@@ -12,28 +12,38 @@
 #include <glib.h>
 
 #include "qif-import-p.h"
+#include "qif-objects-p.h"
+
+static void qif_object_map_get_helper(gpointer key, gpointer value, gpointer listp);
 
 QifContext
-qif_context_new(QifContext parent)
+qif_context_new(void)
 {
   QifContext ctx = g_new0(struct _QifContext, 1);
-
-  if (parent)
-    ctx->parent = parent;
 
   ctx->object_lists = g_hash_table_new(g_str_hash, g_str_equal);
   ctx->object_maps = g_hash_table_new(g_str_hash, g_str_equal);
 
-  /* we should assume that we've got a bank account... just in case.. */
-  qif_parse_bangtype(ctx, "!type:bank");
-
-  /* Return the new context */
   return ctx;
 }
 
 void
 qif_context_destroy(QifContext ctx)
 {
+  GList *node, *temp;
+  QifContext fctx;
+
+  if (!ctx) return;
+
+  /* First, try to destroy all the children contexts */
+  for (node = ctx->files; node; node = temp) {
+    fctx = node->data;
+    temp = node->next;
+    qif_context_destroy(fctx);
+  }
+  
+  /* ok, at this point we're actually destroying this context. */
+
   /* force the end of record */
   if (ctx->handler && ctx->handler->end)
     ctx->handler->end(ctx);
@@ -42,7 +52,87 @@ qif_context_destroy(QifContext ctx)
   qif_object_list_destroy(ctx);
   qif_object_map_destroy(ctx);
 
+  /* Remove us from our parent context */
+  if (ctx->parent)
+    ctx->parent->files = g_list_remove(ctx->parent->files, ctx);
+
+  g_free(ctx->filename);
+
+  g_assert(ctx->files == NULL);
   g_free(ctx);
+}
+
+static GList *
+qif_context_get_foo_helper(QifContext ctx, GFunc get_helper)
+{
+  GHashTable *ht;
+  GList *node, *list = NULL;
+  QifContext fctx;
+
+  g_return_val_if_fail(ctx, NULL);
+  g_return_val_if_fail(ctx->parsed, NULL);
+  g_return_val_if_fail(get_helper, NULL);
+
+  ht = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  for (node = ctx->files; node; node = node->next) {
+    fctx = node->data;
+    qif_object_list_foreach(fctx, QIF_O_TXN, get_helper, ht);
+  }
+
+  g_hash_table_foreach(ht, qif_object_map_get_helper, &list);
+  g_hash_table_destroy(ht);
+
+  return list;
+}
+
+static void
+qif_get_accts_helper(gpointer obj, gpointer htp)
+{
+  QifTxn txn = obj;
+  QifSplit split;
+  GHashTable *ht = htp;
+  GList *node;
+
+  if (txn->from_acct)
+    g_hash_table_insert(ht, txn->from_acct, txn->from_acct);
+
+  /* The default_split is using the from_acct, so we can ignore it */
+
+  for (node = txn->splits; node; node = node->next) {
+    split = node->data;
+    if (split->cat.obj && split->cat_is_acct)
+      g_hash_table_insert(ht, split->cat.acct, split->cat.acct);
+  }
+}
+
+GList *
+qif_context_get_accounts(QifContext ctx)
+{
+  return qif_context_get_foo_helper(ctx, qif_get_accts_helper);
+}
+
+static void
+qif_get_cats_helper(gpointer obj, gpointer htp)
+{
+  QifTxn txn = obj;
+  QifSplit split;
+  GHashTable *ht = htp;
+  GList *node;
+
+  /* default_split uses from_acct, so no categories */
+
+  for (node = txn->splits; node; node = node->next) {
+    split = node->data;
+    if (split->cat.obj && !split->cat_is_acct)
+      g_hash_table_insert(ht, split->cat.cat, split->cat.cat);
+  }
+}
+
+GList *
+qif_context_get_categories(QifContext ctx)
+{
+  return qif_context_get_foo_helper(ctx, qif_get_cats_helper);
 }
 
 /*****************************************************************************/
@@ -50,6 +140,22 @@ qif_context_destroy(QifContext ctx)
 /*
  * Insert and remove a QifObject from the Object Maps in this Qif Context
  */
+
+gint
+qif_object_map_count(QifContext ctx, const char *type)
+{
+  GHashTable *ht;
+
+  g_return_val_if_fail(ctx, 0);
+  g_return_val_if_fail(ctx->object_maps, 0);
+  g_return_val_if_fail(type, 0);
+
+  ht = g_hash_table_lookup(ctx->object_maps, type);
+  if (!ht)
+    return 0;
+
+  return g_hash_table_size(ht);
+}
 
 void
 qif_object_map_foreach(QifContext ctx, const char *type, GHFunc func, gpointer arg)
@@ -171,8 +277,8 @@ void qif_object_map_destroy(QifContext ctx)
   g_return_if_fail(ctx);
   g_return_if_fail(ctx->object_maps);
 
-  g_hash_table_foreach_remove(ctx->object_lists, qif_object_map_remove_all, NULL);
-  g_hash_table_destroy(ctx->object_lists);
+  g_hash_table_foreach_remove(ctx->object_maps, qif_object_map_remove_all, NULL);
+  g_hash_table_destroy(ctx->object_maps);
 }
 
 /*****************************************************************************/
@@ -180,6 +286,33 @@ void qif_object_map_destroy(QifContext ctx)
 /*
  * Insert and remove a QifObject from the Object Lists in this Qif Context
  */
+
+void
+qif_object_list_reverse(QifContext ctx, const char *type)
+{
+  GList *list;
+
+  g_return_if_fail(ctx);
+  g_return_if_fail(ctx->object_lists);
+  g_return_if_fail(type);
+
+  list = qif_object_list_get(ctx, type);
+  list = g_list_reverse(list);
+  g_hash_table_insert(ctx->object_lists, (gpointer)type, list);
+}
+
+gint
+qif_object_list_count(QifContext ctx, const char *type)
+{
+  GList *list;
+
+  g_return_val_if_fail(ctx, 0);
+  g_return_val_if_fail(ctx->object_lists, 0);
+  g_return_val_if_fail(type, 0);
+
+  list = g_hash_table_lookup(ctx->object_lists, type);
+  return g_list_length(list);
+}
 
 void
 qif_object_list_foreach(QifContext ctx, const char *type, GFunc func, gpointer arg)
@@ -259,4 +392,3 @@ qif_object_list_destroy(QifContext ctx)
   g_hash_table_foreach_remove(ctx->object_lists, qif_object_list_remove_all, NULL);
   g_hash_table_destroy(ctx->object_lists);
 }
-

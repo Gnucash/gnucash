@@ -593,6 +593,7 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIInfo *main_info;
   GnomeMDI *mdi;
+  GNCMDIChildInfo * inf;
 
   main_info = gnc_mdi_get_current ();
   if (!main_info) return;
@@ -600,11 +601,10 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   mdi = main_info->mdi;
   if (!mdi) return;
 
+  inf = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
+
   if (mdi->active_child)
   {
-    GNCMDIChildInfo * inf;
-
-    inf = g_object_get_data (G_OBJECT (mdi->active_child), "gnc-mdi-child-info");
     if (inf->toolbar)
     {
       gtk_widget_destroy (GTK_WIDGET(inf->toolbar)->parent);
@@ -615,7 +615,8 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   }  
   else
   {
-    gnc_warning_dialog (_("Select \"Exit\" to exit GnuCash."));
+    gnc_warning_dialog (GTK_WIDGET(inf->app),
+			_("Select \"Exit\" to exit GnuCash."));
   }
 }
 
@@ -678,10 +679,10 @@ gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data)
 
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret == 0 ) {
-    gnc_info_dialog( nothing_to_do_msg );
+    gnc_info_dialog(NULL, nothing_to_do_msg );
   } else if ( ret < 0 ) {
     gnc_info_dialog
-      (ngettext 
+      (NULL, ngettext 
        /* Translators: %d is the number of transactions. This is a
 	  ngettext(3) message. */
        ("There are no Scheduled Transactions to be entered at this time.\n"

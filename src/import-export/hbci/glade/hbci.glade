@@ -59,9 +59,9 @@ HBCI connection now.</property>
 	<widget class="GnomeDruidPageStandard" id="configfile_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter OpenHBCI Configuration File</property>
-	  <property name="title_foreground">#e1a8082be3b8</property>
-	  <property name="background">#93c80842f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#ba90082be8c8</property>
+	  <property name="background">#ce28082be9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox132">
@@ -211,9 +211,9 @@ Setup finishes.</property>
 	<widget class="GnomeDruidPageStandard" id="bank_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter Bank Information</property>
-	  <property name="title_foreground">#3ce80853e3b8</property>
-	  <property name="background">#60700849f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#1030082ee8c8</property>
+	  <property name="background">#0ed8082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox130">
@@ -461,9 +461,9 @@ Setup finishes.</property>
 	<widget class="GnomeDruidPageStandard" id="user_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter User Information</property>
-	  <property name="title_foreground">#56600853e3b8</property>
-	  <property name="background">#c218082bf9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#6230082ee8c8</property>
+	  <property name="background">#58e8082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox141">
@@ -1125,9 +1125,9 @@ use the tool 'hbcicard' from the libchipcard package to read these numbers from 
 	<widget class="GnomeDruidPageStandard" id="account_info_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Account list will be updated</property>
-	  <property name="title_foreground">#e0000853e3b8</property>
-	  <property name="background">#f0880853f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#80e0082fe8c8</property>
+	  <property name="background">#9338082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1170,9 +1170,9 @@ progress of the HBCI connection in the HBCI connection window.</property>
 	<widget class="GnomeDruidPageStandard" id="account_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match HBCI accounts with GnuCash accounts</property>
-	  <property name="title_foreground">#f4000853e3b8</property>
-	  <property name="background">#07d00854f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#8428082fe8c8</property>
+	  <property name="background">#b178082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox3">
@@ -1188,22 +1188,57 @@ progress of the HBCI connection in the HBCI connection window.</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkScrolledWindow" id="scrolledwindow25">
+		    <widget class="GtkVBox" id="vbox157">
 		      <property name="visible">True</property>
-		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
-		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="account_page_list">
+			<widget class="GtkScrolledWindow" id="scrolledwindow25">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="headers_visible">True</property>
-			  <property name="rules_hint">False</property>
-			  <property name="reorderable">False</property>
-			  <property name="enable_search">True</property>
+			  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+			  <child>
+			    <widget class="GtkTreeView" id="account_page_list">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="headers_visible">True</property>
+			      <property name="rules_hint">False</property>
+			      <property name="reorderable">False</property>
+			      <property name="enable_search">True</property>
+			    </widget>
+			  </child>
 			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label828">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Click on the line of a HBCI account name if you want to match it to a GnuCash account.
+Click &quot;Next&quot; when all desired accounts are matching.</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
 		      </child>
 		    </widget>
 		    <packing>
@@ -1313,28 +1348,6 @@ User</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
-
-	      <child>
-		<widget class="GtkLabel" id="label828">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click on the line of a HBCI account name if you want to match it to a GnuCash account.
-Click &quot;Next&quot; when all desired accounts are matching.</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_CENTER</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-		<packing>
-		  <property name="padding">3</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -1366,9 +1379,9 @@ Press 'Finish' now.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_info_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Public Keys will be retrieved</property>
-	  <property name="title_foreground">#49100854e3b8</property>
-	  <property name="background">#5b500854f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#2dc80830e8c8</property>
+	  <property name="background">#45700830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1417,9 +1430,9 @@ before this whole druid has finished.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_server_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Verify Ini-Letter from Server</property>
-	  <property name="title_foreground">#60f80854e3b8</property>
-	  <property name="background">#87f00854f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#52100830e8c8</property>
+	  <property name="background">#60780830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox8">
@@ -1578,9 +1591,9 @@ before this whole druid has finished.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_userinfo_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">User Keys will be sent</property>
-	  <property name="title_foreground">#b9280854e3b8</property>
-	  <property name="background">#c4800854f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#b1780830e8c8</property>
+	  <property name="background">#c1e80830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1631,9 +1644,9 @@ connection in the HBCI connection window.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_user_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Print Ini-Letter of User</property>
-	  <property name="title_foreground">#c7080854e3b8</property>
-	  <property name="background">#de200854f9eb</property>
-	  <property name="logo_background">#1ed0081d0001</property>
+	  <property name="title_foreground">#c3480830e8c8</property>
+	  <property name="background">#d4880830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="iniletter_user_vbox">

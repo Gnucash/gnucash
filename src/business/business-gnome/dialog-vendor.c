@@ -156,7 +156,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
   const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
   if (safe_strcmp (res, "") == 0) {
     if (error_message)
-      gnc_error_dialog_parented (GTK_WINDOW (dialog), "%s", error_message);
+      gnc_error_dialog (dialog, "%s", error_message);
     return TRUE;
   }
   return FALSE;
@@ -181,7 +181,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
       check_entry_nonempty (vw->dialog, vw->addr3_entry, NULL) &&
       check_entry_nonempty (vw->dialog, vw->addr4_entry, NULL)) {
     const char *msg = _("You must enter a payment address.");
-    gnc_error_dialog_parented (GTK_WINDOW (vw->dialog), msg);
+    gnc_error_dialog (vw->dialog, msg);
     return;
   }
 

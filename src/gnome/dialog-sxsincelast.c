@@ -350,7 +350,7 @@ static void gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
                                         GList *toRevertList );
 static gboolean processed_valid_reminders_listP( sxSinceLastData *sxsld );
 static void create_bad_reminders_msg( gpointer data, gpointer ud );
-static gboolean inform_or_add( reminderTuple *rt, gboolean okFlag,
+static gboolean inform_or_add( sxSinceLastData *sxsld, reminderTuple *rt, gboolean okFlag,
                                GList *badList, GList **goodList );
 
 static void sx_obsolete_select_all_clicked( GtkButton *button,
@@ -383,7 +383,8 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret < 0 ) {
     gnc_info_dialog
-      (ngettext 
+      (NULL,
+       ngettext 
        ("There are no Scheduled Transactions to be entered at this time.\n"
 	"(%d transaction automatically created)",
 	"There are no Scheduled Transactions to be entered at this time.\n"
@@ -1381,8 +1382,8 @@ cancel_check( GnomeDruidPage *druid_page,
                 return FALSE;
         }
 
-        if ( !gnc_verify_dialog_parented( sxsld->sincelast_window, TRUE,
-                                          lastrun_cancel_check_msg ) ) {
+        if ( !gnc_verify_dialog( sxsld->sincelast_window, TRUE,
+				 lastrun_cancel_check_msg ) ) {
                 return TRUE;
         }
 
@@ -3108,7 +3109,7 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
                         }
                 }
                 overallOkFlag &=
-                        inform_or_add( rt, okFlag, badList, &goodList );
+                        inform_or_add( sxsld, rt, okFlag, badList, &goodList );
                 if ( badList ) {
                         g_list_free( badList );
                         badList = NULL;
@@ -3436,7 +3437,7 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
 }
 
 static gboolean
-inform_or_add( reminderTuple *rt, gboolean okFlag,
+inform_or_add( sxSinceLastData *sxsld, reminderTuple *rt, gboolean okFlag,
                GList *badList, GList **goodList )
 {
         reminderInstanceTuple *rit;
@@ -3468,7 +3469,7 @@ inform_or_add( reminderTuple *rt, gboolean okFlag,
                                   "must be selected as well:\n\n",
                                   xaccSchedXactionGetName( rt->sx ) );
                 g_list_foreach( badList, create_bad_reminders_msg, userMsg );
-                gnc_error_dialog( userMsg->str );
+                gnc_error_dialog( sxsld->sincelast_window, userMsg->str );
                 g_string_free( userMsg, TRUE );
         }
 

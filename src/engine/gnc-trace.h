@@ -60,7 +60,8 @@ typedef enum
   MOD_ACCOUNT = 20,
   MOD_IMPORT  = 21,
   MOD_BUSINESS= 22,
-  MOD_LAST    = 22
+  MOD_DRUID   = 23,
+  MOD_LAST    = 23
 } gncModuleType;
 
 typedef enum

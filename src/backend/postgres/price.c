@@ -363,7 +363,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    char * p;
 
    ENTER ("be=%p, lookup=%p", be, look);
-   if (!be || !look) return;
+   if (!be || !look) { LEAVE("(null) args"); return; }
 
    /* special case the two-way search in terms of more basic primitives */
    if (LOOKUP_NEAREST_IN_TIME == look->type)
@@ -372,6 +372,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
       pgendPriceFind (bend, look);
       look->type = LOOKUP_EARLIEST_AFTER;
       pgendPriceFind (bend, look);
+      LEAVE(" ");
       return;
    }
 
@@ -389,9 +390,15 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    p = stpcpy (p, "SELECT * FROM gncPrice"
                   "  WHERE commodity='");
    p = stpcpy (p, sqlEscapeString (escape, commodity_str));
-   p = stpcpy (p, "'  AND currency='");
-   p = stpcpy (p, sqlEscapeString (escape, currency_str));
    p = stpcpy (p, "' ");
+
+   if (currency_str) {
+       p = stpcpy (p, "AND currency='");
+       p = stpcpy (p, sqlEscapeString (escape, currency_str));
+       p = stpcpy (p, "' ");
+   }
+
+   PINFO("query = %s", be->buff);
 
    sqlEscape_destroy (escape);
    escape = NULL;
@@ -429,6 +436,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
          /* re-enable events */
          pgendEnable(be);
          gnc_engine_resume_events();
+         LEAVE(" ");
          return;
    }
 
@@ -442,6 +450,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+   LEAVE(" ");
 }
 
 /* ============================================================= */

@@ -118,7 +118,11 @@ FreqType xaccFreqSpecGetType( FreqSpec *fs );
  **/
 /* void xaccFreqSpecSetType( FreqSpec *fs, FreqType newType ); */
 void xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType );
-/** DOCUMENT ME! */
+
+/** 
+ * Returns the frequency part of the FreqSpec, specifically,
+ * one of the 'user-interface' enumerants.
+ */
 UIFreqType xaccFreqSpecGetUIType( FreqSpec *fs );
 
 

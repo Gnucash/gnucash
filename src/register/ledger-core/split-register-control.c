@@ -113,7 +113,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     else
       default_value = 0;
 
-    choice = gnc_choose_radio_option_dialog_parented
+    choice = gnc_choose_radio_option_dialog
       (gnc_split_register_get_parent (reg),
        title,
        message,
@@ -1060,7 +1060,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* If this is an un-expanded, multi-split transaction, then warn the user */
   if (force_dialog && !expanded && ! xfer_acc) {
-    gnc_error_dialog (message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
     return TRUE;
   }
 
@@ -1077,7 +1077,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   reg_acc = gnc_split_register_get_default_account (reg);
   reg_com = xaccAccountGetCommodity (reg_acc);
 
-  /* Is this a two-split txn? */
+  /* Grab the split and perhaps the "other" split (if it is a two-split txn) */
   split = gnc_split_register_get_current_split (reg);
   osplit = xaccSplitGetOtherSplit (split);
 
@@ -1109,7 +1109,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!expanded && osplit &&
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
-    gnc_error_dialog (message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
     return TRUE;
   }
 
@@ -1122,6 +1122,15 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    */
   if (gnc_numeric_zero_p (amount))
     return FALSE;
+
+  /* If the exch_rate is zero, we're not forcing the dialog, and this is
+   * _not_ the blank split, then return FALSE -- this is a "special"
+   * gain/loss stock transaction.
+   */
+  if (gnc_numeric_zero_p(exch_rate) && !force_dialog &&
+      split != gnc_split_register_get_blank_split (reg))
+    return FALSE;
+
 
   /* We know that "amount" is always in the reg_com currency.
    * Unfortunately it is possible that neither xfer_com or txn_cur are
@@ -1228,7 +1237,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   Transaction *pending_trans;
   VirtualLocation virt_loc;
   Transaction *trans, *new_trans;
-  GNCVerifyResult result;
+  gint result;
   gboolean changed;
   SRInfo *info;
   Split *split;
@@ -1452,17 +1461,17 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     message = _("The current transaction has been changed.\n"
                 "Would you like to record it?");
 
-    result = gnc_verify_cancel_dialog_parented
+    result = gnc_verify_cancel_dialog
       (gnc_split_register_get_parent (reg),
-       GNC_VERIFY_YES, message);
+       GTK_RESPONSE_YES, message);
   }
 
   switch (result)
   {
-    case GNC_VERIFY_YES:
+    case GTK_RESPONSE_YES:
       break;
 
-    case GNC_VERIFY_NO:
+    case GTK_RESPONSE_NO:
       {
         VirtualCellLocation vcell_loc;
         Split *new_split;
@@ -1490,7 +1499,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
       break;
 
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       return TRUE;
 
     default:
@@ -1531,8 +1540,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
     if (!confirm)
       return TRUE;
 
-    return gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                       TRUE, message);
+    return gnc_verify_dialog (gnc_split_register_get_parent (reg),
+			      TRUE, message);
   }
 
   return TRUE;

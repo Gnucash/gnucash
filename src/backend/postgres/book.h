@@ -32,7 +32,7 @@
 
 QofBookList * pgendGetAllBooks (PGBackend *be, QofBookList *);
 
-void pgendGetBook (PGBackend *be, QofBook *book);
+void pgendBookRestore (PGBackend *be, QofBook *book);
 void pgendStoreBookNoLock (PGBackend *be, QofBook *book, int do_check_version);
 void pgendStoreBook (PGBackend *be, QofBook *book);
 

@@ -41,4 +41,13 @@ QifAccount find_or_make_acct(QifContext ctx, char *name, GList *types);
 QifCategory find_or_make_cat(QifContext ctx, char *name);
 QifClass find_or_make_class(QifContext ctx, char *name);
 
+/* merge the object into the context.  Returns the object that's in
+ * the context, which is either the supplied object or the
+ * already-existing object.
+ */
+QifAccount qif_account_merge(QifContext ctx, QifAccount acct);
+QifCategory qif_cat_merge(QifContext ctx, QifCategory cat);
+QifClass qif_class_merge(QifContext ctx, QifClass qclass);
+QifSecurity qif_security_merge(QifContext ctx, QifSecurity security);
+
 #endif /* QIF_OBJECTS_H */

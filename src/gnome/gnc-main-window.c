@@ -819,9 +819,9 @@ gnc_main_window_cmd_actions_since_last_run (EggAction *action, GncMainWindow *wi
 	
 	ret = gnc_ui_sxsincelast_dialog_create ();
 	if ( ret == 0 ) {
-		gnc_info_dialog (nothing_to_do_msg);
+		gnc_info_dialog (GTK_WIDGET(&window->parent), nothing_to_do_msg);
 	} else if ( ret < 0 ) {
-		gnc_info_dialog (ngettext
+		gnc_info_dialog (GTK_WIDGET(&window->parent), ngettext
 			 /* Translators: %d is the number of transactions. This is a
 			    ngettext(3) message. */
 			 ("There are no Scheduled Transactions to be entered at this time.\n"

@@ -506,7 +506,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPag
 			Split *s = splits->data;
 			Transaction *txn = xaccSplitGetParent (s);
 			if (xaccTransGetReadOnly (txn)) {
-				gnc_error_dialog (acct_has_ro_splits, name);
+				gnc_error_dialog (NULL, acct_has_ro_splits, name);
 				return;
 			}
 		}
@@ -520,7 +520,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPag
 
 		/* Check for RO txns in the children -- disallow deletion if there are any */
 		if (delete_res.has_ro_splits) {
-			gnc_error_dialog (child_has_ro_splits, name);
+			gnc_error_dialog (NULL, child_has_ro_splits, name);
 			return;
 
 		} else if (delete_res.has_splits)
@@ -529,7 +529,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPag
 			format = children ? no_splits : no_splits_no_children;
 	}
 
-	if (gnc_verify_dialog (FALSE, format, name)) {
+	if (gnc_verify_dialog (NULL, FALSE, format, name)) {
 		gnc_suspend_gui_refresh ();
 
 		xaccAccountBeginEdit (account);

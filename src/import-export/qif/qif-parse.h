@@ -27,4 +27,7 @@ QifAction qif_parse_action(QifLine line);
 GList * qif_parse_acct_type(const char *str, gint lineno);
 GList * qif_parse_acct_type_guess(QifType type);
 
+/* Parse all objects */
+void qif_parse_all(QifContext ctx, gpointer ui_args);
+
 #endif /* QIF_PARSE_H */

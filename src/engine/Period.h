@@ -82,17 +82,12 @@
  *    /book/prev-book         GUID of previous book (the closed book)
  *    
 -- hack alert -- 
-   Need to also split up the price db too.  Also need to make copies of SX,
-   and the like ... 
+   -- Need to also split up the price db too.  
+   -- Need to make copies of SX, and the like ... 
+   -- Need to move lots too
 
 -- hack alert -- feature request: 
    have some way of remembering the quickfill text from older books...
-
--- hack alert -- 
-  Not imlemented (yet), these should go into book:
-  /book/name=some-user-supplied-name
-  /book/notes=user-supplied-descriptive-comments
-  /book/accounting-period=enum {none, week, month, quarter, trimester, year}
 
 -- hack alert -- should not allow closed books to have unreconciled
    transactions ???

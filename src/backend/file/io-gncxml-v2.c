@@ -228,6 +228,7 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     
     table = gnc_book_get_commodity_table (data->book);
 
+    xaccTransBeginEdit (trn);
     clear_up_transaction_commodity(table, trn,
                                    xaccTransGetCurrency,
                                    xaccTransSetCurrency);
@@ -240,6 +241,7 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     {
         xaccAccountInsertSplit(xaccSplitGetAccount(spl), spl);
     }
+    xaccTransCommitEdit (trn);
 
     data->counter.transactions_loaded++;
     run_callback(data, "transaction");
@@ -550,7 +552,7 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
 
       if (be_data.ok == FALSE)
       {
-	PWARN ("unexpected tag %s", tag);
+        PWARN ("unexpected tag %s", tag);
       }
     }
     return TRUE;

@@ -35,8 +35,8 @@
     GnoTime (gttr.sourcefore.net) uses this file, and this file is 
     formally a part of QOF (qof.sourceforge.net).
     *
-    @author Copyright (C) 1997 Robin D. Clark
-    @author Copyright (C) 1998-2001 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu> 
+    @author Copyright (C) 1998-2001,2003 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef GNC_DATE_H
@@ -413,12 +413,20 @@ void   gnc_tm_get_day_start(struct tm *tm, time_t time_val);
 void   gnc_tm_get_day_end(struct tm *tm, time_t time_val);
 
 /** The gnc_timet_get_day_start() routine will take the given time in
- *  seconds and first it to the last second of that day. */
+ *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_start(time_t time_val);
 
 /** The gnc_timet_get_day_end() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
+
+/** The gnc_timet_get_day_start() routine will take the given time in
+ *  GLib GDate format and adjust it to the last second of that day. */
+time_t gnc_timet_get_day_start_gdate (GDate *date);
+
+/** The gnc_timet_get_day_end() routine will take the given time in
+ *  GLib GDate format and adjust it to the last second of that day. */
+time_t gnc_timet_get_day_end_gdate (GDate *date);
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);

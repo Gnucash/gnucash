@@ -69,26 +69,28 @@ struct pageDataTuple
 GType gnc_frequency_get_type( void );
 
 /**
+ * Create a new freq spec widget.
+ * The menus and panaels will be initialized to correspond to the
+ * settings in the FreqSpec, and the date window will show the 
+ * indicated date.  Either or both may be NULL.
  * For the default freq spec widget, use 'NULL'.
  **/
-GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *startDate );
+GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *date );
 void gnc_frequency_init( GNCFrequency *gf );
 
 /**
- * Sets up the given GNCFrequency with the given FreqSpec and
- * UIFreqSpec.  If the FreqSpec is NULL, then the default value is
- * Daily; if the UIFreqSpec is not NONE, then that value is the
- * default.  If the FreqSpec is non-NULL, then it really should agree
- * with the UIFreqSpec; this is considered a 'critical' error.
+ * Change the given GNCFrequency with the given FreqSpec and GDate.  
+ * If the FreqSpec is NULL, then no change is made to the widget menus.
+ * If the date is NULL, then no change is made to the widget date field.
  **/
-void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate );
+void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date );
 
 /**
- * Saves the state of the GNCFrequenecy widget into the given FreqSpec
- * and UIFreqSpec.
- * Places the start date in outStartDate, if it's not null.
+ * Saves the state of the GNCFrequenecy widget.
+ * Updates the given FreqSpec if it's not NULL.
+ * Places the date in outDate, if it's not NULL.
  **/
-void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate );
+void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate);
 
 /**
  * Set the label text for the frequency option menu.  In the current
@@ -96,9 +98,9 @@ void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDa
  */
 void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt);
 /**
- * Set the label text for the start-date entry widget. In the current
+ * Set the label text for the date entry widget. In the current
  * impelmentation, the default label text is "Start Date:"
  */
-void gnc_frequency_set_startdate_label_text (GNCFrequency *gf, const gchar *txt);
+void gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt);
 
 #endif /* !defined( GNC_FREQUENCY_H ) */

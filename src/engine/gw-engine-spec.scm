@@ -223,6 +223,7 @@
   (gw:enum-add-value! we "ERR_BACKEND_CONN_LOST" 'connection-lost)
   (gw:enum-add-value! we "ERR_BACKEND_NO_SUCH_DB" 'no-such-db)
   (gw:enum-add-value! we "ERR_BACKEND_LOCKED" 'locked)
+  (gw:enum-add-value! we "ERR_BACKEND_READONLY" 'read-only)
   (gw:enum-add-value! we "ERR_BACKEND_DATA_CORRUPT" 'data-corrupt)
   (gw:enum-add-value! we "ERR_BACKEND_SERVER_ERR" 'server-error)
   (gw:enum-add-value! we "ERR_BACKEND_ALLOC" 'alloc)

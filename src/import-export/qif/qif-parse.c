@@ -30,11 +30,11 @@
 static short module = MOD_IMPORT;
 
 /* An array of handlers for the various bang-types */
-static QifHandler qif_handlers[QIF_TYPE_MAX] = { NULL };
+static QifHandler qif_handlers[QIF_TYPE_MAX+1] = { NULL };
 
 /* Parser Regular Expressions */
+static gboolean qifp_regex_compiled = FALSE;
 static regex_t category_regex;
-static gboolean regex_compiled = FALSE;
 
 /* A Hash Table of bang-types */
 static GHashTable *qif_bangtype_map = NULL;
@@ -51,6 +51,10 @@ static GHashTable *qif_atype_map = NULL;
 void
 qif_register_handler(QifType type, QifHandler handler)
 {
+  if (type <= 0 || type > QIF_TYPE_MAX) {
+    PERR("Invalid type: %d", type);
+    return;
+  }
   qif_handlers[type] = handler;
 }
 
@@ -61,7 +65,7 @@ compile_regex()
       "^ *(\\[)?([^]/\\|]*)(]?)(/([^\\|]*))?(\\|(\\[)?([^]/]*)(]?)(/(.*))?)? *$",
 	  REG_EXTENDED);
 
-  regex_compiled = TRUE;
+  qifp_regex_compiled = TRUE;
 }
 
 #define QIF_ADD_TYPE(ts,t) \
@@ -187,8 +191,8 @@ build_atype_map()
 {
   g_return_if_fail(!qif_atype_map);
 
-  qif_action_map = g_hash_table_new(g_str_hash, g_str_equal);
-  g_assert(qif_action_map);
+  qif_atype_map = g_hash_table_new(g_str_hash, g_str_equal);
+  g_assert(qif_atype_map);
 
   QIF_ADD_ATYPE("bank", make_list(1, BANK));
   QIF_ADD_ATYPE("port", make_list(1, BANK));
@@ -233,12 +237,12 @@ qif_parse_bangtype(QifContext ctx, const char *line)
    * - strip off leading/trailing whitespace
    * - make it all lower case
    */
-  bangtype = g_strdup(line);
+  bangtype = g_strdup(line+1);
   g_strstrip(bangtype);
   g_strdown(bangtype);
 
   /* In some cases we get "!Type Bank" -- change the space to a colon */
-  if (!strncmp(bangtype, "!type ", 6))
+  if (!strncmp(bangtype, "type ", 5))
     bangtype[5] = ':';
 
   /* Lookup the bangtype in the map and then destroy the local copy */
@@ -290,7 +294,7 @@ qif_parse_split_category(const char* str,
 		       miscx_cat && miscx_cat_is_acct && miscx_class, FALSE);
 
 
-  if (!regex_compiled)
+  if (!qifp_regex_compiled)
     compile_regex();
 
   if (regexec(&category_regex, str, 12, pmatch, 0) != 0) {
@@ -582,7 +586,7 @@ qif_parse_parse_txn(gpointer val, gpointer data)
 	split = NULL;
     } while (split);
 
-    qif_txn_post_parse_amounts(txn);
+    qif_txn_setup_splits(txn);
   }
 }
 
@@ -644,4 +648,208 @@ qif_parse_all(QifContext ctx, gpointer arg)
 
   /* now parse it.. */
   qif_object_list_foreach(ctx, QIF_O_TXN, qif_parse_parse_txn, &helper);
+}
+
+typedef struct {
+  QifContext	ctx;
+  GList *	list;
+  const char*	type;
+} qif_merge_t;
+
+static void
+qif_merge_accts(gpointer key, gpointer value, gpointer data)
+{
+  qif_merge_t *merge = data;
+  QifAccount acct = value;
+
+  /* Merge into the context.  Remember items moved into the parent */
+  if (qif_account_merge(merge->ctx, acct) == acct)
+    merge->list = g_list_prepend(merge->list, acct->name);
+}
+
+static void
+qif_merge_cats(gpointer key, gpointer value, gpointer data)
+{
+  qif_merge_t *merge = data;
+  QifCategory cat = value;
+
+  /* Merge into the context.  Remember items moved into the parent */
+  if (qif_cat_merge(merge->ctx, cat) == cat)
+    merge->list = g_list_prepend(merge->list, cat->name);
+}
+
+static void
+qif_merge_classes(gpointer key, gpointer value, gpointer data)
+{
+  qif_merge_t *merge = data;
+  QifClass qclass = value;
+
+  /* Merge into the context.  Remember items moved into the parent */
+  if (qif_class_merge(merge->ctx, qclass) == qclass)
+    merge->list = g_list_prepend(merge->list, qclass->name);
+}
+
+static void
+qif_merge_secs(gpointer key, gpointer value, gpointer data)
+{
+  qif_merge_t *merge = data;
+  QifSecurity sec = value;
+
+  /* Merge into the context.  Remember items moved into the parent */
+  if (qif_security_merge(merge->ctx, sec) == sec)
+    merge->list = g_list_prepend(merge->list, sec->name);
+}
+
+static void
+qif_merge_del(gpointer obj, gpointer data)
+{
+  qif_merge_t *merge = data;
+  const char *name = obj;
+
+  qif_object_map_remove(merge->ctx, merge->type, name);
+}
+
+static void
+qif_massage_split(QifSplit split, QifContext ctx)
+{
+  const char *type = QIF_O_CATEGORY;
+  char *name;
+
+  if (split->cat.obj) {
+    if (split->cat_is_acct) {
+      type = QIF_O_ACCOUNT;
+      name = split->cat.acct->name;
+    } else
+      name = split->cat.cat->name;
+
+    split->cat.obj = qif_object_map_lookup(ctx, type, name);
+  }
+
+  if (split->cat_class) {
+    split->cat_class = (QifClass) qif_object_map_lookup(ctx, QIF_O_CLASS,
+							split->cat_class->name);
+  }
+}
+
+static void
+qif_massage_itxn(QifInvstTxn itxn, QifContext ctx)
+{
+  const char *type = QIF_O_CATEGORY;
+  char *name;
+
+  if (itxn->far_cat.obj) {
+    if (itxn->far_cat_is_acct) {
+      type = QIF_O_ACCOUNT;
+      name = itxn->far_cat.acct->name;
+    } else
+      name = itxn->far_cat.cat->name;
+
+    itxn->far_cat.obj = qif_object_map_lookup(ctx, type, name);
+  }
+}
+
+static void
+qif_massage_txn(gpointer obj, gpointer data)
+{
+  QifTxn txn = obj;
+  QifContext ctx = data;
+  QifSplit split;
+  GList *node;
+
+  if (txn->from_acct)
+    txn->from_acct = (QifAccount) qif_object_map_lookup(ctx, QIF_O_ACCOUNT,
+							txn->from_acct->name);
+
+  if (txn->invst_info)
+    qif_massage_itxn(txn->invst_info, ctx);
+
+  if (txn->default_split)
+    qif_massage_split(txn->default_split, ctx);
+
+  for (node = txn->splits; node; node = node->next) {
+    split = node->data;
+    qif_massage_split(split, ctx);
+  }
+}
+
+void
+qif_parse_merge_files(QifContext ctx)
+{
+  GList *node;
+  GList *accts = NULL;
+  GList *cats = NULL;
+  GList *classes = NULL;
+  GList *securities = NULL;
+  QifContext fctx;
+
+  qif_merge_t merge;
+
+  g_return_if_fail(ctx);
+
+  /* Make sure each of the "file" contexts have been parsed.
+   * note that we don't care about OUR context -- we can run this
+   * process multiple times safely.
+   */
+  for (node = ctx->files; node; node = node->next) {
+    fctx = node->data;
+    g_return_if_fail(fctx->parsed);
+  }
+
+
+  /* Iterate over each file.  Merge the Accounts, Categories, Classes,
+   * Securities, and Transactions into the top-level context.  Be sure
+   * to re-point all Transaction/Split category/class/account pointers
+   * to the new top-level item.  Then be sure to remove the
+   * "duplicated" items so we don't double-free (as we don't refcount,
+   * either).
+   */
+  for (node = ctx->files; node; node = node->next) {
+    fctx = node->data;
+
+    /* Merge accts, categories, classes, and securities */
+
+    merge.ctx = ctx;
+    merge.list = NULL;
+    qif_object_map_foreach(fctx, QIF_O_ACCOUNT, qif_merge_accts, &merge);
+    accts = merge.list;
+
+    merge.list = NULL;
+    qif_object_map_foreach(fctx, QIF_O_CATEGORY, qif_merge_cats, &merge);
+    cats = merge.list;
+
+    merge.list = NULL;
+    qif_object_map_foreach(fctx, QIF_O_CLASS, qif_merge_classes, &merge);
+    classes = merge.list;
+
+    merge.list = NULL;
+    qif_object_map_foreach(fctx, QIF_O_SECURITY, qif_merge_secs, &merge);
+    securities = merge.list;
+
+
+    /* repoint the transactions to the merged context data */
+    qif_object_list_foreach(fctx, QIF_O_TXN, qif_massage_txn, ctx);
+
+
+    /* then remove from the file context objects referenced in the top context */
+    merge.ctx = fctx;
+    merge.type = QIF_O_ACCOUNT;
+    g_list_foreach(accts, qif_merge_del, &merge);
+    g_list_free(accts);
+
+    merge.type = QIF_O_CATEGORY;
+    g_list_foreach(cats, qif_merge_del, &merge);
+    g_list_free(cats);
+
+    merge.type = QIF_O_CLASS;
+    g_list_foreach(classes, qif_merge_del, &merge);
+    g_list_free(classes);
+
+    merge.type = QIF_O_SECURITY;
+    g_list_foreach(securities, qif_merge_del, &merge);
+    g_list_free(securities);
+
+  }
+
+  /* We've been parsed */
+  ctx->parsed = TRUE;
 }

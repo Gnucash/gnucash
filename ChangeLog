@@ -1481,6 +1481,156 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2003-08-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/druid-loan.c: Apply patch to fix a number of
+	  off-by-one bugs in the loan druid.  Fixes #119001.
+
+2003-07-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-account-tree.c: add "(Report)" strings
+	  to the various columns displayed in the report currency.
+	  Partial fix for #118695.
+
+	* src/business/business-core/gncInvoice.c: set the date-entered on
+	  invoice transactions to "now" instead of the post date.  This
+	  lets us know when an invoice was actually posted, or a payment
+	  was actually made.
+
+	Support "gain/loss" balancing splits on stocks:
+	* src/engine/Transaction.c: fix xaccSplitGetPrice() to return '0'
+	  if 'amount' is zero but 'value' is non-zero
+	* src/register/ledger-core/split-register-model-save.c: if we've
+	  already handled the debcred cell then DON'T handle the price cell
+	  as it will override the debcred's value.
+	* src/register/ledger-core/split-register.c: if #shares == 0,
+	  price == 0, and value (buy/sell) != 0 then allow this entry;
+	  it's an income/expense balancing split.
+	* src/register/ledger-core/split-register-control.c: if the exchange
+	  rate cell is 0 but this is NOT the blank split, then don't run
+	  the exchange-rate dialog unless specifically requested.
+	* src/register/ledger-core/split-register-model.c: when trying to
+	  find the conversion rate for a split, remember if we found
+	  a matching split (even if the amount is 0).  If all matching
+	  splits are 0, then return 0, not 1.
+
+2003-07-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif/ -- add functionality to merge multiple
+	  qif file contexts into a single parent context while retaining
+	  the ability to add/remove new files.
+
+	* src/import-export/qif-context.c: add functions to get the list
+	  of used QifAccount and QifCategory objects from the set of
+	  transactions.
+
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/business-gnome.scm: remove
+	  some unused (old) code.
+
+2003-07-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Add button for
+	manual adding of HBCI accounts. Fixes #117760. Requires latest
+	OpenHBCI CVS -- next openhbci-0.9.13 will be out this weekend.
+
+	* src/import-export/hbci/gnc-hbci-{getbalance,gettrans,transfer}.c:
+	Add saving of the HBCI_API so that bank's status changes will now
+	be remembered immediately. However this might save some
+	unnecessary information to disk, but hopefully we will have fixed
+	that in OpenHBCI soon.
+
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-date-edit.c: hide the calendar popup
+	  on enter/return keypress events (in addition to ESC).
+	Fixes #118500
+
+2003-07-27  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Added pgendGetBook(),
+      to retrieve the QofBook from the session, instead of storing the
+      book in the backend object.
+    - Where be->book was used, use pgendGetBook() instead.
+    - Enhanced debug messages.
+    * src/backend/postgres/PostgresBackend.h: Added the qofbook.h
+      include, and the pgendGetBook() prototype
+    * src/backend/postgres/book.c: Changed pgendGetBook to
+      pgendBookRestore() to reflect its functionality of restoring
+      the book's data to the engine.
+    * src/backend/postgres/price.c: In pgendPriceFind(), couched the
+      currenct portion of the SQL statement in an "if" statement,
+      because gnc_pricedb_lookup_latest_any_currency() can pass in
+      a NULL currency, and stpcpy() doesn't like NULLs.
+    * src/backend/postgres/escape.c: enhanced debug messages.
+    Fixes bug #116546
+
+2003-07-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbackend.h: add a new error, ERR_BACKEND_READONLY
+	* src/engine/gw-engine-spec.scm: add new error type
+	* src/backend/file/gnc-backend-file.c: differentiate between
+	  "file is already locked" and "we can't create the lockfile"
+	  so we can let the user know.
+	* src/app-file/gnc-file.c: handle the new ERR_BACKEND_READONLY
+	  error message by changing the error dialog presented to the
+	  user.
+	Fixes #117665
+
+	* src/backend/file/gnc-backend-file.c: don't make the chmod() and
+	  chown() functions fatal errors.  Warn the user if they fail, but
+	  don't fail to save.  In the long run we need some way to pop up
+	  warning messages from a backend, but until then we'll have to
+	  stick with PWARN() and hope users see the console.
+	Fixes #118258
+
+	* src/app-file/gnc-file.c: fix the message to be more appropriate
+	  when we hit a READONLY error.
+	* src/backend/file/gnc-backend-file.c: return ERR_BACKEND_READONLY
+	  on save if the XML write fails and the unlink() fails with
+	  ENOENT, EPERM, EROFS, or EACCES.
+	* src/engine/qofsession.c: don't call end_session just because
+	  there's an error.
+	Fixes #117657
+
+2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-account-matcher.c: Fix bug #105293
+
+2003-07-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbook.c: be sure to delete the book's KVP when we
+	  destroy it.
+
+2003-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif/...
+	  more work on the new qif importer.  structure it into a parent
+	  context that contains a "list of files" (each file has its own
+	  context).  Add some tests to actually test the code.  It
+	  actually loads a basic qif file, now.  Still need to perform
+	  merging (internal and into GNC) as well as the qif-to-gnc maps.
+
+2003-07-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/gnc-backend-file.c:  Don't need to set the
+	  backend error directly after calling gnc_file_be_get_file_lock(),
+	  as get_file_lock will set the backend error itself.
+
+2003-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c: change the description
+	  and action of Invoice and Payement Transactions/Splits, to make
+	  it easier to print a check off the posted transactions.
+
+	* src/report/standard-reports/cash-flow.scm: fix some labels and
+	  add more text to make it more clear what's going on.  Hopefully
+	  fixes #104878.
+
+	* src/report/standard-reports/register.scm: add Debit and Credit
+	  totals.  Fixes bug #115611.
+
 2003-07-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif: an incomplete implementation of a new

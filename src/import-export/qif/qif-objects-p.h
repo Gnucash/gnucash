@@ -8,6 +8,8 @@
 #ifndef QIF_OBJECTS_P_H
 #define QIF_OBJECTS_P_H
 
+#include "gnc-date.h"
+
 #include "qif-import.h"
 #include "qif-objects.h"
 #include "gnc-numeric.h"
@@ -130,6 +132,7 @@ struct _QifInvstTxn {
   char *	commissionstr;
 
   char *	security;
+  char *	catstr;
 
   union {
     QifObject	obj;
@@ -139,8 +142,8 @@ struct _QifInvstTxn {
   gboolean	far_cat_is_acct;
 };
 
-
-void qif_txn_post_parse_amounts(QifTxn txn);
+/* to be run after parsing all the dates and amounts */
+void qif_txn_setup_splits(QifTxn txn);
 void qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn);
 
 #endif /* QIF_OBJECTS_P_H */

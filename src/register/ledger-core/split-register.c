@@ -495,13 +495,13 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
   {
     const char *message = _("The current transaction has been changed.\n"
                             "Would you like to record it?");
-    GNCVerifyResult result;
+    gint result;
 
-    result = gnc_ok_cancel_dialog_parented
+    result = gnc_ok_cancel_dialog
       (gnc_split_register_get_parent (reg),
-       GNC_VERIFY_OK, message);
+       GTK_RESPONSE_OK, message);
 
-    if (result == GNC_VERIFY_CANCEL)
+    if (result == GTK_RESPONSE_CANCEL)
     {
       gnc_resume_gui_refresh ();
       return NULL;
@@ -799,8 +799,8 @@ gnc_split_register_paste_current (SplitRegister *reg)
       return;
 
     if (split != NULL)
-      result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                           FALSE, message);
+      result = gnc_verify_dialog (gnc_split_register_get_parent (reg),
+				  FALSE, message);
     else
       result = TRUE;
 
@@ -836,8 +836,8 @@ gnc_split_register_paste_current (SplitRegister *reg)
       return;
 
     if (split != blank_split)
-      result = gnc_verify_dialog_parented(gnc_split_register_get_parent(reg),
-                                          FALSE, message);
+      result = gnc_verify_dialog(gnc_split_register_get_parent(reg),
+				 FALSE, message);
     else
       result = TRUE;
 
@@ -1599,8 +1599,8 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 
   if (!account) {
     /* Ask if they want to create a new one. */
-    if (!gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-				     TRUE, missing, name))
+    if (!gnc_verify_dialog (gnc_split_register_get_parent (reg),
+			    TRUE, missing, name))
       return NULL;
     
     /* User said yes, they want to create a new account. */
@@ -1619,8 +1619,8 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 
   /* See if the account (either old or new) is a placeholder. */
   if (xaccAccountGetPlaceholder (account)) {
-    gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
-			       placeholder, name);
+    gnc_error_dialog (gnc_split_register_get_parent (reg),
+		      placeholder, name);
   }
 
   /* Be seeing you. */
@@ -1730,6 +1730,17 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   else
     value = xaccSplitGetValue (split);
 
+
+  /* Check if shares and price are BOTH zero (and value is non-zero).
+   * If so, we can assume that this is an income-correcting split
+   */
+  if (gnc_numeric_zero_p(amount) && gnc_numeric_zero_p(price) &&
+      !gnc_numeric_zero_p(value))
+  {
+    /* XXX: should we ask the user? */
+    return TRUE;
+  }
+
   /* Check if precisely one value is zero. If so, we can assume that the
    * zero value needs to be recalculated.   */
 
@@ -1817,7 +1828,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     else
       default_value = 1;
 
-    choice = gnc_choose_radio_option_dialog_parented
+    choice = gnc_choose_radio_option_dialog
       (gnc_split_register_get_parent (reg),
        title,
        message,

@@ -152,15 +152,16 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	
     } while (!successful);
     
-    if (result >= 0) {
-      /* If we wanted to do something here with the gnc txn, we could. */
+    /* If we wanted to do something here with the gnc txn, we could. */
+    /*if (result >= 0) {
       Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
       printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
-	     xaccTransGetDescription(gtrans));
-    }
+      xaccTransGetDescription(gtrans));
+      }*/
 
     /* Just to be on the safe side, clear queue once again. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    gnc_hbci_api_save (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
     
@@ -174,7 +175,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc, 
 			      GList *template_list, gboolean dont_ask)
 {
-  if (dont_ask || gnc_verify_dialog_parented
+  if (dont_ask || gnc_verify_dialog
       (parent, 
        FALSE,
        "%s",

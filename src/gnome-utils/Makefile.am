@@ -59,6 +59,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-selection.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
+  misc-gnome-utils.c \
   print-session.c \
   search-param.c \
   window-help.c
@@ -101,6 +102,7 @@ gncinclude_HEADERS = \
   gnc-tree-model-price.h \
   gnc-tree-model-selection.h \
   gtkselect.h \
+  misc-gnome-utils.h \
   print-session.h \
   window-help.h
 

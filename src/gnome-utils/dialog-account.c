@@ -391,7 +391,7 @@ gnc_ui_to_account(AccountWindow *aw)
                                              gnc_get_current_book ()))
     {
       const char *message = _("Could not create opening balance.");
-      gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+      gnc_error_dialog(aw->dialog, message);
     }
   }
   else
@@ -773,7 +773,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   if (safe_strcmp(name, "") == 0)
   {
     const char *message = _("The account must be given a name.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -781,7 +781,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   if (aw->type == BAD_TYPE)
   {
     const char *message = _("You must select an account type.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -797,7 +797,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   if (!gnc_filter_parent_accounts(new_parent, aw))
   {
     const char *message = _("You must choose a valid parent account.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -807,7 +807,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   if (!commodity)
   {
     const char *message = _("You must choose a commodity.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -899,7 +899,7 @@ gnc_new_account_ok (AccountWindow *aw)
   if (safe_strcmp(name, "") == 0)
   {
     const char *message = _("The account must be given a name.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -945,7 +945,7 @@ gnc_new_account_ok (AccountWindow *aw)
     if (account != NULL)
     {
       const char *message = _("There is already an account with that name.");
-      gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+      gnc_error_dialog(aw->dialog, message);
       return;
     }
   }
@@ -954,7 +954,7 @@ gnc_new_account_ok (AccountWindow *aw)
   if (aw->type == BAD_TYPE)
   {
     const char *message = _("You must select an account type.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -965,7 +965,7 @@ gnc_new_account_ok (AccountWindow *aw)
   if (!commodity)
   {
     const char *message = _("You must choose a commodity.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -973,7 +973,7 @@ gnc_new_account_ok (AccountWindow *aw)
   {
     const char *message = _("You must enter a valid opening balance "
                             "or leave it blank.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    gnc_error_dialog(aw->dialog, message);
     return;
   }
 
@@ -998,7 +998,7 @@ gnc_new_account_ok (AccountWindow *aw)
       {
         const char *message = _("You must select a transfer account or choose"
                                 "\nthe opening balances equity account.");
-        gnc_error_dialog_parented (GTK_WINDOW(aw->dialog), message);
+        gnc_error_dialog(aw->dialog, message);
         return;
       }
     }
