@@ -47,6 +47,7 @@ void
 gnc_show_splash_screen (void)
 {
   GtkWidget *pixmap;
+  GtkWidget *frame;
 
   if (splash) return;
 
@@ -54,7 +55,7 @@ gnc_show_splash_screen (void)
 
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
 
-  pixmap = gnc_get_pixmap ("gnucash_long.png");
+  pixmap = gnc_get_pixmap ("gnucash_splash.png");
 
   if (!pixmap)
   {
@@ -63,7 +64,10 @@ gnc_show_splash_screen (void)
     return;
   }
 
-  gtk_container_add (GTK_CONTAINER (splash), pixmap);
+  frame = gtk_frame_new (NULL);
+
+  gtk_container_add (GTK_CONTAINER (frame), pixmap);
+  gtk_container_add (GTK_CONTAINER (splash), frame);
 
   gtk_widget_show_all (splash);
 

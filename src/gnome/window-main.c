@@ -117,7 +117,8 @@ typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
  * currency, plus (eventually) one for the default currency
  * accumulation (like the EURO). */
 struct _GNCCurrencyItem {
-  gnc_commodity * currency;
+  char *namespace;
+  char *mnemonic;
   GtkWidget *listitem;
   GtkWidget *assets_label;
   GtkWidget *profits_label;
@@ -144,7 +145,8 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
 
   item = g_new0 (GNCCurrencyItem, 1);
 
-  item->currency = currency;
+  item->namespace = g_strdup (gnc_commodity_get_namespace (currency));
+  item->mnemonic = g_strdup (gnc_commodity_get_mnemonic (currency));
 
   listitem = gtk_list_item_new();
   item->listitem = listitem;
@@ -194,6 +196,19 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
   return item;
 }
 
+static void
+gnc_ui_currency_item_destroy (GNCCurrencyItem *item)
+{
+  if (!item) return;
+
+  g_free (item->namespace);
+  g_free (item->mnemonic);
+
+  item->namespace = NULL;
+  item->mnemonic = NULL;
+
+  g_free (item);
+}
 
 /* Get a currency accumulator.
  *
@@ -222,6 +237,20 @@ gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency)
   return found;
 }
 
+static gboolean
+gnc_ui_currency_item_match (const GNCCurrencyItem *item,
+                            const gnc_commodity *commodity)
+{
+  if (!item || !commodity) return FALSE;
+
+  return
+    (safe_strcmp (item->namespace,
+                  gnc_commodity_get_namespace (commodity)) == 0) &&
+    (safe_strcmp (item->mnemonic,
+                  gnc_commodity_get_mnemonic (commodity)) == 0);
+
+}
+
 /* Get a currency item.
  *
  * This will search the given list, and if no accumulator is found, will
@@ -231,18 +260,20 @@ gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency)
  * the item into the list. */
 
 static GNCCurrencyItem *
-gnc_ui_get_currency_item(GList **list, gnc_commodity * currency,
-                         GtkWidget *holder)
+gnc_ui_get_currency_item (GList **list,
+                          gnc_commodity * currency,
+                          GtkWidget *holder)
 {
   GList *current;
   GNCCurrencyItem *found;
 
   for (current = g_list_first(*list); current;
-       current = g_list_next(current)) {
+       current = g_list_next(current))
+  {
     found = current->data;
-    if (gnc_commodity_equiv(found->currency, currency)) {
+
+    if (gnc_ui_currency_item_match (found, currency))
       return found;
-    }
   }
 
   found = gnc_ui_build_currency_item(currency);
@@ -437,13 +468,13 @@ gnc_ui_refresh_statusbar (void)
     GList *next = current->next;
 
     currency_item = current->data;
-    if (currency_item->touched == 0
-        && !gnc_commodity_equiv(currency_item->currency,
-                                default_currency)) {
-      currency_list = g_list_append(currency_list, currency_item->listitem);
+    if (currency_item->touched == 0 &&
+        !gnc_ui_currency_item_match(currency_item, default_currency))
+    {
+      currency_list = g_list_prepend(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
-      g_free(currency_item);
+      gnc_ui_currency_item_destroy(currency_item);
       current->data = NULL;
       g_list_free_1(current);
     }

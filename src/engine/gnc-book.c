@@ -824,6 +824,25 @@ gnc_book_destroy (GNCBook *book)
   LEAVE(" ");
 }
 
+gboolean
+gnc_book_events_pending (GNCBook *book)
+{
+  if (!book) return FALSE;
+  if (!book->backend) return FALSE;
+  if (!book->backend->events_pending) return FALSE;
+
+  return book->backend->events_pending (book->backend);
+}
+
+gboolean
+gnc_book_process_events (GNCBook *book)
+{
+  if (!book) return FALSE;
+  if (!book->backend) return FALSE;
+  if (!book->backend->process_events) return FALSE;
+
+  return book->backend->process_events (book->backend);
+}
 
 /* ---------------------------------------------------------------------- */
 /* 

@@ -378,16 +378,55 @@ gnc_ui_show_main_window(void)
     SCM window = gw_wcp_assimilate_ptr(app, gh_eval_str("<gnc:UIWidget>"));
     gh_call2(run_danglers, hook, window); 
   }
+
   return 0;
 }
 
-int
-gnc_ui_start_event_loop(void)
+static gboolean
+gnc_ui_check_events (gpointer not_used)
 {
+  GNCBook *book;
+  gboolean force;
+
+  if (gtk_main_level() != 1)
+    return TRUE;
+
+  book = gncGetCurrentBook ();
+  if (!book)
+    return TRUE;
+
+  if (gnc_gui_refresh_suspended ())
+    return TRUE;
+
+  if (!gnc_book_events_pending (book))
+    return TRUE;
+
+  gnc_suspend_gui_refresh ();
+
+  force = gnc_book_process_events (book);
+
+  gnc_resume_gui_refresh ();
+
+  if (force)
+    gnc_gui_refresh_all ();
+
+  return TRUE;
+}
+
+int
+gnc_ui_start_event_loop (void)
+{
+  guint id;
+
   gnome_is_running = TRUE;
 
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+                           gnc_ui_check_events, NULL, NULL);
+
   /* Enter gnome event loop */
-  gtk_main();
+  gtk_main ();
+
+  g_source_remove (id);
 
   gnome_is_running = FALSE;
   gnome_is_terminating = FALSE;

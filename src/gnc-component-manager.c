@@ -659,6 +659,12 @@ gnc_gui_refresh_all (void)
   gnc_gui_refresh_internal (TRUE);
 }
 
+gboolean
+gnc_gui_refresh_suspended (void)
+{
+  return suspend_counter != 0;
+}
+
 void
 gnc_close_gui_component (gint component_id)
 {

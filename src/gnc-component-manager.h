@@ -229,6 +229,11 @@ void gnc_resume_gui_refresh (void);
  */
 void gnc_gui_refresh_all (void);
 
+/* gnc_gui_refresh_suspended
+ *   Return TRUE if gui refreshes are suspended.
+ */
+gboolean gnc_gui_refresh_suspended (void);
+
 /* gnc_close_gui_component
  *   Invoke the close handler for the indicated component.
  *

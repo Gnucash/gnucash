@@ -2302,8 +2302,10 @@ Backend *
 pgendNew (void)
 {
    PGBackend *be;
-   be = (PGBackend *) g_malloc (sizeof (PGBackend));
+
+   be = g_new0 (PGBackend, 1);
    pgendInit (be);
+
    return (Backend *) be;
 }
 

@@ -165,6 +165,17 @@ gboolean gnc_book_save_may_clobber_data (GNCBook *book);
 void     gnc_book_save (GNCBook *book);
 void     gnc_book_end  (GNCBook *book);
 
+/* The gnc_book_events_pending() method will return TRUE if the backend
+ *    has pending events which must be processed to bring the engine
+ *    up to date with the backend.
+ *
+ * The gnc_book_process_events() method will process any events indicated
+ *    by the gnc_book_events_pending() method. It returns TRUE if the
+ *    engine was modified while engine events were suspended.
+ */
+gboolean gnc_book_events_pending (GNCBook *book);
+gboolean gnc_book_process_events (GNCBook *book);
+
 /* The xaccResolveFilePath() routine is a utility that will accept
  *    a fragmentary filename as input, and resolve it into a fully
  *    qualified path in the file system, i.e. a path that begins with

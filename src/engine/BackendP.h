@@ -101,7 +101,15 @@ typedef struct _backend Backend;
  *    (It might pull new splits from the backend, if this is what is
  *    needed to update an existing transaction.  It might pull new 
  *    currencies (??))
- *    
+ *
+ * The events_pending() routines should return true if there are
+ *    external events which need to be processed to bring the
+ *    engine up to date with the backend.
+ *
+ * The process_events() routine should process any events indicated
+ *    by the events_pending() routine. It should return TRUE if
+ *    the engine was changed while engine events were suspended.
+ *
  * The last_err member indicates the last error that occurred.
  *    It should probably be implemented as an array (actually,
  *    a stack) of all the errors that have occurred.
@@ -122,6 +130,9 @@ struct _backend
   void (*run_query) (Backend *, Query *);
   void (*sync) (Backend *, AccountGroup *);
 
+  gboolean (*events_pending) (Backend *be);
+  gboolean (*process_events) (Backend *be);
+
   GNCBackendError last_err;
 };
 
@@ -133,8 +144,8 @@ struct _backend
  *   stack.
  */
 
-void xaccBackendSetError (Backend *, GNCBackendError err);
-GNCBackendError xaccBackendGetError (Backend *);
+void xaccBackendSetError (Backend *be, GNCBackendError err);
+GNCBackendError xaccBackendGetError (Backend *be);
 
 /*
  * The xaccGetAccountBackend() subroutine will find the
@@ -148,14 +159,14 @@ GNCBackendError xaccBackendGetError (Backend *);
  *    transaction.
  */
 
-Backend * xaccAccountGetBackend (Account *);
-Backend * xaccTransactionGetBackend (Transaction *);
+Backend * xaccAccountGetBackend (Account *account);
+Backend * xaccTransactionGetBackend (Transaction *trans);
 
 /*
  * The xaccGroupSetBackend() associates a backend to a group
  */
-void xaccGroupSetBackend (AccountGroup *, Backend *);
-Backend * xaccGroupGetBackend (AccountGroup *);
+void xaccGroupSetBackend (AccountGroup *group, Backend *be);
+Backend * xaccGroupGetBackend (AccountGroup *group);
 Backend * xaccGNCBookGetBackend (GNCBook *book);
 
 

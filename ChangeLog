@@ -1,9 +1,32 @@
+2001-03-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c (gnc_ui_check_events): add timeout
+	handler for checking backend events.
+
+	* src/engine/gnc-book.{ch}: add api calls to use backend
+	event hooks.
+
+	* src/engine/BackendP.h (struct _backend ): add events_pending
+	and process_events callbacks.
+
+	* src/scm/command-line.scm: extend usage command with argument
+	list
+
+	* src/pixmaps/Makefile.am: switch splash graphics
+
+	* src/gnome/gnc-splash.c (gnc_show_splash_screen): add a border.
+	use new graphic.
+
+	* src/gnome/window-main.c: store namespace & mnemonic instead
+	of commodity pointers in the asset/profit widget.
+
 2001-03-07  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/report/transaction-report.scm: Added row colors to make things
-	look pretty.  Comments on effectiveness appreciated.
+	* src/scm/report/transaction-report.scm: Added row colors to make
+	things look pretty.  Comments on effectiveness appreciated.
 
-	* src/scm/html-table.scm: keep track of how many rows are in the table.
+	* src/scm/html-table.scm: keep track of how many rows are in the
+	table.
 
 2001-03-06  Dave Peticolas  <dave@krondo.com>
 
