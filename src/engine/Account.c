@@ -604,7 +604,9 @@ xaccAccountRecomputeBalance( Account * acc )
 
     /* For bank accounts, the invariant subtotal is the dollar
      * amount.  For stock accounts, the invariant is the share amount */
-    if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
+    if ( (STOCK    == acc->type) ||
+         (MUTUAL   == acc->type) ||
+         (CURRENCY == acc->type) ) {
       split -> share_balance = share_balance;
       split -> share_cleared_balance = share_cleared_balance;
       split -> share_reconciled_balance = share_reconciled_balance;
