@@ -3,7 +3,7 @@
 #include <time.h>
 
 #include "TransLog.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
