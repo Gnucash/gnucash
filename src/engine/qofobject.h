@@ -44,8 +44,9 @@ typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
                                       gpointer backend_data,
                                       gpointer user_data);
 
-/* This is the Object Object descriptor */
-struct _QofObject {
+/** This is the QofObject Class descriptor */
+struct _QofObject 
+{
   gint                interface_version; /* of this object interface */
   QofIdType           name;              /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
@@ -59,7 +60,7 @@ struct _QofObject {
   void                (*book_end)(QofBook *);
 
   /* Determine if there are any dirty items in this book */
-  gboolean        (*is_dirty)(QofBook *);
+  gboolean            (*is_dirty)(QofBook *);
 
   /* Mark this object's book clean (for after a load) */
   void                (*mark_clean)(QofBook *);

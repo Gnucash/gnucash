@@ -30,6 +30,9 @@
 
 #include "qofid.h"
 
+/** Core types of objects that can be used in parameters.
+ *  Note that QofIdTypes may also be used.  */
+
 #define QOF_TYPE_STRING    "string"
 #define QOF_TYPE_DATE    	"date"
 #define QOF_TYPE_NUMERIC   "numeric"
@@ -58,7 +61,7 @@ typedef gpointer (*QofAccessFunc)(gpointer);
  *
  * -- param_name is the name of the parameter.
  * -- param_type is the type of the parameter, which can be either another
- *    object or it can be a core data type.
+ *    object (QofIdType) or it can be a core data type (QofType).
  * -- param_getgcn is the function to actually obtain the parameter
  */
 typedef struct _QofParam 
@@ -71,11 +74,11 @@ typedef struct _QofParam
 /** This function is the default sort function for a particular object type */
 typedef int (*QofSortFunc)(gpointer, gpointer);
 
-/** This function registers a new Gnucash Object with the QofQuery
+/** This function registers a new object class with the QofQuery
  * subsystem.  In particular it registers the set of parameters and
- * converters to query the type-specific data.  Both "params" and
- * "converters" are NULL-terminated arrays of structures.  Either
- * argument may be NULL if there is nothing to be registered.
+ * converters to query the type-specific data.  The "params" argument
+ * must be a NULL-terminated array of QofParam. It may be NULL if
+ * there are no paramters to be registered.
  */
 void qof_query_object_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_fcn,
@@ -83,21 +86,21 @@ void qof_query_object_register (QofIdTypeConst obj_name,
 
 /** An example:
  *
- * #define MY_QUERY_OBJ_MEMO	"memo"
- * #define MY_QUERY_OBJ_VALUE	"value"
- * #define MY_QUERY_OBJ_DATE	"date"
- * #define MY_QUERY_OBJ_ACCOUNT "account"
- * #define MY_QUERY_OBJ_TRANS	"trans"
+ * #define MY_OBJ_MEMO	"memo"
+ * #define MY_OBJ_VALUE	"value"
+ * #define MY_OBJ_DATE	"date"
+ * #define MY_OBJ_ACCOUNT "account"
+ * #define MY_OBJ_TRANS	"trans"
  *
  * static QofParam myParams[] = {
- * { MY_QUERY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter },
- * { MY_QUERY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter },
- * { MY_QUERY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter },
- * { MY_QUERY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
- * { MY_QUERY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
+ * { MY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter },
+ * { MY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter },
+ * { MY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter },
+ * { MY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
+ * { MY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
  * NULL };
  *
- * qof_query_object_register ("myObjectName", myQueryObjectCompare,
+ * qof_query_object_register ("myObjectName", myObjectCompare,
  *				    &myParams);
  */
 
