@@ -239,9 +239,18 @@ printf ("save split is %p \n", split);
    if (MOD_MEMO & changed) 
       xaccSplitSetMemo (split, reg->memoCell->value);
 
-   if (MOD_AMNT & changed) {
+   /* The AMNT and NAMNT updates only differ by sign.  Basically, 
+    * the split and transaction cursors show minus the quants that
+    * the single and double cursors show, and so when updates happen,
+    * the extra minus sign must also be handled.
+    */
+   if ((MOD_AMNT | MOD_NAMNT) & changed) {
       double new_amount;
-      new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
+      if (MOD_AMNT & changed) {
+         new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
+      } else {
+         new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
+      }
       if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
           (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
@@ -321,6 +330,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetComboCellValue (reg->xfrmCell, "");
       xaccSetDebCredCellValue (reg->debitCell, 
                                reg->creditCell, 0.0);
+      xaccSetDebCredCellValue (reg->ndebitCell, 
+                               reg->ncreditCell, 0.0);
       xaccSetPriceCellValue (reg->priceCell, 0.0);
       xaccSetPriceCellValue (reg->valueCell, 0.0);
 
@@ -389,6 +400,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
          amt = xaccSplitGetValue (split);
       }
       xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amt);
+      xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amt);
       xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
    }
@@ -430,7 +442,7 @@ void
 xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
    xaccSRLoadTransEntry (reg, split, 0);
-   xaccSRLoadSplitEntry (reg, split, 0);
+   /* xaccSRLoadSplitEntry (reg, split, 0); */
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
