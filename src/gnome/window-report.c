@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-report-window.c
+ * gnc-report-window.c                                              *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
@@ -26,20 +26,25 @@
 \********************************************************************/
 
 #include "config.h"
-#include <gnome.h>
 
+#include <gnome.h>
 #include <guile/gh.h>
 
-#include "glade-gnc-dialogs.h"
-#include "window-report.h"
-#include "gnc-html.h"
-#include "gnc-html-history.h"
 #include "dialog-options.h"
+#include "glade-gnc-dialogs.h"
+#include "gnc-component-manager.h"
+#include "gnc-html-history.h"
+#include "gnc-html.h"
 #include "query-user.h"
+#include "window-report.h"
+
+#define WINDOW_REPORT_CM_CLASS "window-report"
 
 struct _gnc_report_window {
-  GtkWidget    * toplevel;  
+  GtkWidget    * container;
   GtkWidget    * paned;
+
+  gboolean     top_level;
 
   GtkWidget    * popup;
   GtkWidget    * back_widg;
@@ -53,9 +58,6 @@ struct _gnc_report_window {
 
   gnc_html     * html;
 };
-
-/* all open report windows... makes cleanup easier */
-static GList * open_report_windows = NULL;
 
 
 /********************************************************************
@@ -237,7 +239,7 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
                                     gnc_options_dialog_close_cb,
                                     win);
   }
-  
+
   scm_unprotect_object(win->scm_options);
   win->scm_options = inst_options;
   scm_protect_object(win->scm_options);
@@ -269,8 +271,41 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
 
 static void
 gnc_report_window_destroy_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window * win = data;
+
+  /* delete the window from the open list */
+  if (win->top_level)
+    gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
+
+  gnc_html_destroy(win->html);
+
+  if(win->option_dialog) {
+    gnc_options_dialog_destroy(win->option_dialog);
+  }
+
+  if(win->odb) gnc_option_db_destroy(win->odb);
+
+  win->container     = NULL;
+  win->option_dialog = NULL;
+  win->odb           = NULL;
+  win->html          = NULL;
+
+  scm_unprotect_object(win->scm_options);
+  scm_unprotect_object(win->scm_report);
+
+  g_free(win);
+}
+
+
+/********************************************************************
+ * gnc_report_window_close_cb
+ ********************************************************************/
+
+static void
+gnc_report_window_close_cb(GtkWidget * w, gpointer data) {
   gnc_report_window * rw = data;
-  gnc_report_window_destroy(rw);
+
+  gnc_close_gui_component_by_data (WINDOW_REPORT_CM_CLASS, rw);
 }
 
 
@@ -334,6 +369,14 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
   }
 }
 
+static void
+close_handler (gpointer user_data)
+{
+  gnc_report_window *win = user_data;
+
+  gnc_report_window_destroy (win);
+}
+
 /********************************************************************
  * gnc_report_window_new 
  * allocates and opens up a report window
@@ -341,7 +384,7 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
 
 gnc_report_window *
 gnc_report_window_new(GtkWidget * container) {
-  
+
   gnc_report_window * report = g_new0(gnc_report_window, 1);
   GtkObject         * tlo; 
   GtkWidget         * toolbar = NULL;
@@ -416,7 +459,7 @@ gnc_report_window_new(GtkWidget * container) {
     { GNOME_APP_UI_ITEM,
       _("Close"),
       _("Close this report window"),
-      gnc_report_window_destroy_cb, report,
+      gnc_report_window_close_cb, report,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_CLOSE,
@@ -437,28 +480,33 @@ gnc_report_window_new(GtkWidget * container) {
   scm_protect_object(report->scm_report);
 
   if(container) {
-    report->toplevel = container;    
-    report->paned    = gtk_hpaned_new();
+    report->container = container;
+    report->top_level = FALSE;
+    report->paned = gtk_hpaned_new();
     gtk_paned_add2(GTK_PANED(report->paned), 
                    gnc_html_get_widget(report->html));
     gtk_container_add(GTK_CONTAINER(container), report->paned);
     report->popup = gnome_popup_menu_new(toolbar_data);
   }
   else {
-    report->toplevel    = create_Report_Window();
-  
-    tlo = GTK_OBJECT(report->toplevel);
+    report->container = create_Report_Window();
+    report->top_level = TRUE;
+
+    tlo = GTK_OBJECT(report->container);
     toolbar         = gtk_object_get_data(tlo, "report_toolbar");
     report->paned   = gtk_object_get_data(tlo, "report_paned");
-    
+
     gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_data, NULL);
     gtk_paned_add2(GTK_PANED(report->paned), 
                    gnc_html_get_widget(report->html));
+
+    gnc_register_gui_component (WINDOW_REPORT_CM_CLASS, NULL,
+                                close_handler, report);
   }
-  
+
   report->back_widg = toolbar_data[0].widget;
   report->fwd_widg  = toolbar_data[1].widget;
-  
+
   gtk_paned_set_gutter_size(GTK_PANED(report->paned), 20);
   gtk_paned_set_position(GTK_PANED(report->paned), 0);
 
@@ -466,16 +514,15 @@ gnc_report_window_new(GtkWidget * container) {
   gnc_html_set_load_cb(report->html, gnc_report_window_load_cb, report);
   gnc_html_set_button_cb(report->html, gnc_report_window_button_cb, report);
 
-  gtk_signal_connect(GTK_OBJECT(report->toplevel), "destroy",
-                     GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb), 
-                     (gpointer)report);
+  gtk_signal_connect(GTK_OBJECT(report->container), "destroy",
+                     GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb),
+                     report);
 
   report->option_dialog = NULL;
   report->odb = NULL;
-  gtk_widget_show_all(report->toplevel);
 
-  open_report_windows = g_list_append(open_report_windows, report);
-  
+  gtk_widget_show_all(report->container);
+
   return report;
 }
 
@@ -488,34 +535,9 @@ gnc_report_window_new(GtkWidget * container) {
 void
 gnc_report_window_destroy(gnc_report_window * win) {
 
-  /* delete the window from the open list */
-  open_report_windows = g_list_remove(open_report_windows, win);
+  if (!win) return;
 
-  gtk_signal_disconnect_by_func(GTK_OBJECT(win->toplevel), 
-                                GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb), 
-                                (gpointer)win);
-  
-  /* handle the gnc-html carefully */
-  gtk_widget_ref(gnc_html_get_widget(win->html));
-  gnc_html_destroy(win->html);
-
-  if(win->option_dialog) {
-    gtk_widget_ref(gnc_options_dialog_widget(win->option_dialog));
-    gnc_options_dialog_destroy(win->option_dialog);
-  }
-
-  if(win->odb) gnc_option_db_destroy(win->odb);
-  if(win->toplevel) gtk_widget_destroy(GTK_WIDGET(win->toplevel)); 
-  
-  
-  win->toplevel      = NULL;
-  win->option_dialog = NULL;
-  win->odb           = NULL;
-  win->html          = NULL;
-
-  scm_unprotect_object(win->scm_options);
-
-  g_free(win);
+  gtk_widget_destroy(GTK_WIDGET(win->container));
 }
 
 gnc_html *
@@ -536,12 +558,3 @@ reportWindow(int report_id) {
   gnc_report_window * win = gnc_report_window_new(NULL);
   gnc_report_window_show_report(win, report_id);
 }
-
-
-void
-gnc_ui_destroy_report_windows(void) {
-  while(open_report_windows != NULL) {
-    gnc_report_window_destroy((gnc_report_window *)open_report_windows->data);
-  }
-}
-

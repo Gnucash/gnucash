@@ -197,6 +197,8 @@ gncAddHistory (GNCBook *book)
     gnc_history_add_file (url + 5);
   else
     gnc_history_add_file (url);
+
+  g_free (url);
 }
 
 /* ======================================================== */

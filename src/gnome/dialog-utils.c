@@ -54,7 +54,6 @@ gnc_ui_source_menu_create(Account *account)
   GtkMenu   *menu;
   GtkWidget *item;
   GtkWidget *omenu;
-  /* gchar *codename;      This didn't appear to be used anywhere... */
   GNCAccountType type;
 
   menu = GTK_MENU(gtk_menu_new());
@@ -82,10 +81,6 @@ gnc_ui_source_menu_create(Account *account)
   if ((STOCK != type) && (MUTUAL != type))
     return omenu;
   
-  /* 
-     This didn't appear to be used anywhere...
-     codename = xaccInvAcctGetPriceSrc(invacct); */
-
   return omenu;
 }
 
@@ -106,6 +101,13 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
   cb(w, index, data);
 }
 
+static void
+option_menu_destroy_cb (GtkObject *obj, gpointer data)
+{
+  GtkTooltips *tips = data;
+
+  gtk_object_unref (GTK_OBJECT (tips));
+}
 
 /********************************************************************\
  * gnc_ui_create_option_button                                      *
@@ -131,6 +133,9 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
   gtk_widget_show(menu);
 
   tooltips = gtk_tooltips_new();
+
+  gtk_object_ref (GTK_OBJECT (tooltips));
+  gtk_object_sink (GTK_OBJECT (tooltips));
 
   for (i = 0; i < num_options; i++)
   {
@@ -159,6 +164,9 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
   }
 
   gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
+
+  gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
+                      GTK_SIGNAL_FUNC (option_menu_destroy_cb), tooltips);
 
   return omenu;
 }

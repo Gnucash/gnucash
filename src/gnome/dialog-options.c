@@ -46,8 +46,12 @@
 static short module = MOD_GUI;
 
 struct _gnc_option_win {
-  GtkWidget  * window;
+  GtkWidget  * container;
   GtkWidget  * notebook;
+
+  gboolean toplevel;
+
+  GtkTooltips * tips;
 
   GNCOptionWinCallback apply_cb;
   gpointer             apply_cb_data;
@@ -794,6 +798,7 @@ gnc_option_create_date_widget (GNCOption *option)
   char **raw_strings;
   char **raw;
   int num_values;
+
   type = gnc_option_date_option_get_subtype(option);
   show_time = gnc_option_show_time(option);
   use24 = gnc_lookup_boolean_option("International", 
@@ -847,6 +852,8 @@ gnc_option_create_date_widget (GNCOption *option)
         info[i].callback = gnc_option_multichoice_cb;
       }
       info[i].user_data = option;
+
+      raw++;
     }
 
     rel_widget = gnc_build_option_menu(info, num_values);
@@ -857,7 +864,8 @@ gnc_option_create_date_widget (GNCOption *option)
 
     g_free(raw_strings);
     g_free(info);
-  }  
+  }
+
   if(safe_strcmp(type, "absolute") == 0)
   {
     free(type);
@@ -1677,8 +1685,7 @@ gnc_options_dialog_add_option(GtkWidget *page,
 
 static gint
 gnc_options_dialog_append_page(GNCOptionWin * propertybox,
-                               GNCOptionSection *section,
-                               GtkTooltips *tooltips)
+                               GNCOptionSection *section)
 {
   GNCOption *option;
   GtkWidget *page_label;
@@ -1708,7 +1715,8 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   for (i = 0; i < num_options; i++)
   {
     option = gnc_get_option_section_option(section, i);
-    gnc_options_dialog_add_option(page_content_box, option, tooltips);
+    gnc_options_dialog_add_option(page_content_box, option,
+                                  propertybox->tips);
   }
   
   return gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
@@ -1729,7 +1737,6 @@ void
 gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
                                   GNCOptionDB  *odb)
 {
-  GtkTooltips *tooltips;
   GNCOptionSection *section;
   gchar *default_section_name;
   gint default_page = -1;
@@ -1737,7 +1744,10 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   gint page;
   gint i, j;
 
-  tooltips = gtk_tooltips_new();
+  propertybox->tips = gtk_tooltips_new();
+
+  gtk_object_ref (GTK_OBJECT (propertybox->tips));
+  gtk_object_sink (GTK_OBJECT (propertybox->tips));
 
   num_sections = gnc_option_db_num_sections(odb);
   default_section_name = gnc_option_db_get_default_section(odb);
@@ -1747,7 +1757,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
     const char *section_name;
 
     section = gnc_option_db_get_section(odb, i);
-    page = gnc_options_dialog_append_page(propertybox, section, tooltips);
+    page = gnc_options_dialog_append_page(propertybox, section);
 
     section_name = gnc_option_section_name(section);
     if (safe_strcmp(section_name, default_section_name) == 0)
@@ -1779,7 +1789,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
 
 GtkWidget *
 gnc_options_dialog_widget(GNCOptionWin * win) {
-  return win->window;
+  return win->container;
 }
 
 static int
@@ -1814,7 +1824,7 @@ gnc_options_dialog_close_stub_cb(GtkWidget * w, gpointer data) {
     return TRUE;
   }
   else {
-    gtk_widget_hide(window->window);
+    gtk_widget_hide(window->container);
     return FALSE;
   }
 }
@@ -1826,7 +1836,7 @@ gnc_options_dialog_ok_cb(GtkWidget * w, gpointer data) {
 }
 
 GNCOptionWin *
-gnc_options_dialog_new(int make_toplevel) {
+gnc_options_dialog_new(gboolean make_toplevel) {
   GNCOptionWin * retval = g_new0(GNCOptionWin, 1);
   GtkWidget * vbox;
   GtkWidget * buttonbox;
@@ -1836,15 +1846,19 @@ gnc_options_dialog_new(int make_toplevel) {
   GtkWidget * help_button=NULL;
   GtkWidget * close_button=NULL;
 
+  retval->toplevel = make_toplevel;
+
   vbox     =  gtk_vbox_new(FALSE, 5);
 
   if(make_toplevel) {
-    retval->window = gtk_window_new(GDK_WINDOW_TOPLEVEL);
+    retval->container = gtk_window_new(GDK_WINDOW_TOPLEVEL);
   }
   else {
-    retval->window = vbox;
+    retval->container = vbox;
+    gtk_widget_ref(vbox);
+    gtk_object_sink(GTK_OBJECT(vbox));
   }
-  
+
   buttonbox = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
@@ -1868,7 +1882,6 @@ gnc_options_dialog_new(int make_toplevel) {
                      GTK_SIGNAL_FUNC(gnc_options_dialog_help_stub_cb),
                      retval);
   
-  
   gtk_signal_connect(GTK_OBJECT(ok_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_ok_cb),
                      retval);
@@ -1887,7 +1900,7 @@ gnc_options_dialog_new(int make_toplevel) {
   gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(buttonbox), FALSE, TRUE, 0);
 
   if(make_toplevel) {
-    gtk_container_add(GTK_CONTAINER(retval->window), vbox);
+    gtk_container_add(GTK_CONTAINER(retval->container), vbox);
   }
 
   gtk_widget_show_all(vbox);
@@ -1919,16 +1932,24 @@ gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
 
 void
 gnc_options_dialog_destroy(GNCOptionWin * win) {
-  if(win && win->window) {
-    gtk_widget_unref(win->window);
+
+  if (!win) return;
+
+  gtk_widget_destroy(win->container);
+
+  if(!win->toplevel) {
+    gtk_widget_unref(win->container);
   }
-  if(win) {
-    win->window = NULL;
-    win->notebook = NULL;
-    win->apply_cb = NULL;
-    win->help_cb = NULL;
-    g_free(win);
-  }
+
+  gtk_object_unref (GTK_OBJECT(win->tips));
+
+  win->container = NULL;
+  win->notebook = NULL;
+  win->apply_cb = NULL;
+  win->help_cb = NULL;
+  win->tips = NULL;
+
+  g_free(win);
 }
 
 
@@ -1985,7 +2006,7 @@ gnc_show_options_dialog(void)
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);
     
-    gtk_window_set_title(GTK_WINDOW(options_dialog->window), 
+    gtk_window_set_title(GTK_WINDOW(options_dialog->container), 
                          _("GnuCash Preferences"));
     
     gnc_options_dialog_set_apply_cb(options_dialog, 
@@ -1997,6 +2018,6 @@ gnc_show_options_dialog(void)
                                    global_options);
   }
   
-  gtk_widget_show(GTK_WIDGET(options_dialog->window));  
-  gdk_window_raise(options_dialog->window->window);
+  gtk_widget_show(options_dialog->container);
+  gdk_window_raise(options_dialog->container->window);
 }

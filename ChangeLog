@@ -1,3 +1,38 @@
+2001-03-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-dialogs.glade: add title to transfer dialog
+
+	* src/engine/gnc-pricedb.c (gnc_pricedb_destroy): fix mem leak
+
+	* src/gnome/dialog-options.c: cleanup destruction semantics.
+	destroy tooltips
+
+	* src/engine/io-gncxml-r.c (gnc_book_load_from_xml_file): fix mem
+	leak
+
+	* src/gnome/dialog-utils.c (gnc_build_option_menu): destroy
+	tooltips when menu is destroyed
+
+2001-03-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: destroy tooltips object
+
+	* src/gnome/window-main.c (gnc_ui_destroy_all_subwindows): now all
+	windows use component manager
+
+	* src/gnome/window-report.c: add report to component manager.
+	cleaner destruction behavior
+
+	* src/gnome/window-help.c: cleaner destruction behavior
+
+	* src/gnome/gnc-html.c: fix to avoid having the ref the container
+	from outside for destruction
+
+	* src/FileDialog.c (gncAddHistory): fix mem leak
+
+	* src/gnome/dialog-options.c (gnc_option_create_date_widget): fix
+	bug & mem leak.
+
 2001-03-01  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/gnc-account-xml-v2.c (account_id_handler): fix mem

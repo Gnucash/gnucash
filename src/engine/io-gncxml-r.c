@@ -315,6 +315,10 @@ gnc_book_load_from_xml_file(GNCBook *book)
     }
     else
     {
+      GNCPriceDB *db = gnc_book_get_pricedb(book);
+
+      if(db) gnc_pricedb_destroy(db);
+
       gnc_book_set_pricedb(book, gnc_pricedb_create());
     }
     return(TRUE);

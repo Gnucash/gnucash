@@ -1079,12 +1079,12 @@ gnc_html_reload(gnc_html * html) {
 \********************************************************************/
 
 gnc_html * 
-gnc_html_new() {
+gnc_html_new(void) {
   gnc_html * retval = g_new0(gnc_html, 1);
   
   retval->container = gtk_scrolled_window_new(NULL, NULL);
-  retval->html   = gtk_html_new();
-  
+  retval->html = gtk_html_new();
+
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(retval->container),
                                  GTK_POLICY_AUTOMATIC,
                                  GTK_POLICY_AUTOMATIC);
@@ -1092,7 +1092,10 @@ gnc_html_new() {
   gtk_container_add(GTK_CONTAINER(retval->container), 
                     GTK_WIDGET(retval->html));
   
-  retval->history   = gnc_html_history_new();
+  retval->history = gnc_html_history_new();
+
+  gtk_widget_ref (retval->container);
+  gtk_object_sink (GTK_OBJECT (retval->container));
 
   /* signals */
   gtk_signal_connect(GTK_OBJECT(retval->html), "url_requested",
@@ -1176,10 +1179,20 @@ gnc_html_destroy(gnc_html * html) {
   /* cancel any outstanding HTTP requests */
   gnc_html_cancel(html);
   
-  gtk_widget_unref(html->container);
   gnc_html_history_destroy(html->history);
+
+  gtk_widget_destroy(html->container);
+  gtk_widget_unref(html->container);
+
   g_free(html->current_link);
   g_free(html->base_location);
+
+  html->container     = NULL;
+  html->html          = NULL;
+  html->history       = NULL;
+  html->current_link  = NULL;
+  html->base_location = NULL;
+
   g_free(html);
 }
 
@@ -1221,12 +1234,14 @@ gnc_html_print(gnc_html * html) {
 
 gnc_html_history * 
 gnc_html_get_history(gnc_html * html) {
+  if (!html) return NULL;
   return html->history;
 }
 
 
 GtkWidget * 
 gnc_html_get_widget(gnc_html * html) {
+  if (!html) return NULL;
   return html->container;
 }
 

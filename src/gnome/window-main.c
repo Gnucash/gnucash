@@ -1597,8 +1597,6 @@ gnc_ui_destroy_all_subwindows (void)
 
   gnc_forall_gui_components (NULL, component_handler, info);
 
-  gnc_ui_destroy_report_windows ();
-
   gnc_resume_gui_refresh ();
 }
 

@@ -349,7 +349,29 @@ static void
 gnc_help_window_destroy_cb(GtkWidget * w, gpointer data) {
   gnc_help_window * help = data;
 
-  gnc_help_window_destroy(help);
+  gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
+
+  /* close the help index db */
+  if(help->index_db) {
+    help->index_db->close(help->index_db);
+  }
+
+  gnc_html_destroy(help->html);
+
+  help->html        = NULL;
+  help->toplevel    = NULL;
+  help->statusbar   = NULL;
+  help->html_vbox   = NULL;
+  help->topics_tree = NULL;
+
+  g_free(help);
+}
+
+static void
+gnc_help_window_close_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window * help = data;
+
+  gnc_close_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
 }
 
 static void
@@ -540,7 +562,7 @@ gnc_help_window_new (void) {
     { GNOME_APP_UI_ITEM,
       N_("Close"),
       N_("Close this Help window"),
-      gnc_help_window_destroy_cb, help,
+      gnc_help_window_close_cb, help,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_CLOSE,
@@ -616,30 +638,9 @@ gnc_help_window_new (void) {
 void
 gnc_help_window_destroy(gnc_help_window * help) {
 
-  gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
-
-  gtk_signal_disconnect_by_func(GTK_OBJECT(help->toplevel), 
-                                GTK_SIGNAL_FUNC(gnc_help_window_destroy_cb), 
-                                (gpointer)help);
-
-  /* close the help index db */
-  if(help->index_db) {
-    help->index_db->close(help->index_db);
-  }
-
-  /* take care of the gnc-html object specially */
-  gtk_widget_ref(gnc_html_get_widget(help->html));
-  gnc_html_destroy(help->html);
+  if (!help) return;
 
   gtk_widget_destroy(GTK_WIDGET(help->toplevel)); 
-
-  help->html        = NULL;
-  help->toplevel    = NULL;
-  help->statusbar   = NULL;
-  help->html_vbox   = NULL;
-  help->topics_tree = NULL;
-
-  g_free(help);
 }
 
 

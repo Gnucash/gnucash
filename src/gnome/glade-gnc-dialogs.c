@@ -4850,7 +4850,7 @@ create_Transfer_Dialog (void)
   GtkWidget *button66;
   GtkWidget *button68;
 
-  Transfer_Dialog = gnome_dialog_new (NULL, NULL);
+  Transfer_Dialog = gnome_dialog_new (_("Transfer Funds"), NULL);
   gtk_object_set_data (GTK_OBJECT (Transfer_Dialog), "Transfer_Dialog", Transfer_Dialog);
   gtk_window_set_policy (GTK_WINDOW (Transfer_Dialog), TRUE, TRUE, FALSE);
 

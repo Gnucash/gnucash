@@ -7050,6 +7050,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 <widget>
   <class>GnomeDialog</class>
   <name>Transfer Dialog</name>
+  <title>Transfer Funds</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>

@@ -37,8 +37,7 @@ gnc_report_window * gnc_report_window_new(GtkWidget * container);
 void       gnc_report_window_destroy(gnc_report_window * rep);
 void       gnc_report_window_show_report(gnc_report_window * rw, int id);
 gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
- 
+
 void reportWindow(int id);
-void gnc_ui_destroy_report_windows(void);
 
 #endif

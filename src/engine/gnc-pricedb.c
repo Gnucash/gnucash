@@ -296,7 +296,7 @@ gnc_price_list_destroy(GList *prices)
  */
 
 GNCPriceDB *
-gnc_pricedb_create()
+gnc_pricedb_create(void)
 {
   GNCPriceDB * result = g_new0(GNCPriceDB, 1);
   result->commodity_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
@@ -350,6 +350,7 @@ gnc_pricedb_destroy(GNCPriceDB *db)
                         NULL);
   g_hash_table_destroy (db->commodity_hash);
   db->commodity_hash = NULL;
+  g_free(db);
 }
 
 gboolean

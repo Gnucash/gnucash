@@ -86,6 +86,8 @@ struct _xferDialog
 
   GtkWidget * price_radio;
   GtkWidget * amount_radio;
+
+  GtkTooltips *tips;
 };
 
 struct _acct_list_item
@@ -329,8 +331,7 @@ gnc_xfer_dialog_to_tree_select_cb(GNCAccountTree *tree,
 
 static void
 gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
-                                XferDirection direction,
-                                GtkTooltips *tooltips)
+                                XferDirection direction)
 {
   const char *show_inc_exp_message = _("Show the income and expense accounts");
   GNCAccountTree *atree;
@@ -384,7 +385,7 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
     xferData->from_show_button = button;
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
-  gtk_tooltips_set_tip(tooltips, button, show_inc_exp_message, NULL);
+  gtk_tooltips_set_tip(xferData->tips, button, show_inc_exp_message, NULL);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb), tree);
@@ -897,6 +898,8 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
     xferData->curr_accts_list = NULL;
   }
 
+  gtk_object_unref (GTK_OBJECT (xferData->tips));
+
   gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 
   g_free(xferData);
@@ -911,7 +914,6 @@ static void
 gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 {
   GtkWidget *dialog;
-  GtkTooltips *tooltips;
   GtkObject *tdo;
 
   dialog = create_Transfer_Dialog();
@@ -936,7 +938,10 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   gtk_signal_connect(GTK_OBJECT(dialog), "close",
                      GTK_SIGNAL_FUNC(gnc_xfer_dialog_close_cb), xferData);
 
-  tooltips = gtk_tooltips_new();
+  xferData->tips = gtk_tooltips_new();
+
+  gtk_object_ref (GTK_OBJECT (xferData->tips));
+  gtk_object_sink (GTK_OBJECT (xferData->tips));
 
   /* amount & date widgets */
   {
@@ -982,8 +987,8 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   {
     GtkWidget *label;
 
-    gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_TO, tooltips);
-    gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_FROM, tooltips);
+    gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_TO);
+    gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_FROM);
 
     gtk_signal_connect(GTK_OBJECT(xferData->from), "select_account",
 		       GTK_SIGNAL_FUNC(gnc_xfer_dialog_from_tree_select_cb),
