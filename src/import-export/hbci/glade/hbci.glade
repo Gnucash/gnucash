@@ -201,7 +201,7 @@ HBCI connection now.</text>
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label8477399</name>
-	      <label>Country Code</label>
+	      <label>Country Code (Germany: 280)</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0</xalign>
@@ -255,7 +255,7 @@ HBCI connection now.</text>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>8</text_max_length>
-	      <text>09950004</text>
+	      <text></text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
@@ -555,7 +555,7 @@ HBCI connection now.</text>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>50</text_max_length>
-	      <text>Benutzer-000146-04</text>
+	      <text></text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
