@@ -93,7 +93,9 @@
                       (gnc:account-get-type level-2-account))))
       (html-table-row-align
        (list
-	account-name type-name (gnc:amount->formatted-string l2-value #f))
+	account-name type-name 
+	(gnc:amount->formatted-currency-string 
+	 l2-value (gnc:account-get-currency level-2-account) #f))
        (list "left" "center" "right"))))
 
   (define (render-level-1-account account l1-value)
@@ -101,7 +103,8 @@
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
       (html-table-row-align
        (list name type NBSP 
-             (gnc:amount->formatted-string l1-value #f)
+             (gnc:amount->formatted-currency-string 
+ 	      l1-value (gnc:account-get-currency account) #f)
 	     NBSP NBSP)
        (list "left" "center" "right" "right" "right" "right"))))
 
