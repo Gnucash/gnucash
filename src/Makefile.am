@@ -21,8 +21,8 @@ GUI_SUBDIRS_1 = \
 
 GUI_SUBDIRS_2 = \
   register \
-  import-export \
   gnome \
+  import-export \
   experimental \
   business \
   optional 

@@ -2052,7 +2052,7 @@ xaccSplitDestroy (Split *split)
 
    acc = split->acc;
    trans = split->parent;
-   if (!acc->do_free && xaccTransWarnReadOnly (trans))
+   if (acc && !acc->do_free && xaccTransWarnReadOnly (trans))
        return FALSE;
 
    check_open (trans);

@@ -62,6 +62,14 @@ static void xaccAccountBringUpToDate (Account *);
 /********************************************************************\
 \********************************************************************/
 
+G_INLINE_FUNC void account_event (Account *account);
+G_INLINE_FUNC void
+account_event (Account *account)
+{
+  gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
+}
+
+
 G_INLINE_FUNC void mark_account (Account *account);
 G_INLINE_FUNC void
 mark_account (Account *account)
@@ -69,7 +77,7 @@ mark_account (Account *account)
   if (account->parent)
     account->parent->saved = FALSE;
 
-  gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
+  account_event (account);
 }
 
 /********************************************************************\
@@ -1169,6 +1177,7 @@ xaccAccountRecomputeBalance (Account * acc)
   acc->reconciled_balance = reconciled_balance;
 
   acc->balance_dirty = FALSE;
+  account_event (acc);
 }
 
 /********************************************************************\

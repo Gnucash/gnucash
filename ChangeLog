@@ -1,3 +1,20 @@
+2002-11-09  Derek Atkins  <derek@ihtfp.com>
+	* gnome/dialog-new-user: don't call the qif-import-druid directly.
+	  Add a callback API for the qif-import druid.  Use that callback
+	  when the qif-import button is pressed.  Make the qif-import button
+	  sensitive only when the qif-import module is loaded (i.e. only when
+	  the callback function is non-NULL).
+	* import-export/qif-import -- set the make_druid callback for the new-user
+	  dialog.
+	* gnome/Makefile.am -- remove dependency on qif-import library.
+	* src/makefile.am -- re-order import-export after gnome
+	
+	* engine/Transaction.c -- allow deletion of a non-connected Splits
+	  (fixes a SEGV problem)
+
+	* engine/Account.c -- send an event whenever an account balance is updated.
+	  Fixes bug # 97689
+
 2002-11-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/window-register.c (regWindowLedger): Fix menu

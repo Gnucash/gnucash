@@ -11,6 +11,7 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 #include "druid-qif-import.h"
+#include "dialog-new-user.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_qif_import_LTX_gnc_module_system_interface = 0;
@@ -55,6 +56,15 @@ libgncmod_qif_import_LTX_gnc_module_init(int refcount)
   if(!gnc_module_load("gnucash/gnome-utils", 0)) 
   {
     return FALSE;
+  }
+
+  /* If the recount == 0 then register the qif-import-druid for the new-user
+   * dialog.
+   */
+  if (refcount == 0)
+  {
+    gnc_new_user_dialog_register_qif_druid
+      ((void (*)())gnc_ui_qif_import_druid_make);
   }
 
   gh_eval_str("(use-modules (gnucash import-export qif-import))");

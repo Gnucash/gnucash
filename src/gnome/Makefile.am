@@ -11,7 +11,6 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
-  ${top_builddir}/src/import-export/qif-import/libgncmod-qif-import.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
@@ -120,8 +119,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
-  -I${top_srcdir}/src/import-export/binary-import \
-  -I${top_srcdir}/src/import-export/qif-import \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_INCLUDEDIR} \

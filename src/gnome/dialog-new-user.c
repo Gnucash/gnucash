@@ -28,14 +28,24 @@
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
-#include "druid-qif-import.h"
 #include "global-options.h"
 #include "gnc-ui.h"
 #include "window-help.h"
 
 
+/* function to open a qif import druid */
+static void (*qifImportDruidFcn)(void) = NULL;
+
+
 static void gnc_ui_new_user_cancel_dialog (void);
 
+
+void
+gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
+{
+  g_return_if_fail (qifImportDruidFcn == NULL);
+  qifImportDruidFcn = cb_fcn;
+}
 
 void
 gnc_set_first_startup (gboolean first_startup)
@@ -63,6 +73,11 @@ gnc_ui_new_user_dialog (void)
   import_qif_button = glade_xml_get_widget (xml, "import_qif_button");
   tutorial_button = glade_xml_get_widget (xml, "tutorial_button");
 
+  /* Set the sensitivity of the qif-import button based on the availability
+   * of the qif-import druid.
+   */
+  gtk_widget_set_sensitive (import_qif_button, (qifImportDruidFcn != NULL));
+
   result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
   if (result != 0)
   {
@@ -79,10 +94,10 @@ gnc_ui_new_user_dialog (void)
     return;
   }
 
-  if (gtk_toggle_button_get_active
-      (GTK_TOGGLE_BUTTON (import_qif_button)))
+  if ((qifImportDruidFcn != NULL) &&
+      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
   {
-    gnc_ui_qif_import_druid_make ();
+    qifImportDruidFcn();
   }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
   {
