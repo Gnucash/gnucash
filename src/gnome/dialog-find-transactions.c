@@ -345,7 +345,6 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gtk_object_get_data(GTK_OBJECT(dialog), "find_transactions_structure");
   
   GList   * selected_accounts;
-  GList   * cur;
   char    * descript_match_text;
   char    * memo_match_text;
   char    * number_match_text;
@@ -356,8 +355,6 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   float   amt_temp;
   int     amt_type;
   Query   * q, * q2;
-  Account ** acclist;
-  int     i;
   gboolean new_ledger = FALSE;
 
   int start_year, start_month, start_day;
@@ -396,18 +393,8 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   action_match_text = 
     gtk_entry_get_text(GTK_ENTRY(ftd->action_entry));
   
-  if(g_list_length(selected_accounts)) {
-    /* build the acclist from the widget GList */
-    acclist = g_new0(Account *, 
-                     g_list_length(selected_accounts) + 1);
-    i = 0;
-    for(cur=selected_accounts; cur; cur=cur->next) {
-      acclist[i] = cur->data;
-      i++;
-    }
-    acclist[i] = NULL;
-    
-    xaccQueryAddAccountMatch(q, acclist,
+  if(selected_accounts) {
+    xaccQueryAddAccountMatch(q, selected_accounts,
                              gnc_option_menu_get_active
                              (ftd->match_accounts_picker),
                              QUERY_AND);

@@ -111,22 +111,12 @@ print_query(Query * q) {
 
 
 /********************************************************************
- * xaccMallocQuery 
- ********************************************************************/
-
-Query * 
-xaccMallocQuery(void) {
-  Query * qp     = g_new0(Query, 1);
-  xaccInitQuery(qp, NULL);
-  return qp;
-}
-
-
-/********************************************************************
  * xaccInitQuery
  ********************************************************************/
 
-void
+/* initial_term has hand-over semantics! Thus, initial_term must point
+ * to newly allocated memory or be NULL. */
+static void
 xaccInitQuery(Query * q, QueryTerm * initial_term) {
   GList * or  = NULL;
   GList * and = NULL;
@@ -138,10 +128,9 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
     or->data  = and;
   }
 
-  if(q->terms) {
+  if(q->terms)
     xaccQueryClear(q);
-  }
-  
+
   q->terms      = or;
   q->split_list = NULL;
   q->changed    = 1;
@@ -153,6 +142,18 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->tertiary_sort = BY_NONE;
 
   q->sort_increasing = TRUE;
+}
+
+
+/********************************************************************
+ * xaccMallocQuery 
+ ********************************************************************/
+
+Query * 
+xaccMallocQuery(void) {
+  Query * qp     = g_new0(Query, 1);
+  xaccInitQuery(qp, NULL);
+  return qp;
 }
 
 
@@ -186,6 +187,82 @@ xaccQueryHasTerms(Query * q) {
 }
 
 
+static void
+free_query_term(QueryTerm *qt)
+{
+  if (qt == NULL)
+    return;
+
+  switch (qt->data.type)
+  {
+    case PD_ACCOUNT:
+      g_list_free (qt->data.acct.accounts);
+      qt->data.acct.accounts = NULL;
+      break;
+
+    case PD_STRING:
+      g_free(qt->data.str.matchstring);
+      qt->data.str.matchstring = NULL;
+      break;
+
+    default:
+      break;
+  }
+
+  g_free(qt);
+}
+
+static QueryTerm *
+copy_query_term(QueryTerm * qt) {
+  QueryTerm * nqt;
+
+  if (qt == NULL)
+    return NULL;
+
+  nqt = g_new0(QueryTerm, 1);
+
+  memcpy(nqt, qt, sizeof(QueryTerm));
+
+  switch (nqt->data.type)
+  {
+    case PD_ACCOUNT:
+      nqt->data.acct.accounts = g_list_copy (nqt->data.acct.accounts);
+      break;
+
+    case PD_STRING:
+      nqt->data.str.matchstring = g_strdup(nqt->data.str.matchstring);
+      break;
+
+    default:
+      break;
+  }
+
+  return nqt;
+}
+
+static GList *
+copy_and_terms(GList *and_terms) {
+  GList *and = NULL;
+  GList *cur_and;
+
+  for(cur_and = and_terms; cur_and; cur_and = cur_and->next)
+    and = g_list_prepend(and, copy_query_term (cur_and->data));
+
+  return g_list_reverse(and);
+}
+
+static GList * 
+copy_or_terms(GList * or_terms) {
+  GList * or = NULL;
+  GList * cur_or;
+
+  for(cur_or = or_terms; cur_or; cur_or = cur_or->next)
+    or = g_list_prepend(or, copy_and_terms(cur_or->data));
+
+  return g_list_reverse(or);
+}
+
+
 /********************************************************************
  * xaccFreeQuery 
  * note that the terms list is freed, so you must have newly 
@@ -194,34 +271,30 @@ xaccQueryHasTerms(Query * q) {
 
 void    
 xaccFreeQuery(Query * q) {
-  GList * gl;
+  GList * cur_or;
 
   if (q == NULL)
     return;
 
-  for(gl=q->terms; gl; gl=gl->next) {
-    g_list_free(gl->data);
+  for(cur_or = q->terms; cur_or; cur_or = cur_or->next) {
+    GList * cur_and;
+
+    for(cur_and = cur_or->data; cur_and; cur_and = cur_and->next) {
+      free_query_term(cur_and->data);
+      cur_and->data = NULL;
+    }
+
+    g_list_free(cur_or->data);
+    cur_or->data = NULL;
   }
+
   g_list_free(q->terms);
+  q->terms = NULL;
+
   g_free(q->split_list);
+  q->split_list = NULL;
+
   g_free(q);
-}
-
-static QueryTerm *
-copy_query_term(QueryTerm * qt) {
-  QueryTerm * nqt = g_new0(QueryTerm, 1);
-  memcpy(nqt, qt, sizeof(QueryTerm));
-  return nqt;
-}
-
-static GList * 
-deep_copy_terms(GList * t) {
-  GList * r = NULL;
-  GList * cur;
-  for(cur=t; cur; cur=cur->next) {
-    r = g_list_append(r, g_list_copy(cur->data));
-  }
-  return r;  
 }
 
 
@@ -242,15 +315,12 @@ xaccQueryInvert(Query * q) {
   int    num_or_terms;
 
   num_or_terms = g_list_length(q->terms);
-  
+
   switch(num_or_terms) {
   case 0:
     retval = xaccMallocQuery();
     retval->max_splits     = q->max_splits;
     retval->acct_group     = q->acct_group;
-    retval->split_list     = NULL; 
-    retval->terms          = NULL;
-    retval->changed        = 1;
     break;
 
     /* this is demorgan expansion for a single AND expression. */
@@ -259,9 +329,6 @@ xaccQueryInvert(Query * q) {
     retval = xaccMallocQuery();
     retval->max_splits     = q->max_splits;
     retval->acct_group     = q->acct_group;
-    retval->split_list     = NULL; 
-    retval->terms          = NULL;
-    retval->changed        = 1;
 
     aterms = g_list_nth_data(q->terms, 0);
     new_oterm = NULL;
@@ -278,28 +345,28 @@ xaccQueryInvert(Query * q) {
      * !a * !(b + c) = !a * !b * !c.  */
   default:
     right        = xaccMallocQuery();
-    right->terms = deep_copy_terms(g_list_nth(q->terms, 1));
-    
+    right->terms = copy_or_terms(g_list_nth(q->terms, 1));
+
     left         = xaccMallocQuery();
     left->terms  = g_list_append(NULL, 
-                                 g_list_copy(g_list_nth_data(q->terms, 0)));
-    
+                                 copy_and_terms(g_list_nth_data(q->terms, 0)));
+
     iright       = xaccQueryInvert(right);
     ileft        = xaccQueryInvert(left);
-    
+
     retval = xaccQueryMerge(iright, ileft, QUERY_AND);
     retval->max_splits     = q->max_splits;
     retval->acct_group     = q->acct_group;
     retval->changed        = 1;
-    
+
     xaccFreeQuery(iright);
     xaccFreeQuery(ileft);
     xaccFreeQuery(right);
     xaccFreeQuery(left);
     break;
-  }  
-  return retval;
+  }
 
+  return retval;
 }
 
 
@@ -324,27 +391,27 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
   case QUERY_OR:
     retval = xaccMallocQuery();
     retval->terms = 
-      g_list_concat(deep_copy_terms(q1->terms), deep_copy_terms(q2->terms));
+      g_list_concat(copy_or_terms(q1->terms), copy_or_terms(q2->terms));
     retval->max_splits     = q1->max_splits;
     retval->split_list     = NULL; /* fixme */
     retval->changed        = 1;
     retval->acct_group     = q1->acct_group;
     break;
-    
+
   case QUERY_AND:
     retval = xaccMallocQuery();
     retval->max_splits     = q1->max_splits;
     retval->split_list     = NULL; /* fixme */
     retval->changed        = 1;
     retval->acct_group     = q1->acct_group;
-    
+
     for(i=q1->terms; i; i=i->next) {
       for(j=q2->terms; j; j=j->next) {
         retval->terms = 
           g_list_append(retval->terms, 
                         g_list_concat
-                        (g_list_copy(i->data),
-                         g_list_copy(j->data)));
+                        (copy_and_terms(i->data),
+                         copy_and_terms(j->data)));
       }
     }
     break;
@@ -357,7 +424,7 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
     xaccFreeQuery(i1);
     xaccFreeQuery(i2);
     break;
-    
+
   case QUERY_NOR:
     /* !(a+b) = (!a*!b) */
     i1     = xaccQueryInvert(q1);
@@ -366,7 +433,7 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
     xaccFreeQuery(i1);
     xaccFreeQuery(i2);
     break;
-    
+
   case QUERY_XOR:
     /* a xor b = (a * !b) + (!a * b) */
     i1     = xaccQueryInvert(q1);
@@ -411,22 +478,22 @@ query_sort_func(gconstpointer pa, gconstpointer pb) {
 
 static int 
 acct_query_matches(QueryTerm * qt, Account * acct) {
-  Account ** ptr;
-  int     account_in_set = 0;
-  int     first_account = 1;
+  GList *node;
+  gboolean account_in_set = FALSE;
+  gboolean first_account = TRUE;
 
   assert(qt && acct);
   assert(qt->data.type == PD_ACCOUNT);
   assert(qt->data.acct.accounts);
 
-  for(ptr = qt->data.acct.accounts; *ptr ; ptr++) {
-    if(acct == *ptr) {
-      account_in_set = 1;
+  for(node = qt->data.acct.accounts; node ; node = node->next) {
+    if(acct == node->data) {
+      account_in_set = TRUE;
       break;
     }
-    first_account = 0;
+    first_account = FALSE;
   }
-  
+
   /* if we need the query to match "ALL" accounts, we only return 
    * true for the first acct in the set. */
   switch(qt->data.acct.how) {
@@ -443,7 +510,7 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
     break;
   }
 
-  return 0;
+  return FALSE;
 }
 
 static Query * split_sort_query = NULL;
@@ -834,9 +901,8 @@ xaccQueryGetSplits(Query * q) {
          total_splits_checked, split_count);
 
   q->changed = 0;
-  if(q->split_list) {
-    g_free(q->split_list);
-  }
+
+  g_free(q->split_list);
   q->split_list = splits;
   
   return splits;
@@ -849,7 +915,7 @@ xaccQueryGetSplits(Query * q) {
  ********************************************************************/
 
 void
-xaccQueryAddAccountMatch(Query * q, Account ** acclist, acct_match_t how,
+xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
                          QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
@@ -859,11 +925,11 @@ xaccQueryAddAccountMatch(Query * q, Account ** acclist, acct_match_t how,
   qt->sense  = 1;
   qt->data.type           = PD_ACCOUNT;
   qt->data.acct.how       = how;
-  qt->data.acct.accounts  = acclist;
-  
+  qt->data.acct.accounts  = g_list_copy(accounts);
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -887,17 +953,13 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
                                QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Account   ** acctlist = g_new0(Account *, 2);
   Query     * qr;
 
-  acctlist[0] = acct;
-  acctlist[1] = NULL;
-  
   qt->p      = & xaccAccountMatchPredicate;
   qt->sense  = 1;
   qt->data.type           = PD_ACCOUNT;
   qt->data.acct.how       = ACCT_MATCH_ANY;
-  qt->data.acct.accounts  = acctlist;
+  qt->data.acct.accounts  = g_list_prepend(NULL, acct);
   
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -935,7 +997,7 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
   qt->data.type            = PD_STRING;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
-  qt->data.str.matchstring = strdup(matchstring);
+  qt->data.str.matchstring = g_strdup(matchstring);
 
   if(!case_sens) {
     flags |= REG_ICASE;
@@ -991,7 +1053,7 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
   qt->data.type            = PD_STRING;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
-  qt->data.str.matchstring = strdup(matchstring);
+  qt->data.str.matchstring = g_strdup(matchstring);
 
   if(!case_sens) {
     flags |= REG_ICASE;
@@ -1013,7 +1075,7 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
   
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1156,7 +1218,7 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
   qt->data.type            = PD_STRING;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
-  qt->data.str.matchstring = strdup(matchstring);
+  qt->data.str.matchstring = g_strdup(matchstring);
 
   if(!case_sens) {
     flags |= REG_ICASE;
@@ -1211,7 +1273,7 @@ xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
   qt->data.type            = PD_STRING;
   qt->data.str.case_sens   = case_sens;
   qt->data.str.use_regexp  = use_regexp;
-  qt->data.str.matchstring = strdup(matchstring);
+  qt->data.str.matchstring = g_strdup(matchstring);
 
   if(!case_sens) {
     flags |= REG_ICASE;
@@ -1435,17 +1497,19 @@ xaccQueryPurgeTerms(Query * q, pd_type_t type) {
       qt = and->data;
       if(qt->data.type == type) {
         if(g_list_length(or->data) == 1) {          
-          q->terms = g_list_remove_link(q->terms, or);          
+          q->terms = g_list_remove_link(q->terms, or);
+          g_list_free_1(or);
           or = q->terms;
           break;
         }
         else {
           or->data = g_list_remove_link(or->data, and);
+          g_list_free_1(and);
           and = or->data;
           if(!and) break;
         }
         q->changed = 1;
-        g_free(qt);
+        free_query_term(qt);
       }
     }
     if(!or) break; 
@@ -1532,7 +1596,7 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   Split       * split;
   Account     * split_acct;
-  Account     ** acct;
+  GList       * acct_node;
   int         i;
   int         numsplits;
 
@@ -1547,10 +1611,10 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
     /* there must be a split in parent that matches each of the 
      * accounts listed in pd. */
     numsplits = xaccTransCountSplits(parent);
-    for(acct=pd->acct.accounts; *acct; acct++) {
+    for(acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next) {
       for(i=0; i < numsplits; i++) {
         split = xaccTransGetSplit(parent, i);
-        if(*acct == xaccSplitGetAccount(split)) {
+        if(acct_node->data == xaccSplitGetAccount(split)) {
           /* break here means we found a match before running out 
            * of splits (success) */
           break;
@@ -1562,7 +1626,7 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
         break;
       }
     }
-    if(*acct) return 0;
+    if(acct_node) return 0;
     else return 1;
 
     break;
@@ -1570,25 +1634,13 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   case ACCT_MATCH_ANY:
     /* s must match an account in pd */
     split_acct = xaccSplitGetAccount(s);
-    for(acct = pd->acct.accounts; *acct; acct++) {
-      if(*acct == split_acct) {
-        break;
-      }
-    }
-    if(*acct) return 1;
-    else return 0;
+    return (g_list_find(pd->acct.accounts, split_acct) != NULL);
     break;
 
   case ACCT_MATCH_NONE:
-    /* s must match an account in pd */
+    /* s must match no account in pd */
     split_acct = xaccSplitGetAccount(s);
-    for(acct = pd->acct.accounts; *acct; acct++) {
-      if(*acct == split_acct) {
-        break;
-      }
-    }
-    if(*acct) return 0;
-    else return 1;
+    return (g_list_find(pd->acct.accounts, split_acct) == NULL);
     break;
   }
 

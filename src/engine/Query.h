@@ -85,7 +85,7 @@ typedef struct {
 typedef struct {
   pd_type_t    type;
   acct_match_t how;
-  Account      ** accounts;
+  GList        * accounts;
 } AccountPredicateData;
 
 typedef struct {
@@ -132,7 +132,6 @@ typedef struct {
  *******************************************************************/
 
 Query   * xaccMallocQuery(void);
-void    xaccInitQuery(Query * q, QueryTerm * qt);
 void    xaccFreeQuery(Query *);
 void    xaccQuerySetGroup(Query * q, AccountGroup * group);
 Query   * xaccQueryInvert(Query * q1);
@@ -148,7 +147,7 @@ Split   ** xaccQueryGetSplits(Query * q);
  *  match-adding API 
  *******************************************************************/
 
-void xaccQueryAddAccountMatch(Query * q, Account ** acclist,
+void xaccQueryAddAccountMatch(Query * q, GList * accounts,
                               acct_match_t how, QueryOp op);
 void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
                                     QueryOp op);

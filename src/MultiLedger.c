@@ -355,27 +355,13 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
   xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
 
   if (regData->displayed_accounts)
-  {
-    Account **account_list;
-    Account **account_p;
-    GList *node;
-
-    account_list = g_new(Account *,
-                         g_list_length(regData->displayed_accounts) + 1);
-    for (account_p = account_list, node = regData->displayed_accounts; node;
-         node = node->next, account_p++)
-      *account_p = node->data;
-
-    xaccQueryAddAccountMatch(regData->query, account_list,
+    xaccQueryAddAccountMatch(regData->query, regData->displayed_accounts,
                              ACCT_MATCH_ANY, QUERY_OR);
-
-    /* fixme: memory leak pending query semantics resolution */
-  }
 
   if ((regData->leader != NULL) &&
       (g_list_find(regData->displayed_accounts, regData->leader) == NULL))
     xaccQueryAddSingleAccountMatch(regData->query, regData->leader, QUERY_OR);
-  
+
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 
@@ -512,11 +498,11 @@ RefreshAllRegs (Account *account)
 \********************************************************************/
 
 void 
-xaccAccountDisplayRefresh (Account *acc)
+xaccAccountDisplayRefresh (Account *account)
 {
   /* avoid excess screen flicker with a two-phase refresh */
-  MarkDirtyAllRegs (acc);
-  RefreshAllRegs (acc);
+  MarkDirtyAllRegs (account);
+  RefreshAllRegs (account);
 }
 
 /********************************************************************\
