@@ -88,6 +88,7 @@ gncinclude_HEADERS = \
   kvp-scm.h \
   kvp-util.h \
   messages.h \
+  qof.h \
   qofbackend.h \
   qofbook.h \
   qofid.h \
