@@ -1,3 +1,7 @@
+2002-11-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/Makefile.am -- make sure to distribute the scm files
+
 2002-11-26  David Hampton  <hampton@employees.org>
 
 	* src/report/report-system/commodity-utilities.scm:

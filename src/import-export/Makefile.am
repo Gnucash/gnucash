@@ -57,7 +57,9 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} 
 
-EXTRA_DIST = $(glade_DATA) \
+EXTRA_DIST = \
+  $(glade_DATA) \
+  ${gncscm_DATA} \
   .cvsignore
 
 CLEANFILES =
