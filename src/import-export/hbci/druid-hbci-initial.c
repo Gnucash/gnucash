@@ -199,9 +199,9 @@ update_accountlist_acc_cb (const HBCI_Account *hacc, gpointer user_data)
   g_assert(info);
   row_text[2] = "";
   
-  /* Account code, then Bank name, then Bank code in parentheses. */
   row_text[0] = 
-    g_strdup_printf("%s at %s (code %s)",
+    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
+    g_strdup_printf(_("%s at %s (code %s)"),
 		    HBCI_Account_accountId (hacc),
 		    HBCI_Bank_name (HBCI_Account_bank (hacc)),
 		    HBCI_Bank_bankCode (HBCI_Account_bank (hacc)));
@@ -569,6 +569,79 @@ choose_hbciversion_dialog (GtkWindow *parent, HBCI_Bank *bank)
   gtk_widget_destroy (dialog);
   return FALSE;
 }
+
+
+/* -------------------------------------- */
+/* Copied from window-help.c */
+static void
+goto_string_cb(char * string, gpointer data)
+{
+  if(!data) return;
+  if(!string) {
+    *(char **)data = NULL;
+  }
+  else {
+    *(char **)data = g_strdup(string);
+  }
+}
+static void gnc_hbci_addaccount(HBCIInitialInfo *info, 
+				const HBCI_Customer *cust)
+{
+  HBCI_Bank *bank;
+  const HBCI_User *user;
+  HBCI_Account *acc;
+
+  GtkWidget *dlg;
+  char *prompt;
+  char *accnr = NULL;
+  int retval = -1;
+
+  g_assert(info);
+  user = HBCI_Customer_user (cust);
+  bank = (HBCI_Bank *) HBCI_User_bank (user);
+
+  /* Ask for new account id by opening a request_dialog -- a druid
+     page would be better from GUI design, but I'm too lazy. */
+  prompt = g_strdup_printf(_("Enter account id for new account \nat bank %s (bank code %s):"), 
+			   HBCI_Bank_name (bank), HBCI_Bank_bankCode (bank));
+  
+  dlg = gnome_request_dialog(FALSE, prompt, "", 20,
+			     &goto_string_cb, &accnr, GTK_WINDOW(info->window));
+  retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
+  
+  if ((retval == 0) && accnr && (strlen(accnr) > 0)) {
+    
+    /* Check if such an account already exists */
+    if ( HBCI_Bank_findAccount (bank, accnr) )
+      {
+	/* Yes, then don't create it again */
+	gnc_error_dialog_parented
+	  (GTK_WINDOW (info->window),
+	   _("An account with this account id at this bank already exists."));
+      }
+    else
+      {
+	/* No, then create it now */
+	acc = HBCI_API_accountFactory(bank, accnr, "");
+	/* Add it to the bank, and the bank will also own the newly
+	   created object. */
+	HBCI_Bank_addAccount(bank, acc, TRUE);
+	/* and add the given customer as first authorized
+	   customer. This needs more work in case there are different
+	   customers here.  */
+	HBCI_Account_addAuthorizedCustomer(acc, cust);
+
+	/* Don't forget to update the account list, otherwise the new
+	   accounts won't show up. */
+	update_accountlist(info);
+      }
+  }
+    
+  g_free(prompt);
+  if (accnr) 
+    g_free (accnr);
+}
+/* -------------------------------------- */
 
 
 /*************************************************************
@@ -1070,7 +1143,6 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 
     HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
   }
-  /*update_accountlist(info->api);*/
   
   return FALSE;
 }
@@ -1466,18 +1538,9 @@ on_button_clicked (GtkButton *button,
   } else if (strcmp (name, "addaccount_button") == 0) {
     /* manually adding HBCI account is not yet implemented (should be
        rather easy, though) */
-    gnc_error_dialog_parented
-      (GTK_WINDOW (info->window),
-       _("Unfortunately the manual adding of HBCI accounts to your OpenHBCI\n"
-	 "configuration has not yet been implemented in GnuCash. Please use\n"
-	 "other programs such as 'aqmoney' to manually add the HBCI accounts to\n"
-	 "your OpenHBCI configuration (see aqmoney manual page).\n"
-	 "\n"
-	 "Note: Most banks automatically send the list of available HBCI\n"
-	 "accounts to you when you press the button 'Update Account List'. The\n"
-	 "manual adding of HBCI accounts is needed if and only if your bank does\n"
-	 "not support this automatic updating of the account list. If in doubt,\n"
-	 "contact your bank and/or the GnuCash and OpenHBCI developers."));
+    info->newcustomer = choose_customer (info);
+    gnc_hbci_addaccount(info, info->newcustomer);
+    /* Nothing else to do. Stay at this druid page. */
   } else if (strcmp (name, "serveryes_button") == 0) {
     druid_enable_next_button (info);
   } else if (strcmp (name, "serverno_button") == 0) {
@@ -1499,6 +1562,9 @@ on_button_clicked (GtkButton *button,
 	   name);
   }
 }
+
+
+
 
 
 
