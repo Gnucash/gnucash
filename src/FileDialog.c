@@ -519,15 +519,13 @@ gncGetCurrentGroup (void)
 
   return topgroup;
 }
-  
-#if 0
-/* ======================================================== */
-/* whats this for ???? */
 
-gnc_main_window_get_session(gncUIWidget w) 
+/* ======================================================== */
+
+Session *
+main_window_get_session (void) 
 {
-  return(current_session);
+  return (current_session);
 }
 
-#endif
 /********************* END OF FILE **********************************/

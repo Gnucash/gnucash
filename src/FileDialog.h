@@ -132,9 +132,6 @@ void gncFileQuit (void);
 
 AccountGroup *gncGetCurrentGroup (void);
 
-/* ??? why is this needed ??? */
-/*
-Session *gnc_main_window_get_session(gncUIWidget w);
-*/
+Session *main_window_get_session (void);
 
 #endif /* __GNC_FILE_DIALOG_H__ */
