@@ -9,6 +9,9 @@
 #
 # HISTORY:
 # Created by Linas Vepstas January 1999
+# Updated by Paul Fenwick <pjf@cpan.org> to take advantage of
+#   new Finance::Quote features. (June 2000)
+#
 # Copyright (c) 1999-2000 Linas Vepstas
 
 use lib '@-GNC_PERLSHAREDIR-@';
@@ -160,46 +163,15 @@ foreach $acct (@acctlist)
 
       undef $price;  # undef to make sure later if($price) not broken
 
-      if ("YAHOO" eq $quotesrc)
+      %quotes = &Quote::fetch($quotesrc, $security);
+      unless ($quotes{$security,'success'})
       {
-        %quotes = &Quote::yahoo ($security);
-        $price = $quotes {$security, "last"};
-      }
-      elsif ("YAHOO_EUROPE" eq $quotesrc)
-      {
-        %quotes = &Quote::yahoo_europe ($security);
-        $price = $quotes {$security, "last"};
-      }
-      elsif ("FIDELITY" eq $quotesrc)
-      {
-        %quotes = &Quote::fidelity ($security);
-        $price = $quotes {$security, "nav"};
-      }
-      elsif ("TRPRICE" eq $quotesrc)
-      {
-        %quotes = &Quote::troweprice ($security);
-        $price = $quotes {$security, "nav"};
-      }
-      elsif ("VANGUARD" eq $quotesrc)
-      {
-        %quotes = &Quote::vanguard ($security);
-        $price = $quotes {$security, "nav"};
-      }
-      elsif ("ASX" eq $quotesrc)
-      {
-        %quotes = &Quote::asx ($security);
-	$price  = $quotes {$security, "last"};
-      }
-      elsif ("TIAACREF" eq $quotesrc)
-      {
-        %quotes = &Quote::tiaacref ($security);
-        $price  = $quotes {$security, "nav"};
-      }
-      else
-      {
-        print "unknown quote source: $quotesrc\n";
+      	print "Lookup of $quotesrc/$security failed: ",
+	      $quotes{$security,'errormsg'}."\n";
         next;
       }
+
+      $price = $quotes{$security,'price'};
 
       print "using $quotesrc\n";
       print "$name: ";

@@ -6,6 +6,9 @@ use Quote;
 
 ## Simple program to get quotes and feed them back to gnucash.
 
+## Modified by Paul Fenwick <pjf@cpan.org>, June 2000, to take
+## advantage of new Finance::Quote features.
+
 ## Input (on standard input - one line per entry)
 ##
 ## ("IBM" "YAHOO")
@@ -42,15 +45,6 @@ use Quote;
 # source.  Perhaps later...
 
 my $exit_status = 0;
-
-my %quote_source_data =
-    ("YAHOO"        => [\&Quote::yahoo, "last"], 
-     "YAHOO_EUROPE" => [\&Quote::yahoo_europe, "last"],
-     "FIDELITY"     => [\&Quote::fidelity, "nav"],
-     "TRPRICE"      => [\&Quote::troweprice, "nav"],
-     "VANGUARD"     => [\&Quote::vanguard, "nav"],
-     "ASX"          => [\&Quote::asx, "last"],
-     "TIAACREF"     => [\&Quote::tiaacref, "nav"]);
 
 sub schemify_str {
   my($str) = @_;
@@ -98,22 +92,9 @@ while(<>) {
     next;
   }
 
-  my $quote_source_data = $quote_source_data{$quote_source_name};
-  
-  if(!$quote_source_data) {
-    # We don't have to schemify the source - the regexp filtered it.
-    print "(error bad-quote-source ";
-    print "\"Ignoring input line with bad source: $quote_source_name.\")\n";
-    $exit_status |= 1;
-    next;
-  }
+  my %quote_data = &Quote::fetch($quote_source_name,$security_name);
 
-  my $quote_func = $$quote_source_data[0];
-  my $quote_hash_label = $$quote_source_data[1];
-
-  my %quote_data = &$quote_func($security_name);
-
-  if(!%quote_data) {
+  unless($quote_data{$quote_source_name,'success'}) {
     # We don't have to schemify the source or name - the regexp filtered it.
     print "(error quote-lookup-failed ";
     print "\"Lookup of $security_name at $quote_source_name failed.\")\n";
@@ -121,7 +102,7 @@ while(<>) {
     next;
   }    
 
-  my $security_price = $quote_data{$security_name, $quote_hash_label};
+  my $security_price = $quote_data{$security_name, 'price'};
   my $quote_date = $quote_data{$security_name, 'date'};
 
   if(!$security_price) {
