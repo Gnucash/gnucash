@@ -53,6 +53,8 @@ struct _xaccLedgerDisplay
 
   SplitRegister *reg;
 
+  gboolean loading;
+
   LedgerDisplayDestroy destroy;
   LedgerDisplayGetParent get_parent;
   LedgerDisplaySetHelp set_help;
@@ -487,6 +489,9 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   const EventInfo *info;
   gboolean has_leader;
 
+  if (ld->loading)
+    return;
+
   has_leader = (ld->ld_type == LD_SINGLE || ld->ld_type == LD_SUBACCOUNT);
 
   if (has_leader)
@@ -684,6 +689,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   ld->leader = *xaccAccountGetGUID (lead_account);
   ld->query = NULL;
   ld->ld_type = ld_type;
+  ld->loading = FALSE;
   ld->destroy = NULL;
   ld->get_parent = NULL;
   ld->set_help = NULL;
@@ -706,6 +712,10 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   gnc_gui_component_watch_entity_type (ld->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  gnc_gui_component_watch_entity_type (ld->component_id,
+                                       GNC_ID_TRANS,
+                                       GNC_EVENT_MODIFY);
 
   /******************************************************************\
    * The main register window itself                                *
@@ -764,6 +774,11 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
   if (!ld)
     return;
 
+  if (ld->loading)
+    return;
+
+  ld->loading = TRUE;
+
   /* The leader account is used by the register gui to
    * assign a default source account for a "blank split"
    * that is attached to the bottom of the register.
@@ -772,6 +787,8 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
   xaccSRLoadRegister (ld->reg,
                       xaccQueryGetSplits (ld->query),
                       xaccLedgerDisplayLeader (ld));
+
+  ld->loading = FALSE;
 }
 
 void

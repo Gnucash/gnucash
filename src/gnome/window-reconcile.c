@@ -116,8 +116,9 @@ struct _RecnWindow
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
-static void   recnFinishCB(GtkWidget *w, gpointer data);
-static void   recnCancelCB(GtkWidget *w, gpointer data);
+static void   recnFinishCB (GtkWidget *w, gpointer data);
+static void   recnPostponeCB (GtkWidget *w, gpointer data);
+static void   recnCancelCB (GtkWidget *w, gpointer data);
 
 static void   gnc_reconcile_window_set_sensitivity(RecnWindow *recnData);
 static char * gnc_recn_make_window_name(Account *account);
@@ -975,6 +976,14 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
     },
     {
       GNOME_APP_UI_ITEM,
+      N_("_Postpone"),
+      N_("Postpone the reconciliation of this account"),
+      recnPostponeCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'p', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
       N_("_Cancel"),
       N_("Cancel the reconciliation of this account"),
       recnCancelCB, NULL, NULL,
@@ -1385,6 +1394,10 @@ recnWindow (GtkWidget *parent, Account *account)
                                   xaccAccountGetGUID (account),
                                   GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
+  gnc_gui_component_watch_entity_type (component_id,
+                                       GNC_ID_TRANS,
+                                       GNC_EVENT_MODIFY);
+
   type = xaccAccountGetType(account);
   recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
                           (type == CURRENCY));
@@ -1755,7 +1768,7 @@ recnFinishCB (GtkWidget *w, gpointer data)
   {
     const char *message = _("The account is not balanced.\n"
                             "Are you sure you want to finish?");
-    if (!gnc_verify_dialog_parented(recnData->window, message, FALSE))
+    if (!gnc_verify_dialog_parented (recnData->window, message, FALSE))
       return;
   }
 
@@ -1763,10 +1776,10 @@ recnFinishCB (GtkWidget *w, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
+  recnData->delete_refresh = TRUE;
+
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit), date);
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->debit), date);
-
-  recnData->delete_refresh = TRUE;
 
   auto_payment = gnc_lookup_boolean_option ("Reconcile",
                                             "Automatic credit card payments",
@@ -1792,6 +1805,42 @@ recnFinishCB (GtkWidget *w, gpointer data)
     if (payment_account != NULL)
       gnc_xfer_dialog_select_from_account (xfer, payment_account);
   }
+
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+}
+
+/********************************************************************\
+ * recnPostponeCB                                                   *
+ *   saves reconcile information for later use                      *
+ *                                                                  *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this window                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void 
+recnPostponeCB (GtkWidget *w, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account;
+
+  {
+    const char *message = _("Do you want to postpone this reconciliation "
+                            "and finish it later?");
+    if (!gnc_verify_dialog_parented (recnData->window, message, FALSE))
+      return;
+  }
+
+  gnc_suspend_gui_refresh ();
+
+  recnData->delete_refresh = TRUE;
+
+  gnc_reconcile_list_postpone (GNC_RECONCILE_LIST(recnData->credit));
+  gnc_reconcile_list_postpone (GNC_RECONCILE_LIST(recnData->debit));
+
+  account = recn_get_account (recnData);
+
+  xaccAccountSetReconcilePostponeDate (account, recnData->statement_date);
+  xaccAccountSetReconcilePostponeBalance (account, recnData->new_ending);
 
   gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }

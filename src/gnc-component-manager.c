@@ -66,6 +66,7 @@ static gint   next_component_id = 0;
 static GList *components = NULL;
 
 static ComponentEventInfo changes = { 0, 0, NULL };
+static ComponentEventInfo changes_backup = { 0, 0, NULL };
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -275,6 +276,10 @@ gnc_component_manager_init (void)
   changes.account_event_mask = 0;
   changes.entity_events = guid_hash_table_new ();
 
+  changes_backup.trans_event_mask = 0;
+  changes_backup.account_event_mask = 0;
+  changes_backup.entity_events = guid_hash_table_new ();
+
   handler_id = gnc_engine_register_event_handler (gnc_cm_event_handler, NULL);
 }
 
@@ -290,6 +295,10 @@ gnc_component_manager_shutdown (void)
   clear_event_info (&changes);
   destroy_event_hash (changes.entity_events);
   changes.entity_events = NULL;
+
+  clear_event_info (&changes_backup);
+  destroy_event_hash (changes_backup.entity_events);
+  changes_backup.entity_events = NULL;
 
   gnc_engine_unregister_event_handler (handler_id);
 }
@@ -546,7 +555,7 @@ match_helper (gpointer key, gpointer value, gpointer user_data)
 }
 
 static gboolean
-changes_match (ComponentEventInfo *cei)
+changes_match (ComponentEventInfo *cei, ComponentEventInfo *changes)
 {
   ComponentEventInfo *big_cei;
   GHashTable *small;
@@ -556,21 +565,21 @@ changes_match (ComponentEventInfo *cei)
 
   /* check types first, for efficiency */
 
-  if (cei->trans_event_mask & changes.trans_event_mask)
+  if (cei->trans_event_mask & changes->trans_event_mask)
     return TRUE;
 
-  if (cei->account_event_mask & changes.account_event_mask)
+  if (cei->account_event_mask & changes->account_event_mask)
     return TRUE;
 
   if (g_hash_table_size (cei->entity_events) <=
-      g_hash_table_size (changes.entity_events))
+      g_hash_table_size (changes->entity_events))
   {
     small = cei->entity_events;
-    big_cei = &changes;
+    big_cei = changes;
   }
   else
   {
-    small = changes.entity_events;
+    small = changes->entity_events;
     big_cei = cei;
   }
 
@@ -589,6 +598,19 @@ gnc_gui_refresh_internal (gboolean force)
 
   if (!got_events && !force)
     return;
+
+  gnc_suspend_gui_refresh ();
+
+  {
+    GHashTable *table;
+
+    changes_backup.trans_event_mask = changes.trans_event_mask;
+    changes_backup.account_event_mask = changes.account_event_mask;
+
+    table = changes_backup.entity_events;
+    changes_backup.entity_events = changes.entity_events;
+    changes.entity_events = table;
+  }
 
 #if CM_DEBUG
   fprintf (stderr, "refresh!\n");
@@ -613,14 +635,16 @@ gnc_gui_refresh_internal (gboolean force)
 
     if (force)
       ci->refresh_handler (NULL, ci->user_data);
-    else if (changes_match (&ci->watch_info))
-      ci->refresh_handler (changes.entity_events, ci->user_data);
+    else if (changes_match (&ci->watch_info, &changes_backup))
+      ci->refresh_handler (changes_backup.entity_events, ci->user_data);
   }
 
-  clear_event_info (&changes);
+  clear_event_info (&changes_backup);
   got_events = FALSE;
 
   g_list_free (list);
+
+  gnc_resume_gui_refresh ();
 }
 
 void

@@ -4163,9 +4163,9 @@ void
 xaccSRLoadRegister (SplitRegister *reg, GList * slist,
                     Account *default_account)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SRInfo *info = xaccSRGetInfo (reg);
+  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
+  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   SplitRegisterBuffer *reg_buffer;
   GHashTable *trans_table = NULL;
   CellBlock *lead_cursor;
@@ -4641,7 +4641,7 @@ xaccSRCheckReconciled (SplitRegister *reg)
 void
 xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo (reg);
 
   if (reg == NULL)
     return;

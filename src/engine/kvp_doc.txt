@@ -81,12 +81,12 @@ Type: frame
 Entities: Account
 Use: store the statement date of the last reconciliation
 
-Name: reconcile-info/postpone-date
+Name: reconcile-info/postpone/date
 Type: gint64
 Entities: Account
 Use: store the ending statement date of a postponed reconciliation
 
-Name: reconcile-info/postpone-balance
+Name: reconcile-info/postpone/balance
 Type: numeric
 Entities: Account
 Use: store the ending balance of a postponed reconciliation
