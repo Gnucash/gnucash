@@ -33,7 +33,7 @@ CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS   := Ledger.c SplitLedger.c MultiLedger.c
+COMMON_SRCS   := SplitLedger.c MultiLedger.c
 CLEAN_SUBDIRS := engine gnome motif register guile qt
 ######################################################################
 

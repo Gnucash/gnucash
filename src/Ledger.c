@@ -1,3 +1,4 @@
+#ifdef OBSOLETE
 /* 
  * FILE:
  * Ledger.c 
@@ -423,3 +424,4 @@ void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
 
 #endif /* THIS_HAS_BEEN_MOVED_TO_SPLITREG_C  */
 /* =======================  end of file =================== */
+#endif

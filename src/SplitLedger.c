@@ -175,22 +175,28 @@ printf ("save split is %p \n", split);
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
-   if (MOD_AMNT & changed) {
+   if (MOD_TAMNT & changed) {
       double new_amount;
-      new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
-      xaccSplitSetValue (split, -new_amount);
+      new_amount = (reg->creditTransCell->amount) - (reg->debitTransCell->amount);
+      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      { 
+         xaccSplitSetShareAmount (split, new_amount);
+      } else {
+         xaccSplitSetValue (split, new_amount);
+      }
    }
 
-   if (MOD_SHRS & changed) {
-      xaccSplitSetShareAmount (split, reg->shrsCell->amount);
+   if (MOD_TPRIC & changed) {
+      xaccSplitSetSharePrice (split, -(reg->priceTransCell->amount));
    }
 
-   if (MOD_PRIC & changed) {
-      xaccSplitSetSharePrice (split, reg->priceCell->amount);
+   if (MOD_TVALU & changed) {
+      xaccSplitSetValue (split, -(reg->valueTransCell->amount));
    }
 
-   if (MOD_MEMO & changed) 
-      xaccSplitSetMemo (split, reg->memoCell->value);
+   /* -------------------------------------------------------------- */
 
    if (MOD_ACTN & changed) 
       xaccSplitSetAction (split, reg->actionCell->cell.value);
@@ -208,10 +214,36 @@ printf ("save split is %p \n", split);
       xaccAccountDisplayRefresh (old_acc);
    }
 
-
    if (MOD_XTO & changed) {
       /* hack alert -- implement this */
    }
+
+   if (MOD_MEMO & changed) 
+      xaccSplitSetMemo (split, reg->memoCell->value);
+
+   if (MOD_AMNT & changed) {
+      double new_amount;
+      new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
+      new_amount = -new_amount;
+      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      { 
+         xaccSplitSetShareAmount (split, new_amount);
+      } else {
+         xaccSplitSetValue (split, new_amount);
+      }
+   }
+
+   if (MOD_PRIC & changed) {
+      xaccSplitSetSharePrice (split, reg->priceCell->amount);
+   }
+
+   if (MOD_VALU & changed) {
+      xaccSplitSetValue (split, reg->valueCell->amount);
+   }
+
+
    xaccTransCommitEdit (trans);
 
 printf ("finished saving split %s of trans %s \n", 
@@ -250,7 +282,6 @@ xaccTransGetDescription(trans));
 static void
 xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
-   Transaction *trans;
    char buff[2];
    time_t secs;
    double baln;
@@ -269,7 +300,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
    } else {
-      trans = xaccSplitGetParent (split);
+      double amt;
+      Transaction *trans = xaccSplitGetParent (split);
    
       secs = xaccTransGetDate (trans);
       xaccSetDateCellValueSecs (reg->dateCell, secs);
@@ -281,8 +313,15 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      xaccSetDebCredCellValue (reg->debitTransCell, 
-                               reg->creditTransCell, xaccSplitGetValue (split));
+      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      { 
+         amt = xaccSplitGetShareAmount (split);
+      } else {
+         amt = xaccSplitGetValue (split);
+      }
+      xaccSetDebCredCellValue (reg->debitTransCell, reg->creditTransCell, amt);
       xaccSetPriceCellValue (reg->priceTransCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue (reg->valueTransCell, xaccSplitGetValue (split));
    
@@ -292,8 +331,8 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * bank account, and a debit to the income account.
        * Thus, positive and negative are interchanged */
       baln = xaccSplitGetBalance (split);
-      if ((INCOME_REGISTER == reg->type) ||
-          (EXPENSE_REGISTER == reg->type)) { 
+      if ((INCOME_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (EXPENSE_REGISTER == (reg->type & REG_TYPE_MASK))) { 
          baln = -baln;
       }
       xaccSetPriceCellValue (reg->balanceCell, baln);
@@ -314,7 +353,6 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 static void
 xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 {
-   Transaction *trans;
    char *accname;
    char buff[2];
 
@@ -329,7 +367,7 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetPriceCellValue (reg->valueCell, 0.0);
 
    } else {
-      trans = xaccSplitGetParent (split);
+      double amt;
    
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
       xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
@@ -342,9 +380,15 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
       accname = xaccAccountGetName (xaccSplitGetAccount (split));
       xaccSetComboCellValue (reg->xfrmCell, accname);
    
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, -xaccSplitGetValue (split));
-   
+      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      { 
+         amt = xaccSplitGetShareAmount (split);
+      } else {
+         amt = xaccSplitGetValue (split);
+      }
+      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, -amt);
       xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue (reg->valueCell, -xaccSplitGetValue (split));
    }
