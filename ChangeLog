@@ -1,5 +1,9 @@
 2002-01-06  Christian Stimming  <stimming@tuhh.de>
 
+	* src/report/report-system/html-utilities.scm,
+	src/report/standard-reports/*: Added option hyperlink in report
+	warnings.
+
 	* doc/sgml/*/xacc-euro.sgml: Fixed DEM rate as pointed out by
 	Gregor Hoffleit <gregor@hoffleit.de>.
 

@@ -399,11 +399,13 @@ balance at a given time"))
 
              (gnc:html-document-add-object!
               document
-              (gnc:html-make-empty-data-warning report-title))))
+	      (gnc:html-make-empty-data-warning
+	       report-title (gnc:report-id report-obj)))))
 
           (gnc:html-document-add-object!
            document
-           (gnc:html-make-no-account-warning report-title)))
+	   (gnc:html-make-no-account-warning 
+	    report-title (gnc:report-id report-obj))))
 
       document)))
 

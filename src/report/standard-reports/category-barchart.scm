@@ -458,12 +458,14 @@ developing over time"))
            ;; else if empty data
            (gnc:html-document-add-object!
             document
-            (gnc:html-make-empty-data-warning report-title))))
+            (gnc:html-make-empty-data-warning
+	     report-title (gnc:report-id report-obj)))))
         
-        ;; else if no accounts selected
+	;; else if no accounts selected
         (gnc:html-document-add-object! 
          document 
-         (gnc:html-make-no-account-warning report-title)))
+	 (gnc:html-make-no-account-warning 
+	  report-title (gnc:report-id report-obj))))
     
     document))
 

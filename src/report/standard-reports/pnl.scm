@@ -204,7 +204,9 @@
         ;; error condition: no accounts specified
         
         (gnc:html-document-add-object!
-         doc (gnc:html-make-no-account-warning report-title)))      
+         doc
+	 (gnc:html-make-no-account-warning 
+	  report-title (gnc:report-id report-obj))))
     doc))
 
 (gnc:define-report 
