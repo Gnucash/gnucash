@@ -52,6 +52,7 @@ gnc_commodity* get_random_commodity(GNCSession *session);
 const char *get_random_commodity_namespace(void);
 
 Query* get_random_query(void);
+Query * make_trans_query (Transaction *trans);
 
 GNCBook * get_random_book (GNCSession *session);
 GNCSession * get_random_session (void);
