@@ -66,7 +66,7 @@ static short module = MOD_ENGINE;
 
 /* This code is based on code in md5.c in GNU textutils. */
 static size_t
-init_from_stream(FILE *stream, size_t max_size, gboolean no_block)
+init_from_stream(FILE *stream, size_t max_size)
 {
   char buffer[BLOCKSIZE + 72];
   size_t sum, block_size, total;
@@ -97,7 +97,7 @@ init_from_stream(FILE *stream, size_t max_size, gboolean no_block)
 
       sum += n;
     }
-    while (!no_block && sum < block_size && n != 0);
+    while (sum < block_size && n != 0);
 
     max_size -= sum;
 
@@ -126,10 +126,11 @@ init_from_stream(FILE *stream, size_t max_size, gboolean no_block)
 }
 
 static size_t
-init_from_file(const char *filename, size_t max_size, gboolean no_block)
+init_from_file(const char *filename, size_t max_size)
 {
   struct stat stats;
   size_t total = 0;
+  size_t file_bytes;
   FILE *fp;
 
   if (stat(filename, &stats) != 0)
@@ -145,10 +146,13 @@ init_from_file(const char *filename, size_t max_size, gboolean no_block)
   if (fp == NULL)
     return total;
 
-  if (no_block)
-    setvbuf (fp, NULL, _IONBF, 0);
+  file_bytes = init_from_stream(fp, max_size);
 
-  total += init_from_stream(fp, max_size, no_block);
+#if DEBUG_GUID
+  g_warning ("guid_init got %u bytes from %s", file_bytes, filename);
+#endif
+
+  total += file_bytes;
 
   fclose(fp);
 
@@ -231,10 +235,7 @@ guid_init(void)
   md5_init_ctx(&guid_context);
 
   /* entropy pool */
-  {
-    bytes += init_from_file ("/dev/random", 256, TRUE);
-    bytes += init_from_file ("/dev/urandom", 256, FALSE);
-  }
+  bytes += init_from_file ("/dev/urandom", 512);
 
   /* files */
   {
@@ -253,7 +254,7 @@ guid_init(void)
     int i;
 
     for (i = 0; files[i] != NULL; i++)
-      bytes += init_from_file(files[i], BLOCKSIZE, FALSE);
+      bytes += init_from_file(files[i], BLOCKSIZE);
   }
 
   /* directories */
@@ -343,7 +344,7 @@ guid_init(void)
   bytes += init_from_time();
 
 #if DEBUG_GUID
-  g_warning ("guid_init got %u bytes.", bytes);
+  g_warning ("guid_init got %u bytes", bytes);
 #endif
 
   if (bytes < THRESHOLD)
