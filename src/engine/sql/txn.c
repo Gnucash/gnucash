@@ -74,7 +74,7 @@ is_trans_empty (Transaction *trans)
    if (1 != xaccTransCountSplits(trans)) return FALSE;
 
    s = xaccTransGetSplit(trans, 0);
-   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetAmount(s))) return FALSE;
    if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
    if ('n' != xaccSplitGetReconcile(s)) return FALSE;
    if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
@@ -547,10 +547,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
               (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
-            num = strtoll (DB_GET_VAL("value", j), NULL, 0);
-            value = gnc_numeric_create (num, trans_frac);
-            xaccSplitSetValue (s, value);
-
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
 
             /* --------------------------------------------- */
@@ -572,11 +568,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             {
                gnc_commodity *modity;
                gint64 acct_frac;
-               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
-               modity = xaccAccountGetCommodity (acc);
-               acct_frac = gnc_commodity_get_fraction (modity);
-               amount = gnc_numeric_create (num, acct_frac);
-               xaccSplitSetShareAmount (s, amount);
 
                xaccTransAppendSplit (trans, s);
 
@@ -589,6 +580,21 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
                if (acc->parent) save_state = acc->parent->saved;
                xaccAccountInsertSplit(acc, s);
                if (acc->parent) acc->parent->saved = save_state;
+
+               /* Ummm, we really need to set the amount & value after
+                * the split has been inserted into the account.  This 
+                * is because the amount/value setting routines require
+                * SCU settings from the account to work correctly. 
+                */
+               num = strtoll (DB_GET_VAL("value", j), NULL, 0);
+               value = gnc_numeric_create (num, trans_frac);
+               xaccSplitSetValue (s, value);
+
+               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
+               modity = xaccAccountGetCommodity (acc);
+               acct_frac = gnc_commodity_get_fraction (modity);
+               amount = gnc_numeric_create (num, acct_frac);
+               xaccSplitSetAmount (s, amount);
 
                /* finally tally them up; we use this below to 
                 * clean out deleted splits */
