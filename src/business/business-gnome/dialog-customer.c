@@ -25,6 +25,7 @@
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 
+#include "business-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
 #include "dialog-order.h"
@@ -69,7 +70,7 @@ struct _customer_window {
   GtkWidget *	shipfax_entry;
   GtkWidget *	shipemail_entry;
 
-  GtkWidget *	terms_entry;
+  GtkWidget *	terms_menu;
   GtkWidget *	discount_amount;
   GtkWidget *	credit_amount;
 
@@ -77,6 +78,7 @@ struct _customer_window {
   GtkWidget *	taxincluded_check;
   GtkWidget *	notes_text;
 
+  GncBillTerm *	terms;
   CustomerDialogType	dialog_type;
   GUID		customer_guid;
   gint		component_id;
@@ -150,8 +152,7 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 		       (GTK_EDITABLE (cw->notes_text), 0, -1));
 
   /* Parse and set the terms, discount, and credit amounts */
-  gncCustomerSetTerms (cust, gtk_editable_get_chars
-		       (GTK_EDITABLE (cw->terms_entry), 0, -1));
+  gncCustomerSetTerms (cust, cw->terms);
   gncCustomerSetDiscount (cust, gnc_amount_edit_get_amount
 			  (GNC_AMOUNT_EDIT (cw->discount_amount)));
   gncCustomerSetCredit (cust, gnc_amount_edit_get_amount
@@ -219,10 +220,6 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
   /* Verify terms, discount, and credit are valid (or empty) */
   min = gnc_numeric_zero ();
   max = gnc_numeric_create (100, 1);
-  //  if (check_edit_amount (cw->dialog, cw->terms_amount, &min, NULL,
-  //			 _("Terms must be a positive integer or "
-  //			   "you must leave it blank.")))
-  //    return;
 
   if (check_edit_amount (cw->dialog, cw->discount_amount, &min, &max,
 			 _("Discount percentage must be between 0-100 "
@@ -426,7 +423,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   cw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
   cw->notes_text = glade_xml_get_widget (xml, "notes_text");
 
-  cw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
+  cw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
   /* DISCOUNT: Percentage Value */
   edit = gnc_amount_edit_new();
@@ -554,6 +551,8 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 				  gnc_customer_window_refresh_handler,
 				  gnc_customer_window_close_handler,
 				  cw);
+    cw->terms = gncCustomerGetTerms (cust);
+
   } else {
     cust = gncCustomerCreate (bookp);
     gncCustomerSetCommodity (cust, commodity);
@@ -565,12 +564,15 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 				  gnc_customer_window_refresh_handler,
 				  gnc_customer_window_close_handler,
 				  cw);
+
+    /* XXX: get the global-default terms */
+    cw->terms = NULL;
   }
 
   /* I know that cust exists here -- either passed in or just created */
 
-  gtk_entry_set_text (GTK_ENTRY (cw->terms_entry),
-		      gncCustomerGetTerms (cust));
+  gnc_ui_billterms_optionmenu (cw->terms_menu, bookp, TRUE, &cw->terms);
+
 
   /* Set the Discount, and Credit amounts */
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),

@@ -10,6 +10,7 @@
 struct _gncInvoice;
 typedef struct _gncInvoice GncInvoice;
 
+#include "gncBillTerm.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
 
@@ -26,7 +27,7 @@ void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
-void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms);
+void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms);
 void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com);
@@ -44,7 +45,7 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
 Timespec gncInvoiceGetDatePosted (GncInvoice *invoice);
 Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
-const char * gncInvoiceGetTerms (GncInvoice *invoice);
+GncBillTerm * gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 

@@ -29,7 +29,7 @@ struct _gncCustomer {
   char *	id;
   char *	name;
   char *	notes;
-  char *	terms;
+  GncBillTerm *	terms;
   GncAddress *	addr;
   GncAddress *	shipaddr;
   gnc_commodity	* commodity;
@@ -72,7 +72,6 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->terms = CACHE_INSERT ("Net-30");
   cust->addr = gncAddressCreate (book, &cust->guid);
   cust->shipaddr = gncAddressCreate (book, &cust->guid);
   cust->discount = gnc_numeric_zero();
@@ -98,7 +97,6 @@ void gncCustomerDestroy (GncCustomer *cust)
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
   CACHE_REMOVE (cust->notes);
-  CACHE_REMOVE (cust->terms);
   gncAddressDestroy (cust->addr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
@@ -153,10 +151,15 @@ void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
   addObj (cust);
 }
 
-void gncCustomerSetTerms (GncCustomer *cust, const char *terms)
+void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 {
-  if (!cust || !terms) return;
-  SET_STR(cust->terms, terms);
+  if (!cust) return;
+  if (cust->terms == terms) return;
+  if (cust->terms)
+    gncBillTermDecRef (cust->terms);
+  cust->terms = terms;
+  if (cust->terms)
+    gncBillTermIncRef (cust->terms);
   mark_customer (cust);
 }
 
@@ -286,7 +289,7 @@ const char * gncCustomerGetNotes (GncCustomer *cust)
   return cust->notes;
 }
 
-const char * gncCustomerGetTerms (GncCustomer *cust)
+GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->terms;

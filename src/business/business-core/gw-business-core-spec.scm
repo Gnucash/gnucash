@@ -34,6 +34,7 @@
    (lambda (wrapset client-wrapset)
      (list
       "#include <gncAddress.h>\n"
+      "#include <gncBillTerm.h>\n"
       "#include <gncCustomer.h>\n"
       "#include <gncEmployee.h>\n"
       "#include <gncEntry.h>\n"
@@ -41,6 +42,7 @@
       "#include <gncJob.h>\n"
       "#include <gncOrder.h>\n"
       "#include <gncOwner.h>\n"
+      "#include <gncTaxTable.h>\n"
       "#include <gncVendor.h>\n")))
 
   (gw:wrapset-add-cs-initializers!
@@ -54,6 +56,7 @@
   ;; XXX: Need to add lists of all of these!
 
   (gw:wrap-as-wct ws '<gnc:GncAddress*> "GncAddress*" "const GncAddress*")
+  (gw:wrap-as-wct ws '<gnc:GncBillTerm*> "GncBillTerm*" "const GncBillTerm*")
   (gw:wrap-as-wct ws '<gnc:GncCustomer*> "GncCustomer*" "const GncCustomer*")
   (gw:wrap-as-wct ws '<gnc:GncEmployee*> "GncEmployee*" "const GncEmployee*")
   (gw:wrap-as-wct ws '<gnc:GncEntry*> "GncEntry*" "const GncEntry*")
@@ -61,6 +64,7 @@
   (gw:wrap-as-wct ws '<gnc:GncJob*> "GncJob*" "const GncJob*")
   (gw:wrap-as-wct ws '<gnc:GncOrder*> "GncOrder*" "const GncOrder*")
   (gw:wrap-as-wct ws '<gnc:GncOwner*> "GncOwner*" "const GncOwner*")
+  (gw:wrap-as-wct ws '<gnc:GncTaxTable*> "GncTaxTable*" "const GncTaxTable*")
   (gw:wrap-as-wct ws '<gnc:GncVendor*> "GncVendor*" "const GncVendor*")
 
   (let ((wt (gw:wrap-enumeration ws '<gnc:GncOwnerType> "GncOwnerType")))
@@ -182,6 +186,26 @@
    "gncAddressGetEmail"
    '((<gnc:GncAddress*> address))
    "Return the Address's Email Entry")
+
+  ;;
+  ;; gncBillTerm.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:bill-term-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncBillTermGetName"
+   '((<gnc:GncBillTerm*> term))
+   "Return the Bill-term name")
+
+  (gw:wrap-function
+   ws
+   'gnc:bill-term-get-description
+   '(<gw:mchars> callee-owned const)
+   "gncBillTermGetDescription"
+   '((<gnc:GncBillTerm*> term))
+   "Return the printable Bill-term description")
 
   ;;
   ;; gncCustomer.h
@@ -450,7 +474,7 @@
    'gnc:invoice-set-terms
    '<gw:void>
    "gncInvoiceSetTerms"
-   '((<gnc:GncInvoice*> invoice) ((<gw:mchars> callee-owned const) id))
+   '((<gnc:GncInvoice*> invoice) (<gnc:GncBillTerm*> term))
    "Set the Invoice Terms")
 
   (gw:wrap-function
@@ -514,7 +538,7 @@
   (gw:wrap-function
    ws
    'gnc:invoice-get-terms
-   '(<gw:mchars> callee-owned const)
+   '(<gnc:GncBillTerm*>)
    "gncInvoiceGetTerms"
    '((<gnc:GncInvoice*> invoice))
    "Return the invoice's Terms")

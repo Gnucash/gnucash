@@ -60,7 +60,7 @@ test_customer (void)
     test_string_fcn (book, "Name", gncCustomerSetName, gncCustomerGetName);
     test_string_fcn (book, "Notes", gncCustomerSetNotes, gncCustomerGetNotes);
 
-    test_string_fcn (book, "Terms", gncCustomerSetTerms, gncCustomerGetTerms);
+    //test_string_fcn (book, "Terms", gncCustomerSetTerms, gncCustomerGetTerms);
 
     test_numeric_fcn (book, "Discount", gncCustomerSetDiscount, gncCustomerGetDiscount);
     test_numeric_fcn (book, "Credit", gncCustomerSetCredit, gncCustomerGetCredit);

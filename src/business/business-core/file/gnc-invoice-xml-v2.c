@@ -41,6 +41,7 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "gncBillTermP.h"
 #include "gncInvoiceP.h"
 #include "gnc-invoice-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
@@ -90,6 +91,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     Timespec ts;
     Transaction *txn;
     Account *acc;
+    GncBillTerm *term;
 
     ret = xmlNewNode(NULL, gnc_invoice_string);
     xmlSetProp(ret, "version", invoice_version_string);
@@ -109,7 +111,11 @@ invoice_dom_tree_create (GncInvoice *invoice)
     maybe_add_timespec (ret, invoice_posted_string,
 			gncInvoiceGetDatePosted (invoice));
     
-    maybe_add_string (ret, invoice_terms_string, gncInvoiceGetTerms (invoice));
+    term = gncInvoiceGetTerms (invoice);
+    if (term)
+      xmlAddChild(ret, guid_to_dom_tree(invoice_terms_string,
+					gncBillTermGetGUID (term)));
+      
     maybe_add_string (ret, invoice_billing_id_string,
 		      gncInvoiceGetBillingID (invoice));
     maybe_add_string (ret, invoice_notes_string, gncInvoiceGetNotes (invoice));
@@ -230,14 +236,6 @@ invoice_posted_handler (xmlNodePtr node, gpointer invoice_pdata)
 }
 
 static gboolean
-invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
-{
-    struct invoice_pdata *pdata = invoice_pdata;
-
-    return set_string(node, pdata->invoice, gncInvoiceSetTerms);
-}
-
-static gboolean
 invoice_billing_id_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
@@ -265,6 +263,28 @@ invoice_active_handler (xmlNodePtr node, gpointer invoice_pdata)
       gncInvoiceSetActive(pdata->invoice, (gboolean)val);
 
     return ret;
+}
+
+static gboolean
+invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+    struct invoice_pdata *pdata = invoice_pdata;
+    GUID *guid;
+    GncBillTerm *term;
+
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail (guid, FALSE);
+    term = gncBillTermLookup (pdata->book, guid);
+    if (!term) {
+      term = gncBillTermCreate (pdata->book);
+      gncBillTermSetGUID (term, guid);
+    } else
+      gncBillTermDecRef (term);
+
+    g_free (guid);
+    gncInvoiceSetTerms (pdata->invoice, term);
+    
+    return TRUE;
 }
 
 static gboolean
@@ -321,10 +341,10 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_owner_string, invoice_owner_handler, 1, 0 },
     { invoice_opened_string, invoice_opened_handler, 1, 0 },
     { invoice_posted_string, invoice_posted_handler, 0, 0 },
-    { invoice_terms_string, invoice_terms_handler, 0, 0 },
     { invoice_billing_id_string, invoice_billing_id_handler, 0, 0 },
     { invoice_notes_string, invoice_notes_handler, 0, 0 },
     { invoice_active_string, invoice_active_handler, 1, 0 },
+    { invoice_terms_string, invoice_terms_handler, 0, 0 },
     { invoice_posttxn_string, invoice_posttxn_handler, 0, 0 },
     { invoice_postacc_string, invoice_postacc_handler, 0, 0 },
     { invoice_commodity_string, invoice_commodity_handler, 1, 0 },

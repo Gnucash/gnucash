@@ -10,6 +10,8 @@
 
 #include "gnc-book.h"
 #include "gncOwner.h"
+#include "gncBillTerm.h"
+#include "gncTaxTable.h"
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 				     GNCBook *book, GncOwner *owner);
@@ -27,5 +29,21 @@ GList * gnc_business_account_types (GncOwner *owner);
 /* Fill in a combo box with the appropriate list of accounts */
 void gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
 				    GList *acct_types);
+
+
+/* Create an optionmenu of available billing terms and attach it to
+ * the menu passed in.  If none_ok is true, then add "none" as a
+ * choice (with data set to NULL).  Any time the menu changes,
+ * 'choice' will be set to the chosen option.  If *choice is non-NULL,
+ * then that will be the default option setting when the menu is
+ * created.
+ */
+void gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
+				  gboolean none_ok, GncBillTerm **choice);
+
+/* Same thing except for the tax tables */
+void
+gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
+			     gboolean none_ok, GncTaxTable **choice);
 
 #endif /* GNC_BUSINESS_UTILS_H_ */

@@ -41,6 +41,7 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "gncBillTermP.h"
 #include "gncVendorP.h"
 #include "gnc-vendor-xml-v2.h"
 #include "gnc-address-xml-v2.h"
@@ -77,6 +78,7 @@ static xmlNodePtr
 vendor_dom_tree_create (GncVendor *vendor)
 {
     xmlNodePtr ret;
+    GncBillTerm *term;
 
     ret = xmlNewNode(NULL, gnc_vendor_string);
     xmlSetProp(ret, "version", vendor_version_string);
@@ -94,7 +96,11 @@ vendor_dom_tree_create (GncVendor *vendor)
 					     gncVendorGetAddr (vendor)));
     
     maybe_add_string (ret, vendor_notes_string, gncVendorGetNotes (vendor));
-    maybe_add_string (ret, vendor_terms_string, gncVendorGetTerms (vendor));
+
+    term = gncVendorGetTerms (vendor);
+    if (term)
+      xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,
+					gncBillTermGetGUID (term)));
 
     xmlAddChild(ret, int_to_dom_tree(vendor_taxincluded_string,
 				     gncVendorGetTaxIncluded (vendor)));
@@ -182,8 +188,22 @@ static gboolean
 vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
+    GUID *guid;
+    GncBillTerm *term;
 
-    return set_string(node, pdata->vendor, gncVendorSetTerms);
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail (guid, FALSE);
+    term = gncBillTermLookup (pdata->book, guid);
+    if (!term) {
+      term = gncBillTermCreate (pdata->book);
+      gncBillTermSetGUID (term, guid);
+    } else
+      gncBillTermDecRef (term);
+
+    g_free (guid);
+    gncVendorSetTerms (pdata->vendor, term);
+    
+    return TRUE;
 }
 
 static gboolean

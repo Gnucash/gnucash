@@ -1,5 +1,8 @@
 2002-06-21  Derek Atkins   <derek@ihtfp.com>
 
+	* integrate the Billing Terms into the Core, GUI, and XML Backend
+	for the rest of the business objects that need billing terms.
+
 	* .../business-core/gncBillTerm*.[ch]: Add Billing Term objects.
 	Currently there are "Days" and "Proximo" billing terms available.
 

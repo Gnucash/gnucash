@@ -41,6 +41,7 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "gncBillTermP.h"
 #include "gncCustomerP.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-address-xml-v2.h"
@@ -81,6 +82,7 @@ customer_dom_tree_create (GncCustomer *cust)
 {
     xmlNodePtr ret;
     gnc_numeric num;
+    GncBillTerm *term;
 
     ret = xmlNewNode(NULL, gnc_customer_string);
     xmlSetProp(ret, "version", customer_version_string);
@@ -101,7 +103,11 @@ customer_dom_tree_create (GncCustomer *cust)
 					     gncCustomerGetShipAddr (cust)));
     
     maybe_add_string (ret, cust_notes_string, gncCustomerGetNotes (cust));
-    maybe_add_string (ret, cust_terms_string, gncCustomerGetTerms (cust));
+
+    term = gncCustomerGetTerms (cust);
+    if (term)
+      xmlAddChild(ret, guid_to_dom_tree(cust_terms_string,
+					gncBillTermGetGUID (term)));
 
     xmlAddChild(ret, int_to_dom_tree(cust_taxincluded_string,
 				     gncCustomerGetTaxIncluded (cust)));
@@ -195,8 +201,22 @@ static gboolean
 customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
+    GUID *guid;
+    GncBillTerm *term;
 
-    return set_string(node, pdata->customer, gncCustomerSetTerms);
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail (guid, FALSE);
+    term = gncBillTermLookup (pdata->book, guid);
+    if (!term) {
+      term = gncBillTermCreate (pdata->book);
+      gncBillTermSetGUID (term, guid);
+    } else
+      gncBillTermDecRef (term);
+
+    g_free (guid);
+    gncCustomerSetTerms (pdata->customer, term);
+    
+    return TRUE;
 }
 
 static gboolean

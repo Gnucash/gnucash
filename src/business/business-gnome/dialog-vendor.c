@@ -24,6 +24,7 @@
 #include "gncVendor.h"
 #include "gncVendorP.h"
 
+#include "business-utils.h"
 #include "dialog-vendor.h"
 #include "dialog-job.h"
 #include "dialog-order.h"
@@ -58,12 +59,13 @@ struct _vendor_window {
   GtkWidget *	phone_entry;
   GtkWidget *	fax_entry;
   GtkWidget *	email_entry;
-  GtkWidget *	terms_entry;
+  GtkWidget *	terms_menu;
 
   GtkWidget *	active_check;
   GtkWidget *	taxincluded_check;
   GtkWidget *	notes_text;
 
+  GncBillTerm *	terms;
   VendorDialogType	dialog_type;
   GUID		vendor_guid;
   gint		component_id;
@@ -117,8 +119,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 			     (GTK_TOGGLE_BUTTON (vw->taxincluded_check)));
   gncVendorSetNotes (vendor, gtk_editable_get_chars
 		       (GTK_EDITABLE (vw->notes_text), 0, -1));
-  gncVendorSetTerms (vendor, gtk_editable_get_chars
-		       (GTK_EDITABLE (vw->terms_entry), 0, -1));
+  gncVendorSetTerms (vendor, vw->terms);
 
   gncVendorCommitEdit (vendor);
   gnc_resume_gui_refresh ();
@@ -155,13 +156,6 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     gnc_error_dialog_parented (GTK_WINDOW (vw->dialog), msg);
     return;
   }
-
-  //  /* Verify terms are valid (or empty) */
-  //  min = gnc_numeric_zero ();
-  //  if (check_edit_amount (vw->dialog, vw->terms_amount, &min, NULL,
-  //			 _("Terms must be a positive integer or "
-  //			   "you must leave it blank.")))
-  //    return;
 
   /* Check for valid id and set one if necessary */
   if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
@@ -341,7 +335,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   vw->active_check = glade_xml_get_widget (xml, "active_check");
   vw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
   vw->notes_text = glade_xml_get_widget (xml, "notes_text");
-  vw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
+  vw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
   /* Setup Dialog for Editing */
   gnome_dialog_set_default (vwd, 0);
@@ -422,6 +416,9 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 				  gnc_vendor_window_refresh_handler,
 				  gnc_vendor_window_close_handler,
 				  vw);
+
+    vw->terms = gncVendorGetTerms (vendor);
+
   } else {
     vendor = gncVendorCreate (bookp);
     gncVendorSetCommodity (vendor, gnc_default_currency ());
@@ -433,12 +430,15 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 				  gnc_vendor_window_refresh_handler,
 				  gnc_vendor_window_close_handler,
 				  vw);
+
+    /* XXX: Get the default Billing Terms */
+    vw->terms = NULL;
   }
 
   /* I know that vendor exists here -- either passed in or just created */
 
-  /* Set the Terms amounts */
-  gtk_entry_set_text (GTK_ENTRY (vw->terms_entry), gncVendorGetTerms (vendor));
+  gnc_ui_billterms_optionmenu (vw->terms_menu, bookp, TRUE, &vw->terms);
+
 
   gnc_gui_component_watch_entity_type (vw->component_id,
 				       GNC_VENDOR_MODULE_NAME,

@@ -564,7 +564,8 @@
 		(make-break! document)))))
 
     (if (opt-val "Display" "Invoice Terms")
-	(let ((terms (gnc:invoice-get-terms invoice)))
+	(let* ((term (gnc:invoice-get-terms invoice))
+	       (terms (gnc:bill-term-get-description term)))
 	  (if (and terms (> (string-length terms) 0))
 	      (gnc:html-document-add-object!
 	       document

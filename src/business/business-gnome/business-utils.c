@@ -214,3 +214,87 @@ gnc_business_account_types (GncOwner *owner)
     return (g_list_prepend (NULL, (gpointer)NO_TYPE));
   }
 }
+
+static void
+business_option_changed (GtkWidget *widget, gpointer *result)
+{
+  *result = 
+    gtk_object_get_data (GTK_OBJECT (widget), "this_item");
+}
+
+static void
+add_menu_item (GtkWidget *menu, const char *label, gpointer *result,
+	       gpointer this_item)
+{
+  GtkWidget *item = gtk_menu_item_new_with_label (label);
+  gtk_object_set_data (GTK_OBJECT (item), "this_item", this_item);
+  gtk_signal_connect (GTK_OBJECT (item), "activate",
+		      business_option_changed, result);
+  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_widget_show (item);
+}
+
+#define DO_ADD_ITEM(s,o) { \
+	add_menu_item (menu, (s), result, (o)); \
+	if (*result == (o)) current = index; \
+	index++; \
+}
+
+typedef const char * (*GenericLookup_t)(gpointer);
+
+static void
+make_generic_optionmenu (GList *items, GtkWidget *omenu, GNCBook *book,
+			 gboolean none_ok, GenericLookup_t func,
+			 gpointer *result)
+{
+  GtkWidget *menu;
+  int current = 0, index = 0;
+
+  menu = gtk_menu_new ();
+  
+  if (none_ok || items == NULL)
+    DO_ADD_ITEM (_("None"), NULL);
+
+  for ( ; items; items = items->next)
+    DO_ADD_ITEM (func (items->data), items->data);
+
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
+  gtk_widget_show (menu);
+  
+}
+
+/* Create an optionmenu of available billing terms and attach it to
+ * the menu passed in.  If none_ok is true, then add "none" as a
+ * choice (with data set to NULL).  Any time the menu changes,
+ * 'choice' will be set to the chosen option.  If *choice is non-NULL,
+ * then that will be the default option setting when the menu is
+ * created.
+ */
+void
+gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
+			     gboolean none_ok, GncBillTerm **choice)
+{
+  GList *terms;
+
+  if (!omenu || !choice || !book) return;
+
+  terms = gncBillTermGetTerms (book);
+  make_generic_optionmenu (terms, omenu, book, none_ok,
+			   (GenericLookup_t)gncBillTermGetName,
+			   (gpointer *)choice);
+}
+
+void
+gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
+			     gboolean none_ok, GncTaxTable **choice)
+{
+  GList *tables;
+
+  if (!omenu || !choice || !book) return;
+
+  tables = gncTaxTableGetTables (book);
+  make_generic_optionmenu (tables, omenu, book, none_ok,
+			   (GenericLookup_t)gncTaxTableGetName,
+			   (gpointer *)choice);
+}

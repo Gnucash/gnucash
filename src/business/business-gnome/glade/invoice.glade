@@ -366,13 +366,12 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkEntry</class>
-	      <name>terms_entry</name>
+	      <class>GtkOptionMenu</class>
+	      <name>terms_menu</name>
 	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
+	      <items>(terms)
+</items>
+	      <initial_choice>0</initial_choice>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
@@ -912,13 +911,13 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<name>terms_entry</name>
+		<class>GtkOptionMenu</class>
+		<name>terms_menu</name>
+		<sensitive>False</sensitive>
 		<can_focus>True</can_focus>
-		<editable>False</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
+		<items>(terms)
+</items>
+		<initial_choice>0</initial_choice>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>

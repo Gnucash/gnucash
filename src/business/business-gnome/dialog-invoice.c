@@ -82,10 +82,11 @@ struct _invoice_window {
   GtkWidget *	job_box;
   GtkWidget *	job_choice;
   GtkWidget *	billing_id_entry;
-  GtkWidget *	terms_entry;
+  GtkWidget *	terms_menu;
 
   gint		width;
 
+  GncBillTerm *	terms;
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
 
@@ -136,8 +137,7 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 		     (GTK_EDITABLE (iw->id_entry), 0, -1));
     gncInvoiceSetBillingID (invoice, gtk_editable_get_chars
 			    (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
-    gncInvoiceSetTerms (invoice, gtk_editable_get_chars
-			(GTK_EDITABLE (iw->terms_entry), 0, -1));
+    gncInvoiceSetTerms (invoice, iw->terms);
 
     ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (iw->opened_date));
     gncInvoiceSetDateOpened (invoice, ts);
@@ -764,7 +764,7 @@ static int
 gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
-  char const *msg = "";
+  GncBillTerm *term = NULL;
   GncOwner owner;
   
   if (!iw)
@@ -791,17 +791,19 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 
   switch (gncOwnerGetType (&(iw->owner))) {
   case GNC_OWNER_CUSTOMER:
-    msg = gncCustomerGetTerms (gncOwnerGetCustomer (&(iw->owner)));
+    term = gncCustomerGetTerms (gncOwnerGetCustomer (&(iw->owner)));
     break;
   case GNC_OWNER_VENDOR:
-    msg = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
+    term = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
     break;
   default:
     g_warning ("Unknown owner type: %d\n", gncOwnerGetType (&(iw->owner)));
     break;
   }
 
-  gtk_entry_set_text (GTK_ENTRY (iw->terms_entry), msg ? msg : "");
+  /* XXX: I'm not sure -- should we change the terms if this happens? */
+  iw->terms = term;
+  gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
 
   gnc_invoice_update_job_choice (iw);
 
@@ -991,9 +993,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     gtk_entry_set_text (GTK_ENTRY (iw->billing_id_entry),
 			gncInvoiceGetBillingID (invoice));
 
-    gtk_entry_set_text (GTK_ENTRY (iw->terms_entry),
-			gncInvoiceGetTerms (invoice));
-
     string = gncInvoiceGetNotes (invoice);
     gtk_editable_delete_text (GTK_EDITABLE (iw->notes_text), 0, -1);
     gtk_editable_insert_text (GTK_EDITABLE (iw->notes_text), string,
@@ -1009,6 +1008,10 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     } else {
       gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->opened_date), ts);
     }
+
+    /* fill in the terms menu */
+    iw->terms = gncInvoiceGetTerms (invoice);
+    gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
 
     /*
      * Next, figure out if we've been posted, and if so set the
@@ -1028,7 +1031,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
     string = xaccAccountGetFullName (acct, gnc_get_account_separator ());
     gtk_entry_set_text (GTK_ENTRY (acct_entry), string);
-
 
   } while (FALSE);
 
@@ -1075,7 +1077,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     /* Setup viewer for read-only access */
     /*
     gtk_widget_set_sensitive (iw->id_entry, FALSE);
-    gtk_widget_set_sensitive (iw->terms_entry, FALSE);
+    gtk_widget_set_sensitive (iw->terms_menu, FALSE);
     gtk_widget_set_sensitive (iw->opened_date, FALSE);
     gtk_widget_set_sensitive (iw->notes_text, FALSE); *//* XXX: should notes remain writable? */
 
@@ -1141,7 +1143,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   /* Grab the widgets */
   iw->id_entry = glade_xml_get_widget (xml, "id_entry");
   iw->billing_id_entry = glade_xml_get_widget (xml, "billing_id_entry");
-  iw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
+  iw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
   iw->notes_text = glade_xml_get_widget (xml, "notes_text");
   iw->active_check = glade_xml_get_widget (xml, "active_check");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
@@ -1318,7 +1320,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   /* Grab the widgets */
   iw->id_entry = glade_xml_get_widget (xml, "id_entry");
   iw->billing_id_entry = glade_xml_get_widget (xml, "billing_id_entry");
-  iw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
+  iw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
   iw->notes_text = glade_xml_get_widget (xml, "notes_text");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");

@@ -33,9 +33,9 @@ struct _gncInvoice {
   GUID		guid;
   char *	id;
   char *	notes;
-  char *	terms;
   char *	billing_id;
   char *	printname;
+  GncBillTerm *	terms;
   GList * 	entries;
   GncOwner	owner;
   GncJob *	job;
@@ -94,7 +94,6 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
-  invoice->terms = CACHE_INSERT ("");
   invoice->billing_id = CACHE_INSERT ("");
 
   invoice->active = TRUE;
@@ -115,7 +114,6 @@ void gncInvoiceDestroy (GncInvoice *invoice)
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
-  CACHE_REMOVE (invoice->terms);
   CACHE_REMOVE (invoice->billing_id);
   g_list_free (invoice->entries);
   remObj (invoice);
@@ -168,10 +166,15 @@ void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
   mark_invoice (invoice);
 }
 
-void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms)
+void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms)
 {
   if (!invoice) return;
-  SET_STR (invoice->terms, terms);
+  if (invoice->terms == terms) return;
+  if (invoice->terms)
+    gncBillTermDecRef (invoice->terms);
+  invoice->terms = terms;
+  if (invoice->terms)
+    gncBillTermIncRef (invoice->terms);
   mark_invoice (invoice);
 }
 
@@ -306,7 +309,7 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
   return xaccTransRetDateDueTS (txn);
 }
 
-const char * gncInvoiceGetTerms (GncInvoice *invoice)
+GncBillTerm * gncInvoiceGetTerms (GncInvoice *invoice)
 {
   if (!invoice) return 0;
   return invoice->terms;
@@ -418,6 +421,12 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   if (!invoice || !acc) return NULL;
 
+  /* Stabilize the Billing Terms of this invoice */
+  if (invoice->terms)
+    gncInvoiceSetTerms (invoice,
+			gncBillTermReturnChild (invoice->terms, TRUE));
+
+  /* Figure out if we need to "reverse" the numbers. */
   reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
   /* Create a new lot for this invoice */
@@ -694,12 +703,12 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_DUE, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateDue },
     { INVOICE_POSTED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePosted },
     { INVOICE_IS_POSTED, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPosted },
-    { INVOICE_TERMS, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetTerms },
     { INVOICE_BILLINGID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetBillingID },
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
     { INVOICE_TYPE, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetType },
+    { INVOICE_TERMS, GNC_BILLTERM_MODULE_NAME, (QueryAccess)gncInvoiceGetTerms },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { NULL },

@@ -62,7 +62,7 @@ test_vendor (void)
     test_string_fcn (book, "Name", gncVendorSetName, gncVendorGetName);
     test_string_fcn (book, "Notes", gncVendorSetNotes, gncVendorGetNotes);
 
-    test_string_fcn (book, "Terms", gncVendorSetTerms, gncVendorGetTerms);
+    //test_string_fcn (book, "Terms", gncVendorSetTerms, gncVendorGetTerms);
 
     test_bool_fcn (book, "TaxIncluded", gncVendorSetTaxIncluded, gncVendorGetTaxIncluded);
     test_bool_fcn (book, "Active", gncVendorSetActive, gncVendorGetActive);
