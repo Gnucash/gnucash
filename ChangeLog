@@ -1,3 +1,8 @@
+2002-11-27  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/pt_BR/*: Added Brazilian Portugese account templates by
+	Lucimar Moresco <lucimarmoresco@hotmail.com>.
+
 2002-11-27  Derek Atkins  <derek@ihtfp.com>
 	* remove find.glade -- it is no longer used
 	* src/gnome/dialog-findtransactions.c -- remove old code
