@@ -37,13 +37,31 @@
   ;; push the matches onto a list. 
   (let* ((new-xtns (gnc:group-get-transactions new-group))
          (separator (string-ref (gnc:account-separator-char) 0))
+	 (progress-dialog #f)
+	 (work-to-do (length new-xtns))
+	 (work-done 0)
          (matches '()))    
     
+    (if (> work-to-do 100)
+	(begin 
+	  (set! progress-dialog (gnc:progress-dialog-new #f #f))
+	  (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
+	  (gnc:progress-dialog-set-heading progress-dialog
+					   (_ "Finding duplicate transactions..."))
+	  (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+
     ;; for each transaction in the new group, build a query that could
     ;; match possibly similar transactions.
     (for-each
      (lambda (xtn) 
        (let ((query (gnc:malloc-query)))         
+	 (set! work-done (+ 1 work-done))
+	 (if progress-dialog 
+	     (begin 
+	       (gnc:progress-dialog-set-value 
+		progress-dialog (* 100 (/ work-done work-to-do)))
+	       (gnc:progress-dialog-update progress-dialog))) 
+
 	 (gnc:query-set-book query (gnc:group-get-book old-group))
          
          ;; the date should be close to the same.. +/- a week. 
@@ -111,6 +129,10 @@
          (gnc:free-query query)))
      new-xtns)
     
+    ;; get rid of the progress dialog 
+    (if progress-dialog
+	(gnc:progress-dialog-destroy progress-dialog))
+
     ;; return the matches 
     matches))
   

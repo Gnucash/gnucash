@@ -133,7 +133,8 @@ static char *qif_import_wd = NULL;
 #define NUM_DOC_PAGES  6
 
 static GnomeDruidPage *
-get_named_page(QIFImportWindow * w, const char * name) {
+get_named_page(QIFImportWindow * w, const char * name)
+{
   return GNOME_DRUID_PAGE(gnc_glade_lookup_widget(w->window, name));
 }
 
@@ -144,7 +145,8 @@ get_named_page(QIFImportWindow * w, const char * name) {
 \********************************************************************/
 
 void
-gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
+gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
+{
   if (!window)
     return;
 
@@ -173,7 +175,8 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
 }
 
 static GtkWidget * 
-get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
+get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
+{
   GList     * current = NULL;
   GList     * next;
   int       where = 0;
@@ -228,7 +231,8 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
 }
 
 static GtkWidget * 
-get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
+get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
+{
   GList     * current = NULL;
   GList     * prev;
   int       where = 0;
@@ -297,7 +301,8 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
 
 static gboolean
 gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1, 
-                                  gpointer user_data) {
+                                  gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   GtkWidget * next_page = get_next_druid_page(wind, page);
   
@@ -319,7 +324,8 @@ gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1,
 
 static gboolean
 gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1, 
-                                  gpointer user_data) {
+                                  gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   GtkWidget * back_page = get_prev_druid_page(wind, page);
   
@@ -343,7 +349,8 @@ gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1,
 
 static void
 gnc_ui_qif_import_select_file_cb(GtkButton * button,
-                                 gpointer user_data) {
+                                 gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   const char * new_file_name;
   char *file_name, *tmp;
@@ -383,7 +390,8 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
 static gboolean
 gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page, 
                                     gpointer arg1,
-                                    gpointer user_data) {
+                                    gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   char * path_to_load;
@@ -583,7 +591,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 static gboolean
 gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page, 
                                       gpointer arg1,
-                                      gpointer user_data) {
+                                      gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   SCM  reparse_dates   = gh_eval_str("qif-file:reparse-dates");
@@ -625,7 +634,8 @@ static void
 gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
                                         int row, int column,
                                         GdkEvent   * event,
-                                        gpointer  user_data) {
+                                        gpointer  user_data)
+{
   QIFImportWindow * wind = user_data;
 
   if(gh_list_p(wind->imported_files) && 
@@ -646,7 +656,8 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
 static void
 gnc_ui_qif_import_loaded_files_prepare_cb(GnomeDruidPage * page,
                                           gpointer arg1,
-                                          gpointer user_data) {
+                                          gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   update_file_page(wind);
@@ -663,7 +674,8 @@ gnc_ui_qif_import_loaded_files_prepare_cb(GnomeDruidPage * page,
 
 static void
 gnc_ui_qif_import_load_another_cb(GtkButton * button,
-                                  gpointer user_data) {
+                                  gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   
   gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -681,7 +693,8 @@ gnc_ui_qif_import_load_another_cb(GtkButton * button,
 
 static void
 gnc_ui_qif_import_unload_file_cb(GtkButton * button,
-                                 gpointer user_data) {
+                                 gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
@@ -710,7 +723,8 @@ gnc_ui_qif_import_unload_file_cb(GtkButton * button,
  ********************************************************************/
 
 static void
-update_file_page(QIFImportWindow * wind) {
+update_file_page(QIFImportWindow * wind)
+{
   
   SCM       loaded_file_list = wind->imported_files;
   SCM       scm_qiffile = SCM_BOOL_F;
@@ -760,7 +774,8 @@ update_file_page(QIFImportWindow * wind) {
 static gboolean
 gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
                                        gpointer arg1,
-                                       gpointer user_data) {
+                                       gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   char   * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
   SCM    fix_default = gh_eval_str("qif-import:fix-from-acct");
@@ -788,7 +803,8 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
 static gboolean
 gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
                                        gpointer arg1,
-                                       gpointer user_data) {
+                                       gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   SCM unload = gh_eval_str("qif-dialog:unload-qif-file");
   SCM files_list;
@@ -822,7 +838,8 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
 
 static void
 update_account_picker_page(QIFImportWindow * wind, SCM make_display,
-			   GtkWidget *list, SCM map_info, SCM * display_info) {
+			   GtkWidget *list, SCM map_info, SCM * display_info)
+{
 
   SCM  get_qif_name         = gh_eval_str("qif-map-entry:qif-name");
   SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
@@ -890,7 +907,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
  ****************************************************************/
 
 static void
-update_accounts_page(QIFImportWindow * wind) {
+update_accounts_page(QIFImportWindow * wind)
+{
 
   SCM  make_account_display = gh_eval_str("qif-dialog:make-account-display");
 
@@ -904,7 +922,8 @@ update_accounts_page(QIFImportWindow * wind) {
  ****************************************************************/
 
 static void
-update_categories_page(QIFImportWindow * wind) {
+update_categories_page(QIFImportWindow * wind)
+{
   SCM  make_category_display = gh_eval_str("qif-dialog:make-category-display");
 
   update_account_picker_page (wind, make_category_display, wind->cat_list,
@@ -917,7 +936,8 @@ update_categories_page(QIFImportWindow * wind) {
  ****************************************************************/
 
 static void
-update_memo_page(QIFImportWindow * wind) {
+update_memo_page(QIFImportWindow * wind)
+{
   SCM  make_memo_display = gh_eval_str("qif-dialog:make-memo-display");
 
   update_account_picker_page (wind, make_memo_display, wind->memo_list,
@@ -934,7 +954,8 @@ update_memo_page(QIFImportWindow * wind) {
  ********************************************************************/
 static void
 select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
-	     void (*update_page)(QIFImportWindow *)) {
+	     void (*update_page)(QIFImportWindow *))
+{
   SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
   SCM   selected_acct;
   
@@ -959,7 +980,8 @@ select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
 static void
 gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
                                          gint column, GdkEvent * event,
-                                         gpointer user_data) {
+                                         gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   select_line (wind, row, wind->acct_display_info, wind->acct_map_info,
@@ -975,7 +997,8 @@ gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
 static void
 gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
                                           gint column, GdkEvent * event,
-                                          gpointer user_data) {
+                                          gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   select_line (wind, row, wind->cat_display_info, wind->cat_map_info,
@@ -991,7 +1014,8 @@ gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
 static void
 gnc_ui_qif_import_memo_line_select_cb(GtkCList * clist, gint row,
                                       gint column, GdkEvent * event,
-                                      gpointer user_data) {
+                                      gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   select_line (wind, row, wind->memo_display_info, wind->memo_map_info,
@@ -1006,7 +1030,8 @@ gnc_ui_qif_import_memo_line_select_cb(GtkCList * clist, gint row,
 static void
 gnc_ui_qif_import_accounts_prepare_cb(GnomeDruidPage * page,
                                       gpointer arg1,
-                                      gpointer user_data) {
+                                      gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   gnc_set_busy_cursor(NULL, TRUE);
@@ -1022,7 +1047,8 @@ gnc_ui_qif_import_accounts_prepare_cb(GnomeDruidPage * page,
 static void
 gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
                                         gpointer arg1,
-                                        gpointer user_data) {
+                                        gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   gnc_set_busy_cursor(NULL, TRUE);
@@ -1037,7 +1063,8 @@ gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
 static void
 gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
                                         gpointer arg1,
-                                        gpointer user_data) {
+                                        gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   gnc_set_busy_cursor(NULL, TRUE);
@@ -1053,7 +1080,8 @@ gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
  ****************************************************************/
 
 static gboolean
-gnc_ui_qif_import_convert(QIFImportWindow * wind) {
+gnc_ui_qif_import_convert(QIFImportWindow * wind)
+{
 
   SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
   SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
@@ -1195,7 +1223,8 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
 static gboolean
 gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
                                gpointer arg1,
-                               gpointer user_data) {
+                               gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   SCM any_new      = gh_eval_str("qif-import:any-new-accts?");
   SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
@@ -1261,7 +1290,8 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
 static gboolean
 gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
                                    gpointer arg1,
-                                   gpointer user_data) {
+                                   gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
   int show_matches;
@@ -1312,7 +1342,8 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
 static gboolean
 gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
                                 gpointer arg1,
-                                gpointer user_data) {
+                                gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   QIFDruidPage    * qpage = 
     gtk_object_get_data(GTK_OBJECT(page), "page_struct");
@@ -1384,7 +1415,8 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
 static void
 gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
                                        gpointer arg1,
-                                       gpointer user_data) {
+                                       gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   SCM   hash_ref          = gh_eval_str("hash-ref");
@@ -1451,7 +1483,8 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 }
 
 static QIFDruidPage *
-make_qif_druid_page(gnc_commodity * comm) {
+make_qif_druid_page(gnc_commodity * comm)
+{
   
   QIFDruidPage * retval = g_new0(QIFDruidPage, 1);
   GtkWidget * top_vbox;
@@ -1563,7 +1596,8 @@ make_qif_druid_page(gnc_commodity * comm) {
 
 
 static void
-refresh_old_transactions(QIFImportWindow * wind, int selection) {
+refresh_old_transactions(QIFImportWindow * wind, int selection)
+{
   SCM          possible_matches;
   SCM          current_xtn;
   SCM          selected;
@@ -1626,7 +1660,8 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
 
 static void
 gnc_ui_qif_import_duplicate_new_select_cb(GtkCList * clist, int row, int col, 
-                                          GdkEvent * ev, gpointer user_data) {
+                                          GdkEvent * ev, gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   wind->selected_transaction = row;
@@ -1636,7 +1671,8 @@ gnc_ui_qif_import_duplicate_new_select_cb(GtkCList * clist, int row, int col,
 
 static void
 gnc_ui_qif_import_duplicate_old_select_cb(GtkCList * clist, int row, int col, 
-                                          GdkEvent * ev, gpointer user_data) {
+                                          GdkEvent * ev, gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
 
   refresh_old_transactions(wind, row);
@@ -1645,7 +1681,8 @@ gnc_ui_qif_import_duplicate_old_select_cb(GtkCList * clist, int row, int col,
 static void
 gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage, 
                             gpointer arg1, 
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   
   SCM   save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
   SCM   cat_and_merge = gh_eval_str("gnc:group-catenate-and-merge");
@@ -1677,14 +1714,16 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
 static void
 gnc_ui_qif_import_cancel_cb (GnomeDruid * druid, 
-                             gpointer user_data) {
+                             gpointer user_data)
+{
   QIFImportWindow * wind = user_data;
   
   gnc_ui_qif_import_druid_destroy(wind);
 }
 
 SCM
-gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w) {
+gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w)
+{
   return SCM_LIST3(w->acct_map_info, 
                    w->cat_map_info,
                    w->memo_map_info);

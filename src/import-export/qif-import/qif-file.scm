@@ -41,9 +41,9 @@
      (if (> file-size 10000)
          (begin
            (set! progress-dialog (gnc:progress-dialog-new #f #f))
-           (gnc:progress-dialog-set-title progress-dialog "Progress")
+           (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
            (gnc:progress-dialog-set-heading progress-dialog
-                                            "Loading QIF file...")
+                                            (_ "Loading QIF file..."))
            (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
 
      (with-input-from-file path

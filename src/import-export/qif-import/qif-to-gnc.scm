@@ -293,9 +293,9 @@
        (if (> work-to-do 100)
            (begin 
              (set! progress-dialog (gnc:progress-dialog-new #f #f))
-             (gnc:progress-dialog-set-title progress-dialog "Progress")
+             (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
              (gnc:progress-dialog-set-heading progress-dialog
-                                              "Importing transactions...")
+                                              (_ "Importing transactions..."))
              (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
        
 

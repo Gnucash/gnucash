@@ -1,3 +1,16 @@
+2002-11-23  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/qif-merge-groups.scm: Add a new
+	progress box for a function that takes forever and a day to
+	complete.
+
+	* src/import-export/qif-import/qif-to-gnc.scm: 
+	* src/import-export/qif-import/qif-file.scm: Mark progress box
+	strings for i18n.
+
+	* src/import-export/qif-import/druid-qif-import.c: Fix start
+	declarations so emacs can find them.
+
 2002-11-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/Transaction-matcher.c: Refactor *a lot* of the
