@@ -1,3 +1,31 @@
+2001-05-10  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/scm/main.scm ((gnc:main)): remove the main window startup
+	with new user startup (moved to end of new user stuff).
+
+	* src/engine/sql/PostgresBackend.c (pgendGetAllAccountKVP): same
+	as below.
+
+	* src/engine/rpc/RpcUtils.c (rpcend_build_gncacctlist): 
+	xaccGroupForEachAccountDeeply -> xaccGroupForEachAccount(...TRUE)
+	(rpcend_build_gncacct_verslist): same.
+
+	* src/engine/gnc-book.c (gnc_book_set_group): free account group
+	when setting new one.
+
+	* src/engine/Group.c (xaccGroupForEachAccount): change from
+	xaccGroupForEachAccountDeeply and add argument on whether it
+	should do things deeply.
+
+	* src/engine/Account.c (xaccCloneAccountSimple): new func.
+	(xaccAccountEnumAsString): change arg to GNCAccountType.
+
+	* src/gnc-ui-util.c (gnc_ui_account_get_balance):
+	xaccGroupForEachAccountDeeply -> xaccGroupForEachAccount(...TRUE)
+
+	* src/engine/Account.c (xaccAccountGetChildren): Add children
+	group if ->children == NULL.
+
 2001-05-10  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/File.c (gncFindFile): handle NULL arg
@@ -654,6 +682,11 @@
 	between html & txf
 
 	* src/gnome/window-report.c: implement export callback
+
+2001-04-19  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnome/new-user-funs.c (gnc_new_user_get_clist): new func to
+	remove duplicate code.
 
 2001-04-18  Dave Peticolas  <dave@krondo.com>
 
