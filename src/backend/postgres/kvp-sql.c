@@ -527,13 +527,16 @@ pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
 }
 
 void 
-pgendKVPDelete (PGBackend *be, guint32 iguid, const char *objtype)
+pgendKVPDelete (PGBackend *be, guint32 iguid, char objtype_char)
 {
-   char iguid_str[80], sess_str[80];
+   char iguid_str[80], sess_str[80], objtype[2];
    char * p;
 
-   if (!be || 0 == iguid || !objtype || (strlen (objtype) != 1))
+   if (!be || 0 == iguid)
      return;
+
+   objtype[0] = objtype_char;
+   objtype[1] = '\0';
 
    sprintf (iguid_str, "%d;\n", iguid);
    guid_to_string_buff (be->sessionGuid, sess_str);
