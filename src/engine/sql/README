@@ -248,9 +248,6 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- multi-user mode says 'not saved, save?' we keep clearing this flag,
-   when is it getting set ???
-
 -- modify checkpoint computation to always occur on fixed dates.
    Failure to do so causes the fill-out algorithm to pull in all 
    data. Document this inn design.txt

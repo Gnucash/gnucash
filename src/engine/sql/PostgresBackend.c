@@ -1463,6 +1463,10 @@ pgendRunQuery (Backend *bend, Query *q)
 
    sql_Query_destroy(sq);
 
+   /* the fill-out will dirty a lot of data. That's irrelevent,
+    * mark it all as having been saved. */
+   xaccGroupMarkSaved (be->topgroup);
+
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1784,6 +1788,10 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
 
    SEND_QUERY (be, be->buff, );
    pgendGetResults (be, get_price_cb, look->prdb);
+
+   /* insertion into the price db will mark it dirty;
+    * but it really isn't at this point. */
+   gnc_pricedb_mark_clean (look->prdb);
 
    /* re-enable events */
    pgendEnable(be);
@@ -3093,7 +3101,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
-            be->be.sync = pgendSync;
+            // be->be.sync = pgendSync;
+            be->be.sync = NULL;
             be->be.sync_price = pgendSyncPriceDB;
             PWARN ("MODE_POLL is alpha -- \n"
                    "there are a few unfixed bugs, but maybe this mode is usable.\n"
