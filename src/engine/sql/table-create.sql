@@ -166,31 +166,59 @@ CREATE TABLE gncKVPvalue (
         PRIMARY KEY (iguid, ipath)
 );
 
-CREATE INDEX gncKVPvalue_iguid_idx ON gncKVPvalue (iguid);
+--  CREATE INDEX gncKVPvalue_iguid_idx ON gncKVPvalue (iguid);
+
+-- Add primary keys to each kvp table ... because key inheritance 
+-- is ambiguously defined and thus not implemented in postgres.
+-- Note, however, adding these keys degrades performance by 20%
+-- (even after a vacuum analyze), and adding indexes degrades
+-- an additional 15% !!  I find this result surprising, so I
+-- simply leave these commented out ... (as of postgres 7.1.2)
+-- Note, indexex on the main, non-inherited tables *are* important
+-- for ensuring good performance, so this effect seems to be related
+-- to inheritance
 
 CREATE TABLE gncKVPvalue_int64 (
 	data		INT8
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_int64_iguid_idx ON gncKVPvalue_int64 (iguid);
 
 CREATE TABLE gncKVPvalue_dbl (
 	data		FLOAT8
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_dbl_iguid_idx ON gncKVPvalue_dbl (iguid);
 
 CREATE TABLE gncKVPvalue_numeric (
 	num		INT8,
 	denom		INT8
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_numeric_iguid_idx ON gncKVPvalue_numeric (iguid);
 
 CREATE TABLE gncKVPvalue_str (
 	data		TEXT
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_str_iguid_idx ON gncKVPvalue_str (iguid);
 
 CREATE TABLE gncKVPvalue_guid (
 	data		CHAR(32)
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_guid_iguid_idx ON gncKVPvalue_guid (iguid);
 
 CREATE TABLE gncKVPvalue_list (
 	data		TEXT[]
+--        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_list_iguid_idx ON gncKVPvalue_list (iguid);
 
 -- end of file
