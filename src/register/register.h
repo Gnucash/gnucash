@@ -25,9 +25,9 @@
 #define EXPENSE_LEDGER    6
 #define EQUITY_LEDGER     7
 #define STOCK_LEDGER      8
-#define GEN_LEDGER        9
-#define INC_LEDGER        10
-#define PORTFOLIO         11
+#define GENERAL_LEDGER    9
+#define INCO_LEDGER       10
+#define PORTFOL           11
 
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE  0x000
