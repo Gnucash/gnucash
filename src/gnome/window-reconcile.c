@@ -1,5 +1,5 @@
 /********************************************************************\
- * RecnWindow.c -- the reconcile window                             *
+ * window-reconcile.c -- the reconcile window                       *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -32,7 +32,7 @@
 #include "date.h"
 #include "Group.h"
 #include "MultiLedger.h"
-
+#include "top-level.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
 #include "window-reconcile.h"
@@ -71,6 +71,7 @@ static short module = MOD_GUI;
 
 /********************************************************************/
 
+
 /********************************************************************\
  * recnRefresh                                                      *
  *   refreshes the transactions in the reconcile window             *
@@ -88,7 +89,8 @@ recnRefresh(Account *acc)
   GList *credit_items = NULL;
   
   FIND_IN_LIST (RecnWindow, recnList, acc, acc, recnData);
-  if(!recnData) return;
+  if(!recnData)
+    return;
   
   /* Build lists of the non-reconciled transactions */
   i=0;
@@ -125,7 +127,7 @@ recnRefresh(Account *acc)
         GtkWidget *check_button = gtk_check_button_new_with_label(item_str);
 
         gtk_signal_connect(GTK_OBJECT(check_button), "toggled",
-                           (GtkSignalFunc)recnCB, (gpointer) recnData);
+                           GTK_SIGNAL_FUNC(recnCB), (gpointer) recnData);
 
         gtk_container_add(GTK_CONTAINER(list_item), check_button);
         gtk_widget_show(list_item);
@@ -249,20 +251,6 @@ recnRecalculateBalance(RecnWindow *recnData)
   gtk_label_set(GTK_LABEL(recnData->difference), amt);
 }
 
-/********************************************************************\
- * startRecnWindow:  gets the ending balance for reconcile window   *
-\********************************************************************/
-static void
-startRecnOkCB(GtkWidget *w, gpointer data)
-{
-  *((int *) data) = 1;
-}
-
-static void
-startRecnCancelCB(GtkWidget *w, gpointer data)
-{
-  *((int *) data) = 0;
-}
 
 /********************************************************************\
  * startRecnWindow                                                  *
@@ -276,119 +264,115 @@ startRecnCancelCB(GtkWidget *w, gpointer data)
  *         acc     - the account to reconcile                       *
  *         diff    - returns the amount from ending balance field   *
  * Return: True, if the user presses "Ok", else False               *
- * Global: app - the app context                                    *
 \********************************************************************/
 gboolean
 startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
 {
-  GtkWidget *dialog;
-  char * amt;
-  double dendBalance;
+  GtkWidget *dialog, *end_value;
+  char *amt, *title;
+  double dendBalance, val;
   int result;
   short shrs = 0;
   int acc_type;
-  char *title = NULL;
+  gchar *string;
 
-  gnc_set_busy_cursor(parent);
-  
   /* Get the previous ending balance.  Use the published
    * account interface for this, since the ending balance
    * may have to be adjusted for stock price fluctuations.
    */
   dendBalance = xaccAccountGetReconciledBalance(acc);
-  
+
   acc_type = xaccAccountGetType(acc);
-  if((STOCK == acc_type) || (MUTUAL == acc_type)) shrs = 1;
+  if ((STOCK == acc_type) || (MUTUAL == acc_type))
+    shrs = 1;
 
   shrs *= PRTSHR;
   shrs |= PRTSYM;
   amt = xaccPrintAmount (dendBalance, shrs);
-  
+
   /* Create the dialog box... */
   asprintf(&title, "%s: %s", xaccAccountGetName(acc), RECONCILE_STR);
-  
+
   dialog = gnome_dialog_new(title,
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
-                            GNOME_STOCK_BUTTON_HELP,
                             NULL);
   free(title);
   
-  // gnome_dialog_set_modal(GNOME_DIALOG(dialog));
-  gnome_dialog_set_default(GNOME_DIALOG(dialog), 1);
+  gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
   gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
-  
-  gnome_dialog_button_connect(GNOME_DIALOG(dialog), 0,
-                              GTK_SIGNAL_FUNC(startRecnOkCB),
-                              (gpointer) &result);
-  gnome_dialog_button_connect(GNOME_DIALOG(dialog), 1,
-                              GTK_SIGNAL_FUNC(startRecnCancelCB),
-                              (gpointer) &result);
-  
-  PERR (" startRecnWindow(): Not implemented: helpMenubarCB\n");
-  /*
-    gnome_dialog_button_connect(GNOME_DIALOG(dialog), 2,
-    GTK_SIGNAL_FUNC(helpMenubarCB),
-    (gpointer) HMB_RECNWIN);
-  */  
-  
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
+  gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(parent));
+
   {
-    GtkWidget *main_area = gtk_hbox_new(TRUE, 0);
-    GtkWidget *left_column = gtk_vbox_new(FALSE, 0);
-    GtkWidget *right_column = gtk_vbox_new(FALSE, 0);
+    GtkWidget *frame = gtk_frame_new("Reconcile Information");
+    GtkWidget *main_area = gtk_hbox_new(FALSE, 5);
+    GtkWidget *left_column = gtk_vbox_new(TRUE, 0);
+    GtkWidget *right_column = gtk_vbox_new(TRUE, 0);
     GtkWidget *prev_title = gtk_label_new(PREV_BALN_C_STR);
     GtkWidget *end_title = gtk_label_new(END_BALN_C_STR);
     GtkWidget *prev_value = gtk_label_new(amt);
-    GtkWidget *end_value = gtk_entry_new();
-    
-    gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox), main_area,
-                       TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(main_area), left_column, TRUE, TRUE, 0);
+    GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
+    end_value = gtk_entry_new();
+
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
+                                 GTK_EDITABLE(end_value));
+
+    gtk_misc_set_alignment (GTK_MISC(end_title), 0.95, 0.5);
+    gtk_misc_set_alignment (GTK_MISC(prev_title), 0.95, 0.5);
+    gtk_misc_set_alignment (GTK_MISC(prev_value), 0, 0.5);
+
+    gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
+    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+    gtk_container_add(GTK_CONTAINER(frame), main_area);
+
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+
+    gtk_box_pack_start(GTK_BOX(main_area), left_column, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(main_area), right_column, TRUE, TRUE, 0);
     
     gtk_box_pack_start(GTK_BOX(left_column), prev_title, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(left_column), end_title, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), prev_value, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
-    
+
+    gtk_widget_show(frame);
     gtk_widget_show(main_area);
     gtk_widget_show(left_column);
     gtk_widget_show(right_column);
     gtk_widget_show(prev_title);
     gtk_widget_show(end_title);
     gtk_widget_show(prev_value);
-    gtk_widget_show(end_value);
-    gtk_widget_show(dialog);
+    gtk_widget_show(end_value); 
+  }
     
-    gnc_unset_busy_cursor(parent);
-    
-    
-    result = -1;
-    while(result == -1) {
-      while(result == -1) {
-        gtk_main_iteration();
-      }
-      
-      /* Get the amount from the "end-balance" field */
+  while (1)
+  {
+    result = gnome_dialog_run(GNOME_DIALOG(dialog));
+
+    if (result == 0) /* ok button */
+    {
+      string = gtk_entry_get_text(GTK_ENTRY(end_value));
+
+      if(sscanf(string, "%lf", &val ) == 1)
       {
-        gchar *str = gtk_entry_get_text(GTK_ENTRY(end_value));
-        double val=0.0;
-        
-        if(result == 1) {
-          if(sscanf(str, "%lf", &val ) == 1) {
-            *diff = dendBalance - val;
-          } else {
-            gnc_error_dialog(N_("Ending balance must be a number."));
-            result = -1;
-          }
-        }
+        *diff = dendBalance - val;
+        break;
+      }
+      else
+      {
+        gnc_error_dialog(_("Ending balance must be a number."));
+        continue;
       }
     }
-    gnome_dialog_close(GNOME_DIALOG(dialog));
+
+    /* cancel or delete */
+    break;
   }
-  PINFO ("Returning result: %d\n", result);
-  return result;
+
+  gtk_widget_destroy(dialog);
+
+  return (result == 0);
 }
 
 /********************************************************************\
@@ -406,16 +390,13 @@ recnWindow(GtkWidget *parent, Account *acc)
   double ddiff;
   gchar *title = NULL;
   
+  FETCH_FROM_LIST(RecnWindow, recnList, acc, acc, recnData);
+
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
-  if(!startRecnWindow(parent,acc,&ddiff) ) {
+  if (!startRecnWindow(parent, acc, &ddiff))
     return NULL;
-  }
 
-  FETCH_FROM_LIST(RecnWindow, recnList, acc, acc, recnData);
-  
-  gnc_set_busy_cursor(parent);
-  
   recnData->ddiff = ddiff;
   
   asprintf(&title, "%s: %s", xaccAccountGetName (acc), RECONCILE_STR);
@@ -429,35 +410,29 @@ recnWindow(GtkWidget *parent, Account *acc)
 
   /* here we connect the "destroy" event to a signal handler.  
    * This event occurs when we call gtk_widget_destroy() on the window,
-   * or if we return 'FALSE' in the "delete_event" callback. */
+   * or if we return 'FALSE' in the "delete_event" callback.
+   * Eventually executed by gnome_dialog_close() */
   gtk_signal_connect (GTK_OBJECT (recnData->dialog), "destroy",
                       GTK_SIGNAL_FUNC(recnClose), (gpointer) recnData);
 
-  
-  // gnome_dialog_set_modal(GNOME_DIALOG(recnData->dialog));
-  gnome_dialog_set_default(GNOME_DIALOG(recnData->dialog), 1);
+  /* Ok is default */
+  gnome_dialog_set_default(GNOME_DIALOG(recnData->dialog), 0);
+
+  /* Buttons don't close automatically */
   gnome_dialog_set_close(GNOME_DIALOG(recnData->dialog), FALSE);
+
+  /* destroy, don't hide */
   gnome_dialog_close_hides(GNOME_DIALOG(recnData->dialog), FALSE);
   
   gnome_dialog_button_connect(GNOME_DIALOG(recnData->dialog), 0,
                               GTK_SIGNAL_FUNC(recnOkCB),
                               (gpointer) recnData);
+
   gnome_dialog_button_connect(GNOME_DIALOG(recnData->dialog), 1,
                               GTK_SIGNAL_FUNC(recnCancelCB),
                               (gpointer) recnData);
 
   PERR ("recnWindow(): Not implemented: helpMenubarCB\n");
-  /*
-  XtAddCallback( widget, XmNactivateCallback,
-                 helpMenubarCB, (XtPointer)HMB_RECNWIN );
-  */  
-
-  //String labels[]    = {"", NUM_STR, DATE_STR, DESC_STR, AMT_STR };
-  //unsigned char alignments[] = {XmALIGNMENT_CENTER,
-  //                                XmALIGNMENT_END,
-  //                                XmALIGNMENT_CENTER,
-  //                                XmALIGNMENT_BEGINNING,
-  //                                XmALIGNMENT_END};
 
   {
     GtkWidget *main_area = gtk_vbox_new(FALSE, 0);
@@ -507,14 +482,12 @@ recnWindow(GtkWidget *parent, Account *acc)
     gtk_widget_show(recnData->dialog);
   }
     
-  /* now that the matices are set up, fill 'em in with transactions: */
+  /* now that the matrices are set up, fill 'em in with transactions: */
   recnRefresh (acc);
 
   /* and then refresh the total/difference balance fields: */
   recnRecalculateBalance(recnData);
   
-  gnc_unset_busy_cursor(parent);
-
   return recnData;
 }
 
@@ -526,10 +499,12 @@ recnWindow(GtkWidget *parent, Account *acc)
 void 
 xaccDestroyRecnWindow(Account *acc)
 {
-  RecnWindow *recnData;
+  RecnWindow *recnData = NULL;
   
   FIND_IN_LIST(RecnWindow, recnList, acc, acc, recnData);
-  if(!recnData) return;
+  if (recnData == NULL)
+    return;
+
   gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
 }
 
@@ -539,9 +514,8 @@ xaccDestroyRecnWindow(Account *acc)
  *   frees memory allocated for an recnWindow, and other cleanup    *
  *   stuff                                                          *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - recnData - the data struct for this window          *
- *         cb -                                                     *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
 static void 
@@ -569,15 +543,14 @@ recn_ok_cb_set_reconciled_helper(gpointer item, gpointer data) {
   }
 }
 
+
 /********************************************************************\
  * recnOkCB                                                         *
  *   saves account stuff, when the user clicks "Ok"                 *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - recnData - the data struct for this window          *
- *         cb -                                                     *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this window                   *
  * Return: none                                                     *
- * Global: data                                                     *
 \********************************************************************/
 static void 
 recnOkCB(GtkWidget *w, gpointer data)
@@ -594,7 +567,6 @@ recnOkCB(GtkWidget *w, gpointer data)
   xaccAccountDisplayRefresh (recnData->acc);
   
   gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
-
 }
 
 static void 
@@ -606,14 +578,14 @@ recnCancelCB(GtkWidget *w, gpointer data)
   PINFO ("Y\n");
 }
 
+
 /********************************************************************\
  * recnCB                                                           *
  *   called whenever the users does anything in the debit/credit    *
  *   matrices                                                       *
  *                                                                  *
- * Args:   mw - the matrix widget that called us                    *
- *         cd - recnData - the data struct for this window          *
- *         cb -                                                     *
+ * Args:   w    - the matrix widget that called us                  *
+ *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
 static void

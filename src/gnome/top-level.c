@@ -1,5 +1,5 @@
 /********************************************************************\
- * top-level.c -- main for xacc (X-Accountant)                           *
+ * top-level.c -- Gnome GUI main for GnuCash                        *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
@@ -88,27 +88,14 @@ gnucash_ui_init()
   ENTER ("gnucash_ui_init");
 
   /* We're going to have to have other ways to handle X and GUI
-     specific args...
-
-     For now, use fake_argv and fake_argc...
-  */
-  if (!gnome_is_initialized) {
+     specific args... */
+  if (!gnome_is_initialized)
+  {
     gnome_init("GnuCash", NULL, fake_argc, fake_argv);
     gnome_is_initialized = TRUE;
 
     app = gnome_app_new ( "GnuCash", "GnuCash" );
 
-    {
-      /* Use a nicer font IMO, if available */
-      char font[] = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*";
-      GtkStyle *st = gtk_widget_get_default_style();
-      GdkFont *f = gdk_font_load(font);
-      if(st && f) {
-	st->font = f;
-      }
-    }
-
-    /* Make the main window. */
     mainWindow();
   }
 

@@ -33,28 +33,28 @@
  want at the bottom, and whatever contents you want inside the main
  portion of the window.
 
- Upon entry, dialog_result must point to an integer value of 0.  This
- function will put up a dialog with the requested buttons and will not
- return until someone has set *dialog_result to a non-zero value.
- Clicking yes or ok will set *dialog_result to GNC_QUERY_YES, no to
+ This function creates a dialog with the requested buttons. Clicking
+ yes or ok will set *dialog_result to GNC_QUERY_YES, no to
  GNC_QUERY_NO and cancel to GNC_QUERY_CANCEL. These values are all
  negative; positive values are reserved for the caller.
 
  Each of the *_allowed arguments indicates whether or not the dialog
- should contain a button of that type.  default_answer may be set to
+ should contain a button of that type. default_answer may be set to
  GNC_QUERY_YES for "yes" (or OK), GNC_QUERY_NO for "no", and
  GNC_QUERY_CANCEL for "cancel".  If you allow both yes and OK buttons,
  and set GNC_QUERY_YES as the default answer, which button is the
  default is undefined, but the result is the same either way, and why
  would you be doing that anyhow?
 
- The function will return 0 if all went well, and non-zero if there
- was a failure of any sort. If there was a failure, you cannot trust
- the value of *dialog_result.
-
- FIXME: We need more system call error checking in here!
+ The function returns the created dialog, or NULL if there was a
+ problem.
 
 */
+
+typedef struct {
+  int delete_result;
+  int * dialog_result;
+} FoundationCBData;
 
 static void
 foundation_query_yes_cb(GtkWidget *w, gpointer data) {
@@ -74,7 +74,20 @@ foundation_query_cancel_cb(GtkWidget *w, gpointer data) {
   *result = GNC_QUERY_CANCEL;
 }
 
-int
+static gboolean
+foundation_query_delete_cb(GtkWidget *w, GdkEvent *event, gpointer data) {
+  FoundationCBData * cb_data = (FoundationCBData *) data;
+  *(cb_data->dialog_result) = cb_data->delete_result;
+  return(FALSE);
+}
+
+static gint
+foundation_query_close_cb(GtkWidget *w, gpointer data) {
+  free(data);
+  return(FALSE);
+}
+
+GtkWidget *
 gnc_foundation_query_dialog(const gchar *title,
                             GtkWidget *contents,
                             int default_answer,
@@ -84,6 +97,7 @@ gnc_foundation_query_dialog(const gchar *title,
                             gncBoolean cancel_allowed,
                             int *dialog_result) {
 
+  FoundationCBData * cb_data;
   GtkWidget *query_dialog = NULL;
 
   const gchar *button_names[5] = {NULL, NULL, NULL, NULL, NULL};
@@ -91,7 +105,9 @@ gnc_foundation_query_dialog(const gchar *title,
 
   int button_count = 0;
   int default_button = 0;
+  int delete_result;
 
+  /* Validate our arguments */
   assert(yes_allowed || ok_allowed || no_allowed || cancel_allowed);
   assert((default_answer == GNC_QUERY_YES) ||
 	 (default_answer == GNC_QUERY_NO) ||
@@ -99,67 +115,87 @@ gnc_foundation_query_dialog(const gchar *title,
   assert((default_answer != GNC_QUERY_YES) || (yes_allowed || ok_allowed));
   assert((default_answer != GNC_QUERY_NO) || no_allowed);
   assert((default_answer != GNC_QUERY_CANCEL) || cancel_allowed);
-  
+  assert(dialog_result != NULL);
+
+  /* Setup buttons */
   if(yes_allowed) {
     button_names[button_count] = GNOME_STOCK_BUTTON_YES;
     button_func[button_count] = GTK_SIGNAL_FUNC(foundation_query_yes_cb);
     if(GNC_QUERY_YES == default_answer) default_button = button_count;
+    delete_result = GNC_QUERY_YES;
     button_count++;
   }  
   if(ok_allowed) {
     button_names[button_count] = GNOME_STOCK_BUTTON_OK;
     button_func[button_count] = GTK_SIGNAL_FUNC(foundation_query_yes_cb);
     if(GNC_QUERY_YES == default_answer) default_button = button_count;
+    delete_result = GNC_QUERY_YES;
     button_count++;
   }  
   if(no_allowed) {
     button_names[button_count] = GNOME_STOCK_BUTTON_NO;
     button_func[button_count] = GTK_SIGNAL_FUNC(foundation_query_no_cb);
     if(GNC_QUERY_NO == default_answer) default_button = button_count;
+    delete_result = GNC_QUERY_NO;
     button_count++;
-  }  
+  }
   if(cancel_allowed) {
     button_names[button_count] = GNOME_STOCK_BUTTON_CANCEL;
     button_func[button_count] = GTK_SIGNAL_FUNC(foundation_query_cancel_cb);
     if(GNC_QUERY_CANCEL == default_answer) default_button = button_count;
+    delete_result = GNC_QUERY_CANCEL;
     button_count++;
   }
 
+  /* Allocate our resources */
+  cb_data = malloc(sizeof(FoundationCBData));
+  if (cb_data == NULL)
+    return NULL;
+
   query_dialog = gnome_dialog_newv(title, button_names);
-    
-  gtk_window_set_modal(GTK_WINDOW(query_dialog), GNC_T);
 
-  gnome_dialog_set_default(GNOME_DIALOG(query_dialog), default_button);
-  gnome_dialog_set_close(GNOME_DIALOG(query_dialog), TRUE);
-  gnome_dialog_set_parent(GNOME_DIALOG(query_dialog),
-			  GTK_WINDOW(gnc_get_ui_data()));
+  if (query_dialog == NULL) {
+    free(cb_data);
+    return NULL;
+  }
 
+  /* Connect button signals */
   {
     int i;
     for(i = 0; i < button_count; i++) {
       gnome_dialog_button_connect(GNOME_DIALOG(query_dialog), i,
                                   GTK_SIGNAL_FUNC(button_func[i]),
-                                  GINT_TO_POINTER(dialog_result));
+                                  (gpointer) dialog_result);
     }
   }
 
-  if(contents) {
+  /* Setup the delete and close callbacks */
+  cb_data->delete_result = delete_result;
+  cb_data->dialog_result = dialog_result;
+
+  gtk_signal_connect(GTK_OBJECT(query_dialog),
+		     "delete_event",
+		     GTK_SIGNAL_FUNC(foundation_query_delete_cb),
+		     (gpointer) cb_data);
+
+  gtk_signal_connect(GTK_OBJECT(query_dialog),
+		     "close",
+		     GTK_SIGNAL_FUNC(foundation_query_close_cb),
+		     (gpointer) cb_data);
+
+  /* Setup window settings */
+  gtk_window_set_modal(GTK_WINDOW(query_dialog), GNC_T);
+  gnome_dialog_set_default(GNOME_DIALOG(query_dialog), default_button);
+  gnome_dialog_set_close(GNOME_DIALOG(query_dialog), TRUE);
+  gnome_dialog_set_parent(GNOME_DIALOG(query_dialog),
+			  GTK_WINDOW(gnc_get_ui_data()));
+
+  /* Add in the user-supplied widget */
+  if(contents)
     gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(query_dialog)->vbox),
                        contents, FALSE, FALSE, 0);
-    gtk_widget_show(contents);
-  }
 
-  gtk_widget_show(query_dialog);
-
-  while(*dialog_result == 0) {
-    gtk_main_iteration();
-  }
-
-  /* User supplied value, dialog not automatically closed. */
-  if (*dialog_result > 0)
-    gnome_dialog_close(GNOME_DIALOG(query_dialog));
-
-  return(0);
+  return query_dialog;
 }
 
 
@@ -248,13 +284,16 @@ typedef struct {
   SCM closure;
   int *dialog_result;
   SCM *scm_result;
+  GnomeDialog *dialog;
 } ChooseItemCBData;
 
 
 static void
-gnc_choose_item_cb(GtkWidget *w, gpointer p) {
-  if(!p) return;
-  
+gnc_choose_item_cb(GtkWidget *w, gpointer p)
+{
+  if(p == NULL)
+    return;
+
  {
    ChooseItemCBData *d = (ChooseItemCBData *) p;
    SCM result = gh_call0(d->closure);
@@ -262,31 +301,36 @@ gnc_choose_item_cb(GtkWidget *w, gpointer p) {
    if(result != SCM_BOOL_F) {
      *(d->dialog_result) = 1;
      *(d->scm_result) = result;
+     gnome_dialog_close(d->dialog);
    }
  }
 }
 
 SCM
-gnc_choose_item_from_list_dialog(const char *title, SCM list_items) {
-
+gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
+{
   ChooseItemCBData *cb_data = NULL;
   int dialog_result = 0;
   SCM scm_result = SCM_BOOL_F;
   int result;
   unsigned long num_items;
   GtkWidget *vbox;
+  GtkWidget *query_box;
   SCM listcursor;
   gncBoolean status_ok;
   unsigned long i;
 
-  if(!title) return SCM_BOOL_F;
-  if(!gh_list_p(list_items)) return SCM_BOOL_F;
+  if(title == NULL)
+    return SCM_BOOL_F;
+  if(!gh_list_p(list_items))
+    return SCM_BOOL_F;
 
   num_items = gh_length(list_items);
   
   cb_data = (ChooseItemCBData *) malloc(sizeof(ChooseItemCBData) * num_items);
 
-  if(!cb_data) return SCM_BOOL_F;
+  if(cb_data == NULL)
+    return SCM_BOOL_F;
 
   /* Convert the scm data to C callback structs */
   i = 0;
@@ -333,7 +377,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items) {
 
   for(i = 0; i < num_items; i++) {
     GtkWidget *b = gtk_button_new_with_label(cb_data[i].name);
-    if(!b) {
+    if(b == NULL) {
       status_ok = GNC_F;
     } else {
       gtk_signal_connect(GTK_OBJECT(b), "clicked",
@@ -353,29 +397,39 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items) {
 
   gtk_widget_show(vbox);
 
-  if(gnc_foundation_query_dialog(title,
-                                 vbox,
-                                 GNC_QUERY_CANCEL, /* cancel */
-                                 GNC_F, /* yes_allowed */
-                                 GNC_F, /* ok_allowed */
-                                 GNC_F, /* no_allowed */
-                                 GNC_T, /* cancel_allowed */
-                                 &dialog_result) == 0) {
-    switch(dialog_result) {
-      case 1:
-	result = gh_cons(gh_symbol2scm("result"), scm_result);
-	break;
-      case GNC_QUERY_YES:
-      case GNC_QUERY_NO:
-	result = SCM_BOOL_F;
-	break;
-      case GNC_QUERY_CANCEL:
-	result = gh_symbol2scm("cancel");
-	break;
-      default: result = SCM_BOOL_F; break;
-    }
-  } else {
-    result = SCM_BOOL_F;
+  query_box = gnc_foundation_query_dialog(title,
+					  vbox,
+					  GNC_QUERY_CANCEL, /* cancel */
+					  GNC_F, /* yes_allowed */
+					  GNC_F, /* ok_allowed */
+					  GNC_F, /* no_allowed */
+					  GNC_T, /* cancel_allowed */
+					  &dialog_result);
+
+  if(query_box == NULL) {
+    free(cb_data);
+    return SCM_BOOL_F;
+  }
+
+  for (i = 0; i < num_items; i++)
+    cb_data[i].dialog = GNOME_DIALOG(query_box);
+
+  gnome_dialog_run_and_close(GNOME_DIALOG(query_box));
+
+  switch(dialog_result) {
+    case 1:
+      result = gh_cons(gh_symbol2scm("result"), scm_result);
+      break;
+    case GNC_QUERY_YES:
+    case GNC_QUERY_NO:
+      result = SCM_BOOL_F;
+      break;
+    case GNC_QUERY_CANCEL:
+      result = gh_symbol2scm("cancel");
+      break;
+    default:
+      result = SCM_BOOL_F;
+      break;
   }
 
   free(cb_data);

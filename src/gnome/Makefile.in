@@ -70,7 +70,7 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               window-help.c cursors.c account-tree.c \
               ui-callbacks.c window-reconcile.c \
               dialog-options.c dialog-filebox.c \
-              dialog-add.c dialog-edit.c \
+              dialog-add.c dialog-edit.c dialog-utils.c \
               scripts_menu.c query-user.c
 ######################################################################
 

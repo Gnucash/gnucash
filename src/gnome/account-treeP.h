@@ -1,5 +1,5 @@
-/*******************************************************************\
- * account-tree.h -- private GNOME account tree functions           *
+/********************************************************************\
+ * account-treeP.h -- private GNOME account tree functions          *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,27 +20,50 @@
 #ifndef __ACCOUNT_TREEP_H__
 #define __ACCOUNT_TREEP_H__
 
+#include "account-tree.h"
+
+
+enum
+{
+  SELECT_ACCOUNT,
+  UNSELECT_ACCOUNT,
+  DOUBLE_CLICK_ACCOUNT,
+  LAST_SIGNAL
+};
+
+
 /** PROTOTYPES ******************************************************/
-static gint gnc_ctree_button_press_cb(GtkWidget *widget,
-				      GdkEventButton *event);
+static void gnc_account_tree_init(GNCAccountTree *tree);
 
-static gint gnc_acct_ctree_select_cb(GtkWidget *widget,
-				     GtkCTreeNode *row,
-				     gint column,
-				     gpointer user_data);
+static void gnc_account_tree_class_init(GNCAccountTreeClass *klass);
 
-static gint gnc_acct_ctree_unselect_cb(GtkWidget *widget,
-				       GtkCTreeNode *row,
-				       gint column,
-				       gpointer user_data);
+static gint gnc_account_tree_button_press(GtkWidget *widget,
+					  GdkEventButton *event);
 
-static void gnc_tree_insert_row (GtkCTree *ctree,
-				 GtkCTreeNode *parent,
-				 GtkCTreeNode **sibling,
-				 Account *acc);
+static void gnc_account_tree_select_row(GtkCTree *ctree,
+					GtkCTreeNode *row,
+					gint column);
 
-static void gnc_ui_acct_ctree_fill(GtkCTree *ctree,
-				   GtkCTreeNode *parent,
-				   AccountGroup *accts);
+static void gnc_account_tree_unselect_row(GtkCTree *ctree,
+					  GtkCTreeNode *row,
+					  gint column);
+
+static GtkCTreeNode * gnc_account_tree_insert_row(GNCAccountTree *tree,
+						  GtkCTreeNode *parent,
+						  GtkCTreeNode *sibling,
+						  Account *acc);
+
+static void gnc_account_tree_fill(GNCAccountTree *tree,
+				  GtkCTreeNode *parent,
+				  AccountGroup *accts);
+
+static void gnc_account_tree_set_view_info_real(GNCAccountTree *tree);
+
+
+static void gnc_init_account_view_info(AccountViewInfo *avi);
+
+static GtkCTreeNode * gnc_account_tree_insert_root(GNCAccountTree *tree);
+
+static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
 
 #endif

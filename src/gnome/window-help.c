@@ -48,7 +48,6 @@
 #include "messages.h"
 #include "Sheet.h"
 #include "util.h"
-//#include "xtutil.h"
 
 extern GtkWidget app;
 static short module = MOD_HTML; 
@@ -609,6 +608,7 @@ xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text)
 
 
    gtk_xmhtml_source(GTK_XMHTML(widget), text);
+
 #if 0
    if (label) {
       XmHTMLAnchorScrollToName(mw, label);
@@ -616,6 +616,7 @@ xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text)
       XmHTMLTextScrollToLine(mw, 0);
 }
 #endif
+
    if (file) free (file);
 
    return text;

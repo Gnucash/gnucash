@@ -1,5 +1,5 @@
 /*******************************************************************\
- * account-tree.h -- public GNOME account tree functions            *
+ * account-tree.h -- private GNOME account tree functions           *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -17,11 +17,96 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __ACCOUNT_TREE_H__
-#define __ACCOUNT_TREE_H__
+#ifndef __GNC_ACCOUNT_TREE_H__
+#define __GNC_ACCOUNT_TREE_H__
 
-/** PROTOTYPES ******************************************************/
-GtkWidget * gnc_create_account_tree(void);
-void gnc_ui_refresh_tree(void);
+#include <gtk/gtkctree.h>
 
-#endif
+#include "dialog-utils.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif				/* __cplusplus */
+
+#define GTK_TYPE_GNC_ACCOUNT_TREE (gnc_account_tree_get_type ())
+#define GNC_ACCOUNT_TREE(obj)     (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTree))
+#define GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTreeClass))
+#define GTK_IS_GNC_ACCOUNT_TREE(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_ACCOUNT_TREE))
+#define GTK_IS_GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_ACCOUNT_TREE))
+
+typedef struct _GNCAccountTree      GNCAccountTree;
+typedef struct _GNCAccountTreeClass GNCAccountTreeClass;
+typedef struct _AccountViewInfo     AccountViewInfo;
+
+struct _AccountViewInfo
+{
+  gboolean include_type[NUM_ACCOUNT_TYPES];
+
+  gboolean show_field[NUM_ACCOUNT_FIELDS];
+};
+
+struct _GNCAccountTree
+{
+  GtkCTree ctree;
+
+  AccountViewInfo avi;
+
+  gint    num_columns;
+  gint    column_fields[NUM_ACCOUNT_FIELDS];
+  gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
+
+  Account *root_account;
+  Account *current_account;
+
+  gboolean ignore_unselect;
+};
+
+struct _GNCAccountTreeClass
+{
+  GtkCTreeClass parent_class;
+
+  void (*select_account)       (GNCAccountTree *tree,
+				Account        *account);
+
+  void (*unselect_account)     (GNCAccountTree *tree,
+				Account        *account);
+
+  void (*double_click_account) (GNCAccountTree *tree,
+				Account        *account);
+};
+
+/***********************************************************
+ *                public functions                         *
+ ***********************************************************/
+
+GtkType gnc_account_tree_get_type     (void);
+
+GtkWidget * gnc_account_tree_new      (void);
+
+GtkWidget * gnc_account_tree_new_with_root (Account *account);
+
+void gnc_account_tree_refresh         (GNCAccountTree *tree);
+
+gboolean gnc_account_tree_select_account  (GNCAccountTree *tree,
+					   Account *account);
+
+void gnc_account_tree_insert_account  (GNCAccountTree *tree,
+				       Account *account);
+
+void gnc_account_tree_remove_account  (GNCAccountTree *tree,
+				       Account *account);
+
+void gnc_account_tree_show_categories (GNCAccountTree *tree);
+
+void gnc_account_tree_hide_categories (GNCAccountTree *tree);
+
+Account * gnc_account_tree_get_current_account (GNCAccountTree *tree);
+
+void gnc_account_tree_hide_all_but_name (GNCAccountTree *tree);
+
+
+#ifdef __cplusplus
+}
+#endif				/* __cplusplus */
+
+#endif				/* __GNC_ACCOUNT_TREE_H__ */

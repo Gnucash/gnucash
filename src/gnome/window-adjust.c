@@ -1,5 +1,5 @@
 /********************************************************************\
- * AdjBWindow.c -- the adjust balance window                        *
+ * window-adjust.c -- the adjust balance window                     *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
@@ -23,26 +23,207 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <stdio.h>
-#include <nana.h>
+#include <gnome.h>
+#include <time.h>
 
 #include "config.h"
-
 #include "AdjBWindow.h"
+#include "messages.h"
+#include "util.h"
+
+
+/** STRUCTS *********************************************************/
+struct _AdjBWindow
+{
+  Account * account;         /* The account that we are adjusting    */
+  GtkWidget * dialog;        /* The adjust balance dialog            */
+  GtkWidget * balance_entry; /* Text field, the new balance          */
+  GtkWidget * date_entry;    /* Date field, the date for the balance */
+};
+
+/** GLOBALS *********************************************************/
+static AdjBWindow **adjBList = NULL;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
+
+static int
+gnc_ui_adjBWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
+{
+  AdjBWindow * adjBData = (AdjBWindow *) user_data;
+  Account *account = adjBData->account;
+
+  REMOVE_FROM_LIST (AdjBWindow, adjBList, account, account); 
+
+  free(adjBData);
+
+  /* really close */
+  return FALSE;
+}
+
+
+static void
+gnc_ui_AdjBWindow_cancel_cb(GtkWidget * widget, gpointer data)
+{
+  AdjBWindow *adjBData = (AdjBWindow *) data;
+
+  gnome_dialog_close(GNOME_DIALOG(adjBData->dialog));
+}
+
+
+static void
+gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
+{
+  AdjBWindow *adjBData = (AdjBWindow *) data;
+  Transaction *trans;
+  Split *source_split;
+  time_t time;
+  double new_balance, current_balance;
+  gchar * string;
+
+  string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
+
+  if(sscanf(string, "%lf", &new_balance) != 1)
+  {
+    gnc_error_dialog(_("Balance must be a number."));
+    return;
+  }
+
+  time = gnome_date_edit_get_date(GNOME_DATE_EDIT(adjBData->date_entry));
+
+  trans = xaccMallocTransaction();
+  
+  xaccTransBeginEdit(trans, 0);
+
+  xaccTransSetDateSecs(trans, time);
+  xaccTransSetDescription(trans, ADJ_BALN_STR);
+
+  source_split = xaccTransGetSplit(trans, 0);
+
+  xaccAccountBeginEdit(adjBData->account, 0);
+  xaccAccountInsertSplit(adjBData->account, source_split);
+
+  /* Compute the dollar amount this transaction should have.
+   * It is the difference between the current balance, and
+   * the desired balance. */
+  current_balance = xaccSplitGetBalance(source_split);
+  xaccSplitSetValue(source_split, new_balance - current_balance);
+
+  xaccAccountCommitEdit(adjBData->account);
+  xaccTransCommitEdit(trans);
+  
+  xaccAccountDisplayRefresh(adjBData->account);
+  recnRefresh(adjBData->account);
+  gnc_refresh_main_window();
+
+  gnome_dialog_close(GNOME_DIALOG(adjBData->dialog));
+}
+
 
 /********************************************************************\
  * adjBWindow                                                       *
  *   opens up the window to adjust the balance                      *
  *                                                                  *
- * Args:   parent  - the parent of this window                      *
- *         account - the account to adjust                          *
+ * Args:   account - the account to adjust                          *
  * Return: adjBData - the instance of this AdjBWindow               *
 \********************************************************************/
 AdjBWindow *
-adjBWindow( Account *acc ) {
-  AdjBWindow *adjBData = NULL;
+adjBWindow(Account *account)
+{
+  GtkWidget *dialog, *frame, *vbox;
+  AdjBWindow *adjBData;
+  gchar *title;
+   
+  FETCH_FROM_LIST(AdjBWindow, adjBList, account, account, adjBData);
 
-  L("STUB: adjBWindow needs to be written for GNOME.\n");
+  title = g_strconcat(xaccAccountGetName(account), ": ", ADJ_BALN_STR, NULL);
+
+  dialog = gnome_dialog_new(title,
+			    GNOME_STOCK_BUTTON_OK,
+			    GNOME_STOCK_BUTTON_CANCEL,
+			    NULL);
+
+  g_free(title);
+
+  adjBData->account = account;
+  adjBData->dialog = dialog;
+
+  /* default to ok */
+  gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
+
+  /* destroy, don't hide */
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
+
+  vbox = GNOME_DIALOG(dialog)->vbox;
+
+  frame = gtk_frame_new(NULL);
+  gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+  gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+  gtk_widget_show(frame);
+
+  {
+    GtkWidget *hbox, *vbox;
+    GtkWidget *amount, *date;
+    GtkWidget *label;
+    gchar *string;
+
+    hbox = gtk_hbox_new(FALSE, 5);
+    gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
+    gtk_container_add(GTK_CONTAINER(frame), hbox);
+    gtk_widget_show(hbox);
+
+    /* Label box */
+    vbox = gtk_vbox_new(TRUE, 3);
+    gtk_widget_show(vbox);
+
+    /* Date label */
+    label = gtk_label_new(DATE_STR);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_widget_show(label);
+    gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
+
+    /* new balance label */
+    string = g_strconcat(NEW_BALN_STR, " ", CURRENCY_SYMBOL, NULL);
+    label = gtk_label_new(string);
+    g_free(string);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_widget_show(label);
+    gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
+
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+
+    /* Edit widget box */
+    vbox = gtk_vbox_new(TRUE, 3);
+    gtk_widget_show(vbox);
+
+    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_widget_show(date);
+    gtk_box_pack_start(GTK_BOX(vbox), date, TRUE, TRUE, 0);
+    adjBData->date_entry = date;
+
+    amount = gtk_entry_new();
+    gtk_widget_show(amount);
+    gtk_box_pack_start(GTK_BOX(vbox), amount, TRUE, TRUE, 0);
+    adjBData->balance_entry = amount;
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(amount));
+
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
+  }
+
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(dialog), 0,
+     GTK_SIGNAL_FUNC(gnc_ui_AdjBWindow_ok_cb), adjBData);
+
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(dialog), 1,
+     GTK_SIGNAL_FUNC(gnc_ui_AdjBWindow_cancel_cb), adjBData);
+
+  gtk_signal_connect(GTK_OBJECT(dialog), "close",
+		     GTK_SIGNAL_FUNC (gnc_ui_adjBWindow_close_cb),
+		     adjBData);
+
+  gtk_widget_show(dialog);
 
   return adjBData;
 }
@@ -52,10 +233,16 @@ adjBWindow( Account *acc ) {
 \********************************************************************/
 
 void
-xaccDestroyAdjBWindow (Account *acc) {
+xaccDestroyAdjBWindow (Account *account)
+{
+  AdjBWindow *adjBData;
 
-  L("STUB: xaccDestroyAdjBWindow needs to be written for GNOME.\n");
-  
+  FIND_IN_LIST(AdjBWindow, adjBList, account, account, adjBData); 
+
+  if (adjBData == NULL)
+    return;
+ 
+  gnome_dialog_close(GNOME_DIALOG(adjBData->dialog));
 }
 
 

@@ -20,7 +20,13 @@
 #ifndef __WINDOW_MAIN_H__
 #define __WINDOW_MAIN_H__
 
+#include "account-tree.h"
+
+
 /** PROTOTYPES ******************************************************/
+
 void mainWindow(void);
+GNCAccountTree * gnc_get_current_account_tree();
+Account * gnc_get_current_account();
 
 #endif

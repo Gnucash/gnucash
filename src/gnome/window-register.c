@@ -64,15 +64,13 @@ struct _RegWindow {
   int query_date;
 
   /* display widgets */
-  GtkWidget *   dialog;
-  GtkWidget *   reg;               /* The matrix widget...  */
-  GtkWidget *   record;            /* the record transaction button */
+  GtkWidget * window;
+  GtkWidget * reg;               /* The matrix widget...  */
+  GtkWidget * record;            /* the record transaction button */
 
+  gncBoolean close_ledger;
 };
 
-
-/** GLOBALS *********************************************************/
-extern GtkWidget *  toplevel;
 
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
@@ -82,7 +80,7 @@ RegWindow *regWindowLedger( xaccLedgerDisplay *ledger);
 static void regRefresh (xaccLedgerDisplay *ledger);
 static void regDestroy (xaccLedgerDisplay *ledger);
 
-static void closeRegWindow(GtkWidget * mw, gpointer data);
+static void closeRegWindow(GtkWidget * mw, RegWindow * regData);
 
 static void startRecnCB(GtkWidget *w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
@@ -98,18 +96,18 @@ static void startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
  * regWindowSimple                                                  *
  *   opens up a register window for Account account                 *
  *                                                                  *
- * Args:   parent  - the parent of this window                      *
- *         acc     - the account associated with this register      *
+ * Args:   acc     - the account associated with this register      *
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowSimple(Account *acc) {
+regWindowSimple(Account *acc)
+{
   RegWindow *result = NULL;
   xaccLedgerDisplay * ledger = xaccLedgerDisplaySimple(acc);
 
-  if(ledger) {
+  if (ledger)
     result = regWindowLedger(ledger);
-  }
+
   return result;
 }
 
@@ -122,35 +120,21 @@ regWindowSimple(Account *acc) {
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowAccGroup(Account *acc) {
+regWindowAccGroup(Account *acc)
+{
   RegWindow *result = NULL;
   xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup(acc);  
 
-  if(ledger) {
+  if(ledger)
     result = regWindowLedger(ledger);
-  }
+
   return result;
 }
 
-
-static gint
-delete_event(GtkWidget *widget, gpointer data) {
-
-  /* if you return FALSE in the "delete_event" signal handler,
-   * GTK will emit the "destroy" signal.  Returning TRUE means
-   * you don't want the window to be destroyed.
-   * This is useful for popping up 'are you sure you want to quit ?'
-   * type dialogs. */
-  
-  /* Change TRUE to FALSE and the main window will be destroyed with
-   * a "delete_event". */
-  closeRegWindow(widget, data);
-  return (FALSE);
-}
-
 static void
-destroy (GtkWidget *widget, gpointer data) {
-  closeRegWindow(widget, data);
+gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
+{
+  closeRegWindow(widget, (RegWindow *) data);
 }
 
 static void
@@ -224,34 +208,26 @@ build_option_menu (gncOptionMenuItem items[], gint num_items) {
 }
 
 
-
 /********************************************************************\
  * regWindowLedger                                                  *
  *   opens up a ledger window for the account list                  *
  *                                                                  *
- * Args:   parent   - the parent of this window                     *
- *         lead_acc - the account associated with this register     *
- *                     (may be null)                                *
- *         acc_list - the list of accounts to display in register   *
- *                     (may be null)                                *
+ * Args:   ledger - ledger data structure                           *
  * Return: regData  - the register window instance                  *
 \********************************************************************/
 RegWindow *
-regWindowLedger(xaccLedgerDisplay *ledger) {
-  RegWindow   *regData = NULL;
+regWindowLedger(xaccLedgerDisplay *ledger)
+{
+  RegWindow *regData = NULL;
   GtkWidget *reg = NULL;
+  GtkWidget *register_window;
+  GtkWidget *register_vbox;
+  GtkWidget *table_frame;
   char *windowname;
-  GtkWidget *register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  GtkWidget *register_vbox = gtk_vbox_new(FALSE, 0);
-
-  GtkWidget *table_frame = gtk_frame_new(NULL);
-#if 0
-  GtkWidget *table_frame = gtk_layout_new(NULL, NULL);
-#endif
-  /* Menu creation */
 
   regData = (RegWindow *) (ledger->gui_hook);
-  if(regData) return(regData);
+  if (regData)
+    return regData;
 
   regData = (RegWindow *) malloc (sizeof (RegWindow));
 
@@ -263,11 +239,12 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
   regData->query_date = 1;
   regData->early_date_handler = xaccMallocDateCell();
   regData->late_date_handler = xaccMallocDateCell();
+  regData->close_ledger = GNC_T;
 
-  /******************************************************************\
-   * Start creating the Motif Widgets ...                           *
-   \******************************************************************/
-  
+  register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  register_vbox = gtk_vbox_new(FALSE, 0);
+  table_frame = gtk_frame_new(NULL);
+
   /* pick a window name */
   if (ledger->leader) {
     char * acc_name = xaccAccountGetName (ledger->leader);
@@ -291,32 +268,22 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
   gnc_set_busy_cursor(gnc_get_ui_data());
   
   gtk_box_pack_start(GTK_BOX(register_vbox), table_frame, TRUE, TRUE, 0); 
-  regData->dialog = table_frame;
+  regData->window = register_window;
   
   gtk_window_set_title(GTK_WINDOW(register_window), windowname);
-  
-  /* when the window is given the "delete_event" signal (this is given
-   * by the window manager (usually the 'close' option, or on the
-   * titlebar), we ask it to call the delete_event () function
-   * as defined above.  The data passed to the callback
-   * function is NULL and is ignored in the callback. */
-  gtk_signal_connect (GTK_OBJECT (regData->dialog), "delete_event",
-                      GTK_SIGNAL_FUNC (delete_event), (gpointer) regData);
-  
-  /* here we connect the "destroy" event to a signal handler.  
-   * This event occurs when we call gtk_widget_destroy() on the window,
-   * or if we return 'FALSE' in the "delete_event" callback. */
-  gtk_signal_connect (GTK_OBJECT (regData->dialog), "destroy",
-                      GTK_SIGNAL_FUNC (destroy), (gpointer) regData);
+
+  /* Invoked when window is being destroyed. */
+  gtk_signal_connect(GTK_OBJECT (regData->window), "destroy",
+		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb),
+		     (gpointer) regData);
 
 
   /******************************************************************\
    * The main register window itself                                *
   \******************************************************************/
 
-  /* The CreateTable will do the actual gui init, 
-   * returning a widget */
-  reg = xaccCreateTable (ledger->ledger->table, regData->dialog);
+  /* The CreateTable will do the actual gui init, returning a widget */
+  reg = xaccCreateTable (ledger->ledger->table, table_frame);
   regData->reg = reg;
     
   /* be sure to initialize the gui elements associated with the cursor */
@@ -371,7 +338,7 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
          this hack.  It should be fixed later... */
       list_width += widths[i] * 5;
     }
-    gtk_widget_set_usize(regData->dialog, list_width + 219, 500);
+    gtk_widget_set_usize(table_frame, list_width + 219, 500);
   }
 
   /* Add controls at the bottom.  The controls are all in a handle
@@ -455,7 +422,8 @@ regWindowLedger(xaccLedgerDisplay *ledger) {
   gtk_widget_show(register_vbox);
   gtk_widget_show(register_window);
 
-  if(windowname) free(windowname);
+  if (windowname)
+    free(windowname);
 
   ledger->dirty = 1;
   xaccLedgerDisplayRefresh (ledger);
@@ -472,12 +440,13 @@ static void regRefresh (xaccLedgerDisplay *ledger)
 {
   RegWindow *regData = (RegWindow *) (ledger->gui_hook);         
 
-  if( NULL != regData->dialog ) {
+  if( NULL != regData->window ) {
     char *reglabel = NULL; 
     char *balance_str, *cleared_balance_str, *reconciled_balance_str;
     
     balance_str = strdup(xaccPrintAmount(ledger->balance, PRTSYM));
-    cleared_balance_str = strdup(xaccPrintAmount(ledger->clearedBalance, PRTSYM));
+    cleared_balance_str = strdup(xaccPrintAmount(ledger->clearedBalance,
+						 PRTSYM));
     reconciled_balance_str =
       strdup(xaccPrintAmount(ledger->reconciledBalance, PRTSYM));
     
@@ -485,8 +454,7 @@ static void regRefresh (xaccLedgerDisplay *ledger)
              xaccAccountGetName(ledger->leader),
              reconciled_balance_str,
              cleared_balance_str,
-             balance_str
-             );
+             balance_str);
     
     //gtk_frame_set_label(GTK_FRAME(regData->dialog), reglabel);
     free(balance_str);
@@ -499,15 +467,20 @@ static void regRefresh (xaccLedgerDisplay *ledger)
 
 /********************************************************************\
  * regDestroy()
- * It is enought to call just XtDestroy Widget.  Any allocated
- * memory will be freed by the close callbacks.
 \********************************************************************/
 
 static void
-regDestroy (xaccLedgerDisplay *ledger)
+regDestroy(xaccLedgerDisplay *ledger)
 {
-   RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-   if (regData) gtk_widget_destroy(regData->dialog);
+  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
+
+  if (regData)
+  {
+    /* It will be closed elsewhere */
+    regData->close_ledger = GNC_F;
+
+    gtk_widget_destroy(regData->window);
+  }
 }
 
 
@@ -516,18 +489,20 @@ regDestroy (xaccLedgerDisplay *ledger)
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   widget  - the widget that called us                      *
+ *         regData - the data struct for this register              *
  * Return: none                                                     *
 \********************************************************************/
 static void 
-closeRegWindow( GtkWidget * mw, gpointer data)
+closeRegWindow(GtkWidget * widget, RegWindow *regData)
 {
-  RegWindow *regData = (RegWindow *)data;
   PINFO("closeRegWindow(): Closing register safely\n");
-  xaccLedgerDisplayClose (regData->ledger);
+
+  if (regData->close_ledger)
+    xaccLedgerDisplayClose(regData->ledger);
+
   free(regData);
+
   DEBUG("closed RegWindow\n");
 }
 
@@ -567,9 +542,8 @@ startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
  * startRecnCB -- open up the reconcile window... called from       *
  *   menubar.                                                       *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
  * Return: none                                                     *
 \********************************************************************/
 static void 
@@ -583,21 +557,24 @@ startRecnCB(GtkWidget * w, gpointer data)
    * then this callback should never have been called,
    * since the menu entry is supposed to be greyed out.
    */
-  if (ledger->leader) {
+  if (ledger->leader)
     acc = ledger->leader;
-  } else {
-    if (1 != ledger->numAcc) return;
+  else
+  {
+    if (1 != ledger->numAcc)
+      return;
     acc = ledger->displayed_accounts[0];
   }
-  recnWindow(w, acc);
+
+  recnWindow(regData->window, acc);
 }
+
 
 /********************************************************************\
  * recordCB                                                         *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
  * Return: none                                                     *
 \********************************************************************/
 static void
@@ -609,15 +586,14 @@ recordCB( GtkWidget *w, gpointer data)
   xaccSRRedrawRegEntry (regData->ledger->ledger);
 }
 
+
 /********************************************************************\
  * deleteCB                                                         *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
  * Return: none                                                     *
 \********************************************************************/
-
 static void
 deleteCB(GtkWidget *widget, gpointer data)
 {
@@ -647,7 +623,8 @@ deleteCB(GtkWidget *widget, gpointer data)
    */
   num_splits = xaccTransCountSplits (trans);
   g_message("%s:%d", G_GNUC_PRETTY_FUNCTION, num_splits);
-  affected_accounts = (Account **) malloc ((num_splits+1) * sizeof (Account *));
+  affected_accounts = (Account **) malloc ((num_splits+1) *
+					   sizeof (Account *));
   for (i=0; i<num_splits; i++) 
   {
     s = xaccTransGetSplit (trans, i);
@@ -669,13 +646,12 @@ deleteCB(GtkWidget *widget, gpointer data)
 /********************************************************************\
  * cancelCB                                                         *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
  * Return: none                                                     *
 \********************************************************************/
 static void
-cancelCB( GtkWidget *w, gpointer data)
+cancelCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
   Split * split;
@@ -688,20 +664,19 @@ cancelCB( GtkWidget *w, gpointer data)
 
 
 /********************************************************************\
- * closeCB                                                         *
+ * closeCB                                                          *
  *                                                                  *
- * Args:   widget - the widget that called us                           *
- *         data - regData - the data struct for this register         *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
  * Return: none                                                     *
 \********************************************************************/
 static void
-closeCB( GtkWidget *widget, gpointer data)
+closeCB(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
-  gtk_widget_destroy (gtk_widget_get_toplevel (regData->dialog));
+
+  gtk_widget_destroy(regData->window);
 }
 
-/********************************************************************\
-\********************************************************************/
 
 /************************** END OF FILE **************************/
