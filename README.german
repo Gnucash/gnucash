@@ -1,17 +1,20 @@
 
-X-Accountant
-------------
+GnuCash
+-------
 
-xacc ist ein Programm zur Verwaltung persönlicher Finanzen mit einem
-ähnlichen Konzept wie Quicken(TM). Obwohl einige Spezialfunktionen von
-Quicken noch fehlen, sind die Basisfunktionen implementiert. Einige
-Funktionen sind:
+GnuCash ist ein Programm zur Verwaltung persönlicher Finanzen.
+Eine Scheck-Buch aehnliche Oberflaeche erlaubt die Eingabe und
+das Verfolgen von Bankkonten, Aktien und sogar Waehrungshandel.
+Die Oberflaeche ist einfach und leicht zu bedienen, aber wird
+von einem Doppel-Buchungs Prinzip unterstuetzt, um 
+ausgeglichene Konten zu ermoeglichen.
+ 
+Funktionen von GnuCash sind :
 
-  - Verwaltung mehrerer Konten.
   - Für jedes Konto wird sowohl der aktuelle Stand als
     auch der Stand nicht bestätigter Buchungen gehalten.
   - Ein einfaches Benutzerinterface: wer einen Kontoauszug
-    versteht, kann xacc verwenden.
+    versteht, kann GnuCash verwenden.
   - QuickFill: wenn ein Beschreibungstext für eine Buchung
     mit einem vorangehenden Text identisch ist, kann er
     mit <TAB> automatisch komplettiert werden (z.B. für
@@ -20,84 +23,95 @@ Funktionen sind:
     aktuelle Stand kann einzeln (eine Aktie = ein Konto)
     oder als Portfolio (alle Aktien = ein Konto)
     verwaltet werden.
+  - Verschiedene Waehrungen und Waehrungshandel :
+    Mehrere Waehrungen werden unterstuetzt und koennen
+    ge- und verkauft werden. Waehrungsbewegungen auf
+    den Konten werden ausgeglichen.(Einige Teile von 
+    Waehrungshandel sind aber noch nicht vollstaendig 
+    implementiert)
   - Import von Dateien im Quicken Interchange Format 
     (QIF).
-
-
-Erweiterte Funktionen
----------------------
-
-X-Accountant verfügt über erweiterte Funktionen, wie man sie nicht in
-einfacheren Programmem findet:
-
-  - Unterkonten: Ein Hauptkonto kann über eine hierarchische 
-    Struktur von detaillierteren Unterkonten verfügen. So 
-    können ähnliche Kontentypen (z.B. Kasse, Giro, Aktien)
-    zu einem Hauptkonto (z.B. Haben)  zusammengefaßt werden.
-  - Doppelte Buchführung: Jede Buchung kann in zwei Konten
-    auftreten: ein Konto wird mit dem Betrag belastet, auf
-    das zweite wird derselbe Betrag gutgeschrieben. Mit
-    doppelter Buchführung werden bei Modifikation einer
-    Buchung alle aktive Fenster und beide betroffenen
-    Konten aktualisiert. 
-  - Kategorien von Einnahme/Ausgabe-Konten.
-    Zusammen mit der Doppelten Buchführung können sie
-    die Kontenübersicht und die Gewinn/Verlutrechung
-    automatisieren. Z.B. können Guthabenzinsen, Dividenden
-    und Gehaltszahlungen mittels doppelter Buchführung
-    sowohl als Einzahlung auf das Bankkonto als auch als
-    Einkommen für das entsprechende, dem Bankkonto 
-    untergeordnete Einkommenskonto gebucht werden. In 
-    gleicher Weise können Forderungen von der Kreditkarte
-    simultan im Kreditkartenkonto als auch im entsprechenden
-    Unterkonto für Ausgaben gebucht werden.
-  - Hauptbuch: mehrere Konten können gemeinsam in einer
-    einzigen Buchungsliste angezeigt werden. So können
-    z.B. Tippfehler in allen Buchungen bereinigt werden,
-    oder es können alle Aktienstände gemeinsam dargestellt
-    werden.
+  - Berichte : Anzeigen von Gewinn&Verlust oder Portfolios
+    , auch in HTML
+  - Hierarchie von Konten : Ein Haupt-Konto kann eine Hierarchie
+    von Unter-Konten haben. Das macht es moeglich, aehnliche 
+    Konten (Bargeld,Spar-,Aktien-Konten)in einem Hauptkonto
+    zusammenzufassen.
+  - Split-Buchungen : Eine einzelne Buchung kann in mehrere Teile
+    zerlegt werden, wie z.B. Steuern, Gebuehren, usw.
+  - Doppelte Eintraege : Wenn aktiviert, muss jede Transaktion
+    ein Konto be- und ein anderes um den gleichen Betrag entlasten.
+  - Eingaben- / Ausgaben- Konten-Typen : Zusammen mit dem Doppel-
+    Eintrag genutzt , fuehren sie zu sauberen Gewinn- & Verlust-
+    Rechnungen, aber natuerlich dienen sie auch der einfachen 
+    Kategorisierung ihrer Einnahmen und Ausgaben.  
+  - Hauptbuch : Mehrere Konten koennen in einem Register darge-
+    stellt werden um Tipp- oder Eingabefehler zu finden.Genauso 
+    koennen Portfolios aus mehreren Aktien betrachtet werden, indem
+    man alle Transaktionen in diesem Portfolio anzeigt.
+  - Geschrieben in "C" mit eingebetteter Unterstuetzung von Scheme 
+    durch "guile".
+  - "Perl"-Unterstuetzung ist optinal moeglich fuer Skripting via SWIG.
+  - Der Datei-Zugriff ist Netzwerk-sicher, das Beschaedigen von Dateien
+    durch Zugriff mehrerer User auch ueber ein Netzwerk wird verhindert, 
+    auch bei Zugriff ueber NFS.
+  - Bietet ein Byte-Stream-Format, das den Transport von Konten
+    und -gruppen an andere Prozesse via Sockets oder Pipes erlaubt.
+  - Erlaubt das Aktualisieren von Aktien- und Fonds-Kursen ueber das
+    Internet, auch automatisch.
+  - Europaesiches Datum moeglich (xx.xx.xx), deutsche und franzoesische 
+    Versionen moeglich.  
 
 Home Page:
 ----------
-http://www.cs.hmc.edu/~rclark/xacc
+http://gnucash.org
 
 
-Wichtig:
---------
+Ausführen von GnuCash:
+----------------------
 
-Mit lesstif Version 0.82 wurden zahlreiche Programmabstürze
-gemeldet. Diese treten mit Version 0.81 und mit RedHat Motif nicht
-auf. Bei Problemen sollte zuerst die statisch mit Motif gelinkte
-Version verwendet werden (siehe unten).
+Nur die Motif-Version von GnuCash funktioniert zur Zeit. Die Gnome Version
+gibt einen Ueberblick ueber die Funktionen, aber die meisten funktionieren
+nicht. Die qt-Version kann zur Zeit nicht uebersetzt werden, die meisten 
+Funktionen fehlen. Weiter unten sind Hinweise fuer andere Betriebssysteme
+als Linux/*BSD .
+
+Um einige der Funktionen wie Berichte und Herunterladen von Aktienkursen 
+nutzen zu koennen, muessen die folgenden Pakete installiert sein :
+(Natuerlich zusaetzlich zu den Paketen, die benoetigt werden ,um GnuCash
+kompilieren/uebersetzen zu koennen)
+Hinweise zu "Uebersetzen und Installieren" weiter unten !
+RPM's sind teilweise hier erhaeltlich :
+http://rufus.w3.org/linux/
+
+slib    -- scheme libraries fuerr guile.  Version slib2c0 oder hoeher .
+perl    -- Fast jede Version von perl5 sollte funktionieren.  Ich habe perl-5.004 
+eperl   -- Fast jede Version von eperl sollte funktionieren.  Ich habe eperl-2.2.14
+  
+Zusaetzlich werden zum Installieren einige Perl-Module benoetigt :
+
+perl-LWP/libwww-perl-5.36
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- Diese Perl Module werden benutzt um Aktien- und Fondskurse aus dem
+           Internet zu laden.
+           RPMS bei :
+           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           oder Quelldateien bei :
+           http://www.cpan.org/CPAN.html
 
 
-Ausführen von xacc:
--------------------
-
-Die Binärdistribution beinhaltet zwei Dateien: 'xacc.bin' und
-'xacc-static.bin'. Erstere benötigt eine (kommerziell erhältliche)
+Die Binärdistribution beinhaltet zwei Dateien: 'gnucash.bin' und
+'gnucash-static.bin'. Erstere benötigt eine (kommerziell erhältliche)
 Laufzeitbibliothek für Motif; die zweite ist statisch mit Motif
 gelinkt. Wenn Sie Motif installiert haben, starten sie einfach xacc;
-wenn nicht müssen sie erst 'xacc-static.bin' auf 'xacc.bin' kopieren.
+wenn nicht müssen sie erst 'gnucash-static.bin' auf 'gnucash.bin' kopieren.
 
-Für die xacc-Dokumentation muß die Environment-Variable XACC_HELP auf
-das 'Docs'-Unterverzeichnis zeigen. Das 'xacc' Shell-Skript setzt
-diese Variable auf den vorkonfigurierten Wert, sodaß sie nicht von
-Hand gesetzt werden muß.
 
-Ändern des vorkonfigurierten Wertes für das 'Docs'-Verzeichnis:
-
-Mit csh/tcsh-Shells:
-
-% setenv XACC_HELP /usr/local/share/xacc/Docs
-
-Mit bash/bsh/ksh/sh-Shells:
-
-% set XACC_HELP=/usr/local/share/xacc/Docs
-% export XACC_HELP
-
-Von der Kommandozeile wird das Programm mit 'xacc' oder 'xacc
-<dateiname>' gestartet, wobei '<dateiname>' eine xacc-Kontodatei
+Von der Kommandozeile wird das Programm mit 'gnucash' oder 'gnucash
+<dateiname>' gestartet, wobei '<dateiname>' eine gnucash-Kontodatei
 ist. Beispieldateien befinden sich im Unterverzeichnis 'data'. Dateien
 mit der Endung '.dat' können mit dem Menüeintrag 'Datei Öffnen'
 geladen werden, Dateien mit der Endug '.qif' sind im Quicken Import
@@ -110,27 +124,58 @@ Format und werden mit dem Menüeintrag 'QIF Importieren' geladen.
 Diese Schritte sind nur für die Sourcedistribution erforderlich, nicht
 für die Binärdistribution.
 
-Normalerweise wird xacc wie folgt übersetzt und installiert:
+Normalerweise wird GnuCash wie folgt übersetzt und installiert:
 
   # ./configure
-  # make depend
   # make
   # make install
 
-Alternativ kann das Programm auch in einem separaten Verzeichnis
-übersetzt werden, z.B. um Testversionen oder für unterschiedliche
-Rechnerplattformen zu übersetzen:
+Um deutsche oder franzoesische Versionen zu uebersetzen, oder das
+europaeische Datumsformat zu aktivieren, muessen sie den Inhalt des
+/include -Verzeichnis untersuchen und modifizieren.
 
-  # mkdir BUILD
-  # mkdir BUILD/debug
-  # cd BUILD/debug
-  # ../../configure --enable-debug
-  # make depend
-  # make
-  # make install
+"make install" fuehrt zu einer normalen FSSTND /usr/ oder /usr/local/
+Installation bei der alles andere sich in /foo/gnucash/*-Verzeichnissen
+verteilt. Alternativ koennen sie "make install-opt" nehmen, bei dem alles
+in /opt/gnucash/bin, /opt/gnucash/doc ,usw. landet.
+
+Die meistgebraeuchlichen Versionen waeren also :
+Fuer eine normale System-Installation:
+	
+    ./configure --prefix=/usr --sysconfdir=/etc
+    make motif
+    make install
+
+ Fuer eine /opt Installation :
+
+    ./configure --prefix=/usr/local/opt/gnucash
+    make motif
+    make install-opt
 
 
-*********************** Rest of document not updated yet ******************
+Beispiele einiger weiterer Konfigurations-Optionen:
+    configure --with-motif=/usr/local/opt/mootif \
+              --prefix=/usr/local/opt/gnucash \
+              --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
+              --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
+
+
+Runtime und Installations-Orte sind verschieden . Der --prefix
+, den sie angeben legt fest, wo das lauffaehige Programm waehrend
+der Laufzeit nach anderen Dingen sucht. Der prefix, den sie bei
+make install angeben(z.B. make prefix=foo install) legt nur fest
+wo die Dateien angelegt werden.Wenn das vom Konfigurations --prefix
+abweicht, wird GnuCash nicht funktionieren, bis es zu diesem 
+Verzeichnis verschoben wurde. Dieses Features ist fuer Leute von
+Bedeutung , die daraus gleich fertige RPM's oder .deb-Pakete daraus
+bauen wollen.
+
+Nur der Ort von startup.scm ist fest in der ausfuehrbaren Datei drin,
+und sogar das kann mit --startup-file in der Kommandozeile uebergangen
+werden.Die anderen Einstellungen sind jetzt in startup.scm, path-defaults.h
+gibt es nicht mehr. Das startup-file-Setting ist in gnucash.h, generiert 
+von gnucash.h.in .
+
 
 Quick translation table for financial terms:
 
@@ -145,33 +190,23 @@ double entry			doppelte Buchführung
 general ledger			Hauptbuch
 
 
+Unterstuetzte Betriebssysteme :
+-------------------------------
+GnuCash Version 1.2.x arbeitet unter folgenden Systemen :
 
-Status:
--------
-As of version 1.0.16:
+Linux 2.x.x           -- Intel  
+FreeBSD               -- Intel
+OpenBSD               -- Intel
 
-xacc is known to work in the following configs:
-Linux 2.0.x           -- Intel  w/ RedHat Motif
-Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
-Linux 2.0.x           -- Intel  w/ Lesstif v0.81
-SGI IRIX              -- 
-IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
-Unixware 7            -- Intel
-SCO OpenServer 5.0.4  -- Intel
 
-See http://linas.org/linux/xacc for precompiled binaries for these platforms
-
-xacc seems to be having problems with:
-Solaris -- Sparc  -- won't compile due to va-args in XmHTML
-Linux 2.0.x -- Intel w/ Lesstif v0.82
 
 Download Sites:
 ---------------
-All of the precompiled binaries & the latest source versions can be found
-at http://linas.org/linux/xacc  However, it is recommended that the master
-sites for each particular binary be used instead, for two reasons:
-1) bandwidth
-2) OS-specific info & support
+
+ftp://ftp.gnucash.org/pub/
+
+Weitere Download Sites:
+-----------------------
 
 IBM AIX 4.1.5 
       -- SMIT-installable images 
@@ -182,39 +217,107 @@ SCO OpenServer 5.0.4
       http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
 
 Unixware 7
-      -- use pkgadd to install
+      -- nehmen sie pkgadd zum Installieren
       http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
 
 SGI Irix
-      -- in SGI install format
-      -- warning, this is a very down-level version
+      -- im SGI install format
+      -- Warnung, dies ist eine down-level Version !
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
-Linux Debian
-      -- use debian tools to install
-      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
+Quellcode mit CVS:
+------------------
+Eine read-only (Nur-Lese) Version des CVS-Baums ist hier erhaeltlich :
+Fuer den Zugriff erst wie folgt einloggen :
 
-That's all folks!
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+Das Passwort ist "guest"
 
-Main Developers:
-----------------
-Rob Browning <rlb@cs.utexas.edu> for GTK graphing
-Robin Clark <rclark@hmc.edu> for original xacc
-Jeremy Collins <linux@cyberramp.net> for GTK port
-Linas Vepstas <linas@lins.org> for extensive enhancements
+Um eine Kopie des Quellcodes aus dem gnucash-1.2 stable production 
+Baum zu bekommen (stabile Version):
+
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -P -rxacc-12-patch gnucash
+
+Um eine Kopie des Quellcodes aus dem experimentellen Entwickler-Baum
+zu bekommen (unstabile Version):
+
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -P -rHEAD gnucash
+
+
+Haupt-Entwickler:
+-----------------
+
+Robin Clark <rclark@hmc.edu> fuer das urspruengliche X-Accountant in
+Motif , das als Schul-Pojekt begann, bis hin zur Version 0.9 im 
+Oktober 1997.
+
+Linas Vepstas <linas@lins.org> gefiel , was er sah : Die grafische Ober-
+flaeche (GUI) was schlank, der Quellcode war dokumentiert und gut 
+strukturiert, alles stand unter der GnuPublicLicense. Und so erweiterte er
+alles und fuehrte es fort : hinzufuegen von Zellen zu XbaeMatrix, so dass die 
+Combobox und die Pfeile eine noch schlankere GUI daraus machten, schrieb die
+X-Accountant-"Innereien" neu, so dass Doppel-Eintraege, eine Konten-Hierarchie,
+eine Mini-Transaktions-Maschine und Unterstuetzung fuer Aktien hinzukam, 
+desweiteren brachte er die Help-Files auf Vordermann.
+Soweit zur Version 1.0 im Januar 1998.
+Seitdem wurden fuer die Version 1.1 die Maschine erweitert und verfeinert,
+das Register-Fenster neu designed, und groesstenteils Motif- (und GUI-)
+unabhanegig gemacht. Er hat auch OFX-Prototypen-Arbeit gemacht.
+
+Jeremy Collins <jcollins@gnucash.org> hat das GnoMoney-Prjekt
+weit und breit publiziert, und dann den Namen zu GnuCash geaendert.
+Jeremy hat die gnucash.org-Webseite kreiert, die Domain registriert,
+und den ersten GTK/Gnome-Code zum Laufen gebracht.
+
+Rob Browning <rlb@cs.utexas.edu> hat jeden beschimpft, wenn er nicht
+Perl benutzt hat, und dann doch guile/scheme -Unterstuetzung implementiert.   
+Rob wartet die Uebersetzungs-Bereiche, und keummert sich um die ganze
+guile/perl -Erweiterungssprachen-Sache, zuletzt ist die Konfiguration
+und Konfigurierbarkeit auch seine Sache.
+
+Dirk Schoenberger <schoenberger@signsoft.com> arbeitet an der Qt/KDE Version
 
 Fixes & Patches:
 ----------------
+Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
+Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
+Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
-Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
+Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation    
+Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Alexandru Harsanyi <haral@codec.ro> for misc core dumps & lockups.
+Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
+Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Sven Kuenzler <sk@xgm.de> for SuSE README file
+Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
+G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
+Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
-Henning Spruth <spruth@bigfoot.com> for German translations
+Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
+
 ... and I am sure that I have missed many others ...
+
+
+Stand : 29.07.99
+
 
