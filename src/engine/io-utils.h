@@ -32,6 +32,7 @@
 
 void write_account_group(FILE *out, AccountGroup *grp);
 void write_accounts(FILE *out, GNCBook *book);
+void write_commodities(FILE *out, GNCBook *book);
 
 void write_emacs_trailer(FILE *out);
 

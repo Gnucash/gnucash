@@ -777,6 +777,7 @@ gnc_main_window_file_export_cb(GtkWidget * widget) {
     if (rc == EOF)
       break;
 
+    write_commodities (file, gncGetCurrentBook ());
     write_accounts (file, gncGetCurrentBook ());
 
     rc = fputs ("<\\gnc-v2>\n", file);

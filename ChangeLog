@@ -1,5 +1,9 @@
 2001-05-13  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-main.c: write commodities with accounts
+
+	* src/engine/io-gncxml-v2.c (write_commodities): make public
+
 	* src/gnome/new-user.glade: tweak gui
 
 	* src/gnome/window-main.c: the "destroy" handler does not

@@ -394,7 +394,7 @@ compare_commodity_ids(gconstpointer a, gconstpointer b) {
                      gnc_commodity_get_mnemonic(cb)));
 }
 
-static void
+void
 write_commodities(FILE *out, GNCBook *book)
 {
     gnc_commodity_table *tbl;
@@ -436,7 +436,6 @@ write_commodities(FILE *out, GNCBook *book)
     }
 
     g_list_free (namespaces);
-
 }
 
 static void
