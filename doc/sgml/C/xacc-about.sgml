@@ -1194,21 +1194,20 @@ For now, this is what we have.
 <LISTITEM>
 <PARA>docs -- english-only user documentation
               (html or sgml)
-      
-
  </PARA>
+</LISTITEM>
+<LISTITEM>
 <PARA>Languages -- the number of languages that the application messages
       have been translated to.  In parenthesis, the number of messages
       in the message files (grep msgstr *.po |wc), in thousands.
-      
-
  </PARA>
 </LISTITEM>
 
-<LISTITEM> <PARA>txt -- internal <filename>README</filename>,
-<filename>*.txt</filename> and <filename>*.texinfo</filename>
-documentation files in all subdirectories,
-</PARA>
+<LISTITEM> 
+<PARA>txt -- internal <filename>README</filename>,
+      <filename>*.txt</filename> and <filename>*.texinfo</filename>
+      documentation files in all subdirectories,
+ </PARA>
 </LISTITEM>
 
 </ITEMIZEDLIST>
