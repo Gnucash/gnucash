@@ -32,6 +32,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

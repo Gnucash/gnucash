@@ -721,6 +721,38 @@ sr_get_active_cursor (SplitRegister *reg)
   return NULL;
 }
 
+static void
+xaccSRShowTrans (SplitRegister *reg,
+                 VirtualCellLocation start_loc)
+{
+  VirtualCellLocation end_loc;
+  int v_row;
+
+  start_loc = reg->table->current_cursor_loc.vcell_loc;
+  end_loc = reg->table->current_cursor_loc.vcell_loc;
+
+  for (v_row = end_loc.virt_row + 1;
+       v_row < reg->table->num_virt_rows; v_row++)
+  {
+    VirtualCellLocation vc_loc = { v_row, 0 };
+    CursorClass cursor_class;
+
+    cursor_class = xaccSplitRegisterGetCursorClass (reg, vc_loc);
+    if (cursor_class == CURSOR_CLASS_TRANS)
+      break;
+
+    if (cursor_class != CURSOR_CLASS_SPLIT)
+    {
+      v_row--;
+      break;
+    }
+  }
+
+  end_loc.virt_row = MIN (v_row, reg->table->num_virt_rows - 1);
+
+  gnc_table_show_range (reg->table, start_loc, end_loc);
+}
+
 void
 xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
 {
@@ -782,35 +814,7 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
   gnc_table_refresh_gui (reg->table, TRUE);
 
   if (expand)
-  {
-    VirtualCellLocation start_loc;
-    VirtualCellLocation end_loc;
-    int v_row;
-
-    start_loc = reg->table->current_cursor_loc.vcell_loc;
-    end_loc = reg->table->current_cursor_loc.vcell_loc;
-
-    for (v_row = end_loc.virt_row + 1;
-         v_row < reg->table->num_virt_rows; v_row++)
-    {
-      VirtualCellLocation vc_loc = { v_row, 0 };
-      CursorClass cursor_class;
-
-      cursor_class = xaccSplitRegisterGetCursorClass (reg, vc_loc);
-      if (cursor_class == CURSOR_CLASS_TRANS)
-        break;
-
-      if (cursor_class != CURSOR_CLASS_SPLIT)
-      {
-        v_row--;
-        break;
-      }
-    }
-
-    end_loc.virt_row = MIN (v_row, reg->table->num_virt_rows - 1);
-
-    gnc_table_show_range (reg->table, start_loc, end_loc);
-  }
+    xaccSRShowTrans (reg, reg->table->current_cursor_loc.vcell_loc);
 }
 
 gboolean
@@ -1159,8 +1163,13 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
   if (do_refresh)
   {
+    VirtualCellLocation vc_loc;
+
     gnc_table_refresh_gui (table, FALSE);
     gnc_table_leave_update (table, table->current_cursor_loc);
+
+    xaccSRGetTransSplit (reg, p_new_virt_loc->vcell_loc, &vc_loc);
+    xaccSRShowTrans (reg, vc_loc);
   }
 }
 
@@ -4963,6 +4972,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   sr_set_cell_fractions (reg, xaccSRGetCurrentSplit (reg));
 
   gnc_table_refresh_gui (table, TRUE);
+
+  xaccSRShowTrans (reg, table->current_cursor_loc.vcell_loc);
 
   /* set the completion character for the xfer cells */
   xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);

@@ -245,7 +245,7 @@ gnc_table_show_range (Table *table,
 {
         GnucashSheet *sheet;
 
-        if (!table)
+        if (!table || !table->ui_data)
                 return;
 
         g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
