@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -138,7 +138,7 @@ static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 						      Account *account,
 						      XferDirection direction);
 void gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
-void gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data);
+void gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data);
 
 /** Implementations **********************************************/
 
@@ -1366,6 +1366,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
   {
     gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
+    LEAVE("no account");
     return;
   }
 
@@ -1558,7 +1559,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 }
 
 void
-gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
+gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 {
   XferDialog * xferData = data;
   GtkWidget *entry;
@@ -1739,10 +1740,15 @@ static void
 close_handler (gpointer user_data)
 {
   XferDialog *xferData = user_data;
+  GtkWidget *dialog;
 
-  DEBUG(" ");
-  gtk_widget_hide (GTK_WIDGET (xferData->dialog));
-  gtk_widget_destroy (GTK_WIDGET (xferData->dialog));
+  ENTER(" ");
+  dialog = GTK_WIDGET (xferData->dialog);
+
+  gtk_widget_hide (dialog);
+  gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
+  gtk_widget_destroy (dialog);
+  LEAVE(" ");
 }
 
 /********************************************************************\
@@ -1928,8 +1934,8 @@ find_xfer (gpointer find_data, gpointer user_data)
  */
 gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
 {
-  gboolean result_ok = FALSE, done = FALSE;
-  gint response;
+  GtkDialog *dialog;
+  gint count, response;
 
   ENTER("xferData=%p", xferData);
   if( xferData == NULL ) {
@@ -1937,46 +1943,47 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     return( FALSE );
   }
 
-  while( !done )
-  {
-    g_object_ref(xferData->dialog);
-    response = gtk_dialog_run (GTK_DIALOG (xferData->dialog));
-    g_object_unref(xferData->dialog);
-    switch (response) {
-     case GTK_RESPONSE_OK:
-      /* See if the dialog is still there.  For various reasons, the
-       * user could have hit OK but remained in the dialog.  We don't
-       * want to return processing back to anyone else until we clear
-       * off this dialog, so if the dialog is still there we'll just
-       * run it again.
-       */
-      DEBUG("OK");
-      if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
-                                           find_xfer, xferData ) )
-        {
-          /* no more dialog, and OK was clicked, so assume it's all good */
-	  result_ok = TRUE;
-          return( TRUE );
-        }
+  dialog = GTK_DIALOG (xferData->dialog);
 
-      /* else run the dialog again */
-      continue;
+  /*
+   * We need to call the response_cb function by hand.  Calling it
+   * automatically on a button click can destroy the window, and
+   * that's bad mojo whole gtk_dialog_run is still in control.
+   */
+  count = g_signal_handlers_disconnect_by_func(dialog,
+					       gnc_xfer_dialog_response_cb,
+					       xferData);
+  g_assert(count == 1);
 
-     case GTK_RESPONSE_CANCEL:
-      DEBUG("CANCEL");
-      done = TRUE;
-      break;
+  while( TRUE ) {
+    DEBUG("calling gtk_dialog_run");
+    response = gtk_dialog_run (dialog);
+    DEBUG("gtk_dialog_run returned %d", response);
+    gnc_xfer_dialog_response_cb (dialog, response, xferData);
 
-     default:
-      DEBUG("%d", response);
-      done = TRUE;
-      break;
+    if (response != GTK_RESPONSE_OK) {
+      LEAVE("not ok");
+      return FALSE;
     }
+
+    /* See if the dialog is still there.  For various reasons, the
+     * user could have hit OK but remained in the dialog.  We don't
+     * want to return processing back to anyone else until we clear
+     * off this dialog, so if the dialog is still there we'll just
+     * run it again.
+     */
+    if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
+				       find_xfer, xferData ) )
+      {
+	/* no more dialog, and OK was clicked, so assume it's all good */
+	LEAVE("ok");
+	return TRUE;
+      }
+    
+    /* else run the dialog again */
   }
 
-  gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
-  LEAVE("unreached");
-  return( result_ok );
+  g_assert_not_reached();
 }
 
 
