@@ -3585,7 +3585,8 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
 				     gnc_sxsld_menu_entries,
 				     gnc_sxsld_menu_n_entries,
 				     "gnc-sxed-window-ui.xml",
-				     NULL, /* no accelerators */
+				     sxsld->sincelast_window,
+				     FALSE, /* no accelerators */
 				     sxsld);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->ac_window),
 			    TRUE, TRUE, 0);
@@ -3627,7 +3628,8 @@ create_created_ledger( sxSinceLastData *sxsld )
 				  gnc_sxsld_menu_entries,
 				  gnc_sxsld_menu_n_entries,
 				  "gnc-sxed-window-ui.xml",
-				  NULL, /* no accelerators */
+				  sxsld->sincelast_window,
+				  FALSE, /* no accelerators */
 				  sxsld);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->created_window),
 			    TRUE, TRUE, 0);
@@ -3734,7 +3736,8 @@ create_to_create_ledger( sxSinceLastData *sxsld )
 				  gnc_sxsld_menu_entries,
 				  gnc_sxsld_menu_n_entries,
 				  "gnc-sxed-to-create-window-ui.xml",
-				  NULL, /* no accelerators */
+				  sxsld->sincelast_window,
+				  FALSE, /* no accelerators */
 				  sxsld);
 	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->to_create_window),
 			    TRUE, TRUE, 0);

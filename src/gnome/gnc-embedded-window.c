@@ -67,11 +67,10 @@ struct GncEmbeddedWindowPrivate
   EggActionGroup *action_group;
 
   GncPluginPage *page;
+  GtkWidget     *parent_window;
 };
 
 static GObjectClass *parent_class = NULL;
-
-static GQuark window_type = 0;
 
 GType
 gnc_embedded_window_get_type (void)
@@ -159,8 +158,6 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
-
-  window_type = g_quark_from_static_string ("gnc-embedded-window");
 
   object_class->finalize = gnc_embedded_window_finalize;
   object_class->dispose = gnc_embedded_window_dispose;
@@ -265,7 +262,8 @@ gnc_embedded_window_new (const gchar *action_group_name,
 			 EggActionEntry *action_entries,
 			 gint n_action_entries,
 			 const gchar *ui_filename,
-			 GtkWindow *enclosing_win,
+			 GtkWidget *enclosing_win,
+			 gboolean add_accelerators,
 			 gpointer user_data)
 {
   GncEmbeddedWindowPrivate *priv;
@@ -274,9 +272,9 @@ gnc_embedded_window_new (const gchar *action_group_name,
   GError *error = NULL;
   guint merge_id;
 
-  ENTER("group %s, first %p, num %d, ui file %s, parent %p, user data %p",
+  ENTER("group %s, first %p, num %d, ui file %s, parent %p, add accelerators %d, user data %p",
 	action_group_name, action_entries, n_action_entries, ui_filename,
-	enclosing_win, user_data);
+	enclosing_win, add_accelerators, user_data);
   window = g_object_new (GNC_TYPE_EMBEDDED_WINDOW, NULL);
   priv = window->priv;
 
@@ -303,8 +301,9 @@ gnc_embedded_window_new (const gchar *action_group_name,
   }
 
   /* Add accelerators (if wanted) */
-  if (enclosing_win)
-    gtk_window_add_accel_group (enclosing_win, window->ui_merge->accel_group);
+  if (add_accelerators)
+    gtk_window_add_accel_group (GTK_WINDOW(enclosing_win),
+				window->ui_merge->accel_group);
 
   egg_menu_merge_ensure_update (window->ui_merge);
   g_free(ui_fullname);

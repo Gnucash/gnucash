@@ -1526,7 +1526,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 				     gnc_sxed_menu_entries,
 				     gnc_sxed_menu_n_entries,
 				     "gnc-sxed-window-ui.xml",
-				     NULL, /* no accelerators */
+				     sxed->dialog,
+				     FALSE, /* no accelerators */
 				     sxed);
 	gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(sxed->embed_window),
 			    TRUE, TRUE, 0);

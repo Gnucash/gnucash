@@ -74,7 +74,8 @@ GncEmbeddedWindow * gnc_embedded_window_new      (const gchar *action_group_name
 						  EggActionEntry *action_entries,
 						  gint n_action_entries,
 						  const gchar *ui_filename,
-						  GtkWindow *enclosing_win,
+						  GtkWidget *enclosing_win,
+						  gboolean add_accelerators,
 						  gpointer user_data);
 
 void            gnc_embedded_window_open_page    (GncEmbeddedWindow *window,
