@@ -135,16 +135,18 @@ xaccScrubSubSplitPrice (Split *split)
  *    other error, then a negative value is returned.
  */
 
+int gnc_kvp_array_find_guid (KvpFrame *array_root, 
+                         const char *guid_name, GUID *desired_guid);
 int
 gnc_kvp_array_find_guid (KvpFrame *array_root, 
                          const char *guid_name, GUID *desired_guid)
 {
   KvpValue *va;
-  int i, ncopies;
+  gint64 i, ncopies;
 
   va = kvp_frame_get_value (array_root, "ncopies");
   if (!va) return -1;
-  ncopies = (int) kvp_value_get_gint64 (va, "ncopies");
+  ncopies = kvp_value_get_gint64 (va, "ncopies");
 
   for (i=0; i<ncopies; i++)
   {
@@ -152,7 +154,7 @@ gnc_kvp_array_find_guid (KvpFrame *array_root,
     KvpFrame *fr;
     GUID *guid;
 
-    snprintf (buff, 32, "%d", i);
+    snprintf (buff, 32, GNC_SCANF_LLD, i);
     fr = kvp_frame_get_slot (array_root, buff);
     if (!fr) continue;
 
@@ -164,6 +166,38 @@ gnc_kvp_array_find_guid (KvpFrame *array_root,
   return -1;
 }
 
+
+/** Remove the array element from the array.  The contents associated
+ *     with that index are deleted, and the size of the array is
+ *     diminished by one.
+ */
+
+void
+gnc_kvp_array_remove_index (KvpFrame *array_root, int elt)
+{
+  char eltname[32], endname[32];
+  KvpValue *va;
+  gint64 ncopies;
+  KvpFrame *eltfr, *endfr;
+
+  /* Get the array length */
+  va = kvp_frame_get_value (array_root, "ncopies");
+  if (!va) return;
+  ncopies = kvp_value_get_gint64 (va, "ncopies");
+  if ((0 > elt) || (ncopies <= elt)) return;
+
+  /* Get the element in question */
+  snprintf (eltname, 32, GNC_SCANF_LLD, elt);
+  eltfr = kvp_frame_get_slot (array_root, eltname);
+  if (!eltfr) return;
+
+  snprintf (endname, 32, GNC_SCANF_LLD, --ncopies);
+  endfr = kvp_frame_get_slot (array_root, endname);
+
+  kvp_frame_set_fr_nc (array_root, 
+
+  kvp_frame_set_gint64 (array_root, "ncopies", ncopies);
+}
 
 /* Remove the guid of b from a */
 static void
