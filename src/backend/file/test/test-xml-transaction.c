@@ -194,14 +194,6 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
     return TRUE;
 }
 
-static GNCBook *
-xaccTransGetBook (Transaction *trn)
-{
-   Split *s = xaccTransGetSplit (trn, 0);
-   Account *acc = xaccSplitGetAccount(s);
-   return xaccAccountGetBook (acc);
-}
-
 static gchar*
 node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
 {
