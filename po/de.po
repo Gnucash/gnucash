@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
 "POT-Creation-Date: 2002-10-19 02:19+0200\n"
-"PO-Revision-Date: 2002-10-20 00:53+0200\n"
+"PO-Revision-Date: 2002-10-21 23:57+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -264,19 +264,19 @@ msgstr "Benutzername:"
 
 #: src/gnome/glade/sched-xact.glade.h:1
 msgid " days in advance"
-msgstr ""
+msgstr " Tage im voraus"
 
 #: intl-scm/guile-strings.c:1001
 #: src/business/business-ledger/gncEntryLedgerLoad.c:30
 #: src/gnome/glade/sched-xact.glade.h:3
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: src/gnome/glade/sched-xact.glade.h:5
 #, no-c-format
 msgid "%v/%u (%p%%)"
-msgstr ""
+msgstr "%v/%u (%p%%)"
 
 #: src/gnome/glade/sched-xact.glade.h:6
 msgid "... utilize an escrow account for payments?"
@@ -419,9 +419,8 @@ msgid "August"
 msgstr "August"
 
 #: src/gnome/glade/sched-xact.glade.h:42
-#, fuzzy
 msgid "Auto-Created Transactions Notification"
-msgstr "Importierte Buchungen mit Duplikaten"
+msgstr "Benachrichtigung über automatisch erstellte Buchungen"
 
 #: src/gnome/glade/sched-xact.glade.h:43
 msgid "Bi-Weekly"
@@ -1256,15 +1255,13 @@ msgid "Cut the selected transaction"
 msgstr "Ausgewählten Geschäftsvorgang ausschneiden"
 
 #: src/gnome/glade/register.glade.h:16
-#, fuzzy
 msgid "Date _Range"
 msgstr "_Datumsbereich"
 
 #: src/business/business-gnome/glade/invoice.glade.h:17
 #: src/gnome/glade/register.glade.h:17
-#, fuzzy
 msgid "Date of _Entry"
-msgstr "Sortiere nach Eingabe-Datum"
+msgstr "Eingabe-Datum"
 
 #: src/gnome/glade/register.glade.h:20
 #: src/register/ledger-core/gnc-regwidget.c:1707
@@ -1288,31 +1285,26 @@ msgid "Delete the whole transaction"
 msgstr "Den gesamten Geschäftsvorgang löschen"
 
 #: src/gnome/glade/register.glade.h:24
-#, fuzzy
 msgid "Descri_ption"
 msgstr "Beschreibung"
 
 #: src/business/business-gnome/glade/invoice.glade.h:21
 #: src/gnome/glade/register.glade.h:25
-#, fuzzy
 msgid "Display the Status Bar"
-msgstr "Anzeigen der Bilanz"
+msgstr "Anzeigen der Statusleiste"
 
 #: src/gnome/glade/register.glade.h:26
-#, fuzzy
 msgid "Display the Summary Bar"
-msgstr "Anzeigen des Buchungstexts?"
+msgstr "Anzeigen der Zusammenfassungsleiste"
 
 #: src/business/business-gnome/glade/invoice.glade.h:22
 #: src/gnome/glade/register.glade.h:27
-#, fuzzy
 msgid "Display the toolbar"
-msgstr "Anzeigen der Bilanz"
+msgstr "Anzeigen der Werkzeugleiste"
 
 #: src/gnome/glade/register.glade.h:28
-#, fuzzy
 msgid "Dup_licate Transaction..."
-msgstr "Doppelte Buchung"
+msgstr "Buchung duplizieren..."
 
 #: src/business/business-gnome/glade/invoice.glade.h:24
 #: src/gnome/glade/register.glade.h:29
@@ -1388,9 +1380,8 @@ msgid "Open a general ledger window"
 msgstr "Hauptbuch-Fenster öffnen"
 
 #: src/gnome/glade/register.glade.h:44
-#, fuzzy
 msgid "Open a register report window for this transaction"
-msgstr "Rechnungsbericht für diesen Geschäftsvorgang öffnen"
+msgstr "Kassenbericht als Bericht für diesen Geschäftsvorgang öffnen"
 
 #: src/gnome/glade/register.glade.h:45
 msgid "Open a report window for this register"
@@ -1402,9 +1393,8 @@ msgid "Paste Transaction"
 msgstr "Geschäftsvorgang einfügen"
 
 #: src/gnome/glade/register.glade.h:47
-#, fuzzy
 msgid "Paste the transaction from the clipboard"
-msgstr "Den Geschäftsvorgangs vom Clipboard einfügen"
+msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:48
 #: src/gnome-utils/window-help.c:641 src/gnome/glade/register.glade.h:48
@@ -1414,7 +1404,6 @@ msgid "Print"
 msgstr "Drucken"
 
 #: src/gnome/glade/register.glade.h:49
-#, fuzzy
 msgid "Print _Check"
 msgstr "Scheck drucken"
 
@@ -1556,7 +1545,6 @@ msgid "Sort by Memo"
 msgstr "Sortiere nach Buchungstext"
 
 #: src/gnome/glade/register.glade.h:78
-#, fuzzy
 msgid "Sort by Number"
 msgstr "Sortiere nach Nummer"
 
@@ -1579,7 +1567,6 @@ msgid "Split"
 msgstr "Mehrteilig"
 
 #: src/gnome/glade/register.glade.h:82
-#, fuzzy
 msgid "St_yle"
 msgstr "Stil"
 
@@ -1623,33 +1610,27 @@ msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
 #: src/gnome/glade/register.glade.h:91
-#, fuzzy
 msgid "_Account Report"
-msgstr "Kontentrenner"
+msgstr "Kontenbericht"
 
 #: src/business/business-gnome/glade/invoice.glade.h:63
 #: src/gnome/glade/register.glade.h:92 src/gnome/window-main.c:964
-#, fuzzy
 msgid "_Actions"
-msgstr "Aktion"
+msgstr "Aktionen"
 
 #: src/gnome/glade/register.glade.h:93
-#, fuzzy
 msgid "_All transactions"
-msgstr "Alle Geschäftsvorgänge anzeigen"
+msgstr "Alle Geschäftsvorgänge"
 
 #: src/gnome/glade/register.glade.h:94
-#, fuzzy
 msgid "_Amount"
 msgstr "Betrag"
 
 #: src/gnome/glade/register.glade.h:95
-#, fuzzy
 msgid "_Auto-Split Ledger"
 msgstr "Auto-Mehrteiliges Hauptbuch"
 
 #: src/gnome/glade/register.glade.h:96
-#, fuzzy
 msgid "_Basic Ledger"
 msgstr "Vereinfachtes Hauptbuch"
 
@@ -1669,13 +1650,11 @@ msgstr "_Abbrechen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:67
 #: src/gnome/glade/register.glade.h:99
-#, fuzzy
 msgid "_Commodity Editor"
 msgstr "Aktien _Editor"
 
 #: src/business/business-gnome/glade/invoice.glade.h:69
 #: src/gnome/glade/register.glade.h:100
-#, fuzzy
 msgid "_Date"
 msgstr "Datum"
 
@@ -1706,7 +1685,6 @@ msgstr "Übernehmen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:74
 #: src/gnome/glade/register.glade.h:105
-#, fuzzy
 msgid "_Financial Calculator"
 msgstr "Finanzrechner"
 
@@ -1717,9 +1695,8 @@ msgstr "_Hauptbuch"
 
 #: src/business/business-gnome/glade/invoice.glade.h:76
 #: src/gnome/glade/register.glade.h:107
-#, fuzzy
 msgid "_Gnucash Users Manual"
-msgstr "GnuCash-Anleitung"
+msgstr "GnuCash Benutzeranleitung"
 
 #: src/gnome/glade/register.glade.h:108
 #: src/register/ledger-core/gnc-regwidget.c:905
@@ -1728,12 +1705,10 @@ msgid "_Jump"
 msgstr "Gegenbuchung"
 
 #: src/gnome/glade/register.glade.h:109
-#, fuzzy
 msgid "_Memo"
 msgstr "Buchungstext"
 
 #: src/gnome/glade/register.glade.h:110
-#, fuzzy
 msgid "_Number"
 msgstr "Nummer"
 
@@ -1755,41 +1730,35 @@ msgstr "_Berichte"
 
 #: src/business/business-gnome/glade/invoice.glade.h:82
 #: src/gnome/glade/register.glade.h:114
-#, fuzzy
 msgid "_Standard"
 msgstr "Standardreihenfolge"
 
 #: src/gnome/glade/register.glade.h:115
-#, fuzzy
 msgid "_Statement Date"
-msgstr "Datum des Kontoauszugs:"
+msgstr "Datum des Kontoauszugs"
 
 #: src/business/business-gnome/glade/invoice.glade.h:83
 #: src/gnome/glade/register.glade.h:116 src/gnome/window-main.c:844
 msgid "_Status Bar"
-msgstr ""
+msgstr "Statuszeile"
 
 #: src/gnome/glade/register.glade.h:117
-#, fuzzy
 msgid "_Stock Split..."
 msgstr "Aktienteilung..."
 
 #: src/gnome/glade/register.glade.h:118
-#, fuzzy
 msgid "_This transaction"
-msgstr "_Geschäftsvorgang"
+msgstr "_Dieser Geschäftsvorgang"
 
 #: src/business/business-gnome/glade/invoice.glade.h:85
 #: src/gnome/glade/register.glade.h:119
-#, fuzzy
 msgid "_Tip Of The Day"
 msgstr "_Tipp des Tages"
 
 #: src/business/business-gnome/glade/invoice.glade.h:86
 #: src/gnome/glade/register.glade.h:120 src/gnome/window-main.c:830
-#, fuzzy
 msgid "_Toolbar"
-msgstr "_Werkzeuge"
+msgstr "_Werkzeugleiste"
 
 #: src/business/business-gnome/glade/invoice.glade.h:87
 #: src/gnome/glade/register.glade.h:121 src/gnome/window-main.c:965
@@ -1797,12 +1766,10 @@ msgid "_Tools"
 msgstr "_Werkzeuge"
 
 #: src/gnome/glade/register.glade.h:122
-#, fuzzy
 msgid "_Transaction Journal"
 msgstr "Amerikanisches Journal"
 
 #: src/gnome/glade/register.glade.h:123
-#, fuzzy
 msgid "_Transaction Report"
 msgstr "Buchungsbericht"
 
@@ -2007,12 +1974,8 @@ msgid "Credit"
 msgstr "Gutschrift"
 
 #: src/gnome/glade/find.glade.h:16
-#, fuzzy
 msgid "Credit or Debit"
-msgstr ""
-"Gutschrift oder Belastung\n"
-"Gutschrift\n"
-"Belastung\n"
+msgstr "Gutschrift oder Belastung"
 
 #: intl-scm/guile-strings.c:906 intl-scm/guile-strings.c:975
 #: intl-scm/guile-strings.c:992 intl-scm/guile-strings.c:1003
@@ -2439,31 +2402,28 @@ msgid "Date format:"
 msgstr "Datumsformat:"
 
 #: src/gnome/glade/print.glade.h:16
-#, fuzzy
 msgid "December 31, 2000"
-msgstr "Dezember"
+msgstr "Dezember  31, 2000"
 
 #: src/gnome/glade/print.glade.h:17
 msgid "Europe (31.12.2001)"
-msgstr ""
+msgstr "Europa (31.12.2001)"
 
 #: src/gnome/glade/print.glade.h:18
-#, fuzzy
 msgid "Format:"
-msgstr "Formular"
+msgstr "Format:"
 
 #: src/gnome/glade/print.glade.h:19
 msgid "ISO (2001-12-31)"
-msgstr ""
+msgstr "ISO (2001-12-31)"
 
 #: src/gnome/glade/print.glade.h:20
-#, fuzzy
 msgid "Inches"
-msgstr "Zunahme"
+msgstr "Inches"
 
 #: src/gnome/glade/print.glade.h:21
 msgid "Include the century when printing the year. (E.g. 2001 instead of 01.)"
-msgstr ""
+msgstr "Beim Drucken das Jahrhundert mit hinzufügen (z.B. 2001 anstelle 01)."
 
 #: intl-scm/guile-strings.c:257 src/gnome/glade/print.glade.h:22
 msgid "Locale"
@@ -2471,16 +2431,15 @@ msgstr "Systemeinstellung"
 
 #: src/gnome/glade/print.glade.h:24
 msgid "Middle"
-msgstr ""
+msgstr "Mitte"
 
 #: src/gnome/glade/print.glade.h:25
 msgid "Millimeters"
-msgstr ""
+msgstr "Millimeter"
 
 #: src/gnome/glade/print.glade.h:26
-#, fuzzy
 msgid "Months:"
-msgstr "Monate"
+msgstr "Monate:"
 
 #: src/gnome/glade/print.glade.h:28
 msgid "Payee:"
@@ -2503,18 +2462,16 @@ msgstr ""
 "Benutzerdefiniert\n"
 
 #: src/gnome/glade/print.glade.h:32
-#, fuzzy
 msgid "Sample:"
-msgstr "Beispiel"
+msgstr "Beispiel:"
 
 #: src/gnome/glade/print.glade.h:33
 msgid "Specify the format for the date with strftime(3) formatting codes."
 msgstr ""
 
 #: src/gnome/glade/print.glade.h:34
-#, fuzzy
 msgid "Top"
-msgstr "Bis"
+msgstr "Oben"
 
 #: src/gnome/glade/print.glade.h:35
 msgid "UK (31/12/2001)"
@@ -2529,40 +2486,34 @@ msgid "Units:"
 msgstr "Maßeinheiten:"
 
 #: src/gnome/glade/print.glade.h:38
-#, fuzzy
 msgid "Use abbreviated month name for date format."
-msgstr "24 Stunden-Format statt 12 Stunden-Format"
+msgstr "Abkürzung für Monatsname benutzen."
 
 #: src/gnome/glade/print.glade.h:39
-#, fuzzy
 msgid "Use month number for date format."
-msgstr "24-Stunden-Format zur Zeitanzeige"
+msgstr "Zahl für Monatsanzeige benutzen."
 
 #: src/gnome/glade/print.glade.h:40
 msgid "Use normal month name for date format."
-msgstr ""
+msgstr "Normalen Monatsnamen benutzen."
 
 #: src/gnome/glade/print.glade.h:41
-#, fuzzy
 msgid "Years:"
-msgstr "Jahre"
+msgstr "Jahre:"
 
 #: src/gnome/glade/print.glade.h:42
-#, fuzzy
 msgid "abbreviation"
-msgstr "Symbol/Abkürzung:"
+msgstr "Abkürzung"
 
 #: src/gnome/glade/print.glade.h:43
 msgid "include century"
-msgstr ""
+msgstr "Mit Jahrhundert"
 
 #: src/gnome/glade/print.glade.h:44
-#, fuzzy
 msgid "name"
 msgstr "Name"
 
 #: src/gnome/glade/print.glade.h:45
-#, fuzzy
 msgid "number"
 msgstr "Nummer"
 
@@ -2799,12 +2750,10 @@ msgid "Get new online quotes for stock accounts."
 msgstr "Neue Börsenkurse für Aktienkonten online abrufen."
 
 #: src/gnome/glade/price.glade.h:15
-#, fuzzy
 msgid "Last"
-msgstr "Letztes Jahr"
+msgstr "Zuletzt"
 
 #: src/gnome/glade/price.glade.h:16
-#, fuzzy
 msgid "Net Asset Value"
 msgstr "Netto Anlagevermögen"
 
@@ -8902,7 +8851,7 @@ msgstr "Sortiere nach Nummer"
 
 #: src/register/ledger-core/gnc-regwidget.c:833
 msgid "Paste the transaction clipboard"
-msgstr "Den Geschäftsvorgangs vom Clipboard einfügen"
+msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
 
 #: src/register/ledger-core/gnc-regwidget.c:870
 #: src/register/ledger-core/gnc-regwidget.c:1033
