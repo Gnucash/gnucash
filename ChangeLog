@@ -25,6 +25,12 @@
 	  to actually include the Due Date of the invoice.
 	* src/business/business-gnome/gw-business-gnome-spec.scm:
 	  change the int to a double on the bills-due api
+
+	* src/gnome-utils/print-session.[ch]: added gnucash wrappers
+	  around gnome-print's rotate, translate, gsave, and grestore
+	  APIs.  All to allow sideways printing (by rotating the image).
+	* src/gnome-utils/gw-gnome-utils-spec.scm: wrap the new print-session
+	  apis.
 	
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
