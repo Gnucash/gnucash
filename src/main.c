@@ -64,8 +64,9 @@ String accRes[] ={
 /* NOTE: These will eventually be moved out into a site-default file,
  *       but default-resources are here for now, for convenience */
 String fbRes[] = {
-  "*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*",
   "*Background:               grey",
+  "*Foreground:               black",
+  "*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*",
   "*text.fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*",
   /* Help stuff" */
   "*help*geometry:            530x480-0-0",
