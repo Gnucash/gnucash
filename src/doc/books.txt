@@ -280,6 +280,14 @@ Plan A has been implemented in the engine.
    because they can be easily picked apart by an appropriate SQL query.
    (Not tested, probably borken).
 
+   Period-closing does not delete enything from the SQL database.  That's
+   the design.  The core assumption is that having lots of old data in the
+   sql db wouldn't slow it down, and thus, nothing needed to be actually
+   deleted. So it doesn't delete anything.
+                                                                                
+   However, an sql admin, if they were desperate to trim the db size, 
+   could DELETE FROM * WHERE bookguid='asdfasdfasdf';
+
 -- The xml-file backend can store multiple books in one file.  There 
    is currently minimal support for writing out multiple books, 
    one per file (this enables faster load, by not loading old books).  
@@ -320,6 +328,10 @@ I am so flooded in email that I may not be able to react for a while.
 
 Open Issues/Questions that Need Discussion:
 -------------------------------------------
+*) How to handle business objects? e.g. vendors, customers should be
+   copied into both old and new books. but invocies should be in one 
+   or the other.  Need to document which is which.
+
 *) Discussion Q: What should the naming convention be for the different 
    books?  When the XML file backend is used, different books need to be 
    stored as different files (in order to avoid the performance 
@@ -406,6 +418,4 @@ Open Issues / ToDo
    13. 12/07 - 12/31
                                                                                 
 
-
 =========================== end of file ========================
-
