@@ -612,7 +612,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    pcy = lot->account->policy;
    currency = split->parent->common_currency;
 
-   ENTER ("split=%p gains=%p status=0x%x lot=%s", split, 
+   ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
        split->gains_split, split->gains,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
@@ -638,11 +638,13 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          xaccTransCommitEdit (trans);
       }
 #endif
+      PINFO ("Lot opening split, returning.");
       return;
    }
 
    if (GAINS_STATUS_GAINS & split->gains)
    {
+      PINFO ("split is a gains recording split, switch over");
       /* If this is the split that records the gains, then work with 
        * the split that generates the gains. 
        */
@@ -688,7 +690,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * nothing to do. Just return. */
    if ((FALSE == (split->gains & GAINS_STATUS_A_VDIRTY))  &&
        (split->gains_split) &&
-       (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) return;
+       (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) 
+   {
+      PINFO ("split not dirty, returning");
+      return;
+   }
 
    /* Yow! If amount is zero, there's nothing to do! Amount-zero splits 
     * may exist if users attempted to manually record gains. */
@@ -709,6 +715,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        * I don't know how to compute cap gains for that.  This is not
        * an error. Just punt, silently. 
        */
+      PINFO ("Can't compute gains, mismatched commodities!");
       return;
    }
 
@@ -720,7 +727,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
    {
-      PERR ("Malformed Lot! (too thin!)\n");
+      PERR ("Malformed Lot! (too thin!)");
       return;
    }
    if ( (gnc_numeric_negative_p(opening_amount) ||
@@ -728,7 +735,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         (gnc_numeric_positive_p(opening_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
-      PERR ("Malformed Lot! (too fat!)\n");
+      PERR ("Malformed Lot! (too fat!)");
       return;
    }
 
@@ -743,7 +750,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
                    GNC_DENOM_AUTO, GNC_RND_NEVER);
    value = gnc_numeric_div (value, opening_amount, 
                    gnc_numeric_denom(opening_value), GNC_DENOM_EXACT);
-   
    value = gnc_numeric_sub (value, split->value,
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
@@ -752,6 +758,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           gnc_numeric_to_string (split->amount),
           gnc_numeric_to_string (split->value),
           gnc_numeric_to_string (value));
+   if (gnc_numeric_check (value))
+   {
+      PERR ("Numeric overflow during gains calculation");
+      return;
+   }
 
    /* Are the cap gains zero?  If not, add a balancing transaction.
     * As per design doc lots.txt: the transaction has two splits, 
@@ -855,7 +866,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
       xaccTransCommitEdit (trans);
    }
-   LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+   LEAVE ("(lot=%s)", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
 /* ============================================================== */
