@@ -107,22 +107,52 @@
 	    <name>price_list</name>
 	    <can_focus>True</can_focus>
 	    <columns>6</columns>
-	    <column_widths>80,80,80,80,80,80</column_widths>
+	    <column_widths>117,80,80,80,80,80</column_widths>
 	    <selection_mode>GTK_SELECTION_BROWSE</selection_mode>
 	    <show_titles>True</show_titles>
 	    <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	    <widget>
-	      <class>GtkLabel</class>
+	      <class>GtkHBox</class>
 	      <child_name>CList:title</child_name>
-	      <name>label8477415</name>
-	      <label>Commodity</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <name>hbox109</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label8477415</name>
+		<label>Commodity</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkArrow</class>
+		<name>commodity_arrow</name>
+		<arrow_type>GTK_ARROW_DOWN</arrow_type>
+		<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		  <pack>GTK_PACK_END</pack>
+		</child>
+	      </widget>
 	    </widget>
 
 	    <widget>
@@ -139,16 +169,46 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkLabel</class>
+	      <class>GtkHBox</class>
 	      <child_name>CList:title</child_name>
-	      <name>label8477417</name>
-	      <label>Date</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
+	      <name>hbox110</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label8477417</name>
+		<label>Date</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkArrow</class>
+		<name>date_arrow</name>
+		<arrow_type>GTK_ARROW_DOWN</arrow_type>
+		<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		  <pack>GTK_PACK_END</pack>
+		</child>
+	      </widget>
 	    </widget>
 
 	    <widget>
@@ -193,49 +253,6 @@
 	</widget>
 
 	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox108</name>
-	  <border_width>3</border_width>
-	  <homogeneous>True</homogeneous>
-	  <spacing>10</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>sort_by_commodity_radio</name>
-	    <can_focus>True</can_focus>
-	    <label>Sort by Commodity</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>price_sort_radio</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>radiobutton10</name>
-	    <can_focus>True</can_focus>
-	    <label>Sort by Date</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>price_sort_radio</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
-
-	<widget>
 	  <class>GtkHButtonBox</class>
 	  <name>hbuttonbox5</name>
 	  <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
@@ -257,6 +274,7 @@
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Add</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -266,6 +284,7 @@
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -275,6 +294,7 @@
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove Old...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -284,6 +304,7 @@
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Edit</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -293,6 +314,7 @@
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Get Quotes</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 	</widget>
       </widget>
@@ -347,6 +369,7 @@
 	<class>GtkButton</class>
 	<name>ok_button</name>
 	<can_default>True</can_default>
+	<has_default>True</has_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
       </widget>

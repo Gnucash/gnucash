@@ -1,3 +1,14 @@
+2002-06-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/price.glade:
+	* src/gnome/dialog-price-editor.c: Set up all fields so that the
+	Enter key triggers the OK button.
+
+	* src/gnome/glade/price.glade:
+	* src/gnome/dialog-price-edit-db.c: Sort the database by clicking
+	on the column titles.  Removed old radio-buttons for sorting.  A
+	double-click on an item will also open it for editing.
+
 2002-06-08  David Hampton  <hampton@employees.org>
 
 	* src/app-file/gnome/gnc-file-history.c (gnc_history_update_menu):

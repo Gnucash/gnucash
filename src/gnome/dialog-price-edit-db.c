@@ -46,6 +46,9 @@
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
 
+#define COMMODITY_COLUMN 0
+#define DATE_COLUMN      2
+
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
 
@@ -53,7 +56,10 @@ typedef struct
 {
   GtkWidget * dialog;
 
-  GtkWidget * sort_radio;
+  gint        sort_column;
+  gboolean    ascending;
+  GtkWidget * commodity_arrow;
+  GtkWidget * date_arrow;
 
   GtkWidget * price_list;
   GtkWidget * edit_button;
@@ -122,7 +128,7 @@ price_compare (gconstpointer a, gconstpointer b)
                gnc_price_get_source (price_b));
 
   return gnc_numeric_compare (gnc_price_get_value (price_a),
-                              gnc_price_get_value (price_b));
+			      gnc_price_get_value (price_b));
 }
 
 static int
@@ -150,6 +156,10 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   gnc_commodity *current_commodity;
   GNCPrintAmountInfo print_info;
   gboolean sort_commodity;
+  GtkArrowType arrow_dir;
+  GtkWidget *show, *hide;
+  GCompareFunc sort_fn;
+  gboolean sort_ascending;
   GNCPrice *old_price;
   GNCBook *book;
   GList *prices;
@@ -164,11 +174,28 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   gnc_pricedb_foreach_price (gnc_book_get_pricedb (book),
                              load_price_helper, &prices, FALSE);
 
-  sort_commodity = gtk_toggle_button_get_active
-    (GTK_TOGGLE_BUTTON (pdb_dialog->sort_radio));
+  sort_commodity = (pdb_dialog->sort_column == COMMODITY_COLUMN);
 
-  prices = g_list_sort (prices,
-                        sort_commodity ? price_compare : price_date_compare);
+  if (sort_commodity) {
+    show = pdb_dialog->commodity_arrow;
+    hide = pdb_dialog->date_arrow;
+    sort_fn = price_compare;
+    sort_ascending = pdb_dialog->ascending;
+  } else {
+    show = pdb_dialog->date_arrow;
+    hide = pdb_dialog->commodity_arrow;
+    sort_fn = price_date_compare;
+    sort_ascending = !pdb_dialog->ascending; /* Aren't date sorts fun */
+  }
+
+  prices = g_list_sort (prices, sort_fn);
+  if (!sort_ascending)
+    prices = g_list_reverse (prices);
+
+  arrow_dir = pdb_dialog->ascending ? GTK_ARROW_DOWN: GTK_ARROW_UP;
+  gtk_arrow_set(GTK_ARROW(show), arrow_dir, GTK_SHADOW_ETCHED_IN);
+  gtk_widget_show(show);
+  gtk_widget_hide(hide);
 
   gtk_clist_freeze (GTK_CLIST (pdb_dialog->price_list));
 
@@ -385,6 +412,35 @@ get_quotes_clicked (GtkWidget *widget, gpointer data)
   gnc_gui_refresh_all ();
 }
 
+/**
+ * gnc_prices_click_column_cb
+ *
+ * @par1: A pointer to the clist.
+ * @par2: The column number clicked (0 based).
+ * @par3: A pointer to the data structure describing this window.
+ *
+ * This function checks for a valid column number, and determines
+ * whether or not to invert the current sort or select a new column
+ * for sorting.  It calls the gnc_prices_load_prices() function to
+ * sort and display the data.
+ */
+static void
+gnc_prices_click_column_cb(GtkCList *clist, gint column, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+
+  if ((column != COMMODITY_COLUMN) && (column != DATE_COLUMN))
+    return;
+
+  if (pdb_dialog->sort_column == column) {
+    pdb_dialog->ascending = !pdb_dialog->ascending;
+  } else {
+    pdb_dialog->sort_column = column;
+    pdb_dialog->ascending = TRUE;
+  }
+  gnc_prices_load_prices (pdb_dialog);
+}
+
 static void
 gnc_prices_select_price_cb (GtkCList *clist, gint row, gint col,
                             GdkEventButton *event, gpointer data)
@@ -405,6 +461,10 @@ gnc_prices_select_price_cb (GtkCList *clist, gint row, gint col,
                             pdb_dialog->price != NULL);
   gtk_widget_set_sensitive (pdb_dialog->remove_old_button,
                             pdb_dialog->price != NULL);
+
+  if (event && (event->type == GDK_2BUTTON_PRESS)) {
+    edit_clicked(NULL, data);
+  }
 }
 
 static void
@@ -451,15 +511,6 @@ prices_set_min_widths (PricesDialog *pdb_dialog)
 }
 
 static void
-sort_commodity_toggled_cb (GtkToggleButton *togglebutton,
-                           gpointer user_data)
-{
-  PricesDialog *pdb_dialog = user_data;
-
-  gnc_prices_load_prices (pdb_dialog);
-}
-
-static void
 gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 {
   GtkWidget *dialog;
@@ -490,6 +541,12 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     list = glade_xml_get_widget (xml, "price_list");
     pdb_dialog->price_list = list;
+    pdb_dialog->sort_column = COMMODITY_COLUMN;
+    pdb_dialog->ascending = TRUE;
+
+    gtk_clist_column_titles_passive(GTK_CLIST(list));
+    gtk_clist_column_title_active(GTK_CLIST(list), COMMODITY_COLUMN);
+    gtk_clist_column_title_active(GTK_CLIST(list), DATE_COLUMN);
 
     gtk_signal_connect (GTK_OBJECT(list), "select_row",
                         GTK_SIGNAL_FUNC(gnc_prices_select_price_cb),
@@ -498,18 +555,15 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     gtk_signal_connect (GTK_OBJECT(list), "unselect_row",
                         GTK_SIGNAL_FUNC(gnc_prices_unselect_price_cb),
                         pdb_dialog);
+
+    gtk_signal_connect (GTK_OBJECT(list), "click_column",
+			GTK_SIGNAL_FUNC(gnc_prices_click_column_cb),
+			pdb_dialog);
   }
 
   /* buttons */
   {
     GtkWidget *button;
-
-    button = glade_xml_get_widget (xml, "sort_by_commodity_radio");
-    pdb_dialog->sort_radio = button;
-
-    gtk_signal_connect (GTK_OBJECT (button), "toggled",
-                        GTK_SIGNAL_FUNC (sort_commodity_toggled_cb),
-                        pdb_dialog);
 
     button = glade_xml_get_widget (xml, "edit_button");
     pdb_dialog->edit_button = button;
@@ -538,6 +592,17 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (get_quotes_clicked), pdb_dialog);
+  }
+
+  /* arrows */
+  {
+    GtkWidget *arrow;
+
+    arrow = glade_xml_get_widget (xml, "commodity_arrow");
+    pdb_dialog->commodity_arrow = arrow;
+
+    arrow = glade_xml_get_widget (xml, "date_arrow");
+    pdb_dialog->date_arrow = arrow;
   }
 
   gnc_prices_load_prices (pdb_dialog);
