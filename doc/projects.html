@@ -474,6 +474,13 @@
       </tr>
 
       <tr>
+        <td><a href="#query">Transaction Query</a></td>
+
+        <td>Small</td>
+        <td>Biil</td>
+      </tr>
+
+      <tr>
         <td><a href="#ledger">Simplified Ledger</a></td>
 
         <td>Small</td>
@@ -796,7 +803,7 @@
         country. This would include the printing of currency values
         in the local country conventions. 
 
-        <p><b>Current status:</b></p>
+        <p><b>Current status:</b>
 
         <ul>
           <li>All GUI messages currently use GNU <tt>gettext()</tt>
@@ -819,8 +826,7 @@
           currently support the Asian languages. This needs
           fixing.</li>
         </ul>
-        <br>
-        <br>
+        </p>
       </dd>
 
       <dt><a name="reports"><b>Reports</b></a></dt>
@@ -850,10 +856,14 @@
         <li>Allowing user to modify report title/subtitle on the fly
             (and possibly add notes at the top or bottom of the report,
             e.g. to explain line items).
-        <li>Remember the report that was asked for, give that report
+        <li>Allow user to use the <a href="#query">transaction query</a>
+            interface to pick the set of transactions that will make up
+            the report.
+        <li>Memorize the report that was asked for, give that report
             a name, and in the future, allow that same exact report 
             to be re-run.  Allow user to edit this report properties
-            at a later date.
+            at a later date.  Note that the basic idea is similar to 
+            that of <a href="#query">memorized queries, discussed below.</a>
         </ul>
         Note that the customization info should be stored in a 
         <a href="#arrangements">Arrangements File (see below)</a>.
@@ -874,8 +884,9 @@
         or a little bitty evolution bonobo part?
         </p>
 
-        <p>Reports should make use of the 'action' field ...</p>
+        <p>
         Relationship to budgeting not clear ... 
+        </p>
 
         <p>Stock portfolio tools should include a Cost Averaging
         report, Market Index report, Stock Option values,
@@ -884,7 +895,8 @@
         <p>Reports should be printable to printer. (this should 
         be automatic with the gtk-html widget.)</p>
 
-        <p><b>Status:</b></p>
+        <p>
+        <b>Status:</b>
 
         <ul>
           <li>A general reporting infrastructure was implemented in
@@ -933,6 +945,7 @@
         </li>
 
         </ul>
+        </p>
       </dd>
 
       <dt><a name="graphs"><b>Graphs</b></a></dt>
@@ -945,7 +958,8 @@
            both for data collection via queries, and for displayed
            output.
         </p>
-        <p><b>Status:</b></p>
+        <p>
+        <b>Status:</b>
         <ul>
           <li>Different graphing packages were evaluated, 
               <a href="http://www.gnome.org/guppi/">GUPPI</a>.
@@ -956,6 +970,33 @@
               interactive plot editing -- each segment attributes 
               totally settable/controllable -- drag/move callbacks 
               when segments are click-dragged.
+          </li>
+        </ul>
+        </p>
+      </dd>
+
+      <dt><a name="query"><b>Transaction Query</b></a></dt>
+
+      <dd>
+        Allow user to build (complex) queries to locate a 
+        set of transactions that match some criteria: e.g.
+        a date range, or a matching payee, description, amount,
+        etc.  Once a user has created a complex query, it
+        must be possible to memorize it (i.e. give it a name,
+        and store it for future reuse).
+
+        <p>
+        <b>Status:</b></p>
+        <ul>
+          <li>The query engine has been implemented (as of 1.4.0,
+              grib)
+          </li>
+          <li>The GUI for creating queries has been implemented
+              (as of 1.4.0, grib)
+          </li>
+          <li>The ability to memorize queries has <b>not</b>
+              been implemented and awaits further action (see reports,
+              above).
           </li>
         </ul>
       </dd>
