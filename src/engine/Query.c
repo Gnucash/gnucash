@@ -20,6 +20,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
+
 #include <ctype.h>
 #include <glib.h>
 #include <math.h>
@@ -32,7 +34,6 @@
 
 #include <assert.h>
 
-#include "gnc-common.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "Account.h"

@@ -37,7 +37,6 @@
 #include <sys/time.h>
 
 #include "gnc-engine-util.h"
-#include "gnc-common.h"
 #include "gnc-engine.h"
 
 /** GLOBALS *********************************************************/

@@ -23,11 +23,8 @@
 #ifndef GLOBAL_OPTIONS_H
 #define GLOBAL_OPTIONS_H
 
-#include "config.h"
-
 #include <glib.h>
 
-#include "gnc-common.h"
 #include "option-util.h"
 
 

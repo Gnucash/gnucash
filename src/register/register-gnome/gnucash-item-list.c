@@ -24,6 +24,8 @@
  *  A scrollable list box.
  */
 
+#include "config.h"
+
 #include <gnome.h>
 
 #include "gnc-engine-util.h"

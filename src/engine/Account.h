@@ -25,8 +25,6 @@
 #ifndef XACC_ACCOUNT_H
 #define XACC_ACCOUNT_H
 
-#include "config.h"
-
 #include "GNCId.h"
 #include "Transaction.h"
 #include "kvp_frame.h"

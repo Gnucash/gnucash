@@ -16,6 +16,9 @@ doc_DATA = \
   README \
   README.patches
 
+m4datadir = $(datadir)/aclocal
+m4data_DATA = gnucash.m4
+
 # All the other files that go in the distribution tarfile that aren't
 # included some other way...
 

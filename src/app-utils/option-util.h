@@ -24,12 +24,9 @@
 #ifndef OPTION_UTIL_H
 #define OPTION_UTIL_H
 
-#include "config.h"
-
 #include <guile/gh.h>
 #include <glib.h>
 
-#include "gnc-common.h"
 #include "gnc-commodity.h"
 #include "gnc-ui-common.h"
 #include "date.h"

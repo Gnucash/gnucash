@@ -25,11 +25,8 @@
 #ifndef XACC_TRANSACTION_H
 #define XACC_TRANSACTION_H
 
-#include "config.h"
-
 #include <time.h>
 
-#include "gnc-common.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"

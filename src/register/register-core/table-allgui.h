@@ -93,7 +93,6 @@
 
 #include "basiccell.h"
 #include "cellblock.h"
-#include "gnc-common.h"
 #include "gtable.h"
 #include "register-common.h"
 #include "table-control.h"

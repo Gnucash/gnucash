@@ -21,6 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
+#include "config.h"
+
 #include "sixtp.h"
 #include "sixtp-stack.h"
 

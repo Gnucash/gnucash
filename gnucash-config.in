@@ -25,6 +25,8 @@ if test $# -eq 0; then
 	usage 1 1>&2
 fi
 
+any_lib=no
+
 while test $# -gt 0; do
   case "$1" in
   -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
@@ -60,10 +62,11 @@ while test $# -gt 0; do
       ;;
     engine)
       lib_engine=yes
+      any_lib=yes
       ;;
     gnucash)
-      lib_engine=yes
       lib_gnucash=yes
+      any_lib=yes
       ;;
     *)
       usage 1 1>&2
@@ -71,6 +74,11 @@ while test $# -gt 0; do
   esac
   shift
 done
+
+
+if test "$any_lib" = "no"; then
+  lib_gnucash=yes
+fi
 
 if test "$echo_prefix" = "yes"; then
     echo $prefix

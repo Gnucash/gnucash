@@ -28,7 +28,6 @@
 #include <glib.h>
 #include <regex.h>
 
-#include "gnc-common.h" 
 #include "Account.h" 
 #include "Transaction.h" 
 

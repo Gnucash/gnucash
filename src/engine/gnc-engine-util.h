@@ -27,10 +27,6 @@
 #ifndef GNC_ENGINE_UTIL_H
 #define GNC_ENGINE_UTIL_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <assert.h>
 #include <errno.h>
 #include <glib.h>
@@ -38,7 +34,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "gnc-common.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 

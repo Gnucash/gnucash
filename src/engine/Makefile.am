@@ -56,7 +56,6 @@ gncinclude_HEADERS = \
   gnc-associate-account.h \
   gnc-book.h \
   gnc-commodity.h \
-  gnc-common.h \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \

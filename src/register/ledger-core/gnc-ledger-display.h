@@ -25,8 +25,6 @@
 #ifndef GNC_LEDGER_DISPLAY_H
 #define GNC_LEDGER_DISPLAY_H
 
-#include "config.h"
-
 #include <glib.h>
 
 #include "Account.h"

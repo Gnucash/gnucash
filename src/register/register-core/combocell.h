@@ -50,7 +50,6 @@
 #include <glib.h>
 
 #include "basiccell.h"
-#include "gnc-common.h"
 
 
 typedef struct _ComboCell

@@ -25,13 +25,10 @@
 #ifndef XACC_ACCOUNT_GROUP_H
 #define XACC_ACCOUNT_GROUP_H
 
-#include "config.h"
-
 #include <glib.h>
 
 #include "Account.h"
 #include "GNCId.h"
-#include "gnc-common.h"
 
 
 /** PROTOTYPES ******************************************************/

@@ -45,7 +45,6 @@
 #define PRICE_CELL_H
 
 #include "basiccell.h"
-#include "gnc-common.h"
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 

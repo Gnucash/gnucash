@@ -23,6 +23,8 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <assert.h>
+#include <glib.h>
 #include <string.h>
 
 #include "Account.h"
@@ -34,7 +35,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-common.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"

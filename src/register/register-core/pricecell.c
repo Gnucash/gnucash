@@ -35,11 +35,11 @@
 #include "config.h"
 
 #include <ctype.h>
-#include <string.h>
+#include <glib.h>
 #include <locale.h>
 #include <string.h>
+#include <string.h>
 
-#include "gnc-common.h"
 #include "gnc-exp-parser.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"

@@ -17,9 +17,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#include "messages.h"
-#include <string.h>
+#include "config.h"
+
 #include <glib.h>
+#include <string.h>
+
+#include "messages.h"
 
 /* Prefix marker and end-of-prefix marker for i18n messages with
    qualifying prefix, see

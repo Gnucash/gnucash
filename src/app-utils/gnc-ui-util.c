@@ -34,7 +34,6 @@
 
 #include "global-options.h"
 #include "gnc-book.h"
-#include "gnc-common.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"

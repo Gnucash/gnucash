@@ -28,7 +28,6 @@
 
 #include "Group.h"
 #include "Transaction.h"
-#include "gnc-common.h"
 #include "table-allgui.h"
 
 
