@@ -14,7 +14,6 @@ libgncengine_la_SOURCES = \
   Group.c \
   Query.c \
   Scrub.c \
-  Session.c \
   Transaction.c \
   TransLog.c \
   date.c \
@@ -25,7 +24,8 @@ libgncengine_la_SOURCES = \
   io-gncxml-w.c \
   md5.c \
   kvp_frame.c \
-  gnc-commodity.c\
+  gnc-book.c \
+  gnc-commodity.c \
   gnc-numeric.c \
   gnc-engine.c \
   gnc-engine-util.c
@@ -45,7 +45,6 @@ noinst_HEADERS = \
   GroupP.h \
   Query.h \
   Scrub.h \
-  Session.h \
   TransLog.h \
   Transaction.h \
   TransactionP.h \
@@ -56,6 +55,7 @@ noinst_HEADERS = \
   io-gncxml.h \
   md5.h \
   kvp_frame.h \
+  gnc-book.h \
   gnc-commodity.h \
   gnc-numeric.h \
   gnc-engine.h \

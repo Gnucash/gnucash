@@ -122,7 +122,7 @@
 #include "config.h"
 
 #include "Group.h"
-#include "Session.h"
+#include "gnc-book.h"
 
 void gncFileNew (void);
 void gncFileOpen (void);
@@ -138,6 +138,6 @@ void gncFileQuit (void);
 
 AccountGroup *gncGetCurrentGroup (void);
 
-Session *gncGetCurrentSession (void);
+GNCBook *gncGetCurrentBook (void);
 
 #endif /* __GNC_FILE_DIALOG_H__ */

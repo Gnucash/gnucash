@@ -144,8 +144,8 @@ xaccFreeAccountGroup( AccountGroup *grp )
 
   xaccAccountGroupBeginEdit (grp, 1);
 
-  for( i=0; i<grp->numAcc; i++ )
-    xaccFreeAccount( grp->account[i] );
+  for(i = 0; i < grp->numAcc; i++ )
+    xaccFreeAccount(grp->account[i]);
 
   g_free(grp->account);
 

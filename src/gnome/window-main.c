@@ -457,7 +457,7 @@ static void
 gnc_refresh_main_window_title()
 {
   GtkWidget *main_window;
-  Session *session;
+  GNCBook *book;
   gchar *filename;
   gchar *title;
 
@@ -465,12 +465,9 @@ gnc_refresh_main_window_title()
   if (main_window == NULL)
     return;
 
-  session = gncGetCurrentSession();
+  book = gncGetCurrentBook ();
 
-  if (session == NULL)
-    filename = _("Untitled");
-  else
-    filename = xaccSessionGetFilePath(session);
+  filename = gnc_book_get_file_path (book);
 
   if ((filename == NULL) || (*filename == '\0'))
     filename = _("Untitled");

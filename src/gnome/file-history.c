@@ -99,7 +99,7 @@ __gnc_history_file_cb(GtkWidget *w, char *data)
 }
 
 void
-gnc_history_add_file(char *newfile)
+gnc_history_add_file(const char *newfile)
 {
   int i, max_files;
   gboolean used_default, matched = FALSE;

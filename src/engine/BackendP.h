@@ -5,7 +5,7 @@
  * back-ends (which will probably be sql databases).
  * 
  * The callbacks will be called at the appropriate times during 
- * a session to allow the backend to store the data as needed.
+ * a book session to allow the backend to store the data as needed.
  *
  */
 
@@ -13,10 +13,11 @@
 #define __XACC_BACKEND_P_H__
 
 #include "config.h"
+
 #include "Account.h"
 #include "Group.h"
-#include "Session.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 
 typedef struct _backend Backend;
 
@@ -31,8 +32,8 @@ typedef struct _backend Backend;
 
 struct _backend 
 {
-  AccountGroup * (*session_begin) (Session *, const char * sessionid);
-  int (*session_end) (Session *);
+  AccountGroup * (*book_begin) (GNCBook *, const char * book_id);
+  int (*book_end) (GNCBook *);
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *, int defer);
@@ -60,7 +61,7 @@ Backend * xaccTransactionGetBackend (Transaction *);
  */
 void xaccGroupSetBackend (AccountGroup *, Backend *);
 Backend * xaccGroupGetBackend (AccountGroup *);
-Backend * xaccSessionGetBackend (Session *);
+Backend * xaccGNCBookGetBackend (GNCBook *book);
 
 
 #endif /* __XACC_BACKEND_P_H__ */

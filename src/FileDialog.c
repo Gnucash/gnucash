@@ -21,28 +21,26 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <glib.h>
 #include <guile/gh.h>
+#include <string.h>
 
+#include "Destroy.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "FileIO.h"
 #include "Group.h"
-#include "messages.h"
-#include "Session.h"
 #include "TransLog.h"
-#include "Destroy.h"
+#include "file-history.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
-#include "file-history.h"
+#include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
 /** GLOBALS *********************************************************/
-static Session *current_session = NULL;
-static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
+static GNCBook *current_book = NULL;
 
 /* ======================================================== */
 
@@ -55,7 +53,7 @@ file_not_found_msg (void)
 /* ======================================================== */
 
 static gboolean
-show_file_error (GNCFileIOError io_error, char *newfile)
+show_file_error (GNCFileIOError io_error, const char *newfile)
 {
   gboolean uh_oh = FALSE;
   char *buf = NULL;
@@ -113,9 +111,9 @@ show_file_error (GNCFileIOError io_error, char *newfile)
 /* ======================================================== */
 
 static gboolean
-show_session_error(Session *session, char *newfile)
+show_book_error(GNCBook *book, const char *newfile)
 {
-  int norr = xaccSessionGetError (session);
+  int norr = gnc_book_get_error (book);
   gboolean uh_oh = FALSE;
   char *buf = NULL;
 
@@ -147,38 +145,30 @@ show_session_error(Session *session, char *newfile)
 void
 gncFileNew (void)
 {
-  Session *sess;
-  AccountGroup *grp;
+  GNCBook *book;
+  AccountGroup *group;
 
-  /* If user attempts to start a new session before saving
-   * results of the last one, prompt them to clean up their 
-   * act. */
+  /* If user attempts to start a new session before saving results of
+   * the last one, prompt them to clean up their act. */
   if (!gncFileQuerySave ())
     return;
 
-  sess = current_session;
-  grp = xaccSessionGetGroup (sess);
-  /* if session not yet started ... */
-  if (!grp) grp = topgroup;
+  book = gncGetCurrentBook ();
+  group = gnc_book_get_group (book);
 
   /* when starting new everything, destroy old stuff first */
   /* destroy open windows first, before destroying the group itself */
-  xaccGroupWindowDestroy (grp);
+  xaccGroupWindowDestroy (group);
 
-  /* close any ongoing file sessions, if any */
-  xaccSessionEnd (sess);
-  xaccSessionDestroy (sess);
-  current_session = NULL;
-  topgroup = NULL;
-
-  /* disable logging while we move over to the new set of accounts to
-   * edit; the mass deletion of accounts and transactions during
-   * switchover is not something we want to keep in a journal.  */
+  /* close any ongoing file sessions, and free the accounts.
+   * disable logging so we don't get all that junk. */
   xaccLogDisable();
-  xaccFreeAccountGroup (grp);
+  gnc_book_destroy (book);
+  current_book = NULL;
   xaccLogEnable();
-  grp = xaccMallocAccountGroup();
-  topgroup = grp;
+
+  /* start a new book */
+  gncGetCurrentBook ();
 }
 
 /* ======================================================== */
@@ -186,16 +176,14 @@ gncFileNew (void)
 gboolean
 gncFileQuerySave (void)
 {
-  Session *sess;
-  AccountGroup *grp;
+  GNCBook *book;
+  AccountGroup *group;
   gncUIWidget app;
 
-  sess = current_session;
-  grp = xaccSessionGetGroup (sess);
-  /* if session not yet started ... */
-  if (!grp) grp = topgroup;
+  book = gncGetCurrentBook ();
+  group = gnc_book_get_group (book);
 
-  app = gnc_get_ui_data();
+  app = gnc_get_ui_data ();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -203,7 +191,7 @@ gncFileQuerySave (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while ( xaccGroupNotSaved (grp) ) 
+  while (xaccGroupNotSaved (group))
   {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
@@ -252,15 +240,17 @@ gncLockFailHandler (const char *file)
 static void
 gncPostFileOpen (const char * filename)
 {
-  Session *newsess;
-  AccountGroup *oldgrp;
+  GNCBook *new_book;
+  AccountGroup *old_group;
   gboolean uh_oh = FALSE;
-  AccountGroup *newgrp;
+  AccountGroup *new_group;
   char * newfile;
 
   if (!filename) return;
+
   newfile = xaccResolveFilePath (filename); 
-  if (!newfile) {
+  if (!newfile)
+  {
      char *buf = g_strdup_printf (file_not_found_msg(), filename);
      gnc_error_dialog (buf);
      g_free(buf);
@@ -269,47 +259,43 @@ gncPostFileOpen (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  oldgrp = xaccSessionGetGroup (current_session);
-  /* if session not yet started ... */
-  if (!oldgrp) oldgrp = topgroup;
+  old_group = gnc_book_get_group (gncGetCurrentBook ());
 
   /* load the accounts from the users datafile */
-  /* but first, check to make sure we've got a session going ... */
-  newsess = xaccMallocSession ();
+  /* but first, check to make sure we've got a book going. */
+  new_book = gnc_book_new ();
 
   /* disable logging while we move over to the new set of accounts to
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
-  gnc_set_busy_cursor(NULL);
-  xaccLogDisable();
-  newgrp = NULL;
-  if(xaccSessionBeginFile(newsess, newfile, gncLockFailHandler)) {
-    if(xaccSessionLoad(newsess)) {
-      newgrp = xaccSessionGetGroup(newsess);
-    }
+  gnc_set_busy_cursor (NULL);
+  xaccLogDisable ();
+  new_group = NULL;
+  if (gnc_book_begin_file (new_book, newfile, gncLockFailHandler))
+  {
+    if (gnc_book_load (new_book))
+      new_group = gnc_book_get_group (new_book);
   }
-  xaccLogEnable();
-  gnc_unset_busy_cursor(NULL);
+  xaccLogEnable ();
+  gnc_unset_busy_cursor (NULL);
 
-  /* check for session errors, put up appropriate dialog */
-  uh_oh = show_session_error (newsess, newfile);
+  /* check for book errors, put up appropriate dialog */
+  uh_oh = show_book_error (new_book, newfile);
 
   if (!uh_oh)
   {
-    GNCFileIOError io_err = xaccSessionGetFileError(newsess);
+    GNCFileIOError io_err = gnc_book_get_file_error (new_book);
+
     /* check for i/o error, put up appropriate error message */
     uh_oh = show_file_error(io_err, newfile);
     if (uh_oh)
-    {
-      xaccFreeAccountGroup (newgrp);
-      newgrp = NULL;
-    }
+      new_group = NULL;
 
     /* Umm, came up empty-handed, i.e. the file was not found. */
     /* This is almost certainly not what the user wanted. */
-    if (!uh_oh && !newgrp && (io_err == ERR_FILEIO_NONE)) 
+    if (!uh_oh && !new_group && (io_err == ERR_FILEIO_NONE)) 
     {
-      char *buf = g_strdup_printf (file_not_found_msg(), newfile);	
+      char *buf = g_strdup_printf (file_not_found_msg(), newfile);
       gnc_error_dialog (buf);
       g_free (buf);
       uh_oh = TRUE;
@@ -319,50 +305,46 @@ gncPostFileOpen (const char * filename)
   /* going down -- abandon ship */
   if (uh_oh) 
   {
-    xaccSessionEnd (newsess);
-    xaccSessionDestroy (newsess);
+    gnc_book_destroy (new_book);
 
-    /* well, no matter what, I think its a good idea to have 
-     * a topgroup around.  For example, early in the gnucash startup
-     * sequence, the user opens a file; if this open fails for any 
-     * reason, we don't want to leave them high & dry without a topgroup,
-     * because if the user continues, then bad things will happen.
-     */
-    if (NULL == topgroup) 
-    {
-      topgroup = xaccMallocAccountGroup();
-    }
+    /* well, no matter what, I think its a good idea to have a
+     * topgroup around.  For example, early in the gnucash startup
+     * sequence, the user opens a file; if this open fails for any
+     * reason, we don't want to leave them high & dry without a
+     * topgroup, because if the user continues, then bad things will
+     * happen. */
+    gncGetCurrentBook ();
+
     free (newfile);
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  xaccSessionEnd (current_session);
-  xaccSessionDestroy (current_session);
-  current_session = newsess;
+  xaccLogDisable();
+  xaccLogSetBaseName (newfile);
+
+  xaccGroupWindowDestroy (old_group);
+  gnc_book_destroy (current_book);
+  current_book = new_book;
+
+  xaccLogEnable();
+
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  xaccLogDisable();
-  xaccLogSetBaseName (newfile);
   gnc_history_add_file (newfile);
-  /* destroy open windows first, before destroying the group itself */
-  xaccGroupWindowDestroy (oldgrp);
-  xaccFreeAccountGroup (oldgrp);
-  topgroup = newgrp;
-  xaccLogEnable();
-
   free (newfile);
 
-  /* run a file-opened hook.  For now, the main thing it will do 
+  /* run a file-opened hook. For now, the main thing it will do 
    * is notice if legacy currencies are being imported. */
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*file-opened-hook*");
     SCM filename;
-    
-    if(newfile) {
+
+    if (newfile)
+    {
       filename = gh_str02scm(newfile);
       gh_call2(run_danglers, hook, filename); 
     }
@@ -386,8 +368,7 @@ gncFileOpen (void)
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  if (topgroup == NULL)
-    topgroup = xaccMallocAccountGroup();
+  gncGetCurrentBook ();
 }
 
 void
@@ -402,22 +383,23 @@ gncFileOpenFile (const char * newfile)
 }
 
 /* ======================================================== */
-static int been_here_before = 0;
+static gboolean been_here_before = FALSE;
 
 void
 gncFileSave (void)
 {
-  AccountGroup *newgrp = NULL;
-  char * newfile;
   GNCFileIOError io_err;
-  int norr, uh_oh = 0;
+  const char * newfile;
+  GNCBook *book;
+  int uh_oh = 0;
+  int norr;
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
-  /* if no session exists, then we don't have a filename/path 
-   * to save to. Get one now. */
-  if ((NULL == current_session) || 
-      (NULL == xaccSessionGetGroup (current_session)))
+  /* If we don't have a filename/path to save to get one. */
+  book = gncGetCurrentBook ();
+
+  if (!gnc_book_get_file_path (book))
   {
     gncFileSaveAs();
     return;
@@ -425,19 +407,19 @@ gncFileSave (void)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor(NULL);
-  xaccSessionSave (current_session);
+  gnc_book_save (book);
   gnc_unset_busy_cursor(NULL);
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
-  norr = xaccSessionGetError (current_session);
+  norr = gnc_book_get_error (book);
   if (norr)
   {
     const char *format = _("There was an error writing the file\n     %s"
                            "\n\n%s");
     char *message;
 
-    newfile = xaccSessionGetFilePath(current_session);
+    newfile = gnc_book_get_file_path (book);
     if (newfile == NULL)
       newfile = "";
 
@@ -447,9 +429,9 @@ gncFileSave (void)
 
     if (been_here_before) return;
 
-    been_here_before = 1;
+    been_here_before = TRUE;
     gncFileSaveAs();   /* been_here prevents infinite recuirsion */
-    been_here_before = 0;
+    been_here_before = FALSE;
 
     return;
   }
@@ -457,21 +439,16 @@ gncFileSave (void)
   /* check for i/o error, put up appropriate error message.
    * NOTE: the file-writing routines never set the file io
    * error code, so this seems to be unneccesary. */
-  io_err = xaccSessionGetFileError(current_session);
-  newfile = xaccSessionGetFilePath(current_session);
-  gnc_history_add_file(newfile);
+  io_err = gnc_book_get_file_error (book);
+  newfile = gnc_book_get_file_path (book);
+  gnc_history_add_file (newfile);
 
   uh_oh = show_file_error (io_err, newfile);
-  if (uh_oh)
-  {
-    xaccFreeAccountGroup (newgrp);
-    newgrp = NULL;
-  }
 
   /* going down -- abandon ship */
   if (uh_oh) return;
 
-  xaccGroupMarkSaved (topgroup);
+  xaccGroupMarkSaved (gnc_book_get_group (book));
 }
 
 /* ======================================================== */
@@ -479,81 +456,80 @@ gncFileSave (void)
 void
 gncFileSaveAs (void)
 {
-  Session *newsess;
-  AccountGroup *oldgrp;
+  AccountGroup *group;
+  GNCBook *new_book;
+  GNCBook *book;
   const char *filename;
   char *newfile;
-  char * oldfile;
+  const char *oldfile;
   gboolean uh_oh = FALSE;
 
   filename = fileBox(_("Save"), "*.gnc");
   if (!filename) return;
 
-  /* check to see if the user did something silly, 
-   * like specifying the same file as the current file ... 
-   * if so, then just do that, instead of the below,
-   * which assumes a truly new name was given.
-   */
+  /* Check to see if the user specified the same file as the current
+   * file. If so, then just do that, instead of the below, which
+   * assumes a truly new name was given. */
   newfile = xaccResolveFilePath (filename);
-  if (!newfile) {
+  if (!newfile)
+  {
      char *buf = g_strdup_printf (file_not_found_msg(), filename);
      gnc_error_dialog (buf);
      g_free (buf);
      return;
   }
-  oldfile = xaccSessionGetFilePath (current_session);
-  if (oldfile && (strcmp(oldfile, newfile) == 0)) {
+
+  book = gncGetCurrentBook ();
+  oldfile = gnc_book_get_file_path (book);
+  if (oldfile && (strcmp(oldfile, newfile) == 0))
+  {
     free (newfile);
     gncFileSave ();
     return;
   }
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
-  oldgrp = xaccSessionGetGroup (current_session);
-  /* if session not yet started ... */
-  if (!oldgrp) oldgrp = topgroup;
-
-  /* create a new session ... */
-  newsess = xaccMallocSession ();
+  group = gnc_book_get_group (book);
 
   /* disable logging while we move over to the new set of accounts to
    * edit; the mass deletetion of accounts and transactions during
-   * switchover is not something we want to keep in a journal.  */
-  xaccLogDisable();
-  xaccSessionBeginFile(newsess, newfile, gncLockFailHandler);
-  xaccLogEnable();
+   * switchover is not something we want to keep in a journal. */
+  xaccLogDisable ();
+  new_book = gnc_book_new ();
+  gnc_book_begin_file (new_book, newfile, gncLockFailHandler);
+  xaccLogEnable ();
 
   /* check for session errors (e.g. file locked by another user) */
-  uh_oh = show_session_error (newsess, newfile);
+  uh_oh = show_book_error (new_book, newfile);
 
   /* No check for file errors since we didn't read a file... */
 
   /* going down -- abandon ship */
-  if (uh_oh) {
-    xaccSessionDestroy (newsess);
+  if (uh_oh)
+  {
+    xaccLogDisable ();
+    gnc_book_destroy (new_book);
+    xaccLogEnable ();
 
-    /* well, no matter what, I think its a good idea to have 
-     * a topgroup around.  For example, early in the gnucash startup
-     * sequence, the user opens a file ... if this open fails for any 
-     * reason, we don't want to leave them high & dry without a topgroup,
-     * because if user continues, then bad things will happen ...
-     */
-    if(NULL == topgroup) {
-      topgroup = xaccMallocAccountGroup();
-    }
     free (newfile);
     gnc_refresh_main_window();
+
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  xaccSessionDestroy (current_session);
-  current_session = newsess;
+  xaccLogDisable ();
+  gnc_book_set_group (book, NULL);
+  gnc_book_destroy (book);
+  current_book = new_book;
+  xaccLogEnable ();
+
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* oops ... file already exists ... ask user what to do... */
-  if(xaccSessionSaveMayClobberData(newsess)) {
+  if (gnc_book_save_may_clobber_data (new_book))
+  {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
     char *tmpmsg;
@@ -567,20 +543,17 @@ gncFileSaveAs (void)
     if (!result)
       return;
 
-    /* Whoa-ok. Blow away the previous file. 
-     * Do not disable logging ... we want to capture the 
-     * old file in the log, just in case the user later
-     *  decides it was all a big mistake. */
-    xaccSessionSetGroup (newsess, NULL);
-    /* xaccLogDisable();  no don't disable, keep logging on */
+    /* Whoa-ok. Blow away the previous file. Do not disable
+     * logging. We want to capture the old file in the log, just in
+     * case the user later decides it was all a big mistake. */
   }
 
   /* OK, save the data to the file ... */
   xaccLogSetBaseName (newfile);
-  xaccSessionSetGroup (newsess, oldgrp);
+  gnc_book_set_group (new_book, group);
   gncFileSave ();
-  free (newfile);
 
+  free (newfile);
   gnc_refresh_main_window();
 }
 
@@ -589,21 +562,16 @@ gncFileSaveAs (void)
 void
 gncFileQuit (void)
 {
-  AccountGroup *grp;
+  GNCBook *book;
 
-  grp = xaccSessionGetGroup (current_session);
-  /* if session not yet started ... */
-  if (!grp) grp = topgroup;
+  book = gncGetCurrentBook ();
 
   /* disable logging; the mass deletetion of accounts and transactions
    * during shutdown is not something we want to keep in a journal.  */
   xaccLogDisable();
 
-  xaccSessionEnd (current_session);
-  xaccSessionDestroy (current_session);
-  current_session = NULL;
-  xaccFreeAccountGroup (grp);
-  topgroup = NULL;
+  gnc_book_destroy (book);
+  current_book = NULL;
 }
 
 /* ======================================================== */
@@ -611,27 +579,22 @@ gncFileQuit (void)
 AccountGroup *
 gncGetCurrentGroup (void)
 {
-  AccountGroup *grp;
-  grp = xaccSessionGetGroup (current_session); 
-  if (grp) return grp;
+  GNCBook *book;
 
-  /* If we are here, then no session has yet been started ... */
-  grp = topgroup;
-  if (grp) return grp;
+  book = gncGetCurrentBook ();
 
-  /* if we are here, then topgroup not yet initialized ... */
-  xaccLogEnable();
-  topgroup = xaccMallocAccountGroup();
-
-  return topgroup;
+  return gnc_book_get_group (book);
 }
 
 /* ======================================================== */
 
-Session *
-gncGetCurrentSession (void) 
+GNCBook *
+gncGetCurrentBook (void) 
 {
-  return (current_session);
+  if (!current_book)
+    current_book = gnc_book_new ();
+
+  return current_book;
 }
 
 /********************* END OF FILE **********************************/
