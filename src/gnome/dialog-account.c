@@ -442,6 +442,7 @@ gnc_account_change_currency_security(Account *account,
       while ((s = xaccTransGetSplit(trans, j++)) != NULL)
       {
         gboolean add_it = FALSE;
+        const gnc_commodity *commodity;
         Account *a;
 
         a = xaccSplitGetAccount(s);
@@ -455,20 +456,34 @@ gnc_account_change_currency_security(Account *account,
         if (g_hash_table_lookup(change_security, a) != NULL)
           continue;
 
-        if (new_currency &&
-            (gnc_commodity_equiv(old_currency, xaccAccountGetCurrency(a))))
+        commodity = xaccAccountGetCurrency(a);
+
+        if (new_currency && (gnc_commodity_equiv(old_currency, commodity)))
         {
-          g_hash_table_insert(change_currency, a, (char *) currency);
+          g_hash_table_insert(change_currency, a, (gpointer) currency);
           add_it = TRUE;
         }
 
-        if (new_security &&
-            (gnc_commodity_equiv(old_security, xaccAccountGetSecurity(a))))
+        if (new_security && (gnc_commodity_equiv(old_security, commodity)))
         {
-          g_hash_table_insert(change_security, a, (char *) security);
+          g_hash_table_insert(change_currency, a, (gpointer) security);
           add_it = TRUE;
         }
-        
+
+        commodity = xaccAccountGetSecurity(a);
+
+        if (new_security && (gnc_commodity_equiv(old_security, commodity)))
+        {
+          g_hash_table_insert(change_security, a, (gpointer) security);
+          add_it = TRUE;
+        }
+
+        if (new_currency && (gnc_commodity_equiv(old_currency, commodity)))
+        {
+          g_hash_table_insert(change_security, a, (gpointer) currency);
+          add_it = TRUE;
+        }
+
         if (add_it)
           stack = g_slist_prepend(stack, a);
       }
