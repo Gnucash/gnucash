@@ -64,6 +64,9 @@ int force_double_entry = 0;
 #define DEFER_REBALANCE 0x2
 #define BEING_DESTROYED 0x4
 
+/* a very small number */
+#define ZERO_THRESH_VALUE 0.0000000000001
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -590,8 +593,15 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
          PERR ("split must have a parent\n");
          assert (s->acc);
       } else { 
-         DEVIDE (s -> damount, value, s->share_price);
-         return;
+        /* if there's already a share-amount set, we need to respect 
+         * that and adjust the price to make this balance. */
+        if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+          DEVIDE(s->share_price, value, s->damount);
+        }
+        else {
+          DEVIDE(s->damount, value, s->share_price);
+        }
+        return;
       }
    }
 
@@ -599,13 +609,23 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
     * value in.  This may or may not require a divide.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
-      DEVIDE (s -> damount, value, s->share_price);
+     if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
    } else 
    if (!safe_strcmp(s->acc->security, base_currency)) {
-      s -> damount = value;   
+      s->damount = value;   
    } else 
    if ((0x0==base_currency) && (0 == force_double_entry)) {
-      DEVIDE (s -> damount, value, s->share_price);
+     if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
    } else 
    {
       PERR ("inappropriate base currency %s "
