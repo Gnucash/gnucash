@@ -612,7 +612,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    if ('!' == qifline [0]) return qifline;
 
    trans = xaccMallocTransaction ();
-   source_split = xaccTransGetSourceSplit (trans);
+   source_split = xaccTransGetSplit (trans, 0);
 
    /* scan for transaction date, description, type */
    while (qifline) {
@@ -623,9 +623,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * Cx or CX means reconciled
           */
         if (('x' == qifline[1]) || ('X' == qifline[1])) { 
-           xaccTransSetReconcile (trans, YREC);
+           xaccSplitSetReconcile (source_split, YREC);
         } else {
-           xaccTransSetReconcile (trans, CREC);
+           xaccSplitSetReconcile (source_split, CREC);
         }
      } else 
 

@@ -39,6 +39,7 @@
  *                                                                  *
  * Version 5 of the file format adds splits                         *
  *                                                                  *
+ * Version 6 of the file format removes the source split            *
  *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
@@ -46,7 +47,7 @@
  *   Account     ::== accID flags type accountName description      * 
  *                    notes numTran (Transaction)^numTrans          * 
  *                    numGroups (Group)^numGroups                   *
- *   Transaction ::== num date description source_split             *
+ *   Transaction ::== num date description                          *
  *                    numSplits (Split)^numSplits                   *
  *   Split       ::== memo action reconciled                        *
  *                     amount share_price account                   *
@@ -95,7 +96,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 5
+#define VERSION 6
 
 /** GLOBALS *********************************************************/
 
@@ -571,7 +572,8 @@ readTransaction( int fd, Account *acc, int token )
       xaccFreeTransaction(trans);
       return NULL;
       }
-    xaccTransSetReconcile (trans, recn);
+    xaccSplitSetReconcile (trans->splits[0], recn);
+    xaccSplitSetReconcile (trans->splits[1], recn);
     
     if( 1 >= token ) {
       /* Note: this is for version 0 of file format only.
@@ -579,21 +581,12 @@ readTransaction( int fd, Account *acc, int token )
        * aren't reconciled until you get your bank statement, and
        * use the reconcile window to mark the transaction reconciled
        */
-      if( YREC == trans->source_split.reconciled ) {
-        xaccTransSetReconcile (trans, CREC);
+      if( YREC == recn ) {
+        xaccSplitSetReconcile (trans->splits[0], CREC);
+        xaccSplitSetReconcile (trans->splits[1], CREC);
       }
     }
   
-    /* make sure the value of trans->reconciled is valid...
-     * I have to do this mainly for if I change what NREC and
-     * YREC are defined to be... this way it might loose all
-     * the reconciled data, but at least the field is valid */
-    if( (YREC != trans->source_split.reconciled) && 
-        (FREC != trans->source_split.reconciled) &&
-        (CREC != trans->source_split.reconciled) ) {
-      xaccTransSetReconcile (trans, NREC);
-    }
-    
     /* Version 1 files stored the amount as an integer,
      * with the amount recorded as pennies.
      * Version 2 and above store the share amounts and 
@@ -609,7 +602,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_INT (amount);
       num_shares = 0.01 * ((double) amount); /* file stores pennies */
-      trans->source_split.damount = num_shares;
+      trans->splits[0]->damount = num_shares;
     } else {
       double damount;
   
@@ -623,7 +616,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       num_shares  = damount;
-      trans->source_split.damount = num_shares;
+      trans->splits[0]->damount = num_shares;
   
       /* ... next read the share price ... */
       err = read( fd, &damount, sizeof(double) );
@@ -635,7 +628,7 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       share_price = damount;
-      trans->source_split.share_price = share_price;
+      trans->splits[0]->share_price = share_price;
     }  
   
     INFO_2 ("readTransaction(): num_shares %f \n", num_shares);
@@ -655,11 +648,11 @@ readTransaction( int fd, Account *acc, int token )
       XACC_FLIP_INT (acc_id);
       INFO_2 ("readTransaction(): credit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
-      trans -> source_split.acc = (struct _account *) peer_acc;
+      trans -> splits[0]-> acc = peer_acc;
   
       /* insert the split part of the transaction into 
        * the credited account */
-      if (peer_acc) xaccAccountInsertSplit( peer_acc, &(trans->source_split) );
+      if (peer_acc) xaccAccountInsertSplit( peer_acc, trans->splits[0]);
   
       /* next read the debit account number */
       err = read( fd, &acc_id, sizeof(int) );
@@ -673,47 +666,40 @@ readTransaction( int fd, Account *acc, int token )
       INFO_2 ("readTransaction(): debit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
       if (peer_acc) {
-         Split *split;
-         split = xaccMallocSplit ();
-         xaccTransAppendSplit (trans, split);
-         split -> acc = (struct _account *) peer_acc;
-         xaccAccountInsertSplit (peer_acc, split);
+         Split *split = trans->splits[1];
 
          /* duplicate many of the attributes in the credit split */
          split->damount = -num_shares;
          split->share_price = share_price;
-         split->reconciled = trans->source_split.reconciled;
+         split->reconciled = trans->splits[0]->reconciled;
          free (split->memo);
-         split->memo = strdup (trans->source_split.memo);
+         split->memo = strdup (trans->splits[0]->memo);
          free (split->action);
-         split->action = strdup (trans->source_split.action);
+         split->action = strdup (trans->splits[0]->action);
       }
   
     } else {
 
       /* Version 1 files did not do double-entry */
-      xaccAccountInsertSplit( acc, &(trans->source_split) );
+      xaccAccountInsertSplit( acc, (trans->splits[0]) );
     }
-  } else { /* else, read version-5 files */
+  } else { /* else, read version 5 and above files */
      Split *split;
+     int offset = 0;
 
-     /* first, read the credit split, and copy it in place */
-     split = readSplit (fd, token);
-     xaccSplitSetMemo ( &(trans->source_split), split->memo);
-     xaccSplitSetAction ( &(trans->source_split), split->action);
-     xaccSplitSetReconcile ( &(trans->source_split), split->reconciled);
-     trans->source_split.damount = split->damount;
-     trans->source_split.share_price = split->share_price;
-     trans->source_split.acc = split->acc;
-     trans->source_split.parent = trans;
+     if (5 == token) {
+        /* Version 5 files included a split that immediately
+         * followed the transaction, before the destination splits.
+         * Later versions don't have this. */
+        offset = 1;
+        xaccFreeSplit (trans->splits[0]);
+        split = readSplit (fd, token);
+        trans->splits[0] = split;
+        split->parent = trans;
 
-     /* then wire it into place */
-     xaccAccountInsertSplit( ((Account *) (trans->source_split.acc)), &(trans->source_split) );
-     
-     /* free the thing that  the read returned */
-     split->acc = NULL;
-     split->parent = NULL;
-     xaccFreeSplit (split);
+        /* then wire it into place */
+        xaccAccountInsertSplit( trans->splits[0]->acc, trans->splits[0]);
+     }
 
     /* read number of splits */
     err = read( fd, &(numSplits), sizeof(int) );
@@ -724,12 +710,17 @@ readTransaction( int fd, Account *acc, int token )
       return NULL;
       }
      XACC_FLIP_INT (numSplits);
-    
      for (i=0; i<numSplits; i++) {
         split = readSplit (fd, token);
-        split->parent = trans;
-        xaccTransAppendSplit( trans, split);
-        xaccAccountInsertSplit( ((Account *) (split->acc)), split);
+        if (2 > i+offset) {
+           /* the first two splits have been malloced. just replace them */
+           xaccFreeSplit (trans->splits[i+offset]);
+           trans->splits[i+offset] = split;
+           split->parent = trans;
+        } else {
+           xaccTransAppendSplit( trans, split);
+           xaccAccountInsertSplit( ((Account *) (split->acc)), split);
+        }
      }
   }
     
@@ -1178,15 +1169,12 @@ writeTransaction( int fd, Transaction *trans )
   err = writeString( fd, trans->description );
   if( -1 == err ) return err;
   
-  err = writeSplit( fd, &(trans->source_split) );
-  if( -1 == err ) return err;
-  
   /* count the number of splits */
   i = 0;
-  s = trans->dest_splits[i];
+  s = trans->splits[i];
   while (s) {
     i++;
-    s = trans->dest_splits[i];
+    s = trans->splits[i];
   }
   XACC_FLIP_INT (i);
   err = write( fd, &i, sizeof(int) );
@@ -1194,12 +1182,12 @@ writeTransaction( int fd, Transaction *trans )
   
   /* now write the splits */
   i = 0;
-  s = trans->dest_splits[i];
+  s = trans->splits[i];
   while (s) {
     err = writeSplit (fd, s);
     if( -1 == err ) return err;
     i++;
-    s = trans->dest_splits[i];
+    s = trans->splits[i];
   }
   
   return err;

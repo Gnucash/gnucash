@@ -225,18 +225,24 @@ double xaccSplitGetShareBalance (Split *s)
 void
 xaccInitTransaction( Transaction * trans )
   {
-  Split *dsplit;
+  Split *split;
   
   /* fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
 
-  trans->splits    = (Split **) _malloc (sizeof (Split *));
-  trans->splits[0] = NULL;
+  trans->splits    = (Split **) _malloc (3* sizeof (Split *));
 
-  /* create at least one destination split */
-  dsplit = xaccMallocSplit ();
-  xaccTransAppendSplit (trans, dsplit);
+  /* create a pair of splits */
+  split = xaccMallocSplit ();
+  split->parent = trans;
+  trans->splits[0] = split;
+
+  split = xaccMallocSplit ();
+  split->parent = trans;
+  trans->splits[1] = split;
+
+  trans->splits[2] = NULL;
 
   trans->date.year   = 1900;        
   trans->date.month  = 1;        

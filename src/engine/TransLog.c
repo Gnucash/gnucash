@@ -65,6 +65,7 @@ xaccOpenLog (void)
 
       trans_log = fopen (filename, "a");
 
+      /* use tab-separated fields, to be /rdb compatible */
       fprintf (trans_log, "num	description\n");
       fprintf (trans_log, "-----------------\n");
    }
@@ -78,7 +79,8 @@ xaccOpenLog (void)
 
       split_log = fopen (filename, "a");
 
-      fprintf (split_log, "num	memo	action\n");
+      /* use tab-separated fields, to be /rdb compatible */
+      fprintf (split_log, "num	memo	action	reconciled	amount	price\n");
       fprintf (split_log, "-----------------\n");
    }
    free (timestamp);
@@ -90,12 +92,25 @@ xaccOpenLog (void)
 void
 xaccTransWriteLog (Transaction *trans)
 {
+   Split *split;
+   int i = 0;
+
+   /* use tab-separated fields, to be /rdb compatible */
    fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
 
-   fprintf (split_log, "%s	%s	%s\n",
-            trans->num,
-            trans->source_split.memo,
-            trans->source_split.action);
+   split = trans->splits[0];
+   while (split) {
+      fprintf (split_log, "%s	%s	%s	%c	%g	%g\n",
+               trans->num,
+               split->memo,
+               split->action,
+               split->reconciled,
+               split->damount,
+               split->share_price
+               );
+      i++;
+      split = trans->splits[i];
+   }
 }
 
 /************************ END OF ************************************\
