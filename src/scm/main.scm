@@ -99,12 +99,16 @@
   (gnc:debug "UI Shutdown hook.")
   (gnc:file-quit))
 
-(define (gnc:load-account-file)
+(define (gnc:account-file-to-load)
   (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
         (file (if (pair? gnc:*command-line-remaining*)
                   (car gnc:*command-line-remaining*)
                   (gnc:history-get-last))))
-    (if (and ok (string? file))
+    (and ok (string? file) file)))
+
+(define (gnc:load-account-file)
+  (let ((file (gnc:account-file-to-load)))
+    (if file
         (gnc:ui-open-file file)
         (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
 
@@ -152,6 +156,7 @@
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
         (gnc:ui-init)
         (if (and
+             (not (gnc:account-file-to-load))
              (not (string? (gnc:history-get-last)))
              (equal? ((gnc:option-getter
                       (gnc:lookup-global-option "__new_user" "first_startup")))
@@ -165,9 +170,9 @@
               (gnc:show-main-window)
               (gnc:start-ui-event-loop)))
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
-      
+
       ;; else: we're in batch mode.  Just do what the user said on the
       ;; command line
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
-  
+
   (gnc:shutdown 0))

@@ -37,23 +37,6 @@
     (or result
         (begin (gnc:book-destroy book) #f))))
 
-; (define (gnc:account-transactions-for-each thunk account)
-;   ;; You must call gnc:group-reset-write-flags on the account group
-;   ;; before using this...
-
-;   (let loop ((num-splits (gnc:account-get-split-count account))
-;              (i 0))
-;     (if (< i num-splits)
-;         (let* ((split (gnc:account-get-split account i))
-;                (transaction (gnc:split-get-parent split)))
-;           ;; We don't use the flags just like FileIO does (only 1 pass here)...
-;           (if (= (gnc:transaction-get-write-flag transaction) 0)
-;               (begin
-;                 (thunk transaction)
-;                 (gnc:transaction-set-write-flag transaction 2)))
-;           (loop num-splits (+ i 1))))))
-
-
 (define (gnc:transaction-map-splits thunk transaction)
   (let ((retval '()))
     (let loop ((splits (or (gnc:transaction-get-splits transaction) '())))

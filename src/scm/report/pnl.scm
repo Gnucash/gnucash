@@ -65,7 +65,6 @@
        options gnc:pagename-accounts
        optname-display-depth optname-show-subaccounts
        optname-accounts "a" 2
-       ;; FIXME: get income/expense accounts
        (lambda ()
 	 (filter 
 	  gnc:account-is-inc-exp?
@@ -109,8 +108,9 @@
 				     optname-display-depth))
 	  (show-subaccts? (get-option gnc:pagename-accounts
 				      optname-show-subaccounts))
-	  (accounts (get-option gnc:pagename-accounts
-				optname-accounts))
+	  (accounts (filter gnc:account-is-inc-exp
+                            (get-option gnc:pagename-accounts
+                                        optname-accounts)))
           (do-grouping? (get-option gnc:pagename-display
 				    optname-group-accounts))
           (show-parent-balance? (get-option gnc:pagename-display

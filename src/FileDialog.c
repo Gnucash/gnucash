@@ -200,6 +200,8 @@ gncAddHistory (GNCBook *book)
   if (!book) return;
 
   url = xaccResolveURL (gnc_book_get_url (book));
+  if (!url)
+    return;
 
   if (strncmp (url, "file:", 5) == 0)
     gnc_history_add_file (url + 5);

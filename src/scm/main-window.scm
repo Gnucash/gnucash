@@ -121,4 +121,3 @@
                       gnc:main-window-book-open-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
-

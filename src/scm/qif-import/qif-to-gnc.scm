@@ -1064,22 +1064,3 @@
               (loop (cdr splits)))))
     (if all-marked
         (qif-xtn:set-mark! xtn #t))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; qif-import:set-share-price split 
-;; find the split that precedes 'split' in the account and set split's
-;; share price to that.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (qif-import:set-share-price split)
-  (let* ((account (gnc:split-get-account split))
-         (numsplits (gnc:account-get-split-count account)))
-    (let loop ((i 0)
-               (last-split #f))
-      (let ((ith-split (gnc:account-get-split account i)))        
-        (if (gw:wcp=? ith-split split)
-            (if last-split
-                (d-gnc:split-set-share-price 
-                 split (d-gnc:split-get-share-price last-split)))
-            (if (< i numsplits) (loop (+ 1 i) ith-split)))))))
-

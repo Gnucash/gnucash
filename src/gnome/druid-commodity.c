@@ -354,6 +354,7 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
 
   /* unload the current file (can't have out-of-date commodities) */
   gncFileQuit();
+  gncFileNew();
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);

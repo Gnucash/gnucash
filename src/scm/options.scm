@@ -496,13 +496,16 @@
          (validator
           (if (not value-validator)
               (lambda (account-list) (list #t account-list))
-              value-validator)))
+              (lambda (account-list)
+                (value-validator (map convert-to-account account-list))))))
     (gnc:make-option
-     section name sort-tag 'account-list documentation-string
-     getter
+     section name sort-tag 'account-list documentation-string getter
      (lambda (account-list)
        (if (not account-list) (set! account-list (default-getter)))
-       (set! account-list (filter (lambda (x) x) account-list))
+       (set! account-list
+             (filter (lambda (x) (if (string? x)
+                                     (gnc:account-lookup x)
+                                     x)) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
               (value (cadr result)))

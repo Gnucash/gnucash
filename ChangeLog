@@ -1,3 +1,31 @@
+2001-04-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/druid-commodity.c: do gncFileNew after gncFileQuit
+
+	* src/guile/gnc.gwp: remove pokey functions (not used anymore)
+
+	* src/scm/main.scm: fix bug. don't do new user dialog if we
+	have a file on the command line.
+
+	* src/FileDialog.c (gncAddHistory): fix bug. check for NULL.
+
+	* src/guile/gnucash.c.in: include string.h
+
+	* src/gnome/window-main.c: don't restore state for old format files
+
+2001-04-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/options.scm: check for deleted accounts in account
+	list option. fix bug.
+
+	* src/scm/report/pnl.scm: filter out non income/expense accounts
+
+	* src/scm/report/budget-report.scm: remove
+
+	* src/scm/qif-import/qif-to-gnc.scm: remove cruft
+
+	* src/engine/Account.c: take out pokey warnings
+
 2001-04-25  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/html-utilities.scm:

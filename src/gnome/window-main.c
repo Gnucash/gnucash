@@ -28,8 +28,9 @@
 #include <guile/gh.h>
 #include <string.h>
 
-#include "gnucash.h"
+#include "gnc-engine.h"
 #include "gnc-ui.h"
+#include "gnucash.h"
 #include "top-level.h"
 #include "extensions.h"
 
@@ -495,10 +496,16 @@ void
 gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
   char * session_name = g_strdup_printf("/GnuCash/MDI : %s",
                                         gnc_html_encode_string(filename));
+  gboolean old_format_file;
   GList * old_children = g_list_copy(wind->mdi->children);
   GList * c;
 
+  old_format_file =
+    gnc_commodity_table_has_namespace
+    (gnc_engine_commodities (), GNC_COMMODITY_NS_LEGACY);
+
   if(!filename ||
+     old_format_file ||
      !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
                               gnc_main_window_create_child) ||
      wind->mdi->children == NULL) {
@@ -1015,5 +1022,4 @@ gnc_main_window_create_child_toolbar(GNCMainInfo * mi,
     child->toolbar_size;
   
   gnome_app_fill_toolbar(tb, tbinfo, NULL);
-
 }
