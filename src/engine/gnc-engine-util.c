@@ -62,12 +62,12 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SQL EVENT */
   GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
-  GNC_LOG_DEBUG,        /* SX */
+  GNC_LOG_WARNING,        /* SX */
   GNC_LOG_WARNING,      /* BOOK */
   GNC_LOG_TRACE,        /* TEST */
-  GNC_LOG_DEBUG,        /* LOT */
+  GNC_LOG_WARNING,        /* LOT */
   GNC_LOG_WARNING,      /* ACCOUNT */
-  GNC_LOG_DEBUG,	/* IMPORT */
+  GNC_LOG_WARNING,	/* IMPORT */
   GNC_LOG_WARNING,	/* BUSINESS */
 };
 

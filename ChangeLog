@@ -39,7 +39,10 @@
 
 	* src/engine/QueryNew.c (gncQueryPrint): Check that q is not NULL
 	prior to processing it.
-	 
+
+	* src/engine/gnc-engine-util.c: turn off DEBUG on all the modules
+	  (for the release).
+	
 2003-02-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/window-register.c: fix the query code to use the correct
