@@ -1,3 +1,9 @@
+2003-01-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/test/test-print-parse-amount.c: set force_fit and
+	  round to 0 (like they should be) so we don't hit the rounding
+	  code and blow up.   Fixes #103536.
+
 2003-01-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/QueryNew.h: add QUERY_PARAM_ACTIVE

@@ -40,6 +40,8 @@ test_num (gnc_numeric n)
   print_info.min_decimal_places = 0;
   print_info.use_locale = 1;
   print_info.use_symbol = 0;
+  print_info.force_fit = 0;
+  print_info.round = 0;
 
   for (i = 1, fraction = 10; i < 9; i++, fraction *= 10)
   {
