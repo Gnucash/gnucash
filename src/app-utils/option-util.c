@@ -1643,23 +1643,10 @@ gnc_commit_option(GNCOption *option)
     name = gnc_option_name(option);
     section = gnc_option_section(option);
 
-#if 1
-    {
-      char *full;
-      full = g_strdup_printf("There is a problem with option %s:%s.\n%s",
-			     section ? section : "(null)",
-			     name ? name : "(null)",
-			     message ? message : "(null)");
-      printf("%s\n", full);
-      g_free(full);
-    }
-#else
-    /* FIXME : figure out how to get this back */
-    gnc_error_dialog("There is a problem with option %s:%s.\n%s",
+    gnc_send_gui_error("There is a problem with option %s:%s.\n%s",
 			   section ? section : "(null)",
                            name ? name : "(null)",
                            message ? message : "(null)");
-#endif
 
     if (message != NULL)
       free(message);
