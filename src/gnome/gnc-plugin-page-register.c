@@ -168,6 +168,17 @@ gnc_plugin_page_register_new_gl (void)
 	return GNC_PLUGIN_PAGE (plugin_page);
 }
 
+GncPluginPage *
+gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger)
+{
+	GncPluginPageRegister *plugin_page;
+
+	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
+	plugin_page->priv->ld = ledger;
+	
+	return GNC_PLUGIN_PAGE (plugin_page);
+}
+
 static void
 gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 {

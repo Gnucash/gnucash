@@ -28,6 +28,7 @@
 #include <gtk/gtkwindow.h>
 
 #include "Account.h"
+#include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -58,8 +59,9 @@ typedef struct {
 /* function prototypes */
 GType          gnc_plugin_page_register_get_type (void);
 
-GncPluginPage *gnc_plugin_page_register_new  (Account *account, gboolean subaccounts);
-GncPluginPage *gnc_plugin_page_register_new_gl  (void);
+GncPluginPage *gnc_plugin_page_register_new        (Account *account, gboolean subaccounts);
+GncPluginPage *gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
+GncPluginPage *gnc_plugin_page_register_new_gl     (void);
 
 G_END_DECLS
 

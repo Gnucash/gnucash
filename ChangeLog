@@ -17,6 +17,16 @@
 	* src/gnome/gnc-plugin-register.c: Can now open arbitrary account
 	registers.
 
+	* src/gnome/gnc-main-window.c: Track all open windows.  If a
+	caller tries to open a new page but doesn't specify where, use the
+	first window available (which should be the initial window).
+
+	* src/gnome-search/search.glade: Expand the dialog properly.
+
+	* src/gnome/dialog-find-transactions.c:
+	* src/gnome/gnc-plugin-page-register.[ch]: Open a new page for
+	search results.
+
 2003-09-09  David Hampton  <hampton@employees.org>
 
 	* src/gnome-search/dialog-search.c:

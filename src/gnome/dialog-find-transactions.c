@@ -35,7 +35,8 @@
 #include "SX-book.h"
 #include "Transaction.h"
 #include "dialog-find-transactions.h"
-#include "window-register.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-register.h"
 #include "messages.h"
 #include "search-param.h"
 
@@ -51,6 +52,7 @@ do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
   struct _ftd_data *ftd = user_data;
   GNCLedgerDisplay *ledger;
   gboolean new_ledger = FALSE;
+  GncPluginPage *page;
 
   ledger = gnc_ledger_display_find_by_query (ftd->ledger_q);
   if(!ledger) {
@@ -63,8 +65,10 @@ do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
 
   gnc_ledger_display_refresh (ledger);
 
-  if (new_ledger)
-    regWindowLedger(ledger);
+  if (new_ledger) {
+    page = gnc_plugin_page_register_new_ledger (ledger);
+    gnc_main_window_open_page (NULL, page);
+  }
 
   gncQueryDestroy (ftd->q);
 
