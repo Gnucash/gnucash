@@ -670,8 +670,8 @@ static void closeConnection(TransportType t, void *user_data)
   g_assert(data);
   data->current_act++;
   gtk_entry_set_text (GTK_ENTRY (data->action_entry), _("Done"));
-  gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-			       1.0);
+  /*gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
+    1.0);*/
 
   if (debug_pmonitor)
     printf("actFinished-cb: current_job %d, jobs %d, current_act %d, actions %d.\n", 
@@ -764,6 +764,8 @@ gnc_hbci_new_interactor(GNCInteractor *data)
   g_assert (data->close_checkbutton = 
 	    glade_xml_get_widget (xml, "close_checkbutton"));
 
+  /* grey out the progress bar -- its unused at the moment */
+  gtk_widget_set_sensitive (data->action_progress, FALSE);
   gtk_toggle_button_set_active 
     (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
      gnc_lookup_boolean_option("__gui", "hbci_close_on_finish", TRUE));

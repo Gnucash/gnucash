@@ -97,6 +97,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 
     job = HBCI_OutboxJob_new("JobGetBalance", (HBCI_Customer *)customer, 
 			     gnc_HBCI_Account_accountId(h_acc));
+    HBCI_Job_setProperty(HBCI_OutboxJob_Job(job), "allAccounts", "N");
     
     /* Add job to API queue */
     outbox = HBCI_Outbox_new();
@@ -218,9 +219,14 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     return TRUE;
   }
 
-  noted_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "noted");
-  booked_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "booked");
+  noted_grp = GWEN_DB_GetGroup(acc_bal, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "noted");
+  booked_grp = GWEN_DB_GetGroup(acc_bal, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "booked");
 
+  if (!booked_grp || !noted_grp) {
+    printf("gnc_hbci_getbalance_finish: Oops, booked_grp or noted_grp == NULL. Response was:\n");
+    GWEN_DB_Dump(response, stdout, 1);
+    return TRUE;
+  }
   booked_val = HBCI_Value_new(GWEN_DB_GetCharValue(booked_grp, "value", 0, "0"),
 			      GWEN_DB_GetCharValue(booked_grp, "currency", 0, "EUR"));
   booked_debit = (strcasecmp(GWEN_DB_GetCharValue(booked_grp, "debitmark", 0, "C"),"D")==0);

@@ -82,9 +82,9 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
 static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
 {
   if (gnc_hbci_get_account_accountid(gnc_acc))
-    gnc_hbci_set_account_accountid (gnc_acc, NULL);
+    gnc_hbci_set_account_accountid (gnc_acc, "");
   if (gnc_hbci_get_account_bankcode(gnc_acc))
-    gnc_hbci_set_account_bankcode (gnc_acc, NULL);
+    gnc_hbci_set_account_bankcode (gnc_acc, "");
   if (gnc_hbci_get_account_countrycode(gnc_acc))
     gnc_hbci_set_account_countrycode (gnc_acc, 0);
   return NULL;

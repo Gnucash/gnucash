@@ -468,8 +468,12 @@ hbci_trans_fill_values(const gnc_HBCI_Account *h_acc, HBCITransDialog *td)
 
   /* If this is a direct debit, a textkey/ "Textschluessel"/
      transactionCode different from the default has to be set. */
-  if (td->trans_type == SINGLE_DEBITNOTE)
+  switch(td->trans_type) {
+  case SINGLE_DEBITNOTE:
     HBCI_Transaction_setTransactionCode (trans, 05);
+  default:
+    HBCI_Transaction_setTransactionCode (trans, 51);
+  }
 
   return trans;
 }
