@@ -36,6 +36,11 @@ Bill Gribble <grib@billgribble.com> works magic. If your checks print
 
 Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 
+Yannick Le Ny <y-le-ny@ifrance.com>  The french translator,
+   he has translated the menus, messages, Readme and on line help in french.
+   The webmaster of the french Gnucash's website and try to have it up to date.
+   Patch for Yahoo Europe to get stocks quotes.
+
 Fixes & Patches:
 ----------------
 
@@ -105,7 +110,6 @@ Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Johnny Ernst Nielsen <j.e.nielsen@iname.com> Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
-Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
