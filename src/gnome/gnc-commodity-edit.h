@@ -53,6 +53,8 @@ typedef struct {
 
 typedef struct {
         GtkHBoxClass parent_class;
+
+        void (*changed) (GNCCommodityEdit *edit);
 } GNCCommodityEditClass;
 
 guint      gnc_commodity_edit_get_type       (void);

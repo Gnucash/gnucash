@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include "EuroUtils.h"
+#include "FileDialog.h"
 #include "Group.h"
 #include "global-options.h"
 #include "gnc-ui-util.h"
@@ -359,6 +360,161 @@ gnc_get_source_code (const char * codename)
   return SOURCE_NONE;
 }
 
+static const char *
+equity_base_name (GNCEquityType equity_type)
+{
+  switch (equity_type)
+  {
+    case EQUITY_OPENING_BALANCE:
+      return _("Opening Balances");
+
+    case EQUITY_RETAINED_EARNINGS:
+      return _("Retained Earnings");
+
+    default:
+      return NULL;
+  }
+}
+
+Account *
+gnc_find_or_create_equity_account (GNCEquityType equity_type,
+                                   gnc_commodity *currency)
+{
+  Account *parent;
+  Account *account;
+  AccountGroup *group;
+  gboolean name_exists;
+  gboolean base_name_exists;
+  const char *base_name;
+  char *name;
+
+  g_return_val_if_fail (equity_type >= 0, NULL);
+  g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
+  g_return_val_if_fail (currency != NULL, NULL);
+
+  group = gncGetCurrentGroup ();
+
+  base_name = equity_base_name (equity_type);
+
+  account = xaccGetAccountFromName (group, base_name);
+  if (account && xaccAccountGetType (account) != EQUITY)
+    account = NULL;
+
+  base_name_exists = (account != NULL);
+
+  if (account &&
+      gnc_commodity_equiv (currency, xaccAccountGetCurrency (account)))
+    return account;
+
+  name = g_strconcat (base_name, " - ",
+                      gnc_commodity_get_mnemonic (currency), NULL);
+  account = xaccGetAccountFromName (group, name);
+  if (account && xaccAccountGetType (account) != EQUITY)
+    account = NULL;
+
+  name_exists = (account != NULL);
+
+  if (account &&
+      gnc_commodity_equiv (currency, xaccAccountGetCurrency (account)))
+    return account;
+
+  /* Couldn't find one, so create it */
+  if (name_exists && base_name_exists)
+  {
+    PWARN ("equity account with unexpected currency");
+    g_free (name);
+    return NULL;
+  }
+
+  if (!base_name_exists &&
+      gnc_commodity_equiv (currency, gnc_locale_default_currency ()))
+  {
+    g_free (name);
+    name = g_strdup (base_name);
+  }
+
+  parent = xaccGetAccountFromName (group, _("Equity"));
+  if (parent && xaccAccountGetType (parent) != EQUITY)
+    parent == NULL;
+
+  account = xaccMallocAccount ();
+
+  xaccAccountBeginEdit (account);
+
+  xaccAccountSetName (account, name);
+  xaccAccountSetType (account, EQUITY);
+  xaccAccountSetCurrency (account, currency);
+
+  if (parent)
+  {
+    xaccAccountBeginEdit (parent);
+    xaccAccountInsertSubAccount (parent, account);
+    xaccAccountCommitEdit (parent);
+  }
+  else
+    xaccGroupInsertAccount (group, account);
+
+  xaccAccountCommitEdit (account);
+
+  g_free (name);
+
+  return account;
+}
+
+gboolean
+gnc_account_create_opening_balance (Account *account,
+                                    gnc_numeric balance,
+                                    time_t date)
+{
+  Account *equity_account;
+  Transaction *trans;
+  Split *split;
+
+  if (gnc_numeric_zero_p (balance))
+    return TRUE;
+
+  g_return_val_if_fail (account != NULL, FALSE);
+
+  equity_account =
+    gnc_find_or_create_equity_account (EQUITY_OPENING_BALANCE,
+                                       xaccAccountGetCurrency (account));
+  if (!equity_account)
+    return FALSE;
+
+  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (equity_account);
+
+  trans = xaccMallocTransaction ();
+
+  xaccTransBeginEdit (trans);
+
+  xaccTransSetDateSecs (trans, date);
+  xaccTransSetDescription (trans, _("Opening Balance"));
+
+  split = xaccMallocSplit ();
+
+  xaccTransAppendSplit (trans, split);
+  xaccAccountInsertSplit (account, split);
+
+  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetValue (split, balance);
+
+  balance = gnc_numeric_neg (balance);
+
+  split = xaccMallocSplit ();
+
+  xaccTransAppendSplit (trans, split);
+  xaccAccountInsertSplit (equity_account, split);
+
+  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetValue (split, balance);
+
+  xaccTransCommitEdit (trans);
+  xaccAccountCommitEdit (equity_account);
+  xaccAccountCommitEdit (account);
+
+  return TRUE;
+}
 
 static void
 gnc_lconv_set (char **p_value, char *default_value)

@@ -877,6 +877,9 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
 {
  	struct tm tm;
 
+        g_return_val_if_fail (gde != NULL, 0);
+        g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
+
         tm = gnc_date_edit_get_date_internal (gde);
 
         if (mktime (&tm) == -1)
@@ -904,6 +907,9 @@ time_t
 gnc_date_edit_get_date_end (GNCDateEdit *gde)
 {
  	struct tm tm;
+
+        g_return_val_if_fail (gde != NULL, 0);
+        g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
         tm = gnc_date_edit_get_date_internal (gde);
 

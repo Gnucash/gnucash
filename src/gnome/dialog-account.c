@@ -35,9 +35,11 @@
 #include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "global-options.h"
+#include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
+#include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
@@ -82,10 +84,15 @@ struct _AccountWindow
   GtkWidget * type_list;
   GtkWidget * parent_tree;
 
+  GtkWidget * opening_balance_edit;
+  GtkWidget * opening_balance_date_edit;
+  GtkWidget * opening_balance_frame;
+
   /* These probably don't belong here anymore, but until we figure out
      what we want, we'll leave them alone. */
   GtkWidget * source_menu;
   GtkWidget * quote_tz_menu;
+  GtkWidget * quote_frame;
 
   GtkWidget * tax_related_button;
 
@@ -175,17 +182,22 @@ gnc_account_to_ui(AccountWindow *aw)
       gtk_option_menu_set_history (GTK_OPTION_MENU (aw->source_menu),
                                    gnc_get_source_code (price_src));
   }
+
   {
     const char* quote_tz = xaccAccountGetQuoteTZ (account);
     guint pos = 0;
-    if(quote_tz) {
+
+    if (quote_tz)
+    {
       pos = gnc_find_timezone_menu_position(quote_tz);
-      if(pos == 0) {
+      if(pos == 0)
+      {
         PWARN("Unknown price quote timezone (%s), resetting to default.",
               quote_tz);
         xaccAccountSetQuoteTZ (account, NULL);
       }
     }
+
     gtk_option_menu_set_history (GTK_OPTION_MENU (aw->quote_tz_menu), pos);
   }
 }
@@ -201,6 +213,8 @@ gnc_ui_to_account(AccountWindow *aw)
   const char *old_string;
   const char *string;
   gboolean tax_related;
+  gnc_numeric balance;
+  time_t date;
 
   if (!account)
     return;
@@ -283,6 +297,17 @@ gnc_ui_to_account(AccountWindow *aw)
 
   xaccAccountCommitEdit (parent_account);
   xaccAccountCommitEdit (account);
+
+  balance = gnc_amount_edit_get_amount
+    (GNC_AMOUNT_EDIT (aw->opening_balance_edit));
+  date = gnc_date_edit_get_date
+    (GNC_DATE_EDIT (aw->opening_balance_date_edit));
+
+  if (!gnc_account_create_opening_balance (account, balance, date))
+  {
+    const char *message = _("Could not create opening balance.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+  }
 }
 
 
@@ -807,6 +832,8 @@ gnc_edit_account_ok(AccountWindow *aw)
   const char *name;
   gnc_commodity * currency;
   gnc_commodity * security;
+  gnc_numeric balance;
+
 
   /* check for valid name */
   name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
@@ -1032,6 +1059,14 @@ gnc_new_account_ok (AccountWindow *aw)
     return;
   }
 
+  if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (aw->opening_balance_edit)))
+  {
+    const char *message = _("You must enter a valid opening balance "
+                            "or leave it blank.");
+    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    return;
+  }
+
   gnc_finish_ok (aw, NULL, NULL, NULL);
 }
 
@@ -1166,7 +1201,14 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
 	       aw->type == CURRENCY);
 
   gtk_widget_set_sensitive(aw->security_edit, sensitive);
-  gtk_widget_set_sensitive(aw->source_menu, sensitive);
+  gtk_widget_set_sensitive(aw->quote_frame, sensitive);
+
+  sensitive = (aw->type != EQUITY &&
+               aw->type != CURRENCY &&
+               aw->type != STOCK &&
+               aw->type != MUTUAL);
+
+  gtk_widget_set_sensitive(aw->opening_balance_frame, sensitive);
 }
 
 
@@ -1295,6 +1337,21 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
   gnc_account_window_set_name (aw);
 }
 
+static void
+currency_changed_cb (GNCCommodityEdit *gce, gpointer data)
+{
+  AccountWindow *aw = data;
+  gnc_commodity *currency;
+
+  currency = gnc_commodity_edit_get_commodity (gce);
+  if (!currency)
+    return;
+
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
+                                gnc_commodity_get_fraction (currency));
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
+                                  gnc_commodity_print_info (currency, FALSE));
+}
 
 /********************************************************************\
  * gnc_account_window_create                                        *
@@ -1307,6 +1364,8 @@ static void
 gnc_account_window_create(AccountWindow *aw)
 {
   GnomeDialog *awd;
+  GtkWidget *amount;
+  GtkWidget *date;
   GtkObject *awo;
   GtkWidget *box;
 
@@ -1347,6 +1406,9 @@ gnc_account_window_create(AccountWindow *aw)
   aw->currency_edit = gnc_commodity_edit_new ();
   gtk_box_pack_start(GTK_BOX(box), aw->currency_edit, TRUE, TRUE, 0);
 
+  gtk_signal_connect (GTK_OBJECT (aw->currency_edit), "changed",
+                      GTK_SIGNAL_FUNC (currency_changed_cb), aw);
+
   box = gtk_object_get_data(awo, "security_hbox");
   aw->security_edit = gnc_commodity_edit_new ();
   gtk_box_pack_start(GTK_BOX(box), aw->security_edit, TRUE, TRUE, 0);
@@ -1358,6 +1420,22 @@ gnc_account_window_create(AccountWindow *aw)
   box = gtk_object_get_data(awo, "quote_tz_box");
   aw->quote_tz_menu = gnc_ui_quote_tz_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->quote_tz_menu, TRUE, TRUE, 0);
+
+  aw->quote_frame = gtk_object_get_data (awo, "price_quote_frame");
+
+  box = gtk_object_get_data(awo, "opening_balance_box");
+  amount = gnc_amount_edit_new ();
+  aw->opening_balance_edit = amount;
+  gtk_box_pack_start(GTK_BOX(box), amount, TRUE, TRUE, 0);
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
+
+  box = gtk_object_get_data (awo, "opening_balance_date_box");
+  date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+  aw->opening_balance_date_edit = date;
+  gtk_box_pack_start(GTK_BOX(box), date, TRUE, TRUE, 0);
+
+  aw->opening_balance_frame =
+    gtk_object_get_data (awo, "opening_balance_frame");
 
   aw->type_list = gtk_object_get_data(awo, "type_list");
   gnc_account_type_list_create (aw);
@@ -1737,6 +1815,7 @@ gnc_ui_edit_account_window(Account *account)
   gnc_resume_gui_refresh ();
 
   gtk_widget_show_all (aw->dialog);
+  gtk_widget_hide (aw->opening_balance_frame);
 
   parent = xaccAccountGetParentAccount (account);
   if (parent == NULL)

@@ -406,7 +406,13 @@
                                    '())
                              (list (gnc:make-html-table-cell/size/markup
                                     1 (colspan currency)
-                                    "total-number-cell" currency))))
+                                    "total-number-cell"
+                                    (if
+                                     (and (credit-col used-columns)
+                                          (gnc:numeric-negative-p
+                                           (gnc:gnc-monetary-amount currency)))
+                                     (gnc:monetary-neg currency)
+                                     currency)))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
                   currency-totals)))

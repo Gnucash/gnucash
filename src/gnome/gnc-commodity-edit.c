@@ -42,12 +42,21 @@
 #include "guile-util.h"
 #include "messages.h"
 
+/* Signal codes */
+enum
+{
+  COMMODITY_CHANGED,
+  LAST_SIGNAL
+};
+
 
 static void gnc_commodity_edit_init         (GNCCommodityEdit      *gce);
 static void gnc_commodity_edit_class_init   (GNCCommodityEditClass *class);
 static void gnc_commodity_edit_destroy      (GtkObject             *object);
 
 static GtkHBoxClass *parent_class;
+static guint commodity_edit_signals[LAST_SIGNAL];
+
 
 /**
  * gnc_commodity_edit_get_type:
@@ -100,18 +109,33 @@ gnc_commodity_edit_forall (GtkContainer *container, gboolean include_internals,
 }
 
 static void
-gnc_commodity_edit_class_init (GNCCommodityEditClass *class)
+gnc_commodity_edit_class_init (GNCCommodityEditClass *klass)
 {
-	GtkObjectClass *object_class = (GtkObjectClass *) class;
-	GtkContainerClass *container_class = (GtkContainerClass *) class;
+	GtkObjectClass *object_class = (GtkObjectClass *) klass;
+	GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
-	object_class = (GtkObjectClass*) class;
+	object_class = (GtkObjectClass*) klass;
 
 	parent_class = gtk_type_class (gtk_hbox_get_type ());
+
+        commodity_edit_signals[COMMODITY_CHANGED] =
+                gtk_signal_new("changed",
+                               GTK_RUN_FIRST,
+                               object_class->type,
+                               GTK_SIGNAL_OFFSET(GNCCommodityEditClass,
+                                                 changed),
+                               gtk_marshal_NONE__NONE,
+                               GTK_TYPE_NONE, 0);
+
+        gtk_object_class_add_signals(object_class,
+                                     commodity_edit_signals,
+                                     LAST_SIGNAL);
 
 	container_class->forall = gnc_commodity_edit_forall;
 
 	object_class->destroy = gnc_commodity_edit_destroy;
+
+        klass->changed = NULL;
 }
 
 static void
@@ -217,6 +241,9 @@ gnc_commodity_edit_set_commodity (GNCCommodityEdit *gce,
                 text = gnc_commodity_get_printname(commodity);
 
         gtk_entry_set_text(GTK_ENTRY(gce->entry), text);
+
+        gtk_signal_emit(GTK_OBJECT(gce),
+                        commodity_edit_signals[COMMODITY_CHANGED]);
 }
 
 /**

@@ -72,6 +72,19 @@ gnc_numeric gnc_ui_account_get_balance (Account *account,
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
 
+typedef enum
+{
+  EQUITY_OPENING_BALANCE,
+  EQUITY_RETAINED_EARNINGS,
+  NUM_EQUITY_TYPES
+} GNCEquityType;
+
+Account * gnc_find_or_create_equity_account (GNCEquityType equity_type,
+                                             gnc_commodity *currency);
+gboolean gnc_account_create_opening_balance (Account *account,
+                                             gnc_numeric balance,
+                                             time_t date);
+
 
 /* Price source functions *******************************************/
 

@@ -5313,7 +5313,119 @@ Daily (365)
 
       <widget>
 	<class>GtkFrame</class>
-	<name>frame31</name>
+	<name>opening_balance_frame</name>
+	<border_width>3</border_width>
+	<label>Opening Balance</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox101</name>
+	  <border_width>3</border_width>
+	  <homogeneous>False</homogeneous>
+	  <spacing>2</spacing>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox114</name>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label847737</name>
+	      <label>Balance:</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label847738</name>
+	      <label>Date:</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox115</name>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>opening_balance_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>opening_balance_date_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>price_quote_frame</name>
 	<border_width>3</border_width>
 	<label>Price Quote Source</label>
 	<label_xalign>0</label_xalign>
@@ -5325,21 +5437,21 @@ Daily (365)
 	</child>
 
 	<widget>
-	  <class>GtkVBox</class>
-	  <name>vbox105</name>
+	  <class>GtkHBox</class>
+	  <name>hbox103</name>
+	  <border_width>3</border_width>
 	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+	  <spacing>2</spacing>
 
 	  <widget>
-	    <class>GtkHBox</class>
-	    <name>source_box</name>
-	    <border_width>3</border_width>
-	    <homogeneous>False</homogeneous>
-	    <spacing>3</spacing>
+	    <class>GtkVBox</class>
+	    <name>vbox116</name>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
 	    <child>
 	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
+	      <expand>False</expand>
+	      <fill>False</fill>
 	    </child>
 
 	    <widget>
@@ -5360,23 +5472,6 @@ Daily (365)
 	    </widget>
 
 	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>quote_tz_box</name>
-	    <border_width>3</border_width>
-	    <homogeneous>False</homogeneous>
-	    <spacing>3</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label847713</name>
 	      <label>Timezone for these quotes:</label>
@@ -5392,9 +5487,49 @@ Daily (365)
 		<fill>False</fill>
 	      </child>
 	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox117</name>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
 
 	    <widget>
-	      <class>Placeholder</class>
+	      <class>GtkHBox</class>
+	      <name>source_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>quote_tz_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>

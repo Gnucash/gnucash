@@ -1,3 +1,16 @@
+2001-04-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-account.c: add opening balance support
+
+	* src/gnc-ui-util.c (gnc_find_or_create_equity_account): new func.
+	(gnc_account_create_opening_balance): new func.
+
+	* src/gnome/gnc-dateedit.c: add some error checking
+
+	* src/gnome/gnc-commodity-edit.c: add "changed" signal
+
+	* src/scm/report/register.scm: fix bug
+
 2001-04-03  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/html-table.scm (gnc:html-table-prepend-row!): Fix

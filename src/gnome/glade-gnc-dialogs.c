@@ -3400,12 +3400,22 @@ create_Account_Dialog (void)
   GtkWidget *label812;
   GtkWidget *frame30;
   GtkWidget *parent_scroll;
-  GtkWidget *frame31;
-  GtkWidget *vbox105;
-  GtkWidget *source_box;
+  GtkWidget *opening_balance_frame;
+  GtkWidget *hbox101;
+  GtkWidget *vbox114;
+  GtkWidget *label847737;
+  GtkWidget *label847738;
+  GtkWidget *vbox115;
+  GtkWidget *opening_balance_box;
+  GtkWidget *opening_balance_date_box;
+  GtkWidget *price_quote_frame;
+  GtkWidget *hbox103;
+  GtkWidget *vbox116;
   GtkWidget *label813;
-  GtkWidget *quote_tz_box;
   GtkWidget *label847713;
+  GtkWidget *vbox117;
+  GtkWidget *source_box;
+  GtkWidget *quote_tz_box;
   GtkWidget *frame32;
   GtkWidget *scrolledwindow9;
   GtkWidget *notes_text;
@@ -3597,54 +3607,129 @@ create_Account_Dialog (void)
   gtk_container_set_border_width (GTK_CONTAINER (parent_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (parent_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-  frame31 = gtk_frame_new (_("Price Quote Source"));
-  gtk_widget_ref (frame31);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame31", frame31,
+  opening_balance_frame = gtk_frame_new (_("Opening Balance"));
+  gtk_widget_ref (opening_balance_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_frame", opening_balance_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame31);
-  gtk_box_pack_start (GTK_BOX (vbox75), frame31, FALSE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame31), 3);
+  gtk_widget_show (opening_balance_frame);
+  gtk_box_pack_start (GTK_BOX (vbox75), opening_balance_frame, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (opening_balance_frame), 3);
 
-  vbox105 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_ref (vbox105);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox105", vbox105,
+  hbox101 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox101);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox101", hbox101,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox105);
-  gtk_container_add (GTK_CONTAINER (frame31), vbox105);
+  gtk_widget_show (hbox101);
+  gtk_container_add (GTK_CONTAINER (opening_balance_frame), hbox101);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox101), 3);
 
-  source_box = gtk_hbox_new (FALSE, 3);
-  gtk_widget_ref (source_box);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "source_box", source_box,
+  vbox114 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox114);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox114", vbox114,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (source_box);
-  gtk_box_pack_start (GTK_BOX (vbox105), source_box, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (source_box), 3);
+  gtk_widget_show (vbox114);
+  gtk_box_pack_start (GTK_BOX (hbox101), vbox114, FALSE, FALSE, 0);
+
+  label847737 = gtk_label_new (_("Balance:"));
+  gtk_widget_ref (label847737);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847737", label847737,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847737);
+  gtk_box_pack_start (GTK_BOX (vbox114), label847737, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847737), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label847737), 1, 0.5);
+
+  label847738 = gtk_label_new (_("Date:"));
+  gtk_widget_ref (label847738);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847738", label847738,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847738);
+  gtk_box_pack_start (GTK_BOX (vbox114), label847738, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847738), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label847738), 1, 0.5);
+
+  vbox115 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox115);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox115", vbox115,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox115);
+  gtk_box_pack_start (GTK_BOX (hbox101), vbox115, TRUE, TRUE, 0);
+
+  opening_balance_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (opening_balance_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_box", opening_balance_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_balance_box);
+  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_box, TRUE, TRUE, 0);
+
+  opening_balance_date_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (opening_balance_date_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_date_box", opening_balance_date_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_balance_date_box);
+  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_date_box, TRUE, TRUE, 0);
+
+  price_quote_frame = gtk_frame_new (_("Price Quote Source"));
+  gtk_widget_ref (price_quote_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "price_quote_frame", price_quote_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_quote_frame);
+  gtk_box_pack_start (GTK_BOX (vbox75), price_quote_frame, FALSE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (price_quote_frame), 3);
+
+  hbox103 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox103);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox103", hbox103,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox103);
+  gtk_container_add (GTK_CONTAINER (price_quote_frame), hbox103);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox103), 3);
+
+  vbox116 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox116);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox116", vbox116,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox116);
+  gtk_box_pack_start (GTK_BOX (hbox103), vbox116, FALSE, FALSE, 0);
 
   label813 = gtk_label_new (_("The source for price quotes:"));
   gtk_widget_ref (label813);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label813", label813,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label813);
-  gtk_box_pack_start (GTK_BOX (source_box), label813, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox116), label813, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label813), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label813), 1, 0.5);
-
-  quote_tz_box = gtk_hbox_new (FALSE, 3);
-  gtk_widget_ref (quote_tz_box);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "quote_tz_box", quote_tz_box,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (quote_tz_box);
-  gtk_box_pack_start (GTK_BOX (vbox105), quote_tz_box, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (quote_tz_box), 3);
 
   label847713 = gtk_label_new (_("Timezone for these quotes:"));
   gtk_widget_ref (label847713);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847713", label847713,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label847713);
-  gtk_box_pack_start (GTK_BOX (quote_tz_box), label847713, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox116), label847713, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label847713), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label847713), 1, 0.5);
+
+  vbox117 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox117);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox117", vbox117,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox117);
+  gtk_box_pack_start (GTK_BOX (hbox103), vbox117, TRUE, TRUE, 0);
+
+  source_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (source_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "source_box", source_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (source_box);
+  gtk_box_pack_start (GTK_BOX (vbox117), source_box, TRUE, TRUE, 0);
+
+  quote_tz_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (quote_tz_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "quote_tz_box", quote_tz_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (quote_tz_box);
+  gtk_box_pack_start (GTK_BOX (vbox117), quote_tz_box, TRUE, TRUE, 0);
 
   frame32 = gtk_frame_new (_("Notes"));
   gtk_widget_ref (frame32);
@@ -3718,7 +3803,7 @@ create_New_Commodity_Format_Druid (void)
   GtkWidget *New_Commodity_Format_Druid;
   GtkWidget *commodity_druid;
   GtkWidget *start_page;
-  GdkColor start_page_bg_color = { 0, 39320, 49087, 39320 };
+  GdkColor start_page_bg_color = { 0, 39321, 49087, 39321 };
   GdkColor start_page_textbox_color = { 0, 65535, 65535, 65535 };
   GdkColor start_page_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor start_page_title_color = { 0, 65535, 65535, 65535 };
