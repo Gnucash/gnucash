@@ -1,3 +1,7 @@
+2001-08-31  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Scrub.c: don't create accounts with no currency
+
 2001-08-30  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/gnome/dialog-sx-from-trans.{ch}: New files, providing easy way
@@ -20,8 +24,6 @@
 
 	* src/gnome/window-register.c: added code to let user activate 
 	SX-from-trans dialog
-
-	
 
 2001-08-25  Christian Stimming  <stimming@tuhh.de>
 

@@ -127,6 +127,8 @@ xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
     DEBUG ("Found an orphan \n");
 
     orph = GetOrMakeAccount (root, trans, _("Orphan"));
+    if (!orph)
+      continue;
 
     xaccAccountBeginEdit (orph);
     xaccAccountInsertSplit (orph, split);
@@ -314,6 +316,9 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     else
       account = parent;
 
+    if (!account)
+      return;
+
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
       Split *split = node->data;
@@ -477,6 +482,11 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
 
   /* build the account name */
   currency = xaccTransGetCurrency (trans);
+  if (!currency)
+  {
+    PERR ("Transaction with no currency");
+    return NULL;
+  }
 
   accname = g_strconcat (name_root, "-",
                          gnc_commodity_get_mnemonic (currency), NULL);
