@@ -308,9 +308,9 @@ gnc_main_window_open_page (GncMainWindow *window,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
+	gnc_plugin_page_set_window (page, GTK_WIDGET(window));
 	child = gnc_plugin_page_create_widget (page);
 	g_object_set_data (G_OBJECT (child), "page-plugin", page);
-	g_object_set_data (G_OBJECT (child), "window", window);
 
 	icon = gnc_plugin_page_get_tab_icon (page);
 	tab_name = gnc_plugin_page_get_tab_name (page);

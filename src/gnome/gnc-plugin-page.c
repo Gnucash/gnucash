@@ -194,6 +194,22 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
 	g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
 }
 
+GtkWidget *
+gnc_plugin_page_get_window  (GncPluginPage *plugin_page)
+{
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
+
+	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->window;
+}
+
+void
+gnc_plugin_page_set_window  (GncPluginPage *plugin_page, GtkWidget *window)
+{
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+
+	GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->window = window;
+}
+
 static void
 gnc_plugin_page_base_init (gpointer klass)
 {

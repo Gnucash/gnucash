@@ -62,6 +62,9 @@ typedef struct {
 
 	G_CONST_RETURN gchar *(* get_plugin_name) (GncPluginPage *plugin_page);
 	G_CONST_RETURN gchar *(* get_uri) (GncPluginPage *plugin_page);
+
+	/* Variables */
+	GtkWidget *window;
 } GncPluginPageIface;
 
 /* function prototypes */
@@ -87,6 +90,11 @@ void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_pag
 void                  gnc_plugin_page_removed         (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_selected        (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
+
+/* Variables */
+GtkWidget            *gnc_plugin_page_get_window      (GncPluginPage *plugin_page);
+void                  gnc_plugin_page_set_window      (GncPluginPage *plugin_page,
+						       GtkWidget *window);
 
 G_END_DECLS
 

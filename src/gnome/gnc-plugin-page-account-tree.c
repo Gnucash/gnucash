@@ -454,11 +454,11 @@ static void
 gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 {
   GncPluginPageAccountTree *page;
-  GncMainWindow *window;
+  GtkWidget *window;
 
   page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(user_data);
-  window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (page->priv->widget), "window"));
-  gnc_main_window_close_page (window, GNC_PLUGIN_PAGE(page));
+  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
+  gnc_main_window_close_page (GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
 }
 
 static GtkWidget *
@@ -683,9 +683,8 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 static void
 gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page)
 {
-	GncMainWindow *window;
+	GtkWidget *window;
 	GncPluginPage *new_page;
-	GtkWidget *widget;
 	Account *account;
 
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
@@ -693,21 +692,16 @@ gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageA
 	if (account == NULL)
 	  return;
 
-	widget = page->priv->widget;
-	window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (widget), "window"));
-	if (window == NULL)
-	  return;
-
+	window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
 	new_page = gnc_plugin_page_register_new (account, FALSE);
-	gnc_main_window_open_page (window, new_page);
+	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
 static void
 gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page)
 {
-	GncMainWindow *window;
+	GtkWidget *window;
 	GncPluginPage *new_page;
-	GtkWidget *widget;
 	Account *account;
 
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
@@ -715,13 +709,9 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginP
 	if (account == NULL)
 	  return;
 
-	widget = page->priv->widget;
-	window = GNC_MAIN_WINDOW(g_object_get_data (G_OBJECT (widget), "window"));
-	if (window == NULL)
-	  return;
-
+	window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
 	new_page = gnc_plugin_page_register_new (account, TRUE);
-	gnc_main_window_open_page (window, new_page);
+	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
 static void
