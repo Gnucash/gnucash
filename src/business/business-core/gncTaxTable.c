@@ -53,15 +53,15 @@ struct _gncTaxTable
   QofInstance     inst;
   char *          name;
   GList *         entries;
+  Timespec        modtime;      /* internal date of last modtime */
 
   /* See src/doc/business.txt for an explanation of the following */
-  Timespec        modtime;        /* internal date of last modtime */
+  /* Code that handles this is *identical* to that in gncBillTerm */
   gint64          refcount;
-  GncTaxTable *   parent;         /* if non-null, we are an immutable child */
-  GncTaxTable *   child;          /* if non-null, we have not changed */
+  GncTaxTable *   parent;       /* if non-null, we are an immutable child */
+  GncTaxTable *   child;        /* if non-null, we have not changed */
   gboolean        invisible;
-
-  GList *         children;        /* A list of children */
+  GList *         children;     /* list of children for disconnection */
 };
 
 struct _gncTaxTableEntry 
@@ -255,27 +255,26 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   table->modtime = from->modtime;
   table->invisible = from->invisible;
 
-  /* XXX not sure how to handle the refcount ... FIXME!! */
-#if LATER_FIXME
-  table->refcount = ????
-#endif 
+  table->refcount = 0;
 
-  /* XXX this treats parent-child as double-linked list, not sure
-   * if that's true .. */
   /* Make copies of parents and children. Note that this can be
-   * a recursive copy ... */
+   * a recursive copy ... treat as doubly-linked list. */
   if (from->child)
   {
     table->child = gncTaxTableObtainTwin (from->child, book);
     table->child->parent = table;
-    table->child->refcount = 0; /* XXX is this right ?? */
-    table->children = g_list_prepend(table->children, table->child);
   }
-
   if (from->parent)
   {
     table->parent = gncTaxTableObtainTwin (from->parent, book);
     table->parent->child = table;
+  }
+  for (node=g_list_last(from->children); node; node=node->next)
+  {
+    GncTaxTable *tbl = node->data;
+    tbl = gncTaxTableObtainTwin (tbl, book);
+    tbl->parent = table;
+    table->children = g_list_prepend(table->children, tbl);
   }
 
   /* Copy tax entries, preserving the order in the list */

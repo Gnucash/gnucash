@@ -62,11 +62,11 @@ struct _gncBillTerm
   gint            cutoff;
 
   /* See src/doc/business.txt for an explanation of the following */
+  /* Code that handles this is *identical* to that in gncTaxTable */
   gint64          refcount;
   GncBillTerm *   parent;      /* if non-null, we are an immutable child */
   GncBillTerm *   child;       /* if non-null, we have not changed */
   gboolean        invisible;
-
   GList *         children;    /* list of children for disconnection */
 };
 
@@ -224,6 +224,7 @@ static void gncBillTermFree (GncBillTerm *term)
 GncBillTerm *
 gncCloneBillTerm (GncBillTerm *from, QofBook *book)
 {
+  GList *node;
   GncBillTerm *term;
 
   if (!book) return NULL;
@@ -241,24 +242,26 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   term->cutoff = from->cutoff;
   term->invisible = from->invisible;
 
-  /** xxx I don't know what to do about refcount ... FIXME XXX  */
+  term->refcount = 0;
 
-  /* XXX this treats parent-child as double-linked list, not sure 
-   * if that's true .. */
   /* Make copies of parents and children. Note that this can be
-   * a recursive copy ... */
+   * a recursive copy ... treat as doubly-linked list. */
   if (from->child)
   {
     term->child = gncBillTermObtainTwin (from->child, book);
     term->child->parent = term;
-    term->child->refcount = 0; /* XXX is this right ?? */
-    term->children = g_list_prepend(term->children, term->child);
   }
-
   if (from->parent)
   {
     term->parent = gncBillTermObtainTwin (from->parent, book);
     term->parent->child = term;
+  }
+  for (node=g_list_last(from->children); node; node=node->next)
+  {
+    GncBillTerm *btrm = node->data;
+    btrm = gncBillTermObtainTwin (btrm, book);
+    btrm->parent = term;
+    term->children = g_list_prepend(term->children, btrm);
   }
 
   addObj (term);
