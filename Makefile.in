@@ -41,18 +41,10 @@ CPU     = @target_cpu@
 
 LIBS=@LIBS@
 
-OPT_STYLE_INSTALL=@OPT_STYLE_INSTALL@
-ifeq (${OPT_STYLE_INSTALL},0)
-  export GNC_DOCDIR=${prefix}/doc/gnucash
-  export GNC_BINDIR=${prefix}/bin
-  export GNC_CONFIGDIR=${sysconfdir}/gnucash
-  export GNC_SHAREDIR=${datadir}/gnucash
-else
-  export GNC_DOCDIR=${prefix}/doc
-  export GNC_BINDIR=${prefix}/bin
-  export GNC_CONFIGDIR=${sysconfdir}
-  export GNC_SHAREDIR=${datadir}
-endif
+GNC_DOCDIR    := @GNC_DOCDIR@
+GNC_BINDIR    := @GNC_BINDIR@
+GNC_CONFIGDIR := @GNC_CONFIGDIR@
+GNC_SHAREDIR  := @GNC_SHAREDIR@
 
 ######################################################################
 # Description of targets:

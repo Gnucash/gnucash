@@ -31,7 +31,7 @@ INCLPATH = -I@srcdir@/../.. \
            -I@srcdir@/../../lib/ComboBox-1.33 \
            -I@srcdir@/../../lib/Xbae-4.6.2-linas \
            -I@prefix@/include
- 
+
 
 CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} 
 
