@@ -1409,12 +1409,17 @@ static void
 gnc_register_record_cb(GnucashRegister *reg, gpointer data)
 {
   RegWindow *regData = data;
-  gncBoolean goto_blank = GNC_F;
+  gncBoolean goto_blank;
+
+  goto_blank = gnc_lookup_boolean_option("Register",
+                                         "'Enter' moves to blank transaction",
+                                         GNC_F);
 
   /* If we are in single or double line mode and we hit enter
    * on the blank split, go to the blank split instead of the
    * next row. This prevents the cursor from jumping around
    * when you are entering transactions. */
+  if (!goto_blank)
   {
     SplitRegister *sr = regData->ledger->ledger;
     SplitRegisterStyle style = sr->style;

@@ -248,14 +248,20 @@ the account instead of opening a register." #f))
   "f" "By default, show horizontal borders on the cells." #t))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "'Enter' moves to blank transaction"
+  "g" "If selected, move to the blank transaction after the user presses \
+'Enter'. Otherwise, move down one row." #f))
+
+(gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register font"
-  "g" "The font to use in the register" (gnc:register-default-font)))
+  "h" "The font to use in the register" (gnc:register-default-font)))
 
 (gnc:register-configuration-option
  (gnc:make-font-option
   "Register" "Register hint font"
-  "g" "The font used to show hints in the register"
+  "i" "The font used to show hints in the register"
   (gnc:register-default-hint-font)))
 
 
