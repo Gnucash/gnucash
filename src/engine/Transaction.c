@@ -846,7 +846,9 @@ xaccIsCommonCurrency(const char *currency_1, const char *security_1,
 }
 
 static const char *
-FindCommonCurrency (Split **slist, const char * ra, const char * rb)
+FindCommonExclSCurrency (Split **slist, 
+			 const char * ra, const char * rb,
+			 Split *excl_split)
 {
   Split *s;
   int i = 0;
@@ -855,10 +857,17 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 
   if (rb && ('\0' == rb[0])) rb = NULL;
 
-  i=0; s = slist[0];
+  i = 0;
+  s = slist[0];
+
+  /* If s is to be excluded, go ahead in the list until one split is
+     not excluded or is NULL. */
+  while (s && (s == excl_split))
+    { i++; s = slist[i]; }
+
   while (s) {
     char *sa, *sb;
-
+    
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
@@ -901,12 +910,28 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
     }
 
     if ((!ra) && (!rb)) return NULL;
-    i++; s = slist[i];
+
+    i++; 
+    s = slist[i];
+
+    /* If s is to be excluded, go ahead in the list until one split is
+       not excluded or is NULL. */
+    while (s && (s == excl_split))
+      { i++; s = slist[i]; } 
   }
 
   return (ra);
 }
 
+/* This is the wrapper for those calls (i.e. the older ones) which
+ * don't exclude one split from the splitlist when looking for a
+ * common currency.  
+ */
+static const char *
+FindCommonCurrency (Split **slist, const char * ra, const char * rb)
+{
+  return FindCommonExclSCurrency(slist, ra, rb, NULL);
+}
 
 const char *
 xaccTransFindCommonCurrency (Transaction *trans)
@@ -927,6 +952,13 @@ const char *
 xaccTransIsCommonCurrency (Transaction *trans, const char * ra)
 {
   return FindCommonCurrency (trans->splits, ra, NULL);
+}
+
+const char *
+xaccTransIsCommonExclSCurrency (Transaction *trans, 
+				const char * ra, Split *excl_split)
+{
+  return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
 }
 
 /********************************************************************\

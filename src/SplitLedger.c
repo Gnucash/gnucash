@@ -2596,11 +2596,11 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       const char *security = NULL;
 
       currency = xaccAccountGetCurrency(new_acc);
-      currency = xaccTransIsCommonCurrency(trans, currency);
+      currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
 
       if (currency == NULL) {
         security = xaccAccountGetSecurity(new_acc);
-        security = xaccTransIsCommonCurrency(trans, security);
+        security = xaccTransIsCommonExclSCurrency(trans, security, split);
       }
 
       if ((currency != NULL) || (security != NULL)) {
@@ -2669,11 +2669,11 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         const char *security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
-        currency = xaccTransIsCommonCurrency(trans, currency);
+        currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
 
         if (currency == NULL) {
           security = xaccAccountGetSecurity(new_acc);
-          security = xaccTransIsCommonCurrency(trans, security);
+          security = xaccTransIsCommonExclSCurrency(trans, security, split);
         }
 
         if ((currency != NULL) || (security != NULL)) {

@@ -295,6 +295,20 @@ const char * xaccTransFindCommonCurrency (Transaction *trans);
 const char * xaccTransIsCommonCurrency (Transaction *trans,
                                         const char * currency);
 
+/* The xaccTransIsCommonExclSCurrency () method compares the input
+ *    string to the currency/security denominations of all splits in
+ *    the transaction except the one given as parameter, and returns
+ *    the input string if it is common with all splits except the one
+ *    given, otherwise, it returns NULL.
+ *   
+ * This is useful when changing one split such that the old entry in
+ *    that split is of no relevance when determining whether the new entry
+ *    has a common currency with the other splits.
+ */
+const char * xaccTransIsCommonExclSCurrency (Transaction *trans,
+                                        const char * currency, 
+					     Split *excl_split);
+
 /* The xaccTransGetImbalance() method returns the total value of the
  *    transaction.  In a pure double-entry system, this imbalance
  *    should be exactly zero, and if it is not, something is broken.
