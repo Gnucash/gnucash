@@ -209,9 +209,15 @@ AC_ARG_ENABLE( profile,
 AC_ARG_ENABLE( sql,
   [  --enable-sql                 compile with sql support],
   [
+    PG_CONFIG=`which pg_config`
+
+    if test "x$PG_CONFIG" = "x" ; then
+        PG_CONFIG="/usr/lib/postgresql/bin/pg_config"
+    fi
+
     if test "x$enableval" != "xno" ; then
 
-      PGSQL_CFLAGS=`/usr/lib/postgresql/bin/pg_config --includedir`
+      PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
       if test "x$PGSQL_CFLAGS" != x; then
          CFLAGS="${CFLAGS} -I${PGSQL_CFLAGS}"
       fi
@@ -238,7 +244,8 @@ AC_ARG_ENABLE( sql,
 	fi
         
         saved_LIBS="$LIBS"
-        PGSQL_LIBS=`/usr/lib/postgresql/bin/pg_config --libdir`
+
+        PGSQL_LIBS=`${PG_CONFIG} --libdir`
         if test "x$PGSQL_LIBS" != x; then
            LIBS="-L${PGSQL_LIBS} -lpq $LIBS"
         else
