@@ -26,6 +26,7 @@ ltmain.sh
 make-gnucash-patch
 make-gnucash-potfiles
 stamp-h
+stamp-h1
 stamp-h.in
 install-stamp
 tags
