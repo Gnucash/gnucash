@@ -691,7 +691,9 @@ if test "$prefer_db1" = "yes"; then
  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
   AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
    AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
+     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    )
    )
   )
  )
@@ -699,7 +701,9 @@ else
  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
   AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
    AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
+     AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+    )
    )
   )
  )
@@ -708,15 +712,15 @@ fi
 
 dnl look for db headers
 if test "$prefer_db1" = "yes"; then
-	AC_CHECK_HEADERS(db_185.h db1/db.h)
-	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nono; then
+	AC_CHECK_HEADERS(db_185.h db1/db.h db4/db_185.h)
+	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nonono; then
 	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
 	fi
 	AC_DEFINE(PREFER_DB1)
 else
-	AC_CHECK_HEADERS(db.h db_185.h db1/db.h)
+	AC_CHECK_HEADERS(db.h db_185.h db1/db.h db4/db_185.h)
 
-	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nonono; then
+	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
 	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
 	fi
 fi
