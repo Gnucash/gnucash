@@ -83,6 +83,14 @@ xaccInitAccount (Account * acc)
   acc->share_cleared_balance = gnc_numeric_zero();
   acc->share_reconciled_balance = gnc_numeric_zero();
 
+  acc->starting_balance = gnc_numeric_zero();
+  acc->starting_cleared_balance = gnc_numeric_zero();
+  acc->starting_reconciled_balance = gnc_numeric_zero();
+
+  acc->starting_share_balance = gnc_numeric_zero();
+  acc->starting_share_cleared_balance = gnc_numeric_zero();
+  acc->starting_share_reconciled_balance = gnc_numeric_zero();
+
   acc->type = NO_TYPE;
 
   acc->accountName = g_strdup("");
@@ -656,12 +664,12 @@ xaccAccountRecomputeBalance (Account * acc)
   if(acc->editlevel > 0) return;
   if(!acc->balance_dirty) return;
 
-  dbalance = gnc_numeric_zero();
-  dcleared_balance = gnc_numeric_zero();
-  dreconciled_balance = gnc_numeric_zero();
-  share_balance = gnc_numeric_zero();
-  share_cleared_balance = gnc_numeric_zero();
-  share_reconciled_balance = gnc_numeric_zero();
+  dbalance =                 acc->starting_balance;
+  dcleared_balance =         acc->starting_cleared_balance;
+  dreconciled_balance =      acc->starting_reconciled_balance;
+  share_balance =            acc->starting_share_balance;
+  share_cleared_balance =    acc->starting_share_cleared_balance;
+  share_reconciled_balance = acc->starting_share_reconciled_balance;
 
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *split = (Split *) lp->data;
@@ -712,19 +720,16 @@ xaccAccountRecomputeBalance (Account * acc)
   if ( (STOCK == acc->type)  ||
        (MUTUAL == acc->type) ||
        (CURRENCY == acc->type) ) {
+    acc -> share_balance = share_balance;
+    acc -> share_cleared_balance = share_cleared_balance;
+    acc -> share_reconciled_balance = share_reconciled_balance;
     if (last_split) {
-      acc -> share_balance = share_balance;
-      acc -> share_cleared_balance = share_cleared_balance;
-      acc -> share_reconciled_balance = share_reconciled_balance;
       acc -> balance = price_xfer(last_split, share_balance);
       acc -> cleared_balance = price_xfer(last_split, share_cleared_balance);
       acc -> reconciled_balance = 
         price_xfer(last_split, share_reconciled_balance);
     } 
     else {
-      acc -> share_balance = gnc_numeric_zero();
-      acc -> share_cleared_balance = gnc_numeric_zero();
-      acc -> share_reconciled_balance = gnc_numeric_zero();
       acc -> balance = gnc_numeric_zero();
       acc -> cleared_balance = gnc_numeric_zero();
       acc -> reconciled_balance = gnc_numeric_zero();
@@ -742,6 +747,47 @@ xaccAccountRecomputeBalance (Account * acc)
   return;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccAccountSetStartingBalance(Account *acc,
+                              const gnc_numeric start_baln,
+                              const gnc_numeric start_cleared_baln,
+                              const gnc_numeric start_reconciled_baln)  
+{
+  if (!acc) return;
+
+  /* hack alert -- this routine is meant to set the one and only
+   * account commodity starting balance. However, until we remove
+   * the 'reporting currency' from accounts, we will have to guess
+   * which to set based on the account type.
+   */
+  switch (acc->type) 
+  {
+     case BANK:
+     case CASH:
+     case CREDIT:
+     case ASSET:
+     case LIABILITY:
+     case INCOME:
+     case EXPENSE:
+     case EQUITY:
+        acc->starting_balance = start_baln;
+        acc->starting_cleared_balance = start_cleared_baln;
+        acc->starting_reconciled_balance = start_reconciled_baln;
+        break;
+     case STOCK:
+     case MUTUAL:
+     case CURRENCY:
+        acc->starting_share_balance = start_baln;
+        acc->starting_share_cleared_balance = start_cleared_baln;
+        acc->starting_share_reconciled_balance = start_reconciled_baln;
+        break;
+     default:
+  }
+  acc->balance_dirty = TRUE;
+}
 
 /********************************************************************\
  * xaccAccountFixSplitDateOrder                                     *

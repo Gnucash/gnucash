@@ -108,6 +108,14 @@ struct _account {
   AccountGroup *children;  /* pointer to sub-accounts */
 
   /* protected data, cached parameters */
+  gnc_numeric starting_balance;
+  gnc_numeric starting_cleared_balance;
+  gnc_numeric starting_reconciled_balance;
+
+  gnc_numeric starting_share_balance;
+  gnc_numeric starting_share_cleared_balance;
+  gnc_numeric starting_share_reconciled_balance;
+
   gnc_numeric balance;
   gnc_numeric cleared_balance;
   gnc_numeric reconciled_balance;
@@ -167,5 +175,26 @@ void         xaccAccountRecomputeBalance (Account *);
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
 void         xaccAccountSetGUID (Account *account, GUID *guid);
+
+/* The xaccAccountSetStartingBalance() routine will set the starting
+ *    commodity balance for this account.  This routine is intended for
+ *    use with backends that do not return the complete list of splits
+ *    for an account, but rather return a partial list.  In such a case,
+ *    the backend will typically return all of the splits after some 
+ *    certain date, and the 'starting balance' will represent the summation 
+ *    of the splits up to that date.
+ *
+ *    Design Note: this routine assumes that there is only one commodity
+ *    associated with this account, and that the reporting currency will
+ *    no longer be stored with the account.
+ *
+ *    This routine is in the private .h file because only backends are 
+ *    allowed to set the starting balance.  This is *not* a user interface
+ *    function.
+ */
+void xaccAccountSetStartingBalance(Account *account, 
+                                   const gnc_numeric start_baln, 
+                                   const gnc_numeric start_cleared_baln, 
+                                   const gnc_numeric start_reconciled_baln); 
 
 #endif /* __XACC_ACCOUNT_P_H__ */
