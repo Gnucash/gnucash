@@ -149,9 +149,8 @@ The following packages are required to be installed to run gnucash:
 
   gnome-print: any recent version should work.
 
-  gtkhtml: version 0.4 and later should work. A CVS snapshot of gtkhtml
-           is available in the GnuCash CVS repository under the lib
-           directory.
+  gtkhtml: version 0.4 and later should work. You can obtain the latest
+    version of gtkhtml from Helix Code.
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
