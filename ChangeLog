@@ -1,5 +1,7 @@
 2005-01-29  Christian Stimming  <stimming@tuhh.de>
 
+	* po/de.po: Update German translation.
+
 	* src/import-export/hbci/dialog-hbcitrans.c: Enable debit notes
 	again. Various other improvements.
 
