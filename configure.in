@@ -94,6 +94,13 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
         AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11)
 
+AC_CHECK_LIB(guile, main,
+  AC_DEFINE(HAVE_GUILE,1) LIBS="-lguile ${LIBS}",
+  AC_CHECK_LIB(qthreads, main,
+    AC_DEFINE(HAVE_GUILE,1) LIBS="-lguile -lqthreads ${LIBS}",
+    echo "Guile currently required for build"; exit 1;,
+    -lguile))
+
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 

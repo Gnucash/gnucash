@@ -2166,6 +2166,86 @@ EOF
 fi
 
 
+echo $ac_n "checking for main in -lguile""... $ac_c" 1>&6
+echo "configure:2171: checking for main in -lguile" >&5
+ac_lib_var=`echo guile'_'main | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lguile  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2179 "configure"
+#include "confdefs.h"
+
+int main() {
+main()
+; return 0; }
+EOF
+if { (eval echo configure:2186: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_GUILE 1
+EOF
+ LIBS="-lguile ${LIBS}"
+else
+  echo "$ac_t""no" 1>&6
+echo $ac_n "checking for main in -lqthreads""... $ac_c" 1>&6
+echo "configure:2208: checking for main in -lqthreads" >&5
+ac_lib_var=`echo qthreads'_'main | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lqthreads -lguile $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2216 "configure"
+#include "confdefs.h"
+
+int main() {
+main()
+; return 0; }
+EOF
+if { (eval echo configure:2223: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_GUILE 1
+EOF
+ LIBS="-lguile -lqthreads ${LIBS}"
+else
+  echo "$ac_t""no" 1>&6
+echo "Guile currently required for build"; exit 1;
+fi
+
+fi
+
+
 # *******************************************
 
 
