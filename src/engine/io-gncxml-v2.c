@@ -11,6 +11,7 @@
 #include "sixtp-parsers.h"
 #include "gnc-xml.h"
 #include "gnc-book-p.h"
+#include "gnc-pricedb.h"
 
 #include "Group.h"
 
@@ -57,8 +58,8 @@ static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     clear_up_account_commodity(data->book, act,
-                               xaccAccountGetCommodity,
-                               xaccAccountSetCommodity);
+                               xaccAccountGetCurrency,
+                               xaccAccountSetCurrency);
     clear_up_account_commodity(data->book, act,
                                xaccAccountGetSecurity,
                                xaccAccountSetSecurity);
@@ -107,7 +108,8 @@ add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
     {
         gnc_pricedb_destroy(gnc_book_get_pricedb(data->book));
     }
-    
+
+    /* gnc_pricedb_print_contents(db, stdout); */
     gnc_book_set_pricedb(data->book, db);
 
     return TRUE;
@@ -364,6 +366,11 @@ write_pricedb(FILE *out, GNCBook *book)
 
     node = gnc_pricedb_dom_tree_create(gnc_book_get_pricedb(book));
 
+    if(!node)
+    {
+        return;
+    }
+    
     xmlElemDump(out, NULL, node);
     fprintf(out, "\n");
 

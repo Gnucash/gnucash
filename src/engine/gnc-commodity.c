@@ -301,11 +301,34 @@ gnc_commodity_table_new(void) {
  ********************************************************************/
 
 guint
-gnc_commodity_table_get_size(gnc_commodity_table* tbl)
+gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl)
 {
     g_return_val_if_fail(tbl, 0);
     g_return_val_if_fail(tbl->table, 0);
     return g_hash_table_size(tbl->table);
+}
+
+static void
+count_coms(gpointer key, gpointer value, gpointer user_data)
+{
+    GHashTable *tbl = ((gnc_commodity_namespace*)value)->table;
+    guint *count = (guint*)user_data;
+
+    if(!value) return;
+    
+    *count += g_hash_table_size(tbl);
+}
+
+guint
+gnc_commodity_table_get_size(gnc_commodity_table* tbl)
+{
+    guint count = 0;
+    g_return_val_if_fail(tbl, 0);
+    g_return_val_if_fail(tbl->table, 0);
+
+    g_hash_table_foreach(tbl->table, count_coms, (gpointer)&count);
+
+    return count;
 }
 
 /********************************************************************

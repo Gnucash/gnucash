@@ -493,60 +493,86 @@ Submitting a Patch:
   provided with the distribution that you can use to create the
   patch. Here is how to use that perl script.
 
-  First, set up your development directories as follows:
+  There are two methods.
 
-  < GnuCash home development directory >
-      |
-      |---- < directory containing original GnuCash sources >
-      |
-      |---- < directory containing your modified GnuCash sources >
+  1) Run ./make-gnucash-patch in your source directory.  The script
+     will then create two directories ../diff and ../tmp.  In ../tmp
+     it will then do a checkout of the cvs sources.  If gnucash has
+     already been checked out into this directory then only an update
+     will occur.  As a consequence of this you should make sure you
+     are merged with current CVS before running make-gnucash-patch or
+     you will find parts of the patch are reversing recent changes in
+     CVS.
 
-  A concrete example of those directories might be:
+     make-gnucash-patch will then use makepatch to create a patch
+     between the original directory and ../tmp/gnucash.  makepatch
+     will ask you for a description of the patch. And then the diff
+     will be written to the diff file
+     ../diffs/gnucash-YYYYMMDD-hhmmss-<username>.diff.gz where Y=year,
+     M=month, D=day, h=hour, m=minute, and s=second.
 
-  /home/me/gnucash
-      |
-      |---- /home/me/gnucash/gnucash.pristine (original sources)
-      |
-      |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
+     make-gnucash-patch will then uuencode the diff to
+     ../diffs/<samefilename>.uue.
 
-  Copy the make-gnucash-patch script to the home development directory
-  (/home/me/gnucash above). Now set three environment variables to
-  reflect the names of your directories. Given the names above, you
-  would use:
+     There are two vars you can set in a ~/.gnucash-patch.rc file.
+     The file should look like this
 
-  export GNC_MAKEPATCH_OLD_DIR=gnucash.pristine
-  export GNC_MAKEPATCH_NEW_DIR=gnucash.mywork
-  export GNC_MAKEPATCH_HOME_DIR=/home/me/gnucash
+----------------------------------------------------------------------
+# -*- perl -*-
 
-  Right before you make your patch, make sure *both* your working and
-  your pristine directories are in sync with cvs. Run 'cvs -z3 update
-  -dP' in both directories to ensure that is the case. Updating from
-  cvs in your working directory may cause conficts in a file. You must
-  resolve those conficts before making a patch.
+$::should_uuencode = 0;
+$::ask_description = 0;
 
-  Now run the script. Note that this script requires the programs
-  'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course, 'perl')
-  to run.
+1;
+----------------------------------------------------------------------
+     This is basically a perl file that is sourced by the script.  If
+     you don't want the diff to be uuencoded (say you'll send the
+     patch in email using mime and don't need it double encoded).  Set
+     $::should_uuencode to 0.  If you don't want makepatch to ask you
+     for the patch description (so the process is more automated
+     possibly) set $::ask_description to 0.
 
-  When you run the script, three files will be generated:
+  2) The second method is basically described below but it also
+     includes the vars you can set from above.  This method gives you
+     more control over which directories are used.
 
-  gnc.diff: This file is an ascii text file containing the differences
-    between the original sources and your edits. At the bottom of this
-    file is a list of the files which were added, changed, or deleted.
+     First, set up your development directories as follows:
 
-    Please examine this file (especially the list at the bottom) to
-    make sure that all of your changes (and no other changes) are
-    present in the file.
+     < GnuCash home development directory >
+         |
+         |---- < directory containing original GnuCash sources >
+         |
+         |---- < directory containing your modified GnuCash sources >
 
-    If the patch is relatively small, send this file as an attachment
-    to gnucash-patches@gnucash.org and you are done. Otherwise,
-    continue.
+     A concrete example of those directories might be:
 
-  gnucash.diff.gz: This is a gzipped version of the above file.
-    If you want to send the patch as an attachment, send this
-    file to gnucash-patches@gnucash.org. Otherwise, continue.
+     /home/me/gnucash
+         |
+         |---- /home/me/gnucash/gnucash.pristine (original sources)
+         |
+         |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
 
-  gnucash.diff.gz.uue: This is a uuencoded (ascii-encoded) version of
-    the above file. Send this file to gnucash-patches@gnucash.org.
+     Copy the make-gnucash-patch script to the home development
+     directory (/home/me/gnucash above). Now set three environment
+     variables to reflect the names of your directories. Given the
+     names above, you would use:
 
-  Thanks in advance for your contribution!
+     export GNC_MAKEPATCH_OLD_DIR=gnucash.pristine
+     export GNC_MAKEPATCH_NEW_DIR=gnucash.mywork
+     export GNC_MAKEPATCH_HOME_DIR=/home/me/gnucash
+
+     Right before you make your patch, make sure *both* your working
+     and your pristine directories are in sync with cvs. Run 'cvs -z3
+     update -dP' in both directories to ensure that is the
+     case. Updating from cvs in your working directory may cause
+     conficts in a file. You must resolve those conficts before making
+     a patch.
+
+     Now run the script. Note that this script requires the programs
+     'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course,
+     'perl') to run.
+
+     The same files will be generated for this method as the last
+     (../diffs/*.diff.gz and ../diffs/*.diff.gz.uue).
+
+     Thanks in advance for your contribution!

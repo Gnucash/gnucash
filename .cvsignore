@@ -25,6 +25,7 @@ ltmain.sh
 make-gnucash-patch
 stamp-h
 stamp-h.in
+install-stamp
 tags
 *.tar.gz
 *.log

@@ -688,8 +688,6 @@ gnc_pricedb_substitute_commodity(GNCPriceDB *db,
 
 /***************************************************************************/
 
-#if 0
-
 /* Semi-lame debugging code */
 
 static void
@@ -740,7 +738,7 @@ static gboolean
 print_pricedb_adapter(GNCPrice *p, gpointer user_data)
 {
   FILE *f = (FILE *) user_data;
-  gnc_price_print(p, f);
+  gnc_price_print(p, f, 1);
   return TRUE;
 }
 
@@ -755,4 +753,4 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
   fprintf(f, "</gnc:pricedb>\n");
 }
 
-#endif
+

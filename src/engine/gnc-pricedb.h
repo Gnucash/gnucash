@@ -161,10 +161,8 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
 /* Return FALSE if the database has not been modified */
 gboolean gnc_pricedb_dirty(GNCPriceDB *p);
 
-#if 0
 /* semi-lame debugging code */
-void gnc_price_print(GNCPrice *db, FILE *f);
+void gnc_price_print(GNCPrice *db, FILE *f, int indent);
 void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
-#endif
 
 #endif

@@ -1,3 +1,20 @@
+2001-03-27  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-gncxml-v2.c (add_account_local): duh.  currency
+	not commodity.  commodity is same as Security.  Old gets freed
+	really hosing the data known_commodities structure.
+
+2001-03-26  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-commodity.c (count_coms): new func.
+	(gnc_commodity_table_get_size): Actually return size rather than
+	namespace size.
+	(gnc_commodity_table_get_number_of_namespaces): new func.  Used to
+	be the get_size one.
+
+	* src/test/test-commodities.c (test_commodity): Improve error
+	output for size diffs.
+
 2001-03-26  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/dialog-column-view.{c,h}: new files.  Options editor
@@ -25,6 +42,10 @@
 	multiple reports.  Each report is in a table cell with a
 	configurable rowspan and colspan.
 	
+2001-03-26  James LewisMoss  <jimdres@mindspring.com>
+
+	* README (NOTE): Update how make-gnucash-patch works.
+
 2001-03-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/transaction-report.scm: fix i18n bug
@@ -89,6 +110,14 @@
 
 	* src/scm/report/income-or-expense-pie.scm: Included new option to
 	summarize all subaccount balances below a certain level threshold.
+
+2001-03-23  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-pricedb-xml-v1.c (gnc_pricedb_to_dom_tree): Don't
+	return and empty tree.  Return NULL.
+
+	* src/engine/io-gncxml-v2.c (write_pricedb): check for null return
+	from pricedb tree generator and ignore.  It's ok to get NULL.
 
 2001-03-22  Dave Peticolas  <dave@krondo.com>
 

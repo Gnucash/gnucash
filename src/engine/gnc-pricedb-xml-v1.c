@@ -293,7 +293,6 @@ pricedb_v2_end_handler(
     return TRUE;
 }
 
-
 sixtp*
 gnc_pricedb_sixtp_parser_create(void)
 {
@@ -430,6 +429,13 @@ gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
     return NULL;
   }
 
+  /* if no children have been added just return NULL */
+  if(!db_xml->xmlChildrenNode)
+  {
+      xmlFreeNode(db_xml);
+      return NULL;
+  }
+  
   return db_xml;
 }
 
