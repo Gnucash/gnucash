@@ -574,7 +574,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="end_gnome_nentry">
+				    <widget class="GtkEntry" id="end_nentry">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
@@ -614,7 +614,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="remain_gnome_nentry">
+				    <widget class="GtkEntry" id="remain_nentry">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
@@ -4744,13 +4744,59 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTreeView" id="sched_xact_list">
+		<widget class="GtkCList" id="sched_xact_list">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="headers_visible">True</property>
-		  <property name="rules_hint">False</property>
-		  <property name="reorderable">False</property>
-		  <property name="enable_search">True</property>
+		  <property name="n_columns">3</property>
+		  <property name="column_widths">127,140,80</property>
+		  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		  <property name="show_titles">True</property>
+		  <property name="shadow_type">GTK_SHADOW_IN</property>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847750">
+		      <property name="label" translatable="yes">Name</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847751">
+		      <property name="label" translatable="yes">Frequency</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847752">
+		      <property name="label" translatable="yes">Next Occurrence</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 	    </widget>
@@ -6740,7 +6786,7 @@ If you make a mistake or want to make changes later, you can edit
 the created Scheduled Transactions directly.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
-	  <property name="background_color">#191919197070</property>
+	  <property name="background_color">#666666669998</property>
 	  <property name="logo_background_color">#ffffffffffff</property>
 	  <property name="textbox_color">#ffffffffffff</property>
 	</widget>
@@ -6750,8 +6796,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_info_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Loan Information</property>
-	  <property name="title_foreground">#dab0083bd8c8</property>
-	  <property name="background">#f128083be9eb</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7179,8 +7225,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_opts_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Options</property>
-	  <property name="title_foreground">#87a0083cd8c8</property>
-	  <property name="background">#9a70083ce9eb</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7329,8 +7375,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="repayment_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Repayment</property>
-	  <property name="title_foreground">#c160083cd8c8</property>
-	  <property name="background">#cec0083ce9eb</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7599,8 +7645,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="payment_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Repayment Type</property>
-	  <property name="title_foreground">#2618083dd8c8</property>
-	  <property name="background">#0e20083de9eb</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7764,6 +7810,20 @@ the created Scheduled Transactions directly.</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xscale">1</property>
 			      <property name="yscale">1</property>
+
+			      <child>
+				<widget class="GtkEntry" id="pay_amt_ent">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="editable">True</property>
+				  <property name="visibility">True</property>
+				  <property name="max_length">0</property>
+				  <property name="text" translatable="yes"></property>
+				  <property name="has_frame">True</property>
+				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="activates_default">False</property>
+				</widget>
+			      </child>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -8009,8 +8069,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="review_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Review</property>
-	  <property name="title_foreground">#b458083dd8c8</property>
-	  <property name="background">#b1b0083de9eb</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -8258,6 +8318,16 @@ the created Scheduled Transactions directly.</property>
 	      </child>
 	    </widget>
 	  </child>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GnomeDruidPageEdge" id="commit_pg">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_FINISH</property>
+	  <property name="text" translatable="yes">Press apply to commit these changes.</property>
+	  <property name="background_color">#666666669998</property>
+	  <property name="logo_background_color">#666666669998</property>
 	</widget>
       </child>
     </widget>

@@ -1,3 +1,19 @@
+2003-09-20  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-loan.c:
+	* src/gnome/glade/sched-xact.glade: Fix up druid for changes in
+	GnomeDruid between gnome1 and gnome2.
+
+	* src/gnome-utils/gnc-dense-cal.c: Use deprecated routine to
+	prevent this code from crashing.  Still need to be converted to
+	use pango routines.
+
+	* src/gnome-utils/gnc-account-sel.c: Don't unregister the event
+	handler twice.
+
+	* src/gnome-utils/dialog-utils.c:
+	* src/gnome-utils/gnc-html.c: Work around gcc 3.3.1 brokenness.
+	
 2003-09-19  David Hampton  <hampton@employees.org>
 
 	* configure.in:
