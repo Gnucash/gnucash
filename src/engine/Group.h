@@ -56,7 +56,6 @@ void    xaccMergeAccounts (AccountGroup *grp);
 int     xaccAccountGroupNotSaved  (AccountGroup *grp);
 void    xaccAccountGroupMarkSaved (AccountGroup *grp);
 
-Account *getAccount( AccountGroup *grp, int num );
 Account *removeAccount( AccountGroup *grp, int num );
 int     insertAccount( AccountGroup *grp, Account *acc );
 
@@ -84,6 +83,12 @@ int     xaccInsertSubAccount( Account *parent, Account *child );
  * of accounts, including subaccounts, in the account group
  */
 int     xaccGetNumAccounts (AccountGroup *grp);
+
+/*
+ * The xaccGroupGetNumAccounts() subroutine returns the number
+ * of accounts in the indicated group only (children not counted).
+ */
+int     xaccGroupGetNumAccounts (AccountGroup *grp);
 
 /* 
  * The xaccGetAccountFromID() subroutine fetches the account
@@ -135,6 +140,10 @@ AccountGroup * xaccGetAccountRoot (Account *);
  */
 
 void xaccConsolidateGrpTransactions (AccountGroup *);
+
+/* #define getAccount xaccGroupGetAccount */
+Account * xaccGroupGetAccount (AccountGroup *, int);
+double    xaccGroupGetBalance (AccountGroup *);
 
 
 /** GLOBALS *********************************************************/

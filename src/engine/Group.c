@@ -133,22 +133,6 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
 }
 
 /********************************************************************\
-\********************************************************************/
-Account *
-getAccount( AccountGroup *grp, int num )
-  {
-  if( grp != NULL )
-    {
-    if( (0 <= num) && (num < grp->numAcc) )
-      return grp->account[num];
-    else
-      return NULL;
-    }
-  else
-    return NULL;
-  }
-
-/********************************************************************\
  * Get the number of accounts, including subaccounts                *
 \********************************************************************/
 
@@ -587,6 +571,30 @@ xaccConsolidateGrpTransactions (AccountGroup *grp)
       /* recursively do the children */
       xaccConsolidateGrpTransactions (acc->children);
    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int     
+xaccGroupGetNumAccounts (AccountGroup *grp)
+{
+   return (grp->numAcc);
+}
+
+Account *
+xaccGroupGetAccount (AccountGroup *grp, int i)
+{
+   if (!grp) return NULL;
+   if (!(grp->account)) return NULL;
+   if((0>i) || (i >= grp->numAcc)) return NULL;
+   return (grp->account[i]);
+}
+
+double
+xaccGroupGetBalance (AccountGroup * grp)
+{
+   return (grp->balance);
 }
 
 /****************** END OF FILE *************************************/

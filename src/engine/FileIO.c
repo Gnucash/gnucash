@@ -937,7 +937,7 @@ xaccResetWriteFlags (AccountGroup *grp)
     int n=0;
     Account *acc;
     Split *s;
-    acc = getAccount (grp,i) ;
+    acc = xaccGroupGetAccount (grp,i) ;
 
     /* recursively do sub-accounts */
     xaccResetWriteFlags (acc->children);
@@ -1033,7 +1033,7 @@ writeGroup (int fd, AccountGroup *grp )
   
   for( i=0; i<grp->numAcc; i++ )
     {
-    err = writeAccount( fd, getAccount(grp,i) );
+    err = writeAccount( fd, xaccGroupGetAccount(grp,i) );
     if( -1 == err )
       return err;
     }
