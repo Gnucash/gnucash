@@ -38,6 +38,7 @@
 #include "GNCIdP.h"
 
 #include "PostgresBackend.h"
+#include "account.h"
 #include "putil.h"
 #include "txn.h"
 
@@ -257,6 +258,23 @@ pgendProcessEvents (Backend *bend)
             {
                be->last_account = ev->stamp;
             }
+            switch (ev->type)
+            {
+               default:
+                  PERR ("account: cant' happen !!!!!!!");
+                  break;
+               case GNC_EVENT_CREATE:
+               case GNC_EVENT_MODIFY: 
+                  pgendCopyAccountToEngine (be, &(ev->guid));
+                  break;
+               case GNC_EVENT_DESTROY: {
+                  Account * acc = xaccAccountLookup (&(ev->guid));
+                  xaccAccountBeginEdit (acc);
+                  xaccAccountDestroy (acc);
+                  break;
+               }
+            }
+
             break;
 
          case GNC_ID_TRANS:
@@ -268,7 +286,7 @@ pgendProcessEvents (Backend *bend)
             {
                default:
                case GNC_EVENT_CREATE:
-                  PERR ("cant' happen !!!!!!!");
+                  PERR ("transaction: cant' happen !!!!!!!");
                   break;
                case GNC_EVENT_MODIFY: 
                   pgendCopyTransactionToEngine (be, &(ev->guid));

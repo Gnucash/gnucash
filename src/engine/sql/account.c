@@ -369,6 +369,64 @@ pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
 
 
 /* ============================================================= */
+
+int
+pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
+{
+   char *pbuff;
+   Account *acc;
+   PGresult *result;
+   int engine_data_is_newer = 0;
+   int i, j, nrows;
+
+
+   ENTER ("be=%p", be);
+   if (!be || !acct_guid) return 0;
+
+   /* disable callbacks into the backend, and events to GUI */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   /* first, see if we already have such an account */
+   acc = xaccAccountLookup (acct_guid);
+   if (!acc)
+   {
+      engine_data_is_newer = -1;
+   } 
+   else
+   {
+      engine_data_is_newer = - pgendAccountCompareVersion (be, acc);
+   }
+
+   if (0 > engine_data_is_newer)
+   { 
+      /* build the sql query to get the account */
+      pbuff = be->buff;
+      pbuff[0] = 0;
+      pbuff = stpcpy (pbuff,
+            "SELECT * FROM gncAccount WHERE accountGuid='");
+      pbuff = guid_to_string_buff(acct_guid, pbuff);
+      pbuff = stpcpy (pbuff, "';");
+   
+      SEND_QUERY (be,be->buff, 0);
+      pgendGetResults (be, get_account_cb, be->topgroup);
+
+      acc = xaccAccountLookup (acct_guid);
+      /* restore any kvp data associated with the transaction and splits */
+      acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
+
+      pgendGetAccountCurrencyHack (be, acc);
+   }
+
+   /* re-enable events to the backend and GUI */
+   pgendEnable(be);
+   gnc_engine_resume_events();
+
+   LEAVE (" ");
+   return engine_data_is_newer;
+}
+
+/* ============================================================= */
 /* ============================================================= */
 /*         HIGHER LEVEL ROUTINES AND BACKEND PROPER              */
 /* ============================================================= */
