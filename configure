@@ -2332,7 +2332,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lguile -ldl -lreadline $LIBS"
+LIBS="-lguile -ldl -lreadline -ltermcap $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2338 "configure"
 #include "confdefs.h"
@@ -2360,7 +2360,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline"
+  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap"
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for gh_eval_file in -lguile""... $ac_c" 1>&6
@@ -2370,7 +2370,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lguile -ldl -lreadline -lqthreads $LIBS"
+LIBS="-lguile -ldl -lreadline -ltermcap -lqthreads $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2376 "configure"
 #include "confdefs.h"
@@ -2398,7 +2398,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -lqthreads"
+  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads"
 else
   echo "$ac_t""no" 1>&6
 { echo "configure: error: cannot link with guile" 1>&2; exit 1; }
