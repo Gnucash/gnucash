@@ -102,8 +102,6 @@ void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
 void gnc_book_set_backend (GNCBook *book, Backend *be);
 
-GNCEntityTable * gnc_book_get_entity_table (GNCBook *book);
-
 /* The gnc_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the 
  *    notsaved flag as FALSE just after loading.  Do not use otherwise!

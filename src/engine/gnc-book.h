@@ -33,6 +33,7 @@
 #ifndef GNC_BOOK_H
 #define GNC_BOOK_H
 
+#include "GNCId.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "kvp_frame.h"
@@ -44,6 +45,9 @@ GNCBook * gnc_book_new (void);
 /** End any editing sessions associated with book, and free all memory 
     associated with it. */
 void      gnc_book_destroy (GNCBook *book);
+
+/** \return The Entity table for the book. */
+GNCEntityTable      * gnc_book_get_entity_table (GNCBook *book);
 
 /** \return The GUID for the book. */
 const GUID          * gnc_book_get_guid (GNCBook *book);
