@@ -1027,6 +1027,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   gboolean expanded = FALSE;
   PriceCell *rate_cell;
   const char *message;
+  CursorClass cursor_class;
   
   /* Make sure we NEED this for this type of register */
   if (!gnc_split_reg_has_rate_cell (reg->type))
@@ -1043,6 +1044,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* Are we expanded? */
   expanded = gnc_split_register_current_trans_expanded (reg);
+  cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+  /* If we're expanded AND a transaction cursor, there is nothing to do */
+  if (expanded && cursor_class == CURSOR_CLASS_TRANS)
+    return FALSE;
 
   /* Grab the xfer account */
   if (expanded)

@@ -174,6 +174,9 @@
                             (qif-split:set-category! default-split value)))
                        
                        ;; S : split category 
+		       ;; At this point we are ignoring the default-split
+		       ;; completely!  So, we need to reverse the current-split
+		       ;; values!
                        ((#\S)
                         (set! current-split (make-qif-split))
                         (set! default-split #f)
@@ -190,7 +193,9 @@
                        ;; $ : split amount (if there are splits)
                        ((#\$)
                         (if current-split
-                            (qif-split:set-amount! current-split value)))
+			    (begin
+			      (qif-split:set-amount! current-split value)
+			      (qif-split:set-neg! current-split #t))))
                        
                        ;; ^ : end-of-record 
                        ((#\^)
@@ -453,7 +458,7 @@
    (qif-file:xtns self)
    qif-parse:print-date
    'error-on-ambiguity
-   (lambda (t e) e)))
+   (lambda (t e) e) 'date))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields-results results type

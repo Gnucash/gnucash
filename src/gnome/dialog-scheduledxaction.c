@@ -1423,6 +1423,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         gtk_widget_show_all(sxed->dialog);
 
+	/* Refresh the cal and the ledger */
+	gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
         gnc_ledger_display_refresh( sxed->ledger );
 
         return sxed;

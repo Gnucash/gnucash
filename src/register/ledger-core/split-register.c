@@ -317,7 +317,7 @@ gnc_split_register_current_trans_expanded (SplitRegister *reg)
 
   if (reg->style == REG_STYLE_AUTO_LEDGER ||
       reg->style == REG_STYLE_JOURNAL)
-    return FALSE;
+    return TRUE;
 
   return info->trans_expanded;
 }

@@ -1,3 +1,112 @@
+2003-02-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.1
+	* rpm/gnucash.spec.in: fix info files prob
+	* NEWS: update for release
+	* src/quotes/Makefile.am: remove dump-finance-quote from build
+	  to fix problems with rpm wanting Finance::Quote
+
+2003-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c
+	  If we're expanded, ignore TRANS cursor classes.  This prevents
+	  a bug where the exchange-rate dialog is realized when there really
+	  is nothing to do (because we're in an expanded transaction).
+  	* src/register/ledger-core/split-register-model.c
+	  Don't PERR() if we have no account -- this prevents annoying
+	  messages when handling multi-currency txns in the GL.  Note:
+	  all GL txns are displayed in the locale currency (if possible).	
+	* src/register/ledger-core/split-register.c
+	  AUTO_LEDGER and JOURNAL register types _ARE_ expanded -- return
+	  TRUE, not FALSE.
+	Fixes 105319
+
+	* src/report/standard-report/advanced-portfolio.scm: add extra
+	  arguments to prevent scheme crash.
+	Fixes 105405
+
+	* src/gnome/glade/sched-xact.glade: Need to start the Editor dialog
+	  as non-visible so the ledger get's sized properly
+	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
+	  dialog is shown, so it get's sized properly.
+
+	* src/register/register-gnome/gnucash-style.c: temporary fix to
+	  prevent 105346, until a real fix can be created.  There is still
+	  a visual artifact leftover, but at least it doesn't crash.
+	
+2003-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/tip-list.scm: remove the tip that says that this is a development
+	  version.  (Thanks, pogma)
+
+	* src/scm/command-line.scm: remove the "development version" string
+	  when running "gnucash --version"
+
+	Pull up from HEAD:
+	* src/import-export/import-backend.c: Add heuristic for duplicate
+	  matching by check number.  
+	* doc/README.OFX: Update
+
+2003-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is
+	  0..255 instead of -128..127.  Force a "signed char" to make sure
+	  we get the latter interpretation.
+
+	* src/app-utils/gnc-ui-utils.c: Don't round unless force_fit is true.
+	  Fixes Debian Bug #179802.
+
+	* src/bin/overrides/gnucash-build-env.in: add business-utils
+
+	* src/business/business-utils/Makefile.am: make scm-links so you
+	  can run gnucash from within the build tree
+	
+2003-02-04  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<L.Cappelletti@mail.com>.
+
+2003-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm: mark "splits" as negative
+	  to make sure the numbers are reflected appropriately.
+	* src/import-export/qif-import/qif-objects.scm: add a neg? value to
+	  a qif-split; use this when converting the split-amount.
+	Fixes bug #105179	
+
+2003-02-03  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+
+	* src/calculation/Makefile.am: need to add GUILE_INCS
+
+	* src/engine/Makefile.am: add ${INTLLIBS} for gettext() et al on
+	  platforms that don't have it in libc
+
+	* src/backend/file/io-gncbin-r.c: don't need to define functions
+	  that are never used, so move the #ifdef around.  Fixes # 105124
+
+	* rpm/gnucash.in: don't call autoconf
+
+	Pull up from HEAD:
+
+	* src/import-export/qif-import/qif-file.scm: fix a
+	  wrong-number-of-arguments fatal crash when trying to reparse
+	  dates.
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* README: Changed to suit new stable release
+	* configure.in: release 1.8.0
+	* src/scm/main.scm: turn off devel version message
+	* NEWS: add whats news
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* rpm/gnucash.spec.in: add options to build ofx,hbci and postgresql
+
 2003-02-02  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* doc/README.OFX: I've quickly put together some docs for the ofx module and transaction matching.  Also includes a FAQ. Not perfect, but should closebug 99478.
