@@ -712,6 +712,11 @@ AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
 
 
 ### --------------------------------------------------------------------------
+### Adjustments.
+
+chmod u+x src/gnc-test-env
+
+### --------------------------------------------------------------------------
 ### Makefile creation
 
 AC_OUTPUT(
