@@ -9,6 +9,9 @@
 	* src/app-utils/Makefile.am: install i18n.h but don't include it
 	  in the DIST tarball -- let it be generated from i18n.h.in, which
 	  IS distributed.
+
+	* src/business/business-reports/invoice.scm: fix some strings
+	  "Invoice Terms" -> "Billing Terms"
 	
 2002-11-03  Joshua Sled  <jsled@asynchronous.org>
 

@@ -268,8 +268,8 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Invoice Terms")
-    "t" (N_ "Display the invoice terms?") #t))
+    (N_ "Display") (N_ "Billing Terms")
+    "t" (N_ "Display the invoice billing terms?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -644,7 +644,7 @@
 			 (string-expand billing-id #\newline "<br>"))))
 		      (make-break! document)))))
 
-	  (if (opt-val "Display" "Invoice Terms")
+	  (if (opt-val "Display" "Billing Terms")
 	      (let* ((term (gnc:invoice-get-terms invoice))
 		     (terms (gnc:bill-term-get-description term)))
 		(if (and terms (> (string-length terms) 0))
