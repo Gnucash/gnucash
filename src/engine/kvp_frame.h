@@ -61,6 +61,7 @@ typedef struct _kvp_value kvp_value;
 kvp_frame   * kvp_frame_new(void);
 void          kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
+gboolean      kvp_frame_is_empty(kvp_frame * frame);
 
 gchar* kvp_frame_to_string(const kvp_frame *frame);
 gchar* binary_to_string(const void *data, guint32 size);
