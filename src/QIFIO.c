@@ -45,6 +45,11 @@
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
+#ifdef DEBUG
+#undef DEBUG
+#endif
+#define DEBUG printf
+
 /********************************************************************\
  * xaccReadQIFLine                                                  * 
  *   reads in one line of ASCII, until cr-nl                        *
@@ -275,11 +280,13 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
 
    if (!trans) return NULL;
 
-   trans -> memo = 0x0;         /* string */
-   trans -> description = 0x0;  /* string */
    trans -> num = 0x0;          /* string */ 
+   trans -> description = 0x0;  /* string */
+   trans -> memo = 0x0;         /* string */
+   trans -> action = 0x0;       /* string */
    trans -> catagory = 0;       /* category is int */
    trans -> damount = 0.0;      /* amount is double */
+   trans -> share_price= 1.0;   /* share_price is double */
    trans -> reconciled = NREC;  /* reconciled is byte */
    /* other possible values ... */
    /* trans->reconciled = YREC;  trans->reconciled = CREC; */
@@ -287,6 +294,9 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
    trans -> date.year = 1970;      /* int */
    trans -> date.month = 1;     /* int */
    trans -> date.day = 1;       /* int */
+
+   trans -> debit = NULL;
+   trans -> credit = NULL;
   
    qifline = xaccReadQIFLine (fd);
 
@@ -313,7 +323,7 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
          xaccParseQIFDate (&(trans->date), &qifline[1]);
      } else 
      if ('T' == qifline [0]) {   /* T == total */
-         trans -> damount = xaccParseQIFAmount (&qifline[1]);         /* amount is double */
+         trans -> damount = xaccParseQIFAmount (&qifline[1]);  /* amount is double */
          if (isneg) trans -> damount = - (trans->damount);
      } else 
      if ('I' == qifline [0]) {   /* I == share price */
@@ -340,12 +350,44 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
      qifline = xaccReadQIFLine (fd);
    }
 
+   XACC_PREP_NULL_STRING (trans->num);
    XACC_PREP_NULL_STRING (trans->memo);
    XACC_PREP_NULL_STRING (trans->description);
+   XACC_PREP_NULL_STRING (trans->action);
 
    return qifline;
 }
   
+/********************************************************************\
+ * read a sequence of transactions, inserting them into 
+ * the indicated account
+\********************************************************************/
+
+char * xaccReadQIFTransList (int fd, Account *acc)
+{
+   Transaction *trans;
+   char * qifline;
+
+   if (!acc) return 0x0;
+
+   do { 
+      trans = (Transaction *)_malloc(sizeof(Transaction));
+      qifline = xaccReadQIFTransaction (fd, trans);
+      if (!qifline) {  /* free up malloced data if the read bombed. */
+         _free (trans);
+         break;
+      }
+      if ('!' == qifline[0]) {
+         _free (trans);
+         break;
+      }
+
+      insertTransaction( acc, trans );
+   } while (qifline);
+
+   return qifline;
+}
+
 /********************************************************************\
  ********************** LOAD DATA ***********************************
 \********************************************************************/
@@ -385,19 +427,31 @@ xaccReadQIFData( char *datafile )
   
   while (qifline) {
      if (!strcmp (qifline, "!Type:Class\r\n")) {
-        DEBUG ("got class");
+        DEBUG ("got class\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
+     if (!strcmp (qifline, "!Type:Bank \r\n")) {
+        Account *acc   = mallocAccount();
+        DEBUG ("got bank\n");
+
+        acc->type = BANK;
+        acc->accountName = XtNewString ("Quicken Bank Account");
+
+        insertAccount( grp, acc );
+        qifline = xaccReadQIFTransList (fd, acc);
+        continue;
+     } else
+
      if (!strcmp (qifline, "!Type:Cat\r\n")) {
-        DEBUG ("got category");
+        DEBUG ("got category\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
      if (!strcmp (qifline, "!Option:AutoSwitch\r\n")) {
-        DEBUG ("got autoswitch on");
+        DEBUG ("got autoswitch on\n");
         skip = 1;
         qifline = xaccReadQIFDiscard (fd);
         continue;
@@ -421,7 +475,6 @@ xaccReadQIFData( char *datafile )
            }
         } else {
            /* read account name, followed by dollar data ... */
-           Transaction *trans;
            Account *acc   = mallocAccount();
            DEBUG ("got account");
            qifline = xaccReadQIFAccount (fd, acc);
@@ -439,19 +492,7 @@ xaccReadQIFData( char *datafile )
            }
    
            /* read transactions */
-           while (qifline) { 
-              trans = (Transaction *)_malloc(sizeof(Transaction));
-              qifline = xaccReadQIFTransaction (fd, trans);
-              if (!qifline) {  /* free up malloced data if the read bombed. */
-                 _free (trans);
-                 break;
-              }
-              if ('!' == qifline[0]) {
-                 _free (trans);
-                 break;
-              }
-              insertTransaction( acc, trans );
-           }
+           if (qifline) qifline = xaccReadQIFTransList (fd, acc);
         }    
         continue;
      } else
