@@ -2762,7 +2762,7 @@ xaccTransGetVoidTime(Transaction *tr)
   Timespec void_time= {0,0};
   g_return_val_if_fail(tr, void_time);
 
-  frame = xaccSplitGetSlots(tr);
+  frame = xaccTransGetSlots(tr);
 
   val = kvp_frame_get_slot(frame, void_time_str);
   

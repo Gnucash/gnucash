@@ -17,6 +17,7 @@
 
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
+
 static void
 transaction_set_splits_to_accounts(Transaction *tr, Account *a1, Account *a2)
 {
@@ -41,7 +42,9 @@ run_test (void)
   gnc_numeric old_amt, new_amt, new_kvp_amt, old_val, new_val, new_kvp_val;
   int rval;
   GNCSession *session;
- 
+  Timespec ts;
+  time_t now;
+
   char *reason = "because I can";
 
   session = gnc_session_new();
@@ -65,10 +68,17 @@ run_test (void)
  old_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
  old_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
 
+ now = time (NULL);
 
- 
  xaccTransVoid(transaction, reason);
 
+ ts = xaccTransGetVoidTime (transaction);
+
+ /* figure at most 2 seconds difference */
+ if ((ts.tv_sec < now) || ((ts.tv_sec - now) > 2))
+ {
+   failure("bad void time");
+ }
 
  if (!xaccTransGetVoidStatus(transaction))
  {
@@ -81,7 +91,7 @@ run_test (void)
  }
  
  new_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
- print_gnc_numeric(new_amt);
+ /* print_gnc_numeric(new_amt); */
 
  if (!gnc_numeric_zero_p( new_amt))
  {
