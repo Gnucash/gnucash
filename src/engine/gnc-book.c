@@ -353,12 +353,15 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
 
 /* #define SQLHACK */
 #ifdef SQLHACK
-     extern Backend * pgendNew (void);
-     book->backend = pgendNew ();
-#endif
-
+    {
+      extern Backend * pgendNew (void);
+      book->backend = pgendNew ();
+    }
+    return TRUE;
+#else
     book->errtype = ENOSYS;
     return FALSE;
+#endif
   }
   /* -------------------------------------------------- */
 
@@ -732,16 +735,10 @@ xaccResolveURL (const char * pathfrag)
    * to make sure hte uri is in good form...
    */
 
-  if (!strncmp (pathfrag, "http://", 7)) {
-    return (char *) pathfrag;
-  }
-
-  if (!strncmp (pathfrag, "https://", 8)) {
-    return (char *) pathfrag;
-  }
-
-  if (!strncmp (pathfrag, "postgres://", 11)) {
-    PERR ("not implemented")
+  if (!strncmp (pathfrag, "http://", 7)      ||
+      !strncmp (pathfrag, "https://", 8)     ||
+      !strncmp (pathfrag, "postgres://", 11) ) 
+  {
     return (char *) pathfrag;
   }
 
