@@ -42,7 +42,7 @@ Postgres Install Instructions
 
 
 Alternatively, you can install into a brand new database without
-using root privileges. After step 1 above, perform the following:
+using root privileges. Perform the following:
 
 1) Install postgresql server, client and devel packages.
 2) initdb -D ~/gnucash
@@ -68,7 +68,6 @@ using root privileges. After step 1 above, perform the following:
 
    By default, the postmaster process will only accept
    connections from processes on the local host.
-
 
 
 GnuCash Build Instructions
