@@ -32,6 +32,11 @@
 #include "cellblock.h"
 #include "table-allgui.h"
 
+static void xaccFreeTableEntries (Table * table);
+static void xaccTableResize (Table * table,
+                 int new_phys_rows, int new_phys_cols,
+                 int new_virt_rows, int new_virt_cols);
+
 /* ==================================================== */
 
 Table * 
@@ -223,7 +228,7 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 
 /* ==================================================== */
 
-void
+static void
 xaccFreeTableEntries (Table * table)
 {
    int i,j;
@@ -274,7 +279,7 @@ xaccMallocLocator (void)
 
 /* ==================================================== */
 
-void 
+static void 
 xaccTableResize (Table * table,
                  int new_phys_rows, int new_phys_cols,
                  int new_virt_rows, int new_virt_cols)
@@ -625,9 +630,8 @@ xaccRefreshHeader (Table *table)
 /* verifyCursorPosition checks the location of the cursor 
  * with respect to a row/column position, and repositions 
  * the cursor if necessary.  This includes saving any uncomited
- * data in the old cursor, and then oving the cursor and it's
+ * data in the old cursor, and then moving the cursor and it's
  * GUI.
- *
  */
 
 void
