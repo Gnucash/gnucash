@@ -1066,7 +1066,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_TOGGLEITEM,
       N_("_Split"),
-      N_("Show all Stransaction in the current transaction"),
+      N_("Show all splits in the current transaction"),
       emit_expand_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL

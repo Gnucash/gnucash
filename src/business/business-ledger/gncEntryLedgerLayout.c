@@ -51,8 +51,8 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     gboolean expandable;
     gboolean span;
   } cells[] = {
-    /* The 'sample:' items are strings which are not displayed, but
-       only used to estimate widths. Translators, please only
+    /* Translators: The 'sample:' items are strings which are not
+       displayed, but only used to estimate widths. Please only
        translate the portion after the ':' and leave the rest
        ("sample:") as is. */
     { ENTRY_INV_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:X")+7,

@@ -115,7 +115,7 @@
   
   (set! gnc:*config-path*
         (gnc:make-path-config-var
-         (N_ "List of directories to search when lookng for config files. \
+         (N_ "List of directories to search when looking for config files. \
 Each element must be a string representing a directory or a symbol \
 where 'default expands to the default path, and 'current expands to \
 the current value of the path.")
@@ -123,7 +123,7 @@ the current value of the path.")
   
   (set! gnc:*share-path*
         (gnc:make-path-config-var
-         (N_ "List of directories to search when lookng for shared data files. \
+         (N_ "List of directories to search when looking for shared data files. \
 Each element must be a string representing a directory or a symbol \
 where 'default expands to the default path, and 'current expands to \
 the current value of the path.")

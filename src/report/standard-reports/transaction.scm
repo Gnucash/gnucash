@@ -514,7 +514,7 @@
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	gnc:pagename-accounts optname-void-transactions
-	"d" (N_ "how to handle void transactions")
+	"d" (N_ "How to handle void transactions")
 	'non-void-only
 	(list (vector
 	       'non-void-only

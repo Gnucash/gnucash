@@ -1323,7 +1323,7 @@
 	  <class>GtkButton</class>
 	  <child_name>Toolbar:button</child_name>
 	  <name>blank_button</name>
-	  <tooltip>Move to the blank entry at the end of the Invoice</tooltip>
+	  <tooltip>Move to the blank entry at the bottom of the Invoice</tooltip>
 	  <signal>
 	    <name>clicked</name>
 	    <handler>gnc_invoice_window_blankCB</handler>

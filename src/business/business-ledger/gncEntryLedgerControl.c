@@ -119,6 +119,7 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
   g_return_val_if_fail (cell, TRUE);
   name = cell->cell.value;
   if (!name || *name == '\0') {
+    /* Translators: %s is the string "an Account" i.e. its translation. */
     const char *format = _("Invalid Entry:  You need to supply %s.");
 
     gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), format, cell_msg);

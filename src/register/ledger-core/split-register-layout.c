@@ -510,6 +510,11 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
   gnc_register_add_cell (layout,
                          NUM_CELL,
                          NUM_CELL_TYPE_NAME,
+			 /* Translators: The 'sample:' items are
+			    strings which are not displayed, but only
+			    used to estimate widths. Please only
+			    translate the portion after the ':' and
+			    leave the rest ("sample:") as is. */
                          N_("sample:99999") + 7,
                          CELL_ALIGN_LEFT,
                          FALSE,
