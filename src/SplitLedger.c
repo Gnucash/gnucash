@@ -194,7 +194,7 @@ LedgerDestroy (SplitRegister *reg)
       /* split destroy will automatically remove it
        * from its parent account */
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransDestroy (trans);
       reg->user_hook = NULL;
    }
@@ -304,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -313,7 +313,7 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
    }
 
    /* copy the contents from the cursor to the split */
@@ -404,9 +404,10 @@ printf ("save split is %p \n", split);
       } else {
          new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
       }
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+          (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO         == (reg->type & REG_TYPE_MASK))) 
       { 
          xaccSplitSetShareAmount (split, new_amount);
       } else {
@@ -536,9 +537,10 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      if ((EQUITY_REGISTER == typo) ||
-          (STOCK_REGISTER  == typo) ||
-          (PORTFOLIO       == typo)) 
+      if ((EQUITY_REGISTER   == typo) ||
+          (STOCK_REGISTER    == typo) ||
+          (CURRENCY_REGISTER == typo) ||
+          (PORTFOLIO         == typo)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
@@ -895,7 +897,7 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
       double last_price = 0.0;
 
       trans = xaccMallocTransaction ();
-      xaccTransBeginEdit (trans);
+      xaccTransBeginEdit (trans, 1);
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
@@ -951,20 +953,32 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
 /* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell *cell,  AccountGroup *grp)
+LoadXferCell (ComboCell *cell,  
+              AccountGroup *grp,
+              char *base_currency)
 {
    Account * acc;
+   char * curr;
    int n;
 
    if (!grp) return;
 
-   /* build the xfer menu out of account names */
-   /* traverse sub-accounts recursively */
+   /* Build the xfer menu out of account names.
+    * Traverse sub-accounts recursively.
+    * Valid transfers can occur only between accounts
+    * with the same base currency.
+    */
    n = 0;
    acc = xaccGroupGetAccount (grp, n);
    while (acc) {
-      xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
-      LoadXferCell (cell, xaccAccountGetChildren (acc));
+      curr = xaccAccountGetCurrency (acc);
+      if ((!curr) && (!base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      if (curr && base_currency && !strcmp (curr, base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      LoadXferCell (cell, xaccAccountGetChildren (acc), base_currency);
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
@@ -972,10 +986,12 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 
 /* ======================================================== */
 
-void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+void xaccLoadXferCell (ComboCell *cell,  
+                       AccountGroup *grp, 
+                       char *base_currency)
 {
    xaccAddComboCellMenuItem (cell, "");
-   LoadXferCell (cell, grp);
+   LoadXferCell (cell, grp, base_currency);
 }
 
 /* =======================  end of file =================== */
