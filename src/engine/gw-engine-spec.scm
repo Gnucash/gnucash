@@ -1719,6 +1719,14 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
+ 'gnc:query-get-lots
+ '(gw:glist-of <gnc:Lot*> caller-owned)
+ "xaccQueryGetLots"
+ '((<gnc:Query*> q) (<gnc:query-txn-match-t> rt))
+ "Find lots with splits matching the Query.")
+
+(gw:wrap-function
+ ws
  'gnc:query-add-account-match
  '<gw:void>
  "xaccQueryAddAccountMatch"
