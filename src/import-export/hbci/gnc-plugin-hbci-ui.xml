@@ -1,0 +1,19 @@
+<ui>
+  <menubar>
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <menu name="OnlineActions"           action="OnlineActionsAction">
+          <menuitem name="HbciGetBalance"       action="HbciGetBalanceAction"/>
+          <menuitem name="HbciGetTrans"         action="HbciGetTransAction"/>
+          <menuitem name="HbciIssueTrans"       action="HbciIssueTransAction"/>
+          <menuitem name="HbciIssueDirectDebit" action="HbciIssueDirectDebitAction"/>
+        </menu>
+      </placeholder>
+    </menu>
+    <menu name="Tools" action="ToolsAction">
+      <placeholder name="ToolsPlaceholder">
+        <menuitem name="HbciSetup"            action="HbciSetupAction"/>
+     </placeholder>
+    </menu>
+  </menubar>
+</ui>
