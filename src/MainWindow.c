@@ -89,10 +89,10 @@ Boolean havePixels = False;
  * Return: none                                                     *
 \********************************************************************/
 void
-xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
+xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
 {
 
-  int   i, currow;
+  int   i, j, currow;
   char  buf[BUFSIZE];
   
   /* Add all the top-level accounts to the list */
@@ -103,6 +103,19 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
     Account *acc = getAccount( grp, i );
     double dbalance;
     
+    /* fill in the arrow and the account type fileds */
+    cols[XACC_MAIN_ACC_ARRW] = XtNewString("");
+    cols[XACC_MAIN_ACC_TYPE] = account_type_name[acc->type];
+
+    /* fill in the account name field, indenting for sub-accounts */
+    buf[0] = 0x0;
+    for (j=0; j<depth; j++) {
+       strcat (buf, "    ");
+    }
+    strcat (buf, acc->accountName);
+    cols[XACC_MAIN_ACC_NAME] = XtNewString(buf);
+
+    /* fill in the balance column */
     xaccRecomputeBalance (acc);  /* hack alert -- we don't need this */
     dbalance = acc->balance;
     
@@ -110,12 +123,8 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
       sprintf( buf,"-$%.2f\0", DABS(dbalance) );
     else
       sprintf( buf,"$%.2f\0", DABS(dbalance) );
-    
-    cols[XACC_MAIN_ACC_ARRW] = "";
-    cols[XACC_MAIN_ACC_NAME] = acc->accountName;
-    cols[XACC_MAIN_ACC_TYPE] = account_type_name[acc->type];
     cols[XACC_MAIN_ACC_BALN] = XtNewString(buf);
-
+    
     XtVaGetValues (acctrix, XmNrows, &currow, NULL);
     XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
     
@@ -128,6 +137,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
       XbaeMatrixSetCellColor( acctrix, currow, XACC_MAIN_ACC_BALN, posPixel );    
 #endif
 
+    /* associate a pointer to the actual account with the row */
     XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer *) acc); 
 
     /* If the account has sub-accounts, then add an arrow button 
@@ -145,6 +155,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
                                       NULL);
        }
        XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
+       XtManageChild (acc->arrowb);
 
        XtAddCallback (acc->arrowb, XmNactivateCallback, 
                       expandListCB, (XtPointer *) acc);
@@ -162,8 +173,9 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
 #endif /* __XACC_DO_ARROW_CALLBACK */
 
 
+       /* recursively display children accounts */
        if (acc->expand) {
-          xaccMainWindowAddAcct (acctrix, acc->children);
+          xaccMainWindowAddAcct (acctrix, acc->children, depth+1);
        }
     }
   }
@@ -187,7 +199,7 @@ refreshMainWindow( void )
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
-  xaccMainWindowAddAcct (accountlist, grp);
+  xaccMainWindowAddAcct (accountlist, grp, 0);
 }
 
 /********************************************************************\
@@ -257,7 +269,7 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
   XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
   Account *acc = (Account *)pClientData;
 
-  /* a hack to avoid double invocation */
+  /* a "fix" to avoid double invocation */
   switch ( info->reason ) {
       case XmCR_ACTIVATE:
           /* avoid double invocation */
@@ -368,10 +380,8 @@ mainWindow( Widget parent )
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
 					xmMainWindowWidgetClass, parent, 
 					XmNdeleteResponse,       XmDESTROY,
-/*linas hack */
-                                 XmNwidth,     650,
-                                 XmNheight,    300,
-
+                                        XmNwidth,     450,
+                                        XmNheight,    240,
 					NULL );
   
   /* Umm... this doesn't seem to be getting called */
@@ -447,7 +457,7 @@ mainWindow( Widget parent )
    * up in columns */
     {
     String   labels[XACC_MAIN_NUM_COLS]     = {"", "Account Name","Type","Balance"};
-    short    colWidths[]        = {4,16,10,8};
+    short    colWidths[]        = {2,20,10,12};
     unsigned char alignments[XACC_MAIN_NUM_COLS] = {
                                    XmALIGNMENT_CENTER,
                                    XmALIGNMENT_BEGINNING,
@@ -568,6 +578,7 @@ mainWindow( Widget parent )
 		 accountMenubarCB, (XtPointer)AMB_DEL );
   
   
+    
   /* Fix button area of the pane to its current size, and not let 
    * it resize. */
   XtManageChild( controlform );
@@ -577,17 +588,8 @@ mainWindow( Widget parent )
     XtVaSetValues( controlform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
     }
   
-  /* Fix action area of the pane to its current size, and not let 
-   * it resize. */
   XtManageChild( actionform );
-    {
-    Dimension h;
-    XtVaGetValues( accountlist, XmNheight, &h, NULL );
-    XtVaSetValues( actionform, XmNpaneMaximum, h, XmNpaneMinimum, h, NULL );
-    }
-    
-  /******************************************************************/
-  XtManageChild(pane);
+  XtManageChild( pane );
   }
 
 /********************************************************************\
