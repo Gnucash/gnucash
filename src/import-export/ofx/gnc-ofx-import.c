@@ -23,6 +23,19 @@
 
 #define _GNU_SOURCE
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "config.h"
 
 #include <stdio.h>
@@ -42,6 +55,10 @@
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
+
+
+#include "dialog-utils.h"
+
 
 static short module = MOD_IMPORT;
 /********************************************************************\
@@ -76,7 +93,7 @@ void gnc_file_ofx_import (void)
   gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
-selected_filename = gnc_file_dialog("Select an OFX/QFX file to process",
+selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
 				NULL,
 				NULL);
 
@@ -131,6 +148,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   time_t current_time; 
   Account *account;
   Account *investment_account;
+  gchar investment_account_text[256] = "";
   gnc_commodity *investment_commodity;
   GNCBook *book;
   Transaction *transaction;
@@ -289,7 +307,12 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 								 NULL);
 	      if(investment_commodity!=NULL)
 		{
-		  investment_account = gnc_import_select_account(data.unique_id, 1, data.security_data_ptr->secname, investment_commodity, STOCK);
+		  strncat(investment_account_text,
+			  _("A Stock or Mutual Fund account for the following security: \""),
+			  sizeof(investment_account_text)-strlen(investment_account_text));
+		  strncat(investment_account_text,data.security_data_ptr->secname,sizeof(investment_account_text)-strlen(investment_account_text));
+		  strncat(investment_account_text,_("\"\nWarning:  Ofx investment transactions require two accounts."),sizeof(investment_account_text)-strlen(investment_account_text));
+		  investment_account = gnc_import_select_account(data.unique_id, 1, investment_account_text, investment_commodity, STOCK);
 		  
 		  if(investment_account!=NULL&&data.unitprice_valid==true&&data.units_valid==true)
 		    {

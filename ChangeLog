@@ -1,3 +1,7 @@
+2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Trasaction-matcher.c: Fix compiler warnings.
+	* src/import-export/ofx/gnc-ofx-import.c: Give the user more information for account creation.
+	
 2002-10-20  Derek Atkins  <derek@ihtfp.com>
 	* configure.in -- remove -Wno-uninitialized -Wno-unused, in preparation
 	  for the "new g-wrap" which should output code that wont cause these

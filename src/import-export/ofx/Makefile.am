@@ -42,7 +42,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
   ${GLIB_CFLAGS} \
-  ${LIBOFX_CFLAGS}
+  ${LIBOFX_CFLAGS} \
+  ${GTKHTML_CFLAGS}
 
 EXTRA_DIST = \
   .cvsignore 

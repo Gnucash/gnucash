@@ -33,7 +33,7 @@
 
 #include <glade/glade.h>
 
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <math.h>
 #include "gnc-generic-import.h"
 #include "Account.h"
@@ -108,7 +108,7 @@ struct _transactioninfo
   char action_text[10];
   char date_text[20];
   char amount_text[20];
-  char * clist_text[NUM_COLUMNS_DOWNLOADED_CLIST];
+  const char * clist_text[NUM_COLUMNS_DOWNLOADED_CLIST];
   GList * match_list;
   struct _matchinfo * selected_match_info;
   Action action;
@@ -125,7 +125,7 @@ struct _matchinfo
   char probability_text[10];
   char date_text[20];
   char amount_text[20];
-  char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
+  const char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
 };
 
 static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * matcher,struct _transactioninfo * transaction_info)
@@ -177,7 +177,7 @@ if(transaction_info==matcher->selected_trans_info)
 	  gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split)));
   transaction_info->clist_text[DOWNLOADED_CLIST_AMOUNT]=transaction_info->amount_text;
 
-  transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]=xaccTransGetDescription(transaction_info->trans);
+  transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]==xaccTransGetDescription(transaction_info->trans);
   transaction_info->clist_text[DOWNLOADED_CLIST_MEMO]=xaccSplitGetMemo(transaction_info->first_split);
  
 
@@ -218,7 +218,7 @@ downloaded_transaction_select_cb (GtkCList *clist,
     {
       match_info = list_element->data;
       row_number = gtk_clist_append(matcher->match_clist,
-				    match_info->clist_text); 
+				    (char **)(match_info->clist_text)); 
       gtk_clist_set_row_data          (matcher->match_clist,
 				       row_number,
 				       match_info);
@@ -757,7 +757,7 @@ void gnc_import_add_trans(Transaction *trans)
       }
       
       row_number = gtk_clist_append(matcher->downloaded_clist,
-				    transaction_info->clist_text);
+				   (char **)(transaction_info->clist_text));
       gtk_clist_set_row_data_full(matcher->downloaded_clist,
 				  row_number,
 				  transaction_info,
