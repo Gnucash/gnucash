@@ -509,7 +509,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
   /* Set through accessor functions */
   cm->quote_source = NULL;
 
-  g_cache_remove(str_cache, cm->quote_tz);
+  if (cm->quote_tz) g_cache_remove(str_cache, cm->quote_tz);
   cm->quote_tz = NULL;
 
   /* Automatically generated */
@@ -550,8 +550,10 @@ gnc_commodity_clone(gnc_commodity *src)
   dest->mark = 0;
 
   dest->quote_flag = src->quote_flag;
-  dest->quote_source = g_cache_insert(str_cache, src->quote_source);
-  dest->quote_tz = g_cache_insert(str_cache, src->quote_tz);
+
+  gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
+  if (src->quote_tz)
+     dest->quote_tz = g_cache_insert(str_cache, src->quote_tz);
 
   reset_printname(dest);
   reset_unique_name(dest);
@@ -807,12 +809,10 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 void
 gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 {
-  GCache *str_cache = gnc_engine_get_string_cache ();
   ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
 
   if(!cm) return;
-  g_cache_remove(str_cache, cm->quote_source);
-  cm->quote_source = g_cache_insert(str_cache, src);
+  cm->quote_source = src;
   LEAVE(" ");
 }
 
@@ -828,8 +828,11 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 
   if(!cm) return;
 
-  g_cache_remove(str_cache, cm->quote_tz);
-  if (cm->quote_tz) cm->quote_tz = NULL;
+  if (cm->quote_tz) 
+  {
+    g_cache_remove(str_cache, cm->quote_tz);
+    cm->quote_tz = NULL;
+  }
 
   if (tz && *tz) cm->quote_tz = g_cache_insert(str_cache, (gpointer)tz);
 
