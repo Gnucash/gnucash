@@ -41,6 +41,9 @@ typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (Account *account,
 						   gnc_commodity *report_commodity,
 						   gboolean include_children);
 
+#define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
+#define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
+
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
  * from one release to the next.  Note that if values are added,
