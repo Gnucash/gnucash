@@ -924,7 +924,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Duplicate Transaction Dialog</name>
-  <title>Duplicate Transaction</title>
+  <title>Duplicate this Transaction</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>True</modal>

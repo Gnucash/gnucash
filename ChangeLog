@@ -1,3 +1,15 @@
+2003-03-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/app-utils/prefs.scm: Adjust the names of register styles in
+	the preferences to those names used in the register View
+	menu. This didn't require changes in any option lookup code.
+
+	* src/gnome/glade/register.glade: 'Duplicate Transaction' could
+	either mean 'to duplicate a transaction' or 'the duplicate of a
+	transaction'. Both need very different translations. Therefore
+	changed 'Duplicate Transaction' in the register into 'Duplicate
+	this Transaction' to resolve that ambiguity here.
+
 2003-03-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
