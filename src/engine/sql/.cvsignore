@@ -7,7 +7,7 @@ Makefile.in
 a.out
 base-autogen.c
 check-autogen.c
+functions.c
 kvp-autogen.c
 table-create.c
 table-drop.c
-
