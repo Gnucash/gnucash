@@ -8,6 +8,11 @@ data, instead of allowing the PFM to talk to the bank directly.
 reasons).  The goal here is to be sure that we can import QFX files
 properly.
 
+Note that these files are all single-entry statements, rather than
+double-entry ledgers.  Thus, we only know where the money is coming
+from, and have no idea of where its going to: a human will have to
+pick through these during import. #@$%^&*(
+
 rbc_gi.qfx
     Royal Bank of Canada statement.
 
