@@ -1,10 +1,12 @@
 Makefile
 Makefile.in
 .deps
+.libs
 *.diff
 *.lo
 *.la
 .scm-links
+gw-binary-import.scm
 gw-binary-import.c
 gw-binary-import.h
 gw-binary-import.html
