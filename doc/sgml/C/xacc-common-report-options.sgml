@@ -1,11 +1,11 @@
-<article ID="XACC-COMMON-REPORT-OPTIONS"
+<article ID="XACC-COMMON-REPORT-OPTIONS">
 <artheader>
 <title>Common Report Options</title>
 </artheader>
 <sect1>
 <title></title>
 <para>Many reports share similar sorts of options.  Some common ones
-include:
+include:</para>
 
 <itemizedlist>
 <listitem>
@@ -35,6 +35,14 @@ monthly, and yearly.</para></listitem>
 accounts.  Note that some reports only allow you to select certain 
 types of accounts - for instance, an expense piechart only allows
 expense accounts to be selected.  </para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-show-full-names">Show full 
+Account Names</emphasis></para>
+<para>Many reports and graphs let you select whether to display short
+account names (for example "power") or full account names (for example
+"utilities:power").</para>
 </listitem>
 
 <listitem>
@@ -86,7 +94,18 @@ this currency for graphical display or summarization.</para>
 You can choose a weighted average of prices over all transactions, 
 prices at current values, or prices at the time of the report date.</para>
 </listitem>
-</itemizedlist>
-</para>
+<listitem>
+	<para><emphasis><anchor id="xacc-options-graph-totals">Totals</emphasis></para>
+	<para>Some piecharts display totals in the chart legend if this option is
+	  selected.
+	  </para></listitem>
+
+<listitem>
+	<para><emphasis><anchor id="xacc-options-max-slices">Maximum Slices</emphasis></para>
+	<para>Controls the maximum number of slices displayed in a piechart - other accounts
+	  will be placed in a slice marked "other".
+	</para>
+	</listitem></itemizedlist>
+
 </sect1>
 </article>

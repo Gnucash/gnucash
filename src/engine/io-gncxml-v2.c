@@ -54,10 +54,13 @@ static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
     gnc_commodity * (*getter) (Account *account),
-    void (*setter) (Account *account, gnc_commodity *comm))
+    void (*setter) (Account *account, gnc_commodity *comm),
+    int (*scu_getter) (Account *account),
+    void (*scu_setter) (Account *account, int scu))
 {
     gnc_commodity *gcom;
     gnc_commodity *com = getter(act);
+    int old_scu = scu_getter(act);
 
     if(!com)
     {
@@ -76,6 +79,8 @@ clear_up_account_commodity(
     {
         gnc_commodity_destroy(com);
         setter(act, gcom);
+        if (old_scu != 0)
+          scu_setter(act, old_scu);
     }
 }
 
@@ -83,9 +88,15 @@ static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               xaccAccountGetCurrency, xaccAccountSetCurrency);
+                               xaccAccountGetCurrency, xaccAccountSetCurrency,
+                               xaccAccountGetCurrencySCU,
+                               xaccAccountSetCurrencySCU);
+
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               xaccAccountGetSecurity, xaccAccountSetSecurity);
+                               xaccAccountGetSecurity, xaccAccountSetSecurity,
+                               xaccAccountGetCommoditySCU,
+                               xaccAccountSetCommoditySCU);
+
     if(!xaccAccountGetParent(act))
     {
         xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
@@ -494,6 +505,10 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     FILE *out;
 
     out = fopen(filename, "w");
+    if (out == NULL)
+    {
+        return FALSE;
+    }
 
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_V2_STRING ">\n");
@@ -519,7 +534,10 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     write_emacs_trailer(out);
 
-    fclose(out);
+    if(fclose(out) != 0)
+    {
+        return FALSE;
+    }
     
     return TRUE;
 }

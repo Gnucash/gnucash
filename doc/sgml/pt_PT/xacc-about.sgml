@@ -25,17 +25,16 @@ oferece, consulte a página das <link linkend="xacc-features">Funcionalidades
     consideradas estáveis, sujeitas apenas a manutenção ou correcção 
     de erros, e sub-versões "impares" indicam um ramo "experimental" 
     que procura adicionar funcionalidades.
-    A última versão estável é a 1.4.x; caso não tencione realizar 
+    A última versão estável é a 1.6.x; caso não tencione realizar 
     desenvolvimentos, deverá utilizar ou esta versão, ou uma estável
     anterior. Estas versões são bastante estáveis, com todos os erros
     conhecidos corrigidos.
-    O ramo "experimental" actual é o gnucash-1.5.x, que se encontra já 
-    em versão beta. Esta é a versão que está de momento a utilizar, 
-    obviamente! Se estiver a utilizar esta versão com dados reais, 
+    O ramo "experimental" actual é o gnucash-1.7.x, que se encontra já 
+    em versão beta. Se estiver a utilizar esta versão com dados reais, 
     POR FAVOR FAÇA CÓPIAS DE SEGURANÇA REGULARMENTE!
 
-    Quando a série 1.5.x estabilizar, a próxima série estável será
-    a 1.6.x.
+    Quando a série 1.7.x estabilizar, a próxima série estável será
+    a 1.8.x.
 
  </para>
 <para>Caso deseje programar sobre a versão experimental, deverá
@@ -143,7 +142,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossterm><email>dres@debian.org</email> James LewisMoss</glossterm>
 <glossdef>
 <para>
    modificações ao desenho dos documentos, re-estruturação do XML, 
@@ -153,13 +152,22 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>stimming@uclink.berkeley.edu</email>Christian
+<glossterm><email>stimming@tuhh.de</email> Christian
    Stimming</glossterm>
 <glossdef>
 <para>
    é um monstro na geração de relatórios. Ele é um dos principais 
    contribuintes para a infraestrutura de relatórios actual, tendo 
    criado muitos dos relatórios importantes.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jsled@asynchronous.org</email> Joshua Sled</glossterm>
+<glossdef>
+<para>
+  trabalhos nas transacções agendadas e orçamentação.
    </para>
 </glossdef>
 </glossentry>
@@ -175,6 +183,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>A <emphasis>lista de milhares</emphasis> inclui:
 
 <glosslist>
+
 <glossentry>
 <glossterm><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</glossterm>
@@ -182,6 +191,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>correcções várias e modificação para FreeBSD</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>matt_armstrong@bigfoot.com</email> Matt
       Armstrong</glossterm>
@@ -204,6 +214,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>tentou converter o código para Java/MoneyDance</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>dennisb@cs.chalmers.se</email> Dennis
       Bj&ouml;rklund</glossterm>
@@ -237,11 +248,19 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="http://www.hex.net/~cbbrowne">Christopher B.
-      Browne</ulink></glossterm>
+<glossterm><email>cbbrowne@acm.org</email> Christopher B.
+      Browne</glossterm>
 <glossdef>
 <para>pelos scripts para acções em perl, código de importação QIF baseado em Guile, 
       várias alterações à documentação em Inglês, e muito código em guile</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kemitix@users.sourceforge.net</email> Paul
+      Campbell</glossterm>
+<glossdef>
+<para>modificação para reconciliar contas filhas com a pai</para>
 </glossdef>
 </glossentry>
 
@@ -262,6 +281,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
+<glossterm><email>davefx@aspl.f2s.com</email> David Mar?n 
+      Carre?o </glossterm>
+<glossdef>
+<para>tradução para espanhol das contas iniciais de configuração</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>carol@gnumatic.com</email> Carol
       Champagne</glossterm>
 <glossdef>
@@ -276,19 +303,22 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>pelo pacote addon (extra) para xacc-rpts</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>georgec@sco.com</email> George Chen</glossterm>
 <glossdef>
 <para>pelo suporte ao QIF do MS-Money</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
-<glossterm><email>china@thewrittenword.com</email>Albert
+<glossterm><email>china@thewrittenword.com</email> Albert
       Chin-A-Young</glossterm>
 <glossdef>
 <para>correcção do configure.in</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>kenneth@gnome.org</email> Kenneth
        Christiansen</glossterm>
@@ -298,7 +328,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>jcollins@gnucash.org</email> Jeremey
+<glossterm><email>cyba@gnome.pl</email> Zbigniew Chyla</glossterm>
+<glossdef>
+<para>tradução para Polaco</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jcollins@gnucash.org</email> Jeremy
       Collins</glossterm>
 <glossdef>
 <para>pelo GnoMoney e conversão para GTK</para>
@@ -351,18 +388,21 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>por modificações do config/make e pela manutenção debian</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>ripley@xs4all.nl</email> Koen D'Hondt</glossterm>
 <glossdef>
 <para>pelas modificações ao XmHTML para Solaris</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>bob@mostly.com</email> Bob Drzyzgula</glossterm>
 <glossdef>
 <para>pelas dicas de desenho técnico da orçamentação</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>pjf@schools.net.au</email> Paul
       Fenwick</glossterm>
@@ -394,6 +434,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>Tradução das mensagens para Alemão</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>kevinfinn@mediaone.net</email> Kevin
       Finn</glossterm>
@@ -401,6 +442,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>adição do separador decimal automático, adição de opções</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rjf@aracnet.com</email> Ron
       Forrester</glossterm>
@@ -408,6 +450,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>modificações para gnome</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>DFreese@osc.uscg.mil</email> Dave
       Freese</glossterm>
@@ -415,6 +458,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>correcção para anos bissextos</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>jgoerzen@complete.org</email> John
       Goerzen</glossterm>
@@ -437,6 +481,13 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <glossdef>
 <para>código de importação QIF, impressão de cheques, janela de procura de 
       transacções</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hag@linnaean.org</email> Daniel Hagerty</glossterm>
+<glossdef>
+<para>modificação ao relatório de folha de saldos</para>
 </glossdef>
 </glossentry>
 
@@ -469,6 +520,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>actualizou a documentação sobre moedas</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>haral@codec.ro</email> Alexandru
       Harsanyi</glossterm>
@@ -476,12 +528,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>por correcções várias</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>john@dhh.gt.org</email> John Hasler</glossterm>
 <glossdef>
 <para>modificações ao motor</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>hellan@acm.org</email> Jon K&aring;re
       Hellan</glossterm>
@@ -491,14 +545,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm> 
+<glossterm><email>claus_h@image.dk</email> Claus Hindsgaul</glossterm> 
 <glossdef>
 <para>Tradução para Dinamarquês</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jjvmjv@mundomail.net</email>Miquel Jordana
+<glossterm><email>jjvmjv@mundomail.net</email> Miquel Jordana
       Vilamitjana</glossterm> 
 <glossdef>
 <para>Tradução para Espanhol do manual</para>
@@ -522,7 +576,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossterm><email>ben.kelly@ieee.org</email> Ben Kelly</glossterm>
 <glossdef>
 <para>correcção de erro de menu em Motif, correcções de erros</para>
 </glossdef>
@@ -534,12 +588,22 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>conversão para SGI Irix</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>kraai@alumni.carnegiemellon.edu</email> Matt
+      Kraai</glossterm>
+<glossdef>
+<para>correcção de erro no acelerador de datas</para>
+</glossdef>
+</glossentry>
+
 <glossentry>
 <glossterm><email>sk@xgm.de</email> Sven Kuenzler</glossterm>
 <glossdef>
 <para>pelo ficheiro README (Leia-me) para SuSE</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>blarsen@ada-works.com</email> Bryan
       Larsen</glossterm>
@@ -557,7 +621,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossterm><email>nj.lee@plumtree.co.nz</email> Nicholas Lee</glossterm>
+<glossdef>
+<para>correcção de erro scheme</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>minfrin@sharp.fm</email> Graham Leggett</glossterm>
 <glossdef>
 <para>por corrigir um erro que prendia o funcionamento</para>
 </glossdef>
@@ -603,7 +674,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossterm><email>kmaraas@gnome.org</email> Kjartan Maraas</glossterm>
 <glossdef>
 <para>traduções para Norueguês</para>
 </glossdef>
@@ -691,7 +762,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>j.e.nielsen@iname.com</email>Johnny Ernst
+<glossterm><email>j.e.nielsen@iname.com</email> Johnny Ernst
 Nielsen</glossterm>
 <glossdef>
 <para>Tradução para Dinamarquês</para>
@@ -707,10 +778,25 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>d95mback@dtek.chalmers.se</email> Martin
+      Norbäck</glossterm>
+<glossdef>
+<para>tTradução para Sueco</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>spacey@inch.com</email> Peter
       Norton</glossterm>
 <glossdef>
 <para>pela valente tentativa de conversão para GTK</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>notting@redhat.com</email> Bill Nottingham</glossterm>
+<glossdef>
+<para>modificação da configuração de compilação guile</para>
 </glossdef>
 </glossentry>
 
@@ -782,6 +868,13 @@ Nielsen</glossterm>
 <glossterm><email>tpo@spin.ch</email> Tomas Pospisek</glossterm>
 <glossdef>
 <para>modificações debian</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>famille.p.poulain@free.fr</email> Paul Poulain</glossterm>
+<glossdef>
+<para>traduções para Francês</para>
 </glossdef>
 </glossentry>
 
@@ -879,10 +972,18 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>stimming@uclink.berkeley.edu</email> Christian
+<glossterm><email>stimming@tuhh.de</email> Christian
       Stimming</glossterm>
 <glossdef>
 <para>modificação de relatórios</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>garrisonstuber@bellsouth.net</email> Michael
+      T. Garrison Stuber</glossterm>
+<glossdef>
+<para>modificação aos relatórios</para>
 </glossdef>
 </glossentry>
 
@@ -902,7 +1003,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossterm><email>troeger@samart.co.th</email> Arnold Troeger</glossterm>
 <glossdef>
 <para>Pacotes para Mandrake</para>
 </glossdef>
@@ -962,15 +1063,22 @@ Nielsen</glossterm>
 <para>Tradução para Japonês</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>jazepeda@pacbell.net</email> Alex Zepeda</glossterm>
+<glossdef>
+<para>modificação à configuração postgres</para>
+</glossdef>
+</glossentry>
 </glosslist>
 
- </para>
+</para>
 </sect1>
 
 <sect1 id="xacc-oses">
 <title>Sistemas Operativos Suportados</title>
 
-<para>Sabe-se que o GnuCash 1.5.0 funciona nos seguintes sistemas: 
+<para>Sabe-se que o GnuCash 1.6.0 funciona nos seguintes sistemas: 
 
 <itemizedlist>
 
@@ -1228,6 +1336,28 @@ Por agora, é isto o que temos.
          (114.2)</entry>
 <entry>8 (7.8)</entry>
 </row>
+<row>
+<entry>gnucash-1.6.0
+         Junho 2001</entry>
+<entry>139 ficheiros
+         (42.8+8.3)</entry>
+<entry>28 ficheiros
+         (5.7+2.0)</entry>
+<entry>23 ficheiros
+         (10.1+1.5)</entry>
+<entry>-</entry>
+<entry>132 ficheiros
+         (60.0+4.2)</entry>
+<entry>102 ficheiros
+         (6.2+0.8+27.3)</entry>
+<entry>64 ficheiros
+         (12.1)</entry>
+<entry>69 ficheiros
+         (12.9)</entry>
+<entry>455 ficheiros
+         (193.9)</entry>
+<entry>11 (18.7)</entry>
+</row>
 </tbody>
 </tgroup>
 </table>
@@ -1271,8 +1401,7 @@ Por agora, é isto o que temos.
 </listitem>
 <listitem>
 <para>scheme -- código scheme e guile -- <filename>src/scm</filename> e
-      <filename>src/guile</filename> -- em parentesis é <filename>*.c + *.h + *.scm</filename>
-
+ <filename>src/guile</filename> -- em parentesis é <filename>*.c + *.h + *.scm</filename>
  </para>
 </listitem>
 <listitem>
@@ -1289,8 +1418,8 @@ Por agora, é isto o que temos.
 </listitem>
 
 <listitem> <para>txt -- <filename>README</filename> interno,
-      ficheiros de documentação <filename>*.txt</filename> e 
-      <filename>*.texinfo</filename> em todos os sub-directórios. </para>
+ficheiros de documentação <filename>*.txt</filename> e 
+<filename>*.texinfo</filename> em todos os sub-directórios. </para>
 </listitem>
 
 </itemizedlist>

@@ -534,7 +534,7 @@ guid_hash_to_guint (gconstpointer ptr)
 
   if (!guid)
   {
-    fprintf(stderr, "guid_g_hash_table_hash: received NULL guid pointer.");
+    PERR ("received NULL guid pointer.");
     return 0;
   }
 

@@ -1,5 +1,54 @@
 Version history:
 ------- -------
+ 1.6.6  - 10 March 2002
+ 	 o Updated or new translations for Dutch, Norwegian, Russian,
+	   Greek, French, German, Portuguese, Azerbaijani Turkic,
+	   and Slovak
+	 o Tweaked the exchange rate calculation so that it will work
+	   in even more complicated cases, involving different 
+	   Euroland and other currencies.
+	 o Added Edit Report Options hyperlink to warnings in reports.
+	 o Added workaround for Guppi barchart legend sorting
+	   (broken in Guppi 0.40.0 - 0.40.3).
+	 o Bug fixes
+
+ 1.6.5  - 16 December 2001
+         o Euro conversion druid
+         o Updated or new translations for Brazilian Portuguese,
+           Danish, German, Nicaraguan Spanish, Norwegian, Portuguese,
+           Slovak, Spanish, and Swedish
+         o minor bug fixes
+
+ 1.6.4  - 30 September 2001
+         o fix bug importing GnuCash 1.4 files
+
+ 1.6.3  - 23 September 2001
+         o new Polish translation
+         o Danish and Spanish translation of new account files
+         o updated Swedish, German, and Portuguese translations
+         o child accounts can be reconciled with the parent
+         o support for TrustNet online quotes
+         o support for precious metal currencies
+         o bug fixes
+
+ 1.6.2  - 12 August 2001
+         o Updated Danish and German translations
+         o SQL backend performance improvements
+         o bug fixes
+
+ 1.6.1  - 07 July 2001
+         o updated documentation
+         o updated French, German, Japanese, and Portuguese translations
+         o improved startup time
+         o many bug fixes
+
+ 1.6.0  - 10 June 2001
+         o more sql backend work
+         o updated translations for Portuguese, German,
+           Swedish, and Danish
+         o a little ray of sunshine
+         o bug fixes
+
  1.5.98 - 04 June 2001
          o second beta release
          o updated documentation (English & Portuguese)

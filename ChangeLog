@@ -1,3 +1,632 @@
+2002-03-03  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: Added nl to ALL_LINGUAS
+	
+2002-02-27  Christian Stimming  <stimming@tuhh.de>
+
+	* po/nl.po, po/glossary/nl.po: Added Dutch translation by
+	Jan-Willem Harmanny <jwharmanny@hotmail.com>.
+
+2002-02-23  Christian Stimming  <stimming@tuhh.de>
+
+	* po/no.po: updated translation by Kjartan Maraas
+	<kmaraas@gnome.org>.
+
+2002-02-19  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ru.po: updated translation by Vitaly Lipatov.
+
+2002-02-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/el.po: Updated Greek translation by Nikos Charonitakis
+	<charosn@her.forthnet.gr>.
+
+2002-02-17  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: Added support for surpressing zero
+	amounts.
+
+	* src/scm/*-utilities.scm: Clean up commodity-collector calling
+	functions.
+
+2002-02-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/gnc-html-guppi.c: Added workaround for Guppi barchart
+	legend sorting (broken in Guppi 0.40.0 - 0.40.3).
+
+2002-02-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/fr.po: Updated French translation from work of Jérôme Sautret
+	<jerome@sautret.org>.
+
+2002-01-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-reconcile.c: fix bugs when reconciling
+	share accounts
+
+	* src/gnc-ui-util.c: fix bugs in get_balance functions
+
+2002-01-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/commodity-utilities.scm: Tweaked the exchange rate
+	calculation so that it will work in even more complicated cases,
+	involving different Euroland and other currencies.
+
+2002-01-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm, src/scm/report/*.scm: Added option
+	hyperlink in report warnings.
+
+	* doc/sgml/*/xacc-euro.sgml: Fixed DEM rate as pointed out by
+	Gregor Hoffleit <gregor@hoffleit.de>.
+
+2002-01-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/html-*.scm,
+	src/scm/report/reports/stylesheet-*.scm: Added nowrap attribute
+	for cells containing numbers.
+
+	* po/de.po: String fix by Christian Meyer <chrisime@gnome.org>.
+
+2001-12-30  Christian Stimming  <stimming@tuhh.de>
+
+	* po/el.po, po/glossary/el.po: Added initial Greek translation by
+	Simos Xenitellis <simos@hellug.gr>
+
+	* po/glossary/pt.po: Added portugese translation by Duarte Loreto
+	<happyguy_pt@hotmail.com>
+
+	* po/az.po: Added Azerbaijani Turkic translation by
+	<azerb_linux@hotmail.com>.
+
+2001-12-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sk.po: Updated Slovak translation from Zdenko Podobny
+	<zdpo@mailbox.sk>. 
+
+2001-12-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c: Fixed support for using existing
+	exchange accounts.
+
+2001-12-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c: More sanity checks. Added support
+	for using existing exchange accounts.
+
+2001-12-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c: Added support for Stock accounts.
+
+	* src/gnome/window-main.c, src/gnome/window-acct-tree.c: moved
+	Euro conversion to Tools menu.
+
+	* po/sv.po: Fixed Swedish translation, by Christian Rose
+	<menthos@menthos.com>, who thanks Peter Karlsson
+	<peter@softwolves.pp.se> for his comments.
+
+	* po/pt.po: Updated portuguese translation by Duarte Loreto
+	<happyguy_pt@hotmail.com>
+
+2001-12-09  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sv.po: Updated Swedish translation, by Christian Rose
+	<menthos@menthos.com> 
+
+	* po/de.po: Updated German translation (use correct quotes).
+
+	* src/gnome/druid-euro-conv.c: Fix forgotten Income/Expense
+	account creation.
+
+2001-12-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/POTFILES.in: Forgot this one.
+
+	* po/de.po: Updated German translation.
+
+	* src/EuroUtils.c: Fixed rounding error.
+
+	* src/gnome/druid-euro-conv.c, src/gnome/Makefile.am,
+	src/gnc-ui.h, src/gnome/gnc-dialogs.glade,
+	src/gnome/window-acct-tree.c, src/pixmaps/Makefile.am,
+	src/pixmaps/one-euro.png, src/pixmaps/euro-notes.png: Added Euro
+	conversion druid.
+
+	* src/gnome/druid-utils.h, src/gnome/druid-utils.c: added
+	gnc_druid_set_logo_image. 
+
+2001-12-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main-summarybar.c (gnc_ui_accounts_recurse):
+	fix bug summing EURO currencies
+
+2001-11-16  Christian Stimming  <stimming@tuhh.de>
+
+	* {src,src/test,src/gnome}/Makefile.am: Moved ${GUPPI_LIBS} to
+	appear before GNOME_LIBDIR in LDALL so that --with-libguppi-prefix
+	can have any effect at all.
+
+2001-11-12  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sk.po, po/glossary/sk.po: updated/added Slovak translation
+	from Zdenko Podobný <zdpo@mailbox.sk>.
+
+2001-10-11  Christian Stimming  <stimming@tuhh.de>
+
+	* po/fr.po: updated french team address. fixed version number.
+
+2001-10-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/da.po: Added translation by Keld Simonsen
+	<keld@dkuug.dk>
+
+2001-10-09  Christian Stimming  <stimming@tuhh.de>
+ 
+	* po/glossary/no.po: Added Norwegian (bokmål) translation by
+	Kjartan Maraas <kmaraas@gnome.org>.
+
+	* po/glossary/sv.po: Added Swedish translation by Christian Rose
+	<menthos@menthos.com> who "fixed a lot of things. Thanks to Göran
+	Uddeborg <goeran@uddeborg.pp.se> for his review."
+	
+	* po/da.po: Updated translation by Keld Simonsen <keld@dkuug.dk>
+
+	* po/es.po: Updated Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+	
+	* po/sk.po, configure.in: Added Slovak translation from Zdenko
+	Podobný <zdpo@mailbox.sk>.
+
+2001-10-03  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sv.po: Updated Swedish translation, by Christian Rose
+	<menthos@menthos.com>
+
+2001-10-02  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/es.po: Added Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+
+	* po/no.po: Updated Norwegian translation by Kjartan Maraas
+	<kmaraas@gnome.org>
+	
+	* po/es.po: Updated Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+
+2001-09-25  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/de.po, po/de.po: Add professional German accounting
+	terms.
+
+2001-09-12  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sv.po: Updated Swedish translation by Christian Rose
+	<menthos@menthos.com>
+
+2001-09-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/messages.[hc]: Added support for i18n messages with
+	qualifying prefix; adapted from code by Zbigniew Chyla
+	<cyba@piast.t19.ds.pwr.wroc.pl>.
+
+2001-09-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Account.c (xaccInitAccount): initialize scus to 0
+
+	* src/engine/io-gncxml-v2.c (clear_up_account_commodity): fix scu
+	values
+
+2001-08-29  Christian Stimming <stimming@tuhh.de> 
+
+	* po/pl.po: Added (preliminary) Polish translation by Zbigniew
+	Chyla <cyba@gnome.pl>
+
+2001-08-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/gnc-html-guppi.c: activate the [xy]_axis_label
+	options.
+
+2001-08-19  Christian Stimming  <stimming@tuhh.de>
+
+	* po/gnc-glossary.txt, po/glossary/gnc-glossary.txt,
+	po/glossary/txt-to-pot.sh, po/glossary/de.po: Moved from the
+	concept of one big ascii table to the concept of one po file for
+	each translation of the glossary. Hence, created this
+	subdirectory.
+
+2001-08-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/window-reconcile.c: see below.
+
+	* src/gnome/window-register.c, src/gnome/window-acct-tree.c,
+	po/gnc-glossary.txt: Changed the term 'to scrub' to 'to check and
+	repair'.
+
+2001-08-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Update German translation.
+	
+	* src/FileDialog.c (show_book_error): fix message.
+
+	* po/gnc-glossary.txt: Updated explanation for "to scrub" to clear
+	up some big misunderstandings here.
+
+2001-08-09  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/table-gnome.c
+	(gnc_table_save_state): tweak cell width saving
+
+2001-08-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c: fix bugs
+
+	* src/register/gnome/pricecell-gnome.c: better 'return'
+	handling.
+
+2001-08-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/pricecell.c: fix bugs
+
+2001-08-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-register.c: move close button to left
+	to be more consistent with main window
+
+	* src/SplitLedger.c (sr_split_auto_calc): fix bug
+
+2001-08-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/main-window.scm: handle errors in creating
+	~/.gnucash/books
+
+	* src/scm/path.scm (gnc:make-dir): new func
+
+	* src/scm/options.scm: same as below
+
+	* src/scm/html-style-sheet.scm: handle file opening error
+
+2001-07-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: Fixed bug with sub-balances in
+	account tables with non-default account selection.
+
+2001-07-17  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-features.sgml: Matt Krai's doc patch
+
+	* doc/sgml/C/xacc-about.sgml: Matt Krai's doc patch
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/gnome/gnc-dateedit.c: Matt Kraai's date accelerator bug fix
+
+	* src/engine/io-gncbin-r.c: fix bug with price import (use
+	posted date, not entered date).
+
+	* src/engine/gnc-pricedb.[ch]: fix bugs with setting currency and
+	commodity and with converting from legacy commodities.
+
+2001-07-17  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/report/transaction.scm: Michael T. Garrison Stuber's
+	transaction report patch.
+
+2001-07-11  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: fix credits
+
+	* doc/sgml/C/xacc-about.sgml: fix docs, credits
+
+2001-07-11  James LewisMoss  <jimdres@mindspring.com>
+
+	* configure.in (GNOME_XML_CFLAGS): add Richard Braakman's xml
+	version check.
+
+2001-07-09  Dave Peticolas  <dave@krondo.com>
+
+	* configure.in: check for ghttp_ssl.h
+
+	* src/gnome/gnc-http.c: conditionally include ghttp_ssl.h
+
+	* doc/sgml/C/xacc-whats-new.sgml: fix spelling
+
+	* doc/sgml/C/xacc-about.sgml: fix version
+
+	* src/Makefile.am: link intl libs with gnucash-make-guids
+
+	* src/register/QuickFill.c: same as below
+
+	* src/register/quickfillcell.c: conditionally include wctype.h
+
+	* configure.in: check for wctype.h
+
+2001-07-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/gnc-test-stuff.c (get_random_query): not so many terms
+
+	* src/test/Makefile.am: add test-scm-query
+
+	* src/test/.cvsignore: add test-scm-query
+
+	* src/test/test-scm-query.c: new test -- check query<->scm
+	conversion
+
+	* src/guile/gnucash.h: new func api
+
+	* src/guile/gnucash.c.in (gnc_gw_init): new func
+
+	* src/guile/gnc-helpers.c: fix bugs
+
+	* src/engine/Query.c: fix bugs
+
+2001-07-04  Bill Gribble  <grib@billgribble.com>
+
+	* backport QIF import fixes from 1.7 tree
+
+2001-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/depend.scm: disable load time output
+
+	* src/scm/commodity-utilities.scm: use srfi-1 to get the
+	right 'last'.
+
+2001-07-04  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/gnome/glade/.cvsignore: create and add Makefile and
+	Makefile.in.
+
+	* src/scm/report/report-list.scm: switch to use-modules for
+	some reports.
+
+	* po/.cvsignore: add ChangeLog.
+
+	* src/scm/report/transaction-report.scm: renamed to transaction.scm
+
+	* src/scm/report/transaction.scm: renamed from
+	transaction-report.scm and converted to guile module.
+
+	* src/scm/report/taxtxf.scm: convert to guile module.
+
+	* src/scm/report/register.scm: convert to guile module.
+
+	* src/scm/report/price-scatter.scm: convert to guile module.
+
+	* src/scm/report/portfolio.scm: convert to guile module.
+
+	* src/scm/report/pnl.scm: convert to guile module.
+
+	* src/scm/report/net-barchart.scm: convert to guile module.
+
+	* src/scm/report/iframe-url.scm: convert to guile module.
+
+	* src/scm/report/hello-world.scm: convert to guile module.
+
+	* src/scm/report/category-barchart.scm: convert to guile module.
+
+	* src/scm/report/balance-sheet.scm: convert to guile module.
+
+	* src/scm/report/average-balance.scm: convert to guile module.
+
+	* src/scm/report/account-summary.scm: convert to guile module.
+
+	* src/scm/report/account-piecharts.scm: convert to guile module.
+
+	* src/scm/report/Makefile.am (gncscmmoddir): dir for report modules.
+	(gncscmmod_DATA): add reports that have been modularized.
+	(gncscm_DATA): remove reports that have been modularized.
+
+	* src/scm/bootstrap.scm.in (gnc:load): don't silently succeed on
+	load errors -- fail.
+
+	* src/scm/report-html.scm: make (ice-9 slib) dependency explicit.
+
+	* src/scm/depend.scm (gnc:depend): add optional timing facility.
+
+2001-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* Makefile.am: add gnc-glossary.txt to the dist
+
+	* src/engine/sixtp.c (sixtp_handle_catastrophe): fix bug -- don't
+	destroy last stack frame
+
+2001-07-03  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/date-utilities.scm: Nicholas Lee's bug fix
+
+	* src/.cvsignore: adjust for new program
+
+	* rpm/gnucash.spec.in: adjust for new program
+
+	* src/Makefile.am: adjust for new program
+
+	* src/gnucash-make-guids.c: new program to aid in GUID creation
+
+	* src/engine/sql/putil.h: Alex Zepeda's patch converting atol->strtoll.
+
+	* src/scm/report/taxtxf.scm: fix bug, eliminate use of append
+
+2001-07-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-dateedit.c: sync with datecell-gnome.c
+
+	* src/register/gnome/datecell-gnome.c: use GDate to do
+	date manipulations.
+
+	* src/scm/bootstrap.scm.in: instead of the scheme command,
+	just tell the user to run gnucash once as root.
+
+2001-07-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.[ch]: implement towupper and iswlower
+	if they are missing
+
+	* src/register/quickfillcell.c: include gnc-ui-util.h
+
+	* src/register/QuickFill.c: include gnc-ui-util.h
+
+	* configure.in: check for towupper
+
+2001-06-29  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-account-xml-v2.c: Alex Zepeda's patch
+	adding a missing include.
+
+2001-06-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/QuickFill.c: same as below
+
+	* src/register/quickfillcell.c: use wide character conversion
+	functions
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* po/fr.po: Paul Poulain's french translations
+
+2001-06-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sixtp-dom-parsers.c: same as below
+
+	* src/engine/gnc-commodity-xml-v2.c: same as below
+
+	* src/engine/gnc-account-xml-v2.c: don't use node content member
+	directly -- if libxml was configured to use buffers, this won't
+	work.
+
+	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): strip
+	string before setting things. (James LewisMoss patch)
+
+	* src/engine/io-gncxml-v2.c (gnc_book_write_to_xml_file_v2): check
+	return of fclose. (James LewisMoss patch)
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_key_press_event): allow shift-pgup and shift-pgdn
+	to go to top & bottom of register respectively.
+
+	* src/register/gnome/datecell-gnome.c (DateDirect): allow '-'
+	hotkey to work if there is a full date there, or the cell is
+	blank.
+
+	* src/gnome/gnc-html.c: don't handle keypresses, let the gtkhtml
+	object do it.
+
+2001-06-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/kvp-sql.c: include gnc-engine-util.h for stpcpy
+
+	* src/engine/gnc-engine-util.c (gnc_stpcpy): add func
+
+	* src/engine/gnc-engine-util.h: add definition of gnc_stpcpy.
+	if stpcpy is not available, define stpcpy as gnc_stpcpy.
+
+	* src/gnc-ui-util.c: remove gnc_stpcpy
+
+	* src/gnome/window-main-summarybar.c: fix bug in euro profit
+	calculation. use share prices in calculating totals.
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/report/balance-sheet.scm: Daniel Hagerty's patch
+	to add an unrealized gain/loss line to the balance sheet.
+
+2001-06-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/account-piecharts.scm: fix sign bug
+
+	* src/engine/sql/kvp-sql.c: same as below
+
+	* src/engine/sql/txn.c: same as below
+
+	* src/engine/sql/price.c: same as below
+
+	* src/engine/sql/checkpoint.c: use strtoll instead of atoll
+
+2001-06-24  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* configure.in: Alex Zepeda's postgres configure patch
+
+2001-06-23  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/gnome/window-reconcile.c: fix for display of auto end value
+	updates.
+
+2001-06-23  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* AUTHORS: credits
+
+	* configure.in: Bill Nottingham's guile configuration patch
+
+2001-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/Makefile.am: remove glade cruft
+
+2001-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* configure.in: better error messages. remove cruft.
+
+2001-06-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/cursors.c (gnc_set_busy_cursor): fix warning
+
+	* src/scm/date-utilities.scm: use gnc:print-date instead of
+	strftime
+
+	* src/scm/report/hello-world.scm: fix docs
+
+	* src/scm/report/transaction-report.scm: fix date printing
+
+	* src/scm/report/register.scm: remove cruft
+
+	* src/register/gnome/gnucash-style.c (gnucash_font_load): new func
+	If gdk_fontset_load doesn't work, try gdk_font_load.
+	(gnucash_style_set_register_font_name): use gnucash_font_load
+	(gnucash_style_set_register_hint_font_name): use gnucash_font_load
+
+	* src/FileDialog.c (gncFileSave): save the window state on a save
+	(gncFileQuerySave): don't provide cancel option when the ui can't
+
+	* src/scm/main-window.scm (gnc:main-window-save-state): new func
+	don't save state when the ui can't
+
+	* src/gnome/window-main.c
+	(gnc_main_window_can_cancel_exit): new func
+	(gnc_main_window_can_save): new func
+	(gnc_main_window_has_apps): new func
+
+	* src/gnc-ui.h: add new api
+
+	* src/gnome/top-level.c (gnc_ui_can_cancel_exit): new func
+
+2001-06-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/prefs.scm: fix bug
+
+	* src/scm/main.scm: fix bug
+
+2001-06-15  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Transaction.c (xaccSplitDateOrder): Fix bug -
+	use split values rather than balances.
+
 2001-06-10  Christian Stimming  <stimming@tuhh.de>
 
 	* de.po: updated German translation.

@@ -291,13 +291,17 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case MUTUAL:
       case CREDIT:
       case LIABILITY:
-	amount = xaccAccountGetBalance(account);
+	amount = gnc_ui_account_get_balance (account, FALSE);
+        /* unreverse sign */
+        if (gnc_reverse_balance (account))
+          amount = gnc_numeric_neg (amount);
+
         currency_accum->assets =
           gnc_numeric_add (currency_accum->assets, amount,
                            gnc_commodity_get_fraction (account_currency),
                            GNC_RND_ROUND);
 
-	if (euro)
+	if (euro && (currency_accum != euro_accum))
 	  euro_accum->assets =
             gnc_numeric_add (euro_accum->assets,
                              gnc_convert_to_euro(account_currency, amount),
@@ -309,17 +313,22 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 	break;
       case INCOME:
       case EXPENSE:
-	amount = xaccAccountGetBalance(account);
+	amount = gnc_ui_account_get_balance (account, FALSE);
+        /* unreverse sign */
+        if (gnc_reverse_balance (account))
+          amount = gnc_numeric_neg (amount);
+
         currency_accum->profits =
           gnc_numeric_sub (currency_accum->profits, amount,
                            gnc_commodity_get_fraction (account_currency),
                            GNC_RND_ROUND);
 
-        if (euro)
-          gnc_numeric_sub (euro_accum->profits,
-                           gnc_convert_to_euro(account_currency, amount),
-                           gnc_commodity_get_fraction (euro_commodity),
-                           GNC_RND_ROUND);
+        if (euro && (currency_accum != euro_accum))
+          euro_accum->profits =
+            gnc_numeric_sub (euro_accum->profits,
+                             gnc_convert_to_euro(account_currency, amount),
+                             gnc_commodity_get_fraction (euro_commodity),
+                             GNC_RND_ROUND);
 
 	if (children != NULL)
 	  gnc_ui_accounts_recurse(children, currency_list, euro);

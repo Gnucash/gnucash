@@ -102,7 +102,7 @@ create_QIF_Import_Account_Picker (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox1), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (QIF_Import_Account_Picker), GNOME_STOCK_BUTTON_OK);
-  button1 = g_list_last (GNOME_DIALOG (QIF_Import_Account_Picker)->buttons)->data;
+  button1 = GTK_WIDGET (g_list_last (GNOME_DIALOG (QIF_Import_Account_Picker)->buttons)->data);
   gtk_widget_ref (button1);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "button1", button1,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -110,7 +110,7 @@ create_QIF_Import_Account_Picker (void)
   GTK_WIDGET_SET_FLAGS (button1, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (QIF_Import_Account_Picker), GNOME_STOCK_BUTTON_CANCEL);
-  button2 = g_list_last (GNOME_DIALOG (QIF_Import_Account_Picker)->buttons)->data;
+  button2 = GTK_WIDGET (g_list_last (GNOME_DIALOG (QIF_Import_Account_Picker)->buttons)->data);
   gtk_widget_ref (button2);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "button2", button2,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -635,7 +635,7 @@ create_Print_Check_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area6), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Print_Check_Dialog), GNOME_STOCK_BUTTON_OK);
-  button21 = g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data;
+  button21 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data);
   gtk_widget_ref (button21);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "button21", button21,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -643,7 +643,7 @@ create_Print_Check_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button21, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Print_Check_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button22 = g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data;
+  button22 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data);
   gtk_widget_ref (button22);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "button22", button22,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -651,7 +651,7 @@ create_Print_Check_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button22, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Print_Check_Dialog), GNOME_STOCK_BUTTON_HELP);
-  button23 = g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data;
+  button23 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Print_Check_Dialog)->buttons)->data);
   gtk_widget_ref (button23);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "button23", button23,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1661,7 +1661,7 @@ create_Find_Transactions (void)
 
   gnome_dialog_append_button_with_pixmap (GNOME_DIALOG (Find_Transactions),
                                           _("Find"), GNOME_STOCK_PIXMAP_SEARCH);
-  button26 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  button26 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data);
   gtk_widget_ref (button26);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button26", button26,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1669,7 +1669,7 @@ create_Find_Transactions (void)
   GTK_WIDGET_SET_FLAGS (button26, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Find_Transactions), GNOME_STOCK_BUTTON_CANCEL);
-  button27 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  button27 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data);
   gtk_widget_ref (button27);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button27", button27,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -1677,7 +1677,7 @@ create_Find_Transactions (void)
   GTK_WIDGET_SET_FLAGS (button27, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Find_Transactions), GNOME_STOCK_BUTTON_HELP);
-  button28 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  button28 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data);
   gtk_widget_ref (button28);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button28", button28,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2214,7 +2214,7 @@ create_Budget_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area9), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Budget_Dialog), GNOME_STOCK_BUTTON_OK);
-  ok_button = g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data;
+  ok_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data);
   gtk_widget_ref (ok_button);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "ok_button", ok_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2222,7 +2222,7 @@ create_Budget_Dialog (void)
   GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Budget_Dialog), GNOME_STOCK_BUTTON_APPLY);
-  apply_button = g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data;
+  apply_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data);
   gtk_widget_ref (apply_button);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "apply_button", apply_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2230,7 +2230,7 @@ create_Budget_Dialog (void)
   GTK_WIDGET_SET_FLAGS (apply_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Budget_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  cancel_button = g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data;
+  cancel_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data);
   gtk_widget_ref (cancel_button);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "cancel_button", cancel_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2238,7 +2238,7 @@ create_Budget_Dialog (void)
   GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Budget_Dialog), GNOME_STOCK_BUTTON_HELP);
-  help_button = g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data;
+  help_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Budget_Dialog)->buttons)->data);
   gtk_widget_ref (help_button);
   gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "help_button", help_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2789,7 +2789,7 @@ create_Financial_Calculator_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area10), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Financial_Calculator_Dialog), _("Schedule"));
-  schedule_button = g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data;
+  schedule_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data);
   gtk_widget_ref (schedule_button);
   gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "schedule_button", schedule_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -2797,7 +2797,7 @@ create_Financial_Calculator_Dialog (void)
   GTK_WIDGET_SET_FLAGS (schedule_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Financial_Calculator_Dialog), GNOME_STOCK_BUTTON_CLOSE);
-  close_button = g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data;
+  close_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Financial_Calculator_Dialog)->buttons)->data);
   gtk_widget_ref (close_button);
   gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "close_button", close_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3003,7 +3003,7 @@ create_Amortization_Schedule_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area11), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_OK);
-  button60 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  button60 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data);
   gtk_widget_ref (button60);
   gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button60", button60,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3011,7 +3011,7 @@ create_Amortization_Schedule_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button60, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_APPLY);
-  button61 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  button61 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data);
   gtk_widget_ref (button61);
   gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button61", button61,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3019,7 +3019,7 @@ create_Amortization_Schedule_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button61, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Amortization_Schedule_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button62 = g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data;
+  button62 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Amortization_Schedule_Dialog)->buttons)->data);
   gtk_widget_ref (button62);
   gtk_object_set_data_full (GTK_OBJECT (Amortization_Schedule_Dialog), "button62", button62,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3131,7 +3131,7 @@ create_Commodity_Selector_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area12), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Selector_Dialog), GNOME_STOCK_BUTTON_OK);
-  button63 = g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data;
+  button63 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data);
   gtk_widget_ref (button63);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Selector_Dialog), "button63", button63,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3139,7 +3139,7 @@ create_Commodity_Selector_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button63, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Selector_Dialog), _("New..."));
-  button64 = g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data;
+  button64 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data);
   gtk_widget_ref (button64);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Selector_Dialog), "button64", button64,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3147,7 +3147,7 @@ create_Commodity_Selector_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button64, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Selector_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button65 = g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data;
+  button65 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Selector_Dialog)->buttons)->data);
   gtk_widget_ref (button65);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Selector_Dialog), "button65", button65,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3337,7 +3337,7 @@ create_Commodity_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area13), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Dialog), GNOME_STOCK_BUTTON_OK);
-  button66 = g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data;
+  button66 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data);
   gtk_widget_ref (button66);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Dialog), "button66", button66,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3345,7 +3345,7 @@ create_Commodity_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button66, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button67 = g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data;
+  button67 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data);
   gtk_widget_ref (button67);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Dialog), "button67", button67,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3353,7 +3353,7 @@ create_Commodity_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button67, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodity_Dialog), GNOME_STOCK_BUTTON_HELP);
-  button68 = g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data;
+  button68 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodity_Dialog)->buttons)->data);
   gtk_widget_ref (button68);
   gtk_object_set_data_full (GTK_OBJECT (Commodity_Dialog), "button68", button68,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3439,9 +3439,6 @@ create_Account_Dialog (void)
   GtkWidget *button63;
   GtkWidget *cancel_button;
   GtkWidget *button72;
-  GtkTooltips *tooltips;
-
-  tooltips = gtk_tooltips_new ();
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
@@ -3840,7 +3837,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (opening_equity_radio);
   gtk_box_pack_start (GTK_BOX (vbox120), opening_equity_radio, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, opening_equity_radio, _("Use an Equity account to transfer the opening balance. The Equity account will be created if it doesn't exist already."), NULL);
 
   radiobutton8 = gtk_radio_button_new_with_label (vbox120_group, _("Select Transfer Account"));
   vbox120_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton8));
@@ -3849,7 +3845,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (radiobutton8);
   gtk_box_pack_start (GTK_BOX (vbox120), radiobutton8, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radiobutton8, _("Use the account select below to transfer the opening balance."), NULL);
 
   transfer_account_frame = gtk_frame_new (_("Transfer Account"));
   gtk_widget_ref (transfer_account_frame);
@@ -3883,7 +3878,7 @@ create_Account_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area12), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_OK);
-  button63 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  button63 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data);
   gtk_widget_ref (button63);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button63", button63,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3891,7 +3886,7 @@ create_Account_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button63, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  cancel_button = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  cancel_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data);
   gtk_widget_ref (cancel_button);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "cancel_button", cancel_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -3899,14 +3894,12 @@ create_Account_Dialog (void)
   GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_HELP);
-  button72 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  button72 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data);
   gtk_widget_ref (button72);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button72", button72,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (button72);
   GTK_WIDGET_SET_FLAGS (button72, GTK_CAN_DEFAULT);
-
-  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "tooltips", tooltips);
 
   return Account_Dialog;
 }
@@ -4007,6 +4000,7 @@ create_QIF_Import_Druid (void)
   GtkWidget *label841;
   GtkWidget *date_format_combo;
   GtkWidget *date_format_entry;
+  GtkWidget *label8477431;
   GtkWidget *account_name_page;
   GdkColor account_name_page_bg_color = { 0, 39321, 49087, 39578 };
   GdkColor account_name_page_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -4016,6 +4010,7 @@ create_QIF_Import_Druid (void)
   GtkWidget *hbox70;
   GtkWidget *label824;
   GtkWidget *qif_account_entry;
+  GtkWidget *label8477432;
   GtkWidget *loaded_files_page;
   GdkColor loaded_files_page_bg_color = { 0, 39321, 49087, 39321 };
   GdkColor loaded_files_page_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -4249,6 +4244,13 @@ create_QIF_Import_Druid (void)
   gtk_widget_show (date_format_entry);
   gtk_entry_set_editable (GTK_ENTRY (date_format_entry), FALSE);
 
+  label8477431 = gtk_label_new (_("Click \"Back\" to cancel loading this file and choose another."));
+  gtk_widget_ref (label8477431);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label8477431", label8477431,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477431);
+  gtk_box_pack_end (GTK_BOX (druid_vbox22), label8477431, FALSE, FALSE, 0);
+
   account_name_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (account_name_page);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "account_name_page", account_name_page,
@@ -4296,6 +4298,13 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_account_entry);
   gtk_box_pack_start (GTK_BOX (hbox70), qif_account_entry, TRUE, TRUE, 0);
+
+  label8477432 = gtk_label_new (_("Click \"Back\" to cancel loading this file and select another."));
+  gtk_widget_ref (label8477432);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label8477432", label8477432,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477432);
+  gtk_box_pack_end (GTK_BOX (druid_vbox9), label8477432, FALSE, FALSE, 0);
 
   loaded_files_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (loaded_files_page);
@@ -4900,7 +4909,7 @@ create_QIF_Import_Druid (void)
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_date_format_next_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (date_format_page), "back",
-                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_back_cb),
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_back_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (account_name_page), "next",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_next_cb),
@@ -5412,7 +5421,7 @@ create_Transfer_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area13), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Transfer_Dialog), GNOME_STOCK_BUTTON_OK);
-  button66 = g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data;
+  button66 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data);
   gtk_widget_ref (button66);
   gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "button66", button66,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -5420,7 +5429,7 @@ create_Transfer_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button66, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Transfer_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button68 = g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data;
+  button68 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data);
   gtk_widget_ref (button68);
   gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "button68", button68,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -5880,7 +5889,7 @@ create_New_Style_Sheet_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area15), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (New_Style_Sheet_Dialog), GNOME_STOCK_BUTTON_OK);
-  button73 = g_list_last (GNOME_DIALOG (New_Style_Sheet_Dialog)->buttons)->data;
+  button73 = GTK_WIDGET (g_list_last (GNOME_DIALOG (New_Style_Sheet_Dialog)->buttons)->data);
   gtk_widget_ref (button73);
   gtk_object_set_data_full (GTK_OBJECT (New_Style_Sheet_Dialog), "button73", button73,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -5888,7 +5897,7 @@ create_New_Style_Sheet_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button73, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (New_Style_Sheet_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button75 = g_list_last (GNOME_DIALOG (New_Style_Sheet_Dialog)->buttons)->data;
+  button75 = GTK_WIDGET (g_list_last (GNOME_DIALOG (New_Style_Sheet_Dialog)->buttons)->data);
   gtk_widget_ref (button75);
   gtk_object_set_data_full (GTK_OBJECT (New_Style_Sheet_Dialog), "button75", button75,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6163,7 +6172,7 @@ create_Tax_Information_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area14), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_OK);
-  button73 = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  button73 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
   gtk_widget_ref (button73);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button73", button73,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6171,7 +6180,7 @@ create_Tax_Information_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button73, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_APPLY);
-  apply_button = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  apply_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
   gtk_widget_ref (apply_button);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "apply_button", apply_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6179,7 +6188,7 @@ create_Tax_Information_Dialog (void)
   GTK_WIDGET_SET_FLAGS (apply_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_CLOSE);
-  button75 = g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data;
+  button75 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
   gtk_widget_ref (button75);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button75", button75,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6284,7 +6293,7 @@ create_Duplicate_Transaction_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area15), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Duplicate_Transaction_Dialog), GNOME_STOCK_BUTTON_OK);
-  button76 = g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data;
+  button76 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data);
   gtk_widget_ref (button76);
   gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "button76", button76,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6292,7 +6301,7 @@ create_Duplicate_Transaction_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button76, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Duplicate_Transaction_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button77 = g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data;
+  button77 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Duplicate_Transaction_Dialog)->buttons)->data);
   gtk_widget_ref (button77);
   gtk_object_set_data_full (GTK_OBJECT (Duplicate_Transaction_Dialog), "button77", button77,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6965,7 +6974,7 @@ create_Username_Password_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area16), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Username_Password_Dialog), GNOME_STOCK_BUTTON_OK);
-  button79 = g_list_last (GNOME_DIALOG (Username_Password_Dialog)->buttons)->data;
+  button79 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Username_Password_Dialog)->buttons)->data);
   gtk_widget_ref (button79);
   gtk_object_set_data_full (GTK_OBJECT (Username_Password_Dialog), "button79", button79,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6973,7 +6982,7 @@ create_Username_Password_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button79, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Username_Password_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button81 = g_list_last (GNOME_DIALOG (Username_Password_Dialog)->buttons)->data;
+  button81 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Username_Password_Dialog)->buttons)->data);
   gtk_widget_ref (button81);
   gtk_object_set_data_full (GTK_OBJECT (Username_Password_Dialog), "button81", button81,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7287,7 +7296,7 @@ create_Edit_Report_Size (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area17), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Edit_Report_Size), GNOME_STOCK_BUTTON_OK);
-  button90 = g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data;
+  button90 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data);
   gtk_widget_ref (button90);
   gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "button90", button90,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7295,7 +7304,7 @@ create_Edit_Report_Size (void)
   GTK_WIDGET_SET_FLAGS (button90, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Edit_Report_Size), GNOME_STOCK_BUTTON_CANCEL);
-  button92 = g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data;
+  button92 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Edit_Report_Size)->buttons)->data);
   gtk_widget_ref (button92);
   gtk_object_set_data_full (GTK_OBJECT (Edit_Report_Size), "button92", button92,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7511,7 +7520,7 @@ create_Prices_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox4), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Prices_Dialog), GNOME_STOCK_BUTTON_CLOSE);
-  close_button = g_list_last (GNOME_DIALOG (Prices_Dialog)->buttons)->data;
+  close_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Prices_Dialog)->buttons)->data);
   gtk_widget_ref (close_button);
   gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "close_button", close_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7709,7 +7718,7 @@ create_Price_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area18), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Price_Dialog), GNOME_STOCK_BUTTON_OK);
-  ok_button = g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data;
+  ok_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data);
   gtk_widget_ref (ok_button);
   gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "ok_button", ok_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7717,7 +7726,7 @@ create_Price_Dialog (void)
   GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Price_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  cancel_button = g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data;
+  cancel_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data);
   gtk_widget_ref (cancel_button);
   gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "cancel_button", cancel_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7890,7 +7899,7 @@ create_Commodities_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox6), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (Commodities_Dialog), GNOME_STOCK_BUTTON_CLOSE);
-  close_button = g_list_last (GNOME_DIALOG (Commodities_Dialog)->buttons)->data;
+  close_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Commodities_Dialog)->buttons)->data);
   gtk_widget_ref (close_button);
   gtk_object_set_data_full (GTK_OBJECT (Commodities_Dialog), "close_button", close_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7900,5 +7909,209 @@ create_Commodities_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Commodities_Dialog), "tooltips", tooltips);
 
   return Commodities_Dialog;
+}
+
+GtkWidget*
+create_Euro_Conversion_Druid (void)
+{
+  GtkWidget *Euro_Conversion_Druid;
+  GtkWidget *euro_conv_druid;
+  GtkWidget *druidpagestart1;
+  GdkColor druidpagestart1_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor druidpagestart1_textbox_color = { 0, 65535, 65535, 65535 };
+  GdkColor druidpagestart1_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor druidpagestart1_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *page_accountplace;
+  GdkColor page_accountplace_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountplace_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountplace_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox48;
+  GtkWidget *vbox130;
+  GtkWidget *label8477433;
+  GtkWidget *vbox134;
+  GSList *place_group_group = NULL;
+  GtkWidget *radiobutton_newtoplevel;
+  GtkWidget *radiobutton_sametoplevel;
+  GtkWidget *radiobutton_leafaccounts;
+  GtkWidget *page_accountname;
+  GdkColor page_accountname_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountname_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountname_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox49;
+  GtkWidget *vbox132;
+  GtkWidget *label8477434;
+  GtkWidget *vbox133;
+  GSList *name_group_group = NULL;
+  GtkWidget *radiobutton_new_eur;
+  GtkWidget *radiobutton_old_euroland;
+  GtkWidget *finish_page;
+  GdkColor finish_page_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor finish_page_textbox_color = { 0, 65535, 65535, 65535 };
+  GdkColor finish_page_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor finish_page_title_color = { 0, 65535, 65535, 65535 };
+
+  Euro_Conversion_Druid = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (Euro_Conversion_Druid), "Euro_Conversion_Druid", Euro_Conversion_Druid);
+  gtk_window_set_title (GTK_WINDOW (Euro_Conversion_Druid), _("window1"));
+
+  euro_conv_druid = gnome_druid_new ();
+  gtk_widget_ref (euro_conv_druid);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "euro_conv_druid", euro_conv_druid,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (euro_conv_druid);
+  gtk_container_add (GTK_CONTAINER (Euro_Conversion_Druid), euro_conv_druid);
+
+  druidpagestart1 = gnome_druid_page_start_new ();
+  gtk_widget_ref (druidpagestart1);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druidpagestart1", druidpagestart1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druidpagestart1);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (druidpagestart1));
+  gnome_druid_set_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (druidpagestart1));
+  gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_bg_color);
+  gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_textbox_color);
+  gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_logo_bg_color);
+  gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_title_color);
+  gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (druidpagestart1), _("Euro Conversion Druid"));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart1), _("This druid will help you converting your existing accounts to the\ncurrency Euro (EUR). \n\nIn the following, the term 'Euroland currency' will denote \nthe currencies that are being replaced by the Euro.\n\nNo changes will be made until you press 'Finish' on the last page\nof this druid."));
+
+  page_accountplace = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (page_accountplace);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "page_accountplace", page_accountplace,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (page_accountplace);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (page_accountplace));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (page_accountplace), _("Where to create the Euro accounts?"));
+
+  druid_vbox48 = GNOME_DRUID_PAGE_STANDARD (page_accountplace)->vbox;
+  gtk_widget_ref (druid_vbox48);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druid_vbox48", druid_vbox48,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox48);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox48), 5);
+
+  vbox130 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox130);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox130", vbox130,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox130);
+  gtk_box_pack_start (GTK_BOX (druid_vbox48), vbox130, TRUE, TRUE, 0);
+
+  label8477433 = gtk_label_new (_("For each of your Euroland accounts, the druid will create a new EUR account. \n\nPlease choose the place in your account hierarchy where you would\nlike the EUR accounts to be created."));
+  gtk_widget_ref (label8477433);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "label8477433", label8477433,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477433);
+  gtk_box_pack_start (GTK_BOX (vbox130), label8477433, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label8477433), GTK_JUSTIFY_LEFT);
+
+  vbox134 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox134);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox134", vbox134,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox134);
+  gtk_box_pack_start (GTK_BOX (vbox130), vbox134, FALSE, FALSE, 10);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox134), 30);
+
+  radiobutton_newtoplevel = gtk_radio_button_new_with_label (place_group_group, _("Create a new toplevel account hierarchy as a copy of the existing one"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_newtoplevel));
+  gtk_widget_ref (radiobutton_newtoplevel);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_newtoplevel", radiobutton_newtoplevel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_newtoplevel);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_newtoplevel, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_newtoplevel), TRUE);
+
+  radiobutton_sametoplevel = gtk_radio_button_new_with_label (place_group_group, _("Use same toplevel accounts. Create a copy of the rest of the accounts"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_sametoplevel));
+  gtk_widget_ref (radiobutton_sametoplevel);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_sametoplevel", radiobutton_sametoplevel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_sametoplevel);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_sametoplevel, FALSE, FALSE, 0);
+
+  radiobutton_leafaccounts = gtk_radio_button_new_with_label (place_group_group, _("Use existing account hierarchy. Create only a copy of those \naccounts that have no subaccounts"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_leafaccounts));
+  gtk_widget_ref (radiobutton_leafaccounts);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_leafaccounts", radiobutton_leafaccounts,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_leafaccounts);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_leafaccounts, FALSE, FALSE, 0);
+
+  page_accountname = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (page_accountname);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "page_accountname", page_accountname,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (page_accountname);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (page_accountname));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (page_accountname), _("How to name the new accounts?"));
+
+  druid_vbox49 = GNOME_DRUID_PAGE_STANDARD (page_accountname)->vbox;
+  gtk_widget_ref (druid_vbox49);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druid_vbox49", druid_vbox49,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox49);
+
+  vbox132 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox132);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox132", vbox132,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox132);
+  gtk_box_pack_start (GTK_BOX (druid_vbox49), vbox132, TRUE, TRUE, 0);
+
+  label8477434 = gtk_label_new (_("Please choose a naming scheme for the new Euro accounts \nand the old Euroland accounts."));
+  gtk_widget_ref (label8477434);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "label8477434", label8477434,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477434);
+  gtk_box_pack_start (GTK_BOX (vbox132), label8477434, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label8477434), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_padding (GTK_MISC (label8477434), 0, 5);
+
+  vbox133 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox133);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox133", vbox133,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox133);
+  gtk_box_pack_start (GTK_BOX (vbox132), vbox133, FALSE, FALSE, 10);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox133), 30);
+
+  radiobutton_new_eur = gtk_radio_button_new_with_label (name_group_group, _("The name of each newly created Euro account is copied from\nthe old Euroland account, plus an appended 'EUR'"));
+  name_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_new_eur));
+  gtk_widget_ref (radiobutton_new_eur);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_new_eur", radiobutton_new_eur,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_new_eur);
+  gtk_box_pack_start (GTK_BOX (vbox133), radiobutton_new_eur, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_new_eur), TRUE);
+
+  radiobutton_old_euroland = gtk_radio_button_new_with_label (name_group_group, _("The name of each old Euroland account is modified by appending \nthe respective currency symbol of the Euroland currency. \nThe name of the newly created Euro account is copied from the\nold Euroland account."));
+  name_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_old_euroland));
+  gtk_widget_ref (radiobutton_old_euroland);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_old_euroland", radiobutton_old_euroland,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_old_euroland);
+  gtk_box_pack_start (GTK_BOX (vbox133), radiobutton_old_euroland, FALSE, FALSE, 0);
+
+  finish_page = gnome_druid_page_finish_new ();
+  gtk_widget_ref (finish_page);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "finish_page", finish_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (finish_page);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (finish_page));
+  gnome_druid_page_finish_set_bg_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_bg_color);
+  gnome_druid_page_finish_set_textbox_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_textbox_color);
+  gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_logo_bg_color);
+  gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_title_color);
+  gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (finish_page), _("Finish Euro Conversion"));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (finish_page), _("If you have finished choosing your Euro conversion settings,\npress 'Finish'.\n\nThe druid will then perform the following steps:\n\n1. Create new accounts according to your settings.\n2. Create currency exchange accounts.\n3. Exchange all amounts from Euroland accounts to their\nrespective Euro account.\n\nYou may also press 'Back' to review your settings, or 'Cancel'\nto quit without making any changes."));
+
+  return Euro_Conversion_Druid;
 }
 

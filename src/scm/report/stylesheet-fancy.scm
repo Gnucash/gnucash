@@ -198,7 +198,8 @@
       (gnc:html-document-set-style!
        ssdoc "number-cell"
        'tag "td"
-       'attribute (list "align" "right"))
+       'attribute (list "align" "right")
+       'attribute (list "nowrap"))
 
       (if (and bgpixmap
                (not (string=? bgpixmap "")))

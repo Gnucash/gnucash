@@ -325,6 +325,14 @@
 		  (set! value (+ amount value))))
 	('total value)
 	(else (gnc:warn "bad value-collector action: " action))))))
+;; Bah. Let's get back to normal data types -- this procedure thingy
+;; from above makes every code almost unreadable. First step: replace
+;; all 'action function calls by the normal functions below.
+(define (gnc:value-collector-add collector amount)
+  (collector 'add amount))
+(define (gnc:value-collector-total collector)
+  (collector 'total #f))
+
 
 ;; Same as above but with gnc:numeric
 (define (gnc:make-numeric-collector)
@@ -338,6 +346,11 @@
 		   "gnc:numeric-collector called with wrong argument: " amount)))
 	('total value)
 	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
+;; Replace all 'action function calls by the normal functions below.
+(define (gnc:numeric-collector-add collector amount)
+  (collector 'add amount))
+(define (gnc:numeric-collector-total collector)
+  (collector 'total #f))
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
@@ -392,29 +405,32 @@
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
-	((cadr pair) 'add value)))
+	(gnc:numeric-collector-add (cadr pair) value)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity -> collector) pair to our list at the appropriate 
     ;; place
     (define (add-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value (caar clist) 
-				       ((cadar clist) 'total #f))
+	    (else (add-commodity-value 
+		   (caar clist) 
+		   (gnc:numeric-collector-total (cadar clist)))
 		  (add-commodity-clist (cdr clist)))))
 
     (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value (caar clist) 
-				       (gnc:numeric-neg
-					((cadar clist) 'total #f)))
+	    (else (add-commodity-value 
+		   (caar clist) 
+		   (gnc:numeric-neg
+		    (gnc:numeric-collector-total (cadar clist))))
 		  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
     (define (process-commodity-list fn clist)
       (map 
-       (lambda (pair) (fn (car pair) ((cadr pair) 'total #f)))
+       (lambda (pair) (fn (car pair) 
+			  (gnc:numeric-collector-total (cadr pair))))
        clist))
 
     ;; helper function which is given a commodity and returns, if
@@ -426,8 +442,9 @@
 	      (if (not pair)
 		  (gnc:numeric-zero)
 		  (if sign?
-		      (gnc:numeric-neg ((cadr pair) 'total #f))
-		      ((cadr pair) 'total #f)))
+		      (gnc:numeric-neg 
+		       (gnc:numeric-collector-total (cadr pair)))
+		      (gnc:numeric-collector-total (cadr pair))))
 	      '()))))
 
     ;; helper function which is given a commodity and returns, if
@@ -439,21 +456,56 @@
 	 c (if (not pair)
 	       (gnc:numeric-zero)
 	       (if sign?
-		   (gnc:numeric-neg ((cadr pair) 'total #f))
-		   ((cadr pair) 'total #f))))))
+		   (gnc:numeric-neg 
+		    (gnc:numeric-collector-total (cadr pair)))
+		   (gnc:numeric-collector-total (cadr pair)))))))
     
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
 	('add (add-commodity-value commodity amount))
-	('merge (add-commodity-clist (commodity 'list #f #f)))
-	('minusmerge (minus-commodity-clist (commodity 'list #f #f)))
+	('merge (add-commodity-clist 
+		 (gnc:commodity-collector-list commodity)))
+	('minusmerge (minus-commodity-clist
+		      (gnc:commodity-collector-list commodity)))
 	('format (process-commodity-list commodity commoditylist))
 	('reset (set! commoditylist '()))
 	('getpair (getpair commodity amount))
 	('getmonetary (getmonetary commodity amount))
 	('list commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
+;; Bah. Let's get back to normal data types -- this procedure thingy
+;; from above makes every code almost unreadable. First step: replace
+;; all 'action function calls by the normal functions below.
+(define (gnc:commodity-collector-add collector commodity amount)
+  (collector 'add commodity amount))
+(define (gnc:commodity-collector-merge collector other-collector)
+  (collector 'merge other-collector #f))
+(define (gnc:commodity-collector-minusmerge collector other-collector)
+  (collector 'minusmerge other-collector #f))
+(define (gnc:commodity-collector-map collector function)
+  (collector 'format function #f))
+;; Returns a <gnc:monetary> value. If reversee-sign? is #t, the sign
+;; gets reversed.
+(define (gnc:commodity-collector-assoc collector commodity reverse-sign?)
+  (collector 'getmonetary commodity reverse-sign?))
+(define (gnc:commodity-collector-assoc-pair 
+	 collector commodity reverse-sign?)
+  (collector 'getpair commodity reverse-sign?))
+(define (gnc:commodity-collector-list collector)
+  (collector 'list #f #f))
+
+;; Returns zero if all entries in this collector are zero.
+(define (gnc:commodity-collector-allzero? collector)
+  (let ((result #t))
+    (gnc:commodity-collector-map 
+     collector
+     (lambda (commodity amount)
+       (if (not (gnc:numeric-zero-p amount))
+	   (set! result #f))))
+    result))
+
+
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
@@ -520,8 +572,9 @@
       (gnc:free-query query)
       
       (if (and splits (not (null? splits)))
-	(balance-collector 'add (gnc:account-get-commodity account)
-			   (gnc:split-get-share-balance (car splits))))
+	  (gnc:commodity-collector-add balance-collector 
+				       (gnc:account-get-commodity account)
+				       (gnc:split-get-share-balance (car splits))))
       balance-collector))
   
 ;; get the balance of a group of accounts at the specified date
@@ -543,10 +596,10 @@
   (let ((collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (acct)
-       (collector (if (reverse-balance-fn acct)
-		      'minusmerge 
-		      'merge) 
-		  (get-balance-fn acct) #f))
+       ((if (reverse-balance-fn acct)
+	    gnc:commodity-collector-minusmerge 
+	    gnc:commodity-collector-merge)
+	collector (get-balance-fn acct)))
      accounts)
     collector))
 
@@ -597,7 +650,8 @@
 (define (gnc:group-get-comm-balance-at-date group date)
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each 
-     (lambda (x) (this-collector 'merge x #f))
+     (lambda (x) 
+       (gnc:commodity-collector-merge this-collector x))
      (gnc:group-map-all-accounts
       (lambda (account)
 	(gnc:account-get-comm-balance-at-date 
@@ -623,11 +677,12 @@
 	 account from to include-children?)
   (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (this-collector 
-     'minusmerge (gnc:account-get-comm-balance-at-date 
-		  account 
-		  (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
-		  include-children?) #f)
+    (gnc:commodity-collector-minusmerge
+     this-collector
+     (gnc:account-get-comm-balance-at-date
+      account 
+      (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
+      include-children?))
     this-collector))
 
 (define (gnc:group-get-balance-interval group from to)
@@ -639,7 +694,8 @@
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)
   (let ((this-collector (gnc:make-commodity-collector)))
-    (for-each (lambda (x) (this-collector 'merge x #f))
+    (for-each (lambda (x) 
+		(gnc:commodity-collector-merge this-collector x))
 	      (gnc:group-map-all-accounts
 	       (lambda (account)
 		 (gnc:account-get-comm-balance-interval 

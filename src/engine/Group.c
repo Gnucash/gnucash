@@ -118,7 +118,7 @@ xaccGroupEqual(AccountGroup *ga,
 /********************************************************************\
 \********************************************************************/
 
-static void
+void
 xaccAccountGroupBeginEdit (AccountGroup *grp)
 {
   GList *node;
@@ -148,8 +148,8 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccAccountCommitEdit (account);
     xaccAccountGroupCommitEdit (account->children);
+    xaccAccountCommitEdit (account);
   }
 }
 

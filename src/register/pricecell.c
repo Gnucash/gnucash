@@ -56,7 +56,6 @@ static void xaccInitPriceCell (PriceCell *cell);
 static void PriceSetValue (BasicCell *bcell, const char *value);
 static const char * xaccPriceCellPrintValue (PriceCell *cell);
 
-
 /* ================================================ */
 
 static gboolean
@@ -73,8 +72,6 @@ PriceEnter (BasicCell *_cell,
 }
 
 /* ================================================ */
-/* This callback only allows numbers with a single
- * decimal point in them */
 
 static void
 PriceMV (BasicCell *_cell, 
@@ -88,7 +85,7 @@ PriceMV (BasicCell *_cell,
 {
   PriceCell *cell = (PriceCell *) _cell;
   struct lconv *lc = gnc_localeconv ();
-  const char *toks = "+-*/=()";
+  const char *toks = "+-*/=()_";
   char decimal_point;
   char thousands_sep;
   int i;
@@ -114,6 +111,7 @@ PriceMV (BasicCell *_cell,
   for (i = 0; i < change_len; i++)
     if (!isdigit(change[i]) &&
         !isspace(change[i]) &&
+        !isalpha(change[i]) &&
         (decimal_point != change[i]) &&
         (thousands_sep != change[i]) &&
         (strchr (toks, change[i]) == NULL))
@@ -126,7 +124,7 @@ PriceMV (BasicCell *_cell,
 /* ================================================ */
 
 static void
-PriceParse (PriceCell *cell)
+PriceParse (PriceCell *cell, gboolean update_value)
 {
   const char *newval;
   char *oldval;
@@ -149,6 +147,9 @@ PriceParse (PriceCell *cell)
   else
     cell->amount = gnc_numeric_zero ();
 
+  if (!update_value)
+    return;
+
   newval = xaccPriceCellPrintValue (cell);
 
   /* If they are identical do nothing */
@@ -166,7 +167,7 @@ PriceLeave (BasicCell *_cell)
 {
   PriceCell *cell = (PriceCell *) _cell;
 
-  PriceParse (cell);
+  PriceParse (cell, TRUE);
 }
 
 /* ================================================ */
@@ -255,7 +256,7 @@ xaccGetPriceCellValue (PriceCell *cell)
   if (cell == NULL)
     return gnc_numeric_zero ();
 
-  PriceParse (cell);
+  PriceParse (cell, FALSE);
 
   return cell->amount;
 }

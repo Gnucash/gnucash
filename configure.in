@@ -24,7 +24,7 @@ dnl Process this file with autoconf to produce a configure script.
 ### commands depend on them):
 
 AC_INIT(src/guile/gnucash.h)
-AM_INIT_AUTOMAKE(gnucash,1.5.98)
+AM_INIT_AUTOMAKE(gnucash,1.6.6)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
@@ -43,7 +43,7 @@ AC_PROG_MAKE_SET
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
-AC_CHECK_FUNCS(stpcpy memcpy timegm)
+AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
@@ -52,10 +52,10 @@ AM_PATH_GLIB
 
 if test ${no_glib}x = yesx
 then
-  AC_MSG_ERROR([Cannot find glib.])
+  AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
-AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h)
+AC_CHECK_HEADERS(dlfcn.h dl.h ghttp_ssl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 DL_LIB=
 AC_CHECK_FUNCS(dlopen,,[
@@ -88,8 +88,12 @@ GNOME_XML_CHECK
 #])
 
 dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it ja no pt_PT ru sv"
+ALL_LINGUAS="az da de el en_GB es es_NI fr hu it ja nl no pl pt pt_BR ru sk sv"
 AM_GNU_GETTEXT
+
+if test "x${XGETTEXT}" != x; then
+  XGETTEXT="${XGETTEXT} --keyword=Q_ "
+fi
 
 
 ### --------------------------------------------------------------------------
@@ -165,24 +169,56 @@ AC_ARG_ENABLE( profile,
 ### --------------------------------------------------------------------------
 ### SQL
 # Check to see if the user wants to have Postgres support
+#
+# hack alert ... we should use 'pg_config --includedir' and
+# 'pg_config --libdir' to find paths; unfortunately pg_config itself
+# is hard to find :-(
 
 AC_ARG_ENABLE( sql,
   [  --enable-sql                 compile with sql support],
   [
+    PG_CONFIG=`which pg_config`
+
+    if test "x$PG_CONFIG" = "x" ; then
+        PG_CONFIG="/usr/lib/postgresql/bin/pg_config"
+    fi
+
     if test "x$enableval" != "xno" ; then
-      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h)
-      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h" == xnono; then
-         AC_MSG_ERROR([Cannot find PosgreSQL headers; won't build sql backend]) 
+
+      PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
+      if test "x$PGSQL_CFLAGS" != x; then
+         CFLAGS="${CFLAGS} -I${PGSQL_CFLAGS}"
+      fi
+
+      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
+      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h$ac_cv_header_libpq_fe_h" = xnonono; then
+         AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
       else 
+        master_dirs="/usr/include /usr/local/include"
         if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
-          CFLAGS="${CFLAGS} -I/usr/include/pgsql"
-	fi
-        if test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
-          CFLAGS="${CFLAGS} -I/usr/include/postgresql"
+          for dir in $master_dirs; do
+              if test -f "$dir/pgsql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/pgsql"
+                  break
+	      fi
+          done
+        elif test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
+          for dir in $master_dirs; do
+              if test -f "$dir/postgresql/libpq-fe.h"; then
+                  CFLAGS="${CFLAGS} -I$dir/postgresql"
+                  break
+              fi
+          done
 	fi
         
         saved_LIBS="$LIBS"
-        LIBS="-lpq $LIBS"
+
+        PGSQL_LIBS=`${PG_CONFIG} --libdir`
+        if test "x$PGSQL_LIBS" != x; then
+           LIBS="-L${PGSQL_LIBS} -lpq $LIBS"
+        else
+           LIBS="-lpq $LIBS"
+        fi
         AC_MSG_CHECKING(for libpq)
         AC_TRY_LINK(
           [
@@ -196,7 +232,7 @@ AC_ARG_ENABLE( sql,
             SQL_DIR=sql
           ],
           [
-            AC_MSG_ERROR([Cannot find PosgreSQL libraries; will not build sql backend]) 
+            AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
           ]
         )
         LIBS="$saved_LIBS"
@@ -259,15 +295,14 @@ AM_CONDITIONAL(GNC_TAGS_FILE, test x${GNC_TAGS_FILE} = xTAGS)
 ### --------------------------------------------------------------------------
 ### Check for glade
 
-AC_ARG_WITH(glade,
-  [  --with-glade=FILE            which glade executable to use ],
-  GLADE="${with_glade}")
+GLADE_LIBS=`$GNOME_CONFIG --libs libglade`
+GLADE_CFLAGS=`$GNOME_CONFIG --cflags libglade`
 
-# If the user didn't specify a glade, then go fetch.
-if test x"$GLADE" = x;
-then
-  AC_PATH_PROG(GLADE, glade)
-fi
+# check for glade libs
+AC_CHECK_LIB(glade, glade_init,
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} glade",
+             AC_MSG_ERROR([Cannot find libglade. See the README and config.log for more info.]),
+             $GLADE_LIBS)
 
 # Make sure glade was found
 #if test x"$GLADE" = x; then
@@ -332,13 +367,17 @@ AC_CHECK_FUNC(dbopen, [],
 if test "$prefer_db1" = "yes"; then
  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
   AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
+    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   )
   )
  )
 else
  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
   AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
+    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   )
   )
  )
 fi
@@ -368,13 +407,20 @@ GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
 
 AC_SUBST(GNOME_XML_CFLAGS)
 
+oLIBS="$LIBS"
+LIBS="$LIBS $GNOME_XML_LIB"
+AC_CHECK_LIB(xml, xmlElemDump, [:], [
+  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
+  ])
+LIBS="$oLIBS"
+
 
 ### --------------------------------------------------------------------------
 GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
 GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
 
 AC_CHECK_LIB(gal, main, true,
-  [AC_MSG_ERROR([gal library not found.  See the README for more info.])],
+  [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
   `$GNOME_CONFIG --libs gal`)
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
@@ -382,7 +428,7 @@ AC_CHECK_LIB(gal, main, true,
 AC_CHECK_LIB(gtkhtml, gtk_html_new,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
              AC_DEFINE(HAVE_LIBGTKHTML),
-             AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
+             AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
              $GTKHTML_LIBS)
 
 GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
@@ -395,7 +441,7 @@ AC_CHECK_LIB(ghttp, ghttp_request_new,
 	     if test "x$GHTTP_LIBS" = "x" ; then
 		GHTTP_LIBS=-lghttp
 	     fi,
-             AC_MSG_ERROR([Cannot find ghttp.  See the README for more info.]),
+             AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
              $GHTTP_LIBS)
 
 AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
@@ -443,22 +489,17 @@ AC_SUBST(EFENCE_LIBS)
 # LAME: if you ask gnome-config for the zvt libs, it doesn't include
 # imlib, though it needs it so we'll just steal gtkhtml's which does.
 AC_CHECK_LIB(zvt, main, true,
-  [AC_MSG_ERROR([libzvt development files not found.  Guppi requires them.])],
+  [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
   `$GNOME_CONFIG --libs zvt gtkhtml`)
 
 AC_CHECK_LIB(bonobo, main, true,
-  [AC_MSG_ERROR([libbonobo development files not found.  Guppi requires them.])
+  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
 ],
   `$GNOME_CONFIG --libs bonobo`)
 
 AC_CHECK_LIB(oaf, main, true,
-  [AC_MSG_ERROR([liboaf development files not found.  Guppi requires them.])],
+  [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
   `$GNOME_CONFIG --libs oaf`)
-
-AC_CHECK_LIB(glade, main, true,
-  [AC_MSG_ERROR([libglade development files not found.  Guppi requires them.])]
-,
-  `$GNOME_CONFIG --libs libglade`)
 
 ## guppi itself.
 
@@ -490,7 +531,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 
   popt 1.5 or newer is required to build gnucash. You can download
   the latest version from ftp://people.redhat.com/sopwith/popt/, or if
-  you're running Debian, install the libpopt-dev pacakge.
+  you're running Debian, install the libpopt-dev package.
 ])])
 
 ### --------------------------------------------------------------------------
@@ -549,7 +590,9 @@ AC_TRY_RUN([
   }
 ],[
   AC_MSG_RESULT(yes)
-  AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64))
+  AC_CHECK_LIB(guile, scm_long_long2num,
+               AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >=
+	       sizeof(gint64)))
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -582,8 +625,11 @@ AC_OUTPUT(
           Makefile
           accounts/Makefile
           accounts/C/Makefile
+          accounts/da/Makefile
           accounts/de_DE/Makefile
+          accounts/es_ES/Makefile
           accounts/pt_PT/Makefile
+          accounts/sk/Makefile
           debian/Makefile
           doc/Makefile
           doc/examples/Makefile
@@ -624,6 +670,8 @@ AC_OUTPUT(
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
+          src/optional/swig/Makefile
+          src/optional/swig/examples/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile
@@ -634,6 +682,9 @@ AC_OUTPUT(
           src/scm/qif-import/Makefile
           src/scm/report/Makefile
           src/test/Makefile
+          src/test/test-files/Makefile
+          src/test/test-files/xml2/Makefile
+
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
           ,

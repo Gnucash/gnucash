@@ -87,6 +87,7 @@ gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
 void     gnc_stock_split_dialog (Account * initial);
+void     gnc_euro_conv_dialog ();
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 
@@ -109,6 +110,8 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 void        gnc_ui_shutdown (void);
 void        gnc_ui_destroy_all_subwindows (void);
 gncUIWidget gnc_ui_get_toplevel(void);
+
+gboolean    gnc_ui_can_cancel_save (void);
 
 /* Changing the GUI Cursor ******************************************/
 

@@ -600,6 +600,11 @@ gnc_html_embedded_barchart(gnc_html * parent,
 
   chart->parent = parent;
 
+  /* FIXME: Temporary workaround for allocation (?) problems with the
+     g_hash_table (segfault at too many subsequent g_hash_table_lookup
+     calls)*/
+#define UNNEEDED_OPTIONS 0
+
   if((param = g_hash_table_lookup(params, "data_rows")) != NULL) {
     sscanf(param, "%d", &datarows);
     arglist[argind].name   = "data_rows";
@@ -622,8 +627,6 @@ gnc_html_embedded_barchart(gnc_html * parent,
     argind++;    
   }
 
-#if 0
-  /* These still give segfault, regardless of what you do. Shit. */
   if(gnc_has_guppi_version(0,35,6) &&
      (param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
     arglist[argind].name   = "x_axis_label";
@@ -638,7 +641,6 @@ gnc_html_embedded_barchart(gnc_html * parent,
     GTK_VALUE_POINTER(arglist[argind]) = param;
     argind++;    
   }
-#endif
 
   if((param = g_hash_table_lookup(params, "col_labels")) != NULL) {
     col_labels = read_strings(param, datacols);
@@ -683,6 +685,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
                                                    datarows*datacols);
     g_free(callbacks);
   }
+#if UNNEEDED_OPTIONS
   if((param = g_hash_table_lookup(params, "bar_urls_2")) != NULL) {
     arglist[argind].name   = "bar_callback2";
     arglist[argind].type   = GTK_TYPE_POINTER;
@@ -713,6 +716,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
                                                    datarows*datacols);
     g_free(callbacks);
   }
+#endif
   if((param = g_hash_table_lookup(params, "legend_urls_1")) != NULL) {
     arglist[argind].name   = "legend_callback1";
     arglist[argind].type   = GTK_TYPE_POINTER;
@@ -728,6 +732,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
                                                      datarows*datacols);
     g_free(callbacks);
   }
+#if UNNEEDED_OPTIONS
   if((param = g_hash_table_lookup(params, "legend_urls_2")) != NULL) {
     arglist[argind].name   = "legend_callback2";
     arglist[argind].type   = GTK_TYPE_POINTER;
@@ -758,7 +763,10 @@ gnc_html_embedded_barchart(gnc_html * parent,
                                                      datarows*datacols);
     g_free(callbacks);
   }
+#endif
+  /* This was broken in Guppi 0.40.0 - 0.40.3. */
   if(gnc_has_guppi_version(0,35,4) &&
+     (!gnc_has_guppi_version(0,40,0) || gnc_has_guppi_version(0,40,4)) &&
      (param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
     sscanf(param, "%d", &rotate);
     arglist[argind].name   = "legend_reversed";
@@ -774,6 +782,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
     GTK_VALUE_BOOL(arglist[argind]) = stacked;
     argind++;
   }
+#if UNNEEDED_OPTIONS
   if(gnc_has_guppi_version(0,35,4) &&
      (param = g_hash_table_lookup(params, "normalize_stacks")) != NULL) {
     sscanf(param, "%d", &normalize_stacks);
@@ -782,6 +791,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
     GTK_VALUE_BOOL(arglist[argind]) = normalize_stacks;
     argind++;
   }
+#endif
 
   barchart = guppi_object_newv("barchart", w, h,
                                argind, arglist);

@@ -1,23 +1,22 @@
-<ARTICLE ID="XACC-PRINT">
+  <article id="xacc-print">
 
-<ARTHEADER>
-<TITLE>Impressão</TITLE>
-</ARTHEADER>
+    <artheader>
+      <title>Imprimir</title>
+    </artheader>
+
     <sect1>
       <title></title>
-<PARA>Actualmente, o único tipo de impressão directamente suportada pelo 
-    GnuCash é a <LINK LINKEND="XACC-PRINT-CHECK">impressão de cheques</LINK>.
-    Outros tipos de impressão serão adicionados na versão 1.5.
 
-    </PARA>
+      <para>O GnuCash suporta <link linkend="xacc-print-check">a impressão 
+      de cheques</link>, de relatórios, e de janelas de registo.
+    </para>
 
-<PARA>Os <LINK LINKEND="XACC-REPORTS">relatórios</LINK> podem também ser <LINK
-LINKEND="EXPORT">exportados como HTML</LINK>.
+      <para><link linkend="xacc-reports">Os relatórios</link> também podem ser 
+      <link linkend="export">exportados como HTML</link>.
+</para>
 
-
-</PARA>
 </sect1>
-</ARTICLE>
+</article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->
