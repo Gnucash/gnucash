@@ -1027,8 +1027,8 @@ and Income accounts")))))
      name-sortkey name-subtotal name-date-subtotal
      3 2))
 
-      (define (get-other-account-names account-list)
-	( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
+  (define (get-other-account-names account-list)
+    ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
 
   (let ((document (gnc:make-html-document))
             (c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
@@ -1140,16 +1140,22 @@ and Income accounts")))))
                   (_ "No matching transactions found"))
                  (gnc:html-markup-p
                   (_ "No transactions were found that \
-match the given time interval and account selection.")))
+match the given time interval and account selection."))
+		 (gnc:html-markup-p
+		  (gnc:html-markup-anchor
+		   (sprintf #f "gnc-options:report-id=%a" 
+			    (gnc:report-id report-obj))
+		   (_ "Click here to edit the report options."))))
                 (gnc:html-document-add-object! document p))))
 
         ;; error condition: no accounts specified
         
         (gnc:html-document-add-object!
          document 
-         (gnc:html-make-no-account-warning report-title)))
-
-    document))
+	 (gnc:html-make-no-account-warning-link 
+	  report-title (gnc:report-id report-obj))))
+	
+	document))
 
 ;; Define the report.
 (gnc:define-report

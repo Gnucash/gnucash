@@ -174,7 +174,12 @@
        document 
        (gnc:make-html-text 
         (gnc:html-markup-h2 title)
-        (gnc:html-markup-p text))))
+        (gnc:html-markup-p text)
+	(gnc:html-markup-p
+	 (gnc:html-markup-anchor
+	  (sprintf #f "gnc-options:report-id=%a" 
+		   (gnc:report-id report-obj))
+	  (_ "Click here to edit the report options."))))))
 
     (gnc:html-scatter-set-title! 
      chart report-title)

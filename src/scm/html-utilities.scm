@@ -686,6 +686,10 @@
     table))
 
 (define (gnc:html-make-no-account-warning report-title-string)
+  (gnc:html-make-no-account-warning-link report-title-string #f))
+
+(define (gnc:html-make-no-account-warning-link
+	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
@@ -695,9 +699,20 @@
      (gnc:html-markup-h2 (_ "No accounts selected"))
      (gnc:html-markup-p
       (_ "This report requires accounts to be selected.")))
+    (if report-id
+	(gnc:html-text-append! 
+	 p 
+	 (gnc:html-markup-p
+	  (gnc:html-markup-anchor
+	   (sprintf #f "gnc-options:report-id=%a" report-id)
+	   (_ "Click here to edit the report options.")))))
     p))
 
 (define (gnc:html-make-empty-data-warning report-title-string)
+  (gnc:html-make-empty-data-warning-link report-title-string #f))
+
+(define (gnc:html-make-empty-data-warning-link 
+	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
      p 
@@ -706,4 +721,11 @@
      (gnc:html-markup-h2 (_ "No data"))
      (gnc:html-markup-p
       (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
+    (if report-id
+	(gnc:html-text-append! 
+	 p 
+	 (gnc:html-markup-p
+	  (gnc:html-markup-anchor
+	   (sprintf #f "gnc-options:report-id=%a" report-id)
+	   (_ "Click here to edit the report options.")))))
     p))

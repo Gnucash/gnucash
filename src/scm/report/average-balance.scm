@@ -468,8 +468,8 @@
                       (gnc:html-document-add-object! document barchart))
                     (gnc:html-document-add-object!
                      document
-                     (gnc:html-make-empty-data-warning 
-                      (_ "Average Balance"))))))
+                     (gnc:html-make-empty-data-warning-link 
+                      (_ "Average Balance") (gnc:report-id report-obj))))))
           
           ;; make a table (optionally)
           (if show-table? 
@@ -494,7 +494,9 @@
         ;; if there are no accounts selected...
         (gnc:html-document-add-object! 
          document
-         (gnc:html-make-no-account-warning)))
+         (gnc:html-make-no-account-warning-link 
+	  report-title (gnc:report-id report-obj))))
+	  
     document))
 
 (gnc:define-report
