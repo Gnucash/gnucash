@@ -333,6 +333,9 @@ gnc_ui_shutdown (void)
     gnc_ui_mainWindow_save_size();
     gtk_widget_hide(app);
     gtk_main_quit();
+#ifdef USE_GUPPI    
+    gnc_html_guppi_shutdown();
+#endif
   }
 }
 

@@ -168,14 +168,14 @@
 
   (gnc:define-report
    'version 1
-   'name (N_ "Income Breakdown Piechart")
+   'name (N_ "Income Piechart")
    'options-generator (lambda () (options-generator #t))
    'renderer (lambda (report-obj)
                (income-or-expense-pie-renderer report-obj #t)))
 
   (gnc:define-report
    'version 1
-   'name (N_ "Expense Breakdown Piechart")
+   'name (N_ "Expense Piechart")
    'options-generator (lambda () (options-generator #f))
    'renderer (lambda (report-obj)
                (income-or-expense-pie-renderer report-obj #f))))

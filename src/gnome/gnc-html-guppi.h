@@ -27,6 +27,7 @@
 #include "gnc-html.h"
 
 void        gnc_html_guppi_init(void);
+void        gnc_html_guppi_shutdown(void);
 GtkWidget * gnc_html_embedded_piechart(gnc_html * parent, 
                                        gint w, gint h, GHashTable * params);
 GtkWidget * gnc_html_embedded_barchart(gnc_html * parent,

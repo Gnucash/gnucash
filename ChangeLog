@@ -1,5 +1,12 @@
 2001-03-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/gnc-html-guppi.c: new func for shutting down guppi
+
+	* src/gnome/top-level.c (gnc_ui_shutdown): shutdown guppi
+
+	* src/scm/report/income-or-expense-pie.scm: use shorter names
+	for reports
+
 	* src/scm/report/income-expense-graph.scm: work on display
 
 	* src/scm/html-utilities.scm (gnc:account-anchor-text): new func

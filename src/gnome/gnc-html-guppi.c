@@ -52,6 +52,11 @@ gnc_html_guppi_init(void) {
   gnc_html_register_object_handler("gnc-guppi-scatter", handle_scatter);
 }
 
+void
+gnc_html_guppi_shutdown(void) {
+  guppi_tank_shutdown();
+}
+
 /* the handlers for pie. bar, and scatter charts */ 
 static int
 handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer data) {
