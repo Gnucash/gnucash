@@ -1,3 +1,8 @@
+2002-12-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-transfer.c: Revert pricedb lookup at
+	warlord's request.
+
 2002-12-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/main.scm: Patch by Peter O'Gorman <peter@pogma.com> for

@@ -1461,12 +1461,12 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       GList *prices;
 
       /* First see if an entry exists at time ts */
-      prices = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
+      prices = gnc_pricedb_lookup_at_time (xferData->pricedb, from, to, ts);
       if (prices) {
 	PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
 	      gnc_commodity_get_mnemonic(to));
       } else {
-	prices = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
+	prices = gnc_pricedb_lookup_at_time (xferData->pricedb, to, from, ts);
 	if (prices) {
 	  PINFO("Found reverse price for %s in %s", gnc_commodity_get_mnemonic(to),
 		gnc_commodity_get_mnemonic(from));
