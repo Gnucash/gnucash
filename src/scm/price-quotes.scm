@@ -232,8 +232,6 @@
 	     (catch
 	      #t
 	      (lambda ()
-		(write (list 'checking-sources))
-		(newline)
 		(set! results (read from-child))
 ;;		(write (list 'results results)) (newline)
 		results)
