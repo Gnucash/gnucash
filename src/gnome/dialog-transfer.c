@@ -818,11 +818,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     /* create first split */
     to_split = xaccMallocSplit();
     xaccTransAppendSplit(trans, to_split); 
-    xaccSplitSetShareAmount(to_split, amount);
 
     /* create second split */
     from_split = xaccMallocSplit();
-    xaccSplitSetShareAmount(from_split, gnc_numeric_neg (amount));
     xaccTransAppendSplit(trans, from_split); 
 
     /* set the memo fields */
@@ -839,6 +837,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountBeginEdit(from);
     xaccAccountInsertSplit(from, from_split);
     xaccAccountCommitEdit(from);
+
+    /* do this after they go into their accounts */
+    xaccSplitSetBaseValue (to_split, amount, to_currency);
+    xaccSplitSetBaseValue (from_split, gnc_numeric_neg (amount),
+                           from_currency);
 
     /* finish transaction */
     xaccTransCommitEdit(trans);
