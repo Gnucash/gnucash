@@ -60,7 +60,7 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 
 void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
 
-#endif XACC_PERIOD_H
+#endif /* XACC_PERIOD_H */
 
 #include "AccountP.h"
 #include "gnc-book-p.h"
