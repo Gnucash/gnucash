@@ -5,7 +5,8 @@ TESTS =  \
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/network-utils \
-  --guile-load-dir ${G_WRAP_MODULE_DIR}
+  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --library-dir    ${G_WRAP_LIB_DIR}
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

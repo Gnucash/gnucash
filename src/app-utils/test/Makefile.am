@@ -19,7 +19,8 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/gnome \
   --library-dir    ${top_builddir}/src/gnome-utils \
-  --library-dir    ${top_srcdir}/src/gnome
+  --library-dir    ${top_srcdir}/src/gnome \
+  --library-dir    ${G_WRAP_LIB_DIR}
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
