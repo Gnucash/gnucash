@@ -242,12 +242,12 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 
         /* FIXMEs: Do checks on validity and such, interrupting the user if
          * things aren't right.
-         * FIXME: We should do all validity checks before we change anything
+         * . We should do all validity checks before we change anything
          * about the SX; for clarity as well as consistency.
          *
-         * . SX name is unique
          * . balancing the SX if contain numeric-only formula data.
          *   . agreement with create-automagically/notification controls
+         * X SX name is unique
          * X SX has a name
          * X "weekly" FS has some days set.
          * X "once" with reasonable start/end dates.
