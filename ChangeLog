@@ -13,6 +13,8 @@
 	
 	* src/test-core and src/engine/test-core should not be added to
 	  the gnucash-build-env (noinst_ is a static library)
+
+	* add library directories for "make check"
 	
 2002-10-14  Chris Lyttle  <chris@wilddev.net>
 

@@ -14,6 +14,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/scm \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
   --gnc-module-dir ${top_srcdir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/network-utils \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
