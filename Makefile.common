@@ -23,12 +23,14 @@ MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
 QT_OBJS    := $(addprefix obj/qt/,${COMMON_SRCS:.c=.o})
 QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
+CFLAGS += -pg
 
 ifdef GNOME_CONFIG_BIN
   GNOME_CFLAGS += $(shell ${GNOME_CONFIG_BIN} --cflags gnomeui)
 endif
 
 QT_FLAGS   := 
+
 
 %.c : %.h
 
@@ -93,7 +95,10 @@ distclean: clean-files
 	rm -f $(foreach f,$(wildcard *.in),$(filter-out configure,$(f:.in=)))
 	-rm -rf ${DIST_TRASH}
 
-.PHONY: clean clean-files distclean
+dist:
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) dist);)
+
+.PHONY: clean clean-files dist distclean
 
 # Get dependencies (if existent).
 
