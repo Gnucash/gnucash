@@ -33,6 +33,9 @@
 
 	* move QuickFill and dialog-transfer into gnome-utils
 
+	* business-ledger/gncEntryLedger.c -- delay setting *new = FALSE until
+	  just before we call the "new account" dialog.	  
+	
 2002-12-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/gnc-helpers.c (g_date_equals, g_date_hash): Added

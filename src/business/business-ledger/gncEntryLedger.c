@@ -69,9 +69,6 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
   ComboCell *cell = (ComboCell *) bcell;
   Account *account;
 
-  /* No changes, as yet. */
-  *new = FALSE;
-
   /* Find the account */
   account = xaccGetAccountFromFullName (gnc_get_current_group (),
 					name, gnc_get_account_separator ());
@@ -81,6 +78,9 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     if (!gnc_verify_dialog_parented (ledger->parent, TRUE, missing, name))
       return NULL;
     
+    /* No changes, as yet. */
+    *new = FALSE;
+
     /* User said yes, they want to create a new account. */
     account = gnc_ui_new_accounts_from_name_window (name);
     if (!account)
