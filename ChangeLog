@@ -1,3 +1,10 @@
+2003-08-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/help-topics-index.scm: Adapted to latest gnucash-docs
+	changes, by Jon Lapham <lapham@extracta.com.br>. Note: We are now
+	in string freeze until 1.8.5 release on Aug 17. Please don't
+	change any translated strings now.
+
 2003-08-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/druid-loan.c: Apply patch to fix a number of
