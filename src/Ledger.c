@@ -25,9 +25,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
+
 #include "Ledger.h"
 #include "messages.h"
 #include "register.h"
+#include "table-allgui.h"
 #include "Transaction.h"
 
 #define BUFSIZE 1024
@@ -37,7 +40,7 @@
 static void
 LedgerMoveCursor  (struct _Table *_table, void * client_data)
 {
-   Table * table =  (Table *)_table;
+   /* Table * table =  (Table *)_table; */
    BasicRegister *reg = (BasicRegister *) client_data;
    xaccSaveRegEntry (reg);
 }
@@ -50,7 +53,7 @@ Split * xaccGetCurrentSplit (BasicRegister *reg)
    Split *split;
 
    /* get the handle to the current split and transaction */
-   cursor = reg->table->cursor;
+   cursor = reg->table->current_cursor;
    split = (Split *) cursor->user_data;
 
    return split;
@@ -197,7 +200,7 @@ trans->date.day, trans->date.month, trans->date.year);
    xaccSetAmountCellValue (reg->valueCell, (split->share_price) *
                                            (split->damount));
 
-   reg->table->cursor->user_data = (void *) split;
+   reg->table->current_cursor->user_data = (void *) split;
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
@@ -211,9 +214,12 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    int i;
    Split *split;
    Transaction *trans;
-   char buff[BUFSIZE];
    Table *table;
-   int save_cursor_row;
+   int save_cursor_phys_row;
+   int num_phys_rows;
+   int num_phys_cols;
+   int num_virt_rows;
+   int phys_row;
 
    table = reg->table;
 
@@ -223,22 +229,43 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
 
    /* save the current cursor location; we want to restore 
     * it after the reload.  */
-   save_cursor_row = table->current_cursor_row;
+   save_cursor_phys_row = table->current_cursor_phys_row;
    xaccMoveCursorGUI (table, -1, -1);
 
    /* set table size to number of items in list */
    i=0;
    while (slist[i]) i++;
-   xaccSetTableSize (table, i+1, 1);
+
+   /* compute the corresponding number of physical & virtual rows. */
+   /* number of virtual rows is number of splits,
+    * plus one for the header,
+    * plus one for the blank new entry split. */
+   num_virt_rows = i+2;
+
+   /* num_phys_cols is easy ... just the total number os cells */
+   num_phys_cols = reg->header->numCols;
+
+   /* num_phys_rows is the number of rows in all the cursors */
+   num_phys_rows = reg->header->numRows;
+   num_phys_rows += (i+1) * (reg->cursor->numRows);
+
+   /* num_virt_cols is always one. */
+   xaccSetTableSize (table, num_phys_rows, num_phys_cols, num_virt_rows, 1);
+
+   /* make sure that the header is loaded */
+   xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
 printf ("load reg of %d entries --------------------------- \n",i);
    /* populate the table */
    i=0;
    split = slist[0]; 
    while (split) {
+      phys_row = reg->header->numRows;
+      phys_row += i * (reg->cursor->numRows);
 
-      table->current_cursor_row = i;
-      table->current_cursor_col = 0;
+      /* i+1 because header is virt row zero */
+      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 1);
+      xaccMoveCursor (table, phys_row, 0);
       xaccLoadRegEntry (reg, split);
 
       i++;
@@ -248,15 +275,26 @@ printf ("load reg of %d entries --------------------------- \n",i);
    /* add new, disconnected transaction at the end */
    trans = xaccMallocTransaction ();
    todaysDate (&(trans->date));
-   table->current_cursor_row = i;
-   table->current_cursor_col = 0;
+
+   phys_row = reg->header->numRows;
+   phys_row += i * (reg->cursor->numRows);
+   xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 1);
+   xaccMoveCursor (table, phys_row, 0);
+
    xaccLoadRegEntry (reg, &(trans->source_split));
-   i++;
    
    /* restore the cursor to it original location */
-   if (i <= save_cursor_row)  save_cursor_row = i - 1;
-   if (0 > save_cursor_row)  save_cursor_row = 0;
-   xaccMoveCursorGUI (table, save_cursor_row, 0);
+   i++;
+   phys_row = reg->header->numRows;
+   phys_row += i * (reg->cursor->numRows);
+
+   if (phys_row <= save_cursor_phys_row) {
+       save_cursor_phys_row = phys_row - reg->cursor->numRows;
+   }
+   if (save_cursor_phys_row < (reg->header->numRows)) {
+      save_cursor_phys_row = reg->header->numRows;
+   }
+   xaccMoveCursorGUI (table, save_cursor_phys_row, 0);
    xaccRefreshTableGUI (table);
 
    /* enable callback for cursor user-driven moves */
