@@ -34,6 +34,14 @@
 #include "TransactionP.h"
 #include "util.h"
 
+
+/* if the "force_double_entry" flag has a non-zero value,
+ * then all transactions will be *forced* to balance.
+ * This will be forced even if it requires a new split 
+ * to be created.
+ */
+int force_double_entry = 0;
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -155,7 +163,7 @@ void xaccSplitSetShareAmount (Split *s, double amt)
    s -> damount = amt;
 }
 
-void xaccSplitSetAmount (Split *s, double amt)
+void xaccSplitSetValue (Split *s, double amt)
 {
    MARK_SPLIT(s);
    /* remember, damount is actually share price */
@@ -268,30 +276,92 @@ xaccFreeTransaction( Transaction *trans )
 \********************************************************************/
 
 void
-xaccTransRecomputeAmount (Transaction *trans)
+xaccSplitRebalance (Split *split)
 {
+  Transaction *trans;
   Split *s;
   int i = 0;
-  double amount = 0.0;
+  double value = 0.0;
 
-  s = trans->dest_splits[i];
-  while (s) {
-    amount += s->share_price * s->damount;
-    i++;
-    s = trans->dest_splits[i];
-  }
 
-  /* if there is just one split, then the credited 
-   * and the debited splits should match up. */
-  if (1 == i) {
+  trans = split->parent;
+
+  if (&(trans->source_split) == split) {
+    /* The indicated split is the source split.
+     * Pick a destination split (by default, 
+     * the first destination split), and force 
+     * the total on it. 
+     */
+
     s = trans->dest_splits[0];
-    trans -> source_split.damount = - (s->damount);
-    trans -> source_split.share_price = s->share_price;
+    if (s) {
+      /* first, add the source split */
+      value = split->share_price * split->damount;
+
+      /* now add in the sum of the destination splits */
+      i = 0;
+      while (s) {
+        value += s->share_price * s->damount;
+        i++;
+        s = trans->dest_splits[i];
+      }
+
+      /* subtract the first destination split */
+      s = trans->dest_splits[0];
+      value -= (s->share_price) * (s->damount);
+
+      /* the new value of the destination split 
+       * will be the result.
+       */
+      s -> damount = - (value / (s->share_price));   
+      MARK_SPLIT (s);
+
+    } else{
+      /* There are no destination splits !! 
+       * Either this is allowed, in which case 
+       * we just blow it off, or its forbidden,
+       * in which case we force a balacing split 
+       * to be created.
+       */
+
+       if (force_double_entry) {
+          value = split->share_price * split->damount;
+
+          /* malloc a new split, mirror it to the source split */
+          s = xaccMallocSplit ();
+          s->damount = -value;
+          free (s->memo);
+          s->memo = strdup (split->memo);
+          free (s->action);
+          s->action = strdup (split->action);
+
+          /* insert the new split into the transaction and 
+           * the same account as the source split */
+          xaccTransAppendSplit (trans, s); 
+          xaccAccountInsertSplit (split->acc, s);
+          MARK_SPLIT (s);
+       }
+    }
   } else {
-    trans -> source_split.damount = -amount;
-    trans -> source_split.share_price = 1.0;
+
+    /* The indicated split is a destination split.
+     * Compute grand total of all distination splits,
+     * and force the source split to blanace.
+     */
+    i = 0;
+    s = trans->dest_splits[i];
+    value = 0.0;
+    while (s) {
+      value += s->share_price * s->damount;
+      i++;
+      s = trans->dest_splits[i];
+    }
+
+    s = &(trans->source_split);
+    s -> damount = - (value / (s->share_price));   
+    MARK_SPLIT (s);
   }
-  MARK_SPLIT (&(trans->source_split));
+
 }
 
 /********************************************************************\
@@ -343,9 +413,6 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
      s = trans->dest_splits[n];
    }
    trans->dest_splits[i] = NULL;
-
-   /* bring dollar amounts into synchrony */
-   xaccTransRecomputeAmount (trans);
 }
 
 /********************************************************************\

@@ -83,10 +83,33 @@ void          xaccTransSetReconcile (Transaction *, char);
 void          xaccTransAppendSplit (Transaction *, Split *);
 void          xaccTransRemoveSplit (Transaction *, Split *);
 
-/* recompute the total transaction value, based
- * on the sum of the debit splits that belong to this
- * transaction. */
-void xaccTransRecomputeAmount (Transaction *);
+/* 
+ * The xaccSplitRebalance() routine is an important routine for 
+ * maintaining and ensuring that double-entries balance properly.
+ * This routine forces the sum-total of the values of all the 
+ * splits in a transaction to total up to exactly zero.  
+ *
+ * It is worthwhile to understand the algorithm that this routine
+ * uses to acheive balance.  It goes like this:
+ * If the indicated split is a destination split, then the
+ * total value of the destination splits is computed, and the
+ * value of the source split is adjusted to be minus this amount.
+ * (the share price of the source split is not changed).
+ * If the indicated split is the source split, then the value
+ * of the very first destination split is adjusted so that
+ * the blanace is zero.   If there is not destination split,
+ * one of two outcomes are possible, depending on whether
+ * "forced_double_entry" is enabled or disabled.
+ * (1) if forced-double-entry is disabled, the fact that
+ *     the destination is missing is ignored.
+ * (2) if force-double-entry is enabled, then a destination
+ *     split that exactly mirrors the ource split is created,
+ *     and credited to the same account as the source split.
+ *     Hopefully, the user will notice this, and reparent the 
+ *     destination split properly.
+ */
+ 
+void xaccSplitRebalance (Split *);
 
 /* ------------- gets --------------- */
 /* return pointer to the source split */
@@ -115,7 +138,7 @@ void          xaccSplitSetAction (Split *, const char *);
 void          xaccSplitSetReconcile (Split *, char);
 
 /* The following two functions set the amount on the split */
-void         xaccSplitSetAmount (Split *, double);
+void         xaccSplitSetValue (Split *, double);
 void         xaccSplitSetShareAmount (Split *, double);
 
 
