@@ -127,6 +127,8 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     AB_Banking_DelPendingJob(api, job);
     gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
+    GWEN_Time_free (from_date);
+    GWEN_Time_free (to_date);
   }
 }
 
