@@ -754,19 +754,18 @@ sixtp_setup_parser (sixtp *sixtp,
 
 static gboolean
 sixtp_teardown_parser(sixtp *sixtp,
-                     gpointer data_for_top_level,
-                     gpointer global_data,
-                     gpointer *parse_result, 
-                     sixtp_sax_data *sax_data)
+                      gpointer data_for_top_level,
+                      gpointer global_data,
+                      gpointer *parse_result, 
+                      sixtp_sax_data *sax_data,
+                      sixtp_stack_frame *top_frame)
 {
-  sixtp_stack_frame *top_frame = NULL;
-  
   if(!sax_data->parsing_ok) {
     PERR ("couldn't parse, handle catastrophe");
     sixtp_handle_catastrophe(sax_data);
     return(FALSE);
   }
-  
+
   if(sixtp->end_handler) {
     sax_data->parsing_ok =
       sixtp->end_handler(top_frame->data_for_children,
@@ -786,7 +785,7 @@ sixtp_teardown_parser(sixtp *sixtp,
 
   /* put the result where the caller can see it */
   if(top_frame->frame_data) *parse_result = top_frame->frame_data;
-  
+
   {
     GSList *lp = NULL;
     for(lp = sax_data->stack; lp; lp = lp->next)
@@ -814,22 +813,22 @@ sixtp_parse_file(sixtp *sixtp,
   /* looks like a mem leak to me ... */
   top_frame = g_new0(sixtp_stack_frame, 1);
   rc = sixtp_setup_parser (sixtp,
-                      data_for_top_level,
-                      global_data,
-                      &sax_handler,
-                      &sax_data,
-                      top_frame);
- 
-  
+                           data_for_top_level,
+                           global_data,
+                           &sax_handler,
+                           &sax_data,
+                           top_frame);
+
   if(!rc) return(FALSE);
-  
+
   xmlSAXUserParseFile(&sax_handler, &sax_data, filename);
-  
+
   rc = sixtp_teardown_parser(sixtp,
-                     data_for_top_level,
-                     global_data,
-                     parse_result, 
-                     &sax_data);
+                             data_for_top_level,
+                             global_data,
+                             parse_result, 
+                             &sax_data,
+                             top_frame);
 
   return rc;
 }
