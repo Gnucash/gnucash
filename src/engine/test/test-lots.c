@@ -46,11 +46,15 @@ run_test (void)
    * XXX not implemented 
    */
   success ("automatic lot scrubbing lightly tested and seem to work");
+  qof_session_destroy (sess);
+
 }
 
 static void
 main_helper (void *closure, int argc, char **argv)
 {
+  int i;
+
   /* Any tests that cause an error or warning to be printed
    * automatically fail! */
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
@@ -59,7 +63,12 @@ main_helper (void *closure, int argc, char **argv)
 
   do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "load engine");
 
-  run_test ();
+  /* set the rng to a known starting point */
+  srand(0);
+
+  /* Iterate the test a number of times */
+  for (i=0; i< 20; i++)
+    run_test ();
 
   print_test_results();
   exit(get_rv());
