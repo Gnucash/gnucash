@@ -580,7 +580,7 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 }
 
 static void
-gnucash_sheet_destroy (GtkObject *object)
+gnucash_sheet_finalize (GObject *object)
 {
         GnucashSheet *sheet;
 
@@ -594,8 +594,8 @@ gnucash_sheet_destroy (GtkObject *object)
         g_hash_table_destroy (sheet->cursor_styles);
         g_hash_table_destroy (sheet->dimensions_hash_table);        
 
-        if (GTK_OBJECT_CLASS (sheet_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS (sheet_parent_class)->destroy)(object);
+        if (G_OBJECT_CLASS (sheet_parent_class)->finalize)
+                (*G_OBJECT_CLASS (sheet_parent_class)->finalize)(object);
 
 	/* This has to come after the parent destroy, so the item edit
 	   destruction can do its disconnects. */
@@ -2190,18 +2190,18 @@ gnucash_sheet_selection_received (GtkWidget          *widget,
 static void
 gnucash_sheet_class_init (GnucashSheetClass *class)
 {
-        GtkObjectClass *object_class;
+        GObjectClass *gobject_class;
         GtkWidgetClass *widget_class;
         GnomeCanvasClass *canvas_class;
 
-        object_class = (GtkObjectClass *) class;
+        gobject_class = G_OBJECT_CLASS (class);
         widget_class = (GtkWidgetClass *) class;
         canvas_class = (GnomeCanvasClass *) class;
 
         sheet_parent_class = gtk_type_class (gnome_canvas_get_type ());
 
         /* Method override */
-        object_class->destroy = gnucash_sheet_destroy;
+        gobject_class->finalize = gnucash_sheet_finalize;
 
         widget_class->realize = gnucash_sheet_realize;
 
@@ -2261,23 +2261,25 @@ gnucash_sheet_init (GnucashSheet *sheet)
 GtkType
 gnucash_sheet_get_type (void)
 {
-        static GtkType gnucash_sheet_type = 0;
+        static GType gnucash_sheet_type = 0;
 
         if (!gnucash_sheet_type){
-                GtkTypeInfo gnucash_sheet_info = {
-                        "GnucashSheet",
-                        sizeof (GnucashSheet),
+                static const GTypeInfo gnucash_sheet_info = {
                         sizeof (GnucashSheetClass),
-                        (GtkClassInitFunc) gnucash_sheet_class_init,
-                        (GtkObjectInitFunc) gnucash_sheet_init,
-                        NULL, /* reserved 1 */
-                        NULL, /* reserved 2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_sheet_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashSheet),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_sheet_init
                 };
 
                 gnucash_sheet_type =
-			gtk_type_unique (gnome_canvas_get_type (),
-					 &gnucash_sheet_info);
+			g_type_register_static (gnome_canvas_get_type (),
+						"GnucashSheet",
+						&gnucash_sheet_info, 0);
         }
 
         return gnucash_sheet_type;
@@ -2336,42 +2338,45 @@ gnucash_sheet_new (Table *table)
 static void
 gnucash_register_class_init (GnucashRegisterClass *class)
 {
-        GtkObjectClass *object_class;
+	GObjectClass *gobject_class;
         GtkWidgetClass *widget_class;
         GtkTableClass *table_class;
 
-        object_class = (GtkObjectClass *) class;
+	gobject_class = G_OBJECT_CLASS (class);
         widget_class = (GtkWidgetClass *) class;
         table_class = (GtkTableClass *) class;
 
-        register_parent_class = gtk_type_class (gtk_table_get_type ());
+        register_parent_class = g_type_class_peek_parent (class);
 
         register_signals[ACTIVATE_CURSOR] =
-                gtk_signal_new("activate_cursor",
-                               GTK_RUN_LAST,
-                               GTK_CLASS_TYPE(object_class),
-                               GTK_SIGNAL_OFFSET(GnucashRegisterClass,
-                                                 activate_cursor),
-                               gtk_marshal_NONE__NONE,
-                               GTK_TYPE_NONE, 0);
+                g_signal_new("activate_cursor",
+			     G_TYPE_FROM_CLASS(gobject_class),
+			     G_SIGNAL_RUN_LAST,
+			     G_STRUCT_OFFSET(GnucashRegisterClass,
+					     activate_cursor),
+			     NULL, NULL,
+			     gtk_marshal_NONE__NONE,
+			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_ALL] =
-                gtk_signal_new("redraw_all",
-                               GTK_RUN_LAST,
-                               GTK_CLASS_TYPE(object_class),
-                               GTK_SIGNAL_OFFSET(GnucashRegisterClass,
-                                                 redraw_all),
-                               gtk_marshal_NONE__NONE,
-                               GTK_TYPE_NONE, 0);
+                g_signal_new("redraw_all",
+			     G_TYPE_FROM_CLASS(gobject_class),
+			     G_SIGNAL_RUN_LAST,
+			     G_STRUCT_OFFSET(GnucashRegisterClass,
+					     redraw_all),
+			     NULL, NULL,
+			     gtk_marshal_NONE__NONE,
+			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_HELP] =
-                gtk_signal_new("redraw_help",
-                               GTK_RUN_LAST,
-                               GTK_CLASS_TYPE(object_class),
-                               GTK_SIGNAL_OFFSET(GnucashRegisterClass,
-                                                 redraw_help),
-                               gtk_marshal_NONE__NONE,
-                               GTK_TYPE_NONE, 0);
+                g_signal_new("redraw_help",
+			     G_TYPE_FROM_CLASS(gobject_class),
+			     G_SIGNAL_RUN_LAST,
+			     G_STRUCT_OFFSET(GnucashRegisterClass,
+					     redraw_help),
+			     NULL, NULL,
+			     gtk_marshal_NONE__NONE,
+			     G_TYPE_NONE, 0);
 
         class->activate_cursor = NULL;
         class->redraw_all = NULL;
@@ -2395,23 +2400,25 @@ gnucash_register_init (GnucashRegister *g_reg)
 GtkType
 gnucash_register_get_type (void)
 {
-        static GtkType gnucash_register_type = 0;
+        static GType gnucash_register_type = 0;
 
         if (!gnucash_register_type) {
-                GtkTypeInfo gnucash_register_info = {
-                        "GnucashRegister",
-                        sizeof (GnucashRegister),
+                static const GTypeInfo gnucash_register_info = {
                         sizeof (GnucashRegisterClass),
-                        (GtkClassInitFunc) gnucash_register_class_init,
-                        (GtkObjectInitFunc) gnucash_register_init,
-                        NULL, /* reserved 1 */
-                        NULL, /* reserved 2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_register_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashRegister),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_register_init,
                 };
 
-                gnucash_register_type = gtk_type_unique
+                gnucash_register_type = g_type_register_static
 			(gtk_table_get_type (),
-			 &gnucash_register_info);
+			 "GnucashRegister",
+			 &gnucash_register_info, 0);
         }
 
         return gnucash_register_type;
