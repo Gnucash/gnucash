@@ -49,6 +49,13 @@
  *   set, then the callbacks below are used to when the
  *   cell is entered.
  *
+ *   If ALLOW_SHADOW is not set, then register contents
+ *   will never be copied into this cell.  This may result
+ *   in undesirable behaviour when the cell is moved around,
+ *   as the cell contents will be imprinted onto every location 
+ *   where it is moved.  On the other hand, this can be useful
+ *   for, e.g. blanking out cells.
+ *
  *
  * USER CALLBACKS:
  * The enter_cell() callback is called when the user first
@@ -154,6 +161,8 @@ struct _BasicCell {
   short  width;           /* column width, in chars, not pixels */
   short  alignment;       /* column text alignment */
   char   input_output;    /* zero if output-only */
+
+  /* hack alert -- may want to redesign color to used named color strings. */
   uint32 bg_color;        /* background color, ARGB format */
   uint32 fg_color;        /* forground (text) color ARGB format */
 
