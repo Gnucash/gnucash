@@ -495,7 +495,8 @@ gnc_gui_component_watch_entity_type (gint component_id,
   if (safe_strcmp (entity_type, GNC_ID_TRANS) &&
       safe_strcmp (entity_type, GNC_ID_ACCOUNT))
   {
-    PERR ("bad entity type: %s", entity_type);
+    PERR ("bad entity type: %s",
+	  (entity_type ? entity_type : "<null-entity-type>"));
     return;
   }
 
