@@ -1,5 +1,7 @@
 2001-03-31  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-utils.c (gnc_get_gdk_imlib_image): new func
+
 	* src/scm/report.scm: translate report name
 
 	* src/gnome/window-main.c: fix some i18n bugs

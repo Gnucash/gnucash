@@ -5487,7 +5487,7 @@ update your accounts for the new version of Gnucash.
 Hit &quot;Cancel&quot; now to stop loading the file. </text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
-      <background_color>155,191,156</background_color>
+      <background_color>153,191,153</background_color>
       <logo_background_color>255,255,255</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
     </widget>
@@ -9174,7 +9174,7 @@ words.
 
     <widget>
       <class>GnomeDruidPageStart</class>
-      <name>druidpagestart2</name>
+      <name>start_page</name>
       <title></title>
       <text>This wizard will help you record a stock split or stock merger.</text>
       <title_color>255,255,255</title_color>

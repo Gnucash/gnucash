@@ -56,6 +56,7 @@ GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
 GtkWidget * gnc_get_pixmap (const char *name);
+GdkImlibImage * gnc_get_gdk_imlib_image (const char *name);
 
 GtkToolbarStyle gnc_get_toolbar_style (void);
 

@@ -3718,7 +3718,7 @@ create_New_Commodity_Format_Druid (void)
   GtkWidget *New_Commodity_Format_Druid;
   GtkWidget *commodity_druid;
   GtkWidget *start_page;
-  GdkColor start_page_bg_color = { 0, 39835, 49087, 40092 };
+  GdkColor start_page_bg_color = { 0, 39320, 49087, 39320 };
   GdkColor start_page_textbox_color = { 0, 65535, 65535, 65535 };
   GdkColor start_page_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor start_page_title_color = { 0, 65535, 65535, 65535 };
@@ -6197,11 +6197,11 @@ create_Stock_Split_Druid (void)
 {
   GtkWidget *Stock_Split_Druid;
   GtkWidget *stock_split_druid;
-  GtkWidget *druidpagestart2;
-  GdkColor druidpagestart2_bg_color = { 0, 6425, 6425, 28784 };
-  GdkColor druidpagestart2_textbox_color = { 0, 65535, 65535, 65535 };
-  GdkColor druidpagestart2_logo_bg_color = { 0, 65535, 65535, 65535 };
-  GdkColor druidpagestart2_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *start_page;
+  GdkColor start_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor start_page_textbox_color = { 0, 65535, 65535, 65535 };
+  GdkColor start_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor start_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *account_page;
   GdkColor account_page_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor account_page_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -6274,18 +6274,18 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (stock_split_druid);
   gtk_container_add (GTK_CONTAINER (Stock_Split_Druid), stock_split_druid);
 
-  druidpagestart2 = gnome_druid_page_start_new ();
-  gtk_widget_ref (druidpagestart2);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagestart2", druidpagestart2,
+  start_page = gnome_druid_page_start_new ();
+  gtk_widget_ref (start_page);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "start_page", start_page,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (druidpagestart2);
-  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (druidpagestart2));
-  gnome_druid_set_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (druidpagestart2));
-  gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_bg_color);
-  gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_textbox_color);
-  gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_logo_bg_color);
-  gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_title_color);
-  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart2), _("This wizard will help you record a stock split or stock merger."));
+  gtk_widget_show (start_page);
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (start_page));
+  gnome_druid_set_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (start_page));
+  gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (start_page), &start_page_bg_color);
+  gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (start_page), &start_page_textbox_color);
+  gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (start_page), &start_page_logo_bg_color);
+  gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (start_page), &start_page_title_color);
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (start_page), _("This wizard will help you record a stock split or stock merger."));
 
   account_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (account_page);

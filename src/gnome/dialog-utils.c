@@ -265,6 +265,30 @@ gnc_get_pixmap (const char *name)
 
 
 /********************************************************************\
+ * gnc_get_imlib_image                                              *
+ *   returns a GdkImlibImage object given a pixmap filename         *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: GnomePixmap widget or NULL if there was a problem       *
+ \*******************************************************************/
+GdkImlibImage *
+gnc_get_gdk_imlib_image (const char *name)
+{
+  GdkImlibImage *image;
+
+  char *fullname;
+
+  g_return_val_if_fail (name != NULL, NULL);
+
+  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
+  image = gdk_imlib_load_image (fullname);
+  g_free (fullname);
+
+  return image;
+}
+
+
+/********************************************************************\
  * gnc_get_toolbar_style                                            *
  *   returns the current toolbar style for gnucash toolbars         *
  *                                                                  *

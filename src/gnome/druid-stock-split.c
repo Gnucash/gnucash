@@ -717,7 +717,7 @@ gnc_stock_split_dialog (Account * initial)
 
   if (fill_account_list (info, initial) == 0)
   {
-    gnc_warning_dialog (_("You don't have any stock accounts!"));
+    gnc_warning_dialog (_("You don't have any stock accounts with balances!"));
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
     return;
   }
