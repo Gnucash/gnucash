@@ -89,7 +89,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     AB_JOB *job;
 
     job = AB_JobGetBalance_new((AB_ACCOUNT*)h_acc);
-    if (!AB_Job_CheckAvailability(job)) {
+    if (AB_Job_CheckAvailability(job)) {
       printf("gnc_hbci_getbalance: JobGetBalance not avaiable for this account.\n");
       /* FIXME: free unneeded data */
       return;

@@ -95,6 +95,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     
     /* Create OutboxJob */
     job = AB_JobGetTransactions_new((AB_ACCOUNT*)h_acc);
+    if (AB_Job_CheckAvailability(job)) {
+      printf("gnc_hbci_gettrans: Oops, job not available. Aborting.\n");
+      /* FIXME: free unneeded data */
+      return;
+    }
     AB_JobGetTransactions_SetFromTime(job, from_date);
     AB_JobGetTransactions_SetToTime(job, to_date);
 

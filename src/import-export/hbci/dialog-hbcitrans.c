@@ -65,6 +65,8 @@ struct _trans_data
   /* Purpose, description */
   GtkWidget *purpose_entry;
   GtkWidget *purpose_cont_entry;
+  GtkWidget *purpose_cont2_entry;
+  GtkWidget *purpose_cont3_entry;
 
   /* Recipient's bank name (may be filled in automatically sometime later) */
   GtkWidget *recp_bankname_label;
@@ -276,6 +278,10 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     g_assert
       ((td->purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry")) != NULL);
     g_assert
+      ((td->purpose_cont2_entry = glade_xml_get_widget (xml, "purpose_cont2_entry")) != NULL);
+    g_assert
+      ((td->purpose_cont3_entry = glade_xml_get_widget (xml, "purpose_cont3_entry")) != NULL);
+    g_assert
       ((orig_name_label = glade_xml_get_widget (xml, "orig_name_label")) != NULL);
     g_assert
       ((orig_account_label = glade_xml_get_widget (xml, "orig_account_label")) != NULL);
@@ -423,7 +429,23 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 				 const AB_ACCOUNT *h_acc)
 {
   int result;
+  int max_purpose_lines;
   gboolean values_ok;
+
+  {
+    AB_JOB *job = AB_JobSingleTransfer_new((AB_ACCOUNT *)h_acc);
+    if (AB_Job_CheckAvailability(job)) {
+      printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+      return -1;
+    }
+    max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
+    /* these are the number of fields, 27 characters each. */
+    AB_Job_free(job);
+  }
+  /* gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_entry), max_purpose_lines > 0); */
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont_entry), max_purpose_lines > 1);
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont2_entry), max_purpose_lines > 2);
+  gtk_widget_set_sensitive (GTK_WIDGET (td->purpose_cont3_entry), max_purpose_lines > 3);
 
   /* Repeat until entered values make sense */
   do {
@@ -517,6 +539,10 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
     (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)), FALSE);
   AB_Transaction_AddPurpose
     (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)), FALSE);
+  AB_Transaction_AddPurpose
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)), FALSE);
+  AB_Transaction_AddPurpose
+    (trans, gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)), FALSE);
 	
   /* FIXME: Replace "EUR" by account-dependent string here. */
   AB_Transaction_SetValue 
@@ -613,6 +639,10 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
     }
   }
   job = AB_JobSingleTransfer_new(h_acc);
+  if (AB_Job_CheckAvailability(job)) {
+    printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+    return NULL;
+  }
   AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
 
   /* Make really sure there is no other job in the queue */
