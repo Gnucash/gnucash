@@ -17,6 +17,10 @@ struct _pgend {
    /* postgres-specific conection data */
    char * dbName;
    PGconn * connection;
+
+   /* scratch space for constructing queries */ 
+   int bufflen;
+   char *buff;
 };
 
 /*

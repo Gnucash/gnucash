@@ -21,11 +21,20 @@
 
 static short module = MOD_BACKEND; 
 
-/* hack alert -- this is the query buffer, it might be too small.
-   we need to make it dynamic sized */
-#define QBUFSIZE 16350
-
 /* ============================================================= */
+
+#define SEND_QUERY(be) {					\
+   int rc;							\
+   rc = PQsendQuery (be->connection, be->buff);			\
+   if (!rc)							\
+   {								\
+      /* hack alert -- we need knider, gentler error handling */\
+      PERR("send query failed:\n"				\
+           "\t%s", PQerrorMessage(be->connection));		\
+      PQfinish (be->connection);				\
+      return;							\
+   }								\
+}
 
 #define FLUSH(conn) {						\
    PGresult *result; 						\
@@ -48,6 +57,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 /* This routine stores the indicated group structure into the database.
  * It does *not* chase pointers, traverse the tree, etc. 
+ * It performs no locking.
  */
 
 static void
@@ -55,8 +65,7 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
 {
    Account *parent;
    const GUID *parent_guid, *grp_guid;
-   char buff[QBUFSIZE];
-   int i, nacc, rc;
+   int i, nacc;
 
    ENTER ("be=%p, grp=%p\n", be, grp);
    if (!be || !grp) return;
@@ -70,7 +79,7 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
       Account *acc = xaccGroupGetAccount(grp, i);
 
       /* hack alert -- values should be escaped so that no '' apear in them */
-      snprintf (buff, QBUFSIZE, 
+      snprintf (be->buff, be->bufflen, 
                "INSERT INTO gncGroup "
                "(groupGuid, parentGuid, childGuid)"
                " values "
@@ -79,14 +88,8 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
                guid_to_string(parent_guid),
                guid_to_string(xaccAccountGetGUID (acc))
                );
-      rc = PQsendQuery (be->connection, buff);
-      if (!rc)
-      {
-         PERR("send query failed:\n"
-              "\t%s", PQerrorMessage(be->connection));
-         PQfinish (be->connection);
-         return;
-      }
+
+      SEND_QUERY(be);
    
       /* complete/commit the transaction, check the status */
       FLUSH(be->connection);
@@ -96,15 +99,87 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
 }
 
 /* ============================================================= */
+/* This routine stores the indicated account structure into the database.
+ * It does *not* chase pointers, traverse the tree, etc. 
+ * It performs no locking.
+ */
+
+static void
+pgendStoreOneAccountOnly (PGBackend *be, Account *acct)
+{
+
+   ENTER ("be=%p, acct=%p\n", be, acct);
+   if (!be || !acct) return;
+
+   /* hack alert -- values should be escaped so that no '' apear in them */
+   snprintf (be->buff, be->bufflen, 
+            "INSERT INTO gncAccount "
+            "(accountGuid, parentGuid, childrenGuid, "
+            "accountName, accountCode, description, notes, "
+            "type, currency, security)"
+            " values "
+            "('%s', '%s', '%s', '%s', '%s', '%s', '%s', "
+            "%d, '%s', '%s');",
+            guid_to_string(xaccAccountGetGUID (acct)),
+            guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct))),
+            guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct))),
+            xaccAccountGetName (acct),
+            xaccAccountGetCode (acct),
+            xaccAccountGetDescription (acct),
+            xaccAccountGetNotes (acct),
+            xaccAccountGetType (acct),
+            xaccAccountGetCurrency (acct),
+            xaccAccountGetSecurity (acct)
+            );
+
+   SEND_QUERY (be);
+   
+   /* complete/commit the transaction, check the status */
+   FLUSH(be->connection);
+
+   LEAVE ("\n");
+}
+
+/* ============================================================= */
+/* This routine stores the indicated transaction structure into the database.
+ * It does *not* chase pointers, traverse the tree, etc. 
+ * It performs no locking.
+ */
+
+static void
+pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans)
+{
+
+   ENTER ("be=%p, trans=%p\n", be, trans);
+   if (!be || !trans) return;
+
+   /* hack alert -- values should be escaped so that no '' apear in them */
+   snprintf (be->buff, be->bufflen, 
+            "INSERT INTO gncTransaction "
+            "(transGuid, num, description)"
+            " values "
+            "('%s', '%s', '%s');",
+            guid_to_string(xaccTransGetGUID (trans)),
+            xaccTransGetNum (trans),
+            xaccTransGetDescription (trans)
+            );
+
+   SEND_QUERY (be);
+   
+   /* complete/commit the transaction, check the status */
+   FLUSH(be->connection);
+
+   LEAVE ("\n");
+}
+
+/* ============================================================= */
 /* this routine stores the indicated split in the database
  */
 
 static void
-pgendStoreSplit (PGBackend *be, Split *split)
+pgendStoreOneSplitOnly (PGBackend *be, Split *split)
 {
    Timespec ts;
-   char buff[QBUFSIZE];
-   int rc;
 
    ENTER ("be=%p, split=%p\n", be, split);
    if (!be || !split) return;
@@ -113,7 +188,7 @@ pgendStoreSplit (PGBackend *be, Split *split)
    xaccSplitGetDateReconciledTS (split, &ts);
 
    /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (buff, QBUFSIZE, 
+   snprintf (be->buff, be->bufflen, 
             "INSERT INTO gncEntry "
             "(entryGuid, accountGuid, transGuid, memo, action,"
             "reconciled, amount, share_price)"
@@ -128,19 +203,87 @@ pgendStoreSplit (PGBackend *be, Split *split)
             xaccSplitGetShareAmount(split),
             xaccSplitGetSharePrice(split)
             );
-   rc = PQsendQuery (be->connection, buff);
-   if (!rc)
-   {
-      PERR("send query failed:\n"
-           "\t%s", PQerrorMessage(be->connection));
-      PQfinish (be->connection);
-      return;
-   }
+
+   SEND_QUERY (be);
 
    /* complete/commit the transaction, check the status */
    FLUSH(be->connection);
 
    LEAVE ("\n");
+}
+
+/* ============================================================= */
+/* This routine traverses the group structure and stores it into 
+ * the database.  The NoLock version doesn't lock up the tables.
+ */
+
+static int
+traverse_cb (Transaction *trans, void *cb_data)
+{
+   PGBackend *be = (PGBackend *) cb_data;
+   int i, nsplits;
+
+   if (!be || !trans) return;
+
+   pgendStoreOneTransactionOnly (be, trans);
+
+   /* walk over the list of splits */
+   nsplits = xaccTransGetNumSplits (trans);
+   for (i=0; i<nsplits; i++) {
+      Split * s = xaccTransGetSplit (trans, i);
+      pgendStoreOneSplitOnly (be, s);
+   }
+
+   return 0;
+}
+
+static void
+pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp)
+{
+   int i, nacc;
+
+   if (!be || !grp) return;
+
+   /* first, store the top-group */
+   pgendStoreOneGroupOnly (be, grp);
+
+   /* next, walk the account tree, and store subaccounts */
+   nacc = xaccGroupGetNumAccounts(grp);
+
+   for (i=0; i<nacc; i++) {
+      AccountGroup *subgrp;
+      Account *acc = xaccGroupGetAccount(grp, i);
+      pgendStoreOneAccountOnly (be, acc);
+
+      /* recursively walk to child accounts */
+      subgrp = xaccAccountGetChildren (acc);
+      if (subgrp) pgendStoreGroupNoLock(be, subgrp);
+   }
+}
+
+
+static void
+pgendStoreGroup (PGBackend *be, AccountGroup *grp)
+{
+   ENTER ("be=%p, grp=%p\n", be, grp);
+   if (!be || !grp) return;
+
+   /* lock it up so that we store atomically */
+   snprintf (be->buff, be->bufflen, "BEGIN;");
+   SEND_QUERY (be);
+   FLUSH(be->connection);
+
+   /* reset the write flags. We use this to amek sure we don't
+    * get caught in infinite recursion */
+   xaccGroupBeginStagedTransactionTraversals(grp);
+   pgendStoreGroupNoLock (be, grp);
+
+   /* recursively walk transactions */
+   xaccGroupStagedTransactionTraversal (grp, 1, traverse_cb, be);
+
+   snprintf (be->buff, be->bufflen, "COMMIT;");
+   SEND_QUERY (be);
+   FLUSH(be->connection);
 }
 
 /* ============================================================= */
@@ -177,6 +320,9 @@ pgend_session_begin (Session *sess, const char * sessionid)
 {
    PGBackend *be;
 
+   if (!sess) return;
+   be = (PGBackend *) xaccSessionGetBackend (sess);
+
    ENTER("sessionid=%s\n", sessionid);
    /* connect to a bogus database ... */
    /* hack alert -- clean this up ... */
@@ -194,6 +340,11 @@ pgend_session_begin (Session *sess, const char * sessionid)
    }
 
    DEBUGCMD (PQtrace(be->connection, stderr));
+
+/* hack alert --- */
+/* just a quickie place to duimp stuff */
+xaccGroupSetBackend (xaccSessionGetGroup(sess), &(be->be));
+pgendStoreGroup (be, xaccSessionGetGroup(sess));
 
    LEAVE("\n");
    return NULL;
@@ -214,7 +365,7 @@ pgend_trans_commit_edit (Backend * bend, Transaction * trans)
    nsplits = xaccTransCountSplits (trans);
    for (i=0; i<nsplits; i++) {
       Split *s =  xaccTransGetSplit (trans, i);
-      pgendStoreSplit (be, s);
+      pgendStoreOneSplitOnly (be, s);
    }
 
 #if 0
@@ -233,6 +384,10 @@ pgend_trans_commit_edit (Backend * bend, Transaction * trans)
 }
 
 /* ============================================================= */
+
+/* hack alert -- this is the query buffer, it might be too small.
+   we need to make it dynamic sized */
+#define QBUFSIZE 16350
 
 Backend * 
 pgendNew (void)
@@ -254,6 +409,9 @@ pgendNew (void)
    /* postgres specific data */
    be->dbName = NULL;
    be->connection = NULL;
+
+   be->buff = malloc (QBUFSIZE);
+   be->bufflen = QBUFSIZE;
 
    return (Backend *) be;
 }
