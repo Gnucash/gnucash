@@ -96,14 +96,16 @@
   <para>
     Se desejar, o GnuCash pode ajudar a configurar um 
     conjunto de contas de defeito para sí, utilizando o 
-    ajudante de "Configuração de Novas Contas".  O que é 
-    um ajudante?  Bem, é uma espécie assistente, mas 
-    chama-se ajudante.  Porquê? Porque não é um assistente, 
-    é um ajudante . . .
+    druida de <link linkend="xacc-account-hierarchy-creator">
+    Configuração de Novas Contas</link>. O que é um druida?  
+    Bem, é uma espécie assistente, mas chama-se druida.  Porquê? 
+    Porque não é um assistente, é um druida . . .
     </para>
   <para>
-    De qualquer modo, o ajudante leva-lo-á através do processo 
+    De qualquer modo, o druida leva-lo-á através do processo 
     de criar um conjunto de contas para que possa começar.
+    Para começar, vá ao menu "Ficheiro" (no topo superior esquerdo 
+    da janelo do GnuCash), e seleccioner "nova árvore de contas".
     Basta seguir as questões para definir a moeda de defeito, 
     depois definir os tipos de contas que deseja criar. Ser-lhe-á 
     então dada a possibilidade de inserir saldos iniciais para 

@@ -1,257 +1,171 @@
-<ARTICLE ID="XACC-REGWIN">
+<article id="XACC-REGWIN">
+ <title>O Registo de Contas</title>
+  <sect1>
+   <title>Introdução</title>
+   <para>
+    O Registo de Contas é provavelmente a janela que verá com mais frequência
+    no GnuCash. É utilizada para introduzir as suas transacções financeiras no  
+    GnuCash e também imprimir relatórios, cheques e facturas. O registo de Contas 
+    tem três modos de introduzir transacções e é flexível ao nível da sua configuração 
+    pelo que pode visualizar as transacções da forma que mais lhe agradar. Nesta 
+    secção iremos descrever as suas funcionalidades, configuração e como introduzir 
+    transacções.
+   </para>
+  <sect2 id="basicledger">
+   <title>Transacções de registo Simples</title>
+   <para>
+    Modo de registo Simples é o defeito quando você abre a janela de Registo 
+    de Contas ou selecciona <menuchoice><guimenu>Registo</guimenu><guimenuitem>
+    Estilo</guimenuitem><guimenuitem>Registo Simples</guimenuitem></menuchoice>.
+   </para>
+    <figure>
+     <title>O Registo de Contas - Registo Simples</title>
+    <screenshot>
+     <screeninfo>O Registo de Contas - Registo Simples</screeninfo>
+      <mediaobject>
+      <imageobject>
+        <imagedata fileref="image/basicledger.png" srccredit="wilddev">
+      </imageobject>
+      </mediaobject>
+    </screenshot>
+    </figure>
 
-<ARTHEADER>
-<TITLE>A Janela de Registo</TITLE>
-</ARTHEADER>
+   <para>
+  Quando você abre a janela de Registo de Contas o cursor estará 
+  no campo de data pronto a que você introduza uma transacção. 
+  Tudo o que tem a fazer é primir tab para ir para o campo seguinte 
+  e introduzir os detalhes da transacção. Se tiver um número, tal 
+  como um número de cheque, introduza-o no campo seguinte e depois 
+  prima novamente tab para introduzir a descrição da transacção. O campo 
+  Transferência é onde a natureza de dupla-entrada do GnuCash entra em 
+  acção visto aqui você ir assignar a segunda parte da transacção a 
+  outra conta. Se clicar no extremo direito do campo Transferência uma 
+  caixa de selecção surgirá e você poderá seleccionar a conta à qual
+  assignar a transacção. Tal como no exemplo abaixo, seleccione a conta 
+  à qual assignar a transacção e depois preencha o montante. Quando 
+  primir a tecla enter ou clicar no icon de entrada, a transacção 
+  será adicionada ao registo e o compo de netrada passará automaticamente 
+  para a próxima transacção.
+   </para>
 
-<MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/regwin-single.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
 
-<PARA>Este é o "Registo" na janela de "Conta". As transacções são
-    inseridas aqui. Para inserir uma nova transacção, basta escrever
-    na última transacção, que está em branco. Pode utilizar os
-    <LINK LINKEND="DATE">Atalhos de Teclado de Datas</LINK>
-    para rapidamente introduzir datas. Utilize o rato ou os
-    <LINK LINKEND="XACC-REGWIN-KBD">Atalhos de Teclado de Registo</LINK>
-    para se mover entre os campos, e prima a tecla <KEYCAP>Enter</KEYCAP>
-    ou clique <GUIBUTTON>Gravar</GUIBUTTON> na barra de ferramentas para
-    gravar a transacção:
+    <figure>
+     <title>Registo Simples - Transferência</title>
+    <screenshot>
+     <screeninfo>Registo Simples - Transferência</screeninfo>
+       <mediaobject>
+          <imageobject>
+           <imagedata fileref="image/basicledger-transfer.png" srccredit="wilddev">
+          </imageobject>
+       </mediaobject>
+    </screenshot>
+    </figure>
+   <para>
+    Existem campos adicionais nas transacções que são acedidos seleccionando 
+    <menuchoice><guimenu>Registo</guimenu><guimenuitem>Estilo</guimenuitem>
+    <guimenuitem>Dupla Linha</guimenuitem></menuchoice>. Estes campos 
+    permitem-lhe adicionar notas às suas transacções e seleccionar o tipo 
+    de transacção que está a introduzir. Todos estes campos são editáveis 
+    após introduzida a transacção. A outra metade da transacção é 
+    automaticamente actualizada com a informação modificada.
+   </para>
+  </sect2>
 
-    </PARA>
-    <MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/regwin-single2.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
-<PARA>Note como a transacção foi gravada e uma nova transacção,
-    em branco, foi criada.
-
-    </PARA>
-<PARA>Pode editar transacções existentes de uma forma semelhante. O GnuCash
-    pedir-lhe-á para confirmar quaisquer modificações realizadas.
-
-    </PARA>
-<PARA>Após ter introduzido algumas transacções, o GnuCash irá tentar
-    adivinhar parte ou a totalidade dos detalhes restantes de uma transacção
-    quando escrever no campo de <GUILABEL>Descrição</GUILABEL>. Se o GnuCash
-    tiver adivinhado erradamente, basta escrever por cima ou apagar a informação
-    incorrecta e substitui-la pela informação desejada.
-
-    </PARA>
-
-<SECT1 ID="XACC-MANTXN">
-<TITLE>Manipular Transacções</TITLE>
-<PARA>Você pode manipular transacções com os botões da barra de ferramentas ou o
-    menu de <GUIMENU>Transacções</GUIMENU>:
-
-    </PARA>
-<VARIABLELIST>
-<VARLISTENTRY><TERM><GUIBUTTON>Apagar</GUIBUTTON></TERM>
-<LISTITEM><PARA> Pode apagar uma transacção ou uma parcela individual.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Cancelar</GUIBUTTON></TERM>
-<LISTITEM><PARA> Isto desfaz quaisquer alterações que tenha realizado
-      à transacção que estiver de momento a introduzir ou alterar.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Nova</GUIBUTTON></TERM>
-<LISTITEM><PARA> Isto move o cursor para a última linha do
-      registo, onde as novas transacções são inseridas.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Saltar</GUIBUTTON></TERM>
-<LISTITEM><PARA> Quando tiver seleccionado uma transacção ou parcela existente,
-      esta opção leva-o para a entrada correspondente de registo na outra conta
-      que está envolvida na transacção ou parcela.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Transferir</GUIBUTTON></TERM>
-<LISTITEM><PARA>Esta é uma forma alternativa de introduzir uma
-      transacção. Você pode fazer uma transferência entre duas
-      quaisquer contas sem abrir outros registos.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Fechar</GUIBUTTON></TERM>
-<LISTITEM><PARA>Fecha este registo.
-    </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-</VARIABLELIST>
-
-</SECT1>
-<SECT1 ID="XACC-VIEWTXN">
-<TITLE> Visualisar Transacções</TITLE>
-<PARA>O registo pode mostrar transacções de várias formas diferentes,
-    controladas por entradas no menu <GUIMENU>Registo</GUIMENU>.
-
-    </PARA>
-<PARA>O registo consegue apresentar transacções em estilos bem diversos:
-
-    </PARA>
-    <VARIABLELIST>
-<VARLISTENTRY><TERM>Modo <GUIMENUITEM>linha única</GUIMENUITEM></TERM>
-<LISTITEM><PARA>As transacções são apresentadas numa única linha.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM>Modo <GUIMENUITEM>linha dupla</GUIMENUITEM></TERM>
-<LISTITEM><PARA>As transacções são apresentadas em duas linhas,
-      com mais informação visível sobre cada transacção.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM>Modo <GUIMENUITEM>linha múltipla</GUIMENUITEM></TERM>
-<LISTITEM><PARA>As transacções são apresentadas em múltiplas
-      linhas, permitindo a apresentação de entradas multiplas.
-      Isto permite-lhe introduzir transacções de várias parcelas
-      (por exemplo, quando paga várias contas com o mesmo cheque).
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM>Modos <GUIMENUITEM>única automática</GUIMENUITEM> e
-      <GUIMENUITEM>dupla automática</GUIMENUITEM></TERM>
-<LISTITEM><PARA>Tal como os modos de linha única e linha dupla,
-      excepto que a transacção a ser editada no momento é mostrada
-      em formato multi-linha. Esta é uma forma muito agradável de
-      introduzir transacções que envolvam várias contas.
-    </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-</VARIABLELIST>
-
-<PARA>Para modificar o estilo de apresentação, vá ao menu <GUIMENU>Registo</GUIMENU>
-    e seleccione um estilo na opção de menu <GUISUBMENU>Estilo</GUISUBMENU>.
-
-    </PARA>
-<PARA>As transacções existentes são normalmente apresentadas ordenadas por data,
-    mas isto pode também ser modificado no menu <GUIMENU>Registo</GUIMENU>
-    na opção <GUISUBMENU>Ordenação</GUISUBMENU>. Pode também seleccionar um
-    intrevalo de datas entre as quais as transacções serão apresentadas
-    usando a opção <GUISUBMENU>Intrevalo Datas</GUISUBMENU>.
-
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-RECONCILIATION">
-<TITLE> Reconciliação</TITLE>
-<PARA>As transacções são normalmente confrontadas com os extractos bancários -
-    um processo conhecido como "reconciliação". O GnuCash controla o estado
-    de reconciliação de cada transacção.
-
-    </PARA>
-<PARA>O estado de reconciliação de uma transacção é mostrado pelo campo
-    reconciliação (<GUILABEL>R</GUILABEL>). '<LITERAL>y</LITERAL>'
-    indica que a transacção foi reconciliada, '<LITERAL>n</LITERAL>'
-    indica que não o foi, e '<LITERAL>c</LITERAL>' indica que foi limpa,
-    mas não reconciliada. Você pode alterar o estado de reconciliação
-    entre '<LITERAL>n</LITERAL>' e '<LITERAL>c</LITERAL>' clicando no
-    campo (<GUILABEL>R</GUILABEL>); pode defini-lo como '<LITERAL>y</LITERAL>'
-    utilizando a <LINK LINKEND=XACC-RECNWIN>Janela de Reconciliação</LINK>.
-
-    </PARA>
-<PARA>No fundo da janela de conta, existem dois saldos correntes:
-    '<GUILABEL>Saldo</GUILABEL>', e '<GUILABEL>Limpo</GUILABEL>'. '<GUILABEL>
-    Limpo</GUILABEL>' deverá corresponder a quanto dinheiro o seu banco pensa
-    que você tem na sua conta, enquanto '<GUILABEL>Saldo</GUILABEL>' inclui
-    trahnsacções em aberto.
-
-    </PARA>
-<PARA>A reconciliação pode ser feita na
-      <LINK LINKEND="XACC-RECNWIN">Janela de Reconciliação</LINK>
-
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-STKPTLO">
-<TITLE> Portfólios de Acções</TITLE>
-<PARA>Você pode fazer transacções de acções quer através de uma janela de
-    acção única, quer de uma janela de vista de portfólio, mostrada abaixo.
-
-    </PARA>
-<MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/foliowin.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
-     <MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/foliowin-single.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
-
-<PARA>O gestor de portfólio pode parecer um pouco assustador de início.
-    Se tiver problemas a compreende-lo, poderá desejar criar uma conta
-    para cada acção que deseja acompanhar.
-    </PARA>
-
-<PARA>Alguns pontos importantes a reter sobre a janela de portfólio:
-
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>Mostra <EMPHASIS>todas</EMPHASIS> as acções bo seu portfólio, não
-      apenas uma.  Os montantes das acções mostrados são para cada acção
-      em particular.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Note que utiliza uma disposição de duas linhas. Contas debitadas e
-      montantes debitados estão na linha superior, e montantes e contas
-      creditadas encontram-se na linha inferior.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Se comprar ou vender uma acção com dinheiro da conta da correctora,
-      o saldo total não será alterado, visto o valor da acção ser igual
-      ao valor dop montante transaccionado.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Se comprar ou vender uma acção com dinheiro da conta da correctora,
-      o valor da transacção aparecerá duas vezes, uma a vermelho e outra
-      a preto. Se forem compradas acções, o montante debitado da conta da
-      correctora estará a vermelho e o valor das acções a preto. Se acções
-      forem vendidas, então o valor das acções ficará a vermelho e o
-      montante creditado na conta da correctora estará a preto.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Se estiver a ter problemas a tentar inserir uma aquisição/venda de
-      acções no gestor de protfólio, assegure-se que as contas
-      <GUILABEL>Transferir De</GUILABEL> e
-      <GUILABEL>Transfer Para</GUILABEL> estão na ordem correcta.
-      Uma transferência de uma conta de acções é sempre interpretada
-      como uma venda, mesmo que tenha introduzido os dados como se de uma
-      compra se tratasse. O oposto é também verdade.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Eventualmente, uma janela de gestão de portfólio alternativa,
-      mais simples, poderá vir a ser disponibilizada.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
-
-</PARA>
-</SECT1>
-</ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->
+  <sect2 id="autosplit">
+   <title>Transacções de Registo com Parcelas Automáticas</title>
+   <para>
+    O modo de Registo com Parcelas Automáticas é seleccionado em <menuchoice>
+    <guimenu>Registo</guimenu><guimenuitem>Estilo</guimenuitem><guimenuitem>
+    Registo Parcelas Automáticas</guimenuitem></menuchoice>. Este modo permite-lhe 
+    ver ambos os lados da transacção que está a introduzir bem como parcelar qualquer 
+    parte da transacção em várias contas. Abaixo verá que nós parcelamos a transacção 
+    anterior em duas para reflectir com precisão em que é que o diheiro foi utilizado. 
+    As componentes das parcelas desaparecem automaticamente quando você passar para 
+    a transacção seguinte e verá apenas <guibutton>-- Transacção Parcelada --
+    </guibutton>
+   </para>
+    <figure>
+     <title>Registo de Contas - Registo com Parcelas Automáticas</title>
+    <screenshot>
+     <screeninfo>Registo de Contas - Registo com Parcelas Automáticas</screeninfo>
+      <mediaobject>
+   <imageobject>
+            <imagedata fileref="image/autosplitledger" srccredit="wilddev">
+         </imageobject>
+      </mediaobject>
+    </screenshot>
+    </figure>
+  </sect2>
+  <sect2 id="transjrnl">
+   <title>Diário de Transacções</title>
+   <para>
+    O modo de Diário de Transacções é seleccionado em <menuchoice><guimenu>Registo
+    </guimenu><guimenuitem>Estilo</guimenuitem><guimenuitem>Diário de Transacções 
+    </guimenuitem></menuchoice>. Este modo permite-lhe ver ambos os lados de todas 
+    as transações que introduziu e as parcelas dessas transacções. Quando introduz 
+    transacções neste modo as transacções anteriores não escondem as suas componentes.
+   </para>
+    <figure>
+     <title>O Registo de Contas - Diário de Transacções</title>
+    <screenshot>
+     <screeninfo>O Registo de Contas - Diário de Transacções</screeninfo>
+      <mediaobject>
+        <imageobject>
+         <imagedata fileref="image/transactionjrnl" srccredit="wilddev">
+        </imageobject>
+       </mediaobject>
+    </screenshot>
+    </figure>
+  </sect2>
+  <sect2 id="xacc-register-sortorder">
+   <title>Ordenamento</title>
+   <para>
+    A forma de Ordenamento das suas transacções é seleccionada em <menuchoice><guimenu>
+    Registo</guimenu><guimenuitem>Ordem de Ordenação</guimenuitem></menuchoice>. 
+    A forma de ordenação por defeito é a ordenação por Data. Outras opções de ordenação 
+    são: data de entrada, data do documento, Nº, montante, nota e descrição.
+   </para>
+  </sect2>
+  <sect2 id="xacc-daterange">
+   <title>Intrevalo de Datas</title>
+   <para>
+    O GnuCash tem a funcionalidade de mostrar uma selecção de transacções com 
+    um Intrevalo de Datas. Isto pode ser acedido em <menuchoice><guimenu>Registo
+    </guimenu><guimenuitem>Intrevalo de Datas</guimenuitem><guimenuitem>Definir 
+    Intrevalo...</guimenuitem></menuchoice>. Seleccione o intrevalo que deseja 
+    visualizar seleccionando a <guibutton>Data de início:</guibutton> e a <guibutton>
+    Data de fim:</guibutton> e depois clique <guibutton>Definir Intrevalo Datas</guibutton> 
+    para aplicar o intrevalo. Quando necessitar de repôr a visualização de novo para 
+    todas as transacções clique em <menuchoice><guimenu>Registo</guimenu><guimenuitem>
+    Intrevalo Datas</guimenuitem><guimenuitem>Mostrar Todas</guimenuitem></menuchoice>.
+   </para>
+  </sect2>
+    <sect2 id=xacc-general-ledger>
+  <title>
+  O Plano de Contas
+  </title>
+    <para>
+    O plano de contas é um registo especial que contém entradas 
+    para mais do que uma conta.  Você pode obter um plano de contas para 
+    uma conta e as suas subcontas utilizando o item de menu <guimenu>Abrir 
+    subcontas</guimenu> numa janela de contas, ou um plano de contas para 
+    <emphasis>todas</emphasis> as contas seleccionando <guimenu>Plano de Contas</guimenu>
+    no item de menu principal <guimenu>Ferramentas</guimenu>.
+    </para>
+  <para>
+    <emphasis>CORRIGIR: Provavelmente será necessária imagem</emphasis>
+  </para>
+  <para>
+    Planos de contas mostram as entradas em todas as contas em que 
+    uma transacção surge, que você pode editar directamente.  Note
+    que a ganela de plano de contas é mais complicada e dificil de 
+    utilizar relativamente aos registos individuais de contas. A 
+    janela de plano de contas permite uma visão geral mais completa 
+    de todas as contas num espaço mais pequeno e rápido de navegar 
+    (para utilizadores experientes que sabem exactamente o que estão 
+    a fazer). Devido à sua maior complexidade, a sua utilização é 
+    recomendada apenas a contabilistas experientes.
+</para>
+    </sect2>
+ </sect1>
+</article>

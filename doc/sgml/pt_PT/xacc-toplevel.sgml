@@ -1,0 +1,96 @@
+<article id="xacc-toplevel">
+<artheader>
+<title>Menus Principais</title>
+</artheader>
+<sect1>
+<title>O Menu Principal</title>
+<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
+</para>
+<para>O menu principal é apresentado sobre todas as janelas de topo, e é 
+uma porta para tudo o que o GnuCash pode fazer, incluindo operações com 
+ficheiros, relatórios, operações sobre contas, operações sobre janelas, e 
+obter ajuda. É dinâmico, modificando-se para apresentar as funções requeridas 
+dependendo de estar a ser visualizado um <link linkend="xacc-reports">relatório</link>, 
+ou uma <link linkend="xacc-mainwin">árvore de contas</link>.</para>
+
+<para>Os menus que estão sempre presentes incluem:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Ficheiro</emphasis>: Itens neste menu 
+      são usados para criar, importar, carregar, e gravar contas.  Veja 
+      <link linkend="xacc-file-operations">Operações com Ficheiros</link>.
+  </para>
+        </listitem>
+  <listitem>
+    <para>
+      <emphasis><link linkend="xacc-reports">Relatórios</link></emphasis>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <emphasis>Ferramentas</emphasis>: este menu contém o 
+      <link linkend="xacc-general-ledger">Plano de Contas</link>,
+      bem como ferramentas para </para>
+    <itemizedlist>
+      <listitem><para><link linkend="xacc-commodity">editar
+        "informação-meta" sobre moedas, fundos de investimento, e 
+        acções</link>,</para></listitem>
+      <listitem><para><link linkend="xacc-price-editor">registar
+        valores de acções e câmbios</link>,</para></listitem> 
+      <listitem><para><link linkend="xacc-calculator">Realizar cálculos 
+        financeiros</link>, and</para></listitem>
+      <listitem><para><link linkend="xacc-locatingtxns">Procurar 
+      Transacções.</link>
+    </para>
+      </listitem>
+            <listitem>
+              <para><emphasis>Definições</emphasis>: Customizar 
+      <link linkend="xacc-style-sheets">Folhas de Estilo</link> e 
+      <link linkend="xacc-preferences">Preferências</link>.
+      </para></listitem>
+            <listitem><para>
+      <emphasis>Ajuda</emphasis>
+      </para>
+            </listitem>
+    </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+</sect1>
+  <sect1 id="xacc-toplevel-toolbar">
+    <title>
+      A Barra de Ferramentas e a Barra de Resumo
+    </title>
+    <para>
+      A barra de ferramentas encontra-se imediatamente abaixo da barra de menu, e 
+      disponibiliza atalhos para as funções mais utilizadas.  Tal como o menu, 
+      modifica-se dependendo de a janela conter um relatório ou uma árvore de 
+      contas.
+    </para>
+    <para>
+      A Barra de Resumo apresenta num relance os seus activos líquidos e 
+      lucros/ganhos.
+    </para>
+  </sect1>
+
+  <sect1>
+    <title>
+      Acopolar, Mover, e Remover
+    </title>
+    <para>
+    Se você tiver a correcta configuração de GNOME, poderá mover as barras 
+    de menu, ferramentas, e resumo para onde quiser simplesmente clicando 
+    na sua barra à esquerda, e arrastando-as para onde as desejar.
+    Poderá até arrasta-las completamente para fora da janela do GnuCash, se 
+    assim o quiser.
+
+    Caso não consiga fazer isto, poderá ter de fazer modificações à pasta "Aspecto 
+    e Funcionamento" na ferramenta de configuração do GNOME.
+    </para>
+    </sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

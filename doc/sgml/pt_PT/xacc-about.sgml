@@ -170,7 +170,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </sect1>
 
 <sect1 id="xacc-contributors">
-<title>Pessoas que Corrigiram Erros</title>
+<title>Outros Colaboradores</title>
 
 <para>A <emphasis>lista de milhares</emphasis> inclui:
 
@@ -549,6 +549,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
+<glossterm><email>LeachCJ@az1.bp.com</email> Chris
+      J (Oakton) Leach</glossterm>
+<glossdef>
+<para>modificação ao autoconf</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
 <glossdef>
 <para>por corrigir um erro que prendia o funcionamento</para>
@@ -562,6 +570,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>conversão para NetBSD</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</glossterm>
@@ -569,6 +578,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>pela tradução em françês</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>glikely@nortelnetworks.com</email> Grant
       Likely</glossterm>
@@ -586,6 +596,13 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
+<glossterm><email>chris@wilddev.net</email> Chris Lyttle</glossterm>
+<glossdef>
+<para>Documentação do Registo e imagens de ecrã.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
 <glossdef>
 <para>traduções para Norueguês</para>
@@ -599,6 +616,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>muito trabalho sobre o registo em gnome</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>mgmartin@abacusnet.net</email> Matt
       Martin</glossterm>
@@ -713,12 +731,21 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>dwarf@solarisresources.com</email> Alan Orndorff
+      </glossterm>
+<glossdef>
+<para>Pacote para Solaris</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>mopyr@ipm.lviv.ua</email> Myroslav
       Opyr</glossterm>
 <glossdef>
 <para>modificações várias</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>laurent.pelecq@wanadoo.fr</email> Laurent
       P&eacute;lecq</glossterm>
@@ -726,6 +753,7 @@ Nielsen</glossterm>
 <para>modificações de internacionalização com o gettext</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>Alain.Peyrat@nmu.alcatel.fr</email> Alain
       Peyrat</glossterm>
@@ -733,6 +761,7 @@ Nielsen</glossterm>
 <para>modificações ao <filename>configure.in</filename></para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>peter@wuzel.m.isar.de</email> Peter
       Pointner</glossterm>
@@ -740,6 +769,7 @@ Nielsen</glossterm>
 <para>modificações motif e à configuração</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>maufk@csv.warwick.ac.uk</email> Gavin
       Porter</glossterm>
@@ -747,18 +777,21 @@ Nielsen</glossterm>
 <para>pelo tipo de datas euro</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>tpo@spin.ch</email> Tomas Pospisek</glossterm>
 <glossdef>
 <para>modificações debian</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rr@sco.com</email> Ron Record</glossterm>
 <glossdef>
 <para>pelas compilações par SCO Unixware e OpenServer</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>Keith.Refson@earth.ox.ac.uk</email> Keith
       Refson</glossterm>
@@ -766,6 +799,7 @@ Nielsen</glossterm>
 <para>correcções para Solaris</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>schoenberger@signsoft.com</email> Dirk
       Schoenberger</glossterm>
@@ -773,6 +807,7 @@ Nielsen</glossterm>
 <para>iniciou a conversão para Qt/KDE</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>jan.schrage@urz.uni-heidelberg.de</email> Jan
       Schrage</glossterm>
@@ -803,8 +838,8 @@ Nielsen</glossterm>
 <glossdef>
 <para>modificações ao <filename>configure.in</filename></para>
 </glossdef>
-
 </glossentry>
+
 <glossentry>
 <glossterm><email>keld@dkuug.dk</email> Keld Simonsen</glossterm>
 <glossdef>
@@ -819,6 +854,7 @@ Nielsen</glossterm>
 <para>limpeza ao código para Solaris</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>spruth@bigfoot.com</email> Henning
       Spruth</glossterm>
@@ -866,6 +902,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossdef>
+<para>Pacotes para Mandrake</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>detrout@earthlink.net</email> Diane
       Trout</glossterm>
 <glossdef>
@@ -888,19 +931,22 @@ Nielsen</glossterm>
 <para>modificação para <application>gnc-prices</application>, correcções à importação QIF</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rob@valinux.com</email> Rob Walker</glossterm>
 <glossdef>
 <para>modificações para guile e ao registo</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>dwmw2@infradead.org</email> David
       Woodhouse</glossterm>
 <glossdef>
-<para>traduções para Inglês</para>
+<para>traduções para Inglês Britânico</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>gooch@ic.EECS.Berkeley.EDU</email> Ken
       Yamaguchi</glossterm>
@@ -908,6 +954,7 @@ Nielsen</glossterm>
 <para>correcções às importações QIF; importação de MYM</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>shimpei@gol.com</email> Shimpei
       Yamashita</glossterm>

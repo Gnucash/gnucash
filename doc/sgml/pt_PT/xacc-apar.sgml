@@ -1,38 +1,37 @@
-
 <article id="xacc-apar">
 <artheader>
 <title>Contas a Pagar/Contas a Receber</title>
 </artheader>
-<!-- <sect1 id="xacc-ap-ar"> -->
-<!-- <title>Contas a Pagar e Contas a Receber</title> -->
-<para>C/R (Contas a Receber) e C/P (Contas a Pagar) são utilizadas 
-    por empresas para registar vendas pelas quais não serão imediatamente 
-    pagas, ou para registar contas que receberam, mas apenas irão pagar 
-    mais tarde. Este tipo de contas é utilizado principalmente quando 
-    você tem muitas facturas e recibos a entrar e sair, e não lhes deseja 
-    perder o controlo apenas porque não as paga/é pago imediatamente.</para> 
-    <para>Para a maior parte dos utilizadores domésticos, C/R e C/P são demasiado 
-    complicadas e confusas para valerem o esforço.
 
-    </para>
-<!-- </sect1> -->
+<para>C/R (Contas a Receber) e C/P (Contas a Pagar) são utilizadas 
+por empresas para registar vendas pelas quais não serão imediatamente 
+pagas, ou para registar contas que receberam, mas apenas irão pagar 
+mais tarde. Este tipo de contas é utilizado principalmente quando 
+você tem muitas facturas e recibos a entrar e sair, e não lhes deseja 
+perder o controlo apenas porque não as paga/é pago imediatamente.</para> 
+<para>Para a maior parte dos utilizadores domésticos, C/R e C/P são demasiado 
+complicadas e confusas para valerem o esforço.
+
+</para>
+
 <sect1 id="xacc-ardef">
 <title> Contas a Receber</title>
+
 <para>Vamos assumir que em vez de requerer que os seus clientes 
-    lhe paguem <emphasis>imediatamente,</emphasis> em dinheiro, 
-    lhes emite uma factura e lhes dá 30 dias para efectuar o pagamento. 
-    (Após 30 dias, podemos começar a cobrar juros e a enviar cartas de 
-    caloteiro :-)). Quando efectuamos uma venda, as duas contas afectadas 
-    são <emphasis>Vendas</emphasis> (uma conta de receitas) e 
-    <emphasis>Contas a Receber.</emphasis> Contas a Receber são 
-    activos, mas não são líquidos pois não os pode vender imediatamente, 
-    e certamente não são dinheiro. Quando o cliente paga a factura, você 
-    transfere o montante de C/R para Dinheiro. Isto é feito em dois passos 
-    pois você decidiu efectuar a sua contabilidade na base da efectivação  
-    e não no do dinheiro. Isto deve-se a que a maioria das suas transacções 
-    não se baseiam apenas em dinheiro trocar de mãos, mas antes em 
-    <emphasis>contrair obrigações (ou dívidas).</emphasis>
-    </para>
+lhe paguem <emphasis>imediatamente,</emphasis> em dinheiro, 
+lhes emite uma factura e lhes dá 30 dias para efectuar o pagamento. 
+(Após 30 dias, podemos começar a cobrar juros e a enviar cartas de 
+caloteiro :-)). Quando efectuamos uma venda, as duas contas afectadas 
+são <emphasis>Vendas</emphasis> (uma conta de receitas) e 
+<emphasis>Contas a Receber.</emphasis> Contas a Receber são 
+activos, mas não são líquidos pois não os pode vender imediatamente, 
+e certamente não são dinheiro. Quando o cliente paga a factura, você 
+transfere o montante de C/R para Dinheiro. Isto é feito em dois passos 
+pois você decidiu efectuar a sua contabilidade na base da efectivação  
+e não no do dinheiro. Isto deve-se a que a maioria das suas transacções 
+não se baseiam apenas em dinheiro trocar de mãos, mas antes em 
+<emphasis>contrair obrigações (ou dívidas).</emphasis>
+</para>
 
 <para>Em operações mais sofisticadas, pode existir uma muito mais 
     complexa sequência de documentos gerados e acompanhados:

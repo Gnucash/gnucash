@@ -3,12 +3,14 @@ gnucash_helpdir = $(GNC_HELPDIR)/pt_PT
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
 	xacc-about.sgml \
+	xacc-account-hierarchy-creator.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
 	xacc-adjbalwin.sgml \
 	xacc-apar.sgml \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \
+	xacc-calculator.sgml \
 	xacc-chartofaccts.sgml \
 	xacc-commodity.sgml \
 	xacc-currencyhandling.sgml \
@@ -17,6 +19,7 @@ GNUCASH_SGML_FILES = \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-features.sgml \
+	xacc-file-operations.sgml \
 	xacc-gpl.sgml \
 	xacc-incomeexpense.sgml \
 	xacc-locatingtxns.sgml \
@@ -38,6 +41,7 @@ GNUCASH_SGML_FILES = \
 	xacc-reports.sgml \
 	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
+	xacc-toplevel.sgml \
 	xacc-trans-report.sgml \
 	xacc-txf-export-anomalies.sgml \
 	xacc-txf-export.sgml \

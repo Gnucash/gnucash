@@ -1,0 +1,13 @@
+<article id="xacc-file-operations">
+<artheader>
+<title>Operações com Ficheiros</title>
+</artheader>
+<para> Esta funcionalidade ainda não se encontra documentada, mas irá falar do carregamento e gravação de ficheiros,
+bem como de efectuar cópias de segurança dos seus dados.  Irá também mencionar o interface SQL.
+</para>
+</article>
+
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -131,6 +131,11 @@ incluíndo a de outras fontes.  Utilize o <link linkend="xacc-gnucash-web-browser
 Relatório de Endereço em Frame</link> para o fazer.
 </para></sect1>
 
+<sect1 id="xacc-style-sheets">
+<title>Folhas de Estilos</title>
+<para><emphasis>CORRIGIR:documentar este ponto!!!</emphasis></para>
+</sect1>
+
 <sect1 id="xacc-customreports">
 <title> Construir relatórios personalizados</title>
 

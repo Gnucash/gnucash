@@ -38,15 +38,9 @@
     </PARA>
 <PARA>A entrada de menu <GUIMENU>Abrir Sub-contas</GUIMENU> é interessante 
     apenas se seleccionar uma conta com sub-contas (contas de detalhe).
-    Contas com sub-contas terão sempre uma caixa à sua esquerda. Ao 
-    seleccionar a entrada de menu <GUIMENU>Abrir Sub-contas</GUIMENU>, uma 
-    janela com o plano de contas é aberta, que apresenta todas as transacções 
-    para a conta pai e as contas de detalhe. Note que a janela de plano de
-    contas é mais complicada e difícil de utilizar que os registos individuais 
-    de conta. A janela de plano de contas permite uma visão geral mais compreensiva 
-    das contas num espaço mais reduzido. Devido à sua maior complexidade, a sua
-    utilização é recomendada apenas a profissionais de contabilidade.
-
+    Contas com sub-contas terão sempre uma caixa à sua esquerda. Ao seleccionar 
+    a entrada de menu <GUIMENU>Abrir Sub-contas</GUIMENU>, uma janela com o 
+    <link linkend="xacc-general-ledger">plano de contas</link> é aberta. 
 </PARA>
 </sect1>
 </ARTICLE>

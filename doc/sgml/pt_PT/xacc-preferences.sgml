@@ -1,61 +1,88 @@
-<ARTICLE ID="XACC-PREFERENCES">
+  <article id="XACC-PREFERENCES">
 
-<ARTHEADER>
-<TITLE>Preferências</TITLE>
-</ARTHEADER>
+    <artheader>
+      <title>Preferências</title>
+    </artheader>
 
     <sect1>
       <title></title>
-<PARA>Você pode personalizar o comportamento do GnuCash alterando 
-    as definições nesta janela. Todas as definições são automaticamente 
-    gravadas pelo que as alterações se mantêm em futuras sessões.
+      <para>Você pode personalizar o comportamento do GnuCash alterando 
+        as definições nesta janela. Todas as definições são automaticamente 
+        gravadas pelo que as alterações se mantêm em futuras sessões.
 
-    </PARA>
-<PARA>Para modificar definições, basta clicar para seleccionar a página 
-    apropriada, depois realizar as modificações necessárias e carregar no 
-    botão "Aplicar" para ver as modificações tomarem efeito. Clicar no "OK" aplica 
-    as alterações, fechando a janela de propriedades de seguida. O botão de 
-    "Fechar" limita-se a fechar a janela sem aplicar as últimas modificações.
+      </para>
+      <para>Para modificar definições, basta clicar para seleccionar a página 
+        apropriada, depois realizar as modificações necessárias e carregar no 
+        botão "Aplicar" para ver as modificações tomarem efeito. Clicar no "OK" aplica 
+        as alterações, fechando a janela de propriedades de seguida. O botão de 
+        "Fechar" limita-se a fechar a janela sem aplicar as últimas modificações.
 
-    </PARA>
-<PARA>As definições encontram-se agrupadas nas seguintes categorias:
+      </para>
+      <para>As definições encontram-se agrupadas nas seguintes categorias:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>Campos de Contas:</EMPHASIS> define que campos são apresentados 
-      na lista de contas da janela principal.
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Genérico:</emphasis> tudo o que não se encaixar 
+              em qualquer outro lado.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-general.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Internacional:</emphasis> Opções relacionadas com 
+              formatos de visualização de datas e hora.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-international.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Rede:</emphasis> Opções relacionadas com 
+              ligações à rede</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-network.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Importação QIF:</emphasis> Opções relacionadas 
+              com a importação de ficheiros QIF.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-qif-import.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Reconciliação:</emphasis> Opções relacionadas 
+              com a reconciliação de contas.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-reconcile.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Registo:</emphasis> Opções relacionadas com 
+              a aparência por defeito dos registos de contas.
+            </para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Cores do Registo:</emphasis> Definir as 
+              cores a serem utilizadas no registo</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register-colors.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Informação do Utilizador:</emphasis> Definição da 
+              informação do utilizador</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-user-info.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+        </itemizedlist>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Tipos de Contas:</EMPHASIS> define que tipos de contas são 
-      apresentados na janela principal.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Genérico:</EMPHASIS> tudo o que não se encaixar em mais lado 
-      nenhum.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Internacional:</EMPHASIS> Opções relacionadas com os formatos 
-      de visualisação de data e hora.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Registo:</EMPHASIS> Opções relacionadas com a aparência por 
-      defeito do registo de transacções.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
-
-
-</PARA>
-      </sect1>
-</ARTICLE>
+      </para>
+    </sect1>
+  </article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->
