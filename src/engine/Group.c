@@ -930,6 +930,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         node_b = node_b->prev;
 
         /* remove from list -- node_a is ok, it's before node_b */
+	gnc_engine_generate_event (&acc_b->guid, GNC_ID_ACCOUNT, GNC_EVENT_REMOVE);
         grp->accounts = g_list_remove (grp->accounts, acc_b);
 
         xaccAccountBeginEdit (acc_b);
