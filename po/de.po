@@ -2505,7 +2505,7 @@ msgstr "Erträge/Aufwendungen anzeigen"
 
 #: src/gnome/glade-gnc-dialogs.c:5269
 msgid "Transfer To"
-msgstr "Buchen nach"
+msgstr "Zielkonto"
 
 #: src/gnome/glade-gnc-dialogs.c:5324
 msgid "Currency Transfer"
@@ -2521,7 +2521,7 @@ msgstr "Wechselkurs:"
 
 #: src/gnome/glade-gnc-dialogs.c:5364
 msgid "To Amount:"
-msgstr "zum Betrag:"
+msgstr "Zielbetrag:"
 
 #: src/gnome/glade-gnc-dialogs.c:5446
 msgid "Working..."

@@ -97,6 +97,12 @@
 	* src/sc/qif-import/qif-guess-map.scm: fix bug in 
 	account name guessing 
 
+2001-06-13  Herbert Thoma <herbie@hthoma.de>
+
+	* po/de.po: updated German translation for transfer dialog.
+
+	* doc/build-suse.txt: updated for gnucash 1.6 / SuSE 7.2
+
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/glade/report.glade: new file for old report dialogs
@@ -120,6 +126,7 @@
 
 	* src/scm/tip-list.scm: update tip
 
+>>>>>>> 1.619
 	* src/register/register-common.h: move function defs to
 	register-common.c
 
