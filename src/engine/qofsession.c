@@ -69,7 +69,7 @@
 #endif /* GNUCASH */
 
 static QofSession * current_session = NULL;
-static short module = MOD_IO;
+static short module = MOD_BACKEND;
 
 /* ====================================================================== */
 /* error handling routines */

@@ -28,7 +28,7 @@
 #include "qofbackend.h"
 #include "qofbackend-p.h"
 
-/* static short module = MOD_ENGINE; */
+/* static short module = MOD_BACKEND; */
 
 /********************************************************************\
  * error handling                                                   *
