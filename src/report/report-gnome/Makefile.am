@@ -1,3 +1,5 @@
+SUBDIRS = . test
+
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la libgw-report-gnome.la
 
 AM_CFLAGS = \
@@ -31,6 +33,8 @@ libgncmod_report_gnome_la_LDFLAGS = -module
 
 libgncmod_report_gnome_la_LIBADD = \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBDIR} \
