@@ -261,14 +261,14 @@ long long xaccFlipLongLong (long long val)
 \********************************************************************/
 
 /********************************************************************\
- * xaccReadAccountGroup                                                     * 
+ * xaccReadAccountGroupFile                                         * 
  *   reads in the data from file datafile                           *
  *                                                                  * 
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 AccountGroup *
-xaccReadAccountGroup( char *datafile )
+xaccReadAccountGroupFile( char *datafile )
   {
   int  fd;
   AccountGroup *grp = 0x0;
@@ -282,21 +282,21 @@ xaccReadAccountGroup( char *datafile )
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
     }
-  grp = xaccReadAccountGroupFD (fd);
+  grp = xaccReadAccountGroup (fd);
 
   close(fd);
   return grp;
 }
   
 /********************************************************************\
- * xaccReadAccountGroupFD                                           * 
+ * xaccReadAccountGroup                                             * 
  *   reads in the data from file descriptor                         *
  *                                                                  * 
  * Args:   fd -- the file descriptor to read the data from          * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 AccountGroup *
-xaccReadAccountGroupFD( int fd )
+xaccReadAccountGroup( int fd )
   {
   int  err=0;
   int  token=0;
@@ -1335,7 +1335,7 @@ xaccResetWriteFlags (AccountGroup *grp)
 }
 
 /********************************************************************\
- * xaccWriteAccountGroup                                            * 
+ * xaccWriteAccountGroupFile                                        * 
  * writes account date to two files: the current file, and a        *
  * backup log.                                                      *
  *                                                                  * 
@@ -1343,7 +1343,7 @@ xaccResetWriteFlags (AccountGroup *grp)
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
+xaccWriteAccountGroupFile( char *datafile, AccountGroup *grp )
   {
   int err = 0;
   char * timestamp;
@@ -1396,7 +1396,7 @@ writeAccountGroupToFile( char *datafile, AccountGroup *grp )
     return -1;
     }
   
-  err = xaccWriteAccountGroupFD (fd, grp);
+  err = xaccWriteAccountGroup (fd, grp);
 
   close(fd);
 
@@ -1404,7 +1404,7 @@ writeAccountGroupToFile( char *datafile, AccountGroup *grp )
   }
 
 /********************************************************************\
- * xaccWriteAccountGroupFD                                          * 
+ * xaccWriteAccountGroup                                            * 
  *   writes out a group of accounts to a file                       * 
  *                                                                  * 
  * Args:   fd -- file descriptor                                    *
@@ -1413,13 +1413,13 @@ writeAccountGroupToFile( char *datafile, AccountGroup *grp )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-xaccWriteAccountGroupFD (int fd, AccountGroup *grp )
+xaccWriteAccountGroup (int fd, AccountGroup *grp )
   {
   int i,numAcc;
   int token = VERSION;    /* The file format version */
   int err = 0;
 
-  ENTER ("xaccWriteAccountGroupFD");
+  ENTER ("xaccWriteAccountGroup");
   
   XACC_FLIP_INT (token);
   err = write( fd, &token, sizeof(int) );

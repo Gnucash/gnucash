@@ -276,7 +276,7 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
    sess->topgroup = NULL;
    rc = stat (sess->fullpath, &statbuf);
    if (!rc) {
-      sess->topgroup = xaccReadAccountGroup (sess->fullpath);
+      sess->topgroup = xaccReadAccountGroupFile (sess->fullpath);
    }
 
    return (sess->topgroup);
@@ -297,7 +297,7 @@ xaccSessionSave (Session *sess)
       return;
    }
    if (sess->topgroup) {
-      xaccWriteAccountGroup (sess->fullpath, sess->topgroup);
+      xaccWriteAccountGroupFile (sess->fullpath, sess->topgroup);
    } else {
       /* hmm ... no topgroup means delete file */
       unlink (sess->fullpath);
