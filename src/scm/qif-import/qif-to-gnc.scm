@@ -735,7 +735,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; qif-xtn:marge-xtns 
+;; qif-xtn:merge-xtns 
 ;; merge-xtns merges any additional information from other-xtn into
 ;; xtn.  this needs to be fleshed out a bit. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -805,4 +805,3 @@
                 (gnc:split-set-share-price 
                  split (gnc:split-get-share-price last-split)))
             (if (< i numsplits) (loop (+ 1 i) ith-split)))))))
-
