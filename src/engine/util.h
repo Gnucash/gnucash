@@ -2,7 +2,7 @@
  * util.h -- utility functions that are used everywhere for         *
  *           gnucash (ex-xacc (X-Accountant))                       *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -151,8 +151,9 @@ struct lconv * gnc_localeconv();
  *
  *    PRTSYM -- also print currency symbol.
  *    PRTSHR -- print four decimal places
- *    PRTSYM | PRTSHR -- prints three decimal places followed by string "shrs"
+ *    PRTSYM | PRTSHR -- prints four decimal places followed by "shrs"
  *    PRTSEP -- print comma-separated K's
+ *    PRTNMN -- print as non-monetary value
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
  *    allocated buffer, and is therefore not thread-safe.
@@ -160,11 +161,8 @@ struct lconv * gnc_localeconv();
  * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
  *    printed to.  It returns the length of the printed string.
  *
- * The xaccSPrintAmountGeneral() routine is a generalization of
- *    xaccSPrintAmount that allows the precision and minimum
- *    number of trailing zeros to be set. You can also set
- *    whether the amount should be printed as monetary or
- *    non-monetary, which affects fomatting in locales.
+ * The xaccSPrintAmountGeneral() routine is a more general version that
+ *    allows the user to set the precision and the minimum trailing zeros.
  *
  * The xaccPrintAmountArgs() routine is identical to xaccPrintAmount,
  *    except that the arguments are given as boolean values intead of
@@ -174,12 +172,12 @@ struct lconv * gnc_localeconv();
 #define PRTSYM 0x1
 #define PRTSHR 0x2
 #define PRTSEP 0x4
+#define PRTNMN 0x8
 
 char * xaccPrintAmount (double val, short shrs);
 int xaccSPrintAmount (char *buf, double val, short shrs);
 int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
-                             int precision, gncBoolean monetary,
-                             int min_trailing_zeros);
+                             int precision, int min_trailing_zeros);
 char * xaccPrintAmountArgs (double val,
                             gncBoolean print_currency_symbol,
                             gncBoolean print_separators,

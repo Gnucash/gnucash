@@ -125,8 +125,6 @@ static SplitRegisterColors reg_colors = {
 #define SHRS_CELL_ALIGN    ALIGN_RIGHT
 #define BALN_CELL_ALIGN    ALIGN_RIGHT
 
-#define SHARES_PRECISION 4
-
 /* ============================================== */
 
 #define LABEL(NAME,label)					\
@@ -988,10 +986,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetPriceCellValue (reg->ndebitCell, 0.0);
    xaccSetPriceCellValue (reg->ncreditCell, 0.0);
 
-   /* The format for share-related info is a printf-style
-    * format string for a double.  */
-   xaccSetPriceCellMinTrailZeros (reg->shrsCell, 0);
-   xaccSetPriceCellPrecision (reg->shrsCell, SHARES_PRECISION);
+   /* Initialize shares cell */
+   xaccSetPriceCellSharesValue (reg->shrsCell, GNC_T);
 
    /* The action cell should accept strings not in the list */
    xaccComboCellSetStrict (reg->actionCell, GNC_F);
@@ -1002,16 +998,10 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
       case STOCK_REGISTER:
       case PORTFOLIO:
       case CURRENCY_REGISTER:
-         xaccSetPriceCellMinTrailZeros (reg->debitCell, 0);
-         xaccSetPriceCellMinTrailZeros (reg->creditCell, 0);
-         xaccSetPriceCellMinTrailZeros (reg->ndebitCell, 0);
-         xaccSetPriceCellMinTrailZeros (reg->ncreditCell, 0);
-
-         xaccSetPriceCellPrecision (reg->debitCell, SHARES_PRECISION);
-         xaccSetPriceCellPrecision (reg->creditCell, SHARES_PRECISION);
-         xaccSetPriceCellPrecision (reg->ndebitCell, SHARES_PRECISION);
-         xaccSetPriceCellPrecision (reg->ncreditCell, SHARES_PRECISION);
-         xaccSetPriceCellPrecision (reg->priceCell, SHARES_PRECISION);
+         xaccSetPriceCellSharesValue (reg->debitCell, GNC_T);
+         xaccSetPriceCellSharesValue (reg->creditCell, GNC_T);
+         xaccSetPriceCellSharesValue (reg->ndebitCell, GNC_T);
+         xaccSetPriceCellSharesValue (reg->ncreditCell, GNC_T);
 
          xaccSetBasicCellBlankHelp (&reg->priceCell->cell, PRICE_CELL_HELP);
          xaccSetBasicCellBlankHelp (&reg->valueCell->cell, VALUE_CELL_HELP);

@@ -1,14 +1,3 @@
-/*
- * FILE:
- * pricecell.c
- *
- * FUNCTION:
- * Implements the price cell
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,6 +13,17 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * pricecell.c
+ *
+ * FUNCTION:
+ * Implements the price cell
+ *
+ * HISTORY:
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #include <ctype.h>
 #include <string.h>
@@ -191,12 +191,11 @@ xaccInitPriceCell (PriceCell *cell)
    xaccInitBasicCell( &(cell->cell));
 
    cell->amount = 0.0;
-   cell->precision = 2;
    cell->blank_zero = GNC_T;
-   cell->min_trail_zeros = 2;
    cell->monetary = GNC_T;
+   cell->shares_value = GNC_F;
 
-   SET ( &(cell->cell), "");
+   SET (&(cell->cell), "");
 
    cell->cell.use_fg_color = 1;
    cell->cell.enter_cell = PriceEnter;
@@ -212,7 +211,7 @@ void
 xaccDestroyPriceCell (PriceCell *cell)
 {
    cell->amount = 0.0;
-   xaccDestroyBasicCell ( &(cell->cell));
+   xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* ================================================ */
@@ -221,14 +220,17 @@ static char *
 xaccPriceCellPrintValue (PriceCell *cell)
 {
   static char buff[PRTBUF];
+  short flags = PRTSEP;
 
   if (cell->blank_zero && DEQ(cell->amount, 0.0)) {
      strcpy(buff, "");
      return buff;
   }
 
-  xaccSPrintAmountGeneral(buff, cell->amount, PRTSEP, cell->precision,
-                          cell->monetary, cell->min_trail_zeros);
+  if (cell->shares_value)
+    flags |= PRTSHR;
+
+  xaccSPrintAmount(buff, cell->amount, flags);
 
   return buff;
 }
@@ -258,11 +260,11 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
 /* ================================================ */
 
 void
-xaccSetPriceCellPrecision (PriceCell *cell, int precision)
+xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 {
   assert(cell != NULL);
 
-  cell->precision = precision;
+  cell->shares_value = shares_value;
 }
 
 /* ================================================ */
@@ -273,16 +275,6 @@ xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
   assert(cell != NULL);
 
   cell->monetary = monetary;
-}
-
-/* ================================================ */
-
-void
-xaccSetPriceCellMinTrailZeros (PriceCell * cell, int min_trail_zeros)
-{
-  assert(cell != NULL);
-
-  cell->min_trail_zeros = min_trail_zeros;
 }
 
 /* ================================================ */

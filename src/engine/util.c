@@ -2,7 +2,7 @@
  * util.c -- utility functions that are used everywhere else for    *
  *           xacc (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +28,8 @@
 #include <math.h>
 #include <string.h>
 #include <locale.h>
+
+/* #include <glib.h> */
 
 #include "config.h"
 #include "messages.h"
@@ -72,14 +74,14 @@ size_t core=0;
 
 void
 dfree( void *ptr )
-  {
+{
   core -= malloc_usable_size(ptr);
   free(ptr);
-  }
+}
 
 void*
 dmalloc( size_t size )
-  {
+{
   int i;
   char *ptr;
   ptr = (char *)malloc(size);
@@ -88,20 +90,21 @@ dmalloc( size_t size )
   
   core +=  malloc_usable_size(ptr);
   return (void *)ptr;
-  }
+}
 
 size_t
 dcoresize(void)
-  {
+{
   return core;
-  }
+}
 #endif
 
 /********************************************************************\
 \********************************************************************/
 
 int 
-safe_strcmp (const char * da, const char * db) {
+safe_strcmp (const char * da, const char * db)
+{
    SAFE_STRCMP (da, db);
    return 0;
 }
@@ -242,6 +245,8 @@ gnc_localeconv()
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
   gnc_lconv_set(&lc.negative_sign, "-");
 
+  gnc_lconv_set_char(&lc.frac_digits, 2);
+  gnc_lconv_set_char(&lc.int_frac_digits, 2);
   gnc_lconv_set_char(&lc.p_cs_precedes, 1);
   gnc_lconv_set_char(&lc.p_sep_by_space, 0);
   gnc_lconv_set_char(&lc.n_cs_precedes, 1);
@@ -345,7 +350,7 @@ PrintAmt(char *buf, double val, int prec,
 
 int
 xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
-                         gncBoolean monetary, int min_trailing_zeros)
+                         int min_trailing_zeros)
 {
    struct lconv *lc;
 
@@ -429,8 +434,8 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      bufp = stpcpy(bufp, "(");
 
    /* Now print the value */
-   bufp += PrintAmt(bufp, DABS(val), precision,
-                    shrs & PRTSEP, monetary, min_trailing_zeros);
+   bufp += PrintAmt(bufp, DABS(val), precision, shrs & PRTSEP,
+                    !(shrs & PRTNMN), min_trailing_zeros);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
@@ -466,17 +471,24 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
 int
 xaccSPrintAmount (char * bufp, double val, short shrs) 
 {
-   int precision = 2;
-   int min_trailing_zeros = 2;
+   int precision;
+   int min_trailing_zeros;
 
    if (shrs & PRTSHR)
    {
      precision = 4;
      min_trailing_zeros = 0;
    }
+   else
+   {
+     struct lconv *lc = gnc_localeconv();
+
+     precision = lc->frac_digits;
+     min_trailing_zeros = lc->frac_digits;
+   }
 
    return xaccSPrintAmountGeneral(bufp, val, shrs, precision,
-                                  GNC_T, min_trailing_zeros);
+                                  min_trailing_zeros);
 }
 
 char *
