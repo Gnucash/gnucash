@@ -2552,7 +2552,7 @@ then
 else
   GNC_DOCDIR='${prefix}/doc/gnucash'
   GNC_BINDIR='${prefix}/bin'
-  GNC_LIBDIR='${prefix}/lib'
+  GNC_LIBDIR='${prefix}/lib/gnucash'
   GNC_CONFIGDIR=${sysconfdir}/gnucash
   GNC_SHAREDIR=${datadir}/gnucash
 fi
