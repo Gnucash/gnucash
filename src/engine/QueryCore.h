@@ -55,6 +55,7 @@
 		
 		#define gncQueryCorePredicateEqual qof_query_core_predicate_equal
 		
+		#define QUERYCORE_GUID QOF_QUERYCORE_GUID
 		#define QUERYCORE_DEBCRED QOF_QUERYCORE_DEBCRED
 		#define QUERYCORE_BOOLEAN QOF_QUERYCORE_BOOLEAN
 		#define QUERYCORE_NUMERIC QOF_QUERYCORE_NUMERIC
