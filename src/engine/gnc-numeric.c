@@ -33,324 +33,9 @@
 #include <string.h>
 
 #include "gnc-numeric.h"
+#include "qofmath128.c"
 
 /* static short module = MOD_ENGINE; */
-
-/* =============================================================== */
-/* Quick-n-dirty 128-bit math lib. The mult128 routine should work 
- * great; I think that div128 works, but its not really tested.
- */
-
-typedef struct {
-  guint64 hi;
-  guint64 lo;
-  short isneg;    /* sign-bit -- T if number is negative */
-  short isbig;    /* sizeflag -- T if number won't fit in signed 64-bit */
-} gncint128;
-
-/** Multiply a pair of signed 64-bit numbers, 
- *  returning a signed 128-bit number.
- */
-static inline gncint128
-mult128 (gint64 a, gint64 b)
-{
-  gncint128 prod;
-
-  prod.isneg = 0;
-  if (0>a)
-  {
-    prod.isneg = !prod.isneg;
-    a = -a;
-  }
-
-  if (0>b)
-  {
-    prod.isneg = !prod.isneg;
-    b = -b;
-  }
-
-  guint64 a1 = a >> 32;
-  guint64 a0 = a - (a1<<32);
-
-  guint64 b1 = b >> 32;
-  guint64 b0 = b - (b1<<32);
-
-  guint64 d = a0*b0;
-  guint64 d1 = d >> 32;
-  guint64 d0 = d - (d1<<32);
-
-  guint64 e = a0*b1;
-  guint64 e1 = e >> 32;
-  guint64 e0 = e - (e1<<32);
-
-  guint64 f = a1*b0;
-  guint64 f1 = f >> 32;
-  guint64 f0 = f - (f1<<32);
-
-  guint64 g = a1*b1;
-  guint64 g1 = g >> 32;
-  guint64 g0 = g - (g1<<32);
-
-  guint64 sum = d1+e0+f0;
-  guint64 carry = 0;
-  /* Can't say 1<<32 cause cpp will goof it up; 1ULL<<32 might work */
-  guint64 roll = 1<<30;
-  roll <<= 2;
-
-  guint64 pmax = roll-1;
-  while (pmax < sum)
-  {
-    sum -= roll;
-    carry ++;
-  }
-
-  prod.lo = d0 + (sum<<32);
-  prod.hi = carry + e1 + f1 + g0 + (g1<<32);
-  // prod.isbig = (prod.hi || (sum >> 31));
-  prod.isbig = prod.hi || (prod.lo >> 63);
-
-  return prod;
-}
-
-/** Divide a signed 128-bit number by a signed 64-bit,
- *  returning a signed 128-bit number.
- */
-static inline gncint128
-div128 (gncint128 n, gint64 d)
-{
-  gncint128 quotient;
-  guint64 hirem;   /* hi remainder */
-  guint64 qlo;
-
-  quotient.isneg = n.isneg;
-  if (0 > d)
-  {
-    d = -d;
-    quotient.isneg = !quotient.isneg;
-  }
-
-  quotient.hi = n.hi / d;
-  hirem = n.hi - quotient.hi * d;
-  
-  guint64 lo = 1<<30;
-  lo <<= 33;
-  lo /= d;
-  lo <<= 1;
-
-  lo *= hirem; 
-  quotient.lo = lo + n.lo/d;
-
-  /* Deal with low remainder bits.
-   * Is there a more efficient way of doing this?
-   */
-  gncint128 mu = mult128 (quotient.lo, d);
-
-  gint64 nn = 0x7fffffffffffffffULL & n.lo;
-  gint64 rr = 0x7fffffffffffffffULL & mu.lo;
-  gint64 rnd = nn - rr;
-  rnd /= d;   
-
-  /* ?? will this ever overflow ? */
-  qlo = quotient.lo;
-  quotient.lo += rnd;
-  if (qlo > quotient.lo)
-  {
-    quotient.hi += 1;
-  }
-
-  /* compute the carry situation */
-  quotient.isbig = (quotient.hi || (quotient.lo >> 63));
-
-  return quotient;
-}
-
-/** Return the remainder of a signed 128-bit number modulo 
- *  a signed 64-bit.  That is, return n%d in 128-bit math.
- *  I beleive that ths algo is overflow-free, but should be 
- *  audited some more ... 
- */
-static inline gint64
-rem128 (gncint128 n, gint64 d)
-{
-  gncint128 quotient = div128 (n,d);
-
-  gncint128 mu = mult128 (quotient.lo, d);
-
-  gint64 nn = 0x7fffffffffffffffULL & n.lo;
-  gint64 rr = 0x7fffffffffffffffULL & mu.lo;
-  return nn - rr;
-}
-
-/** Return the ratio n/d reduced so that there are no common factors. */
-static inline gnc_numeric
-reduce128(gncint128 n, gint64 d)
-{
-  gint64   t;
-  gint64   num;
-  gint64   denom;
-  gnc_numeric out;
-
-  t =  rem128 (n, d);
-  num = d;
-  denom = t;
-
-  /* The strategy is to use Euclid's algorithm */
-  while (denom > 0) 
-  {
-    t = num % denom;
-    num = denom;
-    denom = t;
-  }
-  /* num now holds the GCD (Greatest Common Divisor) */
-
-  gncint128 red = div128 (n, num);
-  if (red.isbig)
-  {
-    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-  }
-  out.num   = red.lo;
-  if (red.isneg) out.num = -out.num;
-  out.denom = d / num;
-  return out;
-}
-
-/** Return true of two numbers are equal */
-static inline gboolean
-equal128 (gncint128 a, gncint128 b)
-{
-	if (a.lo != b.lo) return 0;
-	if (a.hi != b.hi) return 0;
-	if (a.isneg != b.isneg) return 0;
-	return 1;
-}
-
-/** Return the greatest common factor of two 64-bit numbers */
-static inline guint64
-gcf64(guint64 num, guint64 denom)
-{
-  guint64   t;
-
-  t =  num % denom;
-  num = denom;
-  denom = t;
-
-  /* The strategy is to use Euclid's algorithm */
-  while (0 != denom) 
-  {
-    t = num % denom;
-    num = denom;
-    denom = t;
-  }
-  /* num now holds the GCD (Greatest Common Divisor) */
-  return num;
-}
-
-/** Return the least common multiple of two 64-bit numbers. */
-static inline gncint128
-lcm128 (guint64 a, guint64 b)
-{
-  guint64 gcf = gcf64 (a,b);
-  b /= gcf;
-  return mult128 (a,b);
-}
-
-/** Add a pair of 128-bit numbers, returning a 128-bit number */
-static inline gncint128
-add128 (gncint128 a, gncint128 b)
-{
-  gncint128 sum;
-  if (a.isneg == b.isneg)
-  {
-    sum.isneg = a.isneg;
-    sum.hi = a.hi + b.hi;
-    sum.lo = a.lo + b.lo;
-    if ((sum.lo < a.lo) || (sum.lo < b.lo))
-    {
-     sum.hi ++;
-    }
-    sum.isbig = sum.hi || (sum.lo >> 63);
-    return sum;
-  }
-  if ((b.hi > a.hi) ||
-     ((b.hi == a.hi) && (b.lo > a.lo)))
-  {
-    gncint128 tmp = a;
-    a = b;
-    b = tmp;
-  }
-
-  sum.isneg = a.isneg;
-  sum.hi = a.hi - b.hi;
-  sum.lo = a.lo - b.lo;
-
-  if (sum.lo > a.lo)
-  {
-    sum.hi --;
-  }
-
-  sum.isbig = sum.hi || (sum.lo >> 63);
-  return sum;
-}
-
-#ifdef TEST_128_BIT_MULT
-static void pr (gint64 a, gint64 b)
-{
-   gncint128 prod = mult128 (a,b);
-   printf ("%lld * %lld = %lld %llu (0x%llx %llx) %hd\n",
-	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.isbig);
-}
-
-static void prd (gint64 a, gint64 b, gint64 c)
-{
-   gncint128 prod = mult128 (a,b);
-   gncint128 quot = div128 (prod, c);
-   gint64 rem = rem128 (prod, c);
-   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx) %hd\n",
-	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.isbig);
-}
-
-int main ()
-{
-  pr (2,2);
-
-  gint64 x = 1<<30;
-  x <<= 2;
-
-  pr (x,x);
-  pr (x+1,x);
-  pr (x+1,x+1);
-
-  pr (x,-x);
-  pr (-x,-x);
-  pr (x-1,x);
-  pr (x-1,x-1);
-  pr (x-2,x-2);
-
-  x <<= 1;
-  pr (x,x);
-  pr (x,-x);
-
-  pr (1000000, 10000000000000);
-
-  prd (x,x,2);
-  prd (x,x,3);
-  prd (x,x,4);
-  prd (x,x,5);
-  prd (x,x,6);
-
-  x <<= 29;
-  prd (3,x,3);
-  prd (6,x,3);
-  prd (99,x,3);
-  prd (100,x,5);
-  prd (540,x,5);
-  prd (777,x,7);
-  prd (1111,x,11);
-
-  return 0;
-}
-
-#endif /* TEST_128_BIT_MULT */
 
 /* =============================================================== */
 
@@ -414,7 +99,7 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
     return b.denom;
   }
 
-  gncint128 lcm = lcm128 (a.denom, b.denom);
+  qofint128 lcm = lcm128 (a.denom, b.denom);
   if (lcm.isbig) return GNC_ERROR_ARG;
   return lcm.lo;
 }
@@ -543,8 +228,8 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
   if ((a.denom > 0) && (b.denom > 0))
   {
     // return (a.num*b.denom == b.num*a.denom);
-    gncint128 l = mult128 (a.num, b.denom);
-    gncint128 r = mult128 (b.num, a.denom);
+    qofint128 l = mult128 (a.num, b.denom);
+    qofint128 r = mult128 (b.num, a.denom);
     return equal128 (l, r);
 
 #if ALT_WAY_OF_CHECKING_EQUALITY
@@ -649,13 +334,13 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     {
        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     }
-    gncint128 ca = mult128 (a.num, lcd/a.denom);
+    qofint128 ca = mult128 (a.num, lcd/a.denom);
     if (ca.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
-    gncint128 cb = mult128 (b.num, lcd/b.denom);
+    qofint128 cb = mult128 (b.num, lcd/b.denom);
     if (cb.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
-    gncint128 cab = add128 (ca, cb);
+    qofint128 cab = add128 (ca, cb);
     if (cab.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     
     sum.num   = cab.lo;
@@ -699,7 +384,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how) 
 {
   gnc_numeric product, result;
-  gncint128 bigprod;
+  qofint128 bigprod;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -827,8 +512,8 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       sgn = -sgn;
       b.num = -b.num;
     }
-    gncint128 nume = mult128(a.num, b.denom);
-    gncint128 deno = mult128(b.num, a.denom);
+    qofint128 nume = mult128(a.num, b.denom);
+    qofint128 deno = mult128(b.num, a.denom);
     if ((0 == nume.isbig) && (0 == deno.isbig))
     {
       quotient.num = sgn * nume.lo;
@@ -846,10 +531,10 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       gnc_numeric rb = gnc_numeric_reduce (b);
 
       gint64 gcf_nume = gcf64(ra.num, rb.denom);
-      gncint128 nume = mult128(ra.num, rb.denom/gcf_nume);
+      qofint128 nume = mult128(ra.num, rb.denom/gcf_nume);
 
       gint64 gcf_deno = gcf64(rb.num, ra.denom);
-      gncint128 deno = mult128(rb.num, ra.denom/gcf_deno);
+      qofint128 deno = mult128(rb.num, ra.denom/gcf_deno);
 
       if ((0 == nume.isbig) && (0 == deno.isbig))
       {
