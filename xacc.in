@@ -3,4 +3,8 @@
 
 XACC_HELP=${XACC_HELP:-@prefix@/share/xacc/Docs}
 export XACC_HELP
-exec xacc.bin $@
+if [ -f /usr/X11R6/lib/libXm.so -o -L /usr/X11R6/lib/libXm.so ]; then 
+  exec xacc.bin $@
+else
+  exec xacc-static.bin $@
+fi
