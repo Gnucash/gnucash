@@ -762,14 +762,10 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
    const int save_phys_row = table->current_cursor_phys_row;
    const int save_phys_col = table->current_cursor_phys_col;
 
-   PINFO("table1: leave rr (%d %d) table val %s\n", 
-         2, 2,
-         table->entries[2][2]);
+   ENTER("wrapVerifyCursorPosition(): (%d %d) val=%s\n", 
+         row,col, table->entries[row][col]);
    /* VerifyCursor will do all sorts of gui-independent machinations */
    xaccVerifyCursorPosition (table, row, col);
-   PINFO("table2: leave rr (%d %d) table val %s\n", 
-         2, 2,
-         table->entries[2][2]);
 
    if ((save_phys_row != table->current_cursor_phys_row) ||
        (save_phys_col != table->current_cursor_phys_col))
@@ -778,6 +774,7 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
       xaccRefreshCursorGUI (table);
       doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
    }
+   LEAVE ("wrapVerifyCursorPosition()\n");
 }
 
 /* ==================================================== */
@@ -870,24 +867,24 @@ gnc_table_enter_update(Table *table,
   
   const char * (*enter) (BasicCell *, const char *);
   
-  PINFO("table: enter rr (0 2) cell->val %s table val %s\n", 
+  ENTER("gnc_table_enter_update(): enter rr (0 2) cell->val=%s table val=%s\n", 
         arr->cells[0][2]->value,
         table->entries[2][2]);
 
-  PINFO("table: enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
-        row, col, rel_row, rel_col, 
-        arr->cells[rel_row][rel_col], table->entries[row][col]);
+  DEBUG("gnc_table_enter_update(): "
+        "enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+         row, col, rel_row, rel_col, 
+         arr->cells[rel_row][rel_col], table->entries[row][col]);
   
   
   /* OK, if there is a callback for this cell, call it */
   enter = arr->cells[rel_row][rel_col]->enter_cell;
 
-  PINFO("table: ENTER: %d %d == (", rel_row, rel_col);
 
   if (enter) {
     const char *val;
 
-    PINFO("has enter handler");
+    DEBUG("gnc_table_enter_update(): %d %d has enter handler\n", rel_row, rel_col);
     
     val = table->entries[row][col];
     retval = (char *) enter(arr->cells[rel_row][rel_col], val);
@@ -905,13 +902,13 @@ gnc_table_enter_update(Table *table,
        retval = NULL;
     }
   }
-  PINFO(")\n");
   
   /* record this position as the cell that will be
    * traversed out of if a traverse even happens */
   table->prev_phys_traverse_row = row;
   table->prev_phys_traverse_col = col;
 
+  LEAVE("gnc_table_enter_update(): return %s\n", retval);
   return retval;
 }
 
@@ -925,11 +922,12 @@ gnc_table_leave_update(Table *table, int row, int col,
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
   const char * (*leave) (BasicCell *, const char *);
-  char *newval = NULL;
   const char *retval = NULL;
   
-  PINFO("table: leave -- proposed (%d %d) rel(%d %d) \"%s\"\n",
+  ENTER("gnc_table_leave_update(): proposed (%d %d) rel(%d %d) \"%s\"\n",
         row, col, rel_row, rel_col, callback_text);
+
+  if (!callback_text) callback_text = "";
 
   /* OK, if there is a callback for this cell, call it */
   leave = arr->cells[rel_row][rel_col]->leave_cell;
@@ -940,28 +938,27 @@ gnc_table_leave_update(Table *table, int row, int col,
      * callback_text, or it might return a new pointer (to newly 
      * malloced memory). 
      */
-    if (retval && (retval != callback_text)) {
-       newval = (char *) retval;
-    } else {
+    if (retval == callback_text) {
        retval = NULL;
     }
   }
 
-  if (!newval) newval = strdup (callback_text);
+  if (!retval) retval = strdup (callback_text);
   
   /* save whatever was returned; but lets check for  
    * changes to avoid roiling the cells too much */
   if (table->entries[row][col]) {
-    if (strcmp (table->entries[row][col], newval)) {
+    if (strcmp (table->entries[row][col], retval)) {
       free (table->entries[row][col]);
-      table->entries[row][col] = newval;
+      table->entries[row][col] = (char *) retval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
     } else {
       /* leave() allocated memory, which we will not be using ... */
-      free (newval);
+      free ((char *) retval);
+      retval = NULL;
     }
   } else {
-    table->entries[row][col] = newval;
+    table->entries[row][col] = (char *) retval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
   
@@ -972,6 +969,13 @@ gnc_table_leave_update(Table *table, int row, int col,
                             table->reverify_phys_row,
                             table->reverify_phys_col);
 
+  /* return the result of the final decisionmaking */
+  if (strcmp (table->entries[row][col], callback_text)) {
+     retval =  table->entries[row][col];
+  } else {
+     retval = NULL;
+  }
+  LEAVE("gnc_table_leave_update(): return %s\n", retval);
   return retval;
 }
 
@@ -994,6 +998,7 @@ gnc_table_modify_update(Table *table, int row, int col,
 
   const char * (*mv) (BasicCell *, const char *, const char *, const char *);
   const char *retval = NULL;
+  ENTER ("gnc_table_modify_update()\n");
   
   /* OK, if there is a callback for this cell, call it */
   mv = arr->cells[rel_row][rel_col]->modify_verify;
@@ -1013,9 +1018,10 @@ gnc_table_modify_update(Table *table, int row, int col,
     table->entries[row][col] = newval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
-  PINFO("table: modify -- change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
-        row, col, rel_row, rel_col, 
-        arr->cells[rel_row][rel_col], table->entries[row][col]);
+  LEAVE ("gnc_table_modify_update(): "
+         "change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+         row, col, rel_row, rel_col, 
+         arr->cells[rel_row][rel_col], table->entries[row][col]);
   
   return(retval);
 }
@@ -1031,7 +1037,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   gncBoolean exit_register = FALSE;
   CellBlock *arr = table->current_cursor;
   
-  PINFO("table: traverse -- proposed (%d %d %s) -> (%d %d %s)\n",
+  ENTER("gnc_table_traverse_update(): proposed (%d %d %s) -> (%d %d %s)\n",
         row, col, table->entries[row][col],
         *dest_row, *dest_col, table->entries[*dest_row][*dest_col]);
 
@@ -1052,6 +1058,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
         assert (0);
         table->prev_phys_traverse_row = *dest_row;
         table->prev_phys_traverse_col = *dest_col;
+        LEAVE("gnc_table_traverse_update(): out of bounds\n");
         return FALSE;
       }
       
@@ -1126,6 +1133,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;
 
+  LEAVE("gnc_table_traverse_update(): return %d\n", exit_register);
   return(exit_register);
 }
 
