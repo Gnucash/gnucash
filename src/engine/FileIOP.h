@@ -1,6 +1,6 @@
 /********************************************************************\
- * FileIO.h -- read from and writing to a datafile for gnucash      *
- *             (X-Accountant)                                       *
+ * FileIOP.h -- private header to read from and writing to a        *
+ *              datafile for gnucash (X-Accountant)                 *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
@@ -17,29 +17,21 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __XACC_FILEIO_H__
-#define __XACC_FILEIO_H__
+#ifndef __XACC_FILEIO_P_H__
+#define __XACC_FILEIO_P_H__
 
 #include "Group.h"
 
-#define ERR_FILEIO_NO_ERROR          0
-#define ERR_FILEIO_FILE_BAD_READ     1 
-#define ERR_FILEIO_FILE_EMPTY        2 
-#define ERR_FILEIO_FILE_NOT_FOUND    3
-#define ERR_FILEIO_FILE_TOO_NEW      4
-#define ERR_FILEIO_FILE_TOO_OLD      5
-
 /** PROTOTYPES ******************************************************/
-int           xaccGetFileIOError (void);
+/*
+ * NOTE:
+ * The Read and WriteAccountGroup routines should not be used directly.
+ * They are not "safe" against file-locking errors.  Use the Session
+ * object instead.
+ */
+AccountGroup *xaccReadAccountGroup  (char *datafile);
+int           xaccWriteAccountGroup (char *datafile, AccountGroup *grp);
 
-AccountGroup *xaccReadQIFAccountGroup (char *datafile);
-int           xaccGetQIFIOError (void);
-
-#endif /* __XACC_FILEIO_H__ */
+#endif /* __XACC_FILEIO_P_H__ */

@@ -37,6 +37,7 @@
 #include <unistd.h>
 
 #include "FileIO.h"
+#include "FileIOP.h"
 #include "Group.h"
 #include "Session.h"
 #include "util.h"
