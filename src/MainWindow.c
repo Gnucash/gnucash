@@ -108,6 +108,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
 
   int   i, j, k, currow;
   char  buf[BUFSIZE];
+  char *amt;
   
   /* Add all the top-level accounts to the list */
   for( i=0; i<grp->numAcc; i++ )
@@ -145,11 +146,8 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
         (INCOME  == acc->type) ) {
       dbalance = -dbalance;
     }
-    if( 0.0 > dbalance )
-      sprintf( buf,"-$%.2f", DABS(dbalance) );
-    else
-      sprintf( buf,"$%.2f", DABS(dbalance) );
-    cols[XACC_MAIN_ACC_BALN] = XtNewString(buf);
+    amt = xaccPrintAmount (dbalance, PRTSYM);
+    cols[XACC_MAIN_ACC_BALN] = XtNewString(amt);
     
     XtVaGetValues (acctrix, XmNrows, &currow, NULL);
     XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
@@ -791,6 +789,7 @@ xaccMainWindowRedisplayBalance (void)
    double  assets  = 0.0;
    double  profits = 0.0;
    char buf[BUFSIZE];
+   char * amt;
    AccountGroup *grp = topgroup;
    Account *acc;
    
@@ -823,8 +822,12 @@ xaccMainWindowRedisplayBalance (void)
       }
    }
   
-   sprintf( buf, "$ %.2f\n$ %.2f", assets, profits);
-     
+   amt = xaccPrintAmount (assets, PRTSYM);
+   strcpy (buf, amt);
+   strcat (buf, "\n");
+   amt = xaccPrintAmount (profits, PRTSYM);
+   strcat (buf, amt);
+   
    XmTextSetString( baln_widget, buf );
 }
 

@@ -1107,8 +1107,12 @@ regRecalculateBalance( RegWindow *regData )
     }
   }
   if( NULL != regData->balance ) {
-    sprintf( buf, "$ %.2f\n$ %.2f", 
-             prt_balance, prt_clearedBalance );
+    char * amt;
+    amt = xaccPrintAmount (prt_balance, PRTSYM);
+    strcpy (buf, amt);
+    strcat (buf, "\n");
+    amt = xaccPrintAmount (prt_clearedBalance, PRTSYM);
+    strcat (buf, amt);
     XmTextSetString( regData->balance, buf );
   }
   
