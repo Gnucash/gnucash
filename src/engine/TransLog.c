@@ -144,7 +144,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
    split = trans->splits[0];
    while (split) {
       char * accname = "";
-      if (split->acc) accname = split->acc->description;
+      if (split->acc) accname = split->acc->accountName;
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
