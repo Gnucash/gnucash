@@ -14,8 +14,6 @@
   <output_support_files>False</output_support_files>
   <output_build_files>False</output_build_files>
   <backup_source_files>False</backup_source_files>
-  <output_translatable_strings>True</output_translatable_strings>
-  <translatable_strings_file>fincalc_strings.c</translatable_strings_file>
 </project>
 
 <widget>
@@ -152,6 +150,7 @@
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -165,6 +164,7 @@
 		<name>payment_periods_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -236,6 +236,7 @@
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -249,6 +250,7 @@
 		<name>interest_rate_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -320,6 +322,7 @@
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -333,6 +336,7 @@
 		<name>present_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -404,6 +408,7 @@
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -417,6 +422,7 @@
 		<name>periodic_payment_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -488,6 +494,7 @@
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -501,6 +508,7 @@
 		<name>future_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>

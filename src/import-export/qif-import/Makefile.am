@@ -37,8 +37,6 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
-STRING_FILES = qif_strings.c 
-
 CFLAGS = @CFLAGS@ ${G_WRAP_COMPILE_ARGS}
 
 INCLUDES = \
@@ -57,7 +55,6 @@ EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA} \
   ${glade_DATA} \
-  ${STRING_FILES} \
   file-format.txt
 
 guile-strings.c: ${gncscm_DATA}

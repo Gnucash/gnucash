@@ -17,22 +17,4 @@ glade_DATA = \
 	userpass.glade \
 	sched-xact.glade
 
-STRING_FILES = \
-	account_strings.c \
-	commodity_strings.c \
-	fincalc_strings.c \
-	find_strings.c \
-	help_strings.c \
-	newuser_strings.c \
-	price_strings.c \
-	print_strings.c \
-	progress_strings.c \
-	register_strings.c \
-	report_strings.c \
-	stocks_strings.c \
-	tax_strings.c \
-	transfer_strings.c \
-	userpass_strings.c \
-	sched-xact_strings.c
-
-EXTRA_DIST = $(glade_DATA) $(STRING_FILES)
+EXTRA_DIST = $(glade_DATA)

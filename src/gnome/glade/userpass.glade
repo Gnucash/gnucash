@@ -14,8 +14,6 @@
   <output_support_files>False</output_support_files>
   <output_build_files>False</output_build_files>
   <backup_source_files>False</backup_source_files>
-  <output_translatable_strings>True</output_translatable_strings>
-  <translatable_strings_file>userpass_strings.c</translatable_strings_file>
 </project>
 
 <widget>
