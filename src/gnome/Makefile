@@ -4,6 +4,8 @@
 #********************************************************************
 #* Makefile -- makefile for xacc/src/gtk                            *
 #* Copyright (C) 1997 Robin Clark                                   *
+#* Copyright (C) 1998 Linas Vepstas                                 *
+#* Copyright (C) 1998 Rob Browning                                  *
 #*                                                                  *
 #* This program is free software; you can redistribute it and/or    *
 #* modify it under the terms of the GNU General Public License as   *
@@ -40,10 +42,19 @@ INCLPATH = -I/usr/include \
 # and general brokenness
 #           -I./../../lib/libhtmlw 
 
-CFLAGS   = -g -Wall
-LFLAGS   = -g -Wall
+#
+# CFLAGS and LIBS are built automatically with gtk-config.
+# gtk-config is now "guaranteed" to be installed on any host 
+# where gtk's installed and is supposed to report the compiler 
+# options needed for the build.
+
+CFLAGS := $(shell gtk-config -cflags) -g -Wall
+LFLAGS := -g -Wall
+
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
-LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+# LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  \
+#            -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
+LIBS     := $(shell gtk-config -libs) 
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
 TARGET   = ../../xacc.gtk.bin
 
