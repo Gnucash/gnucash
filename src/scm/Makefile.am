@@ -24,6 +24,9 @@ gncscm_DATA = ${gnc_regular_scm_files}
 
 noinst_DATA = .scm-links
 
+configdir = ${GNC_CONFIGDIR}
+config_DATA = config
+
 .scm-links: 
 	rm -f gnucash
 	ln -sf . gnucash
@@ -36,6 +39,7 @@ SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 EXTRA_DIST = \
   .cvsignore \
   bootstrap.scm.in \
+  config \
   startup-design.txt \
   ${SCM_FILES}
 
