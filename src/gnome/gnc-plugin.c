@@ -25,8 +25,10 @@
 #include "config.h"
 
 #include "gnc-plugin.h"
+#include "gnc-trace.h"
 
 static gpointer parent_class = NULL;
+static short module = MOD_GUI;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
 static void gnc_plugin_init       (GncPlugin *plugin_page);
@@ -105,7 +107,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	GncPluginClass *class;
 
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-
+	ENTER (""); 
 	class = GNC_PLUGIN_GET_CLASS (plugin);
 	plugin->window = window;
 	if (class->actions_name) {
@@ -117,6 +119,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window) {
 	  GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
 	}
+	LEAVE ("plugin name = %s", gnc_plugin_get_name(plugin));
 }
 
 void
@@ -148,6 +151,13 @@ gnc_plugin_create_page (GncPlugin *plugin,
 	if (!GNC_PLUGIN_GET_CLASS (plugin)->create_page)
 	  return NULL;
 	return GNC_PLUGIN_GET_CLASS (plugin)->create_page (plugin, uri);
+}
+
+const gchar *
+gnc_plugin_get_name (GncPlugin *plugin)
+{
+	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
+	return (GNC_PLUGIN_GET_CLASS(plugin)->plugin_name);
 }
 
 #if 0

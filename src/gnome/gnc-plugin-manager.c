@@ -1,5 +1,5 @@
 /* 
- * gnc-plugin-account-tree.c -- 
+ * gnc-plugin-manager.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -27,6 +27,9 @@
 #include "gnc-plugin-manager.h"
 
 #include "messages.h"
+#include "gnc-trace.h"
+
+static short module = MOD_GUI;
 
 static void gnc_plugin_manager_class_init (GncPluginManagerClass *klass);
 static void gnc_plugin_manager_init (GncPluginManager *plugin);
@@ -91,7 +94,8 @@ gnc_plugin_manager_add_plugin (GncPluginManager *manager,
 			       GncPlugin *plugin)
 {
 	gint index;
-	
+
+	ENTER (" ");
 	g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
@@ -108,6 +112,7 @@ gnc_plugin_manager_add_plugin (GncPluginManager *manager,
 			     plugin);
 
 	g_signal_emit (G_OBJECT (manager), signals[PLUGIN_ADDED], 0, plugin);
+	LEAVE ("added %s to GncPluginManager", gnc_plugin_get_name(plugin));
 }
 
 void
@@ -116,6 +121,7 @@ gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 {
 	gint index;
 	
+	ENTER (" ");
 	g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
@@ -130,6 +136,8 @@ gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 
 	g_signal_emit (G_OBJECT (manager), signals[PLUGIN_REMOVED], 0, plugin);
 
+	LEAVE ("removed %s from GncPluginManager", 
+	       gnc_plugin_get_name(plugin));
 	g_object_unref (plugin);
 }
 

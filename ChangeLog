@@ -32,6 +32,12 @@
 	    prototype, callers, and docs
 	  - Clarify comments about receiving events after entity life-cycle
 
+	Chris Shoemaker's patch: Debugging aids for gnc-plugin-manager
+	* gnc-plugin-manager tweaks
+	  - tweak comments
+	  - add debug traces
+	  - add function gnc_plugin_get_name()
+
 2005-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' patch to clean up the test-book-merge:

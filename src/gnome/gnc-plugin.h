@@ -76,6 +76,7 @@ void                  gnc_plugin_remove_from_window (GncPlugin *plugin,
 
 GncPluginPage        *gnc_plugin_create_page     (GncPlugin *plugin,
 						  const gchar *uri);
+const gchar          *gnc_plugin_get_name (GncPlugin *plugin);
 
 G_END_DECLS
 
