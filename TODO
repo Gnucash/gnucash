@@ -1,10 +1,5 @@
 Open, known bugs, desired enhancements:
 
-> 2)  Typing a name of a .dat file which doesn't exist allows xacc to
->     start, but on the console it prints "FileIO.c: Line 151, error =
->     No such file or directory"
-Should probably be a popup.
-
 > 3)  Selecting "File", "New File" does nothing..
 
 Its supposed to work that way, erasing old work.  Clarify
@@ -12,7 +7,7 @@ the docs or change the menu entry name.
 
 9) For SGI Irix, mystery core dump when creating submenus ...
    related to menu initialization complaints with sgi compiler.
-   ??? fixed ???
+   ??? probably fixed ???
 
 10) cleared balances are incorrectly shown for stock accounts
 
@@ -78,6 +73,11 @@ Probably fixed with XmVersion work ...
 >   - CC=cc
 >   - RANLIB=true
 should be fixed by configure
+
+> 2)  Typing a name of a .dat file which doesn't exist allows xacc to
+>     start, but on the console it prints "FileIO.c: Line 151, error =
+>     No such file or directory"
+Fixed.
 
 > 4)  Selecting "File", "Open File" and then clicking "Cancel" causes
 >     "Bad File" to be printed on the console, and the "Open File"
