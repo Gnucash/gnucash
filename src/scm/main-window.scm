@@ -40,16 +40,19 @@
          (add-option 
           (lambda (opt)
             (gnc:register-option options opt))))
+
     (add-option
      (gnc:make-string-option
       (N_ "Account Tree") (N_ "Name of account view")
-      "a" (N_ "If you keep multiple account views open, it may be helpful 
-               to give each one a descriptive name") (N_ "Accounts")))
+      "a" (N_ "If you keep multiple account views open, it may be helpful \
+to give each one a descriptive name") (N_ "Accounts")))
+
     (add-option
      (gnc:make-simple-boolean-option
       (N_ "Account Tree") (N_ "Double click expands parent accounts")
       "a" (N_ "Double clicking on an account with children expands \
-               the account instead of opening a register.") #f))
+the account instead of opening a register.") #f))
+
     (add-option
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account types to display")
@@ -67,7 +70,7 @@
             (list->vector (list 'income    (N_ "Income") ""))
             (list->vector (list 'expense   (N_ "Expense") ""))
             (list->vector (list 'equity    (N_ "Equity") "")))))
-    
+
     (add-option
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account fields to display")
@@ -91,7 +94,7 @@
     (hash-set! gnc:*acct-tree-options* id options)
     (set! gnc:*acct-tree-id* (+ 1 id))
     (cons options id)))
-    
+
 (define (gnc:free-acct-tree-window id) 
   (hash-remove! gnc:*acct-tree-options* id))
 
