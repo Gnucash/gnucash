@@ -211,7 +211,10 @@ xaccLedgerDisplayAccGroup (Account *account)
       {
         le_type = xaccAccountGetType (node->data);
         if ((STOCK == le_type) || (MUTUAL == le_type))
+        {
           ledger_type = PORTFOLIO_LEDGER;
+          break;
+        }
       }
       break;
 

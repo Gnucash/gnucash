@@ -329,6 +329,7 @@ provide an accurate Profit & Loss statement.
 <PARA>patch to RPM spec</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><ULINK URL="http://www.hex.net/~cbbrowne">Christopher B.
       Browne</ULINK></GLOSSTERM>
@@ -338,8 +339,16 @@ provide an accurate Profit & Loss statement.
       code</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
-<GLOSSENTRY>
 
+<GLOSSENTRY>
+<GLOSSTERM><email>conrad@mail.watersprite.com.au</email> Conrad
+      Canterford</GLOSSTERM>
+<GLOSSDEF>
+<PARA>register bug fix</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
 <GLOSSTERM><email>wwc@wwcnet.nu</email> Bill
       Carlson</GLOSSTERM>
 <GLOSSDEF>
