@@ -277,16 +277,15 @@ CFLAGS="${CFLAGS} -Wall"
 AC_ARG_ENABLE(error-on-warning,
   [  --enable-error-on-warning    treat compile warnings as errors],
   [case "${enableval}" in
-     yes) CFLAGS="${CFLAGS} -Werror -Wno-unused"; enable_compile_warnings=no ;;
+     yes) CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ;;
      no)  ;;
      *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
    esac]
-  [  CFLAGS="${CFLAGS} -Werror -Wno-unused"; enable_compile_warnings=no ])
+  [  CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ])
 
 # This has to come after AC_PROG_CC
 if test ${GCC}x = yesx
 then
-  CFLAGS="${CFLAGS} -Wno-unused"
   CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 fi
 

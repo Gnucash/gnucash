@@ -1,3 +1,11 @@
+2001-12-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/bin/overrides/gnucash-build-env.in: add report-gnome dir
+
+	* src/backend/postgres/test/test-db.c: remove unused function
+
+	* configure.in: remove -Wno-unused
+
 2001-12-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/report/report-system/report.scm: move a gnome function
