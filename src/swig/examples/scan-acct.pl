@@ -13,7 +13,8 @@ package gnucash;
 die "Usage: $0 <filename>" if $#ARGV < 0;
 print "its $ARGV[0]\n";
 
-$grp = gnucash::xaccReadAccountGroup ($ARGV[0]);
+$sess = gnucash::xaccMallocSession ();
+$grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 $numacc = gnucash::xaccGroupGetNumAccounts ($grp);
 print "Loaded $numacc accounts\n\n";
 
@@ -24,3 +25,4 @@ for ($i=0; $i<$numacc; $i++) {
    print "\tAccount: $acctname \tBalance: $baln\n";
 }
 
+gnucash::xaccSessionEnd ($sess);
