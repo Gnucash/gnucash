@@ -56,6 +56,8 @@ gnc_commodity * gncOwnerGetCommodity (GncOwner *owner);
 const GUID * gncOwnerGetGUID (GncOwner *owner);
 GUID gncOwnerRetGUID (GncOwner *owner);
 
+gboolean gncOwnerIsValid (GncOwner *owner);
+
 /*
  * Get the "parent" Owner or GUID thereof.  The "parent" owner
  * is the Customer or Vendor, or the Owner of a Job

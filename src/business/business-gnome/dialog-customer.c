@@ -602,7 +602,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   gnc_ui_taxtables_optionmenu (cw->taxtable_menu, bookp, TRUE, &cw->taxtable);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxtable_check),
                                 gncCustomerGetTaxTableOverride (cust));
-  gnc_customer_taxtable_check_cb (cw->taxtable_check, cw);
+  gnc_customer_taxtable_check_cb (GTK_TOGGLE_BUTTON (cw->taxtable_check), cw);
 
   /* Set the Discount, and Credit amounts */
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
@@ -777,6 +777,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
     { N_("Process Payment"), payment_customer_cb},
     { NULL },
   };
+  (void)order_customer_cb;
 
   g_return_val_if_fail (book, NULL);
 

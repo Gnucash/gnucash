@@ -277,6 +277,12 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
   return (owner->owner.undefined != NULL);
 }
 
+gboolean gncOwnerIsValid (GncOwner *owner)
+{
+  if (!owner) return FALSE;
+  return (owner->owner.undefined != NULL);
+}
+
 /* XXX: Yea, this is broken, but it should work fine for Queries.
  * We're single-threaded, right?
  */

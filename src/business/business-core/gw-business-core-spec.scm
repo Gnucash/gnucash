@@ -973,6 +973,14 @@
    '((<gnc:GncOwner*> src-owner) (<gnc:GncOwner*> dest-owner))
    "Copy the src-owner to the dest-owner")
 
+  (gw:wrap-function
+   ws
+   'gnc:owner-is-valid?
+   '<gw:bool>
+   "gncOwnerIsValid"
+   '((<gnc:GncOwner*> owner))
+   "Is this a real owner?  Return TRUE IFF there is an actual owner.")
+
   ;;
   ;; gncVendor.h
   ;;

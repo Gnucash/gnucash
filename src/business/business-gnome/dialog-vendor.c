@@ -468,7 +468,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   gnc_ui_taxtables_optionmenu (vw->taxtable_menu, bookp, TRUE, &vw->taxtable);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->taxtable_check),
                                 gncVendorGetTaxTableOverride (vendor));
-  gnc_vendor_taxtable_check_cb (vw->taxtable_check, vw);
+  gnc_vendor_taxtable_check_cb (GTK_TOGGLE_BUTTON (vw->taxtable_check), vw);
 
   gnc_gui_component_watch_entity_type (vw->component_id,
 				       GNC_VENDOR_MODULE_NAME,
@@ -635,6 +635,7 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
     { N_("Pay Bill"), payment_vendor_cb},
     { NULL },
   };
+  (void)order_vendor_cb;
 
   g_return_val_if_fail (book, NULL);
 

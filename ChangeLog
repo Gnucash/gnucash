@@ -4,6 +4,13 @@
 
 	* remove (old, unused) dialog-job-select.[ch] files from CVS.
 	* fix bug #96035 -- do not limit searches to the last-chosen object.
+
+	* fix some compiler warnings in dialog-customer and dialog-vendor
+	* add a new function: gncOwnerIsValid() which is really a
+	  scheme-helper to detect whether an owner is holding a NULL value
+	  (i.e. a real container with no value in the container).
+	* fix part of bug #96032 -- use (gnc:owner-is-valid) to detect owner
+	  existence.
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 

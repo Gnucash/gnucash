@@ -479,7 +479,7 @@
     (if (not (null? account-list))
 	(set! account (car account-list)))
 
-    (if owner
+    (if (gnc:owner-is-valid? owner)
 	(begin
 	  (setup-query query owner account)
 
