@@ -30,8 +30,11 @@
  *
  */
 
-#include "gnc-engine.h"
+#include "AccountP.h"
+#include "TransactionP.h"
 #include "Scrub2.h"
+#include "gnc-engine.h"
+#include "gnc-lot.h"
 
 /* ============================================================== */
 
@@ -57,6 +60,58 @@ xaccAccountHasTrades (Account *acc)
 
 /* ============================================================== */
 
+struct early_lot_s
+{
+   GNCLot *lot;
+   Timespec ts;
+   int (*numeric_pred)(gnc_numeric);
+};
+
+static gpointer earliest_helper (GNCLot *lot,  gpointer user_data)
+{
+   struct early_lot_s *els = user_data;
+   Split *s;
+   Transaction *trans;
+   gnc_numeric bal;
+
+   if (gnc_lot_is_closed (lot)) return NULL;
+
+   /* We want a lot whose balance is of the correct sign */
+   bal = gnc_lot_get_balance (lot);
+   if (0 == (els->numeric_pred) (bal)) return NULL;
+   
+   s = gnc_lot_get_earliest_split (lot);
+   trans = s->parent;
+   if ((els->ts.tv_sec > trans->date_posted.tv_sec)  ||
+       ((els->ts.tv_sec == trans->date_posted.tv_sec) &&
+        (els->ts.tv_nsec > trans->date_posted.tv_nsec)))
+   {
+      els->ts = trans->date_posted;
+      els->lot = lot;
+   }
+   
+   return NULL;
+}
+
+GNCLot *
+xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+{
+   struct early_lot_s es;
+
+   es.lot = NULL;
+   es.ts.tv_sec = 10000000LL * ((long long) LONG_MAX);
+   es.ts.tv_nsec = 0;
+
+   if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_positive_p;
+   else es.numeric_pred = gnc_numeric_negative_p;
+      
+   xaccAccountForEachLot (acc, earliest_helper, &es);
+   return es.lot;
+}
+
+/* ============================================================== */
+
+#if 0
 void
 xaccAccountScrubLots (Account *acc)
 {
@@ -71,5 +126,6 @@ xaccAccountScrubLots (Account *acc)
       gnc_lot_is_closed (lot);
 	}
 }
+#endif
 
 /* =========================== END OF FILE ======================= */

@@ -47,5 +47,21 @@
  */
 gboolean xaccAccountHasTrades (Account *);
 
+/** The xaccAccountFindEarliestOpenLot() method is a handy
+ *   utility routine for finding the earliest open lot in
+ *   an account whose lot balance is *opposite* to the 
+ *   passed argument 'sign'.   By 'earliest lot', we mean
+ *   the lot that has a split with the earliest 'date_posted'.
+ *   The sign comparison helps identify a lot that can be 
+ *   added to: usually, one wants to add splits to a lot so
+ *   that the balance only decreases.
+ */
+GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
+
+
+/** XXX need docos
+ */
+
+
 #endif /* XACC_SCRUB2_H */
 /** @} */
