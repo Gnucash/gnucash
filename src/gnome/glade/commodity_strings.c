@@ -4,6 +4,22 @@
  * DO NOT compile it as part of your application.
  */
 
+gchar *s = N_("Select currency/security ");
+gchar *s = N_("New...");
+gchar *s = N_("Type:");
+gchar *s = N_("Currency/security:");
+gchar *s = N_("New Currency/Security");
+gchar *s = N_("Full name:");
+gchar *s = N_("Symbol/abbreviation:");
+gchar *s = N_("Type:");
+gchar *s = N_("CUSIP or other code:");
+gchar *s = N_("Fraction traded:");
+gchar *s = N_("Enter the full name of the commodity. Example: US Dollars");
+gchar *s = N_("Enter the ticker symbol or currency code for the commodity. Example: USD");
+gchar *s = N_("Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard.");
+gchar *s = N_("Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.");
+gchar *s = N_("1 /");
+gchar *s = N_("Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.");
 gchar *s = N_("Import currency and stock information");
 gchar *s = N_("Import currency and stock information ");
 gchar *s = N_("The file you are loading is from an older version of GnuCash. \n"

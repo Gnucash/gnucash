@@ -28,8 +28,7 @@
 
 #include "FileDialog.h"
 #include "dialog-commodity.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
+#include "dialog-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
@@ -71,6 +70,17 @@ gnc_ui_commodity_create(const char * selected_namespace,
                         gnc_commodity_callback callback, 
                         void * callback_data);
 
+static void gnc_ui_select_commodity_ok_cb(GtkButton * button,
+                                          gpointer user_data);
+static void gnc_ui_select_commodity_new_cb(GtkButton * button,
+                                           gpointer user_data);
+static void gnc_ui_select_commodity_cancel_cb(GtkButton * button,
+                                              gpointer user_data);
+static void gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
+                                                         gpointer user_data);
+static void gnc_ui_commodity_ok_cb(GtkButton * button, gpointer user_data);
+static void gnc_ui_commodity_cancel_cb(GtkButton * button, gpointer user_data);
+static void gnc_ui_commodity_help_cb(GtkButton * button, gpointer user_data);
 
 static void 
 select_modal_callback(const gnc_commodity * arg, void * data) {
@@ -121,24 +131,37 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                gnc_commodity_callback callback,
                                void * callback_data) {
   SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
+  GladeXML *xml;
   char * namespace;
 
-  retval->dialog = create_Commodity_Selector_Dialog();
-  retval->namespace_combo = 
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_combo");
-  retval->commodity_combo = 
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "commodity_combo");
-  retval->commodity_entry = 
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "commodity_entry");
+  xml = gnc_glade_xml_new ("commodity.glade", "Commodity Selector Dialog");
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_commodity_ok_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_commodity_ok_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_commodity_new_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_commodity_new_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_commodity_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_commodity_cancel_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_select_commodity_namespace_changed_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_select_commodity_namespace_changed_cb), retval);
+
+  retval->dialog = glade_xml_get_widget (xml, "Commodity Selector Dialog");
+  retval->namespace_combo = glade_xml_get_widget (xml, "namespace_combo");
+  retval->commodity_combo = glade_xml_get_widget (xml, "commodity_combo");
+  retval->commodity_entry = glade_xml_get_widget (xml, "commodity_entry");
 
   retval->callback = callback;
   retval->callback_data = callback_data;
 
   gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
                       GTK_SIGNAL_FUNC(select_commodity_close), retval);
-
-  gtk_object_set_data(GTK_OBJECT(retval->dialog), "select_commodity_struct",
-                      retval);
 
   /* build the menus of namespaces and commodities */
   namespace = 
@@ -216,12 +239,10 @@ gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
  * gnc_ui_select_commodity_ok_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_select_commodity_ok_cb(GtkButton * button,
                               gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
-  SelectCommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
+  SelectCommodityWindow * w = user_data;
 
   const char    * namespace;  
   char          * fullname;
@@ -249,17 +270,15 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
  * gnc_ui_select_commodity_new_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_select_commodity_new_cb(GtkButton * button,
                                gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
-  SelectCommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
+  SelectCommodityWindow * w = user_data;
 
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
 
   const gnc_commodity * new_commodity = 
-    gnc_ui_new_commodity_modal(namespace, dialog);
+    gnc_ui_new_commodity_modal(namespace, w->dialog);
 
   if(new_commodity) {
     char *namespace;
@@ -281,12 +300,10 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
  * gnc_ui_select_commodity_cancel_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_select_commodity_cancel_cb(GtkButton * button,
                                   gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
-  SelectCommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
+  SelectCommodityWindow * w = user_data;
 
   if (w->callback)
     (w->callback)(NULL, w->callback_data);
@@ -298,12 +315,10 @@ gnc_ui_select_commodity_cancel_cb(GtkButton * button,
  * gnc_ui_select_commodity_namespace_changed_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
                                              gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
-  SelectCommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
+  SelectCommodityWindow * w = user_data;
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
   
   gnc_ui_update_commodity_picker(w->commodity_combo, namespace, NULL);
@@ -427,28 +442,36 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
                             gnc_commodity_callback callback, 
                             void * callback_data) {
   CommodityWindow * retval = g_new0(CommodityWindow, 1);
+  GladeXML *xml;
   char *namespace;
 
-  retval->dialog = create_Commodity_Dialog();
+  xml = gnc_glade_xml_new ("commodity.glade", "Commodity Dialog");
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_commodity_ok_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_commodity_ok_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_commodity_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_commodity_cancel_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_commodity_help_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_commodity_help_cb), retval);
+
+  retval->dialog = glade_xml_get_widget (xml, "Commodity Dialog");
 
   retval->edit_commodity = NULL;
 
-  retval->fullname_entry =
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "fullname_entry");
-  retval->mnemonic_entry =
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "mnemonic_entry");
-  retval->namespace_combo =
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_combo");
-  retval->code_entry =
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "code_entry");
-  retval->fraction_spinbutton =
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "fraction_spinbutton");
+  retval->fullname_entry = glade_xml_get_widget (xml, "fullname_entry");
+  retval->mnemonic_entry = glade_xml_get_widget (xml, "mnemonic_entry");
+  retval->namespace_combo = glade_xml_get_widget (xml, "namespace_combo");
+  retval->code_entry = glade_xml_get_widget (xml, "code_entry");
+  retval->fraction_spinbutton = glade_xml_get_widget (xml,
+                                                      "fraction_spinbutton");
 
   retval->callback = callback;
   retval->callback_data = callback_data;
-
-  gtk_object_set_data(GTK_OBJECT(retval->dialog), "commodity_struct",
-                      (gpointer)retval);
 
   gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
                       GTK_SIGNAL_FUNC(commodity_close), retval);
@@ -568,12 +591,10 @@ gnc_ui_commodity_destroy(CommodityWindow * w) {
  * gnc_ui_commodity_ok_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_commodity_ok_cb(GtkButton * button,
                        gpointer user_data) {
-  GtkWidget          * dialog = GTK_WIDGET(user_data);
-  CommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "commodity_struct");
+  CommodityWindow * w = user_data;
 
   const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
@@ -586,7 +607,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 
   if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
   {
-    gnc_warning_dialog_parented(dialog,
+    gnc_warning_dialog_parented(w->dialog,
                                 _("You may not create a new national "
                                   "currency."));
     return;
@@ -600,7 +621,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 
     if ((!w->edit_commodity && c) ||
         (w->edit_commodity && c && (c != w->edit_commodity))) {
-      gnc_warning_dialog_parented (dialog,
+      gnc_warning_dialog_parented (w->dialog,
                                    _("That commodity already exists."));
       return;
     }
@@ -633,7 +654,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     gnc_ui_commodity_destroy(w);
   }
   else {
-    gnc_warning_dialog_parented(dialog,
+    gnc_warning_dialog_parented(w->dialog,
                                 _("You must enter a non-empty \"Full name\", "
                                   "\"Symbol/abbreviation\",\n"
                                   "and \"Type\" for the commodity."));
@@ -645,11 +666,9 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
  * gnc_ui_commodity_help_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_commodity_help_cb(GtkButton * button,
                          gpointer user_data) {
-  /* GtkWidget             * dialog = GTK_WIDGET(user_data); */
-
   helpWindow(NULL, _("Help"), HH_COMMODITY);
 }
 
@@ -658,12 +677,10 @@ gnc_ui_commodity_help_cb(GtkButton * button,
  * gnc_ui_commodity_cancel_cb()
  ********************************************************************/
 
-void
+static void
 gnc_ui_commodity_cancel_cb(GtkButton * button,
                            gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
-  CommodityWindow * w = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "commodity_struct");  
+  CommodityWindow * w = user_data;
 
   if (w->callback) {
     (w->callback)(NULL, w->callback_data);

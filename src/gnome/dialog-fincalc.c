@@ -1,6 +1,6 @@
 /********************************************************************\
  * dialog-fincalc.c : dialog for a financial calculator             *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -30,8 +30,6 @@
 #include "dialog-utils.h"
 #include "finproto.h"
 #include "finvar.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity.h"
@@ -517,12 +515,15 @@ gnc_ui_fincalc_dialog_create(void)
   GtkWidget *menu;
   GtkWidget *hbox;
   GtkWidget *edit;
+  GladeXML  *xml;
 
   commodity = gnc_default_currency ();
 
   fcd = g_new0(FinCalcDialog, 1);
 
-  fcd->dialog = create_Financial_Calculator_Dialog();
+  xml = gnc_glade_xml_new ("fincalc.glade", "Financial Calculator Dialog");
+
+  fcd->dialog = glade_xml_get_widget (xml, "Financial Calculator Dialog");
   fcdo = GTK_OBJECT(fcd->dialog);
 
   gnc_register_gui_component (DIALOG_FINCALC_CM_CLASS,
@@ -540,7 +541,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PAYMENT_PERIODS] = edit;
   gtk_widget_show (edit);
 
-  hbox = lookup_widget (fcd->dialog, "payment_periods_hbox");
+  hbox = glade_xml_get_widget (xml, "payment_periods_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -556,7 +557,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[INTEREST_RATE] = edit;
   gtk_widget_show (edit);
 
-  hbox = lookup_widget (fcd->dialog, "interest_rate_hbox");
+  hbox = glade_xml_get_widget (xml, "interest_rate_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -574,7 +575,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PRESENT_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = lookup_widget (fcd->dialog, "present_value_hbox");
+  hbox = glade_xml_get_widget (xml, "present_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -590,7 +591,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[PERIODIC_PAYMENT] = edit;
   gtk_widget_show (edit);
 
-  hbox = lookup_widget (fcd->dialog, "periodic_payment_hbox");
+  hbox = glade_xml_get_widget (xml, "periodic_payment_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -606,7 +607,7 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->amounts[FUTURE_VALUE] = edit;
   gtk_widget_show (edit);
 
-  hbox = lookup_widget (fcd->dialog, "future_value_hbox");
+  hbox = glade_xml_get_widget (xml, "future_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
@@ -614,85 +615,84 @@ gnc_ui_fincalc_dialog_create(void)
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
-  button = lookup_widget (fcd->dialog, "payment_periods_calc_button");
+  button = glade_xml_get_widget (xml, "payment_periods_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_payment_periods), fcd);
 
-  button = lookup_widget (fcd->dialog, "interest_rate_calc_button");
+  button = glade_xml_get_widget (xml, "interest_rate_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_interest_rate), fcd);
 
-  button = lookup_widget (fcd->dialog, "present_value_calc_button");
+  button = glade_xml_get_widget (xml, "present_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_present_value), fcd);
 
-  button = lookup_widget (fcd->dialog, "periodic_payment_calc_button");
+  button = glade_xml_get_widget (xml, "periodic_payment_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_periodic_payment), fcd);
 
-  button = lookup_widget (fcd->dialog, "future_value_calc_button");
+  button = glade_xml_get_widget (xml, "future_value_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(calc_future_value), fcd);
 
-  button = lookup_widget (fcd->dialog, "payment_periods_clear_button");
+  button = glade_xml_get_widget (xml, "payment_periods_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PAYMENT_PERIODS]);
 
-  button = lookup_widget (fcd->dialog, "interest_rate_clear_button");
+  button = glade_xml_get_widget (xml, "interest_rate_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[INTEREST_RATE]);
 
-  button = lookup_widget (fcd->dialog, "present_value_clear_button");
+  button = glade_xml_get_widget (xml, "present_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PRESENT_VALUE]);
 
-  button = lookup_widget (fcd->dialog, "periodic_payment_clear_button");
+  button = glade_xml_get_widget (xml, "periodic_payment_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PERIODIC_PAYMENT]);
 
-  button = lookup_widget (fcd->dialog, "future_value_clear_button");
+  button = glade_xml_get_widget (xml, "future_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[FUTURE_VALUE]);
 
-  menu = lookup_widget (fcd->dialog, "compounding_menu");
+  menu = glade_xml_get_widget (xml, "compounding_menu");
   fcd->compounding_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  menu = lookup_widget (fcd->dialog, "payment_menu");
+  menu = glade_xml_get_widget (xml, "payment_menu");
   fcd->payment_menu = menu;
   gnc_option_menu_init(menu);
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
   gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
 
-  button = lookup_widget (fcd->dialog, "period_payment_radio");
+  button = glade_xml_get_widget (xml, "period_payment_radio");
   fcd->end_of_period_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
                      GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
 
-  button = lookup_widget (fcd->dialog, "discrete_compounding_radio");
+  button = glade_xml_get_widget (xml, "discrete_compounding_radio");
   fcd->discrete_compounding_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
                      GTK_SIGNAL_FUNC(fincalc_compounding_radio_toggled), fcd);
 
-  button = lookup_widget (fcd->dialog, "close_button");
+  button = glade_xml_get_widget (xml, "close_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(close_button_clicked), fcd);
-  fcd->payment_total_label = lookup_widget (fcd->dialog,
-                                            "payment_total_label");
+  fcd->payment_total_label = glade_xml_get_widget (xml, "payment_total_label");
 
-  button = lookup_widget (fcd->dialog, "schedule_button");
+  button = glade_xml_get_widget (xml, "schedule_button");
   gtk_widget_hide (button);
 
   init_fi(fcd);

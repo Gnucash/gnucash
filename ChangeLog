@@ -1,5 +1,9 @@
 2001-06-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-fincalc.c: use libglade
+
+	* src/gnome/dialog-commodity.c: use libglade
+
 	* src/gnome/dialog-account.c: use libglade
 
 	* src/gnome/dialog-userpass.c: fix bloop
