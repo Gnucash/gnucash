@@ -43,6 +43,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "gnc-pricedb.h"
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 #include "messages.h"
