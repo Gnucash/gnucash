@@ -106,7 +106,7 @@ size_t dcoresize();
   }					\
 }
 
-int safe_strcmp (char * da, char * db);
+int safe_strcmp (const char * da, const char * db);
 
 /** PROTOTYPES ******************************************************/
 
