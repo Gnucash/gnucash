@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES = libgw-gnc-module.la
 libgncmodule_la_SOURCES = gnc-module.c
 libgncmodule_la_LDFLAGS = -module
 libgncmodule_la_LIBADD = \
-  -L../core-utils -L../core-utils/.libs -lcore-utils \
+  ../core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   -lltdl
@@ -54,8 +54,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	touch .scm-links
-
-gnc-module.c: gw-gnc-module.h
 
 gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: .scm-links gw-gnc-module-spec.scm
 	FLAVOR=gnome guile -c \

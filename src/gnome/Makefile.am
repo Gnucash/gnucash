@@ -19,9 +19,8 @@ libgncgnome_la_LIBADD = \
 
 libgw_gnc_la_SOURCES = gw-gnc.c
 libgw_gnc_la_LDFLAGS = -module \
-  -L. -L.libs -lgncgnome \
   ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
-libgw_gnc_la_LIBADD =
+libgw_gnc_la_LIBADD = libgncgnome.la
 
 libgncgnome_la_SOURCES = \
   dialog-commodities.c \
@@ -144,9 +143,6 @@ gnucash.keys: gnucash.keys.in
 	mv $@.tmp $@
 
 noinst_DATA = .scm-links
-
-# Prime the dependancies.
-gnc-splash.c: gnc-version.h
 
 gnc-version.h: _gnc-version.h
 	-[ ! -f gnc-version.h ] && cp _gnc-version.h gnc-version.h

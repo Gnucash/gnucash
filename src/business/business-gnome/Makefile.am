@@ -116,13 +116,12 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-businessmod-gnome.c: gw-business-gnome.h
-
 gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-business-gnome-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../business-core\" %load-path)) \
+	 (set! %load-path (cons \"${srcdir}/../business-core\" %load-path)) \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \
 	 (set! %load-path (cons \"../../app-utils\" %load-path)) \
 	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \

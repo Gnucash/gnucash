@@ -60,8 +60,10 @@ AM_ACLOCAL_INCLUDE(macros)
 AC_PROG_INSTALL
 
 AC_LIBTOOL_DLOPEN
-AC_DISABLE_STATIC
+AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+
+AC_SUBST(LIBTOOL_DEPS)
 
 AC_ISC_POSIX
 AC_C_BIGENDIAN
@@ -236,8 +238,9 @@ CFLAGS="$GNC_OLDCFLAGS"
 
 GNC_ADD_ON_SRFIS=""
 
-for srfi in `ls lib/srfi/srfi-*.scm | sed -e 's|lib/srfi/||; s/\.scm//'`
+for f in ${srcdir}/lib/srfi/srfi-*.scm
 do
+  srfi=`echo $f | sed 's%.*/%%' | sed 's/.scm//'`
   AC_MSG_CHECKING(if guile needs our copy of ${srfi})
   if ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
   then
@@ -1015,11 +1018,11 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 ### makefiles, so that we don't have an opportunity to adjust them
 ### there.
 
-chmod u+x src/gnc-test-env
-chmod u+x src/bin/generate-gnc-script
-chmod u+x src/bin/overrides/gnucash
-chmod u+x src/bin/overrides/gnucash-run-script
-chmod u+x src/bin/overrides/gnucash-make-guids
+chmod u+x ${srcdir}/src/gnc-test-env
+chmod u+x ${srcdir}/src/bin/generate-gnc-script
+chmod u+x ${srcdir}/src/bin/overrides/gnucash
+chmod u+x ${srcdir}/src/bin/overrides/gnucash-run-script
+chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
@@ -1029,7 +1032,7 @@ chmod u+x src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( m4/Makefile  intl/Makefile 
+AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -1051,8 +1054,6 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           lib/srfi/Makefile
 	  lib/libc/Makefile
           macros/Makefile
-	  po/Makefile.in
-          po/Makefile
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile
@@ -1127,15 +1128,15 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
           src/report/report-gnome/test/Makefile
-          src/report/report-system/test/Makefile
           src/report/report-system/Makefile
-          src/report/standard-reports/test/Makefile
+          src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile
+          src/report/standard-reports/test/Makefile
           src/report/locale-specific/Makefile
           src/report/locale-specific/us/Makefile
           src/report/locale-specific/us/test/Makefile
-          src/report/stylesheets/test/Makefile
           src/report/stylesheets/Makefile
+          src/report/stylesheets/test/Makefile
           src/report/utility-reports/Makefile
           src/report/utility-reports/test/Makefile
           src/scm/Makefile

@@ -6,7 +6,7 @@ exec guile -s $0 "$@"
 (use-modules (ice-9 slib))
 (require 'format)
 
-(define *currency-file* "iso-4217-currencies.scm")
+(define *currency-file* (string-append (getenv "srcdir") "/" "iso-4217-currencies.scm"))
 (define *c-file-name* "iso-4217-currencies.c")
 
 (define (generate-currency-c-code form output-port)

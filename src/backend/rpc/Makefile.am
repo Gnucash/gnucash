@@ -60,7 +60,7 @@ RPCGEN_SRCS = gncAccount.x gncCommodity.x gncKVP.x gncGUID.x \
 
 gncRpc_xdr.c: $(RPCGEN_SRCS)
 	$(RM) $@
-	$(RPCGEN) -c -o $@ gncRpc.x
+	$(RPCGEN) -c -o $@ ${srcdir}/gncRpc.x
 
 #gncRpc_clnt.c: $(RPCGEN_SRCS)
 #	$(RM) $@

@@ -14,12 +14,9 @@ libbaz_la_SOURCES = baz.c
 noinst_HEADERS = baz.h
 
 libgncmodbaz_la_SOURCES = baz-gwrap.c gnc-mod-baz.c
-libgncmodbaz_la_LDFLAGS = -module -L../mod-foo
+libgncmodbaz_la_LDFLAGS = -module
 
-libgncmodbaz_la_LIBADD = \
-  -L. -L./.libs \
-  -L../mod-foo -L../mod-foo/.libs \
-  -lbaz -lfoo
+libgncmodbaz_la_LIBADD = ../mod-foo/libfoo.la libbaz.la
 
 EXTRA_DIST = \
   baz-gwrap.scm \
@@ -33,3 +30,7 @@ baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
 
 BUILT_SOURCES = baz-gwrap.c baz-gwrap.h
 CLEANFILES = *.so* *.a baz-gwrap.c baz-gwrap.h baz-gwrap.html
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:

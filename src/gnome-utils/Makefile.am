@@ -131,8 +131,6 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
-dialog-utils.c: gnc-dir.h
-
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
@@ -150,7 +148,7 @@ BUILT_SOURCES = gnc-dir.h
 # these files into the dist tarfile.  If there's a a better way,
 # by all means, let us know...
 dist-hook:
-	rm ${distdir}/gnc-dir.h
+	rm -f ${distdir}/gnc-dir.h
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling

@@ -1,3 +1,47 @@
+2003-01-05  John H. Pierce <john@killterm.org>
+    * Makefile.am: Added rule for libtool rebuilding.
+
+    * configure.in: Changed AC_DISABLE_STATIC to AM_DISABLE_STATIC
+      Look in the right place for srfi modules.
+      Reordered output files so directories get created in the right order.
+
+    * intl-scm/Makefile.am: Only find scm files once.
+      Fix for non-srcdir builds.
+
+    * src/app-utils/Makefile.am:
+    * src/business/business-core/Makefile.am: 
+    * src/business/dialog-tax-table/Makefile.am:
+    * src/gnome/Makefile.am:
+    * src/gnome-search/Makefile.am:
+    * src/gnome-utils/Makefile.am:
+    * src/business/business-gnome/Makefile.am:
+    * src/gnc-module/Makefile.am: 
+      Removed unneeded depends, they interfere with the auto-generated ones.
+
+    * src/gnc-module/test/mod-bar/Makefile.am: 
+    * src/gnc-module/test/mod-baz/Makefile.am: 
+    * src/gnc-module/test/mod-foo/Makefile.am:
+    * src/gnc-module/test/misc-mods/Makefile.am:
+      Don't install test modules.
+        
+    * src/backend/postgres/Makefile.am:
+      Fixed auto-generation of sources out of srcdir.
+      Moved auto-generation sources all to BUILT_SOURCES to generate
+      correct depends.
+      Removed incomplete explicit depends.
+
+    * src/backend/rpc/Makefile.am:
+    * src/backend/postgres/test/Makefile.am:
+      Look in engine srcdir for guile stuff.
+
+    * src/engine/Makefile.am:
+      Remove absolute paths so automake gets dependencies right for libs.
+      Remove unneeded depends.
+
+    * src/engine/gnc-commodity.c:
+    * src/engine/iso-currencies-to-c:
+      Look for auto-generated files in srcdir.
+
 2002-1-6  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/import-backend.c: Give a much higher importance
 	the date heuristics.   Exact date now worth +3, date within 

@@ -17,3 +17,7 @@ libagedver_la_SOURCES=agedver.c
 libagedver_la_LDFLAGS=-module
 
 CLEANFILES = *.so* *.a
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:

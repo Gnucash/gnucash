@@ -6,6 +6,7 @@ TESTS = \
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/backend/postgres \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
@@ -37,6 +38,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I.. \
+  -I${srcdir}/.. \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} 
 

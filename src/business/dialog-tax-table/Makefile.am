@@ -70,8 +70,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gncmod-dialog-tax-table.c: gw-dialog-tax-table.h
-
 gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: .scm-links gw-dialog-tax-table-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \

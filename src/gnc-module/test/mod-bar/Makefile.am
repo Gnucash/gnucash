@@ -14,7 +14,7 @@ noinst_HEADERS = bar.h
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 libgncmodbar_la_LDFLAGS=-module
-libgncmodbar_la_LIBADD=-L. -L./.libs -lbar
+libgncmodbar_la_LIBADD=libbar.la
 
 EXTRA_DIST = \
   bar-gwrap.scm \
@@ -28,3 +28,7 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 
 BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
 CLEANFILES = *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:

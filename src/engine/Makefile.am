@@ -109,10 +109,10 @@ noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
- ${top_builddir}/src/gnc-module/libgncmodule.la \
- ${top_builddir}/src/engine/libgw-engine.la \
- ${top_builddir}/src/engine/libgw-kvp.la \
- ${top_builddir}/lib/libc/libc-missing.la
+ libgw-engine.la \
+ libgw-kvp.la \
+ ../gnc-module/libgncmodule.la \
+ ../../lib/libc/libc-missing.la
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
 libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
@@ -168,13 +168,9 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gncmod-engine.c: gw-engine.h
-
-gnc-commodity.c: iso-4217-currencies.c
-
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	-chmod u+x ./iso-currencies-to-c
-	GUILE_LOAD_PATH=${top_srcdir}/lib/:${GUILE_LOAD_PATH} ${srcdir}/iso-currencies-to-c
+	-chmod u+x ${srcdir}/iso-currencies-to-c
+	GUILE_LOAD_PATH=${top_srcdir}/lib/:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	FLAVOR=gnome guile -c \
@@ -191,8 +187,7 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	 (gw:generate-wrapset \"gw-kvp\")"
 
 BUILT_SOURCES = \
+  iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h 
-CLEANFILES = ${BUILT_SOURCES} gw-engine.html gw-kvp.html \
-             iso-4217-currencies.c \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+

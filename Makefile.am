@@ -124,3 +124,6 @@ ACLOCAL_AMFLAGS = -I m4
 .PHONY: doc
 doc:
 	$(MAKE) -C src/doc doc
+
+libtool: $(LIBTOOL_DEPS)
+	$(SHELL) ./config.status --recheck

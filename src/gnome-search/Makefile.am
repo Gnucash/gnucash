@@ -96,8 +96,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gncmod-gnome-search.c: gw-gnome-search.h
-
 gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h: .scm-links gw-gnome-search-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \

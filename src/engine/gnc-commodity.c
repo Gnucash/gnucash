@@ -889,7 +889,7 @@ gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table)
 {
 
-  #include "./iso-4217-currencies.c"
+  #include "iso-4217-currencies.c"
 
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE);

@@ -14,7 +14,7 @@ noinst_HEADERS = foo.h
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 libgncmodfoo_la_LDFLAGS = -module 
-libgncmodfoo_la_LIBADD = -L. -L.libs -lfoo
+libgncmodfoo_la_LIBADD = libfoo.la
 
 EXTRA_DIST = \
   foo-gwrap.scm \
@@ -28,3 +28,7 @@ foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
 
 BUILT_SOURCES = foo-gwrap.c foo-gwrap.h
 CLEANFILES = *.so* *.a foo-gwrap.c foo-gwrap.h foo-gwrap.html
+
+# Keep automake from generating install targets for test libs
+install-checklibLTLIBRARIES:
+uninstall-checklibLTLIBRARIES:
