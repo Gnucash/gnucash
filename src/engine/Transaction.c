@@ -254,15 +254,21 @@ xaccFreeSplit (Split *split)
 {
   if (!split) return;
 
-  kvp_frame_delete (split->kvp_data);
-
+  /* Debug double-free's */
+  if (((char *) 1) == split->memo)
+  {
+    PERR ("double-free %p", split);
+    return;
+  }
   g_cache_remove(gnc_engine_get_string_cache(), split->memo);
   g_cache_remove(gnc_engine_get_string_cache(), split->action);
 
-  /* just in case someone looks up freed memory ... */
-  split->memo        = NULL;
-  split->action      = NULL;
+  kvp_frame_delete (split->kvp_data);
   split->kvp_data    = NULL;
+
+  /* Just in case someone looks up freed memory ... */
+  split->memo        = (char *) 1;
+  split->action      = NULL;
   split->reconciled  = NREC;
   split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -813,6 +819,7 @@ xaccSplitGetReconciledBalance (const Split *s)
 static void
 xaccInitTransaction (Transaction * trans, QofBook *book)
 {
+  ENTER ("trans=%p", trans);
   /* Fill in some sane defaults */
   trans->num         = g_cache_insert(gnc_engine_get_string_cache(), "");
   trans->description = g_cache_insert(gnc_engine_get_string_cache(), "");
@@ -1031,7 +1038,12 @@ xaccFreeTransaction (Transaction *trans)
 
   if (!trans) return;
 
-  ENTER ("addr=%p\n", trans);
+  ENTER ("addr=%p", trans);
+  if (((char *) 1) == trans->num)
+  {
+    PERR ("double-free %p", trans);
+    return;
+  }
 
   /* free up the destination splits */
   for (node = trans->splits; node; node = node->next)
@@ -1045,8 +1057,8 @@ xaccFreeTransaction (Transaction *trans)
 
   kvp_frame_delete (trans->kvp_data);
 
-  /* just in case someone looks up freed memory ... */
-  trans->num         = NULL;
+  /* Just in case someone looks up freed memory ... */
+  trans->num         = (char *) 1;
   trans->description = NULL;
   trans->kvp_data    = NULL;
 
@@ -1068,7 +1080,7 @@ xaccFreeTransaction (Transaction *trans)
 
   g_free(trans);
 
-  LEAVE ("addr=%p\n", trans);
+  LEAVE ("addr=%p", trans);
 }
 
 /********************************************************************
@@ -1739,14 +1751,12 @@ xaccTransCommitEdit (Transaction *trans)
 {
    Split *split;
    QofBackend *be;
-   const char *str;
 
    if (!trans) return;
-   ENTER ("trans addr=%p", trans);
-
    trans->editlevel--;
    if (0 < trans->editlevel) return;
 
+   ENTER ("trans addr=%p", trans);
    if (0 > trans->editlevel)
    {
       PERR ("unbalanced call - resetting (was %d)", trans->editlevel);
@@ -1767,6 +1777,7 @@ xaccTransCommitEdit (Transaction *trans)
     */
    if (trans->splits && !(trans->do_free))
    {
+      PINFO ("cleanup trans=%p", trans);
       split = trans->splits->data;
  
       /* Try to get the sorting order lined up according to 
@@ -1814,9 +1825,7 @@ xaccTransCommitEdit (Transaction *trans)
     */
 
    /* See if there's a backend.  If there is, invoke it. */
-   str = trans->description;
-   str = str ? str : "(null)";
-   PINFO ("descr is %s", str);
+   PINFO ("descr is %s", trans->description ? trans->description : "(null)");
 
    be = xaccTransactionGetBackend (trans);
    if (be && be->commit) 
@@ -1872,6 +1881,7 @@ xaccTransCommitEdit (Transaction *trans)
 
    /* Get rid of the copy we made. We won't be rolling back, 
     * so we don't need it any more.  */
+   PINFO ("get rid of rollback trans=%p", trans->orig);
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
 

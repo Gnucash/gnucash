@@ -82,8 +82,9 @@
  *    /book/prev-book         GUID of previous book (the closed book)
  *    
 -- hack alert -- 
-   Need to also split up the price db too.  Also need to make copies of SX,
-   and the like ... 
+   -- Need to also split up the price db too.  
+   -- Need to make copies of SX, and the like ... 
+   -- Need to move lots too
 
 -- hack alert -- feature request: 
    have some way of remembering the quickfill text from older books...
