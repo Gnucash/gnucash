@@ -1,4 +1,3 @@
-
 <ARTICLE ID="XACC-BALANCESHEET">
 <ARTHEADER>
 <TITLE>Balance Sheet</TITLE>
@@ -13,17 +12,32 @@
 
     </PARA>
 <PARA>This report summarizes your assets, liabilities, and
-    equity.  According to the accounting equation, your assets
+    equity.  When your books are properly maintained, your assets
 should equal the sum of your liabilities and equity.  If that 
 is not the case, there is some kind of internal imbalance in 
 your accounts.
+<para>Options available for this report include:
+<itemizedlist>
+	<listitem><para><emphasis><link linkend="xacc-options-accounts">
+		  Accounts</link></emphasis></para>
+	  </listitem>
+	  <listitem><para><emphasis><link linkend="xacc-options-depth">
+		  Depth</link></emphasis></para>
+	  </listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-report-title">
+		Report Title</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-date">
+		  Date</link></emphasis></para></listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+		Style Sheet</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis><link linkend="xacc-options-price-source">
+		Price Source</link></emphasis></para>
+	</listitem>
+	<listitem><para><emphasis>Add More!!!
+	      </emphasis></para>
+	</listitem>
 
-    </PARA>
-<PARA>You can select the date for which the balance sheet is to be
-    calculated up to using the "preferences" toolbar button. The
-    default is today.
-
-</PARA>
 <PARA>Note that while you <EMPHASIS>can</EMPHASIS> select specific
 accounts for this report, unless you know exactly what you are 
 doing it is unwise and highly likely to give you misleading and

@@ -109,6 +109,14 @@ examine a set of financial information at a glance. This functionality
 is provided with the <link linkend="xacc-multicolumn-view-report">
 Multicolumn View</link> special report.</para></sect1>
 
+<sect1 id="xacc-url-reports">
+<title>Web Pages as reports</title>
+<para>You can view web pages as a special sort of report - very convenient
+for keeping all the financial information you need, including from external
+sources, in the one place.  Use the <link linkend="xacc-frame-urlreport">
+Frame URL Report</link> to do so.
+</para></sect1>
+
 <sect1 id="xacc-customreports">
 <title> Constructing custom reports</title>
 

@@ -1,3 +1,13 @@
+2001-05-21  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-multicolumn-view-reports.sgml: preliminary description.
+
+	* doc/sgml/C/xacc-report.sgml, xacc-balancesheet.sgml, 
+	xacc-asset-liability-piecharts.sgml : more updates.
+
+	* src/scm/tip-list.scm: more tips.
+
+
 2001-05-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/sixtp.c (gnc_is_our_xml_file): fix mem leak
