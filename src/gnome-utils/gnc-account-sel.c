@@ -448,7 +448,10 @@ gnc_account_sel_dispose (GObject *object)
 
 	gas = GNC_ACCOUNT_SEL (object);
 
-        gnc_engine_unregister_event_handler (gas->eventHandlerId);
+        if (gas->eventHandlerId) {
+		gnc_engine_unregister_event_handler (gas->eventHandlerId);
+		gas->eventHandlerId = 0;
+	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
