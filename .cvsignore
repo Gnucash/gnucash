@@ -1,5 +1,4 @@
 Makefile
-Makefile.init
 config.cache
 config.log
 config.status
@@ -10,9 +9,5 @@ config.h
 *.patch
 *.diff
 *.diffs
-xacc
 *.xac.*.xac
-errs*
-gnucash.motif
-gnucash.gnome
 make-gnucash-patch

@@ -80,7 +80,6 @@
 
   (gnc:add-extension menu)
   (gnc:add-extension export-item)
-  (gnc:add-extension qif-item)
 
   (if (gnc:debugging?)
       (gnc:add-extension strings-item)))
