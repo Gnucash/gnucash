@@ -124,6 +124,7 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
   gae->amount = 0.0;
   gae->print_flags = 0;
   gae->currency = NULL;
+  gae->evaluate_on_enter = FALSE;
 }
 
 static void
@@ -179,6 +180,8 @@ amount_entry_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
   switch (event->keyval)
   {
     case GDK_Return:
+      if (gae->evaluate_on_enter)
+        break;
       if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK))
         break;
       return FALSE;
@@ -371,4 +374,22 @@ gnc_amount_edit_gtk_entry (GNCAmountEdit *gae)
   g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), NULL);
 
   return gae->amount_entry;
+}
+
+
+/**
+ * gnc_amount_edit_set_evaluate_on_enter:
+ * @gae: The GNCAmountEdit widget
+ * @evaluate_on_enter: The flag value to set
+ *
+ * Returns nothing.
+ */
+void
+gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
+                                       gboolean evaluate_on_enter)
+{
+  g_return_if_fail(gae != NULL);
+  g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
+
+  gae->evaluate_on_enter = evaluate_on_enter;
 }

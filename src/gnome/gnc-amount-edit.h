@@ -51,6 +51,8 @@ typedef struct
 
   double amount;
 
+  gboolean evaluate_on_enter;
+
 } GNCAmountEdit;
 
 typedef struct
@@ -76,6 +78,9 @@ void      gnc_amount_edit_set_print_flags (GNCAmountEdit *gae,
 
 void      gnc_amount_edit_set_currency    (GNCAmountEdit *gae,
                                            const char * currency);
+
+void      gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
+                                                 gboolean evaluate_on_enter);
 
 END_GNOME_DECLS
 
