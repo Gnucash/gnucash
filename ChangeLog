@@ -1,3 +1,9 @@
+2002-06-29  David Hampton  <hampton@employees.org>
+
+	* configure.in:
+	* src/gnome/gnc-splash.c (gnc_show_splash_screen): Add the current
+	version number (or cvs build time) to the splash screen.
+
 2002-06-27  Derek Atkins   <derek@ihtfp.com>
 
 	* Change the "Owner Report" to a "Customer Report" and "Vendor

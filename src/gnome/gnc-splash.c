@@ -81,7 +81,12 @@ gnc_show_splash_screen (void)
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
   hbox = gtk_hbox_new (FALSE, 0);
-  sprintf(ver_string, "Version: Gnucash-%s", VERSION);
+  if (GNUCASH_MINOR_VERSION % 2) {
+    sprintf(ver_string, _("Version: Gnucash-cvs (built %s)"),
+	    GNUCASH_BUILD_DATE);
+  } else {
+    sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
+  }
   version = gtk_label_new (ver_string);
 
   gtk_container_add (GTK_CONTAINER (frame), pixmap);
