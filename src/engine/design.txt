@@ -283,11 +283,12 @@ course-grained account-group level.
 
 Transaction Processing
 ----------------------
-The following has been implemented:
-
-Introduce begin() and end() subroutines that should wrap updates 
-to individual splits/transactions.  These should be useful for 
-an sql back-end, where end() would be a synonym for "commit".
+There is a rudimentary level of "TP" build in, via the routines
+xaccTransBeginEdit(), xaccTransRollbackEdit(), and xaccTransCommitEdit(),
+which allow changes to be made to a transaction, and then commited,
+or rejected at the end.  Handy for the GUI, if the user makes a bunch
+of changes which they don't want to keep; also handy for an SQL back end,
+where the Commit() routine triggers the actual update of the SQL database.
 
 
 Journal Logs
