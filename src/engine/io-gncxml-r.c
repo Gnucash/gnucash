@@ -4163,6 +4163,7 @@ gnc_transaction_parser_new() {
   sixtp_set_start(restore_pr, txn_restore_start_handler);
   sixtp_set_chars(restore_pr, allow_and_ignore_only_whitespace);
   sixtp_set_end(restore_pr, txn_restore_end_handler);
+  sixtp_set_after_child(restore_pr, txn_restore_after_child_handler);
   sixtp_set_fail(restore_pr, txn_restore_fail_handler);
   sixtp_add_sub_parser(top_level, "restore", restore_pr);
 
