@@ -1,3 +1,8 @@
+2002-10-28  Christian Stimming  <stimming@tuhh.de>
+
+	* intl-scm/xgettext.scm: Add the file name of scheme files to
+	translation messages.
+
 2002-10-28  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: update for new release
