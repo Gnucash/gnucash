@@ -5,7 +5,7 @@ CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
 lib_LTLIBRARIES = libgncmodule.la 
 pkglib_LTLIBRARIES = libgw-gnc-module.la
 
-libgncmodule_la_SOURCES = gnc-module.c 
+libgncmodule_la_SOURCES = gnc-module.c
 libgncmodule_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS} -lltdl
 libgncmodule_la_LDFLAGS = -module
 
@@ -36,6 +36,8 @@ EXTRA_DIST = \
 	ln -sf . gnucash
 	ln -sf . g-wrapped
 	touch .scm-links
+
+gnc-module.c: gw-gnc-module.h
 
 gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: gw-gnc-module-spec.scm
 	FLAVOR=gnome guile -c \
