@@ -54,7 +54,11 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
-  data->gnc_iconv_handler = iconv_open("ISO8859-1", "UTF-8");
+  /* FIXME: The internal target encoding is hard-coded so far. This
+     needs to be fixed for the gnome2 version; the target encoding is
+     then probably utf-8 as well. iconv is also used in
+     gnc_hbci_descr_tognc() in gnc-hbci-utils.c. */
+  data->gnc_iconv_handler = iconv_open("ISO8859-15", "UTF-8");
   g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
