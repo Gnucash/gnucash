@@ -246,6 +246,18 @@ void date_add_months (struct tm *tm, int months, gboolean track_last_day)
 }
 
 /**
+ * getDateFormat
+ * Args: nothing
+ * returns: DateFormat: enumeration indicating preferred format
+ *
+ * Globals: dateFormat
+ **/
+DateFormat getDateFormat (void)
+{
+  return dateFormat;
+}
+
+/**
  * setDateFormat
  * set date format to one of US, UK, CE, OR ISO
  * checks to make sure it's a legal value
@@ -267,6 +279,53 @@ void setDateFormat(DateFormat df)
   }
 
   return;
+}
+
+/**
+ * getDateFormatString
+ * get the date format string for the current format
+ * returns: string
+ *
+ * Globals: dateFormat
+ **/
+const gchar *getDateFormatString(DateFormat df)
+{
+  switch(df) {
+   case DATE_FORMAT_US:
+    return "%m/%d/%y";
+   case DATE_FORMAT_UK:
+    return "%d/%m/%y";
+   case DATE_FORMAT_CE:
+    return "%d.%m.%y";
+   case DATE_FORMAT_ISO:
+    return "%y-%m-%d";
+   case DATE_FORMAT_LOCALE:
+   default:
+    return GNC_D_FMT;
+  };
+}
+
+/**
+ * getDateTextFormatString
+ * get the date format string for the current format
+ * returns: string
+ *
+ * Globals: dateFormat
+ **/
+const gchar *getDateTextFormatString(DateFormat df)
+{
+  switch(df) {
+   case DATE_FORMAT_US:
+    return "%b %d, %y";
+   case DATE_FORMAT_UK:
+   case DATE_FORMAT_CE:
+    return "%d %b, %y";
+   case DATE_FORMAT_ISO:
+    return "%y-%b-%d";
+   case DATE_FORMAT_LOCALE:
+   default:
+    return GNC_D_FMT;
+  };
 }
 
 /**

@@ -118,7 +118,10 @@ gboolean date_is_last_mday(struct tm *tm);
  */
 void date_add_months (struct tm *tm, int months, gboolean track_last_day);
 
+DateFormat getDateFormat(void);
 void setDateFormat(DateFormat df);
+const gchar *getDateFormatString(DateFormat df);
+const gchar *getDateTextFormatString(DateFormat df);
 
 /**
  * printDate
