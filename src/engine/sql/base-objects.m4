@@ -34,3 +34,7 @@ put_one_only(price)
 compare_version(account)
 compare_version(transaction)
 compare_version(price)
+
+is_deleted(account)
+is_deleted(transaction)
+is_deleted(price)

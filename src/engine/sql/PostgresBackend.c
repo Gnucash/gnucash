@@ -206,8 +206,10 @@ pgendGetResults (PGBackend *be,
 static gpointer
 get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   if (-1 != (int) data || 0 != j) return (gpointer) -1;
-   return ((gpointer) atoi(DB_GET_VAL ("version", 0)));
+   int version = atoi(DB_GET_VAL ("version", j));
+   int incoming = (int) data;
+   if (version < incoming) version = incoming;
+   return (gpointer) version;
 }
 
 /* ============================================================= */
@@ -1949,7 +1951,10 @@ pgend_trans_commit_edit (Backend * bend,
       }
       }
 #else
-      if (0 < pgendTransactionCompareVersion (be, oldtrans)) rollback ++;
+      /* first, see if someone else has already deleted this transaction */
+      if (-1 < pgendTransactionGetDeletedVersion (be, oldtrans)) { rollback ++; }
+      else
+      if (0 < pgendTransactionCompareVersion (be, oldtrans)) { rollback ++; }
 #endif
    
       if (rollback) {
@@ -2025,16 +2030,27 @@ pgend_trans_commit_edit (Backend * bend,
  */
 
 static int
-pgend_trans_rollback_edit (Backend * bend, 
-                         Transaction * trans)
+pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
    const GUID * trans_guid;
 
    if (!be || !trans) return 0;
+   ENTER ("be=%p, trans=%p", be, trans);
+
+   /* First, lets see if the other user had deleted this transaction.
+    * If so, then we want to delete it from the local cache as well.
+    */
+   if (-1 < pgendTransactionGetDeletedVersion (be, trans))
+   {
+      LEAVE ("destroyed");
+      return BACKEND_ROLLBACK_DESTROY;
+   }
 
    trans_guid = xaccTransGetGUID (trans);
    pgendCopyTransactionToEngine (be, trans_guid);
+
+   LEAVE ("rolled back");
    return 0;
 }
 
@@ -2146,6 +2162,9 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
  * to the same account or transaction.  This routine does not check
  * for such conflicts or report them.  Hack alert: this is a bug that
  * should be fixed.
+ *
+ * This routine should also check for deleted transactions (that
+ * other users have deleted, but are still present in out cache).
  */
 
 

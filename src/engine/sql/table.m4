@@ -347,6 +347,33 @@ pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)
 
 ')
 
+define(`is_deleted',
+`
+/* ------------------------------------------------------ */
+/* This routine looks at the audit trail to see if the
+ * indicated object has been deleted. If it has been,
+ * it returns the version number of the deleted object;
+ * otherwise it returns -1.
+ */ 
+
+static int 
+pgend`'func_name($@)`'GetDeletedVersion (PGBackend *be, xacc_type($@) *ptr)
+{
+   char *p;
+   int sql_version = -1;
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT version FROM tablename($@)" "Trail WHERE key_fieldname($@) = ''`");
+   p = guid_to_string_buff (&(ptr->guid), p);
+   p = stpcpy (p, "''` AND change = ''`d''`;");
+   SEND_QUERY (be,be->buff, -1);
+   sql_version = (int) pgendGetResults (be, get_version_cb, (gpointer) -1);
+
+   return sql_version;
+}
+
+')
+
 define(`store_audit', 
 `
 /* ------------------------------------------------------ */

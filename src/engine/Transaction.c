@@ -1673,6 +1673,19 @@ xaccTransRollbackEdit (Transaction *trans)
       int rc = 0;
       rc = (be->trans_rollback_edit) (be, trans);
 
+      if (BACKEND_ROLLBACK_DESTROY == rc)
+      {
+         /* The backend is asking us to delete this transaction.
+          * This typically happens because another (remote) user
+          * has deleted this transaction, and we haven't found
+          * out about it until this user tried to edit it.
+          */
+         trans->editlevel++;
+         xaccTransDestroy (trans);
+         xaccFreeTransaction (trans);
+         LEAVE ("deleted trans addr=%p\n", trans);
+         return;
+      }
       if (rc) {
 	PERR ("Rollback Failed.  Ouch!");
       }

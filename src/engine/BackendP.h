@@ -50,6 +50,8 @@
 #include "gnc-book.h"
 #include "gnc-pricedb.h"
 
+#define BACKEND_ROLLBACK_DESTROY 999
+
 /*
  * The book_begin() routine gives the backend a second initialization
  *    opportunity.  It is suggested that the backend check that 
@@ -89,6 +91,24 @@
  *    convenience; it had better be substantially equivalent to
  *    the argument for the trans_begin_edit() callback.  (It doesn't
  *    have to be identical, it can be a clone).
+ *
+ * The trans_rollback_edit() routine is invoked in one of two different
+ *    ways.  In one case, the user may hit 'undo' in the GUI, resulting
+ *    in xaccTransRollback() being called, which in turn calls this
+ *    routine.  In this manner, xaccTransRollback() implements a
+ *    single-level undo convenience routine for the GUI.  The other
+ *    way in which this routine gets invoked involves conflicting
+ *    edits by two users to the same transaction.  The second user
+ *    to make an edit will typically fail in trans_commit_edit(),
+ *    with trans_commit_edit() returning an error code.  This 
+ *    causes xaccTransCommitEdit() to call xaccTransRollback()
+ *    which in turn calls this routine.  Thus, this routine
+ *    gives the backend a chance to clean up failed commits.
+ *
+ *    If the second user tries to modify a transaction that
+ *    the first user deleted, then the backend should return
+ *    BACKEND_ROLLBACK_DESTROY from this routine, so that the 
+ *    engine can properly clean up.
  *
  * The run_query() callback takes a GnuCash query object. 
  *    For an SQL backend,  the contents of the query object need to 

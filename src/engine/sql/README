@@ -278,11 +278,6 @@ multi-user mode is fundamentally broken unless they are fixed.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
 
--- bug: if another user deletes a transaction, or an account, we
-   need to look at the audit trail to see if the thing has been deleted.
-   Otherwise, any sort of sync will incorrectly
-   add the deleted transaction back in.  
-
 -- we should use LISTEN/NOTIFY to let others know tht things have 
    changed.  This is of limited utility, but still...
    It could be used to update the balances in the main window 
@@ -291,11 +286,19 @@ multi-user mode is fundamentally broken unless they are fixed.
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
    as to what this is about.  For the first pass, this is not a 
-   serious issue; its a 'nice to have' thing.
+   serious issue; its a 'nice to have' thing.  (sync is called
+   when user hits the 'save' button, and should be disabled for 
+   multi-user modes)
 
 -- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)
    ditto for prices ...
+
+-- bug: if another user deletes an account, we need to look at the 
+   audit trail to see if the thing has been deleted.
+   Otherwise, any edit of this account will incorrectly
+   add the deleted account back in. (Note that from the user
+   perspective, deleting accounts is a bad idea ...)
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
@@ -308,7 +311,8 @@ multi-user mode is fundamentally broken unless they are fixed.
    user's permission to view/edit account by account ... (hmmm this
    done by the dbadmin... using SQL commands... which means if user
    tries to write to something they're not allowed to write to,
-   then they should be bounced back.)
+   then they should be bounced back.)  Does some user have the permission
+   to create new accounts ??
 
 -- Review versioning verification in backend. The desired semantic for 
    updates should be like CVS: multiple nearly-simultaneous writers 
@@ -316,7 +320,8 @@ multi-user mode is fundamentally broken unless they are fixed.
    The losers know themselves because they are trying to update info 
    of the wrong version. 
    -- pgend_transaction_commit does it correctly; but the GUI doesn't
-      report a rollback.
+      report a rollback.  (need to get err message out of engine, into 
+      gui).
    -- pgTransactionSync() is broken, but its not used anywhere.
    -- pgend_account_commit checks version but doesn't rollback.
       (nor does the GUI report a rollback.)
