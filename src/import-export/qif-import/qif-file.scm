@@ -18,10 +18,11 @@
  (else (use-modules (ice-9 rdelim))))
 
 (define qif-bad-numeric-rexp 
-  (make-regexp "^\.\.\."))
+  (make-regexp "^\\.\\.\\."))
 
 (define (not-bad-numeric-string? input)
-  (if (regexp-exec qif-bad-numeric-rexp input) #f #t))
+  (let ((match (regexp-exec qif-bad-numeric-rexp input)))
+    (if match #f #t)))
 
 (define (qif-file:read-file self path ticker-map)
   (false-if-exception
@@ -122,7 +123,7 @@
                        ;; T : total amount 
                        ((#\T)
                         (if (and default-split (not-bad-numeric-string? value))
-                            (qif-split:set-amount! default-split value)))
+			    (qif-split:set-amount! default-split value)))
                        
                        ;; P : payee
                        ((#\P)
