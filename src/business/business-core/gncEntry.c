@@ -108,6 +108,8 @@ GncEntry *gncEntryCreate (GNCBook *book)
     gncEntrySetTax (entry, zero);
     gncEntrySetDiscount (entry, zero);
   }
+  entry->tax_type = GNC_ENTRY_INTERP_PERCENT;
+  entry->disc_type = GNC_ENTRY_INTERP_PERCENT;
   entry->dirty = FALSE;
 
   xaccGUIDNew (&entry->guid, book);
