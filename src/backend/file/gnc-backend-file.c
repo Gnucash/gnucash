@@ -592,9 +592,9 @@ gnc_file_be_remove_old_files(FileBackend *be)
         /* Is this file associated with the current data file */
         if (strncmp(name, be->fullpath, pathlen) == 0) {
 
-            if ((strcmp(name + len, ".LNK") == 0) &&
+            if ((safe_strcmp(name + len, ".LNK") == 0) &&
 		/* Is a lock file. Skip the active lock file */
-                (strcmp(name, be->linkfile) != 0) &&
+                (safe_strcmp(name, be->linkfile) != 0) &&
                 /* Only delete lock files older than the active one */
                 (stat(name, &statbuf) == 0) &&
                 (statbuf.st_mtime <lockstatbuf.st_mtime)) {
