@@ -1,0 +1,33 @@
+#
+# file: count.dat
+#
+# Raw data for the number of KLOC of code in gnucash,
+# as a function of date.  Taken from the web page
+# http://www.gnucash.org/en/sizing.phtml
+# format: day/month/year <tab> KLOC
+# plot this by saying "gnuplot count.gplot" at the command line
+#
+# xacc-0.9 Sept 97
+1/9/1997	8.8
+# xacc-0.9w Dec 97
+1/12/1997	16.2
+# xacc-1.0.17 Feb 98
+1/2/1998	18.3
+# gnucash-1.1.15 Aug 98
+1/8/1998	34.7
+# gnucash-1.2.2 Aug 99
+1/8/1999	39.0
+# gnucash-1.3.6 April 2000
+1/4/2000	95.1
+# gnucash-1.4.6 Sept 2000
+# 1/9/2000	101.9
+# gnucash-1.4.12 April 2001
+# 1/4/2001	108.2
+# gnucash-1.5.2 Sept 2000
+1/9/2000	114.2
+# gnucash-1.6.0 June 2001
+1/6/2001	193.9
+# gnucash-1.7.2 November 2002
+1/11/2002	297.1
+# gnucash-1.8.4 June 2003
+1/6/2003	385.5
