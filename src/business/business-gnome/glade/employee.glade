@@ -110,7 +110,7 @@
 	  <class>GtkFrame</class>
 	  <name>frame1</name>
 	  <border_width>3</border_width>
-	  <label>Indentification</label>
+	  <label>Identification</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>

@@ -1546,37 +1546,49 @@ static void
 gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
-  char *id, *wintype = NULL, *objtype = NULL, *title;
+  char *id, *wintitle = NULL, *title;
 
   if (!iw) return;
 
   id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
 
-  switch (iw->dialog_type) {
-  case NEW_INVOICE:
-    wintype = _("New");
-    break;
-  case MOD_INVOICE:
-  case EDIT_INVOICE:
-    wintype = _("Edit");
-    break;
-  case VIEW_INVOICE:
-    wintype = _("View");
-    break;
-  }
+  switch (gncOwnerGetType (&iw->owner)) 
+    {
+    case GNC_OWNER_CUSTOMER:
+      switch (iw->dialog_type) 
+	{
+	case NEW_INVOICE:
+	  wintitle = _("New Invoice");
+	  break;
+	case MOD_INVOICE:
+	case EDIT_INVOICE:
+	  wintitle = _("Edit Invoice");
+	  break;
+	case VIEW_INVOICE:
+	  wintitle = _("View Invoice");
+	  break;
+	}
+      break;
+    case GNC_OWNER_VENDOR:
+      switch (iw->dialog_type) 
+	{
+	case NEW_INVOICE:
+	  wintitle = _("New Bill");
+	  break;
+	case MOD_INVOICE:
+	case EDIT_INVOICE:
+	  wintitle = _("Edit Bill");
+	  break;
+	case VIEW_INVOICE:
+	  wintitle = _("View Bill");
+	  break;
+	}
+      break;
+    default:
+      break;
+    }  
 
-  switch (gncOwnerGetType (&iw->owner)) {
-  case GNC_OWNER_CUSTOMER:
-    objtype = _("Invoice");
-    break;
-  case GNC_OWNER_VENDOR:
-    objtype = _("Bill");
-    break;
-  default:
-    break;
-  }  
-
-  title = g_strconcat (wintype, " ", objtype, " - ", id, NULL);
+  title = g_strconcat (wintitle, " - ", id, NULL);
   gtk_window_set_title (GTK_WINDOW (iw->dialog), title);
   g_free (title);
 }
