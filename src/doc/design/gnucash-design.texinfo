@@ -78,6 +78,7 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 Engine
 
 * Engine Introduction::         
+* Using and Extending the Engine API::  
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
 * Splits::                      
@@ -100,6 +101,11 @@ Key-Value Pair Frames
 * kvp_frame::                   
 * kvp_value::                   
 * kvp_list::                    
+
+Splits
+
+* General Split API::           
+* Split Getters::               
 
 Register
 

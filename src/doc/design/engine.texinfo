@@ -18,6 +18,7 @@ be created as a shared library for use by other programs.
 
 @menu
 * Engine Introduction::         
+* Using and Extending the Engine API::  
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
 * Splits::                      
@@ -28,7 +29,7 @@ be created as a shared library for use by other programs.
 @end menu
 
 
-@node Engine Introduction, Globally Unique Identifiers, Engine, Engine
+@node Engine Introduction, Using and Extending the Engine API, Engine, Engine
 @section Introduction
 
 Splits (@pxref{Splits}), or "Ledger Entries" are the fundamental
@@ -93,7 +94,31 @@ convention, the value of an Account is equal to the value of all of its
 Splits plus the value of all of its sub-Accounts.
 
 
-@node Globally Unique Identifiers, Key-Value Pair Frames, Engine Introduction, Engine
+@node Using and Extending the Engine API, Globally Unique Identifiers, Engine Introduction, Engine
+@section Using and Extending the Engine API
+
+Engine API calls are named using a specific convention. For example,
+the function to access the Memo field of a Split is
+@code{xaccSplitGetMemo}.  The prefix @code{xacc} comes
+first@footnote{The @code{xacc} prefix is a historical artifact. GnuCash
+was derived from X-Accountant by Robin Clark.}, followed by the name of
+the entity for which the API call applies (@code{Split}), followed by
+the action performed by the call (@code{Get}), followed by the name of
+the field being accessed (@code{Memo}). Future API calls should conform
+to this naming convention.
+
+The formal arguments to Engine API calls always begin with the entity to
+which the call applies. Thus, the arguments to @code{xaccSplitSetMemo}
+are the @code{Split} pointer followed by the pointer to a memo
+string. Future API calls should also conform to this convention.
+
+Engine API calls should be implemented to behave as gracefully as
+possible with unexpected input. Specifically, public API calls should
+gracefully handle @code{NULL} pointer arguments. User code should be
+able to handle @code{NULL} return values from Engine calls as well.
+
+
+@node Globally Unique Identifiers, Key-Value Pair Frames, Using and Extending the Engine API, Engine
 @section Globally Unique Identifiers
 @cindex Globally Unique Identifier
 @tindex GUID
@@ -631,6 +656,126 @@ reconciliation states for a Split are:
 In addition to the above, Splits contain a Memo field, an Action field,
 and a key-value pair frame. The Memo and Action fields are for arbitrary
 user input.
+
+
+@menu
+* General Split API::           
+* Split Getters::               
+@end menu
+
+@node General Split API, Split Getters, Splits, Splits
+@subsection General Split API
+
+@deftypefun {Split *} xaccMallocSplit (void)
+Allocate, initialize, and return a new Split.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccSplitGetGUID (Split * @var{split})
+Return the GUID of @var{split}.
+@end deftypefun 
+
+@deftypefun {Split *} xaccSplitLookup (const GUID * @var{guid})
+Return the split associated with @var{GUID}, or @code{NULL} if there is
+no such split.
+@end deftypefun
+
+@deftypefun {kvp_value *} xaccSplitGetSlot(Split * @var{split}, const char * @var{key})
+Return the @code{kvp_value} associated with @var{key} in @var{split}.
+If there is none, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun void xaccSplitSetSlot(Split * @var{split}, const char * @var{key}, const kvp_value * @var{value})
+Associate a copy of @var{value} with @var{key} in @var{split}.
+@end deftypefun
+
+
+@node Split Getters,  , General Split API, Splits
+@subsection Split Getters
+
+@deftypefun {Account *} xaccSplitGetAccount (Split * @var{split})
+Return the parent Account of @var{split}.
+@end deftypefun
+
+@deftypefun {Transaction *} xaccSplitGetParent (Split * @var{split})
+Return the parent Transaction of @var{split}.
+@end deftypefun
+
+@deftypefun double xaccSplitGetShareAmount (Split * @var{split})
+Return the 'share quantity' of @var{split}.
+@end deftypefun
+
+@deftypefun double xaccSplitGetSharePrice (Split * @var{split})
+Return the 'share price' of @var{split}.
+@end deftypefun
+
+@deftypefun double xaccSplitGetValue (Split * @var{split})
+Return the value of @var{split}, which is equal to the share quantity
+multiplied by the share price.
+@end deftypefun
+
+@deftypefun char xaccSplitGetReconcile (Split * @var{split})
+Return the value of the reconcile flag in @var{split}. Possible
+values for the flag are:
+
+  @table @code
+
+  @item NREC
+  Not Reconciled
+
+  @item CREC
+  Cleared
+
+  @item YREC
+  Reconciled
+
+  @item FREC
+  Frozen
+
+  @end table
+
+@end deftypefun
+
+@deftypefun void xaccSplitGetDateReconciledTS (Split * @var{split}, Timespec * @var{ts})
+Fill @var{ts} with the reconciled date of @var{split}.
+@end deftypefun
+
+@deftypefun {const char *} xaccSplitGetMemo (Split * @var{split})
+Return the Memo field of @var{split}.
+@end deftypefun
+
+@deftypefun {const char *} xaccSplitGetAction (Split * @var{split})
+Return the Action field of @var{split}.
+@end deftypefun
+
+@deftypefun double xaccSplitGetBalance (Split * @var{split})
+Return the balance of @var{split}'s parent Account up to and including
+@var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun double xaccSplitGetClearedBalance (Split * @code{split})
+Return the cleared balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun double xaccSplitGetReconciledBalance (Split * @code{split})
+Return the reconciled balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun double xaccSplitGetShareBalance (Split * @var{split})
+Return the share balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun double xaccSplitGetShareClearedBalance (Split * @code{split})
+Return the share cleared balance of @var{split}'s parent Account up to
+and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun double xaccSplitGetShareReconciledBalance (Split * @code{split})
+Return the share reconciled balance of @var{split}'s parent Account up
+to and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
 
 
 @node Transactions, Accounts, Splits, Engine
