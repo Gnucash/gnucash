@@ -43,7 +43,7 @@
 #include "config.h"
 
 #include "Backend.h"
-#include "Query.h"
+#include "QueryNew.h"
 #include "gnc-session.h"
 
 #include "gnc-pricedb.h"
@@ -240,7 +240,7 @@ struct backend_s
   void (*commit) (Backend *, GNCIdTypeConst, gpointer);
   void (*rollback) (Backend *, GNCIdTypeConst, gpointer);
 
-  gpointer (*compile_query) (Backend *, Query *);
+  gpointer (*compile_query) (Backend *, QueryNew *);
   void (*free_query) (Backend *, gpointer);
   void (*run_query) (Backend *, gpointer);
   void (*price_lookup) (Backend *, GNCPriceLookup *);
