@@ -7,8 +7,7 @@
      Accounts for tracking spouse's income separately
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you have
-    a working spouse (salary (spouse), taxes (spouse)).
+    You would want to select this set of accounts if you have a working spouse (salary (spouse), taxes (spouse)).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Income</act:name>

@@ -7,9 +7,7 @@
      Retirement account with related investment accounts for spouse
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you have
-    investments in a spouse's name (stock, bond, mutual fund, index
-    fund, interest, dividend).
+    You would want to select this set of accounts if you have investments in a spouse's name (stock, bond, mutual fund, index fund, interest, dividend).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>

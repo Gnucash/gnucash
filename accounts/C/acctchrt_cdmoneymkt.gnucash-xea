@@ -7,9 +7,7 @@
      Accounts for CD and money market investments
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you have
-    CDs or money market accounts (CD, CD interest, money market, money
-    market interest).
+    You would want to select this set of accounts if you have CDs or money market accounts (CD, CD interest, money market, money market interest).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>

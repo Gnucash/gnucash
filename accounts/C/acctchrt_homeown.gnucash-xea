@@ -7,9 +7,7 @@
       Expenses associated with owning a home
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you own a home.
-    This set provides a group of accounts to track home expenses
-    (insurance, taxes, home repair).
+    You would want to select this set of accounts if you own a home. This set provides a group of accounts to track home expenses (insurance, taxes, home repair).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
