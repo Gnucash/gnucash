@@ -107,22 +107,30 @@ gnc_module_system_setup_load_path(void)
 {
   GList * dirs = gnc_module_system_search_dirs();
   GList * lp;
-  SCM   loadpath = gh_lookup("%load-path");
+  char *envt = getenv("LD_LIBRARY_PATH");
+
+  if(envt)
+  {
+    envt = g_strdup(envt);
+  }
+  else
+  {
+    envt = g_strdup("");
+  }
 
   for(lp=dirs; lp; lp=lp->next) 
   {
-    SCM dirname = gh_str02scm(lp->data);
-    if(scm_member(dirname, loadpath) == SCM_BOOL_F) 
-    {
-      char * evalstr = 
-        g_strdup_printf("(set! %%load-path (cons \"%s\" %%load-path))",
-                        (char *)lp->data);
-      gh_eval_str(evalstr);
-      g_free(evalstr);
-    }
+    char *tmp = g_strdup_printf("%s:%s", envt, (char *) lp->data);
+    g_free(envt);
+    envt = tmp;
     g_free(lp->data);
   }
   g_list_free(dirs);
+  if(setenv("LD_LIBRARY_PATH", envt, 1) == -1)
+  {
+    g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
+  }
+  g_free(envt);
 }
 
 /*************************************************************
