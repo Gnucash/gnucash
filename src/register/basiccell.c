@@ -21,7 +21,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->enter_cell = NULL;
    cell->modify_verify = NULL;
    cell->leave_cell = NULL;
-   cell->block = NULL;
+   cell->realize = NULL;
 }
 
 void xaccSetBasicCellValue (BasicCell *cell, char *val)

@@ -5,7 +5,7 @@ RANLIB   = ranlib
 INCLPATH = -I/usr/include \
            -I/usr/X11R6/include/. \
            -I./../../include \
-           -I./../lib/ComboBox-1.33 \
+           -I./../../lib/ComboBox-1.33 \
            -I./../lib/XmHTML-1.1.0/src \
            -I./../../lib/Xbae-4.6.2-linas 
 
@@ -26,7 +26,7 @@ LIBXBAE  = ../../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 LIBTRANS = ../Account.o ../Data.o ../FileIO.o ../Transaction.o ../date.o
 ######################################################################
-SRCS = 	basiccell.c cellblock.c datecell.c pricecell.c \
+SRCS = 	basiccell.c cellblock.c combocell.c datecell.c pricecell.c \
 	recncell.c register.c table.c textcell.c
 OBJS = ${SRCS:.c=.o} 
 ######################################################################

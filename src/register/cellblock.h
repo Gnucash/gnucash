@@ -1,16 +1,26 @@
+/* 
+ * FILE:
+ * cellblock.h
+ *
+ * FUNCTION:
+ * The CellBlock struct is a rectangular grid of cells that 
+ * define an arrangement of cells.  It is typically used to
+ * define a virtual cursor within a larger table of cells.
+ *
+ * The CellBlock also has utilities to define a tab group.
+ * A tab group is an ordered group of cells that are traversed
+ * when the user presses the tab key (and/or uses the arrow 
+ * keys).
+ *
+ * MEMBERS:
+ * The right_traverse array indicates which cell chould be
+ * traversed to when the tab key is pressed.
+ */
 
 #ifndef __XACC_CELL_BLOCK_H__
 #define __XACC_CELL_BLOCK_H__
 
 #include "basiccell.h"
-
-/* 
- * The CellBlock is a rectangular grid of cells that define
- * a traversal group for one entry in the register 
- *
- * The right_traverse array indicates which cell chould be
- * traversed to when the tab key is pressed.
- */
 
 typedef struct _CellBlock {
 

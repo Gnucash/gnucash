@@ -548,6 +548,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
 Widget
 xaccCreateTable (Table *table, Widget parent, char * name) 
 {
+   CellBlock *curs;
    unsigned char * alignments;
    short * widths;
    Widget reg;
@@ -565,11 +566,6 @@ xaccCreateTable (Table *table, Widget parent, char * name)
       haveQuarks = True;
    }
 
-   /* make sure that the table is consistent */
-/* hack alert -- remove for now, since may be inited? 
-   xaccInitTable (table, table->num_rows, table->num_cols);
-*/
-
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;
    widths = NULL;
@@ -585,6 +581,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    /* copy header data into entries cache */
    xaccRefreshHeader (table);
 
+   /* create the matrix widget */
    reg = XtVaCreateWidget( name,
                   xbaeMatrixWidgetClass,  parent,
                   XmNcells,               table->entries,
@@ -607,12 +604,36 @@ xaccCreateTable (Table *table, Widget parent, char * name)
     
    XtManageChild (reg);
 
+   /* add callbacks that handle cell editing */
    XtAddCallback (reg, XmNenterCellCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNleaveCellCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNmodifyVerifyCallback, cellCB, (XtPointer)table);
    XtAddCallback (reg, XmNtraverseCellCallback, cellCB, (XtPointer)table);
 
    table->table_widget = reg;
+
+   /* if any of the cells have GUI specific compnents that need 
+    * initialization, initialize them now. */
+
+   curs = table->cursor;
+   if (curs) {
+      int i,j;
+
+      for (i=0; i<curs->numRows; i++) {
+         for (j=0; j<curs->numCols; j++) {
+            BasicCell *cell;
+            cell = curs->cells[i][j];
+            if (cell) {
+               void (*xt_realize) (struct _BasicCell *, void *gui);
+               xt_realize = cell->realize;
+               if (xt_realize) {
+                  xt_realize (((struct _BasicCell *) cell), ((void *) reg));
+               }
+            }
+         }
+      }
+   }
+
    return (reg);
 }
 

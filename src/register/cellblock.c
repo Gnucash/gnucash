@@ -115,9 +115,6 @@ xaccAddCell (CellBlock *arr, BasicCell *cell, int row, int col)
    arr->cells[row][col] = cell;
    arr->widths[col] = cell->width;
    arr->alignments[col] = cell->alignment;
-
-   /* install back-pointer to this container */
-   cell->block = (struct _CellBlock *) arr;
 }
 
 /* =================================================== */
@@ -139,7 +136,6 @@ xaccNextRight (CellBlock *arr, int row,      int col,
 
    (arr->right_traverse_r)[row][col] = next_row;
    (arr->right_traverse_c)[row][col] = next_col;
-
 
 }
 

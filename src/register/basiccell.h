@@ -1,16 +1,20 @@
 /*
+ * FILE:
  * basiccell.h
- */
-
-#ifndef __XACC_BASIC_CELL_H__
-#define __XACC_BASIC_CELL_H__
-
-/*
+ *
+ * FUNCTION:
+ * The BasicCell struct provides an abstract base class  
+ * defining the handling of the editing of a cell of a table.
+ * Classes that provide the actual handling for different
+ * cell types should inherit from this class.
+ *
+ * MEMBERS:
  * The input_output member is zero if the cell is supposed 
  * to only display values, but not accept user input.  If
  * non-zero, then the callbacks below are used to when the
  * cell is entered.
  *
+ * CALLBACKS:
  * The enter_cell() callback is called when the user first
  * makes a move to enter a cell.  The current value of the 
  * cell is passed as the argument.  If the callback wishes
@@ -46,7 +50,15 @@
  * (3) if the callback chooses to not return "new", it must 
  *     malloc the memory for a new string.  It does not need
  *     to worry about garbage collection.
+ *
+ * GUI STUFF:
+ * The realize callback will be called when GUI-specific 
+ * initalization needs to be done.  For Xt/Motif, the second
+ * argument will be cast to the parent widget.
  */
+
+#ifndef __XACC_BASIC_CELL_H__
+#define __XACC_BASIC_CELL_H__
 
 typedef struct _BasicCell {
 
@@ -54,7 +66,6 @@ typedef struct _BasicCell {
   short alignment; /* column text alignment */
   char  input_output;  /* zero if output-only */
 
-  /* private data */
   char * value;   /* current value */
 
   const char * (*enter_cell) (struct _BasicCell *,
@@ -66,7 +77,9 @@ typedef struct _BasicCell {
   const char * (*leave_cell) (struct _BasicCell *,
                               const char * current);
 
-  struct _CellBlock *block;  /* back-pointer to parent container */
+  /* private, GUI-specific initializer */
+  void         (* realize) (struct _BasicCell *, void *gui_handle);
+
 } BasicCell;
 
 
