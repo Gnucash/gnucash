@@ -134,8 +134,8 @@ struct _Table {
   /* background colors for each cell, format ARGB, 
    * and foreground (text) colors, format ARGB,
    * of dimension num_phys_rows * num_phys_cols */
-  uint **bg_colors;
-  uint **fg_colors;
+  uint32 **bg_colors;
+  uint32 **fg_colors;
 
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
