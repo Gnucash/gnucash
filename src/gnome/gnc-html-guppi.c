@@ -32,6 +32,7 @@
 
 #include <libguppitank/guppi-tank.h>
 
+#include "gnc-engine-util.h"
 #include "gnc-html.h"
 #include "gnc-html-guppi.h"
 #include "gnc-ui-util.h"
@@ -330,6 +331,21 @@ convert_string_array(char ** strings, int nstrings) {
   return retval;
 }
 
+static gboolean
+gnc_arg_list_has_arg (GtkArg *args, guint n_args, const char *arg_name)
+{
+  guint i;
+
+  if (!args)
+    return FALSE;
+
+  for (i = 0; i < n_args; i++)
+    if (safe_strcmp (args[i].name, arg_name) == 0)
+      return TRUE;
+
+  return FALSE;
+}
+
 /********************************************************************
  * gnc_html_embedded_piechart
  * create a Guppi piechart from an HTML <object> block
@@ -350,7 +366,7 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
   char        ** colors=NULL;
   char        ** callbacks=NULL;
   char        * gtitle;
-  
+
   chart->parent = parent;
 
   if((param = g_hash_table_lookup(params, "datasize")) != NULL) {
@@ -466,8 +482,7 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
     g_free(callbacks);
   }
 
-  piechart = guppi_object_newv("pie", w, h,
-                               argind, arglist);
+  piechart = guppi_object_newv ("pie", w, h, argind, arglist);
 
   if(piechart) {
     if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {
@@ -513,6 +528,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
   GuppiObject * barchart = NULL;
   GuppiObject * title = NULL;
   GtkArg      arglist[21];
+  GtkArg      *guppi_args;
   int         argind=0;
   char        * param;
   int         datarows=0;
@@ -527,6 +543,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
   char        ** col_colors=NULL;
   char        ** callbacks=NULL;
   char        * gtitle = NULL;
+  guint       n_args;
 
   chart->parent = parent;
 
@@ -593,27 +610,6 @@ gnc_html_embedded_barchart(gnc_html * parent,
     arglist[argind].name   = "rotate_x_axis_labels";
     arglist[argind].type   = GTK_TYPE_BOOL;
     GTK_VALUE_BOOL(arglist[argind]) = rotate;
-    argind++;    
-  }
-  if((param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
-    sscanf(param, "%d", &rotate);
-    arglist[argind].name   = "legend_reversed";
-    arglist[argind].type   = GTK_TYPE_BOOL;
-    GTK_VALUE_BOOL(arglist[argind]) = rotate;
-    argind++;    
-  }
-  if((param = g_hash_table_lookup(params, "stacked")) != NULL) {
-    sscanf(param, "%d", &stacked);
-    arglist[argind].name   = "stacked";
-    arglist[argind].type   = GTK_TYPE_BOOL;
-    GTK_VALUE_BOOL(arglist[argind]) = stacked;
-    argind++;    
-  }
-  if((param = g_hash_table_lookup(params, "normalize_stacks")) != NULL) {
-    sscanf(param, "%d", &normalize_stacks);
-    arglist[argind].name   = "normalize_stacks";
-    arglist[argind].type   = GTK_TYPE_BOOL;
-    GTK_VALUE_BOOL(arglist[argind]) = normalize_stacks;
     argind++;    
   }
   if((param = g_hash_table_lookup(params, "bar_urls_1")) != NULL) {
@@ -707,10 +703,44 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
   
-
   barchart = guppi_object_newv("barchart", w, h,
                                argind, arglist);
-  
+
+  guppi_args = gtk_object_query_args (GTK_OBJECT_TYPE (barchart),
+                                      NULL, &n_args);
+
+  argind = 0;
+
+  if(gnc_arg_list_has_arg (guppi_args, n_args, "legend_reversed") &&
+     (param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
+    sscanf(param, "%d", &rotate);
+    arglist[argind].name   = "legend_reversed";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = rotate;
+    argind++;
+  }
+  if(gnc_arg_list_has_arg (guppi_args, n_args, "stacked") &&
+     (param = g_hash_table_lookup(params, "stacked")) != NULL) {
+    sscanf(param, "%d", &stacked);
+    arglist[argind].name   = "stacked";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = stacked;
+    argind++;
+  }
+  if(gnc_arg_list_has_arg (guppi_args, n_args, "normalize_stacks") &&
+     (param = g_hash_table_lookup(params, "normalize_stacks")) != NULL) {
+    sscanf(param, "%d", &normalize_stacks);
+    arglist[argind].name   = "normalize_stacks";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = normalize_stacks;
+    argind++;
+  }
+
+  g_free (guppi_args);
+
+  if (barchart && argind > 0)
+    gtk_object_setv (GTK_OBJECT (barchart), argind, arglist);
+
   if(barchart) {
     if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {      
       title = guppi_object_new("title", w, h,

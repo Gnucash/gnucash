@@ -1,3 +1,8 @@
+2001-04-23  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-html-guppi.c: check for new guppi args before
+	passing them
+
 2001-04-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/transaction-report.scm: Make more sanity
