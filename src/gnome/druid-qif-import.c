@@ -259,7 +259,12 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
         prev = g_list_last(wind->pre_comm_pages);
         break;
       case 2:
-        prev = g_list_last(wind->commodity_pages);
+        if(wind->new_stocks != SCM_BOOL_F) {
+          prev = g_list_last(wind->commodity_pages);
+        }
+        else {
+           prev = g_list_last(wind->pre_comm_pages);
+        }
         break;
       default:
         if (wind->show_doc_pages)
@@ -271,7 +276,6 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
       }              
     }
   }
-
   if(prev)
     return (GtkWidget *)prev->data;
   else 
@@ -1392,7 +1396,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 
   /* insert new pages, one for each stock */
   stocks = wind->new_stocks;
-  while(!gh_null_p(stocks)) {
+  while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F))) {
     comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
     commodity      = gw_wcp_get_ptr(comm_ptr_token);
     

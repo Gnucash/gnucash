@@ -6,6 +6,8 @@
 	* src/gnome/glade/qif.glade: add some explanatory text about 
 	what the "back" button does where it's not obvious
 
+	* (later) actually fix #106... first patch didn't do it
+	
 2001-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* Makefile.am: add gnc-glossary.txt to the dist
