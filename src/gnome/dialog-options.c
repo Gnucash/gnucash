@@ -193,12 +193,12 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   }
   else
   {
-    PERR("gnc_option_set_ui_value: Unknown type. Ignoring.\n");
+    PERR("Unknown type. Ignoring.\n");
   }
 
   if (bad_value)
   {
-    PERR("gnc_option_set_ui_value: bad value\n");
+    PERR("bad value\n");
   }
 
   free(type);
@@ -321,7 +321,7 @@ gnc_option_get_ui_value(GNCOption *option)
   }
   else
   {
-    PERR("gnc_option_get_ui_value: Unknown type for refresh. Ignoring.\n");
+    PERR("Unknown type for refresh. Ignoring.\n");
   }
 
   free(type);
@@ -667,7 +667,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
     }
     else
     {
-      PERR("gnc_option_create_list_widget: bad value name\n");
+      PERR("bad value name\n");
     }
   }
 
@@ -1017,7 +1017,7 @@ gnc_option_set_ui_widget(GNCOption *option,
   }
   else
   {
-    PERR("gnc_option_set_ui_widget: Unknown type. Ignoring.\n");
+    PERR("Unknown type. Ignoring.\n");
   }
 
   if (!packed && (enclosing != NULL))

@@ -85,7 +85,7 @@ gnc_extension_type(ExtensionInfo *ext_info)
   string = gnc_guile_call1_symbol_to_string(getters.type, ext_info->extension);
   if (string == NULL)
   {
-    PERR("gnc_extension_type: bad type");
+    PERR("bad type");
     return GNOME_APP_UI_ENDOFINFO;
   }
 
@@ -97,7 +97,7 @@ gnc_extension_type(ExtensionInfo *ext_info)
     type = GNOME_APP_UI_SEPARATOR;
   else
   {
-    PERR("gnc_extension_type: bad type");
+    PERR("bad type");
     type = GNOME_APP_UI_ENDOFINFO;
   }
 
@@ -163,7 +163,7 @@ gnc_extension_path(ExtensionInfo *ext_info)
         free(strings[--i]);
       g_free(strings);
 
-      PERR("gnc_extension_menu_path: not a string");
+      PERR("not a string");
 
       return NULL;
     }
@@ -192,7 +192,7 @@ gnc_extension_run_script(ExtensionInfo *ext_info)
   script = gnc_guile_call1_to_procedure(getters.script, ext_info->extension);
   if (script == SCM_UNDEFINED)
   {
-    PERR("gnc_extension_run_script: not a procedure.");
+    PERR("not a procedure.");
     return;
   }
 
@@ -259,7 +259,7 @@ gnc_create_extension_info(SCM extension)
       break;
 
     default:
-      PERR("gnc_create_extension_info: bad item type");
+      PERR("bad item type");
       g_free(ext_info);
       return NULL;
   }
@@ -300,7 +300,7 @@ gnc_add_extension(SCM extension)
   ext_info = gnc_create_extension_info(extension);
   if (ext_info == NULL)
   {
-    PERR("gnc_add_extension: bad extension");
+    PERR("bad extension");
     return;
   }
 

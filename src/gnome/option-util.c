@@ -231,7 +231,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
   register_proc = gh_eval_str("gnc:options-register-c-callback");
   if (!gh_procedure_p(register_proc))
   {
-    PERR("gnc_option_db_register_change_callback2: not a procedure\n");
+    PERR("not a procedure\n");
     return SCM_UNDEFINED;
   }
 
@@ -289,7 +289,7 @@ gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb, SCM callback_id)
   proc = gh_eval_str("gnc:options-unregister-callback-id");
   if (!gh_procedure_p(proc))
   {
-    PERR("gnc_option_db_unregister_change_callback_id: not a procedure\n");
+    PERR("not a procedure\n");
     return;
   }
 
@@ -310,7 +310,7 @@ gnc_call_option_change_callbacks(GNCOptionDB *odb)
   proc = gh_eval_str("gnc:options-run-callbacks");
   if (!gh_procedure_p(proc))
   {
-    PERR("gnc_call_option_change_callbacks: not a procedure\n");
+    PERR("not a procedure\n");
     return;
   }
 
@@ -1349,7 +1349,7 @@ gnc_commit_option(GNCOption *option)
   result = gh_call1(validator, value);
   if (!gh_list_p(result) || gh_null_p(result))
   {
-    PERR("gnc_commit_option: bad validation result\n");
+    PERR("bad validation result\n");
     return;
   }
 
@@ -1357,7 +1357,7 @@ gnc_commit_option(GNCOption *option)
   ok = gh_car(result);
   if (!gh_boolean_p(ok))
   {
-    PERR("gnc_commit_option: bad validation result\n");
+    PERR("bad validation result\n");
     return;
   }
 
@@ -1378,7 +1378,7 @@ gnc_commit_option(GNCOption *option)
     oops = gh_cadr(result);
     if (!gh_string_p(oops))
     {
-      PERR("gnc_commit_option: bad validation result\n");
+      PERR("bad validation result\n");
       return;
     }
 

@@ -66,7 +66,7 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
 char *
 fileBox(const char * title, const char * filter) 
 {
-  ENTER("fileBox");
+  ENTER("\n");
 
   /* Set a default title if nothing was passed in */  
   if (title == NULL)
@@ -114,7 +114,7 @@ fileBox(const char * title, const char * filter)
 
   gtk_widget_destroy(GTK_WIDGET(fb_info.file_box));
 
-  LEAVE("fileBox");
+  LEAVE("\n");
 
   return fb_info.file_name;
 }

@@ -124,7 +124,7 @@ gnucash_ui_init()
   int fake_argc = 1;
   char *fake_argv[] = {"gnucash"};
 
-  ENTER ("gnucash_ui_init");
+  ENTER ("\n");
 
   /* We're going to have to have other ways to handle X and GUI
      specific args... */
@@ -182,7 +182,7 @@ gnucash_ui_init()
     gnucash_color_init();
   }
 
-  LEAVE ("gnucash_ui_init");
+  LEAVE ("\n");
 
   return 0;
 }
@@ -616,7 +616,7 @@ gnc_configure_reverse_balance(void)
   }
   else
   {
-    PERR("gnc_configure_reverse_balance: bad value\n");
+    PERR("bad value\n");
 
     reverse_type[INCOME]  = GNC_T;
     reverse_type[EXPENSE] = GNC_T;

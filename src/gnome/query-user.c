@@ -244,7 +244,7 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent, const char *message,
       default_button = 1;
       break;
     default:
-      PWARN("gnc_verify_cancel_dialog: bad default button\n");
+      PWARN("bad default button\n");
       default_button = 0;
       break;
   }
@@ -303,7 +303,7 @@ gnc_verify_cancel_dialog_parented(GtkWidget *parent, const char *message,
       default_button = 2;
       break;
     default:
-      PWARN("gnc_verify_cancel_dialog: bad default button\n");
+      PWARN("bad default button\n");
       default_button = 0;
       break;
   }

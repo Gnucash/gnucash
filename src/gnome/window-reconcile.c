@@ -1228,7 +1228,7 @@ xaccDestroyRecnWindow(Account *account)
 {
   RecnWindow *recnData = NULL;
 
-  DEBUG("Destroying reconcile window");
+  DEBUG("Destroying reconcile window\n");
 
   FIND_IN_LIST(RecnWindow, recnList, account, account, recnData);
   if (recnData == NULL)

@@ -85,7 +85,7 @@ gnc_ui_adjBWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
   AdjBWindow * adjBData = (AdjBWindow *) user_data;
   Account *account = adjBData->account;
 
-  DEBUG("Closing adjust balance window");
+  DEBUG("Closing adjust balance window\n");
 
   REMOVE_FROM_LIST (AdjBWindow, adjBList, account, account); 
 
