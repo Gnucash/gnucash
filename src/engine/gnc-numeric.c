@@ -955,7 +955,9 @@ gnc_numeric_check(gnc_numeric in) {
 gchar *
 gnc_numeric_to_string(gnc_numeric n) {
   gchar *result;
-  result = g_strdup_printf("%lld/%lld", n.num, n.denom);
+  long long tmpnum = n.num;
+  long long tmpdenom = n.denom;
+  result = g_strdup_printf("%lld/%lld", tmpnum, tmpdenom);
   return result;
 }
 
@@ -965,13 +967,17 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
      returning a pointer to just past the last byte read.  Return NULL
      on error. */
   int num_read;
-
+  long long tmpnum;
+  long long tmpdenom;
+    
   if(!str) return NULL;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %lld/%lld%n", &(n->num), &(n->denom), &num_read) < 2) {
+  if(sscanf(str, " %lld/%lld%n", &tmpnum, &tmpdenom, &num_read) < 2) {
     return(NULL);
   }
+  n->num = tmpnum;
+  n->denom = tmpdenom;
   return(str + num_read);
 }
 
