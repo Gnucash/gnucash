@@ -780,6 +780,8 @@ gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
 {
   IterData iter_data;
 
+  if (!tbl || !f) return FALSE;
+
   iter_data.ok = TRUE;
   iter_data.func = f;
   iter_data.user_data = user_data;
@@ -795,7 +797,8 @@ gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
  ********************************************************************/
 
 static int
-ct_helper(gpointer key, gpointer value, gpointer data) {
+ct_helper(gpointer key, gpointer value, gpointer data) 
+{
   gnc_commodity_namespace * ns = value;
   g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
   g_hash_table_destroy(ns->table);
@@ -806,7 +809,8 @@ ct_helper(gpointer key, gpointer value, gpointer data) {
 }
 
 void
-gnc_commodity_table_destroy(gnc_commodity_table * t) {
+gnc_commodity_table_destroy(gnc_commodity_table * t) 
+{
   if (!t) return;
   
   g_hash_table_foreach_remove(t->table, ct_helper, t);
