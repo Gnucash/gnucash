@@ -3935,6 +3935,14 @@ AC_DEFUN(AC_GWRAP_CHECK_GUILE,
  if test "${GUILE}" = "no" ; then
 	AC_MSG_ERROR(g-wrap couldn't find guile.)
  fi
+ AC_MSG_CHECKING(if g-wrap works)
+ $GUILE -c "(set! %load-path (cons \"$1\" %load-path)) (use-modules (g-wrap))"
+ status=$?
+ if test $status != 0 ; then
+   AC_MSG_ERROR([g-wrap could not run.  Perhaps missing slib?])
+ else
+   AC_MSG_RESULT(yes)
+ fi
 ])
 
 dnl AM_PATH_GWRAP ([MINIMUM-VERSION, MAXIMUM-VERSION, [ACTION-IF-FOUND.

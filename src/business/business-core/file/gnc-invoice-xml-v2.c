@@ -71,6 +71,7 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_postacc_string "invoice:postacc"
 #define invoice_currency_string "invoice:currency"
 #define invoice_billto_string "invoice:billto"
+#define invoice_tochargeamt_string "invoice:charge-amt"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -96,6 +97,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     Account *acc;
     GncBillTerm *term;
     GncOwner *billto;
+    gnc_numeric amt;
 
     ret = xmlNewNode(NULL, gnc_invoice_string);
     xmlSetProp(ret, "version", invoice_version_string);
@@ -150,6 +152,10 @@ invoice_dom_tree_create (GncInvoice *invoice)
     billto = gncInvoiceGetBillTo (invoice);
     if (billto && billto->owner.undefined != NULL)
       xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
+
+    amt = gncInvoiceGetToChargeAmount (invoice);
+    if (! gnc_numeric_zero_p (amt))
+      xmlAddChild (ret, gnc_numeric_to_dom_tree (invoice_tochargeamt_string, &amt));
 
     return ret;
 }
@@ -382,6 +388,18 @@ invoice_billto_handler (xmlNodePtr node, gpointer invoice_pdata)
   return ret;
 }
 
+static gboolean
+invoice_tochargeamt_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+  struct invoice_pdata *pdata = invoice_pdata;
+  gnc_numeric* num = dom_tree_to_gnc_numeric(node);
+  g_return_val_if_fail(num, FALSE);
+    
+  gncInvoiceSetToChargeAmount (pdata->invoice, *num);
+  g_free(num);
+  return TRUE;
+}
+
 static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_guid_string, invoice_guid_handler, 1, 0 },
     { invoice_id_string, invoice_id_handler, 1, 0 },
@@ -398,6 +416,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_currency_string, invoice_currency_handler, 0, 0 },
     { "invoice:commodity", invoice_currency_handler, 0, 0 },
     { invoice_billto_string, invoice_billto_handler, 0, 0 },
+    { invoice_tochargeamt_string, invoice_tochargeamt_handler, 0, 0},
     { NULL, 0, 0, 0 }
 };
 

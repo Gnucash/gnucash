@@ -20,7 +20,7 @@
   <class>GtkWindow</class>
   <name>HBCI Init Druid</name>
   <width>540</width>
-  <height>370</height>
+  <height>380</height>
   <title>Initial HBCI Setup</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_MOUSE</position>
@@ -105,38 +105,17 @@ HBCI connection now.</text>
 	  </child>
 
 	  <widget>
-	    <class>GtkHBox</class>
-	    <name>hbox108</name>
-	    <border_width>10</border_width>
+	    <class>GtkVBox</class>
+	    <name>vbox156</name>
 	    <homogeneous>False</homogeneous>
-	    <spacing>5</spacing>
+	    <spacing>0</spacing>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label8477402</name>
-	      <label>Configuration File</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <focus_target>configfile-entry</focus_target>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GnomeFileEntry</class>
-	      <name>configfile_fileentry</name>
-	      <history_id>openhbci_configfile</history_id>
-	      <max_saved>10</max_saved>
-	      <title>Choose OpenHBCI Configuration File</title>
-	      <directory>False</directory>
-	      <modal>False</modal>
+	      <class>GtkHBox</class>
+	      <name>hbox108</name>
+	      <border_width>5</border_width>
+	      <homogeneous>False</homogeneous>
+	      <spacing>5</spacing>
 	      <child>
 		<padding>0</padding>
 		<expand>True</expand>
@@ -144,15 +123,70 @@ HBCI connection now.</text>
 	      </child>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<child_name>GnomeEntry:entry</child_name>
-		<name>configfile-entry</name>
-		<can_focus>True</can_focus>
-		<editable>True</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
+		<class>GtkLabel</class>
+		<name>label8477402</name>
+		<label>Configuration File</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>5</xpad>
+		<ypad>0</ypad>
+		<focus_target>configfile-entry</focus_target>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
 	      </widget>
+
+	      <widget>
+		<class>GnomeFileEntry</class>
+		<name>configfile_fileentry</name>
+		<history_id>openhbci_configfile</history_id>
+		<max_saved>10</max_saved>
+		<title>Choose OpenHBCI Configuration File</title>
+		<directory>False</directory>
+		<modal>False</modal>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>True</fill>
+		</child>
+
+		<widget>
+		  <class>GtkEntry</class>
+		  <child_name>GnomeEntry:entry</child_name>
+		  <name>configfile-entry</name>
+		  <can_focus>True</can_focus>
+		  <editable>True</editable>
+		  <text_visible>True</text_visible>
+		  <text_max_length>0</text_max_length>
+		  <text></text>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8877441</name>
+	      <label>If you already have an OpenHBCI configuration file (e.g. from 'aqmoney'), 
+please select it here. GnuCash will continue to use your existing configuration.
+
+If you do not yet have an OpenHBCI configuration file, please specify a file name here. 
+A new OpenHBCI configuration file with that name will be created when this HBCI 
+Setup finishes.</label>
+	      <justify>GTK_JUSTIFY_LEFT</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>10</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
 	    </widget>
 	  </widget>
 	</widget>
@@ -523,7 +557,7 @@ HBCI connection now.</text>
 	    <class>GtkTable</class>
 	    <name>table3</name>
 	    <border_width>10</border_width>
-	    <rows>4</rows>
+	    <rows>5</rows>
 	    <columns>4</columns>
 	    <homogeneous>False</homogeneous>
 	    <row_spacing>5</row_spacing>
@@ -532,7 +566,7 @@ HBCI connection now.</text>
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label8477402</name>
-	      <label>User ID</label>
+	      <label>User ID (&quot;Benutzerkennung&quot;)</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>0</xalign>
@@ -543,8 +577,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -567,8 +601,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -594,8 +628,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>2</left_attach>
 		<right_attach>3</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -618,8 +652,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>3</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -634,7 +668,7 @@ HBCI connection now.</text>
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label8477410</name>
-	      <label>Customer ID</label>
+	      <label>Customer ID (&quot;Kundennummer&quot;)</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>0</xalign>
@@ -645,8 +679,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -672,8 +706,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>2</left_attach>
 		<right_attach>3</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -691,8 +725,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -715,8 +749,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -739,8 +773,8 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>3</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -755,7 +789,7 @@ HBCI connection now.</text>
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label8877438</name>
-	      <label>If your bank did not specify a Customer ID, simply enter the User ID here.</label>
+	      <label>If your bank did not specify a Customer ID, enter the User ID here.</label>
 	      <justify>GTK_JUSTIFY_LEFT</justify>
 	      <wrap>False</wrap>
 	      <xalign>0</xalign>
@@ -766,8 +800,34 @@ HBCI connection now.</text>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>3</top_attach>
-		<bottom_attach>4</bottom_attach>
+		<top_attach>4</top_attach>
+		<bottom_attach>5</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8877440</name>
+	      <label>Enter the IDs given from your bank here. Please make sure the spelling is correct. </label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>

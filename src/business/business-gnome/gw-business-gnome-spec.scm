@@ -57,6 +57,8 @@
 		 "GNC_CUSTOMER_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-vendor '<gnc:url-type> 
 		 "GNC_VENDOR_MODULE_NAME")
+  (gw:wrap-value ws 'gnc:url-type-employee '<gnc:url-type> 
+		 "GNC_EMPLOYEE_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-invoice '<gnc:url-type> 
 		 "GNC_INVOICE_MODULE_NAME")
   (gw:wrap-value ws 'gnc:url-type-ownerreport '<gnc:url-type>

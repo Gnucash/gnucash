@@ -74,6 +74,7 @@
     (gw:enum-add-value! wt "GNC_OWNER_CUSTOMER" 'gnc-owner-customer)
     (gw:enum-add-value! wt "GNC_OWNER_JOB" 'gnc-owner-job)
     (gw:enum-add-value! wt "GNC_OWNER_VENDOR" 'gnc-owner-vendor)
+    (gw:enum-add-value! wt "GNC_OWNER_EMPLOYEE" 'gnc-owner-employee)
     #t)
 
   (let ((wt (gw:wrap-enumeration ws '<gnc:GncAmountType> "GncAmountType")))
@@ -350,6 +351,46 @@
   ;;
   ;; gncEmployee.h
   ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:employee-get-guid
+   '<gnc:guid-scm>
+   "gncEmployeeRetGUID"
+   '((<gnc:GncEmployee*> employee))
+   "Return the GUID of the employee")
+
+  (gw:wrap-function
+   ws
+   'gnc:employee-lookup
+   '<gnc:GncEmployee*>
+   "gncEmployeeLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the employee with GUID guid.")
+
+  (gw:wrap-function
+   ws
+   'gnc:employee-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncEmployeeGetID"
+   '((<gnc:GncEmployee*> employee))
+   "Return the Employee's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-username
+   '(<gw:mchars> callee-owned const)
+   "gncEmployeeGetUsername"
+   '((<gnc:GncEmployee*> employee))
+   "Return the Employee's Username")
+
+  (gw:wrap-function
+   ws
+   'gnc:employee-get-addr
+   '<gnc:GncAddress*>
+   "gncEmployeeGetAddr"
+   '((<gnc:GncEmployee*> employee))
+   "Return the Employee's Address")
 
   ;;
   ;; gncEntry.h
@@ -953,6 +994,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:owner-init-employee
+   '<gw:void>
+   "gncOwnerInitEmployee"
+   '((<gnc:GncOwner*> owner) (<gnc:GncEmployee*> employee))
+   "Initialize an owner to hold a Employee.  The Employee may be NULL.")
+
+  (gw:wrap-function
+   ws
    'gnc:owner-get-type
    '<gnc:GncOwnerType>
    "gncOwnerGetType"
@@ -985,6 +1034,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:owner-get-employee
+   '<gnc:GncEmployee*>
+   "gncOwnerGetEmployee"
+   '((<gnc:GncOwner*> owner))
+   "Return the employee of this owner.")
+
+  (gw:wrap-function
+   ws
    'gnc:owner-equal
    '<gw:bool>
    "gncOwnerEqual"
@@ -1014,6 +1071,14 @@
    "gncOwnerRetGUID"
    '((<gnc:GncOwner*> owner))
    "Return the GUID of this owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:owner-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncOwnerGetName"
+   '((<gnc:GncOwner*> owner))
+   "Return the Name of this owner")
 
   (gw:wrap-function
    ws

@@ -135,4 +135,7 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
  */
 void gncQueryPrint (QueryNew *query);
 
+/* Return the list of books we're using */
+GList * gncQueryGetBooks (QueryNew *q);
+
 #endif /* GNC_QUERYNEW_H */

@@ -84,9 +84,11 @@ const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
 
-/* Make a lot of debugging messages about this outboxjob.  */
-void 
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
+/* Return the HBCI return code of the given 'job', or zero if none was
+ * found. If 'verbose' is TRUE, make a lot of debugging messages about
+ * this outboxjob. */
+int
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose);
 
 /* Check HBCI_Error on whether some feedback should be given to the
  * user. Returns true if the HBCI action should be tried again; on the

@@ -125,7 +125,7 @@ struct _GNCSplitReg {
   gint createFlags;
   gint disallowedCaps;
 
-  gint sort_type;
+  guint sort_type;
 
   gboolean read_only;
 };

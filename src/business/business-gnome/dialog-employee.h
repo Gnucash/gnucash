@@ -20,16 +20,13 @@ EmployeeWindow * gnc_ui_employee_new (GNCBook *book);
 /* Search for an employee */
 GNCSearchWindow * gnc_employee_search (GncEmployee *start, GNCBook *book);
 
-/* Callbacks to select a employee that match the necessary functions
- * for use with the gnc_general_select widget.
+/*
+ * These callbacks are for use with the gnc_general_search widget
  *
- * new_select provides a selection and the ability to create and edit
- *	employees.
- * new_edit provides only the ability to edit the current selection
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing vendor for editing and returns NULL.
  */
-gpointer        gnc_employee_edit_new_select (gpointer book, gpointer c,
-					      GtkWidget *toplevel);
-gpointer	gnc_employee_edit_new_edit (gpointer book, gpointer employee,
-					    GtkWidget *toplevel);
+GNCSearchWindow * gnc_employee_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_employee_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_EMPLOYEE_H_ */

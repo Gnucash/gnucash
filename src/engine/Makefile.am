@@ -10,7 +10,6 @@ AM_CFLAGS = \
 libgncmod_engine_la_SOURCES = \
   Account.c \
   Backend.c \
-  DateUtils.c \
   FreqSpec.c \
   GNCId.c \
   Group.c \
@@ -50,7 +49,6 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
   Backend.h \
-  DateUtils.h \
   FreqSpec.h \
   GNCId.h \
   Group.h \
@@ -112,7 +110,7 @@ noinst_HEADERS = \
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
+libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} ${INTLLIBS} \
  libgw-engine.la \
  libgw-kvp.la \
  ../gnc-module/libgncmodule.la \

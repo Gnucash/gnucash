@@ -216,6 +216,11 @@ gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
 				  Account *acc,
 				  gboolean selected_manually);
 
+/** Try to automatch a given transaction to a destination account */
+gboolean
+gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
+				      GncImportMatchMap *matchmap);
+
 /** Returns if the currently selected destination account for auto-matching was selected by the user. */
 gboolean
 gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *info);

@@ -34,6 +34,7 @@ void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
+void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
@@ -57,6 +58,7 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
 gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
@@ -65,6 +67,7 @@ Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 
 /* return the "total" amount of the invoice */
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
@@ -129,6 +132,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
+#define INVOICE_POST_LOT	"posted_lot"
 #define INVOICE_TYPE	"type"
 #define INVOICE_BILLTO	"bill-to"
 

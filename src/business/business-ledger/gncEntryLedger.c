@@ -1,6 +1,6 @@
 /*
  * gncEntryLedger.c -- a Ledger widget for entering GncEntry objects
- * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -211,6 +211,11 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
     ((ComboCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), TRUE);
 
+  /* The action cell should also accept strings not in the list */
+  gnc_combo_cell_set_strict
+    ((ComboCell *)
+     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), FALSE);
+
   /* Use 6 decimal places for all prices and quantities */
   gnc_price_cell_set_fraction
     ((PriceCell *)
@@ -227,7 +232,7 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
 					      ENTRY_QTY_CELL),
      1000000);
 
-  /* add menu items for the action cell */
+  /* add menu items for the action and payment cells */
   gnc_entry_ledger_config_action (ledger);
 }
 
@@ -254,6 +259,8 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
     break;
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
   case GNCENTRY_NUM_REGISTER_TYPES:
     ledger->is_invoice = FALSE;
     break;
@@ -396,6 +403,8 @@ static void create_invoice_query (GncEntryLedger *ledger)
     break;
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
     type = ENTRY_BILL;
     break;
   default:
@@ -529,6 +538,10 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
       ledger->type = GNCENTRY_BILL_VIEWER;
       create_invoice_query (ledger);
       break;
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+      ledger->type = GNCENTRY_EXPVOUCHER_VIEWER;
+      create_invoice_query (ledger);
+      break;
     default:
       return;			/* Nothing to do */
     }
@@ -543,6 +556,10 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
       break;
     case GNCENTRY_BILL_VIEWER:
       ledger->type = GNCENTRY_BILL_ENTRY;
+      create_invoice_query (ledger);
+      break;
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+      ledger->type = GNCENTRY_EXPVOUCHER_ENTRY;
       create_invoice_query (ledger);
       break;
     default:
@@ -590,9 +607,11 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
   disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
   disc_how = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
 
-  /* Bills dont have discounts */
+  /* Bills and exp-vouchers dont have discounts */
   if (ledger->type == GNCENTRY_BILL_ENTRY ||
-      ledger->type == GNCENTRY_BILL_VIEWER)
+      ledger->type == GNCENTRY_BILL_VIEWER ||
+      ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||
+      ledger->type == GNCENTRY_EXPVOUCHER_VIEWER)
   {
     g_assert (gnc_numeric_zero_p (discount));
     disc_type = GNC_AMT_TYPE_VALUE;
@@ -614,6 +633,15 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
   taxincluded = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXINCLUDED_CELL);
   table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
   
+  /* Expense vouchers don't have taxable, taxincluded, or taxtable cells, either */
+  if (ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||
+      ledger->type == GNCENTRY_EXPVOUCHER_VIEWER)
+  {
+    taxable = FALSE;
+    taxincluded = FALSE;
+    table = NULL;
+  }
+
   gncEntryComputeValue (qty, price, (taxable ? table : NULL), taxincluded,
 			discount, disc_type, disc_how,
 			value, NULL, &taxes);

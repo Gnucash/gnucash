@@ -1,6 +1,202 @@
 Version history:
 ------- -------
 
+ 1.8.4  - 25 May 2003
+ 	 o Fix transfer dialog to nothang if OK button is clicked w/o filling
+	   in dialog properly.
+	 o Add HTML::Parser to the list of items checked/installed.
+	 o Updated translations:  Brazilian Portugese, Czech, Italian, German
+	 o Fix the "View xxxbar" menu items to track properly when a new data
+	   file is opened. Consolidate the code for manipulating the
+	   View/Statusbar and View/Summarybar menu items.  Work around a Gnome
+	   MDI bug as best as possible.
+	 o The numeric test regex was broken and would fail on ALL numerics,
+	   causing all imports to be of value zero.
+	 o Fix for creating new template transactions [from Scheduling
+	   existing transactions], such that they have valid Posted dates.
+	 o Fix for existing/old data without posted dates.  If we encounter
+	   the condition, fixup the transaction's Posted date to that of the
+	   Entered date.
+	 o Add LOT_IS_CLOSED and LOT_BALANCE query parameter methods
+	 o Fixes for 64-bit architectures.
+	 o Add gncQueryGetBooks() API to return list of books in a query.
+	 o Add INVOICE_POST_LOT query parameter methods
+	 o Add an api to force an event even when events are suspended.
+	   Without such an API, events can be lost if the event system is
+	   suspended when the event comes in.
+	 o Added gnucash wrappers around gnome-print's rotate, translate,
+	   gsave, and grestore APIs.  All to allow sideways printing (by
+	   rotating the image).
+	 o Wrap the new print-session apis.
+	 o Modify the AC_GWRAP_CHECK_GUILE() macro to take an argument, the
+	   g-wrap module directory.  Then actually test that the g-wrap module
+	   loads.  This should detect systems without slib installed.
+	 o New gwrap check macro
+	 o Deal properly when there are no prices for a commodity.
+	 o Supply a start date (as well as an end date) and don't print
+	   invoices that occur prior to the start date or after the end date.
+	   The aging information ignores the start date, but not the end date.
+	   This means the aging information will always be acurate through the
+	   end date (even if all the invoices and payments are not displayed).
+	 o Limit the itemized invoices/payments to the start/end date range,
+	   but print out a "Balance" line if there is a non-zero balance as of
+	   the start date.
+	 o Nikos Charonitakis's account chart updates: added new carloan
+	   account chart, updated account chart.
+	 o Use the correct columns when printing the Gain column, don't reuse
+	   the same column as profit; we want to report different values.
+	 o Don't let the user do anything with the options dialog until
+	   Apply() finishes.
+	 o Had the wrong number of arguments in gnc:account-get-balance-at-date
+	 o Add some (commented out) code to support a start date for computing
+	   the Net Income (aka Net Profit) in the Balance Sheet.
+	 o Move the instantiation of File -> Properties into main-window.scm
+	   (out of business-gnome.scm) for future cases where we might decide to
+	   ship the business modules separately.
+	 o Fix the ofx test program to make sure it links on many weird
+	   platforms.
+	 o When we are asked to reload the report, queue the request, queue a
+	   draw event, and then return immediately.  When the draw event
+	   happens, load the report then.  This lets you hit Apply and then OK
+	   before the report finishes loading.
+	 o Make sure we can find libofx/libofx.h
+	 o Include split transactions in the filtering of the transaction
+	   report.
+	 o Use a 'from' date to better compute the Net Income on the report.
+	 o Change the default Search Operation for numerics from "less than"
+	   to "equals" -- so by default you would search for an exact value.
+	 o "eval" changed API on guile-1.6.  Use the existing API to convert a
+	   delta symbol to a delta time.
+	 o Call eval with the right number of arguments based on early or late
+	   versions.
+	 o Change the date format string to be consistent with other places
+	   (e.g. the check print dialog) and use '%' instead of '~'.
+	 o Make the Bill Due Days option selectable based on the setting of
+	   Notify Bills Due?
+	 o Don't crash if you remove the last entry and then add another one.
+	 o Deal with the case where the first transaction found for a
+	   particular company is a payment
+	 o Also print out any overpayment in the total column.
+	 o Catch errors when running the child reports so we display the
+	   failed report backtrace but also display an error and continue with
+	   the multicolumn report.
+	 
+ 1.8.3  - 03 May 2003
+ 	 o Updated translations: Italian, Swedish, Danish, British,
+	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.
+	 o Turn off the report-total by default
+	 o The Euroland currency rates were inverted in the transfer dialog.
+	 o Chris Morgan's Baysian Matching code, to match transactions based
+	   on Bayesian filtering of previously matched transactions.
+	 o Fix a bug in the account name list when you you filtered down to no
+	   accounts it would ignore the filter.
+	 o The Account Separator option was moved to the Accounts page,
+	   reference correctly.
+	 o Fix the keypress handlers so they work properly for both the text
+	   entry widget and the calendar popup widget.
+	 o Force the cursor to the first line of a transaction split before
+	   disabling "double line" mode in the register.  This prevents the
+	   register refresh code from trying to update a cell that is no longer
+	   visible.
+	 o Fix HBCI close-on-finished checkbutton.
+	 o Add descriptions of new HBCI actions.
+	 o OpenBSD fixes by Todd T. Fries
+	 o New report "income vs. day of week" by Andy Wingo
+	 o Fix a couple strings to improve comments when owners and accounts
+	   are missing.  Direct the user to select them in the report options.
+	 o When building the "name + address" string, check if the company
+	   name and contact name are the same and, if so, only print one of
+	   them.
+	 o Fix the glade settings so resizing the window will properly resize
+	   the widgets.
+	 o Save the entry cells before adding an it to the invoice, otherwise
+	   it wont get sorted properly.
+	 o Add support in business code for the to-charge amount.
+	 o Don't ask the user in the general case when making changes to
+	   entries.  Generally the user should be allowed to make whatever
+	   changes they want without being pestered.
+	 o Guile-1.6 requires empty lists to be quoted.
+	 o Symbols are not strings in guile-1.6.
+	 o Fix "WeekDelta" and add TwoWeekDelta.
+	 o Pop up a dialog if the user tries to transfer from a non-currency
+	   account, and don't let them do it.
+	 o Evaluate the date during get_predicate() in case the user just "hit
+	   return" (and the auto-evaluate didn't happen).
+	 o Fix crash during import of investment accounts.
+	 o Fixes for GCC 3.3 warnings
+	 o Fix HBCI user messages where chip cards were confused with key
+	   files.
+	 o Adapt to latest changes in OpenHBCI CVS.
+	 o Applied Tomas Pospisek's patch to the transaction report.
+	 o Fix the description of gnc:mdi-show-progress.
+	 o Enable changing the "ID" for different business objects.
+	 o Fix the percentage calculations so we don't get GtkCritical
+	   warnings.
+	 o Disable the test-scm-query-import test, since it breaks on
+	   guile-1.6
+	 o Move currency conversion to gnc-pricedb.c
+	 o Improve report for stocks and funds not denominated in report
+	   currency.
+	 o QIF imports don't assume that a date of the form XXXXXXXX is always
+	   YYYYMMDD. Make sure a 4-digit year "makes sense"
+	 o Fix hbci and ofx test for handling --disable correctly.
+	 o Fix openhbci macro again so that it uses a C check program.
+
+ 1.8.2  - 09 March 2003
+ 	 o Updated translations: German, Slovak, Spanish
+	 o Updated HBCI requirement to 0.9.6
+	 o Postgres fix for PG-7.3.x
+	 o More fixes for guile-1.6 support
+	 o Fix QIF Import for split transactions (#105139)
+	 o Remove "display balance in Euro" columns from the main window
+	 o Add "display balance in Report Currency" columns to the main window
+	 o Fix the transfer dialog / exchange-rate dialog so it doesn't round
+	   the values input by the user. (#106332)
+	 o Fix configure so tests wont fail on GCC 3.2.2
+	 o HBCI: avoid sending online transfers twice
+	 o Dont override the user's toolbar style (#102041)
+	 o Import: don't punish transactions with an online ID
+	 o Add engine support for employee expense vouchers
+
+ 1.8.1  - 09 February 2003
+	 o Release of new stable version 1.8.1
+	 o Fixes for qif import crashes
+	 o Update translation po/it.po by Lorenzo Cappelletti
+	 o Remove the tip that says that this is a development version.
+	 o Remove the "development version" string when running "gnucash
+	   --version"
+	 o Add heuristic for duplicate matching by check number.
+	 o Various bug fixes, remove Finance::Quote requirement for rpms
+	   built on RH 8.0
+	 
+ 1.8.0  - 02 February 2003
+ 	 o Release of new stable version 1.8.0
+	 o Fix problem getting quotes from trustnet.
+	 o Add new script that dumps all the data returned by F::Q for a
+	   stock.
+	 o Apply Bill Nottingham's patch to use db4/db_185.h
+	 o Updated translations, po/en_GB.po by Nigel Titley, po/it.po by
+	   Lorenzo Cappelletti
+	 o Fix HBCI problem with negative account balances.
+	 o Add preference (on advanced tab) to enable HBCI debug messages.
+	 o Fix the Recurrence-Frequency example-calendar date calculation to
+	   show upcoming instances correctly.
+	 o Add HBCI user messages about what is supported by the bank.
+	 o Fixes for gcc 3.x build problems with postgresql backend
+	 o Many more fixes for the postgresql backend
+	 o Fix the "bill reminder" so it doesn't create a query if there are
+	   no payables accounts.
+	 o Fix some of the accounts in the tree to be more accurate to the
+	   real world.
+	 o Only set ReadOnly status for Invoices, not Payments.
+	 o Fix several bugs in QIF importer
+	 o Recognize even more error codes from OpenHBCI.
+	 o No longer assume that transaction with type OFX_OTHER are
+	   investment transactions.
+	 o Don't add income accounts to bills, or expense accounts to
+	   invoices.  This should help further reduce user confusion with what
+	   to do when entering invoices.
+	 
  1.7.8  - 20 January 2003
  	 o Welcome to Release Canidate 3
 	 o Fixed build issues introduced in last release
