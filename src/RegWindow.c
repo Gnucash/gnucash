@@ -759,7 +759,23 @@ regRecalculateBalance( RegWindow *regData )
     is_credit = xaccIsAccountInList (credit_acc, regData -> blackacc );
     is_debit  = xaccIsAccountInList (debit_acc,  regData -> blackacc );
 
-    /* increment and/or decrement the running balance as appropriate */
+    /* Increment and/or decrement the running balance as appropriate.
+     * Naively, if there were no stock transactions (or at least,
+     * transactions that recorded only a price), we could simply get 
+     * the amount, and add that to the balance.  However, price 
+     * transactions, where only a price is specified, and the share
+     * amount is zero, makes this a tricky proposition.  A large
+     * number of price transactions interspersed with buy/sell makes
+     * this an even trickier calculation.  The easiest thing to do
+     * is to indirectly derive transaction values from the previously 
+     * computed balances.  Thus, the running balance.  
+     *
+     * Note, however, that this algorithm will provide confusing
+     * results unless all transactions are absolutely ordered.
+     * That is, date order is not enough, if several transactions
+     * occur on the same date:  they MUST be completely disambiguated
+     * and absolutely ordered.
+     */
     if (is_credit) {
       tmp = xaccGetBalance (credit_acc, trans);
       dbalance -= credit_acc -> running_balance;
