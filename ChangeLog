@@ -1,5 +1,13 @@
 2000-04-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* configure.in: removed check for eperl
+
+	* src/reports: removed pathconfig.h.in and Sheet.? (eperl stuff)
+
+	* src/gnome/window-help.c: took out gncReport call (eperl)
+
+	* lib/Makefile.in: took out make dist hack
+
 	* src/register/table-allgui.c: more error checking
 
 	* src/SplitLedger.c: more cleanup. Fix a bug in refreshing a register

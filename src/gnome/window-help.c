@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -15,13 +16,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #include <top-level.h>
@@ -30,7 +30,6 @@
 
 #include "window-help.h"
 #include "window-html.h"
-#include "Sheet.h"
 #include "File.h"
 #include "messages.h"
 #include "util.h"
@@ -172,10 +171,6 @@ helpJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
     /* truncate # from name */
     help_data->htmlfile[label - help_data->htmlfile] = 0x0;
   }
-
-  /* see if the anchor is an "active gnucash page" */
-  if (strstr(help_data->htmlfile, ".phtml"))
-    text = gncReport(help_data->htmlfile);
 
   /* if text to display wasn't specified, use the truncated name to read */
   if (text == NULL)

@@ -1,4 +1,4 @@
-# Makefile -- makefile for xacc/lib
+# Makefile -- makefile for gnucash/lib
 # Copyright (C) 1997 Robin Clark
 # Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
 # 
@@ -13,13 +13,11 @@
 # GNU General Public License for more details. 
 # 
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software 
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
-# 
-#   Author: Robin Clark
-# Internet: rclark@rush.aero.org 
-#  Address: 609 8th Street 
-#           Huntington Beach, CA 92648-4632
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+# Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 include @top_srcdir@/Makefile.init
 
@@ -34,7 +32,7 @@ include @top_srcdir@/Makefile.init
 
 ######################################################################
 # See Makefile.common for information about these variables.
-CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas g-wrap
+CLEAN_SUBDIRS := ComboBox-1.33 Xbae-4.6.2-linas g-wrap
 ######################################################################
 
 all:
@@ -64,19 +62,6 @@ g-wrap-install: g-wrap.configure
 TRASH += g-wrap-install
 
 .PHONY: g-wrap-install
-
-# this make dist is a quick hack to avoid build problems that
-# # naive builders are suffering from.  Doing a 'make dist' makes
-# build problems go away.
-dist:
-	touch g-wrap/aclocal.m4
-	touch g-wrap/configure.in
-	touch g-wrap/Makefile.in
-	touch g-wrap/doc/Makefile.in
-	touch g-wrap/configure
-	touch g-wrap/conf-h.in
-	touch g-wrap/stamp-h.in
-	chmod +x g-wrap/missing
 
 
 motif motif.static: g-wrap-install

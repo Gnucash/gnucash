@@ -70,7 +70,7 @@
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
-    (let ((account-name (string-append "&nbsp;&nbsp;"
+    (let ((account-name (string-append "&nbsp;&nbsp;&nbsp;&nbsp"
                                        (gnc:account-get-full-name
                                         level-2-account)))
           (type-name (gnc:account-get-type-string
@@ -80,14 +80,11 @@
 	account-name type-name (gnc:amount->formatted-string l2-value #f))
        (list "left" "center" "right"))))
 
-  (define (render-level-1-account account l1-value l2-value)
+  (define (render-level-1-account account l1-value)
     (let ((name (gnc:account-get-full-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
       (html-table-row-align
-       (list name type
-             (if l2-value
-                 (gnc:amount->formatted-string l2-value #f)
-                 "&nbsp;")
+       (list name type "&nbsp;"
              (gnc:amount->formatted-string l1-value #f)
 	     "&nbsp;" "&nbsp;")
        (list "left" "center" "right" "right" "right" "right"))))
@@ -147,10 +144,7 @@
                 (l0-collector 'add (l1-collector 'total #f))
                 (let ((level-1-output
                        (render-level-1-account account
-                                               (l1-collector 'total #f)
-                                               (if (> num-children 0)
-                                                   (l2-collector 'total #f)
-                                                   #f))))
+                                               (l1-collector 'total #f))))
                   (l1-collector 'reset #f)
                   (l2-collector 'reset #f)
                   (if (null? childrens-output)
@@ -220,7 +214,7 @@
        report-description
        "<p>"
 
-       "<table cellpadding=2>"
+       "<table cellpadding=1>"
        "<caption><b>" report-name "</b></caption>"
        "<tr>"
        "<th>" (string-db 'lookup 'account-name) "</th>"

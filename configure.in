@@ -140,8 +140,9 @@ fi
 AC_SUBST(QT_TARGET)
 AC_SUBST(QT_STATIC_TARGET)
 
+
 ### --------------------------------------------------------------------------
-### Programs
+### Check for perl
 
 # Check for perl, force version 5
 # AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
@@ -179,29 +180,6 @@ if test ! -d ${PERLINCL}/CORE; then
 fi
 AC_SUBST(PERLINCL)
 
-# Check for eperl (rgmerk)
-# Permits compilation without eperl, but if it can't find eperl you
-# must either use the --with-eperl option or, at a last resort, 
-# it'll use /usr/bin/eperl.
-
-AC_PATH_PROG(EPERL,eperl,no)
-AC_ARG_WITH(eperl,
-  [  --with-eperl=FILE             which eperl executable to use ],
-  EPERL="${with_eperl}")
-
-if test x"$EPERL" = xno; then
-    AC_MSG_WARN([Can't find eperl.  Try using the --with-eperl flag.])
-    EPERL="/usr/bin/eperl"
-fi
-
-# for some reason the code needs both the full path and the basename.
-# these get dumped into src/guile/pathconfig.h
-
-GNC_EXPANDED_EPERL_PATH=$(gnc_recursively_expand_var "${EPERL}")
-EPERL_NAME=`basename $EPERL`
-
-AC_SUBST(GNC_EXPANDED_EPERL_PATH)
-AC_SUBST(EPERL_NAME)
 
 ### -------------------------------------------------------------------
 
@@ -598,7 +576,6 @@ AC_OUTPUT(Makefile
           src/register/Makefile
 	  src/register/gnome/Makefile
           src/reports/Makefile
-          src/reports/pathconfig.h
           src/swig/Makefile
           src/swig/perl5/Makefile
 	  po/Makefile.in
