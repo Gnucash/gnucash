@@ -1,5 +1,7 @@
 2001-03-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/guile/option-util.c (gnc_commit_option): update GUI value
+
 	* src/gnome/gnc-html-guppi.c: new func for shutting down guppi
 
 	* src/gnome/top-level.c (gnc_ui_shutdown): shutdown guppi

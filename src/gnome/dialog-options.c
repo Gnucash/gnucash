@@ -250,7 +250,10 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	symbol_str = gh_symbol2newstr(symbol, NULL);
 	if (safe_strcmp(symbol_str, "relative") == 0)
 	{
-	  index = gnc_option_permissible_value_index(option, gh_vector_ref(value, gh_int2scm(2)));
+	  index =
+            gnc_option_permissible_value_index(option,
+                                               gh_vector_ref(value,
+                                                             gh_int2scm(2)));
 	  if (safe_strcmp(date_option_type, "relative") == 0)
 	  {      
 	    gtk_object_set_data(GTK_OBJECT(option->widget),
@@ -263,7 +266,8 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	  {
 	    GList *widget_list;
 	    GtkWidget *rel_date_widget;
-	    widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+	    widget_list =
+              gtk_container_children(GTK_CONTAINER(option->widget));
 	    rel_date_widget = g_list_nth_data(widget_list,
                                               GNC_RD_WID_REL_WIDGET_POS);
 	    gnc_date_option_set_select_method(option, FALSE, TRUE);
@@ -295,7 +299,8 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	    {
 	      GList *widget_list;
 	      GtkWidget *ab_widget;
-	      widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+	      widget_list =
+                gtk_container_children(GTK_CONTAINER(option->widget));
 	      ab_widget = g_list_nth_data(widget_list,
                                           GNC_RD_WID_AB_WIDGET_POS);
 	      gnc_date_option_set_select_method(option, TRUE, TRUE);
