@@ -103,7 +103,7 @@ MenuItem *
 xaccBuildAccountSubMenu (AccountGroup *grp, 
                          AccountMenu *accData, 
                          int *offset,
-                         int pad) 
+                         int pad)
 {
   MenuItem   *menuList;
   int        i;
@@ -147,11 +147,29 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     menuList[i+pad].accel_text    = NULL;
     menuList[i+pad].callback      = xaccAccountMenuCB;
     menuList[i+pad].callback_data = accData->menuEntry[*offset];
+    menuList[i+pad].subitems      = (MenuItem *) NULL;
 
     (*offset) ++;
-    menuList[i+pad].subitems      = xaccBuildAccountSubMenu (acc->children, accData, offset, 0);
+    if (acc->children) {
+       pad ++;
+       accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
+       accData->menuEntry[*offset]->option = xaccGetAccountID (acc);
+       accData->menuEntry[*offset]->chosen = &(accData->choice);
+       
+       menuList[i+pad].label         = acc->accountName;
+       menuList[i+pad].wclass        = &xmPushButtonWidgetClass;
+       menuList[i+pad].mnemonic      = 0;
+       menuList[i+pad].accelerator   = NULL;
+       menuList[i+pad].accel_text    = NULL;
+       menuList[i+pad].callback      = xaccAccountMenuCB;
+       menuList[i+pad].callback_data = accData->menuEntry[*offset];
+       menuList[i+pad].subitems      = (MenuItem *) NULL;
+
+       (*offset) ++;
+       menuList[i+pad].subitems      = xaccBuildAccountSubMenu (acc->children, accData, offset, 0);
+       }
     }
-  menuList[i+pad] .label= NULL;
+  menuList[i+pad].label= NULL;
   
   return (menuList);
 }
@@ -192,6 +210,7 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
   if (NULL == grp) return NULL;
   
   nacc = xaccGetNumAccounts (grp);
+  nacc *= 2;  /* quick hack to make room for doubled account labels. */
 
   accData = (AccountMenu *) _malloc (sizeof (AccountMenu));
   accData ->choice = -1;
