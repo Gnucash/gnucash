@@ -423,7 +423,8 @@ gsr_setup_table( GNCSplitReg *gsr )
 
   sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gnc_split_register_show_present_divider( sr, TRUE );
-  gnc_ledger_display_refresh( gsr->ledger );
+  /* events should be sufficient to redraw this */
+  /* gnc_ledger_display_refresh( gsr->ledger ); */
   gnc_split_reg_refresh_toolbar( gsr );
 }
 
@@ -1852,7 +1853,10 @@ gnc_split_reg_record (GNCSplitReg *gsr)
     return;
 
   gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
-  gnc_split_register_redraw (reg);
+
+  /* Explicit redraw shouldn't be needed, 
+   * since gui_refresh events should handle this. */
+  /* gnc_split_register_redraw (reg); */
 }
 
 static gboolean
