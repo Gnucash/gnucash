@@ -123,15 +123,9 @@ update to latest  darwin])
 		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
 		mv libtool libtool.old
 		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
-			-e 's|^archive_cmds.*|archive_cmds="$CC
--dynamiclib  \\$allow_undefined_flag -o \\$lib \\$libobjs
-\\$deplibs\\$linker_flags  -install_name \\$rpath/\\$soname
-\\$verstring"|g' \
-			-e
-'s|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$vers
-uffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
-			-e
-'s|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
+			-e 's|^archive_cmds.*|archive_cmds="$CC -dynamiclib \\$allow_undefined_flag -o \\$lib \\$libobjs \\$deplibs\\$linker_flags -install_name \\$rpath/\\$soname \\$verstring"|g' \
+			-e 's|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$versuffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
+			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
 			< libtool.old > libtool
 		rm libtool.old
 		;;
