@@ -63,8 +63,8 @@ Features include:
     It also provides a convenient way of viewing a
     portfolio of many stocks, by showing all transactions
     in that portfolio.
-  - Written in C, with perl, scheme and tcl support for easy
-    configuration and extensibility.
+  - Written in C with embedded scheme support via Guile.
+  - Perl support is optionally available for standalone scripting via SWIG.
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the 
     same file, even if the file is NFS-mounted.
@@ -97,9 +97,12 @@ will give you a taste for Gnome, but most functions will not work.   The qt
 version doesn't compile, most functions are missing.  See below for OS's other
 than Linux/*BSD support.
 
-To be able to use certain features of GnuCash, such as reports and network stock
-price downloads, you must have the following packages below installed.
-RPM's for most of these can be found at http://rufus.w3.org/linux/  
+To be able to use certain features of GnuCash, such as reports and
+network stock price downloads, you must have the following packages
+below installed (in addition to the packages you need to install in
+order to build GnuCash.  See "Building & Installing" below for more
+details).  RPM's for most of these can be found at
+http://rufus.w3.org/linux/
 
 slib    -- scheme libraries for guile.  Need version slib2c0 or later.
 perl    -- Almost any version of perl5 should work.  I run perl-5.004 
@@ -152,9 +155,9 @@ GnuCash responds to the following environment variables:
     guile> (gnc:load "startup.scm")
     guile> (gnc:main)
 
-  which is the same thing that happens if you don't use the --shell
-  option.  This can be helpful when trying to write and test new .scm
-  files.
+  This is the same thing that happens if you don't use this
+  environment variable.  This can be helpful when trying to write and
+  test new .scm files.
 
   GNC_BOOTSTRAP_SCM - the location of the initial bootstrapping scheme code.
 
@@ -162,7 +165,8 @@ GnuCash responds to the following environment variables:
   it should be a string representing a proper scheme list.  Each
   element can either be a string representing a directory, the symbol
   'default which will expand to the default path, or 'current which
-  will expand to the current load-path.
+  will expand to the current load-path at the instant it encounters
+  the symbol.
 
   GNC_DEBUG - enable debugging output.  This allows you to turn on
   debugging earlier in the startup process than you can with --debug.
