@@ -1,3 +1,7 @@
+2001-05-15  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: update docs
+
 2001-05-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm, report/portfolio.scm: major

@@ -1685,6 +1685,36 @@ Set the description field of @var{trans} to @var{desc}.
 @section Accounts
 @tindex Account
 
+An Account is the Engine abstraction of an, well, an account. Accounts
+contain the following pieces of information:
+
+@table @asis
+
+@item A list of Ledger Entries, or Splits
+The list of debits and credits which apply to the Account. The sum of
+all debits and credits is the account balance.
+
+@item A name
+The name of the Account.
+
+@item A description
+A textual description of the Account.
+
+@item A currency
+The commodity that Splits in the account are valued in, i.e., the
+denomination of the 'value' member of Splits in the account.
+
+@item A security
+For Accounts which may contain shares (such as stock accounts),
+the denomination of the 'share quantity' member of Splits in
+the accounts. For accounts which do not contain shares, the
+security is blank, and the share quantities are denominated
+in the Account currency.
+
+@end table
+
+In addition to the above, Accounts contain a key-value pair frame.
+
 
 @node Account Groups, GNCBooks, Accounts, Engine
 @section Account Groups
