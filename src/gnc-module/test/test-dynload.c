@@ -11,8 +11,11 @@
 #include "gnc-module.h"
 
 static void
-guile_main(int argc, char ** argv) {
+guile_main(int argc, char ** argv)
+{
   lt_dlhandle handle;
+
+  lt_dlinit();
 
   printf("  test-dynload.c: testing dynamic linking of libgncmodule ...");
   handle = lt_dlopen("libgncmodule.la");
