@@ -9,7 +9,7 @@ LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/sr
 noinst_PROGRAMS = \
   test-link-module
 
-INCLUDES=-I../../gnc-module ${GLIB_CFLAGS} ${GUILE_CFLAGS}
+INCLUDES=-I../../gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
