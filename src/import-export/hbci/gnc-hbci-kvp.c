@@ -31,6 +31,14 @@
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
 #define HBCI_ACCOUNTS "hbci-accounts"
 
+static void force_account_dirty(Account *acct)
+{
+  /* This is necessary because modifying the KvpFrames doesn't mark
+     accounts dirty, which means the changes wont be propagated to the
+     backend. */
+  xaccAccountSetName(acct, xaccAccountGetName(acct));
+}
+
 /* Account */
 char *gnc_hbci_get_account_accountid (Account *a)
 {
@@ -56,6 +64,7 @@ void gnc_hbci_set_account_accountid (Account *a, const char *id)
   kvp_value *value = kvp_value_new_string (id);
   xaccAccountBeginEdit(a);
   kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_ID, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_bankcode (Account *a, const char *code)
@@ -64,6 +73,7 @@ void gnc_hbci_set_account_bankcode (Account *a, const char *code)
   kvp_value *value = kvp_value_new_string (code);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_BANK_CODE, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_countrycode (Account *a, gint code)
@@ -72,6 +82,7 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
   kvp_value *value = kvp_value_new_gint64 (code);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 gint gnc_hbci_get_account_uid (Account *a)
@@ -86,6 +97,7 @@ void gnc_hbci_set_account_uid (Account *a, gint uid)
   kvp_value *value = kvp_value_new_gint64 (uid);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_UID, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
@@ -100,6 +112,7 @@ void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
   kvp_value *value = kvp_value_new_timespec (time);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_TRANS_RETRIEVAL, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 
