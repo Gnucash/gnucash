@@ -33,19 +33,18 @@ struct _gncInvoice {
   char *	id;
   char *	notes;
   char *	terms;
+  char *	billing_id;
   char *	printname;
   GList * 	entries;
   GncOwner	owner;
+  GncJob *	job;
   Timespec 	date_opened;
   Timespec 	date_posted;
-  Timespec 	date_due;
-  Timespec 	date_paid;
 
   gnc_commodity * common_commodity;
 
   Account * 	posted_acc;
   Transaction * posted_txn;
-  Transaction * paid_txn;
 
   gboolean 	active;
 
@@ -95,6 +94,7 @@ GncInvoice *gncInvoiceCreate (GNCBook *book)
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
   invoice->terms = CACHE_INSERT ("");
+  invoice->billing_id = CACHE_INSERT ("");
 
   invoice->active = TRUE;
 
@@ -114,6 +114,8 @@ void gncInvoiceDestroy (GncInvoice *invoice)
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
+  CACHE_REMOVE (invoice->terms);
+  CACHE_REMOVE (invoice->billing_id);
   g_list_free (invoice->entries);
   remObj (invoice);
 
@@ -162,24 +164,17 @@ void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
   mark_invoice (invoice);
 }
 
-void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date)
-{
-  if (!invoice) return;
-  invoice->date_due = date;
-  mark_invoice (invoice);
-}
-
-void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date)
-{
-  if (!invoice) return;
-  invoice->date_paid = date;
-  mark_invoice (invoice);
-}
-
 void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms)
 {
   if (!invoice) return;
   SET_STR (invoice->terms, terms);
+  mark_invoice (invoice);
+}
+
+void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id)
+{
+  if (!invoice) return;
+  SET_STR (invoice->billing_id, billing_id);
   mark_invoice (invoice);
 }
 
@@ -215,14 +210,6 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
   if (!invoice) return;
 
   invoice->posted_txn = txn;
-  mark_invoice (invoice);
-}
-
-void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn)
-{
-  if (!invoice) return;
-
-  invoice->paid_txn = txn;
   mark_invoice (invoice);
 }
 
@@ -301,22 +288,24 @@ Timespec gncInvoiceGetDatePosted (GncInvoice *invoice)
 
 Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
 {
+  Transaction *txn;
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!invoice) return ts;
-  return invoice->date_due;
-}
-
-Timespec gncInvoiceGetDatePaid (GncInvoice *invoice)
-{
-  Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
-  if (!invoice) return ts;
-  return invoice->date_paid;
+  txn = gncInvoiceGetPostedTxn (invoice);
+  if (!txn) return ts;
+  return xaccTransRetDateDueTS (txn);
 }
 
 const char * gncInvoiceGetTerms (GncInvoice *invoice)
 {
   if (!invoice) return 0;
   return invoice->terms;
+}
+
+const char * gncInvoiceGetBillingID (GncInvoice *invoice)
+{
+  if (!invoice) return 0;
+  return invoice->billing_id;
 }
 
 const char * gncInvoiceGetNotes (GncInvoice *invoice)
@@ -335,12 +324,6 @@ Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->posted_txn;
-}
-
-Transaction * gncInvoiceGetPaidTxn (GncInvoice *invoice)
-{
-  if (!invoice) return NULL;
-  return invoice->paid_txn;
 }
 
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice)
@@ -368,7 +351,7 @@ gboolean gncInvoiceIsDirty (GncInvoice *invoice)
 }
 
 static void
-gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn, char type)
+gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 {
   kvp_frame *kvp;
   kvp_value *value;
@@ -383,19 +366,9 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn, char type)
   value = kvp_value_new_guid (gncInvoiceGetGUID (invoice));
   kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
   kvp_value_delete (value);
-  xaccTransSetTxnType (txn, type);
+  xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
   xaccTransCommitEdit (txn);
-
-  switch (type) {
-  case TXN_TYPE_PAYMENT:
-    gncInvoiceSetPaidTxn (invoice, txn);
-    break;
-  case TXN_TYPE_INVOICE:
-    gncInvoiceSetPostedTxn (invoice, txn);
-    break;
-  default:
-    break;
-  }
+  gncInvoiceSetPostedTxn (invoice, txn);
 }
 
 #define GET_OR_ADD_ACCVAL(list,t_acc,res) { \
@@ -416,7 +389,8 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn, char type)
 }
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-				       Timespec *date, gboolean reverse)
+				       Timespec *post_date, Timespec *due_date,
+				       gboolean reverse)
 {
   Transaction *txn;
   GList *iter;
@@ -440,17 +414,14 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   xaccTransSetCurrency (txn, invoice->common_commodity);
 
   /* Entered and Posted at date */
-  if (date) {
-    xaccTransSetDateEnteredTS (txn, date);
-    xaccTransSetDatePostedTS (txn, date);
-    gncInvoiceSetDatePosted (invoice, *date);
+  if (post_date) {
+    xaccTransSetDateEnteredTS (txn, post_date);
+    xaccTransSetDatePostedTS (txn, post_date);
+    gncInvoiceSetDatePosted (invoice, *post_date);
   }
 
-  /* Set the txn due date to be equal to the invoice */
-  {
-    Timespec ddue = gncInvoiceGetDateDue (invoice);
-    xaccTransSetDateDueTS (txn, &ddue);
-  }
+  if (due_date)
+    xaccTransSetDateDueTS (txn, due_date);
 
   /* Iterate through the entries; sum up everything for each account.
    * then create the appropriate splits in this txn.
@@ -516,92 +487,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   }
 
   /* Now attach this invoice to the txn and account */
-  gncInvoiceAttachInvoiceToTxn (invoice, txn, TXN_TYPE_INVOICE);
+  gncInvoiceAttachInvoiceToTxn (invoice, txn);
   gncInvoiceSetPostedAcc (invoice, acc);
-
-  xaccTransCommitEdit (txn);
-
-  return txn;
-}
-
-Transaction *
-gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
-			Timespec *paid_date)
-{
-  Transaction *txn;
-  gnc_numeric total;
-  Account *acct;
-
-  if (!invoice || !acc) return NULL;
-
-  /* Must have posted before you can pay */
-  g_return_val_if_fail (gncInvoiceGetPostedTxn(invoice), NULL);
-  acct = gncInvoiceGetPostedAcc (invoice);
-  g_return_val_if_fail (acct, NULL);
-
-  /* Determine the value for this payment..  Find the split into
-   * the posted account and pull the value out of that.
-   * XXX: Should the payment value be an argument here?
-   */
-  {
-    GList *l = xaccTransGetSplitList (gncInvoiceGetPostedTxn (invoice));
-
-    for (; l; l=l->next) {
-      Split *s = l->data;
-
-      if (xaccSplitGetAccount (s) == acct) {
-	total = xaccSplitGetValue (s);
-	break;
-      }
-    }
-
-    /* Make sure we found the Split */
-    g_return_val_if_fail (l, NULL);
-  }
-
-  txn = xaccMallocTransaction (invoice->book);
-  xaccTransBeginEdit (txn);
-
-  /* Set Transaction Description (customer), Num (invoice ID), Currency */
-  xaccTransSetDescription
-    (txn, gncOwnerGetName (gncInvoiceGetOwner (invoice)));
-			   
-  xaccTransSetNum (txn, gncInvoiceGetID (invoice));
-  xaccTransSetCurrency (txn, invoice->common_commodity);
-
-  /* Entered and Posted at date */
-  if (paid_date) {
-    xaccTransSetDateEnteredTS (txn, paid_date);
-    xaccTransSetDatePostedTS (txn, paid_date);
-    gncInvoiceSetDatePaid (invoice, *paid_date);
-  }
-
-  /* create the split to the payment account */
-  {
-    Split *split = xaccMallocSplit (invoice->book);
-    /* Set action/memo */
-    xaccSplitSetBaseValue (split, total, invoice->common_commodity);
-    xaccAccountBeginEdit (acc);
-    xaccAccountInsertSplit (acc, split);
-    xaccAccountCommitEdit (acc);
-    xaccTransAppendSplit (txn, split);
-  }
-
-  /* Now create the Payment split for the posted acc, reverse value */
-  {
-    Split *split = xaccMallocSplit (invoice->book);
-
-    /* Set action/memo */
-    xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
-			   invoice->common_commodity);
-    xaccAccountBeginEdit (acct);
-    xaccAccountInsertSplit (acct, split);
-    xaccAccountCommitEdit (acct);
-    xaccTransAppendSplit (txn, split);
-  }
-
-  /* Now attach this invoice to the txn and account */
-  gncInvoiceAttachInvoiceToTxn (invoice, txn, TXN_TYPE_PAYMENT);
 
   xaccTransCommitEdit (txn);
 
@@ -641,12 +528,6 @@ gboolean gncInvoiceIsPosted (GncInvoice *invoice)
   return gncInvoiceDateExists (&(invoice->date_posted));
 }
 
-gboolean gncInvoiceIsPaid (GncInvoice *invoice)
-{
-  if (!invoice) return FALSE;
-  return gncInvoiceDateExists (&(invoice->date_paid));
-}
-
 GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
@@ -681,9 +562,6 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   if (compare) return compare;
 
   compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
-  if (compare) return compare;
-
-  compare = timespec_cmp (&(a->date_paid), &(b->date_paid));
   if (compare) return compare;
 
   return guid_compare (&(a->guid), &(b->guid));
@@ -737,9 +615,8 @@ static const char * _gncInvoicePrintable (gpointer obj)
     if (invoice->printname) g_free (invoice->printname);
 
     invoice->printname =
-      g_strdup_printf ("%s%s%s", invoice->id,
-		       gncInvoiceIsPosted (invoice) ? _(" (posted)") : "",
-		       gncInvoiceIsPaid (invoice) ? _(" (paid)") : "");
+      g_strdup_printf ("%s%s", invoice->id,
+		       gncInvoiceIsPosted (invoice) ? _(" (posted)") : "");
   }
 
   return invoice->printname;
@@ -763,15 +640,14 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_ID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetID },
     { INVOICE_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncInvoiceGetOwner },
     { INVOICE_OPENED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateOpened },
-    { INVOICE_POSTED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePosted },
     { INVOICE_DUE, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateDue },
-    { INVOICE_PAID, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePaid },
+    { INVOICE_POSTED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePosted },
     { INVOICE_IS_POSTED, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPosted },
-    { INVOICE_IS_PAID, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPaid },
+    { INVOICE_TERMS, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetTerms },
+    { INVOICE_BILLINGID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetBillingID },
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
-    { INVOICE_PD_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPaidTxn },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { NULL },

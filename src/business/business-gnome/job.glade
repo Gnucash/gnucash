@@ -261,7 +261,7 @@
 	      <class>GtkLabel</class>
 	      <name>label4</name>
 	      <width>100</width>
-	      <label>Reference</label>
+	      <label>Billing ID</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
@@ -590,7 +590,7 @@
 	<widget>
 	  <class>GtkVButtonBox</class>
 	  <name>vbuttonbox1</name>
-	  <layout_style>GTK_BUTTONBOX_DEFAULT_STYLE</layout_style>
+	  <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
 	  <spacing>10</spacing>
 	  <child_min_width>85</child_min_width>
 	  <child_min_height>27</child_min_height>
@@ -634,21 +634,6 @@
 
 	  <widget>
 	    <class>GtkButton</class>
-	    <name>button25</name>
-	    <can_default>True</can_default>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>gnc_ui_select_job_order_cb</handler>
-	      <data>Job Selector Dialog</data>
-	      <last_modification_time>Thu, 21 Feb 2002 22:22:22 GMT</last_modification_time>
-	    </signal>
-	    <label>View Orders</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	  </widget>
-
-	  <widget>
-	    <class>GtkButton</class>
 	    <name>button26</name>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
@@ -659,6 +644,22 @@
 	      <last_modification_time>Thu, 21 Feb 2002 22:22:39 GMT</last_modification_time>
 	    </signal>
 	    <label>View Invoices</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>order_button</name>
+	    <visible>False</visible>
+	    <can_default>True</can_default>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>clicked</name>
+	      <handler>gnc_ui_select_job_order_cb</handler>
+	      <data>Job Selector Dialog</data>
+	      <last_modification_time>Thu, 21 Feb 2002 22:22:22 GMT</last_modification_time>
+	    </signal>
+	    <label>View Orders</label>
 	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 	</widget>

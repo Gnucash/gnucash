@@ -609,7 +609,8 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   return cw;
 }
 
-CustomerWindow * gnc_ui_customer_window_create (GncCustomer *cust)
+CustomerWindow *
+gnc_ui_customer_window_create (GncCustomer *cust)
 {
   CustomerWindow *cw;
 
@@ -702,6 +703,7 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
 static gboolean
 edit_customer_cb (gpointer *cust_p, gpointer user_data)
 {
+  struct _customer_select_window *sw = user_data;
   GncCustomer *cust;
 
   g_return_val_if_fail (cust_p && user_data, TRUE);
@@ -711,7 +713,8 @@ edit_customer_cb (gpointer *cust_p, gpointer user_data)
   if (!cust)
     return TRUE;
 
-  gnc_ui_customer_window_create (cust);
+  gnc_customer_new_window (sw->parent, gncCustomerGetBook(cust), cust);
+
   return TRUE;
 }
 
@@ -728,11 +731,16 @@ static gboolean
 new_customer_cb (GtkWidget *parent, gpointer *cust_p, gpointer user_data)
 {
   struct _customer_select_window *sw = user_data;
+  CustomerWindow *cw;
+  GncCustomer *created_customer = NULL;
   
   g_return_val_if_fail (cust_p && user_data, TRUE);
 
-  *cust_p = gnc_customer_new (parent, sw->book);
-  return sw->no_close;
+  cw = gnc_customer_new_window (sw->parent, sw->book, NULL);
+
+  *cust_p = cw_get_customer (cw);
+
+  return TRUE;
 }
 
 static GncCustomer *
@@ -746,7 +754,7 @@ gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
     { N_("Select Customer"), select_customer_cb},
     { N_("View/Edit Customer"), edit_customer_cb},
     { N_("Customer Jobs"), jobs_customer_cb},
-    { N_("Customer Orders"), order_customer_cb},
+    //    { N_("Customer Orders"), order_customer_cb},
     { N_("Customer Invoices"), invoice_customer_cb},
     { NULL },
   };

@@ -76,7 +76,8 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (edit),
 				   owner->owner.undefined);
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
-  gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
+  if (label)
+    gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
 
   return edit;
 }
@@ -85,7 +86,6 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 				     GNCBook *book, GncOwner *owner)
 {
-  g_return_val_if_fail (label != NULL, NULL);
   g_return_val_if_fail (hbox != NULL, NULL);
   g_return_val_if_fail (book != NULL, NULL);
   g_return_val_if_fail (owner != NULL, NULL);
@@ -97,7 +97,6 @@ GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
 				   GNCBook *book, GncOwner *owner)
 {
-  g_return_val_if_fail (label != NULL, NULL);
   g_return_val_if_fail (hbox != NULL, NULL);
   g_return_val_if_fail (book != NULL, NULL);
   g_return_val_if_fail (owner != NULL, NULL);

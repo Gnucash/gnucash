@@ -82,11 +82,12 @@ static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 {
   GNCSearchCallbackButton *cb;
-  gboolean res;
+  gboolean res = FALSE;
 
   cb = gtk_object_get_data (GTK_OBJECT (button), "data");
 
-  res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+  if (cb->cb_fcn)
+    res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
 
   /* Destroy the display if asked */
   if (!res)
@@ -336,11 +337,13 @@ static void
 search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 {
   gpointer res = NULL;
-  gboolean retval;
+  gboolean retval = FALSE;
 
   g_return_if_fail (sw->new_item_cb);
 
-  retval = (sw->new_item_cb)(sw->dialog, &res, sw->user_data);
+  if (sw->new_item_cb)
+    retval = (sw->new_item_cb)(sw->dialog, &res, sw->user_data);
+
   if (res) {
     sw->selected_item = res;
     if (!retval)
@@ -776,6 +779,40 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   }
 
   return sw;
+}
+
+/* Register an on-close signal with the Search Dialog */
+guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
+					  GtkSignalFunc func,
+					  gpointer user_data)
+{
+  g_return_val_if_fail (sw, 0);
+  g_return_val_if_fail (func, 0);
+  g_return_val_if_fail (user_data, 0);
+
+  return gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
+			     func, user_data);
+
+}
+
+/* Un-register the signal handlers with the Search Dialog */
+void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
+{
+  g_return_if_fail (sw);
+  g_return_if_fail (user_data);
+
+  gtk_signal_disconnect_by_data (GTK_OBJECT (sw->dialog), user_data);  
+}
+
+/* Clear all callbacks with this Search Window */
+void gnc_search_dialog_clear_callbacks (GNCSearchWindow *sw)
+{
+  g_return_if_fail (sw);
+
+  /* XXX */
+  sw->result_cb = NULL;
+  sw->new_item_cb = NULL;
+  sw->user_data = NULL;
 }
 
 static int

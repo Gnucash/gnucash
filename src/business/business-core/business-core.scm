@@ -2,7 +2,7 @@
 (use-modules (g-wrapped gw-business-core))
 
 ; return a string which is basically:
-;    contact \n name \n addr1 \n addr2 \n addr3 \n addr4
+;    name \n Attn: contact \n addr1 \n addr2 \n addr3 \n addr4
 ;
 ; But only include the strings that really exist.
 ;
@@ -21,8 +21,8 @@
 
   (let ((lst '()))
 
-    (set! lst (add-if-exists lst (gnc:address-get-name addr)))
     (set! lst (add-if-exists lst name))
+    (set! lst (add-if-exists lst (gnc:address-get-name addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
@@ -30,7 +30,37 @@
 
     (build-string lst)))
 
+(define (gnc:owner-get-name owner)
+  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+	       (gnc:owner-get-type owner) #f)))
+    (case type
+      ((gnc-owner-customer)
+       (let ((c (gnc:owner-get-customer owner)))
+	 (gnc:customer-get-name c)))
+      ((gnc-owner-vendor)
+       (let ((v (gnc:owner-get-vendor owner)))
+	  (gnc:vendor-get-name v)))
+      ((gnc-owner-job)
+       (gnc:owner-get-name (gnc:job-get-owner
+			    (gnc:owner-get-job owner))))
+      (else ""))))
+
 (define (gnc:owner-get-address owner)
+  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+	       (gnc:owner-get-type owner) #f)))
+    (case type
+      ((gnc-owner-customer)
+       (let ((c (gnc:owner-get-customer owner)))
+	 (gnc:customer-get-addr c)))
+      ((gnc-owner-vendor)
+       (let ((v (gnc:owner-get-vendor owner)))
+	 (gnc:vendor-get-addr v)))
+      ((gnc-owner-job)
+       (gnc:owner-get-address (gnc:job-get-owner
+			       (gnc:owner-get-job owner))))
+      (else ""))))
+
+(define (gnc:owner-get-address-dep owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
 	       (gnc:owner-get-type owner) #f)))
     (case type
@@ -68,6 +98,8 @@
 (define (gnc:entry-type-percent-p type)
   (or (= type 1) (= type 3)))
 
+(export gnc:owner-get-name)
 (export gnc:owner-get-address)
+(export gnc:owner-get-address-dep)
 (export gnc:owner-get-owner-id)
 (export gnc:entry-type-percent-p)

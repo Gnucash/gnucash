@@ -260,8 +260,13 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Billing ID")
+    "ta" (N_ "Display the billing id?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Invoice Notes")
-    "t" (N_ "Display the invoice notes?") #f))
+    "tb" (N_ "Display the invoice notes?") #f))
 
   (gnc:register-inv-option
    (gnc:make-text-option
@@ -412,7 +417,7 @@
                          (line-helper rest)))))
   (line-helper (string->list string)))
 
-(define (make-client-table address orders)
+(define (make-client-table owner orders)
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-style!
      table "table"
@@ -422,7 +427,7 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand address #\newline "<br>")))
+      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
     (gnc:html-table-append-row!
      table
      (list "<br>"))
@@ -475,8 +480,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (gnc:option-value
-       (gnc:lookup-global-option "User Info" "User Address"))))
+      (string-expand
+       (gnc:option-value
+	(gnc:lookup-global-option "User Info" "User Address"))
+       #\newline "<br>")))
     (gnc:html-table-append-row!
      table
      (list (date->string (current-date) date-format)))
@@ -538,10 +545,22 @@
 
     (gnc:html-document-add-object!
      document
-     (make-client-table (gnc:owner-get-address owner) orders))
+     (make-client-table owner orders))
 
     (make-break! document)
     (make-break! document)
+
+    (if (opt-val "Display" "Billing ID")
+	(let ((billing-id (gnc:invoice-get-billing-id invoice)))
+	  (if (and billing-id (> (string-length billing-id) 0))
+	      (begin
+		(gnc:html-document-add-object!
+		 document
+		 (gnc:make-html-text
+		  (string-append
+		   (_ "Reference") ":&nbsp;" 
+		   (string-expand billing-id #\newline "<br>"))))
+		(make-break! document)))))
 
     (if (opt-val "Display" "Invoice Terms")
 	(let ((terms (gnc:invoice-get-terms invoice)))

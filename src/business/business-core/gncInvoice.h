@@ -26,9 +26,8 @@ void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
-void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date);
-void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms);
+void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
@@ -45,14 +44,13 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
 Timespec gncInvoiceGetDatePosted (GncInvoice *invoice);
 Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
-Timespec gncInvoiceGetDatePaid (GncInvoice *invoice);
 const char * gncInvoiceGetTerms (GncInvoice *invoice);
+const char * gncInvoiceGetBillingID (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
-Transaction * gncInvoiceGetPaidTxn (GncInvoice *invoice);
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
@@ -65,15 +63,9 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice);
  */
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-			 Timespec *posted_date, gboolean reverse);
+			 Timespec *posted_date, Timespec *due_date,
+			 gboolean reverse);
 
-
-/* Pay this invoice, by creating a split from the posted_acc to the
- * supplied (bank) account, occuring at the specified paid_date.
- */
-Transaction *
-gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
-			Timespec *paid_date);
 
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
@@ -91,12 +83,11 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_OPENED	"date_opened"
 #define INVOICE_POSTED	"date_posted"
 #define INVOICE_DUE	"date_due"
-#define INVOICE_PAID	"date_paid"
 #define INVOICE_IS_POSTED	"is_posted?"
-#define INVOICE_IS_PAID	"is_paid?"
+#define INVOICE_TERMS	"terms"
+#define INVOICE_BILLINGID	"billing_id"
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
-#define INVOICE_PD_TXN	"paid_txn"
 
 #endif /* GNC_INVOICE_H_ */

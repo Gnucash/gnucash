@@ -449,11 +449,27 @@ static char * get_distype_help (VirtualLocation virt_loc, gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
   const char *help;
+  gint type;
 
-  help = gnc_table_get_entry (ledger->table, virt_loc);
-  if (!help || *help == '\0')
-    help = _("Select the Discount type");
+  type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
 
+  switch (type) {
+  case GNC_ENTRY_INTERP_VALUE:
+    help = _("Discount Type: Monetary Value");
+    break;
+  case GNC_ENTRY_INTERP_PERCENT:
+    help = _("Discount Type: Percent");
+    break;
+  case GNC_ENTRY_INTERP_VALUE | GNC_ENTRY_PRETAX_FLAG:
+    help = _("Discount Type: Pre-Tax Monetary Value");
+    break;
+  case GNC_ENTRY_INTERP_PERCENT | GNC_ENTRY_PRETAX_FLAG:
+    help = _("Discount Type: Pre-Tax Percent");
+    break;
+  default:
+    help = _("Select the Discount Type");
+    break;
+  }
   return g_strdup (help);
 }
 
@@ -497,11 +513,21 @@ static char * get_taxtype_help (VirtualLocation virt_loc, gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
   const char *help;
+  gint type;
 
-  help = gnc_table_get_entry (ledger->table, virt_loc);
-  if (!help || *help == '\0')
+  type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+
+  switch (type) {
+  case GNC_ENTRY_INTERP_VALUE:
+    help = _("Tax Type: Monetary Value");
+    break;
+  case GNC_ENTRY_INTERP_PERCENT:
+    help = _("Tax Type: Percent");
+    break;
+  default:
     help = _("Select the Tax Type");
-
+    break;
+  }
   return g_strdup (help);
 }
 
@@ -526,20 +552,18 @@ static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
   GncEntryLedger *ledger = user_data;
   const char *help;
 
-  help = gnc_table_get_entry (ledger->table, virt_loc);
-  if (!help || *help == '\0')
-    switch (ledger->type) {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
-      help = _("Is this entry Invoiced?");
-      break;
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
-      help = _("Include this entry on this invoice?");
-      break;
-    default:
-      help = _("Unknown EntryLedger Type");
-    }
+  switch (ledger->type) {
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+    help = _("Is this entry Invoiced?");
+    break;
+  case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_INVOICE_VIEWER:
+    help = _("Include this entry on this invoice?");
+    break;
+  default:
+    help = _("Unknown EntryLedger Type");
+  }
 
   return g_strdup (help);
 }

@@ -30,22 +30,6 @@
 						last-cust)
 					       (gnc:get-current-book)))))
 
-    (define new-order-item
-      (gnc:make-menu-item (N_ "New Order")
-			  (N_ "New Order")
-			  (list "Extensions" "Customers" "")
-			  (lambda ()
-			    (gnc:order-new #f last-cust
-					   (gnc:get-current-book)))))
-
-    (define find-order-item
-      (gnc:make-menu-item (N_ "Find Order")
-			  (N_ "Find Order")
-			  (list "Extensions" "Customers" "")
-			  (lambda ()
-			    (gnc:order-find #f last-cust
-					    (gnc:get-current-book)))))
-
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Invoice")
 			  (N_ "New Invoice")
@@ -86,8 +70,6 @@
     (gnc:add-extension new-job-item)
     (gnc:add-extension find-invoice-item)
     (gnc:add-extension new-invoice-item)
-    (gnc:add-extension find-order-item)
-    (gnc:add-extension new-order-item)
     (gnc:add-extension find-customer-item)
     (gnc:add-extension new-customer-item)
     ))
@@ -115,22 +97,6 @@
 			    (gnc:vendor-find (gnc:owner-get-vendor
 					      last-vendor)
 					     (gnc:get-current-book)))))
-
-    (define new-order-item
-      (gnc:make-menu-item (N_ "New Order")
-			  (N_ "New Order")
-			  (list "Extensions" "Vendors" "")
-			  (lambda ()
-			    (gnc:order-new #f last-vendor
-					   (gnc:get-current-book)))))
-
-    (define find-order-item
-      (gnc:make-menu-item (N_ "Find Order")
-			  (N_ "Find Order")
-			  (list "Extensions" "Vendors" "")
-			  (lambda ()
-			    (gnc:order-find #f last-vendor
-					    (gnc:get-current-book)))))
 
     (define new-invoice-item
       (gnc:make-menu-item (N_ "New Invoice")
@@ -172,8 +138,6 @@
     (gnc:add-extension new-job-item)
     (gnc:add-extension find-invoice-item)
     (gnc:add-extension new-invoice-item)
-    (gnc:add-extension find-order-item)
-    (gnc:add-extension new-order-item)
     (gnc:add-extension find-vendor-item)
     (gnc:add-extension new-vendor-item)
     ))
@@ -235,7 +199,6 @@
 				 (invoice (gnc:invoice-create book))
 				 (owner (gnc:owner-create))
 				 (job (gnc:job-create book))
-				 (order (gnc:order-create book))
 				 (group (gnc:book-get-group book))
 				 (inc-acct (gnc:malloc-account book))
 				 (bank-acct (gnc:malloc-account book))
@@ -274,13 +237,6 @@
 			    ;; MODIFY THE OWNER
 			    (gnc:owner-init-job owner job)
 
-			    ;; Create the Order
-			    (gnc:order-set-id order "001342")
-			    (gnc:order-set-owner order owner)
-			    (gnc:order-set-reference order "Customer's ref#")
-			    (gnc:order-set-date-opened
-			     order (cons (current-time) 0))
-			    
 			    ;; Create the A/R account
 			    (gnc:account-set-type ar-acct 'receivable)
 			    (gnc:account-set-name ar-acct "A/R")
@@ -308,9 +264,6 @@
 			    (gnc:account-set-commodity tax-acct
 						       (gnc:default-currency))
 			    (gnc:group-insert-account group tax-acct)
-
-			    ;; Launch the order editor
-			    (gnc:order-edit order)
 
 			    ;; Launch the invoice editor
 			    (gnc:invoice-edit invoice)

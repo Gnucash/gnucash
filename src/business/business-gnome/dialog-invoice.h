@@ -15,6 +15,7 @@ typedef struct _invoice_window InvoiceWindow;
 
 /* Create an invoice window */
 InvoiceWindow * gnc_ui_invoice_window_create (GncInvoice *invoice);
+InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 
 void gnc_invoice_find (GncInvoice *start, GncOwner *owner, GNCBook *book);
 

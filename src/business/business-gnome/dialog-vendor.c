@@ -610,7 +610,7 @@ gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
     { N_("Select Vendor"), select_vendor_cb},
     { N_("View/Edit Vendor"), edit_vendor_cb},
     { N_("Vendor Jobs"), jobs_vendor_cb},
-    { N_("Vendor Orders"), order_vendor_cb},
+    //    { N_("Vendor Orders"), order_vendor_cb},
     { N_("Vendor Invoices"), invoice_vendor_cb},
     { NULL },
   };

@@ -364,6 +364,12 @@ gnc_job_select (GtkWidget * parent, GncJob *start_job,
     gtk_widget_hide_all (wid);
   }
 
+  /* XXX: Hide the Order Button */
+  {
+    GtkWidget *wid = glade_xml_get_widget (xml, "order_button");
+    gtk_widget_hide_all (wid);
+  }
+
   gtk_main();
 
   /* exit */

@@ -505,19 +505,19 @@
 
   (gw:wrap-function
    ws
-   'gnc:invoice-get-date-paid
-   '<gnc:time-pair>
-   "gncInvoiceGetDatePaid"
-   '((<gnc:GncInvoice*> invoice))
-   "Return the Date the invoice was paid")
-
-  (gw:wrap-function
-   ws
    'gnc:invoice-get-terms
    '(<gw:mchars> callee-owned const)
    "gncInvoiceGetTerms"
    '((<gnc:GncInvoice*> invoice))
    "Return the invoice's Terms")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-billing-id
+   '(<gw:mchars> callee-owned const)
+   "gncInvoiceGetBillingID"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's Billing ID")
 
   (gw:wrap-function
    ws

@@ -61,13 +61,11 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_owner_string "invoice:owner"
 #define invoice_opened_string "invoice:opened"
 #define invoice_posted_string "invoice:posted"
-#define invoice_due_string "invoice:due"
-#define invoice_paid_string "invoice:paid"
 #define invoice_terms_string "invoice:terms"
+#define invoice_billing_id_string "invoice:billing_id"
 #define invoice_notes_string "invoice:notes"
 #define invoice_active_string "invoice:active"
 #define invoice_posttxn_string "invoice:posttxn"
-#define invoice_paidtxn_string "invoice:paidtxn"
 #define invoice_postacc_string "invoice:postacc"
 #define invoice_commodity_string "invoice:commodity"
 
@@ -110,12 +108,10 @@ invoice_dom_tree_create (GncInvoice *invoice)
 
     maybe_add_timespec (ret, invoice_posted_string,
 			gncInvoiceGetDatePosted (invoice));
-    maybe_add_timespec (ret, invoice_due_string,
-			gncInvoiceGetDateDue (invoice));
-    maybe_add_timespec (ret, invoice_paid_string,
-			gncInvoiceGetDatePaid (invoice));
     
     maybe_add_string (ret, invoice_terms_string, gncInvoiceGetTerms (invoice));
+    maybe_add_string (ret, invoice_billing_id_string,
+		      gncInvoiceGetBillingID (invoice));
     maybe_add_string (ret, invoice_notes_string, gncInvoiceGetNotes (invoice));
 
     xmlAddChild(ret, int_to_dom_tree(invoice_active_string,
@@ -124,11 +120,6 @@ invoice_dom_tree_create (GncInvoice *invoice)
     txn = gncInvoiceGetPostedTxn (invoice);
     if (txn)
       xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
-					  xaccTransGetGUID (txn)));
-
-    txn = gncInvoiceGetPaidTxn (invoice);
-    if (txn)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_paidtxn_string,
 					  xaccTransGetGUID (txn)));
 
     acc = gncInvoiceGetPostedAcc (invoice);
@@ -239,27 +230,19 @@ invoice_posted_handler (xmlNodePtr node, gpointer invoice_pdata)
 }
 
 static gboolean
-invoice_due_handler (xmlNodePtr node, gpointer invoice_pdata)
-{
-    struct invoice_pdata *pdata = invoice_pdata;
-
-    return set_timespec (node, pdata->invoice, gncInvoiceSetDateDue);
-}
-
-static gboolean
-invoice_paid_handler (xmlNodePtr node, gpointer invoice_pdata)
-{
-    struct invoice_pdata *pdata = invoice_pdata;
-
-    return set_timespec (node, pdata->invoice, gncInvoiceSetDatePaid);
-}
-
-static gboolean
 invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
 
     return set_string(node, pdata->invoice, gncInvoiceSetTerms);
+}
+
+static gboolean
+invoice_billing_id_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+    struct invoice_pdata *pdata = invoice_pdata;
+
+    return set_string(node, pdata->invoice, gncInvoiceSetBillingID);
 }
 
 static gboolean
@@ -302,23 +285,6 @@ invoice_posttxn_handler (xmlNodePtr node, gpointer invoice_pdata)
 }
 
 static gboolean
-invoice_paidtxn_handler (xmlNodePtr node, gpointer invoice_pdata)
-{
-    struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
-    Transaction *txn;
-
-    guid = dom_tree_to_guid(node);
-    g_return_val_if_fail (guid, FALSE);
-    txn = xaccTransLookup (guid, pdata->book);
-    g_free (guid);
-    g_return_val_if_fail (txn, FALSE);
-
-    gncInvoiceSetPaidTxn (pdata->invoice, txn);
-    return TRUE;
-}
-
-static gboolean
 invoice_postacc_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
@@ -355,13 +321,11 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_owner_string, invoice_owner_handler, 1, 0 },
     { invoice_opened_string, invoice_opened_handler, 1, 0 },
     { invoice_posted_string, invoice_posted_handler, 0, 0 },
-    { invoice_due_string, invoice_due_handler, 0, 0 },
-    { invoice_paid_string, invoice_paid_handler, 0, 0 },
     { invoice_terms_string, invoice_terms_handler, 0, 0 },
+    { invoice_billing_id_string, invoice_billing_id_handler, 0, 0 },
     { invoice_notes_string, invoice_notes_handler, 0, 0 },
     { invoice_active_string, invoice_active_handler, 1, 0 },
     { invoice_posttxn_string, invoice_posttxn_handler, 0, 0 },
-    { invoice_paidtxn_string, invoice_paidtxn_handler, 0, 0 },
     { invoice_postacc_string, invoice_postacc_handler, 0, 0 },
     { invoice_commodity_string, invoice_commodity_handler, 1, 0 },
     { NULL, 0, 0, 0 }

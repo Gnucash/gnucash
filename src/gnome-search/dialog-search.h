@@ -57,6 +57,16 @@ GNCSearchWindow * gnc_search_dialog_create (GNCIdTypeConst obj_type,
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_test (void);
 
+/* Register an on-close signal with the Search Dialog */
+guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
+					  GtkSignalFunc func,
+					  gpointer user_data);
+
+/* Un-register the signal handlers with the Search Dialog */
+void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data);
+
+/* Clear all callbacks with this Search Window */
+void gnc_search_dialog_clear_callbacks (GNCSearchWindow *sw);
 
 /* Use this function to choose (and return) an object.
  *
