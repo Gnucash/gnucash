@@ -2,7 +2,8 @@
 # created by Terry Boldt 3-16-2000
 #
 
-CFLAGS = -O3
+GLIB_CFLAGS = `glib-config --cflags`
+CFLAGS = -O3 $(GLIB_CFLAGS)
 #CFLAGS = -g
 
 CC = gcc
@@ -12,7 +13,7 @@ all: financial fini
 HDRS = finproto.h \
 	fin_static_proto.h\
 	fin_spl_protos.h\
-	finvar.h		
+	finvar.h
 
 OBJSM = fin.o\
 	amort_prt.o\
@@ -27,11 +28,11 @@ OBJSI = fin.o \
 
 financial:  $(OBJSM)
 		@echo "linking"
-		$(CC) -o $@ $(OBJSM)
+		$(CC) `glib-config --libs` -o $@ $(OBJSM)
 
 fini:	$(OBJSI)
 		@echo "linking"
-		$(CC) -o $@ $(OBJSI)
+		$(CC) `glib-config --libs` -o $@ $(OBJSI)
 
 fin.o:	fin.c $(HDRS)
 

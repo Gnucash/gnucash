@@ -34,6 +34,7 @@
 #define INT_TYPE    '\x001'
 #define DBL_TYPE    '\x002'
 
+#define PARSER_NO_ERROR     0
 #define UNBALANCED_PARENS   1
 #define STACK_OVERFLOW      2
 #define STACK_UNDERFLOW     3

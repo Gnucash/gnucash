@@ -126,9 +126,7 @@ noinst_HEADERS =    finvar.h   finproto.h   fin_spl_protos.h   fin_static_proto.
 EXTRA_DIST =    .cvsignore   README   amort_opt.c   amort_prt.c   fin-interactive.c   fin-main.c
 
 
-CFLAGS = @CFLAGS@
-
-INCLUDES = 
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

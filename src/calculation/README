@@ -665,9 +665,9 @@ functions in everyday life.
 
 <<<<<<<<<<------------------------------------------------------------>>>>>>>>
 
-The only thing left to describe is the expression
-parser/evaluator. The expression parser/evaluator is contained in the
-file "expression_parser.c".
+The only thing left to describe is the expression parser/evaluator.
+The expression parser/evaluator is contained in the file
+"expression_parser.c".
 
 Before describing the parser per se, I want to describe the structures
 used to contain the results returned from the parser. The structure is
@@ -784,9 +784,9 @@ If the returned variable value is not named, i.e., "variable_name ==
 NULL", then the user/caller is responsible for freeing the memory used
 by the internal representation of the numeric value.  If, however,
 "variable_name != NULL", freeing the memory used by the internal
-numeric representation will cause a segmentation fault later, when the
+numeric representation will cause a segmentation fault later, when
 parser attempts to free the memory through a call to
-"free_numeric". In addition, freeing the memory will probably
+the "free_numeric". In addition, freeing the memory will probably
 invalidate the numeric value contained therein and lead to pernicuous
 results when the value is used.
 
@@ -891,20 +891,20 @@ would all be defined.
 
 There are six functions needed to use the parser/evaluator:
 
-Note: in the last five functions, in the function paramter (void *vp),
-"vp" is the pointer returned by the "init_parser" function.
+Note: in the last five functions, in the function paramter (parse_env_ptr pe),
+"pe" is the pointer returned by the "init_parser" function.
 
-void *init_parser(
-                  var_store_ptr  predefined_vars,
-                  unsigned char  radix_point,
-                  void          *trans_numeric(unsigned char  *digit_str,
-                                               unsigned char   radix_point,
-                                               unsigned char **rstr),
-                  void          *numeric_ops(unsigned char  op_sym,
-                                             void          *left_value,
-                                             void          *right_value),
-                  void          *negate_numeric(void *value),
-                  void           free_numeric(void *numeric_value));
+parser_env_ptr
+init_parser(var_store_ptr  predefined_vars,
+            unsigned char  radix_point,
+            void                  *trans_numeric(unsigned char  *digit_str,
+                                                 unsigned char   radix_point,
+                                                 unsigned char **rstr),
+            void          *numeric_ops(unsigned char  op_sym,
+                                       void          *left_value,
+                                       void          *right_value),
+            void          *negate_numeric(void *value),
+            void           free_numeric(void *numeric_value));
 
 This function is called by the gnucash module/function/whatever to
 initialize the parser. The parser returns a pointer to a structure
@@ -925,15 +925,13 @@ directly, since it may and could change in the future.
            I descibed above for the internal numeric representation desired
            by the calling function(s).
 
-void exit_parser(
-                 void *vp);
+void exit_parser(parser_env_ptr pe);
 
 This function is called to exit the parser and free all dynamically
 allocated memory used by the parser for an internal stack and user
 defined variables.
 
-unsigned get_parse_error(
-                         void *vp);
+unsigned get_parse_error(parser_env_ptr pe);
 
 Whenever the parser encounters an error in parsing/evaluating a
 string, it returns a NULL pointer instead of a valid pointer to a
@@ -943,8 +941,7 @@ the "finvar.h" file. A function "parse_error" has been defined in the
 file "fin-interactive.c" illustrating how to use this function and
 pin-point for the user the exact location of the error.
 
-var_store_ptr get_vars(
-                       void *vp)
+var_store_ptr get_vars(parser_env_ptr pe)
 
 This function returns a pointer to a linked list of variable storage
 structures containing the user defined named variables if any
@@ -954,19 +951,17 @@ function is contained in the "main" function in the
 variable names. The numeric values may be altered if the calling
 function really knows what it is doing.
 
-unsigned delete_var(
-                    unsigned char *var_name,
-                    void *vp);
+unsigned delete_var(unsigned char *var_name,
+                    parse_env_ptr pe);
 
 This function will delete the user defined named variable with a name
 identical to the name string passed in the first parameter. If no user
 defined variable exists with an identical name, zero, 0, returned. If
 the delete operation is successful, one, 1, is returned.
 
-unsigned char *parse_string(
-                            var_store_ptr value,
+unsigned char *parse_string(var_store_ptr value,
                             unsigned char *string,
-                            void *vp);
+                            parser_env_ptr pe);
 
 This function parses the string passed in the second parameter and
 returns a pointer to the last character not recognized upon a parsing

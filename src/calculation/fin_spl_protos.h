@@ -3,7 +3,7 @@
 /* expression_parser.c
  */
 /* Line Number:  344 */
-void          *init_parser(
+parser_env_ptr init_parser(
                            var_store_ptr  predefined_vars,
                            unsigned char  radix_point,
                            unsigned char  group_char,

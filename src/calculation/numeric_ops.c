@@ -30,7 +30,6 @@
 #include <float.h>
 #include <math.h>
 
-
 #define NUMERIC_OPS_STATICS
 #include "finvar.h"
 
@@ -214,7 +213,7 @@ unsigned char **endstr)           /* where to return pointer to first unrecogniz
             	rslt->value.dbl_value = dblval;
         	} /* endif */
     	  } else {
-    	    if ( !sign && (inum == LONG_MIN) || err ) {
+    	    if ( (!sign && (inum == LONG_MIN)) || err ) {
         		inum = LONG_MIN + sign;
 		        errno = ERANGE;
 		      } else {

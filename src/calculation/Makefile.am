@@ -20,6 +20,4 @@ EXTRA_DIST = \
   fin-interactive.c \
   fin-main.c
 
-CFLAGS = @CFLAGS@
-
-INCLUDES =
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
