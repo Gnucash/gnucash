@@ -35,6 +35,20 @@
 #include "gnc-hbci-utils.h"
 #include "dialog-hbcitrans.h"
 
+
+static void 
+bal_print_debug(const char *name,
+		const HBCI_Value *val,
+		gboolean negative,
+		time_t tt)
+{
+  char *str = HBCI_Value_toReadableString (val);
+  printf("GetBalance: %s%s %s at date %s",
+	 (negative ? "-" : ""), str, 
+	 name, ctime(&tt));
+  free (str);
+}
+
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 {
@@ -109,38 +123,45 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     {
       const HBCI_AccountBalance *acc_bal;
       const HBCI_Balance *noted_bal, *booked_bal;
-      const HBCI_Value *noted_val, *booked_val;
-      time_t noted_tt, booked_tt;
-      char *noted_str, *booked_str;
-      gboolean noted_debit, booked_debit;
+      const HBCI_Value *booked_val; 
+      gboolean booked_debit;
+      time_t balance_tt, noted_tt, booked_tt;
       gboolean dialogres;
 	    
       acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
-
-      noted_bal = HBCI_AccountBalance_notedBalance (acc_bal);
-      noted_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (noted_bal), 
-					  HBCI_Balance_time (noted_bal));
-      noted_val = HBCI_Balance_value (noted_bal);
-      noted_debit = HBCI_Balance_isDebit (noted_bal);
-      noted_str = HBCI_Value_toReadableString (noted_val);
+      balance_tt = 
+	HBCI_DateTime_to_time_t (HBCI_AccountBalance_date (acc_bal), 
+				 HBCI_AccountBalance_time (acc_bal));
 
       booked_bal = HBCI_AccountBalance_bookedBalance (acc_bal);
       booked_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (booked_bal), 
 					   HBCI_Balance_time (booked_bal));
       booked_val = HBCI_Balance_value (booked_bal);
-      booked_debit = HBCI_Balance_isDebit (booked_bal);
-      booked_str = HBCI_Value_toReadableString (booked_val);
+      booked_debit = HBCI_Balance_isDebit (booked_bal),
 
-      printf("Noted balance: %s%s for account no. %s at date %s",
-	     (noted_debit ? "-" : ""),
-	     noted_str, 
-	     HBCI_Account_accountId (h_acc),
-	     ctime(&noted_tt));
-      printf("Booked balance: %s%s for account no. %s at date %s",
-	     (booked_debit ? "-" : ""),
-	     booked_str,
-	     HBCI_Account_accountId (h_acc),
-	     ctime(&booked_tt));
+      noted_bal = HBCI_AccountBalance_notedBalance (acc_bal);
+      noted_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (noted_bal), 
+					  HBCI_Balance_time (noted_bal));
+
+      printf("GetBalance: Balances for account %s :\n",
+	     HBCI_Account_accountId (h_acc));
+      bal_print_debug("Booked balance",
+		      booked_val,
+		      booked_debit,
+		      booked_tt);
+      bal_print_debug("Noted balance",
+		      HBCI_Balance_value (noted_bal),
+		      HBCI_Balance_isDebit (noted_bal),
+		      noted_tt);
+      bal_print_debug("Bank Line", 
+		      HBCI_AccountBalance_bankLine (acc_bal), FALSE,
+		      balance_tt);
+      bal_print_debug("Disposable amount",
+		      HBCI_AccountBalance_disposable (acc_bal), FALSE,
+		      balance_tt);
+      bal_print_debug("Already disposed",
+		      HBCI_AccountBalance_disposed (acc_bal), FALSE,
+		      balance_tt);
 
       if ((HBCI_Value_getValue (HBCI_Balance_value (noted_bal)) == 0) &&
 	  (HBCI_Value_getValue (HBCI_Balance_value (booked_bal)) == 0))
@@ -161,6 +182,9 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	}
       else
       {
+	gboolean booked_debit = HBCI_Balance_isDebit (booked_bal);
+	char *booked_str = HBCI_Value_toReadableString (booked_val);
+
 	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
@@ -170,10 +194,10 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	     "Reconcile account now?"),
 	   (booked_debit ? "-" : ""),
 	   booked_str);
+
+	free (booked_str);
       }
 
-      free (noted_str);
-      free (booked_str);
       
       GNCInteractor_hide (interactor);
       if (dialogres) 

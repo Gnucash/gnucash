@@ -1,3 +1,8 @@
+2003-01-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Introduced yet
+	more user messages about what is supported by the bank.
+
 2003-01-27  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in -- don't assume gtkhtml is avail from gnome-config
