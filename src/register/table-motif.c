@@ -570,7 +570,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    CellBlock *curs;
    unsigned char * alignments;
    short * widths;
-   Widget reg;
+   Widget reg, textw;
    int num_header_rows = 0;
 
    if (!table) return 0;
@@ -627,6 +627,10 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (XtPointer)table);
 
    table->table_widget = reg;
+
+   /* stop it from beeping */
+   XtVaGetValues (reg, XmNtextField, &textw, NULL);
+   XtVaSetValues (textw, XmNverifyBell, False, NULL);
 
    return (reg);
 }
