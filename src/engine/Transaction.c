@@ -2404,7 +2404,7 @@ xaccSplitGetCorrAccountCode(const Split *sa)
   else
   {
     other_split_acc = xaccSplitGetAccount(other_split);
-    return xaccAccountGetName(other_split_acc);
+    return xaccAccountGetCode(other_split_acc);
   }
 }
 
