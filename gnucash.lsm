@@ -1,0 +1,52 @@
+Begin3
+Title:		xacc -- simple single-user accounting program
+Version:	1.0.18
+Entered-date:	20FEB98
+Description:    xacc is a program to keep track of your finances.  It 
+                offers a simple check-book register style interface.
+                Currently, the features are quite simple:
+
+                - Multiple Accounts
+                - Each account keeps a running balance and
+                  a reconciled balance, so you can keep track
+                  of the checks that have cleared your account.
+                - A simple interface.  If you can use the
+                  register in the back of your checkbook,
+                  you can use xacc.
+                - QuickFill... if you begin typing a description
+                  in the description fields, and it matches an
+                  previous transaction, hitting <TAB> will copy
+                  the previous transaction.  Handy if you have
+                  similar transactions on a regular basis.
+                  (such as depositing your paycheck every week :)
+                - Stock/Mutual Fund Portfolios.  Tracks stock
+                  investments.
+                - General Ledger.  This is an advanced feature 
+                  for more serious work. Supported are:
+                   o Double Entry: Transactions can appear in two
+                     accounts, one debited, one credited. 
+                   o Sub-accounts: A master account can have 
+                     a hierarchy of detail accounts.
+                   o Income/Expense account types.
+                   o General Ledger for displaying multiple
+                     accounts at once.
+                - Quicken Import. Support for import from 
+                  Quicken QIF files.
+                 
+Keywords:	X11 Accounting double entry
+Author:		rclark@cs.hmc.edu (Robin Clark)
+Maintained-by:	linas@linas.org (Linas Vepstas)
+Primary-site:	http://www.cs.hmc.edu/~rclark/xacc/
+Alternate-site:	http://linas.org/linux/xacc 
+		540KB  xacc-1.0b7.bin-sgi-irix.inst.tar
+                535KB  xacc-1.0.16-ibm-aix415.exe
+                356KB  xacc-1.0.16-sco-osr.vols.gz
+                301KB  xacc_1.0.15-1_i386.deb
+Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
+		918KB  xacc-1.0.17.tar.gz
+		1388KB xacc-1.0.17.bin-linux-i386.tar.gz
+Alternate-site:	ftp.x.org /contrib/applications
+Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Mootif/Sparc/Intel/PowerPC 
+Copying-policy:	GPL
+End
+
