@@ -35,7 +35,7 @@ main (int argc, char *argv[])
    /* contact the database, which is a flat file for this demo */
    book = gnc_book_new ();
 
-   rc = gnc_book_begin (book, "file:/tmp/demo.xac");
+   rc = gnc_book_begin (book, "file:/tmp/demo.xac", FALSE);
    if (!rc) {
       int err = gnc_book_get_error (book);
       printf ("HTTP/1.1 500 Server Error\n");

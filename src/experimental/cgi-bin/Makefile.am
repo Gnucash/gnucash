@@ -7,7 +7,7 @@ CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 
 LDADD = 			\
   ../../engine/libgncengine.la 	\
-  -lxml -lglib
+  -lxml -lghttp -lglib
 
 INCLUDES =
 
