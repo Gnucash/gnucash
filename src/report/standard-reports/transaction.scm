@@ -44,6 +44,7 @@
 
 ;; Define the strings here to avoid typos and make changes easier.
 
+(define reportname (N_ "Transaction Report"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -775,7 +776,8 @@ Credit Card, and Income accounts")))))
                           primary-subtotal-renderer
                           secondary-subtotal-renderer)
   
-
+ (let ((work-to-do (length splits))
+       (work-done 0))
   (define (get-account-types-to-reverse options)
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
@@ -821,6 +823,8 @@ Credit Card, and Income accounts")))))
                                   primary-subtotal-collector 
                                   secondary-subtotal-collector 
                                   total-collector)
+    (set! work-done (+ 1 work-done))
+    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
     (if (null? splits)
         (begin
           (gnc:html-table-append-row/markup!
@@ -961,7 +965,7 @@ Credit Card, and Income accounts")))))
                                   (gnc:make-commodity-collector)
                                   (gnc:make-commodity-collector))))
     
-    table))
+    table)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
@@ -1079,6 +1083,7 @@ Credit Card, and Income accounts")))))
   (define (get-other-account-names account-list)
     ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
 
+  (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
 	(c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
 	(c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
@@ -1208,6 +1213,7 @@ match the given time interval and account selection.")))
 	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
 
+    (gnc:report-finished)
     document))
 
 ;; Define the report.
@@ -1215,7 +1221,7 @@ match the given time interval and account selection.")))
  
  'version 2
  
- 'name (N_ "Transaction Report")
+ 'name reportname
  
  'options-generator trep-options-generator
  

@@ -38,6 +38,9 @@
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
+
+(define reportname (N_ "Tax Report / TXF Export"))
+
 (define (make-level-collector num-levels)
   (let ((level-collector (make-vector num-levels)))
     (do ((i 0 (+ i 1)))
@@ -425,6 +428,7 @@
                       (lambda (x) (num-generations x (+ 1 gen)))
                       children)))))
 
+  (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 
                       (get-option gnc:pagename-general "From")))
          (to-value (gnc:timepair-end-day-time
@@ -449,6 +453,8 @@
                                           selected-accounts))
                           0))
          (max-level (min MAX-LEVELS (max 1 generations)))
+	 (work-to-do 0)
+	 (work-done 0)
 
          ;; Alternate dates are relative to from-date
          (from-date (gnc:timepair->date from-value))
@@ -595,10 +601,24 @@
                                          #t fudge-date  #t date))))
              split-list)))
     
+    (define (count-accounts level accounts)
+      (if (< level max-level)
+	  (let ((sum 0))
+	    (for-each (lambda (x)
+		   (if (gnc:account-is-inc-exp? x)
+		       (set! sum (+ sum (+ 1 (count-accounts (+ 1 level)
+							     (gnc:account-get-immediate-subaccounts x)))))
+		       0))
+		 accounts)
+	    sum)
+	  (length accounts)))
+
     (define (handle-level-x-account level account)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym
                    (gnc:account-get-type account) #f)))
 
+	(set! work-done (+ 1 work-done))
+	(gnc:report-percent-done (* 100 (/ work-done work-to-do)))
         (if (gnc:account-is-inc-exp? account)
             (let* ((children (gnc:account-get-children account))
                    (to-special #f)	; clear special-splits-period
@@ -701,6 +721,7 @@
 
       (set! txf-last-payer "")
       (set! txf-l-count 0)
+      (set! work-to-do (count-accounts 1 selected-accounts))
 
       (if (not tax-mode?)		; Do Txf mode
           (begin
@@ -779,11 +800,12 @@
                    (_ "No Tax Related accounts were found.  Go to the\
  Edit->Tax Options dialog to set up tax-related accounts.")))))
 
+	    (gnc:report-finished)
             doc)))))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Tax Report / TXF Export")
+ 'name reportname
  'menu-name (N_ "Tax Report & TXF Export")
  ;;'menu-path (list gnc:menuname-taxes)
  'menu-tip (N_ "Taxable Income / Deductible Expenses / Export to .TXF file")

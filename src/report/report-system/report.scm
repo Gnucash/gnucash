@@ -364,7 +364,6 @@
       (let ((template (hash-ref *gnc:_report-templates_* 
                                 (gnc:report-type report)))
 	    (doc #f))
-	(gnc:set_busy_cursor #f #t)
         (set! doc (if template
             (let* ((renderer (gnc:report-template-renderer template))
                    (stylesheet (gnc:report-stylesheet report))
@@ -376,24 +375,25 @@
               (gnc:report-set-dirty?! report #f)              
               html)
             #f))
-	(gnc:unset_busy_cursor #f)
 	doc)))
 
 (define (gnc:report-run id)
-  (gnc:backtrace-if-exception 
-   (lambda ()
-     (let ((report (gnc:find-report id))
-           (start-time (gettimeofday))
-           (html #f))
+  (let ((report (gnc:find-report id))
+	(start-time (gettimeofday))
+	(html #f))
+    (gnc:set_busy_cursor #f #t)
+    (gnc:backtrace-if-exception 
+     (lambda ()
        (if report
-           (begin 
-             (set! html (gnc:report-render-html report #t))
-;;             (display "total time to run report: ")
-;;             (display (gnc:time-elapsed start-time (gettimeofday)))
-;;             (newline)
-;;             (display html) (newline)
-             html)
-           #f)))))
+	   (begin 
+	     (set! html (gnc:report-render-html report #t))
+;;	     (display "total time to run report: ")
+;;	     (display (gnc:time-elapsed start-time (gettimeofday)))
+;;	     (newline)
+;;	     (display html) (newline)
+	     ))))
+    (gnc:unset_busy_cursor #f)
+    html))
 
 (define (gnc:report-templates-for-each thunk)
   (hash-for-each (lambda (name template) (thunk name template))
