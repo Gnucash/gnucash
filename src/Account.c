@@ -77,8 +77,6 @@ mallocAccount( void )
   acc->ledgerList    = NULL;
   acc->recnData      = NULL;
   acc->adjBData      = NULL;
-  acc->editAccData   = NULL;
-  acc->editNotesData = NULL;
   
   return acc;
   }

@@ -36,7 +36,6 @@
 #include <Xm/PushB.h>
 #include <Xm/Text.h>
 
-
 #include "config.h"
 
 #include "Account.h"
@@ -52,7 +51,6 @@
 typedef struct _accwindow {
                          /* The account type buttons:               */
   Widget dialog;
-
   Widget type_widgets[NUM_ACCOUNT_TYPES];
 
                          /* The text fields:                        */
@@ -78,11 +76,14 @@ typedef struct _editaccwindow {
 typedef struct _editnoteswindow {
   TextBox *tb;
   Account *account;      /* The account to edit                     */
-
 } EditNotesWindow;
+
 
 /** GLOBALS *********************************************************/
 extern Widget toplevel;
+
+static EditAccWindow   ** editAccList   = NULL;
+static EditNotesWindow ** editNotesList = NULL;
 
 /** PROTOTYPES ******************************************************/
 static void closeAccWindow      ( Widget mw, XtPointer cd, XtPointer cb );
@@ -379,15 +380,6 @@ closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   }
 
 /********************************************************************\
-\********************************************************************/
-
-void xaccDestroyEditAccWindow (EditAccWindow *editAccData)
-{
-   if (!editAccData) return;
-   XtDestroyWidget (editAccData->dialog);
-}
-
-/********************************************************************\
  * editAccWindow                                                    *
  *   opens up a window to edit an account                           * 
  *                                                                  * 
@@ -396,19 +388,15 @@ void xaccDestroyEditAccWindow (EditAccWindow *editAccData)
  * Return: none                                                     *
 \********************************************************************/
 EditAccWindow *
-editAccWindow( Widget parent, Account *account )
-  {
+editAccWindow( Widget parent, Account *acc )
+{
 
   Widget dialog, form, widget, label, buttonform;
   EditAccWindow *editAccData;
   
-  if (0x0 == account) return 0x0;  /* internal error, really */
+  FETCH_FROM_LIST (EditAccWindow, editAccList, acc, account, editAccData);
 
   setBusyCursor( parent );
-  
-  editAccData = (EditAccWindow *)_malloc(sizeof(EditAccWindow));
-  editAccData->account = account;
-  account->editAccData = editAccData;
   
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
@@ -456,7 +444,7 @@ editAccWindow( Widget parent, Account *account )
 			     xmTextWidgetClass,  form,
 			     XmNmaxLength,       40,
 			     XmNcolumns,         25,
-			     XmNvalue,           account->accountName,
+			     XmNvalue,           acc->accountName,
 			     XmNeditable,        True,
 			     XmNtopAttachment,   XmATTACH_FORM,
 			     XmNtopOffset,       10,
@@ -479,7 +467,7 @@ editAccWindow( Widget parent, Account *account )
 			     xmTextWidgetClass,  form,
 			     XmNmaxLength,       40,
 			     XmNcolumns,         30,
-			     XmNvalue,           account->description,
+			     XmNvalue,           acc->description,
 			     XmNeditable,        True,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       editAccData->name,
@@ -566,7 +554,19 @@ editAccWindow( Widget parent, Account *account )
   unsetBusyCursor( parent );
 
   return editAccData;
-  }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void xaccDestroyEditAccWindow (Account * acc)
+{
+  EditAccWindow *editAccData;
+
+  REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account,editAccData); 
+  XtDestroyWidget (editAccData->dialog);
+  free (editAccData);
+}
 
 /********************************************************************\
  * closeEditAccWindow                                               *
@@ -583,9 +583,10 @@ static void
 closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
+  Account *acc = editAccData->account;
 
-  editAccData->account->editAccData = NULL;
-  _free(editAccData);
+  REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account,editAccData); 
+  free(editAccData);
   DEBUG("close EditAccWindow");
   }
 
@@ -603,10 +604,8 @@ notesCB( Widget mw, XtPointer cd, XtPointer cb )
 {
   AccWindow *accData = (AccWindow *)cd;
   Account *acc = accData -> newacc;
-  if (NULL == acc->editNotesData) {
-     editNotesWindow (acc);
-  }
-  /* hack alert -- else, should raise window to the top */
+  editNotesWindow (acc);
+  /* hack alert -- should raise window to the top */
 }
 
 /********************************************************************\
@@ -623,11 +622,8 @@ editNotesCB( Widget mw, XtPointer cd, XtPointer cb )
 {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
   Account *acc = editAccData -> account;
-
-  if (NULL == acc->editNotesData) {
-     editNotesWindow (acc);
-  }
-  /* hack alert -- else, should raise window to the top */
+  editNotesWindow (acc);
+  /* hack alert -- should raise window to the top */
 }
 
 /********************************************************************\
@@ -910,32 +906,28 @@ selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
 EditNotesWindow *
 editNotesWindow (Account *acc)
 {
-  EditNotesWindow *editNotesData;
+  EditNotesWindow *enw;
 
-  if (!acc) return 0x0;
-
-  editNotesData = (EditNotesWindow *) malloc (sizeof (EditNotesWindow));
-  editNotesData->account = acc;
-  acc -> editNotesData = editNotesData;
- 
-  editNotesData->tb = textBox( toplevel, NOTES_STR, 
-                              &(acc->notes),
-                              closeEditNotesWindow, editNotesData);
-
-  return editNotesData;
+  FETCH_FROM_LIST (EditNotesWindow, editNotesList, acc, account, enw);
+  
+  enw->tb = textBox( toplevel, NOTES_STR, 
+                     &(acc->notes),
+                     closeEditNotesWindow, enw);
+  return enw;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void 
-xaccDestroyEditNotesWindow (EditNotesWindow *editNotesData)
+xaccDestroyEditNotesWindow (Account *acc)
 {
-  if (!editNotesData) return;
+  EditNotesWindow *edwin;
 
-  editNotesData->account->editNotesData = NULL;
-  xaccDestroyTextBox (editNotesData->tb);
-  _free(editNotesData);
+  REMOVE_FROM_LIST (EditNotesWindow,editNotesList,acc,account,edwin) 
+
+  xaccDestroyTextBox (edwin->tb);
+  free (edwin);
 }
 
 /********************************************************************\
@@ -943,16 +935,13 @@ xaccDestroyEditNotesWindow (EditNotesWindow *editNotesData)
 
 static void 
 closeEditNotesWindow( Widget mw, XtPointer cd, XtPointer cb )
-  {
-  EditNotesWindow *editNotesData = (EditNotesWindow *) cd;
+{
+  EditNotesWindow *enw = (EditNotesWindow *) cd;
 
-  editNotesData->account->editNotesData = NULL;
+  xaccDestroyEditNotesWindow (enw->account);
 
-  xaccDestroyTextBox (editNotesData->tb);
-
-  _free(editNotesData);
   DEBUG("close EditNotesWindow");
-  }
+}
 
 /********************** END OF FILE *********************************\
 \********************************************************************/
