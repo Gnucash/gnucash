@@ -1261,7 +1261,7 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 static gboolean
 account_commodity_filter (GtkTreeSelection *selection,
 			  GtkTreeModel *unused_model,
-			  GtkTreePath *unused_path,
+			  GtkTreePath *s_path,
 			  gboolean path_currently_selected,
 			  gpointer user_data)
 {
@@ -1278,7 +1278,7 @@ account_commodity_filter (GtkTreeSelection *selection,
     return TRUE;
   }
 
-  account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
+  account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree), s_path);
   if (!account) {
     return FALSE;
   }
@@ -1315,10 +1315,6 @@ gnc_account_window_create(AccountWindow *aw)
   GObject *awo;
   GtkWidget *box;
   GladeXML  *xml;
-  //  AccountGroup *group;
-  //  GtkTreeModel *model;
-  //  GtkCellRenderer *renderer;
-  //  GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
 
   ENTER("aw %p, modal %d", aw, aw->modal);
@@ -1570,7 +1566,6 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_commodity *commodity;
   AccountWindow *aw;
   Account *account;
-  GtkTreeModel *model, *filter_model;
 
   aw = g_new0 (AccountWindow, 1);
 
@@ -1620,9 +1615,6 @@ gnc_ui_new_account_window_internal (Account *base_account,
   if (base_account == NULL) {
 	  base_account = aw->top_level_account;
   }
-
-  filter_model = gtk_tree_view_get_model (aw->parent_tree);
-  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER(filter_model));
 
   gtk_tree_view_collapse_all (aw->parent_tree);
   gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree),
