@@ -165,7 +165,7 @@ gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
 static KvpFrame *
 gnc_kvp_bag_get_first (KvpFrame *root, const char * path)
 {
-  KvpValue *arr;
+  KvpValue *arr, *va;
   KvpValueType valtype;
   GList *node;
 
@@ -182,7 +182,7 @@ gnc_kvp_bag_get_first (KvpFrame *root, const char * path)
   node = kvp_value_get_glist(arr);
   if (NULL == node) return NULL;
 
-  KvpValue *va = node->data;
+  va = node->data;
   return kvp_value_get_frame(va);
 }
 

@@ -553,13 +553,14 @@ GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
 {
   GNCPriceDB * result;
+  QofCollection *col;
 
   g_return_val_if_fail (book, NULL);
 
   /* There can only be one pricedb per book.  So if one exits already,
    * then use that.  Warn user, they shouldn't be creating two ... 
    */
-  QofCollection *col = qof_book_get_collection (book, GNC_ID_PRICEDB);
+  col = qof_book_get_collection (book, GNC_ID_PRICEDB);
   result = qof_collection_get_data (col);
   if (result) 
   {
@@ -584,10 +585,11 @@ destroy_pricedb_currency_hash_data(gpointer key,
 {
   GList *price_list = (GList *) data;
   GList *node;
+  GNCPrice *p;
 
   for (node = price_list; node; node = node->next)
   {
-    GNCPrice *p = node->data;
+    p = node->data;
 
     p->db = NULL;
   }

@@ -82,6 +82,7 @@ gnc_numeric_check(gnc_numeric in)
 static inline gint64
 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) 
 {
+  qofint128 lcm;
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
   {
     return GNC_ERROR_ARG;
@@ -99,7 +100,7 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b)
     return b.denom;
   }
 
-  qofint128 lcm = lcm128 (a.denom, b.denom);
+  lcm = lcm128 (a.denom, b.denom);
   if (lcm.isbig) return GNC_ERROR_ARG;
   return lcm.lo;
 }
@@ -113,6 +114,7 @@ reduce128(qofint128 n, gint64 d)
   gint64   num;
   gint64   denom;
   gnc_numeric out;
+  qofint128 red;
 
   t =  rem128 (n, d);
   num = d;
@@ -127,7 +129,7 @@ reduce128(qofint128 n, gint64 d)
   }
   /* num now holds the GCD (Greatest Common Divisor) */
 
-  qofint128 red = div128 (n, num);
+  red = div128 (n, num);
   if (red.isbig)
   {
     return gnc_numeric_error (GNC_ERROR_OVERFLOW);
@@ -219,6 +221,7 @@ int
 gnc_numeric_compare(gnc_numeric a, gnc_numeric b) 
 {
   gint64 aa, bb;
+  qofint128 l, r;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
   {
@@ -235,8 +238,8 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
   if  ((a.denom > 0) && (b.denom > 0))
   {
     /* Avoid overflows using 128-bit intermediate math */
-    qofint128 l = mult128 (a.num, b.denom);
-    qofint128 r = mult128 (b.num, a.denom);
+    l = mult128 (a.num, b.denom);
+    r = mult128 (b.num, a.denom);
     return cmp128 (l,r);
   }
 
@@ -377,18 +380,19 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
      * Computing the LCD minimizes likelyhood of overflow
      */
     gint64 lcd;
+    qofint128 ca, cb, cab;
     lcd = gnc_numeric_lcd(a,b);
     if (GNC_ERROR_ARG == lcd)
     {
        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     }
-    qofint128 ca = mult128 (a.num, lcd/a.denom);
+    ca = mult128 (a.num, lcd/a.denom);
     if (ca.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
-    qofint128 cb = mult128 (b.num, lcd/b.denom);
+    cb = mult128 (b.num, lcd/b.denom);
     if (cb.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
-    qofint128 cab = add128 (ca, cb);
+    cab = add128 (ca, cb);
     if (cab.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     
     sum.num   = cab.lo;
@@ -414,12 +418,13 @@ gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) 
 {
+  gnc_numeric nb;
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
   {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  gnc_numeric nb = b;
+  nb = b;
   nb.num = -nb.num;
   return gnc_numeric_add (a, nb, denom, how);
 }
@@ -552,6 +557,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how) 
 {
   gnc_numeric quotient;
+  qofint128 nume, deno;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
   {
@@ -606,8 +612,8 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       sgn = -sgn;
       b.num = -b.num;
     }
-    qofint128 nume = mult128(a.num, b.denom);
-    qofint128 deno = mult128(b.num, a.denom);
+    nume = mult128(a.num, b.denom);
+    deno = mult128(b.num, a.denom);
 
     /* Try to avoid overflow by removing common factors */
     if (nume.isbig && deno.isbig)
@@ -717,6 +723,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   gint        denom_neg=0;
   double      ratio, logratio;
   double      sigfigs;
+  qofint128 nume, newm;
 
   if(gnc_numeric_check(in)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -813,8 +820,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
      * out.num   = out.num / temp.denom;
      * out.denom = denom;
      */
-    qofint128 nume = mult128 (in.num, temp.num);
-    qofint128 newm = div128 (nume, temp.denom);
+    nume = mult128 (in.num, temp.num);
+    newm = div128 (nume, temp.denom);
     remainder = rem128 (nume, temp.denom);
 
     if (newm.isbig)

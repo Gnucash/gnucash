@@ -112,19 +112,22 @@ check_eq_operator (void)
 static void
 check_reduce (void)
 {
+	gnc_numeric one, rone;
+	gnc_numeric four, rfour;
+	gnc_numeric val, rval;
 	/* Check common factor elimination (needed for equality checks) */
-	gnc_numeric one = gnc_numeric_create (1,1);
-	gnc_numeric rone = gnc_numeric_create (1000000,1000000);
+	one = gnc_numeric_create (1,1);
+	rone = gnc_numeric_create (1000000,1000000);
 	rone = gnc_numeric_reduce (rone);
 	do_test (gnc_numeric_eq(one, rone), "reduce to one");
 
-	gnc_numeric four = gnc_numeric_create (4,1);
-	gnc_numeric rfour = gnc_numeric_create (480,120);
+	four = gnc_numeric_create (4,1);
+	rfour = gnc_numeric_create (480,120);
 	rfour = gnc_numeric_reduce (rfour);
 	do_test (gnc_numeric_eq(four, rfour), "reduce to four");
 
-	gnc_numeric val = gnc_numeric_create(10023234LL, 334216654LL);
-	gnc_numeric rval = gnc_numeric_reduce (val);
+	val = gnc_numeric_create(10023234LL, 334216654LL);
+	rval = gnc_numeric_reduce (val);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (5011617,167108327),
 	                rval,
@@ -150,14 +153,20 @@ check_reduce (void)
 static void
 check_equality_operator (void)
 {
+	int i, m;
+	gint deno, mult, numer;
+	gint64 f;
+	gnc_numeric big, rbig;
+	gnc_numeric val, mval;
+	gnc_numeric bval, rval;
 	/* Check equality operator for some large numer/denom values */
-	gint64 numer = 1<<30;
+	numer = 1<<30;
 	numer <<= 30;   /* we don't trust cpp to compute 1<<60 correctly */
-	gint64 deno = 1<<30;
+	deno = 1<<30;
 	deno <<= 20;
-	gnc_numeric rbig = gnc_numeric_create (numer, deno);
+	rbig = gnc_numeric_create (numer, deno);
 	
-	gnc_numeric big = gnc_numeric_create (1<<10,1);
+	big = gnc_numeric_create (1<<10,1);
 	do_test (gnc_numeric_equal(big, rbig), "equal to billion");
 	
 	big = gnc_numeric_create (1<<20,1<<10);
@@ -183,20 +192,19 @@ check_equality_operator (void)
 	big = gnc_numeric_create (numer, 1<<20);
 	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<50/1<<20");
 
-	int i;
 	/* We assume RAND_MAX is less that 1<<32 */
 	for (i=0; i<NREPS; i++) 
 	{
-		gint64 deno = rand() / 2;
-		gint64 mult = rand() / 2;
-		gint64 numer = rand() / 2;
+		deno = rand() / 2;
+		mult = rand() / 2;
+		numer = rand() / 2;
 
-		gnc_numeric val = gnc_numeric_create (numer, deno);
-		gnc_numeric mval = gnc_numeric_create (numer*mult, deno*mult);
+		val = gnc_numeric_create (numer, deno);
+		mval = gnc_numeric_create (numer*mult, deno*mult);
 		
 		/* The reduced version should be equivalent */
-		gnc_numeric bval = gnc_numeric_reduce (val);
-		gnc_numeric rval = gnc_numeric_reduce (mval);
+		bval = gnc_numeric_reduce (val);
+		rval = gnc_numeric_reduce (mval);
 		check_unary_op (gnc_numeric_eq, 
                       bval, rval, mval, "expected %s = %s = reduce(%s)");
 		
@@ -209,8 +217,8 @@ check_equality_operator (void)
 		 * might creep in. */
 		mval.denom >>= 1;
 		mval.num >>= 1;
-		int m=0;
-		gint64 f = mval.denom;
+		m=0;
+		f = mval.denom;
 		while (f%2 == 0)
 		{
 			f >>= 1;
@@ -297,6 +305,7 @@ check_rounding (void)
 static void
 check_double (void)
 {
+	double flo;
 	gnc_numeric val = gnc_numeric_create (0,1);
 
 	check_unary_op (gnc_numeric_eq,
@@ -330,7 +339,7 @@ check_double (void)
                                          GNC_HOW_RND_ROUND),
                    val, "expected %s = %s double 6 figs");
 
-	double flo = gnc_numeric_to_double(gnc_numeric_create(7, 16));
+	flo = gnc_numeric_to_double(gnc_numeric_create(7, 16));
 	do_test ((0.4375 == flo), "float pt conversion");
 }
 
@@ -359,8 +368,14 @@ check_neg (void)
 static void
 check_add_subtract (void)
 {
-  gnc_numeric a = gnc_numeric_create(2, 6);
-  gnc_numeric b = gnc_numeric_create(1, 4);
+  int i;
+  gnc_numeric a, b, c, d, z;
+#if CHECK_ERRORS_TOO
+  gnc_numeric c;
+#endif
+  
+  a = gnc_numeric_create(2, 6);
+  b = gnc_numeric_create(1, 4);
 
   /* Well, actually 14/24 would be acceptable/better in this case */
   check_binary_op (gnc_numeric_create(7,12), 
@@ -402,9 +417,9 @@ check_add_subtract (void)
   
   /* ------------------------------------------------------------ */
   /* This test has failed before */
-  gnc_numeric c = gnc_numeric_neg (a);
-  gnc_numeric d = gnc_numeric_neg (b);
-  gnc_numeric z = gnc_numeric_zero();
+  c = gnc_numeric_neg (a);
+  d = gnc_numeric_neg (b);
+  z = gnc_numeric_zero();
   check_binary_op (c, gnc_numeric_add_fixed(z,c),
 						 z, c, "expected %s got %s = %s + %s for add fixed");
   
@@ -455,7 +470,6 @@ check_add_subtract (void)
   
   /* ------------------------------------------------------------ */
 #if CHECK_ERRORS_TOO
-  gnc_numeric c;
   c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
@@ -472,7 +486,6 @@ check_add_subtract (void)
 
   /* ------------------------------------------------------------ */
 	/* Add and subtract some random numbers */
-	int i;
 	for (i=0; i<NREPS; i++)
 	{
 		gnc_numeric e;
@@ -509,7 +522,11 @@ check_add_subtract (void)
 static void
 check_mult_div (void)
 {
+  int i, j;
+  gint64 v;
   gnc_numeric c, d;
+  gnc_numeric amt_a, amt_tot, frac, val_tot, val_a;
+
   gnc_numeric a = gnc_numeric_create(2, 6);
   gnc_numeric b = gnc_numeric_create(1, 4);
 
@@ -556,7 +573,7 @@ check_mult_div (void)
   /* Check for math with 2^63 < num*num < 2^64 which previously failed 
    * see http://bugzilla.gnome.org/show_bug.cgi?id=144980 
    */
-  gint64 v = 1000000;
+  v = 1000000;
   a = gnc_numeric_create(1*v, v);
   b = gnc_numeric_create(10000000*v, v);
 
@@ -567,7 +584,6 @@ check_mult_div (void)
 	/* Multiply some random numbers.  This test presumes that
 	 * RAND_MAX is approx 2^32 
 	 */
-	int i;
 	for (i=0; i<NREPS; i++)
 	{
 		gint64 deno = 1;
@@ -588,7 +604,6 @@ check_mult_div (void)
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
 		/* Force 128-bit math to come into play */
-		int j;
 		for (j=1; j<31; j++)
 		{
 			a = gnc_numeric_create(na << j, 1<<j);
@@ -673,9 +688,9 @@ check_mult_div (void)
 			 c, d, "expected %s got %s = %s / %s for div round");
 
 	/* A simple irreducible ratio, involving negative numbers */
-	gnc_numeric amt_a = gnc_numeric_create (-6005287905LL, 40595);
-	gnc_numeric amt_tot = gnc_numeric_create (-8744187958LL, 40595);
-	gnc_numeric frac = gnc_numeric_div (amt_a, amt_tot,
+	amt_a = gnc_numeric_create (-6005287905LL, 40595);
+	amt_tot = gnc_numeric_create (-8744187958LL, 40595);
+	frac = gnc_numeric_div (amt_a, amt_tot,
                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
 	check_binary_op (gnc_numeric_create(6005287905LL, 8744187958LL),
@@ -683,8 +698,8 @@ check_mult_div (void)
 	                 "expected %s got %s = %s / %s for div reduce");
 
 	/* Another overflow-prone condition */
-	gnc_numeric val_tot = gnc_numeric_create (-4280656418LL, 19873);
-	gnc_numeric val_a = gnc_numeric_mul (frac, val_tot,
+	val_tot = gnc_numeric_create (-4280656418LL, 19873);
+	val_a = gnc_numeric_mul (frac, val_tot,
                         gnc_numeric_denom(val_tot),
                         GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
 	check_binary_op (gnc_numeric_create(-2939846940LL, 19873),

@@ -137,6 +137,8 @@ void
 xaccTransScrubOrphans (Transaction *trans)
 {
   SplitList *node;
+  QofBook *book = NULL;
+  AccountGroup *root = NULL;
   for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
@@ -154,8 +156,8 @@ xaccTransScrubOrphans (Transaction *trans)
    * XXX we should probably *always* to this, instead of the above loop!
    */
   PINFO ("Free Floating Transaction!");
-  QofBook *book = xaccTransGetBook (trans);
-  AccountGroup *root = xaccGetAccountGroup (book);
+  book = xaccTransGetBook (trans);
+  root = xaccGetAccountGroup (book);
   TransScrubOrphansFast (trans, root);
 }
 
@@ -361,6 +363,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
                          Account *parent)
 {
   Split *balance_split = NULL;
+  QofBook *book = NULL;
   gnc_numeric imbalance;
   Account *account;
   SplitList *node, *slist;
@@ -394,7 +397,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
           /* This should never occur, accounts are always 
            * in an account group */
           PERR ("Can't find root account");
-          QofBook *book = xaccTransGetBook (trans);
+          book = xaccTransGetBook (trans);
           root = xaccGetAccountGroup (book);
        }
        if (NULL == root)

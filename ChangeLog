@@ -1,3 +1,17 @@
+2004-07-20  Derek Atkins <derek@ihtfp.com>
+
+	* src/engine/Scrub.c
+	* src/engine/Scrub2.c
+	* src/engine/gnc-numeric.c
+	* src/engine/gnc-pricedb.c
+	* src/engine/kvp-util.c
+	* src/engine/qofid.c
+	* src/engine/qofmath128.c
+	* src/engine/qofquery.c
+	* src/engine/qofsession.c
+	* src/engine/test/test-numeric.c
+	  Priit Laes' patch for C90 compliance.
+
 2004-07-13  David Montenegro  <sunrise2000@comcast.net>
 
         * src/report/standard-reports/general-ledger.scm:

@@ -436,6 +436,7 @@ void
 qof_session_begin (QofSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
+  char * p;
   if (!session) return;
 
   ENTER (" sess=%p ignore_lock=%d, book-id=%s", 
@@ -471,7 +472,7 @@ qof_session_begin (QofSession *session, const char * book_id,
    * "postgres://". Everything before the colon is the access 
    * method.  Load the first backend found for that access method.
    */
-  char * p = strchr (book_id, ':');
+  p = strchr (book_id, ':');
   if (p)
   {
     char * access_method = g_strdup (book_id);
