@@ -22,6 +22,13 @@
 	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
 	  dialog is shown, so it get's sized properly.
 	
+	Move some files around in preparation for re-factoring the
+	reconcile-list code:
+	* src/gnome-search/Makefile.am: removed search-param.[ch]
+	* src/gnome-search/search-param.[ch]: moved the search-param to gnome-utils
+	* src/gnome-utils/search-parah.[ch]: moved search-param from gnome-search
+	* src/gnome-utils/Makefile.am: added search-param.[ch]
+
 2003-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main.scm:
