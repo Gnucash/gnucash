@@ -93,7 +93,12 @@ void GNCInteractor_show(GNCInteractor *i)
 void GNCInteractor_hide(GNCInteractor *i)
 {
   g_assert(i);
-  gtk_widget_hide_all (i->dialog);
+  if (gtk_toggle_button_get_active 
+      (GTK_TOGGLE_BUTTON (i->close_checkbutton)))
+    gtk_widget_hide_all (i->dialog);
+  gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
+			  gtk_toggle_button_get_active 
+			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
 }
 
 void GNCInteractor_delete(GNCInteractor *data)

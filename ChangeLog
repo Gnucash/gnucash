@@ -1,5 +1,8 @@
 2003-03-23  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/hbci-interaction.c (GNCInteractor_hide): 
+	Fix close-on-finished checkbutton.
+
 	* src/import-export/hbci/hbci-progressmon.c: Add descriptions of
 	new HBCI actions.
 
