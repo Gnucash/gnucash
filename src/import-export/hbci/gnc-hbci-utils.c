@@ -26,11 +26,13 @@
 #include <gnome.h>
 #include <errno.h>
 #include <openhbci/error.h>
+#include <openhbci.h>
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h" 
+#include "global-options.h"
 
 #include "hbci-interaction.h"
 
@@ -277,6 +279,15 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("Unfortunately this HBCI job is not supported \n"
 	 "by your bank or for your account. Aborting."));
     return FALSE;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
+  case HBCI_ERROR_CODE_SOCKET_NO_CONNECT:
+    GNCInteractor_hide (inter);
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("The server of your bank refused the HBCI connection.\n"
+	 "Please try again later. Aborting."));
+    return FALSE;
+#endif    
       
   default:
     return FALSE;
@@ -293,7 +304,12 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
   if (inter)
     GNCInteractor_show (inter);
 
-  HBCI_Hbci_setDebugLevel(0);
+  if (gnc_lookup_boolean_option("_+Advanced", 
+				"HBCI Verbose Debug Messages", FALSE))
+    HBCI_Hbci_setDebugLevel (3);
+  else
+    HBCI_Hbci_setDebugLevel (0);
+
   do {
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);

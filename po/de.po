@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2003-01-24 19:38+0100\n"
-"PO-Revision-Date: 2003-01-25 11:32+0100\n"
+"POT-Creation-Date: 2003-01-26 02:06+0100\n"
+"PO-Revision-Date: 2003-01-26 01:59+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -963,7 +963,9 @@ msgstr "Bedingungen: "
 msgid ""
 "The customer ID number.  If left blank a reasonable number will be chosen "
 "for you"
-msgstr "Die Kundennummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Kundennummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #: src/business/business-gnome/glade/customer.glade.h:28
 msgid "What Tax Table should be applied to this customer?"
@@ -1037,7 +1039,9 @@ msgstr "Zahlungsadresse"
 msgid ""
 "The employee ID number.  If left blank a reasonable number will be chosen "
 "for you"
-msgstr "Die Mitarbeiternummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Mitarbeiternummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #: src/business/business-gnome/glade/employee.glade.h:21
 msgid "Username: "
@@ -1283,7 +1287,9 @@ msgstr "Sortiere nach Datum der Einträge"
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr "Die Rechnungsnummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Rechnungsnummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #: src/business/business-gnome/glade/invoice.glade.h:60
 msgid "Unpost"
@@ -1467,7 +1473,9 @@ msgstr "Mandanteninformationen"
 #: src/business/business-gnome/glade/job.glade.h:10
 msgid ""
 "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "Die Auftragsnummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Auftragsnummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #: src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
@@ -1517,7 +1525,9 @@ msgstr "Referenz"
 msgid ""
 "The order ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr "Die Bestellungsnummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Bestellungsnummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2941 intl-scm/guile-strings.c:2943
@@ -1538,7 +1548,9 @@ msgstr "Steuertabelle:"
 msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr "Die Zulieferernummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
+msgstr ""
+"Die Zulieferernummer. Falls keine angegeben wird, wird automatisch ein "
+"sinnvoller Wert gewählt."
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:3143
@@ -2554,8 +2566,8 @@ msgstr ""
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:112 intl-scm/guile-strings.c:1377
 #: src/engine/Account.c:2252 src/import-export/hbci/glade/hbci.glade.h:12
-#: src/import-export/hbci/gnc-hbci-utils.c:404
-#: src/import-export/hbci/gnc-hbci-utils.c:408
+#: src/import-export/hbci/gnc-hbci-utils.c:420
+#: src/import-export/hbci/gnc-hbci-utils.c:424
 msgid "Bank"
 msgstr "Bank"
 
@@ -2758,11 +2770,11 @@ msgstr "Jährlich (%1$u Mal): %3$u. %2$s"
 msgid "Yearly: %s/%u"
 msgstr "Jährlich: %2$u. %1$s"
 
-#: src/engine/Scrub.c:127
+#: src/engine/Scrub.c:128
 msgid "Orphan"
 msgstr "Ausbuchungskonto"
 
-#: src/engine/Scrub.c:316 src/import-export/generic-import.glade.h:25
+#: src/engine/Scrub.c:317 src/import-export/generic-import.glade.h:25
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
@@ -3266,8 +3278,8 @@ msgstr "1/1000000"
 #: intl-scm/guile-strings.c:3059 src/gnome-utils/dialog-account.c:708
 #: src/gnome/glade/account.glade.h:8 src/gnome/glade/stocks.glade.h:1
 #: src/import-export/generic-import.glade.h:10
-#: src/import-export/hbci/gnc-hbci-utils.c:403
-#: src/import-export/hbci/gnc-hbci-utils.c:407
+#: src/import-export/hbci/gnc-hbci-utils.c:419
+#: src/import-export/hbci/gnc-hbci-utils.c:423
 #: src/import-export/qif-import/qif.glade.h:1
 #: src/register/ledger-core/split-register-model.c:191
 msgid "Account"
@@ -6386,7 +6398,9 @@ msgstr "Ergebnisse zur aktuellen Suche hinzufügen"
 #: src/gnome-search/search.glade.h:4
 msgid ""
 "Choose whether to search all your data or only that marked as \"active\""
-msgstr "Wählen Sie, ob entweder alle Daten durchsucht werden sollen oder nur der als \"aktiv\" markierte Teil"
+msgstr ""
+"Wählen Sie, ob entweder alle Daten durchsucht werden sollen oder nur der als "
+"\"aktiv\" markierte Teil"
 
 #: src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
@@ -7745,8 +7759,8 @@ msgstr ""
 #. * inside Germany (HBCI is not supported anywhere else). You
 #. * may safely ignore strings from the import-export/hbci
 #. * subdirectory in other countries.
-#: src/import-export/hbci/gnc-hbci-utils.c:60
-#: src/import-export/hbci/gnc-hbci-utils.c:78
+#: src/import-export/hbci/gnc-hbci-utils.c:62
+#: src/import-export/hbci/gnc-hbci-utils.c:80
 #, c-format
 msgid ""
 "Error while loading OpenHBCI config file:\n"
@@ -7755,7 +7769,7 @@ msgstr ""
 "Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
 "  %s\n"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:259
+#: src/import-export/hbci/gnc-hbci-utils.c:261
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7763,7 +7777,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:268
+#: src/import-export/hbci/gnc-hbci-utils.c:270
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7771,7 +7785,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:277
+#: src/import-export/hbci/gnc-hbci-utils.c:279
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -7779,11 +7793,19 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
+#: src/import-export/hbci/gnc-hbci-utils.c:287
+msgid ""
+"The server of your bank refused the HBCI connection.\n"
+"Please try again later. Aborting."
+msgstr ""
+"Der HBCI Server der Bank hat die Verbindung abgewiesen. Bitte\n"
+"versuchen Sie es später noch einmal. Aktion wird abgebrochen."
+
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #: intl-scm/guile-strings.c:2825 intl-scm/guile-strings.c:2847
 #: src/import-export/gnc-gen-transaction.c:354
 #: src/import-export/gnc-gen-transaction.c:379
-#: src/import-export/hbci/gnc-hbci-utils.c:376
+#: src/import-export/hbci/gnc-hbci-utils.c:392
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
@@ -8098,7 +8120,7 @@ msgstr "(unbekannt)"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:149
+#: src/import-export/hbci/gnc-hbci-getbalance.c:154
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "It seems as if your bank does not support Balance download \n"
@@ -8114,15 +8136,15 @@ msgstr ""
 "den Saldo abzufragen.  \n"
 
 #. Translators: %s is the amount.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:163
+#: src/import-export/hbci/gnc-hbci-getbalance.c:168
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
-"Account booked balance is %s\n"
+"Account booked balance is %s%s\n"
 "Reconcile account now?"
 msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
-"Gebuchter Saldo des Kontos ist %s\n"
+"Gebuchter Saldo des Kontos ist %s%s\n"
 "Konto jetzt abgleichen?"
 
 #: src/import-export/hbci/gnc-hbci-gettrans.c:230
@@ -11199,12 +11221,14 @@ msgstr "Standardeinstellung: Zeige jeden Geschäftsvorgang im Konto"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:929 intl-scm/guile-strings.c:3015
 msgid "Number of Rows"
-msgstr "Anzahl der Spalten"
+msgstr "Anzahl der Zeilen"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:931
 msgid "Default number of register rows to display."
-msgstr "Standardanzahl von Zeilen, die angezeigt werden sollen"
+msgstr ""
+"Standardanzahl von Zeilen, die im Kassenbericht eines Kontos angezeigt "
+"werden sollen."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:935
@@ -11214,7 +11238,9 @@ msgstr "Ergebnisanzahl für Neue Suche"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:937
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr "Voreinstellung 'Neue Suche' wählen, wenn diese Anzahl an Ergebnissen unterschritten wurde."
+msgstr ""
+"Voreinstellung 'Neue Suche' wählen, wenn diese Anzahl an Ergebnissen "
+"unterschritten wurde."
 
 #. src/app-utils/date-utilities.scm
 #: intl-scm/guile-strings.c:939
@@ -14251,7 +14277,9 @@ msgstr "Benachrichtigung bei fälligen Rechnungen?"
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3025
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "Wählen Sie, ob die Liste von fälligen Rechnungen beim Programmstart angezeigt werden soll."
+msgstr ""
+"Wählen Sie, ob die Liste von fälligen Rechnungen beim Programmstart "
+"angezeigt werden soll."
 
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3027
@@ -14281,7 +14309,8 @@ msgstr "Voreinstellung Kunde Steuertabelle"
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3037
 msgid "The default tax table to apply to customers."
-msgstr "Voreinstellung für die Steuertabelle, die bei Kunden angewandt werden soll."
+msgstr ""
+"Voreinstellung für die Steuertabelle, die bei Kunden angewandt werden soll."
 
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3039
@@ -14291,7 +14320,9 @@ msgstr "Voreinstellung Zulieferer Steuertabelle"
 #. src/business/business-utils/business-prefs.scm
 #: intl-scm/guile-strings.c:3041
 msgid "The default tax table to apply to vendors."
-msgstr "Voreinstellung für die Steuertabelle, die bei Zulieferern angewandt werden soll."
+msgstr ""
+"Voreinstellung für die Steuertabelle, die bei Zulieferern angewandt werden "
+"soll."
 
 #. src/business/business-utils/business-utils.scm
 #: intl-scm/guile-strings.c:3047
