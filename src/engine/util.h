@@ -221,7 +221,7 @@ int gnc_locale_decimal_places( void );
  *    PRTSEP -- print comma-separated K's
  *    PRTNMN -- print as non-monetary value
  *    PRTEUR -- print as EURO value (2 decimal places, EUR as currency
- *              symbol if PRTSYM is specified, mutually exclisive with PRTSHR)
+ *              symbol if PRTSYM is specified, mutually exclusive with PRTSHR)
  *    PRTCUR -- print as a currency price, with 5 decimals, overides PRTSHR
  *
  *    If non-NULL, the curr_code argument overrides the default currency

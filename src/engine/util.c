@@ -1022,6 +1022,10 @@ xaccParseAmount (const char * in_str, gboolean monetary, double *result,
           *out++ = *in;
           next_state = PRE_GROUP_ST;
         }
+        else if (*in == decimal_point)
+        {
+          next_state = FRAC_ST;
+        }
         else if (isspace(*in))
         {
         }
