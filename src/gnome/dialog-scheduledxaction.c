@@ -1446,7 +1446,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         /* For some reason the Glade-specified sensitivity settings are not
          * being honored... ? */
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->notifyOpt), FALSE );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->advanceSpin), TRUE );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->advanceSpin), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->remindSpin), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountEntry), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainEntry), FALSE );
