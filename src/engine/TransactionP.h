@@ -167,6 +167,9 @@ struct _transaction
    */
   const gnc_commodity *common_currency;
 
+  /* version number, used for tracking multiuser updates */
+  gint32 version;
+
   GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 
@@ -209,5 +212,13 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
  * excluding the skip_me split. */
 gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                     const gnc_commodity * base_currency);
+
+/* The xaccTransSet/GetVersion() routines set & get the version
+ *    numbers on this transaction.  The version number is used to manage
+ *    multi-user updates.  These routines are private because we don't
+ *    want anyone except the backend to mess with them.
+ */
+void xaccTransSetVersion (Transaction*, gint32);
+gint32 xaccTransGetVersion (Transaction*);
 
 #endif /* __XACC_TRANSACTION_P_H__ */

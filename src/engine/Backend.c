@@ -139,8 +139,15 @@ xaccGroupSetBackend (AccountGroup *grp, Backend *be)
 Backend *
 xaccGroupGetBackend (AccountGroup *grp)
 {
-   if (!grp) return NULL;
-   return (grp->backend);
+   while (grp)
+   {
+     Account *parent;
+     if (grp->backend) return (grp->backend);
+     parent = grp->parent;
+     if (!parent) return NULL;
+     grp = parent->parent;
+   }
+   return NULL;
 }
 
 /************************* END OF FILE ********************************/

@@ -48,7 +48,7 @@ libgncengine_la_SOURCES = \
   Query-xml-parser-v1.c \
   Transaction-xml-parser-v1.c
 
-libgncengine_la_LDFLAGS = -version-info 2:1:1
+libgncengine_la_LDFLAGS = -version-info 2:3:1
 
 noinst_HEADERS = \
   Account.h \

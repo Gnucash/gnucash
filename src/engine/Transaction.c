@@ -583,6 +583,7 @@ xaccInitTransaction (Transaction * trans)
   trans->date_posted.tv_sec  = 0;
   trans->date_posted.tv_nsec = 0;
 
+  trans->version = 0;
   trans->marker = 0;
   trans->editlevel = 0;
   trans->do_free = FALSE;
@@ -640,6 +641,7 @@ xaccCloneTransaction (Transaction *t)
   trans->date_posted.tv_sec  = t->date_posted.tv_sec;
   trans->date_posted.tv_nsec = t->date_posted.tv_nsec;
 
+  trans->version = t->version;
   trans->editlevel = 0;
   trans->do_free = FALSE;
   trans->orig = NULL;
@@ -679,8 +681,7 @@ xaccFreeTransaction (Transaction *trans)
   /* just in case someone looks up freed memory ... */
   trans->num         = NULL;
   trans->description = NULL;
-
-  trans->kvp_data = NULL;
+  trans->kvp_data    = NULL;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;
@@ -688,6 +689,7 @@ xaccFreeTransaction (Transaction *trans)
   trans->date_posted.tv_sec = 0;
   trans->date_posted.tv_nsec = 0;
 
+  trans->version = 0;
   trans->editlevel = 0;
   trans->do_free = FALSE;
 
@@ -1018,6 +1020,7 @@ xaccTransGetImbalance (Transaction * trans)
 
 /********************************************************************\
 \********************************************************************/
+
 gboolean
 xaccIsCommonCurrency(const gnc_commodity * currency_1, 
                      const gnc_commodity * security_1,
@@ -1267,7 +1270,6 @@ xaccTransBeginEdit (Transaction *trans)
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   GList *node;
    Split *split;
    Backend *be;
 
@@ -1348,8 +1350,12 @@ xaccTransCommitEdit (Transaction *trans)
               "Please refresh your browser and try again.\n"
               "(This dialog should be a gui dialog and \n"
               "should check for errors)\n");
-        PERR("Backend asked engine to rollback, but we don't "
-             "handle this case yet. Return code=%d", rc);
+        /* hack alert -- we should check for i/o errors from 
+         * the backend too ... 
+         */
+        trans->editlevel++;
+        xaccTransRollbackEdit (trans);
+        return;
       }
    }
 
@@ -1561,6 +1567,20 @@ xaccTransIsOpen (Transaction *trans)
 {
   if (!trans) return FALSE;
   return (0 < trans->editlevel);
+}
+
+void
+xaccTransSetVersion (Transaction *trans, gint32 vers)
+{
+  if (!trans) return;
+  trans->version = vers;
+}
+
+gint32
+xaccTransGetVersion (Transaction *trans)
+{
+  if (!trans) return 0;
+  return (trans->version);
 }
 
 /********************************************************************\

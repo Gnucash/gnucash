@@ -574,6 +574,9 @@ gnc_book_save (GNCBook *book)
   be = book->backend;
   if (be && be->sync && book->topgroup)
   {
+     /* if invoked as SaveAs(), then backend not yet set */
+     xaccGroupSetBackend (book->topgroup, be);
+
      (be->sync)(be, book->topgroup);
      retval = xaccBackendGetError(be);
 

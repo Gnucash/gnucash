@@ -108,6 +108,7 @@ xaccInitAccount (Account * acc)
 
   acc->splits      = NULL;
 
+  acc->version = 0;
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
@@ -224,6 +225,7 @@ xaccFreeAccount (Account *acc)
   acc->currency    = NULL;
   acc->security    = NULL;
 
+  acc->version = 0;
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
@@ -348,6 +350,21 @@ xaccAccountDestroy (Account *acc)
   acc->do_free = TRUE;
 
   xaccAccountCommitEdit (acc);
+}
+
+
+void 
+xaccAccountSetVersion (Account *acc, gint32 vers)
+{
+  if (!acc) return;
+  acc->version = vers;
+}
+
+gint32 
+xaccAccountGetVersion (Account *acc)
+{
+  if (!acc) return 0;
+  return (acc->version);
 }
 
 /********************************************************************\

@@ -124,15 +124,18 @@ struct _account {
   gnc_numeric share_cleared_balance;
   gnc_numeric share_reconciled_balance;
 
+  /* version number, used for tracking multiuser updates */
+  gint32 version;
+
   GList *splits;           /* list of split pointers */
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;
 
-  gboolean balance_dirty;
-  gboolean sort_dirty;
+  gboolean balance_dirty;  /* balances in splits incorrect */
+  gboolean sort_dirty;     /* sort order of splits is bad */
   gboolean core_dirty;     /* fields in this struct have changed */
-  gboolean do_free;
+  gboolean do_free;        /* in process of being destroyed */
 
   /* The "mark" flag can be used by the user to mark this account
    * in any way desired.  Handy for specialty traversals of the 
@@ -187,4 +190,13 @@ void xaccAccountSetStartingBalance(Account *account,
  */
 
 void xaccFreeAccount (Account *account);
+
+/* The xaccAccountSet/GetVersion() routines set & get the version 
+ *    numbers on this account.  The version number is used to manage
+ *    multi-user updates.  These routines are private because we don't
+ *    want anyone except the backend to mess with them.
+ */
+void xaccAccountSetVersion (Account*, gint32);
+gint32 xaccAccountGetVersion (Account*);
+
 #endif /* __XACC_ACCOUNT_P_H__ */
