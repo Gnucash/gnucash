@@ -1,15 +1,10 @@
 SUBDIRS = . test
 DIST_SUBDIRS = test
 
-pkglib_LTLIBRARIES = libgncmod-binary-import.la
+pkglib_LTLIBRARIES = libgncmod-binary-import.la libgw-binary-import.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
-
-#FIXME remove the following deps
-#  -I${top_srcdir}/src \
-#  -I${top_srcdir}/src/gnome \
-
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
@@ -17,8 +12,14 @@ INCLUDES = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
-  ${GNOME_INCLUDEDIR} \
-  ${GUILE_INCS}
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GLIB_CFLAGS} \
+  ${GNOME_INCLUDEDIR}
+
+#FIXME remove the following deps
+#  -I${top_srcdir}/src \
+#  -I${top_srcdir}/src/gnome \
 
 libgncmod_binary_import_la_SOURCES = \
   druid-commodity.c \
@@ -61,8 +62,7 @@ gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
 gncmod_DATA = binary-import.scm 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_LTLIBRARIES = libgw-binary-import.la
-gwmod_DATA = gw-binary-import-spec.scm
+gwmod_DATA = gw-binary-import-spec.scm gw-binary-import.scm
 
 noinst_DATA = .scm-links
 
@@ -81,13 +81,13 @@ EXTRA_DIST = \
 	ln -sf . g-wrapped 
 	touch .scm-links
 
-gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
+gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (primitive-load \"./gw-binary-import-spec.scm\") \
 	  (gw:generate-module \"gw-binary-import\")"
 
-BUILT_SOURCES = gw-binary-import.c gw-binary-import.h
-CLEANFILES = gw-binary-import.c gw-binary-import.h gw-binary-import.html \
+BUILT_SOURCES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h
+CLEANFILES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h gw-binary-import.html \
               gnucash g-wrapped .scm-links
