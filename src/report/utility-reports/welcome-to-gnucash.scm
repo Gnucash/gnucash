@@ -80,7 +80,7 @@
      (gnc:make-html-text 
       (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.8!"))
       (gnc:html-markup-p
-       (_ "GnuCash 1.6 has lots of nice features. Here are a few."))))
+       (_ "GnuCash 1.8 has lots of nice features. Here are a few."))))
     doc))
 
 (gnc:define-report 

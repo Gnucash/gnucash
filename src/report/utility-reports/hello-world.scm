@@ -477,6 +477,10 @@ new, totally cool report, consult the mailing list %s.")
  ;; untranslated value here!
  'name (N_ "Hello, World")
 
+ ;; The name in the menu
+ ;; (only necessary if it differs from the name)
+ 'menu-name (N_ "Sample Report with Examples")
+
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
  'menu-tip (N_ "A sample report with examples.")

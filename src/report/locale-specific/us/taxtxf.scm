@@ -777,7 +777,7 @@
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    (_ "No Tax Related accounts were found.  Go to the\
- Accounts->Tax Information dialog to set up tax-related accounts.")))))
+ Edit->Tax Options dialog to set up tax-related accounts.")))))
 
             doc)))))
 

@@ -75,10 +75,10 @@ transaction. See the GnuCash online manual for details.")
 
  (N_ "You can pack multiple reports into a single window, 
 providing all the financial information you want at a glance.
-To do so, use the \"Multicolumn View\" report.")
+To do so, use the \"Custom Multicolumn Report\" report.")
 
  (N_ "GnuCash can act as a simple web browser!  To display
-a web page as a report, use the \"Frame URL\" report.")
+a web page as a report, use the \"Custom Web Report\" report.")
 
  (N_ "Style Sheets affect how reports are displayed.  Choose
 a style sheet for your report as a report option, and use

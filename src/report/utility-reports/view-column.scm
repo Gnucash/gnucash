@@ -228,6 +228,7 @@
 (gnc:define-report 
  'version 1
  'name (N_ "Multicolumn View")
+ 'menu-name (N_ "Custom Multicolumn Report")
  'menu-path (list gnc:menuname-utility)
  'renderer render-view
  'options-generator make-options

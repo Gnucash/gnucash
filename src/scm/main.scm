@@ -478,11 +478,11 @@ string and 'directories' must be a list of strings."
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 
-  ;; the Welcome to GnuCash-1.6 extravaganza 
+  ;; the Welcome to GnuCash "extravaganza" report
   (gnc:add-extension 
    (gnc:make-menu-item 
-    (N_ "Welcome Extravaganza")
-    (N_ "Welcome-to-GnuCash screen")
+    (N_ "Welcome Sample Report")
+    (N_ "Welcome-to-GnuCash report screen")
     (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
