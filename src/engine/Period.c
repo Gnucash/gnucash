@@ -154,6 +154,7 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    GList *split_list, *snode;
 
    if (!src_book || !dest_book || !query) return;
+   ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
 
    be = src_book->backend;
    if (be && be->book_transfer_begin)
@@ -200,6 +201,7 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    {
       (*be->book_transfer_commit)(be, dest_book);
    }
+   LEAVE (" ");
 }
 
 /* ================================================================ */
@@ -259,6 +261,8 @@ add_closing_balances (AccountGroup *closed_grp,
    AccountList *acc_list, *node;
 
    if (!closed_grp) return;
+   ENTER (" enter=%s post=%s desc=%s", gnc_print_date(*date_entered),
+       gnc_print_date (*post_date), desc);
 
    /* walk accounts in closed book */
    acc_list = xaccGroupGetAccountList (closed_grp);
@@ -375,11 +379,14 @@ add_closing_balances (AccountGroup *closed_grp,
       childs = xaccAccountGetChildren(candidate);
       if (childs) 
       {
+         PINFO ("add closing baln to subaccts of %s", 
+                 candidate->description);
          add_closing_balances (childs, open_book, closed_book,
                           equity_account,
                           post_date, date_entered, desc);
       }
    }
+   LEAVE (" ");
 }
 
 /* ================================================================ */
@@ -397,6 +404,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    Timespec ts;
 
    if (!existing_book) return NULL;
+   ENTER (" date=%s memo=%s", gnc_print_date(calve_date), memo);
 
    /* Get all transactions that are *earlier* than the calve date,
     * and put them in the new book.  */
@@ -439,6 +447,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);
+   LEAVE (" ");
    return closing_book;
 }
 
