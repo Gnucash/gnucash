@@ -55,7 +55,6 @@ void
 xaccInitializeAccountGroup (AccountGroup *grp)
   {
   grp->saved       = TRUE;
-  grp->new         = FALSE;
   
   grp->parent      = NULL;
   grp->numAcc      = 0;
