@@ -4114,7 +4114,6 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox65);
   gtk_box_pack_start (GTK_BOX (vbox75), hbox65, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox65), 3);
 
   frame29 = gtk_frame_new (_("Account Type"));
   gtk_widget_ref (frame29);
@@ -4247,5 +4246,261 @@ create_Account_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button65, GTK_CAN_DEFAULT);
 
   return Account_Dialog;
+}
+
+GtkWidget*
+create_Transfer_Dialog (void)
+{
+  GtkWidget *Transfer_Dialog;
+  GtkWidget *dialog_vbox13;
+  GtkWidget *vbox78;
+  GtkWidget *frame33;
+  GtkWidget *hbox70;
+  GtkWidget *vbox80;
+  GtkWidget *label814;
+  GtkWidget *label816;
+  GtkWidget *label817;
+  GtkWidget *label818;
+  GtkWidget *vbox81;
+  GtkWidget *amount_big_hbox;
+  GtkWidget *amount_hbox;
+  GtkWidget *date_hbox;
+  GtkWidget *label815;
+  GtkWidget *num_entry;
+  GtkWidget *description_entry;
+  GtkWidget *memo_entry;
+  GtkWidget *hbox66;
+  GtkWidget *frame34;
+  GtkWidget *vbox82;
+  GtkWidget *from_window;
+  GtkWidget *from_show_button;
+  GtkWidget *frame35;
+  GtkWidget *vbox83;
+  GtkWidget *to_window;
+  GtkWidget *to_show_button;
+  GtkWidget *dialog_action_area13;
+  GtkWidget *button66;
+  GtkWidget *button68;
+
+  Transfer_Dialog = gnome_dialog_new (NULL, NULL);
+  gtk_object_set_data (GTK_OBJECT (Transfer_Dialog), "Transfer_Dialog", Transfer_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Transfer_Dialog), TRUE, TRUE, FALSE);
+
+  dialog_vbox13 = GNOME_DIALOG (Transfer_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Transfer_Dialog), "dialog_vbox13", dialog_vbox13);
+  gtk_widget_show (dialog_vbox13);
+
+  vbox78 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox78);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox78", vbox78,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox78);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox13), vbox78, TRUE, TRUE, 0);
+
+  frame33 = gtk_frame_new (_("Transfer Information"));
+  gtk_widget_ref (frame33);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "frame33", frame33,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame33);
+  gtk_box_pack_start (GTK_BOX (vbox78), frame33, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame33), 3);
+
+  hbox70 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox70);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "hbox70", hbox70,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox70);
+  gtk_container_add (GTK_CONTAINER (frame33), hbox70);
+
+  vbox80 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox80);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox80", vbox80,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox80);
+  gtk_box_pack_start (GTK_BOX (hbox70), vbox80, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox80), 3);
+
+  label814 = gtk_label_new (_("Amount:"));
+  gtk_widget_ref (label814);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label814", label814,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label814);
+  gtk_box_pack_start (GTK_BOX (vbox80), label814, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label814), 1, 0.5);
+
+  label816 = gtk_label_new (_("Num:"));
+  gtk_widget_ref (label816);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label816", label816,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label816);
+  gtk_box_pack_start (GTK_BOX (vbox80), label816, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label816), 1, 0.5);
+
+  label817 = gtk_label_new (_("Description:"));
+  gtk_widget_ref (label817);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label817", label817,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label817);
+  gtk_box_pack_start (GTK_BOX (vbox80), label817, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label817), 1, 0.5);
+
+  label818 = gtk_label_new (_("Memo:"));
+  gtk_widget_ref (label818);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label818", label818,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label818);
+  gtk_box_pack_start (GTK_BOX (vbox80), label818, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label818), 1, 0.5);
+
+  vbox81 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox81);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox81", vbox81,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox81);
+  gtk_box_pack_start (GTK_BOX (hbox70), vbox81, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox81), 3);
+
+  amount_big_hbox = gtk_hbox_new (FALSE, 5);
+  gtk_widget_ref (amount_big_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "amount_big_hbox", amount_big_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (amount_big_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox81), amount_big_hbox, TRUE, TRUE, 0);
+
+  amount_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (amount_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "amount_hbox", amount_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (amount_hbox);
+  gtk_box_pack_start (GTK_BOX (amount_big_hbox), amount_hbox, TRUE, TRUE, 0);
+
+  date_hbox = gtk_hbox_new (FALSE, 3);
+  gtk_widget_ref (date_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "date_hbox", date_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_hbox);
+  gtk_box_pack_start (GTK_BOX (amount_big_hbox), date_hbox, FALSE, FALSE, 0);
+
+  label815 = gtk_label_new (_("Date:"));
+  gtk_widget_ref (label815);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "label815", label815,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label815);
+  gtk_box_pack_start (GTK_BOX (date_hbox), label815, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label815), 1, 0.5);
+
+  num_entry = gtk_entry_new ();
+  gtk_widget_ref (num_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "num_entry", num_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (num_entry);
+  gtk_box_pack_start (GTK_BOX (vbox81), num_entry, FALSE, FALSE, 0);
+
+  description_entry = gtk_entry_new ();
+  gtk_widget_ref (description_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "description_entry", description_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_entry);
+  gtk_box_pack_start (GTK_BOX (vbox81), description_entry, FALSE, FALSE, 0);
+
+  memo_entry = gtk_entry_new ();
+  gtk_widget_ref (memo_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "memo_entry", memo_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (memo_entry);
+  gtk_box_pack_start (GTK_BOX (vbox81), memo_entry, FALSE, FALSE, 0);
+
+  hbox66 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox66);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "hbox66", hbox66,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox66);
+  gtk_box_pack_start (GTK_BOX (vbox78), hbox66, TRUE, TRUE, 0);
+
+  frame34 = gtk_frame_new (_("Transfer From"));
+  gtk_widget_ref (frame34);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "frame34", frame34,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame34);
+  gtk_box_pack_start (GTK_BOX (hbox66), frame34, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame34), 3);
+
+  vbox82 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox82);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox82", vbox82,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox82);
+  gtk_container_add (GTK_CONTAINER (frame34), vbox82);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox82), 3);
+
+  from_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (from_window);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "from_window", from_window,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (from_window);
+  gtk_box_pack_start (GTK_BOX (vbox82), from_window, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (from_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  from_show_button = gtk_check_button_new_with_label (_("Show Income/Expense"));
+  gtk_widget_ref (from_show_button);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "from_show_button", from_show_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (from_show_button);
+  gtk_box_pack_start (GTK_BOX (vbox82), from_show_button, FALSE, FALSE, 0);
+
+  frame35 = gtk_frame_new (_("Transfer To"));
+  gtk_widget_ref (frame35);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "frame35", frame35,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame35);
+  gtk_box_pack_start (GTK_BOX (hbox66), frame35, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame35), 3);
+
+  vbox83 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox83);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "vbox83", vbox83,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox83);
+  gtk_container_add (GTK_CONTAINER (frame35), vbox83);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox83), 3);
+
+  to_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (to_window);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "to_window", to_window,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (to_window);
+  gtk_box_pack_start (GTK_BOX (vbox83), to_window, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (to_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  to_show_button = gtk_check_button_new_with_label (_("Show Income/Expense"));
+  gtk_widget_ref (to_show_button);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "to_show_button", to_show_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (to_show_button);
+  gtk_box_pack_start (GTK_BOX (vbox83), to_show_button, FALSE, FALSE, 0);
+
+  dialog_action_area13 = GNOME_DIALOG (Transfer_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Transfer_Dialog), "dialog_action_area13", dialog_action_area13);
+  gtk_widget_show (dialog_action_area13);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area13), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area13), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Transfer_Dialog), GNOME_STOCK_BUTTON_OK);
+  button66 = g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data;
+  gtk_widget_ref (button66);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "button66", button66,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button66);
+  GTK_WIDGET_SET_FLAGS (button66, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Transfer_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  button68 = g_list_last (GNOME_DIALOG (Transfer_Dialog)->buttons)->data;
+  gtk_widget_ref (button68);
+  gtk_object_set_data_full (GTK_OBJECT (Transfer_Dialog), "button68", button68,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button68);
+  GTK_WIDGET_SET_FLAGS (button68, GTK_CAN_DEFAULT);
+
+  return Transfer_Dialog;
 }
 

@@ -33,10 +33,11 @@
 #include "window-reconcile.h"
 #include "query-user.h"
 #include "account-tree.h"
+#include "glade-gnc-dialogs.h"
 #include "gnc-amount-edit.h"
 #include "gnc-dateedit.h"
 #include "gnc-exp-parser.h"
-#include "enriched-messages.h"
+#include "messages.h"
 #include "ui-callbacks.h"
 #include "util.h"
 
@@ -83,37 +84,40 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 
-static GtkWidget *
-gnc_xfer_dialog_create_tree_frame(gchar *title,
-                                  GNCAccountTree **set_tree,
-                                  GtkWidget **set_show_button,
-                                  GtkTooltips *tooltips)
+static void
+gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
+                                XferDirection direction,
+                                GtkTooltips *tooltips)
 {
-  GtkWidget *frame, *scrollWin, *accountTree, *vbox, *button;
+  GNCAccountTree *atree;
+  GtkWidget *scroll_win;
+  GtkWidget *button;
+  GtkWidget *tree;
+  GtkObject *tdo;
 
-  frame = gtk_frame_new(title);
+  tdo = GTK_OBJECT (xferData->dialog);
 
-  vbox = gtk_vbox_new(FALSE, 5);
-  gtk_container_add(GTK_CONTAINER(frame), vbox);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
+  tree = gnc_account_tree_new();
+  atree = GNC_ACCOUNT_TREE (tree);
 
-  accountTree = gnc_account_tree_new();
-  *set_tree = GNC_ACCOUNT_TREE(accountTree);
-  gtk_clist_column_titles_hide(GTK_CLIST(accountTree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(accountTree));
-  gnc_account_tree_hide_income_expense(GNC_ACCOUNT_TREE(accountTree));
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(accountTree));
+  if (direction == XFER_DIALOG_TO)
+    xferData->to = atree;
+  else
+    xferData->from = atree;
 
-  scrollWin = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
-				 GTK_POLICY_AUTOMATIC, 
-				 GTK_POLICY_AUTOMATIC);
+  gtk_clist_column_titles_hide(GTK_CLIST(tree));
+  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(tree));
+  gnc_account_tree_hide_income_expense(GNC_ACCOUNT_TREE(tree));
+  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
 
-  gtk_box_pack_start(GTK_BOX(vbox), scrollWin, TRUE, TRUE, 0);
-  gtk_container_add(GTK_CONTAINER(scrollWin), accountTree);
+  scroll_win = gtk_object_get_data (tdo,
+                                    (direction == XFER_DIALOG_TO) ?
+                                    "to_window" : "from_window");
+
+  gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
   {
-    GtkStyle *st = gtk_widget_get_style(accountTree);
+    GtkStyle *st = gtk_widget_get_style(tree);
     GdkFont *font = NULL;
     gint height;
 
@@ -123,20 +127,24 @@ gnc_xfer_dialog_create_tree_frame(gchar *title,
     if (font != NULL)
     {
       height = gdk_char_height(font, 'X');
-      gtk_widget_set_usize(scrollWin, 0, (height + 6) * 10);
+      gtk_widget_set_usize(scroll_win, 0, (height + 6) * 10);
     }
   }
 
-  button = gtk_check_button_new_with_label(SHOW_INC_EXP_STR);
-  *set_show_button = button;
+  button = gtk_object_get_data (tdo,
+                                (direction == XFER_DIALOG_TO) ?
+                                "to_show_button" : "from_show_button");
+
+  if (direction == XFER_DIALOG_TO)
+    xferData->to_show_button = button;
+  else
+    xferData->from_show_button = button;
+
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
-  gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
   gtk_tooltips_set_tip(tooltips, button, SHOW_INC_EXP_MSG, NULL);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
-		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb), accountTree);
-
-  return frame;
+		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb), tree);
 }
 
 
@@ -422,13 +430,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 {
   GtkWidget *dialog;
   GtkTooltips *tooltips;
-  
-  dialog = gnome_dialog_new(TRANSFER_STR,
-			    GNOME_STOCK_BUTTON_OK,
-			    GNOME_STOCK_BUTTON_CANCEL,
-			    NULL);
+  GtkObject *tdo;
 
+  dialog = create_Transfer_Dialog();
   xferData->dialog = dialog;
+  tdo = GTK_OBJECT (dialog);
 
   /* parent */
   if (parent != NULL)
@@ -436,12 +442,6 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
-
-  /* destroy on close */
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
-
-  /* allow grow and shrink, no auto-shrink */
-  gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, FALSE);
 
   gnome_dialog_button_connect(GNOME_DIALOG(dialog), 0,
                               GTK_SIGNAL_FUNC(gnc_xfer_dialog_ok_cb),
@@ -456,133 +456,52 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   tooltips = gtk_tooltips_new();
 
-  /* contains amount, date, num, description, and memo */
+  /* amount & date widgets */
   {
-    GtkWidget *frame, *vbox, *hbox, *label;
+    GtkWidget *amount;
+    GtkWidget *entry;
+    GtkWidget *date;
+    GtkWidget *hbox;
 
-    frame = gtk_frame_new(XFER_INFO);
-    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+    amount = gnc_amount_edit_new();
+    gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(amount), PRTSEP);
 
-    gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox),
-		       frame, TRUE, TRUE, 0);
+    hbox = gtk_object_get_data(tdo, "amount_hbox");
+    gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
+    xferData->amount_edit = amount;
 
-    vbox = gtk_vbox_new(FALSE, 6);
-    gtk_container_add(GTK_CONTAINER(frame), vbox);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
+    entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
 
-    /* Contains amount and date */
-    hbox = gtk_hbox_new(FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
+    gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
+                       GTK_SIGNAL_FUNC(gnc_xfer_update_cb), xferData);
 
-    {
-      GtkWidget *amount;
-      GtkWidget *entry;
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-      label = gtk_label_new(AMOUNT_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-      gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-      amount = gnc_amount_edit_new();
-      gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(amount), PRTSEP);
-      gtk_box_pack_start(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
-      xferData->amount_edit = amount;
-
-      entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
-
-      gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
-                         GTK_SIGNAL_FUNC(gnc_xfer_update_cb), xferData);
-
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
-    }
-
-    {
-      GtkWidget *date;
-
-      label = gtk_label_new(DATE_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-      gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-      date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
-      gtk_box_pack_start(GTK_BOX(hbox), date, TRUE, TRUE, 0);
-      xferData->date_entry = date;
-    }
-
-    {
-      GtkWidget *sep;
-
-      sep = gtk_hseparator_new();
-      gtk_box_pack_start(GTK_BOX(vbox), sep, TRUE, TRUE, 3);
-    }
-
-    /* Contains num, description, and memo */
-    hbox = gtk_hbox_new(FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
-
-    {
-      GtkWidget *vbox;
-      gchar *string;
-
-      vbox = gtk_vbox_new(TRUE, 5);
-      gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
-
-      string = g_strconcat(NUM_STR, ":", NULL);
-      label = gtk_label_new(string);
-      g_free(string);
-      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-      gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-      label = gtk_label_new(DESC_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-      gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-      label = gtk_label_new(MEMO_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-      gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    }
-
-    {
-      GtkWidget *vbox, *entry;
-
-      vbox = gtk_vbox_new(TRUE, 5);
-      gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
-
-      entry = gtk_entry_new();
-      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
-      xferData->num_entry = entry;
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
-
-      entry = gtk_entry_new();
-      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
-      xferData->description_entry = entry;
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
-
-      entry = gtk_entry_new();
-      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
-      xferData->memo_entry = entry;
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
-    }
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    hbox = gtk_object_get_data(tdo, "date_hbox");
+    gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
+    xferData->date_entry = date;
   }
 
-  /* Contains from and to */
   {
-    GtkWidget *hbox, *tree;
+    GtkWidget *entry;
 
-    hbox = gtk_hbox_new(TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(dialog)->vbox),
-		       hbox, TRUE, TRUE, 0);
+    entry = gtk_object_get_data(tdo, "num_entry");
+    xferData->num_entry = entry;
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-    tree = gnc_xfer_dialog_create_tree_frame(XFRM_STR,
-                                             &xferData->from,
-                                             &xferData->from_show_button,
-                                             tooltips);
-    gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
+    entry = gtk_object_get_data(tdo, "description_entry");
+    xferData->description_entry = entry;
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-    tree = gnc_xfer_dialog_create_tree_frame(XFTO_STR,
-                                             &xferData->to,
-                                             &xferData->to_show_button,
-                                             tooltips);
-    gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
+    entry = gtk_object_get_data(tdo, "memo_entry");
+    xferData->memo_entry = entry;
+    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
   }
+
+  /* from and to */
+  gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_TO, tooltips);
+  gnc_xfer_dialog_fill_tree_frame(xferData, XFER_DIALOG_FROM, tooltips);
 }
 
 
