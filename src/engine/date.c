@@ -405,6 +405,15 @@ printDateSecs (char * buff, time_t t)
                    theTime->tm_year + 1900);
 }
 
+void
+printGDate( char *buf, GDate *gd )
+{
+  printDate( buf,
+             g_date_day(gd),
+             g_date_month(gd),
+             g_date_year(gd) );
+}
+
 char * 
 xaccPrintDateSecs (time_t t)
 {

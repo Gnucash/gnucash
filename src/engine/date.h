@@ -138,9 +138,12 @@ const gchar *getDateTextFormatString(DateFormat df);
  * Return: nothing
  *
  * Globals: global dateFormat value
- */
+ **/
 void printDate (char * buff, int day, int month, int year);
+/** convenience: calls through to printDate. **/
 void printDateSecs (char * buff, time_t secs);
+/** Convenience; calls through to printDate. **/
+void printGDate( char *buf, GDate *gd );
 
 char * xaccPrintDateSecs (time_t secs);
 const char * gnc_print_date(Timespec ts);
