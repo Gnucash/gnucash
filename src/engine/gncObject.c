@@ -31,13 +31,14 @@
 #include "gnc-engine-util.h"
 #include "gncObject.h"
 #include "gncObjectP.h"
+#include "qofbook.h"
 
 static gboolean object_is_initialized = FALSE;
 static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
-void gncObjectBookBegin (GNCBook *book)
+void gncObjectBookBegin (QofBook *book)
 {
   GList *l;
 
@@ -52,7 +53,7 @@ void gncObjectBookBegin (GNCBook *book)
   book_list = g_list_prepend (book_list, book);
 }
 
-void gncObjectBookEnd (GNCBook *book)
+void gncObjectBookEnd (QofBook *book)
 {
   GList *l;
 
@@ -67,7 +68,7 @@ void gncObjectBookEnd (GNCBook *book)
   book_list = g_list_remove (book_list, book);
 }
 
-gboolean gncObjectIsDirty (GNCBook *book)
+gboolean gncObjectIsDirty (QofBook *book)
 {
   GList *l;
 
@@ -81,7 +82,7 @@ gboolean gncObjectIsDirty (GNCBook *book)
   return FALSE;
 }
 
-void gncObjectMarkClean (GNCBook *book)
+void gncObjectMarkClean (QofBook *book)
 {
   GList *l;
 
@@ -105,7 +106,7 @@ void gncObjectForeachType (foreachTypeCB cb, gpointer user_data)
   }
 }
 
-void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
+void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data)
 {
   const GncObject_t *obj;

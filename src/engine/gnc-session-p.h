@@ -29,8 +29,8 @@
 #ifndef GNC_SESSION_P_H
 #define GNC_SESSION_P_H
 
-#include "gnc-book.h"
 #include "gnc-session.h"
+#include "qofbook.h"
 
 struct gnc_session_struct
 {
@@ -70,7 +70,7 @@ struct gnc_session_struct
  * you call this routine with a book that is open, then the
  * old list is blown away.
  */
-void gnc_session_set_book (GNCSession *session, GNCBook *book);
+void gnc_session_set_book (GNCSession *session, QofBook *book);
 
 Backend * gnc_session_get_backend (GNCSession *session);
 

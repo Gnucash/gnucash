@@ -35,8 +35,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -50,6 +48,8 @@
 
 #include "gncObject.h"
 #include "QueryObject.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_ACCOUNT; 
 
@@ -88,7 +88,7 @@ mark_account (Account *account)
 \********************************************************************/
 
 static void
-xaccInitAccount (Account * acc, GNCBook *book)
+xaccInitAccount (Account * acc, QofBook *book)
 {
   acc->parent   = NULL;
   acc->children = NULL;
@@ -136,7 +136,7 @@ xaccInitAccount (Account * acc, GNCBook *book)
 \********************************************************************/
 
 Account *
-xaccMallocAccount (GNCBook *book)
+xaccMallocAccount (QofBook *book)
 {
   Account *acc;
 
@@ -152,7 +152,7 @@ xaccMallocAccount (GNCBook *book)
 }
 
 Account *
-xaccCloneAccountSimple(const Account *from, GNCBook *book)
+xaccCloneAccountSimple(const Account *from, QofBook *book)
 {
     Account *ret;
 
@@ -185,7 +185,7 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 }
 
 Account *
-xaccCloneAccount (const Account *from, GNCBook *book)
+xaccCloneAccount (const Account *from, QofBook *book)
 {
     time_t now;
     Account *ret;
@@ -226,7 +226,7 @@ xaccCloneAccount (const Account *from, GNCBook *book)
 /* ================================================================ */
 
 Account *
-xaccAccountLookupTwin (Account *acc,  GNCBook *book)
+xaccAccountLookupTwin (Account *acc,  QofBook *book)
 {
    kvp_value *v_ncopies;
    int i, ncopies = 0;
@@ -535,7 +535,7 @@ xaccAccountGetVersion (Account *acc)
   return (acc->version);
 }
 
-GNCBook *
+QofBook *
 xaccAccountGetBook (Account *account)
 {
   if (!account) return NULL;
@@ -864,18 +864,18 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 \********************************************************************/
 
 Account *
-xaccAccountLookup (const GUID *guid, GNCBook *book)
+xaccAccountLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                            guid, GNC_ID_ACCOUNT);
 }
 
 Account *
-xaccAccountLookupDirect (GUID guid, GNCBook *book)
+xaccAccountLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                            &guid, GNC_ID_ACCOUNT);
 }
 
@@ -1599,7 +1599,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   commodity = DxaccAccountGetCurrency (acc);
   if (!commodity)
   {
-    gnc_commodity_table_insert (gnc_book_get_commodity_table (acc->book), currency);
+    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->book), currency);
   }
 }
 
@@ -1622,7 +1622,7 @@ DxaccAccountSetSecurity (Account *acc, gnc_commodity * security)
   commodity = DxaccAccountGetSecurity (acc);
   if (!commodity)
   {
-    gnc_commodity_table_insert (gnc_book_get_commodity_table (acc->book), security);
+    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->book), security);
   }
 }
 
@@ -1810,7 +1810,7 @@ DxaccAccountGetCurrency (Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  table = gnc_book_get_commodity_table (acc->book);
+  table = gnc_commodity_table_get_table (acc->book);
 
   return gnc_commodity_table_lookup_unique (table, s);
 }
@@ -1838,7 +1838,7 @@ DxaccAccountGetSecurity (Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  table = gnc_book_get_commodity_table (acc->book);
+  table = gnc_commodity_table_get_table (acc->book);
 
   return gnc_commodity_table_lookup_unique (table, s);
 }
@@ -1995,7 +1995,7 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 				    gnc_commodity *balance_currency,
 				    gnc_commodity *new_currency)
 {
-  GNCBook *book;
+  QofBook *book;
   GNCPriceDB *pdb;
 
   if (gnc_numeric_zero_p (balance) ||
@@ -2003,7 +2003,7 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
     return balance;
 
   book = xaccGroupGetBook (xaccAccountGetRoot (account));
-  pdb = gnc_book_get_pricedb (book);
+  pdb = gnc_pricedb_get_db (book);
 
   balance = gnc_pricedb_convert_balance_latest_price(pdb, balance, balance_currency, new_currency);
 
@@ -3164,14 +3164,14 @@ xaccAccountGetBackend (Account * acc)
 /* gncObject function implementation and registration */
 
 static void
-account_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
+account_foreach (QofBook *book, foreachObjectCB cb, gpointer ud)
 {
   GNCEntityTable *et;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
-  et = gnc_book_get_entity_table (book);
+  et = qof_book_get_entity_table (book);
   xaccForeachEntity (et, GNC_ID_ACCOUNT, cb, ud);
 }
 

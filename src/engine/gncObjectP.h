@@ -30,6 +30,7 @@
 #define GNC_OBJECTP_H_
 
 #include "gncObject.h"
+#include "qofbook.h"
 
 /* Initialize the object registration subsystem */
 /* XXX A better name would be 'ObjectClassInitialize ... */
@@ -38,11 +39,11 @@ void gncObjectShutdown (void);
 
 /* Note that the following are per-class and not per-instance */
 /* To be called from within the book */
-void gncObjectBookBegin (GNCBook *book);
-void gncObjectBookEnd (GNCBook *book);
+void gncObjectBookBegin (QofBook *book);
+void gncObjectBookEnd (QofBook *book);
 
-gboolean gncObjectIsDirty (GNCBook *book);
-void gncObjectMarkClean (GNCBook *book);
+gboolean gncObjectIsDirty (QofBook *book);
+void gncObjectMarkClean (QofBook *book);
 
 #endif /* GNC_OBJECTP_H_ */
 /** @} */

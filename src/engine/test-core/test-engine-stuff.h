@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #include "Query.h"
+#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-pricedb.h"
 #include "gnc-session.h"

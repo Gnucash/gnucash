@@ -29,8 +29,8 @@
 #ifndef GNC_OBJECT_H_
 #define GNC_OBJECT_H_
 
-#include "gnc-book.h"
 #include "GNCId.h"
+#include "qofbook.h"
 
 /* Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
@@ -55,19 +55,19 @@ struct _gncObjectDef {
    * book_end is called when the book is being closed, to clean
    * up (and free memory).
    */
-  void		(*book_begin)(GNCBook *);
-  void		(*book_end)(GNCBook *);
+  void		(*book_begin)(QofBook *);
+  void		(*book_end)(QofBook *);
 
   /* Determine if there are any dirty items in this book */
-  gboolean	(*is_dirty)(GNCBook *);
+  gboolean	(*is_dirty)(QofBook *);
 
   /* Mark this object's book clean (for after a load) */
-  void		(*mark_clean)(GNCBook *);
+  void		(*mark_clean)(QofBook *);
 
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void		(*foreach)(GNCBook *, foreachObjectCB, gpointer);
+  void		(*foreach)(QofBook *, foreachObjectCB, gpointer);
 
   /* Given a particular object, return a printable string */
   const char *	(*printable)(gpointer obj);
@@ -76,7 +76,7 @@ struct _gncObjectDef {
 
 void gncObjectForeachType (foreachTypeCB cb, gpointer user_data);
 
-void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
+void gncObjectForeach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data);
 
 const char * gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj);

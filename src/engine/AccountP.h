@@ -48,6 +48,7 @@
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 
 /** STRUCTS *********************************************************/
@@ -62,7 +63,7 @@ struct account_s
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  GNCBook *book;   /* the entity_table in which this account is stored */
+  QofBook *book;   /* the entity_table in which this account is stored */
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that

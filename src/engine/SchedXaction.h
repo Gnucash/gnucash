@@ -37,6 +37,7 @@
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 /* 
  * #defines for kvp_frame strings
@@ -61,7 +62,7 @@ typedef struct gncp_SchedXaction SchedXaction;
 /**
  * Creates and initializes a scheduled transaction.
  **/
-SchedXaction *xaccSchedXactionMalloc(GNCBook *book);
+SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 
 /**
  * @return True if the scheduled transaction is dirty and needs to
@@ -231,7 +232,7 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
  */
 void xaccSchedXactionSetTemplateTrans( SchedXaction *sx,
                                        GList *t_t_list,
-                                       GNCBook *book );
+                                       QofBook *book );
 
 /**
  * Adds an instance to the deferred list of the SX.  Added instances are

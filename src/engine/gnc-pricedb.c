@@ -30,14 +30,14 @@
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "gncObject.h"
-#include "gnc-book-p.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
 #include "kvp-util.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;
@@ -51,7 +51,7 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
 /* allocation */
 GNCPrice *
-gnc_price_create (GNCBook *book)
+gnc_price_create (QofBook *book)
 {
   GNCPrice *p;
 
@@ -68,7 +68,7 @@ gnc_price_create (GNCBook *book)
   p->value = gnc_numeric_zero();
 
   p->book = book;
-  p->entity_table = gnc_book_get_entity_table (book);
+  p->entity_table = qof_book_get_entity_table (book);
 
   xaccGUIDNew (&p->guid, book);
   xaccStoreEntity (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
@@ -121,7 +121,7 @@ gnc_price_unref(GNCPrice *p)
 /* ==================================================================== */
 
 GNCPrice *
-gnc_price_clone (GNCPrice* p, GNCBook *book)
+gnc_price_clone (GNCPrice* p, QofBook *book)
 {
   /* the clone doesn't belong to a PriceDB */
   GNCPrice *new_p;
@@ -376,11 +376,11 @@ gnc_price_set_version(GNCPrice *p, gint32 vers)
 /* getters */
 
 GNCPrice *
-gnc_price_lookup (const GUID *guid, GNCBook *book)
+gnc_price_lookup (const GUID *guid, QofBook *book)
 {
   if (!guid) return NULL;
   g_return_val_if_fail (book, NULL);
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                            guid, GNC_ID_PRICE);
 }
 
@@ -398,7 +398,7 @@ gnc_price_return_guid (GNCPrice *p)
   return p->guid;
 }
 
-GNCBook *
+QofBook *
 gnc_price_get_book (GNCPrice *p)
 {
   if (!p) return NULL;
@@ -630,7 +630,7 @@ commodity_equal (gconstpointer a, gconstpointer b)
 }
 
 GNCPriceDB *
-gnc_pricedb_create(GNCBook * book)
+gnc_pricedb_create(QofBook * book)
 {
   GNCPriceDB * result;
 
@@ -692,14 +692,14 @@ gnc_pricedb_destroy(GNCPriceDB *db)
 #define GNC_PRICEDB "gnc_pricedb"
 
 GNCPriceDB *
-gnc_pricedb_get_db(GNCBook *book)
+gnc_pricedb_get_db(QofBook *book)
 {
   if (!book) return NULL;
-  return gnc_book_get_data (book, GNC_PRICEDB);
+  return qof_book_get_data (book, GNC_PRICEDB);
 }
 
 void
-gnc_pricedb_set_db(GNCBook *book, GNCPriceDB *db)
+gnc_pricedb_set_db(QofBook *book, GNCPriceDB *db)
 {
   GNCPriceDB *old_db;
   
@@ -708,7 +708,7 @@ gnc_pricedb_set_db(GNCBook *book, GNCPriceDB *db)
   old_db = gnc_pricedb_get_db (book);
   if (db == old_db) return;
   
-  gnc_book_set_data (book, GNC_PRICEDB, db);
+  qof_book_set_data (book, GNC_PRICEDB, db);
   if (db) db->book = book;
 
   gnc_pricedb_destroy (old_db);
@@ -1925,26 +1925,26 @@ xaccPriceDBGetBackend (GNCPriceDB *prdb)
 /* gncObject function implementation and registration */
 
 static void 
-pricedb_book_begin (GNCBook *book)
+pricedb_book_begin (QofBook *book)
 {
   gnc_pricedb_set_db (book, gnc_pricedb_create(book));
 }
 
 static void 
-pricedb_book_end (GNCBook *book)
+pricedb_book_end (QofBook *book)
 {
   /* unhook the prices */
   gnc_pricedb_set_db (book, NULL);
 }
 
 static gboolean
-pricedb_is_dirty (GNCBook *book)
+pricedb_is_dirty (QofBook *book)
 {
-  return gnc_pricedb_dirty(gnc_book_get_pricedb(book));
+  return gnc_pricedb_dirty(gnc_pricedb_get_db(book));
 }
 
 static void
-pricedb_mark_clean(GNCBook *book)
+pricedb_mark_clean(QofBook *book)
 {
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 }

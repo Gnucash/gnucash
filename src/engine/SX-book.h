@@ -36,17 +36,17 @@
 
 #include <glib.h>
 
-#include "gnc-book.h"
 #include "gnc-engine.h"
+#include "qofbook.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
-SchedXactions * gnc_book_get_schedxaction_list( GNCBook *book );
-GList * gnc_book_get_schedxactions( GNCBook *book );
+SchedXactions * gnc_book_get_schedxaction_list( QofBook *book );
+GList * gnc_book_get_schedxactions( QofBook *book );
 
 /** Returns the template group from the book.
  **/
-AccountGroup * gnc_book_get_template_group (GNCBook *book);
+AccountGroup * gnc_book_get_template_group (QofBook *book);
 
 #endif /* GNC_SX_BOOK_H */
 /** @} */

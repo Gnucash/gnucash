@@ -35,12 +35,12 @@
 #include "QueryCoreP.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "guile-mappings.h"
+#include "qofbook.h"
 
 static short module = MOD_ENGINE;
 
@@ -2343,7 +2343,7 @@ gnc_commodity_to_scm (const gnc_commodity *commodity)
  * gnc_book_to_scm
  ********************************************************************/
 SCM
-gnc_book_to_scm (GNCBook *book)
+gnc_book_to_scm (QofBook *book)
 {
   static SCM book_type = SCM_UNDEFINED;
 

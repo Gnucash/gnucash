@@ -86,11 +86,12 @@
 
 #include "FreqSpecP.h"
 #include "GNCIdP.h"
-#include "gnc-book-p.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "messages.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 /* I have done this to prevent compiler warnings...
  * This is used to convert a const GDate* to a GDate* for passing
@@ -176,12 +177,12 @@ get_abbrev_month_name(guint month)
  **/
 
 static void
-xaccFreqSpecInit( FreqSpec *fs, GNCBook *book )
+xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 {
         g_return_if_fail( fs );
         g_return_if_fail (book);
 
-        fs->entity_table = gnc_book_get_entity_table (book);
+        fs->entity_table = qof_book_get_entity_table (book);
 
         xaccGUIDNew( &fs->guid, book );
         xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
@@ -193,7 +194,7 @@ xaccFreqSpecInit( FreqSpec *fs, GNCBook *book )
 }
 
 FreqSpec*
-xaccFreqSpecMalloc(GNCBook *book)
+xaccFreqSpecMalloc(QofBook *book)
 {
         FreqSpec        *fs;
 

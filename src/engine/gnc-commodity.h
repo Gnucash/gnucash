@@ -40,8 +40,8 @@
 #define GNC_COMMODITY_H
 
 #include <glib.h>
-#include "gnc-book.h"
 #include "gnc-engine.h"
+#include "qofbook.h"
 
 /** The commodity namespace definitions are used to tag a commodity by
  *  its type, or a stocks by the exchange where it is traded.
@@ -424,12 +424,12 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 
 /** Returns the commodity table assoicated with a book.
  */
-gnc_commodity_table * gnc_commodity_table_get_table(GNCBook *book);
+gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
 
 /** You should probably not be using gnc_commodity_table_set_table()
  * directly.  Its for internal use only.
  */
-void gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct);
+void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
 
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the

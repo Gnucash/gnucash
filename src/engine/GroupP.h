@@ -41,8 +41,8 @@
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Transaction.h"
-#include "gnc-book.h"
 #include "gnc-numeric.h"
+#include "qofbook.h"
 
 
 /** STRUCTS *********************************************************/
@@ -55,7 +55,7 @@ struct account_group_s
 
   AccountList *accounts;   /* list of account pointers */
 
-  GNCBook *book;           /* The book which this group belongs to */
+  QofBook *book;           /* The book which this group belongs to */
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;
@@ -94,7 +94,7 @@ void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
 void     xaccFreeAccountGroup (AccountGroup *account_group);
 
 /* Set the top-level group in the book */
-void     xaccSetAccountGroup (GNCBook *book, AccountGroup *grp);
+void     xaccSetAccountGroup (QofBook *book, AccountGroup *grp);
 
 /*
  * The xaccGroupGetBackend() subroutine will find the

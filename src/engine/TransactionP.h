@@ -51,11 +51,11 @@
 #include <glib.h>
 
 #include "Backend.h"
-#include "gnc-book.h"
 #include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
 #include "GNCIdP.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 
 /** STRUCTS *********************************************************/
@@ -81,7 +81,7 @@ struct split_s
 {
   GUID guid;  /* globally unique id */
 
-  GNCBook *book;             /* The enitity table where this split is stored. */
+  QofBook *book;             /* The enitity table where this split is stored. */
 
   Account *acc;              /* back-pointer to debited/credited account  */
 
@@ -141,7 +141,7 @@ struct transaction_s
    */
   GUID guid;
 
-  GNCBook *book;         /* The entity_table where the transaction is stored */
+  QofBook *book;         /* The entity_table where the transaction is stored */
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -244,7 +244,7 @@ gint32 xaccTransGetVersion (const Transaction*);
  *    transaction have in common, using the old currency/security fields
  *    of the split accounts. */
 gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
-                                                GNCBook *book);
+                                                QofBook *book);
 
 /* Code to register Split and Transaction types with the engine */
 gboolean xaccSplitRegister (void);

@@ -35,11 +35,12 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
 #include "gncObject.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -54,7 +55,7 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
+xaccInitializeAccountGroup (AccountGroup *grp, QofBook *book)
 {
   grp->saved       = 1;
 
@@ -69,7 +70,7 @@ xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
 \********************************************************************/
 
 AccountGroup *
-xaccMallocAccountGroup (GNCBook *book)
+xaccMallocAccountGroup (QofBook *book)
 {
   AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
@@ -85,14 +86,14 @@ xaccMallocAccountGroup (GNCBook *book)
 
 #define GNC_TOP_GROUP "gnc_top_group"
 AccountGroup * 
-xaccGetAccountGroup (GNCBook *book)
+xaccGetAccountGroup (QofBook *book)
 {
    if (!book) return NULL;
-   return gnc_book_get_data (book, GNC_TOP_GROUP);
+   return qof_book_get_data (book, GNC_TOP_GROUP);
 }
 
 void
-xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
+xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
 {
   AccountGroup *old_grp;
   if (!book) return;
@@ -106,7 +107,7 @@ xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
      return;
   }
 
-  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
+  qof_book_set_data (book, GNC_TOP_GROUP, grp);
 
   xaccAccountGroupBeginEdit (old_grp);
   xaccAccountGroupDestroy (old_grp);
@@ -239,7 +240,7 @@ xaccAccountGroupDestroy (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 
-GNCBook *
+QofBook *
 xaccGroupGetBook (AccountGroup *group)
 {
   if (!group) return NULL;
@@ -1291,25 +1292,25 @@ xaccGroupGetBackend (AccountGroup *grp)
 /* gncObject function implementation and registration */
 
 static void 
-group_book_begin (GNCBook *book)
+group_book_begin (QofBook *book)
 {
   xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
 }
 
 static void 
-group_book_end (GNCBook *book)
+group_book_end (QofBook *book)
 {
   xaccSetAccountGroup (book, NULL);
 }
 
 static gboolean
-group_is_dirty (GNCBook *book)
+group_is_dirty (QofBook *book)
 {
   return xaccGroupNotSaved(xaccGetAccountGroup(book));
 }
 
 static void
-group_mark_clean(GNCBook *book)
+group_mark_clean(QofBook *book)
 {
   xaccGroupMarkSaved(xaccGetAccountGroup(book));
 }

@@ -102,7 +102,7 @@ typedef struct gnc_lot_struct        GNCLot;
 
 /** GList of Account */
 typedef GList                  AccountList;
-/** GList of GNCBook */
+/** GList of GNCLots */
 typedef GList                  LotList;
 /** GList of Split */
 typedef GList                  SplitList;

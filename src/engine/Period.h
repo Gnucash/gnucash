@@ -14,9 +14,9 @@
 #ifndef XACC_PERIOD_H
 #define XACC_PERIOD_H
 
-#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "Query.h"
+#include "qofbook.h"
 
 
 /** The gnc_book_close_period() routine will 'close' a book at
@@ -98,7 +98,7 @@
    transactions ???
 
  */
-GNCBook * gnc_book_close_period (GNCBook *, Timespec, 
+QofBook * gnc_book_close_period (QofBook *, Timespec, 
                                  Account *equity_acct, 
                                  const char *memo);
 
@@ -130,7 +130,7 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
  *    For the current usage, this bug aint important, and I'm too 
  *    lazy to fix it.
  */
-void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
+void gnc_book_partition (QofBook *dest, QofBook *src, Query *);
 
 /** The gnc_book_insert_trans_clobber() routine takes an existing 
  *    transaction that is located in one book, and moves it to 
@@ -148,8 +148,8 @@ void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
  *    books' entity tables, and not much else.
  */
 
-void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
-void gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans);
+void gnc_book_insert_trans (QofBook *book, Transaction *trans);
+void gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans);
 
 #endif /* XACC_PERIOD_H */
 
