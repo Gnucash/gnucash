@@ -580,6 +580,58 @@ the caller and should not be accessed after the function returns.
 @section Splits
 @tindex Split
 
+A Split is the Engine abstraction of an accounting entry in an Account
+Ledger. In accounting terms, a Split is a Ledger Entry. As such, it
+contains the following pieces of information:
+
+@table @asis
+
+@item A parent Account
+The Account of which it is an entry.
+
+@item A parent Transaction.
+In accounting terms, this is the Journal Entry which this Ledger Entry
+is linked to.
+
+@item A 'share quantity'
+This is the number of 'shares' which have been debited to the parent
+Account. This quantity may be negative, in which case the Split
+represents a 'credit'. Shares are given in units of the security of the
+Account, unless the security field is blank, in which case shares are
+given in units of the Account currency. @xref{Accounts}.
+
+@item A 'price'
+This represents the price of the shares. The price is a ratio of the
+parent Account currency to the parent Account security. For most Accounts,
+the security is blank, and thus the price is @code{1.0}, since the currency
+effectively is the security. @xref{Accounts}.
+
+@item A 'reconciled' flag
+This flag represents the reconciled status of the Split. Possible
+reconciliation states for a Split are:
+
+  @table @asis
+
+  @item Not Reconciled
+  The Split has not been reconciled or cleared.
+
+  @item Cleared
+  The Split has been cleared, but not reconciled.
+
+  @item Reconciled
+  The Split has been reconciled with a statement.
+
+  @item Frozen
+  The Split has been frozen into the accounting period.
+
+  @end table
+
+@end table
+
+In addition to the above, Splits contain a Memo field, an Action field,
+and a key-value pair frame. The Memo and Action fields are for arbitrary
+user input.
+
 
 @node Transactions, Accounts, Splits, Engine
 @section Transactions
