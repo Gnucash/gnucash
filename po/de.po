@@ -2586,7 +2586,7 @@ msgstr "Wechselkurs:"
 
 #: src/gnome/glade-gnc-dialogs.c:5396
 msgid "To Amount:"
-msgstr "zum Betrag:"
+msgstr "Ziel Betrag:"
 
 #: src/gnome/glade-gnc-dialogs.c:5478
 msgid "Working..."
@@ -7356,7 +7356,7 @@ msgstr "Börsenplatzkürzel"
 
 #: src/scm/report/guile-strings.c:417
 msgid "Units"
-msgstr "Maßeinheiten"
+msgstr "Anteile"
 
 #: src/scm/report/guile-strings.c:421
 msgid "Investment Portfolio"
