@@ -712,6 +712,15 @@ sr_get_cell_borders (VirtualLocation virt_loc,
     borders->bottom = CELL_BORDER_LINE_NONE;
     borders->left   = CELL_BORDER_LINE_NONE;
     borders->right  = CELL_BORDER_LINE_NONE;
+    return;
+  }
+
+  if (vcell->cellblock->cursor_type == CURSOR_TYPE_SPLIT)
+  {
+    borders->top    = MIN (borders->top,    CELL_BORDER_LINE_LIGHT);
+    borders->bottom = MIN (borders->bottom, CELL_BORDER_LINE_LIGHT);
+    borders->left   = MIN (borders->left,   CELL_BORDER_LINE_LIGHT);
+    borders->right  = MIN (borders->right,  CELL_BORDER_LINE_LIGHT);
   }
 }
 
