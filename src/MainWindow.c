@@ -183,25 +183,25 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
                                       XmNshadowThickness, 0,
                                       XmNarrowDirection, XmARROW_DOWN, 
                                       NULL);
-       }
-       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
-       XtManageChild (acc->arrowb);
 
-       XtAddCallback (acc->arrowb, XmNactivateCallback, 
-                      expandListCB, (XtPointer *) acc);
+          XtAddCallback (acc->arrowb, XmNactivateCallback, 
+                         expandListCB, (XtPointer *) acc);
 
 #define __XACC_DO_ARROW_CALLBACK
 #ifdef  __XACC_DO_ARROW_CALLBACK
-        /* add a button press event handler just in case the 
-         * XmNactivate callback is broken. See notes for the
-         * ArrowEventCallback for details.  -- Linas */
-        acc->PreviousArrowReason = 0;
-	XtAddEventHandler(acc->arrowb, 
-			  ButtonPressMask | ButtonReleaseMask,
-			  False, (XtEventHandler) ArrowEventCallback,
-			  (XtPointer) acc);
+          /* add a button press event handler just in case the 
+           * XmNactivate callback is broken. See notes for the
+           * ArrowEventCallback for details.  -- Linas */
+          acc->PreviousArrowReason = 0;
+          XtAddEventHandler(acc->arrowb, 
+                            ButtonPressMask | ButtonReleaseMask,
+                            False, (XtEventHandler) ArrowEventCallback,
+                            (XtPointer) acc);
 #endif /* __XACC_DO_ARROW_CALLBACK */
 
+       }
+       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
+       XtManageChild (acc->arrowb);
 
        /* recursively display children accounts */
        if (acc->expand) {
@@ -214,6 +214,16 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
         */
        if (acc->arrowb) {
           XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, NULL);
+          XtRemoveCallback (acc->arrowb, XmNactivateCallback,
+                            expandListCB, (XtPointer *) acc);
+
+#ifdef  __XACC_DO_ARROW_CALLBACK
+          acc->PreviousArrowReason = 0;
+          XtRemoveEventHandler(acc->arrowb, 
+                            ButtonPressMask | ButtonReleaseMask,
+                            False, (XtEventHandler) ArrowEventCallback,
+                            (XtPointer) acc);
+#endif /* __XACC_DO_ARROW_CALLBACK */
           XtUnmanageChild (acc->arrowb);
           XtDestroyWidget (acc->arrowb);
           acc->arrowb = NULL;
