@@ -337,7 +337,7 @@ employee_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return gw_wcp_assimilate_ptr (owner.owner.undefined,
-				scm_c_eval_string("<gnc:GncEmployee*>"));
+				gh_eval_str("<gnc:GncEmployee*>"));
 }
 
 /********************************************************************/
