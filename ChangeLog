@@ -30,6 +30,13 @@
 	  symbol to a delta time.
 	* src/scm/main.scm: call eval with the right number of arguments
 	  based on early or late versions.
+
+	* src/business/business-reports/invoice.scm:
+	* src/business/business-reports/owner-report.scm:
+	  Change the date format string to be consistent with other places
+	  (e.g. the check print dialog) and use '%' instead of '~'.
+	  This is an interim fix for #99574, at least until we can
+	  centralize the functionality.
 	
 2003-05-23  Derek Atkins  <derek@ihtfp.com>
 

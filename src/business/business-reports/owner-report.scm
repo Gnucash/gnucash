@@ -9,7 +9,6 @@
 (define-module (gnucash report owner-report))
 
 (use-modules (srfi srfi-1))
-(use-modules (srfi srfi-19))
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash main))		; for gnc:debug
@@ -379,7 +378,7 @@
    (gnc:make-string-option
     gnc:pagename-general (N_ "Today Date Format")
     "p" (N_ "The format for the date->string conversion for today's date.")
-    "~B ~e, ~Y"))
+    "%B %e, %Y"))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -494,9 +493,10 @@
     (gnc:html-table-append-row! table (list (string-expand
 					     (if addy addy "")
 					     #\newline "<br>")))
-    (gnc:html-table-append-row! table
-				(list (date->string (current-date)
-						    date-format)))
+    (gnc:html-table-append-row! table (list
+				       (strftime
+					date-format
+					(localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)
