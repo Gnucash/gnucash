@@ -111,17 +111,6 @@
 		 (thunk (gnc:account-get-split account x)))
 	       0 (gnc:account-get-split-count account) 1))
 
-
-(define (gnc:group-map-accounts thunk group)
-  (let ((num-accounts (gnc:group-get-num-accounts group)))
-    (let loop 
-        ((i 0)
-         (collected '()))
-      (if (>= i num-accounts)
-          (reverse collected)
-          (loop (+ i 1)
-                (cons (thunk (gnc:group-get-account group i)) collected))))))
-
 (define (gnc:group-get-accounts group)
   (gnc:group-map-accounts (lambda (a) a) group))
 

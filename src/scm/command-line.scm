@@ -91,9 +91,18 @@
                   (begin
                     (gnc:error "non-list given for --doc-path: " val)
                     (gnc:shutdown 1)))))))
+
+   (cons "evaluate"
+         (cons 'string
+               (lambda (val)
+                 (set! gnc:*batch-mode-forms-to-evaluate*
+                       (cons val gnc:*batch-mode-forms-to-evaluate*)))))
    
-   (cons "load-user-config" (cons 'boolean gnc:load-user-config-if-needed))
-   (cons "load-system-config" (cons 'boolean gnc:load-system-config-if-needed))))
+   (cons "load-user-config"
+         (cons 'boolean gnc:load-user-config-if-needed))
+
+   (cons "load-system-config"
+         (cons 'boolean gnc:load-system-config-if-needed))))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t

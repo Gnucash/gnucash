@@ -115,7 +115,8 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
-EXTRA_DIST =    .cvsignore 
+EXTRA_DIST =    .cvsignore
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

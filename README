@@ -1,4 +1,4 @@
-============================================================
+############################################################
           Gnucash 1.5.x README file.
 
 NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
@@ -10,7 +10,7 @@ If you want something a bit more tested, please use the
 1.4 stable series.
 ------------------------------------------------------------
 
-==================
+##################
 Table of Contents:
 ------------------
 
@@ -19,13 +19,13 @@ Table of Contents:
   - Dependencies
   - Invocation/running
   - Internationalization
-  - Building and Installing
-  - Supported OSes
+  - Building & Installing
+  - Supported Platforms
   - Additional Download Sites
   - Getting the Source via CVS
   - Developing GnuCash
 
-========
+########
 Overview
 --------
 
@@ -110,7 +110,7 @@ http://www.gnucash.org/pub/gnucash/
 Development versions:
 http://www.gnucash.org/source_code.php3
 
-====================
+####################
 Upgrading from 1.2.x
 --------------------
 
@@ -124,7 +124,7 @@ section of this file for more detail.  The file format hasn't changed
 We hope you enjoy all the new features!
 
 
-============
+############
 Dependencies
 ------------
 
@@ -183,7 +183,7 @@ you will need to install:
              http://www.gnuplot.vt.edu/ 
 
 
-=======
+#######
 Running
 -------
 
@@ -243,7 +243,7 @@ to run gnucash from a local directory:
     "$@"
 
 
-====================
+####################
 Internationalization
 --------------------
 Message catalogues exist for French and German.  These are enabled with 
@@ -267,7 +267,7 @@ fr_CH
 de_CH
 
 
-=====================
+#####################
 Building & Installing
 ---------------------
 
@@ -286,8 +286,30 @@ following packages:
   SWIG: Used to autogenerate perl wrappers - available at www.swig.org
     need 1.1p5 or later ...
 
+  gnome development system: headers, libraries, etc.
+
+  libxml: available from ftp.gnome.org
+
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
+
+What you'll need to get and install in order to make sure you have all
+of these pieces properly installed for your particular operating
+system flavor will vary, but here's at least a partial list of what
+you'll need for the systems we know about:
+
+  Debian/GNU/Linux:
+    current:
+      libgnome-dev
+      libxml-dev
+      libgtkxmhtml-dev
+      guile1.3
+      libguile6-dev
+      libguile6-slib
+
+  RedHat:
+    ???
+
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
@@ -346,9 +368,9 @@ to be installed, the above command would install
 DESTDIR can be helpful when trying to build install images and
 packages.
 
-==============
-Supported OS's
---------------
+###################
+Supported Platforms
+-------------------
 
 GnuCash 1.5.x is known to work with the following operating systems:
 
@@ -372,7 +394,7 @@ for precompiled (but *very old*) binaries for these platforms
 Gnucash can probably be made to work with most POSIX-ish platforms, 
 provided the libraries and toolchain are available.
 
-=========================
+#########################
 Additional Download Sites
 -------------------------
 
@@ -412,7 +434,7 @@ SGI Irix
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
 
-=======================
+#######################
 Getting Source with CVS
 -----------------------
 A read-only version of the cvs tree is available on the net.
@@ -431,7 +453,7 @@ To get a copy of the source in the gnucash-1.2 stable production tree do a
   cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
 
-==================
+##################
 Developing GnuCash
 ------------------
 Before you start developing GnuCash, you should do the following:
@@ -514,3 +536,7 @@ Submitting a Patch:
   Send gnucash.diff.gz.uue to gnucash-patches@gnucash.org
 
   Thanks in advance for your contribution!
+
+Local Variables:
+mode: text
+End:
