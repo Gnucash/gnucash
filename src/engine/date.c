@@ -330,9 +330,10 @@ char dateSeparator ()
 /* hack alert -- this routine returns incorrect values for 
  * dates before 1970 */
 
-Timespec
-gnc_iso8601_to_timespec(const char *str)
+static Timespec
+gnc_iso8601_to_timespec(const char *str, int do_localtime)
 {
+  char buf[4];
   Timespec ts;
   struct tm stm;
   long int nsec =0;
@@ -355,22 +356,67 @@ gnc_iso8601_to_timespec(const char *str)
   stm.tm_sec = atoi (str);
 
   /* the decimal point, optionally present ... */
-  /* hack alert -- we should count number of decimal places, */
+  /* hack alert -- this algo breaks if more than 9 decimal places present */
   if (strchr (str, '.')) 
   { 
+     int decimals, i, multiplier=1000000000;
      str = strchr (str, '.') +1;
-     nsec = atoi(str) *10000000;
+     decimals = strcspn (str, "+- ");
+     for (i=0; i<decimals; i++) multiplier /= 10;
+     nsec = atoi(str) * multiplier;
   }
   stm.tm_isdst = -1;
 
+
+  /* timezone format can be +hh or +hhmm or +hh.mm (or -) */
   str += strcspn (str, "+-");
-  stm.tm_hour += atoi(str);
+  buf[0] = str[0];
+  buf[1] = str[1];
+  buf[2] = str[2];
+  buf[3] = 0;
+  stm.tm_hour -= atoi(buf);
+
+  str +=3;
+  if ('.' == *str) str++;
+  if (isdigit (*str) && isdigit (*(str+1)))
+  {
+     int cyn;
+     /* copy sign from hour part */
+     if ('+' == buf[0]) { cyn = -1; } else { cyn = +1; } 
+     buf[0] = str[0];
+     buf[1] = str[1];
+     buf[2] = str[2];
+     buf[3] = 0;
+     stm.tm_min += cyn * atoi(buf);
+  }
+
+  /* adjust for the local timezone */
+  if (do_localtime)
+  {
+    int tz_hour=0;
+    localtime (&tz_hour);   /* bogus call, forces 'timezone' to be set */
+    tz_hour = timezone/3600;
+    stm.tm_hour -= tz_hour;
+    stm.tm_min -= (timezone - 3600*tz_hour)/60;
+  }
 
   /* compute number of seconds */
   ts.tv_sec = mktime (&stm);
   ts.tv_nsec = nsec;
 
   return ts;
+}
+
+Timespec
+gnc_iso8601_to_timespec_local(const char *str)
+{
+   return gnc_iso8601_to_timespec(str, 1);
+}
+
+Timespec
+gnc_iso8601_to_timespec_gmt(const char *str)
+{
+   return gnc_iso8601_to_timespec(str, 0);
 }
 
 /********************************************************************\
@@ -395,8 +441,8 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   /* we also have to print the sign by hand, to work around a bug
    * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
    */
-  cyn = '+';
-  if (0>tz_hour) { cyn = '-'; tz_hour = -tz_hour; }
+  cyn = '-';
+  if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
 
   len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
        parsed.tm_year+1900, parsed.tm_mon+1, parsed.tm_mday,

@@ -148,10 +148,12 @@ Timespec gnc_dmy2timespec (int day, int month, int year);
 /* Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
-/* The gnc_iso8601_to_timespec() routine converts an ISO-8601 style 
+/* The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
  *    date/time string to Timespec.
  *    For example: 1998-07-17 11:00:00.68-05 
  *    is 680 milliseconds after 11 o'clock, central daylight time 
+ *    The _gmt() routine returns the time in gmt. The _local() routine
+ *    returns the local time.
  *
  * The gnc_timespec_to_iso8601_buff() routine prints a Timespec
  *    as an ISO-8601 style string.  The buffer must be long enough
@@ -159,7 +161,8 @@ Timespec gnc_dmy2timespec_end (int day, int month, int year);
  *    routine returns a pointer to the null terminator (and can 
  *    thus be used in the 'stpcpy' metaphor of string concatenation).
  */
-Timespec gnc_iso8601_to_timespec(const char *);
+Timespec gnc_iso8601_to_timespec_local(const char *);
+Timespec gnc_iso8601_to_timespec_gmt(const char *);
 char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
 
 #endif /* __XACC_DATE_H__ */
