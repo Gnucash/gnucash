@@ -27,12 +27,44 @@ quick_modify (struct _BasicCell *_cell,
         const char *change, 
         const char *newval)
 {
-   
-printf ("change is %s \n", change);
-   if (change) {
-   } 
+   QuickFillCell *cell = (QuickFillCell *) _cell;
 
-   return newval;
+   /* if user typed the very first letter into this
+    * cell, then make sure that the quick-fill is set to 
+    * the root.  Alternately, if user erased all of the 
+    * text in the cell, and has just started typing,
+    * then make sure that the quick-fill root is also reset
+    */
+   if (newval) {
+      if ((0x0 != newval[0]) && (0x0 == newval[1])) {
+         cell->qf = cell->qfRoot;
+      }
+   }
+
+   /* if change is null, then user is deleting text;
+    * otehrwise, they are inserting text. */
+   if (change) {
+      int i;
+      char c;
+      
+      /* search for best-matching quick-fill string */
+      i=0;
+      c = change[i];
+      while (c) {
+         cell->qf = xaccGetQuickFill (cell->qf, c);
+         i++;
+         c = change[i];
+      }
+
+      /* if a match found, return it */
+      if (cell->qf) {
+         return (strdup (cell->qf->text));
+      } else {
+         return newval;
+      }
+   } else {
+      return newval;
+   }
 }
 
 /* ================================================ */
@@ -55,11 +87,9 @@ QuickFillCell *
 xaccMallocQuickFillCell (void)
 {
    QuickFillCell *cell;
-   cell = xaccMallocQuickFillCell();
-   xaccInitBasicCell (&(cell->cell));
+   cell = ( QuickFillCell *) malloc (sizeof (QuickFillCell));
 
-   cell->qfRoot = xaccMallocQuickFill();
-   cell->qf = cell->qfRoot;
+   xaccInitQuickFillCell (cell);
    return cell;
 }
 
@@ -68,9 +98,14 @@ xaccMallocQuickFillCell (void)
 void
 xaccInitQuickFillCell (QuickFillCell *cell)
 {
-  cell->cell.enter_cell    = quick_enter;
-  cell->cell.modify_verify = quick_modify;
-  cell->cell.leave_cell    = quick_leave;
+   xaccInitBasicCell (&(cell->cell));
+
+   cell->qfRoot = xaccMallocQuickFill();
+   cell->qf = cell->qfRoot;
+
+   cell->cell.enter_cell    = quick_enter;
+   cell->cell.modify_verify = quick_modify;
+   cell->cell.leave_cell    = quick_leave;
 }
 
 /* ================================================ */

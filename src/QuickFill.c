@@ -58,10 +58,12 @@ QuickFill *
 xaccMallocQuickFill( void )
   {
   int i;
-  QuickFill *qf = (QuickFill *)_malloc(sizeof(QuickFill));
+  QuickFill *qf = (QuickFill *)malloc(sizeof(QuickFill));
   
-  for( i=0; i<QFNUM; i++ )
+  for( i=0; i<QFNUM; i++ ) 
+    {
     qf->qf[i] = NULL;
+    }
   
   qf->text = NULL;
   
@@ -78,9 +80,12 @@ xaccFreeQuickFill( QuickFill *qf )
     int i;
     
     for( i=0; i<QFNUM; i++ )
+      {
       xaccFreeQuickFill( qf->qf[i] );
-    
-    _free(qf);
+      }
+
+    free(qf->text);
+    free(qf);
     }
   }
 
@@ -120,9 +125,14 @@ qfInsertTextRec( QuickFill *qf, const char *text, int depth )
       int index = CHAR_TO_INDEX( text[depth] );
       
       if( qf->qf[index] == NULL )
+        {
         qf->qf[index] = xaccMallocQuickFill();
-      
-      qf->qf[index]->text = text;
+        }
+
+      /* store text in LIFO order, so that recent
+       * stuff shows up before old stuff */
+      if (qf->qf[index]->text) free (qf->qf[index]->text);
+      qf->qf[index]->text = strdup (text);
       
       qfInsertTextRec( qf->qf[index], text, ++depth );
       }
