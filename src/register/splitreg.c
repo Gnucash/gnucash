@@ -1,6 +1,6 @@
 /*
  * FILE:
- * register.c
+ * splitreg.c
  *
  * FUNCTION:
  * Implements the register object.
@@ -125,7 +125,7 @@
 /* ============================================== */
 
 static void
-configLayout (BasicRegister *reg)
+configLayout (SplitRegister *reg)
 {
    int type = reg->type;
 
@@ -136,11 +136,11 @@ configLayout (BasicRegister *reg)
    reg->num_header_rows = 1;
    SET (DATE_CELL,  0,  0, 11,  DATE_STR);
    SET (NUM_CELL,   1,  0,  7,  NUM_STR);
-   SET (ACTN_CELL,  1,  1,  7,  NUM_STR);
+   SET (ACTN_CELL,  1,  0,  7,  NUM_STR);
    SET (XFRM_CELL,  2,  0, 14,  XFRM_STR);
-   SET (XTO_CELL,   2,  1, 14,  XFTO_STR);
+   SET (XTO_CELL,   2,  0, 14,  XFTO_STR);
    SET (DESC_CELL,  3,  0, 29,  DESC_STR);
-   SET (MEMO_CELL,  3,  1, 29,  DESC_STR);
+   SET (MEMO_CELL,  3,  0, 29,  DESC_STR);
    SET (RECN_CELL,  4,  0,  1,  "R");
    SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
    SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
@@ -228,8 +228,10 @@ configLayout (BasicRegister *reg)
 /* negative cells mean "traverse out of table" */
 
 static void
-configTraverse (BasicRegister *reg)
+configTraverse (SplitRegister *reg)
 {
+
+#ifdef LATER
    int type = reg->type;
    CellBlock *curs = reg->cursor;
 
@@ -268,15 +270,16 @@ configTraverse (BasicRegister *reg)
          xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
 
    }
+#endif /* LATER */
 }
 
 /* ============================================== */
 
-BasicRegister * xaccMallocBasicRegister (int type)
+SplitRegister * xaccMallocSplitRegister (int type)
 {
-   BasicRegister * reg;
-   reg = (BasicRegister *) malloc (sizeof (BasicRegister));
-   xaccInitBasicRegister (reg, type);
+   SplitRegister * reg;
+   reg = (SplitRegister *) malloc (sizeof (SplitRegister));
+   xaccInitSplitRegister (reg, type);
    return reg;
 }
 
@@ -297,6 +300,11 @@ BasicRegister * xaccMallocBasicRegister (int type)
 }
    
 /* BASIC & FANCY macros initialize cells in the register */
+/* CN == Cell Name
+ * CT == Cell Type
+ * CL == Cell location
+ */
+
 
 #define FANCY(CN,CT,CL) {					\
    reg->CN##Cell = xaccMalloc##CT##Cell();			\
@@ -312,7 +320,7 @@ BasicRegister * xaccMallocBasicRegister (int type)
    
 /* ============================================== */
 
-void xaccInitBasicRegister (BasicRegister *reg, int type)
+void xaccInitSplitRegister (SplitRegister *reg, int type)
 {
    Table * table;
    CellBlock *curs, *header;
@@ -323,6 +331,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    reg->type = type;
 
    /* --------------------------- */
+   /* define the rows & columns where cells appear */
    configLayout (reg);
 
    /* --------------------------- */
@@ -343,17 +352,25 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    HDR (VALU);
    
    /* --------------------------- */
-   /* define the ledger cursor */
-   /* the cursor is 2 rows tall */
-   curs = xaccMallocCellBlock (2, reg->num_cols);
-   reg->cursor = curs;
+   /* define the ledger cursor that handles transactions */
+   /* the cursor is 1 row tall */
+   curs = xaccMallocCellBlock (1, reg->num_cols);
+   reg->trans_cursor = curs;
    
    FANCY (date,    Date,      DATE);
    BASIC (num,     Text,      NUM);
-   FANCY (action,  Combo,     ACTN);
+   FANCY (desc,    QuickFill, DESC);
+   FANCY (balance, Price,     BALN);
+
+   /* --------------------------- */
+   /* define the ledger cursor that handles splits */
+   /* the cursor is 1 row tall */
+   curs = xaccMallocCellBlock (1, reg->num_cols);
+   reg->split_cursor = curs;
+   
    FANCY (xfrm,    Combo,     XFRM);
    FANCY (xto,     Combo,     XTO);
-   FANCY (desc,    QuickFill, DESC);
+   FANCY (action,  Combo,     ACTN);
    BASIC (memo,    Text,      MEMO);
    BASIC (recn,    Recn,      RECN);
    FANCY (credit,  Price,     CRED);
@@ -362,8 +379,14 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    FANCY (price,   Price,     PRIC);
    FANCY (value,   Price,     VALU);
 
-   FANCY (balance, Price,     BALN);
+
+   /* --------------------------- */
+   /* do some misc cell config */
+
+   /* balance cell does not accept input; its display only.  */
    reg->balanceCell->cell.input_output = 0;
+
+   /* the debit/credit/value cells show blank if value is 0.00 */
    reg->debitCell->blank_zero = 1;
    reg->creditCell->blank_zero = 1;
    reg->valueCell->blank_zero = 1;
@@ -401,7 +424,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    phys_c = header->numCols;
    xaccSetTableSize (table, phys_r, phys_c, 2, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
-   xaccSetCursor (table, curs, header->numRows, 0, 1, 0);
+   xaccSetCursor (table, reg->xxxxcurs, header->numRows, 0, 1, 0);
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
@@ -410,7 +433,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 /* ============================================== */
 
 void 
-xaccDestroyBasicRegister (BasicRegister *reg)
+xaccDestroySplitRegister (SplitRegister *reg)
 {
    /* give the user a chance to clean up */
    if (reg->destroy) {
@@ -423,9 +446,11 @@ xaccDestroyBasicRegister (BasicRegister *reg)
    reg->table = NULL;
 
    xaccDestroyCellBlock (reg->header);
-   xaccDestroyCellBlock (reg->cursor);
+   xaccDestroyCellBlock (reg->trans_cursor);
+   xaccDestroyCellBlock (reg->split_cursor);
    reg->header = NULL;
-   reg->cursor = NULL;
+   reg->trans_cursor = NULL;
+   reg->split_cursor = NULL;
 
    xaccDestroyDateCell      (reg->dateCell);
    xaccDestroyBasicCell     (reg->numCell);
@@ -464,7 +489,7 @@ xaccDestroyBasicRegister (BasicRegister *reg)
 /* ============================================== */
 
 unsigned int
-xaccGetChangeFlag (BasicRegister *reg)
+xaccGetChangeFlag (SplitRegister *reg)
 {
 
    unsigned int changed = 0;

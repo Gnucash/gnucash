@@ -1,6 +1,6 @@
 /*
  * FILE:
- * register.h
+ * splitreg.h
  *
  * FUNCTION:
  * Implements a basic display register/ledger.
@@ -9,10 +9,7 @@
  * it also determines the actual phyisical layout, arrengement
  * of columns, etc.
  *
- * WARNING: 
- * This register is quasi-broken: it does not display splits.
- * This register is "obsolete", and is here for documentary
- * and exaple reasons only.
+ * Handles splits
  *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
@@ -38,8 +35,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __XACC_REGISTER_H__
-#define __XACC_REGISTER_H__
+#ifndef __XACC_SPLITREG_H__
+#define __XACC_SPLITREG_H__
 
 #include "basiccell.h"
 #include "combocell.h"
@@ -90,14 +87,15 @@
 
 #define NUM_CELLS 20
 
-typedef struct _BasicRegister BasicRegister;
+typedef struct _SplitRegister SplitRegister;
 
-struct _BasicRegister {
+struct _SplitRegister {
    /* the table itself that implements the underlying GUI. */
    Table         * table;
 
    /* the cursors that define the currently edited row */
-   CellBlock     * cursor;
+   CellBlock     * trans_cursor;
+   CellBlock     * split_cursor;
    CellBlock     * header;
 
    /* the individual cells, by function */
@@ -135,17 +133,17 @@ struct _BasicRegister {
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
-   void (* destroy) (BasicRegister *);
+   void (* destroy) (SplitRegister *);
 
 };
 
-BasicRegister * xaccMallocBasicRegister (int type);
-void            xaccInitBasicRegister (BasicRegister *, int type);
-void            xaccDestroyBasicRegister (BasicRegister *);
+SplitRegister * xaccMallocSplitRegister (int type);
+void            xaccInitSplitRegister (SplitRegister *, int type);
+void            xaccDestroySplitRegister (SplitRegister *);
 
 /* returns non-zero value if updates have been made to data */
-unsigned int    xaccGetChangeFlag (BasicRegister *);
+unsigned int    xaccGetChangeFlag (SplitRegister *);
 
-#endif /* __XACC_REGISTER_H__ */
+#endif /* __XACC_SPLITREG_H__ */
 
 /* ============ END OF FILE ===================== */
