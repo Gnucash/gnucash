@@ -35,12 +35,8 @@
 
 #include "config.h"
 
-#include <dlfcn.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <glib.h>
 
@@ -61,54 +57,10 @@
 #include "gnc-pricedb-p.h"
 #include "SchedXaction.h"
 #include "SchedXactionP.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 
 static short module = MOD_ENGINE;
-
-/* ====================================================================== */
-
-typedef struct xaccSchedXactionListDef {
-   GNCBook *book;
-	GList *sx_list;
-	gboolean sx_notsaved;
-} SchedXactionList;
-
-#define GNC_SCHEDXACTIONS "gnc_schedxactions"
-static SchedXactionList *
-gnc_book_get_schedxaction_list( GNCBook *book )
-{
-  if ( book == NULL ) return NULL;
-  return gnc_book_get_data (book, GNC_SCHEDXACTIONS);
-}
-
-GList *
-gnc_book_get_schedxactions( GNCBook *book )
-{
-  SchedXactionList *list;
-  if ( book == NULL ) return NULL;
-  list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
-  if (list) return list->sx_list;
-  return NULL;
-}
-
-void
-gnc_book_set_schedxactions( GNCBook *book, GList *newList )
-{
-  SchedXactionList *old_list, *new_list;
-  if ( book == NULL ) return;
-
-  old_list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
-  if (old_list && old_list->sx_list == newList) return;
-  
-  new_list = g_new (SchedXactionList, 1);
-  new_list->book = book;
-  new_list->sx_list = newList;
-  new_list->sx_notsaved = TRUE;
-  if (NULL == newList) new_list->sx_notsaved = FALSE;
-  
-  gnc_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
-
-  g_free (old_list);
-}
 
 /* ====================================================================== */
 /* dirty flag stuff */
@@ -124,7 +76,7 @@ mark_sx_clean(gpointer data, gpointer user_data)
 static void
 book_sxns_mark_saved(GNCBook *book)
 {
-  SchedXactionList *sxl;
+  SchedXactions *sxl;
 
   sxl = gnc_book_get_schedxaction_list (book);
   if (sxl) sxl->sx_notsaved = FALSE;
@@ -139,7 +91,7 @@ book_sxlist_notsaved(GNCBook *book)
 {
   GList *sxlist;
   SchedXaction *sx;
-  SchedXactionList *sxl;
+  SchedXactions *sxl;
 
   sxl = gnc_book_get_schedxaction_list (book);
   if((sxl && sxl->sx_notsaved)
