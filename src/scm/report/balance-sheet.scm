@@ -181,7 +181,6 @@
 	    (append (assoc-ref split-up-accounts (_ "Income"))
 		    (assoc-ref split-up-accounts (_ "Expense"))))
 
-	   ;; cstim: happy now? :->
 
 	   (doc (gnc:make-html-document))
 	   (txt (gnc:make-html-text))

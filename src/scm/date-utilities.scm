@@ -200,23 +200,26 @@
 ;; Note that the last interval will be shorter than <incr> if
 ;; (<curd>-<endd>) is not an integer multiple of <incr>. If you don't
 ;; want that you'll have to write another function.
-(define (gnc:dateloop curd endd incr) 
+(define (gnc:make-date-interval-list curd endd incr) 
   (cond ((gnc:timepair-later curd endd)
 	 (let ((nextd (incdate curd incr)))
 	   (cond ((gnc:timepair-later nextd endd)
 		  (cons (list curd (decdate nextd SecDelta) '())
-			(gnc:dateloop nextd endd incr)))
+			(gnc:make-date-interval-list nextd endd incr)))
 		  (else (cons (list curd endd '()) '())))))
 	(else '())))
 
-;; Build a list of evenly spaced times.  If dates are unevenly spaced,
-;; the last interval will be the shorter one/
-(define (gnc:dateloop-simple curd endd incr) 
-  (cond ((gnc:timepair-later curd endd)
-	 (let ((nextd (incdate curd incr)))
-	   (cons curd (gnc:dateloop-simple nextd endd incr))))
-		
-	(else (list endd))))
+;; Build a list of times.  The dates are evenly spaced with the
+;; stepsize 'incr'. If the difference of 'startdate' and 'enddate' is
+;; not an integer multiple of 'incr', 'enddate' will be added as the
+;; last element of the list, thus making the last interval smaller
+;; than 'incr'.
+(define (gnc:make-date-list startdate enddate incr) 
+  (cond ((gnc:timepair-later startdate enddate)
+	 (cons startdate 
+	       (gnc:make-date-list (incdate startdate incr) 
+				   enddate incr)))
+	(else (list enddate))))
 
 
 ; A reference zero date - the Beginning Of The Epoch

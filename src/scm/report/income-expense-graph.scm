@@ -138,7 +138,7 @@
 	   (exchange-fn-internal (gnc:make-exchange-function exchange-alist))
 	   (exchange-fn (lambda (foreign)
                           (exchange-fn-internal foreign report-currency)))
-	   (dates-list (gnc:dateloop 
+	   (dates-list (gnc:make-date-interval-list
                         (gnc:timepair-start-day-time from-date-tp) 
                         (gnc:timepair-end-day-time to-date-tp)
                         (eval interval)))

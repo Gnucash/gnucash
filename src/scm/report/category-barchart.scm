@@ -175,7 +175,7 @@
 			     (gnc:get-current-group-depth)
 			     account-levels))
 	     ;; This is the list of date intervals to calculate.
-	     (dates-list (gnc:dateloop 
+	     (dates-list (gnc:make-date-interval-list
 			  (gnc:timepair-start-day-time from-date-tp) 
 			  (gnc:timepair-end-day-time to-date-tp)
 			  (eval interval)))

@@ -16,8 +16,8 @@
       (optname-report-currency (N_ "Report's currency"))
 
       (pagename-display (N_ "Display"))
-      (optname-sep-bars (N_ "Show seperate asset & liability/equity bars?"))
-      (optname-net-bars (N_ "Show net worth bars?"))
+      (optname-sep-bars (N_ "Show Asset & Liability bars"))
+      (optname-net-bars (N_ "Show net worth bars"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
@@ -58,17 +58,17 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-sep-bars
-        "a" (N_ "Show Seperate Asset and Liability bars?") #t))
+        "a" (N_ "Show the Asset and the Liability/Equity bars?") #t))
 
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-net-bars
-        "b" (N_ "Show A Net Worth bar?") #t))
+        "b" (N_ "Show a Net Worth bar?") #t))
 
 
       (gnc:options-add-plot-size! 
        options pagename-display 
-       optname-plot-width optname-plot-height "c" 400 400)
+       optname-plot-width optname-plot-height "c" 500 400)
 
       (gnc:options-set-default-section options pagename-general)
 
@@ -140,7 +140,6 @@
 
 	   (show-sep? (op-value pagename-display optname-sep-bars))
 	   (show-net? (op-value pagename-display optname-net-bars))
-;	   (stacked? (op-value pagename-display optname-stacked))
 	   (height (op-value pagename-display optname-plot-height))
 	   (width (op-value pagename-display optname-plot-width))
 
@@ -151,8 +150,8 @@
 	   (exchange-fn-internal (gnc:make-exchange-function exchange-alist))
 	   (exchange-fn (lambda (foreign)
                           (exchange-fn-internal foreign report-currency)))
-	   (dates-list (gnc:dateloop-simple 
-                        (gnc:timepair-start-day-time from-date-tp) 
+	   (dates-list (gnc:make-date-list
+                        (gnc:timepair-end-day-time from-date-tp) 
                         (gnc:timepair-end-day-time to-date-tp)
                         (eval interval)))
 	   (dummy134 (gnc:debug "dates-list" dates-list))
@@ -183,9 +182,13 @@
       (gnc:html-barchart-set-row-labels! chart date-string-list)
       (gnc:html-barchart-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
-;      (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-;      (gnc:html-barchart-set-stacked?! chart stacked?)
-
+      ;; Determine whether we have enough space for horizontal labels
+      ;; -- kind of a hack. Assumptions: y-axis labels and legend
+      ;; require 200 pixels, and each x-axes label needs 60 pixels.
+      (gnc:html-barchart-set-row-labels-rotated?! 
+       chart (< (/ (- width 200) 
+		   (length date-string-list)) 60))
+      
       (if show-sep?
           (begin
             (gnc:html-barchart-append-column! chart assets-list)
@@ -224,7 +227,7 @@
    ;; The name of this report. This will be used, among other things,
    ;; for making its menu item in the main menu. You need to use the
    ;; untranslated value here!
-   'name (N_ "Net Worth Time Series")
+   'name (N_ "Net Worth Barchart")
 
    ;; The options generator function defined above.
    'options-generator options-generator

@@ -1,3 +1,15 @@
+2001-04-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/net-worth-timeseries.scm: Fixed date argument
+	bug. Added auto label rotation.
+
+	* src/scm/date-utilities.scm: Renamed gnc:dateloop to
+	gnc:make-date-interval-list and gnc:dateloop-simple to
+	gnc:make-date-list.
+
+	* src/scm/report/category-barchart.scm, income-expense-graph.scm:
+	Adapt to gnc:dateloop's namechange.
+
 2001-04-10  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/net-worth-timeseries.scm: New file.  You guessed
