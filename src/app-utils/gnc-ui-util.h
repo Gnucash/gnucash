@@ -90,6 +90,8 @@ gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    gboolean include_children);
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
+const char * gnc_get_reconcile_valid_chars (void);
+const char * gnc_get_reconcile_char_order (void);
 
 typedef enum
 {

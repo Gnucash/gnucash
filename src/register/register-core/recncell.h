@@ -29,12 +29,10 @@
  * that will cycle through a series of single-character
  * values when clicked upon by the mouse.
  *
- * hack alert -- there should be a way of specifying what these values
- * are, instead of having them hard coded as they currently are.
- *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2001 Derek Atkins
  */
 
 #ifndef RECN_CELL_H
@@ -44,7 +42,6 @@
 
 #include "basiccell.h"
 
-typedef const char * (*RecnCellStringGetter) (char flag);
 typedef gboolean (*RecnCellConfirm) (char old_flag, gpointer data);
 
 typedef struct
@@ -52,6 +49,10 @@ typedef struct
   BasicCell cell;
 
   char reconciled_flag; /* The actual flag value */
+
+  char * valid_chars;		/* The list of valid flag types */
+  char * char_order;		/* The order of automatic flag selection */
+  char 	default_flag;		/* The default flag for unknown user input */
 
   RecnCellConfirm confirm_cb;
   gpointer confirm_data;
@@ -66,6 +67,16 @@ void        gnc_recn_cell_set_confirm_cb (RecnCell *cell,
                                           RecnCellConfirm confirm_cb,
                                           gpointer data);
  
-void        gnc_recn_cell_set_string_getter (RecnCellStringGetter getter);
+/*
+ * note that chars is copied into the RecnCell directly, but remains
+ * the "property" of the caller.  The caller must maintain the chars
+ * pointer, and the caller must setup a mechanism to 'free' the chars
+ * pointer.  The rationale is that you may have many RecnCell objects
+ * that use the same set of flags -- this saves you an alloc/free for
+ * each cell.  - warlord  2001-11-28
+ */
+void	    gnc_recn_cell_set_valid_chars (RecnCell *cell, const char *chars,
+					   char default_flag);
+void	    gnc_recn_cell_set_char_order (RecnCell *cell, const char *chars);
 
 #endif

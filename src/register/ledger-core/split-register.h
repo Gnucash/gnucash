@@ -88,6 +88,7 @@ typedef enum
 #define TCRED_CELL "trans-credit"
 #define TDEBT_CELL "trans-debit"
 #define TSHRS_CELL "trans-shares"
+#define TYPE_CELL  "split-type"
 #define XFRM_CELL  "account"
 
 /* Cursor Names */

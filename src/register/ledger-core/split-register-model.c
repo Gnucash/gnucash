@@ -189,6 +189,13 @@ gnc_split_register_get_memo_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_type_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+  return _("Type");
+}
+
+static const char *
 gnc_split_register_get_debit_label (VirtualLocation virt_loc,
                                     gpointer user_data)
 {
@@ -625,18 +632,29 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
 				       gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  Transaction *trans;
-  Split *split;
-  Timespec ts;
+  char type;
 
-  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-  trans = xaccSplitGetParent (split);
-  if (!trans)
+  type = gnc_recn_cell_get_flag
+    ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL));
+
+  /* Only print the due date for invoice transactions */
+  if (type != 'I')
     return NULL;
 
-  xaccTransGetDateDueTS (trans, &ts);
+  {
+    Transaction *trans;
+    Split *split;
+    Timespec ts;
 
-  return gnc_print_date (ts);
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    trans = xaccSplitGetParent (split);
+    if (!trans)
+      return NULL;
+
+    xaccTransGetDateDueTS (trans, &ts);
+    
+    return gnc_print_date (ts);
+  }
 }
 
 static const char *
@@ -809,6 +827,29 @@ gnc_split_register_get_recn_entry (VirtualLocation virt_loc,
     static char s[2];
 
     s[0] = xaccSplitGetReconcile (split);
+    s[1] = '\0';
+
+    return s;
+  }
+}
+
+static const char *
+gnc_split_register_get_type_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (!split)
+    return NULL;
+
+  {
+    static char s[2];
+
+    s[0] = 'I';
     s[1] = '\0';
 
     return s;
@@ -1605,6 +1646,10 @@ gnc_split_register_model_new (void)
                                      TCRED_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_type_entry,
+                                     TYPE_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_debcred_entry,
                                      DEBT_CELL);
 
@@ -1684,6 +1729,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_tbalance_label,
                                      TBALN_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_type_label,
+                                     TYPE_CELL);
 
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_notes_label,
@@ -1818,6 +1867,11 @@ gnc_split_register_model_new (void)
                                  (model,
                                   gnc_split_register_get_recn_io_flags,
                                   RECN_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_recn_io_flags,
+                                  TYPE_CELL);
 
   gnc_table_model_set_io_flags_handler
                                  (model,

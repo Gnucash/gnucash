@@ -40,6 +40,42 @@ static short module = MOD_LEDGER;
 
 
 static void
+gnc_split_register_load_recn_cells (SplitRegister *reg)
+{
+  RecnCell *cell;
+  const char * s;
+
+  if (!reg) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, RECN_CELL);
+
+  if (!cell) return;
+
+  s = gnc_get_reconcile_valid_chars ();
+  gnc_recn_cell_set_valid_chars (cell, s, *s);
+  gnc_recn_cell_set_char_order (cell, gnc_get_reconcile_char_order ());
+}
+
+static void
+gnc_split_register_load_type_cells (SplitRegister *reg)
+{
+  RecnCell *cell;
+  const char * s;
+
+  if (!reg) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
+
+  if (!cell) return;
+
+  /* FIXME: These should get moved to an i18n function */
+  gnc_recn_cell_set_valid_chars (cell, "IP", 'I');
+  gnc_recn_cell_set_char_order (cell, "IP");
+}
+
+static void
 gnc_split_register_add_transaction (SplitRegister *reg,
                                     Transaction *trans,
                                     Split *split,
@@ -518,6 +554,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   gnc_table_control_allow_move (table->control, TRUE);
 
   gnc_split_register_load_xfer_cells (reg, default_account);
+  gnc_split_register_load_recn_cells (reg);
+  gnc_split_register_load_type_cells (reg);
 }
 
 static void

@@ -63,7 +63,6 @@
 #include "gnucash-style.h"
 #include "guile-util.h"
 #include "messages.h"
-#include "recncell.h"
 #include "split-register.h"
 #include "top-level.h"
 #include "window-help.h"
@@ -515,8 +514,6 @@ gnucash_ui_init(void)
       gnc_register_option_change_callback(gnc_configure_register_hint_font_cb,
                                           NULL, "Register",
                                           "Register hint font");
-
-    gnc_recn_cell_set_string_getter (gnc_get_reconcile_str);
 
     gnucash_style_init();
     gnucash_color_init();

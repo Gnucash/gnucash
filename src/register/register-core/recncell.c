@@ -31,6 +31,7 @@
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2001 Derek Atkins
  */
 
 #include "config.h"
@@ -43,34 +44,11 @@
 #include "gnc-engine-util.h"
 #include "recncell.h"
 
-/* hack alert -- I am uncomfortable with including engine
- * stuff here; all code in this directory should really be 
- * independent of the engine.  Its just that we need the
- * defs for YREC, CREC, etc. This is some cleanup we should 
- * do some day.
- */
-#include "Transaction.h"
-
-static RecnCellStringGetter string_getter = NULL;
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
 static void gnc_recn_cell_set_value (BasicCell *_cell, const char *value);
 
-
-static const char *
-gnc_recn_cell_get_string (char reconciled_flag)
-{
-  static char str[2] = { 0, 0 };
-
-  if (string_getter != NULL)
-    return (string_getter)(reconciled_flag);
-
-  str[0] = reconciled_flag;
-
-  return str;
-}
 
 static gboolean
 gnc_recn_cell_enter (BasicCell *_cell,
@@ -79,16 +57,31 @@ gnc_recn_cell_enter (BasicCell *_cell,
                      int *end_selection)
 {
   RecnCell *cell = (RecnCell *) _cell;
+  char * this_flag;
 
   if (cell->confirm_cb &&
       ! (cell->confirm_cb (cell->reconciled_flag, cell->confirm_data)))
     return FALSE;
 
-  if (cell->reconciled_flag == NREC)
-    cell->reconciled_flag = CREC;
-  else
-    cell->reconciled_flag = NREC;
+  /* Find the current flag in the list of flags */
+  this_flag = strchr (cell->char_order, cell->reconciled_flag);
 
+  if (this_flag == NULL || *this_flag == '\0') {
+    /* If it's not there (or the list is empty) use default_flag */
+    cell->reconciled_flag = cell->default_flag;
+
+  } else {
+    /* It is in the list -- choose the -next- item in the list (wrapping
+     * around as necessary).
+     */
+    this_flag++;
+    if (*this_flag != '\0')
+      cell->reconciled_flag = *this_flag;
+    else
+      cell->reconciled_flag = *(cell->char_order);
+  }
+
+  /* And set the display */
   gnc_recn_cell_set_flag (cell, cell->reconciled_flag);
 
   return FALSE;
@@ -99,8 +92,10 @@ gnc_recn_cell_init (RecnCell *cell)
 {
   gnc_basic_cell_init (&cell->cell);
 
-  gnc_recn_cell_set_flag (cell, NREC);
+  gnc_recn_cell_set_flag (cell, ' ');
   cell->confirm_cb = NULL;
+  cell->valid_chars = "";
+  cell->char_order = "";
 
   cell->cell.enter_cell = gnc_recn_cell_enter;
   cell->cell.set_value = gnc_recn_cell_set_value;
@@ -127,25 +122,14 @@ gnc_recn_cell_set_value (BasicCell *_cell, const char *value)
 
   if (!value || *value == '\0')
   {
-    cell->reconciled_flag = NREC;
+    cell->reconciled_flag = cell->default_flag;
     gnc_basic_cell_set_value_internal (_cell, "");
     return;
   }
 
-  switch (*value)
-  {
-    case NREC:
-    case CREC:
-    case YREC:
-    case FREC:
-      flag = *value;
-      break;
-
-    default:
-      PWARN ("unexpected recn flag");
-      flag = NREC;
-      break;
-  }
+  flag = cell->default_flag;
+  if (strchr (cell->valid_chars, *value) != NULL)
+    flag = *value;
 
   gnc_recn_cell_set_flag (cell, flag);
 }
@@ -153,13 +137,11 @@ gnc_recn_cell_set_value (BasicCell *_cell, const char *value)
 void
 gnc_recn_cell_set_flag (RecnCell *cell, char reconciled_flag)
 {
-  const char *string;
+  static char string[2] = { 0 , 0 };
 
   g_return_if_fail (cell != NULL);
 
-  cell->reconciled_flag = reconciled_flag;
-
-  string = gnc_recn_cell_get_string (reconciled_flag);
+  string[0] = cell->reconciled_flag = reconciled_flag;
 
   gnc_basic_cell_set_value_internal (&cell->cell, string);
 }
@@ -167,15 +149,9 @@ gnc_recn_cell_set_flag (RecnCell *cell, char reconciled_flag)
 char
 gnc_recn_cell_get_flag (RecnCell *cell)
 {
-  g_return_val_if_fail (cell != NULL, NREC);
+  g_return_val_if_fail (cell != NULL, '\0');
 
   return cell->reconciled_flag;
-}
-
-void
-gnc_recn_cell_set_string_getter (RecnCellStringGetter getter)
-{
-  string_getter = getter;
 }
 
 void
@@ -187,3 +163,24 @@ gnc_recn_cell_set_confirm_cb (RecnCell *cell, RecnCellConfirm confirm_cb,
   cell->confirm_cb = confirm_cb;
   cell->confirm_data = data;
 }
+
+void
+gnc_recn_cell_set_valid_chars (RecnCell *cell, const char *chars,
+			       char default_flag)
+{
+  g_return_if_fail (cell != NULL);
+  g_return_if_fail (chars != NULL);
+
+  cell->valid_chars = (char *)chars;
+  cell->default_flag = default_flag;
+}
+
+void
+gnc_recn_cell_set_char_order (RecnCell *cell, const char *chars)
+{
+  g_return_if_fail (cell != NULL);
+  g_return_if_fail (chars != NULL);
+
+  cell->char_order = (char *)chars;
+}
+
