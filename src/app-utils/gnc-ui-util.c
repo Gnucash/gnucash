@@ -245,6 +245,33 @@ gnc_reverse_balance (Account *account)
   return reverse_type[type];
 }
 
+
+void
+gnc_init_default_directory (char **dirname)
+{
+  if (*dirname == NULL)
+    *dirname = g_strdup_printf("%s/", getenv("HOME"));
+}
+
+void
+gnc_extract_directory (char **dirname, const char *filename)
+{
+  char *tmp;
+
+  if (*dirname)
+    free(*dirname);
+
+  /* Parse out the directory. */
+  if ((filename == NULL) || (rindex(filename, '/') == NULL)) {
+    *dirname = NULL;
+    return;
+  }
+
+  *dirname = g_strdup(filename);
+  tmp = rindex(*dirname, '/');
+  *(tmp+1) = '\0';
+}
+
 GNCBook *
 gnc_get_current_book (void)
 {

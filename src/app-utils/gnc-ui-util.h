@@ -46,6 +46,12 @@ gboolean gnc_reverse_balance(Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
+/* Default directories **********************************************/
+
+void gnc_init_default_directory (char **dirname);
+void gnc_extract_directory (char **dirname, const char *filename);
+
+
 /* Engine enhancements & i18n ***************************************/
 GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);

@@ -556,6 +556,9 @@ gnc_file_export_file(const char * newfile)
   GNCSession *current_session, *new_session;
   gboolean ok;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
+  static char *default_dir = NULL;	/* default directory for exports */
+
+  gnc_init_default_directory(&default_dir);
 
   if (!newfile) {
     if (!file_dialog_func) {
@@ -563,11 +566,14 @@ gnc_file_export_file(const char * newfile)
       return;
     }
 
-    newfile =  file_dialog_func (_("Export"), NULL, NULL);
+    newfile =  file_dialog_func (_("Export"), NULL, default_dir);
     if (!newfile)
       return;
   }
 
+  /* Remember the directory as the default. */
+  gnc_extract_directory(&default_dir, newfile);
+      
   gnc_engine_suspend_events();
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
@@ -695,6 +701,8 @@ gnc_file_save_as (void)
   GNCSession *new_session;
   GNCSession *session;
   const char *filename;
+  char *default_dir = NULL;	/* Default to last open */
+  const char *last;
   char *newfile;
   const char *oldfile;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
@@ -707,7 +715,14 @@ gnc_file_save_as (void)
     return;
   }
 
-  filename = file_dialog_func (_("Save"), "*.gnc", NULL);
+  last = history_get_last_func ? history_get_last_func() : NULL;
+  if (last)
+    gnc_extract_directory(&default_dir, last);
+  else
+    gnc_init_default_directory(&default_dir);
+  filename = file_dialog_func (_("Save"), "*.gnc", default_dir);
+  if (default_dir)
+    free(default_dir);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current

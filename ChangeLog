@@ -52,6 +52,22 @@
 	
 2003-01-12  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/gnc-ui-util.c: Add routine for easily extracting a
+	directory path from a filename.
+
+	* src/app-file/gnc-file.c: Default the save directory to the
+	directory of the last file used. Default the exports directory to
+	the direcory of the last file exported this session, or the user's
+	home dir for the first export. #94428
+
+	* src/scm/price-quotes.scm: Correctly handle the case where no
+	stocks have been defined and the user askes gnucash to get price
+	quotes. #102560
+
+	* src/network-utils/gnc-http.c: Work around bug in ghttp library
+	so that intl users whose whole units/fractions separator is a
+	comma can request web pages.
+
 	* src/register/register-gnome/gnucash-sheet.c
 	(gnucash_sheet_insert_cb): Return the number of characters
 	entered, not the length of the encoded multi-byte string. Possible
