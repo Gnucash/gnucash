@@ -35,6 +35,7 @@
 #include "dialog-invoice.h"
 #include "dialog-job.h"
 #include "business-utils.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
@@ -1204,6 +1205,22 @@ edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
   gnc_ui_invoice_edit (invoice);
 }
 
+static void
+pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
+{
+  struct _invoice_select_window *sw = user_data;
+  GncInvoice *invoice;
+
+  g_return_if_fail (invoice_p && user_data);
+
+  invoice = *invoice_p;
+
+  if (!invoice)
+    return;
+
+  gnc_ui_payment_new (gncInvoiceGetOwner (invoice), sw->book);
+}
+
 static gpointer
 new_invoice_cb (gpointer user_data)
 {
@@ -1237,6 +1254,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Invoice"), edit_invoice_cb},
+    { N_("Process Payment"), pay_invoice_cb},
     { NULL },
   };
 
