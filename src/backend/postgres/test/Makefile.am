@@ -11,6 +11,7 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${G_WRAP_MODULE_DIR}
 
 TESTS_ENVIRONMENT := \
+  TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
@@ -35,7 +36,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I.. \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS} 
 
 EXTRA_DIST = \
   db-control.sh
