@@ -102,7 +102,7 @@ void        kvp_glist_delete(GList * list);
 /* value constructors (copying for pointer args) */
 kvp_value   * kvp_value_new_gint64(gint64 value);
 kvp_value   * kvp_value_new_double(double value);
-kvp_value   * kvp_value_new_numeric(gnc_numeric value);
+kvp_value   * kvp_value_new_gnc_numeric(gnc_numeric value);
 kvp_value   * kvp_value_new_string(const char * value);
 kvp_value   * kvp_value_new_guid(const GUID * guid);
 kvp_value   * kvp_value_new_binary(const void * data, guint64 datasize);

@@ -433,7 +433,7 @@ kvp_value_new_double(double value) {
 }
 
 kvp_value *
-kvp_value_new_numeric(gnc_numeric value) {
+kvp_value_new_gnc_numeric(gnc_numeric value) {
   kvp_value * retval    = g_new0(kvp_value, 1);
   retval->type          = KVP_TYPE_NUMERIC;
   retval->value.numeric = value;
@@ -651,7 +651,7 @@ kvp_value_copy(const kvp_value * value) {
     return kvp_value_new_double(value->value.dbl);
     break;
   case KVP_TYPE_NUMERIC:
-    return kvp_value_new_numeric(value->value.numeric);
+    return kvp_value_new_gnc_numeric(value->value.numeric);
     break;
   case KVP_TYPE_STRING:
     return kvp_value_new_string(value->value.str);

@@ -29,6 +29,7 @@
 #include "DateUtils.h"
 #include "Group.h"
 #include "messages.h"
+#include "Query.h"
 #include "Transaction.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
@@ -699,8 +700,10 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
   }
 }
 
-
 /* ========================================================== */
+/* initialize misc structures so that we can call the libxml 
+ * parser.
+ */
 
 static gboolean
 sixtp_setup_parser (sixtp *sixtp,
@@ -751,6 +754,7 @@ sixtp_setup_parser (sixtp *sixtp,
   
 
 /* ========================================================== */
+/* misc structure celanup after parsing */
 
 static gboolean
 sixtp_teardown_parser(sixtp *sixtp,
@@ -796,6 +800,7 @@ sixtp_teardown_parser(sixtp *sixtp,
 }
 
 /* ========================================================== */
+/* parse the contents of a file */
 
 static gboolean
 sixtp_parse_file(sixtp *sixtp,
@@ -851,9 +856,13 @@ typedef struct {
 
   /* The account group */
   AccountGroup *account_group;
+
+  /* The query */
+  Query *query;
   
   GNCParseErr error;
 } GNCParseStatus;
+
 
 static gboolean
 isspace_str(const gchar *str, int nomorethan) {
@@ -1015,6 +1024,24 @@ string_to_gint64(const gchar *str, gint64 *v) {
   return(TRUE);
 }
 
+/*********/
+/* gint32
+ */
+   
+static gboolean
+string_to_gint32(const gchar *str, gint32 *v) {
+  /* convert a string to a gint32.  only whitespace allowed before and after. */
+  int num_read;
+
+  /* must use "<" here because %n's effects aren't well defined */
+  if(sscanf(str, " %d %n", v, &num_read) < 1) {
+    return(FALSE);
+  }
+
+  if(!isspace_str(str + num_read, -1)) return(FALSE);
+  return(TRUE);
+}
+
 /************/
 /* hex string
  */
@@ -1072,6 +1099,56 @@ hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len) {
   return(TRUE);
 }
 
+/****************************************************************************/
+/* generic #defines, aid in code brevity */
+
+#define START_HANDLER(NAME)				\
+static gboolean						\
+NAME##_start_handler(GSList* sibling_data,		\
+                          gpointer parent_data,		\
+                          gpointer global_data,		\
+                          gpointer *data_for_children,	\
+                          gpointer *result,		\
+                          const gchar *tag) 
+
+#define END_HANDLER(NAME)				\
+static gboolean						\
+NAME##_end_handler(gpointer data_for_children,		\
+                        GSList* data_from_children,	\
+                        GSList* sibling_data,		\
+                        gpointer parent_data,		\
+                        gpointer global_data,		\
+                        gpointer *result,		\
+                        const gchar *tag) 
+
+
+#define AFTER_CHILD(NAME)				\
+static gboolean						\
+NAME##_after_child_handler(gpointer data_for_children,	\
+                           GSList* data_from_children,	\
+                           GSList* sibling_data,	\
+                           gpointer parent_data,	\
+                           gpointer global_data,	\
+                           gpointer *result,		\
+                           const gchar *tag,		\
+                           const gchar *child_tag,	\
+                           sixtp_child_result *child_result) 
+
+#define FAIL_HANDLER(NAME)				\
+static void						\
+NAME##_fail_handler(gpointer data_for_children,		\
+                         GSList* data_from_children,	\
+                         GSList* sibling_data,		\
+                         gpointer parent_data,		\
+                         gpointer global_data,		\
+                         gpointer *result,		\
+                         const gchar *tag) 
+
+
+#define RESULT_CLEANUP(NAME)				\
+static void						\
+NAME##_result_cleanup(sixtp_child_result *cr) 
+
 /***************************************************************************/
 /* simple chars only parser - just grabs all it's contained chars and
    does what you specify in the end handler - if you pass NULL as the
@@ -1093,14 +1170,8 @@ hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len) {
 
  */
 
-static gboolean
-generic_return_chars_end_handler(gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
-                                 gpointer parent_data,
-                                 gpointer global_data,
-                                 gpointer *result,
-                                 const gchar *tag) {
+END_HANDLER(generic_return_chars)
+{
   gchar *txt = NULL;
   
   txt = concatenate_child_result_chars(data_from_children);
@@ -1111,7 +1182,8 @@ generic_return_chars_end_handler(gpointer data_for_children,
 
 
 static sixtp*
-simple_chars_only_parser_new(sixtp_end_handler end_handler) {
+simple_chars_only_parser_new(sixtp_end_handler end_handler) 
+{
   sixtp *top_level = sixtp_new();
   
   g_return_val_if_fail(top_level, NULL);
@@ -1162,23 +1234,24 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler) {
    belongs. */
 
 
-static void
-kvp_value_result_cleanup(sixtp_child_result *cr) {  
+RESULT_CLEANUP(kvp_value)
+{  
   kvp_value *v = (kvp_value *) cr->data;;
   if(v) kvp_value_delete(v);
 }
 
 static sixtp*
-simple_kvp_value_parser_new(sixtp_end_handler end_handler) {
+simple_kvp_value_parser_new(sixtp_end_handler end_handler) 
+{
   sixtp *top_level = sixtp_new();
 
   g_return_val_if_fail(top_level, NULL);
   sixtp_set_chars(top_level, generic_accumulate_chars);
-  sixtp_set_cleanup_chars(top_level, generic_free_result);
-  sixtp_set_chars_fail(top_level, generic_free_result);
   sixtp_set_end(top_level, end_handler);
   sixtp_set_cleanup_result(top_level, kvp_value_result_cleanup);
+  sixtp_set_cleanup_chars(top_level, generic_free_result);
   sixtp_set_result_fail(top_level, kvp_value_result_cleanup);
+  sixtp_set_chars_fail(top_level, generic_free_result);
   return(top_level);
 }
 
@@ -1199,164 +1272,51 @@ simple_kvp_value_parser_new(sixtp_end_handler end_handler) {
 
  */
 
-static gboolean
-gint64_kvp_value_end_handler(gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
-  gchar *txt = NULL;
-  gint64 val;
-  kvp_value *kvpv;
-  gboolean ok;
+/* ------------------------------------------------------------ */
+/* generic type copnversion for kvp types */
+#define KVP_CVT_VALUE(TYPE)					\
+{								\
+  gchar *txt = NULL;						\
+  TYPE val;							\
+  kvp_value *kvpv;						\
+  gboolean ok;							\
+								\
+  txt = concatenate_child_result_chars(data_from_children);	\
+  g_return_val_if_fail(txt, FALSE);				\
+  								\
+  ok = (gboolean) string_to_##TYPE(txt, &val);			\
+  g_free(txt);							\
+  g_return_val_if_fail(ok, FALSE);				\
+								\
+  kvpv = kvp_value_new_##TYPE(val);				\
+  g_return_val_if_fail(kvpv, FALSE);				\
+    								\
+  *result = kvpv;						\
+  return(TRUE);							\
+}
+/* ------------------------------------------------------------ */
 
-  txt = concatenate_child_result_chars(data_from_children);
-  g_return_val_if_fail(txt, FALSE);
-  
-  ok = string_to_gint64(txt, &val);
-  g_free(txt);
-
-  g_return_val_if_fail(ok, FALSE);
-
-  kvpv = kvp_value_new_gint64(val);
-  g_return_val_if_fail(kvpv, FALSE);
-    
-  *result = kvpv;
-  return(TRUE);
+#define KVP_PARSER_NEW(TYPE)					\
+static sixtp*							\
+TYPE##_kvp_value_parser_new() {					\
+  return(simple_kvp_value_parser_new(TYPE##_kvp_value_end_handler)); \
 }
 
-static sixtp*
-gint64_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(gint64_kvp_value_end_handler));
-}
 
-/* <double> - double kvp_value parser.
+END_HANDLER(gint64_kvp_value) { KVP_CVT_VALUE (gint64); }
 
-   input: NA
-   returns: double kvp_value
+KVP_PARSER_NEW(gint64)
 
-   start: NA
-   chars: generic_accumulate_chars.
-   end: convert chars to double kvp_value* if possible and return.
+END_HANDLER(double_kvp_value) { KVP_CVT_VALUE (double); }
 
-   cleanup-result: kvp_value_delete.
-   cleanup-chars: g_free (for chars)
-   fail: NA
-   result-fail: kvp_value_delete
-   chars-fail: g_free (for chars)
+KVP_PARSER_NEW(double)
 
- */
+END_HANDLER(gnc_numeric_kvp_value) { KVP_CVT_VALUE (gnc_numeric); }
 
-static gboolean
-double_kvp_value_end_handler(gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
-  gchar *txt = NULL;
-  double val;
-  kvp_value *kvpv;
-  gboolean ok;
+KVP_PARSER_NEW(gnc_numeric)
 
-  txt = concatenate_child_result_chars(data_from_children);
-  g_return_val_if_fail(txt, FALSE);
-  
-  ok = string_to_double(txt, &val);
-  g_free(txt);
-
-  g_return_val_if_fail(ok, FALSE);
-
-  kvpv = kvp_value_new_double(val);
-  g_return_val_if_fail(kvpv, FALSE);
-    
-  *result = kvpv;
-  return(TRUE);
-}
-
-static sixtp*
-double_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(double_kvp_value_end_handler));
-}
-
-/* <numeric> - gnc_numeric kvp_value parser.
-
-   input: NA
-   returns: numeric kvp_value
-
-   start: NA
-   chars: generic_accumulate_chars.
-   end: convert chars to numeric kvp_value* if possible and return.
-
-   cleanup-result: kvp_value_delete.
-   cleanup-chars: g_free (for chars)
-   fail: NA
-   result-fail: kvp_value_delete
-   chars-fail: g_free (for chars)
-
- */
-
-static gboolean
-numeric_kvp_value_end_handler(gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *result,
-                              const gchar *tag) {
-  gchar *txt = NULL;
-  gnc_numeric val;
-  kvp_value *kvpv;
-  gboolean ok;
-
-  txt = concatenate_child_result_chars(data_from_children);
-  g_return_val_if_fail(txt, FALSE);
-
-  ok = string_to_gnc_numeric(txt, &val) != NULL;
-  g_free(txt);
-
-  g_return_val_if_fail(ok, FALSE);
-
-  kvpv = kvp_value_new_numeric(val);
-  g_return_val_if_fail(kvpv, FALSE);
-
-  *result = kvpv;
-  return(TRUE);
-}
-
-static sixtp*
-numeric_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(numeric_kvp_value_end_handler));
-}
-
-/* <string> - string kvp_value parser.
-
-   input: NA
-   returns: string kvp_value
-
-   start: NA
-   chars: generic_accumulate_chars.
-   end: convert chars to string kvp_value* if possible and return.
-
-   cleanup-result: kvp_value_delete.
-   cleanup-chars: g_free (for chars)
-   fail: NA
-   result-fail: kvp_value_delete
-   chars-fail: g_free (for chars)
-
- */
-
-static gboolean
-string_kvp_value_end_handler(gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(string_kvp_value)
+{
   gchar *txt = NULL;
   kvp_value *kvpv;
   
@@ -1371,44 +1331,20 @@ string_kvp_value_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static sixtp*
-string_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(string_kvp_value_end_handler));
-}
+KVP_PARSER_NEW(string)
 
-/* <guid> - guid kvp_value parser.
-
-   input: NA
-   returns: guid kvp_value
-
-   start: NA
-   chars: generic_accumulate_chars.
-   end: convert chars to guid kvp_value* if possible and return.
-
-   cleanup-result: kvp_value_delete.
-   cleanup-chars: g_free (for chars)
-   fail: NA
-   result-fail: kvp_value_delete
-   chars-fail: g_free (for chars)
-
- */
-
-static gboolean
-guid_kvp_value_end_handler(gpointer data_for_children,
-                           GSList* data_from_children,
-                           GSList* sibling_data,
-                           gpointer parent_data,
-                           gpointer global_data,
-                           gpointer *result,
-                           const gchar *tag) {
+/* the guid handler is almost the same as above, but has 
+ * inconsistent type handling */
+END_HANDLER(guid_kvp_value) 
+{
   gchar *txt = NULL;
   GUID val;
   kvp_value *kvpv;
   gboolean ok;
-  
+
   txt = concatenate_child_result_chars(data_from_children);
   g_return_val_if_fail(txt, FALSE);
-  
+
   ok = string_to_guid(txt, &val);
   g_free(txt);
 
@@ -1416,15 +1352,12 @@ guid_kvp_value_end_handler(gpointer data_for_children,
 
   kvpv = kvp_value_new_guid(&val);
   g_return_val_if_fail(kvpv, FALSE);
-    
+   
   *result = kvpv;
   return(TRUE);
 }
 
-static sixtp*
-guid_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(guid_kvp_value_end_handler));
-}
+KVP_PARSER_NEW(guid)
 
 /*********************************/
 /* kvp-frame binary value handlers
@@ -1453,14 +1386,8 @@ guid_kvp_value_parser_new() {
    
  */
 
-static gboolean
-hex_binary_kvp_value_end_handler(gpointer data_for_children,
-                                 GSList* data_from_children,
-                                 GSList* sibling_data,
-                                 gpointer parent_data,
-                                 gpointer global_data,
-                                 gpointer *result,
-                                 const gchar *tag) {
+END_HANDLER(hex_binary_kvp_value)
+{
   gchar *txt = NULL;
   void *val;
   guint64 size;
@@ -1482,10 +1409,7 @@ hex_binary_kvp_value_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static sixtp*
-hex_binary_kvp_value_parser_new() {
-  return(simple_kvp_value_parser_new(hex_binary_kvp_value_end_handler));
-}
+KVP_PARSER_NEW(hex_binary)
 
 /* <binary> (lineage <s> <kvp-frame>)
    input: NA
@@ -1503,14 +1427,8 @@ hex_binary_kvp_value_parser_new() {
 
  */
 
-static gboolean
-kvp_frame_binary_end_handler(gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(kvp_frame_binary)
+{
   void *data;
   guint64 total_size;
   guint64 pos;
@@ -1599,14 +1517,8 @@ binary_kvp_value_parser_new() {
  */
 
 
-static gboolean
-glist_kvp_value_end_handler(gpointer data_for_children,
-                            GSList* data_from_children,
-                            GSList* sibling_data,
-                            gpointer parent_data,
-                            gpointer global_data,
-                            gpointer *result,
-                            const gchar *tag) {
+END_HANDLER(glist_kvp_value)
+{
   GSList *lp;
   GList *result_glist;
   kvp_value *kvp_result;
@@ -1629,6 +1541,14 @@ glist_kvp_value_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
+/* ---------------------------------------------- */
+#define KVP_TOKEN(NAME,TOK)			\
+  child_pr = NAME##_kvp_value_parser_new();	\
+  g_return_val_if_fail(child_pr, FALSE);	\
+  sixtp_add_sub_parser(p, TOK, child_pr);
+/* ---------------------------------------------- */
+
+
 static gboolean
 add_all_kvp_value_parsers_as_sub_nodes(sixtp *p,
                                        sixtp *kvp_frame_parser,
@@ -1638,29 +1558,12 @@ add_all_kvp_value_parsers_as_sub_nodes(sixtp *p,
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(kvp_frame_parser, FALSE);
 
-  child_pr = gint64_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "gint64", child_pr);
-
-  child_pr = double_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "double", child_pr);
-
-  child_pr = numeric_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "numeric", child_pr);
-
-  child_pr = string_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "string", child_pr);
-
-  child_pr = guid_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "guid", child_pr);
-
-  child_pr = binary_kvp_value_parser_new();
-  g_return_val_if_fail(child_pr, FALSE);
-  sixtp_add_sub_parser(p, "binary", child_pr);
+  KVP_TOKEN(gint64, "gint64");
+  KVP_TOKEN(double, "double");
+  KVP_TOKEN(gnc_numeric, "numeric");
+  KVP_TOKEN(string, "string");
+  KVP_TOKEN(guid,   "guid");
+  KVP_TOKEN(binary, "binary");
 
   sixtp_add_sub_parser(p, "glist", glist_parser);
   sixtp_add_sub_parser(p, "frame", kvp_frame_parser);
@@ -1719,14 +1622,8 @@ glist_kvp_value_parser_new(sixtp *kvp_frame_parser) {
 
  */
 
-static gboolean
-kvp_frame_slot_end_handler(gpointer data_for_children,
-                           GSList* data_from_children,
-                           GSList* sibling_data,
-                           gpointer parent_data,
-                           gpointer global_data,
-                           gpointer *result,
-                           const gchar *tag) {
+END_HANDLER(kvp_frame_slot)
+{
   kvp_frame *f = (kvp_frame *) parent_data;
   GSList *lp;
   guint64 key_node_count;
@@ -1818,48 +1715,30 @@ kvp_frame_slot_parser_new(sixtp *kvp_frame_parser) {
 
  */
 
-static gboolean
-kvp_frame_start_handler(GSList* sibling_data,
-                        gpointer parent_data,
-                        gpointer global_data,
-                        gpointer *data_for_children,
-                        gpointer *result,
-                        const gchar *tag) {
+START_HANDLER(kvp_frame)
+{
   kvp_frame *f = kvp_frame_new();
   g_return_val_if_fail(f, FALSE);
   *data_for_children = f;
   return(TRUE);
 }
 
-static gboolean
-kvp_frame_end_handler(gpointer data_for_children,
-                      GSList* data_from_children,
-                      GSList* sibling_data,
-                      gpointer parent_data,
-                      gpointer global_data,
-                      gpointer *result,
-                      const gchar *tag) {
-  
+END_HANDLER(kvp_frame)
+{
   kvp_frame *f = (kvp_frame *) data_for_children;
   g_return_val_if_fail(f, FALSE);
   *result = f;
   return(TRUE);
 }
 
-static void
-kvp_frame_fail_handler(gpointer data_for_children,
-                       GSList* data_from_children,
-                       GSList* sibling_data,
-                       gpointer parent_data,
-                       gpointer global_data,
-                       gpointer *result,
-                       const gchar *tag) {  
+FAIL_HANDLER(kvp_frame)
+{
   kvp_frame *f = (kvp_frame *) data_for_children;
   if(f) kvp_frame_delete(f);
 }
 
-static void
-kvp_frame_result_cleanup(sixtp_child_result *cr) {  
+RESULT_CLEANUP(kvp_frame)
+{
   kvp_frame *f = (kvp_frame *) cr->data;;
   if(f) kvp_frame_delete(f);
 }
@@ -1995,14 +1874,8 @@ typedef struct {
   guint ns_block_count;
 } TimespecParseInfo;
 
-static gboolean
-generic_timespec_start_handler(GSList* sibling_data,
-                               gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *data_for_children,
-                               gpointer *result,
-                               const gchar *tag) {
-
+START_HANDLER(generic_timespec)
+{
   TimespecParseInfo *tsp = g_new0(TimespecParseInfo, 1);
   g_return_val_if_fail(tsp, FALSE);
   *data_for_children = tsp;
@@ -2044,14 +1917,8 @@ timespec_parse_ok(TimespecParseInfo *info) {
 
  */
 
-static gboolean
-generic_timespec_secs_end_handler(gpointer data_for_children,
-                                  GSList* data_from_children,
-                                  GSList* sibling_data,
-                                  gpointer parent_data,
-                                  gpointer global_data,
-                                  gpointer *result,
-                                  const gchar *tag) {
+END_HANDLER(generic_timespec_secs)
+{
   gchar *txt = NULL;
   TimespecParseInfo *info = (TimespecParseInfo *) parent_data;
   gboolean ok;
@@ -2087,14 +1954,8 @@ generic_timespec_secs_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-generic_timespec_nsecs_end_handler(gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
-                                   gpointer parent_data,
-                                   gpointer global_data,
-                                   gpointer *result,
-                                   const gchar *tag) {
+END_HANDLER(generic_timespec_nsecs)
+{
   gchar *txt = NULL;
   TimespecParseInfo *info = (TimespecParseInfo *) parent_data;
   gboolean ok;
@@ -2113,13 +1974,27 @@ generic_timespec_nsecs_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static sixtp *
-generic_timespec_parser_new(sixtp_end_handler end_handler) {
-  sixtp *top_level = sixtp_new();
-  sixtp *secs_pr;
-  sixtp *nsecs_pr;
+#define TIMESPEC_TOK(NAME,TOK)					\
+{								\
+  sixtp *tmp_pr = sixtp_new();					\
+  if(!tmp_pr) {							\
+    sixtp_destroy(top_level);					\
+    return(NULL);						\
+  }								\
+  sixtp_set_chars(tmp_pr, generic_accumulate_chars);		\
+  sixtp_set_end(tmp_pr, generic_timespec_##NAME##_end_handler);	\
+  sixtp_set_cleanup_chars(tmp_pr, generic_free_result);		\
+  sixtp_set_chars_fail(tmp_pr, generic_free_result);		\
+  sixtp_add_sub_parser(top_level, TOK, tmp_pr);			\
+}
 
+
+static sixtp *
+generic_timespec_parser_new(sixtp_end_handler end_handler) 
+{
+  sixtp *top_level = sixtp_new();
   g_return_val_if_fail(top_level, NULL);
+
   sixtp_set_start(top_level, generic_timespec_start_handler);
   sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
   sixtp_set_end(top_level, end_handler);
@@ -2127,31 +2002,14 @@ generic_timespec_parser_new(sixtp_end_handler end_handler) {
   sixtp_set_fail(top_level, generic_free_data_for_children);
   sixtp_set_result_fail(top_level, generic_free_result);
 
-  secs_pr = sixtp_new();
-  if(!secs_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(secs_pr, generic_accumulate_chars);
-  sixtp_set_end(secs_pr, generic_timespec_secs_end_handler);
-  sixtp_set_cleanup_chars(secs_pr, generic_free_result);
-  sixtp_set_chars_fail(secs_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "s", secs_pr);
-
-  nsecs_pr = sixtp_new();
-  if(!nsecs_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(nsecs_pr, generic_accumulate_chars);
-  sixtp_set_end(nsecs_pr, generic_timespec_nsecs_end_handler);
-  sixtp_set_cleanup_chars(nsecs_pr, generic_free_result);
-  sixtp_set_chars_fail(nsecs_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "ns", nsecs_pr);
+  TIMESPEC_TOK(secs, "s");
+  TIMESPEC_TOK(nsecs, "ns");
 
   return(top_level);
 }
 
+/****************************************************************************/
+/****************************************************************************/
 /****************************************************************************/
 /* <ledger-data> (parent <gnc-data>)
 
@@ -2183,13 +2041,8 @@ generic_timespec_parser_new(sixtp_end_handler end_handler) {
 */
 
 
-static gboolean
-ledger_data_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag) {
+START_HANDLER(ledger_data)
+{
   AccountGroup *ag;
 
   /* disable logging during load; otherwise its just a mess */
@@ -2202,14 +2055,8 @@ ledger_data_start_handler(GSList* sibling_data,
   return(ag != NULL);
 }
 
-static gboolean
-ledger_data_end_handler(gpointer data_for_children,
-                        GSList* data_from_children,
-                        GSList* sibling_data,
-                        gpointer parent_data,
-                        gpointer global_data,
-                        gpointer *result,
-                        const gchar *tag) {
+END_HANDLER(ledger_data)
+{
   
   AccountGroup *ag = (AccountGroup *) data_for_children;
 
@@ -2237,20 +2084,14 @@ ledger_data_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static void
-ledger_data_fail_handler(gpointer data_for_children,
-GSList* data_from_children,
-                         GSList* sibling_data,
-                         gpointer parent_data,
-                         gpointer global_data,
-                         gpointer *result,
-                         const gchar *tag) {  
+FAIL_HANDLER(ledger_data)
+{
   AccountGroup *ag = (AccountGroup *) data_for_children;
   if(ag) xaccFreeAccountGroup(ag);
 }
 
-static void
-ledger_data_result_cleanup(sixtp_child_result *cr) {  
+RESULT_CLEANUP(ledger_data)
+{
   AccountGroup *ag = (AccountGroup *) cr->data;
   if(ag) xaccFreeAccountGroup(ag);
 }
@@ -2284,6 +2125,24 @@ ledger_data_result_cleanup(sixtp_child_result *cr) {
 */
 
 
+/* ==================================================================== */
+
+/* generic setup of the 'restore' clasue */
+#define SETUP_RESTORE(NAME,PARENT)					\
+  restore_pr = sixtp_new();						\
+  if (!restore_pr) {							\
+    sixtp_destroy(top_level);						\
+    return(NULL);							\
+  }									\
+  sixtp_set_start(restore_pr, NAME##_restore_start_handler);		\
+  sixtp_set_chars(restore_pr, allow_and_ignore_only_whitespace);	\
+  sixtp_set_end(restore_pr, NAME##_restore_end_handler);		\
+  sixtp_set_fail(restore_pr, NAME##_restore_fail_handler);		\
+  sixtp_set_after_child(restore_pr, NAME##_restore_after_child_handler);\
+  sixtp_add_sub_parser(PARENT, "restore", restore_pr);
+
+/* ==================================================================== */
+
 /*********************************/
 /* <restore> (lineage <commodity>)
 
@@ -2316,14 +2175,8 @@ typedef struct {
   int fraction;
 } CommodityParseInfo;
 
-static gboolean
-commodity_restore_start_handler(GSList* sibling_data,
-                                gpointer parent_data,
-                                gpointer global_data,
-                                gpointer *data_for_children,
-                                gpointer *result,
-                                const gchar *tag) {
-
+START_HANDLER(commodity_restore)
+{
   CommodityParseInfo *cpi = (CommodityParseInfo *) g_new0(CommodityParseInfo, 1);
 
   g_return_val_if_fail(cpi, FALSE);
@@ -2332,43 +2185,28 @@ commodity_restore_start_handler(GSList* sibling_data,
   return(TRUE);
 }
 
-static gboolean
-commodity_restore_after_child_handler(gpointer data_for_children,
-                                      GSList* data_from_children,
-                                      GSList* sibling_data,
-                                      gpointer parent_data,
-                                      gpointer global_data,
-                                      gpointer *result,
-                                      
-                                      const gchar *tag,
-                                      const gchar *child_tag,
-                                      sixtp_child_result *child_result) {
+/* ----------------------------------------------------*/
+#define COMMOD_TOKEN(NAME)				\
+  if(strcmp(child_result->tag, #NAME) == 0) {		\
+    if(cpi->NAME) return(FALSE);			\
+    cpi->NAME = (gchar *) child_result->data;		\
+    child_result->should_cleanup = FALSE;		\
+  }							\
+  else 
+/* ----------------------------------------------------*/
+
+AFTER_CHILD(commodity_restore)
+{
   CommodityParseInfo *cpi = (CommodityParseInfo *) data_for_children;
 
   g_return_val_if_fail(cpi, FALSE);
   g_return_val_if_fail(child_result, FALSE);
 
-  if(strcmp(child_result->tag, "space") == 0) {
-    if(cpi->space) return(FALSE);
-    cpi->space = (gchar *) child_result->data;
-    child_result->should_cleanup = FALSE;
-  }
-  else if(strcmp(child_result->tag, "id") == 0) {
-    if(cpi->id) return(FALSE);
-    cpi->id = (gchar *) child_result->data;
-    child_result->should_cleanup = FALSE;
-  }
-  else if(strcmp(child_result->tag, "name") == 0) {
-    if(cpi->name) return(FALSE);
-    cpi->name = (gchar *) child_result->data;
-    child_result->should_cleanup = FALSE;
-  }
-  else if(strcmp(child_result->tag, "xcode") == 0) {
-    if(cpi->xcode) return(FALSE);
-    cpi->xcode = (gchar *) child_result->data;
-    child_result->should_cleanup = FALSE;
-  }
-  else if(strcmp(child_result->tag, "fraction") == 0) {
+  COMMOD_TOKEN(space)
+  COMMOD_TOKEN(id)
+  COMMOD_TOKEN(name)
+  COMMOD_TOKEN(xcode)
+  if(strcmp(child_result->tag, "fraction") == 0) {
     gint64 frac;
     gboolean conv_ok;
 
@@ -2385,14 +2223,8 @@ commodity_restore_after_child_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static gboolean
-commodity_restore_end_handler(gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *result,
-                              const gchar *tag) {
+END_HANDLER(commodity_restore)
+{
   CommodityParseInfo *cpi = (CommodityParseInfo *) data_for_children;
   gboolean ok = FALSE;
   gnc_commodity *comm = NULL;
@@ -2432,63 +2264,36 @@ commodity_restore_end_handler(gpointer data_for_children,
   return(ok);
 }
 
+/* --------------------------------------------------- */
+#define COM_PARSE(NAME)					\
+{							\
+  sixtp *tmp_pr = simple_chars_only_parser_new(NULL);	\
+  if(!tmp_pr) {						\
+    sixtp_destroy(top_level);				\
+    return(NULL);					\
+  }							\
+  sixtp_add_sub_parser(restore_pr, #NAME, tmp_pr);	\
+}
+/* --------------------------------------------------- */
+
+
 static sixtp *
-commodity_restore_parser_new() {
+commodity_restore_parser_new() 
+{
   sixtp *top_level;
   sixtp *restore_pr;
-  sixtp *tmp_pr;
 
   top_level = sixtp_new();
   g_return_val_if_fail(top_level, NULL);
   
-  restore_pr = sixtp_new();
-  if(!restore_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_start(restore_pr, commodity_restore_start_handler);
-  sixtp_set_chars(restore_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_after_child(restore_pr, commodity_restore_after_child_handler);
-  sixtp_set_end(restore_pr, commodity_restore_end_handler);
+  #define commodity_restore_fail_handler generic_free_data_for_children
+  SETUP_RESTORE(commodity, top_level)
 
-  sixtp_set_fail(restore_pr, generic_free_data_for_children);
-
-  sixtp_add_sub_parser(top_level, "restore", restore_pr);
-
-  tmp_pr = simple_chars_only_parser_new(NULL);
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "space", tmp_pr);
-
-  tmp_pr = simple_chars_only_parser_new(NULL);
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "id", tmp_pr);
-
-  tmp_pr = simple_chars_only_parser_new(NULL);
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "name", tmp_pr);
-
-  tmp_pr = simple_chars_only_parser_new(NULL);
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "xcode", tmp_pr);
-
-  tmp_pr = simple_chars_only_parser_new(NULL);
-  if(!tmp_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "fraction", tmp_pr);
+  COM_PARSE(space);
+  COM_PARSE(id);
+  COM_PARSE(name);
+  COM_PARSE(xcode);
+  COM_PARSE(fraction);
 
   return(top_level);
 }
@@ -2524,14 +2329,8 @@ commodity_restore_parser_new() {
 
  */
 
-static gboolean
-account_start_handler(GSList* sibling_data,
-                      gpointer parent_data,
-                      gpointer global_data,
-                      gpointer *data_for_children,
-                      gpointer *result,
-                      const gchar *tag) {
-
+START_HANDLER(account)
+{
   /* pass the parent data down to the children */
   *data_for_children = parent_data;
   return(TRUE);
@@ -2569,13 +2368,8 @@ account_start_handler(GSList* sibling_data,
 
  */
 
-static gboolean
-account_restore_start_handler(GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *data_for_children,
-                              gpointer *result,
-                              const gchar *tag) {
+START_HANDLER(account_restore)
+{
   Account *acc = xaccMallocAccount();
   
   g_return_val_if_fail(acc, FALSE);
@@ -2587,14 +2381,8 @@ account_restore_start_handler(GSList* sibling_data,
   return(TRUE);
 }
 
-static gboolean
-account_restore_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                            GSList* sibling_data,
-                            gpointer parent_data,
-                            gpointer global_data,
-                            gpointer *result,
-                            const gchar *tag) {
+END_HANDLER(account_restore)
+{
   AccountGroup *ag = (AccountGroup *) parent_data;
   Account *acc = (Account *) *result;
   AccountGroup *parent_ag;
@@ -2620,17 +2408,8 @@ GSList* data_from_children,
   return(TRUE);
 }
 
-static gboolean
-account_restore_after_child_handler(gpointer data_for_children,
-                                    GSList* data_from_children,
-                                    GSList* sibling_data,
-                                    gpointer parent_data,
-                                    gpointer global_data,
-                                    gpointer *result,
-                                    
-                                    const gchar *tag,
-                                    const gchar *child_tag,
-                                    sixtp_child_result *child_result) {
+AFTER_CHILD(account_restore)
+{
   Account *a = (Account *) data_for_children;
   g_return_val_if_fail(a, FALSE);
   if(!child_result) return(TRUE);
@@ -2660,14 +2439,8 @@ account_restore_after_child_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static void
-account_restore_fail_handler(gpointer data_for_children,
-GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+FAIL_HANDLER(account_restore)
+{
   Account *acc = (Account *) *result;
   if(acc) xaccFreeAccount(acc);
 }
@@ -2690,15 +2463,8 @@ GSList* data_from_children,
    chars-fail: g_free the result string.
 
  */
-
-static gboolean
-acc_restore_name_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(acc_restore_name)
+{
   Account *acc = (Account *) parent_data;
   gchar *name = NULL;
 
@@ -2731,14 +2497,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_guid_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(acc_restore_guid)
+{
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -2781,14 +2541,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_type_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(acc_restore_type)
+{
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   int type;
@@ -2827,14 +2581,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_code_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             const gchar *tag) {
+END_HANDLER(acc_restore_code)
+{
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   
@@ -2868,14 +2616,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_description_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                                    GSList* sibling_data,
-                                    gpointer parent_data,
-                                    gpointer global_data,
-                                    gpointer *result,
-                                    const gchar *tag) {
+END_HANDLER(acc_restore_description)
+{
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   
@@ -2908,14 +2650,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_notes_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                              GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *result,
-                              const gchar *tag) {
+END_HANDLER(acc_restore_notes)
+{
   Account *acc = (Account *) parent_data;
   gchar *txt = NULL;
   
@@ -2951,14 +2687,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-acc_restore_parent_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                               GSList* sibling_data,
-                               gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *result,
-                               const gchar *tag) {
+END_HANDLER(acc_restore_parent)
+{
 
   Account *acc = (Account *) parent_data;
   Account *parent;
@@ -3009,14 +2739,8 @@ GSList* data_from_children,
 
  */
 
-static gboolean
-generic_guid_end_handler(gpointer data_for_children,
-GSList* data_from_children,
-                         GSList* sibling_data,
-                         gpointer parent_data,
-                         gpointer global_data,
-                         gpointer *result,
-                         const gchar *tag) {
+END_HANDLER(generic_guid)
+{
   gchar *txt = NULL;
   GUID *gid;
   gboolean ok;
@@ -3079,14 +2803,8 @@ generic_guid_parser_new() {
 
  */
 
-static gboolean
-generic_gnc_numeric_end_handler(gpointer data_for_children,
-                                GSList* data_from_children,
-                                GSList* sibling_data,
-                                gpointer parent_data,
-                                gpointer global_data,
-                                gpointer *result,
-                                const gchar *tag) {
+END_HANDLER(generic_gnc_numeric)
+{
   gnc_numeric *num = NULL;
   gchar *txt = NULL;
   gboolean ok = FALSE;
@@ -3167,31 +2885,16 @@ typedef struct {
   gchar *id;
 } CommodityLookupParseInfo;
 
-static gboolean
-generic_gnc_commodity_lookup_start_handler(GSList* sibling_data,
-                                           gpointer parent_data,
-                                           gpointer global_data,
-                                           gpointer *data_for_children,
-                                           gpointer *result,
-                                           const gchar *tag) {
-  
+START_HANDLER(generic_gnc_commodity_lookup)
+{
   CommodityLookupParseInfo *cpi = g_new0(CommodityLookupParseInfo, 1);
   g_return_val_if_fail(cpi, FALSE);
   *data_for_children = cpi;
   return(TRUE);
 }
 
-static gboolean
-generic_gnc_commodity_lookup_after_child_handler(gpointer data_for_children,
-                                                 GSList* data_from_children,
-                                                 GSList* sibling_data,
-                                                 gpointer parent_data,
-                                                 gpointer global_data,
-                                                 gpointer *result,
-                                          
-                                                 const gchar *tag,
-                                                 const gchar *child_tag,
-                                                 sixtp_child_result *child_result) {
+AFTER_CHILD(generic_gnc_commodity_lookup)
+{
   CommodityLookupParseInfo *cpi = (CommodityLookupParseInfo *) data_for_children;
 
   g_return_val_if_fail(cpi, FALSE);
@@ -3215,14 +2918,8 @@ generic_gnc_commodity_lookup_after_child_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static gboolean
-generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
-                                         GSList* data_from_children,
-                                         GSList* sibling_data,
-                                         gpointer parent_data,
-                                         gpointer global_data,
-                                         gpointer *result,
-                                         const gchar *tag) {
+END_HANDLER(generic_gnc_commodity_lookup)
+{
   CommodityLookupParseInfo *cpi = (CommodityLookupParseInfo *) data_for_children;
   gboolean ok = FALSE;
 
@@ -3311,14 +3008,8 @@ generic_gnc_commodity_lookup_parser_new() {
 
  */
 
-static gboolean
-transaction_start_handler(GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *data_for_children,
-                          gpointer *result,
-                          const gchar *tag) {
-  
+START_HANDLER(transaction)
+{
   /* pass the parent data down to the children */
   *data_for_children = parent_data;
   return(TRUE);
@@ -3358,32 +3049,17 @@ transaction_start_handler(GSList* sibling_data,
 
  */
 
-static gboolean
-txn_restore_start_handler(GSList* sibling_data,
-                            gpointer parent_data,
-                            gpointer global_data,
-                            gpointer *data_for_children,
-                            gpointer *result,
-                            const gchar *tag) {
+START_HANDLER(txn_restore)
+{
   Transaction *trans = xaccMallocTransaction();
-
   g_return_val_if_fail(trans, FALSE);
-
   xaccTransBeginEdit(trans);
-
   *data_for_children = trans;
-
   return(TRUE);
 }
 
-static gboolean
-txn_restore_end_handler(gpointer data_for_children,
-                          GSList* data_from_children,
-                          GSList* sibling_data,
-                          gpointer parent_data,
-                          gpointer global_data,
-                          gpointer *result,
-                          const gchar *tag) {
+END_HANDLER(txn_restore)
+{
   AccountGroup *ag = (AccountGroup *) parent_data;
   Transaction *trans = (Transaction *) data_for_children;
 
@@ -3407,17 +3083,8 @@ txn_restore_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static gboolean
-txn_restore_after_child_handler(gpointer data_for_children,
-                                GSList* data_from_children,
-                                GSList* sibling_data,
-                                gpointer parent_data,
-                                gpointer global_data,
-                                gpointer *result,
-                                
-                                const gchar *tag,
-                                const gchar *child_tag,
-                                sixtp_child_result *child_result) {
+AFTER_CHILD(txn_restore)
+{
   Transaction *trans = (Transaction *) data_for_children;
   g_return_val_if_fail(trans, FALSE);
   if(!child_result) return(TRUE);
@@ -3432,14 +3099,8 @@ txn_restore_after_child_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static void
-txn_restore_fail_handler(gpointer data_for_children,
-                           GSList* data_from_children,
-                           GSList* sibling_data,
-                           gpointer parent_data,
-                           gpointer global_data,
-                           gpointer *result,
-                           const gchar *tag) {
+FAIL_HANDLER(txn_restore)
+{
   Transaction *trans = (Transaction *) data_for_children;
   if(trans) {
     xaccTransDestroy(trans);
@@ -3468,14 +3129,8 @@ txn_restore_fail_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_guid_end_handler(gpointer data_for_children,
-                               GSList* data_from_children,
-                               GSList* sibling_data,
-                               gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *result,
-                               const gchar *tag) {
+END_HANDLER(txn_restore_guid)
+{
   Transaction *t = (Transaction *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -3520,14 +3175,8 @@ txn_restore_guid_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_num_end_handler(gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *result,
-                              const gchar *tag) {
+END_HANDLER(txn_restore_num)
+{
   Transaction *t = (Transaction *) parent_data;
   gchar *txt = NULL;
   
@@ -3562,14 +3211,8 @@ txn_restore_num_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_description_end_handler(gpointer data_for_children,
-                                      GSList* data_from_children,
-                                      GSList* sibling_data,
-                                      gpointer parent_data,
-                                      gpointer global_data,
-                                      gpointer *result,
-                                      const gchar *tag) {
+END_HANDLER(txn_restore_description)
+{
   Transaction *t = (Transaction *) parent_data;
   gchar *txt = NULL;
   
@@ -3594,14 +3237,8 @@ txn_restore_description_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_rest_date_posted_end_handler(gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
-                                   gpointer parent_data,
-                                   gpointer global_data,
-                                   gpointer *result,
-                                   const gchar *tag) {
+END_HANDLER(txn_rest_date_posted)
+{
   Transaction *t = (Transaction *) parent_data;
   TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;
   
@@ -3627,14 +3264,8 @@ txn_rest_date_posted_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_rest_date_entered_end_handler(gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
-                                   gpointer parent_data,
-                                   gpointer global_data,
-                                   gpointer *result,
-                                   const gchar *tag) {
+END_HANDLER(txn_rest_date_entered)
+{
   Transaction *t = (Transaction *) parent_data;
   TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;
   
@@ -3675,28 +3306,16 @@ txn_rest_date_entered_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_split_start_handler(GSList* sibling_data,
-                                gpointer parent_data,
-                                gpointer global_data,
-                                gpointer *data_for_children,
-                                gpointer *result,
-                                const gchar *tag) {
+START_HANDLER(txn_restore_split)
+{
   Split *s = xaccMallocSplit();
-  
   g_return_val_if_fail(s, FALSE);
   *data_for_children = s;
   return(TRUE);
 }
 
-static gboolean
-txn_restore_split_end_handler(gpointer data_for_children,
-                              GSList* data_from_children,
-                              GSList* sibling_data,
-                              gpointer parent_data,
-                              gpointer global_data,
-                              gpointer *result,
-                              const gchar *tag) {
+END_HANDLER(txn_restore_split)
+{
   Transaction *t = (Transaction *) parent_data;
   Split *s = (Split *) data_for_children;
 
@@ -3716,17 +3335,8 @@ txn_restore_split_end_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static gboolean
-txn_restore_split_after_child_handler(gpointer data_for_children,
-                                      GSList* data_from_children,
-                                      GSList* sibling_data,
-                                      gpointer parent_data,
-                                      gpointer global_data,
-                                      gpointer *result,
-                                      
-                                      const gchar *tag,
-                                      const gchar *child_tag,
-                                      sixtp_child_result *child_result) {
+AFTER_CHILD(txn_restore_split)
+{
   Split *s = (Split *) data_for_children;
   g_return_val_if_fail(s, FALSE);
   if(!child_result) return(TRUE);
@@ -3755,14 +3365,8 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
   return(TRUE);
 }
 
-static void
-txn_restore_split_fail_handler(gpointer data_for_children,
-                               GSList* data_from_children,
-                               GSList* sibling_data,
-                               gpointer parent_data,
-                               gpointer global_data,
-                               gpointer *result,
-                               const gchar *tag) {
+FAIL_HANDLER(txn_restore_split)
+{
   Split *s = (Split *) data_for_children;
   if(s) xaccSplitDestroy(s);
 }
@@ -3788,14 +3392,8 @@ txn_restore_split_fail_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_split_guid_end_handler(gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
-                                   gpointer parent_data,
-                                   gpointer global_data,
-                                   gpointer *result,
-                                   const gchar *tag) {
+END_HANDLER(txn_restore_split_guid)
+{
   Split *s = (Split *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -3840,14 +3438,8 @@ txn_restore_split_guid_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_split_memo_end_handler(gpointer data_for_children,
-                                   GSList* data_from_children,
-                                   GSList* sibling_data,
-                                   gpointer parent_data,
-                                   gpointer global_data,
-                                   gpointer *result,
-                                   const gchar *tag) {
+END_HANDLER(txn_restore_split_memo)
+{
   Split *s = (Split *) parent_data;
   gchar *txt = NULL;
   
@@ -3882,14 +3474,8 @@ txn_restore_split_memo_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_split_action_end_handler(gpointer data_for_children,
-                                     GSList* data_from_children,
-                                     GSList* sibling_data,
-                                     gpointer parent_data,
-                                     gpointer global_data,
-                                     gpointer *result,
-                                     const gchar *tag) {
+END_HANDLER(txn_restore_split_action)
+{
   Split *s = (Split *) parent_data;
   gchar *txt = NULL;
   
@@ -3924,14 +3510,8 @@ txn_restore_split_action_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_rest_split_reconcile_state_end_handler(gpointer data_for_children,
-                                           GSList* data_from_children,
-                                           GSList* sibling_data,
-                                           gpointer parent_data,
-                                           gpointer global_data,
-                                           gpointer *result,
-                                           const gchar *tag) {
+END_HANDLER(txn_restore_split_reconcile_state)
+{
   Split *s = (Split *) parent_data;
   gchar *txt = NULL;
   
@@ -3961,14 +3541,8 @@ txn_rest_split_reconcile_state_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_rest_split_reconcile_date_end_handler(gpointer data_for_children,
-                                          GSList* data_from_children,
-                                          GSList* sibling_data,
-                                          gpointer parent_data,
-                                          gpointer global_data,
-                                          gpointer *result,
-                                          const gchar *tag) {
+END_HANDLER(txn_restore_split_reconcile_date)
+{
   Split *s = (Split *) parent_data;
   TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;
   
@@ -4004,14 +3578,8 @@ txn_rest_split_reconcile_date_end_handler(gpointer data_for_children,
 
  */
 
-static gboolean
-txn_restore_split_account_end_handler(gpointer data_for_children,
-                                      GSList* data_from_children,
-                                      GSList* sibling_data,
-                                      gpointer parent_data,
-                                      gpointer global_data,
-                                      gpointer *result,
-                                      const gchar *tag) {
+END_HANDLER(txn_restore_split_account)
+{
   Split *s = (Split *) parent_data;
   Account *acct;
   gchar *txt = NULL;
@@ -4038,17 +3606,48 @@ txn_restore_split_account_end_handler(gpointer data_for_children,
 
 /****************************************************************************/
 
+/* Generic character restorion macro */
+#define RESTORE_CHAR(NAME,TOK,REST)					\
+  {									\
+    sixtp *NAME##_pr = sixtp_new();					\
+    if(!NAME##_pr) {							\
+      sixtp_destroy(top_level);						\
+      return(NULL);							\
+    }									\
+    sixtp_set_chars(NAME##_pr, generic_accumulate_chars);		\
+    sixtp_set_end(NAME##_pr, REST##_##NAME##_end_handler);		\
+    sixtp_set_cleanup_chars(NAME##_pr, generic_free_result);		\
+    sixtp_set_chars_fail(NAME##_pr, generic_free_result);		\
+    sixtp_add_sub_parser(restore_pr, TOK, NAME##_pr);			\
+  }
+
+/* Generic date restore macro */
+#define RESTORE_DATE(NAME,TOK,REST)					\
+  {									\
+    sixtp *NAME##_pr;							\
+    NAME##_pr = generic_timespec_parser_new(REST##_##NAME##_end_handler);\
+    if(!NAME##_pr) {							\
+      sixtp_destroy(top_level);						\
+      return(NULL);							\
+    }									\
+    sixtp_add_sub_parser(restore_pr, TOK, NAME##_pr);			\
+  }
+
+/****************************************************************************/
+
+#define TXN_RESTORE_SPLIT_DASH(NAME,TOK)				\
+        RESTORE_CHAR(NAME, TOK, txn_restore_split)
+
+#define TXN_RESTORE_SPLIT(NAME)  					\
+        RESTORE_CHAR(NAME, #NAME, txn_restore_split)
+
+
 static sixtp *
 gnc_txn_restore_split_parser_new() {
   sixtp *top_level;
-  sixtp *guid_pr;
-  sixtp *memo_pr;
-  sixtp *action_pr;
-  sixtp *reconcile_state_pr;
-  sixtp *reconcile_date_pr;
+  sixtp *restore_pr;
   sixtp *damount_pr;
   sixtp *value_pr;
-  sixtp *account_pr;
   sixtp *tmp_pr;
   
   top_level = sixtp_new();
@@ -4059,63 +3658,16 @@ gnc_txn_restore_split_parser_new() {
   sixtp_set_fail(top_level, txn_restore_split_fail_handler);
   sixtp_set_after_child(top_level, txn_restore_split_after_child_handler);
 
-  /* <restore> <guid> */
-  guid_pr = sixtp_new();
-  if(!guid_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(guid_pr, generic_accumulate_chars);
-  sixtp_set_end(guid_pr, txn_restore_split_guid_end_handler);
-  sixtp_set_cleanup_chars(guid_pr, generic_free_result);
-  sixtp_set_chars_fail(guid_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "guid", guid_pr);
-  
-  /* <restore> <memo> */
-  memo_pr = sixtp_new();
-  if(!memo_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(memo_pr, generic_accumulate_chars);
-  sixtp_set_end(memo_pr, txn_restore_split_memo_end_handler);
-  sixtp_set_cleanup_chars(memo_pr, generic_free_result);
-  sixtp_set_chars_fail(memo_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "memo", memo_pr);
-
-  /* <restore> <action> */
-  action_pr = sixtp_new();
-  if(!action_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(action_pr, generic_accumulate_chars);
-  sixtp_set_end(action_pr, txn_restore_split_action_end_handler);
-  sixtp_set_cleanup_chars(action_pr, generic_free_result);
-  sixtp_set_chars_fail(action_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "action", action_pr);
-
-  /* <restore> <reconcile-state> */
-  reconcile_state_pr = sixtp_new();
-  if(!reconcile_state_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(reconcile_state_pr, generic_accumulate_chars);
-  sixtp_set_end(reconcile_state_pr,
-                txn_rest_split_reconcile_state_end_handler);
-  sixtp_set_cleanup_chars(reconcile_state_pr, generic_free_result);
-  sixtp_set_chars_fail(reconcile_state_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "reconcile-state", reconcile_state_pr);
+  /* <restore> (<guid> | <memo> | <action> | <account> | <reconcile-state>)  */
+  restore_pr = top_level;
+  TXN_RESTORE_SPLIT (guid);
+  TXN_RESTORE_SPLIT (memo);
+  TXN_RESTORE_SPLIT (action);
+  TXN_RESTORE_SPLIT (account);
+  TXN_RESTORE_SPLIT_DASH (reconcile_state, "reconcile-state");
 
   /* <restore> <reconcile-date> */
-  reconcile_date_pr =
-    generic_timespec_parser_new(txn_rest_split_reconcile_date_end_handler);
-  if(!reconcile_date_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(top_level, "reconcile-date", reconcile_date_pr);
+  RESTORE_DATE (reconcile_date, "reconcile-date", txn_restore_split);
   
   /* <restore> <quantity> */
   damount_pr = generic_gnc_numeric_parser_new();
@@ -4133,18 +3685,6 @@ gnc_txn_restore_split_parser_new() {
   }
   sixtp_add_sub_parser(top_level, "value", value_pr);
 
-  /* <restore> <account> */
-  account_pr = sixtp_new();
-  if(!account_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(account_pr, generic_accumulate_chars);
-  sixtp_set_end(account_pr, txn_restore_split_account_end_handler);
-  sixtp_set_cleanup_chars(account_pr, generic_free_result);
-  sixtp_set_chars_fail(account_pr, generic_free_result);
-  sixtp_add_sub_parser(top_level, "account", account_pr);
-
   /* <restore> <slots> */
   tmp_pr = kvp_frame_parser_new();
   if(!tmp_pr) {
@@ -4158,15 +3698,12 @@ gnc_txn_restore_split_parser_new() {
 
 /***************************************************************************/
 
+#define TXN_RESTORE(NAME)  RESTORE_CHAR(NAME,#NAME, txn_restore)
+
 static sixtp *
 gnc_transaction_parser_new() {
   sixtp *top_level;
   sixtp *restore_pr;
-  sixtp *guid_pr;
-  sixtp *num_pr;
-  sixtp *date_posted_pr;
-  sixtp *date_entered_pr;
-  sixtp *description_pr;
   sixtp *split_pr;
   sixtp *tmp_pr;
 
@@ -4177,72 +3714,17 @@ gnc_transaction_parser_new() {
   sixtp_set_after_child(top_level, txn_restore_after_child_handler);
 
   /* <restore> */
-  restore_pr = sixtp_new();
-  if(!restore_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_start(restore_pr, txn_restore_start_handler);
-  sixtp_set_chars(restore_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(restore_pr, txn_restore_end_handler);
-  sixtp_set_after_child(restore_pr, txn_restore_after_child_handler);
-  sixtp_set_fail(restore_pr, txn_restore_fail_handler);
-  sixtp_add_sub_parser(top_level, "restore", restore_pr);
+  SETUP_RESTORE (txn, top_level);
 
-  /* <restore> <guid> */
-  guid_pr = sixtp_new();
-  if(!guid_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(guid_pr, generic_accumulate_chars);
-  sixtp_set_end(guid_pr, txn_restore_guid_end_handler);
-  sixtp_set_cleanup_chars(guid_pr, generic_free_result);
-  sixtp_set_chars_fail(guid_pr, generic_free_result);
-  sixtp_add_sub_parser(restore_pr, "guid", guid_pr);
+  /* <restore> (<guid> | <num> | <description> ) */
+  TXN_RESTORE (guid);
+  TXN_RESTORE (num);
+  TXN_RESTORE (description);
+
+  /* <restore> (<date-posted> | <date-entered>) */
+  RESTORE_DATE (date_posted, "date-posted", txn_rest);
+  RESTORE_DATE (date_entered, "date-entered", txn_rest);
   
-  /* <restore> <num> */
-  num_pr = sixtp_new();
-  if(!num_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(num_pr, generic_accumulate_chars);
-  sixtp_set_end(num_pr, txn_restore_num_end_handler);
-  sixtp_set_cleanup_chars(num_pr, generic_free_result);
-  sixtp_set_chars_fail(num_pr, generic_free_result);
-  sixtp_add_sub_parser(restore_pr, "num", num_pr);
-
-  /* <restore> <date-posted> */
-  date_posted_pr =
-    generic_timespec_parser_new(txn_rest_date_posted_end_handler);
-  if(!date_posted_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "date-posted", date_posted_pr);
-  
-  /* <restore> <date-entered> */
-  date_entered_pr =
-    generic_timespec_parser_new(txn_rest_date_entered_end_handler);
-  if(!date_entered_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_add_sub_parser(restore_pr, "date-entered", date_entered_pr);
-
-  /* <restore> <description> */
-  description_pr = sixtp_new();
-  if(!description_pr) {
-    sixtp_destroy(top_level);
-    return(NULL);
-  }
-  sixtp_set_chars(description_pr, generic_accumulate_chars);
-  sixtp_set_end(description_pr, txn_restore_description_end_handler);
-  sixtp_set_cleanup_chars(description_pr, generic_free_result);
-  sixtp_set_chars_fail(description_pr, generic_free_result);
-  sixtp_add_sub_parser(restore_pr, "description", description_pr);
-
   /* <restore> <slots> */
   tmp_pr = kvp_frame_parser_new();
   if(!tmp_pr) {
@@ -4264,126 +3746,93 @@ gnc_transaction_parser_new() {
 
 /***************************************************************************/
 
-static sixtp*
-ledger_data_parser_new() {
-  /* FIXME: this may leak memory - need to allocate at usage time as
-     with the other parser creation functions above... */
 
-  sixtp *ledger_data_pr = sixtp_new();
-  sixtp *acc_pr = sixtp_new();
-  sixtp *acc_restore_pr = sixtp_new();
-  sixtp *acc_restore_name_pr = sixtp_new();
-  sixtp *acc_restore_guid_pr = sixtp_new();
-  sixtp *acc_restore_type_pr = sixtp_new();
-  sixtp *acc_restore_code_pr = sixtp_new();
-  sixtp *acc_restore_description_pr = sixtp_new();
-  sixtp *acc_restore_notes_pr = sixtp_new();
+#define ACC_RESTORE_SIMPLE(NAME) 						\
+  RESTORE_CHAR (NAME, #NAME, acc_restore)
+
+  
+static sixtp*
+ledger_data_parser_new() 
+{
+  sixtp *top_level;
+  sixtp *acc_pr;
+  sixtp *restore_pr;
   sixtp *acc_restore_currency_pr;
   sixtp *acc_restore_security_pr;
-  sixtp *acc_restore_parent_pr = sixtp_new();
+  sixtp *acc_restore_parent_pr;
   sixtp *acc_restore_parent_guid_pr;
   sixtp *acc_restore_slots_pr;
   sixtp *tmp_pr;
 
-  g_return_val_if_fail(ledger_data_pr, NULL);
-  g_return_val_if_fail(acc_pr, NULL);
-  g_return_val_if_fail(acc_restore_pr, NULL);
-  g_return_val_if_fail(acc_restore_name_pr, NULL);
-  g_return_val_if_fail(acc_restore_guid_pr, NULL);
-  g_return_val_if_fail(acc_restore_type_pr, NULL);
-  g_return_val_if_fail(acc_restore_code_pr, NULL);
-  g_return_val_if_fail(acc_restore_description_pr, NULL);
-  g_return_val_if_fail(acc_restore_notes_pr, NULL);
-  g_return_val_if_fail(acc_restore_parent_pr, NULL);
-  
   /* <ledger-data> */
-  sixtp_set_start(ledger_data_pr, ledger_data_start_handler);
-  sixtp_set_chars(ledger_data_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(ledger_data_pr, ledger_data_end_handler);
-  sixtp_set_cleanup_result(ledger_data_pr, ledger_data_result_cleanup);
-  sixtp_set_fail(ledger_data_pr, ledger_data_fail_handler);
-  sixtp_set_result_fail(ledger_data_pr, ledger_data_result_cleanup);
+  top_level = sixtp_new();
+  g_return_val_if_fail(top_level, NULL);
+  sixtp_set_start(top_level, ledger_data_start_handler);
+  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
+  sixtp_set_end(top_level, ledger_data_end_handler);
+  sixtp_set_cleanup_result(top_level, ledger_data_result_cleanup);
+  sixtp_set_fail(top_level, ledger_data_fail_handler);
+  sixtp_set_result_fail(top_level, ledger_data_result_cleanup);
 
   /* <commodity> */
   tmp_pr = commodity_restore_parser_new();
   if(!tmp_pr) {
-    sixtp_destroy(ledger_data_pr);
+    sixtp_destroy(top_level);
     return(NULL);
   }
-  sixtp_add_sub_parser(ledger_data_pr, "commodity", tmp_pr);  
+  sixtp_add_sub_parser(top_level, "commodity", tmp_pr);  
 
   /* <account> */
+  acc_pr = sixtp_new();
+  if(!acc_pr) {
+    sixtp_destroy(top_level);
+    return(NULL);
+  }
   sixtp_set_start(acc_pr, account_start_handler);
   sixtp_set_chars(acc_pr, allow_and_ignore_only_whitespace);
+  sixtp_add_sub_parser(top_level, "account", acc_pr);
   
   /* <account> <restore> */
-  sixtp_set_start(acc_restore_pr, account_restore_start_handler);
-  sixtp_set_chars(acc_restore_pr, allow_and_ignore_only_whitespace);
-  sixtp_set_end(acc_restore_pr, account_restore_end_handler);
-  sixtp_set_fail(acc_restore_pr, account_restore_fail_handler);
-  sixtp_set_after_child(acc_restore_pr, account_restore_after_child_handler);
+  SETUP_RESTORE (account, acc_pr);
   
-  /* <account> <restore> <name> */
-  sixtp_set_chars(acc_restore_name_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_name_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_name_pr, generic_free_result);
-  sixtp_set_end(acc_restore_name_pr, acc_restore_name_end_handler);
-  
-  /* <account> <restore> <guid> */
-  sixtp_set_chars(acc_restore_guid_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_guid_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_guid_pr, generic_free_result);
-  sixtp_set_end(acc_restore_guid_pr, acc_restore_guid_end_handler);
-  
-  /* <account> <restore> <type> */
-  sixtp_set_chars(acc_restore_type_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_type_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_type_pr, generic_free_result);
-  sixtp_set_end(acc_restore_type_pr, acc_restore_type_end_handler);
-  
-  /* <account> <restore> <code> */
-  sixtp_set_chars(acc_restore_code_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_code_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_code_pr, generic_free_result);
-  sixtp_set_end(acc_restore_code_pr, acc_restore_code_end_handler);
-  
-  /* <account> <restore> <description> */
-  sixtp_set_chars(acc_restore_description_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_description_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_description_pr, generic_free_result);
-  sixtp_set_end(acc_restore_description_pr,
-                acc_restore_description_end_handler);
-  
-  /* <account> <restore> <notes> */
-  sixtp_set_chars(acc_restore_notes_pr, generic_accumulate_chars);  
-  sixtp_set_chars_fail(acc_restore_notes_pr, generic_free_result);
-  sixtp_set_cleanup_chars(acc_restore_notes_pr, generic_free_result);
-  sixtp_set_end(acc_restore_notes_pr, acc_restore_notes_end_handler);
+  /* <restore> (<name> | <guid> | <type> | <code> | <description> | <notes>)*/
+  ACC_RESTORE_SIMPLE(name);
+  ACC_RESTORE_SIMPLE(guid);
+  ACC_RESTORE_SIMPLE(type);
+  ACC_RESTORE_SIMPLE(code);
+  ACC_RESTORE_SIMPLE(description);
+  ACC_RESTORE_SIMPLE(notes);
   
   /* <account> <restore> <currency> */
   acc_restore_currency_pr = generic_gnc_commodity_lookup_parser_new();
   if(!acc_restore_currency_pr) {
-    sixtp_destroy(ledger_data_pr);
+    sixtp_destroy(top_level);
     return(NULL);
   }
-  sixtp_add_sub_parser(acc_restore_pr, "currency", acc_restore_currency_pr);
+  sixtp_add_sub_parser(restore_pr, "currency", acc_restore_currency_pr);
   
   /* <account> <restore> <security> */
   acc_restore_security_pr = generic_gnc_commodity_lookup_parser_new();
   if(!acc_restore_security_pr) {
-    sixtp_destroy(ledger_data_pr);
+    sixtp_destroy(top_level);
     return(NULL);
   }
-  sixtp_add_sub_parser(acc_restore_pr, "security", acc_restore_security_pr);
+  sixtp_add_sub_parser(restore_pr, "security", acc_restore_security_pr);
 
   /* <account> <restore> <parent> */
-  sixtp_set_chars(ledger_data_pr, allow_and_ignore_only_whitespace);
+  acc_restore_parent_pr = sixtp_new();
+  if(!acc_restore_parent_pr) {
+    sixtp_destroy(top_level);
+    return(NULL);
+  }
+  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
   sixtp_set_end(acc_restore_parent_pr, acc_restore_parent_end_handler);
+  sixtp_add_sub_parser(restore_pr, "parent", acc_restore_parent_pr);
   
   /* <account> <restore> <parent> <guid> */
   acc_restore_parent_guid_pr = generic_guid_parser_new();
   if(!acc_restore_parent_guid_pr) {
-    sixtp_destroy(ledger_data_pr);
+    sixtp_destroy(top_level);
     return(NULL);
   }
   sixtp_add_sub_parser(acc_restore_parent_pr, "guid",
@@ -4392,10 +3841,177 @@ ledger_data_parser_new() {
   /* <account> <restore> <slots> */
   acc_restore_slots_pr = kvp_frame_parser_new();
   if(!acc_restore_slots_pr) {
-    sixtp_destroy(ledger_data_pr);
+    sixtp_destroy(top_level);
     return(NULL);
   }
-  sixtp_add_sub_parser(acc_restore_pr, "slots", acc_restore_slots_pr);
+  sixtp_add_sub_parser(restore_pr, "slots", acc_restore_slots_pr);
+
+  /* <transaction> */
+  {
+    sixtp *transaction_pr = gnc_transaction_parser_new();
+    if(!transaction_pr) {
+      /* FIXME: need more cleanup here... */
+      return(NULL);
+    }
+    sixtp_add_sub_parser(top_level, "transaction", transaction_pr);
+  }
+
+  return(top_level);
+}
+
+
+/****************************************************************************/
+/****************************************************************************/
+/* ================================================================= */
+/* <query> (parent <gnc-data>)
+
+   On failure or on normal cleanup, the query will be killed,
+   so if you want it, you better set should_cleanup to false
+
+   input: NA
+   to-children-via-*result: new Query*
+   returns: a Query*
+   start: creates the query and puts it into *result
+   characters: NA
+   end: finishes up the query and leaves it in result.
+   cleanup-result: deletes the query (use should_cleanup to avoid).
+   cleanup-chars: NA
+   fail: deletes the query in *result.
+   result-fail: same as cleanup-result.
+   chars-fail: NA
+
+*/
+
+
+START_HANDLER(query_server)
+{
+  return(TRUE);
+}
+
+END_HANDLER(query_server)
+{
+  // hax0r alert should set result from somewhere ?
+  // *result = q;
+  return(TRUE);
+}
+
+
+/* ================================================================= */
+/* <query> (parent <query-server>)
+ 
+   This block does nothing.
+   It generates no data of its own, so it doesn't need any cleanup.
+
+   input: NA
+   to-children-via-*result: NA
+   returns: NA
+   start: NA.
+   characters: NA
+   end: NA
+   cleanup-result: NA
+   cleanup-chars: NA
+   fail: NA
+   result-fail: NA
+   chars-fail: NA
+
+ */
+
+START_HANDLER(query)
+{
+  return(TRUE);
+}
+
+
+/* ================================================================= */
+/* <restore> (lineage <query> <query-server>)
+   
+   restores a given query.  We allocate the new query in the
+   start block, the children modify it, and in the end block, we see
+   if the resultant query is OK, and if so, we're done.
+ 
+   input: Query*
+   to-children-via-*result: new Query*
+   returns: NA
+   start: create new Query*, and leave in for children.
+   characters: NA
+   end: clear *result
+   cleanup-result: NA
+   cleanup-chars: NA
+   fail: delete Query*
+   result-fail: NA
+   chars-fail: NA
+
+ */
+
+START_HANDLER(query_restore)
+{
+  Query *q;
+  q = xaccMallocQuery();
+  g_return_val_if_fail(q, FALSE);
+  *data_for_children = q;
+  *result = q;
+  return(q != NULL);
+}
+
+END_HANDLER(query_restore)
+{
+  Query *q = (Query *) result;
+  g_return_val_if_fail(q, FALSE);
+  *result = q;
+  return(TRUE);
+}
+
+FAIL_HANDLER(query_restore)
+{  
+  Query *q = (Query *) data_for_children;
+  if (q) xaccFreeQuery(q);
+}
+
+RESULT_CLEANUP(query_restore)
+{  
+  Query *q = (Query *) cr->data;
+  if (q) xaccFreeQuery(q);
+}
+
+
+AFTER_CHILD (query_restore)
+{
+  g_return_val_if_fail(data_for_children, FALSE);
+  if(!child_result) return(TRUE);
+  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
+  return(TRUE);
+}
+
+/* ================================================================= */
+
+static sixtp*
+query_server_parser_new() 
+{
+  sixtp *top_level;
+  sixtp *query_pr;
+  sixtp *restore_pr;
+  
+  /* <query_server> */
+  top_level = sixtp_new();
+  g_return_val_if_fail(top_level, NULL);
+  sixtp_set_start(top_level, query_server_start_handler);
+  sixtp_set_chars(top_level, allow_and_ignore_only_whitespace);
+  sixtp_set_end(top_level, query_server_end_handler);
+
+  /* <query_server> <query> */
+  query_pr = sixtp_new();
+  if (!query_pr) {
+    sixtp_destroy(top_level);
+    return (NULL);
+  }
+  sixtp_set_start(query_pr, query_start_handler);
+  sixtp_set_chars(query_pr, allow_and_ignore_only_whitespace);
+  sixtp_add_sub_parser(top_level, "query-server", query_pr);
+  
+  /* <query> <restore> */
+  SETUP_RESTORE (query, query_pr);
+
+#ifdef LATER
 
   /* <transaction> */
   {
@@ -4407,23 +4023,12 @@ ledger_data_parser_new() {
     sixtp_add_sub_parser(ledger_data_pr, "transaction", transaction_pr);
   }
 
-  /* parser structure */
-  sixtp_add_sub_parser(acc_restore_pr, "parent", acc_restore_parent_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "notes", acc_restore_notes_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "description", acc_restore_description_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "code", acc_restore_code_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "type", acc_restore_type_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "guid", acc_restore_guid_pr);
-  sixtp_add_sub_parser(acc_restore_pr, "name", acc_restore_name_pr);
+#endif
 
-  sixtp_add_sub_parser(acc_pr, "restore", acc_restore_pr);
-  sixtp_add_sub_parser(ledger_data_pr, "account", acc_pr);
-
-
-  return(ledger_data_pr);
+  return(top_level);
 }
 
-
+/* ================================================================= */
 /****************************************************************************/
 /* <version> (lineage <gnc>)
    
@@ -4436,7 +4041,8 @@ ledger_data_parser_new() {
  */
 
 static gboolean
-gnc_parser_configure_for_input_version(GNCParseStatus *status, gint64 version) {
+gnc_parser_configure_for_input_version(GNCParseStatus *status, gint64 version) 
+{
 
   status->version = version;
   status->seen_version = TRUE;
@@ -4456,17 +4062,18 @@ gnc_parser_configure_for_input_version(GNCParseStatus *status, gint64 version) {
     sixtp_add_sub_parser(status->gnc_parser, "ledger-data", ledger_data_pr);
   }
 
+  /* add <query-server> */
+  {
+    sixtp *query_server_pr = query_server_parser_new();
+    g_return_val_if_fail(query_server_pr, FALSE);
+    sixtp_add_sub_parser(status->gnc_parser, "query-server", query_server_pr);
+  }
+
   return(TRUE);
 }
 
-static gboolean
-gnc_version_end_handler(gpointer data_for_children,
-                        GSList* data_from_children,
-                        GSList* sibling_data,
-                        gpointer parent_data,
-                        gpointer global_data,
-                        gpointer *result,
-                        const gchar *tag) {
+END_HANDLER(gnc_version)
+{
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   gint64 version;
   gboolean ok;
@@ -4505,6 +4112,8 @@ static sixtp *gnc_version_parser_new() {
    before-child: make sure we don't get two ledger-data's (not allowed ATM).
    after-child: if a ledger-data child, parse_data->account_group = *result.
    characters: allow_and_ignore_only_whitespace
+
+   Similarly, only one query is allowed ... 
    end: NA
 
    cleanup-result: NA
@@ -4524,36 +4133,42 @@ gnc_parser_before_child_handler(gpointer data_for_children,
                               gpointer *result,
                               
                               const gchar *tag,
-                              const gchar *child_tag) {  
+                              const gchar *child_tag) 
+{  
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   
   g_return_val_if_fail(pstatus, FALSE);
+
   if(strcmp(child_tag, "ledger-data") == 0) {
     if(pstatus->account_group) {
       return(FALSE);
     }
   }
+
+  if(strcmp(child_tag, "query-server") == 0) {
+    if(pstatus->query) return(FALSE);
+  }
   return(TRUE);
 }
 
-static gboolean
-gnc_parser_after_child_handler(gpointer data_for_children,
-                             GSList* data_from_children,
-                             GSList* sibling_data,
-                             gpointer parent_data,
-                             gpointer global_data,
-                             gpointer *result,
-                             
-                             const gchar *tag,
-                             const gchar *child_tag,
-                             sixtp_child_result *child_result) {  
+AFTER_CHILD(gnc_parser)
+{  
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  
   g_return_val_if_fail(pstatus, FALSE);
-  if(strcmp(child_tag, "ledger-data") == 0) {
+
+  if(strcmp(child_tag, "ledger-data") == 0) 
+  {
     g_return_val_if_fail(child_result, FALSE);
     g_return_val_if_fail(child_result->data, FALSE);
     pstatus->account_group = (AccountGroup *) child_result->data;
+    child_result->should_cleanup = FALSE;
+  }
+
+  if(strcmp(child_tag, "query-server") == 0) 
+  {
+    g_return_val_if_fail(child_result, FALSE);
+    g_return_val_if_fail(child_result->data, FALSE);
+    pstatus->query = (Query *) child_result->data;
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);
@@ -4614,6 +4229,7 @@ gncxml_read(const gchar *filename,
   global_parse_status.seen_version = FALSE;
   global_parse_status.gnc_parser = gnc_pr;
   global_parse_status.account_group = NULL;
+  global_parse_status.query = NULL;
   global_parse_status.error = GNC_PARSE_ERR_NONE;
   parse_result = NULL;
 

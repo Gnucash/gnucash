@@ -1676,7 +1676,7 @@ xaccAccountSetReconcilePostponeBalance (Account *account,
 
     check_open (account);
 
-    value = kvp_value_new_numeric (balance);
+    value = kvp_value_new_gnc_numeric (balance);
 
     kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
                              "reconcile-info", "postpone", "balance", NULL);
