@@ -387,29 +387,29 @@ sql_sort_need_entry (Query *q)
  * regex!  yahooo! 
  */
 
-#define STRING_TERM(fieldname)				\
-{							\
-   const char *tmp;					\
-							\
-   if (0 == pd->str.sense)				\
-   {							\
-      sq->pq = stpcpy (sq->pq, "NOT (");		\
-   }							\
-   if (pd->str.use_regexp || !pd->str.case_sens)        \
-     sq->pq = stpcpy(sq->pq, fieldname " ~");		\
-   else                                                 \
-     sq->pq = stpcpy(sq->pq, fieldname " =");		\
-   if (0 == pd->str.case_sens) {			\
-      sq->pq = stpcpy(sq->pq, "*");			\
-   }							\
-   sq->pq = stpcpy(sq->pq, " '");			\
-   tmp = sqlEscapeString (sq->escape, pd->str.matchstring); \
-   sq->pq = stpcpy(sq->pq, tmp);			\
-   sq->pq = stpcpy(sq->pq, "'");			\
-   if (0 == pd->str.sense)				\
-   {							\
-      sq->pq = stpcpy (sq->pq, ") ");			\
-   }							\
+#define STRING_TERM(fieldname)                                \
+{                                                             \
+   const char *tmp;                                           \
+                                                              \
+   if (0 == pd->str.sense)                                    \
+   {                                                          \
+      sq->pq = stpcpy (sq->pq, "NOT (");                      \
+   }                                                          \
+   if (pd->str.use_regexp || !pd->str.case_sens)              \
+     sq->pq = stpcpy(sq->pq, fieldname " ~");                 \
+   else                                                       \
+     sq->pq = stpcpy(sq->pq, fieldname " =");                 \
+   if (0 == pd->str.case_sens) {                              \
+      sq->pq = stpcpy(sq->pq, "*");                           \
+   }                                                          \
+   sq->pq = stpcpy(sq->pq, " '");                             \
+   tmp = sqlEscapeString (sq->escape, pd->str.matchstring);   \
+   sq->pq = stpcpy(sq->pq, tmp);                              \
+   sq->pq = stpcpy(sq->pq, "'");                              \
+   if (0 == pd->str.sense)                                    \
+   {                                                          \
+      sq->pq = stpcpy (sq->pq, ") ");                         \
+   }                                                          \
 }
 
 /* =========================================================== */
@@ -419,64 +419,64 @@ sql_sort_need_entry (Query *q)
  * broken as well. 
  */
 
-#define AMOUNT_TERM(fieldname,comtable)				\
-{								\
-   if (0 == pd->amount.sense)					\
-   {								\
-      sq->pq = stpcpy (sq->pq, "NOT (");			\
-   }								\
-   switch(pd->amount.amt_sgn) 					\
-   {								\
-      case AMT_SGN_MATCH_CREDIT:				\
-         sq->pq = stpcpy(sq->pq, fieldname " <= 0 AND "); 	\
-         break;							\
-      case AMT_SGN_MATCH_DEBIT:					\
-         sq->pq = stpcpy(sq->pq, fieldname " >= 0 AND "); 	\
-         break;							\
-      default:							\
-         break;							\
-   }								\
-   switch(pd->amount.how) 					\
-   {								\
-      case AMT_MATCH_ATLEAST:					\
-         sq->pq = stpcpy(sq->pq, 				\
-            "abs(" fieldname ") >= "comtable".fraction * float8"); \
+#define AMOUNT_TERM(fieldname,comtable)                              \
+{                                                                    \
+   if (0 == pd->amount.sense)                                        \
+   {                                                                 \
+      sq->pq = stpcpy (sq->pq, "NOT (");                             \
+   }                                                                 \
+   switch(pd->amount.amt_sgn)                                        \
+   {                                                                 \
+      case AMT_SGN_MATCH_CREDIT:                                     \
+         sq->pq = stpcpy(sq->pq, fieldname " <= 0 AND ");            \
+         break;                                                      \
+      case AMT_SGN_MATCH_DEBIT:                                      \
+         sq->pq = stpcpy(sq->pq, fieldname " >= 0 AND ");            \
+         break;                                                      \
+      default:                                                       \
+         break;                                                      \
+   }                                                                 \
+   switch(pd->amount.how)                                            \
+   {                                                                 \
+      case AMT_MATCH_ATLEAST:                                        \
+         sq->pq = stpcpy(sq->pq,                                     \
+            "abs(" fieldname ") >= "comtable".fraction * float8");   \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
-         break;							\
-      case AMT_MATCH_ATMOST:					\
-         sq->pq = stpcpy(sq->pq, 				\
-            "abs(" fieldname ") <= "comtable".fraction * float8"); \
+         break;                                                      \
+      case AMT_MATCH_ATMOST:                                         \
+         sq->pq = stpcpy(sq->pq,                                     \
+            "abs(" fieldname ") <= "comtable".fraction * float8");   \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
-         break;							\
-      case AMT_MATCH_EXACTLY:					\
-         sq->pq = stpcpy(sq->pq, 				\
+         break;                                                      \
+      case AMT_MATCH_EXACTLY:                                        \
+         sq->pq = stpcpy(sq->pq,                                     \
             "abs(abs(" fieldname ") - abs("comtable".fraction * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
-         sq->pq = stpcpy(sq->pq, ")) < 1");			\
-         break;							\
-   }								\
-   if (0 == pd->amount.sense)					\
-   {								\
-      sq->pq = stpcpy (sq->pq, ") ");				\
-   }								\
+         sq->pq = stpcpy(sq->pq, ")) < 1");                          \
+         break;                                                      \
+   }                                                                 \
+   if (0 == pd->amount.sense)                                        \
+   {                                                                 \
+      sq->pq = stpcpy (sq->pq, ") ");                                \
+   }                                                                 \
 }
 
 /* =========================================================== */
 /* Macro for PR_CLEARED term */
 
-#define CLR_TERM(howie,flagchar)				\
-{								\
-   if (pd->cleared.how & howie)					\
-   {								\
-      if (got_one)						\
-      {								\
-         sq->pq = stpcpy(sq->pq, "OR ");			\
-      }								\
-      sq->pq = stpcpy(sq->pq, "gncEntry.reconciled = '");	\
-      *(sq->pq) = flagchar;  (sq->pq) ++;			\
-      sq->pq = stpcpy(sq->pq, "' ");				\
-      got_one = 1;						\
-   }								\
+#define CLR_TERM(howie,flagchar)                                  \
+{                                                                 \
+   if (pd->cleared.how & howie)                                   \
+   {                                                              \
+      if (got_one)                                                \
+      {                                                           \
+         sq->pq = stpcpy(sq->pq, "OR ");                          \
+      }                                                           \
+      sq->pq = stpcpy(sq->pq, "gncEntry.reconciled = '");         \
+      *(sq->pq) = flagchar;  (sq->pq) ++;                         \
+      sq->pq = stpcpy(sq->pq, "' ");                              \
+      got_one = 1;                                                \
+   }                                                              \
 }
 
 /* =========================================================== */
@@ -813,18 +813,26 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
                break;
 
             case PR_GUID:
-	      if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
-		need_account = TRUE;
-	      else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
-		need_entry = TRUE;
-	      break;
+               if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
+               {
+                  need_account = TRUE;
+               }
+               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
+               {
+                  need_entry = TRUE;
+               }
+               break;
 
             case PR_KVP:
-              if (pd->kvp.where & KVP_MATCH_SPLIT)
-                need_entry = TRUE;
-              if (pd->kvp.where & KVP_MATCH_ACCOUNT)
-                need_account = TRUE;
-              break;
+               if (pd->kvp.where & KVP_MATCH_SPLIT)
+               {
+                  need_entry = TRUE;
+               }
+               if (pd->kvp.where & KVP_MATCH_ACCOUNT)
+               {
+                  need_account = TRUE;
+               }
+               break;
 
             case PR_SHRS: 
                need_entry = TRUE;
@@ -1055,27 +1063,29 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
 
                sq->pq = stpcpy (sq->pq, " (");
 
-	       if (pd->guid.id_type == GNC_ID_NONE ||
-		   !safe_strcmp (pd->guid.id_type, GNC_ID_NULL))
+               if (pd->guid.id_type == GNC_ID_NONE ||
+                   !safe_strcmp (pd->guid.id_type, GNC_ID_NULL))
+               {
                    sq->pq = stpcpy(sq->pq, "FALSE ");
-	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
-	       {
+               }
+               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
+               {
                    sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-	       }
-	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
-	       {
+               }
+               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
+               {
                    sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-	       }
-	       else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
-	       {
+               }
+               else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
+               {
                    sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
                    sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
                    sq->pq = stpcpy(sq->pq, "' ");
-	       }
+               }
 
                sq->pq = stpcpy (sq->pq, ") ");
 
@@ -1083,9 +1093,9 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
             }
 
             case PR_KVP:
-              PINFO("term is PR_KVP");
-              sqlQuery_kvp_build (sq, &pd->kvp);
-              break;
+               PINFO("term is PR_KVP");
+               sqlQuery_kvp_build (sq, &pd->kvp);
+               break;
 
             case PR_MEMO:
                PINFO("term is PR_MEMO");
