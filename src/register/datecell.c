@@ -36,6 +36,8 @@
 #include <string.h>
 #include <time.h>
 
+#include "../engine/date.h"  /* hack alert -- don't include from engine directory */
+
 #include "basiccell.h"
 #include "datecell.h"
 
