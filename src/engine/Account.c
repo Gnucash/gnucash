@@ -54,6 +54,17 @@ static short module = MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
+G_INLINE_FUNC void mark_account (Account *account);
+G_INLINE_FUNC void
+mark_account (Account *account)
+{
+  if (account->parent)
+    account->parent->saved = FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+
 static void
 xaccInitAccount (Account * acc) {
 
@@ -253,7 +264,7 @@ split_sort_func(gconstpointer a, gconstpointer b) {
   return(xaccSplitDateOrder(sa, sb));
 }
 
-void
+static void
 xaccAccountSortSplits (Account *acc) {
   if(!acc) return;
 
@@ -271,6 +282,7 @@ xaccAccountBringUpToDate(Account *acc) {
      cost basis and balance calls are no-ops */
   xaccAccountSortSplits(acc);
   xaccAccountRecomputeBalance(acc);
+  mark_account (acc);
 }
 
 void 
@@ -403,13 +415,12 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
    }
 }
 
-
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void check_and_mark (Account *account);
+G_INLINE_FUNC void check_open (Account *account);
 G_INLINE_FUNC void
-check_and_mark (Account *account)
+check_open (Account *account)
 {
   if (account->editlevel <= 0)
   {
@@ -418,9 +429,6 @@ check_and_mark (Account *account)
     /* assert (0); */
     /* return; */
   }
-
-  if (account->parent)
-    account->parent->saved = FALSE;
 }
 
 /********************************************************************\
@@ -448,7 +456,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
   xaccAccountBeginEdit(acc);
   {
     Account *oldacc;
-    check_and_mark (acc);
+    check_open (acc);
 
     acc->balance_dirty = TRUE;
     acc->sort_dirty = TRUE;
@@ -478,6 +486,8 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
     } else {
       acc->splits = g_list_prepend(acc->splits, split);
     }
+
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -486,16 +496,31 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
 \********************************************************************/
 
 void
-xaccAccountRemoveSplit ( Account *acc, Split *split ) {
+xaccAccountRemoveSplit (Account *acc, Split *split) {
   if (!acc) return;
   if (!split) return;
   
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);  
-    acc->balance_dirty = TRUE;
-    acc->splits = g_list_remove(acc->splits, split);
-    split->acc = NULL;
+    GList *node;
+
+    check_open (acc);
+
+    node = g_list_find (acc->splits, split);
+    if (!node)
+    {
+      PERR ("split not in account");
+    }
+    else
+    {
+      acc->splits = g_list_remove_link (acc->splits, node);
+      g_list_free_1 (node);
+
+      acc->balance_dirty = TRUE;
+      split->acc = NULL;
+
+      mark_account (acc);
+    }
   }
   xaccAccountCommitEdit(acc);
 }
@@ -832,13 +857,15 @@ xaccAccountSetType (Account *acc, int tip) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);
+    check_open (acc);
     
     /* refuse invalid account types, and don't bother if not new type. */
     if((NUM_ACCOUNT_TYPES > tip) && (acc->type != tip)) {
       acc->type = tip;
       acc->balance_dirty = TRUE; /* new type may affect balance computation */
     }
+
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -851,12 +878,14 @@ xaccAccountSetName (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_and_mark (acc);
+     check_open (acc);
 
      /* make strdup before freeing */
      tmp = g_strdup (str);
      g_free (acc->accountName);
      acc->accountName = tmp;
+
+     mark_account (acc);
    }
    xaccAccountCommitEdit(acc);
 }
@@ -868,12 +897,14 @@ xaccAccountSetCode (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_and_mark (acc);
+     check_open (acc);
      
      /* make strdup before freeing */
      tmp = g_strdup (str);
      g_free (acc->accountCode);
      acc->accountCode = tmp;
+
+     mark_account (acc);
    }
    xaccAccountCommitEdit(acc);
 }
@@ -885,12 +916,14 @@ xaccAccountSetDescription (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_and_mark (acc);
+     check_open (acc);
      
      /* make strdup before freeing */
      tmp = g_strdup (str);
      g_free (acc->description);
      acc->description = tmp;
+
+     mark_account (acc);
    }
    xaccAccountCommitEdit(acc);
 }
@@ -903,7 +936,7 @@ xaccAccountSetNotes (Account *acc, const char *str) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);
+    check_open (acc);
     
     new_value = kvp_value_new_string(str);
     if(new_value) {
@@ -913,6 +946,8 @@ xaccAccountSetNotes (Account *acc, const char *str) {
     else {
       PERR ("failed to allocate kvp");
     }
+
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -943,7 +978,7 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
   
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);
+    check_open (acc);
     
     acc->currency     = currency;
     acc->currency_scu = gnc_commodity_get_fraction(currency);
@@ -951,6 +986,8 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
 
     acc->sort_dirty = TRUE;
     acc->balance_dirty = TRUE;
+
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -962,7 +999,7 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
   
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);
+    check_open (acc);
 
     acc->security     = security;
     acc->security_scu = gnc_commodity_get_fraction(security);    
@@ -970,6 +1007,8 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
 
     acc->sort_dirty = TRUE;
     acc->balance_dirty = TRUE;
+
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -981,8 +1020,23 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_and_mark (acc);
+    check_open (acc);
     acc->currency_scu = scu;
+    mark_account (acc);
+  }
+  xaccAccountCommitEdit(acc);
+}
+
+void
+xaccAccountSetSecuritySCU (Account *acc, int scu) {
+
+  if (!acc) return;
+
+  xaccAccountBeginEdit(acc);
+  {
+    check_open (acc);
+    acc->security_scu = scu;
+    mark_account (acc);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -1282,13 +1336,15 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 
   xaccAccountBeginEdit (account);
   {
-    check_and_mark (account);
+    check_open (account);
 
     kvp_frame_set_slot(xaccAccountGetSlots (account),
                        "tax-related", new_value);
 
     if (new_value)
       kvp_value_delete(new_value);
+
+    mark_account (account);
   }
   xaccAccountCommitEdit (account);
 }

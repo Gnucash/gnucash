@@ -300,8 +300,6 @@ void           xaccClearMarkDownGr (AccountGroup *group, short val);
 void         xaccAccountSetPriceSrc (Account *account, const char *src);
 const char * xaccAccountGetPriceSrc (Account *account);
 
-void xaccAccountSortSplits(Account *account);
-
 gpointer xaccAccountForEachSplit(Account *account,
                                  gpointer (*thunk)(Split *s, gpointer data),
                                  gpointer data);
