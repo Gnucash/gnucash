@@ -64,7 +64,7 @@ if (not defined($old)) {
     exit(1);
   }
   if (not -d "tmp") {
-    mkdir "tmp";
+    mkdir "tmp", 0755];
   }
   chdir "tmp";
   system("cvs -d `cat ../$new/CVS/Root` co gnucash");
@@ -110,7 +110,7 @@ chdir $gnc_home or die "Can't cd!\n";
 #unlink('gnc.diff', 'gnucash.diff.gz', 'gnucash.diff.gz.uue');
 
 if (not -d "diffs") {
-  mkdir "diffs";
+  mkdir "diffs", 0755;
 }
 
 my $date = `date '+%s'`;
