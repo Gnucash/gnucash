@@ -491,6 +491,8 @@ Basic GUI:
 
 todo:
 ---- change lot viewer to use gnc-query-list
+---- after the gnome2 port, add the 'unclaimed splits" window
+     to the lot viewer, this will allow it to be a simple lot editor.
 
 
 Status
