@@ -1,6 +1,5 @@
-*.la
-*.lo
 .deps
 .libs
 Makefile
 Makefile.in
+test-link

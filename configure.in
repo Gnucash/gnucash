@@ -412,7 +412,13 @@ AC_ARG_ENABLE( rpc,
 
 AC_SUBST(RPC_DIR)
 
+### --------------------------------------------------------------------------
+### OFX
+AC_ARG_ENABLE( ofx,
+  [  --enable-ofx                 compile with ofx support],
+       OFX_DIR=ofx)
 
+AC_SUBST(OFX_DIR)
 ### --------------------------------------------------------------------------
 ### i18n
 
@@ -921,12 +927,15 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/gnome-utils/test/Makefile
           src/gnome-search/Makefile
           src/import-export/Makefile
+          src/import-export/test/Makefile
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
+          src/import-export/ofx/Makefile
+          src/import-export/ofx/test/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/test/Makefile
           src/network-utils/Makefile

@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<GTK-Interface>
+
+<project>
+  <name>generic-import</name>
+  <program_name>Gnucash</program_name>
+  <directory></directory>
+  <source_directory></source_directory>
+  <pixmaps_directory></pixmaps_directory>
+  <language>C</language>
+  <gnome_support>True</gnome_support>
+  <gettext_support>True</gettext_support>
+  <output_main_file>False</output_main_file>
+  <backup_source_files>False</backup_source_files>
+</project>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>Generic Import Account Picker</name>
+  <signal>
+    <name>map</name>
+    <handler>gnc_ui_generic_account_picker_map_cb</handler>
+    <last_modification_time>Fri, 07 Jun 2002 17:35:27 GMT</last_modification_time>
+  </signal>
+  <title>Select Account</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <default_width>600</default_width>
+  <default_height>400</default_height>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>True</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>vbox1</name>
+    <homogeneous>False</homogeneous>
+    <spacing>0</spacing>
+    <child>
+      <padding>1</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>hbuttonbox1</name>
+      <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button1</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button2</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkLabel</class>
+      <name>label847715</name>
+      <label>The following online account is unknown:</label>
+      <justify>GTK_JUSTIFY_CENTER</justify>
+      <wrap>False</wrap>
+      <xalign>0.5</xalign>
+      <yalign>0.5</yalign>
+      <xpad>0</xpad>
+      <ypad>0</ypad>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+
+    <widget>
+      <class>GtkLabel</class>
+      <name>online_id_label</name>
+      <label>Online account ID here...</label>
+      <justify>GTK_JUSTIFY_CENTER</justify>
+      <wrap>True</wrap>
+      <xalign>0.5</xalign>
+      <yalign>0.5</yalign>
+      <xpad>0</xpad>
+      <ypad>0</ypad>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+
+    <widget>
+      <class>GtkFrame</class>
+      <name>frame1</name>
+      <label>Please select or create matching Gnucash account:</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkScrolledWindow</class>
+	<name>scrolledwindow24</name>
+	<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	<widget>
+	  <class>GtkCTree</class>
+	  <name>account_tree</name>
+	  <can_focus>True</can_focus>
+	  <signal>
+	    <name>tree_select_row</name>
+	    <handler>gnc_ui_generic_account_picker_select_cb</handler>
+	    <last_modification_time>Fri, 07 Jun 2002 17:33:51 GMT</last_modification_time>
+	  </signal>
+	  <signal>
+	    <name>tree_unselect_row</name>
+	    <handler>gnc_ui_generic_account_picker_unselect_cb</handler>
+	    <last_modification_time>Fri, 07 Jun 2002 17:34:00 GMT</last_modification_time>
+	  </signal>
+	  <columns>3</columns>
+	  <column_widths>215,48,80</column_widths>
+	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	  <show_titles>True</show_titles>
+	  <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>label847711</name>
+	    <label>Account</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>label847712</name>
+	    <label>Type</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>label847713</name>
+	    <label>Online ID</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkButton</class>
+      <name>button78</name>
+      <can_focus>True</can_focus>
+      <signal>
+	<name>clicked</name>
+	<handler>gnc_ui_generic_account_picker_new_cb</handler>
+	<data>QIF_Import_Account_Picker</data>
+	<last_modification_time>Fri, 07 Jun 2002 17:30:20 GMT</last_modification_time>
+      </signal>
+      <label>New Account (child of selected) ...</label>
+      <relief>GTK_RELIEF_NORMAL</relief>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+  </widget>
+</widget>
+
+</GTK-Interface>

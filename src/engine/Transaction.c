@@ -2420,6 +2420,12 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 }
 
 void
+xaccTransSetDatePostedSecs (Transaction *trans, time_t secs)
+{
+    xaccTransSetDateInternal(trans, TDATE_POSTED, secs, 0);
+}
+
+void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
     xaccTransSetDateInternal(trans, TDATE_ENTERED, secs, 0);

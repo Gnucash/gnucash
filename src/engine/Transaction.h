@@ -159,6 +159,7 @@ void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
+void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 

@@ -4,3 +4,4 @@
 .libs
 Makefile
 Makefile.in
+test-link

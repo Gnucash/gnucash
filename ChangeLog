@@ -1,3 +1,11 @@
+2002-06-20  David Hampton  <hampton@employees.org>
+
+	* src/engine/Transaction.[ch]: New function
+
+	* src/import-export/<blah>:
+	* src/import-export/ofx/<blah>: Benoit Gregoire's initial support
+	for OFX import.
+
 2002-06-18  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.[ch]: Added; a multiply-markable,

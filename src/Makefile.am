@@ -20,9 +20,9 @@ GUI_SUBDIRS_1 = \
   app-file
 
 GUI_SUBDIRS_2 = \
-  import-export \
   dialog-account \
   register \
+  import-export \
   gnome \
   experimental \
   business \
