@@ -499,4 +499,4 @@
   (apply gnc:apply-register-report (cons gnc:report-window rest)))
 
 (define (gnc:print-register-report . rest)
-  (apply gnc:apply-register-report (const gnc:print-report rest)))
+  (apply gnc:apply-register-report (cons gnc:print-report rest)))

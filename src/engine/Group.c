@@ -560,6 +560,12 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
    * are not yet parented. */
   if (!grp) return;
 
+  if (acc->parent != grp)
+  {
+    PERR ("account not in group");
+    return;
+  }
+
   acc->parent = NULL;
 
   grp->accounts = g_list_remove (grp->accounts, acc);

@@ -1,3 +1,37 @@
+2001-03-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gnucash.c.in (gnc_main): change from main
+	function so other executables can link with this lib
+
+	* src/gnc-main.c: new file with gnucash main
+
+	* src/test/test-stuff.c: add api to turn on success printing
+
+	* src/test/test-exp-parser.c: new test file for testing
+	expression parser
+
+	* src/scm/report/income-or-expense-pie.scm: display totals
+	in legend
+
+	* src/gnome/druid-stock-split.c: check for proper currencies
+	on income & asset accounts. allow price to be recorded.
+
+	* src/gnome/account-tree.c: add api for setting selectability
+	with a filter function
+
+	* src/engine/Group.c (xaccGroupRemoveAccount): check for
+	group/account mismatch
+
+2001-03-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/date-utilities.scm: set isdst to -1 before calling
+	mktime
+
+	* src/gnome/window-main.c: put summary info on left side
+
+	* src/gnome/gtkselect.c: don't display button unless there is
+	something to select. put button on left side
+
 2001-03-22  Robert Graham Merkel <rgmerk@mira.net>
 
 	* src/scm/date-utilities.scm (moddate): set is-dst to unknown to

@@ -306,6 +306,18 @@ gtk_select_popup_button_leave (GtkWidget        *button,
 }
 
 static void
+gtk_select_update_button (GtkSelect *select)
+{
+  if (g_list_length (select->entries) > 1)
+    gtk_widget_show (select->button);
+  else if (g_list_length (select->entries) == 1 &&
+           select->selected == NULL)
+    gtk_widget_show (select->button);
+  else
+    gtk_widget_hide (select->button);
+}
+
+static void
 gtk_select_update_entry (GtkList * list, GtkSelect * select)
 {
   GtkWidget *selected;
@@ -341,6 +353,9 @@ gtk_select_update_entry (GtkList * list, GtkSelect * select)
       select->selected = NULL;
     }
   }
+
+  gtk_select_update_button (select);
+
   gtk_signal_handler_unblock (GTK_OBJECT (list), select->list_change_id);
 }
 
@@ -522,11 +537,10 @@ gtk_select_init (GtkSelect * select)
   gtk_widget_show (select->empty);
   gtk_container_add(GTK_CONTAINER(select->entry), select->empty);
   gtk_container_add (GTK_CONTAINER (select->button), arrow);
+  gtk_box_pack_start (GTK_BOX (select), select->button, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (select), select->entry, TRUE, TRUE, 0);
-  gtk_box_pack_end (GTK_BOX (select), select->button, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (select->button, GTK_CAN_FOCUS);
   gtk_widget_show (select->entry);
-  gtk_widget_show (select->button);
 //  gtk_signal_connect (GTK_OBJECT (select->entry), "key_press_event",
 //		      (GtkSignalFunc) gtk_select_entry_key_press, select);
   gtk_signal_connect_after (GTK_OBJECT (select->button), "button_press_event",
@@ -708,6 +722,7 @@ gtk_select_insert_items (GtkSelect *select, GList *items, gint position)
   copy = g_list_copy(items);
   select->entries = g_list_insert_list(select->entries, items, position);
   gtk_list_insert_items(GTK_LIST(select->list), copy, position);
+  gtk_select_update_button (select);
 }
 
 void
@@ -720,6 +735,7 @@ gtk_select_append_items (GtkSelect *select, GList *items)
   copy = g_list_copy(items);
   select->entries = g_list_concat(select->entries, items);
   gtk_list_append_items(GTK_LIST(select->list), copy);
+  gtk_select_update_button (select);
 }
 
 void
@@ -732,6 +748,7 @@ gtk_select_prepend_items (GtkSelect *select, GList *items)
   copy = g_list_copy(items);
   select->entries = g_list_concat(items, select->entries);
   gtk_list_prepend_items(GTK_LIST(select->list), copy);
+  gtk_select_update_button (select);
 }
 
 static void
@@ -762,6 +779,8 @@ gtk_select_remove_items_internal (GtkSelect *select, GList *items,
     gtk_list_remove_items_no_unref(GTK_LIST(select->list), items);
   if (do_free)
     g_list_free(items);
+
+  gtk_select_update_button (select);
 }
 
 void

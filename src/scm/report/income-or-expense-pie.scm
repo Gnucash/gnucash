@@ -18,7 +18,7 @@
       (optname-slices (N_ "Maximum Slices"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
-  
+
   ;; Note the options-generator has a boolean argument, which
   ;; is true for income piecharts.  We use a lambda to wrap
   ;; up this function in the define-reports.
@@ -136,8 +136,8 @@
                          ;;           report-currency #t)))))
 		 profit-collector-list))
            (combined (zip double-list accounts))
-           (accounts-or-names '())
-           (other-anchor ""))
+           (other-anchor "")
+           (print-info (gnc:commodity-print-info report-currency #t)))
 
       (set! combined
             (filter (lambda (pair) (not (= 0.0 (car pair))))
@@ -170,11 +170,6 @@
                     (gnc:report-anchor-text
                      (gnc:make-report name options))))))
 
-      (call-with-values (lambda () (unzip2 combined))
-                        (lambda (ds as)
-                          (set! double-list ds)
-                          (set! accounts-or-names as)))
-
       (gnc:html-piechart-set-title!
        chart (if is-income? 
                  (_ "Income by Account")
@@ -188,18 +183,24 @@
 
       (gnc:html-piechart-set-width! chart width)
       (gnc:html-piechart-set-height! chart height)
-      (gnc:html-piechart-set-data! chart double-list)
+      (gnc:html-piechart-set-data! chart (unzip1 combined))
       (gnc:html-piechart-set-labels!
        chart
-       (map (lambda (a) (if (string? a) a (gnc:account-get-full-name a)))
-            accounts-or-names))
+       (map (lambda (pair)
+              (string-append
+               (if (string? (cadr pair))
+                   (cadr pair)
+                   (gnc:account-get-full-name (cadr pair)))
+               " - "
+               (gnc:amount->string (car pair) print-info)))
+            combined))
       (gnc:html-piechart-set-colors! chart
                                      (gnc:assign-colors (length combined)))
-      (let ((urls (map (lambda (a)
-                         (if (string? a)
+      (let ((urls (map (lambda (pair)
+                         (if (string? (cadr pair))
                              other-anchor
-                             (gnc:account-anchor-text a)))
-                       accounts-or-names)))
+                             (gnc:account-anchor-text (cadr pair))))
+                       combined)))
         (gnc:html-piechart-set-button-1-slice-urls! chart urls)
         (gnc:html-piechart-set-button-1-legend-urls! chart urls))
 

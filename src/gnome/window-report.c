@@ -37,6 +37,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
+#include "gnc-ui.h"
 #include "query-user.h"
 #include "window-report.h"
 
@@ -590,8 +591,12 @@ gnc_report_window_show_report(gnc_report_window * report, int report_id) {
 
 void
 reportWindow(int report_id) {
-  gnc_report_window * win = gnc_report_window_new(NULL);
+  gnc_report_window * win;
+
+  gnc_set_busy_cursor (NULL);
+  win = gnc_report_window_new(NULL);
   gnc_report_window_show_report(win, report_id);
+  gnc_unset_busy_cursor (NULL);
 }
 
 void
@@ -602,9 +607,11 @@ gnc_print_report (int report_id)
 
   html = gnc_html_new ();
 
+  gnc_set_busy_cursor (NULL);
   location = g_strdup_printf("id=%d", report_id);  
   gnc_html_show_url(html, URL_TYPE_REPORT, location, NULL, FALSE);
   g_free(location);
+  gnc_unset_busy_cursor (NULL);
 
   gnc_html_print (html);
 

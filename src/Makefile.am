@@ -48,6 +48,7 @@ gnucash_SOURCES = \
   FileDialog.c \
   gnc-component-manager.c \
   gnc-exp-parser.c \
+  gnc-main.c \
   gnc-ui-util.c
 
 noinst_HEADERS = \

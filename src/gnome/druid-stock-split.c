@@ -33,6 +33,7 @@
 #include "glade-support.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
+#include "gnc-currency-edit.h"
 #include "gnc-dateedit.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui.h"
@@ -58,6 +59,7 @@ typedef struct
   GtkWidget * distribution_edit;
   GtkWidget * description_entry;
   GtkWidget * price_edit;
+  GtkWidget * price_currency_edit;
 
   /* cash in lieu page data */
   GtkWidget * cash_edit;
@@ -181,6 +183,10 @@ refresh_details_page (StockSplitInfo *info)
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->distribution_edit),
                                 xaccAccountGetSecuritySCU (account));
+
+  gnc_currency_edit_set_currency
+    (GNC_CURRENCY_EDIT (info->price_currency_edit),
+     xaccAccountGetCurrency (account));
 }
 
 static gboolean
@@ -346,6 +352,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
   Transaction *trans;
   Account *account;
   Split *split;
+  time_t date;
 
   account = xaccAccountLookup (&info->account);
   g_return_if_fail (account != NULL);
@@ -360,12 +367,8 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   xaccTransBeginEdit (trans);
 
-  {
-    time_t date;
-
-    date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
-    xaccTransSetDateSecs (trans, date);
-  }
+  date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
+  xaccTransSetDateSecs (trans, date);
 
   {
     const char *description;
@@ -390,8 +393,34 @@ stock_split_finish (GnomeDruidPage *druidpage,
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
   if (gnc_numeric_positive_p (amount))
   {
-    const char *message = "FIXME: we need the pricedb to record.";
-    gnc_error_dialog_parented (GTK_WINDOW (info->window), message);
+    GNCBook *book;
+    GNCPrice *price;
+    GNCPriceDB *pdb;
+    GNCCurrencyEdit *ce;
+    Timespec ts;
+
+    ce = GNC_CURRENCY_EDIT (info->price_currency_edit);
+
+    ts.tv_sec = date;
+    ts.tv_nsec = 0;
+
+    price = gnc_price_create ();
+
+    gnc_price_set_commodity (price, xaccAccountGetSecurity (account));
+    gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
+    gnc_price_set_time (price, ts);
+    gnc_price_set_source (price, "user:stock-split");
+    gnc_price_set_type (price, "unknown");
+    gnc_price_set_value (price, amount);
+
+    book = gncGetCurrentBook ();
+    pdb = gnc_book_get_pricedb (book);
+
+    if (!gnc_pricedb_add_price (pdb, price))
+      gnc_error_dialog_parented (GTK_WINDOW (info->window),
+                                 _("Error adding price."));
+
+    gnc_price_unref (price);
   }
 
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->cash_edit));
@@ -400,7 +429,6 @@ stock_split_finish (GnomeDruidPage *druidpage,
     const char *memo;
 
     memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
-
 
     /* asset split */
     account = gnc_account_tree_get_current_account
@@ -459,6 +487,19 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
+static gboolean
+account_currency_filter (Account *account, gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+  Account *split_account = xaccAccountLookup (&info->account);
+
+  if (!account)
+    return FALSE;
+
+  return gnc_commodity_equiv (xaccAccountGetCurrency (split_account),
+                              xaccAccountGetCurrency (account));
+}
+
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
@@ -498,6 +539,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *box;
     GtkWidget *amount;
     GtkWidget *date;
+    GtkWidget *ce;
 
     info->description_entry =
       lookup_widget (info->window, "description_entry");
@@ -516,8 +558,14 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     amount = gnc_amount_edit_new ();
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                     gnc_default_price_print_info ());
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->price_edit = amount;
+
+    box = lookup_widget (info->window, "price_currency_box");
+    ce = gnc_currency_edit_new ();
+    gtk_box_pack_start (GTK_BOX (box), ce, TRUE, TRUE, 0);
+    info->price_currency_edit = ce;
 
     page = lookup_widget (info->window, "details_page");
 
@@ -555,6 +603,10 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
 
+    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
+                                            account_currency_filter,
+                                            info);
+
     gtk_widget_show (tree);
 
     scroll = lookup_widget (info->window, "income_scroll");
@@ -575,6 +627,10 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
         (type == BANK) || (type == CASH) || (type == ASSET);
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
+
+    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
+                                            account_currency_filter,
+                                            info);
 
     gtk_widget_show (tree);
 

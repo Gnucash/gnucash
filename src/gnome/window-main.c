@@ -1467,7 +1467,8 @@ gnc_main_create_summary_bar (GnomeApp *app, GNCMainInfo *main_info)
                                        main_info->totals_combo);
 
   gtk_select_select_child (GTK_SELECT(combo_box), def_item->listitem);
-  gtk_box_pack_end (GTK_BOX(summarybar), combo_box, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX(summarybar), combo_box, FALSE, FALSE, 5);
+  gtk_widget_show (combo_box);
 
   return summarybar;
 }
@@ -1638,8 +1639,8 @@ mainWindow (void)
                       main_info);
 
   /* Show everything now that it is created */
-  gtk_widget_show_all (summarybar);
-  gtk_widget_show_all (statusbar);
+  gtk_widget_show (summarybar);
+  gtk_widget_show (statusbar);
   gtk_widget_show (main_info->account_tree);
 
   gnc_configure_account_tree (main_info);

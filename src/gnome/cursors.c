@@ -71,14 +71,20 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type)
 static void
 set_cursor_helper (gpointer window, gpointer data)
 {
-  GtkWidget *widget = GTK_WIDGET(window);
-  int type = GPOINTER_TO_INT(data);
+  GtkWidget *widget;
+  int type;
 
-  if(!window)
+  if (!window)
   {
-      return;
+    return;
   }
-  
+
+  widget = GTK_WIDGET(window);
+  if (!widget->window)
+    return;
+
+  type = GPOINTER_TO_INT(data);
+
   gnc_ui_set_cursor (widget->window, type);
 }
 

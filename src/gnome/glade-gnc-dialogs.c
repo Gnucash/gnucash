@@ -6175,8 +6175,12 @@ create_Stock_Split_Druid (void)
   GtkWidget *hseparator2;
   GtkWidget *label847691;
   GtkWidget *hbox93;
+  GtkWidget *vbox107;
   GtkWidget *label847692;
+  GtkWidget *label847715;
+  GtkWidget *vbox108;
   GtkWidget *price_box;
+  GtkWidget *price_currency_box;
   GtkWidget *cash_page;
   GdkColor cash_page_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor cash_page_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -6415,20 +6419,49 @@ create_Stock_Split_Druid (void)
   gtk_box_pack_start (GTK_BOX (druid_vbox32), hbox93, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hbox93), 10);
 
+  vbox107 = gtk_vbox_new (TRUE, 4);
+  gtk_widget_ref (vbox107);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox107", vbox107,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox107);
+  gtk_box_pack_start (GTK_BOX (hbox93), vbox107, FALSE, FALSE, 0);
+
   label847692 = gtk_label_new (_("New Price:"));
   gtk_widget_ref (label847692);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847692", label847692,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label847692);
-  gtk_box_pack_start (GTK_BOX (hbox93), label847692, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox107), label847692, FALSE, FALSE, 0);
   gtk_misc_set_alignment (GTK_MISC (label847692), 1, 0.5);
+
+  label847715 = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (label847715);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847715", label847715,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847715);
+  gtk_box_pack_start (GTK_BOX (vbox107), label847715, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847715), 1, 0.5);
+
+  vbox108 = gtk_vbox_new (TRUE, 4);
+  gtk_widget_ref (vbox108);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox108", vbox108,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox108);
+  gtk_box_pack_start (GTK_BOX (hbox93), vbox108, FALSE, FALSE, 0);
 
   price_box = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (price_box);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "price_box", price_box,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (price_box);
-  gtk_box_pack_start (GTK_BOX (hbox93), price_box, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox108), price_box, TRUE, TRUE, 0);
+
+  price_currency_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (price_currency_box);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "price_currency_box", price_currency_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_currency_box);
+  gtk_box_pack_start (GTK_BOX (vbox108), price_currency_box, TRUE, TRUE, 0);
 
   cash_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (cash_page);

@@ -216,7 +216,7 @@
     (set-tm:year zd 0)
     (set-tm:yday zd 0)
     (set-tm:wday zd 0)
-    (set-tm:isdst zd 0)
+    (set-tm:isdst zd -1)
     zd))
 
 (define SecDelta 
@@ -282,6 +282,7 @@
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
     (set-tm:hour bdt 12)
+    (set-tm:isdst bdt -1)
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))
 
@@ -290,6 +291,7 @@
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
     (set-tm:hour bdt 0)
+    (set-tm:isdst bdt -1)
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))
 
@@ -298,6 +300,7 @@
     (set-tm:sec bdt 59)
     (set-tm:min bdt 59)
     (set-tm:hour bdt 23)
+    (set-tm:isdst bdt -1)
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))
 
@@ -349,7 +352,7 @@
     (set-tm:hour now 0)
     (set-tm:mday now 1)
     (set-tm:mon now 0)
-    (set-tm:isdst now 0)
+    (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-start-prev-year)
@@ -360,7 +363,7 @@
     (set-tm:mday now 1)
     (set-tm:mon now 0)
     (set-tm:year now (- (tm:year now) 1))
-    (set-tm:isdst now 0)
+    (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-end-prev-year)
@@ -371,7 +374,7 @@
     (set-tm:mday now 31)
     (set-tm:mon now 11)
     (set-tm:year now (- (tm:year now) 1))
-    (set-tm:isdst now 0)
+    (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
 ;; FIXME:: Replace with option when it becomes available
@@ -385,13 +388,15 @@
 	  (set-tm:mday now 1)
 	  (set-tm:mon now 6)
 	  (set-tm:year now (- (tm:year now) 1))
-	  (gnc:secs->timepair (car (mktime now)))) 
+          (set-tm:isdst now -1)
+	  (gnc:secs->timepair (car (mktime now))))
 	(begin
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
 	  (set-tm:hour now 0)
 	  (set-tm:mday now 1)
 	  (set-tm:mon now 6)
+          (set-tm:isdst now -1)
 	  (gnc:secs->timepair (car (mktime now)))))))
 
 (define (gnc:get-start-prev-fin-year)
@@ -404,6 +409,7 @@
 	  (set-tm:mday now 1)
 	  (set-tm:mon now 6)
 	  (set-tm:year now (- (tm:year now) 2))
+          (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0))
 	(begin
 	  (set-tm:sec now 0)
@@ -412,6 +418,7 @@
 	  (set-tm:mday now 1)
 	  (set-tm:mon now 6)
 	  (set-tm:year now (- (tm:year now) 2))
+          (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0)))))
 
 (define (gnc:get-end-prev-fin-year)
@@ -423,6 +430,7 @@
 	  (set-tm:hour now 23)
 	  (set-tm:mday now 30)
 	  (set-tm:mon now 5)
+          (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0))
 	(begin
 	  (set-tm:sec now 59)
@@ -431,6 +439,7 @@
 	  (set-tm:mday now 30)
 	  (set-tm:mon now 5)
 	  (set-tm:year now (- (tm:year now) 1))
+          (set-tm:isdst now -1)
 	  (cons (car (mktime now)) 0)))))
 
 (define (gnc:get-start-this-month)
@@ -439,6 +448,7 @@
     (set-tm:min now 0)
     (set-tm:hour now 0)
     (set-tm:mday now 1)
+    (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
 
 (define (gnc:get-start-prev-month)
@@ -452,6 +462,7 @@
 	  (set-tm:mon now 11)
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:mon now (- (tm:mon now) 1)))
+    (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
 
 (define (gnc:get-end-prev-month)
@@ -465,6 +476,7 @@
 	  (set-tm:year (- (tm:year now) 1)))
 	(set-tm:month now (- (tm:month now) 1)))
     (set-tm:mday (gnc:days-in-month (+ (tm:month now) 1)) (+ (tm:year) 1900))
+    (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
     
 (define (gnc:get-start-current-quarter)
@@ -474,6 +486,7 @@
     (set-tm:hour now 0)
     (set-tm:mday now 1)
     (set-tm:month now (- (tm:month now) (mod (tm:month now) 3)))
+    (set-tm:isdst now -1)
     (cons (car (mktime now)) 0)))
 
 (define (gnc:get-start-prev-quarter)
@@ -488,6 +501,7 @@
 	  (set-tm:month now 9)
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:month now (- (tm-month now) 3)))
+    (set-tm:isdst now -1)
     (cons (car (mktime now) 0))))
 
 (define (gnc:get-end-prev-quarter)
@@ -501,8 +515,9 @@
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:month now (- (tm:month now) 
 			     (3 + (mod (tm:month now) 3)))))
-    (set-tm:mday (gnc:days-in-month 
-		  (+ (tm:month now) 1)) (+ (tm:year) 1900))
+    (set-tm:mday now (gnc:days-in-month (+ (tm:month now) 1)
+                                        (+ (tm:year) 1900)))
+    (set-tm:isdst now -1)
     (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-today)
@@ -516,9 +531,10 @@
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:month now (- (tm:month now) 1)))
     (let ((month-length (gnc:days-in-month (+ (tm:month now) 1)
-			    (+ (tm:year now) 1900))))
+                                           (+ (tm:year now) 1900))))
       (if (> month-length (tm:mday now))
-	  (set-tm:mday month-length))
+	  (set-tm:mday now month-length))
+      (set-tm:isdst now -1)
      (gnc:secs->timepair (car (mktime now))))))
 
 (define (gnc:get-three-months-ago)
@@ -528,11 +544,11 @@
 	  (set:tm-month now (+ (tm:month now) 12))
 	  (set:tm-year now  (- (tm:year now) 1))))
     (set:tm-month now (- (tm:month now) 3))
-    (let ((month-days) (gnc:days-in-month 
-			(+ (tm:month now) 1)
-			(+ (tm:year now) 1900)))
+    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+                                          (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
+      (set-tm:isdst now -1)
       (gnc:secs->timepair (car (mktime now))))))
 
 (define (gnc:get-six-months-ago)
@@ -542,24 +558,22 @@
 	  (set:tm-month now (+ (tm:month now) 12))
 	  (set:tm-year now  (- (tm:year now) 1))))
     (set:tm-month now (- (tm:month now) 6))
-    (let ((month-days) (gnc:days-in-month 
-			(+ (tm:month now) 1)
-			(+ (tm:year now) 1900)))
+    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+                                          (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
+      (set-tm:isdst now -1)
       (gnc:secs->timepair (car (mktime now))))))
-
 
 (define (gnc:get-one-year-ago)
   (let ((now (localtime (current-time))))
     (set:tm-year now (- (tm:year now) 1))
-    (let ((month-days) (gnc:days-in-month 
-			(+ (tm:month now) 1)
-			(+ (tm:year now) 1900)))
+    (let ((month-days) (gnc:days-in-month (+ (tm:month now) 1)
+                                          (+ (tm:year now) 1900)))
       (if (> (month-days) (tm:mday now))
 	  (set-tm:mday now month-days))
+      (set-tm:isdst now -1)
       (gnc:secs->timepair (car (mktime now))))))
-
 
 (define (gnc:reldate-initialize)
   (begin

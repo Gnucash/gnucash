@@ -174,8 +174,10 @@ gnc_account_tree_init (GNCAccountTree *tree)
   tree->root_account     = *xaccGUIDNULL ();
   tree->current_accounts = NULL;
   tree->ignore_unselect  = FALSE;
-  tree->filter           = NULL;
-  tree->filter_data      = NULL;
+  tree->view_filter      = NULL;
+  tree->view_filter_data = NULL;
+  tree->selectable_filter = NULL;
+  tree->selectable_filter_data = NULL;
 
   gnc_init_account_view_info(&tree->avi);
 
@@ -894,8 +896,8 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 }
 
 /********************************************************************\
- * gnc_account_tree_set_filter                                      *
- *   sets the account filter to use with the tree                   *
+ * gnc_account_tree_set_view_filter                                 *
+ *   sets the account view filter to use with the tree              *
  *                                                                  *
  * Args: tree      - the tree to set the filter on                  *
  *       filter    - the filter function to use                     *
@@ -903,15 +905,36 @@ gnc_init_account_view_info(AccountViewInfo *avi)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_account_tree_set_filter(GNCAccountTree *tree,
-                            AccountFilter filter,
-                            gpointer user_data)
+gnc_account_tree_set_view_filter(GNCAccountTree *tree,
+                                 AccountFilter filter,
+                                 gpointer user_data)
 {
   g_return_if_fail(tree != NULL);
   g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
 
-  tree->filter = filter;
-  tree->filter_data = user_data;
+  tree->view_filter = filter;
+  tree->view_filter_data = user_data;
+}
+
+/********************************************************************\
+ * gnc_account_tree_set_selectable_filter                           *
+ *   sets the account selectable filter to use with the tree        *
+ *                                                                  *
+ * Args: tree      - the tree to set the filter on                  *
+ *       filter    - the filter function to use                     *
+ *       user_data - the user_data for the callback                 *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
+                                        AccountFilter filter,
+                                        gpointer user_data)
+{
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(IS_GNC_ACCOUNT_TREE(tree));
+
+  tree->selectable_filter = filter;
+  tree->selectable_filter_data = user_data;
 }
 
 static void
@@ -1087,8 +1110,8 @@ gnc_account_tree_fill(GNCAccountTree *tree,
     PINFO ("acct=%p guid=%s\n", 
         account, guid_to_string(xaccAccountGetGUID(account)));
 
-    if (tree->filter != NULL)
-      if (!tree->filter(account, tree->filter_data))
+    if (tree->view_filter != NULL)
+      if (!tree->view_filter(account, tree->view_filter_data))
         continue;
 
     type = xaccAccountGetType(account);
@@ -1098,12 +1121,21 @@ gnc_account_tree_fill(GNCAccountTree *tree,
 
     node = gnc_account_tree_insert_row(tree, parent, NULL, account);
 
+    if (tree->selectable_filter != NULL)
+    {
+      gboolean selectable;
+
+      selectable = tree->selectable_filter (account,
+                                            tree->selectable_filter_data);
+
+      gtk_ctree_node_set_selectable (GTK_CTREE(tree), node, selectable);
+    }
+
     if (g_hash_table_lookup(expanded_accounts, account) != NULL)
       gtk_ctree_expand(GTK_CTREE(tree), node);
 
     /* If this account has children,
-     * then we need to build a subtree and fill it.
-     */
+     * then we need to build a subtree and fill it. */
     acc_children = xaccAccountGetChildren(account);
     if (xaccAccountGetChildren(account) != NULL)
       gnc_account_tree_fill(tree, expanded_accounts, node, acc_children);

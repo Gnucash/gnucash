@@ -55,8 +55,11 @@ struct _GNCAccountTree
 {
   GtkCTree ctree;
 
-  AccountFilter filter;
-  gpointer filter_data;
+  AccountFilter view_filter;
+  gpointer view_filter_data;
+
+  AccountFilter selectable_filter;
+  gpointer selectable_filter_data;
 
   AccountViewInfo avi;
 
@@ -155,9 +158,13 @@ void gnc_account_tree_set_view_info (GNCAccountTree *tree,
 void gnc_account_tree_get_view_info (GNCAccountTree *tree,
 				     AccountViewInfo *info);
 
-void gnc_account_tree_set_filter (GNCAccountTree *tree,
-                                  AccountFilter filter,
-                                  gpointer user_data);
+void gnc_account_tree_set_view_filter (GNCAccountTree *tree,
+                                       AccountFilter filter,
+                                       gpointer user_data);
+
+void gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
+                                             AccountFilter filter,
+                                             gpointer user_data);
 
 #ifdef __cplusplus
 }
