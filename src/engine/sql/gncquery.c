@@ -252,6 +252,132 @@ sql_sort_distinct (char *p, sort_type_t sort_type)
  
 
 /* =========================================================== */
+/* does sorting require a reference to this particular table? */
+
+static gboolean 
+sql_sort_sort_need_account (sort_type_t sort_type)
+{
+   gboolean need_account = FALSE;
+   ENTER ("sort type=%d", sort_type);
+
+   switch (sort_type)
+   {
+      case BY_STANDARD:
+      case BY_AMOUNT:
+      case BY_DATE:
+      case BY_DATE_ROUNDED:
+      case BY_DATE_ENTERED:
+      case BY_DATE_ENTERED_ROUNDED:
+      case BY_DATE_RECONCILED:
+      case BY_DATE_RECONCILED_ROUNDED:
+      case BY_DESC:
+      case BY_MEMO:
+      case BY_NUM:
+      case BY_RECONCILE:
+      case BY_NONE:
+         break;
+      case BY_ACCOUNT_FULL_NAME:
+      case BY_ACCOUNT_CODE:
+      case BY_CORR_ACCOUNT_FULL_NAME:
+      case BY_CORR_ACCOUNT_CODE:
+         need_account = TRUE;
+         break;
+      default:
+         PERR ("unknown sort type %d", sort_type);
+         break;
+   }
+
+   return need_account;
+}
+ 
+static gboolean 
+sql_sort_need_account (Query *q)
+{
+   gboolean need_account = FALSE;
+
+   sort_type_t sorter;
+   sorter = xaccQueryGetPrimarySortOrder(q);
+   if (BY_NONE != sorter)
+   {
+      need_account = sql_sort_sort_need_account(sorter);
+      sorter = xaccQueryGetSecondarySortOrder(q);
+      if (BY_NONE != sorter)
+      {
+         need_account = need_account || sql_sort_sort_need_account(sorter);
+         sorter = xaccQueryGetTertiarySortOrder(q);
+         if (BY_NONE != sorter)
+         {   
+            need_account = need_account || sql_sort_sort_need_account(sorter);
+         }
+      }
+   }
+   return need_account;
+}
+
+/* =========================================================== */
+/* does sorting require a reference to this particular table? */
+
+static gboolean 
+sql_sort_sort_need_entry (sort_type_t sort_type)
+{
+   gboolean need_entry = FALSE;
+   ENTER ("sort type=%d", sort_type);
+
+   switch (sort_type)
+   {
+      case BY_STANDARD:
+      case BY_ACCOUNT_FULL_NAME:
+      case BY_ACCOUNT_CODE:
+      case BY_CORR_ACCOUNT_FULL_NAME:
+      case BY_CORR_ACCOUNT_CODE:
+      case BY_DATE:
+      case BY_DATE_ROUNDED:
+      case BY_DATE_ENTERED:
+      case BY_DATE_ENTERED_ROUNDED:
+      case BY_DESC:
+      case BY_NUM:
+      case BY_NONE:
+         break;
+      case BY_AMOUNT:
+      case BY_DATE_RECONCILED:
+      case BY_DATE_RECONCILED_ROUNDED:
+      case BY_MEMO:
+      case BY_RECONCILE:
+         need_entry = TRUE;
+         break;
+      default:
+         PERR ("unknown sort type %d", sort_type);
+         break;
+   }
+
+   return need_entry;
+}
+ 
+static gboolean 
+sql_sort_need_entry (Query *q)
+{
+   gboolean need_entry = FALSE;
+
+   sort_type_t sorter;
+   sorter = xaccQueryGetPrimarySortOrder(q);
+   if (BY_NONE != sorter)
+   {
+      need_entry = sql_sort_sort_need_entry(sorter);
+      sorter = xaccQueryGetSecondarySortOrder(q);
+      if (BY_NONE != sorter)
+      {
+         need_entry = need_entry || sql_sort_sort_need_entry(sorter);
+         sorter = xaccQueryGetTertiarySortOrder(q);
+         if (BY_NONE != sorter)
+         {   
+            need_entry = need_entry || sql_sort_sort_need_entry(sorter);
+         }
+      }
+   }
+   return need_entry;
+}
+
+/* =========================================================== */
 /* Macro for PD_STRING query types
  * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
@@ -360,6 +486,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    int max_rows;
    gboolean need_account = FALSE;
    gboolean need_commodity = FALSE;
+   gboolean need_entry = FALSE;
    sort_type_t sorter;
 
    if (!sq || !q) return NULL;
@@ -382,18 +509,21 @@ sqlQuery_build (sqlQuery *sq, Query *q)
          pd = &qt->data;
          switch (pd->base.term_type) 
          {
-            case PR_ACCOUNT: 
-            case PR_ACTION:
             case PR_BALANCE:
-            case PR_CLEARED:
             case PR_DATE:
             case PR_DESC:
-            case PR_MEMO:
             case PR_MISC:
             case PR_NUM:
+               break;
+            case PR_ACCOUNT: 
+            case PR_ACTION:
+            case PR_CLEARED:
+            case PR_MEMO:
             case PR_PRICE: 
+               need_entry = TRUE;
                break;
             case PR_AMOUNT:
+               need_entry = TRUE;
                need_commodity = TRUE;
                break;
             case PR_GUID:
@@ -402,15 +532,18 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                   case GNC_ID_ACCOUNT:
                      need_account = TRUE;
                      break;
+                  case GNC_ID_SPLIT:
+                     need_entry = TRUE;
+                     break;
                   case GNC_ID_NONE:
                   case GNC_ID_NULL:
                   case GNC_ID_TRANS:
-                  case GNC_ID_SPLIT:
                   default:
                      break;
                }
                break;
             case PR_SHRS: 
+               need_entry = TRUE;
                need_commodity = TRUE;
                need_account = TRUE;
                break;
@@ -419,18 +552,22 @@ sqlQuery_build (sqlQuery *sq, Query *q)
          }
       }
    }
+
+   /* determine wther the requested sort order needs this table */
+   need_account = need_account || sql_sort_need_account (q);
+   need_entry = need_entry || sql_sort_need_entry (q);
    
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT DISTINCT gncEntry.transGuid ");
+               "SELECT DISTINCT gncTransaction.transGuid ");
 
    /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetPrimarySortOrder(q));
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetSecondarySortOrder(q));
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetTertiarySortOrder(q));
 
-   sq->pq = stpcpy(sq->pq, "  FROM gncEntry, gncTransaction");
+   sq->pq = stpcpy(sq->pq, "  FROM gncTransaction");
 
    /* add additional search tables, as needed for performance */
    if (need_account)
@@ -441,8 +578,17 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    {
       sq->pq = stpcpy(sq->pq, ", gncCommodity");
    }
-   sq->pq = stpcpy(sq->pq, 
-           "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
+   if (need_entry)
+   {
+      sq->pq = stpcpy(sq->pq, ", gncEntry");
+   }
+   sq->pq = stpcpy(sq->pq, " WHERE ");
+   if (need_entry)
+   {
+      sq->pq = stpcpy(sq->pq, 
+              " gncEntry.transGuid = gncTransaction.transGuid AND ");
+   }
+   sq->pq = stpcpy(sq->pq, "  ( ");
 
 
    /* qterms is a list of lists: outer list is a set of terms 
