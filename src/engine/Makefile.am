@@ -3,6 +3,9 @@
 # don't build sql subdir by default, unless you want hurt
 SUBDIRS = ${SQL_DIR}
 
+# but put it in the dist
+DIST_SUBDIRS = sql
+
 # Build a libtool library, libhello.la for installation in libdir.
 lib_LTLIBRARIES = libgncengine.la
 
