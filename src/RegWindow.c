@@ -1321,8 +1321,9 @@ regSaveTransaction( RegWindow *regData, int position )
      * from ourself to ourself, then proceed, otheriwse ignore. */
     /* hack alert -- should put up a popup warning if user tries 
      * to transfer from & to the same account -- the two must differ! */
-    if (xfer_acct && (    ((1 <  regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
-                       || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) )) {
+    if (xfer_acct && (
+         ((1 <  regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
+      || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) )) {
       
       /* for a new transaction, the default will be that the
        * transfer occurs from the debited account */
@@ -1349,7 +1350,6 @@ regSaveTransaction( RegWindow *regData, int position )
       insertTransaction (xfer_acct, trans);
       }
     }
-
 
   /* if not a ledger, then we shouldn't get here ... */
   if( (regData->changed & MOD_XTO ) &&
@@ -1556,6 +1556,7 @@ regSaveTransaction( RegWindow *regData, int position )
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) ) {
       freeTransaction (trans);
+      regData->changed = MOD_NONE;
       return;
     }
 
@@ -1586,6 +1587,7 @@ regSaveTransaction( RegWindow *regData, int position )
     if ((NULL == trans->credit) && (NULL == trans->debit)) {
       errorBox (toplevel, XFER_NO_ACC_MSG);
       freeTransaction (trans);
+      regData->changed = MOD_NONE;
       return;
     }
   }
@@ -1687,6 +1689,8 @@ regSaveTransaction( RegWindow *regData, int position )
 
   REFRESH_RECONCILE_WIN ((trans->credit));
   REFRESH_RECONCILE_WIN ((trans->debit));
+
+  regData->changed = MOD_NONE;
   
   return;
 }
@@ -1878,7 +1882,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     }
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
-  regData->changed     = 0;          /* Nothing has changed yet! */
+  regData->changed     = MOD_NONE;   /* Nothing has changed yet! */
   regData->header_rows = 1;
   regData->currEntry   = 0;
   regData->insert      = 0;          /* the insert (cursor) position in
@@ -2638,6 +2642,7 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
   
   XbaeMatrixCommitEdit( regData->reg, False );
   regSaveTransaction( regData, regData->currEntry );
+  regData->changed = MOD_NONE;
   }
 
 /********************************************************************\
@@ -2743,6 +2748,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
                         (row+NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS));
         
         regSaveTransaction( regData, regData->currEntry );
+        regData->changed = MOD_NONE;
         
         regData->currEntry = (row-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
         regData->insert    = 0;
