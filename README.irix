@@ -26,4 +26,7 @@ I also suggest setting the X resource:
 xacc*sgiMode: true 
 This makes xacc look much more sgi-ish.
 
+For additional notes, consult
+http://www-personal.engin.umich.edu/~tkludy/xacc-sgi.html
+
 -- Tom Kludy tkludy@csd.sgi.com  December 1997
