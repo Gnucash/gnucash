@@ -852,7 +852,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   static GnomeUIInfo gnc_sched_xaction_tools_submenu_template[] = 
   {
     { GNOME_APP_UI_ITEM,
-      N_("_List and Editor"),
+      N_("_Scheduled Transaction Editor"),
       N_("The list of Scheduled Transactions"),
       gnc_main_window_sched_xaction_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,

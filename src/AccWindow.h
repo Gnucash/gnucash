@@ -40,6 +40,15 @@ AccountWindow * gnc_ui_new_account_window_with_default(AccountGroup *group,
                                                        Account * parent);
 AccountWindow * gnc_ui_edit_account_window (Account *account);
 
+/**
+ * @param unused The AccountGroup to create in; this isn't used.
+ * @param valid_types A GList of GNCAccountType gints [as pointers] which are
+ * allowed to be created.  Unlike below, this function makes a copy of the
+ * valid_types list.
+ **/
+AccountWindow * gnc_ui_new_account_with_types( AccountGroup *unused,
+                                               GList *valid_types );
+
 Account * gnc_ui_new_accounts_from_name_window (const char *name);
 
 /* Note that the caller owns the valid_types list */

@@ -147,6 +147,7 @@ delete_template_trans(SchedXaction *sx)
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
+  GList *l;
       
   if ( sx == NULL ) return;
   
@@ -171,10 +172,19 @@ xaccSchedXactionFree( SchedXaction *sx )
   
   xaccAccountBeginEdit(sx->template_acct);
   xaccAccountDestroy(sx->template_acct);
+
+  for ( l = sx->deferredList; l; l = l->next ) {
+          gnc_sx_destroy_temporal_state( l->data );
+          l->data = NULL;
+  }
+  if ( sx->deferredList ) {
+          g_list_free( sx->deferredList );
+          sx->deferredList = NULL;
+  }
   
   g_free( sx );
   
-  return;   
+  return;
 }
 
 
@@ -489,12 +499,16 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 {
         GDate prev_occur, next_occur;
 
-        prev_occur = *date;
+        g_date_clear( &prev_occur, 1 );
+        if ( date ) {
+                prev_occur = *date;
+        }
 
         if ( stateData != NULL ) {
                 temporalStateData *tsd = (temporalStateData*)stateData;
                 prev_occur = tsd->last_date;
         }
+
         if ( ! g_date_valid( &prev_occur ) ) {
                 /* We must be at the beginning. */
                 prev_occur = sx->start_date;
@@ -679,6 +693,10 @@ gnc_sx_create_temporal_state( SchedXaction *sx )
         temporalStateData *toRet =
                 g_new0( temporalStateData, 1 );
         toRet->last_date       = sx->last_date;
+        if ( !g_date_valid( &toRet->last_date ) ) {
+                toRet->last_date = sx->start_date;
+                g_date_subtract_days( &toRet->last_date, 1 );
+        }
         toRet->num_occur_rem   = sx->num_occurances_remain;
         toRet->num_inst        = sx->instance_num;
         return (void*)toRet;
@@ -690,6 +708,7 @@ gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData )
         GDate unused;
         temporalStateData *tsd = (temporalStateData*)stateData;
 
+        g_date_clear( &unused, 1 );
         tsd->last_date =
                 xaccSchedXactionGetInstanceAfter( sx,
                                                   &unused,

@@ -1,3 +1,42 @@
+2002-10-06  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c: The druid now enforces valid account
+	selection for the GNCAccountSel widgets; fixes Bug#90784.
+
+	* src/gnome/gnc-account-sel.c (gas_destroy): GNCAccountSel
+	now cleans up after itself, especially with removing its engine
+	event observation.  Moved from src/gnome-utils/ to src/gnome/
+	because of circular dep introduced below.
+
+	* src/dialog-account/dialog-account.c
+	(gnc_ui_new_account_with_types): Added new function to create a
+	NewAccount dialog with only a valid-types filtering list.
+
+	* src/gnome-utils/gnc-account-sel.c
+	(gnc_account_sel_set_acct_filters): Added support for filtering
+	the accounts available through the GNCAccountSel.
+	(gnc_account_sel_set_new_account_ability): Added support for a
+	conditional "New..." button which allows the creation a new
+	account.  If the selector has a filter in place, the filter will
+	apply to the new-account creation as well.
+
+	* src/gnome-utils/gnc-account-sel.c: Added ifdefs, comments around
+	regions pertaining to unimplemented feature of completion.
+	Fix for Bug#90779.
+	(gnc_account_sel_event_cb): Added support for updating list
+	contents when the account tree changes; the current selection is
+	respected if the account still exists; fixes Bug#94951.
+
+	* src/gnome/dialog-sxsincelast.c
+	(sxsld_process_to_create_instance): Handle the corner case of not
+	incrementing the state while postponing/ignoring a
+	never-been-created SX.  Handle only incrementing the counters of
+	newly-come-due SXes.
+
+	* src/engine/SchedXaction.c (gnc_sx_create_temporal_state): Fix
+	corner case of creating the temporal state of a never-been-created
+	SX; fixes Bug#94947.
+
 2002-10-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c, gnc-hbci-actions.c:

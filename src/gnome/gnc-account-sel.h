@@ -1,11 +1,15 @@
 /**
- * gnc-account-sel.h -- combobox style account selection widget, with
- * auto-completion.
+ * gnc-account-sel.h -- combobox style account selection widget.
+ *
+ * Note that this widget will track changes in the account tree, and update
+ * itself accordingly.  If an account with the same name exists in the
+ * freshly-retreived account list, the widget will re-select that account.
  *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>
  * All rights reserved.
- *
- * GnuCash is free software; you can redistribute it and/or modify
+ **/
+
+/* GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
@@ -21,7 +25,7 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
- **/
+ */
 
 #ifndef GNC_ACCOUNT_SEL_H
 #define GNC_ACCOUNT_SEL_H
@@ -37,18 +41,26 @@ BEGIN_GNOME_DECLS
 
 typedef struct
 {
-  GtkHBox hbox;
-  gboolean initDone;
-  GtkCombo *combo;
-  GCompletion *completion;
+        GtkHBox hbox;
+        gboolean initDone;
+        GtkCombo *combo;
+        GList *acctTypeFilters;
+        gint eventHandlerId;
+        /* The state of this pointer also serves as a flag about what state
+         * the widget is in WRT the new-account-button ability. */
+        GtkWidget *newAccountButton;
+
+#if 0 /* completion not implemented. */
+        GCompletion *completion;
+#endif /* 0 - completion not implemented */
 } GNCAccountSel;
 
 typedef struct
 {
-  GtkHBoxClass parent_class;
+        GtkHBoxClass parent_class;
 
-  /* Signals for notification/filtering of changes */
-  void (*account_sel_changed) (GNCAccountSel *gas);
+        /* Signals for notification/filtering of changes */
+        void (*account_sel_changed) (GNCAccountSel *gas);
 } GNCAccountSelClass;
 
 guint      gnc_account_sel_get_type(void);
@@ -65,6 +77,21 @@ void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct );
  * is in a bad state, NULL will be returned.
  **/
 Account*   gnc_account_sel_get_account( GNCAccountSel *gas );
+
+/**
+ * The GNCAccountSel can be setup to filter the accounts displayed.
+ * @param filters A GList of GNCAccountType identifiers which are allowed.
+ * The list is copied, of course.
+ **/
+void gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *filters );
+
+/**
+ * Conditional inclusion of a new-account button to the right of the
+ * combobox.
+ * @param state TRUE if the new-account button is desired, FALSE otherwise.
+ **/
+void gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
+                                              gboolean state );
 
 END_GNOME_DECLS
 

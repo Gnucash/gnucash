@@ -43,6 +43,7 @@ libgncgnome_la_SOURCES = \
   druid-hierarchy.c \
   druid-loan.c \
   druid-stock-split.c \
+  gnc-account-sel.c \
   gnc-network.c \
   gnc-splash.c \
   mainwindow-account-tree.c \
@@ -79,6 +80,7 @@ noinst_HEADERS = \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
   druid-loan.h \
+  gnc-account-sel.h \
   gnc-network.h \
   gnc-splash.h \
   gw-gnc.h \

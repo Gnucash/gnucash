@@ -334,6 +334,7 @@ gnc_ui_sx_loan_druid_create()
 
                                 a = GTK_ALIGNMENT(gtk_alignment_new( 0.0, 0.5, 0.25, 1.0 ));
                                 gas = GNC_ACCOUNT_SEL(gnc_account_sel_new());
+                                gnc_account_sel_set_new_account_ability( gas, TRUE );
                                 gtk_container_add( GTK_CONTAINER(a),
                                                    GTK_WIDGET(gas) );
                                 gtk_table_attach( gas_data[i].table,
@@ -402,6 +403,7 @@ gnc_ui_sx_loan_druid_create()
                                     GTK_SIGNAL_FUNC(ld_escrow_toggle), ldd );
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), FALSE );
                 ldd->optEscrowGAS = GNC_ACCOUNT_SEL(gnc_account_sel_new());
+                gnc_account_sel_set_new_account_ability( ldd->optEscrowGAS, TRUE );
                 gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
                                    GTK_WIDGET(ldd->optEscrowGAS) );
 
@@ -820,6 +822,12 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd = (LoanDruidData*)ud;
 
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
+        if ( ldd->ld.primaryAcct == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "loan account." );
+                return TRUE;
+        } 
         if ( ! ldd->ld.repPriAcct ) {
                 ldd->ld.repPriAcct = ldd->ld.primaryAcct;
         }
@@ -896,23 +904,30 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
-void
+gboolean
 ld_opts_save_state( LoanDruidData *ldd )
 {
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->optEscrowCb) ) ) {
                 ldd->ld.escrowAcct =
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
+                if ( ldd->ld.escrowAcct == NULL ) {
+                        gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                                  "Please select a valid "
+                                                  "Escrow Account" );
+                        return TRUE;
+                }
+                
         } else {
                 ldd->ld.escrowAcct = NULL;
         }
+        return FALSE;
 }
 
 static
 gboolean
 ld_opts_tran( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 {
-        ld_opts_save_state( (LoanDruidData*)ud );
-        return FALSE;
+        return ld_opts_save_state( (LoanDruidData*)ud );
 }
 
 static
@@ -944,7 +959,7 @@ ld_opts_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
-void
+gboolean
 ld_rep_save( LoanDruidData *ldd )
 {
         int i;
@@ -961,10 +976,28 @@ ld_rep_save( LoanDruidData *ldd )
 
         ldd->ld.repFromAcct =
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
+        if ( ldd->ld.repFromAcct == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "\"from\" account." );
+                return TRUE;
+        }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
+        if ( ldd->ld.repPriAcct == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "\"to\" account." );
+                return TRUE;
+        }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
+        if ( ldd->ld.repIntAcct == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "\"interest\" account." );
+                return TRUE;
+        }
         ldd->ld.remainderChoice =
                 gnc_option_menu_get_active( GTK_WIDGET(ldd->repRemainderOpt) );
         gnc_frequency_save_state( ldd->repGncFreq,
@@ -979,6 +1012,7 @@ ld_rep_save( LoanDruidData *ldd )
                         rod->from = ldd->ld.repFromAcct;
                 }
         }
+        return FALSE;
 }
 
 static
@@ -989,7 +1023,9 @@ ld_rep_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd = (LoanDruidData*)ud;
 
-        ld_rep_save( ldd );
+        if ( ld_rep_save( ldd ) != FALSE ) {
+                return TRUE;
+        }
 
         if ( (ldd->currentIdx < 0)
              || (ldd->currentIdx >= ldd->ld.repayOptCount)
@@ -1019,8 +1055,7 @@ ld_rep_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         LoanDruidData *ldd;
 
         ldd = (LoanDruidData*)ud;
-        ld_rep_save(ldd);
-        return FALSE;
+        return ld_rep_save(ldd);
 }
 
 static
@@ -1107,7 +1142,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 }
 
 static
-void
+gboolean
 ld_pay_save_current( LoanDruidData *ldd )
 {
         gchar *tmpStr;
@@ -1131,7 +1166,19 @@ ld_pay_save_current( LoanDruidData *ldd )
         g_free( tmpStr );
 
         rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
+        if ( rod->from == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "\"from\" account." );
+                return TRUE;
+        }
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
+        if ( rod->from == NULL ) {
+                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
+                                          "Please select a valid "
+                                          "\"to\" account." );
+                return TRUE;
+        }
         
         /* if ( rb toggled )
          *   ensure freqspec/startdate setup
@@ -1164,6 +1211,7 @@ ld_pay_save_current( LoanDruidData *ldd )
                         rod->startDate = NULL;
                 }
         }
+        return FALSE;
 }
 
 static
@@ -1175,7 +1223,9 @@ ld_pay_next( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd = (LoanDruidData*)ud;
         /* save current data */
-        ld_pay_save_current( ldd );
+        if ( ld_pay_save_current( ldd ) != FALSE ) {
+                return TRUE;
+        }
 
         /* Go through opts list and select next enabled option. */
         for ( i=(++ldd->currentIdx);
@@ -1200,7 +1250,9 @@ ld_pay_back( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd = (LoanDruidData*)ud;
 
         /* save current data */
-        ld_pay_save_current( ldd );
+        if ( ld_pay_save_current( ldd ) != FALSE ) {
+                return TRUE;
+        }
 
         for ( i=(--ldd->currentIdx);
               (i > -1) && !ldd->ld.repayOpts[i]->enabled;

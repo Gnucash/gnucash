@@ -1092,6 +1092,13 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                         break;
                 }
                 /* add to the postponed list. */
+                { 
+                        char tmpBuf[50];
+                        g_date_strftime( tmpBuf, 49, "%c", tci->date );
+                        DEBUG( "Adding defer instance on %s for %s",
+                               tmpBuf,
+                               xaccSchedXactionGetName( tci->parentTCT->sx ) );
+                }
                 gnc_sx_add_defer_instance( tci->parentTCT->sx, tci->sxStateData );
                 break;
         case TO_CREATE:
@@ -1128,11 +1135,18 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                         return;
                 }
                 xaccSchedXactionSetLastOccurDate( sx, tci->date );
-                tmp = gnc_sx_get_instance_count( sx, NULL );
-                gnc_sx_set_instance_count( sx, tmp+1 );
-                if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                        tmp = xaccSchedXactionGetRemOccur(sx);
-                        xaccSchedXactionSetRemOccur( sx, tmp-1 );
+
+                /* Handle an interesting corner case of postponing or
+                 * ignoring the first instance. We only want to incrment the
+                 * counters for newly-discovered-as-to-be-created SXes.
+                 */
+                if ( tci->origState == UNDEF ) {
+                        tmp = gnc_sx_get_instance_count( sx, NULL );
+                        gnc_sx_set_instance_count( sx, tmp+1 );
+                        if ( xaccSchedXactionHasOccurDef( sx ) ) {
+                                tmp = xaccSchedXactionGetRemOccur(sx);
+                                xaccSchedXactionSetRemOccur( sx, tmp-1 );
+                        }
                 }
         }
 }
@@ -1288,6 +1302,8 @@ cancel_check( GnomeDruidPage *druid_page,
              "Are you sure you want to lose all "
              "Scheduled Transaction changes?" );
 
+        /* FIXME: This may now be a bug, as we might have changed the SX
+         * states. */
         if ( g_list_length( sxsld->createdTxnGUIDList ) == 0 ) {
                 /* There's nothing to cancel, so just do so... */
                 return FALSE;
@@ -1347,7 +1363,7 @@ cancel_check( GnomeDruidPage *druid_page,
                               tciList = tciList->next ) {
                                 tci = (toCreateInstance*)tciList->data;
                                 if ( tci->prevState == POSTPONE
-                                     && tci->origState != POSTPONE ) {
+                                     && tci->origState    != POSTPONE ) {
                                         /* Any valid [non-null] 'prevState !=
                                          * POSTPONE' sx temporal state
                                          * pointers will be destroyed at the
@@ -1539,6 +1555,8 @@ generate_instances( SchedXaction *sx,
 
         g_assert( g_date_valid(end) );
         g_assert( g_date_valid(reminderEnd) );
+
+        g_date_clear( &gd, 1 );
 
         /* Process valid next instances. */
         seqStateData = gnc_sx_create_temporal_state( sx );
@@ -1961,7 +1979,6 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
         GList *sxList, *instanceList, *l, **containingList;
         SchedXaction *sx;
-        void *sx_state;
         GDate end, endPlusReminders;
         gint daysInAdvance;
         gboolean autocreateState, notifyState;
@@ -1991,9 +2008,13 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                               "the first time?" );
                         return FALSE;
                 }
-                sx_state = gnc_sx_create_temporal_state( sx );
-                g_hash_table_insert( sxsld->sxInitStates,
-                                     sx, sx_state );
+                {
+                        void *sx_state;
+                        sx_state = gnc_sx_create_temporal_state( sx );
+                        g_hash_table_insert( sxsld->sxInitStates,
+                                             sx, sx_state );
+                        sx_state = NULL;
+                }
 
                 g_date_set_time( &end, time(NULL) );
                 daysInAdvance = xaccSchedXactionGetAdvanceCreation( sx );
@@ -3474,21 +3495,22 @@ gnc_sxsld_free_tci( toCreateInstance *tci )
          * but here's the rules...
          *
          * If we're not cancelling...
-         * . If ignored, then destroy.
-         * . If postponed, then don't.
+         * . If ignored, destroy.
+         * . If postponed, DON'T destroy.
          * . If to-create, destroy.
          *
-         * If we are cancelling....
+         * If we are cancelling...
          * . If ignored, destroy.
          * . If postponed, destroy.
+         *   . UNLESS previously postponed
          * . If to-create, destroy.
          *
          * So, we don't destroy postponed by default, and let the
          * cancel-specific case handle that destruction [thus the
          * valid-pointer check].
          */
-        if ( tci->prevState    != POSTPONE
-             && tci->origState != POSTPONE
+        if ( tci->prevState      != POSTPONE
+             && tci->origState   != POSTPONE
              && tci->sxStateData != NULL ) {
                 gnc_sx_destroy_temporal_state( tci->sxStateData );
                 tci->sxStateData = NULL;
