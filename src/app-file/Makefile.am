@@ -58,7 +58,7 @@ gw-app-file.scm gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-app-file-spec.scm\") \
-	  (gw:generate-module \"gw-app-file\")"
+	  (gw:generate-wrapset \"gw-app-file\")"
 
 BUILT_SOURCES = gw-app-file.scm gw-app-file.c gw-app-file.h
 CLEANFILES = gw-app-file.scm gw-app-file.c gw-app-file.h gw-app-file.html \
