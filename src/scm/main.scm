@@ -327,8 +327,8 @@ string and 'directories' must be a list of strings."
     ;; LC_ALL for those systems.
     (let* ((locale (or (false-if-exception (setlocale LC_MESSAGES))
 		       (setlocale LC_ALL)))
-           (strings (cond ((not (string? locale)) ())
-                          ((equal? locale "C") ())
+           (strings (cond ((not (string? locale)) '())
+                          ((equal? locale "C") '())
                           ((<= (string-length locale) 4) (list locale))
                           (else (list (substring locale 0 2)
                                       (substring locale 0 5)

@@ -1,3 +1,8 @@
+2003-04-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main.scm: guile-1.6 requires empty lists to be quoted
+	  (fixes debian bug #186188)
+
 2003-04-03  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-commodity-matcher.c: Fix debian bug #187061
