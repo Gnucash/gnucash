@@ -31,6 +31,7 @@
 #ifndef __XACC_DATE_H__
 #define __XACC_DATE_H__
 
+#include <time.h>
 #include "config.h"
 #include "glib.h"
 
