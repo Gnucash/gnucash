@@ -40,6 +40,8 @@ typedef struct
 
         gint origin_x;
         gint origin_y;
+
+        gboolean can_span_over;
 } CellDimensions;
 
 typedef struct

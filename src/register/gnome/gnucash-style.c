@@ -74,6 +74,7 @@ cell_dimensions_new (gpointer user_data)
         cd = g_new0 (CellDimensions, 1);
 
         cd->pixel_width = -1;
+        cd->can_span_over = TRUE;
 
         return cd;
 }
@@ -190,12 +191,17 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
 
+                        cd->pixel_height = (font->ascent + font->descent +
+                                            (2 * CELL_VPADDING));
+
                         cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
                         text = cb_cell->sample_text;
+                        if (text != NULL)
+                                cd->can_span_over = FALSE;
 
                         if (cd->pixel_width > 0)
-                                width = cd->pixel_width;
+                                continue;
                         else if (text)
                         {
                                 width = gdk_string_width (font, text);
@@ -205,9 +211,6 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                                 width = 0;
 
                         cd->pixel_width = width;
-
-                        cd->pixel_height = (font->ascent + font->descent +
-                                            (2 * CELL_VPADDING));
                 }
 
                 cd = g_table_index (dimensions->cell_dimensions, row, 0);
@@ -314,6 +317,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                                         cd_span = cd;
                                         continue;
                                 }
+
+                                if (!cd->can_span_over)
+                                        continue;
 
                                 if (cd_span == NULL)
                                         continue;
