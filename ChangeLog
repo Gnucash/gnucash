@@ -1,4 +1,18 @@
 
+2003-05-15 TomF changes for gnucash-gnome2-dev, 15th batch
+	* src/gnome/druid-stock-split.c: gnc_stock_split_druid_create:
+	  Use gnome_druid_page_edge functions instead of gnc_druid
+	  Replace gnc_get_gdk_imlib_image by 	gdk_pixbuf_new_from_file  
+	* src/gnome-utils/druid-utils.c, src/gnome-utils/druid-utils.h:  
+	  Remove functions with < 2 callers:
+	  gnc_druid_set_logo_image, 
+	  gnc_druid_set_watermark_image, gnc_druid_set_title_image
+	  
+	  In the following, use new gnome_druid function names.
+	* src/gnome-utils/druid-utils.c: gnc_druid_set_colors:
+	* src/import-export/qif-import/druid-qif-import.c
+
+	 
 2003-05-12 TomF changes for gnucash-gnome2-dev, 14th batch
 	* TODO: Added items for conversion to Pango,
 	  druid, GnomeMDI

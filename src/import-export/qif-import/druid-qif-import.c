@@ -1547,9 +1547,9 @@ make_qif_druid_page(gnc_commodity * comm)
   str = str ? str : "";
   title = g_strdup_printf(_("Enter information about \"%s\""), str);
 
-  gnome_druid_page_standard_set_bg_color(page, & std_bg_color);  
-  gnome_druid_page_standard_set_logo_bg_color(page, & std_logo_bg_color);
-  gnome_druid_page_standard_set_title_color(page, & std_title_color);
+  gnome_druid_page_standard_set_background(page, & std_bg_color);  
+  gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
+  gnome_druid_page_standard_set_title_foreground (page, & std_title_color);
   gnome_druid_page_standard_set_title(page, title);
   g_free(title);
   

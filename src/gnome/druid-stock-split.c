@@ -513,6 +513,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 {
   GtkWidget *page;
   GladeXML *xml;
+  GdkPixbuf *pixbuf;
 
   xml = gnc_glade_xml_new ("stocks.glade", "Stock Split Druid");
 
@@ -526,10 +527,14 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
   gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
                       GTK_SIGNAL_FUNC (druid_cancel), info);
 
-  gnc_druid_set_title_image (GNOME_DRUID(info->druid),
-                             "stock_split_title.png");
-  gnc_druid_set_watermark_image (GNOME_DRUID(info->druid),
-                                 "stock_split_watermark.png");
+  gnome_druid_page_edge_set_title(GNOME_DRUID_PAGE_EDGE(info->druid),
+                             "Stock Split Druid");
+  gnome_druid_page_edge_set_text (GNOME_DRUID_PAGE_EDGE(info->druid),
+                             "Enter stock split info");
+
+  pixbuf = gdk_pixbuf_new_from_file ("stock_split_watermark.png", NULL);
+  gnome_druid_page_edge_set_watermark (GNOME_DRUID_PAGE_EDGE(info->druid), pixbuf );
+  gdk_pixbuf_unref (pixbuf);
 
   /* account list */
   {
