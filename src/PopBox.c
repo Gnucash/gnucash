@@ -68,8 +68,10 @@ popBox (Widget parent)
                        XmNvalue, "",
 
 /* hack alert -- the width of the combobox should be relative to the font, should
-   be relative to the size of the cell in which it will fit. */
+ * be relative to the size of the cell in which it will fit. Basically, these
+ * values should not be hard-coded, but should be conmputed somehow */
                        XmNwidth, 53,
+                       XmNdropDownWidth, 103,
                        NULL);
 
    popData -> combobox = combobox;
