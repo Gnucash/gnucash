@@ -364,10 +364,11 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
       scm_protect_object(wind->imported_files);
       
       gettimeofday(&end, NULL);
+#if 0
       printf("QIF file load took %f ms total.\n", 
              1000.0*(end.tv_sec - start.tv_sec) +
              .001*(end.tv_usec - start.tv_usec));
-      
+#endif      
       gettimeofday(&start, NULL);
       
       /* now update the Accounts and Categories pages in the notebook */
@@ -377,9 +378,11 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
 
       gettimeofday(&end, NULL);
 
+#if 0
       printf("QIF Category/account tab update took %f ms.\n", 
              1000.0*(end.tv_sec - start.tv_sec) +
              .001*(end.tv_usec - start.tv_usec));
+#endif
 
       gettimeofday(&end, NULL);
 
@@ -784,7 +787,6 @@ update_categories_page(QIFImportWindow * wind) {
              gh_str02scm(qif_cat_name), 
              hash_data);
   }
-  
   
   /* now get the list of strings to display in the clist widget */
   /*   gnc_unprotect_object(wind->cat_display_info); */

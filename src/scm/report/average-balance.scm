@@ -338,12 +338,17 @@
             (gncq (gnc:malloc-query))
             (slist '()))
 
-        (if (null? accounts)
-            (set! rept-text
+        (cond ((null? accounts)
+	       (set! rept-text
                   (list "<TR><TD>"
                         (string-db 'lookup 'no-account)
-                        "</TD></TR>"))
-            (begin
+                        "</TD></TR>")))
+	      ((gnc:timepair-le enddate begindate)
+	       (set! rept-text
+		    (list "<TR><TD><EM>"
+			  (string-db 'lookup 'dates-reversed)
+			  "</EM></TD></TR>")))
+            (else (begin
 
               ; Grab account names
               (set! acctname
@@ -401,7 +406,7 @@
                     (system 
                      (string-append "echo \"" preplot "plot '"
                                     fn "'" plotstr
-                                    "\"|gnuplot -persist " ))))))
+                                    "\"|gnuplot -persist " )))))))
 
         (append prefix
                 (if (null? accounts)
@@ -426,6 +431,7 @@
   (string-db 'store 'gain "Gain")
   (string-db 'store 'loss "Loss")
   (string-db 'store 'no-account "You have not selected an account.")
+  (string-db 'store 'dates-reversed "Please choose appropriate dates - the \"To\" date should be *after* the \"From\" date.")
   (string-db 'store 'period-ending "Period Ending")
   (string-db 'store 'report-for "Report for %s.")
   (string-db 'store 'report-for-and "Report for %s and all subaccounts.")

@@ -130,6 +130,8 @@
     (cond
      ((string=? mangled-string "bank")
       GNC-BANK-TYPE)
+     ((string=? mangled-string "port")
+      GNC-BANK-TYPE)
      ((string=? mangled-string "cash")
       GNC-CASH-TYPE)
      ((string=? mangled-string "ccard")
@@ -188,9 +190,9 @@
        'div) 
       ((divx)    
        'divx)
-      ((intinc aktzu) ;; zinsen
+      ((int intinc aktzu) ;; zinsen
        'intinc)
-      ((intincx)
+      ((intx intincx)
        'intincx)
       ((cglong) ;; Kapitalgewinnsteuer
        'cglong)
@@ -202,6 +204,12 @@
        'cgshortx)
       ((shrsin)
        'shrsin)
+      ((xin) 
+       'xin)
+      ((xout) 
+       'xout)
+      ((stksplit)
+       'stksplit)
       ((reinvdiv)
        'reinvdiv)
       ((reinvint)
@@ -212,9 +220,18 @@
        'reinvsh)
       ((reinvlg reinvkur)
        'reinvlg)
+      ((miscinc)
+       'miscinc)
+      ((miscincx)
+       'miscincx)
+      ((miscexp)
+       'miscexp)
+      ((miscexpx)
+       'miscexpx)
       (else 
-       action-symbol))))
-
+       (display "qif-parse:parse-action-field : unknown action field ")
+       (write read-value) (newline)
+       'unknown))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-cleared-field : in a C (cleared) field in a QIF transaction,

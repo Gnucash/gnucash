@@ -52,7 +52,7 @@
           (gnc:account-begin-edit new-acct 1)
           
           ;; if this is a copy of an existing gnc account, 
-2          ;; copy the account properties 
+          ;; copy the account properties 
           (if (not make-new-acct)
               (begin 
                 (gnc:account-set-name 
@@ -206,13 +206,11 @@
           (qif-file:xtns qif-file))
          (qif-file:set-markable-xtns! qif-file markable-xtns)))
      qif-files-list)
-        
+    
     ;; iterate over files. Going in the sort order by number of 
     ;; transactions should give us a small speed advantage.
     (for-each 
      (lambda (qif-file)
-       ;; iterate over markable transactions.  The non-transfer 
-       ;; ones are already weeded out. 
        (for-each 
         (lambda (xtn)
           (if (not (qif-xtn:mark xtn))
@@ -221,7 +219,7 @@
                 ;; xtns that refer to the same xtn 
                 (qif-xtn:set-mark! xtn #t)
                 (qif-import:mark-matching-xtns xtn qif-file qif-files-list)
-
+                
                 ;; create and fill in the GNC transaction
                 (let ((gnc-xtn (gnc:transaction-create)))
                   (gnc:transaction-init gnc-xtn)
@@ -262,7 +260,7 @@
                                        gnc-acct-hash mapping-data)
   (let ((splits (qif-xtn:splits qif-xtn))
         (gnc-near-split (gnc:split-create))
-        (near-split-total 0)
+        (near-split-total 0.0)
         (qif-cat-map (caddr mapping-data))
         (qif-acct-map (cadr mapping-data))
         (near-acct-info #f)
@@ -292,7 +290,7 @@
           (set! near-acct-name 
                 (list-ref near-acct-info 1))
           (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
-        
+          
           ;; iterate over QIF splits.  Each split defines one "far
           ;; end" for the transaction.
           (for-each 
@@ -304,6 +302,8 @@
                    (far-acct #f)
                    (split-amt (qif-split:amount qif-split))
                    (memo (qif-split:memo qif-split)))
+
+               (if (not split-amt) (set! split-amt 0.0))
                
                ;; fill the splits in (near first).  This handles files in
                ;; multiple currencies by pulling the currency value from the
@@ -342,7 +342,6 @@
           (gnc:transaction-append-split gnc-xtn gnc-near-split)
           (gnc:account-insert-split near-acct gnc-near-split))
         
-        
         ;; STOCK TRANSACTIONS: the near/far accounts depend on the
         ;; "action" encoded in the Number field.  It's generally the
         ;; security account (for buys, sells, and reinvests) but can
@@ -351,6 +350,7 @@
               (share-price (qif-xtn:share-price qif-xtn))
               (num-shares (qif-xtn:num-shares qif-xtn))
               (split-amt (qif-split:amount (car (qif-xtn:splits qif-xtn))))
+              (qif-accts #f)
               (qif-near-acct #f)
               (qif-far-acct #f)
               (far-acct-info #f)
@@ -358,92 +358,95 @@
               (far-acct #f)
               (gnc-far-split (gnc:split-create)))
           
+          (if (not share-price) (set! share-price 0.0))
+          (if (not num-shares) (set! num-shares 0.0))
+          (if (not split-amt) (set! split-amt 0.0))
+
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
               (begin 
                 (display "qif-import:qif-xtn-to-gnc-xtn : ")
                 (display "splits in stock transaction!") (newline)))
+
+          (set! qif-accts 
+                (qif-split:accounts-affected (qif-xtn:splits qif-xtn) 
+                                             qif-xtn))
           
-          ;; the near split: where is the money going TO?
-          (case action-sym
-            ((buy buyx sell sellx reinvdiv reinvsg reinvsh reinvlg shrsin)
-             (set! qif-near-acct qif-security))
-            ((div cgshort cglong intinc) 
-             (set! qif-near-acct (qif-xtn:from-acct qif-xtn)))
-            ((divx cgshortx cglongx intincx)
-             (set! qif-near-acct 
-                   (qif-split:category (car (qif-xtn:splits qif-xtn)))))
-            (else 
-             (display "HEY! HEY! action-sym = ")
-             (display action-sym) (newline)))
+          (set! qif-near-acct (car qif-accts))
+          (set! qif-far-acct (cadr qif-accts))
           
-          ;; the far split: where is the money coming from?
-          (case action-sym
-            ((buy sell)
-             (set! qif-far-acct (qif-xtn:from-acct qif-xtn)))
-            ((buyx sellx)
-             (set! qif-far-acct 
-                   (qif-split:category (car (qif-xtn:splits qif-xtn)))))
-            ((cgshort cgshortx reinvsg reinvsh)
-             (set! qif-far-acct
-                   (default-cgshort-acct qif-security)))
-            ((cglong cglongx reinvlg)
-             (set! qif-far-acct
-                   (default-cglong-acct qif-security)))
-            ((intinc intincx reinvint)
-             (set! qif-far-acct
-                   (default-interest-acct qif-security)))
-            ((div divx reinvdiv)
-             (set! qif-far-acct
-                   (default-dividend-acct qif-security)))            
-            ((shrsin)
-             (set! qif-far-acct
-                   (default-equity-account)))
-            (else 
-             (display "HEY! HEY! action-sym = ")
-             (display action-sym) (newline)))
-            
+          ;; translate the QIF account names into Gnucash accounts
+          (if (and qif-near-acct qif-far-acct)
+              (begin 
+                (set! near-acct-info 
+                      (or (hash-ref qif-acct-map qif-near-acct)
+                          (hash-ref qif-cat-map qif-near-acct)))
+                (set! near-acct-name 
+                      (list-ref near-acct-info 1))
+                (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
+                
+                (set! far-acct-info
+                      (or (hash-ref qif-acct-map qif-far-acct)
+                          (hash-ref qif-cat-map qif-far-acct)))
+                (set! far-acct-name 
+                      (list-ref far-acct-info 1))
+                (set! far-acct (hash-ref gnc-acct-hash far-acct-name))))
+              
           ;; the amounts and signs: are shares going in or out? 
           ;; are amounts currency or shares? 
           (case action-sym
-            ((buy buyx reinvdiv reinvsg reinvsh reinvlg shrsin)
+            ((buy buyx reinvint reinvdiv reinvsg reinvsh reinvlg shrsin)
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split num-shares)
              (gnc:split-set-share-amount gnc-far-split (- num-shares)))
+            
             ((sell sellx)
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split (- num-shares))
              (gnc:split-set-share-amount gnc-far-split num-shares))
-            ((cgshort cgshortx cglong cglongx intinc intincx div divx)
+            
+            ((cgshort cgshortx cglong cglongx intinc intincx div divx
+                      miscinc miscincx miscexp miscexpx xin)
              (gnc:split-set-base-value gnc-near-split split-amt currency)
-             (gnc:split-set-base-value gnc-far-split (- split-amt) currency)))
-          
-          (set! near-acct-info 
-                (hash-ref qif-acct-map qif-near-acct))
-          (set! near-acct-name 
-                (list-ref near-acct-info 1))
-          (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
-          
-          (set! far-acct-info
-                (hash-ref qif-acct-map qif-far-acct))
-          (set! far-acct-name 
-                (list-ref far-acct-info 1))
-          (set! far-acct (hash-ref gnc-acct-hash far-acct-name))
-          
+             (gnc:split-set-base-value gnc-far-split (- split-amt) currency))
+            
+            ((xout)
+             (gnc:split-set-base-value gnc-near-split (- split-amt) currency)
+             (gnc:split-set-base-value gnc-far-split  split-amt currency))
+            
+            ;; stock splits are a pain in the butt: QIF just specifies 
+            ;; the split ratio, not the number of shares in and out, 
+            ;; so we have to fetch the number of shares from the 
+            ;; security account             
+            ((stksplit)
+             (let* ((splitratio (/ num-shares 10))
+                    (in-shares 
+                     (gnc:account-get-share-balance near-acct))
+                    (out-shares (* in-shares splitratio)))
+               (gnc:split-set-share-price gnc-near-split 
+                                          (/ share-price splitratio))
+               (gnc:split-set-share-price gnc-far-split share-price) 
+               (gnc:split-set-share-amount gnc-near-split out-shares)
+               (gnc:split-set-share-amount gnc-far-split (- in-shares))))
+            (else 
+             (display "symbol = " ) (write action-sym) (newline)))
+               
           (let ((cleared (qif-split:matching-cleared 
                           (car (qif-xtn:splits qif-xtn)))))
             (if (or (eq? 'cleared cleared)
                     (eq? 'reconciled cleared))
                 (gnc:split-set-reconcile gnc-far-split #\c)))
           
-          (gnc:transaction-append-split gnc-xtn gnc-near-split)
-          (gnc:account-insert-split near-acct gnc-near-split)
-          
-          (gnc:transaction-append-split gnc-xtn gnc-far-split)
-          (gnc:account-insert-split far-acct gnc-far-split)))
+          (if (and qif-near-acct qif-far-acct)
+              (begin 
+                (gnc:transaction-append-split gnc-xtn gnc-near-split)
+                (gnc:account-insert-split near-acct gnc-near-split)
+                
+                (gnc:transaction-append-split gnc-xtn gnc-far-split)
+                (gnc:account-insert-split far-acct gnc-far-split)))))
     
     ;; set properties of the whole transaction     
     (apply gnc:transaction-set-date gnc-xtn (qif-xtn:date qif-xtn))
@@ -475,37 +478,35 @@
                (qif-split:set-mark! split #t)
                (qif-split:set-matching-cleared! 
                 split
-                (qif-import:mark-matching-split split xtn qif-file qif-files))
+                (qif-import:mark-matching-split 
+                 split xtn qif-file qif-files))
                (qif-split:set-mark! split #t)))))
    (qif-xtn:splits xtn))
   (qif-xtn:set-mark! xtn #t))
 
 (define (qif-import:mark-matching-split split xtn qif-file qif-files)
-  (let ((near-acct-name #f)
-        (far-acct-name (qif-split:category split))
-        (date (qif-xtn:date xtn))
-        (amount (- (qif-split:amount split)))
-        (memo (qif-split:memo split))        
-        (bank-xtn? (not (qif-xtn:security-name xtn)))
-        (cleared? #f)
-        (done #f))
+  (let* ((near-acct-name #f)
+         (far-acct-name (qif-split:category split))
+         (date (qif-xtn:date xtn))
+         (amount (- (qif-split:amount split)))
+         (memo (qif-split:memo split))        
+         (security-name (qif-xtn:security-name xtn))
+         (action (qif-xtn:number xtn))
+         (bank-xtn? (not security-name))
+         (cleared? #f)
+         (done #f))
         
-    ;; FIXME security stuff
     (if bank-xtn?
         (let ((near (qif-xtn:from-acct xtn)))
+          (set! far-acct-name (qif-split:category split))
           (if near
               (set! near-acct-name near)
               (set! near-acct-name (qif-file:default-account qif-file))))
-        (set! near-acct-name (qif-xtn:security-name xtn)))
+        (let ((qif-accts 
+               (qif-split:accounts-affected split xtn)))
+          (set! near-acct-name (car qif-accts))
+          (set! far-acct-name (cadr qif-accts))))
     
-;;     (display "mark-matching-split : near-acct = ")
-;;     (write near-acct-name)
-;;     (display " far-acct = ") 
-;;     (write far-acct-name)
-;;     (display " date = ")
-;;     (write date)
-;;     (newline)
-
     ;; this is the grind loop.  Go over every unmarked split of every
     ;; unmarked transaction of every file that has any transactions from
     ;; the far-acct-name.
@@ -578,3 +579,71 @@
    ;; is the memo the same? (is this true?)
    ;; ignore it for now
    ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  (qif-split:accounts-affected split xtn)
+;;  Get the near and far ends of a split, returned as a list 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-split:accounts-affected split xtn) 
+  (let ((near-acct-name #f)
+        (far-acct-name #f)
+        (security (qif-xtn:security-name xtn))
+        (action (qif-xtn:number xtn)))    
+    
+    ;; for non-security transactions, the near account is the 
+    ;; acct in which the xtn is, and the far is the account 
+    ;; linked by the category line. 
+
+    (if (not security)
+        ;; non-security transactions 
+        (begin 
+          (set! near-acct-name (qif-xtn:from-acct xtn))
+          (set! far-acct-name (qif-split:category split)))
+        
+        ;; security transactions : the near end is either the 
+        ;; brokerage, the stock, or the category 
+        (let ((action-sym (qif-parse:parse-action-field action)))
+          (case action-sym
+            ((buy buyx sell sellx reinvint reinvdiv reinvsg reinvsh 
+                  reinvlg shrsin stksplit)
+             (set! near-acct-name security))
+            ((div cgshort cglong intinc miscinc miscexp xin xout)
+             (set! near-acct-name (qif-xtn:from-acct xtn)))
+            ((divx cgshortx cglongx intincx miscintx miscexpx)
+             (set! near-acct-name 
+                   (qif-split:category (car (qif-xtn:splits xtn)))))
+            (else 
+             (set! near-acct-name (qif-xtn:from-acct xtn))
+             (display "HEY! HEY! action-sym = ")
+             (display action-sym) (newline)))
+          
+          ;; the far split: where is the money coming from?  
+          ;; Either the brokerage account, the category,
+          ;; or an external account 
+          (case action-sym
+            ((buy sell)
+             (set! far-acct-name (qif-xtn:from-acct xtn)))
+            ((buyx sellx miscinc miscincx miscexp miscexpx xin xout)
+             (set! far-acct-name 
+                   (qif-split:category (car (qif-xtn:splits xtn)))))
+            ((stksplit)
+             (set! far-acct-name security))                   
+            ((cgshort cgshortx reinvsg reinvsh)
+             (set! far-acct-name
+                   (default-cgshort-acct security)))
+            ((cglong cglongx reinvlg)
+             (set! far-acct-name
+                   (default-cglong-acct security)))
+            ((intinc intincx reinvint)
+             (set! far-acct-name
+                   (default-interest-acct security)))
+            ((div divx reinvdiv)
+             (set! far-acct-name
+                   (default-dividend-acct security)))            
+            ((shrsin)
+             (set! far-acct-name
+                   (default-equity-account))))))
+
+    (list near-acct-name far-acct-name)))
+    

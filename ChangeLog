@@ -1,3 +1,8 @@
+2000-06-08  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/average-balance.scm (average-balance-renderer): 
+	added a condition to catch incorrectly entered dates without crashing.
+
 2000-06-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Query.c: fixed a "dave is an idiot" bug in cropping

@@ -178,6 +178,10 @@
                               self current-xtn qstate-type)
                              (set! first-xtn #f)))
                        
+                       (if (and (eq? qstate-type 'type:invst)
+                                (not (qif-xtn:security-name current-xtn)))
+                           (qif-xtn:set-security-name! current-xtn ""))
+                       
                        (if current-account-name 
                            (qif-xtn:set-from-acct! current-xtn 
                                                    current-account-name) 
@@ -201,6 +205,10 @@
                       ((#\D)
                        (qif-class:set-description! current-xtn value))
                       
+                      ;; R : tax copy designator (ignored for now)
+                      ((#\R)
+                       #t)
+
                       ;; end-of-record
                       ((#\^)
                        (qif-file:add-class! self current-xtn)
@@ -264,7 +272,7 @@
                       ;; R : what is the tax rate (from some table?
                       ;; seems to be an integer)
                       ((#\R)
-                       (qif-cat:set-tax-rate! current-xtn value))
+                       (qif-cat:set-tax-class! current-xtn value))
                       
                       ;; B : budget amount.  not really supported. 
                       ((#\B)
@@ -305,13 +313,6 @@
     ;; now reverse the transaction list so xtns are in the same order that 
     ;; they were in the file.  This is important in a few cases. 
     (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
-    
-    (set! end-time (gettimeofday))
-    (display "QIF file read took ")
-    (display (+ (* 1000 (- (car end-time) (car start-time)))
-                (* .001 (- (cdr end-time) (cdr start-time)))))
-    (newline)
-    
     return-val))
 
 
@@ -393,7 +394,7 @@
     (and 
      ;; fields of categories. 
      (check-and-parse-field 
-      qif-cat:tax-rate qif-cat:set-tax-rate! 
+      qif-cat:tax-class qif-cat:set-tax-class! 
       qif-parse:check-number-format '(decimal comma)
       qif-parse:parse-number/format (qif-file:cats self)
       set-error)
@@ -465,11 +466,7 @@
        #t))
     
     (set! end-time (gettimeofday))
-    (display "QIF string parsing took ")
-    (display (+ (* 1000 (- (car end-time) (car start-time)))
-                (* .001 (- (cdr end-time) (cdr start-time)))))
-    (newline)
-    
+
     (cond ((list? error)
            (list all-ok (errlist-to-string error)))
           (error 

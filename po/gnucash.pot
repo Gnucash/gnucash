@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-04 17:16-0700\n"
+"POT-Creation-Date: 2000-06-08 12:48-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2977,8 +2977,8 @@ msgstr ""
 msgid "You must specify a currency."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:619
-#: src/gnome/dialog-qif-import.c:676 src/gnome/dialog-qif-import.c:774
+#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
+#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
@@ -2986,7 +2986,7 @@ msgstr ""
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:704 src/gnome/dialog-qif-import.c:802
+#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
 msgid "Something is very wrong with QIF Importing."
 msgstr ""
 

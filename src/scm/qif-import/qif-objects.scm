@@ -25,7 +25,6 @@
    '(path                 ;; where file was loaded 
      default-account      ;; guessed or specified default account name
      default-account-type ;; either GNC-BANK-TYPE or GNC-STOCK-TYPE 
-     default-acct-xtns
      y2k-threshold
      currency             ;; this is a string.. no checking 
      accts-mentioned
@@ -68,12 +67,6 @@
 (define qif-file:set-currency!
   (simple-obj-setter <qif-file> 'currency))
 
-(define qif-file:default-acct-xtns 
-  (simple-obj-getter <qif-file> 'default-acct-xtns))
-
-(define qif-file:set-default-acct-xtns!
-  (simple-obj-setter <qif-file> 'default-acct-xtns))
-
 (define qif-file:accts-mentioned 
   (simple-obj-getter <qif-file> 'accts-mentioned))
 
@@ -115,7 +108,6 @@
     (qif-file:set-default-account! self account)
     (qif-file:set-currency! self currency)
     (qif-file:set-y2k-threshold! self 50)
-    (qif-file:set-default-acct-xtns! self 0)
     (qif-file:set-accts-mentioned! self '())
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
@@ -353,7 +345,9 @@
   (simple-obj-setter <qif-acct> 'budget))
 
 (define (make-qif-acct)
-  (make-simple-obj <qif-acct>))
+  (let ((retval (make-simple-obj <qif-acct>)))
+    (qif-acct:set-type! retval "Bank")
+    retval))
 
 (define qif-acct? 
   (record-predicate <qif-acct>))
@@ -408,7 +402,7 @@
 (define <qif-cat>
   (make-simple-class 
    'qif-cat
-   '(name description taxable expense-cat income-cat tax-rate budget-amt)))
+   '(name description taxable expense-cat income-cat tax-class budget-amt)))
 
 (define qif-cat:name
   (simple-obj-getter <qif-cat> 'name))
@@ -440,11 +434,11 @@
 (define qif-cat:set-income-cat! 
   (simple-obj-setter <qif-cat> 'income-cat))
 
-(define qif-cat:tax-rate
-  (simple-obj-getter <qif-cat> 'tax-rate))
+(define qif-cat:tax-class
+  (simple-obj-getter <qif-cat> 'tax-class))
 
-(define qif-cat:set-tax-rate! 
-  (simple-obj-setter <qif-cat> 'tax-rate))
+(define qif-cat:set-tax-class! 
+  (simple-obj-setter <qif-cat> 'tax-class))
 
 (define qif-cat:budget-amt
   (simple-obj-getter <qif-cat> 'budget-amt))
@@ -462,29 +456,23 @@
   (simple-obj-print self))
 
 (define (qif-file:add-xtn! self xtn)
-  (let ((from (qif-xtn:from-acct xtn)))
-    (if from
-        (if (not (member from (qif-file:accts-mentioned self)))
-            (qif-file:set-accts-mentioned! 
-             self (cons from (qif-file:accts-mentioned self))))
-        (let ((defs (qif-file:default-acct-xtns self)))
-          (qif-file:set-default-acct-xtns! self (+ 1 defs))
-          (if (and (eq? 0 defs)
-                   (not (member (qif-file:default-account self)
-                                (qif-file:accts-mentioned self))))
-              (qif-file:set-accts-mentioned! 
-               self (cons (qif-file:default-account self)
-                          (qif-file:accts-mentioned self)))))))
-  (for-each 
-   (lambda (split)
-     (if (and (qif-split:category-is-account? split)
-              (not (member (qif-split:category split)
-                           (qif-file:accts-mentioned self))))
-         (qif-file:set-accts-mentioned!
-          self (cons (qif-split:category split) 
-                     (qif-file:accts-mentioned self)))))
-   (qif-xtn:splits xtn))
-  
+  (let ((splits (qif-xtn:splits xtn)))
+    (for-each 
+     (lambda (split)
+       (let ((accts (qif-split:accounts-affected split xtn))
+             (mentioned (qif-file:accts-mentioned self)))
+         ;; add the near account to the mentioned-list
+         ;; but only for the first split
+         (if (and (eq? (car splits) split)
+                  (not (member (car accts) mentioned)))
+             (qif-file:set-accts-mentioned! 
+              self (cons (car accts) mentioned)))
+         ;; add the far account for each split 
+         (set! mentioned (qif-file:accts-mentioned self))
+         (if (not (member (cadr accts) mentioned))
+             (qif-file:set-accts-mentioned!
+              self (cons (cadr accts) mentioned)))))
+     splits))  
   (qif-file:set-xtns! self 
                       (cons xtn (qif-file:xtns self))))
 
