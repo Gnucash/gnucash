@@ -23,6 +23,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup Engine
+    @{ */
+/** @file gnc-tree-model-account.h
+    @brief GtkTreeModel implementation for gnucash account tree.
+    @author Jan Arne Petersen <jpetersen@uni-bonn.de>
+    @author David Hampton <hampton@employees.org>
+*/
+
 #ifndef __GNC_TREE_MODEL_ACCOUNT_H
 #define __GNC_TREE_MODEL_ACCOUNT_H
 
@@ -91,25 +99,91 @@ typedef struct {
 	GtkObjectClass parent;
 } GncTreeModelAccountClass;
 
-/* function prototypes */
+
+
+/* Standard g_object type */
 GType         gnc_tree_model_account_get_type              (void);
 
+
+/** @name Account Tree Model Constructors */
+/** @{ */
+
 GtkTreeModel *gnc_tree_model_account_new                   (AccountGroup *group);
+/** @} */
+
+
+/* OBSOLETE */
 void          gnc_tree_model_account_set_root              (GncTreeModelAccount *model,
                                                             AccountGroup *group);
 
+/** This function returns the account associated with the top level
+ *  pseudo-account.  The gnucash engine does not have a single top
+ *  level account (it has a list of top level accounts), but this code
+ *  provides one so that it can be used with all parts of the gnucash
+ *  gui.
+ *
+ *  @internal This function should only be called from gnc-tree-view-account.c.
+ *
+ *  @param account_view A pointer to an account tree view.
+ *
+ *  @return The top-level pseudo-account.
+ */
+Account      *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
+
+
+/** @name Account Tree Model Get/Set Functions */
+/** @{ */
+
+/** Convert a model/iter pair to a gnucash account.  This routine should
+ *  only be called from an account tree view filter function.  The
+ *  model and iter values will be provided as part of the call to the
+ *  filter.
+ *
+ *  @param model A pointer to the account tree model.
+ *
+ *  @param iter A gtk_tree_iter corresponding to a single account in
+ *  the model.
+ *
+ *  @return A pointer to the corresponding account.
+ */
 Account      *gnc_tree_model_account_get_account           (GncTreeModelAccount *model,
                                                             GtkTreeIter *iter);
 
-void          gnc_tree_model_account_set_toplevel          (GncTreeModelAccount *model,
-                                                            Account *toplevel);
-Account      *gnc_tree_model_account_get_toplevel          (GncTreeModelAccount *model);
 
-GtkTreePath  *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
-                                                            Account *account);
+/** Convert a model/account pair into a gtk_tree_model_iter.  This
+ *  routine should only be called from the file
+ *  gnc-tree-view-account.c.
+ *
+ *  @internal
+ *
+ *  @param model The model that an account belongs to.
+ *
+ *  @param account The account to convert.
+ *
+ *  @param iter A pointer to an iter.  This iter will be rewritten to
+ *  contain the results of the query.
+ */
 void          gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
                                                             Account *account,
                                                             GtkTreeIter *iter);
+
+
+/** Convert a model/account pair into a gtk_tree_model_path.  This
+ *  routine should only be called from the file
+ *  gnc-tree-view-account.c.
+ *
+ *  @internal
+ *
+ *  @param model The model that an account belongs to.
+ *
+ *  @param account The account to convert.
+ *
+ *  @return A pointer to a path describing the account.  It is the
+ *  responsibility of the caller to free this path when done.
+ */
+GtkTreePath  *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
+                                                            Account *account);
+/** @} */
 
 G_END_DECLS
 

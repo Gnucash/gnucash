@@ -39,26 +39,22 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 
-#define TREE_VIEW_ACCOUNT_CM_CLASS "tree-view-account"
+
+/** Static Globals *******************************************************/
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
+/** Declarations *********************************************************/
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
 static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
 static void gnc_tree_view_account_destroy (GtkObject *object);
 
-#if 0
-static void gnc_tree_model_account_refresh_handler (GHashTable *changes,
-						    gpointer data);
-static void gnc_tree_model_account_refresh (GncTreeModelAccount *model);
-#endif
 
 struct GncTreeViewAccountPrivate
 {
   AccountViewInfo avi;
-  gboolean has_filter;
 };
 
 typedef struct _gnc_tree_view_account_default {
@@ -91,6 +87,10 @@ static gnc_tree_view_account_default gnc_tree_view_account_defaults[] = {
   {GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,          0, FALSE, 0.0, "tax-info",          N_("Tax Info")},
 };
 
+
+/************************************************************/
+/*               g_object required functions                */
+/************************************************************/
 
 static GObjectClass *parent_class = NULL;
 
@@ -141,11 +141,9 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 static void
 gnc_tree_view_account_init (GncTreeViewAccount *view)
 {
-  ENTER(" ");
   view->priv = g_new0 (GncTreeViewAccountPrivate, 1);
 
   gnc_init_account_view_info(&view->priv->avi);
-  LEAVE(" ");
 }
 
 static void
@@ -156,13 +154,11 @@ gnc_tree_view_account_finalize (GObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
 
-  ENTER("view %p", object);
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
   g_free (account_view->priv);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
-  LEAVE(" ");
 }
 
 static void
@@ -173,60 +169,56 @@ gnc_tree_view_account_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
 
-  ENTER("view %p", object);
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-  LEAVE(" ");
 }
 
-static void
-gnc_tree_view_update_column_visibility_internal (GncTreeViewAccount *account_view)
-{
-  GtkTreeView *tree_view;
-  GtkTreeViewColumn *column;
-  gint i;
 
-  ENTER(" ");
-  tree_view = GTK_TREE_VIEW (account_view);
+/************************************************************/
+/*                    New View Creation                     */
+/************************************************************/
 
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++) {
-    DEBUG("setting column %d to %s", i, account_view->priv->avi.show_field[i] ? "visible" : "invisible");
-    column = gtk_tree_view_get_column (tree_view, i);
-    gtk_tree_view_column_set_visible (column, account_view->priv->avi.show_field[i]);
-  }
-  LEAVE(" ");
-}
-
-static GtkTreeView *
-gnc_tree_view_account_new_internal (gboolean filterable)
+/*
+ * Create a new account tree view with (optional) top level root node.
+ * This view will be based on a model that is common to all view of
+ * the same set of books, but will have its own private filter on that
+ * model.
+ */
+GtkTreeView *
+gnc_tree_view_account_new (gboolean show_root)
 {
   GncTreeViewAccount *account_view;
   GtkTreeView *tree_view;
   GtkTreeModel *model, *filter_model;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
+  GtkTreePath *virtual_root_path = NULL;
   gint i;
 
   ENTER(" ");
+  /* Create our view */
   account_view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT, NULL);
   tree_view = GTK_TREE_VIEW (account_view);
 
+  /* Create/get a pointer to the existing model for this set of books. */
   model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
-  if (filterable) {
-    filter_model = egg_tree_model_filter_new (model, NULL);
-    gtk_tree_view_set_model (tree_view, filter_model);
-  } else {
-    gtk_tree_view_set_model (tree_view, model);
-  }
+
+  /* Set up the view private filter on the common model. */
+  if (!show_root)
+    virtual_root_path = gtk_tree_path_new_first ();
+  filter_model = egg_tree_model_filter_new (model, virtual_root_path);
+  gtk_tree_view_set_model (tree_view, filter_model);
   gtk_object_sink(GTK_OBJECT(model));
-  account_view->priv->has_filter = filterable;
+  if (virtual_root_path)
+    gtk_tree_path_free(virtual_root_path);
 
-  /* Set column visibilities */
-  gnc_tree_view_init_default_visibility(&account_view->priv->avi);
+  /* Set default visibilities */
+  gtk_tree_view_set_headers_visible (tree_view, FALSE);
+  gnc_tree_view_account_init_view_info(&account_view->priv->avi);
 
-  /* Account name */
+  /* Set up the "account name" column */
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, gettext(gnc_tree_view_account_defaults[0].field_name));
   renderer = gtk_cell_renderer_pixbuf_new ();
@@ -241,7 +233,7 @@ gnc_tree_view_account_new_internal (gboolean filterable)
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_set_expander_column (tree_view, column);
 
-  /* All other columns */
+  /* Set up all other columns */
   for (i = 1; i < NUM_ACCOUNT_FIELDS; i++) {
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (gettext(gnc_tree_view_account_defaults[i].field_name),
@@ -266,69 +258,19 @@ gnc_tree_view_account_new_internal (gboolean filterable)
     gtk_tree_view_column_set_resizable (column, TRUE);
   }
 
-#if 0
-  priv->component_id = gnc_register_gui_component (TREE_MODEL_ACCOUNT_CM_CLASS,
-  						 gnc_tree_model_account_refresh_handler,
-  						 NULL,
-  						 model);
-  
-  gnc_gui_component_watch_entity_type (priv->component_id,
-  				     GNC_ID_ACCOUNT,
-  				     GNC_EVENT_CREATE | GNC_EVENT_DESTROY);
-#endif
-
   LEAVE("%p", tree_view);
   return tree_view;
 }
 
-GtkTreeView *
-gnc_tree_view_account_new (void)
-{
-  return gnc_tree_view_account_new_internal (FALSE);
-}
 
-GtkTreeView *
-gnc_tree_view_account_new_filterable (void)
-{
-  return gnc_tree_view_account_new_internal (TRUE);
-}
+/************************************************************/
+/*            Account Tree View Filter Functions            */
+/************************************************************/
 
-/********************************************************************\
- * gnc_init_account_view_info                                       *
- *   initialize an account view info structure with default values  *
- *                                                                  *
- * Args: avi - structure to initialize                              *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_tree_view_init_default_visibility(AccountViewInfo *avi)
-{
-  int i;
-
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
-    avi->show_field[i] = FALSE;
-
-  avi->show_field[ACCOUNT_NAME] = TRUE;
-  avi->show_field[ACCOUNT_DESCRIPTION] = TRUE;
-  avi->show_field[ACCOUNT_TOTAL] = TRUE;
-}
-
-void
-gnc_tree_view_update_column_visibility (GncTreeViewAccount *account_view,
-					AccountViewInfo *avi)
-{
-  GncTreeViewAccountPrivate *priv;
-
-  ENTER("%p", account_view);
-  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
-  priv = account_view->priv;
-
-  priv->avi = *avi;
-  
-  gnc_tree_view_update_column_visibility_internal (account_view);
-  LEAVE(" ");
-}
-
+/*
+ * Convert a column name to a numeric identifier.  This is a
+ * helper routine for the following function.
+ */
 static gint
 gnc_tree_view_account_pref_name_to_field (const char *pref_name)
 {
@@ -341,8 +283,12 @@ gnc_tree_view_account_pref_name_to_field (const char *pref_name)
   return(GNC_TREE_MODEL_ACCOUNT_COL_NAME);
 }
 
+/*
+ * Set the list of columns that will be visible in an account tree view.
+ */
 void
-gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view, GSList *list)
+gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
+					 GSList *column_names)
 {
   AccountViewInfo new_avi;
   AccountFieldCode field;
@@ -351,7 +297,7 @@ gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view, GSLis
   ENTER(" ");
   memset (&new_avi, 0, sizeof(new_avi));
 
-  for (node = list; node != NULL; node = node->next)
+  for (node = column_names; node != NULL; node = node->next)
   {
     field = gnc_tree_view_account_pref_name_to_field(node->data);
     if (field < NUM_ACCOUNT_FIELDS)
@@ -360,10 +306,76 @@ gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view, GSLis
 
   new_avi.show_field[ACCOUNT_NAME] = TRUE;
 
-  gnc_tree_view_update_column_visibility (account_view, &new_avi);
+  gnc_tree_view_account_set_view_info (account_view, &new_avi);
   LEAVE(" ");
 }
 
+/*
+ * Initialize an account view info structure with default values.
+ */
+void
+gnc_tree_view_account_init_view_info(AccountViewInfo *avi)
+{
+  int i;
+
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+    avi->show_field[i] = FALSE;
+
+  avi->show_field[ACCOUNT_NAME] = TRUE;
+}
+
+/*
+ * Get a copy of the account view info structure in use by the
+ * specified tree.
+ */
+void
+gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
+				     AccountViewInfo *avi)
+{
+  GncTreeViewAccountPrivate *priv;
+
+  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
+  priv = account_view->priv;
+
+  *avi = priv->avi;
+}
+
+/*
+ * Set the account view info data in use by the specified tree to
+ * match the callers request.
+ *
+ * DRH - COMPATABILITY WARNING
+ *
+ * This function does not do anything with the 'include_type' field.
+ * Should there be a automatic filter for backward compatability
+ * that uses these flags, or should all uses of this be converted to
+ * a eggtreemodelfilter?
+ */
+void
+gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
+				     AccountViewInfo *avi)
+{
+  GtkTreeViewColumn *column;
+  gint i;
+
+  ENTER("%p", account_view);
+  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
+
+  account_view->priv->avi = *avi;
+  
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++) {
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW(account_view), i);
+    gtk_tree_view_column_set_visible (column, avi->show_field[i]);
+  }
+
+  LEAVE(" ");
+}
+
+/*
+ * Set an eggtreemodel visible filter on this account.  This filter will be
+ * called for each account that the tree is about to show, and the
+ * account will be passed to the callback function.
+ */
 void
 gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view, 
 				  EggTreeModelFilterVisibleFunc  func,
@@ -372,71 +384,222 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
 {
   GtkTreeModel *filter_model;
 
-  g_return_if_fail (account_view->priv->has_filter == TRUE);
-
+  ENTER("view %p, filter func %p, data %p, destroy %p",
+	account_view, func, data, destroy);
   filter_model = gtk_tree_view_get_model (GTK_TREE_VIEW (account_view));
   egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (filter_model),
 					  func, data, destroy);
+  LEAVE(" ");
 }
 
-gboolean
-gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view,
-					    Account **account)
+/*
+ * Forces the entire account tree to be re-evaluated for visibility.
+ */
+void
+gnc_tree_view_account_refilter (GncTreeViewAccount *view)
+{
+  GtkTreeModel *filter_model;
+
+  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
+
+  filter_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (filter_model));
+}
+
+
+/************************************************************/
+/*           Account Tree View Get/Set Functions            */
+/************************************************************/
+
+/*
+ * Return the account associated with the top level pseudo-account for
+ * the tree.
+ */
+Account *
+gnc_tree_view_account_get_top_level (GncTreeViewAccount *view)
+{
+  GtkTreeModel *model, *filter_model;
+
+  filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
+
+  return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT(model));
+}
+
+/*
+ * Retrieve the selected account from an account tree view.  The
+ * account tree must be in single selection mode.
+ */
+Account *
+gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
 {
     GtkTreeSelection *selection;
     GtkTreeModel *model;
     GtkTreeIter iter, child_iter;
+    Account *account;
 
-    g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), FALSE);
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+      LEAVE("no account, get_selected failed");
       return FALSE;
-
-    if (!view->priv->has_filter) {
-      *account = iter.user_data;
-      return TRUE;
     }
 
     egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (model),
 						      &child_iter, &iter);
     account = child_iter.user_data;
-    return TRUE;
+    LEAVE("account %p (%s)", account, xaccAccountGetName (account));
+    return account;
 }
 
-#if 0
-static void
-gnc_tree_view_account_refresh_handler (GHashTable *changes, gpointer user_data)
+/*
+ * Selects a single account in the account tree view.  The account
+ * tree must be in single selection mode.
+ */
+void
+gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
+					    Account *account)
 {
-	ENTER("changes %p, view %p", changes, user_data);
-	g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (user_data));
+  GtkTreeModel *model, *filter_model;
+  GtkTreeSelection *selection;
+  GtkTreePath *path, *filter_path, *parent_path;
 
-	gnc_tree_view_account_refresh (GNC_TREE_VIEW_ACCOUNT (user_data));
-	LEAVE(" ");
+  ENTER("view %p, account %p (%s)", view,
+	account, xaccAccountGetName (account));
+
+  /* Clear any existing selection. */
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  gtk_tree_selection_unselect_all (selection);
+
+  filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
+
+  path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
+  if (path == NULL) {
+    LEAVE("get_path_from_account failed");
+    return;
+  }
+  {
+    gchar *path_string = gtk_tree_path_to_string(path);
+    DEBUG("tree path %s", path_string);
+    g_free(path_string);
+  }
+  filter_path =
+    egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (filter_model),
+						      path);
+  gtk_tree_path_free(path);
+  if (filter_path == NULL) {
+    LEAVE("convert_child_path_to_path failed");
+    return;
+  }
+
+  /* gtk_tree_view requires that a row be visible before it can be selected */
+  parent_path = gtk_tree_path_copy (filter_path);
+  if (gtk_tree_path_up (parent_path)) {
+    /* This function is misnamed.  It expands the actual item
+     * specified, not the path to the item specified. I.E. It expands
+     * one level too many, thus the get of the parent. */
+    gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), parent_path);
+  }
+  gtk_tree_path_free(parent_path);
+
+  gtk_tree_selection_select_path (selection, filter_path);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), filter_path, NULL, FALSE, 0.0, 0.0);
+  {
+    gchar *path_string = gtk_tree_path_to_string(filter_path);
+    LEAVE("filter path %s", path_string);
+    g_free(path_string);
+  }
+  gtk_tree_path_free(filter_path);
 }
 
+/*
+ * This helper function is called once for each row in the tree view
+ * that is currently selected.  Its task is to an the corresponding
+ * account to the end of a glist.
+ */
 static void
-gnc_tree_view_account_refresh (GncTreeViewAccount *view)
+get_selected_accounts_helper (GtkTreeModel *model,
+			      GtkTreePath *path,
+			      GtkTreeIter *iter,
+			      gpointer data)
 {
-	GtkTreePath *path;
-	gint i;
-	
-	ENTER("view %p", view);
-	if (view->priv->root == NULL) {
-		return;
-	}
+  GList **return_list = data;
+  Account *account;
 
-	path = gtk_tree_path_new_first ();
-	if (view->priv->toplevel != NULL) {
-		gtk_tree_path_append_index (path, 0);
-	}
-	for (i = 0; i < xaccGroupGetNumAccounts (view->priv->root); i++) {
-		gtk_tree_view_row_deleted (GTK_TREE_VIEW (view), path);
-	}
-	gtk_tree_path_free (path);
-
-	xaccGroupForEachAccount (view->priv->root, account_row_inserted, view, TRUE);
-	LEAVE(" ");
+  account = iter->user_data;
+  *return_list = g_list_append(*return_list, account);
 }
-#endif
 
+/*
+ * Given an account tree view, return a list of the selected accounts. The
+ * account tree must be in multiple selection mode.
+ *
+ * Note: It is the responsibility of the caller to free the returned
+ * list.
+ */
+GList *
+gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view)
+{
+  GtkTreeSelection *selection;
+  GList *return_list = NULL;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+  gtk_tree_selection_selected_foreach(selection, get_selected_accounts_helper, &return_list);
+  return return_list;
+}
+
+/*
+ * Given an account tree view and a list of accounts, select those
+ * accounts in the tree view.
+ */
+void
+gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
+					     GList *account_list,
+					     gboolean show_last)
+{
+  GtkTreeModel *model;
+  GtkTreePath *path, *parent_path;
+  GtkTreeSelection *selection;
+  GList *element;
+  Account *account;
+
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+
+  /* Clear any existing selection. */
+  gtk_tree_selection_unselect_all (selection);
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW(view));
+
+  /* Now go select what the user requested. */
+  for (element = account_list; element; ) {
+    account = element->data;
+    element = g_list_next(element);
+
+    path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
+    if (path == NULL) {
+      /*
+       * Oops.  Someone must have deleted this account and not cleaned
+       * up all references to it.
+       */
+      continue;
+    }
+
+    /* gtk_tree_view requires that a row be visible before it can be selected */
+    parent_path = gtk_tree_path_copy (path);
+    if (gtk_tree_path_up (parent_path)) {
+      /* This function is misnamed.  It expands the actual item
+       * specified, not the path to the item specified. I.E. It
+       * expands one level too many, thus the get of the parent. */
+      gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), parent_path);
+    }
+    gtk_tree_path_free(parent_path);
+
+    gtk_tree_selection_select_path (selection, path);
+    if (show_last && (element == NULL))
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, FALSE, 0.0, 0.0);
+    gtk_tree_path_free(path);
+  }
+}

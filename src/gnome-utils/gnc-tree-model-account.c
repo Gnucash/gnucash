@@ -3,7 +3,8 @@
  *	display accounts in a GtkTreeView.
  *
  * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Authors: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ *          David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,6 +25,7 @@
  */
 
 #include "config.h"
+#include <string.h>
 
 #include "gnc-tree-model-account.h"
 
@@ -33,6 +35,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
+#include "messages.h"
 
 #define TREE_MODEL_ACCOUNT_CM_CLASS "tree-model-account"
 
@@ -77,11 +80,12 @@ static gboolean	gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 						    GtkTreeIter *iter,
     						    GtkTreeIter *child);
 
-static gpointer account_row_inserted (Account *account,
-				      gpointer data);
-void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-					   GNCEngineEventType event_type,
-					   gpointer user_data);
+static void gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
+						 Account *toplevel);
+
+static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
+						  GNCEngineEventType event_type,
+						  gpointer user_data);
 
 struct GncTreeModelAccountPrivate
 {
@@ -89,6 +93,11 @@ struct GncTreeModelAccountPrivate
 	Account *toplevel;
 	gint event_handler_id;
 };
+
+
+/************************************************************/
+/*               g_object required functions                */
+/************************************************************/
 
 static GtkObjectClass *parent_class = NULL;
 
@@ -200,6 +209,11 @@ gnc_tree_model_account_destroy (GtkObject *object)
 	LEAVE(" ");
 }
 
+
+/************************************************************/
+/*                   New Model Creation                     */
+/************************************************************/
+
 GtkTreeModel *
 gnc_tree_model_account_new (AccountGroup *group)
 {
@@ -222,6 +236,13 @@ gnc_tree_model_account_new (AccountGroup *group)
 	priv = model->priv;
 	priv->root = group;
 
+	{
+	  Account *account;
+
+	  account = xaccMallocAccount(gnc_get_current_book());
+	  gnc_tree_model_account_set_toplevel (model, account);
+	}
+
 	priv->event_handler_id =
 	  gnc_engine_register_event_handler (gnc_tree_model_account_event_handler, model);
 
@@ -230,152 +251,44 @@ gnc_tree_model_account_new (AccountGroup *group)
 	return GTK_TREE_MODEL (model);
 }
 
-void
-gnc_tree_model_account_set_root (GncTreeModelAccount *model,
-		                 AccountGroup *group)
+
+/************************************************************/
+/*        Gnc Tree Model Debugging Utility Function         */
+/************************************************************/
+
+#define ITER_STRING_LEN 128
+
+static const gchar *
+iter_to_string (GtkTreeIter *iter)
 {
-	GtkTreePath *path;
-	gint i;
+#ifdef G_THREADS_ENABLED
+  static GStaticPrivate gtmits_buffer_key = G_STATIC_PRIVATE_INIT;
+  gchar *string;
 
-	ENTER("model %p, group %p", model, group);
-	g_return_if_fail (model != NULL);
-	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
+  string = g_static_private_get (&gtmits_buffer_key);
+  if (string == NULL) {
+    string = malloc(ITER_STRING_LEN + 1);
+    g_static_private_set (&gtmits_buffer_key, string, g_free);
+  }
+#else
+  static char string[ITER_STRING_LEN + 1];
+#endif
 
-	DEBUG("old root %p", model->priv->root);
-	if (model->priv->root != NULL) {
-		path = gtk_tree_path_new_first ();
-		if (model->priv->toplevel != NULL) {
-			gtk_tree_path_append_index (path, 0);
-		}
-		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
-			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		}
-		gtk_tree_path_free (path);
-	}
-
-	model->priv->root = group;
-
-	if (model->priv->root != NULL) {
-		xaccGroupForEachAccount (model->priv->root, account_row_inserted, model, TRUE);
-	}
-	LEAVE("new root %p", model->priv->root);
+  if (iter)
+    snprintf(string, ITER_STRING_LEN,
+	     "[stamp:%x data:%p (%s), %p, %d]",
+	     iter->stamp, iter->user_data,
+	     xaccAccountGetName ((Account *) iter->user_data),
+	     iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+  else
+    strcpy(string, "(null)");
+  return string;
 }
 
-Account *
-gnc_tree_model_account_get_account (GncTreeModelAccount *model,
-				    GtkTreeIter *iter)
-{
-	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
-	g_return_val_if_fail (iter != NULL, NULL);
-	g_return_val_if_fail (iter->user_data != NULL, NULL);
-	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
 
-	return (Account *) iter->user_data;
-}
-
-void
-gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
-                                     Account *toplevel)
-{
-	GtkTreePath *path;
-	gint i;
-	GtkTreeIter iter;
-
-	ENTER("model %p, toplevel %p", model, toplevel);
-	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
-
-	DEBUG("old toplevel %p", model->priv->toplevel);
-	if (model->priv->toplevel != NULL) {
-		path = gtk_tree_path_new_first ();
-		gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		gtk_tree_path_free (path);
-	} else {
-		path = gtk_tree_path_new_first ();
-		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
-			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		}
-		gtk_tree_path_free (path);
-	}
-
-	model->priv->toplevel = toplevel;
-
-	if (model->priv->toplevel != NULL) {
-		path = gtk_tree_path_new_first ();
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
-		gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-		gtk_tree_path_free (path);
-	}
-
-	if (model->priv->root != NULL) {
-		xaccGroupForEachAccount (model->priv->root, account_row_inserted, model, TRUE);
-	}
-	LEAVE("new toplevel %p", model->priv->root);
-}
-
-Account *
-gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model)
-{
-	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
-
-	return model->priv->toplevel;
-}
-
-void
-gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
-					      Account *account,
-					      GtkTreeIter *iter)
-{
-	AccountGroup *group;
-	gint i;
-	
-	ENTER("model %p, account %p, iter %p", model, account, iter);
-	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
-	g_return_if_fail (account != NULL);
-	g_return_if_fail (iter != NULL);
-
-	iter->user_data = account;
-	iter->stamp = model->stamp;
-
-	if (account == model->priv->toplevel) {
-		iter->user_data2 = NULL;
-		iter->user_data3 = GINT_TO_POINTER (0);
-		return;
-	}
-
-	group = xaccAccountGetParent (account);
-
-	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
-		if (xaccGroupGetAccount (group, i) == account) {
-			break;
-		}
-	}
-
-	iter->user_data2 = group;
-	iter->user_data3 = GINT_TO_POINTER (i);
-	LEAVE("iter [stamp:%x data:%p, %p, %d]", iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
-}
-
-GtkTreePath *
-gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
-					      Account *account)
-{
-	GtkTreeIter tree_iter;
-	GtkTreePath *tree_path;
-
-	ENTER("model %p, account %p", model, account);
-	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
-	g_return_val_if_fail (account != NULL, NULL);
-
-	gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter);
-	tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
-	if (tree_path) {
-	  gchar *path_string = gtk_tree_path_to_string(tree_path);
-	  LEAVE("path (2) %s", path_string);
-	  g_free(path_string);
-	}
-	return tree_path;
-}
-
+/************************************************************/
+/*       Gtk Tree Model Required Interface Functions        */
+/************************************************************/
 
 static void
 gnc_tree_model_account_tree_model_init (GtkTreeModelIface *iface)
@@ -487,7 +400,7 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 			iter->user_data3 = GINT_TO_POINTER (0);
 			iter->stamp = model->stamp;
 
-			LEAVE("iter (1) [stamp:%x data:%p, %p, %d]", iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+			LEAVE("iter (1) %s", iter_to_string(iter));
 			return TRUE;
 		}
 	}
@@ -525,7 +438,7 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 	iter->user_data2 = group;
 	iter->user_data3 = GINT_TO_POINTER (indices[i - 1]);
 
-	LEAVE("iter (5) [stamp:%x data:%p, %p, %d]", iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	LEAVE("iter (5) %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -540,8 +453,7 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 	gint i;
 	gboolean found, finished = FALSE;
 
-	ENTER("model %p, iter [stamp:%x data:%p, %p, %d]", model,
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	ENTER("model %p, iter %s", model, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 	g_return_val_if_fail (iter != NULL, NULL);
 	g_return_val_if_fail (iter->user_data != NULL, NULL);
@@ -616,8 +528,8 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 	gboolean negative; /* used to set "defecit style" aka red numbers */
 	gchar *string;
 
-	//ENTER("model %p, iter [stamp:%x data:%p, %p, %d], col %d", tree_model,
-	//      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3), column);
+	// ENTER("model %p, iter %s, col %d", tree_model,
+	//       iter_to_string(iter), column);
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
 	g_return_if_fail (iter != NULL);
 	g_return_if_fail (iter->user_data != NULL);
@@ -628,7 +540,10 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 	switch (column) {
 		case GNC_TREE_MODEL_ACCOUNT_COL_NAME:
 			g_value_init (value, G_TYPE_STRING);
-			g_value_set_string (value, xaccAccountGetName (account));
+			if (account == model->priv->toplevel)
+			  g_value_set_string (value, _("New top level account"));
+			else
+			  g_value_set_string (value, xaccAccountGetName (account));
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_TYPE:
 			g_value_init (value, G_TYPE_STRING);
@@ -802,8 +717,7 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 	AccountGroup *group;
 	gint i;
 
-	ENTER("model %p, iter [stamp:%x data:%p, %p, %d]", tree_model,
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
 	g_return_val_if_fail (iter != NULL, FALSE);
 	g_return_val_if_fail (iter->user_data != NULL, FALSE);
@@ -836,8 +750,7 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 	iter->user_data2 = group;
 	iter->user_data3 = GINT_TO_POINTER (i + 1);
 
-	LEAVE("iter [stamp:%x data:%p, %p, %d]",
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	LEAVE("iter %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -851,12 +764,10 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 	AccountGroup *group;
 
 	if (parent) {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], parent [stamp:%x data:%p, %p, %d]", tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3),
-		parent->stamp, parent->user_data, parent->user_data2, GPOINTER_TO_INT(parent->user_data3));
+	  ENTER("model %p, iter %p (to be filed in), parent %s",
+		tree_model, iter, iter_to_string(parent));
 	} else {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], parent (null)", tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	  ENTER("model %p, iter %p (to be filed in), parent (null)", tree_model, iter);
 	}
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
@@ -868,8 +779,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 			iter->user_data2 = NULL;
 			iter->user_data3 = GINT_TO_POINTER (0);
 			iter->stamp = model->stamp;
-			LEAVE("iter (1) [stamp:%x data:%p, %p, %d]",
-			      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+			LEAVE("iter (1) %s", iter_to_string(iter));
 			return TRUE;
 		} else if (parent->user_data == model->priv->toplevel) {
 			parent = NULL;
@@ -895,8 +805,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 		iter->user_data2 = model->priv->root;
 		iter->user_data3 = GINT_TO_POINTER (0);
 		iter->stamp = model->stamp;
-		LEAVE("iter (2) [stamp:%x data:%p, %p, %d]",
-		      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+		LEAVE("iter (2) %s", iter_to_string(iter));
 		return TRUE;	
 	}
 
@@ -924,8 +833,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 	iter->user_data2 = group;
 	iter->user_data3 = GINT_TO_POINTER (0);
 	iter->stamp = model->stamp;
-	LEAVE("iter (3) [stamp:%x data:%p, %p, %d]",
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	LEAVE("iter (3) %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -936,8 +844,7 @@ gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
 	GncTreeModelAccount *model;
 	AccountGroup *group;
 
-	ENTER("model %p, iter [stamp:%x data:%p, %p, %d]", tree_model,
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
@@ -968,8 +875,7 @@ gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
 	GncTreeModelAccount *model;
 	AccountGroup *group;
 
-	ENTER("model %p, iter [stamp:%x data:%p, %p, %d]", tree_model,
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
@@ -1009,14 +915,16 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 	AccountGroup *group;
 
 	if (parent) {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], parent [stamp:%x data:%p, %p, %d], n %d",
-		tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3),
-		parent->stamp, parent->user_data, parent->user_data2, GPOINTER_TO_INT(parent->user_data3), n);
+	  gchar *parent_string;
+
+	  parent_string = strdup(iter_to_string(parent));
+	  ENTER("model %p, iter %s, parent %s, n %d",
+		tree_model, iter_to_string(iter),
+		parent_string, n);
+	  g_free(parent_string);
 	} else {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], parent (null), n %d",
-		tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3), n);
+	  ENTER("model %p, iter %s, parent (null), n %d",
+		tree_model, iter_to_string(iter), n);
 	}
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
@@ -1033,8 +941,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 				iter->user_data2 = NULL;
 				iter->user_data3 = GINT_TO_POINTER (0);
 				iter->stamp = model->stamp;
-				LEAVE("iter (1) [stamp:%x data:%p, %p, %d]",
-				      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+				LEAVE("iter (1) %s", iter_to_string(iter));
 				return TRUE;
 			}
 		}
@@ -1051,8 +958,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 		iter->user_data2 = model->priv->root;
 		iter->user_data3 = GINT_TO_POINTER (n);
 		iter->stamp = model->stamp;
-		LEAVE("iter (2) [stamp:%x data:%p, %p, %d]",
-		      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+		LEAVE("iter (2) %s", iter_to_string(iter));
 		return TRUE;
 	}
 
@@ -1083,8 +989,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 	iter->user_data2 = group;
 	iter->user_data3 = GINT_TO_POINTER (n);
 	iter->stamp = model->stamp;
-	LEAVE("iter (3) [stamp:%x data:%p, %p, %d]",
-	      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	LEAVE("iter (3) %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -1099,14 +1004,16 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 	gint i;
 
 	if (child) {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], child [stamp:%x data:%p, %p, %d]",
-		tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3),
-		child->stamp, child->user_data, child->user_data2, GPOINTER_TO_INT(child->user_data3));
+	  gchar *child_string;
+
+	  child_string = strdup(iter_to_string(child));
+	  ENTER("model %p, iter %s, child %s",
+		tree_model, iter_to_string(iter),
+		child_string);
+	  g_free(child_string);
 	} else {
-	  ENTER("model %p, iter [stamp:%x data:%p, %p, %d], child (null)",
-		tree_model,
-		iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+	  ENTER("model %p, iter %s, child (null)",
+		tree_model, iter_to_string(iter));
 	}
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
@@ -1133,8 +1040,7 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 			iter->user_data2 = NULL;
 			iter->user_data3 = GINT_TO_POINTER (0);
 			iter->stamp = model->stamp;
-			LEAVE("iter (1) [stamp:%x data:%p, %p, %d]",
-			      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+			LEAVE("iter (1) %s", iter_to_string(iter));
 			return TRUE;
 		} else {
 			iter->stamp = 0;
@@ -1149,8 +1055,7 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 			iter->user_data2 = group;
 			iter->user_data3 = GINT_TO_POINTER (i);
 			iter->stamp = model->stamp;
-			LEAVE("iter (2) [stamp:%x data:%p, %p, %d]",
-			      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+			LEAVE("iter (2) %s", iter_to_string(iter));
 			return TRUE;	
 		}
 	}
@@ -1160,14 +1065,18 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
 		iter->stamp = model->stamp;
-		LEAVE("iter (2) [stamp:%x data:%p, %p, %d]",
-		      iter->stamp, iter->user_data, iter->user_data2, GPOINTER_TO_INT(iter->user_data3));
+		LEAVE("iter (3) %s", iter_to_string(iter));
 		return TRUE;
 	}
 	iter->stamp = 0;
 	LEAVE("failed (3)");
 	return FALSE;
 }
+
+
+/************************************************************/
+/*             Account Tree View Root Functions             */
+/************************************************************/
 
 static gpointer
 account_row_inserted (Account *account,
@@ -1176,7 +1085,8 @@ account_row_inserted (Account *account,
 	GtkTreePath *path;
 	GtkTreeIter iter;
 
-	ENTER("account %p, model %p", account, data);
+	ENTER("account %p (%s), model %p",
+	      account, xaccAccountGetName(account), data);
 	gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT (data), account, &iter);
 
 	path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
@@ -1189,16 +1099,352 @@ account_row_inserted (Account *account,
 	return NULL;
 }
 
+/*
+ * Add a new top node to the model.  This node is for a pseudo-account
+ * that lives above the main level accounts in the engine.
+ */
+Account *
+gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model)
+{
+	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
+
+	return model->priv->toplevel;
+}
+
+/*
+ * Add a new top node to the model.  This node is for a pseudo-account
+ * that lives above the main level accounts in the engine.
+ */
+static void
+gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
+                                     Account *toplevel)
+{
+	GtkTreePath *path;
+	gint i;
+	GtkTreeIter iter;
+
+	ENTER("model %p, toplevel %p", model, toplevel);
+	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
+
+	DEBUG("old toplevel %p", model->priv->toplevel);
+	if (model->priv->toplevel != NULL) {
+		path = gtk_tree_path_new_first ();
+		gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+		gtk_tree_path_free (path);
+	} else {
+		path = gtk_tree_path_new_first ();
+		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
+			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+		}
+		gtk_tree_path_free (path);
+	}
+
+	DEBUG("set new toplevel %p", toplevel);
+	model->priv->toplevel = toplevel;
+
+	if (model->priv->toplevel != NULL) {
+		path = gtk_tree_path_new_first ();
+		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
+		gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+		gtk_tree_path_free (path);
+	}
+
+	if (model->priv->root != NULL) {
+		xaccGroupForEachAccount (model->priv->root, account_row_inserted, model, TRUE);
+	}
+	LEAVE("new toplevel %p", model->priv->root);
+}
+
+/************************************************************/
+/*            Account Tree View Filter Functions            */
+/************************************************************/
+
+/*
+ * DRH - THIS FUNCTION SHOULD BE REMOVED.
+ *
+ * This function is from before the account tree view existed.  This
+ * functionality should migrate there.
+ */
+void
+gnc_tree_model_account_set_root (GncTreeModelAccount *model,
+		                 AccountGroup *group)
+{
+	g_assert_not_reached ();
+#if 0
+	GtkTreePath *path;
+	gint i;
+
+	ENTER("model %p, group %p", model, group);
+	g_return_if_fail (model != NULL);
+	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
+
+	DEBUG("old root %p", model->priv->root);
+	if (model->priv->root != NULL) {
+		path = gtk_tree_path_new_first ();
+		if (model->priv->toplevel != NULL) {
+			gtk_tree_path_append_index (path, 0);
+		}
+		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
+			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+		}
+		gtk_tree_path_free (path);
+	}
+
+	model->priv->root = group;
+
+	if (model->priv->root != NULL) {
+		xaccGroupForEachAccount (model->priv->root, account_row_inserted, model, TRUE);
+	}
+	LEAVE("new root %p", model->priv->root);
+#endif
+}
+
+
+/*
+ * Convert a model/iter pair to a gnucash account.  This routine should
+ * only be called from an account tree view filter function.
+ */
+Account *
+gnc_tree_model_account_get_account (GncTreeModelAccount *model,
+				    GtkTreeIter *iter)
+{
+	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
+	g_return_val_if_fail (iter != NULL, NULL);
+	g_return_val_if_fail (iter->user_data != NULL, NULL);
+	g_return_val_if_fail (iter->stamp == model->stamp, NULL);
+
+	return (Account *) iter->user_data;
+}
+
+/*
+ * Convert a model/account pair into a gtk_tree_model_iter.  This
+ * routine should only be called from the file
+ * gnc-tree-view-account.c.
+ */
+void
+gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
+					      Account *account,
+					      GtkTreeIter *iter)
+{
+	AccountGroup *group;
+	gint i;
+	
+	ENTER("model %p, account %p, iter %p", model, account, iter);
+	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
+	g_return_if_fail (account != NULL);
+	g_return_if_fail (iter != NULL);
+
+	iter->user_data = account;
+	iter->stamp = model->stamp;
+
+	if (account == model->priv->toplevel) {
+		iter->user_data2 = NULL;
+		iter->user_data3 = GINT_TO_POINTER (0);
+		return;
+	}
+
+	group = xaccAccountGetParent (account);
+
+	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
+		if (xaccGroupGetAccount (group, i) == account) {
+			break;
+		}
+	}
+
+	iter->user_data2 = group;
+	iter->user_data3 = GINT_TO_POINTER (i);
+	LEAVE("iter %s", iter_to_string(iter));
+}
+
+/*
+ * Convert a model/account pair into a gtk_tree_model_path.  This
+ * routine should only be called from the file
+ * gnc-tree-view-account.c.
+ */
+GtkTreePath *
+gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
+					      Account *account)
+{
+	GtkTreeIter tree_iter;
+	GtkTreePath *tree_path;
+
+	ENTER("model %p, account %p", model, account);
+	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
+	g_return_val_if_fail (account != NULL, NULL);
+
+	gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter);
+	tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
+	if (tree_path) {
+	  gchar *path_string = gtk_tree_path_to_string(tree_path);
+	  LEAVE("path (2) %s", path_string);
+	  g_free(path_string);
+	}
+	return tree_path;
+}
+
+/************************************************************/
+/*   Account Tree Model - Engine Event Handling Functions   */
+/************************************************************/
+
+typedef struct _remove_data {
+  GUID                 guid;
+  GncTreeModelAccount *model;
+  GtkTreePath         *path;
+} remove_data;
+
+static GSList *pending_removals = NULL;
+
+/** This function performs common updating to the model after an
+ *  account has been added or removed.  The parent entry needs to be
+ *  tapped on the shoulder so that it can correctly update the
+ *  disclosure triangle (first added child/last removed child) or
+ *  possibly rebuild its child list of that level of accounts is
+ *  visible.
+ *
+ *  @internal
+ *
+ *  @param model The account tree model containing the account that
+ *  has been added or deleted.
+ *
+ *  @param path The path to the newly added item, or the just removed
+ *  item.
+ */
+static void
+gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
+				     GtkTreePath *path)
+{
+  GtkTreeIter iter;
+
+  if (gtk_tree_path_up (path)) {
+    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
+    gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+  }
+
+  do {
+    model->stamp++;
+  } while (model->stamp == 0);
+}
+
+
+/** This function is a helper routine for the following
+ *  gnc_tree_model_account_event_handler() function.  It is called
+ *  from an iterator over all the pending account removals, and is
+ *  responsible for selecting the right item(s), deleting it from the
+ *  pending list, and then sending the "row_deleted" signal to any/all
+ *  parent models.
+ *
+ *  @internal
+ *
+ *  @param data An item in the pending deletion list.
+ *
+ *  @param entity The guid value of the destroyed item.
+ */
+static void
+gnc_tree_model_account_delete_event_helper (remove_data *data,
+					    GUID *entity)
+{
+  if (!guid_equal(&data->guid, entity))
+    return;
+
+  pending_removals = g_slist_remove (pending_removals, data);
+
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
+  gnc_tree_model_account_path_changed (data->model, data->path);
+  gtk_tree_path_free(data->path);
+  g_free(data);
+}
+
+
+/** This function is the handler for all event messages from the
+ *  engine.  Its purpose is to update the account tree model any time
+ *  an account is added to the engine or deleted from the engine.
+ *  This change to the model is then propagated to any/all overlying
+ *  filters and views.  This function listens to the ADD, REMOVE, and
+ *  DESTROY events.
+ *
+ *  @internal
+ *
+ *  @warning There is a "Catch 22" situation here.
+ *  gtk_tree_model_row_deleted() can't be called until after the item
+ *  has been deleted from the real model (which is the engine's
+ *  account tree for us), but once the account has been deleted from
+ *  the engine we have no way to determine the path to pass to
+ *  row_deleted().  This is a PITA, but the only ither choice is to
+ *  have this model mirror the engine's accounts instead of
+ *  referencing them directly.
+ *
+ *  @param entity The guid of the affected item.
+ *
+ *  @param type The type of the affected item.  This function only
+ *  cares about items of type "account".
+ *
+ *  @param event type The type of the event. This function only cares
+ *  about items of type ADD, REMOVE, and DESTROY.
+ *
+ *  @param user_data A pointer to the account tree model.
+ */
 void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 					   GNCEngineEventType event_type,
 					   gpointer user_data)
 {
   	GncTreeModelAccount *model;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	Account *account;
+	remove_data *data;
+	const gchar *account_name;
 
+	/* hard failures */
 	g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
 
+	/* soft failures */
+	if (safe_strcmp(type, GNC_ID_ACCOUNT) != 0)
+	  return;
+
+	ENTER("entity %p of type %s, event %d, model %p",
+	      entity, type, event_type, user_data);
 	model = (GncTreeModelAccount *)user_data;
-	do {
-		model->stamp++;
-	} while (model->stamp == 0);
+
+	/* Get the account.*/
+	/* DRH - Put the book in the model private data so this code
+	 * supports multiple simultaneous books. */
+	account = xaccAccountLookup (entity, gnc_get_current_book ());
+	account_name = xaccAccountGetName(account);
+
+	switch (event_type) {
+	 case GNC_EVENT_ADD:
+	  /* Tell the filters/views where the new account was added. */
+	  DEBUG("create account %p (%s)", account, account_name);
+	  gnc_tree_model_account_get_iter_from_account (model, account, &iter);
+	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
+	  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
+	  gnc_tree_model_account_path_changed (model, path);
+	  gtk_tree_path_free(path);
+	  break;
+
+	 case GNC_EVENT_REMOVE:
+	  /* Record the path of this account for later use in destruction */
+	  DEBUG("remove account %p (%s)", account, account_name);
+	  data = malloc(sizeof(*data));
+	  data->guid = *entity;
+	  data->model = model;
+	  data->path = gnc_tree_model_account_get_path_from_account (model,
+								     account);
+	  pending_removals = g_slist_append (pending_removals, data);
+	  LEAVE(" ");
+	  return;
+
+	 case GNC_EVENT_DESTROY:
+	  /* Tell the filters/view the account has been deleted. */
+	  DEBUG("destroy account %p (%s)", account, account_name);
+	  g_slist_foreach (pending_removals,
+			   (GFunc)gnc_tree_model_account_delete_event_helper,
+			   entity);
+	  break;
+
+	 default:
+	  LEAVE("ignored event for %p (%s)", account, account_name);
+	  return;
+	}
+	LEAVE(" new stamp %u", model->stamp);
 }
