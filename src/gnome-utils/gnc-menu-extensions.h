@@ -26,7 +26,8 @@
 #include <guile/gh.h>
 #include <gnome.h>
 
-void gnc_add_extension(SCM extension);
+void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
+void gnc_add_scm_extension(SCM extension);
 void gnc_extensions_menu_setup(GnomeApp * app);
 void gnc_extensions_shutdown(void);
 

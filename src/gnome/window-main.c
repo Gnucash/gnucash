@@ -42,7 +42,6 @@
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "druid-qif-import.h"
 #include "gfec.h"
 #include "global-options.h"
 #include "gnc-engine.h"
@@ -519,12 +518,6 @@ gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data)
 }
 
 static void
-gnc_main_window_file_import_cb(GtkWidget * widget, gpointer data)
-{
-  gnc_file_qif_import ();
-}
-
-static void
 gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
 {
   const char *filename;
@@ -799,14 +792,6 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
 
   static GnomeUIInfo gnc_file_import_submenu_template[] =
   {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Import _QIF..."),
-      N_("Import a Quicken QIF file"),
-      gnc_main_window_file_import_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
-      'i', GDK_CONTROL_MASK, NULL
-    },
     GNOMEUIINFO_END
   };
 

@@ -12,7 +12,17 @@
 	* src/import-export/ofx/gnc-ofx-import.c :
 	* src/import-export/ofx/gncmod-ofx-import.c :
 	* src/scm/main.scm : OFX module loading tweaks.
-	
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]:
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Add a new
+	gnc_add_c_extension function. Rename the existing
+	gnc_add_extension to gnc_add_scm_extension.
+
+	* src/gnome/window-main.c:
+	* src/import-export/qif-import/druid-qif-import.[ch]:
+	* src/import-export/qif-import/gncmod-qif-import.c: Create the
+	"Import QIF" menu item from within the QIF module.
+
 2002-06-21  Derek Atkins   <derek@ihtfp.com>
 
 	* integrate the Billing Terms into the Core, GUI, and XML Backend

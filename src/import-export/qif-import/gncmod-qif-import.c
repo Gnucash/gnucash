@@ -10,6 +10,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "druid-qif-import.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_qif_import_LTX_gnc_module_system_interface = 0;
@@ -50,6 +51,7 @@ libgncmod_qif_import_LTX_gnc_module_init(int refcount)
   }
 
   gh_eval_str("(use-modules (gnucash import-export qif-import))");
+  gnc_ui_qif_import_create_menus();
 
   return TRUE;
 }

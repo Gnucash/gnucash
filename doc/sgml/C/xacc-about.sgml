@@ -194,7 +194,11 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <glossentry>
 <glossterm><email>hampton@employees.org</email> David Hampton</glossterm>
 <glossdef>
-<para>is an all-around making-things-better guy.</para>
+<para>is an all-around
+    making-things-better guy. He is working on cleaning up the GUI and
+   on fleshing out support for stocks. David has picked up Dave's
+   previous tendency to hacks obsessively on GnuCash. (Something in
+   the name?)</para>
 </glossdef>
 </glossentry>
 

@@ -33,6 +33,7 @@ typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
 {
   SCM extension;
+  gchar *path;
 
   GnomeUIInfo info[2];
 
@@ -128,7 +129,7 @@ gnc_extension_documentation(ExtensionInfo *ext_info)
 
 /* returns g_malloc'd path */
 static char *
-gnc_extension_path(ExtensionInfo *ext_info)
+gnc_extension_path(SCM extension)
 {
   SCM path;
   gchar **strings;
@@ -137,7 +138,7 @@ gnc_extension_path(ExtensionInfo *ext_info)
 
   initialize_getters();
 
-  path = gnc_guile_call1_to_list(getters.path, ext_info->extension);
+  path = gnc_guile_call1_to_list(getters.path, extension);
   if (path == SCM_UNDEFINED)
     return g_strdup("");
 
@@ -220,6 +221,7 @@ gnc_create_extension_info(SCM extension)
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
+  ext_info->path = gnc_extension_path(extension);
 
   ext_info->info[0].type = gnc_extension_type(ext_info);
 
@@ -281,17 +283,19 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
 {
   ExtensionInfo *ext_info = extension_info;
 
-  scm_unprotect_object(ext_info->extension);
+  if (ext_info->extension)
+    scm_unprotect_object(ext_info->extension);
 
   g_free(ext_info->info[0].label);
   g_free(ext_info->info[0].hint);
   g_free(ext_info->extra_info);
+  g_free(ext_info->path);
   g_free(ext_info);
 }
 
 
 void
-gnc_add_extension(SCM extension)
+gnc_add_scm_extension(SCM extension)
 {
   ExtensionInfo *ext_info;
   ext_info = gnc_create_extension_info(extension);
@@ -303,17 +307,32 @@ gnc_add_extension(SCM extension)
 }
 
 void
-gnc_extensions_menu_setup(GnomeApp * app) {
+gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
+{
+  ExtensionInfo *ext_info;
+
+  ext_info = g_new0(ExtensionInfo, 1);
+  ext_info->path = g_strdup(path);
+
+  ext_info->info[0] = *info;
+  ext_info->info[0].label = g_strdup(info->label);
+  ext_info->info[0].hint  = g_strdup(info->hint);
+  ext_info->info[1].type  = GNOME_APP_UI_ENDOFINFO;
+
+  /* need to append so we can run them in order */
+  extension_list = g_slist_append(extension_list, ext_info);
+}
+
+void
+gnc_extensions_menu_setup(GnomeApp * app)
+{
   GSList        * l = NULL;
   ExtensionInfo * info;
-  char          * path;
   
   for(l=extension_list; l; l=l->next) {
     info = l->data;
-    path = gnc_extension_path(info);
-    gnome_app_insert_menus(app, path, info->info);
+    gnome_app_insert_menus(app, info->path, info->info);
     gnome_app_install_menu_hints(app, info->info); 
-    g_free(path);
   }
 }
 

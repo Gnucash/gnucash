@@ -66,10 +66,14 @@ Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    modularized the Book object storage, and modularized the backend
    to allow pluggable objects.
 
-David Hampton <hampton@employees.org> is an all-around making-things-better guy.
+David Hampton <hampton@employees.org> is an all-around
+   making-things-better guy. He is working on cleaning up the GUI and
+   on fleshing out support for stocks. David has picked up Dave's
+   previous tendency to hacks obsessively on GnuCash. (Something in
+   the name?)
 
-Chris Lyttle <chris@wilddev.net> writes documentation and administers the GnuCash
-   bug list.
+Chris Lyttle <chris@wilddev.net> writes documentation and administers
+   the GnuCash bug list.
 
 
 Other Contributors:

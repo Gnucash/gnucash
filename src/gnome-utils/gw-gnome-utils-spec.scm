@@ -186,7 +186,7 @@
    ws
    'gnc:add-extension
    '<gw:void>
-   "gnc_add_extension"
+   "gnc_add_scm_extension"
    '((<gw:scm> extension))
    "Add a menu extension.")
 

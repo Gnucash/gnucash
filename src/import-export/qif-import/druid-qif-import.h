@@ -38,5 +38,6 @@ SCM               gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w);
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
 void              gnc_file_qif_import (void);
+void              gnc_ui_qif_import_create_menus(void);
 
 #endif
