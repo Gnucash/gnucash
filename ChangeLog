@@ -1,3 +1,11 @@
+2001-03-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/guile/gnc.gwp: wrap more of pricedb api
+
+	* src/engine/gnc-pricedb.c (gnc_pricedb_get_prices): new func
+
 2001-03-28  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/dialog-column-view.c: set the view dirty on edit

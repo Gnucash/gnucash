@@ -449,6 +449,31 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
 }
 
 GList *
+gnc_pricedb_get_prices(GNCPriceDB *db,
+                       gnc_commodity *commodity,
+                       gnc_commodity *currency)
+{
+  GList *price_list;
+  GList *result;
+  GList *node;
+  GHashTable *currency_hash;
+
+  if(!db || !commodity || !currency) return NULL;
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+  if(!currency_hash) return NULL;
+
+  price_list = g_hash_table_lookup(currency_hash, currency);
+  if(!price_list) return NULL;
+
+  result = g_list_copy (price_list);
+  for (node = result; node; node = node->next)
+    gnc_price_ref (node->data);
+
+  return result;
+}
+
+GList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                            gnc_commodity *c,
                            gnc_commodity *currency,
@@ -690,7 +715,7 @@ gnc_pricedb_substitute_commodity(GNCPriceDB *db,
 
 /* Semi-lame debugging code */
 
-static void
+void
 gnc_price_print(GNCPrice *p, FILE *f, int indent)
 {
   gnc_commodity *commodity;
@@ -728,7 +753,7 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
   g_free(istr);
 }
 
-void
+static void
 gnc_price_print_stdout(GNCPrice *p, int indent)
 {
   gnc_price_print(p, stdout, indent);
@@ -752,5 +777,3 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
   gnc_pricedb_foreach_price(db, print_pricedb_adapter, f, FALSE);
   fprintf(f, "</gnc:pricedb>\n");
 }
-
-

@@ -5964,7 +5964,7 @@ create_Tax_Information_Dialog (void)
   gtk_widget_show (apply_button);
   GTK_WIDGET_SET_FLAGS (apply_button, GTK_CAN_DEFAULT);
 
-  gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_CLOSE);
   button75 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
   gtk_widget_ref (button75);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button75", button75,
@@ -6821,6 +6821,7 @@ create_Edit_Column_View_Page (void)
   gtk_widget_show (available_list);
   gtk_container_add (GTK_CONTAINER (scrolledwindow26), available_list);
   gtk_clist_set_column_width (GTK_CLIST (available_list), 0, 80);
+  gtk_clist_set_selection_mode (GTK_CLIST (available_list), GTK_SELECTION_BROWSE);
   gtk_clist_column_titles_show (GTK_CLIST (available_list));
 
   label847720 = gtk_label_new (_("Available reports"));
@@ -6917,6 +6918,7 @@ create_Edit_Column_View_Page (void)
   gtk_clist_set_column_width (GTK_CLIST (contents_list), 0, 150);
   gtk_clist_set_column_width (GTK_CLIST (contents_list), 1, 34);
   gtk_clist_set_column_width (GTK_CLIST (contents_list), 2, 25);
+  gtk_clist_set_selection_mode (GTK_CLIST (contents_list), GTK_SELECTION_BROWSE);
   gtk_clist_column_titles_show (GTK_CLIST (contents_list));
 
   label847725 = gtk_label_new (_("Report"));

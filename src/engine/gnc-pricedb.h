@@ -141,6 +141,10 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
                                        gnc_commodity *commodity,
                                        gnc_commodity *currency);
 
+GList      * gnc_pricedb_get_prices(GNCPriceDB *db,
+                                    gnc_commodity *commodity,
+                                    gnc_commodity *currency);
+
 /* Return all prices that match the given commodity, currency, and
    timespec.  Prices will be returned as a price_list (see above) */
 GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
