@@ -2,7 +2,7 @@
  * business-urls.c -- Initialize HTML for business code
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2002 Derek Atkins
  */
 
 #include "config.h"
