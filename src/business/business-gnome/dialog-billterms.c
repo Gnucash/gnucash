@@ -4,12 +4,6 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-/* 2003-03-12 TomF changes for Gnome-2 branch, 7th batch
- * * src/business/business-gnome/dialog-billterms.c:
- *   Change gtk_object_ref to g_object_ref, same for unref, 
- *   to replace deprecated function.
- */
-
 #include "config.h"
 
 #include <gnome.h>

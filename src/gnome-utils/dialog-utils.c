@@ -22,13 +22,6 @@
  *                                                                  *
 \********************************************************************/
 
-/********************************************************************\
- * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
- * * src/gnome-utils/dialog-utils.c				    *
- *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
- *   to replace deprecated function.				    *
-\********************************************************************/
-
 #include "config.h"
 
 #include <glade/glade.h>

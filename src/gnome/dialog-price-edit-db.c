@@ -21,13 +21,6 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/********************************************************************\
- * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
- * * src/gnome/dialog-price-edit-db.c				    *
- *   Change gtk_object_ref to g_object_ref, same for unref, 	    *
- *   to replace deprecated function.				    *
-\********************************************************************/
-
 
 #include "config.h"
 

@@ -25,13 +25,6 @@
  *                                                                  *
 \********************************************************************/
 
-/********************************************************************\
- * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
- * * src/gnome/window-register.c				    *
- *   Change gtk_object_ref to g_object_ref, same for unref, 	    *
- *   to replace deprecated function.				    *
-\********************************************************************/
-
 #define _GNU_SOURCE
 
 #include "config.h"
