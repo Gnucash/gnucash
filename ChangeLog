@@ -1,3 +1,8 @@
+2002-07-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/zh_CN.po: Updated Simplified Chinese translation by Yang Yi
+	<yang_yi_cn@yahoo.com>.
+
 2002-07-03  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/new-user-callbacks.c (gnc_get_ea_locale_dir):

@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.6.6\n"
+"Project-Id-Version: GnuCash\n"
 "POT-Creation-Date: 2001-12-08 22:22+0100\n"
-"PO-Revision-Date: 2002-06-11 22:16+0800\n"
+"PO-Revision-Date: 2002-07-10 02:03+0800\n"
 "Last-Translator: Yang Yi <yang_yi_cn@yahoo.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,9 @@ msgid ""
 "    %s\n"
 "is not supported by this version of GnuCash."
 msgstr ""
+"网址 \n"
+"    %s\n"
+"在这个版本的 GnuCash 尚不支持"
 
 #: src/FileDialog.c:78
 #, c-format
@@ -31,6 +34,8 @@ msgid ""
 "Can't parse the URL\n"
 "   %s\n"
 msgstr ""
+"无法解析网址\n"
+"   %s\n"
 
 #: src/FileDialog.c:84
 #, c-format
@@ -39,6 +44,9 @@ msgid ""
 "   %s\n"
 "The host, username or password were incorrect."
 msgstr ""
+"无法连接到\n"
+"   %s\n"
+"主机名，用户名或者密码不正确。"
 
 #: src/FileDialog.c:91
 #, c-format
@@ -47,6 +55,9 @@ msgid ""
 "   %s\n"
 "Connection was lost, unable to send data."
 msgstr ""
+"无法连接到\n"
+"   %s\n"
+"断线了，无法发送数据。"
 
 #: src/FileDialog.c:98
 msgid ""
@@ -54,6 +65,9 @@ msgid ""
 "of GnuCash. You must upgrade your version of GnuCash\n"
 "to work with this data."
 msgstr ""
+"这个文件／网址看来是从一个更新版本的\n"
+" GnuCash 那里获得的。要处理该数据，\n"
+"您必须升级您的 GnuCash 。"
 
 #: src/FileDialog.c:105
 #, c-format
@@ -62,6 +76,9 @@ msgid ""
 "   %s\n"
 "doesn't seem to exist. Do you want to create it?\n"
 msgstr ""
+"数据库\n"
+"   %s\n"
+"看起来并不存在。您要创建它吗？\n"
 
 #: src/FileDialog.c:113
 #, c-format
@@ -73,6 +90,13 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the database?"
 msgstr ""
+" GnuCash 无法获得\n"
+"   %s\n"
+"的锁。\n"
+"该数据库可能正被另一个用户使用，\n"
+"在这种情况下您最好不要打开该数据库。\n"
+"\n"
+"您还要打开数据库继续操作吗？"
 
 #: src/FileDialog.c:123
 #, c-format
@@ -81,6 +105,9 @@ msgid ""
 "    %s\n"
 "does not contain GnuCash data or the data is corrupt."
 msgstr ""
+"文件／网址 \n"
+"    %s\n"
+"并不包含 GnuCash 数据或者数据已损坏。"
 
 #: src/FileDialog.c:130
 #, c-format
@@ -89,6 +116,9 @@ msgid ""
 "    %s\n"
 "experienced an error or encountered bad or corrupt data."
 msgstr ""
+"在 \n"
+"    %s\n"
+"的服务器发生错误或者遇到了损坏的数据。"
 
 #: src/FileDialog.c:137
 #, c-format
@@ -96,6 +126,8 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
+"您无权存取\n"
+"    %s\n"
 
 #: src/FileDialog.c:143
 #, c-format
@@ -103,12 +135,16 @@ msgid ""
 "An error occurred while processing\n"
 "    %s\n"
 msgstr ""
+"在处理 %s 时\n"
+"发生错误\n"
 
 #: src/FileDialog.c:149
 msgid ""
 "There was an error reading the file.\n"
 "Do you want to continue?"
 msgstr ""
+"在读取文件时发生了一个错误。\n"
+"您还要继续吗？"
 
 #: src/FileDialog.c:155
 #, c-format
@@ -117,6 +153,9 @@ msgid ""
 "    %s\n"
 " is empty."
 msgstr ""
+"文件 \n"
+"    %s\n"
+" 是空的。"
 
 #: src/FileDialog.c:161
 #, c-format
@@ -125,22 +164,29 @@ msgid ""
 "    %s\n"
 " could not be found."
 msgstr ""
+"文件 \n"
+"    %s\n"
+" 找不到。"
 
 #: src/FileDialog.c:167
 msgid ""
 "This file is from an older version of GnuCash.\n"
 "Do you want to continue?"
 msgstr ""
+"这个文件来自老版本的 GnuCash 。\n"
+"您还要继续吗？"
 
 #: src/FileDialog.c:173
 msgid "Unknown file type"
-msgstr ""
+msgstr "未知的文件类型"
 
 #: src/FileDialog.c:179
 msgid ""
 "This database is from an older version of GnuCash.\n"
 "Do you want to upgrade the database to the current version?"
 msgstr ""
+"这个数据库来自老版本的 GnuCash 。\n"
+"您是否想要把该数据库升级到当前的版本？"
 
 #: src/FileDialog.c:186
 msgid ""
@@ -150,14 +196,17 @@ msgid ""
 "documentation to learn how to clear out dangling login\n"
 "sessions."
 msgstr ""
+" SQL 数据库正在被其它用户使用，在他们退出之前无法升级。如果现在没有其它的用"
+"户，请参考文档以学习如何清除这种\n"
+"悬空的会话。"
 
 #: src/FileDialog.c:196
 msgid "An unknown I/O error occurred."
-msgstr ""
+msgstr "发生了一个未知的输入／输出错误。"
 
 #: src/FileDialog.c:288
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr ""
+msgstr "从上次保存到现在数据已经发生了变化。要把数据保存到文件吗？"
 
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
 #: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
@@ -177,40 +226,44 @@ msgid ""
 " already exists.\n"
 "Are you sure you want to overwrite it?"
 msgstr ""
+"文件 \n"
+"    %s\n"
+" 已经存在。\n"
+"你确定要覆盖它吗？"
 
 #: src/SplitLedger.c:125 src/engine/Transaction.c:2043
 #: src/engine/Transaction.c:2064 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:472
 msgid "-- Split Transaction --"
-msgstr ""
+msgstr "――分割交易――"
 
 #: src/SplitLedger.c:126 src/register/splitreg.c:747
 msgid "-- Stock Split --"
-msgstr ""
+msgstr "――股票分割――"
 
 #: src/SplitLedger.c:822
 msgid "Rebalance Transaction"
-msgstr ""
+msgstr "重新结算交易"
 
 #: src/SplitLedger.c:823
 msgid "The current transaction is not balanced."
-msgstr ""
+msgstr "当前交易没有平衡。"
 
 #: src/SplitLedger.c:859
 msgid "Balance it manually"
-msgstr ""
+msgstr "手工平衡它"
 
 #: src/SplitLedger.c:861
 msgid "Let GnuCash add an adjusting split"
-msgstr ""
+msgstr "让 GnuCash 添加并调整分割"
 
 #: src/SplitLedger.c:866
 msgid "Adjust current account split total"
-msgstr ""
+msgstr "调整当前帐户分割总值"
 
 #: src/SplitLedger.c:870
 msgid "Adjust other account split total"
-msgstr ""
+msgstr "调整其它帐户分割总值"
 
 #: src/SplitLedger.c:1468
 #, c-format
@@ -218,6 +271,8 @@ msgid ""
 "The account %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
+"帐户 %s 不存在。\n"
+"你想要创建它吗？"
 
 #: src/SplitLedger.c:1589 src/SplitLedger.c:2034
 #: src/gnome/window-register.c:3123
@@ -225,28 +280,36 @@ msgid ""
 "The current transaction has been changed.\n"
 "Would you like to record it?"
 msgstr ""
+"当前交易已经被修改过了。\n"
+"你要记录它吗？"
 
 #: src/SplitLedger.c:2328
 msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
+"你将要覆盖一个存在的片段。\n"
+"你确定你要那样做吗？"
 
 #: src/SplitLedger.c:2357
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
+"你将要覆盖一个存在的交易。\n"
+"你确定你要那样做吗？"
 
 #: src/SplitLedger.c:3087
 msgid "Recalculate Transaction"
-msgstr ""
+msgstr "重新计算交易"
 
 #: src/SplitLedger.c:3088
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?"
 msgstr ""
+"为这个交易输入的数值不一致。\n"
+"你打算重新计算哪个数值？"
 
 #: src/SplitLedger.c:3095 src/SplitLedger.c:3097 src/SplitLedger.c:4069
 #: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6571
@@ -254,11 +317,11 @@ msgstr ""
 #: src/scm/report/guile-strings.c:597 src/scm/report/guile-strings.c:614
 #: src/scm/report/guile-strings.c:698
 msgid "Shares"
-msgstr ""
+msgstr "股份"
 
 #: src/SplitLedger.c:3095 src/SplitLedger.c:3102 src/SplitLedger.c:3109
 msgid "Changed"
-msgstr ""
+msgstr "修改了"
 
 #: src/SplitLedger.c:3102 src/SplitLedger.c:3104 src/SplitLedger.c:4063
 #: src/gnome/dialog-price-editor.c:743 src/gnome/glade-gnc-dialogs.c:1374
@@ -284,6 +347,11 @@ msgid ""
 "you need an intermediate currency account.\n"
 "Please see the GnuCash online manual."
 msgstr ""
+"你不能从这个 %s 帐户里传输资金。\n"
+"没有合适的货币。\n"
+"要把资金在两个不同币种的帐户间传输，\n"
+"你需要一个中间货币帐户。\n"
+"请查看 GnuCash 在线手册。"
 
 #: src/SplitLedger.c:3330 src/SplitLedger.c:3411
 msgid "(no name)"
@@ -293,14 +361,14 @@ msgstr "(未命名)"
 #: src/guile/guile-util.c:1063 src/scm/report/guile-strings.c:473
 #: src/scm/report/guile-strings.c:617
 msgid "Debit"
-msgstr ""
+msgstr "借方"
 
 #: src/SplitLedger.c:4011 src/gnome/glade-gnc-dialogs.c:1122
 #: src/guile/guile-util.c:1108 src/register/splitreg.c:177
 #: src/register/splitreg.c:193 src/scm/guile-strings.c:144
 #: src/scm/report/guile-strings.c:474 src/scm/report/guile-strings.c:618
 msgid "Credit"
-msgstr ""
+msgstr "贷方"
 
 #: src/SplitLedger.c:4027 src/gnome/dialog-price-editor.c:740
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4803
@@ -318,7 +386,7 @@ msgstr "日期"
 #: src/scm/report/guile-strings.c:589 src/scm/report/guile-strings.c:609
 #: src/scm/report/guile-strings.c:686
 msgid "Num"
-msgstr ""
+msgstr "序号"
 
 #: src/SplitLedger.c:4033 src/gnc-ui-util.c:124
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4810
@@ -335,18 +403,18 @@ msgstr "描述"
 #: src/SplitLedger.c:4036 src/gnome/reconcile-list.c:167
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
-msgstr ""
+msgstr "已对帐:R"
 
 #: src/SplitLedger.c:4039 src/SplitLedger.c:4112
 msgid "Share Balance"
-msgstr ""
+msgstr "股票结算"
 
 #: src/SplitLedger.c:4042 src/SplitLedger.c:4115 src/gnc-ui-util.c:136
 #: src/gnc-ui-util.c:139 src/gnome/glade-gnc-dialogs.c:1527
 #: src/scm/guile-strings.c:126 src/scm/guile-strings.c:161
 #: src/scm/report/guile-strings.c:471 src/scm/report/guile-strings.c:619
 msgid "Balance"
-msgstr ""
+msgstr "结余"
 
 #: src/SplitLedger.c:4045 src/gnome/glade-gnc-dialogs.c:1432
 msgid "Action"
@@ -366,7 +434,7 @@ msgstr "帐号"
 #: src/scm/report/guile-strings.c:607 src/scm/report/guile-strings.c:611
 #: src/scm/report/guile-strings.c:662 src/scm/report/guile-strings.c:690
 msgid "Memo"
-msgstr ""
+msgstr "备忘"
 
 #. balance cell
 #: src/SplitLedger.c:4072 src/gnome/window-register.c:907
@@ -378,19 +446,19 @@ msgstr "传输"
 #: src/SplitLedger.c:4081 src/SplitLedger.c:4098
 #, c-format
 msgid "Tot %s"
-msgstr ""
+msgstr "总计 %s"
 
 #: src/SplitLedger.c:4087
 msgid "Tot Credit"
-msgstr ""
+msgstr "贷方总计"
 
 #: src/SplitLedger.c:4104
 msgid "Tot Debit"
-msgstr ""
+msgstr "借方总计"
 
 #: src/SplitLedger.c:4109
 msgid "Tot Shares"
-msgstr ""
+msgstr "股票总计"
 
 #: src/SplitLedger.c:4118 src/gnc-ui-util.c:127
 #: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:158
@@ -402,12 +470,16 @@ msgid ""
 "You are about to change a reconciled split.\n"
 "Are you sure you want to do that?"
 msgstr ""
+"你正要修改一个已经对帐的片段。\n"
+"你确定要那样做吗？"
 
 #: src/SplitLedger.c:4507
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
+"你真的要把这个交易标记为未经对帐的吗？\n"
+"这样做可能会使将来的对帐变得困难！"
 
 #: src/engine/Account.c:1868 src/scm/guile-strings.c:142
 #: src/scm/guile-strings.c:458
@@ -433,7 +505,7 @@ msgstr "负债"
 
 #: src/engine/Account.c:1873 src/scm/guile-strings.c:147
 msgid "Stock"
-msgstr "可用函数库"
+msgstr "股票"
 
 #: src/engine/Account.c:1874 src/scm/guile-strings.c:148
 msgid "Mutual Fund"
@@ -466,40 +538,40 @@ msgstr "权益"
 
 #: src/engine/Scrub.c:127
 msgid "Orphan"
-msgstr ""
+msgstr "孤立的"
 
 #: src/engine/Scrub.c:309
 msgid "Imbalance"
-msgstr ""
+msgstr "不平衡的"
 
 #: src/engine/Transaction.c:2085 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:880 src/register/splitreg.c:241
 msgid "Split"
-msgstr "分隔"
+msgstr "分列"
 
 #: src/engine/io-gncbin-r.c:482
 msgid "Lost Accounts"
-msgstr ""
+msgstr "丢失的帐户"
 
 #: src/gnc-exp-parser.c:482
 msgid "Unbalanced parenthesis"
-msgstr ""
+msgstr "括号不配对"
 
 #: src/gnc-exp-parser.c:484
 msgid "Stack overflow"
-msgstr ""
+msgstr "堆栈上溢"
 
 #: src/gnc-exp-parser.c:486
 msgid "Stack underflow"
-msgstr ""
+msgstr "堆栈下溢"
 
 #: src/gnc-exp-parser.c:488
 msgid "Undefined character"
-msgstr ""
+msgstr "未定义的字符"
 
 #: src/gnc-exp-parser.c:490
 msgid "Not a variable"
-msgstr ""
+msgstr "不是一个变量"
 
 #: src/gnc-exp-parser.c:492
 msgid "Out of memory"
@@ -507,7 +579,7 @@ msgstr "内存不足"
 
 #: src/gnc-exp-parser.c:494
 msgid "Numeric error"
-msgstr ""
+msgstr "数字错误"
 
 #: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
 #: src/gnome/dialog-price-editor.c:742 src/gnome/glade-gnc-dialogs.c:7423
@@ -523,7 +595,7 @@ msgstr "帐号名"
 
 #: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:644
 msgid "Account Code"
-msgstr ""
+msgstr "帐号代码"
 
 #: src/gnc-ui-util.c:133 src/scm/guile-strings.c:160
 msgid "Security"
@@ -538,23 +610,23 @@ msgstr "总和"
 
 #: src/gnc-ui-util.c:148 src/scm/guile-strings.c:163
 msgid "Tax Info"
-msgstr ""
+msgstr "税务信息"
 
 #: src/gnc-ui-util.c:518
 msgid "not cleared:n"
-msgstr ""
+msgstr "未清的：n"
 
 #: src/gnc-ui-util.c:519
 msgid "cleared:c"
-msgstr ""
+msgstr "已清的：c"
 
 #: src/gnc-ui-util.c:520
 msgid "reconciled:y"
-msgstr ""
+msgstr "已对帐：y"
 
 #: src/gnc-ui-util.c:521
 msgid "frozen:f"
-msgstr ""
+msgstr "冻结：f"
 
 #: src/gnc-ui-util.c:536
 msgid "(none)"
@@ -567,7 +639,7 @@ msgstr "期初节余"
 #: src/gnc-ui-util.c:622 src/scm/qif-import/guile-strings.c:7
 #: src/scm/qif-import/guile-strings.c:8
 msgid "Retained Earnings"
-msgstr ""
+msgstr "留存利润"
 
 #: src/gnc-ui-util.c:753 src/gnome/dialog-account.c:241
 #: src/gnome/glade-gnc-dialogs.c:3867 src/gnome/new-user-interface.c:406
@@ -577,11 +649,11 @@ msgstr "期初节余"
 
 #: src/gnome/dialog-account-picker.c:165
 msgid "Enter a name for the account"
-msgstr ""
+msgstr "为帐户输入一个名字"
 
 #: src/gnome/dialog-account.c:407
 msgid "Could not create opening balance."
-msgstr ""
+msgstr "无法创建期初余额"
 
 #: src/gnome/dialog-account.c:829
 msgid "Field"
@@ -589,70 +661,72 @@ msgstr "域"
 
 #: src/gnome/dialog-account.c:830
 msgid "Old Value"
-msgstr ""
+msgstr "旧值"
 
 #: src/gnome/dialog-account.c:831
 msgid "New Value"
-msgstr ""
+msgstr "新值"
 
 #: src/gnome/dialog-account.c:859
 msgid "Verify Changes"
-msgstr ""
+msgstr "检验变化"
 
 #: src/gnome/dialog-account.c:873
 msgid "The following changes must be made. Continue?"
-msgstr ""
+msgstr "必须作出下列改动。继续吗？"
 
 #: src/gnome/dialog-account.c:953 src/gnome/dialog-account.c:1096
 msgid "The account must be given a name."
-msgstr ""
+msgstr "帐户必须要给个名字。"
 
 #: src/gnome/dialog-account.c:961 src/gnome/dialog-account.c:1147
 msgid "You must select an account type."
-msgstr ""
+msgstr "你必须选择一个帐户类型。"
 
 #: src/gnome/dialog-account.c:972
 msgid "You must choose a valid parent account."
-msgstr ""
+msgstr "你必须选择一个有效的父帐户。"
 
 #: src/gnome/dialog-account.c:984 src/gnome/dialog-account.c:1160
 msgid "You must choose a currency."
-msgstr ""
+msgstr "你必须选择一种货币。"
 
 #: src/gnome/dialog-account.c:993 src/gnome/dialog-account.c:1169
 msgid "You must choose a security."
-msgstr ""
+msgstr "你必须选择一种证券。"
 
 #: src/gnome/dialog-account.c:1138
 msgid "There is already an account with that name."
-msgstr ""
+msgstr "已经有一个帐号用了这个名字。"
 
 #: src/gnome/dialog-account.c:1176
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr ""
+msgstr "你必须输入一个有效的期初节余或者留作空白。"
 
 #: src/gnome/dialog-account.c:1201
 msgid ""
 "You must select a transfer account or choose\n"
 "the opening balances equity account."
 msgstr ""
+"你必须选择一个汇兑帐户或者选择\n"
+"期初结余权益帐户。"
 
 #: src/gnome/dialog-account.c:1637
 msgid "New top level account"
-msgstr ""
+msgstr "新建顶级帐户"
 
 #: src/gnome/dialog-account.c:1717
 msgid "<No name>"
-msgstr ""
+msgstr "<无名>"
 
 #: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
-msgstr ""
+msgstr "编辑帐户"
 
 #: src/gnome/dialog-account.c:1760
 #, c-format
 msgid "(%d) New Accounts"
-msgstr ""
+msgstr "（%d）新建帐户"
 
 #: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3443
 msgid "New Account"
@@ -672,12 +746,14 @@ msgid ""
 "at least one of your accounts. You may\n"
 "not delete it."
 msgstr ""
+"该商品现在正被至少一个你的帐户使用。\n"
+"你不可以删除它。"
 
 #: src/gnome/dialog-commodities.c:272
 msgid ""
 "Are you sure you want to delete the\n"
 "current commodity?"
-msgstr ""
+msgstr "你确定你要删除这个商品吗？"
 
 #: src/gnome/dialog-commodities.c:340 src/gnome/glade-gnc-dialogs.c:6564
 #: src/gnome/glade-gnc-dialogs.c:7832 src/scm/report/guile-strings.c:415
@@ -691,7 +767,7 @@ msgstr "名字"
 #: src/gnome/dialog-commodities.c:342 src/gnome/glade-gnc-dialogs.c:7846
 #: src/scm/guile-strings.c:156
 msgid "Code"
-msgstr ""
+msgstr "代码"
 
 #: src/gnome/dialog-commodities.c:343 src/gnome/glade-gnc-dialogs.c:7853
 msgid "Fraction"
@@ -702,20 +778,24 @@ msgid ""
 "You must select a commodity.\n"
 "To create a new one, click \"New\""
 msgstr ""
+"你必须选择一个商品。\n"
+"要新建一个，点击“新建”"
 
 #: src/gnome/dialog-commodity.c:588
 msgid "You may not create a new national currency."
-msgstr ""
+msgstr "你不可以创建一个新国家货币。"
 
 #: src/gnome/dialog-commodity.c:602
 msgid "That commodity already exists."
-msgstr ""
+msgstr "该货币已经存在。"
 
 #: src/gnome/dialog-commodity.c:635
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\",\n"
 "and \"Type\" for the commodity."
 msgstr ""
+"你必须为该商品输入一个非空的“全名”，“符号／缩写”，\n"
+"和“类型”。"
 
 #. GtkWidget             * dialog = GTK_WIDGET(user_data);
 #: src/gnome/dialog-commodity.c:651 src/gnome/glade-gnc-dialogs.c:5670
@@ -724,11 +804,11 @@ msgstr "帮助"
 
 #: src/gnome/dialog-fincalc.c:342
 msgid "You must enter values for the other quantities."
-msgstr "你必须为其它变量填入数值"
+msgstr "您必须为其它变量填入数值"
 
 #: src/gnome/dialog-fincalc.c:343
 msgid "You must enter a valid expression."
-msgstr "你必须输入一个有效的表达式"
+msgstr "您必须输入一个有效的表达式"
 
 #: src/gnome/dialog-fincalc.c:384
 msgid "The interest rate cannot be zero."
@@ -778,29 +858,29 @@ msgstr " GnuCash 首选项"
 
 #: src/gnome/dialog-price-editor.c:349
 msgid "You must select a commodity."
-msgstr ""
+msgstr "你必须选择一种商品。"
 
 #: src/gnome/dialog-price-editor.c:354
 msgid "You must select a currency."
-msgstr "你必须选择一种货币。"
+msgstr "您必须选择一种货币。"
 
 #: src/gnome/dialog-price-editor.c:363 src/gnome/dialog-transfer.c:1074
 msgid "You must enter a valid amount."
-msgstr "你必须输入一个有效的数量。"
+msgstr "您必须输入一个有效的数量。"
 
 #: src/gnome/dialog-price-editor.c:510
 msgid ""
 "Are you sure you want to delete the\n"
 "current price?"
-msgstr ""
+msgstr "你确定你要删除当前价格？"
 
 #: src/gnome/dialog-price-editor.c:537
 msgid "Remove old prices"
-msgstr ""
+msgstr "删除旧的价格"
 
 #: src/gnome/dialog-price-editor.c:551
 msgid "All prices before the date below will be deleted."
-msgstr ""
+msgstr "在下面的日期前的价格会被删除。"
 
 #: src/gnome/dialog-price-editor.c:738 src/gnome/glade-gnc-dialogs.c:7395
 #: src/scm/guile-strings.c:82
@@ -829,7 +909,7 @@ msgstr ""
 
 #: src/gnome/dialog-totd.c:303
 msgid "Tip of the Day:"
-msgstr ""
+msgstr "每日提示："
 
 #: src/gnome/dialog-transfer.c:440
 msgid "Show the income and expense accounts"
@@ -845,22 +925,25 @@ msgid ""
 "or to, or both, for this transaction.\n"
 "Otherwise, it will not be recorded."
 msgstr ""
+"你必须为这个交易指明一个用来汇入，\n"
+"或汇出，或者双向的帐号。\n"
+"否则，它不会被记录。"
 
 #: src/gnome/dialog-transfer.c:1066
 msgid "You can't transfer from and to the same account!"
-msgstr ""
+msgstr "你不能汇入汇出到同一个帐户！"
 
 #: src/gnome/dialog-transfer.c:1087
 msgid "You must enter an amount to transfer."
-msgstr ""
+msgstr "你必须输入一个汇兑的数量。"
 
 #: src/gnome/dialog-transfer.c:1101
 msgid "You must enter a valid price."
-msgstr ""
+msgstr "你必须输入一个有效的价格。"
 
 #: src/gnome/dialog-transfer.c:1112
 msgid "You must enter a valid `to' amount."
-msgstr ""
+msgstr "你必须输入一个有效的“汇出”数额。"
 
 #: src/gnome/dialog-transfer.c:1123
 #, c-format
@@ -872,6 +955,11 @@ msgid ""
 "(or vice versa) to transfer funds\n"
 "between the selected accounts."
 msgstr ""
+"没有合适的货币帐户！\n"
+"请以货币 %s\n"
+"和证券 %s\n"
+"创建一个现金帐户（或相反）以在选中的帐户间\n"
+"传输资金。"
 
 #: src/gnome/dialog-utils.c:138
 msgid "Use local time"
@@ -883,34 +971,45 @@ msgid ""
 "use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
 "pick list are inappropriate."
 msgstr ""
+"选取货币或证券的类型。对国家货币，\n"
+"使用“CURRENCY”。如果列表中的项目不合适，在\n"
+"输入框里输入一个新类型。"
 
 #: src/gnome/druid-commodity.c:268
 msgid ""
 "Enter a descriptive name for the currency or stock, such as \n"
 "\"US Dollar\" or \"Red Hat Stock\""
 msgstr ""
+"给该货币或股票输入一个描述性的名字，例如\n"
+"“美元”或“红帽子股票”"
 
 #: src/gnome/druid-commodity.c:287
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
 "(such as \"USD\"), or other unique abbreviation for the name."
 msgstr ""
+"输入股票名（例如“RHAT”），国家货币符号\n"
+"（例如“USD”），或者该名字其它独一无二的缩写。"
 
 #: src/gnome/druid-commodity.c:306
 msgid ""
 "Click \"Next\" to accept the information and move \n"
 "to the next currency or stock."
 msgstr ""
+"点击“继续”，接受信息并移动到\n"
+"下一个货币或股票。"
 
 #: src/gnome/druid-commodity.c:390
 msgid ""
 "You must put values for the type, name,\n"
 "and abbreviation of the currency/stock."
 msgstr ""
+"你必须为该货币／股票的类型，名字和缩写\n"
+"输入值。"
 
 #: src/gnome/druid-commodity.c:401 src/gnome/druid-qif-import.c:1487
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "你必须输入一个已经存在的国家的货币或者输入其它类型"
+msgstr "您必须输入一个已经存在的国家的货币或者输入其它类型"
 
 #: src/gnome/druid-euro-conv.c:205
 msgid "Exchange"
@@ -923,21 +1022,23 @@ msgstr "欧元转换"
 
 #: src/gnome/druid-euro-conv.c:391
 msgid "You don't have any accounts of Euroland currencies."
-msgstr ""
+msgstr "您并没有任何帐户使用欧洲货币"
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
-msgstr ""
+msgstr "选择 QIF 文件"
 
 #: src/gnome/druid-qif-import.c:550
 msgid "Please select a file to load.\n"
-msgstr ""
+msgstr "请选择一个要载入的文件。\n"
 
 #: src/gnome/druid-qif-import.c:556
 msgid ""
 "File not found or read permission denied.\n"
 "Please select another file."
 msgstr ""
+"找不到文件或者没有读取文件的权限。\n"
+"请另外选择一个文件。"
 
 #: src/gnome/druid-qif-import.c:568
 msgid ""
@@ -1314,7 +1415,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1119
 msgid "Credit or Debit"
-msgstr ""
+msgstr "贷方或借方"
 
 #: src/gnome/glade-gnc-dialogs.c:1130
 msgid "splits having amounts of:"
@@ -1327,7 +1428,7 @@ msgstr "至少"
 
 #: src/gnome/glade-gnc-dialogs.c:1154
 msgid "At most "
-msgstr ""
+msgstr "至多"
 
 #: src/gnome/glade-gnc-dialogs.c:1157 src/gnome/glade-gnc-dialogs.c:1284
 #: src/gnome/glade-gnc-dialogs.c:1354
@@ -3040,70 +3141,70 @@ msgstr ""
 
 #: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
-msgstr ""
+msgstr "打开帐户(_O)"
 
 #: src/gnome/window-acct-tree.c:840
 msgid "Open S_ubaccounts"
-msgstr ""
+msgstr "打开子帐户(_u)"
 
 #: src/gnome/window-acct-tree.c:841
 msgid "Open the selected account and all its subaccounts"
-msgstr ""
+msgstr "打开选中的帐户以及它所有的子帐户"
 
 #: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1422
 msgid "_Edit Account"
-msgstr ""
+msgstr "编辑帐户(_E)"
 
 #: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
 msgid "_Reconcile..."
-msgstr ""
+msgstr "对帐……(_R)"
 
 #: src/gnome/window-acct-tree.c:858
 msgid "Reconcile the selected account"
-msgstr ""
+msgstr "使选中的帐户一致化"
 
 #: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1439
 msgid "_Transfer..."
-msgstr ""
+msgstr "过户……(_T)"
 
 #: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
-msgstr ""
+msgstr "将资金从一个帐户转移到另一个帐户"
 
 #: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
-msgstr ""
+msgstr "股票分割……(_p)"
 
 #: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
 msgid "Record a stock split or a stock merger"
-msgstr ""
+msgstr "记录一次股票分割或合并"
 
 #: src/gnome/window-acct-tree.c:881
 msgid "_Euro Conversion..."
-msgstr ""
+msgstr "欧元转换……(_E)"
 
 #: src/gnome/window-acct-tree.c:882
 msgid "Do the Euro conversion of the account hierarchy"
-msgstr ""
+msgstr "对帐户树做欧元转换"
 
 #: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
 msgid "_New Account..."
-msgstr ""
+msgstr "新建帐户……(_N)"
 
 #: src/gnome/window-acct-tree.c:898
 msgid "_Delete Account"
-msgstr ""
+msgstr "删除帐户(_D)"
 
 #: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
 msgid "_Check & Repair"
-msgstr ""
+msgstr "检查和修复(_C)"
 
 #: src/gnome/window-acct-tree.c:910
 msgid "Setup tax information for all income and expense accounts"
-msgstr ""
+msgstr "为所有的收入和支出帐户设置税收信息"
 
 #: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1583
@@ -3112,7 +3213,7 @@ msgstr "帐号(_A)"
 
 #: src/gnome/window-help.c:321
 msgid "Enter URI to load:"
-msgstr ""
+msgstr "输入要装载的 URI ："
 
 #: src/gnome/window-help.c:599 src/gnome/window-report.c:631
 msgid "Back"
@@ -3120,7 +3221,7 @@ msgstr "返回"
 
 #: src/gnome/window-help.c:600 src/gnome/window-report.c:632
 msgid "Move back one step in the history"
-msgstr ""
+msgstr "在历史记录中往回退一步"
 
 #: src/gnome/window-help.c:608 src/gnome/window-report.c:640
 msgid "Forward"
@@ -3128,7 +3229,7 @@ msgstr "向前"
 
 #: src/gnome/window-help.c:609 src/gnome/window-report.c:641
 msgid "Move forward one step in the history"
-msgstr ""
+msgstr "在历史记录中向前进一步"
 
 #: src/gnome/window-help.c:618 src/gnome/window-report.c:649
 msgid "Reload"
@@ -3140,7 +3241,7 @@ msgstr "重新载入当前文件"
 
 #: src/gnome/window-help.c:628
 msgid "Open a new document"
-msgstr ""
+msgstr "打开一个新文档"
 
 #: src/gnome/window-help.c:636 src/gnome/window-report.c:658
 msgid "Stop"
@@ -3148,7 +3249,7 @@ msgstr "停止"
 
 #: src/gnome/window-help.c:637 src/gnome/window-report.c:659
 msgid "Cancel outstanding HTML requests"
-msgstr ""
+msgstr "中止未完成的 HTML 请求"
 
 #: src/gnome/window-help.c:646 src/gnome/window-register.c:934
 #: src/gnome/window-register.c:1367 src/gnome/window-report.c:686
@@ -3157,7 +3258,7 @@ msgstr "打印"
 
 #: src/gnome/window-help.c:647
 msgid "Print Help window"
-msgstr ""
+msgstr "打印帮助窗口"
 
 #: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
@@ -3166,11 +3267,11 @@ msgstr "关闭"
 
 #: src/gnome/window-help.c:657
 msgid "Close this Help window"
-msgstr ""
+msgstr "关闭这个帮助窗口"
 
 #: src/gnome/window-main.c:198
 msgid "<no file>"
-msgstr ""
+msgstr "<没有文件>"
 
 #: src/gnome/window-main.c:746 src/gnome/window-report.c:668
 msgid "Export"
@@ -3178,19 +3279,19 @@ msgstr "导出"
 
 #: src/gnome/window-main.c:755
 msgid "You cannot save to that filename."
-msgstr ""
+msgstr "你不能存成那个文件名。"
 
 #: src/gnome/window-main.c:768 src/gnome/window-main.c:794
 msgid "You cannot save to that file."
-msgstr ""
+msgstr "你不能存到那个文件。"
 
 #: src/gnome/window-main.c:834
 msgid "There was an error saving the file."
-msgstr ""
+msgstr "在保存文件时发生了一个错误。"
 
 #: src/gnome/window-main.c:874
 msgid "Select \"Exit\" to exit GnuCash."
-msgstr ""
+msgstr "选择“退出”，退出 GnuCash 。"
 
 #: src/gnome/window-main.c:910
 msgid ""
@@ -3346,29 +3447,29 @@ msgstr "收益"
 
 #: src/gnome/window-reconcile.c:418
 msgid "Reconcile Information"
-msgstr ""
+msgstr "对帐信息"
 
 #: src/gnome/window-reconcile.c:422
 msgid "Statement Date:"
-msgstr ""
+msgstr "财务报告日期："
 
 #. starting balance title/value
 #: src/gnome/window-reconcile.c:423 src/gnome/window-reconcile.c:1707
 msgid "Starting Balance:"
-msgstr ""
+msgstr "开始结算"
 
 #. ending balance title/value
 #: src/gnome/window-reconcile.c:424 src/gnome/window-reconcile.c:1717
 msgid "Ending Balance:"
-msgstr ""
+msgstr "结束结算"
 
 #: src/gnome/window-reconcile.c:433
 msgid "Include Subaccounts"
-msgstr ""
+msgstr "包括子帐户"
 
 #: src/gnome/window-reconcile.c:644 src/gnome/window-reconcile.c:1147
 msgid "Debits"
-msgstr ""
+msgstr "借方"
 
 #: src/gnome/window-reconcile.c:654 src/gnome/window-reconcile.c:1148
 #: src/scm/guile-strings.c:460
@@ -3381,21 +3482,21 @@ msgstr "全部："
 
 #: src/gnome/window-reconcile.c:823 src/gnome/window-register.c:3025
 msgid "Are you sure you want to delete the current transaction?"
-msgstr ""
+msgstr "你确定你要删除当前的交易？"
 
 #: src/gnome/window-reconcile.c:872 src/scm/guile-strings.c:318
 #: src/scm/guile-strings.c:321
 msgid "Reconcile"
-msgstr ""
+msgstr "对帐"
 
 #: src/gnome/window-reconcile.c:1064
 msgid "_Reconcile Information..."
-msgstr ""
+msgstr "对帐信息……(_R)"
 
 #: src/gnome/window-reconcile.c:1065
 msgid ""
 "Change the reconcile information including statement date and ending balance."
-msgstr ""
+msgstr "修改对帐信息使之包括财务报告日期，同时结束结算。"
 
 #: src/gnome/window-reconcile.c:1074
 msgid "_Finish"
@@ -3403,7 +3504,7 @@ msgstr "完成(_F)"
 
 #: src/gnome/window-reconcile.c:1075 src/gnome/window-reconcile.c:1369
 msgid "Finish the reconciliation of this account"
-msgstr ""
+msgstr "结束这个帐户的对帐"
 
 #: src/gnome/window-reconcile.c:1082
 msgid "_Postpone"
@@ -3411,7 +3512,7 @@ msgstr "延迟(_P)"
 
 #: src/gnome/window-reconcile.c:1083
 msgid "Postpone the reconciliation of this account"
-msgstr ""
+msgstr "推迟这个帐户的对帐"
 
 #: src/gnome/window-reconcile.c:1090 src/gnome/window-register.c:1477
 #: src/gnome/window-register.c:1667
@@ -3420,43 +3521,43 @@ msgstr "取消(_C)"
 
 #: src/gnome/window-reconcile.c:1091
 msgid "Cancel the reconciliation of this account"
-msgstr ""
+msgstr "取消这个帐户的对帐"
 
 #: src/gnome/window-reconcile.c:1101 src/gnome/window-reconcile.c:1124
 #: src/gnome/window-register.c:1286
 msgid "Standard order"
-msgstr ""
+msgstr "标准顺序"
 
 #: src/gnome/window-reconcile.c:1102 src/gnome/window-reconcile.c:1125
 #: src/gnome/window-register.c:1287
 msgid "Keep normal account order"
-msgstr ""
+msgstr "保持普通的帐户顺序"
 
 #: src/gnome/window-reconcile.c:1104 src/gnome/window-reconcile.c:1105
 #: src/gnome/window-reconcile.c:1127 src/gnome/window-reconcile.c:1128
 #: src/gnome/window-register.c:1301 src/gnome/window-register.c:1302
 msgid "Sort by Num"
-msgstr ""
+msgstr "按序号排序"
 
 #: src/gnome/window-reconcile.c:1107 src/gnome/window-reconcile.c:1108
 #: src/gnome/window-reconcile.c:1130 src/gnome/window-reconcile.c:1131
 #: src/gnome/window-register.c:1310 src/gnome/window-register.c:1311
 msgid "Sort by Description"
-msgstr ""
+msgstr "按描述排序"
 
 #: src/gnome/window-reconcile.c:1110 src/gnome/window-reconcile.c:1111
 #: src/gnome/window-reconcile.c:1133 src/gnome/window-reconcile.c:1134
 #: src/gnome/window-register.c:1304 src/gnome/window-register.c:1305
 msgid "Sort by Amount"
-msgstr ""
+msgstr "按数量排序"
 
 #: src/gnome/window-reconcile.c:1158 src/gnome/window-reconcile.c:1361
 msgid "Open the account"
-msgstr ""
+msgstr "打开帐户"
 
 #: src/gnome/window-reconcile.c:1165 src/gnome/window-register.c:1423
 msgid "Edit the main account for this register"
-msgstr ""
+msgstr "编辑这个登记表的主帐户"
 
 #: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
 msgid "_New"
@@ -3465,7 +3566,7 @@ msgstr "新增 (_N)"
 #: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
 #: src/gnome/window-reconcile.c:1339
 msgid "Add a new transaction to the account"
-msgstr ""
+msgstr "给这个帐户增加一个新的交易"
 
 #: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
 msgid "_Edit"
@@ -3474,7 +3575,7 @@ msgstr "编辑(_E)"
 #: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
 #: src/gnome/window-reconcile.c:1346
 msgid "Edit the current transaction"
-msgstr ""
+msgstr "编辑当前交易"
 
 #: src/gnome/window-reconcile.c:1209 src/gnome/window-reconcile.c:1293
 #: src/gnome/window-register.c:1485 src/gnome/window-register.c:1675
@@ -3485,7 +3586,7 @@ msgstr "删除(_D)"
 #: src/gnome/window-reconcile.c:1353 src/gnome/window-register.c:863
 #: src/gnome/window-register.c:1486 src/gnome/window-register.c:1676
 msgid "Delete the current transaction"
-msgstr ""
+msgstr "删除当前交易"
 
 #: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1570
 msgid "_Help"
@@ -3493,19 +3594,19 @@ msgstr "求助(_H)"
 
 #: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1571
 msgid "Open the GnuCash help window"
-msgstr ""
+msgstr "打开 GnuCash 帮助窗口"
 
 #: src/gnome/window-reconcile.c:1231
 msgid "_Reconcile"
-msgstr ""
+msgstr "对帐(_R)"
 
 #: src/gnome/window-reconcile.c:1232 src/gnome/window-register.c:1346
 msgid "Sort _Order"
-msgstr ""
+msgstr "排列顺序(_O)"
 
 #: src/gnome/window-reconcile.c:1234 src/gnome/window-register.c:1584
 msgid "_Transaction"
-msgstr ""
+msgstr "交易(_T)"
 
 #: src/gnome/window-reconcile.c:1369
 msgid "Finish"
@@ -3514,36 +3615,40 @@ msgstr "完成"
 #. reconciled balance title/value
 #: src/gnome/window-reconcile.c:1727
 msgid "Reconciled Balance:"
-msgstr ""
+msgstr "一致了的结算"
 
 #. difference title/value
 #: src/gnome/window-reconcile.c:1737
 msgid "Difference:"
-msgstr ""
+msgstr "差额："
 
 #: src/gnome/window-reconcile.c:1931
 msgid ""
 "The account is not balanced.\n"
 "Are you sure you want to finish?"
 msgstr ""
+"该帐户没有达到平衡。\n"
+"你确定要结束吗？"
 
 #: src/gnome/window-reconcile.c:1989
 msgid "Do you want to postpone this reconciliation and finish it later?"
-msgstr ""
+msgstr "你想要推迟这次对帐，以后再完成它吗？"
 
 #: src/gnome/window-reconcile.c:2023
 msgid ""
 "You have made changes to this reconcile window.\n"
 "Are you sure you want to cancel?"
 msgstr ""
+"你已经对这个对帐窗口做了改动。\n"
+"你确定要取消吗？"
 
 #: src/gnome/window-register.c:686
 msgid "Register date ranges"
-msgstr ""
+msgstr "登记表日期范围"
 
 #: src/gnome/window-register.c:723
 msgid "Show Earliest"
-msgstr ""
+msgstr "显示最早的"
 
 #: src/gnome/window-register.c:734
 msgid "Start date:"
@@ -3551,11 +3656,11 @@ msgstr "开始日期："
 
 #: src/gnome/window-register.c:773
 msgid "Show Latest"
-msgstr ""
+msgstr "显示最晚的"
 
 #: src/gnome/window-register.c:784
 msgid "End date:"
-msgstr ""
+msgstr "结束日期："
 
 #: src/gnome/window-register.c:810 src/scm/guile-strings.c:49
 msgid "Today"
@@ -3563,11 +3668,11 @@ msgstr "今天"
 
 #: src/gnome/window-register.c:816
 msgid "Set Date Range"
-msgstr ""
+msgstr "设置日期范围"
 
 #: src/gnome/window-register.c:838 src/gnome/window-register.c:1377
 msgid "Close this register window"
-msgstr ""
+msgstr "关闭这个登记表窗口"
 
 #: src/gnome/window-register.c:846
 msgid "Enter"
@@ -3576,7 +3681,7 @@ msgstr "输入"
 #: src/gnome/window-register.c:847 src/gnome/window-register.c:1470
 #: src/gnome/window-register.c:1660
 msgid "Record the current transaction"
-msgstr ""
+msgstr "记录当前交易"
 
 #: src/gnome/window-register.c:854
 msgid "Cancel"
@@ -3585,7 +3690,7 @@ msgstr "取消"
 #: src/gnome/window-register.c:855 src/gnome/window-register.c:1478
 #: src/gnome/window-register.c:1668
 msgid "Cancel the current transaction"
-msgstr ""
+msgstr "取消当前交易"
 
 #: src/gnome/window-register.c:871
 msgid "Duplicate"
@@ -3594,12 +3699,12 @@ msgstr "复制"
 #: src/gnome/window-register.c:872 src/gnome/window-register.c:1495
 #: src/gnome/window-register.c:1685
 msgid "Make a copy of the current transaction"
-msgstr ""
+msgstr "制作一个当前交易的副本"
 
 #: src/gnome/window-register.c:881 src/gnome/window-register.c:1504
 #: src/gnome/window-register.c:1694
 msgid "Show all splits in the current transaction"
-msgstr ""
+msgstr "显示当前交易的所有部分"
 
 #: src/gnome/window-register.c:888
 msgid "Blank"
@@ -3608,101 +3713,101 @@ msgstr "空白"
 #: src/gnome/window-register.c:889 src/gnome/window-register.c:1512
 #: src/gnome/window-register.c:1702
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr ""
+msgstr "移动到登记表底部的空白交易"
 
 #: src/gnome/window-register.c:897
 msgid "Jump"
-msgstr ""
+msgstr "跳转"
 
 #: src/gnome/window-register.c:898 src/gnome/window-register.c:1521
 #: src/gnome/window-register.c:1711
 msgid "Jump to the corresponding transaction in the other account"
-msgstr ""
+msgstr "跳转到其它帐户里对应的交易"
 
 #: src/gnome/window-register.c:926 src/gnome/window-register.c:1352
 msgid "Open a report window for this register"
-msgstr ""
+msgstr "为本登记表打开一个报表窗口"
 
 #: src/gnome/window-register.c:935 src/gnome/window-register.c:1368
 msgid "Print a report for this register"
-msgstr ""
+msgstr "为本登记表打印一张报表"
 
 #: src/gnome/window-register.c:1033
 msgid "Present:"
-msgstr ""
+msgstr "现在："
 
 #: src/gnome/window-register.c:1034
 msgid "Future:"
-msgstr ""
+msgstr "将来："
 
 #: src/gnome/window-register.c:1035
 msgid "Cleared:"
-msgstr ""
+msgstr "已清的："
 
 #: src/gnome/window-register.c:1037
 msgid "Reconciled:"
-msgstr ""
+msgstr "已对帐的："
 
 #: src/gnome/window-register.c:1041
 msgid "Shares:"
-msgstr ""
+msgstr "股票："
 
 #: src/gnome/window-register.c:1043
 msgid "Current Value:"
-msgstr ""
+msgstr "现价："
 
 #: src/gnome/window-register.c:1259
 msgid "Basic Ledger"
-msgstr ""
+msgstr "基本分类帐"
 
 #: src/gnome/window-register.c:1260 src/scm/guile-strings.c:259
 msgid "Show transactions on one or two lines"
-msgstr ""
+msgstr "用一行或两行显示交易"
 
 #: src/gnome/window-register.c:1262
 msgid "Auto-Split Ledger"
-msgstr ""
+msgstr "自动分列分类帐"
 
 #: src/gnome/window-register.c:1263 src/scm/guile-strings.c:261
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
-msgstr ""
+msgstr "用一行或两行显示交易并展开当前交易"
 
 #: src/gnome/window-register.c:1266
 msgid "Transaction Journal"
-msgstr ""
+msgstr "交易日志"
 
 #: src/gnome/window-register.c:1267 src/scm/guile-strings.c:263
 msgid "Show expanded transactions with all splits"
-msgstr ""
+msgstr "显示包含所有分列的展开的交易"
 
 #: src/gnome/window-register.c:1277
 msgid "_Double Line"
-msgstr ""
+msgstr "双行(_D)"
 
 #: src/gnome/window-register.c:1278 src/scm/guile-strings.c:266
 msgid "Show two lines of information for each transaction"
-msgstr ""
+msgstr "每项交易用两行显示信息"
 
 #: src/gnome/window-register.c:1292
 msgid "Sort by date of entry"
-msgstr ""
+msgstr "按进入日期排序"
 
 #: src/gnome/window-register.c:1293
 msgid "Sort by the date of entry"
-msgstr ""
+msgstr "按进入日期排序"
 
 #: src/gnome/window-register.c:1296
 msgid "Sort by statement date"
-msgstr ""
+msgstr "按财务报告日期排序"
 
 #: src/gnome/window-register.c:1297
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr ""
+msgstr "按财务报告日期排序（未对帐项目在最后）"
 
 #: src/gnome/window-register.c:1307 src/gnome/window-register.c:1308
 msgid "Sort by Memo"
-msgstr ""
+msgstr "按备忘排序"
 
 #: src/gnome/window-register.c:1326
 msgid "Show _All"
@@ -3710,15 +3815,15 @@ msgstr "全部显示(_A)"
 
 #: src/gnome/window-register.c:1327
 msgid "Show all of the transactions in the account"
-msgstr ""
+msgstr "显示帐号里的所有交易"
 
 #: src/gnome/window-register.c:1334
 msgid "Set _Range..."
-msgstr ""
+msgstr "设置范围……(_R)"
 
 #: src/gnome/window-register.c:1335
 msgid "Set the date range of this register"
-msgstr ""
+msgstr "设置本登记表的日期范围"
 
 #: src/gnome/window-register.c:1345
 msgid "_Style"
@@ -3726,7 +3831,7 @@ msgstr "模式(_S)"
 
 #: src/gnome/window-register.c:1347
 msgid "_Date Range"
-msgstr ""
+msgstr "日期范围(_D)"
 
 #: src/gnome/window-register.c:1359 src/gnome/window-register.c:1549
 #: src/scm/report/guile-strings.c:475 src/scm/report/guile-strings.c:478
@@ -3821,7 +3926,7 @@ msgstr ""
 
 #: src/gnome/window-register.c:1581
 msgid "_Register"
-msgstr ""
+msgstr "登记表(_R)"
 
 #: src/gnome/window-register.c:1872
 msgid "General Ledger"
@@ -3855,15 +3960,15 @@ msgstr ""
 #: src/scm/guile-strings.c:288 src/scm/guile-strings.c:291
 #: src/scm/report/guile-strings.c:524
 msgid "Register"
-msgstr "寄存器"
+msgstr "登记表"
 
 #: src/gnome/window-register.c:1895 src/scm/report/guile-strings.c:487
 msgid "Register Report"
-msgstr ""
+msgstr "登记表报表"
 
 #: src/gnome/window-register.c:2409
 msgid "<No information>"
-msgstr ""
+msgstr "<没有信息>"
 
 #: src/gnome/window-register.c:2838
 msgid ""
@@ -4518,7 +4623,7 @@ msgstr ""
 #: src/scm/guile-strings.c:104 src/scm/report/guile-strings.c:239
 #: src/scm/report/guile-strings.c:240
 msgid "Balance Sheet"
-msgstr " 资产负债表"
+msgstr "资产负债表"
 
 #: src/scm/guile-strings.c:105
 msgid "Profit & Loss"
