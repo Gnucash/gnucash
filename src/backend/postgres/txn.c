@@ -45,6 +45,7 @@
  
 #include "PostgresBackend.h"
 #include "account.h"
+#include "base-autogen.h"
 #include "checkpoint.h"
 #include "kvp-sql.h"
 #include "price.h"

@@ -486,7 +486,7 @@ test_raw_query (GNCSession *session, Query *q)
   be = (PGBackend *) gnc_session_get_backend(session);
 
   sq = sqlQuery_new();
-  sql_query_string = sqlQuery_build (sq, q, gnc_session_get_book(session));
+  sql_query_string = sqlQuery_build (sq, q);
 
   result = PQexec (be->connection, sql_query_string);
 

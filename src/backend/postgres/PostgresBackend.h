@@ -123,23 +123,4 @@ AccountGroup * pgendGetTopGroup (PGBackend *be);
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
 
-void pgendStoreOneTransactionOnly (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
-
-void pgendPutOneAccountOnly (PGBackend *be, Account *ptr);
-void pgendPutOneCommodityOnly (PGBackend *be, gnc_commodity *ptr);
-void pgendPutOnePriceOnly (PGBackend *be, GNCPrice *ptr);
-void pgendPutOneSplitOnly (PGBackend *be, Split *ptr);
-void pgendPutOneTransactionOnly (PGBackend *be, Transaction *ptr);
-
-int pgendAccountCompareVersion (PGBackend *be, Account *ptr);
-int pgendPriceCompareVersion (PGBackend *be, GNCPrice *ptr);
-int pgendTransactionCompareVersion (PGBackend *be, Transaction *ptr);
-
-void pgendStoreAuditAccount (PGBackend *be, Account *ptr, sqlBuild_QType update);
-void pgendStoreAuditPrice (PGBackend *be, GNCPrice *ptr, sqlBuild_QType update);
-void pgendStoreAuditSplit (PGBackend *be, Split *ptr, sqlBuild_QType update);
-void pgendStoreAuditTransaction (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
-
-int pgendTransactionGetDeletedVersion (PGBackend *be, Transaction *ptr);
-
 #endif /* POSTGRES_BACKEND_H */

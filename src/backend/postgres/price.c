@@ -39,6 +39,7 @@
 #include "guid.h"
 
 #include "PostgresBackend.h"
+#include "base-autogen.h"
 #include "escape.h"
 #include "price.h"
 #include "putil.h"

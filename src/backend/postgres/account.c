@@ -41,6 +41,7 @@
 #include "guid.h"
 
 #include "account.h"
+#include "base-autogen.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
 #include "price.h"
