@@ -43,6 +43,8 @@ static int    validateDate( Date *date );
 static
 char days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
+static int been_here = 0;
+
 /********************************************************************\
  * adjustDay                                                        *
  *   adds adj to the current day of the month... the resulting day  *
@@ -91,6 +93,10 @@ validateDate( Date *date )
   {
   int valid = True;
 
+  /* the "been here" flag prevents infinite recursion */
+  if (1 == been_here) return valid;
+  been_here = 1;
+
   /* adjust days in february for leap year */
   if ( ( ( date->year % 4 == 0 ) && ( date->year % 100 != 0 ) )
        || ( date->year % 400 == 0 ) )
@@ -125,6 +131,10 @@ validateDate( Date *date )
     date->year--;
     }
   
+  /* try again, in case a year change messed up leap year calcs. */
+  validateDate (date);
+  been_here = 0;
+
   return valid;
   }
 
