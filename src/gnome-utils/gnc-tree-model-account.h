@@ -2,8 +2,8 @@
  * gnc-tree-model-account.h -- GtkTreeModel implementation to
  *	display accounts in a GtkTreeView.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -54,6 +54,7 @@ typedef enum {
 	GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,	
 	GNC_TREE_MODEL_ACCOUNT_COL_CODE,
 	GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
+	GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
 	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
 	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
 	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
@@ -70,7 +71,7 @@ typedef enum {
 	GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
 	GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
 
-	GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
+	GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE = GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
 
 	/* internal hidden columns */
 	GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
@@ -108,13 +109,15 @@ GType         gnc_tree_model_account_get_type              (void);
 /** @name Account Tree Model Constructors */
 /** @{ */
 
+/** Create a new GtkTreeModel for manipulating gnucash accounts.
+ *
+ *  @param group The account group to put at the top level of the tree hierarchy. */
 GtkTreeModel *gnc_tree_model_account_new                   (AccountGroup *group);
 /** @} */
 
 
-/* OBSOLETE */
-void          gnc_tree_model_account_set_root              (GncTreeModelAccount *model,
-                                                            AccountGroup *group);
+/** @name Account Tree Model Get/Set Functions */
+/** @{ */
 
 /** This function returns the account associated with the top level
  *  pseudo-account.  The gnucash engine does not have a single top
@@ -130,9 +133,6 @@ void          gnc_tree_model_account_set_root              (GncTreeModelAccount 
  */
 Account      *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
 
-
-/** @name Account Tree Model Get/Set Functions */
-/** @{ */
 
 /** Convert a model/iter pair to a gnucash account.  This routine should
  *  only be called from an account tree view filter function.  The
@@ -191,3 +191,5 @@ GtkTreePath  *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount 
 G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_ACCOUNT_H */
+
+/** @} */

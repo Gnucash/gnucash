@@ -93,6 +93,7 @@ the account instead of opening a register.") #f))
             (list->vector (list 'future_min_report (N_ "Future Minimum Balance in Report Currency") ""))
             (list->vector (list 'total          (N_ "Total") ""))
             (list->vector (list 'total_report   (N_ "Total in Report Currency") ""))
+            (list->vector (list 'lastnum        (N_ "Last Number Used") ""))
             (list->vector (list 'tax-info       (N_ "Tax Info") "")))))
 
     options))

@@ -2,9 +2,8 @@
  * gnc-tree-model-account.c -- GtkTreeModel implementation to
  *	display accounts in a GtkTreeView.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Authors: Jan Arne Petersen <jpetersen@uni-bonn.de>
- *          David Hampton <hampton@employees.org>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -716,6 +715,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			g_value_set_string (value, xaccAccountGetLastNum (account));
 			break;
+
 		case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
 			g_value_init (value, G_TYPE_BOOLEAN);
 			g_value_set_boolean (value, xaccAccountGetPlaceholder (account));
@@ -1185,47 +1185,6 @@ gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 /************************************************************/
 
 /*
- * DRH - THIS FUNCTION SHOULD BE REMOVED.
- *
- * This function is from before the account tree view existed.  This
- * functionality should migrate there.
- */
-void
-gnc_tree_model_account_set_root (GncTreeModelAccount *model,
-		                 AccountGroup *group)
-{
-	g_assert_not_reached ();
-#if 0
-	GtkTreePath *path;
-	gint i;
-
-	ENTER("model %p, group %p", model, group);
-	g_return_if_fail (model != NULL);
-	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
-
-	DEBUG("old root %p", model->priv->root);
-	if (model->priv->root != NULL) {
-		path = gtk_tree_path_new_first ();
-		if (model->priv->toplevel != NULL) {
-			gtk_tree_path_append_index (path, 0);
-		}
-		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
-			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		}
-		gtk_tree_path_free (path);
-	}
-
-	model->priv->root = group;
-
-	if (model->priv->root != NULL) {
-		xaccGroupForEachAccount (model->priv->root, account_row_inserted, model, TRUE);
-	}
-	LEAVE("new root %p", model->priv->root);
-#endif
-}
-
-
-/*
  * Convert a model/iter pair to a gnucash account.  This routine should
  * only be called from an account tree view filter function.
  */
@@ -1423,9 +1382,10 @@ gnc_tree_model_account_delete_event_helper (remove_data *data,
  *
  *  @param user_data A pointer to the account tree model.
  */
-void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-					   GNCEngineEventType event_type,
-					   gpointer user_data)
+static void
+gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
+				      GNCEngineEventType event_type,
+				      gpointer user_data)
 {
   	GncTreeModelAccount *model;
 	GtkTreePath *path;
