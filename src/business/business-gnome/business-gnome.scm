@@ -34,7 +34,7 @@
 (define (business-report-function)
   (gnc:add-extension
    (gnc:make-menu gnc:menuname-business-reports
-		  (list "Main" gnc:menuname-reports gnc:menuname-income-expense))))
+		  (list "Main" gnc:menuname-reports))))
 
 
 
