@@ -138,7 +138,7 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
     Account *acc = getAccount( grp, i-1 );
     
     accData->menuEntry[i] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
-    accData->menuEntry[i]->option = i-1;
+    accData->menuEntry[i]->option = xaccGetAccountID (acc);
     accData->menuEntry[i]->chosen = &(accData->choice);
     
     accountMenu[i].label         = acc->accountName;

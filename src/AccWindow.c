@@ -43,7 +43,7 @@
 #include "util.h"
 
 /* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important */
+ *       important -- hack alert -- why is order important ?? */
 typedef struct _accwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The account type buttons:               */
@@ -56,10 +56,11 @@ typedef struct _accwindow {
   Widget portfolio;
   Widget mutual;
 
-  Widget group_menu;     /* menu of groups, for sub-accounts        */
                          /* The text fields:                        */
   Widget name;           /* The account name text field             */
   Widget desc;           /* Account description text field          */
+
+  AccountMenu *accMenu;
 } AccWindow;
 
 /* NOTE: notes has to be at the beginning of the struct!  Order is 
@@ -95,9 +96,8 @@ void
 accWindow( Widget parent )
   {
   Widget    dialog, form, frame, rc, widget, 
-            label, buttonform, topwid;
+            label, buttonform, group_menu, topwid;
   AccWindow *accData;
-  AccountMenu *accMenu;
   AccountGroup *grp = topgroup;  /* hack alert -- should be passed as argument */
   
   setBusyCursor( parent );
@@ -271,10 +271,10 @@ accWindow( Widget parent )
 			     XmNrightPosition,   35,        /* 35% */
 			     NULL );
   
-  accMenu = xaccBuildAccountMenu (grp, form, "");
-  accData->group_menu = xaccGetAccountMenuWidget (accMenu);
+  accData->accMenu = xaccBuildAccountMenu (grp, form, "");
+  group_menu = xaccGetAccountMenuWidget (accData->accMenu);
    
-  XtVaSetValues( accData->group_menu,
+  XtVaSetValues( group_menu,
                              XmNtopAttachment,  XmATTACH_WIDGET,
 			     XmNtopWidget,       accData->desc,
 			     XmNtopOffset,       10, 
@@ -282,13 +282,13 @@ accWindow( Widget parent )
 			     XmNleftPosition,    35,        /* 35% */
                              NULL );
   
-  XtManageChild (accData->group_menu); 
+  XtManageChild (group_menu); 
 
   /******************************************************************\
    * The buttons at the bottom...                                   *
   \******************************************************************/
 
-  topwid = accData->group_menu;
+  topwid = group_menu;
   
   buttonform = XtVaCreateWidget( "form", 
 				 xmFormWidgetClass,   form,
@@ -378,6 +378,7 @@ closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
   
+  xaccFreeAccountMenu (accData->accMenu);
   _free(accData);
   DEBUG("close AccWindow");
   }
@@ -610,9 +611,9 @@ notesCB( Widget mw, XtPointer cd, XtPointer cb )
 void
 createCB( Widget mw, XtPointer cd, XtPointer cb )
   {
-  int i,num;
+  int i, num, acc_id;
   Transaction *trans;
-  Account     *acc;
+  Account     *acc, *parent_acc;
   AccWindow   *accData = (AccWindow *)cd;
   Boolean set = False;
 
@@ -672,12 +673,20 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
   
-  /* once the account is set up, add it to account group */
-  /* xxxxxxxxxxxxxxxxx */
-  insertAccount( topgroup, acc );
+  /* once the account is set up, add it to account group 
+   * If the user indicated a parent acccount, make it a 
+   * sub account of that */
+  acc_id = xaccGetAccountMenuSelection (accData->accMenu);
+  parent_acc = xaccGetAccountFromID (topgroup, acc_id);
+  if (parent_acc) {
+    xaccInsertSubAccount (parent_acc, acc);
+  } else {
+    insertAccount( topgroup, acc );
+  }
   
   /* make sure the accountlist is updated to reflect the new account */
   refreshMainWindow();
+
   /* open up the account window for the user */
   regWindow( toplevel, acc );
 
