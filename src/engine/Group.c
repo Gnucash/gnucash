@@ -615,7 +615,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
   GList *node;
 
   if (!grp) return;
-  if (!grp->accounts);
+  if (!grp->accounts) return;
 
   account = grp->accounts->data;
 
