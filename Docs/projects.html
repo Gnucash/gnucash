@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>X-Accountant/GnoMoney Project Goals</title>
-<meta name="description" content="The Linux GnoMoney/X-Accountant
+<title>GnuCash Project Goals</title>
+<meta name="description" content="The Linux GnuCash (X-Accountant)
     project aims at creating a world-class personal finance package.
     Goals include ease-of use, double entry, OFX support, charts,
     and reports, and multi-user support.">
@@ -11,8 +11,8 @@
 </head>
 
 <body>
-<h1>X-Accountant/GnoMoney Project Goals</h1>
-X-Accountant/GnoMoney is a Motif/C (and soon GTK) personal finance 
+<h1>GnuCash (formerly X-Accountant) Project Goals</h1>
+GnuCash (previously known as X-Accountant) is a personal finance 
 accounting application.  The project goals are to create a world-class
 GPL'ed Open Source personal financial application for Linux and other 
 Unix's.  The project is the result of a merger 
@@ -27,8 +27,9 @@ The version 1.1.x is *unstable* (may not even compile), and is in
 active development.  This page attempts to describe the current 
 goals & status.  Current efforts center around a port to GTK, and 
 the addition of various features.
-<a href="http://gnomoney.ml.org/gnomoney/index.hts">GnoMoney</a>
-presents a beautified presentation of this material.
+The <a href="http://gnucash.ml.org/">GnuCash</a> pages
+present a broader overview of the people, projects, availability &
+status.
 <p>
 We believe that a GNU GPL project should provide goals and motivations
 at both the large and the small scales, in order to focus and motivate
@@ -45,6 +46,10 @@ large ones shall turn into a multitude of small ones.
 
 <h2>News</h2>
 <dl>
+<dt><b>10 April 1998</b>
+<dd>Work on OFX support, and user-prefrences, has begun in earnest.
+    <p>
+
 <dt><b>10 March 1998</b>
 <dd>Source is available with CVS. See instructions at bottom.
     <p>
@@ -81,7 +86,7 @@ charts of asset allocations, or graphs asset value over time.
 <p>
 
 Create a mechanism for obtaining data from multiple financial sources.
-Currently, X-Accountant stores data in its own file format; it can also
+Currently, GnuCash stores data in its own file format; it can also
 import Quicken(TM) QIF files.   However, other sources & sinks of data
 might be stock-quote web sites, on-line banking interfaces, or
 access to SQL databases.  It should be possible to have any of these at
@@ -133,36 +138,36 @@ architectural goals.
     separation would make the design and implementation of new ledger
     windows much simpler and easier.
     <p>
-    Current Status: the latest alpha-development releases (version 
+    <b>Current Status:</b> the latest alpha-development releases (version 
     1.1.x) contain such an object.  Its currently motif-based, but 
     should be easily portable to Qt, GTK, curses.  
     <p>
 
-<dt><b>C++</b>
-<dd>The current code is written in C, in an object-oriented fashion.
-    However, C++ has many benefits;  a major overhaul and conversion
-    to C++ is needed.  This is a large task, with little short-term 
-    benefit to the project; however, it is vital for getting to the 
-    next level of clean, well-structured code, and thus should be
-    considered a priority.
-    <p>
-
 <dt><b>Extension Language Support</b>
-<dd>Data is currently available by reading the xacc file format, and 
-    by importing QIF files.  This interface should be abstracted,
-    allowing data to come from any source.  The abstraction should
-    involve dynamically loadable modules, so that new modules could
-    be developed and added without the need for recompilations or
-    re-linking.
+<dd>Currently, the application is wired together entirely with 
+    C code.  A goal of the project is to replace this wiring with
+    a highly-configurable extension-language interface.
     <p>
-    Rather than designing a loadable-module API, a better design 
-    goal would probably be to create interfaces to extension 
-    languages (perl, tcl, guile).  Such an interface, laying in
-    between the transaction data, and the GUI that manipulates
-    it, should allow for the easy creation of modules, and for
-    modifying the behavior of the application.  Using
+    The overall architecture is envisioned to be as so:
+    All code, including the transaction engine, the file I/O routines,
+    the menus, and the ledger, will be abstracted into
+    compact modules that can function independently of each other.
+    At the highest level, there will be a infrastructure with
+    extension language interfaces that will "wire together" the
+    various modules.
+    <p>
+    Such "wiring together" will consist of a dispatch infrastructure
+    that will allow arbitrary menu entries to be hooked to arbitrary
+    modules.  The configuration for menu entries, and thier associated
+    callbacks, will be specified in an ext-lang configuration file.
+    At the final stages, it is hoped that new modules can be imported
+    without requiring that the application itself be recompiled & relinked.
+    <p>
+    <b>Status:</b>  Work has begun.  The transaction engine interfaces
+    are avaialable via 
     <a href="http://starship.skyport.net/crew/beazley/swig.html">
-    SWIG</a> should simplify the actual implementation.
+    SWIG</a>.
+    A scheme-based user-preferences/configuration file has been created.
     <p>
 
 <dt><b>Multi-user Support</b>
@@ -198,10 +203,13 @@ architectural goals.
 <dd>The current system makes a distinction between the data (account,
     transaction) and they GUI that displays it.  This distinction should
     be further strengthened, and a set of financial objects, residing in
-    their own library, should be created. 
+    their own library, should be created.   Routines to help make the 
+    engine more transaction-processing oriented should be added.
     <p>
     <b>Current Status:</b> The basic engine has been detangled from 
-    the GUI elements, as of version 1.1.4.
+    the GUI elements, as of version 1.1.4.  Binary file i/o still
+    remains tangled.  Transaction processing constructs are present, but
+    do nothing and are not enforced.
     <p>
 
 <dt><b>OFX support</b>
@@ -211,6 +219,9 @@ architectural goals.
     from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
     The OFX DTD's are included in the 1.1 distributions. See 
     <a href="http://www.ofx.org">OFX HomePage</a> for details.
+    <p>
+    <b>Status:</b>Work on an OFX DTD parser has begun.  
+    Simple scripts have been run past OFX servers.
     <p>
 
 </dl>
@@ -525,6 +536,7 @@ See also <a href="http://www.cs.hmc.edu/~rclark/xacc/merger.html">Merger</a>
 
 <h2>References</h2>
 <ul>
+<li><a href="http://gnucash.ml.org/">GnuCash Home Page</a>
 <li><a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant Home Page</a>
 <li><a href="http://www.hex.net/~cbbrowne/finances.html">CBBrowne's List
     of Linux Accounting Software</a>
@@ -578,7 +590,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
 </ul>
 
 <hr>
-Draft version 0.20 -- April 1998<br>
+Draft version 0.21 -- April 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
