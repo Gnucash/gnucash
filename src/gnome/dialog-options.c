@@ -1776,13 +1776,21 @@ gnc_options_dialog_new(int make_toplevel) {
     retval->window = vbox;
   }
   
-  buttonbox = gtk_hbox_new(FALSE, 2);  
+  buttonbox = gtk_hbutton_box_new ();
 
-  apply_button = gtk_button_new_with_label(_("Apply"));
-  help_button  = gtk_button_new_with_label(_("Help"));
-  ok_button = gtk_button_new_with_label(_("OK"));
-  close_button = gtk_button_new_with_label(_("Close"));
-  
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
+                             GTK_BUTTONBOX_SPREAD);
+
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (buttonbox), 
+			      GNOME_PAD);
+
+  gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
+
+  apply_button = gnome_stock_button (GNOME_STOCK_BUTTON_APPLY);
+  help_button  = gnome_stock_button (GNOME_STOCK_BUTTON_HELP);
+  ok_button    = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
+  close_button = gnome_stock_button (GNOME_STOCK_BUTTON_CLOSE);
+
   gtk_signal_connect(GTK_OBJECT(apply_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_apply_stub_cb),
                      retval);
