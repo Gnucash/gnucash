@@ -51,6 +51,8 @@ GtkWidget * gnc_ui_source_menu_create (Account *account);
 GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
+GtkWidget * gnc_get_pixmap (const char *name);
+
 GtkToolbarStyle gnc_get_toolbar_style (void);
 
 void gnc_get_deficit_color (GdkColor *color);

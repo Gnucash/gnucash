@@ -37,6 +37,7 @@ libgncgnome_a_SOURCES = \
   gnc-html-embedded.c \
   gnc-html-history.c \
   gnc-html.c \
+  gnc-splash.c \
   gtkselect.c \
   mainwindow-account-tree.c \
   new-user-callbacks.c \
@@ -91,6 +92,7 @@ noinst_HEADERS = \
   gnc-html-embedded.h \
   gnc-html-history.h \
   gnc-html.h \
+  gnc-splash.h \
   gtkselect.h \
   mainwindow-account-tree.h \
   new-user-callbacks.h \

@@ -1,3 +1,17 @@
+2001-03-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/pixmaps: add gnucash_long.png graphic
+
+	* src/gnome/top-level.c (gnucash_ui_init): show splash screen
+
+	* src/gnome/gnc-splash.{ch}: splash screen functionality
+
+	* src/gnome/dialog-utils.{ch} (gnc_get_pixmap): new function
+
+	* src/gnc-dir.h.in: add header file with directory info
+
+	* src/guile/Makefile.am: use BUILT_SOURCES for *.in sources
+
 2001-03-04  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-utilities.scm: Added different printing of stock

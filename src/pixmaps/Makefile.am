@@ -1,3 +1,8 @@
+gncpixmapdir = ${GNC_SHAREDIR}
+
+gncpixmap_DATA = \
+  gnucash_long.png
 
 EXTRA_DIST = \
-  .cvsignore
+  .cvsignore \
+  ${gncpixmap_DATA}

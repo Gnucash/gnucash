@@ -62,6 +62,7 @@ noinst_HEADERS = \
   SplitLedger.h \
   file-history.h \
   gnc-component-manager.h \
+  gnc-dir.h \
   gnc-exp-parser.h \
   gnc-ui.h \
   gnc-ui-common.h \
@@ -69,7 +70,8 @@ noinst_HEADERS = \
   messages.h
 
 EXTRA_DIST = \
-  .cvsignore
+  .cvsignore \
+  gnc-dir.h.in
 
 CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
@@ -78,3 +80,20 @@ INCLUDES = \
   -I./engine \
   -I./guile \
   -I./register
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+gnc-dir.h: gnc-dir.h.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:g'
+	mv $@.tmp $@
+BUILT_SOURCES += gnc-dir.h
+
+# We have to do this because otherwise automake insists on putting
+# these files into the dist tarfile.  If there's a a better way,
+# by all means, let us know...
+dist-hook:
+	rm ${distdir}/gnc-dir.h

@@ -49,6 +49,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc.h"
 #include "gnucash-color.h"
@@ -91,6 +92,7 @@ static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(gpointer);
 static void gnc_configure_register_hint_font(void);
 
+
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -112,6 +114,7 @@ static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
+
 
 /* ============================================================== */
 
@@ -214,6 +217,13 @@ gnucash_ui_init(void)
     guppi_tank_init();
 #endif
 
+    /* put up splash screen */
+    gnc_show_splash_screen ();
+
+    /* make sure splash is up */
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
+
     app = gnome_app_new("GnuCash", "GnuCash");
 
     gnc_configure_date_format();
@@ -292,7 +302,8 @@ gnucash_ui_init(void)
 }
 
 static gboolean hasstarted = FALSE;
-void gnc_default_ui_start(void)
+void
+gnc_default_ui_start(void)
 {
     if(!hasstarted)
     {
