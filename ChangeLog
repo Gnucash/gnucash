@@ -1,3 +1,17 @@
+2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/generic-import.scm: New file, contains user
+	prefs for the Transaction matcher:
+	Display, Auto-ADD and Auto-CLEAR thresholds can be ajusted.
+	SKIP and REPLACE action can now be disabled.
+	* src/import-export/gncmod-generic-import.c: Load generic-import.scm
+	* src/import-export/Makefile.am: Add generic-import.scm
+	* src/import-export/Transaction-matcher.c:
+	-Use the new user prefs.
+	-Change the name of the actions to hopefully reflect better the 
+	action that will be taken.  RECONCILE is now CLEAR, and IGNORE is 
+	now SKIP.
+	-Disable numeric scoring.
+
 2002-11-19  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/Scrub.c (xaccTransScrubCurrency): Add code to deal

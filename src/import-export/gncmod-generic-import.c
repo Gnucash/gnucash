@@ -53,6 +53,7 @@ libgncmod_generic_import_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
+  gh_eval_str("(load-from-path \"generic-import/generic-import.scm\")");
   return TRUE;
 }
 

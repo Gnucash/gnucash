@@ -28,6 +28,11 @@ libgncmod_generic_import_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GLIB_LIBS}
 
+gncscmdir = ${GNC_SCM_INSTALL_DIR}/generic-import
+
+gncscm_DATA = \
+	generic-import.scm
+
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = generic-import.glade
 

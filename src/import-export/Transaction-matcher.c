@@ -39,6 +39,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
+#include "global-options.h"
 
 #include "gnc-engine-util.h"
 
@@ -69,9 +70,9 @@ static const int MATCHER_CLIST_MEMO = 4;
 \********************************************************************/
 /* If you modify this, modify get_next_action */
 typedef enum _action{
-  IGNORE,
+  SKIP,
   ADD,
-  RECONCILE,
+  CLEAR,
   REPLACE,
   LAST_ACTION,
   INVALID_ACTION
@@ -86,9 +87,31 @@ struct _transmatcherdialog {
   struct _transactioninfo * selected_trans_info;
 
   char * action_add_text;
-  char * action_reconcile_text;       
+  char * action_clear_text;       
   char * action_replace_text;       
-  char * action_ignore_text;
+  char * action_skip_text;
+
+  gboolean action_skip_enabled;
+  gboolean action_replace_enabled;
+  gboolean action_add_enabled;
+  gboolean action_clear_enabled;
+
+  /*Transaction who's best match probability is equal or higher than
+    this will reconcile their best match by default */
+  int clear_threshold;
+  /*Transaction who's best match probability is below or equal to 
+    this will be added as new by default */
+  int add_threshold;
+  /*Transaction's match probability must be at least this much to be 
+    displayed in the match list.  Dont set this to 0 except for 
+    debugging purposes, otherwise all transactions of every accounts 
+    will be shown in the list */
+  int display_threshold;
+  /*Transaction's who have an online_id kvp frame have been downloaded 
+    online can probably be skipped in the match list, since it is very 
+    unlikely that they would match a transaction downloaded at a later
+    date and yet not have the same online_id.  This also increases
+    performance of the matcher. */
 };
 
 struct _transactioninfo
@@ -127,28 +150,36 @@ struct _matchinfo
 static short module = MOD_IMPORT;
 static const double MATCH_ATM_FEE_TRESHOLD=3.00;
 static const int MATCH_DATE_TRESHOLD=4; /*within 4 days*/
+static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;
+static const int SHOW_NUMERIC_SCORE = FALSE;
+
+static const int DEFAULT_ACTION_ADD_ENABLED = TRUE;
+static const int DEFAULT_ACTION_CLEAR_ENABLED = TRUE;
+
+/********************************************************************\
+ * The folowing are default values for user prefs.  If you modify   *
+ * the value of any of these, you must do the same in               *
+ * generic-import.scm                                               *
+\********************************************************************/
 /*Transaction who's best match probability is equal or higher than
   this will reconcile their best match by default */
-static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
+static const int DEFAULT_CLEAR_THRESHOLD = 5;
 /*Transaction who's best match probability is below or equal to 
   this will be added as new by default */
-static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
+static const int DEFAULT_ADD_THRESHOLD = 2;
 /*Transaction's match probability must be at least this much to be 
   displayed in the match list.  Dont set this to 0 except for 
   debugging purposes, otherwise all transactions of every accounts 
   will be shown in the list */
-static const int TRANSACTION_DISPLAY_PROBABILITY_THRESHOLD = 1;
+static const int DEFAULT_DISPLAY_THRESHOLD = 1;
 /*Transaction's who have an online_id kvp frame have been downloaded 
   online can probably be skipped in the match list, since it is very 
   unlikely that they would match a transaction downloaded at a later
   date and yet not have the same online_id.  This also increases
   performance of the matcher. */
-static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;
 
-static const int ACTION_IGNORE_ENABLED = TRUE;
-static const int ACTION_ADD_ENABLED = TRUE;
-static const int ACTION_RECONCILE_ENABLED = TRUE;
-static const int ACTION_REPLACE_ENABLED = TRUE;
+static const int DEFAULT_ACTION_SKIP_ENABLED = TRUE;
+static const int DEFAULT_ACTION_REPLACE_ENABLED = FALSE;
 
 /* XPM */
 static char * fleche_xpm[] = {
@@ -255,11 +286,11 @@ static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog
 	    }
 	  else
 	    {
-	      if (j<=TRANSACTION_ADD_PROBABILITY_THRESHOLD-1)
+	      if (j<=(matcher->add_threshold)-1)
 		{
 		  strcat(xpm[num_colors+1+i],red_bar);
 		}
-	      else if (j>=TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD-1)
+	      else if (j>=(matcher->clear_threshold)-1)
 		{
 		  strcat(xpm[num_colors+1+i],green_bar);
 		}
@@ -288,30 +319,32 @@ static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog
   return retval;
 }
 
-static Action get_next_action(Action current_action)
+static Action get_next_action(struct _transmatcherdialog * matcher, Action current_action)
 {
   Action retval = INVALID_ACTION;
   Action i = current_action;
-  
+  DEBUG("Begin, action=%d",current_action);
   do
     {
       if (i == LAST_ACTION)
 	{
-	  i=0;
+	  i=SKIP;
 	}
       else
 	{
 	  i++;
 	}
-      if(i==IGNORE&&ACTION_IGNORE_ENABLED==TRUE)
+      DEBUG("i=%d",i);
+      if(i==SKIP&&matcher->action_skip_enabled==TRUE)
 	retval = i;
-      if(i==ADD&&ACTION_ADD_ENABLED==TRUE)
+      if(i==ADD&&matcher->action_add_enabled==TRUE)
 	retval = i;
-      if(i==RECONCILE&&ACTION_RECONCILE_ENABLED==TRUE)
+      if(i==CLEAR&&matcher->action_clear_enabled==TRUE)
 	retval = i;
-      if(i==REPLACE&&ACTION_REPLACE_ENABLED==TRUE)
+      if(i==REPLACE&&matcher->action_replace_enabled==TRUE)
 	retval = i;
     }while(retval==INVALID_ACTION&&i!=current_action);
+      DEBUG("retval=%d",i);
   return retval;
 }
 
@@ -321,18 +354,18 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
   gint i;
   GdkPixmap* fleche;
 
-  DEBUG("Begin");
+  DEBUG("Begin, transaction_info ptr: %p%s%d",transaction_info," action: ", transaction_info->action);
   row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
 					    transaction_info);
   switch(transaction_info->action)
     {
     case ADD: transaction_info->action_text = matcher->action_add_text;
       break;
-    case RECONCILE: transaction_info->action_text= matcher->action_reconcile_text;
+    case CLEAR: transaction_info->action_text= matcher->action_clear_text;
       break;
     case REPLACE:transaction_info->action_text=matcher->action_replace_text;
       break;
-    case IGNORE: transaction_info->action_text=matcher->action_ignore_text;
+    case SKIP: transaction_info->action_text=matcher->action_skip_text;
       break;
     default:
       PERR("Unknown action");
@@ -378,7 +411,7 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
 				   3,
 				   fleche,
 				   NULL);
- 
+    
   gtk_clist_set_row_height        (matcher->downloaded_clist,
 				   23);
 }
@@ -433,13 +466,24 @@ downloaded_transaction_select_cb (GtkCList *clist,
 				       match_info);
       if(match_info->probability!=0)
 	{
-	  gtk_clist_set_pixtext           (matcher->match_clist,
-					   row_number,
-					   MATCHER_CLIST_CONFIDENCE,
-					   match_info->probability_text,
-					   3,
-					   gen_probability_pixmap(match_info->probability, matcher),
-					   NULL);
+	  if(SHOW_NUMERIC_SCORE==TRUE)
+	    {
+	      gtk_clist_set_pixtext (matcher->match_clist,
+				     row_number,
+				     MATCHER_CLIST_CONFIDENCE,
+				     match_info->probability_text,
+				     3,
+				     gen_probability_pixmap(match_info->probability, matcher),
+				     NULL);
+	    }
+	  else
+	    {
+	      gtk_clist_set_pixmap (matcher->match_clist,
+				    row_number,
+				    MATCHER_CLIST_CONFIDENCE,
+				    gen_probability_pixmap(match_info->probability, matcher),
+				    NULL);
+	    }
 	}
       
       gtk_clist_set_row_height        (matcher->match_clist,
@@ -461,10 +505,10 @@ downloaded_transaction_select_cb (GtkCList *clist,
       valid_action_found=FALSE;
       while(valid_action_found==FALSE)
 	{
-	  matcher->selected_trans_info->action=get_next_action(matcher->selected_trans_info->action);
+	  matcher->selected_trans_info->action=get_next_action(matcher, matcher->selected_trans_info->action);
 	  valid_action_found=TRUE;
 	  if(matcher->selected_trans_info->selected_match_info==NULL&&
-	     (matcher->selected_trans_info->action==REPLACE||matcher->selected_trans_info->action==RECONCILE))
+	     (matcher->selected_trans_info->action==REPLACE||matcher->selected_trans_info->action==CLEAR))
 	    {
 	      valid_action_found=FALSE;
 	    }
@@ -519,13 +563,13 @@ match_transaction_unselect_cb(GtkCList *clist,
   DEBUG("row: %d%s%d",row,", column: ",column);
   matcher->selected_trans_info->selected_match_info=NULL;
 
-  /*You can't replace or reconcile a nonexistent transaction*/
-  if(matcher->selected_trans_info->action==RECONCILE||
-     matcher->selected_trans_info->action==REPLACE)
+  /*You can't replace or reconcile if no match is selected*/
+  while(matcher->selected_trans_info->action==CLEAR||
+	matcher->selected_trans_info->action==REPLACE)
     {
-      matcher->selected_trans_info->action=IGNORE;
-      downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
-    }
+      matcher->selected_trans_info->action=get_next_action(matcher, matcher->selected_trans_info->action);
+    } 
+  downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
 }
 
 static void 
@@ -543,7 +587,7 @@ on_matcher_apply_clicked (GtkButton *button,
   for(i=1;transaction_info!=NULL;i++)
     {
       DEBUG("Iteration %d",i);
-      if(transaction_info->action!=IGNORE)
+      if(transaction_info->action!=SKIP)
 	{
 	  if(transaction_info->action==ADD)
 	    {
@@ -552,7 +596,7 @@ on_matcher_apply_clicked (GtkButton *button,
 	      xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
 	      xaccTransCommitEdit(transaction_info->trans);
 	    }
-	  else if(transaction_info->action==RECONCILE)
+	  else if(transaction_info->action==CLEAR)
 	    {
 	      if(transaction_info->selected_match_info->split==NULL)
 		{
@@ -617,9 +661,9 @@ on_matcher_cancel_clicked (GtkButton *button,
   matcher->initialised=FALSE;
   gtk_widget_destroy(matcher->transaction_matcher);
   g_free (matcher->action_add_text);
-  g_free (matcher->action_reconcile_text);
+  g_free (matcher->action_clear_text);
   g_free (matcher->action_replace_text);    
-  g_free (matcher->action_ignore_text);
+  g_free (matcher->action_skip_text);
 }
 
 static void 
@@ -703,9 +747,28 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
   matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "match_clist");
 
   matcher->action_add_text = g_strdup(_("ADD"));
-  matcher->action_reconcile_text =  g_strdup(_("RECONCILE"));       
+  matcher->action_clear_text =  g_strdup(_("CLEAR"));       
   matcher->action_replace_text =  g_strdup(_("REPLACE"));       
-  matcher->action_ignore_text =  g_strdup(_("IGNORE"));
+  matcher->action_skip_text =  g_strdup(_("SKIP"));
+  matcher->action_skip_enabled=gnc_lookup_boolean_option("Transaction Matcher","Enable SKIP transaction action",
+							 DEFAULT_ACTION_SKIP_ENABLED);
+  matcher->action_replace_enabled=gnc_lookup_boolean_option("Transaction Matcher","Enable REPLACE match action",
+							    DEFAULT_ACTION_REPLACE_ENABLED);
+  matcher->action_add_enabled=DEFAULT_ACTION_ADD_ENABLED;
+ matcher->action_clear_enabled=DEFAULT_ACTION_CLEAR_ENABLED;
+  matcher->clear_threshold=gnc_lookup_number_option("Transaction Matcher","Auto-CLEAR threshold",
+						    DEFAULT_CLEAR_THRESHOLD);
+  matcher->add_threshold=gnc_lookup_number_option("Transaction Matcher","Auto-ADD threshold",
+						  DEFAULT_ADD_THRESHOLD);
+  matcher->display_threshold=gnc_lookup_number_option("Transaction Matcher","Match display threshold",
+						      DEFAULT_DISPLAY_THRESHOLD);
+  DEBUG("User prefs:%s%d%s%d%s%d%s%d%s%d",
+	" action_replace_enabled:",matcher->action_replace_enabled,
+	", action_skip_enabled:",matcher->action_skip_enabled,
+	", clear_threshold:",matcher->clear_threshold,
+	", add_threshold:",matcher->add_threshold,
+	", display_threshold:",matcher->display_threshold);
+  
 
   gtk_widget_show(matcher->transaction_matcher);  
   matcher->initialised=TRUE;  
@@ -717,10 +780,10 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
  * The main function for transaction matching.  The heuristics are
  * here. 
 \********************************************************************/
-static void split_find_match( gpointer data, gpointer user_data)
+static void split_find_match( struct _transmatcherdialog * matcher,
+			      struct _transactioninfo * transaction_info,
+			      Split * split)
 {
-  Split * split = data;
-  struct _transactioninfo * transaction_info=user_data;
   struct _matchinfo * match_info;
   double downloaded_split_amount;
   double match_split_amount;
@@ -728,7 +791,7 @@ static void split_find_match( gpointer data, gpointer user_data)
   struct tm downloaded_split_date;
   struct tm match_split_date;
   DEBUG("Begin");
-
+  
   /*Ignore the split if the transaction is open for edit, meaning it was just downloaded
     Ignore the split if the transaction has an online ID, unless overriden in prefs */
   if(xaccTransIsOpen(xaccSplitGetParent(split))==FALSE&&
@@ -740,9 +803,9 @@ static void split_find_match( gpointer data, gpointer user_data)
       match_info->trans = xaccSplitGetParent(split);
     
       downloaded_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split));
-      DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);
+      /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
-      DEBUG(" match_split_amount=%f", match_split_amount);
+      /*DEBUG(" match_split_amount=%f", match_split_amount);*/
       temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
       match_split_date = *localtime(&temp_time_t);
       temp_time_t = xaccTransGetDate(transaction_info->trans);
@@ -830,7 +893,7 @@ static void split_find_match( gpointer data, gpointer user_data)
     
       match_info->clist_text[MATCHER_CLIST_MEMO]=xaccSplitGetMemo(split);/*Split memo*/
     
-      if(match_info->probability >= TRANSACTION_DISPLAY_PROBABILITY_THRESHOLD)
+      if(match_info->probability >= matcher->display_threshold)
 	{
 	  transaction_info->match_list = g_list_append(transaction_info->match_list,
 						   match_info);
@@ -882,6 +945,7 @@ void gnc_import_add_trans(Transaction *trans)
 {
   static struct _transmatcherdialog * matcher;
   gint i;
+  GList * list_element;
   Account * dest_acct;
   gboolean trans_not_found=TRUE;
   struct _transactioninfo * transaction_info = NULL;
@@ -929,29 +993,40 @@ void gnc_import_add_trans(Transaction *trans)
       
       transaction_info->first_split=xaccTransGetSplit(trans,0);/*Only use first split, the source split*/
       transaction_info->trans=trans;
-      
-      g_list_foreach( xaccAccountGetSplitList(xaccSplitGetAccount(transaction_info->first_split)),
-		      split_find_match,
-		      (gpointer)transaction_info);
-      
+   
+
+   
+      list_element = g_list_first(xaccAccountGetSplitList(xaccSplitGetAccount(transaction_info->first_split)));
+      while(list_element!=NULL)
+	{
+	  split_find_match(matcher, transaction_info, list_element->data);
+	  list_element=g_list_next(list_element);
+	}
+
+
+
+
+
+
+
       /*WRITEME:  sort match list and determine default action*/
       transaction_info->match_list=g_list_sort(transaction_info->match_list,
 					       compare_probability);
       best_match=g_list_nth_data(transaction_info->match_list,0);
       if(best_match != NULL && 
-	 best_match->probability >= TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
+	 best_match->probability >= matcher->clear_threshold)
 	{
-	  transaction_info->action=RECONCILE;
+	  transaction_info->action=CLEAR;
 	  transaction_info->selected_match_info=best_match;
 	}
       else if(best_match == NULL ||
-	      best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
+	      best_match->probability<=matcher->add_threshold)
 	{
 	  transaction_info->action=ADD;
 	}
       else
 	{
-	  transaction_info->action=IGNORE;
+	  transaction_info->action=SKIP;
 	}
       
       transaction_info->previous_action=transaction_info->action;
