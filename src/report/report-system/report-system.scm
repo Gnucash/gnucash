@@ -514,7 +514,6 @@
 (export gnc:make-commodity-collector)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-comm-balance-at-date)
-(export gnc:group-get-balance-at-date)
 (export gnc:accounts-get-balance-helper)
 (export gnc:accounts-get-comm-total-profit)
 (export gnc:accounts-get-comm-total-income)
@@ -523,10 +522,8 @@
 (export gnc:group-get-comm-balance-at-date)
 (export gnc:account-get-balance-interval)
 (export gnc:account-get-comm-balance-interval)
-(export gnc:group-get-balance-interval)
 (export gnc:group-get-comm-balance-interval)
 (export gnc:transaction-get-splits)
-(export gnc:split-get-other-splits)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

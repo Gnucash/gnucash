@@ -388,7 +388,7 @@
 ;;       commodity->numeric-collector
 
 (define (gnc:make-commodity-collector)
-  (let 
+  (let
       ;; the association list of (commodity -> value-collector) pairs.
       ((commoditylist '()))
     
@@ -453,7 +453,7 @@
 	       (if sign?
 		   (gnc:numeric-neg ((cadr pair) 'total #f))
 		   ((cadr pair) 'total #f))))))
-    
+
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
@@ -471,34 +471,9 @@
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
 (define (gnc:account-get-balance-at-date account date include-children?)
-  (let ((children-balance
-         (if include-children?
-             (gnc:group-get-balance-at-date
-              (gnc:account-get-children account) date)
-             0))
-        (balance #f)
-        (query (gnc:malloc-query))
-        (splits #f))
-    
-    (gnc:query-set-group query (gnc:get-current-group))
-    (gnc:query-add-single-account-match query account 'query-and)
-    (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
-    (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
-    (gnc:query-set-sort-increasing query #t #t #t)
-    (gnc:query-set-max-splits query 1)
-    
-    (set! splits (gnc:glist->list 
-                  (gnc:query-get-splits query) 
-                  <gnc:Split*>))
-    (gnc:free-query query)
-
-    (if (and splits (not (null? splits)))
-        (set! balance (gnc:numeric-to-double 
-                       (gnc:split-get-balance (car splits))))
-        (set! balance 0.0))
-    (if include-children? 
-        (+ balance children-balance)
-        balance)))    
+  (let ((collector (gnc:account-get-comm-balance-at-date
+                    account date include-children?)))
+    (cadr (collector 'getpair (gnc:account-get-commodity account) #f))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -526,20 +501,11 @@
 		    (gnc:query-get-splits query) 
                   <gnc:Split*>))
       (gnc:free-query query)
-      
+
       (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
 			   (gnc:split-get-balance (car splits))))
       balance-collector))
-
-;; get the balance of a group of accounts at the specified date
-;; inlcuding child accounts.
-(define (gnc:group-get-balance-at-date group date)
-  (apply +
-         (gnc:group-map-all-accounts
-          (lambda (account)
-            (gnc:account-get-balance-at-date account date #f)) 
-          group)))
 
 ;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. The reverse-balance-fn
@@ -617,32 +583,24 @@
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
 (define (gnc:account-get-balance-interval account from to include-children?)
-  ;; Since this function calculates a balance difference it has to
-  ;; subtract the balance of the previous day's end (from-date)
-  ;; instead of the plain date.
-  (- (gnc:account-get-balance-at-date account to include-children?)
-     (gnc:account-get-balance-at-date 
-      account 
-      (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
-      include-children?)))
+  (let ((collector (gnc:account-get-comm-balance-interval
+                    account from to include-children?)))
+    (cadr (collector 'getpair (gnc:account-get-commodity account) #f))))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
 	 account from to include-children?)
+  ;; Since this function calculates a balance difference it has to
+  ;; subtract the balance of the previous day's end (from-date)
+  ;; instead of the plain date.
   (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (this-collector 
-     'minusmerge (gnc:account-get-comm-balance-at-date 
-		  account 
+    (this-collector
+     'minusmerge (gnc:account-get-comm-balance-at-date
+		  account
 		  (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
 		  include-children?) #f)
     this-collector))
-
-(define (gnc:group-get-balance-interval group from to)
-  (apply +
-         (gnc:group-map-all-accounts
-          (lambda (account)
-            (gnc:account-get-balance-interval account from to #t)) group)))
 
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)
@@ -654,6 +612,7 @@
 		  account from to #t)) group))
     this-collector))
 
+;; FIXME redundant
 (define (gnc:transaction-get-splits transaction)
   (let* ((num-splits (gnc:transaction-get-split-count transaction)))
     (let loop ((index 0))
@@ -662,13 +621,3 @@
 	  (cons
 	   (gnc:transaction-get-split transaction index)
 	   (loop (+ index 1)))))))
-
-;; given one split, return the other splits in a transaction
-(define (gnc:split-get-other-splits split)
-  (let loop ((splits 
-	      (gnc:transaction-get-splits (gnc:split-get-parent split))))
-    (if (null? splits) 
-	'()
-	(if (equal? (car splits) split)
-	    (loop (cdr splits))
-	    (cons (car splits) (loop (cdr splits)))))))

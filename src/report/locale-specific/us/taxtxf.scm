@@ -56,7 +56,7 @@
   (let ((level-collector (make-vector num-levels)))
     (do ((i 0 (+ i 1)))
         ((= i num-levels) i)
-      (vector-set! level-collector i (gnc:make-stats-collector)))
+      (vector-set! level-collector i (gnc:make-commodity-collector)))
     level-collector))
 
 (define MAX-LEVELS 16)			; Maximum Account Levels
@@ -104,8 +104,8 @@
                       item))
    (else (gnc:warn warn-msg item " is the wrong type."))))
 
-(define (lx-collector level action value)
-  ((vector-ref levelx-collector (- level 1)) action value))
+(define (lx-collector level action arg1 arg2)
+  ((vector-ref levelx-collector (- level 1)) action arg1 arg2))
 
 ;; IRS asked congress to make the tax quarters the same as real quarters
 ;;   This is the year it is effective.  THIS IS A Y10K BUG!
@@ -288,7 +288,7 @@
          (value (gnc:amount->string account-value print-info))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
-             (not (equal? value (gnc:amount->string 0 print-info))))
+             (not (gnc:numeric-zero-p account-value)))
         (let* ((type (gw:enum-<gnc:AccountType>-val->sym
                       (gnc:account-get-type account) #f))
                (code (gnc:account-get-txf-code account))
@@ -382,11 +382,12 @@
          (blank-cells (make-list (- max-level level)
                                  (gnc:make-html-table-cell #f)))
          (end-cells (make-list (- level 1) (gnc:make-html-table-cell #f))))
+
     (if (and blue? (not txf-date))	; check for duplicate txf codes
         (txf-check-dups account))
-    ;;(if (not (equal? lx-value 0.0)) ; this fails, round off, I guess
+
     (if (or (not suppress-0) (= level 1)
-            (not (equal? value (gnc:amount->string 0 print-info))))
+            (not (gnc:numeric-zero-p lx-value)))
         (begin
           (gnc:html-table-prepend-row!
            table
@@ -609,8 +610,7 @@
         (map (lambda (spl) 
                (let* ((date (gnc:transaction-get-date-posted 
                              (gnc:split-get-parent spl)))
-                      (amount (gnc:numeric-to-double
-                               (gnc:split-get-amount spl)))
+                      (amount (gnc:split-get-amount spl))
                       ;; TurboTax 1999 and 2000 ignore dates after Dec 31
                       (fudge-date (if (and full-year? 
                                            (gnc:timepair-lt to-value date))
@@ -626,7 +626,7 @@
     (define (handle-level-x-account level account)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym
                    (gnc:account-get-type account) #f)))
-        
+
         (if (gnc:account-is-inc-exp? account)
             (let* ((children (gnc:account-get-children account))
                    (to-special #f)	; clear special-splits-period
@@ -646,33 +646,41 @@
                                                            to-value))
                               
                               '()))
-                        
+
                         (map (lambda (x)
                                (if (>= max-level (+ 1 level))
                                    (handle-level-x-account (+ 1 level) x)
                                    '()))
                              (reverse 
                               (gnc:group-get-account-list children)))))
-                   
+
                    (account-balance 
                     (if (gnc:account-get-tax-related account)
                         (if to-special
                             (gnc:account-get-balance-interval
-                             account from-special 
-                             to-special #f)
+                             account from-special to-special #f)
                             (gnc:account-get-balance-interval
                              account from-value to-value #f))
-                        0))) ; don't add non tax related
-              
-              (set! account-balance (+ (if (> max-level level)
-                                           (lx-collector (+ 1 level)
-                                                         'total #f)
-                                           0)
-                                       ;; make positive
-                                       (if (eq? type 'income)
-                                           (- account-balance)
-                                           account-balance)))
-              (lx-collector level 'add account-balance)
+                        (gnc:numeric-zero)))) ; don't add non tax related
+
+              (set! account-balance
+                    (gnc:numeric-add-fixed
+                     (if (> max-level level)
+                         (cadr
+                          (lx-collector (+ 1 level)
+                                        'getpair
+                                        (gnc:account-get-commodity account)
+                                        #f))
+                         (gnc:numeric-zero))
+                       ;; make positive
+                       (if (eq? type 'income)
+                           (gnc:numeric-neg account-balance)
+                           account-balance)))
+
+              (lx-collector level
+                            'add
+                            (gnc:account-get-commodity account)
+                            account-balance)
 
               (let ((level-x-output
                      (if tax-mode?
@@ -688,9 +696,10 @@
                           (render-txf-account account account-balance
                                               #f #f #f #f)))))
                 (if (equal? 1 level)
-                    (lx-collector 1 'reset #f))
+                    (lx-collector 1 'reset #f #f))
+
                 (if (> max-level level)
-                    (lx-collector (+ 1 level) 'reset #f))
+                    (lx-collector (+ 1 level) 'reset #f #f))
 
                 (if (null? level-x-output)
                     '()
@@ -712,16 +721,16 @@
                                  (car (gnc:timepair-canonical-day-time
                                        (cons (current-time) 0))))))
           (file-name #f))
-      
-      
+
       ;; Now, the main body
       ;; Reset all the balance collectors
       (do ((i 1 (+ i 1)))
           ((> i MAX-LEVELS) i)
-        (lx-collector i 'reset #f))
+        (lx-collector i 'reset #f #f))
+
       (set! txf-last-payer "")
       (set! txf-l-count 0)
-      
+
       (if (not tax-mode?)		; Do Txf mode
           (begin
             (set! file-name		; get file name from user
