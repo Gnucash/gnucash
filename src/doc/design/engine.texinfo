@@ -874,12 +874,49 @@ A textual description of the transaction.
 In addition to the above, Transactions contain a key-value pair frame.
 
 
+@subsection The Transaction Edit Cycle
+
+The Engine supports (and, in fact, requires) a 2-phase commit/rollback
+cycle for modifying Transactions and their constituent Splits. A Transaction
+must be opened for editing using @code{xaccTransBeginEdit()} before any of
+the following actions may be taken.
+
+@itemize
+
+@item
+Modifying any field of a Transaction.
+
+@item
+Modifying any Split belonging to the Transaction. That includes
+re-parenting a Split to a different Account or a different Transaction.
+In the case of re-parenting to a new Transaction, both Transactions must
+be opened for editing.
+
+@item
+Deleting any Split belonging to the Transaction.
+
+@item
+Adding a Split to the transaction.
+
+@item
+Deleting the Transaction.
+
+@end itemize
+
+After the desired changes have been made, they must either be committed
+using @code{xaccTransCommitEdit()} or rolled back using
+@code{xaccTransRollbackEdit()}. Rolling back a transaction will undo any
+changes which have been made to it or to its Splits since it was opened
+for editing.
+
+
 @menu
 * General Transaction API::     
+* Transaction Getters::         
 @end menu
 
 
-@node General Transaction API,  , Transactions, Transactions
+@node General Transaction API, Transaction Getters, Transactions, Transactions
 @subsection General Transaction API
 
 @deftypefun {Transaction *} xaccMallocTransaction (void)
@@ -902,6 +939,48 @@ If there is none, @code{NULL} is returned.
 
 @deftypefun void xaccTransSetSlot(Split * @var{trans}, const char * @var{key}, const kvp_value * @var{value})
 Associate a copy of @var{value} with @var{key} in @var{trans}.
+@end deftypefun
+
+
+@node Transaction Getters,  , General Transaction API, Transactions
+@subsection Transaction Getters
+
+@deftypefun {Split *} xaccTransGetSplit (Transaction * @var{trans}, int @var{i})
+Return the @var{I}th Split of @var{trans}.
+@end deftypefun
+
+@deftypefun {const char *} xaccTransGetNum (Transaction * @var{trans})
+Return the number field of @var{trans}.
+@end deftypefun
+
+@deftypefun {const char *} xaccTransGetDescription (Transaction * @var{trans})
+Return the description field of @var{trans}.
+@end deftypefun
+
+@deftypefun time_t xaccTransGetDate (Transaction * @var{trans})
+Return the post date of @var{trans} as a @code{time_t} value.
+@end deftypefun
+
+@deftypefun {long long} xaccTransGetDateL (Transaction * @var{trans})
+Return the post date of @var{trans} as a @code{long long} value.
+@end deftypefun
+
+@deftypefun void xaccTransGetDateTS (Transaction * @var{trans}, Timespec * @var{ts})
+Return the post date of @var{trans} in @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransGetDateEnteredTS (Transaction * @var{trans}, Timespec * @var{ts})
+Return the entry date of @var{trans} in @var{ts}.
+@end deftypefun
+
+@deftypefun {char *} xaccTransGetDateStr (Transaction * @var{trans})
+Return a string representing the post date of @var{trans}, or NULL if
+@var{trans} is NULL. The string must be freed with @code{free()} after
+use.
+@end deftypefun
+
+@deftypefun int xaccTransCountSplits (Transaction * @var{trans})
+Return the number of Splits in @var{trans}.
 @end deftypefun
 
 

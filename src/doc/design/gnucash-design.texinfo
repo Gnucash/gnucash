@@ -108,9 +108,10 @@ Splits
 * Split Getters::               
 * Split Setters::               
 
-Transactions
+The Transaction Edit Cycle
 
 * General Transaction API::     
+* Transaction Getters::         
 
 Register
 
