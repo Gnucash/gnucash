@@ -445,6 +445,8 @@ gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -456,6 +458,8 @@ gnc_option_changed_cb(GtkEditable *editable, gpointer data)
   GNCOption *option = data;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(editable));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -481,6 +485,8 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
                       GINT_TO_POINTER(index));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
@@ -545,6 +551,8 @@ gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(tree));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -559,6 +567,8 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -572,6 +582,8 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -655,6 +667,8 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
@@ -669,6 +683,8 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
   GtkWidget *pbox;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
 
@@ -686,6 +702,8 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -699,6 +717,8 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
   gtk_clist_unselect_all(GTK_CLIST(option->widget));
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -800,6 +820,8 @@ gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
 
   option->changed = TRUE;
 
+  gnc_option_call_option_widget_changed_proc(option);
+
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
@@ -812,6 +834,8 @@ gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
   GNCOption *option = data;
 
   option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
@@ -1250,7 +1274,7 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
   gint default_page = -1;
   gint num_sections;
   gint page;
-  gint i;
+  gint i, j;
 
   tooltips = gtk_tooltips_new();
 
@@ -1274,6 +1298,21 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 
   if (default_section_name != NULL)
     free(default_section_name);
+
+  /* call each option widget changed callbacks once at this point,
+   * now that all options widgets exist.
+   */
+  for (i = 0; i < num_sections; i++)
+  {
+    section = gnc_option_db_get_section(odb, i);
+
+    for (j = 0; j < gnc_option_section_num_options(section); j++)
+    {
+      gnc_option_call_option_widget_changed_proc(
+              gnc_get_option_section_option(section, j) );
+    }
+  }
+
 }
 
 

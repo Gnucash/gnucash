@@ -423,6 +423,13 @@ the account instead of opening a register." #f))
   "g" "Automatically insert a decimal point into values that are entered without one.  Example:  '2000' is changed to '20.00'." #f))
 
 ;(gnc:register-configuration-option
+; (gnc:make-complex-boolean-option
+;  "General" "complex boolean test"
+;  "h" "some random text" #f
+;  (lambda (x) (gnc:warn "setter cb function"))
+;  (lambda (x) (gnc:warn "widget cb function"))))
+
+;(gnc:register-configuration-option
 ; (gnc:make-number-range-option
 ;  "General" "Default precision"
 ;  "f" "Default number of decimal places to display"
