@@ -653,6 +653,12 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    p = be->buff; *p = 0;
    for (node=deletelist; node; node=node->next)
    {
+      Split *s;
+      GUID guid;
+      string_to_guid ((char *)(node->data), &guid);
+      s = xaccSplitLookup(&guid);
+      pgendStoreAuditSplit (be, s, SQL_DELETE);
+
       p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
       p = stpcpy (p, node->data);
       p = stpcpy (p, "';\n");
@@ -691,10 +697,12 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
+         pgendStoreAuditSplit (be, s, SQL_DELETE);
          p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
          p = guid_to_string_buff (xaccSplitGetGUID(s), p);
          p = stpcpy (p, "';\n");
       }
+      pgendStoreAuditTransaction (be, trans, SQL_DELETE);
       p = be->buff; 
       p = stpcpy (p, "DELETE FROM gncTransaction WHERE transGuid='");
       p = guid_to_string_buff (xaccTransGetGUID(trans), p);
@@ -1753,9 +1761,13 @@ pgend_account_commit_edit (Backend * bend,
 
    if (acct->do_free)
    {
+      const GUID *guid = xaccAccountGetGUID(acct);
+      pgendStoreAuditAccount (be, acct, SQL_DELETE);
+      pgendKVPDelete (be, guid);
+
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
-      p = guid_to_string_buff (xaccAccountGetGUID(acct), p);
+      p = guid_to_string_buff (guid, p);
       p = stpcpy (p, "';");
       SEND_QUERY (be,be->buff, 444);
       FINISH_QUERY(be->connection);
@@ -1924,7 +1936,8 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 
    if (pr->do_free) 
    {
-      bufp = be->buff; 
+      pgendStoreAuditPrice (be, pr, SQL_DELETE);
+      bufp = be->buff; *bufp = 0;
       bufp = stpcpy (bufp, "DELETE FROM gncPrice WHERE priceGuid='");
       bufp = guid_to_string_buff (gnc_price_get_guid(pr), bufp);
       bufp = stpcpy (bufp, "';");
@@ -2919,9 +2932,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_lookup = NULL;
             be->be.sync = pgendSyncSingleFile;
             be->be.sync_price = pgendSyncPriceDBSingleFile;
-            PWARN ("MODE_SINGLE_FILE is beta -- \n"
+            PWARN ("MODE_SINGLE_FILE is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
-                   "there aren't any!\n");
+                   "there aren't any! We think its safe to use.\n");
             break;
 
          case MODE_SINGLE_UPDATE:
@@ -2939,9 +2952,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_lookup = NULL;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
-            PWARN ("MODE_SINGLE_UPDATE is beta -- \n"
+            PWARN ("MODE_SINGLE_UPDATE is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
-                   "there aren't any!\n");
+                   "there aren't any! We think its safe to use.\n");
             break;
 
          case MODE_POLL:
@@ -2959,7 +2972,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_lookup = pgendPriceLookup;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
-            PWARN ("MODE_POLL is experimental -- you might corrupt your data\n");
+            PWARN ("MODE_POLL is alpha -- \n"
+                   "there are a few unfixed bugs, but maybe this mode is usable.\n"
+                   "It might still corrupt your data, we're not sure yet.\n");
             break;
 
          case MODE_EVENT:

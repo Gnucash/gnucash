@@ -227,18 +227,10 @@ multi-user mode is fundamentally broken unless they are fixed.
    Failure to do so causes the fill-out algorithm to pull in all 
    data.
 
--- Implement logging history/audit-trail in the SQL server.  
-   (partly done; delete not implemented. )  Need indexes on kvp ...
-
--- if another user deletes a transaction, or an account, there is no way
-   for us to know.  Thus, any sort of sync will probably (incorrectly)
-   add the deleted transaction back in.  Question: what is the best way
-   of having the backend detect that another user has deleted a 
-   transaction?
-   Method A) keep a master list of all transactions, and compare to
-     that.
-   Method B) keep an audit trail of deleted transactions, and check
-     that.
+-- if another user deletes a transaction, or an account, we
+   need to look at the audit trail to see if the thing has been deleted.
+   Otherwise, any sort of sync will incorrectly
+   add the deleted transaction back in.  
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details

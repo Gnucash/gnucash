@@ -525,9 +525,19 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
 
 /* =========================================================== */
 
+#define CPY_KVP(TYPE)							\
+{									\
+   p = stpcpy (p, "INSERT INTO gncKVPValue" TYPE "Trail SELECT '");	\
+   p = stpcpy (p, sess_str);						\
+   p = stpcpy (p, "' as sessionGuid, datetime('NOW') as date_changed, "	\
+                  "'d' as change, * from gncKVPValue" TYPE " WHERE iguid=");\
+   p = stpcpy (p, iguid_str);						\
+}
+
 void 
 pgendKVPDeleteStr (PGBackend *be, const char *guid)
 {
+   char iguid_str[80], sess_str[80];
    char * p;
    int iguid = 0;
    if (!be || !guid) return;
@@ -535,28 +545,34 @@ pgendKVPDeleteStr (PGBackend *be, const char *guid)
    iguid = pgendGetGUIDCacheIDStr (be, guid);
    if (0 == iguid) return;
 
+   sprintf (iguid_str, "%d;", iguid);
+   guid_to_string_buff (be->sessionGuid, sess_str);
+
+   /* first, copy values to the audit tables */
    p = be->buff; *p = 0;
+   CPY_KVP("");
+   CPY_KVP("_dbl");
+   CPY_KVP("_guid");
+   CPY_KVP("_int64");
+   CPY_KVP("_list");
+   CPY_KVP("_numeric");
+   CPY_KVP("_str");
+
+   /* then delete the values */
    p = stpcpy (p, "DELETE FROM gncKVPValue WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_dbl WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_guid WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_int64 WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_list WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_numeric WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_str WHERE iguid=");
-   p += sprintf (p, "%d", iguid);
-   p = stpcpy (p, ";");
+   p = stpcpy (p, iguid_str);
 
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
