@@ -685,6 +685,7 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
     "Linas Vepstas <linas@linas.org>",
     "Joshua Sled <jsled@asynchronous.org>",
     "Derek Atkins <derek@ihtfp.com>",
+    "David Hampton <hampton@employees.org>",
     NULL
   };
 
