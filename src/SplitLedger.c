@@ -656,7 +656,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   Split *split;
 
   split = xaccSRGetCurrentSplit(reg);
-  trans = xaccSplitGetParent(split);
+  trans = xaccSRGetCurrentTrans(reg);
 
   /* This shouldn't happen, but be paranoid. */
   if (trans == NULL)

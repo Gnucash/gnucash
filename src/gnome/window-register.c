@@ -121,6 +121,7 @@ static void helpCB(GtkWidget *w, gpointer data);
 static void startAdjBCB(GtkWidget * w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
+static void duplicateCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
@@ -1091,6 +1092,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_UI_ITEM,
       DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
       deleteCB, regData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      DUPLICATE_MENU_STR, TOOLTIP_DUP_TRANS,
+      duplicateCB, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -2085,6 +2094,27 @@ deleteCB(GtkWidget *widget, gpointer data)
       return;
     }
   }
+}
+
+
+/********************************************************************\
+ * duplicateCB                                                      *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+static void duplicateCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = (RegWindow *) data;
+  Split *new_split;
+
+  new_split = xaccSRDuplicateCurrent(regData->ledger->ledger);
+
+  if (new_split == NULL)
+    return;
+
+  gnc_register_jump_to_split(regData, new_split);
 }
 
 

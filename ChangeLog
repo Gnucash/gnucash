@@ -1,5 +1,16 @@
 2000-03-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/c-interface.scm (gnc:error->string tag args): print a
+ 	stack backtrace.
+
+	* src/gnome/cursors.c: when given a NULL argument, the set and
+	unset busy cursor function change all top-level window cursors.
+	This breaks the motif side though, in that the cursor will no
+	longer get set there. Oh well.
+
+	* src/gnome/window-register.c (duplicateCB): new callback for
+ 	duplicating the current transaction/split.
+
 	* src/SplitLedger.c (xaccSRDuplicateCurrent): new function to
  	duplicate the current split or transaction.
 

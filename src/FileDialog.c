@@ -180,7 +180,6 @@ gncPostFileOpen (const char * filename)
   int io_error, uh_oh=0;
   char buf[BUFSIZE];
   AccountGroup *newgrp;
-  gncUIWidget app;
   char * newfile;
 
   if (!filename) return;
@@ -200,12 +199,11 @@ gncPostFileOpen (const char * filename)
   /* disable logging while we move over to the new set of accounts to
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
-  app = gnc_get_ui_data();
-  gnc_set_busy_cursor(app);
+  gnc_set_busy_cursor(NULL);
   xaccLogDisable();
   newgrp = xaccSessionBeginFile (newsess, newfile);
   xaccLogEnable();
-  gnc_unset_busy_cursor(app);
+  gnc_unset_busy_cursor(NULL);
 
   /* check for session errors, put up appropriate dialog */
   SHOW_LOCK_ERR_MSG (newsess);
@@ -305,19 +303,16 @@ gncFileQIFImport (void)
   char buf[BUFSIZE];
   int io_error, uh_oh = 0;
   AccountGroup *newgrp;
-  gncUIWidget app;
-
-  app = gnc_get_ui_data();
 
   newfile = fileBox(IMPORT_QIF_STR, "*.qif");
   if (!newfile) return;
 
-  gnc_set_busy_cursor(app);
+  gnc_set_busy_cursor(NULL);
 
   /* load the accounts from the file the user specified */
   newgrp = xaccReadQIFAccountGroup (newfile);
 
-  gnc_unset_busy_cursor(app);
+  gnc_unset_busy_cursor(NULL);
 
   /* check for i/o error, put up appropriate error message */
   io_error = xaccGetQIFIOError();
@@ -330,7 +325,7 @@ gncFileQIFImport (void)
     topgroup = xaccMallocAccountGroup();
   }
 
-  gnc_set_busy_cursor(app);
+  gnc_set_busy_cursor(NULL);
 
   /* since quicken will not export all accounts 
    * into one file, we must merge them in one by one */
@@ -338,7 +333,7 @@ gncFileQIFImport (void)
   xaccMergeAccounts (topgroup);
   xaccConsolidateGrpTransactions (topgroup);
 
-  gnc_unset_busy_cursor(app);
+  gnc_unset_busy_cursor(NULL);
 }
 
 /* ======================================================== */
@@ -351,7 +346,7 @@ gncFileSave (void)
   char * newfile;
   char buf[BUFSIZE];
   int io_error, norr, uh_oh = 0;
-  gncUIWidget app;
+
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* if no session exists, then we don't have a filename/path 
@@ -364,10 +359,9 @@ gncFileSave (void)
   }
 
   /* use the current session to save to file */
-  app = gnc_get_ui_data();
-  gnc_set_busy_cursor(app);
+  gnc_set_busy_cursor(NULL);
   xaccSessionSave (current_session);
-  gnc_unset_busy_cursor(app);
+  gnc_unset_busy_cursor(NULL);
 
   /* in theory, no error should have occured, but just in case, 
    * we're gonna check and handle ... */

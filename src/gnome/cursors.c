@@ -45,7 +45,7 @@ gnc_ui_set_cursor (GdkWindow *win, int type)
 {
   GdkCursor *cursor = NULL;
 
-  if (!win)
+  if (win == NULL)
     return;
 
   if (type != GNC_CURSOR_NORMAL)
@@ -61,9 +61,20 @@ gnc_ui_set_cursor (GdkWindow *win, int type)
 }
 
 
+static void
+set_cursor_helper(gpointer window, gpointer data)
+{
+  GtkWidget *widget = GTK_WIDGET(window);
+  int type = GPOINTER_TO_INT(data);
+
+  gnc_ui_set_cursor(widget->window, type);
+}
+
+
 /********************************************************************\
  * gnc_set_busy_cursor                                              * 
- *   sets the cursor to the busy watch                              * 
+ *   sets the cursor to the busy watch for the given window.        * 
+ *   if the window is null, sets the cursor for all toplevel windows*
  *                                                                  * 
  * Args:   w - the widget over which to make cursor busy            * 
  * Return: none                                                     * 
@@ -73,12 +84,17 @@ gnc_set_busy_cursor(GtkWidget *w)
 {
   if (w != NULL)
     gnc_ui_set_cursor(w->window, GNC_CURSOR_BUSY);
+  else
+    g_list_foreach(gtk_container_get_toplevels(),
+                   set_cursor_helper,
+                   GINT_TO_POINTER(GNC_CURSOR_BUSY));
 }
 
 
 /********************************************************************\
  * gnc_unset_busy_cursor                                            * 
- *   sets the cursor to the default cursor                          * 
+ *   sets the cursor to the default cursor for the given window.    * 
+ *   if the window is null, sets the cursor for all toplevel windows*
  *                                                                  * 
  * Args:   w - the widget over which to make cursor normal          * 
  * Return: none                                                     * 
@@ -88,6 +104,10 @@ gnc_unset_busy_cursor(GtkWidget *w)
 {
   if (w != NULL)
     gnc_ui_set_cursor(w->window, GNC_CURSOR_NORMAL);
+  else
+    g_list_foreach(gtk_container_get_toplevels(),
+                   set_cursor_helper,
+                   GINT_TO_POINTER(GNC_CURSOR_NORMAL));
 }
 
 /************************* END OF FILE ******************************\

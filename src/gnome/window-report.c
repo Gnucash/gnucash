@@ -224,20 +224,17 @@ static char *
 gnc_run_report(ReportData *report_data)
 {
   SCM result, nil;
-  gncUIWidget window;
 
   if (!gh_procedure_p(report_data->rendering_thunk))
     return NULL;
 
-  window = gnc_html_window_get_window(reportwindow);
-
-  gnc_set_busy_cursor(window);
+  gnc_set_busy_cursor(NULL);
 
   nil = gh_eval_str("()");
   result = gfec_apply(report_data->rendering_thunk, nil,
                       gnc_report_error_dialog);
 
-  gnc_unset_busy_cursor(window);
+  gnc_unset_busy_cursor(NULL);
 
   if (!gh_string_p(result))
     return NULL;

@@ -357,7 +357,7 @@ disable for now till we figure out what the right thing is.
 
 void
 xaccAccountRemoveSplit ( Account *acc, Split *split )
-  {
+{
   int  i,j;
 
   if (!acc) return;
