@@ -1,5 +1,9 @@
 2003-01-02  Derek Atkins  <derek@ihtfp.com>
 
+	* src/engine/test-core/test-engine-stuff.c: don't test double
+	  KVPs, on the theory that they will soon be deprecated.
+	Fixes #127315
+	
 	* src/engine/test-core/test-engine-stuff.c: random queries only
 	  get up to 3 terms, not 4
 	* src/app-utils/test/test-scm-query-string.c: loop the test 1000
