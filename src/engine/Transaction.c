@@ -398,7 +398,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return FALSE;
   }
 
-  if (!gnc_numeric_eq(xaccSplitGetAmount (sa), xaccSplitGetAmount (sb))
+  if (!gnc_numeric_eq(xaccSplitGetAmount (sa), xaccSplitGetAmount (sb)))
   {
     char *str_a;
     char *str_b;
@@ -414,7 +414,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return FALSE;
   }
 
-  if (!gnc_numeric_eq(xaccSplitGetValue (sa), xaccSplitGetValue (sb))
+  if (!gnc_numeric_eq(xaccSplitGetValue (sa), xaccSplitGetValue (sb)))
   {
     char *str_a;
     char *str_b;
@@ -2526,7 +2526,7 @@ get_corr_account_split(const Split *sa, Split **retval)
   g_return_val_if_fail(sa, TRUE);
   ta = sa->parent;
   
-  sa_value = xaccSplitgetValue (sa);
+  sa_value = xaccSplitGetValue (sa);
   sa_value_positive = gnc_numeric_positive_p(sa_value);
 
   for (split_list = ta->splits;
