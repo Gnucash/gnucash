@@ -1,3 +1,5 @@
+SUBDIRS = . test
+
 pkglib_LTLIBRARIES = libgncmod-register-gnome.la
 
 libgncmod_register_gnome_la_LDFLAGS = -module ${GNOME_LIBDIR} ${GNOMEUI_LIBS}
