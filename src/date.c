@@ -30,18 +30,17 @@
 #include <time.h>
 
 #include "config.h"
-
 #include "date.h"
-#include "util.h"
 
 #define False 0
 #define True  1
 
 /** PROTOTYPES ******************************************************/
-int    validateDate( Date *date );
+static int    validateDate( Date *date );
 
 /** GLOBALS *********************************************************/
 /** DEFAULT FOR FEBRUARY IS 28 VICE 29 (and patched by year in validateDate() **/
+static
 char days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 /********************************************************************\
@@ -87,7 +86,7 @@ adjustMonth( Date *date, int adj )
  * Args:   date - the date structure to edit                        *
  * Return: True if date was changed, otherwise False                *
 \********************************************************************/
-int
+static int
 validateDate( Date *date )
   {
   int valid = True;
