@@ -77,7 +77,7 @@ EXTRA_DIST = \
   io-gncxml-version1.dtd \
   kvp_doc.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS} ${GHTTP_CFLAGS}
 
 LDADD = ${GNOME_XML_LIB}
 

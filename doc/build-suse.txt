@@ -1,7 +1,7 @@
 How to install gnucash on SuSE
 ==============================
 (written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
-(last changed 2000-09-04 by Herbert Thoma (tma@iis.fhg.de))
+(last changed 2001-01-09 by Herbert Thoma (herbie@hthoma.de))
 
 Notes:
 
@@ -10,7 +10,7 @@ Notes:
   your own risk. If you find errors, you might report them to the
   gnucash mailing list (gnucash-devel@gnucash.org)
 
-- This is for SuSE 6.3 and 6.4 (Intel). Earlier SuSE distributions
+- This is for SuSE 6.3, 6.4 and 7.0 (Intel). Earlier SuSE distributions
   lack some required packages. Later SuSE distributions didn't exist
   at the time of writing.
   NOTE: You can install new packages to older versions of SuSE from
@@ -24,11 +24,12 @@ Notes:
 - The current stable version is gnucash-1.4.x,
   the current development version is gnucash-1.5.x,
   the development version needs the latest GNOME libraries
-  to build, especially gnprint >= 0.16 and gdk_pix >= 0.7,
-  which are not included with current SuSE distibutions.
-  The easiest way to get the latest GNOME is to do
+  to build, especially gnprint >= 0.23, gdk_pix >= 0.8
+  and gtkhtml-0.8, which are not included with current SuSE 
+  distibutions. The easiest way to get the latest GNOME is to do
    "lynx -source http://go-gnome.com | sh"
-  as root.
+  as root. At the end of this file is a list which helix gnome
+  packages I have installed at the time of this writing.
 
 Let's go:
 
@@ -61,9 +62,16 @@ Let's go:
     su root -c "unzip -L /tmp/slib2c7"
 
 * Download g-wrap from
-    ftp://ftp.gnucash.org/pub/g-wrap/g-wrap-0.9.1..tar.gz
+    ftp://ftp.gnucash.org/pub/g-wrap/g-wrap-1.1.4..tar.gz
   unpack and untar, then
   ./configure, make, su, make install
+
+* If you want to build the development version, download Guppi from
+    ftp://ftp.gnome.org/pub/guppi/Guppi-0.35.2.tar.gz
+  unpack and untar, then
+  ./configure, make, su, make install
+  Guppi is not yet part of standard gnome distributions, but I expect it
+  to become more common soon.
 
 * Download GnuCash
   stable version:
@@ -91,3 +99,78 @@ Let's go:
 * You may need to run GnuCash once as root, because guile needs to set up
   some things for slib. Alternatively you can try as root:
     guile -c '(use-modules (ice-9 slib)) (require 'new-catalog)'
+
+-------
+List of helix gnome packages:
+
+audiofil-0.1.9-136_helix_1.i386.rpm
+bonobo-0.30-0_helix_2.i386.rpm
+bonobod-0.30-0_helix_2.i386.rpm
+bugbuddy-1.2-0_helix_1.i386.rpm
+ckfntpth-1.7-0_helix_1.i386.rpm
+esound-0.2.20-0_helix_1.i386.rpm
+gal-0.4.1-0_helix_1.i386.rpm
+galdev-0.4.1-0_helix_1.i386.rpm
+gdk_pix-0.9.0-0_helix_1.i386.rpm
+gdk_pixd-0.9.0-0_helix_1.i386.rpm
+gdm-2.0beta4-110_helix_3.i386.rpm
+glade-0.5.9-0_helix_1.i386.rpm
+glib-1.2.8-33_helix_1.i386.rpm
+glibdev-1.2.8-33_helix_1.i386.rpm
+gmc-4.5.51-0_helix_2.i386.rpm
+gn_doc-1.2-0_helix_1.i386.rpm
+gnapplts-1.2.4-0_helix_1.i386.rpm
+gncontr-1.2.2-0_helix_1.i386.rpm
+gncontrd-1.2.2-0_helix_1.i386.rpm
+gncore-1.2.4-0_helix_1.i386.rpm
+gncored-1.2.4-0_helix_1.i386.rpm
+gnlibs-1.2.8-0_helix_1.i386.rpm
+gnlibsd-1.2.8-0_helix_1.i386.rpm
+gnprint-0.25-0_helix_1.i386.rpm
+gnprintd-0.25-0_helix_1.i386.rpm
+gtk-1.2.8-32_helix_1.i386.rpm
+gtkdev-1.2.8-32_helix_1.i386.rpm
+gtkhtml-0.8-0_helix_3.i386.rpm
+gtkhtmld-0.8-0_helix_3.i386.rpm
+gtkmm-1.2.3-0_helix_1.i386.rpm
+hlxswtpl-0.1-0_helix_1.i386.rpm
+hupdate-0.9-0_helix_1.i386.rpm
+imlib-1.9.8.1-32_helix_1.i386.rpm
+imlibcfe-1.9.8.1-32_helix_1.i386.rpm
+imlibdev-1.9.8.1-32_helix_1.i386.rpm
+libgal1-0.2.2-0_helix_1.i386.rpm
+libgal3-0.4.1-0_helix_1.i386.rpm
+libghtt-1.0.7-0_helix_1.i386.rpm
+libghttd-1.0.7-0_helix_1.i386.rpm
+libglad-0.14-0_helix_1.i386.rpm
+libgladd-0.14-0_helix_1.i386.rpm
+libgnomeprint11-0.25-0_helix_1.i386.rpm
+libgnomeprint6-0.20-0_helix_5.i386.rpm
+libgtop-1.0.9-29_helix_1.i386.rpm
+libgtopd-1.0.9-29_helix_1.i386.rpm
+libole2-0.1.7-0_helix_1.i386.rpm
+libole2d-0.1.7-0_helix_1.i386.rpm
+librep-0.13.2-0_helix_1.i386.rpm
+libxml-1.8.10-0_helix_1.i386.rpm
+libxmld-1.8.10-0_helix_1.i386.rpm
+liconv-1.5-0_helix_1.i386.rpm
+liconvd-1.5-0_helix_1.i386.rpm
+lsigcpp-1.0.1-0_helix_1.i386.rpm
+lunicod-0.4.gnome-0_helix_1.i386.rpm
+lunicodd-0.4.gnome-0_helix_1.i386.rpm
+mc-4.5.51-0_helix_2.i386.rpm
+memprof-0.4.0-0_helix_1.i386.rpm
+oaf-0.6.1-0_helix_1.i386.rpm
+oafdev-0.6.1-0_helix_1.i386.rpm
+orbit-0.5.5-0_helix_2.i386.rpm
+orbitdev-0.5.5-0_helix_2.i386.rpm
+perlgnom-0.7003-0_helix_2.i386.rpm
+popt-1.5-68_helix_1.i386.rpm
+repglad-0.14-0_helix_1.i386.rpm
+repgnm-0.14-0_helix_1.i386.rpm
+repgtk-0.14-0_helix_1.i386.rpm
+sawfish-0.33.1-0_helix_1.i386.rpm
+tcd-1.2.0-25_helix_1.i386.rpm
+urwfonts-1.1-0_helix_1.i386.rpm
+xmms-1.2.3-0_helix_1.i386.rpm
+xmmsesd-1.2.3-0_helix_1.i386.rpm
