@@ -250,12 +250,19 @@ static const char *
 DateLeave (struct _SingleCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
+   char buff[30];
+   char * retval;
 
    /* OK, we are leaving the cell.  Find out
     * what date that cell thinks it has.   */
    xaccParseDate (&(cell->date), curr);
 
-   return curr;
+   sprintf (buff, "%d/%d/%d", cell->date.tm_mday, 
+                              cell->date.tm_mon+1, 
+                              cell->date.tm_year+1900);
+
+   retval = strdup (buff);
+   return retval;
 }
 
 /* ================================================ */
