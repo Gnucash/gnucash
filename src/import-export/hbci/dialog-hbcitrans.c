@@ -256,57 +256,57 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     GtkWidget *del_templ_button;
         
     g_assert 
-      (heading_label = glade_xml_get_widget (xml, "heading_label"));
+      ((heading_label = glade_xml_get_widget (xml, "heading_label")) != NULL);
     g_assert 
-      (td->recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
+      ((td->recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry")) != NULL);
     g_assert 
-      (recp_name_heading = glade_xml_get_widget (xml, "recp_name_heading"));
+      ((recp_name_heading = glade_xml_get_widget (xml, "recp_name_heading")) != NULL);
     g_assert
-      (td->recp_account_entry = glade_xml_get_widget (xml, "recp_account_entry"));
+      ((td->recp_account_entry = glade_xml_get_widget (xml, "recp_account_entry")) != NULL);
     g_assert
-      (recp_account_heading = glade_xml_get_widget (xml, "recp_account_heading"));
+      ((recp_account_heading = glade_xml_get_widget (xml, "recp_account_heading")) != NULL);
     g_assert
-      (td->recp_bankcode_entry = glade_xml_get_widget (xml, "recp_bankcode_entry"));
+      ((td->recp_bankcode_entry = glade_xml_get_widget (xml, "recp_bankcode_entry")) != NULL);
     g_assert
-      (recp_bankcode_heading = glade_xml_get_widget (xml, "recp_bankcode_heading"));
+      ((recp_bankcode_heading = glade_xml_get_widget (xml, "recp_bankcode_heading")) != NULL);
     g_assert
-      (td->recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label"));
+      ((td->recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label")) != NULL);
     g_assert
-      (amount_hbox = glade_xml_get_widget (xml, "amount_hbox"));
+      ((amount_hbox = glade_xml_get_widget (xml, "amount_hbox")) != NULL);
     g_assert
-      (td->purpose_entry = glade_xml_get_widget (xml, "purpose_entry"));
+      ((td->purpose_entry = glade_xml_get_widget (xml, "purpose_entry")) != NULL);
     g_assert
-      (td->purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry"));
+      ((td->purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry")) != NULL);
     g_assert
-      (orig_name_label = glade_xml_get_widget (xml, "orig_name_label"));
+      ((orig_name_label = glade_xml_get_widget (xml, "orig_name_label")) != NULL);
     g_assert
-      (orig_account_label = glade_xml_get_widget (xml, "orig_account_label"));
+      ((orig_account_label = glade_xml_get_widget (xml, "orig_account_label")) != NULL);
     g_assert
-      (orig_bankname_label = glade_xml_get_widget (xml, "orig_bankname_label"));
+      ((orig_bankname_label = glade_xml_get_widget (xml, "orig_bankname_label")) != NULL);
     g_assert
-      (orig_bankcode_label = glade_xml_get_widget (xml, "orig_bankcode_label"));
+      ((orig_bankcode_label = glade_xml_get_widget (xml, "orig_bankcode_label")) != NULL);
     g_assert
-      (orig_name_heading = glade_xml_get_widget (xml, "orig_name_heading"));
+      ((orig_name_heading = glade_xml_get_widget (xml, "orig_name_heading")) != NULL);
     g_assert
-      (orig_account_heading = glade_xml_get_widget (xml, "orig_account_heading"));
+      ((orig_account_heading = glade_xml_get_widget (xml, "orig_account_heading")) != NULL);
     g_assert
-      (orig_bankname_heading = glade_xml_get_widget (xml, "orig_bankname_heading"));
+      ((orig_bankname_heading = glade_xml_get_widget (xml, "orig_bankname_heading")) != NULL);
     g_assert
-      (orig_bankcode_heading = glade_xml_get_widget (xml, "orig_bankcode_heading"));
+      ((orig_bankcode_heading = glade_xml_get_widget (xml, "orig_bankcode_heading")) != NULL);
     g_assert
-      (exec_later_button = glade_xml_get_widget (xml, "exec_later_button"));
+      ((exec_later_button = glade_xml_get_widget (xml, "exec_later_button")) != NULL);
     g_assert
-      (td->template_gtk_list = glade_xml_get_widget (xml, "template_list"));
+      ((td->template_gtk_list = glade_xml_get_widget (xml, "template_list")) != NULL);
     g_assert
-      (add_templ_button = glade_xml_get_widget (xml, "add_templ_button"));
+      ((add_templ_button = glade_xml_get_widget (xml, "add_templ_button")) != NULL);
     g_assert
-      (moveup_templ_button = glade_xml_get_widget (xml, "moveup_templ_button"));
+      ((moveup_templ_button = glade_xml_get_widget (xml, "moveup_templ_button")) != NULL);
     g_assert
-      (movedown_templ_button = glade_xml_get_widget (xml, "movedown_templ_button"));
+      ((movedown_templ_button = glade_xml_get_widget (xml, "movedown_templ_button")) != NULL);
     g_assert
-      (sort_templ_button = glade_xml_get_widget (xml, "sort_templ_button"));
+      ((sort_templ_button = glade_xml_get_widget (xml, "sort_templ_button")) != NULL);
     g_assert
-      (del_templ_button = glade_xml_get_widget (xml, "del_templ_button"));
+      ((del_templ_button = glade_xml_get_widget (xml, "del_templ_button")) != NULL);
 
     td->amount_edit = gnc_amount_edit_new();
     gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td->amount_edit);
