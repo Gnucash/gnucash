@@ -35,6 +35,7 @@
 #include <glib.h>
 #include <gtk/gtkmain.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "gnc-http.h"
@@ -109,7 +110,7 @@ ghttp_check_callback(gpointer data) {
     req = current->data;
 
     if(!req) {
-      printf(_("NULL request. \n"));
+      g_warning("NULL request.");
       continue;
     }
 
