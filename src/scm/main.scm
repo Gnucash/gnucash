@@ -167,6 +167,7 @@
   (load-from-path "extensions.scm")
   (load-from-path "main-window.scm")
   (load-from-path "tip-of-the-day.scm")
+  (load-from-path "printing/print-check.scm")
 
   (gnc:use-guile-module-here! '(gnucash price-quotes))
 

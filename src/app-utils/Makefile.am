@@ -62,6 +62,7 @@ gncscm_DATA = \
   hooks.scm \
   options.scm \
   prefs.scm \
+  simple-obj.scm \
   utilities.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}

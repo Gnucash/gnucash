@@ -1,3 +1,26 @@
+2001-10-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/Makefile.am: remove slib-backup.scm and startup.scm
+
+	* src/scm/bootstrap.scm.in: remove out-of-date docs
+
+	* src/scm/main.scm: load printing/print-check.scm
+
+	* src/import-export/qif-import/Makefile.am: remove simple-obj.scm
+
+	* src/import-export/qif-import/qif-import.scm: don't load
+	simple-obj.scm
+
+	* src/guile/gw-gnc-spec.scm: remove printing g-wraps
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: add printing g-wraps
+
+	* src/engine/Account.c (xaccAccountSetSlots_nc): set core_dirty
+
+	* src/app-utils/Makefile.am: add simple-obj.scm
+
+	* src/app-utils/app-utils.scm: export simple-obj api
+
 2001-10-24  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (sxed_delete_event): Added.

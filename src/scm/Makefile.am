@@ -15,8 +15,6 @@ gnc_regular_scm_files = \
   main.scm \
   main-window.scm \
   path.scm \
-  slib-backup.scm \
-  startup.scm \
   substring-search.scm \
   tip-list.scm \
   tip-of-the-day.scm \

@@ -232,6 +232,15 @@
 (export gnc:*new-book-hook*)
 (export gnc:*book-closed-hook*)
 
+;; simple-obj
+(export make-simple-class)
+(export simple-obj-getter)
+(export simple-obj-setter)
+(export simple-obj-print)
+(export simple-obj-to-list)
+(export simple-obj-from-list)
+(export make-simple-obj)
+
 ;; utilities
 (export hash-fold)
 (export item-list->hash!)
@@ -245,6 +254,7 @@
 (load-from-path "hooks.scm")
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")
+(load-from-path "simple-obj.scm")
 (load-from-path "utilities.scm")
 
 (gnc:hook-add-dangler gnc:*startup-hook*

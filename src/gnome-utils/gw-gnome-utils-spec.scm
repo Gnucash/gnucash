@@ -38,6 +38,7 @@
    (lambda (client-only?) 
      (list 
       "#include <gnc-mdi-utils.h>\n"
+      "#include <print-session.h>\n"
       )))
 
   (let ((nnt (gw:wrap-non-native-type
@@ -77,4 +78,71 @@
    "gnc_mdi_restore" '((<gnc:mdi-info*> mi) 
                        ((<gw:m-chars-caller-owned> gw:const) bookname))
    "Restore MDI window configuration for the specified book")
+
+
+  (let ((nnt (gw:wrap-non-native-type
+              mod
+              '<gnc:PrintSession*>
+              "PrintSession*" "const PrintSession*")))
+    #t)
+
+  (let ((nnt (gw:wrap-non-native-type
+              mod
+              '<gnc:PrintDialog*>
+              "PrintDialog*" "const PrintDialog*")))
+    #t)
+
+  (let ((nnt (gw:wrap-non-native-type
+              mod
+              '<gnc:PaperDialog*>
+              "PaperDialog*" "const PaperDialog*")))
+    #t)
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-create
+   '<gnc:PrintSession*>
+   "gnc_print_session_create"
+   '()
+   "Start a new print session.")
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-destroy
+   '<gw:void>
+   "gnc_print_session_destroy"
+   '((<gnc:PrintSession*> p))
+   "Free a print session's resources")
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-moveto
+   '<gw:void>
+   "gnc_print_session_moveto"
+   '((<gnc:PrintSession*> p) (<gw:double> x) (<gw:double> y))
+   "Move the current point")
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-text
+   '<gw:void>
+   "gnc_print_session_text"
+   '((<gnc:PrintSession*> p) ((<gw:m-chars-caller-owned> gw:const) text))
+   "Show some text in Courier 16")
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-done
+   '<gw:void>
+   "gnc_print_session_done"
+   '((<gnc:PrintSession*> p))
+   "Let the print context know you're finished with it.")
+
+  (gw:wrap-function
+   mod
+   'gnc:print-session-print
+   '<gw:void>
+   "gnc_print_session_print"
+   '((<gnc:PrintSession*> p))
+   "Show the GNOME print dialog to start printing.")
 )

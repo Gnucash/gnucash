@@ -31,8 +31,7 @@ gncscm_DATA = \
   qif-objects.scm \
   qif-parse.scm \
   qif-to-gnc.scm \
-  qif-utils.scm \
-  simple-obj.scm
+  qif-utils.scm
 
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade

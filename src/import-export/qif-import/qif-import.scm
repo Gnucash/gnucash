@@ -20,7 +20,6 @@
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
 
-(load-from-path "qif-import/simple-obj.scm")
 (load-from-path "qif-import/qif-objects.scm")      ;; class definitions 
 (load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
 (load-from-path "qif-import/qif-utils.scm")         
