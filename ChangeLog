@@ -1,5 +1,33 @@
 2001-11-12  Rob Browning  <rlb@defaultvalue.org>
 
+	* src/report/utility-reports/test/Makefile.am: use gnc-test-env.
+
+	* src/report/stylesheets/test/Makefile.am: switch to use gnc-test-env.
+
+	* src/gnome/Makefile.am: accomodate files from src/guile.
+
+	* src/gnome/gnucash.c.in: moved here from src/guile.
+
+	* src/gnome/gnucash.h: moved here from src/guile.
+
+	* src/gnome/i18n.h.in: moved here from src/guile.
+
+	* src/gnome/.cvsignore: add files from src/guile.
+
+	* src/Makefile.am: update to reflect deleted src/gnome.
+
+	* configure.in: update to reflect deleted src/gnome.
+
+	* src/guile: deleted -- remaining contents moved to src/gnome.
+
+	* src/scm/Makefile.am: added config.
+
+	* src/scm/config: moved from src/scm.
+
+	* src/guile/Makefile.am: remove config.
+
+	* src/guile/config: moved to src/scm.
+
 	* src/report/standard-reports/test/Makefile.am: use gnc-test-env.
 
 	* configure.in: set execute bit on gnc-test-env.
