@@ -60,6 +60,9 @@
  * a key such as 'some/key' or 'some/./other/../key' because you
  * may get unexpected results.
  * 
+ * In almost all cases, you want to be using the kvp_frame_set_gint64()
+ * routine or one of its brothers.  Most of the other routines provide
+ * only low-level access.
  */
 typedef struct _KvpFrame KvpFrame;
 
@@ -116,9 +119,66 @@ gchar* binary_to_string(const void *data, guint32 size);
 gchar* kvp_value_glist_to_string(const GList *list);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
-
 /** @name KvpFrame Value Storing */
 /*@{*/
+
+/** The kvp_frame_set_str() routine will store a string at the indicated path.
+ *  If not all frame components of the path exist, they are created.
+ * */
+void kvp_frame_set_gint64(KvpFrame * frame, const char * path, gint64 ival);
+void kvp_frame_set_double(KvpFrame * frame, const char * path, double dval);
+void kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval);
+void kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str);
+void kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid);
+void kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts);
+
+/** The kvp_frame_add_url_encoding() routine will parse the
+ *  value string, assuming it to be URL-encoded in the standard way,
+ *  turning it into a set of key-value pairs, and adding those to the
+ *  indicated frame.  URL-encoded strings are the things that are
+ *  returned by web browsers when a form is filled out.  For example,
+ *  'start-date=June&end-date=November' consists of two keys, 
+ *  'start-date' and 'end-date', which have the values 'June' and 
+ *  'November', respectively.  This routine also handles % encoding.
+ *
+ *  This routine treats all values as strings; it does *not* attempt
+ *  to perform any type-conversion.
+ * */
+void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
+/*@}*/
+
+/** @name KvpFrame KvpValue low-level storing routines. */
+/*@{*/
+
+/** You probably shouldn't be using these low-level routines */
+
+/** The kvp_frame_set_slot_slash() routine copies the value into the frame,
+ *    at the location 'path'.   If the path contains slashes '/', these 
+ *    are assumed to represent a sequence of keys.  The returned value 
+ *    is a pointer to the actual frame into which the value was inserted;
+ *    it is NULL if the frame couldn't be found (and thus the value wasn't 
+ *    inserted).
+ *
+ *    Pointers passed as arguments into this routine are the responsibility 
+ *    of the caller; the pointers are *not* taken over or managed.
+ */
+KvpFrame *   kvp_frame_set_slot_slash(KvpFrame * frame, 
+                                 const char * path, const KvpValue * value);
+/**
+ * The kvp_frame_set_slot_slash_nc() routine puts the value (without copying
+ *    it) into the frame, putting it at the location 'path'.  If the path 
+ *    contains slashes '/', these are assumed to represent a sequence of keys.
+ *    The returned value is a pointer to the actual frame into which the value 
+ *    was inserted; it is NULL if the frame couldn't be found (and thus the 
+ *    value wasn't inserted).
+ *
+ *    This routine is handy for avoiding excess memory allocations & frees.
+ *    Note that because the KvpValue was grabbed, you can't just delete 
+ *    unless you remove the key as well (or unless you replace the value).
+ */
+KvpFrame *    kvp_frame_set_slot_slash_nc(KvpFrame * frame, 
+                                 const char * path, KvpValue * value);
+
 /** The kvp_frame_set_slot() routine copies the value into the frame,
  *    associating it with a copy of 'key'.  Pointers passed as arguments 
  *    into kvp_frame_set_slot are the responsibility of the caller;
@@ -152,19 +212,6 @@ void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
                                               const KvpValue *value,
                                               GSList *key_path);
 
-/** The kvp_frame_add_url_encoding()routine will parse the
- *  value string, assuming it to be URL-encoded in the standard way,
- *  turning it into a set of key-value pairs, and adding those to the
- *  indicated frame.  URL-encoded strings are the things that are
- *  returned by web browsers when a form is filled out.  For example,
- *  'start-date=June&end-date=November' consists of two keys, 
- *  'start-date' and 'end-date', which have the values 'June' and 
- *  'November', respectively.  This routine also handles % encoding.
- *
- *  This routine treats all values as strings; it does *not* attempt
- *  to perform any type-conversion.
- * */
-void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /*@}*/
 
 

@@ -102,7 +102,7 @@ Name: /book/open-date
 Type: Timespec
 Entities: Book
 Use:  The posted opening date of this book.  This book only contains transactions
-      whose posted date is laterr than this closing date.
+      whose posted date is later than this closing date.
 
 Name: /book/prev-acct
 Type: GUID
