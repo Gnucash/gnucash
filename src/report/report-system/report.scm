@@ -51,8 +51,7 @@
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name 
-                              options-generator options-editor 
+                    '(version name options-generator
                               options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
                               menu-tip export-thunk)))
@@ -70,7 +69,6 @@
      #f                         ;; version
      #f                         ;; name
      #f                         ;; options-generator
-     #f                         ;; options-editor
      #f                         ;; options-cleanup-cb
      #f                         ;; options-changed-cb
      #f                         ;; renderer
@@ -106,8 +104,6 @@
   (record-accessor <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
-(define gnc:report-template-options-editor
-  (record-accessor <report-template> 'options-editor))
 (define gnc:report-template-options-cleanup-cb
   (record-accessor <report-template> 'options-cleanup-cb))
 (define gnc:report-template-options-changed-cb
@@ -268,16 +264,6 @@
         (gnc:report-template-new-options template)
         #f)))
 
-(define (gnc:report-options-editor report) 
-  (let ((template 
-         (hash-ref  *gnc:_report-templates_* 
-                    (gnc:report-type report))))
-    (if template
-        (let ((ed (gnc:report-template-options-editor template)))
-	  (if ed ed 
-	      gnc:default-options-editor))
-        #f)))
-
 (define (gnc:report-export-thunk report)
   (let ((template 
          (hash-ref  *gnc:_report-templates_* 
@@ -334,6 +320,9 @@
 
 (define (gnc:find-report id) 
   (hash-ref *gnc:_reports_* id))
+
+(define (gnc:find-report-template report-type) 
+  (hash-ref *gnc:_report-templates_* report-type))
 
 (define (gnc:report-generate-restore-forms report)
   ;; clean up the options if necessary.  this is only needed 
