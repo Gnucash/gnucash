@@ -133,8 +133,8 @@
 	  (delete-duplicates
 	   (sort (map gnc:account-get-commodity accounts) 
 		 (lambda (a b) 
-		   (string<? (gnc:commodity-get-mnemonic a)
-			     (gnc:commodity-get-mnemonic b)))))))
+		   (string<? (or (gnc:commodity-get-mnemonic a) "")
+			     (or (gnc:commodity-get-mnemonic b) "")))))))
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
