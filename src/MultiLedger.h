@@ -79,6 +79,14 @@ xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_account,
                                               SplitRegisterType type,
                                               SplitRegisterStyle style);
 
+/* display a register for an arbitrary query */
+xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,
+                                            SplitRegisterType type,
+                                            SplitRegisterStyle style);
+
+/* Set the query used for a register. */
+void xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q);
+
 /* redisplay/redraw all windows that contain any transactions that are
  * associated with the indicated account. */
 void        xaccAccountDisplayRefresh (Account *account);

@@ -905,12 +905,11 @@ static void
 gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow * regdata = data;
-  if(regdata->ledger->type == SEARCH_LEDGER) {
-    gnc_ui_find_transactions_dialog_create(regdata->ledger);
-  }
-  else {
-    gnc_ui_find_transactions_dialog_create(NULL);
-  }    
+
+  if (regdata->ledger->type == SEARCH_LEDGER)
+    gnc_ui_find_transactions_dialog_create (regdata->ledger);
+  else
+    gnc_ui_find_transactions_dialog_create (NULL);
 }
 
 

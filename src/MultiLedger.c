@@ -43,6 +43,12 @@
 static short module = MOD_LEDGER;
 
 
+/** Declarations ****************************************************/
+static xaccLedgerDisplay *
+xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
+                           SplitRegisterType type, SplitRegisterStyle style);
+
+
 /** Implementations *************************************************/
 
 static gboolean
@@ -339,6 +345,30 @@ close_handler (gpointer user_data)
   g_free (ld);
 }
 
+static void
+make_ledger_query (xaccLedgerDisplay *ld, gboolean show_all,
+                   SplitRegisterType type)
+{
+  ld->query = xaccMallocQuery ();
+
+  /* This is a bit of a hack. The number of splits should be
+   * configurable, or maybe we should go back a time range instead
+   * of picking a number, or maybe we should be able to exclude
+   * based on reconciled status. Anyway, this works for now. */
+  if (!show_all && (type != SEARCH_LEDGER))
+    xaccQuerySetMaxSplits (ld->query, 30);
+
+  xaccQuerySetGroup (ld->query, gncGetCurrentGroup());
+
+  if (ld->displayed_accounts)
+    xaccQueryAddAccountMatch (ld->query, ld->displayed_accounts,
+                              ACCT_MATCH_ANY, QUERY_OR);
+
+  if (ld->leader &&
+      (g_list_find (ld->displayed_accounts, ld->leader) == NULL))
+    xaccQueryAddSingleAccountMatch (ld->query, ld->leader, QUERY_OR);
+}
+
 /********************************************************************\
  * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
@@ -347,11 +377,46 @@ close_handler (gpointer user_data)
  *                        (may be NULL)                             *
  *         accounts     - the list of accounts to display           *
  *                        (may be NULL)                             *
+ *         type         - the type of split register to open        *
+ *         style        - the style of register to use              *
  * Return: the register window instance                             *
 \********************************************************************/
 xaccLedgerDisplay *
 xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
                           SplitRegisterType type, SplitRegisterStyle style)
+{
+  return xaccLedgerDisplayInternal (lead_account, accounts, NULL, type, style);
+}
+
+/********************************************************************\
+ * xaccLedgerDisplayQuery                                           *
+ *   opens up a ledger window for an arbitrary query                *
+ *                                                                  *
+ * Args:   query - the query to use for the register                *
+ *         type  - the type of split register to open               *
+ *         style - the style of register to use                     *
+ * Return: the register window instance                             *
+\********************************************************************/
+xaccLedgerDisplay *
+xaccLedgerDisplayQuery (Query *query, SplitRegisterType type,
+                        SplitRegisterStyle style)
+{
+  return xaccLedgerDisplayInternal (NULL, NULL, query, type, style);
+}
+
+void
+xaccLedgerDisplaySetQuery (xaccLedgerDisplay *ledger_display, Query *q)
+{
+  if (!ledger_display || !q)
+    return;
+
+  xaccFreeQuery (ledger_display->query);
+  ledger_display->query = xaccQueryCopy (q);
+}
+
+static xaccLedgerDisplay *
+xaccLedgerDisplayInternal (Account *lead_account, GList *accounts, Query *q,
+                           SplitRegisterType type, SplitRegisterStyle style)
 {
   xaccLedgerDisplay *ld;
   gboolean show_all;
@@ -402,24 +467,10 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
                                         TRUE);
 
   /* set up the query filter */
-  ld->query = xaccMallocQuery ();
-
-  /* This is a bit of a hack. The number of splits should be
-   * configurable, or maybe we should go back a time range instead
-   * of picking a number, or maybe we should be able to exclude
-   * based on reconciled status. Anyway, this works for now. */
-  if (!show_all && (type != SEARCH_LEDGER))
-    xaccQuerySetMaxSplits(ld->query, 30);
-
-  xaccQuerySetGroup (ld->query, gncGetCurrentGroup());
-
-  if (ld->displayed_accounts)
-    xaccQueryAddAccountMatch (ld->query, ld->displayed_accounts,
-                              ACCT_MATCH_ANY, QUERY_OR);
-
-  if ((ld->leader != NULL) &&
-      (g_list_find (ld->displayed_accounts, ld->leader) == NULL))
-    xaccQueryAddSingleAccountMatch (ld->query, ld->leader, QUERY_OR);
+  if (q)
+    ld->query = xaccQueryCopy (q);
+  else
+    make_ledger_query (ld, show_all, type);
 
   ld->component_id = gnc_register_gui_component (class, NULL,
                                                  close_handler, ld);
@@ -459,7 +510,7 @@ void
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
 {
   /* If we don't really need the redraw, don't do it. */
-  if (!(ld->dirty))
+  if (!ld->dirty)
     return;
 
   ld->dirty = FALSE;  /* mark clean */

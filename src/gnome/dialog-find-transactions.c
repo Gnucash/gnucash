@@ -39,11 +39,15 @@
 #include "dialog-utils.h"
 #include "glade-cb-gnc-dialogs.h"
 #include "gnc-dateedit.h"
+#include "gnc-engine-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "splitreg.h"
 #include "window-help.h"
 #include "window-register.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 /********************************************************************\
  * gnc_ui_find_transactions_dialog_create
@@ -59,12 +63,12 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->ledger = orig_ledg;
 
   if(orig_ledg) {
-    ftd->q = orig_ledg->query;
+    ftd->q = xaccQueryCopy (orig_ledg->query);
   }
   else {
     ftd->q = NULL;
   }
-  
+
   /* initialize the radiobutton state vars */
   ftd->search_type = 0;
 
@@ -227,7 +231,13 @@ gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * ftd) {
   gnome_dialog_close(GNOME_DIALOG(ftd->dialog));
   
   ftd->dialog = NULL;
+
+  xaccFreeQuery (ftd->q);
+  ftd->q = NULL;
+
   g_free(ftd->ymd_format);
+  ftd->ymd_format = NULL;
+
   g_free(ftd);
 }
   
@@ -339,6 +349,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   float   amt_temp;
   int     amt_type;
   Query   * q, * q2;
+  Query   * new_q;
   gboolean new_ledger = FALSE;
 
   int    use_start_date, use_end_date;
@@ -516,39 +527,45 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     xaccQueryAddBalanceMatch(q, how, QUERY_AND);
   }
 
-  if(!ftd->ledger) {
-    new_ledger = TRUE;
-    ftd->ledger = xaccLedgerDisplayGeneral(NULL, NULL,
-                                           SEARCH_LEDGER,
-                                           REG_STYLE_JOURNAL);
-    xaccFreeQuery(ftd->ledger->query);
-  }
-
   switch(search_type) {
   case 0:
-    ftd->ledger->query = q;
+    new_q = q;
     break;
   case 1:    
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q, QUERY_AND);
+    new_q = xaccQueryMerge(ftd->q, q, QUERY_AND);
     xaccFreeQuery(q);
     break;
   case 2:
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q, QUERY_OR);
+    new_q = xaccQueryMerge(ftd->q, q, QUERY_OR);
     xaccFreeQuery(q);
     break;
   case 3:
     q2 = xaccQueryInvert(q);
-    ftd->ledger->query = xaccQueryMerge(ftd->q, q2, QUERY_AND);
+    new_q = xaccQueryMerge(ftd->q, q2, QUERY_AND);
     xaccFreeQuery(q2);
     xaccFreeQuery(q);
     break;
+  default:
+    PERR ("bad search type: %d", search_type);
+    new_q = q;
+    break;
   }
 
-  ftd->ledger->dirty = 1;
+  if(!ftd->ledger) {
+    new_ledger = TRUE;
+    ftd->ledger = xaccLedgerDisplayQuery (new_q, SEARCH_LEDGER,
+                                          REG_STYLE_JOURNAL);
+  }
+  else
+    xaccLedgerDisplaySetQuery (ftd->ledger, new_q);
+
+  xaccFreeQuery (new_q);
+
+  ftd->ledger->dirty = TRUE;
   xaccLedgerDisplayRefresh(ftd->ledger);
-  if (new_ledger) regWindowLedger(ftd->ledger);
-  
+
+  if (new_ledger)
+    regWindowLedger(ftd->ledger);
+
   gnc_ui_find_transactions_dialog_destroy(ftd);
 }
-
-
