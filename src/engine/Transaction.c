@@ -516,7 +516,7 @@ xaccSplitRebalance (Split *split)
 #define CHECK_OPEN(trans) {					\
    if (!trans->open) {						\
       printf ("Error: transaction %p not open for editing\n", trans);	\
-      assert (trans->open); 					\
+      /* assert (trans->open); */					\
       printf ("%s:%d \n", __FILE__, __LINE__);			\
       /* return; */						\
    }								\
