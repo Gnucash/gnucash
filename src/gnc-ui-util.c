@@ -202,6 +202,9 @@ balance_helper (Account *account, gpointer data)
   CurrencyBalance *cb = data;
   gnc_numeric balance;
 
+  if (!cb->currency)
+    return NULL;
+
   balance = gnc_account_get_balance_in_currency (account, cb->currency);
 
   cb->balance = gnc_numeric_add (cb->balance, balance,

@@ -1,3 +1,7 @@
+2001-07-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.c (balance_helper): fix bug
+
 2001-07-17  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Scrub.c (xaccGroupScrubCommodities): use group
