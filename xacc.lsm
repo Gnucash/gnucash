@@ -33,11 +33,6 @@ Description:    xacc is a program to keep track of your finances.  It
                 - Quicken Import. Support for import from 
                   Quicken Version 3 QIF files.
                  
-                This is a beta development version with known
-                minor user interface bugs and no known major bugs.
-                It has been tested lightly but seems to work. 
-                It is not believed to corrupt data.
-
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
 Maintained-by:	linas@linas.org (Linas Vepstas)
