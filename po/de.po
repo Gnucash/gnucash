@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-09-15 23:33+0200\n"
-"PO-Revision-Date: 2003-09-15 23:34+0200\n"
+"PO-Revision-Date: 2003-10-14 10:33+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -12647,7 +12647,7 @@ msgstr "Beginn des vorherigen Finanzquartals"
 #. src/app-utils/date-utilities.scm
 #: intl-scm/guile-strings.c:1402
 msgid "End of previous quarter"
-msgstr "Ende des vorherigen Jahres"
+msgstr "Ende des vorherigen Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: intl-scm/guile-strings.c:1404
