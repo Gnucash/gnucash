@@ -38,14 +38,10 @@
 #include "gnucash-style.h"
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
-#include "gnc-engine-util.h"
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630
 
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GTK_REG;
 
 static guint gnucash_register_initial_rows = 15;
 
@@ -717,7 +713,7 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         new_text_len = gnc_mbstowcs (&new_text_wc, new_text);
         if (new_text_len < 0)
         {
-                PERR ("bad text: %s", new_text ? new_text : "(null)");
+                g_warning ("bad text: %s", new_text ? new_text : "(null)");
                 return NULL;
         }
 
@@ -814,7 +810,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
 
         if (change_text_len < 0)
         {
-                PERR ("bad change text conversion");
+                g_warning ("bad change text conversion");
                 g_free (change_text_w);
                 return;
         }
@@ -826,7 +822,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         old_text_len = gnc_mbstowcs (&old_text_w, old_text);
         if (old_text_len < 0)
         {
-                PERR ("bad old text conversion");
+                g_warning ("bad old text conversion");
                 g_free (change_text_w);
                 return;
         }
@@ -865,7 +861,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
                                           &sheet->input_cancelled);
 
         if (retval &&
-            ((safe_strcmp (retval, new_text) != 0) ||
+            ((strcmp (retval, new_text) != 0) ||
              (*position != old_position)))
         {
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
@@ -973,7 +969,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                                           &start_sel, &end_sel,
                                           &sheet->input_cancelled);
 
-        if (retval && (safe_strcmp (retval, new_text) != 0))
+        if (retval && (strcmp (retval, new_text) != 0))
         {
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
                                           sheet->insert_signal);

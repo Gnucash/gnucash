@@ -32,14 +32,9 @@ int
 gnc_module_init(int refcount) {
   if(refcount == 0) 
   {
-    if(!gnc_module_load("gnucash/engine", 0)) {
-      return FALSE;
-    }
     if(!gnc_module_load("gnucash/register/register-core", 0)) {
       return FALSE;
     }
   }
   return TRUE;
 }
-
-

@@ -38,7 +38,6 @@
 
 #include "QuickFill.h"
 #include "combocell.h"
-#include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
@@ -87,8 +86,6 @@ static gboolean gnc_combo_cell_enter (BasicCell *bcell,
 static void gnc_combo_cell_leave (BasicCell *bcell);
 static void gnc_combo_cell_destroy (BasicCell *bcell);
 
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GTK_REG;
 static gboolean auto_pop_combos = FALSE;
 
 
@@ -284,8 +281,6 @@ gnc_combo_cell_gui_destroy (BasicCell *bcell)
 		cell->cell.leave_cell = NULL;
 		cell->cell.gui_destroy = NULL;
 	}
-
-	DEBUG("combo destroyed\n");
 }
 
 static void
@@ -423,7 +418,8 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
                 block_list_signals (cell);
 
 		gnc_item_list_append (box->item_list, menustr);
-                if (safe_strcmp (menustr, cell->cell.value) == 0)
+                if (cell->cell.value &&
+                    (strcmp (menustr, cell->cell.value) == 0))
                         gnc_item_list_select (box->item_list, menustr);
 
                 unblock_list_signals (cell);
@@ -688,7 +684,10 @@ ComboHelpValue (BasicCell *bcell)
                 for (node = box->ignore_strings; node;
                      node = node->next, help_node = help_node->next)
                 {
-                        if (safe_strcmp (bcell->value, node->data) != 0)
+                        if (!node->data)
+                                continue;
+
+                        if (strcmp (bcell->value, node->data) != 0)
                                 continue;
 
                         if (help_node->data != NULL)
@@ -797,17 +796,18 @@ popup_get_width (GnomeCanvasItem *item,
 
 static gboolean
 gnc_combo_cell_enter (BasicCell *bcell,
-                  int *cursor_position,
-                  int *start_selection,
-                  int *end_selection)
+                      int *cursor_position,
+                      int *start_selection,
+                      int *end_selection)
 {
         ComboCell *cell = (ComboCell *) bcell;
 	PopBox *box = bcell->gui_private;
-        GList *find;
+        GList *find = NULL;
 
-        find = g_list_find_custom (box->ignore_strings,
-                                   bcell->value,
-                                   (GCompareFunc) safe_strcmp);
+        if (bcell->value)
+                find = g_list_find_custom (box->ignore_strings,
+                                           bcell->value,
+                                           (GCompareFunc) strcmp);
         if (find)
                 return FALSE;
 
@@ -847,17 +847,19 @@ gnc_combo_cell_leave (BasicCell *bcell)
 
         if (box->strict)
         {
-                GList *find;
+                GList *find = NULL;
 
-                find = g_list_find_custom (box->menustrings,
-                                           bcell->value,
-                                           (GCompareFunc) safe_strcmp);
+                if (bcell->value)
+                        find = g_list_find_custom (box->menustrings,
+                                                   bcell->value,
+                                                   (GCompareFunc) strcmp);
                 if (find)
                         return;
 
-                find = g_list_find_custom (box->ignore_strings,
-                                           bcell->value,
-                                           (GCompareFunc) safe_strcmp);
+                if (bcell->value)
+                        find = g_list_find_custom (box->ignore_strings,
+                                                   bcell->value,
+                                                   (GCompareFunc) strcmp);
                 if (find)
                         return;
 
@@ -900,6 +902,9 @@ gnc_combo_cell_add_ignore_string (ComboCell *cell,
 
 	if (cell == NULL)
 		return;
+
+        if (!ignore_string)
+                return;
 
 	box = cell->cell.gui_private;
 

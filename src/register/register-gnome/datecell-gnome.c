@@ -40,7 +40,6 @@
 #include <time.h>
 
 #include "datecell.h"
-#include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnucash-date-picker.h"
 #include "gnucash-item-edit.h"
@@ -90,11 +89,6 @@ static gboolean gnc_date_cell_enter (BasicCell *bcell,
                                      int *end_selection);
 static void gnc_date_cell_leave (BasicCell *bcell);
 
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GTK_REG;
-
-
-/* ================================================ */
 
 static void
 gnc_parse_date (struct tm *parsed, const char * datestr)
@@ -368,8 +362,6 @@ gnc_date_cell_gui_destroy (BasicCell *bcell)
     cell->cell.leave_cell = NULL;
     cell->cell.gui_destroy = NULL;
   }
-
-  DEBUG ("date destroyed\n");
 }
 
 static void
