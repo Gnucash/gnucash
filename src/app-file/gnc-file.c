@@ -51,6 +51,7 @@ static short module = MOD_GUI;
 
 static GNCSession * current_session = NULL;
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
+static GNCShutdownCB shutdown_cb = NULL;
 
 static GNCHistoryAddFileFunc history_add_file_func = NULL;
 static GNCHistoryGetLastFunc history_get_last_func = NULL;
@@ -389,7 +390,28 @@ gnc_post_file_open (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
   {
-    if (FALSE == show_session_error (io_err, newfile))
+    const char *buttons[] = { N_("Quit Gnucash"), N_("Open Anyway"),
+			      N_("Don't Open"), NULL };
+    char *fmt = _("GnuCash could not obtain the lock for\n"
+		  "   %s.\n"
+		  "That database may be in use by another user,\n"
+		  "in which case you should not open the database.\n"
+		  "\nWhat would you like to do?");
+    int rc;
+
+    if (shutdown_cb) {
+      rc = gnc_generic_question_dialog (buttons, fmt, newfile);
+    } else {
+      rc = gnc_generic_question_dialog (buttons+1, fmt, newfile)+1;
+    }
+
+    if (rc == 0)
+    {
+      if (shutdown_cb)
+	shutdown_cb(0);
+      g_assert(1);
+    }
+    else if (rc == 1)
     {
       /* user told us to ignore locks. So ignore them. */
       gnc_session_begin (new_session, newfile, TRUE, FALSE);
@@ -821,4 +843,10 @@ void
 gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb)
 {
   can_cancel_cb = cb;
+}
+
+void
+gnc_file_set_shutdown_callback (GNCShutdownCB cb)
+{
+  shutdown_cb = cb;
 }

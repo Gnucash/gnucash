@@ -1,3 +1,14 @@
+2002-09-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-gui-query.c: Add routines to put up the
+	various question/warning/error dialogs with a variable number of
+	buttons.
+
+	* src/app-file/gnc-file.c (gnc_file_set_shutdown_callback): Add a
+	callback so the gnome specific code can call the "top level"
+	shutdown function. (gnc_post_file_open): Rework the "file locked"
+	query to include a "Quit" option.
+
 2002-09-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-actions.c: Distinguish

@@ -399,6 +399,7 @@ gnc_gui_init (SCM command_line)
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
     gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
+    gnc_file_set_shutdown_callback (gnc_shutdown);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 

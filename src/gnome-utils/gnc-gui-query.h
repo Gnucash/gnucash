@@ -40,4 +40,16 @@ extern void
 gnc_error_dialog_parented(GtkWindow *parent,
 			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
+extern int
+gnc_generic_question_dialog(const char **buttons,
+			    const char *format, ...) G_GNUC_PRINTF (2, 3);
+
+extern int
+gnc_generic_warning_dialog(const char **buttons,
+			   const char *format, ...) G_GNUC_PRINTF (2, 3);
+
+extern int
+gnc_generic_error_dialog(const char **buttons,
+			 const char *format, ...) G_GNUC_PRINTF (2, 3);
+
 #endif
