@@ -123,6 +123,10 @@ void
 qof_instance_gemini (QofInstance *to, QofInstance *from)
 {
   time_t now;
+
+  /* Books must differ for a gemini to be meaningful */
+  if (!from || !to || (from->book == to->book)) return;
+
   now = time(0);
 
   /* Make a note of where the copy came from */

@@ -60,9 +60,14 @@ KvpFrame* qof_instance_get_slots (QofInstance *);
 /** return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
 
-/** pair things up. Currently, this routine only inserts a
- * pair of guid-pointers pointing to each other.  it
- * doesn't copy any data.
+/** Pair things up.  This routine inserts a kvp value into each instance
+ *  containing the guid of the other.  In this way, if one has one of the
+ *  pair, one can always find the other by looking up it's guid.  Typically,
+ *  you will want to use qof_instance_lookup_twin() to find the twin.
+ *  (The current implementation assumes the two instances belong to different
+ *  books, and will not add gemini kvp's unless the books differ.  Note that
+ *  the gemini kvp includes the book guid as well, so that the right book can
+ *  be found.
  */
 void qof_instance_gemini (QofInstance *to, QofInstance *from);
 
