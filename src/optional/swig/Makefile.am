@@ -20,7 +20,7 @@ EXTRA_DIST = \
   examples/scan-acct.pl \
   perl5_swig_annotations.i
 
-CFLAGS += ${GNOME_CFLAGS} -Dbool=char
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
 
 INCLUDES = \
   -I@PERLINCL@/CORE \
@@ -68,7 +68,13 @@ SWIG_INPUT_HDRS := \
 ## aren't named lib*.so...
 install-data-local: libgncswig.la
 	cd ${perllibdir} && rm -f gnucash.so
-	cd ${perllibdir} && ln -s libgncswig.so gnucash.so
+	if [ -f ${perllibdir}/libgncswig.so ]; then \
+		cd ${perllibdir} && ln -s libgncswig.so gnucash.so; \
+	elif [ -f ${perllibdir}/libgncswig.so.1.1 ]; then \
+		cd ${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
+	else \
+		echo "Can't find libgncswig shared library!"; \
+	fi
 
 uninstall-local:
 	rm -f ${perllibdir}/gnucash.so

@@ -488,8 +488,6 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
   /* make sure the array is NULL terminated */
   acc->splits[acc->numSplits] = NULL;
-
-  xaccAccountRecomputeBalance (acc);
 }
 
 

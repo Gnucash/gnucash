@@ -1,7 +1,10 @@
 2000-06-13  Dave Peticolas  <dave@krondo.com>
 
-	* src/engine/Account.c (xaccAccountRemoveSplit): recompute the
-	balance after removal.
+	* src/SplitLedger.c: refresh the main window before refreshing the
+	register. This makes sure balances are recomputed first.
+
+	* src/engine/Transaction.c (xaccSplitSetBaseValue): mark the split
+	as having changed.
 
 	* src/gnome/gnc-currency-edit.c: loosen the restrictions on what
 	can be typed in. The 'currency' could potentially be a stock

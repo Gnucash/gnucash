@@ -921,8 +921,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       refresh_accounts = gnc_trans_prepend_account_list(trans,
                                                         refresh_accounts);
 
-      gnc_account_glist_ui_refresh(refresh_accounts);
       gnc_refresh_main_window();
+      gnc_account_glist_ui_refresh(refresh_accounts);
 
       g_list_free(refresh_accounts);
 
@@ -1652,8 +1652,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   }
 
   /* Refresh the GUI. */
-  gnc_transaction_ui_refresh(trans);
   gnc_refresh_main_window();
+  gnc_transaction_ui_refresh(trans);
 
   return return_split;
 }
@@ -1887,8 +1887,8 @@ xaccSRPasteCurrent (SplitRegister *reg)
   accounts = gnc_trans_prepend_account_list(trans, accounts);
 
   /* Refresh the GUI. */
-  gnc_account_glist_ui_refresh(accounts);
   gnc_refresh_main_window();
+  gnc_account_glist_ui_refresh(accounts);
 
   g_list_free(accounts);
 }
@@ -1942,11 +1942,10 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
     pending_trans = NULL;
   }
 
+  gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
 
   g_list_free(accounts);
-
-  gnc_refresh_main_window ();
 }
 
 /* ======================================================== */
@@ -2011,11 +2010,10 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
     pending_trans = NULL;
   }
 
+  gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
 
   g_list_free(accounts);
-
-  gnc_refresh_main_window ();
 }
 
 /* ======================================================== */
@@ -2085,12 +2083,11 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
     pending_trans = NULL;
   }
 
+  gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
 
   g_list_free(accounts);
   g_list_free(splits);
-
-  gnc_refresh_main_window ();
 }
 
 /* ======================================================== */
@@ -2171,8 +2168,8 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
     * to affect any account windows associated with the other splits
     * in this transaction. So basically, send redraw events to all
     * of the splits. */
-   gnc_transaction_ui_refresh(trans);
    gnc_refresh_main_window();
+   gnc_transaction_ui_refresh(trans);
 }
 
 /* ======================================================== */
@@ -2474,8 +2471,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    xaccSplitRegisterClearChangeFlag(reg);
 
    if (refresh_accounts != NULL) {
-     gnc_account_glist_ui_refresh(refresh_accounts);
      gnc_refresh_main_window();
+     gnc_account_glist_ui_refresh(refresh_accounts);
      g_list_free(refresh_accounts);
    }
 

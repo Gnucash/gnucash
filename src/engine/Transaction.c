@@ -282,6 +282,8 @@ xaccCountSplits (Split **tarray)
 
 void xaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
+   if (!s) return;
+
    MARK_SPLIT(s);
    s -> share_price = price;
    s -> damount = amt;
@@ -292,6 +294,8 @@ void xaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 
 void xaccSplitSetSharePrice (Split *s, double amt)
 {
+   if (!s) return;
+
    MARK_SPLIT(s);
    s -> share_price = amt;
 
@@ -301,6 +305,8 @@ void xaccSplitSetSharePrice (Split *s, double amt)
 
 void xaccSplitSetShareAmount (Split *s, double amt)
 {
+   if (!s) return;
+
    MARK_SPLIT(s);
    s -> damount = amt;
 
@@ -310,6 +316,8 @@ void xaccSplitSetShareAmount (Split *s, double amt)
 
 void xaccSplitSetValue (Split *s, double amt)
 {
+   if (!s) return;
+
    MARK_SPLIT(s);
    /* remember, damount is actually share price */
    s -> damount = amt / (s->share_price);
@@ -569,6 +577,8 @@ void
 xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 {
    if (!s) return;
+
+   MARK_SPLIT(s);
 
    /* Novice/casual users may not want or use the double entry 
     * features of this engine. So, in particular, there
