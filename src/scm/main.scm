@@ -393,28 +393,35 @@ string and 'directories' must be a list of strings."
   (let ((original-module (current-module))
         (bootstrap (resolve-module '(gnucash main))))
     
+    (define (load-module name vers optional?)
+      (let ((str (string-append "Loading modules... " name)))
+	(gnc:update-splash-screen str)
+	(if optional?
+	    (gnc:module-load-optional name vers)
+	    (gnc:module-load name vers))))
+
     (set-current-module bootstrap)
     
     ;; right now we have to statically load all these at startup time.
     ;; Hopefully we can gradually make them autoloading.
     (gnc:update-splash-screen "Loading modules...")
-    (gnc:module-load "gnucash/engine" 0)
+    (load-module "gnucash/engine" 0 #f)
 
-    (gnc:module-load "gnucash/app-file" 0)
-    (gnc:module-load "gnucash/register/ledger-core" 0)
-    (gnc:module-load "gnucash/register/register-core" 0)
-    (gnc:module-load "gnucash/register/register-gnome" 0)
-    (gnc:module-load "gnucash/import-export/binary-import" 0)
-    (gnc:module-load "gnucash/import-export/qif-import" 0)
-    (gnc:module-load-optional "gnucash/import-export/ofx" 0)
-    (gnc:module-load-optional "gnucash/import-export/hbci" 0)
-    (gnc:module-load "gnucash/report/report-system" 0)
-    (gnc:module-load "gnucash/report/stylesheets" 0)
-    (gnc:module-load "gnucash/report/standard-reports" 0)
-    (gnc:module-load "gnucash/report/utility-reports" 0)
-    (gnc:module-load "gnucash/report/locale-specific/us" 0)
-    (gnc:module-load "gnucash/report/report-gnome" 0)
-    (gnc:module-load "gnucash/business-gnome" 0)
+    (load-module "gnucash/app-file" 0 #f)
+    (load-module "gnucash/register/ledger-core" 0 #f)
+    (load-module "gnucash/register/register-core" 0 #f)
+    (load-module "gnucash/register/register-gnome" 0 #f)
+    (load-module "gnucash/import-export/binary-import" 0 #f)
+    (load-module "gnucash/import-export/qif-import" 0 #f)
+    (load-module "gnucash/import-export/ofx" 0 #t)
+    (load-module "gnucash/import-export/hbci" 0 #t)
+    (load-module "gnucash/report/report-system" 0 #f)
+    (load-module "gnucash/report/stylesheets" 0 #f)
+    (load-module "gnucash/report/standard-reports" 0 #f)
+    (load-module "gnucash/report/utility-reports" 0 #f)
+    (load-module "gnucash/report/locale-specific/us" 0 #f)
+    (load-module "gnucash/report/report-gnome" 0 #f)
+    (load-module "gnucash/business-gnome" 0 #t)
 
     ;; files we should be able to load from the top-level because
     ;; they're "well behaved" (these should probably be in modules
@@ -425,6 +432,7 @@ string and 'directories' must be a list of strings."
     ;; +jsled - 2002.07.08
     (load-from-path "fin.scm")
 
+    (gnc:update-splash-screen "Loading tip-of-the-day...")
     (gnc:initialize-tip-of-the-day)
 
     (gnc:use-guile-module-here! '(gnucash price-quotes))
