@@ -28,4 +28,7 @@
 void gnc_hbci_initial_druid (void);
 SCM  scm_hbci_initial_druid (void);
 
+typedef struct _hbciinitialinfo HBCIInitialInfo;
+
+
 #endif

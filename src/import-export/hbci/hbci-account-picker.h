@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-hbci-kvp.h -- hbci kvp handling                              *
- * Copyright (C) 2002 Christian Stimming                            *
+ * hbci-account-picker.h -- window for picking a GNUcash account  *
+ *                       (GnuCash)                                  *
+ * Copyright (C) 2002 Christian <stimming@tuhh.de>
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,36 +21,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_KVP_H
-#define GNC_HBCI_KVP_H
+#ifndef HBCI_ACCOUNT_PICKER_H
+#define HBCI_ACCOUNT_PICKER_H
 
-//#include <guile/gh.h>
-#include <glib.h>
-#include "kvp_frame.h"
+#include "druid-hbci-initial.h"
 #include "Account.h"
-#include "gnc-book.h"
 
-/* Account */
-char *gnc_hbci_get_account_accountid (Account *a);
-void gnc_hbci_set_account_accountid (Account *a, const char *id);
+Account *hbci_account_picker_dialog(HBCIInitialInfo *info, 
+				    Account *initial_sel);
 
-char *gnc_hbci_get_account_bankcode (Account *a);
-void gnc_hbci_set_account_bankcode (Account *a, const char *code);
-
-gint gnc_hbci_get_account_countrycode (Account *a);
-void gnc_hbci_set_account_countrycode (Account *a, gint code);
-
-/* GNCBook */
-char *gnc_hbci_get_book_configfile (GNCBook *b);
-void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
-
-/* lowlevel */
-/* getter for kvp frame in book */
-kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b);
-
-/* kvp frame in Account */
-kvp_frame *gnc_hbci_get_account_kvp (Account *a);
-
-
+typedef struct _accountpickerdialog HBCIAccountPickerDialog;
 
 #endif

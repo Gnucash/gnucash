@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-hbci-kvp.h -- hbci kvp handling                              *
+ * gnc-hbci-utils.h -- hbci utility functions                       *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,35 +20,33 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_KVP_H
-#define GNC_HBCI_KVP_H
+#ifndef GNC_HBCI_UTILS_H
+#define GNC_HBCI_UTILS_H
 
-//#include <guile/gh.h>
 #include <glib.h>
-#include "kvp_frame.h"
+#include <openhbci/account.h>
+#include <openhbci/api.h>
 #include "Account.h"
 #include "gnc-book.h"
 
-/* Account */
-char *gnc_hbci_get_account_accountid (Account *a);
-void gnc_hbci_set_account_accountid (Account *a, const char *id);
+/* Create a new HBCI_API and let it load its environment from the
+ * configuration file filename. If the file doesn't exist, this
+ * function returns NULL. If the file exists, but OpenHBCI encountered
+ * an error upon opening, then an error will be displayed, and NULL
+ * will be returned.*/
+HBCI_API * gnc_hbci_api_new (const char *filename);
 
-char *gnc_hbci_get_account_bankcode (Account *a);
-void gnc_hbci_set_account_bankcode (Account *a, const char *code);
+/* Same as above, but takes the filename already from the current
+   book's kvp frame. */ 
+HBCI_API * gnc_hbci_api_new_currentbook ();
 
-gint gnc_hbci_get_account_countrycode (Account *a);
-void gnc_hbci_set_account_countrycode (Account *a, gint code);
 
-/* GNCBook */
-char *gnc_hbci_get_book_configfile (GNCBook *b);
-void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
-
-/* lowlevel */
-/* getter for kvp frame in book */
-kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b);
-
-/* kvp frame in Account */
-kvp_frame *gnc_hbci_get_account_kvp (Account *a);
+/* Get the corresponding HBCI account to a gnucash account. Of course
+ * this only works after the gnucash account has been set up for HBCI
+ * use, i.e. the kvp_frame "hbci/..." have been filled with
+ * information. Returns NULL if no HBCI_Account was found. */
+const HBCI_Account *
+gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
 
 

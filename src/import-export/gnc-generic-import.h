@@ -29,13 +29,40 @@
 #include "Account.h"
 
 /* The gnc_import_select_account():
-Must be called with a string containing a unique identifier for the account.  If an account with a matching online_id kvp_frame is found, the function immediately returns with a pointer to that account.  Otherwise, the user is prompted to select a GnuCash account or create a new one (in both cases, the unique identifier is written to the account's kvp_frame, so the user won't be prompted again.    If the user refuses to select or create an account
-   Params:
-   account_online_id_value: MANDATORY: The string containing your account_id
-   gchar * account_human_description: OPTIONNAL: A human-readable description of the account.  If not NULL, it will be shown before the id in the account matching dialog.  It will also be used as the default account name if a new account is created.
-   gnc_commodity * new_account_default_currenc: OPTIONNAL: If not NULL, it will be the account's commodity if a new account is created.  If not NULL, the function will also warn the user if the found or created account's commodity doesn't match.
-   GNCAccountType new_account_default_type: OPTIONNAL:  If not NO_TYPE, it will be the account's type if a new account is created.  If not NO_TYPE, the function will also warn the user if the found or created account's commodity doesn't match.
-   Return: A pointer to the found or created Account, or NULL if no account was found or created.
+
+  Must be called with a string containing a unique identifier for the
+  account.  If an account with a matching online_id kvp_frame is
+  found, the function immediately returns with a pointer to that
+  account.  Otherwise, the user is prompted to select a GnuCash
+  account or create a new one (in both cases, the unique identifier is
+  written to the account's kvp_frame, so the user won't be prompted
+  again).  If the user refuses to select or create an account, NULL is
+  returned.
+
+  Params:
+
+    account_online_id_value: The string containing your account_id
+
+    gchar * account_human_description: A human-readable description of
+    the account.  Can be NULL. If it is not NULL, it will be shown before
+    the id in the account matching dialog.  It will also be used as
+    the default account name if a new account is created.
+
+    gnc_commodity * new_account_default_currenc: Default commodity of
+    the new account. Can be NULL. If not NULL, it will be the
+    account's commodity if a new account is created.  Also, if not
+    NULL, the function will also warn the user if the found or created
+    account's commodity doesn't match.
+
+    GNCAccountType new_account_default_type: Default account type of a
+    new account. Can be NULL.  If not NO_TYPE, it will be the
+    account's type if a new account is created.  If not NO_TYPE, the
+    function will also warn the user if the found or created account's
+    commodity doesn't match.
+
+  Return: A pointer to the found or created Account, or NULL if no
+  account was found or created.
+
 */
 Account * gnc_import_select_account(char * account_online_id_value,
 				    char * account_human_description,

@@ -171,7 +171,13 @@ kvp_value   * kvp_value_new_binary_nc(void * data, guint64 datasize);
 kvp_value   * kvp_value_new_glist_nc(GList *lst);
 kvp_value   * kvp_value_new_frame_nc(kvp_frame * value);
 
-/* value accessors (NON-copying for frames/lists/guids/binary) */
+/* Value accessors. Those for GUID, binary, GList, kvp_frame and
+  string are non-copying -- the caller can modify the value directly.
+
+  Note that the above non-copying list did not include the
+  get_string() function. But in fact that function has always been a
+  non-copying one -- therefore don't free the result unless you want
+  to delete the whole kvp_frame by yourself. */
 kvp_value_t kvp_value_get_type(const kvp_value * value);
 
 gint64      kvp_value_get_gint64(const kvp_value * value);

@@ -1,3 +1,16 @@
+2002-08-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.[hc]: Added hbci functions
+	that are to be used from the rest of the gnucash UI.
+
+	* src/import-export/hbci/*: More work on HBCI support (HBCI data
+	is now actually stored in book's and account's kvp frames).
+	
+	* src/import-export/gnc-generic-import.h: Clarified docs.
+
+	* src/engine/kvp_frame.h: Clarified doc about kvp_value_get_string
+	(which is in fact non-copying.)
+
 2002-08-05  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c (to_create_next): Fix for

@@ -29,13 +29,13 @@
 #define HBCI_CONFIGFILE "config-filename"
 
 /* Account */
-gchar *gnc_hbci_get_account_accountid (Account *a)
+char *gnc_hbci_get_account_accountid (Account *a)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNT_ID);
   return kvp_value_get_string (value);
 }
-gchar *gnc_hbci_get_account_bankcode (Account *a)
+char *gnc_hbci_get_account_bankcode (Account *a)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_BANK_CODE);
@@ -51,24 +51,30 @@ void gnc_hbci_set_account_accountid (Account *a, const char *id)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_value_new_string (id);
-  kvp_frame_set_slot (frame, HBCI_ACCOUNT_ID, value);
+  xaccAccountBeginEdit(a);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_ID, value);
+  xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_bankcode (Account *a, const char *code)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_value_new_string (code);
-  kvp_frame_set_slot (frame, HBCI_BANK_CODE, value);
+  xaccAccountBeginEdit (a);
+  kvp_frame_set_slot_nc (frame, HBCI_BANK_CODE, value);
+  xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_countrycode (Account *a, gint code)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_value_new_gint64 (code);
-  kvp_frame_set_slot (frame, HBCI_COUNTRY_CODE, value);
+  xaccAccountBeginEdit (a);
+  kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
+  xaccAccountCommitEdit (a);
 }
 
 
 /* GNCBook */
-gchar *gnc_hbci_get_book_configfile (GNCBook *b)
+char *gnc_hbci_get_book_configfile (GNCBook *b)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_CONFIGFILE);
@@ -78,7 +84,8 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
   kvp_value *value = kvp_value_new_string (filename);
-  kvp_frame_set_slot (frame, HBCI_CONFIGFILE, value);
+  kvp_frame_set_slot_nc (frame, HBCI_CONFIGFILE, value);
+  gnc_book_kvp_changed (b);
 }
 
 /* lowlevel */

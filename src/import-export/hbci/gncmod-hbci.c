@@ -69,7 +69,7 @@ gnc_module_init(int refcount)
   gh_new_procedure("gnc:hbci-initial-setup", 
 		   scm_hbci_initial_druid, 0, 0, 0);
   gh_new_procedure("gnc:hbci-finish-setup", 
-		   scm_hbci_final_druid, 0, 0, 0);
+   		   scm_hbci_final_druid, 0, 0, 0);
   
   //printf("Been in gncmod-hbci.c.\n");
   

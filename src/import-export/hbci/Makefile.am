@@ -6,7 +6,9 @@ libgncmod_hbci_la_SOURCES = \
   gncmod-hbci.c \
   druid-hbci-initial.c \
   druid-hbci-final.c \
-  gnc-hbci-kvp.c
+  gnc-hbci-kvp.c \
+  hbci-account-picker.c \
+  gnc-hbci-utils.c
 
 noinst_HEADERS = 
 
