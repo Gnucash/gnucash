@@ -4,6 +4,8 @@
 <TITLE>Preferences</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA>You can customize the behavior of GnuCash by changing the
     settings in this dialog box.All settings are automatically
     saved so changes are preserved for future sessions.
@@ -53,6 +55,7 @@
 
 
 </PARA>
+      </sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
