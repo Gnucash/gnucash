@@ -124,7 +124,7 @@ perlsharedir = ${GNC_SHAREDIR}/perl
 perlshare_DATA =    Quote.pm
 
 
-EXTRA_DIST =    .cvsignore   Quote.pm   Quote_example.pl   gnc-prices-2.in   gnc-prices.in   value_portfolio
+EXTRA_DIST =    .cvsignore   Quote.pm   Quote_example.pl   gnc-prices-2.in   gnc-prices.in   gnc-restore.pl   value_portfolio
 
 
 CLEANFILES =  gnc-prices
