@@ -3525,6 +3525,7 @@ create_Account_Dialog (void)
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Account_Dialog), TRUE, TRUE, FALSE);
 
   dialog_vbox12 = GNOME_DIALOG (Account_Dialog)->vbox;
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_vbox12", dialog_vbox12);

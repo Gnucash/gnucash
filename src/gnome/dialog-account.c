@@ -1112,11 +1112,6 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   g_free (aw);
 
-  gdk_window_get_geometry (GTK_WIDGET(object)->window, NULL, NULL,
-                           &last_width, &last_height, NULL);
-
-  gnc_save_window_size ("account_win", last_width, last_height);
-
   return FALSE;
 }
 
@@ -1444,6 +1439,11 @@ static void
 close_handler (gpointer user_data)
 {
   AccountWindow *aw = user_data;
+
+  gdk_window_get_geometry (GTK_WIDGET(aw->dialog)->window, NULL, NULL,
+                           &last_width, &last_height, NULL);
+
+  gnc_save_window_size ("account_win", last_width, last_height);
 
   gnome_dialog_close (GNOME_DIALOG (aw->dialog));
 }

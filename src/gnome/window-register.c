@@ -1986,7 +1986,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   }
 
   /* Allow grow, allow shrink, auto-shrink */
-  gtk_window_set_policy(GTK_WINDOW(register_window), TRUE, TRUE, TRUE);
+  gtk_window_set_policy (GTK_WINDOW(register_window), TRUE, TRUE, FALSE);
 
   {
     int *width;

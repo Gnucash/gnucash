@@ -1021,6 +1021,7 @@ static void
 gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
         GnucashSheet *sheet = GNUCASH_SHEET(widget);
+        GtkWidget *window;
 
         if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
@@ -1030,7 +1031,8 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             allocation->width == sheet->window_width)
                 return;
 
-        gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
+        if (allocation->width != sheet->window_width)
+                gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
 
         sheet->window_height = allocation->height;
         sheet->window_width  = allocation->width;
@@ -1041,6 +1043,12 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
         gnucash_sheet_update_adjustments (sheet);
+
+        /* HACK ALERT. this seems to be the only thing to get the
+         * freekin register window to stop freekin resizing itself
+         * all the freekin time. */
+        window = gtk_widget_get_toplevel (widget);
+        gtk_window_set_default_size (GTK_WINDOW(window), allocation->width, 0);
 }
 
 static gboolean
