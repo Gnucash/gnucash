@@ -998,8 +998,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), GNC_T);
 
       /* auto-complete the amounts */
-      if ((EQUITY_REGISTER   == typo) ||
-          (STOCK_REGISTER    == typo) ||
+      if ((STOCK_REGISTER    == typo) ||
           (CURRENCY_REGISTER == typo) ||
           (PORTFOLIO_LEDGER  == typo)) 
         amount = xaccSplitGetShareAmount (auto_split);
@@ -2304,8 +2303,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 
     price = gnc_split_scm_get_share_price(split_scm);
 
-    if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
-        (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+    if ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
         (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
         (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
       ;
@@ -2811,8 +2809,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT: %f\n", new_amount);
 
-    if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
-        (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+    if ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
         (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
         (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
       xaccSplitSetShareAmount (split, new_amount);
@@ -2978,8 +2975,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
 
-      if ((EQUITY_REGISTER   == typo) ||
-          (STOCK_REGISTER    == typo) ||
+      if ((STOCK_REGISTER    == typo) ||
           (CURRENCY_REGISTER == typo) ||
           (PORTFOLIO_LEDGER  == typo)) 
       { 
