@@ -155,11 +155,11 @@ main( int argc, char *argv[] )
     datafile = fileBox( toplevel, OPEN, "*.xac" );
   
   if( datafile != NULL )
-    topgroup = readData(datafile);     /* load the accounts data from datafile*/
+    topgroup = xaccReadData(datafile); /* load the accounts data from datafile*/
   
   if( NULL == topgroup )
     {
-    topgroup = mallocAccountGroup();           /* the file could not be found */
+    topgroup = mallocAccountGroup();   /* the file could not be found */
     topgroup->new = True;
     }
   

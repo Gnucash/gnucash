@@ -176,14 +176,14 @@ double xaccFlipDouble (double val)
 \********************************************************************/
 
 /********************************************************************\
- * readData                                                         * 
+ * xaccReadData                                                     * 
  *   reads in the data from file datafile                           *
  *                                                                  * 
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 AccountGroup *
-readData( char *datafile )
+xaccReadData( char *datafile )
   {
   int  fd;
   int  err=0;
@@ -947,14 +947,14 @@ xaccResetWriteFlags (AccountGroup *grp)
 }
 
 /********************************************************************\
- * writeData                                                        * 
+ * xaccWriteData                                                    * 
  *   flattens the program data and saves it in a file               * 
  *                                                                  * 
  * Args:   datafile - the file to store the data in                 * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-writeData( char *datafile, AccountGroup *grp )
+xaccWriteData( char *datafile, AccountGroup *grp )
   {
   int err = 0;
   int token = VERSION;    /* The file format version */

@@ -919,7 +919,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         freeAccountGroup (grp);
       
         /* load the accounts from the users datafile */
-        grp = readData (datafile);
+        grp = xaccReadData (datafile);
       
         if( NULL == grp ) {
           /* the file could not be found */
@@ -967,7 +967,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         break;
       }
 
-      writeData( datafile, grp );
+      xaccWriteData( datafile, grp );
       xaccAccountGroupMarkSaved (grp);
       break;
 
