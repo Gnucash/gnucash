@@ -91,6 +91,23 @@ size_t dcoresize();
 #define EPS  (1.0e-4)
 #define DEQ(x,y) (((((x)+EPS)>(y)) ? 1 : 0) && ((((x)-EPS)<(y)) ? 1 : 0))
 
+
+#define SAFE_STRCMP(da,db) {		\
+  if ((da) && (db)) {			\
+    int retval = strcmp ((da), (db));	\
+    /* if strings differ, return */	\
+    if (retval) return retval;		\
+  } else 				\
+  if ((!(da)) && (db)) {		\
+    return -1;				\
+  } else 				\
+  if ((da) && (!(db))) {		\
+    return +1;				\
+  }					\
+}
+
+int safe_strcmp (char * da, char * db);
+
 /** PROTOTYPES ******************************************************/
 
 #define PRTSYM 0x1

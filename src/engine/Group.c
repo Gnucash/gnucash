@@ -444,13 +444,18 @@ insertAccount( AccountGroup *grp, Account *acc )
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccRecomputeGroupBalance (AccountGroup *grp)
 {
    int i;
    Account *acc;
+   char * default_currency;
 
    if (!grp) return;
+
+   acc = grp->account[0];
+   default_currency = acc->currency;
 
    grp->balance = 0.0;
    for (i=0; i<grp->numAcc; i++) {
@@ -459,12 +464,17 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       /* first, get subtotals recursively */
       if (acc->children) {
          xaccRecomputeGroupBalance (acc->children);
-         grp->balance += acc->children->balance;
+
+         if (!safe_strcmp (default_currency, acc->currency)) {
+            grp->balance += acc->children->balance;
+         }
       }
 
       /* then add up accounts in this group */
       xaccAccountRecomputeBalance (acc);
-      grp->balance += acc->balance;
+      if (!safe_strcmp (default_currency, acc->currency)) {
+         grp->balance += acc->balance;
+      }
    }
 }
 

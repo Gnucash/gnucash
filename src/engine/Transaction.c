@@ -67,27 +67,6 @@ int force_double_entry = 0;
 \********************************************************************/
 
 
-#define SAFE_STRCMP(da,db) {		\
-  if ((da) && (db)) {			\
-    int retval = strcmp ((da), (db));	\
-    /* if strings differ, return */	\
-    if (retval) return retval;		\
-  } else 				\
-  if ((!(da)) && (db)) {		\
-    return -1;				\
-  } else 				\
-  if ((da) && (!(db))) {		\
-    return +1;				\
-  }					\
-}
-
-static int 
-safestrcmp (char * da, char * db) {
-   SAFE_STRCMP (da, db);
-   return 0;
-}
-
-
 /********************************************************************\
  * xaccInitSplit
  * Initialize a splitaction structure
@@ -363,10 +342,10 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
 
    assert (s->acc);
 
-   if (!safestrcmp(s->acc->currency, base_currency)) {
+   if (!safe_strcmp(s->acc->currency, base_currency)) {
       s -> damount = - (value / (s->share_price));   
    } else 
-   if (!safestrcmp(s->acc->security, base_currency)) {
+   if (!safe_strcmp(s->acc->security, base_currency)) {
       s -> damount = -value;   
    } else {
       printf ("Error: xaccSplitSetBaseValue(): "
@@ -386,10 +365,10 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
 
    assert (s->acc);
 
-   if (!safestrcmp(s->acc->currency, base_currency)) {
+   if (!safe_strcmp(s->acc->currency, base_currency)) {
       value = s->damount * s->share_price;   
    } else 
-   if (!safestrcmp(s->acc->security, base_currency)) {
+   if (!safe_strcmp(s->acc->security, base_currency)) {
       value = s->damount;   
    } else {
       printf ("Error: xaccSplitGetBaseValue(): "
@@ -415,10 +394,10 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    s = sarray[0];
    while (s) {
       if (s != skip_me) {
-         if (!safestrcmp(s->acc->currency, base_currency)) {
+         if (!safe_strcmp(s->acc->currency, base_currency)) {
             value += s->share_price * s->damount;
          } else 
-         if (!safestrcmp(s->acc->security, base_currency)) {
+         if (!safe_strcmp(s->acc->security, base_currency)) {
             value += s->damount;
          } else {
             printf ("Internal Error: ComputeValue(): "
@@ -484,10 +463,10 @@ xaccSplitRebalance (Split *split)
     if (sb && (0x0==sb[0])) sb = 0x0;
 
     if (ra && rb) {
-       int aa = safestrcmp (ra,sa);
-       int ab = safestrcmp (ra,sb);
-       int ba = safestrcmp (rb,sa);
-       int bb = safestrcmp (rb,sb);
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
+       int ba = safe_strcmp (rb,sa);
+       int bb = safe_strcmp (rb,sb);
        if ( (!aa) && bb) rb = 0x0;
        else
        if ( (!ab) && ba) rb = 0x0;
@@ -502,8 +481,8 @@ xaccSplitRebalance (Split *split)
     } 
     else
     if (ra && !rb) {
-       int aa = safestrcmp (ra,sa);
-       int ab = safestrcmp (ra,sb);
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
        if ( aa && ab )  ra= 0x0;
     }
 
