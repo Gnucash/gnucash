@@ -30,6 +30,7 @@ gnc_regular_scm_files = \
   html-style-sheet.scm \
   html-text.scm \
   html-table.scm \
+  html-utilities.scm \
   iso-4217-currencies.scm \
   main.scm \
   options.scm \

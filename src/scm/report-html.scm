@@ -34,6 +34,7 @@
 (gnc:depend "html-barchart.scm")
 (gnc:depend "html-style-info.scm")
 (gnc:depend "html-style-sheet.scm")
+(gnc:depend "html-utilities.scm")
 
 (gnc:depend "report-utilities.scm")
 

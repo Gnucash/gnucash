@@ -114,122 +114,10 @@
       
       options))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; In progress: A suggested function to calculate the weighted
-  ;; average exchange rate between all commodities and the
-  ;; report-commodity. Returns an alist.
-  (define (make-exchange-alist report-commodity end-date)
-    (let ((curr-accounts 
-	   (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					    (gnc:get-current-group))))
-	  (query (gnc:malloc-query))
-	  (splits #f)
-	  ;; an association list. each element has a commodity as key,
-	  ;; and a pair of two value-collectors as value, e.g. ( (USD
-	  ;; (400 .  1000)) (FRF (300 . 100)) ) whers USD is a
-	  ;; <gnc:commodity> and the numbers are a value-collector
-	  ;; which in turn store a <gnc:numeric>.
-	  (sumlist '()))
-      
-      (if (not (null? curr-accounts))
-	  (begin
-	    (gnc:query-set-group query (gnc:get-current-group))
-	    (gnc:query-add-account-match 
-	     query (gnc:list->glist curr-accounts)
-	     'acct-match-any 'query-and)
-	    (gnc:query-add-date-match-timepair 
-	     query #f end-date #t end-date 'query-and) 
-	    
-	    (set! splits (filter 
-			  ;; Filter such that we get only those splits
-			  ;; which have two *different* commodities
-			  ;; involved.
-			  (lambda (s) (not (gnc:commodity-equiv? 
-					    (gnc:transaction-get-commodity 
-					     (gnc:split-get-parent s))
-					    (gnc:account-get-commodity 
-					     (gnc:split-get-account s)))))
-			  ;; Get the query result, i.e. all splits in
-			  ;; currency accounts.
-			  (gnc:glist->list 
-			   (gnc:query-get-splits query) 
-			   <gnc:Split*>)))
-	    (gnc:free-query query);
-	    
-	    (for-each 
-	     (lambda (a)
-	       (let* ((transaction-comm (gnc:transaction-get-commodity 
-					 (gnc:split-get-parent a)))
-		      (account-comm (gnc:account-get-commodity 
-				     (gnc:split-get-account a)))
-		      (foreignlist 
-		       (if (gnc:commodity-equiv? transaction-comm
-						 report-commodity)
-			   (list account-comm 
-				 (gnc:numeric-neg
-				  (gnc:split-get-share-amount a))
-				 (gnc:numeric-neg
-				  (gnc:split-get-value a))) 
-			   (list transaction-comm 
-				 (gnc:split-get-value a) 
-				 (gnc:split-get-share-amount a))))
-		      (pair (assoc (car foreignlist) sumlist)))
-		 (if (not pair)
-		     (begin
-		       (set! 
-			pair (list (car foreignlist)
-				   (cons (make-numeric-collector) 
-					 (make-numeric-collector))))
-		       (set! sumlist (cons pair sumlist))))
-		 ((caadr pair) 'add (cadr foreignlist))
-		 ((cdadr pair) 'add (caddr foreignlist))))
-		   ;(display 
-		    ;(commodity-value->string 
-		     ;(list (car foreignlist) (cadr foreignlist)))
-		    ;(commodity-value->string 
-		    ; (list report-commodity (caddr foreignlist)))))))
-	     splits)
-	    (map 
-	     (lambda (e)
-	       (begin
-		 ;(display
-		 ; (commodity-value->string 
-		 ;  (list (car e) ((caadr e) 'total #f)))
-		 ; (commodity-value->string 
-		 ;  (list report-commodity ((cdadr e) 'total #f))))
-		 (list (car e) 
-		       (gnc:numeric-div ((cdadr e) 'total #f) 
-					((caadr e) 'total #f)
-					;; 0 stands for GNC_DENOM_AUTO
-					0
-					GNC-DENOM-REDUCE))))
-	     sumlist)))))
-  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Start of report generating code
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
-  ;; pair is a list of one gnc:commodity and one gnc:numeric
-  ;; value. This function should disappear once this is an "official"
-  ;; data type.
-  (define (commodity-value->string pair)
-    (gnc:commodity-amount->string 
-     (cadr pair) (gnc:commodity-print-info (car pair) #t)))
-
-  ;; returns a list with n #f (empty cell) values 
-  (define (make-empty-cells n)
-    (if (> n 0)
-	(cons #f (make-empty-cells (- n 1)))
-	'()))
-
-  ;; returns the account name as html-text and anchor to the register.
-  (define (html-account-anchor acct)
-    (gnc:make-html-text (gnc:html-markup-anchor
-			 (string-append 
-			  "gnc-register:account=" 
-			  (gnc:account-get-full-name acct))
-			 (gnc:account-get-name acct))))
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; build-acct-table
   ;; builds and returns the tree-shaped table
@@ -249,11 +137,11 @@
       ;; returns a list which makes up a row in the table
       (define (make-row acct current-depth)
 	(append
-	 (make-empty-cells (- current-depth 1))
+	 (gnc:html-make-empty-cells (- current-depth 1))
 	 (list (gnc:make-html-table-cell/size 
 		1 (+ 1 (- tree-depth current-depth)) 
-		(html-account-anchor acct)))
-	 (make-empty-cells (- tree-depth current-depth))
+		(gnc:html-account-anchor acct)))
+	 (gnc:html-make-empty-cells (- tree-depth current-depth))
 	 ;; the account balance
 	 (list 
 	  ;; FIXME: report-commodity is ignored right now.
@@ -262,8 +150,8 @@
 		       'getpair (gnc:account-get-commodity acct) #f)))
 	    ;; pair is a list of one gnc:commodity and 
 	    ;; one gnc:numeric value. 
-	    (commodity-value->string pair)))
-	 (make-empty-cells (- current-depth 1))))
+	    (gnc:commodity-value->string pair)))
+	 (gnc:html-make-empty-cells (- current-depth 1))))
       
       ;; Adds rows to the table. Therefore it goes through the list of
       ;; accounts, runs make-row on each account.  If tree-depth and
@@ -299,15 +187,16 @@
 	  (gnc:html-table-append-row! 
 	   table
 	   (append
-	    (make-empty-cells (- current-depth 1))
+	    (gnc:html-make-empty-cells (- current-depth 1))
 	    (list (gnc:make-html-table-cell/size 
 		   1 (+ 1 (- tree-depth current-depth)) 
-		   (html-account-anchor acct)))
-	    (make-empty-cells (+ 1 (* 2 (- tree-depth current-depth))))
+		   (gnc:html-account-anchor acct)))
+	    (gnc:html-make-empty-cells (+ 1 (* 2 (- tree-depth current-depth))))
 	    ;; the account balance in terms of report commodity
 	    (list
-	     (commodity-value->string (balance 'getpair report-commodity #f)))
-	    (make-empty-cells (* 2 (- current-depth 1)))))
+	     (gnc:commodity-value->string 
+	      (balance 'getpair report-commodity #f)))
+	    (gnc:html-make-empty-cells (* 2 (- current-depth 1)))))
 	  ;; The additional rows: show no name, but the foreign currency
 	  ;; balance and its corresponding value in the
 	  ;; report-currency. One row for each non-report-currency.
@@ -320,14 +209,14 @@
 	      table
 	      (append
 	       ;; print no account name 
-	       (make-empty-cells tree-depth)
-	       (make-empty-cells  (* 2 (- tree-depth current-depth)))
+	       (gnc:html-make-empty-cells tree-depth)
+	       (gnc:html-make-empty-cells  (* 2 (- tree-depth current-depth)))
 	       ;; print the account balance in the respective commodity
 	       (list
-		(commodity-value->string (list curr val))
-		(commodity-value->string 
+		(gnc:commodity-value->string (list curr val))
+		(gnc:commodity-value->string 
 		 (exchange-fn (list curr val) report-commodity)))
-	       (make-empty-cells (* 2 (- current-depth 1))))))) 
+	       (gnc:html-make-empty-cells (* 2 (- current-depth 1))))))) 
        #f)))
   
       ;; The same as above, but for showing foreign currencies/commodities.
@@ -376,24 +265,24 @@
   ;; returns the maximum integer>0 in the given list... I'm
   ;; sure there is a predefined function for this task, but I don't
   ;; know where to look for that.
-  (define (find-max-int l)
+  (define (gnc:find-max-int l)
     (if (null? l)
 	0
-	(let ((a (find-max-int (cdr l))))
+	(let ((a (gnc:find-max-int (cdr l))))
 	  (if (> a (car l))
 	      a
 	      (car l)))))
   
-  ;; return the depth of the given account tree (needed if no
-  ;; tree-depth was specified)
-  (define (find-depth tree)
-    (find-max-int
+  ;; return the number of children/depth of the given account tree
+  ;; (needed if no tree-depth was specified)
+  (define (gnc:accounts-get-children-depth tree)
+    (gnc:find-max-int
      (map (lambda (acct)
 	    (let ((children 
 		   (gnc:account-get-immediate-subaccounts acct)))
 	      (if (null? children)
 		  1
-		  (+ 1 (find-depth children)))))
+		  (+ 1 (gnc:accounts-get-children-depth children)))))
 	  tree)))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -425,25 +314,11 @@
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
 	  (let* ((tree-depth (if (equal? display-depth 'all)
-				(find-depth accounts)
-				display-depth))
-		 (exchange-alist (make-exchange-alist 
+				 (gnc:accounts-get-children-depth accounts)
+				 display-depth))
+		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency date-tp))
-
-		 ;; proposed exchange rate calculation function
-		 (exchange-fn 
-		  (lambda (foreign-pair domestic)
-		    (list domestic 
-			  (let ((pair (assoc (car foreign-pair) 
-					     exchange-alist)))
-			    (if (not pair)
-				(gnc:numeric-zero)
-				(gnc:numeric-mul 
-				 (cadr foreign-pair) (cadr pair)
-				 ;; FIXME: the constant 100 here is
-				 ;; not a durable solution
-				 100 GNC-RND-ROUND))))))
-		 
+		 (exchange-fn (gnc:make-exchange-function exchange-alist))
 		 ;; do the processing here
 		 (table (build-acct-table 
 			 accounts date-tp tree-depth do-subtotals?
@@ -468,15 +343,15 @@
 	     (lambda (pair)
 	       (gnc:html-text-append! 
 		txt
-		"Exchange rate " 
-		(commodity-value->string 
+		(_ "Exchange rate ")
+		(gnc:commodity-value->string 
 		 (list (car pair) (gnc:numeric-create 1 1)))
 		" = "
-		(commodity-value->string 
+		(gnc:commodity-value->string 
 		 (list report-currency 
 		       (gnc:numeric-convert 
-			;; FIXME: remove the constant 1000000
-			(cadr pair) 1000000 GNC-RND-ROUND)))))
+			;; FIXME: remove the constant 100000
+			(cadr pair) 100000 GNC-RND-ROUND)))))
 	     exchange-alist)
 
 	    (if show-fcur?

@@ -26,6 +26,14 @@
 (define (gnc:commodity-amount->string amount info)
   (gnc:amount->string-helper amount info))
 
+;; pair is a list of one gnc:commodity and one gnc:numeric value. This
+;; function should disappear once this is an "official" data type, so
+;; that the data type will be accepted by the html-renderer.
+(define (gnc:commodity-value->string pair)
+  (gnc:commodity-amount->string 
+   (cadr pair) (gnc:commodity-print-info (car pair) #t)))
+
+;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)
   ;; FYI: The val->sym function used to be called 
   ;; gw:enum-GNCAccountType-val->sym
@@ -87,68 +95,56 @@
 (define (gnc:account-get-all-subaccounts acct)
   (let ((group (gnc:account-get-children acct)))
     (gnc:group-get-subaccounts group)))
-                            
-;; returns a list contains elements of the-list for which predicate is true
-(define (gnc:filter-list the-list predicate)
-  (let loop ((rest the-list)
-             (collected '()))
-    (cond ((null? rest) (reverse collected))
-          (else (loop (cdr rest)
-                      (if (predicate (car rest))
-                          (cons (car rest) collected)
-                          collected))))))
 
+;; AFAIK the following stuff exists in SRFI. 02/01/2001
+;
+;;; returns a list contains elements of the-list for which predicate is true
+;(define (gnc:filter-list the-list predicate)
+;  (let loop ((rest the-list)
+;             (collected '()))
+;    (cond ((null? rest) (reverse collected))
+;          (else (loop (cdr rest)
+;                      (if (predicate (car rest))
+;                          (cons (car rest) collected)
+;                          collected))))))
+;
 ;; like map, but restricted to one dimension, and
 ;; guaranteed to have inorder semantics.
 ;; note: map-in-order is in a SRFI.
-(define (gnc:inorder-map the-list fn)
-  (let loop ((rest the-list)
-             (collected '()))
-    (cond ((null? rest) (reverse collected))
-          (else (loop (cdr rest)
-                      (cons (fn (car rest)) collected))))))
-
-(define (gnc:for-loop thunk first last step)
-  (if (< first last) 
-      (begin
-	(thunk first)
-	(gnc:for-loop thunk (+ first step) last step))
-      #f))
-
-(define (gnc:map-for thunk first last step)
-  (if (< first last)
-      (cons
-	(thunk first)
-	(gnc:map-for thunk (+ first step) last step))
-      '()))
-
-;;; applies thunk to each split in account account
-(define (gnc:for-each-split-in-account account thunk)
-  (gnc:for-loop (lambda (x) 
-		  (thunk (gnc:account-get-split account x)))
-                0 (gnc:account-get-split-count account) 1))
-
-;;; applies thunk to each split in account account
-(define (gnc:map-splits-in-account thunk account)
-  (gnc:map-for (lambda (x) 
-		 (thunk (gnc:account-get-split account x)))
-	       0 (gnc:account-get-split-count account) 1))
-
-; (define (gnc:account-transactions-for-each thunk account)
-;   ;; You must call gnc:group-reset-write-flags on the account group
-;   ;; before using this...
+;(define (gnc:inorder-map the-list fn)
+;  (let loop ((rest the-list)
+;             (collected '()))
+;    (cond ((null? rest) (reverse collected))
+;          (else (loop (cdr rest)
+;                      (cons (fn (car rest)) collected))))))
 ;
-;   (let loop ((num-splits (gnc:account-get-split-count account))
-;              (i 0))
-;     (if (< i num-splits)
-;         (let* ((split (gnc:account-get-split account i))
-;                (transaction (gnc:split-get-parent split)))
-;           ;; We don't use the flags just like FileIO does (only 1 pass here).
-;           (if (= (gnc:transaction-get-write-flag transaction) 0)
-;               (begin
-;                 (thunk transaction)
-;                 (gnc:transaction-set-write-flag transaction 2)))
-;           (loop num-splits (+ i 1))))))
+;(define (gnc:for-loop thunk first last step)
+;  (if (< first last) 
+;      (begin
+;	(thunk first)
+;	(gnc:for-loop thunk (+ first step) last step))
+;      #f))
+;
+;(define (gnc:map-for thunk first last step)
+;  (if (< first last)
+;      (cons
+;	(thunk first)
+;	(gnc:map-for thunk (+ first step) last step))
+;      '()))
+
+;; The following tasks shall be done with the query-api. 02/01/2001
+;
+;;; applies thunk to each split in account account
+;(define (gnc:for-each-split-in-account account thunk)
+;  (gnc:for-loop (lambda (x) 
+;		  (thunk (gnc:account-get-split account x)))
+;                0 (gnc:account-get-split-count account) 1))
+;
+;;; applies thunk to each split in account account
+;(define (gnc:map-splits-in-account thunk account)
+;  (gnc:map-for (lambda (x) 
+;		 (thunk (gnc:account-get-split account x)))
+;	       0 (gnc:account-get-split-count account) 1))
 
 (define (gnc:transaction-map-splits thunk transaction)
   (let loop ((num-splits (gnc:transaction-get-split-count transaction))
@@ -261,25 +257,30 @@
 ;; (a 'add 'USD 12) ...  (a 'format (lambda(x y)(list x y)) #f) 
 ;; used to give you something like 
 ;; ((USD 123.4) (DEM 12.21) (FRF -23.32))
+;; But now USD is a <gnc:commodity*> and 123.4 a <gnc:numeric>, so
+;; there is no simple example anymore.
 ;;
 ;; The functions:
 ;;   'add <commodity> <amount>: Add the given amount to the 
-;;       appropriate currencies' total amount.
+;;       appropriate currencies' total balance.
 ;;   'format <fn> #f: Call the function <fn> (where fn takes two
 ;;       arguments) for each commodity with the arguments <commodity>
 ;;       and the corresponding total <amount>. The results is a list
 ;;       of each call's result.
 ;;   'merge <commodity-collector> #f: Merge the given other
 ;;       commodity-collector into this one, adding all currencies'
-;;       amounts, respectively.
+;;       balances, respectively.
 ;;   'minusmerge <commodity-collector> #f: Merge the given other 
 ;;       commodity-collector into this one (like above) but subtract
-;;       the other's currencies' amounts from this one's amounts,
+;;       the other's currencies' balance from this one's balance,
 ;;       respectively.
 ;;   'reset #f #f: Delete everything that has been accumulated 
 ;;       (even the fact that any commodity showed up at all).
+;;   'getpair <commodity> #f: Returns the two-element-list with the
+;;       <commodity> and its corresponding balance. If <commodity>
+;;       doesn't exist, the balance will be (gnc:numeric-zero).
 ;;   (internal) 'list #f #f: get the association list of 
-;;        commodity->numeric-collector
+;;       commodity->numeric-collector
 
 (define (make-commodity-collector)
   (let 
@@ -319,18 +320,19 @@
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
     (define (process-commodity-list fn clist)
-      (cond ((null? clist) '())
-	    (else (cons (fn (caar clist) ((cadar clist) 'total #f))
-			(process-commodity-list fn (cdr clist))))))
+      (map 
+       (lambda (pair) (fn (car pair) ((cadr pair) 'total #f)))
+       clist))
 
     ;; helper function which is given a commodity and returns, if
-    ;; existing, a list (gnc-commodity gnc:numeric) 
+    ;; existing, a list (gnc:commodity gnc:numeric) 
     (define (getpair c)
       (let ((pair (assoc c commoditylist)))
-	(list c 
+	(cons c (cons 
 	      (if (not pair)
 		  (gnc:numeric-zero)
-		  ((cadr pair) 'total #f)))))
+		  ((cadr pair) 'total #f))
+	      '()))))
 
     ;; Dispatch function
     (lambda (action commodity amount)
@@ -344,24 +346,19 @@
 	('list commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
 
-;; Add x to list lst if it is not already in there
-(define (addunique lst x)
-  (if (null? lst)  
-      (list x)		; all checked add it
-      (if (equal? x (car lst))
-	  lst	; found, quit search and don't add again
-	  (cons (car lst) (addunique (cdr lst) x))))) ; keep searching
-
-;;; applies thunk to each split in account account
-(define (gnc:for-each-split-in-account account thunk)
-  (gnc:for-loop (lambda (x) 
-		  (thunk (gnc:account-get-split account x)))
-		0 (gnc:account-get-split-count account) 1))
-
-;; get transaction date from split - needs to be done indirectly
-;; as it's stored in the parent transaction
-(define (gnc:split-get-transaction-date split)
-  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+;; Nobody uses the following functions. 02/01/2001
+;;; Add x to list lst if it is not already in there
+;(define (addunique lst x)
+;  (if (null? lst)  
+;      (list x)		; all checked add it
+;      (if (equal? x (car lst))
+;	  lst	; found, quit search and don't add again
+;	  (cons (car lst) (addunique (cdr lst) x))))) ; keep searching
+;
+;;; get transaction date from split - needs to be done indirectly
+;;; as it's stored in the parent transaction
+;(define (gnc:split-get-transaction-date split)
+;  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
@@ -500,3 +497,126 @@
 	(if (equal? (car splits) split)
 	    (loop (cdr splits))
 	    (cons (car splits) (loop (cdr splits)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; In progress: A suggested function to calculate the weighted average
+;; exchange rate between all commodities and the
+;; report-commodity. Uses all currency transactions up until the
+;; end-date. Returns an alist, see sumlist.
+(define (gnc:get-exchange-totals report-commodity end-date)
+  (let ((curr-accounts 
+	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+					  (gnc:get-current-group))))
+	(query (gnc:malloc-query))
+	(splits #f)
+	;; sumlist: an association list. each element has a commodity
+	;; as key, and a pair of two value-collectors as value, e.g. (
+	;; (USD (400 .  1000)) (FRF (300 . 100)) ) whers USD is a
+	;; <gnc:commodity> and the numbers are a value-collector which
+	;; in turn store a <gnc:numeric>. In the example, USD 400 were
+	;; bought for an amount of 1000 of the report-commodity.
+	(sumlist '()))
+    
+    (if (not (null? curr-accounts))
+	(begin
+	  (gnc:query-set-group query (gnc:get-current-group))
+	  (gnc:query-add-account-match 
+	   query (gnc:list->glist curr-accounts)
+	   'acct-match-any 'query-and)
+	  (gnc:query-add-date-match-timepair 
+	   query #f end-date #t end-date 'query-and) 
+	  
+	  ;; Get the query result, i.e. all splits in currency
+	  ;; accounts.
+	  (set! splits (filter 
+			;; Filter such that we get only those splits
+			;; which have two *different* commodities
+			;; involved.
+			(lambda (s) (not (gnc:commodity-equiv? 
+					  (gnc:transaction-get-commodity 
+					   (gnc:split-get-parent s))
+					  (gnc:account-get-commodity 
+					   (gnc:split-get-account s)))))
+			(gnc:glist->list 
+			 (gnc:query-get-splits query) 
+			 <gnc:Split*>)))
+	  (gnc:free-query query);
+	  
+	  ;; Now go through all splits and add up all value-amounts
+	  ;; and share-amounts
+	  (for-each 
+	   (lambda (a)
+	     (let* ((transaction-comm (gnc:transaction-get-commodity 
+				       (gnc:split-get-parent a)))
+		    (account-comm (gnc:account-get-commodity 
+				   (gnc:split-get-account a)))
+		    (foreignlist 
+		     ;; this will adjust the signs appropriately
+		     (if (gnc:commodity-equiv? transaction-comm
+					       report-commodity)
+			 (list account-comm 
+			       (gnc:numeric-neg
+				(gnc:split-get-share-amount a))
+			       (gnc:numeric-neg
+				(gnc:split-get-value a))) 
+			 (list transaction-comm 
+			       (gnc:split-get-value a) 
+			       (gnc:split-get-share-amount a))))
+		    ;; commodity already existing in sumlist?
+		    (pair (assoc (car foreignlist) sumlist)))
+	       ;; if not, create a new entry in sumlist.
+	       (if (not pair)
+		   (begin
+		     (set! 
+		      pair (list (car foreignlist)
+				 (cons (make-numeric-collector) 
+				       (make-numeric-collector))))
+		     (set! sumlist (cons pair sumlist))))
+	       ;;(display (gnc:commodity-value->string (list (car
+	       ;;foreignlist) (cadr foreignlist)))
+	       ;;(gnc:commodity-value->string (list report-commodity
+	       ;;(caddr foreignlist)))))))
+	       ((caadr pair) 'add (cadr foreignlist))
+	       ((cdadr pair) 'add (caddr foreignlist))))
+	   splits)))
+  sumlist))
+
+;; Anybody feel free to reimplement any of these functions, either in
+;; scheme or in C. -- cstim
+
+(define (gnc:make-exchange-alist report-commodity end-date)
+  ;; This returns the alist with the actual exchange rates, i.e. the
+  ;; total balances from get-exchange-totals are divided by each
+  ;; other.
+  (map 
+   (lambda (e)
+     (begin
+       ;;(display (gnc:commodity-value->string (list (car e) ((caadr
+       ;;e) 'total #f))) (gnc:commodity-value->string (list
+       ;;report-commodity ((cdadr e) 'total #f))))
+       (list (car e) 
+	     (gnc:numeric-div ((cdadr e) 'total #f) 
+			      ((caadr e) 'total #f)
+			      ;; 0 stands for GNC_DENOM_AUTO
+			      0
+			      GNC-DENOM-REDUCE))))
+   (gnc:get-exchange-totals report-commodity end-date)))
+
+;; This one returns the ready-to-use function for calculation of the
+;; exchange rates. The returned function in turn returns a pair
+;; commodity - value which instantly can be plugged into
+;; gnc:commodity-amount->string .
+(define (gnc:make-exchange-function exchange-alist)
+  (let ((exchangelist exchange-alist))
+    (lambda (foreign-pair domestic)
+      (cons domestic
+	    (cons 
+	     (let ((pair (assoc (car foreign-pair) exchangelist)))
+	       (if (not pair)
+		   (gnc:numeric-zero)
+		   (gnc:numeric-mul (cadr foreign-pair) (cadr pair)
+				    ;; FIXME: the constant 100 here is
+				    ;; not a durable solution
+				    100 GNC-RND-ROUND)))
+	     '())))))
+
