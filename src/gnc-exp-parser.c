@@ -21,9 +21,11 @@
 #include "config.h"
 
 #include <ctype.h>
+#include <guile/gh.h>
 
 #include "finproto.h"
 #include "fin_spl_protos.h"
+#include "global-options.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"
 #include "util.h"
@@ -48,12 +50,37 @@ static gboolean    parser_inited = FALSE;
 void
 gnc_exp_parser_init (void)
 {
+  SCM alist;
+
   if (parser_inited)
     gnc_exp_parser_shutdown ();
 
   variable_bindings = g_hash_table_new (g_str_hash, g_str_equal);
 
+  /* This comes after the statics have been initialized. Not at the end! */
   parser_inited = TRUE;
+
+  alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
+
+  while (gh_list_p(alist) && !gh_null_p(alist))
+  {
+    char *name;
+    double value;
+    SCM assoc;
+
+    assoc = gh_car (alist);
+    alist = gh_cdr (alist);
+
+    name = gh_scm2newstr(gh_car (assoc), NULL);
+    if (name == NULL)
+      continue;
+
+    value = gh_scm2double(gh_cdr (assoc));
+
+    gnc_exp_parser_set_value (name, value);
+
+    free(name);
+  }
 }
 
 static gboolean
@@ -65,11 +92,30 @@ remove_binding (gpointer key, gpointer value, gpointer not_used)
   return TRUE;
 }
 
+static void
+binding_cons (gpointer key, gpointer value, gpointer data)
+{
+  char *name = key;
+  ParserNum *pnum = value;
+  SCM *alist_p = data;
+  SCM assoc;
+
+  assoc = gh_cons (gh_str02scm (name), gh_double2scm (pnum->value));
+
+  *alist_p = gh_cons (assoc, *alist_p);
+}
+
 void
 gnc_exp_parser_shutdown (void)
 {
+  SCM alist;
+
   if (!parser_inited)
     return;
+
+  alist = SCM_EOL;
+  g_hash_table_foreach (variable_bindings, binding_cons, &alist);
+  gnc_set_option ("__exp_parser", "defined_variables", alist);
 
   g_hash_table_foreach_remove (variable_bindings, remove_binding, NULL);
   g_hash_table_destroy (variable_bindings);

@@ -53,6 +53,12 @@
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
+  ;; Initialize the C side options code. Must come after the scheme
+  ;; options are loaded.
+  (gnc:c-options-init)
+
+  ;; Initialize the expresion parser. Must come after the C side
+  ;; options initialization.
   (gnc:exp-parser-init)
 
   (if (gnc:config-var-value-get gnc:*arg-show-version*)
@@ -94,7 +100,7 @@
 
   ;; Now the fun begins.
   (gnc:startup)
-  
+
   (if (not (= (gnc:lowlev-app-init) 0))
       (gnc:shutdown 0))
 
@@ -103,6 +109,9 @@
 
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
+
+  ;; add a hood to shut down the C side options code
+  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:c-options-shutdown)
 
   (if (null? gnc:*batch-mode-forms-to-evaluate*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.

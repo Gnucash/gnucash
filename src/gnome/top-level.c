@@ -164,8 +164,6 @@ gnucash_ui_init(void)
     
     app = gnome_app_new("GnuCash", "GnuCash");
 
-    gnc_options_init();
-
     gnc_configure_date_format();
     date_callback_id =
       gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
@@ -294,7 +292,6 @@ gnc_ui_destroy (void)
     app = NULL;
   }
 
-  gnc_options_shutdown();
   gnc_extensions_shutdown();
 }
 

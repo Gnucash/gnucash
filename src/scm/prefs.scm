@@ -579,6 +579,10 @@ the current value of the path."
  (gnc:make-internal-option
   "__gui" "reg_column_widths" '()))
 
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__exp_parser" "defined_variables" '()))
+
 
 ;; This needs to be after all the global options definitions
 (if (gnc:debugging?)
