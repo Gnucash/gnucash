@@ -153,7 +153,7 @@ configLabels (SplitRegister *reg)
 
 /* ============================================== */
 
-#define SET(NAME,row,col,handler)				\
+#define SET(NAME,col,row,handler)				\
 {								\
    BasicCell *hcell;						\
    hcell = reg->header_label_cells[NAME##_CELL];		\
@@ -173,12 +173,12 @@ configLabels (SplitRegister *reg)
    
 /* BASIC & FANCY macros initialize cells in the register */
 
-#define BASIC(NAME,CN,row,col) {			\
-   SET (NAME, row, col, reg->CN##Cell);			\
+#define BASIC(NAME,CN,col,row) {			\
+   SET (NAME, col, row, reg->CN##Cell);			\
 }
 
-#define FANCY(NAME,CN,row,col) {			\
-   SET (NAME, row, col, &(reg->CN##Cell->cell));	\
+#define FANCY(NAME,CN,col,row) {			\
+   SET (NAME, col, row, &(reg->CN##Cell->cell));	\
 }
 
 /* ============================================== */
@@ -247,7 +247,7 @@ configLayout (SplitRegister *reg)
             BASIC (NUM,    num,      1,  0);
             FANCY (DESC,   desc,     3,  0);
             BASIC (RECN,   recn,     4,  0);
-            FANCY (BALN,   balance,  7, 0);
+            FANCY (BALN,   balance,  7,  0);
       
             curs = reg->split_cursor;
             FANCY (ACTN,   action,   1,  0);
@@ -572,8 +572,11 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    HDR (DATE);
    HDR (NUM);
+   HDR (ACTN);
    HDR (XFRM);
+   HDR (XTO);
    HDR (DESC);
+   HDR (MEMO);
    HDR (RECN);
    HDR (CRED);
    HDR (DEBT);
