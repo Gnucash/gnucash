@@ -22,6 +22,31 @@
  * To implement the above, the register "user_hook" is used
  * to store the blank split with the register window structures.
  *
+ * =====================================================================
+ * Some notes on Commit/Rollback:
+ * 
+ * There's an engine compnenent and a gui componenet to the commit/rollback
+ * scheme.  On the engine side, one must always call BeginEdit()
+ * before starting to edit a transaction.  When you think you're done,
+ * you can call CommitEdit() to commit the changes, or RollbackEdit() to
+ * go back to how things were before you started the edit.  Think of it as
+ * a one-shot mega-undo for that transaction.
+ * 
+ * Note that the query engine uses the original values, not the currently
+ * edited values, when performing a sort.  This allows your to e.g. edit
+ * the date without having the transaction hop around in the gui while you
+ * do it.
+ * 
+ * On the gui side, commits are now performed on a per-transaction basis,
+ * rather than a per-split (per-journal-entry) basis.  This means that
+ * if you have a transaction with a lot of splits in it, you can edit them
+ * all you want without having to commit one before moving to the next.
+ * 
+ * Similarly, the "cancel" button will now undo the changes to all of the
+ * lines in the transaction display, not just to one line (one split) at a
+ * time.
+ * 
+ *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
