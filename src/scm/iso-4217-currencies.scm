@@ -59,7 +59,6 @@
 ( "Fiji Dollar" "dollar" "cent" "ISO4217" "FJD" "242" 100 100 )
 ( "Finnish Markka" "markka" "penni"  "ISO4217" "FIM" "246" 100 100)
 ( "French Franc" "franc" "centime" "ISO4217" "FRF" "250" 100 100 )
-( "Gabon Franc" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
 ( "Gambian Dalasi" "dalasi" "butut" "ISO4217" "GMD" "270" 100 100 )
 ( "German Mark" "deutschemark" "pfennig" "ISO4217" "DEM" "280" 100 100 )
 ( "Ghanaian Cedi" "cedi" "psewa" "ISO4217" "GHC" "288" 100 100 )

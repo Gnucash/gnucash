@@ -457,14 +457,23 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
   if(fullname && fullname[0] &&
      namespace && namespace[0] &&
      mnemonic && mnemonic[0]) {
+    c = gnc_commodity_table_lookup (gnc_engine_commodities(),
+                                    namespace, mnemonic);
+
+    if (c) {
+      gnc_warning_dialog_parented (dialog,
+                                   _("That commodity already exists."));
+      return;
+    }
+
     c = gnc_commodity_new(fullname, namespace, mnemonic,
                           gtk_entry_get_text
                           (GTK_ENTRY(w->code_entry)),
                           gtk_spin_button_get_value_as_int
                           (GTK_SPIN_BUTTON(w->fraction_spinbutton)));
-    
+
     /* remember the commodity */
-    gnc_commodity_table_insert(gnc_engine_commodities(), c);
+    c = gnc_commodity_table_insert(gnc_engine_commodities(), c);
 
     /* if there's a callback (generally to fill in some fields with 
      * info about the commodity) call it */
@@ -476,9 +485,10 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
     gnc_ui_new_commodity_destroy(w);
   }
   else {
-    gnc_warning_dialog(_("You must enter a non-empty \"Full name\", "
-                         "\"Symbol/abbreviation\",\n"
-                         "and \"Type\" for the commodity."));
+    gnc_warning_dialog_parented(dialog,
+                                _("You must enter a non-empty \"Full name\", "
+                                  "\"Symbol/abbreviation\",\n"
+                                  "and \"Type\" for the commodity."));
   }
 }
 

@@ -1,3 +1,29 @@
+2001-03-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/iso-4217-currencies.scm: remove duplicate currency
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_commodity_ref): use
+	gnc_commodity_destroy, not g_free.
+
+	* src/guile/gnc.gwp: fix for new commodity insert
+
+	* src/gnome/druid-qif-import.c: fix for new commodity insert
+
+	* src/gnome/dialog-commodity.c: check for existing commodity.
+	fix for new commodity insert.
+
+	* src/engine/io-gncbin-r.c: fix for new commodity insert
+
+	* src/gnome/druid-commodity.c: fix for new commodity insert
+
+	* src/engine/gnc-commodity.c: change commodity insert semantics to
+	use an existing commodity if present. Remove
+	gnc_commodity_table_remove(). It wasn't used and was a mem leak.
+
+	* src/engine/Commodity-xml-parser-v1.c
+	(commodity_restore_end_handler): use gnc_commodity_destroy,
+	not just g_free.
+
 2001-03-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-edit.{ch}: improve horizontal

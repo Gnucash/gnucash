@@ -323,12 +323,12 @@ int xaccAccountStagedTransactionTraversal(Account *a,
 
 /* Traverse all of the transactions in the given account group.
    Continue processing IFF proc does not return FALSE. This function
-   does not descend recursively to traverse transactions in the
+   will descend recursively to traverse transactions in the
    children of the accounts in the group.
 
    Proc will be called exactly once for each transaction that is
-   pointed to by at least one split in an account in the account
-   group.
+   pointed to by at least one split in any account in the hierarchy
+   topped by AccountGroup g.
 
    Note too, that if you call this function on two separate account
    groups and those accounts groups share transactions, proc will be

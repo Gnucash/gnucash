@@ -22,6 +22,9 @@
  *******************************************************************/
 
 #define _GNU_SOURCE
+
+#include "config.h"
+
 #include <limits.h>
 #include <string.h>
 #include <stdint.h>
@@ -200,6 +203,7 @@ gnc_commodity_get_fraction(const gnc_commodity * cm) {
 void
 gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
   if(!cm) return;
+  if(cm->mnemonic == mnemonic) return;
 
   g_free(cm->mnemonic);
   cm->mnemonic = g_strdup(mnemonic);
@@ -215,6 +219,7 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
 void
 gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
   if(!cm) return;
+  if(cm->namespace == namespace) return;
 
   g_free(cm->namespace);
   cm->namespace = g_strdup(namespace);
@@ -230,6 +235,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
 void
 gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
   if(!cm) return;
+  if(cm->fullname == fullname) return;
 
   g_free(cm->fullname);
   cm->fullname = g_strdup(fullname);
@@ -245,6 +251,7 @@ void
 gnc_commodity_set_exchange_code(gnc_commodity * cm, 
                                 const char * exchange_code) {
   if(!cm) return;
+  if(cm->exchange_code == exchange_code) return;
 
   g_free(cm->exchange_code);
   cm->exchange_code = g_strdup(exchange_code);
@@ -268,12 +275,8 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
 
 gboolean
 gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) {
-  /* fprintf(stderr, "CmpCmod %p ?= %p\n", a, b); */
   if(a == b) return TRUE;
   if(!a || !b) return FALSE;
-  /* fprintf(stderr, "CmpCmod %s:%s ?= %s:%s\n",
-          a->namespace, a->mnemonic,
-          b->namespace, b->mnemonic); */
   if(safe_strcmp(a->namespace, b->namespace) != 0) return FALSE;
   if(safe_strcmp(a->mnemonic, b->mnemonic) != 0) return FALSE;
   return TRUE;
@@ -351,10 +354,27 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
  * add a commodity to the table. 
  ********************************************************************/
 
-void
+gnc_commodity *
 gnc_commodity_table_insert(gnc_commodity_table * table, 
-                           const gnc_commodity * comm) {
+                           gnc_commodity * comm) {
   gnc_commodity_namespace * nsp = NULL;
+  gnc_commodity *c;
+
+  if (!table) return NULL;
+  if (!comm) return NULL;
+
+  c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
+
+  if (c) {
+    gnc_commodity_set_fullname (c, gnc_commodity_get_fullname (comm));
+    gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
+    gnc_commodity_set_exchange_code (c,
+                                     gnc_commodity_get_exchange_code (comm));
+
+    gnc_commodity_destroy (comm);
+
+    return c;
+  }
 
   nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
   
@@ -366,26 +386,11 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
                         (gpointer)nsp);
   }
 
-  return g_hash_table_insert(nsp->table, 
-                             (gpointer)g_strdup(comm->mnemonic),
-                             (gpointer)comm);  
-}
+  g_hash_table_insert(nsp->table, 
+                      (gpointer)g_strdup(comm->mnemonic),
+                      (gpointer)comm);
 
-/********************************************************************
- * gnc_commodity_table_remove
- * remove a commodity from the table (just unmaps it)
- ********************************************************************/
-
-void
-gnc_commodity_table_remove(gnc_commodity_table * table, 
-                           const gnc_commodity * comm) {
-  gnc_commodity_namespace * nsp = NULL;
-
-  nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
-  
-  if(nsp) {
-    g_hash_table_remove(nsp->table, (gpointer)comm->mnemonic);
-  }
+  return comm;
 }
 
 /********************************************************************

@@ -377,8 +377,7 @@ gnc_commodity_import_legacy(const char * currency_name) {
       old = gnc_commodity_new(currency_name, 
                               GNC_COMMODITY_NS_LEGACY, currency_name,
                               0, 100000);
-      gnc_commodity_table_insert(gnc_engine_commodities(), 
-                                 old);
+      old = gnc_commodity_table_insert(gnc_engine_commodities(), old);
     }
     return old;
   }

@@ -170,7 +170,7 @@ commodity_restore_end_handler(gpointer data_for_children,
   g_free(cpi->xcode);
   g_free(cpi);
 
-  if(!ok) g_free(comm);
+  if(!ok) gnc_commodity_destroy(comm);
 
   return(ok);
 }

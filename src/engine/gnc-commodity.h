@@ -75,10 +75,8 @@ gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table,
 gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
-void          gnc_commodity_table_insert(gnc_commodity_table * table,
-                                         const gnc_commodity * comm);
-void          gnc_commodity_table_remove(gnc_commodity_table * table,
-                                         const gnc_commodity * comm);
+gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
+                                           gnc_commodity * comm);
 
 int       gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
                                             const char * namespace);

@@ -617,21 +617,22 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
     c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0);
   }
 
-  if(space_str) g_free(space_str);
-  if(id_str) g_free(id_str);
+  g_free(space_str);
+  g_free(id_str);
+
   return c;
 }
 
 gnc_commodity*
 dom_tree_to_commodity_ref(xmlNodePtr node)
 {
-    gnc_commodity* daref;
+    gnc_commodity *daref;
     gnc_commodity *ret;
     
     daref = dom_tree_to_commodity_ref_no_engine(node);
     ret = associate_commodity_ref_with_engine_commodity(daref);
 
-    g_free(daref);
+    gnc_commodity_destroy(daref);
 
     return ret;
 }
