@@ -381,7 +381,7 @@ gnc_account_change_currency_security(Account *account,
   gboolean new_security;
   GSList * stack;
 
-  if ((account == NULL) || (currency == NULL) || (security == NULL))
+  if (account == NULL)
     return;
 
   old_currency = xaccAccountGetCurrency(account);
@@ -507,7 +507,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   {
     case ACCOUNT_CURRENCY:
     case ACCOUNT_SECURITY:
-      strings[3] = value;
+      strings[3] = gnc_commodity_get_printname(value);
       break;
     case ACCOUNT_TYPE:
       strings[3] = xaccAccountGetTypeStr(GPOINTER_TO_INT(value));
