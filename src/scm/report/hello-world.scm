@@ -175,37 +175,35 @@
     gnc:*hello-world-options*)
 
 
-  ;; Now we create a string database that will make it easier to
-  ;; internationalize this report. Strings that are stored into
-  ;; this database are registered with another component that
-  ;; can save all such strings into a file suitable for gettext
-  ;; parsing. Strings that are retrieved from the database are
-  ;; automatically translated, if a translation is available.
-  ;; Otherwise, the original string is used.
-  (define string-db (gnc:make-string-database))
-
-  ;; Here is a helper function for getting the translation of
-  ;; a boolean value.
-  (define (hello-world:bool->string value)
-    (string-db 'lookup (if value 'true 'false)))
-
   ;; This is a helper function to generate an html list of account names
   ;; given an account list option.
   (define (account-list accounts)
     (let ((names (map gnc:account-get-name accounts)))
       (if (null? accounts)
-          (list "<p>" (string-db 'lookup 'no-accounts) "</p>")
-          (list "<p>" (string-db 'lookup 'selected-accounts) "</p>"
-                "<ul>"
-                (map (lambda (name) (list "<li>" name "</li>")) names)
-                "</ul>"))))
+          (list
+           "<p>"
+           (_ "There are no selected accounts in the account list option.")
+           "</p>")
+
+          (list
+           "<p>"
+           (_ "The accounts selected in the account list option are:")
+           "</p>"
+           "<ul>"
+           (map (lambda (name) (list "<li>" name "</li>")) names)
+           "</ul>"))))
 
   ;; This is a helper function to generate an html list for the list option.
   (define (list-option-list values)
     (let ((names (map symbol->string values)))
       (if (null? values)
-          (list "<p>" (string-db 'lookup 'no-values) "</p>")
-          (list "<p>" (string-db 'lookup 'selected-values) "</p>"
+          (list "<p>"
+                (_ "You have selected no values in the list option.")
+                "</p>")
+
+          (list "<p>"
+                (_ "The items selected in the list option are:")
+                "</p>"
                 "<ul>"
                 (map (lambda (name) (list "<li>" name "</li>")) names)
                 "</ul>"))))
@@ -215,8 +213,8 @@
     (string-append "<b>" string "</b>"))
 
   ;; Here's a helper function for making some of the paragraphs below.
-  (define (make-para key . values)
-    (let ((args (append (list #f (string-db 'lookup key)) values)))
+  (define (make-para text . values)
+    (let ((args (append (list #f text) values)))
       (html-para (apply sprintf args))))
 
 
@@ -240,10 +238,14 @@
     (let ((bool-val     (op-value "Hello, World!" "Boolean Option"))
           (mult-val     (op-value "Hello, World!" "Multi Choice Option"))
           (string-val   (op-value "Hello, World!" "String Option"))
-          (date-val     (gnc:date-option-absolute-time (op-value "Hello, World!" "Just a Date Option")))
-          (date2-val    (gnc:date-option-absolute-time (op-value "Hello, World!" "Time and Date Option")))
-	  (rel-date-val (gnc:date-option-absolute-time (op-value "Hello, World!" "Relative Date Option")))
-	  (combo-date-val (gnc:date-option-absolute-time (op-value "Hello, World!" "Combo Date Option")))
+          (date-val     (gnc:date-option-absolute-time
+                         (op-value "Hello, World!" "Just a Date Option")))
+          (date2-val    (gnc:date-option-absolute-time
+                         (op-value "Hello, World!" "Time and Date Option")))
+	  (rel-date-val (gnc:date-option-absolute-time
+                         (op-value "Hello, World!" "Relative Date Option")))
+	  (combo-date-val (gnc:date-option-absolute-time
+                           (op-value "Hello, World!" "Combo Date Option")))
           (num-val      (op-value "Hello, World!" "Number Option"))
           (color-op     (get-op   "Hello, World!" "Background Color"))
           (accounts     (op-value "Hello Again"   "An account list option"))
@@ -251,13 +253,14 @@
           (crash-val    (op-value "Testing"       "Crash the report")))
 
       ;; Crash if asked to.
-      (if crash-val (string-length #f));; string-length needs a string
+      (if crash-val (string-length #f)) ;; string-length needs a string
 
       (let ((time-string (strftime "%X" (localtime (current-time))))
             (date-string (strftime "%x" (localtime (car date-val))))
             (date-string2 (strftime "%x %X" (localtime (car date2-val))))
 	    (rel-date-string (strftime "%x" (localtime (car rel-date-val))))
-	(combo-date-string (strftime "%x" (localtime (car combo-date-val)))))
+            (combo-date-string
+             (strftime "%x" (localtime (car combo-date-val)))))
 
         ;; Here's where we generate the html. A real report would need
         ;; much more code and involve many more utility functions. See
@@ -267,39 +270,56 @@
         (list
          (html-start-document-color (gnc:color-option->html color-op))
 
-         ;; Here we get the title using the string database and 'lookup.
-         "<h2>" (string-db 'lookup 'title) "</h2>"
+         ;; Here we print the title of the report.
+         ;; Note we invoke the _ function upon this string.
+         ;; The _ function works the same way as in C -- if a
+         ;; translation of the given string is available for the
+         ;; current locale, then the translation is returned,
+         ;; otherwise the original string is returned.
+         "<h2>" (_ "Hello, World") "</h2>"
 
          ;; Here we user our paragraph helper
-         (make-para 'para-1
-                    (string-append "<tt>" gnc:_share-dir-default_
-                                   "/gnucash/scm/report" "</tt>"))
+         (make-para
+          (_ "This is a sample GnuCash report. \
+See the guile (scheme) source code in %s \
+for details on writing your own reports, \
+or extending existing reports.")
+          (string-append "<tt>" gnc:_share-dir-default_
+                         "/gnucash/scm/report" "</tt>"))
 
-         (make-para 'para-2
-                    (string-append
-                     "<a href=\"mailto:gnucash-devel@gnucash.org\">"
-                     "<tt>gnucash-devel@gnucash.org</tt></a>")
-                    (string-append
-                     "<a href=\"http://www.gnucash.org\">"
-                     "<tt>www.gnucash.org</tt></a>"))
+         (make-para
+          (_ "For help on writing reports, or to contribute your brand \
+new, totally cool report, consult the mailing list %s. \
+For details on subscribing to that list, see %s.")
+          (string-append
+           "<a href=\"mailto:gnucash-devel@gnucash.org\">"
+           "<tt>gnucash-devel@gnucash.org</tt></a>")
+          (string-append
+           "<a href=\"http://www.gnucash.org\">"
+           "<tt>www.gnucash.org</tt></a>"))
 
-         (make-para 'time-string (bold time-string))
+         (make-para (_ "The current time is %s.") (bold time-string))
 
-         (make-para 'bool-string (bold (hello-world:bool->string bool-val)))
+         (make-para (_ "The boolean option is %s.")
+                    (bold (if bool-val (_ "true") (_ "false"))))
 
-         (make-para 'multi-string (bold (symbol->string mult-val)))
+         (make-para (_ "The multi-choice option is %s.")
+                    (bold (symbol->string mult-val)))
 
-         (make-para 'string-string (bold string-val))
+         (make-para (_ "The string option is %s.") (bold string-val))
 
-         (make-para 'date-string (bold date-string))
+         (make-para (_ "The date option is %s.") (bold date-string))
 
-         (make-para 'time-date-string (bold date-string2))
-	 
-	 (make-para 'rel-date-string (bold rel-date-string))
+         (make-para (_ "The date and time option is %s.") (bold date-string2))
 
-	 (make-para 'combo-date-string (bold combo-date-string))
+	 (make-para (_ "The relative date option is %s.")
+                    (bold rel-date-string))
 
-         (make-para 'num-string-1 (bold (number->string num-val)))
+	 (make-para (_ "The combination date option is %s.")
+                    (bold combo-date-string))
+
+         (make-para (_ "The number option is %s.")
+                    (bold (number->string num-val)))
 
          ;; Here we print the value of the number option formatted as
          ;; currency. When printing currency values, you should use
@@ -307,7 +327,7 @@
          ;; report-utilities. This functions will format the number
          ;; appropriately in the current locale. Don't try to format
          ;; it yourself -- it will be wrong in other locales.
-         (make-para 'num-string-2
+         (make-para (_ "The number option formatted as currency is %s.")
                     (bold
                      (gnc:amount->string num-val
                                          (gnc:default-print-info #f))))
@@ -316,69 +336,9 @@
 
          (account-list accounts)
 
-         (make-para 'nice-day)
+         (make-para (_ "Have a nice day!"))
 
          (html-end-document)))))
-
-
-  ;; Now we store the actual strings we are going to use and
-  ;; finally define the report. Commands to execute must come
-  ;; after definitions in guile.
-
-
-  ;; Here we store the string used for the title of the report.
-  ;; The key 'title will be used to get the string (or the
-  ;; translation of the string) later.
-  (string-db 'store 'title "Hello, World")
-
-  ;; Now we store the first paragraph as one entire string. The '%s'
-  ;; in the string will be used to substitute for a filename using
-  ;; sprintf. In general, it is better to use sprintf on a whole
-  ;; sentence or paragraph, than to build up the string using
-  ;; concatentation. When it is translated into other languages,
-  ;; the order of the phrases may need to be changed.
-  (let ((string (string-append "This is a sample GnuCash report. "
-                               "See the guile (scheme) source code in %s "
-                               "for details on writing your own reports, "
-                               "or extending existing reports.")))
-    (string-db 'store 'para-1 string))
-
-  ;; Second paragraph
-  (let ((string
-         (string-append
-          "For help on writing reports, or to contribute your brand "
-          "new, totally cool report, consult the mailing list %s. "
-          "For details on subscribing to that list, see %s.")))
-    (string-db 'store 'para-2 string))
-
-
-  ;; Here we create some more phrases used in the report.
-  (string-db 'store 'time-string "The current time is %s.")
-  (string-db 'store 'bool-string "The boolean option is %s.")
-  (string-db 'store 'multi-string "The multi-choice option is %s.")
-  (string-db 'store 'string-string "The string option is %s.")
-  (string-db 'store 'date-string "The date option is %s.")
-  (string-db 'store 'time-date-string "The date and time option is %s.")
-  (string-db 'store 'rel-date-string "The relative date option is %s.")
-  (string-db 'store 'combo-date-string "The combination date option is %s.")
-  (string-db 'store 'num-string-1 "The number option is %s.")
-  (string-db 'store 'num-string-2
-             "The number option formatted as currency is %s.")
-  (string-db 'store 'nice-day "Have a nice day!")
-
-  (string-db 'store 'true "true")
-  (string-db 'store 'false "false")
-
-  (string-db 'store 'no-accounts
-             "There are no selected accounts in the account list option.")
-  (string-db 'store 'selected-accounts
-             "The accounts selected in the account list option are:")
-
-  (string-db 'store 'no-values
-             "You have selected no values in the list option.")
-  (string-db 'store 'selected-values
-             "The items selected in the list option are:")
-
 
   ;; Here we define the actual report with gnc:define-report
   (gnc:define-report

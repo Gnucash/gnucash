@@ -33,7 +33,8 @@
  *          Dave Peticolas <peticola@cs.ucdavis.edu>
  */
 
-#include <config.h>
+#include "config.h"
+
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */
@@ -41,6 +42,7 @@
 #include <time.h>
 
 #include "gnc-dateedit.h"
+#include "messages.h"
 #include "date.h"
 
 

@@ -9,16 +9,21 @@ gnc_autogen_scm_files = \
 gnc_regular_scm_files = \
   c-interface.scm \
   command-line.scm \
+  commodity-import.scm \
+  commodity-table.scm \
   config-var.scm \
   date-utilities.scm \
   depend.scm \
   doc.scm \
+  engine-init.scm \
   engine-interface.scm \
   engine-utilities.scm \
   extensions.scm \
   graph.scm \
+  help-topics-index.scm \
   hooks.scm \
   html-generator.scm \
+  iso-4217-currencies.scm \
   main.scm \
   options.scm \
   path.scm \
@@ -31,15 +36,11 @@ gnc_regular_scm_files = \
   substring-search.scm \
   testbed.scm \
   text-export.scm \
-  tip-of-the-day.scm \
   tip-list.scm \
+  tip-of-the-day.scm \
   utilities.scm \
-  xml-generator.scm \
-  iso-4217-currencies.scm \
-  engine-init.scm \
-  commodity-table.scm \
-  commodity-import.scm \
-  help-topics-index.scm
+  xgettext.scm \
+  xml-generator.scm
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
 
@@ -49,6 +50,13 @@ EXTRA_DIST = \
   design.txt \
   startup-design.txt \
   ${gnc_regular_scm_files}
+
+guile-strings.c: ${gncscm_DATA}
+	rm -f guile-strings.c
+	guile -s ./xgettext.scm ${gncscm_DATA}
+CLEANFILES += guile-strings.c
+
+all-local: guile-strings.c
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

@@ -84,6 +84,9 @@
     (define gnc:gettext gnc:gettext-helper))
 
 (define gnc:_ gnc:gettext)
+(if (not (defined? '_))
+    (define _ gnc:gettext))
+(define (N_ x) x)
 
 
 ;; This database can be used to store and retrieve translatable

@@ -109,11 +109,8 @@
   (define (accsum_html-table-footer)
     "</TABLE>")
 
-  (define string-db (gnc:make-string-database))
-
   (define (column-list)
-    (map (lambda (key) (string-db 'lookup key))
-         (list 'account-name 'balance )))
+    (list (_ "Account Name") (_ "Balance")))
 
   (define (non-zero-at-date-accounts accts date)
     (if (null? accts)
@@ -184,7 +181,7 @@
         (if (null? accounts)
             (set! rept-text
                   (list "<TR><TD>"
-                        (string-db 'lookup 'no-account)
+                        (_ "You have not selected an account.")
                         "</TD></TR>"))
             (begin
 
@@ -200,28 +197,22 @@
               ;; Create HTML
               (set! rept-data (acc-sum-table accounts enddate dosubs))))
 
-        (list prefix
-              (if (null? accounts)
-                  rept-text
-                  (list (sprintf #f
-                                 (string-db 'lookup
-                                            (if dosubs
-                                                'report-for-and
-                                                'report-for))
-                                 (gnc:print-date enddate)
-                                 acctname
-                                 rept-total)
-                        "<p>\n"))
-              rept-data
-;;              rept-total
-              suffix)))
-
-  ;; Define the strings
-  (string-db 'store 'account-name   "Account Name")
-  (string-db 'store 'balance        "Balance")
-  (string-db 'store 'no-account     "You have not selected an account.")
-  (string-db 'store 'report-for     "Date: %s<br>Report for %s.<br>Accounts Total: %s")
-  (string-db 'store 'report-for-and "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s")
+        (list
+         prefix
+         (if (null? accounts)
+             rept-text
+             (list
+              (sprintf #f
+                       (if dosubs
+                           (_ "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s")
+                           (_ "Date: %s<br>Report for %s.<br>Accounts Total: %s"))
+                       (gnc:print-date enddate)
+                       acctname
+                       rept-total)
+              "<p>\n"))
+         rept-data
+         ;; rept-total
+         suffix)))
 
   (gnc:define-report
    ;; version

@@ -1,3 +1,4 @@
 Makefile
 Makefile.in
 bootstrap.scm
+guile-strings.c

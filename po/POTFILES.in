@@ -1,14 +1,16 @@
 # List of files which containing translatable strings.
 # Copyright (C) 1995, 1998 Free Software Foundation, Inc.
 
-po/guile_strings.txt
+po/guile-strings.c
+src/FileDialog.c
+src/SplitLedger.c
 src/engine/Account.c
-src/engine/io-gncbin-r.c
 src/engine/Scrub.c
+src/engine/io-gncbin-r.c
 src/gnc-exp-parser.c
 src/gnc-ui-util.c
-src/gnome/dialog-account.c
 src/gnome/dialog-account-picker.c
+src/gnome/dialog-account.c
 src/gnome/dialog-budget.c
 src/gnome/dialog-commodity.c
 src/gnome/dialog-filebox.c
@@ -24,6 +26,7 @@ src/gnome/file-history.c
 src/gnome/glade-gnc-dialogs.c
 src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c
+src/gnome/gnc-dateedit.c
 src/gnome/print-session.c
 src/gnome/reconcile-list.c
 src/gnome/window-main.c
@@ -34,5 +37,8 @@ src/guile/gnucash.c
 src/register/gnome/gnucash-style.c
 src/register/recncell.c
 src/register/splitreg.c
-src/FileDialog.c
-src/SplitLedger.c
+src/scm/gnumeric/guile-strings.c
+src/scm/guile-strings.c
+src/scm/printing/guile-strings.c
+src/scm/qif-import/guile-strings.c
+src/scm/report/guile-strings.c
