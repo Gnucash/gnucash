@@ -1,3 +1,8 @@
+2002-01-06  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/sgml/*/xacc-euro.sgml: Fixed DEM rate as pointed out by
+	Gregor Hoffleit <gregor@hoffleit.de>.
+
 2002-01-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/html-*.scm,
