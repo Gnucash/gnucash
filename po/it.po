@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-09-11 00:21-0700\n"
+"POT-Creation-Date: 2000-09-23 01:34-0700\n"
 "PO-Revision-Date: 2000-07-05 15:17+0100\n"
 "Last-Translator: Alessandro Seveso <aleseveso@tiscalinet.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4427,6 +4427,26 @@ msgstr "finestra1"
 #: src/gnome/print-session.c:233
 msgid "You must select a printer first."
 msgstr "Devi selezionare una stampante."
+
+# messages-i18n.c:47
+#: src/SplitLedger.c:1810
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Il conto non è saldato.\n"
+"Sei sicuro di voler terminare?"
+
+# messages-i18n.c:48
+#: src/SplitLedger.c:1840
+#, fuzzy
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+"Hai fatto dei cambiamenti nella finestra d'approssimazione.\n"
+"Sei sicuro di volerlo cancellare?"
 
 # messages-i18n.c:217
 #~ msgid "Show Categories"
