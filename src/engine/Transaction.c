@@ -1508,16 +1508,22 @@ xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
   }
   else if (!gnc_commodity_equiv (retval,trans->common_currency))
   {
-    PWARN ("expected common currency %s but found %s\n",
+    char *guid_str = guid_to_string(xaccTransGetGUID(trans));
+    PWARN ("expected common currency %s but found %s in txn %s\n",
            gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (retval));
+           gnc_commodity_get_unique_name (retval),
+	   guid_str);
+    g_free(guid_str);
   }
 
   if (NULL == retval)
   {
      /* in every situation I can think of, this routine should return 
       * common currency.  So make note of this ... */
-     PWARN ("unable to find a common currency, and that is strange.");
+     char *guid_str = guid_to_string(xaccTransGetGUID(trans));
+     PWARN ("unable to find a common currency in txn %s, and that is strange.",
+	    guid_str);
+     g_free(guid_str);
   }
 
   return retval;

@@ -1,3 +1,10 @@
+2005-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Scrub.c:
+	* src/engine/Transaction.c:
+	  Add the transaction guid to some error warning messages.
+	  Fixes #165571.
+
 2005-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	Thomas Bushnell's patch to protect non-backup pruning (#164875)
