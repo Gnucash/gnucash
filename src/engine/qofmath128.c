@@ -34,6 +34,8 @@
  *  work, and have been tested, but not comprehensively tested.
  */
 
+#define HIBIT (0x8000000000000000ULL)
+
 /** Multiply a pair of signed 64-bit numbers, 
  *  returning a signed 128-bit number.
  */
@@ -98,6 +100,73 @@ mult128 (gint64 a, gint64 b)
   return prod;
 }
 
+/** Shift right by one bit (i.e. divide by two) */
+inline qofint128
+shift128 (qofint128 x)
+{
+  guint64 sbit = x.hi & 0x1;
+  x.hi >>= 1;
+  x.lo >>= 1;
+  x.isbig = 0;
+  if (sbit)
+  {
+    x.lo |= HIBIT;
+    x.isbig = 1;
+    return x;
+  }
+  if (x.hi)
+  {
+    x.isbig = 1;
+  }
+  return x;
+}
+
+/** Shift leftt by one bit (i.e. multiply by two) */
+inline qofint128
+shiftleft128 (qofint128 x)
+{
+  guint64 sbit = x.lo & HIBIT;
+  x.hi <<= 1;
+  x.lo <<= 1;
+  x.isbig = 0;
+  if (sbit)
+  {
+    x.hi |= 1;
+    x.isbig = 1;
+    return x;
+  }
+  if (x.hi)
+  {
+    x.isbig = 1;
+  }
+  return x;
+}
+
+/** increment a 128-bit number by one */
+inline qofint128
+inc128 (qofint128 a)
+{
+  if (0 == a.isneg)
+  {
+    a.lo ++;
+    if (0 == a.lo)
+    {
+      a.hi ++;
+    }
+  }
+  else
+  {
+    if (0 == a.lo)
+    {
+      a.hi --;
+    }
+    a.lo --;
+  }
+
+  a.isbig = (a.hi != 0) || (a.lo >> 63);
+  return a;
+}
+
 /** Divide a signed 128-bit number by a signed 64-bit,
  *  returning a signed 128-bit number.
  */
@@ -105,43 +174,28 @@ inline qofint128
 div128 (qofint128 n, gint64 d)
 {
   qofint128 quotient;
-  guint64 hirem;   /* hi remainder */
-  guint64 qlo;
+  guint64 remainder = 0;
 
-  quotient.isneg = n.isneg;
+  quotient = n;
   if (0 > d)
   {
     d = -d;
     quotient.isneg = !quotient.isneg;
   }
 
-  quotient.hi = n.hi / d;
-  hirem = n.hi - quotient.hi * d;
-  
-  guint64 lo = 1<<30;
-  lo <<= 33;
-  lo /= d;
-  lo <<= 1;
-
-  lo *= hirem; 
-  quotient.lo = lo + n.lo/d;
-
-  /* Deal with low remainder bits.
-   * Is there a more efficient way of doing this?
-   */
-  qofint128 mu = mult128 (quotient.lo, d);
-
-  gint64 nn = 0x7fffffffffffffffULL & n.lo;
-  gint64 rr = 0x7fffffffffffffffULL & mu.lo;
-  gint64 rnd = nn - rr;
-  rnd /= d;   
-
-  /* ?? will this ever overflow ? */
-  qlo = quotient.lo;
-  quotient.lo += rnd;
-  if (qlo > quotient.lo)
+  /* Use grade-school long division algorithm */
+  int i;
+  for (i=0; i<128; i++)
   {
-    quotient.hi += 1;
+    guint64 sbit = HIBIT & quotient.hi;
+    remainder <<= 1;
+    if (sbit) remainder |= 1;
+    quotient = shiftleft128 (quotient);
+    if (remainder >= d)
+    {
+       remainder -= d;
+       quotient.lo |= 1;
+    }
   }
 
   /* compute the carry situation */
@@ -165,39 +219,6 @@ rem128 (qofint128 n, gint64 d)
   gint64 nn = 0x7fffffffffffffffULL & n.lo;
   gint64 rr = 0x7fffffffffffffffULL & mu.lo;
   return nn - rr;
-}
-
-/** Return the ratio n/d reduced so that there are no common factors. */
-inline gnc_numeric
-reduce128(qofint128 n, gint64 d)
-{
-  gint64   t;
-  gint64   num;
-  gint64   denom;
-  gnc_numeric out;
-
-  t =  rem128 (n, d);
-  num = d;
-  denom = t;
-
-  /* The strategy is to use Euclid's algorithm */
-  while (denom > 0) 
-  {
-    t = num % denom;
-    num = denom;
-    denom = t;
-  }
-  /* num now holds the GCD (Greatest Common Divisor) */
-
-  qofint128 red = div128 (n, num);
-  if (red.isbig)
-  {
-    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
-  }
-  out.num   = red.lo;
-  if (red.isneg) out.num = -out.num;
-  out.denom = d / num;
-  return out;
 }
 
 /** Return true of two numbers are equal */
@@ -278,28 +299,6 @@ add128 (qofint128 a, qofint128 b)
   return sum;
 }
 
-/** Shift right by one bit (i.e. divide by two) */
-inline qofint128
-shift128 (qofint128 x)
-{
-  guint64 sbit = x.hi & 0x1;
-  x.hi >>= 1;
-  x.lo >>= 1;
-  x.isbig = 0;
-  if (sbit)
-  {
-    sbit = 1<<30;  /* in two step to avoid 1ULL<<63 */
-    sbit <<= 33;
-    x.lo |= sbit;
-    x.isbig = 1;
-    return x;
-  }
-  if (x.hi)
-  {
-    x.isbig = 1;
-  }
-  return x;
-}
 
 #ifdef TEST_128_BIT_MULT
 static void pr (gint64 a, gint64 b)
@@ -356,6 +355,21 @@ int main ()
   prd (777,x,7);
   prd (1111,x,11);
 
+  /* Really test division */
+  qofint128 n;
+  n.hi = 0xdd91;
+  n.lo = 0x6c5abefbb9e13480ULL;
+
+  gint64 d = 0x2ae79964d3ae1d04ULL;
+  
+  int i;
+  for (i=0; i<20; i++) {
+
+  qofint128 quot = div128 (n, d);
+  printf ("%d result = %llx %llx\n", i, quot.hi, quot.lo);
+    d >>=1;
+    n = shift128 (n);
+  }
   return 0;
 }
 

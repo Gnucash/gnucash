@@ -39,6 +39,21 @@ typedef struct {
   short isbig;    /**< sizeflag -- T if number won't fit in signed 64-bit */
 } qofint128;
 
+/** Return true of two numbers are equal */
+inline gboolean equal128 (qofint128 a, qofint128 b);
+
+/** Shift right by one bit (i.e. divide by two) */
+inline qofint128 shift128 (qofint128 x);
+
+/** Shift left by one bit (i.e. multiply by two) */
+inline qofint128 shiftleft128 (qofint128 x);
+
+/** Increment by one */
+inline qofint128 inc128 (qofint128 a);
+
+/** Add a pair of 128-bit numbers, returning a 128-bit number */
+inline qofint128 add128 (qofint128 a, qofint128 b);
+
 /** Multiply a pair of signed 64-bit numbers, 
  *  returning a signed 128-bit number.
  */
@@ -56,23 +71,11 @@ inline qofint128 div128 (qofint128 n, gint64 d);
  */
 inline gint64 rem128 (qofint128 n, gint64 d);
 
-/** Return the ratio n/d reduced so that there are no common factors. */
-inline gnc_numeric reduce128(qofint128 n, gint64 d);
-
-/** Return true of two numbers are equal */
-inline gboolean equal128 (qofint128 a, qofint128 b);
-
 /** Return the greatest common factor of two 64-bit numbers */
 inline guint64 gcf64(guint64 num, guint64 denom);
 
 /** Return the least common multiple of two 64-bit numbers. */
 inline qofint128 lcm128 (guint64 a, guint64 b);
-
-/** Add a pair of 128-bit numbers, returning a 128-bit number */
-inline qofint128 add128 (qofint128 a, qofint128 b);
-
-/** Shift right by one bit (i.e. divide by two) */
-inline qofint128 shift128 (qofint128 x);
 
 #endif
 
