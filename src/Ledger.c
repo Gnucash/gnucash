@@ -224,6 +224,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
 
    /* add new, disconnected transaction at the end */
    trans = xaccMallocTransaction ();
+   todaysDate (&(trans->date));
    table->current_cursor_row = i;
    table->current_cursor_col = 0;
    xaccLoadRegEntry (reg, &(trans->credit_split));
