@@ -13,7 +13,5 @@
 (export txf-income-categories)
 (export txf-expense-categories)
 
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
-
 (load-from-path "txf.scm")
 (load-from-path "txf-help.scm")
