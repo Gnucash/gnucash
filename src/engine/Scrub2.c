@@ -21,13 +21,11 @@
  *  @breif Utilities to Convert Stock Accounts to use Lots
  *  @author Created by Linas Vepstas March 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
-
- * XXX under construction, not done
  *
  * Provides a set of functions and utilities for checking and
- * repairing ('scrubbing clean') stock and commodity accounts
- * to use Lots & accounting schedules so that books can be closed.
- *
+ * repairing ('scrubbing clean') the usage of Lots and lot balances
+ * in stock and commodity accounts.  Broken lots are repaired using
+ * a first-in, first-out (FIFO) accounting schedule.
  */
 
 #include "config.h"
