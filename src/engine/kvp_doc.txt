@@ -355,13 +355,14 @@ Name: /sched-xaction/debit-formula
 Type: string
 Entities: Split associated with a SchedXaction
 Use: Formula for the debit.  Either the credit or the 
-debit formula must be empty.
+     debit formula must be empty.
+
+-----------------------
+
 Name: split-type
 Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit
      Store a string representing the type of split, if not normal.
-
------------------------
 
 Name: /tax-US/code
 Type: string
