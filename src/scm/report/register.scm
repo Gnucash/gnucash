@@ -129,7 +129,7 @@
 
       (if (used-num column-vector)
 	  (addto! row-contents (gnc:transaction-get-num parent)))
-      
+
       (if (used-description column-vector)
 	  (addto! row-contents (gnc:transaction-get-description parent)))
       (if (used-account column-vector)
@@ -160,8 +160,10 @@
 	      (addto! row-contents " ")))
       (if (used-running-balance column-vector)
 	  (addto! row-contents
-                  (gnc:make-gnc-monetary currency
-                                         (gnc:split-get-balance split))))
+                  (gnc:make-html-table-header-cell/markup
+                   "number-cell"
+                   (gnc:make-gnc-monetary currency
+                                          (gnc:split-get-balance split)))))
       (gnc:html-table-append-row! table (reverse row-contents))
       (apply set-last-row-style! (cons table (cons "tr" row-style)))
       split-value))
@@ -318,7 +320,9 @@
         (for-each (lambda (currency)
                     (gnc:html-table-append-row! 
                      table 
-                     (append blanks (list currency)))
+                     (append blanks
+                             (list (gnc:make-html-table-header-cell/markup
+                                    "number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
                   currency-totals)))

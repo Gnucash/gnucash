@@ -55,7 +55,6 @@
 
     (define (add-subheading-row data table width subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
-;	(gnc:warn "width" width)
 	(gnc:html-table-cell-set-colspan! heading-cell width)
 	(gnc:html-table-append-row!
 	 table
@@ -132,21 +131,7 @@
 	      (cons 'number (vector 'by-num #f #f))
 	      (cons 'memo   (vector 'by-memo #f #f))
 	      (cons 'none    (vector 'by-none #f #f))))
-      
-;      (define <columns-used>
-;	(make-record-type "<columns-used>"
-;			  (list 'date 
-;				'num 
-;				'description 
-;				'account 
-;				'other-account 
-;				'shares 
-;				'price
-;				'amount-single
-;				'amount-double-positive
-;				'amount-double-negative
-;				'running-balance)))
-      
+
       (define (used-date columns-used)
 	(vector-ref columns-used 0))
       (define (used-num columns-used)
@@ -252,13 +237,11 @@
 	   (currency (gnc:account-get-commodity account))
 	   (damount (gnc:split-get-share-amount split))
 	   (split-value (gnc:make-gnc-monetary currency damount)))
-      
-      
+
       (if (used-date column-vector)
 	  (addto! row-contents (gnc:timepair-to-datestring 
 				(gnc:transaction-get-date-posted parent))))
-      
-      
+
       (if (used-num column-vector)
 	  (addto! row-contents (gnc:transaction-get-num parent)))
       
@@ -275,19 +258,27 @@
 	   row-contents 
 	   (gnc:make-gnc-monetary currency (gnc:split-get-share-price split))))
       (if (used-amount-single column-vector)
-	  (addto! row-contents split-value))
+	  (addto! row-contents
+                  (gnc:make-html-table-header-cell/markup "number-cell"
+                                                          split-value)))
       (if (used-amount-double-positive column-vector)
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
-	      (addto! row-contents split-value)
+	      (addto! row-contents
+                      (gnc:make-html-table-header-cell/markup "number-cell"
+                                                              split-value))
 	      (addto! row-contents " ")))
       (if (used-amount-double-negative column-vector)
 	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
-	      (addto! row-contents (gnc:monetary-neg split-value))
+	      (addto! row-contents
+                      (gnc:make-html-table-header-cell/markup
+                       "number-cell" (gnc:monetary-neg split-value)))
 	      (addto! row-contents " ")))
       (if (used-running-balance column-vector)
 	  (addto! row-contents
-                  (gnc:make-gnc-monetary currency
-                                         (gnc:split-get-balance split))))
+                  (gnc:make-html-table-header-cell/markup
+                   "number-cell"
+                   (gnc:make-gnc-monetary currency
+                                          (gnc:split-get-balance split)))))
       (gnc:html-table-append-row! table (reverse row-contents))
       (apply set-last-row-style! (cons table (cons "tr" row-style)))
       split-value))
@@ -347,78 +338,71 @@
      (gnc:make-multichoice-option
       (N_ "Report Options") (N_ "Style")
       "d" (N_ "Report style")
-;; XXX: merged style currently disabled because it breaks double-column
-;; amounts.  If somebody wants it back just uncomment the commented code
-;; below
-      ; 'merged
       'single
-      (list ;#(merged
-	    ;  "Merged"
-	    ;  "Display N-1 lines")
-            (vector 'multi-line
-                   (N_ "Multi-Line")
-                   (N_ "Display N lines"))
+      (list (vector 'multi-line
+                    (N_ "Multi-Line")
+                    (N_ "Display N lines"))
             (vector 'single
-                   (N_ "Single")
-                   (N_ "Display 1 line")))))
+                    (N_ "Single")
+                    (N_ "Display 1 line")))))
+
     (let ((key-choice-list 
 	   (list (vector 'account-name
-                        (N_ "Account Name(w/subtotal)")
-                        (N_ "Sort & subtotal by account name"))
+                         (N_ "Account Name(w/subtotal)")
+                         (N_ "Sort & subtotal by account name"))
 		 (vector 'account-code
-			(N_ "Account Code (w/subtotal)")
-			(N_ "Sort & subtotal by account code"))
+                         (N_ "Account Code (w/subtotal)")
+                         (N_ "Sort & subtotal by account code"))
 		 (vector 'date
-                        (N_ "Date")
-                        (N_ "Sort by date"))
+                         (N_ "Date")
+                         (N_ "Sort by date"))
 		 (vector 'date-monthly
-                        (N_ "Date (subtotal monthly)")
-                        (N_ "Sort by date & subtotal each month"))
+                         (N_ "Date (subtotal monthly)")
+                         (N_ "Sort by date & subtotal each month"))
 		 
-                  (vector 'date-yearly
-                        (N_ "Date (subtotal yearly)")
-                        (N_ "Sort by date & subtotal each year"))
+                 (vector 'date-yearly
+                         (N_ "Date (subtotal yearly)")
+                         (N_ "Sort by date & subtotal each year"))
+
+                 (vector 'corresponding-acc-name
+                         (N_ "Transfer from/to")
+                         (N_ "Sort by account transferred from/to's name"))
 		 
-		 
-                  (vector 'corresponding-acc-name
-                        (N_ "Transfer from/to")
-                        (N_ "Sort by account transferred from/to's name"))
-		 
-                  (vector 'corresponding-acc-name-subtotal
-                        (N_ "Transfer from/to (w/subtotal) by code ")
-                        (N_ "Sort and subtotal by account transferred
+                 (vector 'corresponding-acc-name-subtotal
+                         (N_ "Transfer from/to (w/subtotal) by code ")
+                         (N_ "Sort and subtotal by account transferred
  from/to's code"))
 				
-		  (vector 'corresponding-acc-code
-                        (N_ "Transfer from/to code")
-                        (N_ "Sort by account transferred from/to's code"))
+                 (vector 'corresponding-acc-code
+                         (N_ "Transfer from/to code")
+                         (N_ "Sort by account transferred from/to's code"))
 		
-		  (vector 'corresponding-acc-code-subtotal
-                        (N_ "Transfer from/to (w/subtotal)")
-                        (N_ "Sort and subtotal by account
+                 (vector 'corresponding-acc-code-subtotal
+                         (N_ "Transfer from/to (w/subtotal)")
+                         (N_ "Sort and subtotal by account
  transferred from/to's code"))
 		
-                  (vector 'amount
-                        (N_ "Amount")
-                        (N_ "Sort by amount"))
+                 (vector 'amount
+                         (N_ "Amount")
+                         (N_ "Sort by amount"))
 		 
-                  (vector 'description
-                        (N_ "Description")
-                        (N_ "Sort by description"))
+                 (vector 'description
+                         (N_ "Description")
+                         (N_ "Sort by description"))
 		 
-                  (vector 'number
-                        (N_ "Number")
-                        (N_ "Sort by check/transaction number"))
+                 (vector 'number
+                         (N_ "Number")
+                         (N_ "Sort by check/transaction number"))
 		 
-                  (vector 'memo
-                        (N_ "Memo")
-                        (N_ "Sort by memo"))
+                 (vector 'memo
+                         (N_ "Memo")
+                         (N_ "Sort by memo"))
 		 
-                  (vector 'none
-                        (N_ "None")
-                        (N_ "Do not sort")))))
+                 (vector 'none
+                         (N_ "None")
+                         (N_ "Do not sort")))))
 
-       ;; primary sorting criterion
+      ;; primary sorting criterion
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	(N_ "Sorting") (N_ "Primary Key")
@@ -432,7 +416,7 @@
 	"b" (N_ "Order of primary sorting")
 	'ascend
 	(list
-        (vector 'ascend
+         (vector 'ascend
 		 (N_ "Ascending")
 		 (N_ "smallest to largest, earliest to latest"))
 	 (vector 'descend
@@ -446,26 +430,26 @@
 	(N_ "Sort by this criterion second")
 	'date
 	key-choice-list)))
+
+    (gnc:register-trep-option
+     (gnc:make-multichoice-option
+      (N_ "Sorting") (N_ "Secondary Sort Order")
+      "d" (N_ "Order of Secondary sorting")
+      'ascend
+      (list
+       (vector 'ascend
+               (N_ "Ascending")
+               (N_ "smallest to largest, earliest to latest"))
+       (vector 'descend
+               (N_ "Descending")
+               (N_ "largest to smallest, latest to earliest")))))
      
-      (gnc:register-trep-option
-       (gnc:make-multichoice-option
-	(N_ "Sorting") (N_ "Secondary Sort Order")
-	"d" (N_ "Order of Secondary sorting")
-	'ascend
-	(list
-         (vector 'ascend
-		 (N_ "Ascending")
-                (N_ "smallest to largest, earliest to latest"))
-	 (vector 'descend
-		(N_ "Descending")
-		(N_ "largest to smallest, latest to earliest")))))
-     
-     (gnc:register-trep-option
-       (gnc:make-simple-boolean-option
-	(N_ "Display") (N_ "Date")
-	"b" (N_ "Display the date?") #t))
-    
-     (gnc:register-trep-option
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      (N_ "Display") (N_ "Date")
+      "b" (N_ "Display the date?") #t))
+
+    (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Num")
       "c" (N_ "Display the check number?") #t))
@@ -628,20 +612,18 @@
          (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
               
   (define (make-split-table splits options)
-    (define (add-subtotal-row table width subtotal-collector 
-             subtotal-style)
+    (define (add-subtotal-row table width subtotal-collector subtotal-style)
      (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f))
            (blanks (make-list (- width 1) #f)))
-;	(gnc:warn "Subtotal-collector" subtotal-collector)
-;	(gnc:warn "Currency-totals:" currency-totals)
 	(for-each (lambda (currency)
                     (gnc:html-table-append-row! 
                      table 
-                     (append blanks (list currency)))
+                     (append blanks
+                             (list (gnc:make-html-table-header-cell/markup
+                                    "number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
-                                                
                   currency-totals)))
 
     (define (get-primary-subtotal-pred options)
@@ -652,6 +634,7 @@
                                                (N_ "Primary Key")))
 			   comp-funcs-assoc-list)) 
 		  1))
+
     (define (get-secondary-subtotal-pred options)
       (vector-ref (cdr 
                    (assq (gnc:option-value

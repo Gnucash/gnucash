@@ -1,4 +1,16 @@
+2001-03-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/transaction-report.scm (record): use number-cell
+	style
+
+	* src/scm/report/register.scm: use number-cell style
+
+	* src/engine/gnc-pricedb.c (gnc_price_unref): unref quote source
+
 2001-03-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-pricedb.c (compare_prices_by_date): sort
+	in descending order so the most recent quote is first.
 
 	* AUTHORS: update author info
 

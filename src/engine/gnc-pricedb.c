@@ -81,6 +81,7 @@ gnc_price_unref(GNCPrice *p)
   p->refcount--;
   if(p->refcount == 0) {
     if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
+    if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
     memset(p, 0, sizeof(GNCPrice));
     g_free(p);
   }
@@ -234,10 +235,11 @@ compare_prices_by_date(gconstpointer a, gconstpointer b)
   if(!a && !b) return 0;
   /* nothing is always less than something */
   if(!a) return -1;
-  
+
   time_a = gnc_price_get_time((GNCPrice *) a);
   time_b = gnc_price_get_time((GNCPrice *) b);
-  return timespec_cmp(&time_a, &time_b);
+
+  return -timespec_cmp(&time_a, &time_b);
 }
 
 gboolean
