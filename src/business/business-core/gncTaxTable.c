@@ -63,6 +63,7 @@ struct _book_info {
 static void add_or_rem_object (GncTaxTable *table, gboolean add);
 static void addObj (GncTaxTable *table);
 static void remObj (GncTaxTable *table);
+static void maybe_resort_list (GncTaxTable *table);
 
 G_INLINE_FUNC void mark_table (GncTaxTable *table);
 G_INLINE_FUNC void
@@ -142,6 +143,7 @@ void gncTaxTableSetName (GncTaxTable *table, const char *name)
   if (!table || !name) return;
   SET_STR (table->name, name);
   mark_table (table);
+  maybe_resort_list (table);
 }
 
 void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent)
@@ -496,6 +498,15 @@ void gncAccountValueDestroy (GList *list)
 
 
 /* Package-Private functions */
+
+static void maybe_resort_list (GncTaxTable *table)
+{
+  struct _book_info *bi;
+
+  if (table->parent || table->invisible) return;
+  bi = gnc_book_get_data (table->book, _GNC_MOD_NAME);
+  bi->tables = g_list_sort (bi->tables, (GCompareFunc)gncTaxTableCompare);
+}
 
 static void add_or_rem_object (GncTaxTable *table, gboolean add)
 {

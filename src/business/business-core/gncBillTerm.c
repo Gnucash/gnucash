@@ -60,6 +60,7 @@ struct _book_info {
 static void add_or_rem_object (GncBillTerm *term, gboolean add);
 static void addObj (GncBillTerm *term);
 static void remObj (GncBillTerm *term);
+static void maybe_resort_list (GncBillTerm *term);
 
 G_INLINE_FUNC void mark_term (GncBillTerm *term);
 G_INLINE_FUNC void
@@ -115,6 +116,7 @@ void gncBillTermSetName (GncBillTerm *term, const char *name)
   if (!term || !name) return;
   SET_STR (term->name, name);
   mark_term (term);
+  maybe_resort_list (term);
 }
 
 void gncBillTermSetDescription (GncBillTerm *term, const char *desc)
@@ -122,6 +124,7 @@ void gncBillTermSetDescription (GncBillTerm *term, const char *desc)
   if (!term || !desc) return;
   SET_STR (term->desc, desc);
   mark_term (term);
+  maybe_resort_list (term);
 }
 
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type)
@@ -360,7 +363,7 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b)
   if (!b) return 1;
 
   ret = safe_strcmp (a->name, b->name);
-  if (!ret) return ret;
+  if (ret) return ret;
 
   return safe_strcmp (a->desc, b->desc);
 }
@@ -450,6 +453,15 @@ gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date)
 }
 
 /* Package-Private functions */
+
+static void maybe_resort_list (GncBillTerm *term)
+{
+  struct _book_info *bi;
+
+  if (term->parent || term->invisible) return;
+  bi = gnc_book_get_data (term->book, _GNC_MOD_NAME);
+  bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
+}
 
 static void add_or_rem_object (GncBillTerm *term, gboolean add)
 {
