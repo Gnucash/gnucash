@@ -206,6 +206,29 @@ GnuCash responds to the following environment variables:
   debugging earlier in the startup process than you can with --debug.
 
 
+Internationalization:
+---------------------
+Message catalogues exist for French and German.  These are enabled with 
+environment variables.  For example, 
+
+Francais, en bash:
+    export LANG=fr_FR
+    export LC_ALL=fr_FR
+    export LINGUAS=fr_FR
+
+Francais, en tcsh:
+    setenv LANG fr_FR
+    setenv LC_ALL fr_FR
+    setenv LINGUAS fr_FR
+
+German version:
+    export LANG=de_DE
+    export LC_ALL=de_DE
+    export LINGUAS=de_DE
+
+
+
+
 Other Tools
 -----------
 A tool to generate (ascii) reports from gnucash/xacc files can be found 
