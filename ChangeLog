@@ -1,3 +1,7 @@
+2001-08-03  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-sxeditor.sgml: fix warning
+
 2001-08-02  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.c (xaccSchedXactionSetEndDate): Reject
@@ -5,7 +9,6 @@
 	(xaccSchedXactionSetSplits): remove already-#if'd out function.
 
 	* src/engine/gnc-schedxaction-xml-v2.c: #define more tags.
-	
 
 2001-08-01  Robert Graham Merkel  <rgmerk@mira.net>
 

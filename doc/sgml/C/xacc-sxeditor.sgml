@@ -2,6 +2,7 @@
 <artheader>
 <title>Schedules Transactions</title>
 </artheader>
+
 <sect1>
 <title></title>
 <para>
@@ -11,6 +12,8 @@
 <para>
      <emphasis>FIXME: This feature is not yet documented</emphasis>
 </para>
+</sect1>
+
 </article>
 
 <!-- Local variables: -->
