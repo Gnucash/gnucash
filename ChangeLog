@@ -1,5 +1,9 @@
 2000-08-21  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/QuickFill.c (qfInsertTextRec): When inserting new
+	strings, don't replace older strings that are prefixes of the new
+	string.
+
 	* src/engine/gnc-common.h: remove gncBoolean type and constants.
 	Replace all uses with glib versions.
 

@@ -190,36 +190,48 @@ static void
 qfInsertTextRec( QuickFill *qf, const char *text, int depth,
                  QuickFillSort sort )
 {
-  if (NULL == qf) return;
+  int index;
+  char *old_text;
 
-  if( text )
+  if (qf == NULL)
+    return;
+
+  if ((text == NULL) || (text[depth] == '\0'))
+    return;
+
+  index = CHAR_TO_INDEX(text[depth]);
+
+  if( qf->qf[index] == NULL )
+    qf->qf[index] = xaccMallocQuickFill();
+
+  old_text = qf->qf[index]->text;
+
+  switch(sort)
   {
-    if( text[depth] != '\0' )
-    {
-      int index = CHAR_TO_INDEX(text[depth]);
-
-      if( qf->qf[index] == NULL )
-        qf->qf[index] = xaccMallocQuickFill();
-
-      switch(sort)
+    case QUICKFILL_ALPHA:
+      if ((old_text != NULL) &&
+          (safe_strcmp(text, old_text) >= 0))
+        break;
+    case QUICKFILL_LIFO:
+    default:
+      /* If there's no string there already, just put the new one in. */
+      if (old_text == NULL)
       {
-        case QUICKFILL_ALPHA:
-          if ((qf->qf[index]->text != NULL) &&
-              (safe_strcmp(text, qf->qf[index]->text) >= 0))
-            break;
-        case QUICKFILL_LIFO:
-        default:
-          /* store text in LIFO order, recent
-           * stuff shows up before old stuff */
-          if (qf->qf[index]->text)
-            g_free (qf->qf[index]->text);
-          qf->qf[index]->text = g_strdup (text);
-          break;
+        qf->qf[index]->text = g_strdup (text);
+        break;
       }
 
-      qfInsertTextRec(qf->qf[index], text, ++depth, sort);
-    }
+      /* Leave prefixes in place */
+      if ((strlen(text) > strlen(old_text)) &&
+          (strncmp(text, old_text, strlen(old_text)) == 0))
+        break;
+
+      g_free (old_text);
+      qf->qf[index]->text = g_strdup (text);
+      break;
   }
+
+  qfInsertTextRec(qf->qf[index], text, ++depth, sort);
 }
 
 /********************** END OF FILE *********************************\
