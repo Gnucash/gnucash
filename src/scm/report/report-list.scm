@@ -4,6 +4,7 @@
 ;; reports 
 (gnc:depend "report/account-summary.scm")
 (gnc:depend "report/average-balance.scm")
+(gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
 
 ;; style sheets 

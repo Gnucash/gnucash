@@ -224,7 +224,7 @@
 (define (gnc:default-html-gnc-monetary-renderer datum params)
   (gnc:amount->string-helper 
    (gnc:gnc-monetary-amount datum) 
-   (gnc:commodity-print-info (gnc:gnc-monetary-amount datum) #t)))
+   (gnc:commodity-print-info (gnc:gnc-monetary-commodity datum) #t)))
 
 (define (gnc:default-html-number-renderer datum params)
   (sprintf #f "%.2f" datum))

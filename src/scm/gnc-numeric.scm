@@ -74,7 +74,7 @@
 (define (gnc:make-gnc-monetary c a)
   (if (and (gw:wcp-is-of-type? <gnc:commodity*> c) (gnc:gnc-numeric? a))
       ((record-constructor <gnc-monetary>) c a)
-      #f))
+      (warn "wrong arguments for gnc:make-gnc-monetary: " c a)))
 
 (define gnc:gnc-monetary? 
   (record-predicate <gnc-monetary>))
@@ -85,3 +85,9 @@
 (define gnc:gnc-monetary-amount
   (record-accessor <gnc-monetary> 'amount))
 
+(define (gnc:monetary-neg a)
+  (if (gnc:gnc-monetary? a)
+      (gnc:make-gnc-monetary 
+       (gnc:gnc-monetary-commodity a)
+       (gnc:numeric-neg (gnc:gnc-monetary-amount a)))
+      (warn "wrong arguments for gnc:monetary-neg: " a)))

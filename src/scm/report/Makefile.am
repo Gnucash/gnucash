@@ -4,6 +4,7 @@ gncscmdir = ${GNC_SCM_INSTALL_DIR}/report
 gncscm_DATA = \
   account-summary.scm \
   average-balance.scm \
+  pnl.scm \
   hello-world.scm \
   report-list.scm \
   stylesheet-plain.scm \

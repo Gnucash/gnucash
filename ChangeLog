@@ -1,3 +1,23 @@
+2001-02-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-style-info.scm: Fix bug.
+
+	* src/scm/gnc-numeric.scm: Add more functions on gnc-monetary.
+
+	* src/scm/html-utilities.scm: Add balance sign reversal
+	conditioned on gnc:account-reverse-balance? for the account
+	table. Add function to print exchange rates.
+
+	* src/scm/report-utilities.scm: Modify commodity-collector to
+	enable more sign reversals and usage of gnc-monetary. Add option
+	creation functions common to several reports.
+
+	* src/scm/report/account-summary.scm: Removed function now in
+	report-utilities.scm. Added variables for option names.
+
+	* src/scm/report/pnl.scm: New Profit And Loss report, based on
+	account-summary report.
+
 2001-02-08  James LewisMoss  <dres@phoenixdsl.com>
 
 	* src/engine/sixtp.c (sixtp_parse_file): Only set parse_result if

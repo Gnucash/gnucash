@@ -58,6 +58,10 @@
     ;; loss reports). Returns a commodity-collector.
     (define (my-get-balance account)
       (if start-date
+	  ;; FIXME: the get-balance-interval function uses this date
+	  ;; rightaway, but since it calculates a difference it should
+	  ;; rather take the end-day-time of one day before that. This
+	  ;; needs to be fixed in report-utilities.scm.
 	  (gnc:account-get-comm-balance-interval
 	   account start-date end-date do-subtot?)
 	  (gnc:account-get-comm-balance-at-date 
@@ -80,6 +84,9 @@
 	    (lambda (a b) 
 	      (string<? (gnc:account-get-code a)
 			(gnc:account-get-code b)))))
+
+    ;; just a trivial helper...
+    (define (identity a) a)
     
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
@@ -98,10 +105,14 @@
        (gnc:html-make-empty-cells (- tree-depth current-depth))
        ;; the account balance
        (list 
-	(gnc:commodity-value->string 
-	 ;; get the account balance, then exchange everything into
-	 ;; the report-commodity via gnc:add-collector-commodity
-	 (gnc:add-collector-commodity (my-get-balance acct) 
+	;; get the account balance, then exchange everything into the
+	;; report-commodity via gnc:sum-collector-commodity. If the
+	;; account-reverse-balance? returns true, then the sign gets
+	;; reversed.
+	((if (gnc:account-reverse-balance? acct)
+	     gnc:monetary-neg
+	     identity)
+	 (gnc:sum-collector-commodity (my-get-balance acct) 
 				      report-commodity exchange-fn)))
        (gnc:html-make-empty-cells (- current-depth 1))))
     
@@ -151,14 +162,16 @@
 	      (list
 	       (car (gnc:html-make-empty-cells 1))
 	       (gnc:commodity-value->string 
-		(balance 'getpair report-commodity #f)))
+		(balance 'getpair report-commodity 
+			 (gnc:account-reverse-balance? acct))))
 	      ;; special case if do-subtot? was false and it is in a
 	      ;; different commodity than the report: then the
 	      ;; foreign commodity gets displayed in this line
 	      ;; rather then the following lines (loop below).
 	      (let ((my-balance 
 		     (balance 'getpair 
-			      (gnc:account-get-commodity acct) #f)))
+			      (gnc:account-get-commodity acct) 
+			      (gnc:account-reverse-balance? acct))))
 		(list 
 		 (gnc:commodity-value->string my-balance)
 		 (gnc:commodity-value->string 
@@ -183,9 +196,16 @@
 		     ;; print the account balance in the respective
 		     ;; commodity
 		     (list
-		      (gnc:commodity-value->string (list curr val))
 		      (gnc:commodity-value->string 
-		       (exchange-fn (list curr val) report-commodity)))
+		       (list curr 
+			     (if (gnc:account-reverse-balance? acct) 
+				 (gnc:numeric-neg val) val)))
+		      (gnc:commodity-value->string 
+		       (exchange-fn 
+			(list curr 
+			      (if (gnc:account-reverse-balance? acct) 
+				  (gnc:numeric-neg val) val))
+			report-commodity)))
 		     (gnc:html-make-empty-cells 
 		      (* 2 (- current-depth 1))))))) 
 	     #f))))
@@ -214,7 +234,11 @@
     (if show-total?
 	(let ((total-collector (make-commodity-collector)))
 	  (for-each (lambda (acct)
-		      (total-collector 'merge (my-get-balance acct) #f))
+		      (total-collector 
+		       (if (gnc:account-reverse-balance? acct)
+			   'minusmerge
+			   'merge)
+		       (my-get-balance acct) #f))
 		    (filter show-acct? topl-accounts))
 	  (if show-other-curr?
 	      (begin
@@ -252,17 +276,16 @@
 					report-commodity)))))))
 		 #f))
 	      ;; Show no other currencies. Then just calculate one
-	      ;; total via add-collector-commodity and show it.
+	      ;; total via sum-collector-commodity and show it.
 	      (gnc:html-table-append-row! 
 	       table
 	       (append (list (gnc:make-html-table-cell/size 
 			      1 tree-depth (_ "Total")))
 		       (gnc:html-make-empty-cells (- tree-depth 1))
-		       (list (gnc:commodity-value->string 
-			      (gnc:add-collector-commodity 
-			       total-collector report-commodity 
-			       exchange-fn))))))))
-	  
+		       (list (gnc:sum-collector-commodity 
+			      total-collector report-commodity 
+			      exchange-fn)))))))
+    
     ;; set default alignment to right, and override for the name
     ;; columns
     (gnc:html-table-set-style! 
@@ -285,3 +308,23 @@
 	  (loop (+ col 1))))
     
     table))
+
+;; Print the exchangerate-alist into a given html-txt object. 
+(define (gnc:html-print-exchangerates!
+	 txt-object common-commodity alist)
+  (for-each 
+   (lambda (pair)
+     (gnc:html-text-append! 
+      txt-object
+      (gnc:html-markup-p
+       (_ "Exchange rate ")
+       (gnc:commodity-value->string 
+	(list (car pair) (gnc:numeric-create 1 1)))
+       " = "
+       (gnc:commodity-value->string 
+	(list common-commodity 
+	      (gnc:numeric-convert 
+	       ;; FIXME: remove the constant 100000
+	       (cadr pair) 100000 GNC-RND-ROUND))))))
+   alist))
+
