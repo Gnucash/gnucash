@@ -491,7 +491,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 /* ============================================== */
 
 unsigned int
-xaccGetChangeFlag (SplitRegister *reg)
+xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
 {
 
    unsigned int changed = 0;

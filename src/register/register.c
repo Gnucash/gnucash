@@ -30,8 +30,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifdef COMPILATION_UNIT_IS_EMPTY_DUUDE 
-
 #include <stdlib.h>
 
 #include "messages.h"
@@ -466,7 +464,7 @@ xaccDestroyBasicRegister (BasicRegister *reg)
 /* ============================================== */
 
 unsigned int
-xaccGetChangeFlag (BasicRegister *reg)
+xaccBasicRegisterGetChangeFlag (BasicRegister *reg)
 {
 
    unsigned int changed = 0;
@@ -487,6 +485,5 @@ xaccGetChangeFlag (BasicRegister *reg)
 
    return changed;
 }
-#endif /* COMPILATION_UNIT_IS_EMPTY_DUUDE  */
 
 /* ============ END OF FILE ===================== */
