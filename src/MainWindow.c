@@ -119,6 +119,8 @@ xaccMainArrow (Widget acctrix, Account *acc )
 
    FETCH_FROM_LIST (MainArrow, arrowList, acc, account, arrowData);
 
+   arrowData->expand = 0;
+
    /* adjust arrow size for font size */
    height = XbaeMatrixGetRowPixelHeight (acctrix);
    arrowData->arrowb = XtVaCreateManagedWidget ("accarrow", 

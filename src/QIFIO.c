@@ -511,7 +511,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
    if(tmp) *tmp = 0x0;
 
    /* see if the account exists */
-   rootgrp = xaccGetRootGroupOfAcct (acc);
+   rootgrp = xaccGetAccountRoot (acc);
    xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
 
    /* if not, create it */
@@ -552,7 +552,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    if(tmp) *tmp = 0x0;
 
    /* see if the account exists */
-   rootgrp = xaccGetRootGroupOfAcct (acc);
+   rootgrp = xaccGetAccountRoot (acc);
    xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
 
    /* if not, create it */

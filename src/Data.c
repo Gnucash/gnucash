@@ -206,6 +206,8 @@ xaccGetAccountRoot (Account * acc)
   AccountGroup * grp;
   AccountGroup * root = NULL;
 
+  if (!acc) return NULL;
+
   /* find the root of the account group structure */
   grp = (AccountGroup *) acc->parent;
   while (grp) {
@@ -479,27 +481,6 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       xaccRecomputeBalance (acc);
       grp->balance += acc->balance;
    }
-}
-
-/********************************************************************\
-\********************************************************************/
-AccountGroup * 
-xaccGetRootGroupOfAcct (Account *acc) 
-{
-   AccountGroup *grp;
-
-   if (!acc) return NULL;
-
-   /* recursively walk up the tree of parents */
-   grp = acc->parent;
-   if (!grp) return NULL;
-   acc = grp->parent;
-   while (acc) {
-     grp = acc->parent;
-     acc = grp->parent;
-   }
-
-   return grp;
 }
 
 /********************************************************************\

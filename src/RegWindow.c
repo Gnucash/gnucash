@@ -176,6 +176,8 @@ ledgerIsMember (RegWindow *reg, Account * acc)
 
    if (acc == reg->leader) return 1;
 
+   if (! (reg->blackacc)) return 0; 
+
    n = 0;
    while (reg->blackacc[n]) {
       if (acc == reg->blackacc[n]) return 1;
@@ -495,8 +497,12 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   regData->reg     = reg;
     
   /* complete GUI initialization */
-  /* hack alert ------- wrong list of accounts */
-  xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
+  {
+    AccountGroup *grp;
+    grp = xaccGetAccountRoot (regData->leader);
+    if (!grp) grp = xaccGetAccountRoot (regData->blackacc[0]);
+    xaccLoadXferCell (regData->ledger->xfrmCell, grp);
+  }
 
   XtManageChild (reg);
   XtManageChild (frame);
@@ -626,8 +632,8 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   /******************************************************************/
   XtManageChild(pane);
   
-  /* hack alert -- this is wrong */
-  regRefresh (regData->blackacc[0]);
+  /* hack alert -- if no leader, should be refreshing from list */
+  regRefresh (regData->leader);
   
   XtPopup( regData->dialog, XtGrabNone );
   
@@ -644,6 +650,8 @@ void regRefresh (Account *acc)
 {
    RegWindow *regData;
    int n;
+
+   if (!acc) return;
 
    xaccRecomputeBalance (acc);
 
