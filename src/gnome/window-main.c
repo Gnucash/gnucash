@@ -53,7 +53,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
-#include "gnucash.h"
+#include "guile-util.h"
 #include "io-gncxml-v2.h"
 #include "mainwindow-account-tree.h"
 #include "option-util.h"
@@ -70,6 +70,29 @@ static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
 static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
 
+/********************************************************************
+ * gnc_shutdown
+ * close down gnucash from the C side...
+ ********************************************************************/
+static void
+gnc_shutdown (int exit_status)
+{
+  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
+  SCM scm_shutdown = gh_eval_str("gnc:shutdown");
+
+  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
+  {
+    SCM scm_exit_code = gh_long2scm(exit_status);    
+    gh_call1(scm_shutdown, scm_exit_code);
+  }
+  else
+  {
+    /* Either guile is not running, or for some reason we
+       can't find gnc:shutdown. Either way, just exit. */
+    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
+    exit(exit_status);
+  }
+}
 
 /********************************************************************
  * gnc_main_window_app_created_cb()
