@@ -373,6 +373,13 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice)
   return invoice->notes;
 }
 
+gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
+{
+  gnc_numeric total = { 200, 100 };
+  if (!invoice) return gnc_numeric_zero();
+  return total;
+}
+
 static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
 {
   GncOwner *owner;

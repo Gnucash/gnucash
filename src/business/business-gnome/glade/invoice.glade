@@ -1361,6 +1361,25 @@
     </widget>
 
     <widget>
+      <class>GnomeDockItem</class>
+      <name>summarybar_dock</name>
+      <placement>GNOME_DOCK_BOTTOM</placement>
+      <band>0</band>
+      <position>0</position>
+      <offset>0</offset>
+      <locked>False</locked>
+      <exclusive>False</exclusive>
+      <never_floating>False</never_floating>
+      <never_vertical>False</never_vertical>
+      <never_horizontal>False</never_horizontal>
+      <shadow_type>GTK_SHADOW_OUT</shadow_type>
+
+      <widget>
+	<class>Placeholder</class>
+      </widget>
+    </widget>
+
+    <widget>
       <class>GtkVBox</class>
       <child_name>GnomeDock:contents</child_name>
       <name>vbox1</name>

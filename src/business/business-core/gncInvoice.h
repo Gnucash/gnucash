@@ -63,6 +63,9 @@ GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 
+/* return the "total" amount of the invoice */
+gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
+
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
 /* Post this invoice to an account.  Returns the new Transaction

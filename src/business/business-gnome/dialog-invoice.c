@@ -90,6 +90,10 @@ struct _invoice_window {
   GtkWidget *	print_button;
   GtkWidget *	post_button;
 
+  /* Summary Bar Widgets */
+  GtkWidget *	summarybar_dock;
+  GtkWidget *	total_label;
+
   /* Menu Widgets */
   GtkWidget *	menu_print;
   GtkWidget *	menu_cut;
@@ -171,6 +175,7 @@ void gnc_invoice_window_sort_price_cb (GtkWidget *widget, gpointer data);
 
 void gnc_invoice_window_toolbar_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_summarybar_cb (GtkWidget *widget, gpointer data);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
@@ -787,6 +792,54 @@ void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data)
   }
 }
 
+void
+gnc_invoice_window_summarybar_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GtkCheckMenuItem *checkmenu = GTK_CHECK_MENU_ITEM(widget);
+
+  if (checkmenu->active) {
+    gtk_widget_show(iw->summarybar_dock);
+  } else {
+    gtk_widget_hide(iw->summarybar_dock);
+    gtk_widget_queue_resize(iw->summarybar_dock);
+  }
+}
+
+static GtkWidget *
+add_summary_label (GtkWidget *summarybar, const char *label_str)
+{
+  GtkWidget *hbox;
+  GtkWidget *label;
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new (label_str);
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  return label;
+}
+
+static GtkWidget *
+gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
+{
+  GtkWidget *summarybar;
+
+  iw->total_label	    = NULL;
+
+  summarybar = gtk_hbox_new (FALSE, 4);
+
+  iw->total_label	    = add_summary_label (summarybar, _("Total:"));
+
+  return summarybar;
+}
+
 static GtkWidget *
 gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
 {
@@ -1148,10 +1201,26 @@ gnc_invoice_window_close_handler (gpointer user_data)
 static void
 gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
-  //  InvoiceWindow *iw = data;
+  InvoiceWindow *iw = data;
+  GncInvoice * invoice;
+  gnc_numeric amount;
+  char string[256];
+
+  if (!iw)
+    return;
 
   //  if (iw)
   //    gnc_invoice_update_window (iw);
+
+  invoice = iw_get_invoice (iw);
+  if (!invoice)
+    return;
+
+  if (iw->total_label) {
+    amount = gncInvoiceGetTotal(invoice);
+    xaccSPrintAmount (string, amount, gnc_default_print_info (TRUE));
+    gtk_label_set_text (GTK_LABEL (iw->total_label), string);
+  }
 }
 
 static void
@@ -1576,6 +1645,16 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   /* grab the statusbar */
   iw->statusbar = glade_xml_get_widget (xml, "status_bar");
+
+  /* grab/build the summarybar */
+  {
+    GtkWidget * summarybar = gnc_invoice_window_create_summary_bar (iw);
+    iw->summarybar_dock = glade_xml_get_widget (xml, "summarybar_dock");
+    if (summarybar) {
+      gtk_widget_show_all (summarybar);
+      gtk_container_add (GTK_CONTAINER (iw->summarybar_dock), summarybar);
+    }
+  }
 
   hbox = glade_xml_get_widget (xml, "date_opened_hbox");
   iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);

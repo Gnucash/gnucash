@@ -1,3 +1,10 @@
+2002-10-27  Derek Atkins  <derek@ihtfp.com>
+	* gncInvoice.[ch]: create gncInvoiceGetTotal(), which currently does
+	  nothing but will eventually return the actual invoice total.
+	* dialog-invoice.c: add a summary bar with the invoice total
+	* invoice.glade: add a summary bar dock at the bottom of the page.
+	Partial fix for bug #96833
+
 2002-10-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*.c: add #include config.h for correct
