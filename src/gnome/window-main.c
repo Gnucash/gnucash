@@ -81,8 +81,8 @@ enum {
  *
  * This is used during the update to the status bar to contain the
  * accumulation for a single currency. These are placed in a GList and
- * kept around for the duration of the calcualtion. There may, in fact
- * be better ways to do this, but none occurred...
+ * kept around for the duration of the calculation. There may, in fact
+ * be better ways to do this, but none occurred.
  */
 struct _GNCCurrencyAcc {
   const char *currency;
@@ -96,7 +96,7 @@ typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
  *
  * This is maintained for the duration, where there is one per currency,
  * plus (eventually) one for the default currency accumulation (like the
- * EURO
+ * EURO).
  */
 struct _GNCCurrencyItem {
   const char *currency;
@@ -114,7 +114,7 @@ typedef struct _GNCCurrencyItem GNCCurrencyItem;
  * selector. It looks like the old code in the update function, but now
  * only handles a single currency.
  */
-GNCCurrencyItem *
+static GNCCurrencyItem *
 gnc_ui_build_currency_item(const char *currency)
 {
   GtkWidget *label;
@@ -190,26 +190,28 @@ gnc_ui_get_currency_accumulator(GList **list, const char *currency)
   GList *current;
   GNCCurrencyAcc *found;
 
-  for (current = g_list_first(*list); current; current = g_list_next(current)) {
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current))
+  {
     found = current->data;
-    if (strcmp(found->currency, currency) == 0) {
+    if (safe_strcmp(found->currency, currency) == 0)
       return found;
-    }
   }
+
   found = g_new0(GNCCurrencyAcc, 1);
   found->currency = currency;
   found->assets = 0.0;
   found->profits = 0.0;
   *list = g_list_append(*list, found);
+
   return found;
 }
 
 /*
  * Get a currency item.
  *
- * This will search the given list, and if no accumulator is found, wil
- * create a fresh one. This may cause problems with currencies that have
- * the same name... let the buyer beware.
+ * This will search the given list, and if no accumulator is found, will
+ * create a fresh one.
  *
  * It looks just like the function above, with some extra stuff to get the
  * item into the list.
@@ -220,17 +222,20 @@ gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
   GList *current;
   GNCCurrencyItem *found;
 
-  for (current = g_list_first(*list); current; current = g_list_next(current)) {
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current))
+  {
     found = current->data;
-    if (strcmp(found->currency, currency) == 0) {
+    if (safe_strcmp(found->currency, currency) == 0)
       return found;
-    }
   }
+
   found = gnc_ui_build_currency_item(currency);
   *list = g_list_append(*list, found);
 
   current = g_list_append(NULL, found->listitem);
   gtk_select_append_items(GTK_SELECT(holder), current);
+
   return found;
 }
 
@@ -276,6 +281,7 @@ gnc_ui_refresh_statusbar (void)
   default_currency = gnc_lookup_string_option("International",
 					      "Default Currency",
 					      "USD");
+
   euro = gnc_lookup_boolean_option("International",
 				   "Enable EURO support",
 				   FALSE);
@@ -286,10 +292,8 @@ gnc_ui_refresh_statusbar (void)
 
   currency_list = NULL;
   if (euro)
-  {
     euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
 						 EURO_TOTAL_STR);
-  }
 
   group = gncGetCurrentGroup ();
   num_accounts = xaccGroupGetNumAccounts(group);
@@ -318,9 +322,7 @@ gnc_ui_refresh_statusbar (void)
 
         currency_accum->assets += amount;
 	if(euro)
-	{
 	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
-	}
 	break;
       case INCOME:
       case EXPENSE:
@@ -330,9 +332,7 @@ gnc_ui_refresh_statusbar (void)
 
         currency_accum->profits -= amount;
 	if(euro)
-	{
 	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
-	}
 	break;
       case EQUITY:
         /* no-op, see comments at top about summing assets */
@@ -343,13 +343,13 @@ gnc_ui_refresh_statusbar (void)
     }
   }
 
-
   for (current = g_list_first(main_info->totals_list); current;
        current = g_list_next(current))
   {
     currency_item = current->data;
     currency_item->touched = 0;
   }
+
   for (current = g_list_first(currency_list); current;
        current = g_list_next(current))
   {
@@ -368,11 +368,14 @@ gnc_ui_refresh_statusbar (void)
 		     PRTSYM | PRTSEP, currency_accum->currency);
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
     gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
+
     g_free(currency_accum);
+    current->data = NULL;
   }
-  if (currency_list)
-    g_list_free(currency_list);
+
+  g_list_free(currency_list);
   currency_list = NULL;
+
   current = g_list_first(main_info->totals_list);
   while (current)
   {
@@ -385,14 +388,18 @@ gnc_ui_refresh_statusbar (void)
       currency_list = g_list_append(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
-      g_list_free_1(current);
       g_free(currency_item);
+      current->data = NULL;
+      g_list_free_1(current);
     }
+
     current = next;
   }
+
   if (currency_list)
   {
-    gtk_select_remove_items(GTK_SELECT(main_info->totals_combo), currency_list);
+    gtk_select_remove_items(GTK_SELECT(main_info->totals_combo),
+                            currency_list);
     g_list_free(currency_list);
   }
 }
