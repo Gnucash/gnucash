@@ -445,11 +445,16 @@ xaccAccountGetSlots(Account * account) {
 void
 xaccAccountSetSlots(Account *account, kvp_frame *frame)
 {
-    if(account->kvp_data)
-    {
-        kvp_frame_delete (account->kvp_data);
-    }
-    account->kvp_data = frame;
+  if (!account) return;
+  if (frame == account->kvp_data) return;
+
+  xaccAccountBeginEdit (account);   
+  if(account->kvp_data)
+  {
+      kvp_frame_delete (account->kvp_data);
+  }
+  account->kvp_data = frame;
+  xaccAccountCommitEdit (account);   
 }
 
 
