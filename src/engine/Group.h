@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.h -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,13 +35,29 @@
 
 /** PROTOTYPES ******************************************************/
 /*
+ * The xaccMallocAccountGroup() routine will create a new account group.
+ *    This is an internal-use function, you almost certainly want to
+ *    be using the xaccGetAccountGroup() routine instead.
+ */
+AccountGroup *xaccMallocAccountGroup (GNCBook *book);
+
+/*
+ * The xaccGetAccountGroup() routine will return the top-most
+ * account group associated with the indicated book.
+ */
+AccountGroup * xaccGetAccountGroup (GNCBook *book);
+
+/*
  * The xaccAccountDestroy() routine will destroy and free all 
  *    the data associated with this account group.  The group
  *    must have been opened for editing with 
  *    xaccAccountGroupBeginEdit() first, before the Destroy is called.
  */
-AccountGroup *xaccMallocAccountGroup (GNCBook *book);
 void          xaccAccountGroupDestroy (AccountGroup *grp);
+
+
+/* XXX backwards-compat define, remove at later convenience */
+#define gnc_book_get_group xaccGetAccountGroup
 
 GNCBook * xaccGroupGetBook (AccountGroup *group);
 

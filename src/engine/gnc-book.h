@@ -55,9 +55,6 @@ const GUID          * gnc_book_get_guid (GNCBook *book);
 /** \return The kvp data for the book */
 kvp_frame           * gnc_book_get_slots (GNCBook *book);
 
-/** \return The top-level group in the book.*/
-AccountGroup        * gnc_book_get_group (GNCBook *book);
-
 /** \return A GList of the scheduled transactions in the book.  */
 GList               * gnc_book_get_schedxactions( GNCBook *book );
 

@@ -87,7 +87,6 @@ struct gnc_book_struct
  *    backwards compatibility, we leave these here.)
  */
 void gnc_book_set_guid(GNCBook *book, GUID guid);
-void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
 void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 

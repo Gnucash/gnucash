@@ -94,4 +94,7 @@ void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
  */
 void     xaccFreeAccountGroup (AccountGroup *account_group);
 
+/* Set the top-level group in the book */
+void     xaccSetAccountGroup (GNCBook *book, AccountGroup *grp);
+
 #endif

@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -76,6 +76,39 @@ xaccMallocAccountGroup (GNCBook *book)
   xaccInitializeAccountGroup (grp, book);
 
   return grp;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+#define GNC_TOP_GROUP "gnc_top_group"
+AccountGroup * 
+xaccGetAccountGroup (GNCBook *book)
+{
+   if (!book) return NULL;
+	return gnc_book_get_data (book, GNC_TOP_GROUP);
+}
+
+void
+xaccSetAccountGroup (GNCBook *book, AccountGroup *grp)
+{
+  if (!book) return;
+
+  /* XXX Do not free the old topgroup here unless you also fix
+   * all the other uses of gnc_book_set_group!  That's because
+	* the account group is not reference-counted, and there's some
+	* chance that we'll leave a dangling pointer somewhere.
+   */
+
+  if (gnc_book_get_group (book) == grp) return;
+
+  if (grp && grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
 }
 
 /********************************************************************\

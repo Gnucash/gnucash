@@ -68,13 +68,13 @@ run_test (void)
     exit(get_rv());
   }
 
-  /* this test is testing routines that are private
+  /* This test is testing routines that are private
    * to the engine. these tests are intended to test
    * the engine as a whole, not just the public
    * interface. the maintenance of the correct
    * book pointers is important for correct
    * engine operation. */
-  gnc_book_set_group (book, group1);
+  xaccSetAccountGroup (book, group1);
   if (!group_has_book (group1, book))
   {
     failure("gnc_book_set_group didn't take");
@@ -88,7 +88,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  gnc_book_set_group (book, group2);
+  xaccSetAccountGroup (book, group2);
 
 #if 0
   /* a group cannot have a 'null' book; this test is nonsense. */

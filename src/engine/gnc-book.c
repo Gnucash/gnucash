@@ -66,39 +66,6 @@ static short module = MOD_ENGINE;
 
 /* ====================================================================== */
 
-#define GNC_TOP_GROUP "gnc_top_group"
-AccountGroup * 
-gnc_book_get_group (GNCBook *book)
-{
-   if (!book) return NULL;
-printf ("duude get topgrp\n");
-	return gnc_book_get_data (book, GNC_TOP_GROUP);
-}
-
-void
-gnc_book_set_group (GNCBook *book, AccountGroup *grp)
-{
-  if (!book) return;
-
-  /* XXX Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group!  That's because
-	* the account group is not reference-counted, and there's some
-	* chance that we'll leave a dangling pointer somewhere.
-   */
-
-  if (gnc_book_get_group (book) == grp) return;
-
-  if (grp && grp->book != book)
-  {
-     PERR ("cannot mix and match books freely!");
-     return;
-  }
-
-  gnc_book_set_data (book, GNC_TOP_GROUP, grp);
-}
-
-/* ====================================================================== */
-
 #define GNC_SCHEDXACTIONS "gnc_schedxactions"
 GList *
 gnc_book_get_schedxactions( GNCBook *book )
@@ -189,7 +156,7 @@ gnc_book_mark_saved(GNCBook *book)
 
   book->dirty = FALSE;
 
-  xaccGroupMarkSaved(gnc_book_get_group(book));
+  xaccGroupMarkSaved(xaccGetAccountGroup(book));
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
@@ -197,6 +164,24 @@ gnc_book_mark_saved(GNCBook *book)
 
   /* Mark everything as clean */
   gncObjectMarkClean (book);
+}
+
+/* ====================================================================== */
+
+static gboolean
+counter_thunk(Transaction *t, void *data)
+{
+    (*((guint*)data))++;
+    return TRUE;
+}
+
+guint
+gnc_book_count_transactions(GNCBook *book)
+{
+    guint count = 0;
+    xaccGroupForEachTransaction(xaccGetAccountGroup(book),
+                                counter_thunk, (void*)&count);
+    return count;
 }
 
 /* ====================================================================== */
@@ -213,7 +198,7 @@ gnc_book_populate (GNCBook *book)
   }
   gnc_commodity_table_set_table (book, ct);
   
-  gnc_book_set_group (book, xaccMallocAccountGroup(book));
+  xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
   
   gnc_pricedb_set_db (book, gnc_pricedb_create(book));
 
@@ -230,10 +215,10 @@ gnc_book_depopulate (GNCBook *book)
   gnc_commodity_table *ct;
 
   /* unhook the top-level group */
-  grp = gnc_book_get_group (book);
+  grp = xaccGetAccountGroup (book);
   xaccAccountGroupBeginEdit (grp);
   xaccAccountGroupDestroy (grp);
-  gnc_book_set_group (book, NULL);
+  xaccSetAccountGroup (book, NULL);
 
   /* unhook the prices */
   gnc_pricedb_set_db (book, NULL);
@@ -254,7 +239,7 @@ gnc_book_not_saved(GNCBook *book)
 
   return(book->dirty
          ||
-         xaccGroupNotSaved(gnc_book_get_group(book))
+         xaccGroupNotSaved(xaccGetAccountGroup(book))
          ||
          gnc_pricedb_dirty(gnc_book_get_pricedb(book))
          ||
@@ -406,8 +391,8 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
   if (book_1 == book_2) return TRUE;
   if (!book_1 || !book_2) return FALSE;
 
-  if (!xaccGroupEqual (gnc_book_get_group (book_1),
-                       gnc_book_get_group (book_2),
+  if (!xaccGroupEqual (xaccGetAccountGroup (book_1),
+                       xaccGetAccountGroup (book_2),
                        TRUE))
   {
     PWARN ("groups differ");
@@ -451,24 +436,6 @@ gnc_book_get_data (GNCBook *book, const char *key)
 {
   if (!book || !key) return NULL;
   return g_hash_table_lookup (book->data_tables, (gpointer)key);
-}
-
-/* ====================================================================== */
-
-static gboolean
-counter_thunk(Transaction *t, void *data)
-{
-    (*((guint*)data))++;
-    return TRUE;
-}
-
-guint
-gnc_book_count_transactions(GNCBook *book)
-{
-    guint count = 0;
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                counter_thunk, (void*)&count);
-    return count;
 }
 
 /* ====================================================================== */
