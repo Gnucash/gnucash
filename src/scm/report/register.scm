@@ -1,16 +1,16 @@
 ;; -*-scheme-*-
 ;; register.scm
 
+(use-modules (ice-9 syncase))
+
 (require 'record)
 (gnc:support "report/register.scm")
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ()
-
-  (define-syntax addto!
-    (syntax-rules ()
-		  ((_ alist element) (set! alist (cons element alist)))))
+(let-syntax ((addto!
+              (syntax-rules ()
+                ((_ alist element) (set! alist (cons element alist))))))
 
   (define (set-last-row-style! table tag . rest)
     (let ((arg-list 
@@ -612,7 +612,9 @@
    'name (N_ "Invoice")
    'options-generator options-generator
    'renderer reg-renderer
-   'in-menu? #f))
+   'in-menu? #f)
+
+  #t)
 
 
 (define (gnc:apply-register-report func invoice? query journal? double?
