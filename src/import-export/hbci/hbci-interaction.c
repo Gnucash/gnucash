@@ -34,10 +34,10 @@
 #include "dialog-pass.h"
 
 static int msgInputPin(const HBCI_User *user,
-		char *pinbuf,
-		int bufsize,
-		int minsize,
-		int newPin)
+		       char **pinbuf,
+		       int minsize,
+		       int newPin,
+		       void *user_data)
 {
   const HBCI_Bank * b;
   char *msgstr, *passwd;
@@ -89,17 +89,15 @@ unknown user at unknown bank."));
     if (!retval)
       break;
     
-    if (strlen(passwd)<4) {
+    if (strlen(passwd) < minsize) {
       if (gnc_ok_cancel_dialog_parented (NULL, 
 					 GNC_VERIFY_OK,
-					 _("The PIN needs to be at least four characters long.
-Please try again.")) == GNC_VERIFY_CANCEL)
+					 _("The PIN needs to be at least %d characters long.
+Please try again."), minsize) == GNC_VERIFY_CANCEL)
 	break;
     }
     else {
-      strncpy (pinbuf, passwd, bufsize);
-      memset (passwd, 0, strlen(passwd));
-      g_free (passwd);
+      *pinbuf = passwd;
       return 1;
     }
   }
@@ -109,7 +107,7 @@ Please try again.")) == GNC_VERIFY_CANCEL)
 }
 
 
-static int msgInsertCardOrAbort(const HBCI_User *user)
+static int msgInsertCardOrAbort(const HBCI_User *user, void *user_data)
 {
   const HBCI_Bank * b;
   char *msgstr;
@@ -139,7 +137,8 @@ unknown user at unknown bank."));
 }
 
 
-static int msgInsertCorrectCardOrAbort(const HBCI_User *user)
+static int msgInsertCorrectCardOrAbort(const HBCI_User *user, 
+				       void *user_data)
 {
   const HBCI_Bank * b;
   char *msgstr;
@@ -169,12 +168,12 @@ unknown user at unknown bank."));
 }
 
 
-static void msgStateResponse(const char *msg)
+static void msgStateResponse(const char *msg, void *user_data)
 {
   fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);
 }
 
-static int keepAlive()
+static int keepAlive(void *user_data)
 {
   //fprintf(stdout, "my-keepAlive: returning 1\n");
   return 1;
@@ -185,17 +184,13 @@ HBCI_Interactor *
 gnc_hbci_new_interactor()
 {
     HBCI_InteractorCB *inter;
-    inter = HBCI_InteractorCB_new();
-
-    HBCI_InteractorCB_setMsgInputPin(inter, &msgInputPin);
-    HBCI_InteractorCB_setMsgInsertCardOrAbort(inter, &msgInsertCardOrAbort);
-    HBCI_InteractorCB_setMsgInsertCorrectCardOrAbort(
-	inter,
-	&msgInsertCorrectCardOrAbort);
-    HBCI_InteractorCB_setMsgStateResponse(inter,
-					 &msgStateResponse);
-    HBCI_InteractorCB_setKeepalive(inter,
-				  &keepAlive) ;
+    inter = HBCI_InteractorCB_new(NULL,
+				  &msgInputPin,
+				  &msgInsertCardOrAbort,
+				  &msgInsertCorrectCardOrAbort,
+				  &msgStateResponse,
+				  &keepAlive,
+				  NULL);
 
     return HBCI_InteractorCB_Interactor(inter);
 }
@@ -205,7 +200,7 @@ gnc_hbci_new_interactor()
 /* ---------------------------------------------------------- */
 
 
-static void jobStarted(JobProgressType type, int actions)
+static void jobStarted(JobProgressType type, int actions, void *user_data)
 {
     const char *msg;
     switch(type){
@@ -275,9 +270,12 @@ HBCI_ProgressMonitor *
 gnc_hbci_new_pmonitor()
 {
     HBCI_ProgressMonitorCB *pmon;
-    pmon = HBCI_ProgressMonitorCB_new();
-
-    HBCI_ProgressMonitorCB_setJobStarted(pmon, &jobStarted);
+    pmon = HBCI_ProgressMonitorCB_new(NULL,
+				      NULL, NULL,
+				      &jobStarted, NULL, 
+				      NULL, NULL, 
+				      NULL,
+				      NULL);
     
     return HBCI_ProgressMonitorCB_ProgressMonitor(pmon);
 }
