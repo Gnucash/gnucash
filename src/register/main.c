@@ -72,7 +72,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    reg->header = header;
 
    cell = (SingleCell *) xaccMallocDateCell();
-   cell->width = 9;
+   cell->width = 11;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
    xaccSetSingleCellValue (cell, "Date");
    

@@ -66,20 +66,69 @@ void xaccParseDate (struct tm *parsed, const char * datestr)
 }
 
 /* ================================================ */
+/* february default is 28, and patched below */
+static
+char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+
+/* ================================================ */
+
+static void
+xaccValidateDate (struct tm *date, int recur)
+{
+   int day, month, year;
+
+   /* avoid infinite recursion */
+   if (1 < recur) return;
+
+   day = date->tm_mday;
+   month = date->tm_mon + 1;
+   year = date->tm_year + 1900;
+
+   /* adjust days in february for leap year */
+   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
+      days_in_month[1] = 29;
+   } else {
+      days_in_month[1] = 28;
+   }
+  
+   /* the "% 12" business is because month might not be valid!*/
+
+   while (day > days_in_month[(month+11) % 12]) {
+      day -= days_in_month[(month+11) % 12];
+      month++;
+   }
+   while (day < 1) {
+      month--;
+      day += days_in_month[(month+11) % 12];
+   }
+   while (month > 12) {
+      month -= 12;
+      year++;
+   }
+   while (month < 1) {
+      month += 12;
+      year--;
+   }
+
+   date->tm_mday = day;
+   date->tm_mon = month - 1;
+   date->tm_year = year - 1900;
+
+   /* do it again, in case leap-year scrolling messed things up */
+   xaccValidateDate (date, ++recur);
+}
+
+
+/* ================================================ */
 
 static const char * 
 DateEnter (struct _SingleCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
 
-   /* OK, we just entered a newval cell.  Find out
-    * what date that cell thinks it has. 
-    */
-
+   /* OK, we just entered a new cell.  Find out
+    * what date that cell thinks it has.   */
    xaccParseDate (&(cell->date), curr);
-
-printf ("parse %d %d %d \n", cell->date.tm_mday, cell->date.tm_mon+1,
-cell->date.tm_year+1900);
 
    return curr;
 }
@@ -88,15 +137,15 @@ cell->date.tm_year+1900);
 
 static const char * 
 DateMV (struct _SingleCell *_cell, 
-        const char * oldval, 
+        const char *oldval, 
         const char *change, 
         const char *newval)
 {
    DateCell *cell = (DateCell *) _cell;
+   struct tm *date;
+   char buff[30];
+   char *datestr;
    int accel=0;
-   short day, month, year;
-   char * datestr;
-   char * sep;
 
    /* if user hit backspace, accept the change */
    if (!change) return newval;
@@ -107,53 +156,104 @@ DateMV (struct _SingleCell *_cell,
    /* accept the separator character */
    if (DATE_SEP == change[0]) return newval;
 
-   /* otherwise, maybe its an accelerator key.
-    * parse the date string */
-   day = 1;
-   month = 1;
-   year = 1970;
-
-   sscanf (newval, "%d/%d/%d", day, month, year);
-
-printf ("parsed %d %d %d \n", day, month, year);
+   /* otherwise, maybe its an accelerator key. */
+   date = &(cell->date);
 
    /* handle accelerator keys */
    switch (change[0]) {
       case '+':
       case '=':
+         /* increment day */
+         date->tm_mday ++;
          accel = 1;
          break;
 
+      case '_':
+      case '-':
+         /* decrement day */
+         date->tm_mday --;
+         accel = 1;
+         break;
+
+      case '}':
+      case ']':
+         /* increment month */
+         date->tm_mon ++;
+         accel = 1;
+         break;
+
+      case '{':
+      case '[':
+         /* decrment month */
+         date->tm_mon --;
+         accel = 1;
+         break;
+
+      case 'M':
+      case 'm':
+         /* begining of month */
+         date->tm_mday = 1;
+         break;
+
+      case 'H':
+      case 'h':
+         /* end of month */
+         date->tm_mday = days_in_month[date->tm_mon];
+         break;
+
+      case 'Y':
+      case 'y':
+         /* begining of year */
+         date->tm_mday = 1;
+         date->tm_mon = 0;
+         break;
+
+      case 'R':
+      case 'r':
+         /* end of year */
+         date->tm_mday = 31;
+         date->tm_mon = 11;
+         break;
+
+      case 'T':
+      case 't': {
+         /* today */
+         time_t secs;
+         struct tm *now;
+
+         time (&secs);
+         now = localtime (&secs);
+         *date = *now;
+         break;
+      }
+
       default:
-         /* accept any numeric input */
-         if (isdigit (change[0])) return newval;
+         /* reject other changes */
+         return NULL;
    }
 
    if (accel) {
+      xaccValidateDate (date, 0);
    }
 
-   return newval;
+   sprintf (buff, "%d/%d/%d", date->tm_mday, 
+                              date->tm_mon+1, 
+                              date->tm_year+1900);
+   datestr = strdup (buff);
+   
+   return datestr;
 }
 
 /* ================================================ */
 
 static const char * 
-DateLeave (const char * curr)
+DateLeave (struct _SingleCell *_cell, const char * curr)
 {
-   short day, month, year;
-   char * datestr;
-   char * sep;
+   DateCell *cell = (DateCell *) _cell;
 
-   /* otherwise, maybe its an accelerator key.
-    * parse the date string */
-   day = 1;
-   month = 1;
-   year = 1970;
-
-   sscanf (curr, "%d/%d/%d", day, month, year);
-
-printf ("leave parsed %d %d %d \n", day, month, year);
-
+   /* OK, we are leaving the cell.  Find out
+    * what date that cell thinks it has.   */
+   xaccParseDate (&(cell->date), curr);
 
    return curr;
 }
@@ -191,6 +291,7 @@ xaccInitDateCell (DateCell *cell)
 
   cell->cell.enter_cell = DateEnter;
   cell->cell.modify_verify = DateMV;
+  cell->cell.leave_cell = DateLeave;
 }
 
 /* --------------- end of file ---------------------- */
