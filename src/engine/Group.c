@@ -467,7 +467,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       }
 
       /* then add up accounts in this group */
-      xaccRecomputeBalance (acc);
+      xaccAccountRecomputeBalance (acc);
       grp->balance += acc->balance;
    }
 }
