@@ -1,3 +1,8 @@
+2001-12-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c: More sanity checks. Added support
+	for using existing exchange accounts.
+
 2001-12-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/druid-euro-conv.c: Added support for Stock accounts.

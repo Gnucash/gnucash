@@ -121,14 +121,17 @@ check_account_selection (Account *a, EuroConvInfo *info)
     return TRUE;
 }
 
-/* fills the info->account_list with all accounts that should be converted. */
+/* fills the info->account_list with all accounts that should be
+   converted, plus the info->currency_hash with all currencies that
+   should be converted. */
 static int
 fill_account_list (EuroConvInfo *info)
 {
   GList *all_accounts, *node, *accounts;
   gint num_accounts = 0;
   GHashTable *currencyhash = NULL;
-  CurrencyAccount *currencyinfo = NULL;;
+  CurrencyAccount *currencyinfo = NULL;
+  gnc_numeric amount;
 
   if (info->account_list != NULL)
     g_list_free(info->account_list);
@@ -162,23 +165,41 @@ fill_account_list (EuroConvInfo *info)
     if (!check_account_selection(account,info))
       continue;
 
-    /* okay, this one needs conversion, so we store it. */
-    accounts = g_list_prepend(accounts, account);
-
-    num_accounts++;
-    /*     printf("Account needs conversion: %s\n", */
-    /* 	   xaccAccountGetName (account)); */
-
-    /* record the currency, but only if this account's amount needs to
-       be exchanged */
-    if (!g_hash_table_lookup(currencyhash, currency) &&
-	account_type != INCOME &&
-	account_type != EXPENSE)
+    if (account_type == CURRENCY &&
+	FALSE && /* some GUI query here */
+	gnc_commodity_equiv (xaccAccountGetSecurity (account),
+			     gnc_get_euro ()) &&
+	!g_hash_table_lookup (currencyhash, currency) )
       {
+	/* take this as an exchange account */
 	currencyinfo = g_new0 (CurrencyAccount, 1);
 	currencyinfo->currency = currency;
+	currencyinfo->account = account;
 	g_hash_table_insert(currencyhash, currency, currencyinfo);
-      };
+      }
+    else
+      {
+	/* okay, this one needs conversion, so we store it. */
+	accounts = g_list_prepend(accounts, account);
+	
+	num_accounts++;
+	/*     printf("Account needs conversion: %s\n", */
+	/* 	   xaccAccountGetName (account)); */
+	
+	amount = xaccAccountGetBalance(account);
+	/* record the currency, but only if this account's amount needs to
+	   be exchanged */
+	if (!g_hash_table_lookup(currencyhash, currency) &&
+	    account_type != INCOME &&
+	    account_type != EXPENSE &&
+	    !gnc_numeric_zero_p(amount))
+	  {
+	    currencyinfo = g_new0 (CurrencyAccount, 1);
+	    currencyinfo->currency = currency;
+	    currencyinfo->account = NULL;
+	    g_hash_table_insert(currencyhash, currency, currencyinfo);
+	  };
+      }
   }
   
   info->account_list = g_list_reverse(accounts);
@@ -202,6 +223,10 @@ foreach_currency_cb (gpointer key, gpointer value, gpointer user_data)
   g_return_if_fail (info != NULL);
   /*   printf("Called upon %s.\n",  */
   /* 	 gnc_commodity_get_printname(caccount->currency)); */
+
+  /* Already havin an account? Don't do anything. */
+  if (caccount->account != NULL)
+    return;
 
   accountname = 
     g_strdup_printf 
