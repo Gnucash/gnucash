@@ -456,14 +456,22 @@ then
     	LIBOFX_LIBS="-L${OFXPREFIX}/lib"
 	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
     fi
-    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx -lstdc++"
 
     AC_MSG_CHECKING(for libofx/libofx.h)
     save_CPPFLAGS="${CPPFLAGS}"
     CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes),
-	[ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
+    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes), OFXfound=no )
 
+    if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
+    	LIBOFX_LIBS="-L$/usr/local/lib"
+	LIBOFX_CFLAGS="-I$/usr/local/include"
+        CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+
+        AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT([yes (in /usr/local)]),
+	  [ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
+    fi
+
+    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx -lstdc++"
     AC_MSG_CHECKING(for libofx)
     save_LIBS="${LIBS}"
     LIBS="${LIBS} ${LIBOFX_LIBS}"

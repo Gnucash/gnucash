@@ -1,3 +1,7 @@
+2002-11-18  Derek Atkins <derek@ihtfp.com>
+	* configure.in -- fix OFX search to look in /usr/local if it cannot
+	  find it in /usr.  It skips the second check if you supply an ofx-prefix.
+
 2002-11-18  David Hampton  <hampton@employees.org>
 
 	* configure.in: Fix problems with gtkhtml 1.1.
