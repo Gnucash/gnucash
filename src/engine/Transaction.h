@@ -72,7 +72,11 @@ void          xaccInitTransaction (Transaction *);/* clears a trans struct */
  */
 void          xaccTransDestroy (Transaction *);
 
-void          xaccTransBeginEdit (Transaction *);
+/* The xaccTransBegineEdit() ... 
+ *    If the defer flag is set, then automated balancing
+ *    is defered until the commit ...
+ */
+void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);

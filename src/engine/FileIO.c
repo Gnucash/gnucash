@@ -109,6 +109,13 @@
 
 /** GLOBALS *********************************************************/
 
+/* the default currency is used when importin old-style
+ * file formats, or when importing files with no currency 
+ * specified.  This should probably be something that
+ * is configurable from some user config menu.
+ */
+#define DEFAULT_CURRENCY "USD"
+
 static int          error_code=0; /* error code, if error occurred */
 
 static AccountGroup *holder;      /* temporary holder for
@@ -441,12 +448,16 @@ readAccount( int fd, AccountGroup *grp, int token )
      tmp = readString( fd, token );
      if( NULL == tmp ) { free (tmp); return NULL; }
      xaccAccountSetCurrency (acc, tmp);
+     if (0x0 == tmp[0]) xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
      free (tmp);
 
      tmp = readString( fd, token );
      if( NULL == tmp ) { free (tmp); return NULL; }
      xaccAccountSetSecurity (acc, tmp);
      free (tmp);
+  } else {
+     /* set the default currency when importing old files */
+     xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
   }
 
   err = read( fd, &numTrans, sizeof(int) );
@@ -603,7 +614,7 @@ readTransaction( int fd, Account *acc, int token )
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
-  xaccTransBeginEdit (trans);  
+  xaccTransBeginEdit (trans, 1);  
 
   tmp = readString( fd, token );
   if (NULL == tmp)

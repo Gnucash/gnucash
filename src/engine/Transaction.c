@@ -55,6 +55,11 @@
  */
 int force_double_entry = 1;
 
+
+/* bit-field flags for controlling transaction commits */
+#define BEGIN_EDIT 0x1
+#define DEFER_REBALANCE 0x2
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -420,7 +425,6 @@ xaccSplitRebalance (Split *split)
   short forward=0, backward=0;
   char *base_currency=0x0, *base_security =0x0;
 
-
   trans = split->parent;
 
   /* We might have gotten here if someone is manipulating
@@ -431,6 +435,7 @@ xaccSplitRebalance (Split *split)
   if (!trans) return;
   if (!(split->acc)) return;
 
+  if (DEFER_REBALANCE & (trans->open)) return;
   assert (trans->splits);
   assert (trans->splits[0]);
 
@@ -447,6 +452,10 @@ xaccSplitRebalance (Split *split)
        else {
           printf ("Internal Error: SplitRebalance(): "
                   " no common split currencies \n");
+          printf ("\tbase acc=%s cur=%s base_sec=%s\n"
+                  "\tacc=%s scur=%s ssec=%s \n", 
+              split->acc->accountName, base_currency, base_security,
+              s->acc->accountName, s->acc->currency, s->acc->security );
           assert (0);
           return;
        }
@@ -547,10 +556,11 @@ xaccSplitRebalance (Split *split)
 }
 
 void
-xaccTransBeginEdit (Transaction *trans)
+xaccTransBeginEdit (Transaction *trans, int defer)
 {
    assert (trans);
-   trans->open = 1;
+   trans->open = BEGIN_EDIT;
+   if (defer) trans->open |= DEFER_REBALANCE;
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
 }
@@ -565,6 +575,7 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans) return;
    CHECK_OPEN (trans);
 
+   trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
    /* um, theoritically, it is impossible for splits
