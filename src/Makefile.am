@@ -50,7 +50,8 @@ gnucash_SOURCES = \
   gnc-component-manager.c \
   gnc-exp-parser.c \
   gnc-main.c \
-  gnc-ui-util.c
+  gnc-ui-util.c \
+  messages.c
 
 gnucash_make_guids_LDADD = \
   engine/libgncengine.la \

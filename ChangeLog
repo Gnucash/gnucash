@@ -1,3 +1,9 @@
+2001-09-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/messages.[hc]: Added support for i18n messages with
+	qualifying prefix; adapted from code by Zbigniew Chyla
+	<cyba@piast.t19.ds.pwr.wroc.pl>.
+
 2001-09-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Account.c (xaccInitAccount): initialize scus to 0
