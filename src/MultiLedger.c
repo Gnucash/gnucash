@@ -21,36 +21,15 @@
  *                                                                  *
 \********************************************************************/
 
-
 #include "config.h"
 
 #include "Account.h"
 #include "Group.h"
-
+#include "MultiLedger.h"
 #include "SplitLedger.h"
 #include "LedgerUtils.h"
 #include "Transaction.h"
 #include "util.h"
-
-/** STRUCTS *********************************************************/
-/* The LedgerWindow struct contains data describing a single instance
- * of some displayed transactions.
- */
-
-typedef struct _LedgerWindow LedgerWindow;
-
-struct _LedgerWindow {
-  Account *lead_acct;            /* leading. "master" account               */
-  Account **displayed_accounts;  /* The list of accounts shown here         */
-  short   numAcc;                /* number of accounts in list              */
-
-  short type;                    /* register display type, usually equal to *
-                                  * account type                            */
-
-  short dirty;                   /* dirty flag, non zero if redraw needed   */
-  SplitRegister *ledger;         /* main ledger window                      */
-  void *gui_hook;                /* GUI-specific state                      */
-};
 
 
 /** GLOBALS *********************************************************/
@@ -58,14 +37,14 @@ struct _LedgerWindow {
  * The is, there must be only one instance of these per GUI session.
  */
 
-static LedgerWindow **regList = NULL;     /* single-account registers */
-static LedgerWindow **ledgerList = NULL;  /* multiple-account registers */
-static LedgerWindow **fullList = NULL;    /* all registers */
+static xaccLedgerDisplay **regList = NULL;     /* single-account registers */
+static xaccLedgerDisplay **ledgerList = NULL;  /* multiple-account registers */
+static xaccLedgerDisplay **fullList = NULL;    /* all registers */
 
 /** PROTOTYPES ******************************************************/
-LedgerWindow * regWindowLedger( Widget parent, Account *lead, Account **acclist, int type);
-void        accRefresh (Account *acc);
-void        regRefresh (LedgerWindow *regData);
+
+xaccLedgerDisplay * regWindowLedger (Account *lead, Account **acclist, int type);
+void        regRefresh (xaccLedgerDisplay *regData);
 
 
 /********************************************************************\
@@ -74,7 +53,7 @@ void        regRefresh (LedgerWindow *regData);
 \********************************************************************/
 
 int 
-ledgerListCount (LedgerWindow **list)
+ledgerListCount (xaccLedgerDisplay **list)
 {
    int n = 0;
    if (!list) return 0;
@@ -84,17 +63,17 @@ ledgerListCount (LedgerWindow **list)
 
 /* ------------------------------------------------------ */
 
-LedgerWindow ** 
-ledgerListAdd (LedgerWindow **oldlist, LedgerWindow *addreg)
+xaccLedgerDisplay ** 
+ledgerListAdd (xaccLedgerDisplay **oldlist, xaccLedgerDisplay *addreg)
 {
-   LedgerWindow **newlist;
-   LedgerWindow *reg;
+   xaccLedgerDisplay **newlist;
+   xaccLedgerDisplay *reg;
    int n;
 
    if (!addreg) return oldlist;
 
    n = ledgerListCount (oldlist);
-   newlist = (LedgerWindow **) _malloc ((n+2) * sizeof (LedgerWindow *));
+   newlist = (xaccLedgerDisplay **) _malloc ((n+2) * sizeof (xaccLedgerDisplay *));
 
    n = 0;
    if (oldlist) {
@@ -115,7 +94,7 @@ ledgerListAdd (LedgerWindow **oldlist, LedgerWindow *addreg)
 /* ------------------------------------------------------ */
 
 void
-ledgerListRemove (LedgerWindow **list, LedgerWindow *delreg)
+ledgerListRemove (xaccLedgerDisplay **list, xaccLedgerDisplay *delreg)
 {
    int n, i;
 
@@ -136,7 +115,7 @@ ledgerListRemove (LedgerWindow **list, LedgerWindow *delreg)
 /* ------------------------------------------------------ */
 
 int
-ledgerIsMember (LedgerWindow *reg, Account * acc)
+ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 {
    int n; 
 
@@ -163,10 +142,10 @@ ledgerIsMember (LedgerWindow *reg, Account * acc)
  * Return: regData - the register window instance                   *
 \********************************************************************/
 
-LedgerWindow *
-LedgerWindowSimple (Account *acc)
+xaccLedgerDisplay *
+xaccLedgerDisplaySimple (Account *acc)
   {
-  LedgerWindow *retval;
+  xaccLedgerDisplay *retval;
   int acc_type;
   int reg_type = -1;
 
@@ -209,7 +188,7 @@ LedgerWindowSimple (Account *acc)
   }
 
 /********************************************************************\
- * LedgerWindowAccGroup                                             *
+ * xaccLedgerDisplayAccGroup                                             *
  *   opens up a register window to display an account, and all      *
  *   of its children, in the same window                            *
  *                                                                  *
@@ -217,10 +196,10 @@ LedgerWindowSimple (Account *acc)
  * Return: regData - the register window instance                   *
 \********************************************************************/
 
-LedgerWindow *
-LedgerWindowAccGroup (Account *acc)
+xaccLedgerDisplay *
+xaccLedgerDisplayAccGroup (Account *acc)
   {
-  LedgerWindow *retval;
+  xaccLedgerDisplay *retval;
   Account **list;
   int ledger_type;
   Account *le;
@@ -269,11 +248,11 @@ LedgerWindowAccGroup (Account *acc)
        break;
 
     default:
-      PERR (" LedgerWindowAccGroup(): unknown account type \n");
+      PERR (" xaccLedgerDisplayAccGroup(): unknown account type \n");
       _free (list);
       return NULL;
   }
-  retval = LedgerWindowLedger (acc, list, ledger_type);
+  retval = xaccLedgerDisplayLedger (acc, list, ledger_type);
 
   if (list) _free (list);
 
@@ -281,7 +260,7 @@ LedgerWindowAccGroup (Account *acc)
   }
 
 /********************************************************************\
- * LedgerWindowLedger                                               *
+ * xaccLedgerDisplayLedger                                               *
  *   opens up a ledger window for a list of accounts                *
  *                                                                  *
  * Args:   lead_acc - the account associated with this register     *
@@ -291,10 +270,10 @@ LedgerWindowAccGroup (Account *acc)
  * Return: regData  - the register window instance                  *
 \********************************************************************/
 
-LedgerWindow *
-LedgerWindowLedger (Account *lead_acc, Account **acclist, int ledger_type)
+xaccLedgerDisplay *
+xaccLedgerDisplayLedger (Account *lead_acc, Account **acclist, int ledger_type)
   {
-  LedgerWindow   *regData = NULL;
+  xaccLedgerDisplay   *regData = NULL;
   int    position=0;
   char *windowname;
 
@@ -320,15 +299,15 @@ LedgerWindowLedger (Account *lead_acc, Account **acclist, int ledger_type)
   regData = NULL;
   if (lead_acc) {
      if (!acclist) {
-       FETCH_FROM_LIST (LedgerWindow, regList, lead_acc, lead_acct, regData);
+       FETCH_FROM_LIST (xaccLedgerDisplay, regList, lead_acc, lead_acct, regData);
      } else {
-       FETCH_FROM_LIST (LedgerWindow, ledgerList, lead_acc, lead_acct, regData);
+       FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, lead_acct, regData);
      }
   }
   
   /* if regData is null, then no lead_acct account was specified */
   if (!regData) {
-    regData = (LedgerWindow *) malloc (sizeof (LedgerWindow));
+    regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
     regData->lead_acct = NULL;
   }
 
@@ -352,7 +331,7 @@ LedgerWindowLedger (Account *lead_acc, Account **acclist, int ledger_type)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-void regRefresh (LedgerWindow *regData)
+void regRefresh (xaccLedgerDisplay *regData)
 {
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
@@ -403,7 +382,7 @@ void regRefresh (LedgerWindow *regData)
 
 static void MarkDirtyAllRegs (Account *acc)
 {
-   LedgerWindow *regData;
+   xaccLedgerDisplay *regData;
    int n;
 
    if (!acc) return;
@@ -424,7 +403,7 @@ static void MarkDirtyAllRegs (Account *acc)
 
 static void RefreshAllRegs (Account *acc)
 {
-   LedgerWindow *regData;
+   xaccLedgerDisplay *regData;
    int n;
 
    if (!acc) return;
@@ -445,7 +424,7 @@ static void RefreshAllRegs (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-void accRefresh (Account *acc)
+void xaccAccountDisplayRefresh (Account *acc)
 {
    /* avoid excess screen flicker with a two-phase refresh */
    MarkDirtyAllRegs (acc);
@@ -453,23 +432,23 @@ void accRefresh (Account *acc)
 }
 
 /********************************************************************\
- * xaccDestroyLedgerWindow()
+ * xaccDestroyxaccLedgerDisplay()
  * It is enought to call just XtDestroy Widget.  Any allocated
  * memory will be freed by the close callbacks.
 \********************************************************************/
 
 void
-xaccDestroyLedgerWindow (Account *acc)
+xaccDestroyxaccLedgerDisplay (Account *acc)
 {
-   LedgerWindow *regData;
+   xaccLedgerDisplay *regData;
    int n;
 
    /* find the single-account window for this account, if any */
-   FIND_IN_LIST (LedgerWindow, regList, acc, lead_acct, regData);
+   FIND_IN_LIST (xaccLedgerDisplay, regList, acc, lead_acct, regData);
    if (regData) XtDestroyWidget(regData->dialog);
 
    /* find the multiple-account window for this account, if any */
-   FIND_IN_LIST (LedgerWindow, ledgerList, acc, lead_acct, regData);
+   FIND_IN_LIST (xaccLedgerDisplay, ledgerList, acc, lead_acct, regData);
    if (regData) XtDestroyWidget(regData->dialog);
 
    /* cruise throught the miscellanous account windows */
@@ -486,7 +465,7 @@ xaccDestroyLedgerWindow (Account *acc)
 }
 
 /********************************************************************\
- * closeLedgerWindow                                                   *
+ * closexaccLedgerDisplay                                                   *
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
@@ -496,9 +475,9 @@ xaccDestroyLedgerWindow (Account *acc)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-closeLedgerWindow( Widget mw, XtPointer cd, XtPointer cb )
+closexaccLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
 {
-  LedgerWindow *regData = (LedgerWindow *)cd;
+  xaccLedgerDisplay *regData = (xaccLedgerDisplay *)cd;
   Account *acc = regData->lead_acct;
   
   /* Save any unsaved changes */
@@ -507,8 +486,8 @@ closeLedgerWindow( Widget mw, XtPointer cd, XtPointer cb )
   xaccDestroyBasicRegister (regData->ledger);
   
   /* whether this is a single or multi-account window, remove it */
-  REMOVE_FROM_LIST (LedgerWindow, regList, acc, lead_acct);
-  REMOVE_FROM_LIST (LedgerWindow, ledgerList, acc, lead_acct);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, lead_acct);
+  REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, lead_acct);
 
   ledgerListRemove (fullList, regData);
 
