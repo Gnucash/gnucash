@@ -346,7 +346,7 @@ int    daysInMonth( int month , int year )
  *   compares date1 and date2                                       *
  *   If you tink you need this function, you probably don't.        *
  *   You should probably use xaccTransOrder instead.  Some          *
- *   if the algorithms used here depend on the superior ordering    *
+ *   of the algorithms used here depend on the superior ordering    *
  *   that xaccTransOrder provides.                                  *
  *                                                                  * 
  * Args:   date1 - the first date to look at                        *
