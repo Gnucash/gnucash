@@ -1117,7 +1117,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         VirtualLocation new_virt_loc;
 
         Table *table;
-        gboolean exit_register;
+        gboolean abort_move;
 
         g_return_val_if_fail(widget != NULL, TRUE);
         g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1205,14 +1205,14 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         }
 
         /* and finally...process this as a POINTER_TRAVERSE */
-        exit_register = gnc_table_traverse_update (table,
-                                                   cur_virt_loc,
-                                                   GNC_TABLE_TRAVERSE_POINTER,
-                                                   &new_virt_loc);
+        abort_move = gnc_table_traverse_update (table,
+                                                cur_virt_loc,
+                                                GNC_TABLE_TRAVERSE_POINTER,
+                                                &new_virt_loc);
 
         gnucash_sheet_check_grab(sheet);
 
-        if (exit_register)
+        if (abort_move)
 		return TRUE;
 
         changed_cells = gnucash_sheet_cursor_move(sheet, new_virt_loc);
@@ -1408,7 +1408,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         GnucashSheet *sheet;
 	CellBlock *header;
 	gboolean pass_on = FALSE;
-        gboolean exit_register;
+        gboolean abort_move;
         gboolean set_selection = TRUE;
         VirtualLocation cur_virt_loc;
         VirtualLocation new_virt_loc;
@@ -1574,11 +1574,11 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                 return result;
         }
 
-	exit_register = gnc_table_traverse_update (table, cur_virt_loc,
-                                                   direction, &new_virt_loc);
+	abort_move = gnc_table_traverse_update (table, cur_virt_loc,
+                                                direction, &new_virt_loc);
 
 	/* If that would leave the register, abort */
-	if (exit_register)
+	if (abort_move)
                 return TRUE;
 
 	gnucash_sheet_cursor_move (sheet, new_virt_loc);
@@ -1592,7 +1592,7 @@ static void
 gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
         Table *table;
-        gboolean exit_register;
+        gboolean abort_move;
         VirtualLocation cur_virt_loc;
 
         g_return_if_fail(GNUCASH_IS_SHEET(sheet));
@@ -1603,11 +1603,11 @@ gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 
         /* It's not really a pointer traverse, but it seems the most
          * appropriate here. */
- 	exit_register = gnc_table_traverse_update (table, cur_virt_loc,
-                                                   GNC_TABLE_TRAVERSE_POINTER,
-                                                   &virt_loc);
+ 	abort_move = gnc_table_traverse_update (table, cur_virt_loc,
+                                                GNC_TABLE_TRAVERSE_POINTER,
+                                                &virt_loc);
 
-	if (exit_register)
+	if (abort_move)
 		return;
 
 	gnucash_sheet_cursor_move (sheet, virt_loc);

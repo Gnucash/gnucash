@@ -145,6 +145,9 @@ struct _SRInfo
   /* If the hints were set by the traverse callback */
   gboolean hint_set_by_traverse;
 
+  /* If traverse is to the newly created split */
+  gboolean traverse_to_new;
+
   /* A flag indicating if the last traversal was 'exact'.
    * See table-allgui.[ch] for details. */
   gboolean exact_traversal;
@@ -734,16 +737,13 @@ sr_get_active_cursor (SplitRegister *reg)
  * When the user moves from one cell to another, causing a
  * change in the current virtual cursor, the following 
  * sequence of events get triggered and cascade down:
- *  xaccVerifyCursorPosition() {
- *    doMoveCursor() {
- *      callback for move() which is this function (LedgerMoveCursor) {
- *        xaccSRSaveRegEntry() {...}
- *        RedrawRegEntry() {
- *          SRLoadRegister() {
+ *  xaccVerifyCursorPosition()
+ *    doMoveCursor()
+ *      callback for move() which is this function (LedgerMoveCursor)
+ *        xaccSRSaveRegEntry()
+ *        RedrawRegEntry()
+ *          SRLoadRegister()
  *            xaccMoveCursor()
- *            ...
- *          }
- *        }}}}
  */
 static void
 LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
@@ -759,6 +759,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   Split *new_trans_split;
   Split *new_split;
   CursorClass new_class;
+  CursorClass old_class;
   gboolean do_refresh;
   gboolean saved;
 
@@ -769,8 +770,20 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   /* The transaction we are coming from */
   old_trans = xaccSRGetCurrentTrans (reg);
   old_trans_split = xaccSRGetCurrentTransSplit (reg, &old_trans_split_loc);
+  old_class = xaccSplitRegisterGetCurrentCursorClass (reg);
 
-  if (!info->hint_set_by_traverse)
+  if (info->traverse_to_new)
+  {
+    if (old_class == CURSOR_CLASS_SPLIT)
+      new_trans = old_trans;
+    else
+      new_trans = NULL;
+
+    new_split = NULL;
+    new_trans_split = NULL;
+    new_class = CURSOR_CLASS_NONE;
+  }
+  else if (!info->hint_set_by_traverse)
   {
     /* The transaction where we are moving to */
     new_trans = xaccSRGetTrans(reg, new_virt_loc.vcell_loc);
@@ -831,6 +844,13 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     }
     else
       new_virt_loc.vcell_loc = reg->table->current_cursor_loc.vcell_loc;
+  }
+  else if (info->traverse_to_new)
+  {
+    new_trans = info->cursor_hint_trans;
+    new_split = info->cursor_hint_split;
+    new_trans_split = info->cursor_hint_trans_split;
+    new_class = info->cursor_hint_cursor_class;
   }
 
   gnc_table_find_close_valid_cell (table, &new_virt_loc,
@@ -1142,8 +1162,8 @@ LedgerTraverse (Table *table,
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
 
-  split = xaccSRGetCurrentSplit(reg);
-  trans = xaccSRGetCurrentTrans(reg);
+  split = xaccSRGetCurrentSplit (reg);
+  trans = xaccSRGetCurrentTrans (reg);
   if (trans == NULL)
     return;
 
@@ -1157,6 +1177,36 @@ LedgerTraverse (Table *table,
 
     return;
   }
+
+  /* See if we are tabbing off the end of the very last line */
+  do
+  {
+    VirtualLocation virt_loc;
+
+    if (!changed && !info->blank_split_edited)
+      break;
+
+    if (dir != GNC_TABLE_TRAVERSE_RIGHT)
+      break;
+
+    virt_loc = table->current_cursor_loc;
+    if (gnc_table_move_vertical_position (table, &virt_loc, 1))
+      break;
+
+    virt_loc = table->current_cursor_loc;
+    if (gnc_table_move_tab (table, &virt_loc, TRUE))
+      break;
+
+    *p_new_virt_loc = table->current_cursor_loc;
+    (p_new_virt_loc->vcell_loc.virt_row)++;
+    p_new_virt_loc->phys_row_offset = 0;
+    p_new_virt_loc->phys_col_offset = 0;
+
+    info->traverse_to_new = TRUE;
+
+    return;
+
+  } while (FALSE);
 
   /* Now see if we are changing cursors. If not, we may be able to
    * auto-complete. */
@@ -2335,6 +2385,9 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
       gnc_split_scm_set_account(split_scm, new_account);
   }
 
+  if (reg->style == REG_STYLE_LEDGER)
+    other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
+
   if (MOD_MXFRM & changed) {
     other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
 
@@ -2682,11 +2735,14 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     }
   }
 
+  if (reg->style == REG_STYLE_LEDGER)
+    other_split = xaccGetOtherSplit (split);
+
   if (MOD_MXFRM & changed)
   {
     DEBUG ("MOD_MXFRM: %s", reg->mxfrmCell->cell.value);
 
-    other_split = xaccGetOtherSplit(split);
+    other_split = xaccGetOtherSplit (split);
 
     /* other_split may be null for two very different reasons:
      * (1) the parent transaction has three or more splits in it,
@@ -3642,10 +3698,20 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   lead_cursor = sr_get_passive_cursor (reg);
 
   /* figure out where we are going to. */
-  find_trans = info->cursor_hint_trans;
-  find_split = info->cursor_hint_split;
-  find_trans_split = info->cursor_hint_trans_split;
-  find_class = info->cursor_hint_cursor_class;
+  if (info->traverse_to_new)
+  {
+    find_trans = xaccSplitGetParent (blank_split);
+    find_split = NULL;
+    find_trans_split = blank_split;
+    find_class = info->cursor_hint_cursor_class;
+  }
+  else
+  {
+    find_trans = info->cursor_hint_trans;
+    find_split = info->cursor_hint_split;
+    find_trans_split = info->cursor_hint_trans_split;
+    find_class = info->cursor_hint_cursor_class;
+  }
 
   save_loc = table->current_cursor_loc;
 
@@ -3847,6 +3913,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
   info->cursor_hint_cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
   info->hint_set_by_traverse = FALSE;
+  info->traverse_to_new = FALSE;
   info->exact_traversal = FALSE;
   info->first_pass = FALSE;
 
@@ -3902,11 +3969,11 @@ LoadXferCell (ComboCell * cell,
     DEBUG ("curr=%p secu=%p acct=%s\n", 
            curr, secu, xaccAccountGetName (acc));
 
-    if ( load_everything || 
-         (gnc_commodity_equiv(curr,base_currency)) ||
-         (gnc_commodity_equiv(curr,base_security)) ||
-         (secu && (gnc_commodity_equiv(secu,base_currency))) ||
-         (secu && (gnc_commodity_equiv(secu,base_security))) )
+    if (load_everything || 
+        (gnc_commodity_equiv(curr,base_currency)) ||
+        (gnc_commodity_equiv(curr,base_security)) ||
+        (secu && (gnc_commodity_equiv(secu,base_currency))) ||
+        (secu && (gnc_commodity_equiv(secu,base_security))))
     {
       name = xaccAccountGetFullName (acc, account_separator);
       if (name != NULL)
