@@ -1,5 +1,14 @@
 Version history:
 ------- -------
+ 1.5.3  - 25 February 2001
+         o new XML file format
+         o better support for importing qifs from online banks
+         o improved checking register
+         o support for charts & graphs
+         o financial calculator
+         o new user account hierarchy wizard
+         o many UI improvements
+
  1.5.2  - 25 September 2000
          o fixes for Solaris 8
          o fixes for gnome-print 0.23
