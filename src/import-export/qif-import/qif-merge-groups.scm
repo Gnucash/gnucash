@@ -16,7 +16,7 @@
     ;; account group.
     (gnc:query-add-account-match query
                                  (gnc:group-get-subaccounts group)
-                                 'guid-match-any 'query-or)
+                                 'guid-match-any 'query-and)
 
     (set! xtns (gnc:query-get-transactions query 'query-txn-match-all))
     
@@ -55,7 +55,6 @@
          ;; for each split in the transaction, add a term to match the 
          ;; properties of one split 
          (let ((q-splits (gnc:malloc-query)))
-	   (gnc:query-set-book q-splits (gnc:group-get-book old-group))
            (for-each 
             (lambda (split)
               (let ((sq (gnc:malloc-query)))
