@@ -3,8 +3,15 @@
 #include <Xm/Form.h>
 #include <Xm/MainW.h>
 
+#include "datecell.h"
 #include "price.h"
 #include "table.h"
+#include "textcell.h"
+
+#define DESC_CELL_C  2
+#define DESC_CELL_R  0
+#define MEMO_CELL_C  2
+#define MEMO_CELL_R  1
 
 Table *
 CreateReg(Widget parent ) {
@@ -31,6 +38,24 @@ CreateReg(Widget parent ) {
    cell = xaccMallocPriceCell();
    cell->row = 0;
    cell->col = 4;
+   cell->width = 9;
+   xaccAddCell (curs, cell);
+   
+   cell = xaccMallocDateCell();
+   cell->row = 0;
+   cell->col = 0;
+   cell->width = 9;
+   xaccAddCell (curs, cell);
+   
+   cell = xaccMallocTextCell();
+   cell->row = DESC_CELL_R;
+   cell->col = DESC_CELL_C;
+   cell->width = 9;
+   xaccAddCell (curs, cell);
+   
+   cell = xaccMallocTextCell();
+   cell->row = MEMO_CELL_R;
+   cell->col = MEMO_CELL_C;
    cell->width = 9;
    xaccAddCell (curs, cell);
    
