@@ -33,6 +33,7 @@
 (use-modules (gnucash gnc-module))
 
 (require 'printf)
+(require 'sort)
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
@@ -51,6 +52,7 @@
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
+(define optname-show-full-names (N_ "Show Full Account Names"))
 
 ;; options generator
 (define (cash-flow-options-generator)
@@ -74,7 +76,13 @@
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-show-rates
-      "d" (N_ "Show the exchange rates used") #t))
+      "d" (N_ "Show the exchange rates used") #f))
+
+    (gnc:register-option 
+     options
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-show-full-names
+      "e" (N_ "Show full account names (including parent accounts)") #t))
 
     ;; accounts to work on
     (gnc:options-add-account-selection! 
@@ -106,7 +114,11 @@
   (gnc:report-starting reportname)
 
   ;; get all option's values
-  (let* ((accounts (get-option gnc:pagename-accounts
+  (let* ((display-depth (get-option gnc:pagename-accounts 
+                                    optname-display-depth))
+         (show-subaccts? (get-option gnc:pagename-accounts
+                                     optname-show-subaccounts))
+         (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (work-done 0)
 	 (work-to-do 0)
@@ -116,6 +128,8 @@
                                    optname-price-source))
          (show-rates? (get-option gnc:pagename-general 
                                   optname-show-rates))
+         (show-full-names? (get-option gnc:pagename-general 
+                                       optname-show-full-names))
          (from-date-tp (gnc:timepair-start-day-time 
                         (gnc:date-option-absolute-time
                          (get-option gnc:pagename-general
@@ -128,6 +142,8 @@
          ;; calculate the exchange rates
          (exchange-fn (gnc:case-exchange-fn
                        price-source report-currency to-date-tp))
+
+         (separator (gnc:account-separator-char))
 
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
@@ -151,16 +167,54 @@
            ((same-account? (caar alist) account) (car alist))
            (else (account-in-alist account (cdr alist))))))
 
-    
+    ;; helper for sorting of account list
+    (define (account-full-name<? a b)
+      (string<? (gnc:account-get-full-name a) (gnc:account-get-full-name b)))
+
+    ;; helper for account depth
+    (define (account-get-depth account)
+      (define (account-get-depth-internal account-internal depth)
+        (let ((parent (gnc:account-get-parent-account account-internal)))
+          (if parent
+            (account-get-depth-internal parent (+ depth 1))
+            depth)))
+      (account-get-depth-internal account 1))
+
+    (define (accounts-get-children-depth accounts)
+      (apply max
+	     (map (lambda (acct)
+		    (let ((children 
+			   (gnc:account-get-immediate-subaccounts acct)))
+		      (if (null? children)
+			  1
+			  (+ 1 (accounts-get-children-depth children)))))
+		  accounts)))
+
 
     (gnc:html-document-set-title! 
      doc (sprintf #f (_ "%s - %s to %s for")
 		  (get-option gnc:pagename-general gnc:optname-reportname)
                   (gnc:print-date from-date-tp) (gnc:print-date to-date-tp)))
 
+
+    ;; add subaccounts if requested
+    (if show-subaccts?
+        (let ((sub-accounts (gnc:acccounts-get-all-subaccounts accounts)))
+          (for-each
+            (lambda (sub-account)
+              (if (not (account-in-list? sub-account accounts))
+                  (set! accounts (append accounts sub-accounts))))
+            sub-accounts)))
+
+
     (if (not (null? accounts))
 
-        (let* ((money-in-accounts '())
+        (let* ((tree-depth (if (equal? display-depth 'all)
+                               (accounts-get-children-depth accounts) 
+                               display-depth))
+               (account-disp-list '())
+
+               (money-in-accounts '())
                (money-in-alist '())
                (money-in-collector (gnc:make-commodity-collector))
 
@@ -262,25 +316,44 @@
           (money-diff-collector 'merge money-in-collector #f)
           (money-diff-collector 'minusmerge money-out-collector #f)
 
+          (set! accounts (sort accounts account-full-name<?))
+          (set! money-in-accounts (sort money-in-accounts account-full-name<?))
+          (set! money-out-accounts (sort money-out-accounts account-full-name<?))
+
 
 	  (set! work-done 0)
 	  (set! work-to-do (length accounts))
+          (for-each
+            (lambda (account)
+              (set! work-done (+ 1 work-done))
+              (gnc:report-percent-done (+ 85 (* 5 (/ work-done work-to-do))))
+              (if (<= (account-get-depth account) tree-depth)
+                (let* ((anchor (gnc:html-markup/format
+                                 (if (and (= (account-get-depth account) tree-depth)
+                                          (not (eq? (gnc:account-get-immediate-subaccounts account) '())))
+                                   (if show-subaccts?
+                                     (_ "%s and subaccounts")
+                                     (_ "%s and selected subaccounts"))
+                                   "%s")
+                                 (gnc:html-markup-anchor
+                                   (gnc:account-anchor-text account)
+                                   (if show-full-names?
+                                     (gnc:account-get-full-name account)
+                                     (gnc:account-get-name account))))))
+                  
+                  (set! account-disp-list (cons anchor account-disp-list))
+                )
+              )
+            )
+            accounts
+          )
+
+
           (gnc:html-document-add-object!
            doc
            (gnc:make-html-text
             (gnc:html-markup-ul
-             (map 
-              (lambda (acct)
-		(set! work-done (+ 1 work-done))
-		(gnc:report-percent-done (+ 85 (* 5 (/ work-done work-to-do))))
-                (gnc:html-markup-anchor 
-                 (gnc:html-build-url gnc:url-type-register
-                                      (string-append "account=" 
-                                                     (gnc:account-get-full-name
-                                                      acct))
-                                       #f)
-                  (gnc:account-get-name acct)))
-               accounts))))
+              (reverse account-disp-list))))
 
           (gnc:html-table-append-ruler! table 2)
 
@@ -294,18 +367,27 @@
 	  (set! work-done 0)
 	  (set! work-to-do (length money-in-alist))
           (for-each
-            (lambda (pair)
+            (lambda (account)
 	      (set! work-done (+ 1 work-done))
 	      (gnc:report-percent-done (+ 90 (* 5 (/ work-done work-to-do))))
-              (gnc:html-table-append-row/markup!
-               table
-               "normal-row"
-               (list
-                (gnc:html-account-anchor (car pair))
-                (gnc:make-html-table-header-cell/markup
-                 "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
+              (let* ((pair (account-in-alist account money-in-alist))
+                     (acct (car pair)))
+                (gnc:html-table-append-row/markup!
+                 table
+                 "normal-row"
+                 (list
+                  ;(gnc:html-account-anchor acct)
+                  (gnc:make-html-text
+                    (gnc:html-markup-anchor
+                      (gnc:account-anchor-text acct)
+                      (if show-full-names?
+                        (gnc:account-get-full-name acct)
+                        (gnc:account-get-name acct))))
+                  (gnc:make-html-table-header-cell/markup
+                   "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
+              )
             )
-            money-in-alist
+            money-in-accounts
           )
 
           (gnc:html-table-append-row/markup!
@@ -328,18 +410,27 @@
 	  (set! work-done 0)
 	  (set! work-to-do (length money-out-alist))
           (for-each
-            (lambda (pair)
+            (lambda (account)
 	      (set! work-done (+ 1 work-done))
 	      (gnc:report-percent-done (+ 95 (* 5 (/ work-done work-to-do))))
-              (gnc:html-table-append-row/markup!
-               table
-               "normal-row"
-               (list
-                (gnc:html-account-anchor (car pair))
-                (gnc:make-html-table-header-cell/markup
-                 "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
+              (let* ((pair (account-in-alist account money-out-alist))
+                     (acct (car pair)))
+                (gnc:html-table-append-row/markup!
+                 table
+                 "normal-row"
+                 (list
+                  ;(gnc:html-account-anchor acct)
+                  (gnc:make-html-text
+                    (gnc:html-markup-anchor
+                      (gnc:account-anchor-text acct)
+                      (if show-full-names?
+                        (gnc:account-get-full-name acct)
+                        (gnc:account-get-name acct))))
+                  (gnc:make-html-table-header-cell/markup
+                   "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
+              )
             )
-            money-out-alist
+            money-out-accounts
           )
 
           (gnc:html-table-append-row/markup!
