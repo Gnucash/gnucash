@@ -41,16 +41,16 @@ run_test (void)
   Transaction *transaction;
   gnc_numeric old_amt, new_amt, new_kvp_amt, old_val, new_val, new_kvp_val;
   int rval;
-  GNCSession *session;
+  GNCBook *book;
   Timespec ts;
   time_t now;
 
   char *reason = "because I can";
 
-  session = gnc_session_new();
+  book = gnc_book_new();
 
-  acc1 = get_random_account(session);
-  acc2 = get_random_account(session);
+  acc1 = get_random_account(book);
+  acc2 = get_random_account(book);
 
   if (!acc1 || !acc2)
   {
@@ -59,7 +59,7 @@ run_test (void)
 
   do
   {
-    transaction = get_random_transaction (session);
+    transaction = get_random_transaction (book);
     if (xaccTransGetVoidStatus (transaction))
     {
       xaccTransBeginEdit (transaction);

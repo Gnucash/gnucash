@@ -2,8 +2,9 @@
 #include <glib.h>
 #include <guile/gh.h>
 
-#include "TransLog.h"
+#include "Group.h"
 #include "Transaction.h"
+#include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "gnc-session.h"
@@ -55,9 +56,9 @@ run_test (void)
   book = gnc_session_get_book (session);
   group = gnc_book_get_group (book);
 
-  add_random_transactions_to_session (session, 20);
+  add_random_transactions_to_book (book, 20);
 
-  xaccGroupForEachTransaction (group, test_trans_query, session);
+  xaccGroupForEachTransaction (group, test_trans_query, book);
 
   gnc_session_destroy (session);
 }

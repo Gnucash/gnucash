@@ -16,9 +16,9 @@
 #include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
+#include "gnc-book.h"
 
-static GNCSession *session;
+static GNCBook *book;
 
 static void
 test_once (void)
@@ -27,7 +27,7 @@ test_once (void)
 	guint32 i, start_julian;
 	GDate date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	for( start_julian = 1; start_julian < 1000; ++start_julian ) {
 		g_date_set_julian( &date1, start_julian );
@@ -53,7 +53,7 @@ test_daily (void)
 	FreqSpec *fs;
 	GDate date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	g_date_set_dmy( &date1, 1, 1, 2000 );
 
@@ -101,7 +101,7 @@ test_weekly (void)
 	FreqSpec *fs;
 	GDate date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	/* Use this to test any specific cases which fail,
 	 * for easy access in the debugger. */
@@ -161,7 +161,7 @@ test_monthly (void)
 	FreqSpec *fs;
 	GDate date0, date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	/* Use this to test any specific cases which fail,
 	 * for easy access in the debugger. */
@@ -234,7 +234,7 @@ test_month_relative (void)
 	FreqSpec *fs;
 	GDate date0, date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	/* Use this to test any specific cases which fail,
 	 * for easy access in the debugger. */
@@ -349,7 +349,7 @@ test_composite (void)
 	FreqSpec *fs, *fs2;
 	GDate date0, date1, date2, next_date;
 
-	fs = xaccFreqSpecMalloc(session);
+	fs = xaccFreqSpecMalloc(book);
 
 	/* Use this to test any specific cases which fail,
 	 * for easy access in the debugger. */
@@ -371,17 +371,17 @@ test_composite (void)
 	
 	xaccFreqSpecSetComposite( fs );
 
-	fs2 = xaccFreqSpecMalloc(session);
+	fs2 = xaccFreqSpecMalloc(book);
 	g_date_set_dmy( &date0, 29, 3, 2001 ); /* Wednesday */
 	xaccFreqSpecSetWeekly( fs2, &date0, 2 );
 	xaccFreqSpecCompositeAdd( fs, fs2 );
 	
-	fs2 = xaccFreqSpecMalloc(session);
+	fs2 = xaccFreqSpecMalloc(book);
 	g_date_set_dmy( &date0, 3, 4, 2001 ); /* Tuesday */
 	xaccFreqSpecSetWeekly( fs2, &date0, 2 );
 	xaccFreqSpecCompositeAdd( fs, fs2 );
 		
-	fs2 = xaccFreqSpecMalloc(session);
+	fs2 = xaccFreqSpecMalloc(book);
 	g_date_set_dmy( &date0, 7, 4, 2001 ); /* Saturday */
 	xaccFreqSpecSetWeekly( fs2, &date0, 2 );
 	xaccFreqSpecCompositeAdd( fs, fs2 );
@@ -535,7 +535,7 @@ guile_main( int argc, char* argv[] )
 	set_success_print(TRUE);
 #endif
 
-        session = gnc_session_new ();
+        book = gnc_book_new ();
 
 	test_once();
 
@@ -549,7 +549,7 @@ guile_main( int argc, char* argv[] )
 
 	test_composite();
 
-        gnc_session_destroy (session);
+        gnc_book_destroy (book);
 
 	print_test_results();
 	exit (get_rv());
