@@ -55,16 +55,17 @@
  * (2) Keep the printed format human readable, for the same reasons.
  * (2.a) Keep the format, simple, flat, more or less unstructured,
  *       record oriented.  This will help parsing by perl scripts.
- *       No, using a perl script to analyze a file that's supposed to be human
- *       readable is not a contradication in terms -- that's exactly the point.
- * (2.b) Use tabs as a human freindly field separator; its also a character
- *       that does not (should not) appear naturally anywhere in the data, 
- *       as it serves no formatting purpose in the current GUI design.
- *       (hack alert -- this is not currently tested for or enforced,
- *       so this is a very unsafe assumption. Maybe urlencoding should 
- *       be used.)
- * (2.c) Don't print redundant information in a single record. This would 
- *       just confuse any potential user of this file.
+ *       No, using a perl script to analyze a file that's supposed to
+ *       be human readable is not a contradication in terms -- that's 
+ *       exactly the point.
+ * (2.b) Use tabs as a human freindly field separator; its also a 
+ *       character that does not (should not) appear naturally anywhere 
+ *       in the data, as it serves no formatting purpose in the current 
+ *       GUI design.  (hack alert -- this is not currently tested for 
+ *       or enforced, so this is a very unsafe assumption. Maybe 
+ *       urlencoding should be used.)
+ * (2.c) Don't print redundant information in a single record. This 
+ *       would just confuse any potential user of this file.
  * (2.d) Saving space, being compact is not a priority, I don't think.
  *       
  * (3) There are no compatibility requirements from release to release.
@@ -81,6 +82,20 @@
  *     occurred at a certain time, it can be located.
  * (-) hack alert -- something better than just the account name 
  *     is needed for identifying the account.
+ */
+/* ------------------------------------------------------------------ */
+/*
+ * The engine currently uses the log mechanism with flag char set as
+ * follows:
+ * 
+ * 'B' for 'begin edit' (followed by the transaction as it looks 
+ *     before any changes, i.e. the 'old value')
+ * 'D' for delete (i.e. delete the previous B; echoes the data in the 
+ *     'old B')
+ * 'C' for commit (i.e. accept a previous B; data that follows is the
+ *     'new value')
+ * 'R' for rollback (i.e. revert to previous B; data that follows should
+ *     be identical to old B)
  */
 
 
