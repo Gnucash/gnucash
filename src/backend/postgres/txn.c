@@ -932,8 +932,8 @@ pgend_trans_commit_edit (Backend * bend,
          bufp = "ROLLBACK;";
          SEND_QUERY (be,bufp,); 
          FINISH_QUERY(be->connection);
-   
-         PINFO ("old tranasction didn't match DB, edit rolled back)\n");
+
+         PINFO ("old transaction didn't match DB, edit rolled back)\n");
 
          /* What happens here:  We return to the engine with an 
           * error code.  This causes the engine to call 
@@ -978,7 +978,7 @@ pgend_trans_commit_edit (Backend * bend,
     * message from the GUI about saving one's data. However, it doesn't
     * do the right thing if the connection to the backend was ever lost.
     * what should happen is the user should get a chance to
-    * resynchronize thier data with the backend, before quiting out.
+    * resynchronize their data with the backend, before quiting out.
     */
    {
       Split * s = xaccTransGetSplit (trans, 0);
