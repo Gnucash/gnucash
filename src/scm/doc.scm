@@ -16,7 +16,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (define (gnc:find-doc-file file)
-  (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
+  (gnc:find-localized-file file (gnc:config-var-value-get gnc:*doc-path*)))
 
 (define (remove-i18n-macros input)
   (cond ((null? input) input)
@@ -55,4 +55,3 @@
   (with-input-from-file (%search-load-path fname)
     (lambda ()
       (fill-out-topics (remove-i18n-macros (read))))))
-
