@@ -32,8 +32,14 @@ doc_DATA = \
   report-av-baln.gif \
   report-baln.gif \
   report-folio.gif \
+  report-hierarchical.png \
+  report-hierarchical-options.png \
   report-option.gif \
   report-pnl.gif \
+  report-tax-options.png \
+  report-tax.png \
+  report-txf-options.png \
+  report-txf.png \
   reportwin.gif \
   ticker-a.gif \
   ticker-b.gif

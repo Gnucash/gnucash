@@ -26,6 +26,7 @@ doc_DATA = \
   xacc-globalprops.html \
   xacc-gpl.html \
   xacc-groups.html \
+  xacc-hierarchical-report.html \
   xacc-main.html \
   xacc-mainwin.html \
   xacc-pnl.html \
@@ -37,8 +38,14 @@ doc_DATA = \
   xacc-regwin.html \
   xacc-regwin_kbd.html \
   xacc-reports.html \
+  xacc-txf-export-anomalies.html \
+  xacc-tax-report-example.html \
+  xacc-tax-report.html \
   xacc-ticker.html \
   xacc-trans_report.html \
+  xacc-txf-categories.html \
+  xacc-txf-export-example.html \
+  xacc-txf-export-report.html \
   xacc-y2k.html
 
 EXTRA_DIST = \

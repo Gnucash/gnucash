@@ -62,11 +62,11 @@
 (define (gnc:extensions-menu-setup win)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
 
-  (define export-item
-    (gnc:make-menu-item "Export data as text (Danger: Unfinished)"
-                        "Export data as text."
-                        (list "Extensions" "")
-                        (lambda () (gnc:main-win-export-data-as-text win))))
+;  (define export-item
+;    (gnc:make-menu-item "Export data as text (Danger: Unfinished)"
+;                        "Export data as text."
+;                        (list "Extensions" "")
+;                        (lambda () (gnc:main-win-export-data-as-text win))))
 
   (define strings-item
     (gnc:make-menu-item
@@ -79,15 +79,12 @@
          (if file-name (gnc:save-translatable-strings file-name))))))
 
   (gnc:add-extension menu)
-  (gnc:add-extension export-item)
-
-  (if (gnc:debugging?)
-      (gnc:add-extension strings-item)))
+  (gnc:add-extension strings-item))
 
 
-;(if (gnc:debugging?)
-;    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
-;                          gnc:extensions-menu-setup))
+(if (gnc:debugging?)
+    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
+                          gnc:extensions-menu-setup))
 
 
 ;; Automatically pick accelerators for menu names

@@ -1,0 +1,44 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta name="GENERATOR" content="Mozilla/4.75 [en] (X11; U; Linux 2.2.14-15mdk i686) [Netscape]">
+    <title>Tax Report</title>
+    <link rel="stylesheet" title="normal" type="text/css" href=
+      "gnucash.css">
+  </head>
+  <body>
+    
+    <h1>Hierarchical Account Report</h1>
+    
+    <img SRC="image/report-hierarchical.png" ALT="click for Full Report">
+    
+    <p>This report allows you to view all accounts in a hierarchical
+      fashion.  Up to fifteen sub-accounts are displayed. Lower
+      sub-accounts are ignored. (the source file is scm/report/taxtxf.scm)
+    </p>
+    
+    <img SRC="image/report-hierarchical-options.png" >
+    
+    <p>Parameters for this report include:</p>
+    <ul>
+      <li>The start and end dates - default: Year-to-Date.</li>
+      <li>Alternate Period: (Year is relative to From:)
+	<ul>
+	  <li>Use From - To (default)</li>
+	  <li>1st, 2nd, 3rd, 4th Estimated Tax Quarters (From: year)</li>
+	  <li>Last Year (year before From: year)</li>
+	  <li>1st, 2nd, 3rd, 4th Estimated Tax Quarters for Last Year</li>
+	</ul></li>
+      <li>The accounts for which the report is to be produced. If no
+	account is selected, all tax related accounts are displayed. Non-tax
+	related accounts are not displayed, even if selected, though tax
+	related sub-accounts will be displayed.</li>
+      <li>Suppress $0.00 values</li>
+      <li>Display Full account names</li>
+    </ul>
+    <hr>
+    <p>Return to <a href="xacc-main.html">Main Documentation Page.</a>
+  </body>
+</html>
