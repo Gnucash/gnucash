@@ -1,6 +1,15 @@
 #!/bin/sh
-exec gnucash-env guile -s $0 "$@"
+exec gnucash-env guile -e main -s $0 "$@"
 !#
+
+(use-modules (gnucash bootstrap))
+
+(define (main args)
+  ;; UGLY HACK -- FIXME -- code should be rewritten to not need this.
+  ;; In particular, we should be using gnc_scm_lookup where we're using
+  ;; gh_lookup or gh_eval_str now.
+  (set-current-module (resolve-module '(gnucash bootstrap)))
+  (gnc:main))
 
 (let ((lib (if (or (string=? (version) "1.3")
                    (string=? (version) "1.3.4"))
@@ -11,15 +20,6 @@ exec gnucash-env guile -s $0 "$@"
       (begin
         (display "Can't load libgncguile.  Aborting.\n")
         (exit 1))))
-
-(use-modules (gnucash bootstrap))
-
-;; UGLY HACK -- FIXME -- code should be rewritten to not need this.
-;; In particular, we should be using gnc_scm_lookup where we're using
-;; gh_lookup or gh_eval_str now.
-(set-current-module (resolve-module '(gnucash bootstrap)))
-
-(gnc:main)
 
 ;; Local Variables:
 ;; mode: scheme
