@@ -150,7 +150,6 @@ libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
 libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c glib-helpers.c
 libgw_engine_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
-libgw_engine_la_LIBADD = libgncmod-engine.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = engine.scm 

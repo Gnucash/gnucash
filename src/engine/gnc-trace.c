@@ -251,5 +251,11 @@ gnc_report_clock_total (int clockno,
   fprintf (fout, "\n");
 }
 
+gboolean
+gnc_should_log(gncModuleType module, gncLogLevel log_level)
+{
+  return (log_level <= gnc_log_modules[module]);
+}
+
 /************************* END OF FILE ******************************\
 \********************************************************************/

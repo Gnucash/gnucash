@@ -13,7 +13,8 @@ Owen Taylor.
    Autogen will automatically generate the configure script and then
    run it WITH SPECIAL ARGUMENTS to make sure certain files get built.
    If you run "configure" without these special arguments, it is very likely
-   that GnuCash will fail to build.
+   that GnuCash will fail to build.  Therefore, do not run configure by
+   hand.
 
    If in doubt, you can run autogen.sh, run ./configure --help,
    then re-run autogen.sh with your options.

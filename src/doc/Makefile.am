@@ -26,6 +26,7 @@ EXTRA_DIST = \
   multicurrency-discussion.txt \
   netlogin.txt \
   query-api.txt \
+  guid.txt \
   user-prefs-howto.txt
 
 

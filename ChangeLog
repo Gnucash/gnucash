@@ -1,4 +1,20 @@
-2003-01-02  Derek Atkins  <derek@ihtfp.com>
+2004-01-06  Derek Atkins  <derek@ihtfp.com>
+
+	* README.cvs: make it even more explicit that you should not run configure
+	* src/engine/Makefile.am: remove the circular dependency I added earlier
+	* src/engine/gw-engine-spec.scm: don't include gnc-engine-util.h (it's
+	  not required and may break things).
+	* src/engine/gnc-trace.[ch]: move gnc_should_log() out of the .h
+	  and into the .c (making it a function instead of an array) due
+	  to symbol problems with libgw-engine.  With it the other way the
+	  test-account-create test was throwing an error about an
+	  undefined symbol (gnc_log_modules).
+	  NOTE: If you don't like this de-optimization then feel free to remove
+	  all the P*() calls from engine-helpers.c and then revert gnc-trace.
+	  Or you can find another way around the undefined symbol problem.
+	* src/doc/Makefile.am: include guid.txt in the dist
+
+2004-01-02  Derek Atkins  <derek@ihtfp.com>
 
 	* README.patches:
 	* make-gnucash-patch.in:

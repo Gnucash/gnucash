@@ -76,7 +76,7 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
-extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
+//extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 
 /** Initialize the error logging subsystem */
 void gnc_log_init (void);
@@ -103,9 +103,17 @@ const char * gnc_log_prettify (const char *name);
  * a CPU-cucking subroutine call. Thus, this is a #define, not a
  * subroutine call.  The prototype would have been:
  * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
+ *
+ * Unfortunately this doesn't work due to circular dependencies and
+ * undefined symbols, so let's return it to a function call.  The real
+ * problem appears to be that gnc_log_modules isn't being exported
+ * so engine-helpers.c has an undefined symbol when linked into libgw-engine
+ *  -- Derek Atkins  <derek@ihtfp.com>   2004-01-06
+ *
+ * #define gnc_should_log(module,log_level) \
+ *             (log_level <= gnc_log_modules[module]) 
  */
-#define gnc_should_log(module,log_level)   \
-              (log_level <= gnc_log_modules[module]) 
+gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 
 #define FUNK gnc_log_prettify(__FUNCTION__)
 
