@@ -118,13 +118,6 @@ sorry, no "make install" yet.
 Status:
 -------
 As of version 0.9t:
-Bugs:
-
--- tabbing between fields for mutual funds does not work correctly. 
--- should add "number of shares" to transfer popup when transferring
-   from bank account to portfolio.
--- should do something for automatic interest computations,
-   also mortgages, bonds, etc.
 
 ---------------
 Bare-bones general ledger capabilities added.
@@ -143,12 +136,6 @@ Working Features:
    supported for portfolio/mutual fund accounts.  This field can be set 
    and cleared, but is not currently used anywhere.  It will become 
    useful when reports and graphs are generated.
-
----------------
-An alpha version of import from Quicken files is also present,
-but it is very broken, and many/most quicken formats are not
-supported.  It is not currently enabled in the code ... adventurous
-coders are encouraged to hack on this ...
 
 ---------------
 An beta-level double-entry system has been created.

@@ -29,6 +29,39 @@ the docs or change the menu entry name.
 
 17) Cells lose focus with some window managers.
 
+18) add (none) to transfer list, or explain that a second selection 
+    will clear it.
+
+19) verify that tabbing works for mutualfunds and for ledgers
+
+20) fix quickfill for ledgers.
+
+21) add "number of shares" to XferWindow
+
+22) add automatic interest computation
+
+23) add mortgages, bonds
+
+24) show example of how to do household assets
+
+25) provide menu item to create automaticly a default set
+    of accounts for business, home use.
+
+26) provide user-default menu, to disable listing of zero-balance 
+    accounts
+
+27) add reports
+
+28) add graphs; use code from xinvest for this?
+
+29) add short-cut menu-icon bar
+
+30) add icons for minimuzation
+
+31) move resources out of main.c into a resource file.
+    This requires fixing install first.
+
+32) make instqall should work.
 
 Fixed bugs:
 -----------
