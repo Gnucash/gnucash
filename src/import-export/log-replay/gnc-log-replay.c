@@ -354,7 +354,7 @@ static void dump_split_record(split_record record)
 /* File pointer must already be at the begining of a record */
 static void  process_trans_record(  FILE *log_file)
 {
-  char read_buf[256];
+  char read_buf[2048];
   char *read_retval;
   const char * record_end_str = "===== END";
   int first_record=TRUE;

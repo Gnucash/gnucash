@@ -1,3 +1,7 @@
+2003-12-08  Benoit Grégoire  <bock@step.polymtl.ca>
+	*src/import-export/log-replay/gnc-log-replay.c:  Increase read buffer size.
+	Hopefully fixes 127421, but this time someone please do test the fix...
+
 2003-12-01  Benoit Grégoire <bock@step.polymtl.ca>
 
 	* po/POTFILES.in: Remove reference to bin/strsub.c.
