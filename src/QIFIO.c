@@ -88,6 +88,8 @@ char * xaccReadQIFLine( int fd )
  * Return: first line of new transaction                            * 
 \********************************************************************/
 
+#define NSTRNCMP(x,y) (0==strncmp((x),(y),strlen(y)))
+
 char * xaccReadQIFDiscard( int fd ) 
 {
    char * qifline;
@@ -97,10 +99,10 @@ char * xaccReadQIFDiscard( int fd )
    if ('!' == qifline [0]) return qifline;
 
    while (qifline) {
-     if (!strcmp (qifline, "^^\r\n")) {
+     if (NSTRNCMP(qifline, "^^")) {
         qifline = xaccReadQIFLine (fd);
         return qifline;
-     }
+     } else
      if ('!' == qifline [0]) return qifline;
      qifline = xaccReadQIFLine (fd);
    }
@@ -178,7 +180,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
      } else 
 
      /* check for end-of-transaction marker */
-     if (!strcmp (qifline, "^^\r\n")) {
+     if (NSTRNCMP(qifline, "^^")) {
         break;
      } else
      if ('!' == qifline [0]) break;
@@ -228,22 +230,22 @@ char * xaccReadQIFAccount (int fd, Account * acc)
      } else 
      if ('T' == qifline [0]) {
 
-        if (!strcmp (&qifline[1], "Bank\r\n")) {
+        if (NSTRNCMP (&qifline[1], "Bank")) {
            acc -> type = BANK;
         } else
-        if (!strcmp (&qifline[1], "Cash\r\n")) {
+        if (NSTRNCMP (&qifline[1], "Cash")) {
            acc -> type = CASH;
         } else
-        if (!strcmp (&qifline[1], "CCard\r\n")) {
+        if (NSTRNCMP (&qifline[1], "CCard")) {
            acc -> type = CREDIT;
         } else
-        if (!strcmp (&qifline[1], "Invst\r\n")) {
+        if (NSTRNCMP (&qifline[1], "Invst")) {
            acc -> type = STOCK;
         } else
-        if (!strcmp (&qifline[1], "Oth A\r\n")) {
+        if (NSTRNCMP (&qifline[1], "Oth A")) {
            acc -> type = ASSET;
         } else 
-        if (!strcmp (&qifline[1], "Oth L\r\n")) {
+        if (NSTRNCMP (&qifline[1], "Oth L")) {
            acc -> type = LIABILITY;
         } else 
         {
@@ -253,7 +255,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
      } else 
 
      /* check for end-of-transaction marker */
-     if (!strcmp (qifline, "^^\r\n")) {
+     if (NSTRNCMP (qifline, "^^")) {
         break;
      } else
      if ('!' == qifline [0]) break;
@@ -360,7 +362,10 @@ void xaccParseQIFDate (Date * dat, char * str)
 
    str = tok+sizeof(char);
    tok = strchr (str, '\r');
-   if (!tok) return;
+   if (!tok) {
+      tok = strchr (str, '\n');
+      if (!tok) return;
+   }
    *tok = 0x0;
    dat->year = atoi (str);
    dat->year += 1900;
@@ -410,7 +415,10 @@ double xaccParseQIFAmount (char * str)
       str = tok+sizeof(char);
 
       tok = strchr (str, '\r');
-      if (!tok) return dollars;
+      if (!tok) {
+         tok = strchr (str, '\n');
+         if (!tok) return dollars;
+      }
       *tok = 0x0;
 
       /* strip off garbage at end of the line */
@@ -726,7 +734,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      } else 
 
      /* check for end-of-transaction marker */
-     if (!strcmp (qifline, "^^\r\n")) {
+     if (NSTRNCMP (qifline, "^^")) {
         break;
      } else
      if ('!' == qifline [0]) break;
@@ -864,7 +872,7 @@ xaccReadQIFData( char *datafile )
     }
   
   while (qifline) {
-     if (!strcmp (qifline, "!Type:Bank \r\n")) {
+     if (NSTRNCMP (qifline, "!Type:Bank")) {
         Account *acc   = mallocAccount();
         DEBUG ("got bank\n");
 
@@ -878,19 +886,19 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
-     if (!strcmp (qifline, "!Type:Cat\r\n")) {
+     if (NSTRNCMP (qifline, "!Type:Cat")) {
         DEBUG ("got category\n");
         qifline = xaccReadQIFAccList (fd, grp, 1);
         continue;
      } else
 
-     if (!strcmp (qifline, "!Type:Class\r\n")) {
+     if (NSTRNCMP (qifline, "!Type:Class")) {
         DEBUG ("got class\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (!strcmp (qifline, "!Type:Invst\r\n")) {
+     if (NSTRNCMP (qifline, "!Type:Invst")) {
         Account *acc   = mallocAccount();
         DEBUG ("got Invst\n");
 
@@ -904,27 +912,27 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
-     if (!strcmp (qifline, "!Type:Memorized\r\n")) {
+     if (NSTRNCMP (qifline, "!Type:Memorized")) {
         DEBUG ("got memorized\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (!strcmp (qifline, "!Option:AutoSwitch\r\n")) {
+     if (NSTRNCMP (qifline, "!Option:AutoSwitch")) {
         DEBUG ("got autoswitch on\n");
         skip = 1;
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (!strcmp (qifline, "!Clear:AutoSwitch\r\n")) {
+     if (NSTRNCMP (qifline, "!Clear:AutoSwitch")) {
         DEBUG ("got autoswitch clear\n");
         skip = 0;
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (!strcmp (qifline, "!Account\r\n")) {
+     if (NSTRNCMP (qifline, "!Account")) {
         if (skip) {
            /* loop and read all of the account names and descriptions */
            /* no actual dollar data is expected to be read here ... */
