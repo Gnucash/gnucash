@@ -88,7 +88,11 @@ static void cell_edited (GtkCellRendererText *cell,
     GtkTreeIter iter;
     GncBudgetCategory* category;
 
-    gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+    gint column;
+    gint index;
+    gnc_numeric value;
+
+    column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
     gtk_tree_model_get_iter (model, &iter, path);
     category = gnc_budget_tree_model_get_category(GNC_BUDGET_TREE_MODEL(model), &iter);
@@ -98,8 +102,8 @@ static void cell_edited (GtkCellRendererText *cell,
         return;
     }
 
-    gint index = column - GNC_BUDGET_TREE_MODEL_NUM_STATIC_COLUMNS;
-    gnc_numeric value = double_to_gnc_numeric(atof(new_text), 1, GNC_RND_NEVER);
+    index = column - GNC_BUDGET_TREE_MODEL_NUM_STATIC_COLUMNS;
+    value = double_to_gnc_numeric(atof(new_text), 1, GNC_RND_NEVER);
 
     gnc_budget_category_set_period_value_by_index(category, index, value);
 
@@ -420,12 +424,13 @@ static void regenerate_clicked(GtkWidget* object, gpointer data)
 static void update_period_label(BudgetWorkbench* bench)
 {
     GList* periodList;
-    periodList = gnc_budget_get_period_list(bench->budget);
     GncBudgetPeriod* period;
     GDate* startDate, *endDate;
     char buffer[256];
     gchar startBuffer[126];
     gchar endBuffer[126];
+
+    periodList = gnc_budget_get_period_list(bench->budget);
 
     if(bench->active_period >= g_list_length(periodList)){
         bench->active_period = g_list_length(periodList) - 1;

@@ -6,6 +6,10 @@
 	* src/gnome/gnc-plugin-page-account-tree.c:
 	  use GINT_TO_POINTER() instead of a direct cast.
 
+	* src/engine/gnc-budget-cat.c:
+	* src/gnome/dialog-budget-workbench.c:
+	  Fixes for ISO C90.  Fixes bug #153472.
+
 2004-08-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-budget*:

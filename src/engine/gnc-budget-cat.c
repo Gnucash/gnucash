@@ -390,12 +390,11 @@ static gint find_num_occurences(FreqSpec* a, const GDate* startDate, const GDate
 {
     GDate outDate;
     GDate curDate;
+    gint counter = 0;
     
     g_date_set_dmy(&curDate, g_date_day(startDate),
                              g_date_month(startDate),
                              g_date_year(startDate));
-
-    gint counter = 0;
 
     do{
         xaccFreqSpecGetNextInstance(a, &curDate, &outDate);
