@@ -1183,6 +1183,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   xaccAccountCommitEdit(from_account);
   xaccAccountCommitEdit(to_account);
 
+  /* XXX: Maybe save this exchange to the pricedb */
+
   /* Refresh everything */
   gnc_resume_gui_refresh ();
 

@@ -252,8 +252,10 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
   tt_list = g_list_append(tt_list, tti);
 
+  gnc_suspend_gui_refresh ();
   xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list,
                                    gnc_get_current_book ());
+  gnc_resume_gui_refresh ();
 
   return 0;
 }

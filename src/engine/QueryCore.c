@@ -125,6 +125,8 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
 
   s = ((query_string_getter)get_fcn) (object);
 
+  if (!s) s = "";
+
   if (pdata->is_regex) {
     regmatch_t match;
     if (!regexec (&pdata->compiled, s, 1, &match, 0))

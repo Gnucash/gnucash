@@ -1,3 +1,12 @@
+2002-11-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryCore.c -- make sure we have a string
+	  when running string compares.  Partial fix for #99563
+	* src/gnome/dialog-sx-from-trans.c -- suspend and resume
+	  GUI events when building the template trans -- to make sure
+	  that refreshes don't happen until after the txn is inserted.
+	FIXES bug #99563
+	  
 2002-11-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/gnc-gen-transaction.[hc]
