@@ -228,7 +228,7 @@
     sort-tag (N_ "The source of price information") default
     (list (vector 'weighted-average 
 		  (N_ "Weighted Average")
-		  (N_ "The weighted average all currency transactions of the past"))
+		  (N_ "The weighted average of all currency transactions of the past"))
 	  (vector 'pricedb-latest 
 		  (N_ "Most recent")
 		  (N_ "The most recent recorded price"))

@@ -600,9 +600,9 @@ the current value of the path.")
 (define gnc:*doc-path*
 
   (gnc:make-config-var
-   (N_ "A list of strings indicating where to look for html and parsed-html files\
-Each element must be a string representing a directory or a symbol\
-where 'default expands to the default path, and 'current expands to\
+   (N_ "A list of strings indicating where to look for html and parsed-html files. \
+Each element must be a string representing a directory or a symbol \
+where 'default expands to the default path, and 'current expands to \
 the current value of the path.")
    (lambda (var value)
      (let ((result (gnc:_expand-doc-path_ value)))

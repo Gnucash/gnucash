@@ -1,3 +1,9 @@
+2001-05-23  Christian Stimming  <stimming@tuhh.de>
+
+	* po/pt_PT.po: Duarte Loreto's updated translation.
+
+	* src/scm/prefs.scm, options-utilities.scm: fix string. 
+
 2001-05-23  Rob Browning  <rlb@cs.utexas.edu>
 
 	* configure.in (AC_OUTPUT): remove src/scm/srfi/Makefile (again?).
