@@ -33,7 +33,7 @@
 #include <guile/gh.h>
 #include <gmodule.h>
 
-#include "libofx.h"
+#include "libofx/libofx.h"
 #include "gnc-generic-import.h"
 #include "Account.h"
 #include "Transaction.h"
@@ -94,17 +94,38 @@ selected_filename = gnc_file_dialog("Select an OFX/QFX file to process",
 
 }
 
-int ofx_proc_status(struct OfxStatusData data)
+int ofx_proc_status_cb(struct OfxStatusData data)
 {
   return 0;
 }
 
-int ofx_proc_security(const struct OfxSecurityData data)
+int ofx_proc_security_cb(const struct OfxSecurityData data)
 {
-return 0;
+  char * tmp_exchange_code=NULL;
+  char * tmp_default_fullname=NULL;
+  char * tmp_default_mnemonic=NULL;
+ 
+  if(data.unique_id_valid==true)
+    {
+      tmp_exchange_code=(char *)data.unique_id;
+    }
+  if(data.secname_valid==true)
+    {
+      tmp_default_fullname=(char *)data.secname;
+    }
+  if(data.ticker_valid==true)
+    {
+      tmp_default_mnemonic=(char *)data.ticker;
+    }
+  
+  gnc_import_select_commodity(tmp_exchange_code,
+	        	      true,
+			      tmp_default_fullname,
+			      tmp_default_mnemonic);
+  return 0;
 }
 
-int ofx_proc_transaction(struct OfxTransactionData data)
+int ofx_proc_transaction_cb(struct OfxTransactionData data)
 {
   char dest_string[255];
   time_t current_time; 
@@ -277,12 +298,12 @@ int ofx_proc_transaction(struct OfxTransactionData data)
   return 0;
 }//end ofx_proc_transaction()
 
-int ofx_proc_statement(struct OfxStatementData data)
+int ofx_proc_statement_cb(struct OfxStatementData data)
 {
   return 0;
 }//end ofx_proc_statement()
 
-int ofx_proc_account(struct OfxAccountData data)
+int ofx_proc_account_cb(struct OfxAccountData data)
 {
   Account *selected_account;
   gnc_commodity_table * commodity_table;

@@ -74,6 +74,46 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type);
 
+/* The gnc_import_select_commodity():
+
+  Must be called with a string containing a unique identifier for the
+  commodity.  If an commodity with a matching exchange_code is
+  found, the function immediately returns with a pointer to that
+  commodity.  Otherwise, the user may be prompted to select a GnuCash
+  account or create a new one (in both cases, the exchange_code is written
+  written to the commodity's exchange_code field, overwriting anything that
+  was there before.
+
+  Params:
+
+    char * exchange_code: The string containing the code for which you
+    want a matching commodity.  A CUISP code or similar UNIQUE code.
+    The stock ticker is NOT appropriate, unless you have no other option.
+
+    char auto_create: If 0, if the exchange_code value in unknown,
+    the function returns NULL, otherwise, the user will be asked to 
+    create a new account.
+
+    char * default_fullname: A human-readable description of the commodity, such
+    as the stock name.  Can be NULL. If it is not NULL, it will be shown
+    to the user when selecting a commodity.  It will also be used as
+    the default if a new commodity is created.
+
+     char * default_mnemonic:  Usually the stock ticker or similar. Can be NULL.
+     If it is not NULL, it will be shown
+    to the user when selecting a commodity.  It will also be used as
+    the default if a new commodity is created.
+
+
+  Return: A pointer to the found or created commodity, or NULL if no
+  account was found or created.
+
+*/
+gnc_commodity * gnc_import_select_commodity(char * exchange_code,
+				    char auto_create,
+				    char * default_fullname,
+				    char * default_mnemonic);
+
 /* Your import module should create a new transaction in the current book,
    add as many splits as it knows about, and associate each split with an 
    account.  It should then call gnc_import_add_trans() with that transaction

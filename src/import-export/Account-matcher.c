@@ -36,7 +36,6 @@
 #include <stdlib.h>
 #include "gnc-generic-import.h"
 #include "Account.h"
-#include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "AccWindow.h"
 

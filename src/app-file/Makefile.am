@@ -32,6 +32,7 @@ libgncmod_app_file_la_LIBADD = \
   ../engine/libgncmod-engine.la \
   ../gnome-utils/libgncmod-gnome-utils.la \
   ./gnome/libgnc-app-file-gnome.la \
+  ../app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 

@@ -41,9 +41,14 @@ struct select_commodity_window {
   GtkWidget * namespace_combo;
   GtkWidget * commodity_combo;
   GtkWidget * commodity_entry;
-
+  GtkWidget * select_user_prompt;
   gnc_commodity_callback callback;
   void      * callback_data;
+  
+  char * default_exchange_code;
+  char * default_fullname;
+  char * default_mnemonic;
+  int default_fraction;
 };
 
 struct commodity_window {
@@ -92,17 +97,56 @@ gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb)
   help_callback = cb;
 }
 
+
 /********************************************************************
- * gnc_ui_select_commodity_modal()
+ * gnc_ui_select_commodity_modal_full()
  ********************************************************************/
-
-gnc_commodity *
-gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
-                              GtkWidget * parent) {  
+gnc_commodity * 
+gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel, 
+				   GtkWidget * parent,
+				   char * user_message,
+				   char * exchange_code,
+				   char * fullname,
+				   char * mnemonic,
+				   int fraction)
+{
   gnc_commodity * retval = NULL;
-
+#define PROMPT_SIZE 2048
+  gchar user_prompt_text[PROMPT_SIZE] = "";
+  
   SelectCommodityWindow * win = 
     gnc_ui_select_commodity_create(orig_sel, &select_modal_callback, &retval);
+  
+  win->default_exchange_code=exchange_code;
+  win->default_fullname=fullname;
+  win->default_mnemonic=mnemonic;
+  
+  if(user_message!=NULL)
+    {
+      strncat(user_prompt_text,user_message,PROMPT_SIZE-strlen(user_prompt_text));
+    }
+  else if( exchange_code!=NULL || fullname!=NULL || mnemonic!=NULL)
+    {
+      strncat(user_prompt_text,_("\nPlease select a commodity to match:"),PROMPT_SIZE-strlen(user_prompt_text));
+    }
+  if(fullname!=NULL)
+    {
+      strncat(user_prompt_text,_("\nCommodity: "),PROMPT_SIZE-strlen(user_prompt_text));
+      strncat(user_prompt_text,fullname,PROMPT_SIZE-strlen(user_prompt_text));
+    }
+  if(exchange_code!=NULL)
+    {
+      strncat(user_prompt_text,_("\nExchange code (CUSIP or similar): "),PROMPT_SIZE-strlen(user_prompt_text));
+      strncat(user_prompt_text,exchange_code,PROMPT_SIZE-strlen(user_prompt_text));
+    }
+  if(mnemonic!=NULL)
+       {
+      strncat(user_prompt_text,_("\nMnemonic(Ticker symbol or similar): "),PROMPT_SIZE-strlen(user_prompt_text));
+      strncat(user_prompt_text,mnemonic,PROMPT_SIZE-strlen(user_prompt_text));
+    }
+ 
+  gtk_label_set_text ((GtkLabel *)(win->select_user_prompt),
+		      user_prompt_text);
   
   if(parent) {
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
@@ -110,8 +154,24 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
   gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
   gtk_widget_show (win->dialog);
   gtk_main();
-
+  
   return retval;
+}
+
+/********************************************************************
+ * gnc_ui_select_commodity_modal()
+ ********************************************************************/
+
+gnc_commodity *
+gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
+                              GtkWidget * parent) {  
+  return gnc_ui_select_commodity_modal_full(orig_sel, 
+					    parent,
+					    NULL,
+					    NULL,
+					    NULL,
+					    NULL,
+					    0);
 }
 
 
@@ -161,12 +221,16 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
   retval->namespace_combo = glade_xml_get_widget (xml, "namespace_combo");
   retval->commodity_combo = glade_xml_get_widget (xml, "commodity_combo");
   retval->commodity_entry = glade_xml_get_widget (xml, "commodity_entry");
+  retval->select_user_prompt = glade_xml_get_widget (xml, "select_user_prompt");
 
   retval->callback = callback;
   retval->callback_data = callback_data;
 
   gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
                       GTK_SIGNAL_FUNC(select_commodity_close), retval);
+
+  gtk_label_set_text ((GtkLabel *)retval->select_user_prompt,
+                                             "");
 
   /* build the menus of namespaces and commodities */
   namespace = 
@@ -286,11 +350,15 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
 
   const gnc_commodity * new_commodity = 
-    gnc_ui_new_commodity_modal(namespace, w->dialog);
-
+    gnc_ui_new_commodity_modal_full(namespace,
+				    w->dialog,
+				    w->default_exchange_code,
+				    w->default_fullname,
+				    w->default_mnemonic,
+				    w->default_fraction);
   if(new_commodity) {
     char *namespace;
-
+    
     namespace = 
       gnc_ui_update_namespace_picker(w->namespace_combo, 
                                      gnc_commodity_get_namespace
@@ -553,25 +621,67 @@ new_modal_callback(const gnc_commodity * arg, void * data) {
 }
 
 /********************************************************************
- * gnc_ui_new_commodity_modal()
+ * gnc_ui_new_commodity_modal_full()
  ********************************************************************/
 
-gnc_commodity *
-gnc_ui_new_commodity_modal(const char * selected_namespace,
-                           GtkWidget * parent) {  
+gnc_commodity * 
+gnc_ui_new_commodity_modal_full(const char * default_namespace, 
+				GtkWidget * parent,
+				char * exchange_code,
+				char * fullname,
+				char * mnemonic,
+				int fraction) {  
   gnc_commodity * retval = NULL;
-
+  
   CommodityWindow * win = 
-    gnc_ui_new_commodity_create(selected_namespace, &new_modal_callback, 
+    gnc_ui_new_commodity_create(default_namespace, &new_modal_callback, 
                                 &retval);
+  if(fullname!=NULL)
+    {
+      gtk_entry_set_text((GtkEntry *)(win->fullname_entry),
+			 fullname);
+    }
+  if(mnemonic!=NULL)
+    {
+      gtk_entry_set_text((GtkEntry *)(win->mnemonic_entry),
+			 mnemonic);
+    }
+  if(exchange_code!=NULL)
+    {
+      gtk_entry_set_text((GtkEntry *)(win->code_entry),
+			 exchange_code);
+    }
+  if(fraction>0)
+    {
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON(win->fraction_spinbutton),
+				 fraction);
+    }
+  /*(GtkWidget *)(win->namespace_combo);*/
+
+
   if(parent) {
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
   }
   gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
   gtk_widget_show (win->dialog);
   gtk_main();
-
+  
   return retval;
+}
+
+/********************************************************************
+ * gnc_ui_new_commodity_modal()
+ ********************************************************************/
+
+gnc_commodity *
+gnc_ui_new_commodity_modal(const char * default_namespace,
+                           GtkWidget * parent) {  
+  return gnc_ui_new_commodity_modal_full(default_namespace, 
+					 parent,
+					 NULL,
+					 NULL,
+					 NULL,
+					 0);
 }
 
 /********************************************************************

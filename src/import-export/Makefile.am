@@ -4,6 +4,7 @@ pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
 libgncmod_generic_import_la_SOURCES = \
 	Account-matcher.c \
+	Commodity-matcher.c \
 	Transaction-matcher.c \
 	Utilities.c \
 	gncmod-generic-import.c

@@ -102,6 +102,23 @@
     </widget>
 
     <widget>
+      <class>GtkLabel</class>
+      <name>select_user_prompt</name>
+      <label>Select user information here...</label>
+      <justify>GTK_JUSTIFY_CENTER</justify>
+      <wrap>False</wrap>
+      <xalign>0.5</xalign>
+      <yalign>0.5</yalign>
+      <xpad>0</xpad>
+      <ypad>0</ypad>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+    </widget>
+
+    <widget>
       <class>GtkHBox</class>
       <name>hbox62</name>
       <border_width>5</border_width>

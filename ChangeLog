@@ -1,3 +1,13 @@
+2002-10-18  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* Implement a working commodity matcher for the generic import
+	module.
+	* src/gnome-utils/dialog-commodity.c,.h: Extend the API to allow
+	the user to be told what he is trying to match, and to fill in
+	default values for new commodities
+	* Use the new matcher in the ofx module.  The latest libofx CVS 
+	is needed.
+
 2002-10-17  Derek Atkins <derek@ihtfp.com>
 
 	* fix bug #96030 -- change "Customer/Vendor Name" to "Company Name"
