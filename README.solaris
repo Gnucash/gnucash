@@ -5,4 +5,21 @@ If the Makefile won't work, try the following:
    That is:
         make motif SHELL=/bin/bash
 
+Alan Orndorff writes:
+
+in /src/motif/makefile
+
+If you want to get further before we have a chance to fix this, you
+could just change those $(wildcard foo) statements to $(shell find
+"foo") statements
+
+This will leave two unresolved dependancies.
+
+/usr/local/lib/libiberty.a contains asprintf, so
+vi /src/motif/Makefile and added -liberty to it
+
+In gnucash.c changed setenv to putenv and changed
+the parms from (variable, variable,1)
+to (variable) on both lines
+
 
