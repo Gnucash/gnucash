@@ -10,6 +10,9 @@
 	  multiple-powers of co-factors.  For example, the old algorithm
 	  thought the LCM of 100,96875 was 3100, when it is really 387500,
 	  because it was removing the factor of '5' too many times..
+
+	* src/app-utils/test/test-scm-query-string.c -- fix a memory leak
+	  in the test.
 	
 2003-01-19  John Pierce <john@killterm.org>
 

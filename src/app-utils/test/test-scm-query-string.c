@@ -49,6 +49,7 @@ test_query (Query *q, SCM val2str)
   {
     success ("queries match");
   }
+  if (q2) xaccFreeQuery (q2);
   if (str) free (str);
 }
 
