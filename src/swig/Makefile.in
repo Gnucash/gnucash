@@ -44,6 +44,9 @@ gnome: plotutils ${OBJS} perl5
 motif: plotutils ${OBJS} perl5
 	@cd guile && $(MAKE) motif
 
+qt: plotutils ${OBJS} perl5
+	@cd guile && $(MAKE) qt
+
 DIST_TRASH += plot.preproc.h
 
 plot.preproc.h: /usr/include/plot.h
