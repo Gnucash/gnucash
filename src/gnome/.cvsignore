@@ -3,4 +3,5 @@ Makefile.in
 .deps
 *.diff
 gnc-dir.h
+gnucash.desktop
 gnucash.keys

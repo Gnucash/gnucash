@@ -282,3 +282,6 @@ src/report/report-system/gncmod-report-system.c
 src/report/standard-reports/gncmod-standard-reports.c
 src/report/stylesheets/gncmod-stylesheets.c
 src/report/utility-reports/gncmod-utility-reports.c
+# files added by xml-i18n-prepare
+src/gnome/gnucash.desktop.in
+src/gnome/gnucash.keys.in

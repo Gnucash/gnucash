@@ -7757,3 +7757,11 @@ msgstr "Välkommen till GnuCash 1.6"
 #: src/scm/report/guile-strings.c:724
 msgid "GnuCash 1.6 has lots of nice features. Here are a few."
 msgstr "GnuCash 1.6 har ett antal trevliga finesser. Här är några."
+
+#: src/gnome/gnucash.desktop.in:3
+msgid "GnuCash"
+msgstr "GnuCash"
+
+#: src/gnome/gnucash.desktop.in:4
+msgid "GnuCash Personal Finance"
+msgstr "GnuCash Personliga Finanser"

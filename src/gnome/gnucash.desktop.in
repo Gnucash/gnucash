@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=GnuCash
+_Comment=GnuCash Personal Finance
+TryExec=gnucash
+Exec=gnucash
+Icon=gnome-money.png
+Terminal=0
+Type=Application

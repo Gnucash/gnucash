@@ -43,8 +43,10 @@ EXTRA_DIST = \
   po/README \
   po/glossary/de.po \
   po/glossary/gnc-glossary.txt \
-  po/glossary/txt-to-pot.sh
-
+  po/glossary/txt-to-pot.sh \
+  xml-i18n-extract.in \
+  xml-i18n-merge.in \
+  xml-i18n-update.in
 
 bin_SCRIPTS = gnucash-config
 

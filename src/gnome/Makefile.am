@@ -45,7 +45,9 @@ libgncgnome_a_SOURCES = \
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
-gnomeapp_DATA = gnucash.desktop
+gnomeapp_in_files = gnucash.desktop.in
+gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
+@XML_I18N_MERGE_DESKTOP_RULE@
 
 appicondir = $(datadir)/pixmaps
 
@@ -87,7 +89,7 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  gnucash.desktop \
+  gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime
 

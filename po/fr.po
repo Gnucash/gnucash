@@ -8745,3 +8745,11 @@ msgstr "Bienvenu dans GnuCash 1.6"
 
 
 
+
+#: src/gnome/gnucash.desktop.in:3
+msgid "GnuCash"
+msgstr "GnuCash"
+
+#: src/gnome/gnucash.desktop.in:4
+msgid "GnuCash Personal Finance"
+msgstr "GnuCash Finances personnelles"
