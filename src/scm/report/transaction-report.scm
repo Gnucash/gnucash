@@ -613,7 +613,7 @@
      (gnc:make-multichoice-option
       gnc:pagename-display (N_ "Sign Reverses?")
       "m" "Reverse amount display for certain account types"
-      'income-expense
+      'credit-accounts
       (list 
        (vector 'none (N_ "None") (N_ "Don't change any displayed amounts"))
        (vector 'income-expense (N_ "Income and Expense")
@@ -622,7 +622,6 @@
 	       (N_ "Reverse amount display for Liability, Equity, Credit Card,\
 and Income accounts")))))
 
-  
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
                                      gnc:pagename-general)
@@ -630,11 +629,10 @@ and Income accounts")))))
     gnc:*transaction-report-options*)
 
 
-
   (define (display-date-interval begin end)
     (let ((begin-string (strftime "%x" (localtime (car begin))))
 	  (end-string (strftime "%x" (localtime (car end)))))
-      (string-append (_ "From") " " begin-string (_"To") " " end-string)))
+      (sprintf #f (_ "From %s To %s") begin-string end-string)))
 
   (define (get-primary-subtotal-style options)
     (let ((bgcolor (gnc:lookup-option options 

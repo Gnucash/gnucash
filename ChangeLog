@@ -1,5 +1,8 @@
 2001-05-25  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/transaction-report.scm: default to sign-reverse
+	credit accounts. fix i18n bug.
+
 	* src/doc/design/engine.texinfo: update docs
 
 	* configure.in: add Norwegian to list of translations
