@@ -62,7 +62,7 @@ Register Window
   Actions
     Check and Repair (all)
   Reports
-    Business
+    Business [see below]
   Business <- remove ?
 
 Register Toolbar
@@ -109,9 +109,6 @@ Reporting - Somewhat functional
           Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be
           factored out of gnumeric into libgoffice.
 
-        - Report actions [forw/back/export/options/print] need relevant
-          backing.
-
         - Business reports menu
           a/ one-level deeper than it should be
           b/ empty
@@ -146,3 +143,5 @@ IMPORTING
 	account code or the account name, but not being able to
 	reparent the account.  (Maybe add DND support for this in the
 	long term?)
+
+4/      Print-preview support.

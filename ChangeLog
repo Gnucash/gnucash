@@ -1,5 +1,13 @@
 2004-05-31  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_set_fwd_button),
+	(gnc_plugin_page_report_set_back_button): forw/back action sensitivity
+	(gnc_plugin_page_report_*_cb): Provide functional backing
+	[forw/back/reload/stop/export/options/print].
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/report/report-gnome/gnc-plugin-page-report-ui.xml: Add
 	report UI decl.
 
