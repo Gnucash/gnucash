@@ -699,7 +699,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 // xxxxxxxxxxxxxxxxxxxxxxx
          /* hack alert -- this implementation is not exactly correct.
           * If the entity tables are not identical, then the 'from' book 
-          * will have a different backend than the 'to' book.  This means
+          * may have a different backend than the 'to' book.  This means
           * that we should get the 'from' backend to destroy this account,
           * and the 'to' backend to save it.  Right now, this is broken.
           *  
@@ -784,15 +784,21 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
       to_acc = xaccCloneAccount (from_acc, to->book);
 
       xaccAccountBeginEdit (to_acc);
-      to->accounts = g_list_append (to->accounts, to_acc);
+      to->accounts = g_list_insert_sorted (to->accounts, to_acc,
+                                          group_sort_helper);
+
+      to_acc->parent = to;
+      to_acc->core_dirty = TRUE;
 
       /* copy child accounts too. */
       if (from_acc->children)
       {
          to_acc->children = xaccMallocAccountGroup (to->book);
+         to_acc->children->parent = to_acc;
          xaccGroupCopyGroup (to_acc->children, from_acc->children);
       }
       xaccAccountCommitEdit (to_acc);
+      gnc_engine_generate_event (&to_acc->guid, GNC_EVENT_CREATE);
 
       /* make sure that we have a symmetric, uniform number of 
        * begin-edits, so that subsequent GroupCommitEdit's 

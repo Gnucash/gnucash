@@ -104,10 +104,18 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 
    if (!trans || !book) return;
    
-   /* if this is the same book, its a no-op. */
+   /* If this is the same book, its a no-op. */
    if (trans->book == book) return;
 
-   /* fiddle the transaction into place in the new book */
+   /* If the old and new book don't share backends, then clobber-copy;
+    * i.e. destroy it in one backend, create it in another.  */
+   if (book->backend != trans->book->backend)
+   {
+      gnc_book_insert_trans_clobber (book, trans);
+      return;
+   }
+
+   /* Fiddle the transaction into place in the new book */
    xaccTransBeginEdit (trans);
 
    xaccRemoveEntity (trans->book->entity_table, &trans->guid);

@@ -145,7 +145,9 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 
     xaccInitAccount (ret, book);
 
-    xaccAccountBeginEdit (ret);
+    /* Do not Begin/CommitEdit() here; give the caller 
+     * a chance to fix things up, and let them do it.
+     * Also let caller issue the generate_event (EVENT_CREATE) */
     ret->type = from->type;
 
     ret->accountName = g_strdup(from->accountName);
@@ -157,10 +159,6 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
     ret->commodity    = from->commodity;
     ret->commodity_scu = from->commodity_scu;
     ret->core_dirty   = TRUE;
-
-    gnc_engine_generate_event (&ret->guid, GNC_EVENT_CREATE);
-
-    xaccAccountCommitEdit (ret);
 
     LEAVE (" ");
     return ret;
@@ -181,7 +179,9 @@ xaccCloneAccount (const Account *from, GNCBook *book)
     now = time(0);
     xaccInitAccount (ret, book);
 
-    xaccAccountBeginEdit (ret);
+    /* Do not Begin/CommitEdit() here; give the caller 
+     * a chance to fix things up, and let them do it.
+     * Also let caller issue the generate_event (EVENT_CREATE) */
     ret->type = from->type;
 
     ret->accountName = g_strdup(from->accountName);
@@ -197,10 +197,6 @@ xaccCloneAccount (const Account *from, GNCBook *book)
     /* make a note of where the copy came from */
     gnc_kvp_gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
     gnc_kvp_gemini (from->kvp_data, &ret->guid, &book->guid, now);
-
-    gnc_engine_generate_event (&ret->guid, GNC_EVENT_CREATE);
-
-    xaccAccountCommitEdit (ret);
 
     LEAVE (" ");
     return ret;
