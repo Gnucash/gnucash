@@ -14,6 +14,7 @@
 (gnc:depend "date-utilities.scm")
 
 (let ((pagename-general (N_ "General"))
+      (pagename-accounts (N_ "Accounts"))
       (pagename-display (N_ "Display"))
       (optname-subacct (N_ "Include Sub-Accounts"))
       (optname-report-currency (N_ "Report Currency")))
@@ -34,7 +35,7 @@
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
-        pagename-general (N_ "Accounts")
+        pagename-accounts (N_ "Accounts")
         "d" (N_ "Do transaction report on this account")
         (lambda ()
           ;; FIXME : gnc:get-current-accounts disappeared
@@ -57,7 +58,7 @@
 
       (register-option
        (gnc:make-simple-boolean-option
-        pagename-general optname-subacct
+        pagename-accounts optname-subacct
         "e" (N_ "Include sub-accounts of all selected accounts") #t))
 
       ;; Report currency
@@ -245,8 +246,8 @@
 			(gnc:date-option-absolute-time 
 			 (opt-val pagename-general (N_ "To")))))
            (stepsize   (eval (opt-val pagename-general (N_ "Step Size"))))
-           (accounts   (opt-val pagename-general (N_ "Accounts")))
-           (dosubs?    (opt-val pagename-general optname-subacct))
+           (accounts   (opt-val pagename-accounts (N_ "Accounts")))
+           (dosubs?    (opt-val pagename-accounts optname-subacct))
 	   (report-currency (opt-val pagename-general optname-report-currency))
            (plot-type  (opt-val pagename-display (N_ "Plot Type")))
            (show-plot? (opt-val pagename-display (N_ "Show plot")))

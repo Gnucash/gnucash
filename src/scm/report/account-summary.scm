@@ -45,6 +45,8 @@
       (pagename-accounts (N_ "Accounts"))
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
       (optname-accounts (N_ "Account"))
+
+      (pagename-display (N_ "Display"))
       (optname-group-accounts (N_ "Group the accounts"))
       (optname-show-parent-balance (N_ "Show balances for parent accounts"))
       (optname-show-parent-total (N_ "Show subtotals")))
@@ -82,19 +84,19 @@
       
       ;; with or without grouping
       (gnc:options-add-group-accounts!      
-       options pagename-accounts optname-group-accounts "b" #t)
+       options pagename-display optname-group-accounts "b" #t)
       
       ;; new options here
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-accounts optname-show-parent-balance 
+	pagename-display optname-show-parent-balance 
 	"c" (N_ "Show balances for parent accounts") #t))
 
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-accounts optname-show-parent-total
+	pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #t))
 
       ;; Set the general page as default option tab
@@ -118,11 +120,11 @@
 	  (show-subaccts? (get-option pagename-accounts
 				      optname-show-subaccounts))
 	  (accounts (get-option pagename-accounts optname-accounts))
-          (do-grouping? (get-option pagename-accounts
+          (do-grouping? (get-option pagename-display
 				    optname-group-accounts))
-          (show-parent-balance? (get-option pagename-accounts
+          (show-parent-balance? (get-option pagename-display
 					    optname-show-parent-balance))
-          (show-parent-total? (get-option pagename-accounts
+          (show-parent-total? (get-option pagename-display
 					  optname-show-parent-total))
 	  (show-fcur? (get-option pagename-general optname-show-foreign))
 	  (report-currency (get-option pagename-general 

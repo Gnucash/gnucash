@@ -39,10 +39,11 @@
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
        (optname-accounts (N_ "Account"))
+
+       (pagename-display (N_ "Display"))
        (optname-show-parent-balance (N_ "Show balances for parent accounts"))
        (optname-show-parent-total (N_ "Show subtotals"))
        
-;;      (pagename-currencies (N_ "Currencies")) too little options :)
        (pagename-currencies pagename-general)
        (optname-show-foreign (N_ "Show Foreign Currencies"))
        (optname-report-currency (N_ "Report's currency")))
@@ -59,26 +60,6 @@
        t1 (+ (gnc:html-table-num-rows t1)
 	     (gnc:html-table-num-rows t2)))))
 
-  ;; Copied from html-utilities.scm.
-  ;; Creates the table cell with given colspan (and rowspan=1), with
-  ;; the content content and in boldface if boldface? is true. content
-  ;; may be #f (empty cell), or a string, or a html-text
-  ;; object. Returns a html-table-cell object.
-  (define (my-table-cell colspan content boldface?)
-    (gnc:make-html-table-cell/size 
-     1 colspan 
-     (and content ;; if content == #f, just use #f
-	  (if boldface? 
-	      ;; Further improvement: use some other table cell
-	      ;; style here ("grand-total") instead of the direct
-	      ;; markup-b.
-	      (gnc:make-html-text
-	       (if (gnc:html-text? content)
-		   (apply gnc:html-markup-b 
-			  (gnc:html-text-body content))
-		   (gnc:html-markup-b content)))
-	      content))))
-  
   (define (accountlist-get-comm-balance-at-date accountlist date)
     (let ((collector (gnc:make-commodity-collector)))
       (for-each (lambda (account)
@@ -119,14 +100,14 @@
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-accounts optname-show-parent-balance 
-	"c" (N_ "Show balances for parent accounts") #f))
+	pagename-display optname-show-parent-balance 
+	"c" (N_ "Show balances for parent accounts") #t))
 
       ;; have a subtotal for each parent account?
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-accounts optname-show-parent-total
+	pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #f))
 
       ;; Set the general page as default option tab
@@ -152,9 +133,9 @@
 				      optname-show-subaccounts))
 	   (accounts (get-option pagename-accounts
 				 optname-accounts))	 
-	   (show-parent-balance? (get-option pagename-accounts
+	   (show-parent-balance? (get-option pagename-display
 					     optname-show-parent-balance))
-	   (show-parent-total? (get-option pagename-accounts
+	   (show-parent-total? (get-option pagename-display
 					   optname-show-parent-total))
 	   (show-fcur? (get-option pagename-currencies
 				   optname-show-foreign))
@@ -166,15 +147,10 @@
 
 	   ;; decompose the account list
 	   (split-up-accounts (gnc:decompose-accountlist accounts))
-	   ;;(dummy (gnc:warn "split-up-accounts" split-up-accounts))
 	   (asset-accounts
 	    (assoc-ref split-up-accounts 'asset))
 	   (liability-accounts
 	    (assoc-ref split-up-accounts 'liability))
-;	   (liability-account-names
-;	    (map gnc:account-get-name liability-accounts))
-;	   (dummy2 
-;	    (gnc:warn "liability-account-names" liability-account-names))
 	   (equity-accounts
 	    (assoc-ref split-up-accounts 'equity))
 	   (income-expense-accounts
@@ -195,43 +171,23 @@
 				 (gnc:account-get-comm-balance-at-date 
 				  account to-date-tp #f))))
 
+      ;; Wrapper to call the right html-utility function.
       (define (add-subtotal-line table label balance)
 	(if show-fcur?
-	    ;; FIXME: The multi-currency format is not yet adapted to
-	    ;; take tree-depth into account. Instead of coding that
-	    ;; here it would definitely be better to extract the
-	    ;; necessary function out of html-build-acct-table into
-	    ;; the global namespace.
-	    (let ((first-row #t))
-	      (balance 'format
-		       (lambda (commodity amount)
-			 (html-table-append-row!
-			  (list (if first-row
-				    (begin 
-				      (set! first-row #f)
-				      label)
-				    #f)
-				(gnc:make-gnc-monetary
-				 commodity amount))))
-		       #f))
-	    (gnc:html-table-append-row!
-	     table (append 
-		    ;; FIXME: is it possible to get rid of my private
-		    ;; definition of my-table-cell? Maybe as another
-		    ;; extracted funtion from html-build-acct-tree.
-		    (list (my-table-cell tree-depth label #t))
-		    (gnc:html-make-empty-cells (- tree-depth 1))
-		    (list (and balance
-			       (gnc:make-html-text
-				;; FIXME: this markup-b can go away as
-				;; soon as we have styles here.
-				(gnc:html-markup-b
-				 (gnc:sum-collector-commodity 
-				  balance report-currency exchange-fn)))))))))
-
+	  (gnc:html-acct-table-comm-row-helper! 
+	   table tree-depth 1 label 
+	   report-currency (gnc:sum-collector-stocks 
+			    balance report-currency exchange-fn)
+	   #f #f #t #f)
+	  (gnc:html-acct-table-row-helper! 
+	   table tree-depth 1 label 	   
+	   (gnc:sum-collector-commodity
+	    balance report-currency exchange-fn)
+	   #f #t #f)))
+      
       ;;(gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
-       ;; FIXME: Use magic sprintf code (which one?).
+       ;; FIXME: Use magic sprintf code (goonie: which one?).
        doc (sprintf #f (_ "Balance sheet at %s")
 		    (gnc:timepair-to-datestring to-date-tp)))
 
@@ -262,9 +218,7 @@
 		   #f to-date-tp 
 		   tree-depth show-subaccts? 
 		   asset-accounts
-		   #f #f #f #f
-		   ;;gnc:accounts-get-comm-total-assets (_ "Assets") 
-		   #f
+		   #f #f #f #f #f
 		   show-parent-balance? show-parent-total?
 		   show-fcur? report-currency exchange-fn))
 		 (liability-table 
@@ -272,9 +226,7 @@
 		   #f to-date-tp
 		   tree-depth show-subaccts?
 		   liability-accounts
-		   #f #f #f #f
-		   ;;gnc:accounts-get-comm-total-assets (_ "Liabilities") 
-		   #f
+		   #f #f #f #f #f
 		   show-parent-balance? show-parent-total?
 		   show-fcur? report-currency exchange-fn))
 		 (equity-table
@@ -282,9 +234,7 @@
 		   #f to-date-tp
 		   tree-depth show-subaccts?
 		   equity-accounts
-		   #f #f #f #f 
-		   ;;gnc:accounts-get-comm-total-assets (_ "Equity") 
-		   #f 
+		   #f #f #f #f #f 
 		   show-parent-balance? show-parent-total?
 		   show-fcur? report-currency exchange-fn)))
 
@@ -311,9 +261,9 @@
 	    ;; append-something because we have to prepend.
 	    (gnc:html-table-prepend-row! 
 	     asset-table 
-	     (list (my-table-cell (* (if show-fcur? 3 2) 
-				     tree-depth) 
-				  (_ "Assets") #t)))
+	     (list (gnc:html-acct-table-cell (* (if show-fcur? 3 2) 
+						tree-depth) 
+					     (_ "Assets") #t)))
 	    
 	    (add-subtotal-line 
 	     asset-table (_ "Assets") asset-balance)	    

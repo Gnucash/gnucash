@@ -1,3 +1,20 @@
+2001-04-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/balance-sheet.scm: Cleanup code. Use new funcs
+	from html-utilities.
+
+	* src/scm/report/stylesheet-{plain,fancy}.scm: Added some styles
+	for table-cells.
+
+	* src/scm/html-utilities.scm (gnc:html-acct-table-cell),
+	(gnc:html-acct-table-row-helper!),
+	(gnc:html-acct-table-comm-row-helper!): Added functions i.e. moved
+	them out of gnc:html-build-acct-table. Use table-cell-markup
+	instead of direct markup-b.
+
+	* Several reports: Added option page "Account" or "Display" so
+	that every report has those.
+
 2001-04-12  Bill Gribble  <grib@billgribble.com>
 
 	* Lots and lots of changes to support Gnome MDI.  And I thought it

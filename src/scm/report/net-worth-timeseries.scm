@@ -11,9 +11,11 @@
 (let ((pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
-      (optname-accounts (N_ "Accounts"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
+
+      (pagename-accounts (N_ "Accounts"))
+      (optname-accounts (N_ "Accounts"))
 
       (pagename-display (N_ "Display"))
       (optname-sep-bars (N_ "Show Asset & Liability bars"))
@@ -38,7 +40,7 @@
 
       (add-option
        (gnc:make-account-list-option
-	pagename-general optname-accounts
+	pagename-accounts optname-accounts
 	"c"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
@@ -127,7 +129,7 @@
 			  (vector-ref (op-value pagename-general
 						optname-from-date) 1)))
 	   (interval (op-value pagename-general optname-stepsize))
-	   (accounts (op-value pagename-general optname-accounts))
+	   (accounts (op-value pagename-accounts optname-accounts))
 	   (classified-accounts (gnc:decompose-accountlist accounts))
 	   (asset-accounts
 	    (assoc-ref classified-accounts 'asset))
