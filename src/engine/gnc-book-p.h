@@ -60,6 +60,11 @@ struct gnc_book_struct
 
   gnc_commodity_table *commodity_table;
 
+  /* In order to store arbitrary data, for extensibility, add a table
+   * that will be used to hold arbitrary pointers.
+   */
+  GHashTable *data_tables;
+  
   /* To be technically correct, backends belong to sessions and
    * not books.  So the pointer below "really shouldn't be here", 
    * except that it provides a nice convenience, avoiding a lookup 

@@ -77,4 +77,8 @@ gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
  * to be moved to some utility/support file.  */
 guint gnc_book_count_transactions(GNCBook *book);
 
+/* Store arbitrary pointers in the GNCBook for data storage extensibility */
+void gnc_book_set_data (GNCBook *book, const char *key, gpointer data);
+gpointer gnc_book_get_data (GNCBook *book, const char *key);
+
 #endif /* GNC_BOOK_H */

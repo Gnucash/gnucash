@@ -92,6 +92,8 @@ gnc_book_init (GNCBook *book)
 
   xaccGroupSetBook (book->topgroup, book);
   xaccGroupSetBook (book->template_group, book);
+
+  book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 GNCBook *
@@ -131,6 +133,9 @@ gnc_book_destroy (GNCBook *book)
 
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
+
+  /* FIXME: Make sure the data_table is empty */
+  g_hash_table_destroy (book->data_tables);
 
   xaccLogEnable();
 
@@ -384,3 +389,16 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
 }
 
 /* ---------------------------------------------------------------------- */
+
+/* Store arbitrary pointers in the GNCBook for data storage extensibility */
+void gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
+{
+  if (!book || !key || !data) return;
+  g_hash_table_insert (book->data_tables, (gpointer)key, data);
+}
+
+gpointer gnc_book_get_data (GNCBook *book, const char *key)
+{
+  if (!book || !key) return NULL;
+  return g_hash_table_lookup (book->data_tables, (gpointer)key);
+}
