@@ -1,3 +1,5 @@
+DIST_SUBDIRS = test
+
 pkglib_LTLIBRARIES = libgncmod-ledger-core.la
 
 libgncmod_ledger_core_la_SOURCES = \

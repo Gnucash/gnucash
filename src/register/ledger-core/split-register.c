@@ -106,7 +106,6 @@
 #include <time.h>
 
 #include "Account.h"
-#include "FileDialog.h"
 #include "combocell.h"
 #include "datecell.h"
 #include "global-options.h"
@@ -1468,7 +1467,7 @@ gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 
   name = gnc_table_layout_get_cell_value (reg->table->layout, cell_name);
 
-  return xaccGetAccountFromFullName (gncGetCurrentGroup (),
+  return xaccGetAccountFromFullName (gnc_get_current_group (),
                                      name, gnc_get_account_separator ());
 }
 

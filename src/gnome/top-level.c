@@ -47,7 +47,6 @@
 #include "dialog-utils.h"
 #include "file-utils.h"
 #include "global-options.h"
-#include "gnc-account-tree.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-menu-extensions.h"
@@ -545,7 +544,7 @@ gnucash_ui_init(void)
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
-    gnc_account_tree_set_group_handler (gncGetCurrentGroup);
+    gnc_set_current_group_handler (gncGetCurrentGroup);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();

@@ -117,13 +117,16 @@ typedef void (*TableCursorRefreshCB) (Table *table,
                                       VirtualCellLocation vcell_loc,
                                       gboolean do_scroll);
 
+typedef void (*TableRedrawHelpCB) (Table *table);
+typedef void (*TableDestroyCB) (Table *table);
+
 typedef struct
 {
   TableCursorRefreshCB cursor_refresh;
-} TableGUIHandlers;
 
-typedef void (*TableRedrawHelpFunc) (Table *table);
-typedef void (*TableDestroyFunc) (Table *table);
+  TableRedrawHelpCB redraw_help;
+  TableDestroyCB destroy;
+} TableGUIHandlers;
 
 struct table
 {
@@ -144,8 +147,6 @@ struct table
   GTable *virt_cells;
 
   TableGUIHandlers gui_handlers;
-  TableRedrawHelpFunc ui_redraw_help;
-  TableDestroyFunc ui_destroy;
   gpointer ui_data;
 };
 

@@ -16,12 +16,15 @@ LDADD = \
   -L${top_srcdir}/src/app-utils -L${top_srcdir}/src/app-utils/.libs \
   -L${top_srcdir}/src/gnome-utils -L${top_srcdir}/src/gnome-utils/.libs \
   -L${top_srcdir}/src/register/register-core \
-   -L${top_srcdir}/src/register/register-core/.libs \
+  -L${top_srcdir}/src/register/register-core/.libs \
+  -L${top_srcdir}/src/register/register-gnome \
+  -L${top_srcdir}/src/register/register-gnome/.libs \
    ${top_srcdir}/src/gnc-module/libgncmodule.la \
    ${top_srcdir}/src/engine/libgncmod-engine.la \
    ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
    ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
    ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
+   ${top_srcdir}/src/register/register-gnome/libgncmod-register-gnome.la \
    ../libgncmod-ledger-core.la \
    ${top_srcdir}/src/engine/libgw-engine.la \
    ${top_srcdir}/src/engine/libgw-glib.la \

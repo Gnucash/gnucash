@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "AccWindow.h"
-#include "FileDialog.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
@@ -128,16 +127,16 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
         break;
 
       case 1:
-        xaccTransScrubImbalance (trans, gncGetCurrentGroup (), NULL);
+        xaccTransScrubImbalance (trans, gnc_get_current_group (), NULL);
         break;
 
       case 2:
-        xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
+        xaccTransScrubImbalance (trans, gnc_get_current_group (),
                                  default_account);
         break;
 
       case 3:
-        xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
+        xaccTransScrubImbalance (trans, gnc_get_current_group (),
                                  other_account);
         break;
     }
@@ -907,7 +906,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
         safe_strcmp (name, STOCK_SPLIT_STR) == 0)
       break;
 
-    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+    account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           cell->cell.value,
                                           gnc_get_account_separator ());
     if (account)

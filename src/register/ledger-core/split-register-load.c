@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "combocell.h"
 #include "global-options.h"
@@ -555,7 +554,7 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
-    group = gncGetCurrentGroup();
+    group = gnc_get_current_group();
 
   if (group == NULL)
     return;

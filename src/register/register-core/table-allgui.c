@@ -113,8 +113,6 @@ gnc_table_init (Table * table)
   /* initialize private data */
 
   table->virt_cells = NULL;
-  table->ui_redraw_help = NULL;
-  table->ui_destroy = NULL;
   table->ui_data = NULL;
 }
 
@@ -122,8 +120,8 @@ void
 gnc_table_destroy (Table * table)
 {
   /* invoke destroy callback */
-  if (table->ui_destroy)
-    table->ui_destroy (table);
+  if (table->gui_handlers.destroy)
+    table->gui_handlers.destroy (table);
 
   /* free the dynamic structures */
   gnc_table_free_data (table);
@@ -1044,8 +1042,8 @@ gnc_table_enter_update (Table *table,
     g_free (old_value);
   }
 
-  if (table->ui_redraw_help)
-    table->ui_redraw_help (table);
+  if (table->gui_handlers.redraw_help)
+    table->gui_handlers.redraw_help (table);
 
   LEAVE("return %d\n", can_edit);
 
@@ -1185,8 +1183,8 @@ gnc_table_modify_update (Table *table,
 
   g_free (old_value);
 
-  if (table->ui_redraw_help)
-    table->ui_redraw_help (table);
+  if (table->gui_handlers.redraw_help)
+    table->gui_handlers.redraw_help (table);
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 
          virt_loc.vcell_loc.virt_row,
@@ -1257,8 +1255,8 @@ gnc_table_direct_update (Table *table,
 
   g_free (old_value);
 
-  if (table->ui_redraw_help)
-    table->ui_redraw_help (table);
+  if (table->gui_handlers.redraw_help)
+    table->gui_handlers.redraw_help (table);
 
   return result;
 }

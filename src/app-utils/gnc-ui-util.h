@@ -34,6 +34,9 @@
 #include "Transaction.h"
 
 
+typedef AccountGroup * (*GNCGroupCB) (void);
+
+
 /* User Settings ****************************************************/
 gboolean gnc_color_deficits (void);
 
@@ -47,6 +50,9 @@ const char * gnc_register_default_hint_font(void);
 
 
 /* Engine enhancements & i18n ***************************************/
+AccountGroup * gnc_get_current_group (void);
+void gnc_set_current_group_handler (GNCGroupCB cb);
+
 typedef enum
 {
   ACCOUNT_TYPE = 0,

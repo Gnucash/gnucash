@@ -155,8 +155,8 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         sheet = GNUCASH_SHEET (greg->sheet);
         table = sheet->table;
 
-        table->ui_redraw_help = table_ui_redraw_cb;
-        table->ui_destroy = table_destroy_cb;
+        table->gui_handlers.redraw_help = table_ui_redraw_cb;
+        table->gui_handlers.destroy = table_destroy_cb;
         table->ui_data = sheet;
 
         gtk_widget_ref (GTK_WIDGET(sheet));

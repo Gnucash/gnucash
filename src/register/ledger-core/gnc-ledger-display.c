@@ -29,12 +29,12 @@
 #include "Group.h"
 #include "Query.h"
 #include "Transaction.h"
-#include "FileDialog.h"
 #include "date.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ledger-display.h"
+#include "gnc-ui-util.h"
 #include "split-register-control.h"
 #include "split-register-model.h"
 
@@ -379,7 +379,7 @@ gnc_ledger_display_gl (void)
 
   query = xaccMallocQuery ();
 
-  xaccQuerySetGroup (query, gncGetCurrentGroup());
+  xaccQuerySetGroup (query, gnc_get_current_group());
 
   xaccQueryAddBalanceMatch (query,
                             BALANCE_BALANCED | BALANCE_UNBALANCED,
@@ -428,7 +428,8 @@ gnc_ledger_display_template_gl (char *id)
 
   q = xaccMallocQuery ();
 
-  ag = gnc_book_get_template_group (gncGetCurrentBook());
+  ag = gnc_book_get_template_group
+    (xaccGroupGetBook (gnc_get_current_group ()));
   acct = xaccGetAccountFromName (ag, id);
   if (!acct)
   {
@@ -437,7 +438,7 @@ gnc_ledger_display_template_gl (char *id)
   }
 
   xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
-  book = gncGetCurrentBook ();
+  book = xaccGroupGetBook (gnc_get_current_group ());
   xaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
@@ -586,7 +587,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
   if (!show_all && (type != SEARCH_LEDGER))
     xaccQuerySetMaxSplits (ld->query, 30);
 
-  xaccQuerySetGroup (ld->query, gncGetCurrentGroup());
+  xaccQuerySetGroup (ld->query, gnc_get_current_group());
 
   leader = gnc_ledger_display_leader (ld);
 

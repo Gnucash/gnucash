@@ -4,7 +4,7 @@
  *                   GnuCash.                                       *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -56,8 +56,6 @@ static guint account_tree_signals[LAST_SIGNAL];
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GNCAccountTreeGroupCB group_cb = NULL;
-
 
 /** Static function declarations **************************************/
 static void gnc_account_tree_init(GNCAccountTree *tree);
@@ -83,12 +81,6 @@ static void gnc_account_tree_set_view_info_real(GNCAccountTree *tree);
 static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
 static void gnc_account_tree_destroy(GtkObject *object);
 
-
-void
-gnc_account_tree_set_group_handler (GNCAccountTreeGroupCB cb)
-{
-  group_cb = cb;
-}
 
 GtkType
 gnc_account_tree_get_type (void)
@@ -374,13 +366,10 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   root_account = xaccAccountLookup (&tree->root_account);
 
-  if (!group_cb)
-    g_warning ("No account group handler.");
-
   gnc_account_tree_fill (tree, expanded_accounts,
                          gnc_account_tree_insert_row (tree, NULL, NULL,
                                                       root_account),
-                         group_cb ? group_cb () : NULL);
+                         gnc_get_current_group ());
 
   gtk_clist_columns_autosize(clist);
 

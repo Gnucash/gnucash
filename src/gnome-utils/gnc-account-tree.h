@@ -44,7 +44,6 @@ typedef struct GNCAccountTreeClass_s GNCAccountTreeClass;
 typedef struct AccountViewInfo_s     AccountViewInfo;
 
 typedef gboolean (*AccountFilter) (Account *account, gpointer user_data);
-typedef AccountGroup * (*GNCAccountTreeGroupCB) (void);
 
 struct AccountViewInfo_s
 {
@@ -98,8 +97,6 @@ struct GNCAccountTreeClass_s
 /***********************************************************
  *                public functions                         *
  ***********************************************************/
-
-void gnc_account_tree_set_group_handler (GNCAccountTreeGroupCB cb);
 
 GtkType gnc_account_tree_get_type (void);
 

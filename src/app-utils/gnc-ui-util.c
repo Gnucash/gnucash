@@ -52,6 +52,8 @@ static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
+static GNCGroupCB group_cb = NULL;
+
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -195,6 +197,20 @@ gnc_reverse_balance (Account *account)
   return reverse_type[type];
 }
 
+AccountGroup *
+gnc_get_current_group (void)
+{
+  if (group_cb)
+    return group_cb ();
+
+  return NULL;
+}
+
+void
+gnc_set_current_group_handler (GNCGroupCB cb)
+{
+  group_cb = cb;
+}
 
 const char *
 gnc_ui_account_get_field_name (AccountFieldCode field)
