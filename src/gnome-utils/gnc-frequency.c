@@ -50,7 +50,7 @@ static gint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 static void gnc_frequency_class_init( GNCFrequencyClass *klass );
 
 static void freq_option_value_changed( GtkMenuShell *b, gpointer d );
-static void start_date_changed( GnomeDateEdit *gde, gpointer d );
+static void start_date_changed( GNCDateEdit *gde, gpointer d );
 static void spin_changed_helper( GtkAdjustment *adj, gpointer d );
 
 static void weekly_days_changed( GtkButton *b, gpointer d );
@@ -188,8 +188,15 @@ gnc_frequency_init( GNCFrequency *gf )
         gf->nb = GTK_NOTEBOOK(o);
         o = glade_xml_get_widget( gf->gxml, "freq_option" );
         gf->freqOpt = GTK_OPTION_MENU(o);
-        o = glade_xml_get_widget( gf->gxml, "sxe_start_date" );
-        gf->startDate = GNOME_DATE_EDIT(o);
+        gf->startDate = GNC_DATE_EDIT(gnc_date_edit_new( time(NULL), FALSE, FALSE ));
+        /* Add the new widget to the table. */
+        {
+                GtkWidget *table = glade_xml_get_widget( gf->gxml, "gncfreq_table" );
+                gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(gf->startDate),
+                                  1, 2, 1, 2,
+                                  ( GTK_EXPAND | GTK_FILL ), 0,
+                                  0, 0 );
+        }
         vb = GTK_VBOX( glade_xml_get_widget( gf->gxml, "gncfreq_vbox" ) );
         gf->vb = vb;
         gtk_container_add( GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb) );
@@ -286,7 +293,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                 tmpTT = mktime( tmpTm );
                 g_free( tmpTm );
         }
-        gnome_date_edit_set_time( gf->startDate, tmpTT );
+        gnc_date_edit_set_time( gf->startDate, tmpTT );
  
         switch ( uift ) {
         case UIFREQ_NONE:
@@ -303,7 +310,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                         return;
                 }
                 g_date_to_struct_tm( &theDate, tmpTm );
-                gnome_date_edit_set_time( gf->startDate, mktime(tmpTm) );
+                gnc_date_edit_set_time( gf->startDate, mktime(tmpTm) );
                 g_free( tmpTm );
         }
         break;
@@ -468,7 +475,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                                               "quarterly_day" ),
                                         glade_xml_get_widget( gf->gxml,
                                                               "quarterly_occur" ),
-                                        3, gnome_date_edit_get_date( gf->startDate ) );
+                                        3, gnc_date_edit_get_date( gf->startDate ) );
         }
         break;
         case UIFREQ_TRI_ANUALLY:
@@ -490,7 +497,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                                               "triyearly_day" ),
                                         glade_xml_get_widget( gf->gxml,
                                                               "triyearly_occur" ),
-                                        4, gnome_date_edit_get_date( gf->startDate ) );
+                                        4, gnc_date_edit_get_date( gf->startDate ) );
         }
         break;
         case UIFREQ_SEMI_YEARLY:
@@ -512,7 +519,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                                                               "semiyearly_day" ),
                                         glade_xml_get_widget( gf->gxml,
                                                               "semiyearly_occur" ),
-                                        6, gnome_date_edit_get_date( gf->startDate ) );
+                                        6, gnc_date_edit_get_date( gf->startDate ) );
         }
         break;
         case UIFREQ_YEARLY:
@@ -535,7 +542,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
                 o = glade_xml_get_widget( gf->gxml, "yearly_spin" );
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o),
                                            (int)rint(floor(monthlyMult / 12)) );
-                tmpTT = gnome_date_edit_get_date( gf->startDate );
+                tmpTT = gnc_date_edit_get_date( gf->startDate );
                 tmpTm = localtime( &tmpTT );
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
                 gtk_option_menu_set_history( GTK_OPTION_MENU(o), monthOffset );
@@ -575,7 +582,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
            refreshes. :( */
         gnc_suspend_gui_refresh();
 
-        tmpTimeT = gnome_date_edit_get_date( gf->startDate );
+        tmpTimeT = gnc_date_edit_get_date( gf->startDate );
         gd = g_date_new();
         g_date_set_time( gd, tmpTimeT );
         if ( outStartDate != NULL ) {
@@ -702,7 +709,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
-                tmpTimeT = gnome_date_edit_get_date( gf->startDate );
+                tmpTimeT = gnc_date_edit_get_date( gf->startDate );
                 gd = g_date_new();
                 g_date_set_time( gd, tmpTimeT );
                 tmpTm = g_new0( struct tm, 1 );
@@ -796,7 +803,7 @@ monthly_sel_changed( GtkButton *b, gpointer d )
                                   "monthly_day" );
         dayOfMonth = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
 
-        tmptt = gnome_date_edit_get_date( gf->startDate );
+        tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
         while ( ! g_date_valid_dmy( dayOfMonth,
                                     tmptm->tm_mon + 1,
@@ -805,7 +812,7 @@ monthly_sel_changed( GtkButton *b, gpointer d )
         }
         tmptm->tm_mday = dayOfMonth;
         tmptt = mktime( tmptm );
-        gnome_date_edit_set_time( gf->startDate, tmptt );
+        gnc_date_edit_set_time( gf->startDate, tmptt );
 
         gtk_signal_emit_by_name( GTK_OBJECT(d), "changed", NULL );
 }
@@ -821,7 +828,7 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
 
         gf = (GNCFrequency*)d;
 
-        tmptt = gnome_date_edit_get_date( gf->startDate );
+        tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
 
         o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
@@ -838,7 +845,7 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
                 tmptm->tm_mday -= 1;
         }
         tmptt = mktime( tmptm );
-        gnome_date_edit_set_time( gf->startDate, tmptt );
+        gnc_date_edit_set_time( gf->startDate, tmptt );
 
         gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
@@ -886,14 +893,14 @@ year_range_sels_changed( GNCFrequency *gf,
         occur = gnc_option_menu_get_active( occurW );
         day = gnc_option_menu_get_active( dayOfMonthW ) + 1;
 
-        tmpTT = gnome_date_edit_get_date( gf->startDate );
+        tmpTT = gnc_date_edit_get_date( gf->startDate );
         tmpTm = localtime( &tmpTT );
         tmpTm->tm_mday = day;
         // jump the month to the closest appropriate month.
         // FIXME: this could probably be made more "appropriate".
         tmpTm->tm_mon += occur - (tmpTm->tm_mon % monthsInRange);
         tmpTT = mktime( tmpTm );
-        gnome_date_edit_set_time( gf->startDate, tmpTT );
+        gnc_date_edit_set_time( gf->startDate, tmpTT );
 
         gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
@@ -908,7 +915,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
 
         gf = (GNCFrequency*)d;
 
-        tmptt = gnome_date_edit_get_date( gf->startDate );
+        tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
 
         o = glade_xml_get_widget( gf->gxml, "yearly_month" );
@@ -926,7 +933,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         }
 
         tmptt = mktime( tmptm );
-        gnome_date_edit_set_time( gf->startDate, tmptt );
+        gnc_date_edit_set_time( gf->startDate, tmptt );
 
         gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
@@ -948,7 +955,6 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
         int optIdx;
         UIFreqType uift;
         time_t startDate, tmpDate;
-        GnomeDateEdit *gde;
         struct tm *tmpTm;
         GtkWidget *o;
 
@@ -958,8 +964,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
 
         /* setup initial values for new page, as possible. */
         uift = PAGES[optIdx].uiFTVal;
-        gde = GNOME_DATE_EDIT(glade_xml_get_widget( gf->gxml, "sxe_start_date" ));
-        startDate = gnome_date_edit_get_date( gde );
+        startDate = gnc_date_edit_get_date( gf->startDate );
         tmpTm = localtime( &startDate );
 
         switch ( uift ) {
@@ -1034,7 +1039,7 @@ year_range_menu_helper( GtkWidget *dayOptMenu,
 }
 
 static void
-start_date_changed( GnomeDateEdit *gde, gpointer d )
+start_date_changed( GNCDateEdit *gde, gpointer d )
 {
         GNCFrequency  *gf;
         GtkWidget  *o;
@@ -1045,7 +1050,7 @@ start_date_changed( GnomeDateEdit *gde, gpointer d )
   
         gf = (GNCFrequency*)d;
 
-        dateFromGDE = gnome_date_edit_get_date( gde );
+        dateFromGDE = gnc_date_edit_get_date( gde );
 
         page = gtk_notebook_get_current_page( gf->nb );
         uift = PAGES[page].uiFTVal;

@@ -3512,8 +3512,6 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
                                            4,
                                            (CREATE_TOOLBAR | CREATE_POPUP),
                                            CAP_SCHEDULE ) );
-        DEBUG( "(ac gsr)%p", sxsld->ac_gsr );
-
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->ac_gsr );
 
@@ -3549,7 +3547,6 @@ create_created_ledger( sxSinceLastData *sxsld )
                                            ( CREATE_TOOLBAR | CREATE_POPUP ),
                                            CAP_SCHEDULE ) );
 
-        DEBUG( "(created gsr)%p", sxsld->created_gsr );
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->created_gsr );
 
@@ -3573,7 +3570,6 @@ sxsld_jump_to_real_txn( GNCSplitReg *gsr, gpointer ud )
         Account *leader;
         Split *split;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        DEBUG( "FIXME: Should jump to the actual, not the fake, txn." );
         reg = gnc_ledger_display_get_split_register( sxsld
                                                      ->to_create_ledger );
 
@@ -3659,7 +3655,6 @@ create_to_create_ledger( sxSinceLastData *sxsld )
                             GTK_SIGNAL_FUNC( sxsld_jump_to_real_txn ),
                             sxsld );
 
-        DEBUG( "(to_create gsr)%p", sxsld->to_create_gsr );
         txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
         gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
                            GTK_WIDGET( sxsld->to_create_gsr ) );

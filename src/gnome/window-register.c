@@ -939,9 +939,6 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     gnc_ledger_display_refresh( regData->ledger );
   }
 
-  DEBUG( "(regData)%p (->window)%p (->gsr)%p (->ledger)%p",
-         regData, regData->window, regData->gsr, regData->ledger );
-
   return regData;
 }
 

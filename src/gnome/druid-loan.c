@@ -61,7 +61,7 @@
 #  define ORIG_PRINC_ENTRY "orig_princ_ent"
 #  define IRATE_SPIN       "irate_spin"
 #  define VAR_CONTAINER    "type_freq_frame"
-#  define START_DATE       "start_gde"
+//#  define START_DATE       "start_gde"
 #  define LENGTH_SPIN      "len_spin"
 #  define LENGTH_OPT       "len_opt"
 #  define REMAIN_SPIN      "rem_spin"
@@ -216,7 +216,7 @@ typedef struct LoanDruidData_ {
         GtkOptionMenu *prmType;
         GtkFrame *prmVarFrame;
         GNCFrequency *prmVarGncFreq;
-        GnomeDateEdit *prmStartDateGDE;
+        GNCDateEdit *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
         GtkOptionMenu *prmLengthType;
         GtkSpinButton *prmRemainSpin;
@@ -351,6 +351,19 @@ gnc_ui_sx_loan_druid_create(void)
                                                   GTK_EXPAND | GTK_FILL, 2, 2 );
                                 *(gas_data[i].loc) = gas;
                         }
+                }
+
+                /* The GNCDateEdit */
+                {
+                        ldd->prmStartDateGDE =
+                                GNC_DATE_EDIT(
+                                        gnc_date_edit_new( time(NULL),
+                                                           FALSE, FALSE ) );
+                        gtk_table_attach( ldd->prmTable,
+                                          GTK_WIDGET( ldd->prmStartDateGDE ),
+                                          1, 2, 4, 5,
+                                          (GTK_EXPAND | GTK_FILL),
+                                          GTK_FILL, 0, 0 );
                 }
 
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame), FALSE );
@@ -644,8 +657,8 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    IRATE_SPIN );
         ldd->prmVarFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          VAR_CONTAINER );
-        ldd->prmStartDateGDE =
-                GET_CASTED_WIDGET( GNOME_DATE_EDIT,    START_DATE );
+        /*ldd->prmStartDateGDE =
+          GET_CASTED_WIDGET( GNOME_DATE_EDIT,    START_DATE );*/
         ldd->prmLengthSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    LENGTH_SPIN );
         ldd->prmLengthType =
@@ -860,7 +873,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 time_t tmpTT;
                 struct tm *tmpTm;
 
-                tmpTT = gnome_date_edit_get_date( ldd->prmStartDateGDE );
+                tmpTT = gnc_date_edit_get_date( ldd->prmStartDateGDE );
                 tmpTm = localtime( &tmpTT );
                 g_date_set_dmy( ldd->ld.startDate,
                                 tmpTm->tm_mday,
@@ -904,8 +917,8 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 tmpTm = g_new0( struct tm, 1 );
 
                 g_date_to_struct_tm( ldd->ld.startDate, tmpTm );
-                gnome_date_edit_set_time( ldd->prmStartDateGDE,
-                                          mktime(tmpTm) );
+                gnc_date_edit_set_time( ldd->prmStartDateGDE,
+                                        mktime(tmpTm) );
                 g_free( tmpTm );
         }
 
@@ -1624,7 +1637,7 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
         
         g_date_clear( &start, 1 );
         g_date_clear( &now, 1 );
-        g_date_set_time( &start, gnome_date_edit_get_date( ldd->prmStartDateGDE ) );
+        g_date_set_time( &start, gnc_date_edit_get_date( ldd->prmStartDateGDE ) );
         g_date_set_time( &now, time(NULL) );
         for ( i=0; g_date_compare( &start, &now ) < 0; i++ ) {
                 g_date_add_months( &start, 1 );

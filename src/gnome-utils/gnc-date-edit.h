@@ -7,12 +7,6 @@
  * This file was part of the Gnome Library. It was modifed by
  * Dave Peticolas <dave@krondo.com> for use in GnuCash.
  *
- * 2001.05.13T1647 [PDT], #gnucash:
- * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
- *         on _why_ such a thing was done... any help?
- * <dave_p> jsled: gnome date edit isn't i18n'd properly. also, we
- *          added the register date hotkeys.
- *
  * GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -33,6 +27,7 @@
 /*
   @NOTATION@
  */
+
 
 #ifndef GNC_DATE_EDIT_H
 #define GNC_DATE_EDIT_H 
@@ -57,6 +52,13 @@ typedef enum {
 #define GNC_DATE_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_edit_get_type(), GNCDateEditClass)
 #define GNC_IS_DATE_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_date_edit_get_type ())
 
+/**
+ *  * 2001.05.13T1647 [PDT], #gnucash:
+ * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
+ *         on _why_ such a thing was done... any help?
+ * <dave_p> jsled: gnome date edit isn't i18n'd properly. also, we
+ *          added the register date hotkeys.
+ **/
 typedef struct {
 	GtkHBox hbox;
 

@@ -25,6 +25,7 @@
 #define GNC_FREQUENCY_H
 
 #include <gnome.h>
+#include "gnc-date-edit.h"
 #include "FreqSpec.h"
 #include "dialog-utils.h"
 
@@ -46,7 +47,7 @@ typedef struct _GNCFrequency {
     	GtkVBox         *vb;
 	GtkNotebook     *nb;
 	GtkOptionMenu   *freqOpt;
-	GnomeDateEdit   *startDate;
+	GNCDateEdit     *startDate;
 	GladeXML        *gxml;
 } GNCFrequency;
 

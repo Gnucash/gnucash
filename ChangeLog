@@ -1,3 +1,23 @@
+2002-11-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/prefs.scm (gnc:make-number-range-option): Fix
+	wording of pref-widget hints; fixes Bug#99389.
+
+	* src/gnome/glade/sched-xact.glade: 
+	* src/gnome/dialog-sx-from-trans.c: 
+	* src/gnome/druid-loan.c (gnc_ui_sx_loan_druid_create): 
+	* src/gnome-utils/gnc-frequency.c (gnc_frequency_init): 
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create):
+	GnomeDateEdit -> GNCDateEdit; Fixes Bug#99357.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Removed
+	delete-event handling duplicated by close signal from GnomeDialog;
+	fixes Bug#99399.
+	(sxed_close_event): Check for a valid SX before proceeding; fixes
+	Bugs#99350 and dupes [99348,99356,99397].
+
 2002-11-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Use the new generic

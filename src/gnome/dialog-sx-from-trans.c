@@ -34,6 +34,7 @@
 #include "dialog-utils.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
+#include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnc-dense-cal.h"
@@ -46,17 +47,21 @@
 #define SXFTD_NEVER_END_BUTTON "never_end_button"
 #define SXFTD_END_ON_DATE_BUTTON "end_on_date_button"
 #define SXFTD_N_OCCURRENCES_BUTTON "n_occurrences_button"
+#define SXFTD_PARAM_TABLE "param_table"
 #define SXFTD_NAME_ENTRY "name_entry"
 #define SXFTD_N_OCCURRENCES_ENTRY "n_occurrences_entry"
 #define SXFTD_FREQ_OPTION_MENU "freq_option_menu"
-#define SXFTD_END_DATE_EDIT "end_date_edit"
+//#define SXFTD_END_DATE_EDIT "end_date_edit"
 #define SXFTD_START_DATE_EDIT "start_date_edit"
 #define SXFTD_EX_CAL_FRAME "ex_cal_frame"
+#define SXFTD_END_DATE_BOX "end_date_hbox"
 
 #define SXFTD_EXCAL_NUM_MONTHS 4
 #define SXFTD_EXCAL_MONTHS_PER_COL 4
 
 static short module = MOD_SX;
+
+/** start_date_edit, end_date_edit, param_table, end_date_hbox */
 
 static void sxftd_ok_clicked(GtkWidget *w, gpointer user_data);
 static void sxftd_freq_option_changed( GtkWidget *w, gpointer user_data );
@@ -89,6 +94,8 @@ typedef struct
   GDate **cal_marks;
   gint mark_id;
 
+  GNCDateEdit *startDateGDE, *endDateGDE;
+
 } SXFromTransInfo;
 
 typedef struct
@@ -119,10 +126,8 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
     {
       /* Whenever any of the controls change, we want to update the
        * calendar. */
-      { SXFTD_START_DATE_EDIT,      "date-changed", sxftd_update_excal_adapt },
       { SXFTD_NEVER_END_BUTTON,     "clicked",      sxftd_update_excal_adapt },
       { SXFTD_END_ON_DATE_BUTTON,   "clicked",      sxftd_update_excal_adapt },
-      { SXFTD_END_DATE_EDIT,        "date-changed", sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_BUTTON, "clicked",      sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_ENTRY,  "changed",      sxftd_update_excal_adapt },
 
@@ -168,10 +173,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     time_t end_tt;
     retval.type = END_ON_DATE;
     g_date_clear( &(retval.end_date), 1 );
-
-    w = glade_xml_get_widget(sxfti->gxml, SXFTD_END_DATE_EDIT);
-    end_tt = gnome_date_edit_get_date(GNOME_DATE_EDIT(w));
-
+    end_tt = gnc_date_edit_get_date(sxfti->endDateGDE);
     g_date_set_time( &(retval.end_date), end_tt);
     return retval;
   }
@@ -351,13 +353,42 @@ sxftd_init( SXFromTransInfo *sxfti )
     }
   }
 
+  /* Setup the start and end dates as GNCDateEdits */
+  {
+    GtkWidget *paramTable = glade_xml_get_widget( sxfti->gxml,
+                                                  SXFTD_PARAM_TABLE );
+    sxfti->startDateGDE =
+      GNC_DATE_EDIT( gnc_date_edit_new( time( NULL ),
+                                        FALSE, FALSE ) );
+    gtk_table_attach( GTK_TABLE(paramTable),
+                      GTK_WIDGET( sxfti->startDateGDE ),
+                      1, 2, 2, 3,
+                      (GTK_EXPAND | GTK_FILL),
+                      GTK_FILL,
+                      0, 0 );
+    gtk_signal_connect( GTK_OBJECT( sxfti->startDateGDE ), "date-changed",
+                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
+                        sxfti );
+  }
+  {
+    GtkWidget *endDateBox = glade_xml_get_widget( sxfti->gxml,
+                                                  SXFTD_END_DATE_BOX );
+    sxfti->endDateGDE =
+      GNC_DATE_EDIT( gnc_date_edit_new( time( NULL ),
+                                        FALSE, FALSE ) );
+    gtk_box_pack_start( GTK_BOX( endDateBox ),
+                        GTK_WIDGET( sxfti->endDateGDE ),
+                        FALSE, TRUE, 0 );
+    gtk_signal_connect( GTK_OBJECT( sxfti->endDateGDE ), "date-changed",
+                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
+                        sxfti );
+  }
+
   /* Get the name from the transaction, try that as the initial SX name. */
   transName = xaccTransGetDescription( sxfti->trans );
   xaccSchedXactionSetName( sxfti->sx, transName );
 
   /* Setup the initial start date for user display/confirmation */
-  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
-
   /* compute good initial date. */
   start_tt = xaccTransGetDate( sxfti->trans );
   g_date_set_time( &date, start_tt );
@@ -365,12 +396,11 @@ sxftd_init( SXFromTransInfo *sxfti )
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
 
-  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
   tmpTm = g_new0( struct tm, 1 );
   g_date_to_struct_tm( &nextDate, tmpTm );
   start_tt = mktime( tmpTm );
   g_free( tmpTm );
-  gnome_date_edit_set_time( GNOME_DATE_EDIT(w), start_tt );
+  gnc_date_edit_set_time( sxfti->startDateGDE, start_tt );
 
   w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
   pos = 0;
@@ -413,8 +443,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
-  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
-  g_date_set_time( &date, gnome_date_edit_get_date( GNOME_DATE_EDIT(w) ) );
+  g_date_set_time( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
  
   fs = xaccFreqSpecMalloc(gnc_get_current_book ());
   sxftd_update_fs( sxfti, &date, fs );
@@ -506,7 +535,6 @@ static void
 sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
 {
   SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
-  GtkWidget *start_date;
   GDate date, nextDate;
   time_t tmp_tt;
   struct tm *tmpTm;
@@ -519,12 +547,11 @@ sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
 
-  start_date = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
   tmpTm = g_new0( struct tm, 1 );
   g_date_to_struct_tm( &nextDate, tmpTm );
   tmp_tt = mktime( tmpTm );
   g_free( tmpTm );
-  gnome_date_edit_set_time( GNOME_DATE_EDIT(start_date), tmp_tt );
+  gnc_date_edit_set_time( sxfti->startDateGDE, tmp_tt );
 
   xaccFreqSpecFree( fs );
   sxftd_update_example_cal( sxfti );
@@ -619,7 +646,6 @@ static
 void
 sxftd_update_example_cal( SXFromTransInfo *sxfti )
 {
-  GtkWidget *start_date;
   struct tm *tmpTm;
   time_t tmp_tt;
   GDate date, startDate;
@@ -633,8 +659,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
 
-  start_date = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
-  tmp_tt = gnome_date_edit_get_date( GNOME_DATE_EDIT(start_date) );
+  tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
   tmpTm = g_new0( struct tm, 1 );
   *tmpTm = *localtime( &tmp_tt );
   /* go one day before what's in the box so we can get the correct start

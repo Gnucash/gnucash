@@ -76,7 +76,7 @@ static short module = MOD_SX;
 #define ADVANCE_DAYS_SPIN "advance_days"
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
-#define END_DATE_DATEENTRY "sxe_end_date"
+#define END_DATE_BOX "end_date_hbox"
 #define END_GNOME_NUMENTRY "end_gnome_nentry"
 #define REMAIN_GNOME_NUMENTRY "remain_gnome_nentry"
 #define REMAIN_ENTRY "remain_nentry"
@@ -147,7 +147,7 @@ struct _SchedXactionEditorDialog
         GtkToggleButton *optEndCount;
         GnomeNumberEntry *endCountEntry;
         GnomeNumberEntry *endRemainEntry;
-        GnomeDateEdit *endDateEntry;
+        GNCDateEdit *endDateEntry;
 
         char *sxGUIDstr;
 
@@ -286,10 +286,6 @@ static
 void
 editor_cancel_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
-        
-        if ( !sxed_confirmed_cancel( sxed ) ) {
-                return;
-        }
         /* close */
         gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                          sxed );
@@ -347,6 +343,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 sxList = g_list_append( sxList, sxed->sx );
                 gnc_book_set_schedxactions( book, sxList );
                 sxed->sx = NULL;
+                sxed->newsxP = FALSE;
         }
 
         /* cleanup */
@@ -402,8 +399,8 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                         }
                         sxEndDate = *xaccSchedXactionGetEndDate( sxed->sx );
                         g_date_set_time( &dlgEndDate,
-                                         gnome_date_edit_get_date( sxed->
-                                                                   endDateEntry ) );
+                                         gnc_date_edit_get_date( sxed->
+                                                                 endDateEntry ) );
 
                         if ( g_date_compare( &sxEndDate, &dlgEndDate ) != 0 ) {
                                 return TRUE;
@@ -791,8 +788,8 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 g_date_clear( &endDate, 1 );
                 if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
                         g_date_set_time( &endDate,
-                                         gnome_date_edit_get_date( sxed->
-                                                                   endDateEntry ) );
+                                         gnc_date_edit_get_date( sxed->
+                                                                 endDateEntry ) );
                 }
 
                 /* Now, see if the user is attempting to create a SX that can't exist
@@ -847,7 +844,9 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
                         /* get the end date data */
-                        g_date_set_time( &gdate, gnome_date_edit_get_date( sxed->endDateEntry ) );
+                        g_date_set_time( &gdate,
+                                         gnc_date_edit_get_date(
+                                                 sxed->endDateEntry ) );
                         xaccSchedXactionSetEndDate( sxed->sx, &gdate );
                         /* set the num occurances data */
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
@@ -967,9 +966,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 
         if (sxed == NULL)
                 return;
-
-        DEBUG( "(gsr)%p, (gsr->window)%p",
-               sxed->gsr, sxed->gsr->window );
 
         gnc_unregister_gui_component_by_data
                 (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
@@ -1143,17 +1139,16 @@ sxed_close_event( GnomeDialog *dlg, gpointer ud )
 {
         SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)ud;
 
+        /* We've already processed the SX, likely because of "ok" being
+         * clicked. */
+        if ( sxed->sx == NULL ) {
+          return FALSE;
+        }
+
         if ( ! sxed_confirmed_cancel( sxed ) ) {
                 return TRUE;
         }
         return FALSE;
-}
-
-static gboolean
-sxed_delete_event( GtkWidget *widget, GdkEvent *evt, gpointer ud )
-{
-        sxed_close_handler( (SchedXactionEditorDialog*)ud );
-        return TRUE;
 }
 
 static
@@ -1194,9 +1189,6 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
         w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
         sxed->endRemainEntry = GNOME_NUMBER_ENTRY(w);
 
-        w = glade_xml_get_widget( sxed->gxml, END_DATE_DATEENTRY );
-        sxed->endDateEntry = GNOME_DATE_EDIT(w);
-
 }
 
 SchedXactionEditorDialog *
@@ -1223,7 +1215,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_DATE_OPTION) },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
-                { END_DATE_DATEENTRY, "date-changed", sxed_excal_update_adapt, NULL },
                 { REMAIN_ENTRY ,      "changed",      sxed_excal_update_adapt, NULL },
 
                 { "autocreate_opt", "toggled", autocreate_toggled,           NULL },
@@ -1262,6 +1253,22 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 sxed->markId = -1;
         }
 
+        /* Setup the end-date GNC widget */
+        {
+                GtkWidget *endDateBox =
+                        glade_xml_get_widget( sxed->gxml, END_DATE_BOX );
+                sxed->endDateEntry =
+                        GNC_DATE_EDIT(gnc_date_edit_new( time(NULL),
+                                                         FALSE, FALSE ));
+                gtk_signal_connect( GTK_OBJECT(sxed->endDateEntry),
+                                    "date-changed",
+                                    GTK_SIGNAL_FUNC( sxed_excal_update_adapt ),
+                                    sxed );
+                gtk_box_pack_start( GTK_BOX(endDateBox),
+                                    GTK_WIDGET(sxed->endDateEntry),
+                                    TRUE, TRUE, 0 );
+        }
+
         /* NOTE: this must occur before processing the widget list, defined
          * above, so the gpointers stored with the advance_ and remind_opts
          * are correct. */
@@ -1275,8 +1282,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         gtk_signal_connect( GTK_OBJECT(sxed->dialog), "close",
                             GTK_SIGNAL_FUNC(sxed_close_event), sxed );
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "delete-event",
-                            GTK_SIGNAL_FUNC(sxed_delete_event), sxed );
         gtk_signal_connect( GTK_OBJECT(sxed->dialog), "destroy",
                             GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
                             sxed );
@@ -1323,8 +1328,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_widget_show_all(sxed->dialog);
 
         gnc_ledger_display_refresh( sxed->ledger );
-        DEBUG( "(sxed)%p, (->window)%p (->gsr)%p",
-               sxed, sxed->dialog, sxed->gsr );
 
         return sxed;
 }
@@ -1451,7 +1454,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 g_date_to_struct_tm( gd, tmpTm );
                 tmpDate = mktime( tmpTm );
                 g_free( tmpTm );
-                gnome_date_edit_set_time( sxed->endDateEntry, tmpDate );
+                gnc_date_edit_set_time( sxed->endDateEntry, tmpDate );
 
                 set_endgroup_toggle_states( sxed, END_DATE );
         } else if ( xaccSchedXactionHasOccurDef( sxed->sx ) ) {
@@ -2125,7 +2128,7 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 time_t tt;
                 struct tm *tmpTm;
                 endType = DATE_END;
-                tt = gnome_date_edit_get_date( sxed->endDateEntry );
+                tt = gnc_date_edit_get_date( sxed->endDateEntry );
                 tmpTm = g_new0( struct tm, 1 );
                 *tmpTm = *(localtime( &tt ));
                 g_date_set_day( &endDate, tmpTm->tm_mday );

@@ -487,14 +487,6 @@ gsr_create_toolbar( GNCSplitReg *gsr )
 
 static
 void
-gsr_foobar( GtkWidget *w, gpointer ud )
-{
-  DEBUG( "Happiness is being destroyed (widget)%p, (ud)%p",
-         w, ud );
-}
-
-static
-void
 gsr_create_table( GNCSplitReg *gsr )
 {
   GtkWidget *register_widget;
@@ -521,10 +513,6 @@ gsr_create_table( GNCSplitReg *gsr )
                       GTK_SIGNAL_FUNC(gsr_redraw_all_cb), gsr);
   gtk_signal_connect (GTK_OBJECT(gsr->reg), "redraw_help",
                       GTK_SIGNAL_FUNC(gsr_emit_help_changed), gsr);
-
-
-  gtk_signal_connect (GTK_OBJECT(gsr->reg), "destroy",
-                      GTK_SIGNAL_FUNC(gsr_foobar), gsr);
 }
 
 static
@@ -808,8 +796,6 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
       gnc_table_save_state (reg->table);
 
     gtk_widget_hide_all( gsr->window );
-    DEBUG( "destroying (gsr)%p (->window)%p with ledger %p",
-           gsr, gsr->window, ledger );
     gtk_widget_destroy( gsr->window );
   }
   gnc_ledger_display_set_user_data (ledger, NULL);
@@ -2115,9 +2101,6 @@ gnc_split_reg_get_parent( GNCLedgerDisplay *ledger )
 
   if (gsr == NULL)
     return NULL;
-
-  DEBUG( "(ledger)%p parent: (gsr->window)%p",
-         ledger, gsr->window );
 
   return gsr->window;
 }

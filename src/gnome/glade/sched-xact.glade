@@ -470,7 +470,7 @@
 
 		<widget>
 		  <class>GtkHBox</class>
-		  <name>hbox160</name>
+		  <name>end_date_hbox</name>
 		  <homogeneous>False</homogeneous>
 		  <spacing>0</spacing>
 
@@ -492,18 +492,7 @@
 		  </widget>
 
 		  <widget>
-		    <class>GnomeDateEdit</class>
-		    <name>sxe_end_date</name>
-		    <show_time>False</show_time>
-		    <use_24_format>True</use_24_format>
-		    <week_start_monday>False</week_start_monday>
-		    <lower_hour>7</lower_hour>
-		    <upper_hour>19</upper_hour>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
+		    <class>Placeholder</class>
 		  </widget>
 		</widget>
 	      </widget>
@@ -740,7 +729,7 @@
 
     <widget>
       <class>GtkTable</class>
-      <name>table1</name>
+      <name>gncfreq_table</name>
       <rows>2</rows>
       <columns>2</columns>
       <homogeneous>False</homogeneous>
@@ -830,30 +819,6 @@ Yearly
 	  <xpad>0</xpad>
 	  <ypad>0</ypad>
 	  <xexpand>False</xexpand>
-	  <yexpand>False</yexpand>
-	  <xshrink>False</xshrink>
-	  <yshrink>False</yshrink>
-	  <xfill>True</xfill>
-	  <yfill>False</yfill>
-	</child>
-      </widget>
-
-      <widget>
-	<class>GnomeDateEdit</class>
-	<name>sxe_start_date</name>
-	<show_time>False</show_time>
-	<use_24_format>True</use_24_format>
-	<week_start_monday>False</week_start_monday>
-	<lower_hour>7</lower_hour>
-	<upper_hour>19</upper_hour>
-	<child>
-	  <left_attach>1</left_attach>
-	  <right_attach>2</right_attach>
-	  <top_attach>1</top_attach>
-	  <bottom_attach>2</bottom_attach>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <xexpand>True</xexpand>
 	  <yexpand>False</yexpand>
 	  <xshrink>False</xshrink>
 	  <yshrink>False</yshrink>
@@ -3362,7 +3327,7 @@ December
 
 	<widget>
 	  <class>GtkTable</class>
-	  <name>table2</name>
+	  <name>param_table</name>
 	  <rows>3</rows>
 	  <columns>2</columns>
 	  <homogeneous>False</homogeneous>
@@ -3503,30 +3468,6 @@ Yearly
 	      <yfill>False</yfill>
 	    </child>
 	  </widget>
-
-	  <widget>
-	    <class>GnomeDateEdit</class>
-	    <name>start_date_edit</name>
-	    <show_time>False</show_time>
-	    <use_24_format>True</use_24_format>
-	    <week_start_monday>False</week_start_monday>
-	    <lower_hour>7</lower_hour>
-	    <upper_hour>19</upper_hour>
-	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>2</right_attach>
-	      <top_attach>2</top_attach>
-	      <bottom_attach>3</bottom_attach>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
-	      <yexpand>False</yexpand>
-	      <xshrink>False</xshrink>
-	      <yshrink>False</yshrink>
-	      <xfill>True</xfill>
-	      <yfill>False</yfill>
-	    </child>
-	  </widget>
 	</widget>
 
 	<widget>
@@ -3565,7 +3506,7 @@ Yearly
 
 	    <widget>
 	      <class>GtkHBox</class>
-	      <name>hbox163</name>
+	      <name>end_date_hbox</name>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 	      <child>
@@ -3590,18 +3531,7 @@ Yearly
 	      </widget>
 
 	      <widget>
-		<class>GnomeDateEdit</class>
-		<name>end_date_edit</name>
-		<show_time>False</show_time>
-		<use_24_format>True</use_24_format>
-		<week_start_monday>False</week_start_monday>
-		<lower_hour>0</lower_hour>
-		<upper_hour>23</upper_hour>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
+		<class>Placeholder</class>
 	      </widget>
 	    </widget>
 
@@ -4666,13 +4596,7 @@ years
 	    </child>
 
 	    <widget>
-	      <class>GnomeDateEdit</class>
-	      <name>start_gde</name>
-	      <show_time>False</show_time>
-	      <use_24_format>False</use_24_format>
-	      <week_start_monday>False</week_start_monday>
-	      <lower_hour>7</lower_hour>
-	      <upper_hour>19</upper_hour>
+	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
 
