@@ -1293,7 +1293,7 @@ For now, this is what we have.
 <entry>302 files
          (95.1)</entry>
 <entry>5 (4.3) </entry>
-<entry>?</entry>
+<entry>61</entry>
 </row>
 <row>
 <entry>gnucash-1.4.6
@@ -1316,6 +1316,29 @@ For now, this is what we have.
 <entry>316 files
          (101.9)</entry>
 <entry>7 (6.0)</entry>
+<entry>82</entry>
+</row>
+<row>
+<entry>gnucash-1.4.12
+         April 2001</entry>
+<entry>43 files
+         (13.1+3.6)</entry>
+<entry>27 files
+         (5.9+2.0)</entry>
+<entry>24 files
+         (5.4+1.8)</entry>
+<entry>-</entry>
+<entry>82 files
+         (33.5+3.0)</entry>
+<entry>73 files
+         (4.0+0.7+17.7)</entry>
+<entry>43 files
+         (11.5)</entry>
+<entry>39 files
+         (6.0)</entry>
+<entry>331 files
+         (108.2)</entry>
+<entry>12 (17.8)</entry>
 <entry>97</entry>
 </row>
 <row>
@@ -1339,7 +1362,7 @@ For now, this is what we have.
 <entry>341 files
          (114.2)</entry>
 <entry>8 (7.8)</entry>
-<entry>108</entry>
+<entry>89</entry>
 </row>
 <row>
 <entry>gnucash-1.6.0
@@ -1413,7 +1436,7 @@ For now, this is what we have.
 </listitem>
 <listitem>
 <para>docs -- english-only user documentation
-              (html or sgml)
+              (html or sgml)  'wc doc/html/C/*html doc/sgml/C/*sgml'
  </para>
 </listitem>
 <listitem>
@@ -1425,12 +1448,14 @@ For now, this is what we have.
 </listitem>
 
 <listitem> <para>txt -- internal <filename>README</filename>,
-<filename>*.txt</filename> and <filename>*.texinfo</filename>
-documentation files in all subdirectories, </para>
+     <filename>*.txt</filename> and <filename>*.texinfo</filename>
+     documentation files in all subdirectories. 
+     'wc README* */README* */*/README* INSTALL* NEWS AUTHORS *txt */*txt */*/*txt */*/*/*.txt */*/*/*.texinfo */*/*/*/*.texinfo'
+ </para>
 </listitem>
 
 <listitem>
-<para>Authors -- teh number of authors credited in the AUTHORS file.
+<para>Authors -- the number of authors credited in the AUTHORS file.
       This includes both primary authors and maintainers, as well as
       those who submitted small patches, fixes, documentation and
       translations.
