@@ -282,6 +282,8 @@ sscandate( const char *in_string, Date *date, int flags )
   int *a,*b,*c; /* pointers to address of day, month and year vars */
   int ret;
 
+  if (!in_string) return 0;
+
 #ifdef UK_DATES
   a=&date->day; b=&date->month; c=&date->year;
 #else
