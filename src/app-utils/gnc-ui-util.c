@@ -300,6 +300,19 @@ gnc_ui_account_get_balance (Account *account, gboolean recurse)
 }
 
 /*
+ * This routine retrives the total balance in an account converted to
+ * a given currency, possibly including all sub-accounts under the
+ * specified account.
+ */
+gnc_numeric
+gnc_ui_account_get_balance_in_currency (Account *account, gnc_commodity *currency,
+					gboolean recurse)
+{
+  return gnc_ui_account_get_balance_internal (xaccAccountGetBalanceInCurrency,
+					      account, recurse, NULL, currency);
+}
+
+/*
  * This routine retrives the reconciled balance in an account,
  * possibly including all sub-accounts under the specified account.
  */

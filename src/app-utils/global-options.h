@@ -56,6 +56,10 @@ char * gnc_lookup_font_option(const char *section, const char *name,
 char * gnc_lookup_multichoice_option(const char *section, const char *name,
                                      const char *default_value);
 
+time_t gnc_lookup_date_option(const char *section, const char *name,
+			      gboolean *is_relative, Timespec *set_ab_value,
+			      char **set_rel_value, Timespec *default_value);
+
 gdouble gnc_lookup_number_option(const char *section, const char *name,
                                  gdouble default_value);
 

@@ -124,6 +124,9 @@ char * gnc_ui_account_get_field_value_string (Account *account,
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
 
+gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
+						    gnc_commodity *currency,
+						    gboolean recurse);
 /**
  * This routine retrives the reconciled balance in an account,
  * possibly including all sub-accounts under the specified account.

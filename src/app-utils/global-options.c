@@ -239,6 +239,40 @@ gnc_lookup_multichoice_option(const char *section, const char *name,
                                                  name, default_value);
 }
 
+/********************************************************************\
+ * gnc_lookup_date_option                                           *
+ *   looks up a date option. If present, returns the absolute date  *
+ *   represented in the set_ab_value argument provided, otherwise   *
+ *   copies the default_value argument (if non-NULL) to the         *
+ *   set_value argument. If the default_value argument is NULL,     *
+ *   copies the current date to set_ab_value. Whatever value is     *
+ *   stored in set_value is return as an approximate (no            *
+ *   nanoseconds) time_t value. set_value may be NULL, in which     *
+ *   case only the return value can be used. If is_relative is      *
+ *   non-NULL, it is set to whether the date option is currently    *
+ *   storing a relative date.  If it is, and set_rel_value          *
+ *   is non-NULL, it returns a newly allocated string               *
+ *   representing the scheme symbol for that relative date          *
+ *                                                                  *
+ * Args: section       - section name of option                     *
+ *       name          - name of option                             *
+ *       set_ab_value  - location to store absolute option value    *
+ *       set_rel_value - location to store relative option value    *
+ *       default       - default value if not found                 *
+ * Return: time_t approximation of set_value                        *
+\********************************************************************/
+time_t 
+gnc_lookup_date_option(const char *section,
+		       const char *name,
+		       gboolean *is_relative,
+		       Timespec *set_ab_value,
+		       char **set_rel_value, 
+		       Timespec *default_value)
+{
+  return gnc_option_db_lookup_date_option(global_options, section, name,
+					  is_relative, set_ab_value,
+					  set_rel_value, default_value);
+}
 
 /********************************************************************\
  * gnc_lookup_number_option                                         *
