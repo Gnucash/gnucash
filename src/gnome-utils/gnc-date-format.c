@@ -72,7 +72,8 @@ static gint date_format_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_date_format_init         (GNCDateFormat      *gdf);
 static void gnc_date_format_class_init   (GNCDateFormatClass *class);
-static void gnc_date_format_finalize      (GObject          *object);
+static void gnc_date_format_finalize     (GObject            *object);
+static void gnc_date_format_dispose      (GObject            *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 /* Used by glade_xml_signal_autoconnect_full */
@@ -85,24 +86,28 @@ static GtkHBoxClass *parent_class;
  *
  * Returns the GtkType for the GNCDateFormat widget
  */
-guint
+GType
 gnc_date_format_get_type (void)
 {
-  static guint date_format_type = 0;
+  static GType date_format_type = 0;
 
   if (!date_format_type){
-    GtkTypeInfo date_format_info = {
-      "GNCDateFormat",
-      sizeof (GNCDateFormat),
+    static const GTypeInfo date_format_info = {
       sizeof (GNCDateFormatClass),
-      (GtkClassInitFunc) gnc_date_format_class_init,
-      (GtkObjectInitFunc) gnc_date_format_init,
       NULL,
+      NULL,
+      (GClassInitFunc) gnc_date_format_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCDateFormat),
+      0,
+      (GInstanceInitFunc) gnc_date_format_init,
       NULL,
     };
 
-    date_format_type = gtk_type_unique (gtk_hbox_get_type (),
-					&date_format_info);
+    date_format_type = g_type_register_static(GTK_TYPE_HBOX,
+				        "GNCDateFormat",
+					&date_format_info, 0);
   }
 	
   return date_format_type;
@@ -110,16 +115,15 @@ gnc_date_format_get_type (void)
 
 
 static void
-gnc_date_format_class_init (GNCDateFormatClass *class)
+gnc_date_format_class_init (GNCDateFormatClass *klass)
 {
-  GObjectClass   *gobject_class = (GObjectClass *) class;
-  GtkObjectClass *object_class = (GtkObjectClass *) class;
+  GObjectClass   *gobject_class = (GObjectClass *) klass;
 
-  parent_class = gtk_type_class (gtk_hbox_get_type ());
+  parent_class = g_type_class_peek_parent(klass);
 
   date_format_signals [FORMAT_CHANGED] =
     g_signal_new ("format_changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GNCDateFormatClass, format_changed),
 		  NULL,
@@ -128,9 +132,10 @@ gnc_date_format_class_init (GNCDateFormatClass *class)
 		  G_TYPE_NONE,
 		  0);
 
+  gobject_class->dispose = gnc_date_format_dispose;
   gobject_class->finalize = gnc_date_format_finalize;
 
-  class->format_changed = NULL;
+  /* GtkObjectClass class->format_changed = NULL; */
 }
 
 static void
@@ -141,6 +146,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
+
+  gdf->disposed = FALSE;
 
   gdf->priv = g_new0(GNCDateFormatPriv, 1);
 
@@ -178,11 +185,34 @@ gnc_date_format_init (GNCDateFormat *gdf)
   /* pull in the dialog and table widgets and play the reconnect game */
   dialog = glade_xml_get_widget(xml, "GNC Date Format");
 
-  gtk_object_ref(GTK_OBJECT(gdf->priv->table));
+  g_object_ref(G_OBJECT(gdf->priv->table));
   gtk_container_remove(GTK_CONTAINER(dialog), gdf->priv->table);
   gtk_container_add(GTK_CONTAINER(gdf), gdf->priv->table);
-  /* XXX: do I need to unref the table? */
+  /* XXX: do I need to unref the table? 
+     SAE: I think so, see gnc_data_format_dispose
+   */
   gtk_widget_destroy(dialog);
+}
+
+static void
+gnc_date_format_dispose (GObject *object)
+{
+  GNCDateFormat *gdf;
+
+  g_return_if_fail(object != NULL);
+  g_return_if_fail(GNC_IS_DATE_FORMAT(object));
+
+  gdf = GNC_DATE_FORMAT(object);
+
+  if(gdf->disposed)
+    return;
+
+  gdf->disposed = TRUE;
+
+  g_object_unref(G_OBJECT(gdf->priv->table));
+
+  if (G_OBJECT_CLASS(parent_class)->dispose)
+    (* G_OBJECT_CLASS(parent_class)->dispose) (object);
 }
 
 static void
@@ -243,7 +273,7 @@ gnc_date_format_new_with_label (const char *label)
 {
   GNCDateFormat *gdf;
 
-  gdf = gtk_type_new (gnc_date_format_get_type ());
+  gdf = g_object_new(GNC_TYPE_DATE_FORMAT, NULL);
 
   if (label)
     gtk_label_set_text(GTK_LABEL(gdf->label), label);
@@ -501,3 +531,4 @@ gnc_date_format_compute_format(GNCDateFormat *gdf)
   /* Emit a signal that we've changed */
   g_signal_emit(G_OBJECT(gdf), date_format_signals[FORMAT_CHANGED], 0);
 }
+

@@ -1,3 +1,16 @@
+2004-01-10  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Move GNCDateFormat to GLib patch:
+        * src/gnome-utils/gnc-date-format.h:
+          Added #include <glib.h>
+          Added private member 'disposed' to GncDenseCal struct
+          Added GNC_TYPE_DATE_FORMAT macro
+        * src/gnome-utils/gnc-date-format.c:
+          Converted the following functions to use GObject:
+                gnc_date_format_get_type,
+                gnc_date_format_class_init
+          Created gnc_date_format_dipose function
+
 2004-01-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/Makefile.am: don't explicitly add -lglib.
