@@ -141,9 +141,9 @@ typedef struct _Table Table;
 typedef void (*TableMoveFunc) (Table *table,
                                VirtualLocation *new_virt_loc);
 
-typedef void (*TableTraverseFunc) (Table *table,
-                                   VirtualLocation *new_virt_loc,
-                                   gncTableTraversalDir dir);
+typedef gboolean (*TableTraverseFunc) (Table *table,
+                                       VirtualLocation *new_virt_loc,
+                                       gncTableTraversalDir dir);
 
 typedef void (*TableSetHelpFunc) (Table *table,
                                   const char *help_str);

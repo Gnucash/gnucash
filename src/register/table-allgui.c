@@ -1393,6 +1393,7 @@ gnc_table_traverse_update(Table *table,
                           VirtualLocation *dest_loc)
 {
   CellBlock *cb;
+  gboolean abort_move;
 
   if ((table == NULL) || (dest_loc == NULL))
     return FALSE;
@@ -1485,12 +1486,12 @@ gnc_table_traverse_update(Table *table,
 
   /* Call the table traverse callback for any modifications. */
   if (table->traverse)
-    (table->traverse) (table, dest_loc, dir);
+    abort_move = table->traverse (table, dest_loc, dir);
 
   LEAVE("dest_row = %d, dest_col = %d\n",
         dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col);
 
-  return FALSE;
+  return abort_move;
 }
 
 /* ================== end of file ======================= */

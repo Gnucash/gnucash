@@ -106,6 +106,7 @@
 #include <time.h>
 
 #include "Account.h"
+#include "AccWindow.h"
 #include "FileDialog.h"
 #include "MultiLedger.h"
 #include "Refresh.h"
@@ -1146,7 +1147,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
  * of the new cell will be.
  */
 
-static void
+static gboolean
 LedgerTraverse (Table *table,
                 VirtualLocation *p_new_virt_loc,
                 gncTableTraversalDir dir)
@@ -1165,7 +1166,7 @@ LedgerTraverse (Table *table,
   split = xaccSRGetCurrentSplit (reg);
   trans = xaccSRGetCurrentTrans (reg);
   if (trans == NULL)
-    return;
+    return FALSE;
 
   /* no changes, make sure we aren't going off the end */
   changed = xaccSplitRegisterGetChangeFlag (reg);
@@ -1175,8 +1176,76 @@ LedgerTraverse (Table *table,
 
     *p_new_virt_loc = virt_loc;
 
-    return;
+    return FALSE;
   }
+
+  /* See if we are leaving an account field */
+  do
+  {
+    CellType cell_type;
+    ComboCell *cell;
+    Account *account;
+    char *name;
+
+    cell_type = xaccSplitRegisterGetCurrentCellType (reg);
+
+    if (!(cell_type == XFRM_CELL ||
+          cell_type == XTO_CELL  ||
+          cell_type == MXFRM_CELL))
+      break;
+
+    cell = NULL;
+
+    switch (cell_type)
+    {
+      case XFRM_CELL:
+        if (changed & MOD_XFRM)
+          cell = reg->xfrmCell;
+        break;
+      case XTO_CELL:
+        if (changed & MOD_XTO)
+          cell = reg->xtoCell;
+        break;
+      case MXFRM_CELL:
+        if (changed & MOD_MXFRM)
+          cell = reg->mxfrmCell;
+        break;
+      default:
+        break;
+    }
+
+    if (!cell)
+      break;
+
+    name = cell->cell.value;
+    if (!name || *name == '\0')
+      break;
+
+    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                          cell->cell.value,
+                                          account_separator);
+    if (account)
+      break;
+
+    {
+      const char *format = _("The account %s does not exist.\n"
+                             "Would you like to create it?");
+      char *message;
+      gboolean result;
+
+      message = g_strdup_printf (format, name);
+
+      result = gnc_verify_dialog_parented (xaccSRGetParent (reg),
+                                           message, TRUE);
+      if (!result)
+        break;
+    }
+
+    gnc_ui_new_accounts_from_name_window (name);
+
+    return TRUE;
+
+  } while (FALSE);
 
   /* See if we are tabbing off the end of the very last line */
   do
@@ -1204,7 +1273,7 @@ LedgerTraverse (Table *table,
 
     info->traverse_to_new = TRUE;
 
-    return;
+    return FALSE;
 
   } while (FALSE);
 
@@ -1213,7 +1282,7 @@ LedgerTraverse (Table *table,
   if (!gnc_table_virtual_cell_out_of_bounds (table, virt_loc.vcell_loc))
   {
     if (LedgerAutoCompletion(reg, dir, p_new_virt_loc))
-      return;
+      return FALSE;
   }
 
   if (changed && (split == NULL) && (dir == GNC_TABLE_TRAVERSE_RIGHT))
@@ -1230,7 +1299,7 @@ LedgerTraverse (Table *table,
     info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
     info->hint_set_by_traverse = TRUE;
 
-    return;
+    return FALSE;
   }
 
   /* Check for going off the end */
@@ -1242,7 +1311,7 @@ LedgerTraverse (Table *table,
   {
     *p_new_virt_loc = virt_loc;
 
-    return;
+    return FALSE;
   }
 
   /* Ok, we are changing transactions and the current transaction has
@@ -1284,12 +1353,15 @@ LedgerTraverse (Table *table,
       }
 
       break;
+
     case GNC_VERIFY_CANCEL:
-      *p_new_virt_loc = table->current_cursor_loc;
-      break;
+      return TRUE;
+
     default:
       break;
   }
+
+  return FALSE;
 }
 
 /* ======================================================== */
