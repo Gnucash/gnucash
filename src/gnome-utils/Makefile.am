@@ -135,6 +135,6 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-
 	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
 	  (gw:generate-module \"gw-gnome-utils\")"
 
-BUILT_SOURCES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
+BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 CLEANFILES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h \
              gw-gnome-utils.html gnucash g-wrapped .scm-links
