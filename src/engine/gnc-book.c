@@ -64,6 +64,7 @@ static short module = MOD_ENGINE;
 
 /* ====================================================================== */
 /* dirty flag stuff */
+/* XXX these need to be moved to gncObject is_dirty/mark_clean() callbacks! */
 
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
@@ -128,6 +129,9 @@ gnc_book_mark_saved(GNCBook *book)
 }
 
 /* ====================================================================== */
+/* XXX the following 'populates' need to be moved to GNCObject->book_begin 
+ * callbacks! 
+ */
 
 static void
 gnc_book_populate (GNCBook *book)
@@ -253,6 +257,17 @@ gnc_book_destroy (GNCBook *book)
 }
 
 /* ====================================================================== */
+/* XXX this should probably be calling is_equal callbacks on gncObject */
+
+gboolean
+gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
+{
+  if (book_1 == book_2) return TRUE;
+  if (!book_1 || !book_2) return FALSE;
+  return TRUE;
+}
+
+/* ====================================================================== */
 /* getters */
 
 const GUID *
@@ -321,43 +336,15 @@ void gnc_book_kvp_changed (GNCBook *book)
 
 /* ====================================================================== */
 
-gboolean
-gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
-{
-  if (book_1 == book_2) return TRUE;
-  if (!book_1 || !book_2) return FALSE;
-
-  if (!xaccGroupEqual (xaccGetAccountGroup (book_1),
-                       xaccGetAccountGroup (book_2),
-                       TRUE))
-  {
-    PWARN ("groups differ");
-    return FALSE;
-  }
-
-  if (!gnc_pricedb_equal (gnc_book_get_pricedb (book_1),
-                          gnc_book_get_pricedb (book_2)))
-  {
-    PWARN ("price dbs differ");
-    return FALSE;
-  }
-
-  if (!gnc_commodity_table_equal (gnc_book_get_commodity_table (book_1),
-                                  gnc_book_get_commodity_table (book_2)))
-  {
-    PWARN ("commodity tables differ");
-    return FALSE;
-  }
-
-  /* FIXME: do scheduled transactions and template group */
-
-  return TRUE;
-}
-
-/* ====================================================================== */
-
 /* Store arbitrary pointers in the GNCBook for data storage extensibility */
 /* XXX if data is NULL, we ashould remove the key from the hash table!
+ *
+ * XXX We need some design comments:  an equivalent storage mechanism
+ * would have been to give each item a GUID, store the GUID in a kvp frame,
+ * and then do a GUID lookup to get the pointer to the actual object.
+ * Of course, doing a kvp lookup followed by a GUID lookup would be 
+ * a good bit slower, but may be that's OK? In most cases, book data
+ * is accessed only infrequently?  --linas
  */
 void 
 gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
@@ -440,7 +427,5 @@ gboolean gnc_book_register (void)
 
   return TRUE;
 }
-
-
 
 /* ========================== END OF FILE =============================== */

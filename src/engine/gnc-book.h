@@ -52,7 +52,7 @@ GNCEntityTable      * gnc_book_get_entity_table (GNCBook *book);
 const GUID          * gnc_book_get_guid (GNCBook *book);
 
 /** \return The kvp data for the book */
-kvp_frame           * gnc_book_get_slots (GNCBook *book);
+kvp_frame   * gnc_book_get_slots (GNCBook *book);
 
 /** The gnc_book_set_data() allows
  *    arbitrary pointers to structs to be stored in GNCBook.
@@ -81,8 +81,9 @@ gboolean gnc_book_not_saved (GNCBook *book);
  * is marked 'dirty'. */
 void gnc_book_kvp_changed (GNCBook *book);
 
-/** The gnc_book_equal() method returns TRUE if the engine data
- * in the two given books is equal. */
+/** The gnc_book_equal() method returns TRUE if books are equal. 
+ * XXX this routine is broken, and does not currently compare data.
+ */
 gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
 
 /** This will 'get and increment' the named counter for this book.
