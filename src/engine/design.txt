@@ -180,10 +180,40 @@ How about the following proposal:
 
 Let me know if this is a bad idea, otherwise I'll implement it.
 
+Should I change the font or color or something for reconciled
+transctions, to provide some (strronger) visual cue?  If so, what
+color/font/whatever?
+
 
 > (In a more traditional accounting system, this would be very much 
 > the case.  Once a period is "closed," you can't change the data 
 > anymore...)
+> 
+> I think that there should be a date stamp attached to the reconciliation
+> field so that as well as knowing that it has been reconciled, you also 
+> know *when* it was reconciled.
+> 
+> This isn't so important for personal finances for the periodic user; I
+> have in the past wanted to know when a particular transaction was 
+> reconciled.  This is useful if you want to trace back from the 
+> electronic record to determine when the item actually cleared through 
+> the bank.
+> 
+> This means that I can look at Cheque #428, written Jan 1/97, cashed in May 
+> 1997 (it sat in someone's desk for a while) in the computer system and say 
+> "Ah.  It was marked as reconciled on June 12th/97. That was when I did the 
+> reconciliation of the May bank statements.  Ergo, the cheque cleared in May, 
+> and that's the statement to go to to find a copy of the cheque..."
+> 
+> It's not terribly important for cheques that get cashed right away; it *is* 
+> for things that hang around uncashed for a while.
+
+If the above is implemented, what date should be stored if the user
+toggles the recn flag a few time?  The date of the last toggle?
+The very first date that it was recn'ed?
+
+
+
 
 
 
