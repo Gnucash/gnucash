@@ -6,6 +6,5 @@ Makefile
 Makefile.in
 Makefile.in.in
 POTFILES
-cat-id-tbl.c
-stamp-cat-id
 gnucash.pot
+messages

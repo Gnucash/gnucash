@@ -321,7 +321,6 @@ src/register/register-core/recncell.c
 src/register/register-core/register-common.c
 src/register/register-core/table-allgui.c
 src/register/register-core/table-control.c
-src/register/register-core/table-html.c
 src/register/register-core/table-layout.c
 src/register/register-core/table-model.c
 src/register/register-core/test/test-link-module.c
