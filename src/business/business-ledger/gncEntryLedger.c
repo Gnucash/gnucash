@@ -209,6 +209,21 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   ledger->type = type;
   ledger->book = book;
 
+  /* Orders and Invoices are "invoices" for lookups */
+  switch (type) {
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_INVOICE_VIEWER:
+    ledger->is_invoice = TRUE;
+    break;
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_NUM_REGISTER_TYPES:
+    ledger->is_invoice = FALSE;
+    break;
+  }
+
   ledger->blank_entry_guid = *xaccGUIDNULL();
   ledger->blank_entry_edited = FALSE;
 

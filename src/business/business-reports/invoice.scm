@@ -123,15 +123,15 @@
 	table)
       (gnc:make-gnc-monetary currency numeric)))      
 
-(define (add-entry-row table entry column-vector row-style)
+(define (add-entry-row table entry column-vector row-style invoice?)
   (let* ((row-contents '())
          (currency (gnc:default-currency)) ; XXX: FIXME
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
-		       (gnc:entry-get-value entry)))
+		       (gnc:entry-get-value entry invoice?)))
 	 (entry-tax-value (gnc:make-gnc-monetary
 			   currency
-			   (gnc:entry-get-tax-value entry))))
+			   (gnc:entry-get-tax-value entry invoice?))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -156,23 +156,32 @@
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
 		 (gnc:make-gnc-monetary
-		  currency (gnc:entry-get-price entry)))))
+		  currency (if invoice? (gnc:entry-get-inv-price entry)
+			       (gnc:entry-get-bill-price entry))))))
 
     (if (discount-col column-vector)
 	(addto! row-contents
-		(gnc:make-html-table-cell/markup
-		 "number-cell"
-		 (monetary-or-percent (gnc:entry-get-discount entry)
-				      currency
-				      (gnc:entry-get-discount-type entry)))))
+		(if invoice?
+		    (gnc:make-html-table-cell/markup
+		     "number-cell"
+		     (monetary-or-percent (gnc:entry-get-inv-discount entry)
+					  currency
+					  (gnc:entry-get-inv-discount-type entry)))
+		    "")))
 
     (if (tax-col column-vector)
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
-		 (monetary-or-percent (gnc:entry-get-tax entry)
-				      currency
-				      (gnc:entry-get-tax-type entry)))))
+		 (if #t ""
+		 (if invoice?
+		     (monetary-or-percent (gnc:entry-get-inv-tax entry)
+					  currency
+					  (gnc:entry-get-inv-tax-type entry))
+		     (monetary-or-percent (gnc:entry-get-bill-tax entry)
+					  currency
+					  (gnc:entry-get-bill-tax-type entry))))))
+	)
 
     (if (taxvalue-col column-vector)
 	(addto! row-contents
@@ -293,7 +302,7 @@
 
   gnc:*report-options*)
 
-(define (make-entry-table invoice options add-order)
+(define (make-entry-table invoice options add-order invoice?)
   (let ((show-payments (gnc:option-value
 			(gnc:lookup-option options (N_ "Display")
 					   (N_ "Payments"))))
@@ -403,7 +412,8 @@
 		 (entry-values (add-entry-row table
 					      current
 					      used-columns
-					      current-row-style)))
+					      current-row-style
+					      invoice?)))
 
 	    (value-collector 'add
 			     (gnc:gnc-monetary-commodity (car entry-values))
@@ -558,7 +568,8 @@
 	 (invoice (opt-val invoice-page invoice-name))
 	 (owner #f)
 	 (references? (opt-val "Display" "References"))
-	 (title (_ "Invoice")))
+	 (title (_ "Invoice"))
+	 (invoice? #f))
 
     (define (add-order o)
       (if (and references? (not (member o orders)))
@@ -567,6 +578,14 @@
     (if invoice
 	(begin
 	  (set! owner (gnc:invoice-get-owner invoice))
+	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+		       (gnc:owner-get-type 
+			(gnc:owner-get-end-owner owner)) #f)))
+	    (case type
+	      ((gnc-owner-customer)
+	       (set! invoice? #t))
+	      ((gnc-owner-vendor)
+	       (set! title (_ "Bill")))))
 	  (set! title (string-append title " #"
 				     (gnc:invoice-get-id invoice)))))
 
@@ -576,7 +595,7 @@
 	(let ((book (gnc:invoice-get-book invoice)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
-					add-order))
+					add-order invoice?))
 
 	  (gnc:html-table-set-style!
 	   table "table"

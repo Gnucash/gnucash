@@ -66,20 +66,30 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_action_string "entry:action"
 #define entry_notes_string "entry:notes"
 #define entry_qty_string "entry:qty"
-#define entry_price_string "entry:price"
-#define entry_discount_string "entry:discount"
-#define entry_disctype_string "entry:disc-type"
-#define entry_dischow_string "entry:disc-how"
+
+/* cust inv */
 #define entry_invacct_string "entry:i-acct"
+#define entry_iprice_string "entry:i-price"
+#define entry_idiscount_string "entry:i-discount"
+#define entry_idisctype_string "entry:i-disc-type"
+#define entry_idischow_string "entry:i-disc-how"
+#define entry_itaxable_string "entry:i-taxable"
+#define entry_itaxincluded_string "entry:i-taxincluded"
+#define entry_itaxtable_string "entry:i-taxtable"
+
+/* vend bill */
 #define entry_billacct_string "entry:b-acct"
-#define entry_taxable_string "entry:taxable"
-#define entry_taxincluded_string "entry:taxincluded"
-#define entry_taxtable_string "entry:taxtable"
+#define entry_bprice_string "entry:b-price"
+#define entry_btaxable_string "entry:b-taxable"
+#define entry_btaxincluded_string "entry:b-taxincluded"
+#define entry_btaxtable_string "entry:b-taxtable"
+#define entry_billable_string "entry:billable"
+#define entry_billto_string "entry:billto"
+
+/* other stuff */
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
 #define entry_bill_string "entry:bill"
-#define entry_billable_string "entry:billable"
-#define entry_billto_string "entry:billto"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -123,44 +133,49 @@ entry_dom_tree_create (GncEntry *entry)
     maybe_add_string (ret, entry_notes_string, gncEntryGetNotes (entry));
 
     maybe_add_numeric (ret, entry_qty_string, gncEntryGetQuantity (entry));
-    maybe_add_numeric (ret, entry_price_string, gncEntryGetPrice (entry));
 
-    maybe_add_numeric (ret, entry_discount_string, gncEntryGetDiscount (entry));
-    xmlAddChild(ret, text_to_dom_tree(entry_disctype_string,
-				      gncAmountTypeToString (
-				     gncEntryGetDiscountType (entry))));
-    xmlAddChild(ret, text_to_dom_tree(entry_dischow_string,
-				      gncEntryDiscountHowToString (
-				     gncEntryGetDiscountHow (entry))));
+    /* cust invoice */
 
     acc = gncEntryGetInvAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_invacct_string,
 					  xaccAccountGetGUID (acc)));
 
+    maybe_add_numeric (ret, entry_iprice_string, gncEntryGetInvPrice (entry));
+
+    maybe_add_numeric (ret, entry_idiscount_string, gncEntryGetInvDiscount (entry));
+    
+    invoice = gncEntryGetInvoice (entry);
+    if (invoice) {
+      xmlAddChild (ret, guid_to_dom_tree (entry_invoice_string,
+					  gncInvoiceGetGUID (invoice)));
+
+      xmlAddChild(ret, text_to_dom_tree(entry_idisctype_string,
+					gncAmountTypeToString (
+				       gncEntryGetInvDiscountType (entry))));
+      xmlAddChild(ret, text_to_dom_tree(entry_idischow_string,
+					gncEntryDiscountHowToString (
+				     gncEntryGetInvDiscountHow (entry))));
+
+      xmlAddChild(ret, int_to_dom_tree(entry_itaxable_string,
+				       gncEntryGetInvTaxable (entry)));
+      xmlAddChild(ret, int_to_dom_tree(entry_itaxincluded_string,
+				       gncEntryGetInvTaxIncluded (entry)));
+    }
+
+    taxtable = gncEntryGetInvTaxTable (entry);
+    if (taxtable)
+      xmlAddChild (ret, guid_to_dom_tree (entry_itaxtable_string,
+					  gncTaxTableGetGUID (taxtable)));
+
+    /* vendor bills */
+
     acc = gncEntryGetBillAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_billacct_string,
 					  xaccAccountGetGUID (acc)));
 
-    xmlAddChild(ret, int_to_dom_tree(entry_taxable_string,
-				     gncEntryGetTaxable (entry)));
-    xmlAddChild(ret, int_to_dom_tree(entry_taxincluded_string,
-				     gncEntryGetTaxIncluded (entry)));
-    taxtable = gncEntryGetTaxTable (entry);
-    if (taxtable)
-      xmlAddChild (ret, guid_to_dom_tree (entry_taxtable_string,
-					  gncTaxTableGetGUID (taxtable)));
-
-    order = gncEntryGetOrder (entry);
-    if (order)
-      xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
-					  gncOrderGetGUID (order)));
-
-    invoice = gncEntryGetInvoice (entry);
-    if (invoice)
-      xmlAddChild (ret, guid_to_dom_tree (entry_invoice_string,
-					  gncInvoiceGetGUID (invoice)));
+    maybe_add_numeric (ret, entry_bprice_string, gncEntryGetBillPrice (entry));
 
     invoice = gncEntryGetBill (entry);
     if (invoice) {
@@ -172,7 +187,24 @@ entry_dom_tree_create (GncEntry *entry)
       owner = gncEntryGetBillTo (entry);
       if (owner && owner->owner.undefined != NULL)
 	xmlAddChild (ret, gnc_owner_to_dom_tree (entry_billto_string, owner));
+
+      xmlAddChild(ret, int_to_dom_tree(entry_btaxable_string,
+				       gncEntryGetBillTaxable (entry)));
+      xmlAddChild(ret, int_to_dom_tree(entry_btaxincluded_string,
+				       gncEntryGetBillTaxIncluded (entry)));
     }
+
+    taxtable = gncEntryGetBillTaxTable (entry);
+    if (taxtable)
+      xmlAddChild (ret, guid_to_dom_tree (entry_btaxtable_string,
+					  gncTaxTableGetGUID (taxtable)));
+
+    /* Other stuff */
+
+    order = gncEntryGetOrder (entry);
+    if (order)
+      xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
+					  gncOrderGetGUID (order)));
 
     return ret;
 }
@@ -255,6 +287,27 @@ set_account(xmlNodePtr node, struct entry_pdata *pdata,
 }
 
 static gboolean
+set_taxtable (xmlNodePtr node, struct entry_pdata *pdata,
+	      void (*func)(GncEntry *entry, GncTaxTable *taxtable))
+{
+    GUID *guid;
+    GncTaxTable *taxtable;
+
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
+    taxtable = gncTaxTableLookup (pdata->book, guid);
+    if (!taxtable) {
+      taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableSetGUID (taxtable, guid);
+    } else
+      gncTaxTableDecRef (taxtable);
+
+    func (pdata->entry, taxtable);
+    g_free(guid);
+    return TRUE;
+}
+
+static gboolean
 entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
@@ -324,24 +377,33 @@ entry_qty_handler (xmlNodePtr node, gpointer entry_pdata)
     return set_numeric(node, pdata->entry, gncEntrySetQuantity);
 }
 
+/* Cust invoice */
+
 static gboolean
-entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_invacct_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-
-    return set_numeric(node, pdata->entry, gncEntrySetPrice);
+    return set_account (node, pdata, gncEntrySetInvAccount);
 }
 
 static gboolean
-entry_discount_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_iprice_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
 
-    return set_numeric(node, pdata->entry, gncEntrySetDiscount);
+    return set_numeric(node, pdata->entry, gncEntrySetInvPrice);
 }
 
 static gboolean
-entry_disctype_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_idiscount_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+
+    return set_numeric(node, pdata->entry, gncEntrySetInvDiscount);
+}
+
+static gboolean
+entry_idisctype_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
     GncAmountType type;
@@ -355,13 +417,13 @@ entry_disctype_handler (xmlNodePtr node, gpointer entry_pdata)
     g_free (str);
 
     if (ret)
-      gncEntrySetDiscountType(pdata->entry, type);
+      gncEntrySetInvDiscountType(pdata->entry, type);
 
     return ret;
 }
 
 static gboolean
-entry_dischow_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_idischow_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
     GncDiscountHow how;
@@ -375,28 +437,33 @@ entry_dischow_handler (xmlNodePtr node, gpointer entry_pdata)
     g_free (str);
 
     if (ret)
-      gncEntrySetDiscountHow(pdata->entry, how);
+      gncEntrySetInvDiscountHow(pdata->entry, how);
 
     return ret;
 }
 
 static gboolean
-entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_itaxable_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    /* XXX: try to figure out if this is an 'invoice' or a 'bill' --
-     * we have to wait until the end!
-     */
-
-    return set_account (node, pdata, NULL);
+    return set_boolean (node, pdata->entry, gncEntrySetInvTaxable);
 }
 
 static gboolean
-entry_invacct_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_itaxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    return set_account (node, pdata, gncEntrySetInvAccount);
+    return set_boolean (node, pdata->entry, gncEntrySetInvTaxIncluded);
 }
+
+static gboolean
+entry_itaxtable_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_taxtable (node, pdata, gncEntrySetInvTaxTable);
+}
+
+/* vendor bills */
 
 static gboolean
 entry_billacct_handler (xmlNodePtr node, gpointer entry_pdata)
@@ -406,39 +473,56 @@ entry_billacct_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_taxable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_bprice_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    return set_boolean (node, pdata->entry, gncEntrySetTaxable);
+
+    return set_numeric(node, pdata->entry, gncEntrySetBillPrice);
 }
 
 static gboolean
-entry_taxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_btaxable_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    return set_boolean (node, pdata->entry, gncEntrySetTaxIncluded);
+    return set_boolean (node, pdata->entry, gncEntrySetBillTaxable);
 }
 
 static gboolean
-entry_taxtable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_btaxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
-    GncTaxTable *taxtable;
-
-    guid = dom_tree_to_guid (node);
-    g_return_val_if_fail (guid, FALSE);
-    taxtable = gncTaxTableLookup (pdata->book, guid);
-    if (!taxtable) {
-      taxtable = gncTaxTableCreate (pdata->book);
-      gncTaxTableSetGUID (taxtable, guid);
-    } else
-      gncTaxTableDecRef (taxtable);
-    gncEntrySetTaxTable (pdata->entry, taxtable);
-
-    g_free(guid);
-    return TRUE;
+    return set_boolean (node, pdata->entry, gncEntrySetBillTaxIncluded);
 }
+
+static gboolean
+entry_btaxtable_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_taxtable (node, pdata, gncEntrySetBillTaxTable);
+}
+
+static gboolean
+entry_billable_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_boolean (node, pdata->entry, gncEntrySetBillable);
+}
+
+static gboolean
+entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+  struct entry_pdata *pdata = entry_pdata;
+  GncOwner billto;
+  gboolean ret;
+
+  ret = gnc_dom_tree_to_owner (node, &billto, pdata->book);
+  if (ret)
+    gncEntrySetBillTo (pdata->entry, &billto);
+
+  return ret;
+}
+
+/* The rest of the stuff */
 
 static gboolean
 entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
@@ -503,25 +587,30 @@ entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
     return TRUE;
 }
 
+/* Support for older XML versions */
+
 static gboolean
-entry_billable_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    return set_boolean (node, pdata->entry, gncEntrySetBillable);
+    /* XXX: try to figure out if this is an 'invoice' or a 'bill' --
+     * we have to wait until the end!
+     */
+
+    return set_account (node, pdata, NULL);
 }
 
 static gboolean
-entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
 {
-  struct entry_pdata *pdata = entry_pdata;
-  GncOwner billto;
-  gboolean ret;
+    struct entry_pdata *pdata = entry_pdata;
+    gboolean res;
 
-  ret = gnc_dom_tree_to_owner (node, &billto, pdata->book);
-  if (ret)
-    gncEntrySetBillTo (pdata->entry, &billto);
-
-  return ret;
+    /* just set both.. Don't worry about extra data if it's wrong */
+    res = set_numeric(node, pdata->entry, gncEntrySetInvPrice);
+    if (res)
+      gncEntrySetBillPrice (pdata->entry, gncEntryGetInvPrice (pdata->entry));
+    return res;
 }
 
 static struct dom_tree_handler entry_handlers_v2[] = {
@@ -532,21 +621,40 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_action_string, entry_action_handler, 0, 0 },
     { entry_notes_string, entry_notes_handler, 0, 0 },
     { entry_qty_string, entry_qty_handler, 0, 0 },
-    { entry_price_string, entry_price_handler, 0, 0 },
-    { entry_discount_string, entry_discount_handler, 0, 0 },
-    { entry_disctype_string, entry_disctype_handler, 0, 0 },
-    { entry_dischow_string, entry_dischow_handler, 0, 0 },
-    { "entry:acct", entry_acct_handler, 0, 0 },
+
+    /* cust invoice */
     { entry_invacct_string, entry_invacct_handler, 0, 0 },
+    { entry_iprice_string, entry_iprice_handler, 0, 0 },
+    { entry_idiscount_string, entry_idiscount_handler, 0, 0 },
+    { entry_idisctype_string, entry_idisctype_handler, 0, 0 },
+    { entry_idischow_string, entry_idischow_handler, 0, 0 },
+    { entry_itaxable_string, entry_itaxable_handler, 0, 0 },
+    { entry_itaxincluded_string, entry_itaxincluded_handler, 0, 0 },
+    { entry_itaxtable_string, entry_itaxtable_handler, 0, 0 },
+
+    /* vendor invoice */
     { entry_billacct_string, entry_billacct_handler, 0, 0 },
-    { entry_taxable_string, entry_taxable_handler, 0, 0 },
-    { entry_taxincluded_string, entry_taxincluded_handler, 0, 0 },
-    { entry_taxtable_string, entry_taxtable_handler, 0, 0 },
+    { entry_bprice_string, entry_bprice_handler, 0, 0 },
+    { entry_btaxable_string, entry_btaxable_handler, 0, 0 },
+    { entry_btaxincluded_string, entry_btaxincluded_handler, 0, 0 },
+    { entry_btaxtable_string, entry_btaxtable_handler, 0, 0 },
+    { entry_billable_string, entry_billable_handler, 0, 0 },
+    { entry_billto_string, entry_billto_handler, 0, 0 },
+
+    /* Other stuff */
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
     { entry_bill_string, entry_bill_handler, 0, 0 },
-    { entry_billable_string, entry_billable_handler, 0, 0 },
-    { entry_billto_string, entry_billto_handler, 0, 0 },
+
+    /* Old XML support */
+    { "entry:acct", entry_acct_handler, 0, 0 },
+    { "entry:price", entry_price_handler, 0, 0 },
+    { "entry:discount", entry_idiscount_handler, 0, 0 },
+    { "entry:disc-type", entry_idisctype_handler, 0, 0 },
+    { "entry:disc-how", entry_idischow_handler, 0, 0 },
+    { "entry:taxable", entry_itaxable_handler, 0, 0 },
+    { "entry:taxincluded", entry_itaxincluded_handler, 0, 0 },
+    { "entry:taxtable", entry_itaxtable_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

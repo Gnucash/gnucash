@@ -1,3 +1,36 @@
+2002-09-14  Derek Atkins  <derek@ihtfp.com>
+	Add TaxTable entries to Vendor Invoices (Bills); make sure it does
+	not bleed over into billback items.  Fixes RFE #91415
+
+	* business-core/gncEntry.[ch] -- change the API to provide
+	  separate storage for Price, Taxtable information, etc. for
+	  Invoices and Bills, for chargeback features
+	* business-core/file/gnc-entry-xml-v2.c -- change the XML to
+	  clearly separate the "bill" and "invoice" data.
+	* business-core/gw-business-core-spec.scm -- change scheme API
+	  to match the new gncEntry API
+	
+	* business-core/gncInvoice.c -- use new gncEntry API.  If posting
+	  a bill, set the invoice-price on each "billable" item.
+
+	* business-gnome/business-prefs.scm -- duplicate the Taxincluded
+	  preference into Invoice Taxincluded and Bill Taxincluded.
+	
+	* business-gnome/dialog-invoice.c -- use proper Price (Invoice
+	  Price or Bill Price) when sorting by price.
+	
+	* business-ledger/gncEntryLedgerP.h -- add "is_invoice" flag
+	* business-ledger/gncEntryLedger.c -- set is_invoice at creation
+	* business-ledger/gncEntryLedgerLayout.c -- add TaxTable columns to Bills
+	* business-ledger/gncEntryLedgerLoad.c -- initialize the entry properly
+	  based upon this being an invoice or a bill.  Use different global
+	  pref's as well.
+	* business-ledger/gncEntryLedgerModel.c -- Load/Save using the new API.
+	  Make price-cell immutable if the ledger is an invoice-ledger and the
+	  entry is attached to a bill.
+
+	* business-reports/invoice.scm -- use new API
+
 2002-09-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/gnc-generic-import.c, ...: Patch by Benoit

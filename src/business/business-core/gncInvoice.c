@@ -626,12 +626,20 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Account *this_acc;
 
     /* Stabilize the TaxTable in this entry */
-    gncEntrySetTaxTable (entry,
-			 gncTaxTableReturnChild (gncEntryGetTaxTable (entry),
-						 TRUE));
+    if (reverse)
+      gncEntrySetInvTaxTable
+	(entry, gncTaxTableReturnChild (gncEntryGetInvTaxTable (entry), TRUE));
+    else {
+      gncEntrySetBillTaxTable
+	(entry, gncTaxTableReturnChild (gncEntryGetBillTaxTable (entry), TRUE));
+
+      /* If this is a bill, and the entry is billable, copy the price */
+      if (gncEntryGetBillable (entry))
+	gncEntrySetInvPrice (entry, gncEntryGetBillPrice (entry));
+    }
 
     /* Obtain the Entry's Value and TaxValues */
-    gncEntryGetValue (entry, &value, NULL, &tax, &taxes);
+    gncEntryGetValue (entry, reverse, &value, NULL, &tax, &taxes);
 
     /* add the value for the account split */
     this_acc = (reverse ? gncEntryGetInvAccount (entry) :

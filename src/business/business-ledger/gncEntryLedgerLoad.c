@@ -231,13 +231,20 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  break;
 	case GNC_TAXINCLUDED_USEGLOBAL:
 	  taxincluded = gnc_lookup_boolean_option ("Business",
-						   "Tax Included?", FALSE);
+						   (ledger->is_invoice ?
+						    "Invoice Tax Included?" :
+						    "Bill Tax Included?"), FALSE);
 	  break;
 	}
 
-	gncEntrySetTaxTable (blank_entry, table);
-	gncEntrySetTaxIncluded (blank_entry, taxincluded);
-	gncEntrySetDiscount (blank_entry, discount);
+	if (ledger->is_invoice) {
+	  gncEntrySetInvTaxTable (blank_entry, table);
+	  gncEntrySetInvTaxIncluded (blank_entry, taxincluded);
+	  gncEntrySetInvDiscount (blank_entry, discount);
+	} else {
+	  gncEntrySetBillTaxTable (blank_entry, table);
+	  gncEntrySetBillTaxIncluded (blank_entry, taxincluded);
+	}
       }
       break;
     default:

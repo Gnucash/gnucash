@@ -33,6 +33,8 @@ struct GncEntryLedger_s {
   QueryNew *	query;
   
   GncEntryLedgerType type;
+
+  gboolean	is_invoice;	/* is this an invoice (or a bill)? */
 };
 
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,

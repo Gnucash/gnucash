@@ -379,34 +379,42 @@
 
   (gw:wrap-function
    ws
-   'gnc:entry-get-price
+   'gnc:entry-get-inv-price
    '<gnc:numeric>
-   "gncEntryGetPrice"
+   "gncEntryGetInvPrice"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's Price")
 
   (gw:wrap-function
    ws
-   'gnc:entry-get-discount
+   'gnc:entry-get-inv-discount
    '<gnc:numeric>
-   "gncEntryGetDiscount"
+   "gncEntryGetInvDiscount"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's Discount")
 
   (gw:wrap-function
    ws
-   'gnc:entry-get-discount-type
+   'gnc:entry-get-inv-discount-type
    '<gw:int>
-   "gncEntryGetDiscountType"
+   "gncEntryGetInvDiscountType"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's discount type")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-bill-price
+   '<gnc:numeric>
+   "gncEntryGetBillPrice"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Price")
 
   (gw:wrap-function
    ws
    'gnc:entry-get-value
    '<gnc:numeric>
    "gncEntryReturnValue"
-   '((<gnc:GncEntry*> entry))
+   '((<gnc:GncEntry*> entry) (<gw:bool> invoice?))
    "Return the Entry's computed Value (after discount)")
 
   (gw:wrap-function
@@ -414,7 +422,7 @@
    'gnc:entry-get-tax-value
    '<gnc:numeric>
    "gncEntryReturnTaxValue"
-   '((<gnc:GncEntry*> entry))
+   '((<gnc:GncEntry*> entry) (<gw:bool> invoice?))
    "Return the Entry's computed Tax Value")
 
   (gw:wrap-function
@@ -422,7 +430,7 @@
    'gnc:entry-get-discount-value
    '<gnc:numeric>
    "gncEntryReturnDiscountValue"
-   '((<gnc:GncEntry*> entry))
+   '((<gnc:GncEntry*> entry) (<gw:bool> invoice?))
    "Return the Entry's computed Discount Value")
 
   (gw:wrap-function

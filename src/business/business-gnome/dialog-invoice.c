@@ -699,7 +699,8 @@ gnc_invoice_window_sort (InvoiceWindow *iw, sort_type_t sort_code)
       p2 = standard;
       break;
     case BY_PRICE:
-      p1 = g_slist_prepend (p1, ENTRY_PRICE);
+      p1 = g_slist_prepend (p1, ((iw->owner.type == GNC_OWNER_CUSTOMER) ?
+				 ENTRY_IPRICE : ENTRY_BPRICE));
       p2 = standard;
       break;
     default:

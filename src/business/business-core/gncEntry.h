@@ -40,29 +40,37 @@ gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
 GncEntry *gncEntryCreate (GNCBook *book);
 void gncEntryDestroy (GncEntry *entry);
 
-/* Set Functions */
+/* SET FUNCTIONS */
 
+/* Generic (shared) data */
 void gncEntrySetDate (GncEntry *entry, Timespec date);
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetNotes (GncEntry *entry, const char *notes);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
-void gncEntrySetPrice (GncEntry *entry, gnc_numeric price);
-void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount);
-void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type);
-void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how);
-void gncEntrySetTaxable (GncEntry *entry, gboolean taxable);
-void gncEntrySetTaxIncluded (GncEntry *entry, gboolean tax_included);
-void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table);
+
+/* Customer Invoices */
+void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
+void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price);
+void gncEntrySetInvTaxable (GncEntry *entry, gboolean taxable);
+void gncEntrySetInvTaxIncluded (GncEntry *entry, gboolean tax_included);
+void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table);
+void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount);
+void gncEntrySetInvDiscountType (GncEntry *entry, GncAmountType type);
+void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how);
+
+/* Vendor Bills (and Employee Expenses) */
+void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
+void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price);
+void gncEntrySetBillTaxable (GncEntry *entry, gboolean taxable);
+void gncEntrySetBillTaxIncluded (GncEntry *entry, gboolean tax_included);
+void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetBillable (GncEntry *entry, gboolean billable);
 void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
 
-void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
-void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
-
-/* Get Functions */
-
+/* GET FUNCTIONS */
+/* Generic (shared) data */
 GNCBook * gncEntryGetBook (GncEntry *entry);
 const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
@@ -71,15 +79,26 @@ const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
 const char * gncEntryGetNotes (GncEntry *notes);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
-gnc_numeric gncEntryGetPrice (GncEntry *entry);
-gnc_numeric gncEntryGetDiscount (GncEntry *entry);
-GncAmountType gncEntryGetDiscountType (GncEntry *entry);
-GncDiscountHow gncEntryGetDiscountHow (GncEntry *entry);
-gboolean gncEntryGetTaxable (GncEntry *entry);
-gboolean gncEntryGetTaxIncluded (GncEntry *entry);
-GncTaxTable * gncEntryGetTaxTable (GncEntry *entry);
+
+/* Customer Invoices */
+Account * gncEntryGetInvAccount (GncEntry *entry);
+gnc_numeric gncEntryGetInvPrice (GncEntry *entry);
+gnc_numeric gncEntryGetInvDiscount (GncEntry *entry);
+GncAmountType gncEntryGetInvDiscountType (GncEntry *entry);
+GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry);
+gboolean gncEntryGetInvTaxable (GncEntry *entry);
+gboolean gncEntryGetInvTaxIncluded (GncEntry *entry);
+GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry);
+
+/* Vendor Bills (and Employee Expenses) */
+Account * gncEntryGetBillAccount (GncEntry *entry);
+gnc_numeric gncEntryGetBillPrice (GncEntry *entry);
+gboolean gncEntryGetBillTaxable (GncEntry *entry);
+gboolean gncEntryGetBillTaxIncluded (GncEntry *entry);
+GncTaxTable * gncEntryGetBillTaxTable (GncEntry *entry);
 gboolean gncEntryGetBillable (GncEntry *entry);
 GncOwner *gncEntryGetBillTo (GncEntry *entry);
+
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
@@ -87,10 +106,10 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest);
  * list of unrounded account-values.  The list belongs to the entry
  * and will be destroyed, so use it quickly.
  */
-gnc_numeric gncEntryReturnValue (GncEntry *entry);
-gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry);
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry);
-GList * gncEntryReturnTaxValues (GncEntry *entry);
+gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv);
+gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv);
+gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv);
+GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
 
 /* Compute the Entry value, tax-value, and discount_value, based on
  * the quantity, price, discount, tax-table, and types.  The value is
@@ -101,9 +120,10 @@ GList * gncEntryReturnTaxValues (GncEntry *entry);
  * destroyed automatically, so use it quickly.  Note that all return
  * values from these two functions are NOT rounded.
  */
-void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
+void gncEntryGetValue (GncEntry *entry, gboolean is_inv, gnc_numeric *value,
 		       gnc_numeric *discount, gnc_numeric *tax_value,
 		       GList **tax_values);
+
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   GncTaxTable *tax_table, gboolean tax_included,
 			   gnc_numeric discount, GncAmountType discount_type,
@@ -111,9 +131,6 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   /* return values */
 			   gnc_numeric *value, gnc_numeric *discount_value,
 			   GList **tax_values);
-
-Account * gncEntryGetInvAccount (GncEntry *entry);
-Account * gncEntryGetBillAccount (GncEntry *entry);
 
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
@@ -130,7 +147,9 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_ACTION	"action"
 #define ENTRY_NOTES	"notes"
 #define ENTRY_QTY	"qty"
-#define ENTRY_PRICE	"price"
+
+#define ENTRY_IPRICE	"iprice"
+#define ENTRY_BPRICE	"bprice"
 #define ENTRY_BILLABLE	"billable?"
 #define ENTRY_BILLTO	"bill-to"
 

@@ -32,17 +32,23 @@ struct _gncEntry {
   char *	action;
   char *	notes;
   gnc_numeric 	quantity;
-  gnc_numeric 	price;
-  gnc_numeric 	discount;
-  GncAmountType	disc_type;
-  GncDiscountHow disc_how;
-  Account *	invaccount;
-  Account *	bilaccount;
 
-  gboolean	taxable;
-  gboolean	taxincluded;
-  GncTaxTable *	tax_table;
+  /* customer invoice data */
+  Account *	i_account;
+  gnc_numeric 	i_price;
+  gboolean	i_taxable;
+  gboolean	i_taxincluded;
+  GncTaxTable *	i_tax_table;
+  gnc_numeric 	i_discount;
+  GncAmountType	i_disc_type;
+  GncDiscountHow i_disc_how;
 
+  /* vendor bill data */
+  Account *	b_account;
+  gnc_numeric 	b_price;
+  gboolean	b_taxable;
+  gboolean	b_taxincluded;
+  GncTaxTable *	b_tax_table;
   gboolean	billable;
   GncOwner	billto;
 
@@ -50,17 +56,29 @@ struct _gncEntry {
   GncInvoice *	invoice;
   GncInvoice *	bill;
 
-  gnc_numeric	value;
-  gnc_numeric	value_rounded;
-  GList *	tax_values;
-  gnc_numeric	tax_value;
-  gnc_numeric	tax_value_rounded;
-  gnc_numeric	disc_value;
-  gnc_numeric	disc_value_rounded;
-  gboolean	values_dirty;
-  Timespec	taxtable_modtime;
-
   gboolean	dirty;
+
+  /* CACHED VALUES */
+
+  gboolean	values_dirty;
+
+  /* customer invoice */
+  gnc_numeric	i_value;
+  gnc_numeric	i_value_rounded;
+  GList *	i_tax_values;
+  gnc_numeric	i_tax_value;
+  gnc_numeric	i_tax_value_rounded;
+  gnc_numeric	i_disc_value;
+  gnc_numeric	i_disc_value_rounded;
+  Timespec	i_taxtable_modtime;
+
+  /* vendor bill */
+  gnc_numeric	b_value;
+  gnc_numeric	b_value_rounded;
+  GList *	b_tax_values;
+  gnc_numeric	b_tax_value;
+  gnc_numeric	b_tax_value_rounded;
+  Timespec	b_taxtable_modtime;
 };
 
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
@@ -127,6 +145,7 @@ mark_entry (GncEntry *entry)
 GncEntry *gncEntryCreate (GNCBook *book)
 {
   GncEntry *entry;
+  gnc_numeric zero = gnc_numeric_zero ();
 
   if (!book) return NULL;
 
@@ -136,19 +155,19 @@ GncEntry *gncEntryCreate (GNCBook *book)
   entry->desc = CACHE_INSERT ("");
   entry->action = CACHE_INSERT ("");
   entry->notes = CACHE_INSERT ("");
+  entry->quantity = zero;
 
-  {
-    gnc_numeric zero = gnc_numeric_zero ();
-    entry->quantity = zero;
-    entry->price = zero;
-    entry->discount = zero;
-  }
-  entry->disc_type = GNC_AMT_TYPE_PERCENT;
-  entry->disc_how = GNC_DISC_PRETAX;
-  entry->taxable = TRUE;
-  entry->dirty = FALSE;
-  entry->values_dirty = TRUE;
+  entry->i_price = zero;
+  entry->i_taxable = TRUE;
+  entry->i_discount = zero;
+  entry->i_disc_type = GNC_AMT_TYPE_PERCENT;
+  entry->i_disc_how = GNC_DISC_PRETAX;
+
+  entry->b_price = zero;
+  entry->b_taxable = TRUE;
   entry->billto.type = GNC_OWNER_CUSTOMER;
+
+  entry->values_dirty = TRUE;
 
   xaccGUIDNew (&entry->guid, book);
   addObj (entry);
@@ -167,8 +186,10 @@ void gncEntryDestroy (GncEntry *entry)
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
   CACHE_REMOVE (entry->notes);
-  if (entry->tax_values)
-    gncAccountValueDestroy (entry->tax_values);
+  if (entry->i_tax_values)
+    gncAccountValueDestroy (entry->i_tax_values);
+  if (entry->b_tax_values)
+    gncAccountValueDestroy (entry->b_tax_values);
   remObj (entry);
 
   g_free (entry);
@@ -232,37 +253,150 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
   mark_entry (entry);
 }
 
-void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
-{
-  if (!entry) return;
-  if (gnc_numeric_eq (entry->price, price)) return;
-  entry->price = price;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
-{
-  if (!entry) return;
-  if (gnc_numeric_eq (entry->discount, discount)) return;
-  entry->discount = discount;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
+/* Customer Invoices */
 
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
-  if (entry->invaccount == acc) return;
-  entry->invaccount = acc;
+  if (entry->i_account == acc) return;
+  entry->i_account = acc;
   mark_entry (entry);
 }
+
+void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price)
+{
+  if (!entry) return;
+  if (gnc_numeric_eq (entry->i_price, price)) return;
+  entry->i_price = price;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvTaxable (GncEntry *entry, gboolean taxable)
+{
+  if (!entry) return;
+  if (entry->i_taxable == taxable) return;
+  entry->i_taxable = taxable;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvTaxIncluded (GncEntry *entry, gboolean taxincluded)
+{
+  if (!entry) return;
+  if (entry->i_taxincluded == taxincluded) return;
+  entry->i_taxincluded = taxincluded;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table)
+{
+  if (!entry) return;
+  if (entry->i_tax_table == table) return;
+  if (entry->i_tax_table)
+    gncTaxTableDecRef (entry->i_tax_table);
+  if (table)
+    gncTaxTableIncRef (table);
+  entry->i_tax_table = table;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount)
+{
+  if (!entry) return;
+  if (gnc_numeric_eq (entry->i_discount, discount)) return;
+  entry->i_discount = discount;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvDiscountType (GncEntry *entry, GncAmountType type)
+{
+  if (!entry) return;
+  if (entry->i_disc_type == type) return;
+
+  entry->i_disc_type = type;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how)
+{
+  if (!entry) return;
+  if (entry->i_disc_how == how) return;
+
+  entry->i_disc_how = how;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+/* Vendor Bills */
 
 void gncEntrySetBillAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
-  if (entry->bilaccount == acc) return;
-  entry->bilaccount = acc;
+  if (entry->b_account == acc) return;
+  entry->b_account = acc;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price)
+{
+  if (!entry) return;
+  if (gnc_numeric_eq (entry->b_price, price)) return;
+  entry->b_price = price;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillTaxable (GncEntry *entry, gboolean taxable)
+{
+  if (!entry) return;
+  if (entry->b_taxable == taxable) return;
+  entry->b_taxable = taxable;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillTaxIncluded (GncEntry *entry, gboolean taxincluded)
+{
+  if (!entry) return;
+  if (entry->b_taxincluded == taxincluded) return;
+  entry->b_taxincluded = taxincluded;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table)
+{
+  if (!entry) return;
+  if (entry->b_tax_table == table) return;
+  if (entry->b_tax_table)
+    gncTaxTableDecRef (entry->b_tax_table);
+  if (table)
+    gncTaxTableIncRef (table);
+  entry->b_tax_table = table;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillable (GncEntry *entry, gboolean billable)
+{
+  if (!entry) return;
+  if (entry->billable == billable) return;
+
+  entry->billable = billable;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto)
+{
+  if (!entry || !billto) return;
+  if (gncOwnerEqual (&entry->billto, billto)) return;
+
+  gncOwnerCopy (billto, &entry->billto);
   mark_entry (entry);
 }
 
@@ -297,75 +431,6 @@ void gncEntrySetBill (GncEntry *entry, GncInvoice *bill)
   mark_entry (entry);
 }
 
-void gncEntrySetTaxable (GncEntry *entry, gboolean taxable)
-{
-  if (!entry) return;
-  if (entry->taxable == taxable) return;
-  entry->taxable = taxable;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetTaxIncluded (GncEntry *entry, gboolean taxincluded)
-{
-  if (!entry) return;
-  if (entry->taxincluded == taxincluded) return;
-  entry->taxincluded = taxincluded;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table)
-{
-  if (!entry) return;
-  if (entry->tax_table == table) return;
-  if (entry->tax_table)
-    gncTaxTableDecRef (entry->tax_table);
-  if (table)
-    gncTaxTableIncRef (table);
-  entry->tax_table = table;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type)
-{
-  if (!entry) return;
-  if (entry->disc_type == type) return;
-
-  entry->disc_type = type;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how)
-{
-  if (!entry) return;
-  if (entry->disc_how == how) return;
-
-  entry->disc_how = how;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
-void gncEntrySetBillable (GncEntry *entry, gboolean billable)
-{
-  if (!entry) return;
-  if (entry->billable == billable) return;
-
-  entry->billable = billable;
-  mark_entry (entry);
-}
-
-void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto)
-{
-  if (!entry || !billto) return;
-  if (gncOwnerEqual (&entry->billto, billto)) return;
-
-  gncOwnerCopy (billto, &entry->billto);
-  mark_entry (entry);
-}
-
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
 {
   if (!entry) return;
@@ -382,18 +447,28 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   gncEntrySetAction (dest, src->action);
   gncEntrySetNotes (dest, src->notes);
   dest->quantity		= src->quantity;
-  dest->price			= src->price;
-  dest->discount		= src->discount;
-  dest->disc_type		= src->disc_type;
-  dest->invaccount		= src->invaccount;
-  dest->bilaccount		= src->bilaccount;
-  dest->taxable			= src->taxable;
-  dest->taxincluded		= src->taxincluded;
+
+  dest->i_account		= src->i_account;
+  dest->i_price			= src->i_price;
+  dest->i_taxable		= src->i_taxable;
+  dest->i_taxincluded		= src->i_taxincluded;
+  dest->i_discount		= src->i_discount;
+  dest->i_disc_type		= src->i_disc_type;
+  dest->i_disc_how		= src->i_disc_how;
+
+  /* vendor bill data */
+  dest->b_account		= src->b_account;
+  dest->b_price			= src->b_price;
+  dest->b_taxable		= src->b_taxable;
+  dest->b_taxincluded		= src->b_taxincluded;
   dest->billable		= src->billable;
   dest->billto			= src->billto;
 
-  if (src->tax_table)
-    gncEntrySetTaxTable (dest, src->tax_table);
+  if (src->i_tax_table)
+    gncEntrySetInvTaxTable (dest, src->i_tax_table);
+
+  if (src->b_tax_table)
+    gncEntrySetBillTaxTable (dest, src->b_tax_table);
 
   if (src->order)
     gncOrderAddEntry (src->order, dest);
@@ -459,28 +534,98 @@ gnc_numeric gncEntryGetQuantity (GncEntry *entry)
   return entry->quantity;
 }
 
-gnc_numeric gncEntryGetPrice (GncEntry *entry)
-{
-  if (!entry) return gnc_numeric_zero();
-  return entry->price;
-}
-
-gnc_numeric gncEntryGetDiscount (GncEntry *entry)
-{
-  if (!entry) return gnc_numeric_zero();
-  return entry->discount;
-}
+/* Customer Invoice */
 
 Account * gncEntryGetInvAccount (GncEntry *entry)
 {
   if (!entry) return NULL;
-  return entry->invaccount;
+  return entry->i_account;
 }
+
+gnc_numeric gncEntryGetInvPrice (GncEntry *entry)
+{
+  if (!entry) return gnc_numeric_zero();
+  return entry->i_price;
+}
+
+gnc_numeric gncEntryGetInvDiscount (GncEntry *entry)
+{
+  if (!entry) return gnc_numeric_zero();
+  return entry->i_discount;
+}
+
+GncAmountType gncEntryGetInvDiscountType (GncEntry *entry)
+{
+  if (!entry) return 0;
+  return entry->i_disc_type;
+}
+
+GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry)
+{
+  if (!entry) return 0;
+  return entry->i_disc_how;
+}
+
+gboolean gncEntryGetInvTaxable (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->i_taxable;
+}
+
+gboolean gncEntryGetInvTaxIncluded (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->i_taxincluded;
+}
+
+GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->i_tax_table;
+}
+
+/* vendor bills */
 
 Account * gncEntryGetBillAccount (GncEntry *entry)
 {
   if (!entry) return NULL;
-  return entry->bilaccount;
+  return entry->b_account;
+}
+
+gnc_numeric gncEntryGetBillPrice (GncEntry *entry)
+{
+  if (!entry) return gnc_numeric_zero();
+  return entry->b_price;
+}
+
+gboolean gncEntryGetBillTaxable (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->b_taxable;
+}
+
+gboolean gncEntryGetBillTaxIncluded (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->b_taxincluded;
+}
+
+GncTaxTable * gncEntryGetBillTaxTable (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->b_tax_table;
+}
+
+gboolean gncEntryGetBillable (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->billable;
+}
+
+GncOwner * gncEntryGetBillTo (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return &entry->billto;
 }
 
 GncInvoice * gncEntryGetInvoice (GncEntry *entry)
@@ -499,48 +644,6 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->order;
-}
-
-GncAmountType gncEntryGetDiscountType (GncEntry *entry)
-{
-  if (!entry) return 0;
-  return entry->disc_type;
-}
-
-GncDiscountHow gncEntryGetDiscountHow (GncEntry *entry)
-{
-  if (!entry) return 0;
-  return entry->disc_how;
-}
-
-gboolean gncEntryGetTaxable (GncEntry *entry)
-{
-  if (!entry) return FALSE;
-  return entry->taxable;
-}
-
-gboolean gncEntryGetTaxIncluded (GncEntry *entry)
-{
-  if (!entry) return FALSE;
-  return entry->taxincluded;
-}
-
-GncTaxTable * gncEntryGetTaxTable (GncEntry *entry)
-{
-  if (!entry) return NULL;
-  return entry->tax_table;
-}
-
-gboolean gncEntryGetBillable (GncEntry *entry)
-{
-  if (!entry) return FALSE;
-  return entry->billable;
-}
-
-GncOwner * gncEntryGetBillTo (GncEntry *entry)
-{
-  if (!entry) return NULL;
-  return &entry->billto;
 }
 
 GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
@@ -775,84 +878,110 @@ gncEntryRecomputeValues (GncEntry *entry)
 {
   int denom;
 
-  /* See if the tax table changed since we last computed values */
-  if (entry->tax_table) {
-    Timespec modtime = gncTaxTableLastModified (entry->tax_table);
-    if (timespec_cmp (&entry->taxtable_modtime, &modtime)) {
+  /* See if either tax table changed since we last computed values */
+  if (entry->i_tax_table) {
+    Timespec modtime = gncTaxTableLastModified (entry->i_tax_table);
+    if (timespec_cmp (&entry->i_taxtable_modtime, &modtime)) {
       entry->values_dirty = TRUE;
-      entry->taxtable_modtime = modtime;
+      entry->i_taxtable_modtime = modtime;
+    }
+  }
+  if (entry->b_tax_table) {
+    Timespec modtime = gncTaxTableLastModified (entry->b_tax_table);
+    if (timespec_cmp (&entry->b_taxtable_modtime, &modtime)) {
+      entry->values_dirty = TRUE;
+      entry->b_taxtable_modtime = modtime;
     }
   }
 
   if (!entry->values_dirty)
     return;
 
-  if (entry->tax_values) {
-    gncAccountValueDestroy (entry->tax_values);
-    entry->tax_values = NULL;
+  /* Clear the last-computed tax values */
+  if (entry->i_tax_values) {
+    gncAccountValueDestroy (entry->i_tax_values);
+    entry->i_tax_values = NULL;
+  }
+  if (entry->b_tax_values) {
+    gncAccountValueDestroy (entry->b_tax_values);
+    entry->b_tax_values = NULL;
   }
 
-  gncEntryComputeValue (entry->quantity, entry->price,
-			(entry->taxable ? entry->tax_table : NULL),
-			entry->taxincluded,
-			entry->discount, entry->disc_type,
-			entry->disc_how,
-			&(entry->value), &(entry->disc_value),
-			&(entry->tax_values));
+  /* Compute the invoice values */
+  gncEntryComputeValue (entry->quantity, entry->i_price,
+			(entry->i_taxable ? entry->i_tax_table : NULL),
+			entry->i_taxincluded,
+			entry->i_discount, entry->i_disc_type,
+			entry->i_disc_how,
+			&(entry->i_value), &(entry->i_disc_value),
+			&(entry->i_tax_values));
+
+  /* Compute the bill values */
+  gncEntryComputeValue (entry->quantity, entry->b_price,
+			(entry->b_taxable ? entry->b_tax_table : NULL),
+			entry->b_taxincluded,
+			gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
+			&(entry->b_value), NULL, &(entry->b_tax_values));
 
   denom = get_commodity_denom (entry);
-  entry->value_rounded = gnc_numeric_convert (entry->value, denom,
-					      GNC_RND_ROUND);
-  entry->disc_value_rounded = gnc_numeric_convert (entry->disc_value, denom,
-					      GNC_RND_ROUND);
-  entry->tax_value = gncAccountValueTotal (entry->tax_values);
-  entry->tax_value_rounded = gnc_numeric_convert (entry->tax_value, denom,
-					      GNC_RND_ROUND);
+  entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
+						GNC_RND_ROUND);
+  entry->i_disc_value_rounded = gnc_numeric_convert (entry->i_disc_value, denom,
+						     GNC_RND_ROUND);
+  entry->i_tax_value = gncAccountValueTotal (entry->i_tax_values);
+  entry->i_tax_value_rounded = gnc_numeric_convert (entry->i_tax_value, denom,
+						    GNC_RND_ROUND);
+
+  entry->b_value_rounded = gnc_numeric_convert (entry->b_value, denom,
+						GNC_RND_ROUND);
+  entry->b_tax_value = gncAccountValueTotal (entry->b_tax_values);
+  entry->b_tax_value_rounded = gnc_numeric_convert (entry->b_tax_value, denom,
+						    GNC_RND_ROUND);
   entry->values_dirty = FALSE;
 }
 
-void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
+void gncEntryGetValue (GncEntry *entry, gboolean is_inv, gnc_numeric *value,
 		       gnc_numeric *discount_value, gnc_numeric *tax_value,
 		       GList **tax_values)
 {
   if (!entry) return;
   gncEntryRecomputeValues (entry);
   if (value)
-    *value = entry->value;
+    *value = (is_inv ? entry->i_value : entry->b_value);
   if (discount_value)
-    *discount_value = entry->disc_value;
+    *discount_value = (is_inv ? entry->i_disc_value : gnc_numeric_zero());
   if (tax_value)
-    *tax_value = entry->tax_value;
+    *tax_value = (is_inv ? entry->i_tax_value : entry->b_tax_value);
   if (tax_values)
-    *tax_values = entry->tax_values;
+    *tax_values = (is_inv ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryReturnValue (GncEntry *entry)
+gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv)
 {
   if (!entry) return gnc_numeric_zero();
   gncEntryRecomputeValues (entry);
-  return entry->value_rounded;
+  return (is_inv ? entry->i_value_rounded : entry->b_value_rounded);
 }
 
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry)
+gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv)
 {
   if (!entry) return gnc_numeric_zero();
   gncEntryRecomputeValues (entry);
-  return entry->tax_value_rounded;
+  return (is_inv ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
 }
 
-GList * gncEntryReturnTaxValues (GncEntry *entry)
+GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv)
 {
   if (!entry) return NULL;
   gncEntryRecomputeValues (entry);
-  return entry->tax_values;
+  return (is_inv ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry)
+gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
 {
   if (!entry) return gnc_numeric_zero();
   gncEntryRecomputeValues (entry);
-  return entry->disc_value_rounded;
+  return (is_inv ? entry->i_disc_value_rounded : gnc_numeric_zero());
 }
 
 void gncEntryCommitEdit (GncEntry *entry)
@@ -946,7 +1075,8 @@ gboolean gncEntryRegister (void)
     { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
     { ENTRY_NOTES, QUERYCORE_STRING, (QueryAccess)gncEntryGetNotes },
     { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
-    { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
+    { ENTRY_IPRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetInvPrice },
+    { ENTRY_BPRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetBillPrice },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
     { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetBill },
     { ENTRY_BILLABLE, QUERYCORE_BOOLEAN, (QueryAccess)gncEntryGetBillable },

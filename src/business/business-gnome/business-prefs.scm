@@ -40,9 +40,17 @@
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  gnc:*business-label* (N_ "Tax Included?")
-  "f" (N_ (string-append
-	   "Whether tax is included by default in entries. "
+  gnc:*business-label* (N_ "Invoice Tax Included?")
+  "f1" (N_ (string-append
+	   "Whether tax is included by default in entries on Invoices. "
+	   "This setting is inherited by new customers and vendors"))
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  gnc:*business-label* (N_ "Bill Tax Included?")
+  "f2" (N_ (string-append
+	   "Whether tax is included by default in entries on Bills. "
 	   "This setting is inherited by new customers and vendors"))
   #f))
 
