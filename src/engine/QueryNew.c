@@ -891,7 +891,13 @@ QueryNew * gncQueryInvert (QueryNew *q)
       qt = copy_query_term(cur->data);
       qt->invert = !(qt->invert);
       new_oterm = g_list_append(NULL, qt);
-      retval->terms = g_list_append(retval->terms, new_oterm);
+
+      /* g_list_append() can take forever, so let's do this for speed
+       * in "large" queries
+       */
+      retval->terms = g_list_reverse(retval->terms);
+      retval->terms = g_list_prepend(retval->terms, new_oterm);
+      retval->terms = g_list_reverse(retval->terms);
     }
     break;
 
@@ -963,17 +969,22 @@ QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op)
     retval->max_results    = q1->max_results;
     retval->changed        = 1;
 
+    /* g_list_append() can take forever, so let's build the list in
+     * reverse and then reverse it at the end, to deal better with
+     * "large" queries.
+     */
     for(i=q1->terms; i; i=i->next) 
     {
       for(j=q2->terms; j; j=j->next) 
       {
         retval->terms = 
-          g_list_append(retval->terms, 
+          g_list_prepend(retval->terms, 
                         g_list_concat
                         (copy_and_terms(i->data),
                          copy_and_terms(j->data)));
       }
     }
+    retval->terms = g_list_reverse(retval->terms);
     break;
 
   case QUERY_NAND:

@@ -1,3 +1,10 @@
+2003-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryNew.c -- g_list_append() can take a LONG time
+	  and on big queries the merge can appear to take a long time.
+	  So, let's use g_list_prepend() and g_list_reverse() to speed
+	  up the process significantly.
+
 2003-01-19  John Pierce <john@killterm.org>
 
 	* doc/Makefile.am
