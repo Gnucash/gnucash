@@ -465,7 +465,7 @@ gncFileSave (void)
     if (been_here_before) return;
 
     been_here_before = TRUE;
-    gncFileSaveAs();   /* been_here prevents infinite recuirsion */
+    gncFileSaveAs();   /* been_here prevents infinite recursion */
     been_here_before = FALSE;
 
     return;
