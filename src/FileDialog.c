@@ -263,7 +263,6 @@ static void
 gncPostFileOpen (const char * filename)
 {
   GNCBook *new_book;
-  AccountGroup *old_group;
   gboolean uh_oh = FALSE;
   AccountGroup *new_group;
   char * newfile;
@@ -288,11 +287,9 @@ gncPostFileOpen (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  old_group = gnc_book_get_group (gncGetCurrentBook ());
-
   gnc_book_destroy (current_book);
   current_book = NULL;
-  
+
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a book going. */
   new_book = gnc_book_new ();
