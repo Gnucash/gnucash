@@ -8,8 +8,6 @@
 (gnc:module-load "gnucash/business-core-file" 0)
 (gnc:module-load "gnucash/dialog-tax-table" 0)
 
-;;(use-modules (gnucash report business-reports))
-
 (define top-level "_Business")
 (define new-label "New")
 (define find-label "Find")
