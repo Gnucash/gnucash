@@ -1134,6 +1134,18 @@ then
      esac],
        [  warnFLAGS="${warnFLAGS} -Werror" ])
 
+  # For gcc >= 3.4.x, specifically enable the new warning switch
+  # -Wdeclaration-after-statement in order to preserve source code
+  # compatibility to gcc 2.95 and other compilers.
+  GCC_VERSION=`${CC} -dumpversion`
+  if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 3; then
+     # This is gcc >= 3.x.x
+     if test `echo ${GCC_VERSION} | cut -d. -f2` -ge 4; then
+	# This is gcc >= 3.4.x
+	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+     fi
+  fi
+
   CFLAGS="${CFLAGS} ${warnFLAGS}"
 
 else
@@ -1160,7 +1172,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT(intl/Makefile po/Makefile.in
+AC_OUTPUT( intl/Makefile po/Makefile.in
 	  m4/Makefile
           dnl # Makefiles
           Makefile
