@@ -106,13 +106,22 @@ architectural goals.
     considered a priority.
     <p>
 
-<dt><b>Loadable Modules</b>
+<dt><b>Extension Language Support</b>
 <dd>Data is currently available by reading the xacc file format, and 
     by importing QIF files.  This interface should be abstracted,
     allowing data to come from any source.  The abstraction should
     involve dynamically loadable modules, so that new modules could
     be developed and added without the need for recompilations or
     re-linking.
+    <p>
+    Rather than designing a loadable-module API, a better design 
+    goal would probably be to create interfaces to extension 
+    languages (perl, tcl, guile).  Such an interface, laying in
+    between the transaction data, and the GUI that manipulates
+    it, should allow for the easy creation of modules, and for
+    modifying the behaviour of the application.  Using
+    <a href="http://starship.skyport.net/crew/beazley/swig.html">
+    SWIG</a> should simplify the actual implementation.
     <p>
 
 <dt><b>SQL I/O</b>
@@ -125,6 +134,7 @@ architectural goals.
     the edit could be rejected en-masse, allowing the user to merge and
     correct their changes.  This is a very important note: updating
     SQL does NOT require locks to be held for long periods of time!
+    <p>
     <p>
 
 <dt><b>Financial Objects</b>
