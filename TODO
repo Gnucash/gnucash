@@ -1,4 +1,4 @@
-Open, known bugs:
+Open, known bugs, desired enhancements:
 
 > 0) For SGI Irix, 
 > Xbae-4.6.2-linas/src/Matrix.h:
@@ -56,7 +56,12 @@ Yes, I know, haven't figured out why yet ...
 12) all messages should be moved out so that translation to foreign
     languages would be possible.
 
+13) transfer window should allow share prices to be entered;
+    but these should grey out when dealing with ordinary bank accounts.
 
+14) Allow transfers of funds to be done in-line
+
+15) Allow an account to be designated as a double-entry-only account.
 
 
 Fixed bugs:
