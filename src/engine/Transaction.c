@@ -177,14 +177,12 @@ xaccSplitDestroy (Split *split)
       MARK_SPLIT (s);
       xaccAccountRemoveSplit (acc, s);
       xaccAccountRecomputeBalance (acc);
-      xaccFreeSplit (s);
 
       s = trans->splits[1];
       acc = s->acc;
       MARK_SPLIT (s);
       xaccAccountRemoveSplit (acc, s);
       xaccAccountRecomputeBalance (acc);
-      xaccFreeSplit (s);
       xaccFreeTransaction (trans);
    }
 }
