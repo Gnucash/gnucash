@@ -123,7 +123,7 @@ freeAccount( Account *acc )
     }
 
     if ( (!dont_free_transaction) && (NULL == trans->credit_split.acc) ) {
-      freeTransaction( trans );
+      xaccFreeTransaction( trans );
     }
 
     i++;
@@ -531,11 +531,11 @@ xaccConsolidateTransactions (Account * acc)
          if (0 == DEQ(sa->share_price, sb->share_price)) continue;
          if (strcmp (sa->memo, sb->memo)) continue;
 
-#ifdef STIL_BROKEN
+#ifdef STILL_BROKEN
 /* hack alert -- still broken from splits */
          /* Free the transaction, and shuffle down by one.
           * Need to shuffle in order to preserve date ordering. */
-         freeTransaction (tb);
+         xaccFreeTransaction (tb);
          
          for (k=j+1; k<acc->numTrans; k++) {
             acc->transaction[k-1] = acc->transaction[k];

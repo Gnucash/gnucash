@@ -605,7 +605,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    if (!qifline) return NULL;
    if ('!' == qifline [0]) return qifline;
 
-   trans = mallocTransaction ();
+   trans = xaccMallocTransaction ();
 
    /* scan for transaction date, description, type */
    while (qifline) {
@@ -769,7 +769,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
     * if we see something else, assume the worst, free the last 
     * transaction, and return */
    if ('!' == qifline[0]) {
-      freeTransaction (trans);
+      xaccFreeTransaction (trans);
       return qifline;
    }
 

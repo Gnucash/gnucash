@@ -458,7 +458,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   grp->saved = False;
   
   /* a double-entry transfer -- just one record, two accounts */
-  trans = mallocTransaction();
+  trans = xaccMallocTransaction();
   split = xaccMallocSplit();
   xaccTransAppendSplit (trans, split);
   
@@ -474,6 +474,9 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccTransSetMemo (trans, XmTextGetString(xferData->memo));
   xaccTransSetDescription (trans, XmTextGetString(xferData->desc));
   xaccTransSetReconcile (trans, NREC);
+
+  /* make sure that all monetary sums are up-to-date */
+  xaccTransRecomputeAmount (trans);
   
   /* make note of which accounts this was transfered from & to */
   acc =  getAccount(grp,xferData->from);

@@ -496,7 +496,7 @@ readTransaction( int fd, Account *acc, int token )
   double share_price = 0.0;
 
   /* create a transaction structure */
-  trans = mallocTransaction();
+  trans = xaccMallocTransaction();
   
   ENTER ("readTransaction");
 
@@ -504,7 +504,7 @@ readTransaction( int fd, Account *acc, int token )
   if( trans->num == NULL )
     {
     PERR ("Premature end of Transaction at num");
-    freeTransaction(trans);
+    xaccFreeTransaction(trans);
     return NULL;
     }
   
@@ -512,7 +512,7 @@ readTransaction( int fd, Account *acc, int token )
   if( date == NULL )
     {
     PERR ("Premature end of Transaction at date");
-    freeTransaction(trans);
+    xaccFreeTransaction(trans);
     return NULL;
     }
   trans->date = *date;
@@ -522,7 +522,7 @@ readTransaction( int fd, Account *acc, int token )
   if( trans->description == NULL )
     {
     PERR ("Premature end of Transaction at description");
-    freeTransaction(trans);
+    xaccFreeTransaction(trans);
     return NULL;
     }
   
@@ -535,7 +535,7 @@ readTransaction( int fd, Account *acc, int token )
     if( NULL == tmp )
       {
       PERR ("Premature end of Transaction at memo");
-      freeTransaction(trans);
+      xaccFreeTransaction(trans);
       return NULL;
       }
     xaccTransSetMemo (trans, tmp);
@@ -547,7 +547,7 @@ readTransaction( int fd, Account *acc, int token )
        if( tmp == NULL )
          {
          PERR ("Premature end of Transaction at action");
-         freeTransaction(trans);
+         xaccFreeTransaction(trans);
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
@@ -558,7 +558,7 @@ readTransaction( int fd, Account *acc, int token )
     if( err != sizeof(int) )
       {
       PERR ("Premature end of Transaction at catagory");
-      freeTransaction(trans);
+      xaccFreeTransaction(trans);
       return NULL;
       }
     
@@ -566,7 +566,7 @@ readTransaction( int fd, Account *acc, int token )
     if( err != sizeof(char) )
       {
       PERR ("Premature end of Transaction at reconciled");
-      freeTransaction(trans);
+      xaccFreeTransaction(trans);
       return NULL;
       }
     xaccTransSetReconcile (trans, recn);
@@ -602,7 +602,7 @@ readTransaction( int fd, Account *acc, int token )
       if( err != sizeof(int) )
         {
         PERR ("Premature end of Transaction at V1 amount");
-        freeTransaction(trans);
+        xaccFreeTransaction(trans);
         return NULL;
         }
       XACC_FLIP_INT (amount);
@@ -616,7 +616,7 @@ readTransaction( int fd, Account *acc, int token )
       if( err != sizeof(double) )
         {
         PERR ("Premature end of Transaction at amount");
-        freeTransaction(trans);
+        xaccFreeTransaction(trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -628,7 +628,7 @@ readTransaction( int fd, Account *acc, int token )
       if( err != sizeof(double) )
         {
         PERR ("Premature end of Transaction at share_price");
-        freeTransaction(trans);
+        xaccFreeTransaction(trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -647,7 +647,7 @@ readTransaction( int fd, Account *acc, int token )
       if( err != sizeof(int) )
         {
         PERR ("Premature end of Transaction at credit");
-        freeTransaction(trans);
+        xaccFreeTransaction(trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -664,7 +664,7 @@ readTransaction( int fd, Account *acc, int token )
       if( err != sizeof(int) )
         {
         PERR ("Premature end of Transaction at debit");
-        freeTransaction(trans);
+        xaccFreeTransaction(trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -711,7 +711,7 @@ readTransaction( int fd, Account *acc, int token )
     if( err != sizeof(int) )
       {
       PERR ("Premature end of Transaction at num-splits");
-      freeTransaction(trans);
+      xaccFreeTransaction(trans);
       return NULL;
       }
      XACC_FLIP_INT (numSplits);

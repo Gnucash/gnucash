@@ -671,9 +671,8 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   }
   
   /* Add an opening balance transaction (as the first transaction) */
-  trans = mallocTransaction();
-  initTransaction(trans);
-  
+  trans = xaccMallocTransaction();
+ 
   todaysDate( &(trans->date) );
   xaccTransSetDescription (trans, OPEN_BALN_STR);
 

@@ -297,7 +297,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   acc->parent->saved = False;
   
   /* allocate mem for the new transaction */
-  trans   = mallocTransaction();
+  trans   = xaccMallocTransaction();
   
   /* Create the "trans" transaction */
   str = XmTextGetString(adjBData->date);

@@ -163,12 +163,12 @@ double xaccGetShareBalance (Split *s)
 }
 
 /********************************************************************\
- * initTransaction
+ * xaccInitTransaction
  * Initialize a transaction structure
 \********************************************************************/
 
 void
-initTransaction( Transaction * trans )
+xaccInitTransaction( Transaction * trans )
   {
   
   /* fill in some sane defaults */
@@ -188,11 +188,12 @@ initTransaction( Transaction * trans )
 
 /********************************************************************\
 \********************************************************************/
+
 Transaction *
-mallocTransaction( void )
+xaccMallocTransaction( void )
   {
   Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
-  initTransaction (trans);
+  xaccInitTransaction (trans);
   return trans;
   }
 
@@ -200,7 +201,7 @@ mallocTransaction( void )
 \********************************************************************/
 
 void
-freeTransaction( Transaction *trans )
+xaccFreeTransaction( Transaction *trans )
   {
   int i;
   Split *s;
