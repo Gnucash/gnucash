@@ -38,6 +38,11 @@
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
 
+#include <gwenhywfar/bio_buffer.h>
+#include <gwenhywfar/xml.h>
+
+#include <libxml/encoding.h>
+
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 
@@ -192,25 +197,84 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
     }
 }
 
+/* ************************************************************ 
+ */
+
+/* This function extracts the normal text part out of the
+   combi-strings that are passed from aqbanking. */
+static int gnc__extractText(const char *text, GWEN_BUFFER *tbuf) {
+  GWEN_BUFFEREDIO *bio;
+  GWEN_XMLNODE *xmlNode;
+  GWEN_BUFFER *buf;
+  int rv;
+
+  buf=GWEN_Buffer_new(0, 256, 0, 1);
+  GWEN_Buffer_AppendString(buf, text);
+  GWEN_Buffer_Rewind(buf);
+  bio=GWEN_BufferedIO_Buffer2_new(buf, 1);
+  GWEN_BufferedIO_SetReadBuffer(bio, 0, 256);
+  xmlNode=GWEN_XMLNode_new(GWEN_XMLNodeTypeTag, "html");
+  rv=GWEN_XML_Parse(xmlNode, bio,
+		    GWEN_XML_FLAGS_DEFAULT |
+		    GWEN_XML_FLAGS_HANDLE_OPEN_HTMLTAGS |
+		    GWEN_XML_FLAGS_NO_CONDENSE |
+		    GWEN_XML_FLAGS_KEEP_CNTRL);
+  GWEN_BufferedIO_Close(bio);
+  GWEN_BufferedIO_free(bio);
+  if (rv) {
+    /* DBG_NOTICE(0, "here"); */
+    GWEN_XMLNode_free(xmlNode);
+    return -1;
+  }
+  else {
+    GWEN_XMLNODE *nn;
+
+    nn=GWEN_XMLNode_GetFirstData(xmlNode);
+    if (nn) {
+      GWEN_Buffer_AppendString(tbuf, GWEN_XMLNode_GetData(nn));
+    }
+    else {
+      GWEN_XMLNode_free(xmlNode);
+      return 1;
+    }
+  }
+  GWEN_XMLNode_free(xmlNode);
+  return 0;
+}
+
+#if 0
+void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1);
+
+void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1)
+{
+  xmlCharEncodingHandlerPtr utf8ptr = 
+    xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8);
+  xmlCharEncodingHandlerPtr latin1ptr = 
+    xmlGetCharEncodingHandler(XML_CHAR_ENCODING_8859_1);
+  xmlCharEncodingInputFunc intolatin1 = latin1ptr->input;
+  xmlCharEncodingInputFunc fromutf8 = utf8ptr->output;
+}
+#endif
+
 /********************************************************
  * Now all the callback functions 
  */
 
 static int inputBoxCB(AB_BANKING *ab,
 		      GWEN_TYPE_UINT32 flags,
-		      const char *title,
-		      const char *text,
+		      const char *utf8title,
+		      const char *utf8text,
 		      char *resultbuffer,
 		      int minsize,
 		      int maxLen)
 {
   GNCInteractor *data;
-  char *msgstr = NULL, *passwd = NULL;
+  char *passwd = NULL;
   int retval = 0;
   int newPin;
   int hideInput;
   GWEN_BUFFER *buffer1, *buffer2;
-  int bufsize = 10+strlen(text);
+  int bufsize = 10+strlen(utf8text);
   const char *latin1text;
   const char *latin1title;
 
@@ -221,8 +285,12 @@ static int inputBoxCB(AB_BANKING *ab,
 
   buffer1 = GWEN_Buffer_new(0, bufsize, 0, 0);
   buffer2 = GWEN_Buffer_new(0, bufsize, 0, 0);
-  AB_ImExporter_Utf8ToDta (title, bufsize, buffer1);
-  AB_ImExporter_Utf8ToDta (text, bufsize, buffer2);
+
+  gnc__extractText(utf8title, buffer1);
+  gnc__extractText(utf8text, buffer2);
+  
+  /*   AB_ImExporter_Utf8ToDta (title, bufsize, buffer1); */
+  /*   AB_ImExporter_Utf8ToDta (text, bufsize, buffer2); */
   latin1title = GWEN_Buffer_GetStart (buffer1);
   latin1text = GWEN_Buffer_GetStart (buffer2);
 
@@ -235,27 +303,25 @@ static int inputBoxCB(AB_BANKING *ab,
   while (TRUE) {
 
     if (newPin) {
-      msgstr = g_strdup_printf("%s\n\n%s", latin1title, latin1text);
       retval = gnc_hbci_get_initial_password (data->parent,
-					      msgstr,
+					      latin1title,
+					      latin1text,
 					      &passwd);
-      g_free (msgstr);
     }
     else {
-      if (data->cache_valid && text && (strcmp(text, data->cache_text)==0)) {
+      if (data->cache_valid && latin1text &&
+	  (strcmp(latin1text, data->cache_text)==0)) {
 	/* Cached user matches, so use cached PIN. */
 	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
 	strcpy(resultbuffer, data->pw);
 	return 0;
       }
       else {
-	msgstr = g_strdup_printf("%s\n\n%s", latin1title, latin1text);
-	
 	retval = gnc_hbci_get_password (data->parent,
-					msgstr,
+					latin1title,
+					latin1text,
 					NULL,
 					&passwd);
-	g_free (msgstr);
       } /* user == data->user */
     } /* newPin */
     
@@ -278,9 +344,9 @@ static int inputBoxCB(AB_BANKING *ab,
     else {
       g_assert (maxLen > strlen(resultbuffer));
       strcpy(resultbuffer, passwd);
-      if (text && data->cache_pin) {
+      if (latin1text && data->cache_pin) {
 	/*printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));*/
-	data->cache_text = g_strdup(text);
+	data->cache_text= g_strdup(latin1text);
 	if (data->pw)
 	  g_free (memset (data->pw, 0, strlen (data->pw)));
 	data->pw = passwd;
@@ -350,12 +416,13 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
 
 static GWEN_TYPE_UINT32
 showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
-	  const char *title, const char *text)
+	  const char *utf8title, const char *utf8text)
 {
   char *msgstr;
   GtkWidget *dialog;
   GNCInteractor *data;
   GWEN_TYPE_UINT32 result;
+  const char *title = utf8title, *text = utf8text;
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
@@ -381,11 +448,12 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
  */
 
 static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags, 
-			const char *title, const char *text, 
+			const char *utf8title, const char *utf8text, 
 			const char *b1, const char *b2, const char *b3)
 {
   GNCInteractor *data;
   GtkWidget *dialog, *label;
+  const char *title = utf8title, *text = utf8text;
   int result;
 
   g_assert(ab);
@@ -411,10 +479,11 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 
 #define progress_id 4711
 
-static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *title, 
-					const char *text, GWEN_TYPE_UINT32 total)
+static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title, 
+					const char *utf8text, GWEN_TYPE_UINT32 total)
 {
   GNCInteractor *data;
+  const char *title = utf8title, *text = utf8text;
   //GtkWidget *dialog;
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
@@ -460,12 +529,12 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 
 
 static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id, 
-			 AB_BANKING_LOGLEVEL level, const char *text)
+			 AB_BANKING_LOGLEVEL level, const char *utf8text)
 {
   GNCInteractor *data;
   //GtkWidget *dialog;
   GWEN_BUFFER *buffer;
-  int bufsize = 10+strlen(text);
+  int bufsize = 10+strlen(utf8text);
   const char *latin1text;
 
   g_assert(ab);
@@ -473,7 +542,8 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   g_assert(data);
 
   buffer = GWEN_Buffer_new(0, bufsize, 0, 0);
-  AB_ImExporter_Utf8ToDta (text, bufsize, buffer);
+  gnc__extractText(utf8text, buffer);
+  /*   AB_ImExporter_Utf8ToDta (text, bufsize, buffer); */
   latin1text = GWEN_Buffer_GetStart (buffer);
 
   if ((id != 0) && (id != progress_id)) {

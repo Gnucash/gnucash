@@ -179,12 +179,10 @@ void gnc_hbci_getbalance_debugprint(AB_JOB *job,
 
 static gchar*
 bal_print_balance(const char *format,
-		  const AB_VALUE *val,
-		  gboolean negative)
+		  const AB_VALUE *val)
 {
   char *str = gnc_AB_VALUE_toReadableString (val);
   char *res = g_strdup_printf(format, 
-			      (negative ? "-" : ""), 
 			      str);
   free (str);
   return res;
@@ -203,7 +201,6 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 
   time_t booked_tt;
 
-  gboolean booked_debit, noted_debit;
   gboolean dialogres;
 
   response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
@@ -220,10 +217,8 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     return TRUE;
   }
   booked_val = AB_Balance_GetValue(booked_grp);
-  booked_debit = AB_Value_GetValue(booked_val) < 0;
   
   noted_val = AB_Balance_GetValue(noted_grp);
-  noted_debit = AB_Value_GetValue(noted_val) < 0;
   
   booked_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(booked_grp));
     
@@ -249,24 +244,16 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       char *booked_str = gnc_AB_VALUE_toReadableString (booked_val);
       char *message1 = g_strdup_printf
 	(
-	 /* Translators: The first %s is "-" if this amount is
-	  * negative or "" if it is positive. The second %s is the
-	  * amount. */
 	 _("Result of HBCI job: \n"
-	   "Account booked balance is %s%s\n"),
-	 (booked_debit ? "-" : ""),
+	   "Account booked balance is %s\n"),
 	 booked_str);
       char *message2 = 
 	((AB_Value_GetValue (noted_val) == 0) ?
 	 g_strdup_printf("%s", "") :
 	 bal_print_balance
-	 /* Translators: The first %s is "-" if this amount is
-	  * negative or "" if it is positive. The second %s is the
-	  * amount. */
 	 (_("For your information: This account also \n"
-	    "has a noted balance of %s%s\n"),
-	  noted_val,
-	  noted_debit));
+	    "has a noted balance of %s\n"),
+	  noted_val));
       const char *message3 = _("Reconcile account now?");
 
       dialogres = gnc_verify_dialog
@@ -283,15 +270,13 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       
   if (dialogres) 
     {
-      gnc_numeric abs_value =
+      gnc_numeric value =
 	double_to_gnc_numeric (AB_Value_GetValue (booked_val),
 			       xaccAccountGetCommoditySCU(gnc_acc),
 			       GNC_RND_ROUND);
       recnWindowWithBalance (parent, 
 			     gnc_acc, 
-			     (booked_debit 
-			      ? gnc_numeric_neg (abs_value)
-			      : abs_value),
+			     value,
 			     booked_tt);
     }
       

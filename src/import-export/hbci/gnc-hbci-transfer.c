@@ -116,8 +116,11 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	successful = gnc_hbci_maketrans_final (td, gnc_acc, trans_type);
 
 	/* User pressed cancel? Then go back to HBCI transaction */
-	if (!successful)
+	if (!successful) {
+	  AB_Banking_DequeueJob (api, job);
+	  AB_Job_free (job);
 	  continue;
+	}
 
 	if (result == 0) {
 
@@ -132,8 +135,15 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	    xaccTransBeginEdit(gtrans);
 	    xaccTransDestroy(gtrans);
 	    xaccTransCommitEdit(gtrans);
+
+/* 	    AB_Banking_DequeueJob(api, job); */
+/* 	    AB_Banking_DelFinishedJob(api, job); */
+/* 	    AB_Banking_DelPendingJob(api, job); */
 	  }
 	  
+	  AB_Banking_DequeueJob(api, job);
+	  AB_Banking_DelFinishedJob(api, job);
+	  AB_Banking_DelPendingJob(api, job);
 	} /* result == 0 */
 	else {
 	  /* huh? Only result == 0 should be possible. Simply ignore

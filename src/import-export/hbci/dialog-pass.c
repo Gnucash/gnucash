@@ -31,6 +31,7 @@
 
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
+		       const char *windowtitle,
 		       const char *heading,
 		       const char *initial_password,
 		       char **password)
@@ -58,6 +59,9 @@ gnc_hbci_get_password (GtkWidget *parent,
 
   gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
                                 GTK_EDITABLE (password_entry));
+
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -90,6 +94,7 @@ gnc_hbci_get_password (GtkWidget *parent,
 
 gboolean
 gnc_hbci_get_initial_password (GtkWidget *parent,
+			       const char *windowtitle,
 			       const char *heading,
 			       char **password)
 {
@@ -120,6 +125,9 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
                                 GTK_EDITABLE (password_entry));
   gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
                                 GTK_EDITABLE (confirm_entry));
+
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);

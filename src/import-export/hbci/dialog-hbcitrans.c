@@ -622,27 +622,8 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
 			      GNC_HBCI_Transtype trans_type) 
 {
   AB_JOB *job;
-  const char *jobname;
 
   /* Create a Do-Transaction (Transfer) job. */
-  switch (trans_type) {
-  case SINGLE_DEBITNOTE:
-    { 
-      jobname = "JobSingleDebitNote";
-    }
-    break;
-  case SINGLE_TRANSFER:
-    {
-      jobname = "JobSingleTransfer";
-    }
-    break;
-  default:
-    {
-      /*printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
-	trans_type);*/
-      jobname = "JobSingleTransfer";
-    }
-  }
   job = AB_JobSingleTransfer_new(h_acc);
   if (AB_Job_CheckAvailability(job)) {
     printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");

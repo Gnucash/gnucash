@@ -110,6 +110,8 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     if (!gnc_AB_BANKING_execute (parent, api, job, interactor)) {
       /* AB_BANKING_executeOutbox failed. */
       AB_Banking_DequeueJob(api, job);
+      AB_Banking_DelFinishedJob(api, job);
+      AB_Banking_DelPendingJob(api, job);
       return;
     }
 
@@ -120,7 +122,9 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     gnc_hbci_gettrans_final(parent, gnc_acc, job, FALSE);
 
     /* Clean up behind ourself. */
+    AB_Banking_DequeueJob(api, job);
     AB_Banking_DelFinishedJob(api, job);
+    AB_Banking_DelPendingJob(api, job);
     gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
   }
