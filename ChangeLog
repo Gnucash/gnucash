@@ -1,3 +1,8 @@
+2002-08-10  David Hampton  <hampton@employees.org>
+
+	* src/FileDialog.c (gncFileQuerySave): Fix a common crash (78132
+	et. al.) caused by a dangling pointer reference.
+
 2002-08-10  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: String fixes by Herbert Thoma <tma@iis.fhg.de>

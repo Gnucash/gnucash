@@ -275,7 +275,7 @@ gncFileNew (void)
 gboolean
 gncFileQuerySave (void)
 {
-  GNCBook * book = gncGetCurrentBook();
+  GNCBook * book;
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -283,7 +283,7 @@ gncFileQuerySave (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (gnc_book_not_saved(book)) {
+  while (gnc_book_not_saved(gncGetCurrentBook())) {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
