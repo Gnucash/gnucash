@@ -73,6 +73,12 @@ http://gnucash.org/
 Origianl X-Accountant home page:
 http://www.cs.hmc.edu/~rclark/xacc
 
+Precomipled binaries:
+ftp://ftp.ultra.net/pub/eugene/RPMS/i386/
+
+Development versions:
+http://linas.org/linux/xacc/
+
 Important Note:
 ---------------
 Numerous core dumps have been reported when using various
