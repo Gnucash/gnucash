@@ -1307,7 +1307,7 @@ pgendRunQueryToCheckpoint (Backend *bend, Query *q)
       for (p=qt->data.acct.accounts; p; p=p->next) {
          /* hack alert -- 0xff000000 is a negative data,
           * around 1910 or so */
-this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00")
+// this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00")
          pgendAccountGetBalance (be, p->data, 0xff000000);
       }
    }
