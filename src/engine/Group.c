@@ -246,7 +246,7 @@ xaccGetAccountFromName ( AccountGroup *root, const char * name )
   /* first, look for accounts hanging off the root */
   for (i=0; i<root->numAcc; i++) {
     acc = root->account[i];
-    if (!strcmp(acc->accountName, name)) return acc;
+    if (!safe_strcmp(acc->accountName, name)) return acc;
   }
 
   /* if we are still here, then we haven't found the account yet.
@@ -418,15 +418,15 @@ insertAccount( AccountGroup *grp, Account *acc )
     
   grp->saved = FALSE;
   
-  grp->numAcc++;
-  grp->account = (Account **)_malloc(((grp->numAcc)+1)*sizeof(Account *));
+  grp->account = (Account **)_malloc(((grp->numAcc)+2)*sizeof(Account *));
 
-  for( i=0; i<(grp->numAcc-1); i++ ) {
+  for( i=0; i<(grp->numAcc); i++ ) {
     grp->account[i] = oldAcc[i];
   }
   _free(oldAcc);
 
-  grp->account[(grp->numAcc)-1] = acc;
+  grp->account[(grp->numAcc)] = acc;
+  grp->numAcc++;
   grp->account[(grp->numAcc)] = NULL;
 
   return i;
@@ -487,8 +487,7 @@ xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
       insertAccount (togrp, acc);
       fromgrp->account[i] = NULL;
    }
-   _free (fromgrp->account);
-   fromgrp->account = NULL;
+   fromgrp->account[0] = NULL;
    fromgrp->numAcc = 0;
 }
 
@@ -507,12 +506,12 @@ xaccMergeAccounts (AccountGroup *grp)
       acc_a = grp->account[i];
       for (j=i+1; j<grp->numAcc; j++) {
          acc_b = grp->account[j];
-         if ((0 == strcmp(acc_a->accountName, acc_b->accountName)) &&
-             (0 == strcmp(acc_a->accountCode, acc_b->accountCode)) &&
-             (0 == strcmp(acc_a->description, acc_b->description)) &&
-             (0 == strcmp(acc_a->currency, acc_b->currency)) &&
-             (0 == strcmp(acc_a->security, acc_b->security)) &&
-             (0 == strcmp(acc_a->notes, acc_b->notes)) &&
+         if ((0 == safe_strcmp(acc_a->accountName, acc_b->accountName)) &&
+             (0 == safe_strcmp(acc_a->accountCode, acc_b->accountCode)) &&
+             (0 == safe_strcmp(acc_a->description, acc_b->description)) &&
+             (0 == safe_strcmp(acc_a->currency, acc_b->currency)) &&
+             (0 == safe_strcmp(acc_a->security, acc_b->security)) &&
+             (0 == safe_strcmp(acc_a->notes, acc_b->notes)) &&
              (acc_a->type == acc_b->type)) {
 
             AccountGroup *ga, *gb;
@@ -522,13 +521,13 @@ xaccMergeAccounts (AccountGroup *grp)
             gb = (AccountGroup *) acc_b->children;
             if (gb) {
                if (!ga) {
-                  acc_a->children = (struct _account_group *) gb;
+                  acc_a->children = gb;
                   gb->parent = acc_a;
                   acc_b->children = NULL;
                } else {
                   xaccConcatGroups (ga, gb);
-                  xaccFreeAccountGroup (gb);
                   acc_b->children = NULL;
+                  xaccFreeAccountGroup (gb);
                }
             }
 
@@ -550,6 +549,7 @@ xaccMergeAccounts (AccountGroup *grp)
             grp->account[j] = grp->account[grp->numAcc -1];
             grp->account[grp->numAcc -1] = NULL;
             grp->numAcc --;
+            break;
          }
       }
    }
