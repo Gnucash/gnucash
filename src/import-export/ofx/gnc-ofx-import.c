@@ -368,7 +368,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	xaccTransSetCurrency(transaction,currency);
 	if(data.amount_valid==true)
 	  {
-	    if(data.transactiontype!=OFX_OTHER)
+	    if(data.invtransactiontype_valid==false)
 	      {
 		/*************Process a normal transaction ***************************/ 
 		DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account"); 
@@ -618,6 +618,10 @@ int ofx_proc_account_cb(struct OfxAccountData data)
       case OFX_CREDITCARD : 
 	default_type=CREDIT;
 	account_type_name = g_strdup_printf(_("Unknown OFX credit card account"));
+	break;
+      case OFX_INVESTMENT :
+	default_type=BANK;
+	account_type_name = g_strdup_printf(_("Unknown OFX investment account"));
 	break;
       default: PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
       }

@@ -1,3 +1,8 @@
+2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/gnc-ofx-import.c: No longer assume that transaction with type OFX_OTHER are investement transactions.  Fixes bug reported by Rik harris.
+	* src/import-export/import-main-matcher.c: Fix unrelated display bug with balanced (typically investement) transactions.  
+	
 2003-02-02  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Disable error-on-warning by default because this

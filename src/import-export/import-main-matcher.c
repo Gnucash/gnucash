@@ -688,6 +688,9 @@ refresh_clist_row (GNCImportMainMatcher *gui,
       text[DOWNLOADED_CLIST_ACTION_INFO] = 
 	g_strdup("WRITEME, this is an unknown action");
     }
+  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+		      DOWNLOADED_CLIST_ACTION_INFO, 
+		      text[DOWNLOADED_CLIST_ACTION_INFO]);
 
   /* Set the pixmaps */
   if(gnc_import_TransInfo_get_action(info)==GNCImport_ADD)
