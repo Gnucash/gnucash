@@ -38,16 +38,38 @@
 /* ======================================================== */
 
 static void
-LedgerMoveCursor  (struct _Table *_table, void * client_data)
+LedgerMoveCursor  (Table *table, void * client_data)
 {
-   /* Table * table =  (Table *)_table; */
    BasicRegister *reg = (BasicRegister *) client_data;
    xaccSaveRegEntry (reg);
 }
 
 /* ======================================================== */
 
-Split * xaccGetCurrentSplit (BasicRegister *reg)
+static void
+LedgerDestroy (BasicRegister *reg)
+{
+   /* be sure to destroy the "blank split" */
+   if (reg->user_hook) {
+      Split *split;
+      Transaction * trans;
+      Account * acc;
+
+      split = (Split *) (reg->user_hook);
+
+      acc = xaccSplitGetAccount (split);
+      xaccAccountRemoveSplit (acc, split);
+
+      trans = xaccSplitGetParent (split);
+      xaccFreeTransaction (trans);
+      reg->user_hook = NULL;
+   }
+}
+
+/* ======================================================== */
+
+Split * 
+xaccGetCurrentSplit (BasicRegister *reg)
 {
    CellBlock *cursor;
    Split *split;
@@ -154,8 +176,18 @@ xaccSaveRegEntry (BasicRegister *reg)
    }
 
 printf ("finished saving %s \n", xaccTransGetDescription(trans));
-   /* refresh the register windows *only* if something changed */
    if (changed) {
+
+      /* if the modified split is the "blank split", 
+       * then it is now an official part of the account.
+       * Set user_hook to null, so that we can be sure of 
+       * getting a new split.
+       */
+      if (split == ((Split *) (reg->user_hook))) {
+         reg->user_hook = NULL;
+      }
+
+      /* refresh the register windows *only* if something changed */
       acc = xaccSplitGetAccount (split);
       accRefresh (acc);
    }
@@ -273,10 +305,16 @@ printf ("load reg of %d entries --------------------------- \n",i);
    }
 
    /* add the "blank split" at the end */
-   trans = xaccMallocTransaction ();
-   xaccTransSetDateToday (trans);
-   split = xaccTransGetSourceSplit (trans);
-   xaccAccountInsertSplit (default_source_acc, split);
+   if (reg->user_hook) {
+      split = (Split *) (reg->user_hook);
+   } else {
+      trans = xaccMallocTransaction ();
+      xaccTransSetDateToday (trans);
+      split = xaccTransGetSourceSplit (trans);
+      xaccAccountInsertSplit (default_source_acc, split);
+      reg->user_hook =  (void *) split;
+      reg->destroy = LedgerDestroy;
+   }
 
    phys_row = reg->header->numRows;
    phys_row += i * (reg->cursor->numRows);
