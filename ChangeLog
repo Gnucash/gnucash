@@ -1,3 +1,7 @@
+2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-account-matcher.c: Fix bug #105293
+
 2003-07-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofbook.c: be sure to delete the book's KVP when we
