@@ -58,7 +58,7 @@ static short module = MOD_IMPORT;
 \********************************************************************/
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 21;
+static const int MATCH_DATE_NOT_THRESHOLD = 14;
 /**Transaction's who have an online_id kvp frame have been downloaded 
   online can probably be skipped in the match list, since it is very 
   unlikely that they would match a transaction downloaded at a later
@@ -615,8 +615,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* If a transaction's amount doesn't match within the
 	     threshold, it's very unlikely to be the same transaction
-	     so we give it an extra -1 penality */
-	  prob = prob-1;
+	     so we give it an extra -5 penality */
+	  prob = prob-5;
 	  /* DEBUG("heuristics:  probability - 1 (amount)"); */
 	}
       
@@ -645,8 +645,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* Extra penalty if that split lies awfully far away
 	     from the given one. */
-	  prob = prob-10;
-	  /*DEBUG("heuristics:  probability - 10 (date)"); */
+	  prob = prob-5;
+	  /*DEBUG("heuristics:  probability - 5 (date)"); */
 	}
       
       /* Check number heuristics */  
@@ -657,9 +657,15 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 		     xaccTransGetNum(xaccSplitGetParent(split)))
 	      ==0))
 	    {	
-	      /*An exact match of the Check number gives a +5 */
-	      prob = prob+5;
+	      /*An exact match of the Check number gives a +4 */
+	      prob = prob+4;
 	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
+	    }
+	  else if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info))) > 0 &&
+		  strlen(xaccTransGetNum(xaccSplitGetParent(split))) > 0)
+	    {
+	      /* If both number are not empty yet do not match, add a little extre penality */
+	      prob = prob-2;
 	    }
 	}
       
