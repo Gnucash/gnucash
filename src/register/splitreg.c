@@ -1352,19 +1352,9 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
 
 /* ============================================== */
 
-CursorType
-xaccSplitRegisterGetCursorType (SplitRegister *reg)
+static CursorType
+sr_cellblock_cursor_type(SplitRegister *reg, CellBlock *cursor)
 {
-  Table *table;
-  CellBlock *cursor;
-
-  assert(reg);
-
-  table = reg->table;
-  if (table == NULL)
-    return CURSOR_NONE;
-
-  cursor = table->current_cursor;
   if (cursor == NULL)
     return CURSOR_NONE;
 
@@ -1377,6 +1367,45 @@ xaccSplitRegisterGetCursorType (SplitRegister *reg)
     return CURSOR_SPLIT;
 
   return CURSOR_NONE;
+}
+
+/* ============================================== */
+
+CursorType
+xaccSplitRegisterGetCursorType (SplitRegister *reg)
+{
+  Table *table;
+
+  if (reg == NULL)
+    return CURSOR_NONE;
+
+  table = reg->table;
+  if (table == NULL)
+    return CURSOR_NONE;
+
+  return sr_cellblock_cursor_type(reg, table->current_cursor);
+}
+
+/* ============================================== */
+
+CursorType
+xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
+                                      int virt_row, int virt_col)
+{
+  Table *table;
+
+  if (reg == NULL)
+    return CURSOR_NONE;
+
+  table = reg->table;
+  if (table == NULL)
+    return CURSOR_NONE;
+
+  if ((virt_row < 0) || (virt_row >= table->num_virt_rows) ||
+      (virt_col < 0) || (virt_col >= table->num_virt_cols))
+    return CURSOR_NONE;
+
+  return sr_cellblock_cursor_type(reg, table->handlers[virt_row][virt_col]);
 }
 
 /* ============================================== */

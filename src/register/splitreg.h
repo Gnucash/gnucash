@@ -233,6 +233,9 @@ void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
 
 /* Returns the type of the current cursor */
 CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+CursorType      xaccSplitRegisterGetCursorTypeRowCol (SplitRegister *reg,
+                                                      int virt_row,
+                                                      int virt_col);
 
 /* Functions for working with split register buffers */
 SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();

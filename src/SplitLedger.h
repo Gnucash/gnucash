@@ -141,8 +141,8 @@ Split * xaccSRGetBlankSplit (SplitRegister *reg);
 
 gncBoolean xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
                                  int *virt_row, int *virt_col);
-gncBoolean xaccSRGetTransSplitRowCol (SplitRegister *reg,
-                                      Transaction *trans, Split *split,
+gncBoolean xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
+                                      Split *trans_split, Split *split,
                                       int *virt_row, int *virt_col);
 
 Split * xaccSRDuplicateCurrent (SplitRegister *reg);

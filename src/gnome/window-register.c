@@ -2343,14 +2343,8 @@ deleteCB(GtkWidget *widget, gpointer data)
 static void duplicateCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
-  Split *new_split;
 
-  new_split = xaccSRDuplicateCurrent(regData->ledger->ledger);
-
-  if (new_split == NULL)
-    return;
-
-  gnc_register_jump_to_split(regData, new_split);
+  xaccSRDuplicateCurrent(regData->ledger->ledger);
 }
 
 

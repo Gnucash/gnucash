@@ -1,4 +1,18 @@
+2000-05-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRCountRows): fix a bug when a two or
+	more splits from the same transaction are in the same account. Fix
+	other bugs including not accessing deleted splits/transactions.
+	Improve the refresh strategy. Could this code get any more
+	complicated? Yes...
+
 2000-05-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (xaccSplitRegisterGetCursorTypeRowCol):
+	new function, get cursor type by virt row/col.
+
+	* src/scm/report/transaction-report.scm: debits on left, credits
+	on right.
 
 	* src/engine/guid/md5.c (md5_process_bytes): fix 32-bit alignment
 	bug.

@@ -423,7 +423,7 @@
 
   (define (gnc:titles)
     (map (lambda (key) (string-append "<TH>" (string-db 'lookup key) "</TH>"))
-         (list 'date 'num 'desc 'memo 'category 'credit 'debit 'balance)))
+         (list 'date 'num 'desc 'memo 'category 'debit 'credit 'balance)))
 
   (define (gnc:trep-renderer options)
     (gnc:tr-report-initialize-inflow-and-outflow!)
