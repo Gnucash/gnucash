@@ -59,6 +59,23 @@ xaccNextTabGroup (Table *table, Widget w)
 }
 
 /* ==================================================== */
+
+static void 
+wrapVerifyCursorPosition (Table *table, int row, int col)
+{
+   CellBlock *save_curs = table->current_cursor;
+   int save_phys_row = table->current_cursor_phys_row;
+   int save_phys_col = table->current_cursor_phys_col;
+
+   /* VerifyCursor will do all sorts of gui-independent machinations */
+   xaccVerifyCursorPosition (table, row, col);
+
+   /* make sure *both* the old and the new cursor rows get redrawn */
+   xaccRefreshCursorGUI (table);  
+   doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+}
+
+/* ==================================================== */
 /* this routine calls the individual cell callbacks */
 
 static void
@@ -84,16 +101,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     */
    if (XbaeEnterCellReason == cbs->reason) 
    {
-      CellBlock *save_curs = table->current_cursor;
-      int save_phys_row = table->current_cursor_phys_row;
-      int save_phys_col = table->current_cursor_phys_col;
-
-      /* VerifyCursor will do all sorts of gui-independent machinations */
-      xaccVerifyCursorPosition (table, row, col);
-
-      /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);  
-      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+      wrapVerifyCursorPosition (table, row, col);
    }
 
    /* can't edit outside of the physical space */
@@ -469,7 +477,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       return;
    }
 
-   xaccVerifyCursorPosition (table, row, col);
+   wrapVerifyCursorPosition (table, row, col);
 
    /* compute the cell location */
    rel_row = table->locators[row][col]->phys_row_offset;
@@ -526,7 +534,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
       haveQuarks = True;
    }
 
-   /* The 0'th row of the handlers is defeined as the header */
+   /* The 0'th row of the handlers is defined as the header */
    alignments = NULL;
    widths = NULL;
    curs = table->handlers[0][0];
