@@ -1,3 +1,8 @@
+2001-03-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/reconcile-list.{ch}: automatically mark cleared
+	transactions as reconciled when the dialog is first opened.
+
 2000-12-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-dateedit.c (gnc_date_edit_get_date): make sure the

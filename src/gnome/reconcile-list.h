@@ -58,6 +58,7 @@ struct _GNCReconcileList
 
   gboolean no_toggle;
   gboolean always_unselect;
+  gboolean first_fill;
 
   GHashTable *reconciled;
 
