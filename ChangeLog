@@ -1,3 +1,7 @@
+2001-07-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/taxtxf.scm: fix bug, eliminate use of append
+
 2001-07-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-dateedit.c: sync with datecell-gnome.c
