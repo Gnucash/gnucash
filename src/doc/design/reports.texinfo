@@ -1,5 +1,38 @@
 @node Reports, User Preferences, Register, Top
 @chapter Reports
+@cindex Reports
+
+The reporting infrastructure is designed facilitate the creation
+of sophisticated reports including tables, graphs, and hyperlinks.
+The infrastructure includes functionality to support the following:
+
+@itemize
+
+@item
+Creation of tables, with headings, subheadings, totals, and subtotals.
+
+@item
+Formatting of dates & numbers.
+
+@item
+Currency conversions.
+
+@item
+Create of graphs such as pie and bar charts.
+
+@item
+Creation of hyperlinks to other reports and to other GnuCash
+objects such as registers.
+
+@end itemize
+
+@menu
+* Creating a Report::           
+@end menu
+
+
+@node Creating a Report,  , Reports, Reports
+@section Creating a Report
 
 To define a report, your report must have 
 
@@ -11,9 +44,10 @@ and should have
 
 as well as
 
-@code{(gnc:depend "html-generator.scm")}
+@code{(gnc:depend "report-html.scm")}
  
-if you wish to use the html table generation facilities.
+if you wish to use the html generation facilities. You should
+avoid creating HTML directly wherever possible.
 
 To autoload your report, you should add the line @code{(gnc:depend
 <your_report_name>)} to the file @file{src/scm/report/report-list.scm}.
@@ -24,51 +58,33 @@ has lots of date-manipulation functions you'll almost certainly need.
 
 To define a report, you call @code{(gnc:define-report)}. This function
 can accept a variable number of arguments, but at the moment four
-distinct arguments are recognised, as in like the following from
+distinct arguments are recognised, as in the following from
 the transaction report:
 
 @example
   (gnc:define-report
    'version 1
-   'name (string-db 'lookup 'title)
+   'name (N_ "Transaction Report")
    'options-generator trep-options-generator
-   'renderer gnc:trep-renderer)
+   'renderer trep-renderer)
 @end example
 
 @table @code
 
-@item 'version
+@item version
 This is the version number of the report, which is currently ignored.
 
-@item 'name
-This is self-explanatory.
+@item name
+This is the name of the report. It should be marked as translatable,
+but the name should be given in untranslated form, hence the use of
+@code{(N_ )}.
 
-@item 'options-generator
+@item options-generator
 This should be a function that takes no arguments and returns an options
-structure with the options for the report.  The options interface is
+structure with the options for the report. The options interface is
 currently not fully documented, but should be.
 
-@item 'renderer
-This is a function that takes one argument - a set of options that use
-the options API. It returns a list, which either contains strings, or
-lists which only contain strings or lists of the same type.  When
-flattened and concatenated these strings should form the HTML of the
-report.
+@item renderer
+This is the function which renders the HTML.
 
 @end table
-
-To generate the HTML, you can write your own HTML generation code, or
-use the functions in html-generator.scm. These are already quite well
-documented in the source code itself. To use the HTML generation code,
-you build a structure containing a list of report columns, and for each
-column write functions that, given a report entry, generate the text for
-the cell, as well as column headers and column totals. This interface
-is quite likely to change.
-
-At the moment, the only tools for collecting summary information are
-@code{gnc:account-get-balance-interval} and
-@code{gnc:group-get-balance-interval}. As we start to calculate more
-sophisticated summary statistics (particularly for stock and investment
-tracking), we will add to these. Extracting data from accounts is also
-done directly ATM, but we shall soon use the Query API to do this. The
-Query API therefore needs some user-level documentation as well.

@@ -39,24 +39,24 @@ be created as a shared library for use by other programs.
 
 Splits (@pxref{Splits}), or "Ledger Entries" are the fundamental
 accounting units. Each Split consists of a quantity (number of dollar
-bills, number of shares, etc.), the price of that quantity (the price of
-one dollar is 1.00 dollars, etc.), a Memo, a pointer to the parent
-Transaction, a pointer to the debited Account, a reconciled flag and
-timestamp, an "Action" field, and a key-value frame which can store
-arbitrary data (@pxref{Key-Value Pair Frames}).
+bills, number of shares, etc.), the value of that quantity expressed in
+a (possibly) different currency than the quantity, a Memo, a pointer to
+the parent Transaction, a pointer to the debited Account, a reconciled
+flag and timestamp, an "Action" field, and a key-value frame which can
+store arbitrary data (@pxref{Key-Value Pair Frames}).
 
 Transactions (@pxref{Transactions}) embody the notion of "double entry"
 accounting. A Transaction consists of a date, a description, a number, a
 list of one or more Splits, and a key-value frame. When double-entry
-rules are enforced, the total value of the splits is zero.  Note that if
+rules are enforced, the total value of the splits is zero. Note that if
 there is just one split, its value must be zero for double-entry
 accounting; this used to be used for storing prices, but with the advent
-of the pricedb, zero-valued splits are probably best avoided. If there
-are two splits, then the value of one must be positive, the other
-negative: this denotes that one account is credited, and another is
-debited by an equal amount. Positive Split values are 'debits' and
-negative Split values are 'credits'.  Ensuring the Splits to 'add up' to
-zero causes a double-entry accounting system to always balance.
+of the Price DB, this is no longer the case. If there are two splits,
+then the value of one must be positive, the other negative: this denotes
+that one account is debited, and another is credited by an equal
+amount. Positive Split values are 'debits' and negative Split values are
+'credits'. Ensuring the Splits to 'add up' to zero causes a double-entry
+accounting system to always balance.
 
 The engine does not enforce double-entry accounting, but provides an API
 to enable user-code to find unbalanced transactions and 'repair' them so
@@ -65,20 +65,19 @@ that they are in balance. @xref{Scrub}.
 Note the sum of the values of Splits in a Transaction is always computed
 with respect to a currency; thus splits can be balanced even when they
 are in different currencies, as long as they share a common currency.
-The conversion price is simply the price stored in the Split. This
-feature allows currency-trading accounts to be established.
+This feature allows currency-trading accounts to be established.
 
-Every Split must point at its parent Transaction, and that Transaction
+Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-forced by the engine. The engine user cannnot accidentally destroy this
-relationship as long as they stick to using the API and never access
-internal structures directly.
+enforced by the engine. The engine user cannnot accidentally destroy
+this relationship as long as they stick to using the API and never
+access internal structures directly.
 
 Splits are grouped into Accounts (@pxref{Accounts}) which are also known
-as "Ledgers" in accouting practice. Each Account consists of a list of
+as "Ledgers" in accounting practice. Each Account consists of a list of
 Splits that debit that Account. To ensure consistency, if a Split points
-at an Account, then the Account must point at the Split, and vice-versa.
+to an Account, then the Account must point to the Split, and vice-versa.
 A Split can belong to at most one Account. Besides merely containing a
 list of Splits, the Account structure also give the Account a name, a
 code number, description and notes fields, a key-value frame, a pointer
@@ -1138,14 +1137,13 @@ is linked to.
 This is the number of 'shares' which have been debited to the parent
 Account. This quantity may be negative, in which case the Split
 represents a 'credit'. Shares are given in units of the security of the
-Account, unless the security field is blank, in which case shares are
+Account, unless the security field is NULL, in which case shares are
 given in units of the Account currency. @xref{Accounts}.
 
-@item A 'price'
-This represents the price of the shares. The price is a ratio of the
-parent Account currency to the parent Account security. For most Accounts,
-the security is blank, and thus the price is @code{1.0}, since the currency
-effectively is the security. @xref{Accounts}.
+@item A 'value'
+This represents the value of the shares in units of the currency of
+the Account. If the currency and the security are the same, or the
+security field is NULL, the value and share quantity must be equal.
 
 @item A 'reconciled' flag
 This flag represents the reconciled status of the Split. Possible
@@ -1231,12 +1229,12 @@ Return the 'share quantity' of @var{split}.
 @end deftypefun
 
 @deftypefun gnc_numeric xaccSplitGetSharePrice (Split * @var{split})
-Return the 'share price' of @var{split}.
+Return the 'share price' of @var{split}, which is the value
+divided by the share quantity.
 @end deftypefun
 
 @deftypefun gnc_numeric xaccSplitGetValue (Split * @var{split})
-Return the value of @var{split}, which is equal to the share quantity
-multiplied by the share price.
+Return the value of @var{split}.
 @end deftypefun
 
 @deftypefun gnc_numeric xaccSplitGetBaseValue (Split * @var{split}, const char * @var{base_currency})
@@ -1617,7 +1615,7 @@ Set the description field of @var{trans} to @var{desc}.
 @tindex GNCBook
 
 The @dfn{GNCBook} interface encapsulate all the information about a
-gnucash dataset, including the methods used to read and write the
+GnuCash dataset, including the methods used to read and write the
 dataset to datastores.  This class provides several important services:
 
 @itemize
@@ -1663,7 +1661,7 @@ The book id must be a string in the form of a URI/URL.  In the current
 implementation, only one type of URI is supported, and that is the file
 URI: anything of the form @url{file:/home/somewhere/somedir/file.xac}
 The path part must be a valid path.  The file-part must be a valid
-gnucash data file. Paths may be relative or absolute. If the path is
+GnuCash data file. Paths may be relative or absolute. If the path is
 relative; that is, if the argument is @url{file:somefile.xac} then a
 sequence of search paths are checked for a file of this name.
 

@@ -3,17 +3,17 @@
 @cindex User Preferences
 
 The options system is used to obtain user preferences, both globally,
-and when displaying a report.  A wide variety of option types are
+and when displaying a report. A wide variety of option types are
 supported, so it should be possible to create an option for just about
 any property the user might wish to specify.  New option types can be
 added if necessary, but as the process requires detailed knowledge of
-gnucash internals and GTK+/GNOME, it is not documented here.
+GnuCash internals and GTK+/GNOME, it is not documented here.
 
 At present, users are most likely to come across the options system when
 designing custom reports, and are consequently mostly going to use the
-Scheme interface.  There is also a C interface to much of the options
+Scheme interface. There is also a C interface to much of the options
 system which is used to access preferences for the UI, but it is not yet
-documented..
+documented.
 
 @menu
 * Option Databases::            
@@ -47,7 +47,7 @@ display.
 Sometimes, GnuCash requires the user to specify true/false properties.
 Others properties most easily specified by selections from a list,
 others from a number, others still by selecting dates, or one or more
-accounts in the account hierachy, or even colors.  Gnucash supports all
+accounts in the account hierachy, or even colors.  GnuCash supports all
 of these and more:
 
 @table @code
@@ -95,6 +95,14 @@ or more items from the group.
 
 For specifying a numeric quantity.  The programmer can bound the range
 and precision of the quantity.
+
+@item pixmap
+
+For selecting a pixmap located on the filesystem.
+
+@item color
+
+For selecting a color value.
 
 @item internal
 
@@ -256,7 +264,7 @@ for currency selection.
 Create an option that isn't controlled through the options GUI.  This is
 used mainly by the GUI to store state that should be preserved from 
 session to session but isn't really configurable from a dialog box, 
-such as the size of the gnucash main window.  
+such as the size of the GnuCash main window.  
 @end deffn
 
 @deffn Function gnc:make-number-range-option section name sort-tag documentation-string default-value lower-bound upper-bound num-decimals step-size
@@ -291,4 +299,3 @@ type as how the default values are specified (except the date option
 which needs to be fixed).
 
 @end deffn
-

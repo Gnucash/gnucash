@@ -336,6 +336,10 @@ This routine may only be invoked when the suspend counter is zero. It
 should never be mixed with the suspend/resume refresh routines.
 @end deftypefun
 
+@deftypefun gboolean gnc_gui_refresh_suspended (void)
+Returns TRUE if GUI refreshing is currently suspended.
+@end deftypefun
+
 
 @node Finding Components, Iterating over Components, Controlling Refreshes, Component Manager
 @section Finding Components

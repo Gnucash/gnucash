@@ -155,6 +155,10 @@ Cells
 
 * BasicCell::                   
 
+Reports
+
+* Creating a Report::
+
 User Preferences
 
 * Option Databases::            

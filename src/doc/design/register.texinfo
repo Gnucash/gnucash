@@ -4,7 +4,7 @@
 
 The register is an infrastructure for building a modular matrix of cells
 in which each cell may be specialized to perform a particular function,
-e.g., to read dates, numerical amounts, or text.  The register has been
+e.g., to read dates, numerical amounts, or text. The register has been
 designed to be easy to extend, modular, easy to maintain, and memory
 efficient. It is intended to be used for building financial apps and
 spread-sheets.
@@ -63,46 +63,26 @@ cells must implement. A BasicCell contains the following data members.
 @item char *value
 The 'value' of the cell stored as a character string.
 
-@item guint8 input_output
-This is a bit field used for storing flag values. The following flag
-values are defined.
+@item GdkWChar *w_value
+The 'value' of the cell stores as a wide character string.
 
-  @table @code
-
-  @item XACC_CELL_ALLOW_INPUT
-  If set, the cell will may accept keyboard and mouse input from the
-  user. Otherwise, the cell is for display only.
-
-  @item XACC_CELL_ALLOW_SHADOW
-  If set, the cell will 'shadow' the contents of the register which it
-  is contained in. In other words, as the cell is moved to new locations,
-  the value of the register at that location will be copied into the cell.
-
-  @item XACC_CELL_ALLOW_EXACT_ONLY
-  If set, the cell may only be entered by 'exact' indication of the
-  user. Currently, this means the user must click on the cell with the
-  mouse. This flag will prevent the cell from being tabbed into.
-
-  @end table
+@item gint value_len
+The length of w_value.
 
 @item guint32 changed
 This member is set to have all 1-bits (2^32 - 1) to indicate the
 cell contents have been changed from the register value.
 
+@item guint32 conditionally_changed
+This member is set to have all 1-bits (2^32 - 1) to indicate the
+cell contents have been changed from the register value, but that
+the register should not be considered to be changed unless other
+cells have been changed (not conditionally).
+
 @item char * blank_help
 This member is a text string which may be used by a GUI implementation
 to display an informative help string when the value of a cell is empty
 (perhaps prompting the user to enter a particular kind of value).
-
-@item guint32 bg_color
-@itemx guint32 fg_color
-An RGB value indicating the background (foreground) color to render the
-cell with.
-
-@item gboolean use_bg_color
-@itemx gboolean use_fg_color
-A boolean value indicating whether to use the @code{bg_color}
-(@code{fg_color}) member.
 
 @end table
 
@@ -112,9 +92,7 @@ A boolean value indicating whether to use the @code{bg_color}
 
 A @dfn{Cellblock} is an array of active cells. The cells are laid out in
 rows and columns. The cellblock serves as a convenient container for
-organizing active cells in an array. It provides several functions.
-First, it defines a tab-group (group of cells that can be traversed by
-hitting the tab-key). More importantly, through the mechanism of Cursors
+organizing active cells in an array. Through the mechanism of Cursors
 (defined below), it allows a group of cells to be treated as a single
 transactional entity. That is, the cursor/cellblock allows all edits to
 a groups of cells to be simultaneously committed or rejected by
@@ -126,16 +104,16 @@ transaction-processing applications with two-phase commit requirements.
 @section Table
 
 The @dfn{Table} is a displayed matrix. The table is a complex object;
-it is NOT merely a cellblock.  The table provides all of the GUI
+it is @emph{not} merely a cellblock. The table provides all of the GUI
 infrastructure for displaying a row-column matrix of strings.
 
 The table provides one very important function for minimizing memory
-usage for large matrixes. It defines the notion of a @dfn{Cursor}. The
-cursor is a cellblock (an array of active cells) that is moved to the
-location that the user is currently editing. The cursor "virtualizes"
-cell functions; that is, it makes it seem to the user as if all cells in
-the table are active, when in fact the only cell that actually needs to
-be active is the one that the user is currently editing.
+usage for large matrixes -- the notion of a @dfn{Cursor}. The cursor is
+a cellblock (an array of active cells) that is moved to the location
+that the user is currently editing. The cursor "virtualizes" cell
+functions; that is, it makes it seem to the user as if all cells in the
+table are active, when in fact the only cell that actually needs to be
+active is the one that the user is currently editing.
 
 The table design allows multiple cursors to be defined. When a user
 enters a cell, the appropriate cursor is positioned within the table.
@@ -148,13 +126,18 @@ financial example is a table which lists splits underneath their parent
 transaction. This is very different from a checkbook register, where all
 entries are uniform, and can be handled with a single repeated cursor.
 
+Users of the table must provide a TableView object which provides an API
+the table uses to obtain information about the data it is displaying
+such as strings, colors, etc. Thus, the table represents the non-GUI
+portion of the View object in the Model-View-Controller paradigm.
+
 
 @node Split Register,  , Table, Register
 @section Split Register
 
 The split register is a special-purpose object aimed at the display
 of financial transactions. It includes cells for the date, prices,
-balances, transfer accounts, etc.  The register is where the cells,
+balances, transfer accounts, etc. The register is where the cells,
 cursor and table get put together into a unified whole. The register
 defines specific, actual layouts and widths of the date, price, etc.
 cells in a table. It includes a table header, and defines more than
@@ -168,7 +151,7 @@ this implementation was created with the engine financial structures in
 mind.
 
 The second component (src/SplitLedger.[ch]) implements the full register
-behavior and makes full use of the Engine API. This component is
-responsible for loading transactions and splits into the register,
-modifying transactions and splits according to user input, and
-accomplishing tasks such as performing automatic completion.
+behavior (the Controller in MVC) and makes full use of the Engine
+API. This component is responsible for loading transactions and splits
+into the register, modifying transactions and splits according to user
+input, and accomplishing tasks such as performing automatic completion.
