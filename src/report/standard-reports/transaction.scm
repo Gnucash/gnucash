@@ -167,7 +167,7 @@
                 (gnc:html-table-append-row/markup! 
                  table
                  subtotal-style
-                 (append blanks
+                 (cons blanks
                          (list (gnc:make-html-table-cell/markup
                                 "total-number-cell" currency)))))
               (cdr currency-totals))))

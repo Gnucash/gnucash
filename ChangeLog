@@ -1,5 +1,9 @@
 2002-11-29  David Hampton  <hampton@employees.org>
 
+	* src/report/standard-reports/transaction.scm: Fix the grand
+	totals in the transaction report when there is more than one type
+	of currency/commodity to report. #89501
+
 	* src/report/report-system/report.scm: Move the busy cursor logic
 	so that it removes the busy cursor even after a report error.
 
