@@ -4,6 +4,8 @@
 <TITLE>TXF Export - Known Anomalies and Limitations</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA><EMPHASIS>TaxCut 1999</EMPHASIS> </PARA>
 
 <PARA>
@@ -90,7 +92,7 @@
       </LISTITEM>  
 
     </ITEMIZEDLIST></PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
