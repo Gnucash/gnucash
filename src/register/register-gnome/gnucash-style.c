@@ -31,7 +31,11 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "messages.h"
+#include "gnc-engine-util.h"
 
+/** GLOBALS *********************************************************/
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 #define DEFAULT_STYLE_WIDTH 680
 
@@ -811,64 +815,69 @@ gnucash_style_get_default_register_hint_font_name (void)
 void
 gnucash_style_set_register_font_name (const char *name)
 {
-        g_free (register_font_name);
-        register_font_name = g_strdup (name);
+	GdkFont *new_font = NULL;
 
-        if (gnucash_register_font != NULL)
-        {
-                gdk_font_unref (gnucash_register_font);
-                gnucash_register_font = NULL;
-        }
+	if (name != NULL) {
+		new_font = gnucash_font_load (name);
+		if (new_font == NULL) {
+			PWARN("Cannot load font: %s\n", name);
+		}
+	}
 
-        if (register_font_name != NULL)
-                gnucash_register_font = gnucash_font_load (register_font_name);
+	if (new_font == NULL)
+	{
+		name = gnucash_style_get_default_register_font_name ();
+		new_font = gnucash_font_load (name);
+		if (new_font == NULL) {
+			FATAL("Cannot load fallback font: %s\n", name);
+			return;
+		}
+	}
 
-        if (gnucash_register_font == NULL)
-        {
-                const char *name =
-                        gnucash_style_get_default_register_font_name ();
+	if (gnucash_register_font != NULL)
+		gdk_font_unref (gnucash_register_font);
+	if (register_font_name != NULL)
+		g_free (register_font_name);
 
-                g_free (register_font_name);
-                register_font_name = NULL;
+	gnucash_register_font = new_font;
+	gdk_font_ref (gnucash_register_font);
+	register_font_name = g_strdup (name);
 
-                gnucash_register_font = gnucash_font_load (name);
-        }
-
-        g_assert (gnucash_register_font != NULL);
-
-        gdk_font_ref (gnucash_register_font);
+	g_assert (gnucash_register_font != NULL);
 }
 
 void
 gnucash_style_set_register_hint_font_name (const char *name)
 {
-        g_free (register_hint_font_name);
-        register_hint_font_name = g_strdup (name);
+	GdkFont *new_font = NULL;
 
-        if (gnucash_register_hint_font != NULL)
-        {
-                gdk_font_unref (gnucash_register_hint_font);
-                gnucash_register_hint_font = NULL;
-        }
+	if (name != NULL) {
+		new_font = gnucash_font_load (name);
+		if (new_font == NULL) {
+			PWARN("Cannot load font: %s\n", name);
+		}
+	}
 
-        if (register_hint_font_name != NULL)
-                gnucash_register_hint_font =
-                        gnucash_font_load (register_hint_font_name);
+	if (new_font == NULL)
+	{
+		name = gnucash_style_get_default_register_hint_font_name ();
+		new_font = gnucash_font_load (name);
+		if (new_font == NULL) {
+			FATAL("Cannot load fallback font: %s\n", name);
+			return;
+		}
+	}
 
-        if (gnucash_register_hint_font == NULL)
-        {
-                const char *name =
-                        gnucash_style_get_default_register_hint_font_name ();
+	if (gnucash_register_hint_font != NULL)
+		gdk_font_unref (gnucash_register_hint_font);
+	if (register_hint_font_name != NULL)
+		g_free (register_hint_font_name);
 
-                g_free (register_hint_font_name);
-                register_hint_font_name = NULL;
+	gnucash_register_hint_font = new_font;
+	gdk_font_ref (gnucash_register_hint_font);
+	register_hint_font_name = g_strdup (name);
 
-                gnucash_register_hint_font = gnucash_font_load (name);
-        }
-
-        g_assert (gnucash_register_hint_font != NULL);
-
-        gdk_font_ref (gnucash_register_hint_font);
+	g_assert (gnucash_register_hint_font != NULL);
 }
 
 typedef struct
@@ -1013,7 +1022,7 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet,
                 }
 }
 
-void
+gboolean
 gnucash_style_init (void)
 {
         if (gnucash_register_font == NULL)
@@ -1021,6 +1030,9 @@ gnucash_style_init (void)
 
         if (gnucash_register_hint_font == NULL)
                 gnucash_style_set_register_hint_font_name(NULL);
+
+	return ((gnucash_register_font != NULL) &&
+		(gnucash_register_hint_font != NULL));
 }
 
 

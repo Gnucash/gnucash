@@ -106,7 +106,7 @@ gnc_main_window_get_mdi_child (void)
  * gnc_shutdown
  * close down gnucash from the C side...
  ********************************************************************/
-static void
+void
 gnc_shutdown (int exit_status)
 {
   /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/

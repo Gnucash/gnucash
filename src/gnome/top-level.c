@@ -386,7 +386,8 @@ gnc_gui_init (SCM command_line)
                                           NULL, "Register",
                                           "Register hint font");
 
-    gnucash_style_init();
+    if (!gnucash_style_init())
+      gnc_shutdown(1);
     gnucash_color_init();
 
     gnc_html_register_url_handler (URL_TYPE_REGISTER,

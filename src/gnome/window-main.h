@@ -27,6 +27,7 @@
 #include "gnc-mdi-utils.h"
 
 GNCMDIInfo * gnc_main_window_new (void);
+void gnc_shutdown(int);
 
 /*
  * Functions used as callbacks from multiple dialogs.
