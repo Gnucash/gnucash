@@ -58,10 +58,8 @@ static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    GList *node, *xaction_list = (GList *) data;
-
    Transaction *trans;
    gnc_commodity *currency = NULL;
-   gint64 trans_frac = 0;
    Timespec ts;
    GUID trans_guid;
 
@@ -101,13 +99,9 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi (DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
-                                       be->session);
-   trans_frac = gnc_commodity_get_fraction (currency);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
 
-   xaccTransSetCurrency (trans,
-                         gnc_string_to_commodity (DB_GET_VAL("currency",j),
-                                                  be->session));
+   xaccTransSetCurrency (trans, currency);
 
    /* set timestamp as 'recent' for this data */
    trans->version_check = be->version_check;
