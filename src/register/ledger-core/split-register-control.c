@@ -1157,7 +1157,6 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (swap_amounts) {
     gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
     gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
-    gnc_xfer_dialog_set_swapped_currencies (xfer, TRUE);
   } else {
     gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
     gnc_xfer_dialog_select_from_currency (xfer, txn_cur);

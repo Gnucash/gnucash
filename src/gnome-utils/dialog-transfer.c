@@ -46,6 +46,7 @@
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
 
+#define PRECISION 100000
 typedef enum
 {
   XFER_DIALOG_FROM,
@@ -65,6 +66,8 @@ struct _xferDialog
   GtkWidget * num_entry;
   GtkWidget * description_entry;
   GtkWidget * memo_entry;
+  GtkWidget * conv_forward;
+  GtkWidget * conv_reverse;
 
   GtkWidget *	from_window;
   GNCAccountTree * from;
@@ -103,9 +106,6 @@ struct _xferDialog
   GNCBook *	book;
   GNCPriceDB *	pricedb;
 
-  /* Are the currencies swapped (in terms of looking up entries in pricedb?) */
-  gboolean	swap_currencies;
-
   /* Where to store the "exchange_rate" at exit (in lieu of
    * creating a transaction)
    */
@@ -127,27 +127,10 @@ typedef struct _acct_list_item acct_list_item;
 
 /** Prototypes ***************************************************/
 static void gnc_xfer_update_to_amount (XferDialog *xferData);
+static void gnc_xfer_dialog_update_conv_info(XferDialog *xferData);
 
 
 /** Implementations **********************************************/
-
-static void
-gnc_xfer_dialog_get_from_to_commodities (XferDialog *xferData, gnc_commodity **from,
-					 gnc_commodity **to)
-{
-  if (!xferData || !from || !to) return;
-
-  /* Figure out the "commodity" and "currency" for the pricedb.
-   * we may have swapped it around..
-   */
-  if (xferData->swap_currencies) {
-    *from = xferData->to_commodity;
-    *to = xferData->from_commodity;
-  } else {
-    *to = xferData->to_commodity;
-    *from = xferData->from_commodity;
-  }
-}
 
 /* (maybe) update the price from the pricedb. */
 static void
@@ -155,8 +138,9 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 {
   GNCPrice *prc;
   gnc_numeric price;
-  gnc_commodity *from, *to;
   Timespec date;
+  gnc_commodity *from = xferData->from_commodity;
+  gnc_commodity *to = xferData->to_commodity;
 
   if (!xferData) return;
   if (!xferData->from_commodity || ! xferData->to_commodity) return;
@@ -168,23 +152,27 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 
   /* XXX: I'm ALWAYS going to update whenver we get called */
 
-  /* Get the from/to commodities */
-  gnc_xfer_dialog_get_from_to_commodities (xferData, &from, &to);
-
   /* grab the price nearest to the DATE out of the pricedb */
   date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xferData->date_entry));
   prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb,
-					    to, from, date);
+					    from, to, date);
 
-  if (!prc) return;
-
-  /* grab the price from the pricedb */
-  price = gnc_price_get_value (prc);
-
-  /* maybe swap it.. */
-  if (xferData->swap_currencies && !gnc_numeric_zero_p (price))
+  if (prc) {
+    /* grab the price from the pricedb */
+    price = gnc_price_get_value (prc);
+    PINFO("Found price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
+	  gnc_numeric_to_double(price), gnc_commodity_get_mnemonic(to));
+  } else {
+    prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb,
+					      to, from, date);
+    if (!prc)
+      return;
+    price = gnc_price_get_value (prc);
+    PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
+	  gnc_numeric_to_double(price), gnc_commodity_get_mnemonic(from));
     price = gnc_numeric_div (gnc_numeric_create (1, 1), price,
 			     GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  }
 
   /* and set the price entry */
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit), price);
@@ -277,6 +265,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 
   gnc_xfer_dialog_set_price_auto (xferData, curr_active,
                                   xferData->from_commodity, xferData->to_commodity);
+  gnc_xfer_dialog_update_conv_info(xferData);
 
   if (!curr_active)
   {
@@ -821,6 +810,40 @@ gnc_xfer_description_button_release_cb( GtkEntry *entry,
 
 /*** End of quickfill-specific callbacks ***/
 
+static void
+gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
+{
+  const gchar *to_mnemonic, *from_mnemonic;
+  gchar *string;
+  gnc_numeric price;
+
+  from_mnemonic = gnc_commodity_get_mnemonic(xferData->from_commodity);
+  to_mnemonic = gnc_commodity_get_mnemonic(xferData->to_commodity);
+
+  price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+  if (gnc_numeric_zero_p(price)) {
+    string = g_strdup_printf("1 %s = x %s", from_mnemonic, to_mnemonic);
+    gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
+    g_free(string);
+
+    string = g_strdup_printf("1 %s = x %s", to_mnemonic, from_mnemonic);
+    gtk_label_set_text(GTK_LABEL(xferData->conv_reverse), string);
+    g_free(string);
+  } else {
+    string = g_strdup_printf("1 %s = %f %s", from_mnemonic,
+			     gnc_numeric_to_double(price), to_mnemonic);
+    gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
+    g_free(string);
+
+    price = gnc_numeric_div(gnc_numeric_create (1, 1), price,
+			    GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    string = g_strdup_printf("1 %s = %f %s", to_mnemonic,
+			     gnc_numeric_to_double(price), from_mnemonic);
+    gtk_label_set_text(GTK_LABEL(xferData->conv_reverse), string);
+    g_free(string);
+  }
+}
+
 static gboolean
 gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 			  gpointer data)
@@ -864,7 +887,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
   if (gnc_numeric_zero_p (price))
     to_amount = gnc_numeric_zero ();
   else
-    to_amount = gnc_numeric_div (amount, price,
+    to_amount = gnc_numeric_mul (amount, price,
                                  xaccAccountGetCommoditySCU (account),
                                  GNC_RND_ROUND);
 
@@ -879,6 +902,8 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
                       (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
     gtk_entry_set_text(entry, "");
   }
+
+  gnc_xfer_dialog_update_conv_info(xferData);
 }
 
 
@@ -921,8 +946,9 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
   amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
   to_amount = gnc_amount_edit_get_amount
     (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-  price = gnc_numeric_div (amount, to_amount, 100000, GNC_RND_ROUND);
+  price = gnc_numeric_div (to_amount, amount, PRECISION, GNC_RND_ROUND);
   gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
+  gnc_xfer_dialog_update_conv_info(xferData);
 
   return FALSE;
 }
@@ -1258,15 +1284,6 @@ gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rat
   gnc_xfer_update_to_amount (xferData);
 }
 
-void
-gnc_xfer_dialog_set_swapped_currencies (XferDialog *xferData, gboolean swap)
-{
-  if (xferData == NULL)
-    return;
-
-  xferData->swap_currencies = swap;
-}
-
 static void
 gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 {
@@ -1381,9 +1398,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (xferData->exch_rate)
   {
-    *(xferData->exch_rate) = gnc_numeric_abs (gnc_numeric_div (to_amount, amount,
-							       GNC_DENOM_AUTO,
-							       GNC_DENOM_REDUCE));
+    *(xferData->exch_rate) =
+      gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
   }
   else
   {
@@ -1432,10 +1448,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   /* try to save this to the pricedb */
   if (xferData->pricedb) {
-    gnc_commodity *from = NULL, *to = NULL;
+    gnc_commodity *from = xferData->from_commodity;
+    gnc_commodity *to = xferData->to_commodity;
 
-    gnc_xfer_dialog_get_from_to_commodities (xferData, &from, &to);
-    
     /* only continue if the currencies are DIFFERENT and are
      * not both euroland currencies 
      */
@@ -1446,38 +1461,54 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       GList *prices;
 
       /* First see if an entry exists at time ts */
-      prices = gnc_pricedb_lookup_at_time (xferData->pricedb, to, from, ts);
+      prices = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
+      if (prices) {
+	PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
+	      gnc_commodity_get_mnemonic(to));
+      } else {
+	prices = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
+	if (prices) {
+	  PINFO("Found reverse price for %s in %s", gnc_commodity_get_mnemonic(to),
+		gnc_commodity_get_mnemonic(from));
+	}
+      }
 
       /* If so, do nothing (well, destroy the list).  if not, create one. */
       if (prices) {
 	gnc_price_list_destroy (prices);
       } else {
+	gnc_commodity *tmp;
 	gnc_numeric value;
 
 	/* compute the price -- maybe we need to swap? */
-	if (xferData->swap_currencies)
-	{
-	  value = gnc_numeric_div (to_amount, amount, GNC_DENOM_AUTO,
-				   GNC_DENOM_REDUCE);
-	}
-	else
-	{
-	  value = gnc_numeric_div (amount, to_amount, GNC_DENOM_AUTO,
-				   GNC_DENOM_REDUCE);
-	}
-
+	value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
 	value = gnc_numeric_abs (value);
+
+	/* Try to be consistent about how quotes are installed. */
+	if (from == gnc_default_currency()) {
+	  tmp = from; from = to; to = tmp;
+	  value = gnc_numeric_div (gnc_numeric_create(1,1), value,
+				   PRECISION, GNC_RND_ROUND);
+	} else if ((to != gnc_default_currency()) &&
+		   (strcmp (gnc_commodity_get_mnemonic(from),
+			    gnc_commodity_get_mnemonic(to)) < 0)) {
+	  tmp = from; from = to; to = tmp;
+	  value = gnc_numeric_div (gnc_numeric_create(1,1), value,
+				   PRECISION, GNC_RND_ROUND);
+	}
 
 	price = gnc_price_create (xferData->book);
 	gnc_price_begin_edit (price);
-	gnc_price_set_commodity (price, to);
-	gnc_price_set_currency (price, from);
+	gnc_price_set_commodity (price, from);
+	gnc_price_set_currency (price, to);
 	gnc_price_set_time (price, ts);
 	gnc_price_set_source (price, "user:xfer-dialog");
 	gnc_price_set_value (price, value);
 	gnc_pricedb_add_price (xferData->pricedb, price);
 	gnc_price_commit_edit (price);
 	gnc_price_unref (price);
+	PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
+	      gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
       }
     }
   }
@@ -1640,6 +1671,12 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
     label = glade_xml_get_widget (xml, "to_currency_label");
     xferData->to_currency_label = label;
+
+    label = glade_xml_get_widget (xml, "conv_forward");
+    xferData->conv_forward = label;
+
+    label = glade_xml_get_widget (xml, "conv_reverse");
+    xferData->conv_reverse = label;
   }
 
   /* optional intermediate currency account */
@@ -1656,7 +1693,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                    gnc_default_price_print_info ());
-    gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(edit), 100000);
+    gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(edit), PRECISION);
     hbox = glade_xml_get_widget (xml, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->price_edit = edit;

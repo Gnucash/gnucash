@@ -535,97 +535,162 @@
 	</child>
 
 	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox79</name>
+	  <class>GtkTable</class>
+	  <name>table1</name>
+	  <rows>4</rows>
+	  <columns>2</columns>
 	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+	  <row_spacing>0</row_spacing>
+	  <column_spacing>0</column_spacing>
 
 	  <widget>
-	    <class>GtkVBox</class>
-	    <name>vbox85</name>
-	    <border_width>3</border_width>
-	    <homogeneous>True</homogeneous>
+	    <class>GtkRadioButton</class>
+	    <name>price_radio</name>
+	    <can_focus>True</can_focus>
+	    <label>Exchange Rate:</label>
+	    <active>True</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>price_amount_group</group>
+	    <child>
+	      <left_attach>0</left_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>0</top_attach>
+	      <bottom_attach>1</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>amount_radio</name>
+	    <can_focus>True</can_focus>
+	    <label>To Amount:</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>price_amount_group</group>
+	    <child>
+	      <left_attach>0</left_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>price_hbox</name>
+	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>0</top_attach>
+	      <bottom_attach>1</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>True</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>price_radio</name>
-	      <can_focus>True</can_focus>
-	      <label>Exchange Rate:</label>
-	      <active>True</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>price_amount_group</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>amount_radio</name>
-	      <can_focus>True</can_focus>
-	      <label>To Amount:</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>price_amount_group</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
+	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
 
 	  <widget>
-	    <class>GtkVBox</class>
-	    <name>vbox86</name>
-	    <border_width>3</border_width>
-	    <homogeneous>True</homogeneous>
+	    <class>GtkHBox</class>
+	    <name>to_amount_hbox</name>
+	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
-	      <class>GtkHBox</class>
-	      <name>price_hbox</name>
-	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
-	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
-	      </child>
-
-	      <widget>
-		<class>Placeholder</class>
-	      </widget>
+	      <class>Placeholder</class>
 	    </widget>
+	  </widget>
 
-	    <widget>
-	      <class>GtkHBox</class>
-	      <name>to_amount_hbox</name>
-	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
-	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
-	      </child>
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>conv_forward</name>
+	    <label></label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+	  </widget>
 
-	      <widget>
-		<class>Placeholder</class>
-	      </widget>
-	    </widget>
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>conv_reverse</name>
+	    <label></label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>2</right_attach>
+	      <top_attach>3</top_attach>
+	      <bottom_attach>4</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>False</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
 	  </widget>
 	</widget>
       </widget>
