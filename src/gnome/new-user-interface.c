@@ -47,6 +47,7 @@ create_newUserDialog (void)
   GtkWidget *hbox1;
   GtkWidget *frame1;
   GtkWidget *scrolledwindow2;
+  GtkWidget *viewport2;
   GtkWidget *newAccountTypesDescription;
   GtkWidget *frame2;
   GtkWidget *scrolledwindow3;
@@ -232,14 +233,23 @@ create_newUserDialog (void)
   gtk_container_add (GTK_CONTAINER (frame1), scrolledwindow2);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-  newAccountTypesDescription = gtk_text_new (NULL, NULL);
+  viewport2 = gtk_viewport_new (NULL, NULL);
+  gtk_widget_set_name (viewport2, "viewport2");
+  gtk_widget_ref (viewport2);
+  gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "viewport2", viewport2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (viewport2);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow2), viewport2);
+
+  newAccountTypesDescription = gtk_label_new ("");
   gtk_widget_set_name (newAccountTypesDescription, "newAccountTypesDescription");
   gtk_widget_ref (newAccountTypesDescription);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "newAccountTypesDescription", newAccountTypesDescription,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newAccountTypesDescription);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow2), newAccountTypesDescription);
-  GTK_WIDGET_UNSET_FLAGS (newAccountTypesDescription, GTK_CAN_FOCUS);
+  gtk_container_add (GTK_CONTAINER (viewport2), newAccountTypesDescription);
+  gtk_label_set_justify (GTK_LABEL (newAccountTypesDescription), GTK_JUSTIFY_LEFT);
+  gtk_label_set_line_wrap (GTK_LABEL (newAccountTypesDescription), TRUE);
 
   frame2 = gtk_frame_new (_("Accounts"));
   gtk_widget_set_name (frame2, "frame2");

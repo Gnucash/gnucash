@@ -1,3 +1,27 @@
+2001-05-26  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnome/new-user-funs.c (gnc_new_user_dialog_is_new_user): new
+	func to test is new user.
+	(gnc_ui_show_new_user_window): add arg for new user or not.
+	(gnc_ui_show_new_user_choice_window): call
+	gnc_ui_show_new_user_window with one argument saying it is a new
+	user call.
+
+	* src/gnome/new-user-callbacks.c (cancel_everything_out): new func
+	extracting out shared functionality.
+	(on_accountChooseDruidPage_cancel): add check to only pop up
+	cancel dialog for new user stuff.
+
+	* src/FileDialog.c (gncFileNew): call gnc_ui_show_new_user_window
+	with one argument saying it isn't new user call.
+
+	* src/gnome/new-user-callbacks.c
+	(on_newAccountTypesList_select_row): deal with change in the text
+	setting to a label rather than a gtktext.
+	(on_newAccountTypesList_unselect_row): same.
+
+	* Makefile.am (TAGS): ignore debian dir.
+
 2001-05-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-acct-tree.c: fix label alignment

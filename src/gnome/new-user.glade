@@ -272,10 +272,21 @@ will appear If you choose New File in the File menu unless you have set the
 	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	      <widget>
-		<class>GtkText</class>
-		<name>newAccountTypesDescription</name>
-		<editable>False</editable>
-		<text></text>
+		<class>GtkViewport</class>
+		<name>viewport2</name>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <name>newAccountTypesDescription</name>
+		  <label></label>
+		  <justify>GTK_JUSTIFY_LEFT</justify>
+		  <wrap>True</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
 	      </widget>
 	    </widget>
 	  </widget>
