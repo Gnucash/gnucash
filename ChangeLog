@@ -5,6 +5,10 @@
 
 2003-02-22  David Hampton  <hampton@employees.org>
 
+	* src/gnome/window-register.c: Don't override the user's toolbar
+	style preference by calling gtk_widget_show_all() on the toolbar.
+	#102041
+
 	* various: Initial port from the deprecated (in 1.6) guile gh_xxx
 	interface to the supported scm_xxx interface.
 

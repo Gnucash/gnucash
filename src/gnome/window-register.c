@@ -982,7 +982,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     GtkWidget *toolbar = gnc_register_setup_toolbar( regData );
     regData->toolbar_dock = glade_xml_get_widget( xml, "toolbar_dock" );
     if ( toolbar ) {
-      gtk_widget_show_all( toolbar );
+      /*
+       * Don't call gtk_widget_show_all() here. It overrides the users
+       * toolbar preference setting.
+       */
+      gtk_widget_show( toolbar );
       gtk_container_add( GTK_CONTAINER(regData->toolbar_dock), toolbar );
     }
   }
@@ -1252,7 +1256,11 @@ gnc_register_setup_toolbar( RegWindow *regData )
 
   gtk_widget_destroy( GTK_WIDGET(regTbar) );
 
-  gtk_widget_show_all( GTK_WIDGET(tbar) );
+  /*
+   * Don't call gtk_widget_show_all() here. It overrides the users
+   * toolbar preference setting.
+   */
+  gtk_widget_show( GTK_WIDGET(tbar) );
 
   return GTK_WIDGET(tbar);
 }
