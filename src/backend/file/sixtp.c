@@ -832,7 +832,7 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
           return FALSE;
       }
 
-      tag_compare = g_strdup_printf("<%s>", first_tag);
+      tag_compare = g_strdup_printf("<%s", first_tag);
 
       result = (strncmp(cursor, tag_compare, strlen(tag_compare)) == 0);
       g_free (tag_compare);
