@@ -78,7 +78,7 @@
   (let ((file (if (pair? gnc:*command-line-files*)
                   (car gnc:*command-line-files*)
                   (gnc:history-get-last))))
-    (if file
+    (if (string? file)
       (gnc:ui-open-file file)))
 
   ;; add a hook to save the user configs on shutdown
