@@ -24,6 +24,7 @@
 #include "gnc-hbci-utils.h"
 
 #include <gnome.h>
+#include <errno.h>
 #include <openhbci/error.h>
 
 #include "gnc-ui.h"
@@ -43,16 +44,20 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   if (!filename)
       return NULL;
   if (!allowNewFile && 
-      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))) {
-    gnc_warning_dialog_parented 
-      (parent,
-       /* Translators: Strings from this file are really only needed
-	* inside Germany (HBCI is not supported anywhere else). You
-	* may safely ignore strings from the import-export/hbci
-	* subdirectory in other countries. */
-       _("Error while loading OpenHBCI config file:\n  %s: No such file or directory.\n"), filename);
-    return NULL;
-  }
+      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))) 
+    {
+      /* ENOENT is "No such file or directory" */
+      gchar *errstring = g_strdup_printf ("%s: %s", filename, strerror (ENOENT));
+      gnc_warning_dialog_parented 
+	(parent,
+	 /* Translators: Strings from this file are really only needed
+	  * inside Germany (HBCI is not supported anywhere else). You
+	  * may safely ignore strings from the import-export/hbci
+	  * subdirectory in other countries. */
+	 _("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
+      g_free (errstring);
+      return NULL;
+    }
   
 
   api = HBCI_API_new (FALSE, TRUE);

@@ -142,9 +142,21 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       choose1 = (timespec_cmp (&ts1, &ts2) == 1);
       
       val = HBCI_Balance_value (choose1 ? bal1 : bal2);
-      
+
+      if ((HBCI_Value_getValue (HBCI_Balance_value (bal1)) == 0) &&
+	  (HBCI_Value_getValue (HBCI_Balance_value (bal2)) == 0))
+	{
+	  gnome_ok_dialog_parented 
+	    (_("The HBCI Balance download returned zero balance.\n"
+	       "It seems as if your bank does not support Balance download.\n"
+	       "If you know that your bank does support Balance download, please\n"
+	       "send a detailed bug report to the OpenHBCI developers at openhbci-general@lists.sf.net."),
+	     GTK_WINDOW (parent));
+	  dialogres = FALSE;
+	}
+      else
       {
-	char *str = HBCI_Value_toReadableString (val);
+	 char *str = HBCI_Value_toReadableString (val);
 	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
@@ -163,7 +175,6 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	free (str);
       }
 
-      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
       GNCInteractor_hide (interactor);
       if (dialogres) 
 	recnWindowWithBalance (parent, 
@@ -173,7 +184,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 				xaccAccountGetCommoditySCU(gnc_acc),
 				GNC_RND_ROUND),
 			       (choose1 ? tt1 : tt2));
-
+      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
       
     }
   }

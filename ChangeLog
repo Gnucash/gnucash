@@ -1,5 +1,8 @@
 2002-11-30  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/gnc-hbci-getbalance.c: More graceful
+	fallback solution when returned balances are zero.
+
 	* src/app-utils/gnc-ui-util.[hc]: Added
 	gnc_locale_default_currency_nodefault function since
 	locale_default_currency might return a non-locale related

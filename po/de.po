@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-27 23:55+0100\n"
-"PO-Revision-Date: 2002-11-27 23:59+0100\n"
+"POT-Creation-Date: 2002-11-30 14:56+0100\n"
+"PO-Revision-Date: 2002-11-30 14:58+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -6790,11 +6790,11 @@ msgstr ""
 "Sie müssen entweder eine existierende Währung angeben oder einen anderen Typ "
 "wählen."
 
-#: src/import-export/Account-matcher.c:275
+#: src/import-export/Account-matcher.c:277
 msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
-#: src/import-export/Commodity-matcher.c:118
+#: src/import-export/Commodity-matcher.c:120
 msgid ""
 "Please select a commodity to match the following exchange code.\n"
 "Please note that the exchange code of the commodity you select will be "
@@ -6804,27 +6804,27 @@ msgstr ""
 "passt.  Achtung: Der Aktiencode der ausgewählten Währung/Aktie wird\n"
 "anschließend überschrieben."
 
-#: src/import-export/Transaction-matcher.c:783
-#: src/import-export/Transaction-matcher.c:844
+#: src/import-export/Transaction-matcher.c:785
+#: src/import-export/Transaction-matcher.c:846
 msgid "ADD"
 msgstr "Einfügen"
 
-#: src/import-export/Transaction-matcher.c:784
-#: src/import-export/Transaction-matcher.c:845
+#: src/import-export/Transaction-matcher.c:786
+#: src/import-export/Transaction-matcher.c:847
 msgid "CLEAR"
 msgstr "Abgleichen"
 
-#: src/import-export/Transaction-matcher.c:785
-#: src/import-export/Transaction-matcher.c:846
+#: src/import-export/Transaction-matcher.c:787
+#: src/import-export/Transaction-matcher.c:848
 msgid "REPLACE"
 msgstr "Ersetzen"
 
-#: src/import-export/Transaction-matcher.c:786
-#: src/import-export/Transaction-matcher.c:847
+#: src/import-export/Transaction-matcher.c:788
+#: src/import-export/Transaction-matcher.c:849
 msgid "SKIP"
 msgstr "Ignorieren"
 
-#: src/import-export/Transaction-matcher.c:1274
+#: src/import-export/Transaction-matcher.c:1276
 msgid "Imported Transaction"
 msgstr "Importierte Buchung"
 
@@ -6849,11 +6849,15 @@ msgid ""
 "duplicates are matched with the right existing transaction, \n"
 "click \"Ok\"."
 msgstr ""
-"Für neue Buchungen, klicken Sie auf den Eintrag \"Anderes Konto\", um jenes zu wählen.\n"
-"Für Buchungen, die Duplikate einer existierenden sind, klicken Sie auf \"Anderes Konto\" oder \"Doppelte Buchung\", \n"
+"Für neue Buchungen, klicken Sie auf den Eintrag \"Anderes Konto\", um jenes "
+"zu wählen.\n"
+"Für Buchungen, die Duplikate einer existierenden sind, klicken Sie auf "
+"\"Anderes Konto\" oder \"Doppelte Buchung\", \n"
 "um die Zuordnung zu überprüfen.\n"
-"Um zwischen beiden Möglichkeiten umzuschalten, klicken Sie auf das Häkchen in der Spalte \"Neu\".\n"
-"Wenn allen neuen Buchungen ein \"Anderen Konto\" zugeordnet wurde und alle Duplikate richtig erkannt wurden, klicken Sie \"Ok\"."
+"Um zwischen beiden Möglichkeiten umzuschalten, klicken Sie auf das Häkchen "
+"in der Spalte \"Neu\".\n"
+"Wenn allen neuen Buchungen ein \"Anderen Konto\" zugeordnet wurde und alle "
+"Duplikate richtig erkannt wurden, klicken Sie \"Ok\"."
 
 #: src/import-export/generic-import.glade.h:15
 msgid "Generic import transaction matcher"
@@ -7500,6 +7504,21 @@ msgstr ""
 "existiert nicht.\n"
 "Bitte wählen Sie einen anderen Ort für diese Datei."
 
+#: src/import-export/hbci/gnc-hbci-getbalance.c:150
+msgid ""
+"The HBCI Balance download returned zero balance.\n"
+"It seems as if your bank does not support Balance download.\n"
+"If you know that your bank does support Balance download, please\n"
+"send a detailed bug report to the OpenHBCI developers at openhbci-"
+"general@lists.sf.net."
+msgstr ""
+"Die HBCI Saldenabfrage ergab einen Saldo Null.\n"
+"Das heißt wahrscheinlich, daß Ihre Bank die HBCI Saldenabfrage nicht\n"
+"richtig unterstützt. Wenn Ihnen aber bekannt ist, daß Ihre Bank dieses\n"
+"durchaus unterstützt, dann senden Sie bitte einen ausführlichen\n"
+"Bug-Report an die Entwickler von OpenHBCI unter\n"
+"openhbci-general@lists.sf.net ."
+
 #. Translators: Strings from this file are really only
 #. * needed inside Germany (HBCI is not supported anywhere
 #. * else). You may safely ignore strings from the
@@ -7507,7 +7526,7 @@ msgstr ""
 #. *
 #. * %s is either the string 'noted balance' or 'booked
 #. * balance'. %s is the amount.
-#: src/import-export/hbci/gnc-hbci-getbalance.c:158
+#: src/import-export/hbci/gnc-hbci-getbalance.c:170
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -7518,11 +7537,11 @@ msgstr ""
 "%s des Kontos ist %s\n"
 "Konto jetzt abgleichen?"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:161
+#: src/import-export/hbci/gnc-hbci-getbalance.c:173
 msgid "noted balance"
 msgstr "Vorgemerkter Saldo"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:161
+#: src/import-export/hbci/gnc-hbci-getbalance.c:173
 msgid "booked balance"
 msgstr "Gebuchter Saldo"
 
@@ -7542,7 +7561,8 @@ msgstr "Online-Auftrag Einzelüberweisung"
 #. * inside Germany (HBCI is not supported anywhere else). You
 #. * may safely ignore strings from the import-export/hbci
 #. * subdirectory in other countries.
-#: src/import-export/hbci/gnc-hbci-utils.c:61
+#: src/import-export/hbci/gnc-hbci-utils.c:57
+#: src/import-export/hbci/gnc-hbci-utils.c:75
 #, c-format
 msgid ""
 "Error while loading OpenHBCI config file:\n"
@@ -7551,7 +7571,7 @@ msgstr ""
 "Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
 "  %s\n"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:238
+#: src/import-export/hbci/gnc-hbci-utils.c:252
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7559,7 +7579,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:247
+#: src/import-export/hbci/gnc-hbci-utils.c:261
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7567,7 +7587,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:256
+#: src/import-export/hbci/gnc-hbci-utils.c:270
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -7845,7 +7865,7 @@ msgstr "Lokales System aktualisieren"
 msgid "Closing connection"
 msgstr "Verbindung schließen"
 
-#: src/import-export/ofx/gnc-ofx-import.c:93
+#: src/import-export/ofx/gnc-ofx-import.c:96
 msgid "Select an OFX/QFX file to process"
 msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 
@@ -7853,7 +7873,7 @@ msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: src/import-export/ofx/gnc-ofx-import.c:387
+#: src/import-export/ofx/gnc-ofx-import.c:390
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Aktienkonto für Aktie \"%s\""
@@ -7862,32 +7882,32 @@ msgstr "Aktienkonto für Aktie \"%s\""
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: src/import-export/ofx/gnc-ofx-import.c:442
+#: src/import-export/ofx/gnc-ofx-import.c:445
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Einnahmenkonto für Aktie \"%s\""
 
-#: src/import-export/ofx/gnc-ofx-import.c:569
+#: src/import-export/ofx/gnc-ofx-import.c:572
 msgid "Unknown OFX checking account"
 msgstr "Unbekanntes OFX Girokonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:573
+#: src/import-export/ofx/gnc-ofx-import.c:576
 msgid "Unknown OFX savings account"
 msgstr "Unbekanntes OFX Sparkonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:577
+#: src/import-export/ofx/gnc-ofx-import.c:580
 msgid "Unknown OFX money market account"
 msgstr "Unbekannter OFX Fondskonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:581
+#: src/import-export/ofx/gnc-ofx-import.c:584
 msgid "Unknown OFX credit line account"
 msgstr "Unbekanntes OFX Kreditlinien-Konto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:585
+#: src/import-export/ofx/gnc-ofx-import.c:588
 msgid "Unknown OFX CMA account"
 msgstr "Unbekannter OFX CMA Konto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:589
+#: src/import-export/ofx/gnc-ofx-import.c:592
 msgid "Unknown OFX credit card account"
 msgstr "Unbekanntes OFX Kreditkartenkonto"
 
@@ -8524,14 +8544,14 @@ msgstr "Handelbare Währungen/Aktien"
 msgid "Update your GnuCash accounts"
 msgstr "Aktualisieren Ihrer Gnucash Konten"
 
-#: src/import-export/gnc-gen-transaction.c:117
+#: src/import-export/gnc-gen-transaction.c:119
 msgid "A destination split for the transaction you selected."
 msgstr "Gegenbuchung für den aktuellen Geschäftsvorgang."
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #: intl-scm/guile-strings.c:2578 intl-scm/guile-strings.c:2600
-#: src/import-export/gnc-gen-transaction.c:349
-#: src/import-export/gnc-gen-transaction.c:374
+#: src/import-export/gnc-gen-transaction.c:351
+#: src/import-export/gnc-gen-transaction.c:376
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
