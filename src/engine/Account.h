@@ -638,25 +638,25 @@ void           xaccClearMarkDownGr (AccountGroup *group, short val);
  * it.
  *
  * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
-                              GNCBook *book);
+void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
+
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it.
  *
  * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
-                              GNCBook *book);
+void DxaccAccountSetSecurity (Account *account, gnc_commodity *security);
+
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
-gnc_commodity * DxaccAccountGetCurrency (Account *account,
-                                         GNCBook *book);
+gnc_commodity * DxaccAccountGetCurrency (Account *account);
+
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
-gnc_commodity * DxaccAccountGetSecurity (Account *account,
-                                         GNCBook *book);
+gnc_commodity * DxaccAccountGetSecurity (Account *account);
+
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */

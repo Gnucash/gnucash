@@ -1408,12 +1408,11 @@ xaccTransGetAccountValue (const Transaction *trans,
 static gnc_commodity *
 FindCommonExclSCurrency (SplitList *splits,
                          gnc_commodity * ra, gnc_commodity * rb,
-                         Split *excl_split,
-                         GNCBook *book)
+                         Split *excl_split)
 {
   GList *node;
 
-  if (!splits || !book) return NULL;
+  if (!splits) return NULL;
 
   for (node = splits; node; node = node->next)
   {
@@ -1436,8 +1435,8 @@ FindCommonExclSCurrency (SplitList *splits,
       continue;
     }
 
-    sa = DxaccAccountGetCurrency (s->acc, book);
-    sb = DxaccAccountGetSecurity (s->acc, book);
+    sa = DxaccAccountGetCurrency (s->acc);
+    sb = DxaccAccountGetSecurity (s->acc);
 
     if (ra && rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1475,10 +1474,9 @@ FindCommonExclSCurrency (SplitList *splits,
  * common currency.  
  */
 static gnc_commodity *
-FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb,
-                    GNCBook *book)
+FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
 {
-  return FindCommonExclSCurrency(splits, ra, rb, NULL, book);
+  return FindCommonExclSCurrency(splits, ra, rb, NULL);
 }
 
 gnc_commodity *
@@ -1497,10 +1495,10 @@ xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
 
   if (!split || NULL == split->acc) return NULL;
 
-  ra = DxaccAccountGetCurrency (split->acc, book);
-  rb = DxaccAccountGetSecurity (split->acc, book);
+  ra = DxaccAccountGetCurrency (split->acc);
+  rb = DxaccAccountGetSecurity (split->acc);
 
-  retval = FindCommonCurrency (trans->splits, ra, rb, book);
+  retval = FindCommonCurrency (trans->splits, ra, rb);
 
   /* compare this value to what we think should be the 'right' value */
   if (!trans->common_currency)

@@ -471,14 +471,16 @@ xaccAccountScrubCommodity (Account *account)
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;
 
-  commodity = DxaccAccountGetSecurity (account, account->book);
+  /* Use the 'obsolete' routines to try to figure out what the
+   * account commodity should have been. */
+  commodity = DxaccAccountGetSecurity (account);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
     return;
   }
 
-  commodity = DxaccAccountGetCurrency (account, account->book);
+  commodity = DxaccAccountGetCurrency (account);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
