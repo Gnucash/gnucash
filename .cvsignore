@@ -4,6 +4,7 @@ INSTALL
 Makefile
 Makefile.in
 TAGS
+TAGS.stamp
 aclocal.m4
 configure
 config.cache
