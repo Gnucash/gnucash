@@ -166,11 +166,6 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       return NULL;
    }
 
-   num = strtoll (DB_GET_VAL("value", j), NULL, 0);
-   trans_frac = gnc_commodity_get_fraction (xaccTransGetCurrency(trans));
-   value = gnc_numeric_create (num, trans_frac);
-   xaccSplitSetValue (s, value);
-
    xaccTransAppendSplit (trans, s);
 
    /* --------------------------------------------- */
@@ -190,13 +185,21 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       return NULL;
    }
 
+   /* We must set value after split has been inserted into account,
+    * since engine references the account SCU to set the value. */
+   xaccAccountInsertSplit(acc, s);
+
+   /* we don't know the fraction until after we inserted into the account */
    num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
    modity = xaccAccountGetCommodity (acc);
    acct_frac = gnc_commodity_get_fraction (modity);
    amount = gnc_numeric_create (num, acct_frac);
    xaccSplitSetAmount (s, amount);
 
-   xaccAccountInsertSplit(acc, s);
+   num = strtoll (DB_GET_VAL("value", j), NULL, 0);
+   trans_frac = gnc_commodity_get_fraction (xaccTransGetCurrency(trans));
+   value = gnc_numeric_create (num, trans_frac);
+   xaccSplitSetValue (s, value);
 
    return NULL;
 }
