@@ -1,0 +1,10 @@
+
+
+This directory used to contain an OFX parser.  That code is obsolete
+and has been cvs delete'd, as of 20 January 2003.
+
+The 'explore' subdirectory contains some example OFX from a working etrade
+OFX server.    It will be deleted someday in the future, when we can
+assure that libofx works with the etrade server.
+
+--linas
