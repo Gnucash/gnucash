@@ -1,3 +1,9 @@
+2004-03-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, dialog-hbcitrans.h,
+	glade/hbci.glade, gnc-hbcitransfer.c: Transfer template management
+	GUI added by Bernd Wagner <F.J.Bernd.Wagner@t-online.de>
+
 2004-03-04  Christian Stimming  <stimming@tuhh.de>
 
 	* po/nl.po: Updated Dutch translation by Jeroen ten Berge
