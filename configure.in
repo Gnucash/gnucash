@@ -634,10 +634,10 @@ then
       if test $enableval = yes; then
          EFENCE_LIBS="-lefence"
          USE_EFENCE=1
+	 AC_DEFINE(USE_EFENCE)
       fi,
       USE_EFENCE=0
       EFENCE_LIBS="")
-    AC_DEFINE(USE_EFENCE)
     AC_SUBST(EFENCE_LIBS)
     
     ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)

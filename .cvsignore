@@ -16,6 +16,7 @@ config.h
 config.h.in
 cscope.out
 cscope.files
+depcomp
 etags.files
 gnucash-config
 install-sh
