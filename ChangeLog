@@ -1,3 +1,15 @@
+2005-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	David Montenegro's patch for bugs #95551, #124367.
+	* src/report/standard-reports/account-summary.scm:
+	  Rewrote account summary report. Now has fields for
+	  more account metadata. Properly handles mixed
+	  asset/liability subaccounts.
+	* src/report/standard-reports/html-acct-table.scm:
+	  Added functionality (account-type &c) and bug fixes
+	  (lone zb subtotals, spurious 'recursive-bal, typos)
+	  needed to make the new account-summary.scm work.
+
 2005-01-29  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, src/tax/us/gncmod-tax-us.c,
