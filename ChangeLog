@@ -38,8 +38,7 @@
 	  sure "editable" is FALSE for READ_ONLY cells.
 	* split-register-model.c -- If the TxnType != NONE, set all cells as
 	  READ_ONLY.
-	* fixes bugs 96024 and 96028 by making posted invoices and payments
-	  read-only.
+	* fixes bug 96028 by making posted invoices and payments read-only.
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 
