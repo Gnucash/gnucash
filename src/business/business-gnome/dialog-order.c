@@ -277,6 +277,7 @@ static int
 gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
+  GncOrder *order;
 
   if (!ow)
     return FALSE;
@@ -293,6 +294,10 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
     break;    
   }
+
+  /* Set the Order's owner now! */
+  order = ow_get_order (ow);
+  gncOrderSetOwner (order, &(ow->owner));
   return FALSE;
 }
 

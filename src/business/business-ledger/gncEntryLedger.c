@@ -348,6 +348,15 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
   gnc_entry_ledger_display_refresh (ledger);
 }
 
+void gnc_entry_ledger_reset_query (GncEntryLedger *ledger)
+{
+  if (!ledger) return;
+  if (!ledger->invoice) return;
+
+  create_invoice_query (ledger);
+  gnc_entry_ledger_display_refresh (ledger);
+}
+
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
 {
   if (!ledger) return;

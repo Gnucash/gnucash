@@ -88,4 +88,6 @@ void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
 
 gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger);
 
+void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */

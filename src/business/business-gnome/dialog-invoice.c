@@ -316,6 +316,23 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static int
+gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice;
+
+  if (!iw)
+    return FALSE;
+
+  gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
+  invoice = iw_get_invoice (iw);
+  gncInvoiceSetOwner (invoice, &(iw->owner));
+  gnc_entry_ledger_reset_query (iw->ledger);
+
+  return FALSE;
+}
+
+static int
 gnc_invoice_on_close_cb (GnomeDialog *dialog, gpointer data)
 {
   InvoiceWindow *iw;
@@ -670,6 +687,10 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  gtk_signal_connect (GTK_OBJECT (iw->owner_choice), "changed",
+		      GTK_SIGNAL_FUNC (gnc_invoice_owner_changed_cb),
+		      iw);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
