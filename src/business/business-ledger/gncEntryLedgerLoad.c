@@ -79,7 +79,8 @@ static void load_discount_how_cells (GncEntryLedger *ledger)
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_how_string_getter);
 }
 
-static void load_xfer_cell (ComboCell * cell, AccountGroup * grp)
+static void load_xfer_cell (ComboCell * cell, AccountGroup * grp,
+			    GncEntryLedgerType ledger_type)
 {
   GList *list;
   GList *node;
@@ -93,19 +94,41 @@ static void load_xfer_cell (ComboCell * cell, AccountGroup * grp)
   for (node = list; node; node = node->next) {
     Account *account = node->data;
     char *name;
+    GNCAccountType type;
+
+    /* Don't add placeholder accounts */
+    if (xaccAccountGetPlaceholder (account))
+      continue;
+
+    /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
+    type = xaccAccountGetType (account);
+    if (type == PAYABLE || type == RECEIVABLE ||
+	type == CASH || type == BANK || type == EQUITY)
+      continue;
+
+    /* If this is an ORDER or INVOICE, then leave out the expenses.
+     * if it's a BILL, then leave out the incomes
+     */
+    switch (ledger_type) {
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      if (type == EXPENSE) continue;
+      break;
+
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_NUM_REGISTER_TYPES:
+      if (type == INCOME) continue;
+      break;
+    }
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    if (name != NULL) {
-      GNCAccountType type = xaccAccountGetType (account);
+    if (name != NULL)
+      gnc_combo_cell_add_menu_item (cell, name);
 
-      /* Dont add placeholder, A/R, A/P, Bank, Cash, or Equity accounts */
-      if (! (xaccAccountGetPlaceholder (account) ||
-	     type == PAYABLE || type == RECEIVABLE ||
-	     type == CASH || type == BANK || type == EQUITY) )
-	gnc_combo_cell_add_menu_item (cell, name);
-
-      g_free(name);
-    }
+    g_free(name);
   }
 
   g_list_free (list);
@@ -123,12 +146,12 @@ static void load_xfer_type_cells (GncEntryLedger *ledger)
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
-  load_xfer_cell (cell, group);
+  load_xfer_cell (cell, group, ledger->type);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
-  load_xfer_cell (cell, group);
+  load_xfer_cell (cell, group, ledger->type);
 }
 
 static void load_taxtable_type_cells (GncEntryLedger *ledger)

@@ -15,6 +15,11 @@
 	* src/app-utils/option-util.c: use gh_scm2double() instead of
 	  gh_scm2int() because guile-1.6 prefers it.  Fixes a crash when
 	  opening the Pref's dialog when using guile-1.6.1
+
+	* src/business/business-ledger/gncEntryLedgerLoad.c -- don't add
+	  income accounts to bills, or expense accounts to invoices.  This
+	  should help further reduce user confusion with what to do when
+	  entering invoices.
 	
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 
