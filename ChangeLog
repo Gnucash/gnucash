@@ -1,3 +1,8 @@
+2001-12-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/druid-utils.[ch]: added
+	gnc_druid_set_logo_image.
+
 2001-12-10  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/main.scm: handle welcome report gui here
