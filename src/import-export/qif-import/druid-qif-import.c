@@ -382,6 +382,31 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
 
 
 /********************************************************************
+ * gnc_ui_qif_import_load_file_back_cb
+ * 
+ * Invoked when the "back" button is clicked on the load file page.
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_load_file_back_cb(GnomeDruidPage * page, gpointer arg1, 
+				    gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  if (gh_list_p(wind->imported_files) &&
+      (gh_length(wind->imported_files) > 0)) {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid), 
+			 get_named_page(wind, "loaded_files_page"));
+    return TRUE;
+  }
+
+  gnome_druid_set_page(GNOME_DRUID(wind->druid), 
+		       get_named_page(wind, "start_page"));
+  return TRUE;
+}
+
+
+/********************************************************************
  * gnc_ui_qif_import_load_file_next_cb
  * 
  * Invoked when the "next" button is clicked on the load file page.
@@ -1807,6 +1832,10 @@ gnc_ui_qif_import_druid_make(void)  {
      GTK_SIGNAL_FUNC (gnc_ui_qif_import_select_file_cb), retval);
 
   glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_file_back_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_qif_import_load_file_back_cb), retval);
+
+  glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_load_file_next_cb",
      GTK_SIGNAL_FUNC (gnc_ui_qif_import_load_file_next_cb), retval);
 
@@ -1994,6 +2023,7 @@ gnc_ui_qif_import_druid_make(void)  {
 
   gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, retval);
 
+  gnome_window_icon_set_from_default(retval->window);
   gtk_widget_show_all(retval->window);
   gtk_window_present (GTK_WINDOW(retval->window));
 
