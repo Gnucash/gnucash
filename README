@@ -68,6 +68,9 @@ Features include:
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the 
     same file, even if the file is NFS-mounted.
+  - Provides a byte-stream format, which allows accounts and
+    account groups to be transmitted to other processes
+    via pipes or sockets.
 
 Home Page:
 ----------
