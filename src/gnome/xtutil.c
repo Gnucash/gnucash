@@ -23,10 +23,14 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <gnome.h>
+ 
 #include "config.h"
+
 #include "messages.h"
 #include "util.h"
-#include "xtutil.h"
+#include "ui-callbacks.h"
+#include "top-level.h"
 
 #if 0
 
@@ -247,10 +251,9 @@ verify_cb_no(GtkWidget *w, gpointer data) {
  *         text     - the message to display                        *
  * Return: none                                                     *
 \********************************************************************/
-gboolean
-verifyBox(GtkWidget *parent, const char *text)
-{
-
+gncBool
+verifyBox(const char *text) {
+  GtkWidget *parent = gnc_get_ui_data();
   GtkWidget *verify_box = NULL;
   GtkWidget *verify_text = NULL;
   struct verify_callback_data result;
@@ -308,9 +311,8 @@ error_cb_ok(GtkWidget *w, gpointer data) {
  * Return: none                                                     * 
 \********************************************************************/
 void 
-errorBox(GtkWidget *parent, const char *message )
-{
-  
+errorBox(const char *message) {
+  GtkWidget *parent = gnc_get_ui_data();
   GtkWidget *error_box = NULL;
   GtkWidget *error_text = NULL;
   gboolean finished = FALSE;

@@ -49,7 +49,6 @@
 #include "table-html.h"
 #include "Transaction.h"
 #include "util.h"
-#include "xtutil.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -750,7 +749,7 @@ deleteCB(GtkWidget *widget, gpointer data)
    * permanent damage */
   trans = xaccSplitGetParent (split);
   sprintf (buf, TRANS_DEL_MSG, xaccSplitGetMemo (split), xaccTransGetDescription (trans));
-  if (!verifyBox(toplevel, buf)) return;
+  if (!verifyBox(buf)) return;
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update

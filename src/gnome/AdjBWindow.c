@@ -1,7 +1,7 @@
 /********************************************************************\
- * xtutil.h -- utility functions that are used everywhere else for  *
- *           xacc (X-Accountant)                                    *
+ * AdjBWindow.c -- the adjust balance window                        *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,28 +23,41 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __XACC_XT_UTIL_H__
-#define __XACC_XT_UTIL_H__
-
-#include <gnome.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <nana.h>
 
 #include "config.h"
 
-/** PROTOTYPES ******************************************************/
+#include "AdjBWindow.h"
 
-#if 0
+/********************************************************************\
+ * adjBWindow                                                       *
+ *   opens up the window to adjust the balance                      *
+ *                                                                  *
+ * Args:   parent  - the parent of this window                      *
+ *         account - the account to adjust                          *
+ * Return: adjBData - the instance of this AdjBWindow               *
+\********************************************************************/
+AdjBWindow *
+adjBWindow( Account *acc ) {
+  AdjBWindow *adjBData = NULL;
 
-void    dateCB( Widget mw, XtPointer cd, XtPointer cb );
-void    amountCB( Widget mw, XtPointer cd, XtPointer cb );
-void    noeditCB( Widget mw, XtPointer cd, XtPointer cb );
-void    destroyShellCB( Widget w, XtPointer cd, XtPointer cb );
-void    setBusyCursor( GtkWidget *w );
-void    unsetBusyCursor( GtkWidget *w );
-void    errorBox( GtkWidget *parent, const char *message );
+  L("STUB: adjBWindow needs to be written for GNOME.\n");
 
-#endif
+  return adjBData;
+}
 
-gboolean verifyBox( GtkWidget *parent, const char *text );
+/********************************************************************\
+ * Don't delete any structures, the close callback will do this     *
+\********************************************************************/
 
-#endif /* __XACC_XT_UTIL_H__ */
+void
+xaccDestroyAdjBWindow (Account *acc) {
+
+  L("STUB: xaccDestroyAdjBWindow needs to be written for GNOME.\n");
+  
+}
+
+
+/******************** END OF FILE ***********************************\
+\********************************************************************/

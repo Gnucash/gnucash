@@ -24,54 +24,57 @@
 
 include @top_srcdir@/Makefile.init
 
-INCLPATH = -I.. \
-           -I../.. \
-           -I../engine \
-           -I../register \
-           -I../swig \
-	   -I../guile \
-           -I@srcdir@/../../include \
-           -I$(includedir)
+GTKSHEET_DIR := @GTKSHEET_DIR@
 
-CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} \
-           $(shell @GNOME_CONFIG_BIN@ --cflags gnome)
+INCLPATH := -I.. \
+            -I../.. \
+            -I../guile \
+            -I../engine \
+            -I../register \
+            -I../reports \
+            -I@srcdir@/../../include \
+            -I${includedir}
 
+# All the other GNOME CFLAGS are handled in Makefile.common now
+CFLAGS   = @CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
 
 GUILELIBS = @GUILELIBS@
-LIBS     = -L$(prefix)/lib @X_PRE_LIBS@ @X_LIBS@ \
-           $(shell @GNOME_CONFIG_BIN@ --libs gtk) @X_EXTRA_LIBS@ -lgnomeui \
-	   $(shell @GNOME_CONFIG_BIN@ --libs gnome gnomeui ) \
-	   $(GUILELIBS) ${LIBNANA} @LIBS@ # -lintl
+LIBS     = -L$(prefix)/lib @LIBS@ \
+           $(shell ${GNOME_CONFIG_BIN} --libs gnomeui) $(GUILELIBS)
 
-GNOMELIBS = @GNOMELIBS@
-GTKLIBS   = @GTKLIBS@
+ifeq (${HAVE_PLOTUTILS},1)
+  LIBS += @PLOTUTILS_LIBS@
+endif
 
-TARGET   = ../../gnucash.gnome
-STATIC   = ../../gnucash.gnome.static
-
-OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o \
-              ../guile/obj/*.o ../swig/guile/gnucash-all-guile_wrap.o \
-              ../swig/obj/*.o
+# Have to use wildcard here otherwise filters below won't get the expanded
+# text to work on...
+OTHER_OBJS += $(wildcard @top_srcdir@/lib/${GTKSHEET_DIR}/obj/gnome/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/obj/gnome/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/register/obj/gnome/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/reports/obj/*.o) 
+OTHER_OBJS += $(wildcard @top_srcdir@/src/guile/obj/*.o)
+OTHER_OBJS += @top_srcdir@/src/swig/guile/obj/gnome/gnucash-gnome-guile_wrap.o
+OTHER_OBJS += $(wildcard @top_srcdir@/src/swig/obj/*.o)
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := top-level.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
-              RecnWindow.c MenuCommands.c FileBox.c
+GNOME_SRCS := top-level.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c \
+              xtutil.c RecnWindow.c MenuCommands.c FileBox.c \
+              options-dialog.c AccWindow.c AdjBWindow.c
 ######################################################################
 
-default: $(TARGET)
+all: gnome
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-gnome: default
+gnome: @top_srcdir@/gnucash.gnome
+@top_srcdir@/gnucash.gnome: ${GNOME_OBJS} ${OTHER_OBJS}
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-gnome.static: $(STATIC)
-
-$(TARGET): ${GNOME_OBJS} ${OTHER_OBJS}
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
-
-$(STATIC): ${GNOME_OBJS} ${OTHER_OBJS}
-	$(CC) -static -o $@ $^ $(LDFLAGS) $(LIBS) 
+gnome.static: @top_srcdir@/gnucash.gnome.static
+@top_srcdir@/gnucash.motif.static: ${GNOME_OBJS} ${OTHER_OBJS}
+	$(CC) -static $(LDFLAGS) -o $@ $^ $(LIBS)

@@ -26,7 +26,6 @@
 #ifndef __ADD_DIALOG_H__
 #define __ADD_DIALOG_H__
 
-#include "Account.h"
 #include "Group.h"
 #include "MainWindow.h"
 
@@ -48,13 +47,13 @@ struct _add_account_dialog
   GtkWidget	*separator;
 
   Account	*parent_account;
-  gint		*type;
+  gint		type;
 
 };
 
 typedef struct _add_account_dialog add_account_dialog;
 
-void 			create_add_account_dialog ( AccountGroup * );
+void 			create_add_account_dialog ( Account * );
 add_account_dialog 	*add_account_dialog_init ( void );
 void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
 
