@@ -73,6 +73,26 @@ gnc_split_register_save_date_cell (BasicCell * cell,
 }
 
 static void
+gnc_split_register_save_type_cell (BasicCell * cell,
+				   gpointer save_data,
+				   gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  const char *value;
+  kvp_frame *kvp;
+  kvp_value *k_val;
+
+  g_return_if_fail (gnc_basic_cell_has_name (cell, TYPE_CELL));
+
+  value = gnc_basic_cell_get_value (cell);
+
+  kvp = xaccTransGetSlots (sd->trans);
+  k_val = kvp_value_new_string (value);
+  kvp_frame_set_slot_path (kvp, k_val, SR_TRANS_TYPE, NULL);
+  kvp_value_delete (k_val);
+}
+
+static void
 gnc_split_register_save_due_date_cell (BasicCell * cell,
                                        gpointer save_data,
                                        gpointer user_data)
@@ -536,6 +556,10 @@ gnc_split_register_model_add_save_handlers (TableModel *model)
   gnc_table_model_set_save_handler (model,
                                     gnc_split_register_save_due_date_cell,
                                     DDUE_CELL);
+
+  gnc_table_model_set_save_handler (model,
+                                    gnc_split_register_save_type_cell,
+                                    TYPE_CELL);
 
   gnc_table_model_set_save_handler (model,
                                     gnc_split_register_save_num_cell,

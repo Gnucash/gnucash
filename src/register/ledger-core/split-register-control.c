@@ -843,6 +843,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   gboolean changed;
   SRInfo *info;
   Split *split;
+  const char *cell_name;
 
   if (!reg)
     return FALSE;
@@ -875,15 +876,16 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     return FALSE;
   }
 
+  /* Get the current cell-name to check it.. */
+  cell_name = gnc_table_get_current_cell_name (reg->table);
+
   /* See if we are leaving an account field */
   do
   {
-    const char *cell_name;
     ComboCell *cell;
     Account *account;
     char *name;
 
-    cell_name = gnc_table_get_current_cell_name (reg->table);
 
     if (!gnc_cell_name_equal (cell_name, XFRM_CELL) &&
         !gnc_cell_name_equal (cell_name, MXFRM_CELL))

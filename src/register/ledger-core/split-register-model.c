@@ -626,35 +626,94 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_type_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Transaction *trans;
+  kvp_frame *kvp;
+  kvp_value *val;
+
+  trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+  if (!trans)
+    return NULL;
+
+  kvp = xaccTransGetSlots (trans);
+  val = kvp_frame_get_slot_path (kvp, SR_TRANS_TYPE, NULL);
+  if (!val)
+  {
+    static char s[2];
+
+    s[0] = 'I';
+    s[1] = '\0';
+
+    return s;
+  }
+  else
+    return kvp_value_get_string (val);
+}
+
+static char
+gnc_split_register_get_type_value (SplitRegister *reg,
+				   VirtualLocation virt_loc)
+{
+  RecnCell *cell;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
+  if (!cell)
+    return '\0';
+
+  return gnc_recn_cell_get_flag (cell);
+}
+
+static const char *
 gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
 				       gboolean translate,
 				       gboolean *conditionally_changed,
 				       gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  Transaction *trans;
+  Split *split;
+  Timespec ts;
+  gboolean is_current;
   char type;
 
-  type = gnc_recn_cell_get_flag
-    ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL));
+  is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                    virt_loc.vcell_loc);
+
+  if (is_current) {
+    type = gnc_split_register_get_type_value (reg, virt_loc);
+  } else {
+    const char *typestr =
+      gnc_split_register_get_type_entry (virt_loc, translate,
+					 conditionally_changed, user_data);
+    if (typestr != NULL)
+      type = *typestr;
+    else
+      type = '\0';
+  }
 
   /* Only print the due date for invoice transactions */
-  if (type != 'I')
+  if (type != 'I') {
+    //PWARN ("returning NULL due_date entry");
     return NULL;
-
-  {
-    Transaction *trans;
-    Split *split;
-    Timespec ts;
-
-    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    trans = xaccSplitGetParent (split);
-    if (!trans)
-      return NULL;
-
-    xaccTransGetDateDueTS (trans, &ts);
-    
-    return gnc_print_date (ts);
   }
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = xaccSplitGetParent (split);
+  if (!trans) {
+    //PWARN ("No transaction in due_date entry");
+    return NULL;
+  }
+
+  xaccTransGetDateDueTS (trans, &ts);
+  //PWARN ("returning valid due_date entry");
+    
+  return gnc_print_date (ts);
 }
 
 static const char *
@@ -827,29 +886,6 @@ gnc_split_register_get_recn_entry (VirtualLocation virt_loc,
     static char s[2];
 
     s[0] = xaccSplitGetReconcile (split);
-    s[1] = '\0';
-
-    return s;
-  }
-}
-
-static const char *
-gnc_split_register_get_type_entry (VirtualLocation virt_loc,
-                                   gboolean translate,
-                                   gboolean *conditionally_changed,
-                                   gpointer user_data)
-{
-  SplitRegister *reg = user_data;
-  Split *split;
-
-  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-  if (!split)
-    return NULL;
-
-  {
-    static char s[2];
-
-    s[0] = 'I';
     s[1] = '\0';
 
     return s;
@@ -1285,6 +1321,23 @@ gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
   return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+}
+
+static CellIOFlags
+gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  char type;
+
+  type = gnc_split_register_get_type_value (reg, virt_loc);
+
+  /* Only print the due date for invoice transactions */
+  if (type != 'I') {
+    return XACC_CELL_ALLOW_NONE;
+  }
+
+  return XACC_CELL_ALLOW_ALL;
 }
 
 static CellIOFlags
@@ -1815,7 +1868,7 @@ gnc_split_register_model_new (void)
    */
   gnc_table_model_set_io_flags_handler
                                  (model,
-                                  gnc_split_register_get_standard_io_flags,
+                                  gnc_split_register_get_ddue_io_flags,
                                   DDUE_CELL);
 
   gnc_table_model_set_io_flags_handler

@@ -30,6 +30,7 @@
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
 #define STOCK_SPLIT_STR _("-- Stock Split --")
 
+#define SR_TRANS_TYPE	"split-register-trans-type"
 
 struct sr_info
 {
