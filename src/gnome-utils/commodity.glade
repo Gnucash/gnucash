@@ -254,7 +254,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Commodity Dialog</name>
-  <title>New Currency/Security</title>
+  <title>New Security</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>

@@ -22,7 +22,11 @@
 
 2002-11-23  David Hampton  <hampton@employees.org>
 
-	* src/gnome/glade/register.glade: Update help menu items. 99169
+	* src/gnome-utils/commodity.glade: Change the title of the 'New
+	Currency/Security' dialog to 'New Security' to match its actual
+	function. #95596
+
+	* src/gnome/glade/register.glade: Update help menu items. #99169
 
 	* src/gnome/window-register.c (gnc_register_toolbar_cb): Remove
 	unused routine.	
@@ -58,7 +62,7 @@
 	the reconciliation window fit within the allocated space.
 	(gnc_reconcile_list_fill): For a split with a zero value, if the
 	number field is non-null then assume this split is for a check and
-	force it the credit list.
+	force it the credit list. #93832
 
 2002-11-22  Christian Stimming  <stimming@tuhh.de>
 
