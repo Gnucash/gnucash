@@ -1,6 +1,6 @@
 Begin3
 Title:		gnucash -- simple single-user accounting program
-Version:	1.5.0
+Version:	1.4.9
 Entered-date:	18JUN99
 Description:    GnuCash is a personal finance manager.  A check-book like
                 register GUI allows you to enter and track bank accounts,
@@ -60,13 +60,9 @@ Description:    GnuCash is a personal finance manager.  A check-book like
 Keywords:	X11 Accounting Finance double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
 Maintained-by:	linas@linas.org (Linas Vepstas)
-Primary-site:	http://gnucash.org/
-Alternate-site:	http://linas.org/linux/xacc 
-		885KB  gnucash-1.1.22.tar.gz
-Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		885KB  gnucash-1.1.22.tar.gz
-Alternate-site:	ftp.x.org /contrib/applications
-Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Mootif/Sparc/Intel/PowerPC 
+Primary-site:	ftp://ftp.gnucash.org/pub/gnucash/sources/stable/
+                3463kB gnucash-1.4.9.tar.gz
+Platforms:      Linux/Unix/X Windows/Gnome/Gtk/Sparc/Intel/PowerPC 
 Copying-policy:	GPL
 End
 

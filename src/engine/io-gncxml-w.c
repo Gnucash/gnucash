@@ -6,6 +6,7 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <tree.h>
 #include <parser.h>
@@ -38,6 +39,10 @@
 #define xmlRootNode root
 #endif
 
+static const gchar *gncxml_emacs_trailer =
+"<!-- Local variables: -->\n"
+"<!-- mode: xml        -->\n"
+"<!-- End:             -->\n";
 
 static gboolean
 xml_add_str(xmlNodePtr p, const char *tag, const char *str,
@@ -583,32 +588,6 @@ xml_add_transaction_split(xmlNodePtr p, Split* s) {
     }
   }
 
-#if 0
-  {
-    gchar data[] = "DEADBEEF";
-    GList *lst = NULL;
-    kvp_frame *f = kvp_frame_new();
-    
-    kvp_value *val1 = kvp_value_new_binary(data, sizeof(data) - 1);
-    kvp_value *val2 = kvp_value_new_gint64(666);
-    kvp_value *val3 = kvp_value_new_string("foo");
-    
-    kvp_frame_set_slot(f, "slot-1", val1);
-    kvp_frame_set_slot(f, "slot-2", val2);
-    kvp_frame_set_slot(f, "slot-3", val3);
-
-    lst = g_list_append(lst, val1);
-    lst = g_list_append(lst, val2);
-    lst = g_list_append(lst, val3);
-    
-    xaccSplitSetSlot(s, "one", val1);
-    xaccSplitSetSlot(s, "two", val2);
-    xaccSplitSetSlot(s, "three", val3);
-    xaccSplitSetSlot(s, "listness", kvp_value_new_glist(lst));
-    xaccSplitSetSlot(s, "subbyslot", kvp_value_new_frame(f));
-  }
-#endif
-
   if(s->kvp_data) {
     if(!xml_add_kvp_frame(split_xml, "slots", s->kvp_data, FALSE))
       return(FALSE);
@@ -766,6 +745,24 @@ xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
   return(TRUE);
 }
 
+static gboolean
+gncxml_append_emacs_trailer(const gchar *filename)
+{
+    FILE *toappend;
+    
+    toappend = fopen(filename, "a+");
+    if(!toappend) 
+    {
+        fprintf(stderr, "Unable to append emacs trailer: %s\n",
+                strerror(errno));
+        return 0;
+    }
+    
+    fprintf(toappend, gncxml_emacs_trailer);
+
+    return fclose(toappend);
+}
+    
 gboolean
 gncxml_write(AccountGroup *group, const gchar *filename) {
   /* fixme: this should be broken up into sub-functions later. */
@@ -810,6 +807,8 @@ gncxml_write(AccountGroup *group, const gchar *filename) {
   status = xmlSaveFile(filename, doc);
   xmlFreeDoc(doc);
 
+  gncxml_append_emacs_trailer(filename);
+  
   /* FIXME: This gives me a non-zero result, even when everything's fine ???
      status = xmlDocDump(outfile, doc);
 

@@ -1,8 +1,8 @@
-gnucash (1.5.2.cvs20001210-0.1) unstable; urgency=low
+gnucash (1.5.2.cvs20001218-0.1) unstable; urgency=low
 
   * local compile
 
- -- James LewisMoss <dres@debian.org>  Thu, 30 Nov 2000 13:29:17 -0500
+ -- James LewisMoss <dres@debian.org>  Mon, 18 Dec 2000 19:33:43 -0500
 
 gnucash (1.5.2.cvs20001105-0.1) unstable; urgency=low
 

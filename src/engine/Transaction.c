@@ -1828,19 +1828,26 @@ xaccTransOrder (Transaction *ta, Transaction *tb)
 /********************************************************************\
 \********************************************************************/
 
-void
-xaccTransSetDateSecs (Transaction *trans, time_t secs)
+enum { TDATE_POSTED, TDATE_ENTERED };
+
+static void
+xaccTransSetDateInternal(Transaction *trans, int which, time_t secs,
+                         long int nsecs)
 {
-   if (!trans) return;
-   check_open (trans);
-   PINFO ("addr=%p set date to %lu %s \n",
-           trans, secs, ctime (&secs));
+    Timespec *dadate = 0;
+    if(!trans) return;
+    check_open(trans);
 
-   trans->date_posted.tv_sec = secs;
-   trans->date_posted.tv_nsec = 0;
+    PINFO ("addr=%p set %d date to %lu %li %s \n",
+           trans, which, secs, nsecs, ctime (&secs));
+    
+    dadate = ((which == TDATE_POSTED)
+              ? &trans->date_posted
+              : &trans->date_entered);
+    dadate->tv_sec = secs;
+    dadate->tv_nsec = nsecs;
 
-   mark_trans (trans);
-
+    mark_trans(trans);
    /* Because the date has changed, we need to make sure that each of the
     * splits is properly ordered in each of their accounts.  We could do that
     * here, simply by reinserting each split into its account.  However, in
@@ -1851,69 +1858,44 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 }
 
 void
+xaccTransSetDateSecs (Transaction *trans, time_t secs)
+{
+    xaccTransSetDateInternal(trans, TDATE_POSTED, secs, 0);
+}
+
+void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
-   if (!trans) return;
-   check_open (trans);
-
-   trans->date_entered.tv_sec = secs;
-   trans->date_entered.tv_nsec = 0;
-
-   mark_trans (trans);
+    xaccTransSetDateInternal(trans, TDATE_ENTERED, secs, 0);
 }
 
 void
 xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
 {
-   if (!trans || !ts) return;
-   check_open (trans);
-   DEBUGCMD ({
-         time_t sicko = ts->tv_sec;
-         PINFO ("addr=%p set date to %Lu %s \n",
-                trans, ts->tv_sec, ctime (&sicko));
-    })
-
-   trans->date_posted.tv_sec = ts->tv_sec;
-   trans->date_posted.tv_nsec = ts->tv_nsec;
-
-   mark_trans (trans);
+   if (!ts) return;
+   xaccTransSetDateInternal(trans, TDATE_POSTED, ts->tv_sec, ts->tv_nsec);
 }
 
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {
-   if (!trans || !ts) return;
-   check_open (trans);
-
-   trans->date_entered.tv_sec = ts->tv_sec;
-   trans->date_entered.tv_nsec = ts->tv_nsec;
-
-   mark_trans (trans);
+   if (!ts) return;
+   xaccTransSetDateInternal(trans, TDATE_ENTERED, ts->tv_sec, ts->tv_nsec);
 }
 
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year) 
 {
   Timespec ts = gnc_dmy2timespec(day, mon, year);
-  xaccTransSetDateTS (trans, &ts);
+  xaccTransSetDateInternal(trans, TDATE_POSTED, ts.tv_sec, ts.tv_nsec);
 }
 
 void
 xaccTransSetDateToday (Transaction *trans)
 {
    struct timeval tv;
-
-   if (!trans) return;
-   check_open (trans);
-
    gettimeofday (&tv, NULL);
-   trans->date_posted.tv_sec = tv.tv_sec;
-   trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
-
-   mark_trans (trans);
-
-   PINFO ("addr=%p set date to %lu %s \n",
-          trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
+   xaccTransSetDateInternal(trans, TDATE_POSTED, tv.tv_sec, tv.tv_usec);
 }
 
 

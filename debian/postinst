@@ -1,0 +1,5 @@
+#!/bin/sh
+
+ldconfig
+
+#DEBHELPER#

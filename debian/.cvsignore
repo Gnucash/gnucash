@@ -1,2 +1,6 @@
 Makefile
 Makefile.in
+tmp
+*.debhelper
+files
+substvars

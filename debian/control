@@ -6,7 +6,7 @@ Standards-Version: 3.1.0.0
 
 Package: gnucash
 Architecture: any
-Depends: ${shlibs:Depends}, libwww-perl, slib, scm, guile1.3, libguile6-slib, perl-5.005, eperl
+Depends: ${shlibs:Depends}, libwww-perl, guile1.4-slib
 Suggests: gnuplot
 Description: A personal finance tracking program.
  Gnucash can track finances in multiple accounts, keeping running

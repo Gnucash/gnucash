@@ -2,7 +2,6 @@ Makefile
 Makefile.in
 version.texi
 stamp-vti
-
 gnucash-design.tps
 gnucash-design.fns
 gnucash-design.cps
@@ -13,7 +12,7 @@ gnucash-design.tp
 gnucash-design.vr
 gnucash-design.fn
 gnucash-design.cp
-
 *.info
 *.info-*
 *.html
+texinfo.tex

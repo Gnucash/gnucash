@@ -73,47 +73,6 @@
 
 */
 
-#if 0
-static xmlDocPtr
-xml_sax_parse_file_r(xmlSAXHandlerPtr sax,
-                     const char *filename,
-                     int recovery,
-                     void *user_data) {
-  xmlDocPtr ret;
-  xmlParserCtxtPtr ctxt;
-  char *directory = NULL;
-  
-  ctxt = xmlCreateFileParserCtxt(filename);
-  
-  if (ctxt == NULL) return(NULL);
-  
-  if (sax != NULL) {
-    if (ctxt->sax != NULL) xmlFree(ctxt->sax);
-    ctxt->sax = sax;
-    ctxt->userData = user_data;
-  }
-  
-  if ((ctxt->directory == NULL) && (directory == NULL))
-    directory = xmlParserGetDirectory(filename);
-  if ((ctxt->directory == NULL) && (directory != NULL))
-    ctxt->directory = (char *) xmlStrdup((xmlChar *) directory); /* !!!!!!! */
-  
-  xmlParseDocument(ctxt);
-  
-  if ((ctxt->wellFormed) || recovery) ret = ctxt->myDoc;
-  else {
-    ret = NULL;
-    xmlFreeDoc(ctxt->myDoc);
-    ctxt->myDoc = NULL;
-  }
-  if (sax != NULL)
-    ctxt->sax = NULL;
-  xmlFreeParserCtxt(ctxt);
-  
-  return(ret);
-}
-
-#endif
 
 /* result for a characters handler is shared across all character
    handlers for a given node.  result for start/end pair is shared as
@@ -335,20 +294,6 @@ sixtp_print_frame_stack(GSList *stack, FILE *f) {
     indent += 2;
   }
 
-#if 0
-  for(lp = printcopy; lp; lp = lp->next) {
-    if(lp != printcopy) fprintf(f, " -> ");
-
-    if(lp == printcopy) {
-      /* top level node */
-      fprintf(f, "[top-level]");
-    } else {
-      sixtp_stack_frame *frame = (sixtp_stack_frame *) lp->data;
-      fprintf(f, "<%s>", (gchar *) frame->tag);
-    }
-  }
-  fprintf(f, ")\n"); 
-#endif
 }
 
 static xmlEntityPtr
@@ -369,10 +314,6 @@ sixtp_sax_start_handler(void *user_data,
   sixtp_stack_frame *new_frame = NULL;
   
   if(!pdata->parsing_ok) return;
-
-#if 0
-  fprintf(stderr, "Hit start tag <%s>\n", name);
-#endif
 
   current_frame = (sixtp_stack_frame *) pdata->stack->data;
   current_parser = current_frame->parser;
@@ -492,10 +433,6 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
 
   if(!pdata->parsing_ok) return;
 
-#if 0
-  fprintf(stderr, "Hit end tag </%s>\n", name);
-#endif
-
   current_frame = (sixtp_stack_frame *) pdata->stack->data;
   parent_frame = (sixtp_stack_frame *) pdata->stack->next->data;
 
@@ -534,10 +471,6 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
       g_slist_prepend(parent_frame->data_from_children, child_result_data);
   }
 
-#if 0
-  printf("POPPING FRAME for <%s> parser.\n", current_frame->tag);
-#endif
-
   /* grab it before it goes away - we shouldn't need to g_strdup
      because this string is held by the parent parser's hash table. */
   end_tag = current_frame->tag;
@@ -548,11 +481,6 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
 
   pdata->stack = sixtp_pop_and_destroy_frame(pdata->stack);
 
-#if 0
-  printf("REMAINING STACK:\n");
-  sixtp_print_frame_stack(pdata->stack, stderr);
-#endif
-  
   /* reset pointer after stack pop */
   current_frame = (sixtp_stack_frame *) pdata->stack->data;
   /* reset the parent, checking to see if we're at the top level node */
@@ -646,67 +574,6 @@ sixtp_destroy(sixtp *sp) {
   sixtp_destroy_node(sp, corpses);
   g_hash_table_destroy(corpses);
 }
-
-#if 0
-
-/* Not tested yet - not needed... */
-
-static sixtp *sixtp_copy(sixtp *s);
-
-typedef struct {
-  gboolean ok;
-  GHashTable *hash;
-} sixtp_copy_data;
-
-static void
-sixtp_copy_children_helper(gpointer key, gpointer value, gpointer user_data) {
-  sixtp_copy_data *cd = (sixtp_copy_data *) user_data;
-  const gchar *newkey = g_strdup(key);
-  sixtp *newparser;
-
-  if(!newkey) {
-    cd->ok = FALSE;
-    return;
-  }
-  newparser = sixtp_copy((sixtp *) value);
-  if(!newparser) {
-    cd->ok = FALSE;
-    g_free(newkey);
-    return;
-  }
-  g_hash_table_insert(cd->hash, newkey, newparser);
-}
-
-static sixtp *
-sixtp_copy(sixtp *s) {
-  sixtp_copy_data copy_data;
-  sixtp *copy = gnew0(sixtp, 1);
-  
-  if(!copy) return(NULL);
-  
-  *copy = *s;
-
-  /* now the bits that shouldn't be shared */
-  copy_data.ok = TRUE;
-  copy_data.hash = g_hash_table_new(g_str_hash, g_str_equal);
-
-  if(!copy_data.hash) {
-    g_free(copy);
-    return(NULL);
-  }
-
-  copy->children = copy_data.hash;
-  g_hash_table_foreach(s->children, sixtp_copy_children_helper, copy->children);
-
-  if(!copy_data.ok) {
-    sixtp_destroy(copy);
-    return(NULL);
-  }
-
-  return(copy);
-}
-#endif
-
 
 static void
 sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler) {
@@ -959,18 +826,6 @@ allow_and_ignore_only_whitespace(GSList *sibling_data,
   g_free(copytxt);
   return(is_space);
 }
-
-#if 0
-static gboolean
-generic_pass_data_to_children_start_handler(GSList* sibling_data,
-                                            gpointer parent_data,
-                                            gpointer global_data,
-                                            gpointer *result,
-                                            const gchar *tag) {
-  data_for_children = parent_data;
-  return(TRUE);
-}
-#endif
 
 static gboolean
 generic_accumulate_chars(GSList *sibling_data,
@@ -4664,67 +4519,3 @@ is_gncxml_file(const gchar *filename) {
   if(f) fclose(f);
   return(result);
 }
-
-/****************************************************************************/
-
-#if 0
-void
-real_main(int argc, char *argv[]) {
-
-  gboolean parse_ok;
-  gpointer parse_result;
-  sixtp *top_level_pr;
-  sixtp *gnc_pr;
-  sixtp *gnc_version_pr;
-  GNCParseStatus global_parse_status;
-
-  /* top-level: This is just a dummy node.  It doesn't do anything.
-     For now, the result is communicated through the global_data
-     parser. */
-  top_level_pr = sixtp_new();
-  if(!top_level_pr) return;
-  sixtp_set_chars(top_level_pr, allow_and_ignore_only_whitespace);
-
-  /* <gnc> */
-  gnc_pr = gnc_parser_new();
-  if(!gnc_pr) {
-    sixtp_destroy(top_level_pr);
-    return;
-  }
-  sixtp_add_sub_parser(top_level_pr, "gnc", gnc_pr);
-
-  /* <version> */
-  gnc_version_pr = gnc_version_parser_new();
-  if(!gnc_version_pr) {
-    sixtp_destroy(top_level_pr);
-    return;
-  }
-  sixtp_add_sub_parser(gnc_pr, "version", gnc_version_pr);
-
-  global_parse_status.seen_version = FALSE;
-  global_parse_status.gnc_parser = gnc_pr;
-  global_parse_status.account_group = NULL;
-  global_parse_status.error = GNC_PARSE_ERR_NONE;
-  parse_result = NULL;
-
-  parse_ok = sixtp_parse_file(top_level_pr,
-                              "test-data.xml",
-                              NULL,
-                              &global_parse_status,
-                              &parse_result);
-  
-  sixtp_destroy(top_level_pr);
-  
-  printf("Result:\n");
-  printf("  seen_version: %d\n", global_parse_status.seen_version);
-  printf("  version: %lld\n", global_parse_status.version);
-  printf("  AccountGroup: %p\n", global_parse_status.account_group);
-  printf("  error: %d\n", global_parse_status.error);
-}
-
-int
-main(int argc, char *argv[]) {
-  gh_enter(argc, argv, real_main);
-  return(0);
-}
-#endif

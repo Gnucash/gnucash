@@ -69,8 +69,8 @@ binary-arch: build install
 	dh_installmanpages
 #	dh_undocumented		gnc-prices.1 gnucash.1x gnucash.motif.1x
 	dh_installchangelogs	ChangeLog
-	dh_strip
-	cp src/.libs/gnucash $(id)/usr/bin/gnucash.debug
+#	dh_strip
+#	cp src/.libs/gnucash $(id)/usr/bin/gnucash.debug
 	dh_compress
 	dh_fixperms
 	dh_suidregister

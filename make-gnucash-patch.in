@@ -1,4 +1,5 @@
 #!@-PERL-@ -w
+# -*- perl -*-
 #
 # This perl script is used to make a patch for your GnuCash
 # development work. All patches should be submitted to the
@@ -12,18 +13,18 @@
 
 use strict;
 
+use File::Basename;
+
 ###########################################################
 # This section must be configured for your own setup.     #
 ###########################################################
 
 # The directory with the original gnucash sources
-my $old = 'gnucash.pristine';
+my $old = undef;
 
-# The directory where you do your development
-my $new = 'gnucash';
+chomp(my $cwd = `pwd`);
 
-# The directory where the above two directories reside
-my $gnc_home = '/usr/src/misc/gnc';
+my ($new, $gnc_home) = fileparse($cwd);
 
 ###########################################################
 # This section should not need to be modified.            #
@@ -43,40 +44,90 @@ if($ENV{'GNC_MAKEPATCH_HOME_DIR'}) {
   $gnc_home = $ENV{'GNC_MAKEPATCH_HOME_DIR'};
 }
 
+
 # Switch to the home directory
+print "Changing directory to $gnc_home\n";
+chdir $gnc_home or die "Can't cd!\n";
+
+if (not defined($old)) {
+  if (not -f "$new/CVS/Root") {
+    print "Source not checked out of CVS and no \$old set.  Quitting...\n";
+    exit(1);
+  }
+  if (not -d "tmp") {
+    mkdir "tmp";
+  }
+  chdir "tmp";
+  system("cvs -d `cat ../$new/CVS/Root` co gnucash");
+  chdir "..";
+  $old = "tmp/gnucash";
+}
+
+chdir $gnc_home . "/" . $new or die "Can't cd!\n";
+# Start out with our basic makepatch arguments
+my @args = ('-verbose', '-diff', 'diff -u', '-exclude-vc');
+
+# Add in the exclude patterns from the __DATA__ section
+push_exclusions(\@args);
+
+sub push_exclusions {
+  my $args = shift;
+  foreach my $pat (<DATA>) {
+    chomp($pat);
+    push(@{$args}, '-exclude', $pat) if $pat;
+  }
+  my @cvsignores = `find . -name '.cvsignore'`;
+  foreach my $one_ignore (@cvsignores) {
+    my ($name, $path) = fileparse($one_ignore);
+    open (IG, $one_ignore);
+    foreach my $fl (<IG>) {
+      chomp $fl;
+      $path =~ s/^\.\///;
+      push(@{$args}, '-exclude', $path . $fl) if $fl;
+    }
+    close (IG);
+  }
+}
+# Add the from and to directories for makepatch
+push(@args, $old, $new);
+print "Arguments are: " . join("; ", @args) . "\n";
+
 chdir $gnc_home or die "Can't cd!\n";
 
 # Erase the old files
-unlink('gnc.diff', 'gnucash.diff.gz', 'gnucash.diff.gz.uue');
+#unlink('gnc.diff', 'gnucash.diff.gz', 'gnucash.diff.gz.uue');
 
-# Start out with our basic makepatch arguments
-my @args = ('-diff', 'diff -u', '-exclude-vc');
-
-# Add in the exclude patterns from the __DATA__ section
-foreach my $pat (<DATA>) {
-  chomp($pat);
-  push(@args, '-exclude', $pat) if $pat;
+if (not -d "diffs") {
+  mkdir "diffs";
 }
 
-# Add the from and to directories for makepatch
-push(@args, $old, $new);
+my $date = `date '+%s'`;
+chomp($date);
+my $who = `whoami`;
+chomp($who);
+
+my $outfilename = "gnucash-$date-$who.diff";
 
 # Invoke makepatch with standard out redirected to 'gnucash.diff'
 open(OLDOUT, ">&STDOUT");
-open(STDOUT, "> gnucash.diff") || die "Can't redirect stdout";
+open(STDOUT, "> diffs/$outfilename") || die "Can't redirect stdout";
 system('makepatch', @args);
 close(STDOUT);
 open(STDOUT, ">&OLDOUT");
-
-# Make a copy of the ascii diff in 'gnc.diff'
-system('cp gnucash.diff gnc.diff');
+print "makepatch done\n";
 
 # Compress the patch
-system('gzip -9vf gnucash.diff');
+if (-f "diffs/$outfilename") {
+  system("gzip", "-9vf", "diffs/$outfilename");
+}
 
 # UU encode the compressed patch
 # 'gnucash.diff.gz.uue' is the file you send.
-system('uuencode gnucash.diff.gz gnucash.diff.gz > gnucash.diff.gz.uue');
+if (-f "diffs/$outfilename.gz") {
+  system("uuencode diffs/$outfilename.gz $outfilename.gz > diffs/$outfilename.gz.uue");
+}
+
+print "diffs/$outfilename.gz.uue\n";
 
 exit(0);
 
@@ -100,72 +151,5 @@ __DATA__
 *.tar.gz
 *.wrap
 *.xac.*.xac
+*~
 .#*
-.deps
-.libs
-ABOUT-NLS
-INSTALL
-COPYING
-Makefile
-Makefile.in
-Makefile.init
-POTFILES
-TAGS
-aclocal.m4
-cat-id-tbl.c
-conf.h
-config.cache
-config.guess
-config.h
-config.h.in
-config.log
-config.status
-config.sub
-configure
-doc/sgml/C/gnucash/*
-doc/sgml/C/gnucash.junk
-doc/sgml/C/gnucash.tex
-errs*
-g-wrap-guile
-g-wrap.info
-gnc-autogen.h
-gnucash-design.html
-gnucash-engine-perl5_wrap.c
-gnucash-engine-perl5_wrap_int.c
-gnucash.engine.i
-gnucash.pm
-install-sh
-intl
-lib/finance-quote/blib
-lib/finance-quote/pm_to_blib
-libgncengine.la
-libgwrapguile.la
-libgwraprs.la
-libtool
-ltconfig
-ltmain.sh
-make-gnucash-patch
-po/gnucash.pot
-po/Makefile.in.in
-stamp-h.in
-rpm/gnucash.spec
-src/doc/design/texinfo.tex
-src/doc/design/gnucash-design.info*
-src/doc/design/stamp-vti
-src/doc/design/version.texi
-src/gnome/glade-cb-gnc-dialogs.c
-src/gnome/glade-support-gnc-dialogs.c
-src/gnucash
-src/gnome/gnucash.keys
-src/guile/gnc.c
-src/guile/gnc.h
-src/guile/gnc.html
-src/guile/gnucash.c
-src/guile/i18n.h
-src/optional/swig/gnucash.engine_wrap.doc
-src/optional/swig/libgncswig.la
-src/quotes/gnc-prices
-src/scm/bootstrap.scm
-doc/sgml/C/gnucash
-stamp-cat-id
-stamp-h

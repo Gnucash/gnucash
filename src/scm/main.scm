@@ -146,6 +146,9 @@
       (begin
         ;; (gnc:load-account-file)
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
+        (gnc:ui-init)
+        (gnc:load-account-file)
+        (gnc:default-ui-start)
         (gnc:ui-main)
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
       

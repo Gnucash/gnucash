@@ -25,6 +25,8 @@
 (gnc:depend "date-utilities.scm")
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Budget Entry
 (define budget-entry-structure
   (make-record-type 
    "budget-entry-structure" 
@@ -73,6 +75,44 @@
 (define make-nominal-mechanism
   (record-constructor budget-nominal-mechanism-structure))
 
+
+(define budget-entry-get-description
+  (record-accessor budget-entry-structure 'description))
+
+(define budget-subentry-get-description
+  (record-accessor budget-subentry-structure 'description))
+
+(define budget-entry-get-accounts
+  (record-accessor budget-entry-structure 'accounts))
+
+(define budget-entry-get-subentries
+  (record-accessor budget-entry-structure 'subentries))
+
+(define budget-entry-get-action
+  (record-accessor budget-entry-structure 'action))
+
+(define budget-entry-get-filter-pred
+  (record-accessor budget-entry-structure 'filter-pred))
+
+(define budget-subentry-get-amount
+  (record-accessor budget-subentry-structure 'amount))
+
+(define budget-subentry-get-period
+  (record-accessor budget-subentry-structure 'period))
+
+(define budget-subentry-get-period-type
+  (record-accessor budget-subentry-structure 'period-type))
+
+(define budget-bill-get-window-start-day
+  (record-accessor budget-bill-mechanism-structure 'window-start-day))
+
+(define budget-bill-get-window-end-day
+  (record-accessor budget-bill-mechanism-structure 'window-end-day))
+
+(define budget-subentry-get-mechanism
+  (record-accessor budget-subentry-structure 'mechanism))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; useful filter-pred's for a budget entry
 
 (define (budget-filter-pred-debit split budget-line)
@@ -130,58 +170,69 @@
     "gross" '("Income:Gross Employment Income") #f 
     (list
      (make-budget-subentry #f -99999.99 1 'gnc:budget-month 
-			   (make-bill-mechanism -1 2))) #t)	
+			   (make-bill-mechanism -1 2)))
+    #t)
    (make-budget-entry 
     "bank interest" '("Expense:Bank Charges:Interest") #f 
     (list
      (make-budget-subentry #f 40 1 'gnc:budget-month 
-			   (make-bill-mechanism -4 0))) #t)
+			   (make-bill-mechanism -4 0)))
+    #t)
    (make-budget-entry 
     "bank feed" '("Expense:Bank Charges:Fees") #f 
     (list
      (make-budget-subentry #f 50 1 'gnc:budget-year 
-       (make-bill-mechanism 27 27))) #t)
+                           (make-bill-mechanism 27 27)))
+    #t)
    (make-budget-entry 
     "cell phone" '("Expense:Bills:Cell phone") #f 
     (list
      (make-budget-subentry #f 60 1 'gnc:budget-month 
-			   (make-bill-mechanism -4 -1))) #t)
+			   (make-bill-mechanism -4 -1)))
+    #t)
    (make-budget-entry 
     "hydro" '("Expense:Bills:Hydro") #f 
     (list
      (make-budget-subentry #f 20 1 'gnc:budget-month
-			   (make-bill-mechanism 15 19))) #t)
+			   (make-bill-mechanism 15 19)))
+    #t)
    (make-budget-entry 
     "life insurance" '("Expense:Bills:Life Insurance") #f 
     (list
      (make-budget-subentry #f 15 1 'gnc:budget-month 
-			   (make-bill-mechanism 1 3))) #t)
+			   (make-bill-mechanism 1 3)))
+    #t)
    (make-budget-entry 
     "diesel" '("Expense:Car:Diesel") #f 
     (list
      (make-budget-subentry #f 30 4 'gnc:budget-week
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry 
     "licenses" '("Expense:Car:Licenses") #f 
     (list
      (make-budget-subentry #f 1000 1 'gnc:budget-year
-			   (make-bill-mechanism -122 -108))) #t)
+			   (make-bill-mechanism -122 -108)))
+    #t)
    (make-budget-entry
     "car maintenance" '("Expense:Car:Maintenance") #f 
     (list
      (make-budget-subentry #f 100 6 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "car misc" '("Expense:Car:Miscellaneous") #f 
     (list
      (make-budget-subentry #f 5 1 'gnc:budget-week
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "charitable" '("Expense:Charitable:Non-taxable"
 		   "Expense:Charitable:Taxable") #f 
     (list
      (make-budget-subentry #f 200 1 'gnc:budget-year
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "entertainment" '("Expense:Entertainment:Beer (out)" 
 		      "Expense:Entertainment:Cover"
@@ -192,61 +243,72 @@
 		      "Expense:Entertainment:Liquor (home)") #f 
     (list
      (make-budget-subentry #f 50 1 'gnc:budget-week
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "groceries" '("Expense:Food:Groceries") #f 
     (list
      (make-budget-subentry #f 125 1 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "junk food" '("Expense:Food:Junk") #f 
     (list
      (make-budget-subentry #f 0.5 1 'gnc:budget-day
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "lunch" '("Expense:Food:Lunch") #f
     (list
      (make-budget-subentry #f 8 1 'gnc:budget-day
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "gifts" '("Expense:Gifts") #f 
     (list
      (make-budget-subentry #f 400 1 'gnc:budget-year
 			   (make-recurring-mechanism))
      (make-budget-subentry "xmas" 400 1 'gnc:budget-year
-			   (make-bill-mechanism -30 -5))) #t)
+			   (make-bill-mechanism -30 -5)))
+    #t)
    (make-budget-entry 
     "rent" '("Expense:Household:Rent") #f 
     (list
      (make-budget-subentry #f 312.50 1 'gnc:budget-month
-			   (make-bill-mechanism 1 2))) #t)
+			   (make-bill-mechanism 1 2)))
+    #t)
    (make-budget-entry
     "house junk" '("Expense:Household:Stuff") #f 
     (list
      (make-budget-subentry #f 25 1 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "medical" '("Expense:Medical:Dental" 
 		"Expense:Medical:Optical"
 		"Expense:Medical:Other") #f 
     (list
      (make-budget-subentry #f 1000 1 'gnc:budget-year
-			   (make-contingency-mechanism))) #t)
+			   (make-contingency-mechanism)))
+    #t)
    (make-budget-entry
     "clothes" '("Expense:Personal:Clothes") #f 
     (list
      (make-budget-subentry #f 150 3 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "hygeine" '("Expense:Personal:Personal maintenance") #f 
     (list
      (make-budget-subentry #f 30 1 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "newspapers" '("Expense:Stuff:Newspapers") #f 
     (list
      (make-budget-subentry #f 20.52 1 'gnc:budget-month
-			   (make-bill-mechanism 14 14))) #t)
+			   (make-bill-mechanism 14 14)))
+    #t)
    (make-budget-entry "stuff" '("Expense:Stuff:CD's"
 				"Expense:Stuff:Electronic entertainment"
 				"Expense:Stuff:Fiction" 
@@ -258,37 +320,43 @@
 				"Expense:Stuff:Videos") #f 
     (list
      (make-budget-subentry #f 250 1 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "student loan" '("Expense:Bills:Student Loan Interest"
 		     "Loans:student loan") #f 
     (list
      (make-budget-subentry #f 94.54 1 'gnc:budget-month
-			   (make-bill-mechanism -1 -1))) #t)
+			   (make-bill-mechanism -1 -1)))
+    #t)
    (make-budget-entry
     "car loan" '("Expense:Car:Loan Interest"
 				   "Loans:Car Loan") #f 
     (list
      (make-budget-subentry #f 374.18 1 'gnc:budget-month
-			   (make-bill-mechanism 15 17))) #t)
+			   (make-bill-mechanism 15 17)))
+    #t)
    (make-budget-entry
     "RRSP loan" '("Expense:Investment Expenses:RRSP LOC Interest"
 		  "Loans:Scotia Bank RRSP Line of Credit") 
     budget-filter-pred-debit
     (list
      (make-budget-subentry #f 100 1 'gnc:budget-month
-			   (make-bill-mechanism 5 8))) #t)
+			   (make-bill-mechanism 5 8)))
+    #t)
    (make-budget-entry 
     "cash write off" '("Expense:Cash write-off") #f 
     (list
      (make-budget-subentry #f 60 1 'gnc:budget-month
-			   (make-recurring-mechanism))) #t)
+			   (make-recurring-mechanism)))
+    #t)
    (make-budget-entry
     "taxes" '("Expense:Taxes:CPP" "Expense:Taxes:EI" 
 	      "Expense:Taxes:Federal Income Tax") #f 
     (list
      (make-budget-subentry #f 1034.38 1 'gnc:budget-month
-			   (make-bill-mechanism -1 -2))) #t)))
+			   (make-bill-mechanism -1 -2)))
+    #t)))
 
 
 ;; these are the "other collectors".  This is where all transactions
@@ -296,76 +364,64 @@
 ;; by account-type, which is an integer.
 (define gnc:budget-others
   (list
-   (make-budget-entry "other bank" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other cash" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other asset" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other credit" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other liability" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other stock" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other mutual" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other currency" '() #f (list
-     (make-budget-subentry #f 0 1 'gnc:budget-month
-			   (make-nominal-mechanism))) #f)
-   (make-budget-entry "other income" '() #f (list
-     (make-budget-subentry #f -10000 5 'gnc:budget-year
-		     (make-contingency-mechanism))) 'gnc:budget-comment)
-   (make-budget-entry "other expense" '() #f (list
-     (make-budget-subentry #f 10000 5 'gnc:budget-year
-		     (make-contingency-mechanism))) 'gnc:budget-comment)
-   (make-budget-entry "other equity" '() #f (list
-     (make-budget-subentry #f 10000 5 'gnc:budget-year
-			   (make-contingency-mechanism))) #f)))
+   (make-budget-entry "other bank" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other cash" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other asset" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other credit" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other liability" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other stock" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other mutual" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other currency" '() #f
+                      (list
+                       (make-budget-subentry #f 0 1 'gnc:budget-month
+                                             (make-nominal-mechanism)))
+                      #f)
+   (make-budget-entry "other income" '() #f
+                      (list
+                       (make-budget-subentry #f -10000 5 'gnc:budget-year
+                                             (make-contingency-mechanism)))
+                      'gnc:budget-comment)
+   (make-budget-entry "other expense" '() #f
+                      (list
+                       (make-budget-subentry #f 10000 5 'gnc:budget-year
+                                             (make-contingency-mechanism)))
+                      'gnc:budget-comment)
+   (make-budget-entry "other equity" '() #f
+                      (list
+                       (make-budget-subentry #f 10000 5 'gnc:budget-year
+                                             (make-contingency-mechanism)))
+                      #f)))
 
-(define budget-entry-get-description
-  (record-accessor budget-entry-structure 'description))
-
-(define budget-subentry-get-description
-  (record-accessor budget-subentry-structure 'description))
-
-(define budget-entry-get-accounts
-  (record-accessor budget-entry-structure 'accounts))
-
-(define budget-entry-get-subentries
-  (record-accessor budget-entry-structure 'subentries))
-
-(define budget-entry-get-action
-  (record-accessor budget-entry-structure 'action))
-
-(define budget-entry-get-filter-pred
-  (record-accessor budget-entry-structure 'filter-pred))
-
-(define budget-subentry-get-amount
-  (record-accessor budget-subentry-structure 'amount))
-
-(define budget-subentry-get-period
-  (record-accessor budget-subentry-structure 'period))
-
-(define budget-subentry-get-period-type
-  (record-accessor budget-subentry-structure 'period-type))
-
-(define budget-bill-get-window-start-day
-  (record-accessor budget-bill-mechanism-structure 'window-start-day))
-
-(define budget-bill-get-window-end-day
-  (record-accessor budget-bill-mechanism-structure 'window-end-day))
-
-(define budget-subentry-get-mechanism
-  (record-accessor budget-subentry-structure 'mechanism))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Budget Report
 (define budget-report-structure
   (make-record-type 
    "budget-report-structure" 
@@ -424,6 +480,37 @@
 (define budget-subreport-get-maximum-expected
   (record-accessor budget-subreport-structure 'maximum-expected))
 
+(define budget-report-set-actual!
+  (record-modifier budget-report-structure 'actual))
+
+(define (budget-report-accumulate-actual! value budget-line)
+  (budget-report-set-actual!
+   (budget-line-get-report budget-line)
+   (+ value (budget-report-get-actual
+	     (budget-line-get-report budget-line)))))
+
+(define budget-subreport-set-min-expected!
+  (record-modifier budget-subreport-structure 'minimum-expected))
+
+(define budget-subreport-set-max-expected!
+  (record-modifier budget-subreport-structure 'maximum-expected))
+
+(define budget-report-set-min-expected!
+  (record-modifier budget-report-structure 'minimum-expected))
+
+(define budget-report-set-max-expected!
+  (record-modifier budget-report-structure 'maximum-expected))
+
+(define (budget-report-accumulate-min-expected! report min-expected)
+  (budget-report-set-min-expected! report
+   (+ min-expected (budget-report-get-minimum-expected report))))
+
+(define (budget-report-accumulate-max-expected! report max-expected)
+  (budget-report-set-max-expected! report
+   (+ max-expected (budget-report-get-maximum-expected report))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Budget Line
 (define budget-line-structure
   (make-record-type "budget-line-structure"
 		    '(entry report)))
@@ -463,34 +550,7 @@
   (length
    (budget-entry-get-subentries (budget-line-get-entry line))))
 
-(define budget-report-set-actual!
-  (record-modifier budget-report-structure 'actual))
-
-(define (budget-report-accumulate-actual! value budget-line)
-  (budget-report-set-actual!
-   (budget-line-get-report budget-line)
-   (+ value (budget-report-get-actual
-	     (budget-line-get-report budget-line)))))
-
-(define budget-subreport-set-min-expected!
-  (record-modifier budget-subreport-structure 'minimum-expected))
-
-(define budget-subreport-set-max-expected!
-  (record-modifier budget-subreport-structure 'maximum-expected))
-
-(define budget-report-set-min-expected!
-  (record-modifier budget-report-structure 'minimum-expected))
-
-(define budget-report-set-max-expected!
-  (record-modifier budget-report-structure 'maximum-expected))
-
-(define (budget-report-accumulate-min-expected! report min-expected)
-  (budget-report-set-min-expected! report
-   (+ min-expected (budget-report-get-minimum-expected report))))
-
-(define (budget-report-accumulate-max-expected! report max-expected)
-  (budget-report-set-max-expected! report
-   (+ max-expected (budget-report-get-maximum-expected report))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; return the # of budget periods over the report period
 (define (budget-num-periods subentry begin-date end-date)
@@ -510,9 +570,10 @@
 (define budget-nominal-pred
   (record-predicate budget-nominal-mechanism-structure))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define (budget-calculate-expected! budget-line begin-date end-date)
-  (let ((entry (budget-line-get-entry budget-line))
-	(report (budget-line-get-report budget-line)))
+  (let ((report (budget-line-get-report budget-line)))
     (for-each 
      (lambda (subentry subreport)
        (let ((mechanism (budget-subentry-get-mechanism subentry)))
@@ -533,7 +594,8 @@
 	  report (budget-subreport-get-minimum-expected subreport))
 	 (budget-report-accumulate-max-expected! 
 	  report (budget-subreport-get-maximum-expected subreport))))
-     (budget-entry-get-subentries entry)
+     
+     (budget-entry-get-subentries (budget-line-get-entry budget-line))
      (budget-report-get-subreports report))))
 
 ;; calculate the nominal value.
@@ -577,83 +639,78 @@
       (budget-subreport-set-max-expected! subreport (+ min amount)))))
 
 (define (budget-calculate-bill! subentry subreport mechanism begin-date end-date)
-  (let ((N-type (budget-subentry-get-period-type subentry))
-	(window-start (budget-bill-get-window-start-day mechanism))
-	(window-end (budget-bill-get-window-end-day mechanism))
-	(psize (budget-subentry-get-period subentry))
-	(amount (budget-subentry-get-amount subentry)))
-      ; convert negative numbers to positive numbers
-      (let ((trig-start-A (if (> window-start 0)
-			      window-start
-			      (+ window-start 
-				 (gnc:days-in-period
-				  begin-date N-type psize))))
-	    (trig-start-B (if (> window-start 0)
-			      window-start
-			      (+ window-start 
-				 (gnc:days-in-period
-				  end-date N-type psize))))
-	    (trig-end-A (if (> window-end 0)
-			    window-end
-			    (+ window-end
-			       (gnc:days-in-period
-				begin-date N-type psize))))
-	    (trig-end-B (if (> window-end 0)
-			    window-end
-			    (+ window-end
-			       (gnc:days-in-period
-				end-date N-type psize))))
-	    (possible 0)
-	    (sure 0)
-	    (report-start (gnc:date-to-N-remainder begin-date N-type psize))
-	    (report-end (gnc:date-to-N-remainder end-date N-type psize)))
-	; special case if report start and end are in same period
-	(cond ((= (floor (/ (gnc:date-to-N-fraction end-date N-type) psize))
-		  (floor (/ (gnc:date-to-N-fraction begin-date N-type) psize)))
-	       (cond ((<= trig-start-A trig-end-A)
-		      (cond ((> report-start trig-end-A) #f)
-			    ((< report-end trig-start-A) #f)
-			    ((or (> report-start trig-start-A) 
-				 (< report-end trig-end-A))
-			     (set! possible 1))
-			    (else (set! sure 1))))
-		     (else
-		      (if (<= report-start trig-end-A) 
-			  (set! possible 1))
-		      (if (>= report-end trig-start-A) 
-			  (set! possible (+ possible 1))))))
-	      ; not in same period.
-	      (else
-	       ; first calculate terminal periods
-	       (cond ((<= trig-start-A trig-end-A)
-		      (cond ((> report-start trig-end-A) #f)
-			    ((<= report-start trig-start-A) 
-			     (set! sure (+ sure 1)))
-			    (else (set! possible (+ possible 1))))
-		      (cond ((< report-end trig-start-B) #f)
-			    ((>= report-end trig-end-B) (set! sure (+ sure 1)))
-			    (else (set! possible (+ possible 1)))))
-		     (else
-		      (if (<= report-start trig-end-A) 
-			  (set! possible (+ possible 1)))
-		      (if (>= report-end trig-start-B) 
-			  (set! possible (+ possible 1)))
-		      (if (or (> report-start trig-start-A)
-			      (< report-end trig-end-B)) 
-			  (set! possible (+ possible 1))
-			  (set! sure (+ sure 1)))))
-	       ; then add intermediate periods
-	       (set! sure (+ -1 sure 
-			     (inexact->exact
-			      (- (floor (/ (gnc:date-to-N-fraction 
-					    end-date N-type) psize))
-				 (floor (/ (gnc:date-to-N-fraction 
-					    begin-date N-type) psize))))))))
-	; now save 'em into the record
-	(budget-subreport-set-min-expected! subreport 
-					    (* amount sure))
-	(budget-subreport-set-max-expected! subreport 
-					    (* amount (+ sure possible))))))
+  (letrec ((N-type (budget-subentry-get-period-type subentry))
+           (window-start (budget-bill-get-window-start-day mechanism))
+           (window-end (budget-bill-get-window-end-day mechanism))
+           (psize (budget-subentry-get-period subentry))
+           (amount (budget-subentry-get-amount subentry))
+           (date-positiverter
+            (lambda (num date)
+              (if (> num 0)
+                  num
+                  (+ num (gnc:days-in-period num date N-type psize))))))
+    ;; convert negative numbers to positive numbers
+    (let ((trig-start-A (date-positiverter window-start begin-date))
+          (trig-start-B (date-positiverter window-start end-date))
+          (trig-end-A (date-positiverter window-end begin-date))
+          (trig-end-B (date-positiverter window-end end-date))
+          (possible 0)
+          (sure 0)
+          (report-start (gnc:date-to-N-remainder begin-date N-type psize))
+          (report-end (gnc:date-to-N-remainder end-date N-type psize))
+          (date-diff (inexact->exact
+                      (- (floor (/ (gnc:date-to-N-fraction 
+                                    end-date N-type) psize))
+                         (floor (/ (gnc:date-to-N-fraction 
+                                    begin-date N-type) psize))))))
+      ;; special case if report start and end are in same period
+      (if (= 0 date-diff)
+          (cond ((<= trig-start-A trig-end-A)
+                 (cond ((or (> report-start trig-end-A)
+                            (< report-end trig-start-A))
+                        #f)
+                       ((or (> report-start trig-start-A) 
+                            (< report-end trig-end-A))
+                        (set! possible 1))
+                       (else
+                        (set! sure 1))))
+                (else
+                 (if (<= report-start trig-end-A)
+                     (set! possible 1))
+                 (if (>= report-end trig-start-A)
+                     (set! possible (+ possible 1)))))
+          ;; not in same period.
+          ;; first calculate terminal periods
+          (begin
+            (cond ((<= trig-start-A trig-end-A)
+                   (cond ((> report-start trig-end-A)
+                          #f)
+                         ((<= report-start trig-start-A) 
+                          (set! sure 1))
+                         (else
+                          (set! possible 1)))
+                   (cond ((< report-end trig-start-B)
+                          #f)
+                         ((>= report-end trig-end-B)
+                          (set! sure 1))
+                         (else
+                          (set! possible 1))))
+                  (else
+                   (if (<= report-start trig-end-A) 
+                       (set! possible (+ possible 1)))
+                   (if (>= report-end trig-start-B) 
+                       (set! possible (+ possible 1)))
+                   (if (or (> report-start trig-start-A)
+                           (< report-end trig-end-B)) 
+                       (set! possible (+ possible 1))
+                       (set! sure (+ sure 1)))))
+            ;; then add intermediate periods
+            (set! sure (+ -1 sure date-diff))))
+      ;; now save 'em into the record
+      (budget-subreport-set-min-expected! subreport 
+                                          (* amount sure))
+      (budget-subreport-set-max-expected! subreport 
+                                          (* amount (+ sure possible))))))
 
 (define (budget-calculate-actual! budget-hash others begin-date-secs end-date-secs)
   (let loop ((group (gnc:get-current-group)))

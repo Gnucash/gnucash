@@ -195,7 +195,6 @@ gnucash_ui_init(void)
 
     restargv2 = (char**)poptGetArgs(returnedPoptContext);
     gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
-    gh_eval_str("(gnc:load-account-file)");
 
     /* this must come after using the poptGetArgs return value */
     poptFreeContext (returnedPoptContext);
@@ -274,7 +273,7 @@ gnucash_ui_init(void)
 
     xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
 
-    mainWindow();
+    /* gnc_default_ui_start */
 
     gnucash_style_init();
     gnucash_color_init();
@@ -283,6 +282,16 @@ gnucash_ui_init(void)
   LEAVE ("\n");
 
   return 0;
+}
+
+static int hasstarted = 0;
+void gnc_default_ui_start(void)
+{
+    if(!hasstarted)
+    {
+        mainWindow();
+        hasstarted = 1;
+    }
 }
 
 /* ============================================================== */
@@ -348,7 +357,8 @@ gnc_ui_main(void)
 {
   /* Initialize gnome */
   gnucash_ui_init();
-
+  gnc_default_ui_start();
+  
   gnc_refresh_main_window();
   gtk_widget_show(app);
 

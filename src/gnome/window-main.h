@@ -32,5 +32,7 @@ void mainWindow(void);
 GNCMainWinAccountTree * gnc_get_current_account_tree(void);
 
 void gnc_ui_mainWindow_save_size(void);
+void gnc_default_ui_start(void);
+int gnucash_ui_init(void);
 
 #endif

@@ -157,12 +157,6 @@ static AccountGroup *maingrp;     /* temporary holder for file
 static GHashTable *ids_to_finished_accounts;
 static GHashTable *ids_to_unfinished_accounts;
 
-#if 0
-/* used while writing */
-static GHashTable *accounts_to_ids;
-static gint32 next_write_account_id;
-#endif
-
 /** PROTOTYPES ******************************************************/
 static Account     *locateAccount (int acc_id); 
 
@@ -174,16 +168,6 @@ static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
-
-#if 0
-static int writeGroup( int fd, AccountGroup *grp );
-static int writeAccount( int fd, Account *account );
-static int writeAccInfo(int fd, Account *account);
-static int writeTransaction( int fd, Transaction *trans );
-static int writeSplit( int fd, Split *split);
-static int writeString( int fd, const char *str );
-static int writeTSDate( int fd, Timespec *);
-#endif
 
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
@@ -235,17 +219,6 @@ xaccFlipInt (int val)
   flip |= (val & 0xff) << 24;
   return (int) flip;
 }
-
-#if 0
-static short
-xaccFlipShort (short val) 
-{
-  unsigned short flip;
-  flip = (val & 0xff00) >> 8;
-  flip |= (val & 0xff) << 8;
-  return (short) flip;
-}
-#endif
 
 static double
 xaccFlipDouble (double val) 
