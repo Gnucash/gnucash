@@ -34,6 +34,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-order.c \
   dialog-payment.c \
   dialog-vendor.c \
+  search-owner.c \
   gnc-business-utils.c
 
 noinst_HEADERS = \
@@ -46,6 +47,7 @@ noinst_HEADERS = \
   dialog-order.h \
   dialog-payment.h \
   dialog-vendor.h \
+  search-owner.h \
   gnc-business-utils.h
 
 libgncmod_business_gnome_la_LDFLAGS = -module

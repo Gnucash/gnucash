@@ -1486,6 +1486,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 
   /* Build parameter list in reverse order */
   if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Invoice Owner"), NULL, type,
+				       INVOICE_OWNER, NULL);
     params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
 				       INVOICE_NOTES, NULL);
     params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,

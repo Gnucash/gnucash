@@ -13,6 +13,10 @@
 #include "gnc-module-api.h"
 #include "gw-business-gnome.h"
 
+#include "search-core-type.h"
+#include "search-owner.h"
+#include "gncOwner.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_business_gnome_LTX_gnc_module_system_interface = 0;
 
@@ -59,6 +63,12 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 
   gh_eval_str("(use-modules (g-wrapped gw-business-gnome))");
   gh_eval_str("(use-modules (gnucash business-gnome))");
+
+  if (refcount == 0) {
+    /* Register the Owner search type */
+    gnc_search_core_register_type (GNC_OWNER_MODULE_NAME,
+				   (GNCSearchCoreNew) gnc_search_owner_new);
+  }
 
   return TRUE;
 }
