@@ -38,19 +38,20 @@
 
 struct gnc_book_struct
 {
-  /* Unique guid for this book */
+  /* Unique guid for this book. */
   GUID guid;
 
-  /* The kvp_frame providea a place for top-level data associated 
+  /* The kvp_frame provides a place for top-level data associated 
    * with this book. */
   kvp_frame *kvp_data;
   
   /* The entity table associates the GUIDs of all the objects
-   * created in the session with their respective objects
-   * (pointer addresses) */
+   * belonging to this book, with their pointers to the respective
+	* objects.  This allows a lookup of objects based on thier guid.
+   */
   GNCEntityTable *entity_table;
 
-  /* Pointers to top-level data structures */
+  /* Pointers to top-level data structures. */
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
 
@@ -87,7 +88,7 @@ struct gnc_book_struct
 /*
  * These gnc_book_set_*() routines are used by backends to 
  *    initialize the pointers in the book structure to 
- *    soemthing that contains actual data.  These routines 
+ *    something that contains actual data.  These routines 
  *    should not be used otherwise.  (Its somewhat questionable
  *    if the backends should even be doing this much, but for
  *    backwards compatibility, we leave these here.)
@@ -102,11 +103,10 @@ void gnc_book_set_backend (GNCBook *book, Backend *be);
 
 GNCEntityTable * gnc_book_get_entity_table (GNCBook *book);
 
-/*
- * used by backends to mark the notsaved as FALSE just after 
- * loading.  Do not use otherwise!
+/* The gnc_book_mark_saved() routine marks the book as having been
+ *    saved (to a file, to a database). Used by backends to mark the 
+ *    notsaved flag as FALSE just after loading.  Do not use otherwise!
  */
-
 void gnc_book_mark_saved(GNCBook *book);
 
 #endif /* GNC_BOOK_P_H */

@@ -26,6 +26,7 @@
  *
  * FUNCTION:
  * Encapsulate all the information about a gnucash dataset.
+ * See src/docs/books.txt for implementation overview.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
