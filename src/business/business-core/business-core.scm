@@ -21,10 +21,13 @@
      ((null? (cdr lst)) (car lst))
      (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
 
+  (define (unique str)
+    (if (and name str (string=? name str)) #f str))
+
   (let ((lst '()))
 
     (set! lst (add-if-exists lst name))
-    (set! lst (add-if-exists lst (gnc:address-get-name addr)))
+    (set! lst (add-if-exists lst (unique (gnc:address-get-name addr))))
     (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
     (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
