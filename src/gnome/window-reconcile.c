@@ -665,7 +665,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
   {
     gboolean result;
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
+    result = gnc_verify_dialog_parented(recnData->window,
                                         TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
@@ -1556,8 +1556,7 @@ recnFinishCB(GtkWidget *w, gpointer data)
   time_t date;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
-    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_BALN_WARN, GNC_F))
+    if (!gnc_verify_dialog_parented(recnData->window, RECN_BALN_WARN, GNC_F))
       return;
 
   date = recnData->statement_date;
@@ -1582,8 +1581,7 @@ recnCancelCB(GtkWidget *w, gpointer data)
     changed = TRUE;
 
   if (changed)
-    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
-                                    RECN_CANCEL_WARN, GNC_F))
+    if (!gnc_verify_dialog_parented(recnData->window, RECN_CANCEL_WARN, GNC_F))
       return;
 
   gtk_widget_destroy(recnData->window);

@@ -64,6 +64,9 @@ int force_double_entry = 0;
 #define DEFER_REBALANCE 0x2
 #define BEING_DESTROYED 0x4
 
+/* a very small number */
+#define ZERO_THRESH_VALUE 0.0000000000001
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -576,6 +579,7 @@ xaccTransLookup (const GUID *guid)
 void
 xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 {
+   int adjust_price = 0; 
    if (!s) return;
 
    MARK_SPLIT(s);
@@ -589,29 +593,54 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
       if (force_double_entry) {
          PERR ("split must have a parent\n");
          assert (s->acc);
-      } else { 
-         DEVIDE (s -> damount, value, s->share_price);
-         return;
+      } 
+      else { 
+        /* if there's already a share-amount set, we need to respect 
+         * that and adjust the price to make this balance. */
+        if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+          DEVIDE(s->share_price, value, s->damount);
+        }
+        else {
+          DEVIDE(s->damount, value, s->share_price);
+        }
+        return;
       }
    }
+
+   if (s->acc &&
+       s->acc->security &&
+       *s->acc->security &&
+       safe_strcmp(s->acc->security, s->acc->currency) &&
+       !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE))
+     adjust_price = 1;
 
    /* The value of a split depends on the currency we express the
     * value in.  This may or may not require a divide.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
-      DEVIDE (s -> damount, value, s->share_price);
-   } else 
-   if (!safe_strcmp(s->acc->security, base_currency)) {
-      s -> damount = value;   
-   } else 
-   if ((0x0==base_currency) && (0 == force_double_entry)) {
-      DEVIDE (s -> damount, value, s->share_price);
-   } else 
-   {
-      PERR ("inappropriate base currency %s "
-            "given split currency=%s and security=%s\n",
-             base_currency, s->acc->currency, s->acc->security);
-      return;
+     if (adjust_price) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
+   }
+   else if (!safe_strcmp(s->acc->security, base_currency)) {
+     s->damount = value;   
+   } 
+   else if ((0x0==base_currency) && (0 == force_double_entry)) {
+     if (adjust_price) {
+       DEVIDE(s->share_price, value, s->damount);
+     }
+     else {
+       DEVIDE(s->damount, value, s->share_price);
+     }
+   }
+   else {
+     PERR ("inappropriate base currency %s "
+           "given split currency=%s and security=%s\n",
+           base_currency, s->acc->currency, s->acc->security);
+     return;
    }
 }
 
@@ -750,7 +779,9 @@ xaccIsCommonCurrency(const char *currency_1, const char *security_1,
 }
 
 static const char *
-FindCommonCurrency (Split **slist, const char * ra, const char * rb)
+FindCommonExclSCurrency (Split **slist, 
+			 const char * ra, const char * rb,
+			 Split *excl_split)
 {
   Split *s;
   int i = 0;
@@ -759,10 +790,17 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 
   if (rb && ('\0' == rb[0])) rb = NULL;
 
-  i=0; s = slist[0];
+  i = 0;
+  s = slist[0];
+
+  /* If s is to be excluded, go ahead in the list until one split is
+     not excluded or is NULL. */
+  while (s && (s == excl_split))
+    { i++; s = slist[i]; }
+
   while (s) {
     char *sa, *sb;
-
+    
     /* Novice/casual users may not want or use the double entry 
      * features of this engine.   Because of this, there
      * may be the occasional split without a parent account. 
@@ -805,12 +843,28 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
     }
 
     if ((!ra) && (!rb)) return NULL;
-    i++; s = slist[i];
+
+    i++; 
+    s = slist[i];
+
+    /* If s is to be excluded, go ahead in the list until one split is
+       not excluded or is NULL. */
+    while (s && (s == excl_split))
+      { i++; s = slist[i]; } 
   }
 
   return (ra);
 }
 
+/* This is the wrapper for those calls (i.e. the older ones) which
+ * don't exclude one split from the splitlist when looking for a
+ * common currency.  
+ */
+static const char *
+FindCommonCurrency (Split **slist, const char * ra, const char * rb)
+{
+  return FindCommonExclSCurrency(slist, ra, rb, NULL);
+}
 
 const char *
 xaccTransFindCommonCurrency (Transaction *trans)
@@ -831,6 +885,13 @@ const char *
 xaccTransIsCommonCurrency (Transaction *trans, const char * ra)
 {
   return FindCommonCurrency (trans->splits, ra, NULL);
+}
+
+const char *
+xaccTransIsCommonExclSCurrency (Transaction *trans, 
+				const char * ra, Split *excl_split)
+{
+  return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
 }
 
 /********************************************************************\
@@ -1612,9 +1673,7 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   /* otherwise, sort on number string */
   da = (*ta)->num;
   db = (*tb)->num;
-  if (da && db && *da && *db) {
-    SAFE_STRCMP (da, db);
-  }
+  SAFE_STRCMP (da, db);
 
   /* if dates differ, return */
   DATE_CMP(ta,tb,date_entered);
@@ -1659,7 +1718,7 @@ xaccTransMatch (Transaction **tap, Transaction **tbp)
   nb=0; while ((sb=tb->splits[nb])) { sb->ticket = -1; nb++; }
 
   na=0; 
-  while ((sa=ta->splits[na])) { 
+  while ((sa=ta->splits[na])) {         
      if (-1 < sa->ticket) {na++; continue;}
     
      nb=0; 

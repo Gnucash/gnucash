@@ -148,12 +148,12 @@
 
     ;; This option is for testing. When true, the report generates
     ;; an exception.
-    (gnc:register-hello-world-option
-     (gnc:make-simple-boolean-option
-      "Testing" "Crash the report"
-      "a" (string-append "This is for testing. "
-                         "Your reports probably shouldn't have an "
-                         "option like this.") #f))
+;    (gnc:register-hello-world-option
+;     (gnc:make-simple-boolean-option
+;      "Testing" "Crash the report"
+;      "a" (string-append "This is for testing. "
+;                         "Your reports probably shouldn't have an "
+;                         "option like this.") #f))
 
     (gnc:options-set-default-section gnc:*hello-world-options*
                                      "Hello, World!")
@@ -231,11 +231,11 @@
           (num-val      (op-value "Hello, World!" "Number Option"))
           (color-op     (get-op   "Hello, World!" "Background Color"))
           (accounts     (op-value "Hello Again"   "An account list option"))
-          (list-val     (op-value "Hello Again"   "A list option"))
-          (crash-val    (op-value "Testing"       "Crash the report")))
+          (list-val     (op-value "Hello Again"   "A list option")))
+;          (crash-val    (op-value "Testing"       "Crash the report")))
 
       ;; Crash if asked to.
-      (if crash-val (string-length #f));; string-length needs a string
+;      (if crash-val (string-length #f));; string-length needs a string
 
       (let ((time-string (strftime "%X" (localtime (current-time))))
             (date-string (strftime "%x" (localtime (car date-val))))

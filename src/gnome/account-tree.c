@@ -832,15 +832,19 @@ gnc_account_tree_select_row(GtkCTree *ctree,
   GList *node;
 
   tree->ignore_unselect = GNC_F;
-
   account = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(row));
-  node = g_list_find(tree->current_accounts, account);
-  if (node == NULL)
-    tree->current_accounts = g_list_prepend(tree->current_accounts, account);
 
-  gtk_signal_emit(GTK_OBJECT(ctree),
-		  account_tree_signals[SELECT_ACCOUNT],
-		  account);
+  if (account != NULL)
+  {
+    node = g_list_find(tree->current_accounts, account);
+
+    if (node == NULL)
+      tree->current_accounts = g_list_prepend(tree->current_accounts, account);
+
+    gtk_signal_emit(GTK_OBJECT(ctree),
+                    account_tree_signals[SELECT_ACCOUNT],
+                    account);
+  }
 
   GTK_CTREE_CLASS(parent_class)->tree_select_row(ctree, row, column);
 }

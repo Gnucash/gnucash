@@ -24,9 +24,4 @@
 #ifndef __GNOME_TOP_LEVEL_H_
 #define __GNOME_TOP_LEVEL_H_
 
-#include "Account.h"
-
-gncBoolean gnc_reverse_balance(Account *account);
-gncBoolean gnc_reverse_balance_type(int type);
-
 #endif

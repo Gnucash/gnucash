@@ -1,5 +1,48 @@
 Version history:
 ------- -------
+ 1.4.9  - 05 December 2000
+         o tax report
+         o txf export
+         o bug fixes
+
+ 1.4.8  - 22 October 2000
+         o bug fixes
+
+ 1.4.7  - 02 October 2000
+         o updates to translations
+         o updates to documentation
+         o bug fixes
+
+ 1.4.6  - 11 September 2000
+         o new Spanish translation
+         o several bug fixes
+
+ 1.4.5  - 13 August 2000
+         o a few bug fixes
+
+ 1.4.4  - 13 August 2000
+         o new Russion translation
+         o a few bug fixes
+
+ 1.4.3  - 25 July 2000
+         o updated French translation
+         o a few minor bug fixes
+
+ 1.4.2  - 9 July 2000
+         o updated French translations
+         o improved qif importing
+         o fix for g-wrap 0.9.4
+         o misc bug fixes
+
+ 1.4.1  - 26 June 2000
+         o translations are loaded correctly
+         o improved qif importing
+         o bug fixes
+
+ 1.4.0  - 18 June 2000
+         o improved qif importing
+         o bug fixes
+
  1.3.100 - 12 June 2000
          o bug fixes
          o updated documentation
