@@ -12095,12 +12095,12 @@ msgstr "Kontenübersicht"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1772
 msgid "Money In"
-msgstr ""
+msgstr "Einzahlung"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1774
 msgid "Money Out"
-msgstr ""
+msgstr "Auszahlung"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1776 intl-scm/guile-strings.c:2298

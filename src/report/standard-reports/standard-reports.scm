@@ -71,6 +71,7 @@
 (use-modules (gnucash report advanced-portfolio))
 (use-modules (gnucash report average-balance))
 (use-modules (gnucash report balance-sheet))
+(use-modules (gnucash report cash-flow))
 (use-modules (gnucash report category-barchart))
 (use-modules (gnucash report net-barchart))
 (use-modules (gnucash report pnl))

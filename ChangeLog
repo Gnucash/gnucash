@@ -1,3 +1,11 @@
+2002-11-04  Herbert Thoma  <herbie@hthoma.de>
+
+	* /src/report/standard-reports/cash-flow.scm: new report
+	which shows inflow and outflow of money to a set of accounts
+
+	* src/report/standard-reports/standard-reports.scm: add 
+	cash-flow.scm to gncscmmod_DATA
+
 2002-11-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/gnc-split-reg.c: remove reference to gnc-regwidget.h

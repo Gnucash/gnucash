@@ -24,6 +24,7 @@ gncscmmod_DATA = \
    advanced-portfolio.scm \
    average-balance.scm \
    balance-sheet.scm \
+   cash-flow.scm \
    category-barchart.scm \
    net-barchart.scm \
    pnl.scm \
