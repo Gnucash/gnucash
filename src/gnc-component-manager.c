@@ -244,6 +244,10 @@ gnc_cm_event_handler (GUID *entity,
       changes.account_event_mask |= event_type;
       break;
 
+    case GNC_ID_PRICE:
+      /* Price events not currently handled by CM */
+      break;
+
     case GNC_ID_NONE:
       break;
 

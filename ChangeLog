@@ -1,3 +1,12 @@
+2001-05-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-fincalc.c: Kevin Foss's bug fix
+
+	* src/engine/sql/kvp-sql.h: add /* */ around #endif comment
+
+	* src/gnc-component-manager.c (gnc_cm_event_handler): ignore
+	price events
+
 2001-05-26  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/gnome/new-user-funs.c (gnc_new_user_dialog_is_new_user): new

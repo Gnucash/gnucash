@@ -288,12 +288,6 @@ close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 }
 
 static void
-fincalc_entry_clear_clicked(GtkButton *button, GtkEntry *entry)
-{
-  gtk_entry_set_text(GTK_ENTRY(entry), "");
-}
-
-static void
 fincalc_amount_clear_clicked(GtkButton *button, GNCAmountEdit *edit)
 {
   gtk_entry_set_text(GTK_ENTRY (edit->amount_entry), "");
@@ -630,7 +624,7 @@ gnc_ui_fincalc_dialog_create(void)
 
   button = lookup_widget (fcd->dialog, "payment_periods_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_entry_clear_clicked),
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
                      fcd->amounts[PAYMENT_PERIODS]);
 
   button = lookup_widget (fcd->dialog, "interest_rate_clear_button");

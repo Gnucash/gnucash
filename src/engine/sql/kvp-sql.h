@@ -45,4 +45,4 @@ void pgendKVPDeleteStr (PGBackend *, const char *guid_string);
 
 kvp_frame * pgendKVPFetch (PGBackend *, const GUID *, kvp_frame *);
 
-#endif __KVP_SQL_H__
+#endif /* __KVP_SQL_H__ */
