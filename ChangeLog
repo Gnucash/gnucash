@@ -1,3 +1,8 @@
+2001-08-09  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/register-gnome/table-gnome.c
+	(gnc_table_save_state): tweak cell width saving
+
 2001-08-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/ledger-core/SplitLedger.c: fix bugs
