@@ -364,7 +364,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     else {
       /* call the field parser */
       parse_return = gh_call1(qif_file_parse, gh_car(imported_files));
-      gh_display(parse_return); gh_newline();
 
       /* warning means the date format is ambiguous. Set up the 
        * format selector page. */

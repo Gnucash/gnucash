@@ -1,3 +1,19 @@
+2001-01-15  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/druid-qif-import.c: remove printout 
+
+	* src/scm/qif-import/qif-parse.scm: Warning dialog on unknown
+	Action type.  Add new actions from Q2000.  
+	
+	* src/scm/qif-import/qif-to-gnc.scm: Fix handling of commissions
+	for (hopefully) the last time.  Add new security Action types.
+	Don't puke on unknown Action.
+
+	* src/scm/qif-import/qif-dialog-utils.scm: Change default account
+	for ShrsIn/ShrsOut to 'Retained Earnings', which is a normal
+	account; replaces old policy of stock-denominated Equity
+	subaccounts.
+	
 2001-01-15  Rob Browning  <rlb@cs.utexas.edu>
 
 	* configure.in (G_WRAP_LINK_ARGS): require g-wrap 1.1.5.  This

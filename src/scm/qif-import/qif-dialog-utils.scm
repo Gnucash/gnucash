@@ -24,8 +24,18 @@
                  brokerage (gnc:account-separator-char)  
                  security))
 
+(define (default-capital-return-acct brokerage security) 
+  (string-append "Cap Return" (gnc:account-separator-char) 
+                 brokerage (gnc:account-separator-char)  
+                 security))
+
 (define (default-cglong-acct brokerage security)
   (string-append "Cap. gain (long)" (gnc:account-separator-char) 
+                 brokerage (gnc:account-separator-char) 
+                 security))
+
+(define (default-cgmid-acct brokerage security)
+  (string-append "Cap. gain (mid)" (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char) 
                  security))
 
@@ -34,14 +44,16 @@
                  brokerage (gnc:account-separator-char) 
                  security))
 
-(define (default-equity-holding  security) 
-  (string-append "Retained Earnings" (gnc:account-separator-char) 
-                 security))
+(define (default-equity-holding security) "Retained Earnings")
 
 (define (default-equity-account) "Retained Earnings")  
 
 (define (default-commission-acct brokerage) 
   (string-append "Commissions" (gnc:account-separator-char) 
+                 brokerage))
+
+(define (default-margin-interest-acct brokerage) 
+  (string-append "Margin Interest" (gnc:account-separator-char) 
                  brokerage))
 
 ;; the account-display is a 3-columned list of accounts in the QIF
@@ -122,20 +134,21 @@
                   ;; an interest, dividend, or CG account.
                   (case action
                     ((buy buyx sell sellx reinvint reinvdiv reinvsh reinvsg 
-                          reinvlg shrsin shrsout stksplit)
+                          reinvlg reinvmd shrsin shrsout stksplit)
                      (set! qif-account 
                            (default-stock-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-STOCK-TYPE 
                                                    GNC-MUTUAL-TYPE
                                                    GNC-ASSET-TYPE)))
-                    ((div cgshort cglong intinc miscinc miscexp xin xout)
+                    ((div cgshort cgmid cglong intinc miscinc miscexp 
+                          margint rtrncap xin xout)
                      (set! qif-account from-acct)
                      (set! qif-account-types (list GNC-BANK-TYPE
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE)))
                     
-                    ((divx cgshortx cglongx intincx)
+                    ((divx cgshortx cgmidx cglongx intincx margintx rtrncapx)
                      (set! qif-account 
                            (qif-split:category 
                             (car (qif-xtn:splits xtn))))
@@ -204,6 +217,11 @@
                      (set! qif-account
                            (default-cgshort-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
+
+                    ((cgmid cgmidx reinvmd)
+                     (set! qif-account
+                           (default-cgmid-acct from-acct stock-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
                     ((cglong cglongx reinvlg)
                      (set! qif-account
@@ -220,10 +238,20 @@
                            (default-dividend-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
+                    ((rtrncap rtrncapx)
+                     (set! qif-account
+                           (default-capital-return-acct from-acct))
+                     (set! qif-account-types (list GNC-INCOME-TYPE)))
+
                     ((shrsin shrsout)
                      (set! qif-account
                            (default-equity-holding stock-acct))
                      (set! qif-account-types (list GNC-EQUITY-TYPE)))
+
+                    ((margint margintx)
+                     (set! qif-account
+                           (default-margin-interest-acct from-acct))
+                     (set! qif-account-types (list GNC-EXPENSE-TYPE)))
                     
                     ((miscinc miscexp miscincx miscexpx)
                      ;; these reference a category on the other end 

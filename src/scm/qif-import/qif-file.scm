@@ -38,6 +38,7 @@
           (valid-acct-types 
            '(type:bank type:cash
                        type:ccard type:invst
+                       type:port
                        #{type:oth\ a}#  #{type:oth\ l}#))
           (progress-dialog #f)
           (file-stats (stat path))
@@ -78,7 +79,7 @@
                   (begin 
                     (set! qstate-type (qif-parse:parse-bang-field value))
                     (case qstate-type 
-                      ((type:bank type:cash type:ccard type:invst
+                      ((type:bank type:cash type:ccard type:invst type:port 
                                   #{type:oth\ a}#  #{type:oth\ l}#)
                        (if ignore-accounts 
                            (set! current-account-name last-seen-account-name))
@@ -109,7 +110,7 @@
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                   
                   (case qstate-type 
-                    ((type:bank type:cash type:ccard type:invst
+                    ((type:bank type:cash type:ccard type:invst type:port 
                                 #{type:oth\ a}#  #{type:oth\ l}#)
                      (case tag
                        ;; D : transaction date 
@@ -141,7 +142,8 @@
                        ;; there's both an action and a number in gnucash,
                        ;; one for securities, one for banks. 
                        ((#\N)
-                        (if (eq? qstate-type 'type:invst)
+                        (if (or (eq? qstate-type 'type:invst)
+                                (eq? qstate-type 'type:port))
                             (qif-xtn:set-action! current-xtn value)
                             (qif-xtn:set-number! current-xtn value)))
 
@@ -208,8 +210,10 @@
                                         opening-balance-payee))
                               (set! first-xtn #f)))
                         
-                        (if (and (eq? qstate-type 'type:invst)
-                                 (not (qif-xtn:security-name current-xtn)))
+                        (if (and 
+                             (or (eq? qstate-type 'type:invst)
+                                 (eq? qstate-type 'type:port))
+                             (not (qif-xtn:security-name current-xtn)))
                             (qif-xtn:set-security-name! current-xtn ""))
                         
                         (qif-xtn:set-from-acct! current-xtn 
