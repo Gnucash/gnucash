@@ -1,21 +1,21 @@
 <ARTICLE ID="XACC-TXF-EXPORT-ANOMALIES">
 
 <ARTHEADER>
-<TITLE>TXF Export - Known Anomalies and Limitations</TITLE>
+<TITLE>Exportação TXF - Problemas Conhecidos e Limitações</TITLE>
 </ARTHEADER>
 
 <PARA><EMPHASIS>TaxCut 1999</EMPHASIS> </PARA>
 
 <PARA>
     <ITEMIZEDLIST>
-      <LISTITEM><PARA><EMPHASIS>Code: N488 "^ Sched B \ Div. income, cap
+      <LISTITEM><PARA><EMPHASIS>Código: N488 "^ Sched B \ Div. income, cap
         gain distrib."</EMPHASIS></PARA>
 
-        <PARA><EMPHASIS>Code: N286 "^ Sched B \ Dividend
+        <PARA><EMPHASIS>Código: N286 "^ Sched B \ Dividend
         income"</EMPHASIS></PARA>
 
-        <PARA>These two codes, from the same payer, are not
-        correlated. The user will have to adjust for this after import.
+        <PARA>Estes dois códigos, do mesmo pagador, não são co-relacionados.
+        O utilizador terá de ajustar esta situação após a importação.
         </PARA>
       </LISTITEM>
     </ITEMIZEDLIST></PARA>
@@ -24,25 +24,25 @@
 
 <PARA>
     <ITEMIZEDLIST>
-      <LISTITEM><PARA><EMPHASIS>Code: N521 "  F1040 \ Federal estimated
+
+      <LISTITEM><PARA><EMPHASIS>Código: N521 "  F1040 \ Federal estimated
         tax, qrtrly"</EMPHASIS></PARA>
 
-        <PARA>Does not accept the date field and does not import the
-        individual payment amounts, only the total. The date and
-        individual payment amounts, only matter if you have to compute
-        the penalty. (this may be a TurboTax enhancement)
+        <PARA>Não aceita o campo de data e não importa os montantes 
+        individuais de pagamento, apenas o total. A data e montantes 
+        individuais de pagamento apenas interessam se tiver de calcular 
+        a penalização. (isto poderá ser um melhoramento do TurboTax)
         </PARA></LISTITEM>  
+      <LISTITEM><PARA><EMPHASIS>Código: N460 "  W-2 \ Salário ou Honorários,
+        próprio"</EMPHASIS></PARA>
 
-      <LISTITEM><PARA><EMPHASIS>Code: N460 "  W-2 \ Salary or wages,
-        self"</EMPHASIS></PARA>
+  <PARA><EMPHASIS>Código: N506 "  W-2 \ Salário ou Honorários, conjuge"
+  </EMPHASIS></PARA>
 
-	<PARA><EMPHASIS>Code: N506 "  W-2 \ Salary or wages, spouse"
-	</EMPHASIS></PARA>
+        <PARA>e outros códigos relacionados.</PARA>
 
-        <PARA>and other related codes.</PARA>
-
-	<PARA>Information from only one job may be imported.
-        </PARA></LISTITEM>
+  <PARA>Apenas informação de um emprego pode ser importada.
+         </PARA></LISTITEM>
 
     </ITEMIZEDLIST></PARA>
 
@@ -50,39 +50,39 @@
 
 <PARA>
     <ITEMIZEDLIST>
-      <LISTITEM><PARA><EMPHASIS>Code: N521 "  F1040 \ Federal estimated
+      <LISTITEM><PARA><EMPHASIS>Código: N521 "  F1040 \ Federal estimated
         tax, qrtrly"</EMPHASIS></PARA>
 
-        <PARA>Does not accept the dates outside of the tax year. This is
-        a problem for the last payment that is due Jan 15.  GnuCash
-        changes the the date of the last payment to Dec 31. The user
-        will have to adjust for this after import. The date only matters
-        if you have to compute the penalty.
+        <PARA>Não aceita as datas fora do ano fiscal. Isto é um problema 
+        para o último pagamento que é devido a 15 de Jan. O GnuCash altera 
+        a data do último pagamento para 31 Dez. O utilizador terá de ajustar 
+        esta questão após a importação. A data apenas interessa caso tenha 
+        de calcular a penalização.
         </PARA></LISTITEM>
     </ITEMIZEDLIST></PARA>
 
-<PARA><EMPHASIS>TXF Tax eXport Format</EMPHASIS> </PARA>
+<PARA><EMPHASIS>Formato de Exportação de Impostos TXF</EMPHASIS> </PARA>
 
 <PARA>
     <ITEMIZEDLIST>
-      <LISTITEM><PARA><EMPHASIS>Duplicate Codes</EMPHASIS></PARA>
+      <LISTITEM><PARA><EMPHASIS>Códigos Duplicados</EMPHASIS></PARA>
 
-        <PARA>Most codes are not supposed to appear more than once.
-        GnuCash issues an error message if it detects this, but will
-        still export the data.  These are not handled the same by TaxCut
-        and TurboTax.</PARA>
+        <PARA>Muitos dos códigos não deveriam surgir mais que uma vez.
+        GnuCash emite uma mensagem de erro se detectar isto, mas continuará
+        a exportar os dados. Estes dados duplicados não são geridos da mesma 
+        forma pelo TaxCut e pelo TurboTax.</PARA>
 
         <ITEMIZEDLIST>
           <LISTITEM><PARA><EMPHASIS>TurboTax</EMPHASIS></PARA>
 
-          <PARA>Sums the duplicate codes. i.e., job one and job two are
-          added together.</PARA>
+          <PARA>Soma os códigos duplicados. por ex., emprego um e emprego dois 
+          são somados como se fossem um só.</PARA>
           </LISTITEM>  
 
           <LISTITEM><PARA><EMPHASIS>TaxCut</EMPHASIS></PARA>
 
-          <PARA>Keeps only the <EMPHASIS>LAST</EMPHASIS> of the
-          duplicate codes. i.e., job one is ignored and job two is kept.
+          <PARA>Mantém apenas o <EMPHASIS>ÚLTIMO</EMPHASIS> dos códigos duplicados. 
+          Por ex., o emprego um é ignorado e o emprego dois é mantido.
           </PARA>
           </LISTITEM>  
         </ITEMIZEDLIST>

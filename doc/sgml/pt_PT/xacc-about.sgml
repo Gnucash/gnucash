@@ -214,7 +214,8 @@ activos, pode disponibilizar uma listagem de Lucros & Prejuizos precisa.
       (Na verdade, colocou o nome a votação.  A democracia não é uma boa 
       forma de escolher nomes.) Jeremy registou o nome de domínio, criou 
       e manteve o sitio de internet gnucash.org durante vários anos, além
-      de que conseguiu fazer funcionar o código GTK/gnome inicial.
+      de que conseguiu fazer funcionar o código GTK/gnome inicial. O desenho 
+      do novo sitio de internet do GnuCash é também da autoria do Jeremy.
       </para>
 
 </glossdef>
@@ -227,7 +228,8 @@ termos adicionado suporte para Perl, desistiu do Perl a favor do
 suporte <link linkend="Guile">Guile</link>/<link linkend="Scheme">Scheme</link>. 
 Rob construiu a infraestrutura de compilação, modificou o código gtk, e está a 
 alterar o formato do ficheiro. Ainda re-escreveu os relatórios e o descarregar 
-de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utilizador.
+de extractos em <link linkend="scheme">Scheme</link>, o wrapper <link linkend="gwrap"> 
+g-wrap</link> para guile, e as preferências de utilizador.
 </para>
 
 </glossdef>
@@ -254,6 +256,39 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
     </para>
 </glossdef>
 </glossentry>
+<glossentry>
+<glossterm><email>rgmerk@mira.net</email> Robert Graham
+    Merkel</glossterm>
+<glossdef>
+<para>
+   trabalho extensivo nos relatórios e infraestrutura de relatórios,
+   trabalho no interface gráfico gnome, e preferências do utilizador.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossdef>
+<para>
+   modificações ao desenho dos documentos, re-estruturação do XML, 
+   conjunto de testes automatizados, nova hierarquia de importação de ficheiros.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>stimming@uclink.berkeley.edu</email>Christian
+   Stimming</glossterm>
+<glossdef>
+<para>
+   é um monstro na geração de relatórios. Ele é um dos principais 
+   contribuintes para a infraestrutura de relatórios actual, tendo 
+   criado muitos dos relatórios importantes.
+   </para>
+</glossdef>
+</glossentry>
+
 </glosslist>
 
  </para>
@@ -264,7 +299,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 
 <para>A <emphasis>lista de milhares</emphasis> inclui:
 
-    <glosslist>
+<glosslist>
 <glossentry>
 <glossterm><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</glossterm>
@@ -355,7 +390,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossterm><email>carol@gnumatic.com</email> Carol
       Champagne</glossterm>
 <glossdef>
-<para>documentação</para>
+<para>documentação & um paciente crítico da usabilidade do interface gráfico</para>
 </glossdef>
 </glossentry>
 
@@ -383,7 +418,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossterm><email>kenneth@gnome.org</email> Kenneth
        Christiansen</glossterm>
 <glossdef>
-<para>Tradução para Sueco</para>
+<para>Tradução para Dinamarquês</para>
 </glossdef>
 </glossentry>
 
@@ -414,7 +449,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossterm><email>raphael.dechenaux@worldonline.fr</email> Raphael
       Dechenaux</glossterm>
 <glossdef>
-<para>correcção ao registo</para>
+<para>modificação ao registo</para>
 </glossdef>
 </glossentry>
 
@@ -437,13 +472,13 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossentry>
 <glossterm><email>tyson@tyse.net</email> Tyson Dowd</glossterm>
 <glossdef>
-<para>por correcções do config/make e pela manutenção debian</para>
+<para>por modificações do config/make e pela manutenção debian</para>
 </glossdef>
 </glossentry>
 <glossentry>
 <glossterm><email>ripley@xs4all.nl</email> Koen D'Hondt</glossterm>
 <glossdef>
-<para>pelas correcções ao XmHTML para Solaris</para>
+<para>pelas modificações ao XmHTML para Solaris</para>
 </glossdef>
 </glossentry>
 <glossentry>
@@ -582,7 +617,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossentry>
 <glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm> 
 <glossdef>
-<para>Tradução para Sueco</para>
+<para>Tradução para Dinamarquês</para>
 </glossdef>
 </glossentry>
 
@@ -611,17 +646,26 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 </glossentry>
 
 <glossentry>
+<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossdef>
+<para>correcção de erro de menu em Motif, correcções de erros</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
 <glossdef>
 <para>conversão para SGI Irix</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>sk@xgm.de</email> Sven Kuenzler</glossterm>
 <glossdef>
 <para>pelo ficheiro README (Leia-me) para SuSE</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>blarsen@ada-works.com</email> Bryan
       Larsen</glossterm>
@@ -629,6 +673,14 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <para>relatório de orçamento em guile</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossdef>
+<para>por corrigir um erro que prendia o funcionamento</para>
+</glossdef>
+</glossentry>
+
 <glossentry>
 <glossterm><email>mellon@andare.fugue.com</email> Ted
       Lemon</glossterm>
@@ -636,6 +688,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <para>conversão para NetBSD</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</glossterm>
@@ -678,7 +731,8 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 <glossterm><email>rgmerk@mira.net</email> Robert Graham
       Merkel</glossterm>
 <glossdef>
-<para>modificações a relatórios, gnome e configurações.</para>
+<para>trabalho extensivo em relatórios e na infra-estrutura de relatórios, 
+      interface gráfico gnome, e preferências do utilizador.</para>
 </glossdef>
 </glossentry>
 
@@ -874,7 +928,7 @@ Nielsen</glossterm>
 <glossentry>
 <glossterm><email>keld@dkuug.dk</email> Keld Simonsen</glossterm>
 <glossdef>
-<para>Tradução para Sueco</para>
+<para>Tradução para Dinamarquês</para>
 </glossdef>
 </glossentry>
 
@@ -889,7 +943,7 @@ Nielsen</glossterm>
 <glossterm><email>spruth@bigfoot.com</email> Henning
       Spruth</glossterm>
 <glossdef>
-<para>pela actualização ao texto e datas ero para Alemão</para>
+<para>pela actualização ao texto em Alemão e modificações às datas euro</para>
 </glossdef>
 </glossentry>
 
@@ -935,7 +989,7 @@ Nielsen</glossterm>
 <glossterm><email>detrout@earthlink.net</email> Diane
       Trout</glossterm>
 <glossdef>
-<para>modificação da importação QIF em scheme</para>
+<para>modificação da importação QIF em <link linkend="scheme">Scheme</link></para>
 </glossdef>
 </glossentry>
 
@@ -1031,7 +1085,7 @@ Nielsen</glossterm>
 
 <ulink url="http://www.netbsd.org"><inlinemediaobject>
 <imageobject>
-<imagedata fileref="image/logo-netbsd-banner.png">
+<imagedata fileref="image/logo-NetBSD-banner.png">
 </imageobject>
 </inlinemediaobject></ulink>
 

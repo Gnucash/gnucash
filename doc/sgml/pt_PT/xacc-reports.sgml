@@ -34,17 +34,10 @@
 
       </para>
 </listitem>
-<listitem>
-<para><link linkend="xacc-tax-report">Relatório de Impostos:</link>
-      mostra Receitas e Despesas tributáveis ou dedutíveis.
-
-      </para>
-</listitem>
-<listitem>
-<para><link linkend="xacc-txf-export">Relatório de Exportação TXF:</link>
-      exporta um ficheiro .TXF que pode ser importado para o TaxCut ou TurboTax.
-
-      </para>
+<listitem> <para><link linkend="xacc-tax-report">Relatório de Impostos / 
+Exportação TXF:</link> mostra Receitas e Despesas tributáveis ou dedutíveis. 
+Pode <link linkend="xacc-txf-export">exportar para um ficheiro .TXF</link> 
+que pode ser importado no TaxCut ou TurboTax.  </para>
 </listitem>
 <listitem>
 <para><application>Histórico de Saldos:</application> 
