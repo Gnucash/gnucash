@@ -94,7 +94,7 @@ Split * gnc_lot_get_latest_split (GNCLot *lot);
 /** Every lot has a place to hang kvp data.  This routine returns that
  * place. 
  * */
-kvp_frame * gnc_lot_get_slots (GNCLot *);
+KvpFrame * gnc_lot_get_slots (GNCLot *);
 
 #define LOT_IS_CLOSED	"is-closed?"
 #define LOT_BALANCE	"balance"

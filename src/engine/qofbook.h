@@ -63,7 +63,7 @@ QofEntityTable      * qof_book_get_entity_table (QofBook *book);
 const GUID          * qof_book_get_guid (QofBook *book);
 
 /** \return The kvp data for the book */
-kvp_frame   * qof_book_get_slots (QofBook *book);
+KvpFrame   * qof_book_get_slots (QofBook *book);
 
 /** The qof_book_set_data() allows
  *    arbitrary pointers to structs to be stored in QofBook.

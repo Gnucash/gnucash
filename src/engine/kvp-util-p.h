@@ -41,6 +41,6 @@
  * /gemini/<n>/date, where <n> = ncopies-1.
  */
 
-void gnc_kvp_gemini (kvp_frame *, const GUID *, const GUID *, time_t);
+void gnc_kvp_gemini (KvpFrame *, const GUID *, const GUID *, time_t);
 
 #endif /* XACC_KVP_UTIL_P_H */

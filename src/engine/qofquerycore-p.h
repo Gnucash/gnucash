@@ -126,7 +126,7 @@ typedef struct {
 typedef struct {
   QofQueryPredData	pd;
   GSList *	path;
-  kvp_value *	value;
+  KvpValue *	value;
 } query_kvp_def, *query_kvp_t;
 
 #endif /* QOF_QUERYCOREP_H */

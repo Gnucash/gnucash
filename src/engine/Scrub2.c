@@ -313,8 +313,8 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
 void
 xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
 {
-  kvp_frame *cwd;
-  kvp_value *vvv;
+  KvpFrame *cwd;
+  KvpValue *vvv;
   const char * cur_name;
 
   if (!acc || !gain_acct) return;
@@ -338,8 +338,8 @@ Account *
 xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
 {
   Account *gain_acct = NULL;
-  kvp_frame *cwd;
-  kvp_value *vvv;
+  KvpFrame *cwd;
+  KvpValue *vvv;
   GUID * gain_acct_guid;
   const char * cur_name;
 
@@ -367,8 +367,8 @@ static Account *
 GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 {
   Account *gain_acct = NULL;
-  kvp_frame *cwd;
-  kvp_value *vvv;
+  KvpFrame *cwd;
+  KvpValue *vvv;
   GUID * gain_acct_guid;
   const char * cur_name;
 

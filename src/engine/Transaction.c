@@ -607,7 +607,7 @@ get_commodity_denom(const Split * s)
  * xaccSplitGetSlots
  ********************************************************************/
 
-kvp_frame * 
+KvpFrame * 
 xaccSplitGetSlots (const Split * s)
 {
   if(!s) return NULL;
@@ -615,7 +615,7 @@ xaccSplitGetSlots (const Split * s)
 }
 
 void
-xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
+xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 {
   g_return_if_fail(s);
   g_return_if_fail(frm);
@@ -1238,7 +1238,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
  * xaccTransGetSlots
  ********************************************************************/
 
-kvp_frame * 
+KvpFrame * 
 xaccTransGetSlots (const Transaction *t)
 {
   if(!t) return NULL;
@@ -1246,7 +1246,7 @@ xaccTransGetSlots (const Transaction *t)
 }
 
 void
-xaccTransSetSlots_nc (Transaction *t, kvp_frame *frm)
+xaccTransSetSlots_nc (Transaction *t, KvpFrame *frm)
 {
   g_return_if_fail(t);
   g_return_if_fail(frm);
@@ -2685,7 +2685,7 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 void
 xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!trans || !ts) return;
 
@@ -2697,7 +2697,7 @@ xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 void
 xaccTransSetTxnType (Transaction *trans, char type)
 {
-  kvp_value *value;
+  KvpValue *value;
   char s[2];
 
   if (!trans) return;
@@ -2803,7 +2803,7 @@ xaccTransGetDescription (const Transaction *trans)
 const char * 
 xaccTransGetNotes (const Transaction *trans)
 {
-  kvp_value *v;
+  KvpValue *v;
 
   if (!trans) return NULL;
 
@@ -2856,7 +2856,7 @@ xaccTransRetDateEnteredTS (const Transaction *trans)
 void
 xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
 {
-  kvp_value *value;
+  KvpValue *value;
 
   if (!trans || !ts) return;
 
@@ -2880,7 +2880,7 @@ xaccTransRetDateDueTS (const Transaction *trans)
 char
 xaccTransGetTxnType (const Transaction *trans)
 {
-  kvp_value *value;
+  KvpValue *value;
   const char *s;
 
   if (!trans) return TXN_TYPE_NONE;
@@ -2896,7 +2896,7 @@ xaccTransGetTxnType (const Transaction *trans)
 const char * 
 xaccTransGetReadOnly (const Transaction *trans)
 {
-  kvp_value *v;
+  KvpValue *v;
 
   if (!trans) return NULL;
 
@@ -3171,8 +3171,8 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-  kvp_frame *frame;
-  kvp_value *split_type;
+  KvpFrame *frame;
+  KvpValue *split_type;
 
   if(!s) return NULL;
   frame = s->kvp_data;
@@ -3318,8 +3318,8 @@ void
 xaccTransVoid(Transaction *transaction,
               const char *reason)
 {
-  kvp_frame *frame;
-  kvp_value *val;
+  KvpFrame *frame;
+  KvpValue *val;
   gnc_numeric amt, zero;
   GList *split_list;
   Split *split;
@@ -3381,7 +3381,7 @@ xaccTransGetVoidStatus(const Transaction *trans)
 char *
 xaccTransGetVoidReason(const Transaction *trans)
 {
-  kvp_value *val;
+  KvpValue *val;
   char *reason;
   g_return_val_if_fail(trans, NULL);
 
@@ -3399,7 +3399,7 @@ xaccTransGetVoidReason(const Transaction *trans)
 gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)
 {
-  kvp_value *val;
+  KvpValue *val;
   gnc_numeric amt = gnc_numeric_zero();
   g_return_val_if_fail(split, amt);
 
@@ -3416,7 +3416,7 @@ xaccSplitVoidFormerAmount(const Split *split)
 gnc_numeric
 xaccSplitVoidFormerValue(const Split *split)
 {
-  kvp_value *val;
+  KvpValue *val;
   gnc_numeric amt = gnc_numeric_zero();
 
   g_return_val_if_fail(split, amt);
@@ -3434,7 +3434,7 @@ xaccSplitVoidFormerValue(const Split *split)
 Timespec
 xaccTransGetVoidTime(const Transaction *tr)
 {
-  kvp_value *val;
+  KvpValue *val;
   Timespec void_time = {0,0};
 
   g_return_val_if_fail(tr, void_time);
@@ -3452,8 +3452,8 @@ xaccTransGetVoidTime(const Transaction *tr)
 void
 xaccTransUnvoid (Transaction *transaction)
 {
-  kvp_frame *frame;
-  kvp_value *val;
+  KvpFrame *frame;
+  KvpValue *val;
   gnc_numeric amt;
   GList *split_list;
   Split *split;
