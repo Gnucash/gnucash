@@ -1,6 +1,6 @@
 #! /bin/sh
 # Generated automatically from xacc.in by configure.
 
-XACC_HELP=${XACC_HELP:-/usr/local/share/xacc/Docs}
+XACC_HELP=${XACC_HELP}:./Docs:/usr/local/share/xacc/Docs
 export XACC_HELP
 exec xacc.bin $@
