@@ -1248,15 +1248,18 @@ xaccAccountFixSplitDateOrder (Account * acc, Split *split)
 void
 xaccTransFixSplitDateOrder (Transaction *trans)
 {
-  GList *node;
+  GList *node, *next;
+  static int level = 0;
 
   if (trans == NULL) return;
 
+  gnc_engine_suspend_events();
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
     xaccAccountFixSplitDateOrder (xaccSplitGetAccount(s), s);
   }
+  gnc_engine_resume_events();
 }
 
 /********************************************************************\

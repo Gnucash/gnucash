@@ -18,6 +18,16 @@
 	(sxed_close_event): Check for a valid SX before proceeding; fixes
 	Bugs#99350 and dupes [99348,99356,99397].
 
+2002-11-23  Matthew Vanecek <mevanecek@yahoo.com>
+	* src/engine/Account.c (xaccAccountCommitEdit): Internationalize
+	the PWARN_GUI() string 	argument.
+
+	* src/backend/postgres/PostgresBackend.c: Added messages.h to support
+	string internationalization.
+	
+	* src/backend/postgres/PostgresBackend.c (pgend_session_begin): 
+	an xaccBackendSetMessage() call was missing the Backend argument.
+	
 2002-11-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Use the new generic
@@ -41,6 +51,22 @@
 	Clarify some comments.
 
 2002-11-23  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/gnc-ledger-display.c (refresh_handler): 
+	If there is a current split, then ensure that the transaction
+	containing that split stays in the register.  This will make the
+	transaction being edited stay in the register until you move to
+	another transaction, even though the accounts may have been
+	changes. #92158
+
+	* src/register/ledger-core/split-register-control.c
+	(gnc_split_register_move_cursor): If all the entries of the
+	current split have been cleared, then delete this split. #98139
+	(gnc_split_register_old_split_empty_p): New function.
+
+	* src/engine/Account.c (xaccTransFixSplitDateOrder): 
+	(xaccTransFixSplitDateOrder): Prevent this routine from causing a
+	recursive call to itself.
 
 	* src/gnome-utils/commodity.glade: Change the title of the 'New
 	Currency/Security' dialog to 'New Security' to match its actual
