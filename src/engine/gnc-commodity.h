@@ -117,4 +117,6 @@ gboolean gnc_commodity_table_foreach_commodity(gnc_commodity_table * table,
                                                      gpointer user_data),
                                        gpointer user_data);
 
+gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
+
 #endif
