@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
 "POT-Creation-Date: 2000-06-18 18:39-0700\n"
-"PO-Revision-Date: 2000-07-01 22:00+0100\n"
+"PO-Revision-Date: 2000-07-23 20:00+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2199,7 +2199,7 @@ msgstr "Se retirer"
 # messages-i18n.c:351
 #: messages-i18n.c:402 po/guile_strings.txt:60
 msgid "Withdrawal"
-msgstr "Retiré"
+msgstr "Retrait"
 
 # po/guile_strings.txt:182
 #: messages-i18n.c:403
