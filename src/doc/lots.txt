@@ -276,12 +276,12 @@ account, but this is a painful process.)
 
 FIFO's
 ======
-What is a FIFO ...?
-old gnucash-1.4 code has fifo in Queue.c
-also fifo's in 
-business/business-core/gncInvoice.c's PostInvoice and ApplyPayment
+What is a FIFO ?  A FIFO is a type of accounting policy where
+income from selling inventory is accounted by selling the oldest
+inventory first.  Thus, the profit/loss of the sale corresponds
+to the difference in price between when it was bought and sold.
+FIFO's are also used in depreciation schedules, and in other places.
 
-xaccAccountFindOpenLots
 
 Conversion
 ==========
@@ -305,6 +305,8 @@ for each account {
    }
 }
 
+See the file Scrub2.h for details.
+
 
 GUI
 ===
@@ -317,9 +319,11 @@ Status
 ======
 Core support for Lots in the engine is complete (April 2002).  
 See src/engine/gnc-lot.h for the public API.
-FIFO's have been started.
 The XML backend support for lot is complete (April 2002).
 The Postgres backend does not yet support lots.
+FIFO's have not been started.
+Scrub routines to automatically take old gnucash datasets and
+   transition them to double-balanced lots have been implemented.
 
 No GUI yet.
 
