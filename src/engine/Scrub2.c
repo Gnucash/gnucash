@@ -225,7 +225,7 @@ is_subsplit (Split *split)
 /* ================================================================= */
 
 void
-xaccScrubSubSplitPrice (Split *split)
+xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
 {
    gnc_numeric src_amt, src_val;
    SplitList *node;
@@ -267,10 +267,10 @@ xaccScrubSubSplitPrice (Split *split)
        */
       delta = gnc_numeric_sub_fixed (target_val, dst_val);
       delta = gnc_numeric_abs (delta);
-      if (3 * delta.num  < delta.denom) continue;
+      if (maxmult * delta.num  < delta.denom) continue;
 
       /* If the amount is small, pass on that too */
-      if ((-2 < dst_amt.num) && (dst_amt.num < 2)) continue;
+      if ((-maxamtscu < dst_amt.num) && (dst_amt.num < maxamtscu)) continue;
 
       /* Make the actual adjustment */
       xaccTransBeginEdit (txn);
