@@ -846,6 +846,7 @@ AC_OUTPUT(
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
+          src/report/report-gnome/test/Makefile
           src/report/report-system/test/Makefile
           src/report/report-system/Makefile
           src/report/standard-reports/test/Makefile
