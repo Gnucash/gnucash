@@ -51,6 +51,9 @@ typedef struct
   GNCComponentCloseHandler close_handler;
   gpointer user_data;
 
+  SCM refresh_handler_scm;
+  SCM close_handler_scm;
+
   ComponentEventInfo watch_info;
 
   char *component_class;
@@ -230,7 +233,7 @@ add_event (ComponentEventInfo *cei, const GUID *entity,
 }
 
 static void
-add_event_type (ComponentEventInfo *cei, GNCIdType entity_type,
+add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
                 GNCEngineEventType event_mask, gboolean or_in)
 {
   GNCEngineEventType *mask;
@@ -242,7 +245,8 @@ add_event_type (ComponentEventInfo *cei, GNCIdType entity_type,
   mask = g_hash_table_lookup (cei->event_masks, entity_type);
   if (!mask)
   {
-    char * key = g_cache_insert (gnc_engine_get_string_cache (), entity_type);
+    char * key = g_cache_insert (gnc_engine_get_string_cache (),
+                                 (gpointer) entity_type);
     mask = g_new0 (GNCEngineEventType, 1);
     g_hash_table_insert (cei->event_masks, key, mask);
   }
@@ -361,21 +365,13 @@ find_components_by_data (gpointer user_data)
   return list;
 }
 
-gint
-gnc_register_gui_component (const char *component_class,
-                            GNCComponentRefreshHandler refresh_handler,
-                            GNCComponentCloseHandler close_handler,
-                            gpointer user_data)
+static ComponentInfo *
+gnc_register_gui_component_internal (const char * component_class)
 {
   ComponentInfo *ci;
   gint component_id;
 
-  /* sanity check */
-  if (!component_class)
-  {
-    PERR ("no class specified");
-    return NO_COMPONENT;
-  }
+  g_return_val_if_fail (component_class, NULL);
 
   /* look for a free handler id */
   component_id = next_component_id;
@@ -387,9 +383,8 @@ gnc_register_gui_component (const char *component_class,
   /* found one, add the handler */
   ci = g_new0 (ComponentInfo, 1);
 
-  ci->refresh_handler = refresh_handler;
-  ci->close_handler = close_handler;
-  ci->user_data = user_data;
+  ci->refresh_handler_scm = SCM_BOOL_F;
+  ci->close_handler_scm = SCM_BOOL_F;
 
   ci->watch_info.event_masks = g_hash_table_new (g_str_hash, g_str_equal);
   ci->watch_info.entity_events = guid_hash_table_new ();
@@ -408,7 +403,58 @@ gnc_register_gui_component (const char *component_class,
   dump_components ();
 #endif
 
-  return component_id;
+  return ci;
+}
+
+gint
+gnc_register_gui_component (const char *component_class,
+                            GNCComponentRefreshHandler refresh_handler,
+                            GNCComponentCloseHandler close_handler,
+                            gpointer user_data)
+{
+  ComponentInfo *ci;
+
+  /* sanity check */
+  if (!component_class)
+  {
+    PERR ("no class specified");
+    return NO_COMPONENT;
+  }
+
+  ci = gnc_register_gui_component_internal (component_class);
+  g_return_val_if_fail (ci, NO_COMPONENT);
+
+  ci->refresh_handler = refresh_handler;
+  ci->close_handler = close_handler;
+  ci->user_data = user_data;
+
+  return ci->component_id;
+}
+
+gint
+gnc_register_gui_component_scm (const char * component_class,
+                                SCM refresh_handler,
+                                SCM close_handler)
+{
+  ComponentInfo *ci;
+
+  /* sanity check */
+  if (!component_class)
+  {
+    PERR ("no class specified");
+    return NO_COMPONENT;
+  }
+
+  ci = gnc_register_gui_component_internal (component_class);
+  g_return_val_if_fail (ci, NO_COMPONENT);
+
+  ci->refresh_handler_scm = refresh_handler;
+  scm_protect_object (refresh_handler);
+
+  ci->close_handler_scm = close_handler;
+  scm_protect_object (close_handler);
+
+  return ci->component_id;
 }
 
 void
@@ -432,8 +478,16 @@ gnc_gui_component_watch_entity (gint component_id,
 }
 
 void
+gnc_gui_component_watch_entity_direct (gint component_id,
+                                       GUID entity,
+                                       GNCEngineEventType event_mask)
+{
+  gnc_gui_component_watch_entity (component_id, &entity, event_mask);
+}
+
+void
 gnc_gui_component_watch_entity_type (gint component_id,
-                                     GNCIdType entity_type,
+                                     GNCIdTypeConst entity_type,
                                      GNCEngineEventType event_mask)
 {
   ComponentInfo *ci;
@@ -509,6 +563,14 @@ gnc_unregister_gui_component (gint component_id)
 
   g_free (ci->component_class);
   ci->component_class = NULL;
+
+  if (ci->refresh_handler_scm != SCM_BOOL_F)
+    scm_unprotect_object (ci->refresh_handler_scm);
+  ci->refresh_handler_scm = SCM_BOOL_F;
+
+  if (ci->close_handler_scm != SCM_BOOL_F)
+    scm_unprotect_object (ci->close_handler_scm);
+  ci->close_handler_scm = SCM_BOOL_F;
 
   g_free (ci);
 
@@ -668,13 +730,24 @@ gnc_gui_refresh_internal (gboolean force)
     if (!ci)
       continue;
 
-    if (!ci->refresh_handler)
+    if (!ci->refresh_handler &&
+        !gh_procedure_p (ci->refresh_handler_scm))
       continue;
 
     if (force)
-      ci->refresh_handler (NULL, ci->user_data);
+    {
+      if (ci->refresh_handler)
+        ci->refresh_handler (NULL, ci->user_data);
+      else
+        gh_call0 (ci->refresh_handler_scm);
+    }
     else if (changes_match (&ci->watch_info, &changes_backup))
-      ci->refresh_handler (changes_backup.entity_events, ci->user_data);
+    {
+      if (ci->refresh_handler)
+        ci->refresh_handler (changes_backup.entity_events, ci->user_data);
+      else
+        gh_call0 (ci->refresh_handler_scm);
+    }
   }
 
   clear_event_info (&changes_backup);
@@ -715,10 +788,14 @@ gnc_close_gui_component (gint component_id)
     return;
   }
 
-  if (!ci->close_handler)
+  if (!ci->close_handler &&
+      !gh_procedure_p (ci->close_handler_scm))
     return;
 
-  ci->close_handler (ci->user_data);
+  if (ci->close_handler)
+    ci->close_handler (ci->user_data);
+  else
+    gh_call0 (ci->close_handler_scm);
 }
 
 void

@@ -1,6 +1,7 @@
 TESTS = \
   test-link-module \
   test-load-module \
+  test-component-manager \
   test-exp-parser \
   test-print-parse-amount
 
@@ -34,7 +35,9 @@ noinst_PROGRAMS = \
   test-exp-parser \
   test-print-parse-amount
 
-EXTRA_DIST = test-load-module
+EXTRA_DIST = \
+  test-load-module \
+  test-component-manager
 
 AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \

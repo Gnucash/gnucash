@@ -256,6 +256,44 @@ determines formatting details.")
 
   (gw:wrap-function
    mod
+   'gnc:register-gui-component
+   '<gw:int>
+   "gnc_register_gui_component_scm"
+   '(((<gw:m-chars-caller-owned> gw:const) component-class)
+     (<gw:scm> refresh-handler)
+     (<gw:scm> close-handler))
+   "Register a gui component with the component manager.")
+
+  (gw:wrap-function
+   mod
+   'gnc:gui-component-watch-entity
+   '<gw:void>
+   "gnc_gui_component_watch_entity_direct"
+   '((<gw:int> component-id)
+     (<gnc:guid-scm> entity)
+     (<gnc:event-type> event-type-mask))
+   "Watch the events for a particular entity.")
+
+  (gw:wrap-function
+   mod
+   'gnc:gui-component-watch-entity-type
+   '<gw:void>
+   "gnc_gui_component_watch_entity_type"
+   '((<gw:int> component-id)
+     ((<gw:m-chars-caller-owned> gw:const) id-type)
+     (<gnc:event-type> event-type-mask))
+   "Watch the events for a particular entity type.")
+
+  (gw:wrap-function
+   mod
+   'gnc:unregister-gui-component
+   '<gw:void>
+   "gnc_unregister_gui_component"
+   '((<gw:int> component-id))
+   "Unregister a gui component by id.")
+
+  (gw:wrap-function
+   mod
    'gnc:suspend-gui-refresh
    '<gw:void>
    "gnc_suspend_gui_refresh"
@@ -269,6 +307,30 @@ determines formatting details.")
    "gnc_resume_gui_refresh"
    '()
    "Resume gui refresh events.")
+
+  (gw:wrap-function
+   mod
+   'gnc:gui-refresh-all
+   '<gw:void>
+   "gnc_gui_refresh_all"
+   '()
+   "Refresh all gui components.")
+
+  (gw:wrap-function
+   mod
+   'gnc:gui-refresh-suspended
+   '<gw:bool>
+   "gnc_gui_refresh_suspended"
+   '()
+   "Return #t if refreshes are suspended.")
+
+  (gw:wrap-function
+   mod
+   'gnc:close-gui-component
+   '<gw:void>
+   "gnc_close_gui_component"
+   '((<gw:int> component-id))
+   "Close a gui component by id.")
 
   (gw:wrap-function
    mod

@@ -21,6 +21,7 @@
 #define GNC_COMPONENT_MANAGER_H
 
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "GNCId.h"
 #include "gnc-event.h"
@@ -140,6 +141,24 @@ gint gnc_register_gui_component (const char *component_class,
                                  GNCComponentCloseHandler close_handler,
                                  gpointer user_data);
 
+/* gnc_register_gui_component_scm
+ *   Register a GUI component with the manager with scheme callbacks.
+ *
+ * component_class: same as gnc_register_gui_component
+ * refresh_cb:      refresh handler, may be SCM_BOOL_F, indicating
+ *                  no handler. the handler is invoked with no
+ *                  arguments
+ * close_cb:        close handler, may be SCM_BOOL_F, invoked
+ *                  with no arguments
+ *
+ * Notes:           The same notes apply as in gnc_register_gui_component.
+ *
+ * Return:          id of component, or NO_COMPONENT if error
+ */
+gint gnc_register_gui_component_scm (const char * component_class,
+                                     SCM refresh_handler,
+                                     SCM close_handler);
+
 /* gnc_gui_component_watch_entity
  *   Add an entity to the list of those being watched by the component.
  *   Only entities with refresh handlers should add watches.
@@ -153,6 +172,19 @@ void gnc_gui_component_watch_entity (gint component_id,
                                      const GUID *entity,
                                      GNCEngineEventType event_mask);
 
+/* gnc_gui_component_watch_entity_direct
+ *   Add an entity to the list of those being watched by the component.
+ *   Only entities with refresh handlers should add watches.
+ *
+ * component_id: id of component which is watching the entity
+ * entity:       id of entity to watch
+ * event_mask:   mask which determines which kinds of events are watched
+ *               setting the mask to 0 turns off watching for the entity.
+ */
+void gnc_gui_component_watch_entity_direct (gint component_id,
+                                            GUID entity,
+                                            GNCEngineEventType event_mask);
+
 /* gnc_gui_component_watch_entity_type
  *   Watch all entities of a particular type.
  *
@@ -163,7 +195,7 @@ void gnc_gui_component_watch_entity (gint component_id,
  *               setting the mask to 0 turns off watching for the entity type
  */
 void gnc_gui_component_watch_entity_type (gint component_id,
-                                          GNCIdType entity_type,
+                                          GNCIdTypeConst entity_type,
                                           GNCEngineEventType event_mask);
 
 /* gnc_gui_get_entity_events
