@@ -398,13 +398,12 @@ The password is "guest"
 To get a copy of the source in the experimental development tree
 do a
 
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD xacc
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
 
 To get a copy of the source in the gnucash-1.2 stable production
 tree do a
 
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch
-xacc
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
 
 Main Developers:
