@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Account Window</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>This is an account window. You control your set of
     accounts from here.
 
@@ -50,7 +51,7 @@
     recommended only for accounting experts.
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
