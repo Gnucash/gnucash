@@ -371,7 +371,7 @@ xaccReadAccountGroup( int fd )
   maingrp = NULL;
 
   /* set up various state that is not normally stored in the byte stream */
-  xaccGroupRecomputeBalance (grp);
+  xaccRecomputeGroupBalance (grp);
 
   xaccLogEnable();
   return grp;
