@@ -203,7 +203,12 @@ file_sync_all(QofBackend* be, QofBook *book)
 }
 
 /* ================================================================= */
-/* Routines to deal with the creation of multiple books */
+/* Routines to deal with the creation of multiple books.
+ * The core design assumption here is that the book
+ * begin-edit/commit-edit routines are used solely to write out
+ * closed accounting periods to files.  They're not currently
+ * designed to do anything other than this. (Although they could be).
+ */
 
 static char *
 build_period_filepath (FileBackend *fbe, QofBook *book)
@@ -240,6 +245,18 @@ file_begin_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
+
+    if (NULL == fbe->primary_book)
+    {
+        PERR ("You should have saved the data "
+              "at least once before closing the books!\n");
+    }
+    /* XXX To be anal about it, we should really be checking to see
+     * if there already is a file with this book GUID, and disallowing
+     * further progress.  This is because we are not allowed to 
+     * modify books that are closed (They should be treated as 
+     * 'read-only').
+     */
 }
 
 static void
@@ -262,6 +279,12 @@ file_commit_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
     gnc_file_be_write_to_file(fbe, book, filepath, FALSE);
+
+    /* We want to force a save of the current book at this point,
+     * because if we don't, and the user forgets to do so, then
+     * there'll be the same transactions in the closed book,
+     * and also in the current book. */
+    gnc_file_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
 }
 
 /* ================================================================= */
