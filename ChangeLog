@@ -12,6 +12,23 @@
 	* src/register/ledger-core/split-register-model.c:
 	* src/register/ledger-core/split-register-model-save.c:
 	  Fix a few rounding errors when computing conversion rates.
+
+	* src/gnome-utils/dialog-transfer.c:
+	  don't make some checks if we're acting as an exchange dialog.
+	  Set an initial exchange_rate when it's passed in.
+	  Grab focus in the price-entry if we're acting as an exchange dialog.
+
+	* src/register/ledger-core/split-register-control.c:
+	  reset the rate if the account changed.
+	  get the exchange dialog to pop up in expanded txns
+
+	* src/register/ledger-core/split-register-model.c:
+	  put the "proper" exchange rate in the RATE_CELL
+	  fix the print_info
+	  use ALLOW_SHADOW so the rate-cell gets copied into the cursor
+
+	* src/register/ledger-core/split-register.c:
+	  initialize the RATE Cell print-info
 	
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
 	

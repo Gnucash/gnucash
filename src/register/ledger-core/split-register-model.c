@@ -903,12 +903,26 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  Split *split;
+  Split *split, *osplit;
+  Transaction *txn;
   gnc_numeric amount, value, convrate;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
+
+  /* If this is a basic, non-expanded ledger with exactly two splits,
+   * and split->txn->curr == split->acc->comm, then use the OTHER
+   * split for the rate.
+   */
+  osplit = xaccSplitGetOtherSplit (split);
+  txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+
+  if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
+      !gnc_split_register_needs_conv_rate (txn, xaccSplitGetAccount (split)))
+  {
+    split = osplit;
+  }
 
   amount = xaccSplitGetAmount (split);
   value = xaccSplitGetValue (split);
@@ -918,7 +932,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
 
   convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 
-  return xaccPrintAmount (convrate, gnc_split_value_print_info (split, FALSE));
+  return xaccPrintAmount (convrate, gnc_default_price_print_info ());
 }
 
 static const char *
@@ -1562,7 +1576,7 @@ static CellIOFlags
 gnc_split_register_get_rate_io_flags (VirtualLocation virt_loc,
                                          gpointer user_data)
 {
-  return XACC_CELL_ALLOW_NONE;
+  return XACC_CELL_ALLOW_SHADOW;
 }
 
 static CellIOFlags

@@ -983,7 +983,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc
   Transaction *txn;
   Account *xfer_acc;
   gnc_commodity *txn_cur, *xfer_com;
-  gnc_numeric amount, exch_rate = gnc_numeric_zero();
+  gnc_numeric amount, exch_rate;
   XferDialog *xfer;
   gboolean used_mxfrm = FALSE;
   PriceCell *rate_cell;
@@ -991,6 +991,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc
   /* Make sure we NEED this for this type of register */
   rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
   if (!rate_cell)
+    return FALSE;
+
+  /* See if we already have an exchange rate... */
+  exch_rate = gnc_price_cell_get_value (rate_cell);
+  if (! gnc_numeric_zero_p (exch_rate))
     return FALSE;
 
   /* Grab the xfer account */
@@ -1117,6 +1122,17 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     if (!cell)
       break;
 
+    /* The account changed -- reset the rate
+     * XXX: perhaps we should only do this is the currency changed?
+     */
+    {
+      PriceCell *rate_cell = (PriceCell*)
+	gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+
+      if (rate_cell)
+	gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+    }
+
     name = cell->cell.value;
     if (!name || *name == '\0' ||
         safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
@@ -1226,7 +1242,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   {
     int old_virt_row;
 
-    old_virt_row = virt_loc.vcell_loc.virt_row;
+    old_virt_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
     
     /* Check for going off the end */
     gnc_table_find_close_valid_cell (reg->table, &virt_loc,

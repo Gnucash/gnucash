@@ -2083,7 +2083,7 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
-  /* Use 6 decimal places for prices */
+  /* Use 6 decimal places for prices and "exchange rates"  */
   gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
@@ -2096,6 +2096,15 @@ gnc_split_register_config_cells (SplitRegister *reg)
   gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
+
+  /* Initialize the rate cells */
+  gnc_price_cell_set_fraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (reg->table->layout, RATE_CELL), 1000000);
+
+  gnc_price_cell_set_print_info
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
+     gnc_default_price_print_info());
 
   /* The action cell should accept strings not in the list */
   gnc_combo_cell_set_strict

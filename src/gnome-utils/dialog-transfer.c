@@ -930,6 +930,10 @@ gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur)
 
   xferData->from_commodity = cur;
 
+  if (xferData->exch_rate)
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
+				*(xferData->exch_rate));
+
   gnc_xfer_dialog_curr_acct_activate(xferData);
 }
 
@@ -943,6 +947,11 @@ gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur)
 				gnc_commodity_get_fraction (cur));
 
   xferData->to_commodity = cur;
+
+  if (xferData->exch_rate)
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
+				*(xferData->exch_rate));
+
   gnc_xfer_dialog_curr_acct_activate(xferData);
 }
 
@@ -1053,6 +1062,8 @@ gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
 void
 gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *exch_rate)
 {
+  GNCAmountEdit *gae;
+
   if (!xferData) return;
 
   gtk_widget_set_sensitive (xferData->amount_edit, FALSE);
@@ -1060,6 +1071,10 @@ gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *exch_rate
   gtk_widget_set_sensitive (xferData->num_entry, FALSE);
   gtk_widget_set_sensitive (xferData->description_entry, FALSE);
   gtk_widget_set_sensitive (xferData->memo_entry, FALSE);
+
+
+  gae = GNC_AMOUNT_EDIT (xferData->price_edit);
+  gtk_widget_grab_focus (gnc_amount_edit_gtk_entry (gae));
 
   xferData->exch_rate = exch_rate;
 }
@@ -1180,39 +1195,42 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   from_account = gnc_account_tree_get_current_account(xferData->from);
   to_account   = gnc_account_tree_get_current_account(xferData->to);
 
-  if ((from_account == NULL) || (to_account == NULL))
+  if (xferData->exch_rate == NULL)
   {
-    const char *message = _("You must specify an account to transfer from,\n"
-                            "or to, or both, for this transaction.\n"
-                            "Otherwise, it will not be recorded.");
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
-    return;
-  }
+    if ((from_account == NULL) || (to_account == NULL))
+    {
+      const char *message = _("You must specify an account to transfer from,\n"
+			      "or to, or both, for this transaction.\n"
+			      "Otherwise, it will not be recorded.");
+      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      return;
+    }
 
-  if (from_account == to_account)
-  {
-    const char *message = _("You can't transfer from and to the same "
-                            "account!");
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
-    return;
-  }
+    if (from_account == to_account)
+    {
+      const char *message = _("You can't transfer from and to the same "
+			      "account!");
+      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      return;
+    }
 
-  if (xaccAccountGetPlaceholder(from_account) ||
-      xaccAccountGetPlaceholder(to_account))
-  {
-    const char *placeholder_format =
+    if (xaccAccountGetPlaceholder(from_account) ||
+	xaccAccountGetPlaceholder(to_account))
+    {
+      const char *placeholder_format =
 	_("The account %s\ndoes not allow transactions.\n");
-    char *name;
+      char *name;
 
-    if (xaccAccountGetPlaceholder(from_account))
+      if (xaccAccountGetPlaceholder(from_account))
 	name = xaccAccountGetFullName(from_account,
 				      gnc_get_account_separator ());
-    else
+      else
 	name = xaccAccountGetFullName(to_account,
 				      gnc_get_account_separator ());
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), placeholder_format, name);
-    g_free(name);
-    return;
+      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), placeholder_format, name);
+      g_free(name);
+      return;
+    }
   }
 
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
@@ -1270,8 +1288,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (xferData->exch_rate)
   {
-    *(xferData->exch_rate) = gnc_numeric_div (to_amount, amount,
-					      GNC_DENOM_LCD, GNC_RND_ROUND);
+    *(xferData->exch_rate) = gnc_numeric_abs (gnc_numeric_div (to_amount, amount,
+							       GNC_DENOM_AUTO,
+							       GNC_DENOM_REDUCE));
   }
   else
   {
