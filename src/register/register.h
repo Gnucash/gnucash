@@ -37,18 +37,16 @@
 #define __XACC_REGISTER_H__
 
 #include "basiccell.h"
+#include "combocell.h"
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
 
 #ifdef MOTIF
-#include "combocell-motif.h"
 #include "table-motif.h"
 #endif
 
 #ifdef GNOME
-#include "combocell-gtk.h"
-#include "combocell-gtkP.h"
 #include "table-gtk.h"
 #endif 
 
