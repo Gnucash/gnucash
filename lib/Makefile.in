@@ -45,6 +45,7 @@ all:
 	@echo "Please choose one of the following targets:"
 	@echo "motif           motif version"
 	@echo "gnome           gnome/gtk version"
+	@echo "qt              kde/qt version"
 	@echo " "
 
 # This inclusion must come after the first target, and after the
@@ -58,7 +59,9 @@ motif:
 
 gnome:
 
-.PHONY: gnome motif
+qt:
+
+.PHONY: gnome motif qt
 
 # Local Variables:
 # tab-width: 2

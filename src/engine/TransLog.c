@@ -145,7 +145,7 @@ xaccSplitAsString(Split *split, const char prefix[]) {
           split_value,
           dest_name ? dest_name : "<no-account-name>",
           split_memo ? split_memo : "<no-split-memo>");
-  fclose(stream);
+  fclose(stream); 
   return(result);
 }
 
@@ -209,7 +209,7 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
 
   fputs(prefix, stream);
   fprintf(stream, "  %10.2f -- Transaction total\n", total);
-  fclose(stream);
+  fclose(stream); 
 
   return(result);
 }

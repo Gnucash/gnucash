@@ -42,6 +42,7 @@ COMMON_SRCS := basiccell.c cellblock.c \
 	       recncell.c register.c splitreg.c table-allgui.c textcell.c
 MOTIF_SRCS := table-motif.c combocell-motif.c
 GNOME_SRCS := table-gtk.c combocell-gtk.c
+QT_SRCS    := 
 ######################################################################
 
 all:
@@ -49,6 +50,7 @@ all:
 	@echo "Please choose one of the following targets:"
 	@echo "motif           dynamically linked motif version"
 	@echo "gnome           gnome/gtk version"
+	@echo "qt              kde/qt version"
 	@echo " "
 
 # This inclusion must come after the first target, and after the
@@ -58,6 +60,8 @@ include ../../Makefile.common
 motif: ${MOTIF_OBJS}
 
 gnome: ${GNOME_OBJS}
+
+qt: $(QT_OBJS)
 
 .PHONY: all motif gnome
 

@@ -48,6 +48,7 @@ default:
 	@echo "motif           dynamically linked motif version"
 	@echo "motif-static    statically linked motif version"
 	@echo "gnome           gnome/gtk version"
+	@echo "qt	       kde/qt version"
 	@echo " "
 
 motif:
@@ -62,6 +63,10 @@ motif-static:
 gnome:
 	@cd lib;    $(MAKE) gnome
 	@cd src;    $(MAKE) gnome
+
+qt:
+	@cd lib;    $(MAKE) qt
+	@cd src;    $(MAKE) qt
 
 depend:
 	@cd lib;    $(MAKE) depend
@@ -87,6 +92,10 @@ install: $(TARGET)
 	@mkdir -p $(PREFIX)/bin
 	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
 	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
+	$(INSTALL) $(TARGET).qt.bin $(PREFIX)/bin/$(TARGET).qt.bin
+	$(INSTALL) $(TARGET).gtk.bin $(PREFIX)/bin/$(TARGET).gtk.bin
+	@mkdir -p $(PREFIX)/toolbar
+	$(INSTALL_DATA) toolbar/*.xpm $(PREFIX)/toolbar
 	@mkdir -p $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.html $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.gif $(PREFIX)/$(DOCDIR)

@@ -20,8 +20,11 @@ GNOME_OBJS := $(addprefix obj/gnome/,${COMMON_SRCS:.c=.o})
 GNOME_OBJS += $(addprefix obj/gnome/,${GNOME_SRCS:.c=.o})
 MOTIF_OBJS := $(addprefix obj/motif/,${COMMON_SRCS:.c=.o})
 MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
+QT_OBJS    := $(addprefix obj/motif/,${COMMON_SRCS:.c=.o})
+QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
 GTK_CFLAGS := $(shell gtk-config --cflags)
+QT_FLAGS   := 
 
 %.c : %.h
 
@@ -54,6 +57,11 @@ obj/motif/%.o: %.c
 obj/gnome/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GTK_CFLAGS} -DGNOME -o $@ $< 
+	${cleanupdeps}
+
+obj/qt/%.o: %.cpp
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
 	${cleanupdeps}
 
 clean:
