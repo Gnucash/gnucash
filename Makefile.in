@@ -204,10 +204,6 @@ install:
 	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/logos
 
-	@mkdir -p ${GNC_SHAREDIR}/Reports
-	$(INSTALL_DATA) Reports/*.html ${GNC_SHAREDIR}/Reports
-	$(INSTALL_DATA) Reports/*.phtml ${GNC_SHAREDIR}/Reports
-
   # ------------------------------------------------------------------
   # hack alert -- the config dir stuff is messed up in configure.in as well 
   # as in the scheme search paths.  For example, the configure script tries
