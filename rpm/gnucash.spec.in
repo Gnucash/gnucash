@@ -10,6 +10,7 @@
   %define sql_config --disable-sql
 %endif
 %define version @VERSION@
+%define __libtoolize /bin/true
 
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
@@ -68,10 +69,7 @@ in C programs.
 
 %build
 autoconf
-
-./configure --prefix=%{_prefix} --infodir=%{_infodir} --sysconfdir=%{_sysconfdir}\
-            --libdir=%{_libdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} %{sql_config}
+%configure %{sql_config}
 
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
 
@@ -80,12 +78,8 @@ cp -p src/backend/postgres/README README.postgres
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
-LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} sysconfdir=$RPM_BUILD_ROOT%{_sysconfdir} \
-    datadir=$RPM_BUILD_ROOT%{_datadir} \
-    includedir=$RPM_BUILD_ROOT%{_includedir} install
+LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$RPM_BUILD_ROOT%{_libdir}/gnucash make DESTDIR=$RPM_BUILD_ROOT install
 
-%{makeinstall}
 %find_lang %name
 
 %clean
@@ -98,8 +92,7 @@ LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} make prefix=$RPM_BUILD_ROOT%{_prefix} \
 %postun
 /sbin/ldconfig
 if [ $1 = 0 ]; then
-   /sbin/install-info --delete %{_infodir}/gnucash-design.info.gz
-   %{_infodir}/dir
+   /sbin/install-info --delete %{_infodir}/gnucash-design.info.gz %{_infodir}/dir
 fi
 
 %files -f %{name}.lang
