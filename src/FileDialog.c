@@ -37,7 +37,6 @@
 #include "gnc-event.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "gnome/new-user-funs.h"
 #include "guile/global-options.h"
 
 /* FIXME: this is wrong.  This file should not need this include. */
@@ -266,7 +265,7 @@ gncFileNew (void)
 
   if(gnc_lookup_boolean_option("General",
                                "No account list setup on new file",
-                               1))
+                               TRUE))
   {
       gh_call2(gh_eval_str("gnc:hook-run-danglers"),
                gh_eval_str("gnc:*book-opened-hook*"),
@@ -274,9 +273,9 @@ gncFileNew (void)
   }
   else
   {
-      gnc_ui_show_new_user_window(0);
+      gnc_ui_hierarchy_druid ();
   }
-  
+
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 }

@@ -817,4 +817,573 @@
   </widget>
 </widget>
 
+<widget>
+  <class>GtkWindow</class>
+  <name>Hierarchy Druid</name>
+  <width>540</width>
+  <height>370</height>
+  <title>New Account Hierarchy Setup</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_MOUSE</position>
+  <modal>False</modal>
+  <default_width>640</default_width>
+  <default_height>480</default_height>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>hierarchy_druid</name>
+    <signal>
+      <name>cancel</name>
+      <handler>on_cancel</handler>
+      <last_modification_time>Sat, 16 Jun 2001 23:54:54 GMT</last_modification_time>
+    </signal>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>start_page</name>
+      <title>New Account Hierarchy Setup</title>
+      <text>This druid will help you create a set of GnuCash 
+accounts for your assets (such as investments, 
+checking or savings accounts), liabilities (such 
+as loans) and different kinds of income and 
+expenses you might have. 
+
+Click 'Cancel'  if you do not wish to create any 
+new accounts now.</text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>currency_choose_page</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_choose_currency_prepare</handler>
+	<last_modification_time>Sat, 16 Jun 2001 23:27:41 GMT</last_modification_time>
+      </signal>
+      <title>Choose Currency</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>vbox2</name>
+	<border_width>20</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>5</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>newUserChooseCurrencyDescrip</name>
+	  <label>Please choose the currency to use for new accounts.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>currency_chooser_vbox</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>choose_account_types_page</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_choose_account_types_prepare</handler>
+	<last_modification_time>Sat, 16 Jun 2001 23:59:57 GMT</last_modification_time>
+      </signal>
+      <title>Choose accounts to create</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox1</name>
+	<border_width>5</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>5</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>pickAccountsDescriptionLabel</name>
+	  <label>Select categories that correspond to the ways that you will use GnuCash.  
+Each category you select will cause several accounts to be created.  
+Select the categories that are relevant to you.  You can always create 
+additional accounts by hand later.</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>frame5</name>
+	  <label_xalign>0</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox7</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow1</name>
+	      <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkCList</class>
+		<name>account_types_clist</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>select_row</name>
+		  <handler>on_account_types_list_select_row</handler>
+		  <last_modification_time>Sun, 17 Jun 2001 00:18:23 GMT</last_modification_time>
+		</signal>
+		<signal>
+		  <name>unselect_row</name>
+		  <handler>on_account_types_list_unselect_row</handler>
+		  <last_modification_time>Sun, 17 Jun 2001 00:23:46 GMT</last_modification_time>
+		</signal>
+		<columns>2</columns>
+		<column_widths>144,80</column_widths>
+		<selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
+		<show_titles>True</show_titles>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>newAccountTypesList_TypeLabel</name>
+		  <label>Account Types</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>newAccountTypesList_DescriptionLabel</name>
+		  <label>Description</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>hbox3</name>
+	      <border_width>5</border_width>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkButton</class>
+		<name>select_all_button</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>clicked</name>
+		  <handler>select_all_clicked</handler>
+		  <last_modification_time>Sun, 17 Jun 2001 00:25:54 GMT</last_modification_time>
+		</signal>
+		<label>Select All</label>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkButton</class>
+		<name>clear_all_button</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>clicked</name>
+		  <handler>clear_all_clicked</handler>
+		  <last_modification_time>Sun, 17 Jun 2001 00:28:18 GMT</last_modification_time>
+		</signal>
+		<label>Clear All</label>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox1</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>2</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkFrame</class>
+	    <name>frame1</name>
+	    <label>Detailed Description</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow2</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>GtkViewport</class>
+		<name>viewport2</name>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <name>account_types_description_entry</name>
+		  <label></label>
+		  <justify>GTK_JUSTIFY_LEFT</justify>
+		  <wrap>True</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkFrame</class>
+	    <name>frame2</name>
+	    <label>Accounts</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow3</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>GtkViewport</class>
+		<name>viewport1</name>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkTree</class>
+		  <name>account_type_tree</name>
+		  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		  <view_mode>GTK_TREE_VIEW_LINE</view_mode>
+		  <view_line>True</view_line>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>final_account_page</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_final_account_prepare</handler>
+	<last_modification_time>Sun, 17 Jun 2001 00:30:49 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>next</name>
+	<handler>on_final_account_next</handler>
+	<last_modification_time>Sun, 17 Jun 2001 05:40:45 GMT</last_modification_time>
+      </signal>
+      <title>Enter opening balances</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox3</name>
+	<border_width>5</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>10</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>finalAccountLabel</name>
+	  <label>If you would like an account to have an opening balance, click on the account
+and enter the starting balance in the box on the right. All accounts except Equity
+accounts may have an opening balance.</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>1</xpad>
+	  <ypad>1</ypad>
+	  <child>
+	    <padding>5</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox4</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>2</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow4</name>
+	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkCTree</class>
+	      <name>final_account_ctree</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>tree_select_row</name>
+		<handler>on_final_account_tree_select_row</handler>
+		<last_modification_time>Sun, 17 Jun 2001 05:30:25 GMT</last_modification_time>
+	      </signal>
+	      <signal>
+		<name>tree_unselect_row</name>
+		<handler>on_final_account_tree_unselect_row</handler>
+		<last_modification_time>Sun, 17 Jun 2001 05:38:44 GMT</last_modification_time>
+	      </signal>
+	      <columns>3</columns>
+	      <column_widths>80,80,80</column_widths>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <show_titles>True</show_titles>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>cTreeAccountNameLabel</name>
+		<label>Account Name</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>cTreeTypeLabel</name>
+		<label>Type</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CTree:title</child_name>
+		<name>cTreeOpeningBalanceLabel</name>
+		<label>Opening Balance</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox5</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkFrame</class>
+	      <name>frame3</name>
+	      <label>Opening Balance</label>
+	      <label_xalign>0</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkVBox</class>
+		<name>start_balance_box</name>
+		<border_width>3</border_width>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+
+		<widget>
+		  <class>Placeholder</class>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>newUserDruidFinishPage</name>
+      <signal>
+	<name>finish</name>
+	<handler>on_finish</handler>
+	<last_modification_time>Sat, 16 Jun 2001 23:41:40 GMT</last_modification_time>
+      </signal>
+      <title>Finish Account Setup</title>
+      <text>Press `Finish' to create your new accounts.
+
+Press `Back' to review your selections.
+
+Press `Cancel' to close this dialog without creating any new accounts.</text>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
 </GTK-Interface>

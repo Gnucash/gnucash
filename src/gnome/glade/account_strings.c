@@ -29,3 +29,40 @@ gchar *s = N_("Use Opening Balances Equity account");
 gchar *s = N_("Select Transfer Account");
 gchar *s = N_("Transfer Account");
 gchar *s = N_("Opening Balance");
+gchar *s = N_("New Account Hierarchy Setup");
+gchar *s = N_("New Account Hierarchy Setup");
+gchar *s = N_("This druid will help you create a set of GnuCash \n"
+              "accounts for your assets (such as investments, \n"
+              "checking or savings accounts), liabilities (such \n"
+              "as loans) and different kinds of income and \n"
+              "expenses you might have. \n"
+              "\n"
+              "Click 'Cancel'  if you do not wish to create any \n"
+              "new accounts now.");
+gchar *s = N_("Choose Currency");
+gchar *s = N_("Please choose the currency to use for new accounts.");
+gchar *s = N_("Choose accounts to create");
+gchar *s = N_("Select categories that correspond to the ways that you will use GnuCash.  \n"
+              "Each category you select will cause several accounts to be created.  \n"
+              "Select the categories that are relevant to you.  You can always create \n"
+              "additional accounts by hand later.");
+gchar *s = N_("Account Types");
+gchar *s = N_("Description");
+gchar *s = N_("Select All");
+gchar *s = N_("Clear All");
+gchar *s = N_("Detailed Description");
+gchar *s = N_("Accounts");
+gchar *s = N_("Enter opening balances");
+gchar *s = N_("If you would like an account to have an opening balance, click on the account\n"
+              "and enter the starting balance in the box on the right. All accounts except Equity\n"
+              "accounts may have an opening balance.");
+gchar *s = N_("Account Name");
+gchar *s = N_("Type");
+gchar *s = N_("Opening Balance");
+gchar *s = N_("Opening Balance");
+gchar *s = N_("Finish Account Setup");
+gchar *s = N_("Press `Finish' to create your new accounts.\n"
+              "\n"
+              "Press `Back' to review your selections.\n"
+              "\n"
+              "Press `Cancel' to close this dialog without creating any new accounts.");

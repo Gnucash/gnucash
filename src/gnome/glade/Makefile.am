@@ -5,6 +5,7 @@ glade_DATA = \
 	fincalc.glade \
 	find.glade \
 	help.glade \
+	newuser.glade \
 	price.glade \
 	print.glade \
 	progress.glade \
@@ -22,6 +23,7 @@ STRING_FILES = \
 	fincalc_strings.c \
 	find_strings.c \
 	help_strings.c \
+	newuser_strings.c \
 	price_strings.c \
 	print_strings.c \
 	progress_strings.c \

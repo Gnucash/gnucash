@@ -70,8 +70,6 @@
 #include "window-main.h"
 #include "window-acct-tree.h"
 #include "window-report.h"
-#include "new-user-interface.h"
-#include "new-user-funs.h"
 
 #include <g-wrap-runtime-guile.h>
 

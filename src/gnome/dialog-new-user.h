@@ -1,6 +1,6 @@
 /********************************************************************\
- * new-user-funs.h -- new user functionality for GnuCash            *
- * Copyright (C) 2001 Gnumatic, Inc.                                *
+ * dialog-new-user.h -- new user dialog for GnuCash                 *
+ * Copyright (C) 2001 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,40 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef _NEW_USER_FUNS_H_
-#define _NEW_USER_FUNS_H_
+#ifndef DIALOG_NEW_USER_H
+#define DIALOG_NEW_USER_H
 
-#include <glib.h>
-
-#include "gnc-amount-edit.h"
-#include "gnc-commodity-edit.h"
-#include "Group.h"
-
-int gnc_ui_show_new_user_window(gboolean new_user_dialog);
-int gnc_ui_delete_new_user_window(void);
-gboolean gnc_new_user_dialog_is_new_user(void);
-GtkWidget* gnc_get_new_user_dialog(void);
-
-void gnc_ui_show_new_user_choice_window(void);
-
-int gnc_ui_show_nu_cancel_dialog(void);
-int gnc_ui_delete_nu_cancel_dialog(void);
-
-void gnc_new_user_set_balance (Account *account, gnc_numeric balance);
-gnc_numeric gnc_new_user_get_balance (Account *account);
-
-GtkCList* gnc_new_user_get_clist(void);
-GtkCTree * gnc_new_user_get_final_account_tree (void);
-GtkWidget* gnc_new_user_get_widget(const char *name);
-AccountGroup* gnc_new_user_merge_groups(GSList *dalist);
-GNCCommodityEdit * gnc_get_new_user_commodity_editor(void);
-GNCAmountEdit * gnc_new_user_get_balance_editor(void);
-
-void gnc_new_user_block_amount_changed (void);
-void gnc_new_user_unblock_amount_changed (void);
+void gnc_ui_new_user_dialog (void);
+void gnc_set_first_startup (gboolean first_startup);
 
 /* private */
-void on_finalAccountBalanceEdit_changed (GNCAmountEdit *gae);
 void gncp_new_user_finish (void);
 
-#endif /* NEW_USER_FUNS_H */
+#endif

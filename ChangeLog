@@ -1,3 +1,21 @@
+2001-06-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gnc.gwp: update for api change
+
+	* src/scm/main.scm: update for api change
+
+	* src/gnome/glade/newuser.glade: new file for new user glade xml
+
+	* src/gnome/glade-support.[ch]: remove generated files
+
+	* src/gnome/new-user-*.[ch]: remove old files
+
+	* src/gnome/dialog-new-user.c: new file for new user dialog code.
+
+	* src/gnome/druid-hierarchy.c: new file for account hierarchy
+	creation druid code. Rename api calls to reflect the more
+	general use of the druid.
+
 2001-06-16  Robert Graham Merkel <rgmerk@mira.net
 
 	* po/POTFILES.in : remove references to deleted files.

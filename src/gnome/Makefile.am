@@ -14,6 +14,7 @@ libgncgnome_a_SOURCES = \
   dialog-filebox.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
+  dialog-new-user.c \
   dialog-options.c \
   dialog-price-editor.c \
   dialog-print-check.c \
@@ -25,12 +26,12 @@ libgncgnome_a_SOURCES = \
   dialog-userpass.c \
   dialog-utils.c \
   druid-commodity.c \
+  druid-hierarchy.c \
   druid-qif-import.c \
   druid-stock-split.c \
   druid-utils.c \
   extensions.c \
   file-history.c \
-  glade-support.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
@@ -45,9 +46,6 @@ libgncgnome_a_SOURCES = \
   gnc-splash.c \
   gtkselect.c \
   mainwindow-account-tree.c \
-  new-user-callbacks.c \
-  new-user-funs.c \
-  new-user-interface.c \
   print-session.c \
   query-user.c \
   reconcile-list.c \
@@ -77,6 +75,7 @@ noinst_HEADERS = \
   dialog-commodity.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
+  dialog-new-user.h \
   dialog-options.h \
   dialog-print-check.h \
   dialog-progress.h \
@@ -85,10 +84,10 @@ noinst_HEADERS = \
   dialog-transfer.h \
   dialog-utils.h \
   druid-commodity.h \
+  druid-hierarchy.h \
   druid-qif-import.h \
   druid-utils.h \
   extensions.h \
-  glade-support.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
@@ -104,9 +103,6 @@ noinst_HEADERS = \
   gnc-splash.h \
   gtkselect.h \
   mainwindow-account-tree.h \
-  new-user-callbacks.h \
-  new-user-funs.h \
-  new-user-interface.h \
   print-session.h \
   query-user.h \
   reconcile-list.h \
@@ -119,17 +115,12 @@ noinst_HEADERS = \
   window-register.h \
   window-report.h
 
-GLADE_FILES = \
-  glade-support.c \
-  glade-support.h
-
 EXTRA_DIST = \
   .cvsignore \
   gnc-dir.h.in \
   gnucash.desktop \
   gnucash.keys.in \
-  gnucash.mime \
-  new-user.glade
+  gnucash.mime
 
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \
