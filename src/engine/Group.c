@@ -592,10 +592,11 @@ xaccGroupDepthAutoCode (AccountGroup *grp)
 void
 xaccGroupAutoCode (AccountGroup *grp, int depth)
 {
-   int i;
+   int i, n;
    if (!grp || (0>depth)) return;
 
-   for (i=0; i<grp->numAcc; i++) {
+   n = grp->numAcc;
+   for (i=0; i<n; i++) {
       Account *acc = grp->account[i];
       xaccAccountAutoCode (acc, depth);
       xaccGroupAutoCode (acc->children, depth);
@@ -609,18 +610,18 @@ void
 xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
 {
    Account * acc;
-   int i;
 
    if (!togrp) return;
    if (!fromgrp) return;
    
-   for (i=0; i<fromgrp->numAcc; i++) {
-      acc = fromgrp->account[i];
+   /* the act of inserting the account into togrp also causes
+    * it to automatically be deleted from fromgrp. So just loop 
+    * until they're all gone.
+    */
+   while (fromgrp->numAcc) {
+      acc = fromgrp->account[0];
       xaccGroupInsertAccount (togrp, acc);
-      fromgrp->account[i] = NULL;
    }
-   fromgrp->account[0] = NULL;
-   fromgrp->numAcc = 0;
 }
 
 /********************************************************************\
