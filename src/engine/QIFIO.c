@@ -166,7 +166,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
    if (!acc) return NULL;
 
-   xaccAccountBeginEdit (acc);
+   xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
    xaccAccountSetName (acc, "");
    xaccAccountSetDescription (acc, "");
@@ -244,7 +244,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 
    if (!acc) return NULL;
 
-   xaccAccountBeginEdit (acc);
+   xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
    xaccAccountSetName (acc, "");
    xaccAccountSetDescription (acc, "");
@@ -626,6 +626,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    if ('!' == qifline [0]) return qifline;
 
    trans = xaccMallocTransaction ();
+   xaccTransBeginEdit (trans, 1);
    source_split = xaccTransGetSplit (trans, 0);
 
    /* scan for transaction date, description, type */
@@ -874,6 +875,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       /* the transaction itself appears as a credit */
       xaccAccountInsertSplit (acc, source_split);
    }
+   xaccTransCommitEdit (trans);
 
    return qifline;
 }

@@ -187,7 +187,13 @@ xaccLedgerDisplaySimple (Account *acc)
     case EQUITY:
       reg_type = EQUITY_REGISTER;
       break;
-    }
+    case CURRENCY:
+      reg_type = CURRENCY_REGISTER;
+      break;
+    default:
+      PERR (" xaccLedgerDisplaySimple(): unknown account type\n");
+      return NULL;
+  }
 
   /* default to single-line display */
   reg_type |= REG_SINGLE_LINE;

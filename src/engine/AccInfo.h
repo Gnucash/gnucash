@@ -33,16 +33,12 @@
 
 #include "config.h"
 
-/* The account types. 
- * Note: the actual values of these are *very* important, 
- * as it is the values, not the enums, that are stored 
- * in the file format! 
- * hack alert  ... note that this is a bug that should be fixed ...
- */
-
 /*
  * The account types are used to determine how the transaction data
- * in the account is displayed.  
+ * in the account is displayed.   These values can be safely changed
+ * from one release to the next.  Note that if values are added,
+ * the file IO translation routines need to be updated. Note 
+ * also that GUI code depends on these numbers.
  */
 enum 
 {
@@ -73,29 +69,32 @@ enum
    * which show three columns: price, number of shares, and value.
    */
 
-  INCOME = 7,
-  EXPENSE = 8,
-  /* Income and expense accounts are used to denote income and expenses.
-   * Thus, when data in these accountsare displayed, the sign of the
-   * splits (entries) must be reversed.
-   */ 
-
-  EQUITY = 9,
-  /* Equity account is used to balance the balance sheet. */
-
-  /* bank account types */
-  CHECKING = 10,
-  SAVINGS = 11,
-  MONEYMRKT = 12,
-  CREDITLINE = 13,     /* line of credit */
-
-  CURRENCY = 14, 
+  CURRENCY = 7, 
   /* The currency account type indicates that the account is a currency trading 
    * account.  In many ways, a currency trading account is like a stock trading
    * account, where both quantities and prices are set.
    */
 
-  NUM_ACCOUNT_TYPES = 15
+  INCOME = 8,
+  EXPENSE = 9,
+  /* Income and expense accounts are used to denote income and expenses.
+   * Thus, when data in these accountsare displayed, the sign of the
+   * splits (entries) must be reversed.
+   */ 
+
+  EQUITY = 10,
+  /* Equity account is used to balance the balance sheet. */
+
+  NUM_ACCOUNT_TYPES = 11,
+  /* stop here; the following types just aren't ready for prime time */
+
+  /* bank account types */
+  CHECKING = 11,
+  SAVINGS = 12,
+  MONEYMRKT = 13,
+  CREDITLINE = 14,     /* line of credit */
+
+
 };
 
 /* hack alert -- we need a better way of dealing with

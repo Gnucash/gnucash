@@ -81,7 +81,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   
   account = xaccMallocAccount();
             
-  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (account, 0);
  
   xaccAccountSetName (account, gtk_entry_get_text(GTK_ENTRY(info->textbox_name)));
   xaccAccountSetDescription (account, gtk_entry_get_text(GTK_ENTRY(info->textbox_description)));
@@ -91,7 +91,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   /* Add an opening balance transaction (as the first transaction) */
   trans = xaccMallocTransaction();
  
-  xaccTransBeginEdit(trans);
+  xaccTransBeginEdit(trans, 1);
   xaccTransSetDateToday (trans);
   xaccTransSetDescription (trans, OPEN_BALN_STR);
   xaccTransCommitEdit(trans);

@@ -43,8 +43,11 @@ void         xaccFreeAccount( Account * );
  * They are mildly useful for detecting attempted updates outside
  * of thier scope. However, they do not provide any true two-phase-anything
  * in the current implementation.
+ *
+ * The defer flag, if sett, will defer all attempts at rebalancing 
+ * of accounts until the commit.
  */
-void         xaccAccountBeginEdit (Account *);
+void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
 
 int          xaccGetAccountID (Account *);
