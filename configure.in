@@ -394,7 +394,7 @@ AC_PATH_PROG(G_WRAP, g-wrap)
 
 if test x"${G_WRAP_COMPILE_ARGS}" = x || \
    test x"${G_WRAP_LINK_ARGS}" = x || \
-   ! test -x "${G_WRAP}";
+   test ! -x "${G_WRAP}";
 then
   AC_MSG_ERROR([
 
@@ -428,7 +428,7 @@ AC_PATH_PROG(GUILE, guile)
 
 if test x"${GUILE_COMPILE_ARGS}" = x || \
    test x"${GUILE_LINK_ARGS}" = x || \
-   ! test -x "${GUILE}";
+   test ! -x "${GUILE}";
 then
   AC_MSG_ERROR([
 

@@ -893,26 +893,6 @@ xaccMergeAccounts (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 
-void 
-xaccConsolidateGrpTransactions (AccountGroup *grp)
-{
-   Account * acc;
-   int i;
-
-   if (!grp) return;
-   
-   for (i=0; i<grp->numAcc; i++) {
-      acc = grp->account[i];
-      xaccConsolidateTransactions (acc);
-
-      /* recursively do the children */
-      xaccConsolidateGrpTransactions (acc->children);
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
 int     
 xaccGroupGetNumAccounts (AccountGroup *grp)
 {

@@ -1,3 +1,10 @@
+2000-06-05  Dave Peticolas  <dave@krondo.com>
+
+	* configure.in: changed '! test' to 'test !'.
+
+	* src/engine: removed *Consolidate* functions. These were cruft
+	used by the old QIFIO routines.
+
 2000-06-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/util.c: add log level modification functions.

@@ -115,16 +115,6 @@ int          xaccAccountOrder (Account**, Account **);
  */
 void         xaccAccountAutoCode (Account *, int digits);
 
-/* The xaccConsolidateTransactions() subroutine scans through
- *    all of the transactions in an account, and compares them.
- *    If any of them are exact duplicates, the duplicates are removed.
- *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform,
- *    as it may remove transactions that were not true duplicatees ...
- */
-
-void         xaccConsolidateTransactions (Account *);
-
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
  *    Double-entry transactions by their nature consist of a set of 

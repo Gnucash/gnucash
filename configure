@@ -5813,7 +5813,7 @@ fi
 
 if test x"${G_WRAP_COMPILE_ARGS}" = x || \
    test x"${G_WRAP_LINK_ARGS}" = x || \
-   ! test -x "${G_WRAP}";
+   test ! -x "${G_WRAP}";
 then
   { echo "configure: error: 
 
@@ -5915,7 +5915,7 @@ fi
 
 if test x"${GUILE_COMPILE_ARGS}" = x || \
    test x"${GUILE_LINK_ARGS}" = x || \
-   ! test -x "${GUILE}";
+   test ! -x "${GUILE}";
 then
   { echo "configure: error: 
 

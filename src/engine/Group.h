@@ -216,17 +216,6 @@ char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
-/* The xaccConsolidateGrpTrans() subroutine scans through
- *    all of the transactions in an account, and compares them.
- *    if any of them are exact duplicates, the duplicates are removed.
- *    duplicates may occur when accounts from multiple sources are 
- *    merged.  Note that this can be a dangerous operation to perform 
- *
- *    Note that this subroutine merely walks the account group
- *    tree, and calls ConsolidateTransacations on each account
- */
-
-void xaccConsolidateGrpTransactions (AccountGroup *);
 
 #ifndef SWIG
 
