@@ -1,3 +1,15 @@
+2001-06-04  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/Makefile.am (gnc_regular_scm_files): remove process.scm.
+	(gncscmmoddir): new directory for gnucash guile modules --
+	i.e. for files available via (use-modules (gnucash foo)).
+	(gncscmmod_DATA): first gnucash guile module (gnucash process).
+
+	* src/scm/price-quotes.scm: use (gnucash process) module.
+
+	* src/scm/process.scm: now a guile module (gnucash process).
+	(gnc:cleanup-sub-process): fix several missing waitpid pid args.
+
 2001-06-04  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-xml-commodity.c (node_and_commodity_equal): use
