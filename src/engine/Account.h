@@ -147,6 +147,8 @@ void         xaccAccountDestroy (Account *account);
 kvp_frame * xaccAccountGetSlots (Account *account);
 void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 
+GNCBook * xaccAccountGetBook (Account *account);
+
 /* ------------------ */
 /*
  * The xaccAccountGetGUID() subroutine will return the
@@ -165,7 +167,20 @@ GUID         xaccAccountReturnGUID (Account *account);
 Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
 Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
 
-GNCBook * xaccAccountGetBook (Account *account);
+/* The xaccAccountLookupTwin() routine will find the
+ *    "twin" of this account (if it exists) in another book.
+ *    When accounts are copied or cloned,  both of the pair
+ *    are marked with the guid of thier copy, thus allowing
+ *    the sibling-copy of an account to be found.  Since the 
+ *    sibling may end up in a different book, we need a way 
+ *    of finding it, given only that we know the book, and 
+ *    that we know its twin.  That's what this routine does.
+ *    Given some book 'book', and an account 'acc', it will 
+ *    find the sibling account of 'acc' that is in 'book',
+ *    and return it.  If not found, it returns NULL.
+ *    This routine uses the 'gemini' kvp values to do its work.
+ */
+Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
 
 /* ------------------ */
 

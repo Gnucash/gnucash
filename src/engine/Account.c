@@ -250,6 +250,49 @@ gemini (kvp_frame *kvp_root, const GUID *acct_guid,
    kvp_frame_set_slot_nc (cwd, "date", vvv);
 }
 
+/* ================================================================ */
+
+Account *
+xaccAccountLookupTwin (Account *acc,  GNCBook *book)
+{
+   kvp_value *v_ncopies;
+   int i, ncopies = 0;
+
+   if (!acc || !book) return NULL;
+
+   v_ncopies = kvp_frame_get_slot_path (acc->kvp_data, "gemini", "ncopies");
+   if (!v_ncopies) return NULL;
+   ncopies = kvp_value_get_gint64 (v_ncopies);
+   for (i=0; i<ncopies; i++)
+   {
+      GUID * book_guid;
+      kvp_value *v_book_guid;
+      char buff[80];
+
+      sprintf (buff, "%d", i);
+      v_book_guid = kvp_frame_get_slot_path (acc->kvp_data, 
+             "gemini", buff, "book_guid");
+      if (!v_book_guid) continue;
+      book_guid = kvp_value_get_guid (v_book_guid);
+
+      if (guid_equal(book_guid, &book->guid))
+      {
+         Account *twin;
+         GUID * acct_guid;
+         kvp_value *v_acct_guid;
+
+         v_acct_guid = kvp_frame_get_slot_path (acc->kvp_data, 
+             "gemini", buff, "acct_guid");
+         if (!v_acct_guid) return NULL;
+         acct_guid = kvp_value_get_guid (v_acct_guid);
+
+         twin = xaccAccountLookup (acct_guid, book);
+         return twin;
+      }
+   }
+   return NULL;
+}
+
 /********************************************************************\
 \********************************************************************/
 
