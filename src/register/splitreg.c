@@ -83,6 +83,8 @@
 }
    
 /* ============================================== */
+/* configLabels merely puts strings into the label cells 
+ * it does *not* cop[y them to the header cursor */
 
 static void
 configLabels (SplitRegister *reg)
@@ -632,23 +634,30 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (value,   Price);
 
    /* --------------------------- */
-   /* config the layout of the cells in the cursors */
+   /* configLabels merely puts strings into the label cells 
+    * it does *not* cop[y them to the header cursor */
    configLabels (reg);
+
+   /* config the layout of the cells in the cursors */
    configLayout (reg);
+
+   /* -------------------------------- */   
+   /* define how traversal works */
+   configTraverse (reg);
 
    /* --------------------------- */
    /* do some misc cell config */
    configCursors (reg);
 
-  /* 
-   * The Null Cell is used to make sure that "empty"
-   * cells stay empty.  This solves the problem of 
-   * having the table be reformatted, the result of
-   * which is that an empty cell has landed on a cell
-   * that was previously non-empty.  We want to make 
-   * sure that we erase those cell contents. The null
-   * cells handles this for us.
-   */
+   /* 
+    * The Null Cell is used to make sure that "empty"
+    * cells stay empty.  This solves the problem of 
+    * having the table be reformatted, the result of
+    * which is that an empty cell has landed on a cell
+    * that was previously non-empty.  We want to make 
+    * sure that we erase those cell contents. The null
+    * cells handles this for us.
+    */
 
    reg -> nullCell -> input_output = XACC_CELL_ALLOW_NONE;
    xaccSetBasicCellValue (reg->nullCell, "");
@@ -678,10 +687,6 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * The format is a printf-style format for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
    xaccSetPriceCellFormat (reg->priceCell, "%.3f");
-
-   /* -------------------------------- */   
-   /* define how traversal works */
-   configTraverse (reg);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
@@ -715,8 +720,15 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetTableSize (table, phys_r, phys_c, 3, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
 
-   /* hack alert -- document what call does, why we call it here, etc ??? ??? */
-   xaccSetCursor (table, reg->trans_cursor, header->numRows, 0, 1, 0);
+   /* the SetCursor call below is for most practical purposes useless.
+    * It simply installs a cursor (the single-line cursor, but it could 
+    * of been any of them), and moves it to the first editable row.
+    * Whoop-de-doo, since this is promptly over-ridden when real data 
+    * gets loaded.  Its just sort of here as a fail-safe fallback,
+    * in case someone just creates a register but doesn't do anything 
+    * with it.  Don't want to freak out any programmers.
+    */
+   xaccSetCursor (table, reg->single_cursor, header->numRows, 0, 1, 0);
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
