@@ -638,7 +638,7 @@
       </tr>
 
       <tr>
-        <td><a href="#classes">Classes</a></td>
+        <td><a href="#classes">Classes/'Action' Field</a></td>
 
         <td>Small</td>
         <td>?</td>
@@ -659,38 +659,45 @@
       </tr>
 
       <tr>
+        <td><a href="#wizards">Wizards</a></td>
+
+        <td>Small</td>
+        <td>Dave, Bill-qif</td>
+      </tr>
+
+      <tr>
         <td><a href="#arrangements">Arrangements</a></td>
 
-        <td>Medium</td>
+        <td>Small</td>
         <td>?</td>
       </tr>
 
       <tr>
         <td><a href="#userpref">User Preferences/Session Mgmt.</a></td>
 
-        <td>Medium</td>
+        <td>Done</td>
         <td>?</td>
       </tr>
 
       <tr>
-        <td><a href="#quickim">Quicken(TM) Import</a></td>
+        <td><a href="#quickim">Quicken(TM) QIF Import</a></td>
 
         <td>Small</td>
-        <td>Grib</td>
+        <td>Gribble</td>
       </tr>
 
       <tr>
-        <td><a href="#quickex">Quicken(TM) Export</a></td>
+        <td><a href="#iifim">IIF Import</a></td>
 
         <td>Small</td>
-        <td>Grib</td>
+        <td>?</td>
       </tr>
 
       <tr>
-        <td><a href="#wizards">Wizards</a></td>
+        <td><a href="#quickex">IIF Export</a></td>
 
         <td>Small</td>
-        <td>Dave, Bill-qif</td>
+        <td>Grib</td>
       </tr>
 
       <tr>
@@ -718,7 +725,7 @@
         <td><a href="#quote">Stock Quotes, Price Quotes</a></td>
 
         <td>Small</td>
-        <td>RLB</td>
+        <td>?</td>
       </tr>
 
       <tr>
@@ -745,8 +752,8 @@
       <tr>
         <td><a href="#searchdocs">Searchable Documentation</a></td>
 
-        <td>Small</td>
-        <td>?</td>
+        <td>Done</td>
+        <td>grib</td>
       </tr>
 
       <tr>
@@ -866,6 +873,13 @@
 
         <td>Small</td>
         <td>Linas</td>
+      </tr>
+
+      <tr>
+        <td><a href="#addressbook">Address Book</a></td>
+
+        <td>Small</td>
+        <td>?</td>
       </tr>
 
       <tr>
@@ -1165,6 +1179,7 @@
               Through multi-line transactions. Seems to work well in
 	      1.6.0.
 	   </li>
+        </ul>
       </dd>
 
       <dt><a name="glitz"><b>Themes, Icons, Glitz</b></a></dt>
@@ -1520,6 +1535,31 @@
         Create a set of wizards to walk through some of the more 
         complex tasks, such as new user setup, account creation, 
         QIF import, budget prep, obscure functional corners.
+	<p>
+	Wizards are great, but lets not thow away the denser GUI's.
+	For 8-hour-a-day users, the wizards can be irritating. 
+	A single, dense screen can be more efficient and nicer.
+	So when adding wizards, don't dump GUI's !! (instead,
+	make them 'advanced' features).
+
+	<p>
+	<b>Status:</b>
+	The following not done:
+        <ul>
+          <li><b>Account Creation</b>
+	    The account creation panel is somewhat busy. Maybe 
+	    could use a wizard?
+          </li>
+          <li><b>Budget Setup</b>
+            Setting up a budget.
+          </li>
+          <li><b>Obscure Corners</b>
+            Various obscure corners of the application may be
+            non-intuitive, and need wizard help.  e.g. stock splits?
+            e.g. using foreign currency on a business trip?  
+          </li>
+	</ul>
+	<b>Completed:</b>
         <ul>
           <li>
             <b>New User Setup</b> Provide
@@ -1531,21 +1571,13 @@
             set of accounts, and have those created
             automatically.  Profiles: home-owner vs. renter
             non-for-profit (some non-profits are very very simple, 
-            just a club).  
-          </li>
-          <li><b>Account Creation</b>
+            just a club).   Done in version 1.6.0, C. Champagne,
+	    J LewisMoss
           </li>
           <li><b>QIF Import</b>
             QIF Import is just complicated enough that it needs 
-            a wizard walk-through of the steps.  Grib has a prototype.
-          </li>
-          <li><b>Budget Setup</b>
-            Setting up a budget.
-          </li>
-          <li><b>Obscure Corners</b>
-            Various obscure corners of the application may be
-            non-intuitive, and need wizard help.  e.g. stock splits?
-            e.g. using foreign currency on a business trip?  
+            a wizard walk-through of the steps.  Grib,
+	    version 1.6.0, Done.
           </li>
         </ul>
         <p></p>
@@ -1556,7 +1588,7 @@
       <dd>
         An "application arrangement" is the defining look-n-feel of an application.
         The idea is similar to, but not the same as 'skins'/'themes'.  Its similar
-        to, but not the same as alllowing a user to set 'preferences'.  Its similar 
+        to, but not the same as allowing a user to set 'preferences'.  Its similar 
         to, but not the same as, allowing a user to generate customized financial 
         reports.  In the context of GnuCash, a 'arrangement' should be a file
         (that can be traded by users, uploaded and shared) that controls important
@@ -1601,6 +1633,13 @@
         <a href="http://adamcurry.editthispage.com/stories/storyReader$161">
         radio formats and Napster</a>.
         </p>
+	<p>
+	<b>Status:</b>
+	Not started. Individually, all these cusomizable things exist
+	here and there in gnucash, but they cannot be shared between
+	users: a gnucash user cannot mail her favorite 'arrangement'
+	to her freind.
+	</p>
 
 
       <dt><a name="userpref"><b>User Preferences, Session Management</b></a></dt>
@@ -1617,30 +1656,32 @@
         things ... sort-of. Right now, we don't treat them as such
         ...</p>
 
-        <p>Session management is not implemented; viz, we don't
-        remember where things were left at when the user shut down
-        the windowing system, and we don't restore the session
-        afterwards. This includes: which register windows were left
-        open, what sizes they were, what their placements on the
-        screen were, etc. I believe session management needs to be
-        coordinated with KDE and with gnome, and all compliant
-        window managers will do the rest (?)</p>
-
-        <p>Independently of session management, the register
-        windows should remember how big they were last time they
-        were popped up, and they should pop up the same size, again.
-        The app should remember these sizes from invocation to
-        invocation.</p>
-
         <p><b>Status:</b></p>
+	Done, more or less, version 1.6.0.
 
         <ul>
-          <li>Works good; lots of preferences in the GUI.
-          Implemented in home-grown scheme.</li>
+          <li>Works real good; lots of preferences in the GUI.
+              Implemented in home-grown scheme. (version 1.4.0,
+	      rlb)</li>
 
           <li>These are saved in the '.gnucash/config.auto' file.
-          The current file format is raw scheme code, rather
-          delicate to tweak by hand ...</li>
+              The current file format is raw scheme code, rather
+              delicate to tweak by hand ...</li>
+	  
+          <li>Session management mostly works, but doesn't use the 
+	      sawmill/gnome/X ICCCM system.  GnuCash remembers MDI
+	      based reports, restart reopens in same state. Sizes
+	      and shapes and positions are remembered.
+	      Done in version 1.6.0
+              </li>
+
+          <li>Independently of session management, the register
+              windows should remember how big they were last time they
+              were popped up, and they should pop up the same size, again.
+              The app should remember these sizes from invocation to
+              invocation. Done in version 1.6.0, but seems a bit buggy.
+	      </li>
+
         </ul>
         <br>
         <br>
@@ -1726,8 +1767,8 @@
         dates, ISP contract expiration date :-). These may or may
         not be associated with transactions. Memo's should be
         possible. Pop-ups should happen when dates get close.
-        Technology: need to find/evaluate gnome-calendar/day-planner
-        for integration.</p>
+        Technology: best bet is the Ximian Evolution Calander
+	component.</p>
 
         <p><b>Design Notes:</b> Most alerts &amp; data storage
         should be driven out of the engine. This will enable
@@ -1756,7 +1797,7 @@
         <ul>
           <li>Need to create design doc, need to implement engine
           pieces, need to hunt down gnome-calendaring bonobo.</li>
-          <li>RLB thinks its 2-3 weeks for items 1,2,3.
+          <li>Preliminary work started.
         </ul>
         <br>
         <br>
@@ -1811,7 +1852,7 @@
       <dt><a name="classes"><b>Classes</b></a></dt>
 
       <dd>
-        Ability to mark certain jopurnal entries as belonging to 
+        Ability to mark certain journal entries as belonging to 
         a 'class', so that expenses (or income) can be categorized
         in more than one way.  For example, the expense of a trip
         might include food, travel and lodging, and thus be spread over
@@ -1823,16 +1864,15 @@
         budgets: viz. I set aside $10K in the budget for some activity,
         then deduct the actual costs.  Note that it should be possible
         to roll the remainder over to somehere else (!) 
+	<p>
+	Confusion: isn't this what the 'action' field is supposed to do?
+	The 'action' field is under-utilized.
 
         <p>
         This requires the following:
         <ul>
-        <li>place in the engine where split can be marked
-            (grib is implementing in a slot, with use with qif import).
-        <li>gui where splits can be marked up as beloinging to a certain
-            class.
-        <li>Ability to report by class
-        <li>Ability to query by class.
+        <li>Ability to report by class/action
+        <li>Ability to query by class/action.
         </ul>
         </p>
 
@@ -1845,8 +1885,8 @@
       <dd>
          Build automated test suite, including:
          <ul>
-           <li>File IO consistency check. RLB.
-           <li>Currency math correctness. Grib.
+           <li>File IO consistency check. Done, 1.6.0, LewisMoss
+           <li>Currency math correctness. Done ?? Grib.
          </ul>
         <br>
         <br>
@@ -1856,7 +1896,8 @@
 
       <dd>
         Ability to import Quicken QIF files. Both MSMoney and
-        Quicken use QIF files to export data. 
+        Quicken use QIF files to export data.  Need both wholsesale
+	data import, and incremental (staged) merge.
 
         <p><b>Status:</b></p>
 
@@ -1869,23 +1910,20 @@
             Need a QIF Import wizard (there are several non-intuitive
             steps that need to be performed during import.  
             A dialogue wizard seems like the best idea to carry 
-            through this process. (grib, in process for 1.5)
+            through this process. (grib, done in 1.6.0)
           </li>
           <li>
             Work needs to be done for recurring transactions, etc.
           </li>
           <li>
             QIF processing, as used for on-line banking, is <em>
-            not</em> implemented. That is, staged import isn't
-            done. 
+            in prototype form</em> (for 1.6.1 ??)
             Note that since banks use QIF, the <em>correct</em>
-            way to reconcile bank accounts on-line is through
-            QIF.
+            way to updated 'cleared' reconcile state is through
+            QIF on-line import.
             On one side, we have existing recorded transactions;
             on the other, the latest bank statement, in QIF
             format.
-            Now, just put them together ...
-            Grib estimates 2 weeks for this.
             </p>
           </li>
         </ul>
@@ -1893,10 +1931,30 @@
         <br>
       </dd>
 
-      <dt><a name="quickex"><b>Quicken(TM) Export</b></a></dt>
+      <dt><a name="iifim"><b>IIF Import</b></a></dt>
 
       <dd>
-        Ability to export Quicken QIF files. 
+        Ability to import IIF (Intuiut Interchange Format, used by Quickbooks)
+	files, quickbooks, some upsacle accounting packages use this format.
+
+        <p><b>Status:</b></p>
+
+        <ul>
+          <li>
+	    Sample files checked into sample directory.
+	    No formal documentation known.
+          </li>
+        </ul>
+        <br>
+        <br>
+      </dd>
+
+      <dt><a name="quickex"><b>IIF Export</b></a></dt>
+
+      <dd>
+        Ability to export Intuit IIF files. 
+	The IIF format is more rational than the QIF format,
+	and other 'real' accounting apps support IIF.
         Several design alternatives are apparent:
 
         <ul>
@@ -1908,7 +1966,8 @@
           </li>
 
           <li>It is fairly easy to traverse the data in the engine
-          to write out qif files. Just do it.</li>
+              to write out qif files. This is not hard. Just do it.
+	      </li>
         </ul>
         <br>
         <br>
@@ -1925,48 +1984,48 @@
         (<em>e.g.</em> get 5-year history of mutual fund
         performance vs. DJIA).
 
-        <p>Right now, stock prices are stored along with everything
-        else, in the main database, in the transaction table.
-        This leads to several aesthetic quandaries.</p>
+        <p>Right now, stock prices are stored in a separate, simple pricedb.
+        </p>
 
         <ul>
-          <li>It bulks up the database with 'less-than critical'
-          information. That's bad.  We need an alternate storage
-          mechanism.</li>
+          <li>Prices need to have several different status states.
+	      One state is 'critical/audited', i.e. reviewed by a human,
+	      and important for understanding a historical transaction.
+	      Less mportant may simply be 'audited': i.e. reviewed by a 
+	      human, but not a critical price.  Lowest level: 'live data'
+	      something that was gotten off the net, may be wrong, may 
+	      be right, who knows, who cares.
+          </li>
+	  
+          <li>Add to this the idea that we should probably store other
+              'technical' stock data, such as share volume, high/low/close,
+              daily volatility, etc.
+          </li>
 
-          <li>Currently, the transactions stored in the engine 
-          are either 'critical' <em>viz.</em>,
-          record the movement of money, or are non-critical <em>viz.</em>
-          record things retrievable from the historical record,
-          <em>e.g.</em> prices.
-          This alone is a good reason to ask that price &amp; other
-          non-critical financial data be stored in a separate location.
-          Add to this the idea that we should probably store other
-          'technical' stock data, such as share volume, high/low/close,
-          daily volatility, etc.
+	  <li>Need access to historical quotes, for graphing charting 
+	      of historic portfolio perfformance.
           </li>
         </ul>
 
         <p><b>Status:</b></p>
 
         <ul>
-          <li>Quotes.pm can obtain stock quotes from Yahoo (NYSE), Fidelity
-          Investments, T.Rowe Price, and do automated update of
-          GnuCash data files (with the <tt>gnc-price</tt> perl
-          script). Need to add more data sources. See <tt>
-          src/quotes/Quote.pm</tt> and <tt>
-          src/quotes/gnc-prices</tt> for details.</li>
-
           <li>
           <a href="http://sourceforge.net/project/?group_id=4232">
-          Quote.pm</a> is now a separate development project at
-          SourceForge. 
-          </li>
-
-          <li>Need to integrate with GUI. Right now, this is a
-          stand-alone perl script run from <tt>crontab.</tt> RLB
-          has written scheme wrappers for the module. Its ready now, but
-          not checked into cvs.  Will be in 1.5.
+          Finance::Quote.pm</a> is now a separate development project at
+          SourceForge.  Its a perl module.
+          It can obtain stock quotes from Yahoo 
+	  (NYSE), Yahoo-Europe, Fidelity Investments, T.Rowe Price, 
+	  TIAA-CREF, others. Also handles currency exchange rates.
+	  </li>
+	  
+	  <li>A scheme wrapper allows prices to be
+	  fetched from GUI. Done, version 1.6.0, rlbrowning.</li>
+	  
+          <li>
+          Commandline-flag replaces script file <tt>gnc-prices</tt> 
+	  perl script). Suitable for use with cron jobs.
+	  (version 1.6.0)
           </li>
 
           <li>A separate, historical-quote module can be found at the
@@ -2113,7 +2172,12 @@
         help. <a href="http://www.senga.org/mifluz/html/">Mifluz</a>
         might be more embeddable ... I am told that htdig-API is in
         good solid condition for this, but undocumented.
-        <p></p>
+        <p>
+
+	<b>Status:</b>
+	Done, using a simple keyword search, homegrown.  The only 
+	problem is it doesn't support compound expressions.
+	</p>
       </dd>
 
       <dt><a name="reconcile"><b>Reconcile Auditing</b></a></dt>
@@ -2594,7 +2658,13 @@ Password:
             does not satisfy the 'ACID' criteria</a>.
           </li>
         </ul>
-        <p></p>
+        <p>
+	<b>Status:</b>
+	Done, more or less, gnucash version 1.6.0, Linas Vepstas.
+	Theres still a laundry list of things that need to be 
+	cleaned up, see the README file in src/engine/sql/README.
+	
+	</p>
       </dd>
 
       <dt><a name="multiuser"><b>Multi-user Support</b></a></dt>
@@ -2603,9 +2673,6 @@ Password:
         Multi-user support should be added with either an SQL
         backend to the engine, and/or through CORBA interfaces to
         the engine. 
-        Project Kontor and also FreeMoney is working on SQL
-        schemas; Kontor is also working on Java RMI/CORBA
-        interfaces.
         Another possibility is to create a web application
         server, and have users do much/most of I/O via a web
         interface, possibly using the register object as a browser
@@ -2623,13 +2690,33 @@ Password:
 
           <li>user authorization</li>
 
-          <li>non-repudiability</li>
+          <li>non-repudiability (needed only for peer-to-peer??)</li>
 
           <li>encryption of network connections</li>
         </ul>
-        <p></p>
+        <p>
+	<b>Status:</b> Partly done.  (gnucash 1.6.0, Linas)
+	The postgres backend fully
+	supports multiple simltaneous users. This includes 
+	events for automatic updates of all GUI displays.
+	However, the GUI support is rough, no GUI dialog 
+	for user/password.  
+	</p>
       </dd>
 
+      <dt><a name="addressbook"><b>Address Book</b></a></dt>
+      
+      <dd>
+        Provide support for client/vendor/customer address books,
+	including street addres, eamil, phone.  Also: to-do lists,
+	a mini-contact manager (when is last time this person 
+	was paid? what did they say on phone the last time we 
+	sent them a check? Is there a dispute?)
+	<p>
+	Propose: use Ximian Evolution contact manager/to-do lists.
+	</p>
+      </dd>
+      
       <dt><a name="arap"><b>Accounts Payable, Receivable</b></a></dt>
 
       <dd>Add features to track sales receipts and other pending
