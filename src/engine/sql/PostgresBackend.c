@@ -481,8 +481,23 @@ pgendRunQuery (Backend *bend, Query *q)
 
    /* stage transactions, save some postgres overhead */
    xaccGroupBeginStagedTransactionTraversals (be->topgroup);
+
+   /* We will be doing a bulk insertion of transactions below.
+    * We can gain a tremendous performance improvement,
+    * for example, a factor of 10x when querying 3000 transactions,
+    * by opening all accounts for editing before we start, and
+    * closing them all only after we're done.  This is because
+    * an account must be open for editing in order to insert a split, 
+    * and when the commit is made, the splits are sorted in date order. 
+    * If we're sloppy, then there's an ordering for every insertion.
+    * By defering the Commit, we defer the sort, and thus save gobs.
+    * Of course, this hurts 'shallow' queries some, but I beleive 
+    * by not very much.
+    */
    ncalls = 0;
+   xaccAccountGroupBeginEdit(be->topgroup);
    pgendFillOutToCheckpoint (be, sql_query_string);
+   xaccAccountGroupCommitEdit(be->topgroup);
    PINFO ("number of calls to fill out=%d", ncalls);
 
    sql_Query_destroy(sq);
