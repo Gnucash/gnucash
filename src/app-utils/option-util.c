@@ -39,12 +39,6 @@
 
 /* TODO: 
 
-  - even though there is a make-text-option on the scheme side,
-    gnc_option_db_lookup_string_option() doesn't seem to work for
-    those, so I guess there's no way to use make-text-option
-    [ note -- the internal structure of a string option and text option
-      are effectively the same, so the get_string_option() should work
-      just fine on a text option. ]
   - for make-date-option, there seems to be only support for getting,
     not for setting.
 */
