@@ -192,7 +192,6 @@ add_each_gea_to_clist(gpointer data, gpointer user_data)
 
     row = gtk_clist_insert(clist, row, rowdata);
     gtk_clist_set_row_data(clist, row, gea);
-    row++;
 }
 
 static gchar*
@@ -207,8 +206,6 @@ gnc_get_ea_locale_dir(const char *top_dir)
 
     ret = g_strdup_printf("%s/%s", top_dir, locale);
 
-    printf("Pondering dir: %s\n", ret);
-
     if(stat(ret, &buf) != 0 && (strlen (locale) > 2))
     {
         g_free (ret);
@@ -216,51 +213,51 @@ gnc_get_ea_locale_dir(const char *top_dir)
         ret = g_strdup_printf("%s/%s", top_dir, locale);
     }
 
-    printf("Pondering dir: %s\n", ret);
-
     if(stat(ret, &buf) != 0)
     {
         g_free (ret);
         ret = g_strdup_printf("%s/%s", top_dir, default_locale);
     }
 
-    printf("Opening from dir: %s\n", ret);
-    
     g_free(locale);
 
     return ret;
 }
-    
+
 void
 on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    if(!(int)gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
-                                 "account_list_added"))
+    gpointer added_ptr;
+
+    added_ptr = gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
+                                    "account_list_added");
+    if(!GPOINTER_TO_INT(added_ptr))
     {
         GSList *list;
         GtkCList *clist;
         gchar *locale_dir = gnc_get_ea_locale_dir(GNC_ACCOUNTS_DIR);
-        
+
         list = gnc_load_example_account_list(locale_dir);
-    
+
         clist = gnc_new_user_get_clist();
-        
+
         gtk_clist_freeze(clist);
-        
-        gtk_clist_set_sort_column(clist, 0);
-        
+
         g_slist_foreach(list, add_each_gea_to_clist, (gpointer)clist);
-        
+
+        gtk_clist_set_sort_column(clist, 0);
         gtk_clist_sort(clist);
+
         gtk_clist_thaw(clist);
-        
+
         g_slist_free (list);
         g_free(locale_dir);
-        
+
         gtk_object_set_data(GTK_OBJECT(gnc_get_new_user_dialog()),
-                            "account_list_added", (void*)1);
+                            "account_list_added",
+                            GINT_TO_POINTER(1));
     }
 }
 

@@ -1,5 +1,10 @@
 2001-06-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user-callbacks.c
+	(on_chooseAccountTypesPage_prepare): use pointer<->int conversion
+	macros
+	(gnc_get_ea_locale_dir): take out debugging messages
+
 	* src/SplitLedger.c (xaccSRGetEntryHandler): handle reconcile
 	cell string as appropriate for translate flag.
 
