@@ -1541,10 +1541,12 @@ xaccTransRollbackEdit (Transaction *trans)
            node ; node = node->next)
       {
          Split *s = node->data;
+         Account *account = s->acc;
 
+         s->acc = NULL;
          xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
-         xaccAccountInsertSplit (s->acc, s);
-         xaccAccountRecomputeBalance (s->acc);
+         xaccAccountInsertSplit (account, s);
+         xaccAccountRecomputeBalance (account);
          mark_split (s);
       }
    }
