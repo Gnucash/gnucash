@@ -757,7 +757,7 @@ xaccAccountGetNotes (Account *acc)
 double
 xaccAccountGetBalance (Account *acc)
 {
-   if (!acc) return NULL;
+   if (!acc) return 0.0;
    return (acc->balance);
 }
 
