@@ -20,7 +20,8 @@ LDADD = \
    ../../engine/libgw-engine.la \
    ${top_srcdir}/src/engine/libgw-glib.la \
    ${top_srcdir}/src/test-core/libgncmod-test.la \
-   ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la
+   ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
+  -lltdl
 
 bin_PROGRAMS = \
   test-link-module \
