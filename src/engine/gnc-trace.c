@@ -81,6 +81,7 @@ gnc_log_init (void)
 {
    fout = stderr;
    fout = stdout;
+   fout = fopen ("/tmp/gnucash.trace", "w");
    g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, fh_printer, fout);
 }
 
