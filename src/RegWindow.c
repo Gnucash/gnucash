@@ -46,7 +46,6 @@
 #include "MainWindow.h"
 #include "main.h"
 #include "messages.h"
-#include "QuickFill.h"
 #include "RecnWindow.h"
 #include "Transaction.h"
 #include "util.h"

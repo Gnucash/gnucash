@@ -55,7 +55,7 @@ CHAR_TO_INDEX( char c )
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-mallocQuickFill( void )
+xaccMallocQuickFill( void )
   {
   int i;
   QuickFill *qf = (QuickFill *)_malloc(sizeof(QuickFill));
@@ -71,14 +71,14 @@ mallocQuickFill( void )
 /********************************************************************\
 \********************************************************************/
 void
-freeQuickFill( QuickFill *qf )
+xaccFreeQuickFill( QuickFill *qf )
   {
   if( qf != NULL )
     {
     int i;
     
     for( i=0; i<QFNUM; i++ )
-      freeQuickFill( qf->qf[i] );
+      xaccFreeQuickFill( qf->qf[i] );
     
     _free(qf);
     }
@@ -87,7 +87,7 @@ freeQuickFill( QuickFill *qf )
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-getQuickFill( QuickFill *qf, char c )
+xaccGetQuickFill( QuickFill *qf, char c )
   {
   if( qf != NULL )
     {
@@ -101,9 +101,9 @@ getQuickFill( QuickFill *qf, char c )
 /********************************************************************\
 \********************************************************************/
 void
-qfInsertText( QuickFill *qf, const char * text )
+xaccQFInsertText( QuickFill *qf, const char * text )
   {
-  qfInsertTransactionRec( qf, text, 0 );
+  qfInsertTextRec( qf, text, 0 );
   }
 
 /********************************************************************\
@@ -111,23 +111,23 @@ qfInsertText( QuickFill *qf, const char * text )
 static void
 qfInsertTextRec( QuickFill *qf, const char *text, int depth )
   {
-  if( qf != NULL )
+  if (NULL == qf) return;
+
+  if( text )
     {
-    if( text )
+    if( text[depth] != '\0' )
       {
-      if( text[depth] != '\0' )
-        {
-        int index = CHAR_TO_INDEX( text[depth] );
-        
-        if( qf->qf[index] == NULL )
-          qf->qf[index] = mallocQuickFill();
-        
-        qf->qf[index]->text = text;
-        
-        qfInsertTransactionRec( qf->qf[index], text, ++depth );
-        }
+      int index = CHAR_TO_INDEX( text[depth] );
+      
+      if( qf->qf[index] == NULL )
+        qf->qf[index] = xaccMallocQuickFill();
+      
+      qf->qf[index]->text = text;
+      
+      qfInsertTextRec( qf->qf[index], text, ++depth );
       }
     }
   }
+
 /********************** END OF FILE *********************************\
 \********************************************************************/

@@ -129,10 +129,9 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddCell (curs, cell, XFRM_CELL_R, XFRM_CELL_C);
    reg->xferCell = cell;
    
-   cell = xaccMallocTextCell();
-   cell->width = 9;
-   xaccAddCell (curs, cell, DESC_CELL_R, DESC_CELL_C);
-   reg->descCell = cell;
+   reg->descCell = xaccMallocQuickFillCell();
+   reg->descCell->cell.width = 9;
+   xaccAddCell (curs, &(reg->descCell->cell), DESC_CELL_R, DESC_CELL_C);
    
    cell = xaccMallocTextCell();
    cell->width = 9;

@@ -32,7 +32,7 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
       xaccSetBasicCellValue (reg->dateCell, buff);
 
       xaccSetBasicCellValue (reg->numCell, trans->num);
-      xaccSetBasicCellValue (reg->descCell, trans->description);
+      xaccSetQuickFillCellValue (reg->descCell, trans->description);
       xaccSetBasicCellValue (reg->memoCell, split->memo);
 
       buff[0] = split->reconciled;

@@ -8,25 +8,26 @@
 
 #include "basiccell.h"
 #include "datecell.h"
+#include "quickfillcell.h"
 #include "pricecell.h"
 #include "table.h"
 #include "recncell.h"
 #include "textcell.h"
 
 typedef struct _BasicRegister {
-   Table       * table;
-   CellBlock   * cursor;
-   CellBlock   * header;
-   BasicCell  * dateCell;
-   BasicCell  * numCell;
-   BasicCell  * actionCell;
-   BasicCell  * xferCell;
-   BasicCell  * descCell;
-   BasicCell  * memoCell;
-   BasicCell  * recnCell;
-   PriceCell   * creditCell;
-   PriceCell   * debitCell;
-   PriceCell   * balanceCell;
+   Table         * table;
+   CellBlock     * cursor;
+   CellBlock     * header;
+   BasicCell     * dateCell;
+   BasicCell     * numCell;
+   BasicCell     * actionCell;
+   BasicCell     * xferCell;
+   QuickFillCell * descCell;
+   BasicCell     * memoCell;
+   BasicCell     * recnCell;
+   PriceCell     * creditCell;
+   PriceCell     * debitCell;
+   PriceCell     * balanceCell;
 
 } BasicRegister;
 
