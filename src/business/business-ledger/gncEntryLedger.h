@@ -84,4 +84,8 @@ void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger);
 
+gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
+
+void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */

@@ -305,7 +305,9 @@ static const char * get_inv_entry (VirtualLocation virt_loc,
   static char s[2] = { ' ', '\0' };
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  if (gncEntryGetInvoice (entry) != NULL)
+  if (gncEntryGetInvoice (entry) == NULL)
+    s[0] = ' ';
+  else
     s[0] = 'X';
 
   /* XXX: what if this entry doesn't belong to this invoice?

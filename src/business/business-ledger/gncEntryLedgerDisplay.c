@@ -81,8 +81,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   GncEntryLedger *ledger = user_data;
   GList *entries;
 
-  if (ledger->loading)
-    return;
+  if (!ledger || ledger->loading) return;
 
   entries = gnc_entry_ledger_get_entries (ledger);
 

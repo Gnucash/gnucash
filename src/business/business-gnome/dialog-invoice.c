@@ -78,6 +78,20 @@ iw_get_invoice (InvoiceWindow *iw)
   return gncInvoiceLookup (iw->book, &iw->invoice_guid);
 }
 
+static void gnc_entry_check_close (InvoiceWindow *iw)
+{
+  if (!iw || !iw->ledger) return;
+
+  if (gnc_entry_ledger_changed (iw->ledger)) {
+    const char *message = _("The current entry has been changed.\n"
+			    "Would you like to save it?");
+    if (gnc_verify_dialog_parented (iw->dialog, message, TRUE))
+      gnc_entry_ledger_save (iw->ledger, TRUE);
+    else
+      gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
+  }
+}
+
 static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 {
   Timespec ts;
@@ -140,11 +154,13 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   return TRUE;
 }
 
-static void
+static gboolean
 gnc_invoice_window_ok_save (InvoiceWindow *iw)
 {
+  gnc_entry_check_close (iw);	/* save the current entry? */
+
   if (!gnc_invoice_window_verify_ok (iw))
-    return;
+    return FALSE;
 
   {
     GncInvoice *invoice = iw_get_invoice (iw);
@@ -154,6 +170,7 @@ gnc_invoice_window_ok_save (InvoiceWindow *iw)
     /* Save the invoice to return it later. */
     iw->created_invoice = invoice;
   }
+  return TRUE;
 }
 
 static void
@@ -161,11 +178,13 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
 
-  gnc_invoice_window_ok_save (iw);
-  gnc_close_gui_component (iw->component_id);
+  if (!gnc_invoice_window_ok_save (iw))
+    return;
 
   /* Ok, we don't need this anymore */
   iw->invoice_guid = *xaccGUIDNULL ();
+
+  gnc_close_gui_component (iw->component_id);
 }
 
 static void
@@ -244,7 +263,10 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   /* Save the Due Date */
   gncInvoiceSetDateDue (invoice, &ddue);
 
-  /* Yep, we're posting.  So, save the invoice... */
+  /* Yep, we're posting.  So, save the invoice... 
+   * Note that we can safely ignore the return value; we checked
+   * the verify_ok earlier, so we know it's ok.
+   */
   gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */

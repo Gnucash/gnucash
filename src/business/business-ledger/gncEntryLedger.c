@@ -318,3 +318,15 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger)
   /* and refresh the display */
   gnc_entry_ledger_display_refresh (ledger);
 }
+
+gboolean
+gnc_entry_ledger_changed (GncEntryLedger *ledger)
+{
+  if (!ledger)
+    return FALSE;
+
+  if (gnc_table_current_cursor_changed (ledger->table, FALSE))
+    return TRUE;
+
+  return FALSE;
+}

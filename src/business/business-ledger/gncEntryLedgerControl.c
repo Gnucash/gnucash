@@ -68,27 +68,6 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
   *p_new_virt_loc = new_virt_loc;
 }
 
-static void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
-{
-  VirtualLocation virt_loc;
-
-  if (ledger == NULL)
-    return;
-
-  virt_loc = ledger->table->current_cursor_loc;
-
-  if (!gnc_table_current_cursor_changed (ledger->table, FALSE))
-    return;
-
-  /* When cancelling edits, reload the cursor from the entry. */
-  gnc_table_clear_current_cursor_changes (ledger->table);
-
-  if (gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE))
-    gnc_table_move_cursor_gui (ledger->table, virt_loc);
-
-  gnc_table_refresh_gui (ledger->table, TRUE);
-}
-
 static gboolean
 gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 				  gncTableTraversalDir dir,
@@ -458,4 +437,25 @@ gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
   gnc_resume_gui_refresh ();
 
   return TRUE;
+}
+
+void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
+{
+  VirtualLocation virt_loc;
+
+  if (ledger == NULL)
+    return;
+
+  virt_loc = ledger->table->current_cursor_loc;
+
+  if (!gnc_table_current_cursor_changed (ledger->table, FALSE))
+    return;
+
+  /* When cancelling edits, reload the cursor from the entry. */
+  gnc_table_clear_current_cursor_changes (ledger->table);
+
+  if (gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE))
+    gnc_table_move_cursor_gui (ledger->table, virt_loc);
+
+  gnc_table_refresh_gui (ledger->table, TRUE);
 }
