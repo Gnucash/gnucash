@@ -40,9 +40,9 @@ Notes" at bottom for the current status.
 Note that the correct handling of depreciation, capital gains and
 other similar accounting concepts requires that 'lots' be supported
 by the engine, and in turn, handled correctly by the 'books' 
-infrastructure.  Currently, 'lots' are *not* supported by the engine,
-and this causes the book implementation to be broken in a certain 
-fundamental sense.  See 'lots.txt' for details.
+infrastructure.  Currently, 'lots' are incompletely supported by 
+the engine, and this causes the book implementation to be broken in 
+a certain fundamental sense.  See 'lots.txt' for details.
 
 
 Possible Solutions

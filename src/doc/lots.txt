@@ -48,8 +48,8 @@ Billing Example:
 ----------------
 Normally, there is a one-to-one correspondence between bills and 
 lots: there  is one lot per bill, and one bill per lot.  (Note: this 
-may not be how gnucash invoices are currently implemented; this is a
-propsed implementation.)
+is not how gnucash invoices are currently implemented; this is a
+proposed implementation.)
 
 For example:
 
@@ -103,6 +103,7 @@ many of the account GUI's in GnuCash.  The GUI should probably be
 modified to treat inventory accounts in a special way, e.g. by
 not listing them in account lists, and providing an alternate 
 management GUI.
+
 
 Capital Gains:
 --------------
@@ -191,7 +192,10 @@ account, but this is a painful process.)
 
 Status
 ======
-Implementation barely started.  See src/engine/gnc-lot.h for the public API.
-Neither XML nor Postgres backends support this so far.
+Core support for Lots in the engine is complete (but untested).  
+See src/engine/gnc-lot.h for the public API.
+FIFO's have not been started.
+The XML backend support for lot is complete (but untested).
+The Postgres backend does not yet support lots.
 
 -------------------------- end of file ------------------------------
