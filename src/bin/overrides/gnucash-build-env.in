@@ -51,6 +51,7 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --gnc-module-dir ${top_builddir}/src/report/standard-reports \
   --gnc-module-dir ${top_builddir}/src/report/locale-specific/us \
+  --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --gnc-module-dir ${top_builddir}/src/backend/rpc \
   --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/backend/postgres \
