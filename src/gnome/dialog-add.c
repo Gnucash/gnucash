@@ -340,7 +340,7 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
   if ((Account *)accData->parentAccount) {
     xaccInsertSubAccount ((Account *)accData->parentAccount, account);
   } else {
-    xaccGroupInsertAccount(xaccSessionGetGroup(current_session), account );
+    xaccGroupInsertAccount(gncGetCurrentGroup(), account );
   }
   xaccAccountCommitEdit (account);
 
@@ -406,6 +406,8 @@ accWindow (AccountGroup *grp)
 
   accData = (AccWindow *)g_malloc(sizeof(AccWindow));
 
+  /* if no account group specified, assume top-level group */
+  if (!grp) grp = gncGetCurrentGroup();
   accData->parentAccount = grp;
   accData->newAccount    = xaccMallocAccount();
   
@@ -605,8 +607,7 @@ accWindow (AccountGroup *grp)
     /* Append this new subtree to the current tree item */
     gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
     
-    gnc_ui_accWindow_tree_fill(GTK_TREE(subtree),
-                               xaccSessionGetGroup(current_session)); 
+    gnc_ui_accWindow_tree_fill(GTK_TREE(subtree), gncGetCurrentGroup());
   }
 
   /*** Callbacks ****************************************************/

@@ -1,7 +1,7 @@
 /********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
- * Copyright (C) 1998,1999 Jeremy Collins	                        *
+ * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998      Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -24,25 +24,25 @@
 
 #include "config.h"
 
-#include "gnucash.h"
-#include "top-level.h"
-#include "messages.h"
-#include "version.h"
-#include "util.h"
 
+#include "AccWindow.h"
+#include "dialog-options.h"
+#include "FileDialog.h"
+#include "g-wrap.h"
+#include "gnucash.h"
 #include "MainWindow.h"
+#include "messages.h"
 #include "RegWindow.h"
+#include "top-level.h"
+#include "version.h"
 #include "window-mainP.h"
 #include "window-help.h"
-#include "dialog-options.h"
-#include "AccWindow.h"
+#include "util.h"
 
-#include "g-wrap.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-#include "util.h"
 
 enum {
   FMB_NEW,
@@ -314,13 +314,6 @@ acct_ctree_unselect(GtkWidget *widget, GtkCTreeNode *row, gint column)
   return TRUE; 
 }
 
-Session *
-gnc_main_window_get_session(gncUIWidget w) {
-  /* FIXME: right now there's only one session.  Eventually we might
-     allow multiple windows open. */
-  return(current_session);
-}
-
 static void
 gnc_ui_refresh_statusbar()
 {
@@ -335,8 +328,7 @@ gnc_ui_refresh_statusbar()
   Account *acc;
   int nacc;
    
-  grp = xaccSessionGetGroup (current_session);
-  //if (!grp) grp = topgroup;
+  grp = gncGetCurrentGroup ();
   nacc = xaccGroupGetNumAccounts (grp);
   for (i=0; i<nacc; i++) {
      int acc_type;
@@ -479,7 +471,7 @@ gnc_ui_refresh_tree()
   parent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
   ctree  = gtk_object_get_data(GTK_OBJECT(app), "ctree");
   
-  accts  = xaccSessionGetGroup(current_session);
+  accts  = gncGetCurrentGroup();
   
   gtk_ctree_remove_node(ctree, parent);
 
@@ -705,7 +697,7 @@ mainWindow() {
   GtkWidget    *statusbar;
   GtkWidget    *ctree;
   GtkCTreeNode *parent = NULL;
-  AccountGroup *accts = xaccSessionGetGroup(current_session);
+  AccountGroup *accts = gncGetCurrentGroup();
   gchar        *ctitles[] = {ACC_NAME_STR, DESC_STR, BALN_STR};
 
   /* Create ctree */
