@@ -1,3 +1,8 @@
+2004-04-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po: Updated Czech translation by Miloslav Trmac
+	<mitr@volny.cz>
+
 2004-04-05  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: make sure we always have intl and po Makefiles

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.8\n"
 "POT-Creation-Date: 2003-11-17 22:01-0800\n"
-"PO-Revision-Date: 2004-01-20 11:54+0100\n"
+"PO-Revision-Date: 2004-03-31 21:27+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1867,7 +1867,7 @@ msgstr "Opravdu chcete vystavit fakturu?"
 #: intl-scm/guile-strings.c:549 intl-scm/guile-strings.c:1039
 #: intl-scm/guile-strings.c:1061
 msgid "Due Date"
-msgstr "Datu splatnosti"
+msgstr "Datum splatnosti"
 
 #: src/business/business-gnome/dialog-invoice.c:564
 msgid "Post Date"
@@ -2641,11 +2641,11 @@ msgstr "Příjmy"
 
 #: src/engine/Account.c:2489
 msgid "A/Receivable"
-msgstr "A/K příjmu"
+msgstr "Kniha pohledávek"
 
 #: src/engine/Account.c:2490
 msgid "A/Payable"
-msgstr "A/K zaplacení"
+msgstr "Kniha závazků"
 
 #: src/engine/FreqSpec.c:690
 msgid "last day"
