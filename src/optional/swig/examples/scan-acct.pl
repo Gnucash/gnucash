@@ -6,7 +6,8 @@
 # the names and balances of the top-level accounts in the file.
 # Its a pretty basic demo.
 #
-# use lib '/usr/lib/gnucash/';
+use lib '/usr/local/lib/gnucash/perl/';
+use lib '/usr/lib/gnucash/perl/';
 use lib '..';
 use gnucash;                                           
 package gnucash;

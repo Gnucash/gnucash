@@ -39,8 +39,8 @@ AM_CFLAGS = \
 # we need to specify the inlcude path for glibconfig.h, and so this is the way
 
 libgncswig_la_LIBADD = \
-  -L${prefix}/lib/gnucash \
-  -lgncmod-engine \
+  -L${prefix}/lib \
+  -lgncengine \
   ${GLIB_LIBS} 
 
 

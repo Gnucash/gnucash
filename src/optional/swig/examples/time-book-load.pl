@@ -6,7 +6,8 @@
 # Copyright (c) 2001 Linas Vepstas
 # GPL license. see COPYING.
 #
-# use lib '/usr/lib/gnucash/';
+use lib '/usr/local/lib/gnucash/perl/';
+use lib '/usr/lib/gnucash/perl/';
 use lib '..';
 use gnucash;                                           
 package gnucash;
