@@ -677,7 +677,6 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   GList *acct_type_list;
   GtkTreeSelection *selection;
 
-  printf("*** In function %s\n", __FUNCTION__);
   multiple_selection = gnc_option_multiple_selection(option);
   acct_type_list = gnc_option_get_account_type_list(option);
 
@@ -1379,7 +1378,7 @@ gnc_options_dialog_close_cb(GNCOptionWin *propertybox,
 {
   GNCOptionWin **options_dialog = user_data;
 
-  gtk_widget_destroy (propertybox->dialog);
+  gnc_options_dialog_destroy(propertybox);
 
   *options_dialog = NULL;
 }
