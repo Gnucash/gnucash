@@ -1,3 +1,11 @@
+2003-09-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-transfer.c:  during the dialog startup it
+	  tries to build the transfer rate.  This crashes on Solaris because
+	  during startup one commodity is still NULL when it tries to print
+	  it.
+	Fixes bug #121677
+
 2003-09-04  Derek Atkins  <derek@ihtfp.com>
 
 	Apply Nigel Titley's patch to fix #103174:
