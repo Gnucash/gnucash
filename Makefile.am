@@ -18,10 +18,9 @@ doc_DATA = \
 # included some other way...
 
 # Most directories handle their own EXTRA_DIST setting, but for some,
-# it's not worth the trouble (i.e ./old), and for others, there's no
-# Makefile.am (i.e. ./intl and ./po -- these handle their own
-# Makefile.in and Makefile.in.in files...), so we list their files
-# here.
+# it's not worth the trouble and for others, there's no Makefile.am
+# (i.e. ./intl and ./po -- these handle their own Makefile.in and
+# Makefile.in.in files...), so we list their files here.
 
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
@@ -32,17 +31,6 @@ EXTRA_DIST = \
   gnucash.lsm \
   intl/.cvsignore \
   make-gnucash-patch.in \
-  old/country.sql \
-  old/currencynames \
-  old/Gnucash.app-defaults \
-  old/perl-reports/report-baln.phtml \
-  old/perl-reports/report-folio.phtml \
-  old/perl-reports/report-formtest.html \
-  old/perl-reports/report-main.html \
-  old/perl-reports/report-menu.html \
-  old/perl-reports/report-null.html \
-  old/perl-reports/report-pnl.phtml \
-  old/xacc-shell.c \
   po/.cvsignore
 
 ## We borrow guile's convention and use @-...-@ as the substitution
