@@ -1,3 +1,10 @@
+2004-10-30  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/README.HBCI: Updated HBCI readme.
+	
+	* src/import-export/hbci/hbci-interaction.c: Fix problems with
+	user messages.
+
 2004-10-24  Benoit Grégoire <bock@step.polymtl.ca>
 	* po/fr.po:  Translation from Johan Buret, unfortunately on the wrong branch.
 

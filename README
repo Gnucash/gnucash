@@ -245,10 +245,12 @@ the following;
     GnuCash has mostly been tested against the 0.6.2 version, though
     any newer version should also work. Sources can be found at
     http://sourceforge.net/projects/libofx/
-  openhbci: This library provide support for HBCI file imports. 
-    GnuCash has mostly been tested against the 0.9.6 version, though
+  aqbanking/aqhbci: This library provide support for HBCI file imports. 
+    GnuCash has mostly been tested against the 0.9.7 version, though
     any newer version should also work. Sources can be found at
-    http://sourceforge.net/projects/openhbci/
+    http://sourceforge.net/projects/aqbanking and
+    http://sourceforge.net/projects/aqhbci/. More info in
+    doc/README.HBCI.
 
 #######
 Running
