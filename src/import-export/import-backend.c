@@ -39,6 +39,7 @@
 #include "Account.h"
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "Query.h"
 
 #include "gnc-engine-util.h"
 
@@ -615,8 +616,11 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* If a transaction's amount doesn't match within the
 	     threshold, it's very unlikely to be the same transaction
-	     so we give it an extra -5 penality */
-	  prob = prob-5;
+	     so we give it an extra -5 penality. Changed 2004-11-27:
+	     The penalty is so high that we can forget about this
+	     split anyway and skip the rest of the tests. */
+	  return;
+	  /* prob = prob-5; */
 	  /* DEBUG("heuristics:  probability - 1 (amount)"); */
 	}
       
@@ -643,9 +647,12 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
-	  /* Extra penalty if that split lies awfully far away
-	     from the given one. */
-	  prob = prob-5;
+	  /* Extra penalty if that split lies awfully far away from
+	     the given one. Changed 2004-11-27: The penalty is so high
+	     that we can forget about this split anyway and skip the
+	     rest of the tests. */
+	  return;
+	  /* prob = prob-5; */
 	  /*DEBUG("heuristics:  probability - 5 (date)"); */
 	}
       
@@ -764,13 +771,42 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 				   double fuzzy_amount_difference)
 {
   GList * list_element;
+  Query *query = xaccMallocQuery();
   g_assert (trans_info);
   
   /* Get list of splits of the originating account. */
-  list_element = 
-    g_list_first
-    (xaccAccountGetSplitList
-     (xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info))));
+  {
+    /* We used to traverse *all* splits of the account by using
+       xaccAccountGetSplitList, which is a bad idea because 90% of these
+       splits are outside the date range that is interesting. We should
+       rather use a query according to the date region, which is
+       implemented here. 
+    */
+    Account *importaccount = 
+      xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info));
+    time_t download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
+
+    xaccQuerySetBook (query, gnc_get_current_book());
+    xaccQueryAddSingleAccountMatch (query, importaccount,			    
+				    QOF_QUERY_AND);
+    xaccQueryAddDateMatchTT (query,
+			     TRUE, download_time - MATCH_DATE_NOT_THRESHOLD*86400/2,
+			     TRUE, download_time + MATCH_DATE_NOT_THRESHOLD*86400/2,
+			     QOF_QUERY_AND);
+    list_element = xaccQueryGetSplits (query);
+    /* Sigh. Doesnt help too much. We still create and run one query
+       for each imported transaction. Maybe it would improve
+       performance further if there is one single (master-)query at
+       the beginning, matching the full date range and all accounts in
+       question. However, this doesnt quite work because this function
+       here is called from each gnc_gen_trans_list_add_trans(), which
+       is called one at a time. Therefore the whole importer would
+       have to change its behaviour: Accept the imported txns via
+       gnc_gen_trans_list_add_trans(), and only when
+       gnc_gen_trans_list_run() is called, then calculate all the
+       different match candidates. Thats too much work for now.
+    */
+  }
 
   /* Traverse that list, calling split_find_match on each one. Note
      that xaccAccountForEachSplit is declared in Account.h but
@@ -781,6 +817,8 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 			process_threshold, fuzzy_amount_difference);
       list_element = g_list_next (list_element);
     }
+
+  xaccFreeQuery (query);
 }
 
 

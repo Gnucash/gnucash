@@ -1,3 +1,10 @@
+2004-11-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c
+	(gnc_import_find_split_matches): Improve importer performance by
+	matching imported transactions only against transactions in the
+	proper time interval.
+
 2004-11-22  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, README: Add configure check for libofx version
