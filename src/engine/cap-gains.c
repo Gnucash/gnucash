@@ -255,7 +255,8 @@ xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
 
 /* ============================================================== */
 /* Functionally identical to the following:
- *   if (!xaccAccountGetDefaultGainAccount()) xaccAccountSetDefaultGainAccount ();
+ *   if (!xaccAccountGetDefaultGainAccount()) {
+ *               xaccAccountSetDefaultGainAccount (); }
  * except that it saves a few cycles.
  */
 
@@ -324,7 +325,7 @@ xaccSplitAssignToLot (Split *split,
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
-    * Lets put it in the earliest one we can find.  This 
+    * We ask the policy for a lot to assign it to.  This 
     * block is written in the form of a while loop, since we
     * may have to bust a split across several lots.
     */
@@ -335,7 +336,10 @@ xaccSplitAssignToLot (Split *split,
      lot = policy (acc, split, user_data);
      if (lot)
      {
-        /* If the amount is smaller than open balance ... */
+        /* If adding the split would make the lot balance change sign,
+         * then we split the split into two pieces: one piece that will
+         * bring the lot balance to zero, and another to be dealt with
+         * later.  */
         gnc_numeric baln = gnc_lot_get_balance (lot);
         int cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
                                        gnc_numeric_abs(baln));
@@ -438,7 +442,7 @@ xaccSplitAssignToLot (Split *split,
         gint64 id;
         char buff[200];
 
-        /* No lot was found.  Start a new lot */
+        /* Policy didn't give us a lot.  Start a new lot. */
         PINFO ("start new lot");
         lot = gnc_lot_new (acc->book);
         gnc_lot_add_split (lot, split);
@@ -465,8 +469,12 @@ FIFOPolicy (Account *acc, Split *split, gpointer user_data)
 }
 
 gboolean
-xaccSplitFIFOAssignToLot (Split *split)
+xaccSplitAssignToLot (Split *split)
 {
+   /* XXX FIXME: instead of a hard-wired fifo policy, we should 
+    * be using the policy as specified by the account. i.e.
+    * we should be using split->acc->polcy as the function 
+    */
    return xaccSplitAssignToLot (split, FIFOPolicy, NULL);
 }
 
@@ -492,6 +500,13 @@ xaccSplitGetCapGainsSplit (Split *split)
 }
 
 /* ============================================================== */
+/* XXX Note that xaccSplitComputeCapGains makes some subtle assumptions
+ * about the accounting policy that may introduce bugs when used with
+ * other policies.  In particular, it assumes the earliest split is the
+ * 'opening' split, and that its amount will be larger and of opposite
+ * sign of all the other splits. This is a characteristic of FIFO's but 
+ * might not be of other policies.
+ */
 
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
@@ -583,6 +598,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    /* Opening amount should be larger (or equal) to current split,
     * and it should be of the opposite sign.
+XXX this should be a part of a scrub routine !
     */
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_split->amount),
                                 gnc_numeric_abs(split->amount)))

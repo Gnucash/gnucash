@@ -56,7 +56,7 @@ static short module = MOD_LOT;
 /* ============================================================== */
 
 void
-xaccAccountScrubLots (Account *acc)
+xaccAccountAssignLots (Account *acc)
 {
    SplitList *node;
 
@@ -67,8 +67,7 @@ xaccAccountScrubLots (Account *acc)
 
    /* Loop over all splits, and make sure that every split
     * belongs to some lot.  If a split does not belong to 
-    * any lots, its is placed into the earliest possible
-    * lot (thus enforcing FIFO accounting rules).
+    * any lots, poke it into one.
     */
 restart_loop:
    for (node=acc->splits; node; node=node->next)
@@ -77,7 +76,7 @@ restart_loop:
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
-      if (xaccSplitFIFOAssignToLot (split)) goto restart_loop;
+      if (xaccSplitAssignToLot (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
@@ -172,7 +171,7 @@ static gpointer
 lot_scrub_cb (Account *acc, gpointer data)
 {
    if (FALSE == xaccAccountHasTrades (acc)) return NULL;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
    return NULL;
 }
@@ -189,7 +188,7 @@ xaccAccountScrubLotsBalance (Account *acc)
 {
    if (!acc) return;
    if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
 }
 
@@ -201,7 +200,7 @@ xaccAccountTreeScrubLotsBalance (Account *acc)
    xaccGroupScrubLotsBalance (acc->children);
    
    if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountScrubLots (acc);
+   xaccAccountAssignLots (acc);
    xaccAccountScrubDoubleBalance (acc);
 }
 

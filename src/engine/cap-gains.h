@@ -107,12 +107,13 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
                                                                                 
 Split * xaccSplitGetCapGainsSplit (Split *);
 
-/** The`xaccSplitFIFOAssignToLot() routine will take the indicated
- *  split and assign it to the earliest open lot that it can find.
+/** The`xaccSplitAssignToLot() routine will take the indicated
+ *  split and, if it doesn't already belong to a lot, it will attempt 
+ *  to assign it to an appropriate lot.
  *  If the split already belongs to a Lot, this routine does nothing.
  *  If there are no open Lots, this routine will create a new lot
  *  and place the split into it.  If there's an open lot, and its
- *  big enough to accept the split in it's entrety, then the split
+ *  big enough to accept the split in it's entirety, then the split
  *  will be placed into that lot.  If the split is too big to fit
  *  into the currently open lot, it will be busted up into two 
  *  (or more) pieces, and each placed into a lot accordingly.
@@ -123,12 +124,13 @@ Split * xaccSplitGetCapGainsSplit (Split *);
  *  directory is used to identify the peers. 'gemini'-style kvp's
  *  are used.
  *
- *  Because this routine always uses the earliest open lot, it
- *  implments a "FIFO" First-In First-Out accounting policy.
- *  (Adding new policies is 'easy', read the source luke).
+ *  This routine uses the "FIFOPolicy" callback, and thus 
+ *  implements a "FIFO" First-In First-Out accounting policy.
+ *  This is currently the only implemented policy; adding new
+ *  policies should be 'easy'; read the source luke.
  */
 
-gboolean xaccSplitFIFOAssignToLot (Split *split);
+gboolean xaccSplitAssignToLot (Split *split);
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into
