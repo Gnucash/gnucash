@@ -1,5 +1,7 @@
 2001-06-17  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/cursors.c (gnc_set_busy_cursor): fix warning
+
 	* src/scm/date-utilities.scm: use gnc:print-date instead of
 	strftime
 
