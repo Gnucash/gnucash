@@ -1,3 +1,9 @@
+2003-01-27  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in -- don't assume gtkhtml is avail from gnome-config
+	  when testing for zvt.  Use the (already aquired) $GTKHTML_LIBS
+	  instead.  Fixes Stan's problem from gc-devel.
+
 2003-01-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/glade/hbci.glade: Some more GUI work for

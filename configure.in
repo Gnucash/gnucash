@@ -876,7 +876,7 @@ then
     # imlib, though it needs it so we'll just steal gtkhtml's which does.
     AC_CHECK_LIB(zvt, main, true,
       [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
-      `$GNOME_CONFIG --libs zvt gtkhtml`)
+      `$GNOME_CONFIG --libs zvt` $GTKHTML_LIBS)
     
     #AC_CHECK_LIB(bonobo, main, true,
     #  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
