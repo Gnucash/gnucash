@@ -176,8 +176,12 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    xaccAccountGroupBeginEdit (dest_book->topgroup);
    xaccAccountGroupBeginEdit (src_book->topgroup);
    xaccGroupCopyGroup (dest_book->topgroup, src_book->topgroup);
+   xaccAccountGroupCommitEdit (src_book->topgroup);
+   xaccAccountGroupCommitEdit (dest_book->topgroup);
 
    /* Next, run the query */
+   xaccAccountGroupBeginEdit (dest_book->topgroup);
+   xaccAccountGroupBeginEdit (src_book->topgroup);
    xaccQuerySetGroup (query, src_book->topgroup);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
@@ -222,7 +226,12 @@ find_nearest_equity_acct (Account *acc)
    for (node=acc_list; node; node=node->next)
    {
       candidate = (Account *) node->data;
-      if (EQUITY == xaccAccountGetType (candidate)) return candidate;
+      if ((EQUITY == xaccAccountGetType (candidate)) &&
+          gnc_commodity_equiv(xaccAccountGetCommodity(acc),
+                              xaccAccountGetCommodity(candidate)))
+      {
+         return candidate;
+      }
    }
 
    /* If we got to here, we did not find a peer equity account. 
@@ -242,6 +251,7 @@ find_nearest_equity_acct (Account *acc)
    xaccGroupInsertAccount (parent, candidate);
    xaccAccountSetType (candidate, EQUITY);
    xaccAccountSetName (candidate, xaccAccountGetTypeStr(EQUITY));
+   xaccAccountSetCommodity (candidate, xaccAccountGetCommodity(acc));
    xaccAccountCommitEdit (candidate);
    
    return candidate;
@@ -282,6 +292,7 @@ add_closing_balances (AccountGroup *closed_grp,
       /* add KVP to open account, indicating the progenitor
        * of this account. */
       xaccAccountBeginEdit (twin);
+      twin->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (twin);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -291,12 +302,11 @@ add_closing_balances (AccountGroup *closed_grp,
       vvv = kvp_value_new_guid (&closed_book->guid);
       kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
       
-      xaccAccountCommitEdit (twin);
-
       /* -------------------------------- */
       /* add KVP to closed account, indicating where 
        * the next book is. */
       xaccAccountBeginEdit (candidate);
+      candidate->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (candidate);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -335,9 +345,11 @@ add_closing_balances (AccountGroup *closed_grp,
          xaccTransBeginEdit (trans);
          st = xaccMallocSplit(open_book);
          xaccAccountInsertSplit (twin, st);
+         xaccTransAppendSplit(trans, st);
          
          se = xaccMallocSplit(open_book);
          xaccAccountInsertSplit (equity, se);
+         xaccTransAppendSplit(trans, se);
 
          xaccSplitSetValue (st, baln);
          xaccSplitSetValue (se, gnc_numeric_neg(baln));
@@ -345,6 +357,7 @@ add_closing_balances (AccountGroup *closed_grp,
          xaccTransSetDatePostedTS (trans, post_date);
          xaccTransSetDateEnteredTS (trans, date_entered);
          xaccTransSetDescription (trans, desc);
+         xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
 
          /* add KVP data showing where the balancing 
           * transaction came from */
@@ -362,18 +375,16 @@ add_closing_balances (AccountGroup *closed_grp,
          /* -------------------------------- */
          /* add KVP to closed account, indicating where the
           * balance was carried forward to. */
-         xaccAccountBeginEdit (candidate);
          cwd = xaccAccountGetSlots (candidate);
          cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
          vvv = kvp_value_new_guid (xaccTransGetGUID(trans));
          kvp_frame_set_slot_nc (cwd, "balancing-trans", vvv);
-         xaccAccountCommitEdit (candidate);
       }
 
       /* we left an open dangling above ... */
       xaccAccountCommitEdit (candidate);
-
+      xaccAccountCommitEdit (twin);
 
       /* recurse down to the children */
       childs = xaccAccountGetChildren(candidate);
@@ -413,6 +424,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
                                    TRUE, calve_date,
                                    QUERY_OR);
    closing_book = gnc_book_new();
+   gnc_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
    gnc_book_partition (closing_book, existing_book, query);
 
