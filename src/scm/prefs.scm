@@ -328,6 +328,13 @@ not each row")
 to enter a credit card payment")
   #t))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Reconcile") (N_ "Check off cleared transactions")
+  "b" (N_ "Automatically check off cleared transactions when reconciling")
+  #t))
+
+
 ;;; User Info Options
 
 (gnc:register-configuration-option
