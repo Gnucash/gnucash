@@ -34,6 +34,12 @@
 	  Pass the QofIdType into the event generation code.
 	Fixes #115988
 
+	* src/engine/qofid.c: change the entity table to use
+	  two hash tables to make iterating over all the objects
+	  of a particular type a bit faster.  This should improve
+	  Query performance on larger datasets.
+	Fixes #115989
+
 2003-06-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Fix stupid bug with
