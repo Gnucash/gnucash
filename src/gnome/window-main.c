@@ -577,6 +577,9 @@ gnc_configure_account_tree(void *data)
 
     else if (safe_strcmp(node->data, "balance") == 0)
       new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
+
+    else if (safe_strcmp(node->data, "total") == 0)
+      new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
   }
 
   gnc_free_list_option_value(list);

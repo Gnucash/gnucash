@@ -131,6 +131,9 @@ gnc_account_tree_init(GNCAccountTree *tree)
   gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->balance_column,
 				     GTK_JUSTIFY_RIGHT);
+  gtk_clist_set_column_justification(GTK_CLIST(tree),
+				     tree->total_column,
+				     GTK_JUSTIFY_RIGHT);
 
   {
     GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(tree));
@@ -697,7 +700,7 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 
   avi->show_field[ACCOUNT_NAME] = GNC_T;
   avi->show_field[ACCOUNT_DESCRIPTION] = GNC_T;
-  avi->show_field[ACCOUNT_BALANCE] = GNC_T;
+  avi->show_field[ACCOUNT_TOTAL] = GNC_T;
 }
 
 /********************************************************************\
@@ -735,6 +738,9 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 
   tree->balance_column = i;
   tree->column_fields[i++] = ACCOUNT_BALANCE;
+
+  tree->total_column = i;
+  tree->column_fields[i++] = ACCOUNT_TOTAL;
 
   tree->column_fields[i++] = ACCOUNT_NOTES;
 
@@ -918,8 +924,11 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
     return NULL;
 
   for (i = 0; i < tree->num_columns; i++)
+  {
     text[i] = gnc_ui_get_account_field_value_string(acc,
 						    tree->column_fields[i]);
+    text[i] = g_strdup(text[i]);
+  }
 
   text[tree->num_columns] = NULL;
 
@@ -927,13 +936,16 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 			       text, 0, NULL, NULL, NULL, NULL,
 			       FALSE, FALSE);
 
+  for (i = 0; i < tree->num_columns; i++)
+    g_free(text[i]);
+
 #if !USE_NO_COLOR
   {
     GtkStyle *style;
     double balance;
     gboolean deficit;
 
-    balance = gnc_ui_get_account_full_balance(acc);
+    balance = gnc_ui_account_get_balance(acc, FALSE);
     deficit = (balance < 0) && !DEQ(balance, 0);
 
     if (deficit)
@@ -944,6 +956,18 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
     if (style != NULL)
       gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
 				    tree->balance_column, style);
+
+    balance = gnc_ui_account_get_balance(acc, TRUE);
+    deficit = (balance < 0) && !DEQ(balance, 0);
+
+    if (deficit)
+      style = tree->deficit_style;
+    else
+      style = gtk_widget_get_style(GTK_WIDGET(tree));
+
+    if (style != NULL)
+      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
+				    tree->total_column, style);
   }
 #endif
 

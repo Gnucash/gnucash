@@ -97,14 +97,15 @@ the account instead of opening a register." #f))
  (gnc:make-list-option
   "Main Window" "Account fields to display"
   "c" ""
-  (list 'description 'balance)
+  (list 'description 'total)
   (list #(type "Type" "")
         #(code "Code" "")
         #(description "Description" "")
         #(notes "Notes" "")
         #(currency "Currency" "")
         #(security "Security" "")
-        #(balance "Balance" ""))))
+        #(balance "Balance" "")
+        #(total "Total" ""))))
 
 
 ;; International options

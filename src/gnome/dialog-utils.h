@@ -80,8 +80,8 @@ enum
   ACCOUNT_NOTES,
   ACCOUNT_CURRENCY,
   ACCOUNT_SECURITY,
-  ACCOUNT_BALANCE, /* including children, with sign reversal
-		      for income/expense */
+  ACCOUNT_BALANCE, /* with sign reversal */
+  ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
   NUM_ACCOUNT_FIELDS
 };
 
@@ -106,7 +106,7 @@ char * gnc_ui_get_account_field_name(int field);
 
 char * gnc_ui_get_account_field_value_string(Account *account, int field);
 
-double gnc_ui_get_account_full_balance(Account *account);
+double gnc_ui_account_get_balance(Account *account, gboolean include_children);
 
 GtkWidget * gnc_ui_notes_frame_create(GtkEditable **notes_entry);
 

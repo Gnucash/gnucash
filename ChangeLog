@@ -1,3 +1,18 @@
+2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/prefs.scm: make the default field types be description
+ 	and total
+
+	* src/gnome/window-main.c (gnc_configure_account_tree): set the
+	state of the total field
+
+	* src/gnome/account-tree.c: add in the new total field
+
+	* src/gnome/dialog-utils.c: add the new account field key
+ 	ACCOUNT_TOTAL. This key refers to the account's balance plus the
+ 	balances of all children. The ACCOUNT_BALANCE key now refers to
+ 	the balance of the account itself, without children.
+
 2000-04-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/balance-and-pnl.scm: remove the report description.

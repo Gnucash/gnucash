@@ -595,6 +595,9 @@ char * gnc_ui_get_account_field_name(int field)
     case ACCOUNT_BALANCE :
       return BALN_STR;
       break;
+    case ACCOUNT_TOTAL :
+      return TOTAL_STR;
+      break;
   }
 
   assert(0);
@@ -603,24 +606,25 @@ char * gnc_ui_get_account_field_name(int field)
 
 
 double
-gnc_ui_get_account_full_balance(Account *account)
+gnc_ui_account_get_balance(Account *account, gboolean include_children)
 {
-  AccountGroup *acc_children;
   double balance;
-  int type;
 
-  assert(account != NULL);
+  if (account == NULL)
+    return 0.0;
 
-  acc_children = xaccAccountGetChildren (account);
-  type = xaccAccountGetType(account);
   balance = xaccAccountGetBalance (account);
 
-  /* if the account has children, add in their balance */
-  if (acc_children)
-    balance += xaccGroupGetBalance(acc_children);
+  if (include_children)
+  {
+    AccountGroup *children;
+
+    children = xaccAccountGetChildren (account);
+    balance += xaccGroupGetBalance (children);
+  }
 
   /* reverse sign if needed */
-  if (gnc_reverse_balance(account))
+  if (gnc_reverse_balance (account))
     balance = -balance;
 
   return balance;
@@ -629,7 +633,9 @@ gnc_ui_get_account_full_balance(Account *account)
 
 char * gnc_ui_get_account_field_value_string(Account *account, int field)
 {
-  assert(account != NULL);
+  if (account == NULL)
+    return NULL;
+
   assert((field >= 0) && (field < NUM_ACCOUNT_FIELDS));
 
   switch (field)
@@ -657,7 +663,14 @@ char * gnc_ui_get_account_field_value_string(Account *account, int field)
       break;
     case ACCOUNT_BALANCE :
       {
-	double balance = gnc_ui_get_account_full_balance(account);
+        double balance = gnc_ui_account_get_balance(account, FALSE);
+
+	return xaccPrintAmount(balance, PRTSYM | PRTSEP);
+      }
+      break;
+    case ACCOUNT_TOTAL :
+      {
+	double balance = gnc_ui_account_get_balance(account, TRUE);
 
 	return xaccPrintAmount(balance, PRTSYM | PRTSEP);
       }
