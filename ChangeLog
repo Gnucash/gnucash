@@ -1,3 +1,7 @@
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* Luigi Ballabio's automake patch to gnucash.m4
+
 2004-05-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-match-map.c
