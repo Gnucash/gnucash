@@ -10,8 +10,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 /*
@@ -183,7 +187,7 @@ style_layout_info_destroy (CellLayoutInfo *li)
         int i, j;
 
         for (i = 0; i < li->nrows; i++) {
-                
+
                 for (j = 0; j < li->ncols; j++) {
                         if (li->string[i][j])
                                 g_free (li->string[i][j]);
@@ -1071,7 +1075,9 @@ compute_cell_origins_y (CellDimensions *dimensions)
 }
 
 static void
-style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_info, CellDimensions *dimensions, int width)
+style_recompute_layout_dimensions (GnucashSheet *sheet,
+                                   CellLayoutInfo *layout_info,
+                                   CellDimensions *dimensions, int width)
 {
         int i;
         int ideal_width;
@@ -1083,10 +1089,12 @@ style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_i
         /* First set the top rows */
         set_dimensions_pass_one (sheet, layout_info, dimensions, 0);
         set_dimensions_pass_two (sheet, layout_info, dimensions, 0);
-        set_dimensions_pass_three (sheet, layout_info, dimensions, 0, ideal_width);
+        set_dimensions_pass_three (sheet, layout_info, dimensions, 0,
+                                   ideal_width);
 
         /* style->dimensions->width is fixed now */
-        dimensions->width = compute_row_width (dimensions, 0, 0, dimensions->ncols-1);
+        dimensions->width = compute_row_width (dimensions, 0, 0,
+                                               dimensions->ncols-1);
         compute_cell_origins_x (dimensions, 0);
 
         /*  For now, let's treat the other rows as ALIGNED_ cells only */
@@ -1102,7 +1110,9 @@ style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_i
 
 #if 0
 static void
-sheet_recompute_style_dimensions_internal (gpointer _key, gpointer _layout_info, gpointer _data)
+sheet_recompute_style_dimensions_internal (gpointer _key,
+                                           gpointer _layout_info,
+                                           gpointer _data)
 {
         gchar *key = _key;
         CellLayoutInfo *layout_info = _layout_info;
@@ -1265,7 +1275,7 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
         for (i = 0; i < style->nrows; i++) {
                 for (j = 0; j < style->ncols; j++) {
                         type = cellblock->cell_types[i][j];
-                        
+
                         style->widths[i][j] = cellblock->widths[j];
 
                         style->fonts[i][j] = NULL;
@@ -1337,7 +1347,8 @@ gnucash_style_set_borders (SheetBlockStyle *style, int border)
 
         for (row  = 0; row < style->nrows; row++) {
                 for (col = 0; col < style->ncols; col++)
-                        gnucash_style_set_cell_borders (style, row, col, border);
+                        gnucash_style_set_cell_borders (style, row, col,
+                                                        border);
                 
                 style->borders[row][0] |= STYLE_BORDER_LEFT;
                 style->borders[row][style->ncols - 1] |= STYLE_BORDER_RIGHT;
@@ -1409,8 +1420,9 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
 /* FIXME:  maybe we can precompute these for each style */
 void
 gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
-                                           gint cell_row, gint cell_col,
-                                           gint *x, gint *y, gint *w, gint *h)
+                                               gint cell_row, gint cell_col,
+                                               gint *x, gint *y,
+                                               gint *w, gint *h)
 {
         gint i;
         
