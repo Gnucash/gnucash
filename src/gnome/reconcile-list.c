@@ -844,6 +844,7 @@ void
 gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 {
   gint column;
+  gboolean sort_order;
 
   g_return_if_fail (list != NULL);
   g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
@@ -866,6 +867,9 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
   }
   list->increasing = (list->key == key) ? !list->increasing : TRUE;
   list->key = key;
+  sort_order = list->increasing;
+  if ((list->list_type == RECLIST_CREDIT) && (key == BY_AMOUNT))
+    sort_order = !sort_order;
 
   /* Set the appropriate arrow */
   gtk_arrow_set(GTK_ARROW(list->title_arrow[column]),
@@ -878,9 +882,9 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
                          (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
                          BY_NONE);
   xaccQuerySetSortIncreasing (list->query,
-			      list->increasing,
-			      list->increasing,
-			      list->increasing);
+			      sort_order,
+			      sort_order,
+			      sort_order);
 
   /*
    * Recompute the list. Is this really necessary? Why not just sort
