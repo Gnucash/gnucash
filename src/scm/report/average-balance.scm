@@ -6,8 +6,6 @@
 ;; Author makes no implicit or explicit guarantee of accuracy of 
 ;;  these calculations and accepts no responsibility for direct
 ;;  or indirect losses incurred as a result of using this software.
-;;
-;; Matt Martin <matt.martin@ieee.org>
 
 (gnc:support "report/average-balance.scm")
 (use-modules (ice-9 regex))
@@ -170,7 +168,7 @@
               (end   (cadr delta)))
           (if (null? splits)
               (begin
-                (accbal start end)
+                (accbal prevdate end)
                 '())
               (let* ((split (car splits))
                      (now   (gnc:split-get-transaction-date split)))
@@ -210,9 +208,9 @@
                      end
                      (/ (stat-accumulator 'total #f)
                         (gnc:timepair-delta start end))
-                     (min-max-accumulator 'getmin #f)
                      (min-max-accumulator 'getmax #f)
-                     (- (gl-accumulator 'debits #f) 
+                     (min-max-accumulator 'getmin #f)
+                     (- (gl-accumulator 'debits #f)
                         (gl-accumulator 'credits #f))
                      (gl-accumulator 'debits #f) 
                      (gl-accumulator 'credits #f))
