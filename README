@@ -370,7 +370,7 @@ Supported Platforms
 GnuCash 1.5.x is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, Alpha
-Solaris		      -- Sparc
+Solaris               -- Sparc
 FreeBSD               -- x86
 OpenBSD               -- x86
 
@@ -382,8 +382,8 @@ IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 
-See http://www.gnucash.org/pub/gnucash (high-bandwidth)
-or  http://linas.org/linux/gnucash (slow-www ) 
+See http://www.gnucash.org/pub/gnucash 
+or  http://www.linas.org/linux/gnucash 
 for precompiled (but *very old*) binaries for these platforms
 
 GnuCash can probably be made to work with most POSIX-ish platforms, 
@@ -396,7 +396,6 @@ Additional Download Sites
 You can also download GnuCash from:
 
   - http://download.sourceforge.net/gnucash
-  - ftp://ftp.krondo.com
 
 You can download GnuCash Solaris packages from:
 
