@@ -42,11 +42,11 @@
 #include "gnc-trace.h"
 #include "Group.h"
 
-static GtkWidget	*qof_book_merge_window = NULL;
+static GtkWidget			*qof_book_merge_window = NULL;
 GtkWidget			*druid_hierarchy_window = NULL;
 static GtkWidget	*qsf_import_merge_window = NULL;
 QofSession			*previous_session = NULL;
-gint				count = 0;
+gint					count = 0;
 qof_book_mergeData	*mergeData = NULL;
 QofSession 			*merge_session = NULL;
 QofBook				*mergeBook = NULL;
@@ -210,7 +210,7 @@ on_merge_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         user_data)
 {
 	gint result;
-    GtkWidget *top;	
+    GtkWidget *top;
     const char *message;
 
 	ENTER (" ");
@@ -413,7 +413,7 @@ gnc_ui_qsf_import_merge_druid (QofSession *original, QofSession *import)
 void
 gnc_ui_qof_book_merge_druid (void)
 {
-	if (qof_book_merge_window) { return; }
+	if (qof_book_merge_window) return;
 	/*	QofSession changes to avoid using current book */
 	gnc_engine_suspend_events ();
 	previous_session = qof_session_get_current_session();

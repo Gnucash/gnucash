@@ -361,9 +361,31 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
+/* change prototype of gnc_lot_register to return a gboolean
+and set a foreach 
+before enabling the object description. */
+/*
+static QofObject gncLotDesc =
+{
+interface_version:  QOF_OBJECT_VERSION,
+e_type:             GNC_ID_LOT,
+type_label:         "Lot",
+create:             (gpointer)gnc_lot_new,
+book_begin:         NULL,
+book_end:           NULL,
+is_dirty:           NULL,
+mark_clean:         NULL,
+foreach:            NULL,
+printable:          NULL,
+version_cmp:        NULL,
+};
+*/
+
 void gnc_lot_register (void)
 {
   static const QofParam params[] = {
+	{ LOT_TITLE, 		QOF_TYPE_STRING,	(QofAccessFunc)gnc_lot_get_title, 		(QofSetterFunc)gnc_lot_set_title },
+	{ LOT_NOTES,		QOF_TYPE_STRING,	(QofAccessFunc)gnc_lot_get_notes,		(QofSetterFunc)gnc_lot_set_notes },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
     { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
@@ -372,6 +394,9 @@ void gnc_lot_register (void)
   };
 
   qof_class_register (GNC_ID_LOT, NULL, params);
+  
+//  return qof_object_register(&gncLotDesc);
+
 }
 
 /* ========================== END OF FILE ========================= */

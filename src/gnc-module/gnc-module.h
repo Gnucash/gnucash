@@ -35,7 +35,12 @@ void            gnc_module_system_refresh(void);
 GList         * gnc_module_system_modinfo(void);
 
 /* load and unload a module.  gnc_module_system_init() must be called
- * before loading and unloading. */
+ * before loading and unloading. 
+ *
+ * Note/FIXME: There seems to be no real reason for why the argument
+ * module_name is not a const gchar?! It certainly should be const
+ * (because of passing string literals), and from a quick glance it is
+ * also only used in a const way. */
 GNCModule       gnc_module_load(gchar * module_name, gint interface);
 GNCModule       gnc_module_load_optional(gchar * module_name, gint interface);
 int             gnc_module_unload(GNCModule mod);

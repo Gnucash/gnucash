@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <gnome.h>
+#include <iconv.h>
 
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
@@ -75,6 +76,11 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc);
  * this outboxjob. */
 int
 gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose);
+
+/** Clean up the queue after executing, i.e. delete the job as good as
+    possible. */
+void
+gnc_hbci_cleanup_job(AB_BANKING *api, AB_JOB *job);
 
 /* Check int on whether some feedback should be given to the
  * user. Returns true if the HBCI action should be tried again; on the
@@ -143,5 +149,17 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans);
 
 /** Return a newly allocated string. */
 char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v);
+
+/** Returns a newly allocated gchar, converted according to the given
+   handler */
+gchar *gnc_call_iconv(iconv_t handler, const char* input);
+
+/** Returns the encoding of the current book in the format as required
+    by iconv_open(3). */
+const char *gnc_hbci_book_encoding(void);
+
+/** Returns the encoding that is required by AqBanking in the format
+    as required by iconv_open(3). */
+const char *gnc_hbci_AQBANKING_encoding(void);
 
 #endif

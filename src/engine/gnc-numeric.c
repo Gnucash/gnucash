@@ -725,6 +725,9 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   double      sigfigs;
   qofint128 nume, newm;
 
+  temp.num   = 0;
+  temp.denom = 0;
+
   if(gnc_numeric_check(in)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }

@@ -616,11 +616,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{
 	  /* If a transaction's amount doesn't match within the
 	     threshold, it's very unlikely to be the same transaction
-	     so we give it an extra -5 penality. Changed 2004-11-27:
-	     The penalty is so high that we can forget about this
-	     split anyway and skip the rest of the tests. */
-	  return;
-	  /* prob = prob-5; */
+	     so we give it an extra -5 penality */
+	  prob = prob-5;
 	  /* DEBUG("heuristics:  probability - 1 (amount)"); */
 	}
       
@@ -648,12 +645,13 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
 	  /* Extra penalty if that split lies awfully far away from
-	     the given one. Changed 2004-11-27: The penalty is so high
-	     that we can forget about this split anyway and skip the
-	     rest of the tests. */
-	  return;
-	  /* prob = prob-5; */
+	     the given one. */
+	  prob = prob-5;
 	  /*DEBUG("heuristics:  probability - 5 (date)"); */
+	  /* Changed 2005-02-21: Revert the hard-limiting behaviour
+	     back to the previous large penalty. (Changed 2004-11-27:
+	     The penalty is so high that we can forget about this
+	     split anyway and skip the rest of the tests.) */
 	}
       
       /* Check number heuristics */  
@@ -768,7 +766,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
    transaction, and find all matching splits there. */
 void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 				   gint process_threshold, 
-				   double fuzzy_amount_difference)
+				   double fuzzy_amount_difference,
+				   gint match_date_hardlimit)
 {
   GList * list_element;
   Query *query = xaccMallocQuery();
@@ -790,8 +789,8 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
     xaccQueryAddSingleAccountMatch (query, importaccount,			    
 				    QOF_QUERY_AND);
     xaccQueryAddDateMatchTT (query,
-			     TRUE, download_time - MATCH_DATE_NOT_THRESHOLD*86400/2,
-			     TRUE, download_time + MATCH_DATE_NOT_THRESHOLD*86400/2,
+			     TRUE, download_time - match_date_hardlimit*86400,
+			     TRUE, download_time + match_date_hardlimit*86400,
 			     QOF_QUERY_AND);
     list_element = xaccQueryGetSplits (query);
     /* Sigh. Doesnt help too much. We still create and run one query
@@ -1072,7 +1071,8 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
   /* Find all split matches in originating account. */
   gnc_import_find_split_matches(trans_info,  
 				gnc_import_Settings_get_display_threshold (settings),
-				gnc_import_Settings_get_fuzzy_amount (settings));
+				gnc_import_Settings_get_fuzzy_amount (settings),
+				gnc_import_Settings_get_match_date_hardlimit (settings));
   
   if (trans_info->match_list != NULL) 
     {

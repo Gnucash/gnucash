@@ -503,7 +503,7 @@ guid_new(GUID *guid)
   counter--;
 }
 
-const GUID
+GUID
 guid_new_return(void)
 {
   GUID guid;

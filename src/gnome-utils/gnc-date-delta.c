@@ -53,7 +53,7 @@ enum
   LAST_SIGNAL
 };
 
-static gint date_delta_signals [LAST_SIGNAL] = { 0 };
+static guint date_delta_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_date_delta_init       (GNCDateDelta      *gdd);

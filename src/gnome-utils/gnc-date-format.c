@@ -67,7 +67,7 @@ struct _GNCDateFormatPriv {
   GtkWidget*	label_box;
 };
 
-static gint date_format_signals [LAST_SIGNAL] = { 0 };
+static guint date_format_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_date_format_init         (GNCDateFormat      *gdf);

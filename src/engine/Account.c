@@ -1255,7 +1255,8 @@ xaccAccountSetDescription (Account *acc, const char *str)
    xaccAccountCommitEdit(acc);
 }
 
-void qofAccountSetParent (Account *acc, QofEntity *parent) 
+static void
+qofAccountSetParent (Account *acc, QofEntity *parent) 
 {
 	Account *parent_acc;
 	

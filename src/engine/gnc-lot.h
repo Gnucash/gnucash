@@ -63,6 +63,7 @@
 #include "gnc-numeric.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofobject.h"
 
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
@@ -135,7 +136,8 @@ KvpFrame * gnc_lot_get_slots (GNCLot *);
 
 #define LOT_IS_CLOSED	"is-closed?"
 #define LOT_BALANCE	"balance"
-
+#define LOT_TITLE		"lot-title"
+#define LOT_NOTES		"notes"
 #endif /* GNC_LOT_H */
 /** @} */
 /** @} */

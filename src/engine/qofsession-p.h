@@ -32,18 +32,20 @@
 #include "qofbook.h"
 #include "qofsession.h"
 
+/** \struct QofSession
+*/
 struct _QofSession
 {
-  /* A book holds pointers to the various types of datasets used
+  /** A book holds pointers to the various types of datasets used
    * by GnuCash.  A session may have open multiple books.  */
   GList *books;
 
-  /* The requested book id, in the form or a URI, such as
+  /** The requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
    */
   char *book_id;
 
-  /* If any book subroutine failed, this records the failure reason 
+  /** If any book subroutine failed, this records the failure reason 
    * (file not found, etc).
    * This is a 'stack' that is one deep.  (Should be deeper ??)
    * FIXME: Each backend has its own error stack. The session
@@ -54,7 +56,7 @@ struct _QofSession
   char *error_message;
 
   /* ---------------------------------------------------- */
-  /* Pointer to the backend that is actually used to move data
+  /** Pointer to the backend that is actually used to move data
    * between the persistant store and the local engine.  */
   QofBackend *backend;
 };
@@ -68,4 +70,3 @@ void qof_session_push_error (QofSession *session, QofBackendError err,
 QofBackend* gncBackendInit_file(const char *book_id, void *data);
 
 #endif
-

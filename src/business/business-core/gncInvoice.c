@@ -855,23 +855,23 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
 	if (accumulatesplits) {
-	    gncAccountValueAdd (splitinfo, this_acc, value);
+	    splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
 	} else {
-		Split *split;
+	  Split *split;
 
-		split = xaccMallocSplit (invoice->inst.book);
-		/* set action and memo? */
+	  split = xaccMallocSplit (invoice->inst.book);
+	  /* set action and memo? */
 
-		xaccSplitSetMemo (split, gncEntryGetDescription (entry));
-		xaccSplitSetAction (split, type);
+	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
+	  xaccSplitSetAction (split, type);
 
-		xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
-				: value),
+	  xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
+					 : value),
 				 invoice->currency);
-       	xaccAccountBeginEdit (this_acc);
-        xaccAccountInsertSplit (this_acc, split);
-        xaccAccountCommitEdit (this_acc);
-        xaccTransAppendSplit (txn, split);
+	  xaccAccountBeginEdit (this_acc);
+	  xaccAccountInsertSplit (this_acc, split);
+	  xaccAccountCommitEdit (this_acc);
+	  xaccTransAppendSplit (txn, split);
 	}
 
 	/* If there is a credit-card account, and this is a CCard

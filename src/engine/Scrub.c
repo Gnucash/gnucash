@@ -573,16 +573,21 @@ xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
   }
   else if (!gnc_commodity_equiv (retval,trans->common_currency))
   {
-    PWARN ("expected common currency %s but found %s\n",
+    char guid_str[GUID_ENCODING_LENGTH+1];
+    guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+    PWARN ("expected common currency %s but found %s in txn %s\n",
            gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (retval));
+           gnc_commodity_get_unique_name (retval), guid_str);
   }
 
   if (NULL == retval)
   {
      /* In every situation I can think of, this routine should return 
       * common currency.  So make note of this ... */
-     PWARN ("unable to find a common currency, and that is strange.");
+     char guid_str[GUID_ENCODING_LENGTH+1];
+     guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+     PWARN ("unable to find a common currency in txn %s, and that is strange.",
+	    guid_str);
   }
 
   return retval;
@@ -623,7 +628,11 @@ xaccTransScrubCurrency (Transaction *trans)
     else
     {
       SplitList *node;
-      PWARN ("no common transaction currency found for trans=\"%s\"", trans->description);
+      char guid_str[GUID_ENCODING_LENGTH+1];
+      guid_to_string_buff(xaccTransGetGUID(trans), guid_str);
+      PWARN ("no common transaction currency found for trans=\"%s\" (%s)",
+	     trans->description, guid_str);
+
       for (node=trans->splits; node; node=node->next)
       {
         Split *split = node->data;

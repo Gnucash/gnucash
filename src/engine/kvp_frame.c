@@ -498,6 +498,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
   KvpValue * old_value;
   char *last_key;
 
+  last_key = NULL;
   if (new_value)
   {
      frame = get_trailer_make (frame, key_path, &last_key);

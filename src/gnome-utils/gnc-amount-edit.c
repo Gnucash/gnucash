@@ -49,7 +49,7 @@ enum
 };
 
 
-static gint amount_edit_signals [LAST_SIGNAL] = { 0 };
+static guint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_amount_edit_init         (GNCAmountEdit      *gae);

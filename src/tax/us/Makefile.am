@@ -17,7 +17,7 @@ AM_CFLAGS = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = us.scm
+SCM_FILE_LINKS = us.scm de_DE.scm
 endif
 
 .scm-links:
@@ -34,10 +34,10 @@ endif
 noinst_DATA = .scm-links
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/tax
-gncscmmod_DATA = us.scm
+gncscmmod_DATA = us.scm de_DE.scm
 
 gncscmdir = ${GNC_SHAREDIR}/scm
-gncscm_DATA = txf.scm txf-help.scm 
+gncscm_DATA = txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm 
 
 EXTRA_DIST = \
   ${gncscmmod_DATA} \

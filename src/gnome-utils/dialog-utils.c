@@ -22,11 +22,14 @@
  *                                                                  *
 \********************************************************************/
 
+#define _GNU_SOURCE 1  /* necessary to get RTLD_DEFAULT on linux */
+
 #include "config.h"
 
 #include <glade/glade.h>
 #include <gnome.h>
 #include <gmodule.h>
+#include <dlfcn.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -37,7 +40,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
-
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
@@ -954,20 +956,23 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gboolean signal_after,
 				gpointer user_data)
 {
-  gpointer ptr;
   GCallback func;
+  GtkSignalFunc *p_func = &func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */
     allsymbols = g_module_open(NULL, 0);
   }
 
-  if (!g_module_symbol(allsymbols, handler_name, &ptr)) {
-    g_warning("could not find signal handler '%s'.", handler_name);
-    return;
+  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func)) {
+    /* Fallback to dlsym -- necessary for *BSD linkers */
+    func = dlsym(RTLD_DEFAULT, handler_name);
+    if (func == NULL) {
+      g_warning("ggaff: could not find signal handler '%s'.", handler_name);
+      return;
+    }
   }
 
-  func = G_CALLBACK(ptr);
   if (other_object) {
     if (signal_after)
       g_signal_connect_object (signal_object, signal_name, func,

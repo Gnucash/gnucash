@@ -25,6 +25,8 @@
 
 #include <gnome.h>
 #include <errno.h>
+#include <iconv.h>
+#include <langinfo.h>
 #include <gwenhywfar/directory.h>
 
 #include "gnc-ui.h"
@@ -134,7 +136,7 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 
     if (!hbci_acc && bankcode && (strlen(bankcode)>0) &&
 	accountid && (strlen(accountid) > 0)) {
-      printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid);
+      /* printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid); */
       hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
     }
     /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
@@ -237,6 +239,18 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 #endif
 
   return cause;
+}
+
+void
+gnc_hbci_cleanup_job(AB_BANKING *api, AB_JOB *job)
+{
+  if (AB_Job_GetStatus(job) == AB_Job_StatusFinished) {
+    AB_Banking_DelFinishedJob(api, job);
+  } else if (AB_Job_GetStatus(job) == AB_Job_StatusPending) {
+    AB_Banking_DelPendingJob(api, job);
+  }
+  /* Martin assured me that there will be no job in the queue after
+     ExecuteQueue, so we don't need to remove it from the queue. */
 }
 
 
@@ -463,16 +477,22 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   }
 }
 
+struct cb_struct {
+  gchar **result;
+  iconv_t gnc_iconv_handler;
+};
+
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
 static void *gnc_list_string_cb (const char *string, void *user_data)
 {
-  gchar **res = user_data;
+  struct cb_struct *u = user_data;
+  gchar **res = u->result;
   gchar *tmp1, *tmp2;
 
   if (!string) return NULL;
-  tmp1 = g_strdup (string);
-  g_strstrip (tmp1);
+  tmp1 = gnc_call_iconv(u->gnc_iconv_handler, string);
 
+  g_strstrip (tmp1);
   if (strlen (tmp1) > 0) {
     if (*res != NULL) {
       /* The " " is the separating string in between each two strings. */
@@ -499,19 +519,27 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   char *g_descr;
   const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
+  struct cb_struct cb_object;
+
+  cb_object.gnc_iconv_handler = 
+    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
 
   /* Don't use list_string_concat_delim here since we need to
      g_strstrip every single element of the string list, which is
      only done in our callback gnc_list_string_cb. The separator is
      also set there. */
+  cb_object.result = &h_descr;
   if (h_purpose)
     GWEN_StringList_ForEach (h_purpose,
 			     &gnc_list_string_cb,
-			     &h_descr);
+			     &cb_object);
+
+  cb_object.result = &othername;
   if (h_remotename)
     GWEN_StringList_ForEach (h_remotename,
 			     &gnc_list_string_cb,
-			     &othername);
+			     &cb_object);
   /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
@@ -527,6 +555,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
+  iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
   return g_descr;
@@ -833,4 +862,37 @@ char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
   else
     sprintf(tmp, "%.2f", 0.0);
   return g_strdup(tmp);
+}
+
+/* Returns a newly allocated gchar, converted according to the given
+   handler */
+gchar *gnc_call_iconv(iconv_t handler, const char* input)
+{
+  char *inbuffer = (char*)input;
+  char *outbuffer, *outbufferstart;
+  int inbytes, outbytes;
+
+  inbytes = strlen(inbuffer);
+  outbytes = inbytes + 2;
+  outbufferstart = g_strndup(inbuffer, outbytes);
+  outbuffer = outbufferstart;
+  iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
+  if (outbytes > 0) 
+    *outbuffer = '\0';
+  return outbufferstart;
+}
+
+const char *gnc_hbci_book_encoding()
+{
+#if HAVE_LANGINFO_CODESET
+  char* encoding = nl_langinfo(CODESET);
+#else
+  char* encoding = "ISO8859-15";
+#endif
+  return encoding;
+}
+
+const char *gnc_hbci_AQBANKING_encoding()
+{
+  return "UTF-8";
 }

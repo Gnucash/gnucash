@@ -135,15 +135,9 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	    xaccTransBeginEdit(gtrans);
 	    xaccTransDestroy(gtrans);
 	    xaccTransCommitEdit(gtrans);
-
-/* 	    AB_Banking_DequeueJob(api, job); */
-/* 	    AB_Banking_DelFinishedJob(api, job); */
-/* 	    AB_Banking_DelPendingJob(api, job); */
 	  }
 	  
-	  AB_Banking_DequeueJob(api, job);
-	  AB_Banking_DelFinishedJob(api, job);
-	  AB_Banking_DelPendingJob(api, job);
+	  gnc_hbci_cleanup_job(api, job);
 	} /* result == 0 */
 	else {
 	  /* huh? Only result == 0 should be possible. Simply ignore

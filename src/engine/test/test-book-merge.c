@@ -450,11 +450,11 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 		/* do NOT use as_string for calculations or set_fcn */
 		importstring = qof_book_merge_param_as_string(eachParam, rule->importEnt);
 		do_test ((importstring != NULL), "loop:#16 import param_as_string is null");
-//		printf("importstring %s\t%s Type\n", importstring, eachParam->param_type);
+/*		printf("importstring %s\t%s Type\n", importstring, eachParam->param_type);*/
 		if(!skip_target) {
 		targetstring = qof_book_merge_param_as_string(eachParam, rule->targetEnt);
 		do_test ((targetstring != NULL), "loop:#17 target param_as_string is null");
-//		printf("targetstring %s\t%s Type\n", targetstring, eachParam->param_type);
+/*		printf("targetstring %s\t%s Type\n", targetstring, eachParam->param_type);*/
 			}
 		/* add your own code for user involvement here. */
 		/* either store the importstring and targetstring values and display separately,

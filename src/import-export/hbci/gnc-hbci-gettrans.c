@@ -107,11 +107,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     AB_Banking_EnqueueJob(api, job);
 
     /* Execute Outbox. */
-    if (!gnc_AB_BANKING_execute (parent, api, job, interactor)) {
+    if (!gnc_AB_BANKING_execute (parent, api, job, interactor) ||
+	(AB_Job_GetStatus(job) == AB_Job_StatusError) ||
+	GNCInteractor_hadErrors (interactor)) {
       /* AB_BANKING_executeOutbox failed. */
-      AB_Banking_DequeueJob(api, job);
-      AB_Banking_DelFinishedJob(api, job);
-      AB_Banking_DelPendingJob(api, job);
+      gnc_hbci_cleanup_job(api, job);
       return;
     }
 
@@ -122,12 +122,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     gnc_hbci_gettrans_final(parent, gnc_acc, job, FALSE);
 
     /* Clean up behind ourself. */
-    AB_Banking_DequeueJob(api, job);
-    AB_Banking_DelFinishedJob(api, job);
-    AB_Banking_DelPendingJob(api, job);
+    gnc_hbci_cleanup_job(api, job);
     gnc_AB_BANKING_fini (api);
     GNCInteractor_hide (interactor);
-    GWEN_Time_free (from_date);
+    if (from_date) 
+      GWEN_Time_free (from_date);
     GWEN_Time_free (to_date);
   }
 }
@@ -152,35 +151,36 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
   last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
   if (last_timespec.tv_sec == 0) {
     use_last_date = FALSE;
-      timespecFromTime_t (&last_timespec, now);
-    }
-    timespecFromTime_t (&until_timespec, now);
+    timespecFromTime_t (&last_timespec, now);
+  }
+  timespecFromTime_t (&until_timespec, now);
 
-    /* Let the user choose the date range of retrieval */
-    if (!gnc_hbci_enter_daterange (parent, NULL, 
-				   &last_timespec, 
-				   &use_last_date, &use_earliest_date,
-				   &until_timespec, &use_until_now))
-      return FALSE;
+  /* Let the user choose the date range of retrieval */
+  if (!gnc_hbci_enter_daterange (parent, NULL, 
+				 &last_timespec, 
+				 &use_last_date, &use_earliest_date,
+				 &until_timespec, &use_until_now))
+    return FALSE;
 
-    /*printf("Retrieving transactions from date %s to date %s. \n",
-	   ctime(&()))*/
+  /*printf("Retrieving transactions from date %s to date %s. \n",
+    ctime(&()))*/
     
-    /* Now calculate from date */
-    if (use_earliest_date)
-      *from_date = GWEN_Time_fromSeconds(0);
-    else {
-      if (use_last_date)
-	last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
-      *from_date = GWEN_Time_fromSeconds(timespecToTime_t(last_timespec));
-    }
+  /* Now calculate from date */
+  if (use_earliest_date)
+    *from_date = NULL;
+  /* for an old version this was: from_date = GWEN_Time_fromSeconds(0); */
+  else {
+    if (use_last_date)
+      last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
+    *from_date = GWEN_Time_fromSeconds(timespecToTime_t(last_timespec));
+  }
 
-    /* Now calculate to date */
-    if (use_until_now)
-      timespecFromTime_t (&until_timespec, now);
-    *to_date = GWEN_Time_fromSeconds(timespecToTime_t (until_timespec));
+  /* Now calculate to date */
+  if (use_until_now)
+    timespecFromTime_t (&until_timespec, now);
+  *to_date = GWEN_Time_fromSeconds(timespecToTime_t (until_timespec));
 
-    return TRUE;
+  return TRUE;
 }
 
 
@@ -197,7 +197,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 
   trans_list = AB_JobGetTransactions_GetTransactions(trans_job);
   if (!trans_list) {
-    printf("gnc_hbci_gettrans_final: No transactions section. Response was:\n");
+    /* printf("gnc_hbci_gettrans_final: No transactions section. Response was:\n"); */
 
     gnome_ok_dialog_parented 
       (_("The HBCI import returned no transactions for the selected time period."),
@@ -208,7 +208,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
   if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
     struct trans_list_data data;
     GNCImportMainMatcher *importer_generic_gui = 
-      gnc_gen_trans_list_new(NULL, NULL, TRUE);
+      gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
 
     data.importer_generic = importer_generic_gui;
     data.gnc_acc = gnc_acc;

@@ -134,7 +134,7 @@ void guid_new(GUID *guid);
  *  CAS: huh? make that: @return guid A data structure containing a newly
  * allocated GUID.  Caller is responsible for calling guid_free().
  */
-const GUID guid_new_return(void);
+GUID guid_new_return(void);
 
 /** Returns a GUID which is guaranteed to never reference any entity. */
 /* CAS: AFAICT: this isn't really guaranteed, but it's only as likely

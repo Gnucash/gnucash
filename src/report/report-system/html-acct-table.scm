@@ -63,7 +63,7 @@
 ;; The list of accounts which are to be placed in the
 ;; gnc:html-acct-table object can be controled with the
 ;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/env/accts,
-;; and gnc:html-table-add-accts!  functions.  
+;; and gnc:html-table-add-accts! functions.  
 ;; 
 ;; The gnc:html-acct-table parameters, set with
 ;; gnc:make-html-acct-table/env and gnc:make-html-acct-table/accts/env
@@ -209,6 +209,21 @@
 ;;         the parent account of the current account, if one exists.
 ;;         #f if the current account has no parent.
 ;; 
+;;     account-guid: guid
+;; 
+;;         the guid of the account in the current row, as returned by
+;;         gnc:account-get-guid.
+;; 
+;;     account-desc: string?
+;; 
+;;         the account description of the account in the current row,
+;;         as returned by gnc:account-get-description.
+;; 
+;;     account-notes: string?
+;; 
+;;         the account notes of the account in the current row, as
+;;         returned by gnc:account-get-notes.
+;; 
 ;;     account-path: string
 ;; 
 ;;         the full name of the account in the current row. i.e., if
@@ -338,6 +353,15 @@
 ;;         releases may permit mixed-commodity accounts, so it's
 ;;         probably safest not to assume that an account contains only
 ;;         its default commodity.
+;; 
+;;     account-type: account_type
+;; 
+;;         returns the type of the account in the current row
+;; 
+;;     account-type-string: string
+;; 
+;;         returns the type of the account in the current row as a
+;;         string
 ;; 
 ;;     row-type: 'account-row 'subtotal-row 
 ;; 
@@ -638,6 +662,14 @@
 		  (account-depth acct-depth)
 		  (logical-depth logi-depth)
 		  (account-commodity (gnc:account-get-commodity acct))
+		  (account-type (gnc:account-get-type acct))
+		  ;; N.B.: gnc:account-get-type-string really should be
+		  ;; called gnc:account-type-get-string
+		  (account-type-string (gnc:account-get-type-string
+					(gnc:account-get-type acct)))
+		  (account-guid (gnc:account-get-guid acct))
+		  (account-description (gnc:account-get-description acct))
+		  (account-notes (gnc:account-get-notes acct))
 		  (account-bal (my-get-balance-nosub
 				acct start-date end-date))
 		  (recursive-bal
@@ -655,6 +687,11 @@
 			    (list 'account account)
 			    (list 'account-name account-name)
 			    (list 'account-code account-code)
+			    (list 'account-type account-type)
+			    (list 'account-type-string account-type-string)
+			    (list 'account-guid account-guid)
+			    (list 'account-description account-description)
+			    (list 'account-notes account-notes)
 			    (list 'account-path account-path)
 			    (list 'account-parent account-parent)
 			    (list 'account-children account-children)
@@ -709,8 +746,11 @@
 				 )
 	     (or (not (use-acct? acct))
 		 (not subtotal-mode)
-		 ;; ignore use-acct for subtotals...
-		 ;; (not (use-acct acct))
+		 ;; ditto that remark concerning zero recursive-bal...
+		 (and (gnc:commodity-collector-allzero? recursive-bal)
+		      (equal? zero-mode 'omit-leaf-acct))
+		 ;; ignore use-acct for subtotals...?
+		 ;; (not (use-acct? acct))
 		 (null? subaccts)
 		 (let* ((lbl-txt (gnc:make-html-text (_ "Total") " ")))
 		   (apply gnc:html-text-append! lbl-txt
@@ -803,7 +843,7 @@
   (gnc:html-table-num-rows (gnc:_html-acct-table-matrix_ acct-table)))
 
 (define (gnc:html-acct-table-num-cols acct-table)
-  (- (gnc:html-table-num-cols (gnc:_html-acct-table-matrix_ acct-table)) 1))
+  (- (gnc:html-table-num-columns (gnc:_html-acct-table-matrix_ acct-table)) 1))
 
 (define (gnc:html-acct-table-get-cell acct-table row col)
   ;; we'll only ever store one object in an html-table-cell
@@ -1009,16 +1049,16 @@
 		       'omit-bal))
 		  (bal-method
 		   ;; figure out how to calculate our balance:
-		   ;; 'immediate-bal|'recursive-bal|'omit-bal
+		   ;; 'immediate-bal|'recursive-bal ('omit-bal handled below)
 		   (or (and (equal? row-type 'subtotal-row) 'recursive-bal)
 		       (and (equal? (+ display-depth 1) display-tree-depth)
-			    (if (equal? limit-behavior 'truncate)
-				'immediate-bal
-				;; 'summarize, 'flatten, and unknown
-				;; depth limit behaviors yield
-				;; 'recursive-bal.  this is true
-				;; whether a leaf account or not.
-				'recursive-bal)
+			    (or (and (equal? limit-behavior 'summarize)
+				     'recursive-bal)
+				(and (null? children) 'immediate-bal)
+				;; otherwise, parent account at depth limit,
+				;; with either 'truncate or 'flatten...
+				parent-acct-bal-mode
+				)
 			    )
 		       (if (null? children) #f parent-acct-bal-mode)
 		       'immediate-bal

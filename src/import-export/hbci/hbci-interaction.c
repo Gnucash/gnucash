@@ -54,7 +54,12 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
-  data->gnc_iconv_handler = iconv_open("ISO8859-1", "UTF-8");
+  /* FIXME: The internal target encoding is hard-coded so far. This
+     needs to be fixed for the gnome2 version; the target encoding is
+     then probably utf-8 as well. iconv is also used in
+     gnc_hbci_descr_tognc() in gnc-hbci-utils.c. */
+  data->gnc_iconv_handler = 
+    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
   g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
@@ -107,6 +112,7 @@ static void GNCInteractor_setRunning (GNCInteractor *data)
   data->state = RUNNING;
   gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (data->close_button), FALSE);
+  data->keepAlive = TRUE;
 }
 static void GNCInteractor_setFinished (GNCInteractor *data)
 {
@@ -203,6 +209,12 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
     }
 }
 
+gboolean GNCInteractor_hadErrors (const GNCInteractor *i)
+{
+  g_assert (i);
+  return i->msgBoxError != 0;
+}
+
 /* ************************************************************ 
  */
 
@@ -256,9 +268,7 @@ gchar *gnc__extractText(const char *text)
 
 char *gnc_hbci_utf8ToLatin1(GNCInteractor *data, const char *utf)
 {
-  int inbytes, outbytes;
   char *utf8extracted, *latin1;
-  char *inbuffer, *outbuffer;
 
   g_assert(data);
   if (!utf) return g_strdup("");
@@ -267,16 +277,7 @@ char *gnc_hbci_utf8ToLatin1(GNCInteractor *data, const char *utf)
   utf8extracted = gnc__extractText(utf);
 /*   printf("Extracted \"%s\" into \"%s\"\n", utf, utf8extracted); */
 
-  inbuffer = utf8extracted;
-  inbytes = strlen(inbuffer);
-  outbytes = inbytes + 2;
-  latin1 = g_strndup(inbuffer, outbytes);
-  outbuffer = latin1;
-
-  iconv(data->gnc_iconv_handler, &inbuffer, &inbytes,
-	&outbuffer, &outbytes);
-  if (outbytes > 0)
-    *outbuffer = '\0';
+  latin1 = gnc_call_iconv(data->gnc_iconv_handler, utf8extracted);
 
 /*   printf("Converted \"%s\" into \"%s\"\n", utf8extracted, latin1); */
   g_free(utf8extracted);
@@ -306,6 +307,7 @@ static int inputBoxCB(AB_BANKING *ab,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -385,6 +387,7 @@ static int getTanCB(AB_BANKING *ab,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
+  data->msgBoxError = 0;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -494,6 +497,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
   
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -530,6 +534,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -630,8 +635,7 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 				   progress/data->action_max);
   }
 
-  keepAlive(data);
-  return 0;
+  return !keepAlive(data);
 }
 
 
@@ -655,8 +659,7 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   GNCInteractor_add_log_text (data, text);
 
   g_free(text);
-  keepAlive(data);
-  return 0;
+  return !keepAlive(data);
 }
 
 static int progressEndCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)

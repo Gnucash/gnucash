@@ -3273,7 +3273,7 @@ gboolean xaccSplitRegister (void)
 {
   static const QofParam params[] = {
     { SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
-      (QofAccessFunc)xaccSplitRetDateReconciledTS, NULL },
+	(QofAccessFunc)xaccSplitRetDateReconciledTS, 	(QofSetterFunc)xaccSplitSetDateReconciledTS },
 
     /* d-* are depricated query params, should not be used in new
      * queries, should be removed from old queries. */

@@ -313,8 +313,6 @@ qof_session_get_url (QofSession *session)
    return session->book_id;
 }
 
-/* =============================================================== */
-
 typedef struct qof_entity_copy_data {
 	QofEntity *from;
 	QofEntity *to;
