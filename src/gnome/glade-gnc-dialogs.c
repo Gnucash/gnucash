@@ -2770,7 +2770,7 @@ create_Financial_Calculator_Dialog (void)
   GtkWidget *discrete_compounding_radio;
   GtkWidget *radiobutton6;
   GtkWidget *hbox76;
-  GtkWidget *_;
+  GtkWidget *some_label;
   GtkWidget *payment_total_label;
   GtkWidget *dialog_action_area10;
   GtkWidget *schedule_button;
@@ -3229,12 +3229,12 @@ create_Financial_Calculator_Dialog (void)
   gtk_widget_show (hbox76);
   gtk_box_pack_end (GTK_BOX (vbox65), hbox76, FALSE, FALSE, 0);
 
-  _ = gtk_label_new (_("Payment Total:"));
-  gtk_widget_ref (_);
-  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "_", _,
+  some_label = gtk_label_new (_("Payment Total:"));
+  gtk_widget_ref (some_label);
+  gtk_object_set_data_full (GTK_OBJECT (Financial_Calculator_Dialog), "some_label", some_label,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (_);
-  gtk_box_pack_start (GTK_BOX (hbox76), _, FALSE, FALSE, 0);
+  gtk_widget_show (some_label);
+  gtk_box_pack_start (GTK_BOX (hbox76), some_label, FALSE, FALSE, 0);
 
   payment_total_label = gtk_label_new (_("total"));
   gtk_widget_ref (payment_total_label);

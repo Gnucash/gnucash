@@ -4762,7 +4762,7 @@ Daily (365)
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <name></name>
+	      <name>some_label</name>
 	      <label>Payment Total:</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
