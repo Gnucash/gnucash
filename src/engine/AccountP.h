@@ -42,6 +42,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "Backend.h"
 #include "GNCIdP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
@@ -203,6 +204,13 @@ void xaccFreeAccount (Account *account);
  */
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
+
+/*
+ * The xaccGetAccountBackend() subroutine will find the
+ *    persistent-data storage backend associated with this account.
+ */
+
+Backend * xaccAccountGetBackend (Account *account);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

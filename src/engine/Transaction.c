@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
@@ -3288,6 +3289,18 @@ xaccTransGetVoidTime(const Transaction *tr)
   return void_time;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+Backend *
+xaccTransactionGetBackend (Transaction *trans)
+{
+  if (!trans || !trans->book) return NULL;
+  return trans->book->backend;
+}
+
+/********************************************************************\
+\********************************************************************/
 /* gncObject function implementation */
 static void
 do_foreach (GNCBook *book, GNCIdType type, foreachObjectCB cb, gpointer ud)

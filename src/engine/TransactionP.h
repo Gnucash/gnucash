@@ -45,10 +45,13 @@
 #ifndef XACC_TRANSACTION_P_H
 #define XACC_TRANSACTION_P_H
 
+#include "config.h"
+
 #include <time.h>
 #include <glib.h>
 
-#include "config.h"
+#include "Backend.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
 #include "GNCIdP.h"
@@ -247,5 +250,11 @@ gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
 gboolean xaccSplitRegister (void);
 gboolean xaccTransRegister (void);
 
+/*
+ * The xaccTransactionGetBackend() subroutine will find the
+ *    persistent-data storage backend associated with this 
+ *    transaction.
+ */
+Backend * xaccTransactionGetBackend (Transaction *trans);
 
 #endif /* XACC_TRANSACTION_P_H */

@@ -32,7 +32,11 @@
 #ifndef GNC_SX_BOOK_H
 #define GNC_SX_BOOK_H
 
+#include "config.h"
+
 #include <glib.h>
+
+#include "gnc-book.h"
 #include "gnc-engine.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;

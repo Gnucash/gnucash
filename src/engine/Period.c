@@ -40,6 +40,7 @@ Open questions: how do we deal with the backends ???
 #include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
 #include "Period.h"
@@ -202,8 +203,8 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write an account-group merge 
     * routine, and it is not needed for the current usage. */
-   src_grp = gnc_book_get_group (src_book);
-   dst_grp = gnc_book_get_group (dest_book);
+   src_grp = xaccGetAccountGroup (src_book);
+   dst_grp = xaccGetAccountGroup (dest_book);
    xaccAccountGroupBeginEdit (dst_grp);
    xaccAccountGroupBeginEdit (src_grp);
    xaccGroupCopyGroup (dst_grp, src_grp);
@@ -488,7 +489,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */
-   add_closing_balances (gnc_book_get_group(closing_book), 
+   add_closing_balances (xaccGetAccountGroup(closing_book), 
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);

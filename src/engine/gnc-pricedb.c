@@ -1913,6 +1913,15 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 }
 
 /* ==================================================================== */
+
+Backend *
+xaccPriceDBGetBackend (GNCPriceDB *prdb)
+{
+  if (!prdb || !prdb->book) return NULL;
+  return prdb->book->backend;
+}
+
+/* ==================================================================== */
 /* gncObject function implementation and registration */
 
 static void 

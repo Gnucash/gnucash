@@ -90,12 +90,17 @@ void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
 
 /*
  * The xaccFreeAccountGroup() subroutine will  ...
- * 
  */
 void     xaccFreeAccountGroup (AccountGroup *account_group);
 
 /* Set the top-level group in the book */
 void     xaccSetAccountGroup (GNCBook *book, AccountGroup *grp);
+
+/*
+ * The xaccGroupGetBackend() subroutine will find the
+ *    persistent-data storage backend associated with this account group.
+ */
+Backend * xaccGroupGetBackend (AccountGroup *group);
 
 gboolean      xaccGroupRegister (void);
 

@@ -29,6 +29,7 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
@@ -1274,6 +1275,16 @@ xaccGroupForEachAccount (AccountGroup *grp,
   }
 
   return(NULL);
+}
+
+/* ============================================================== */
+
+Backend *
+xaccGroupGetBackend (AccountGroup *grp)
+{
+  grp = xaccGroupGetRoot (grp);
+  if (!grp || !grp->book) return NULL;
+  return grp->book->backend;
 }
 
 /* ============================================================== */

@@ -2,6 +2,7 @@
 #include <glib.h>
 #include <libguile.h>
 
+#include "Group.h"
 #include "GroupP.h"
 #include "GNCIdP.h"
 #include "TransLog.h"

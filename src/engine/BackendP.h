@@ -42,12 +42,10 @@
 
 #include "config.h"
 
-#include "Account.h"
 #include "Backend.h"
-#include "Group.h"
 #include "Query.h"
-#include "Transaction.h"
 #include "gnc-session.h"
+
 #include "gnc-pricedb.h"
 
 /*
@@ -283,18 +281,11 @@ void xaccBackendSetMessage(Backend *be, const char *format, ...);
 char * xaccBackendGetMessage(Backend *be);
 
 /*
- * The xaccGetAccountBackend() subroutine will find the
- *    persistent-data storage backend associated with this account.
- *
- * The xaccGetTransactionBackend() subroutine does the same, for a given
- *    transaction.
+ * The xaccGNCBookGetBackend() subroutine will find the
+ *    persistent-data storage backend associated with 
+ *    this book.
  */
-
-Backend * xaccAccountGetBackend (Account *account);
-Backend * xaccTransactionGetBackend (Transaction *trans);
-Backend * xaccGroupGetBackend (AccountGroup *group);
 Backend * xaccGNCBookGetBackend (GNCBook *book);
-Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
 
 void xaccInitBackend(Backend *be);
 

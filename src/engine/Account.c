@@ -29,8 +29,10 @@
 #include <string.h>
 
 #include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
+#include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-book.h"
@@ -3144,6 +3146,15 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
   finder_help_function(account, description, NULL, &trans );
 
   return( trans );
+}
+
+/* ================================================================ */
+
+Backend *
+xaccAccountGetBackend (Account * acc)
+{
+  if (!acc || !acc->book) return NULL;
+  return acc->book->backend;
 }
 
 /* ================================================================ */

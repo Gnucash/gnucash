@@ -45,14 +45,12 @@
 
 #include "BackendP.h"
 #include "TransLog.h"
-#include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "gnc-date.h"
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-module.h"
 #include "gnc-session-p.h"
+#include "gnc-trace.h"
 
 static GNCSession * current_session = NULL;
 static short module = MOD_IO;
@@ -515,31 +513,6 @@ gnc_session_load (GNCSession *session,
       gnc_book_mark_saved (newbook);
 
       xaccLogEnable();
-  }
-
-  /* Technically, the following tests can never succeed, because a group
-   * and pricedb is always allocated when a book is created.  So even
-   * if the load fails, there will be a topgroup and a pricedb. */
-  if (!gnc_book_get_group (newbook))
-  {
-      /* Something broke, put back the old stuff */
-      gnc_book_set_backend (newbook, NULL);
-      gnc_book_destroy (newbook);
-      g_list_free (session->books);
-      session->books = oldbooks;
-      PERR("topgroup NULL");
-      return;
-  }
-  
-  if (!gnc_book_get_pricedb (newbook))
-  {
-      /* Something broke, put back the old stuff */
-      gnc_book_set_backend (newbook, NULL);
-      gnc_book_destroy (newbook);
-      g_list_free (session->books);
-      session->books = oldbooks;
-      PERR("pricedb NULL");
-      return;
   }
 
   err = gnc_session_get_error(session);
