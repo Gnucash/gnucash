@@ -102,8 +102,8 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
@@ -201,7 +201,7 @@ mark_potential_quote(Split *s, double price, double quantity)
 
 static gboolean
 cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
-                                            GNCBook *book)
+                                            QofBook *book)
 {
   GSList *item = potential_quotes;
 
@@ -253,15 +253,15 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 }
 
 /** PROTOTYPES ******************************************************/
-static Account     *locateAccount (int acc_id, GNCBook *book); 
+static Account     *locateAccount (int acc_id, QofBook *book); 
 
-static AccountGroup *readGroup( GNCBook *, int fd, Account *, int token );
-static Account      *readAccount( GNCBook *book, int fd,
+static AccountGroup *readGroup( QofBook *, int fd, Account *, int token );
+static Account      *readAccount( QofBook *book, int fd,
                                   AccountGroup *, int token );
 static gboolean      readAccInfo( int fd, Account *, int token );
-static Transaction  *readTransaction( GNCBook *book,
+static Transaction  *readTransaction( QofBook *book,
                                       int fd, Account *, int token );
-static Split        *readSplit( GNCBook *book, int fd, int token );
+static Split        *readSplit( QofBook *book, int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
@@ -376,7 +376,7 @@ xaccFlipLongLong (gint64 val)
  ********************************************************************/
 
 static gnc_commodity * 
-gnc_commodity_import_legacy(GNCBook *book, const char * currency_name)
+gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
 {
   gnc_commodity_table *table;
   gnc_commodity * old = NULL;
@@ -416,7 +416,7 @@ gnc_commodity_import_legacy(GNCBook *book, const char * currency_name)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static gboolean
-gnc_load_financials_from_fd(GNCBook *book, int fd)
+gnc_load_financials_from_fd(QofBook *book, int fd)
 {
   int  err=0;
   int  token=0;
@@ -524,7 +524,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
 
   /* mark the newly read book as saved, since the act of putting it
    * together will have caused it to be marked up as not-saved.  */
-  gnc_book_mark_saved(book);
+  qof_book_mark_saved(book);
 
   return (error_code == ERR_BACKEND_NO_ERR);
 }
@@ -570,7 +570,7 @@ gnc_session_load_from_binfile(GNCSession *session)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static AccountGroup *
-readGroup (GNCBook *book, int fd, Account *aparent, int token)
+readGroup (QofBook *book, int fd, Account *aparent, int token)
   {
   int  numAcc;
   int  err=0;
@@ -625,7 +625,7 @@ readGroup (GNCBook *book, int fd, Account *aparent, int token)
  * Return: error value, 0 if OK, else -1                            * 
 \********************************************************************/
 static Account *
-readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
+readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
 {
   int err=0;
   int i;
@@ -819,7 +819,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
  */
 
 static Account *
-locateAccount (int acc_id, GNCBook *book)
+locateAccount (int acc_id, QofBook *book)
 {
    Account * acc;
    /* negative account ids denote no account */
@@ -921,7 +921,7 @@ xaccTransSetAction (Transaction *trans, const char *action)
 \********************************************************************/
 
 static Transaction *
-readTransaction(GNCBook *book, int fd, Account *acc, int revision)
+readTransaction(QofBook *book, int fd, Account *acc, int revision)
   {
   int err=0;
   int acc_id;
@@ -1257,7 +1257,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
 \********************************************************************/
 
 static Split *
-readSplit ( GNCBook *book, int fd, int token )
+readSplit ( QofBook *book, int fd, int token )
 {
   Account *peer_acc;
   Split *split;

@@ -44,10 +44,10 @@
 #include "io-utils.h"
 
 #include "sixtp-dom-parsers.h"
-#include "gnc-book-p.h"
-#include "gnc-book.h"
 #include "gnc-engine-util.h"
 #include "Group.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 /* non-static because it's used in io-gncxml-v2.c */
 const gchar *gnc_v2_book_version_string = "2.0.0";
@@ -104,19 +104,19 @@ traverse_txns (Transaction *txn, gpointer data)
 /* ================================================================ */
 
 xmlNodePtr
-gnc_book_dom_tree_create(GNCBook *book)
+gnc_book_dom_tree_create(QofBook *book)
 {
     xmlNodePtr ret;
 
     ret = xmlNewNode(NULL, gnc_book_string);
     xmlSetProp(ret, "version", gnc_v2_book_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree(book_id_string, gnc_book_get_guid(book)));
+    xmlAddChild(ret, guid_to_dom_tree(book_id_string, qof_book_get_guid(book)));
 
-    if(gnc_book_get_slots(book))
+    if(qof_book_get_slots(book))
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                                                   gnc_book_get_slots(book));
+                                                   qof_book_get_slots(book));
         if(kvpnode)
         {
             xmlAddChild(ret, kvpnode);
@@ -152,19 +152,19 @@ gnc_book_dom_tree_create(GNCBook *book)
  * and slots, everythign else is handled elsewehere */
 
 void
-write_book_parts(FILE *out, GNCBook *book)
+write_book_parts(FILE *out, QofBook *book)
 {
     xmlNodePtr domnode;
 
-    domnode = guid_to_dom_tree(book_id_string, gnc_book_get_guid(book));
+    domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
     fprintf(out, "\n");
     xmlFreeNode (domnode);
 
-    if(gnc_book_get_slots(book))
+    if(qof_book_get_slots(book))
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                                                   gnc_book_get_slots(book));
+                                                   qof_book_get_slots(book));
         if(kvpnode)
         {
             xmlElemDump(out, NULL, kvpnode);
@@ -179,11 +179,11 @@ write_book_parts(FILE *out, GNCBook *book)
 static gboolean
 book_id_handler (xmlNodePtr node, gpointer book_pdata)
 {
-    GNCBook *book = book_pdata;
+    QofBook *book = book_pdata;
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    gnc_book_set_guid(book, *guid);
+    qof_book_set_guid(book, *guid);
 
     g_free(guid);
     
@@ -193,12 +193,12 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
 static gboolean
 book_slots_handler (xmlNodePtr node, gpointer book_pdata)
 {
-    GNCBook *book = book_pdata;
+    QofBook *book = book_pdata;
     gboolean success;
 
     /* the below works only because the get is gaurenteed to return 
      * a frame, even if its empty */
-    success = dom_tree_to_kvp_frame_given (node, gnc_book_get_slots (book));
+    success = dom_tree_to_kvp_frame_given (node, qof_book_get_slots (book));
 
     g_return_val_if_fail(success, FALSE);
     
@@ -221,7 +221,7 @@ gnc_book_end_handler(gpointer data_for_children,
     int successful;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -259,7 +259,7 @@ gnc_book_id_end_handler(gpointer data_for_children,
     gboolean successful;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     if(parent_data) { return TRUE; }
     if(!tag) { return TRUE; }
@@ -281,7 +281,7 @@ gnc_book_slots_end_handler(gpointer data_for_children,
     gboolean successful;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     if(parent_data) { return TRUE; }
     if(!tag) { return TRUE; }
@@ -294,8 +294,8 @@ gnc_book_slots_end_handler(gpointer data_for_children,
     return successful;
 }
 
-GNCBook*
-dom_tree_to_book (xmlNodePtr node, GNCBook *book)
+QofBook*
+dom_tree_to_book (xmlNodePtr node, QofBook *book)
 {
     gboolean successful;
 

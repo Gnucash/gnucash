@@ -46,7 +46,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
 
 #include "io-gncxml.h"
 
@@ -96,7 +96,7 @@ typedef struct {
   sixtp *gnc_parser;
 
   /* The book */
-  GNCBook *book;
+  QofBook *book;
 
   /* The account group */
   AccountGroup *account_group;
@@ -366,7 +366,7 @@ gnc_session_load_from_xml_file(GNCSession *session)
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
   const gchar *filename;
-  GNCBook *book;
+  QofBook *book;
 
   g_return_val_if_fail(session, FALSE);
 
@@ -3573,7 +3573,7 @@ gnc_transaction_parser_new(void)
 */
 
 static gboolean
-price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCBook *book)
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
 {
   if(!p || !sub_node) return FALSE;
 
