@@ -1,5 +1,12 @@
 2003-05-26  Derek Atkins  <derek@ihtfp.com>
 
+	* src/register/ledger-core/dialog-dup-trans.c: If the "number" is
+	  set to 0, then empty out the entry.  Considering the SpinButton
+	  wants to force a digit, this lets you set an empty number if you
+	  accidentally tab into and out of the number field.  This also
+	  means you cannot have a check numbered '0', but that is probably
+	  a reasonable limitation.  Fixes #109610.
+
 	* src/business/business-core/gncInvoice.[ch]: define
 	  INVOICE_IS_PAID and create gncInvoiceIsPaid() function (the
 	  prototype already existed, but it was never implemented).
