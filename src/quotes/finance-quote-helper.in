@@ -1,6 +1,6 @@
 #!@-PERL-@ -w
 ######################################################################
-### price-quote-helper - present a scheme interface to Finance::Quote
+### finance-quote-helper - present a scheme interface to Finance::Quote
 ### Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
 ### 
 ### This program is free software; you can redistribute it and/or    
@@ -26,8 +26,6 @@ use lib '@-PERLINCL-@';
 use strict;
 use English;
 use FileHandle;
-use Date::Manip;
-use Finance::Quote;
 
 # Input: (on standard input - one entry per line and one line per
 # entry, and double quotes must only be delimiters, not string
@@ -93,6 +91,33 @@ use Finance::Quote;
 
 # The methods we know about.  For now we assume they all have the same
 # signature so this works OK.
+
+sub check_modules {
+  my @modules = qw(Date::Manip Finance::Quote);
+  my @missing;
+
+  foreach my $mod (@modules) {
+    if (eval "require $mod") {
+      $mod->import();
+    }
+    else {
+      push (@missing, $mod);
+    }
+  }
+
+  return unless @missing;
+
+  print "\n";
+  print "You need to install the following Perl modules:\n";
+  foreach my $mod (@missing) {
+    print "  ".$mod."\n";
+  }
+
+  print "\n";
+  print "Run 'update-finance-quote' as root to install them.\n";
+
+  exit 1
+}
 
 sub schemify_string {
   my($str) = @_;
@@ -260,6 +285,9 @@ sub parse_input_line {
 
 #---------------------------------------------------------------------------
 # Runtime.
+
+# Check for and load non-standard modules
+check_modules ();
 
 # Create a stockquote object.
 my $quoter = Finance::Quote->new();

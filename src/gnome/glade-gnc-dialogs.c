@@ -5716,9 +5716,10 @@ create_Tax_Information_Dialog (void)
   GtkWidget *hseparator1;
   GtkWidget *txf_categories_frame;
   GtkWidget *hbox85;
-  GtkWidget *scrolledwindow18;
+  GtkWidget *scrolledwindow28;
   GtkWidget *txf_category_clist;
-  GtkWidget *label847671;
+  GtkWidget *label847734;
+  GtkWidget *label847735;
   GtkWidget *scrolledwindow19;
   GtkWidget *txf_help_text;
   GtkWidget *payer_name_source_frame;
@@ -5871,30 +5872,37 @@ create_Tax_Information_Dialog (void)
   gtk_container_add (GTK_CONTAINER (txf_categories_frame), hbox85);
   gtk_container_set_border_width (GTK_CONTAINER (hbox85), 3);
 
-  scrolledwindow18 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_ref (scrolledwindow18);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "scrolledwindow18", scrolledwindow18,
+  scrolledwindow28 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow28);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "scrolledwindow28", scrolledwindow28,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (scrolledwindow18);
-  gtk_box_pack_start (GTK_BOX (hbox85), scrolledwindow18, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow18), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_widget_show (scrolledwindow28);
+  gtk_box_pack_start (GTK_BOX (hbox85), scrolledwindow28, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow28), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-  txf_category_clist = gtk_clist_new (1);
+  txf_category_clist = gtk_clist_new (2);
   gtk_widget_ref (txf_category_clist);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "txf_category_clist", txf_category_clist,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (txf_category_clist);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow18), txf_category_clist);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow28), txf_category_clist);
   gtk_clist_set_column_width (GTK_CLIST (txf_category_clist), 0, 80);
-  gtk_clist_set_selection_mode (GTK_CLIST (txf_category_clist), GTK_SELECTION_BROWSE);
-  gtk_clist_column_titles_hide (GTK_CLIST (txf_category_clist));
+  gtk_clist_set_column_width (GTK_CLIST (txf_category_clist), 1, 80);
+  gtk_clist_column_titles_show (GTK_CLIST (txf_category_clist));
 
-  label847671 = gtk_label_new (_("label847671"));
-  gtk_widget_ref (label847671);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847671", label847671,
+  label847734 = gtk_label_new (_("Code"));
+  gtk_widget_ref (label847734);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847734", label847734,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label847671);
-  gtk_clist_set_column_widget (GTK_CLIST (txf_category_clist), 0, label847671);
+  gtk_widget_show (label847734);
+  gtk_clist_set_column_widget (GTK_CLIST (txf_category_clist), 0, label847734);
+
+  label847735 = gtk_label_new (_("Form"));
+  gtk_widget_ref (label847735);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847735", label847735,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847735);
+  gtk_clist_set_column_widget (GTK_CLIST (txf_category_clist), 1, label847735);
 
   scrolledwindow19 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow19);

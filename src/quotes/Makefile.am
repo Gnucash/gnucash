@@ -1,14 +1,15 @@
 
 gncsharedir = ${GNC_SHAREDIR}
 
-bin_SCRIPTS = gnc-prices
-gncshare_SCRIPTS=finance-quote-helper
+bin_SCRIPTS = gnc-prices update-finance-quote
+gncshare_SCRIPTS = finance-quote-helper
 
 EXTRA_DIST = \
   .cvsignore \
   Quote_example.pl \
   finance-quote-helper.in \
   gnc-prices \
+  update-finance-quote \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
@@ -22,5 +23,13 @@ finance-quote-helper: finance-quote-helper.in
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-
 CLEANFILES += finance-quote-helper
+
+update-finance-quote: update-finance-quote.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+CLEANFILES += update-finance-quote

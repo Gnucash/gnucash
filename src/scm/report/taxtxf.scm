@@ -179,7 +179,7 @@
   (define txf-dups-alist '())
 
   (define (txf-payer? payer)
-    (member str '('current 'parent)))
+    (member payer '('current 'parent)))
 
   (define (gnc:account-get-txf-code account)
     (let ((code (gnc:account-get-tax-US-code account)))
@@ -207,7 +207,7 @@
 
   ;; check for duplicate txf codes
   (define (txf-check-dups account) 
-    (let* ((code (string->symbol (gnc:account-get-txf-code account)))
+    (let* ((code (gnc:account-get-txf-code account))
 	   (item (assoc-ref txf-dups-alist code))
 	   (payer (gnc:account-get-txf-payer-source account)))
       (if (not (txf-payer? payer))
@@ -227,7 +227,8 @@
                                       (txf (gnc:account-get-txf acc)))
                                  (cons (string-append 
                                         "Code \"" 
-                                        (gnc:account-get-txf-code acc)
+                                        (symbol->string
+                                         (gnc:account-get-txf-code acc))
                                         "\" has duplicates in "
                                         (number->string cnt) " accounts:")
                                        (map gnc:account-get-full-name 
@@ -244,7 +245,7 @@
               (gnc:html-markup
                "blue"
                (_ "ERROR: There are duplicate TXF codes assigned\
- to some accounts.  Only TXF codes prefixed with \"&lt;\" or \"^\" may be\
+ to some accounts. Only TXF codes prefixed with payer sources may be\
  repeated."))))
             (map (lambda (s)
                    (gnc:html-text-append!
@@ -260,9 +261,8 @@
   (define (render-txf-account account account-value date)
     (let* ((print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string account-value print-info))
-	   (txf? (gnc:account-get-txf account)))
+	   (txf? (gnc:account-get-tax-related account)))
       (if (and txf?
-	       ;; (not (equal? account-value 0.0)) ; fails, round off, I guess
 	       (not (equal? value (gnc:amount->string 0 print-info))))
 	  (let* ((type (gw:enum-<gnc:AccountType>-val->sym
                         (gnc:account-get-type account) #f))
@@ -270,7 +270,7 @@
 		 (date-str (if date
 			       (strftime "%m/%d/%Y" (localtime (car date)))
 			       #f))
-		 ;; Only formats 1,3 implimented now! Others are treated as 1.
+		 ;; Only formats 1,3 implemented now! Others are treated as 1.
 		 (format (gnc:get-txf-format code (eq? type 'income)))
 		 (payer-src (gnc:account-get-txf-payer-source account))
 		 (account-name (if (eq? payer-src 'parent)
@@ -291,18 +291,19 @@
 				(set! txf-last-payer account-name)
 				(number->string txf-l-count))
 			      "1")))
-	    (list (if date "\nTD" "\nTS") ; newlines are at the beginning
-		  "\n" code		; because one is added at the end, and
-		  "\nC1"		; TurboTax spits out an error msg for
-		  "\nL" l-value		; a blank line at the end of the file.
-		  (if date
-		      (list "\nD" date-str)
-		      '())
-		  "\n" value
-		  (case format
-		    ((3) (list "\nP" account-name))
-		    (else '()))
-		  "\n^"))
+	    (list
+             (if date "\nTD" "\nTS")    ; newlines are at the beginning
+             "\n" (symbol->string code) ; because one is added at the end, and
+             "\nC1"	                ; TurboTax spits out an error msg for
+             "\nL" l-value		; a blank line at the end of the file.
+             (if date
+                 (list "\nD" date-str)
+                 '())
+             "\n" value
+             (case format
+               ((3) (list "\nP" account-name))
+               (else '()))
+             "\n^"))
 	  "")))
 
   ;; Render any level
@@ -313,7 +314,7 @@
 			     (if (or full-names (equal? level 1))
 				 (gnc:account-get-full-name account)
 				 (gnc:account-get-name account))))
-	   (blue? (gnc:account-get-txf account))
+	   (blue? (gnc:account-get-tax-related account))
 	   (print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string lx-value print-info))
 	   (value-formatted
@@ -373,8 +374,8 @@
     (define (num-generations account gen)
       (let ((children (gnc:account-get-children account)))
 	(if (not children)
-	    (if (and (gnc:account-get-txf account)
-		     (equal? "N521" (gnc:account-get-txf-code account)))
+	    (if (and (gnc:account-get-tax-related account)
+		     (eqv? 'N521 (gnc:account-get-txf-code account)))
 		(+ gen 1)		; Est Fed Tax has a extra generation
 		gen)	       		; no kids, return input
 	    (apply max (gnc:group-map-accounts
@@ -482,14 +483,12 @@
                         (set-tm:isdst bdtm -1)
 			(cons (car (mktime bdtm)) 0))))
 
-           (txf-help (get-option "TXF Export Init"
-                                 "Print extended TXF HELP messages"))
 	   (txf-feedback-str-lst '())
            (doc (gnc:make-html-document))
            (table (gnc:make-html-table)))
 
       (define (handle-txf-special-splits level account from-value to-value)
-	(if (and (gnc:account-get-txf account)
+	(if (and (gnc:account-get-tax-related account)
 		 (txf-special-split? (gnc:account-get-txf-code account)))
 	    (let* 
 		((full-year?
@@ -587,32 +586,8 @@
                        (lambda (x)
                          (if (>= max-level (+ 1 level))
                              (handle-level-x-account (+ 1 level) x)))
-                       children)))))))
-
-      (let* ((txf-acc-lst (get-option "TXF Export Init" "Select Account"))
-             (txf-account (if (null? txf-acc-lst)
-                              (begin (set! txf-acc-lst '(#f))
-                                     #f)
-                              (car txf-acc-lst)))
-             (txf-income (get-option "TXF Export Init"
-                                     "For INCOME accounts,\
- select here.   < ^ # see help"))
-             (txf-expense (get-option "TXF Export Init"
-                                      "For EXPENSE\
- accounts, select here.   < ^ # see help"))
-             (txf-payer-source (get-option "TXF Export Init"
-                                           "< ^   Payer Name source"))
-             (txf-full-name-lst (if txf-account
-                                    (map gnc:account-get-full-name
-                                         txf-acc-lst)
-                                    '(#f)))
-
-             (txf-fun-str-lst (map (lambda (a) (txf-function 
-                                                a txf-income txf-expense
-                                                txf-payer-source))
-                                   txf-acc-lst)))
-        (set! txf-feedback-str-lst (map txf-feedback-str txf-fun-str-lst
-                                        txf-full-name-lst)))
+                       children))
+                  level-x-output)))))
 
       (let ((from-date  (strftime "%Y-%b-%d" (localtime (car from-value))))
 	    (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
@@ -622,17 +597,15 @@
 					 (cons (current-time) 0))))))
 	    (txf-last-payer "")
 	    (txf-l-count 0)
-	    (report-title (if txf-help 
-                              (_ "Detailed TXF Category Descriptions")
-			      report-name))
 	    (file-name #f))
 
         (define (make-sub-headers max-level)
-          (if (eq? max-level 0)
+          (if (<= max-level 1)
               '()
               (cons (gnc:make-html-table-header-cell/markup
                      "number-header"
-                     "(" (_ "Sub") " " (number->string max-level) ")")
+                     "(" (_ "Sub") " "
+                     (number->string (- max-level 1)) ")")
                     (make-sub-headers (- max-level 1)))))
 
 	;; Now, the main body
@@ -668,9 +641,8 @@
 	      (if file-name		; cancel TXF if no file selected
 		  (let* ((port (open-output-file file-name))    
 			 (output
-                          (list
-                           (map (lambda (x) (handle-level-x-account 1 x))
-                                selected-accounts)))
+                          (map (lambda (x) (handle-level-x-account 1 x))
+                               selected-accounts))
 			 (output-txf (list
 				      "V035"
 				      "\nAGnuCash "
@@ -679,6 +651,8 @@
 				      "\n^"
 				      output)))
 
+                    (display file-name) (newline)
+                    (display output-txf) (newline)
 		    (gnc:display-report-list-item output-txf port
 						  "taxtxf.scm - ")
 		    (newline port)
@@ -701,7 +675,7 @@
          'tag "font"
          'attribute (list "color" "#ff0000"))
 
-        (gnc:html-document-set-title! doc report-title)
+        (gnc:html-document-set-title! doc report-name)
 
         (gnc:html-document-add-object! 
          doc
@@ -716,10 +690,8 @@
           (gnc:html-markup
            "blue"
            (if tax-mode-in
-               (if (not txf-help)
-                   (gnc:html-markup-p
-                    (_ "Blue items are exportable to a TXF file."))
-                   "")
+               (gnc:html-markup-p
+                (_ "Blue items are exportable to a TXF file."))
                (gnc:html-markup-p
                 (if file-name
                     (gnc:html-markup/format
@@ -728,59 +700,23 @@
                     (_ "Blue items were <em>not</em> exported to \
 txf file!")))))))
 
-        (if (not txf-help)
-            (map (lambda (s)
-                   (gnc:html-document-add-object!
-                    doc
-                    (gnc:make-html-text
-                     (gnc:html-markup "blue" (gnc:html-markup-p s)))))
-                 txf-feedback-str-lst))
-
         (txf-print-dups doc)
 
         (gnc:html-document-add-object! doc table)
 
-        (if txf-help
-            (gnc:html-document-set-style! doc
-                                          "table"
-                                          'attribute (list "border" "1")))
+        (gnc:html-table-append-row!
+         table
+         (append
+          (list
+           (gnc:make-html-table-header-cell
+            (_ "Account Name")))
+          (make-sub-headers max-level)
+          (list
+           (gnc:make-html-table-header-cell/markup
+            "number-header" (_ "Total")))))
 
-        (if txf-help
-            (gnc:html-table-append-row!
-             table
-             (list
-              (gnc:make-html-table-header-cell
-               (_ "Tax Form \\ TXF Code")
-               (gnc:make-html-text (gnc:html-markup-br))
-               (_ "Description"))
-              (gnc:make-html-table-header-cell
-               (_ "Extended TXF Help messages") " "
-               (gnc:make-html-text
-                (gnc:html-markup "income" (_ "Income")))
-               " "
-               (gnc:make-html-text
-                (gnc:html-markup "expense" (_ "Expense"))))))
-            (gnc:html-table-append-row!
-             table
-             (append
-              (list
-               (gnc:make-html-table-header-cell
-                (_ "Account Name")))
-              (make-sub-headers max-level)
-              (list
-               (gnc:make-html-table-header-cell/markup
-                "number-header" (_ "Total"))))))
-
-        (if txf-help
-            (begin
-              (map (lambda (x) (txf-print-help table x #t))
-                   txf-help-categories)
-              (map (lambda (x) (txf-print-help table x #t))
-                   txf-income-categories)
-              (map (lambda (x) (txf-print-help table x #f))
-                   txf-expense-categories))
-            (map (lambda (x) (handle-level-x-account 1 x))
-                 selected-accounts))
+        (map (lambda (x) (handle-level-x-account 1 x))
+             selected-accounts)
 
         (if (null? selected-accounts)
             (gnc:html-document-add-object!
@@ -792,27 +728,26 @@ Go the the Tax Information dialog to set up tax-related accounts.")))))
 
         doc)))
 
-;  (gnc:define-report
-;   'version 1
-;   'name (N_ "Tax")
-;   'options-generator tax-options-generator
-;   'renderer (lambda (report-obj)
-;               (generate-tax-or-txf
-;                (_ "Taxable Income / Deductible Expenses")
-;                (_ "This page shows your Taxable Income and \
-;Deductable Expenses.")
-;                report-obj
-;		#t)))
-  #f)
+  (gnc:define-report
+   'version 1
+   'name (N_ "Tax")
+   'options-generator tax-options-generator
+   'renderer (lambda (report-obj)
+               (generate-tax-or-txf
+                (_ "Taxable Income / Deductible Expenses")
+                (_ "This report shows your Taxable Income and \
+Deductable Expenses.")
+                report-obj
+		#t)))
 
-;  (gnc:define-report
-;   'version 1
-;   'name (N_ "Export .TXF")
-;   'options-generator tax-options-generator
-;   'renderer (lambda (report-obj)
-;               (generate-tax-or-txf
-;                (_ "Taxable Income / Deductible Expenses")
-;                (_ "This page shows your Taxable Income and \
-;Deductable Expenses.")
-;                report-obj
-;		#f))))
+  (gnc:define-report
+   'version 1
+   'name (N_ "Export .TXF")
+   'options-generator tax-options-generator
+   'renderer (lambda (report-obj)
+               (generate-tax-or-txf
+                (_ "Taxable Income / Deductible Expenses")
+                (_ "This page shows your Taxable Income and \
+Deductable Expenses.")
+                report-obj
+		#f))))

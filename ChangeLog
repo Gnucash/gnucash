@@ -1,4 +1,37 @@
+2001-03-30  Dave Peticolas  <dave@krondo.com>
+
+	* src/quotes/finance-quote-helper.in: check for non-standard
+	Perl modules
+
+	* src/quotes/Makefile.am: add update-finance-quote
+
+	* src/quotes/update-finance-quote.in: new file
+
+	* src/guile/guile-util.c: new funcs for wrapping price lists
+
+	* src/guile/gnc.gwp: wrap more pricedb api. g-wrap price lists.
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/gnc-ui-util.c (gnc_push_locale): new func
+	(gnc_pop_locale): new func
+
+	* src/gnome/gnc-html-guppi.c: use C locale when parsing doubles
+
+	* src/gnc-ui-util.c (gnc_lconv_set): strdup value to make
+	sure changing the locale doesn't affect the cached value
+
+	* src/gnome/window-register.c: make 'record' work like 'enter'
+
+	* src/scm/prefs.scm: add internal prefs for tax window size
+
+	* src/gnome/gnc-splash.c: make splash a regular window
+
 2001-03-29  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-incomeexpense.sgml: fix debit/credit distinction
+
+	* src/scm/report/taxtxf.scm: more work
 
 	* src/scm/report/category-barchart.scm: remove url FIXME
 

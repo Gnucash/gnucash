@@ -110,6 +110,11 @@ gnc_commodity * gnc_locale_default_currency (void);
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);
 
+/* Push and pop locales. Currently, this has no effect on gnc_localeconv.
+ * i.e., after the first call to gnc_localeconv, subsequent calls will
+ * return the same information. */
+void gnc_push_locale (const char *locale);
+void gnc_pop_locale (void);
 
 /* Amount printing and parsing **************************************/
 

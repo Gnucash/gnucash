@@ -104,6 +104,7 @@
                     "number-cell" (gnc:make-gnc-monetary currency price-value))
                    (gnc:make-html-table-header-cell/markup
                     "number-cell" value)))
+            (gnc:price-unref price)
 	    (table-add-stock-rows
              table rest to-date currency pricedb collector))))
 

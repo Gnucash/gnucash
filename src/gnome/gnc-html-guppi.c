@@ -31,8 +31,11 @@
 #include <gtkhtml/gtkhtml-embedded.h>
 
 #include <libguppitank/guppi-tank.h>
+
 #include "gnc-html.h"
 #include "gnc-html-guppi.h"
+#include "gnc-ui-util.h"
+
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
@@ -125,11 +128,15 @@ read_doubles(const char * string, int nvalues) {
   int    accum = 0;
   double * retval = g_new0(double, nvalues);
 
+  gnc_push_locale ("C");
+
   for(n=0; n<nvalues; n++) {
     sscanf(string+accum, "%le%n", &retval[n], &choffset);
     accum += choffset;
   }
-  
+
+  gnc_pop_locale ();
+
   return retval;
 }
 

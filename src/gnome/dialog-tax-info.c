@@ -27,6 +27,7 @@
 #include <guile/gh.h>
 
 #include "account-tree.h"
+#include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
 #include "gnc-component-manager.h"
@@ -80,6 +81,8 @@ typedef struct
 
 
 static gboolean getters_initialized = FALSE;
+static gint last_width = 0;
+static gint last_height = 0;
 
 
 static void
@@ -227,7 +230,7 @@ static void
 load_category_list (TaxInfoDialog *ti_dialog)
 {
   GtkCList *clist = GTK_CLIST (ti_dialog->txf_category_clist);
-  char *text[1];
+  char *text[2];
   GList *codes;
 
   gtk_clist_freeze (clist);
@@ -240,6 +243,7 @@ load_category_list (TaxInfoDialog *ti_dialog)
     TXFInfo *txf_info = codes->data;
 
     text[0] = txf_info->code;
+    text[1] = txf_info->form;
 
     gtk_clist_append (clist, text);
   }
@@ -655,6 +659,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     ti_dialog->txf_help_text = text;
 
     clist = lookup_widget (dialog, "txf_category_clist");
+    gtk_clist_column_titles_passive (GTK_CLIST (clist));
     ti_dialog->txf_category_clist = clist;
 
     gtk_signal_connect (GTK_OBJECT (clist), "select-row",
@@ -722,12 +727,26 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   gnc_tax_info_update_accounts (ti_dialog);
   clear_gui (ti_dialog);
   gnc_tax_info_set_changed (ti_dialog, FALSE);
+
+  if (last_width == 0)
+    gnc_get_window_size ("tax_info_win", &last_width, &last_height);
+
+  if (last_height == 0)
+    last_height = 400;
+
+  gtk_window_set_default_size (GTK_WINDOW(ti_dialog->dialog),
+                               last_width, last_height);
 }
 
 static void
 close_handler (gpointer user_data)
 {
   TaxInfoDialog *ti_dialog = user_data;
+
+  gdk_window_get_geometry (GTK_WIDGET(ti_dialog->dialog)->window,
+                           NULL, NULL, &last_width, &last_height, NULL);
+
+  gnc_save_window_size ("tax_info_win", last_width, last_height);
 
   gnome_dialog_close (GNOME_DIALOG (ti_dialog->dialog));
 }

@@ -827,7 +827,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("Record"),
+      N_("Enter"),
       N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
@@ -1451,7 +1451,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Record"),
+      N_("_Enter"),
       N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -1632,7 +1632,7 @@ gnc_register_create_popup_menu (RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Record"),
+      N_("_Enter"),
       N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -1702,11 +1702,29 @@ gnc_register_create_popup_menu (RegWindow *regData)
   return popup;
 }
 
+static void
+gnc_register_record (RegWindow *regData)
+{
+  SplitRegister *reg;
+  Transaction *trans;
+
+  reg = xaccLedgerDisplayGetSR (regData->ledger);
+
+  trans = xaccSRGetCurrentTrans (reg);
+
+  if (!xaccSRSaveRegEntry (reg, TRUE))
+    return;
+
+  if (trans != NULL)
+    gnc_register_include_date (regData, xaccTransGetDate(trans));
+
+  xaccSRRedrawReg (reg);
+}
 
 static void
-gnc_register_record_cb(GnucashRegister *reg, gpointer data)
+gnc_register_enter (RegWindow *regData, gboolean next_transaction)
 {
-  RegWindow *regData = data;
+  SplitRegister *sr = xaccLedgerDisplayGetSR (regData->ledger);
   gboolean goto_blank;
 
   goto_blank = gnc_lookup_boolean_option("Register",
@@ -1717,9 +1735,8 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
    * on the blank split, go to the blank split instead of the
    * next row. This prevents the cursor from jumping around
    * when you are entering transactions. */
-  if (!goto_blank)
+  if (!goto_blank && !next_transaction)
   {
-    SplitRegister *sr = xaccLedgerDisplayGetSR (regData->ledger);
     SplitRegisterStyle style = sr->style;
 
     if (style == REG_STYLE_LEDGER)
@@ -1740,13 +1757,24 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
   }
 
   /* First record the transaction. This will perform a refresh. */
-  recordCB (GTK_WIDGET(reg), data);
+  gnc_register_record (regData);
+
+  if (!goto_blank && next_transaction)
+    xaccSRExpandCurrentTrans (sr, FALSE);
 
   /* Now move. */
   if (goto_blank)
     gnc_register_jump_to_blank (regData);
   else
-    gnucash_register_goto_next_virt_row (reg);
+    gnucash_register_goto_next_virt_row (regData->reg);
+}
+
+static void
+gnc_register_record_cb (GnucashRegister *reg, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_enter (regData, FALSE);
 }
 
 static gboolean
@@ -2679,20 +2707,8 @@ static void
 recordCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
-  SplitRegister *reg;
-  Transaction *trans;
 
-  reg = xaccLedgerDisplayGetSR (regData->ledger);
-
-  trans = xaccSRGetCurrentTrans (reg);
-
-  if (!xaccSRSaveRegEntry (reg, TRUE))
-    return;
-
-  if (trans != NULL)
-    gnc_register_include_date (regData, xaccTransGetDate(trans));
-
-  xaccSRRedrawReg (reg);
+  gnc_register_enter (regData, TRUE);
 }
 
 

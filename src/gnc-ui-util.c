@@ -367,6 +367,8 @@ gnc_lconv_set (char **p_value, char *default_value)
 
   if ((value == NULL) || (value[0] == 0))
     *p_value = default_value;
+
+  *p_value = g_strdup (*p_value);
 }
 
 static void
@@ -463,6 +465,39 @@ gnc_locale_decimal_places (void)
   got_it = TRUE;
 
   return places;
+}
+
+
+static GList *locale_stack = NULL;
+
+void
+gnc_push_locale (const char *locale)
+{
+  char *saved_locale;
+
+  g_return_if_fail (locale != NULL);
+
+  saved_locale = g_strdup (setlocale (LC_ALL, NULL));
+  locale_stack = g_list_prepend (locale_stack, saved_locale);
+  setlocale (LC_ALL, locale);
+}
+
+void
+gnc_pop_locale (void)
+{
+  char *saved_locale;
+  GList *node;
+
+  g_return_if_fail (locale_stack != NULL);
+
+  node = locale_stack;
+  saved_locale = node->data;
+
+  setlocale (LC_ALL, saved_locale);
+
+  locale_stack = g_list_remove_link (locale_stack, node);
+  g_list_free_1 (node);
+  g_free (saved_locale);
 }
 
 
