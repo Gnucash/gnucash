@@ -44,6 +44,7 @@
 #include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
+#include "qofbook.h"
 
 #include "gnc-trace.h"
 static short module = MOD_IMPORT; 
@@ -51,7 +52,7 @@ static short module = MOD_IMPORT;
 static GtkWidget *hierarchy_window = NULL;
 GtkWidget *qof_book_merge_window = NULL;
 static AccountGroup *our_final_group = NULL;
-
+QofBook *temporary;
 
 static void on_balance_changed (GNCAmountEdit *gae);
 
@@ -386,7 +387,8 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
     gchar *locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
 
     gnc_suspend_gui_refresh ();
-    list = gnc_load_example_account_list (gnc_get_current_book (),
+	temporary = qof_book_new();
+    list = gnc_load_example_account_list (temporary,
                                           locale_dir);
     gnc_resume_gui_refresh ();
 
@@ -917,12 +919,14 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 	if (our_final_group)
 	xaccGroupForEachAccount (our_final_group, starting_balance_helper,
 							 NULL, TRUE);
-
 	ENTER (" ");
 	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
 	if(qof_book_merge_window) {
 		DEBUG ("qof_book_merge_window found");
+		if (our_final_group) 
+			xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
 		gtk_widget_show(qof_book_merge_window);
+		qof_book_destroy(temporary);
 		delete_hierarchy_window ();
 		gnc_resume_gui_refresh ();
 		LEAVE (" ");
@@ -936,6 +940,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 	
 	if (our_final_group)
 	xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
+	qof_book_destroy(temporary);
 	
 	gnc_resume_gui_refresh ();
 	LEAVE (" ");
@@ -1045,6 +1050,5 @@ gnc_ui_hierarchy_druid (void)
 
 	hierarchy_window = gnc_create_hierarchy_druid ();
 
-//	qof_book_merge_window = qof_book_merge_running();
 	return;
 }

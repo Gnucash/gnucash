@@ -36,9 +36,10 @@
 #include "gnc-gui-query.h"
 #include "qof_book_merge.h"
 #include "druid-hierarchy.h"
-
+#include "gnc-ui-util.h"
+#include "Account.h"
+#include "global-options.h"
 #include "gnc-trace.h"
-//static short module = MOD_IMPORT; 
 
 static GtkWidget			*qof_book_merge_window = NULL;
 static GtkWidget			*druid_hierarchy_window = NULL;
@@ -52,45 +53,6 @@ static gchar 				*buffer = "";
 
 void collision_rule_loop	( qof_book_mergeRule*, 	guint );
 void progress_rule_loop 	( qof_book_mergeRule*, 	guint );
-void summary_ForeachParam	( QofParam*, 	gpointer );
-void summary_ForeachType  	( QofObject*, 	gpointer );
-void summary_Foreach 	  	( QofEntity*, 	gpointer );
-
-void 
-summary_ForeachParam( QofParam* param, gpointer user_data) 
-{
-	QofEntity *ent;
-	char *importstring;
-
-	ent = (QofEntity*)user_data;
-	/* To control the amount of output, only strings are
-		printed in this example. Remove the loop for all 
-		data. 
-	*/
-	if(safe_strcmp(param->param_type,QOF_TYPE_STRING) == 0) {
-		importstring = NULL;
-		importstring = qof_book_merge_param_as_string(param, ent);
-		printf("%-20s\t\t%s\t\t%s\n", param->param_name, param->param_type, importstring);
-	}
-}
-
-void
-summary_Foreach ( QofEntity* ent, gpointer user_data) 
-{
-	qof_class_param_foreach(ent->e_type, summary_ForeachParam , ent);
-}
-
-void 
-summary_ForeachType ( QofObject* obj, gpointer user_data) 
-{
-	QofBook *book;
-	
-	book = (QofBook*)user_data;
-	printf("\n%s\n", obj->e_type);
-	printf("Parameter name\t\t\tData type\t\tValue\n");
-	qof_object_foreach(obj->e_type, book, summary_Foreach, NULL);
-}
-
 
 static GtkWidget*
 merge_get_widget (const char *name)
@@ -184,8 +146,8 @@ on_qof_book_merge_next (GnomeDruidPage  *gnomedruidpage,
 }
 
 static void
-on_cancel (GnomeDruid      *gnomedruid,
-                 gpointer         user_data)
+on_cancel (	GnomeDruid      *gnomedruid,
+			gpointer         user_data)
 {
 	gnc_suspend_gui_refresh ();
 	delete_merge_window();
@@ -195,17 +157,49 @@ on_cancel (GnomeDruid      *gnomedruid,
 	gnc_resume_gui_refresh ();
 }
 
+void currency_transfer_cb ( QofEntity* ent, gpointer user_data)
+{
+	if(!ent) return;
+	if(xaccAccountGetCommodity((Account*)ent) == NULL) {
+		xaccAccountSetCommodity((Account*)ent, gnc_default_currency());
+	}
+}
+
+void reference_parent_cb ( QofEntity* ent, gpointer user_data)
+{
+	if(!ent) return;
+	if(xaccAccountGetParent((Account*)ent) == NULL) {
+		xaccGroupInsertAccount(xaccGroupGetRoot(xaccGetAccountGroup(gnc_get_current_book())), (Account*)ent);
+	}
+}
+
 static void
 on_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         arg1,
            gpointer         user_data)
 {
+	gint result;
+    GtkWidget *top;
+    const char *message = _("Error: the Commit operation failed.");
+
 	gnc_suspend_gui_refresh ();
-	qof_book_mergeCommit();
+	result = qof_book_mergeCommit();
+	if(result != 0) {
+		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
+	    gnc_error_dialog(top, message);
+	}
 	delete_merge_window ();
+	/*
+	Account has a new setparent parameter that takes 
+	a QofEntity. Account converts this into an AccountGroup based on
+	the GUID in the reference. This needs improving as child accounts 
+	are currently being re-parented to top-level.
+	*/
 	qof_session_set_current_session(previous_session);
+	qof_object_foreach(GNC_ID_ACCOUNT, gnc_get_current_book(), reference_parent_cb,  NULL);
+	qof_object_foreach(GNC_ID_ACCOUNT, gnc_get_current_book(), currency_transfer_cb, NULL);
 	qof_book_destroy(mergeBook);
-	qof_session_end(merge_session);	
+	qof_session_end(merge_session);
 	gnc_resume_gui_refresh ();
 }
 
@@ -246,9 +240,6 @@ gnc_create_merge_druid (void)
 
 	glade_xml_signal_connect(xml, "on_start_page_next",
 		GTK_SIGNAL_FUNC (on_qof_start_page_next));
-	
-//	Please resolve these conflicts in the merge
-//	on_qof_book_merge_prepare
 	
 	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
 		GTK_SIGNAL_FUNC (on_qof_book_merge_prepare));
@@ -431,6 +422,5 @@ gnc_ui_qof_book_merge_druid (void)
 	g_return_if_fail(targetBook != NULL);
 	g_return_if_fail(mergeBook != NULL);
 	g_return_if_fail(merge_session != NULL);
-	gnc_set_log_level(MOD_IMPORT, GNC_LOG_WARNING);
 	return;
 }

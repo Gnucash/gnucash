@@ -75,6 +75,12 @@ any error values to the calling process.
 void gnc_ui_qof_book_merge_druid (void);
 GtkWidget* qof_book_merge_running (void);
 
+/** \brief 	gncCommodity is not QOF enabled, need to set a default commodity before the merge */
+void currency_transfer_cb ( QofEntity* ent, gpointer user_data);
+
+/** \brief workaround for AccountGroup not being fully QOF enabled. */
+void reference_parent_cb ( QofEntity* ent, gpointer user_data);
+
 /** @} */
 /** @} */
 
