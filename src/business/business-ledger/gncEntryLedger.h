@@ -86,6 +86,10 @@ gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
 
+/* This will act just like hitting 'return' to record an entry */
+gboolean gnc_entry_ledger_commit_entry (GncEntryLedger *ledger);
+
+/* This will ask the user if they really want to make a change */
 gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger);
 
 void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);

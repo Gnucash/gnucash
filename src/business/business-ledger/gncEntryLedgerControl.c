@@ -161,7 +161,9 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
   old_entry = gnc_entry_ledger_get_current_entry (ledger);
   new_entry = gnc_entry_ledger_get_entry (ledger, new_virt_loc.vcell_loc);
 
+  gnc_suspend_gui_refresh ();
   saved = gnc_entry_ledger_save (ledger, old_entry != new_entry);
+  gnc_resume_gui_refresh ();
 
   /* redrawing can muck everything up */
   if (saved) {
@@ -244,8 +246,6 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   if (!ledger) return FALSE;
 
   exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
-
-  ledger->traverse_to_new = FALSE;
 
   entry = gnc_entry_ledger_get_current_entry (ledger);
   if (!entry)
@@ -525,15 +525,46 @@ void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
   gnc_table_refresh_gui (ledger->table, TRUE);
 }
 
+static gboolean
+gnc_entry_ledger_check_close_internal (GtkWidget *parent,
+				       GncEntryLedger *ledger,
+				       gboolean dontask)
+{
+  const char *message = _("The current entry has been changed.\n"
+			  "Would you like to save it?");
+  VirtualLocation virt_loc;
+  
+  virt_loc = ledger->table->current_cursor_loc;
+    
+  if (gnc_entry_ledger_traverse (&virt_loc, GNC_TABLE_TRAVERSE_POINTER,
+				 ledger))
+    return FALSE;
+
+  if (!gnc_entry_ledger_verify_can_save (ledger))
+    return FALSE;
+
+  if (dontask || gnc_verify_dialog_parented (parent, TRUE, message))
+    gnc_entry_ledger_save (ledger, TRUE);
+  else
+    gnc_entry_ledger_cancel_cursor_changes (ledger);
+
+  return TRUE;
+}
+
+gboolean
+gnc_entry_ledger_commit_entry (GncEntryLedger *ledger)
+{
+  if (!ledger) return TRUE;
+
+  return gnc_entry_ledger_check_close_internal (NULL, ledger, TRUE);
+}
+
 gboolean
 gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
 {
   if (!ledger) return TRUE;
 
   if (gnc_entry_ledger_changed (ledger)) {
-    VirtualLocation virt_loc;
-    const char *message = _("The current entry has been changed.\n"
-			    "Would you like to save it?");
     gboolean dontask = FALSE;
 
     if (ledger->type ==  GNCENTRY_INVOICE_ENTRY) {
@@ -555,19 +586,8 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
       }
     }
 
-    virt_loc = ledger->table->current_cursor_loc;
+    return gnc_entry_ledger_check_close_internal (parent, ledger, dontask);
 
-    if (gnc_entry_ledger_traverse (&virt_loc, GNC_TABLE_TRAVERSE_POINTER,
-				   ledger))
-      return FALSE;
-
-    if (!gnc_entry_ledger_verify_can_save (ledger))
-      return FALSE;
-
-    if (dontask || gnc_verify_dialog_parented (parent, TRUE, message))
-      gnc_entry_ledger_save (ledger, TRUE);
-    else
-      gnc_entry_ledger_cancel_cursor_changes (ledger);
   }
   return TRUE;
 }

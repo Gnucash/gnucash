@@ -135,7 +135,8 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 /* Copy GncEntry information from the list to the rows of the Ledger. */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 {
-  GncEntry *blank_entry;
+  GncEntry *blank_entry, *find_entry;
+  CursorBuffer *cursor_buffer;
   Table *table;
 
   GList *node;
@@ -144,6 +145,8 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   VirtualLocation save_loc;
   time_t present;
   gboolean start_primary_color = TRUE;
+
+  int new_entry_row = -1;
 
   if (!ledger) return;
 
@@ -174,6 +177,25 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   gnc_table_leave_update (table, table->current_cursor_loc);
   save_loc = table->current_cursor_loc;
+
+  /* Figure out where we are going to */
+  if (ledger->traverse_to_new) {
+    find_entry = blank_entry;
+  } else {
+    find_entry = gnc_entry_ledger_get_current_entry(ledger);
+		/* XXX: get current entry (cursor_hint_xxx) */
+  }
+
+  /* If the current cursor has changed we save the values for later
+   * possible restoration. */
+  if (gnc_table_current_cursor_changed (table, TRUE) &&
+      (find_entry == gnc_entry_ledger_get_current_entry (ledger)))
+  {
+    cursor_buffer = gnc_cursor_buffer_new ();
+    gnc_table_save_current_cursor (table, cursor_buffer);
+  }
+  else
+    cursor_buffer = NULL;
 
   /* disable move callback -- we don't want the cascade of 
    * callbacks while we are fiddling with loading the register */
@@ -229,6 +251,9 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
       /* XXX */
     }
 
+    if (entry == find_entry)
+      new_entry_row = vcell_loc.virt_row;
+
     gnc_table_set_vcell (table, cursor, gncEntryGetGUID (entry),
 			 TRUE, start_primary_color, vcell_loc);
     vcell_loc.virt_row++;
@@ -241,18 +266,32 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   if (blank_entry) {
     gnc_table_set_vcell (table, cursor, gncEntryGetGUID (blank_entry),
 			 TRUE, start_primary_color, vcell_loc);
+
+    if (find_entry == blank_entry)
+      new_entry_row = vcell_loc.virt_row;
+
     vcell_loc.virt_row++;
   }
 
   /* Resize the table */
   gnc_table_set_size (table, vcell_loc.virt_row, 1);
 
-  /* Restore the cursor */
+  /* Restore the cursor to its rightful position */
+  if (new_entry_row > 0)
+    save_loc.vcell_loc.virt_row = new_entry_row;
+
   if (gnc_table_find_close_valid_cell (table, &save_loc, FALSE)) {
     gnc_table_move_cursor_gui (table, save_loc);
 
-    /* restore_current_cursor()? */
+    if (find_entry == gnc_entry_ledger_get_current_entry (ledger))
+      gnc_table_restore_current_cursor (table, cursor_buffer);
   }
+
+  gnc_cursor_buffer_destroy (cursor_buffer);
+  cursor_buffer = NULL;
+
+  /* Reset the ledger */
+  ledger->traverse_to_new = FALSE;
 
   /* Set the cell fractions */
 

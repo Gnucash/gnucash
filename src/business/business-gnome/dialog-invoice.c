@@ -356,11 +356,26 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
 static void
 recordCB (GtkWidget *widget, gpointer data)
 {
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  if (!gnc_entry_ledger_commit_entry (iw->ledger))
+    return;
+
+  gnucash_register_goto_next_virt_row (iw->reg);
 }
 
 static void
 cancelCB (GtkWidget *widget, gpointer data)
 {
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  gnc_entry_ledger_cancel_cursor_changes (iw->ledger);
 }
 
 static void
