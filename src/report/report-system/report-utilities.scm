@@ -467,9 +467,7 @@
       (gnc:query-set-sort-increasing query #t #t #t)
       (gnc:query-set-max-splits query 1)
       
-      (set! splits (gnc:glist->list 
-		    (gnc:query-get-splits query) 
-                  <gnc:Split*>))
+      (set! splits (gnc:query-get-splits query))
       (gnc:free-query query)
 
       (if (and splits (not (null? splits)))
