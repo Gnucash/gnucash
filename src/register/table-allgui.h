@@ -268,17 +268,6 @@ void * xaccGetUserData (Table *table, int phys_row, int phys_col);
 /* ==================================================== */
 /* these are used internally by table-{motif,gtk}.c
    perhaps these should go in a table-allguiP.h  
-
-   They were also ripped more or less straight out of table-motif.c
-   and just made UI independent.  In the long run, they should
-   probably be rewritten to have even clearer interfaces/semantics.
-   For now, though, this will do.
-
-   Function bodies may also be a little contorted, but that's because
-   I had to be careful to only make changes that preserved all the
-   previous invariants.  Sometimes the most careful change may not
-   have been the clearest.
-   
 */
 
 int
@@ -296,6 +285,18 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
 void        
 xaccRefreshCursorGUI (Table * table);
 
+/* 
+ * gnc_table_enter_update() is a utility function used to determine
+ * how the gui will respond.  If it returns NULL, then the GUI will
+ * map an editing widget onto this cell, and allow user input. If 
+ * it returns non-null, then the returned value will be used as the 
+ * new cell value, and an editor for the cell will not be mapped
+ * (viz, the user will be prevented from updating the cell)
+ *
+ * Note: since this is an internal-use-only routine, if you do not 
+ * like this semantic, cut&paste this code and change it to suit you. 
+ * However, don't just change it, because it will break functional code.
+ */
 const char *
 gnc_table_enter_update(Table *table, int row, int col);
 
