@@ -23,14 +23,14 @@
  * Period.c
  *
  * FUNCTION:
- * Implement accounting periods.
+ * Implement accounting periods, using design described in 
+ * src/doc/books.txt
  *
- * CAUTION: This is currently a semi-functional, poorly implementation
- * of the design described in src/doc/book.txt
+ * CAUTION: Not yet finished.
  *
  * HISTORY:
- * created by Linas Vepstas November 2001
- * Copyright (c) 200-2003 Linas Vepstas <linas@linas.org>
+ * Created by Linas Vepstas November 2001
+ * Copyright (c) 2001-2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "AccountP.h"
@@ -38,6 +38,7 @@
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "gnc-pricedb.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
@@ -298,7 +299,7 @@ lot_list_preen_open_lots (LotList *lot_list)
 {
    LotList *lnode;
 
-   for (lnode=lot_list; lnode; lnode=lnode->next)
+   for (lnode=lot_list; lnode; )
    {
       GNCLot *lot = lnode->data;
       LotList *lnext = lnode->next;
@@ -318,7 +319,7 @@ trans_list_preen_open_lots (TransList *trans_list)
 {
    TransList *tnode;
 
-   for (tnode=trans_list; tnode; tnode=tnode->next)
+   for (tnode=trans_list; tnode; )
    {
       Transaction *trans = tnode->data;
       TransList *tnext = tnode->next;
@@ -393,7 +394,26 @@ create_lot_list_from_trans_list (TransList *trans_list)
 /* ================================================================ */
 
 void 
-gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
+gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *query)
+{
+   GNCPriceDB *pdb;
+   GList *price_list;
+
+   if (!src_book || !dest_book || !query) return;
+   ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
+
+   pdb = gnc_pricedb_get_db (src_book);
+
+   qof_query_set_book (query, src_book);
+   price_list = qof_query_run (query);
+
+   LEAVE (" src_book=%p dest_book=%p", src_book, dest_book);
+}
+
+/* ================================================================ */
+
+void 
+gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
    AccountGroup *src_grp, *dst_grp;
    QofBackend *be;
@@ -543,7 +563,6 @@ add_closing_balances (AccountGroup *closed_grp,
    for (node=acc_list; node; node=node->next)
    {
       KvpFrame *cwd;
-      KvpValue *vvv;
       Account *twin;
       AccountGroup *childs;
       Account * candidate = (Account *) node->data;
@@ -557,13 +576,8 @@ add_closing_balances (AccountGroup *closed_grp,
        * of this account. */
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
-      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-      vvv = kvp_value_new_guid (xaccAccountGetGUID (candidate));
-      kvp_frame_set_slot_nc (cwd, "prev-acct", vvv);
-      
-      vvv = kvp_value_new_guid (&closed_book->guid);
-      kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
+      kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
+      kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->guid);
 
       xaccAccountSetSlots_nc (twin, twin->kvp_data);
       
@@ -572,13 +586,8 @@ add_closing_balances (AccountGroup *closed_grp,
        * the next book is. */
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
-      cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-      vvv = kvp_value_new_guid (&open_book->guid);
-      kvp_frame_set_slot_nc (cwd, "next-book", vvv);
-      
-      vvv = kvp_value_new_guid (xaccAccountGetGUID (twin));
-      kvp_frame_set_slot_nc (cwd, "next-acct", vvv);
+      kvp_frame_set_guid (cwd, "/book/next-book", &open_book->guid);
+      kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
       xaccAccountSetSlots_nc (candidate, candidate->kvp_data);
 
@@ -632,13 +641,8 @@ add_closing_balances (AccountGroup *closed_grp,
          /* Add KVP data showing where the balancing 
           * transaction came from */
          cwd = xaccTransGetSlots (trans);
-         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-         vvv = kvp_value_new_guid (&closed_book->guid);
-         kvp_frame_set_slot_nc (cwd, "closed-book", vvv);
-         
-         vvv = kvp_value_new_guid (xaccAccountGetGUID(candidate));
-         kvp_frame_set_slot_nc (cwd, "closed-acct", vvv);
+         kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->guid);
+         kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
          
          xaccTransCommitEdit (trans);
 
@@ -650,10 +654,7 @@ add_closing_balances (AccountGroup *closed_grp,
          /* Add KVP to closed account, indicating where the
           * balance was carried forward to. */
          cwd = xaccAccountGetSlots (candidate);
-         cwd = kvp_frame_get_frame_slash (cwd, "/book/");
-
-         vvv = kvp_value_new_guid (xaccTransGetGUID(trans));
-         kvp_frame_set_slot_nc (cwd, "balancing-trans", vvv);
+         kvp_frame_set_guid (cwd, "/book/balancing-trans", xaccTransGetGUID(trans));
       }
 
       /* We left an open dangling above ... */
@@ -683,55 +684,61 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                        Account *equity_account,
                        const char * memo)
 {
-   QofQuery *query;
+   QofQuery *txn_query, *prc_query;
    QofQueryPredData *pred_data;
    GSList *param_list;
    QofBook *closing_book;
    KvpFrame *exist_cwd, *partn_cwd;
-   KvpValue *vvv;
    Timespec ts;
 
    if (!existing_book) return NULL;
    ENTER (" date=%s memo=%s", gnc_print_date(calve_date), memo);
 
+   /* Setup closuing book */
+   closing_book = qof_book_new();
+   qof_book_set_backend (closing_book, existing_book->backend);
+   closing_book->book_open = 'n';
+
    /* Get all transactions that are *earlier* than the calve date,
     * and put them in the new book.  */
-   query = qof_query_create_for (GNC_ID_TRANS);
+   txn_query = qof_query_create_for (GNC_ID_TRANS);
    pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
                                          QOF_DATE_MATCH_NORMAL,
                                          calve_date);
    param_list = qof_query_build_param_list (TRANS_DATE_POSTED, NULL);
-   qof_query_add_term (query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+   qof_query_add_term (txn_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
 
-   closing_book = qof_book_new();
-   qof_book_set_backend (closing_book, existing_book->backend);
-   closing_book->book_open = 'n';
-   gnc_book_partition (closing_book, existing_book, query);
+   gnc_book_partition_txn (closing_book, existing_book, txn_query);
+   qof_query_destroy (txn_query);
 
-   qof_query_destroy (query);
+   /* Move prices over too */
+   prc_query = qof_query_create_for (GNC_ID_PRICE);
+   pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
+                                         QOF_DATE_MATCH_NORMAL,
+                                         calve_date);
+   param_list = qof_query_build_param_list (PRICE_DATE, NULL);
+   qof_query_add_term (prc_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+
+   gnc_book_partition_pricedb (closing_book, existing_book, prc_query);
+   qof_query_destroy (prc_query);
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */
-   exist_cwd = kvp_frame_get_frame_slash (existing_book->kvp_data, "/book/");
-   partn_cwd = kvp_frame_get_frame_slash (closing_book->kvp_data, "/book/");
+   exist_cwd = existing_book->kvp_data;
+   partn_cwd = closing_book->kvp_data;
    
    /* Mark the boundary date between the books */
-   vvv = kvp_value_new_timespec (calve_date);
-   kvp_frame_set_slot_nc (exist_cwd, "open-date", vvv);
-   kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
+   kvp_frame_set_timespec (exist_cwd, "/book/open-date", calve_date);
+   kvp_frame_set_timespec (partn_cwd, "/book/close-date", calve_date);
 
    /* Mark partition as being closed */
    ts.tv_sec = time(0);
    ts.tv_nsec = 0;
-   vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (partn_cwd, "log-date", vvv);
+   kvp_frame_set_timespec (partn_cwd, "/book/log-date", ts);
 
    /* Set up pointers to each book from the other. */
-   vvv = kvp_value_new_guid (&existing_book->guid);
-   kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
-
-   vvv = kvp_value_new_guid (&closing_book->guid);
-   kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
+   kvp_frame_set_guid (partn_cwd, "/book/next-book", &existing_book->guid);
+   kvp_frame_set_guid (exist_cwd, "/book/prev-book", &closing_book->guid);
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */

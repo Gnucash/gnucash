@@ -21,12 +21,8 @@
 /** @addtogroup Engine
     @{ */
 /** @file Period.h
- *  @breif Implement accounting periods.
+ *  @breif Implement accounting periods, as per design in src/doc/books.txt
  *  @author Copyright (c) 2001,2003 Linas Vepstas <linas@linas.org>
- *
- *  @note CAUTION: this is currently a semi-functional, poorly
- *    implementation of the design described in src/doc/book.txt
- *
  */
 
 
@@ -100,35 +96,34 @@
  *    /book/prev-acct         GUID of twin of this account in the closed book.
  *    /book/prev-book         GUID of previous book (the closed book)
  *    
--- hack alert -- 
-   -- Need to also split up the price db too.  
-   -- Need to make copies of SX, and the like ... 
-   -- Need to move lots too
-
--- hack alert -- feature request: 
-   have some way of remembering the quickfill text from older books...
-
--- hack alert -- should not allow closed books to have unreconciled
-   transactions ???
-
  */
 QofBook * gnc_book_close_period (QofBook *, Timespec, 
                                  Account *equity_acct, 
                                  const char *memo);
 
-/** The gnc_book_partition() uses the result of the indicated query
+/** The gnc_book_partition_txn() uses the result of the indicated query
  *    to move a set of transactions from the "src" book to the "dest"
  *    book.  Before moving the transactions, it will first place a 
  *    copy of all of the accounts in "src" into "dest".  This is done 
  *    in order to ensure that all of the moved transactions will have
  *    the corrrect set of accounts to reference.  The transactions
  *    that will be moved are precisely those specified by the query.
- *    Any query will work to partition a book; however, its expected 
- *    that this routine will mostly serve as a utility to break up a 
- *    book into accounting periods. 
+ *    Any query that returns a list of transactions will work to 
+ *    partition a book; however, its expected that this routine will 
+ *    mostly serve as a utility to break up a book into accounting 
+ *    periods. 
  *
  *    This routine intentionally does not copy scheduled/recurring 
  *    transactions.
+ *
+ *    This routine will also copy closed lots to the destination book.
+ *    NOTICE:
+ *    It will not copy open lots, nor will it copy lots that have
+ *    lead to transactions that contains splits in other open lots.
+ *    Leaving behind open lots is exactly what is needed for closing
+ *    books, but it means that gnc_book_partition() is not really
+ *    a 'general purpose' function.  The way to fix this would be to
+ *    weed out open lots by constructing the query correctly.
  *
  *    When an account is copied, the copy is issued a new GUID.
  *    The GUID of its sibling is placed in the 'gemini' KVP value
@@ -144,7 +139,14 @@ QofBook * gnc_book_close_period (QofBook *, Timespec,
  *    For the current usage, this bug aint important, and I'm too 
  *    lazy to fix it.
  */
-void gnc_book_partition (QofBook *dest, QofBook *src, QofQuery *);
+void gnc_book_partition_txn (QofBook *dest, QofBook *src, QofQuery *);
+
+/** The gnc_book_partition_pricedb() routine uses te result of the
+ *   indicated query to move a set of prices from the "src" book 
+ *   to the "dest" book.  The query passed into it must be set up
+ *   to return a list of prices.
+ */
+void gnc_book_partition_pricedb (QofBook *dest, QofBook *src, QofQuery *);
 
 /** The gnc_book_insert_trans_clobber() routine takes an existing 
  *    transaction that is located in one book, and moves it to 
