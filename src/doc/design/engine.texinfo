@@ -1938,6 +1938,91 @@ security field, that field will be returned. Otherwise, the currency will
 be returned.
 @end deftypefun
 
+@deftypefun {AccountGroup *} xaccAccountGetChildren (Account * @var{account})
+Return the child group of @var{account}. The child group may be @code{NULL},
+indicating @var{account} has no children.
+@end deftypefun
+
+@deftypefun {AccountGroup *} xaccAccountGetParent (Account * @var{account})
+Return the parent Group of @var{account}. The parent may be @code{NULL},
+indicating @var{account} is a top-level Account. However, even if the
+parent is not @code{NULL}, the account may still be top-level if the
+parent Group has no parent Account.
+@end deftypefun
+
+@deftypefun {Account *} xaccAccountGetParentAccount (Account * @var{account})
+Similar to @code{xaccAccountGetParent}, but returns the parent Account
+of the parent Group if the parent Group exists. Otherwise, returns
+@code{NULL}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetBalance (Account * @var{account})
+Return the balance of @var{account}, which is also the balance of the
+last Split in @var{account}. If there are no Splits, the balance is
+zero. The balance is denominated in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetClearedBalance (Account * @var{account})
+Return the cleared balance of @var{account}. The cleared balance is the
+balance of all Splits in @var{account} which are either cleared or
+reconciled or frozen. The cleared balance is denominated in the Account
+currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetReconciledBalance (Account * @var{account})
+Return the reconciled balance of @var{account}. The reconciled balance
+is the balance of all Splits in @var{account} which are reconciled or
+frozen.  The reconciled balance is denominated in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareBalance (Account *account)
+Return the share balance of @var{account}, which is also the share
+balance of the last Split in @var{account}. If there are no Splits, the
+balance is zero. The balance is denominated in the Account security, if
+the Account security exits; otherwise the share balance is denominated
+in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareClearedBalance (Account * @var{account})
+Return the cleared share balance of @var{account}. The cleared share
+balance is the share balance of all Splits in @var{account} which are
+either cleared or reconciled or frozen. The cleared share balance is
+denominated as the share balance.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareReconciledBalance (Account * @var{account})
+Return the reconciled share balance of @var{account}. The reconciled
+share balance is the share balance of all Splits in @var{account} which
+are reconciled or frozen. The reconciled sharea balance is denominated
+as the share balance.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetBalanceAsOfDate (Account * @var{account}, time_t @var{date})
+Return the balance of @var{account} including all Splits whose parent
+Transactions have posted dates on or before @var{date}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareBalanceAsOfDate (Account * @var{account}, time_t @var{date})
+Return the share balance of @var{account} including all Splits whose
+parent Transactions have posted dates on or before @var{date}.
+@end deftypefun
+
+@deftypefun {Split *} xaccAccountGetSplit (Account * @var{account}, int @var{i})
+Return the @var{i}th Split in @var{account}. If @var{i} < 0 or @var{i}
+>= number of splits in @var{account}, then @code{NULL} is returned.
+This function is O(number of splits in account).
+@end deftypefun
+
+@deftypefun int xaccAccountGetNumSplits (Account * @var{account})
+Return the number of Splits in @var{account}. This function is
+O(number of splits in account).
+@end deftypefun
+
+@deftypefun {GList *} xaccAccountGetSplitList (Account * @var{account})
+Return a @code{GList} of the Splits in @var{account}. This list must
+not be modified in any way.
+@end deftypefun
+
 
 @node Account Groups, GNCBooks, Accounts, Engine
 @section Account Groups

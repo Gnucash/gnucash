@@ -1,5 +1,10 @@
 2001-05-17  Dave Peticolas  <dave@krondo.com>
 
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/engine/Account.c (xaccAccountRecomputeBalance): include
+	frozen splits in reconciled balance. Fix variable names.
+
 	* accounts/C/*: tweak detailed descriptions
 
 	* doc/sgml/C/xacc-reports.sgml: fix warnings

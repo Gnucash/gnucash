@@ -770,9 +770,9 @@ price_xfer(Split * s, gnc_numeric share_count) {
 void
 xaccAccountRecomputeBalance (Account * acc)
 {
-  gnc_numeric  dbalance;
-  gnc_numeric  dcleared_balance; 
-  gnc_numeric  dreconciled_balance;
+  gnc_numeric  balance;
+  gnc_numeric  cleared_balance; 
+  gnc_numeric  reconciled_balance;
   gnc_numeric  share_balance; 
   gnc_numeric  share_cleared_balance; 
   gnc_numeric  share_reconciled_balance;
@@ -784,9 +784,9 @@ xaccAccountRecomputeBalance (Account * acc)
   if(!acc->balance_dirty) return;
   if(acc->do_free) return;
 
-  dbalance =                 acc->starting_balance;
-  dcleared_balance =         acc->starting_cleared_balance;
-  dreconciled_balance =      acc->starting_reconciled_balance;
+  balance =                  acc->starting_balance;
+  cleared_balance =          acc->starting_cleared_balance;
+  reconciled_balance =       acc->starting_reconciled_balance;
   share_balance =            acc->starting_share_balance;
   share_cleared_balance =    acc->starting_share_cleared_balance;
   share_reconciled_balance = acc->starting_share_reconciled_balance;
@@ -796,20 +796,21 @@ xaccAccountRecomputeBalance (Account * acc)
 
     /* compute both dollar and share balances */
     share_balance = gnc_numeric_add_fixed(share_balance, split->damount);
-    dbalance      = gnc_numeric_add_fixed(dbalance, split->value);
+    balance      = gnc_numeric_add_fixed(balance, split->value);
 
     if( NREC != split -> reconciled ) {
       share_cleared_balance = 
         gnc_numeric_add_fixed(share_cleared_balance, split->damount);
-      dcleared_balance = 
-        gnc_numeric_add_fixed(dcleared_balance, split->value);
+      cleared_balance = 
+        gnc_numeric_add_fixed(cleared_balance, split->value);
     }
 
-    if( YREC == split -> reconciled ) {
+    if( YREC == split -> reconciled ||
+        FREC == split -> reconciled ) {
       share_reconciled_balance = 
         gnc_numeric_add_fixed(share_cleared_balance, split->damount);
-      dreconciled_balance =  
-        gnc_numeric_add_fixed(dreconciled_balance, split->value);
+      reconciled_balance =  
+        gnc_numeric_add_fixed(reconciled_balance, split->value);
     }
 
     /* For bank accounts, the invariant subtotal is the dollar
@@ -826,12 +827,12 @@ xaccAccountRecomputeBalance (Account * acc)
         price_xfer(split, share_reconciled_balance);
     }
     else {
-      split -> share_balance = dbalance;
-      split -> share_cleared_balance = dcleared_balance;
-      split -> share_reconciled_balance = dreconciled_balance;
-      split -> balance = dbalance;
-      split -> cleared_balance = dcleared_balance;
-      split -> reconciled_balance = dreconciled_balance;
+      split -> share_balance = balance;
+      split -> share_cleared_balance = cleared_balance;
+      split -> share_reconciled_balance = reconciled_balance;
+      split -> balance = balance;
+      split -> cleared_balance = cleared_balance;
+      split -> reconciled_balance = reconciled_balance;
     }
 
     last_split = split;
@@ -846,21 +847,21 @@ xaccAccountRecomputeBalance (Account * acc)
     if (last_split) {
       acc -> balance = price_xfer(last_split, share_balance);
       acc -> cleared_balance = price_xfer(last_split, share_cleared_balance);
-      acc -> reconciled_balance = 
+      acc -> reconciled_balance =
         price_xfer(last_split, share_reconciled_balance);
     } 
     else {
-      acc -> balance = dbalance;
-      acc -> cleared_balance = dcleared_balance;
-      acc -> reconciled_balance = dreconciled_balance;
+      acc -> balance = balance;
+      acc -> cleared_balance = cleared_balance;
+      acc -> reconciled_balance = reconciled_balance;
     }
   } else {
-    acc -> share_balance = dbalance;
-    acc -> share_cleared_balance = dcleared_balance;
-    acc -> share_reconciled_balance = dreconciled_balance;
-    acc -> balance = dbalance;
-    acc -> cleared_balance = dcleared_balance;
-    acc -> reconciled_balance = dreconciled_balance;
+    acc -> share_balance = balance;
+    acc -> share_cleared_balance = cleared_balance;
+    acc -> share_reconciled_balance = reconciled_balance;
+    acc -> balance = balance;
+    acc -> cleared_balance = cleared_balance;
+    acc -> reconciled_balance = reconciled_balance;
   }
 
 
