@@ -12,6 +12,7 @@ libgncmod_engine_la_SOURCES = \
   FreqSpec.c \
   GNCId.c \
   Group.c \
+  Period.c \
   Query.c \
   SchedXaction.c \
   SX-ttinfo.c \
@@ -31,6 +32,7 @@ libgncmod_engine_la_SOURCES = \
   gncmod-engine.c \
   guid.c \
   kvp_frame.c \
+  kvp-util.c \
   md5.c \
   messages.c
 
@@ -78,6 +80,7 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \
+  kvp-util-p.h \
   md5.h
 
 libgncmod_engine_la_LDFLAGS = -module

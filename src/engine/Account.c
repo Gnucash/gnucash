@@ -39,6 +39,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "kvp_frame.h"
+#include "kvp-util-p.h"
 #include "messages.h"
 
 static short module = MOD_ENGINE; 
@@ -52,7 +53,6 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void xaccAccountBringUpToDate (Account *);
-static void gemini (kvp_frame *, const GUID *, const GUID *, time_t);
 
 /********************************************************************\
 \********************************************************************/
@@ -184,69 +184,14 @@ xaccCloneAccount (const Account *from, GNCBook *book)
     xaccAccountSetCommodity (ret, from->commodity);
 
     /* make a note of where the copy came from */
-    gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
-    gemini (from->kvp_data, &ret->guid, &book->guid, now);
+    gnc_kvp_gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
+    gnc_kvp_gemini (from->kvp_data, &ret->guid, &book->guid, now);
 
     gnc_engine_generate_event (&ret->guid, GNC_EVENT_CREATE);
 
     xaccAccountCommitEdit (ret);
 
     return ret;
-}
-
-/********************************************************************\
-\********************************************************************/
-/* mark the guid and date of the copy, using kvp.  The info will be
- * places in /gemini/ncopies, /gemini/<n>/acct_guid, /gemini/<n>/book_guid,
- * /gemini/<n>/date, where <n> = ncopies-1.
- */
-
-static void 
-gemini (kvp_frame *kvp_root, const GUID *acct_guid, 
-        const GUID *book_guid, time_t secs)
-{
-   char buff[80];
-   kvp_frame *cwd, *pwd;
-   kvp_value *v_ncopies, *vvv;
-   gint64 ncopies = 0;
-   Timespec ts;
-
-   /* cwd == 'current working directory' */
-   pwd = kvp_frame_get_frame (kvp_root, "gemini");
-   if (!pwd)
-   {
-      pwd = kvp_frame_new();
-      kvp_frame_set_slot_nc (kvp_root, 
-           "gemini", kvp_value_new_frame(pwd));
-   }
-
-   /* find, increment, store number of copies */
-   v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
-   if (v_ncopies)
-   { 
-      ncopies = kvp_value_get_gint64 (v_ncopies);
-   }
-
-   ncopies ++;
-   v_ncopies = kvp_value_new_gint64 (ncopies);
-   kvp_frame_set_slot_nc (pwd, "ncopies", v_ncopies);
-
-   /* OK, now create subdirectory and put the actual data */
-   --ncopies;
-   sprintf (buff, "%lld", ncopies);
-   cwd = kvp_frame_new();
-   kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame(cwd));
-
-   vvv = kvp_value_new_guid (acct_guid);
-   kvp_frame_set_slot_nc (cwd, "acct_guid", vvv);
-
-   vvv = kvp_value_new_guid (book_guid);
-   kvp_frame_set_slot_nc (cwd, "book_guid", vvv);
-
-   ts.tv_sec = secs;
-   ts.tv_nsec = 0;
-   vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (cwd, "date", vvv);
 }
 
 /* ================================================================ */
