@@ -1920,21 +1920,21 @@ xaccTransGetSplit (Transaction *trans, int i)
    return NULL;
 }
 
-char *
+const char *
 xaccTransGetNum (Transaction *trans)
 {
    if (!trans) return NULL;
    return (trans->num);
 }
 
-char * 
+const char * 
 xaccTransGetDescription (Transaction *trans)
 {
    if (!trans) return NULL;
    return (trans->description);
 }
 
-char * 
+const char * 
 xaccTransGetDocref (Transaction *trans)
 {
    if (!trans) return NULL;
@@ -2067,21 +2067,21 @@ xaccSplitGetAccount (Split *split)
    return (split->acc);
 }
 
-char *
+const char *
 xaccSplitGetMemo (Split *split)
 {
    if (!split) return NULL;
    return (split->memo);
 }
 
-char *
+const char *
 xaccSplitGetAction (Split *split)
 {
    if (!split) return NULL;
    return (split->action);
 }
 
-char *
+const char *
 xaccSplitGetDocref (Split *split)
 {
    if (!split) return NULL;

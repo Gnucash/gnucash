@@ -661,7 +661,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
 
 #define BASE 36
 
-char *
+const char *
 xaccGroupGetNextFreeCode (AccountGroup *grp, int digits)
 {
   Account *acc;
@@ -717,7 +717,7 @@ xaccGroupGetNextFreeCode (AccountGroup *grp, int digits)
 /* almost identical code to above, but altered to deal with 
  * specified account */
 
-char *
+const char *
 xaccAccountGetNextChildCode (Account *parent_acc, int digits)
 {
   Account *acc;

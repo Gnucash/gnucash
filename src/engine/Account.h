@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.h -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -149,13 +149,12 @@ void xaccAccountSetCurrency (Account *, const char *);
 void xaccAccountSetSecurity (Account *, const char *);
 
 GNCAccountType xaccAccountGetType (Account *);
-char *         xaccAccountGetName (Account *);
-char *         xaccAccountGetFullName (Account *, const char separator);
-char *         xaccAccountGetCode (Account *);
-char *         xaccAccountGetDescription (Account *);
-char *         xaccAccountGetNotes (Account *);
-char *         xaccAccountGetCurrency (Account *);
-char *         xaccAccountGetSecurity (Account *);
+const char *   xaccAccountGetName (Account *);
+const char *   xaccAccountGetCode (Account *);
+const char *   xaccAccountGetDescription (Account *);
+const char *   xaccAccountGetNotes (Account *);
+const char *   xaccAccountGetCurrency (Account *);
+const char *   xaccAccountGetSecurity (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 Account *      xaccAccountGetParentAccount (Account *);
@@ -170,6 +169,15 @@ double         xaccAccountGetShareReconciledBalance (Account *);
 Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
 int            xaccAccountGetNumSplits (Account *acc);
+
+/* WAKE UP! 
+ * Unlike all other gets, the string returned by xaccAccountGetFullName() 
+ * must be freed by you the user !!! 
+ * hack alert -- can someone document what this routine does, and also,
+ * since it breaks the rule of string allocation, maybe this routine
+ * should not be in this library, but some utility library ???
+ */
+char *         xaccAccountGetFullName (Account *, const char separator);
 
 /* The IthAccount() routine merely dereferences: the returned
  *    value is just list[i].  This routine is needed for the perl 

@@ -1193,7 +1193,7 @@ xaccAccountGetType (Account *acc)
    return (acc->type);
 }
 
-char *
+const char *
 xaccAccountGetName (Account *acc)
 {
    if (!acc) return NULL;
@@ -1261,35 +1261,35 @@ xaccAccountGetFullName(Account *account, const char separator)
   return fullname;
 }
 
-char *
+const char *
 xaccAccountGetCode (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->accountCode);
 }
 
-char * 
+const char * 
 xaccAccountGetDescription (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->description);
 }
 
-char * 
+const char * 
 xaccAccountGetNotes (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->notes);
 }
 
-char * 
+const char * 
 xaccAccountGetCurrency (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->currency);
 }
 
-char * 
+const char * 
 xaccAccountGetSecurity (Account *acc)
 {
    if (!acc) return NULL;

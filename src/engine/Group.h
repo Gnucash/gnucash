@@ -207,8 +207,8 @@ Account * xaccGroupGetParentAccount (AccountGroup *);
  *    code.
  */
 
-char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
-char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
+const char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
+const char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 

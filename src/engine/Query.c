@@ -1428,7 +1428,8 @@ xaccQueryPurgeTerms(Query * q, pd_type_t type) {
  *******************************************************************/
 
 void
-xaccQueryClear(Query * q) {
+xaccQueryClear(Query * q) 
+{
   Query * q2 = xaccMallocQuery();
   xaccQuerySwapTerms(q, q2);
   q->changed = 1;
@@ -1442,10 +1443,9 @@ xaccQueryClear(Query * q) {
  *******************************************************************/
 
 static int
-string_match_predicate(char * s, PredicateData * pd) {
+string_match_predicate(const char * s, PredicateData * pd) 
+{
   regmatch_t match;
-  char       * teststr; 
-  char       * src, * dest;
 
   assert(s && pd && (pd->type == PD_STRING));
 
@@ -1464,16 +1464,8 @@ string_match_predicate(char * s, PredicateData * pd) {
     else return 0;
   }
   else {
-    /* fix this: need a case-insensitive strstr */
-    teststr = g_new0(char, strlen(s)+1);
-    dest    = teststr;
-    for(src=s; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
-    }
-    *dest = 0;
-
-    if(strstr(teststr, pd->str.matchstring)) return 1;
+    /* use case-insensitive compare */
+    if(strcasestr(s, pd->str.matchstring)) return 1;
     else return 0;
   }
 
@@ -1579,7 +1571,7 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
 int
 xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
-  char        * descript;
+  const char  * descript;
   
   assert(s && pd);  
   assert(pd->type == PD_STRING);
@@ -1597,7 +1589,7 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
 int
 xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
-  char        * number;
+  const char  * number;
   
   assert(s && pd);  
   assert(pd->type == PD_STRING);
@@ -1643,7 +1635,7 @@ xaccSplitMatchPredicate(Split * s, PredicateData * pd) {
  *******************************************************************/
 int
 xaccActionMatchPredicate(Split * s, PredicateData * pd) {
-  char        * action;
+  const char  * action;
   
   assert(s && pd);  
   assert(pd->type == PD_STRING);
@@ -1658,7 +1650,7 @@ xaccActionMatchPredicate(Split * s, PredicateData * pd) {
  *******************************************************************/
 int
 xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
-  char        * memo;
+  const char  * memo;
   
   assert(s && pd);  
   memo = xaccSplitGetMemo(s);

@@ -243,9 +243,9 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 /* These routines return the Num (or ID field), the description, 
  * and the date field.
  */
-char *        xaccTransGetNum (Transaction *);
-char *        xaccTransGetDescription (Transaction *);
-char *        xaccTransGetDocref (Transaction *);
+const char *  xaccTransGetNum (Transaction *);
+const char *  xaccTransGetDescription (Transaction *);
+const char *  xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
 #ifndef SWIG  /* swig chokes on long long */
 long long     xaccTransGetDateL (Transaction *);
@@ -410,9 +410,9 @@ double xaccSplitGetBaseValue (Split *s, const char *base_currency);
 Transaction * xaccSplitGetParent (Split *);
 
 /* return the memo, action strings */
-char *        xaccSplitGetMemo (Split *split);
-char *        xaccSplitGetAction (Split *split);
-char *        xaccSplitGetDocref (Split *split);
+const char *  xaccSplitGetMemo (Split *split);
+const char *  xaccSplitGetAction (Split *split);
+const char *  xaccSplitGetDocref (Split *split);
 
 /* return the value of the reconcile flag */
 char          xaccSplitGetReconcile (Split *split);
