@@ -141,6 +141,7 @@ static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
 static void reportCB(GtkWidget *w, gpointer data);
 static void invoiceCB(GtkWidget *w, gpointer data);
+static void invoiceTransCB(GtkWidget *w, gpointer data);
 static void printReportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void expand_trans_cb(GtkWidget *widget, gpointer data);
@@ -1538,6 +1539,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Invoice"),
+      N_("Open an invoice report window for this transaction"),
+      invoiceTransCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     {
       GNOME_APP_UI_ITEM,
       N_("_Print Check... (unfinished!)"),
@@ -3115,6 +3124,40 @@ invoiceCB (GtkWidget *widget, gpointer data)
   g_return_if_fail (gh_procedure_p (func));
 
   report_helper (regData, func, NULL);
+}
+
+/********************************************************************\
+ * invoiceTransCB                                                   *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+invoiceTransCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Split *split;
+  Query *query;
+  SCM func;
+
+  reg = xaccLedgerDisplayGetSR (regData->ledger);
+
+  split = xaccSRGetCurrentSplit (reg);
+  if (!split)
+    return;
+
+  func = gh_eval_str ("gnc:show-invoice-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  query = xaccMallocQuery ();
+
+  xaccQuerySetGroup (query, gncGetCurrentGroup ());
+
+  xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split), QUERY_AND);
+
+  report_helper (regData, func, query);
 }
 
 /********************************************************************\

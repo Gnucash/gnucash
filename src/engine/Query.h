@@ -64,6 +64,7 @@ typedef enum {
   PD_STRING,
   PD_CLEARED,
   PD_BALANCE,
+  PD_GUID,
   PD_MISC
 } pd_type_t;
 
@@ -75,6 +76,7 @@ typedef enum {
   PR_CLEARED,
   PR_DATE,
   PR_DESC,
+  PR_GUID,
   PR_MEMO,
   PR_MISC,
   PR_NUM,
@@ -191,6 +193,13 @@ typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
+  GUID            guid;
+} GUIDPredicateData;
+
+typedef struct {
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
   int             how;
   int             data;
 } MiscPredicateData;
@@ -204,6 +213,7 @@ typedef union {
   StringPredicateData  str;
   ClearedPredicateData cleared;
   BalancePredicateData balance;
+  GUIDPredicateData    guid;
   MiscPredicateData    misc;
 } PredicateData;
 
@@ -280,6 +290,7 @@ void xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                            int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
 void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
+void xaccQueryAddGUIDMatch(Query * q, GUID *guid, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
 

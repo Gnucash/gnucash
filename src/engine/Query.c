@@ -85,6 +85,7 @@ static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccGUIDMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
@@ -1232,6 +1233,9 @@ xaccQueryGetPredicate (pr_type_t term_type)
     case PR_DESC:
       p = & xaccDescriptionMatchPredicate;
       break;
+    case PR_GUID:
+      p = & xaccGUIDMatchPredicate;
+      break;
     case PR_MEMO:
       p = & xaccMemoMatchPredicate;
       break;
@@ -1862,6 +1866,38 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddGUIDMatch
+ * Add a 'guid' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddGUIDMatch(Query * q, GUID *guid, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p                   = & xaccGUIDMatchPredicate;
+  qt->data.type           = PD_GUID;
+  qt->data.base.term_type = PR_GUID;
+  qt->data.base.sense     = 1;
+  qt->data.guid.guid      = guid ? *guid : *xaccGUIDNULL ();
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
 /*******************************************************************
  *  xaccQueryPurgeTerms
  *  delete any terms of a particular type
@@ -2048,6 +2084,38 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
 
   descript = xaccTransGetDescription(parent);
   return string_match_predicate(descript, pd);
+}
+
+/*******************************************************************
+ *  xaccGUIDMatchPredicate
+ *******************************************************************/
+static int
+xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
+{
+  GUIDPredicateData *gpd;
+  GUID *guid;
+
+  assert(s && pd);  
+  assert(pd->type == PD_GUID);
+
+  guid = &pd->guid.guid;
+
+  switch (xaccGUIDType (guid))
+  {
+    case GNC_ID_NONE:
+    case GNC_ID_NULL:
+    default:
+      return 0;
+
+    case GNC_ID_ACCOUNT:
+      return xaccSplitGetAccount (s) == xaccAccountLookup (guid);
+
+    case GNC_ID_TRANS:
+      return xaccSplitGetParent (s) == xaccTransLookup (guid);
+
+    case GNC_ID_SPLIT:
+      return s == xaccSplitLookup (guid);
+  }
 }
 
 /*******************************************************************
