@@ -93,6 +93,7 @@
         (else
 	 (gnc:ui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
+         (gnc:engine-shutdown)
 	 (exit exit-status))))
 
 (define (gnc:ui-finish)

@@ -60,6 +60,17 @@ gnc_engine_init(int argc, char ** argv) {
   }
 }
 
+/********************************************************************
+ * gnc_engine_shutdown
+ * shutdown backend, destroy any global data, etc.
+ ********************************************************************/
+
+void
+gnc_engine_shutdown (void)
+{
+  g_cache_destroy (gnc_string_cache);
+  gnc_string_cache = NULL;
+}
 
 /********************************************************************
  * gnc_engine_add_init_hook
