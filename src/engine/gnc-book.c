@@ -43,6 +43,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "Backend.h"
 #include "BackendP.h"
@@ -431,6 +432,12 @@ gnc_book_backup_file(GNCBook *book)
     char *timestamp;
     char *backup;
     const char *datafile = gnc_book_get_file_path(book);
+    struct stat statbuf;
+    int rc;
+
+    rc = stat (datafile, &statbuf);
+    if (rc)
+      return (errno == ENOENT);
 
     if(gnc_book_determine_file_type(book) == GNC_BOOK_BIN_FILE)
     {
@@ -439,7 +446,15 @@ gnc_book_backup_file(GNCBook *book)
         char *bin_bkup = g_new(char, strlen(datafile) + strlen(back) + 1);
         strcpy(bin_bkup, datafile);
         strcat(bin_bkup, back);
-        link(datafile, bin_bkup);
+        if(link(datafile, bin_bkup) != 0)
+        {
+            gnc_book_push_error(
+                book, ERR_BACKEND_MISC,
+                g_strdup_printf("unable to make bin file backup: %s",
+                                strerror(errno)));
+            g_free(bin_bkup);
+            return FALSE;
+        }
         g_free(bin_bkup);
     }
     
@@ -450,7 +465,16 @@ gnc_book_backup_file(GNCBook *book)
     strcat (backup, timestamp);
     strcat (backup, ".xac");
     free (timestamp);
-    link(datafile, backup);
+    if(link(datafile, backup) != 0)
+    {
+        gnc_book_push_error(
+            book, ERR_BACKEND_MISC,
+            g_strdup_printf("unable to link backup file: %s",
+                            strerror(errno)));
+        g_free(backup);
+        return FALSE;
+    }
+    
     g_free(backup);
 
     return TRUE;
@@ -475,20 +499,55 @@ gnc_book_write_to_file(GNCBook *book,
   
   if(make_backup)
   {
-      gnc_book_backup_file(book);
+      if(!gnc_book_backup_file(book))
+      {
+          return FALSE;
+      }
   }
   
   if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
   {
-      unlink(datafile);
-      link(tmp_name, datafile);
-      unlink(tmp_name);
+      if(unlink(datafile) != 0 && errno != ENOENT)
+      {
+          gnc_book_push_error(
+              book, ERR_BACKEND_MISC,
+              g_strdup_printf("unable to unlink filename %s: %s",
+                              datafile, strerror(errno)));
+          g_free(tmp_name);
+          return FALSE;
+      }
+      if(link(tmp_name, datafile) != 0)
+      {
+          gnc_book_push_error(
+              book, ERR_BACKEND_MISC,
+              g_strdup_printf("unable to link from temp filename %s to "
+                              "real filename %s: %s",
+                              tmp_name, datafile, strerror(errno)));
+          g_free(tmp_name);
+          return FALSE;
+      }
+      if(unlink(tmp_name) != 0)
+      {
+          gnc_book_push_error(
+              book, ERR_BACKEND_MISC,
+              g_strdup_printf("unable to unlink temp filename %s: %s",
+                              tmp_name, strerror(errno)));
+          g_free(tmp_name);
+          return FALSE;
+      }
       g_free(tmp_name);
       return TRUE;
   }
   else
   {
-      unlink(tmp_name);
+      if(unlink(tmp_name) != 0)
+      {
+          gnc_book_push_error(
+              book, ERR_BACKEND_MISC,
+              g_strdup_printf("unable to unlink temp_filename %s: %s",
+                              tmp_name, strerror(errno)));
+          /* already in an error just flow on through */
+      }
       g_free(tmp_name);
       gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
       return FALSE;
