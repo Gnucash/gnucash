@@ -785,17 +785,26 @@ readSplit ( int fd, int token )
     xaccFreeSplit (split);
     return NULL;
     }
-  xaccSplitSetReconcile (split, recn);
+  
+  if( 1 >= token ) {
+    /* Note: this is for version 0 of file format only. 
+     * What used to be reconciled, is now cleared... transactions
+     * aren't reconciled until you get your bank statement, and
+     * use the reconcile window to mark the transaction reconciled
+     */
+    if( YREC == recn ) recn = CREC;
+  }
   
   /* make sure the value of split->reconciled is valid...
    * Do this mainly in case we change what NREC and
    * YREC are defined to be... this way it might loose all
    * the reconciled data, but at least the field is valid */
-  if( (YREC != split->reconciled) && 
-      (FREC != split->reconciled) &&
-      (CREC != split->reconciled) ) {
-    xaccSplitSetReconcile (split, NREC);
+  if( (YREC != recn) && 
+      (FREC != recn) &&
+      (CREC != recn) ) {
+    recn = NREC;
   }
+  xaccSplitSetReconcile (split, recn);
 
   /* first, read number of shares ... */
   err = read( fd, &damount, sizeof(double) );
