@@ -1,5 +1,9 @@
 2002-01-05  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/report/html-*.scm,
+	src/scm/report/reports/stylesheet-*.scm: Added nowrap attribute
+	for cells containing numbers.
+
 	* po/de.po: String fix by Christian Meyer <chrisime@gnome.org>.
 
 2001-12-30  Christian Stimming  <stimming@tuhh.de>

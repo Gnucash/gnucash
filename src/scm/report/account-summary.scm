@@ -80,7 +80,7 @@
     (gnc:options-add-account-selection! 
      options gnc:pagename-accounts 
      optname-display-depth optname-show-subaccounts
-     optname-accounts "a" 1
+     optname-accounts "a" 3
      (lambda ()
        ;; FIXME : gnc:get-current-accounts disappeared
        (let ((current-accounts '()))
@@ -160,7 +160,12 @@
         (doc (gnc:make-html-document))
         (txt (gnc:make-html-text)))
 
-    (gnc:html-document-set-title! doc report-title)
+    (gnc:html-document-set-title! 
+     doc 
+     (string-append 
+      report-title
+      " "
+      (gnc:timepair-to-datestring date-tp)))
 
     (if (not (null? accounts))
         ;; if no max. tree depth is given we have to find the
