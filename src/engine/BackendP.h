@@ -1,8 +1,12 @@
 /* 
+ * FILE:
  * BackendP.h
  *
+ * FUNCTION:
  * Pseudo-object defining how the engine can interact with different
- * back-ends (which will probably be sql databases).
+ * back-ends (which may be SQL databases, or network interfaces to 
+ * remote gnucash servers.  In theory, file-io should be a type of 
+ * backend).
  * 
  * The callbacks will be called at the appropriate times during 
  * a book session to allow the backend to store the data as needed.
@@ -20,28 +24,75 @@
 #include "Transaction.h"
 #include "gnc-book.h"
 
+
+typedef enum {
+  ERR_BACKEND_NONE = 0,
+  ERR_BACKEND_MISC,
+
+  /* fileio errors */
+  ERR_BFILEIO_FILE_BAD_READ,
+  ERR_BFILEIO_FILE_EMPTY,
+  ERR_BFILEIO_FILE_NOT_FOUND,
+  ERR_BFILEIO_FILE_TOO_NEW,
+  ERR_BFILEIO_FILE_TOO_OLD,
+  ERR_BFILEIO_ALLOC,
+
+  /* network errors */
+  ERR_NETIO_SHORT_READ,
+  ERR_NETIO_WRONG_CONTENT_TYPE,
+  ERR_NETIO_NOT_GNCXML
+} GNCBackendError;
+
+
 typedef struct _backend Backend;
 
 /*
- * trans_commit_edit() takes two transaction arguments:
- * the first is the proposed new transaction; the second is the
- * 'original' transaction. The second argument is here for 
- * convencience; it had better be substantially equivalent to
- * the argument for the trans_begin_edit() callback.  (It doesn't
- * have to be identical, it can be a clone).
+ * The trans_commit_edit() routine takes two transaction arguments:
+ *    the first is the proposed new transaction; the second is the
+ *    'original' transaction. The second argument is here for 
+ *    convencience; it had better be substantially equivalent to
+ *    the argument for the trans_begin_edit() callback.  (It doesn't
+ *    have to be identical, it can be a clone).
+ *
+ * The run_query() callback takes a gnucash query object. 
+ *    For an sql backend,  the contents of the query object need to 
+ *    be turned into a corresponsing sql query statement, and sent 
+ *    to the database for evaluation. The database will return a 
+ *    set of splits and transactions, and this callback needs
+ *    to poke these into the account-group heirarchy held by the 
+ *    query object. 
+ *
+ *    For a network-communications backend, esentially the same is 
+ *    done, except that this routine would convert the query to wire 
+ *    protocol, get an answer from the remote server, and push that
+ *    into the account-group object.
+ *
+ *    Note a peculiar design decision we've used here. The query
+ *    callback has returned a list of splits; these could be returned
+ *    directly to the caller. They are not.  By poking them into the
+ *    existing account heirarchy, we are essentially building a local
+ *    cache of the split data.  This will allow the gnucash client to 
+ *    continue functioning even when disconnected from the server:
+ *    this is because it will have its local cache of data to work from.
+ *    
+ * The last_err member indicates the last error that occured.
+ *    It should probably be implemented as an array (actually,
+ *    a stack) of all the errors that have occurred.
  */
 
 struct _backend 
 {
   AccountGroup * (*book_load) (GNCBook *, const char * book_id);
-  int (*book_end) (GNCBook *);
+  void (*book_end) (GNCBook *);
   int (*account_begin_edit) (Backend *, Account *, int defer);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *);
   int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
   int (*trans_rollback_edit) (Backend *, Transaction *);
 
-  int (*run_query) (Backend *, Query *);
+  void (*run_query) (Backend *, Query *);
+
+  GNCBackendError last_err;
 };
 
 /*

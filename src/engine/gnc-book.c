@@ -253,7 +253,7 @@ static gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
                      gboolean ignore_lock)
 {
-  ENTER ("filefrag=%s\n", filefrag);
+  ENTER ("filefrag=%s", filefrag);
 
   /* Try to find or build an absolute file path */
 
@@ -282,7 +282,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
     return FALSE;
   }
 
-  LEAVE ("\n");
+  LEAVE (" ");
   return TRUE;
 }
 
@@ -294,7 +294,7 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
   int rc;
 
   if (!book) return FALSE;
-  ENTER (" book-id=%s\n", book_id);
+  ENTER (" book-id=%s", book_id);
 
   /* clear the error condition of previous errors */
   book->errtype = 0;
@@ -376,7 +376,7 @@ gnc_book_load (GNCBook *book)
   if (!book) return FALSE;
   if (!book->book_id) return FALSE;
 
-  ENTER ("book_id=%s\n", book->book_id);
+  ENTER ("book_id=%s", book->book_id);
 
   if (strncmp(book->book_id, "file:", 5) == 0)
   {
@@ -407,7 +407,7 @@ gnc_book_load (GNCBook *book)
 
     xaccGroupScrubSplits (book->topgroup);
 
-    LEAVE("\n");
+    LEAVE(" ");
     return TRUE;
   }
 
@@ -445,7 +445,7 @@ gnc_book_load (GNCBook *book)
       return FALSE;
     }
 
-    LEAVE("\n");
+    LEAVE(" ");
     return TRUE;
   }
   else
@@ -604,7 +604,7 @@ xaccResolveFilePath (const char * filefrag)
 
   /* seriously invalid */
   if (!filefrag) return NULL;
-  ENTER ("filefrag=%s\n", filefrag);
+  ENTER ("filefrag=%s", filefrag);
 
   /* ---------------------------------------------------- */
   /* OK, now we try to find or build an absolute file path */

@@ -960,19 +960,19 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
   /* however, many of the types share a generic structure. */
   switch (qt->data.type) {
     case PD_ACCOUNT: 
-       PERR ("unimplemented");
+       PERR ("account query unimplemented");
        break;
 
     case PD_AMOUNT:
-       PERR ("unimplemented");
+       PERR ("amount query unimplemented");
        break;
 
     case PD_BALANCE:
-       PERR ("unimplemented");
+       PERR ("balance query unimplemented");
        break;
 
     case PD_CLEARED:
-       PERR ("unimplemented");
+       PERR ("cleared query unimplemented");
        break;
 
     case PD_DATE:
