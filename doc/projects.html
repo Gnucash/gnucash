@@ -2495,9 +2495,22 @@ Password:
       <dd>Add features to track sales receipts and other pending
           sources of income, as well as owed sums.  
           <ul>
-          <li>Automatic matchin of invoices to payments.
-          <li>Account aging: show (average) age of ammount-due/amount-owed.
-          <li>Prepare sales statics report by customer.
+          <li>Need new account type 'ar' and 'ap'.  When this account type is
+              selected, the register display, etc. is slightly different, as below:
+          <li>Add field to register called 'date due'.  The date could be
+              entered as 'date of transaction +30days'. etc.  The account
+              could have a default: entries always default to +30 or +45 days
+              or whatever.  
+          <li>Create a report to match 'date due' to current date, and report
+              overdue balances ...
+          <li>Create Account aging report: show (average) age of 
+              amount-due/amount-owed.   
+          <li>Create a projected cash flow report: showing projected
+              future payments based on date due.
+          <li>Somehow, automatically match invoices to payments.
+              When an invoice has been paid off, then there should be a 
+              view mode where the invoice and its payment is no longer shown 
+              (i.e. so that only outstanding, unpaid entires are shown ...)
           </ul>
           <p></p>
       </dd>
