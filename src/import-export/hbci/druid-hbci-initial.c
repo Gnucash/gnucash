@@ -544,7 +544,7 @@ on_aqhbci_button (GtkButton *button,
     gnc_error_dialog
       (info->window, "%s",
        _("The external program \"AqHBCI Setup Wizard\" has not been found. \n\n"
-	 "Did you install the package \"aqhbci-qt-wizard\" of AqHBCI? \n"
+	 "Did you install the package \"aqhbci-qt-tools\" of AqHBCI? \n"
 	 "If not, please install it now."));
     druid_disable_next_button(info);
   }
