@@ -165,4 +165,4 @@
 "CREATE INDEX gncSplitTrail_split_idx ON gncSplitTrail (splitGuid); \n"
 "CREATE INDEX gncPriceTrail_price_idx ON gncPriceTrail (priceGuid); \n"
 "CREATE INDEX gncTransactionTrail_trans_idx ON gncTransactionTrail (transGuid); \n"
-"-- end of file";
+"-- end of file"

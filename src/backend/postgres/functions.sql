@@ -66,4 +66,4 @@
 "       gncTransaction.currency = gncCommodity.commodity' \n"
 "    LANGUAGE 'sql'; \n"
 "        \n"
-"-- end of file";
+"-- end of file"

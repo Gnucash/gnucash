@@ -48,6 +48,7 @@ static short module = MOD_BACKEND;
 ExecStatusType execQuery(PGBackend *be, const char * q) {
 	PGresult * result;
 	ExecStatusType status;
+	gchar * msg;
 
     ENTER(" ");
     
@@ -68,7 +69,7 @@ ExecStatusType execQuery(PGBackend *be, const char * q) {
 	}
 
 	status = PQresultStatus(result);
-    gchar * msg = (gchar *)PQresultErrorMessage(result);
+	msg = (gchar *)PQresultErrorMessage(result);
 	PINFO("Result status: %s/%s",
 		PQresStatus(status), (strlen(msg)) > 0 ? msg : "(No Message)");
 	PINFO("Number of rows affected: %d", atoi(PQcmdTuples(result)));

@@ -1,3 +1,15 @@
+2003-09-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/postgres/test/run-tests.sh: small fix from
+	  hawkfan to get tests to work when building outside srcdir.
+	* src/backend/postgres/putil.c: fix a bug introduced by Matthew --
+	  ANSI C does not allow you to declare a variable in the middle
+	  of an expression.  Move the declaration to the top of the function.
+	* src/backend/postgres/functions.sql:
+	* src/backend/postgres/table-audit.sql:
+	  We don't need the trailing semi-colon because the #include adds
+	  one.  The double semi-colon causes build failures in some cases.
+
 2003-09-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/ofx/gnc-ofx-import.c:  use <libofx/libofx.h>
