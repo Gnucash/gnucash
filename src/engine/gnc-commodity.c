@@ -562,7 +562,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
                            const char * namespace, const char * mnemonic)
 {
   gnc_commodity_namespace * nsp = NULL;
-  int i;
+  unsigned int i;
 
   if (!table || !namespace || !mnemonic) return NULL;
 
