@@ -34,6 +34,7 @@
  * the current invocation of GnuCash. GnuCash routines should always
  * use this function and not guid_new! */
 void xaccGUIDNew (GUID *guid);
+GUID xaccGUIDNewReturn (void);
 
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL

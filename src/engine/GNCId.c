@@ -219,6 +219,16 @@ xaccGUIDNew(GUID *guid)
   } while(1);
 }
 
+GUID
+xaccGUIDNewReturn (void)
+{
+  GUID guid;
+
+  xaccGUIDNew (&guid);
+
+  return guid;
+}
+
 const GUID *
 xaccGUIDNULL(void)
 {

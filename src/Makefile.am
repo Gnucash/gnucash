@@ -20,7 +20,7 @@ SUBDIRS = \
   optional
 
 # Engine Makefile.am file.
-bin_PROGRAMS = gnucash gnucash-make-guids
+bin_PROGRAMS = gnucash
 
 # libraries show up twice because they both provide functions for
 # other libs and use functions from other libs.  These mutual
@@ -61,17 +61,6 @@ gnucash_SOURCES = \
   FileDialog.c \
   gnc-main.c
 
-gnucash_make_guids_LDADD = \
-  gnc-module/libgncmodule.la \
-  engine/libgncmod-engine.la \
-  ${DL_LIB} \
-  ${GNOME_XML_LIB} \
-  ${GLIB_LIBS} \
-  ${INTLLIBS}
-
-gnucash_make_guids_SOURCES = \
-  gnucash-make-guids.c
-
 noinst_HEADERS = \
   AccWindow.h \
   FileBox.h \
@@ -82,7 +71,8 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  README.modules
+  README.modules \
+  gnucash-run-script.in
 
 CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
@@ -93,3 +83,27 @@ INCLUDES = \
   -I./register \
   -I./gnc-module
 
+bin_SCRIPTS = gnucash-run-script gnucash-make-guids
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.  *sigh*
+gnucash-run-script: gnucash-run-script.in Makefile
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
+	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
+	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:'
+	mv $@.tmp $@
+CLEANFILES += gnucash-run-script
+
+gnucash-make-guids: gnucash-make-guids.in Makefile
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GNUCASH_RUN_SCRIPT-@:${bindir}/gnucash-run-script:' \
+	    -e 's:@-THIS_SCRIPT-@:${bindir}/$@:'
+	mv $@.tmp $@
+CLEANFILES += gnucash-make-guids

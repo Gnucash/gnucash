@@ -1,3 +1,18 @@
+2001-09-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnucash-run-script.in: new helper script for running gnucash
+	guile scripts with the right directories set up.
+
+	* src/Makefile.am: add new files
+
+	* src/gnucash-make-guids.in: replace old gnucash-make-guid
+	with a guile script
+
+	* src/engine/gw-engine-spec.scm: wrap new function
+
+	* src/engine/GNCId.c (xaccGUIDNewReturn): new function suitable
+	for g-wrapping.
+
 2001-09-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/messages.[hc]: Added support for i18n messages with
@@ -11,22 +26,24 @@
 
 2001-09-05  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/register/ledger-core/split-register-model-save.c: replace kvp-frame
-	key string literal with #defines from schedXaction.h
+	* src/register/ledger-core/split-register-model-save.c: replace
+	kvp-frame key string literal with #defines from schedXaction.h
 
 	* src/gnome/window-register.c: rename "recur" commands "schedule".
 
 2001-09-04  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* several SX-related .c files: replaced use of kvp_frame_{set,get}_slot, 
-	with {set,get}_slot_path, replaced literals with #defines.
+	* several SX-related .c files: replaced use of
+	kvp_frame_{set,get}_slot, with {set,get}_slot_path, replaced
+	literals with #defines.
 
 	* src/engine/SchedXaction.h: #define names for kvp_frame keys.
 
-	* src/engine/dialog-sx-from-trans.h: fix freqspec and date/time setting bugs.
+	* src/engine/dialog-sx-from-trans.h: fix freqspec and date/time
+	setting bugs.
 
-	* src/gnome/glade/sched-xact.glade: rename several items in editor dialog
-	to match UI code.
+	* src/gnome/glade/sched-xact.glade: rename several items in editor
+	dialog to match UI code.
 
 2001-09-02  Dave Peticolas  <dave@krondo.com>
 

@@ -250,6 +250,7 @@
    (lambda (client-only?)
      (list
       "#include <glib.h>\n"
+      "#include <GNCIdP.h>\n"
       "#include <Query.h>\n"
       "#include <Backend.h>\n"
       "#include <gnc-book.h>\n"
@@ -449,6 +450,14 @@
 ;;     (gw:enum-add-value! we "ERR_RPC_FAILED" 'rpc_failed)
 ;;     (gw:enum-add-value! we "ERR_RPC_NOT_ADDED" 'rpc_not_added)
     #t)
+
+  (gw:wrap-function
+   mod
+   'gnc:guid-new
+   '<gnc:guid-scm>
+   "xaccGUIDNewReturn"
+   '()
+   "Return a newly-generated GUID.")
 
   (gw:wrap-function
    mod

@@ -6,6 +6,7 @@ Makefile.in
 *.log
 *.xac.*.xac
 gnucash
+gnucash-run-script
 gnucash-make-guids
 .deps
 .libs
