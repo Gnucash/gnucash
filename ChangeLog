@@ -1,3 +1,11 @@
+2004-01-19  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome-utils/transfer.glade: rename from_xxx and to_xxx account
+	  tree widgets to left_xxx and right_xxx
+	* src/gnome-utils/dialog-transfer.c: if in "accountant mode" call
+	  "transfer from" "credit account" and "transfer to" "debit account"
+	  and interchange account trees
+
 2004-01-19  Benoit Grégoire <bock@step.polymtl.ca>
 
 	* po/fr.po:  Updated translation.  Partially applied patch from Luc
