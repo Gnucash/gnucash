@@ -86,7 +86,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
 struct lot_pdata
 {
   GNCLot  *lot;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -136,7 +136,7 @@ gnc_lot_end_handler(gpointer data_for_children,
     GNCLot *lot;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -167,7 +167,7 @@ gnc_lot_end_handler(gpointer data_for_children,
 }
 
 GNCLot*
-dom_tree_to_lot (xmlNodePtr node, GNCBook *book)
+dom_tree_to_lot (xmlNodePtr node, QofBook *book)
 {
     struct lot_pdata pdata;
     GNCLot *lot;

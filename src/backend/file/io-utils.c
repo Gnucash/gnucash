@@ -85,7 +85,7 @@ write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
 }
 
 void
-write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
+write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     write_account_group(out, gnc_book_get_group(book), gd);
 }

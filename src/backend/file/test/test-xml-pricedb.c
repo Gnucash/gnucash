@@ -20,9 +20,9 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#include "gnc-book.h"
+#include "qofbook.h"
 
-static GNCSession *session;
+static QofSession *session;
 
 struct pricedb_data_struct
 {
@@ -89,7 +89,7 @@ test_db (int i, GNCPriceDB *db)
     }
     else if (!gnc_xml_parse_file (parser, filename1, test_add_pricedb,
                                   (gpointer)&data,
-                                  gnc_session_get_book (session)))
+                                  qof_session_get_book (session)))
     {
       failure_args ("gnc_xml_parse_file returned FALSE",
                     __FILE__, __LINE__, "%d", i);
@@ -110,7 +110,7 @@ test_generation (void)
   {
     GNCPriceDB *db;
 
-    db = get_random_pricedb (gnc_session_get_book (session));
+    db = get_random_pricedb (qof_session_get_book (session));
 
     if (gnc_pricedb_get_num_prices (db))
       test_db (i, db);
@@ -125,7 +125,7 @@ guile_main (void *closure, int argc, char **argv)
   gnc_module_system_init();
   gnc_module_load("gnucash/engine", 0);
 
-  session = gnc_session_new ();
+  session = qof_session_new ();
 
   test_generation ();
 

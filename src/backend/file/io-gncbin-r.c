@@ -94,7 +94,6 @@
 #include "kvp_frame.h"
 #include "Account.h"
 #include "AccountP.h"
-#include "Backend.h"
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -102,6 +101,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "gnc-commodity.h"
@@ -292,7 +292,7 @@ static int           readTSDate( int fd, Timespec *, int token );
 
 /*******************************************************/
 
-GNCBackendError
+QofBackendError
 gnc_get_binfile_io_error(void)
 {
    /* reset the error code */
@@ -536,11 +536,11 @@ gnc_load_financials_from_fd(QofBook *book, int fd)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 void
-gnc_session_load_from_binfile(GNCSession *session)
+qof_session_load_from_binfile(QofSession *session)
 {
   int  fd;
 
-  const gchar *datafile = gnc_session_get_file_path(session);
+  const gchar *datafile = qof_session_get_file_path(session);
   if(!datafile) {
     error_code = ERR_BACKEND_MISC;
     return;
@@ -555,7 +555,7 @@ gnc_session_load_from_binfile(GNCSession *session)
     return;
   }
 
-  if (!gnc_load_financials_from_fd(gnc_session_get_book(session), fd))
+  if (!gnc_load_financials_from_fd(qof_session_get_book(session), fd))
     return;
 
   close(fd);

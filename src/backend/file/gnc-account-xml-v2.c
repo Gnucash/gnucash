@@ -185,7 +185,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 struct account_pdata
 {
   Account *account;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -445,7 +445,7 @@ gnc_account_end_handler(gpointer data_for_children,
     Account *acc;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -481,7 +481,7 @@ gnc_account_end_handler(gpointer data_for_children,
 }
 
 Account*
-dom_tree_to_account (xmlNodePtr node, GNCBook *book)
+dom_tree_to_account (xmlNodePtr node, QofBook *book)
 {
     struct account_pdata act_pdata;
     Account *accToRet;

@@ -122,7 +122,7 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] = {
 typedef struct
 {
         FreqSpec        *fs;              /* FreqSpec we're parsing into. */
-        GNCBook         *book;            /* Book we're loading into. */
+        QofBook         *book;            /* Book we're loading into. */
 
         /* fields used in the union of unions... :) */
         GDate                 once_day;     /* once */
@@ -584,7 +584,7 @@ gnc_freqSpec_sixtp_parser_create(void)
 }
 
 FreqSpec*
-dom_tree_to_freqSpec(xmlNodePtr node, GNCBook *book)
+dom_tree_to_freqSpec(xmlNodePtr node, QofBook *book)
 {
     gboolean        successful;
     fsParseData        fspd;

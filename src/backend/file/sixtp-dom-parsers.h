@@ -40,10 +40,10 @@
 
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
-gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book);
-gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *);
+gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book);
+gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *);
 
-FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCBook *book);
+FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, QofBook *book);
 
 Timespec* dom_tree_to_timespec(xmlNodePtr node);
 GDate* dom_tree_to_gdate(xmlNodePtr node);
@@ -68,10 +68,10 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
 /* higher level structures */
-Account* dom_tree_to_account(xmlNodePtr node, GNCBook *book);
-GNCBook* dom_tree_to_book   (xmlNodePtr node, GNCBook *book);
-GNCLot*  dom_tree_to_lot    (xmlNodePtr node, GNCBook *book);
-Transaction* dom_tree_to_transaction(xmlNodePtr node, GNCBook *book);
+Account* dom_tree_to_account(xmlNodePtr node, QofBook *book);
+QofBook* dom_tree_to_book   (xmlNodePtr node, QofBook *book);
+GNCLot*  dom_tree_to_lot    (xmlNodePtr node, QofBook *book);
+Transaction* dom_tree_to_transaction(xmlNodePtr node, QofBook *book);
 
 struct dom_tree_handler
 {

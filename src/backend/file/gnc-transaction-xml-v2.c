@@ -199,7 +199,7 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 struct split_pdata
 {
   Split *split;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -382,7 +382,7 @@ struct dom_tree_handler spl_dom_handlers[] =
 };
 
 Split*
-dom_tree_to_split(xmlNodePtr node, GNCBook *book)
+dom_tree_to_split(xmlNodePtr node, QofBook *book)
 {
     struct split_pdata pdata;
     Split *ret;
@@ -412,7 +412,7 @@ dom_tree_to_split(xmlNodePtr node, GNCBook *book)
 struct trans_pdata
 {
   Transaction *trans;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -615,7 +615,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
 }
 
 Transaction *
-dom_tree_to_transaction( xmlNodePtr node, GNCBook *book )
+dom_tree_to_transaction( xmlNodePtr node, QofBook *book )
 {
     Transaction *trn;
     gboolean successful;
