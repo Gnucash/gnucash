@@ -104,7 +104,7 @@ double gnc_convert_to_euro(const char *currency, double value)
 
   if(result == NULL)
   {
-    return value;
+    return 0.0;
   }
   else
   {
@@ -126,7 +126,7 @@ double gnc_convert_from_euro(const char *currency, double value)
 
   if(result == NULL)
   {
-    return value;
+    return 0.0;
   }
   else
   {

@@ -53,6 +53,7 @@
 #include "dialog-find-transactions.h"
 #include "gnc-dateedit.h"
 #include "util.h"
+#include "EuroUtils.h"
 
 
 typedef struct _RegDateWindow RegDateWindow;
@@ -1661,11 +1662,19 @@ regRefresh(xaccLedgerDisplay *ledger)
 {
   RegWindow *regData = (RegWindow *) (ledger->gui_hook);
   int print_flags = PRTSYM | PRTSEP;
+  gboolean euro = gnc_lookup_boolean_option("International",
+					    "Enable EURO support",
+					    FALSE);
+  char *currency = xaccAccountGetCurrency(ledger->leader);
+
+  /* no EURO converson, if account is already EURO or no EURO currency */
+  euro = euro && strncasecmp("EUR", currency, 3) && gnc_is_euro_currency(currency);
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
 
   if (regData->window != NULL)
   {
+    char string[256];
     gboolean reverse = gnc_reverse_balance(ledger->leader);
     double amount;
 
@@ -1675,9 +1684,18 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
+      xaccSPrintAmount(string, amount, print_flags, currency);
+      if(euro)
+      {
+	strcat(string, " / ");
+	xaccSPrintAmount(string + strlen(string),
+			 gnc_convert_to_euro(currency, amount),
+			 print_flags | PRTEUR, NULL);
+      }
+
       gnc_set_label_color(regData->balance_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->balance_label),
-                         xaccPrintAmount(amount, print_flags, NULL));
+                         string);
     }
 
     if (regData->cleared_label != NULL)
@@ -1686,9 +1704,18 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
+      xaccSPrintAmount(string, amount, print_flags, currency);
+      if(euro)
+      {
+	strcat(string, " / ");
+	xaccSPrintAmount(string + strlen(string),
+			 gnc_convert_to_euro(currency, amount),
+			 print_flags | PRTEUR, NULL);
+      }
+
       gnc_set_label_color(regData->cleared_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                         xaccPrintAmount(amount, print_flags, NULL));
+                         string);
     }
 
     gnc_reg_set_window_name(regData);

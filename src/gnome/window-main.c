@@ -670,6 +670,7 @@ gnc_euro_change(void *data)
 {
   gnc_ui_refresh_statusbar();
   gnc_configure_account_tree(data);
+  gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
 static void
