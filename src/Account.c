@@ -237,6 +237,8 @@ removeTransaction( Account *acc, int num )
   if (((Account *)trans->credit) == acc) trans->credit = NULL;
   if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
 
+  /* hack alert -- we should alos remove splits from accounts */
+
   return trans;
 }
 
