@@ -3,3 +3,4 @@ obj
 *.i
 *_wrap.c
 *_wrap.doc
+*.pm
