@@ -409,7 +409,8 @@ ap_close_period (GnomeDruidPage *druidpage,
 {
   AcctPeriodInfo *info = user_data;
   QofBook *closed_book = NULL, *current_book;
-  const char *btitle, *bnotes;
+  const char *btitle;
+  char *bnotes;
   Timespec closing_date;
   KvpFrame *book_frame;
   gboolean really_do_close_books = FALSE;
@@ -454,6 +455,7 @@ ap_close_period (GnomeDruidPage *druidpage,
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();  /* resume above should have been enough ??? */
   }
+  g_free(bnotes);
 
   /* Report the status back to the user. */
   info->close_status = 0;  /* XXX fixme success or failure? */

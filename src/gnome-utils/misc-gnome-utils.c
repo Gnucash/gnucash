@@ -32,7 +32,7 @@ xxxgtk_textview_set_text (GtkTextView *text, const char *str)
 
 }
 
-const char *
+char *
 xxxgtk_textview_get_text (GtkTextView *text)
 {
 	GtkTextIter start, end;

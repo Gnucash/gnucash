@@ -270,6 +270,7 @@ lv_unselect_row_cb (GtkCList       *clist,
    GNCLotViewer *lv = user_data;
    GNCLot *lot = lv->selected_lot;
    const char * str;
+   char * notes;
 
    /* Get the title, plunk it into ctree */
    str = gtk_entry_get_text (lv->title_entry);
@@ -281,8 +282,9 @@ lv_unselect_row_cb (GtkCList       *clist,
       kvp_frame_set_str (kvp, "/title", str);
 
       /* Get the notes, save the notes */
-      str = xxxgtk_textview_get_text (lv->lot_notes);
-      kvp_frame_set_str (kvp, "/notes", str);
+      notes = xxxgtk_textview_get_text (lv->lot_notes);
+      kvp_frame_set_str (kvp, "/notes", notes);
+      g_free(notes);
    }
 
    lv_unset_lot (lv);
@@ -504,6 +506,7 @@ lv_close_handler (gpointer user_data)
    if (lot)
    {
       const char * str;
+      char *notes;
       KvpFrame *kvp = gnc_lot_get_slots (lot);
 
       /* Get the title, save the title */
@@ -511,8 +514,9 @@ lv_close_handler (gpointer user_data)
       kvp_frame_set_str (kvp, "/title", str);
 
       /* Get the notes, save the notes */
-      str = xxxgtk_textview_get_text (lv->lot_notes);
-      kvp_frame_set_str (kvp, "/notes", str);
+      notes = xxxgtk_textview_get_text (lv->lot_notes);
+      kvp_frame_set_str (kvp, "/notes", notes);
+      g_free(notes);
    }
 
    gtk_widget_destroy (lv->window);

@@ -46,6 +46,7 @@
 #include "gdk/gdkfont.h"
 #include "guile-mappings.h"
 #include "gnc-date-format.h"
+#include "misc-gnome-utils.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -2032,10 +2033,7 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
   if (SCM_STRINGP(value))
   {
     char *string = gh_scm2newstr(value, NULL);
-    gint pos = 0;
-    gtk_editable_delete_text(GTK_EDITABLE(widget), 0, -1);
-    gtk_editable_insert_text(GTK_EDITABLE(widget),
-			     string, strlen (string), &pos);
+    xxxgtk_textview_set_text (GTK_TEXT_VIEW(widget), string);
     free(string);
     return FALSE;
   }
@@ -2430,7 +2428,7 @@ gnc_option_get_ui_value_text (GNCOption *option, GtkWidget *widget)
   char * string;
   SCM result;
 
-  string = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
+  string = xxxgtk_textview_get_text (GTK_TEXT_VIEW(widget));
   result = scm_makfrom0str(string);
   g_free(string);
   return result;
