@@ -1,3 +1,8 @@
+2002-11-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/ofx/gnc-ofx-import.c: As a trial, use new
+	generic transaction importer GUI. Changes are marked with 'CS:'.
+
 2002-11-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Account.c -- fix some compiler warnings

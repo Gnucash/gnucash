@@ -43,7 +43,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
-
+#include "gnc-gen-transaction.h"
 
 #include "dialog-utils.h"
 
@@ -59,6 +59,10 @@ SCM  scm_gnc_file_ofx_import ()
   gnc_file_ofx_import();
   return SCM_EOL;
 }
+
+/* CS: Store the reference to the created importer gui so that the
+   ofx_proc_transaction_cb can use it. */
+GNCGenTransaction *gnc_ofx_importer_gui = NULL;
 
 void gnc_file_ofx_import (void)
 {
@@ -93,6 +97,9 @@ void gnc_file_ofx_import (void)
       filenames[1]= (char *)selected_filename;
       /*      filenames[1]=file;*/
       filenames[2]=NULL;
+
+      /* CS: Create the Generic transaction importer GUI. */
+      gnc_ofx_importer_gui = gnc_gen_trans_new(NULL, NULL);
       DEBUG("Opening selected file");
       ofx_proc_file(2, filenames);
     }
@@ -490,7 +497,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	      }
 
 
-	    gnc_import_add_trans(transaction);
+	    /* Previous importer GUI: gnc_import_add_trans(transaction); */
+	    /* CS: Use new importer GUI. */
+	    if (gnc_ofx_importer_gui)
+	      gnc_gen_trans_add_trans (gnc_ofx_importer_gui, transaction);
 	  }
 	else
 	  {
