@@ -70,7 +70,11 @@
 
 (define (gnc:assign-colors num-colors)
   (define base-colors '("red" "orange" "yellow" "green"
-                        "blue" "purple" "violet"))
+                        "cyan" "blue" "purple" "magenta" 
+			"orchid" "khaki" "gold" "orange"
+			"red3" "orange3" "yellow3" "green3"
+                        "cyan3" "blue3" "purple3" "magenta3" 
+  			"orchid3" "khaki3" "gold3" "orange3"))
   (if (<= num-colors 0)
       '()
       (cons (list-ref base-colors

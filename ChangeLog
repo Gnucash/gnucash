@@ -1,3 +1,8 @@
+2001-03-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/income-or-expense-pie.scm: Included new option to
+	summarize all subaccount balances below a certain level threshold.
+
 2001-03-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/Makefile.am: compile src/test after compile src/

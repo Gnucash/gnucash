@@ -70,33 +70,45 @@
 		(car (mktime (localtime (current-time))))))))
       #f 'absolute #f))))
 
+;; A multichoice option intended to chose the account level. Different
+;; from the other functions the help string can still be given. Used
+;; below.
+(define (gnc:options-add-account-levels! 
+	 options pagename name-display-depth 
+	 sort-tag help-string default-depth)
+  (gnc:register-option 
+   options  
+   (gnc:make-multichoice-option
+    pagename name-display-depth
+    sort-tag 
+    help-string
+    default-depth
+    (list (list->vector
+	   (list 'all (_ "All") (_ "All accounts")))
+	  (list->vector
+	   (list 1 "1" (_ "Top-level")))
+	  (list->vector
+	   (list 2 "2" (_ "Second-level")))
+	  (list->vector
+	   (list 3 "3" (_ "Third-level")))
+	  (list->vector
+	   (list 4 "4" (_ "Fourth-level")))
+	  (list->vector
+	   (list 5 "5" (_ "Fourth-level")))
+	  (list->vector
+	   (list 6 "6" (_ "Sixth-level")))))))
+
 ;; These help for selecting a bunch of accounts.
 (define (gnc:options-add-account-selection! 
 	 options pagename 
 	 name-display-depth name-show-subaccounts name-accounts
 	 sort-tag default-depth default-accounts)
   (begin
-    (gnc:register-option 
-     options  
-     (gnc:make-multichoice-option
-      pagename name-display-depth
+    (gnc:options-add-account-levels!
+     options pagename name-display-depth 
       (string-append sort-tag "a")
       (_ "Show accounts to this depth, overriding any other option.") 
-      default-depth
-      (list (list->vector
-	     (list 'all (_ "All") (_ "Show all accounts")))
-	    (list->vector
-	     (list 1 "1" (_ "Top-level")))
-	    (list->vector
-	     (list 2 "2" (_ "Second-level")))
-	    (list->vector
-	     (list 3 "3" (_ "Third-level")))
-	    (list->vector
-	     (list 4 "4" (_ "Fourth-level")))
-	    (list->vector
-	     (list 5 "5" (_ "Fourth-level")))
-	    (list->vector
-	     (list 6 "6" (_ "Sixth-level"))))))
+      default-depth)
     
     (gnc:register-option 
      options  
