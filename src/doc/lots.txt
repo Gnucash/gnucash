@@ -318,6 +318,41 @@ For automatically managing accounts, need to implement a variety of
 different accounting policies (of which the FIFO policy is currently 
 implemented in the 'Scrub' routines).
 
+
+Basic GUI: 
+   The goal of the basic GUI is to handle most usages of
+   most lots in most places.  There also need to be special-purpose
+   dialogs for specific applications, e.g. stocks, inventory, etc.
+
+   Shows three areas: 
+   -- list of lots, one of which can be highlighted.
+      Lot names can be edited in-place.
+   -- contents of a single lot (displayed in a narrow, 
+      mini-register view, showing only date, memo, quant, 
+      balance)
+   -- list of splits not in any lot.
+      (not clear if screen real-estate allows side-by-side 
+      placement, or if this must be above/below. above/below
+      would suck)
+
+   Shows various buttons:
+   -- two arrows, which move split into/out of lot.
+      This is a traditional way of moving something from one
+      list to another, but some UI designers argue against this.
+      Is there a better way to move splits into/out-of a lot?
+
+   -- button, labelled 'close lot', which, when pressed, will
+      set lot balance to zero. (by using fifo on the unassigned 
+      splits, if possible).
+
+   -- A field showing realized gain/loss on a closed lot, and
+      a pull-down allowing the gain/loss to be posted to a 
+      specific account.
+
+   -- button or menu item, 'add notes to this lot'.
+
+
+
 Status
 ======
  o Core support for Lots in the engine is complete (April 2002, ships in 
@@ -329,6 +364,10 @@ Status
  o Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
    These implement a FIFO accounting policy (April 2003)
+
+XXX need to add a lot id, have it auto-gened by the scrubber.
+
+XXX accounts need to designate where realized gains should be posted.
 
  o No GUI yet.
 
