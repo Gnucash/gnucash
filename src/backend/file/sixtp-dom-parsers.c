@@ -47,7 +47,7 @@ dom_tree_to_guid(xmlNodePtr node)
 
     if(strcmp(node->properties->name, "type") != 0)
     {
-        PERR("Unknown attribute for id tag: %s\n",
+        PERR("Unknown attribute for id tag: %s",
              node->properties->name ?
              (char *) node->properties->name : "(null)");
         return NULL;
@@ -464,7 +464,7 @@ dom_tree_to_text(xmlNodePtr tree)
     return NULL;
   }
 
-  PINFO ("node string is >>>%s<<<\n", temp);
+  PINFO ("node string is >>>%s<<<", temp);
   result = g_strdup (temp);
   xmlFree (temp);
   return result;

@@ -162,7 +162,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
     
     if(!tochange)
     {
-        PWARN("Null tochange passed\n");
+        PWARN("Null tochange passed");
         return NULL;
     }
 
@@ -222,7 +222,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
 
         default:
             va_end(ap);
-            PERR("Bogus sixtp type %d\n", type);
+            PERR("Bogus sixtp type %d", type);
             if(cleanup)
             {
                 sixtp_destroy(tochange);
@@ -262,13 +262,13 @@ sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data)
 
   if(!corpses) 
   {
-    PERR("no corpses in sixtp_destroy_child <%s>\n",
+    PERR("no corpses in sixtp_destroy_child <%s>",
          key ? (char *) key : "(null)");
     return;
   }
   if(!child) 
   {
-    PERR("no child in sixtp_destroy_child <%s>\n",
+    PERR("no child in sixtp_destroy_child <%s>",
          key ? (char *) key : "");
     return;
   }
@@ -339,7 +339,7 @@ sixtp_add_some_sub_parsers(sixtp *tochange, int cleanup, ...)
         handler = va_arg(ap, sixtp*);
         if(!handler)
         {
-            PWARN("Handler for tag %s is null\n",
+            PWARN("Handler for tag %s is null",
                       tag ? tag : "(null)");
 
             if(cleanup)
@@ -614,7 +614,7 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data)
   GSList *lp;
   GSList **stack = &(sax_data->stack);
 
-  PERR("parse failed at \n");
+  PERR("parse failed at:");
   sixtp_print_frame_stack(sax_data->stack, stderr);
 
   while(*stack) 
