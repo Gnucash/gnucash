@@ -1,3 +1,12 @@
+2003-02-16  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome/gnc-split-reg.c:
+	  only display an euro amount in the status bar of a register window
+	  if the account currency is a euro currency but NOT euro itself
+
+	* src/gnome-utils/gnc-account-tree.c:
+	  auto resize balance and total columns
+	
 2003-02-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-file.scm:

@@ -189,6 +189,14 @@ gnc_account_tree_init (GNCAccountTree *tree)
   gtk_clist_set_column_auto_resize(GTK_CLIST(tree), 0, TRUE);
   gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
                                    tree->description_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->balance_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->balance_column + 1, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->total_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->total_column + 1, TRUE );
 
   gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->balance_column,
