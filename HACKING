@@ -70,6 +70,7 @@ August 22, 2000
 --------------------------------------------------
 
 Starting Gnucash from the build tree:
+-------------------------------------
 
 To run gnucash from your build tree:
 -- edit ./src/bin/overrides/gnucash and replace gnucash-env with
@@ -79,7 +80,7 @@ To run gnucash from your build tree:
 
 
 Starting GnuCash in GDB
-
+-----------------------
 To run gdb on an installed version of gnucash (installed in /usr/local/bin:)
 
     % gnucash-env gdb /usr/bin/guile
@@ -93,7 +94,24 @@ To run gdb on the version in your build tree:
     % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
 
 
-Using Valgrind with gnucash
+Using Electric Fence with GnuCash
+---------------------------------
+    % configure --enable-efence
+(except this doesn't actually enable efence :-( need to hack
+configure.in and add $LIBS = -lefence and re-run ./autogen.sh)
+
+Don't know why, efence does not currently work with gnucash:
+I get a bunch of errors:
+   warning: Cannot initialize thread debugging library: unknown thread_db error '22'
+
+If you know how to fix this, please update tehse instructions.
+
+Using Valgrind with GnuCash
+---------------------------
 -- run ./src/bin/overrides/gnucash-valgrind
 
-However, I did not find valgrind to be useful.  
+However, I did not find valgrind to be useful.  It reported a bunch of
+guile bugs, some g_has_table bugs, and then the program exited prematurely 
+for no appearenet reason. :-( 
+
+If you know how to fix this, please update tehse instructions.
