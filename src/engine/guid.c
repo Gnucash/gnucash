@@ -394,18 +394,19 @@ decode_md5_string(const char *string, unsigned char *data)
   size_t count;
   char c1, c2;
 
-  if (string == NULL)
-    return FALSE;
+  if (NULL == data) return FALSE;
+  if (NULL == string) goto badstring;
 
   for (count = 0; count < 16; count++)
   {
+    /* check for a short string e.g. null string ... */
+    if ((0==string[2*count]) || (0==string[2*count+1])) goto badstring;
+
     c1 = tolower(string[2 * count]);
-    if (!isxdigit(c1))
-      return FALSE;
+    if (!isxdigit(c1)) goto badstring;
 
     c2 = tolower(string[2 * count + 1]);
-    if (!isxdigit(c2))
-      return FALSE;
+    if (!isxdigit(c2)) goto badstring;
 
     if (isdigit(c1))
       n1 = c1 - '0';
@@ -417,11 +418,17 @@ decode_md5_string(const char *string, unsigned char *data)
     else
       n2 = c2 - 'a' + 10;
 
-    if (data != NULL)
-      data[count] = (n1 << 4) | n2;
+    data[count] = (n1 << 4) | n2;
   }
-
   return TRUE;
+
+badstring:
+  for (count = 0; count < 16; count++)
+  {
+    data[count] = 0;
+  }
+  return FALSE;
+
 }
 
 char *
