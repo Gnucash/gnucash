@@ -38,7 +38,7 @@
 (define (gnc:monetary->string value)
   (gnc:amount->string-helper 
    (gnc:gnc-monetary-amount value) 
-   (gnc:commodity-print-info (gnc:gnc-monetary-amount value) #t)))
+   (gnc:commodity-print-info (gnc:gnc-monetary-commodity value) #t)))
 
 ;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)

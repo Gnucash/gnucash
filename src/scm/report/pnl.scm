@@ -43,7 +43,9 @@
        (optname-show-parent-total (N_ "Show subtotals"))
        
        (optname-show-foreign (N_ "Show Foreign Currencies"))
-       (optname-report-currency (N_ "Report's currency")))
+       (optname-report-currency (N_ "Report's currency"))
+       (optname-price-source (N_ "Price Source"))
+       (optname-show-rates (N_ "Show Exchange Rates")))
   
   ;; options generator
   (define (pnl-options-generator)
@@ -74,18 +76,25 @@
       (gnc:options-add-group-accounts!      
        options gnc:pagename-display optname-group-accounts "b" #t)
 
-      ;; FIXME: new options here
+      ;; what to show about non-leaf accounts
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-parent-balance 
 	"c" (N_ "Show balances for parent accounts") #f))
 
+      ;; have a subtotal for each parent account?
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #t))
+
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	gnc:pagename-display optname-show-rates
+	"e" (N_ "Show the exchange rates used") #t))
 
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options gnc:pagename-general)      
@@ -121,6 +130,8 @@
 				  optname-show-foreign))
 	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))
+	  (show-rates? (get-option gnc:pagename-display 
+				   optname-show-rates))
           (to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
                         (get-option gnc:pagename-general
@@ -160,10 +171,16 @@
 	    (gnc:html-document-add-object! doc table)
 
 	    ;; add currency information
-	    (gnc:html-document-add-object! 
-	     doc ;;(gnc:html-markup-p
-	     (gnc:html-make-exchangerates 
-	      report-currency exchange-alist accounts #f)));;)
+	    (if show-rates?
+		(gnc:html-document-add-object! 
+		 doc ;;(gnc:html-markup-p
+		 (gnc:html-make-exchangerates 
+		  report-currency exchange-fn 
+		  (append-map 
+		   (lambda (a)
+		     (gnc:group-get-subaccounts
+		      (gnc:account-get-children a)))
+		   accounts)))))
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))

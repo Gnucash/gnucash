@@ -40,8 +40,10 @@
        (optname-show-parent-balance (N_ "Show balances for parent accounts"))
        (optname-show-parent-total (N_ "Show subtotals"))
        
+       (optname-report-currency (N_ "Report's currency"))
+       (optname-price-source (N_ "Price Source"))
        (optname-show-foreign (N_ "Show Foreign Currencies"))
-       (optname-report-currency (N_ "Report's currency")))
+       (optname-show-rates (N_ "Show Exchange Rates")))
 
   ;; Moderatly ugly hack here, i.e. this depends on the internal
   ;; structure of html-table -- if that is changed, this might break.
@@ -79,6 +81,9 @@
        options gnc:pagename-general
        optname-show-foreign optname-report-currency
        "b")
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "c" 'weighted-average)
 
       ;; accounts to work on
       (gnc:options-add-account-selection! 
@@ -104,6 +109,12 @@
        (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #f))
+
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	gnc:pagename-display optname-show-rates
+	"e" (N_ "Show the exchange rates used") #f))
 
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options gnc:pagename-general)      
@@ -136,6 +147,10 @@
 				   optname-show-foreign))
 	   (report-currency (get-option gnc:pagename-general
 					optname-report-currency))
+	   (price-source (get-option gnc:pagename-general
+				     optname-price-source))
+	   (show-rates? (get-option gnc:pagename-display 
+				    optname-show-rates))
 	   (to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
                         (get-option gnc:pagename-general
@@ -159,9 +174,16 @@
 			   (gnc:get-current-group-depth) 
 			   display-depth))
 	   ;; calculate the exchange rates  
-	   (exchange-alist (gnc:make-exchange-alist 
-			    report-currency to-date-tp))
-	   (exchange-fn (gnc:make-exchange-function exchange-alist))
+	   (exchange-fn 
+	    (case price-source
+	      ('weighted-average (gnc:make-exchange-function 
+				  (gnc:make-exchange-alist 
+				   report-currency to-date-tp)))
+	      ('pricedb-latest gnc:exchange-by-pricedb-latest)
+	      ('pricedb-nearest (lambda (foreign domestic)
+				  (gnc:exchange-by-pricedb-nearest
+				   foreign domestic to-date-tp)))
+	      (else (gnc:warn "balance-sheet: bad price-source value"))))
 	   (totals-get-balance (lambda (account)
 				 (gnc:account-get-comm-balance-at-date 
 				  account to-date-tp #f))))
@@ -287,13 +309,14 @@
 	    (add-subtotal-line
 	     asset-table (_ "Liabilities & Equity") equity-plus-liability)
 	    (gnc:html-document-add-object! doc asset-table)
-
+	    
 	    ;; add currency information
-;	    (gnc:html-document-add-object! 
-;	     doc ;;(gnc:html-markup-p
-;	     (gnc:html-make-exchangerates 
-;	      report-currency exchange-alist accounts #f)))
-	    )
+	    (if show-rates?
+		(gnc:html-document-add-object! 
+		 doc ;;(gnc:html-markup-p
+		 (gnc:html-make-exchangerates 
+		  report-currency exchange-fn accounts))))
+	  
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))

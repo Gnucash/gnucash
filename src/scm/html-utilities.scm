@@ -393,13 +393,14 @@
     ;; depends on the structure of html-table-data, i.e. if those are
     ;; changed then this might break.
     (define (remove-last-empty-row)
-      (if (not (or-map
-		(lambda (e) 
-		  (if (gnc:html-table-cell? e)
-		      (car (gnc:html-table-cell-data e))
-		      e))
-		(car (gnc:html-table-data table))))
-	  (gnc:html-table-remove-last-row! table)))
+      (if (not (null? (gnc:html-table-data table)))
+	  (if (not (or-map
+		    (lambda (e) 
+		      (if (gnc:html-table-cell? e)
+			  (car (gnc:html-table-cell-data e))
+			  e))
+		    (car (gnc:html-table-data table))))
+	      (gnc:html-table-remove-last-row! table))))
 
 
     ;; Wrapper for gnc:html-acct-table-row-helper!
@@ -600,45 +601,56 @@
 ;; Returns a html-object which is a table of all exchange rates.
 ;; Where the report's commodity is common-commodity.
 (define (gnc:html-make-exchangerates
-	 common-commodity rate-alist accounts show-always?) 
-  (let ((comm-list (delete-duplicates
-		    (sort (map gnc:account-get-commodity accounts) 
-			  (lambda (a b) 
-			    (string<? (gnc:commodity-get-mnemonic a)
-				      (gnc:commodity-get-mnemonic b))))))
-	(table (gnc:make-html-table))
-	(any-printed? #f))
-
-    ;; Do something with each exchange rate.
-    (for-each 
-     (lambda (pair)
-       (if (or show-always?
-	       (member (car pair) comm-list))
-	   (begin
-	     (set! any-printed? #t)
-	     (gnc:html-table-append-row! 
-	      table
-	      (list 
-	       (gnc:make-gnc-monetary (car pair) (gnc:numeric-create 1 1))
-	       ;; convert the foreign commodity to 6 significant digits
-	       (gnc:make-gnc-monetary 
-		common-commodity 
-		(gnc:numeric-convert (cadr pair) GNC-DENOM-AUTO 
-				     (logior (GNC-DENOM-SIGFIGS 6) 
-					     GNC-RND-ROUND))))))))
-     rate-alist)
-
-    ;; Set some style
-    (gnc:html-table-set-style! 
-     table "td" 
-     'attribute '("align" "right")
-     'attribute '("valign" "top"))
-
-    (if any-printed?
-	;; set some column headers 
-	(gnc:html-table-set-col-headers!
-	 table 
-	 (list (gnc:make-html-table-header-cell/size 
-		1 2 (_ "Exchange rate ")))))
-
+	 common-commodity exchange-fn accounts) 
+  (let ((comm-list (delete
+		    common-commodity
+		    (delete-duplicates
+		     (sort (map gnc:account-get-commodity accounts) 
+			   (lambda (a b) 
+			     (string<? (gnc:commodity-get-mnemonic a)
+				       (gnc:commodity-get-mnemonic b)))))))
+	(table (gnc:make-html-table)))
+    
+    (if (not (null? comm-list))
+	;; Do something with each exchange rate.
+	(begin
+	  (for-each 
+	   (lambda (commodity)
+	     (let 
+		 ;; slight hack: exchange a value greater than one,
+		 ;; to get enough digits, and round later.
+		 ((exchanged 
+		   (exchange-fn 
+		    (gnc:make-gnc-monetary commodity 
+					   (gnc:numeric-create 1000 1))
+		    common-commodity)))
+	       (gnc:html-table-append-row! 
+		table
+		(list 
+		 (gnc:make-gnc-monetary commodity 
+					(gnc:numeric-create 1 1))
+		 (gnc:make-gnc-monetary
+		  common-commodity
+		  (gnc:numeric-div
+		   (gnc:gnc-monetary-amount exchanged)
+		   (gnc:numeric-create 1000 1)
+		   GNC-DENOM-AUTO 
+		   (logior (GNC-DENOM-SIGFIGS 6) 
+			   GNC-RND-ROUND)))))))
+	   comm-list)
+	  
+	  ;; Set some style
+	  (gnc:html-table-set-style! 
+	   table "td" 
+	   'attribute '("align" "right")
+	   'attribute '("valign" "top"))
+	  
+	  ;; set some column headers 
+	  (gnc:html-table-set-col-headers!
+	   table 
+	   (list (gnc:make-html-table-header-cell/size 
+		  1 2 (if (= 1 (length comm-list))
+			  (_ "Exchange rate")
+			  (_ "Exchange rates")))))))
+    
     table))

@@ -678,6 +678,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
     GNCPrice *p = item->data;
     Timespec price_time = gnc_price_get_time(p);
     if(timespec_cmp(&price_time, &t) > 0) {
+      before_price = after_price;
       after_price = item->data;
     }
     item = item->next;

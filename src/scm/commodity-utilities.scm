@@ -309,9 +309,9 @@
 	     result)
 	   (begin
 	     (warn "gnc:exchange-by-price-helper: No price found for "
-		   (gnc:commodity-value->string foreign) " into "
-		   (gnc:commodity-value->string 
-		    (list domestic (gnc:numeric-zero))))
+		   (gnc:monetary->string foreign) " into "
+		   (gnc:monetary->string
+		    (gnc:make-gnc-monetary domestic (gnc:numeric-zero))))
 	     (gnc:numeric-zero))))
       #f))
 

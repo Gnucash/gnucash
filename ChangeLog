@@ -1,3 +1,23 @@
+2001-04-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/balance-sheet.scm: Added option to choose the
+	source of prices. Adapted to changes in html-utilities.
+
+	* src/scm/report/pnl.scm: Adapted to changes.
+
+	* src/scm/report-utilities.scm (gnc:monetary->string): Fix bug.
+
+	* src/scm/html-utilities.scm (gnc:html-make-exchangerates):
+	Switched to different arguments. Fix bug.
+
+	* src/scm/commodity-utilities.scm: fix bug
+
+	* src/scm/options-utilities.scm (gnc:options-add-price-source!):
+	added function.
+
+	* src/engine/gnc-pricedb.c (gnc_pricedb_lookup_nearest_in_time):
+	fix bug.
+
 2001-04-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm

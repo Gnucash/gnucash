@@ -193,6 +193,26 @@
   (gnc:options-add-currency! options pagename name-report-currency 
 			     (string-append sort-tag "b")))
 
+;; A multichoice option for the source of prices
+(define (gnc:options-add-price-source! 
+	 options pagename optname sort-tag default)
+  (gnc:register-option 
+   options
+   (gnc:make-multichoice-option
+    pagename optname
+    sort-tag (N_ "The source of price information") default
+    (list (vector 'weighted-average 
+		  (N_ "Weighted Average")
+		  (N_ "The weighted average all currency transactions of the past"))
+	  (vector 'pricedb-latest 
+		  (N_ "Most recent")
+		  (N_ "The most recent recorded price"))
+	  (vector 'pricedb-nearest
+		  (N_ "Nearest in time")
+		  (N_ "The price recorded nearest in time to the report date"))
+	  ))))
+
+;; The width- and height- options for charts
 (define (gnc:options-add-plot-size!
 	 options pagename 
 	 name-width name-height sort-tag 
