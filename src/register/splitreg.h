@@ -73,10 +73,11 @@
 #define PORTFOLIO           11
 
 #define REG_TYPE_MASK       0xff
-#define REG_SHOW_TDETAIL    0x100
-#define REG_SHOW_SDETAIL    0x200
-#define REG_SHOW_RECS       0x400
-
+#define REG_SHOW_TDETAIL    0x0100
+#define REG_SHOW_SDETAIL    0x0200
+#define REG_SHOW_RECS       0x0400
+#define REG_DOUBLE_LINE     0x0800
+#define REG_MULTI_LINE      0x1000
 
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE   0x0000
