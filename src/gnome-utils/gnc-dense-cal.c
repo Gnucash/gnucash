@@ -167,12 +167,12 @@ static GtkWidgetClass *parent_class = NULL;
  * locale. (i18n'd version of the above static character array.) */
 static const gchar *month_name(int mon) 
 {
-    static char buf[MONTH_NAME_BUFSIZE];
+    static gchar buf[MONTH_NAME_BUFSIZE];
     struct tm my_tm;
     int i;
 
     my_tm.tm_mon = mon;
-    i = strftime (buf, MONTH_NAME_BUFSIZE, "%b", &my_tm);
+    i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%b", &my_tm);
     return buf;
 }
 /* FIXME: i18n 
@@ -183,12 +183,14 @@ static const gchar *month_name(int mon)
  * the abbreviated weekday name according to the current locale. */
 static const gchar *day_label(int wday)
 {
-    static char buf[MONTH_NAME_BUFSIZE];
+    static gchar buf[MONTH_NAME_BUFSIZE];
     struct tm my_tm;
     int i;
     
     my_tm.tm_wday = wday;
-    i = strftime (buf, MONTH_NAME_BUFSIZE, "%a", &my_tm);
+    i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%a", &my_tm);
+    /* Wild hack to use only the first two letters */
+    buf[2]='\0';
     return buf;
 }
 
@@ -264,14 +266,14 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 GtkWidget *vbox, *hbox;
                 GtkWidget *l;
                 GtkCList *cl;
-                static const gchar *CLIST_TITLES[] = {
-                        "Name", "Info"
-                };
+                static gchar *CLIST_TITLES[2];
+		CLIST_TITLES[0] = _("Name");
+		CLIST_TITLES[1] = _("Frequency");
 
                 vbox = gtk_vbox_new( FALSE, 5 );
                 hbox = gtk_hbox_new( FALSE, 5 );
 
-                l = gtk_label_new( "Date: " );
+                l = gtk_label_new( _("Date: ") );
                 gtk_container_add( GTK_CONTAINER(hbox), l );
                 l = gtk_label_new( "YY/MM/DD" );
                 gtk_object_set_data( GTK_OBJECT(dcal->transPopup),
@@ -999,7 +1001,12 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
                                                      "dateLabel" ) );
                 date = g_date_new_dmy( 1, dcal->month, dcal->year );
                 g_date_add_days( date, doc );
-                g_date_strftime( strftimeBuf, MAX_STRFTIME_BUF_LEN-1, "%Y-%m-%d", date );
+		/* Note: the ISO date format (%F or equivalently
+		 * %Y-%m-%d) is not a good idea here since many
+		 * locales will want to use a very different date
+		 * format. Please leave the specification of the date
+		 * format up to the locale and use %x here.  */
+                g_date_strftime( strftimeBuf, MAX_STRFTIME_BUF_LEN-1, "%x", date );
                 gtk_label_set_text( GTK_LABEL(w), strftimeBuf );
 
                 o = GTK_OBJECT(dcal->transPopup);
@@ -1373,27 +1380,27 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         y -= dcal->topPadding;
 
         if ( (x < 0) || (y < 0) ) {
-                DEBUG( "x(%d) or y(%d) < 0", x, y );
+	    /* DEBUG( "x(%d) or y(%d) < 0", x, y ); */
                 return -1;
         }
         if ( (x >= GTK_WIDGET(dcal)->allocation.width)
              || (y >= GTK_WIDGET(dcal)->allocation.height) ) {
-                DEBUG( "x(%d) > allocation.width(%d) or y(%d) > allocation->height(%d)",
-                       x, y,
-                       GTK_WIDGET(dcal)->allocation.width,
-                       GTK_WIDGET(dcal)->allocation.height );
+	    /*DEBUG( "x(%d) > allocation.width(%d) or y(%d) > allocation->height(%d)",
+	      x, y,
+	      GTK_WIDGET(dcal)->allocation.width,
+	      GTK_WIDGET(dcal)->allocation.height );*/
                 return -1;
         }
 
         /* "outside of displayed table" check */
         if ( x >= (num_cols(dcal) * (col_width(dcal) + COL_BORDER_SIZE)) ) {
-                DEBUG( "x(%d) > ( col_width(%d) * num_cols(%d) )",
-                       x, col_width(dcal), num_cols(dcal) );
+	    /*DEBUG( "x(%d) > ( col_width(%d) * num_cols(%d) )",
+	      x, col_width(dcal), num_cols(dcal) );*/
                 return -1;
         }
         if ( y >= col_height(dcal) ) {
-                DEBUG( "y(%d) > col_height(%d)",
-                       y, col_height(dcal) );
+	    /*DEBUG( "y(%d) > col_height(%d)",
+	      y, col_height(dcal) );*/
                 return -1;
         }
         
@@ -1403,18 +1410,18 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         x %= (col_width(dcal)+COL_BORDER_SIZE);
         x -= dcal->label_width;
         if ( x < 0 ) {
-                DEBUG( "X is over the label." );
-                return -1;
+	    /* DEBUG( "X is over the label." );*/
+	    return -1;
         }
         if ( x >= day_width(dcal) * 7 ) {
-                DEBUG( "X is in the col_border space." );
-                return -1;
+	    /*DEBUG( "X is in the col_border space." );*/
+	    return -1;
         }
 
         y -= dcal->dayLabelHeight;
         if ( y < 0 ) {
-                DEBUG( "Y is over the label." );
-                return -1;
+	    /*DEBUG( "Y is over the label." );*/
+	    return -1;
         }
 
         dayCol = floor( (float)x / (float)day_width(dcal) );
@@ -1426,7 +1433,7 @@ wheres_this( GncDenseCal *dcal, int x, int y )
         dayCol -= (g_date_weekday(&d) % 7);
         if ( weekRow == 0 ) {
                 if ( dayCol < 0 ) {
-                        DEBUG( "Before the beginning of the first month." );
+		    /*DEBUG( "Before the beginning of the first month." );*/
                         return -1;
                 }
         }
@@ -1438,8 +1445,8 @@ wheres_this( GncDenseCal *dcal, int x, int y )
                 g_date_set_dmy( &ccd, 1, dcal->month, dcal->year );
                 g_date_add_months( &ccd, (colNum+1) * dcal->monthsPerCol );
                 if ( g_date_julian(&d) >= g_date_julian(&ccd) ) {
-                        DEBUG( "%d outside of column range [%d]",
-                               g_date_julian(&d), g_date_julian(&ccd) );
+		    /*DEBUG( "%d outside of column range [%d]",
+		      g_date_julian(&d), g_date_julian(&ccd) );*/
                         return -1;
                 }
         }
