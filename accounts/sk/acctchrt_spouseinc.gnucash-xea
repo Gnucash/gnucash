@@ -31,6 +31,16 @@
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>Výdaje</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Výdaje</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
     <act:name>Dane a poplatky (Partnerove)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
@@ -39,7 +49,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Partnerove dane a poplatky</act:description>
-  <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Celo¹tátne dane</act:name>
