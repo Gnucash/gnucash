@@ -440,7 +440,7 @@ get_random_kvp_value_depth (int type, gint depth)
         break;
 
     case KVP_TYPE_DOUBLE:
-        return kvp_value_new_double(get_random_double());
+	return NULL;
         break;
 
     case KVP_TYPE_NUMERIC:
