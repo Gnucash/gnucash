@@ -387,10 +387,22 @@ static const char *table_drop_str =
  * this tear-up.
  */
 
+typedef struct
+{
+  Transaction * trans;
+  char * commodity_string;
+} TransResolveInfo;
+
+typedef struct
+{
+  GList * xaction_list;
+  GList * resolve_list;
+} QueryData;
+
 static gpointer
 query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *xaction_list = (GList *) data;
+   QueryData *qd = data;
    GUID trans_guid;
    Transaction *trans;
    gnc_commodity *currency;
@@ -407,7 +419,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       if (0 != trans->marker)
       {
-         return xaction_list;
+         return qd;
       }
       else
       {
@@ -415,7 +427,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
          db_version = atoi (DB_GET_VAL("version",j));
          cache_version = xaccTransGetVersion (trans);
          if (db_version <= cache_version) {
-            return xaction_list;
+            return qd;
          }
          xaccTransBeginEdit (trans);
       }
@@ -437,15 +449,26 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
-   xaccTransSetCurrency (trans, currency);
+   if (currency)
+     xaccTransSetCurrency (trans, currency);
+   else
+   {
+     TransResolveInfo * ri = g_new0 (TransResolveInfo, 1);
+
+     ri->trans = trans;
+     ri->commodity_string = g_strdup (DB_GET_VAL("currency",j));
+
+     qd->resolve_list = g_list_prepend (qd->resolve_list, ri);
+   }
 
    trans->marker = 1;
-   xaction_list = g_list_prepend (xaction_list, trans);
+   qd->xaction_list = g_list_prepend (qd->xaction_list, trans);
 
-   return xaction_list;
+   return qd;
 }
 
-typedef struct acct_earliest {
+typedef struct acct_earliest
+{
    Account *acct;
    Timespec ts;
 } AcctEarliest;
@@ -457,8 +480,11 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
    int call_count = ncalls;
    int nact=0;
-   GList *xaction_list = NULL;
+   QueryData qd;
    GList *node, *anode, *acct_list = NULL;
+
+   qd.xaction_list = NULL;
+   qd.resolve_list = NULL;
 
    ENTER (" ");
    if (!be) return;
@@ -473,11 +499,37 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    ncalls ++;
 
    SEND_QUERY (be, query_string, );
-   xaction_list = pgendGetResults (be, query_cb, NULL);
+   pgendGetResults (be, query_cb, &qd);
    REPORT_CLOCK (9, "fetched results at call %d", call_count);
 
+   for (node = qd.resolve_list; node; node = node->next)
+   {
+     TransResolveInfo * ri = node->data;
+     gnc_commodity * commodity;
+
+     pgendGetCommodity (be, ri->commodity_string);
+     commodity = gnc_string_to_commodity (ri->commodity_string, be->book);
+
+     if (commodity)
+     {
+       xaccTransSetCurrency (ri->trans, commodity);
+     }
+     else
+     {
+       PERR ("Can't find commodity %s", ri->commodity_string);
+     }
+
+     g_free (ri->commodity_string);
+     ri->commodity_string = NULL;
+
+     g_free (ri);
+     node->data = NULL;
+   }
+   g_list_free (qd.resolve_list);
+   qd.resolve_list = NULL;
+
    /* restore the splits for these transactions */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
 
@@ -485,7 +537,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    }
 
    /* restore any kvp data associated with the transaction and splits */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
@@ -503,7 +555,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    }
 
    /* run the fill-out algorithm */
-   for (node=xaction_list; node; node=node->next)
+   for (node = qd.xaction_list; node; node = node->next)
    {
       Transaction *trans = (Transaction *) node->data;
       GList *split_list, *snode;
@@ -576,8 +628,8 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
          }
       }
    }
-   g_list_free (xaction_list);
-
+   g_list_free (qd.xaction_list);
+   qd.xaction_list = NULL;
 
    REPORT_CLOCK (9, "done gathering at call %d", call_count);
    if (NULL == acct_list) return;

@@ -246,41 +246,83 @@ pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
  * for the indicated book.
  */
 
+typedef struct
+{
+  Account * account;
+
+  char * commodity_string; /* If non-NULL, need to load commodity */
+} AccountResolveInfo;
+
+typedef struct
+{
+  GNCBook * book;
+  GList * resolve_info;
+} GetAccountData;
+
 static gpointer
 get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data; 
+   GetAccountData * gad = data;
+   GNCBook * book = gad->book;
    Account *parent;
    Account *acc;
    GUID acct_guid;
+   char * commodity_string;
+   gnc_commodity * commodity;
 
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
 
-   FIND_BOOK (book);
+   if (NULL == book)
+   {
+      GList *node;
+      GUID book_guid;
+
+      FIND_BOOK (book);
+
+      book = NULL;
+      for (node=be->blist; node; node=node->next)
+      {
+         book = node->data;
+         if (guid_equal (&book->guid, &book_guid)) break;
+         book = NULL;
+      }
+      if (!book) return data;
+   }
 
    /* Next, lets see if we've already got this account */
    acct_guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &acct_guid);
 
    acc = xaccAccountLookup (&acct_guid, book);
-   if (!acc) 
+   if (!acc)
    {
       acc = xaccMallocAccount(book);
       xaccAccountBeginEdit(acc);
       xaccAccountSetGUID(acc, &acct_guid);
    }
-   else 
+   else
    {
       xaccAccountBeginEdit(acc);
+   }
+
+   commodity_string = DB_GET_VAL("commodity",j);
+   commodity = gnc_string_to_commodity (commodity_string, book);
+   if (!commodity)
+   {
+     AccountResolveInfo *ri = g_new0 (AccountResolveInfo, 1);
+
+     ri->account = acc;
+     ri->commodity_string = g_strdup (commodity_string);
+
+     gad->resolve_info = g_list_prepend (gad->resolve_info, ri);
    }
 
    xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
    xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
    xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
-   xaccAccountSetCommodity(acc, 
-                           gnc_string_to_commodity (DB_GET_VAL("commodity",j),
-                                                    book));
+   if (commodity)
+     xaccAccountSetCommodity(acc, commodity);
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 
@@ -312,9 +354,55 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       xaccAccountInsertSubAccount(parent, acc);
       xaccAccountCommitEdit(parent);
    }
+
    xaccAccountCommitEdit(acc);
 
    return data;
+}
+
+static void
+pgendGetAccounts (PGBackend *be, GNCBook *book)
+{
+  GetAccountData gad;
+
+  gad.book = book ? book : be->book;
+  gad.resolve_info = NULL;
+
+  pgendGetResults (be, get_account_cb, &gad);
+
+  while (gad.resolve_info)
+  {
+    AccountResolveInfo *ri = gad.resolve_info->data;
+
+    xaccAccountBeginEdit (ri->account);
+
+    if (ri->commodity_string)
+    {
+      gnc_commodity * commodity;
+
+      pgendGetCommodity (be, ri->commodity_string);
+      commodity = gnc_string_to_commodity (ri->commodity_string,
+                                           xaccAccountGetBook (ri->account));
+
+      if (commodity)
+      {
+        xaccAccountSetCommodity (ri->account, commodity);
+      }
+      else
+      {
+        PERR ("Can't find commodity %s", ri->commodity_string);
+      }
+
+      g_free (ri->commodity_string);
+      ri->commodity_string = NULL;
+    }
+
+    xaccAccountCommitEdit (ri->account);
+
+    gad.resolve_info = g_list_remove (gad.resolve_info, ri);
+
+    g_free (ri);
+  }
 }
 
 void
@@ -335,7 +423,7 @@ pgendGetAllAccounts (PGBackend *be)
    /* Get them ALL */
    bufp = "SELECT * FROM gncAccount;";
    SEND_QUERY (be, bufp, );
-   pgendGetResults (be, get_account_cb, NULL);
+   pgendGetAccounts (be, NULL);
 
    for (node=be->blist; node; node=node->next)
    {
@@ -371,7 +459,7 @@ pgendGetAllAccountsInBook (PGBackend *be, GNCBook *book)
    p = guid_to_string_buff (gnc_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
-   pgendGetResults (be, get_account_cb, book);
+   pgendGetAccounts (be, book);
 
    topgrp = gnc_book_get_group (book);
    pgendGetAllAccountKVP (be, topgrp);
@@ -407,7 +495,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    if (!acc)
    {
       engine_data_is_newer = -1;
-   } 
+   }
    else
    {
       /* save some performance, don't go to the
@@ -417,7 +505,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
          PINFO ("fresh data, skip check");
          engine_data_is_newer = 0;
       }
-      else 
+      else
       {
          engine_data_is_newer = - pgendAccountCompareVersion (be, acc);
       }
@@ -434,7 +522,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       pbuff = stpcpy (pbuff, "';");
 
       SEND_QUERY (be,be->buff, 0);
-      pgendGetResults (be, get_account_cb, NULL);
+      pgendGetAccounts (be, NULL);
       acc = pgendAccountLookup (be, acct_guid);
 
       /* restore any kvp data associated with the transaction and splits */

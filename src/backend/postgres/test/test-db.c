@@ -661,8 +661,6 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
   GNCBook *book;
   gboolean ok;
 
-  // return TRUE;   /* XXX uhh, queries not curently tested ... */
-
   g_return_val_if_fail (db_name && mode, FALSE);
 
   book = gnc_session_get_book (session_base);
@@ -841,7 +839,7 @@ test_updates_2 (GNCSession *session_base,
   }
 #endif
 
-#if 0
+#if 1
   {
     Account * account = get_random_account (td.book_1);
     Account * child = NULL; /* get_random_account (td.book_1); */
@@ -852,7 +850,7 @@ test_updates_2 (GNCSession *session_base,
     xaccAccountBeginEdit (account);
     xaccAccountBeginEdit (child);
     xaccGroupInsertAccount (td.group_1, account);
-    xaccAccountInsertSubAccount (account, child);
+    /* xaccAccountInsertSubAccount (account, child); */
     xaccAccountCommitEdit (child);
     xaccAccountCommitEdit (account);
 
@@ -869,7 +867,7 @@ test_updates_2 (GNCSession *session_base,
     xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (account),
                            GNC_ID_ACCOUNT, QUERY_AND);
 
-    xaccQuerySetGroup (q, td.group_2);
+    xaccQuerySetBook (q, td.book_2);
 
     ok = (g_list_length (xaccQueryGetSplits (q)) == count);
 
