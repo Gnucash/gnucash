@@ -1596,6 +1596,10 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   if (ledger->type != SEARCH_LEDGER)
     gnc_register_set_date_range(regData);
 
+  /* Now that we have a date range, remove any existing
+   * maximum on the number of splits returned. */
+  xaccQuerySetMaxSplits(regData->ledger->query, -1);
+
   statusbar = gnc_register_create_status_bar(regData);
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
