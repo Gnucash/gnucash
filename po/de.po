@@ -1,6 +1,9 @@
 # Messages in Deutsch für GnuCash
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
+# Christian Stimming <stimming@tuhh.de>, 2001.
+# Christian Meyer <chrisime@gnome.org>, 2000, 2001.
+# Herbert Thoma <tma@iis.fhg.de>, 2001.
 #
 msgid ""
 msgstr ""
