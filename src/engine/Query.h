@@ -258,6 +258,11 @@ GList       * xaccQueryGetSplits(Query * q);
 GList       * xaccQueryGetSplitsUniqueTrans(Query *q);
 GList       * xaccQueryGetTransactions(Query * q, query_run_t type);
 
+/* compare two queries for equality. this is a simplistic
+ * implementation -- logical equivalences between different
+ * and/or trees are ignored. */
+gboolean xaccQueryEqual(Query *q1, Query *q2);
+
 /* handy for debugging */
 void    xaccQueryPrint(Query *q);
 

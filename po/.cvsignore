@@ -1,6 +1,7 @@
 *.gmo
 *.pox
 *.mo
+ChangeLog
 Makefile
 Makefile.in
 Makefile.in.in

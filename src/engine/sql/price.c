@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <libpq-fe.h>  
 
@@ -117,6 +118,7 @@ pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr,
      if (0 < pgendPriceCompareVersion (be, pr)) return;
    }
    pr->version ++;  /* be sure to update the version !! */
+   pr->version_check = be->version_check;
 
    /* make sure that we've stored the commodity 
     * and currency before we store the price.
@@ -272,8 +274,8 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
    gnc_price_set_type (pr, DB_GET_VAL("type",j));
 
-   num = atoll (DB_GET_VAL("valueNum", j));
-   denom = atoll (DB_GET_VAL("valueDenom", j));
+   num = strtoll (DB_GET_VAL("valueNum", j), NULL, 0);
+   denom = strtoll (DB_GET_VAL("valueDenom", j), NULL, 0);
    value = gnc_numeric_create (num, denom);
    gnc_price_set_value (pr, value);
 
@@ -398,29 +400,29 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
 /* ============================================================= */
 /* ============================================================= */
 
-int
+void
 pgend_price_begin_edit (Backend * bend, GNCPrice *pr)
 {
    if (pr && pr->db && pr->db->dirty) 
    {
       PERR ("price db is unexpectedly dirty");
    }
-   return 0;
+   return;
 }
 
-int
+void
 pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 {
    char * bufp;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, price=%p", be, pr);
-   if (!be || !pr) return 1;  /* hack alert hardcode literal */
+   if (!be || !pr) return; 
 
    /* lock it up so that we query and store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n";
-   SEND_QUERY (be,bufp, 555);
+   SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
    /* check to see that the engine version is equal or newer than 
@@ -430,7 +432,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
    {
       pr->do_free = FALSE;
       bufp = "ROLLBACK;";
-      SEND_QUERY (be,bufp,444);
+      SEND_QUERY (be,bufp,);
       FINISH_QUERY(be->connection);
 
       /* hack alert -- we should restore the price data from the 
@@ -439,9 +441,11 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
             " price must be rolled back.  This function\n"
             " is not completely implemented !! \n");
       LEAVE ("rolled back");
-      return 445;
+      xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+      return;
    }
    pr->version ++;   /* be sure to update the version !! */
+   pr->version_check = be->version_check;
 
    if (pr->do_free) 
    {
@@ -451,7 +455,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
       bufp = guid_to_string_buff (gnc_price_get_guid(pr), bufp);
       bufp = stpcpy (bufp, "';");
       PINFO ("%s\n", be->buff ? be->buff : "(null)");
-      SEND_QUERY (be,be->buff, 444);
+      SEND_QUERY (be,be->buff, );
       FINISH_QUERY(be->connection);
    }
    else 
@@ -461,13 +465,13 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 
    bufp = "COMMIT;\n"
           "NOTIFY gncPrice;";
-   SEND_QUERY (be,bufp,335);
+   SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
    if (pr->db) pr->db->dirty = FALSE;
 
    LEAVE ("commited");
-   return 0;
+   return;
 }
 
 /* ======================== END OF FILE ======================== */

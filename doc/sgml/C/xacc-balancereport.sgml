@@ -29,7 +29,7 @@
 <LISTITEM>
 <PARA>The accounts for which the report is to be produced. If
       more than one account is selected, the sum of all balances of
-      accounts selected is used <EMPHASIS>NB: Could somebody make sure
+      accounts selected is used <EMPHASIS>FIXME: Could somebody make sure
       this is right?</EMPHASIS>
 
       </PARA>

@@ -15,7 +15,8 @@ libgnc_postgres_la_SOURCES = \
   gncquery.c \
   kvp-sql.c \
   price.c \
-  txn.c
+  txn.c \
+  txnmass.c
 
 noinst_HEADERS = \
   PostgresBackend.h \
@@ -28,7 +29,8 @@ noinst_HEADERS = \
   kvp-sql.h \
   price.h \
   putil.h \
-  txn.h
+  txn.h \
+  txnmass.h
 
 EXTRA_DIST = \
   .cvsignore \

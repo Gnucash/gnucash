@@ -37,14 +37,8 @@ struct _VirtualCellLocation {
 };
 
 
-G_INLINE_FUNC gboolean
-virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2);
-G_INLINE_FUNC gboolean
-virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2)
-{
-  return ((vcl1.virt_row == vcl2.virt_row) &&
-          (vcl1.virt_col == vcl2.virt_col));
-}
+gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
+                              VirtualCellLocation vcl2);
 
 
 /* The VirtualLocation structure contains the virtual
@@ -66,14 +60,6 @@ struct _VirtualLocation {
 };
 
 
-G_INLINE_FUNC gboolean
-virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
-G_INLINE_FUNC gboolean
-virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2)
-{
-  return (virt_cell_loc_equal (vl1.vcell_loc, vl2.vcell_loc) &&
-          (vl1.phys_row_offset == vl2.phys_row_offset) &&
-          (vl1.phys_col_offset == vl2.phys_col_offset));
-}
+gboolean virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
 
 #endif

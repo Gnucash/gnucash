@@ -88,6 +88,7 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
   switch (event->keyval)
   {
     case GDK_Return:
+    case GDK_KP_Enter:
       gtk_signal_emit (GTK_OBJECT (date_picker),
                        gnc_date_picker_signals[DATE_PICKED]);
 

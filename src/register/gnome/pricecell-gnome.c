@@ -22,9 +22,8 @@
  *
  * Implements gnome dependent price cell functions :
  * 
- * often the decimal key in the keypad is not maped to the correct locale 
+ * Often the decimal key in the keypad is not mapped to the correct locale 
  * decimal point, the function PriceDirect handle this case.  
- *
  */
 
 #include "config.h"
@@ -49,6 +48,7 @@ PriceDirect (BasicCell *bcell,
     char decimal_point;
     struct lconv *lc;
     GdkWChar *newval;
+    gboolean is_return;
     int i;
 
     if (event->type != GDK_KEY_PRESS)
@@ -56,31 +56,48 @@ PriceDirect (BasicCell *bcell,
 
     lc = gnc_localeconv ();
 
+    is_return = FALSE;
+
     switch (event->keyval)
     {
         case GDK_Return:
-            if (!cell->need_to_parse)
-                return FALSE;
-
             if (!(event->state &
                   (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
-                return FALSE;
+                is_return = TRUE;
 
         case GDK_KP_Enter:
             {
                 char *error_loc;
                 gnc_numeric amount;
+                gboolean parse_ok;
+                gboolean changed = FALSE;
 
                 if (!cell->need_to_parse)
                     return FALSE;
 
-                if (gnc_exp_parser_parse(cell->cell.value,
-                                         &amount, &error_loc))
-                    return xaccSetPriceCellValue (cell, amount);
+                parse_ok = gnc_exp_parser_parse (cell->cell.value,
+                                                 &amount, &error_loc);
+
+                if (parse_ok)
+                    changed = xaccSetPriceCellValue (cell, amount);
                 else
                     *cursor_position = error_loc - cell->cell.value;
 
-                return TRUE;
+                /* If there is a problem with the parse, swallow
+                 * the key so we stay put. */
+                if (!parse_ok)
+                    return TRUE;
+
+                /* If nothing has changed, let the key cause a
+                 * cursor activation no matter what. */
+                if (!changed)
+                    return FALSE;
+
+                /* If it's not a plain return, stay put. This
+                 * allows a 'calculator' style operation using
+                 * keypad enter where you can keep entering more
+                 * items to add, say. */
+                return !is_return;
             }
 
         case GDK_KP_Decimal:

@@ -123,16 +123,6 @@ noinst_HEADERS = \
   window-register.h \
   window-report.h
 
-GLADE_FILES = \
-  glade-gnc-dialogs.c \
-  glade-cb-gnc-dialogs.h \
-  glade-gnc-dialogs.h \
-  glade-support.c \
-  glade-support.h
-
-#${GLADE_FILES}: gnc-dialogs.glade
-#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
-
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \

@@ -354,6 +354,10 @@ while(<>) {
       %quote_data = $quoter->tiaacref(@$symbols);
       last SWITCH;
     }
+    if($quote_method_name =~ m/^trustnet$/) {
+      %quote_data = $quoter->trustnet(@$symbols);
+      last SWITCH;
+    }
     if($quote_method_name =~ m/^currency$/) {
       my ($from_currency, $to_currency) = @$symbols;
 

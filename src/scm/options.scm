@@ -1036,9 +1036,10 @@
 
 (define (gnc:save-options options options-string file header truncate?)
   (let ((code (gnc:generate-restore-forms options options-string))
-        (port (if truncate? 
-                  (open file (logior O_WRONLY O_CREAT O_TRUNC))
-                  (open file (logior O_WRONLY O_CREAT O_APPEND)))))
+        (port (false-if-exception
+               (if truncate? 
+                   (open file (logior O_WRONLY O_CREAT O_TRUNC))
+                   (open file (logior O_WRONLY O_CREAT O_APPEND))))))
     (if port (begin
                (display header port)
                (display code port)

@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <stdio.h>  
+#include <stdlib.h>
 #include <string.h>  
 
 #include <libpq-fe.h>  
@@ -73,7 +74,7 @@ is_trans_empty (Transaction *trans)
    if (1 != xaccTransCountSplits(trans)) return FALSE;
 
    s = xaccTransGetSplit(trans, 0);
-   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetAmount(s))) return FALSE;
    if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
    if ('n' != xaccSplitGetReconcile(s)) return FALSE;
    if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
@@ -129,6 +130,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       if (0 < pgendTransactionCompareVersion (be, trans)) return;
    }
    trans->version ++;  /* be sure to update the version !! */
+   trans->version_check = be->version_check;
 
    /* first, we need to see which splits are in the database
     * since what is there may not match what we have cached in 
@@ -197,7 +199,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
  
       /* If this trans is marked for deletetion, use the 'orig' values
        * as the base for recording the audit.  This wouldn't be normally
-       * reqquired, except that otherwise one gets a trashed currency 
+       * required, except that otherwise one gets a trashed currency 
        * value.
        */
       pgendStoreAuditTransaction (be, trans->orig, SQL_DELETE);
@@ -338,20 +340,170 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  *    probably be fixed.
  */
 
+void 
+pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
+{
+   char *pbuff;
+   int i, j, nrows;
+   PGresult *result;
+   int save_state = 1;
+   const GUID *trans_guid;
+   Account *acc, *previous_acc=NULL;
+   GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
+   gnc_commodity *currency = NULL;
+   gint64 trans_frac = 0;
+
+   trans_guid = xaccTransGetGUID (trans);
+   currency = xaccTransGetCurrency (trans);
+   trans_frac = gnc_commodity_get_fraction (currency);
+
+   /* build the sql query the splits */
+   pbuff = be->buff;
+   pbuff[0] = 0;
+   pbuff = stpcpy (pbuff, 
+         "SELECT * FROM gncEntry WHERE transGuid='");
+   pbuff = guid_to_string_buff(trans_guid, pbuff);
+   pbuff = stpcpy (pbuff, "';");
+
+   SEND_QUERY (be,be->buff, );
+   i=0; nrows=0;
+   do {
+      GET_RESULTS (be->connection, result);
+      {
+         int j, jrows;
+         int ncols = PQnfields (result);
+         jrows = PQntuples (result);
+         nrows += jrows;
+         PINFO ("query result %d has %d rows and %d cols",
+            i, nrows, ncols);
+
+         for (j=0; j<jrows; j++)
+         {
+            Split *s;
+            GUID guid;
+            Timespec ts;
+            gint64 num;
+            gnc_numeric value, amount;
+
+            /* --------------------------------------------- */
+            /* first, lets see if we've already got this one */
+            PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
+            guid = nullguid;  /* just in case the read fails ... */
+            string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
+            s = xaccSplitLookup (&guid);
+            if (!s)
+            {
+               s = xaccMallocSplit();
+               xaccSplitSetGUID(s, &guid);
+            }
+
+            /* next, restore all split data */
+            xaccSplitSetMemo(s, DB_GET_VAL("memo",j));
+            xaccSplitSetAction(s, DB_GET_VAL("action",j));
+            ts = gnc_iso8601_to_timespec_local
+              (DB_GET_VAL("date_reconciled",j));
+            xaccSplitSetDateReconciledTS (s, &ts);
+
+            xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
+
+            /* --------------------------------------------- */
+            /* next, find the account that this split goes into */
+            guid = nullguid;  /* just in case the read fails ... */
+            string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
+            acc = xaccAccountLookup (&guid);
+            if (!acc)
+            {
+               PERR ("account not found, will delete this split\n"
+                     "\t(split with  guid=%s\n" 
+                     "\twants an acct with guid=%s)\n", 
+                     DB_GET_VAL("entryGUID",j),
+                     DB_GET_VAL("accountGUID",j)
+                     );
+               xaccSplitDestroy (s);
+            }
+            else
+            {
+               gnc_commodity *modity;
+               gint64 acct_frac;
+
+               xaccTransAppendSplit (trans, s);
+
+               if (acc != previous_acc)
+               {
+                  xaccAccountCommitEdit (previous_acc);
+                  xaccAccountBeginEdit (acc);
+                  previous_acc = acc;
+               }
+               if (acc->parent) save_state = acc->parent->saved;
+               xaccAccountInsertSplit(acc, s);
+               if (acc->parent) acc->parent->saved = save_state;
+
+               /* Ummm, we really need to set the amount & value after
+                * the split has been inserted into the account.  This
+                * is because the amount/value setting routines require
+                * SCU settings from the account to work correctly.
+                */
+               num = strtoll (DB_GET_VAL("value", j), NULL, 0);
+               value = gnc_numeric_create (num, trans_frac);
+               xaccSplitSetValue (s, value);
+
+               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
+               modity = xaccAccountGetCommodity (acc);
+               acct_frac = gnc_commodity_get_fraction (modity);
+               amount = gnc_numeric_create (num, acct_frac);
+               xaccSplitSetAmount (s, amount);
+
+               /* finally tally them up; we use this below to 
+                * clean out deleted splits */
+               db_splits = g_list_prepend (db_splits, s);
+            }
+         }
+      }
+      i++;
+      PQclear (result);
+   } while (result);
+
+   /* close out dangling edit session */
+   xaccAccountCommitEdit (previous_acc);
+
+   /* ------------------------------------------------- */
+   /* destroy any splits that the engine has that the DB didn't */
+
+   i=0; j=0;
+   engine_splits = xaccTransGetSplitList(trans);
+   for (node = engine_splits; node; node=node->next)
+   {
+      /* if not found, mark for deletion */
+      if (NULL == g_list_find (db_splits, node->data))
+      {
+         delete_splits = g_list_prepend (delete_splits, node->data);
+         j++;
+      }
+      i++;
+   }
+   PINFO ("%d of %d splits marked for deletion", j, i);
+
+   /* now, delete them ... */
+   for (node=delete_splits; node; node=node->next)
+   {
+      xaccSplitDestroy ((Split *) node->data);
+   }
+   g_list_free (delete_splits);
+   g_list_free (db_splits);
+
+}
+
 int
 pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
 {
    char *pbuff;
    Transaction *trans;
    PGresult *result;
-   Account *acc, *previous_acc=NULL;
    gboolean do_set_guid=FALSE;
    int engine_data_is_newer = 0;
    int i, j, nrows;
-   int save_state = 1;
-   GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
+   GList *node, *engine_splits;
    gnc_commodity *currency = NULL;
-   gint64 trans_frac = 0;
    
    ENTER ("be=%p", be);
    if (!be || !trans_guid) return 0;
@@ -367,6 +519,17 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       trans = xaccMallocTransaction();
       do_set_guid=TRUE;
       engine_data_is_newer = -1;
+   }
+   else 
+   {
+      /* save some performance, don't go to the backend if the data is recent. */
+      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
+      {
+         PINFO ("fresh data, skip check");
+         pgendEnable(be);
+         gnc_engine_resume_events();
+         return 0;
+      }
    }
 
    /* build the sql query to get the transaction */
@@ -459,16 +622,17 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
              * obsolete when reporting currencies are removed from the
              * account. */
             currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
-            trans_frac = gnc_commodity_get_fraction (currency);
 #if 0
-            xaccTransSetCurrency
-              (trans, gnc_string_to_commodity (DB_GET_VAL("currency",j)));
+            xaccTransSetCurrency (trans, currency);
 #endif
          }
       }
       PQclear (result);
       i++;
    } while (result);
+
+   /* set timestamp as 'recent' for this data */
+   trans->version_check = be->version_check;
 
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 
@@ -483,135 +647,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
     * newer than what we have in the engine.  And so, below, 
     * we finish the job of yanking data out of the db.
     */
-
-   /* build the sql query the splits */
-   pbuff = be->buff;
-   pbuff[0] = 0;
-   pbuff = stpcpy (pbuff, 
-         "SELECT * FROM gncEntry WHERE transGuid='");
-   pbuff = guid_to_string_buff(trans_guid, pbuff);
-   pbuff = stpcpy (pbuff, "';");
-
-   SEND_QUERY (be,be->buff, 0);
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            Split *s;
-            GUID guid;
-            Timespec ts;
-            gint64 num;
-            gnc_numeric value, amount;
-
-            /* --------------------------------------------- */
-            /* first, lets see if we've already got this one */
-            PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
-            guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-            s = xaccSplitLookup (&guid);
-            if (!s)
-            {
-               s = xaccMallocSplit();
-               xaccSplitSetGUID(s, &guid);
-            }
-
-            /* next, restore some split data */
-            /* hack alert - not all split fields handled */
-            xaccSplitSetMemo(s, DB_GET_VAL("memo",j));
-            xaccSplitSetAction(s, DB_GET_VAL("action",j));
-            ts = gnc_iso8601_to_timespec_local
-              (DB_GET_VAL("date_reconciled",j));
-            xaccSplitSetDateReconciledTS (s, &ts);
-
-            num = atoll (DB_GET_VAL("value", j));
-            value = gnc_numeric_create (num, trans_frac);
-            xaccSplitSetValue (s, value);
-
-            xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
-
-            /* --------------------------------------------- */
-            /* next, find the account that this split goes into */
-            guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-            acc = xaccAccountLookup (&guid);
-            if (!acc)
-            {
-               PERR ("account not found, will delete this split\n"
-                     "\t(split with  guid=%s\n" 
-                     "\twants an acct with guid=%s)\n", 
-                     DB_GET_VAL("entryGUID",j),
-                     DB_GET_VAL("accountGUID",j)
-                     );
-               xaccSplitDestroy (s);
-            }
-            else
-            {
-               gnc_commodity *modity;
-               gint64 acct_frac;
-               num = atoll (DB_GET_VAL("amount", j));
-               modity = xaccAccountGetCommodity (acc);
-               acct_frac = gnc_commodity_get_fraction (modity);
-               amount = gnc_numeric_create (num, acct_frac);
-               xaccSplitSetShareAmount (s, amount);
-
-               xaccTransAppendSplit (trans, s);
-
-               if (acc != previous_acc)
-               {
-                  xaccAccountCommitEdit (previous_acc);
-                  xaccAccountBeginEdit (acc);
-                  previous_acc = acc;
-               }
-               if (acc->parent) save_state = acc->parent->saved;
-               xaccAccountInsertSplit(acc, s);
-               if (acc->parent) acc->parent->saved = save_state;
-
-               /* finally tally them up; we use this below to 
-                * clean out deleted splits */
-               db_splits = g_list_prepend (db_splits, s);
-            }
-         }
-      }
-      i++;
-      PQclear (result);
-   } while (result);
-
-   /* close out dangling edit session */
-   xaccAccountCommitEdit (previous_acc);
-
-   /* ------------------------------------------------- */
-   /* destroy any splits that the engine has that the DB didn't */
-
-   i=0; j=0;
-   engine_splits = xaccTransGetSplitList(trans);
-   for (node = engine_splits; node; node=node->next)
-   {
-      /* if not found, mark for deletion */
-      if (NULL == g_list_find (db_splits, node->data))
-      {
-         delete_splits = g_list_prepend (delete_splits, node->data);
-         j++;
-      }
-      i++;
-   }
-   PINFO ("%d of %d splits marked for deletion", j, i);
-
-   /* now, delete them ... */
-   for (node=delete_splits; node; node=node->next)
-   {
-      xaccSplitDestroy ((Split *) node->data);
-   }
-   g_list_free (delete_splits);
-   g_list_free (db_splits);
+   pgendCopySplitsToEngine (be, trans);
 
    /* ------------------------------------------------- */
    /* restore any kvp data associated with the transaction and splits */
@@ -716,7 +752,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 
 /* ============================================================= */
 
-int
+void
 pgend_trans_commit_edit (Backend * bend, 
                          Transaction * trans,
                          Transaction * oldtrans)
@@ -726,13 +762,13 @@ pgend_trans_commit_edit (Backend * bend,
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, trans=%p", be, trans);
-   if (!be || !trans) return 1;  /* hack alert hardcode literal */
+   if (!be || !trans) return; 
 
    /* lock it up so that we query and store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
           "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
-   SEND_QUERY (be,bufp, 555);
+   SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
    /* Check to see if this is a 'new' transaction, or not. 
@@ -806,7 +842,7 @@ pgend_trans_commit_edit (Backend * bend,
    
       if (rollback) {
          bufp = "ROLLBACK;";
-         SEND_QUERY (be,bufp,444);  /* hack alert hard coded literal */
+         SEND_QUERY (be,bufp,); 
          FINISH_QUERY(be->connection);
    
          PINFO ("old tranasction didn't match DB, edit rolled back)\n");
@@ -817,7 +853,8 @@ pgend_trans_commit_edit (Backend * bend,
           * routine.  Our rollback routine updates from the latest in 
           * the sql database, and voila! we are good to go. 
           */
-         return 666;   /* hack alert- hard coded literal */
+         xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+         return;
       } 
    }
 
@@ -826,7 +863,7 @@ pgend_trans_commit_edit (Backend * bend,
 
    bufp = "COMMIT;\n"
           "NOTIFY gncTransaction;";
-   SEND_QUERY (be,bufp,334);
+   SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
    /* If this is the multi-user mode, we need to update the
@@ -862,7 +899,7 @@ pgend_trans_commit_edit (Backend * bend,
    }
 
    LEAVE ("commited");
-   return 0;
+   return;
 }
 
 /* ============================================================= */
@@ -877,13 +914,13 @@ pgend_trans_commit_edit (Backend * bend,
  * to sync from the changes that other users had made.
  */
 
-int
+void
 pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
    const GUID * trans_guid;
 
-   if (!be || !trans) return 0;
+   if (!be || !trans) return;
    ENTER ("be=%p, trans=%p", be, trans);
 
    /* First, lets see if the other user had deleted this transaction.
@@ -892,14 +929,15 @@ pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
    if (-1 < pgendTransactionGetDeletedVersion (be, trans))
    {
       LEAVE ("destroyed");
-      return BACKEND_ROLLBACK_DESTROY;
+      xaccBackendSetError (&be->be, ERR_BACKEND_MOD_DESTROY);
+      return;
    }
 
    trans_guid = xaccTransGetGUID (trans);
    pgendCopyTransactionToEngine (be, trans_guid);
 
    LEAVE ("rolled back");
-   return 0;
+   return;
 }
 
 /* ======================== END OF FILE ======================== */
