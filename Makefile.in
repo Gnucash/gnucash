@@ -78,7 +78,8 @@ clean:
 	@cd src;    $(MAKE) clean
 
 distclean: clean
-	rm -f *~ *.o *.bak Makefile xacc xacc.gtk.bin
+	rm -f *~ *.o *.bak Makefile 
+	rm -f xacc xacc.bin xacc.gtk.bin xacc.qt.bin xacc.static.bin
 	rm -f config.cache config.log config.status config.h
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
@@ -92,8 +93,9 @@ install: $(TARGET)
 	@mkdir -p $(PREFIX)/bin
 	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
 	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
-	$(INSTALL) $(TARGET).qt.bin $(PREFIX)/bin/$(TARGET).qt.bin
 	$(INSTALL) $(TARGET).gtk.bin $(PREFIX)/bin/$(TARGET).gtk.bin
+	$(INSTALL) $(TARGET).qt.bin $(PREFIX)/bin/$(TARGET).qt.bin
+	$(INSTALL) $(TARGET).static.bin $(PREFIX)/bin/$(TARGET).static.bin
 	@mkdir -p $(PREFIX)/toolbar
 	$(INSTALL_DATA) toolbar/*.xpm $(PREFIX)/toolbar
 	@mkdir -p $(PREFIX)/$(DOCDIR)
@@ -102,7 +104,10 @@ install: $(TARGET)
 	$(INSTALL_DATA) Docs/*.jpg $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.xpm $(PREFIX)/$(DOCDIR)
 	@mkdir -p $(PREFIX)/$(DOCDIR)/logos
-	$(INSTALL_DATA) Docs/logos/* $(PREFIX)/$(DOCDIR)/logos
+	$(INSTALL_DATA) Docs/logos/*.* $(PREFIX)/$(DOCDIR)/logos
+	@mkdir -p $(PREFIX)/share/gnucash
+	$(INSTALL_DATA) src/prefs/*.scm $(PREFIX)/share/gnucash
+ 
 
 # Local Variables:
 # tab-width: 2
