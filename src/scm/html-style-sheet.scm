@@ -151,6 +151,10 @@
            rv "<number>" 
            gnc:default-html-number-renderer #f)
           
+          (gnc:html-style-sheet-set-style!
+           rv "<gnc-monetary>" 
+           gnc:default-html-gnc-monetary-renderer #f)
+          
           ;; store it in the style sheet hash 
           (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
           rv)

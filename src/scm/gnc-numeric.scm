@@ -1,6 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gnc-numeric.scm : rational number representation for gnucash
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
+;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
 ;; 
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -64,6 +65,23 @@
   (- arg))
 
 
-  
-  
+
+(define <gnc-monetary> 
+  (make-record-type "<gnc-monetary>" 
+		    '(commodity amount)))
+
+;; Constructor; takes one <gnc:commodity*> and one <gnc-numeric>
+(define (gnc:make-gnc-monetary c a)
+  (if (and (gw:wcp-is-of-type? <gnc:commodity*> c) (gnc:gnc-numeric? a))
+      ((record-constructor <gnc-monetary>) c a)
+      #f))
+
+(define gnc:gnc-monetary? 
+  (record-predicate <gnc-monetary>))
+
+(define gnc:gnc-monetary-commodity
+  (record-accessor <gnc-monetary> 'commodity))
+
+(define gnc:gnc-monetary-amount
+  (record-accessor <gnc-monetary> 'amount))
 

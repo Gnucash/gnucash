@@ -26,12 +26,19 @@
 (define (gnc:commodity-amount->string amount info)
   (gnc:amount->string-helper amount info))
 
-;; pair is a list of one gnc:commodity and one gnc:numeric value. This
-;; function should disappear once this is an "official" data type, so
-;; that the data type will be accepted by the html-renderer.
+;; pair is a list of one gnc:commodity and one gnc:numeric
+;; value. Deprecated -- use <gnc-monetary> instead.
 (define (gnc:commodity-value->string pair)
   (gnc:commodity-amount->string 
    (cadr pair) (gnc:commodity-print-info (car pair) #t)))
+
+;; Just for convenience. But in reports you should rather stick to the
+;; style-info mechanism and simple plug the <gnc-monetary> into the
+;; html-renderer.
+(define (gnc:monetary->string value)
+  (gnc:amount->string-helper 
+   (gnc:gnc-monetary-amount value) 
+   (gnc:commodity-print-info (gnc:gnc-monetary-amount value) #t)))
 
 ;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)
