@@ -172,7 +172,6 @@ src/core-utils/core-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/Backend.c
-src/engine/DateUtils.c
 src/engine/FreqSpec.c
 src/engine/GNCId.c
 src/engine/Group.c
