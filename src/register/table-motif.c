@@ -166,7 +166,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb) {
    const char *new_text;
    int cursor_pos, start, end; /* currently not used */
 
-   ENTER ("enterCB()\n");
+   ENTER ("\n");
    new_text = gnc_table_enter_update(table, row, col,
                                      &cursor_pos, &start, &end);
    
@@ -182,7 +182,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb) {
      cbs->doit = True;
      cbs->map = True;
    }
-   LEAVE ("enterCB()\n");
+   LEAVE ("\n");
 }
    
 /* ==================================================== */
@@ -203,7 +203,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    const char *retval;
    char *newval;
 
-   ENTER("modifyCB()\n");
+   ENTER("\n");
    
    /* accept edits by default, unless the cell handler rejects them */
    cbs->verify->doit = True;
@@ -244,7 +244,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
      cbs->verify->doit = False;
      free(newval);
    }
-   LEAVE("modifyCB()\n");
+   LEAVE("\n");
 }
 
 /* ==================================================== */
@@ -258,7 +258,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    const int row = cbs->row;
    const int col = cbs->column;
    const char * new_text;
-   ENTER("leaveCB()\n");
+   ENTER("\n");
 
    new_text = gnc_table_leave_update(table, row, col, cbs->value);
 
@@ -269,7 +269,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
 
    /* by default, accept whatever the final proposed edit is */
    cbs->doit = True;
-   LEAVE("leaveCB()\n");
+   LEAVE("\n");
 }
 
 
@@ -286,7 +286,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
   
   gncTableTraversalDir dir;
 
-  ENTER ("traverseCB()\n");
+  ENTER ("\n");
   if(cbs->qparam == QRight) dir = GNC_TABLE_TRAVERSE_RIGHT;
   else if(cbs->qparam == QLeft) dir = GNC_TABLE_TRAVERSE_LEFT;
   else if(cbs->qparam == QUp) dir = GNC_TABLE_TRAVERSE_UP;
@@ -321,8 +321,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
     }
   } else {
-    PERR("traverseCB(): Invalid traversal direction. (%s)\n",
-         __FUNCTION__);
+    PERR("Invalid traversal direction\n");
     return;
   }
   
@@ -338,7 +337,7 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
     }
   }
-  LEAVE ("traverseCB()\n");
+  LEAVE ("\n");
 }
 
 /* ==================================================== */
@@ -538,7 +537,7 @@ GetColormapIndex (Table *table, unsigned int argb)
    }
 
    /*
-    * printf ("Info: GetColormapIndex(): \n"
+    * PINFO ("\n"
     *   "\tRequested rgb=0x%x r=0x%x g=0x%x b=0x%x \n"
     *   "\tfound idx=%d 0x%x 0x%x 0x%x\n", argb, r, g, b, idx, 
     *   colors[idx].red, colors[idx].green, colors[idx].blue);
@@ -616,10 +615,10 @@ xaccRefreshTableGUI (Table * table)
   if (!(table->table_widget)) return;
 
   DEBUGCMD ({int i;
-     printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
+     fprintf (stderr, " refresh numphysrows=%d numphyscols=%d =========================\n", 
      table->num_phys_rows,table->num_phys_cols);
      for (i=0; i<table->num_phys_rows; i++) {
-     printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
+     fprintf (stderr, "cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
      table->bg_colors[i][3], 
      table->entries[i][2],
      table->entries[i][3],

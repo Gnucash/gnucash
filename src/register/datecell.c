@@ -362,7 +362,7 @@ xaccCommitDateCell (DateCell *cell)
    char buff[30];
 
    if (!cell) return;
-   ENTER ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
+   ENTER ("value is %s \n", cell->cell.value);
    xaccParseDate (&(cell->date), cell->cell.value);
    printDate (buff, cell->date.tm_mday, 
                     cell->date.tm_mon+1, 
@@ -370,7 +370,7 @@ xaccCommitDateCell (DateCell *cell)
 
    if (cell->cell.value) free (cell->cell.value);
    cell->cell.value = strdup (buff);
-   LEAVE ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
+   LEAVE ("value is %s \n", cell->cell.value);
 }
 
 /* ================================================ */

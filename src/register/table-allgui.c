@@ -439,7 +439,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
    int new_virt_row, new_virt_col;
    CellBlock *curs;
 
-   ENTER("doMoveCursor(): new_phys=(%d %d) do_move_gui=%d\n", 
+   ENTER("new_phys=(%d %d) do_move_gui=%d\n", 
          new_phys_row, new_phys_col, do_move_gui);
 
    /* Change the cell background colors to their "passive" values.
@@ -504,7 +504,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
             }
          }
       }
-      LEAVE("doMoveCursor(): out of bounds\n");
+      LEAVE("out of bounds\n");
       return;
    }
 
@@ -576,7 +576,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
    }
 
    curs->user_data = table->user_data[new_virt_row][new_virt_col];
-   LEAVE("doMoveCursor(): did move\n");
+   LEAVE("did move\n");
 }
 
 /* ==================================================== */
@@ -635,7 +635,7 @@ void xaccCommitCursor (Table *table)
          if (cell) {
             int iphys = i + phys_row_origin;
             int jphys = j + phys_col_origin;
-            /*PINFO ("xaccCommitCursor(): rowcol (%d,%d) oldval=%s newval=%s\n",
+            /*PINFO ("rowcol (%d,%d) oldval=%s newval=%s\n",
               iphys, jphys, table->entries[iphys][jphys], cell->value);*/
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
@@ -824,7 +824,7 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
 
    if (!table) return;
 
-   ENTER("wrapVerifyCursorPosition(): (%d %d) val=%s\n", 
+   ENTER("(%d %d) val=%s\n", 
          row,col, table->entries[row][col]);
 
    /* VerifyCursor will do all sorts of gui-independent machinations */
@@ -838,7 +838,7 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
                           save_phys_row, save_phys_col, GNC_F);
    }
 
-   LEAVE ("wrapVerifyCursorPosition()\n");
+   LEAVE ("\n");
 }
 
 /* ==================================================== */
@@ -937,8 +937,7 @@ gnc_table_enter_update(Table *table, int row, int col, int *cursor_position,
 
   const char * (*enter) (BasicCell *, const char *, int *, int *, int *);
 
-  ENTER("gnc_table_enter_update(): "
-        "enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+  ENTER("enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
          arr->cells[rel_row][rel_col], table->entries[row][col]);
 
@@ -989,7 +988,7 @@ gnc_table_enter_update(Table *table, int row, int col, int *cursor_position,
   table->prev_phys_traverse_row = row;
   table->prev_phys_traverse_col = col;
 
-  LEAVE("gnc_table_enter_update(): return %s\n", retval);
+  LEAVE("return %s\n", retval);
   return retval;
 }
 
@@ -1005,7 +1004,7 @@ gnc_table_leave_update(Table *table, int row, int col,
   const char * (*leave) (BasicCell *, const char *);
   const char *retval = NULL;
   
-  ENTER("gnc_table_leave_update(): proposed (%d %d) rel(%d %d) \"%s\"\n",
+  ENTER("proposed (%d %d) rel(%d %d) \"%s\"\n",
         row, col, rel_row, rel_col, callback_text);
 
   if (!callback_text) callback_text = "";
@@ -1050,7 +1049,7 @@ gnc_table_leave_update(Table *table, int row, int col,
      retval = NULL;
   }
 
-  LEAVE("gnc_table_leave_update(): return %s\n", retval);
+  LEAVE("return %s\n", retval);
 
   return retval;
 }
@@ -1082,7 +1081,7 @@ gnc_table_modify_update(Table *table,
 
   const char *retval = NULL;
 
-  ENTER ("gnc_table_modify_update()\n");
+  ENTER ("\n");
 
   /* OK, if there is a callback for this cell, call it */
   mv = arr->cells[rel_row][rel_col]->modify_verify;
@@ -1120,8 +1119,7 @@ gnc_table_modify_update(Table *table,
       free(help_str);
   }
 
-  LEAVE ("gnc_table_modify_update(): "
-         "change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+  LEAVE ("change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
          arr->cells[rel_row][rel_col], table->entries[row][col]);
   
@@ -1224,7 +1222,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
 {
   CellBlock *arr = table->current_cursor;
 
-  ENTER("gnc_table_traverse_update(): proposed (%d %d) -> (%d %d)\n",
+  ENTER("proposed (%d %d) -> (%d %d)\n",
         row, col, *dest_row, *dest_col);
 
   /* first, make sure our destination cell is valid.  If it is out of
@@ -1232,7 +1230,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   if ((*dest_row >= table->num_phys_rows) || (*dest_row < 0) ||
       (*dest_col >= table->num_phys_cols) || (*dest_col < 0)) 
   {
-    PERR("gnc_table_traverse_update: destination (%d, %d) out of bounds (%d, %d)\n",
+    PERR("destination (%d, %d) out of bounds (%d, %d)\n",
          *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
     return GNC_T;
   }
@@ -1243,7 +1241,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   if ((row >= table->num_phys_rows) || (row < 0) ||
       (col >= table->num_phys_cols) || (col < 0)) {
 
-    PINFO("gnc_table_traverse_update: source (%d, %d) out of bounds (%d, %d)\n",
+    PINFO("source (%d, %d) out of bounds (%d, %d)\n",
 	  row, col, table->num_phys_rows, table->num_phys_cols);
     table->prev_phys_traverse_row = *dest_row;
     table->prev_phys_traverse_col = *dest_col;
@@ -1338,7 +1336,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;
 
-  LEAVE("gnc_table_traverse_update(): dest_row = %d, dest_col = %d\n",
+  LEAVE("dest_row = %d, dest_col = %d\n",
         *dest_row, *dest_col);
 
   return GNC_F;

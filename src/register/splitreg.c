@@ -613,7 +613,7 @@ configLayout (SplitRegister *reg)
 
       /* --------------------------------------------------------- */
       default:
-         PERR ("configLayout(): unknown register type %d \n", type);
+         PERR ("unknown register type %d \n", type);
          break;
    }
 }

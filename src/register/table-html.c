@@ -89,7 +89,7 @@ xaccTableDumpHTML (Table * table, int fd)
    fh = fdopen (fd, "a");
    if (!fh) {
       int norr = errno;
-      PERR ("xaccTableDumpHTML(): can't open fd=%d \n"
+      PERR ("can't open fd=%d \n"
             "\t(%d) %s \n", fd, norr, strerror (norr));
       return 0;
    }
@@ -156,7 +156,7 @@ xaccTablePrintHTML (Table * table, char *filename)
    fd = open (filename, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR);
    if (0 > fd) {
       int norr = errno;
-      PERR ("xaccTablePrintHTML(): can't open file %s\n"
+      PERR ("can't open file %s\n"
             "\t(%d) %s\n", filename, norr, strerror (norr));
       return 0;
    }
@@ -172,7 +172,7 @@ xaccTablePrintHTML (Table * table, char *filename)
 #define CHKERR(val, msg) {						\
    if (0 > val) {							\
       int norr = errno;							\
-      PERR ("Error: xaccTableWebServeHTML(): " msg "\n"			\
+      PERR ( msg "\n"							\
             "(%d) %s \n", norr, strerror (norr));			\
       if (pid) return;							\
       exit (0);								\
