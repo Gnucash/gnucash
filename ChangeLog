@@ -20,6 +20,8 @@
 	* move dialog-account.[ch] from src/dialog-account to src/gnome-utils
 	  fix all references (Makefile.am) to remove src/dialog-account
 	* configure.in: remove src/account-dialog/Makefile
+
+	* move gnc-account-sel.[ch] from src/gnome to src/gnome-utils
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 
