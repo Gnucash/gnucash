@@ -43,6 +43,7 @@
 #include "FileBox.h"
 #include "FileIO.h"
 #include "HelpWindow.h"
+#include "LedgerUtils.h"
 #include "main.h"
 #include "MainWindow.h"
 #include "RecnWindow.h"
@@ -376,6 +377,8 @@ mainWindow( Widget parent )
       accountMenubarCB, (XtPointer)AMB_NEW,  (MenuItem *)NULL },
     { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_OPEN, (MenuItem *)NULL },
+    { "Open in Ledger",     &xmPushButtonWidgetClass, 'O', NULL, NULL, False,
+      accountMenubarCB, (XtPointer)AMB_LEDGER, (MenuItem *)NULL },
     { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_EDIT, (MenuItem *)NULL },
     { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
@@ -919,6 +922,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
    * which of the file menubar options was chosen
    *   AMB_NEW    -  New account
    *   AMB_OPEN   -  Open account
+   *   AMB_LEDGER -  Open account and subaccounts in one register
    *   AMB_EDIT   -  Edit account
    *   AMB_DEL    -  Delete account
    *   AMB_CAT    -  Edit catagories
@@ -930,9 +934,10 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("AMB_NEW\n");
       accWindow(toplevel);
       break;
+
     case AMB_OPEN:
       DEBUG("AMB_OPEN\n");
-        {
+      {
         Account *acc = selected_acc;
         if( NULL == acc ) {
           int make_new = verifyBox (toplevel, ACC_NEW_MSG);
@@ -947,6 +952,19 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         }
       }
       break;
+
+    case AMB_LEDGER:
+      DEBUG("AMB_LEDGER\n");
+      {
+        Account **list;
+        list = xaccGroupToList (selected_acc);
+
+        /* hack alert xxxxxxxxxxx -- don't double open */
+        regWindowLedger ( toplevel, list );
+        if (list) _free (list);
+      }
+      break;
+
     case AMB_EDIT:
       DEBUG("AMB_EDIT\n");
       {
@@ -958,9 +976,10 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         }
       }
       break;
+
     case AMB_DEL:
       DEBUG("AMB_DEL\n");
-        {
+      {
         Account *acc = selected_acc;
         if( NULL == acc ) {
           errorBox (toplevel, ACC_DEL_MSG);
@@ -988,17 +1007,21 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           }
         }
       break;
+
     case AMB_TRNS:
       DEBUG("AMB_TRNS\n");
       xferWindow(toplevel);
       break;
+
     case AMB_RPRT:
       DEBUG("AMB_RPRT\n");
       simpleReportWindow(toplevel);
       break;
+
     case AMB_CAT:
       DEBUG("AMB_CAT\n");
       break;
+
     default:
       PERR ("AccountMenuBarCB(): We shouldn't be here!\n");
     }

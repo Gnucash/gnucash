@@ -19,6 +19,7 @@
 \********************************************************************/
 
 #include "Account.h"
+#include "Data.h"
 #include "Transaction.h"
 #include "util.h"
 
@@ -117,4 +118,33 @@ Transaction ** accListGetSortedTrans (Account **list)
    return tarray;
 }   
    
+/* ------------------------------------------------------ */
+Account **
+xaccGroupToList (Account *acc)
+{
+   Account **list;
+   int nacc;
+   int i, n;
+
+   if (!acc) return;
+
+   nacc = xaccGetNumAccounts (acc->children);
+   nacc ++;  /* add one for this account */
+
+   list = (Account **) _malloc ((nacc+1) * sizeof (Account *));
+
+   /* hack alert xxxxxxxxxxx do children's children too */
+   list[0] = acc;
+   n = 1;
+   if (acc->children) {
+      for (i=0; i<acc->children->numAcc; i++) {
+         list[i+1] = acc->children->account[i];
+         n++;
+      }
+   }
+   list[n] = NULL;
+
+   return list;
+}
+
 /************************** END OF FILE *************************/

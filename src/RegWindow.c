@@ -57,7 +57,8 @@
 /* enumerate different ledger types */
 enum {
    GEN_LEDGER = NUM_ACCOUNT_TYPES,
-   PORTFOLIO = NUM_ACCOUNT_TYPES +1,
+   INC_LEDGER = NUM_ACCOUNT_TYPES + 1,
+   PORTFOLIO  = NUM_ACCOUNT_TYPES + 2,
 };
 
 
@@ -345,6 +346,7 @@ regRefresh( RegWindow *regData )
       /* for a general ledger, we fill out the "from" and "to"
        * transfer fields */
       if ( (GEN_LEDGER == regData->type) ||
+           (INC_LEDGER == regData->type) ||
            (PORTFOLIO  == regData->type) ) {
         Account *xfer_acc;
         xfer_acc = (Account *) trans -> debit;
@@ -441,6 +443,7 @@ regRefresh( RegWindow *regData )
         }  
           break;
 
+        case INC_LEDGER: 
         case GEN_LEDGER: {
            Account * acc;
            int show;
@@ -652,8 +655,9 @@ regRecalculateBalance( RegWindow *regData )
      * bank account, and a debit to the income account.
      * Thus, positive and negative are interchanged */
     prt_balance = dbalance;
-    if( (EXPENSE   == regData->type) ||
-        (INCOME    == regData->type) ) {
+    if( (EXPENSE    == regData->type) ||
+        (INCOME     == regData->type) ||
+        (INC_LEDGER == regData->type) ) {
       prt_balance = - dbalance;
       prt_clearedBalance = - dclearedBalance;
     }
@@ -668,14 +672,16 @@ regRecalculateBalance( RegWindow *regData )
       /* Set the color of the text, depending on whether the
        * balance is negative or positive */
       if( 0.0 > prt_balance ) {
-        XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, negPixel );
+        XbaeMatrixSetCellColor( reg, position+BALN_CELL_R, 
+                                     BALN_CELL_C, negPixel );
       } else {
-        XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, posPixel );
+        XbaeMatrixSetCellColor( reg, position+BALN_CELL_R, 
+                                     BALN_CELL_C, posPixel );
       }
 #endif
       
       /* Put the value in the cell */
-      XbaeMatrixSetCell( reg, position, BALN_CELL_C, buf );
+      XbaeMatrixSetCell( reg, position+BALN_CELL_R, BALN_CELL_C, buf );
 
       /* update share balances too ... */
       if( (MUTUAL == regData->type) ||
@@ -689,27 +695,26 @@ regRecalculateBalance( RegWindow *regData )
         /* Set the color of the text, depending on whether the
          * balance is negative or positive */
         if( 0.0 > share_balance ) {
-          XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, negPixel );
+          XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                       SHRS_CELL_C, negPixel );
         } else {
-          XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, posPixel );
+          XbaeMatrixSetCellColor( reg, position+SHRS_CELL_R, 
+                                       SHRS_CELL_C, posPixel );
         }
 #endif
       
         /* Put the value in the cell */
-        XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
+        XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
         }
 
       }
     }
   
-  if( NULL != regData->balance )
-    {
+  if( NULL != regData->balance ) {
     sprintf( buf, "$ %.2f\n$ %.2f", 
              prt_balance, prt_clearedBalance );
-    
     XmTextSetString( regData->balance, buf );
-    }
-  
+  }
   
   /* make sure the balance field in the main 
    * window is up to date.  */ 
@@ -869,6 +874,7 @@ regSaveTransaction( RegWindow *regData, int position )
     /* the way that transfers are handled depends on whether this
      * is a ledger account, or a single-account register */
     if ( (GEN_LEDGER == regData->type) ||
+         (INC_LEDGER == regData->type) ||
          (PORTFOLIO  == regData->type) ) {
 
       /* for a general ledger, from and to are easy to determine */
@@ -1019,6 +1025,7 @@ regSaveTransaction( RegWindow *regData, int position )
         }
         break;
 
+      case INC_LEDGER: 
       case GEN_LEDGER: {
         Account *acc;
         double themount = 0.0;
@@ -1119,7 +1126,7 @@ regSaveTransaction( RegWindow *regData, int position )
    * actually enter any data, then we should not really
    * consider this to be a new transaction! */
   if (regData->changed & MOD_NEW) {
-    /* hack alert xxxxxxxxxxxxxxx this is icorrect for ledger */
+    /* hack alert xxxxxxxxxxxxxxx this is incorrect for ledger */
     Account *main_acc = regData->blackacc[0];
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
@@ -1248,6 +1255,7 @@ regWindowLedger( Widget parent, Account **acclist )
     windowname = regData->blackacc[0]->accountName;
   } else {
     regData->type = GEN_LEDGER;
+    windowname = "ledger";  /* hack alert -- append account name */
     regData->qf   = regData->blackacc[0]->qfRoot;  /* hack alert -- this probably broken */
     /* hack alert -- xxxx -- do the ledgerlist thing */
   }
@@ -1413,8 +1421,21 @@ regWindowLedger( Widget parent, Account **acclist )
         regData -> numCols = 10;
         break;
 
+      case INC_LEDGER:
       case GEN_LEDGER:
         regData->cellColLocation [XTO_CELL_ID]  = 2;
+        regData->cellColLocation [PRIC_CELL_ID] = -1;
+        regData->cellColLocation [SHRS_CELL_ID] = -1;
+        regData->cellColLocation [BALN_CELL_ID] = 7;
+        regData -> numCols = 8;
+        break;
+
+      case PORTFOLIO:
+        regData->cellColLocation [XTO_CELL_ID]  = 2;
+        regData->cellColLocation [PRIC_CELL_ID] = 7;
+        regData->cellColLocation [SHRS_CELL_ID] = 8;
+        regData->cellColLocation [BALN_CELL_ID] = 9;
+        regData -> numCols = 10;
         break;
 
       default:
@@ -1460,9 +1481,11 @@ regWindowLedger( Widget parent, Account **acclist )
         regData->cellRowLocation [XTO_CELL_ID]  = -1;
         break;
 
+      case INC_LEDGER:
       case GEN_LEDGER:
         regData->cellRowLocation [XTO_CELL_ID]  = 1;
         regData->cellRowLocation [DEP_CELL_ID]  = 1;  /* shift credit down */
+        regData->cellRowLocation [BALN_CELL_ID] = 1;  /* shift balance down */
         break;
 
       default:
@@ -1490,6 +1513,8 @@ regWindowLedger( Widget parent, Account **acclist )
       case INCOME:
       case EXPENSE:
       case EQUITY:
+      case GEN_LEDGER:
+      case INC_LEDGER:
         break;
       case STOCK:
       case MUTUAL:
@@ -1521,6 +1546,8 @@ regWindowLedger( Widget parent, Account **acclist )
       case INCOME:
       case EXPENSE:
       case EQUITY:
+      case GEN_LEDGER:
+      case INC_LEDGER:
         break;
 
       case STOCK:
@@ -1560,6 +1587,8 @@ regWindowLedger( Widget parent, Account **acclist )
       case INCOME:
       case EXPENSE:
       case EQUITY:
+      case GEN_LEDGER:
+      case INC_LEDGER:
         break;
       case STOCK:
       case MUTUAL:
@@ -1610,6 +1639,10 @@ regWindowLedger( Widget parent, Account **acclist )
       case GEN_LEDGER:
         regData -> columnLabels[0][PAY_CELL_C] = "Debit";
         regData -> columnLabels[0][DEP_CELL_C] = "Credit";
+        break;
+      case INC_LEDGER:
+        regData -> columnLabels[0][PAY_CELL_C] = "Credit";
+        regData -> columnLabels[0][DEP_CELL_C] = "Debit";
         break;
       }
     
