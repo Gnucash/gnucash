@@ -1648,8 +1648,10 @@ pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
   case MODE_POLL:
   case MODE_SINGLE_UPDATE:
 
-    if (!safe_strcmp (type, GNC_ID_TRANS))
-      return pgend_trans_commit_edit (bend, object);
+    if (!safe_strcmp (type, GNC_ID_TRANS)) {
+      Transaction *txn = (Transaction*) object;
+      return pgend_trans_commit_edit (bend, txn, txn->orig);
+    }
 
     if (!safe_strcmp (type, GNC_ID_PRICE))
       return pgend_price_commit_edit (bend, object);
@@ -1675,10 +1677,8 @@ pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
   case MODE_EVENT:
   case MODE_POLL:
 
-    if (!safe_strcmp (type, GNC_ID_TRANS)) {
-      Transaction *txn = (Transaction*) object;
-      return pgend_trans_rollback_edit (bend, txn);
-    }
+    if (!safe_strcmp (type, GNC_ID_TRANS))
+      return pgend_trans_rollback_edit (bend, object);
 
   case MODE_SINGLE_UPDATE:
   case MODE_SINGLE_FILE:

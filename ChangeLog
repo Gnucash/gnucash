@@ -2,6 +2,7 @@
 	* add more debugging to new PostgresBackend functions
 
 	* fix call to pgend_trans_rollback_edit()
+	* fix call to pgend_trans_commit_edit()
 	
 2002-10-15  Derek Atkins  <derek@ihtfp.com>
 	* Christian Krause's dialog-utils patch for style
