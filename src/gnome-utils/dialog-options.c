@@ -1134,6 +1134,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
     gtk_list_select_item(GTK_LIST(propertybox->page_list), 0);
   }
   gnc_options_dialog_changed_internal(propertybox->dialog, FALSE);
+  gtk_widget_show(propertybox->dialog);
 }
 
 
@@ -1499,6 +1500,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkWidget *frame;
   GtkWidget *scroll;
+  GtkTextBuffer* text_buffer;
 
   frame = gtk_frame_new(name);
 
@@ -1519,8 +1521,9 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
 
-  g_signal_connect(G_OBJECT(value), "changed",
-		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+  text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(value));
+  g_signal_connect(G_OBJECT(text_buffer), "changed",
+		   G_CALLBACK(gnc_option_changed_option_cb), option);
 
   gtk_box_pack_start(GTK_BOX(*enclosing), frame, TRUE, TRUE, 0);
   gtk_widget_show_all(*enclosing);
@@ -2028,12 +2031,19 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
 
 static gboolean
 gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
-				 GtkWidget *widget, SCM value)
+			      GObject *object, SCM value)
 {
+  GtkTextBuffer *buffer;
+
+  if (GTK_IS_TEXT_BUFFER(object))
+    buffer = GTK_TEXT_BUFFER(object);
+  else
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(object));
+
   if (SCM_STRINGP(value))
   {
     char *string = gh_scm2newstr(value, NULL);
-    xxxgtk_textview_set_text (GTK_TEXT_VIEW(widget), string);
+    gtk_text_buffer_set_text (buffer, string, strlen (string));
     free(string);
     return FALSE;
   }
@@ -2671,7 +2681,8 @@ static void gnc_options_initialize_options (void)
     { "string", gnc_option_set_ui_widget_string,
       gnc_option_set_ui_value_string, gnc_option_get_ui_value_string },
     { "text", gnc_option_set_ui_widget_text,
-      gnc_option_set_ui_value_text, gnc_option_get_ui_value_text },
+      (GNCOptionUISetValue)gnc_option_set_ui_value_text,
+      gnc_option_get_ui_value_text },
     { "currency", gnc_option_set_ui_widget_currency,
       gnc_option_set_ui_value_currency, gnc_option_get_ui_value_currency },
     { "commodity", gnc_option_set_ui_widget_commodity,
