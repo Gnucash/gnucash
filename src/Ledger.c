@@ -36,6 +36,10 @@
 #define BUFSIZE 1024
 
 /* ======================================================== */
+/* this callback gets called when the user clicks on the gui
+ * in such a way as to leave the current transaction, and to 
+ * go to a new one.  So, sve the current transaction.
+ */
 
 static void
 LedgerMoveCursor  (Table *table, void * client_data)
@@ -252,6 +256,7 @@ xaccLoadRegister (BasicRegister *reg, Split **slist,
    int num_phys_cols;
    int num_virt_rows;
    int phys_row;
+   int vrow;
 
    table = reg->table;
 
@@ -292,41 +297,50 @@ xaccLoadRegister (BasicRegister *reg, Split **slist,
 printf ("load reg of %d entries --------------------------- \n",i);
    /* populate the table */
    i=0;
+   vrow = 0;
    split = slist[0]; 
    while (split) {
-      phys_row = reg->header->numRows;
-      phys_row += i * (reg->cursor->numRows);
 
-      /* i+1 because header is virt row zero */
-      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
-      xaccMoveCursor (table, phys_row, 0);
-      xaccLoadRegEntry (reg, split);
+      /* don't load the "blank split" inline; instead, we put
+       * it at the end. */
+      if (split != ((Split *) (reg->user_hook))) {
+         phys_row = reg->header->numRows;
+         phys_row += vrow * (reg->cursor->numRows);
+   
+         /* vrow+1 because header is virt row zero */
+         vrow ++;
+         xaccSetCursor (table, reg->cursor, phys_row, 0, vrow, 0);
+         xaccMoveCursor (table, phys_row, 0);
+         xaccLoadRegEntry (reg, split);
+      }
 
-      i++;
+      i++; 
       split = slist[i];
    }
 
    /* add the "blank split" at the end */
-   if (!(reg->user_hook)) {
+   if (reg->user_hook) {
+      split = (Split *) reg->user_hook;
+   } else {
       trans = xaccMallocTransaction ();
       xaccTransSetDateToday (trans);
       split = xaccTransGetSourceSplit (trans);
       xaccAccountInsertSplit (default_source_acc, split);
       reg->user_hook =  (void *) split;
       reg->destroy = LedgerDestroy;
-
-      phys_row = reg->header->numRows;
-      phys_row += i * (reg->cursor->numRows);
-      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
-      xaccMoveCursor (table, phys_row, 0);
-   
-      xaccLoadRegEntry (reg, split);
-      i++;
    }
+
+   phys_row = reg->header->numRows;
+   phys_row += vrow * (reg->cursor->numRows);
+   vrow ++;
+   xaccSetCursor (table, reg->cursor, phys_row, 0, vrow, 0);
+   xaccMoveCursor (table, phys_row, 0);
+   
+   xaccLoadRegEntry (reg, split);
    
    /* restore the cursor to its original location */
    phys_row = reg->header->numRows;
-   phys_row += i * (reg->cursor->numRows);
+   phys_row += vrow * (reg->cursor->numRows);
 
    if (phys_row <= save_cursor_phys_row) {
        save_cursor_phys_row = phys_row - reg->cursor->numRows;
