@@ -61,6 +61,8 @@ typedef struct _PopBox
         gboolean list_sorted;  /* list has been sorted? */
         gboolean list_popped;  /* list is popped up? */
 
+        gboolean autosize;
+
         QuickFill *qf;
         gboolean in_list_select;
 
@@ -125,6 +127,7 @@ xaccInitComboCell (ComboCell *cell)
 	box->list_in_sync = TRUE;
         box->list_sorted = TRUE;
         box->list_popped = FALSE;
+        box->autosize = FALSE;
 
 	cell->cell.gui_private = box;
 
@@ -781,7 +784,12 @@ popup_autosize (GnomeCanvasItem *item,
                 int max_width,
                 gpointer user_data)
 {
-        return max_width;
+        PopBox *box = user_data;
+
+        if (!box || !box->autosize)
+                return max_width;
+
+        return gnc_item_list_autosize (GNC_ITEM_LIST (item)) + 20;
 }
 
 static void
@@ -836,7 +844,7 @@ enterCombo (BasicCell *bcell,
                              GNOME_CANVAS_ITEM (box->item_list),
                              get_popup_height, popup_autosize,
                              popup_set_focus, popup_post_show,
-                             popup_get_width, NULL);
+                             popup_get_width, box);
 
         block_list_signals (cell);
 	gnc_item_list_select (box->item_list, bcell->value);
@@ -933,6 +941,23 @@ xaccComboCellAddIgnoreString (ComboCell *cell,
                                               g_strdup (ignore_string));
         box->ignore_helps = g_list_prepend (box->ignore_helps,
                                             g_strdup (ignore_help));
+}
+
+/* =============================================== */
+
+void
+xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize)
+{
+	PopBox *box;
+
+        if (!cell)
+                return;
+
+	box = cell->cell.gui_private;
+        if (!box)
+                return;
+
+        box->autosize = autosize;
 }
 
 /* =============================================== */

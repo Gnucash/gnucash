@@ -1433,7 +1433,7 @@ item_edit_show_popup (ItemEdit *item_edit)
                                        "x", (gdouble) popup_x,
                                        "y", (gdouble) popup_y,
                                        "height", (gdouble) popup_height,
-                                       "width", (gdouble) popup_max_width,
+                                       "width", (gdouble) popup_width,
                                        "anchor", popup_anchor,
                                        NULL);
         else

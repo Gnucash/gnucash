@@ -742,6 +742,9 @@ xaccInitSplitRegister (SplitRegister *reg,
                                   _("-- Stock Split --"), help);
   }
 
+  /* the action cell */
+  xaccComboCellSetAutoSize (reg->actionCell, TRUE);
+
   /* the memo cell */
   xaccSetBasicCellBlankHelp (&reg->memoCell->cell,
                              _("Enter a description of the split"));
@@ -754,7 +757,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetBasicCellBlankHelp (&reg->notesCell->cell,
                              _("Enter notes for the transaction"));
 
-  /* Use 5 decimal places for prices */
+  /* Use 6 decimal places for prices */
   xaccSetPriceCellFraction (reg->priceCell, 1000000);
 
   /* Initialize price cells */

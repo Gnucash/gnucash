@@ -52,7 +52,7 @@ void gnc_item_list_show_selected (GNCItemList *item_list);
 
 void gnc_item_list_sort (GNCItemList *item_list);
 
-void gnc_item_list_autosize (GNCItemList *item_list);
+int gnc_item_list_autosize (GNCItemList *item_list);
 
 
 typedef struct

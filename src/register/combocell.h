@@ -84,6 +84,10 @@ void         xaccComboCellAddIgnoreString (ComboCell *cell,
                                            const char *ignore_string,
                                            const char *ignore_help);
 
+/* Determines whether the popup list autosizes itself or uses
+ * all available space. FALSE by default. */
+void         xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize);
+
 /* Determines whether combocells are automatically raised upon typing.
  * Defaults to false. This is a 'class' method. */
 void         xaccComboCellSetAutoPop (gboolean auto_pop_combos);

@@ -1,5 +1,16 @@
 2001-05-04  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/splitreg.c: set action cell to autosize
+
+	* src/register/gnome/combocell-gnome.c (xaccComboCellSetAutoSize):
+	new func.
+
+	* src/register/gnome/gnucash-item-list.c (gnc_item_list_autosize):
+	return the clist width
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_show_popup):
+	fix bug
+
 	* src/scm/main.scm: run the book-opened hook before showing
 	the new-user window.
 
