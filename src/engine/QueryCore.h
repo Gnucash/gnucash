@@ -32,7 +32,7 @@
 #include <glib.h>
 
 #include "gnc-numeric.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "kvp_frame.h"
 
 typedef struct query_pred_data *QueryPredData_t;
