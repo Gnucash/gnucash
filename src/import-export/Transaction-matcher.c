@@ -353,7 +353,7 @@ on_matcher_apply_clicked (GtkButton *button,
 	{
 	  if(transaction_info->action==ADD)
 	    {
-	      xaccSplitSetReconcile(transaction_info->first_split,YREC);
+	      xaccSplitSetReconcile(transaction_info->first_split,CREC);
 	      /*Set reconcile date to today*/
 	      xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
 	      xaccTransCommitEdit(transaction_info->trans);
@@ -394,7 +394,7 @@ on_matcher_apply_clicked (GtkButton *button,
 		  xaccTransCommitEdit(transaction_info->selected_match_info->trans);
 		  
 		  /*Replace it with the new one*/
-		  xaccSplitSetReconcile(transaction_info->first_split,YREC);
+		  xaccSplitSetReconcile(transaction_info->first_split,CREC);
 		  /*Set reconcile date to today*/
 		  xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
 		  xaccTransCommitEdit(transaction_info->trans);

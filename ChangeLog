@@ -1,3 +1,8 @@
+2002-11-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/Transaction-matcher.c: Make newly imported
+	transaction "cleared" instead of "reconciled".
+
 2002-11-10  Derek Atkins  <derek@ihtfp.com>
 
 	* Fix the Find-Transactions dialog so it only has "Share Price" once
