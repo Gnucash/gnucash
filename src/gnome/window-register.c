@@ -1199,10 +1199,12 @@ print_check_cb(GtkWidget * widget, gpointer data)
     memo   = xaccSplitGetMemo(split);
 
     gh_apply(print_check,
-             SCM_LIST4(gh_str02scm(payee),
+             /* FIXME: when we drop support older guiles, drop the
+                (char *) coercions below. */
+             SCM_LIST4(gh_str02scm((char *) payee),
                        gh_double2scm(gnc_numeric_to_double (amount)),
                        gh_ulong2scm(date),
-                       gh_str02scm(memo)));
+                       gh_str02scm((char *) memo)));
   }
 }
 
@@ -3234,10 +3236,12 @@ report_helper (RegWindow *regData, SCM func, Query *query)
 
   args = SCM_EOL;
 
-  arg = gh_str02scm (gnc_split_register_get_credit_string (reg));
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
   args = gh_cons (arg, args);
 
-  arg = gh_str02scm (gnc_split_register_get_debit_string (reg));
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
   args = gh_cons (arg, args);
 
   str = gnc_reg_get_name (regData, FALSE);
