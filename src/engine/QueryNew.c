@@ -1040,6 +1040,16 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
 			gnc_book_get_guid(book), QUERY_AND);
 }
 
+void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
+			      QueryOp op)
+{
+  QueryPredData_t pdata;
+  if (!q || !param_list) return;
+
+  pdata = gncQueryBooleanPredicate (COMPARE_EQUAL, value);
+  gncQueryAddTerm (q, param_list, pdata, op);
+}
+
 /**********************************************************************/
 /* PRIVATE PUBLISHED API FUNCTIONS                                    */
 

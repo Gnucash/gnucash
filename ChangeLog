@@ -4,6 +4,8 @@
 	* save these flags only if the entry is attached to a Bill.
 	* add a Billable column to Bill register
 
+	* add gncQueryAddBooleanMatch() convenience function
+	
 2002-07-09  Derek Atkins  <derek@ihftp.com>
 
 	* "global-replace for-each-in-order for-each" because the former

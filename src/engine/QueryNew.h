@@ -72,6 +72,9 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
 			       GList *guid_list, guid_match_t options,
 			       QueryOp op);
 
+void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
+			      QueryOp op);
+
 /* Run the query: */
 GList * gncQueryRun (QueryNew *query);
 
