@@ -460,10 +460,30 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   /* If it looks to be overflowing, try to reduce the fraction ... */
   if (bigprod.isbig)
   {
-    product = reduce128 (bigprod, product.denom);
-    if (gnc_numeric_check (product))
+    /* If rounding allowed, then shift until there's no 
+     * more overflow. The conversion at the end will fix 
+     * things up for the final value. */
+    if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
     {
-      return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+      product = reduce128 (bigprod, product.denom);
+      if (gnc_numeric_check (product))
+      {
+        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+      }
+    } 
+    else 
+    {
+      while (bigprod.isbig)
+      {
+         bigprod = shift128 (bigprod);
+         product.denom >>= 1;
+      }
+      product.num = bigprod.lo;
+      if (bigprod.isneg) product.num = -product.num;
+      if (0 == product.denom) 
+      {
+        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+      }
     }
   }
   
@@ -584,11 +604,10 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       }
       else
       {
-        /* If not exact/fixed, and rounding allowed, then
-         * shift until there's no more overflow. The conversion
-         * at the end will fix things up the final value. */
-        if (((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER) ||
-            ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_EXACT))
+        /* If rounding allowed, then shift until there's no 
+         * more overflow. The conversion at the end will fix 
+         * things up for the final value. */
+        if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
         {
           return gnc_numeric_error (GNC_ERROR_OVERFLOW);
         }
@@ -599,6 +618,10 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
         }
         quotient.num = sgn * rnume.lo;
         quotient.denom = rdeno.lo;
+        if (0 == quotient.denom) 
+        {
+          return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+        }
       }
     }
   }
