@@ -84,13 +84,14 @@
 #include <langinfo.h>
 #endif
 
-#include "date.h"
 #include "FreqSpecP.h"
-#include "GNCIdP.h"
-#include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "messages.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* I have done this to prevent compiler warnings...
  * This is used to convert a const GDate* to a GDate* for passing
@@ -176,15 +177,15 @@ get_abbrev_month_name(guint month)
  **/
 
 static void
-xaccFreqSpecInit( FreqSpec *fs, GNCBook *book )
+xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 {
         g_return_if_fail( fs );
         g_return_if_fail (book);
 
-        fs->entity_table = gnc_book_get_entity_table (book);
+        fs->entity_table = qof_book_get_entity_table (book);
 
-        xaccGUIDNew( &fs->guid, book );
-        xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
+        qof_entity_guid_new (fs->entity_table, &fs->guid);
+        qof_entity_store( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
 
         fs->type = INVALID;
         fs->uift = UIFREQ_ONCE;
@@ -193,7 +194,7 @@ xaccFreqSpecInit( FreqSpec *fs, GNCBook *book )
 }
 
 FreqSpec*
-xaccFreqSpecMalloc(GNCBook *book)
+xaccFreqSpecMalloc(QofBook *book)
 {
         FreqSpec        *fs;
 
@@ -201,7 +202,7 @@ xaccFreqSpecMalloc(GNCBook *book)
 
         fs = g_new0(FreqSpec, 1);
         xaccFreqSpecInit( fs, book );
-        gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
+        gnc_engine_generate_event( &fs->guid, GNC_ID_FREQSPEC, GNC_EVENT_CREATE );
         return fs;
 }
 
@@ -232,8 +233,8 @@ void
 xaccFreqSpecFree( FreqSpec *fs )
 {
         if ( fs == NULL ) return;
-        gnc_engine_generate_event( &fs->guid, GNC_EVENT_DESTROY );
-        xaccRemoveEntity( fs->entity_table, &fs->guid );
+        gnc_engine_generate_event( &fs->guid, GNC_ID_FREQSPEC, GNC_EVENT_DESTROY );
+        qof_entity_remove( fs->entity_table, &fs->guid );
 
         xaccFreqSpecCleanUp( fs );
 
@@ -277,6 +278,8 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
         GList *list;
 
         g_return_if_fail( fs );
+        g_return_if_fail( in_date );
+        g_return_if_fail( out_date );
         switch( fs->type ) {
         case INVALID:
                 /* this is okay, just lame. */

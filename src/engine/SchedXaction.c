@@ -27,18 +27,21 @@
 #include <string.h>
 
 #include "FreqSpec.h"
-#include "GNCId.h"
 #include "Group.h"
+#include "GroupP.h"
+#include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
-#include "date.h"
-#include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "guid.h"
 #include "messages.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid-p.h"
 
 static short module = MOD_SX;
 
@@ -47,61 +50,56 @@ static short module = MOD_SX;
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
+xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 {
-        AccountGroup        *ag;
-        char                *name;
+   AccountGroup        *ag;
 
-        sx->entity_table = gnc_book_get_entity_table (book);
+   sx->entity_table = qof_book_get_entity_table (book);
 
-        sx->freq = xaccFreqSpecMalloc(book);
+   sx->freq = xaccFreqSpecMalloc(book);
 
-        xaccGUIDNew( &sx->guid, book );
-        xaccStoreEntity( sx->entity_table, sx,
-                         &sx->guid, GNC_ID_SCHEDXACTION );
-        g_date_clear( &sx->last_date, 1 );
-        g_date_clear( &sx->start_date, 1 );
-        g_date_clear( &sx->end_date, 1 );
+   qof_entity_guid_new (sx->entity_table, &sx->guid);
+   qof_entity_store( sx->entity_table, sx,
+                    &sx->guid, GNC_ID_SCHEDXACTION );
+   g_date_clear( &sx->last_date, 1 );
+   g_date_clear( &sx->start_date, 1 );
+   g_date_clear( &sx->end_date, 1 );
 
-        sx->num_occurances_total = 0;
-        sx->kvp_data = kvp_frame_new();
-        sx->autoCreateOption = FALSE;
-        sx->autoCreateNotify = FALSE;
-        sx->advanceCreateDays = 0;
-        sx->advanceRemindDays = 0;
-        sx->instance_num = 0;
+   sx->num_occurances_total = 0;
+   sx->kvp_data = kvp_frame_new();
+   sx->autoCreateOption = FALSE;
+   sx->autoCreateNotify = FALSE;
+   sx->advanceCreateDays = 0;
+   sx->advanceRemindDays = 0;
+   sx->instance_num = 0;
 	sx->dirty = TRUE;
-        sx->deferredList = NULL;
+   sx->deferredList = NULL;
 
-        /* create a new template account for our splits */
-        sx->template_acct = xaccMallocAccount(book);
-        name = guid_to_string( &sx->guid );
-        xaccAccountSetName( sx->template_acct, name );
-        xaccAccountSetCommodity
-          (sx->template_acct,
-           gnc_commodity_new( "template", "template",
-                              "template", "template", 1 ) );
-	g_free( name );
-        xaccAccountSetType( sx->template_acct, BANK );
-        ag = gnc_book_get_template_group( book );
-        xaccGroupInsertAccount( ag, sx->template_acct );
+   /* create a new template account for our splits */
+   sx->template_acct = xaccMallocAccount(book);
+   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->guid ));
+   xaccAccountSetCommodity
+     (sx->template_acct,
+      gnc_commodity_new( "template", "template",
+                         "template", "template", 1 ) );
+   xaccAccountSetType( sx->template_acct, BANK );
+   ag = gnc_book_get_template_group( book );
+   xaccGroupInsertAccount( ag, sx->template_acct );
 }
 
 SchedXaction*
-xaccSchedXactionMalloc(GNCBook *book)
+xaccSchedXactionMalloc(QofBook *book)
 {
-        SchedXaction *sx;
+   SchedXaction *sx;
 
-        g_return_val_if_fail (book, NULL);
+   g_return_val_if_fail (book, NULL);
 
-        sx = g_new0( SchedXaction, 1 );
-        xaccSchedXactionInit( sx, book );
-        gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
+   sx = g_new0( SchedXaction, 1 );
+   xaccSchedXactionInit( sx, book );
+   gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_CREATE );
 
-        return sx;
+   return sx;
 }
-
-
 
 static void
 sxprivTransMapDelete( gpointer data, gpointer user_data )
@@ -152,8 +150,8 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
-  xaccRemoveEntity( sx->entity_table, &sx->guid );
+  gnc_engine_generate_event( &sx->guid, GNC_ID_SCHEDXACTION, GNC_EVENT_DESTROY );
+  qof_entity_remove( sx->entity_table, &sx->guid );
   
   if ( sx->name )
     g_free( sx->name );
@@ -210,44 +208,44 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 gchar *
 xaccSchedXactionGetName( SchedXaction *sx )
 {
-        return sx->name;
+   return sx->name;
 }
 
 void
 xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
 {
-        g_return_if_fail( newName != NULL );
-        if ( sx->name != NULL ) {
-                g_free( sx->name );
-                sx->name = NULL;
-        }
+   g_return_if_fail( newName != NULL );
+   if ( sx->name != NULL ) {
+           g_free( sx->name );
+           sx->name = NULL;
+   }
 	sx->dirty = TRUE;
-        sx->name = g_strdup( newName );
+   sx->name = g_strdup( newName );
 }
 
 GDate*
 xaccSchedXactionGetStartDate( SchedXaction *sx )
 {
-        return &sx->start_date;
+   return &sx->start_date;
 }
 
 void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
-        sx->start_date = *newStart;
+   sx->start_date = *newStart;
 	sx->dirty = TRUE;
 }
 
 gboolean
 xaccSchedXactionHasEndDate( SchedXaction *sx )
 {
-        return g_date_valid( &sx->end_date );
+   return g_date_valid( &sx->end_date );
 }
 
 GDate*
 xaccSchedXactionGetEndDate( SchedXaction *sx )
 {
-        return &sx->end_date;
+   return &sx->end_date;
 }
 
 void
@@ -272,7 +270,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
 GDate*
 xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 {
-        return &sx->last_date;
+   return &sx->last_date;
 }
 
 void
@@ -326,7 +324,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 }
 
 
-kvp_value *
+KvpValue *
 xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
 {
   if (!sx) 
@@ -340,7 +338,7 @@ xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
 void
 xaccSchedXactionSetSlot( SchedXaction *sx, 
 			 const char *slot,
-			 const kvp_value *value )
+			 const KvpValue *value )
 {
   if (!sx)
   {
@@ -352,14 +350,14 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
   return;
 }
 
-kvp_frame*
+KvpFrame*
 xaccSchedXactionGetSlots( SchedXaction *sx )
 {
-        return sx->kvp_data;
+   return sx->kvp_data;
 }
 
 void
-xaccSchedXactionSetSlots( SchedXaction *sx, kvp_frame *frm )
+xaccSchedXactionSetSlots( SchedXaction *sx, KvpFrame *frm )
 {
   sx->kvp_data = frm;
   sx->dirty = TRUE;
@@ -583,11 +581,11 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 
 static Split *
 pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
-                 Transaction *parent_trans, GNCBook *book)
+                 Transaction *parent_trans, QofBook *book)
 {
   Split *split;
-  kvp_frame *split_frame;
-  kvp_value *tmp_value;
+  KvpFrame *split_frame;
+  KvpValue *tmp_value;
   const GUID *acc_guid; 
   
   split = xaccMallocSplit(book);
@@ -643,7 +641,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
 void
 xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                 GNCBook *book)
+                                 QofBook *book)
 {
   Transaction *new_trans;
   TTInfo *tti;
@@ -789,3 +787,4 @@ gnc_sx_get_defer_instances( SchedXaction *sx )
 {
         return sx->deferredList;
 }
+

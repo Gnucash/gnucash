@@ -26,6 +26,7 @@
 #include "dialog-customer.h"
 #include "dialog-job.h"
 #include "dialog-vendor.h"
+#include "dialog-employee.h"
 
 typedef enum {
   GNCSEARCH_TYPE_SELECT,
@@ -78,6 +79,14 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     type_name = GNC_VENDOR_MODULE_NAME;
     break;
 
+  case GNC_OWNER_EMPLOYEE:
+    if (type == GNCSEARCH_TYPE_SELECT)
+      search_cb = gnc_employee_search_select;
+    else
+      search_cb = gnc_employee_search_edit;
+    type_name = GNC_EMPLOYEE_MODULE_NAME;
+    break;
+
   default:
     g_warning ("Unknown type");
     return NULL;
@@ -91,7 +100,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 				   owner->owner.undefined);
   gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
   if (label)
-    gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
+    gtk_label_set_text (GTK_LABEL (label), _(gncObjectGetTypeLabel (type_name)));
 
   return edit;
 }
@@ -205,6 +214,7 @@ gnc_business_account_types (GncOwner *owner)
   case GNC_OWNER_CUSTOMER:
     return (g_list_prepend (NULL, (gpointer)RECEIVABLE));
   case GNC_OWNER_VENDOR:
+  case GNC_OWNER_EMPLOYEE:
     return (g_list_prepend (NULL, (gpointer)PAYABLE));
     break;
   default:

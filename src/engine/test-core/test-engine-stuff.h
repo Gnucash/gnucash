@@ -9,10 +9,11 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "gnc-session.h"
 #include "Query.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-pricedb.h"
+#include "qofbook.h"
+#include "qofsession.h"
 
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
@@ -34,22 +35,22 @@ GUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 void random_glist_strings_only (gboolean strings_only);
-void kvp_exclude_type (kvp_value_t kvp_type);
+void kvp_exclude_type (KvpValueType kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 void set_max_group_depth (gint max_group_depth);
 void set_max_group_accounts (gint max_group_accounts);
 
-GNCPrice * get_random_price(GNCBook *book);
-void make_random_pricedb (GNCBook *book, GNCPriceDB *pdb);
-GNCPriceDB * get_random_pricedb(GNCBook *book);
-AccountGroup * get_random_group(GNCBook * book);
-Account* get_random_account(GNCBook * book);
-Split* get_random_split(GNCBook *book, gnc_numeric num);
-Transaction* get_random_transaction(GNCBook *book);
-Transaction* get_random_transaction_with_currency(GNCBook *book,
+GNCPrice * get_random_price(QofBook *book);
+void make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
+GNCPriceDB * get_random_pricedb(QofBook *book);
+AccountGroup * get_random_group(QofBook * book);
+Account* get_random_account(QofBook * book);
+Split* get_random_split(QofBook *book, gnc_numeric num);
+Transaction* get_random_transaction(QofBook *book);
+Transaction* get_random_transaction_with_currency(QofBook *book,
                                                   gnc_commodity *currency);
-gnc_commodity* get_random_commodity(GNCBook *book);
+gnc_commodity* get_random_commodity(QofBook *book);
 const char *get_random_commodity_namespace(void);
 
 typedef enum
@@ -69,24 +70,24 @@ Query * make_trans_query (Transaction *trans, TestQueryTypes query_types);
 TestQueryTypes get_random_query_type (void);
 void trans_query_include_price (gboolean include_amounts);
 
-GNCBook * get_random_book (void);
-GNCSession * get_random_session (void);
+QofBook * get_random_book (void);
+QofSession * get_random_session (void);
 
-void add_random_transactions_to_book (GNCBook *book, gint num_transactions);
+void add_random_transactions_to_book (QofBook *book, gint num_transactions);
 
 void make_random_changes_to_commodity (gnc_commodity *com);
 void make_random_changes_to_commodity_table (gnc_commodity_table *table);
-void make_random_changes_to_price (GNCBook *book, GNCPrice *price);
-void make_random_changes_to_pricedb (GNCBook *book, GNCPriceDB *pdb);
+void make_random_changes_to_price (QofBook *book, GNCPrice *price);
+void make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb);
 void make_random_changes_to_split (Split *split);
-void make_random_changes_to_transaction (GNCBook *book,
+void make_random_changes_to_transaction (QofBook *book,
                                          Transaction *trans);
-void make_random_changes_to_transaction_and_splits (GNCBook *book,
+void make_random_changes_to_transaction_and_splits (QofBook *book,
                                                     Transaction *trans,
                                                     GList *accounts);
-void make_random_changes_to_account (GNCBook *book, Account *account);
-void make_random_changes_to_group (GNCBook *book, AccountGroup *group);
-void make_random_changes_to_book (GNCBook *book);
-void make_random_changes_to_session (GNCSession *session);
+void make_random_changes_to_account (QofBook *book, Account *account);
+void make_random_changes_to_group (QofBook *book, AccountGroup *group);
+void make_random_changes_to_book (QofBook *book);
+void make_random_changes_to_session (QofSession *session);
 
 #endif

@@ -35,6 +35,7 @@
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
@@ -283,7 +284,7 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),
-                                 TRUE, TRUE);
+                                 DIAG_COMM_ALL);
 
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
@@ -417,7 +418,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     return TRUE;
   }
 
-  if (safe_strcmp (new_type, GNC_COMMODITY_NS_ISO) == 0 &&
+  if (gnc_commodity_namespace_is_iso (new_type) &&
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    new_type, new_mnemonic))
   {
@@ -446,7 +447,7 @@ finish_helper(gpointer key, gpointer value, gpointer data)
   gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, key);
   GList          * accts;
   GList          * node;
-  GNCBook        * book = gnc_get_current_book ();
+  QofBook        * book = gnc_get_current_book ();
 
   if(!book) 
   {
@@ -469,19 +470,16 @@ finish_helper(gpointer key, gpointer value, gpointer data)
   for(node = accts; node; node = node->next)
   {
     Account *account = node->data;
-    GNCBook *book;
-
-    book = gnc_get_current_book ();
 
     xaccAccountBeginEdit(account);
 
-    if (gnc_commodity_equiv (DxaccAccountGetCurrency(account, book),
+    if (gnc_commodity_equiv (DxaccAccountGetCurrency(account),
                              old_comm))
-      DxaccAccountSetCurrency (account, comm, book);
+      DxaccAccountSetCurrency (account, comm);
 
-    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account, book),
+    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account),
                              old_comm))
-      DxaccAccountSetSecurity(account, comm, book);
+      DxaccAccountSetSecurity(account, comm);
 
     if (gnc_commodity_equiv (xaccAccountGetCommodity(account), old_comm))
       xaccAccountSetCommodity(account, comm);
@@ -504,8 +502,7 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
 
   /* Fix account and transaction commodities */
-  xaccGroupScrubCommodities (gnc_get_current_group (),
-                             gnc_get_current_book ());
+  xaccGroupScrubCommodities (gnc_get_current_group ());
 
   /* Fix split amount/value */
   xaccGroupScrubSplits (gnc_get_current_group ());

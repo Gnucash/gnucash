@@ -28,10 +28,14 @@
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
+#include "QueryCore.h"
+#include "QueryNew.h"
+#include "SX-book.h"
 #include "Transaction.h"
-#include "date.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-book.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
@@ -418,7 +422,7 @@ gnc_ledger_display_gl (void)
 {
   Query *query;
   time_t start;
-  struct tm *tm;
+  struct tm tm;
 
   query = xaccMallocQuery ();
 
@@ -442,14 +446,9 @@ gnc_ledger_display_gl (void)
     tAG = NULL;
   }
 
-  start = time (NULL);
-  tm = localtime (&start);
-  tm->tm_mon--;
-  tm->tm_hour = 0;
-  tm->tm_min = 0;
-  tm->tm_sec = 0;
-  tm->tm_isdst = -1;
-  start = mktime (tm);
+  gnc_tm_get_today_start(&tm);
+  tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
+  start = mktime (&tm);
   xaccQueryAddDateMatchTT (query, 
                            TRUE, start, 
                            FALSE, 0, 

@@ -13,7 +13,7 @@
 #include "gnc-lot.h"
 
 gboolean gncInvoiceRegister (void);
-gint64 gncInvoiceNextID (GNCBook *book);
+gint64 gncInvoiceNextID (QofBook *book);
 void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid);
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);

@@ -1,20 +1,20 @@
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
+#include "Group.h"
 #include "GroupP.h"
-#include "GNCIdP.h"
 #include "TransLog.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 
 static gboolean
-group_has_book (AccountGroup *group, GNCBook *book)
+group_has_book (AccountGroup *group, QofBook *book)
 {
   GList *node;
 
@@ -46,9 +46,9 @@ run_test (void)
   AccountGroup *group2;
   Account *account1;
   Account *account2;
-  GNCBook *book;
+  QofBook *book;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
   if (!book)
   {
     failure("book not created");
@@ -68,16 +68,16 @@ run_test (void)
     exit(get_rv());
   }
 
-  /* this test is testing routines that are private
+  /* This test is testing routines that are private
    * to the engine. these tests are intended to test
    * the engine as a whole, not just the public
    * interface. the maintenance of the correct
    * book pointers is important for correct
    * engine operation. */
-  gnc_book_set_group (book, group1);
+  xaccSetAccountGroup (book, group1);
   if (!group_has_book (group1, book))
   {
-    failure("gnc_book_set_group didn't take");
+    failure("xaccSetAccountGroup didn't take");
     exit(get_rv());
   }
 
@@ -88,20 +88,20 @@ run_test (void)
     exit(get_rv());
   }
 
-  gnc_book_set_group (book, group2);
+  xaccSetAccountGroup (book, group2);
 
 #if 0
   /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (group1, NULL))
   {
-    failure("gnc_book_set_group didn't clear old");
+    failure("xaccSetAccountGroup didn't clear old");
     exit(get_rv());
   }
 #endif
 
   if (!group_has_book (group2, book))
   {
-    failure("gnc_book_set_group didn't take");
+    failure("xaccSetAccountGroup didn't take");
     exit(get_rv());
   }
 
@@ -151,7 +151,7 @@ run_test (void)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   int i;
 
@@ -176,6 +176,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

@@ -94,9 +94,6 @@
 #include "kvp_frame.h"
 #include "Account.h"
 #include "AccountP.h"
-#include "Backend.h"
-#include "date.h"
-#include "DateUtils.h"
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -104,13 +101,15 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "qofbackend.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "GNCIdP.h"
 #include "gnc-pricedb.h"
-
-#include "gnc-book-p.h"
+#include "gnc-pricedb-p.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
@@ -120,7 +119,7 @@
 #define VERSION 10
 
 
-/* hack alert the current file format does not support most of the
+/* The binary file format does not support most of the
  * new/improved account & transaction structures
  */
 
@@ -181,6 +180,11 @@ typedef struct {
 
 static GSList     *potential_quotes;
 
+
+#define EPS  (1.0e-6)
+#define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
+#define DEQ(x,y) DEQEPS(x,y,EPS)
+
 static void
 mark_potential_quote(Split *s, double price, double quantity)
 {
@@ -196,7 +200,7 @@ mark_potential_quote(Split *s, double price, double quantity)
 
 static gboolean
 cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
-                                            GNCBook *book)
+                                            QofBook *book)
 {
   GSList *item = potential_quotes;
 
@@ -220,9 +224,9 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 
       gnc_price_begin_edit(price);
       gnc_price_set_commodity(price,
-                              DxaccAccountGetSecurity(split_acct, book));
+                              DxaccAccountGetSecurity(split_acct));
       gnc_price_set_currency(price,
-                             DxaccAccountGetCurrency(split_acct, book));
+                             DxaccAccountGetCurrency(split_acct));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");
@@ -248,15 +252,15 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
 }
 
 /** PROTOTYPES ******************************************************/
-static Account     *locateAccount (int acc_id, GNCBook *book); 
+static Account     *locateAccount (int acc_id, QofBook *book); 
 
-static AccountGroup *readGroup( GNCBook *, int fd, Account *, int token );
-static Account      *readAccount( GNCBook *book, int fd,
+static AccountGroup *readGroup( QofBook *, int fd, Account *, int token );
+static Account      *readAccount( QofBook *book, int fd,
                                   AccountGroup *, int token );
 static gboolean      readAccInfo( int fd, Account *, int token );
-static Transaction  *readTransaction( GNCBook *book,
+static Transaction  *readTransaction( QofBook *book,
                                       int fd, Account *, int token );
-static Split        *readSplit( GNCBook *book, int fd, int token );
+static Split        *readSplit( QofBook *book, int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
@@ -288,7 +292,7 @@ static int           readTSDate( int fd, Timespec *, int token );
 
 /*******************************************************/
 
-GNCBackendError
+QofBackendError
 gnc_get_binfile_io_error(void)
 {
    /* reset the error code */
@@ -371,7 +375,7 @@ xaccFlipLongLong (gint64 val)
  ********************************************************************/
 
 static gnc_commodity * 
-gnc_commodity_import_legacy(GNCBook *book, const char * currency_name)
+gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
 {
   gnc_commodity_table *table;
   gnc_commodity * old = NULL;
@@ -411,7 +415,7 @@ gnc_commodity_import_legacy(GNCBook *book, const char * currency_name)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static gboolean
-gnc_load_financials_from_fd(GNCBook *book, int fd)
+gnc_load_financials_from_fd(QofBook *book, int fd)
 {
   int  err=0;
   int  token=0;
@@ -505,9 +509,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
     GNCPriceDB *tmpdb;
     if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, book))
     {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-      gnc_book_set_pricedb(book, tmpdb);
-      if(db) gnc_pricedb_destroy(db);
+      gnc_pricedb_set_db(book, tmpdb);
     } else {
       PWARN("pricedb import failed.");
       error_code = ERR_BACKEND_MISC;
@@ -517,15 +519,11 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
 
   xaccLogEnable();
 
-  {
-    AccountGroup *g = gnc_book_get_group(book);
-    gnc_book_set_group(book, grp);
-    if (g) xaccFreeAccountGroup(g);
-  }
+  xaccSetAccountGroup(book, grp);
 
   /* mark the newly read book as saved, since the act of putting it
    * together will have caused it to be marked up as not-saved.  */
-  gnc_book_mark_saved(book);
+  qof_book_mark_saved(book);
 
   return (error_code == ERR_BACKEND_NO_ERR);
 }
@@ -538,11 +536,11 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 void
-gnc_session_load_from_binfile(GNCSession *session)
+qof_session_load_from_binfile(QofSession *session)
 {
   int  fd;
 
-  const gchar *datafile = gnc_session_get_file_path(session);
+  const gchar *datafile = qof_session_get_file_path(session);
   if(!datafile) {
     error_code = ERR_BACKEND_MISC;
     return;
@@ -557,7 +555,7 @@ gnc_session_load_from_binfile(GNCSession *session)
     return;
   }
 
-  if (!gnc_load_financials_from_fd(gnc_session_get_book(session), fd))
+  if (!gnc_load_financials_from_fd(qof_session_get_book(session), fd))
     return;
 
   close(fd);
@@ -571,7 +569,7 @@ gnc_session_load_from_binfile(GNCSession *session)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static AccountGroup *
-readGroup (GNCBook *book, int fd, Account *aparent, int token)
+readGroup (QofBook *book, int fd, Account *aparent, int token)
   {
   int  numAcc;
   int  err=0;
@@ -626,7 +624,7 @@ readGroup (GNCBook *book, int fd, Account *aparent, int token)
  * Return: error value, 0 if OK, else -1                            * 
 \********************************************************************/
 static Account *
-readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
+readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
 {
   int err=0;
   int i;
@@ -689,26 +687,26 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
   if( NULL == tmp) return NULL;
   DEBUG ("reading acct %s", tmp);
   xaccAccountSetName (acc, tmp);
-  free (tmp);
+  g_free (tmp);
 
   if (8 <= token) {
      tmp = readString( fd, token );
      if( NULL == tmp) return NULL;
      xaccAccountSetCode (acc, tmp);
-     free (tmp);
+     g_free (tmp);
   }
   
   tmp = readString( fd, token );
   if( NULL == tmp ) return NULL;
   xaccAccountSetDescription (acc, tmp);
-  free (tmp);
+  g_free (tmp);
   
   tmp = readString( fd, token );
   if( NULL == tmp ) return NULL;
   if(strlen(tmp) > 0) {
     xaccAccountSetNotes (acc, tmp);
   }
-  free (tmp);
+  g_free (tmp);
   
   /* currency and security strings first introduced 
    * in version 7 of the file format */
@@ -718,9 +716,9 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
      
      PINFO ("currency is %s", tmp);
      currency = gnc_commodity_import_legacy(book, tmp);
-     DxaccAccountSetCurrency (acc, currency, book);
+     DxaccAccountSetCurrency (acc, currency);
      
-     if(tmp) free (tmp);
+     if(tmp) g_free (tmp);
 
      tmp = readString( fd, token );
 
@@ -734,7 +732,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
             account_type == MUTUAL ||
             account_type == CURRENCY)
         {
-          if (tmp) free (tmp);
+          if (tmp) g_free (tmp);
 
           tmp = strdup (xaccAccountGetName (acc));
           if (tmp == NULL) return NULL;
@@ -743,14 +741,14 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
 
      PINFO ("security is %s", tmp);
      security = gnc_commodity_import_legacy(book, tmp);
-     DxaccAccountSetSecurity (acc, security, book);
+     DxaccAccountSetSecurity (acc, security);
 
-     if(tmp) free (tmp);
+     if(tmp) g_free (tmp);
   } 
   else {
     /* set the default currency when importing old files */
     currency = gnc_commodity_import_legacy(book, DEFAULT_CURRENCY);
-    DxaccAccountSetCurrency (acc, currency, book);
+    DxaccAccountSetCurrency (acc, currency);
   }
 
   /* aux account info first appears in version ten files */
@@ -820,7 +818,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
  */
 
 static Account *
-locateAccount (int acc_id, GNCBook *book)
+locateAccount (int acc_id, QofBook *book)
 {
    Account * acc;
    /* negative account ids denote no account */
@@ -872,8 +870,8 @@ readAccInfo(int fd, Account *acc, int token) {
   if ((acc_type == STOCK) || (acc_type == MUTUAL)) {
     const char *tmp = readString( fd, token );
     if(NULL == tmp) return(FALSE);
-    if(strlen(tmp) > 0) xaccAccountSetPriceSrc(acc, tmp);
-    free((char *) tmp);
+    if(strlen(tmp) > 0) dxaccAccountSetPriceSrc(acc, tmp);
+    g_free((char *) tmp);
   }
   return(TRUE);
 }
@@ -922,7 +920,7 @@ xaccTransSetAction (Transaction *trans, const char *action)
 \********************************************************************/
 
 static Transaction *
-readTransaction(GNCBook *book, int fd, Account *acc, int revision)
+readTransaction(QofBook *book, int fd, Account *acc, int revision)
   {
   int err=0;
   int acc_id;
@@ -950,7 +948,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     return NULL;
     }
   xaccTransSetNum (trans, tmp);
-  free (tmp);
+  g_free (tmp);
   
   if (revision <= 7) {
      time_t secs;
@@ -1001,7 +999,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     }
   PINFO ("description=%s", tmp);
   xaccTransSetDescription (trans, tmp);
-  free (tmp);
+  g_free (tmp);
   
   /* docref first makes an appearance in version 8.  They're now
      deprecated, and we don't think anyone ever used them anyway, but
@@ -1019,12 +1017,12 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
        kvp_value *new_value = kvp_value_new_string(tmp);
        if(!new_value) {
          PERR ("Failed to allocate kvp_value for transaction docref.");
-         free(tmp);
+         g_free(tmp);
          return(NULL);
        }
        kvp_frame_set_slot_nc(xaccTransGetSlots(trans), "old-docref", new_value);
      }
-     free (tmp);
+     g_free (tmp);
   }
 
   /* At version 5, most of the transaction stuff was 
@@ -1046,7 +1044,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     if(strlen(tmp) > 0) {
       xaccTransSetMemo (trans, tmp);
     }
-    free (tmp);
+    g_free (tmp);
     
     /* action first introduced in version 3 of the file format */
     if (revision >= 3) 
@@ -1060,7 +1058,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
-       free (tmp);
+       g_free (tmp);
       }
     
     /* category is now obsolete */
@@ -1258,7 +1256,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
 \********************************************************************/
 
 static Split *
-readSplit ( GNCBook *book, int fd, int token )
+readSplit ( QofBook *book, int fd, int token )
 {
   Account *peer_acc;
   Split *split;
@@ -1282,7 +1280,7 @@ readSplit ( GNCBook *book, int fd, int token )
     }
   PINFO ("memo=%s", tmp);
   xaccSplitSetMemo (split, tmp);
-  free (tmp);
+  g_free (tmp);
   
   tmp = readString( fd, token );
   if( tmp == NULL )
@@ -1292,7 +1290,7 @@ readSplit ( GNCBook *book, int fd, int token )
     return NULL;
     }
   xaccSplitSetAction (split, tmp);
-  free (tmp);
+  g_free (tmp);
   
   err = read( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
@@ -1347,12 +1345,12 @@ readSplit ( GNCBook *book, int fd, int token )
        kvp_value *new_value = kvp_value_new_string(tmp);
        if(!new_value) {
          PERR ("Failed to allocate kvp_value for split docref.");
-         free(tmp);
+         g_free(tmp);
          return(NULL);
        }
        kvp_frame_set_slot_nc(xaccSplitGetSlots(split), "old-docref", new_value);
      }
-     free (tmp);
+     g_free (tmp);
   }
 
   /* first, read number of shares ... */
@@ -1417,7 +1415,7 @@ readString( int fd, int token )
     return NULL;
   XACC_FLIP_INT (size);
   
-  str = (char *) malloc (size);
+  str = (char *) g_malloc (size);
   if (!str) {
     PERR("malloc failed on size %d bytes at position %ld\n", size,
          (long int) lseek(fd, 0, SEEK_CUR));
@@ -1427,7 +1425,7 @@ readString( int fd, int token )
   if( err != size )
     {
     PERR("size = %d err = %d str = %s\n", size, err, str );
-    free(str);
+    g_free(str);
     return NULL;
     }
   

@@ -25,15 +25,18 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
+#include "guile-mappings.h"
 
 #include "AccWindow.h"
 #include "Scrub.h"
+#include "Scrub2.h"
 #include "dialog-account.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-book.h"
@@ -708,8 +711,9 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountScrubOrphans (account, gnc_get_current_book ());
-  xaccAccountScrubImbalance (account, gnc_get_current_book ());
+  xaccAccountScrubOrphans (account);
+  xaccAccountScrubImbalance (account);
+  xaccAccountScrubLotsBalance (account);
 
   gnc_resume_gui_refresh ();
 }
@@ -730,8 +734,9 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
-  xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
+  xaccAccountTreeScrubOrphans (account);
+  xaccAccountTreeScrubImbalance (account);
+  xaccAccountTreeScrubLotsBalance (account);
 
   gnc_resume_gui_refresh ();
 }
@@ -744,8 +749,9 @@ gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget,
 
   gnc_suspend_gui_refresh ();
 
-  xaccGroupScrubOrphans (group, gnc_get_current_book ());
-  xaccGroupScrubImbalance (group, gnc_get_current_book ());
+  xaccGroupScrubOrphans (group);
+  xaccGroupScrubImbalance (group);
+  xaccGroupScrubLotsBalance (group);
 
   gnc_resume_gui_refresh ();
 }
@@ -809,6 +815,7 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
 {
   GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
+  AccountFieldCode field;
   GSList *list, *node;
 
   memset (&new_avi, 0, sizeof(new_avi));
@@ -871,35 +878,9 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
 
   for (node = list; node != NULL; node = node->next)
   {
-    if (safe_strcmp(node->data, "type") == 0)
-      new_avi.show_field[ACCOUNT_TYPE] = TRUE;
-
-    else if (safe_strcmp(node->data, "code") == 0)
-      new_avi.show_field[ACCOUNT_CODE] = TRUE;
-
-    else if (safe_strcmp(node->data, "description") == 0)
-      new_avi.show_field[ACCOUNT_DESCRIPTION] = TRUE;
-
-    else if (safe_strcmp(node->data, "notes") == 0)
-      new_avi.show_field[ACCOUNT_NOTES] = TRUE;
-
-    else if (safe_strcmp(node->data, "commodity") == 0)
-      new_avi.show_field[ACCOUNT_COMMODITY] = TRUE;
-
-    else if (safe_strcmp(node->data, "tax-info") == 0)
-      new_avi.show_field[ACCOUNT_TAX_INFO] = TRUE;
-
-    else if (safe_strcmp(node->data, "balance") == 0)
-      new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
-
-    else if (safe_strcmp(node->data, "balance_report") == 0)
-      new_avi.show_field[ACCOUNT_BALANCE_REPORT] = TRUE;
-
-    else if (safe_strcmp(node->data, "total") == 0)
-      new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
-
-    else if (safe_strcmp(node->data, "total_report") == 0)
-      new_avi.show_field[ACCOUNT_TOTAL_REPORT] = TRUE;
+    field = gnc_ui_account_pref_name_to_code(node->data);
+    if (field < NUM_ACCOUNT_FIELDS)
+      new_avi.show_field[field] = TRUE;
   }
 
   gnc_free_list_option_value (list);
@@ -1158,18 +1139,18 @@ gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * win) {
 
 static void
 gnc_acct_tree_window_options_new(GNCAcctTreeWin * win) {
-  SCM func = gh_eval_str("gnc:make-new-acct-tree-window");
-  SCM opts_and_id = gh_call0(func);
+  SCM func = scm_c_eval_string("gnc:make-new-acct-tree-window");
+  SCM opts_and_id = scm_call_0(func);
   
   scm_unprotect_object(win->options);
-  win->options = gh_car(opts_and_id);
+  win->options = SCM_CAR(opts_and_id);
   scm_protect_object(win->options);
-  win->options_id = gh_scm2int(gh_cdr(opts_and_id));
+  win->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
 }
 
 void
 gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
-  SCM  free_tree = gh_eval_str("gnc:free-acct-tree-window");
+  SCM  free_tree = scm_c_eval_string("gnc:free-acct-tree-window");
   gnc_unregister_option_change_callback_id
     (win->euro_change_callback_id);
   
@@ -1183,7 +1164,7 @@ gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
   
   gnc_option_db_destroy(win->odb);
 
-  gh_call1(free_tree, gh_int2scm(win->options_id));
+  scm_call_1(free_tree, scm_int2num(win->options_id));
 
   scm_unprotect_object(win->options);
   g_free (win);
@@ -1224,7 +1205,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
   EggActionGroup *action_group;
   gint i;
   gchar *fname;
-  SCM find_options = gh_eval_str("gnc:find-acct-tree-window-options");
+  SCM find_options = scm_c_eval_string("gnc:find-acct-tree-window-options");
   SCM temp;
   int options_id;
   URLType type;
@@ -1299,7 +1280,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
 	location && (strlen(location) > 3) && 
 	!strncmp("id=", location, 3)) {
       sscanf(location+3, "%d", &options_id);
-      temp = gh_call1(find_options, gh_int2scm(options_id));
+      temp = scm_call_1(find_options, scm_int2num(options_id));
 
       if(temp != SCM_BOOL_F) {
         scm_unprotect_object(treewin->options);

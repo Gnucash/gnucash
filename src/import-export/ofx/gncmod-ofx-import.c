@@ -23,8 +23,10 @@
  @brief module definition/initialization for the ofx importer
  @author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
  */
+#include "config.h"
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-ofx-import.h"
 #include "gnc-module.h"
@@ -77,8 +79,8 @@ libgncmod_ofx_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    gh_eval_str("(load-from-path \"ofx/ofx-import.scm\")");
-    gh_new_procedure("gnc:ofx-import",   scm_gnc_file_ofx_import,   0, 0, 0);
+    scm_c_eval_string("(load-from-path \"ofx/ofx-import.scm\")");
+    scm_c_define_gsubr("gnc:ofx-import", 0, 0, 0, scm_gnc_file_ofx_import);
   return TRUE;
 }
 

@@ -10,7 +10,7 @@
 #include "gncJob.h"
 
 gboolean gncJobRegister (void);
-gint64 gncJobNextID (GNCBook *book);
+gint64 gncJobNextID (QofBook *book);
 void gncJobSetGUID (GncJob *job, const GUID *guid);
 
 #endif /* GNC_JOBP_H_ */

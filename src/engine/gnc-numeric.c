@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-numeric.c -- an exact-number library for gnucash.            *
+ * gnc-numeric.c -- an exact-number library for accounting use      *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -26,11 +26,11 @@
 #include "config.h"
 
 #include <glib.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <string.h>
 
-#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 
 /* TODO 
@@ -1107,17 +1107,26 @@ gnc_numeric_to_string(gnc_numeric n) {
 
 const gchar *
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
-  int num_read;
+  size_t num_read;
   long long int tmpnum;
   long long int tmpdenom;
     
   if(!str) return NULL;
 
+#ifdef GNC_DEPRECATED
   /* must use "<" here because %n's effects aren't well defined */
   if(sscanf(str, " " GNC_SCANF_LLD "/" GNC_SCANF_LLD "%n",
             &tmpnum, &tmpdenom, &num_read) < 2) {
     return(NULL);
   }
+#else
+  tmpnum = atoll (str);
+  str = strchr (str, '/');
+  if (!str) return NULL;
+  str ++;
+  tmpdenom = atoll (str);
+  num_read = strspn (str, "0123456789");
+#endif
   n->num = tmpnum;
   n->denom = tmpdenom;
   return(str + num_read);

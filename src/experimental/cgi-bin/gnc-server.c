@@ -106,11 +106,11 @@ GList * logged_in_users = NULL;
  * should become invalid.
  */
 
-static char *
+static const char *
 auth_user (const char * name, const char *passwd)
 {
   GUID *guid;
-  char *session_auth_string;
+  const char *session_auth_string;
 
   /* hack alert - XXX - we do no authentication whatsoever,
    * any user is allowed to login.  We only reject null users.

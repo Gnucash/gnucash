@@ -9,7 +9,8 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
-#include "QueryObject.h"
+#include "qofquerycore.h"
+#include "qofqueryobject.h"
 #include "guid.h"
 #include "gnc-event-p.h"
 
@@ -17,8 +18,9 @@
 #include "gncAddressP.h"
 
 struct _gncAddress {
-  GNCBook *	book;
+  QofBook *	book;
   const GUID *	parent_guid;
+  QofIdType	parent_type;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -42,12 +44,12 @@ mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 
-  gnc_engine_generate_event (address->parent_guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (address->parent_guid, address->parent_type, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent)
+GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
 {
   GncAddress *addr;
 
@@ -57,6 +59,7 @@ GncAddress * gncAddressCreate (GNCBook *book, const GUID *parent)
   addr->book = book;
   addr->dirty = FALSE;
   addr->parent_guid = parent;
+  addr->parent_type = ptype;
 
   addr->name = CACHE_INSERT ("");
   addr->addr1 = CACHE_INSERT ("");
@@ -233,16 +236,16 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 
 gboolean gncAddressRegister (void)
 {
-  static QueryObjectDef params[] = {
+  static QofQueryObject params[] = {
 
-    { ADDRESS_NAME, QUERYCORE_STRING, (QueryAccess)gncAddressGetName },
-    { ADDRESS_PHONE, QUERYCORE_STRING, (QueryAccess)gncAddressGetPhone },
-    { ADDRESS_FAX, QUERYCORE_STRING, (QueryAccess)gncAddressGetFax },
-    { ADDRESS_EMAIL, QUERYCORE_STRING, (QueryAccess)gncAddressGetEmail },
+    { ADDRESS_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetName },
+    { ADDRESS_PHONE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetPhone },
+    { ADDRESS_FAX, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetFax },
+    { ADDRESS_EMAIL, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetEmail },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncAddressCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
 
   return TRUE;
 }

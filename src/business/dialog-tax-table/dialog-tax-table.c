@@ -76,7 +76,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
       message = g_strdup_printf(_(
 			 "You must provide a unique name for this Tax Table.\n"
 			 "Your choice \"%s\" is already in use."), name);
-      gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
+      gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), "%s", message);
       g_free (message);
       return;
     }
@@ -509,7 +509,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     char *message =
       g_strdup_printf (_("Tax table \"%s\" is in use.  You cannot delete it."),
 		       gncTaxTableGetName (ttw->current_table));
-    gnc_error_dialog_parented (GTK_WINDOW (ttw->dialog), message);
+    gnc_error_dialog_parented (GTK_WINDOW (ttw->dialog), "%s", message);
     g_free (message);
     return;
   }

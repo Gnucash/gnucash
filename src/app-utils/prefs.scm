@@ -191,16 +191,16 @@
   'ledger
   (list (list->vector
          (list 'ledger
-               (N_ "Ledger")
+               (N_ "Basic Ledger")
                (N_ "Show transactions on one or two lines")))
         (list->vector
          (list 'auto_ledger
-               (N_ "Auto Ledger")
+               (N_ "Auto-Split Ledger")
                (N_ "Show transactions on one or two lines \
 and expand the current transaction")))
         (list->vector
          (list 'journal
-               (N_ "Journal")
+               (N_ "Transaction Journal")
                (N_ "Show expanded transactions with all splits"))))))
 
 (gnc:register-configuration-option     
@@ -767,3 +767,7 @@ Control Center"))))))
   "__gui" "search_for_active_only"
   "" ""
   #t))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "commodity_include_iso" 0))

@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001,2003 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,15 +29,17 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
+#include "qofbackend.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid-p.h"
+#include "qofobject.h"
 
 static short module = MOD_ENGINE;
 
@@ -52,7 +54,7 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 static void
-xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
+xaccInitializeAccountGroup (AccountGroup *grp, QofBook *book)
 {
   grp->saved       = 1;
 
@@ -67,7 +69,7 @@ xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
 \********************************************************************/
 
 AccountGroup *
-xaccMallocAccountGroup (GNCBook *book)
+xaccMallocAccountGroup (QofBook *book)
 {
   AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
@@ -76,6 +78,38 @@ xaccMallocAccountGroup (GNCBook *book)
   xaccInitializeAccountGroup (grp, book);
 
   return grp;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+#define GNC_TOP_GROUP "gnc_top_group"
+AccountGroup * 
+xaccGetAccountGroup (QofBook *book)
+{
+   if (!book) return NULL;
+   return qof_book_get_data (book, GNC_TOP_GROUP);
+}
+
+void
+xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
+{
+  AccountGroup *old_grp;
+  if (!book) return;
+
+  old_grp = xaccGetAccountGroup (book);
+  if (old_grp == grp) return;
+
+  if (grp && grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  qof_book_set_data (book, GNC_TOP_GROUP, grp);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
 }
 
 /********************************************************************\
@@ -205,7 +239,7 @@ xaccAccountGroupDestroy (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 
-GNCBook *
+QofBook *
 xaccGroupGetBook (AccountGroup *group)
 {
   if (!group) return NULL;
@@ -597,7 +631,7 @@ xaccAccountRemoveGroup (Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -632,7 +666,7 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -655,7 +689,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 
   xaccGroupInsertAccount (adult->children, child);
 
-  gnc_engine_generate_event (&adult->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&adult->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -710,11 +744,11 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           */
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
-         gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
-         xaccRemoveEntity (acc->book->entity_table, &acc->guid);
+         gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_DESTROY);
+         qof_entity_remove (acc->book->entity_table, &acc->guid);
 
-         xaccStoreEntity (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
-         gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);
+         qof_entity_store (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+         gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
       }
     }
 
@@ -730,7 +764,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -798,7 +832,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccGroupCopyGroup (to_acc->children, from_acc->children);
       }
       xaccAccountCommitEdit (to_acc);
-      gnc_engine_generate_event (&to_acc->guid, GNC_EVENT_CREATE);
+      gnc_engine_generate_event (&to_acc->guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
 
       /* make sure that we have a symmetric, uniform number of 
        * begin-edits, so that subsequent GroupCommitEdit's 
@@ -858,14 +892,14 @@ xaccGroupMergeAccounts (AccountGroup *grp)
             gb->parent = acc_a;
             acc_b->children = NULL;
 
-            gnc_engine_generate_event (&acc_a->guid, GNC_EVENT_MODIFY);
-            gnc_engine_generate_event (&acc_b->guid, GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&acc_a->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&acc_b->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
           }
           else
           {
             xaccGroupConcatGroup (ga, gb);
             acc_b->children = NULL;
-            gnc_engine_generate_event (&acc_b->guid, GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&acc_b->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
           }
         }
 
@@ -880,7 +914,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
           Split *split = lp->data;
 
           gnc_engine_generate_event (&xaccSplitGetAccount(split)->guid,
-                                     GNC_EVENT_MODIFY);
+				     GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
           split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }
@@ -1241,6 +1275,62 @@ xaccGroupForEachAccount (AccountGroup *grp,
   }
 
   return(NULL);
+}
+
+/* ============================================================== */
+
+QofBackend *
+xaccGroupGetBackend (AccountGroup *grp)
+{
+  grp = xaccGroupGetRoot (grp);
+  if (!grp || !grp->book) return NULL;
+  return grp->book->backend;
+}
+
+/* ============================================================== */
+/* gncObject function implementation and registration */
+
+static void 
+group_book_begin (QofBook *book)
+{
+  xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
+}
+
+static void 
+group_book_end (QofBook *book)
+{
+  xaccSetAccountGroup (book, NULL);
+}
+
+static gboolean
+group_is_dirty (QofBook *book)
+{
+  return xaccGroupNotSaved(xaccGetAccountGroup(book));
+}
+
+static void
+group_mark_clean(QofBook *book)
+{
+  xaccGroupMarkSaved(xaccGetAccountGroup(book));
+}
+
+static QofObject group_object_def = 
+{
+  interface_version: QOF_OBJECT_VERSION,
+  name:              GNC_ID_GROUP,
+  type_label:        "AccountGroup",
+  book_begin:        group_book_begin,
+  book_end:          group_book_end,
+  is_dirty:          group_is_dirty,
+  mark_clean:        group_mark_clean,
+  foreach:           NULL,
+  printable:         NULL,
+};
+
+gboolean 
+xaccGroupRegister (void)
+{
+  return qof_object_register (&group_object_def);
 }
 
 /* ========================= END OF FILE ======================== */

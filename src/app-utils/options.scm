@@ -1130,6 +1130,65 @@
         (range (car (gnc:option-data color-option))))
     (gnc:color->hex-string color range)))
 
+;;
+;; dateformat option
+;;
+(define (gnc:make-dateformat-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value)
+
+  (define (def-value)
+    (if (list? default-value)
+	default-value
+	'(locale number #t "")))
+
+  (let* ((value (def-value))
+         (value->string (lambda () 
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'dateformat documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () (def-value))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p)
+       (gnc:kvp-frame-set-slot-path
+	f (symbol->string (car value)) (append p '("fmt")))
+       (gnc:kvp-frame-set-slot-path
+	f (symbol->string (cadr value)) (append p '("month")))
+       (gnc:kvp-frame-set-slot-path
+	f (if (caddr value) 1 0) (append p '("years")))
+       (gnc:kvp-frame-set-slot-path f (cadddr value) (append p '("custom"))))
+     (lambda (f p)
+       (let ((fmt (gnc:kvp-frame-get-slot-path f (append p '("fmt"))))
+	     (month (gnc:kvp-frame-get-slot-path f (append p '("month"))))
+	     (years (gnc:kvp-frame-get-slot-path f (append p '("years"))))
+	     (custom (gnc:kvp-frame-get-slot-path f (append p '("custom")))))
+	 (if (and
+	      fmt (string? fmt)
+	      month (string? month)
+	      years (number? years)
+	      custom (string? custom))
+	     (set! value (list (string->symbol fmt) (string->symbol month)
+			       (if (= years 0) #f #t) custom)))))
+     (lambda (x)
+       (cond ((not (list? x)) (list #f "dateformat-option: not a list"))
+	     ((not (= (length x) 4))
+	      (list #f "dateformat-option: wrong list length" (length x)))
+	     ((not (symbol? (car x)))
+	      (list #f "dateformat-option: no format symbol"))
+	     ((not (symbol? (cadr x)))
+	      (list #f "dateformat-option: no months symbol"))
+	     ((not (string? (cadddr x)))
+	      (list #f "dateformat-option: no custom string"))
+	     (else (list #t x))))
+     #f #f #f #f)))
+
+(define (gnc:dateformat-get-format v)
+  (cadddr v))
 
 ;; Create a new options database
 (define (gnc:new-options)

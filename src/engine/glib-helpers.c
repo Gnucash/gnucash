@@ -23,9 +23,10 @@
 
 #include "config.h"
 
-#include <guile/gh.h>
 #include <string.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
 
@@ -41,9 +42,9 @@ glist_to_scm_list_helper(GList *glist, SCM wct)
   GList *node;
 
   for (node = glist; node; node = node->next)
-    list = gh_cons (gw_wcp_assimilate_ptr(node->data, wct), list);
+    list = scm_cons (gw_wcp_assimilate_ptr(node->data, wct), list);
 
-  return gh_reverse (list);
+  return scm_reverse (list);
 }
 
 SCM
@@ -59,14 +60,14 @@ gnc_scm_list_to_glist(SCM rest)
   GList *result = NULL;
   SCM scm_item;
   
-  SCM_ASSERT(gh_list_p(rest), rest, SCM_ARG1, "gnc_scm_list_to_glist");
+  SCM_ASSERT(SCM_LISTP(rest), rest, SCM_ARG1, "gnc_scm_list_to_glist");
 
-  while(!gh_null_p(rest))
+  while(!SCM_NULLP(rest))
   {
     void *item;
 
-    scm_item = gh_car(rest);
-    rest = gh_cdr(rest);
+    scm_item = SCM_CAR(rest);
+    rest = SCM_CDR(rest);
 
     /* fixes a bug in g-wrap */
     if (scm_item == SCM_BOOL_F)
@@ -94,17 +95,17 @@ glist_map_helper(GList *glist, SCM wct, SCM thunk)
   GList *node;
 
   for (node = glist; node; node = node->next)
-    list = gh_cons (gh_call1(thunk, gw_wcp_assimilate_ptr(node->data, wct)),
-                    list);
+    list = scm_cons (scm_call_1(thunk, gw_wcp_assimilate_ptr(node->data, wct)),
+		     list);
 
-  return gh_reverse (list);
+  return scm_reverse (list);
 }
 
 SCM
 gnc_glist_scm_map(SCM wct, SCM thunk, GList* glist)
 {
   SCM_ASSERT(gw_wct_p(wct), wct, SCM_ARG1, "gnc_glist_map");
-  SCM_ASSERT(gh_procedure_p(thunk), thunk, SCM_ARG2, "gnc_glist_scm_map");  
+  SCM_ASSERT(SCM_PROCEDUREP(thunk), thunk, SCM_ARG2, "gnc_glist_scm_map");  
   return(glist_map_helper(glist, wct, thunk));
 }
 
@@ -113,9 +114,9 @@ gnc_glist_scm_for_each(SCM wct, SCM thunk, GList *glist)
 {
   GList *lp;
   SCM_ASSERT(gw_wct_p(wct), wct, SCM_ARG1, "gnc_glist_map");
-  SCM_ASSERT(gh_procedure_p(thunk), thunk, SCM_ARG2, "gnc_glist_scm_for_each");  
+  SCM_ASSERT(SCM_PROCEDUREP(thunk), thunk, SCM_ARG2, "gnc_glist_scm_for_each");  
   for(lp = glist; lp; lp = lp->next) {
-    gh_call1(thunk, gw_wcp_assimilate_ptr(lp->data, wct));
+    scm_call_1(thunk, gw_wcp_assimilate_ptr(lp->data, wct));
   }
 }
 
@@ -132,9 +133,9 @@ gnc_glist_string_to_scm(GList *glist)
   GList *node;
 
   for (node = glist; node; node = node->next)
-    list = gh_cons (gh_str02scm(node->data), list);
+    list = scm_cons (scm_makfrom0str(node->data), list);
 
-  return gh_reverse (list);
+  return scm_reverse (list);
 }
 
 
@@ -152,10 +153,10 @@ gnc_scm_to_glist_string(SCM list)
 {
   GList *glist = NULL;
 
-  while (!gh_null_p (list))
+  while (!SCM_NULLP (list))
   {
-    glist = g_list_prepend (glist, gh_scm2newstr(gh_car(list), NULL));
-    list = gh_cdr (list);
+    glist = g_list_prepend (glist, gh_scm2newstr(SCM_CAR(list), NULL));
+    list = SCM_CDR (list);
   }
 
   return g_list_reverse (glist);
@@ -167,5 +168,5 @@ gnc_scm_to_glist_string(SCM list)
 
 int
 gnc_glist_string_p(SCM list) {
-  return gh_list_p(list);
+  return SCM_LISTP(list);
 }

@@ -21,7 +21,8 @@
 #define GNC_COMPONENT_MANAGER_H
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "GNCId.h"
 #include "gnc-event.h"

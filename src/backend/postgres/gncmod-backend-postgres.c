@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <glib.h>
 
-#include "Backend.h"
+#include "qofbackend.h"
 #include "PostgresBackend.h"
 
 #include "gnc-backend-api.h"
@@ -17,7 +17,7 @@
 
 /* version of the gnc module system interface we require */
 int libgncmod_backend_postgres_LTX_gnc_module_system_interface = 0;
-//int libgncmod_backend_postgres_LTX_gnc_module_system_interface = 0;
+
 /* module versioning uses libtool semantics. */
 int libgncmod_backend_postgres_LTX_gnc_module_current  = 0;
 int libgncmod_backend_postgres_LTX_gnc_module_revision = 0;
@@ -30,7 +30,7 @@ char *libgncmod_backend_postgres_LTX_gnc_module_path(void);
 char *libgncmod_backend_postgres_LTX_gnc_module_description(void);
 int libgncmod_backend_postgres_LTX_gnc_module_init(int refcount);
 int libgncmod_backend_postgres_LTX_gnc_module_end(int refcount);
-Backend * libgncmod_backend_postgres_LTX_gnc_backend_new(void);
+QofBackend * libgncmod_backend_postgres_LTX_gnc_backend_new(void);
 
 char *
 libgncmod_backend_postgres_LTX_gnc_module_path(void) 
@@ -76,7 +76,7 @@ libgncmod_backend_postgres_LTX_gnc_module_end(int refcount)
  * temporarily 
  ****************************************************************/
 
-Backend * 
+QofBackend * 
 libgncmod_backend_postgres_LTX_gnc_backend_new(void) {
   return pgendNew();
 }

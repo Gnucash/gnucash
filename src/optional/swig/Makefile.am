@@ -51,7 +51,6 @@ libgncswig_la_LIBADD = \
 
 SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/Account.h \
-  ${top_srcdir}/src/engine/DateUtils.h \
   ${top_srcdir}/src/engine/GNCId.h \
   ${top_srcdir}/src/engine/Group.h \
   ${top_srcdir}/src/engine/Query.h \

@@ -25,8 +25,10 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include "gnc-engine-util.h"
 
 #include "kvp_frame.h"
+#include "kvp-util.h"
 #include "kvp-util-p.h"
 
 /* ================================================================ */
@@ -36,12 +38,12 @@
  */
 
 void 
-gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid, 
+gnc_kvp_gemini (KvpFrame *kvp_root, const GUID *acct_guid, 
         const GUID *book_guid, time_t secs)
 {
    char buff[80];
-   kvp_frame *cwd, *pwd;
-   kvp_value *v_ncopies, *vvv;
+   KvpFrame *cwd, *pwd;
+   KvpValue *v_ncopies, *vvv;
    gint64 ncopies = 0;
    Timespec ts;
 
@@ -64,7 +66,7 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
 
    /* OK, now create subdirectory and put the actual data */
    --ncopies;
-   sprintf (buff, "%lld", ncopies);
+   sprintf (buff, GNC_SCANF_LLD, (long long int) ncopies);
    cwd = kvp_frame_new();
    kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 
@@ -87,4 +89,34 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
 }
 
 /* ================================================================ */
+/*
+ * See header for docs.
+ */
 
+static void
+kv_pair_helper(gpointer key, gpointer val, gpointer user_data)
+{
+  GSList **result = (GSList **) user_data;
+  GHashTableKVPair *kvp = g_new(GHashTableKVPair, 1);
+
+  kvp->key = key;
+  kvp->value = val;
+  *result = g_slist_prepend(*result, kvp);
+}
+
+GSList *
+g_hash_table_key_value_pairs(GHashTable *table)
+{
+  GSList *result_list = NULL;
+  g_hash_table_foreach(table, kv_pair_helper, &result_list);
+  return result_list;
+}
+
+void
+g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data)
+{
+  GHashTableKVPair *kvp = (GHashTableKVPair *) data;
+  g_free(kvp);
+}
+
+/*======================== END OF FILE =============================*/

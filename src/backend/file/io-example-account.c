@@ -90,47 +90,6 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 }
 
 static void
-clear_up_account_commodity_session(
-    GNCBook *book, Account *act,
-    gnc_commodity * (*getter) (Account *account, GNCBook *book),
-    void (*setter) (Account *account, gnc_commodity *comm, GNCBook *book))
-{
-    gnc_commodity_table *tbl;
-    gnc_commodity *gcom;
-    gnc_commodity *com;
-
-    tbl = gnc_book_get_commodity_table (book);
-
-    com = getter (act, book);
-    if(!com)
-    {
-        return;
-    }
-
-    g_return_if_fail (tbl != NULL);
-
-    gcom = gnc_commodity_table_lookup(tbl,
-                                      gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
-
-    if(gcom == com)
-    {
-        return;
-    }
-    else if(!gcom)
-    {
-        PWARN("unable to find global commodity for %s adding new",
-                  gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
-    }
-    else
-    {
-        gnc_commodity_destroy(com);
-        setter(act, gcom, book);
-    }
-}
-
-static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
     gnc_commodity * (*getter) (Account *account),
@@ -174,10 +133,10 @@ add_account_local(GncExampleAccount *gea, Account *act)
 
     table = gnc_book_get_commodity_table (gea->book);
 
-    clear_up_account_commodity_session(gea->book, act,
+    clear_up_account_commodity(table, act,
                                        DxaccAccountGetCurrency,
                                        DxaccAccountSetCurrency);
-    clear_up_account_commodity_session(gea->book, act,
+    clear_up_account_commodity(table, act,
                                        DxaccAccountGetSecurity,
                                        DxaccAccountSetSecurity);
 
@@ -185,7 +144,7 @@ add_account_local(GncExampleAccount *gea, Account *act)
                                xaccAccountGetCommodity,
                                xaccAccountSetCommodity);
 
-    xaccAccountScrubCommodity (act, gea->book);
+    xaccAccountScrubCommodity (act);
 
     if (!xaccAccountGetParent(act))
     {
@@ -338,7 +297,7 @@ gnc_titse_sixtp_parser_create(void)
 
 
 GncExampleAccount*
-gnc_read_example_account(GNCBook *book, const gchar *filename)
+gnc_read_example_account(QofBook *book, const gchar *filename)
 {
     GncExampleAccount *gea;
     sixtp *top_parser;
@@ -483,7 +442,7 @@ is_directory(const gchar *filename)
 }
     
 GSList*
-gnc_load_example_account_list(GNCBook *book, const char *dirname)
+gnc_load_example_account_list(QofBook *book, const char *dirname)
 {
     GSList *ret;
     DIR *dir;

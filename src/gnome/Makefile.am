@@ -38,6 +38,7 @@ libgncgnome_la_SOURCES = \
   gnc-totd-dialog.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
+  druid-acct-period.c \
   druid-hierarchy.c \
   druid-loan.c \
   druid-stock-split.c \
@@ -82,8 +83,10 @@ noinst_HEADERS = \
   dialog-sxsincelast.h \
   gnc-totd-dialog.h \
   dialog-scheduledxaction.h \
+  druid-acct-period.h \
   druid-hierarchy.h \
   druid-loan.h \
+  druid-stock-split.h \
   gnc-main-window.h \
   gnc-plugin.h \
   gnc-plugin-account-tree.h \

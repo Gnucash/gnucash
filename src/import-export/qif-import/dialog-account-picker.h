@@ -24,7 +24,7 @@
 #ifndef DIALOG_ACCOUNT_PICKER_H
 #define DIALOG_ACCOUNT_PICKER_H
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "druid-qif-import.h"
 

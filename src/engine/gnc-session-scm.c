@@ -34,24 +34,13 @@
 
 #include "config.h"
 
-#include <dlfcn.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <glib.h>
 
-#include "BackendP.h"
-#include "TransLog.h"
-#include "gnc-engine-util.h"
-#include "DateUtils.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-module.h"
-#include "gnc-session-p.h"
+#include "qofsession.h"
 #include "gnc-session-scm.h"
 
 //static short module = MOD_IO;
@@ -62,28 +51,28 @@ static void
 gnc_session_scm_gui_cb_helper (const char *message, double percent)
 {
   if (gnc_session_scm_gui_cb != SCM_BOOL_F) {
-    SCM string = gh_str02scm((char*)message);
-    SCM scm_percent = gh_double2scm(percent);
-    gh_call2 (gnc_session_scm_gui_cb, string, scm_percent);
+    SCM string = scm_makfrom0str(message);
+    SCM scm_percent = scm_make_real(percent);
+    scm_call_2 (gnc_session_scm_gui_cb, string, scm_percent);
   }
 }
 
 void
-gnc_session_scm_load (GNCSession *session)
+gnc_session_scm_load (QofSession *session)
 {
-  gnc_session_load (session, gnc_session_scm_gui_cb_helper);
+  qof_session_load (session, gnc_session_scm_gui_cb_helper);
 }
 
 void
-gnc_session_scm_save (GNCSession *session)
+gnc_session_scm_save (QofSession *session)
 {
-  gnc_session_save (session, gnc_session_scm_gui_cb_helper);
+  qof_session_save (session, gnc_session_scm_gui_cb_helper);
 }
 
 gboolean
-gnc_session_scm_export (GNCSession *tmp_session, GNCSession *real_session)
+gnc_session_scm_export (QofSession *tmp_session, QofSession *real_session)
 {
-  return gnc_session_export(tmp_session, real_session,
+  return qof_session_export(tmp_session, real_session,
 			    gnc_session_scm_gui_cb_helper);
 }
 

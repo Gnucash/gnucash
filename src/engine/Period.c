@@ -1,3 +1,23 @@
+/********************************************************************\
+ * Period.c -- Implement accounting Periods                         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
 /*
  * FILE:
  * Period.c
@@ -16,14 +36,17 @@ Open questions: how do we deal with the backends ???
  */
 
 #include "AccountP.h"
-#include "BackendP.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
 #include "Period.h"
 #include "TransactionP.h"
+#include "qofbackend-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_BOOK;
@@ -36,7 +59,7 @@ static short module = MOD_BOOK;
  */
 
 void
-gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 {
    Transaction *newtrans;
    GList *node;
@@ -59,7 +82,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
    xaccTransCommitEdit (trans);
 
    /* fiddle the transaction into place in the new book */
-   xaccStoreEntity(book->entity_table, newtrans, &newtrans->guid, GNC_ID_TRANS);
+   qof_entity_store(book->entity_table, newtrans, &newtrans->guid, GNC_ID_TRANS);
    newtrans->book = book;
 
    xaccTransBeginEdit (newtrans);
@@ -70,7 +93,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
 
       /* move the split into the new book ... */
       s->book = book;
-      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -89,7 +112,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (newtrans);
-   gnc_engine_generate_event (&newtrans->guid, GNC_EVENT_CREATE);
+   gnc_engine_generate_event (&newtrans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
 }
 
 /* ================================================================ */
@@ -98,7 +121,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
  */
 
 void
-gnc_book_insert_trans (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans (QofBook *book, Transaction *trans)
 {
    GList *node;
 
@@ -118,9 +141,9 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
    /* Fiddle the transaction into place in the new book */
    xaccTransBeginEdit (trans);
 
-   xaccRemoveEntity (trans->book->entity_table, &trans->guid);
+   qof_entity_remove (trans->book->entity_table, &trans->guid);
    trans->book = book;
-   xaccStoreEntity(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+   qof_entity_store(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
    for (node = trans->splits; node; node = node->next)
    {
@@ -128,9 +151,9 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      xaccRemoveEntity (s->book->entity_table, &s->guid);
+      qof_entity_remove (s->book->entity_table, &s->guid);
       s->book = book;
-      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -149,15 +172,16 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (trans);
-   gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
+   gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
 }
 
 /* ================================================================ */
 
 void 
-gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
+gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
 {
-   Backend *be;
+   AccountGroup *src_grp, *dst_grp;
+   QofBackend *be;
    time_t now;
    GList *split_list, *snode;
 
@@ -181,15 +205,17 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write an account-group merge 
     * routine, and it is not needed for the current usage. */
-   xaccAccountGroupBeginEdit (dest_book->topgroup);
-   xaccAccountGroupBeginEdit (src_book->topgroup);
-   xaccGroupCopyGroup (dest_book->topgroup, src_book->topgroup);
-   xaccAccountGroupCommitEdit (src_book->topgroup);
-   xaccAccountGroupCommitEdit (dest_book->topgroup);
+   src_grp = xaccGetAccountGroup (src_book);
+   dst_grp = xaccGetAccountGroup (dest_book);
+   xaccAccountGroupBeginEdit (dst_grp);
+   xaccAccountGroupBeginEdit (src_grp);
+   xaccGroupCopyGroup (dst_grp, src_grp);
+   xaccAccountGroupCommitEdit (src_grp);
+   xaccAccountGroupCommitEdit (dst_grp);
 
    /* Next, run the query */
-   xaccAccountGroupBeginEdit (dest_book->topgroup);
-   xaccAccountGroupBeginEdit (src_book->topgroup);
+   xaccAccountGroupBeginEdit (dst_grp);
+   xaccAccountGroupBeginEdit (src_grp);
    xaccQuerySetBook (query, src_book);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
@@ -201,8 +227,8 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 
       gnc_book_insert_trans (dest_book, trans);
    }
-   xaccAccountGroupCommitEdit (src_book->topgroup);
-   xaccAccountGroupCommitEdit (dest_book->topgroup);
+   xaccAccountGroupCommitEdit (src_grp);
+   xaccAccountGroupCommitEdit (dst_grp);
 
    /* make note of the sibling books */
    now = time(0);
@@ -270,8 +296,8 @@ find_nearest_equity_acct (Account *acc)
 
 static void
 add_closing_balances (AccountGroup *closed_grp, 
-                      GNCBook *open_book,
-                      GNCBook *closed_book,
+                      QofBook *open_book,
+                      QofBook *closed_book,
                       Account *equity_account,
                       Timespec *post_date, Timespec *date_entered, 
                       const char *desc)
@@ -286,8 +312,8 @@ add_closing_balances (AccountGroup *closed_grp,
    acc_list = xaccGroupGetAccountList (closed_grp);
    for (node=acc_list; node; node=node->next)
    {
-      kvp_frame *cwd;
-      kvp_value *vvv;
+      KvpFrame *cwd;
+      KvpValue *vvv;
       Account *twin;
       AccountGroup *childs;
       Account * candidate = (Account *) node->data;
@@ -300,7 +326,6 @@ add_closing_balances (AccountGroup *closed_grp,
       /* add KVP to open account, indicating the progenitor
        * of this account. */
       xaccAccountBeginEdit (twin);
-      twin->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (twin);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -309,12 +334,13 @@ add_closing_balances (AccountGroup *closed_grp,
       
       vvv = kvp_value_new_guid (&closed_book->guid);
       kvp_frame_set_slot_nc (cwd, "prev-book", vvv);
+
+      xaccAccountSetSlots_nc (twin, twin->kvp_data);
       
       /* -------------------------------- */
       /* add KVP to closed account, indicating where 
        * the next book is. */
       xaccAccountBeginEdit (candidate);
-      candidate->core_dirty = TRUE;
       cwd = xaccAccountGetSlots (candidate);
       cwd = kvp_frame_get_frame_slash (cwd, "/book/");
 
@@ -323,6 +349,8 @@ add_closing_balances (AccountGroup *closed_grp,
       
       vvv = kvp_value_new_guid (xaccAccountGetGUID (twin));
       kvp_frame_set_slot_nc (cwd, "next-acct", vvv);
+
+      xaccAccountSetSlots_nc (candidate, candidate->kvp_data);
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
@@ -411,15 +439,15 @@ add_closing_balances (AccountGroup *closed_grp,
 /* ================================================================ */
 /* split a book into two by date */
 
-GNCBook * 
-gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
+QofBook * 
+gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                        Account *equity_account,
                        const char * memo)
 {
    Query *query;
-   GNCBook *closing_book;
-   kvp_frame *exist_cwd, *partn_cwd;
-   kvp_value *vvv;
+   QofBook *closing_book;
+   KvpFrame *exist_cwd, *partn_cwd;
+   KvpValue *vvv;
    Timespec ts;
 
    if (!existing_book) return NULL;
@@ -430,9 +458,9 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    query = xaccMallocQuery();
    xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
                                    TRUE, calve_date,
-                                   QUERY_AND);
-   closing_book = gnc_book_new();
-   gnc_book_set_backend (closing_book, existing_book->backend);
+                                   QOF_QUERY_AND);
+   closing_book = qof_book_new();
+   qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
    gnc_book_partition (closing_book, existing_book, query);
 
@@ -463,7 +491,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */
-   add_closing_balances (gnc_book_get_group(closing_book), 
+   add_closing_balances (xaccGetAccountGroup(closing_book), 
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);

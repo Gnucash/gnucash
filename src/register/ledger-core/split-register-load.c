@@ -275,20 +275,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   vcell_loc.virt_row++;
 
   /* get the current time and reset the dividing row */
-  {
-    struct tm *tm;
-
-    present = time (NULL);
-
-    tm = localtime (&present);
-    tm->tm_sec = 59;
-    tm->tm_min = 59;
-    tm->tm_hour = 23;
-    tm->tm_isdst = -1;
-
-    present = mktime (tm);
-  }
-
+  present = gnc_timet_get_today_end ();
   if (info->first_pass)
   {
     if (default_account)

@@ -1,8 +1,4 @@
 /********************************************************************\
- * FreqSpec.h -- Frequency Specification                            *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
- * Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>                *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -21,6 +17,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Engine_SchedXaction
+    @{ */
+/** @file FreqSpec.h
+    @brief Period / Date Frequency Specification
+    @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
+    @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>  
+*/
 
 #ifndef XACC_FREQSPEC_H
 #define XACC_FREQSPEC_H
@@ -29,8 +32,9 @@
 
 #include <glib.h>
 
-#include "GNCId.h"
 #include "gnc-engine.h"
+#include "guid.h"
+#include "qofbook.h"
 
 /**
  * Frequency specification.
@@ -85,7 +89,7 @@ typedef struct gncp_freq_spec FreqSpec;
 /**
  * Allocates memory for a FreqSpec and initializes it.
  **/
-FreqSpec* xaccFreqSpecMalloc(GNCBook *book);
+FreqSpec* xaccFreqSpecMalloc(QofBook *book);
 
 /**
  * destroys any private data belonging to the FreqSpec.
@@ -109,13 +113,14 @@ FreqType xaccFreqSpecGetType( FreqSpec *fs );
  * Setting the type re-initializes any spec-data; this means
  * destroying any sub-types in the case of COMPOSITE.
  *
- * THESE FUNCTIONS HAVE NOT BEEN MAINTAINED THROUGH BEN'S CHANGES.
+ * \warning THESE FUNCTIONS HAVE NOT BEEN MAINTAINED THROUGH BEN'S CHANGES.
  * They need to be checked.
  **/
 /* void xaccFreqSpecSetType( FreqSpec *fs, FreqType newType ); */
-
-UIFreqType xaccFreqSpecGetUIType( FreqSpec *fs );
 void xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType );
+/** DOCUMENT ME! */
+UIFreqType xaccFreqSpecGetUIType( FreqSpec *fs );
+
 
 /**
  * Sets the type to once-off, and initialises the
@@ -175,9 +180,13 @@ void xaccFreqSpecSetComposite( FreqSpec *fs );
  **/
 void xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str );
 
+/** DOCUMENT ME! */
 int xaccFreqSpecGetOnce( FreqSpec *fs, GDate *outGD );
+/** DOCUMENT ME! */
 int xaccFreqSpecGetDaily( FreqSpec *fs, int *outRepeat );
+/** DOCUMENT ME! */
 int xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek );
+/** DOCUMENT ME! */
 int xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat,
                             int *outDayOfMonth, int *outMonthOffset );
 /* FIXME: add month-relative */
@@ -198,9 +207,12 @@ GList* xaccFreqSpecCompositeGet( FreqSpec *fs );
 void xaccFreqSpecCompositeAdd( FreqSpec *fs, FreqSpec *fsToAdd );
 
 /**
- * Returns the next instance of the FreqSpec after a given input date.
- * Note that if the given date happens to be a repeat date,
- * then the next repeat date will be returned.
+ * Computes the next instance of the FreqSpec after a given input date.
+ * The object pointed at by 'out_date' is set to the computed value.
+ * The 'in_date' can be any date.  It is gaurenteed that the 'out_date'
+ * is strictly greater than the 'in_date'.  That is, if the 'in_date'
+ * happens to be a repeat date (e.g. a previous out_date), then
+ * the out_date will be the next repeat date after that.
  **/
 void xaccFreqSpecGetNextInstance( FreqSpec *fs,
                                   const GDate* in_date,
@@ -214,3 +226,4 @@ void xaccFreqSpecGetNextInstance( FreqSpec *fs,
 int gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b );
 
 #endif /* XACC_FREQSPEC_H */
+/**@}*/

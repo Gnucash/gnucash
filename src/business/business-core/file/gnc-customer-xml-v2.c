@@ -517,6 +517,7 @@ gnc_customer_xml_initialize (void)
     NULL,			/* add_item */
     customer_get_count,
     customer_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

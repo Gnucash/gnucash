@@ -5,8 +5,10 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -50,13 +52,13 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
   }
 
   /* load the report generation scheme code */
-  if(gh_eval_str("(use-modules (gnucash report taxtxf))") 
+  if(scm_c_eval_string("(use-modules (gnucash report taxtxf))") 
      == SCM_BOOL_F) {
     printf("failed to load (gnucash report taxtxf)\n");
     return FALSE;
   }
 
-  if(gh_eval_str("(use-modules (gnucash report locale-specific us))") 
+  if(scm_c_eval_string("(use-modules (gnucash report locale-specific us))") 
      == SCM_BOOL_F) {
     return FALSE;
   }

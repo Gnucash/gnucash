@@ -31,7 +31,8 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002 Christian Stimming
  */
 
 #include "config.h"
@@ -41,9 +42,11 @@
 #include <string.h>
 
 #include "Account.h"
+#include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "Scrub.h"
+#include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-engine-util.h"
@@ -51,18 +54,16 @@
 #include "gnc-commodity.h"
 
 static short module = MOD_SCRUB;
-static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                                   const char *name_root, GNCBook *book);
 
 /* ================================================================ */
 
 void
-xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book)
+xaccGroupScrubOrphans (AccountGroup *grp)
 {
   GList *list;
   GList *node;
 
-  if (!grp || !book) return;
+  if (!grp) return;
 
   list = xaccGroupGetAccountList (grp);
 
@@ -70,26 +71,51 @@ xaccGroupScrubOrphans (AccountGroup *grp, GNCBook *book)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubOrphans (account, book);
+    xaccAccountTreeScrubOrphans (account);
   }
 }
 
 void
-xaccAccountTreeScrubOrphans (Account *acc, GNCBook *book)
+xaccAccountTreeScrubOrphans (Account *acc)
 {
-  if (!acc || !book) return;
+  if (!acc) return;
 
-  xaccGroupScrubOrphans (xaccAccountGetChildren(acc), book);
-  xaccAccountScrubOrphans (acc, book);
+  xaccGroupScrubOrphans (xaccAccountGetChildren(acc));
+  xaccAccountScrubOrphans (acc);
+}
+
+static void
+TransScrubOrphansFast (Transaction *trans, AccountGroup *root)
+{
+  GList *node;
+
+  if (!trans) return;
+
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *split = node->data;
+    Account *orph;
+
+    if (split->acc) continue;
+
+    DEBUG ("Found an orphan \n");
+
+    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
+    if (!orph) continue;
+
+    xaccAccountBeginEdit (orph);
+    xaccAccountInsertSplit (orph, split);
+    xaccAccountCommitEdit (orph);
+  }
 }
 
 void
-xaccAccountScrubOrphans (Account *acc, GNCBook *book)
+xaccAccountScrubOrphans (Account *acc)
 {
   GList *node;
   const char *str;
 
-  if (!acc || !book) return;
+  if (!acc) return;
 
   str = xaccAccountGetName (acc);
   str = str ? str : "(null)";
@@ -99,39 +125,25 @@ xaccAccountScrubOrphans (Account *acc, GNCBook *book)
   {
     Split *split = node->data;
 
-    xaccTransScrubOrphans (xaccSplitGetParent (split),
-                           xaccAccountGetRoot (acc),
-                           book);
+    TransScrubOrphansFast (xaccSplitGetParent (split),
+                           xaccAccountGetRoot (acc));
   }
 }
 
+
 void
-xaccTransScrubOrphans (Transaction *trans, AccountGroup *root,
-                       GNCBook *book)
+xaccTransScrubOrphans (Transaction *trans)
 {
-  GList *node;
-
-  if (!trans || !book) return;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  SplitList *node;
+  for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
-    Account *account;
-    Account *orph;
 
-    account = xaccSplitGetAccount (split);
-    if (account)
-      continue;
-
-    DEBUG ("Found an orphan \n");
-
-    orph = GetOrMakeAccount (root, trans, _("Orphan"), book);
-    if (!orph)
-      continue;
-
-    xaccAccountBeginEdit (orph);
-    xaccAccountInsertSplit (orph, split);
-    xaccAccountCommitEdit (orph);
+    if (split->acc)
+    {
+      TransScrubOrphansFast (trans, xaccAccountGetRoot(split->acc));
+      break;
+    }
   }
 }
 
@@ -189,37 +201,35 @@ xaccSplitScrub (Split *split)
   Account *account;
   Transaction *trans;
   gnc_numeric value;
-  gboolean trans_was_open;
-  gnc_commodity *commodity;
   gnc_commodity *currency;
   int scu;
 
-  if (!split)
-    return;
+  if (!split) return;
 
   trans = xaccSplitGetParent (split);
-  if (!trans)
-    return;
+  if (!trans) return;
 
   account = xaccSplitGetAccount (split);
+
+  /* If theres no account, this split is an orphan.
+   * We need to fix that first, before proceeding.
+   */
   if (!account)
   {
-    value = xaccSplitGetValue (split);
-
-    if (gnc_numeric_same (xaccSplitGetAmount (split),
-                          xaccSplitGetValue (split),
-                          value.denom, GNC_RND_ROUND))
-      return;
-
-    xaccSplitSetAmount (split, value);
-
-    return;
+    xaccTransScrubOrphans (trans);
+    account = xaccSplitGetAccount (split);
   }
 
-  commodity = xaccAccountGetCommodity (account);
   currency = xaccTransGetCurrency (trans);
 
-  if (!commodity || !gnc_commodity_equiv (commodity, currency))
+  /* If the account doesn't have a commodity, 
+   * we should attempt to fix that first. 
+  */
+  if (!account->commodity)
+  {
+    xaccAccountScrubCommodity (account);
+  }
+  if (!account->commodity || !gnc_commodity_equiv (account->commodity, currency))
     return;
 
   scu = MIN (xaccAccountGetCommoditySCU (account),
@@ -229,30 +239,35 @@ xaccSplitScrub (Split *split)
 
   if (gnc_numeric_same (xaccSplitGetAmount (split),
                         value, scu, GNC_RND_ROUND))
+  {
     return;
+  }
 
-  PINFO ("split with mismatched values");
+  /*
+   * This will be hit every time you answer yes to the dialog "The
+   * current transaction has changed. Would you like to record it.
+   */
+  PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
+         " old amount %s %s, new amount %s",
+            trans->description, split->memo,
+            gnc_numeric_to_string (split->amount),
+            gnc_commodity_get_mnemonic (currency),
+            gnc_numeric_to_string (split->value));
 
-  trans_was_open = xaccTransIsOpen (trans);
-
-  if (!trans_was_open)
-    xaccTransBeginEdit (trans);
-
+  xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
-
-  if (!trans_was_open)
-    xaccTransCommitEdit (trans);
+  xaccTransCommitEdit (trans);
 }
 
 /* ================================================================ */
 
 void
-xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book)
+xaccGroupScrubImbalance (AccountGroup *grp)
 {
   GList *list;
   GList *node;
 
-  if (!grp || !book) return;
+  if (!grp) return;
 
   list = xaccGroupGetAccountList (grp);
 
@@ -260,26 +275,24 @@ xaccGroupScrubImbalance (AccountGroup *grp, GNCBook *book)
   {
     Account *account = node->data;
 
-    xaccAccountTreeScrubImbalance (account, book);
+    xaccAccountTreeScrubImbalance (account);
   }
 }
 
 void
-xaccAccountTreeScrubImbalance (Account *acc, GNCBook *book)
+xaccAccountTreeScrubImbalance (Account *acc)
 {
-  g_return_if_fail (book);
-
-  xaccGroupScrubImbalance (xaccAccountGetChildren(acc), book);
-  xaccAccountScrubImbalance (acc, book);
+  xaccGroupScrubImbalance (xaccAccountGetChildren(acc));
+  xaccAccountScrubImbalance (acc);
 }
 
 void
-xaccAccountScrubImbalance (Account *acc, GNCBook *book)
+xaccAccountScrubImbalance (Account *acc)
 {
   GList *node;
   const char *str;
 
-  if (!acc || !book) return;
+  if (!acc) return;
 
   str = xaccAccountGetName(acc);
   str = str ? str : "(null)";
@@ -290,18 +303,18 @@ xaccAccountScrubImbalance (Account *acc, GNCBook *book)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL, book);
+    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
   }
 }
 
 void
 xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
-                         Account *parent, GNCBook *book)
+                         Account *parent)
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
 
-  if (!trans || !book) return;
+  if (!trans || !root) return;
 
   xaccTransScrubSplits (trans);
 
@@ -314,9 +327,14 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
       return;
 
     if (!parent)
-      account = GetOrMakeAccount (root, trans, _("Imbalance"), book);
+    {
+      account = xaccScrubUtilityGetOrMakeAccount (root, 
+          trans->common_currency, _("Imbalance"));
+    }
     else
+    {
       account = parent;
+    }
 
     if (!account)
       return;
@@ -335,7 +353,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     /* put split into account before setting split value */
     if (!balance_split)
     {
-      balance_split = xaccMallocSplit (book);
+      balance_split = xaccMallocSplit (root->book);
 
       xaccAccountBeginEdit (account);
       xaccAccountInsertSplit (account, balance_split);
@@ -366,8 +384,8 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
      * already existing denominator (bug #104343), because either one
      * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (new_value, imbalance,
-				 gnc_commodity_get_fraction(currency), 
-				 GNC_RND_ROUND);
+             gnc_commodity_get_fraction(currency), 
+             GNC_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
@@ -394,16 +412,23 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 /* ================================================================ */
 
 void
-xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
+xaccTransScrubCurrency (Transaction *trans)
 {
+  SplitList *node;
   gnc_commodity *currency;
 
-  if (!trans || !book) return;
+  if (!trans) return;
+
+  /* If there are any orphaned splits in a transaction, then the 
+   * this routine will fail.  Therefore, we want to make sure that
+   * tehre are no orphans (splits without parent account).
+   */
+  xaccTransScrubOrphans (trans);
 
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
   
-  currency = xaccTransFindOldCommonCurrency (trans, book);
+  currency = xaccTransFindOldCommonCurrency (trans, trans->book);
   if (currency)
   {
     xaccTransBeginEdit (trans);
@@ -412,52 +437,75 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
   }
   else
   {
-    PWARN ("no common transaction currency found");
-  }
-  {
-    Split *sp;
-    int i;
-    for (i=0; (sp = xaccTransGetSplit (trans, i)); i++) {
-      if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
-			     xaccSplitGetValue (sp))) {
-	Account *acc = xaccSplitGetAccount (sp);
-	gnc_commodity *acc_currency = xaccAccountGetCommodity (acc);
-	if (acc_currency == currency) {
-	  /* This Split needs fixing: The transaction-currency equals
-	     the account-currency/commodity, but the amount/values are
-	     inequal i.e. they still correspond to the security
-	     (amount) and the currency (value). In the new model, the
-	     value is the amount in the account-commodity -- so it
-	     needs to be set to equal the amount (since the
-	     account-currency doesn't exist anymore). 
-
-	  Note: Nevertheless we lose some information here. Namely,
-	  the information that the 'amount' in 'account-old-security'
-	  was worth 'value' in 'account-old-currency'. Maybe it would
-	  be better to store that information in the price database? 
-	  But then, for old currency transactions there is still the
-	  'other' transaction, which is going to keep that
-	  information. So I don't bother with that here. -- cstim,
-	  2002/11/20. */
-	  
-	  /*PWARN ("## Error likely: Split '%s' Amount %s %s, value %s",
-	    xaccSplitGetMemo (sp),
-	    gnc_numeric_to_string (amount),
-	    gnc_commodity_get_mnemonic (currency),
-	    gnc_numeric_to_string (value));*/
-	  xaccTransBeginEdit (trans);
-	  xaccSplitSetValue (sp, xaccSplitGetAmount (sp));
-	  xaccTransCommitEdit (trans);
-	}
-	/*else {
-	  PWARN ("Ok: Split '%s' Amount %s %s, value %s %s",
-	  xaccSplitGetMemo (sp),
-	  gnc_numeric_to_string (amount),
-	  gnc_commodity_get_mnemonic (currency),
-	  gnc_numeric_to_string (value),
-	  gnc_commodity_get_mnemonic (acc_currency));
-	  }*/
+    if (NULL == trans->splits)
+    {
+      PWARN ("Transaction \"%s\" has no splits in it!", trans->description);
+    }
+    else
+    {
+      SplitList *node;
+      PWARN ("no common transaction currency found for trans=\"%s\"", trans->description);
+      for (node=trans->splits; node; node=node->next)
+      {
+        Split *split = node->data;
+        if (NULL == split->acc)
+        {
+          PWARN (" split=\"%s\" is not in any account!", split->memo);
+        }
+        else
+        {
+          PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"", 
+              split->memo, split->acc->accountName, gnc_commodity_get_mnemonic (split->acc->commodity));
+        }
       }
+    }
+  }
+
+  for (node=trans->splits; node; node=node->next)
+  {
+    Split *sp = node->data;
+
+    if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
+        xaccSplitGetValue (sp))) 
+    {
+      gnc_commodity *acc_currency = xaccAccountGetCommodity (sp->acc);
+      if (acc_currency == currency) 
+      {
+        /* This Split needs fixing: The transaction-currency equals
+         * the account-currency/commodity, but the amount/values are
+         * inequal i.e. they still correspond to the security
+         * (amount) and the currency (value). In the new model, the
+         * value is the amount in the account-commodity -- so it
+         * needs to be set to equal the amount (since the
+         * account-currency doesn't exist anymore). 
+         *
+         * Note: Nevertheless we lose some information here. Namely,
+         * the information that the 'amount' in 'account-old-security'
+         * was worth 'value' in 'account-old-currency'. Maybe it would
+         * be better to store that information in the price database? 
+         * But then, for old currency transactions there is still the
+         * 'other' transaction, which is going to keep that
+         * information. So I don't bother with that here. -- cstim,
+         * 2002/11/20. */
+          
+        PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
+               " old amount %s %s, new amount %s",
+               trans->description, sp->memo,
+               gnc_numeric_to_string (sp->amount),
+               gnc_commodity_get_mnemonic (currency),
+               gnc_numeric_to_string (sp->value));
+        xaccTransBeginEdit (trans);
+        xaccSplitSetAmount (sp, sp->value);
+        xaccTransCommitEdit (trans);
+      }
+      /*else {
+        PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
+        xaccSplitGetMemo (sp),
+        gnc_numeric_to_string (amount),
+        gnc_commodity_get_mnemonic (currency),
+        gnc_numeric_to_string (value),
+        gnc_commodity_get_mnemonic (acc_currency));
+      }*/
     }
   }
 }
@@ -465,30 +513,32 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
 /* ================================================================ */
 
 void
-xaccAccountScrubCommodity (Account *account, GNCBook *book)
+xaccAccountScrubCommodity (Account *account)
 {
   gnc_commodity *commodity;
 
-  if (!account || !book) return;
+  if (!account) return;
 
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;
 
-  commodity = DxaccAccountGetSecurity (account, book);
+  /* Use the 'obsolete' routines to try to figure out what the
+   * account commodity should have been. */
+  commodity = DxaccAccountGetSecurity (account);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
     return;
   }
 
-  commodity = DxaccAccountGetCurrency (account, book);
+  commodity = DxaccAccountGetCurrency (account);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
     return;
   }
 
-  PERR ("account with no commodity");
+  PERR ("Account \"%s\" does not have a commodity!", account->accountName);
 }
 
 /* ================================================================ */
@@ -496,75 +546,132 @@ xaccAccountScrubCommodity (Account *account, GNCBook *book)
 static gboolean
 scrub_trans_currency_helper (Transaction *t, gpointer data)
 {
-  GNCBook *book = data;
-
-  xaccTransScrubCurrency (t, book);
-
+  xaccTransScrubCurrency (t);
   return TRUE;
 }
 
 static gpointer
 scrub_account_commodity_helper (Account *account, gpointer data)
 {
-  GNCBook *book = data;
-
-  xaccAccountScrubCommodity (account, book);
+  xaccAccountScrubCommodity (account);
   xaccAccountDeleteOldData (account);
-
   return NULL;
 }
 
 void
-xaccGroupScrubCommodities (AccountGroup *group, GNCBook *book)
+xaccGroupScrubCommodities (AccountGroup *group)
 {
-  if (!group || !book) return;
+  if (!group) return;
 
   xaccAccountGroupBeginEdit (group);
 
-  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, book);
+  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
 
   xaccGroupForEachAccount (group, scrub_account_commodity_helper,
-                           book, TRUE);
+                           NULL, TRUE);
 
   xaccAccountGroupCommitEdit (group);
 }
 
 /* ================================================================ */
 
-static Account *
-GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                  const char *name_root, GNCBook *book)
+static gboolean
+check_quote_source (gnc_commodity *com, gpointer data)
 {
-  gnc_commodity * currency;
+  gboolean *commodity_has_quote_src = (gboolean *)data;
+  if (com && !gnc_commodity_is_iso(com))
+    *commodity_has_quote_src |= gnc_commodity_get_quote_flag(com);
+  return TRUE;
+}
+
+static gpointer
+move_quote_source (Account *account, gpointer data)
+{
+  gnc_commodity *com;
+  gnc_quote_source *quote_source;
+  gboolean new_style = GPOINTER_TO_INT(data);
+  const char *source, *tz;
+
+  com = xaccAccountGetCommodity(account);
+  if (!com)
+    return NULL;
+
+  if (!new_style) {
+    source = dxaccAccountGetPriceSrc(account);
+    if (!source || !*source)
+      return NULL;
+    tz = dxaccAccountGetQuoteTZ(account);
+
+    PINFO("to %8s from %s", gnc_commodity_get_mnemonic(com),
+	  xaccAccountGetName(account));
+    gnc_commodity_set_quote_flag(com, TRUE);
+    quote_source = gnc_quote_source_lookup_by_internal(source);
+    if (!quote_source)
+      quote_source = gnc_quote_source_add_new(source, FALSE);
+    gnc_commodity_set_quote_source(com, quote_source);
+    gnc_commodity_set_quote_tz(com, tz);
+  }
+
+  dxaccAccountSetPriceSrc(account, NULL);
+  dxaccAccountSetQuoteTZ(account, NULL);
+  return NULL;
+}
+
+
+void
+xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
+{
+  gboolean new_style = FALSE;
+  ENTER(" ");
+
+  if (!group || !table) {
+    LEAVE("Oops")
+    return;
+  }
+
+  gnc_commodity_table_foreach_commodity (table, check_quote_source, &new_style);
+
+  xaccAccountGroupBeginEdit (group);
+  xaccGroupForEachAccount (group, move_quote_source,
+			   GINT_TO_POINTER(new_style), TRUE);
+  xaccAccountGroupCommitEdit (group);
+  LEAVE("Migration done");
+}
+
+/* ================================================================ */
+
+Account *
+xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
+                  const char *name_root)
+{
   char * accname;
   Account * acc;
 
   g_return_val_if_fail (root, NULL);
 
   /* build the account name */
-  currency = xaccTransGetCurrency (trans);
   if (!currency)
   {
-    PERR ("Transaction with no currency");
+    PERR ("No currency specified!");
     return NULL;
   }
 
   accname = g_strconcat (name_root, "-",
                          gnc_commodity_get_mnemonic (currency), NULL);
 
-  /* see if we've got one of these going already ... */
+  /* See if we've got one of these going already ... */
   acc = xaccGetAccountFromName (root, accname);
 
   if (acc == NULL)
   {
-    /* guess not. We'll have to build one */
-    acc = xaccMallocAccount (book);
+    /* Guess not. We'll have to build one. */
+    acc = xaccMallocAccount (root->book);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
     xaccAccountSetType (acc, BANK);
 
-    /* hang the account off the root */
+    /* Hang the account off the root. */
     xaccGroupInsertAccount (root, acc);
     xaccAccountCommitEdit (acc);
   }

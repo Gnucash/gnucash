@@ -25,12 +25,12 @@
 #define POSTGRES_ACCOUNT_H
 
 #include "Group.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 #include "guid.h"
 
 #include "PostgresBackend.h"
 
-void pgendGetAllAccountsInBook (PGBackend *be, GNCBook *);
+void pgendGetAllAccountsInBook (PGBackend *be, QofBook *);
 
 void pgendGetAllAccounts (PGBackend *be);
 
@@ -39,6 +39,6 @@ void pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp,
                        gboolean do_mark, gboolean do_check_version);
 Account * pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
 
-void pgend_account_commit_edit (Backend * bend, Account * acct);
+void pgend_account_commit_edit (QofBackend * bend, Account * acct);
 
 #endif /* POSTGRES_ACCOUNT_H */

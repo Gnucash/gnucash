@@ -6,6 +6,7 @@
 
 #include "config.h"
 
+#include "qofbook.h"
 #include "gnc-tree-model-example-account.h"
 #include "io-example-account.h"
 #include "Group.h"

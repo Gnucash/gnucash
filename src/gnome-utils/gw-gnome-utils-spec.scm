@@ -196,6 +196,38 @@
 
   (gw:wrap-function
    ws
+   'gnc:print-session-rotate
+   '<gw:void>
+   "gnc_print_session_rotate"
+   '((<gnc:PrintSession*> p) (<gw:double> theta_in_degrees))
+   "Rotate the image by X degrees")
+
+  (gw:wrap-function
+   ws
+   'gnc:print-session-translate
+   '<gw:void>
+   "gnc_print_session_translate"
+   '((<gnc:PrintSession*> p) (<gw:double> x) (<gw:double> y))
+   "Translate the image to point x,y")
+
+  (gw:wrap-function
+   ws
+   'gnc:print-session-gsave
+   '<gw:void>
+   "gnc_print_session_gsave"
+   '((<gnc:PrintSession*> p))
+   "Save the current print-session state")
+
+  (gw:wrap-function
+   ws
+   'gnc:print-session-grestore
+   '<gw:void>
+   "gnc_print_session_grestore"
+   '((<gnc:PrintSession*> p))
+   "Restore the current print-session state")
+
+  (gw:wrap-function
+   ws
    'gnc:print-session-done
    '<gw:void>
    "gnc_print_session_done"
@@ -440,7 +472,7 @@ be left empty")
    "gnc_mdi_show_progress"
    '(((<gw:mchars> caller-owned const) message)
      (<gw:double> percentage))
-   "Autosize the columns of a clist including the titles.")
+   "Show progress bar with the associated percentage (from 0 to 100).")
 
   (gw:wrap-function
    ws

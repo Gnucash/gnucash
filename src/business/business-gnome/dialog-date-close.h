@@ -7,9 +7,9 @@
 #ifndef _DIALOG_DATE_CLOSE_H
 #define _DIALOG_DATE_CLOSE_H
 
-#include "date.h"
 #include "Account.h"
 #include "gnc-book.h"
+#include "gnc-date.h"
 #include "gncBillTerm.h"
 
 gboolean

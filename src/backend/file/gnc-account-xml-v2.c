@@ -119,6 +119,41 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
     if(kf)
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string, kf);
+#if ((GNUCASH_MAJOR_VERSION == 1) && (GNUCASH_MINOR_VERSION < 10))
+	{
+	  /* Temporary backwards compatability hack. Create kvp slot
+	   * information for the stock quote data in case the user has
+	   * to fall back to the production code. */
+	  xmlNodePtr slot_node, val_node;
+	  gnc_commodity *com;
+	  gnc_quote_source *source;
+	  const gchar *tz;
+
+	  com = xaccAccountGetCommodity(act);
+	  if (com &&
+	      !gnc_commodity_is_iso(com) &&
+	      gnc_commodity_get_quote_flag(com)) {
+	    if (!kvpnode)
+	      kvpnode= xmlNewNode(NULL, act_slots_string);
+
+	    slot_node = xmlNewChild(kvpnode, NULL, "slot", NULL);
+	    xmlNewTextChild(slot_node, NULL, "slot:key", "old-price-source");
+
+	    source = gnc_commodity_get_quote_source(com);
+	    val_node = xmlNewTextChild(slot_node, NULL, "slot:value",
+				       gnc_quote_source_get_old_internal_name(source));
+	    xmlSetProp(val_node, "type", "string");
+
+	    tz = gnc_commodity_get_quote_tz(com);
+	    if (tz) {
+	      slot_node = xmlNewChild(kvpnode, NULL, "slot", NULL);
+	      xmlNewTextChild(slot_node, NULL, "slot:key", "old-quote-tz");
+	      val_node = xmlNewTextChild(slot_node, NULL, "slot:value", tz);
+	      xmlSetProp(val_node, "type", "string");
+	    }
+	  }
+	}
+#endif
         if(kvpnode)
         {
             xmlAddChild(ret, kvpnode);
@@ -153,7 +188,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 struct account_pdata
 {
   Account *account;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -253,7 +288,7 @@ depricated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    DxaccAccountSetCurrency(pdata->account, ref, pdata->book);
+    DxaccAccountSetCurrency(pdata->account, ref);
 
     return TRUE;
 }
@@ -277,7 +312,7 @@ depricated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    DxaccAccountSetSecurity(pdata->account, ref, pdata->book);
+    DxaccAccountSetSecurity(pdata->account, ref);
 
     return TRUE;
 }
@@ -413,7 +448,7 @@ gnc_account_end_handler(gpointer data_for_children,
     Account *acc;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -449,7 +484,7 @@ gnc_account_end_handler(gpointer data_for_children,
 }
 
 Account*
-dom_tree_to_account (xmlNodePtr node, GNCBook *book)
+dom_tree_to_account (xmlNodePtr node, QofBook *book)
 {
     struct account_pdata act_pdata;
     Account *accToRet;

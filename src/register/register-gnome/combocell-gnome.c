@@ -67,7 +67,7 @@ typedef struct _PopBox
 
         gboolean strict;
 
-        char complete_char; /* char to be used for auto-completion */
+        unsigned char complete_char; /* char to be used for auto-completion */
 
         GList *ignore_strings;
 } PopBox;

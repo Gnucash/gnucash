@@ -19,7 +19,7 @@ typedef struct _gncInvoice GncInvoice;
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GNCBook *book);
+GncInvoice *gncInvoiceCreate (QofBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
 
 /* Set Functions */
@@ -34,6 +34,7 @@ void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
+void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
@@ -44,7 +45,7 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
 /* Get Functions */
 
-GNCBook * gncInvoiceGetBook (GncInvoice *invoice);
+QofBook * gncInvoiceGetBook (GncInvoice *invoice);
 const GUID * gncInvoiceGetGUID (GncInvoice *invoice);
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
@@ -57,6 +58,7 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
 gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
@@ -65,6 +67,9 @@ Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 
 /* return the "total" amount of the invoice */
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
+gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
@@ -79,14 +84,17 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 const char *memo);
 
 /*
- * UNpost this invoice.  This will destroy the posted transaction
- * and return the invoice to its unposted state.  It may leave empty
- * lots out there.
+ * UNpost this invoice.  This will destroy the posted transaction and
+ * return the invoice to its unposted state.  It may leave empty lots
+ * out there.  If reset_tax_tables is TRUE, then it will also revert
+ * all the Tax Tables to the parent, which will potentially change the
+ * total value of the invoice.  It may also leave some orphaned Tax
+ * Table children.
  *
  * Returns TRUE if successful, FALSE if there is a problem.
  */
 gboolean
-gncInvoiceUnpost (GncInvoice *invoice);
+gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 
 /*
  * Apply a payment of "amount" for the owner, between the xfer_account
@@ -108,9 +116,9 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
 GUID gncInvoiceRetGUID (GncInvoice *invoice);
-GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book);
+GncInvoice * gncInvoiceLookupDirect (GUID guid, QofBook *book);
 
-GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
+GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
@@ -124,11 +132,13 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_POSTED	"date_posted"
 #define INVOICE_DUE	"date_due"
 #define INVOICE_IS_POSTED	"is_posted?"
+#define INVOICE_IS_PAID	"is_paid?"
 #define INVOICE_TERMS	"terms"
 #define INVOICE_BILLINGID	"billing_id"
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
+#define INVOICE_POST_LOT	"posted_lot"
 #define INVOICE_TYPE	"type"
 #define INVOICE_BILLTO	"bill-to"
 

@@ -1,15 +1,12 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
-
-#include "GNCIdP.h"
 
 #include "Account.h"
 #include "TransLog.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -40,13 +37,13 @@ run_test (void)
   Account *acc1, *acc2;
   Transaction *transaction;
   gnc_numeric old_amt, new_amt, old_val, new_val;
-  GNCBook *book;
+  QofBook *book;
   Timespec ts;
   time_t now;
 
   char *reason = "because I can";
 
-  book = gnc_book_new();
+  book = qof_book_new();
 
   acc1 = get_random_account(book);
   acc2 = get_random_account(book);
@@ -102,14 +99,14 @@ run_test (void)
 
   if (!gnc_numeric_zero_p( new_amt))
   {
-    failure("Amount not zero after voiding");
+    failure("Amount of split0 not zero after voiding");
   }      
 
   new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
  
   if (!(gnc_numeric_zero_p(new_val)))
   {
-    failure("Amount not zero after voiding");
+    failure("Value of split1 not zero after voiding");
   }
  
 
@@ -123,11 +120,60 @@ run_test (void)
     failure("former value (after voiding) didn't match actual old value");
   }
 
+  /*
+   * Retore the transaction to its former glory.
+   */
+  xaccTransUnvoid(transaction);
+
+  ts = xaccTransGetVoidTime (transaction);
+
+  /* figure at most 2 seconds difference */
+  if ((ts.tv_sec != 0) || (ts.tv_sec != 0))
+  {
+    failure("void time not zero after restore");
+  }
+
+  if (xaccTransGetVoidStatus(transaction))
+  {
+    failure("void status reports trus after restoring transaction");
+  }
+
+  if (xaccTransGetVoidReason(transaction))
+  {
+    failure("void reason exists after restoring transaction");
+  }
+ 
+  new_amt = xaccSplitGetAmount(xaccTransGetSplit(transaction, 0));
+  /* print_gnc_numeric(new_amt); */
+
+  if(!(gnc_numeric_eq(old_amt, new_amt)))
+  {
+    failure("Amount of split0 not correct after restoring transaction");
+  }      
+
+  new_val = xaccSplitGetValue(xaccTransGetSplit(transaction, 1));
+ 
+  if(!(gnc_numeric_eq(old_val, new_val)))
+  {
+    failure("Value of split1 not correct after restoring transaction");
+  }
+ 
+
+  if (!(gnc_numeric_zero_p(xaccSplitVoidFormerAmount(xaccTransGetSplit(transaction, 0)))))
+  {
+    failure("former amount (after restore) should be zero");
+  }
+
+  if (!(gnc_numeric_zero_p(xaccSplitVoidFormerValue(xaccTransGetSplit(transaction, 1)))))
+  {
+    failure("former value (after restore) should be zero");
+  }
+
   return;
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
 
@@ -144,6 +190,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

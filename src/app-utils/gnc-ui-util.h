@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/** @addtogroup UI
+    @{ */
+/** @file gnc-ui-util.h 
+    @brief  utility functions for the GnuCash UI
+    @author Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
+*/
+
 #ifndef GNC_UI_UTIL_H
 #define GNC_UI_UTIL_H
 
@@ -31,10 +38,11 @@
 #include "Account.h"
 #include "gnc-engine.h"
 #include "Group.h"
-#include "gnc-session.h"
+#include "qofbook.h"
+#include "qofsession.h"
 
 
-typedef GNCSession * (*GNCSessionCB) (void);
+typedef QofSession * (*QofSessionCB) (void);
 
 
 /* User Settings ****************************************************/
@@ -53,41 +61,79 @@ void gnc_extract_directory (char **dirname, const char *filename);
 
 
 /* Engine enhancements & i18n ***************************************/
-GNCBook * gnc_get_current_book (void);
+QofBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
+/*
+ * These values are order according to the way they should appear in
+ * the register.  If you change this enum, you must also change the
+ * acct_tree_defaults data structure in gnc-account-tree.c.
+ */
 typedef enum
 {
-  ACCOUNT_TYPE = 0,
-  ACCOUNT_NAME,
+  ACCOUNT_NAME = 0,
+  ACCOUNT_TYPE,
+  ACCOUNT_COMMODITY,
   ACCOUNT_CODE,
   ACCOUNT_DESCRIPTION,
-  ACCOUNT_NOTES,
-  ACCOUNT_COMMODITY,
+  ACCOUNT_PRESENT,
+  ACCOUNT_PRESENT_REPORT,
   ACCOUNT_BALANCE,        /* with sign reversal */
   ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
+  ACCOUNT_CLEARED,
+  ACCOUNT_CLEARED_REPORT,
+  ACCOUNT_RECONCILED,
+  ACCOUNT_RECONCILED_REPORT,
+  ACCOUNT_FUTURE_MIN,
+  ACCOUNT_FUTURE_MIN_REPORT,
   ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
   ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
+  ACCOUNT_NOTES,
   ACCOUNT_TAX_INFO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
-const char * gnc_ui_account_get_field_name (AccountFieldCode field);
-
-/* Must g_free string when done */
+/**
+ * This routine retrives the content for any given field in the
+ * account tree data structure.  The account specifies the "row" and
+ * the field parameter specifies the "column".  In essence, this is
+ * one giant accessor routine for the Account object where all the
+ * results are string values.
+ *
+ * @param account  The account to retrieve data about.
+ * @param field    An indicator of which field in the account tree to return
+ * @param negative An indicator that the result was a negative numeric
+ *                 value.  May be used by the caller for colorization of the
+ *                 returned string.
+ * @return         The textual string representing the requested field.
+ *
+ * @note The caller must free the returned string when done with it.
+ */
 char * gnc_ui_account_get_field_value_string (Account *account,
-                                              AccountFieldCode field);
+                                              AccountFieldCode field,
+					      gboolean *negative);
 
-gnc_numeric gnc_ui_convert_balance_to_currency(gnc_numeric balance,
-                                               gnc_commodity *balance_currency,
-                                               gnc_commodity *currency);
-
+/**
+ * This routine retrives the total balance in an account, possibly
+ * including all sub-accounts under the specified account.
+ *
+ * @param account           The account to retrieve data about.
+ * @param include_children  Include all sub-accounts of this account.
+ */
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
 
+/**
+ * This routine retrives the reconciled balance in an account,
+ * possibly including all sub-accounts under the specified account.
+ *
+ * @param account           The account to retrieve data about.
+ * @param include_children  Include all sub-accounts of this account.
+ */
 gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
                                                   gboolean include_children);
+
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
                                                    gboolean include_children);
@@ -106,65 +152,13 @@ typedef enum
 Account * gnc_find_or_create_equity_account (AccountGroup *group,
                                              GNCEquityType equity_type,
                                              gnc_commodity *currency,
-                                             GNCBook *book);
+                                             QofBook *book);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
                                              time_t date,
-                                             GNCBook *book);
+                                             QofBook *book);
 
 char * gnc_account_get_full_name (Account *account);
-
-
-/* Price source functions *******************************************/
-
-/* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
-   as well. */
-typedef enum
-{
-  SOURCE_NONE = 0,
-  SPECIFIC_SOURCES,
-  SOURCE_AEX,
-  SOURCE_ASX,
-  SOURCE_DWS,
-  SOURCE_FIDELITY_DIRECT,
-  SOURCE_FOOL,
-  SOURCE_FUNDLIBRARY,
-  SOURCE_TDWATERHOUSE,
-  SOURCE_TIAA_CREF,
-  SOURCE_TROWEPRICE_DIRECT,
-  SOURCE_TRUSTNET,
-  SOURCE_UNION,
-  SOURCE_VANGUARD,
-  SOURCE_VWD,
-  SOURCE_YAHOO,
-  SOURCE_YAHOO_ASIA,
-  SOURCE_YAHOO_AUSTRALIA,
-  SOURCE_YAHOO_EUROPE,
-  SOURCE_ZUERICH,
-  GENERAL_SOURCES,
-  SOURCE_ASIA,
-  SOURCE_AUSTRALIA,
-  SOURCE_CANADA,
-  SOURCE_CANADAMUTUAL,
-  SOURCE_DUTCH,
-  SOURCE_EUROPE,
-  SOURCE_FIDELITY,
-  SOURCE_TROWEPRICE,
-  SOURCE_UKUNITTRUSTS,
-  SOURCE_USA,
-  NUM_SOURCES
-} PriceSourceCode;
-/* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
-   as well. */
-
-const char * gnc_price_source_enum2name (PriceSourceCode source);
-const char * gnc_price_source_enum2internal (PriceSourceCode source);
-const char * gnc_price_source_internal2fq (const char * codename);
-PriceSourceCode gnc_price_source_internal2enum (const char * internal_name);
-PriceSourceCode gnc_price_source_fq2enum (const char * fq_name);
-gboolean gnc_price_source_sensitive (PriceSourceCode source);
-void gnc_price_source_set_fq_installed (GList *sources_list);
-gboolean gnc_price_source_have_fq (void);
 
 
 /* Locale functions *************************************************/
@@ -263,6 +257,19 @@ int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 gboolean xaccParseAmount (const char * in_str, gboolean monetary,
                           gnc_numeric *result, char **endstr);
 
+/*
+ * xaccParseAmountExtended is just like xaccParseAmount except the
+ * caller must provide all the locale-specific information.
+ *
+ * Note: if group is NULL, no group-size verification will take place.
+ * 	 ignore_list is a list of characters that are completely ignored
+ *	 while processing the input string.  If NULL, nothing is ignored.
+ */
+gboolean
+xaccParseAmountExtended (const char * in_str, gboolean monetary,
+			 char negative_sign, char decimal_point,
+			 char group_separator, char *group, char *ignore_list,
+			 gnc_numeric *result, char **endstr);
 
 /* Automatic decimal place conversion *******************************/
 
@@ -281,3 +288,4 @@ int iswlower (gint32 wc);
 #endif
 
 #endif
+/** @} */

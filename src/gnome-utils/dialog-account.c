@@ -30,6 +30,7 @@
 #include "AccWindow.h"
 #include "Transaction.h"
 #include "dialog-account.h"
+#include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
@@ -41,6 +42,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
+#include "gnc-session.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -80,6 +82,7 @@ struct _AccountWindow
   GtkTextBuffer * notes_text_buffer;
 
   GtkWidget * commodity_edit;
+  dialog_commodity_mode commodity_mode;
   GtkWidget * account_scu;
   
   GList * valid_types;
@@ -93,15 +96,6 @@ struct _AccountWindow
   GtkWidget * opening_equity_radio;
   GtkWidget * transfer_account_frame;
   GtkWidget * transfer_tree;
-
-  /* These probably don't belong here anymore, but until we figure out
-     what we want, we'll leave them alone. */
-  GtkWidget * price_quote_frame;
-  GtkWidget * get_quote_check;
-  GtkWidget * source_label;
-  GtkWidget * source_menu;
-  GtkWidget * quote_tz_label;
-  GtkWidget * quote_tz_menu;
 
   GtkWidget * tax_related_button;
   GtkWidget * placeholder_button;
@@ -154,6 +148,24 @@ aw_get_account (AccountWindow *aw)
   return xaccAccountLookup (&aw->account, gnc_get_current_book ());
 }
 
+static void
+gnc_account_commodity_from_type (AccountWindow * aw, gboolean update)
+{
+  dialog_commodity_mode new_mode;
+
+  if ((aw->type == STOCK) || (aw->type == MUTUAL))
+    new_mode = DIAG_COMM_NON_CURRENCY;
+  else
+    new_mode = DIAG_COMM_CURRENCY;
+
+  if (update && (new_mode != aw->commodity_mode)) {
+    gnc_general_select_set_selected(GNC_GENERAL_SELECT (aw->commodity_edit),
+				    NULL);
+  }
+
+  aw->commodity_mode = new_mode;
+}
+
 /* Copy the account values to the GUI widgets */
 static void
 gnc_account_to_ui(AccountWindow *aw)
@@ -178,6 +190,7 @@ gnc_account_to_ui(AccountWindow *aw)
   commodity = xaccAccountGetCommodity (account);
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
+  gnc_account_commodity_from_type (aw, FALSE);
 
   nonstd_scu = xaccAccountGetNonStdSCU (account);
   if (nonstd_scu) {
@@ -204,39 +217,6 @@ gnc_account_to_ui(AccountWindow *aw)
   placeholder = xaccAccountGetPlaceholder (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->placeholder_button),
                                 placeholder);
-
-  if ((STOCK != aw->type) && (MUTUAL != aw->type) && (CURRENCY != aw->type))
-    return;
-
-  {
-    /* we'll let GetPriceSrc handle the account type checking... */
-    const char* price_src = xaccAccountGetPriceSrc (account);
-
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->get_quote_check),
-                                  price_src != NULL);
-
-    if (price_src && aw->type != CURRENCY)
-      gtk_option_menu_set_history (GTK_OPTION_MENU (aw->source_menu),
-                                   gnc_price_source_internal2enum (price_src));
-  }
-
-  {
-    const char* quote_tz = xaccAccountGetQuoteTZ (account);
-    guint pos = 0;
-
-    if (quote_tz)
-    {
-      pos = gnc_find_timezone_menu_position(quote_tz);
-      if(pos == 0)
-      {
-        PWARN("Unknown price quote timezone (%s), resetting to default.",
-              quote_tz ? quote_tz : "(null)");
-        xaccAccountSetQuoteTZ (account, NULL);
-      }
-    }
-
-    gtk_option_menu_set_history (GTK_OPTION_MENU (aw->quote_tz_menu), pos);
-  }
 }
 
 
@@ -350,50 +330,6 @@ gnc_ui_to_account(AccountWindow *aw)
   old_string = xaccAccountGetCode (account);
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetCode (account, string);
-
-  if ((STOCK == aw->type) || (MUTUAL == aw->type) || (CURRENCY == aw->type))
-  {
-    gboolean get_quote;
-
-    get_quote = gtk_toggle_button_get_active
-      (GTK_TOGGLE_BUTTON (aw->get_quote_check));
-
-    if (!get_quote)
-    {
-      if (xaccAccountGetPriceSrc (account))
-        xaccAccountSetPriceSrc (account, NULL);
-    }
-    else if (CURRENCY == aw->type)
-    {
-      gint code;
-
-      old_string = xaccAccountGetPriceSrc (account);
-      if (safe_strcmp ("CURRENCY", old_string) != 0)
-        xaccAccountSetPriceSrc (account, "CURRENCY");
-
-      code = gnc_option_menu_get_active (aw->quote_tz_menu);
-      string = gnc_timezone_menu_position_to_string(code);
-      old_string = xaccAccountGetQuoteTZ (account);
-      if (safe_strcmp (string, old_string) != 0)
-        xaccAccountSetQuoteTZ (account, string);
-    }
-    else if ((STOCK == aw->type) || (MUTUAL == aw->type))
-    {
-      gint code;
-
-      code = gnc_option_menu_get_active (aw->source_menu);
-      string = gnc_price_source_enum2internal (code);
-      old_string = xaccAccountGetPriceSrc (account);
-      if (safe_strcmp (string, old_string) != 0)
-        xaccAccountSetPriceSrc (account, string);
-
-      code = gnc_option_menu_get_active (aw->quote_tz_menu);
-      string = gnc_timezone_menu_position_to_string(code);
-      old_string = xaccAccountGetQuoteTZ (account);
-      if (safe_strcmp (string, old_string) != 0)
-        xaccAccountSetQuoteTZ (account, string);
-    }
-  }
 
   gtk_text_buffer_get_start_iter (aw->notes_text_buffer, &start);
   gtk_text_buffer_get_end_iter (aw->notes_text_buffer, &end);
@@ -513,6 +449,7 @@ gnc_finish_ok (AccountWindow *aw,
     commodity = xaccAccountGetCommodity (parent);
     gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                       commodity);
+    gnc_account_commodity_from_type (aw, FALSE);
 
     /*gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
                                      parent, TRUE);*/
@@ -628,6 +565,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   gchar *account_field_name;
   gchar *account_field_value;
   gchar *value_str;
+  gboolean dummy;
 
   if (fs == NULL) return;
   if (fs->account == account) return;
@@ -641,7 +579,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
     account_field_name = g_strdup("");
 
   account_field_value =
-    gnc_ui_account_get_field_value_string(account, fs->field);
+    gnc_ui_account_get_field_value_string(account, fs->field, &dummy);
   if (!account_field_value)
     account_field_value = g_strdup("");
 
@@ -1172,7 +1110,6 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
                         GdkEventButton * event, gpointer data)
 {
   AccountWindow * aw = data;
-  gboolean get_quote;
   gboolean sensitive;
 
   if (aw == NULL)
@@ -1188,28 +1125,12 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
 
   last_used_account_type = aw->type;
 
-  get_quote = gtk_toggle_button_get_active
-    (GTK_TOGGLE_BUTTON (aw->get_quote_check));
-
-  sensitive = (aw->type == STOCK    ||
-	       aw->type == MUTUAL   ||
-	       aw->type == CURRENCY);
-
-  gtk_widget_set_sensitive(aw->get_quote_check, sensitive);
-  gtk_widget_set_sensitive(aw->quote_tz_menu, sensitive && get_quote);
-  gtk_widget_set_sensitive(aw->quote_tz_label, sensitive && get_quote);
-
-  sensitive = (aw->type == STOCK    ||
-	       aw->type == MUTUAL);
-
-  gtk_widget_set_sensitive(aw->source_menu, sensitive && get_quote);
-  gtk_widget_set_sensitive(aw->source_label, sensitive && get_quote);
-
   sensitive = (aw->type != EQUITY &&
                aw->type != CURRENCY &&
                aw->type != STOCK &&
                aw->type != MUTUAL);
 
+  gnc_account_commodity_from_type (aw, TRUE);
   gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
   if (!sensitive)
   {
@@ -1227,12 +1148,6 @@ gnc_type_list_unselect_cb(GtkCList * type_list, gint row, gint column,
   AccountWindow * aw = data;
 
   aw->type = BAD_TYPE;
-
-  gtk_widget_set_sensitive(aw->get_quote_check, FALSE);
-  gtk_widget_set_sensitive(aw->source_label, FALSE);
-  gtk_widget_set_sensitive(aw->source_menu, FALSE);
-  gtk_widget_set_sensitive(aw->quote_tz_label, FALSE);
-  gtk_widget_set_sensitive(aw->quote_tz_menu, FALSE);
 }
 
 
@@ -1459,29 +1374,6 @@ opening_equity_cb (GtkWidget *w, gpointer data)
   gtk_widget_set_sensitive (aw->transfer_account_frame, !use_equity);
 }
 
-static void
-get_quote_check_cb (GtkWidget *w, gpointer data)
-{
-  AccountWindow *aw = data;
-  gboolean get_quote;
-  gboolean sensitive;
-
-  get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
-
-  sensitive = (aw->type == STOCK    ||
-	       aw->type == MUTUAL   ||
-	       aw->type == CURRENCY);
-
-  gtk_widget_set_sensitive(aw->quote_tz_label, sensitive && get_quote);
-  gtk_widget_set_sensitive(aw->quote_tz_menu, sensitive && get_quote);
-
-  sensitive = (aw->type == STOCK    ||
-	       aw->type == MUTUAL);
-
-  gtk_widget_set_sensitive(aw->source_label, sensitive && get_quote);
-  gtk_widget_set_sensitive(aw->source_menu, sensitive && get_quote);
-}
-
 /********************************************************************\
  * gnc_account_window_create                                        *
  *   creates a window to create a new account.                      *
@@ -1539,7 +1431,7 @@ gnc_account_window_create(AccountWindow *aw)
   aw->commodity_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
 					       gnc_commodity_edit_get_string,
 					       gnc_commodity_edit_new_select,
-					       NULL);
+					       &aw->commodity_mode);
   gtk_box_pack_start(GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
   gtk_widget_show (aw->commodity_edit);
 
@@ -1548,27 +1440,6 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->account_scu = glade_xml_get_widget (xml, "account_scu");
   gnc_option_menu_init(aw->account_scu);
-
-  if (gnc_price_source_have_fq()) {
-    gtk_widget_destroy(glade_xml_get_widget (xml, "finance_quote_warning"));
-  } else {
-    gtk_widget_set_sensitive(glade_xml_get_widget (xml, "price_quote_frame"),
-			     FALSE);
-  }
-
-  aw->get_quote_check = glade_xml_get_widget (xml, "get_quote_check");
-  g_signal_connect (G_OBJECT (aw->get_quote_check), "toggled",
-                    G_CALLBACK (get_quote_check_cb), aw);
-
-  aw->source_label = glade_xml_get_widget (xml, "source_label");
-  box = glade_xml_get_widget (xml, "source_box");
-  aw->source_menu = gnc_ui_source_menu_create(aw_get_account (aw));
-  gtk_box_pack_start(GTK_BOX(box), aw->source_menu, TRUE, TRUE, 0);
-
-  aw->quote_tz_label = glade_xml_get_widget (xml, "quote_tz_label");
-  box = glade_xml_get_widget (xml, "quote_tz_box");
-  aw->quote_tz_menu = gnc_ui_quote_tz_menu_create(aw_get_account (aw));
-  gtk_box_pack_start(GTK_BOX(box), aw->quote_tz_menu, TRUE, TRUE, 0);
 
   box = glade_xml_get_widget (xml, "parent_scroll");
 
@@ -1807,16 +1678,16 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_resume_gui_refresh ();
 
-  if(default_commodity!=NULL)
-    {
-      commodity = default_commodity;
-    }
-  else
-    {
-      commodity = gnc_default_currency ();
-    }
+  if (default_commodity != NULL) {
+    commodity = default_commodity;
+  } else if ((aw->type != STOCK) && (aw->type != MUTUAL)) {
+    commodity = gnc_default_currency ();
+  } else {
+    commodity = NULL;
+  }
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
+  gnc_account_commodity_from_type (aw, FALSE);
 
   gtk_widget_show (aw->dialog);
 

@@ -41,7 +41,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
 #include "messages.h"
@@ -144,7 +144,7 @@ day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 
 	gtk_calendar_get_date (calendar, &year, &month, &day);
 
-        printDate (buffer, day, month + 1, year);
+	qof_print_date_dmy_buff (buffer, 40, day, month + 1, year);
 	gtk_entry_set_text (GTK_ENTRY (gde->date_entry), buffer);
 	g_signal_emit (G_OBJECT (gde), date_edit_signals [DATE_CHANGED], 0);
 }
@@ -169,10 +169,10 @@ delete_popup (GtkWidget *widget, gpointer data)
 static gint
 key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	GNCDateEdit *gde;
+	GNCDateEdit *gde = data;
 
 	if (event->keyval != GDK_Escape)
-		return date_accel_key_press(widget, event, data);
+		return date_accel_key_press(gde->date_entry, event, data);
 
 	gde = data;
 	g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
@@ -257,21 +257,10 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 	if (mtm.tm_year >= 1900)
 		mtm.tm_year -= 1900;
 
-        mtm.tm_sec = 0;
-        mtm.tm_min = 0;
-        mtm.tm_hour = 0;
-        mtm.tm_isdst = -1;
-
+	gnc_tm_set_day_start(&mtm);
         if (mktime (&mtm) == -1)
         {
-                time_t secs = time (NULL);
-
-                mtm = *localtime (&secs);
-                mtm.tm_sec = 0;
-                mtm.tm_min = 0;
-                mtm.tm_hour = 0;
-                mtm.tm_isdst = -1;
-
+		gnc_tm_get_today_start (&mtm);
                 gnc_date_edit_set_time (gde, mktime (&mtm));
         }
 
@@ -488,7 +477,7 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	mytm = localtime (&the_time);
 
 	/* Set the date */
-        printDate (buffer,
+	qof_print_date_dmy_buff (buffer, 40,
                    mytm->tm_mday,
                    mytm->tm_mon + 1,
                    1900 + mytm->tm_year);
@@ -545,16 +534,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 return FALSE;
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 0;
-                tm.tm_min = 0;
-                tm.tm_hour = 0;
-                tm.tm_isdst = -1;
-        }
-
+		gnc_tm_get_today_start (&tm);
         gnc_date_edit_set_time (gde, mktime (&tm));
 
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
@@ -563,6 +543,34 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
 	g_signal_emit (G_OBJECT (gde), date_edit_signals [TIME_CHANGED], 0);
+        return TRUE;
+}
+
+static gint
+key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if (!date_accel_key_press(widget, event, data))
+		return FALSE;
+
+	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+	return TRUE;
+}
+
+static int
+date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	GNCDateEdit *gde = data;
+        struct tm tm;
+
+        tm = gnc_date_edit_get_date_internal (gde);
+        gnc_date_edit_set_time (gde, mktime (&tm));
+
+	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
+                                   1900 + tm.tm_year);
+        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
+	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
 
         return TRUE;
 }
@@ -579,9 +587,11 @@ create_children (GNCDateEdit *gde)
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
 	gtk_widget_show (gde->date_entry);
 	g_signal_connect (G_OBJECT (gde->date_entry), "key_press_event",
-			  G_CALLBACK (date_accel_key_press), gde);
-/*	g_signal_connect (G_OBJECT (gde->date_entry), "focus_out_event",
-			  G_CALLBACK (date_focus_out_event), gde);*/
+			  G_CALLBACK (key_press_entry), gde);
+#if 0
+	g_signal_connect (G_OBJECT (gde->date_entry), "focus_out_event",
+			  G_CALLBACK (date_focus_out_event), gde);
+#endif
 
 	gde->date_button = gtk_button_new ();
 	g_signal_connect (G_OBJECT (gde->date_button), "clicked",
@@ -765,9 +775,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 	}
         else
         {
-                tm.tm_hour = 0;
-                tm.tm_min  = 0;
-                tm.tm_sec  = 0;
+		gnc_tm_set_day_start(&tm);
         }
 
 	tm.tm_isdst = -1;
@@ -792,16 +800,7 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
         tm = gnc_date_edit_get_date_internal (gde);
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 0;
-                tm.tm_min = 0;
-                tm.tm_hour = 0;
-                tm.tm_isdst = -1;
-        }
-
+		return gnc_timet_get_today_start();
 	return mktime (&tm);
 }
 
@@ -831,22 +830,10 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
         g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
         tm = gnc_date_edit_get_date_internal (gde);
-
-        tm.tm_hour = 23;
-        tm.tm_min  = 59;
-        tm.tm_sec  = 59;
+	gnc_tm_set_day_end(&tm);
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 23;
-                tm.tm_min = 59;
-                tm.tm_hour = 59;
-                tm.tm_isdst = -1;
-        }
-
+		return gnc_timet_get_today_end();
 	return mktime (&tm);
 }
 

@@ -8,6 +8,8 @@
 
 #include <glib.h>
 #include <ltdl.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #ifndef lt_ptr
 #define lt_ptr lt_ptr_t

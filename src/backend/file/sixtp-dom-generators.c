@@ -206,8 +206,8 @@ double_to_string(double value)
 {
     gchar *numstr;
 #ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
-    numstr = gh_scm2newstr(gh_call1(gh_eval_str("number->string"),
-                                    gh_double2scm(value)),
+    numstr = gh_scm2newstr(scm_call_1(scm_c_eval_string("number->string"),
+				      scm_make_real(value)),
                            NULL);
 
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
@@ -281,7 +281,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         break;
     case KVP_TYPE_GUID:
         add_text_to_node(val_node,"guid",
-                         guid_to_string(kvp_value_get_guid(val)));
+                         g_strdup(guid_to_string(kvp_value_get_guid(val))));
         break;
     case KVP_TYPE_TIMESPEC:
     {

@@ -24,8 +24,8 @@
 #ifndef XACC_SCHEDXACTION_P_H
 #define XACC_SCHEDXACTION_P_H
 
-#include "GNCIdP.h"
 #include "SchedXaction.h"
+#include "qofid.h"
 
 /**
  * A single scheduled transaction.
@@ -75,7 +75,7 @@ struct gncp_SchedXaction
  
   Account        *template_acct;
   GUID            guid;
-  GNCEntityTable *entity_table;
+  QofEntityTable *entity_table;
   
   /** The list of deferred SX instances.  This list is of temporalStateData
    * instances.  */
@@ -84,7 +84,7 @@ struct gncp_SchedXaction
   /* Changed since last save? */
   gboolean       dirty;
 
-  kvp_frame        *kvp_data;
+  KvpFrame        *kvp_data;
 };
 
 /** Just the variable temporal bits from the SX structure. */

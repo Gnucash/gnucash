@@ -149,16 +149,13 @@ gnc_engine_resume_events (void)
   suspend_counter--;
 }
 
-void
-gnc_engine_generate_event (const GUID *entity, GNCEngineEventType event_type)
+static void
+gnc_engine_generate_event_internal (const GUID *entity, QofIdType type,
+				    GNCEngineEventType event_type)
 {
   GList *node;
 
-  if (!entity)
-    return;
-
-  if (suspend_counter)
-    return;
+  g_return_if_fail(entity);
 
   switch (event_type)
   {
@@ -180,6 +177,29 @@ gnc_engine_generate_event (const GUID *entity, GNCEngineEventType event_type)
     HandlerInfo *hi = node->data;
 
     if (hi->handler)
-      hi->handler ((GUID *)entity, event_type, hi->user_data);
+      hi->handler ((GUID *)entity, type, event_type, hi->user_data);
   }
+}
+
+void
+gnc_engine_force_event (const GUID *entity, QofIdType type, 
+			GNCEngineEventType event_type)
+{
+  if (!entity)
+    return;
+
+  gnc_engine_generate_event_internal (entity, type, event_type);
+}
+
+void
+gnc_engine_generate_event (const GUID *entity, QofIdType type,
+			   GNCEngineEventType event_type)
+{
+  if (!entity)
+    return;
+
+  if (suspend_counter)
+    return;
+
+  gnc_engine_generate_event_internal (entity, type, event_type);
 }

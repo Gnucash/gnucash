@@ -1,4 +1,5 @@
 AM_CFLAGS = \
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnc-module/test/mod-foo \
   ${GLIB_CFLAGS} \

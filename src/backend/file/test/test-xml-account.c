@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,7 +20,6 @@
 #include "test-file-stuff.h"
 
 #include "Account.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "gnc-book.h"
@@ -101,7 +100,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetCurrency(act, book), xaccAccountGetBook(act)))
+                   mark, DxaccAccountGetCurrency(act), xaccAccountGetBook(act)))
             {
                 return g_strdup("currencies differ");
             }
@@ -124,7 +123,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp(mark->name, "act:security") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, DxaccAccountGetSecurity(act, book), xaccAccountGetBook(act)))
+                   mark, DxaccAccountGetSecurity(act), xaccAccountGetBook(act)))
             {
                 return g_strdup("securities differ");
             }
@@ -344,7 +343,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
 
     if(!xaccAccountGetParent(act))
     {
-        xaccGroupInsertAccount(gnc_book_get_group(book), act);
+        xaccGroupInsertAccount(xaccGetAccountGroup(book), act);
     }
 
     msg = node_and_account_equal((xmlNodePtr)global_data, act);
@@ -356,7 +355,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
 }
 
 static void
-guile_main(int argc, char **argv)
+guile_main (void *closure, int argc, char **argv)
 {
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
@@ -379,8 +378,8 @@ guile_main(int argc, char **argv)
 }
 
 int
-main(int argc, char ** argv)
+main (int argc, char ** argv)
 {
-  gh_enter (argc, argv, guile_main);
+  scm_boot_guile (argc, argv, guile_main, NULL);
   return 0;
 }

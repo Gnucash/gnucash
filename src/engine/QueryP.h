@@ -80,7 +80,7 @@ typedef struct {
   pr_type_t       term_type;
   int             sense;
   GUID            guid;
-  GNCIdType       id_type;
+  QofIdType       id_type;
 } GUIDPredicateData;
 
 typedef struct {
@@ -100,7 +100,7 @@ typedef struct {
   kvp_match_t       how;
   kvp_match_where_t where;
   GSList           *path;
-  kvp_value        *value;
+  KvpValue        *value;
 } KVPPredicateData;
 
 typedef struct {
@@ -144,9 +144,9 @@ typedef struct {
 } QueryTerm;
 
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
-                           QueryOp op);
+                           QofQueryOp op);
 
-void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
+void xaccQueryAddPredicate (Query * q, PredicateData *pred, QofQueryOp op);
 
 /* This is useful for network systems */
 Predicate xaccQueryGetPredicate (pr_type_t term_type);

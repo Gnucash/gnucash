@@ -38,10 +38,12 @@
 #include "window-register.h"
 #include "Account.h"
 #include "AccWindow.h"
-#include "Scrub.h"
+#include "QueryNew.h"
+#include "SX-book.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "global-options.h"
+#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
@@ -94,8 +96,6 @@ static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
-static gnc_numeric gsr_account_present_balance( Account *account );
-static gnc_numeric gsr_account_projectedminimum_balance( Account *account );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
 static void gsr_create_menus( GNCSplitReg *gsr );
@@ -108,13 +108,8 @@ static void gsr_setup_status_widgets( GNCSplitReg *gsr );
 static GtkWidget* gsr_create_popup_menu( GNCSplitReg *gsr );
 
 
-/**
- * Defines a function pointer def to get a gnc_numeric from an account.
- **/
-typedef gnc_numeric (*AmountGetterFn)(Account*);
-
 static void gsr_update_summary_label( GtkWidget *label,
-                                      AmountGetterFn getter,
+                                      xaccGetBalanceFn getter,
                                       Account *leader,
                                       GNCPrintAmountInfo print_info,
                                       gnc_commodity *cmdty,
@@ -144,6 +139,9 @@ void gsr_default_copy_handler     ( GNCSplitReg *w, gpointer ud );
 void gsr_default_copy_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
+void gsr_default_void_txn_handler ( GNCSplitReg *w, gpointer ud );
+void gsr_default_unvoid_txn_handler  ( GNCSplitReg *w, gpointer ud );
+void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
 
 static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
@@ -156,6 +154,9 @@ void gnc_split_reg_paste_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_cut_trans_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_copy_trans_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_paste_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_void_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_unvoid_trans_cb(GtkWidget *w, gpointer data);
+void gnc_split_reg_reverse_trans_cb(GtkWidget *w, gpointer data);
 
 void gnc_split_reg_record_cb (GnucashRegister *reg, gpointer data);
 void gnc_split_reg_reinitialize_trans_cb(GtkWidget *w, gpointer data);
@@ -183,6 +184,8 @@ void gnc_split_reg_sort_num_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_amount_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_memo_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_desc_cb (GtkWidget *w, gpointer data);
+void gnc_split_reg_sort_action_cb (GtkWidget *w, gpointer data);
+void gnc_split_reg_sort_notes_cb (GtkWidget *w, gpointer data);
 
 void gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data);
 void gnc_split_reg_size_allocate( GtkWidget *widget,
@@ -210,12 +213,12 @@ gnc_split_reg_get_type( void )
     {
       GtkTypeInfo gnc_split_reg_info =
       {
-	"GNCSplitReg",
-	sizeof (GNCSplitReg),
-	sizeof (GNCSplitRegClass),
-	(GtkClassInitFunc) gnc_split_reg_class_init,
-	(GtkObjectInitFunc) gnc_split_reg_init,
-	NULL, /* reserved_1 */
+        "GNCSplitReg",
+        sizeof (GNCSplitReg),
+        sizeof (GNCSplitRegClass),
+        (GtkClassInitFunc) gnc_split_reg_class_init,
+        (GtkObjectInitFunc) gnc_split_reg_init,
+        NULL, /* reserved_1 */
         NULL, /* reserved_2 */
         (GtkClassInitFunc) NULL
       };
@@ -243,6 +246,9 @@ enum gnc_split_reg_signal_enum {
   COPY_TXN_SIGNAL,
   PASTE_SIGNAL,
   PASTE_TXN_SIGNAL,
+  VOID_TXN_SIGNAL,
+  UNVOID_TXN_SIGNAL,
+  REVERSE_TXN_SIGNAL,
   HELP_CHANGED_SIGNAL,
   INCLUDE_DATE_SIGNAL,
   LAST_SIGNAL
@@ -275,6 +281,9 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     { COPY_TXN_SIGNAL,     "copy_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, copy_txn_cb ) },
     { PASTE_SIGNAL,        "paste",        GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_cb ) },
     { PASTE_TXN_SIGNAL,    "paste_txn",    GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_txn_cb ) },
+    { VOID_TXN_SIGNAL,     "void_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, void_txn_cb ) },
+    { UNVOID_TXN_SIGNAL,   "unvoid_txn",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, unvoid_txn_cb ) },
+    { REVERSE_TXN_SIGNAL,  "reverse_txn",  GTK_SIGNAL_OFFSET( GNCSplitRegClass, reverse_txn_cb ) },
     { HELP_CHANGED_SIGNAL, "help-changed", GTK_SIGNAL_OFFSET( GNCSplitRegClass, help_changed_cb ) },
     { INCLUDE_DATE_SIGNAL, "include-date", GTK_SIGNAL_OFFSET( GNCSplitRegClass, include_date_cb ) },
     { LAST_SIGNAL, NULL, 0 }
@@ -321,6 +330,9 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
   class->copy_txn_cb     = gsr_default_copy_txn_handler;
   class->paste_cb        = gsr_default_paste_handler;
   class->paste_txn_cb    = gsr_default_paste_txn_handler;
+  class->void_txn_cb     = gsr_default_void_txn_handler;
+  class->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
+  class->reverse_txn_cb  = gsr_default_reverse_txn_handler;
 
   class->help_changed_cb = NULL;
   class->include_date_cb = NULL;
@@ -600,7 +612,7 @@ gnc_split_reg_raise( GNCSplitReg *gsr )
 static
 void
 gsr_update_summary_label( GtkWidget *label,
-                          AmountGetterFn getter,
+                          xaccGetBalanceFn getter,
                           Account *leader,
                           GNCPrintAmountInfo print_info,
                           gnc_commodity *cmdty,
@@ -640,13 +652,39 @@ account_latest_price (Account *account)
   gnc_commodity *commodity;
   gnc_commodity *currency;
 
+  if (!account) return NULL;
   commodity = xaccAccountGetCommodity (account);
   currency = gnc_default_currency ();
 
-  book = gnc_get_current_book ();
+  book = xaccAccountGetBook (account);
   pdb = gnc_book_get_pricedb (book);
 
   return gnc_pricedb_lookup_latest (pdb, commodity, currency);
+}
+
+static GNCPrice *
+account_latest_price_any_currency (Account *account)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  gnc_commodity *commodity;
+  GList *price_list;
+  GNCPrice *result;
+
+  if (!account) return NULL;
+  commodity = xaccAccountGetCommodity (account);
+
+  book = xaccAccountGetBook (account);
+  pdb = gnc_book_get_pricedb (book);
+
+  price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
+  if (!price_list) return NULL;
+
+  result = gnc_price_clone((GNCPrice *)(price_list->data), book);
+
+  gnc_price_list_destroy(price_list);
+
+  return result;
 }
 
 static
@@ -674,30 +712,34 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if (commodity != NULL)
-    euro = (euro && gnc_is_euro_currency( commodity ));
+    euro = (euro && gnc_is_euro_currency( commodity ) && 
+            (strncasecmp(gnc_commodity_get_mnemonic(commodity), "EUR", 3)));
   else
     euro = FALSE;
 
   print_info = gnc_account_print_info( leader, TRUE );
   reverse = gnc_reverse_balance( leader );
 
-  if ( gsr->createFlags & CREATE_SUMMARYBAR ) {
+  /* Handle the summary bar */
+  if ( gsr->createFlags & CREATE_SUMMARYBAR ) 
+  {
     gsr_update_summary_label( gsr->balance_label,
-                              (AmountGetterFn)gsr_account_present_balance,
+                              xaccAccountGetPresentBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->cleared_label,
-                              (AmountGetterFn)xaccAccountGetClearedBalance,
+                              xaccAccountGetClearedBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->reconciled_label,
-                              (AmountGetterFn)xaccAccountGetReconciledBalance,
+                              xaccAccountGetReconciledBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->future_label,
-                              (AmountGetterFn)xaccAccountGetBalance,
+                              xaccAccountGetBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->projectedminimum_label,
-                              (AmountGetterFn)gsr_account_projectedminimum_balance,
+                              xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
 
+    /* Print the summary share amount */
     if (gsr->shares_label != NULL)
       {
         print_info = gnc_account_print_info( leader, TRUE );
@@ -712,26 +754,77 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         gtk_label_set_text( GTK_LABEL(gsr->shares_label), string );
       }
 
+    /* Print the summary share value */
     if (gsr->value_label != NULL)
       {
         GNCPrice *price;
 
+        amount = xaccAccountGetBalance (leader);
+        if (reverse) amount = gnc_numeric_neg (amount);
+
         price = account_latest_price (leader);
         if (!price)
           {
-            gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
-            gtk_label_set_text (GTK_LABEL (gsr->value_label),
-                                _("<No information>"));
+            /* If the balance is zero, then print zero. */
+            if (gnc_numeric_equal(amount, gnc_numeric_zero()))
+              {
+                 gnc_commodity *currency = gnc_default_currency ();
+                 print_info = gnc_commodity_print_info (currency, TRUE);
+                 amount = gnc_numeric_zero ();
+
+                 xaccSPrintAmount (string, amount, print_info);
+
+                 gnc_set_label_color (gsr->value_label, amount);
+                 gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
+              }
+            else
+              {
+                /* else try to do a double-price-conversion :-( */
+                price = account_latest_price_any_currency (leader);
+                if(!price)
+                  {
+                     gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
+                     gtk_label_set_text (GTK_LABEL (gsr->value_label),
+                                           _("<No information>"));
+                  }
+                else
+                  {
+                    gnc_commodity *currency = gnc_price_get_currency (price);
+                    gnc_commodity *default_currency = gnc_default_currency ();
+                    gnc_numeric currency_amount;
+                    gnc_numeric default_currency_amount;
+    
+                    print_info = gnc_commodity_print_info (currency, TRUE);
+    
+                    currency_amount =
+                      xaccAccountConvertBalanceToCurrency(leader, amount,
+                                                          commodity, currency);
+                    xaccSPrintAmount (string, currency_amount, print_info);
+    
+                    default_currency_amount =
+                      xaccAccountConvertBalanceToCurrency(leader, amount,
+                                                          commodity,
+                                                          default_currency);
+                    if(!gnc_numeric_zero_p(default_currency_amount))
+                      {
+                        strcat( string, " / " );
+                        print_info = gnc_commodity_print_info (default_currency, TRUE);
+                        xaccSPrintAmount( string + strlen( string ), default_currency_amount,
+                                          print_info);
+                      }
+    
+                    gnc_set_label_color (gsr->value_label, amount);
+                    gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
+    
+                    gnc_price_unref (price);
+                  }
+              }
           }
         else
           {
             gnc_commodity *currency = gnc_price_get_currency (price);
 
             print_info = gnc_commodity_print_info (currency, TRUE);
-
-            amount = xaccAccountGetBalance (leader);
-            if (reverse)
-              amount = gnc_numeric_neg (amount);
 
             amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
                                       gnc_commodity_get_fraction (currency),
@@ -823,25 +916,34 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 gboolean
 gnc_split_reg_check_close( GNCSplitReg *gsr )
 {
+  GNCVerifyResult result;
   gboolean pending_changes;
   SplitRegister *reg;
+  const char *message = _("The current transaction has been changed.\n"
+			  "Would you like to record it?");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   pending_changes = gnc_split_register_changed( reg );
   if ( !pending_changes )
-    return FALSE;
+    return TRUE;
 
+  result = gnc_verify_cancel_dialog_parented(gsr->window, GNC_VERIFY_YES,
+					     message);
+  switch (result)
   {
-    const char *message = _("The current transaction has been changed.\n"
-                            "Would you like to record it?");
-    if ( gnc_verify_dialog_parented( gsr->window, TRUE, message) ) {
+    case GNC_VERIFY_YES:
+    case GNC_VERIFY_OK:
       gnc_split_reg_record_trans_cb( gsr->window, gsr );
       return TRUE;
-    } else {
+
+    case GNC_VERIFY_NO:
       gnc_split_register_cancel_cursor_trans_changes( reg );
+      return TRUE;
+
+    case GNC_VERIFY_CANCEL:
       return FALSE;
-    }
   }
+  return TRUE;
 }
 
 void
@@ -943,6 +1045,102 @@ gnc_split_reg_paste_trans_cb (GtkWidget *w, gpointer data)
   gsr_emit_simple_signal( gsr, "paste_txn" );
 }
 
+/********************************************************************\
+ * gnc_split_reg_void_trans_cb                                      *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_void_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  // Override this function.
+}
+
+void
+gnc_split_reg_void_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "void_txn" );
+}
+
+/********************************************************************\
+ * gnc_split_reg_unvoid_trans_cb                                      *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_unvoid_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  // Override this function.
+}
+
+void
+gnc_split_reg_unvoid_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "unvoid_txn" );
+}
+
+/********************************************************************\
+ * gnc_split_reg_reverse_trans_cb                                   *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
+{
+  SplitRegister *reg;
+  Transaction *trans, *new_trans;
+  kvp_frame *txn_frame;
+  kvp_value *kvp_val;
+
+  reg = gnc_ledger_display_get_split_register( gsr->ledger );
+  trans = gnc_split_register_get_current_trans (reg);
+  if (trans == NULL)
+    return;
+
+  txn_frame = xaccTransGetSlots( trans );
+  if ( txn_frame != NULL ) {
+    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
+    if ( kvp_val ) {
+      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
+      gnc_error_dialog(_("This transaction has already been reversed."));
+      return;
+    }
+  }
+
+  new_trans = xaccTransClone(trans);
+  xaccTransReverse(new_trans);
+
+  /* Clear transaction level info */
+  xaccTransBeginEdit(new_trans);
+  xaccTransSetDatePostedSecs(new_trans, time(NULL));
+  xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+  xaccTransCommitEdit(new_trans);
+
+  /* Now update the original with a pointer to the new one */
+  xaccTransBeginEdit(trans);
+  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
+  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
+  xaccTransCommitEdit(trans);
+
+  /* Now jump to new trans */
+  gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
+}
+
+void
+gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gsr_emit_simple_signal( gsr, "reverse_txn" );
+}
+
 void
 gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 {
@@ -953,15 +1151,15 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   char *buf = NULL;
   gint result;
   const char *two_choices[] = { N_(GTK_STOCK_CANCEL),
-				N_("Remove Transaction Splits"),
-				NULL };
+                                N_("Remove Transaction Splits"),
+                                NULL };
   const char *message = _("Are you sure you want to remove the "
-			  "Splits of this transaction?");
+                          "Splits of this transaction?");
 
   const char *recn_warn = _("You would be modifying a "
-			    "transaction with reconciled splits!\n"
-			    "This is not a good idea as it will cause your "
-			    "reconciled balance to be off.");
+                            "transaction with reconciled splits!\n"
+                            "This is not a good idea as it will cause your "
+                            "reconciled balance to be off.");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -975,7 +1173,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   } else {
       buf = g_strdup (message);
       result =
-	gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
   }
   g_free(buf);
   if (!result)
@@ -1014,8 +1212,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   Split *split;
   gint result;
   const char *two_choices[] = { N_(GTK_STOCK_DELETE),
-				N_(GTK_STOCK_CANCEL),
-				NULL };
+                                N_(GTK_STOCK_CANCEL),
+                                NULL };
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1054,11 +1252,11 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     const char *format = _("Are you sure you want to delete\n   %s\n"
                            "from the transaction\n   %s ?");
     const char *recn_warn = _("You would be deleting a reconciled split!\n"
-			      "This is not a good idea as it will cause your "
-			      "reconciled balance to be off.");
+                              "This is not a good idea as it will cause your "
+                              "reconciled balance to be off.");
     const char *anchor_split = _("This is the split anchoring this transaction "
-				 "to the register. You may not delete it from "
-				 "this register window.");
+                                 "to the register. You may not delete it from "
+                                 "this register window.");
     const char *memo;
     const char *desc;
     char recn;
@@ -1086,10 +1284,10 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
       g_free (buf);
       buf = new_buf;
       result =
-	gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
+        gnc_generic_warning_dialog_parented(gsr->window, two_choices, "%s", buf);
     } else {
       result =
-	gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog_parented(gsr->window, two_choices, "%s", buf);
     }
     g_free(buf);
 
@@ -1109,18 +1307,18 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                             "transaction?");
     const char *recn_warn = _("You would be deleting a transaction "
                               "with reconciled splits!\n"
-			      "This is not a good idea as it will cause your "
-			      "reconciled balance to be off.");
+                              "This is not a good idea as it will cause your "
+                              "reconciled balance to be off.");
     char *buf;
 
     if (xaccTransHasReconciledSplits (trans)) {
       buf = g_strconcat (message, "\n\n", recn_warn, NULL);
       result =
-	gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
+        gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
     } else {
       buf = g_strdup (message);
       result =
-	gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog_parented(gsr->window, two_choices, buf);
     }
 
     g_free (buf);
@@ -1539,6 +1737,15 @@ gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
       p1 = g_slist_prepend (p1, SPLIT_TRANS);
       p2 = standard;
       break;
+    case BY_ACTION:
+      p1 = g_slist_prepend (p1, SPLIT_ACTION);
+      p2 = standard;
+      break;
+    case BY_NOTES:
+      p1 = g_slist_prepend (p1, TRANS_NOTES);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
     default:
       g_slist_free (standard);
       g_return_if_fail (FALSE);
@@ -1605,6 +1812,20 @@ gnc_split_reg_sort_desc_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
   gnc_split_reg_sort(gsr, BY_DESC);
+}
+
+void
+gnc_split_reg_sort_action_cb(GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gnc_split_reg_sort(gsr, BY_ACTION);
+}
+
+void
+gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gnc_split_reg_sort(gsr, BY_NOTES);
 }
 
 void
@@ -1893,7 +2114,7 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
   popup = glade_xml_get_widget( xml, "register_popup" );
   glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
-				     gsr );
+                                     gsr );
 
   client = gconf_client_get_default ();
   /* Glade insists on making this a tearoff menu. */
@@ -2000,7 +2221,7 @@ gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
 
-  gnc_warning_dialog_parented(args->gsr->window, args->string);
+  gnc_warning_dialog_parented(args->gsr->window, "%s", args->string);
   g_free(args);
   return FALSE;
 }
@@ -2065,90 +2286,6 @@ gnc_toolbar_change_cb (void *data)
   GNCSplitReg *gsr = data;
   gnc_split_reg_refresh_toolbar( gsr );
 }
-
-/**
- * A utility function which retreives the present balance from an Account.
- * This should move somewhere more general?
- **/
-static
-gnc_numeric
-gsr_account_present_balance (Account *account)
-{
-  GList *list;
-  GList *node;
-  time_t today;
-  struct tm *tm;
-
-  if (!account)
-    return gnc_numeric_zero ();
-
-  today = time (NULL);
-  tm = localtime (&today);
-  tm->tm_hour = 23;
-  tm->tm_min = 59;
-  tm->tm_sec = 59;
-  tm->tm_isdst = -1;
-  today = mktime (tm);
-
-  list = xaccAccountGetSplitList (account);
-  for (node = g_list_last (list); node; node = node->prev)
-  {
-    Split *split = node->data;
-
-    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-      return xaccSplitGetBalance (split);
-  }
-
-  return gnc_numeric_zero ();
-}
-
-/**
- * A utility function which retreives the present balance from an Account.
- * This should move somewhere more general?
- **/
-static
-gnc_numeric
-gsr_account_projectedminimum_balance (Account *account)
-{
-  GList *list;
-  GList *node;
-  time_t today;
-  struct tm *tm;
-  gnc_numeric lowest = gnc_numeric_zero ();
-  int seen_a_transaction = 0;
-
-  if (!account)
-    return gnc_numeric_zero ();
-
-  today = time (NULL);
-  tm = localtime (&today);
-  tm->tm_hour = 23;
-  tm->tm_min = 59;
-  tm->tm_sec = 59;
-  tm->tm_isdst = -1;
-  today = mktime (tm);
-
-  list = xaccAccountGetSplitList (account);
-  for (node = g_list_last (list); node; node = node->prev)
-  {
-    Split *split = node->data;
-
-    if (!seen_a_transaction)
-    {
-      lowest = xaccSplitGetBalance (split);
-      seen_a_transaction = 1;
-    }
-
-    if ( gnc_numeric_compare(xaccSplitGetBalance (split), lowest) < 0 )
-      lowest = xaccSplitGetBalance (split);
-      
-    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-      return lowest;
-  }
-
-  return lowest;
-}
-
 
 static
 gncUIWidget

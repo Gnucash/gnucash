@@ -1,10 +1,9 @@
 #include <ctype.h>
 #include <glib.h>
-#include <guile/gh.h>
 #include <time.h>
 
 #include "TransLog.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"

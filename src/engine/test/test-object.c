@@ -1,10 +1,11 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
+#include "qofbook.h"
 
 #include "gncObject.h"
 #include "test-stuff.h"
@@ -12,18 +13,18 @@
 #define TEST_MODULE_NAME "object-test"
 #define TEST_MODULE_DESC "Test Object"
 
-static void foreach (GNCBook *, foreachObjectCB, gpointer);
+static void foreach (QofBook *, QofEntityForeachCB, gpointer);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
-static void test_foreach (GNCBook *, const char *);
+static void test_foreach (QofBook *, const char *);
 
-static GncObject_t bus_obj = {
-  GNC_OBJECT_VERSION,
+static QofObject bus_obj = {
+  QOF_OBJECT_VERSION,
   TEST_MODULE_NAME,
   TEST_MODULE_DESC,
   NULL,				/* create */
   NULL,				/* destroy */
-  NULL,                         /* is dirty */
+  NULL,           /* is dirty */
   NULL,				/* mark_clean */
   foreach,
   printable,
@@ -46,12 +47,12 @@ static void test_object (void)
 	     "test description return");
   }
 
-  test_foreach ((GNCBook*)1, TEST_MODULE_NAME);
+  test_foreach ((QofBook*)1, TEST_MODULE_NAME);
   test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
 static void
-foreach (GNCBook *book, foreachObjectCB cb, gpointer u_d)
+foreach (QofBook *book, QofEntityForeachCB cb, gpointer u_d)
 {
   int *foo = u_d;
 
@@ -75,7 +76,7 @@ printable (gpointer obj)
 }
 
 static void
-test_foreach (GNCBook *book, const char *name)
+test_foreach (QofBook *book, const char *name)
 {
   int res = 0;
 
@@ -118,7 +119,7 @@ test_printable (const char *name, gpointer obj)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
   test_object();
@@ -129,6 +130,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

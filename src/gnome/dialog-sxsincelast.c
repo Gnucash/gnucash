@@ -53,17 +53,19 @@
 #include <gnome.h>
 #include <glib.h>
 
-#include "date.h"
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
+#include "QueryNew.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "Scrub.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 #include "dialog-utils.h"
 #include "finvar.h"
 #include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
@@ -1010,6 +1012,7 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         }
         g_list_free( tci->createdTxnGUIDs );
         tci->createdTxnGUIDs = NULL;
+	gnc_resume_gui_refresh();
 }
 
 /**
@@ -2619,7 +2622,7 @@ create_transactions_on( SchedXaction *sx,
         createData createUD;
         AccountGroup *ag;
         Account *acct;
-        char *id;
+        const char *id;
 
         if ( tci ) {
                 g_assert( g_date_compare( gd, tci->date ) == 0 );
@@ -2636,10 +2639,6 @@ create_transactions_on( SchedXaction *sx,
                                                        create_each_transaction_helper,
                                                        /*tct*/ &createUD );
                 }
-	}
-
-	if (id) {
-                g_free( id );
 	}
 }
 
@@ -2675,12 +2674,11 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
         {
                 AccountGroup *ag;
                 Account *acct;
-                char *id;
+                const char *id;
 
                 ag = gnc_book_get_template_group( gnc_get_current_book () );
                 id = guid_to_string( xaccSchedXactionGetGUID(sx) );
                 acct = xaccGetAccountFromName( ag, id );
-                g_free( id );
                 splitList = xaccAccountGetSplitList( acct );
         }
 
@@ -2817,7 +2815,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 AccountGroup *ag;
                 Account *acct;
                 Query *q;
-                gchar *sxGUIDstr;
+                const gchar *sxGUIDstr;
                 SplitRegister *sr;
 
                 q = xaccMallocQuery();
@@ -2825,7 +2823,6 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 ag = gnc_book_get_template_group( gnc_get_current_book() );
                 sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
                 acct = xaccGetAccountFromName( ag, sxGUIDstr );
-                g_free( sxGUIDstr );
                 g_assert( acct != NULL );
                 xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
           

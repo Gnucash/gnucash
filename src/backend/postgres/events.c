@@ -26,16 +26,17 @@
 #include "config.h"
 
 #include <libpq-fe.h>  
+#include <stdlib.h>  
 
-#include "Backend.h"
-#include "BackendP.h"
 #include "events.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "guid.h"
-#include "GNCId.h"
-#include "GNCIdP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
+#include "qofid.h"
+#include "qofid-p.h"
 
 #include "PostgresBackend.h"
 #include "account.h"
@@ -52,7 +53,7 @@ static short module = MOD_EVENT;
 /* ============================================================= */
 
 gboolean
-pgendEventsPending (Backend *bend)
+pgendEventsPending (QofBackend *bend)
 {
    PGBackend *be = (PGBackend *) bend;
    PGnotify *note;
@@ -139,7 +140,7 @@ typedef struct _event {
    Timespec stamp;
    GNCEngineEventType type;
    GUID guid;
-   GNCIdType obj_type;
+   QofIdType obj_type;
 } Event; 
 
 
@@ -154,7 +155,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    GNCEngineEventType type;
    char change = (DB_GET_VAL("change",j))[0];
    char objtype = (DB_GET_VAL("objtype",j))[0];
-   GNCIdType obj_type = GNC_ID_NONE;
+   QofIdType obj_type = GNC_ID_NONE;
 
    guid_str = DB_GET_VAL("guid",j);
    PINFO ("event %c for %s", change, guid_str);
@@ -237,7 +238,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 gboolean
-pgendProcessEvents (Backend *bend)
+pgendProcessEvents (QofBackend *bend)
 {
    PGBackend *be = (PGBackend *) bend;
    GList *node, *pending = NULL;
@@ -267,7 +268,7 @@ pgendProcessEvents (Backend *bend)
    for (node = pending; node; node = node->next)
    {
       Event *ev = (Event *) node->data;
-      GNCIdType local_obj_type;
+      QofIdType local_obj_type;
 
       /* lets see if the local cache has this item in it */
       local_obj_type = pgendGUIDType (be, &(ev->guid));
@@ -367,7 +368,7 @@ pgendProcessEvents (Backend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_CREATE);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_CREATE);
          }
       }
       else 
@@ -375,11 +376,11 @@ pgendProcessEvents (Backend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_MODIFY);
          }
          else
          {
-            gnc_engine_generate_event (&(ev->guid), GNC_EVENT_DESTROY);
+            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_DESTROY);
          }
       }
    

@@ -1,6 +1,6 @@
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "Group.h"
 #include "Transaction.h"
@@ -14,7 +14,7 @@
 static gboolean
 test_trans_query (Transaction *trans, gpointer data)
 {
-  GNCBook *book = data;
+  QofBook *book = data;
   GList *list;
   Query *q;
 
@@ -48,23 +48,23 @@ test_trans_query (Transaction *trans, gpointer data)
 static void
 run_test (void)
 {
-  GNCSession *session;
+  QofSession *session;
   AccountGroup *group;
-  GNCBook *book;
+  QofBook *book;
 
   session = get_random_session ();
-  book = gnc_session_get_book (session);
-  group = gnc_book_get_group (book);
+  book = qof_session_get_book (session);
+  group = xaccGetAccountGroup (book);
 
   add_random_transactions_to_book (book, 20);
 
   xaccGroupForEachTransaction (group, test_trans_query, book);
 
-  gnc_session_destroy (session);
+  qof_session_destroy (session);
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
 
@@ -83,6 +83,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

@@ -26,8 +26,8 @@
 /* GNOME 2 Port (Replace GtkText) */
 
 #include <gnome.h>
-#include <guile/gh.h>
 #include "eggtreemodelfilter.h"
+#include <libguile.h>
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -96,12 +96,12 @@ initialize_getters (void)
   if (getters_initialized)
     return;
 
-  getters.payer_name_source = gh_eval_str ("gnc:txf-get-payer-name-source");
-  getters.form              = gh_eval_str ("gnc:txf-get-form");
-  getters.description       = gh_eval_str ("gnc:txf-get-description");
-  getters.help              = gh_eval_str ("gnc:txf-get-help");
+  getters.payer_name_source = scm_c_eval_string ("gnc:txf-get-payer-name-source");
+  getters.form              = scm_c_eval_string ("gnc:txf-get-form");
+  getters.description       = scm_c_eval_string ("gnc:txf-get-description");
+  getters.help              = scm_c_eval_string ("gnc:txf-get-help");
 
-  getters.codes             = gh_eval_str ("gnc:txf-get-codes");
+  getters.codes             = scm_c_eval_string ("gnc:txf-get-codes");
 
   getters_initialized = TRUE;
 }
@@ -151,33 +151,33 @@ load_txf_info (gboolean income)
 
   initialize_getters ();
 
-  category = gh_eval_str (income ?
-                          "txf-income-categories" :
-                          "txf-expense-categories");
+  category = scm_c_eval_string (income ?
+				"txf-income-categories" :
+				"txf-expense-categories");
   if (category == SCM_UNDEFINED)
   {
     destroy_txf_infos (infos);
     return NULL;
   }
 
-  codes = gh_call1 (getters.codes, category);
-  if (!gh_list_p (codes))
+  codes = scm_call_1 (getters.codes, category);
+  if (!SCM_LISTP (codes))
   {
     destroy_txf_infos (infos);
     return NULL;
   }
 
-  while (!gh_null_p (codes))
+  while (!SCM_NULLP (codes))
   {
     TXFInfo *txf_info;
     SCM code_scm;
     char *str;
     SCM scm;
 
-    code_scm  = gh_car (codes);
-    codes     = gh_cdr (codes);
+    code_scm  = SCM_CAR (codes);
+    codes     = SCM_CDR (codes);
 
-    scm = gh_call2 (getters.payer_name_source, category, code_scm);
+    scm = scm_call_2 (getters.payer_name_source, category, code_scm);
     str = gh_symbol2newstr (scm, NULL);
     if (safe_strcmp (str, "not-impl") == 0)
     {
@@ -197,17 +197,17 @@ load_txf_info (gboolean income)
     txf_info->code = g_strdup (str);
     free (str);
 
-    scm = gh_call2 (getters.form, category, code_scm);
+    scm = scm_call_2 (getters.form, category, code_scm);
     str = gh_scm2newstr (scm, NULL);
     txf_info->form = g_strdup (str);
     free (str);
 
-    scm = gh_call2 (getters.description, category, code_scm);
+    scm = scm_call_2 (getters.description, category, code_scm);
     str = gh_scm2newstr (scm, NULL);
     txf_info->description = g_strdup (str);
     free (str);
 
-    scm = gh_call2 (getters.help, category, code_scm);
+    scm = scm_call_2 (getters.help, category, code_scm);
     str = gh_scm2newstr (scm, NULL);
     txf_info->help = g_strdup (str);
     free (str);

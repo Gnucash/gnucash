@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
@@ -133,5 +133,5 @@ gnc_ui_new_user_cancel_dialog (void)
 void
 gncp_new_user_finish (void)
 {
-  gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+  scm_c_eval_string("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
 }

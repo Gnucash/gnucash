@@ -49,23 +49,36 @@ static short module = MOD_IO;
 
 const gchar *commodity_version_string = "2.0.0";
 
+/* ids */
+#define gnc_commodity_string "gnc:commodity"
+#define cmdty_namespace      "cmdty:space"
+#define cmdty_id             "cmdty:id"
+#define cmdty_name           "cmdty:name"
+#define cmdty_xcode          "cmdty:xcode"
+#define cmdty_fraction       "cmdty:fraction"
+#define cmdty_get_quotes     "cmdty:get_quotes"
+#define cmdty_quote_source   "cmdty:quote_source"
+#define cmdty_quote_tz       "cmdty:quote_tz"
+
 xmlNodePtr
 gnc_commodity_dom_tree_create(const gnc_commodity *com)
 {
+    gnc_quote_source *source;
+    const char *string;
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, "gnc:commodity");
+    ret = xmlNewNode(NULL, gnc_commodity_string);
 
     xmlSetProp(ret, "version", commodity_version_string);
     
-    xmlAddChild(ret, text_to_dom_tree("cmdty:space",
+    xmlAddChild(ret, text_to_dom_tree(cmdty_namespace,
                                       gnc_commodity_get_namespace(com)));
-    xmlAddChild(ret, text_to_dom_tree("cmdty:id",
+    xmlAddChild(ret, text_to_dom_tree(cmdty_id,
                                       gnc_commodity_get_mnemonic(com)));
 
     if(gnc_commodity_get_fullname(com))
     {
-        xmlAddChild(ret, text_to_dom_tree("cmdty:name",
+        xmlAddChild(ret, text_to_dom_tree(cmdty_name,
                                           gnc_commodity_get_fullname(com)));
     }
 
@@ -73,13 +86,23 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
        strlen(gnc_commodity_get_exchange_code(com)) > 0)
     {
         xmlAddChild(ret, text_to_dom_tree(
-                        "cmdty:xcode",
+                        cmdty_xcode,
                         gnc_commodity_get_exchange_code(com)));
     }
 
-    xmlAddChild(ret, int_to_dom_tree("cmdty:fraction",
+    xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
                                      gnc_commodity_get_fraction(com)));
 
+    if (gnc_commodity_get_quote_flag(com)) {
+      xmlNewChild(ret, NULL, cmdty_get_quotes, NULL);
+      source = gnc_commodity_get_quote_source(com);
+      if (source)
+	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source,
+					  gnc_quote_source_get_internal_name(source)));
+      string = gnc_commodity_get_quote_tz(com);
+      if (string)
+	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
+    }
     return ret;
 }
 
@@ -92,17 +115,18 @@ struct com_char_handler
 };
 
 struct com_char_handler com_handlers[] = {
-    { "cmdty:space", gnc_commodity_set_namespace },
-    { "cmdty:id", gnc_commodity_set_mnemonic },
-    { "cmdty:name", gnc_commodity_set_fullname },
-    { "cmdty:xcode", gnc_commodity_set_exchange_code },
+    { cmdty_namespace,    gnc_commodity_set_namespace },
+    { cmdty_id,           gnc_commodity_set_mnemonic },
+    { cmdty_name,         gnc_commodity_set_fullname },
+    { cmdty_xcode,        gnc_commodity_set_exchange_code },
+    { cmdty_quote_tz,     gnc_commodity_set_quote_tz },
     { 0, 0 }
 };
 
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if(safe_strcmp(node->name, "cmdty:fraction") == 0)
+    if(safe_strcmp(node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char *string;
@@ -112,6 +136,22 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
         {
             gnc_commodity_set_fraction(com, val);
         }
+        xmlFree (string);
+    }
+    else if(safe_strcmp(node->name, cmdty_get_quotes) == 0)
+    {
+	gnc_commodity_set_quote_flag(com, TRUE);
+    }
+    else if(safe_strcmp(node->name, cmdty_quote_source) == 0)
+    {
+        gnc_quote_source *source;
+        char *string;
+
+        string = xmlNodeGetContent (node->xmlChildrenNode);
+	source = gnc_quote_source_lookup_by_internal(string);
+	if (!source)
+	  source = gnc_quote_source_add_new(string, FALSE);
+	gnc_commodity_set_quote_source(com, source);
         xmlFree (string);
     }
     else 

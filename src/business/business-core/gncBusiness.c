@@ -9,10 +9,12 @@
 #include <glib.h>
 
 #include "gncBusiness.h"
-#include "gnc-book-p.h"
+#include "gnc-book.h"
+#include "qofid.h"
+#include "qofid-p.h"
 
 struct _iterate {
-  foreachObjectCB cb;
+  QofEntityForeachCB cb;
   gpointer user_data;
 };
 
@@ -22,8 +24,8 @@ static void get_list (gpointer key, gpointer item, gpointer arg)
   iter->cb (item, iter->user_data);
 }
 
-void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
-			 foreachObjectCB cb, gpointer user_data)
+void gncBusinessForeach (QofBook *book, QofIdType mod_name,
+			 QofEntityForeachCB cb, gpointer user_data)
 {
   GncBookInfo *bi;
   struct _iterate iter;
@@ -38,7 +40,7 @@ void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
     g_hash_table_foreach (bi->ht, get_list, &iter);
 }
 
-void gncBusinessCreate (GNCBook *book, GNCIdType mod_name)
+void gncBusinessCreate (QofBook *book, QofIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -49,7 +51,7 @@ void gncBusinessCreate (GNCBook *book, GNCIdType mod_name)
   gnc_book_set_data (book, mod_name, bi);
 }
 
-void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name)
+void gncBusinessDestroy (QofBook *book, QofIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -62,7 +64,7 @@ void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name)
   g_free (bi);
 }
 
-gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
+gboolean gncBusinessIsDirty (QofBook *book, QofIdType mod_name)
 {
   GncBookInfo *bi;
 
@@ -72,7 +74,7 @@ gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
   return bi->is_dirty;
 }
 
-void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+void gncBusinessSetDirtyFlag (QofBook *book, QofIdType mod_name,
 			      gboolean is_dirty)
 {
   GncBookInfo *bi;
@@ -83,22 +85,22 @@ void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
   bi->is_dirty = is_dirty;
 }
 
-void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessAddObject (QofBook *book, QofIdType mod_name,
 			   gpointer obj, const GUID *guid)
 {
   GncBookInfo *bi;
 
-  xaccStoreEntity (gnc_book_get_entity_table (book), obj, guid, mod_name);
+  qof_entity_store (gnc_book_get_entity_table (book), obj, guid, mod_name);
   bi = gnc_book_get_data (book, mod_name);
   g_hash_table_insert (bi->ht, (gpointer)guid, obj);
 }
 
-void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
+void gncBusinessRemoveObject (QofBook *book, QofIdType mod_name,
 			      const GUID *guid)
 {
   GncBookInfo *bi;
 
-  xaccRemoveEntity (gnc_book_get_entity_table (book), guid);
+  qof_entity_remove (gnc_book_get_entity_table (book), guid);
   bi = gnc_book_get_data (book, mod_name);
   g_hash_table_remove (bi->ht, guid);
 }

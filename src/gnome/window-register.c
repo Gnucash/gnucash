@@ -40,6 +40,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -62,6 +63,7 @@
 #include "window-report.h"
 #include "top-level.h"
 #include "dialog-print-check.h"
+#include "guile-mappings.h"
 
 typedef struct _RegDateWindow RegDateWindow;
 struct _RegDateWindow
@@ -102,6 +104,7 @@ struct _RegWindow
   GtkWidget *voided_menu_item;
   GtkWidget *frozen_menu_item;
   GtkWidget *unreconciled_menu_item;
+  gint component_id;
 };
 
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
@@ -146,6 +149,8 @@ void gnc_register_stock_split_cb (GtkWidget * w, gpointer data);
 void gnc_register_edit_cb(GtkWidget *w, gpointer data);
 void gnc_register_new_account_cb(GtkWidget * w, gpointer data);
 
+void gnc_register_void_trans_cb(GtkWidget *w, gpointer data);
+void gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data);
 void gnc_register_close_cb(GtkWidget *w, gpointer data);
 void gnc_register_exit_cb(GtkWidget *w, gpointer data);
 void gnc_register_report_account_cb(GtkWidget *w, gpointer data);
@@ -264,38 +269,6 @@ gnc_register_raise (RegWindow *regData)
     return;
 
   gtk_window_present( GTK_WINDOW(regData->window) );
-}
-
-static time_t
-gnc_register_min_day_time(time_t time_val)
-{
-  struct tm *time_struct;
-
-  /* Get the equivalent time structure */
-  time_struct = localtime(&time_val);
-
-  /* First second of the day */
-  time_struct->tm_sec = 0;
-  time_struct->tm_min = 0;
-  time_struct->tm_hour = 0;
-
-  return mktime(time_struct);
-}
-
-static time_t
-gnc_register_max_day_time(time_t time_val)
-{
-  struct tm *time_struct;
-
-  /* Get the equivalent time structure */
-  time_struct = localtime(&time_val);
-
-  /* Last second of the day */
-  time_struct->tm_sec = 59;
-  time_struct->tm_min = 59;
-  time_struct->tm_hour = 23;
-
-  return mktime(time_struct);
 }
 
 static void
@@ -445,7 +418,7 @@ gnc_register_set_date_range(RegWindow *regData)
     time_t start;
 
     start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
-    start = gnc_register_min_day_time(start);
+    start = gnc_timet_get_day_start(start);
 
     xaccQueryAddDateMatchTT(query, 
                             TRUE, start, 
@@ -459,7 +432,7 @@ gnc_register_set_date_range(RegWindow *regData)
     time_t end;
 
     end = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
-    end = gnc_register_max_day_time(end);
+    end = gnc_timet_get_day_end(end);
 
     xaccQueryAddDateMatchTT(query, 
                             FALSE, 0,
@@ -714,8 +687,8 @@ gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent (split);
 
-    xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
-    xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+    xaccTransScrubOrphans (trans);
+    xaccTransScrubImbalance (trans, root, NULL);
   }
 
   gnc_resume_gui_refresh ();
@@ -737,8 +710,8 @@ gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
   root = gnc_get_current_group ();
-  xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
-  xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+  xaccTransScrubOrphans (trans);
+  xaccTransScrubImbalance (trans, root, NULL);
   gnc_resume_gui_refresh ();
 }
 
@@ -751,8 +724,10 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
     gnc_reg_save_size( regData );
   }
 
-  gnc_split_reg_check_close(regData->gsr);
-  gnc_ledger_display_close (regData->ledger);
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE) {
+    gnc_ledger_display_close (regData->ledger);
+    return FALSE;
+  }
 
   return TRUE; /* don't close */
 }
@@ -761,6 +736,8 @@ void
 gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
+
+  gnc_unregister_gui_component (regData->component_id);
 
   if (regData->date_window != NULL)
   {
@@ -784,15 +761,16 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
 {
   Account *leader;
   SplitRegister *reg;
-  gboolean single_account;
   gchar *account_name;
   gchar *reg_name;
   gchar *name;
+  GNCLedgerDisplayType ledger_type;
 
   if (regData == NULL)
     return NULL;
 
   reg = gnc_ledger_display_get_split_register (regData->ledger);
+  ledger_type = gnc_ledger_display_type (regData->ledger);
 
   switch (reg->type)
   {
@@ -802,40 +780,42 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
         reg_name = _("General Ledger");
       else
         reg_name = _("General Ledger Report");
-      single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
       if (for_window)
         reg_name = _("Portfolio");
       else
         reg_name = _("Portfolio Report");
-      single_account = FALSE;
       break;
     case SEARCH_LEDGER:
       if (for_window)
         reg_name = _("Search Results");
       else
         reg_name = _("Search Results Report");
-      single_account = FALSE;
       break;
     default:
       if (for_window)
         reg_name = _("Register");
       else
         reg_name = _("Register Report");
-      single_account = TRUE;
       break;
   }
 
   leader = gnc_ledger_display_leader (regData->ledger);
 
-  if ((leader != NULL) && single_account)
+  if ((leader != NULL) && (ledger_type != LD_GL))
   {
     account_name = xaccAccountGetFullName (leader,
                                            gnc_get_account_separator ());
 
-    name = g_strconcat (account_name, " - ", reg_name, NULL);
-
+    if (ledger_type == LD_SINGLE)
+    {
+      name = g_strconcat (account_name, " - ", reg_name, NULL);
+    }
+    else 
+    {
+      name = g_strconcat (account_name, " ", _("and subaccounts"), " - ", reg_name, NULL);
+    }
     g_free(account_name);
   }
   else
@@ -873,6 +853,26 @@ gnc_register_size_allocate (GtkWidget *widget,
 
   regData->width = allocation->width;
   gtk_window_set_default_size( GTK_WINDOW(regData->window), regData->width, 0 );
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  gnc_reg_set_window_name (regData);
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  if (!regData)
+    return;
+
+  gnc_register_delete_cb(NULL, NULL, regData);
+  gnc_register_destroy_cb(NULL, regData);
 }
 
 /********************************************************************\
@@ -960,6 +960,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   g_signal_connect (G_OBJECT (regData->gsr), "help-changed",
                     G_CALLBACK ( gnc_register_help_changed_cb ),
                       regData );
+  gtk_signal_connect(GTK_OBJECT(regData->gsr), "void_txn",
+		     GTK_SIGNAL_FUNC(gnc_register_void_trans_cb), regData);
+
+  gtk_signal_connect(GTK_OBJECT(regData->gsr), "unvoid_txn",
+		     GTK_SIGNAL_FUNC(gnc_register_unvoid_trans_cb), regData);
 
   /* The "include-date" and "read-only" signals. */
   g_signal_connect (G_OBJECT (regData->gsr), "include-date",
@@ -982,7 +987,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     GtkWidget *toolbar = gnc_register_setup_toolbar( regData );
     regData->toolbar_dock = glade_xml_get_widget( xml, "toolbar_dock" );
     if ( toolbar ) {
-      gtk_widget_show_all( toolbar );
+      /*
+       * Don't call gtk_widget_show_all() here. It overrides the users
+       * toolbar preference setting.
+       */
+      gtk_widget_show( toolbar );
       gtk_container_add( GTK_CONTAINER(regData->toolbar_dock), toolbar );
     }
   }
@@ -1036,6 +1045,14 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     gnc_ledger_display_refresh( regData->ledger );
   }
 
+  /* Get event updates so we can check the window title */
+  regData->component_id = gnc_register_gui_component ("register-window",
+						      refresh_handler,
+						      close_handler, regData);
+
+  gnc_gui_component_watch_entity_type (regData->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY);
   return regData;
 }
 
@@ -1253,7 +1270,11 @@ gnc_register_setup_toolbar( RegWindow *regData )
 
   gtk_widget_destroy( GTK_WIDGET(regTbar) );
 
-  gtk_widget_show_all( GTK_WIDGET(tbar) );
+  /*
+   * Don't call gtk_widget_show_all() here. It overrides the users
+   * toolbar preference setting.
+   */
+  gtk_widget_show( GTK_WIDGET(tbar) );
 
   return GTK_WIDGET(tbar);
 }
@@ -1441,6 +1462,86 @@ gnc_register_set_read_only( RegWindow *regData )
 }
 
 /********************************************************************\
+ * gnc_register_void_trans_cb                                       *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_register_void_trans_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  GtkWidget *dialog, *entry;
+  Transaction *trans;
+  GladeXML *xml;
+  const char *reason;
+  gint result;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  trans = gnc_split_register_get_current_trans (reg);
+  if (trans == NULL)
+    return;
+  if (xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(_("This transaction has already been voided."));
+    return;
+  }
+  if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
+    gnc_error_dialog(_("You cannot void a transaction with reconciled or cleared splits."));
+    return;
+  }
+
+  xml = gnc_glade_xml_new ("register.glade", "Void Transaction");
+  dialog = glade_xml_get_widget (xml, "Void Transaction");
+  entry = glade_xml_get_widget (xml, "reason");
+  gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
+			       GTK_EDITABLE(entry));
+
+  /* Keep around after closing so we can get the user's text out. */
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+  result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+  if (result == 0)
+    return;
+
+  reason = gtk_entry_get_text(GTK_ENTRY(entry));
+  if (reason == NULL)
+    reason = "";
+  gnc_split_register_void_current_trans
+    (gnc_ledger_display_get_split_register (regData->ledger), reason);
+
+  /* All done. Get rid of it. */
+  gtk_widget_destroy(dialog);
+  g_free(xml);
+}
+
+
+/********************************************************************\
+ * gnc_register_unvoid_trans_cb                                     *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  Transaction *trans;
+
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  trans = gnc_split_register_get_current_trans (reg);
+  if (!xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(_("This transaction is not voided."));
+    return;
+  }
+  gnc_split_register_unvoid_current_trans
+    (gnc_ledger_display_get_split_register (regData->ledger));
+}
+
+
+/********************************************************************\
  * gnc_register_close_cb                                            *
  *                                                                  *
  * Args:   widget - the widget that called us                       *
@@ -1451,8 +1552,9 @@ void
 gnc_register_close_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  gnc_split_reg_check_close( GNC_SPLIT_REG(regData->gsr) );
-  gnc_ledger_display_close( regData->ledger );
+
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE)
+    gnc_ledger_display_close( regData->ledger );
 }
 
 static int
@@ -1468,27 +1570,25 @@ report_helper (RegWindow *regData, Split *split, Query *query)
 
   args = SCM_EOL;
 
-  func = gh_eval_str ("gnc:register-report-create");
-  g_return_val_if_fail (gh_procedure_p (func), -1);
+  func = scm_c_eval_string ("gnc:register-report-create");
+  g_return_val_if_fail (SCM_PROCEDUREP (func), -1);
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (gnc_split_register_get_credit_string (reg));
+  args = scm_cons (arg, args);
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (gnc_split_register_get_debit_string (reg));
+  args = scm_cons (arg, args);
 
   str = gnc_reg_get_name (regData, FALSE);
-  arg = gh_str02scm (str);
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (str);
+  args = scm_cons (arg, args);
   g_free (str);
 
-  arg = gh_bool2scm (reg->use_double_line);
-  args = gh_cons (arg, args);
+  arg = SCM_BOOL (reg->use_double_line);
+  args = scm_cons (arg, args);
 
-  arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
-  args = gh_cons (arg, args);
+  arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
+  args = scm_cons (arg, args);
 
   if (!query)
   {
@@ -1496,17 +1596,17 @@ report_helper (RegWindow *regData, Split *split, Query *query)
     g_return_val_if_fail (query != NULL, -1);
   }
 
-  qtype = gh_eval_str("<gnc:Query*>");
+  qtype = scm_c_eval_string("<gnc:Query*>");
   g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
   arg = gw_wcp_assimilate_ptr (query, qtype);
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
   if (split)
   {
-    qtype = gh_eval_str("<gnc:Split*>");
+    qtype = scm_c_eval_string("<gnc:Split*>");
     g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
     arg = gw_wcp_assimilate_ptr (split, qtype);
   }
@@ -1514,24 +1614,24 @@ report_helper (RegWindow *regData, Split *split, Query *query)
   {
     arg = SCM_BOOL_F;
   }
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
-  qtype = gh_eval_str("<gnc:Account*>");
+  qtype = scm_c_eval_string("<gnc:Account*>");
   g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
   account = gnc_ledger_display_leader (regData->ledger);
   arg = gw_wcp_assimilate_ptr (account, qtype);
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
   /* Apply the function to the args */
-  arg = gh_apply (func, args);
-  g_return_val_if_fail (gh_exact_p (arg), -1);
+  arg = scm_apply (func, args, SCM_EOL);
+  g_return_val_if_fail (SCM_EXACTP (arg), -1);
 
-  return gh_scm2int (arg);
+  return scm_num2int (arg, SCM_ARG1, __FUNCTION__);
 }
 
 /********************************************************************\

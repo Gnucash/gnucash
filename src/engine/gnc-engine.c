@@ -25,20 +25,26 @@
 
 #include <glib.h>
 
-#include "GNCIdP.h"
-#include "QueryNewP.h" 
-#include "gncObjectP.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 
-#include "TransactionP.h"
 #include "AccountP.h"
-#include "gnc-book-p.h"
+#include "GroupP.h"
+#include "SX-book-p.h"
+#include "TransactionP.h"
+#include "gnc-commodity.h"
 #include "gnc-lot-p.h"
+#include "gnc-pricedb-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid.h"
+#include "qofobject.h"
+#include "qofobject-p.h"
+#include "qofquery.h" 
+#include "qofquery-p.h" 
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
-GCache * gnc_string_cache = NULL;
-
 
 /* GnuCash version functions */
 unsigned int
@@ -76,15 +82,19 @@ gnc_engine_init(int argc, char ** argv)
   /* initialize the string cache */
   gnc_engine_get_string_cache();
   
-  xaccGUIDInit ();
-  gncObjectInitialize ();
-  gncQueryNewInit ();
+  guid_init ();
+  qof_object_initialize ();
+  qof_query_init ();
+  qof_book_register ();
 
   /* Now register our core types */
   xaccSplitRegister ();
   xaccTransRegister ();
   xaccAccountRegister ();
-  gnc_book_register ();
+  xaccGroupRegister ();
+  gnc_sxtt_register ();
+  gnc_pricedb_register ();
+  gnc_commodity_table_register();
   gnc_lot_register ();
 
   /* call any engine hooks */
@@ -97,19 +107,6 @@ gnc_engine_init(int argc, char ** argv)
   }
 }
 
-GCache*
-gnc_engine_get_string_cache(void)
-{
-    if(!gnc_string_cache) 
-    {
-        gnc_string_cache = g_cache_new(
-            (GCacheNewFunc) g_strdup, g_free,
-            (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
-            g_str_hash, g_str_equal);
-    }
-    return gnc_string_cache;
-}
-
 /********************************************************************
  * gnc_engine_shutdown
  * shutdown backend, destroy any global data, etc.
@@ -118,13 +115,10 @@ gnc_engine_get_string_cache(void)
 void
 gnc_engine_shutdown (void)
 {
-  gncQueryNewShutdown ();
-
-  g_cache_destroy (gnc_string_cache);
-  gnc_string_cache = NULL;
-
-  gncObjectShutdown ();
-  xaccGUIDShutdown ();
+  qof_query_shutdown ();
+  qof_object_shutdown ();
+  guid_shutdown();
+  gnc_engine_string_cache_destroy ();
 }
 
 /********************************************************************

@@ -66,6 +66,7 @@
 (export gnc:*config-path*)
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
+(export gnc:*namespace-regexp*)
 
 ;; from doc.scm
 (export gnc:find-doc-file)
@@ -327,8 +328,8 @@ string and 'directories' must be a list of strings."
     ;; LC_ALL for those systems.
     (let* ((locale (or (false-if-exception (setlocale LC_MESSAGES))
 		       (setlocale LC_ALL)))
-           (strings (cond ((not (string? locale)) ())
-                          ((equal? locale "C") ())
+           (strings (cond ((not (string? locale)) '())
+                          ((equal? locale "C") '())
                           ((<= (string-length locale) 4) (list locale))
                           (else (list (substring locale 0 2)
                                       (substring locale 0 5)
@@ -354,8 +355,8 @@ string and 'directories' must be a list of strings."
      (_ "This is a development version. It may or may not work.\n")
      (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
      (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-     (_ "The last stable version was ") "GnuCash 1.8.0" "\n"
-     (_ "The next stable version will be ") "GnuCash 2.0"
+     (_ "The last stable version was ") "GnuCash 1.8.4" "\n"
+     (_ "The next stable version will be ") "GnuCash 1.10 or 2.0"
      "\n\n"))))
 
 (define (gnc:startup-pass-1)
@@ -427,6 +428,7 @@ string and 'directories' must be a list of strings."
     (load-module "gnucash/import-export/binary-import" 0 #f)
     (load-module "gnucash/import-export/qif-import" 0 #f)
     (load-module "gnucash/import-export/ofx" 0 #t)
+    (load-module "gnucash/import-export/log-replay" 0 #t)
     (load-module "gnucash/import-export/hbci" 0 #t)
     (load-module "gnucash/report/report-system" 0 #f)
     (load-module "gnucash/report/stylesheets" 0 #f)
@@ -447,10 +449,9 @@ string and 'directories' must be a list of strings."
 
     (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
     (gnc:use-guile-module-here! '(gnucash price-quotes))
-;    (gnc:price-source-set-fq-installed (gnc:fq-check-sources))
     (let ((sources (gnc:fq-check-sources)))
       (if (list? sources)
-	  (gnc:price-source-set-fq-installed sources)))
+	  (gnc:quote-source-set-fq-installed sources)))
 
     (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
     (gnc:initialize-tip-of-the-day)
@@ -587,22 +588,27 @@ string and 'directories' must be a list of strings."
 (define (gnc:main)
 
   (define (handle-batch-mode-item item)
-    (cond
-     ((procedure? item) (item))
-     ((string? item)
-      (call-with-input-string
-       item
-       (lambda (port)
-         (let loop ((next-form (read port)))
-           (if (not (eof-object? next-form))
-               (begin
-                 ;; FIXME: is this where we want to eval these?
-                 ;; should we perhaps have a (gnucash user)?
-                 (eval next-form (resolve-module '(gnucash main)))
-                 (loop (read port))))))))
-     (else
-      (display "gnucash: unknown batch-mode item - ignoring.")
-      (newline))))
+    (let ((old-eval? (or (string=? "1.3" (version))
+			 (string=? "1.3.4" (version))
+			 (string=? "1.4" (substring (version) 0 3)))))
+      (cond
+       ((procedure? item) (item))
+       ((string? item)
+	(call-with-input-string
+	 item
+	 (lambda (port)
+	   (let loop ((next-form (read port)))
+	     (if (not (eof-object? next-form))
+		 (begin
+		   ;; FIXME: is this where we want to eval these?
+		   ;; should we perhaps have a (gnucash user)?
+		   (if old-eval?
+		       (eval next-form)
+		       (eval next-form (resolve-module '(gnucash main))))
+		   (loop (read port))))))))
+       (else
+	(display "gnucash: unknown batch-mode item - ignoring.")
+	(newline)))))
 
   ;;  (statprof-reset 0 50000) ;; 20 times/sec
   ;;  (statprof-start)

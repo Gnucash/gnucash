@@ -13,6 +13,7 @@
 
 #include "gnc-engine-util.h"
 #include "GNCId.h"
+#include "QueryCore.h"
 #include "QueryObject.h"
 
 #include "search-param.h"
@@ -25,6 +26,9 @@ struct _GNCSearchParamPrivate {
   GSList *		converters;
   GSList *		param_path;
   GNCIdTypeConst	type;
+
+  GNCSearchParamFcn	lookup_fcn;
+  gpointer		lookup_arg;
 };
 
 static GObjectClass *parent_class;
@@ -221,6 +225,22 @@ gnc_search_param_set_justify (GNCSearchParam *param, GtkJustification justify)
   param->justify = justify;
 }
 
+void
+gnc_search_param_set_passive (GNCSearchParam *param, gboolean value)
+{
+  g_assert (GNC_IS_SEARCH_PARAM (param));
+
+  param->passive = value;
+}
+
+void
+gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
+{
+  g_assert (GNC_IS_SEARCH_PARAM (param));
+
+  param->non_resizeable = value;
+}
+
 gboolean
 gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 {
@@ -309,4 +329,47 @@ gnc_search_param_prepend (GList *list, char const *title,
 					      param, ap);
   va_end (ap);
   return result;
+}
+
+void
+gnc_search_param_set_param_fcn (GNCSearchParam *param,
+				GNCIdTypeConst param_type,
+				GNCSearchParamFcn fcn,
+				gpointer arg)
+{
+  g_return_if_fail (param);
+  g_return_if_fail (param_type && *param_type);
+  g_return_if_fail (fcn);
+  g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
+
+  param->priv->lookup_fcn = fcn;
+  param->priv->lookup_arg = arg;
+  gnc_search_param_override_param_type (param, param_type);
+}
+
+/* Compute the value of this parameter for this object */
+gpointer
+gnc_search_param_compute_value (GNCSearchParam *param, gpointer object)
+{
+  g_return_val_if_fail(param, NULL);
+  g_return_val_if_fail(GNC_IS_SEARCH_PARAM(param), NULL);
+
+  if (param->priv->lookup_fcn)
+  {
+    return ((param->priv->lookup_fcn)(object, param->priv->lookup_arg));
+  }
+  else
+  {
+    GSList *converters = gnc_search_param_get_converters (param);
+    QueryAccess fcn = NULL;
+    gpointer res = object;
+
+    /* Do all the object conversions */
+    for (; converters; converters = converters->next) {
+      fcn = converters->data;
+      res = fcn (res);
+    }
+
+    return res;
+  }
 }

@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #ifdef GTKHTML_HAVE_GCONF
 #include <gconf/gconf.h>

@@ -75,7 +75,7 @@ the account instead of opening a register.") #f))
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account fields to display")
       "c" ""
-      (list 'description 'total 'total_report)
+      (list 'description 'total)
       (list (list->vector (list 'type           (N_ "Type") ""))
             (list->vector (list 'code           (N_ "Code") ""))
             (list->vector (list 'description    (N_ "Description") ""))
@@ -83,6 +83,14 @@ the account instead of opening a register.") #f))
             (list->vector (list 'commodity      (N_ "Commodity") ""))
             (list->vector (list 'balance        (N_ "Balance") ""))
             (list->vector (list 'balance_report (N_ "Balance in Report Currency") ""))
+            (list->vector (list 'present        (N_ "Present Balance") ""))
+            (list->vector (list 'present_report (N_ "Present Balance in Report Currency") ""))
+            (list->vector (list 'cleared        (N_ "Cleared Balance") ""))
+            (list->vector (list 'cleared_report (N_ "Cleared Balance in Report Currency") ""))
+            (list->vector (list 'reconciled        (N_ "Reconciled Balance") ""))
+            (list->vector (list 'reconciled_report (N_ "Reconciled Balance in Report Currency") ""))
+            (list->vector (list 'future_min        (N_ "Future Minimum Balance") ""))
+            (list->vector (list 'future_min_report (N_ "Future Minimum Balance in Report Currency") ""))
             (list->vector (list 'total          (N_ "Total") ""))
             (list->vector (list 'total_report   (N_ "Total in Report Currency") ""))
             (list->vector (list 'tax-info       (N_ "Tax Info") "")))))
@@ -189,6 +197,23 @@ the account instead of opening a register.") #f))
 ;;    (gnc:mdi-restore (gnc:mdi-get-current) book-url)
     ))
 
+(define (gnc:main-window-ui-startup-handler)
+  (gnc:add-extension
+    (gnc:make-menu-item (N_ "Properties")
+			(N_ "View and edit the properties of this file.")
+			(list "Main" "_File" "_Print")
+			(lambda ()
+			  (let* ((book (gnc:get-current-book))
+				 (slots (gnc:book-get-slots book)))
+
+			    (define (changed_cb)
+			      (gnc:book-kvp-changed book))
+			    
+			    (gnc:kvp-option-dialog gnc:id-book
+						   slots "Book Options"
+						   changed_cb)))))
+  (gnc:add-extension (gnc:make-separator (list "Main" "_File" "_Print")))
+)
 
 (gnc:hook-remove-dangler gnc:*book-opened-hook* 
                          gnc:main-window-book-open-handler)
@@ -199,3 +224,8 @@ the account instead of opening a register.") #f))
                          gnc:main-window-book-close-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
+
+(gnc:hook-remove-dangler gnc:*ui-startup-hook* 
+                         gnc:main-window-ui-startup-handler)
+(gnc:hook-add-dangler gnc:*ui-startup-hook* 
+                      gnc:main-window-ui-startup-handler)

@@ -341,7 +341,7 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
   const char *bad_exp = _("You must enter a valid expression.");
   const char *string;
   gnc_numeric nvalue;
-  int i;
+  unsigned int i;
 
   if (fcd == NULL)
     return NULL;

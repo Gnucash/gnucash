@@ -582,8 +582,8 @@ gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountT
 
 	gnc_suspend_gui_refresh ();
 
-	xaccAccountScrubOrphans (account, gnc_get_current_book ());
-	xaccAccountScrubImbalance (account, gnc_get_current_book ());
+	xaccAccountScrubOrphans (account);
+	xaccAccountScrubImbalance (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -597,8 +597,8 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAcco
 
 	gnc_suspend_gui_refresh ();
 
-	xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
-	xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
+	xaccAccountTreeScrubOrphans (account);
+	xaccAccountTreeScrubImbalance (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -610,6 +610,6 @@ gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAcco
 
 	gnc_suspend_gui_refresh ();
 
-	xaccGroupScrubOrphans (group, gnc_get_current_book ());
-	xaccGroupScrubImbalance (group, gnc_get_current_book ());
+	xaccGroupScrubOrphans (group);
+	xaccGroupScrubImbalance (group);
 }

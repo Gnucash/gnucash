@@ -24,7 +24,7 @@
 #ifndef SIXTP_UTILS_H
 #define SIXTP_UTILS_H
 
-#include "date.h"
+#include "gnc-date.h"
 
 #include "sixtp.h"
 

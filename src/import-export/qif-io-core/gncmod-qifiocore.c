@@ -6,7 +6,7 @@
  *********************************************************************/
 
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -50,7 +50,7 @@ libgncmod_qifiocore_LTX_gnc_module_init(int refcount) {
   }
 
   /* load the QIF Scheme code */
-  if(gh_eval_str("(use-modules (gnucash import-export qif-io-core))") ==
+  if(scm_c_eval_string("(use-modules (gnucash import-export qif-io-core))") ==
      SCM_BOOL_F) {
     return FALSE;
   }

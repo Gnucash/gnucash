@@ -40,7 +40,7 @@
 #include <gnome.h>
 #include <regex.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "Account.h"
 #include "Group.h"
@@ -1421,11 +1421,13 @@ gnc_html_unregister_object_handler(const char * classid)
 {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
+  gchar ** p_keyptr = &keyptr;
+  gchar ** p_valptr = &valptr;
 
   if (!g_hash_table_lookup_extended(gnc_html_object_handlers,
                                     classid, 
-                                    (gpointer *)&keyptr, 
-                                    (gpointer *)&valptr))
+                                    (gpointer *)p_keyptr, 
+                                    (gpointer *)p_valptr))
     return;
 
   g_hash_table_remove(gnc_html_object_handlers, classid);
@@ -1454,13 +1456,15 @@ gnc_html_unregister_action_handler(const char * actionid)
 {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
+  gchar ** p_keyptr = &keyptr;
+  gchar ** p_valptr = &valptr;
 
   g_return_if_fail (actionid != NULL);
 
   if (!g_hash_table_lookup_extended(gnc_html_action_handlers,
                                     actionid, 
-                                    (gpointer *)&keyptr, 
-                                    (gpointer *)&valptr))
+                                    (gpointer *)p_keyptr, 
+                                    (gpointer *)p_valptr))
     return;
 
   g_hash_table_remove(gnc_html_action_handlers, actionid);

@@ -76,7 +76,7 @@ static void transStarted (TransProgressType type,
   
   GNCInteractor_setRunning (data);
 
-  //printf("Executing %d jobs.\n",jobs);
+  /*printf("Executing %d jobs.\n",jobs);*/
   data->jobs = jobs;
   data->current_job = 0;
 
@@ -175,7 +175,6 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
   case    JOB_SEND_KEYS:
     msg = _("Job: Send Keys");
     break;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>8)
     /** Disable keys */
   case JOB_DISABLE_KEYS:
     msg = _("Job: Disable Keys");
@@ -184,14 +183,18 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
   case JOB_CHANGE_KEYS:
     msg = _("Job: Change Keys");
     break;
-#else /* OPENHBCI_VERSION > 0.9.8 */
+    /** Change keys */
+  case JOB_GET_STATUS:
+    msg = _("Job: Get Status Reports");
+    break;
+#if 0
   default:
     msg = _("Unknown");
-#endif /* OPENHBCI_VERSION > 0.9.8 */
+#endif 
   }
   g_assert(msg);
     
-  //printf("Jobstart (w/ %d actions): %s\n",actions, msg);
+  /*printf("Jobstart (w/ %d actions): %s\n",actions, msg);*/
   data->actions = actions;
   data->current_act = 0;
   gtk_entry_set_text (GTK_ENTRY (data->job_entry), msg);
@@ -209,9 +212,9 @@ static void jobFinished (void *user_data)
   g_assert(data);
   data->current_job++;
   gtk_entry_set_text (GTK_ENTRY (data->job_entry), _("Done"));
-  //gtk_entry_set_text (GTK_ENTRY (data->action_entry), _("Done"));
-  //GNCInteractor_setFinished (data);
-  //gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 1.0);
+  /*gtk_entry_set_text (GTK_ENTRY (data->action_entry), _("Done"));
+    GNCInteractor_setFinished (data);
+    gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 1.0);*/
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
   if (debug_pmonitor)
@@ -330,9 +333,11 @@ on_button_clicked (GtkButton *button,
   if (strcmp (name, "abort_button") == 0) {
     GNCInteractor_setAborted(data);
   } else if (strcmp (name, "close_button") == 0) {
-    if (data->state != RUNNING)
+    if (data->state != RUNNING) {
       gtk_widget_hide_all (data->dialog); 
-    /*GNCInteractor_hide (data);*/
+      /*data->dont_hide = FALSE;*/
+      /*GNCInteractor_hide (data);*/
+    }
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
@@ -374,7 +379,7 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
 
   if (data->parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
-  //gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);
+  /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
 
   gtk_object_ref (GTK_OBJECT (dialog));
   gtk_widget_hide_all (dialog);

@@ -24,25 +24,18 @@
 #define _GNU_SOURCE
 #include "config.h"
 
+#include <errno.h>
+#include <glib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <glib.h>
-
 #include "Account.h"
 #include "AccountP.h"
-#include "DateUtils.h"
-#include "date.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
-
-/*
- * The logfiles are useful for tracing, journalling, error recovery.
- * Note that the current support for journalling is at best 
- * embryonic, at worst, is dangerous by setting the wrong expectations.
- */
 
 /* 
  * Some design philosphy that I think would be good to keep in mind:
@@ -79,25 +72,12 @@
  *     as it is simple and unique until the transaction is deleted ...
  *     and we log deletions, so that's OK.  Just note that the id
  *     for a deleted transaction might be recycled.
- * (-) print the current timestamp, so that if it is known that a bug 
+ * (-) print the current timestamp, so that if it is known that a bug
  *     occurred at a certain time, it can be located.
  * (-) hack alert -- something better than just the account name 
  *     is needed for identifying the account.
  */
 /* ------------------------------------------------------------------ */
-/*
- * The engine currently uses the log mechanism with flag char set as
- * follows:
- * 
- * 'B' for 'begin edit' (followed by the transaction as it looks 
- *     before any changes, i.e. the 'old value')
- * 'D' for delete (i.e. delete the previous B; echoes the data in the 
- *     'old B')
- * 'C' for commit (i.e. accept a previous B; data that follows is the
- *     'new value')
- * 'R' for rollback (i.e. revert to previous B; data that follows should
- *     be identical to old B)
- */
 
 
 static int gen_logs = 1;
@@ -161,11 +141,11 @@ xaccOpenLog (void)
    g_free (timestamp);
 
    /* use tab-separated fields */
-   fprintf (trans_log, "mod	id	time_now	" \
+   fprintf (trans_log, "mod	trans_guid	split_guid	time_now	" \
                        "date_entered	date_posted	" \
-                       "account	num	description	" \
-                       "memo	action	reconciled	" \
-                       "amount	price date_reconciled\n");
+                       "acc_guid	acc_name	num	description	" \
+                       "notes	memo	action	reconciled	" \
+                       "amount	value	date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 }
 
@@ -188,38 +168,59 @@ void
 xaccTransWriteLog (Transaction *trans, char flag)
 {
    GList *node;
-   char *dnow, *dent, *dpost, *drecn; 
+   char trans_guid_str[GUID_ENCODING_LENGTH+1];
+   char split_guid_str[GUID_ENCODING_LENGTH+1];
+   const char *trans_notes; 
+   char dnow[100], dent[100], dpost[100], drecn[100]; 
+   Timespec ts;
 
    if (!gen_logs) return;
    if (!trans_log) return;
 
-   dnow = xaccDateUtilGetStampNow ();
-   dent = xaccDateUtilGetStamp (trans->date_entered.tv_sec);
-   dpost = xaccDateUtilGetStamp (trans->date_posted.tv_sec);
+   timespecFromTime_t(&ts,time(NULL));
+   gnc_timespec_to_iso8601_buff (ts, dnow);
 
+   timespecFromTime_t(&ts,trans->date_entered.tv_sec);
+   gnc_timespec_to_iso8601_buff (ts, dent);
+
+   timespecFromTime_t(&ts,trans->date_posted.tv_sec);
+   gnc_timespec_to_iso8601_buff (ts, dpost);
+
+   guid_to_string_buff (xaccTransGetGUID(trans), trans_guid_str);
+   trans_notes = xaccTransGetNotes(trans);
    fprintf (trans_log, "===== START\n");
 
    for (node = trans->splits; node; node = node->next) {
       Split *split = node->data;
       const char * accname = "";
+      char acc_guid_str[GUID_ENCODING_LENGTH+1];
 
-      if (xaccSplitGetAccount(split))
+      if (xaccSplitGetAccount(split)){
         accname = xaccAccountGetName (xaccSplitGetAccount(split));
+	guid_to_string_buff(xaccAccountGetGUID(xaccSplitGetAccount(split)),
+			    acc_guid_str);
+      } else {
+	acc_guid_str[0] = '\0';
+      }
+      
+         timespecFromTime_t(&ts,split->date_reconciled.tv_sec);
+	 gnc_timespec_to_iso8601_buff (ts, drecn);
 
-      drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
-
+      guid_to_string_buff (xaccSplitGetGUID(split), split_guid_str);
       /* use tab-separated fields */
       fprintf (trans_log,
-               "%c\t%p/%p\t%s\t%s\t%s\t%s\t%s\t"
-               "%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
+               "%c\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
+               "%s\t%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
                flag,
-               trans, split,  /* trans+split make up unique id */
+               trans_guid_str, split_guid_str,  /* trans+split make up unique id */
                dnow ? dnow : "",
                dent ? dent : "", 
                dpost ? dpost : "", 
+	       acc_guid_str,
                accname ? accname : "",
                trans->num ? trans->num : "", 
                trans->description ? trans->description : "",
+               trans_notes ? trans_notes : "",
                split->memo ? split->memo : "",
                split->action ? split->action : "",
                split->reconciled,
@@ -228,15 +229,9 @@ xaccTransWriteLog (Transaction *trans, char flag)
                (long long int) gnc_numeric_num(split->value), 
                (long long int) gnc_numeric_denom(split->value),
                drecn ? drecn : "");
-
-      g_free (drecn);
    }
 
    fprintf (trans_log, "===== END\n");
-
-   g_free (dnow);
-   g_free (dent);
-   g_free (dpost);
 
    /* get data out to the disk */
    fflush (trans_log);
@@ -286,7 +281,7 @@ xaccTransGetDateStr (Transaction *trans)
 
    date = localtime (&secs);
 
-   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+   qof_print_date_buff(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
 
    return g_strdup (buf);
 }

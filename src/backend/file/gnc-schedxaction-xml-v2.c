@@ -28,6 +28,7 @@
 
 #include "Group.h"
 #include "SchedXactionP.h"
+#include "SX-book.h"
 
 #include "gnc-xml-helper.h"
 #include "gnc-engine-util.h"
@@ -251,7 +252,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 struct sx_pdata
 {
   SchedXaction *sx;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static
@@ -634,10 +635,10 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     if ( sx->template_acct == NULL )
     {
             AccountGroup *ag = NULL;
-            char *id = NULL;
+            const char *id = NULL;
             Account *acct = NULL;
             sixtp_gdv2 *sixdata = gdata->parsedata;
-            GNCBook *book;
+            QofBook *book;
 
             book = sixdata->book;
 
@@ -761,7 +762,7 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         gboolean   successful = FALSE;
         xmlNodePtr tree = data_for_children;
         gxpf_data  *gdata = global_data;
-        GNCBook    *book = gdata->bookdata;
+        QofBook    *book = gdata->bookdata;
         GList      *n;
         gnc_template_xaction_data txd;
 

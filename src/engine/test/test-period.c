@@ -8,27 +8,26 @@
 
 #include <ctype.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <time.h>
 
 #include "Account.h"
 #include "Group.h"
 #include "Period.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "Transaction.h"
+#include "qofbook.h"
 
 
 
 static void
 run_test (void)
 {
-  GNCSession *sess;
-  GNCBook *openbook, *closedbook;
+  QofSession *sess;
+  QofBook *openbook, *closedbook;
   AccountGroup *grp;
   AccountList *acclist, *anode;
   Account * acc = NULL;
@@ -46,7 +45,7 @@ run_test (void)
   }
 
   sess = get_random_session ();
-  openbook = gnc_session_get_book (sess);
+  openbook = qof_session_get_book (sess);
   if (!openbook)
   {
     failure("book not created");
@@ -55,7 +54,7 @@ run_test (void)
 
   add_random_transactions_to_book (openbook, 120);
 
-  grp = gnc_book_get_group (openbook);
+  grp = xaccGetAccountGroup (openbook);
 
   acclist = xaccGroupGetSubAccounts (grp);
   for (anode=acclist; anode; anode=anode->next)
@@ -69,7 +68,7 @@ run_test (void)
 
   if(!acc)
   {
-    failure("group didn't have accounts with enogh splits");
+    failure("group didn't have accounts with enough splits");
     exit(get_rv());
   }
 

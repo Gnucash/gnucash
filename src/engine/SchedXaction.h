@@ -1,7 +1,4 @@
 /********************************************************************\
- * SchedXaction.h -- Scheduled Transaction                          *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,13 +17,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
 /**
- * @addtogroup Engine
+ * @addtogroup Engine_SchedXaction
  * @{ */
 /**
  * @file SchedXaction.h
  * @brief Scheduled Transactions public handling routines.
+ * @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
  **/
 
 #ifndef XACC_SCHEDXACTION_H
@@ -35,14 +32,15 @@
 #include <time.h>
 #include <glib.h>
 
-#include "GNCId.h"
 #include "FreqSpec.h"
-#include "date.h"
-#include "kvp_frame.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
+#include "guid.h"
+#include "kvp_frame.h"
+#include "qofbook.h"
 
 /* 
- * #defines for kvp_frame strings
+ * #defines for KvpFrame strings
  * FIXME: Is this the right spot for them <rgmerk>?
  * FIXME: No, they should be private data and there should
  *        be an api for getting/setting the values <dave_p>
@@ -64,7 +62,7 @@ typedef struct gncp_SchedXaction SchedXaction;
 /**
  * Creates and initializes a scheduled transaction.
  **/
-SchedXaction *xaccSchedXactionMalloc(GNCBook *book);
+SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 
 /**
  * @return True if the scheduled transaction is dirty and needs to
@@ -160,22 +158,22 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
 /*
  * The following function is slightly risky.  If you change
- * the retrieved kvp_frame you must mark the SchedXaction
+ * the retrieved KvpFrame you must mark the SchedXaction
  * dirty with xaccSchedXactionSetDirtyness
  */
-kvp_frame *xaccSchedXactionGetSlots( SchedXaction *sx );
+KvpFrame *xaccSchedXactionGetSlots( SchedXaction *sx );
 /**
  * Sets the SX kvp data to the given kvp_frame.
  * NOTE: This is not copied, but set directly.
  **/
 void xaccSchedXactionSetSlots( SchedXaction *sx,
-                               kvp_frame *frm );
+                               KvpFrame *frm );
 
 /**
  * Use the following two functions in preference to 
  * the above two . . .
  */
-kvp_value *xaccSchedXactionGetSlot( SchedXaction *sx, 
+KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
 				    const char *slot );
 
 /*
@@ -184,7 +182,7 @@ kvp_value *xaccSchedXactionGetSlot( SchedXaction *sx,
 
 void xaccSchedXactionSetSlot( SchedXaction *sx, 
 			      const char *slot,
-			      const kvp_value *value );
+			      const KvpValue *value );
 
 const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
 void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
@@ -234,7 +232,7 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
  */
 void xaccSchedXactionSetTemplateTrans( SchedXaction *sx,
                                        GList *t_t_list,
-                                       GNCBook *book );
+                                       QofBook *book );
 
 /**
  * Adds an instance to the deferred list of the SX.  Added instances are
@@ -254,6 +252,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
  * gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
  **/
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
+
 
 #endif /* XACC_SCHEDXACTION_H */
 

@@ -37,10 +37,11 @@
 #include "sixtp-utils.h"
 #include "core-utils.h"
 
-#include "date.h"
-#include "guid.h"
-#include "gnc-numeric.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
@@ -175,17 +176,17 @@ string_to_double(const char *str, double *result)
     SCM conversion_result;
   
     if(!ready) {
-      string_to_number = gh_eval_str("string->number");
+      string_to_number = scm_c_eval_string("string->number");
       scm_protect_object(string_to_number);
       ready = TRUE;
     }
     
-    conversion_result = gh_call1(string_to_number, gh_str02scm(str));
+    conversion_result = scm_call_1(string_to_number, scm_makfrom0str(str));
     if(!conversion_result == SCM_BOOL_F) {
       return(FALSE);
     }
   
-    *result = gh_scm2double(conversion_result);
+    *result = scm_num2dbl(conversion_result, __FUNCTION__);
   } 
   
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */

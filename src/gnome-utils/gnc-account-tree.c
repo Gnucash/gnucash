@@ -82,6 +82,32 @@ static void gnc_account_tree_fill (GNCAccountTree *tree,
 static void gnc_account_tree_set_view_info_real (GNCAccountTree *tree);
 static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
 
+struct _acct_tree_defaults {
+  gboolean auto_resize;
+  GtkJustification justification;
+  const char *pref_name;
+  const char *field_name;
+} acct_tree_defaults[] = {
+  {/* NAME */		TRUE,  GTK_JUSTIFY_LEFT,  "name",		N_("Account Name")},
+  {/* TYPE */		FALSE, GTK_JUSTIFY_LEFT,  "type",		N_("Type")},
+  {/* COMMODITY */	FALSE, GTK_JUSTIFY_LEFT,  "commodity",		N_("Commodity")},
+  {/* CODE */		FALSE, GTK_JUSTIFY_LEFT,  "code",		N_("Account Code")},
+  {/* DESCRIPTION */	TRUE,  GTK_JUSTIFY_LEFT,  "description",	N_("Description")},
+  {/* PRESENT */	TRUE,  GTK_JUSTIFY_RIGHT, "present",		N_("Present")},
+  {/* PRESENT_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "present_report",	N_("Present")},
+  {/* BALANCE */	TRUE,  GTK_JUSTIFY_RIGHT, "balance",		N_("Balance")},
+  {/* BALANCE_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "balance_report",	N_("Balance")},
+  {/* CLEARED */	TRUE,  GTK_JUSTIFY_RIGHT, "cleared",		N_("Cleared")},
+  {/* CLEARED_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "cleared_report",	N_("Cleared")},
+  {/* RECNCLD */	TRUE,  GTK_JUSTIFY_RIGHT, "reconciled",		N_("Reconciled")},
+  {/* RECNCLD_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "reconciled_report",	N_("Reconciled")},
+  {/* FUTURE_MIN */	TRUE,  GTK_JUSTIFY_RIGHT, "future_min",		N_("Future Minimum")},
+  {/* FUT_MIN_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "future_min_report",	N_("Future Minimum")},
+  {/* TOTAL */		TRUE,  GTK_JUSTIFY_RIGHT, "total",		N_("Total")},
+  {/* TOTAL_REPORT */	TRUE,  GTK_JUSTIFY_RIGHT, "total_report",	N_("Total")},
+  {/* NOTES */		FALSE, GTK_JUSTIFY_LEFT,  "notes",		N_("Notes")},
+  {/* TAX_INFO */	FALSE, GTK_JUSTIFY_LEFT,  "tax-info",		N_("Tax Info")},
+};
 
 GType
 gnc_account_tree_get_type (void)
@@ -173,6 +199,9 @@ gnc_account_tree_new_with_root (Account * root)
 static void
 gnc_account_tree_init (GNCAccountTree *tree)
 {
+  GtkStyle *style;
+  GdkFont *font;
+  gint width;
   int i;
 
   tree->root_account     = *xaccGUIDNULL ();
@@ -185,30 +214,21 @@ gnc_account_tree_init (GNCAccountTree *tree)
 
   gnc_init_account_view_info(&tree->avi);
 
-  gnc_account_tree_set_view_info_real(tree);
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+    tree->column_headings[i] = gettext(acct_tree_defaults[i].field_name);
 
-	for (i = 0; i < tree->num_columns; i++) {
-		gtk_clist_set_column_title (GTK_CLIST (tree), i, tree->column_headings[i]);
-	}
+#ifdef OLD
+  gtk_ctree_construct(GTK_CTREE(tree),
+                      NUM_ACCOUNT_FIELDS, 0,
+                      (gchar **) tree->column_headings);
+#else
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++) {
+    gtk_clist_set_column_title (GTK_CLIST (tree), i, tree->column_headings[i]);
+  }
+#endif
 
   gtk_clist_set_shadow_type(GTK_CLIST(tree), GTK_SHADOW_IN);
   gtk_clist_column_titles_passive(GTK_CLIST(tree));
-  gtk_clist_set_column_auto_resize(GTK_CLIST(tree), 0, TRUE);
-  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
-                                   tree->description_column, TRUE );
-
-  gtk_clist_set_column_justification(GTK_CLIST(tree),
-				     tree->balance_column,
-				     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(tree),
-				     tree->balance_column + 1,
-				     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(tree),
-				     tree->total_column,
-				     GTK_JUSTIFY_RIGHT);
-  gtk_clist_set_column_justification(GTK_CLIST(tree),
-				     tree->total_column + 1,
-				     GTK_JUSTIFY_RIGHT);
 
   tree->deficit_style = NULL;
 
@@ -763,9 +783,9 @@ gnc_account_tree_update_column_visibility(GNCAccountTree *tree)
 {
   gint i;
 
-  for (i = 0; i < tree->num_columns; i++)
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
     gtk_clist_set_column_visibility
-      (GTK_CLIST(tree), i, tree->avi.show_field[tree->column_fields[i]]);
+      (GTK_CLIST(tree), i, tree->avi.show_field[i]);
 }
 
 
@@ -921,35 +941,32 @@ gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
   tree->selectable_filter_data = user_data;
 }
 
-static void
-gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
+const char *
+gnc_ui_account_get_field_name (AccountFieldCode field)
 {
-  int i = 0;
+  g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
 
-  tree->column_fields[i++] = ACCOUNT_NAME;
-  tree->column_fields[i++] = ACCOUNT_TYPE;
-  tree->column_fields[i++] = ACCOUNT_COMMODITY;
-  tree->column_fields[i++] = ACCOUNT_CODE;
+  return(gettext(acct_tree_defaults[field].field_name));
+}
 
-  tree->description_column = i;
-  tree->column_fields[i++] = ACCOUNT_DESCRIPTION;
+const char *
+gnc_ui_account_get_pref_name (AccountFieldCode field)
+{
+  g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
 
-  tree->balance_column = i;
-  tree->column_fields[i++] = ACCOUNT_BALANCE;
-  tree->column_fields[i++] = ACCOUNT_BALANCE_REPORT;
+  return(gettext(acct_tree_defaults[field].field_name));
+}
 
-  tree->total_column = i;
-  tree->column_fields[i++] = ACCOUNT_TOTAL;
-  tree->column_fields[i++] = ACCOUNT_TOTAL_REPORT;
+AccountFieldCode
+gnc_ui_account_pref_name_to_code (const char *pref_name)
+{
+  gint i;
+  g_return_val_if_fail ((pref_name != NULL), ACCOUNT_NAME);
 
-  tree->column_fields[i++] = ACCOUNT_NOTES;
-  tree->column_fields[i++] = ACCOUNT_TAX_INFO;
-
-  tree->num_columns = i;
-
-  for (i = 0; i < tree->num_columns; i++)
-    tree->column_headings[i] =
-      gnc_ui_account_get_field_name (tree->column_fields[i]);
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+    if (safe_strcmp(acct_tree_defaults[i].pref_name, pref_name) == 0)
+      return i;
+  return(ACCOUNT_NAME);
 }
 
 static gint
@@ -1134,20 +1151,17 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 			    Account *acc)
 {
   gchar *text[NUM_ACCOUNT_FIELDS + 1];
+  gboolean negative[NUM_ACCOUNT_FIELDS + 1];
   GtkCTreeNode *node;
   gint i;
 
   if (acc == NULL)
     return NULL;
 
-  for (i = 0; i < tree->num_columns; i++)
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
   {
-    AccountFieldCode field;
-
-    field = tree->column_fields[i];
-
-    if (tree->avi.show_field[field])
-      text[i] = gnc_ui_account_get_field_value_string(acc, field);
+    if (tree->avi.show_field[i])
+      text[i] = gnc_ui_account_get_field_value_string(acc, i, &negative[i]);
     else
       text[i] = NULL;
 
@@ -1156,47 +1170,26 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
       text[i] = g_strdup("");
   }
 
-  text[tree->num_columns] = NULL;
+  text[NUM_ACCOUNT_FIELDS] = NULL;
 
   node = gtk_ctree_insert_node(GTK_CTREE(tree), parent, sibling,
 			       text, 0, NULL, NULL, NULL, NULL,
 			       FALSE, FALSE);
 
-  for (i = 0; i < tree->num_columns; i++)
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
     g_free(text[i]);
 
   if (gnc_color_deficits())
   {
-    GtkStyle *style;
-    gnc_numeric balance;
-    gboolean deficit;
+    GtkStyle *style, *deficit_style, *normal_style;
+    deficit_style = tree->deficit_style;
+    normal_style = gtk_widget_get_style(GTK_WIDGET(tree));
 
-    balance = gnc_ui_account_get_balance (acc, FALSE);
-    deficit = gnc_numeric_negative_p (balance);
-
-    if (deficit)
-      style = tree->deficit_style;
-    else
-      style = gtk_widget_get_style(GTK_WIDGET(tree));
-
-    if (style != NULL)
-      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
-				    tree->balance_column, style);
-
-    balance = gnc_ui_account_get_balance(acc, TRUE);
-    deficit = gnc_numeric_negative_p (balance);
-
-    if (deficit)
-      style = tree->deficit_style;
-    else
-      style = gtk_widget_get_style(GTK_WIDGET(tree));
-
-    if (style != NULL)
-    {
-      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
-				    tree->total_column, style);
-      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
-				    tree->total_column + 1, style);
+    for (i = 0; i < NUM_ACCOUNT_FIELDS; i++) {
+      style = negative[i] ? deficit_style : normal_style;
+      if (style != NULL) {
+	gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node, i, style);
+      }
     }
   }
 

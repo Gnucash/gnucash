@@ -11,12 +11,13 @@ typedef struct _gncEmployee GncEmployee;
 
 #include "gnc-book.h"
 #include "gncAddress.h"
+#include "Account.h"
 
 #define GNC_EMPLOYEE_MODULE_NAME "gncEmployee"
 
 /* Create/Destroy Functions */
 
-GncEmployee *gncEmployeeCreate (GNCBook *book);
+GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 
 /* Set Functions */
@@ -29,10 +30,11 @@ void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday);
 void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
+void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
 
 /* Get Functions */
 
-GNCBook * gncEmployeeGetBook (GncEmployee *employee);
+QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const GUID * gncEmployeeGetGUID (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
@@ -43,9 +45,13 @@ gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee);
 gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
 gnc_commodity * gncEmployeeGetCurrency (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
+Account * gncEmployeeGetCCard (GncEmployee *employee);
 
-GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
+GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
+
+GUID gncEmployeeRetGUID (GncEmployee *employee);
+GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book);
 
 void gncEmployeeBeginEdit (GncEmployee *employee);
 void gncEmployeeCommitEdit (GncEmployee *employee);

@@ -336,6 +336,7 @@ gnc_job_xml_initialize (void)
     NULL,			/* add_item */
     job_get_count,
     job_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

@@ -1,7 +1,5 @@
 /********************************************************************
  * gnc-engine.h  -- top-level include file for Gnucash Engine       *
- * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
- * Copyright 2001 Linas Vepstas <linas@linas.org>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,73 +19,168 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
+/** @addtogroup Engine
+    @{ */
+/** @file gnc-engine.h 
+    @brief All type declarations for the whole Gnucash engine
+    @author Copyright (C) 1997 Robin D. Clark
+    @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+    @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
+*/
 
 #ifndef GNC_ENGINE_H
 #define GNC_ENGINE_H
 
 #include <glib.h>
+#include "qofid.h"
 
-/** TYPES **********************************************************/
+/* IDENTIFIERS *****************************************************/
+/** GUID Identifiers can be used to reference Accounts, Transactions, 
+ *  Splits and other objects. These Gnucash types are referred to as Gnucash
+ *  entities. GUID Identifiers are globally-unique and permanent, i.e., once
+ *  an entity has been assigned an identifier, it retains that same
+ *  identifier for its lifetime.
+ *
+ *  Identifiers are 'typed' with strings. The ids used in gnucash are
+ *  defined below. An id with type GNC_ID_NONE does not refer to any
+ *  entity, although that may change as new ids are created. An id with
+ *  type GNC_ID_NULL does not refer to any entity, and will never refer
+ *  to any entity. An identifier with any other type may refer to an
+ *  actual entity, but that is not guaranteed. If an id does refer to
+ *  an entity, the type of the entity will match the type of the
+ *  identifier. 
+ */
 
+#define GNC_ID_NONE           QOF_ID_NONE
+#define GNC_ID_BOOK           QOF_ID_BOOK
+#define GNC_ID_SESSION        QOF_ID_SESSION
+#define GNC_ID_NULL           QOF_ID_NULL
+
+#define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_COMMODITY_TABLE "CommodityTable"
+#define GNC_ID_FREQSPEC       "FreqSpec"
+#define GNC_ID_GROUP          "AccountGroup"
+#define GNC_ID_LOT            "Lot"
+#define GNC_ID_PERIOD         "Period"
+#define GNC_ID_PRICE          "Price"
+#define GNC_ID_PRICEDB        "PriceDB"
+#define GNC_ID_SPLIT          "Split"
+#define GNC_ID_SCHEDXACTION   "SchedXaction"
+#define GNC_ID_SXTT           "SXTT"
+#define GNC_ID_TRANS          "Trans"
+                                                                                
+
+                                                                                
+
+
+
+
+/* TYPES **********************************************************/
+
+/** @brief Account in Gnucash. 
+ *
+ * This is the typename for an account. The actual structure is
+ * defined in the private header AccountP.h, but no one outside the
+ * engine should include that file. Instead, access that data only
+ * through the functions in Account.h .*/
 typedef struct account_s             Account;
+
+/** @brief A group of accounts in Gnucash. 
+*/
 typedef struct account_group_s       AccountGroup;
+
+/** @brief Split in Gnucash. 
+ *
+ * A "split" is more commonly refered to as a "entry" in a
+ * "transaction". Each split belongs to one Account and one
+ * Transaction. The split is one out of several parts a Transaction is
+ * divided into.
+ *
+ * This is the typename for a split. The actual structure is defined
+ * in the private header TransactionP.h, but no one outside the engine
+ * should include that file. Instead, access that data only through
+ * the functions in Transaction.h .*/
 typedef struct split_s               Split;
+
+/** @brief Transaction in Gnucash.  
+ *
+ * A Transaction is a piece of business done; the transfer of money
+ * from one account to one or more other accounts. Each Transaction is
+ * divided into one or more Splits (usually two).
+ *
+ * This is the typename for a transaction. The actual structure is
+ * defined in the private header TransactionP.h, but no one outside
+ * the engine should include that file. Instead, access that data only
+ * through the functions in Transaction.h .*/
 typedef struct transaction_s         Transaction;
-typedef struct gnc_book_struct       GNCBook;
+
+/** @brief An article that is bought and sold. 
+ *
+ * A Commodity is the most general term of what an account keeps track
+ * of. Usually this is a monetary currency, but it can also be a stock
+ * share or even a precious metal. Every account keeps track of
+ * exactly one gnc_commodity.
+ *
+ * (Up to version 1.6.x, we used to have currencies and
+ * securities. Now these concepts have been merged into this
+ * gnc_commodity. See the comments at xaccAccountSetCommodity() for
+ * more about that.)
+ *
+ * This is the typename for a gnc_commodity. The actual structure is
+ * defined in a private source file. For accessing that data, only use
+ * the functions in gnc-commodity.h .*/
 typedef struct gnc_commodity_s       gnc_commodity;
+
+/** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
+
+typedef struct gnc_quote_source_s    gnc_quote_source;
+
+/**
+ * A GNCLot implements the fundamental conceptual idea behind
+ * invoices, inventory lots, and stock market investment lots.  
+ *
+ * See the file src/doc/lots.txt for implmentation overview.
+ */
 typedef struct gnc_lot_struct        GNCLot;
-typedef struct gnc_session_struct    GNCSession;
 
+/** GList of Account */
 typedef GList                  AccountList;
-typedef GList                  BookList;
+/** GList of GNCLots */
 typedef GList                  LotList;
+/** GList of Split */
 typedef GList                  SplitList;
+/** GList of Transaction */
 typedef GList                  TransList;
-
+/** GList of GUIDs of a Account */
 typedef GList                  AccountGUIDList;
+/** GList of GUIDs of a GNCBook */
 typedef GList                  BookGUIDList;
 
+/** Function type for init hooks in the engine.  */
 typedef void (* gnc_engine_init_hook_t)(int, char **);
 
 
 /** PROTOTYPES ******************************************************/
 
-/* GnuCash version number infomation. */
+/** GnuCash version number infomation. */
 unsigned int gnucash_major_version (void);
+/** GnuCash version number infomation. */
 unsigned int gnucash_minor_version (void);
+/** GnuCash version number infomation. */
 unsigned int gnucash_micro_version (void);
 
-/* gnc_engine_init MUST be called before gnc engine functions can 
+/** gnc_engine_init MUST be called before gnc engine functions can 
  * be used. */
 void gnc_engine_init(int argc, char ** argv);
 
-/* called to shutdown the engine */
+/** Called to shutdown the engine */
 void gnc_engine_shutdown (void);
 
-/* pass a function pointer to gnc_engine_add_init_hook and 
+/** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
 
-/* Many strings used throughout the engine are likely to be duplicated.
- * So we provide a reference counted cache system for the strings, which
- * shares strings whenever possible.
- *
- * Use g_cache_insert to insert a string into the cache (it will return a
- * pointer to the cached string).
- * Basically you should use this instead of g_strdup.
- *
- * Use g_cache_remove (giving it a pointer to a cached string) if the string
- * is unused.  If this is the last reference to the string it will be
- * removed from the cache, otherwise it will just decrement the
- * reference count.
- * Basically you should use this instead of g_free.
- *
- * Note that all the work is done when inserting or removing.  Once
- * cached the strings are just plain C strings.
- */
-
-/* get the gnc_string_cache.  Create it if it doesn't exist already */
-GCache* gnc_engine_get_string_cache(void);
-
 #endif
+/** @} */

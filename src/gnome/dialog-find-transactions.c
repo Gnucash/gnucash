@@ -29,6 +29,10 @@
 
 #include "gnc-ui-util.h"
 #include "Query.h"
+#include "QueryCore.h"
+#include "QueryNew.h"
+#include "QueryObject.h"
+#include "SX-book.h"
 #include "Transaction.h"
 #include "dialog-find-transactions.h"
 #include "window-register.h"

@@ -868,7 +868,7 @@
 	  <property name="column_spacing">0</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="label847774">
+	    <widget class="GtkLabel" id="freq label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Frequency:</property>
 	      <property name="use_underline">False</property>
@@ -892,7 +892,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="label847775">
+	    <widget class="GtkLabel" id="startdate label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Start Date:</property>
 	      <property name="use_underline">False</property>

@@ -35,6 +35,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
+#include "global-options.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
@@ -49,8 +50,7 @@ typedef struct
   GtkWidget * commodity_list;
   GtkWidget * edit_button;
   GtkWidget * remove_button;
-
-  gboolean show_currencies;
+  GtkWidget * show_currencies;
 
   gboolean new;
 } CommoditiesDialog;
@@ -101,6 +101,10 @@ gnc_commodities_dialog_response (GtkDialog *dialog,
 				 gint response,
 				 CommoditiesDialog *cd)
 {
+	gboolean active;
+
+	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cd->show_currencies));
+	gnc_set_boolean_option ("__gui", "commodity_include_iso", active);
 	gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 }
 
@@ -121,7 +125,10 @@ edit_clicked (GtkWidget *widget, CommoditiesDialog *cd)
 static void
 remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
 {
+  QofBook *book;
+  GNCPriceDB *pdb;
   GList *node;
+  GList *prices;
   GList *accounts;
   gboolean do_delete;
   gboolean can_delete;
@@ -156,6 +163,20 @@ remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
                             "not delete it.");
 
     gnc_warning_dialog_parented (cd->dialog, message);
+    g_list_free (accounts);
+    return;
+  }
+
+  book = xaccGroupGetBook (xaccAccountGetRoot (accounts->data));
+  pdb = gnc_pricedb_get_db (book);
+  prices = gnc_pricedb_get_prices(pdb, commodity, NULL);
+  if (prices)
+  {
+    const char *message = _("This commodity has price quotes. Are\n"
+			    "you sure you want to delete the selected\n"
+                            "commodity and its price quotes?");
+
+    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
   }
   else
   {
@@ -169,12 +190,17 @@ remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
   {
     gnc_commodity_table *ct = gnc_get_current_commodities ();
 
+    for (node = prices; node; node = node->next)
+      gnc_pricedb_remove_price(pdb, node->data);
+
     gnc_commodity_table_remove (ct, commodity);
     gnc_commodity_destroy (commodity);
     commodity = NULL;
   }
 
+  gnc_price_list_destroy(prices);
   g_list_free (accounts);
+  gnc_gui_refresh_all ();
 }
 
 static void
@@ -221,7 +247,7 @@ show_currencies_toggled (GtkToggleButton *toggle,
 {
 	GtkTreeModel *sort_model, *filter_model;
 
-	cd->show_currencies = gtk_toggle_button_get_active (toggle);
+	cd->show_currencies = GTK_WIDGET(gtk_toggle_button_get_active (toggle));
 
 	sort_model = gtk_tree_view_get_model (GTK_TREE_VIEW (cd->commodity_list));
 	filter_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
@@ -266,6 +292,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   
   g_signal_connect (G_OBJECT (dialog), "response",
                     G_CALLBACK (gnc_commodities_dialog_response), cd);
+  gboolean active;
 
   g_signal_connect (G_OBJECT (dialog), "destroy",
                     G_CALLBACK (window_destroy_cb), cd);
@@ -377,11 +404,12 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_FRACTION);
     gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
 
-  /* Show currency button */
-  button = glade_xml_get_widget (xml, "show_currencies_button");
-
-  g_signal_connect (G_OBJECT (button), "toggled",
-                    G_CALLBACK (show_currencies_toggled), cd);
+    /* Show currency button */
+    button = glade_xml_get_widget (xml, "show_currencies_button");
+    active = gnc_lookup_boolean_option ("__gui", "commodity_include_iso", FALSE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), active);
+    g_signal_connect (G_OBJECT (button), "toggled",
+		      G_CALLBACK (show_currencies_toggled), cd);
 
   if (last_width == 0)
     gnc_get_window_size ("commodities_win", &last_width, &last_height);

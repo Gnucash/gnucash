@@ -35,6 +35,8 @@
 #include "gnc-xml-helper.h"
 #include "Account.h"
 #include "AccountP.h"
+#include "Group.h"
+#include "GroupP.h"
 #include "Query.h"
 #include "QueryP.h"
 #include "Scrub.h"
@@ -44,7 +46,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
 
 #include "io-gncxml.h"
 
@@ -94,7 +96,7 @@ typedef struct {
   sixtp *gnc_parser;
 
   /* The book */
-  GNCBook *book;
+  QofBook *book;
 
   /* The account group */
   AccountGroup *account_group;
@@ -357,23 +359,23 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 /* ================================================================== */
 
 gboolean
-gnc_session_load_from_xml_file(GNCSession *session)
+qof_session_load_from_xml_file(QofSession *session)
 {
   gboolean parse_ok;
   gpointer parse_result = NULL;
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
   const gchar *filename;
-  GNCBook *book;
+  QofBook *book;
 
   g_return_val_if_fail(session, FALSE);
 
-  book = gnc_session_get_book (session);
+  book = qof_session_get_book (session);
   global_parse_status.book = book;
 
   g_return_val_if_fail(book, FALSE);
 
-  filename = gnc_session_get_file_path(session);
+  filename = qof_session_get_file_path(session);
   g_return_val_if_fail(filename, FALSE);
 
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
@@ -387,41 +389,19 @@ gnc_session_load_from_xml_file(GNCSession *session)
 
   sixtp_destroy(top_level_pr);
 
-  if(parse_ok) {
-    if(!global_parse_status.account_group)
-      return FALSE;
+  if(parse_ok) 
+  {
+    if(!global_parse_status.account_group) return FALSE;
 
-    {
-      AccountGroup *g = gnc_book_get_group(book);
-
-      gnc_book_set_group(book, global_parse_status.account_group);
-
-      if(g) 
-      {
-        xaccAccountGroupBeginEdit(g);
-        xaccAccountGroupDestroy(g);
-      }
-    }
+    xaccSetAccountGroup(book, global_parse_status.account_group);
 
     if(global_parse_status.pricedb)
     {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-
-      gnc_book_set_pricedb(book, global_parse_status.pricedb);
-
-      if(db) gnc_pricedb_destroy(db);
-    }
-    else
-    {
-      GNCPriceDB *db = gnc_book_get_pricedb(book);
-
-      gnc_book_set_pricedb(book, gnc_pricedb_create(book));
-
-      if(db) gnc_pricedb_destroy(db);
+      gnc_pricedb_set_db(book, global_parse_status.pricedb);
     }
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book), book);
+    xaccGroupScrubCommodities (gnc_book_get_group(book));
 
     /* Fix split amount/value */
     xaccGroupScrubSplits (gnc_book_get_group(book));
@@ -1403,7 +1383,7 @@ account_restore_after_child_handler(gpointer data_for_children,
                                     sixtp_child_result *child_result)
 {
   Account *a = (Account *) data_for_children;
-  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  /* GNCParseStatus *pstatus = (GNCParseStatus *) global_data; */
 
   g_return_val_if_fail(a, FALSE);
 
@@ -1419,15 +1399,15 @@ account_restore_after_child_handler(gpointer data_for_children,
   else if(strcmp(child_result->tag, "currency") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetCurrency(a, pstatus->book)) return FALSE;
-    DxaccAccountSetCurrency(a, com, pstatus->book);
+    if(DxaccAccountGetCurrency(a)) return FALSE;
+    DxaccAccountSetCurrency(a, com);
     /* let the normal child_result handler clean up com */
   }
   else if(strcmp(child_result->tag, "security") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetSecurity(a, pstatus->book)) return FALSE;
-    DxaccAccountSetSecurity(a, com, pstatus->book);
+    if(DxaccAccountGetSecurity(a)) return FALSE;
+    DxaccAccountSetSecurity(a, com);
     /* let the normal child_result handler clean up com */
   }
 
@@ -3593,7 +3573,7 @@ gnc_transaction_parser_new(void)
 */
 
 static gboolean
-price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCBook *book)
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
 {
   if(!p || !sub_node) return FALSE;
 

@@ -39,9 +39,9 @@
 #include <ctype.h> /* isdigit */
 #include <stdio.h>
 
+#include "gnc-date.h"
 #include "gnc-date-delta.h"
 #include "messages.h"
-#include "date.h"
 
 
 enum

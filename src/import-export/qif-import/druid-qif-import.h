@@ -24,7 +24,7 @@
 #ifndef DIALOG_QIF_IMPORT_H
 #define DIALOG_QIF_IMPORT_H
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-ui.h"
 

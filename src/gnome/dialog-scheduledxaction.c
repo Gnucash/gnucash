@@ -27,14 +27,15 @@
 #include <locale.h>
 #include <time.h>
 
-#include "date.h"
 #include "FreqSpec.h"
 #include "SchedXaction.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
 #include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
 #include "gnc-engine-util.h"
@@ -1501,7 +1502,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
                                                  "tempxaction_frame" ) );
         vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
 
-        sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
+        sxed->sxGUIDstr = g_strdup( guid_to_string( xaccSchedXactionGetGUID(sxed->sx) ) );
         sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
         splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 
@@ -1773,7 +1774,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                  * they confirm they actually want to do the deletion
                  * generically.  If it's false, cleanup and return. */
                 if ( ! (destroyOpenedResult =
-                        gnc_verify_dialog_parented( sxd->dialog, FALSE,
+                        gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
                                                     realConfDelOpenMsg->str )) ) {
                         for ( l = beingEditedList; l; l = l->next ) {
                                 g_list_free( (GList*)l->data );
@@ -1784,7 +1785,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 }
         }
 
-        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE,
+        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE, "%s",
                                          realConfDeleteMsg->str ) ) {
                 /* Close the being-edited transactions. */
                 if ( destroyOpenedResult ) {
@@ -1813,14 +1814,15 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
                 for ( sel = cl->selection; sel; sel = sel->next ) {
-                        guint tag;
+                        gint tag;
+                        gint *p_tag = &tag;
                         gpointer unused;
                         gboolean foundP;
 
                         sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
                         sxList = g_list_remove( sxList, (gpointer)sx );
                         foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
-                                                               &unused, (gpointer*)&tag );
+                                                               &unused, (gpointer*)p_tag );
                         g_assert( foundP );
                         if ( tag != -1 ) {
                                 gnc_dense_cal_mark_remove( sxd->gdcal, tag );
@@ -1931,7 +1933,8 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         int instArraySize;
         GDate **instArray;
         GList *instList;
-        guint gdcMarkTag, oldMarkTag;
+        gint gdcMarkTag, oldMarkTag;
+        gint *p_oldMarkTag = &oldMarkTag;
 
         sx = (SchedXaction*)data;
         sxd = (SchedXactionDialog*)user_data;
@@ -2015,7 +2018,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                         g_hash_table_lookup_extended( sxd->sxData,
                                                       (gpointer)sx,
                                                       &unused,
-                                                      (gpointer*)&oldMarkTag );
+                                                      (gpointer*)p_oldMarkTag );
                 g_assert( foundP );
         }
         if ( row == -1 ) {

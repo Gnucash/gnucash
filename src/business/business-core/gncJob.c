@@ -13,18 +13,21 @@
 #include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "gnc-book-p.h"
-#include "GNCIdP.h"
-#include "QueryObject.h"
+#include "gnc-book.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "qofid-p.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 
 struct _gncJob {
-  GNCBook *	book;
+  QofBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
@@ -54,12 +57,12 @@ mark_job (GncJob *job)
   job->dirty = TRUE;
   gncBusinessSetDirtyFlag (job->book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_MODIFY);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GNCBook *book)
+GncJob *gncJobCreate (QofBook *book)
 {
   GncJob *job;
 
@@ -74,10 +77,10 @@ GncJob *gncJobCreate (GNCBook *book)
   job->desc = CACHE_INSERT ("");
   job->active = TRUE;
 
-  xaccGUIDNew (&job->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &job->guid);
   addObj (job);
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_CREATE);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
 
   return job;
 }
@@ -93,7 +96,7 @@ static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
-  gnc_engine_generate_event (&job->guid, GNC_EVENT_DESTROY);
+  gnc_engine_generate_event (&job->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);
@@ -218,9 +221,9 @@ void gncJobBeginEdit (GncJob *job)
   GNC_BEGIN_EDIT (job, _GNC_MOD_NAME);
 }
 
-static void gncJobOnError (GncJob *job, GNCBackendError errcode)
+static void gncJobOnError (GncJob *job, QofBackendError errcode)
 {
-  PERR("Job Backend Failure: %d", errcode);
+  PERR("Job QofBackend Failure: %d", errcode);
 }
 
 static void gncJobOnDone (GncJob *job)
@@ -237,7 +240,7 @@ void gncJobCommitEdit (GncJob *job)
 
 /* Get Functions */
 
-GNCBook * gncJobGetBook (GncJob *job)
+QofBook * gncJobGetBook (GncJob *job)
 {
   if (!job) return NULL;
   return job->book;
@@ -278,7 +281,7 @@ GUID gncJobRetGUID (GncJob *job)
   const GUID *guid = gncJobGetGUID (job);
   if (guid)
     return *guid;
-  return *xaccGUIDNULL ();
+  return *guid_null ();
 }
 
 gboolean gncJobGetActive (GncJob *job)
@@ -287,14 +290,14 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-GncJob * gncJobLookup (GNCBook *book, const GUID *guid)
+GncJob * gncJobLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
-GncJob * gncJobLookupDirect (GUID guid, GNCBook *book)
+GncJob * gncJobLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
   return gncJobLookup (book, &guid);
@@ -329,27 +332,27 @@ static void remObj (GncJob *job)
   gncBusinessRemoveObject (job->book, _GNC_MOD_NAME, &job->guid);
 }
 
-static void _gncJobCreate (GNCBook *book)
+static void _gncJobCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
-static void _gncJobDestroy (GNCBook *book)
+static void _gncJobDestroy (QofBook *book)
 {
   gncBusinessDestroy (book, _GNC_MOD_NAME);
 }
 
-static gboolean _gncJobIsDirty (GNCBook *book)
+static gboolean _gncJobIsDirty (QofBook *book)
 {
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncJobMarkClean (GNCBook *book)
+static void _gncJobMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
+static void _gncJobForeach (QofBook *book, QofEntityForeachCB cb,
 			    gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -365,8 +368,8 @@ static const char * _gncJobPrintable (gpointer item)
   return c->name;
 }
 
-static GncObject_t gncJobDesc = {
-  GNC_OBJECT_VERSION,
+static QofObject gncJobDesc = {
+  QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Job",
   _gncJobCreate,
@@ -379,24 +382,24 @@ static GncObject_t gncJobDesc = {
 
 gboolean gncJobRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { JOB_ID, QUERYCORE_STRING, (QueryAccess)gncJobGetID },
-    { JOB_NAME, QUERYCORE_STRING, (QueryAccess)gncJobGetName },
-    { JOB_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncJobGetReference },
-    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncJobGetOwner },
-    { JOB_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncJobGetActive },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncJobGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
-    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncJobGetActive },
+  static QofQueryObject params[] = {
+    { JOB_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncJobGetID },
+    { JOB_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncJobGetName },
+    { JOB_REFERENCE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncJobGetReference },
+    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncJobGetOwner },
+    { JOB_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncJobGetActive },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncJobGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncJobGetGUID },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncJobGetActive },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncJobCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
 
-  return gncObjectRegister (&gncJobDesc);
+  return qof_object_register (&gncJobDesc);
 }
 
-gint64 gncJobNextID (GNCBook *book)
+gint64 gncJobNextID (QofBook *book)
 {
   return gnc_book_get_counter (book, _GNC_MOD_NAME);
 }

@@ -1,115 +1,68 @@
-/*
- * QueryCore.h -- API for providing core Query data types
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
- *
- */
 
-#ifndef GNC_QUERYCORE_H
-#define GNC_QUERYCORE_H
+#include "qofquerycore.h"
 
-#include "gnc-numeric.h"
-#include "date.h"
-#include "kvp_frame.h"
+		#define QueryPredData_t QofQueryPredData*
 
-#include <glib.h>
+		#define gncQueryStringPredicate qof_query_string_predicate
+		#define gncQueryDatePredicate qof_query_date_predicate
+		#define gncQueryNumericPredicate qof_query_numeric_predicate
+		#define gncQueryGUIDPredicate qof_query_guid_predicate
+		#define gncQueryInt32Predicate qof_query_int32_predicate
+		#define gncQueryInt64Predicate qof_query_int64_predicate
+		#define gncQueryDoublePredicate qof_query_double_predicate
+		#define gncQueryBooleanPredicate qof_query_boolean_predicate
+		#define gncQueryCharPredicate qof_query_char_predicate
+		#define gncQueryKVPPredicate qof_query_kvp_predicate
+		#define gncQueryCorePredicateFree qof_query_core_predicate_free
 
-typedef struct query_pred_data *QueryPredData_t;
+		#define COMPARE_LT QOF_COMPARE_LT
+		#define COMPARE_LTE QOF_COMPARE_LTE
+		#define COMPARE_EQUAL QOF_COMPARE_EQUAL
+		#define COMPARE_GT QOF_COMPARE_GT
+		#define COMPARE_GTE QOF_COMPARE_GTE
+		#define COMPARE_NEQ QOF_COMPARE_NEQ
 
-/* Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
-typedef const char * QueryCoreType;
+		#define STRING_MATCH_NORMAL QOF_STRING_MATCH_NORMAL
+		#define STRING_MATCH_CASEINSENSITIVE QOF_STRING_MATCH_CASEINSENSITIVE
 
-/* Standard Query comparitors, for how to compare objects in a predicate.
- * Note that not all core types implement all comparitors
- */
-typedef enum {
-  COMPARE_LT = 1,
-  COMPARE_LTE,
-  COMPARE_EQUAL,
-  COMPARE_GT,
-  COMPARE_GTE,
-  COMPARE_NEQ
-} query_compare_t;
+		#define DATE_MATCH_NORMAL QOF_DATE_MATCH_NORMAL
+		#define DATE_MATCH_ROUNDED QOF_DATE_MATCH_ROUNDED
 
-/*
- * List of known core query data-types... 
- * Each core query type defines it's set of optional "comparitor qualifiers".
- */
-#define QUERYCORE_STRING	"string"
-typedef enum {
-  STRING_MATCH_NORMAL = 1,
-  STRING_MATCH_CASEINSENSITIVE
-} string_match_t;
+		#define NUMERIC_MATCH_ANY QOF_NUMERIC_MATCH_ANY
+		#define NUMERIC_MATCH_CREDIT QOF_NUMERIC_MATCH_CREDIT
+		#define NUMERIC_MATCH_DEBIT QOF_NUMERIC_MATCH_DEBIT
 
-#define QUERYCORE_DATE		"date"
-typedef enum {
-  DATE_MATCH_NORMAL = 1,
-  DATE_MATCH_ROUNDED
-} date_match_t;
+		#define GUID_MATCH_ANY QOF_GUID_MATCH_ANY
+		#define GUID_MATCH_NONE QOF_GUID_MATCH_NONE
+		#define GUID_MATCH_NULL QOF_GUID_MATCH_NULL
+		#define GUID_MATCH_ALL QOF_GUID_MATCH_ALL
+		#define GUID_MATCH_LIST_ANY QOF_GUID_MATCH_LIST_ANY
 
-#define QUERYCORE_NUMERIC	"numeric"
-#define QUERYCORE_DEBCRED	"debcred"
-typedef enum {
-  NUMERIC_MATCH_DEBIT = 1,
-  NUMERIC_MATCH_CREDIT,
-  NUMERIC_MATCH_ANY
-} numeric_match_t;
+		#define CHAR_MATCH_ANY QOF_CHAR_MATCH_ANY
+		#define CHAR_MATCH_NONE QOF_CHAR_MATCH_NONE
 
-#define QUERYCORE_GUID		"guid"
-typedef enum {
-  GUID_MATCH_ANY = 1,
-  GUID_MATCH_ALL,		/* You _must_ pass a GList of objects! */
-  GUID_MATCH_NONE,
-  GUID_MATCH_NULL,
-} guid_match_t;
+		#define char_match_t QofCharMatch
+		#define guid_match_t QofGuidMatch
+		#define numeric_match_t QofNumericMatch
+		#define date_match_t QofDateMatch
+		#define string_match_t QofStringMatch
+		#define query_compare_t QofQueryCompare
 
-#define QUERYCORE_INT64		"gint64"
-#define QUERYCORE_DOUBLE	"double"
-#define QUERYCORE_BOOLEAN	"boolean"
-#define QUERYCORE_KVP		"kvp"
+		#define gncQueryCoreInit qof_query_core_init
+		#define gncQueryCoreShutdown qof_query_core_shutdown
+		#define gncQueryCoreGetPredicate qof_query_core_get_predicate
+		#define gncQueryCoreGetCompare qof_query_core_get_compare
+		
+		#define gncQueryCorePredicateEqual qof_query_core_predicate_equal
+		
+		#define QUERYCORE_GUID QOF_QUERYCORE_GUID
+		#define QUERYCORE_DEBCRED QOF_QUERYCORE_DEBCRED
+		#define QUERYCORE_BOOLEAN QOF_QUERYCORE_BOOLEAN
+		#define QUERYCORE_NUMERIC QOF_QUERYCORE_NUMERIC
+		#define QUERYCORE_STRING QOF_QUERYCORE_STRING
+		#define QUERYCORE_DATE QOF_QUERYCORE_DATE
+		#define QUERYCORE_INT64 QOF_QUERYCORE_INT64
+		#define QUERYCORE_DOUBLE QOF_QUERYCORE_DOUBLE
 
-/* A CHAR type is for a RECNCell */
-#define QUERYCORE_CHAR		"character"
-typedef enum {
-  CHAR_MATCH_ANY = 1,
-  CHAR_MATCH_NONE
-} char_match_t;
-
-/* Head of Predicate Data structures.  All PData must start like this. */
-typedef struct query_pred_data {
-  QueryCoreType		type_name;	/* QUERYCORE_* */
-  query_compare_t	how;
-} QueryPredDataDef;
-
-/* Core Data Type Predicates */
-QueryPredData_t gncQueryStringPredicate (query_compare_t how, char *str,
-					 string_match_t options,
-					 gboolean is_regex);
-QueryPredData_t gncQueryDatePredicate (query_compare_t how,
-				       date_match_t options, Timespec date);
-QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
-					  numeric_match_t options,
-					  gnc_numeric value);
-QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids);
-QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val);
-QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val);
-QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val);
-QueryPredData_t gncQueryCharPredicate (char_match_t options,
-				       const char *chars);
-QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
-				      GSList *path, const kvp_value *value);
-
-#include "QueryObject.h"	/* for QueryAccess */
-
-/* Copy a predicate */
-QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata);
-
-/* Destroy a predicate */
-void gncQueryCorePredicateFree (QueryPredData_t pdata);
-
-/* Return a printable string for a core data object.  Caller needs
- * to g_free() the returned string
- */
-char * gncQueryCoreToString (char const *type, gpointer object,
-			     QueryAccess fcn);
-
-#endif /* GNC_QUERYCORE_H */
+		#define QueryAccess QofAccessFunc
+		#define gncQueryCoreToString qof_query_core_to_string

@@ -29,13 +29,13 @@
       "#include <kvp_frame.h>\n"
       "#include <kvp-scm.h>\n"
       "#include <Transaction.h>\n"
-      "#include <gnc-book.h>\n")))
+      "#include <qofbook.h>\n")))
 
-  (gw:wrap-as-wct ws '<gnc:kvp-frame*> "kvp_frame*" "const kvp_frame*")
+  (gw:wrap-as-wct ws '<gnc:kvp-frame*> "KvpFrame*" "const KvpFrame*")
 
   (gw:wrap-simple-type
    ws
-   '<gnc:kvp-value*> "kvp_value*"
+   '<gnc:kvp-value*> "KvpValue*"
    '("gnc_kvp_value_ptr_p(" scm-var ")")
    '(c-var " = gnc_scm_to_kvp_value_ptr(" scm-var ");\n")
    '(scm-var " = gnc_kvp_value_ptr_to_scm(" c-var ");\n"))
@@ -47,7 +47,7 @@
    "gnc_kvp_frame_delete_at_path"
    '((<gnc:kvp-frame*> f)
      ((gw:gslist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
-   "Deletes the kvp_frame at the key-path in frame f")
+   "Deletes the KvpFrame at the key-path in frame f")
    
   (gw:wrap-function
    ws
@@ -101,7 +101,7 @@
    ws
    'gnc:book-get-slots
    '<gnc:kvp-frame*>
-   "gnc_book_get_slots"
+   "qof_book_get_slots"
    '((<gnc:Book*> b))
    "Get the book's slots.")
 )

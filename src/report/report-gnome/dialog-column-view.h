@@ -20,7 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 

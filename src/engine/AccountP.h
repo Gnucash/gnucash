@@ -22,11 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * AccountP.h
+/** @file AccountP.h
  *
- * FUNCTION:
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
  *
@@ -45,20 +42,28 @@
 #include "config.h"
 
 #include "Account.h"
-#include "GNCIdP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
+#include "qofbackend.h"
+#include "qofbook.h"
+#include "qofid.h"
 
 
 /** STRUCTS *********************************************************/
+
+/** This is the data that describes an account. 
+ *
+ * This is the *private* header for the account structure.
+ * No one outside of the engine should ever include this file.
+*/
 struct account_s
 {
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  GNCBook *book;   /* the entity_table in which this account is stored */
+  QofBook *book;   /* the entity_table in which this account is stored */
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -85,7 +90,7 @@ struct account_s
    * information in splits, transactions, and accounts.  it's NULL
    * until accessed.  See src/engine/kvp_doc.txt for a list and 
    * description of the important keys. */
-  kvp_frame * kvp_data;
+  KvpFrame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
    * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its
@@ -200,6 +205,13 @@ void xaccFreeAccount (Account *account);
  */
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
+
+/*
+ * The xaccGetAccountBackend() subroutine will find the
+ *    persistent-data storage backend associated with this account.
+ */
+
+QofBackend * xaccAccountGetBackend (Account *account);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

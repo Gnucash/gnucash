@@ -24,15 +24,16 @@
     "#include <glib.h>\n"
     "#include <guid.h>\n"
     "#include <Query.h>\n"
-    "#include <Backend.h>\n"
     "#include <Group.h>\n"
-    "#include <gnc-book.h>\n"
-    "#include <gnc-session.h>\n"
+    "#include <qofbackend.h>\n"
+    "#include <qofbook.h>\n"
+    "#include <qofsession.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
+    "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
-    "#include <date.h>\n"
+    "#include <gnc-date.h>\n"
     "#include <engine-helpers.h>\n"
     "#include <gnc-engine.h>\n"
     "#include <gnc-commodity.h>\n"
@@ -92,15 +93,15 @@
 
 (gw:wrap-as-wct ws '<gnc:GList*> "GList*" "const GList*")
 
-(gw:wrap-as-wct ws '<gnc:id-type> "GNCIdType" "GNCIdTypeConst")
+(gw:wrap-as-wct ws '<gnc:id-type> "QofIdType" "QofIdTypeConst")
 (gw:wrap-as-wct ws '<gnc:Account*> "Account*" "const Account*")
 (gw:wrap-as-wct ws '<gnc:Account**> "Account**" "const Account**")
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
 (gw:wrap-as-wct ws '<gnc:AccInfo*> "AccInfo*" "const AccInfo*")
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
-(gw:wrap-as-wct ws '<gnc:Book*> "GNCBook*" "const GNCBook*")
+(gw:wrap-as-wct ws '<gnc:Book*> "QofBook*" "const QofBook*")
 (gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")
-(gw:wrap-as-wct ws '<gnc:Session*> "GNCSession*" "const GNCSession**")
+(gw:wrap-as-wct ws '<gnc:Session*> "QofSession*" "const QofSession**")
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
 (gw:wrap-as-wct ws '<gnc:Transaction*> "Transaction*" "const Transaction*")  
 (gw:wrap-as-wct ws '<gnc:commodity*> "gnc_commodity*" "const gnc_commodity*")
@@ -118,37 +119,37 @@
   (gw:enum-add-value! wt "GNC_EVENT_DESTROY" 'gnc-event-destroy)
   (gw:enum-add-value! wt "GNC_EVENT_ALL" 'gnc-event-all))
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QueryOp")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QofQueryOp")))
 
-  (gw:enum-add-value! wt "QUERY_AND" 'query-and)
-  (gw:enum-add-value! wt "QUERY_OR" 'query-or)
-  (gw:enum-add-value! wt "QUERY_NAND" 'query-nand)
-  (gw:enum-add-value! wt "QUERY_NOR" 'query-nor)
-  (gw:enum-add-value! wt "QUERY_XOR" 'query-xor))
+  (gw:enum-add-value! wt "QOF_QUERY_AND" 'query-and)
+  (gw:enum-add-value! wt "QOF_QUERY_OR" 'query-or)
+  (gw:enum-add-value! wt "QOF_QUERY_NAND" 'query-nand)
+  (gw:enum-add-value! wt "QOF_QUERY_NOR" 'query-nor)
+  (gw:enum-add-value! wt "QOF_QUERY_XOR" 'query-xor))
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-compare-how> "query_compare_t")))
-  (gw:enum-add-value! wt "COMPARE_LT" 'query-compare-lt)
-  (gw:enum-add-value! wt "COMPARE_LTE" 'query-compare-lte)
-  (gw:enum-add-value! wt "COMPARE_EQUAL" 'query-compare-equal)
-  (gw:enum-add-value! wt "COMPARE_GT" 'query-compare-gt)
-  (gw:enum-add-value! wt "COMPARE_GTE" 'query-compare-gte)
-  (gw:enum-add-value! wt "COMPARE_NEQ" 'query-compare-neq)
+(let ((wt (gw:wrap-enumeration ws '<gnc:query-compare-how> "QofQueryCompare")))
+  (gw:enum-add-value! wt "QOF_COMPARE_LT" 'query-compare-lt)
+  (gw:enum-add-value! wt "QOF_COMPARE_LTE" 'query-compare-lte)
+  (gw:enum-add-value! wt "QOF_COMPARE_EQUAL" 'query-compare-equal)
+  (gw:enum-add-value! wt "QOF_COMPARE_GT" 'query-compare-gt)
+  (gw:enum-add-value! wt "QOF_COMPARE_GTE" 'query-compare-gte)
+  (gw:enum-add-value! wt "QOF_COMPARE_NEQ" 'query-compare-neq)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:string-match-how> "string_match_t")))
-  (gw:enum-add-value! wt "STRING_MATCH_NORMAL" 'string-match-normal)
-  (gw:enum-add-value! wt "STRING_MATCH_CASEINSENSITIVE" 'string-match-caseinsensitive)
+(let ((wt (gw:wrap-enumeration ws '<gnc:string-match-how> "QofStringMatch")))
+  (gw:enum-add-value! wt "QOF_STRING_MATCH_NORMAL" 'string-match-normal)
+  (gw:enum-add-value! wt "QOF_STRING_MATCH_CASEINSENSITIVE" 'string-match-caseinsensitive)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:date-match-how> "date_match_t")))
-  (gw:enum-add-value! wt "DATE_MATCH_NORMAL" 'date-match-normal)
-  (gw:enum-add-value! wt "DATE_MATCH_ROUNDED" 'date-match-rounded)
+(let ((wt (gw:wrap-enumeration ws '<gnc:date-match-how> "QofDateMatch")))
+  (gw:enum-add-value! wt "QOF_DATE_MATCH_NORMAL" 'date-match-normal)
+  (gw:enum-add-value! wt "QOF_DATE_MATCH_ROUNDED" 'date-match-rounded)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:numeric-match-how> "numeric_match_t")))
-  (gw:enum-add-value! wt "NUMERIC_MATCH_ANY" 'amt-sgn-match-either)
-  (gw:enum-add-value! wt "NUMERIC_MATCH_CREDIT" 'amt-sgn-match-credit)
-  (gw:enum-add-value! wt "NUMERIC_MATCH_DEBIT" 'amt-sgn-match-debit)
+(let ((wt (gw:wrap-enumeration ws '<gnc:numeric-match-how> "QofNumericMatch")))
+  (gw:enum-add-value! wt "QOF_NUMERIC_MATCH_ANY" 'amt-sgn-match-either)
+  (gw:enum-add-value! wt "QOF_NUMERIC_MATCH_CREDIT" 'amt-sgn-match-credit)
+  (gw:enum-add-value! wt "QOF_NUMERIC_MATCH_DEBIT" 'amt-sgn-match-debit)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:cleared-match-how> "cleared_match_t")))
@@ -159,16 +160,17 @@
   (gw:enum-add-value! wt "CLEARED_VOIDED" 'cleared-match-voided)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:guid-match-how> "guid_match_t")))
-  (gw:enum-add-value! wt "GUID_MATCH_ALL" 'guid-match-all)
-  (gw:enum-add-value! wt "GUID_MATCH_ANY" 'guid-match-any)
-  (gw:enum-add-value! wt "GUID_MATCH_NULL" 'guid-match-null)
-  (gw:enum-add-value! wt "GUID_MATCH_NONE" 'guid-match-none)
+(let ((wt (gw:wrap-enumeration ws '<gnc:guid-match-how> "QofGuidMatch")))
+  (gw:enum-add-value! wt "QOF_GUID_MATCH_ALL" 'guid-match-all)
+  (gw:enum-add-value! wt "QOF_GUID_MATCH_ANY" 'guid-match-any)
+  (gw:enum-add-value! wt "QOF_GUID_MATCH_NULL" 'guid-match-null)
+  (gw:enum-add-value! wt "QOF_GUID_MATCH_NONE" 'guid-match-none)
+  (gw:enum-add-value! wt "QOF_GUID_MATCH_LIST_ANY" 'guid-match-list-any)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:char-match-how> "char_match_t")))
-  (gw:enum-add-value! wt "CHAR_MATCH_ANY" 'char-match-any)
-  (gw:enum-add-value! wt "CHAR_MATCH_NONE" 'char-match-none)
+(let ((wt (gw:wrap-enumeration ws '<gnc:char-match-how> "QofCharMatch")))
+  (gw:enum-add-value! wt "QOF_CHAR_MATCH_ANY" 'char-match-any)
+  (gw:enum-add-value! wt "QOF_CHAR_MATCH_NONE" 'char-match-none)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-txn-match-t> "query_txn_match_t")))
@@ -176,7 +178,7 @@
   (gw:enum-add-value! wt "QUERY_TXN_MATCH_ANY" 'query-txn-match-any)
   #t)
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-value-t> "kvp_value_t")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:kvp-value-t> "KvpValueType")))
   (gw:enum-add-value! wt "KVP_TYPE_GINT64" 'kvp-type-gint64)
   (gw:enum-add-value! wt "KVP_TYPE_DOUBLE" 'kvp-type-double)
   (gw:enum-add-value! wt "KVP_TYPE_NUMERIC" 'kvp-type-numeric)
@@ -212,7 +214,7 @@
   (gw:enum-add-value! we "CREDITLINE" 'credit-line)
   #t)
 
-(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "GNCBackendError")))
+(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "QofBackendError")))
 
   (gw:enum-add-value! we "ERR_BACKEND_NO_ERR" 'no-err)
   (gw:enum-add-value! we "ERR_BACKEND_NO_BACKEND" 'no-backend)
@@ -250,7 +252,7 @@
   #t)
 
 ;
-; Definitions from GNCId.h
+; Definitions from gnc-engine.h
 ;
 (gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
 (gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")
@@ -921,22 +923,6 @@ Expenses) are given numeric codes in corresponding ``number ranges.''")
 
 (gw:wrap-function
  ws
- 'gnc:account-get-price-src
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetPriceSrc"
- '((<gnc:Account*> a))
- "Get the account's price source, if any.")
-
-(gw:wrap-function
- ws
- 'gnc:account-get-quote-tz
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetQuoteTZ"
- '((<gnc:Account*> a))
- "Get the quote source's timezone, if any.")
-
-(gw:wrap-function
- ws
  'gnc:account-get-children
  '<gnc:AccountGroup*>
  "xaccAccountGetChildren"
@@ -1030,7 +1016,7 @@ children to this account.")
  '<gnc:Book*>
  "xaccGroupGetBook"
  '((<gnc:AccountGroup*> g))
- "Return the GNCBook of group g.")
+ "Return the QofBook of group g.")
 
 (gw:wrap-function
  ws
@@ -1285,12 +1271,29 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:price-list-destroy
+ '<gw:void>
+ "gnc_price_list_destroy"
+ '(((gw:glist-of <gnc:Price*> callee-owned) prices))
+ "Destroys a gnc price list unrefing the prices included in the list")
+
+(gw:wrap-function
+ ws
  'gnc:pricedb-lookup-latest
  '<gnc:Price*>
  "gnc_pricedb_lookup_latest"
  '((<gnc:PriceDB*> db)
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency))
  "Returns the latest price.  Unref the price when you're finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-latest-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_latest_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity))
+ "Returns the latest price(s) in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1301,6 +1304,15 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
    (<gnc:time-pair> t))
  "Returns the price quote nearest to t.  Unref price when finished with it.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-nearest-in-time-any-currency
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_nearest_in_time_any_currency"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity) (<gnc:time-pair> t))
+ "Returns the price(s) nearest to t in any currency available.")
 
 (gw:wrap-function
  ws
@@ -1332,21 +1344,43 @@ when no longer needed.")
    (<gnc:time-pair> t))
  "Lookup a price on the day specified by time t.")
 
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-latest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_latest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency))
+ "convert balance in commodity balance_commodity to new_currency using latest price.")
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-nearest-price
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_nearest_price"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency)
+   (<gnc:time-pair> t))
+ "convert balance in commodity balance_commodity to new_currency using nearest price
+to time t.")
+
 ;;===========
-;; GNCSession
+;; QofSession
 
 (gw:wrap-function
  ws
  'gnc:session-new
  '<gnc:Session*>
- "gnc_session_new" '()
+ "qof_session_new" '()
  "Create a new session.")
 
 (gw:wrap-function
  ws
  'gnc:session-destroy
  '<gw:void>
- "gnc_session_destroy"
+ "qof_session_destroy"
  '((<gnc:Session*> session))
  "Destroy the given session.")
 
@@ -1354,7 +1388,7 @@ when no longer needed.")
  ws
  'gnc:session-get-book
  '<gnc:Book*>
- "gnc_session_get_book"
+ "qof_session_get_book"
  '((<gnc:Session*> session))
  "Get the book of the given session.")
 
@@ -1362,7 +1396,7 @@ when no longer needed.")
  ws
  'gnc:session-begin
  '<gw:void>
- "gnc_session_begin"
+ "qof_session_begin"
  '((<gnc:Session*> session)
    ((<gw:mchars> caller-owned const) id)
    (<gw:bool> ignore-lock?)
@@ -1407,7 +1441,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-end
  '<gw:void>
- "gnc_session_end"
+ "qof_session_end"
  '((<gnc:Session*> session))
  "Indicate you're finished with the session.")
 
@@ -1415,7 +1449,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-group
  '<gnc:AccountGroup*>
- "gnc_book_get_group"
+ "xaccGetAccountGroup"
  '((<gnc:Book*> book))
  "Get the book's account group.")
 
@@ -1423,7 +1457,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-commodity-table
  '<gnc:commodity-table*>
- "gnc_book_get_commodity_table"
+ "gnc_commodity_table_get_table"
  '((<gnc:Book*> book))
  "Get the book's commodity table.")
 
@@ -1431,7 +1465,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-pricedb
  '<gnc:PriceDB*>
- "gnc_book_get_pricedb"
+ "gnc_pricedb_get_db"
  '((<gnc:Book*> book))
  "Get the book's pricedb.")
 
@@ -1439,7 +1473,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-kvp-changed
  '<gw:void>
- "gnc_book_kvp_changed"
+ "qof_book_kvp_changed"
  '((<gnc:Book*> book))
  "Set the flag that the Book's kvp changed.")
 
@@ -1447,7 +1481,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-get-error
  '<gnc:BackendError>
- "gnc_session_get_error"
+ "qof_session_get_error"
  '((<gnc:Session*> session))
  "Check for a pending error.")
 
@@ -1455,7 +1489,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-get-url
  '(<gw:mchars> callee-owned const)
- "gnc_session_get_url"
+ "qof_session_get_url"
  '((<gnc:Session*> session))
  "Return the URL of the opened session.")
 
@@ -1463,7 +1497,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:session-pop-error
  '<gnc:BackendError>
- "gnc_session_pop_error"
+ "qof_session_pop_error"
  '((<gnc:Session*> session))
  "Remove an error, if any, from the error stack.")
 
@@ -1680,7 +1714,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-create
  '<gnc:Query*>
- "gncQueryCreate"
+ "qof_query_create"
  '()
  "Create a new (empty) Query structure.")
 
@@ -1688,7 +1722,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-create-for
  '<gnc:Query*>
- "gncQueryCreateFor"
+ "qof_query_create_for"
  '((<gnc:id-type> obj-type))
  "Create a new (empty) Query structure to search for the supplied type.")
 
@@ -1696,7 +1730,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-search-for
  '<gw:void>
- "gncQuerySearchFor"
+ "qof_query_search_for"
  '((<gnc:Query*> q) (<gnc:id-type> obj-type))
  "Set the object-type to search for.")
 
@@ -1744,7 +1778,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-purge-terms
  '<gw:void>
- "gncQueryPurgeTerms"
+ "qof_query_purge_terms"
  '((<gnc:Query*> q) ((gw:gslist-of <gnc:id-type> caller-owned) param-path))
  "Remove query terms of a particular parameter-path.")
 
@@ -1940,11 +1974,11 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-set-sort-order
  '<gw:void>
- "xaccQuerySetSortOrder"
+ "qof_query_set_sort_order"
  '((<gnc:Query*> q)
-   ((gw:glist-of <gnc:id-type> callee-owned) primary)
-   ((gw:glist-of <gnc:id-type> callee-owned) secondary)
-   ((gw:glist-of <gnc:id-type> callee-owned) tertiary))
+   ((gw:gslist-of <gnc:id-type> callee-owned) primary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) secondary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) tertiary))
  "set sort order.")
 
 (gw:wrap-function
@@ -1962,7 +1996,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-set-max-results
  '<gw:void>
- "gncQuerySetMaxResults"
+ "qof_query_set_max_results"
  '((<gnc:Query*> q) (<gw:int> n))
  "Set the max number of results to be returned by a query.")
 
@@ -2141,7 +2175,16 @@ of having a parent transaction with which one is working...")
  "gnc_commodity_table_get_commodities"
  '((<gnc:commodity-table*> table)
    ((<gw:mchars> caller-owned const) namespace))
- "Return a list of all the namespaces in the table.")
+ "Return a list of all the commodities in a given namespace in the table.")
+
+(gw:wrap-function
+ ws
+ 'gnc:commodity-table-get-quotable-commodities
+ '(gw:glist-of <gnc:commodity*> caller-owned)
+ "gnc_commodity_table_get_quotable_commodities"
+ '((<gnc:commodity-table*> table)
+   ((<gw:mchars> caller-owned const) namespace))
+ "Return a list of all the quotable commodities in a given namespace in the table.")
 
 (gw:wrap-function
  ws
@@ -2387,7 +2430,7 @@ of having a parent transaction with which one is working...")
  '()
  "Run the RPC Server") 
 
-;; src/engine/date.h
+;; gnc-date.h
 
 (gw:wrap-function
  ws
@@ -2441,3 +2484,11 @@ the timepair representing midday on that day")
  "gnc_engine_resume_events"
  '()
  "Resume engine event generation.") 
+
+(gw:wrap-function
+ ws
+ 'gnc:quote-source-set-fq-installed
+ '<gw:void>
+ "gnc_quote_source_set_fq_installed"
+ '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
+ "Takes a list of installed Finance::Quote souces and records it internally.")

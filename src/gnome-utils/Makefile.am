@@ -27,6 +27,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account-pick.c \
   dialog-commodity.c \
   dialog-options.c \
+  dialog-query-list.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
@@ -37,6 +38,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-currency-edit.c \
   gnc-date-delta.c \
   gnc-date-edit.c \
+  gnc-date-format.c \
   gnc-dense-cal.c \
   gnc-frequency.c \
   gnc-general-select.c \
@@ -48,6 +50,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-icons.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
+  gnc-query-list.c \
   gnc-tree-model-account.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-commodity.c \
@@ -67,6 +70,7 @@ gncinclude_HEADERS = \
   dialog-account-pick.h \
   dialog-commodity.h \
   dialog-options.h \
+  dialog-query-list.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
@@ -77,6 +81,7 @@ gncinclude_HEADERS = \
   gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
+  gnc-date-format.h \
   gnc-dense-cal.h \
   gnc-frequency.h \
   gnc-general-select.h \
@@ -88,6 +93,7 @@ gncinclude_HEADERS = \
   gnc-icons.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
+  gnc-query-list.h \
   gnc-tree-model-account.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-commodity.h \
@@ -139,7 +145,9 @@ gncscm_DATA = gnc-menu-extensions.scm
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
+  dialog-query-list.glade \
   exchange-dialog.glade \
+  gnc-date-format.glade \
   transfer.glade
 
 EXTRA_DIST = \

@@ -1,87 +1,21 @@
-/*
- * gncObject.h -- the Core Object Registration/Lookup Interface
- * Copyright (C) 2001,2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
-
-#ifndef GNC_OBJECT_H_
-#define GNC_OBJECT_H_
-
-#include "gnc-book.h"
-#include "GNCId.h"
-
-/* Defines the version of the core object object registration
- * interface.  Only object modules compiled against this version
- * of the interface will load properly
- */
-#define GNC_OBJECT_VERSION 1
-
-typedef struct _gncObjectDef GncObject_t;
-typedef void (*foreachTypeCB) (GncObject_t *type, gpointer user_data);
-typedef void (*foreachBackendTypeCB) (GNCIdTypeConst type,
-				      gpointer backend_data,
-				      gpointer user_data);
-
-/* This is the Object Object descriptor */
-struct _gncObjectDef {
-  gint		interface_version;	/* of this object interface */
-  GNCIdType	name;		/* the Object's GNC_ID */
-  const char *	type_label;	/* "Printable" type-label string */
-
-  /* book_begin is called from within the Book routines to create
-   * module-specific hooks in a book whenever a book is created.
-   * book_end is called when the book is being closed, to clean
-   * up (and free memory).
-   */
-  void		(*book_begin)(GNCBook *);
-  void		(*book_end)(GNCBook *);
-
-  /* Determine if there are any dirty items in this book */
-  gboolean	(*is_dirty)(GNCBook *);
-
-  /* Mark this object's book clean (for after a load) */
-  void		(*mark_clean)(GNCBook *);
-
-  /* foreach() is used to execute a callback over each object
-   * stored in the particular book
-   */
-  void		(*foreach)(GNCBook *, foreachObjectCB, gpointer);
-
-  /* Given a particular object, return a printable string */
-  const char *	(*printable)(gpointer obj);
-
-};
-
-void gncObjectForeachType (foreachTypeCB cb, gpointer user_data);
-
-void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
-		       foreachObjectCB cb, gpointer user_data);
-
-const char * gncObjectPrintable (GNCIdTypeConst type_name, gpointer obj);
+#include "qofobject.h"
 
 
-/* REGISTRATION AND REG-LOOKUP FUNCTIONS */
+		#define GncObject_t QofObject
+		#define gncObjectLookup qof_object_lookup
+		#define gncObjectRegister qof_object_register
+		#define gncObjectGetTypeLabel qof_object_get_type_label
+		#define gncObjectRegisterBackend qof_object_register_backend
+		#define gncObjectLookupBackend qof_object_lookup_backend
+		#define gncObjectForeachBackend qof_object_foreach_backend
 
-/* Register new types of object objects */
-gboolean gncObjectRegister (const GncObject_t *object);
+		#define gncObjectInitialize qof_object_initialize
+		#define gncObjectShutdown qof_object_shutdown
+		#define gncObjectBookBegin qof_object_book_begin
+		#define gncObjectBookEnd qof_object_book_end
+		#define gncObjectIsDirty qof_object_is_dirty
+		#define gncObjectMarkClean qof_object_mark_clean
 
-/* Get the printable label for a type */
-const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name);
-
-/* Lookup a object definition */
-const GncObject_t * gncObjectLookup (GNCIdTypeConst type_name);
-
-
-/* Register and lookup backend-specific data for this particular object */
-gboolean gncObjectRegisterBackend (GNCIdTypeConst type_name,
-				   const char *backend_name,
-				   gpointer be_data);
-
-gpointer gncObjectLookupBackend (GNCIdTypeConst type_name,
-				 const char *backend_name);
-
-void gncObjectForeachBackend (const char *backend_name,
-			      foreachBackendTypeCB cb,
-			      gpointer user_data);
-
-#endif /* GNC_OBJECT_H_ */
+		#define gncObjectForeachType qof_object_foreach_type
+		#define gncObjectForeach qof_object_foreach
+		#define gncObjectPrintable qof_object_printable

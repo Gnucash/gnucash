@@ -31,10 +31,11 @@
 #include <time.h>
 
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
+#include "guid.h"
 #include "kvp_frame.h"
-#include "GNCId.h"
-#include "date.h"
+#include "qofbook.h"
 
 /** @name Split Reconciled field values
     If you change these
@@ -99,7 +100,7 @@ int    xaccConfigGetForceDoubleEntry (void);
  The xaccMallocTransaction() will malloc memory and initialize it.
  Once created, it is usually unsafe to merely "free" this memory;
  the xaccTransDestroy() method should be called. */ 
-Transaction * xaccMallocTransaction (GNCBook *book); 
+Transaction * xaccMallocTransaction (QofBook *book); 
 
 /**
  The xaccTransDestroy() method will remove all 
@@ -111,11 +112,41 @@ Transaction * xaccMallocTransaction (GNCBook *book);
  original order. */
 void          xaccTransDestroy (Transaction *trans);
 
-/** @brief DOCUMENT ME!*/
+/**
+ The xaccTransClone() method will create a complete copy of an
+ existing transaction.
+ */
+Transaction * xaccTransClone (Transaction *t);
+
+/** Equality.
+ *
+ * @param ta First transaction to compare
+ * @param tb Second transaction to compare
+ *
+ * @param check_guids If TRUE, try a guid_equal() on the GUIDs of both
+ * transactions if their pointers are not equal in the first place.
+ * Also passed to subsidiary calls to xaccSplitEqual.
+ *
+ * @param check_splits If TRUE, after checking the transaction data
+ * structures for equality, also check all splits attached to the
+ * transation for equality.
+ *
+ * @param check_balances If TRUE, when checking splits also compare
+ * balances between the two splits.  Balances are recalculated
+ * whenever a split is added or removed from an account, so YMMV on
+ * whether this should be set.
+ *
+ * @param assume_ordered If TRUE, assume that the splits in each
+ * transaction appear in the same order.  This saves some time looking
+ * up splits by GUID, and is required for checking duplicated
+ * transactions because all the splits have new GUIDs.
+ */
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
                         gboolean check_guids,
-                        gboolean check_splits);
+                        gboolean check_splits,
+                        gboolean check_balances,
+                        gboolean assume_ordered);
 
 /** The xaccTransBeginEdit() method must be called before any changes
     are made to a transaction or any of its component splits.  If 
@@ -143,11 +174,19 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
+Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+Transaction * xaccTransLookupDirect (GUID guid, QofBook *book);
+
+
+/** \warning XXX FIXME 
+ * gnc_book_count_transactions is a utility function, 
+ * probably needs to be moved to a utility file somewhere.
+ */
+guint gnc_book_count_transactions(QofBook *book);
+
 /**@}*/
 
 
@@ -162,18 +201,26 @@ const GUID  * xaccTransGetGUID (const Transaction *trans);
 GUID          xaccTransReturnGUID (const Transaction *trans);
 
 /** Returns the book in which the transaction is stored */
-GNCBook *     xaccTransGetBook (const Transaction *trans);
+QofBook *     xaccTransGetBook (const Transaction *trans);
 
+/** Sorts the splits in a transaction, putting the debits first,
+ *  followed by the credits.
+ */
+void          xaccTransSortSplits (Transaction *trans);
 
-/** Returns the transaction's kvp_frame slots.
+/** Print the transaction out to the console. Used for debugging.
+ */
+void          xaccTransDump (Transaction *trans, const char *tag);
+
+/** Returns the transaction's KvpFrame slots.
  *
  Transaction slots are used to store arbitrary strings, numbers, and
  structures which aren't members of the transaction struct.  */
-kvp_frame *xaccTransGetSlots(const Transaction *trans);
+KvpFrame *xaccTransGetSlots(const Transaction *trans);
 
-/** Set the kvp_frame slots of this transaction to the given frm by
+/** Set the KvpFrame slots of this transaction to the given frm by
  * directly using the frm pointer (i.e. non-copying). */
-void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
+void xaccTransSetSlots_nc(Transaction *t, KvpFrame *frm);
 
 
 /** Set the  Transaction Type
@@ -186,26 +233,26 @@ void	      xaccTransSetTxnType (Transaction *trans, char type);
 char	      xaccTransGetTxnType (const Transaction *trans);
 
 
-/** @brief Sets the transaction Number (or ID) field*/
+/** Sets the transaction Number (or ID) field*/
 void          xaccTransSetNum (Transaction *trans, const char *num);
-/** @brief Sets the transaction Description */
+/** Sets the transaction Description */
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
-/** @brief Sets the transaction Notes
+/** Sets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 void          xaccTransSetNotes (Transaction *trans, const char *notes);
 
-/** @brief Gets the transaction Number (or ID) field*/
+/** Gets the transaction Number (or ID) field*/
 const char *  xaccTransGetNum (const Transaction *trans);
-/** @brief Gets the transaction Description */
+/** Gets the transaction Description */
 const char *  xaccTransGetDescription (const Transaction *trans);
-/** @brief Gets the transaction Notes
+/** Gets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
 const char *  xaccTransGetNotes (const Transaction *trans);
 
 
-/** @brief Add a split to the transaction
+/** Add a split to the transaction
  * 
  The xaccTransAppendSplit() method will append the indicated 
  split to the collection of splits in this transaction.
@@ -247,12 +294,21 @@ gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
 gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
 						     const Account *account);
 
+/** FIXME: document me */
+gboolean      xaccTransHasSplitsInState (const Transaction *trans, const char state);
+/** FIXME: document me */
+gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
+						  const char state,
+						  const Account *account);
 
-/** Returns the commodity of this transaction.
+
+/** Returns the valuation commodity of this transaction.
  *
- * Each transaction's 'currency' is by definition
- * the balancing common currency for the splits in that transaction.
- * @note What happens if the Currency isn't set? */
+ * Each transaction's valuation commodity, or 'currency' is, by definition,
+ * the common currency in which all splits in the transaction can be valued.
+ * The total value of the transaction must be zero when all splits 
+ * are valued in this currency.
+ * @note What happens if the Currency isn't set?  Ans: bad things.  */
 gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 
 /** Set the commodity of this transaction. */
@@ -306,8 +362,10 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
-/** The xaccTransSetDateSecs() method will modify the posted date of
-    the transaction, specified by a time_t (see ctime(3)). */
+/** The xaccTransSetDateSecs() method will modify the <i>posted</i>
+    date of the transaction, specified by a time_t (see ctime(3)). The
+    posted date is the date when this transaction was posted at the
+    bank. */
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
 
 /**     xaccTransSetDatePostedSecs() is just an alias for
@@ -319,28 +377,43 @@ void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
-/** @brief Modify the date of when the transaction was entered. */
+/** Modify the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made. */
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
-/** @brief Modify the date of when the transaction was entered. */
+/** Modify the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made. */
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                         const Timespec *ts);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
 
-/** Retrieve the posted date of the transaction. (Although having
-   different function names, GetDate and GetDatePosted refer to the
-   same single date.)*/
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 time_t        xaccTransGetDate (const Transaction *trans);
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. (Although
+    having different function names, GetDate and GetDatePosted refer
+    to the same single date.)*/
 Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
 
-/** Retrieve the date of when the transaction was entered. */
+/** Retrieve the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made.*/
 void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
+/** Retrieve the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made.*/
 Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
+/** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 
 /**@}*/
@@ -354,7 +427,7 @@ void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 /*@{*/
 
 /** Constructor. */
-Split       * xaccMallocSplit (GNCBook *book);
+Split       * xaccMallocSplit (QofBook *book);
 
 /** Destructor.
  *
@@ -377,7 +450,7 @@ gboolean      xaccSplitDestroy (Split *split);
 
 /** Returns the book of this split, i.e. the entity where this split
  * is stored. */
-GNCBook *   xaccSplitGetBook (const Split *split);
+QofBook *   xaccSplitGetBook (const Split *split);
 
 /** Returns the account of this split, which was set through
  * xaccAccountInsertSplit(). */
@@ -392,17 +465,17 @@ Transaction * xaccSplitGetParent (const Split *split);
 GNCLot *      xaccSplitGetLot (const Split *split);
 
 
-/** Returns the kvp_frame slots of this split for direct editing. 
+/** Returns the KvpFrame slots of this split for direct editing. 
  *
  * Split slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  See
  * kvp_doc.txt for reserved slot names.
  */
-kvp_frame *xaccSplitGetSlots(const Split *split);
+KvpFrame *xaccSplitGetSlots(const Split *split);
 
-/** Set the kvp_frame slots of this split to the given frm by directly
+/** Set the KvpFrame slots of this split to the given frm by directly
  * using the frm pointer (i.e. non-copying). */
-void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
+void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
 
 
 /** The xaccSplitGetGUID() subroutine will return the
@@ -535,9 +608,7 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
  * return the amount. If it is neither and the force_double_entry flag
  * is false, return the value. If is is neither and force_double_entry
  * is true, print a warning message and return gnc_numeric_zero(). 
- *
- * @note FIXME: is this function deprecated, or is this function supposed to
- * be used? */
+ */
 gnc_numeric xaccSplitGetBaseValue (const Split *split, 
                                    const gnc_commodity * base_currency);
 
@@ -546,9 +617,7 @@ gnc_numeric xaccSplitGetBaseValue (const Split *split,
  * with non-unit share prices, it is correctly adjusted for
  * share prices.
  *
- * The following three subroutines return the running balance up to &
- * including the indicated split. (The function
- * xaccSplitGetShareBalance seems to have silently disappeared.)
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetBalance (const Split *split);
 
@@ -556,6 +625,8 @@ gnc_numeric xaccSplitGetBalance (const Split *split);
  * The cleared-balance is the currency-denominated balance 
  * of all transactions that have been marked as cleared or reconciled.
  * It is correctly adjusted for price fluctuations.
+ *
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetClearedBalance (const Split *split);
 
@@ -563,6 +634,8 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  * Returns the reconciled-balance of this split. The
  * reconciled-balance is the currency-denominated balance of all
  * transactions that have been marked as reconciled.
+ *
+ * Returns the running balance up to & including the indicated split. 
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
@@ -581,6 +654,10 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  * @param check_guids If TRUE, try a guid_equal() on the GUIDs of both
  * splits if their pointers are not equal in the first place.
  *
+ * @param check_balances If TRUE, compare balances between the two
+ * splits.  Balances are recalculated whenever a split is added or
+ * removed from an account, so YMMV on whether this should be set.
+ *
  * @param check_txn_splits If the pointers are not equal, but
  * everything else so far is equal (including memo, amount, value,
  * kvp_frame), then, when comparing the parenting transactions with
@@ -588,15 +665,16 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
  */
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,
+                	gboolean check_balances,
                         gboolean check_txn_splits);
 
 /** The xaccSplitLookup() subroutine will return the
  *    split associated with the given id, or NULL
  *    if there is no such split. */
-Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
+Split      * xaccSplitLookup (const GUID *guid, QofBook *book);
 /** Returns the split associated with the given id, or NULL if there
  * is no such split. */
-Split      * xaccSplitLookupDirect (GUID guid, GNCBook *book);
+Split      * xaccSplitLookupDirect (GUID guid, QofBook *book);
 
 
 /** 
@@ -735,27 +813,81 @@ Account * xaccGetAccountByFullName (Transaction *trans,
 
 /** @name Transaction voiding */
 /*@{*/
-/** xaccTransactionVoid voids a transaction.  A void transaction
- * has no values, is unaffected by reconciliation, and, by default
- * is not included in any queries.  A voided transaction 
- * should not be altered (and we'll try to make it so it can't be).
- * voiding is irreversible.  Once voided, a transaction cannot be
- * un-voided.
+/** xaccTransVoid voids a transaction.  A void transaction has no
+ *  values, is unaffected by reconciliation, and, by default is not
+ *  included in any queries.  A voided transaction may not be altered.
+ *
+ *  @param transaction The transaction to void.
+ *
+ *  @param reason The textual reason why this transaction is being
+ *  voided.
  */
 void xaccTransVoid(Transaction *transaction, 
-			 const char *reason);
-/** document me */
+		   const char *reason);
+
+/** xaccTransUnvoid restores a voided transaction to its original
+ *  state.  At some point when gnucash is enhanced to support an audit
+ *  trail (i.e. write only transactions) this command should be
+ *  automatically disabled when the audit trail feature is enabled.
+ *
+ *  @param transaction The transaction to restore from voided state.
+ */
+void xaccTransUnvoid(Transaction *transaction);
+
+/** xaccTransReverse inverts all the numerical values on the given
+ *  transaction.  This function can be used after xaccTransClone
+ *  to create a transaction that cancels out the effect of an
+ *  earlier transaction.  This will be needed by write only accounts
+ *  as a way to void a previous transaction (since you can't alter
+ *  the existing transaction).
+ *
+ *  @param transaction The transaction to reverse.
+ */
+void xaccTransReverse(Transaction *transaction);
+
+/** Retrieve information on whether or not a transaction has been voided.
+ *
+ *  @param transaction The transaction in question.
+ *
+ *  @return TRUE if the transaction is void, FALSE otherwise. Also
+ *  returns FALSE upon an error.
+ */
 gboolean xaccTransGetVoidStatus(const Transaction *transaction);
 
-/** document me */
+/** Returns the user supplied textual reason why a transaction was
+ *  voided.
+ *
+ *  @param transaction The transaction in question.
+ *
+ *  @return A pointer to the user supplied reason for voiding.
+ */
 char *xaccTransGetVoidReason(const Transaction *transaction);
 
-/** document me */
+/** Returns the original pre-void amount of a split.
+ *
+ *  @param split The split in question.
+ *
+ *  @return A gnc_numeric containing the original value of this split.
+ *  Returns a gnc_numeric of zero upon error.
+ */
 gnc_numeric xaccSplitVoidFormerAmount(const Split *split);
-/** document me */
+
+/** Returns the original pre-void value of a split.
+ *
+ *  @param split The split in question.
+ *
+ *  @return A gnc_numeric containing the original amount of this split.
+ *  Returns a gnc_numeric of zero upon error.
+ */
 gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
-/** document me */
+/** Returns the time that a transaction was voided.
+ *
+ *  @param split The transaction in question.
+ *
+ *  @return A Timespec containing the time that this transaction was
+ *  voided. Returns a time of zero upon error.
+ */
 Timespec xaccTransGetVoidTime(const Transaction *tr);
 /**@}*/
 

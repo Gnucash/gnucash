@@ -4,6 +4,7 @@ pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
+	-I${top_srcdir}/src \
 	-I${top_srcdir}/src/gnc-module \
 	${GUILE_INCS} \
 	${G_WRAP_COMPILE_ARGS} \
@@ -11,68 +12,70 @@ AM_CFLAGS = \
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
-  Backend.c \
-  DateUtils.c \
   FreqSpec.c \
-  GNCId.c \
   Group.c \
   Period.c \
   Query.c \
-  QueryNew.c \
-  QueryCore.c \
-  QueryObject.c \
   SchedXaction.c \
+  SX-book.c \
   SX-ttinfo.c \
   Scrub.c \
+  Scrub2.c \
   TransLog.c \
   Transaction.c \
-  date.c \
   gnc-associate-account.c \
-  gnc-book.c \
   gnc-commodity.c \
+  gnc-date.c \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
   gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
-  gnc-session.c \
   gnc-session-scm.c \
+  gnc-trace.c \
   gncmod-engine.c \
   guid.c \
-  gncObject.c \
   kvp_frame.c \
   kvp-util.c \
   md5.c \
-  messages.c
+  messages.c \
+  qofbackend.c \
+  qofbook.c \
+  qofid.c \
+  qofobject.c \
+  qofquery.c \
+  qofquerycore.c \
+  qofqueryobject.c \
+  qofsession.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
-  Backend.h \
-  DateUtils.h \
   FreqSpec.h \
   GNCId.h \
   Group.h \
   Period.h \
   SchedXaction.h \
+  SX-book.h \
   SX-ttinfo.h \
   Query.h \
   QueryNew.h \
   QueryObject.h \
   QueryCore.h \
   Scrub.h \
+  Scrub2.h \
   TransLog.h \
   Transaction.h \
-  date.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
   gnc-be-utils.h \
   gnc-book.h \
   gnc-commodity.h \
+  gnc-date.h \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \
@@ -80,36 +83,49 @@ gncinclude_HEADERS = \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
+  gnc-trace.h \
   guid.h \
   gncObject.h \
   kvp_frame.h \
   kvp-scm.h \
-  messages.h
+  kvp-util.h \
+  messages.h \
+  qof.h \
+  qofbackend.h \
+  qofbook.h \
+  qofid.h \
+  qofobject.h \
+  qofquery.h \
+  qofquerycore.h \
+  qofqueryobject.h \
+  qofsession.h
 
 noinst_HEADERS = \
   AccountP.h \
-  BackendP.h \
   FreqSpecP.h \
-  GNCIdP.h \
   GroupP.h \
   QueryP.h \
-  QueryNewP.h \
-  QueryObjectP.h \
-  QueryCoreP.h \
   SchedXactionP.h \
+  ScrubP.h \
+  SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
-  gnc-book-p.h \
   gnc-event-p.h \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
-  gnc-session-p.h \
-  gncObjectP.h \
   kvp-util-p.h \
   md5.h \
   gw-engine.h \
-  gw-kvp.h
+  gw-kvp.h \
+  qofbackend-p.h \
+  qofbook-p.h \
+  qofid-p.h \
+  qofobject-p.h \
+  qofquery-p.h \
+  qofquerycore-p.h \
+  qofqueryobject-p.h \
+  qofsession-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 
@@ -141,10 +157,10 @@ gncscm_DATA = \
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-engine.scm \
-  gw-kvp.scm \
   gw-engine-spec.scm \
-  gw-kvp-spec.scm
+  gw-engine.scm \
+  gw-kvp-spec.scm \
+  gw-kvp.scm
 
 EXTRA_DIST = \
   .cvsignore \

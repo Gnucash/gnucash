@@ -24,7 +24,7 @@
 #define GNC_REPORT_WINDOW_H
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"

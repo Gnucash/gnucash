@@ -10,11 +10,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "date.h"
 #include "Group.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "Transaction.h"
+#include "qofquerycore.h"
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -30,7 +31,7 @@ static gint max_group_accounts = 10;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 static gpointer get_random_list_element (GList *list);
-static void add_random_splits(GNCBook *book, Transaction *trn);
+static void add_random_splits(QofBook *book, Transaction *trn);
 
 
 /***********************************************************************/
@@ -60,7 +61,7 @@ set_max_kvp_frame_elements (gint max_kvp_frame_elements)
 }
 
 void
-kvp_exclude_type (kvp_value_t kvp_type)
+kvp_exclude_type (KvpValueType kvp_type)
 {
   gint *key;
 
@@ -74,7 +75,7 @@ kvp_exclude_type (kvp_value_t kvp_type)
 }
 
 static gboolean
-kvp_type_excluded (kvp_value_t kvp_type)
+kvp_type_excluded (KvpValueType kvp_type)
 {
   gint key = kvp_type;
 
@@ -158,7 +159,7 @@ get_random_commodity_namespace(void)
 }
 
 void
-make_random_changes_to_price (GNCBook *book, GNCPrice *p)
+make_random_changes_to_price (QofBook *book, GNCPrice *p)
 {
   Timespec *ts;
   char *string;
@@ -192,7 +193,7 @@ make_random_changes_to_price (GNCBook *book, GNCPrice *p)
 }
 
 GNCPrice *
-get_random_price(GNCBook *book)
+get_random_price(QofBook *book)
 {
   GNCPrice *p;
 
@@ -204,7 +205,7 @@ get_random_price(GNCBook *book)
 }
 
 void
-make_random_pricedb (GNCBook *book, GNCPriceDB *db)
+make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
   int num_prices;
 
@@ -223,7 +224,7 @@ make_random_pricedb (GNCBook *book, GNCPriceDB *db)
 }
 
 GNCPriceDB *
-get_random_pricedb(GNCBook *book)
+get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
@@ -244,7 +245,7 @@ price_accumulator (GNCPrice *p, gpointer data)
 }
 
 void
-make_random_changes_to_pricedb (GNCBook *book, GNCPriceDB *pdb)
+make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb)
 {
   GList *list = NULL;
   GList *node;
@@ -313,7 +314,7 @@ get_random_glist_depth (gint depth)
 
     for (i = 0; i < count; i++)
     {
-        kvp_value_t kvpt;
+        KvpValueType kvpt;
         kvp_value *value;
 
         kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
@@ -528,7 +529,7 @@ set_account_random_string(Account* act,
 }
 
 static void
-account_add_subaccounts (GNCBook *book, Account *account, int depth)
+account_add_subaccounts (QofBook *book, Account *account, int depth)
 {
   int num_accounts;
 
@@ -548,7 +549,7 @@ account_add_subaccounts (GNCBook *book, Account *account, int depth)
 }
 
 static void
-make_random_group_depth (GNCBook *book, AccountGroup *group, int depth)
+make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
 {
   int num_accounts;
 
@@ -571,7 +572,7 @@ make_random_group_depth (GNCBook *book, AccountGroup *group, int depth)
 }
 
 static void
-make_random_group (GNCBook *book, AccountGroup * group)
+make_random_group (QofBook *book, AccountGroup * group)
 {
   int depth;
 
@@ -584,7 +585,7 @@ make_random_group (GNCBook *book, AccountGroup * group)
 }
 
 AccountGroup *
-get_random_group (GNCBook *book)
+get_random_group (QofBook *book)
 {
   AccountGroup * group;
 
@@ -603,7 +604,7 @@ typedef struct
 } TransInfo;
 
 void
-make_random_changes_to_transaction_and_splits (GNCBook *book,
+make_random_changes_to_transaction_and_splits (QofBook *book,
                                                Transaction *trans,
                                                GList *accounts)
 {
@@ -699,7 +700,7 @@ add_trans_helper (Transaction *trans, gpointer data)
 }
 
 void
-make_random_changes_to_group (GNCBook *book, AccountGroup *group)
+make_random_changes_to_group (QofBook *book, AccountGroup *group)
 {
   Account *new_account;
   Account *account;
@@ -827,7 +828,7 @@ make_random_changes_to_group (GNCBook *book, AccountGroup *group)
 }
 
 Account*
-get_random_account(GNCBook *book)
+get_random_account(QofBook *book)
 {
     Account *ret;
     int tmp_int;
@@ -854,7 +855,7 @@ get_random_account(GNCBook *book)
 }
 
 void
-make_random_changes_to_account (GNCBook *book, Account *account)
+make_random_changes_to_account (QofBook *book, Account *account)
 {
     int tmp_int;
 
@@ -893,7 +894,7 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
-get_random_split(GNCBook *book, gnc_numeric num)
+get_random_split(QofBook *book, gnc_numeric num)
 {
     Split *ret;
     gnc_numeric oneVal;
@@ -958,7 +959,7 @@ set_tran_random_string(Transaction* trn,
 }
 
 static void
-add_random_splits(GNCBook *book, Transaction *trn)
+add_random_splits(QofBook *book, Transaction *trn)
 {
     gnc_numeric num = get_random_gnc_numeric();
 
@@ -979,7 +980,7 @@ trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
 
     
 Transaction *
-get_random_transaction_with_currency(GNCBook *book,
+get_random_transaction_with_currency(QofBook *book,
                                      gnc_commodity *currency)
 {
     Transaction* ret;
@@ -1016,18 +1017,21 @@ get_random_transaction_with_currency(GNCBook *book,
 }
 
 Transaction*
-get_random_transaction (GNCBook *book)
+get_random_transaction (QofBook *book)
 {
   return get_random_transaction_with_currency (book, NULL);
 }
 
 void
-make_random_changes_to_transaction (GNCBook *book, Transaction *trans)
+make_random_changes_to_transaction (QofBook *book, Transaction *trans)
 {
   g_return_if_fail (trans && book);
 
-  if (xaccTransGetVoidStatus (trans))
+  if (xaccTransGetVoidStatus (trans)) {
+    if (get_random_int_in_range (1, 2) == 1)
+      xaccTransUnvoid (trans);
     return;
+  }
 
   xaccTransBeginEdit (trans);
 
@@ -1091,7 +1095,7 @@ get_random_commodity_from_table (gnc_commodity_table *table)
 }
 
 gnc_commodity*
-get_random_commodity (GNCBook *book)
+get_random_commodity (QofBook *book)
 {
     gnc_commodity *ret;
     gchar *name;
@@ -1182,7 +1186,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
     GList *commodities;
     GList *com_node;
 
-    if (strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
+    if (gnc_commodity_namespace_is_iso (ns))
       continue;
 
     commodities = gnc_commodity_table_get_commodities (table, ns);
@@ -1229,10 +1233,10 @@ free_random_guids(GList *guids)
   g_list_free (guids);
 }
 
-static QueryOp
+static QofQueryOp
 get_random_queryop(void)
 {
-  return get_random_int_in_range (1, QUERY_XOR);
+  return get_random_int_in_range (1, QOF_QUERY_XOR);
 }
 
 static GSList *
@@ -1261,7 +1265,7 @@ free_random_kvp_path (GSList *path)
   g_slist_free (path);
 }
 
-static GNCIdType
+static QofIdType
 get_random_id_type (void)
 {
   switch (get_random_int_in_range (1,3)) {
@@ -1341,7 +1345,7 @@ set_query_sort (Query *q, sort_type_t sort_code)
       g_return_if_fail (FALSE);
   }
 
-  gncQuerySetSortOrder (q, p1, p2, p3);
+  qof_query_set_sort_order (q, p1, p2, p3);
 }
 
 Query *
@@ -1374,7 +1378,7 @@ get_random_query(void)
         xaccQueryAddAccountGUIDMatch
           (q,
            guids,
-           get_random_int_in_range (1, GUID_MATCH_NONE),
+           get_random_int_in_range (1, QOF_GUID_MATCH_NONE),
            get_random_queryop ());
         free_random_guids (guids);
         break;
@@ -1449,7 +1453,7 @@ get_random_query(void)
         xaccQueryAddKVPMatch (q,
                               path,
                               value,
-                              get_random_int_in_range (1, COMPARE_NEQ),
+                              get_random_int_in_range (1, QOF_COMPARE_NEQ),
                               get_random_id_type (),
                               get_random_queryop ());
         kvp_value_delete (value);
@@ -1480,7 +1484,7 @@ get_random_query(void)
         xaccQueryAddSharePriceMatch
           (q,
            get_random_gnc_numeric (), 
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1488,7 +1492,7 @@ get_random_query(void)
         xaccQueryAddSharesMatch
           (q,
            get_random_gnc_numeric (), 
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1496,8 +1500,8 @@ get_random_query(void)
         xaccQueryAddValueMatch
           (q,
            get_random_gnc_numeric (),
-           get_random_int_in_range (1, NUMERIC_MATCH_ANY),
-           get_random_int_in_range (1, COMPARE_NEQ),
+           get_random_int_in_range (1, QOF_NUMERIC_MATCH_ANY),
+           get_random_int_in_range (1, QOF_COMPARE_NEQ),
            get_random_queryop ());
         break;
 
@@ -1519,12 +1523,12 @@ get_random_query(void)
   return q;
 }
 
-GNCBook *
+QofBook *
 get_random_book (void)
 {
-  GNCBook *book;
+  QofBook *book;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
 
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
@@ -1532,15 +1536,15 @@ get_random_book (void)
   return book;
 }
 
-GNCSession *
+QofSession *
 get_random_session (void)
 {
-  GNCSession *session;
-  GNCBook *book;
+  QofSession *session;
+  QofBook *book;
 
-  session = gnc_session_new ();
+  session = qof_session_new ();
 
-  book = gnc_session_get_book (session);
+  book = qof_session_get_book (session);
 
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
@@ -1549,7 +1553,7 @@ get_random_session (void)
 }
 
 void
-add_random_transactions_to_book (GNCBook *book, gint num_transactions)
+add_random_transactions_to_book (QofBook *book, gint num_transactions)
 {
   gnc_commodity_table *table;
   GList *accounts;
@@ -1595,7 +1599,7 @@ add_random_transactions_to_book (GNCBook *book, gint num_transactions)
 }
 
 void
-make_random_changes_to_book (GNCBook *book)
+make_random_changes_to_book (QofBook *book)
 {
   g_return_if_fail (book);
 
@@ -1608,16 +1612,16 @@ make_random_changes_to_book (GNCBook *book)
 }
 
 void
-make_random_changes_to_session (GNCSession *session)
+make_random_changes_to_session (QofSession *session)
 {
   g_return_if_fail (session);
 
-  make_random_changes_to_book (gnc_session_get_book (session));
+  make_random_changes_to_book (qof_session_get_book (session));
 }
 
 typedef struct
 {
-  GNCIdType where;
+  QofIdType where;
   GSList *path;
   Query *q;
 } KVPQueryData;
@@ -1635,8 +1639,8 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
                              add_kvp_value_query, data);
   else
     xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
-                          COMPARE_EQUAL, kqd->where,
-                          QUERY_AND);
+                          QOF_COMPARE_EQUAL, kqd->where,
+                          QOF_QUERY_AND);
 
   node = g_slist_last (kqd->path);
   kqd->path = g_slist_remove_link (kqd->path, node);
@@ -1644,7 +1648,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
 }
 
 static void
-add_kvp_query (Query *q, kvp_frame *frame, GNCIdType where)
+add_kvp_query (Query *q, kvp_frame *frame, QofIdType where)
 {
   KVPQueryData kqd;
 
@@ -1695,38 +1699,38 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
   if (query_types & SIMPLE_QT)
   {
-    xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QUERY_AND);
+    xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QOF_QUERY_AND);
 
     xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                  TRUE, FALSE, QUERY_AND);
+                                  TRUE, FALSE, QOF_QUERY_AND);
 
     xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
-                             TRUE, FALSE, QUERY_AND);
+                             TRUE, FALSE, QOF_QUERY_AND);
 
     xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
-                             TRUE, FALSE, QUERY_AND);
+                             TRUE, FALSE, QOF_QUERY_AND);
 
     n = xaccSplitGetValue (s);
-    xaccQueryAddValueMatch (q, n, NUMERIC_MATCH_ANY,
-                              COMPARE_EQUAL, QUERY_AND);
+    xaccQueryAddValueMatch (q, n, QOF_NUMERIC_MATCH_ANY,
+                              QOF_COMPARE_EQUAL, QOF_QUERY_AND);
 
     n = xaccSplitGetAmount (s);
-    xaccQueryAddSharesMatch (q, n, COMPARE_EQUAL, QUERY_AND);
+    xaccQueryAddSharesMatch (q, n, QOF_COMPARE_EQUAL, QOF_QUERY_AND);
 
     if (include_price)
     {
       n = xaccSplitGetSharePrice (s);
-      xaccQueryAddSharePriceMatch (q, n, COMPARE_EQUAL, QUERY_AND);
+      xaccQueryAddSharePriceMatch (q, n, QOF_COMPARE_EQUAL, QOF_QUERY_AND);
     }
 
     {
       Timespec ts;
 
       xaccTransGetDatePostedTS (trans, &ts);
-      xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QUERY_AND);
+      xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QOF_QUERY_AND);
     }
 
-    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QUERY_AND);
+    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
 
     {
       cleared_match_t how;
@@ -1754,7 +1758,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
           return NULL;
       }
 
-      xaccQueryAddClearedMatch (q, how, QUERY_AND);
+      xaccQueryAddClearedMatch (q, how, QOF_QUERY_AND);
     }
   }
 
@@ -1770,7 +1774,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       Split * split = node->data;
       list = g_list_prepend (list, xaccSplitGetAccount (split));
     }
-    xaccQueryAddAccountMatch (q, list, GUID_MATCH_ALL, QUERY_AND);
+    xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QOF_QUERY_AND);
     g_list_free (list);
 
     /* GUID_MATCH_NONE */
@@ -1778,7 +1782,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
-    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_NONE, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
 
     /* GUID_MATCH_ANY */
     {
@@ -1786,7 +1790,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       *guid = *xaccAccountGetGUID (a);
       list = g_list_prepend (list, guid);
     }
-    xaccQueryAddAccountGUIDMatch (q, list, GUID_MATCH_ANY, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
 
     for (node = list; node; node = node->next)
       g_free (node->data);
@@ -1796,13 +1800,13 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   if (query_types & GUID_QT)
   {
     xaccQueryAddGUIDMatch (q, xaccSplitGetGUID (s),
-                           GNC_ID_SPLIT, QUERY_AND);
+                           GNC_ID_SPLIT, QOF_QUERY_AND);
 
     xaccQueryAddGUIDMatch (q, xaccTransGetGUID (trans),
-                           GNC_ID_TRANS, QUERY_AND);
+                           GNC_ID_TRANS, QOF_QUERY_AND);
 
     xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a),
-                           GNC_ID_ACCOUNT, QUERY_AND);
+                           GNC_ID_ACCOUNT, QOF_QUERY_AND);
   }
 
   if (query_types & SPLIT_KVP_QT)

@@ -81,8 +81,8 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
   PriceCell *cell = (PriceCell *) _cell;
   struct lconv *lc = gnc_localeconv ();
   const char *toks = "+-*/=()_";
-  char decimal_point;
-  char thousands_sep;
+  unsigned char decimal_point;
+  unsigned char thousands_sep;
   int i;
 
   /* accept the newval string if user action was delete */

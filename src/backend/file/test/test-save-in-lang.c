@@ -12,7 +12,7 @@
 #include "test-file-stuff.h"
 
 #include "core-utils.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 #include "gnc-engine.h"
 #include "TransLog.h"
 
@@ -69,47 +69,47 @@ test_file(const char *filename)
 
     for(i = 0; possible_envs[i] != NULL; i++)
     {
-        GNCBackendError err;
-        GNCSession *session;
+        QofBackendError err;
+        QofSession *session;
         char *cmd;
         char *new_file = gen_new_file_name(filename, possible_envs[i]);
-        GNCSession *new_session;
+        QofSession *new_session;
         
-        session = gnc_session_new();
+        session = qof_session_new();
 
-        gnc_session_begin(session, filename, TRUE, FALSE);
-        err = gnc_session_pop_error (session);
+        qof_session_begin(session, filename, TRUE, FALSE);
+        err = qof_session_pop_error (session);
         if (err)
         {
-            gnc_session_destroy(session);
-            return g_strdup_printf("gnc_session_begin errorid %d", err);
+            qof_session_destroy(session);
+            return g_strdup_printf("qof_session_begin errorid %d", err);
         }
 
-        gnc_session_load(session, NULL);
-        err = gnc_session_pop_error (session);
+        qof_session_load(session, NULL);
+        err = qof_session_pop_error (session);
         if(err)
         {
-            gnc_session_destroy(session);
-            return g_strdup_printf("gnc_session_load errorid %d", err);
+            qof_session_destroy(session);
+            return g_strdup_printf("qof_session_load errorid %d", err);
         }
 
         if(gnc_setenv("LANG", possible_envs[i], 1) != 0)
           return g_strdup_printf("gnc_setenv for LANG");
 
-        new_session = gnc_session_new();
+        new_session = qof_session_new();
         
-        gnc_session_begin(new_session, new_file, FALSE, FALSE);
-        err = gnc_session_pop_error (new_session);
+        qof_session_begin(new_session, new_file, FALSE, FALSE);
+        err = qof_session_pop_error (new_session);
         if(err)
         {
             g_free(new_file);
-            gnc_session_destroy(session);
-            gnc_session_destroy(new_session);
-            return g_strdup_printf("gnc_session_begin 2 with LANG=%s",
+            qof_session_destroy(session);
+            qof_session_destroy(new_session);
+            return g_strdup_printf("qof_session_begin 2 with LANG=%s",
                                    possible_envs[i]);
         }
 
-        gnc_session_save(new_session, NULL);
+        qof_session_save(new_session, NULL);
 
         cmd = g_strdup_printf(diff_command, filename, new_file);
 
@@ -117,16 +117,16 @@ test_file(const char *filename)
         {
             g_free(cmd);
             g_free(new_file);
-            gnc_session_destroy(session);
-            gnc_session_destroy(new_session);
+            qof_session_destroy(session);
+            qof_session_destroy(new_session);
             return g_strdup_printf("run_command_get_return with LANG=%s",
                                    possible_envs[i]);
         }
 
         g_free(new_file);
         g_free(cmd);
-        gnc_session_destroy(session);
-        gnc_session_destroy(new_session);
+        qof_session_destroy(session);
+        qof_session_destroy(new_session);
     }
 
     return NULL;

@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -8,10 +8,9 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "Backend.h"
+#include "qofsession.h"
 #include "Group.h"
 #include "TransLog.h"
-#include "gnc-session.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "io-gncxml-v2.h"
@@ -46,34 +45,34 @@ remove_locks(const char *filename)
 static void
 test_load_file(const char *filename)
 {
-    GNCSession *session;
-    GNCBook *book;
+    QofSession *session;
+    QofBook *book;
     gboolean ignore_lock;
 
-    session = gnc_session_new();
+    session = qof_session_new();
 
     remove_locks(filename);
 
     ignore_lock = (strcmp(getenv("SRCDIR"), ".") != 0);
-    gnc_session_begin(session, filename, ignore_lock, FALSE);
+    qof_session_begin(session, filename, ignore_lock, FALSE);
 
-    gnc_session_load_from_xml_file_v2(session);
+    qof_session_load_from_xml_file_v2(session);
 
-    book = gnc_session_get_book (session);
+    book = qof_session_get_book (session);
 
-    do_test (xaccGroupGetBook (gnc_book_get_group (book)) == book,
+    do_test (xaccGroupGetBook (xaccGetAccountGroup (book)) == book,
              "book and group don't match");
 
     do_test_args(
-        gnc_session_get_error(session) == ERR_BACKEND_NO_ERR,
+        qof_session_get_error(session) == ERR_BACKEND_NO_ERR,
         "session load xml2", __FILE__, __LINE__, "%d for file %s",
-        gnc_session_get_error(session), filename);
+        qof_session_get_error(session), filename);
 
-    gnc_session_destroy(session);
+    qof_session_destroy(session);
 }
 
 static void
-guile_main(int argc, char **argv)
+guile_main (void *closure, int argc, char **argv)
 {
     const char *location = getenv("GNC_TEST_FILES");
     DIR *xml2_dir;
@@ -126,11 +125,11 @@ guile_main(int argc, char **argv)
 }
 
 int
-main(int argc, char ** argv)
+main (int argc, char ** argv)
 {
   /*  getchar (); */
 
-  gh_enter(argc, argv, guile_main);
+  scm_boot_guile(argc, argv, guile_main, NULL);
 
   return 0;
 }

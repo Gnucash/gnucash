@@ -30,11 +30,10 @@
  *
  * HISTORY:
  * Created by Linas Vepstas May 2002
- * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002.2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "Account.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
@@ -42,7 +41,10 @@
 #include "gnc-lot-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "QueryObject.h"
+#include "qofqueryobject.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -50,7 +52,7 @@ static short module = MOD_LOT;
 /* ============================================================= */
 
 static void
-gnc_lot_init (GNCLot *lot, GNCBook *book)
+gnc_lot_init (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->kvp_data = kvp_frame_new();;
@@ -59,13 +61,13 @@ gnc_lot_init (GNCLot *lot, GNCBook *book)
    lot->is_closed = -1;
   
    lot->book = book;
-   xaccGUIDNew (&lot->guid, book);
-   xaccStoreEntity (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   qof_entity_guid_new (book->entity_table, &lot->guid);
+   qof_entity_store (book->entity_table, lot, &lot->guid, GNC_ID_LOT);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
 GNCLot *
-gnc_lot_new (GNCBook *book)
+gnc_lot_new (QofBook *book)
 {
    GNCLot *lot;
    g_return_val_if_fail (book, NULL);
@@ -81,10 +83,10 @@ gnc_lot_destroy (GNCLot *lot)
    GList *node;
    if (!lot) return;
    
-	ENTER ("(lot=%p)", lot);
-   gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
+   ENTER ("(lot=%p)", lot);
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_DESTROY);
 
-   xaccRemoveEntity (lot->book->entity_table, &lot->guid);
+   qof_entity_remove (lot->book->entity_table, &lot->guid);
    
    for (node=lot->splits; node; node=node->next)
    {
@@ -118,20 +120,20 @@ gnc_lot_set_guid (GNCLot *lot, GUID uid)
 
    if (guid_equal (&lot->guid, &uid)) return;
 
-   xaccRemoveEntity(lot->book->entity_table, &lot->guid);
+   qof_entity_remove(lot->book->entity_table, &lot->guid);
    lot->guid = uid;
-   xaccStoreEntity(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+   qof_entity_store(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
 }
 
 GNCLot *
-gnc_lot_lookup (const GUID *guid, GNCBook *book)
+gnc_lot_lookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                                           guid, GNC_ID_LOT);
 }
 
-GNCBook *
+QofBook *
 gnc_lot_get_book (GNCLot *lot)
 {
   if (!lot) return NULL;
@@ -156,7 +158,7 @@ gnc_lot_get_account (GNCLot *lot)
    return lot->account;
 }
 
-kvp_frame *
+KvpFrame *
 gnc_lot_get_slots (GNCLot *lot)
 {
    if (!lot) return NULL;
@@ -219,7 +221,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    Account * acc;
    if (!lot || !split) return;
 
-	ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p)", lot, split);
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
@@ -251,10 +253,10 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 {
    if (!lot || !split) return;
 
-	ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p)", lot, split);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
-   lot->is_closed = -1;	/* force an is-closed computation */
+   lot->is_closed = -1;   /* force an is-closed computation */
 
    if (NULL == lot->splits)
    {
@@ -263,15 +265,80 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    }
 }
 
+/* ============================================================== */
+/* Utility function, get earliest split in lot */
+
+Split *
+gnc_lot_get_earliest_split (GNCLot *lot)
+{
+   SplitList *node;
+   Timespec ts;
+   Split *earliest = NULL;
+
+   ts.tv_sec = 1000000LL * ((long long) LONG_MAX);
+   ts.tv_nsec = 0;
+   if (!lot) return NULL;
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *trans = s->parent;
+      if (!trans) continue;
+      if ((ts.tv_sec > trans->date_posted.tv_sec) ||
+          ((ts.tv_sec == trans->date_posted.tv_sec) &&
+           (ts.tv_nsec > trans->date_posted.tv_nsec)))
+          
+      {
+         ts = trans->date_posted;
+         earliest = s;
+      }
+   }
+
+   return earliest;
+}
+
+Split *
+gnc_lot_get_latest_split (GNCLot *lot)
+{
+   SplitList *node;
+   Timespec ts;
+   Split *latest = NULL;
+
+   ts.tv_sec = -1000000LL * ((long long) LONG_MAX);
+   ts.tv_nsec = 0;
+   if (!lot) return NULL;
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *trans = s->parent;
+      if (!trans) continue;
+      if ((ts.tv_sec < trans->date_posted.tv_sec) ||
+          ((ts.tv_sec == trans->date_posted.tv_sec) &&
+           (ts.tv_nsec < trans->date_posted.tv_nsec)))
+          
+      {
+         ts = trans->date_posted;
+         latest = s;
+      }
+   }
+
+   return latest;
+}
+
+/* ============================================================= */
+
 void gnc_lot_register (void)
 {
-  static const QueryObjectDef params[] = {
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gnc_lot_get_book },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_lot_get_guid },
+  static const QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gnc_lot_get_guid },
+    { LOT_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
+    { LOT_BALANCE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
+  qof_query_object_register (GNC_ID_LOT, NULL, params);
 }
 
 /* ========================== END OF FILE ========================= */

@@ -17,6 +17,13 @@
       (string=? "1.4" (substring (version) 0 3))) #f)
  (else (use-modules (ice-9 rdelim))))
 
+(define qif-bad-numeric-rexp 
+  (make-regexp "^\\.\\.\\."))
+
+(define (not-bad-numeric-string? input)
+  (let ((match (regexp-exec qif-bad-numeric-rexp input)))
+    (if match #f #t)))
+
 (define (qif-file:read-file self path ticker-map)
   (false-if-exception
    (let* ((qstate-type #f)
@@ -115,8 +122,8 @@
                        
                        ;; T : total amount 
                        ((#\T)
-                        (if default-split 
-                            (qif-split:set-amount! default-split value)))
+                        (if (and default-split (not-bad-numeric-string? value))
+			    (qif-split:set-amount! default-split value)))
                        
                        ;; P : payee
                        ((#\P)
@@ -175,10 +182,13 @@
                        
                        ;; S : split category 
 		       ;; At this point we are ignoring the default-split
-		       ;; completely!  So, we need to reverse the current-split
-		       ;; values!
+		       ;; completely, but save it for later -- we need to use
+		       ;; it to determine whether to reverse the split
+		       ;; values.
                        ((#\S)
                         (set! current-split (make-qif-split))
+			(if default-split
+			    (qif-xtn:set-default-split! current-xtn default-split))
                         (set! default-split #f)
                         (qif-split:set-category! current-split value)
                         (qif-xtn:set-splits! 
@@ -192,10 +202,8 @@
                        
                        ;; $ : split amount (if there are splits)
                        ((#\$)
-                        (if current-split
-			    (begin
-			      (qif-split:set-amount! current-split value)
-			      (qif-split:set-neg! current-split #t))))
+                        (if (and current-split (not-bad-numeric-string? value))
+			    (qif-split:set-amount! current-split value)))
                        
                        ;; ^ : end-of-record 
                        ((#\^)

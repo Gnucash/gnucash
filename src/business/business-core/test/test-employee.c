@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "guid.h"
 #include "gnc-module.h"
@@ -94,8 +94,10 @@ test_employee (void)
   {
     const char *str = get_random_string();
     const char *res;
+    GncAddress *addr;
 
-    gncEmployeeSetUsername (employee, str);
+    addr = gncEmployeeGetAddr (employee);
+    gncAddressSetName (addr, str);
     res = gncObjectPrintable (GNC_EMPLOYEE_MODULE_NAME, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
@@ -183,7 +185,7 @@ test_gint_fcn (GNCBook *book, const char *message,
 #endif
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/business-core", 0);
   test_employee();
@@ -194,6 +196,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

@@ -1,14 +1,12 @@
 
 #include <glib.h>
-#include <guile/gh.h>
-
-#include "GNCIdP.h"
+#include <libguile.h>
 
 #include "AccountP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
+#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -22,11 +20,11 @@ run_test (void)
     Account *act2;
     Split *spl;
     gnc_numeric num;
-    GNCSession *session;
-    GNCBook *book;
+    QofSession *session;
+    QofBook *book;
 
-    session = gnc_session_new ();
-    book = gnc_session_get_book (session);
+    session = qof_session_new ();
+    book = qof_session_get_book (session);
 
     act1 = get_random_account(book);
     if(!act1)
@@ -71,7 +69,7 @@ run_test (void)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
 
@@ -88,6 +86,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }
