@@ -1,3 +1,13 @@
+2004-12-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
+	Add extra sanity checks and verbose error message if the setup
+	wizard of aqhbci cannot be found.
+
+	* src/import-export/hbci/gncmod-hbci.c: Fix potentially missing
+	initialization of gwenhywfar library, as reported by Peter
+	O'Gorman on Max OS X.
+
 2004-12-17  Derek Atkins  <derek@ihtfp.com>
 
 	Rich Johnson's patch to include private structures in the doxygen docs

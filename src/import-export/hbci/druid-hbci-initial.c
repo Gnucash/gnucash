@@ -23,9 +23,10 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 #include "druid-hbci-initial.h"
@@ -448,34 +449,57 @@ on_aqhbci_button (GtkButton *button,
   GWEN_BUFFER *buf;
   int res;
   const char *backend_name = "aqhbci";
+
+  /* NOTE NOTE NOTE: This is the name for the external application
+     shipped with aqhbci that contains the setup druid for HBCI
+     related stuff. The name is misleading -- it requires qt but not
+     kde). This application contains the very verbose step-by-step
+     setup wizard for the HBCI account, and the application is shared
+     with other AqBanking-based financial managers that offer the HBCI
+     features (e.g. KMyMoney). See gnucash-devel discussion here
+     https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html 
+  */
   const char *wizard_name = "kde_wizard";
+  gboolean wizard_exists;
+  const char *wizard_path;
+  int fd;
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
 
   buf = GWEN_Buffer_new(NULL, 200, 0, 0);
   AB_Banking_GetWizardPath(banking, backend_name, buf);
+  wizard_exists = (strlen(GWEN_Buffer_GetStart(buf)) > 0);
 
   GWEN_Buffer_AppendString(buf, "/");
-  GWEN_Buffer_AppendString(buf, wizard_name);
   /* {
     GWEN_PLUGIN_DESCRIPTION_LIST2 *l = 
       AB_Banking_GetWizardDescrs(banking, backend_name);
     const GWEN_PLUGIN_DESCRIPTION *x = GWEN_PluginDescription_List2_GetFront(l);
-    // There needs to be a way to find the name here. Currently this doesnt work yet.
+    // There needs to be a way to find the file name here. Currently
+    // this doesnt work yet.
     wizard_name = GWEN_PluginDescription_GetName(x);
     GWEN_Buffer_AppendString(buf, wizard_name);
     GWEN_PluginDescription_List2_freeAll(l);
     } */
+  GWEN_Buffer_AppendString(buf, wizard_name);
+  wizard_path = GWEN_Buffer_GetStart(buf);
+
+  /* Really check whether the file exists */
+  fd = open( wizard_path, O_RDONLY );
+  if ( fd == -1)
+    wizard_exists = FALSE;
+  else
+    close( fd );
 
   druid_disable_next_button(info);
   AB_Banking_DeactivateProvider(banking, backend_name);
-  if (strlen(GWEN_Buffer_GetStart(buf)) > 0) {
-    const char *path = GWEN_Buffer_GetStart(buf);
+  if (wizard_exists) {
     int wait_status;
     int wait_result = 0;
 
-    /* Call the kde wizard */
-    /* res = system(path); */
+    /* Call the qt wizard (called kde wizard). See the note above
+       about why this approach is chosen. */
+
     /* In gtk2, this would be g_spawn_async or similar. */
     AB_Banking_Fini (info->api);
     {
@@ -488,7 +512,7 @@ on_aqhbci_button (GtkButton *button,
 	AB_Banking_Init (info->api);
 	break;
       case 0: /* child */
-	execl(path, path, NULL);
+	execl(wizard_path, wizard_path, NULL);
 	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
 	_exit(0);
       default: /* parent */
@@ -510,16 +534,30 @@ on_aqhbci_button (GtkButton *button,
       if (res == 0)
 	druid_enable_next_button(info);
       else {
-	printf("on_aqhbci_button: Oops, after successful aqhbci wizard the activation return nonzero value: %d. \n", res);
+	printf("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
 	druid_disable_next_button(info);
       }
     }
     else {
-      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, path);
+      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
+      gnc_error_dialog
+	(info->window, "%s",
+	 _("The external program \"AqHBCI Setup Wizard\" returned a nonzero \n"
+	   "exit code which means it has not been finished successfully. \n"
+	   "The further HBCI setup can only be finished if the AqHBCI \n"
+	   "Setup Wizard is run successfully. Please try to start and \n"
+	   "successfully finish the AqHBCI Setup Wizard program again."));
       druid_disable_next_button(info);
     }
   } else {
-    printf("on_aqhbci_button: Oops, no aqhbci wizard found. Cannot start aqhbci wizard.\n");
+    printf("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
+    gnc_error_dialog
+      (info->window, "%s",
+       _("The external program \"AqHBCI Setup Wizard\" has not been found. \n\n"
+	 "Did you install the package \"kde_wizard\" of AqHBCI? \n"
+	 "If not, please install it now. (The name of that package \n"
+	 "is misleading, as it does not require the KDE desktop \n"
+	 "environment but only the Qt toolkit libraries.)"));
     druid_disable_next_button(info);
   }
   GWEN_Buffer_free(buf);

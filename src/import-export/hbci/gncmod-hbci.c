@@ -17,6 +17,7 @@
 #include "gnc-hbci-cb.h"
 #include "druid-hbci-initial.h"
 #include "gnc-hbci-utils.h"
+#include <gwenhywfar/gwenhywfar.h>
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;
@@ -73,13 +74,20 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
 
   /* Add menu items with C callbacks */
   gnc_hbci_addmenus();
-  
+
+  /* Initialize gwen library */
+  GWEN_Init();
+
   return TRUE;
 }
 
 int
 libgncmod_hbci_LTX_gnc_module_end(int refcount) {
   gnc_AB_BANKING_delete(0);
+
+  /* Finalize gwen library */
+  GWEN_Fini();
+
   return TRUE;
 }
 
