@@ -418,6 +418,7 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
          * is in this ledger. But don't show share amount unless
          * the account type is stock or mutual, since other types
          * do not have shares. */
+        show_debit = 0;
         acc = (Account *) (trans->debit);
         if (acc) {
           if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
@@ -425,6 +426,7 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
           }
         }
 
+        show_credit = 0;
         acc = (Account *) (trans->credit);
         if (acc) {
           if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
@@ -675,37 +677,40 @@ regRefresh( RegWindow *regData )
 
         case PORTFOLIO: {
            Account * acc;
-           int show;
+           int show_debit, show_credit;
 
           /* show the price, only if the transaction records a 
            * share purchase/sale.  Otherwise, its a plain dollar
            * amount, and the price should not be shown. */
-          show = 0;
+          show_debit = 0;
           acc = (Account *) (trans->debit);
           if (acc) {
              if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
-               show += xaccIsAccountInList (acc, regData->blackacc);
+               show_debit = xaccIsAccountInList (acc, regData->blackacc);
              }
           }
+
+          show_credit = 0;
           acc = (Account *) (trans->credit);
           if (acc) {
              if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
-               show += xaccIsAccountInList (acc, regData->blackacc);
+               show_credit = xaccIsAccountInList (acc, regData->blackacc);
              }
           }
 
           /* row location of prices depends on whether this 
            * is a purchase or a sale */
-          if (show) {
-            sprintf( buf, "%.3f ", trans->share_price );
-            themount = trans->damount;
-            if (0.0 < themount) {
-              newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString(buf);
-            } else {
-              newData[row+PRCD_CELL_R][PRCD_CELL_C] = XtNewString(buf);
-            }
+          sprintf( buf, "%.3f ", trans->share_price );
+
+          if (show_credit) { 
+            newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString(buf);
           } else {
             newData[row+PRCC_CELL_R][PRCC_CELL_C] = XtNewString("");
+          }
+
+          if (show_debit) { 
+            newData[row+PRCD_CELL_R][PRCD_CELL_C] = XtNewString(buf);
+          } else {
             newData[row+PRCD_CELL_R][PRCD_CELL_C] = XtNewString("");
           }
         }
