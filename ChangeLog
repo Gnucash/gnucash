@@ -1,3 +1,8 @@
+2003-03-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-progressmon.c: Add descriptions of
+	new HBCI actions.
+
 2003-03-20  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: don't add -I$(GNC_INCLUDE_DIR) to the engine
