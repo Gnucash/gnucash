@@ -65,11 +65,33 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    Timespec ts;
    GUID trans_guid;
 
-   trans = xaccMallocTransaction();
-
-   xaccTransBeginEdit (trans);
+   /* first, see if we already have such a transaction */
    string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
-   xaccTransSetGUID (trans, &trans_guid);
+   trans = xaccTransLookup (&trans_guid);
+   if (trans)
+   {
+      /* If transaction already exists, determine whose data is 
+       * newer: the engine cache, or the database.  If the
+       * engine has newer stuff, ignore the databae contents.
+       */
+
+      gint32 db_version, cache_version;
+      db_version = atoi (DB_GET_VAL("version",j));
+      cache_version = xaccTransGetVersion (trans);
+      if (db_version < cache_version) {
+         xaccTransBeginEdit (trans);
+         xaction_list = g_list_prepend (xaction_list, trans);
+         return xaction_list;
+       }
+      xaccTransBeginEdit (trans);
+   }
+   else
+   {
+      trans = xaccMallocTransaction();
+      xaccTransBeginEdit (trans);
+      xaccTransSetGUID (trans, &trans_guid);
+   }
+
    xaccTransSetNum (trans, DB_GET_VAL("num",j));
    xaccTransSetDescription (trans, DB_GET_VAL("description",j));
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
@@ -113,8 +135,12 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-   s = xaccMallocSplit();
-   xaccSplitSetGUID(s, &guid);
+   s = xaccSplitLookup (&guid);
+   if (!s)
+   {
+      s = xaccMallocSplit();
+      xaccSplitSetGUID(s, &guid);
+   }
 
    /* next, restore all split data */
    xaccSplitSetMemo(s, DB_GET_VAL("memo",j));

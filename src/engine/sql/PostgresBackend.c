@@ -74,6 +74,7 @@
 #include "PostgresBackend.h"
 #include "price.h"
 #include "txn.h"
+#include "txnmass.h"
 
 #include "putil.h"
 
@@ -544,10 +545,10 @@ pgendRunQuery (Backend *bend, Query *q)
  *    transactions out of the database.  This is a potential 
  *    CPU and memory-burner; its use is not suggested for anything
  *    but single-user mode.
- *
- *    To add injury to insult, this routine fetches in a rather 
- *    inefficient manner, in particular, the account query.
- *    (huh ???)
+ * 
+ *    NB. This routine has been obsoleted by the more efficient
+ *    pgendGetMassTransactions().  We keep it around here ...
+ *    for a rainy day...
  */
 
 static gpointer
@@ -678,7 +679,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
    else
    {
       /* in single user mode, read all the transactions */
-      pgendGetAllTransactions (be, grp);
+      pgendGetMassTransactions (be, grp);
    }
 
    /* re-enable events */
@@ -1219,7 +1220,7 @@ pgend_price_load_poll (Backend *bend)
 /* The pgend_book_load_single() routine loads the engine with
  *    data from the database.  Used only in single-user mode,
  *    it loads account *and* transaction data.  Single-user
- *    mode doesn't require balance checkpoingts, to these are
+ *    mode doesn't require balance checkpoints, to these are
  *    not handled.
  */
 
@@ -1237,7 +1238,7 @@ pgend_book_load_single (Backend *bend)
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
-   pgendGetAllTransactions (be, grp);
+   pgendGetMassTransactions (be, grp);
 
    /* re-enable events */
    pgendEnable(be);
