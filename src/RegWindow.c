@@ -2052,6 +2052,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         break;
 
       default:
+        break;
       }
 
     /* ----------------------------------- */
