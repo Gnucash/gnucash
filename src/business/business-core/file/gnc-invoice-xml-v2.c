@@ -130,7 +130,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
       xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
 					  xaccTransGetGUID (txn)));
 
-    lot = gncInvoiceGetPostedlot (invoice);
+    lot = gncInvoiceGetPostedLot (invoice);
     if (lot)
       xmlAddChild (ret, guid_to_dom_tree (invoice_postlot_string,
 					  gnc_lot_get_guid (lot)));
