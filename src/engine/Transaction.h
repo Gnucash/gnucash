@@ -592,13 +592,17 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
 
 /** Depending on the base_currency, set either the value or the amount
  * of this split or both: If the base_currency is the transaction's
- * commodity, set the value.  If it's the account's commodity, set the
+ * commodity, set the value.  If it is the account's commodity, set the
  * amount. If both, set both. 
  *
- * @note This function is useful when filling in the value/amount for
- * a newly created transaction, since otherwise you have to manually
- * make sure that both Value and Amount are correctly set (and not
- * that value or amount remains zero).  */
+ * @note <b>WATCH OUT:</b> When using this function and the
+ * transaction's and account's commodities are different, the amount
+ * or the value will be left as zero. This might screw up the
+ * multi-currency handling code in the register. So please think twice
+ * whether you need this function -- using xaccSplitSetValue()
+ * together with xaccSplitSetAmount() is definitely the better and
+ * safer solution!
+ */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
 
