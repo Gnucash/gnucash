@@ -98,7 +98,7 @@ architectural goals.
     <p>
     Current Status: the latest alpha-development releases (version 
     1.1.x) contain such an object.  Its currently motif-based, but 
-    should be easily portable to Qt, GTK.
+    should be easily portable to Qt, GTK, curses.  
     <p>
 
 <dt><b>C++</b>
@@ -128,6 +128,13 @@ architectural goals.
     SWIG</a> should simplify the actual implementation.
     <p>
 
+<dt><b>Multi-user Support</b>
+<dd>Mutli-user support should be added with either an SQL backend 
+    to the engine, and/or through CORBA interfaces to teh engine. 
+    Project Kontor and also FreeMoney is working on SQL schemas;
+    Kontor is also working on Java RMI/CORBA interfaces.
+    <p>
+
 <dt><b>SQL I/O</b>
 <dd>A module is necessary to allow data to be fetched from an SQL
     database, and for that database to be updated.  Some thoughts:
@@ -139,7 +146,6 @@ architectural goals.
     correct their changes.  This is a very important note: updating
     SQL does NOT require locks to be held for long periods of time!
     <p>
-    <p>
 
 <dt><b>Financial Objects</b>
 <dd>The current system makes a distinction between the data (account,
@@ -148,9 +154,14 @@ architectural goals.
     their own library, should be created.  Current Status: 
     ready to split this stuff off into its own library.  The basic engine 
     has been detangled from the GUI elements.
-</dl>
-<p>
+    <p>
 
+<dt><b>OFX support</b>
+<dd>Provide the SGML DTD parsers to handle the OFX reports that many
+    banking institutions are providing, or will soon be providing, to
+    retail customers.  See below for OFX references.  OFX is an open spec
+    from Microsot, Intuit, & Checkfree, and will be supported by Integrion.
+    <p>
 
 </dl>
 
@@ -184,6 +195,15 @@ immediately, independent of the major goals.
     monetary values in different formats, as well as date/time
     parsing/printing routines.  (xacc contains such parsing
     routines, but they're not very powerful or i18n'ed.)
+    <p>
+
+<dt><b>Recurring Transactions</b>
+<dd>Add support for automatic, recurring transactions, e.g. 
+    mortgage payments, fixed-interest bonds, bank accounts, etc.
+    Note that the design for this could be very different, depending on
+    whether the multi-user functions are available or not.
+    Note also, maybe the engine needs to support two dates per
+    transaction: expected, and actual ??
     <p>
 
 <dt><b>Navigation</b>
@@ -315,7 +335,16 @@ immediately, independent of the major goals.
     many unix tools for manipulating ASCII.  An ASCII equivalent of the
     current file format should be easy to develop ... just substitute
     the writes with printf's.  The tab-delimited format should 
-    be compatible with that of /rdb
+    be compatible with that of /rdb.  The /rdb format is like so:
+<pre>
+    field-name  tab  fieldname  tab fieldname   \n
+    ------------------------------------------  \n
+    value       tab   value     tab value       \n
+    value       tab   value     tab value       \n
+    etc ...
+</pre>
+    Its a very simple, very basic flat table format.  It should match
+    the SQL schemas in order to minimize I/O complexity and incompatability.
     <p>
 
 <dt><b>Splits</b>
