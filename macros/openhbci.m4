@@ -44,7 +44,7 @@ AC_MSG_RESULT($hbci_dir)
 
 min_openhbci_version=ifelse([$1], ,0.9.0.0,$1)
 AC_MSG_CHECKING(for OpenHBCI - version >= $min_openhbci_version)
-AC_LANG(C++)
+AC_LANG_PUSH(C++)
 
 if test "x$enable_openhbcitest" = "xyes" ; then
   ac_save_CXXFLAGS="$CXXFLAGS"
@@ -197,5 +197,6 @@ fi
 AC_SUBST(OPENHBCI_CFLAGS)
 AC_SUBST(OPENHBCI_LIBS)
 AC_SUBST(OPENHBCI_CXXFLAGS)
+AC_LANG_POP(C++)
 rm -f conf.openhbcitest
 ])
