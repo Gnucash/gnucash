@@ -282,7 +282,6 @@ xaccAccountBringUpToDate(Account *acc) {
      cost basis and balance calls are no-ops */
   xaccAccountSortSplits(acc);
   xaccAccountRecomputeBalance(acc);
-  mark_account (acc);
 }
 
 void 
