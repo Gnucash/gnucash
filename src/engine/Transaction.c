@@ -370,9 +370,19 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
 \********************************************************************/
 
 Split *
-xaccSplitLookup (const GUID *guid)
+xaccSplitLookupEntityTable (const GUID *guid, GNCEntityTable *entity_table)
 {
   if (!guid) return NULL;
+  /* FIXME: uncomment soon */
+  /* g_return_val_if_fail (entity_table, NULL); */
+  return xaccLookupEntity(guid, GNC_ID_SPLIT);
+}
+
+Split *
+xaccSplitLookup (const GUID *guid, GNCSession *session)
+{
+  if (!guid) return NULL;
+  g_return_val_if_fail (session, NULL);
   return xaccLookupEntity(guid, GNC_ID_SPLIT);
 }
 

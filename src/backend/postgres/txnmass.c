@@ -138,7 +138,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-   s = xaccSplitLookup (&guid);
+   s = xaccSplitLookup (&guid, be->session);
    if (!s)
    {
       s = xaccMallocSplit(be->session);

@@ -135,7 +135,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
                          Account *default_account)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans;
   CursorBuffer *cursor_buffer;
   GHashTable *trans_table = NULL;
@@ -147,6 +146,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   Transaction *trans;
   CursorClass find_class;
   Split *find_trans_split;
+  Split *blank_split;
   Split *find_split;
   Split *split;
   Table *table;
@@ -166,6 +166,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   int new_trans_row = -1;
   int new_split_row = -1;
   time_t present;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_session ());

@@ -106,7 +106,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
-   if (NULL == xaccSplitLookup (&guid))
+   if (NULL == xaccSplitLookup (&guid, be->session))
    {
       deletelist = g_list_prepend (deletelist, 
                    g_strdup(DB_GET_VAL ("entryGuid", j)));
@@ -150,7 +150,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       Split *s;
       GUID guid;
       string_to_guid ((char *)(node->data), &guid);
-      s = xaccSplitLookup(&guid);
+      s = xaccSplitLookup(&guid, be->session);
       pgendStoreAuditSplit (be, s, SQL_DELETE);
 
       p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
@@ -169,7 +169,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
          Split *s;
          GUID guid;
          string_to_guid ((char *)(node->data), &guid);
-         s = xaccSplitLookup(&guid);
+         s = xaccSplitLookup(&guid, be->session);
          pgendKVPDelete (be, s->idata);
          g_free (node->data);
       }
@@ -404,7 +404,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-            s = xaccSplitLookup (&guid);
+            s = xaccSplitLookup (&guid, be->session);
             if (!s)
             {
                s = xaccMallocSplit(be->session);

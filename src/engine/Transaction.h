@@ -268,7 +268,7 @@ void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
  */
 const GUID * xaccSplitGetGUID (Split *split);
 GUID         xaccSplitReturnGUID (Split *split);
-Split      * xaccSplitLookup (const GUID *guid);
+Split      * xaccSplitLookup (const GUID *guid, GNCSession *session);
 
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.

@@ -546,16 +546,20 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                     VirtualLocation *p_new_virt_loc)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Transaction *pending_trans;
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-  Transaction *blank_trans = xaccSplitGetParent (blank_split);
   VirtualLocation new_virt_loc;
   CursorClass cursor_class;
+  Transaction *pending_trans;
+  Transaction *blank_trans;
   const char *cell_name;
   Transaction *trans;
+  Split *blank_split;
   gnc_numeric amount;
   BasicCell *cell;
   Split *split;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
+  blank_trans = xaccSplitGetParent (blank_split);
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_session ());

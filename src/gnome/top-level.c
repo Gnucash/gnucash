@@ -251,7 +251,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
         break;
 
       case GNC_ID_SPLIT:
-        split = xaccSplitLookup (&guid);
+        split = xaccSplitLookup (&guid, gnc_get_current_session ());
         if (!split)
         {
           result->error_message = g_strdup_printf (_("No such split: %s"),

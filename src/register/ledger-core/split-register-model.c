@@ -848,7 +848,8 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-  if (split == xaccSplitLookup (&info->blank_split_guid))
+  if (split == xaccSplitLookup (&info->blank_split_guid,
+                                gnc_get_current_session ()))
     return NULL;
 
   is_trans = gnc_cell_name_equal

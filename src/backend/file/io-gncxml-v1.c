@@ -3178,6 +3178,7 @@ txn_restore_split_guid_end_handler(gpointer data_for_children,
                                    gpointer parent_data, gpointer global_data,
                                    gpointer *result, const gchar *tag)
 {
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   Split *s = (Split *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -3193,7 +3194,7 @@ txn_restore_split_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccSplitLookup(&gid)) {
+  if(xaccSplitLookup(&gid, pstatus->session)) {
     return(FALSE);
   }
 

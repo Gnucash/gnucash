@@ -362,7 +362,7 @@ gnc_split_register_get_blank_split (SplitRegister *reg)
 
   if (!reg) return NULL;
 
-  return xaccSplitLookup (&info->blank_split_guid);
+  return xaccSplitLookup (&info->blank_split_guid, gnc_get_current_session ());
 }
 
 gboolean
@@ -395,7 +395,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
       if (!vcell->visible)
         continue;
 
-      s = xaccSplitLookup (vcell->vcell_data);
+      s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_session ());
 
       if (s == split)
       {
@@ -451,14 +451,16 @@ Split *
 gnc_split_register_duplicate_current (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
   Split *return_split;
   Split *trans_split;
+  Split *blank_split;
   gboolean changed;
   Split *split;
 
+  blank_split = xaccSplitLookup(&info->blank_split_guid,
+                                gnc_get_current_session ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
   trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
@@ -616,13 +618,15 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
                                           gboolean use_cut_semantics)
 {
   SRInfo *info = gnc_split_register_get_info(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
+  Split *blank_split;
   gboolean changed;
   Split *split;
   SCM new_item;
 
+  blank_split = xaccSplitLookup(&info->blank_split_guid,
+                                gnc_get_current_session ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -711,12 +715,14 @@ void
 gnc_split_register_cut_current (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
+  Split *blank_split;
   gboolean changed;
   Split *split;
 
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -752,15 +758,17 @@ void
 gnc_split_register_paste_current (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
+  Split *blank_split;
   Split *trans_split;
   Split *split;
 
   if (copied_class == CURSOR_CLASS_NONE)
     return;
 
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -879,11 +887,16 @@ void
 gnc_split_register_delete_current_split (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans;
   Transaction *trans;
+  Split *blank_split;
   Account *account;
   Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_session ());
@@ -931,12 +944,16 @@ void
 gnc_split_register_delete_current_trans (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans;
   Transaction *trans;
+  Split *blank_split;
   Account *account;
   Split *split;
 
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_session ());
 
@@ -1001,13 +1018,18 @@ void
 gnc_split_register_emtpy_current_trans (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans;
   Transaction *trans;
+  Split *blank_split;
   Account *account;
   GList *splits;
   GList *node;
   Split *split;
+
+  if (!reg) return;
+
+  blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                 gnc_get_current_session ());
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_session ());
@@ -1320,13 +1342,18 @@ gboolean
 gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
-   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
    Transaction *pending_trans;
    Transaction *blank_trans;
    Transaction *trans;
+   Split *blank_split;
    const char *memo;
    const char *desc;
    Split *split;
+
+   if (!reg) return FALSE;
+
+   blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                  gnc_get_current_session ());
 
    pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                     gnc_get_current_session ());
@@ -2206,9 +2233,12 @@ static void
 gnc_split_register_cleanup (SplitRegister *reg)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
-   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
    Transaction *pending_trans;
    Transaction *trans;
+   Split *blank_split;
+
+   blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                  gnc_get_current_session ());
 
    pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                     gnc_get_current_session ());

@@ -119,7 +119,7 @@ gnc_split_register_get_split (SplitRegister *reg,
   if (guid == NULL)
     return NULL;
 
-  return xaccSplitLookup (guid);
+  return xaccSplitLookup (guid, gnc_get_current_session ());
 }
 
 Account *

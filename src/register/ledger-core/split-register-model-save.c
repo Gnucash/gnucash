@@ -97,7 +97,8 @@ gnc_split_register_save_cells (gpointer save_data,
     if (gnc_num_cell_set_last_num ((NumCell *) cell, value))
     {
       SRInfo *info = gnc_split_register_get_info (reg);
-      Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+      Split *blank_split = xaccSplitLookup(&info->blank_split_guid,
+                                           gnc_get_current_session ());
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
       if (trans != blank_trans)
