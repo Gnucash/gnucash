@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#exit 0
-
 EXIT_VALUE=0
 
 rm -f test_file_*
