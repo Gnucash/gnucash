@@ -35,6 +35,7 @@
 #include "dialog-account.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
+#include "druid-merge.h"
 #include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
@@ -96,6 +97,7 @@ static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection 
 
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAccountTree *plugin_page);
+static void gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (EggAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageAccountTree *page);
@@ -125,6 +127,9 @@ static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "FileNewAccountAction", N_("New Account..."), GNC_STOCK_NEW_ACCOUNT, NULL,
 	  N_("Create a new Account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account) },
+	{ "FileAddAccountHierarchyDruidAction", N_("Add New Account Hierarchy..."), NULL, NULL,
+	  N_("Extend the current book by merging with new account type categories"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_hierarchy_merge) },
 	{ "FileOpenAccountAction", N_("Open Account"), GNC_STOCK_OPEN_ACCOUNT, "<control>o",
 	  N_("Open the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account) },
@@ -706,6 +711,12 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
 	gnc_ui_new_account_window_with_default (NULL, account);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (EggAction *action, GncPluginPageAccountTree *page)
+{
+	gnc_ui_qof_book_merge_druid();
 }
 
 static void

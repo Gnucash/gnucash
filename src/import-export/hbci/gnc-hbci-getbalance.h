@@ -25,9 +25,9 @@
 
 #include <gnome.h>
 #include "Account.h"
-#include <openhbci2/outboxjob.h>
+#include <aqbanking/jobgetbalance.h>
 
-/** Starts a GetBalance job, adds the job to the HBCI_API, and
+/** Starts a GetBalance job, adds the job to the AB_BANKING, and
  * (currently) calls executeOutbox. */
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
@@ -37,7 +37,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
 gboolean
 gnc_hbci_getbalance_finish (GtkWidget *parent, 
 			    Account *gnc_acc,
-			    const HBCI_OutboxJob *job);
+			    const AB_JOB *job);
 
 
 #endif /* GNC_HBCI_GETBALANCE_H */

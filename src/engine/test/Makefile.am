@@ -1,3 +1,5 @@
+# may need to use ln -s ./ qof in src/engine
+# INCLUDES = -DG_LOG_DOMAIN=\"qof_book_merge\"
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -12,11 +14,13 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
+  ../qof_book_merge.lo \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
   ${GLIB_LIBS} \
-  -lltdl
+  -lltdl \
+  -lglib
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
@@ -40,8 +44,10 @@ TESTS = \
   test-transaction-reversal \
   test-transaction-voiding \
   test-freq-spec \
-  test-scm-query
-
+  test-scm-query \
+  test-book-merge 
+  
+ 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -65,6 +71,7 @@ noinst_PROGRAMS = \
   test-load-engine \
   test-lots \
   test-numeric \
+  test-book-merge \
   test-object \
   test-period \
   test-query \

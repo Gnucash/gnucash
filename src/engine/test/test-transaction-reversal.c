@@ -56,7 +56,7 @@ run_test (void)
   do
   {
     gboolean voyd;
-
+    
     transaction = get_random_transaction (book);
     voyd = xaccTransGetVoidStatus (transaction);
     if (voyd)

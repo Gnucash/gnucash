@@ -31,9 +31,11 @@
 
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
+		       const char *windowtitle,
 		       const char *heading,
 		       const char *initial_password,
-		       char **password)
+		       char **password,
+		       gboolean hide_input)
 {
   GtkWidget *dialog;
   GtkWidget *heading_label;
@@ -54,11 +56,20 @@ gnc_hbci_get_password (GtkWidget *parent,
   password_entry = glade_xml_get_widget (xml, "password_entry");
   g_assert(heading_label && password_entry);
 
+  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+
+  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
+                                GTK_EDITABLE (password_entry));
+
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
+
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
   if (initial_password)
     gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+  gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
@@ -76,6 +87,7 @@ gnc_hbci_get_password (GtkWidget *parent,
 
 gboolean
 gnc_hbci_get_initial_password (GtkWidget *parent,
+			       const char *windowtitle,
 			       const char *heading,
 			       char **password)
 {
@@ -99,6 +111,16 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
   password_entry = glade_xml_get_widget (xml, "password_entry");
   confirm_entry = glade_xml_get_widget (xml, "confirm_entry");
   g_assert(heading_label && password_entry && confirm_entry);
+
+  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+
+  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
+                                GTK_EDITABLE (password_entry));
+  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
+                                GTK_EDITABLE (confirm_entry));
+
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);

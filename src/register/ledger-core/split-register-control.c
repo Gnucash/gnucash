@@ -1354,8 +1354,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   }
  
   /* See if we are tabbing off the end of the very last line */
-  do
-  {
+  do {
     VirtualLocation virt_loc;
 
     if (!changed && !info->blank_split_edited)
@@ -1396,8 +1395,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   }
 
   /* See if we are tabbing off the end of a blank split */
-  do
-  {
+  do {
     VirtualLocation virt_loc;
     int old_virt_row;
 
@@ -1437,8 +1435,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     return FALSE;
 
-  } while (FALSE);
-
+  } while(FALSE);
 
   {
     int old_virt_row;

@@ -308,7 +308,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    Timespec ts;
    Split *earliest = NULL;
 
-   ts.tv_sec = 1000000LL * ((long long) LONG_MAX);
+   ts.tv_sec = ((long long) LONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -337,7 +337,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
    Timespec ts;
    Split *latest = NULL;
 
-   ts.tv_sec = -1000000LL * ((long long) LONG_MAX);
+   ts.tv_sec = -((long long) LONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 

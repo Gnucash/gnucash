@@ -539,6 +539,21 @@ then
 	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
     fi
 
+    # check libofx version
+    AC_MSG_CHECKING(for libofx version >= 0.7.0)
+    if test x${OFXPREFIX} = x ; then
+	LIBOFX_VERSION=`ofxdump --version | cut -d" " -f2`
+    else
+	LIBOFX_VERSION=`${OFXPREFIX}/bin/ofxdump --version | cut -d" " -f2`
+    fi
+    if test `echo ${LIBOFX_VERSION} | cut -d. -f1` -ge 1 -o \
+	     `echo ${LIBOFX_VERSION} | cut -d. -f2` -ge 7; then
+	# This is libofx >= 0.7.x
+	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
+    else
+	AC_MSG_ERROR([Libofx 0.7.0 or newer needed for ofx support])
+    fi
+
     AC_MSG_CHECKING(for libofx/libofx.h)
     AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     save_CPPFLAGS="${CPPFLAGS}"
@@ -561,13 +576,9 @@ then
     LIBS="${LIBS} ${LIBOFX_LIBS}"
     AC_TRY_LINK( [
 #include <libofx/libofx.h>
-int ofx_proc_status_cb(const struct OfxStatusData data) { return 0; }
-int ofx_proc_account_cb(const struct OfxAccountData data) { return 0; }
-int ofx_proc_security_cb(const struct OfxSecurityData data) { return 0; }
-int ofx_proc_transaction_cb(const struct OfxTransactionData data) { return 0; }
-int ofx_proc_statement_cb(const struct OfxStatementData data) { return 0; }
 	], [
-	ofx_proc_file(0, NULL);
+	LibofxContextPtr libofx_context = libofx_get_new_context();
+	libofx_free_context(libofx_context);
 	], AC_MSG_RESULT(yes),
 	[ AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.]) ] )
 
@@ -587,8 +598,8 @@ AC_ARG_ENABLE( mt940,
   fi)
 if test x${MT940_DIR} = xmt940 ;
 then
-    AC_MSG_ERROR([Sorry, MT940 support is currently broken since it depends on the hbci module with the old openhbci 0.9.x library. But the hbci module now has been ported to the new openhbci2 library. The MT940 importer needs to be ported to openhbci2 as well before this can be enabled again.])
-    AM_PATH_OPENHBCI(0.9.13.2)
+    AC_MSG_ERROR([Sorry, MT940 support is currently broken since it depended on the hbci module with the old openhbci 0.9.x library. But the hbci module has now been ported to a new hbci library called aqbanking. That library contains a MT940 parser, too, so porting shouldnt be too difficult. Nevertheless someone needs to do the porting work before this can be enabled again.])
+    AC_AQBANKING(0,9,8)
     # Note: HBCI_LIBS is changed again below in the --enable-hbci
     # section. So check for mt940 first and *not* the other way round!
     HBCI_LIBS="${OPENHBCI_LIBS}"
@@ -603,18 +614,20 @@ AC_SUBST(MT940_DIR)
 ### --------------------------------------------------------------------------
 ### HBCI
 AC_ARG_ENABLE( hbci,
-  [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
+  [  --enable-hbci                compile with HBCI support (needs AqBanking)],
   if test "x$enableval" != "xno" ; then
     HBCI_DIR=hbci
   fi)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI2(1.9.0.8)
-    #all_libraries="$all_libraries $OPENHBCI_LIBS"
-    #all_includes="$all_includes $OPENHBCI_CXXFLAGS"
-    #AM_PATH_OPENHBCI(0.9.13)
-    HBCI_LIBS="${OPENHBCI_LIBS}"
-    HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
+    # Check for Aqbanking library
+    AC_AQBANKING(0,9,8)
+    if test x${have_aqbanking} != xyes; 
+    then
+	AC_MSG_ERROR([Could not find aqbanking. If you use --enable-hbci, you *have* to enable aqbanking.])
+    fi
+    HBCI_LIBS="${aqbanking_libs}"
+    HBCI_CFLAGS="${aqbanking_includes}"
 
     # also check for ktoblzcheck
     AC_CHECK_HEADERS(ktoblzcheck.h)

@@ -403,7 +403,7 @@
 		      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
-		      <property name="adjustment">0 0 100000 1 10 10</property>
+		      <property name="adjustment">0 0 1000000000 1 10 10</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -1019,12 +1019,6 @@
 		  <property name="visible">True</property>
 		  <property name="stock_item">GNOMEUIINFO_MENU_PASTE_ITEM</property>
 		  <signal name="activate" handler="gnc_split_reg_paste_cb"/>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="separator13">
-		  <property name="visible">True</property>
 		</widget>
 	      </child>
 

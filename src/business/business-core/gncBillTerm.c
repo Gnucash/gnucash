@@ -51,7 +51,10 @@
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
 
-
+/* doxygen: this definition has been copied and pasted
+into the .h file to make it accessible to doxygen.
+Please keep the two in sync if it is not possible to
+move the struct definition itself into the .h */
 struct _gncBillTerm 
 {
   QofInstance     inst;
@@ -79,7 +82,6 @@ struct _book_info
 {
   GList *         terms;        /* visible terms */
 };
-
 static short        module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_BILLTERM
@@ -678,7 +680,7 @@ static QofObject gncBillTermDesc =
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
-  create:              NULL,
+  create:              (gpointer)gncBillTermCreate,
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
   is_dirty:            qof_collection_is_dirty,
@@ -691,24 +693,16 @@ static QofObject gncBillTermDesc =
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
-    { GNC_BILLTERM_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncBillTermGetName,
-      (QofSetterFunc)gncBillTermSetName },
-    { GNC_BILLTERM_DESC, QOF_TYPE_STRING, (QofAccessFunc)gncBillTermGetDescription,
-      (QofSetterFunc)gncBillTermSetDescription },
-    { GNC_BILLTERM_TYPE, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetType, 
-      (QofSetterFunc)gncBillTermSetType },
-    { GNC_BILLTERM_DUEDAYS, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetDueDays, 
-      (QofSetterFunc)gncBillTermSetDueDays },
-    { GNC_BILLTERM_DISCDAYS, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetDiscountDays,
-      (QofSetterFunc)gncBillTermSetDiscountDays },
-    { GNC_BILLTERM_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncBillTermGetDiscount,
-      (QofSetterFunc)gncBillTermSetDiscount },
-    { GNC_BILLTERM_CUTOFF, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetCutoff, 
-      (QofSetterFunc)gncBillTermSetCutoff },
-    { GNC_BILLTERM_REFCOUNT, QOF_TYPE_INT64, (QofAccessFunc)gncBillTermGetRefcount, NULL },
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+	{ GNC_BILLTERM_NAME, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetName,			(QofSetterFunc)gncBillTermSetName },
+	{ GNC_BILLTERM_DESC, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetDescription,		(QofSetterFunc)gncBillTermSetDescription },
+	{ GNC_BILLTERM_TYPE, 		QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetType, 			(QofSetterFunc)gncBillTermSetType },
+	{ GNC_BILLTERM_DUEDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDueDays, 		(QofSetterFunc)gncBillTermSetDueDays },
+	{ GNC_BILLTERM_DISCDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDiscountDays,	(QofSetterFunc)gncBillTermSetDiscountDays },
+	{ GNC_BILLTERM_DISCOUNT, 	QOF_TYPE_NUMERIC, (QofAccessFunc)gncBillTermGetDiscount,		(QofSetterFunc)gncBillTermSetDiscount },
+	{ GNC_BILLTERM_CUTOFF, 		QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetCutoff, 			(QofSetterFunc)gncBillTermSetCutoff },
+	{ GNC_BILLTERM_REFCOUNT, 	QOF_TYPE_INT64,   (QofAccessFunc)gncBillTermGetRefcount, 		NULL },
+	{ QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
+    { QOF_PARAM_GUID, 			QOF_TYPE_GUID, 	  (QofAccessFunc)qof_instance_get_guid, 		NULL },
     { NULL },
   };
 

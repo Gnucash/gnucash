@@ -60,7 +60,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     gunichar uc;
 
     if (event->type != GDK_KEY_PRESS)
-	return FALSE;
+        return FALSE;
 
     lc = gnc_localeconv ();
 
@@ -73,6 +73,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
             if (!(event->state &
                   (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
                 is_return = TRUE;
+            /* FALL THROUGH TO NEXT CASE */
 
         case GDK_KP_Enter:
             {
@@ -93,9 +94,9 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     }
 
     if (cell->print_info.monetary)
-	decimal_point = lc->mon_decimal_point[0];
+        decimal_point = lc->mon_decimal_point[0];
     else
-	decimal_point = lc->decimal_point[0];
+        decimal_point = lc->decimal_point[0];
 
     newval_gs = g_string_new ("");
     c = bcell->value;

@@ -131,21 +131,21 @@ check_reduce (void)
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (5011617,167108327),
 	                rval,
-                   val, "expected %s = %s = reduce(%s)");
+                   val, "check_reduce(1) expected %s = %s = reduce(%s)");
 
 	val = gnc_numeric_create(17474724864LL,136048896LL);
 	rval = gnc_numeric_reduce (val);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (4*17*17,9),
 	                rval,
-                   val, "expected %s = %s = reduce(%s)");
+                   val, "check_reduce(2) expected %s = %s = reduce(%s)");
 
 	val = gnc_numeric_create(1024LL,1099511627776LL);
 	rval = gnc_numeric_reduce (val);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (1,1024*1024*1024),
 	                rval,
-                   val, "expected %s = %s = reduce(%s)");
+                   val, "check_reduce(3): expected %s = %s = reduce(%s)");
 }
 
 /* ======================================================= */
@@ -154,8 +154,8 @@ static void
 check_equality_operator (void)
 {
 	int i, m;
-	gint deno, mult, numer;
-	gint64 f;
+	gint mult;
+	gint64 f, deno, numer;
 	gnc_numeric big, rbig;
 	gnc_numeric val, mval;
 	gnc_numeric bval, rval;

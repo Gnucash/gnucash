@@ -2858,13 +2858,245 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
-2004-18-21  Derek Atkins  <derek@ihtfp.com>
+2004-12-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
+	Add extra sanity checks and verbose error message if the setup
+	wizard of aqhbci cannot be found.
+
+	* src/import-export/hbci/gncmod-hbci.c: Fix potentially missing
+	initialization of gwenhywfar library, as reported by Peter
+	O'Gorman on Max OS X.
+
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Rich Johnson's patch to include private structures in the doxygen docs
+	* src/doc/doxygen.cfg.in:
+	  extract local classes = yes
+	  don't exclude *P.h
+
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-book-merge.c: targetEnt is always NULL
+	  during MERGE_NEW so don't test it in that case.
+
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/Makefile.am:
+	* src/backend/file/test/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	  Need to include GNOME_XML_CFLAGS to make sure the libxml includes
+	  are found during the compile.  Fixes #121026.
+
+	* src/gnome/glade/register.glade:
+	  Increase "number" spin box to a maximum of 1billion.  Fixes #152772.
+
+	* src/business/business-core/gncInvoice.c:
+	  send an event when a payment is processed so the invoice gets
+	  updated as "paid" in the search window.
+	  Fixes #139092.
+
+	* src/business/business-gnome/dialog-vendor.c:
+	  Make sure we set the proper search-type when we create the
+	  query, otherwise the search will fail later.
+	  Fixes #141526.
+
+	* src/engine/test/test-numeric.c:
+	  Make sure we use gint64 instead of gint when trying to test
+	  values > 2^32.
+
+2004-12-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/Makefile.am: add explicit
+	  dependency on business-utils.
+
+	* src/engine/gnc-trace.c: Try a few different filenames for
+	  the trace log and if all else fails fall back to stderr.
+
+2004-11-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c
+	(gnc_import_find_split_matches): Improve importer performance by
+	matching imported transactions only against transactions in the
+	proper time interval.
+
+2004-11-22  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, README: Add configure check for libofx version
+	0.7.0 and respective error message. Update docs. Fixes #159050
+
+2004-11-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-gnome/window-report.c,
+	src/scm/main-window.scm: Identified and fixed several places with
+	untranslated strings.
+
+2004-11-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
+	Change currency mnemonic for "New Israeli Shekel" from "ILS" to
+	"NIS". Fixes #152755.
+
+2004-11-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/dialog-find-transactions.c: Mark search criteria for
+	translation -- somehow this had been missed all the time.
+
+2004-10-31  Derek Atkins  <derek@ihtfp.com>
+
+	* Neil Williams' QOF Book Merge Patch #2.
+
+	* src/engine/gnc-pricedb.c:
+	  Phil Longstaff's patch to prevent duplicate pricedb entries.
+
+	Heath Martin's x86_64 patch:
+	* macros/autogen.sh:
+	  change "head -1" to "head -n 1"
+	* src/engine/gnc-numeric.[ch]:
+	  change string_to_gnc_numeric() to return gboolean.
+	* src/app-utils/gnc-exp-parser.c:
+	* src/backend/file/sixtp-dom-parsers.c:
+	  use new string_to_gnc_numeric() API
+	* src/engine/gnc-lot.c:
+	  64-bit safe for x86_64
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/gnc-query-list.c:
+	* src/import-export/import-match-map.c:
+	  use GPOINTER_TO_INT and GINT_TO_POINTER macros to be 64-bit safe.
+
+	James Strandboge's "Easy Invoice" patch:
+	* src/business/business-reports/Makefile.am:
+	* src/business/business-reports/business-reports.scm:
+	* src/business/business-reports/easy-invoice.scm:
+	  add "easy invoice" code.
+	* src/business/business-utils/business-prefs.scm:
+	* src/business/business-utils/business-utils.scm:
+	  add preferences for the business ID, used in the easy invoice.
+	* src/report/stylesheets/Makefile.am:
+	* src/report/stylesheets/stylesheets.scm:
+	* src/report/stylesheets/stylesheet-easy.scm:
+	  add "easy stylesheet" code.
+
+	* src/engine/gw-engine-spec.scm:
+	  Fix parameter order to match C file (thanks for Erwin Rieger).
+
+2004-10-30  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/README.HBCI: Updated HBCI readme.
+	
+	* src/import-export/hbci/hbci-interaction.c: Fix problems with
+	user messages.
+
+2004-10-24  Benoit Grégoire <bock@step.polymtl.ca>
+	* po/fr.po:  Translation from Johan Buret, unfortunately on the wrong branch.
+
+2004-10-16  Derek Atkins  <derek@ihtfp.com>
+
+	* Neil Williams' QOF book merge patch #1:
+	  qof_book_merge - release 1.
+
+	  Includes
+	  qof_book_merge.c
+	  qof_book_merge.h
+	  test-book-merge.c test routine
+	  New Account Hierarchy druid 
+	  Sundry adjustments to QOF support.
+	  Tweaks to several Makefile.am files to support new files.
+	  Tweaks to window-main.c to support new menu item
+	  Changes to druid-hierarchy.c to support the merge druid.
+
+2004-10-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]
+	* src/business/business-gnome/dialog-date-close.[ch]
+	* src/business/business-gnome/dialog-invoice.c
+	* src/business/business-gnome/glade/date-close.glade
+	* src/business/business-utils/business-prefs.scm
+	  Daniel Lindenaar's patch to implement a check-box in the Invoice Post
+	  Dialog (with a default in the File Preferences) to choose to accumulate
+	  splits when posting an invoice, or post a 1:1 mapping.
+
+2004-10-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-object.scm:
+	  provide a default account name so we don't crash when someone
+	  imports a broken QIF that has a !Account without an account name.
+	  Fixes bug #155244.
+
+2004-10-08  Derek Atkins  <derek@ihtfp.com>
+
+	* engine/gw-engine-spec.scm:
+	* gnome-search/dialog-search.h:
+	* report/report-gnome/dialog-column-view.h:
+	  Andreas Rottmann's patch to support g-wrap 1.9.
+	  - don't wrap non-existent objects
+	  - protect headers from multiple inclusion
+	  - include gtk.h header when we use gtk objects.
+
+2004-10-08  Benoit Grégoire <bock@step.polymtl.ca>
+       	* src/import-export/import-backend.c:  Duplicate match tweaks:
+               -Change MATCH_DATE_NOT_THRESHOLD from 3 weeks to two weeks
+               -A transaction amount mismatch past the threshold is now punished by -5 instead of -1
+               -Date mismatch is now worth -5 isntead of -10
+               -Check number mismatch is now punished -2, but only if both numbers are NOT empty.
+       	* src/import-export/ofx/gnc-ofx-import.c: Update for new LibOfx, this among other things, gives gnucash Microsoft OFC support.
+       	* src/import-export/ofx/test/test-link.cL Update for new LibOfx.
+       	* configure.in:  Partly update for new libofx.  It will crash if the right version isn't available, but there is no explicit version support (if someone wants to code it, you can use the output of "ofxdump --version".
+	* src/gnome-utils/gnc-query-list.c:  Fix gcc3.4 compile problem
+
+2004-09-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix HBCI balance
+	retrieval when some of the returned balance is NULL.
+
+2004-09-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofquerycore.c: Fix for x86_64.
+	* src/backend/file/io-gncbin-r.c: Fixes for x86_64
+
+2004-09-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Finally fix the HBCI
+	implementation based on aqbanking/aqhbci. This can now be tested
+	intensively.
+
+2004-09-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-transaction-reversal.c:
+	* src/engine/test-core/test-engine-stuff.c:
+	  Fix for ISO C90.  Fixes #153465.
+
+2004-09-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c,
+	gnc-hbci-getbalance.c, gnc-hbci-gettrans.c: More AqBanking work
+	after hints from Martin Preuss <martin@libchipcard.de>.
+
+2004-09-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*.h, *.c, macros/aqbanking.m4,
+	configure.in: Major change for HBCI. It is no longer based on the
+	openhbci2 library but instead on the aqbanking library
+	http://sf.net/projects/aqbanking which is Martin Preuss' successor
+	of openhbci2. This means that now aqbanking-0.9.2 is required
+	instead of any of the openhbci[2] package. Still needs more
+	testing, though.
+
+2004-08-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c: fix xaccAccountGetBalanceAsOfDate() to properly
+	  compute the balance at the end of the split list.  Fixes #150757.
+
+2004-08-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
 	  Add option to include zero-amount splits in computations.
 	  Fixes #143722.
 
-2004-18-19  Derek Atkins  <derek@ihtfp.com>
+2004-08-19  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams's "QOF create: functionality added" patch:
 

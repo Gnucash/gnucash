@@ -709,28 +709,30 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    if (GAINS_STATUS_GAINS & split->gains)
    {
+		Split *s;
       PINFO ("split is a gains recording split, switch over");
       /* If this is the split that records the gains, then work with 
        * the split that generates the gains. 
        */
       /* split = xaccSplitGetCapGainsSplit (split); */
-      split = split->gains_split;
+      s = split->gains_split;
 
       /* This should never be NULL, and if it is, and its matching
        * parent can't be found, then its a bug, and we should be
        * discarding this split.   But ... for now .. return.
        * XXX move appropriate actions to a 'scrub' routine'
        */
-      if (!split) 
+      if (!s) 
       {
          PERR ("Bad gains-split pointer! .. trying to recover.");
          split->gains_split = xaccSplitGetCapGainsSplit (split);
-         split = split->gains_split;
-         if (!split) return;
+         s = split->gains_split;
+         if (!s) return;
 #if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
          xaccTransDestroy (trans);
 #endif
       }
+		split = s;
    }
 
    /* Note: if the value of the 'opening' split(s) has changed,

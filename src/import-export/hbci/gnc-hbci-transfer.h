@@ -24,7 +24,7 @@
 #define GNC_HBCI_TRANSFER_H
 
 #include <gnome.h>
-#include <openhbci2/transaction.h>
+#include <aqbanking/jobsingletransfer.h>
 #include "Account.h"
 #include "dialog-hbcitrans.h"
 
@@ -33,7 +33,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		    GNC_HBCI_Transtype trans_type);
 
 /** Open a gnucash transfer dialog for gnucash Account gnc_acc and
- * fill in all the values from the HBCI_Transaction inside the
+ * fill in all the values from the AB_TRANSACTION inside the
  * HBCITransDialog. Returns TRUE if the gnucash transaction has been
  * successfully created, FALSE if e.g. the user pressed cancel. */
 gboolean

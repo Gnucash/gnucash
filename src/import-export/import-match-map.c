@@ -238,7 +238,7 @@ static void buildProbabilities(gpointer key, gpointer value, gpointer data)
 
     PINFO("P('%s') = '%d'\n", (char*)key, probability);
 
-    g_hash_table_insert(final_probabilities, key, (gpointer)probability);
+    g_hash_table_insert(final_probabilities, key, GINT_TO_POINTER(probability));
 }
 
 /** Frees an array of the same time that buildProperties built */
@@ -270,10 +270,10 @@ static void highestProbability(gpointer key, gpointer value, gpointer data)
   struct account_info *account_i = (struct account_info*)data;
 
   /* if the current probability is greater than the stored, store the current */
-  if((gint32)value > account_i->probability)
+  if(GPOINTER_TO_INT(value) > account_i->probability)
     {
       /* Save the new highest probability and the assoaciated account name */
-      account_i->probability = (gint32)value;
+      account_i->probability = GPOINTER_TO_INT(value);
       account_i->account_name = key;
     }
 }

@@ -32,6 +32,7 @@
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
+#include "druid-merge.h"
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
@@ -47,9 +48,15 @@
 #include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
+#include "qofbook.h"
+
+#include "gnc-trace.h"
+static short module = MOD_IMPORT; 
 
 static GtkWidget *hierarchy_window = NULL;
+GtkWidget *qof_book_merge_window = NULL;
 static AccountGroup *our_final_group = NULL;
+QofBook *temporary;
 
 typedef struct {
   GtkWidget *dialog;
@@ -325,7 +332,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	GtkCellRenderer *renderer;
 
 	locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
- 	list = gnc_load_example_account_list (gnc_get_current_book (),
+ 	list = gnc_load_example_account_list (temporary,
 					      locale_dir);
 	g_free (locale_dir);
 
@@ -378,6 +385,7 @@ on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
   {
     /* Build the categories tree if necessary */
     gnc_suspend_gui_refresh ();
+    temporary = qof_book_new();
     account_categories_tree_view_prepare (data);
     gnc_resume_gui_refresh ();
 
@@ -795,97 +803,118 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         arg1,
            hierarchy_data  *data)
 {
-  gnc_suspend_gui_refresh ();
-
-  if (our_final_group)
-    xaccGroupForEachAccount (our_final_group, (AccountCallback)starting_balance_helper,
-                             data, TRUE);
-
-  delete_hierarchy_window ();
-
-  gncp_new_user_finish ();
-
-  gnc_set_first_startup (FALSE);
-
-  if (our_final_group)
-    xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
-
-  g_free(data);
-  gnc_resume_gui_refresh ();
+	gnc_suspend_gui_refresh ();
+	
+	if (our_final_group)
+	  xaccGroupForEachAccount (our_final_group, (AccountCallback)starting_balance_helper,
+				   data, TRUE);
+	ENTER (" ");
+	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
+	if(qof_book_merge_window) {
+		DEBUG ("qof_book_merge_window found");
+		if (our_final_group) 
+			xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
+		gtk_widget_show(qof_book_merge_window);
+		qof_book_destroy(temporary);
+		delete_hierarchy_window ();
+		gnc_resume_gui_refresh ();
+		LEAVE (" ");
+		return;
+	}
+	delete_hierarchy_window ();
+	
+	gncp_new_user_finish ();
+	
+	gnc_set_first_startup (FALSE);
+	
+	if (our_final_group)
+	xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
+	qof_book_destroy(temporary);
+	
+	g_free(data);
+	gnc_resume_gui_refresh ();
+	LEAVE (" ");
 }
 
 static GtkWidget *
 gnc_create_hierarchy_druid (void)
 {
-  hierarchy_data *data;
-  GtkWidget *balance_edit;
-  GtkWidget *dialog;
-  GtkWidget *druid;
-  GtkTreeView *tree_view;
-  GtkWidget *box;
-  GladeXML *xml;
+	hierarchy_data *data;
+	GtkWidget *balance_edit;
+	GtkWidget *dialog;
+	GtkWidget *druid;
+	GtkTreeView *tree_view;
+	GtkWidget *box;
+	GladeXML *xml;
+	
+	data = g_new0 (hierarchy_data, 1);
+	xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
+	
+	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
+	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
+	data->dialog = dialog;
+	
+	druid = glade_xml_get_widget (xml, "hierarchy_druid");
+	gnc_druid_set_colors (GNOME_DRUID (druid));
+	
+	gtk_widget_show (glade_xml_get_widget (xml, "start_page"));
+	gtk_widget_show (glade_xml_get_widget (xml, "newUserDruidFinishPage"));
+	
+	/* Currency Page */
+	data->currency_selector = gnc_currency_edit_new();
+	gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
+	gtk_widget_show (data->currency_selector);
+	box = glade_xml_get_widget (xml, "currency_chooser_vbox");
+	gtk_box_pack_start(GTK_BOX(box), data->currency_selector, FALSE, FALSE, 0);
 
-  data = g_new0 (hierarchy_data, 1);
-  xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
+	/* Categories Page */
+	balance_edit = gnc_amount_edit_new ();
+	data->balance_edit = GNC_AMOUNT_EDIT(balance_edit);
+	gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
+	gtk_widget_show (balance_edit);
+	box = glade_xml_get_widget (xml, "start_balance_box");
+	gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
+	g_signal_connect (G_OBJECT (balance_edit), "amount_changed",
+			  G_CALLBACK (on_balance_changed), data);
+	g_signal_connect (G_OBJECT (balance_edit), "focus_out_event",
+			  G_CALLBACK (on_balance_focus_out), data);
+	
+	/* Opening Balances Page */
+	tree_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "account_categories_tree_view"));
+	g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (tree_view)), "changed",
+			  G_CALLBACK (categories_tree_selection_changed), data);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
+	data->categories_tree = tree_view;
+	
+	data->category_accounts_box = GTK_BOX(glade_xml_get_widget (xml, "accounts_in_category"));
+	data->category_description = GTK_LABEL(glade_xml_get_widget (xml, "account_types_description_entry"));
+	
+	data->final_account_tree_box = glade_xml_get_widget (xml, "final_account_tree_box");
+	data->final_account_tree = NULL;
+	
+	data->balance_hash = g_hash_table_new (g_str_hash, g_str_equal);
+	
+	g_signal_connect (G_OBJECT(dialog), "destroy",
+			  G_CALLBACK (gnc_hierarchy_destroy_cb), data);
+	
+	glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, data);
+	
+	return dialog;
+}
 
-  dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
-  gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-  data->dialog = dialog;
-
-  druid = glade_xml_get_widget (xml, "hierarchy_druid");
-  gnc_druid_set_colors (GNOME_DRUID (druid));
-
-  gtk_widget_show (glade_xml_get_widget (xml, "start_page"));
-  gtk_widget_show (glade_xml_get_widget (xml, "newUserDruidFinishPage"));
-
-  /* Currency Page */
-  data->currency_selector = gnc_currency_edit_new();
-  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
-  gtk_widget_show (data->currency_selector);
-  box = glade_xml_get_widget (xml, "currency_chooser_vbox");
-  gtk_box_pack_start(GTK_BOX(box), data->currency_selector, FALSE, FALSE, 0);
-
-  /* Categories Page */
-  balance_edit = gnc_amount_edit_new ();
-  data->balance_edit = GNC_AMOUNT_EDIT(balance_edit);
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
-  gtk_widget_show (balance_edit);
-  box = glade_xml_get_widget (xml, "start_balance_box");
-  gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (balance_edit), "amount_changed",
-                    G_CALLBACK (on_balance_changed), data);
-  g_signal_connect (G_OBJECT (balance_edit), "focus_out_event",
-                    G_CALLBACK (on_balance_focus_out), data);
-
-  /* Opening Balances Page */
-  tree_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "account_categories_tree_view"));
-  g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (tree_view)), "changed",
-		    G_CALLBACK (categories_tree_selection_changed), data);
-  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
-  data->categories_tree = tree_view;
-
-  data->category_accounts_box = GTK_BOX(glade_xml_get_widget (xml, "accounts_in_category"));
-  data->category_description = GTK_LABEL(glade_xml_get_widget (xml, "account_types_description_entry"));
-
-  data->final_account_tree_box = glade_xml_get_widget (xml, "final_account_tree_box");
-  data->final_account_tree = NULL;
-
-  data->balance_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-  g_signal_connect (G_OBJECT(dialog), "destroy",
-                    G_CALLBACK (gnc_hierarchy_destroy_cb), data);
-
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, data);
-
-  return dialog;
+GtkWidget*
+gnc_ui_hierarchy_running (void)
+{
+	if (hierarchy_window) return hierarchy_window;
+	return NULL;
 }
 
 void
 gnc_ui_hierarchy_druid (void)
 {
-  if (hierarchy_window) return;
+	if (hierarchy_window) return;
 
-  hierarchy_window = gnc_create_hierarchy_druid ();
+	hierarchy_window = gnc_create_hierarchy_druid ();
 
-  return;
+	return;
 }

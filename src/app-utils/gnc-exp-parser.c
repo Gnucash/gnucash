@@ -108,12 +108,12 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         else if (SCM_STRINGP (val_scm))
           {
             char *s;
-            const char *err;
+            gboolean err;
 
             s = gh_scm2newstr (val_scm, NULL);
 
             err = string_to_gnc_numeric (s, &value);
-            if (err == NULL)
+            if (err == FALSE)
               good = FALSE;
 
             free (s);

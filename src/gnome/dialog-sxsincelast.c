@@ -205,8 +205,8 @@ typedef struct reminderTuple_ {
  * An reminder instance of the containing SX.
  **/
 typedef struct reminderInstanceTuple_ {
-        GDate	*endDate;
-        GDate	*occurDate;
+        GDate        *endDate;
+        GDate        *occurDate;
         void    *sxStateData;
         gboolean isSelected;
         reminderTuple *parentRT;
@@ -426,17 +426,17 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
       (NULL,
        ngettext 
        ("There are no Scheduled Transactions to be entered at this time.\n"
-	"(%d transaction automatically created)",
-	"There are no Scheduled Transactions to be entered at this time.\n"
-	"(%d transactions automatically created)",
-	-(ret)),
+        "(%d transaction automatically created)",
+        "There are no Scheduled Transactions to be entered at this time.\n"
+        "(%d transactions automatically created)",
+        -(ret)),
        -(ret));
   }
 }
 
 static gboolean
 show_handler (const char *class, gint component_id,
-	      gpointer user_data, gpointer iter_data)
+              gpointer user_data, gpointer iter_data)
 {
         GtkWidget *window = user_data;
 
@@ -466,12 +466,12 @@ gnc_ui_sxsincelast_dialog_create()
         int autoCreateCount;
         sxSinceLastData        *sxsld;
 
-	if (gnc_forall_gui_components (DIALOG_SXSINCELAST_CM_CLASS,
-				       show_handler, NULL))
-		return 0;
+        if (gnc_forall_gui_components (DIALOG_SXSINCELAST_CM_CLASS,
+                                       show_handler, NULL))
+                return 0;
 
 
-	sxsld = g_new0( sxSinceLastData, 1 );
+        sxsld = g_new0( sxSinceLastData, 1 );
 
         sxsld->toCreateList = sxsld->reminderList = sxsld->toRemoveList = NULL;
         sxsld->sxInitStates = g_hash_table_new( g_direct_hash, g_direct_equal );
@@ -521,8 +521,8 @@ typedef struct {
    
 static void
 dialog_widgets_attach_handlers(GladeXML *dialog_xml, 
-			       widgetSignalHandlerTuple *handler_info, 
-			       sxSinceLastData *sxsld)
+                               widgetSignalHandlerTuple *handler_info, 
+                               sxSinceLastData *sxsld)
 {
         int i;
         GtkWidget *w;
@@ -1074,7 +1074,7 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         }
         g_list_free( tci->createdTxnGUIDs );
         tci->createdTxnGUIDs = NULL;
-	gnc_resume_gui_refresh();
+        gnc_resume_gui_refresh();
 }
 
 /**
@@ -1388,7 +1388,7 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
                       toDelPtr;
                       toDelPtr = toDelPtr->next ) {
 
-                        row = (gint)toDelPtr->data;
+                        row = GPOINTER_TO_INT(toDelPtr->data);
                         tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
                         elt = g_list_find( sxList, tdt->sx );
                         sxList = g_list_remove_link( sxList, elt );
@@ -1444,7 +1444,7 @@ cancel_check( GnomeDruidPage *druid_page,
         }
 
         if ( !gnc_verify_dialog( sxsld->sincelast_window, TRUE,
-				 lastrun_cancel_check_msg ) ) {
+                                 lastrun_cancel_check_msg ) ) {
                 return TRUE;
         }
 
@@ -1610,7 +1610,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
         g_signal_connect( G_OBJECT(sxsld->sincelast_window), "destroy",
 			  G_CALLBACK( sxsincelast_destroy ), sxsld );
 
-	dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
+        dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
         druid_pages_attach_handlers( sxsld->gxml, pages, sxsld );
 
         /* gnc-init the option menu[s]. */
@@ -1844,7 +1844,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                 for ( insts = tct->instanceList;
                       insts;
                       insts = insts->next ) {
-                        gboolean allVarsBound;
+                        gboolean allVarsBound = FALSE;
 
                         tci = (toCreateInstance*)insts->data;
                 
@@ -1863,24 +1863,24 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
 
                         switch ( tci->state ) {
                         case TO_CREATE:
-                                allVarsBound = TRUE;
-                                g_hash_table_foreach( tci->varBindings,
-                                                      andequal_numerics_set,
-                                                      &allVarsBound );
-                                rowText[1] = ( allVarsBound
-                                               ? _( "Ready to create" )
-					       /* READY_TEXT */ 
-					       : _( "Needs values for variables" )
-                                               /* NEEDS_BINDINGS_TEXT */ );
-                                break;
+                            allVarsBound = TRUE;
+                            g_hash_table_foreach( tci->varBindings,
+                                                  andequal_numerics_set,
+                                                  &allVarsBound );
+                            rowText[1] = ( allVarsBound
+                                           ? _( "Ready to create" )
+                                           /* READY_TEXT */ 
+                                           : _( "Needs values for variables" )
+                                           /* NEEDS_BINDINGS_TEXT */ );
+                            break;
                         case IGNORE:
-			    rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
-			    break;
+                            rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
+                            break;
                         case POSTPONE:
-			    rowText[1] = _( "Postponed" ) /* POSTPONE_TEXT */ ;
-			    break;
+                            rowText[1] = _( "Postponed" ) /* POSTPONE_TEXT */ ;
+                            break;
                         default:
-                                g_assert( FALSE );
+                            g_assert( FALSE );
                         }
                                 
                         tci->node = gtk_ctree_insert_node( ct, sxNode, NULL,
@@ -1987,7 +1987,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                                               SX_OBSOLETE_CLIST ));
 
         tmp_str = g_string_new(NULL);
-        //rowtext[2] = g_new0(gchar, MAX_DATE_LENGTH+1 ); 
+        rowtext[2] = g_strdup( _("Obsolete") );
 
         gtk_clist_freeze( cl );
         gtk_clist_clear( cl );
@@ -2003,9 +2003,9 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
 
                 fs = xaccSchedXactionGetFreqSpec( tdt->sx );
                 xaccFreqSpecGetFreqStr( fs, tmp_str );
+                /* XXX are we leaking memory here, by not 
+                 * freeing previous rrowtext[1] ?? */
                 rowtext[1] = tmp_str->str;
-
-                rowtext[2] = g_strdup( _("Obsolete") );
 
                 gtk_clist_insert( cl, row, rowtext );
                 gtk_clist_set_row_data( cl, row, tdt );
@@ -2388,8 +2388,8 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
         gnc_ledger_display_close( sxsld->to_create_ledger );
         sxsld->to_create_ledger = NULL;
 
-	gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
-					      sxsld->sincelast_window );
+        gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
+                                              sxsld->sincelast_window );
 
         g_free( sxsld );
 }
@@ -2696,7 +2696,7 @@ create_transactions_on( SchedXaction *sx,
 
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-	if ( ag && id ) {
+        if ( ag && id ) {
                 acct = xaccGetAccountFromName( ag, id );
                 if ( acct ) {
                         createUD.tci = tci;
@@ -2705,7 +2705,7 @@ create_transactions_on( SchedXaction *sx,
                                                        create_each_transaction_helper,
                                                        /*tct*/ &createUD );
                 }
-	}
+        }
 }
 
 static void
@@ -2926,7 +2926,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         for ( ; varList ; varList = varList->next ) {
                 gchar *varName;
                 GString *gstr;
-		const gchar *numValueStr;
+                const gchar *numValueStr;
                 gnc_numeric *numValue, *tmpNumValue;
 
                 varName = (gchar*)varList->data;
@@ -3052,7 +3052,7 @@ void
 print_vars_helper( gpointer key, gpointer value, gpointer user_data )
 {
         DEBUG( "\"%s\" -> %.8x [%s]",
-               (gchar*)key, (unsigned int)value,
+               (gchar*)key, GPOINTER_TO_UINT(value),
                gnc_numeric_to_string( *(gnc_numeric*)value ) );
 }
 
@@ -3569,7 +3569,7 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         Query *q;
 
         q = xaccMallocQuery();
-	xaccQuerySetBook (q, gnc_get_current_book ());
+        xaccQuerySetBook (q, gnc_get_current_book ());
         sxsld->ac_ledger = gnc_ledger_display_query( q,
                                                      GENERAL_LEDGER,
                                                      REG_STYLE_LEDGER );
@@ -3612,7 +3612,7 @@ create_created_ledger( sxSinceLastData *sxsld )
         Query *q;
 
         q = xaccMallocQuery();
-	xaccQuerySetBook (q, gnc_get_current_book ());
+        xaccQuerySetBook (q, gnc_get_current_book ());
         sxsld->created_ledger = gnc_ledger_display_query( q,
                                                           GENERAL_LEDGER,
                                                           REG_STYLE_LEDGER );

@@ -265,6 +265,7 @@ gnc_create_merge_druid (void)
 
 	druid = glade_xml_get_widget (xml, "merge_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
+	gtk_widget_show (glade_xml_get_widget (xml, "start_page"));
 
 	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
                       GTK_SIGNAL_FUNC(gnc_merge_destroy_cb), NULL);

@@ -120,7 +120,10 @@ gncReadFile (const char * file, char ** data)
     g_free(buf);
     buf=NULL;
   }
-  buf[size] = '\0';
+  else
+  {
+    buf[size] = '\0';
+  }
 
   close(fd);
   *data = buf;

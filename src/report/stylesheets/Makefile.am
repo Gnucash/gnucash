@@ -39,7 +39,8 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
   stylesheets.scm \
   stylesheet-plain.scm \
-  stylesheet-fancy.scm 
+  stylesheet-fancy.scm \
+  stylesheet-easy.scm
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \

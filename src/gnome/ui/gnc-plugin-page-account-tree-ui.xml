@@ -2,6 +2,7 @@
   <menubar>
     <menu name="File" action="FileAction">
       <placeholder name="FileNewPlaceholder">
+        <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
         <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
       </placeholder>
       <placeholder name="FileOpenPlaceholder">

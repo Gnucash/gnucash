@@ -44,6 +44,15 @@
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
+  gnc:*business-label* (N_ "Accumulate splits on Post?")
+  "f0" (N_ (string-append
+	   "Whether multiple entries in an invoice which transfer to "
+	   "the same account should be accumulated into a single split by default."
+	   "This setting can be changed in the Post dialog."))
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
   gnc:*business-label* (N_ "Invoice Tax Included?")
   "f1" (N_ (string-append
 	   "Whether tax is included by default in entries on Invoices. "
@@ -92,7 +101,13 @@
   (reg-option
    (gnc:make-text-option
     gnc:*business-label* gnc:*company-addy*
-    "b" (N_ "The address of your business") ""))
+    "b1" (N_ "The address of your business") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-id*
+    "b2" (N_ "The ID for your company (eg 'Tax-ID: 00-000000")
+    ""))
 
   (reg-option
    (gnc:make-taxtable-option

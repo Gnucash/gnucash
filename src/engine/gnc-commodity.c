@@ -91,9 +91,10 @@ struct gnc_new_iso_code
   const char *old_code;
   const char *new_code;
 } gnc_new_iso_codes[] = {
-  {"RUB", "RUR"}, // Russian Ruble
-  {"PLZ", "PLN"}, // Polish Zloty
-  {"UAG", "UAH"}, // Ukraine Hryvnia
+  {"RUB", "RUR"}, /* Russian Ruble */
+  {"PLZ", "PLN"}, /* Polish Zloty */
+  {"UAG", "UAH"}, /* Ukraine Hryvnia */
+  {"ILS", "NIS"}, /* New Israeli Shekel */
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
@@ -1431,12 +1432,10 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 {
   gnc_commodity_namespace * ns = NULL; 
   
-  if(table) 
-  { 
-    ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
-  }
+  if (!table) return NULL;
   
-  if(!ns)
+  ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+  if(!ns) 
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
     ns = g_new0(gnc_commodity_namespace, 1);

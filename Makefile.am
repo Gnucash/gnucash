@@ -103,7 +103,7 @@ etags:
 else
 
 etags:
-	@echo "You must ./configure with --enable-etags to use ctags."
+	@echo "You must ./configure with --enable-etags to use etags."
 
 endif
 

@@ -212,9 +212,22 @@ void xaccAccountSetDescription (Account *account, const char *desc);
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
 void xaccAccountSetLastNum (Account *account, const char *num);
-
 /** Set the account's type */
 GNCAccountType xaccAccountGetType (Account *account);
+/** \brief Special function only for qof_book_merge
+
+qofAccountSetParent uses a specific QofEntity that is
+set during a qof_book_merge and it refers to the
+corresponding QofEntity in the target book. This is used
+to link new accounts into an existing AccountGroup. The
+parent reference is only changed if no parent exists.
+
+Care is needed before this function can be used in any
+other manner.
+*/
+void qofAccountSetParent (Account *, QofEntity *);
+
+
 /** Get the account's name */
 const char *   xaccAccountGetName (Account *account);
 /** Get the account's accounting code */
@@ -727,7 +740,7 @@ const char * dxaccAccountGetQuoteTZ (Account *account);
 
 /** @name Account parameter names */
 /** @{ */
-#define ACCOUNT_KVP		"kvp"
+#define ACCOUNT_KVP			"kvp"
 #define ACCOUNT_NAME_		"name"
 #define ACCOUNT_CODE_		"code"
 #define ACCOUNT_DESCRIPTION_	"desc"
@@ -738,6 +751,11 @@ const char * dxaccAccountGetQuoteTZ (Account *account);
 #define ACCOUNT_PRESENT_	"present"
 #define ACCOUNT_FUTURE_MINIMUM_ "future-minimum"
 #define ACCOUNT_TAX_RELATED	"tax-related-p"
+#define ACCOUNT_TYPE_		"account-type"
+#define ACCOUNT_SCU			"smallest-commodity-unit"
+#define ACCOUNT_NSCU		"non-standard-scu"
+#define ACCOUNT_PARENT		"parent-account"
+
 /** @} */
 
 /** This is the type-override when you want to match all accounts.  Used

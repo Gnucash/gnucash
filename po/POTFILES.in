@@ -403,9 +403,6 @@ src/import-export/hbci/gnc-hbci-transfer.c
 src/import-export/hbci/gnc-hbci-utils.c
 src/import-export/hbci/gncmod-hbci.c
 src/import-export/hbci/hbci-interaction.c
-src/import-export/hbci/hbci-progressmon.c
-src/import-export/hbci/glade/hbci.glade
-src/import-export/hbci/glade/hbcipass.glade
 src/import-export/hbci/test/test-link-module.c
 src/import-export/hbci/gnc-plugin-hbci.c
 src/import-export/log-replay/gnc-log-replay.c

@@ -31,8 +31,36 @@
 #ifndef GNC_TAXTABLE_H_
 #define GNC_TAXTABLE_H_
 
+/** @struct GncTaxTable
+
+modtime is the internal date of the last modtime\n
+See src/doc/business.txt for an explanation of the following\n
+Code that handles refcount, parent, child, invisible and children 
+is *identical* to that in ::GncBillTerm
+
+@param	QofInstance     inst;
+@param 	char *          name;
+@param 	GList *         entries;
+@param 	Timespec        modtime;	
+@param 	gint64          refcount;
+@param 	GncTaxTable *   parent; if non-null, we are an immutable child 
+@param 	GncTaxTable *   child;  if non-null, we have not changed 
+@param 	gboolean        invisible;
+@param 	GList *         children; list of children for disconnection 
+*/
 typedef struct _gncTaxTable GncTaxTable;
+
+/** @struct GncTaxTableEntry
+
+@param	GncTaxTable *   table;
+@param  Account *       account;
+@param	GncAmountType   type;
+@param	gnc_numeric     amount;
+};
+
+*/
 typedef struct _gncTaxTableEntry GncTaxTableEntry;
+
 typedef struct _gncAccountValue GncAccountValue;
 
 #include "Account.h"
@@ -91,10 +119,6 @@ void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
-
-/** added for later QOF standardisation */
-gint gncTaxTableEntryGetType_q (GncTaxTableEntry *entry);
-void gncTaxTableEntrySetType_q (GncTaxTableEntry *entry, gint type);
 
 /** @} */
 

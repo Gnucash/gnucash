@@ -479,7 +479,7 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
 
     ret = g_new(gnc_numeric, 1);
 
-    if(string_to_gnc_numeric(content, ret) != NULL)
+    if(string_to_gnc_numeric(content, ret))
     {
         g_free(content);
         return ret;

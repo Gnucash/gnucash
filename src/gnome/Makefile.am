@@ -44,6 +44,7 @@ libgncgnome_la_SOURCES = \
   druid-budget-create.c \
   druid-acct-period.c \
   druid-hierarchy.c \
+  druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
   gnc-embedded-window.c \
@@ -94,6 +95,7 @@ noinst_HEADERS = \
   druid-budget-create.h \
   druid-acct-period.h \
   druid-hierarchy.h \
+  druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
   gnc-embedded-window.h \

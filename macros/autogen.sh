@@ -21,7 +21,7 @@ test_version()
     this_prog="$1"
     want_vers="$2"
 
-    testv=`"$this_prog" --version 2>/dev/null | head -1 | awk '{print $NF}'`
+    testv=`"$this_prog" --version 2>/dev/null | head -n 1 | awk '{print $NF}'`
     if test -z "$testv" ; then return 1 ; fi
 
     testv_major=`echo "$testv" | sed 's/\([0-9]*\).\([0-9]*\).*$/\1/'`

@@ -41,7 +41,7 @@ test_query (Query *q, SCM val2str)
   if (!xaccQueryEqual (q, q2))
   {
     failure ("queries don't match");
-    fprintf (stderr, "%s\n\n", str);
+    fprintf (stderr, "%s\n\n", str ? str : "(null)");
     scm_q = gnc_query2scm (q2);
     gh_display (scm_q); gh_newline ();
     exit (1);

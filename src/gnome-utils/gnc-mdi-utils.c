@@ -364,8 +364,8 @@ gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
  */
 void
 gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
-			GNCMDIAutoType type,
-			gchar *first_path, ...)
+                        GNCMDIAutoType type,
+                        gchar *first_path, ...)
 {
   GList *walker;
   va_list args;
@@ -374,10 +374,10 @@ gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
   va_start(args, first_path);
   for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
     for (walker = g_list_first(mc->menu_names[type]);
-	 walker;
-	 walker = g_list_next(walker)) {
+         walker;
+         walker = g_list_next(walker)) {
       if (strcmp(path, walker->data) == 0)
-	break;
+        break;
     }
     if (walker) {
       /* Found. Don't add again. */
@@ -416,8 +416,8 @@ gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
  */
 void
 gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *mc,
-			   GNCMDIAutoType type,
-			   gchar *first_path, ...)
+                           GNCMDIAutoType type,
+                           gchar *first_path, ...)
 {
   GList *walker;
   gchar *path;
@@ -426,10 +426,10 @@ gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *mc,
   va_start(args, first_path);
   for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
     for (walker = g_list_first(mc->toolbar_names[type]);
-	 walker;
-	 walker = g_list_next(walker)) {
+         walker;
+         walker = g_list_next(walker)) {
       if (strcmp(path, walker->data) == 0)
-	break;
+        break;
     }
     if (walker) {
       /* Found. Don't add again. */
@@ -762,7 +762,7 @@ gnc_mdi_child_menu_tweaking (GNCMDIChildInfo * mc)
  */
 void
 gnc_mdi_set_dispatch_cb (GNCMDIChildInfo * mc, GNCMDIDispatchType type,
-			 GtkCallback cb, gpointer data)
+                         GtkCallback cb, gpointer data)
 {
   g_return_if_fail(mc != NULL);
   g_return_if_fail(type < GNC_DISP_LAST);
@@ -812,7 +812,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       {
         if (oldbar->parent)
           gtk_widget_hide (GTK_WIDGET(oldbar)->parent);        
-	gnc_mdi_show_bars(childwin);
+          gnc_mdi_show_bars(childwin);
       }
     }
     else if (childwin->app)
@@ -873,7 +873,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   gnc_mdi_child_set_title (childwin);
 
   /* install menu hints if relevant */
-  if (mdi->active_child)
+  if (mdi && mdi->active_child)
   {
     /* the arg to this callback is SUPPOSED to be the last active child, 
      * but it gets to be NULL under some circumstances */
@@ -906,7 +906,7 @@ gnc_mdi_configure_toolbar_cb (gpointer data)
     if (mc && mc->toolbar) {
       gtk_toolbar_set_style (GTK_TOOLBAR(mc->toolbar), tbstyle);
       if (mc->app) {
-	gtk_widget_queue_resize(mc->app->dock);
+        gtk_widget_queue_resize(mc->app->dock);
       }
     }
   }
