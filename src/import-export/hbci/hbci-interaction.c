@@ -331,7 +331,8 @@ static int inputBoxCB(AB_BANKING *ab,
 					latin1title,
 					latin1text,
 					NULL,
-					&passwd);
+					&passwd,
+					hideInput);
       } /* user == data->user */
     } /* newPin */
     

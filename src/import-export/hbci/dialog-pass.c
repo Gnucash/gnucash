@@ -34,7 +34,8 @@ gnc_hbci_get_password (GtkWidget *parent,
 		       const char *windowtitle,
 		       const char *heading,
 		       const char *initial_password,
-		       char **password)
+		       char **password,
+		       gboolean hide_input)
 {
   GtkWidget *dialog;
   GtkWidget *heading_label;
@@ -68,6 +69,7 @@ gnc_hbci_get_password (GtkWidget *parent,
 
   if (initial_password)
     gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+  gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
 
   gtk_widget_grab_focus (password_entry);
 
