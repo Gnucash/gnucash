@@ -540,18 +540,50 @@
 	</widget>
 
 	<widget>
-	  <class>GtkCheckButton</class>
-	  <name>tax_related_button</name>
-	  <border_width>3</border_width>
-	  <can_focus>True</can_focus>
-	  <label>Tax Related</label>
-	  <active>False</active>
-	  <draw_indicator>True</draw_indicator>
+	  <class>GtkHBox</class>
+	  <name>hbox104</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>tax_related_button</name>
+	    <border_width>3</border_width>
+	    <can_focus>True</can_focus>
+	    <label>Tax Related</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>placeholder_button</name>
+	    <border_width>3</border_width>
+	    <tooltip>This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account.</tooltip>
+	    <can_focus>True</can_focus>
+	    <label>Placeholder</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
 	</widget>
       </widget>
 

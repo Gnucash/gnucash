@@ -922,8 +922,21 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                                           cell->cell.value,
                                           gnc_get_account_separator ());
     if (account)
-      break;
+    {
+      if (xaccAccountGetPlaceholder (account))
+      {
+        const char *format = _("The account %s does not allow transactions.\n");
+	char *message;
+	gboolean result;
 
+	message = g_strdup_printf (format, name);
+
+	gnc_error_dialog_parented (gnc_split_register_get_parent (reg),
+				   message);
+      }
+      break;
+    }
+    else
     {
       const char *format = _("The account %s does not exist.\n"
                              "Would you like to create it?");

@@ -315,10 +315,12 @@ string and 'directories' must be a list of strings."
 
   (define (locale-prefixes)
     (let* ((locale (setlocale LC_MESSAGES))
-           (strings (cond ((not (string? locale)) '())
-                          ((equal? locale "C") '())
-                          ((<= (string-length locale) 2) (list locale))
-                          (else (list (substring locale 0 2) locale)))))
+           (strings (cond ((not (string? locale)) ())
+                          ((equal? locale "C") ())
+                          ((<= (string-length locale) 4) (list locale))
+                          (else (list (substring locale 0 2)
+                                      (substring locale 0 5)
+                                      locale)))))
       (reverse (cons "C" strings))))
 
   (let loop ((prefixes (locale-prefixes))

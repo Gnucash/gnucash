@@ -577,6 +577,9 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
     Account *account = node->data;
     char *name;
 
+    if (xaccAccountGetPlaceholder (account))
+	continue;
+
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     if (name != NULL)
     {
