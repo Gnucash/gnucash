@@ -116,7 +116,7 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
 	GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->unmerge_actions (plugin_page, ui_merge);
 }
 
-G_CONST_RETURN gchar *
+gchar *
 gnc_plugin_page_get_title  (GncPluginPage *plugin_page)
 {
 	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
@@ -125,13 +125,22 @@ gnc_plugin_page_get_title  (GncPluginPage *plugin_page)
 	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_title (plugin_page);
 }
 
-G_CONST_RETURN gchar *
-gnc_plugin_page_get_icon (GncPluginPage *plugin_page)
+gchar *
+gnc_plugin_page_get_tab_name  (GncPluginPage *plugin_page)
 {
 	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_icon != NULL, NULL);
+	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_name != NULL, NULL);
 
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_icon (plugin_page);
+	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_name (plugin_page);
+}
+
+G_CONST_RETURN gchar *
+gnc_plugin_page_get_tab_icon (GncPluginPage *plugin_page)
+{
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
+	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_icon != NULL, NULL);
+
+	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_icon (plugin_page);
 }
 
 G_CONST_RETURN gchar *

@@ -291,7 +291,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label_box;
 	GtkWidget *label;
 	const gchar *icon;
-	const gchar *title;
+	gchar *tab_name;
 	GtkWidget *image;
 /*	gint pos;*/
 
@@ -300,12 +300,13 @@ gnc_main_window_open_page (GncMainWindow *window,
 
 	child = gnc_plugin_page_create_widget (page);
 	g_object_set_data (G_OBJECT (child), "page-plugin", page);
+	g_object_set_data (G_OBJECT (child), "window", window);
 
-	icon = gnc_plugin_page_get_icon (page);
-	title = gnc_plugin_page_get_title (page);
-
-	label = gtk_label_new (title);
+	icon = gnc_plugin_page_get_tab_icon (page);
+	tab_name = gnc_plugin_page_get_tab_name (page);
+	label = gtk_label_new (tab_name);
 	gtk_widget_show (label);
+	g_free(tab_name);
 
 	if (icon != NULL) {
 		/* FIXME */

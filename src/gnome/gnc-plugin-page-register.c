@@ -29,6 +29,7 @@
 #include <gtk/gtkvbox.h>
 #include "egg-action-group.h"
 #include "global-options.h"
+#include "gnc-icons.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-register.h"
 #include "gnc-split-reg.h"
@@ -47,8 +48,9 @@ static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static G_CONST_RETURN gchar *gnc_plugin_page_register_get_title (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_register_get_icon (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_title (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
+static G_CONST_RETURN gchar *gnc_plugin_page_register_get_tab_icon (GncPluginPage *plugin_page);
 static G_CONST_RETURN gchar *gnc_plugin_page_register_get_plugin_name (GncPluginPage *plugin_page);
 static G_CONST_RETURN gchar *gnc_plugin_page_register_get_uri (GncPluginPage *plugin_page);
 
@@ -243,7 +245,8 @@ gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface)
 	iface->merge_actions   = gnc_plugin_page_register_merge_actions;
 	iface->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
 	iface->get_title       = gnc_plugin_page_register_get_title;
-	iface->get_icon        = gnc_plugin_page_register_get_icon;
+	iface->get_tab_name    = gnc_plugin_page_register_get_tab_name;
+	iface->get_tab_icon    = gnc_plugin_page_register_get_tab_icon;
 	iface->get_plugin_name = gnc_plugin_page_register_get_plugin_name;
 	iface->get_uri         = gnc_plugin_page_register_get_uri;
 }
@@ -326,16 +329,60 @@ gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page,
 	plugin_page_register->priv->ui_merge = NULL;
 }
 
-static G_CONST_RETURN gchar *
+
+static gchar *
 gnc_plugin_page_register_get_title (GncPluginPage *plugin_page)
 {
-	return _("General Ledger");
+	return g_strdup(_("General Ledger"));
+}
+
+
+static gchar *
+gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
+{
+	GNCLedgerDisplayType ledger_type;
+  	GNCLedgerDisplay *ld;
+	SplitRegister *reg;
+	Account *leader;
+
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+	ld = GNC_PLUGIN_PAGE_REGISTER (plugin_page)->priv->ld;
+	reg = gnc_ledger_display_get_split_register (ld);
+	ledger_type = gnc_ledger_display_type (ld);
+	leader = gnc_ledger_display_leader (ld);
+
+	switch (ledger_type) {
+	 case LD_SINGLE:
+	  return g_strdup(xaccAccountGetName (leader));
+
+	 case LD_SUBACCOUNT:
+	  return g_strdup_printf("%s+", xaccAccountGetName (leader));
+
+	 case LD_GL:
+	  switch (reg->type) {
+	   case GENERAL_LEDGER:
+	   case INCOME_LEDGER:
+	    return g_strdup(_("General Ledger"));
+	   case PORTFOLIO_LEDGER:
+	    return g_strdup(_("Portfolio"));
+	   case SEARCH_LEDGER:
+	    return g_strdup(_("Search Results"));
+	   default:
+	    break;
+	  }
+
+	 default:
+	  break;
+	}
+
+	return g_strdup(_("unknown"));
 }
 
 static G_CONST_RETURN gchar *
-gnc_plugin_page_register_get_icon (GncPluginPage *plugin_page)
+gnc_plugin_page_register_get_tab_icon (GncPluginPage *plugin_page)
 {
-	return NULL;
+	return GNC_STOCK_ACCOUNT;
 }
 
 static G_CONST_RETURN gchar *

@@ -56,8 +56,9 @@ typedef struct {
 	void (* merge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 	void (* unmerge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 
-	G_CONST_RETURN gchar *(* get_title) (GncPluginPage *plugin_page);
-	G_CONST_RETURN gchar *(* get_icon) (GncPluginPage *plugin_page);
+	gchar *(* get_title) (GncPluginPage *plugin_page);
+	gchar *(* get_tab_name) (GncPluginPage *plugin_page);
+	G_CONST_RETURN gchar *(* get_tab_icon) (GncPluginPage *plugin_page);
 
 	G_CONST_RETURN gchar *(* get_plugin_name) (GncPluginPage *plugin_page);
 	G_CONST_RETURN gchar *(* get_uri) (GncPluginPage *plugin_page);
@@ -74,8 +75,9 @@ void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_pag
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
                                                        EggMenuMerge *merge);
 
-G_CONST_RETURN gchar *gnc_plugin_page_get_title       (GncPluginPage *plugin_page);
-G_CONST_RETURN gchar *gnc_plugin_page_get_icon        (GncPluginPage *plugin_page);
+gchar                *gnc_plugin_page_get_title       (GncPluginPage *plugin_page);
+gchar                *gnc_plugin_page_get_tab_name    (GncPluginPage *plugin_page);
+G_CONST_RETURN gchar *gnc_plugin_page_get_tab_icon    (GncPluginPage *plugin_page);
 
 G_CONST_RETURN gchar *gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
 G_CONST_RETURN gchar *gnc_plugin_page_get_uri         (GncPluginPage *plugin_page);

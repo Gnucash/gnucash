@@ -71,8 +71,9 @@ static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plu
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_icon (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_account_tree_get_tab_name (GncPluginPage *plugin_page);
+static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_tab_icon (GncPluginPage *plugin_page);
 static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_plugin_name (GncPluginPage *plugin_page);
 static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_uri (GncPluginPage *plugin_page);
 
@@ -432,7 +433,8 @@ gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface)
 	iface->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
 	iface->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
 	iface->get_title       = gnc_plugin_page_account_tree_get_title;
-	iface->get_icon        = gnc_plugin_page_account_tree_get_icon;
+	iface->get_tab_name    = gnc_plugin_page_account_tree_get_tab_name;
+	iface->get_tab_icon    = gnc_plugin_page_account_tree_get_tab_icon;
 	iface->get_plugin_name = gnc_plugin_page_account_tree_get_plugin_name;
 	iface->get_uri         = gnc_plugin_page_account_tree_get_uri;
 	LEAVE(" ");
@@ -542,14 +544,20 @@ gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
 	LEAVE(" ");
 }
 
-static G_CONST_RETURN gchar *
+static gchar *
 gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page)
 {
-	return _("Accounts");
+	return g_strdup(_("Accounts"));
+}
+
+static gchar *
+gnc_plugin_page_account_tree_get_tab_name (GncPluginPage *plugin_page)
+{
+	return g_strdup(_("Accounts"));
 }
 
 static G_CONST_RETURN gchar *
-gnc_plugin_page_account_tree_get_icon (GncPluginPage *plugin_page)
+gnc_plugin_page_account_tree_get_tab_icon (GncPluginPage *plugin_page)
 {
 	return GNC_STOCK_ACCOUNT;
 }
