@@ -399,9 +399,10 @@ if test x"${G_WRAP_COMPILE_ARGS}" = x || \
 then
   AC_MSG_ERROR([
 
-  g-wrap does not appear to be installed.  It must be installed and
+  g-wrap 0.9.x does not appear to be installed. It must be installed and
   its binary directory must be in your PATH.  If you need to install
-  g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.])
+  g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.
+  g-wrap 1.1.x will not work with this version of GnuCash.])
 fi
 
 AC_SUBST(G_WRAP)
