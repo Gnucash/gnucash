@@ -400,6 +400,7 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
 
 Fixes & Patches:
 ----------------
+Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD patches
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
