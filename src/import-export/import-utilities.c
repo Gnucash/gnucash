@@ -56,7 +56,7 @@ const gchar * gnc_import_get_acc_online_id(Account * account)
   return string;
 }
 
-void gnc_import_set_acc_online_id(Account * account, 
+void gnc_import_set_acc_online_id(Account * account,
 				  const gchar * string_value)
 {
   kvp_frame * frame;
@@ -68,9 +68,8 @@ void gnc_import_set_acc_online_id(Account * account,
       frame = kvp_frame_new();
     }
   value = kvp_frame_get_slot(frame, "online_id");
-  //kvp_value_delete(value);
   value = kvp_value_new_string(string_value);
-  kvp_frame_set_slot(frame,"online_id",value);  
+  kvp_frame_set_slot(frame,"online_id",value);
   xaccAccountSetSlots_nc(account,frame);
   return;
 }
@@ -86,12 +85,11 @@ const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
   return string;
 }
 
-void gnc_import_set_trans_online_id(Transaction * transaction, 
+void gnc_import_set_trans_online_id(Transaction * transaction,
 				    const gchar * string_value)
 {
   kvp_frame * frame;
   kvp_value * value;
-  TRACE("Begin");
   frame = xaccTransGetSlots(transaction);
   if(frame==NULL)
     {
@@ -99,8 +97,7 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
       frame = kvp_frame_new();
     }
   value = kvp_value_new_string(string_value);
-  kvp_frame_set_slot(frame,"online_id",value);  
-  kvp_value_delete(value);
+  kvp_frame_set_slot(frame,"online_id",value);
   xaccTransSetSlots_nc(transaction,frame);
   return;
 }

@@ -10,7 +10,6 @@ libgncmod_generic_import_la_SOURCES = \
 	import-utilities.c \
 	import-settings.c \
 	import-match-map.c \
-	gnc-gen-transaction.c \
 	import-main-matcher.c \
 	gncmod-generic-import.c
 
