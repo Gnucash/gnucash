@@ -1,3 +1,11 @@
+2001-06-06  Dave Peticolas  <dave@krondo.com>
+
+	* macros/gnome.m4: Chris J (Oakton) Leach's macro patch
+
+	* AUTHORS: update credits
+
+	* doc/sgml/C/xacc-about.sgml: update credits
+
 2001-06-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-fincalc.c: grey out the frequency menu

@@ -16,7 +16,7 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 
 	AC_ARG_WITH(gnome-includes,
 	[  --with-gnome-includes   Specify location of GNOME headers],[
-	CFLAGS="$CFLAGS -I$withval"
+	CPPFLAGS="$CPPFLAGS -I$withval"
 	])
 	
 	AC_ARG_WITH(gnome-libs,
@@ -38,7 +38,7 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 	    		else
 	        		want_gnome=yes
 	    			LDFLAGS="$LDFLAGS -L$withval/lib"
-	    			CFLAGS="$CFLAGS -I$withval/include"
+	    			CPPFLAGS="$CPPFLAGS -I$withval/include"
 	    			gnome_prefix=$withval/lib
 	    		fi
   		fi,

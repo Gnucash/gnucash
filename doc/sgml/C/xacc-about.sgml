@@ -577,6 +577,14 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>LeachCJ@az1.bp.com</email> Chris
+      J (Oakton) Leach</glossterm>
+<glossdef>
+<para>autoconf patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
 <glossdef>
 <para>for fixing a hang</para>
