@@ -49,7 +49,7 @@ typedef struct {
 } gncint128;
 
 static inline gncint128
-mult (gint64 a, gint64 b)
+mult128 (gint64 a, gint64 b)
 {
   gncint128 prod;
   short aneg=0, bneg=0;
@@ -113,7 +113,7 @@ mult (gint64 a, gint64 b)
 #ifdef TEST_128_BIT_MULT
 void pr (gint64 a, gint64 b)
 {
-   gncint128 prod = mult (a,b);
+   gncint128 prod = mult128 (a,b);
    printf ("%lld * %lld = %lld %llu (0x%llx %llx)\n", a,b, prod.hi, prod.lo, prod.hi, prod.lo);
 }
 
@@ -468,6 +468,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how) 
 {
   gnc_numeric product, result;
+  gncint128 bigprod;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -499,8 +500,15 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     b.denom = 1;
   }
 
+  bigprod = mult128 (a.num, b.num);
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
+
+  if (0 != bigprod.hi)
+  {
+    /* We can try to do better, by reducing the fraction ... */
+    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+  }
   
 #if 0  /* currently, product denom won't ever be zero */
   if(product.denom < 0) {
@@ -880,15 +888,14 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
   
 
 /********************************************************************
- *  gnc_numeric_reduce
- *  reduce a fraction by GCF elimination.  This is NOT done as a
+ ** reduce a fraction by GCF elimination.  This is NOT done as a
  *  part of the arithmetic API unless GNC_DENOM_REDUCE is specified 
  *  as the output denominator.
  ********************************************************************/
 
-#if 1
 gnc_numeric
-gnc_numeric_reduce(gnc_numeric in) {
+gnc_numeric_reduce(gnc_numeric in) 
+{
   gint64   t;
   gint64   num = (in.num < 0) ? (- in.num) : in.num ;
   gint64   denom = in.denom;
@@ -898,96 +905,20 @@ gnc_numeric_reduce(gnc_numeric in) {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  /* the strategy is to use euclid's algorithm */
+  /* The strategy is to use Euclid's algorithm */
   while (denom > 0) {
     t = num % denom;
     num = denom;
     denom = t;
   }
-  /* num = gcd */
+  /* num now holds the GCD (Greatest Common Divisor) */
 
-  /* all calculations are done on positive num, since it's not 
+  /* All calculations are done on positive num, since it's not 
    * well defined what % does for negative values */
   out.num   = in.num / num;
   out.denom = in.denom / num;
   return out;
 }
-
-#else
-gnc_numeric
-gnc_numeric_reduce(gnc_numeric in) {
-
-  gint64   current_divisor = 2;
-  gint64   max_square;
-  gint64   num = (in.num < 0) ? (- in.num) : in.num ;
-  gint64   denom = in.denom;
-  int      three_count = 0;
-  gnc_numeric out;
-
-  if(gnc_numeric_check(in)) {
-    return gnc_numeric_error(GNC_ERROR_ARG);
-  }
-
-  /* the strategy is to eliminate common factors from 
-   * 2 up to 'max', where max is the smaller of the smaller
-   * part of the fraction and the sqrt of the larger part of 
-   * the fraction.  There's also the special case of the 
-   * smaller of fraction parts being a common factor.
-   * 
-   * we test for 2 and 3 first, and thereafter skip all even numbers
-   * and all odd multiples of 3 (that's every third odd number,
-   * i.e. 9, 15, 21), thus the three_count stuff. */
-
-  /* special case: one side divides evenly by the other */
-  if (num == 0) {
-    denom = 1;
-  }
-  else if((num > denom) && (num % denom == 0)) {
-    num = num / denom;
-    denom = 1;
-  }
-  else if ((num <= denom) && (denom % num == 0)) {
-    denom = denom / num;
-    num = 1;
-  }
-
-  max_square = (num > denom) ? denom : num;
-
-  /* normal case: test 2, then 3, 5, 7, 11, etc.
-   * (skip multiples of 2 and 3) */
-  while(current_divisor * current_divisor <= max_square) {
-    if((num % current_divisor == 0) &&
-       (denom % current_divisor == 0)) {
-      num = num / current_divisor;
-      denom = denom / current_divisor;
-    }
-    else {
-      if(current_divisor == 2) {
-        current_divisor++;
-      }
-      else if(three_count == 3) { 
-        current_divisor += 4;
-        three_count = 1;
-      }
-      else {
-        current_divisor += 2;
-        three_count++;
-      }
-    }
-
-    if((current_divisor > num) ||
-       (current_divisor > denom)) {
-      break;
-    }
-  }
-
-  /* all calculations are done on positive num, since it's not 
-   * well defined what % does for negative values */
-  out.num   = (in.num < 0) ? (- num) : num;
-  out.denom = denom;
-  return out;
-}
-#endif
 
 /********************************************************************
  *  double_to_gnc_numeric
@@ -1216,7 +1147,8 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
  ********************************************************************/
 
 gchar *
-gnc_numeric_to_string(gnc_numeric n) {
+gnc_numeric_to_string(gnc_numeric n) 
+{
   gchar *result;
   long long int tmpnum = n.num;
   long long int tmpdenom = n.denom;
