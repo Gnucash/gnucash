@@ -6,6 +6,7 @@
 #include "GNCIdP.h"
 #include "TransLog.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "test-engine-stuff.h"
@@ -67,6 +68,9 @@ run_test (void)
     exit(get_rv());
   }
 
+  /* ????????  this test seems to be testing routines that
+   * are private to the engine, not sure why.  book_set_group
+   * should not be called publically. */
   gnc_book_set_group (book, group1);
   if (!group_has_book (group1, book))
   {

@@ -30,17 +30,16 @@
 #ifndef GNC_BOOK_P_H
 #define GNC_BOOK_P_H
 
-#include "BackendP.h"
+#include "Backend.h"
 #include "GNCIdP.h"
-#include "DateUtils.h"
-#include "TransLog.h"
 #include "gnc-book.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-pricedb-p.h"
+#include "kvp_frame.h"
 
 struct gnc_book_struct
 {
+  kvp_frame *kvp_data;
+  
   /* The entity table associates the GUIDs of all the objects
    * created in the session with their respective objects
    * (pointer addresses) */
@@ -63,9 +62,10 @@ struct gnc_book_struct
   Backend *backend;
 };
 
-
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
+void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
+void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
 void gnc_book_set_backend (GNCBook *book, Backend *be);
 

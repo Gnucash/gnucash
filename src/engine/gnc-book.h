@@ -38,28 +38,28 @@
 
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "kvp_frame.h"
 
 /** PROTOTYPES ******************************************************/
 
 GNCBook * gnc_book_new (void);
 void      gnc_book_destroy (GNCBook *book);
 
+/* The gnc_book_get_slots() method will return the kvp data 
+ * for the book */
+kvp_frame * gnc_book_get_slots (GNCBook *book);
+
+/* Return the various top-level data structure pointers stored 
+ * in the book.  */
 AccountGroup *gnc_book_get_group (GNCBook *book);
-void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
-
-guint gnc_book_count_transactions(GNCBook *book);
-
 gnc_commodity_table* gnc_book_get_commodity_table(GNCBook *book);
 
 /**
  * Returns the list of scheduled transactions.
  **/
 GList * gnc_book_get_schedxactions( GNCBook *book );
-void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
-
 AccountGroup *gnc_book_get_template_group( GNCBook *book );
-void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
 /*
  * The gnc_book_not_saved() subroutine will return TRUE
@@ -70,5 +70,9 @@ gboolean gnc_book_not_saved(GNCBook *book);
 /* The gnc_book_equal() method returns TRUE if the engine data
  * in the two given books is equal. */
 gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);
+
+/* XXX FIXME count_transactions is a utility function, needs 
+ * to be moved to some utility/support file.  */
+guint gnc_book_count_transactions(GNCBook *book);
 
 #endif /* GNC_BOOK_H */

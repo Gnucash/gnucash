@@ -28,8 +28,10 @@
 
 #include "FreqSpec.h"
 #include "GNCId.h"
+#include "Group.h"
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
+#include "Transaction.h"
 #include "date.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"

@@ -315,6 +315,7 @@
       "#include <Backend.h>\n"
       "#include <Group.h>\n"
       "#include <gnc-book.h>\n"
+      "#include <gnc-book-p.h>\n"
       "#include <gnc-session.h>\n"
       "#include <gnc-engine-util.h>\n"
       "#include <date.h>\n"
@@ -1565,6 +1566,7 @@ when no longer needed.")
    '((<gnc:Book*> book))
    "Get the book's account group.")
 
+  ;; XXX FIXME this is a private function, should not be exported publically.
   (gw:wrap-function
    mod
    'gnc:book-set-group

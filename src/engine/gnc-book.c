@@ -70,6 +70,7 @@ gnc_book_init (GNCBook *book)
   if (!book) return;
 
   book->entity_table = xaccEntityTableNew ();
+  book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create();
 
@@ -99,6 +100,13 @@ gnc_book_new (void)
 }
 
 /* ---------------------------------------------------------------------- */
+
+kvp_frame *
+gnc_book_get_slots (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->kvp_data;
+}
 
 GNCEntityTable *
 gnc_book_get_entity_table (GNCBook *book)

@@ -12,6 +12,7 @@
 
 #include "date.h"
 #include "Group.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "test-engine-stuff.h"
@@ -1442,6 +1443,9 @@ get_random_book (void)
 
   book = gnc_book_new ();
 
+  /* XXX fixme -- gnc_book_set_group is a private engine function, 
+   * it should not be invoked in ordinary test cases.  Its should 
+   * be more like make_random_pricedb below... */
   gnc_book_set_group (book, get_random_group (book));
 
   make_random_pricedb (book, gnc_book_get_pricedb (book));
@@ -1459,6 +1463,9 @@ get_random_session (void)
 
   book = gnc_session_get_book (session);
 
+  /* XXX fixme -- gnc_book_set_group is a private engine function, 
+   * it should not be invoked in ordinary test cases.  Its should 
+   * be more like make_random_pricedb below... */
   gnc_book_set_group (book, get_random_group (book));
 
   make_random_pricedb (book, gnc_book_get_pricedb (book));
