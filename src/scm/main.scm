@@ -314,7 +314,10 @@ string and 'directories' must be a list of strings."
   ;; thereof.
 
   (define (locale-prefixes)
-    (let* ((locale (setlocale LC_MESSAGES))
+    ;; Mac OS X. 10.1 and earlier don't have LC_MESSAGES. Fall back to
+    ;; LC_ALL for those systems.
+    (let* ((locale (or (false-if-exception (setlocale LC_MESSAGES))
+		       (setlocale LC_ALL)))
            (strings (cond ((not (string? locale)) ())
                           ((equal? locale "C") ())
                           ((<= (string-length locale) 4) (list locale))

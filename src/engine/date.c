@@ -46,6 +46,13 @@
 #include "date.h"
 #include "gnc-engine-util.h"
 
+#ifndef HAVE_STRPTIME
+#include "strptime.h"
+#endif
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
+
 #define NANOS_PER_SECOND 1000000000
 
 #ifdef HAVE_LANGINFO_D_FMT

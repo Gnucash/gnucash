@@ -805,6 +805,40 @@ chmod u+x src/bin/overrides/gnucash-make-guids
 ### --------------------------------------------------------------------------
 ### Makefile creation
 
+#
+# God, this is ugly....
+#
+# The libtool 2.52 and 2.53 info pages specify two different
+# *incompatible* ways to create the LTLIBOBJS variable.  2.53 makes it
+# an error to directly access the LIBOBJS variable, but then provides
+# a hack to get past this test by introducing the four character
+# sequence '@&t@' that expands to the empty string.  This expansion
+# occurs *after* the LIBOBJS usage test has taken place.
+# Unfortunately, the '@&t@' sequence doesn't exist in 2.52, so we're
+# stuck with this big ugly version check.  Sigh!  At some point in the
+# future, Autoconf 2.53 can be made a required version and this code
+# can be cleaned up.
+#
+# This is necessary so that .o files in LIBOBJS are also built via
+# the ANSI2KNR-filtering rules.
+
+AUTOCONF_VERSION=`autoconf --version`
+autoconf_major_version=`echo ${AUTOCONF_VERSION} | \
+	sed 's/^.*GNU Autoconf.* \([[0-9]]*\)\.\([[0-9]]*\).*$/\1/'`
+autoconf_minor_version=`echo ${AUTOCONF_VERSION} | \
+	sed 's/^.*GNU Autoconf.* \([[0-9]]*\)\.\([[0-9]]*\).*$/\2/'`
+if test $autoconf_major_version -gt 2   -o \
+    \( $autoconf_major_version -eq 2   -a \
+      $autoconf_minor_version -gt 52 \)  ; then
+    LIB@&t@OBJS=`echo "$LIB@&t@OBJS" |
+                  sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
+    LTLIBOBJS=`echo "$LIB@&t@OBJS" |
+                  sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
+else
+    LTLIBOBJS=`echo "$LIBOBJS" | sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
+fi
+AC_SUBST(LTLIBOBJS)
+
 AC_OUTPUT( m4/Makefile  intl/Makefile 
           dnl # Makefiles
           Makefile

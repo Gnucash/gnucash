@@ -1,3 +1,22 @@
+2002-05-18  David Hampton  <hampton@employees.org>
+
+	* configure.in: Work around incompatibilities between autoconf
+	2.52 and 2.53 wrt creating the LIBLTOBJS variable.
+
+	* ltmain.sh: Mac OS X tweaks.
+
+	* libc/Makefile.am: Use LIBLTOBJS instead of LIBOBJS.
+
+	* src/backend/file/sixtp-utils.c (string_to_gint64): 
+	(string_to_gint32): (string_to_timespec_nsecs): Work around bugs
+	in Mac OS X version of sscanf.
+
+	* src/gnome/druid-hierarchy.c (gnc_get_ea_locale_dir): Work around
+	lack of LC_MESSAGES on Mac OS X.
+
+	* src/scm/main.scm (local-prefixes): Work around
+	lack of LC_MESSAGES on Mac OS X.
+
 2002-05-14  David Hampton  <hampton@employees.org>
 
 	* configure.in (AC_CANONICAL_HOST): Remove redundant command.

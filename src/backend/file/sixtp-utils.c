@@ -41,6 +41,12 @@
 #include "guid.h"
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
+#ifndef HAVE_STRPTIME
+#include "strptime.h"
+#endif
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
 
 static short module = MOD_IO;
 
@@ -214,9 +220,18 @@ string_to_gint64(const gchar *str, gint64 *v)
   g_return_val_if_fail(str, FALSE);
   
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " " GNC_SCANF_LLD " %n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " " GNC_SCANF_LLD "%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+
+  /*
+   * Mac OS X version 10.1 and under has a silly bug where scanf
+   * returns bad values in num_read if there is a space before %n. It
+   * is fixed in the next release 10.2 afaik
+   */  
+  while( (*((gchar*)str + num_read)!='\0') &&
+	 isspace(*((char*)str + num_read)))
+    num_read++;
 
   if (v)
     *v = v_in;
@@ -237,9 +252,12 @@ string_to_gint32(const gchar *str, gint32 *v)
   int v_in;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %d %n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " %d%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+  while( (*((gchar*)str + num_read)!='\0') &&
+	 isspace(*((char*)str + num_read)))
+    num_read++;
 
   if (v)
     *v = v_in;
@@ -475,14 +493,17 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
 }
 
 gboolean
-string_to_timespec_nsecs(const gchar *str, Timespec *ts) {
-
+string_to_timespec_nsecs(const gchar *str, Timespec *ts)
+{
   long int nanosecs;
   int charcount;
 
   if (!str || !ts) return FALSE;
 
-  sscanf(str, " %ld %n", &nanosecs, &charcount);
+  sscanf(str, " %ld%n", &nanosecs, &charcount);
+  while( (*((gchar*)str + charcount)!='\0') &&
+	 isspace(*((char*)str + charcount)))
+    charcount++;
 
   if(charcount != strlen(str)) return(FALSE);
 

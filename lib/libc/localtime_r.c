@@ -4,6 +4,7 @@
 #if !HAVE_LOCALTIME_R
 #include <time.h>
 #include <string.h>
+#include "localtime_r.h"
 
 #if HAVE_PTHREAD_MUTEX_INIT
 #include <pthread.h>
