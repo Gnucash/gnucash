@@ -5,6 +5,8 @@
 
 	* src/engine/kvp_doc.txt: add new entries related to transaction voiding.
 
+	* src/engine/Query.{ch}: add support for filtering queries on voided state.
+
 2001-09-30  Josh Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: Displays

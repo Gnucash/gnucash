@@ -2555,6 +2555,10 @@ xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
   case NREC:
     return ((pd->cleared.how & CLEARED_NO) ? 1 : 0);
     break;      
+  case VREC:
+    return ((pd->cleared.how & CLEARED_VOIDED) ? 1 : 0);
+    break;
+    
   }
 
   return 0;

@@ -109,7 +109,8 @@ typedef enum {
   CLEARED_NO         = 1 << 0,
   CLEARED_CLEARED    = 1 << 1,
   CLEARED_RECONCILED = 1 << 2, 
-  CLEARED_FROZEN     = 1 << 3
+  CLEARED_FROZEN     = 1 << 3,
+  CLEARED_VOIDED     = 1 << 4
 } cleared_match_t;
 
 enum {
