@@ -14,6 +14,9 @@
  */
 
 #define _GNU_SOURCE
+
+#include "config.h"
+
 #include <glib.h>
 #include <pwd.h>
 #include <stdio.h>  
@@ -104,7 +107,7 @@ pgendGetUserGecos (PGBackend *be)
  * of the form NAMESPACE::MNEMONIC 
  */
 
-static const gnc_commodity *
+static gnc_commodity *
 gnc_string_to_commodity (const char *str)
 {
    /* hop through a couple of hoops for the commodity */
@@ -796,7 +799,7 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
 static int
 pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
 {
-   const gnc_commodity *modity=NULL;
+   gnc_commodity *modity=NULL;
    char *pbuff;
    Transaction *trans;
    PGresult *result;
