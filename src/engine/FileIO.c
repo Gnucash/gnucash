@@ -1368,6 +1368,16 @@ writeAccountGroupToFile( const char *datafile, AccountGroup *grp )
     return err;
     }
 
+  /* from the close(2) manpage:
+   *   Not checking the return value of close is a common but nevertheless
+   *   serious programming error.  File system implementations which use
+   *   techniques as ``write-behind'' to increase performance may lead to
+   *   write(2) succeeding, although the data has not been written yet.
+   *   The error status may be reported at a later write operation, but it
+   *   is guaranteed to be reported on closing the file.  Not checking the
+   *   return value when closing the file may lead to silent loss of data.
+   *   This can especially be observed with NFS and disk quotas.
+   */
   err = close(fd);
 
   return err;
