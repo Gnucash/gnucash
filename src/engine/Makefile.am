@@ -2,9 +2,9 @@ SUBDIRS = . test-core test
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GNUCASH_ENGINE_BASE_CFLAGS}
 
-INCLUDES = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} -I../
+INCLUDES = -I${top_srcdir}/src/gnc-module -I../
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -83,7 +83,7 @@ noinst_HEADERS = \
   md5.h
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GUILE_LIBS} ${GLIB_LIBS}
+libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS}
 
 libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
 libgw_glib_la_LDFLAGS=-module -lg-wrap-runtime-guile

@@ -70,7 +70,8 @@ gnucash-config: gnucash-config.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
-            -e 's:@-GNC_INCLUDE_DIR-@:${GNC_INCLUDE_DIR}:g'
+            -e 's:@-GNUCASH_ENGINE_CFLAGS-@:${GNUCASH_ENGINE_CFLAGS}:g' \
+            -e 's:@-GNUCASH_ENGINE_LIBS-@:${GNUCASH_ENGINE_LIBS}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 

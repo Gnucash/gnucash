@@ -25,8 +25,6 @@ if test $# -eq 0; then
 	usage 1 1>&2
 fi
 
-lib_gnucash=yes
-
 while test $# -gt 0; do
   case "$1" in
   -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
@@ -64,6 +62,7 @@ while test $# -gt 0; do
       lib_engine=yes
       ;;
     gnucash)
+      lib_engine=yes
       lib_gnucash=yes
       ;;
     *)
@@ -74,17 +73,26 @@ while test $# -gt 0; do
 done
 
 if test "$echo_prefix" = "yes"; then
-	echo $prefix
+    echo $prefix
 fi
 
 if test "$echo_exec_prefix" = "yes"; then
-	echo $exec_prefix
+    echo $exec_prefix
 fi
 
 if test "$echo_cflags" = "yes"; then
-	echo -I@-GNC_INCLUDE_DIR-@
+    cflags=""
+    if test "$lib_engine" = "yes"; then
+        cflags="$cflags @-GNUCASH_ENGINE_CFLAGS-@"
+    fi
+
+    echo $cflags
 fi
 
 if test "$echo_libs" = "yes"; then
-	echo ""
+    libs=""
+    if test "$lib_engine" = "yes"; then
+        libs="$libs @-GNUCASH_ENGINE_LIBS-@"
+    fi
+    echo $libs
 fi
