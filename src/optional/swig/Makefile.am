@@ -102,7 +102,7 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
 CLEANFILES += gnucash.engine.i
 
 gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
-	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ gnucash.engine.i
 CLEANFILES += gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
