@@ -287,8 +287,19 @@ immediately, independent of the major goals.
     to a set of splits, with each split having it's own distinct
     credited account, memo field and currency value.  Suggestion is to
     leave the debited account pointer in the main transaction, and have one
-    credited account pointer in each of the splits.
+    credited account pointer in each of the splits.  Also, sugget
+    leaving a "cleared" flag in the main transaction, *and* putting a
+    separate cleared flag in each split as well.  This allows the
+    cleared flag to be independently set for both the debited & credited
+    accounts.
     <p>
+
+<dt><b>Locks</b>
+<dd>When splits are implemented, and the parent transaction has been
+    marked as cleared, the record should be locked, so that further
+    modifications to the amount can't be performed (or at least, a warning
+    is generated.  This prevents accidental garbaging up of old
+    transactions.
 
 </dl>
 </p>
