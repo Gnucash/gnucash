@@ -49,13 +49,15 @@ typedef enum {
   BY_NONE
 } sort_type_t;  
 
-typedef enum { PD_DATE, PD_AMOUNT, PD_ACCOUNT, PD_STRING, PD_MISC } pd_type_t;
+typedef enum { PD_DATE, PD_AMOUNT, PD_ACCOUNT, 
+               PD_TRANS, PD_SPLIT, PD_STRING, PD_MISC } pd_type_t;
 
 typedef enum { ACCT_MATCH_ALL, ACCT_MATCH_ANY, ACCT_MATCH_NONE } acct_match_t;
 typedef enum { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST, 
                AMT_MATCH_EXACTLY } amt_match_t;
 typedef enum { AMT_SGN_MATCH_EITHER, AMT_SGN_MATCH_CREDIT, 
                AMT_SGN_MATCH_DEBIT } amt_match_sgn_t;
+
 enum { STRING_MATCH_CASE=1, STRING_MATCH_REGEXP=2};
 
 /* the Query makes a subset of all splits based on 3 things: 
@@ -112,15 +114,27 @@ typedef struct {
 
 typedef struct {
   pd_type_t  type;
-  int  how;
-  int  data;
+  int        how;
+  int        data;
 } MiscPredicateData;
+
+typedef struct {
+  pd_type_t    type;
+  Transaction  * trans;
+} TransPredicateData;
+
+typedef struct {
+  pd_type_t    type;
+  Split        * split;
+} SplitPredicateData;
 
 typedef union { 
   pd_type_t            type;
   DatePredicateData    date;
   AmountPredicateData  amount;
   AccountPredicateData acct;
+  TransPredicateData   trans;
+  SplitPredicateData   split;
   StringPredicateData  str;
   MiscPredicateData    misc;
 } PredicateData;
@@ -159,6 +173,9 @@ void xaccQueryAddAccountMatch(Query * q, Account ** acclist,
 void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
                                     QueryOp op);
 
+void xaccQueryAddTransMatch(Query * q, Transaction * t, int how, QueryOp op);
+void xaccQueryAddSplitMatch(Query * q, Split * t, int how, QueryOp op);
+
 void xaccQueryAddDescriptionMatch(Query * q, char * matchstring, 
                                   int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddNumberMatch(Query * q, char * matchstring, 
@@ -193,13 +210,14 @@ void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
  *******************************************************************/
 
 int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
+int  xaccTransMatchPredicate(Split * s, PredicateData * pd);
+int  xaccSplitMatchPredicate(Split * s, PredicateData * pd);
 int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
 int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
 int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
 int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
 int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
 int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
-int  xaccMiscMatchPredicate(Split * s, PredicateData * pd);
 int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
 int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
 

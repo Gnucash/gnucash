@@ -230,7 +230,7 @@ xaccPriceCellPrintValue (PriceCell *cell)
   if (cell->shares_value)
     flags |= PRTSHR;
 
-  xaccSPrintAmount(buff, cell->amount, flags);
+  xaccSPrintAmount(buff, cell->amount, flags, NULL);
 
   return buff;
 }

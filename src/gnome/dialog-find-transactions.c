@@ -62,7 +62,7 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   }
   
   /* initialize the radiobutton state vars */
-  ftd->search_type_radiobutton = 0;
+  ftd->search_type = 0;
 
   /* find the important widgets */
   ftd->new_search_radiobutton = 
@@ -259,7 +259,7 @@ gnc_ui_find_transactions_dialog_search_type_cb(GtkToggleButton * tb,
     gtk_object_get_data(GTK_OBJECT(user_data), "find_transactions_structure");
     
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tb))) {
-    ftd->search_type_radiobutton = 
+    ftd->search_type = 
       g_slist_length(buttongroup) -  g_slist_index(buttongroup, tb) - 1;
   } 
 
@@ -337,12 +337,13 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     gtk_object_get_data(GTK_OBJECT(dialog), "find_transactions_structure");
   
   GList   * selected_accounts;
+  GList   * cur;
   char    * descript_match_text;
   char    * memo_match_text;
   char    * number_match_text;
   char    * action_match_text;
 
-  int     search_type = ftd->search_type_radiobutton;
+  int     search_type = ftd->search_type;
 
   float   amt_temp;
   int     amt_type;
@@ -389,8 +390,10 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     /* build the acclist from the widget GList */
     acclist = g_new0(Account *, 
                      g_list_length(selected_accounts) + 1);
-    for(i=0; i < g_list_length(selected_accounts); i++) {
-      acclist[i] = g_list_nth_data(selected_accounts, i);      
+    i = 0;
+    for(cur=selected_accounts; cur; cur=cur->next) {
+      acclist[i] = cur->data;
+      i++;
     }
     acclist[i] = NULL;
     

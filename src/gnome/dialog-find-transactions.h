@@ -48,7 +48,7 @@ typedef struct {
   
   char       * ymd_format;
 
-  int        search_type_radiobutton;
+  int        search_type;
 
   GtkWidget  * new_search_radiobutton;
   GtkWidget  * narrow_search_radiobutton;

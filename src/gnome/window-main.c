@@ -144,22 +144,22 @@ gnc_ui_refresh_statusbar()
   }
 
 
-  xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP);
+  xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP, NULL);
   if(euro)
   {
     strcat(asset_string, " / ");
-    xaccSPrintAmountGeneral(asset_string + strlen(asset_string), euro_assets,
-			    PRTSYM | PRTSEP, 2, 2, "EURO");
+    xaccSPrintAmount(asset_string + strlen(asset_string), euro_assets,
+		     PRTSYM | PRTSEP | PRTEUR, NULL);
   }
   gtk_label_set_text(GTK_LABEL(main_info->assets_label), asset_string);
   gnc_set_label_color(main_info->assets_label, assets);
 
-  xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP);
+  xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP, NULL);
   if(euro)
   {
     strcat(profit_string, " / ");
-    xaccSPrintAmountGeneral(profit_string + strlen(profit_string), euro_profits,
-			    PRTSYM | PRTSEP, 2, 2, "EURO");
+    xaccSPrintAmount(profit_string + strlen(profit_string), euro_profits,
+		     PRTSYM | PRTSEP | PRTEUR, NULL);
   }
   gtk_label_set_text(GTK_LABEL(main_info->profits_label), profit_string);
   gnc_set_label_color(main_info->profits_label, profits);

@@ -161,7 +161,7 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   value = xaccParseAmount(string, GNC_T);
 
-  new_string = xaccPrintAmount(value, PRTSEP);
+  new_string = xaccPrintAmount(value, PRTSEP, NULL);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -281,7 +281,7 @@ adjBWindow(Account *account)
     gtk_box_pack_start(GTK_BOX(vbox), amount, TRUE, TRUE, 0);
     adjBData->balance_entry = amount;
 
-    gtk_entry_set_text(GTK_ENTRY(amount), xaccPrintAmount(0.0, PRTSEP));
+    gtk_entry_set_text(GTK_ENTRY(amount), xaccPrintAmount(0.0, PRTSEP, NULL));
     gtk_entry_select_region(GTK_ENTRY(amount), 0, -1);
 
     gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",

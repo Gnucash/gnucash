@@ -7,7 +7,9 @@
   (gnc:amount->string-helper (exact->inexact amount)
                              print_currency_symbol?
                              print_separators?
-                             shares_value?))
+                             shares_value?
+                             ;; fixme
+                             (gnc:locale-default-currency)))
 
 (define (gnc:amount->formatted-string amount shares_value?)
   (gnc:amount->string amount #t #t shares_value?))

@@ -140,7 +140,7 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   value = xaccParseAmount(string, GNC_T);
 
-  new_string = xaccPrintAmount(value, PRTSEP);
+  new_string = xaccPrintAmount(value, PRTSEP, NULL);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;

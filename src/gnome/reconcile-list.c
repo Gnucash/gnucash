@@ -562,7 +562,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = xaccTransGetDateStr(trans);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = xaccPrintAmount(DABS(amount), shares);
+    strings[3] = xaccPrintAmount(DABS(amount), shares, NULL);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
 

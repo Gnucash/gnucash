@@ -40,23 +40,23 @@
 
 static void 
 print_query(Query * q) {
-  int   i, j;
   GList * aterms;
+  GList * i, * j;
   QueryTerm * qt;
 
   printf("Query: max splits = %d\n", q->max_splits);
-  for(i=0; i < g_list_length(q->terms); i++) {
-    aterms = g_list_nth_data(q->terms, i);
+  for(i=q->terms; i; i=i->next) {
+    aterms = i->data;
     printf("(");
-    for(j=0; j < g_list_length(aterms); j++) {
-      qt = (QueryTerm *)g_list_nth_data(aterms, j);
+    for(j=aterms; j; j=j->next) {
+      qt = (QueryTerm *)j->data;
       if(!qt->sense) printf("~");
       printf("%d ", qt->data.type);
     }
     printf(")");
-    if((i + 1) < g_list_length(q->terms)) {
+    if(i->next) {
       printf(" | ");
-    }
+    }    
   }
   printf("\n");
 }
@@ -158,12 +158,11 @@ xaccQueryHasTerms(Query * q) {
 
 void    
 xaccFreeQuery(Query * q) {
-  int i;
   GList * gl = q->terms;
-  for(i=0; i < g_list_length(gl); i++) {
-    g_list_free(g_list_nth_data(gl, i));
+  for(gl=q->terms; gl; gl=gl->next) {
+    g_list_free(gl->data);
   }
-  g_list_free(gl);
+  g_list_free(q->terms);
   g_free(q->split_list);
   g_free(q);
 }
@@ -178,9 +177,9 @@ copy_query_term(QueryTerm * qt) {
 static GList * 
 deep_copy_terms(GList * t) {
   GList * r = NULL;
-  int   i;
-  for(i=0; i < g_list_length(t); i++) {
-    r = g_list_append(r, g_list_copy(g_list_nth_data(t, i)));
+  GList * cur;
+  for(cur=t; cur; cur=cur->next) {
+    r = g_list_append(r, g_list_copy(cur->data));
   }
   return r;  
 }
@@ -198,9 +197,9 @@ xaccQueryInvert(Query * q) {
   Query  * right, * left, * iright, * ileft;
   QueryTerm * qt;
   GList  * aterms;
+  GList  * cur;
   GList  * new_oterm;
   int    num_or_terms;
-  int    i;
 
   num_or_terms = g_list_length(q->terms);
   
@@ -229,8 +228,8 @@ xaccQueryInvert(Query * q) {
 
     aterms = g_list_nth_data(q->terms, 0);
     new_oterm = NULL;
-    for(i = 0; i < g_list_length(aterms); i++) {
-      qt = copy_query_term(g_list_nth_data(aterms, i));
+    for(cur=aterms; cur; cur=cur->next) {
+      qt = copy_query_term(cur->data);
       qt->sense = !(qt->sense);
       new_oterm = g_list_append(NULL, qt);
       retval->terms = g_list_append(retval->terms, new_oterm);
@@ -278,7 +277,7 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
   Query * retval = NULL;
   Query * i1, * i2;
   Query * t1, * t2;
-  int i, j;
+  GList * i, * j;
 
   /*  printf("merging queries: op=%d\n", op);
       print_query(q1);
@@ -302,13 +301,13 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
     retval->changed        = 1;
     retval->acct_group     = q1->acct_group;
     
-    for(i=0; i < g_list_length(q1->terms); i++) {
-      for(j=0; j < g_list_length(q2->terms); j++) {
+    for(i=q1->terms; i; i=i->next) {
+      for(j=q2->terms; j; j=j->next) {
         retval->terms = 
           g_list_append(retval->terms, 
                         g_list_concat
-                        (g_list_copy(g_list_nth_data(q1->terms, i)),
-                         g_list_copy(g_list_nth_data(q2->terms, j))));
+                        (g_list_copy(i->data),
+                         g_list_copy(j->data)));
       }
     }
     break;
@@ -731,11 +730,13 @@ xaccQueryGetSplits(Query * q) {
 
   gettimeofday(&end, NULL);
 
+#if 0
   printf("xaccQueryGetSplits: elapsed time = %e ms\n",
          (end.tv_sec - start.tv_sec)*1000.0 +
          (end.tv_usec - start.tv_usec)/1000.0);
   printf("xaccQueryGetSplits: %d splits checked, %d splits matched.\n",
          total_splits_checked, split_count);
+#endif
 
   q->changed = 0;
   if(q->split_list) {
@@ -777,6 +778,68 @@ xaccQueryAddAccountMatch(Query * q, Account ** acclist, acct_match_t how,
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
 }
+
+/********************************************************************
+ * xaccQueryAddTransMatch
+ * match splits in the given transaction
+ ********************************************************************/
+
+void
+xaccQueryAddTransMatch(Query * q, Transaction * trans, int how,
+                       QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccTransMatchPredicate;
+  qt->sense  = how;
+  qt->data.type         = PD_TRANS;
+  qt->data.trans.trans  = trans;
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddSplitMatch
+ * match exactly the given split
+ ********************************************************************/
+
+void
+xaccQueryAddSplitMatch(Query * q, Split * split, int how,
+                       QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccSplitMatchPredicate;
+  qt->sense  = how;
+  qt->data.type         = PD_SPLIT;
+  qt->data.split.split  = split;
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
 
 /********************************************************************
  * xaccQueryAddSingleAccountMatch
@@ -1483,6 +1546,35 @@ xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
   number = xaccTransGetNum(parent);
   return string_match_predicate(number, pd);
 }
+
+
+/*******************************************************************
+ *  xaccTransMatchPredicate 
+ *******************************************************************/
+int
+xaccTransMatchPredicate(Split * s, PredicateData * pd) {
+  Transaction * parent;
+  
+  assert(s && pd);  
+  assert(pd->type == PD_TRANS);
+
+  parent = xaccSplitGetParent(s);
+  assert(parent);
+
+  return (parent == pd->trans.trans);
+}
+
+
+/*******************************************************************
+ *  xaccSplitMatchPredicate 
+ *******************************************************************/
+int
+xaccSplitMatchPredicate(Split * s, PredicateData * pd) {
+  assert(s && pd);  
+  assert(pd->type == PD_SPLIT);
+  return (s == pd->split.split);
+}
+
 
 /*******************************************************************
  *  xaccActionMatchPredicate 

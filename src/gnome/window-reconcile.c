@@ -169,12 +169,12 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     value = -value;
 
-  amount = xaccPrintAmount(value, shares);
+  amount = xaccPrintAmount(value, shares, NULL);
   gnc_set_label_color(recnData->starting, value);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
 
   value -= recnData->ddiff;
-  amount = xaccPrintAmount(value, shares);
+  amount = xaccPrintAmount(value, shares, NULL);
   gnc_set_label_color(recnData->ending, value);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
 
@@ -189,14 +189,14 @@ recnRecalculateBalance(RecnWindow *recnData)
     dcredit = -dcredit;
 
   /* Update the difference field, and the total fields */
-  amount = xaccPrintAmount(DABS(ddebit), shares);
+  amount = xaccPrintAmount(DABS(ddebit), shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
-  amount = xaccPrintAmount(dcredit, shares);
+  amount = xaccPrintAmount(dcredit, shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
   ddiff = recnData->ddiff + dcredit - ddebit;
-  amount = xaccPrintAmount(ddiff, shares);
+  amount = xaccPrintAmount(ddiff, shares, NULL);
   gnc_set_label_color(recnData->difference, ddiff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
 
@@ -217,7 +217,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   value = xaccParseAmount(string, GNC_T);
 
-  new_string = xaccPrintAmount(value, shares & ~PRTSYM);
+  new_string = xaccPrintAmount(value, shares & ~PRTSYM, NULL);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -263,7 +263,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
       (account_type == CURRENCY))
     shares |= PRTSHR;
 
-  amount = xaccPrintAmount(dendBalance, shares);
+  amount = xaccPrintAmount(dendBalance, shares, NULL);
 
   /* Create the dialog box... */
   title = gnc_recn_make_window_name(account);
@@ -290,7 +290,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(dendBalance - *diff, shares & ~PRTSYM);
+    amount = xaccPrintAmount(dendBalance - *diff, shares & ~PRTSYM, NULL);
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
 

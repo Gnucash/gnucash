@@ -419,7 +419,7 @@ PrintAmt(char *buf, double val, int prec,
 
 int
 xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
-                         int min_trailing_zeros, char *curr_sym)
+                         int min_trailing_zeros, const char *curr_sym)
 {
    struct lconv *lc;
 
@@ -446,9 +446,15 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      cs_precedes = 0;  /* currency symbol follows amount */
      sep_by_space = 1; /* they are separated by a space  */
    }
+   else if (shrs & PRTEUR)
+   {
+     currency_symbol = "EUR";
+     cs_precedes = 1;  /* currency symbol precedes amount */
+     sep_by_space = 0; /* they are not separated by a space  */
+   }
    else
    {
-     if(curr_sym == NULL)
+     if (curr_sym == NULL)
      {
        currency_symbol = lc->currency_symbol;
      }
@@ -456,6 +462,7 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      {
        currency_symbol = curr_sym;
      }
+
      if (val < 0.0)
      {
        cs_precedes  = lc->n_cs_precedes;
@@ -545,35 +552,47 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
 }
 
 int
-xaccSPrintAmount (char * bufp, double val, short shrs) 
+xaccSPrintAmount (char * bufp, double val, short shrs, const char *curr_code) 
 {
+   struct lconv *lc;
    int precision;
    int min_trailing_zeros;
+
+   lc = gnc_localeconv();
+
+   if (curr_code && (strncmp(curr_code, lc->int_curr_symbol, 3) == 0))
+     curr_code = NULL;
+
+   if (curr_code && (safe_strcmp(curr_code, "EUR") == 0))
+     shrs |= PRTEUR;
 
    if (shrs & PRTSHR)
    {
      precision = 4;
      min_trailing_zeros = 0;
    }
+   else if (shrs & PRTEUR)
+   {
+     precision = 2;
+     min_trailing_zeros = 2;
+   }
    else
    {
-     struct lconv *lc = gnc_localeconv();
-
      precision = lc->frac_digits;
      min_trailing_zeros = lc->frac_digits;
    }
 
    return xaccSPrintAmountGeneral(bufp, val, shrs, precision,
-                                  min_trailing_zeros, NULL);
+                                  min_trailing_zeros, curr_code);
 }
 
 char *
-xaccPrintAmount (double val, short shrs) 
+xaccPrintAmount (double val, short shrs, const char *curr_code) 
 {
    /* hack alert -- this is not thread safe ... */
    static char buf[BUFSIZE];
 
-   xaccSPrintAmount (buf, val, shrs);
+   xaccSPrintAmount (buf, val, shrs, curr_code);
 
    /* its OK to return buf, since we declared it static */
    return buf;
@@ -581,7 +600,8 @@ xaccPrintAmount (double val, short shrs)
 
 char *
 xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
-                     gncBoolean print_separators, gncBoolean is_shares_value)
+                     gncBoolean print_separators, gncBoolean is_shares_value,
+                     const char *curr_code)
 {
   short shrs = 0;
 
@@ -589,7 +609,7 @@ xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
   if (print_separators)      shrs |= PRTSEP;
   if (is_shares_value)       shrs |= PRTSHR;
 
-  return xaccPrintAmount(val, shrs);
+  return xaccPrintAmount(val, shrs, curr_code);
 }
 
 

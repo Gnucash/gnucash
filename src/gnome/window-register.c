@@ -1678,7 +1678,7 @@ regRefresh(xaccLedgerDisplay *ledger)
 
       gnc_set_label_color(regData->balance_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->balance_label),
-                         xaccPrintAmount(amount, print_flags));
+                         xaccPrintAmount(amount, print_flags, NULL));
     }
 
     if (regData->cleared_label != NULL)
@@ -1689,7 +1689,7 @@ regRefresh(xaccLedgerDisplay *ledger)
 
       gnc_set_label_color(regData->cleared_label, amount);
       gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                         xaccPrintAmount(amount, print_flags));
+                         xaccPrintAmount(amount, print_flags, NULL));
     }
 
     gnc_reg_set_window_name(regData);

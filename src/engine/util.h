@@ -161,6 +161,11 @@ char * gnc_locale_default_currency();
  *    PRTSYM | PRTSHR -- prints four decimal places followed by "shrs"
  *    PRTSEP -- print comma-separated K's
  *    PRTNMN -- print as non-monetary value
+ *    PRTEUR -- print as EURO value (2 decimal places, EUR as currency
+ *              symbol if PRTSYM is specified, mutually exclisive with PRTSHR)
+ *
+ *    If non-NULL, the curr_code argument overrides the default currency
+ *    code.
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
  *    allocated buffer, and is therefore not thread-safe.
@@ -181,16 +186,19 @@ char * gnc_locale_default_currency();
 #define PRTSHR 0x2
 #define PRTSEP 0x4
 #define PRTNMN 0x8
+#define PRTEUR 0x10
 
-char * xaccPrintAmount (double val, short shrs);
-int xaccSPrintAmount (char *buf, double val, short shrs);
+char * xaccPrintAmount (double val, short shrs, const char *curr_code);
+int xaccSPrintAmount (char *buf, double val, short shrs,
+                      const char *curr_code);
 int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
                              int precision, int min_trailing_zeros,
-                             char *curr_sym);
+                             const char *curr_sym);
 char * xaccPrintAmountArgs (double val,
                             gncBoolean print_currency_symbol,
                             gncBoolean print_separators,
-                            gncBoolean is_shares_value);
+                            gncBoolean is_shares_value,
+                            const char *curr_code);
 
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gncBoolean monetary);
@@ -208,8 +216,8 @@ double xaccParseAmount (const char * instr, gncBoolean monetary);
  * XXX hack alert: the right way to do this is to do the following:
  *  -- have a global flag that indicates 'euro' or 'us style'
  *  -- initial value of global flag depends on locale
- *  -- if during parsing, a euro-format currency is found, then flag is set to euro.
- *  -- if during parsing, a use-format amount is found, then flag set to us.
+ *  -- if during parsing, a euro currency is found, then flag set to euro.
+ *  -- if during parsing, a us-format amount is found, then flag set to us.
  *  -- if both styles found during one run, then flag an error.
  *                                                                  *
 \********************************************************************/
