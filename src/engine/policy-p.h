@@ -43,6 +43,12 @@
  *  The FIFOPolicyGetLot() routine returns a lot into which the 
  *     indicated split should be placed.
  *
+ *  The FIFOPolicyGetSplit() routine returns an unassinged split
+ *     from the account that is appropriate for placing into the
+ *     indicated lot.  For the FIFO policy, that would be the 
+ *     earliest split that is not in any account, and is of the
+ *     appropriate sign.
+ *
  *  The FIFOPolicyIsOpeningSplit() predicate returns a true/false
  *     value, indicating if the indicated split was used to 'open'
  *     or 'grow' the lot. 
@@ -55,6 +61,8 @@
  */
 
 GNCLot * FIFOPolicyGetLot (Split *split, gpointer user_data);
+
+Split * FIFOPolicyGetSplit (GNCLot *lot, gpointer user_data);
 
 void FIFOPolicyGetLotOpening (GNCLot *lot,
         gnc_numeric *ret_amount, gnc_numeric *ret_value,

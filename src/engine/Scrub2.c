@@ -50,6 +50,7 @@
 #include "gnc-trace.h"
 #include "kvp-util-p.h"
 #include "messages.h"
+#include "policy-p.h"
 
 static short module = MOD_LOT;
 
@@ -76,7 +77,7 @@ restart_loop:
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
-      if (xaccSplitAssignToLot (split)) goto restart_loop;
+      if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
@@ -85,15 +86,18 @@ restart_loop:
 
 /* ============================================================== */
 
-xxxxxxxxxxx
-need documentation for this one.
+/** The xaccLotFill() routine attempts to assign splits to the 
+ *  indicated lot until the lot balance goes to zero, or until 
+ *  there are no suitable (i.e. unassigned) splits left in the 
+ *  account.  It uses the default accounting policy to choose
+ *  the splits to fill out the lot.
+ */
 
 void
 xaccLotFill (GNCLot *lot)
 {
    gnc_numeric lot_baln;
    Account *acc;
-   SplitList *node;
 
    if (!lot) return;
    acc = lot->account;
@@ -106,32 +110,23 @@ xaccLotFill (GNCLot *lot)
 
    xaccAccountBeginEdit (acc);
 
-   /* Loop over all splits, until we find one that's
-    * not in a lot.  Poke it into this lot.  Keep 
-    * going until the balance is zero.
-    */
-xxxxxxxxx  this is wrong, we need to be fetching splits based
-on policy, rather than this implicit date-order.
-
-restart_loop:
-   for (node=acc->splits; node; node=node->next)
+   /* Loop until we've filled up the lot, (i.e. till the 
+    * balance goes to zero) or there are no splits left.  */
+   while (1)
    {
-      Split * split = node->data;
-      Split * subsplit;
+      Split *split, *subsplit;
 
-      /* If already in lot, then no-op */
-      if (split->lot) continue;
+      split = FIFOPolicyGetSplit (lot, NULL);
       subsplit = xaccSplitAssignToLot (split, lot);
       if (subsplit == split)
       {
          PERR ("Accounting Policy gave us a split that "
                "doesn't fit into this lot");
-         continue;
+         break;
       }
 
       lot_baln = gnc_lot_get_balance (lot);
       if (gnc_numeric_zero_p (lot_baln)) break;
-      if (subsplit) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);

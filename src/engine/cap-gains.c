@@ -309,6 +309,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    Account *acc;
    gnc_numeric baln;
    int cmp;
+   gboolean baln_is_positive, amt_is_positive;
 
    if (!lot) return split;
    if (!split) return NULL;
@@ -337,10 +338,10 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     * we won't add it, because that would make the lot bigger, not
     * smaller. Our only function here is to make lot balances smaller.
     */
-   if ((gnc_numeric_negative_p (baln) && 
-        gnc_numeric_negative_p (split->amount)) ||
-       (gnc_numeric_positive_p (baln) && 
-        gnc_numeric_positive_p (split->amount)))
+   baln_is_positive = gnc_numeric_positive_p (baln);
+   amt_is_positive = gnc_numeric_positive_p (split->amount);
+   if ((baln_is_positive && amt_is_positive) ||
+       ((!baln_is_positive) && (!amt_is_positive)))
    {
       return split;
    }

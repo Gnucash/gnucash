@@ -54,6 +54,29 @@ FIFOPolicyGetLot (Split *split, gpointer user_data)
    return xaccAccountFindEarliestOpenLot (split->acc, split->amount);
 }
 
+Split * 
+FIFOPolicyGetSplit (GNCLot *lot, gpointer user_data)
+{
+   SplitList *node;
+   gboolean want_positive;
+
+   want_positive = gnc_numeric_negative_p (gnc_lot_get_balance (lot));
+
+   /* Make use of the fact that the splits in a lot are already
+    * in date order; so we don't have to search for the earliest. */
+   for (node = lot->account->splits; node; node=node->next)
+   {
+      gboolean is_positive;
+      Split *split = node->data;
+      if (split->lot) continue;
+
+      is_positive = gnc_numeric_positive_p (split->amount);
+      if ((want_positive && is_positive) ||
+          ((!want_positive) && (!is_positive))) return split;
+   }
+   return NULL;
+}
+
 void
 FIFOPolicyGetLotOpening (GNCLot *lot,
         gnc_numeric *ret_amount, gnc_numeric *ret_value,

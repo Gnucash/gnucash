@@ -67,6 +67,14 @@ void xaccAccountTreeScrubLotsBalance (Account *acc);
  */
 void xaccAccountAssignLots (Account *acc);
 
+/** The xaccLotFill() routine attempts to assign splits to the
+ *  indicated lot until the lot balance goes to zero, or until
+ *  there are no suitable (i.e. unassigned) splits left in the
+ *  account.  It uses the default accounting policy to choose
+ *  the splits to fill out the lot. 
+ */
+void xaccLotFill (GNCLot *lot);
+
 /** The xaccAccountScrubDoubleBalance() routine examines all
  *   of the closed lots in an account, and verifies that the
  *   lots are 'double balanced'.  By 'double balance', we mean
