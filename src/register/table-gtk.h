@@ -9,6 +9,16 @@
  *
  * It provides the mechanism to handle tab-traversal.
  *
+ * hack alert -- this file and the corresponding one
+ * for motif share some basic comon code.  
+ * C++ style inheritance from a coon base class would
+ * solve this problem, but with just C, there is no easy
+ * way to accomplish this. 
+ *
+ * In particular, the file table-motif.h contains a fair
+ * amount of documentation for these comon parts ...
+ *
+ *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 1998 Rob Browning <rlb@cs.utexas.edu>
@@ -31,8 +41,8 @@
 \********************************************************************/
 
 
-#ifndef __XACC_TABLE_H__
-#define __XACC_TABLE_H__
+#ifndef __XACC_TABLE_GTK_H__
+#define __XACC_TABLE_GTK_H__
 
 #include <gtk/gtk.h>
 #include "basiccell.h"
@@ -138,7 +148,7 @@ Table     * xaccMallocTable (void);
 void        xaccInitTable (Table *);
 void        xaccDestroyTable (Table *);
 
-/* rsize the table to the indicated dimensions.
+/* resize the table to the indicated dimensions.
  * calls the gui-independent xaccTableResize() routine,
  * and then does some gtk-specific cleanup.
  */
@@ -152,5 +162,5 @@ void        xaccNextTabGroup (Table *, GtkWidget*);
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);
 
-#endif __XACC_TABLE_H__
+#endif __XACC_TABLE_GTK_H__
 /* ================== end of file ======================= */

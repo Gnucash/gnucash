@@ -30,8 +30,8 @@
 \********************************************************************/
 
 
-#ifndef __XACC_TABLE_H__
-#define __XACC_TABLE_H__
+#ifndef __XACC_TABLE_MOTIF_H__
+#define __XACC_TABLE_MOTIF_H__
 
 #include <Xm/Xm.h>
 #include "basiccell.h"
@@ -58,16 +58,25 @@ struct _Locator {
 
 typedef struct _Locator Locator;
 
+/* The number of "physical" rows/cols is the number
+ * of displayed one-line gui rows/cols in the table.
+ * The number of physical rows can differ from the 
+ * number of "virtual" rows because each virtual row 
+ * consist of one or more physical rows.
+ *
+ * Given the location of a physical row & col, the corresponding 
+ * virtual row & col can be found by looking it up in the 
+ * "locators" member.  The locator will provide the matching 
+ * virtual row and column.  
+ *
+ * Given the location of the virtual row and column, the
+ * corresponding GUI handler, and any associated user data can 
+ * be directly accessed.
+ */
+
 typedef struct _Table Table;
 
 struct _Table {
-
-  /* The number of "physical" rows/cols is the number
-   * of displayed one-line gui rows/cols in the table.
-   * The number of physical rows can differ from the 
-   * number of "virtual" rows because each virtual row 
-   * consist of one or more physical rows.
-   */
 
   int num_phys_rows;
   int num_phys_cols;
@@ -127,9 +136,10 @@ Table     * xaccMallocTable (void);
 void        xaccInitTable (Table *);
 void        xaccDestroyTable (Table *);
 
-/* rsize the table to the indicated dimensions.
- * calls the gui-independent xaccTableResize() routine,
- * and then does some motif-specific cleanup.
+/* The xaccSetTableSize() method will resize the table to the 
+ * indicated dimensions.  This method calls the gui-independent 
+ * xaccTableResize() routine, and then does some motif-specific 
+ * cleanup.
  */
 void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                              int virt_rows, int virt_cols);
@@ -141,5 +151,5 @@ void        xaccNextTabGroup (Table *, Widget);
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);
 
-#endif __XACC_TABLE_H__
+#endif __XACC_TABLE_MOTIF_H__
 /* ================== end of file ======================= */
