@@ -341,7 +341,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if (sa->memo != sb->memo)
   {
     PWARN ("memos differ: (%p)%s vs (%p)%s",
-	   sa->memo, sa->memo, sb->memo, sb->memo);
+           sa->memo, sa->memo, sb->memo, sb->memo);
     return FALSE;
   }
 
@@ -422,7 +422,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   }
 
   if (!xaccTransEqual(sa->parent, sb->parent, check_guids, check_txn_splits,
-		      check_balances, FALSE))
+                      check_balances, FALSE))
   {
     PWARN ("transactions differ");
     return FALSE;
@@ -1042,13 +1042,13 @@ xaccTransClone (Transaction *t)
   trans->description     = g_cache_insert (gnc_engine_get_string_cache(), t->description);
   trans->kvp_data        = kvp_frame_copy (t->kvp_data);
   trans->common_currency = t->common_currency;
-  trans->version       	 = t->version;
-  trans->version_check 	 = t->version_check;
+  trans->version         = t->version;
+  trans->version_check   = t->version_check;
 
-  trans->editlevel     	 = 0;
-  trans->do_free       	 = FALSE;
-  trans->orig          	 = NULL;
-  trans->idata         	 = 0;
+  trans->editlevel       = 0;
+  trans->do_free         = FALSE;
+  trans->orig            = NULL;
+  trans->idata           = 0;
 
   qof_entity_guid_new (t->book->entity_table, &trans->guid);
   qof_entity_store (t->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
@@ -1233,20 +1233,20 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
       GList *node_a, *node_b;
 
       for (node_a = ta->splits, node_b = tb->splits;
-	   node_a;
-	   node_a = node_a->next, node_b = node_b->next)
+           node_a;
+           node_a = node_a->next, node_b = node_b->next)
       {
         Split *split_a = node_a->data;
         Split *split_b;
 
         /* don't presume that the splits are in the same order */
-	if (!assume_ordered)
-	  node_b = g_list_find_custom (tb->splits, split_a, compare_split_guids);
+        if (!assume_ordered)
+          node_b = g_list_find_custom (tb->splits, split_a, compare_split_guids);
 
         if (!node_b)
         {
           PWARN ("first has split %s and second does not",
-		 guid_to_string (xaccSplitGetGUID (split_a)));
+                 guid_to_string (xaccSplitGetGUID (split_a)));
           return(FALSE);
         }
 
@@ -1258,7 +1258,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
           char str_b[GUID_ENCODING_LENGTH+1];
 
           guid_to_string_buff (xaccSplitGetGUID (split_a), str_a);
-	  guid_to_string_buff (xaccSplitGetGUID (split_b), str_b);
+          guid_to_string_buff (xaccSplitGetGUID (split_b), str_b);
 
           PWARN ("splits %s and %s differ", str_a, str_b);
           return(FALSE);
@@ -1437,7 +1437,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
 gnc_numeric
 xaccSplitGetBaseValue (const Split *s, 
-		       const gnc_commodity * base_currency)
+                       const gnc_commodity * base_currency)
 {
   const gnc_commodity *currency;
   const gnc_commodity *commodity;
@@ -1581,7 +1581,7 @@ xaccTransGetImbalance (const Transaction * trans)
 
 gnc_numeric
 xaccTransGetAccountValue (const Transaction *trans, 
-			  const Account *account)
+                          const Account *account)
 {
   gnc_numeric total = gnc_numeric_zero ();
   GList *splits;
@@ -1595,7 +1595,7 @@ xaccTransGetAccountValue (const Transaction *trans,
     Account *a = xaccSplitGetAccount (s);
     if (a == account)
       total = gnc_numeric_add (total, xaccSplitGetValue (s),
-			       GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                               GNC_DENOM_AUTO, GNC_DENOM_LCD);
   }
   return total;
 }
@@ -1887,8 +1887,8 @@ xaccTransCommitEdit (Transaction *trans)
         if (ERR_BACKEND_MODIFIED == errcode)
         {
            PWARN_GUI(_("Another user has modified this transaction\n"
-		       "\tjust a moment ago. Please look at their changes,\n"
-		       "\tand try again, if needed.\n"));
+                       "\tjust a moment ago. Please look at their changes,\n"
+                       "\tand try again, if needed.\n"));
         }
 
         /* push error back onto the stack */
@@ -2196,8 +2196,8 @@ xaccTransWarnReadOnly (const Transaction *trans)
   reason = xaccTransGetReadOnly (trans);
   if (reason) {
     gnc_send_gui_error("Cannot modify or delete this transaction.\n"
-		       "This transaction is marked read-only because:\n\n'%s'",
-		       reason);
+                       "This transaction is marked read-only because:\n\n'%s'",
+                       reason);
     return TRUE;
   }
   return FALSE;
@@ -2358,26 +2358,26 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 \********************************************************************/
 
 
-#define DATE_CMP(aaa,bbb,field) {			\
-  /* if dates differ, return */				\
-  if ( (aaa->field.tv_sec) <				\
-       (bbb->field.tv_sec)) {				\
-    return -1;						\
-  } else						\
-  if ( (aaa->field.tv_sec) >				\
-       (bbb->field.tv_sec)) {				\
-    return +1;						\
-  }							\
-							\
-  /* else, seconds match. check nanoseconds */		\
-  if ( (aaa->field.tv_nsec) <				\
-       (bbb->field.tv_nsec)) {				\
-    return -1;						\
-  } else						\
-  if ( (aaa->field.tv_nsec) >				\
-       (bbb->field.tv_nsec)) {				\
-    return +1;						\
-  }							\
+#define DATE_CMP(aaa,bbb,field) {                       \
+  /* if dates differ, return */                         \
+  if ( (aaa->field.tv_sec) <                            \
+       (bbb->field.tv_sec)) {                           \
+    return -1;                                          \
+  } else                                                \
+  if ( (aaa->field.tv_sec) >                            \
+       (bbb->field.tv_sec)) {                           \
+    return +1;                                          \
+  }                                                     \
+                                                        \
+  /* else, seconds match. check nanoseconds */          \
+  if ( (aaa->field.tv_nsec) <                           \
+       (bbb->field.tv_nsec)) {                          \
+    return -1;                                          \
+  } else                                                \
+  if ( (aaa->field.tv_nsec) >                           \
+       (bbb->field.tv_nsec)) {                          \
+    return +1;                                          \
+  }                                                     \
 }
 
 
@@ -2656,12 +2656,11 @@ xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb)
 static inline void
 xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
-    if(!trans) return;
     check_open(trans);
 
     PINFO ("addr=%p set date to %llu.%09ld %s",
-	   trans, val.tv_sec, val.tv_nsec, 
-      ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
+           trans, val.tv_sec, val.tv_nsec, 
+           ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
     
     *dadate = val;
     mark_trans(trans);
@@ -2676,46 +2675,85 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     * routine. So, for now, we are done. */
 }
 
+/* Freeze the date value for cap-gains splits.  Can't set the date for
+ * those directly. This predicate returns T if its a gains transaction. */
+static inline gboolean
+is_gains_txn (Transaction *trans)
+{
+   SplitList *node;
+   for (node = trans->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      DetermineGainStatus (s);
+      if (GAINS_STATUS_GAINS == s->gains) return TRUE;
+   }
+   return FALSE;
+}
+
+/* Copy the date of the transaction that is causing the cap gains 
+ * over to the transaction that is recording the cap gains. */
+static inline void
+fiddle_cap_gains_date (Transaction *trans, Timespec ts)
+{
+   SplitList *node;
+   for (node = trans->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      s = s->gains_split;
+      if (s) xaccTransSetDatePostedTS (s->parent, &ts);
+   }
+}
+
 void
 xaccTransSetDatePostedSecs (Transaction *trans, time_t secs)
 {
-    Timespec t = {secs, 0};
-    xaccTransSetDateInternal(trans, &trans->date_posted, t);
+   Timespec ts = {secs, 0};
+   if(!trans) return;
+   if (is_gains_txn (trans)) return;
+   xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+   fiddle_cap_gains_date (trans, ts);
 }
 
 void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
-    Timespec t = {secs, 0};
-    xaccTransSetDateInternal(trans, &trans->date_entered, t);
+   Timespec ts = {secs, 0};
+   if(!trans) return;
+   xaccTransSetDateInternal(trans, &trans->date_entered, ts);
 }
 
 void
 xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
 {
-   if (!ts) return;
+   if (!trans || !ts) return;
+   if (is_gains_txn (trans)) return;
    xaccTransSetDateInternal(trans, &trans->date_posted, *ts);
+   fiddle_cap_gains_date (trans, *ts);
 }
 
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {
-   if (!ts) return;
+   if (!trans || !ts) return;
    xaccTransSetDateInternal(trans, &trans->date_entered, *ts);
 }
 
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year) 
 {
-  Timespec ts = gnc_dmy2timespec(day, mon, year);
-  xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+   Timespec ts;
+   if(!trans) return;
+   if (is_gains_txn (trans)) return;
+   ts = gnc_dmy2timespec(day, mon, year);
+   xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+   fiddle_cap_gains_date (trans, ts);
 }
 
 void
 xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 {
-  if (!trans || !ts) return;
-  kvp_frame_set_timespec (trans->kvp_data, TRANS_DATE_DUE_KVP, *ts);
+   if (!trans || !ts) return;
+   kvp_frame_set_timespec (trans->kvp_data, TRANS_DATE_DUE_KVP, *ts);
 }
 
 void
@@ -2728,16 +2766,15 @@ xaccTransSetTxnType (Transaction *trans, char type)
 
 void xaccTransClearReadOnly (Transaction *trans)
 {
-  if (!trans) return;
-
-  kvp_frame_set_slot_path (trans->kvp_data, NULL, TRANS_READ_ONLY_REASON, NULL);
+   if (!trans) return;
+   kvp_frame_set_slot_path (trans->kvp_data, NULL, TRANS_READ_ONLY_REASON, NULL);
 }
 
 void
 xaccTransSetReadOnly (Transaction *trans, const char *reason)
 {
-  if (!trans || !reason) return;
-  kvp_frame_set_str (trans->kvp_data, TRANS_READ_ONLY_REASON, reason);
+   if (!trans || !reason) return;
+   kvp_frame_set_str (trans->kvp_data, TRANS_READ_ONLY_REASON, reason);
 }
 
 /********************************************************************\
@@ -2929,7 +2966,7 @@ xaccTransCountSplits (const Transaction *trans)
 
 gboolean
 xaccTransHasReconciledSplitsByAccount (const Transaction *trans, 
-				       const Account *account)
+                                       const Account *account)
 {
   GList *node;
 
@@ -2963,8 +3000,8 @@ xaccTransHasReconciledSplits (const Transaction *trans)
 
 gboolean
 xaccTransHasSplitsInStateByAccount (const Transaction *trans,
-				    const char state,
-				    const Account *account)
+                                    const char state,
+                                    const Account *account)
 {
   GList *node;
 
@@ -3345,7 +3382,7 @@ xaccTransVoid(Transaction *transaction,
 {
   KvpFrame *frame;
   KvpValue *val;
-  gnc_numeric amt, zero;
+  gnc_numeric zero = gnc_numeric_zero();
   GList *split_list;
   Timespec now;
   char iso8601_str[ISO_DATELENGTH+1] = "";
@@ -3353,7 +3390,6 @@ xaccTransVoid(Transaction *transaction,
   g_return_if_fail(transaction && reason);
 
   xaccTransBeginEdit(transaction);
-  zero = gnc_numeric_zero();
   frame = transaction->kvp_data;
 
   val = kvp_frame_get_slot(frame, trans_notes_str);
@@ -3580,12 +3616,12 @@ static QofObject split_object_def = {
   QOF_OBJECT_VERSION,
   GNC_ID_SPLIT,
   "Split",
-  NULL,				/* book_begin */
-  NULL,				/* book_end */
-  NULL,				/* is_dirty */
-  NULL,				/* mark_clean */
-  split_foreach,		/* foreach */
-  (const char* (*)(gpointer)) xaccSplitGetMemo		/* printable */
+  NULL,                           /* book_begin */
+  NULL,                           /* book_end */
+  NULL,                           /* is_dirty */
+  NULL,                           /* mark_clean */
+  split_foreach,                  /* foreach */
+  (const char* (*)(gpointer)) xaccSplitGetMemo                  /* printable */
 };
 
 static gpointer split_account_guid_getter (gpointer obj)
@@ -3644,14 +3680,14 @@ gboolean xaccSplitRegister (void)
 
   qof_query_object_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitDateOrder, params);
   qof_query_object_register (SPLIT_ACCT_FULLNAME,
-			  (QofSortFunc)xaccSplitCompareAccountFullNames,
-			  NULL);
+                          (QofSortFunc)xaccSplitCompareAccountFullNames,
+                          NULL);
   qof_query_object_register (SPLIT_CORR_ACCT_NAME,
-			  (QofSortFunc)xaccSplitCompareOtherAccountFullNames,
-			  NULL);
+                          (QofSortFunc)xaccSplitCompareOtherAccountFullNames,
+                          NULL);
   qof_query_object_register (SPLIT_CORR_ACCT_CODE,
-			  (QofSortFunc)xaccSplitCompareOtherAccountCodes,
-			  NULL);
+                          (QofSortFunc)xaccSplitCompareOtherAccountCodes,
+                          NULL);
 
   return qof_object_register (&split_object_def);
 }
@@ -3666,12 +3702,12 @@ static QofObject trans_object_def = {
   QOF_OBJECT_VERSION,
   GNC_ID_TRANS,
   "Transaction",
-  NULL,				/* book_begin */
-  NULL,				/* book_end */
-  NULL,				/* is_dirty */
-  NULL,				/* mark_clean */
-  trans_foreach,		/* foreach */
-  (const char* (*)(gpointer)) xaccTransGetDescription	/* printable */
+  NULL,                          /* book_begin */
+  NULL,                          /* book_end */
+  NULL,                          /* is_dirty */
+  NULL,                          /* mark_clean */
+  trans_foreach,                 /* foreach */
+  (const char* (*)(gpointer)) xaccTransGetDescription        /* printable */
 };
 
 static gboolean
