@@ -510,7 +510,7 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
        * commit any edits that have been accumulated 
        * in the cursor */
       xaccCommitCursor (table);
-      xaccMoveCursorGUI (table, virt_row, virt_col);
+      xaccMoveCursorGUI (table, phys_row, phys_col);
    }
 }
 
