@@ -510,6 +510,10 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
   filter_model = gtk_tree_view_get_model (GTK_TREE_VIEW (account_view));
   egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (filter_model),
 					  func, data, destroy);
+
+  /* Whack any existing levels. The top two levels have been created
+   * before this routine can be called. */
+  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (filter_model));
   LEAVE(" ");
 }
 
