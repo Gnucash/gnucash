@@ -92,9 +92,15 @@ static void gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page,
 
 void
 gnc_import_legacy_commodities(const char * filename) {
-  CommodityDruid * d = gnc_ui_commodity_druid_create(filename);
+  CommodityDruid * d;
 
+  if (!gnc_commodity_table_has_namespace (gnc_engine_commodities (),
+                                          GNC_COMMODITY_NS_LEGACY))
+    return;
+
+  d = gnc_ui_commodity_druid_create(filename);
   d->is_modal = TRUE;
+
   gtk_window_set_modal(GTK_WINDOW(d->window), TRUE);
   gtk_main();  
 }
@@ -148,8 +154,6 @@ gnc_ui_commodity_druid_create(const char * filename) {
 
   d->is_modal = FALSE;
 
-  gtk_object_set_data(dobj, "commodity_druid_struct", d);
-
   glade_xml_signal_connect_data
     (xml, "gnc_ui_commodity_druid_cancel_cb",
      GTK_SIGNAL_FUNC (gnc_ui_commodity_druid_cancel_cb), d);
@@ -194,12 +198,12 @@ gnc_ui_commodity_druid_create(const char * filename) {
     /* set up next/back signal handlers */
     gtk_signal_connect(GTK_OBJECT (new_page->page), "next",
                        GTK_SIGNAL_FUNC(gnc_ui_commodity_druid_comm_check_cb),
-                       d->window);
+                       d);
     
     gtk_signal_connect(GTK_OBJECT(new_page->page), "cancel",
                        GTK_SIGNAL_FUNC(gnc_ui_commodity_druid_cancel_cb),
-                       d->window);
-    
+                       d);
+
     d->pages = g_list_append(d->pages, new_page);
 
     gnome_druid_insert_page(GNOME_DRUID(d->druid),
@@ -239,8 +243,7 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   /* make the page widget */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL);
-  gtk_object_set_data(GTK_OBJECT(retval->page),
-                      "page_struct", (gpointer)retval);
+  gtk_object_set_data(GTK_OBJECT(retval->page), "page_struct", retval);
 
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
 
@@ -360,6 +363,8 @@ gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {
   if(cd->is_modal) {
     gtk_main_quit();
   }
+
+  g_free (cd);
 }
 
 
@@ -372,12 +377,12 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
                                  gpointer user_data) {
   CommodityDruid * cd = user_data;
 
+  /* destroy the dialog */
+  gnc_ui_commodity_druid_destroy(cd);
+
   /* unload the current file (can't have out-of-date commodities) */
   gncFileQuit();
   gncFileNew();
-
-  /* destroy the dialog */
-  gnc_ui_commodity_druid_destroy(cd);
 
   return TRUE;
 }
@@ -386,9 +391,7 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
 static gboolean
 gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
                                      gpointer user_data) {
-  CommodityDruid * cd = 
-    (CommodityDruid *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                          "commodity_druid_struct");
+  CommodityDruid * cd = user_data;
   CommodityDruidPage * dpage = 
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
                                               "page_struct");
