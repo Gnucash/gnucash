@@ -30,8 +30,8 @@
 
 #include "config.h"
 
-#include <stdio.h>
 #include <gnome.h>
+#include <stdio.h>
 
 #include "AccWindow.h"
 #include "MainWindow.h"
@@ -44,6 +44,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
+#include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
@@ -56,6 +57,8 @@
 #include "window-reconcile.h"
 #include "window-register.h"
 
+
+#define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 
 /** STRUCTS *********************************************************/
 struct _RecnWindow
@@ -110,20 +113,19 @@ struct _RecnWindow
 
 
 /** PROTOTYPES ******************************************************/
-static gnc_numeric recnRecalculateBalance( RecnWindow *recnData );
+static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
-static void   recnClose(GtkWidget *w, gpointer data);
+static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recnFinishCB(GtkWidget *w, gpointer data);
 static void   recnCancelCB(GtkWidget *w, gpointer data);
 
 static void   gnc_reconcile_window_set_sensitivity(RecnWindow *recnData);
 static char * gnc_recn_make_window_name(Account *account);
 static void   gnc_recn_set_window_name(RecnWindow *recnData);
+static gboolean find_by_account (gpointer find_data, gpointer user_data);
 
 
 /** GLOBALS *********************************************************/
-static RecnWindow **recnList = NULL;
-
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
 
@@ -139,11 +141,12 @@ static short module = MOD_GUI;
  * Return: none                                                     *
 \********************************************************************/
 void
-recnRefresh(Account *account)
+recnRefresh (Account *account)
 {
   RecnWindow *recnData; 
 
-  FIND_IN_LIST (RecnWindow, recnList, account, account, recnData);
+  recnData = gnc_find_first_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                           find_by_account, account);
   if (recnData == NULL)
     return;
 
@@ -404,7 +407,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     break;
   }
 
-  gtk_widget_destroy(dialog);
+  gtk_widget_destroy (dialog);
 
   return (result == 0);
 }
@@ -1241,6 +1244,25 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
   return toolbar;
 }
 
+static gboolean
+find_by_account (gpointer find_data, gpointer user_data)
+{
+  Account *account = find_data;
+  RecnWindow *recnData = user_data;
+
+  if (!recnData)
+    return FALSE;
+
+  return (recnData->account == account);
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  RecnWindow *recnData = user_data;
+
+  gtk_widget_destroy (recnData->window);
+}
 
 /********************************************************************\
  * recnWindow                                                       *
@@ -1251,7 +1273,7 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
  * Return: recnData - the instance of this RecnWindow               *
 \********************************************************************/
 RecnWindow *
-recnWindow(GtkWidget *parent, Account *account)
+recnWindow (GtkWidget *parent, Account *account)
 {
   static time_t last_statement_date = 0;
 
@@ -1266,7 +1288,17 @@ recnWindow(GtkWidget *parent, Account *account)
   if (account == NULL)
     return NULL;
 
-  FETCH_FROM_LIST(RecnWindow, recnList, account, account, recnData);
+  recnData = gnc_find_first_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                           find_by_account, account);
+  if (recnData)
+    return recnData;
+
+  recnData = g_new0 (RecnWindow, 1);
+
+  recnData->account = account;
+
+  gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                              NULL, close_handler, recnData);
 
   type = xaccAccountGetType(account);
   recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
@@ -1292,8 +1324,8 @@ recnWindow(GtkWidget *parent, Account *account)
    * ending balance for his/her bank statement */
   if (!startRecnWindow(parent, account, &new_ending, &statement_date))
   {
-    REMOVE_FROM_LIST(RecnWindow, recnList, account, account);
-    free (recnData);
+    gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+    g_free (recnData);
     return NULL;
   }
 
@@ -1318,7 +1350,7 @@ recnWindow(GtkWidget *parent, Account *account)
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
   gtk_signal_connect (GTK_OBJECT (recnData->window), "destroy",
-                      GTK_SIGNAL_FUNC(recnClose), recnData);
+                      GTK_SIGNAL_FUNC(recn_destroy_cb), recnData);
 
   /* The menu bar */
   {
@@ -1527,22 +1559,23 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
 \********************************************************************/
 
 void 
-xaccDestroyRecnWindow(Account *account)
+xaccDestroyRecnWindow (Account *account)
 {
   RecnWindow *recnData = NULL;
 
   DEBUG("Destroying reconcile window\n");
 
-  FIND_IN_LIST(RecnWindow, recnList, account, account, recnData);
+  recnData = gnc_find_first_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                           find_by_account, account);
   if (recnData == NULL)
     return;
 
-  gtk_widget_destroy(recnData->window);
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
 
 /********************************************************************\
- * recnClose                                                        *
+ * recn_destroy_cb                                                  *
  *   frees memory allocated for an recnWindow, and other cleanup    *
  *   stuff                                                          *
  *                                                                  *
@@ -1551,13 +1584,12 @@ xaccDestroyRecnWindow(Account *account)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-recnClose(GtkWidget *w, gpointer data)
+recn_destroy_cb (GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
-  Account *account = recnData->account;
   SCM id;
 
-  REMOVE_FROM_LIST(RecnWindow, recnList, account, account);
+  gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 
   id = recnData->toolbar_change_cb_id;
   gnc_unregister_option_change_callback_id(id);
@@ -1568,7 +1600,7 @@ recnClose(GtkWidget *w, gpointer data)
   if (recnData->delete_refresh)
     gnc_account_ui_refresh(recnData->account);
 
-  free(recnData);
+  g_free (recnData);
 }
 
 
@@ -1644,7 +1676,7 @@ find_payment_account(Account *account)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-recnFinishCB(GtkWidget *w, gpointer data)
+recnFinishCB (GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
   gboolean auto_payment;
@@ -1685,11 +1717,11 @@ recnFinishCB(GtkWidget *w, gpointer data)
       gnc_xfer_dialog_select_from_account(xfer, account);
   }
 
-  gtk_widget_destroy(recnData->window);
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
 static void 
-recnCancelCB(GtkWidget *w, gpointer data)
+recnCancelCB (GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
   gboolean changed = FALSE;
@@ -1707,5 +1739,5 @@ recnCancelCB(GtkWidget *w, gpointer data)
       return;
   }
 
-  gtk_widget_destroy(recnData->window);
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }

@@ -254,6 +254,24 @@ GList * gnc_find_gui_components (const char *component_class,
                                  GNCComponentFindHandler find_handler,
                                  gpointer find_data);
 
+/* gnc_find_first_gui_component
+ *   Search for the first matching component in the specified class.
+ *
+ * component_class:     the class to search for components in
+ *                      must be non-NULL
+ * find_cb:             the handler used to search for the component
+ *                      must be non-null
+ * find_data:           find_data passed to find_cb
+ *
+ * Returns: user_data of first found component, or NULL if none found
+ *
+ * Notes on finding: components should not be registered or unregistered
+ *                   by the find callback.
+ */
+gpointer gnc_find_first_gui_component (const char *component_class,
+                                       GNCComponentFindHandler find_handler,
+                                       gpointer find_data);
+
 /* gnc_forall_gui_components
  *   Invoke 'handler' for components in the database.
  *

@@ -71,7 +71,7 @@ static short module = MOD_GUI;
 
 
 /** Prototypes ******************************************************/
-static void gnc_gui_refresh_internal (void);
+static void gnc_gui_refresh_internal (gboolean force);
 
 
 /** Implementations *************************************************/
@@ -468,7 +468,7 @@ gnc_resume_gui_refresh (void)
   suspend_counter--;
 
   if (suspend_counter == 0)
-    gnc_gui_refresh_internal ();
+    gnc_gui_refresh_internal (FALSE);
 }
 
 static void
@@ -524,7 +524,7 @@ changes_match (ComponentEventInfo *cei)
 }
 
 static void
-gnc_gui_refresh_internal (void)
+gnc_gui_refresh_internal (gboolean force)
 {
   GList *node;
 
@@ -535,7 +535,9 @@ gnc_gui_refresh_internal (void)
     if (!ci->refresh_handler)
       continue;
 
-    if (changes_match (&ci->watch_info))
+    if (force)
+      ci->refresh_handler (NULL, ci->user_data);
+    else if (changes_match (&ci->watch_info))
       ci->refresh_handler (changes.entity_events, ci->user_data);
   }
 
@@ -551,7 +553,7 @@ gnc_gui_refresh_all (void)
     return;
   }
 
-  gnc_gui_refresh_internal ();
+  gnc_gui_refresh_internal (TRUE);
 }
 
 void
@@ -620,6 +622,34 @@ gnc_find_gui_components (const char *component_class,
   }
 
   return list;
+}
+
+gpointer
+gnc_find_first_gui_component (const char *component_class,
+                              GNCComponentFindHandler find_handler,
+                              gpointer find_data)
+{
+  GList *list;
+  gpointer user_data;
+
+  if (!component_class)
+    return NULL;
+
+  if (!find_handler)
+  {
+    PERR ("no find handler");
+    return NULL;
+  }
+
+  list = gnc_find_gui_components (component_class, find_handler, find_data);
+  if (!list)
+    return NULL;
+
+  user_data = list->data;
+
+  g_list_free (list);
+
+  return user_data;
 }
 
 static GList *
