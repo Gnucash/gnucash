@@ -111,6 +111,7 @@ gnc_set_logfile (FILE *outfile)
    fout = outfile;
 }
 
+#define MAX_CHARS 50
 /* gnc_log_prettify() cleans up subroutine names. AIX/xlC has the habit
  * of printing signatures not names; clean this up. On other operating
  * systems, truncate name to 30 chars. Note this routine is not thread
@@ -125,7 +126,7 @@ gnc_log_prettify (const char *name)
   if (!name)
     return "";
 
-  strncpy (bf, name, 29); bf[28] = 0;
+  strncpy (bf, name, MAX_CHARS-1); bf[MAX_CHARS-2] = 0;
   p = strchr (bf, '(');
 
   if (p)
@@ -134,7 +135,7 @@ gnc_log_prettify (const char *name)
     *(p+2) = 0x0;
   }
   else
-    strcpy (&bf[26], "...()");
+    strcpy (&bf[MAX_CHARS-4], "...()");
 
   return bf;
 }
