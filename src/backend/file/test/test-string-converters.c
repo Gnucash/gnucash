@@ -11,9 +11,9 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#include "guid.h"
-#include "date.h"
+#include "gnc-date.h"
 #include "gnc-numeric.h"
+#include "guid.h"
 
 static void
 test_binary()

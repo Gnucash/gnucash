@@ -41,7 +41,7 @@
 #ifndef SQL_BUILDER_H
 #define SQL_BUILDER_H
 
-#include "date.h"
+#include "gnc-date.h"
 #include "guid.h"
 
 #define SQL_DBL_FMT "%24.18g"

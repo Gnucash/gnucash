@@ -37,10 +37,11 @@
 #include "sixtp-utils.h"
 #include "core-utils.h"
 
-#include "date.h"
-#include "guid.h"
-#include "gnc-numeric.h"
+#include "gnc-date.h"
 #include "gnc-engine-util.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
