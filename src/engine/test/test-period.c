@@ -69,7 +69,7 @@ run_test (void)
 
   if(!acc)
   {
-    failure("group didn't have accounts with enogh splits");
+    failure("group didn't have accounts with enough splits");
     exit(get_rv());
   }
 
