@@ -1120,7 +1120,7 @@ xaccTransGetImbalance (Transaction * trans)
   if (!trans)
     return gnc_numeric_zero ();
 
-  currency = xaccTransFindCommonCurrency (trans);
+  currency = xaccTransGetCurrency (trans);
   return xaccSplitsComputeValue (trans->splits, NULL, currency);
 }
 

@@ -377,7 +377,7 @@ void rpcend_build_gnctxn (gncTransaction *rpctxn, Transaction *txn)
   if (!rpctxn || !txn)
     return;
 
-  c = xaccTransFindCommonCurrency (txn);
+  c = xaccTransGetCurrency (txn);
   ENTER ("%p, com=%p", txn, c);
 
   /* Copy the Transaction information */

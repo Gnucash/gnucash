@@ -343,7 +343,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!trans_was_open)
       xaccTransBeginEdit (trans);
 
-    common_currency = xaccTransFindCommonCurrency (trans);
+    common_currency = xaccTransGetCurrency (trans);
     account = xaccSplitGetAccount (balance_split);
 
     commodity = xaccAccountGetCurrency (account);
@@ -402,7 +402,7 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
   Account * acc;
 
   /* build the account name */
-  currency = xaccTransFindCommonCurrency (trans);
+  currency = xaccTransGetCurrency (trans);
 
   accname = g_strconcat (name_root, "-",
                          gnc_commodity_get_mnemonic(currency), NULL);
