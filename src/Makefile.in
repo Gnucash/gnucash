@@ -27,7 +27,8 @@
 srcdir   = @srcdir@
 VPATH    = @srcdir@
 CC       = @CC@
-INCLPATH = -I.. \
+INCLPATH = -I/usr/include \
+           -I.. \
            -I@x_includes@ \
            -I@srcdir@/../include \
            -I@srcdir@/../lib/ComboBox-1.33 \

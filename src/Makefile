@@ -27,7 +27,8 @@
 
 srcdir   = .
 CC       = gcc
-INCLPATH = -I.. \
+INCLPATH = -I/usr/include \
+           -I.. \
            -I/usr/X11R6/include \
            -I./../include \
            -I./../lib/ComboBox-1.33 \
