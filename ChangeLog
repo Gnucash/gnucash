@@ -1,3 +1,8 @@
+2004-12-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/Makefile.am: add explicit
+	  dependency on business-utils.
+
 2004-11-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c
