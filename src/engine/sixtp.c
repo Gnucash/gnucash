@@ -354,7 +354,12 @@ sixtp_sax_start_handler(void *user_data,
   gboolean lookup_success = FALSE;
   sixtp_stack_frame *new_frame = NULL;
 
-  g_return_if_fail(pdata->parsing_ok);
+  /* don't replace with g_return_if_fail because we don't want to see
+     the critical warnings.  We error elsewhere. */
+  if(!pdata->parsing_ok)
+  {
+      return;
+  }
 
   current_frame = (sixtp_stack_frame *) pdata->stack->data;
   current_parser = current_frame->parser;
@@ -426,7 +431,12 @@ sixtp_sax_characters_handler(void *user_data, const xmlChar *text, int len) {
   sixtp_sax_data *pdata = (sixtp_sax_data *) user_data;
   sixtp_stack_frame *frame;
 
-  g_return_if_fail(pdata->parsing_ok);
+  /* don't replace with g_return_if_fail because we don't want to see
+     the critical warnings.  We error elsewhere. */
+  if(!pdata->parsing_ok)
+  {
+      return;
+  }
 
   frame = (sixtp_stack_frame *) pdata->stack->data;
   if(frame->parser->characters_handler) {
@@ -465,7 +475,12 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
   sixtp_child_result *child_result_data = NULL;
   gchar *end_tag = NULL;
 
-  g_return_if_fail(pdata->parsing_ok);
+  /* don't replace with g_return_if_fail because we don't want to see
+     the critical warnings.  We error elsewhere. */
+  if(!pdata->parsing_ok)
+  {
+      return;
+  }
 
   current_frame = (sixtp_stack_frame *) pdata->stack->data;
   parent_frame = (sixtp_stack_frame *) pdata->stack->next->data;

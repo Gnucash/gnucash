@@ -99,7 +99,7 @@ xaccTransactionGetBackend (Transaction *trans)
   for (node = snode; node; node=node->next)
   {
     s = node->data;
-    if (s->acc) break;
+    if (xaccSplitGetAccount(s)) break;
     s = NULL;
   }
 
@@ -111,7 +111,7 @@ xaccTransactionGetBackend (Transaction *trans)
     for (node = snode; node; node=node->next)
     {
       s = node->data;
-      if (s->acc) break;
+      if (xaccSplitGetAccount(s)) break;
       s = NULL;
     }
   }
@@ -122,7 +122,7 @@ xaccTransactionGetBackend (Transaction *trans)
    * don't.  However, at this point, it seems quite unlikely, so we'll
    * just use the first backend we find.
    */
-  return xaccAccountGetBackend (s->acc);
+  return xaccAccountGetBackend (xaccSplitGetAccount(s));
 }
 
 /********************************************************************\

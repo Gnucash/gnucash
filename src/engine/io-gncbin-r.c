@@ -1939,7 +1939,7 @@ writeSplit ( int fd, Split *split )
     return -1;
 
   /* write the credited/debted account */
-  xfer_acc = split->acc;
+  xfer_acc = xaccSplitGetAccount(split);
   acc_id = -1;
   if (xfer_acc) acc_id = get_or_assign_account_write_id(xfer_acc);
   DEBUG ("credit %d \n", acc_id);

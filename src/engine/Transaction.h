@@ -135,6 +135,7 @@ Transaction * xaccTransLookup (const GUID *guid);
  * structures which aren't members of the transaction struct.  */
 
 kvp_frame *xaccTransGetSlots(Transaction *trans);
+void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
 
 /* The xaccTransSetDateSecs() method will modify the posted date 
  *    of the transaction.  (Footnote: this shouldn't matter to a user,
@@ -340,6 +341,7 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
  * See kvp_doc.txt for reserved slot names.
  */
 kvp_frame *xaccSplitGetSlots(Split *split);
+void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
 
 /* The xaccSplitGetGUID() subroutine will return the
  *    globally unique id associated with that split.
@@ -467,6 +469,9 @@ gnc_numeric   xaccSplitGetSharePrice (Split * split);
 gnc_numeric   xaccSplitGetValue (Split * split);
 
 Account *     xaccSplitGetAccount (Split *split);
+const GUID *  xaccSplitGetAccountGUID(Split *split);
+void          xaccSplitSetAccount(Split *s, Account *act);
+void          xaccSplitSetAccountGUID(Split *s, GUID id);
 
 /* split types: normal stock-split */
 const char *xaccSplitGetType(const Split *s);

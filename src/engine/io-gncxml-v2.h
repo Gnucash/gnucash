@@ -30,6 +30,8 @@ struct sixtp_global_data_v2_struct
                                  gnc_commodity *com);
     gboolean (*addTransactionFunc)(struct sixtp_global_data_v2_struct *data,
                                    Transaction *act);
+    gboolean (*addPriceDBFunc)(struct sixtp_global_data_v2_struct *data,
+                               GNCPrice *prc);
 };
 
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;

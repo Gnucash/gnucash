@@ -86,15 +86,15 @@ gnc_account_dom_tree_create(Account *act)
 }
 
 /***********************************************************************/
+
 static gboolean
-account_name_handler (xmlNodePtr node, Account* act)
+set_string(xmlNodePtr node, Account* act,
+           void (*func)(Account *act, const gchar *txt))
 {
-    gchar* txt;
-    
-    txt = dom_tree_to_text(node);
+    gchar* txt = dom_tree_to_text(node);
     g_return_val_if_fail(txt, FALSE);
     
-    xaccAccountSetName(act, txt);
+    func(act, txt);
 
     g_free(txt);
     
@@ -102,12 +102,18 @@ account_name_handler (xmlNodePtr node, Account* act)
 }
 
 static gboolean
-account_id_handler (xmlNodePtr node, Account* act)
+account_name_handler (xmlNodePtr node, gpointer act)
+{
+    return set_string(node, (Account*)act, xaccAccountSetName);
+}
+
+static gboolean
+account_id_handler (xmlNodePtr node, gpointer act)
 {
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    xaccAccountSetGUID(act, guid);
+    xaccAccountSetGUID((Account*)act, guid);
 
     g_free(guid);
     
@@ -115,104 +121,74 @@ account_id_handler (xmlNodePtr node, Account* act)
 }
 
 static gboolean
-account_type_handler (xmlNodePtr node, Account* act)
+account_type_handler (xmlNodePtr node, gpointer act)
 {
     int type;
 
     xaccAccountStringToType(node->xmlChildrenNode->content, &type);
-    xaccAccountSetType(act, type);
+    xaccAccountSetType((Account*)act, type);
     return TRUE;
 }
 
 static gboolean
-account_currency_handler (xmlNodePtr node, Account* act)
+account_currency_handler (xmlNodePtr node, gpointer act)
 {
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    xaccAccountSetCurrency(act, ref);
+    xaccAccountSetCurrency((Account*)act, ref);
 
     return TRUE;
 }
 
 static gboolean
-account_security_handler (xmlNodePtr node, Account* act)
+account_security_handler (xmlNodePtr node, gpointer act)
 {
     gnc_commodity *ref;
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    xaccAccountSetSecurity(act, ref);
+    xaccAccountSetSecurity((Account*)act, ref);
 
     return TRUE;
 }
 
 static gboolean
-account_slots_handler (xmlNodePtr node, Account* act)
+account_slots_handler (xmlNodePtr node, gpointer act)
 {
     kvp_frame *frm  = dom_tree_to_kvp_frame(node);
     g_return_val_if_fail(frm, FALSE);
     
-    xaccAccountSetSlots_nc(act, frm);
+    xaccAccountSetSlots_nc((Account*)act, frm);
     
     return TRUE;
 }
 
 static gboolean
-account_parent_handler (xmlNodePtr node, Account* act)
+account_parent_handler (xmlNodePtr node, gpointer act)
 {
     Account *parent;
     GUID *gid = dom_tree_to_guid(node);
 
     parent = xaccAccountLookup(gid);
 
-    xaccAccountInsertSubAccount(parent, act);
+    xaccAccountInsertSubAccount(parent, (Account*)act);
 
     xaccGUIDFree(gid);
     return TRUE;
 }
 
 static gboolean
-account_code_handler(xmlNodePtr node, Account* act)
+account_code_handler(xmlNodePtr node, gpointer act)
 {
-    gchar* txt;
-    
-    txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
-    
-    xaccAccountSetCode(act, txt);
-
-    g_free(txt);
-    
-    return TRUE;
-    
+    return set_string(node, (Account*)act, xaccAccountSetCode);
 }
 
 static gboolean
-account_description_handler(xmlNodePtr node, Account *act)
+account_description_handler(xmlNodePtr node, gpointer act)
 {
-    gchar* txt;
-    
-    txt = dom_tree_to_text(node);
-    g_return_val_if_fail(txt, FALSE);
-    
-    xaccAccountSetDescription(act, txt);
-
-    g_free(txt);
-    
-    return TRUE;
-    
+    return set_string(node, (Account*)act, xaccAccountSetDescription);
 }
 
-struct dom_handlers
-{
-    const char *tag;
-
-    gboolean (*handler) (xmlNodePtr, Account*);
-
-    int required;
-    int gotten;
-};
-
-static struct dom_handlers account_handlers_v2[] = {
+static struct dom_tree_handler account_handlers_v2[] = {
     { "act:name", account_name_handler, 1, 0 },
     { "act:id", account_id_handler, 1, 0 },
     { "act:type", account_type_handler, 1, 0 },
@@ -224,57 +200,6 @@ static struct dom_handlers account_handlers_v2[] = {
     { "act:parent", account_parent_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
-
-static void
-set_handlers(struct dom_handlers *handler_ptr)
-{
-    while(handler_ptr->tag != NULL)
-    {
-        handler_ptr->gotten = 0;
-
-        handler_ptr++;
-    }
-}
-
-static gboolean
-all_required_gotten_p(struct dom_handlers *handler_ptr)
-{
-    while(handler_ptr->tag != NULL)
-    {
-        if(handler_ptr->required && ! handler_ptr->gotten)
-        {
-            g_warning("Not defined and it should be: %s", handler_ptr->tag);
-            return FALSE;
-        }
-        handler_ptr++;
-    }
-    return TRUE;
-}
-        
-static gboolean
-gnc_xml_set_account_data(const gchar* tag, xmlNodePtr node, Account *acc,
-                         struct dom_handlers *handler_ptr)
-{
-    while(handler_ptr->tag)
-    {
-        if(strcmp(tag, handler_ptr->tag) == 0)
-        {
-            (handler_ptr->handler)(node, acc);
-            handler_ptr->gotten = TRUE;
-            break;
-        }
-
-        handler_ptr++;
-    }
-    
-    if(!handler_ptr->tag) 
-    {
-        g_warning("Unhandled account tag: %s\n", tag);
-        return FALSE;
-    }
-
-    return TRUE;
-}
 
 static gboolean
 gnc_account_end_handler(gpointer data_for_children,
@@ -308,27 +233,9 @@ gnc_account_end_handler(gpointer data_for_children,
     g_return_val_if_fail(acc, FALSE);
     xaccAccountBeginEdit(acc);
 
-    set_handlers(account_handlers_v2);
-
-    for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
-    {
-        if(!gnc_xml_set_account_data(achild->name, achild, acc,
-                                     account_handlers_v2))
-        {
-            g_warning("gnc_xml_set_account_data failed");
-            successful = FALSE;
-            break;
-        }
-    }
-
+    successful = dom_tree_generic_parse(tree, account_handlers_v2, acc);
     xaccAccountCommitEdit(acc);
     
-    if(!all_required_gotten_p(account_handlers_v2))
-    {
-        g_warning("all_required_gotten_p failed");
-        successful = FALSE;
-    }
-
     if(!successful)
     {
         xaccFreeAccount(acc);

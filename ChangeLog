@@ -1,3 +1,58 @@
+2001-03-08  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-stuff.c (failure): don't print num if == -1.
+	(success): same.
+	(get_random_account): move here from test-xml-account.c
+	(get_random_split): move here from test-xml-transaction.c
+	(get_random_transaction): same.
+	(success_args): New func.
+	(success): Simplified version
+	(failure_args): new func.
+	(failure): Simplified version.
+
+	* src/engine/io-gncbin-r.c: same as below.
+
+	* src/engine/TransLog.c (xaccTransWriteLog): same as below.
+
+	* src/engine/Group.c (xaccGroupMergeAccounts): same as below.
+
+	* src/engine/Backend.c (xaccTransactionGetBackend): Convert to not
+	use the split's acc part directly, but only to access through
+	funcs 
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_generic_parse): Add
+	generic parser.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler): use
+	generic parser extracted from here and used here and
+	gnc-transaction-iml-v2.c 
+
+	* src/engine/Transaction.c (xaccInitSplit): Add a split->acc_guid
+	field that is set to the account's guid.  This way an Account is
+	not required to exist yet when loading the split.  Later when
+	xaccSplitGetAccount is called the account is looked up, cached and
+	returned.  Make sure everything accesses ->acc through the helper
+	function.
+
+	* src/engine/AccountP.h: same as below.
+
+	* src/engine/Account.c (xaccAccountSetGUID): mark guid argument
+	const since it doesn't keep a pointer to it.
+
+	* src/doc/xml/transactions-v2.dtd: change guid -> id.
+
+2001-03-07  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Transaction.c (get_denom_internal): New helper func.
+	(get_currency_denom): use func.
+	(get_security_denom): use func.
+
+	* src/engine/sixtp.c: (sixtp_sax_end_handler,
+	sixtp_sax_characters_handler, sixtp_sax_start_handler): don't use
+	g_return_if_fail to test pdata->parsing_ok so we don't see the
+	million CRITICAL warnings.  We'll print an error at the end
+	anyway.
+
 2001-03-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/report-list.scm: load tax report if possibly in
@@ -126,6 +181,13 @@
 	reports: subtotals are now printed *below* the subaccounts instead
 	of above.
 
+2001-03-05  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Transaction.c (xaccSplitSetAccount): new func.
+
+	* src/doc/xml/transactions-v2.dtd: move splits to an array type
+	structure. 
+
 2001-03-04  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: define a new substitution GNC_PIXMAP_DIR for
@@ -210,6 +272,28 @@
 
 	* src/gnome/dialog-utils.c (gnc_build_option_menu): destroy
 	tooltips when menu is destroyed
+
+2001-03-02  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-transaction.c (test_generation): add success
+	call for creation accuracy.
+
+	* src/test/test-xml-commodity.c (test_generation): Add success
+	call for creation accuracy.
+
+	* src/test/test-xml-account.c (test_generation): Add call to
+	xaccGUIDinit.  Don't know how this was working before without this
+	call.  Maybe hit good memory spots before.
+	(test_generation): add success call for creation accuracy.
+
+	* src/engine/Transaction.c (xaccSplitSetSlots_nc): New func.
+	(xaccTransSetSlots_nc): new func.
+
+2001-03-01  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-account-xml-v2.c (account_id_handler): fix mem
+	leak because xaccAccountSetGUID doesn't keep pointer to guid
+	passed in.
 
 2001-03-01  Dave Peticolas  <dave@krondo.com>
 

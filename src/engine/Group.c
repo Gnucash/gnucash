@@ -951,9 +951,9 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         {
           Split *split = lp->data;
 
-          gnc_engine_generate_event (&split->acc->guid, GNC_EVENT_MODIFY);
-
-          split->acc = NULL;
+          gnc_engine_generate_event (&xaccSplitGetAccount(split)->guid,
+                                     GNC_EVENT_MODIFY);
+          xaccSplitSetAccount(split, NULL);
           xaccAccountInsertSplit (acc_a, split);
         }
 

@@ -3,11 +3,11 @@
 
 <!ELEMENT gnc:transaction (trn:guid, trn:num?, trn:date-posted,
                            trn:date-entered, trn:description?,
-                           trn:slots?, trn:split+)>
+                           trn:slots?, trn:splits)>
 <!ATTLIST gnc:transaction version CDATA #REQUIRED>
 
-<!ELEMENT trn:guid (#PCDATA)>
-<!ATTLIST trn:guid type %id-type; %default-id-type;>
+<!ELEMENT trn:id (#PCDATA)>
+<!ATTLIST trn:id type %id-type; %default-id-type;>
 
 <!ELEMENT trn:num (#PCDATA)>
 
@@ -19,12 +19,15 @@
 
 <!ELEMENT trn:slots %slot-type;>
 
-<!ELEMENT trn:split (split:guid, split:memo?, split:reconciled-state,
-                     split:reconcile-date?, split:value,
-                     split:quantity, split:account)>
+<!ELEMENT trn:splits (trn:split+)>
 
-<!ELEMENT split:guid (#PCDATA)>
-<!ATTLIST split:guid type %id-type; %default-id-type;>
+<!ELEMENT trn:split (split:id, split:memo?, split:reconciled-state,
+                     split:reconcile-date?, split:value,
+                     split:quantity, split:account,
+                     split:slots?)>
+
+<!ELEMENT split:id (#PCDATA)>
+<!ATTLIST split:id type %id-type; %default-id-type;>
 
 <!ELEMENT split:memo (#PCDATA)>
 
@@ -39,4 +42,4 @@
 <!ELEMENT split:account (#PCDATA)>
 <!ATTLIST split:account type %id-type; %default-id-type;>
 
- 
+<!ELEMENT split:slots %slot-type;>

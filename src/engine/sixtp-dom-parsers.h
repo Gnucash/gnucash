@@ -63,4 +63,20 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
 
+struct dom_tree_handler
+{
+    const char *tag;
+
+    gboolean (*handler) (xmlNodePtr, gpointer);
+
+    int required;
+    int gotten;
+};
+
+gboolean dom_tree_generic_parse(xmlNodePtr node,
+                                struct dom_tree_handler *handlers,
+                                gpointer data);
+
+
+
 #endif /* _SIXTP_DOM_PARSERS_H_ */

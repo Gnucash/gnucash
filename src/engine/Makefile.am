@@ -38,6 +38,7 @@ libgncengine_la_SOURCES = \
   gnc-numeric.c \
   gnc-pricedb-xml-v1.c \
   gnc-pricedb.c \
+  gnc-transaction-xml-v2.c \
   guid.c \
   io-gncbin-r.c \
   io-gncxml-r.c \

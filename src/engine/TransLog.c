@@ -207,8 +207,8 @@ xaccTransWriteLog (Transaction *trans, char flag)
       Split *split = node->data;
       char * accname = "";
 
-      if (split->acc)
-        accname = split->acc->accountName;
+      if (xaccSplitGetAccount(split))
+        accname = xaccSplitGetAccount(split)->accountName;
 
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 

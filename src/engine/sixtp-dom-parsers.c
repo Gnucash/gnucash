@@ -644,3 +644,82 @@ associate_commodity_ref_with_engine_commodity(gnc_commodity *com)
                                       gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
 }
+
+/***********************************************************************/
+/* generic parser */
+
+static void
+dom_tree_handlers_reset(struct dom_tree_handler *handlers)
+{
+    for(;handlers->tag != NULL; handlers++)
+    {
+        handlers->gotten = 0;
+    }
+}
+
+static gboolean
+dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
+{
+    gboolean ret = TRUE;
+    for(;handlers->tag != NULL;handlers++)
+    {
+        if(handlers->required && ! handlers->gotten)
+        {
+            g_warning("Not defined and it should be: %s", handlers->tag);
+            ret = FALSE;
+        }
+    }
+    return ret;
+}
+
+        
+static gboolean
+gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gboolean *item,
+                      struct dom_tree_handler *handlers)
+{
+    for(;handlers->tag != NULL; handlers++)
+    {
+        if(safe_strcmp(tag, handlers->tag) == 0)
+        {
+            (handlers->handler)(node, item);
+            handlers->gotten = TRUE;
+            break;
+        }
+    }
+    
+    if(!handlers->tag) 
+    {
+        g_warning("Unhandled tag: %s\n", tag);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+gboolean
+dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
+                       gpointer data)
+{
+    xmlNodePtr achild;
+    gboolean successful = TRUE;
+    
+    dom_tree_handlers_reset(handlers);
+
+    for(achild = node->xmlChildrenNode; achild; achild = achild->next)
+    {
+        if(!gnc_xml_set_data(achild->name, achild, data, handlers))
+        {
+            g_warning("gnc_xml_set_data failed");
+            successful = FALSE;
+            break;
+        }
+    }
+
+    if(!dom_tree_handlers_all_gotten_p(handlers))
+    {
+        g_warning("missing tag in input");
+        successful = FALSE;
+    }
+
+    return successful;
+}

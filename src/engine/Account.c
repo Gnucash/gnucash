@@ -172,8 +172,7 @@ xaccFreeAccount (Account *acc)
     /* any split pointing at this account needs to be unmarked */
     for(lp = acc->splits; lp; lp = lp->next) 
     {
-      Split *s = (Split *) lp->data;
-      s->acc = NULL;
+      xaccSplitSetAccount((Split *) lp->data, NULL);
     }
   
     acc->editlevel = 0;
@@ -294,8 +293,7 @@ xaccAccountCommitEdit (Account *acc)
     /* any split pointing at this account needs to be unmarked */
     for(lp = acc->splits; lp; lp = lp->next) 
     {
-      Split *s = (Split *) lp->data;
-      s->acc = NULL;
+      xaccSplitSetAccount((Split *) lp->data, NULL);
     }
 
     for(lp = acc->splits; lp; lp = lp->next) 
@@ -491,7 +489,7 @@ xaccAccountGetGUID (Account *account)
 \********************************************************************/
 
 void 
-xaccAccountSetGUID (Account *account, GUID *guid)
+xaccAccountSetGUID (Account *account, const GUID *guid)
 {
   if (!account || !guid) return;
 
@@ -646,9 +644,10 @@ xaccAccountInsertSplit (Account *acc, Split *split)
      * first.  We don't want to ever leave the system in an inconsistent
      * state.  Note that it might belong to the current account if we're
      * just using this call to re-order.  */
-    oldacc = split->acc;
-    if (split->acc) xaccAccountRemoveSplit (split->acc, split);
-    split->acc = acc;
+    oldacc = xaccSplitGetAccount(split);
+    if (xaccSplitGetAccount(split))
+        xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
+    xaccSplitSetAccount(split, acc);
 
     if (acc->editlevel == 1)
     {
@@ -689,7 +688,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
       g_list_free_1 (node);
 
       acc->balance_dirty = TRUE;
-      split->acc = NULL;
+      xaccSplitSetAccount(split, NULL);
 
       mark_account (acc);
       if (split->parent)
@@ -935,7 +934,7 @@ xaccTransFixSplitDateOrder (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
-    xaccAccountFixSplitDateOrder (s->acc, s);
+    xaccAccountFixSplitDateOrder (xaccSplitGetAccount(s), s);
   }
 }
 

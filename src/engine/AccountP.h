@@ -175,7 +175,7 @@ void         xaccAccountRecomputeBalance (Account *);
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void         xaccAccountSetGUID (Account *account, GUID *guid);
+void         xaccAccountSetGUID (Account *account, const GUID *guid);
 
 /* The xaccAccountSetStartingBalance() routine will set the starting
  *    commodity balance for this account.  This routine is intended for

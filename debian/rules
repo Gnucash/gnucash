@@ -25,6 +25,7 @@ Makefile: Makefile.in configure
 		--mandir=/usr/share/man \
 		--enable-error-on-warnings
 
+# --enable-efence \
 # --enable-profile \
 
 build: build-stamp
