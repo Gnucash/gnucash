@@ -3,9 +3,8 @@
 <ARTHEADER>
 <TITLE>Currency Handling and Double Entry Bookkeeping</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE> Currency Handling and Double Entry Bookkeeping</TITLE> <PARA>
-</PARA> <PARA>A <LINK LINKEND="XACC-DOUBLEENTRY">Double Entry
+
+    <PARA>A <LINK LINKEND="XACC-DOUBLEENTRY">Double Entry
     bookkeeping system</LINK> stores both values, and requires
     that all transactions balance, as described in the <LINK
     LINKEND="XACC-DOUBLEENTRYRULE">Rule of Double Entry Accounting.</LINK>
@@ -66,7 +65,7 @@ zero, thereby guaranteeing satisfaction of the <LINK
 LINKEND="XACC-DOUBLEENTRYRULE">rule of double entry accounting.</LINK>
 
     </PARA>
-</SECT1>
+
   <SECT1>
   <TITLE>How to set up a foreign-currency account</TITLE>
   <PARA>All of the above may sound straightforward, but you may get
