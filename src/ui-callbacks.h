@@ -37,4 +37,6 @@ void       gnc_error_dialog( const char *message );
 void gnc_set_busy_cursor( gncUIWidget w );
 void gnc_unset_busy_cursor( gncUIWidget w );
 
+void gnc_ui_destroy_all_subwindows( void );
+
 #endif

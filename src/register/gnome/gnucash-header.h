@@ -31,9 +31,14 @@ typedef struct {
         GnomeCanvasItem canvas_item;
 
         GnucashSheet *sheet;
-        
         SheetBlockStyle *style;
+
+        int type;
+        int row;
+        
         GdkGC *gc;
+        GdkCursor *normal_cursor;
+        GdkCursor *resize_cursor;
 } GnucashHeader;
 
 

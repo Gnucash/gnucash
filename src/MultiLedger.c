@@ -340,7 +340,9 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   /* set up the query filter */
   regData->query = xaccMallocQuery();
   xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
-  xaccQueryAddAccount (regData->query, regData->leader);
+  if ((regData->leader != NULL) &&
+      !accListHasAccount(regData->displayed_accounts, regData->leader))
+    xaccQueryAddAccount (regData->query, regData->leader);
 
   /* by default, display only thirty transactions */
   xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS);
@@ -352,10 +354,10 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    * The main register window itself                                *
   \******************************************************************/
 
-  /* MallocBasicRegister will malloc & initialize the register,
+  /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
-  
+
   regData->dirty = 1;
   xaccLedgerDisplayRefresh (regData);
   
@@ -414,7 +416,26 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
   if (regData->redraw) {
      (regData->redraw) (regData);
    }
+}
 
+/********************************************************************\
+ * refresh all the register windows, but only with the gui callback *
+\********************************************************************/
+
+void 
+xaccRegisterRefreshAllGUI (void)
+{
+   xaccLedgerDisplay *regData;
+   int n;
+
+   if (!fullList) return;
+
+   n = 0; regData = fullList[n];
+   while (regData) {
+     if (regData->redraw)
+       (regData->redraw) (regData);
+      n++; regData = fullList[n];
+   }
 }
 
 /********************************************************************\
@@ -614,9 +635,7 @@ xaccDestroyLedgerDisplay (Account *acc)
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
- * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register         *
- *         cb -                                                     *
+ * Args:   regData - ledger display structure                       *
  * Return: none                                                     *
 \********************************************************************/
 void 
@@ -628,13 +647,11 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   acc = regData->leader;
 
   /* Save any unsaved changes */
-  xaccSRSaveRegEntry (regData->ledger);
-
-  /* refresh the register windows if there were changes */
-  xaccSRRedrawRegEntry (regData->ledger);
+  if (xaccSRSaveRegEntry (regData->ledger, NULL))
+    xaccSRRedrawRegEntry (regData->ledger);
 
   xaccDestroySplitRegister (regData->ledger);
-  
+
   /* whether this is a single or multi-account window, remove it */
   REMOVE_FROM_LIST (xaccLedgerDisplay, regList, acc, leader);
   REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);

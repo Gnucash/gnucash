@@ -104,6 +104,8 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   list->num_columns = 0;
   list->reconciled = g_hash_table_new(NULL, NULL);
   list->current_row = -1;
+  list->current_split = NULL;
+  list->no_toggle = FALSE;
 
   while (titles[list->num_columns] != NULL)
     list->num_columns++;
@@ -138,7 +140,6 @@ gnc_reconcile_list_init(GNCReconcileList *list)
     GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(list));
 
     list->reconciled_style = gtk_style_copy(style);
-    list->normal_style = gtk_style_copy(style);
 
 #if !USE_NO_COLOR
     style = list->reconciled_style;
@@ -151,12 +152,6 @@ gnc_reconcile_list_init(GNCReconcileList *list)
     gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
 
     style->fg[GTK_STATE_SELECTED] = style->fg[GTK_STATE_NORMAL];
-    style->bg[GTK_STATE_SELECTED] = style->white;
-
-    list->normal_style->fg[GTK_STATE_SELECTED] = style->black;
-    list->normal_style->bg[GTK_STATE_SELECTED] = style->white;
-
-    gtk_widget_set_style(GTK_WIDGET(list), list->normal_style);
 #endif
   }
 }
@@ -221,9 +216,17 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   assert(GTK_IS_GNC_RECONCILE_LIST(list));
   assert(list->reconciled != NULL);
 
+  if (list->no_toggle)
+    return;
+
   row = list->current_row;
   split = gtk_clist_get_row_data(GTK_CLIST(list), row);
   current = g_hash_table_lookup(list->reconciled, split);
+
+  if (list->current_split != split)
+    list->current_split = split;
+  else
+    list->current_split = NULL;
 
   if (current == NULL)
   {
@@ -282,12 +285,6 @@ gnc_reconcile_list_destroy(GtkObject *object)
     list->reconciled_style = NULL;
   }
 
-  if (list->normal_style != NULL)
-  {
-    gtk_style_unref(list->normal_style);
-    list->normal_style = NULL;
-  }
-
   if (list->reconciled != NULL)
   {
     g_hash_table_destroy(list->reconciled);
@@ -319,6 +316,13 @@ gnc_reconcile_list_get_num_splits(GNCReconcileList *list)
   return list->num_splits;
 }
 
+Split *
+gnc_reconcile_list_get_current_split(GNCReconcileList *list)
+{
+  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+
+  return list->current_split;
+}
 
 /********************************************************************\
  * gnc_reconcile_list_refresh                                       *
@@ -333,6 +337,8 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
   GtkCList *clist = GTK_CLIST(list);
   GtkAdjustment *adjustment;
   gfloat save_value = 0.0;
+  Split *old_split;
+  gint new_row;
 
   assert(GTK_IS_GNC_RECONCILE_LIST(list));
 
@@ -344,11 +350,12 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
 
   gtk_clist_clear(clist);
 
+  old_split = list->current_split;
   list->num_splits = 0;
+  list->current_row = -1;
+  list->current_split = NULL;
 
   gnc_reconcile_list_fill(list);
-
-  gtk_clist_thaw(clist);
 
   gtk_clist_columns_autosize(clist);
 
@@ -357,6 +364,20 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
     save_value = CLAMP(save_value, adjustment->lower, adjustment->upper);
     gtk_adjustment_set_value(adjustment, save_value);
   }
+
+  if (old_split != NULL)
+  {
+    new_row = gtk_clist_find_row_from_data(clist, old_split);
+    if (new_row >= 0)
+    {
+      list->no_toggle = TRUE;
+      gtk_clist_select_row(clist, new_row, 0);
+      list->no_toggle = FALSE;
+      list->current_split = old_split;
+    }
+  }
+
+  gtk_clist_thaw(clist);
 }
 
 
@@ -426,6 +447,26 @@ gnc_reconcile_list_commit(GNCReconcileList *list)
     if (g_hash_table_lookup(list->reconciled, split) != NULL)
       xaccSplitSetReconcile(split, YREC);
   }
+}
+
+
+/********************************************************************\
+ * gnc_reconcile_list_unselect_all                                  *
+ *   unselect all splits in the list                                *
+ *                                                                  *
+ * Args: list - list to unselect all                                *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_reconcile_list_unselect_all(GNCReconcileList *list)
+{
+  GtkCList *clist = GTK_CLIST(list);
+
+  list->no_toggle = TRUE;
+  gtk_clist_unselect_all(clist);
+  list->no_toggle = FALSE;
+
+  list->current_split = NULL;
 }
 
 

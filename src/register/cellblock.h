@@ -99,6 +99,12 @@ struct _CellBlock {
 
   short     **right_traverse_r;
   short     **right_traverse_c;
+  short     **left_traverse_r;
+  short     **left_traverse_c;
+  short     right_exit_r;
+  short     right_exit_c;
+  short     left_exit_r;
+  short     left_exit_c;
   /* the above arrays have dimension of numRows*numCols.
    * the are automatically created and managed by the routines below.
    * The control the tab-traversal order through this cell block.
@@ -106,8 +112,7 @@ struct _CellBlock {
    * on the keyboard will take input-focus to cell (inext,jnext), where
    * inext = right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
    *
-   * Note that left-traversing arrays could be defined (for when
-   * shift-tab is hit), but we haven't (yet) done so.
+   *  (exit_r, exit_c) is the last cell of this tab group.
    */
 
   /* the last-reneter row and column should contain the very last
@@ -117,6 +122,9 @@ struct _CellBlock {
    */
   short last_reenter_traverse_row;
   short last_reenter_traverse_col;
+
+  short last_left_reenter_traverse_row;
+  short last_left_reenter_traverse_col;
 
   void * user_data;
   /* above is a pointer to anything the programmer-user of this struct

@@ -81,13 +81,17 @@ typedef enum
   DATE_FORMAT_US,       /* United states: mm/dd/yyyy */
   DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
   DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
-  DATE_FORMAT_ISO       /* ISO: yyyy-mm-dd */
+  DATE_FORMAT_ISO,       /* ISO: yyyy-mm-dd */
+  DATE_FORMAT_LOCALE    /* Take from locale information */
 } DateFormat;
 
+#define DATE_FORMAT_FIRST DATE_FORMAT_US
+#define DATE_FORMAT_LAST  DATE_FORMAT_LOCALE
 /* the maximum length of a string created by sprtDate() */
 #define MAX_DATE_LENGTH 11
 
 /** PROTOTYPES ******************************************************/
+void setDateFormat(DateFormat df);
 void printDate (char * buff, int day, int month, int year);
 void printDateSecs (char * buff, time_t secs);
 
@@ -101,6 +105,7 @@ void   xaccTransSetDateStr (Transaction *trans, char *str);
 
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
+
 
 /** GLOBALS *********************************************************/
 

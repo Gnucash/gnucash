@@ -33,6 +33,7 @@
 #include "AdjBWindow.h"
 #include "Refresh.h"
 #include "window-reconcile.h"
+#include "dialog-utils.h"
 #include "query-user.h"
 #include "messages.h"
 #include "util.h"
@@ -141,17 +142,19 @@ adjBWindow(Account *account)
 {
   GtkWidget *dialog, *frame, *vbox;
   AdjBWindow *adjBData;
-  gchar *title;
+  gchar *title, *name;
    
   FETCH_FROM_LIST(AdjBWindow, adjBList, account, account, adjBData);
 
-  title = g_strconcat(xaccAccountGetName(account), ": ", ADJ_BALN_STR, NULL);
+  name = gnc_ui_get_account_full_name(account, ":");
+  title = g_strconcat(name, " - ", ADJ_BALN_STR, NULL);
 
   dialog = gnome_dialog_new(title,
 			    GNOME_STOCK_BUTTON_OK,
 			    GNOME_STOCK_BUTTON_CANCEL,
 			    NULL);
 
+  g_free(name);
   g_free(title);
 
   adjBData->account = account;

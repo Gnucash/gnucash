@@ -35,6 +35,7 @@
 #include "AccWindow.h"
 #include "MainWindow.h"
 #include "FileDialog.h"
+#include "Refresh.h"
 #include "window-main.h"
 #include "dialog-utils.h"
 #include "account-tree.h"
@@ -47,7 +48,9 @@
 static short module = MOD_GUI;
 
 static int _accWindow_last_used_account_type = BANK;
+
 static gchar * default_currency = "USD";
+static gboolean default_currency_dynamically_allocated = FALSE;
 
 
 struct _accwindow
@@ -360,8 +363,10 @@ gnc_ui_accWindow_create_account(Account * account, Account * parent,
 
   xaccAccountCommitEdit (account);
 
-  gnc_account_tree_insert_account(gnc_get_current_account_tree(),
-				  account);
+  gnc_account_tree_insert_account(gnc_get_current_account_tree(), account);
+
+  /* Refresh register so they have this account in their lists */
+  gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
 
@@ -526,6 +531,25 @@ xaccDestroyEditNotesWindow (Account *acc)
   return;
 }
 
+
+/*********************************************************************\
+ * xaccSetDefaultNewaccountCurrency                                  *
+ *   Set the default currency for new accounts                       *
+ *   intended to be called by option handling code                   *
+ *                                                                   *
+ * Args:    new default_currency                                     *
+ * Globals: default_currency, default_currency_dynamically_allocated *
+ * Return value: none                                                *
+\*********************************************************************/
+void 
+xaccSetDefaultNewaccountCurrency(char *new_default_currency)
+{
+  if (default_currency_dynamically_allocated)
+    g_free(default_currency);
+
+  default_currency = g_strdup(new_default_currency);
+  default_currency_dynamically_allocated = TRUE;
+}
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

@@ -7,6 +7,11 @@
   (list
    
    (cons
+    "version"
+    (cons 'boolean
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*arg-show-version* #f val))))
+   (cons
     "usage"
     (cons 'boolean
           (lambda (val)
@@ -91,6 +96,9 @@
 (define (gnc:cmd-line-get-string-arg args)
   (gnc:debug "got string arg returning " (car args) " and " (cdr args))
   (list (car args) (cdr args)))
+
+(define (gnc:prefs-show-version)
+  (display "GnuCash 1.3 development version") (newline))
 
 (define (gnc:prefs-show-usage)
   (display "usage: gnucash [ option ... ] [ datafile ]") (newline))

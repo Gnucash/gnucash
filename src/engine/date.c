@@ -35,12 +35,42 @@
 
 #include "config.h"
 #include "date.h"
+#include "util.h"
 
-/* hack alert -- this should be turned into user-configurable parameter .. */
-DateFormat dateFormat = DATE_FORMAT_US;
+/* This is now user configured through the gnome options system() */
+static DateFormat dateFormat = DATE_FORMAT_US;
+
+/* This static indicates the debugging module that this .o belongs to. */
+static short module = MOD_ENGINE;
+
 
 /********************************************************************\
 \********************************************************************/
+
+
+/**
+ * setDateFormat
+ * set date format to one of US, UK, CE, OR ISO
+ * checks to make sure it's a legal value
+ * Args: DateFormat: enumeration indicating preferred format
+ * returns: nothing
+ *
+ * Globals: dateFormat
+ **/
+
+void setDateFormat(DateFormat df)
+{
+  if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
+  {
+    dateFormat = df;
+  }
+  else
+  {    /* hack alert - is this what we should be doing here? */
+    PERR("non-existent date format set");
+  }
+
+  return;
+}
 
 /**
  * printDate
@@ -72,6 +102,7 @@ printDate (char * buff, int day, int month, int year)
    */
   switch(dateFormat)
     {
+      
     case DATE_FORMAT_UK:
       sprintf (buff, "%2d/%2d/%-4d", day, month, year);
       break;
@@ -81,11 +112,24 @@ printDate (char * buff, int day, int month, int year)
     case DATE_FORMAT_ISO:
       sprintf (buff, "%04d-%02d-%02d", year, month, day);
       break;
+    case DATE_FORMAT_LOCALE:
+      {
+        struct tm tm_str;
+        tm_str.tm_mday = day;
+        tm_str.tm_mon = month - 1; /*tm_mon = 0 through 11 */
+        tm_str.tm_year = year - 1900; /* this is what the standard 
+                                       * says, it's not a Y2K thing
+                                       */
+        strftime(buff, MAX_DATE_LENGTH, "%x", &tm_str);
+      }
+      break;
+
     case DATE_FORMAT_US:
     default:
       sprintf (buff, "%2d/%2d/%-4d", month, day, year);
       break;
     }
+  return;
 }
 
 void 

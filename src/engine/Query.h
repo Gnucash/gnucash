@@ -38,11 +38,13 @@ typedef struct _Query Query;
 
 /* sorting orders */
 enum {
+  BY_STANDARD,
   BY_DATE,
   BY_NUM,
   BY_AMOUNT,
   BY_MEMO,
-  BY_DESC
+  BY_DESC,
+  BY_NONE
 };
 
 Query * xaccMallocQuery (void);

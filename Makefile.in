@@ -51,7 +51,7 @@ include @top_srcdir@/Makefile.common
 motif-static: motif.static
 gnome-static: gnome.static
 
-build-flavor:
+build-flavor: config.status
 	@cd lib;    $(MAKE) ${FLAVOR}
 	@cd src;    $(MAKE) ${FLAVOR}
 	ln -sf gnucash.${FLAVOR} gnucash.bin
@@ -64,16 +64,39 @@ motif.static:
 	${MAKE} FLAVOR=motif.static build-flavor
 
 gnome:
-	${MAKE} FLAVOR=gnome build-flavor
+	${MAKE} @GNOME_TARGET@
 
 gnome.static:
+	${MAKE} @GNOME_STATIC_TARGET@
+
+gnome.real:
+	${MAKE} FLAVOR=gnome build-flavor
+
+gnome.static.real:
 	${MAKE} FLAVOR=gnome.static build-flavor
+
+#GNOME_TARGET if gnome build disabled due to missing libraries
+
+gnome.disable:
+	echo "Gnome build disabled - see configure.log for details"
+	false
 
 qt:
 	${MAKE} FLAVOR=qt build-flavor
 
 depend:
 	@echo make depend is now superfluous.
+
+configure: configure.in
+	autoconf
+
+config.status: configure
+	if [ -f ./config.status ]; then \
+		./config.status --recheck; \
+	else \
+		echo "======> You need to run configure!"; \
+		exit 1; \
+	fi
 
 CLEAN_SUBDIRS += lib src
 TRASH += TAGS *~ *.o *.bak
@@ -155,6 +178,7 @@ install:
 	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
   #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
+	$(INSTALL_DATA) Docs/*.css ${GNC_SHAREDIR}/Docs
 	@mkdir -p ${GNC_SHAREDIR}/Docs/images
   # 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/images
 	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
@@ -193,9 +217,6 @@ install:
 #		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
 #  done
 
-.PHONY: default install-private install motif motif-static gnome gnome-static qt
+.PHONY: default install-private install
+.PHONY: motif motif-static motif.static gnome gnome-static gnome.static qt
 .PHONY: depend dist clean distclean
-
-# Local Variables:
-# tab-width: 2
-# End:

@@ -28,6 +28,29 @@
 
 /****** Structures *************************************************/
 
+struct _GNCOptionSection
+{
+  char * section_name;
+
+  GSList * options;
+};
+
+struct _GNCOptionDB
+{
+  GSList *option_sections;
+
+  gboolean options_dirty;
+
+  GSList *change_callbacks;
+};
+
+typedef struct _ChangeCBInfo ChangeCBInfo;
+struct _ChangeCBInfo
+{
+  OptionChangeCallback callback;
+  gpointer user_data;
+};
+
 typedef struct _Getters Getters;
 struct _Getters
 {
@@ -40,65 +63,114 @@ struct _Getters
   SCM setter;
   SCM default_getter;
   SCM value_validator;
+  SCM permissible_values;
 };
 
 
 /****** Globals ****************************************************/
 
-static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-static GSList *option_sections = NULL;
-static gboolean options_dirty = FALSE;
-
-static GSList *change_callbacks = NULL;
+static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* This static indicates the debugging module this .o belongs to.  */
 static short module = MOD_GUI;
 
+static GPtrArray *option_dbs = NULL;
+
 /*******************************************************************/
 
 
-/********************************************************************\
- * gnc_options_init                                                 *
- *   initialize the options structures from the guile side          *
- *                                                                  *
- * Args: none                                                       *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_options_init()
+static GNCOptionDBHandle
+gnc_option_db_get_handle(GNCOptionDB *odb)
 {
-  SCM func = gh_eval_str("gnc:send-ui-options");
+  int i;
 
-  option_sections = NULL;
-  options_dirty = FALSE;
-  change_callbacks = NULL;
+  for (i = 0; i < option_dbs->len; i++)
+    if (odb == g_ptr_array_index(option_dbs, i))
+      return i;
 
-  if (gh_procedure_p(func))
-    gh_call0(func);
-  else
-  {
-    PERR("gnc_options_init: no guile options!");
-  }
+  return -1;
 }
 
 
 /********************************************************************\
- * gnc_options_shutdown                                             *
- *   unregister the scheme options and free the structure memory    *
+ * gnc_option_db_new                                                *
+ *   allocate a new option database and initialize its values       *
  *                                                                  *
  * Args: none                                                       *
+ * Returns: a new option database                                   *
+\********************************************************************/
+GNCOptionDB *
+gnc_option_db_new()
+{
+  GNCOptionDB *odb;
+
+  odb = g_new0(GNCOptionDB, 1);
+
+  odb->option_sections = NULL;
+  odb->options_dirty = FALSE;
+  odb->change_callbacks = NULL;
+
+  if (option_dbs == NULL)
+    option_dbs = g_ptr_array_new();
+
+  g_ptr_array_add(option_dbs, odb);
+
+  return odb;
+}
+
+
+/********************************************************************\
+ * gnc_option_db_init                                               *
+ *   initialize the options structures from the guile side          *
+ *                                                                  *
+ * Args: odb     - the option database to initialize                *
+ *       options - the guile options to initialize with             * 
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_options_shutdown()
+gnc_option_db_init(GNCOptionDB *odb, SCM options)
+{
+  SCM func = gh_eval_str("gnc:send-options");
+  GNCOptionDBHandle handle;
+
+  handle = gnc_option_db_get_handle(odb);
+  if (handle < 0)
+  {
+    PERR("Can't find option database in list.\n");
+    return;
+  }
+
+  gh_call2(func, gh_int2scm(handle), options);
+}
+
+
+static void
+gnc_option_free_cbinfo(gpointer data, gpointer not_used)
+{
+  g_free(data);
+}
+
+/********************************************************************\
+ * gnc_option_db_destroy                                            *
+ *   unregister the scheme options and free all the memory          *
+ *   associated with an option database, including the database     *
+ *   itself                                                         *
+ *                                                                  *
+ * Args: options database to destroy                                *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_option_db_destroy(GNCOptionDB *odb)
 {
   GSList *section_node;
   GSList *option_node;
   GNCOptionSection *section;
   GNCOption *option;
 
-  section_node = option_sections;
+  if (odb == NULL)
+    return;
+
+  section_node = odb->option_sections;
   while (section_node != NULL)
   {
     section = section_node->data;
@@ -121,43 +193,72 @@ gnc_options_shutdown()
     section_node = section_node->next;
   }
 
-  if (option_sections != NULL)
-    g_slist_free(section->options);
+  g_slist_foreach(odb->change_callbacks, gnc_option_free_cbinfo, NULL);
 
-  option_sections = NULL;
-  options_dirty = FALSE;
+  g_slist_free(odb->option_sections);
+  g_slist_free(odb->change_callbacks);
+
+  odb->option_sections = NULL;
+  odb->change_callbacks = NULL;
+  odb->options_dirty = FALSE;
+
+  if (!g_ptr_array_remove(option_dbs, odb))
+  {
+    PERR("Option database not present in list.\n");
+  }
+
+  if (option_dbs->len == 0)
+  {
+    g_ptr_array_free(option_dbs, FALSE);
+    option_dbs = NULL;
+  }
+
+  g_free(odb);
 }
 
 
 /********************************************************************\
- * gnc_register_option_change_callback                              *
+ * gnc_option_db_register_change_callback                           *
  *   register a callback to be called whenever an option changes    *
  *   this is rather heavy-weight, since all handlers will be called *
  *   whenever any option changes. We may need to refine it later.   *
  *                                                                  *
- * Args: callback - the callback function                           *
+ * Args: odb      - the option database to register with            *
+ *       callback - the callback function to register               *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_register_option_change_callback(void (*callback) (void))
+gnc_option_db_register_change_callback(GNCOptionDB *odb,
+                                       OptionChangeCallback callback,
+                                       gpointer data)
 {
-  change_callbacks = g_slist_prepend(change_callbacks, callback);
+  ChangeCBInfo *cbinfo;
+
+  assert(odb != NULL);
+
+  cbinfo = g_new0(ChangeCBInfo, 1);
+  cbinfo->callback = callback;
+  cbinfo->user_data = data;
+
+  odb->change_callbacks = g_slist_prepend(odb->change_callbacks, cbinfo);
 }
 
+
 static void
-gnc_call_option_change_callbacks()
+gnc_call_option_change_callbacks(GNCOptionDB *odb)
 {
-  GSList *node = change_callbacks;
-  void (*callback) (void);
+  GSList *node = odb->change_callbacks;
+  ChangeCBInfo *cbinfo;
 
   while (node != NULL)
   {
-    callback = node->data;
-    (*callback)();
+    cbinfo = node->data;
+    (cbinfo->callback)(cbinfo->user_data);
 
     node = node->next;
   }
 }
+
 
 static void
 initialize_getters()
@@ -167,18 +268,20 @@ initialize_getters()
   if (getters_initialized)
     return;
 
-  getters.section = gh_eval_str("gnc:configuration-option-section");
-  getters.name = gh_eval_str("gnc:configuration-option-name");
-  getters.type = gh_eval_str("gnc:configuration-option-type");
-  getters.sort_tag = gh_eval_str("gnc:configuration-option-sort-tag");
+  getters.section = gh_eval_str("gnc:option-section");
+  getters.name = gh_eval_str("gnc:option-name");
+  getters.type = gh_eval_str("gnc:option-type");
+  getters.sort_tag = gh_eval_str("gnc:option-sort-tag");
   getters.documentation =
-    gh_eval_str("gnc:configuration-option-documentation");
-  getters.getter = gh_eval_str("gnc:configuration-option-getter");
-  getters.setter = gh_eval_str("gnc:configuration-option-setter");
+    gh_eval_str("gnc:option-documentation");
+  getters.getter = gh_eval_str("gnc:option-getter");
+  getters.setter = gh_eval_str("gnc:option-setter");
   getters.default_getter =
-    gh_eval_str("gnc:configuration-option-default-getter");
+    gh_eval_str("gnc:option-default-getter");
   getters.value_validator =
-    gh_eval_str("gnc:configuration-option-value-validator");
+    gh_eval_str("gnc:option-value-validator");
+  getters.permissible_values =
+    gh_eval_str("gnc:option-permissible-values");
     
   getters_initialized = TRUE;
 }
@@ -343,6 +446,198 @@ gnc_option_value_validator(GNCOption *option)
 }
 
 
+/********************************************************************\
+ * gnc_option_value_num_permissible_values                          *
+ *   returns the number of permissible values in the option, or     *
+ *   -1 if there are no values available.                           *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: number of permissible options or -1                     *
+\********************************************************************/
+int
+gnc_option_value_num_permissible_values(GNCOption *option)
+{
+  SCM values;
+
+  initialize_getters();
+
+  values = gnc_guile_call1_to_list(getters.permissible_values,
+                                   option->guile_option);
+
+  if (values == SCM_UNDEFINED)
+    return -1;
+
+  return gh_length(values);
+}
+
+
+/********************************************************************\
+ * gnc_option_value_permissible_value_index                         *
+ *   returns the index of the permissible value matching the        *
+ *   provided value, or -1 if it couldn't be found                  *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ *       value  - the SCM handle of the value                       *
+ * Returns: index of permissible value, or -1                       *
+\********************************************************************/
+int
+gnc_option_value_permissible_value_index(GNCOption *option, SCM search_value)
+{
+  SCM values, vector, value;
+  int num_values, i;
+
+  if (!gh_symbol_p(search_value))
+    return -1;
+
+  initialize_getters();
+
+  values = gnc_guile_call1_to_list(getters.permissible_values,
+                                   option->guile_option);
+
+  if (values == SCM_UNDEFINED)
+    return -1;
+
+  num_values = gh_length(values);
+
+  for (i = 0; i < num_values; i++)
+  {
+    vector = gh_list_ref(values, gh_int2scm(i));
+    if (!gh_vector_p(vector))
+      continue;
+
+    value = gh_vector_ref(vector, gh_int2scm(0));
+
+    if (gh_eq_p(value, search_value))
+      return i;
+  }
+
+  return -1;
+}
+
+
+/********************************************************************\
+ * gnc_option_value_permissible_value                               *
+ *   returns the SCM handle to the indexth permissible value in the *
+ *   option, or SCM_UNDEFINED if the index was out of range or      *
+ *   there was some other problem.                                  *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ *       index  - the index of the permissible value                *
+ * Returns: SCM handle to option value or SCM_UNDEFINED             *
+\********************************************************************/
+SCM
+gnc_option_value_permissible_value(GNCOption *option, int index)
+{
+  SCM values, vector, value;
+
+  if (index < 0)
+    return SCM_UNDEFINED;
+
+  initialize_getters();
+
+  values = gnc_guile_call1_to_list(getters.permissible_values,
+                                   option->guile_option);
+
+  if (values == SCM_UNDEFINED)
+    return SCM_UNDEFINED;
+
+  if (index >= gh_length(values))
+    return SCM_UNDEFINED;
+
+  vector = gh_list_ref(values, gh_int2scm(index));
+  if (!gh_vector_p(vector))
+    return SCM_UNDEFINED;
+
+  value = gh_vector_ref(vector, gh_int2scm(0));
+  if (!gh_symbol_p(value))
+    return SCM_UNDEFINED;
+
+  return value;
+}
+
+
+/********************************************************************\
+ * gnc_option_value_permissible_value_name                          *
+ *   returns the malloc'd name of the indexth permissible value in  *
+ *   the option, or NULL if the index was out of range or there are *
+ *   no values available.                                           *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ *       index  - the index of the permissible value                *
+ * Returns: malloc'd name of permissible value or NULL              *
+\********************************************************************/
+char *
+gnc_option_value_permissible_value_name(GNCOption *option, int index)
+{
+  SCM values, vector, name;
+
+  if (index < 0)
+    return NULL;
+
+  initialize_getters();
+
+  values = gnc_guile_call1_to_list(getters.permissible_values,
+                                   option->guile_option);
+
+  if (values == SCM_UNDEFINED)
+    return NULL;
+
+  if (index >= gh_length(values))
+    return NULL;
+
+  vector = gh_list_ref(values, gh_int2scm(index));
+  if (!gh_vector_p(vector))
+    return NULL;
+
+  name = gh_vector_ref(vector, gh_int2scm(1));
+  if (!gh_string_p(name))
+    return NULL;
+
+  return gh_scm2newstr(name, NULL);
+}
+
+
+/********************************************************************\
+ * gnc_option_value_permissible_value_description                   *
+ *   returns the malloc'd description of the indexth permissible    *
+ *   value in the option, or NULL if the index was out of range or  *
+ *   there are no values available.                                 *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ *       index  - the index of the permissible value                *
+ * Returns: malloc'd description of permissible value or NULL       *
+\********************************************************************/
+char *
+gnc_option_value_permissible_value_description(GNCOption *option, int index)
+{
+  SCM values, vector, help;
+
+  if (index < 0)
+    return NULL;
+
+  initialize_getters();
+
+  values = gnc_guile_call1_to_list(getters.permissible_values,
+                                   option->guile_option);
+
+  if (values == SCM_UNDEFINED)
+    return NULL;
+
+  if (index >= gh_length(values))
+    return NULL;
+
+  vector = gh_list_ref(values, gh_int2scm(index));
+  if (!gh_vector_p(vector))
+    return NULL;
+
+  help = gh_vector_ref(vector, gh_int2scm(2));
+  if (!gh_string_p(help))
+    return NULL;
+
+  return gh_scm2newstr(help, NULL);
+}
+
+
 static gint
 compare_sections(gconstpointer a, gconstpointer b)
 {
@@ -394,47 +689,58 @@ compare_option_names(gconstpointer a, gconstpointer b)
 }
 #endif
 
+
 /********************************************************************\
- * gnc_options_dirty                                                *
- *   returns true if guile has registered more options since the    *
- *   options dialog was created.                                    *
+ * gnc_option_db_dirty                                              *
+ *   returns true if guile has registered more options into the     *
+ *   database since the last time the database was cleaned.         *
  *                                                                  *
  * Returns: dirty flag                                              *
 \********************************************************************/
 gboolean
-gnc_options_dirty()
+gnc_option_db_dirty(GNCOptionDB *odb)
 {
-  return options_dirty;
+  assert(odb != NULL);
+
+  return odb->options_dirty;
 }
 
 
 /********************************************************************\
- * gnc_options_clean                                                *
- *   resets the dirty flag                                          *
+ * gnc_option_db_clean                                              *
+ *   resets the dirty flag of the option database                   *
  *                                                                  *
 \********************************************************************/
 void
-gnc_options_clean()
+gnc_option_db_clean(GNCOptionDB *odb)
 {
-  options_dirty = FALSE;
+  assert(odb != NULL);
+
+  odb->options_dirty = FALSE;
 }
 
 
 /********************************************************************\
- * gnc_register_option_ui                                           *
- *   registers an option with the GUI. Intended to be called from   *
- *   guile.                                                         *
+ * _gnc_option_db_register_option                                   *
+ *   registers an option with an option database. Intended to be    *
+ *   called from guile.                                             *
  *                                                                  *
- * Args: option - the guile option                                  *
+ * Args: odb    - the option database                               *
+ *       option - the guile option                                  *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-_gnc_register_option_ui(SCM guile_option)
+_gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 {
+  GNCOptionDB *odb;
   GNCOption *option;
   GNCOptionSection *section;
 
-  options_dirty = TRUE;
+  odb = g_ptr_array_index(option_dbs, handle);
+
+  assert(odb != NULL);
+
+  odb->options_dirty = TRUE;
 
   /* Make the option structure */
   option = g_new0(GNCOption, 1);
@@ -447,7 +753,7 @@ _gnc_register_option_ui(SCM guile_option)
   if (option->guile_option_id == SCM_UNDEFINED)
   {
     g_free(option);
-    PERR("_gnc_register_option_ui: couldn't register\n");
+    PERR("_gnc_option_db_register_option: couldn't register\n");
     return;
   }
 
@@ -460,7 +766,7 @@ _gnc_register_option_ui(SCM guile_option)
   {
     GSList *old;
 
-    old = g_slist_find_custom(option_sections, section, compare_sections);
+    old = g_slist_find_custom(odb->option_sections, section, compare_sections);
 
     if (old != NULL)
     {
@@ -470,8 +776,8 @@ _gnc_register_option_ui(SCM guile_option)
       section = old->data;
     }
     else
-      option_sections = g_slist_insert_sorted(option_sections, section,
-					      compare_sections);
+      odb->option_sections = g_slist_insert_sorted(odb->option_sections,
+                                                   section, compare_sections);
   }
 
   section->options = g_slist_insert_sorted(section->options, option,
@@ -480,30 +786,46 @@ _gnc_register_option_ui(SCM guile_option)
 
 
 /********************************************************************\
- * gnc_num_options_sections                                         *
- *   returns the number of option sections registered so far        *
+ * gnc_option_db_num_sections                                       *
+ *   returns the number of option sections registered so far in the *
+ *   database                                                       *
  *                                                                  *
- * Args: none                                                       *
+ * Args: odb - the database to count sections for                   *
  * Returns: number of option sections                               *
 \********************************************************************/
 guint
-gnc_num_option_sections()
+gnc_option_db_num_sections(GNCOptionDB *odb)
 {
-  return g_slist_length(option_sections);
+  return g_slist_length(odb->option_sections);
 }
 
 
 /********************************************************************\
- * gnc_get_option_section                                           *
- *   returns the ith option section, or NULL                        *
+ * gnc_option_db_get_section                                        *
+ *   returns the ith option section in the database, or NULL        *
  *                                                                  *
- * Args: i - index of section                                       *
+ * Args: odb - the option database                                  *
+ *       i   - index of section                                     *
  * Returns: ith option sectioin                                     *
 \********************************************************************/
 GNCOptionSection *
-gnc_get_option_section(gint i)
+gnc_option_db_get_section(GNCOptionDB *odb, gint i)
 {
-  return g_slist_nth_data(option_sections, i);
+  return g_slist_nth_data(odb->option_sections, i);
+}
+
+
+/********************************************************************\
+ * gnc_option_section_name                                          *
+ *   returns the name of the options section                        *
+ *                                                                  *
+ * Args: section - section to get name of                           *
+ * Returns: name of option section                                  *
+\********************************************************************/
+char *
+gnc_option_section_name(GNCOptionSection *section)
+{
+  return section->section_name;
 }
 
 
@@ -530,6 +852,7 @@ gnc_option_section_num_options(GNCOptionSection *section)
  * Returns: ith option in section                                   *
 \********************************************************************/
 GNCOption *
+
 gnc_get_option_section_option(GNCOptionSection *section, int i)
 {
   return g_slist_nth_data(section->options, i);
@@ -537,15 +860,17 @@ gnc_get_option_section_option(GNCOptionSection *section, int i)
 
 
 /********************************************************************\
- * gnc_get_option_by_name                                           *
+ * gnc_option_db_get_option_by_name                                 *
  *   returns an option given section name and name                  *
  *                                                                  *
- * Args: section_name - name of section to search for               *
+ * Args: odb          - option database to search in                *
+ *       section_name - name of section to search for               *
  *       name         - name to search for                          *
  * Returns: given option, or NULL if none                           *
 \********************************************************************/
 GNCOption *
-gnc_get_option_by_name(char *section_name, char *name)
+gnc_option_db_get_option_by_name(GNCOptionDB *odb, char *section_name,
+                                 char *name)
 {
   GSList *section_node;
   GSList *option_node;
@@ -557,7 +882,7 @@ gnc_get_option_by_name(char *section_name, char *name)
 
   section_key.section_name = section_name;
 
-  section_node = g_slist_find_custom(option_sections, &section_key,
+  section_node = g_slist_find_custom(odb->option_sections, &section_key,
 				     compare_sections);
 
   if (section_node == NULL)
@@ -585,14 +910,15 @@ gnc_get_option_by_name(char *section_name, char *name)
 
 
 /********************************************************************\
- * gnc_get_option_by_SCM                                            *
+ * gnc_option_db_get_option_by_SCM                                  *
  *   returns an option given SCM handle. Uses section and name.     *
  *                                                                  *
- * Args: guile_option - SCM handle of option                        *
+ * Args: odb          - option database to search in                *
+ *       guile_option - SCM handle of option                        *
  * Returns: given option, or NULL if none                           *
 \********************************************************************/
 GNCOption *
-gnc_get_option_by_SCM(SCM guile_option)
+gnc_option_db_get_option_by_SCM(GNCOptionDB *odb, SCM guile_option)
 {
   GNCOption option_key;
   GNCOption *option;
@@ -604,7 +930,7 @@ gnc_get_option_by_SCM(SCM guile_option)
   section_name = gnc_option_section(&option_key);
   name = gnc_option_name(&option_key);
 
-  option = gnc_get_option_by_name(section_name, name);
+  option = gnc_option_db_get_option_by_name(odb, section_name, name);
 
   if (section_name != NULL)
     free(section_name);
@@ -684,15 +1010,15 @@ gnc_commit_option(GNCOption *option)
 
 
 /********************************************************************\
- * gnc_options_commit                                               *
+ * gnc_option_db_commit                                             *
  *   commits the options which have changed, and which are valid    *
  *   for those which are not valid, error dialogs are shown.        *
  *                                                                  *
- * Args: none                                                       *
+ * Args: odb - option database to commit                            *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_options_commit()
+gnc_option_db_commit(GNCOptionDB *odb)
 {
   GSList *section_node;
   GSList *option_node;
@@ -700,7 +1026,9 @@ gnc_options_commit()
   GNCOption *option;
   gboolean changed_something = FALSE;
 
-  section_node = option_sections;
+  assert(odb != NULL);
+
+  section_node = odb->option_sections;
   while (section_node != NULL)
   {
     section = section_node->data;
@@ -724,28 +1052,30 @@ gnc_options_commit()
   }
 
   if (changed_something)
-    gnc_call_option_change_callbacks();
+    gnc_call_option_change_callbacks(odb);
 }
 
 
 /********************************************************************\
- * gnc_lookup_boolean_option                                        *
+ * gnc_option_db_lookup_boolean_option                              *
  *   looks up a boolean option. If present, returns its value,      *
  *   otherwise returns the default.                                 *
  *                                                                  *
- * Args: section - section name of option                           *
+ * Args: odb     - option database to search in                     *
+ *       section - section name of option                           *
  *       name    - name of option                                   *
  *       default - default value if not found                       *
  * Return: gboolean option value                                    *
 \********************************************************************/
 gboolean
-gnc_lookup_boolean_option(char *section, char *name, gboolean default_value)
+gnc_option_db_lookup_boolean_option(GNCOptionDB *odb, char *section,
+                                    char *name, gboolean default_value)
 {
   GNCOption *option;
   SCM getter;
   SCM value;
 
-  option = gnc_get_option_by_name(section, name);
+  option = gnc_option_db_get_option_by_name(odb, section, name);
 
   if (option == NULL)
     return default_value;
@@ -764,24 +1094,26 @@ gnc_lookup_boolean_option(char *section, char *name, gboolean default_value)
 
 
 /********************************************************************\
- * gnc_lookup_string_option                                         *
+ * gnc_option_db_lookup_string_option                               *
  *   looks up a string option. If present, returns its malloc'ed    *
  *   value, otherwise returns the strdup'ed default, or NULL if     *
  *   default was NULL.                                              *
  *                                                                  *
- * Args: section - section name of option                           *
+ * Args: odb     - option database to search in                     *
+ *       section - section name of option                           *
  *       name    - name of option                                   *
  *       default - default value if not found                       *
  * Return: char * option value                                      *
 \********************************************************************/
 char *
-gnc_lookup_string_option(char *section, char *name, char *default_value)
+gnc_option_db_lookup_string_option(GNCOptionDB *odb, char *section,
+                                   char *name, char *default_value)
 {
   GNCOption *option;
   SCM getter;
   SCM value;
 
-  option = gnc_get_option_by_name(section, name);
+  option = gnc_option_db_get_option_by_name(odb, section, name);
 
   if (option != NULL)
   {
@@ -791,6 +1123,47 @@ gnc_lookup_string_option(char *section, char *name, char *default_value)
       value = gh_call0(getter);
       if (gh_string_p(value))
 	return gh_scm2newstr(value, NULL);
+    }
+  }
+
+  if (default_value == NULL)
+    return NULL;
+
+  return strdup(default_value);
+}
+
+
+/********************************************************************\
+ * gnc_option_db_lookup_multichoice_option                          *
+ *   looks up a multichoice option. If present, returns its         *
+ *   name as a malloc'ed string                                     *
+ *   value, otherwise returns the strdup'ed default, or NULL if     *
+ *   default was NULL.                                              *
+ *                                                                  *
+ * Args: odb     - option database to search in                     *
+ *       section - section name of option                           *
+ *       name    - name of option                                   *
+ *       default - default value if not found                       *
+ * Return: char * option value                                      *
+\********************************************************************/
+char *
+gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb, char *section,
+                                        char *name, char *default_value)
+{
+  GNCOption *option;
+  SCM getter;
+  SCM value;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+
+  if (option != NULL)
+  {
+    getter = gnc_option_getter(option);
+    if (getter != SCM_UNDEFINED)
+    {
+      value = gh_call0(getter);
+      if (gh_symbol_p(value))
+	return gh_symbol2newstr(value, NULL);
     }
   }
 

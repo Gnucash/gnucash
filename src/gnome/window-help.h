@@ -1,5 +1,5 @@
 /********************************************************************\
- * HelpWindow.h -- a help window for hypertext help.                *
+ * window-help.h -- a help window for hypertext help.               *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,8 +22,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __HELPWINDOW_H__
-#define __HELPWINDOW_H__
+#ifndef __WINDOW_HELP_H__
+#define __WINDOW_HELP_H__
 
 #include <gnome.h>
 
@@ -31,8 +31,9 @@
 
 
 /** PROTOTYPES ******************************************************/
-void helpWindow( GtkWidget *parent, const char *title, const char *htmlfile );
-void reportWindow( GtkWidget *parent, const char *title, const char *text );
 
+void helpWindow(GtkWidget *parent, const char *title, const char *htmlfile);
+
+void gnc_ui_destroy_help_windows();
 
 #endif

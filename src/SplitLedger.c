@@ -19,8 +19,8 @@
  *    (2) it must be committed if the user edits it, and 
  *        a new blank split must be created.
  *    (3) it must be deleted when the ledger window is closed.
- * To implement the above, the register "user_hook" is used
- * to store the blank split with the register window structures.
+ * To implement the above, the register "user_data" is used
+ * to store an SRInfo structure containing the blank split.
  *
  * =====================================================================
  * Some notes on Commit/Rollback:
@@ -105,22 +105,37 @@
 
 #define BUFSIZE 1024
 
+typedef struct _SRInfo SRInfo;
+struct _SRInfo
+{
+  /* The blank split at the bottom of the register */
+  Split * blank_split;
+
+  /* The currently open transaction, if any */
+  Transaction *pending_trans;
+
+  /* A transaction used to remember where to expand the cursor */
+  Transaction *cursor_hint_trans;
+
+  /* The default account where new splits are added */
+  Account *default_source_account;
+};
+
+
 /* ======================================================== */
-/* the force_double_entry_awareness flag controls how the 
+/* The force_double_entry_awareness flag controls how the 
  * register behaves if the user failed to specify a transfer-to
- * account when creting a new split.  What it does is simple,
+ * account when creating a new split. What it does is simple,
  * although it can lead to some confusion to the user.
  * If this flag is set, then any new split will be put into
- * exactly the same account as the split immediately above it.
- * If the spluit immediately above is the leader, then what
- * happens visually is that it appears as if there are two 
- * transactions,  one debiting and one crediting this acdunt
- * by exactly the same amount.  Thus, the user is forced to
- * deal with this somewhat nutty situation.
+ * the leader account. What happens visually is that it appears
+ * as if there are two transactions, one debiting and one crediting
+ * this acount by exactly the same amount. Thus, the user is forced
+ * to deal with this somewhat nutty situation.
  *
  * If this flag is *not* set, then the split just sort of 
- * hangs out, without beloinging to any account. This will 
- * of course lead to a lkedger that fails to balance.
+ * hangs out, without belonging to any account. This will 
+ * of course lead to a ledger that fails to balance.
  * Bummer, duude !
  *
  * hack alert -- this flag should really be made a configurable 
@@ -131,6 +146,43 @@ static int force_double_entry_awareness = 0;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LEDGER;
+
+/* The routines below create, access, and destroy the SRInfo structure
+ * used by SplitLedger routines to store data for a particular register.
+ * This is the only code that should access the user_data member of a
+ * SplitRegister directly. If additional user data is needed, just add
+ * it to the SRInfo structure above. */
+static void
+xaccSRInitRegisterData(SplitRegister *reg)
+{
+  assert(reg != NULL);
+
+  /* calloc initializes to 0 */
+  reg->user_data = calloc(1, sizeof(SRInfo));
+  assert(reg->user_data != NULL);
+}
+
+static void
+xaccSRDestroyRegisterData(SplitRegister *reg)
+{
+  assert(reg != NULL);
+
+  if (reg->user_data != NULL)
+    free(reg->user_data);
+
+  reg->user_data = NULL;
+}
+
+static SRInfo *
+xaccSRGetInfo(SplitRegister *reg)
+{
+  assert(reg != NULL);
+
+  if (reg->user_data == NULL)
+    xaccSRInitRegisterData(reg);
+
+  return (SRInfo *) reg->user_data;
+}
 
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
@@ -163,15 +215,30 @@ LedgerMoveCursor  (Table *table,
    int new_phys_row = *p_new_phys_row;
    int new_phys_col = *p_new_phys_col;
    SplitRegister *reg = (SplitRegister *) client_data;
+   SRInfo *info = xaccSRGetInfo(reg);
+   Transaction *newtrans = NULL;
+   Locator *locator;
+   Split *split;
    int style;
 
    PINFO ("LedgerMoveCursor(): start calback %d %d \n",
-       new_phys_row, new_phys_col);
+          new_phys_row, new_phys_col);
+
+   /* The split where we are moving to */
+   split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+   if (split != NULL)
+     newtrans = xaccSplitGetParent(split);
+
    /* commit the contents of the cursor into the database */
-   xaccSRSaveRegEntry (reg);
+   xaccSRSaveRegEntry (reg, newtrans);
    xaccSRRedrawRegEntry (reg); 
+
    PINFO ("LedgerMoveCursor(): after redraw %d %d \n",
-      new_phys_row, new_phys_col);
+          new_phys_row, new_phys_col);
+
+   reg->cursor_phys_row = new_phys_row;
+   locator = table->locators[new_phys_row][new_phys_col];
+   reg->cursor_virt_row = locator->virt_row;
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -193,7 +260,7 @@ LedgerMoveCursor  (Table *table,
       if (NULL == split) {
          reg->cursor_phys_row = new_phys_row;
          // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
-         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+         info->cursor_hint_trans = xaccSplitGetParent (oldsplit);
       }
       xaccRegisterRefresh (reg);
       gnc_refresh_main_window();
@@ -208,21 +275,25 @@ LedgerMoveCursor  (Table *table,
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
- * go to a new one.  It is called to verify what the cordinates
- * of the new cell will be.  It really applies only for auto-expansion,
- * where we need to calculate the coords of the target cell.
+ * go to a new one. It is called to verify what the coordinates
+ * of the new cell will be. It currently does nothing.
  */
 
 static void
 LedgerTraverse  (Table *table, 
-                   int *p_new_phys_row, 
-                   int *p_new_phys_col, 
-                   void * client_data)
+                 int *p_new_phys_row, 
+                 int *p_new_phys_col, 
+                 void * client_data)
 {
    int new_phys_row = *p_new_phys_row;
    int new_phys_col = *p_new_phys_col;
    SplitRegister *reg = (SplitRegister *) client_data;
+   SRInfo *info = xaccSRGetInfo(reg);
    int style;
+
+   /* For now, just do nothing. The auto mode handling is done entirely
+    * by LedgerMoveCursor above. */
+   return;
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -235,6 +306,15 @@ LedgerTraverse  (Table *table,
        (REG_DOUBLE_DYNAMIC == style)) 
    {
       Split *split, *oldsplit;
+      int save_num_phys_rows, save_num_virt_rows;
+      int save_cursor_phys_row, save_cursor_virt_row;
+
+      /* Save the values that xaccSRCountRows will futz up */
+      save_num_phys_rows = reg->num_phys_rows;
+      save_num_virt_rows = reg->num_virt_rows;
+      save_cursor_phys_row = reg->cursor_phys_row;
+      save_cursor_virt_row = reg->cursor_virt_row;
+
       ENTER ("LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
       oldsplit = xaccSRGetCurrentSplit (reg);
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
@@ -244,7 +324,7 @@ LedgerTraverse  (Table *table,
       if (NULL == split) {
          reg->cursor_phys_row = new_phys_row;
          // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
-         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+         info->cursor_hint_trans = xaccSplitGetParent (oldsplit);
       }
 
       xaccRegisterCountHack (reg);
@@ -253,6 +333,12 @@ LedgerTraverse  (Table *table,
       LEAVE ("LedgerTraverse with %d \n", reg->cursor_phys_row);
       /* indicate what row we *should* go to */
       *p_new_phys_row = reg->cursor_phys_row;
+
+      /* Restore the values */
+      reg->num_phys_rows = save_num_phys_rows;
+      reg->num_virt_rows = save_num_virt_rows;
+      reg->cursor_phys_row = save_cursor_phys_row;
+      reg->cursor_virt_row = save_cursor_virt_row;
    }
 }
 
@@ -261,35 +347,70 @@ LedgerTraverse  (Table *table,
 static void
 LedgerDestroy (SplitRegister *reg)
 {
+   SRInfo *info = xaccSRGetInfo(reg);
    Transaction *trans;
 
    /* be sure to destroy the "blank split" */
-   if (reg->user_hook) {
-      Split *split;
-
-      split = (Split *) (reg->user_hook);
-
+   if (info->blank_split) {
       /* split destroy will automatically remove it
        * from its parent account */
-      trans = xaccSplitGetParent (split);
+      trans = xaccSplitGetParent (info->blank_split);
+
+      /* Make sure we don't commit this below */
+      if (trans == info->pending_trans)
+        info->pending_trans = NULL;
+
       xaccTransBeginEdit (trans, 1);
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
-      reg->user_hook = NULL;
+      info->blank_split = NULL;
    }
 
    /* be sure to take care of any open transactions */
-   if (reg->user_huck) {
-      trans = (Transaction *) (reg->user_huck);   
-  
-      /* I suppose we could also rollback here ... its not clear what
-       * the desirable behaviour should be from the user's point of view 
-       * when they close a window with an uncommitted edit in it ...
-       * Maybe we should prompt them ??
-       */
-      xaccTransCommitEdit (trans);
-      reg->user_huck = NULL;
+   if (info->pending_trans) {
+      /* Committing this should have been taken care of by
+       * xaccLedgerDisplayClose. But, we'll check again. */
+      if (xaccTransIsOpen(info->pending_trans))
+        xaccTransCommitEdit (info->pending_trans);
+
+      info->pending_trans = NULL;
    }
+
+   xaccSRDestroyRegisterData(reg);
+}
+
+/* ======================================================== */
+
+Transaction * 
+xaccSRGetCurrentTrans (SplitRegister *reg)
+{
+  Split *split;
+  int pr, pc;
+  int vr, vc;
+
+  split = xaccSRGetCurrentSplit (reg);
+  if (split != NULL)
+    return xaccSplitGetParent(split);
+
+  /* Split is blank. Assume it is the blank split of a multi-line
+   * transaction. Go back one row to find a split in the transaction. */
+  pr = reg->cursor_phys_row;
+  pc = reg->table->current_cursor_phys_col;
+  vr = reg->table->locators[pr][pc]->virt_row;
+  vc = reg->table->locators[pr][pc]->virt_col;
+  vr --;
+  if ((0 > vr) || (0 > vc)) {
+    PERR ("Internal Error: SaveRegEntry(): bad row \n");
+    return NULL;
+  }
+
+  split = (Split *) reg->table->user_data[vr][vc];
+  if (split == NULL) {
+    PERR ("Internal Error: SaveRegEntry(): no parent \n");
+    return NULL;
+  }
+
+  return xaccSplitGetParent(split);
 }
 
 /* ======================================================== */
@@ -306,6 +427,332 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
    split = (Split *) (cursor->user_data);
 
    return split;
+}
+
+/* ======================================================== */
+
+Split * 
+xaccSRGetBlankSplit (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+
+  return info->blank_split;
+}
+
+/* ======================================================== */
+
+gncBoolean
+xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
+                      int *virt_row, int *virt_col)
+{
+  Table *table = reg->table;
+  int v_row, v_col;
+  Split *s;
+
+  for (v_row = 1; v_row < table->num_virt_rows; v_row++)
+    for (v_col = 0; v_col < table->num_virt_cols; v_col++)
+    {
+      s = (Split *) table->user_data[v_row][v_col];
+
+      if (s == split)
+      {
+        if (virt_row != NULL)
+          *virt_row = v_row;
+        if (virt_col != NULL)
+          *virt_col = v_col;
+
+        return GNC_T;
+      }
+    }
+
+  return GNC_F;
+}
+
+/* ======================================================== */
+
+void
+xaccSRDeleteCurrentSplit (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  Split *split, *s;
+  Transaction *trans;
+  int i, num_splits;
+  Account *account, **affected_accounts;
+
+  /* get the current split based on cursor position */
+  split = xaccSRGetCurrentSplit(reg);
+  if (split == NULL)
+    return;
+
+  /* If we just deleted the blank split, clean up. The user is
+   * allowed to delete the blank split as a method for discarding any
+   * edits they may have made to it. */
+  if (split == info->blank_split)
+  {
+    account = xaccSplitGetAccount(split);
+    xaccAccountDisplayRefresh(account);
+    return;
+  }
+
+  /* make a copy of all of the accounts that will be  
+   * affected by this deletion, so that we can update
+   * their register windows after the deletion.
+   */
+  trans = xaccSplitGetParent(split);
+  num_splits = xaccTransCountSplits(trans);
+  affected_accounts = (Account **) malloc((num_splits + 1) *
+                                          sizeof(Account *));
+  assert(affected_accounts != NULL);
+
+  for (i = 0; i < num_splits; i++) 
+  {
+    s = xaccTransGetSplit(trans, i);
+    affected_accounts[i] = xaccSplitGetAccount(s);
+  }
+  affected_accounts[num_splits] = NULL;
+
+  account = xaccSplitGetAccount(split);
+
+  xaccTransBeginEdit(trans, 1);
+  xaccAccountBeginEdit(account, 1);
+  xaccSplitDestroy(split);
+  xaccAccountCommitEdit(account);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == info->pending_trans)
+    info->pending_trans = NULL;
+
+  gnc_account_list_ui_refresh(affected_accounts);
+
+  free(affected_accounts);
+
+  gnc_refresh_main_window ();
+}
+
+/* ======================================================== */
+
+void
+xaccSRDeleteCurrentTrans (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  Split *split, *s;
+  Transaction *trans;
+  int i, num_splits;
+  Account *account, **affected_accounts;
+
+  /* get the current split based on cursor position */
+  split = xaccSRGetCurrentSplit(reg);
+  if (split == NULL)
+    return;
+
+  /* If we just deleted the blank split, clean up. The user is
+   * allowed to delete the blank split as a method for discarding any
+   * edits they may have made to it. */
+  if (split == info->blank_split)
+  {
+    trans = xaccSplitGetParent (info->blank_split);
+    account = xaccSplitGetAccount(split);
+
+    /* Make sure we don't commit this later on */
+    if (trans == info->pending_trans)
+      info->pending_trans = NULL;
+
+    xaccTransBeginEdit (trans, 1);
+    xaccTransDestroy (trans);
+    xaccTransCommitEdit (trans);
+
+    info->blank_split = NULL;
+
+    xaccAccountDisplayRefresh(account);
+    return;
+  }
+
+  /* make a copy of all of the accounts that will be  
+   * affected by this deletion, so that we can update
+   * their register windows after the deletion.
+   */
+  trans = xaccSplitGetParent(split);
+  num_splits = xaccTransCountSplits(trans);
+  affected_accounts = (Account **) malloc((num_splits + 1) *
+                                          sizeof(Account *));
+  assert(affected_accounts != NULL);
+
+  for (i = 0; i < num_splits; i++) 
+  {
+    s = xaccTransGetSplit(trans, i);
+    affected_accounts[i] = xaccSplitGetAccount(s);
+  }
+  affected_accounts[num_splits] = NULL;
+
+  xaccTransBeginEdit(trans, 1);
+  xaccTransDestroy(trans);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == info->pending_trans)
+    info->pending_trans = NULL;
+
+  gnc_account_list_ui_refresh(affected_accounts);
+
+  free(affected_accounts);
+
+  gnc_refresh_main_window ();
+}
+
+/* ======================================================== */
+
+void
+xaccSREmptyCurrentTrans (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  Split *split, *s;
+  Split **splits;
+  Transaction *trans;
+  int i, num_splits;
+  Account *account, **affected_accounts;
+
+  /* get the current split based on cursor position */
+  split = xaccSRGetCurrentSplit(reg);
+  if (split == NULL)
+    return;
+
+  /* If we just deleted the blank split, clean up. The user is
+   * allowed to delete the blank split as a method for discarding any
+   * edits they may have made to it. */
+  if (split == info->blank_split)
+  {
+    trans = xaccSplitGetParent (info->blank_split);
+    account = xaccSplitGetAccount(split);
+
+    /* Make sure we don't commit this later on */
+    if (trans == info->pending_trans)
+      info->pending_trans = NULL;
+
+    xaccTransBeginEdit (trans, 1);
+    xaccTransDestroy (trans);
+    xaccTransCommitEdit (trans);
+
+    info->blank_split = NULL;
+
+    xaccAccountDisplayRefresh(account);
+    return;
+  }
+
+  /* make a copy of all of the accounts that will be  
+   * affected by this deletion, so that we can update
+   * their register windows after the deletion.
+   */
+  trans = xaccSplitGetParent(split);
+  num_splits = xaccTransCountSplits(trans);
+  affected_accounts = (Account **) malloc((num_splits + 1) *
+                                          sizeof(Account *));
+  splits = calloc(num_splits, sizeof(Split *));
+
+  assert(affected_accounts != NULL);
+  assert(splits != NULL);
+
+  for (i = 0; i < num_splits; i++) 
+  {
+    s = xaccTransGetSplit(trans, i);
+    splits[i] = s;
+    affected_accounts[i] = xaccSplitGetAccount(s);
+  }
+  affected_accounts[num_splits] = NULL;
+
+  xaccTransBeginEdit(trans, 1);
+  for (i = 0; i < num_splits; i++)
+    if (splits[i] != split)
+      xaccSplitDestroy(splits[i]);
+  xaccTransCommitEdit(trans);
+
+  /* Check pending transaction */
+  if (trans == info->pending_trans)
+    info->pending_trans = NULL;
+
+  gnc_account_list_ui_refresh(affected_accounts);
+
+  free(affected_accounts);
+  free(splits);
+
+  gnc_refresh_main_window ();
+}
+
+/* ======================================================== */
+
+void
+xaccSRCancelCursorSplitChanges (SplitRegister *reg)
+{
+  Split * split;
+  unsigned int changed;
+
+  changed = xaccSplitRegisterGetChangeFlag(reg);
+  if (!changed)
+    return;
+
+  /* We're just cancelling the current split here, not the transaction */
+  /* When cancelling edits, reload the cursor from the transaction */
+  split = xaccSRGetCurrentSplit(reg);
+  xaccSRLoadRegEntry(reg, split);
+  xaccRefreshTableGUI(reg->table);
+  xaccSplitRegisterClearChangeFlag(reg);
+}
+
+/* ======================================================== */
+
+void
+xaccSRCancelCursorTransChanges (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  Transaction *trans;
+  Split *split;
+  int i, num_splits = 0, more_splits = 0;
+  Account **affected_accounts = NULL;
+
+  /* Get the currently open transaction, rollback the edits on it, and
+   * then repaint everything. To repaint everything, make a note of
+   * all of the accounts that will be affected by this rollback. Geez,
+   * there must be some easier way of doing redraw notification. */
+  trans = info->pending_trans;
+
+  if (!xaccTransIsOpen(trans))
+  {
+    xaccSRCancelCursorSplitChanges(reg);
+    return;
+  }
+
+  num_splits = xaccTransCountSplits (trans);
+  affected_accounts = (Account **) malloc ((num_splits+1) *
+                                           sizeof (Account *));
+
+  for (i = 0; i < num_splits; i++)
+  {
+    split = xaccTransGetSplit (trans, i);
+    affected_accounts[i] = xaccSplitGetAccount (split);
+  }
+  affected_accounts[num_splits] = NULL;
+   
+  xaccTransRollbackEdit (trans);
+     
+  /* and do some more redraw, for the new set of accounts .. */
+  more_splits = xaccTransCountSplits (trans);
+  affected_accounts = (Account **) realloc (affected_accounts, 
+                                            (more_splits+num_splits+1) *
+                                            sizeof (Account *));
+
+  for (i = 0; i < more_splits; i++)
+  {
+    split = xaccTransGetSplit (trans, i);
+    affected_accounts[i+num_splits] = xaccSplitGetAccount (split);
+  }
+  affected_accounts[num_splits+more_splits] = NULL;
+   
+  xaccAccListDisplayRefresh (affected_accounts);
+  free (affected_accounts);
+
+  info->pending_trans = NULL;
+
+  gnc_refresh_main_window ();
 }
 
 /* ======================================================== */
@@ -339,11 +786,12 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 /* ======================================================== */
 /* Copy from the register object to the engine */
 
-void 
-xaccSRSaveRegEntry (SplitRegister *reg)
+gncBoolean
+xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 {
+   SRInfo *info = xaccSRGetInfo(reg);
    Split *split;
-   Transaction *trans, *oldtrans;
+   Transaction *trans;
    unsigned int changed;
    int style;
 
@@ -351,71 +799,48 @@ xaccSRSaveRegEntry (SplitRegister *reg)
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
    changed = xaccSplitRegisterGetChangeFlag (reg);
-   if (!changed) return;
+   if (!changed) return GNC_F;
 
    style = (reg->type) & REG_STYLE_MASK;   
 
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
-   ENTER ("xaccSRSaveRegEntry(): save split is %p \n", split);
-   if (!split) {
-      int vr, vc;
-      Split *s;
-      /* If we were asked to save data for a row for which there
-       * is no associated split, then assume that this was a row
-       * that was set aside for adding splits to an existing 
-       * transaction.  The pre-existing transaction will be the 
-       * one in the row(s) immediately above.  Therefore, get  
-       * the cursor location; subtract one row, and get the 
-       * associated transaction.  We will then create a new
-       * split, copy the row contents to that split, and 
-       * append the split to the pre-existing transaction. 
-       */
-      vr = reg->table->current_cursor_virt_row;
-      vc = reg->table->current_cursor_virt_col;
-      vr --;
-      if ((0 > vr) || (0 > vc)) {
-         PERR ("Internal Error: SaveRegEntry(): bad row \n");
-         return;
-      }
-      s = (Split *) reg->table->user_data[vr][vc];
-      if (!s) {
-         PERR ("Internal Error: SaveRegEntry(): no parent \n");
-         return;
-      }
-      trans = xaccSplitGetParent (s);
+   trans = xaccSRGetCurrentTrans (reg);
+   if (trans == NULL)
+     return GNC_F;
 
-      /* determine whether we should commit the previous edit */
-      oldtrans = (Transaction *) (reg->user_huck);
-      if (oldtrans != trans) {
-         xaccTransCommitEdit (oldtrans);
-         xaccTransBeginEdit (trans, 0);   
-         reg->user_huck =  (void *) trans;
-      }
-      
+   ENTER ("xaccSRSaveRegEntry(): save split is %p \n", split);
+
+   /* determine whether we should commit the pending transaction */
+   if (info->pending_trans != trans) {
+     if (xaccTransIsOpen (info->pending_trans))
+       xaccTransCommitEdit (info->pending_trans);
+     xaccTransBeginEdit (trans, 0);
+     info->pending_trans = trans;
+   }
+
+   /* If we are committing the blank split, add it to the account now */
+   if (xaccTransGetSplit(trans, 0) == info->blank_split)
+     xaccAccountInsertSplit (info->default_source_account, info->blank_split);
+
+   if (split == NULL) {
+      /* If we were asked to save data for a row for which there is no
+       * associated split, then assume that this was a row that was
+       * set aside for adding splits to an existing transaction.
+       * xaccSRGetCurrent will handle this case, too. We will create
+       * a new split, copy the row contents to that split, and append
+       * the split to the pre-existing transaction. */
+
       split = xaccMallocSplit ();
       xaccTransAppendSplit (trans, split);
 
-      if (force_double_entry_awareness) {
-         Account * acc;
-         acc = xaccSplitGetAccount (s);
-         xaccAccountInsertSplit (acc, split);
-      }
+      if (force_double_entry_awareness)
+        xaccAccountInsertSplit (info->default_source_account, split);
 
       assert (reg->table->current_cursor);
       reg->table->current_cursor->user_data = (void *) split;
-
-   } else {
-      trans = xaccSplitGetParent (split);
-
-      /* determine whether we should commit the previous edit */
-      oldtrans = (Transaction *) (reg->user_huck);
-      if (oldtrans != trans) {
-         xaccTransCommitEdit (oldtrans);
-         xaccTransBeginEdit (trans, 0);   
-         reg->user_huck =  (void *) trans;
-      }
    }
+
    DEBUG ("xaccSRSaveRegEntry(): updating trans addr=%p\n", trans);
 
    /* copy the contents from the cursor to the split */
@@ -450,6 +875,11 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    if (MOD_ACTN & changed) {
       DEBUG ("xaccSRSaveRegEntry(): MOD_ACTN: %s\n", reg->actionCell->cell.value);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
+   }
+
+   if (MOD_MEMO & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n", reg->memoCell->value);
+      xaccSplitSetMemo (split, reg->memoCell->value);
    }
 
    /* -------------------------------------------------------------- */
@@ -523,11 +953,6 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       /* hack alert -- implement this */
    }
 
-   if (MOD_MEMO & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n", reg->memoCell->value);
-      xaccSplitSetMemo (split, reg->memoCell->value);
-   }
-
    /* The AMNT and NAMNT updates only differ by sign.  Basically, 
     * the split and transaction cursors show minus the quants that
     * the single and double cursors show, and so when updates happen,
@@ -596,15 +1021,21 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    PINFO ("xaccSRSaveRegEntry(): finished saving split %s of trans %s \n", 
       xaccSplitGetMemo(split), xaccTransGetDescription(trans));
 
-   /* if the modified split is the "blank split", 
-    * then it is now an official part of the account.
-    * Set user_hook to null, so that we can be sure of 
-    * getting a new split.
-    */
+   /* If the modified split is the "blank split", then it is now an
+    * official part of the account. Set the blank split to NULL, so
+    * we can be sure of getting a new split.  */
    split = xaccTransGetSplit (trans, 0);
-   if (split == ((Split *) (reg->user_hook))) {
-      reg->user_hook = NULL;
+   if (split == info->blank_split)
+     info->blank_split = NULL;
+
+   /* If the new transaction is different from the current,
+    * commit the current and set the pending transaction to NULL. */
+   if (trans != newtrans) {
+     xaccTransCommitEdit (trans);
+     info->pending_trans = NULL;
    }
+
+   return GNC_T;
 }
 
 /* ======================================================== */
@@ -758,7 +1189,6 @@ void
 xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
    xaccSRLoadTransEntry (reg, split, 0);
-   /* xaccSRLoadSplitEntry (reg, split, 0); */
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
@@ -768,11 +1198,13 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 
 void
 xaccSRCountRows (SplitRegister *reg, Split **slist, 
-                      Account *default_source_acc)
+                 Account *default_source_acc)
 {
+   SRInfo *info = xaccSRGetInfo(reg);
    int i;
-   Split *split=NULL;
-   Split *save_current_split=NULL;
+   Split *split = NULL;
+   Split *save_current_split = NULL;
+   Transaction *save_current_trans = NULL;
    int save_cursor_phys_row = -1;
    int save_cursor_virt_row = -1;
    Table *table;
@@ -781,6 +1213,7 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    int style;
    int multi_line, dynamic;
    CellBlock *lead_cursor;
+   gncBoolean found_split = GNC_F;
 
    table = reg->table;
    style = (reg->type) & REG_STYLE_MASK;
@@ -797,10 +1230,9 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
     * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
    save_current_split = xaccSRGetCurrentSplit (reg);
-   if (NULL == save_current_split) {
-      save_cursor_phys_row = reg->cursor_phys_row;
-      save_cursor_virt_row = reg->cursor_virt_row;
-   }
+   save_current_trans = xaccSRGetCurrentTrans (reg);
+   save_cursor_phys_row = reg->cursor_phys_row;
+   save_cursor_virt_row = reg->cursor_virt_row;
 
    /* num_phys_rows is the number of rows in all the cursors.
     * num_virt_rows is the number of cursors (including the header).
@@ -823,14 +1255,24 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    }
    while (split) {
       /* do not count the blank split */
-      if (split != ((Split *) reg->user_hook)) {
+      if (split != info->blank_split) {
          Transaction *trans;
          int do_expand = 0;
 
          /* lets determine where to locate the cursor ... */
-         if (split == save_current_split) {
-            save_cursor_phys_row = num_phys_rows;
-            save_cursor_virt_row = num_virt_rows;
+         if (!found_split) {
+           /* Check to see if we find a perfect match */
+           if (split == save_current_split) {
+             save_cursor_phys_row = num_phys_rows;
+             save_cursor_virt_row = num_virt_rows;
+             found_split = GNC_T;
+           }
+           /* Otherwise, check for a close match. This could happen if
+              we are collapsing from multi-line to single, e.g. */
+           else if (xaccSplitGetParent(split) == save_current_trans) {
+             save_cursor_phys_row = num_phys_rows;
+             save_cursor_virt_row = num_virt_rows;
+           }             
          }
 
          /* if multi-line, then show all splits.  If dynamic then
@@ -841,7 +1283,7 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
                      (dynamic && xaccIsPeerSplit(split,save_current_split)); 
          if (NULL == save_current_split) {
             trans = xaccSplitGetParent (split);
-            do_expand = do_expand || (trans == reg->user_hack);
+            do_expand = do_expand || (trans == info->cursor_hint_trans);
          }
 
          if (do_expand) 
@@ -869,13 +1311,21 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
                secondary = xaccTransGetSplit (trans, j);
                if (secondary != split) {
 
-                  /* lets determine where to locate the cursor ... */
-                  if (secondary == save_current_split) {
+                 /* lets determine where to locate the cursor ... */
+                 if (!found_split) {
+                   /* Check to see if we find a perfect match. We have to
+                    * check the transaction in case the split is NULL (blank).
+                    */
+                   if ((secondary == save_current_split) &&
+                       (trans == save_current_trans)) {
                      save_cursor_phys_row = num_phys_rows;
                      save_cursor_virt_row = num_virt_rows;
-                  }
-                  num_virt_rows ++;
-                  num_phys_rows += reg->split_cursor->numRows; 
+                     found_split = GNC_T;
+                   }
+                 }
+
+                 num_virt_rows ++;
+                 num_phys_rows += reg->split_cursor->numRows; 
                }
                j++;
             } while (secondary);
@@ -892,13 +1342,12 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
 
    /* ---------------------------------------------------------- */
    /* the "blank split", if it exists, is at the end */
-   if (reg->user_hook) {
-      split = (Split *) reg->user_hook;
-
+   if (info->blank_split != NULL) {
       /* lets determine where to locate the cursor ... */
-      if (split == save_current_split) {
+      if (!found_split && info->blank_split == save_current_split) {
          save_cursor_phys_row = num_phys_rows;
          save_cursor_virt_row = num_virt_rows;
+         found_split = GNC_T;
       }
    }
 
@@ -936,17 +1385,22 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
 
 void
 xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
-                      Account *default_source_acc)
+                    Account *default_source_acc)
 {
+   SRInfo *info = xaccSRGetInfo(reg);
    int i = 0;
    Split *split=NULL, *last_split=NULL;
    Split *save_current_split=NULL;
    Table *table;
    int phys_row;
+   int save_phys_col;
    int vrow;
    int type, style;
    int multi_line, dynamic;
    CellBlock *lead_cursor;
+   gncBoolean found_pending = GNC_F;
+
+   info->default_source_account = default_source_acc;
 
    table = reg->table;
    type  = (reg->type) & REG_TYPE_MASK;
@@ -963,10 +1417,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* count the number of rows */
    xaccSRCountRows (reg, slist, default_source_acc);
 
-   /* save the current cursor location; we do this by saving
-    * a pointer to the currently edited split; we restore the 
-    * cursor to this location when we are done. */
+   /* save the current cursor location; we do this by saving a pointer
+    * to the currently edited split and physical column; we restore
+    * the cursor to this location when we are done. */
    save_current_split = xaccSRGetCurrentSplit (reg);
+   save_phys_col = table->current_cursor_phys_col;
 
    /* disable move callback -- we con't want the cascade of 
     * callbacks while we are fiddling with loading the register */
@@ -995,14 +1450,17 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    }
    while (split) {
 
+     if (info->pending_trans == xaccSplitGetParent (split))
+       found_pending = GNC_T;
+
       /* do not load the blank split */
-      if (split != ((Split *) reg->user_hook)) {
+      if (split != info->blank_split) {
          Transaction *trans;
          int do_expand;
 
          PINFO ("xaccSRLoadRegister(): "
                 "load trans %d at phys row %d \n", i, phys_row);
-   
+
          /* if multi-line, then show all splits.  If dynamic then
           * show all splits only if this is the hot split. 
           */
@@ -1011,7 +1469,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                      (dynamic && xaccIsPeerSplit(split,save_current_split)); 
          if (NULL == save_current_split) {
             trans = xaccSplitGetParent (split);
-            do_expand = do_expand || (trans == reg->user_hack);
+            do_expand = do_expand || (trans == info->cursor_hint_trans);
          }
 
          if (do_expand) 
@@ -1056,7 +1514,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          }
       } else {
          PINFO ("xaccSRLoadRegister(): "
-                "skip trans %d (user hook) \n", i);
+                "skip trans %d (blank split) \n", i);
       }
    
 
@@ -1066,10 +1524,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    }
 
    /* add the "blank split" at the end.  We use either the blank
-    * split we've cached away previously in "user_hook", or we create
-    * a new one, as needed. */
-   if (reg->user_hook) {
-      split = (Split *) reg->user_hook;
+    * split or we create a new one, as needed. */
+   if (info->blank_split != NULL) {
+      split = info->blank_split;
+      if (info->pending_trans == xaccSplitGetParent(split))
+        found_pending = GNC_T;
    } else {
       Transaction *trans;
       double last_price = 0.0;
@@ -1079,8 +1538,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
-      xaccAccountInsertSplit (default_source_acc, split);
-      reg->user_hook =  (void *) split;
+      info->blank_split = split;
       reg->destroy = LedgerDestroy;
 
       /* kind of a cheesy hack to get the price on the last split right
@@ -1121,8 +1579,28 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       phys_row += lead_cursor->numRows; 
    }
 
-   /* restor the cursor to its rightful position */
-   xaccMoveCursorGUI (table, reg->cursor_phys_row, 0);
+   /* restore the cursor to its rightful position */
+   i = 0;
+   while ((save_phys_col + i < reg->num_cols) || (save_phys_col > 0)) {
+     if (gnc_register_cell_valid(table, reg->cursor_phys_row,
+                                 save_phys_col + i)) {
+       xaccMoveCursorGUI (table, reg->cursor_phys_row, save_phys_col + i);
+       break;
+     }
+     if (gnc_register_cell_valid(table, reg->cursor_phys_row,
+                                 save_phys_col - i)) {
+       xaccMoveCursorGUI (table, reg->cursor_phys_row, save_phys_col - i);
+       break;
+     }
+     i++;
+   }
+
+   /* If we didn't find the pending transaction, it was removed
+    * from the account. It might not even exist any more.
+    * Make sure we don't access it. */
+   if (!found_pending)
+     info->pending_trans = NULL;
+
    xaccRefreshTableGUI (table);
 
    /* enable callback for cursor user-driven moves */
@@ -1179,9 +1657,10 @@ LoadXferCell (ComboCell *cell,
 
 /* ======================================================== */
 
-void xaccLoadXferCell (ComboCell *cell,  
-                       AccountGroup *grp, 
-                       Account *base_account)
+static void
+xaccLoadXferCell (ComboCell *cell,  
+                  AccountGroup *grp, 
+                  Account *base_account)
 {
    char *curr, *secu;
 
@@ -1189,8 +1668,24 @@ void xaccLoadXferCell (ComboCell *cell,
    secu = xaccAccountGetSecurity (base_account);
    if (secu && (0x0 == secu[0])) secu = 0x0;
 
+   xaccClearComboCellMenu (cell);
    xaccAddComboCellMenuItem (cell, "");
    LoadXferCell (cell, grp, curr, secu);
+}
+
+/* ======================================================== */
+
+void
+xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
+{
+  AccountGroup *group;
+
+  group = xaccGetAccountRoot(base_account);
+
+  assert((group != NULL) && (base_account != NULL));
+
+  xaccLoadXferCell(reg->xfrmCell, group, base_account);
+  xaccLoadXferCell(reg->mxfrmCell, group, base_account);
 }
 
 /* =======================  end of file =================== */

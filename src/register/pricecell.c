@@ -38,6 +38,7 @@
 #define VERY_SMALL (1.0e-20)
 
 static void PriceSetValue (BasicCell *, const char *);
+static char * xaccPriceCellPrintValue (PriceCell *cell);
 
 /* set the color of the text to red, if teh value is negative */
 /* hack alert -- the actual color should probably be configurable */
@@ -66,7 +67,8 @@ static const char *
 PriceMV (BasicCell *_cell, 
          const char * oldval, 
          const char *change, 
-         const char *newval)
+         const char *newval,
+         int *cursor_position)
 {
    PriceCell *cell = (PriceCell *) _cell;
 
@@ -89,6 +91,25 @@ PriceMV (BasicCell *_cell,
    cell->amount = xaccParseUSAmount (newval);
    SET ((&(cell->cell)), newval);
    return newval; 
+}
+
+/* ================================================ */
+
+static const char * 
+PriceLeave (BasicCell *_cell, const char *val) 
+{
+   PriceCell *cell = (PriceCell *) _cell;
+   double amount;
+   char *newval;
+
+   newval = xaccPriceCellPrintValue(cell);
+
+   /* If they are identical, return the original */
+   if (strcmp(newval, val) == 0)
+     return val;
+
+   /* Otherwise, return the new one. */
+   return strdup(newval);
 }
 
 /* ================================================ */
@@ -117,6 +138,7 @@ xaccInitPriceCell (PriceCell *cell)
 
    cell->cell.use_fg_color = 1;
    cell->cell.modify_verify = PriceMV;
+   cell->cell.leave_cell = PriceLeave;
    cell->cell.set_value = PriceSetValue;
 }
 
@@ -132,35 +154,48 @@ xaccDestroyPriceCell (PriceCell *cell)
 
 /* ================================================ */
 
+static char *
+xaccPriceCellPrintValue (PriceCell *cell)
+{
+  static char buff[PRTBUF];
+  char tmpfmt[PRTBUF];
+  char tmpval[PRTBUF];
+  char *monet;
+
+  if (cell->blank_zero &&
+      (VERY_SMALL > cell->amount) && ((-VERY_SMALL) < cell->amount)) {
+
+      strcpy(buff, "");
+      return buff;
+  }
+
+  /* check for monetary-style format not natively supported by printf */
+  /* hack alert -- this type of extended function should be abstracted
+   * out to a gnc_sprintf type function, however, this is much
+   * easier said than done */
+  monet = strstr (cell->prt_format, "%m");
+  if (monet) {
+    strcpy (tmpfmt, cell->prt_format);
+    monet = strstr (tmpfmt, "%m");
+    *(monet+1) = 's';
+    xaccSPrintAmount (tmpval, cell->amount, PRTSEP);
+    snprintf (buff, PRTBUF, tmpfmt, tmpval);
+  } else {
+    snprintf (buff, PRTBUF, cell->prt_format, cell->amount);
+  }
+
+  return buff;
+}
+
+/* ================================================ */
+
 void xaccSetPriceCellValue (PriceCell * cell, double amt)
 {
-   char buff[PRTBUF];
+   char *buff;
+
    cell->amount = amt;
+   buff = xaccPriceCellPrintValue (cell);
 
-   /* if amount is zero, and blanking is set, then print blank */
-   if (cell->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
-      buff[0] = 0x0;
-   } else {
-      char *monet;
-
-      /* check for monetary-style format not natively supported by printf */
-      /* hack alert -- this type of extended function should be abstracted
-       * out to a gnc_sprintf type function, however, this is much
-       * easier said than done */
-      monet = strstr (cell->prt_format, "%m");
-      if (monet) {
-         char tmpfmt[PRTBUF];
-         char tmpval[PRTBUF];
-         strcpy (tmpfmt, cell->prt_format);
-         monet = strstr (tmpfmt, "%m");
-         *(monet+1) = 's';
-         xaccSPrintAmount (tmpval, amt, PRTSEP);
-
-         snprintf (buff, PRTBUF, tmpfmt, tmpval);
-      } else {
-         snprintf (buff, PRTBUF, cell->prt_format, amt);
-      }
-   }
    SET ( &(cell->cell), buff);
 
    /* set the cell color to red if the value is negative */
@@ -183,21 +218,20 @@ void xaccSetPriceCellFormat (PriceCell * cell, char * fmt)
 void xaccSetDebCredCellValue (PriceCell * deb, 
                               PriceCell * cred, double amt)
 {
-   deb->amount = -amt;
-   cred->amount = amt;
-
    deb->cell.fg_color = 0xff0000;
    cred->cell.fg_color = 0x0;
 
-   if (cred->blank_zero && (VERY_SMALL > amt) && ((-VERY_SMALL) < amt)) {
-      SET ( &(cred->cell), "");
-      SET ( &(deb->cell), "");
-   } else
    if (0.0 < amt) {
       xaccSetPriceCellValue (cred, amt);
-      SET ( &(deb->cell), "");
+      xaccSetPriceCellValue (deb, 0.0);
+      if (!deb->blank_zero) {
+        SET(&deb->cell, "");
+      }
    } else {
-      SET ( &(cred->cell), "");
+      xaccSetPriceCellValue (cred, 0.0);
+      if (!cred->blank_zero) {
+        SET(&deb->cell, "");
+      }
       xaccSetPriceCellValue (deb, -amt);
    }
 }

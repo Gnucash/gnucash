@@ -49,7 +49,7 @@ int loglevel[MODULE_MAX] =
  2,      /* IO */
  4,      /* REGISTER */
  2,      /* LEDGER */
- 4,      /* HTML */
+ 2,      /* HTML */
  2,      /* GUI */
  4,      /* SCRUB */
  4,      /* GTK_REG */
@@ -151,6 +151,44 @@ ultostr (unsigned long val, int base)
 }
 
 /********************************************************************\
+ * utility function to convert floating point value to a string
+\********************************************************************/
+
+static int
+util_fptostr(char *buf, double val, int prec)
+{
+  int  i;
+  char formatString[10];
+  char prefix[]  = "%0.";
+  char postfix[] = "f";
+
+  /* This routine can only handle precision between 0 and 9, so
+   * clamp precision to that range */
+  if (prec > 9) prec = 9;
+  if (prec < 0) prec = 0;
+
+  /* Make sure that the output does not resemble "-0.00" by forcing
+   * val to 0.0 when we have a very small negative number */
+  if ((val <= 0.0) && (val > -pow(0.1, prec+1) * 5.0))
+    val = 0.0;
+
+  /* Create a format string to pass into sprintf.  By doing this,
+   * we can get sprintf to convert the number to a string, rather
+   * than maintaining conversion code ourselves.  */
+  i = 0;
+  strcpy(&formatString[i], prefix);
+  i += strlen(prefix);
+  formatString[i] = '0' + prec;  /* add prec to ASCII code for '0' */
+  i += 1;
+  strcpy(&formatString[i], postfix);
+  i += strlen(postfix);
+
+  sprintf(buf, formatString, val);
+
+  return strlen(buf);
+}
+
+/********************************************************************\
  * stpcpy for those platforms that don't have it.
 \********************************************************************/
 
@@ -170,7 +208,6 @@ stpcpy (char *dest, const char *src)
  * returned from the localconv() subroutine
 \********************************************************************/
 
-/* The PrtAmtComma() routine prints a comma-separated currency value */
 
 /* THOU_SEP is a comma in U.S. but a period in some parts of Europe */
 /* CENT_SEP is a period in U.S. but a comma in some parts of Europe */
@@ -178,60 +215,60 @@ stpcpy (char *dest, const char *src)
 #define CENT_SEP '.'
 
 static int
-PrtAmtComma (char * buf, double val, int prec)
+PrintAmt(char *buf, double val, int prec, int use_commas)
 {
-   int i, ival, ncommas = 0;
-   double tmp, amt=0.0;
-   char *start = buf;
+  int  i, stringLength, numWholeDigits, commaCount;
+  char tempBuf[50];
+  char *bufPtr = buf;
 
-   /* check if we're printing infinity */
-   if (!finite(val)) {
-      strcpy (buf, "inf");
-      return 3;
-   }
+  /* check if we're printing infinity */
+  if (!finite(val)) {
+     strcpy (buf, "inf");
+     return 3;
+  }
 
-   /* Round to 100'ths or 1000'nths now.  Must do this before we start printing. */
-   if (2 == prec) val += 0.005;
-   if (3 == prec) val += 0.0005;
-
-   /* count number of commas */
-   tmp = val;
-   while (tmp > 1000.0) {
-      tmp *= 0.001;
-      ncommas ++;
-   }
-
-   /* print digits in groups of three, separated by commas */
-   for (i=ncommas; i>=0; i--) {
-      int j;
-
-      amt *= 1000.0;
-      tmp = val;
-      for (j=i; j>0; j--) tmp *= 0.001;
-      tmp -= amt;
-      ival = tmp;  
-      if (i !=ncommas) {
-        buf += sprintf (buf, "%03d", ival);   
-      } else {
-        buf += sprintf (buf, "%d", ival);   
+  util_fptostr(tempBuf, val, prec);
+  
+  if (!use_commas)
+    {
+      /* If we're not using commas, then the whole string is copied */
+      strcpy(buf, tempBuf);
+    }
+  else
+    {
+      /* Determine where the decimal place is, if there is one */
+      stringLength = strlen(tempBuf);
+      numWholeDigits = -1;
+      for (i = 0; i < stringLength; i++) {
+	if (tempBuf[i] == '.') {
+	  numWholeDigits = i;
+	  break;
+	}
       }
-      *buf = THOU_SEP; buf++;
-      amt += ival;
-   }
+      
+      if (numWholeDigits < 0)
+	numWholeDigits = stringLength;  /* Can't find decimal place, it's
+					 * a whole number */
 
-   /* place decimal point */
-   buf --; *buf = CENT_SEP; buf++;
+      /* We now know the number of whole digits, now insert commas while
+       * copying them from the temp buffer to the destination */
+      bufPtr = buf;
+      for (i = 0; i < numWholeDigits; i++, bufPtr++) {
+	*bufPtr = tempBuf[i];
+	commaCount = (numWholeDigits - i) - 1;
+	if ( (commaCount % 3 == 0) &&
+	     (commaCount != 0) &&
+	     (tempBuf[i] != '-'))
+	  {
+	    bufPtr++;
+	    *bufPtr = ',';
+	  }
+      }
+      
+      strcpy(bufPtr, &tempBuf[numWholeDigits]);
+    } /* endif */
 
-   /* print two or three decimal places */
-   if (3 == prec) {
-      ival = 1000.0 * (val-amt);
-      buf += sprintf (buf, "%03d", ival); 
-   } else {
-      ival = 100.0 * (val-amt);
-      buf += sprintf (buf, "%02d", ival); 
-   }
-
-   return (buf-start);
+  return strlen(buf);
 }
 
 int
@@ -244,32 +281,18 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    if (DEQ(val, 0.0))
      val = 0.0;
 
-   if (0.0 > val) {
-      bufp[0] = '-';
-      bufp ++;
-      val = -val;
-   }
-
    if (shrs & PRTSHR) {
-      if (shrs & PRTSEP) {
-         bufp += PrtAmtComma (bufp, val, 3);
-      } else {
-         bufp += sprintf( bufp, "%.3f", val );
-      }
+      bufp += PrintAmt(orig_bufp, val, 4, shrs & PRTSEP);
       if (shrs & PRTSYM) {
          /* stpcpy returns pointer to end of string, not like strcpy */
          bufp = stpcpy (bufp, " shrs");
       }
    } else {
-
       if (shrs & PRTSYM) {
          bufp += sprintf( bufp, "%s ", CURRENCY_SYMBOL);
       }
-      if (shrs & PRTSEP) {
-         bufp += PrtAmtComma (bufp, val, 2);
-      } else {
-         bufp += sprintf( bufp, "%.2f", val );
-      }
+
+      bufp += PrintAmt(orig_bufp, val, 2, shrs & PRTSEP);
    }
 
    /* return length of printed string */

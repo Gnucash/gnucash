@@ -80,9 +80,9 @@ item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
         GnucashSheet *sheet = item_edit->sheet;
         int xd, yd;
 
-        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &xd, &yd);
+        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &yd);
 
-        xd += gnucash_sheet_col_get_distance(sheet, sheet->left_block,
+        xd = gnucash_sheet_col_get_distance(sheet, sheet->left_block,
 					     item_edit->virt_col)
                 + sheet->left_block_offset;
         yd += gnucash_sheet_row_get_distance (sheet, sheet->top_block,
@@ -275,7 +275,7 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 	toggle_x = x + w - (toggle_width + 3);
 	toggle_y = y + 5;
 
-        item_edit->combo_toggle.toggle_offset = toggle_width + 3;
+    item_edit->combo_toggle.toggle_offset = toggle_width + 3;
 
 	item_edit_show_combo_toggle(item_edit, toggle_x, toggle_y,
 				    toggle_width, toggle_height,
@@ -507,7 +507,7 @@ item_edit_configure (ItemEdit *item_edit)
 
         item_edit->style = gnucash_sheet_get_style (item_edit->sheet,
                                                     item_edit->virt_row,
-						    item_edit->virt_col);
+                                                    item_edit->virt_col);
 
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL]);
@@ -566,22 +566,11 @@ static void
 item_edit_combo_toggled (GtkToggleButton *button, gpointer data)
 {
 	ItemEdit *item_edit = ITEM_EDIT(data);
-	GtkArrowType arrow_type;
-	GtkShadowType shadow_type;
 
 	item_edit->show_list = gtk_toggle_button_get_active(button);
 
-	if (!item_edit->show_list) {
-		item_edit_hide_list(item_edit);
-		arrow_type = GTK_ARROW_DOWN;
-		shadow_type = GTK_SHADOW_IN;
-	}
-	else {
-		arrow_type = GTK_ARROW_UP;
-		shadow_type = GTK_SHADOW_OUT;
-	}
-
-	gtk_arrow_set(item_edit->combo_toggle.arrow, arrow_type, shadow_type);
+        if (!item_edit->show_list)
+                item_edit_hide_list(item_edit);
 
 	item_edit_configure (item_edit);
 }
@@ -654,12 +643,6 @@ item_edit_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 			item_edit->show_list = FALSE;
 
 			disconnect_combo_signals(item_edit);
-
-			gtk_arrow_set(item_edit->combo_toggle.arrow,
-				      GTK_ARROW_DOWN, GTK_SHADOW_IN);
-
-			gtk_toggle_button_set_active
-				(item_edit->combo_toggle.combo_button, FALSE);
 
 			item_edit_hide_list(item_edit);
 			item_edit_hide_combo_toggle(item_edit);
@@ -800,6 +783,11 @@ item_edit_show_list (ItemEdit *item_edit, gint x, gint y,
 			      "height", (gdouble) height,
 			      "anchor", anchor,
 			      NULL);
+
+	gtk_arrow_set(item_edit->combo_toggle.arrow,
+                      GTK_ARROW_UP, GTK_SHADOW_OUT);
+
+        gtk_widget_grab_focus(GTK_WIDGET(item_edit->item_list->clist));
 }
 
 
@@ -814,6 +802,14 @@ item_edit_hide_list (ItemEdit *item_edit)
 	/* safely out of the way */
 	gnome_canvas_item_set(GNOME_CANVAS_ITEM(item_edit->item_list),
 			      "x", -10000.0, NULL);
+
+	gtk_arrow_set(item_edit->combo_toggle.arrow,
+                      GTK_ARROW_DOWN, GTK_SHADOW_IN);
+
+        gtk_widget_grab_focus(GTK_WIDGET(item_edit->sheet));
+
+        gtk_toggle_button_set_active
+                (item_edit->combo_toggle.combo_button, FALSE);
 }
 
 

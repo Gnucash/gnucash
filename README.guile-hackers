@@ -15,6 +15,53 @@ from the guile side.
 Given that and a reasonable understanding of GTK/GNOME, you should be
 able to follow what I've done.
 
+Introduction To Scheme and guile(rgmerk)
+--------------------------------
+Please skip this if you already know what Scheme is and why it's
+so cool . . . 
+
+Scheme is a dialect of LISP (List Programming), one of the earliest
+programming languages.  It makes so many things easy it's just not
+funny.  It can be a little confusing for people raised on C and Java, 
+but any time taken to learn it is made up for with easier-to-write,
+easier-to-debug, more reusable,  and more robust code.
+
+Guile is an implementation of standard Scheme which is easily
+embeddable in C, making multi-language development relatively
+straightforward.  You can easily access data and procedures from
+either end.  Guile supports a superset of R4RS (the Scheme standard).  
+For initial experimentation, you can  use Guile as an interactive Scheme 
+shell to play around with the system.  
+
+SLIB is a a library for Scheme implementations (including guile)
+that implements a large collection of useful data structures
+and algorithms.
+
+FIXME: Starting gnucash as a guile shell. .. 
+
+While the Guile documentation (in info format) explains
+Guile specifics, it doesn't have much information about Scheme,
+the language.  The Internet Scheme Repository:
+
+http://www.cs.indiana.edu/scheme-repository/home.html
+
+has quite a useful collection of information, including 
+FAQs, online copies of the Scheme standard (which is actually
+quite readable and useful), and pointers to web tutorials
+and other resources.   
+
+g-wrap
+------
+
+g-wrap is the tool used to automate the wrapping of C functions
+to make them callable from the guile code.  Gnucash installs
+its own local copy of g-wrap.  Documentation in info format 
+is available in gnucash/lib/g-wrap/doc/g-wrap.info.  Available
+C functions are wrapped in gnucash/src/g-wrap/gnc.gwp.  Pointers
+are wrapped using some stuff in gnucash/lib/g-wrap/guile/pointer.scm
+which is not documented but looks reasonably straightforward.
+
+
 Garbage collection:
 -------------------
 

@@ -108,6 +108,31 @@ if test ! -d ${PERLINCL}/CORE; then
 fi
 AC_SUBST(PERLINCL)
 
+# Check for eperl (rgmerk)
+# Permits compilation without eperl, but if it can't find eperl you
+# must either use the --with-eperl option or, at a last resort, 
+# it'll use /usr/bin/eperl.
+
+AC_PATH_PROG(EPERL,eperl,no)
+AC_ARG_WITH(eperl,
+  [  --with-eperl=FILE             which eperl executable to use ],
+  EPERL="${with_eperl}")
+
+if test x"$EPERL" = xno; then
+    AC_MSG_WARN([Can't find eperl.  Try using the --with-eperl flag.])
+    EPERL="/usr/bin/eperl"
+fi
+
+# for some reason the code needs both the full path and the basename.
+# these get dumped into src/guile/pathconfig.h
+
+EPERL_PATH="$EPERL"
+EPERL_NAME=`basename $EPERL`
+AC_SUBST(EPERL_PATH)
+AC_SUBST(EPERL_NAME)
+
+### -------------------------------------------------------------------
+
 # Check for 'swig'
 AC_PATH_PROG(SWIG,swig,no)	# Sets @SWIG@
 AC_ARG_WITH(swig,
@@ -236,6 +261,54 @@ AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
 
 AC_SUBST(XMHTML_TARGET)
 AC_SUBST(XMHTML_INC)
+
+### -------------------------------------------------------------------------
+## gtk-xmhtml
+#  if gtk-xmhtml header or library not found, gnome builds are disabled
+#  make gnome will run make gnome.disabled which echoes a warning message
+
+## XXX - need to do this because gtk-xmhtml requires glibconfig.h
+## and I don't want CPPFLAGS permanently altered.
+## If there's a better way to tackle this please let me know!
+
+OLDCPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS `$GNOME_CONFIG_BIN --cflags glib`"
+
+
+# gnome targets if all goes well
+# XXX - should we shift these to the rest of the gnome configuration
+# section?
+
+GNOME_TARGET="gnome.real"
+GNOME_STATIC_TARGET="gnome.static.real"
+
+#AC_CHECK_HEADER might work, but I'm not sure it uses CPPFLAGS
+# this guarantees it - it works.  Promise!!
+AC_MSG_CHECKING([gtk-xmhtml/gtk-xmhtml.h])
+AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>], AC_MSG_RESULT(yes) ,
+    AC_MSG_WARN([Cannot find gtk-xmhtml.h -- gnome build disabled (not required for motif)]) 
+    GNOME_TARGET="gnome.disabled" 
+    GNOME_STATIC_TARGET="gnome.disabled")
+
+#undo damage to CPPFLAGS
+CPPFLAGS="$OLDCPPFLAGS"
+
+OLDLDFLAGS="$LDFLAGS"
+LDFLAGS="$LDFLAGS `$GNOME_CONFIG_BIN --libs gtkxmhtml`"
+    
+#check for gtkxmhtml, export library link to variable GTK_XMHTML
+AC_CHECK_LIB(gtkxmhtml, gtk_xmhtml_new,
+        GTK_XMHTML="gtkxmhtml",
+        AC_MSG_WARN([Cannotfind libgtkxmhtml -- gnome build disabled (not required for motif)]) 
+	GNOME_TARGET="gnome.disabled" 
+	GNOME_STATIC_TARGET="gnome.disabled")
+AC_SUBST(GTK_XMHTML)
+LDFLAGS="$OLDLDFLAGS"
+    
+# XXX - should we export these here or later in the configure script?
+AC_SUBST(GNOME_TARGET)
+AC_SUBST(GNOME_STATIC_TARGET)
+
 
 ### --------------------------------------------------------------------------
 ## Nana
@@ -394,6 +467,14 @@ AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_SHAREDIR)
 
+
+# HACK : inserts the path to gnucash.pm, which is used in the
+# reporting code and is defined in gnucash.h
+
+GNC_RUNTIME_PERLLIBPATH=`eval echo ${GNC_LIBDIR}`
+
+AC_SUBST(GNC_RUNTIME_PERLLIBPATH)
+
 # We have to handle these here because they are the *runtime* (not install
 # time) defaults, and they're substituted into bootstrap.scm and gnucash.h
 # directly, so:
@@ -429,6 +510,7 @@ AC_OUTPUT(Makefile
           src/register/Makefile
 	  src/register/gnome/Makefile
           src/reports/Makefile
+	  src/reports/pathconfig.h
           src/swig/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
@@ -438,6 +520,6 @@ AC_OUTPUT(Makefile
 
 chmod +x gnucash
 
-make -f Makefile.config.finish prefix=${prefix} \
-                               GNC_SHAREDIR=${GNC_SHAREDIR} \
-                               GNC_CONFIGDIR=${GNC_SHAREDIR} 
+${MAKE-make} -f Makefile.config.finish prefix=${prefix} \
+                           GNC_SHAREDIR=${GNC_SHAREDIR} \
+                          GNC_CONFIGDIR=${GNC_SHAREDIR} 

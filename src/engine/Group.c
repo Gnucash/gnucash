@@ -110,6 +110,15 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+void
+xaccAccountGroupMarkNotSaved (AccountGroup *grp)
+{
+   if (!grp) return;
+   grp->saved = GNC_F;
+}
+
+/********************************************************************\
+\********************************************************************/
 int
 xaccAccountGroupNotSaved (AccountGroup *grp)
 {
@@ -762,6 +771,13 @@ xaccGroupGetAccount (AccountGroup *grp, int i)
    if (!(grp->account)) return NULL;
    if((0>i) || (i >= grp->numAcc)) return NULL;
    return (grp->account[i]);
+}
+
+Account *
+xaccGroupGetParentAccount (AccountGroup * grp)
+{
+  if (!grp) return NULL;
+  return grp->parent;
 }
 
 double

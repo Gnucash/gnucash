@@ -11,8 +11,6 @@
  *
  * Handles splits
  *
- * If the SHOW_TDETAIL flag is set, then transaction blah blah is shown.
- * Otherwise it is not (useful when not displaying splits, gives old-styule reg).
  * Hack alert -- finish documenting this
  *
  * The xaccConfigSplitRegister() subroutine allows the configuration 
@@ -107,6 +105,14 @@
 #define MOD_NEW    0x2000
 #define MOD_ALL    0x3fff
 
+/* Types of cursors */
+typedef enum
+{
+  CURSOR_SPLIT,
+  CURSOR_TRANS,
+  CURSOR_NONE
+} CursorType;
+
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
  */
@@ -161,11 +167,9 @@ struct _SplitRegister {
 
    BasicCell *header_label_cells[NUM_CELLS];
 
-   /* user_hook allows users of this object to hang
+   /* user_data allows users of this object to hang
     * private data onto it */
-   void *user_hook;
-   void *user_hack;
-   void *user_huck;
+   void *user_data;
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
@@ -180,6 +184,13 @@ void            xaccDestroySplitRegister (SplitRegister *);
 
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);
+
+/* Clears all change flags in the register. Does not alter values */
+void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);
+
+/* Returns the type of the current cursor */
+CursorType      xaccSplitRegisterGetCursorType (SplitRegister *reg);
+
 
 #endif /* __XACC_SPLITREG_H__ */
 

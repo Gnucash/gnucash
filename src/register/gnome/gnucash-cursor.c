@@ -39,17 +39,6 @@ enum {
 };
 
 
-#if 0
-static void
-gnucash_cursor_update (GnomeCanvasItem *item, double *affine,
-		       ArtSVP *clip_path, int flags)
-{
-        if (GNOME_CANVAS_ITEM_CLASS(gnucash_cursor_parent_class)->update)
-                (*GNOME_CANVAS_ITEM_CLASS(gnucash_cursor_parent_class)->update)
-			(item, affine, clip_path, flags);
-}
-#endif
-
 static void
 gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
 				 gint *w, gint *h)
@@ -58,12 +47,12 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor, gint *x, gint *y,
         GnucashItemCursor *item_cursor =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
 
-        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(cursor->sheet), x, y);
+        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(cursor->sheet), NULL, y);
 
         *y += gnucash_sheet_row_get_distance (sheet, sheet->top_block,
 					      item_cursor->row)
                 + sheet->top_block_offset;
-        *x += gnucash_sheet_col_get_distance (sheet, sheet->left_block,
+        *x = gnucash_sheet_col_get_distance (sheet, sheet->left_block,
 					      item_cursor->col)
                 + sheet->left_block_offset;
 
@@ -255,12 +244,17 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dw = item_cursor->w;
 			dh = item_cursor->h;
 
-			gdk_gc_set_foreground (cursor->gc, &gn_light_gray);
+
 			gdk_gc_set_line_attributes (cursor->gc, 1,
 						    GDK_LINE_SOLID, -1, -1);
 
+			gdk_gc_set_foreground (cursor->gc, &gn_light_gray);
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx+1, dy+1, dw-2, dh-2);
+
+			gdk_gc_set_foreground (cursor->gc, &gn_black);      
+			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
+					    dx+2, dy+2, dw-4, dh-4);
         }
 }
 
@@ -332,6 +326,12 @@ gnucash_cursor_set (GnucashCursor *cursor, gint block_row, gint block_col,
         gnucash_cursor_set_cell (cursor, cell_row, cell_col);
 
         gnucash_cursor_configure (cursor);
+
+        gnome_canvas_item_set (GNOME_CANVAS_ITEM(sheet->header_item),
+                               "GnucashHeader::cursor_type",
+                               cursor->style->cursor_type,
+                               "GnucashHeader::cursor_row", cell_row,
+                               NULL);
 
         gnucash_cursor_request_redraw (cursor);
 }
@@ -505,16 +505,9 @@ gnucash_cursor_class_init (GnucashCursorClass *cursor_class)
         object_class->set_arg = gnucash_cursor_set_arg;
         object_class->destroy = gnucash_cursor_destroy;
 
-/* GnomeCanvasItem method overrides */
-
+        /* GnomeCanvasItem method overrides */
         item_class->realize     = gnucash_cursor_realize;
         item_class->unrealize   = gnucash_cursor_unrealize;
-/*
-          item_class->update      = gnucash_cursor_update;
-          item_class->point       = gnucash_cursor_point;
-          item_class->translate   = gnucash_cursor_translate;
-          item_class->event       = gnucash_cursor_event;
-*/
 }
 
 
@@ -589,5 +582,3 @@ gnucash_cursor_new (GnomeCanvasGroup *parent)
   c-basic-offset: 8
   End:
 */
-
-

@@ -140,6 +140,7 @@ char *         xaccAccountGetCurrency (Account *);
 char *         xaccAccountGetSecurity (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
+Account *      xaccAccountGetParentAccount (Account *);
 AccInfo *      xaccAccountGetAccInfo (Account *);
 
 double         xaccAccountGetBalance (Account *);

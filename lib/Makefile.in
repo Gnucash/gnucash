@@ -69,13 +69,13 @@ dist:
 	chmod +x g-wrap/missing
 
 
-motif:	g-wrap-install
+motif motif.static: g-wrap-install
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
-gnome:	g-wrap-install
+gnome gnome.static: g-wrap-install
 
-qt:	g-wrap-install
+qt: g-wrap-install
 
 
-.PHONY: all gnome motif qt dist
+.PHONY: all gnome gnome.static motif motif.static qt dist

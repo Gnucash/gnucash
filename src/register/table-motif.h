@@ -32,6 +32,9 @@
 
 #include <Xm/Xm.h>
 
+#include "gnc-common.h"
+
+
 /* We use C not C++ in this project, but we none-the-less need 
  * the general mechanism of inheritance.  The three #defines
  * below implement that.
@@ -97,7 +100,7 @@ void        xaccRefreshTableGUI (Table *);
  * redrawn. Thus, the use of this routine should result in significantly
  * less screen color flashing than the use of the full-table refresh routine.
  */
-void        xaccRefreshCursorGUI (Table *);
+void        xaccRefreshCursorGUI (Table *, gncBoolean do_scroll);
 
 #endif /* __XACC_TABLE_MOTIF_H__ */
 /* ================== end of file ======================= */

@@ -617,6 +617,34 @@ gnc_ui_get_account_full_balance(Account *account)
 }
 
 
+char * gnc_ui_get_account_full_name(Account *account, const char *separator)
+{
+  Account *a;
+  gchar **names, *name;
+  gint num = 0;
+
+  assert(account != NULL);
+
+  /* Figure out how many names */
+  for (a = account; a != NULL; a = xaccAccountGetParentAccount(a))
+    num++;
+
+  /* allocate the memory, plus one for null termination */
+  names = g_new0(gchar *, num + 1);
+
+  /* Make the names array */
+  for (a = account, num--; a != NULL;
+       a = xaccAccountGetParentAccount(a), num--)
+    names[num] = xaccAccountGetName(a);
+
+  name = g_strjoinv(separator, names);
+
+  g_free(names);
+
+  return name;
+}
+
+
 char * gnc_ui_get_account_field_value_string(Account *account, int field)
 {
   assert(account != NULL);
@@ -667,6 +695,22 @@ void gnc_set_tooltip(GtkWidget *w, const gchar *tip)
 }
 
 
+static void
+gnc_option_menu_cb(GtkWidget *w, gpointer data)
+{
+  GNCOptionCallback cb;
+  gpointer _index;
+  gint index;
+
+  cb = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_cb");
+
+  _index = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_index");
+  index = GPOINTER_TO_INT(_index);
+
+  cb(w, index, data);
+}
+
+
 /********************************************************************\
  * gnc_ui_create_option_button                                      *
  *   create an option button given the option structure             *
@@ -692,11 +736,25 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
   for (i = 0; i < num_options; i++)
   {
     menu_item = gtk_menu_item_new_with_label(option_info[i].name);
+    gnc_set_tooltip(menu_item, option_info[i].tip);
     gtk_widget_show(menu_item);
 
-    gtk_signal_connect(GTK_OBJECT(menu_item), "activate",
-                       GTK_SIGNAL_FUNC(option_info[i].callback),
-		       option_info[i].user_data);
+    gtk_object_set_data(GTK_OBJECT(menu_item),
+                        "gnc_option_cb",
+                        option_info[i].callback);
+
+    gtk_object_set_data(GTK_OBJECT(menu_item),
+                        "gnc_option_index",
+                        GINT_TO_POINTER(i));
+
+    gtk_object_set_data(GTK_OBJECT(menu_item),
+                        "gnc_option_menu",
+                        omenu);
+
+    if (option_info[i].callback != NULL)
+      gtk_signal_connect(GTK_OBJECT(menu_item), "activate",
+                         GTK_SIGNAL_FUNC(gnc_option_menu_cb),
+                         option_info[i].user_data);
 
     gtk_menu_append(GTK_MENU(menu), menu_item);
   }

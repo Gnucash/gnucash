@@ -45,6 +45,7 @@ COMMON_SRCS := basiccell.c cellblock.c \
 MOTIF_SRCS := table-motif.c combocell-motif.c
 GNOME_SRCS := table-gnome.c
 QT_SRCS    := table-qt.cpp combocell-qt.cpp
+CLEAN_SUBDIRS := gnome
 ######################################################################
 
 all:

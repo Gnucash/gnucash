@@ -1,3 +1,755 @@
+1999-12-26  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-report.c (reportWindow): Add a properties
+ 	button to the html window icon bar to allow the report parameters
+ 	dialog to be brought up.
+	(reportWindow): Add a title to the properties dialog.
+
+	* src/gnome/window-html.c (htmlWindow): Add arguments to allow the
+ 	caller to add its own icons to the window.
+
+1999-12-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/global-options.c (gnc_show_options_dialog): Added
+ 	title.
+
+	* src/gnome/window-main.c: removed eperl reports menu items
+
+	* src/gnome/window-report.c: new file. Report-specific gnome
+	gui code will reside here.
+
+1999-12-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-html.c: take out help and report specific code.
+
+	* src/gnome/dialog-options.c: removed global options code.
+	These routines now with with arbitrary options databases.
+
+	* src/gnome/global-options.c: new function. global options are
+ 	implemented here. This uses dialog-options and option-util
+ 	functions.
+
+	* src/gnome/option-util.c: removed global options code.
+
+	* src/gnome/window-register.c (gnc_build_ledger_style_menu): set
+ 	the style menu to the default on creation.
+
+1999-12-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/account-tree.c (gnc_account_tree_refresh): thaw after
+ 	all changes.
+
+1999-12-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/option-util.c: many new functions. Rewrote this to
+	add the concept of option databases, a data structure which holds
+	a collection of options and allows access to them. This will be
+	used to hold, e.g., options for a report window. The old functions
+	now just call the new ones with the 'global' configuation option
+	database as the database argument.
+
+	* src/gnome/dialog-report.c: Rename dialog-trans-report.? to
+	dialog-report.?. This will construct a generic report dialog.
+
+1999-12-21  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-trans-report.c: New file.  GNOME code for
+ 	creating a dialog box for information on the transaction report.
+  	At the moment only contains a stub for the actual dialog box code.
+
+	* src/gnome/dialog-trans-report.h: New file.  Headers for 
+	 the dialog box stuff, obviously!
+
+	* src/gnome/Makefile.in: modified to compile dialog-trans-report.c
+
+1999-12-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c: enhance this window with
+	new, edit, and delete transaction buttons.
+
+1999-12-20  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_size_allocate): Configure the item_editor on a
+ 	resize.
+
+	* src/register/gnome/gnucash-cursor.c
+ 	(gnucash_cursor_get_pixel_coords): Don't use the horizontal scroll
+ 	offset.
+
+	* src/register/gnome/gnucash-item-edit.c
+ 	(item_edit_get_pixel_coords): Ditto.
+
+	* src/register/gnome/gnucash-item-list.c (gnc_item_list_new): Set
+ 	the "x" coordinate on creation.
+
+1999-12-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (regWindowLedger): get the default
+	register type guile option to set the register style.
+	(regRefresh): set the toolbar button display based on the guile
+	option value.
+
+1999-12-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/MultiLedger.c (xaccRegisterRefreshAllGUI): new function.
+	call gui refresh on all registers.
+
+	* src/MultiLedger.h: remove unecessary externs.
+
+1999-12-19  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_update_adjustments): Update the horizontal
+ 	adjustments, too.
+	(gnucash_register_new): Attach the horizontal scrollbar to the
+ 	horizontal adjustment.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_set_arg):
+ 	Hook up the hadjustment from the sheet so that they scroll
+ 	horizontally together.
+
+1999-12-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c: applied Grant Likely's patch to the number
+	formatting routines.
+
+	* src/register/splitreg.c: applied Grant Likely's patch to make
+ 	stock register have 4 decimal places of accuracy.
+
+	* Applied Christopher Brown's html and QIFIO.c patch.
+
+1999-12-19  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/src/report/transaction-report.scm: New file. Will contain
+ 	code for doing a transaction report on an account. At this stage
+ 	all it does is display unformatted raw scheme lists.
+ 	
+	* README.guile-hackers: Added general information about Scheme and
+ 	a pointer to net resources about it. Also explained a little
+ 	about g-wrap and gave a pointer to the documentation for it.
+
+1999-12-18  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): Don't set the width of the widget,
+ 	let it find it's own width.
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_sheet_style_set_dimensions): Reworked extensively.  It
+ 	now tries very hard to fit the cursors in the register window.
+  	Supports a number of layout options for the cursors, as detailed
+ 	in the source.
+
+1999-12-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (gnc_register_create_tool_bar):
+ 	Don't cause a legister refresh.
+
+1999-12-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-edit.c (gnc_ui_EditAccWindow_ok_cb): refresh
+ 	all the registers.
+
+	* src/gnome/dialog-add.c (gnc_ui_accWindow_create_account):
+ 	refresh all the registers.
+
+	* src/gnome/window-register.c (regRefresh): reload the transfer
+ 	cells.
+
+	* src/SplitLedger.c (xaccSRLoadXferCells): new function. Load the
+	transfer cells in a split register.
+
+	* src/register/gnome/combocell-gnome.c (xaccClearComboCellMenu):
+ 	new function. clear all items in the combocell menu.
+
+1999-12-16  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): Use the
+	exit flags from the cellblock to decide how to set
+	exit_register, and don't change entries in the traverse arrays
+	to positive.
+
+	* src/register/splitreg.c (configTraverse): Mark all the exit rows
+	and columns, too.
+
+	* src/register/cellblock.h: Add variables to the CellBlock struct
+	that flag the exit cells.  We can't use negative entries in the
+	traverse arrays anymore, since left traverses sometimes need
+	valid negative directions.
+
+1999-12-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/pricecell.c (xaccPriceCellPrintValue): new
+ 	function.  return a pointer to a static string buffer with the
+	cell amount printed.
+	(xaccSetPriceCellValue): simplify with above function.
+	(PriceLeave): new leave callback for price cells. Pretty-prints
+	cell value using xaccPriceCellPrintValue.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_cursor_move):
+ 	have this function take physical instead of virtual coordinates.
+  	This function now 'does the move' using wrapVerifyCursorPosition.
+	It has smarts that were in the three functions below.
+	It returns TRUE if the current cell changed.
+	(gnucash_button_press_event): simplify
+	(gnucash_sheet_key_press_event): simplify
+	(gnucash_sheet_goto_virt_row_col): simplify
+
+1999-12-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): take
+ 	out the reverify fields. These are unnecessary for the auto modes
+ 	(at least for gnome) and complicate the leave semantics.
+
+	* src/SplitLedger.c (xaccSRGetCurrentTrans): use the register
+ 	physical row and not the table. needed for auto mode movement.
+
+	* src/register/table-allgui.c (gnc_table_leave_update): do the
+ 	wrapverify after we check for changes. I'm not sure if wrapverify
+ 	could change the outcome of this, but doing the check after the
+ 	wrap verify makes no sense since the row and col values aren't
+ 	meaningful anymore.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_deactivate_cursor_cell): always call the leave
+ 	update, even for "bad" locations. We need the wrap verify that
+ 	happens in the gnc_table_leave_update.
+
+1999-12-15  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-add.c (xaccSetDefaultNewaccountCurrency): Added
+ 	an interface to set the default currency for new accounts.
+
+	* src/scm/prefs.scm (gnc:make-string-option) added a new option
+ 	generator for strings, used this to add a "default new account
+ 	currency" option
+
+	* src/gnome/top-level.c (gnc_configure_newacc_currency_cb)
+ 	callback to update the default currency when options are changed
+	(default_configure_newacc_currency) does the work of updating
+	(gnucash_ui_init) registered the new callback
+
+1999-12-14  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): a fix
+ 	for the auto modes.
+
+	* src/SplitLedger.c (xaccSRCountRows): Look for the cursor
+ 	position using the transaction, as well as the split. Useful when
+ 	changing modes when you are on a blank split in multi-line.
+	(xaccSRGetCurrentTrans): new function. Gets current transaction.
+  	Works when you are on blank splits as well.
+	(LedgerTraverse): save the old register values and then restore
+ 	them.
+
+1999-12-13  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): check for a valid header row before
+ 	proceeding.
+
+1999-12-13  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-cursor.c (gnucash_cursor_set): Set
+ 	the type and row arguments in the header.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_draw): Tweak
+ 	the coords on the separator line a bit.  Draw the header based on
+ 	header->type and header->row.
+	(gnucash_header_set_arg): Add two new arguments to support setting
+ 	the type of the header from the current cursor and the row within
+ 	the cursor to draw.
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_sheet_style_compile): Set the header font.
+
+1999-12-13  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/option-util.c (gnc_lookup_multichoice_option): Rob
+ 	Merkel's patch.
+
+	* src/engine/date.c (printDate): Rob Merkel's patch to i18n date
+ 	formats.
+
+	* src/gnome/top-level.c (gnc_configure_date_format): Rob Merkel's
+	patch to i18n date formats.
+
+1999-12-12  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): Put an
+ 	assert(0) in the default case, since now we handle all possible
+ 	cases.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_key_press_event): Remove hack to wrap around when
+ 	moving the cursor.  splitreg.c takes care of this, after a
+ 	fashion.
+
+1999-12-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/combocell-gnome.c (disconnect_list_signals):
+ 	if the list has been destroyed, don't bother.
+	(connect_list_signals): ditto.
+
+1999-12-10  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/splitreg.c (configTraverse): Configure left
+ 	traverses, too.
+
+	* src/register/cellblock.[c,h] (xaccInitCellBlock): Allocate left
+ 	traverse matrices.
+ 	(FreeCellBlockMem): Free left traverse matrices.
+ 	(xaccNextLeft): New function.
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): Add
+ 	support for left traverses.
+
+1999-12-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (jump_cb): new callback. Used to
+ 	jump to 'other' account.
+
+	* src/gnome/option-util.c: modify multichoice
+ 	functions. multichoice options are now a list of vectors,
+	where each vector contains the value, name, and description.
+
+	* src/gnome/dialog-options.c (gnc_option_set_ui_widget): Rob
+ 	Merkel's patch to add the option name to a multichoice option.
+
+1999-12-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-utils.c (gnc_build_option_menu): change this
+ 	function so that the callback includes the index of the selection
+ 	as well as the user_data.
+
+	* src/gnome/option-util.c
+ 	(gnc_option_value_num_permissible_values): new function. return #
+ 	of permissible values.
+	(gnc_option_value_permissible_value_index): new function. search
+ 	for SCM value in permissible value list.
+	(gnc_option_value_permissible_value_name): new function. return
+ 	name of indexth permissible value.
+	(gnc_option_value_permissible_value_help): new function. return
+ 	help of indexth permissible value.
+
+	* src/gnome/dialog-options.c (gnc_option_set_ui_value): add
+ 	multichoice option.
+	(gnc_option_get_ui_value): add multichoice option.
+	(gnc_option_multichoice_cb): new function. callback for
+ 	multichoice buttons. We use an object data with key
+ 	"gnc_multichoice_index" to store the index with the option menu.
+	(gnc_option_create_multichoice_widget): new function. create the
+ 	widget for multichoice options.
+	(gnc_option_set_ui_widget): add multichoice option.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_block_destroy): Don't free the entries and colors,
+ 	that is done by gnucash_sheet_block_clear_entries now.
+	(gnucash_sheet_block_clear_entries): Set the freed pointers to
+ 	NULL for safety.
+
+1999-12-09  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-color.c (color_hash): The argument is
+ 	an argb, not a GdkColor. So we'll just use its value directly.
+  	This fixes a bug in that we were getting lots of failed color
+ 	lookups in the hash table, and therefore lots of redundant
+ 	insertions.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_block_clear_entries): Free entries, fg_colors,
+ 	bg_colors here. We were leaking [fg,bg]_colors.
+
+
+1999-12-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (regWindowLedger): set the window
+	policy to allow shrinking and growing.
+
+	* src/SplitLedger.c (xaccSRSaveRegEntry): change the memo
+	before you create the 'other' split, so it gets the same memo.
+	Also, if we are committing the blank split, insert it into the
+	account before we create the 'other' split, so the other split
+	can get a parent account, too.
+
+1999-12-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/main.scm (gnc:ui-finish): destroy the ui subwindows
+	before doing a file-query-save. The register windows need to
+	be closed before saving, in case there are edited transactions.
+
+	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): new
+ 	function.  used by guile to destroy all non-main windows.
+
+	* src/gnome/window-help.c (gnc_ui_destroy_html_windows): new
+ 	function.  destroy any help or report windows open.
+
+1999-12-08  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-cursor.c (gnucash_item_cursor_draw):
+ 	Draw an inner rectangle in the cell cursor.  This balances the
+ 	cursor top/bottom versus sides, and fixes some ugliness especially
+ 	in double line mode.
+
+1999-12-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRLoadRegister): restore original
+ 	position a bit more accurately.
+
+1999-12-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/text-export.scm (gnc:account-transactions-export-as-text):
+	return #f as value so the traversal keeps going. (See Group.h).
+
+	* src/g-wrap/gnc-helpers.c: use gh_long2scm instead of the
+	long long version. This is incorrect for very large values,
+	but longlong doesn't seem to be working right now.
+
+	* src/engine/LedgerUtils.c (accListHasAccount): new function.
+	search for account in list.
+
+	* src/MultiLedger.c: Only add the leader if it wasn't in the list.
+
+	* src/gnome/window-register.c (gnc_register_create_menu_bar):
+	Added an option to scrub the account. Changed Register menu
+	to Account menu.
+
+	* src/engine/Transaction.c (MARK_SPLIT): mark the account group
+	as not saved. Ensures we get a "do you want to save" dialog.
+
+	* src/register/gnome/gnucash-sheet.c (compute_optimal_height):
+	request height for DEFAULT_REGISTER_ROWS rows.
+
+	* src/gnome/window-register.c (deleteCB): fancy deletes.
+
+1999-12-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRSaveRegEntry): Insert the blank split
+ 	into the account when it is committed, not when it is created.
+  	Otherwise, the blank split gets saved to a file if you save with
+ 	an open register. Also, it gets stuck in the reconcile window if
+ 	you open that with an open register.
+
+	* src/register/pricecell.c (xaccSetDebCredCellValue): simplify
+	and fix value setting bug.
+
+	* src/SplitLedger.c (xaccSRCancelCursorTransChanges): new
+ 	function. Cancel the changes to the current transaction.
+
+	* src/motif/RegWindow.c (cancelCB): use SR functions instead.
+
+	* src/g-wrap/gnc.gwp: add wrapper for xaccGroupGetBalance
+
+	* src/gnome/window-register.c (regWindowLedger): take out the size
+ 	code altogether.
+
+1999-12-06  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c (DEFAULT_REGISTER_WIDTH):
+ 	Increase this a little, so at least a checking account register is
+ 	drawn correctly.  This is a hack for now anyway until the
+ 	computations in gnucash-style.c are reworked.
+
+	* src/gnome/window-register.c (regWindowLedger): Comment out the
+ 	call to gtk_widget_set_usize (), so the register window finds it's
+ 	own natural size.
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): Compute w, h correctly.
+
+1999-12-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (closeCB): Query the user as to
+ 	whether or not to save a changed transaction.
+
+	* src/MultiLedger.c (xaccLedgerDisplayClose): Only refresh
+	if there were really changes.
+
+	* src/SplitLedger.c (LedgerDestroy): Paranoia checks.
+
+	* src/gnome/window-register.c (regWindowLedger): catch the register
+	"activate_cursor" signal. Upon receipt, record the transaction and
+	move to the next virtual row.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_register_goto_next_virt_row): new function. Cause the
+	register cursor to advance to the next virtual row.
+
+	* src/register/gnome/gnucash-sheet.h: Add a "activate_cursor"
+ 	callback to the register that is emitted when the user pressed
+ 	return.
+
+1999-12-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-main.c (gnc_ui_mainWindow_scrub): new function.
+  	Scrub the current account.
+	(gnc_ui_mainWindow_toolbar_open_subs): new function.
+	Open subaccounts.
+
+	* src/gnome/window-register.c (gnc_register_raise): new function.
+	Cause the given register window to be raised to the top.
+
+	* src/gnome/scripts_menu.c (gnc_extensions_menu_add_item): We have
+ 	to register the scheme scripts to make sure they aren't
+ 	garbage-collected.
+	(gnc_extensions_shutdown): New function. Call when shutting down
+	to free memory structures and unregister scheme scripts.
+
+	* src/gnome/window-register.c (gnc_register_create_popup_menu): new
+	function. Create a popup menu for the register.
+	(regWindowLedger): Add the popup menu to the register.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_button_press_event):
+	return FALSE for unused events so they are passed up the hierarchy.
+
+	* src/gnome/window-adjust.c (adjBWindow): use fully qualified
+	account name in window title.
+
+	* src/gnome/window-register.c (regWindowLedger): use fully
+ 	qualified name in the title of the window.
+
+	* src/gnome/dialog-utils.c (gnc_ui_get_account_full_name): new
+ 	function. Construct the fully-qualified account name using the
+	given separator string.
+
+	* src/engine/Account.c (xaccAccountGetParentAccount): new function.
+	Return the parent account of an account.
+
+	* src/engine/Group.c (xaccGroupGetParentAccount): new function.
+	Return the parent account of a group.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_key_press_event):
+	respond to keypad directional keys.
+
+1999-12-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRLoadRegister): When we refresh, look
+ 	for the pending transaction. If we don't find it, clear the
+ 	pending transaction to prevent it being committed later.
+
+	* src/g-wrap/gnc.gwp: added binding for reportWindowDirect
+
+	* src/gnome/window-register.c (helpCB): help window should not
+	be parented.
+
+	* src/gnome/window-main.c (gnc_ui_help_cb): help window should
+	not be parented.
+	(gnc_ui_reports_cb): reports window should not be parented.
+
+	* src/engine/Transaction.c (xaccTransBeginEdit): Check for an
+ 	already open transaction.
+	(xaccTransIsOpen): new function. returns true if transaction
+	is open for editing.
+
+	* src/gnome/window-register.c (regWindowLedger): Use a gnome dock
+ 	to hold the window contents. This is more flexible.
+	(gnc_register_create_tool_bar): use graphical buttons. Also, don't
+ 	create the handle box, the gnome dock item will handle that.
+	(gnc_register_create_menu_bar): don't create the handle box.
+
+	* src/reports/Sheet.c: Rob Merkel's patch for locating eperl
+
+	* src/gnome/account-tree.c (gnc_account_tree_refresh): tighter
+ 	bounds on adjustment value. Prevents quirks when refreshing to
+	a smaller number of accounts.
+
+	* configure.in: Rob Merkel's eperl and gtkxmhtml build patches
+
+	* Makefile.in: Rob Merkel's patch to enforce gtkxmhtml requirement
+
+	* src/gnome/window-register.c (deleteCB): use
+ 	xaccSRDeleteCurrentSplit to delete the split.
+
+1999-12-02  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/combocell-gnome.c (moveCombo): disconnect
+	the list signals.
+
+	* src/SplitLedger.c (LedgerMoveCursor): update cursor_phys_row and
+ 	cursor_virt_row in the SplitRegiter.
+	(xaccSRDeleteCurrentSplit): new function. delete the current split
+ 	in the register.
+	(xaccSRCountRows): don't move the saved physical and virtual rows
+	if the current split was NULL.
+
+	* Makefile.in: Added Tyson Dowd's rules to rerun autoconf
+	and configure when needed.
+
+1999-12-01  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/txn-create.scm: remove trailing garbage.
+
+	* src/scm/srfi: new directory containing source for various Scheme
+	Requests for Implementation.  We now have srfi-8 and srfi-1.
+	These are very useful.  Docs are available at
+	http://srfi.schemers.org/.
+
+	* src/scm/report/folio.scm: new file implementing
+	Reports/report-folio.phtml.  Not finished, but not loaded either.
+
+	* src/scm/report/dummy.scm: new file to test the report system.
+	Shows the current date.
+
+	* src/scm/report/balance-and-pnl.scm: new file to generate balance
+	sheet and profit and loss reports.  Implements
+	Reports/report-baln.phtml and Reports/report-pnl.phtml.  The code
+	in here could be better, but it's not awful.  It's mostly a
+	straight eperl port.
+
+	* src/scm/report.scm: new file implementing the initial
+	scheme-based report system.
+
+	* src/scm/main.scm: use the new depend mechanism and load the new
+	srfis
+
+	* src/scm/extensions.scm: reformat so all the code doesn't go off
+	the right side of a normal screen (with tabs set to 8, etc).
+	Linas might veto this, but I thought it was worthwhile.
+
+	* src/scm/depend.scm: new file adding a support/depend mechanism.
+	Modify other files to start using it.
+
+1999-11-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-help.c: extensive rewrite. Revamped look to use
+	dockable toolbar. Handle motion keys. Escape key closes window.
+	Graphics are now loaded.
+
+1999-11-28  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/table-allgui.c (doMoveCursor): don't scroll when we
+	update the cursor after the the callback.
+
+	* src/register/table-gnome.c (doRefreshCursorGUI): same as below
+
+	* src/register/table-motif.c (doRefreshCursorGUI): same as below
+
+	* src/register/table-allgui.c (xaccRefreshCursorGUI): add a
+ 	do_scroll argument to determine whether the gui should scroll to
+ 	make the cursor visible. This lets us cut down on flashing.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_table_load):
+ 	try to avoid scrolling
+	(gnucash_sheet_cursor_set_from_table): remove redundant call to
+ 	update adjustments.
+
+	* src/gnome/window-register.c (cancelCB): use
+ 	xaccSplitRegisterClearChangeFlag.
+	(gnc_register_create_tool_bar): right-align the displayed balances
+
+	* src/register/splitreg.c (xaccSplitRegisterClearChangeFlag): new
+ 	function. Clear the change flags of the register.
+
+	* src/SplitLedger.c (xaccSRCancelCursorChanges): new
+ 	function. Cancel the changes made to the current cursor.
+
+1999-11-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (regWindowLedger): set default sort
+	order to the standard order.
+	(gnc_build_ledger_sort_order_menu): add the standard order to the
+	list of options.
+	(gnc_ledger_sort_cb): handle the standard order
+
+	* src/engine/Query.c (xaccQuerySetSortOrder): added BY_STANDARD and
+ 	BY_NONE sort orders.
+
+	* src/register/splitreg.c (configLayout): configure the single
+ 	cursor last so the header is the most reasonable. This is a
+ 	hack. Eventually, we should probably switch headers dyamically.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_register_goto_virt_row_col): replaces and generalizes
+ 	gnucash_sheet_go_to_last_row.
+
+	* src/gnome/window-register.c (gnc_register_jump_to_blank): new
+ 	function to jump to the blank split.
+	(new_trans_cb): use gnc_register_jump_to_blank
+	(regWindowLedger): jump to the blank split with above function
+ 	before returning
+
+	* src/SplitLedger.c (xaccSRGetSplitRowCol): new function
+	(xaccSRGetBlankSplit): new function
+
+	* src/register/splitreg.c (configLabels): apply Rob Walker's patch
+	to fix the labels.
+
+	* src/gnome/window-register.c (gnc_register_date_cb): set start
+ 	date to the first second of the day selected and the end date to
+ 	the last second of the day selected.
+
+	* src/engine/Query.c (xaccQueryGetSplits): fixed a problem to
+ 	prevent returning one split too many. We need to check for the
+	max date before we add the split.
+
+1999-11-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_go_to_last_row): 
+	jump to the last row in the sheet. This will be the blank split.
+
+	* src/gnome/window-register.c (gnc_register_create_menu_bar): add
+	a menu item for moving to the blank split
+	(regWindowLedger): jump to the last row, i.e., the blank split,
+	before you return.
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+ 	make the reconcile cell visible in mult-line mode. It's not
+ 	active, but it looks better.
+
+	* src/SplitLedger.c (LedgerMoveCursor): tell xaccSRSaveRegEntry
+ 	which transaction we are moving to.
+	(xaccSRSaveRegEntry): add an argument to indicate which
+ 	transaction will be current after the save. This allows us to
+ 	commit right away if we are changing transactions and keeps the
+ 	register gui in sync with the engine.
+
+	* src/register/table-allgui.c (doMoveCursor): refresh the gui
+ 	cursor after the second makePassive if we are moving the gui.
+  	This fixes a refresh bug that happens if the splits get reordered.
+
+	* configure.in and src/gnome/Makefile.in: Rob Merkel's patch
+	to check for gtkxmhtml
+	
+	* src/scm: applied Rob Walker's patch to add a version argument
+	
+	* src/gnome/account-tree.c (gnc_account_tree_init): auto resize
+	the first column
+
+	* src/gnome/window-main.c (mainWindow): give focus to the
+	account tree before we exit
+
+1999-11-22  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/register/table-motif.c (modifyCB): *trivial* modification to
+	support modify_verify cursor_position arg.  I'm not in a position
+	to easily deal with the XmBae callback complexity.  This should
+	just leave the status-quo.
+
+	* src/motif/RegWindow.c (dateChangeCB): ditto.
+
+	* src/register/table-allgui.[hc]: quickfill fixes, support the new
+	modify_verify cursor_position arg.
+
+	* src/register/gnome/gnucash-sheet.c: quickfill fixes, use the new
+	modify_verify cursor_position arg.
+
+	* ChangeLog: merge all the src/register/gnome/ChangeLog entries
+	into this file and delete that file to finish up what Dave started
+	on 1999-11-20.  Aside from being cleaner, it also makes emacs (and
+	I suspect other editors) automatically find the right file when
+	you do a "C-x 4 a" (changelog-add-entry).
+
+	* src/register/*cell.h: added position (int *) parameter to
+	all cell MV calls.  This allows the callback to reposition the
+	cursor within the text if needed.  This was required by the
+	quickfill fix, but is probably useful elsewhere.
+
+	* src/register/quickfillcell.c (quick_modify): fixed so that
+	cursor tracks as you type along with some other important bugs
+	(quickfill divergences now cause the remainder of the stale fill
+	to be deleted, etc.)
+
 1999-11-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-register.c: (recordCB): when when record
@@ -11,6 +763,9 @@
 	fix for when you enter a cell that's right-aligned.
 	
 1999-11-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+        * src/register/gnome/ChangeLog: we're going to stop using this
+	changlog file and put all changes in the top-level ChangLog file.
 
 	* src/gnome/reconcile-list.[ch]: Use a hash table to remember
 	reconcile flags after a refresh. Also remember scroll position.
@@ -60,10 +815,54 @@
 
 	* src/gnome/: modify dialogs to use parented dialogs
 
+	* src/register/gnome/gnucash-cursor.c: (gnucash_item_cursor_draw):
+	Heath's mod which removes the outer rectangle.
+
+	* src/register/gnome/gnucash-item-edit.c: (item_edit_update):
+	Heath's mod to make the combo list draw correctly
+
 1999-11-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
-	* src/engine/util.c: (PrtAmtComma): fixed rounding error
-	when remainder is close to 1.
+	* src/engine/util.c: (PrtAmtComma): fixed
+	rounding error when remainder is close to 1.
+
+1999-11-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-header.[ch]: removed type
+	variable. The header should always be type GNUCASH_CURSOR_HEADER
+
+	* src/register/gnome/gnucash-style.c:
+	(gnucash_sheet_style_compile): use the cell labels for the header
+	style labels
+	
+	* src/register/gnome/gnucash-item-edit.[ch]: Added a toggle button
+	for popping the combo list.
+
+	* src/register/gnome/gnucash-style.c: (gnucash_style_layout_init)
+	make the width of the 'num' column of the split cursor the same as
+	the others.
+
+1999-11-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c: (gnucash_sheet_delete_cb)
+	and
+	(gnucash_sheet_insert_cb): use malloc/free instead of glib
+	routines for newval. newval may be free()d by routines in the
+	register code. You can't mix-n-match.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_destroy) and
+	(gnucash_sheet_new): sink the entry and unref it after the item
+	editor is destroyed. This fixes a memory leak, the entry was not
+	being finalized.
+
+	* src/register/gnome/gnucash-sheet.c add
+	(gnucash_sheet_key_press): allow outside entities to pass
+	keystrokes to the sheet. Used by the combocell.
+
+	* src/register/gnome/combocell-gnome-c: extensive modifications to
+	support the new list item.
+
+	* src/register/gnome/gnucash-item-edit.[ch]: ditto
 
 1999-11-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
@@ -88,6 +887,13 @@
 	* src/gnome/account-tree.c: (gnc_account_tree_select_account):
 	scroll to make sure account is visible.
 
+	* src/register/gnome/gnucash-item-edit.c: (item_edit_draw): make
+	the cursor larger and allow it to be seen even when it's at the
+	end of a too-long-to-fit-in-cell string.
+
+	* src/register/gnome/gnucash-item-list.[ch]: new code to support
+	the combo cell.
+	
 1999-11-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-filebox.c: Use GtkFileSelection instead
@@ -101,6 +907,13 @@
 
 	* src/gnome/window-main.: added Save As menu item.
 
+	* src/register/gnome/combocell-gnome.c: reformatted to be
+	idiomatic
+
+	* src/register/gnome/gnucash-sheet.c:
+	(gnucash_sheet_key_press_event): Added support for pageup/down and
+	home/end keypressed.
+
 1999-11-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/Refresh.c: Added this code for refreshing account-related
@@ -109,6 +922,39 @@
 
 	* src/gnome/window-register.c: fixed deleting of blank split
 	
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_activate_cursor_cell): handle enter updates when
+	new_text is non-null by updating the cell from the table and *not*
+	src/register/gnome/starting the editing widget.
+
+	* gnucash-grid.c (draw_cell): used CELL_HPADDING for right justify
+	adjustment on x value instead of CELL_VPADDING.
+
+1999-11-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): use
+	g_return_if_fail for error checks.
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_unrealize):
+	Sanity checks before unrefing the gc's.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_unrealize):
+	sanity checks
+
+	* src/register/gnome/gnucash-currsor.c (gnucash_cursor_unrealize):
+	sanity checks
+
+	* src/register/gnome/gnucash-sheet.h (GnucashRegisterClass):
+	parent class should be GtkTableClass
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_update_adjustments): update page_increment, so
+	clicking on the rest of the scrollbar scrolls one page
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_key_press_event): call gnc_table_traverse_update on
+	up/down motion.
+
 1999-11-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* Add this changelog entry which I should have done a long
@@ -130,6 +976,35 @@
 	* Add Heath's gnome register enhancements.
 
 	* Remove dependencies on gtksheet. Hooray!
+
+	* src/register/gnome Various: a few fixes here and there to make
+	everything compile cleanly under -Wall. Mainly removing unused
+	local variables, and changing g_return_if_fail to
+	g_return_val_if_fail for functions which return a value. Added a
+	few prototypes that were missing. Cleaned up #includes.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_register_new): Make
+	the vertical scrollbar flush with the top of the register.
+
+	* src/register/gnome/Makefile.in: removed motif and qt
+	targets. Made gnome target the default.
+
+1999-08-30  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_key_press_event): Be sure to set new_p_row in the
+	case GDK_Tab, since the function gnc_table_traverse_update checks
+	the proposed new row/col, so we need to initialize properly.
+
+1999-08-28  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* TODO: New file.
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_init): Removed
+	the dependency on gnome-print for now.  We may want to use the
+	gnome-print library in the future.
+
+	* Makefile.in (LIBS): Ditto
 
 1999-08-25  Rob Browning  <rlb@cs.utexas.edu>
 
@@ -159,3 +1034,228 @@
 	* Add function (current-gnc-compile-flavor) to gnc.gwp so that we
 	can have conditional blocks.  Possible return values are 'gnome
 	and 'motif.
+
+1999-08-23  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_draw): Added
+	a separator line between the header and the register entries.
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_new): Attempt
+	to implement the comboboxes.  For some reason, I can't get combos
+	to work, something related to how the widget size is computed.
+	Comment this out for now.
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_set_arg):
+	Ditto
+
+1999-08-20  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-grid.c (draw_cell): Set the
+	background/foreground color on a per cell basis.  This obsoletes
+	the bg/fg colors in the styles for now.
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_block_clear_entries): Fixed a big memory leak here.
+	(gnucash_sheet_block_set_entries): Support for background and
+	foreground colors for the cells.  Set these from the table.
+
+1999-08-19  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+	Layout the stock registers.
+
+1999-08-18  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): When the
+	block is active, if a cell doesn't have a user-entered string,
+	then draw the label for that cell type as a hint for what should
+	be entered.  TODO: Don't draw the label if the cell isn't an
+	input/output cell, or whatever.
+
+	* src/register/gnome/gnucash-style.c
+	(gnucash_sheet_style_compile): Initialize the labels[][] array in
+	the style.
+
+1999-08-17  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-cursor.c (configure_bounds): Do this
+	the right way.
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_draw): Added
+	the clip rectangle, and made it so the text scrolls to keep the
+	cursor in view.
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): Added the
+	clip rectangle.
+
+1999-08-14  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-cursor.c
+	(gnucash_cursor_get_pixel_coords): Take into account the alignment
+	offsets.
+
+	* src/register/gnome/gnucash-item-edit.c
+	(item_edit_get_pixel_coords): Take into account the alignment
+	offsets.
+
+	* src/register/gnome/gnucash-grid.c
+	(gnucash_grid_find_block_origin_by_pixel): Fixed an off-by-one
+	mistake.
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_make_cell_visible): New function
+	(gnucash_sheet_cursor_move): Make the cell visible.
+	(gnucash_sheet_set_top_row): Added support for aligning on the top
+	or bottom row.
+	(gnucash_sheet_update_adjustments): Fixed this so the sheet can't
+	scroll past the bottom row.
+
+1999-08-12  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_activate_cursor_cell): With Alexandru's patches, we
+	seem to need to grab the focus.  We'll probably need this
+	elsewhere.
+
+1999-08-11  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_button_press_event):
+	New function.
+
+	* src/register/gnome/gnucash-grid.c
+	(gnucash_grid_find_block_origin_by_pixel): Add a return value.
+	(gnucash_grid_find_cell_origin_by_pixel): New function.
+
+1999-08-10  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_key_press_event): Added up/down movement.
+	(gnucash_sheet_style_set_dimensions): Change the way we set
+	dimensions.
+	(gnucash_sheet_size_allocate): Recompute style dimensions.
+
+	* src/register/gnome/gnucash-item-edit.c
+	(item_edit_get_pixel_coords): We need to compute pixels relative
+	to the canvas origin, not the window origin.  Duh.  (Note that
+	canvas sends coordinates to a draw function relative to the canvas
+	origin.)
+
+	* src/register/gnome/gnucash-cursor.c
+	(gnucash_cursor_get_pixel_coords): Ditto.
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_deactivate_cursor_cell): New function.
+	(gnucash_sheet_activate_cursor_cell):
+	(gnucash_sheet_cursor_move):
+	(gnucash_sheet_start_editing_at_cursor):
+	(gnucash_sheet_stop_editing):
+
+1999-08-09  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/combocell-gnome.c: New file, everything is a
+	no-op for now, we just need the stubs.
+
+	* src/register/gnome/gnucash-item-edit.[ch]: New file.  Implements
+	an entry for the sheet.
+
+1999-08-08  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-cursor.[ch] : New file.  Implements a
+	block/cell cursor.
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_style_get_cell_pixel_rel_coords): New function.
+
+1999-08-06  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): Updated
+	to reflect the changes below.
+	(gnucash_grid_find_block_origin_by_pixel): Bug fix (off by one).
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_table_load):
+	Another overhaul of the structure.  We need to keep a local copy
+	of the table, to keep what we need to redraw from changing
+	underneath us.  So we needed some memory management and some minor
+	API adjustments.
+	(gnucash_sheet_resize):
+	(gnucash_sheet_resize_row):
+	(gnucash_sheet_destroy_row):
+	(gnucash_sheet_block_new_row):
+	(gnucash_sheet_block_set_from_table):
+	(gnucash_sheet_block_set_entries):
+	(gnucash_sheet_block_clear_entries):
+	(gnucash_sheet_insert_block_row):
+	(gnucash_sheet_get_block):
+
+1999-08-04  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_compute_visible_range): New
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): Basic
+	support for drawing the text of a cell.
+	(gnucash_grid_draw): Added support for justifications.
+
+1999-08-03  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_register_new): Make
+	register into an independent widget.
+
+	* src/register/gnome/gnucash-sheet.c, gnucash-grid.c: Overhaul of
+	the structure.  We don't need to keep a list of blocks, or a hash
+	list of styles.  All the info we need is in the Table, and there
+	are only five styles associated to a given table (from
+	splitreg.h).  Many functions touched to reflect the change.  Also,
+	keep track of the SplitRegister associated to this table.
+
+1999-08-02  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-color.c (gnucash_color_init): move
+	the color allocation and hash table routines from table-gnome.c to
+	here.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_block_append):
+	fixed a silly bug.
+	(gnucash_sheet_block_style_new): Fix up the key.
+	(gnucash_register_new): This is complex widget that already has
+	the vertical/horizontal scrollbars attached.
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_find_block): Be
+	sure we get a valid sheet_block.  Our register window may be
+	larger than the number of blocks.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_load): Initial
+	load of the table into the register.
+
+	* src/register/gnome/gnucash-color.[c,h]:  steal these files from gnumeric
+
+1999-08-01  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_style_recompile): make height, width a member of
+	the style, so we don't have to change every block when the style
+	gets recompiled (on sheet allocation changes for example).
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_get_type): First
+	hack at getting a grid going.
+	(gnucash_grid_class_init): Ditto
+	(gnucash_grid_set_arg):
+	(gnucash_grid_init):
+	(gnucash_grid_draw):
+	(gnucash_grid_find_block):
+	(gnucash_grid_update):
+	(gnucash_grid_unrealize):
+	(gnucash_grid_realize):
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_new): New
+	(gnucash_sheet_get_type): New
+	(gnucash_sheet_class_init): New
+	(gnucash_sheet_create): New
+	(gnucash_sheet_realize): New
+	(gnucash_sheet_block_new): New
+	(gnucash_sheet_block_destroy): New
+	(gnucash_sheet_vadjustment_value_changed): New
+	(gnucash_sheet_set_top_block): New
+	(gnucash_sheet_block_get_pixels): New
+	(gnucash_sheet_get_block): New
+	(gnucash_sheet_style_init): etc, per block style handling

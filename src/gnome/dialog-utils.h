@@ -82,18 +82,25 @@ enum
 };
 
 
+/* option button callback function */
+typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
+                                   gpointer user_data);
+
 /* Structure for building option buttons */
 typedef struct _GNCOptionInfo GNCOptionInfo;
 struct _GNCOptionInfo
 {
   char *name;
-  gpointer callback;
+  char *tip;
+  GNCOptionCallback callback;
   gpointer user_data;
 };
 
 
 /**** PROTOTYPES *************************************************/
 char * gnc_ui_get_account_field_name(int field);
+
+char * gnc_ui_get_account_full_name(Account *account, const char *separator);
 
 char * gnc_ui_get_account_field_value_string(Account *account, int field);
 

@@ -141,7 +141,8 @@ static const char *
 DateMV (BasicCell *_cell, 
         const char *oldval, 
         const char *change, 
-        const char *newval)
+        const char *newval,
+        int *cursor_position)
 {
    DateCell *cell = (DateCell *) _cell;
    struct tm *date;

@@ -1,5 +1,5 @@
 /********************************************************************\
- * HelpWindow.c -- a help window for hypertext help.                *
+ * window-help.c -- a help window for hypertext help.               *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
@@ -24,227 +24,161 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <fcntl.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
 #include <gnome.h>
-#include <gtk-xmhtml/gtk-xmhtml.h>
-
-#include <guile/gh.h>
 
 #include "config.h"
 
-#if HAVE_XPM
-#  include <X11/xpm.h>
-#endif
-
-#include "File.h"
 #include "window-help.h"
-#include "top-level.h"
-#include "ui-callbacks.h"
-#include "messages.h"
+#include "window-html.h"
 #include "Sheet.h"
+#include "File.h"
+#include "messages.h"
 #include "util.h"
 
-extern GtkWidget app;
 static short module = MOD_HTML; 
 
-/********************************************************************\
- *     HTML History functions                                       * 
- * hack alert -- these are gui-independent, and should be moved
- * to somewhere were the gtk, Qt gui's can make use of them
-\********************************************************************/
-typedef struct _HTMLHistory {
-  struct _HTMLHistory *next;
-  struct _HTMLHistory *last;
-  char   *htmlfile;
-  char   *text;
-} HTMLHistory;
+static HTMLWindow *helpwindow = NULL;
 
-/* insert an htmlfile into history.  Return TRUE if this
- * is the first element in the history.  If not last element
- * in history, all next pages are deleted */
-static int
-historyInsert( HTMLHistory **history, const char *htmlfile )
-  {
-  if( (*history) != NULL )
-    {
-    HTMLHistory *temp;
-    
-    /* delete all next pages: */
-    temp = (*history)->next;
-    while( temp ) 
-      {
-      (*history)->next = temp->next;
-      if (temp->htmlfile) free(temp->htmlfile);
-      if (temp->text) free(temp->text);
-      _free(temp);
 
-      temp = (*history)->next;
-      }
-    
-    /* Add new node to history: */
-    temp = (HTMLHistory *)_malloc(sizeof(HTMLHistory));
-    if (htmlfile) {
-       temp->htmlfile = strdup (htmlfile);
-    } else {
-       temp->htmlfile = NULL;
-    }
-    temp->text = NULL;
-    temp->next = NULL;
-    temp->last = (*history);
-    (*history)->next = temp;
-    (*history) = temp;
-    
-    return FALSE;
-    }
-  else
-    {
-    /* This must be the first node in the history... */
-    (*history) = (HTMLHistory *)_malloc(sizeof(HTMLHistory));
-    if (htmlfile) {
-       (*history)->htmlfile = strdup (htmlfile);
-    } else {
-       (*history)->htmlfile = NULL;
-    }
-    (*history)->text = NULL;
-    (*history)->last = NULL;
-    (*history)->next = NULL;
-    
-    /* ...so return TRUE */
-    return TRUE;
-    }
-  }
-
-/* Move forward in history, and return current htmlfile */
-static char *
-historyFwd( HTMLHistory **history )
-  {
-  if( (*history) != NULL ) {
-    if( (*history)->next != NULL ) { 
-      (*history) = (*history)->next; 
-       }
-    return (*history)->htmlfile;
-    }
-  else
-    return NULL;
-  }
-
-/* Move back in history, and return current htmlfile */
-static char *
-historyBack( HTMLHistory **history )
-  {
-  if( (*history) != NULL ) {
-    if( (*history)->last != NULL ) {
-      (*history) = (*history)->last;
-      }
-    return (*history)->htmlfile;
-    }
-  else
-    return NULL;
-  }
-
-#ifdef NOT_USED
-/* Return current htmlfile */
-static char *
-historyCurrent( HTMLHistory **history )
-  {
-  if( (*history) != NULL )
-    return (*history)->htmlfile;
-  else
-    return NULL;
-  }
-#endif
-
-/* Remove all entries from history: */
-#if 0
-static void
-historyClear( HTMLHistory **history )
-  {
-  /* move to beginning of history: */
-  while( (*history)->last != NULL )
-    (*history) = (*history)->last;
-  
-  /* delete all next pages: */
-  while( (*history)->next != NULL )
-    {
-    HTMLHistory *temp = (*history)->next;
-    
-    (*history)->next = temp->next;
-    if(temp->htmlfile) free(temp->htmlfile);
-    if(temp->text) free(temp->text);
-    _free(temp);
-    }
-  
-  /* delete current page: */
-  if ((*history)->htmlfile) free((*history)->htmlfile);
-  if ((*history)->text) free((*history)->text);
-  _free(*history);
-  (*history) = NULL;
-  }
-#endif
-
-/********************************************************************\
- *     HTML Window stuff...                                         * 
-\********************************************************************/
-
-/** GLOBALS *********************************************************/
-
-struct _HTMLWindow {
-   GtkWidget *htmlwidget;
-   GtkWidget *data_target_frame;
-   GtkWidget *menu_target_frame;
-   short  installed_data_frame_form_cb;
-   short  installed_menu_frame_form_cb;
-   HTMLHistory *history;
+typedef struct _HelpData HelpData;
+struct _HelpData
+{
+  gchar *htmlfile;
+  gchar *label;
+  gchar *text;
 };
 
-typedef struct _HTMLWindow HTMLWindow;
 
-HTMLWindow *helpwindow = NULL;
-HTMLWindow *reportwindow = NULL;
-
-/** PROTOTYPES ******************************************************/
-static void   htmlWindow( GtkWidget *parent, HTMLWindow **hwinp,
-                          const char * const title, 
-                          const char * const htmlfile, 
-                          const char * const text);
-static void   htmlBackCB( GtkWidget *widget,  gpointer data );
-static void   htmlFwdCB( GtkWidget *widget, gpointer data );
-static void   htmlAnchorCB( GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs, gpointer data );
-
-#if HAVE_LIBXMHTML
-static char * xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text);
-#endif /* HAVE_XMHTML */
-
-/********************************************************************\
- * reportWindow                                                     * 
- *   opens up a report window, and displays html                    * 
- *                                                                  * 
- * Args:   parent   - the parent widget                             * 
- *         title    - the title of the window                       * 
- *         htmlfile - the file name of the help file to display     * 
- * Return: none                                                     * 
-\********************************************************************/
-void
-reportWindow( GtkWidget *parent, const char *title, const char *file)
+static HelpData *
+help_data_new()
 {
-  if (!reportwindow) {
-    reportwindow = (HTMLWindow *) g_malloc (sizeof (HTMLWindow));
-    reportwindow->htmlwidget = 0;
-    reportwindow->data_target_frame = 0;
-    reportwindow->menu_target_frame = 0;
-    reportwindow->installed_data_frame_form_cb = 0;
-    reportwindow->installed_menu_frame_form_cb = 0;
-    reportwindow->history = NULL;
-  } 
- 
-  htmlWindow (parent, &reportwindow, title, file, NULL);
-}
+  HelpData *hd;
   
+  hd = g_new0(HelpData, 1);
+
+  return hd;
+}
+
+static void
+help_data_destroy(HTMLHistoryData history_data)
+{
+  HelpData *hd = history_data;
+
+  g_free(hd->htmlfile);
+  hd->htmlfile = NULL;
+
+  g_free(hd->label);
+  hd->label = NULL;
+
+  g_free(hd->text);
+  hd->text = NULL;
+
+  g_free(hd);
+}
+
+static void
+help_data_set_file(HelpData *hd, const gchar *htmlfile)
+{
+  g_free(hd->htmlfile);
+  hd->htmlfile = g_strdup(htmlfile);
+}
+
+static void
+help_data_set_label(HelpData *hd, const gchar *label)
+{
+  g_free(hd->label);
+  hd->label = g_strdup(label);
+}
+
+static void
+help_data_set_text(HelpData *hd, const gchar *text)
+{
+  g_free(hd->text);
+  hd->text = g_strdup(text);
+}
+
+
+static HTMLHistoryData
+helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLHistoryData history_data)
+{
+  HelpData *hd;
+
+  switch(acbs->url_type)
+  {
+    /* a local file with a possible jump to label */
+    case ANCHOR_FILE_LOCAL:
+      hd = help_data_new();
+      help_data_set_file(hd, acbs->href);
+      return hd;
+
+    /* other types are unsupported, but it would be fun if they were ... */
+    case ANCHOR_FTP:
+      PERR(" this help window doesn't support ftp: %s\n", acbs->href);
+      break;
+    case ANCHOR_HTTP:
+      PERR (" this help window doesn't support http: %s\n", acbs->href);
+      break;
+    case ANCHOR_MAILTO:
+      PERR(" this help window doesn't support email: %s\n", acbs->href);
+      break;
+    case ANCHOR_UNKNOWN:
+    default:
+      PERR(" don't know this type of url: %s\n", acbs->href);
+      break;
+  }
+
+  return NULL;
+}
+
+static void
+helpJumpCB(HTMLHistoryData history_data, char **set_text, char **set_label)
+{
+  HelpData *hd = (HelpData *) history_data;
+  char *text = NULL;
+  char *label = NULL;
+
+  *set_text = NULL;
+  *set_label = NULL;
+
+  if (hd->text != NULL)
+  {
+    *set_text = hd->text;
+    *set_label = hd->label;
+    return;
+  }
+
+  if (hd->htmlfile == NULL)
+    return;
+
+  /* see if this anchor contains a jump */
+  label = strpbrk(hd->htmlfile, "#?");
+  if (label != NULL)
+  {
+    help_data_set_label(hd, label);
+
+    /* truncate # from name */
+    hd->htmlfile[label - hd->htmlfile] = 0x0;
+  }
+
+  /* see if the anchor is an "active gnucash page" */
+  if (strstr(hd->htmlfile, ".phtml"))
+    text = gncReport(hd->htmlfile);
+
+  /* if text to display wasn't specified, use the truncated name to read */
+  if (text == NULL)
+    text = gncReadFile(hd->htmlfile);
+
+  if (text != NULL)
+  {
+    help_data_set_text(hd, text);
+    free(text);
+  }
+
+  *set_text = hd->text;
+  *set_label = hd->label;
+}
+
+
 /********************************************************************\
  * helpWindow                                                       * 
  *   opens up a help window, and displays html                      * 
@@ -255,322 +189,35 @@ reportWindow( GtkWidget *parent, const char *title, const char *file)
  * Return: none                                                     * 
 \********************************************************************/
 void
-helpWindow( GtkWidget *parent, const char *title, const char *htmlfile )
+helpWindow(GtkWidget *parent, const char *title, const char *htmlfile)
 {
-  if (!helpwindow) {
-    helpwindow = (HTMLWindow *) malloc (sizeof (HTMLWindow));
-    helpwindow->htmlwidget = 0;
-    helpwindow->data_target_frame = 0;
-    helpwindow->menu_target_frame = 0;
-    helpwindow->installed_data_frame_form_cb = 0;
-    helpwindow->installed_menu_frame_form_cb = 0;
-    helpwindow->history = NULL;
-  } 
+  HelpData *hd;
+
+  if (helpwindow == NULL)
+    helpwindow = gnc_html_window_new(help_data_destroy, helpAnchorCB,
+                                     helpJumpCB);
  
-  htmlWindow (parent, &helpwindow, title, htmlfile, NULL);
+  hd = help_data_new();
+  help_data_set_file(hd, htmlfile);
+
+  htmlWindow(parent, &helpwindow, title, hd, NULL, 0);
 }
-  
+
+
 /********************************************************************\
- * helpWindow                                                       * 
- *   opens up a help window, and displays html                      * 
+ * gnc_ui_destroy_help_windows                                      * 
+ *   destroys any open help windows                                 * 
  *                                                                  * 
- * Args:   parent   - the parent widget                             * 
- *         title    - the title of the window                       * 
- *         htmlfile - the file name of the help file to display     * 
+ * Args:   none                                                     * 
  * Return: none                                                     * 
 \********************************************************************/
-static void
-htmlWindow( GtkWidget *parent, 
-            HTMLWindow **hwinp,
-            const char * const title, 
-            const char * const htmlfile,
-            const char * const htmltext)
+void
+gnc_ui_destroy_help_windows()
 {
-  HTMLWindow *hw = *hwinp;
-  char * text=0x0;
-  
- // gnc_set_busy_cursor( parent );
-  
-  historyInsert (&(hw->history), htmlfile); 
-  if (htmltext) text = strdup (htmltext);
-  hw->history->text = text;
+  gnc_html_window_destroy(helpwindow);
+  helpwindow = NULL;
 
-  /* if the help window isn't open, then open it... otherwise, load
-   * new help page into current help window */
-   
-  /************ CREATE HTML WINDOW HERE *****************/
-  /******************************************************/
-  {
-    GtkWidget *window;
-    GtkWidget *html;
-    GtkWidget *button;
-    GtkWidget *hbuttonbox1;
-    GtkWidget *vbox1;
-
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_object_set_data (GTK_OBJECT (window), "window", window);
-    gtk_window_set_title (GTK_WINDOW (window), "Gnucash Help System");
-    gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);
-
-    html = gtk_xmhtml_new();
-  
-    hw->htmlwidget = html;
-  
-    text = xaccJumpToLabel( hw->htmlwidget, htmlfile, text);
-    hw->history->text = text;
-
-    vbox1 = gtk_vbox_new (FALSE, 0);
-    gtk_object_set_data (GTK_OBJECT (window), "vbox1", vbox1);
-    gtk_widget_show (vbox1);
-    gtk_container_add (GTK_CONTAINER (window), vbox1);
-    gtk_container_border_width (GTK_CONTAINER (vbox1), 6);
-
-    /* Pack our html widget into the window */
-    //gtk_container_add(GTK_CONTAINER(window), html);
-    gtk_box_pack_start(GTK_BOX(vbox1), html, TRUE, TRUE, 5);
-  
-    hbuttonbox1 = gtk_hbutton_box_new ();
-    gtk_object_set_data (GTK_OBJECT (window), "hbuttonbox1", hbuttonbox1);
-    gtk_widget_show (hbuttonbox1);
-    gtk_box_pack_start (GTK_BOX (vbox1), hbuttonbox1, FALSE, FALSE, 0);
-    gtk_container_border_width (GTK_CONTAINER (hbuttonbox1), 5);
-    gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox1), GTK_BUTTONBOX_SPREAD);
-  
-    button = gtk_button_new_with_label ("Back");
-    gtk_object_set_data (GTK_OBJECT (window), "back", button);
-    gtk_widget_show (button);
-    gtk_container_add (GTK_CONTAINER (hbuttonbox1), button);
-
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                       GTK_SIGNAL_FUNC(htmlBackCB),
-                       hw);                       
-  
-    button = gtk_button_new_with_label ("Contents");
-    gtk_object_set_data (GTK_OBJECT (window), "contents", button);
-    gtk_widget_show (button);
-    gtk_container_add (GTK_CONTAINER (hbuttonbox1), button);
-  
-    button = gtk_button_new_with_label ("Forward");
-    gtk_object_set_data (GTK_OBJECT (window), "forward", button);
-    gtk_widget_show (button);
-    gtk_container_add (GTK_CONTAINER (hbuttonbox1), button);
-
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                       GTK_SIGNAL_FUNC(htmlFwdCB),
-                       hw);                       
-
-    hw->data_target_frame = hw->htmlwidget;
-  
-    gtk_widget_show(html);  
-    gtk_widget_show(window);
-
-    gtk_widget_set_usize(GTK_WIDGET(window), 675, 400);
-    
-    gtk_signal_connect(GTK_OBJECT(hw->htmlwidget), "activate",
-                       GTK_SIGNAL_FUNC(htmlAnchorCB),
-                       hw);
-                       
-  }
-
+  DEBUG("help windows destroyed.\n");
 }
-
-/********************************************************************\
- *     callback functions...                                        * 
-\********************************************************************/
-
-
-/********************************************************************\
- * htmlBackCB - called when user clicks "Back" button... shows last * 
- *   help page in history                                           * 
- *                                                                  * 
- * Args:   mw -                                                     * 
- *         cd -                                                     * 
- *         cb -                                                     * 
- * Return: none                                                     * 
-\********************************************************************/
-static void
-htmlBackCB( GtkWidget *widget, gpointer data )
-  {
-  HTMLWindow *hw = (HTMLWindow *) data;
-  char *file = historyBack(&(hw->history));
-  char *text = hw->history->text;
- 
-#if HAVE_LIBXMHTML
-  text = xaccJumpToLabel( hw->htmlwidget, file, text);
-  hw->history->text = text;
-#endif
-  }
-
-/********************************************************************\
- * htmlFwdCB - called when user clicks "Forward" button... shows    * 
- *   next help page in the history                                  * 
- *                                                                  * 
- * Args:   mw -                                                     * 
- *         cd -                                                     * 
- *         cb -                                                     * 
- * Return: none                                                     * 
-\********************************************************************/
-static void
-htmlFwdCB( GtkWidget *widget, gpointer data )
-  {
-  HTMLWindow *hw = (HTMLWindow *) data;
-  char *file = historyFwd(&(hw->history));
-  char *text = hw->history->text;
-#if HAVE_LIBXMHTML
-  text = xaccJumpToLabel( hw->htmlwidget, file, text);
-  hw->history->text = text;
-#endif
-  }
-
-/********************************************************************\
- * closeHtmlWin - called when the help window is closed             * 
- *                                                                  * 
- * Args:   mw -                                                     * 
- *         cd -                                                     * 
- *         cb -                                                     * 
- * Return: none                                                     * 
-\********************************************************************/
-#if 0
-static void
-closeHtmlWin( GtkWidget *widget, gpointer data )
-{
-  HTMLWindow **hw = (HTMLWindow **) data;
-
-  /* Delete the history: */
-  historyClear (&((*hw)->history));
-  (*hw)->history=NULL;
-  (*hw)->htmlwidget=0;
-  free (*hw);
-  (*hw) = NULL;
-}
-#endif
-
-/********************************************************************\
- * htmlAnchorCB - called when user clicks on html anchor tag        * 
- *                                                                  * 
- * Args:   mw - the html widget that called us                      * 
- *         cd -                                                     * 
- *         cb - the anchor call-back struct                         * 
- * Return: none                                                     * 
-\********************************************************************/
-static void
-htmlAnchorCB( GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs, gpointer data)
-  {
-  HTMLWindow *hw = (HTMLWindow *) data;
-
-#if HAVE_LIBXMHTML
-//   XmHTMLAnchorCallbackStruct *acbs = (XmHTMLAnchorCallbackStruct *) data;
-
-   if(acbs->reason != XmCR_ACTIVATE) return;
-
-   switch(acbs->url_type) {
-
-      /* a named anchor on a page that is already displayed */
-      case ANCHOR_JUMP: {
-//          XmHTMLAnchorScrollToName(widget, acbs->href);
-      }
-      break;
-
-      /* a local file with a possible jump to label */
-      case ANCHOR_FILE_LOCAL: {
-         historyInsert(&(hw->history), acbs->href);
-/* hack alert -- the target widget thing is a hack */
-         hw->history->text = xaccJumpToLabel (hw->data_target_frame, acbs->href, NULL);
-      }
-      break;
-
-      /*  other types are unsupported, but it would be fun if they were ... */
-      case ANCHOR_FTP:
-         PERR(" this help window doesn't support ftp: %s\n", acbs->href);
-         break;
-      case ANCHOR_HTTP:
-         PERR (" this help window doesn't support http: %s\n", acbs->href);
-         break;
-      case ANCHOR_MAILTO:
-         PERR(" this help window doesn't support email: %s\n", acbs->href);
-         break;
-      case ANCHOR_UNKNOWN:
-      default:
-         PERR(" don't know this type of url: %s\n", acbs->href);
-         break;
-   }
-
-#endif
-  }
-
-/********************************************************************\
- *     utility functions...                                         * 
-\********************************************************************/
-
-#if HAVE_LIBXMHTML
-static char * 
-xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text)
-{
-   char *label=0x0, *file=0x0;
-
-   if (jumpfile) {
-      file = strdup (jumpfile);
-   
-      /*  see if this anchor contains a jump */
-      label = strpbrk (file, "#?");
-      if (label) {
-         file [label - file] = 0x0;  /* truncate # from name */
-      }
-   
-      /* see if the anchor is an "active gnucash page" */
-      if (strstr (file, ".phtml")) {
-        text = gncReport (file);
-      }
-
-      /* if text to display wasn't specified, use the truncated name to read */
-      if (!text) text = gncReadFile (file);
-   }
-   if (!text) return NULL;
-
-
-   gtk_xmhtml_source(GTK_XMHTML(widget), text);
-
-#if 0
-   if (label) {
-      XmHTMLAnchorScrollToName(mw, label);
-   } else {
-      XmHTMLTextScrollToLine(mw, 0);
-}
-#endif
-
-   if (file) free (file);
-
-   return text;
-}
-
-/********************************************************************\
- *     HTML functions...                                            * 
-\********************************************************************/
-
-/********************************************************************\
- * htmlReadImageProc                                                * 
- *                                                                  * 
- * Args:   file - the name of the html file to read                 * 
- * Return: none                                                     * 
- * Global: helpPath - the path to the help files                    * 
-\********************************************************************/
-#if 0
-static XmImageInfo *
-htmlReadImageProc (GtkWidget *widget, String file) 
-  {
-  char  *filename;
-  XmImageInfo *retval = NULL;
-
-  /* construct absolute path -- twiddle the relative path we recieved */  
-  filename = gncFindFile (file);
-  
-  /* use the default proc for the hard work */
-//  retval = XmHTMLImageDefaultProc(widget, filename, NULL, 0);
-
-  free(filename);
-  return retval;
-}
-#endif /* 0 */
-#endif /* HAVE_XMHTML */
 
 /* ----------------------- END OF FILE ---------------------  */

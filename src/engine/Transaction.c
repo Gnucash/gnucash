@@ -201,9 +201,10 @@ xaccConfigGetForceDoubleEntry (void)
 /********************************************************************\
 \********************************************************************/
 
-#define MARK_SPLIT(split) {			\
-   Account *acc = (Account *) ((split)->acc);	\
-   if (acc) acc->changed |= ACC_INVALIDATE_ALL;	\
+#define MARK_SPLIT(split) {			       \
+   Account *acc = (Account *) ((split)->acc);	       \
+   if (acc) acc->changed |= ACC_INVALIDATE_ALL;	       \
+   if (acc) xaccAccountGroupMarkNotSaved(acc->parent); \
 }
 
 static void
@@ -869,9 +870,14 @@ xaccSplitRebalance (Split *split)
 void
 xaccTransBeginEdit (Transaction *trans, int defer)
 {
+   char open;
+
    assert (trans);
+   open = trans->open;
    trans->open = BEGIN_EDIT;
    if (defer) trans->open |= DEFER_REBALANCE;
+   if (open & BEGIN_EDIT) return;
+
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
 
@@ -1097,6 +1103,13 @@ xaccTransRollbackEdit (Transaction *trans)
    LEAVE ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
 }
 
+gncBoolean
+xaccTransIsOpen (Transaction *trans)
+{
+  if (trans == NULL) return GNC_F;
+
+  return ((trans->open & BEGIN_EDIT) != 0);
+}
 
 /********************************************************************\
 \********************************************************************/

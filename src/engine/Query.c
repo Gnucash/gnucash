@@ -226,6 +226,8 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
 }
 
 /* ================================================== */
+
+/* ================================================== */
 /* Note that the sort order for a transaction that is
  * currently being edited is based on its old values, 
  * not in its current edit values.  This is somewhat
@@ -254,6 +256,10 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
   if ( !(ta) && !(tb) ) return 0;		\
 
 
+#define CSTANDARD {                             \
+  retval = xaccSplitDateOrder(sa, sb);          \
+  if (retval) return retval;                    \
+}
 
 #define CDATE {					\
   /* if dates differ, return */			\
@@ -328,7 +334,7 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
   }						\
 }
 
-#define CAMOUNT {					\
+#define CAMOUNT {				\
   double fa, fb;				\
   fa = ((*sa)->damount) * ((*sa)->share_price); \
   fb = ((*sb)->damount) * ((*sb)->share_price); \
@@ -339,6 +345,8 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
     return +1;					\
   }						\
 }
+
+#define CNONE
 
 #define DECLARE(ONE,TWO,THREE)			\
 static int Sort_##ONE##_##TWO##_##THREE		\
@@ -392,6 +400,7 @@ sub recur {
 /* ================================================== */
 /* Define the sorting comparison functions */
 
+DECLARE (STANDARD, NONE, NONE)
 DECLARE (DESC, MEMO, AMOUNT)
 DECLARE (DESC, MEMO, NUM)
 DECLARE (DESC, MEMO, DATE)
@@ -468,6 +477,7 @@ xaccQuerySetSortOrder (Query *q, int arga, int argb, int argc)
    if (!q) return;
    q->changed = 1; 
 
+   DECIDE (STANDARD, NONE, NONE)
    DECIDE (DESC, MEMO, AMOUNT)
    DECIDE (DESC, MEMO, NUM)
    DECIDE (DESC, MEMO, DATE)
@@ -587,11 +597,11 @@ xaccQueryGetSplits (Query *q)
          /* now go through the splits */
          j=0; s = acc->splits[0];
          while (s) {
-            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
-               nsplits ++;
-            }
             if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
                break;
+            }
+            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
+               nsplits ++;
             }
             j++; s = acc->splits[j];
          }
@@ -610,11 +620,11 @@ xaccQueryGetSplits (Query *q)
          /* now go through the splits */
          j=0; s = acc->splits[0];
          while (s) {
-            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
-               slist[k] = s; k++;
-            }
             if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
                break;
+            }
+            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
+               slist[k] = s; k++;
             }
             j++; s = acc->splits[j];
          }

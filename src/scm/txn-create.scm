@@ -62,4 +62,4 @@
     (gnc:trans-commit-edit Txn)))
 
 (define (gnc:test-load-txns accg)
-  #f)diff -u 'pristine/gnucash/src/scm/utilities.scm' 'working/gnucash/src/scm/utilities.scm'
+  #f)

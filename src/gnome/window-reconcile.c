@@ -33,7 +33,10 @@
 #include "MainWindow.h"
 #include "RegWindow.h"
 #include "window-reconcile.h"
+#include "window-register.h"
+#include "dialog-utils.h"
 #include "reconcile-list.h"
+#include "Refresh.h"
 #include "query-user.h"
 #include "window-help.h"
 #include "messages.h"
@@ -58,6 +61,9 @@ struct _RecnWindow
   GtkWidget *debit;         /* Debit matrix show unreconciled debit */
   GtkWidget *credit;        /* Credit matrix, shows credits...      */
 
+  GtkWidget *edit_button;   /* Edit transaction button              */
+  GtkWidget *delete_button; /* Delete transaction button            */
+
   char * symbol;            /* Currency symbol or 's' for shares    */
 };
 
@@ -67,6 +73,8 @@ static double recnRecalculateBalance( RecnWindow *recnData );
 static void recnClose(GtkWidget *w, gpointer data);
 static void recnOkCB(GtkWidget *w, gpointer data);
 static void recnCancelCB(GtkWidget *w, gpointer data);
+
+static void gnc_reconcile_window_set_button_sensitivity(RecnWindow *recnData);
 
 /** GLOBALS *********************************************************/
 
@@ -96,6 +104,8 @@ recnRefresh(Account *account)
 
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->debit));
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->credit));
+
+  gnc_reconcile_window_set_button_sensitivity(recnData);
 
   recnRecalculateBalance(recnData);
 }
@@ -159,7 +169,7 @@ recnRecalculateBalance(RecnWindow *recnData)
  *       or "Cancel"                                                *
  *                                                                  *
  * Args:   parent  - the parent of this window                      *
- *         acc     - the account to reconcile                       *
+ *         account - the account to reconcile                       *
  *         diff    - returns the amount from ending balance field   *
  * Return: True, if the user presses "Ok", else False               *
 \********************************************************************/
@@ -273,12 +283,47 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 
 
 static void
+gnc_reconcile_window_set_button_sensitivity(RecnWindow *recnData)
+{
+  gboolean sensitive = FALSE;
+  GNCReconcileList *list;
+
+  list = GNC_RECONCILE_LIST(recnData->debit);
+  if (gnc_reconcile_list_get_current_split(list) != NULL)
+    sensitive = TRUE;
+
+  list = GNC_RECONCILE_LIST(recnData->credit);
+  if (gnc_reconcile_list_get_current_split(list) != NULL)
+    sensitive = TRUE;
+
+  gtk_widget_set_sensitive(recnData->edit_button, sensitive);
+  gtk_widget_set_sensitive(recnData->delete_button, sensitive);
+}
+
+static void
 gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
                              gpointer data)
 {
   RecnWindow *recnData = (RecnWindow *) data;
 
+  gnc_reconcile_window_set_button_sensitivity(recnData);
   recnRecalculateBalance(recnData);
+}
+
+static void
+gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
+                              gpointer data)
+{
+  RecnWindow *recnData = (RecnWindow *) data;
+  GNCReconcileList *this_list, *debit, *credit;
+
+  this_list = GNC_RECONCILE_LIST(widget);
+
+  debit  = GNC_RECONCILE_LIST(recnData->debit);
+  credit = GNC_RECONCILE_LIST(recnData->credit);
+
+  /* clear the *other* list so we always have no more than one selection */
+  gnc_reconcile_list_unselect_all((this_list == debit) ? credit : debit);
 }
 
 static GtkWidget *
@@ -305,6 +350,8 @@ gnc_reconcile_window_create_list_frame(Account *account,
 
   gtk_signal_connect(GTK_OBJECT(list), "toggle_reconciled",
                      GTK_SIGNAL_FUNC(gnc_reconcile_window_list_cb), recnData);
+  gtk_signal_connect(GTK_OBJECT(list), "focus_in_event",
+                     GTK_SIGNAL_FUNC(gnc_reconcile_window_focus_cb), recnData);
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
@@ -331,6 +378,23 @@ gnc_reconcile_window_create_list_frame(Account *account,
 }
 
 
+static Split *
+gnc_reconcile_window_get_current_split(RecnWindow *recnData)
+{
+  GNCReconcileList *list;
+  Split *split;
+
+  list = GNC_RECONCILE_LIST(recnData->debit);
+  split = gnc_reconcile_list_get_current_split(list);
+  if (split != NULL)
+    return split;
+
+  list = GNC_RECONCILE_LIST(recnData->credit);
+  split = gnc_reconcile_list_get_current_split(list);
+
+  return split;
+}
+
 static void
 gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 {
@@ -349,6 +413,94 @@ gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
     recnRecalculateBalance(recnData);
   }
 }
+
+static void
+gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
+{
+  RecnWindow *recnData = (RecnWindow *) data;
+  RegWindow *regData;
+
+  regData = regWindowSimple(recnData->account);
+  if (regData == NULL)
+    return;
+
+  gnc_register_raise(regData);
+  gnc_register_jump_to_blank(regData);
+}
+
+static void
+gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
+{
+  RecnWindow *recnData = (RecnWindow *) data;
+  Account **affected_accounts;
+  Transaction *trans;
+  Split *split, *s;
+  int i, num_splits;
+
+  split = gnc_reconcile_window_get_current_split(recnData);
+  /* This should never be true, but be paranoid */
+  if (split == NULL)
+    return;
+
+  {
+    gchar * buf = "Are you sure you want to delete the current transaction?";
+    gboolean result;
+
+    result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
+                                        buf, GNC_F);
+
+    if (!result)
+      return;
+  }
+
+  /* make a copy of all of the accounts that will be  
+   * affected by this deletion, so that we can update
+   * their register windows after the deletion.
+   */
+  trans = xaccSplitGetParent(split);
+  num_splits = xaccTransCountSplits(trans);
+  affected_accounts = (Account **) malloc((num_splits + 1) *
+                                          sizeof(Account *));
+  assert(affected_accounts != NULL);
+
+  for (i = 0; i < num_splits; i++) 
+  {
+    s = xaccTransGetSplit(trans, i);
+    affected_accounts[i] = xaccSplitGetAccount(s);
+  }
+  affected_accounts[num_splits] = NULL;
+
+  xaccTransBeginEdit(trans, 1);
+  xaccTransDestroy(trans);
+  xaccTransCommitEdit(trans);
+
+  gnc_account_list_ui_refresh(affected_accounts);
+
+  free(affected_accounts);
+
+  gnc_refresh_main_window ();
+}
+
+static void
+gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
+{
+  RecnWindow *recnData = (RecnWindow *) data;
+  RegWindow *regData;
+  Split *split;
+
+  split = gnc_reconcile_window_get_current_split(recnData);
+  /* This should never be true, but be paranoid */
+  if (split == NULL)
+    return;
+
+  regData = regWindowSimple(recnData->account);
+  if (regData == NULL)
+    return;
+
+  gnc_register_raise(regData);
+  gnc_register_jump_to_split(regData, split);
+}
+
 
 /********************************************************************\
  * recnWindow                                                       *
@@ -436,55 +588,94 @@ recnWindow(GtkWidget *parent, Account *account)
     gtk_box_pack_start(GTK_BOX(debcred_area), debits_frame, TRUE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(debcred_area), credits_frame, TRUE, FALSE, 0);
 
-  {
-    GtkWidget *hbox     = gtk_hbox_new(FALSE, 5);
+    {
+      GtkWidget *hbox, *title_vbox, *value_vbox, *button;
+      GtkWidget *totals_hbox, *frame, *title, *value, *bbox;
 
-    GtkWidget *prev_title = gtk_label_new(PREV_BALN_C_STR);
-    GtkWidget *end_title  = gtk_label_new(END_BALN_C_STR);
-    GtkWidget *space      = gtk_label_new("");
-    GtkWidget *prev_value = gtk_label_new("");
-    GtkWidget *end_value  = gtk_label_new("");
+      /* lower horizontal bar below reconcile lists */
+      hbox = gtk_hbox_new(FALSE, 5);
+      gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
 
-    GtkWidget *change_end = gtk_button_new();
-    GtkWidget *difference_frame = gtk_frame_new(NULL);
-    GtkWidget *difference_box = gtk_hbox_new(FALSE, 5);
-    GtkWidget *difference_label = gtk_label_new(DIFF_C_STR);
-    GtkWidget *difference_value = gtk_label_new("");
+      bbox = gtk_hbutton_box_new();
+      gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
 
-    gtk_container_add(GTK_CONTAINER(change_end), end_value);
-    gtk_container_set_border_width(GTK_CONTAINER(change_end), 4);
-    gtk_button_set_relief(GTK_BUTTON(change_end), GTK_RELIEF_HALF);
+      button = gtk_button_new_with_label("New");
+      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+      gnc_set_tooltip(button, "Add a new transaction to the account");
+      gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_new_cb),
+                         recnData);
 
-    gtk_signal_connect(GTK_OBJECT(change_end), "clicked",
-                       GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
-                       recnData);
+      button = gtk_button_new_with_label("Edit");
+      recnData->edit_button = button;
+      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+      gnc_set_tooltip(button, "Edit the current transaction");
+      gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_edit_cb),
+                         recnData);
+ 
+      button = gtk_button_new_with_label("Delete");
+      recnData->delete_button = button;
+      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+      gnc_set_tooltip(button, "Delete the current transaction");
+      gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_delete_cb),
+                         recnData);
 
-    gtk_misc_set_alignment(GTK_MISC(prev_title), 0.95, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(end_title), 0.95, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(difference_label), 0.95, 0.5);
+      button = gtk_button_new_with_label("Edit Info...");
+      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+      gnc_set_tooltip(button, "Adjust the ending balance");
+      gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
+                         recnData);
 
-    recnData->starting = prev_value;
-    recnData->ending = end_value;
-    recnData->difference = difference_value;
+      /* frame to hold totals */
+      frame = gtk_frame_new(NULL);
+      gtk_box_pack_end(GTK_BOX(hbox), frame, FALSE, FALSE, 0);
 
-    gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
+      /* hbox to hold title/value vboxes */
+      totals_hbox = gtk_hbox_new(FALSE, 3);
+      gtk_container_add(GTK_CONTAINER(frame), totals_hbox);
+      gtk_container_set_border_width(GTK_CONTAINER(totals_hbox), 5);
 
-    gtk_box_pack_start(GTK_BOX(hbox), prev_title, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), prev_value, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), space, FALSE, FALSE, 3);
-    gtk_box_pack_start(GTK_BOX(hbox), end_title, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), change_end, FALSE, FALSE, 0);
-    gtk_box_pack_end(GTK_BOX(hbox), difference_frame, FALSE, FALSE, 0);
+      /* vbox to hold titles */
+      title_vbox = gtk_vbox_new(TRUE, 3);
+      gtk_box_pack_start(GTK_BOX(totals_hbox), title_vbox, FALSE, FALSE, 0);
 
-    gtk_frame_set_shadow_type(GTK_FRAME(difference_frame), GTK_SHADOW_IN);
-    gtk_container_add(GTK_CONTAINER(difference_frame), difference_box); 
+      /* vbox to hold values */
+      value_vbox = gtk_vbox_new(TRUE, 3);
+      gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
 
-    gtk_container_set_border_width(GTK_CONTAINER(difference_box), 5);
-    gtk_box_pack_start(GTK_BOX(difference_box), difference_label,
-                       TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(difference_box), difference_value,
-                       FALSE, FALSE, 0);
-  }
+      /* previous balance title/value */
+      title = gtk_label_new(PREV_BALN_C_STR);
+      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+
+      value = gtk_label_new("");
+      recnData->starting = value;
+      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+
+      /* ending balance title/value */
+      title = gtk_label_new(END_BALN_C_STR);
+      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+
+      value = gtk_label_new("");
+      recnData->ending = value;
+      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+
+      /* difference title/value */
+      title = gtk_label_new(DIFF_C_STR);
+      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+
+      value = gtk_label_new("");
+      recnData->difference = value;
+      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+    }
 
     /* Set up the data */
     recnRefresh(account);

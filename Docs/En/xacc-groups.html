@@ -1,19 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
 <html>
   <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
     <title>Chart of Accounts and Account Numbering</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
-    <h1>Chart of Accounts</h1>
-    Typically accounts are arranged as a tree, in heirarchical form. 
-    The main trunks represent entire categories or groups, while the 
-    leaves of the tree denote individual bank accounts or expense 
-    categories.  When a summary report is requested, typically only 
-    the main branches are shown in the report, not each of the 
-    individual accounts.  For example, a chart of accounts might look 
-    like the following:
 
+  <body>
+    <h1>Chart of Accounts</h1>
+    Typically accounts are arranged as a tree, in hierarchical
+    form. The main trunks represent entire categories or groups,
+    while the leaves of the tree denote individual bank accounts or
+    expense categories. 
+
+    <p> When a summary report is requested, typically only the main
+    branches are shown in the report, not each of the individual
+    accounts. For example, a chart of accounts might look like the
+    following:</p>
 <pre>
         300             Expenses
          |
@@ -30,168 +35,336 @@
          :   :
 </pre>
 
-    Note that accounts are coded: when a report is generated,
-    the sort order is determined entirely by the numbering.  
-    By tradition and common practice, accounts that are not 
-    leaf accounts have a number that ends in zero; each higher
-    level has one more zero in the account code.
+    <p> Note that accounts not only have names; they have <b>
+    codes;</b> when a report is generated, the <a name="SORTORDER">
+    sort order is determined entirely by the numbering. A sensible
+    hierarchy generally will have the "leaf" accounts end in
+    non-zero digits, whilst parent nodes have increasing numbers of
+    zeros. For instance, "cash" accounts might logically be
+    arranged thus:</a></p>
 
-    <p>
-    When you <a href="xacc-accwin.html">create a new account</a>,
-    GnuCash offers a guess 
-    at what it thinks the account code might be; you are free 
-    to change this.  GnuCash does not prevent duplicate numbering, 
-    although you are encouraged to avoid this.  Account codes
-    are treated as numbers, base-36: thus, if you run out of numbers,
-    you can use the letters, a through z. 
-    
-
-    <h2>A Bigger Example</h2>
-    A "typical" chart of accounts is shown below.  Each account
-    is of a given <a href="xacc-acctypes.html">account type</a>.
-    This example is a combination of some typical business 
-    and personal accounts.   
-    <p>
     <ul>
-    <li>Assets
+      <li>
+        Overall Assets: <tt> 100</tt> 
+
         <ul>
-        <li>Cash On Hand
+          <li>
+            Overall Cash: <tt> 110</tt> 
+
             <ul>
-            <li>Checking account
-            <li>Money Market Account
-            <li>Certificate of Deposit
+              <li>Cash in Wallet: <tt> 111</tt></li>
+
+              <li>Cash in Sock in Closet: <tt> 112</tt></li>
+
+              <li>Cash in Mattress: <tt> 113</tt></li>
+
+              <li>Petty Cash Box: <tt> 114</tt></li>
             </ul>
-        <li>Fixed Assets
+          </li>
+
+          <li>
+            Overall Banking Assets <tt> 120</tt> 
+
             <ul>
-            <li>Furniture
-            <li>Computers
-            <li>Jewelry, Collectibles
-            <li>Tools, Machinery
+              <li>Checking Account <tt> 121</tt></li>
+
+              <li>Savings Account <tt> 122</tt></li>
             </ul>
-        <li>Investments
-            <ul>
-            <li>Stocks
-            <li>Bonds
-            <li>Mutual Funds
-            <li>Real Estate
-            </ul>
-        </ul>
-    <li>Liabilities
-        <ul>
-        <li>Taxes
-            <ul>
-            <li>Federal Income Tax
-            <li>Social Security
-            <li>Medicare
-            <li>FUTA
-            <li>State Income Tax
-            </ul>
-        <li>Accounts Payable
-            <ul>
-            <li>MasterCard
-            <li>Visa
-            <li>American Express
-            <li>Diner's Club
-            </ul>
-        <li>Loans
-            <ul>
-            <li>Debentures
-            <li>School Loan
-            <li>Uncle Harry's Tide-me-over
-            </ul>
-        </ul>
-    <li>Equity
-        <ul>
-        <li>Retained Earnings
-        <li>Current Year Earnings
-        <li>Historical Adjustments
+          </li>
         </ul>
 
-    <li>Income
+        <p> When you <a href="xacc-accwin.html">create a new
+        account</a>, GnuCash offers a guess at what it thinks the
+        account code might be; you are free to change this. GnuCash
+        does not prevent duplicate numbering, although we would
+        encourage you to avoid this. Account codes are treated as
+        numbers in base-36, thus, if you run out of numbers, you
+        can use the letters, <tt>a</tt> through <tt>z</tt>.</p>
+
+        <h2>A Sample Chart of Accounts</h2>
+        <a name="SAMPLECHART"></a>
+
+        <p> A "typical" chart of accounts is shown below. Each
+        account is of a given <a href="xacc-acctypes.html">account
+        type</a>. This example is a combination of some typical
+        business and personal accounts.</p>
+
         <ul>
-        <li>Interest Income
+          <li>
+            Assets 
+
             <ul>
-            <li>Bank Account Interest
-            <li>Certificate of Deposit
-            <li>Bond Interest
+              <li>
+                Cash On Hand 
+
+                <ul>
+                  <li>Checking account</li>
+
+                  <li>Money Market Account</li>
+
+                  <li>Certificate of Deposit</li>
+                </ul>
+              </li>
+
+              <li>
+                Fixed Assets 
+
+                <ul>
+                  <li>Furniture</li>
+
+                  <li>Computers</li>
+
+                  <li>Jewelry, Collectibles</li>
+
+                  <li>Tools, Machinery</li>
+                </ul>
+              </li>
+
+              <li>
+                Investments 
+
+                <ul>
+                  <li>Stocks</li>
+
+                  <li>Bonds</li>
+
+                  <li>Mutual Funds</li>
+
+                  <li>Real Estate</li>
+                </ul>
+              </li>
             </ul>
-        <li>Dividends
+          </li>
+
+          <li>
+            Liabilities 
+
             <ul>
-            <li>Stock
-            <li>Mutual Fund
+              <li>
+                Taxes 
+
+                <ul>
+                  <li>Federal Income Tax</li>
+
+                  <li>Social Security</li>
+
+                  <li>Medicare</li>
+
+                  <li>FUTA</li>
+
+                  <li>State Income Tax</li>
+                </ul>
+              </li>
+
+              <li>
+                Accounts Payable 
+
+                <ul>
+                  <li>MasterCard</li>
+
+                  <li>Visa</li>
+
+                  <li>American Express</li>
+
+                  <li>Diner's Club</li>
+                </ul>
+              </li>
+
+              <li>
+                Loans 
+
+                <ul>
+                  <li>Debentures</li>
+
+                  <li>School Loan</li>
+
+                  <li>Uncle Harry's Tide-me-over</li>
+                </ul>
+              </li>
             </ul>
-        <li>Consulting
+          </li>
+
+          <li>
+            Equity 
+
             <ul>
-            <li>ABC Design
-            <li>PQR Infomatics
+              <li>Retained Earnings</li>
+
+              <li>Current Year Earnings</li>
+
+              <li>Historical Adjustments</li>
             </ul>
-        <li>Salary
+          </li>
+
+          <li>
+            Income 
+
             <ul>
-            <li>My Day Job
+              <li>
+                Interest Income 
+
+                <ul>
+                  <li>Bank Account Interest</li>
+
+                  <li>Certificate of Deposit</li>
+
+                  <li>Bond Interest</li>
+                </ul>
+              </li>
+
+              <li>
+                Dividends 
+
+                <ul>
+                  <li>Stock</li>
+
+                  <li>Mutual Fund</li>
+                </ul>
+              </li>
+
+              <li>
+                Consulting 
+
+                <ul>
+                  <li>ABC Design</li>
+
+                  <li>PQR Infomatics</li>
+                </ul>
+              </li>
+
+              <li>
+                Salary 
+
+                <ul>
+                  <li>My Day Job</li>
+                </ul>
+              </li>
+
+              <li>
+                Commissions 
+
+                <ul>
+                  <li>Royalties</li>
+                </ul>
+              </li>
             </ul>
-        <li>Commissions
+          </li>
+
+          <li>
+            Expenses 
+
             <ul>
-            <li>Royalties
+              <li>
+                Rent and Utilities 
+
+                <ul>
+                  <li>Rent</li>
+
+                  <li>Rent Late Fees</li>
+
+                  <li>Electricity</li>
+
+                  <li>Gas</li>
+
+                  <li>Phone</li>
+
+                  <li>Internet</li>
+
+                  <li>Cable TV</li>
+                </ul>
+              </li>
+
+              <li>
+                Office Expenses 
+
+                <ul>
+                  <li>Accounting</li>
+
+                  <li>Legal</li>
+
+                  <li>Software</li>
+
+                  <li>Postage</li>
+
+                  <li>Bank Charges</li>
+
+                  <li>Credit Card Charges</li>
+
+                  <li>Toner, Paper, Paper Clips</li>
+                </ul>
+              </li>
+
+              <li>
+                Auto Expenses 
+
+                <ul>
+                  <li>Gas</li>
+
+                  <li>Insurance</li>
+
+                  <li>Repair</li>
+
+                  <li>Rental</li>
+                </ul>
+              </li>
+
+              <li>
+                Taxes 
+
+                <ul>
+                  <li>Social Security</li>
+
+                  <li>Unemployment</li>
+
+                  <li>IRS penalties</li>
+                </ul>
+              </li>
+
+              <li>
+                Wages &amp; Salaries 
+
+                <ul>
+                  <li>Consulting</li>
+
+                  <li>Wages</li>
+
+                  <li>Health Insurance</li>
+                </ul>
+              </li>
+
+              <li>
+                Travel 
+
+                <ul>
+                  <li>Air</li>
+
+                  <li>Hotel</li>
+
+                  <li>Meals</li>
+
+                  <li>Auto</li>
+                </ul>
+              </li>
+
+              <li>
+                Marketing 
+
+                <ul>
+                  <li>Advertising</li>
+
+                  <li>Trade Shows</li>
+
+                  <li>Give Aways</li>
+                </ul>
+              </li>
             </ul>
+          </li>
         </ul>
 
-    <li>Expenses
-        <ul>
-        <li>Rent and Utilities
-            <ul>
-            <li>Rent
-            <li>Rent Late Fees
-            <li>Electricity
-            <li>Gas
-            <li>Phone
-            <li>Internet
-            <li>Cable TV
-            </ul>
-        <li>Office Expenses
-            <ul>
-            <li>Accounting
-            <li>Legal
-            <li>Software
-            <li>Postage
-            <li>Bank Charges
-            <li>Credit Card Charges
-            <li>Toner, Paper, Paper Clips
-            </ul>
-        <li>Auto Expenses
-            <ul>
-            <li>Gas
-            <li>Insurance
-            <li>Repair
-            <li>Rental
-            </ul>
-        <li>Taxes
-            <ul>
-            <li>Social Security
-            <li>Unemployment
-            <li>IRS penalties
-            </ul>
-        <li>Wages &amp; Salaries
-            <ul>
-            <li>Consulting
-            <li>Wages
-            <li>Health Insurance
-            </ul>
-        <li>Travel
-            <ul>
-            <li>Air
-            <li>Hotel
-            <li>Meals
-            <li>Auto
-            </ul>
-        <li>Marketing
-            <ul>
-            <li>Advertising
-            <li>Trade Shows
-            <li>Give Aways
-            </ul>
-        </ul>
+        <p> Return to <a href="xacc-main.html"> Main Documentation
+        Page.</a></p>
+      </li>
     </ul>
-
-
   </body>
 </html>
+

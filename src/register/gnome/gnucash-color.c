@@ -40,13 +40,12 @@ GdkColor gn_white, gn_black, gn_light_gray, gn_dark_gray, gn_red;
 
 static GHashTable *color_hash_table = NULL;
 
-
 static guint
 color_hash (gconstpointer v)
 {
-        const GdkColor *c = (GdkColor *) v;
+        const uint32 *c = (uint32 *) v;
 
-        return (c->red << 16) | (c->green << 8) | (c->blue);
+        return *c;
 }
 
 
@@ -116,8 +115,9 @@ gnucash_color_argb_to_gdk (uint32 argb)
         if (!color) {
                 color = g_new0(GdkColor, 1);
                 newkey = g_new0(uint32, 1);
-                *newkey = key;
 
+                *newkey = key;
+                
                 color->red = (argb & 0xff0000) >> 8;
                 color->green = argb & 0xff00;
                 color->blue = (argb & 0xff) << 8;

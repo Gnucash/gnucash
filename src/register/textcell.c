@@ -38,7 +38,8 @@ static const char *
 TextMV (struct _BasicCell *_cell,
         const char *oldval, 
         const char *change, 
-        const char *newval)
+        const char *newval,
+        int *cursor_position)
 {
    BasicCell *cell = (BasicCell *) _cell;
 

@@ -1,286 +1,472 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
   <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
     <title>About GnuCash</title>
   </head>
-    <body bgcolor="#eeeeee"> 
 
+  <body>
     <h1>About GnuCash</h1>
-
     <hr>
-    
-    GnuCash is a program to keep track of your finances.  Its 
-    features include:
-    
+    GnuCash is a program to keep track of your finances. Its
+    features include: 
+
     <ul>
-      <li>Multiple accounts, which can be open at
-	the same time.  Create one xacc account
-	for each of your bank accounts.
-      <li>Each account keeps a running balance and
-	a reconciled balance, so you can keep track
-	of the checks that have cleared your account.
-      <li>A simple interface.  If you can use the
-	register in the back of your checkbook,
-	you can use xacc.
-      <li>Automatic account reconciling.  At the end
-	of the month, open up the reconcile window,
-	enter your bank statement's ending balance,
-	and check off the transactions that appear
-	in the bank statement.  This makes it easy
-	to track down any discrepancies.
-      <li>QuickFill... if you begin typing 
-	in the description field, and the text matches a
-	previous transaction, hitting TAB will copy
-	that previous transaction.  Handy if you have
-	similar transactions on a regular basis.
-      <li>Stock/Mutual Fund Portfolios.  Track stocks
-        individually (one per account) or in portfolio
-        of accounts (a group of accounts that can be 
-        displayed together).  
-      <li>Support for multiple currencies and currency 
-        trading accounts. (partial, still broken).
-        Bank accounts may be established in different
-        currencies, and trades with indicated prices 
-        may be made, much as stocks would be traded.
-      <li><a href="xacc-quicken.html">Quicken File Import</a>.
-        Import Quicken Version 3.0 QIF files.
-      <li><a href="xacc-reports.html">Reports</a>. Display
-        or output as HTML Balance or Profit&amp;Loss reports.
+      <li><b> Multiple accounts,</b> which can be open at the same
+      time. Create an xacc account for each of your bank
+      accounts.</li>
+
+      <li>Each account maintains both a running balance and a
+      reconciled balance, so you can keep track of the checks that
+      have cleared your account.</li>
+
+      <li>
+        <b>A simple interface.</b> 
+
+        <p> If you can use the register in the back of your
+        checkbook, you can use <tt>xacc.</tt></p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-recnwin.html"> Automated Tools for
+        Reconciling Accounts.</a></b> 
+
+        <p>At the end of the month, open up the <b> reconcile</b>
+        window, enter the ending balance from your bank statement,
+        and check off the transactions that appear in the bank
+        statement. This agrees what you have recorded in GnuCash
+        with what your bank has reported, and makes it easier to
+        track down any discrepancies.</p>
+      </li>
+
+      <li>
+        <b> QuickFill.</b> 
+
+        <p> If you begin typing in the description field, and the
+        text matches a previous transaction, hitting <tt> TAB</tt>
+        will copy in that previous transaction. This is a handy
+        time saver if you regularly create similar
+        transactions.</p>
+      </li>
+
+      <li>
+        <b>Stock/Mutual Fund Portfolios.</b> 
+
+        <p> Track stocks individually (one per account) or in
+        portfolio of accounts (a group of accounts that can be
+        displayed together).</p>
+
+        <p> There are tools to <a href="xacc-ticker.html">
+        automatically collect stock quotes.</a></p>
+      </li>
+
+      <li>
+        Support for <b> <a href="xacc-currency.html"> multiple
+        currencies</a></b> and <b> currency trading accounts.</b>
+        (partial, still broken). 
+
+        <p> Bank accounts may be established in different
+        currencies, and trades at varying exchange rates may be
+        made, in much the same way stocks trade at varying
+        prices.</p>
+      </li>
+
+      <li>
+        <b><a href="xacc-quicken.html#QIF">Quicken File
+        Import</a>.</b> 
+
+        <p> Imports Quicken-style QIF files.</p>
+      </li>
+
+      <li><b> <a href="xacc-reports.html">Reports</a>.</b> Display
+      or output as HTML Balance or Profit&amp;Loss reports.</li>
     </ul>
 
     <h2>Advanced Features</h2>
-    GnuCash offers some features not usually found
-    in simpler accounting programs.
+
+    <p> GnuCash offers some features not found in simpler
+    accounting programs.</p>
+
     <ul>
-      <li>Sub-accounts: A master account can have a hierarchy
-        of detail accounts underneath it.  This allows similar
-        account types (e.g. Cash, Bank, Stock) to be grouped 
-        into one master account (e.g. Assets).
-      <li><a href="xacc-double.html">Double Entry</a>: 
-        Every transaction can appear in two
-        accounts; one account is debited and the other is 
-        credited with exactly the same amount.  With 
-        double-entry, a transaction edited in one window 
-        will be automatically updated in all other windows 
-        showing that transaction, and in both of the 
-        accounts.
-      <li><a href="xacc-expense.html">Income/Expense Account Types
-        (Categories)</a>.   When used properly 
-        with the double-entry feature, these can be used 
-        to create both Balance Sheet and Profits &amp; Losses
-        reports.  For example, savings account interest,
-        stock dividends, or paychecks can be marked as 
-        both a deposit in a bank account, and as income in 
-        an Income account type, using the double-entry 
-        (transfer) feature.  Similarly, credit card charges
-        can be noted in the credit card account, as well 
-        as in a corresponding expense account.
-      <li>General Ledger: Multiple accounts can be displayed 
-        in one register window at the same time.  This can
-        ease the trouble of tracking down typing/entry errors.
-        It also provides a convenient way of viewing a
-        portfolio of many stocks, by showing all transactions
-        in that portfolio.
+      <li>
+        <b> <a href="xacc-groups.html"> Account Hierarchy</a></b> 
+
+        <p>A master account can have a hierarchy of more detailed
+        accounts arranged underneath it. This allows related
+        account types (<em>e.g.</em> - Cash, Bank, Stock) to be
+        grouped under one master account (<em> e.g.</em> -
+        Assets).</p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-double.html">Double Entry</a></b> 
+
+        <p>Every transaction involves two accounts, and <em> each
+        transaction</em> is required to balance. This provides
+        assurance that the overall set of books will add up
+        correctly, and prevents out-of-balance errors
+        altogether.</p>
+      </li>
+
+      <li>
+        <b> <a href="xacc-expense.html"> Income/Expense Account
+        Types</a></b> 
+
+        <p> Intuit's <a href="xacc-quicken.html"> Quicken</a>
+        product has what they call "categories" that are used to
+        track incomes and expenses. These may be used to create
+        Profits &amp; Losses reports.</p>
+      </li>
+
+      <li>
+        <b> General Ledger</b> 
+
+        <p> Multiple accounts may be displayed in one register
+        window at the same time. This can make it easier to track
+        down data errors. It also provides a convenient way of
+        viewing a portfolio of many stocks, by showing all
+        transactions in that portfolio.</p>
+      </li>
+
+      <li><b> Handling of <a href="xacc-currency.html"> multiple
+      currencies</a></b></li>
     </ul>
 
     <h2>Version</h2>
-    This version is gnucash-1.3.x, a somewhat unstable, buggy version.
-    The latest stable release is 1.2.x, you should be using that.
-    <p>
-    Versions 1.0.x and 1.2.x are considered to be stable revisions with all
-    currently known bugs fixed.  Versions 1.3.x are considered to be
-    development versions, which may have many bugs.  The next stable 
-    series will be 1.4.x
 
-    <p>
+    <p> The versioning scheme for X-Accountant parallels that of
+    the Linux kernel, where "even" sub-versions indicate versions
+    that are intended to be stable, only seeing maintenance to fix
+    bugs, and "odd" sub-versions indicate an "experimental" stream
+    that seeks to add enhancement.</p>
+
+    <p> The present "experimental" stream is gnucash-1.3.x, which
+    is somewhat unstable.</p>
+
+    <p> The latest stable release is 1.2.x; if you don't intend to
+    do development work, you should be using either this version,
+    or an older 1.0.x version. These versions are fairly stable,
+    with all currently known bugs fixed.</p>
+
+    <p> Once the 1.3.x series stabilizes, the next stable series
+    will be 1.4.x, and experimentation will likely continue on
+    1.5.x.</p>
 
     <h2>Lead Developers</h2>
+
     <dl>
-    <dt>Robin Clark &lt;rclark@hmc.edu&gt;
-    <dd>wrote the original X-Accountant in Motif
-       as a school project, taking it to version 0.9 by October 1997.
+      <dt>Robin Clark &lt;rclark@hmc.edu&gt;</dt>
 
-    <dt>Linas Vepstas &lt;linas@linas.org&gt;
-    <dd>liked what he saw: the GUI was slick,
-       the code was documented and well structured, and it was all GPL'ed.
-       And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that
-       the combobox and arrows would make an even slicker GUI, rewrote the
-       X-Accountant internals to add double-entry, an account heirarchy,
-       split out a transaction mini-engine, add support for stocks, and spiff
-       up the help menus.  This was version 1.0 as of January 1998.  Since
-       then, for version 1.1, the engine was expanded &amp; refined, and the
-       register window code completely redesigned and made mostly
-       Motif-(and GUI-)independent.  Did some prototype OFX work.
+      <dd>wrote the original X-Accountant in Motif as a school
+      project, taking it to version 0.9 by October 1997.</dd>
 
-    <dt>Jeremy Collins &lt;jcollins@gnucash.org&gt;
-    <dd>publicized the GnoMoney project
-       widely and broadly, and then changed its name to GnuCash.  Jeremy
-       created the gnucash.org web site, registered the domain, got the
-       initial GTK/gnome code working.
+      <dt>Linas Vepstas &lt;linas@linas.org&gt;</dt>
 
-    <dt>Rob Browning &lt;rlb@cs.utexas.edu&gt;
-    <dd>abused everyone for not using perl,
-       and then added guile/scheme support. Rob maintains the build
-       infrastructure, is handling the whole guile/perl extension language
-       thing, and is dealing with configuration &amp; configurability.
+      <dd>liked what he saw: the GUI was slick, the code was
+      documented and well structured, and it was all GPL'ed. And so
+      he re-wrote it: adding cell-widgets to XbaeMatrix, so that
+      the combobox and arrows would make an even slicker GUI,
+      rewrote the X-Accountant internals to add double-entry, an
+      account heirarchy, split out a transaction mini-engine, add
+      support for stocks, and spiff up the help menus. This was
+      version 1.0 as of January 1998. Since then, for version 1.1,
+      the engine was expanded &amp; refined, and the register
+      window code completely redesigned and made mostly Motif-(and
+      GUI-)independent. Did some prototype OFX work.</dd>
 
-    <dt>Dave Peticolas
-    <dd>did a whole lot and should write a bio here.
+      <dt>Jeremy Collins &lt;jcollins@gnucash.org&gt;</dt>
+
+      <dd>publicized the GnoMoney project widely and broadly, and
+      then changed its name to GnuCash. Jeremy created the
+      gnucash.org web site, registered the domain, got the initial
+      GTK/gnome code working.</dd>
+
+      <dt>Rob Browning &lt;rlb@cs.utexas.edu&gt;</dt>
+
+      <dd>abused everyone for not using perl, and then added
+      guile/scheme support. Rob maintains the build infrastructure,
+      is handling the whole guile/perl extension language thing,
+      and is dealing with configuration &amp; configurability.</dd>
+
+      <dt>Dirk Schoenberger &lt;schoenberger@signsoft.com&gt;</dt>
+
+      <dd>is working on the Qt/KDE port</dd>
+
+      <dt>Dave Peticolas &lt;peticola@cs.ucdavis.edu&gt;</dt>
+
+      <dd>hacks obsessively on GnuCash. But he can stop anytime
+      he wants to. Really.</dd>
+
     </dl>
-    <p>
-
 
     <h2>Fixes &amp; Patches</h2>
-    <br>Andrew Arensburger &lt;arensb@cfar.umd.edu&gt; for FreeBSD &amp; other patches
-    <br>Matt Armstrong &lt;matt_armstrong@bigfoot.com&gt; for misc fixes
-    <br>Fred Baube &lt;fred@moremagic.com&gt; for attempted Java port/MoneyDance
-    <br>Christopher B. Browne &lt;cbbrowne@hex.net&gt; for perl stock scripts
-    <br>Graham Chapman &lt;grahamc@zeta.org.au&gt; for the xacc-rpts addon package
-    <br>George Chen &lt;georgec@sco.com&gt; for MS-Money QIF's &amp; fixes
-    <br>Jeremey Collins &lt;jcollins@gnucash.org&gt; for GnoMoney &amp; GTK port
-    <br>Patrick Condron &lt;pcondon@rackspace.com&gt; for webserver and T1 connection.
-    <br>Ciaran Deignan &lt;Ciaran.Deignan@bull.net&gt; for AIX binary version
-    <br>Tyson Dowd   &lt;tyson@tyse.net&gt; for config/make patches &amp; debian maint.
-    <br>Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to XmHTML
-    <br>Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design notes
-    <br>Jan-Uwe Finck &lt;ju_finck@mail.netwave.de&gt; for German message translation
-    <br>Ron Forrester &lt;rjf@aracnet.com&gt; for gnome patches
-    <br>Dave Freese &lt;DFreese@osc.uscg.mil&gt; for leap-year fix
-    <br>Otto Hammersmith &lt;otto@bug.redhat.com&gt; for RedHat RPM version
-    <br>Alexandru Harsanyi &lt;haral@codec.ro&gt; for misc core dumps &amp; lockups.
-    <br>Jon K}re Hellan &lt;jk@isdn-a33.itea.ntnu.no&gt; misc core dump fixes
-    <br>Prakash Kailasa &lt;PrakashK@bigfoot.com&gt; for gnome build fixes
-    <br>Tom Kludy &lt;tkludy@csd.sgi.com&gt; for SGI Irix port
-    <br>Sven Kuenzler &lt;sk@xgm.de&gt; for SuSE README file
-    <br>Ted Lemon &lt;mellon@andare.fugue.com&gt; for NetBSD port
-    <br>Yannick Le Ny &lt;y-le-ny@ifrance.com&gt; pour la traduction en francais
-    <br>G. Allen Morris III  &lt;gam3@ann.softgams.com&gt; for QIF core dump
-    <br>Peter Norton &lt;spacey@inch.com&gt; for a valiant attempt at a GTK port
-    <br>OmNiBuS &lt;webmaster@obsidian.uia.net&gt; web site graphics &amp; content
-    <br>Myroslav Opyr &lt;mopyr@IPM.Lviv.UA&gt; for misc patches
-    <br>Alain Peyrat &lt;Alain.Peyrat@nmu.alcatel.fr&gt; for configure.in patches
-    <br>Gavin Porter &lt;maufk@csv.warwick.ac.uk&gt; for euro style dates
-    <br>Ron Record &lt;rr@sco.com&gt; for SCO Unixware &amp; OpenServer binaries
-    <br>Christopher Seawood &lt;cls@seawood.org&gt; for XbaeMatrix core dump
-    <br>Mike Simons &lt;msimons@fsimons01.erols.com&gt; misc configure.in patches
-    <br>Richard Skelton &lt;rich@brake.demon.co.uk&gt; for Solaris cleanup
-    <br>Henning Spruth &lt;spruth@bigfoot.com&gt; for German text &amp; euro date rework
-    <br>Ken Yamaguchi &lt;gooch@ic.EECS.Berkeley.EDU&gt; QIF import fixes; MYM import
     <br>
-
-
-
+     Andrew Arensburger &lt;arensb@cfar.umd.edu&gt; for FreeBSD
+    &amp; other patches <br>
+     Matt Armstrong &lt;matt_armstrong@bigfoot.com&gt; for misc
+    fixes <br>
+     Fred Baube &lt;fred@moremagic.com&gt; for attempted Java
+    port/MoneyDance <br>
+     <a href="http://www.hex.net/~cbbrowne"> Christopher B.
+    Browne</a> &lt;cbbrowne@hex.net&gt; for perl stock scripts,
+    Guile-based QIF import code <br>
+     Graham Chapman &lt;grahamc@zeta.org.au&gt; for the xacc-rpts
+    addon package <br>
+     George Chen &lt;georgec@sco.com&gt; for MS-Money QIF's &amp;
+    fixes <br>
+     Jeremey Collins &lt;jcollins@gnucash.org&gt; for GnoMoney
+    &amp; GTK port <br>
+     Patrick Condron &lt;pcondon@rackspace.com&gt; for webserver
+    and T1 connection. <br>
+     Ciaran Deignan &lt;Ciaran.Deignan@bull.net&gt; for AIX binary
+    version <br>
+     Tyson Dowd &lt;tyson@tyse.net&gt; for config/make patches
+    &amp; debian maint. <br>
+     Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to
+    XmHTML <br>
+     Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design
+    notes <br>
+     Jan-Uwe Finck &lt;ju_finck@mail.netwave.de&gt; for German
+    message translation <br>
+     Ron Forrester &lt;rjf@aracnet.com&gt; for gnome patches <br>
+     Dave Freese &lt;DFreese@osc.uscg.mil&gt; for leap-year fix
+    <br>
+     Otto Hammersmith &lt;otto@bug.redhat.com&gt; for RedHat RPM
+    version <br>
+     Alexandru Harsanyi &lt;haral@codec.ro&gt; for misc core dumps
+    &amp; lockups. <br>
+     Jon K}re Hellan &lt;jk@isdn-a33.itea.ntnu.no&gt; misc core
+    dump fixes <br>
+     Prakash Kailasa &lt;PrakashK@bigfoot.com&gt; for gnome build
+    fixes <br>
+     Tom Kludy &lt;tkludy@csd.sgi.com&gt; for SGI Irix port <br>
+     Sven Kuenzler &lt;sk@xgm.de&gt; for SuSE README file <br>
+     Ted Lemon &lt;mellon@andare.fugue.com&gt; for NetBSD port <br>
+     Yannick Le Ny &lt;y-le-ny@ifrance.com&gt; pour la traduction
+    en francais <br>
+     G. Allen Morris III &lt;gam3@ann.softgams.com&gt; for QIF core
+    dump <br>
+     Peter Norton &lt;spacey@inch.com&gt; for a valiant attempt at
+    a GTK port <br>
+     OmNiBuS &lt;webmaster@obsidian.uia.net&gt; web site graphics
+    &amp; content <br>
+     Myroslav Opyr &lt;mopyr@IPM.Lviv.UA&gt; for misc patches <br>
+     Alain Peyrat &lt;Alain.Peyrat@nmu.alcatel.fr&gt; for
+    configure.in patches <br>
+     Gavin Porter &lt;maufk@csv.warwick.ac.uk&gt; for euro style
+    dates <br>
+     Ron Record &lt;rr@sco.com&gt; for SCO Unixware &amp;
+    OpenServer binaries <br>
+     Christopher Seawood &lt;cls@seawood.org&gt; for XbaeMatrix
+    core dump <br>
+     Mike Simons &lt;msimons@fsimons01.erols.com&gt; misc
+    configure.in patches <br>
+     Richard Skelton &lt;rich@brake.demon.co.uk&gt; for Solaris
+    cleanup <br>
+     Henning Spruth &lt;spruth@bigfoot.com&gt; for German text
+    &amp; euro date rework <br>
+     Ken Yamaguchi &lt;gooch@ic.EECS.Berkeley.EDU&gt; QIF import
+    fixes; MYM import <br>
+     
 
     <h2>Supported Operating Systems</h2>
-    gnucash-1.0.18 (xacc-1.0.18) is known to work in the following configs:
-    <br>Linux 2.0.x           -- Intel  w/ RedHat Motif
-    <br>Linux 2.0.x           -- Intel  w/ Lesstif v0.81
-    <br>Linux Debian          -- Intel  w/ Lesstif v0.81
-    <br>SGI IRIX              -- MIPS
-    <br>IBM AIX 4.1.5         -- RS/6000  
-    <br>SCO Unixware 7        -- Intel
-    <br>SCO OpenServer 5.0.4  -- Intel
-    <br>NetBSD                -- Intel
-    <p>
+    gnucash-1.0.18 (xacc-1.0.18) is known to work on the following
+    systems: 
 
-    <a href="http://www.gnucash.org/">
-    <img src="logos/linux.gif"></a>
+    <ul>
+      <li>Linux 2.0.x -- Intel w/ RedHat Motif</li>
 
-    <a href="http://www.sco.com/skunkware">
-    <img src="logos/skunkware.gif"></a>
+      <li>Linux 2.0.x -- Intel w/ Lesstif v0.81</li>
 
-    <a href="http://www.bull.de/pub/">
-    <img src="logos/bullogogross.gif">
-    <img src="logos/ibm.gif">
-    </a>
-    <a href="http://www.sgi.com/">
-    <img src="logos/sgi.gif">
-    </a>
+      <li>Linux Debian -- Intel w/ Lesstif v0.81</li>
 
-    <a href="http://www.debian.org/">
-    <img src="logos/debian.jpg">
-    </a>
+      <li>SGI IRIX -- MIPS</li>
 
-    <img src = "logos/NetBSD-banner.gif">
+      <li>IBM AIX 4.1.5 -- RS/6000</li>
+
+      <li>SCO Unixware 7 -- Intel</li>
+
+      <li>SCO OpenServer 5.0.4 -- Intel</li>
+
+      <li>NetBSD -- Intel</li>
+    </ul>
+
+    <p> <a href="http://www.gnucash.org/"> <img src=
+    "logos/linux.gif"></a> <a href="http://www.sco.com/skunkware">
+    <img src="logos/skunkware.gif"></a> <a href= 
+    "http://www.bull.de/pub/"><img src="logos/bullogogross.gif">
+    <img src="logos/ibm.gif"></a> <a href="http://www.sgi.com/">
+    <img src="logos/sgi.gif"></a> <a href="http://www.debian.org/">
+    <img src="logos/debian.jpg"></a> <img src= 
+    "logos/NetBSD-banner.gif"></p>
 
     <h2>History</h2>
-    The table below shows some historical lines-of-code and number-of-files
-    counts for the X-Accountant/GnuCash development project
-    <br>
-    <table border=1>
-    <CAPTION>Historical Development Stats</CAPTION>
-    <tr align=center>
-    <th>Version
-    <th>engine 
-    <th>register 
-    <th>ledger
-    <th>motif 
-    <th>gnome 
-    <th>qt 
-    <th>prefs (scm)
-    <th>docs (html)
-    <th>misc
-    <th>Total
+    The table below shows some historical lines-of-code and
+    number-of-files counts for the X-Accountant/GnuCash development
+    project <br>
+     
 
-    <tr align=center>
-    <td>xacc-0.9<br>Sept 97
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>34 files<br>(7.5+0.9)
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>5 files<br>(0.4)
-    <td> - 
-    <td>39 files<br>(8.8)
+    <table border="1">
+      <caption>
+         Historical Development Stats
+      </caption>
 
-    <tr align=center>
-    <td>xacc-0.9w<br>Dec 97
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>51 files<br>(13.8+1.5)
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>9 files<br>(0.8)
-    <td> - 
-    <td>60 files<br>(16.1)
+      <tr align="center">
+        <th>Version</th>
 
-    <tr align=center>
-    <td>xacc-1.0.17<br>Feb 98
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>52 files<br>(14.8+1.8)
-    <td> - 
-    <td> - 
-    <td> - 
-    <td>12 files<br>(1.4)
-    <td> - 
-    <td>64 files<br>(18.0)
+        <th>engine</th>
 
-    <tr align=center>
-    <td>gnucash-1.1.15<br>Aug 98
-    <td>24 files<br>(6.2+1.5)
-    <td>31 files<br>(6.1+1.7)
-    <td>5 files<br>(1.4+0.4)
-    <td>30 files<br>(7.4+0.7)
-    <td>17 files<br>(3.4+0.5)
-    <td>16 files<br>(1.2+0.2)
-    <td>3 files<br>(0.3)
-    <td>16 files<br>(1.9)
-    <td>not counted<br>(>1.0)
-    <td>142 files<br>(32.9)
+        <th>register</th>
+
+        <th>ledger</th>
+
+        <th>motif</th>
+
+        <th>gnome</th>
+
+        <th>qt</th>
+
+        <th>prefs (scm)</th>
+
+        <th>docs (html)</th>
+
+        <th>misc</th>
+
+        <th>Total</th>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-0.9<br>
+         Sept 97</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>34 files<br>
+         (7.5+0.9)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>5 files<br>
+         (0.4)</td>
+
+        <td>-</td>
+
+        <td>39 files<br>
+         (8.8)</td>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-0.9w<br>
+         Dec 97</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>51 files<br>
+         (13.8+1.5)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>9 files<br>
+         (0.8)</td>
+
+        <td>-</td>
+
+        <td>60 files<br>
+         (16.1)</td>
+      </tr>
+
+      <tr align="center">
+        <td>xacc-1.0.17<br>
+         Feb 98</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>52 files<br>
+         (14.8+1.8)</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>-</td>
+
+        <td>12 files<br>
+         (1.4)</td>
+
+        <td>-</td>
+
+        <td>64 files<br>
+         (18.0)</td>
+      </tr>
+
+      <tr align="center">
+        <td>gnucash-1.1.15<br>
+         Aug 98</td>
+
+        <td>24 files<br>
+         (6.2+1.5)</td>
+
+        <td>31 files<br>
+         (6.1+1.7)</td>
+
+        <td>5 files<br>
+         (1.4+0.4)</td>
+
+        <td>30 files<br>
+         (7.4+0.7)</td>
+
+        <td>17 files<br>
+         (3.4+0.5)</td>
+
+        <td>16 files<br>
+         (1.2+0.2)</td>
+
+        <td>3 files<br>
+         (0.3)</td>
+
+        <td>16 files<br>
+         (1.9)</td>
+
+        <td>not counted<br>
+         (&gt;1.0)</td>
+
+        <td>142 files<br>
+         (32.9)</td>
+      </tr>
     </table>
 
-    <p>
-    Each cell contains:
+    <p> Each cell contains:<br>
     <br>
-    <br>number of *c and *.h files
-    <br>(KLOCS in *.c + KLOCS in *.h),
-    <p>
-    where KLOC == kilo-lines-of-code, as reported by <tt>wc</tt>.
+     number of *c and *.h files<br>
+     (KLOCS in *.c + KLOCS in *.h),</p>
+
+    <p> where KLOC == kilo-lines-of-code, as reported by <tt>
+    wc</tt>.</p>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

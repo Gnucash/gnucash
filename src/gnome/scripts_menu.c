@@ -19,55 +19,105 @@
 
 #include "scripts_menu.h"
 
-#include <guile/gh.h>
-
 #include "top-level.h"
+
+#include "guile-util.h"
 #include "util.h"
+
+
+typedef struct _ScriptInfo ScriptInfo;
+struct _ScriptInfo
+{
+  SCM script;
+
+  GnomeUIInfo info[2];
+};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-/* FIXME: is this always kosher?  Will SCM's always fit in a gpointer? */
+static GSList *script_list = NULL;
+
 
 static void
 gnc_extensions_menu_cb( GtkWidget *w, gpointer p)
 {
-  SCM closure = (SCM) p;
+  ScriptInfo *si = (ScriptInfo *) p;
 
-  if (!p)
+  if (si == NULL)
     return;
 
-  gh_call0(closure);
+  gh_call0(si->script);
 }
 
-void
-gnc_extensions_menu_add_item(char name[],
-                             char hint[],
-                             gpointer data)
+
+static ScriptInfo *
+gnc_extensions_create_script_info(char *name, char *hint, SCM script)
 {
-  GnomeUIInfo item_info[2];
-  GnomeUIInfo tmpi;
+  ScriptInfo *si;
+
+  si = g_new0(ScriptInfo, 1);
+  si->script = script;
+  gnc_register_c_side_scheme_ptr(script);
+
+  script_list = g_slist_prepend(script_list, si);
+
+  si->info[0].type = GNOME_APP_UI_ITEM;
+  si->info[0].label = g_strdup(name);
+  si->info[0].hint = g_strdup(hint);
+  si->info[0].moreinfo = gnc_extensions_menu_cb;
+  si->info[0].user_data = si;
+  si->info[0].unused_data = NULL;
+  si->info[0].pixmap_type = GNOME_APP_PIXMAP_NONE;
+  si->info[0].pixmap_info = NULL;
+  si->info[0].accelerator_key = 0;
+  si->info[0].ac_mods = (GdkModifierType) 0;
+  si->info[0].widget = NULL;
   
-  tmpi.type = GNOME_APP_UI_ITEM;
-  tmpi.label = N_(name);
-  tmpi.hint = N_(hint);
-  tmpi.moreinfo = gnc_extensions_menu_cb;
-  tmpi.user_data = data;
-  tmpi.unused_data = NULL;
-  tmpi.pixmap_type = GNOME_APP_PIXMAP_NONE;
-  tmpi.pixmap_info = NULL;
-  tmpi.accelerator_key = 0;
-  tmpi.ac_mods = (GdkModifierType) 0;
-  tmpi.widget = NULL;
-  item_info[0] = tmpi;
+  si->info[1].type = GNOME_APP_UI_ENDOFINFO;
+  si->info[1].label = NULL;
+  si->info[1].moreinfo = NULL;
+
+  return si;
+}
+
+
+void
+gnc_extensions_menu_add_item(char *name, char *hint, SCM script)
+{
+  ScriptInfo *si;
+
+  g_return_if_fail(gh_procedure_p(script));
+
+  si = gnc_extensions_create_script_info(name, hint, script);
   
-  tmpi.type = GNOME_APP_UI_ENDOFINFO;
-  tmpi.label = NULL;
-  tmpi.moreinfo = NULL;
-  item_info[1] = tmpi;
-  
-  PINFO ("gnc_extensions_menu_add_item(): %s %s %p\n", name, hint, data);
-  gnome_app_insert_menus(GNOME_APP(gnc_get_ui_data()), "Extensions/",
-			 item_info);
-  gnome_app_install_menu_hints(GNOME_APP(gnc_get_ui_data()), item_info);
+  PINFO ("gnc_extensions_menu_add_item(): %s %s %p\n", name, hint, si);
+
+  gnome_app_insert_menus(GNOME_APP(gnc_get_ui_data()),
+                         "Extensions/", si->info);
+  gnome_app_install_menu_hints(GNOME_APP(gnc_get_ui_data()), si->info);
+}
+
+
+static void
+cleanup_script_info(gpointer script_info, gpointer not_used)
+{
+  ScriptInfo *si = (ScriptInfo *) script_info;
+
+  gnc_register_c_side_scheme_ptr(si->script);
+
+  g_free(si->info[0].label);
+  g_free(si->info[0].hint);
+  g_free(si);
+}
+
+
+void
+gnc_extensions_shutdown()
+{
+  g_slist_foreach(script_list, cleanup_script_info, NULL);
+
+  g_slist_free(script_list);
+
+  script_list = NULL;
 }

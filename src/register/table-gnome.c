@@ -114,7 +114,7 @@ xaccCreateTable (GtkWidget *widget, void *data)
         xaccRefreshHeader (table);
 
         gnucash_sheet_table_load (sheet);
-        gnucash_sheet_cursor_set_from_table (sheet);
+        gnucash_sheet_cursor_set_from_table (sheet, TRUE);
         gnucash_sheet_redraw_all (sheet);
         
         return;
@@ -142,13 +142,11 @@ xaccRefreshTableGUI (Table * table)
 
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+doRefreshCursorGUI (Table * table, CellBlock *curs,
+                    int from_row, int from_col, gncBoolean do_scroll)
 {
         GnucashSheet *sheet;
-        int phys_row, phys_col;
-        int to_row, to_col;
         gint virt_row, virt_col;
-        int i,j;
 
         if (!table)
                 return;
@@ -160,14 +158,17 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
         /* if the current cursor is undefined, there is nothing to do. */
         if (!curs) return;
         if ((0 > from_row) || (0 > from_col)) return;
+        if ((from_row >= table->num_phys_rows) ||
+            (from_col >= table->num_phys_cols))
+                return;
 
         sheet = GNUCASH_SHEET(table->table_widget);
 
-  /* compute the physical bounds of the current cursor */
+        /* compute the physical bounds of the current cursor */
         virt_row = table->locators[from_row][from_col]->virt_row;
         virt_col = table->locators[from_row][from_col]->virt_col;
 
-        gnucash_sheet_cursor_set_from_table (sheet);
+        gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         gnucash_sheet_block_set_from_table (sheet, virt_row, virt_col);
         gnucash_sheet_redraw_block (sheet, virt_row, virt_col);
 }

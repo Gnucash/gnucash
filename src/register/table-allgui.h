@@ -239,9 +239,6 @@ struct _Table {
   int prev_phys_traverse_row;
   int prev_phys_traverse_col;
 
-  int reverify_phys_row;
-  int reverify_phys_col;
-   
   /* Since we are using C not C++, but we need inheritance, 
    * cock it up with a #defined thingy that the "derived class" 
    * can specify.
@@ -339,10 +336,11 @@ int
 gnc_register_cell_valid(Table *table, int row, int col);
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
+doRefreshCursorGUI (Table * table, CellBlock *curs,
+                    int from_row, int from_col, gncBoolean do_scroll);
 
 void        
-xaccRefreshCursorGUI (Table * table);
+xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll);
 
 /* 
  * gnc_table_enter_update() is a utility function used to determine
@@ -367,7 +365,8 @@ const char *
 gnc_table_modify_update(Table *table, int row, int col,
                         const char *oldval,
                         const char *change,
-                        char *newval);
+                        char *newval,
+                        int *cursor_position);
 gncBoolean
 gnc_table_traverse_update(Table *table, int row, int col,
                           gncTableTraversalDir dir,

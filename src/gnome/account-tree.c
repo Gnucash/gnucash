@@ -117,6 +117,7 @@ gnc_account_tree_init(GNCAccountTree *tree)
 
   gtk_clist_set_shadow_type(GTK_CLIST(tree), GTK_SHADOW_IN);
   gtk_clist_column_titles_passive(GTK_CLIST(tree));
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree), 0, TRUE);
   gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->balance_column,
 				     GTK_JUSTIFY_RIGHT);
@@ -286,8 +287,6 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 						    tree->root_account),
 			gncGetCurrentGroup());
 
-  gtk_clist_thaw(clist);
-
   gtk_clist_columns_autosize(clist);
 
   gnc_account_tree_update_column_visibility(tree);
@@ -297,9 +296,12 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   if (adjustment != NULL)
   {
-    save_value = CLAMP(save_value, adjustment->lower, adjustment->upper);
+    save_value = CLAMP(save_value, adjustment->lower,
+                       adjustment->upper - adjustment->page_size);
     gtk_adjustment_set_value(adjustment, save_value);
   }
+
+  gtk_clist_thaw(clist);
 
   g_hash_table_destroy(expanded_accounts);
 }

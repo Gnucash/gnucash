@@ -52,23 +52,23 @@ include @top_srcdir@/Makefile.common
 
 default: $(OBJS)
 
-motif: ${MOTIF_OBJS}
+motif motif.static: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
 	@cd reports;           $(MAKE) default
 	@cd g-wrap;            $(MAKE) motif
 	@cd swig;              $(MAKE) motif
 	@cd guile;             $(MAKE) default
-	@cd motif;             $(MAKE) motif
+	@cd motif;             $(MAKE) $@
 
-gnome: ${GNOME_OBJS}
+gnome gnome.static: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
 	@cd reports;           $(MAKE) default
 	@cd g-wrap;            $(MAKE) gnome
 	@cd swig;              $(MAKE) gnome
 	@cd guile;             $(MAKE) default
-	@cd gnome;             $(MAKE) gnome
+	@cd gnome;             $(MAKE) $@
 
 qt: $(QT_OBJS)
 	@cd engine;            $(MAKE) default
@@ -79,8 +79,4 @@ qt: $(QT_OBJS)
 	@cd guile;             $(MAKE) default 	
 	@cd qt;                $(MAKE) qt
 
-.PHONY: default qt gnome motif all
-
-# Local Variables:
-# tab-width: 2
-# End:
+.PHONY: default qt gnome gnome.static motif motif.static all

@@ -1,6 +1,8 @@
 ;;; $Id$
 ;;; Import QIF File
 
+(gnc:support "importqif.scm")
+
 (define testing? #f)  ;;; Should we do testing?
 
 (define favorite-currency "USD")  ;;;; This may need to change...

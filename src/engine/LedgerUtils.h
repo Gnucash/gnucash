@@ -21,12 +21,14 @@
 #ifndef __XACC_LEDGER_UTILS_H__
 #define __XACC_LEDGER_UTILS_H__
 
+#include "gnc-common.h"
 #include "config.h"
 
 #include "Account.h"
 
 /** PROTOTYPES ******************************************************/
 
+gncBoolean accListHasAccount (Account **list, Account *findme);
 int        accListCount (Account **list);
 Account ** accListCopy (Account **list);
 Account ** xaccGroupToList (Account *);

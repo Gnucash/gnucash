@@ -26,21 +26,31 @@
 #include "top-level.h"
 
 #include "window-main.h"
-#include "option-util.h"
+#include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
+#include "scripts_menu.h"
+#include "window-help.h"
+#include "window-report.h"
 #include "FileIO.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "MainWindow.h"
 #include "Destroy.h"
+#include "Refresh.h"
 #include "messages.h"
 #include "TransLog.h"
 #include "util.h"
+#include "date.h"
+#include "AccWindow.h"
 
 
 /** PROTOTYPES ******************************************************/
+static void gnc_configure_date_format_cb(gpointer);
+static void gnc_configure_date_format(void);
+static void gnc_configure_newacc_currency_cb(gpointer);
+static void gnc_configure_newacc_currency(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -99,6 +109,13 @@ gnucash_ui_init()
 
     gnc_options_init();
 
+    gnc_configure_date_format();
+    gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL);
+
+    gnc_configure_newacc_currency();
+    gnc_register_option_change_callback(gnc_configure_newacc_currency_cb,
+                                        NULL);
+
     mainWindow();
 
     gnucash_style_init();
@@ -118,10 +135,20 @@ gnc_ui_shutdown (void)
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
-    xaccGroupWindowDestroy(gncGetCurrentGroup());
+    gnc_ui_destroy_all_subwindows();
     gtk_widget_hide(app);
     gtk_main_quit();
   }
+}
+
+/* ============================================================== */
+
+void
+gnc_ui_destroy_all_subwindows (void)
+{
+  xaccGroupWindowDestroy(gncGetCurrentGroup());
+  gnc_ui_destroy_help_windows();
+  gnc_ui_destroy_report_windows();
 }
 
 /* ============================================================== */
@@ -133,6 +160,7 @@ gnc_ui_destroy (void)
     return;
 
   gnc_options_shutdown();
+  gnc_extensions_shutdown();
 
   if (app != NULL)
   {
@@ -182,4 +210,102 @@ gnucash_ui_select_file()
   return (1);
 }
 
+/* ============================================================== */
+
+/* gnc_configure_date_format_cb
+ *    Callback called when options change - sets dateFormat to the current
+ *    value on the scheme side and refreshes register windows
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_date_format_cb(gpointer data)
+{
+  gnc_configure_date_format();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+
+/* gnc_configure_date_format
+ *    sets dateFormat to the current value on the scheme side
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_date_format (void)
+{
+  char *format_code = gnc_lookup_multichoice_option("International", 
+                                                    "Date Format",
+                                                    "us");
+
+  DateFormat df;
+
+  if( safe_strcmp(format_code, "us") == 0)
+  {
+    df = DATE_FORMAT_US;
+  }
+
+  else if( safe_strcmp(format_code, "uk") == 0)
+  {
+    df = DATE_FORMAT_UK;
+  }
+
+  else if( safe_strcmp(format_code, "ce") == 0)
+  {
+    df = DATE_FORMAT_CE;
+  }
+
+  else if( safe_strcmp(format_code, "iso") == 0)
+  {
+    df = DATE_FORMAT_ISO;
+  }
+
+  else if( safe_strcmp(format_code, "locale") == 0)
+  {
+    df = DATE_FORMAT_LOCALE;
+  }
+
+  else
+  {
+    PERR("Incorrect date format code");
+    return;
+  }
+
+  setDateFormat(df);
+  free(format_code);
+}
+
+/* gnc_configure_date_format_cb
+ *    Callback called when options change - sets default currency to
+ *    the current value on the scheme size
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_newacc_currency_cb(gpointer data)
+{
+  gnc_configure_newacc_currency();
+}
+
+/* gnc_configure_newacc_currency
+ *    sets the default currency for new accounts to the 
+ *    current value on the scheme side
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_newacc_currency(void)
+{
+  char *newacc_def_currency = 
+    gnc_lookup_string_option("International",
+                             "Default Currency",
+                             "USD");
+  xaccSetDefaultNewaccountCurrency(newacc_def_currency);
+  free(newacc_def_currency);
+}
+                                               
 /****************** END OF FILE **********************/

@@ -21,10 +21,9 @@
 #define __SCRIPTS_MENU_H__
 
 #include <gnome.h>
+#include <guile/gh.h>
 
-void gnc_extensions_menu_add_item(char name[], char hint[], gpointer data);
-
-GnomeUIInfo *create_scripts_menu_data();
-void         destroy_scripts_menu_data(); 
+void gnc_extensions_menu_add_item(char *name, char *hint, SCM script);
+void gnc_extensions_shutdown();
 
 #endif

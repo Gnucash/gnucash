@@ -1,65 +1,120 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
   <head>
-    <title>Using the Double Entry Feature</title>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>Understanding Double Entry Accounting</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
-  <h2>What is Double Entry?</h2>
-    Double entry is an accounting methodology used by professionals
-    to make sure that all accounts are properly balanced.  When accounts
-    balance, the likelihood that a data-entry error has been made is much 
-    less.  For large, complex accounts with many transactions, it is easy 
-    to make errors that might go undetected for a long time. Double-entry
-    is a crucial technology for catching those errors.
-    <p>
-    A double-entry transaction is a transaction that appears in two 
-    accounts.  One account is debited by an amount exactly equal to 
-    what the other is credited.  Thus, all transactions are always 
-    transfers between two accounts.  Since they always appear with
-    a plus sign in one account, and a minus sign in the other, the
-    total over all accounts will always be zero, and thus, balanced
-    accounts are guaranteed.
-    <p>
-    Double-entry is already familiar to most people as a transfer 
-    from one bank account to another, where money is withdrawn from 
-    one and deposited in another.  Far less familiar is the idea that 
-    double entry can be used to track income and expenses as well as 
-    bank transfers.  See the 
-    "<a href="xacc-expense.html">Income/Expense</a>" help window 
-    for more information.
 
-  <h2>Using Double Entry</h2>
-    To use the double entry, click on a box in the column marked
-    "Transfer From" on the left-hand side of the register.  A menu
-    will drop down, listing all of the accounts from which a transfer 
-    may be made.   Select one.  When you record the transaction,
-    the double-entry will automatically be made, and the transaction 
-    automatically appear in all windows showing the transfered-from
-    and the transferred-to accounts.
-    <p>
-    To change a double-entry transaction, edit it in any window in 
-    which it appears.  Any changes made will be automatically 
-    reflected in both accounts and all windows displaying the
-    transaction.   Similarly, when a double-entry transaction is 
-    deleted, it is deleted from both accounts; balances are
-    automatically recalculated for both accounts.
-    <p>
-    To change the transfer account, simply select a new account 
-    from the pull-down menu.  When you record the transaction, 
-    it will automatically be selected from the old account, and 
-    inserted into the new account.
-    
-  <h2>Scrubbing Clean</h2>
-    GnuCash can be configured to be strict about double entry,
-    or to be loose.  In loose mode, you can create unbalanced transactions,
-    that is, transactions that don't pair up with a matching entry,
-    and thus don't balance to zero.  To clean up these unbalanced transactions,
-    you can <b>scrub</b> the account clean by choosing "Scrub" from the 
-    window menu.  This will examine each transaction; if the transaction doesn't
-    balance, a split entry will be created and placed into an account
-    named "Unbalanced".  You can then review these splits and move them
-    to thier proper accounts.
+  <body>
+    <h2>What is Double Entry Accounting?</h2>
 
+    <p> Double entry is an accounting methodology used by
+    professional accountants to make sure that all accounts and
+    indeed <em> each transaction</em> is properly balanced. When
+    these are all required to balance, the likelihood of data-entry
+    errors is greatly reduced. For large, complex sets of accounts
+    with many transactions, it is distressingly easy to make errors
+    that may go undetected for a long time. Double-entry is a
+    crucial technology that has been used since the 13th century to
+    avoid such errors.</p>
+
+    <p> A double-entry transaction is a transaction that contains
+    entries for two (or more) accounts that balance against one
+    another. One account is <em>debited</em> by an amount exactly
+    equal to what the other is <em>credited.</em> By ensuring that
+    each transaction balances, a balanced set of accounts is
+    guaranteed. This doesn't prevent you from having errors, but
+    certainly eliminates the large class of <b> I forgot to enter
+    that part of the transaction</b> errors.</p>
+
+    <p> Double-entry may be introduced in a more intuitive way via
+    the notion of a transfer from one bank account to another,
+    where an amount is taken out of one bank account and deposited
+    in the other. This is effectively the "rule" of double entry
+    accounting; if you add something in to one account, you <em>
+    have</em> to have another component to that transaction to
+    balance this.</p>
+
+    <p> <b> Not-quite-an-aside:</b> If you look at your bank
+    statements, they are typically written up from the <b>
+    bank's</b> perspective, which is exactly <em> opposite</em> to
+    yours. For instance, when you put money in, establishing a
+    deposit, this establishes a <b> DEBT</b> on their part.</p>
+
+    <p> The perhaps less obvious extension is the notion that
+    double entry can be used to represent income and expenses as
+    well as bank transfers. See the <a href="xacc-expense.html">
+    Income/Expense</a> page for more information.</p>
+
+    <p> <a name="IDENTITY"> In a traditional system that records
+    debits and credits separately, the identity that all
+    transactions are required to satisfy is that <tt> Total of
+    Debits = Total of Credits.</tt></a></p>
+
+    <p> X-Accountant treats "Debits" as positive values, and
+    "Credits" as negative values, so that this identity simplifies
+    to <tt> value<sub>1</sub> + value<sub>2</sub> +
+    value<sub>3</sub> + ... = 0</tt></p>
+
+    <h2>Using Double Entry</h2>
+
+    <p> To use the double entry system, click on a box in the
+    column marked "Transfer From" on the left-hand side of the
+    register. A menu will drop down, listing all of the accounts
+    from which a transfer may be made. Select one. When you record
+    the transaction, the double-entry will automatically be made,
+    and the transaction automatically appear in all windows showing
+    the transfered-from and the transferred-to accounts.</p>
+
+    <p> To <em> change</em> a double-entry transaction, edit the
+    transaction in any window in which it appears. Any changes made
+    will be automatically reflected in both accounts and all
+    windows displaying the transaction. Similarly, when a
+    double-entry transaction is deleted, it will be deleted from
+    both accounts; balances are automatically recalculated for <em>
+    both</em> accounts.</p>
+
+    <p> To change the transfer account, simply select a new account
+    from the pull-down menu. When you record the transaction, it
+    will automatically be selected from the old account, and
+    inserted into the new account.</p>
+
+    <h2>Scrubbing Clean</h2>
+
+    <p> GnuCash can be configured to be strict about double entry,
+    or you may configure it to be "loose."</p>
+
+    <p> In "loose" mode, you can create <em>unbalanced
+    transactions,</em> that is, transactions where the "splits"
+    don't balance to zero. That discards the validation that comes
+    from using the more strict double entry scheme, which is
+    probably not a really wise move. In effect:</p>
+
+    <ul>
+      <li>If you aren't sure of what you're doing, you likely do
+      not want to discard the validation of <b> double entry,</b>
+      as this helps you keep your accounts balanced even when
+      you're not perfectly clear on this.</li>
+
+      <li>If you are an <em> accounting whiz,</em> you'll know that
+      it's <em> really important</em> to keep things in balance,
+      and again will prefer <b> double entry.</b></li>
+    </ul>
+
+    <p> But if you decide to "outsmart the system," and have a
+    number of unbalanced transactions, you'll probably want to
+    clean this up at some point. To clean up these unbalanced
+    transactions, you <b> Scrub</b> the account clean by choosing
+    <tt>Scrub</tt> from the window menu. This will examine each
+    transaction; if the transaction doesn't balance, a split entry
+    will be created and placed into an account named <b>
+    Unbalanced.</b> You may then review these splits and move them
+    to their proper accounts.</p>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

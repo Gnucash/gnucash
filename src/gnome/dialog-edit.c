@@ -32,6 +32,8 @@
 
 #include "AccWindow.h"
 #include "MainWindow.h"
+#include "Refresh.h"
+#include "FileDialog.h"
 #include "dialog-utils.h"
 #include "messages.h"
 #include "util.h"
@@ -149,6 +151,7 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
   gnc_ui_free_field_strings(&strings);
 
   gnc_refresh_main_window();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
 
   gnome_dialog_close(GNOME_DIALOG(editAccData->dialog));
 }
@@ -166,13 +169,20 @@ editAccWindow(Account *acc)
 {
   EditAccWindow * editAccData;
   GtkWidget *vbox, *widget, *dialog;
+  char *name, *title;
   
   FETCH_FROM_LIST (EditAccWindow, editAccList, acc, account, editAccData);
 
-  dialog = gnome_dialog_new(EDIT_ACCT_STR,
+  name = gnc_ui_get_account_full_name(acc, ":");
+  title = g_strconcat(name, " - ", EDIT_ACCT_STR, NULL);
+
+  dialog = gnome_dialog_new(title,
 			    GNOME_STOCK_BUTTON_OK,
 			    GNOME_STOCK_BUTTON_CANCEL,
 			    NULL);
+
+  g_free(name);
+  g_free(title);
 
   editAccData->dialog  = dialog;
   editAccData->account = acc;

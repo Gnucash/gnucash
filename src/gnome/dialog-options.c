@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-options.h -- GNOME option handling                        *
+ * dialog-options.c -- GNOME option handling                        *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,14 +25,21 @@
 #include "query-user.h"
 #include "util.h"
 
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GnomePropertyBox *options_dialog = NULL;
 
-
-static void
+/********************************************************************\
+ * gnc_option_set_ui_value                                          *
+ *   sets the GUI representation of an option with either its       *
+ *   current guile value, or its default value                      *
+ *                                                                  *
+ * Args: option      - option structure containing option           *
+ *       use_default - if true, use the default value, otherwise    *
+ *                     use the current value                        *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
 gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 {
   gboolean bad_value = FALSE;
@@ -64,12 +71,26 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   {
     if (gh_string_p(value))
     {
-      char *string = gh_scm2newstr(gh_call0(getter), NULL);
+      char *string = gh_scm2newstr(value, NULL);
       gtk_entry_set_text(GTK_ENTRY(option->widget), string);
       free(string);
     }
     else
       bad_value = TRUE;
+  }
+  else if (safe_strcmp(type, "multichoice") == 0)
+  {
+    int index;
+
+    index = gnc_option_value_permissible_value_index(option, value);
+    if (index < 0)
+      bad_value = TRUE;
+    else
+    {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(option->widget), index);
+      gtk_object_set_data(GTK_OBJECT(option->widget), "gnc_multichoice_index",
+                          GINT_TO_POINTER(index));
+    }
   }
   else
   {
@@ -84,12 +105,14 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   free(type);
 }
 
-void
-_gnc_option_refresh_ui(SCM guile_option)
-{
-  gnc_option_set_ui_value(gnc_get_option_by_SCM(guile_option), FALSE);
-}
 
+/********************************************************************\
+ * gnc_option_get_ui_value                                          *
+ *   returns the SCM representation of the GUI option value         *
+ *                                                                  *
+ * Args: option - option structure containing option                *
+ * Return: SCM handle to GUI option value                           *
+\********************************************************************/
 SCM
 gnc_option_get_ui_value(GNCOption *option)
 {
@@ -116,9 +139,20 @@ gnc_option_get_ui_value(GNCOption *option)
     result = gh_str02scm(string);
     g_free(string);
   }
+  else if (safe_strcmp(type, "multichoice") == 0)
+  {
+    gpointer _index;
+    int index;
+
+    _index = gtk_object_get_data(GTK_OBJECT(option->widget),
+                                 "gnc_multichoice_index");
+    index = GPOINTER_TO_INT(_index);
+
+    result = gnc_option_value_permissible_value(option, index);
+  }
   else
   {
-    PERR("_gnc_option_get_guile_value: "
+    PERR("gnc_option_get_ui_value: "
 	 "Unknown type for refresh. Ignoring.\n");
   }
 
@@ -130,12 +164,15 @@ gnc_option_get_ui_value(GNCOption *option)
 static void
 default_button_cb(GtkButton *button, gpointer data)
 {
+  GtkWidget *pbox;
   GNCOption *option = data;
 
   gnc_option_set_ui_value(option, TRUE);
 
   option->changed = TRUE;
-  gnome_property_box_changed(options_dialog);
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
 
 static GtkWidget *
@@ -155,19 +192,85 @@ gnc_option_create_default_button(GNCOption *option)
 static void
 gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
 {
+  GtkWidget *pbox;
   GNCOption *option = data;
 
   option->changed = TRUE;
-  gnome_property_box_changed(options_dialog);
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
 
 static void
 gnc_option_changed_cb(GtkEditable *editable, gpointer data)
 {
+  GtkWidget *pbox;
   GNCOption *option = data;
 
   option->changed = TRUE;
-  gnome_property_box_changed(options_dialog);
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(editable));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
+{
+  GtkWidget *pbox, *omenu;
+  GNCOption *option = data;
+  gpointer _current;
+  gint current;
+
+  _current = gtk_object_get_data(GTK_OBJECT(option->widget),
+                                 "gnc_multichoice_index");
+  current = GPOINTER_TO_INT(_current);
+
+  if (current == index)
+    return;
+
+  gtk_option_menu_set_history(GTK_OPTION_MENU(option->widget), index);
+  gtk_object_set_data(GTK_OBJECT(option->widget), "gnc_multichoice_index",
+                      GINT_TO_POINTER(index));
+
+  option->changed = TRUE;
+
+  omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
+  pbox = gtk_widget_get_toplevel(omenu);
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static GtkWidget *
+gnc_option_create_multichoice_widget(GNCOption *option)
+{
+  GtkWidget *widget;
+  GNCOptionInfo *info;
+  int num_values;
+  int i;
+
+  num_values = gnc_option_value_num_permissible_values(option);
+
+  g_return_val_if_fail(num_values >= 0, NULL);
+
+  info = g_new0(GNCOptionInfo, num_values);
+
+  for (i = 0; i < num_values; i++)
+  {
+    info[i].name = gnc_option_value_permissible_value_name(option, i);
+    info[i].tip  = gnc_option_value_permissible_value_description(option, i);
+    info[i].callback = gnc_option_multichoice_cb;
+    info[i].user_data = option;
+  }
+
+  widget = gnc_build_option_menu(info, num_values);
+
+  for (i = 0; i < num_values; i++)
+  {
+    free(info[i].name);
+    free(info[i].tip);
+  }
+  g_free(info);
+
+  return widget;
 }
 
 static GtkWidget *
@@ -223,6 +326,27 @@ gnc_option_set_ui_widget(GNCOption *option)
 		     gnc_option_create_default_button(option),
 		     FALSE, FALSE, 0);
   }
+  else if (safe_strcmp(type, "multichoice") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label= gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+
+    value = gnc_option_create_multichoice_widget(option);
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option),
+		     FALSE, FALSE, 0);
+  }
   else
   {
     PERR("gnc_option_set_ui_widget: Unknown type. Ignoring.\n");
@@ -249,7 +373,8 @@ gnc_options_dialog_add_option(GtkWidget *page, GNCOption *option)
 }
 
 static void
-gnc_options_dialog_append_page(GNCOptionSection *section)
+gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
+                               GNCOptionSection *section)
 {
   GNCOption *option;
   GtkWidget *page_label;
@@ -257,14 +382,14 @@ gnc_options_dialog_append_page(GNCOptionSection *section)
   gint num_options;
   gint i;
 
-  page_label = gtk_label_new(section->section_name);
+  page_label = gtk_label_new(gnc_option_section_name(section));
   gtk_widget_show(page_label);
 
   page_content_box = gtk_vbox_new(FALSE, 5);
   gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 5);
   gtk_widget_show(page_content_box);
   
-  gnome_property_box_append_page(options_dialog, page_content_box, page_label);
+  gnome_property_box_append_page(propertybox, page_content_box, page_label);
 
   num_options = gnc_option_section_num_options(section);
   for (i = 0; i < num_options; i++)
@@ -274,71 +399,27 @@ gnc_options_dialog_append_page(GNCOptionSection *section)
   }
 }
 
-static void
-build_options_dialog_contents()
+
+/********************************************************************\
+ * gnc_build_options_dialog_contents                                *
+ *   builds an options dialog given a property box and an options   *
+ *   database                                                       *
+ *                                                                  *
+ * Args: propertybox - gnome property box to use                    *
+ *       odb         - option database to use                       *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
+                                  GNCOptionDB *odb)
 {
   GNCOptionSection *section;
-  gint num_sections = gnc_num_option_sections();
+  gint num_sections = gnc_option_db_num_sections(odb);
   gint i;
 
   for (i = 0; i < num_sections; i++)
   {
-    section = gnc_get_option_section(i);
-    gnc_options_dialog_append_page(section);
+    section = gnc_option_db_get_section(odb, i);
+    gnc_options_dialog_append_page(propertybox, section);
   }
-}
-
-static void
-gnc_options_dialog_apply_cb(GnomePropertyBox *propertybox,
-			    gint arg1, gpointer user_data)
-{
-  if (arg1 == -1)
-    gnc_options_commit();
-}
-
-static void
-gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
-			   gint arg1, gpointer user_data)
-{
-  gnome_ok_dialog("Help on properties");
-}
-
-/* Options dialog... this should house all of the config options     */
-/* like where the docs reside, and whatever else is deemed necessary */
-void
-gnc_show_options_dialog()
-{
-  if (gnc_num_option_sections() == 0)
-  {
-    gnc_warning_dialog("No options!");
-    return;
-  }
-
-  if (gnc_options_dirty())
-  {
-    if (options_dialog != NULL)
-      gtk_widget_destroy(GTK_WIDGET(options_dialog));
-
-    options_dialog = NULL;
-  }
-
-  if (options_dialog == NULL)
-  {
-    options_dialog = GNOME_PROPERTY_BOX(gnome_property_box_new());
-    gnome_dialog_close_hides(GNOME_DIALOG(options_dialog), TRUE);
-
-    build_options_dialog_contents();
-    gnc_options_clean();
-
-    gtk_signal_connect(GTK_OBJECT(options_dialog), "apply",
-		       GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),
-		       NULL);
-
-    gtk_signal_connect(GTK_OBJECT(options_dialog), "help",
-		       GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb),
-		       NULL);
-  }
-
-  gtk_widget_show(GTK_WIDGET(options_dialog));  
-  gdk_window_raise(GTK_WIDGET(options_dialog)->window);
 }

@@ -1,4 +1,7 @@
 ;;; $Id$
+
+(gnc:support "text-export.scm")
+
 (require 'pretty-print)
 (define (gnc:group-map-accounts thunk group)
   (let loop ((num-accounts (gnc:group-get-num-accounts group))
@@ -49,7 +52,7 @@
    (let* ((accinfo (gnc:account-get-acc-info a))
           (invacct (gnc:cast-to-inv-acct accinfo)))
      (if (not (pointer-token-null? invacct))
-         (gnc:inv-acct-get-price-source invacct)
+         (gnc:inv-acct-get-price-src invacct)
          #f))
    (list 'children
          (gnc:group-map-accounts 
@@ -80,7 +83,7 @@
   (gnc:account-staged-transaction-traversal
    account
    1
-   (lambda (t) (pretty-print (gnc:transaction->output-form t)))))
+   (lambda (t) (pretty-print (gnc:transaction->output-form t)) #f)))
 
 (define (gnc:transaction->output-form transaction)
   (list

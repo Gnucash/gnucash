@@ -25,7 +25,7 @@
 #ifndef __WINDOW_MAINP_H__
 #define __WINDOW_MAINP_H__
 
-#include <gtk/gtk.h>
+#include <gnome.h>
 
 #include "top-level.h"
 
@@ -35,14 +35,18 @@ static void gnc_ui_refresh_statusbar(void);
 static void gnc_ui_exit_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_about_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_help_cb(GtkWidget *widget, gpointer data);
-static void gnc_ui_reports_cb(GtkWidget *widget, gpointer report);
 static void gnc_ui_add_account(GtkWidget *widget, gpointer data);
 static void gnc_ui_delete_account_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_toolbar_open(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget,
+                                                gpointer data);
 static void gnc_ui_mainWindow_toolbar_edit(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data);
 static void gnc_ui_options_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem);
 

@@ -1,83 +1,104 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
 <html>
   <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
     <title>Register Window</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
+
+  <body>
     <h1>Register Window</h1>
     This is the "Register" or the "Ledger" window. Enter
-    transactions here.  Add more documentation to this page.  
+    transactions here. Add more documentation to this page. 
 
-    <p>
-    This is what the register window should look like:</p>
+    <p> This is what the register window should look like:</p>
     <br>
-    <img src="regwin-single.gif">
-    <br>
-    <img src="regwin-double.gif">
-    <br>
-    <img src="regwin-multi.gif">
+     <img src="regwin-single.gif"> <br>
+     <img src="regwin-double.gif"> <br>
+     <img src="regwin-multi.gif"> 
     <hr>
+
     <h2>Reconciliation</h2>
+    At the bottom of the account window, there are two running
+    balances, the "cleared &amp; reconciled" balance, and the
+    "total" balance... the "cleared &amp; reconciled" balance
+    should correspond to how much money the bank thinks you have in
+    your account, and the "total" balance includes outstanding
+    transactions. 
 
-    At the bottom of the account window, there are two running balances,
-    the "cleared &amp; reconciled" balance, and the "total" balance...  the
-    "cleared &amp; reconciled" balance should correspond to how much money
-    the bank thinks you have in your account, and the "total" balance
-    includes outstanding transactions.
-    <p>
-    Reconciliation can be done in the <a href="xacc-recnwin.html">
-    Reconcile Window</a>
-    <p>
-(Not yet implemented) Transactions marked with 'y' can not be edited
-without first changing this flag.  This is because a reconciled
-transaction should be thought of as something that has been checked
-over, and therefore correct.  Changing such a transaction should
-be difficult: we want to avoid accidental errors.
-<p>
-(Not yet implemented) Transactions marked with 'f' are frozen, 
-can cannot be edited under any circumstances.  These have been 
-frozen into an accounting period. That is, the books have been closed
-for this period; they can no longer be reopened for editing.
-    <p>
-    
+    <p> Reconciliation can be done in the <a href=
+    "xacc-recnwin.html">Reconcile Window</a></p>
+
+    <p>(Not yet implemented) Transactions marked with <tt> y</tt>
+    can not be edited without first changing this flag. This is
+    because a reconciled transaction should be thought of as
+    something that has been checked over, and therefore correct.
+    Changing such a transaction should be difficult: we want to
+    avoid accidental errors.</p>
+
+    <p>(Not yet implemented) Transactions marked with <tt>f</tt>
+    are frozen, and cannot be edited under any circumstances. These
+    have been "frozen" into an accounting period. That is, the
+    books have been closed for this period; they may no longer be
+    modified.</p>
+
     <h2>Stock Portfolios</h2>
-    You can do stock transaction either from a single-stock window, 
-    or from a portfolio-view window, shown below.  
-    <p>
-    <img src="foliowin.gif">
-    <br>
-    <img src="foliowin-single.gif">
-    <br>
-    The portfolio ledger can be a bit daunting at first sight.
-    If you have trouble understanding it, then stick to creating
-    accounts which have a single stock in them.
-    Some important points to remember about the portfolio window: 
-    <ul>
-    <li>Its shows all stocks for your portfolio, not just some.
-        The share amounts shown are for each particular stock.
-    <li>Notice that it uses a two line display.  Debited 
-        accounts and debited amounts are on the upper line, and 
-        credited amounts and accounts are on the lower line.
-    <li>If you buy or sell a stock with money from the brokerage
-        account, the total balance will not change, since the
-        value of the stock equals the amount of money exchanged.
-    <li>If you buy or sell a stock with money from the brokerage
-        account, the value of the transaction will appear twice,
-        once in red, and once in black.  If shares are purchased,
-        the amount of money debited from the brokerage account will be
-        in red, and the value of the shares in black.  If shares are
-        sold, then value of the shares is in red, and the money
-        credited to the brokerage account in black.
-    <li>If you are having trouble indicating a share purchase/sale
-        in the portfolio ledger, then make sure that "Transfer From"
-        and "Transfer To" accounts are in the right order.  A 
-        transfer from a stock account is always interpreted 
-        as a sale, even if you entered the data as a purchase.
-        The vice-versa is also true. 
-    <li>Someday, X-Accountant will be enhanced with a simplified
-        portfolio ledger window.
 
+    <p> You can do stock transaction either from a single-stock
+    window, or from a portfolio-view window, shown below.</p>
+
+    <p> <img src="foliowin.gif"><br>
+     <img src="foliowin-single.gif"></p>
+
+    <p> The portfolio ledger can be a bit daunting at first sight.
+    If you have trouble understanding it, then stick to creating
+    accounts which track a single stock. Some important points to
+    remember about the portfolio window:</p>
+
+    <ul>
+      <li>
+        It shows <em>all</em> stocks in your portfolio, not just
+        one. 
+
+        <p> The share amounts shown are for each particular
+        stock.</p>
+      </li>
+
+      <li>
+        Note that it uses a two line display. 
+
+        <p> Debited accounts and debited amounts are on the upper
+        line, and credited amounts and accounts are on the lower
+        line.</p>
+      </li>
+
+      <li>If you buy or sell a stock with money from the brokerage
+      account, the total balance will not change, since the value
+      of the stock equals the amount of money exchanged.</li>
+
+      <li>If you buy or sell a stock with money from the brokerage
+      account, the value of the transaction will appear twice, once
+      in red, and once in black. If shares are purchased, the
+      amount of money debited from the brokerage account will be in
+      red, and the value of the shares in black. If shares are
+      sold, then value of the shares is in red, and the money
+      credited to the brokerage account in black.</li>
+
+      <li>If you are having trouble indicating a share
+      purchase/sale in the portfolio ledger, then make sure that
+      "Transfer From" and "Transfer To" accounts are in the right
+      order. A transfer from a stock account is always interpreted
+      as a sale, even if you entered the data as a purchase. The
+      vice-versa is also true.</li>
+
+      <li>Eventually, X-Accountant may be enhanced to provide a
+      simplified portfolio ledger window.</li>
     </ul>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

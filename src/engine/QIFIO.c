@@ -49,6 +49,13 @@
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
+/* Cleared values found in QIF files */
+#define QRECCLEAR '*'     /* Cleared, per Quicken */
+#define QRECREC   'x'     /* Reconciled, per Quicken */
+#define QRECRECM  'X'     /* Reconciled, per MS Money */
+#define QRECBUDG  '?'     /* Budgeted amount, per CBB */
+#define QRECBUDP  '!'     /* OLD Budgeted amount per CBB */
+
 /** GLOBALS *********************************************************/
 
 /* XXX hack alert -- this default currency should be made configurable
@@ -60,6 +67,9 @@ static int          error_code=0; /* error code, if error occurred */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short        module = MOD_IO;
+static int FindDateDelimiter (char *str);
+static void TryToFixDate (struct tm *date);
+static int FavorDateType (int value);
 
 /*******************************************************/
 
@@ -397,7 +407,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
  *   parses date of the form MM/DD/YY                               *
  *                                                                  * 
  * Args:   str -- pointer to string rep of date                     * 
- * Return: void                                                     * 
+ * Return: time_t -- date in format used by UNIX time_t             * 
 \********************************************************************/
 
 time_t
@@ -406,15 +416,22 @@ xaccParseQIFDate (char * str)
    char * tok;
    time_t secs;
    struct tm dat;
+   int favechar = 0;   /* Which delimiter do we have? */
 
-   if (!str) return 0;
-   tok = strchr (str, '/');
+   if (!str) return 0;  /* If the string is null, we're done. */
+
+   /* First, figure out the delimiter. */
+   /* Choices: "." or "-" or "/" */
+   favechar = FindDateDelimiter(str);
+   if (!favechar) return 0;
+
+   tok = strchr (str, favechar);
    if (!tok) return 0;
    *tok = 0x0;
    dat.tm_mon = atoi (str) - 1;
 
    str = tok+sizeof(char);
-   tok = strchr (str, '/');
+   tok = strchr (str, favechar);
    if (!tok) return 0;
    *tok = 0x0;
    dat.tm_mday = atoi (str);
@@ -428,6 +445,8 @@ xaccParseQIFDate (char * str)
    *tok = 0x0;
    dat.tm_year = atoi (str);
 
+   TryToFixDate(&dat);
+
    /* a quickie Y2K fix: assume two digit dates with
     * a value less than 50 are in the 21st century. */
    if (50 > dat.tm_year) dat.tm_year += 100;
@@ -439,6 +458,120 @@ xaccParseQIFDate (char * str)
    secs = mktime (&dat);
 
    return secs;
+}
+
+
+/********************************************************************\
+ * FindDateDelimiter                                                *
+ *  determines which character is the delimiter for a date          *
+ *  typical would be "MM/DD/YY", "MM-DD-YY", "MM.DD.YY"             *
+ *                                                                  * 
+ * Args:   str -- pointer to string rep of date                     * 
+ * Return: int containing '/', '.', '-', or NULL indicating failure * 
+\********************************************************************/
+
+static int FindDateDelimiter (char *str) {
+  char *tok;
+  if (!str) return 0;
+  tok = strchr (str, '/');
+  if (tok)
+    return '/';
+  tok = strchr (str, '.');
+  if (tok)
+    return '.';
+  tok = strchr (str, '-');
+  if (tok)
+    return '-';
+  return 0;
+}
+
+/********************************************************************\
+ * TryToFixDate                                                     *
+ *  Swaps around date components based on some heuristics           *
+ *                                                                  * 
+ * Args:   date -- pointer to time_t structure                      *
+ * Return: void                                                     *
+\********************************************************************/
+static void TryToFixDate (struct tm *date) 
+{
+  int first, second, third;
+  int st_first, st_second, st_third;
+  int mon, mday, year;
+  int results;
+  int which[5] = {0,0,0,0,0};
+  
+  first = date->tm_mon;
+  second = date->tm_mday;
+  third = date->tm_year;
+  
+  /* See what sort of date is favored by each component */
+  st_first = FavorDateType(first);
+  st_second = FavorDateType(second);
+  st_third = FavorDateType(third);
+  
+  /* Plunk the values down into which[] */
+  which[st_first] = 1;
+  which[st_second] = 2;
+  which[st_third] = 3;
+  
+  switch (which[4]) {   /* Year */
+  case 1:
+    year = first;
+    break;
+  case 2:
+    year = second;
+    break;
+  case 3:
+    year = third;
+    break;
+  default:
+    return;   /* No date component looks like a year --> ABORT */
+  }
+  switch (which[2]) {   /* month */
+  case 1:
+    mon = first;
+    break;
+  case 2:
+    mon = second;
+    break;
+  case 3:
+    mon = third;
+    break;
+  default:
+    return;   /* No date component looks like a month --> ABORT */
+  }
+  switch (which[1]) {   /* mday */
+  case 1:
+    mday = first;
+    break;
+  case 2:
+    mday = second;
+    break;
+  case 3:
+    mday = third;
+    break;
+  default:
+    return;   /* No date component looks like a day of the month - ABORT */
+  }
+  
+  date->tm_mon = mon;
+  date->tm_mday = mday;
+  date->tm_year = year;
+  
+  return;    
+}
+
+static int FavorDateType (int value) 
+{
+  int favoring;
+  favoring = 2;  /* Month */
+  if (value > 30)
+    favoring = 4;  /* Year */
+  if (value < 0) 
+    favoring = 4;  /* Year */
+  if (value < 31)
+    if (value > 11)
+      favoring = 1;  /* Day of month */
 }
 
 /********************************************************************\
@@ -643,6 +776,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
    double adjust = 0.0;
+   char secondchar;
 
    if (!acc) return NULL;
 
@@ -659,17 +793,24 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
    while (qifline) {
      switch (qifline[0]) 
        {
-       case 'C':
-	 /* C == Cleared / Reconciled */
-         /* Quicken uses C* and Cx, while MS Money uses CX.
-          * C* means cleared (but not yet reconciled)
-          * Cx or CX means reconciled
-          */
-	 if (('x' == qifline[1]) || ('X' == qifline[1])) {
-           xaccSplitSetReconcile (source_split, YREC);
-	 } else {
-           xaccSplitSetReconcile (source_split, CREC);
-	 }
+       case 'C':   /* Cleared flag */
+	 secondchar = qifline[1];
+	 switch(secondchar) 
+	   {
+	   case QRECCLEAR:
+	     xaccSplitSetReconcile(source_split, CREC);
+	     break;
+	   case QRECREC:
+	   case QRECRECM:
+	     xaccSplitSetReconcile(source_split, YREC);
+	     break;
+	   case QRECBUDP:
+	   case QRECBUDG:
+	     xaccSplitSetReconcile(source_split, NREC);
+	     break;
+	   default:
+	     xaccSplitSetReconcile(source_split, NREC);
+	   }
 	 break;
        case 'D':   /* D == date */
 	 {
@@ -729,7 +870,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	 if (!strncmp (qifline, "NSell", 5)) isneg = 1;
 	 if (!strncmp (qifline, "NSell", 5)) share_xfer = 1;
 	 if (!strncmp (qifline, "NBuy", 4)) share_xfer = 1;
-
+	 
 	 /* if a recognized action, convert to our cannonical names */
 	 XACC_ACTION ("Buy", "Buy")
 	   XACC_ACTION ("Sell", "Sell")
@@ -749,7 +890,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	 /* O == adjustments */
 	 /* hack alert -- sometimes adjustments are quite large.
 	  * I have no clue why, and what to do about it.  For what 
-	  * its worth, I can prove that Quicken version 3.0 makes 
+	  * it's worth, I can prove that Quicken version 3.0 makes 
 	  * math errors ... */
 	 {
 	   double pute;
@@ -870,49 +1011,48 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
      return qifline;
    }
 
-   /* fundamentally differnt handling for securities and non-securities */
+   /* fundamentally different handling for securities and non-securities */
    if (is_security) {
-
-      /* if the transaction  is a sale/purchase of a security, 
-       * then it is a defacto transfer between the brokerage account 
-       * and the stock account.  */
-      if (share_xfer) {
-         if (!split) {
-            split = xaccMallocSplit ();
-            xaccTransAppendSplit (trans, split);
-         }
-
-         /* Insert the transaction into the main brokerage 
-          * account as a debit, unless an alternate account
-          * was specified. */
-         if (xfer_acc) {
-            xaccAccountInsertSplit (xfer_acc, split);
+     /* if the transaction  is a sale/purchase of a security, 
+      * then it is a defacto transfer between the brokerage account 
+      * and the stock account.  */
+     if (share_xfer) {
+       if (!split) {
+	 split = xaccMallocSplit ();
+	 xaccTransAppendSplit (trans, split);
+       }
+       
+       /* Insert the transaction into the main brokerage 
+	* account as a debit, unless an alternate account
+	* was specified. */
+       if (xfer_acc) {
+	 xaccAccountInsertSplit (xfer_acc, split);
+       } else {
+	 xaccAccountInsertSplit (acc, split);
+       }
+       
+       /* normally, the security account is pointed at by 
+	* sub_acc; the security account is credited.
+	* But, just in case its missing, avoid a core dump */
+       if (sub_acc) {
+	 /* xxx hack alert --- is this right ??? */
+	 xaccAccountInsertSplit (sub_acc, source_split);
+       }
+     } else {
+       
+       /* else, we are here if its not a share transfer. 
+	* It is probably dividend or other income */
+       
+       /* if a transfer account is specified, the transfer 
+	* account gets the dividend credit; otherwise, the 
+	* main account gets it */
+       if (xfer_acc) {
+	 xaccAccountInsertSplit (xfer_acc, source_split);
          } else {
-            xaccAccountInsertSplit (acc, split);
+	   xaccAccountInsertSplit (acc, source_split);
          }
-
-         /* normally, the security account is pointed at by 
-          * sub_acc; the security account is credited.
-          * But, just in case its missing, avoid a core dump */
-         if (sub_acc) {
-/* xxx hack alert --- is this right ??? */
-            xaccAccountInsertSplit (sub_acc, source_split);
-         }
-      } else {
-
-         /* else, we are here if its not a share transfer. 
-          * It is probably dividend or other income */
-
-         /* if a transfer account is specified, the transfer 
-          * account gets the dividend credit; otherwise, the 
-          * main account gets it */
-         if (xfer_acc) {
-            xaccAccountInsertSplit (xfer_acc, source_split);
-         } else {
-            xaccAccountInsertSplit (acc, source_split);
-         }
-      }
-
+     }
+     
    } else {
       /* if we are here, its not a security, but an ordinary account */
       /* if a transfer account was specified,  it is the debited account */

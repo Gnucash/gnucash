@@ -51,11 +51,13 @@ struct _GNCReconcileList
   gint num_columns;
 
   gint current_row;
+  Split *current_split;
+
+  gboolean no_toggle;
 
   GHashTable *reconciled;
 
   GtkStyle *reconciled_style;
-  GtkStyle *normal_style;
 
   Account *account;
 };
@@ -81,11 +83,15 @@ gint gnc_reconcile_list_get_row_height(GNCReconcileList *list);
 
 gint gnc_reconcile_list_get_num_splits(GNCReconcileList *list);
 
+Split * gnc_reconcile_list_get_current_split(GNCReconcileList *list);
+
 void gnc_reconcile_list_refresh (GNCReconcileList *list);
 
 double gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
 
 void gnc_reconcile_list_commit(GNCReconcileList *list);
+
+void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
 
 #ifdef __cplusplus

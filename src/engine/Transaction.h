@@ -136,10 +136,15 @@ void          xaccTransDestroy (Transaction *);
  *    started.  This includes restoring any deleted splits, removing
  *    any added splits, and undoing the effects of xaccTransDestroy,
  *    as well as restoring prices, memo's descriptions, etc.
+ *
+ * The xaccTransIsOpen() method returns GNC_T if the transaction
+ *    is open for editing. Otherwise, it returns false.
  */
 void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
 void          xaccTransRollbackEdit (Transaction *);
+
+gncBoolean    xaccTransIsOpen (Transaction *trans);
 
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);

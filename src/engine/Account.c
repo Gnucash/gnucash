@@ -1066,6 +1066,13 @@ xaccAccountGetParent (Account *acc)
    return (acc->parent);
 }
 
+Account *
+xaccAccountGetParentAccount (Account * acc)
+{
+  if (!acc) return NULL;
+  return xaccGroupGetParentAccount(acc->parent);
+}
+
 int
 xaccAccountGetType (Account *acc)
 {

@@ -52,6 +52,7 @@ void         xaccDestroyComboCell (ComboCell *);
 
 void         xaccSetComboCellValue (ComboCell *, const char *);
 
+void         xaccClearComboCellMenu (ComboCell *);
 void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
 
 #endif /* __XACC_COMBO_CELL_H__ */

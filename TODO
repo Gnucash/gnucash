@@ -82,6 +82,22 @@ Done, except for the percentage bit.
 
 56) mnemonics don't work in the menus
 
+57) fix auto single/double modes
+
+58) transactions cut/copy/paste
+
+59) stock split functionality
+
+60) account combobox needs to reflect account structure
+
+61) allocate columns widths better in gnome
+
+63) ability to reparent accounts
+
+64) ability to merge accounts
+
+65) better mousing on the gnome register
+
 
 Fixed bugs:
 -----------
@@ -200,3 +216,4 @@ Non-memory-leak requires major redesign, and is in version 1.1
     pull-down.
 Feb 98 fixed
 
+62) refresh accounts in register combobox when accounts change

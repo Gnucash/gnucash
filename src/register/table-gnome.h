@@ -32,6 +32,8 @@
 
 #include <gnome.h>
 
+#include "gnc-common.h"
+
    
 /* We use C not C++ in this project, but we none-the-less need 
  * the general mechanism of inheritance.  The three #defines
@@ -89,7 +91,7 @@ typedef struct _Table Table;
 
 
 void xaccCreateTable (GtkWidget *, void *);
-void doRefreshCursorGUI (Table *, CellBlock *, int, int);
+void doRefreshCursorGUI (Table *, CellBlock *, int, int, gncBoolean);
 void xaccRefreshTableGUI (Table *);
 
 #endif __XACC_TABLE_GNOME_H__

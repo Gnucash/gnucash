@@ -23,7 +23,6 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-
 typedef struct _GNCOption GNCOption;
 struct _GNCOption
 {
@@ -41,20 +40,21 @@ struct _GNCOption
 };
 
 typedef struct _GNCOptionSection GNCOptionSection;
-struct _GNCOptionSection
-{
-  char * section_name;
+typedef struct _GNCOptionDB GNCOptionDB;
 
-  GSList * options;
-};
+typedef int GNCOptionDBHandle;
 
+typedef void (*OptionChangeCallback)(gpointer user_data);
 
 /***** Prototypes ********************************************************/
 
-void gnc_options_init();
-void gnc_options_shutdown();
+GNCOptionDB * gnc_option_db_new();
+void          gnc_option_db_init(GNCOptionDB *odb, SCM options);
+void          gnc_option_db_destroy(GNCOptionDB *odb);
 
-void gnc_register_option_change_callback(void (*callback) (void));
+void gnc_option_db_register_change_callback(GNCOptionDB *odb,
+                                            OptionChangeCallback callback,
+                                            gpointer data);
 
 char * gnc_option_section(GNCOption *option);
 char * gnc_option_name(GNCOption *option);
@@ -65,30 +65,48 @@ SCM    gnc_option_getter(GNCOption *option);
 SCM    gnc_option_setter(GNCOption *option);
 SCM    gnc_option_default_getter(GNCOption *option);
 SCM    gnc_option_value_validator(GNCOption *option);
+int    gnc_option_value_num_permissible_values(GNCOption *option);
+int    gnc_option_value_permissible_value_index(GNCOption *option, SCM value);
+SCM    gnc_option_value_permissible_value(GNCOption *option, int index);
+char * gnc_option_value_permissible_value_name(GNCOption *option, int index);
+char * gnc_option_value_permissible_value_description(GNCOption *option,
+                                                      int index);
 
-guint gnc_num_option_sections();
-guint gnc_option_section_num_options(GNCOptionSection *section);
+guint gnc_option_db_num_sections(GNCOptionDB *odb);
 
-GNCOptionSection * gnc_get_option_section(gint i);
+char * gnc_option_section_name(GNCOptionSection *section);
+guint  gnc_option_section_num_options(GNCOptionSection *section);
+
+GNCOptionSection * gnc_option_db_get_section(GNCOptionDB *odb, gint i);
 
 GNCOption * gnc_get_option_section_option(GNCOptionSection *section, int i);
-GNCOption * gnc_get_option_by_name(char *section_name, char *name);
-GNCOption * gnc_get_option_by_SCM(SCM guile_option);
 
-gboolean gnc_options_dirty();
-void     gnc_options_clean();
+GNCOption * gnc_option_db_get_option_by_name(GNCOptionDB *odb,
+                                             char *section_name, char *name);
 
-void gnc_options_commit();
+GNCOption * gnc_option_db_get_option_by_SCM(GNCOptionDB *odb,
+                                            SCM guile_option);
 
-gboolean gnc_lookup_boolean_option(char *section, char *name,
-				   gboolean default_value);
-char * gnc_lookup_string_option(char *section, char *name,
-				char *default_value);
+gboolean gnc_option_db_dirty(GNCOptionDB *odb);
+void     gnc_option_db_clean(GNCOptionDB *odb);
 
+void gnc_option_db_commit(GNCOptionDB *odb);
+
+gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
+                                             char *section, char *name,
+                                             gboolean default_value);
+
+char * gnc_option_db_lookup_string_option(GNCOptionDB *odb, char *section,
+                                          char *name, char *default_value);
+
+char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
+                                               char *section, char *name,
+                                               char *default_value);
 
 /* private */
 
-void _gnc_register_option_ui(SCM guile_option);
+void _gnc_option_db_register_option(GNCOptionDBHandle handle,
+                                    SCM guile_option);
 
 
 #endif /* __OPTION_UTIL_H__ */

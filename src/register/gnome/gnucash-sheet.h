@@ -56,6 +56,8 @@ typedef enum {
 } GnucashSheetAlignment;
 
 
+typedef struct _CellLayoutInfo CellLayoutInfo;
+
 typedef struct
 {
         gint nrows;
@@ -75,11 +77,15 @@ typedef struct
                                     row/column not displayed */
         gint **pixel_widths;
 
-        gchar ***labels;
+        CellLayoutInfo **layout_info;
+
+        gchar ***labels;              /* for the header */
+        GdkFont *header_font;          
         
         GtkJustification **alignments;
 
         GdkFont ***fonts;
+
 
         GdkColor ***active_bg_color;
         GdkColor ***inactive_bg_color;
@@ -141,6 +147,8 @@ typedef struct {
         gint top_block_offset; 
         gint left_block_offset;
 
+        gint width;  /* the width in pixels of the sheet */
+
         gint alignment;
 
         gint editing;
@@ -194,12 +202,10 @@ void gnucash_sheet_cursor_set (GnucashSheet *gsheet,
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 					       const gchar *new_text);
 
-void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet);
+void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
+                                          gncBoolean do_scroll);
 
-void gnucash_sheet_move_cursor (GnucashSheet *sheet,
-                                int col, int row);
-
-int gnucash_sheet_can_move_cursor (GnucashSheet *sheet);
+void gnucash_sheet_move_cursor (GnucashSheet *sheet, int col, int row);
 
 void gnucash_sheet_set_cursor_bounds (GnucashSheet *sheet,
 				      int start_col, int start_row,
@@ -210,6 +216,14 @@ void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
 				      gint virt_row, gint virt_col,
 				      gint cell_row, gint cell_col);
+
+void gnucash_register_goto_virt_row_col (GnucashRegister *reg,
+                                         int v_row, int v_col);
+
+void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
+
+void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
+                                   gpointer data);
 
 
 typedef struct {
@@ -230,6 +244,9 @@ typedef struct {
 
 typedef struct {
         GtkTableClass parent_class;
+
+        void (*activate_cursor) (GnucashRegister *reg);
+
 } GnucashRegisterClass;
 
 #endif

@@ -1,68 +1,83 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
 <html>
   <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
     <title>Stock Ticker</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
-    <h1>Stock Pricing and Ticker Symbols</h1>
-    <p>
-    GnuCash currently provides rudimentary automated stcok quote 
-    abilities.  If an account is properly configured, and the 
-    host computer is connected to the internet, the binary 
-    <tt>gnc-prices</tt> can be used to load stock or mutual fund 
-    price quotes from various web sites directly into GnuCash.
-    <p>
-    To make use of this feature, the following must be done:
-    <ul>
-    <li>Create an account and mark it as being of type "Mutual Fund"
-        or "Stock".
-    <li>Enter a valid ticker symbol in the box marked "Security:"
-    <li>Select a quote source from the pull-down menu.  Currently
-        supported quote sources include <b>Yahoo</b>, <b>Fidelity
-        Investments</b>, <b>T. Rowe Price</b> and the <b>Vanguard
-        Group</b>.  Note that Yahoo will provide price quotes for
-        most mutual funds, including Fidelity, T.Rowe Price and
-        Vanguard, and that the quoted prices/NAV should be 
-        identical to those on the source sites.
-    </ul>
-    <p>
-    A sample image is shown below:
-    </p>
-    <br>
-    <img src="ticker-a.gif">
 
-    <p>
-    To update the prices stored in a gnucash account file, run the
-    command line command <tt>gnc-price</tt>, specifying the filename;
-    for example:
+  <body>
+    <h1>Stock Pricing and Ticker Symbols</h1>
+
+    <p> GnuCash currently provides a somewhat rudimentary automated
+    stock quote gathering abilities. If an account is properly
+    configured, and the host computer is connected to the internet,
+    the binary <tt> gnc-prices</tt> may be used to load stock and
+    mutual fund price quotes from various web sites directly into
+    GnuCash.</p>
+
+    <p> To make use of this facility, the following must be
+    done:</p>
+
+    <ul>
+      <li>Create an account and mark it as being of type "Mutual
+      Fund" or "Stock".</li>
+
+      <li>Enter a valid ticker symbol in the box marked
+      "Security:"</li>
+
+      <li>Select a quote source from the pull-down menu. Currently
+      supported quote sources include <b>Yahoo</b>, <b>Fidelity
+      Investments</b>, <b>T. Rowe Price</b> and the <b>Vanguard
+      Group</b>. Note that Yahoo will provide price quotes for many
+      mutual funds <em>including</em> Fidelity, T.Rowe Price and
+      Vanguard, and that the quoted prices/NAV should be identical
+      to those on the source sites.</li>
+    </ul>
+
+    <p> A sample image is shown below:</p>
+    <br>
+     <img src="ticker-a.gif"> 
+
+    <p> To update the prices stored in a gnucash account file, run
+    the command line command <tt>gnc-price</tt>, specifying the
+    filename; for example:</p>
 <pre>
     gnc-prices myaccts.xac
 </pre>
-    Running this command will print various diagnostic messages to
-    the screen while it loads data.  It will work only when the host
-    computer is attached to the internet.  It will work if the host
-    is behind a masq-style firewall.  It does not currently work from
-    behind proxy or socks-style firewalls.  The command can be run
-    many times in one day; however, it will update the accounts
-    at most once with the most recent trading days price data.  Thus,
-    if gnc-prices is run on Friday, Saturday, Sunday and Monday,
-    only two price entires will be made: one containing Friday's 
-    data, and one containing Monday's data, since the Saturday and
-    Sunday runs will only retreive the Friday closing price.
-    To keep gnc-prices from updating one account, while allowing it
-    to update another account, merely mark the data source for that
-    account as "(none)".  You can do this from the "Edit Account" 
-    window.
-    <p>
-    After running gnc-prices for a few days, your accounts will
-    begin to resemble the following:
-    </p>
-    <br>
-    <img src="ticker-b.gif">
-     
 
+    <p> Running this command will print various diagnostic messages
+    to the screen while it loads data. It will work only when the
+    host computer is attached to the internet. It <em> can</em>
+    function in conjunction with masquerading-style firewalls, but
+    is not currently able to use proxy servers to get through proxy
+    or socks-style firewalls.</p>
+
+    <p> The command can be run many times in one day; however, it
+    will update the accounts at most once with the most recent
+    trading days price data.</p>
+
+    <p> Thus, if <tt>gnc-prices</tt> is run on Friday, Saturday,
+    Sunday and Monday, only two price entires will be made: one
+    containing Friday's data, and one containing Monday's data,
+    since the Saturday and Sunday runs will only retrieve the
+    Friday closing price.</p>
+
+    <p>To keep <tt>gnc-prices</tt> from updating one account, while
+    allowing it to update another account, merely mark the data
+    source for that account as <tt>(none)</tt>. You can do this
+    from the <tt>Edit Account</tt> window.</p>
+
+    <p> After running <tt>gnc-prices</tt> for a few days, your
+    accounts will begin to resemble the following:</p>
+    <br>
+     <img src="ticker-b.gif"> 
     <hr>
-    
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

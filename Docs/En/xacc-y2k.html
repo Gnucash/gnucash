@@ -1,28 +1,47 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
 <html>
   <head>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
     <title>GnuCash Y2K Readiness</title>
   </head>
-    <body bgcolor="#eeeeee"> 
 
+  <body>
     <h1>GnuCash Y2K Readiness</h1>
-    Gnucash version 1.1.25 and later store all dates as seconds and
-    nanoseconds, where the seconds are stored in a 64-bit signed integer.
-    This should suffice to store dates in the distant past as well as the
-    distant future, as long as they are less than several dozen times the 
-    age of the universe.
-    <p>
-    The file format for version 1.1.25 and later stores dates in the 
-    above-described fashion.
-    <p>
-    Some internal routines use the <tt>time_t</tt> type to express
-    seconds.  Note that on most OS'es, this is a 32-bit quantity, and 
-    is limited to the Unix era (Dec 1901 to Jan 2038).  
-    <p>
-    Backup and log files are time-stamped using the standard Unix
-    <tt>ctime()</tt> routine, which takes a <tt>time_t</tt> argument.
-    Thus, the backup and log mechanism may experience trouble in 2038.
 
+    <p> Gnucash version 1.1.25 and later store all dates as seconds
+    and nanoseconds, where the seconds are stored in a 64-bit
+    signed integer. This should suffice to store dates in the
+    distant past as well as the distant future, as long as they are
+    less than several dozen times the present estimates of the age
+    of the universe.</p>
 
+    <p> The file format for version 1.1.25 and later stores dates
+    in the above-described fashion.</p>
+
+    <p> Some internal routines use the <tt>time_t</tt> type to
+    express seconds. Note that on most OSes, this is a 32-bit
+    quantity, and is limited to the Unix epoch, roughly December
+    1901 thru Jan 2038. It is reasonable to expect that this will
+    migrate to 64 bit values by that time.</p>
+
+    <p> Backup and log files are time-stamped using the standard
+    Unix <tt>ctime()</tt> routine, which takes a <tt>time_t</tt>
+    argument. Thus, the backup and log mechanism may experience
+    trouble in 2038, assuming your Unix continues to be in service
+    at that time without remediation.</p>
+
+    <p> Note that GnuCash also correctly recognizes February 29th,
+    2000 as a "leap day," another of the "critical Y2K dates."</p>
+
+    <p>Y2K issues are described in more detail at <a href= 
+    "http://www.ntlug.org/~cbbrowne/linuxy2k.html"> Linux and Year
+    2000.</a></p>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

@@ -27,7 +27,7 @@
 
 #include "AccWindow.h"
 #include "AdjBWindow.h"
-#include "dialog-options.h"
+#include "global-options.h"
 #include "FileDialog.h"
 #include "g-wrap.h"
 #include "gnucash.h"
@@ -35,20 +35,24 @@
 #include "Destroy.h"
 #include "messages.h"
 #include "RegWindow.h"
+#include "Refresh.h"
 #include "version.h"
 #include "window-main.h"
 #include "window-mainP.h"
 #include "window-reconcile.h"
+#include "window-register.h"
 #include "window-help.h"
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-edit.h"
+#include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
 
 enum {
   FMB_NEW,
@@ -85,24 +89,6 @@ static GnomeUIInfo filemenu[] = {
   GNOMEUIINFO_END
 };
 
-static GnomeUIInfo reportsmenu[] = {
-  {
-    GNOME_APP_UI_ITEM,
-    N_("_Balance..."), N_("Balance Report"),
-    gnc_ui_reports_cb, "report-baln.phtml", NULL,
-    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-    0, 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM,
-    N_("_Profit & Loss..."), N_("Profit & Loss Report"),
-    gnc_ui_reports_cb, "report-pnl.phtml", NULL,
-    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-    0, 0, NULL
-  },
-  GNOMEUIINFO_END
-};
-
 static GnomeUIInfo optionsmenu[] = {
   {
     GNOME_APP_UI_ITEM,
@@ -123,17 +109,50 @@ static GnomeUIInfo optionsmenu[] = {
   GNOMEUIINFO_END
 };
 
+static GnomeUIInfo scrubmenu[] = {
+  {
+    GNOME_APP_UI_ITEM,
+    N_("_Scrub Account"), N_("Scrub the account clean"),
+    gnc_ui_mainWindow_scrub, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Scrub S_ubaccounts"), N_("Scrub the account and all its "
+                                "subaccounts clean"),
+    gnc_ui_mainWindow_scrub_sub, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Scrub _All"), N_("Scrub all the accounts clean"),
+    gnc_ui_mainWindow_scrub_all, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  GNOMEUIINFO_END
+};
+
 static GnomeUIInfo accountsmenu[] = {
   {
     GNOME_APP_UI_ITEM,
-    N_("_View..."), N_("View Account"),
+    N_("_View..."), N_("View account"),
     gnc_ui_mainWindow_toolbar_open, NULL, NULL,
     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
     'v', GDK_CONTROL_MASK, NULL
   },
   {
     GNOME_APP_UI_ITEM,
-    N_("_Edit..."), N_("Edit Account"),
+    N_("View S_ubaccounts..."), N_("View account and subaccounts"),
+    gnc_ui_mainWindow_toolbar_open_subs, NULL, NULL,
+    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("_Edit..."), N_("Edit account information"),
     gnc_ui_mainWindow_toolbar_edit, NULL, NULL,
     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
     'e', GDK_CONTROL_MASK, NULL
@@ -175,6 +194,8 @@ static GnomeUIInfo accountsmenu[] = {
     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
     'r', GDK_CONTROL_MASK, NULL
   },
+  GNOMEUIINFO_SEPARATOR,
+  GNOMEUIINFO_SUBTREE(N_("_Scrub"), scrubmenu),
   GNOMEUIINFO_END
 };  
 
@@ -199,7 +220,6 @@ static GnomeUIInfo scriptsmenu[] = {
 static GnomeUIInfo mainmenu[] = {
   GNOMEUIINFO_MENU_FILE_TREE(filemenu),
   GNOMEUIINFO_SUBTREE(N_("_Accounts"), accountsmenu),
-  GNOMEUIINFO_SUBTREE(N_("_Reports"), reportsmenu),
   GNOMEUIINFO_SUBTREE(N_("_Options"), optionsmenu),
   GNOMEUIINFO_SUBTREE(N_("_Extensions"), scriptsmenu),    
   GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
@@ -397,13 +417,7 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
-  helpWindow( GTK_WIDGET(gnc_get_ui_data()), HELP_STR, HH_MAIN );
-}
-
-static void
-gnc_ui_reports_cb(GtkWidget *widget, gpointer report)
-{
-  reportWindow (widget, "duuuude", report);  
+  helpWindow(NULL, HELP_STR, HH_MAIN);
 }
 
 static void
@@ -425,8 +439,9 @@ gnc_ui_delete_account ( Account *account )
   xaccRemoveAccount(account);
   xaccFreeAccount(account);
 
-  /* Step 4: Refresh the toolbar */
+  /* Step 4: Refresh things */
   gnc_ui_refresh_statusbar();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
 }
 
 static void
@@ -447,15 +462,37 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
 {
+  RegWindow *regData;
   Account *account = gnc_get_current_account();
   
-  if(account)
+  if (account == NULL)
   {
-    PINFO ("calling regWindowSimple(%p)\n", account);
-    regWindowSimple ( account );
-  }
-  else
     gnc_error_dialog("You must select an account to open first.");
+    return;
+  }
+
+  PINFO ("calling regWindowSimple(%p)\n", account);
+
+  regData = regWindowSimple(account);
+  gnc_register_raise(regData);
+}
+
+static void
+gnc_ui_mainWindow_toolbar_open_subs(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData;
+  Account *account = gnc_get_current_account();
+  
+  if (account == NULL)
+  {
+    gnc_error_dialog("You must select an account to open first.");
+    return;
+  }
+
+  PINFO ("calling regWindowAccGroup(%p)\n", account);
+
+  regData = regWindowAccGroup(account);
+  gnc_register_raise(regData);
 }
 
 static void
@@ -503,6 +540,54 @@ gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data)
     adjBWindow(account);
   else
     gnc_error_dialog("You must select an account to adjust first.");
+}
+
+static void
+gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+
+  if (account == NULL)
+  {
+    gnc_error_dialog("You must select an account to scrub first.");
+    return;
+  }
+
+  xaccAccountScrubOrphans(account);
+  xaccAccountScrubImbalance(account);
+
+  gnc_account_ui_refresh(account);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+
+  if (account == NULL)
+  {
+    gnc_error_dialog("You must select an account to scrub first.");
+    return;
+  }
+
+  xaccAccountTreeScrubOrphans(account);
+  xaccAccountTreeScrubImbalance(account);
+
+  gnc_account_ui_refresh(account);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
+{
+  AccountGroup *group = gncGetCurrentGroup();
+
+  xaccGroupScrubOrphans(group);
+  xaccGroupScrubImbalance(group);
+
+  gnc_group_ui_refresh(group);
+  gnc_refresh_main_window();
 }
 
 static void
@@ -582,11 +667,14 @@ gnc_account_tree_activate_cb(GNCAccountTree *tree,
                              Account *account,
                              gpointer user_data)
 {
-  regWindowSimple(account);
+  RegWindow *regData;
+
+  regData = regWindowSimple(account);
+  gnc_register_raise(regData);
 }
 
 static void
-gnc_configure_account_tree()
+gnc_configure_account_tree(gpointer data)
 {
   GtkObject *app;
   GNCAccountTree *tree;
@@ -713,8 +801,9 @@ mainWindow()
 
   account_tree = gnc_account_tree_new();
   gtk_object_set_data (GTK_OBJECT (app), "account_tree", account_tree);
-  gnc_configure_account_tree();
-  gnc_register_option_change_callback(gnc_configure_account_tree);
+  gnc_configure_account_tree(NULL);
+  gnc_register_option_change_callback(gnc_configure_account_tree, NULL);
+
   gtk_signal_connect(GTK_OBJECT (account_tree), "activate_account",
 		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
 
@@ -773,15 +862,8 @@ mainWindow()
   gtk_widget_show(scrolled_win);
 
   gnc_refresh_main_window();
+
+  gtk_widget_grab_focus(account_tree);
 } 
 
 /********************* END OF FILE **********************************/
-
-/*
-  Local Variables:
-  indent-tabs-mode: nil
-  mode: c
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

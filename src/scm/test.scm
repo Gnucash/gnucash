@@ -1,3 +1,6 @@
+
+(gnc:support "test.scm")
+
 (define (gnc:test-load group)
   (let ((cash
 	 (list (gnc:malloc-account)

@@ -54,9 +54,13 @@ void    xaccMergeAccounts (AccountGroup *grp);
  * The xaccAccountGroupMarkSaved() subroutine will mark
  *    the entire group as having been saved, including 
  *    all of the child accounts.
+ *
+ * The xaccAccountGroupMarkNotSaved() subroutine will mark
+ *    the given group as not having been saved.
  */
 int     xaccAccountGroupNotSaved  (AccountGroup *grp);
 void    xaccAccountGroupMarkSaved (AccountGroup *grp);
+void    xaccAccountGroupMarkNotSaved (AccountGroup *grp);
 
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated
@@ -167,6 +171,11 @@ AccountGroup * xaccGetAccountRoot (Account *);
 void xaccConsolidateGrpTransactions (AccountGroup *);
 
 Account * xaccGroupGetAccount (AccountGroup *, int);
+
+/* The xaccGroupGetParentAccount() subroutine returns the parent
+ * account of the group, or NULL.
+ */
+Account * xaccGroupGetParentAccount (AccountGroup *);
 
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 

@@ -148,6 +148,40 @@ void xaccDestroyComboCell (ComboCell *cell)
 
 /* =============================================== */
 
+void
+xaccClearComboCellMenu (ComboCell * cell)
+{
+   int n;
+   char ** arr;
+
+   if (!cell) return;
+
+   arr = cell->menuitems;
+   n = 0;
+   while (arr[n]) n++;
+   if (n == 0)
+     return;
+
+   n = 0;
+   while (arr[n]) {
+      free (arr[n]);
+      n++;
+   }
+   free (arr);
+
+   cell->menuitems = (char **) malloc (sizeof (char *));
+   cell->menuitems[0] = NULL;
+
+   if (!cell->cell.realize) {
+      PopBox *box;
+
+      box = (PopBox *) cell->cell.gui_private;
+      XmComboBoxDeleteAllItems (box->combobox);
+   }
+}
+
+/* =============================================== */
+
 void 
 xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 {

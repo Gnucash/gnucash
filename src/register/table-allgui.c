@@ -92,9 +92,6 @@ xaccInitTable (Table * table)
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
 
-   table->reverify_phys_row = -1;
-   table->reverify_phys_col = -1;
-
    /* call the "derived" class constructor */
    TABLE_PRIVATE_DATA_INIT (table);
 }
@@ -438,7 +435,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
    ENTER("doMoveCursor(): new_phys=(%d %d) do_move_gui=%d\n", 
        new_phys_row, new_phys_col, do_move_gui);
-   /* Change the cell background colors to thier "passive" values.
+   /* Change the cell background colors to their "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
     */
@@ -451,11 +448,13 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
       (table->move_cursor) (table, &new_phys_row, &new_phys_col, 
                             table->client_data);
 
-      /* The above callback can cause this routine to be called recursively.
-       * As a result of this recursion, the cursor may have gotten repositioned. 
-       * we need to make sure we make passive again.
-       */
+      /* The above callback can cause this routine to be called
+       * recursively. As a result of this recursion, the cursor may
+       * have gotten repositioned. We need to make sure we make
+       * passive again. */
       makePassive (table);
+      if (do_move_gui)
+        xaccRefreshCursorGUI(table, FALSE);
    }
 
    /* check for out-of-bounds conditions (which may be deliberate) */
@@ -681,7 +680,7 @@ xaccRefreshHeader (Table *table)
 /* ==================================================== */
 /* verifyCursorPosition checks the location of the cursor 
  * with respect to a row/column position, and repositions 
- * the cursor if necessary.  This includes saving any uncomited
+ * the cursor if necessary. This includes saving any uncommited
  * data in the old cursor, and then moving the cursor and its
  * GUI.
  */
@@ -801,8 +800,9 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
        (save_phys_col != table->current_cursor_phys_col))
    {
       /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);
-      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
+      xaccRefreshCursorGUI (table, TRUE);
+      doRefreshCursorGUI (table, save_curs,
+                          save_phys_row, save_phys_col, FALSE);
    }
    LEAVE ("wrapVerifyCursorPosition()\n");
 }
@@ -810,11 +810,12 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
 /* ==================================================== */
 
 void        
-xaccRefreshCursorGUI (Table * table)
+xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll)
 {
    doRefreshCursorGUI (table, table->current_cursor,
-      table->current_cursor_phys_row,
-      table->current_cursor_phys_col);
+                       table->current_cursor_phys_row,
+                       table->current_cursor_phys_col,
+                       do_scroll);
 }
 
 /* ==================================================== */
@@ -984,20 +985,15 @@ gnc_table_leave_update(Table *table, int row, int col,
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
   
-  /* Do the verify last, which in general asumes that cell handlers
-     are up to date (i.e. the leave has been processed.) */
-
-  wrapVerifyCursorPosition (table,
-                            table->reverify_phys_row,
-                            table->reverify_phys_col);
-
   /* return the result of the final decisionmaking */
   if (strcmp (table->entries[row][col], callback_text)) {
-     retval =  table->entries[row][col];
+     retval = table->entries[row][col];
   } else {
      retval = NULL;
   }
+
   LEAVE("gnc_table_leave_update(): return %s\n", retval);
+
   return retval;
 }
 
@@ -1007,7 +1003,7 @@ const char *
 gnc_table_modify_update(Table *table, int row, int col,
                         const char *oldval,
                         const char *change,
-                        char *newval) 
+                        char *newval, int *cursor_position) 
 {
   /* returned result should not be touched by the caller */
   /* NULL return value means the edit was rejected */
@@ -1018,14 +1014,16 @@ gnc_table_modify_update(Table *table, int row, int col,
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
 
-  const char * (*mv) (BasicCell *, const char *, const char *, const char *);
+  const char * (*mv) (BasicCell *,
+                      const char *, const char *, const char *, int *);
   const char *retval = NULL;
   ENTER ("gnc_table_modify_update()\n");
   
   /* OK, if there is a callback for this cell, call it */
   mv = arr->cells[rel_row][rel_col]->modify_verify;
   if (mv) {
-    retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
+    retval = (*mv) (arr->cells[rel_row][rel_col],
+                    oldval, change, newval, cursor_position);
 
     /* if the callback returned a non-null value, allow the edit */
     if (retval) {
@@ -1089,27 +1087,25 @@ gnc_table_traverse_update(Table *table, int row, int col,
   /* process forward-moving traversals */
   switch(dir) {
     case GNC_TABLE_TRAVERSE_RIGHT:
+    case GNC_TABLE_TRAVERSE_LEFT:      
       {
 	/* cannot compute the cell location until we have checked that
 	 * row and column have valid values. compute the cell location.
 	 */
-	const int rel_row = table->locators[row][col]->phys_row_offset;
-	const int rel_col = table->locators[row][col]->phys_col_offset;
+        int next_row, next_col;
+        const int rel_row = table->locators[row][col]->phys_row_offset;
+      const int rel_col = table->locators[row][col]->phys_col_offset;
 
-	int next_row = arr->right_traverse_r[rel_row][rel_col];
-	int next_col = arr->right_traverse_c[rel_row][rel_col];
+  if (dir == GNC_TABLE_TRAVERSE_RIGHT) {
+    *dest_row = row - rel_row + arr->right_traverse_r[rel_row][rel_col];
+    *dest_col = col - rel_col + arr->right_traverse_c[rel_row][rel_col];
+    exit_register= ((rel_row == arr->right_exit_r) && (rel_col == arr->right_exit_c));
+  }   else {
+    *dest_row = row - rel_row + arr->left_traverse_r[rel_row][rel_col];
+    *dest_col = col - rel_col + arr->left_traverse_c[rel_row][rel_col];
+    exit_register = ((rel_row == arr->left_exit_r) && (rel_col == arr->left_exit_c));    
+  }
 
-	/* if we are at the end of the traversal chain, hop out of this
-	 * tab group, and into the next.  */
-	if ((0 > next_row) || (0 > next_col)) {
-	  /* reverse the sign of next_row, col to be positive. */
-	  *dest_row = row - rel_row - next_row - 1; 
-	  *dest_col = col - rel_col - next_col - 1;
-	  exit_register = TRUE;
-	} else {
-	  *dest_row = row - rel_row + next_row; 
-	  *dest_col = col - rel_col + next_col;
-	}
       }
       break;
 
@@ -1181,40 +1177,19 @@ gnc_table_traverse_update(Table *table, int row, int col,
       break;
 
     default:
-      /* FIXME: Handle left-movement */
+      /* shouldn't be reached */
+      assert(0);
       break;
   }
 
-  /* OK, now we do a fancy trick to get the auto-expanding registers
-     to work right.  The trick is that as one transaction is expanded
-     or collapsed, the rows all get renumbered.  Now, we can't tell
-     the code to directly hope to the new renumbered position, because
-     we haven't completed all of our work yet.  In particular, we
-     haven't left the current cell, and this means we haven't yet
-     saved those cell contents.  Only after saving, can we reconfigure
-     the table.  And only after we reconfigure the table can we move
-     the since only then will we know where & how to move it to.  Sooo
-     ...  here's what we do. We compute where we should have hopped to
-     in the reconfigured table, and save that off in the "reverify"
-     fields.  Then we hop to the boring old place we would have hopped
-     to if there had been no reconfiguring going on.  Later on, after
-     we've reconfigured, we will move the cursor to the "reverify"
-     position, and viola, we'll be in the right place.  */
-  
-  if (table->traverse) {
-    int nr = *dest_row;
-    int nc = *dest_col;
-    table->reverify_phys_row = nr;
-    table->reverify_phys_col = nc;
-    (table->traverse) (table, &nr, &nc, table->client_data);
-    *dest_row = nr;
-    *dest_col = nc;
-  }
-  
+  /* Call the table traverse callback for any modifications. */
+  if (table->traverse)
+    (table->traverse) (table, dest_row, dest_col, table->client_data);
+
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;
 
-  LEAVE("gnc_table_traverse_update(): exit_register=%d\n", exit_register);
+  LEAVE("gnc_table_traverse_update(): dest_row = %d, dest_col = %d, exit_register=%d\n", *dest_row, *dest_col, exit_register);
   return(exit_register);
 }
 

@@ -261,6 +261,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
         item = gnome_canvas_item_new(parent, gnc_item_list_get_type(),
 				     "widget", hbox,
 				     "size_pixels", TRUE,
+				     "x", -10000.0,                                     
 				     NULL);
 
         item_list = GNC_ITEM_LIST(item);

@@ -200,6 +200,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    int len = 1;
    const char *retval;
    char *newval;
+
    ENTER("modifyCB()\n");
    
    /* accept edits by default, unless the cell handler rejects them */
@@ -216,7 +217,11 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    if (change) strcat (newval, change);
    strcat (newval, &oldval[(cbs->verify->endPos)]);
 
-   retval = gnc_table_modify_update(table, row, col, oldval, change, newval);
+   {
+     int cursor_position = 0; /* Unused at present. */
+     retval = gnc_table_modify_update(table, row, col, oldval, change, newval,
+                                      &cursor_position);
+   }
 
    if (retval && (retval != newval)) {
      DEBUG ("modifyCB() new text: %s\n", retval);
@@ -629,7 +634,8 @@ xaccRefreshTableGUI (Table * table)
 /* ==================================================== */
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col,
+                    gncBoolean do_scroll)
 {
    int phys_row, phys_col;
    int to_row, to_col;
@@ -638,6 +644,9 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
    /* if the current cursor is undefined, there is nothing to do. */
    if (!curs) return;
    if ((0 > from_row) || (0 > from_col)) return;
+   if ((from_row >= table->num_phys_rows) ||
+       (from_col >= table->num_phys_cols))
+     return;
 
    /* compute the physical bounds of the current cursor */
    phys_row = from_row;

@@ -111,6 +111,7 @@ select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 	PopBox *box = (PopBox *) cell->cell.gui_private;
 
 	gnucash_sheet_modify_current_cell(box->sheet, item_string);
+        item_edit_hide_list (box->item_edit);
 }
 
 static void
@@ -119,7 +120,15 @@ key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
 	ComboCell *cell = (ComboCell *) data;
 	PopBox *box = (PopBox *) cell->cell.gui_private;
 
-	gtk_widget_event(GTK_WIDGET(box->sheet), (GdkEvent *) event);
+        switch(event->keyval) {
+                case GDK_Escape:
+                        item_edit_hide_list (box->item_edit);
+                        break;
+                default:
+                        gtk_widget_event(GTK_WIDGET(box->sheet),
+                                         (GdkEvent *) event);
+                        break;
+        }
 }
 
 static void
@@ -129,6 +138,9 @@ disconnect_list_signals (ComboCell *cell)
 
 	if (!box->list_signals_connected)
 		return;
+
+        if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
+                return;
 
 	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
 			      box->select_item_signal);
@@ -146,6 +158,9 @@ connect_list_signals (ComboCell *cell)
 
 	if (box->list_signals_connected)
 		return;
+
+        if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
+                return;
 
 	box->select_item_signal =
 		gtk_signal_connect(GTK_OBJECT(box->item_list), "select_item",
@@ -213,6 +228,32 @@ void xaccDestroyComboCell (ComboCell *cell)
 
 /* =============================================== */
 
+void
+xaccClearComboCellMenu (ComboCell * cell)
+{
+        PopBox *box;
+
+        if (cell == NULL)
+                return;
+
+        box = (PopBox *) cell->cell.gui_private;
+        if (box == NULL)
+                return;
+        if (box->menustrings == NULL)
+                return;
+
+        g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
+        g_list_free(box->menustrings);
+        box->menustrings = NULL;
+
+        if (box->item_list != NULL)
+                gnc_item_list_clear(box->item_list);
+
+        box->list_in_sync = TRUE;
+}
+
+/* =============================================== */
+
 static void
 gnc_append_string_to_list(gpointer _string, gpointer _item_list)
 {
@@ -266,7 +307,7 @@ xaccSetComboCellValue (ComboCell *cell, const char *str)
 
 static const char *
 ComboMV (BasicCell *_cell, const char *oldval, const char *change,
-	 const char *newval)
+	 const char *newval, int *cursor_position)
 {
         xaccSetBasicCellValue (_cell, newval);
 
@@ -306,6 +347,8 @@ static void
 moveCombo (BasicCell *bcell, int phys_row, int phys_col)
 {
 	PopBox *box = (PopBox *) bcell->gui_private;
+
+	disconnect_list_signals((ComboCell *) bcell);
 
 	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
 			      "is_combo", FALSE, NULL);

@@ -25,8 +25,9 @@
 
 #include <gnome.h>
 
-#include "config.h"
+#include "top-level.h"
 
+#include "config.h"
 #include "FileBox.h"
 #include "messages.h"
 #include "util.h"
@@ -78,10 +79,13 @@ fileBox(const char * title, const char * filter)
 
   fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
   fb_info.file_name = NULL;
-
+/* hack alert - this was filtering directory names as well as file 
+ * names, so I think we should not do this by default (rgmerk)
+ */
+#if 0
   if (filter != NULL)
     gtk_file_selection_complete(fb_info.file_box, filter);
-
+#endif
   gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
   gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
 			       GTK_WINDOW(gnc_get_ui_data()));

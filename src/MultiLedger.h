@@ -79,53 +79,66 @@ struct _xaccLedgerDisplay {
 /*
  * opens up a register window to display a single account  
  */
-extern xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
+xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
 
 /*
  * opens up a register window to display the parent account
  * and all of its children.
  */
-extern xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
+xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
 
 /*
  * display list of accounts in a general ledger.
  */
-extern xaccLedgerDisplay * xaccLedgerDisplayGeneral 
-      (Account *lead_acc, Account **acclist, int ledger_type);
+xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_acc,
+                                              Account **acclist,
+                                              int ledger_type);
 
 /*
  * redisplay/redraw all windows that contain any transactions
  * that are associated with the indicated account.
  */
-extern void        xaccAccountDisplayRefresh (Account *acc);
-extern void        xaccAccListDisplayRefresh (Account **acc);
+void        xaccAccountDisplayRefresh (Account *acc);
+void        xaccAccListDisplayRefresh (Account **acc);
 
 /* 
  * redisplay/redraw all windows that contain this transaction
  * (or any of its member splits).
  */
-extern void        xaccTransDisplayRefresh (Transaction *trans);
+void        xaccTransDisplayRefresh (Transaction *trans);
 
 /* 
  * redisplay/redraw only the indicated window.
  * both routines do same thing, they differ only by the argument they
  * take.
  */
-extern void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
-extern void        xaccRegisterRefresh (SplitRegister *);
+void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
+void        xaccRegisterRefresh (SplitRegister *);
+
+/*
+ * Call the user refresh callback for all registers. This does not
+ * perform a full refresh, i.e., it does not reload transactions.
+ * This is just for updating gui controls.
+ */
+void        xaccRegisterRefreshAllGUI (void);
+
+/*
+ * return true if acc is a member of the ledger.
+ */
+int         ledgerIsMember (xaccLedgerDisplay *reg, Account * acc);
 
 /* 
  * close the window 
  */
-extern void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
+void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
 
 /********************************************************************\
  * sort of a quick hack involving the layout of the register.
 \********************************************************************/
 
-extern void        xaccRegisterCountHack (SplitRegister *splitreg);
+void        xaccRegisterCountHack (SplitRegister *splitreg);
 
-extern void xaccDestroyLedgerDisplay (Account *acc);
+void        xaccDestroyLedgerDisplay (Account *acc);
 
 #endif /* __MULTI_LEDGER_H__ */
 

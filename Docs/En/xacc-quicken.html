@@ -1,64 +1,99 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML//EN">
+
 <html>
   <head>
-    <title>Quicken User's Guide</title>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>A Guide for Former Users of Quicken</title>
   </head>
-  
-  <body bgcolor=#eeeeee>
-  <h1>Quicken (TM) User's Guide</h1>
-    Not all accounting systems use the same words for the same
-    concepts.  Below follows some notes for
-    users accustomed to Quicken products.
 
-  <h2>Categories</h2>
-    What Quicken calls "Categories" are really just 
-    <a href="xacc-expense.html">Income/Expense accounts</a>.
-    Thus, if you are used to specifying a category in Quicken, 
-    just create an income/expense account of the same name in
-    X-Accountant, and use that as a category. 
+  <body>
+    <h1>Quicken (TM) User's Guide</h1>
 
-  <h2>Quicken QIF File Import</h2>
-    X-Accountant supports the import of Quicken Import Files
-    (QIF). (Note: Only Quicken Version 3.0 QIF has been tested).
-    Due to the curious nature of QIF, please read this section 
-    carefully, or you may be disappointed with the results.
-    <p>
-    To create a Quicken QIF file, start Quicken (yes, it works
-    Wine, and probably Wabi too), choose the menu "File"
-    and select the "Export..." menu entry.  Under Quicken 
-    Version 3.0, you can only export one account at a time, 
-    and thus, exporting will prove to be a tedious process.
-    When exporting, note that there are a series of check 
-    boxes marked "Transactions", "Accounts List", "Category
-    List", etc.  For best results, you will want to make
-    sure that these three are checked.  If you do *not*
-    check the "Accounts List" box, then the name of your
-    account will be lost.
-    <p>
-    To import a Quicken QIF file, choose the menu "File"
-    and select the entry "Import QIF".  The imported wile 
-    will be merged with whatever other data you currently
-    have in X-Accountant.  This merge allows multiple
-    Quicken accounts to be imported and merged into 
-    one account group.  Note that during merge, a scan 
-    is made for duplicate transactions, and duplicates 
-    are removed.  A duplicate transaction is one 
-    where the date, description (payee), memo, quantity, share price,
-    and debited/credited accounts or categories match exactly.
-    Thus, the merge should be safe unless you have multiple
-    transactions on the same date, to the same account,
-    for the same amount, with the same description and memo.
-    <p>
-    Note that when the "Accounts List" and "Category List"
-    is exported from Quicken, <b>all</b> accounts and 
-    categories will be exported, even if they are empty,
-    and contain no transactions.  When these are imported,
-    they will appear as accounts with a balance of zero.
-    If you do not need or use these accounts, delete them.
-    A future X-Accountant enhancement will allow you to
-    delete them en-masse, or to make them invisible without
-    deleting them.
-    
+    <p> Not all accounting systems use the same words for the same
+    concepts. The following are some notes that may be helpful to
+    users accustomed to Intuit's products.</p>
 
+    <h2>Categories</h2>
+    <a name="QUICKENCATS"></a> 
+
+    <p> What Quicken calls <tt>Categories</tt> are really just <a
+    href="xacc-expense.html">Income/Expense accounts</a>. Thus, if
+    you are used to specifying a category in Quicken, just create
+    an income/expense account of the same name in X-Accountant, and
+    use that as the name of the account.</p>
+
+    <h2>Quicken QIF File Import</h2>
+    <a name="QIF"> X-Accountant supports the import of Quicken
+    Import Files (QIF). (Note: Only Quicken Version 3.0 QIF has
+    been tested).</a> 
+
+    <p> Note that the QIF format is representive of a somewhat
+    peculiar data model that is not as expressive as one might
+    wish; please read this section carefully, or you may be
+    disappointed with the results.</p>
+
+    <p> To create a Quicken QIF file, start Quicken (yes, it works
+    on <a href="http://www.winehq.com/"> Wine,</a> and probably
+    Wabi too), choose the menu "File" and select the <tt>
+    Export...</tt> menu entry. Quicken can only export one account
+    to each data file, which means that if you have many accounts,
+    this may prove to be a somewhat tedious process. (On the other
+    hand, it should be a whole lot <em> less</em> tedious than
+    entering the data from scratch.)</p>
+
+    <p>When exporting, note that there are a series of check boxes
+    marked <tt>Transactions</tt>, <tt>Accounts List</tt>, <tt>
+    Category List</tt>, and so forth. For best results, you will
+    want to make sure that these three are checked. If you do <em>
+    not</em> check the <tt>Accounts List</tt> box, then the name of
+    your account will be lost.</p>
+
+    <p> To import a Quicken QIF file, choose the menu <tt>File</tt>
+    and select the entry <tt>Import QIF</tt>. The imported file
+    will be merged with whatever other data you currently have in
+    X-Accountant. This merge allows multiple Quicken accounts to be
+    imported and merged into one account group.</p>
+
+    <p> Note that during merge, a scan is made for duplicate
+    transactions, and duplicates are removed. A duplicate
+    transaction is one where the date, description (payee), memo,
+    quantity, share price, and debited/credited accounts or
+    categories match <em> exactly.</em> Thus, the merge should be
+    safe unless you have multiple transactions on the same date, to
+    the same account, for the same amount, with the same
+    description and memo.</p>
+
+    <p> This unfortunately <em> can</em> occur, the typical
+    scenario involving where you make multiple withdrawals of
+    identical amounts from ATM machines on the same day.</p>
+
+    <p> An ongoing project is to build an alternative import
+    utility in Guile that will be more flexible, and which, by
+    virtue of being stored as a set of Scheme scripts, may be
+    modified without needing to recompile the whole application. At
+    this point, it successfully parses QIF files; what remains is
+    the (rather complex task) of determine appropriate
+    correspondences between the Quicken <b> Categories</b> and the
+    GnuCash equivalents.</p>
+
+    <p> Further details about the QIF Interchange Format may be
+    found <a href= 
+    "http://www.ntlug.org/~cbbrowne/financeformats.html#QIF">
+    here.</a></p>
+
+    <p> Note that when the <tt>Accounts List</tt> and <tt>Category
+    List</tt> is exported from Quicken, <b>all</b> accounts and
+    categories will be exported, even if they are empty and contain
+    no transactions. When these are imported, they will appear as
+    accounts with a balance of zero. If you do not plan to use such
+    accounts, feel free to delete them. Future enhancements may
+    allow you to delete them "en masse," or to make them invisible
+    without deleting them.</p>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
+

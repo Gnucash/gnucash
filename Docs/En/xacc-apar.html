@@ -1,54 +1,103 @@
-<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
   <head>
-    <title></title>
+    <link rel="stylesheet" title="normal" type="text/css" href= 
+    "gnucash.css">
+
+    <title>Accounts Payable/Accounts Receivable</title>
   </head>
 
   <body>
     <h1>Accounts Payable &amp; Accounts Receivable</h1>
-    A/R and A/P are kind of deep, 
 
-    <p> Anyways, let's consider A/R. We can't really relate to A/P
-    because we always pay <em>our</em> bills on time, don't we ?
-    :-)</p>
+    <p> A/R (Accounts Receivable) and A/P (Accounts Payable) are
+    somewhat deep to understand.</p>
 
-    <p> So anyways, let's say we give our customers 30 days to
-    pay.</p>
+    <p> Let us first examine A/R. After all, we really shouldn't
+    really <em>need</em> to relate to A/P because we always pay
+    <em>our</em> bills on time, don't we ? :-)</p>
 
-    <p> When we make a sale, the two accounts affected are Sales
-    (an income account) and A/R. A/R is an asset, but it's not
-    liquid, and it's not quite cash.</p>
+    <p> So, as a first cut, let us assume we don't require
+    customers to pay <em> instantly,</em> in cash, but rather issue
+    them an invoice, and give them 30 days to pay the bills. (Then
+    we can start charging interest and sending out harassing
+    letters :-)).</p>
+
+    <p> When we make a sale, the two accounts affected are <b>
+    Sales</b> (an income account) and <b>Accounts Receivable.</b>
+    Accounts Receivable is an asset, but it's not liquid, and it's
+    not <em> quite</em> cash.</p>
 
     <p> Then when they come by to pay their bill, dropping off a
-    big bag of twenty-dollar bills, we transfer the amount from A/R
-    to Cash.</p>
+    large sack of twenty-dollar bills (or, more likely, a
+    check/cheque), we transfer the amount from A/R to Cash.</p>
 
-    <p> The reason we do it in two steps is that we've decided to
+    <p> The reason we do this in two steps is that we've decided to
     do our accounting on an accrual basis and not on a cash basis,
-    bcos, well, most of our transactions are not cash, they're
-    obligations.</p>
+    because most of our transactions are not solely based on cash
+    changing hands, but rather based on <em> establishing
+    obligations.</em></p>
+
+    <p> In more sophisticated systems, there may be a whole
+    sequence of documents generated and tracked:</p>
+
+    <ul>
+      <li>A customer sends in a <b>Purchase Order</b>, thus
+      authorizing a purchase.</li>
+
+      <li>We set up a <b>Work Order</b> to schedule production of
+      whatever the customer is buying</li>
+
+      <li>We issue a <b>Shipping Notice</b>, to ship to goods to
+      the customer</li>
+
+      <li>Once shipped, we issue an <b>Invoice</b>, representing
+      the <em> request to pay</em></li>
+    </ul>
 
     <p> We report sales in our sales figures as soon as we make
-    them, but if the auditor wants to know about whether we're
-    gonna get stuck with bad debts, we break down those A/R's by
-    how old they are: 0-30 says, 31-60 says, etc. At some point
-    when a particular debt is "written off", like when the cheesing
-    bastards go bankrupt, we dock both A/R and Sales, so we're
-    going back and patching up (or rather, "patching down") the
-    Sales account to show that the Sale was never made good.</p>
+    them, but if the auditor wants to know about whether we'll get
+    stuck with bad debts, we break down those A/R's based on the
+    "ages" of the debts, commonly segmented into three or four
+    periods, of 0-30 days, 31-60 days, etc.</p>
 
-    <p> We can use the same technique for things that we prepay. If
-    we have to plunk down six months' rent in advance, that is an
-    "accrued asset", and while it put a healthy dent in the Cash
-    account, it does show on the books as an asset. And if we've
-    been collecting payroll taxes from our employees and keeping
-    them in a special bank account, the money's not really ours, so
-    we have a growth in the Cash account on one side, and a growth
-    in an Accrued Liability, namely, Payroll Taxes Payable, on the
-    toher side. When we send the quarterly check to the Feds so
-    that they can make payroll too, our liability drops and so does
-    our Cash account.</p>
+    <p> At some point when a particular debt is "written off,"
+    perhaps when the cheesing bastards go bankrupt, we dock both
+    A/R and Sales, so we're going back and patching up (or rather,
+    less happily, "patching down") the Sales account to show that
+    the Sale was never made good. It is common to set up a <b> Bad
+    Debt Expense</b> account so that such incidences are recorded
+    in a way that makes it clearer that <em> sales went bad</em>
+    .</p>
+
+    <p> The above things, reversed, reflect how Accounts Payables
+    work; just switch customer with supplier, and see how the roles
+    reverse. If we buy materials "on account," accrual accounting
+    requires that we record that we incur the expense immediately,
+    and rather than reducing cash, we put the "credit" into the <b>
+    Accounts Payable</b> account. Three weeks later, the invoice
+    comes in, and we issue a payment, and so <em> Debit AP, Credit
+    Cash.</em></p>
+
+    <p> We can also use analagous techniques for expenses that we
+    prepay. If we have to pay out down six months of rent in
+    advance, that is treated as an "accrued asset," <b> Prepaid
+    Rent,</b> and while it puts an unfortunate dent in the Cash
+    account, it <em> does</em> show on the books as an asset that
+    will decline over time to zero. Each month, we draw the account
+    down via <em> Debit <b> Rent Expense</b>, Credit <b> Prepaid
+    Rent</b>.</em> Similarly, we've been collecting payroll taxes
+    from our employees and keeping them in a special bank account,
+    <em> that</em> money is not really ours, so we have a growth in
+    the Cash account on one side, and a growth in an Accrued
+    Liability, namely, <b>Payroll Taxes Payable</b>, on the other
+    side. When we send the quarterly check to the Government so
+    that they can make <em> their</em> payroll, our <b> Payroll
+    Taxes Payable</b> drops as does the balance in the <b>Checking
+    Account</b>.</p>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
 
