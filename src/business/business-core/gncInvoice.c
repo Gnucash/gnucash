@@ -703,7 +703,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gnc_numeric total;
   gboolean reverse;
   const char *name, *type;
-  char *built_name;
   Account *ccard_acct = NULL;
   GncOwner *owner;
 
@@ -750,10 +749,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
   type = gncInvoiceGetType (invoice);
-  built_name = g_strdup_printf ("%s: %s", type ? type : "", name ? name : "");
 
   /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
-  xaccTransSetDescription (txn, built_name);
+  xaccTransSetDescription (txn, name ? name : "");
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, invoice->currency);
 
@@ -817,6 +815,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	  split = xaccMallocSplit (invoice->book);
 	  /* set action? */
 	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
+	  xaccSplitSetAction (split, type);
 	  xaccSplitSetBaseValue (split, (reverse ? value : gnc_numeric_neg (value)),
 				 invoice->currency);
 	  xaccAccountBeginEdit (ccard_acct);
@@ -851,6 +850,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* set action and memo? */
 
     xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, type);
 
     xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
 				   : acc_val->value),
@@ -869,6 +869,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Set memo.  action? */
     xaccSplitSetMemo (split, _("Extra to Charge Card"));
+    xaccSplitSetAction (split, type);
     
     xaccSplitSetBaseValue (split, (reverse ? invoice->to_charge_amount :
 				   gnc_numeric_neg(invoice->to_charge_amount)),
@@ -925,6 +926,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split;
     /* Translators: This is the memo of an auto-created split */
     char *memo2 = _("Automatic Payment Forward");
+    char *action2 = _("Auto Split");
 
     t2 = xaccMallocTransaction (invoice->book);
     lot2 = gnc_lot_new (invoice->book);
@@ -935,7 +937,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountBeginEdit (acc);
 
     /* Set Transaction Description (Owner Name), Currency */
-    xaccTransSetDescription (t2, built_name);
+    xaccTransSetDescription (t2, name ? name : "");
     xaccTransSetCurrency (t2, invoice->currency);
 
     /* Entered and Posted at date */
@@ -947,6 +949,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* Balance out this lot */
     split = xaccMallocSplit (invoice->book);
     xaccSplitSetMemo (split, memo2);
+    xaccSplitSetAction (split, action2);
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
 			   invoice->currency);
     xaccAccountInsertSplit (acc, split);
@@ -956,6 +959,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* And apply the pre-payment to a new lot */
     split = xaccMallocSplit (invoice->book);
     xaccSplitSetMemo (split, memo2);
+    xaccSplitSetAction (split, action2);
     xaccSplitSetBaseValue (split, total, invoice->currency);
     xaccAccountInsertSplit (acc, split);
     xaccTransAppendSplit (t2, split);
@@ -966,8 +970,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   }
 
   gncInvoiceCommitEdit (invoice);
-
-  g_free (built_name);
 
   return txn;
 }
@@ -1087,7 +1089,6 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   GList *lot_list, *fifo = NULL;
   GNCLot *lot, *prepay_lot = NULL;
   const char *name;
-  char *built_name;
   gnc_commodity *commodity;
   gnc_numeric split_amt;
   gboolean reverse;
@@ -1102,24 +1103,21 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   commodity = gncOwnerGetCurrency (owner);
   reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
 
-  built_name = g_strdup_printf ("%s: %s", _("Payment"), name ? name : "");
-
   txn = xaccMallocTransaction (book);
   xaccTransBeginEdit (txn);
 
   /* Set up the transaction */
-  xaccTransSetDescription (txn, built_name);
+  xaccTransSetDescription (txn, name ? name : "");
   xaccTransSetNum (txn, num);
   xaccTransSetCurrency (txn, commodity);
   xaccTransSetDateEnteredTS (txn, &date);
   xaccTransSetDatePostedTS (txn, &date);
   xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
-  g_free (built_name);
-
   /* The split for the transfer account */
   split = xaccMallocSplit (book);
   xaccSplitSetMemo (split, memo);
+  xaccSplitSetAction (split, _("Payment"));
   xaccSplitSetBaseValue (split, reverse ? amount :
 			 gnc_numeric_neg (amount), commodity);
   xaccAccountBeginEdit (xfer_acc);
@@ -1203,7 +1201,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
 
     split = xaccMallocSplit (book);
     xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, _("Payment"));
+    xaccSplitSetAction (split, _("Pre-Payment"));
     xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) :
 			   amount, commodity);
     xaccAccountInsertSplit (posted_acc, split);

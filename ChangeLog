@@ -1,3 +1,9 @@
+2003-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c: change the description
+	  and action of Invoice and Payement Transactions/Splits, to make
+	  it easier to print a check off the posted transactions.
+
 2003-07-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif: an incomplete implementation of a new
