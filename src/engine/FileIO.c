@@ -150,7 +150,7 @@ static int writeAccount( int fd, Account *account );
 static int writeAccInfo( int fd, AccInfo *accinfo );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
-static int writeString( int fd, char *str );
+static int writeString( int fd, const char *str );
 static int writeTSDate( int fd, Timespec *);
 
 /*******************************************************/
@@ -1521,7 +1521,7 @@ writeAccount( int fd, Account *acc )
   int numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
-  char * tmp;
+  const char * tmp;
   
   DEBUG ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
 
@@ -1816,7 +1816,7 @@ writeAccInfo ( int fd, AccInfo *accinfo )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeString( int fd, char *str )
+writeString( int fd, const char *str )
   {
   int err=0;
   int size;

@@ -83,7 +83,7 @@ gnc_ui_refresh_statusbar()
   char profit_string[256];
   int num_accounts;
   int account_type;
-  char *account_currency;
+  const char *account_currency;
   gboolean euro;
   int i;
 
@@ -239,7 +239,7 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 
   if (account)
   {
-    gchar *name;
+    const gchar *name;
     gchar *message;
 
     name = xaccAccountGetName(account);

@@ -69,11 +69,14 @@ xaccMallocAccountGroup( void )
 
   xaccInitializeAccountGroup (grp);
 
-  guid_new(&grp->guid);
+  do {
+    guid_new(&grp->guid);
 
-  if (xaccGUIDType(&grp->guid) != GNC_ID_NONE) {
+    if (xaccGUIDType(&grp->guid) == GNC_ID_NONE)
+      break;
+
     PWARN("xaccMallocAccountGroup: duplicate id\n");
-  }
+  } while(1);
 
   xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
 

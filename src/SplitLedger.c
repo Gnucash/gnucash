@@ -2345,7 +2345,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 static void 
 LoadXferCell (ComboCell *cell,  
               AccountGroup *grp,
-              char *base_currency, char *base_security)
+              const char *base_currency,
+              const char *base_security)
 {
   gncBoolean load_everything;
   Account * acc;
@@ -2366,7 +2367,7 @@ LoadXferCell (ComboCell *cell,
   n = 0;
   acc = xaccGroupGetAccount (grp, n);
   while (acc) {
-    char *curr, *secu;
+    const char *curr, *secu;
 
     curr = xaccAccountGetCurrency (acc);
     secu = xaccAccountGetSecurity (acc);
@@ -2404,7 +2405,7 @@ xaccLoadXferCell (ComboCell *cell,
                   AccountGroup *grp, 
                   Account *base_account)
 {
-  char *curr, *secu;
+  const char *curr, *secu;
 
   curr = xaccAccountGetCurrency (base_account);
   secu = xaccAccountGetSecurity (base_account);

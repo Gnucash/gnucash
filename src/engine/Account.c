@@ -112,11 +112,14 @@ xaccMallocAccount( void )
 
   xaccInitAccount (acc);
 
-  guid_new(&acc->guid);
+  do {
+    guid_new(&acc->guid);
 
-  if (xaccGUIDType(&acc->guid) != GNC_ID_NONE) {
+    if (xaccGUIDType(&acc->guid) == GNC_ID_NONE)
+      break;
+
     PWARN("xaccMallocAccount: duplicate id\n");
-  }
+  } while(1);
 
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
 
@@ -992,7 +995,7 @@ xaccAccountSetType (Account *acc, int tip)
 }
 
 void 
-xaccAccountSetName (Account *acc, char *str)
+xaccAccountSetName (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -1005,7 +1008,7 @@ xaccAccountSetName (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetCode (Account *acc, char *str)
+xaccAccountSetCode (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -1018,7 +1021,7 @@ xaccAccountSetCode (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetDescription (Account *acc, char *str)
+xaccAccountSetDescription (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -1031,7 +1034,7 @@ xaccAccountSetDescription (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetNotes (Account *acc, char *str)
+xaccAccountSetNotes (Account *acc, const char *str)
 {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -1044,7 +1047,7 @@ xaccAccountSetNotes (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetCurrency (Account *acc, char *str)
+xaccAccountSetCurrency (Account *acc, const char *str)
 {
    if ((!acc) || (!str)) return;
    CHECK (acc);
@@ -1068,7 +1071,7 @@ xaccAccountSetCurrency (Account *acc, char *str)
 }
 
 void 
-xaccAccountSetSecurity (Account *acc, char *str)
+xaccAccountSetSecurity (Account *acc, const char *str)
 {
    if ((!acc) || (!str)) return;
    CHECK (acc);
@@ -1141,7 +1144,7 @@ xaccAccountGetFullName(Account *account, const char separator)
 {
   Account *a;
   char *fullname;
-  char *name;
+  const char *name;
   char *p;
   int length;
 

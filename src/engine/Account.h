@@ -60,8 +60,8 @@ void         xaccAccountCommitEdit (Account *);
  *    account associated with the given id, or NULL
  *    if there is no such account.
  */
-GUID    * xaccAccountGetGUID (Account *account);
-Account * xaccAccountLookup (GUID *guid);
+GUID       * xaccAccountGetGUID (Account *account);
+Account    * xaccAccountLookup (GUID *guid);
 
 int          xaccGetAccountID (Account *);
 char         xaccGetAccountFlags (Account *);
@@ -137,12 +137,12 @@ void xaccMoveFarEnd (Split *, Account *);
 void xaccMoveFarEndByName (Split *, const char *);
 
 void xaccAccountSetType (Account *, int);
-void xaccAccountSetName (Account *, char *);
-void xaccAccountSetCode (Account *, char *);
-void xaccAccountSetDescription (Account *, char *);
-void xaccAccountSetNotes (Account *, char *);
-void xaccAccountSetCurrency (Account *, char *);
-void xaccAccountSetSecurity (Account *, char *);
+void xaccAccountSetName (Account *, const char *);
+void xaccAccountSetCode (Account *, const char *);
+void xaccAccountSetDescription (Account *, const char *);
+void xaccAccountSetNotes (Account *, const char *);
+void xaccAccountSetCurrency (Account *, const char *);
+void xaccAccountSetSecurity (Account *, const char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);

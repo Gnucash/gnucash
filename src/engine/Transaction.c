@@ -115,11 +115,14 @@ xaccMallocSplit(void)
 
   xaccInitSplit (split);
 
-  guid_new(&split->guid);
+  do {
+    guid_new(&split->guid);
 
-  if (xaccGUIDType(&split->guid) != GNC_ID_NONE) {
+    if (xaccGUIDType(&split->guid) == GNC_ID_NONE)
+      break;
+
     PWARN("xaccMallocSplit: duplicate id\n");
-  }
+  } while (1);
 
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 
@@ -388,11 +391,14 @@ xaccMallocTransaction( void )
 
   xaccInitTransaction (trans);
 
-  guid_new(&trans->guid);
+  do {
+    guid_new(&trans->guid);
 
-  if (xaccGUIDType(&trans->guid) != GNC_ID_NONE) {
+    if (xaccGUIDType(&trans->guid) == GNC_ID_NONE)
+      break;
+
     PWARN("xaccMallocTransaction: duplicate id\n");
-  }
+  } while (1);
 
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 

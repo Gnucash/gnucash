@@ -88,7 +88,7 @@ GtkWidget *
 gnc_ui_create_account_label(int field_type)
 {
   GtkWidget *label;
-  gchar     *label_string = gnc_ui_get_account_field_name(field_type);
+  gchar *label_string = gnc_ui_get_account_field_name(field_type);
 
   label_string = g_strconcat(label_string, ":", NULL);
 
@@ -569,7 +569,8 @@ gnc_ui_install_field_strings(Account * account,
 
 /* =========================================================== */
 
-char * gnc_ui_get_account_field_name(int field)
+char *
+gnc_ui_get_account_field_name(int field)
 {
   assert((field >= 0) && (field < NUM_ACCOUNT_FIELDS));
 
@@ -641,7 +642,8 @@ gnc_ui_account_get_balance(Account *account, gboolean include_children)
 }
 
 
-char * gnc_ui_get_account_field_value_string(Account *account, int field)
+char *
+gnc_ui_get_account_field_value_string(Account *account, int field)
 {
   if (account == NULL)
     return NULL;

@@ -229,8 +229,8 @@ gnc_account_change_currency_security(Account *account,
                                      const char *currency,
                                      const char *security)
 {
-  char *old_currency;
-  char *old_security;
+  const char *old_currency;
+  const char *old_security;
   gboolean new_currency;
   gboolean new_security;
   GSList *stack;
@@ -915,7 +915,7 @@ editAccWindow(Account *account)
   gtk_box_pack_start(GTK_BOX(vbox), source_menu, FALSE, FALSE, 0);
 
   { /* Notes entry */
-    gchar * notes;
+    const gchar * notes;
 
     widget = gnc_ui_notes_frame_create(&editAccData->edit_info.notes_entry);
     gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);

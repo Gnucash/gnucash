@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.3.6  - 24 April 2000
+         o transaction finder dialog
+         o even better qif importing
+         o some support for the euro
+         o bug fixes
+
  1.3.5  - 10 April 2000
          o more work on reports and check-printing
          o fixes to qif importing

@@ -177,7 +177,7 @@ gnc_ui_account_picker_select_cb(GtkTree   * tree,
   AccountGroup * topgroup = gncGetCurrentGroup();
   Account      * gnc_acct;
   char         * selected_acct;
-  char         * description;
+  const char   * description;
   int          acct_type;
   SCM          infolist;
 
@@ -198,7 +198,7 @@ gnc_ui_account_picker_select_cb(GtkTree   * tree,
                               acct_type);
   infolist = SCM_LIST3(gh_str02scm(selected_acct),
                        gh_int2scm(acct_type),
-                       gh_str02scm(description));
+                       gh_str02scm((char *) description));
   scm_protect_object(infolist);
 
   scm_unprotect_object(wind->scm_acct_info);

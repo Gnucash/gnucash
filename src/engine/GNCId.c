@@ -103,7 +103,26 @@ id_compare(gconstpointer key_1, gconstpointer key_2)
   return memcmp(key_1, key_2, sizeof(GUID)) == 0;
 }
 
-static void summarize_table();
+#ifdef USE_DEBUG
+static void
+print_node(gpointer key, gpointer value, gpointer not_used)
+{
+  GUID *guid = key;
+  EntityNode *node = value;
+
+  fprintf(stderr, "%s %d %p\n",
+          guid_to_string(guid), node->entity_type, node->entity);
+}
+
+static void
+summarize_table()
+{
+  if (entity_table == NULL)
+    return;
+
+  g_hash_table_foreach(entity_table, print_node, NULL);
+}
+#endif
 
 static void
 entity_table_init()
@@ -113,7 +132,9 @@ entity_table_init()
 
   entity_table = g_hash_table_new(id_hash, id_compare);
 
-  /* atexit(summarize_table); */
+#ifdef USE_DEBUG
+  atexit(summarize_table);
+#endif
 }
 
 GNCIdType
@@ -199,23 +220,4 @@ xaccRemoveEntity(GUID * guid)
     g_hash_table_remove(entity_table, old_guid);
     entity_node_destroy(old_guid, e_node, NULL);
   }
-}
-
-static void
-print_node(gpointer key, gpointer value, gpointer not_used)
-{
-  GUID *guid = key;
-  EntityNode *node = value;
-
-  fprintf(stderr, "%s %d %p\n",
-          guid_to_string(guid), node->entity_type, node->entity);
-}
-
-static void
-summarize_table()
-{
-  if (entity_table == NULL)
-    return;
-
-  g_hash_table_foreach(entity_table, print_node, NULL);
 }

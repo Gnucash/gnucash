@@ -924,9 +924,9 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 			    GtkCTreeNode *sibling,
 			    Account *acc)
 {
-  int i;
   gchar *text[NUM_ACCOUNT_FIELDS + 1];
   GtkCTreeNode *node;
+  gint i;
 
   if (acc == NULL)
     return NULL;

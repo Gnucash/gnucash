@@ -1,3 +1,14 @@
+2000-04-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Group.c (xaccMallocAccountGroup): loop until we
+	get a unique id. This is just paranoia code. Ditto for Account.c
+	and Transaction.c.
+
+	* src/engine/Account.c: add some 'const' keywords to string
+	arguments. This affected many other files.
+
+	* src/engine/Scrub.c: i18n strings used to make new accounts.
+
 2000-04-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-options.c: use the default section, if present,

@@ -346,7 +346,8 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 {
    char * qifline;
    Account *acc;
-   char *str, *tok;
+   const char *str;
+   char *tok;
 
    if (!grp) return 0x0;
    do { 
@@ -647,7 +648,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    nacc = xaccGroupGetNumAccounts (rootgrp);
    for (i=0; i<nacc; i++) {
       Account *acc = xaccGroupGetAccount (rootgrp, i);
-      char * acc_name = xaccAccountGetName (acc);
+      const char * acc_name = xaccAccountGetName (acc);
       if (!strcmp(acc_name, qifline)) {
          xfer_acc = acc;
          break;
@@ -1231,7 +1232,7 @@ xaccReadQIFAccountGroup( char *datafile )
            }
         } else {
            /* read account name, followed by dollar data ... */
-           char * acc_name;
+           const char * acc_name;
            Account *preexisting;
            Account *acc = xaccMallocAccount();
 

@@ -338,7 +338,13 @@
                          (set! accounts (addunique accounts a)))
                        (allsubaccounts accounts)))
 
-;              (map (lambda (acct) (gnc:query-add-account gncq acct)) accounts)
+              (gnc:query-set-group gncq (gnc:get-current-group))
+
+              (map (lambda (acct)
+                     ;; FIXME - the '1' below is hard-coded and should
+                     ;;         be abstracted. Just a temp fix while
+                     ;;         the query api gets fully wrapped.
+                     (gnc:query-add-account gncq acct 1)) accounts)
 
               (set! acctcurrency (gnc:account-get-currency (car accounts)))
 
@@ -347,7 +353,7 @@
 
               (gnc:free-query gncq)
 
-              (set! rept-data 
+              (set! rept-data
                     (reduce-split-list (dateloop begindate enddate stepsize)
                                        report-lines 0))
 
