@@ -100,10 +100,9 @@ static gboolean dom_chars_handler(
 {
     if(length > 0 && !isspace_str(text, length))
     {
-        xmlNodeSetContentLen((xmlNodePtr)parent_data, text, length);
+        xmlNodeAddContentLen((xmlNodePtr)parent_data, text, length);
     }
     return TRUE;
-        
 }
 
 sixtp *

@@ -1,5 +1,8 @@
 2001-03-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sixtp-to-dom-parser.c (dom_chars_handler): use
+	xmlNodeAddContentLen
+
 	* src/gnome/gnc-dialogs.glade: tweak stylesheet dialog
 
 	* src/gnome/dialog-style-sheet.c: tweak looks
