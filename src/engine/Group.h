@@ -92,6 +92,19 @@ int     xaccGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
 
+/*
+ * The xaccGetAccounts() subroutine returns an array containing 
+ *    all of the accounts, including subaccounts, in the account group.
+ *    The returned array should be freed when no longer needed.
+ *
+ * The xaccFillInAccounts() routine performs the same function as the
+ *    above routine, except that it fills in the array provided by the
+ *    user.  The array provioded by the user *must* be large enough,
+ *    including a terminating NULL pointer.
+ */
+Account ** xaccGetAccounts (AccountGroup *grp);
+int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
+
 /* 
  * The xaccGetAccountFromID() subroutine fetches the account
  *    with the indicated account id from the collection of accounts
