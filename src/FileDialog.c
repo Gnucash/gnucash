@@ -38,6 +38,7 @@
 #include "gnc-ui.h"
 #include "messages.h"
 #include "gnome/new-user-funs.h"
+#include "guile/global-options.h"
 
 /* FIXME: this is wrong.  This file should not need this include. */
 #include "gnc-book-p.h"
@@ -263,13 +264,18 @@ gncFileNew (void)
   /* start a new book */
   gncGetCurrentBook ();
 
-  gnc_ui_show_new_user_window(0);
-
-  /* leave this here for the moment.  Will add an option in which case
-     this needs to run */
-/*   gh_call2(gh_eval_str("gnc:hook-run-danglers"), */
-/*            gh_eval_str("gnc:*book-opened-hook*"), */
-/*            gh_str02scm(gnc_book_get_url(current_book)));  */
+  if(gnc_lookup_boolean_option("General",
+                               "No account list setup on new file",
+                               1))
+  {
+      gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+               gh_eval_str("gnc:*book-opened-hook*"),
+               gh_str02scm(gnc_book_get_url(current_book))); 
+  }
+  else
+  {
+      gnc_ui_show_new_user_window(0);
+  }
   
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
