@@ -99,31 +99,46 @@ xaccAccountMenuCB( Widget mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 
 AccountMenu *
-xaccBuildAccountMenu (AccountGroup *grp, Widget parent) 
+xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label) 
 {
   MenuItem   *accountMenu;
   AccountMenu *accData;
   int        i;
+  int        nacc;
   
   if (NULL == grp) return NULL;
   
+  nacc = grp->numAcc;
 
   /******************************************************************\
    * The popup menus that let the user choose the account to        *
    * transfer to and the account to transfer from                   *
   \******************************************************************/
   accData = (AccountMenu *) _malloc (sizeof (AccountMenu));
-  accountMenu = (MenuItem *) _malloc((grp->numAcc+1)*sizeof(MenuItem));
+  accountMenu = (MenuItem *) _malloc((nacc+2)*sizeof(MenuItem));
   
-  accData->menuEntry = (AccMenuEntry **)_malloc(grp->numAcc*sizeof(AccMenuEntry *));
-  accData->numMenuEntries = grp->numAcc;
+  accData->menuEntry = (AccMenuEntry **)_malloc((nacc+1)*sizeof(AccMenuEntry *));
+  accData->numMenuEntries = nacc+1;
   
-  for( i=0; i<accData->numMenuEntries; i++ )
+  accData->menuEntry[0] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
+  accData->menuEntry[0]->option = -1;
+  accData->menuEntry[0]->chosen = &(accData->choice);
+    
+  accountMenu[0].label         = "(none)";
+  accountMenu[0].wclass        = &xmPushButtonWidgetClass;
+  accountMenu[0].mnemonic      = 0;
+  accountMenu[0].accelerator   = NULL;
+  accountMenu[0].accel_text    = NULL;
+  accountMenu[0].callback      = xaccAccountMenuCB;
+  accountMenu[0].callback_data = accData->menuEntry[0];
+  accountMenu[0].subitems      = (MenuItem *)NULL;
+
+  for( i=1; i<nacc+1; i++ )
     {
-    Account *acc = getAccount( grp, i );
+    Account *acc = getAccount( grp, i-1 );
     
     accData->menuEntry[i] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
-    accData->menuEntry[i]->option = i;
+    accData->menuEntry[i]->option = i-1;
     accData->menuEntry[i]->chosen = &(accData->choice);
     
     accountMenu[i].label         = acc->accountName;
@@ -137,11 +152,12 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent)
     }
   accountMenu[i] .label= NULL;
   
-  accData->menu_widget = BuildMenu( parent, XmMENU_OPTION, "From:", 'F', 
+  accData->menu_widget = BuildMenu( parent, XmMENU_OPTION, label, 'F', 
                            False, 0, accountMenu );
   
   _free(accountMenu);
   
+  return (accData);
 }
 
 /* ********************** END OF FILE *************************/

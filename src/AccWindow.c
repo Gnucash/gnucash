@@ -37,6 +37,7 @@
 #include <Xm/Text.h>
 
 #include "Account.h"
+#include "AccountMenu.h"
 #include "Data.h"
 #include "main.h"
 #include "util.h"
@@ -94,8 +95,10 @@ void
 accWindow( Widget parent )
   {
   Widget    dialog, form, frame, rc, widget, 
-            label, buttonform;
+            label, buttonform, topwid;
   AccWindow *accData;
+  AccountMenu *accMenu;
+  AccountGroup *grp = topgroup;  /* hack alert -- should be passed as argument */
   
   setBusyCursor( parent );
   
@@ -110,9 +113,9 @@ accWindow( Widget parent )
 				 XmNwidth,     350,
 				 XmNminWidth,  350,
 				 XmNmaxWidth,  350,
-				 XmNheight,    300,
-				 XmNminHeight, 300,
-				 XmNmaxHeight, 300,
+				 XmNheight,    340,
+				 XmNminHeight, 340,
+				 XmNmaxHeight, 340,
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
                                  /* XmNtransient, FALSE,  /* allow window to be repositioned */
@@ -212,33 +215,12 @@ accWindow( Widget parent )
    * Text fields....                                                *
   \******************************************************************/
   
-  label = 
-    XtVaCreateManagedWidget( "Sub:",
-			     xmLabelGadgetClass, form,
-			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       frame,
-			     XmNtopOffset,       10, 
-			     XmNrightAttachment, XmATTACH_POSITION,
-			     XmNrightPosition,   35,        /* 35% */
-			     NULL );
-  
-  accData->group_menu = 
-    XtVaCreateManagedWidget( "text",
-			     xmTextWidgetClass,  form,
-			     XmNmaxLength,       40,
-			     XmNcolumns,         25,
-			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       frame,
-			     XmNtopOffset,       10, 
-			     XmNleftAttachment,  XmATTACH_POSITION,
-			     XmNleftPosition,    35,        /* 35% */
-			     NULL );
-  
+    
   label = 
     XtVaCreateManagedWidget( "Account Name:",
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       accData->group_menu,
+			     XmNtopWidget,       frame,
 			     XmNtopOffset,       10, 
 			     XmNrightAttachment, XmATTACH_POSITION,
 			     XmNrightPosition,   35,        /* 35% */
@@ -250,7 +232,7 @@ accWindow( Widget parent )
 			     XmNmaxLength,       40,
 			     XmNcolumns,         25,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
-			     XmNtopWidget,       accData->group_menu,
+			     XmNtopWidget,       frame,
 			     XmNtopOffset,       10, 
 			     XmNleftAttachment,  XmATTACH_POSITION,
 			     XmNleftPosition,    35,        /* 35% */
@@ -278,15 +260,41 @@ accWindow( Widget parent )
 			     XmNleftPosition,    35,        /* 35% */
 			     NULL );
   
+  topwid = accData->desc;
+  label = 
+    XtVaCreateManagedWidget( "Parent Account:",
+			     xmLabelGadgetClass, form,
+			     XmNtopAttachment,   XmATTACH_WIDGET,
+			     XmNtopWidget,       topwid,
+			     XmNtopOffset,       10,
+			     XmNrightAttachment, XmATTACH_POSITION,
+			     XmNrightPosition,   35,        /* 35% */
+			     NULL );
+  
+  accMenu = xaccBuildAccountMenu (grp, form, "");
+  accData->group_menu = xaccGetAccountMenuWidget (accMenu);
+   
+  XtVaSetValues( accData->group_menu,
+                             XmNtopAttachment,  XmATTACH_WIDGET,
+			     XmNtopWidget,       accData->desc,
+			     XmNtopOffset,       10, 
+			     XmNleftAttachment,  XmATTACH_POSITION,
+			     XmNleftPosition,    35,        /* 35% */
+                             NULL );
+  
+  XtManageChild (accData->group_menu); 
+
   /******************************************************************\
    * The buttons at the bottom...                                   *
   \******************************************************************/
+
+  topwid = accData->group_menu;
   
   buttonform = XtVaCreateWidget( "form", 
 				 xmFormWidgetClass,   form,
 				 XmNfractionBase,     5,
 				 XmNtopAttachment,    XmATTACH_WIDGET,
-				 XmNtopWidget,        accData->desc, 
+				 XmNtopWidget,        topwid, 
 				 XmNtopOffset,        10, 
 				 XmNbottomAttachment, XmATTACH_FORM,
 				 XmNbottomOffset,     10,
