@@ -27,6 +27,7 @@ EXTRA_DIST = \
   netlogin.txt \
   query-api.txt \
   guid.txt \
+  qif.txt \
   user-prefs-howto.txt
 
 
