@@ -1671,14 +1671,6 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
- 'd-gnc:split-set-share-price
- '<gw:void>
- "DxaccSplitSetSharePrice"
- '((<gnc:Split*> s) (<gw:double> value))
- "Set share price for split entry")
-
-(gw:wrap-function
- ws
  'gnc:split-set-share-price
  '<gw:void>
  "xaccSplitSetSharePrice"

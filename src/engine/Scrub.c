@@ -250,9 +250,9 @@ xaccSplitScrub (Split *split)
   PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
          " old amount %s %s, new amount %s",
             trans->description, split->memo,
-            gnc_numeric_to_string (split->amount),
+            gnc_numeric_to_string (xaccSplitGetAmount(split)),
             gnc_commodity_get_mnemonic (currency),
-            gnc_numeric_to_string (split->value));
+            gnc_numeric_to_string (xaccSplitGetValue(split)));
 
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
@@ -491,14 +491,15 @@ xaccTransScrubCurrency (Transaction *trans)
         PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
                " old amount %s %s, new amount %s",
                trans->description, sp->memo,
-               gnc_numeric_to_string (sp->amount),
+               gnc_numeric_to_string (xaccSplitGetAmount(sp)),
                gnc_commodity_get_mnemonic (currency),
-               gnc_numeric_to_string (sp->value));
+               gnc_numeric_to_string (xaccSplitGetValue(sp)));
         xaccTransBeginEdit (trans);
-        xaccSplitSetAmount (sp, sp->value);
+        xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
         xaccTransCommitEdit (trans);
       }
-      /*else {
+      /*else 
+      {
         PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
         xaccSplitGetMemo (sp),
         gnc_numeric_to_string (amount),
@@ -603,7 +604,7 @@ move_quote_source (Account *account, gpointer data)
     tz = dxaccAccountGetQuoteTZ(account);
 
     PINFO("to %8s from %s", gnc_commodity_get_mnemonic(com),
-	  xaccAccountGetName(account));
+          xaccAccountGetName(account));
     gnc_commodity_set_quote_flag(com, TRUE);
     quote_source = gnc_quote_source_lookup_by_internal(source);
     if (!quote_source)
@@ -633,7 +634,7 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
 
   xaccAccountGroupBeginEdit (group);
   xaccGroupForEachAccount (group, move_quote_source,
-			   GINT_TO_POINTER(new_style), TRUE);
+                           GINT_TO_POINTER(new_style), TRUE);
   xaccAccountGroupCommitEdit (group);
   LEAVE("Migration done");
 }

@@ -55,6 +55,9 @@ ToDo List:
    then the peers need to be reunified first!   And that implies that
    gain transactions need to be 'reunified' too.
 
+ o XXX Need to create a data-integrity scrubber, tht makes sure that
+   the various flags, and pointers & etc. match. See sections marked
+   with XXX below for things that might go wrong.
  */
 
 #include "config.h"
@@ -506,19 +509,51 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    ENTER ("split=%p lot=%s", split,
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
-   /* Make sure this isn't a cap-gains split itself; ignore these. */
+   /* Make sure the status flags and pointers are initialized */
+   if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+   if (GAINS_STATUS_GAINS & split->gains)
+   {
+      /* If this is the split that records the gains, then work with 
+       * the split that generates the gains. 
+       */
+      /* split = xaccSplitGetCapGainsSplit (split); */
+      split = split->gains_split;
+
+      /* This should never be NULL, and if it is, and its matching
+       * parent can't be found, then its a bug, and we should be
+       * discarding this split.   But ... for now .. return.
+       * XXX move appropriate actions to a 'scrub' routine'
+       */
+      if (!split) 
+      {
+         PERR ("Bad gains-split pointer! .. trying to recover.");
+         split->gains_split = xaccSplitGetCapGainsSplit (split);
+         split = split->gains_split;
+         if (!split) return;
+#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
+         xaccTransDestroy (trans);
+#endif
+      }
+   }
+
+   if ((FALSE == (split->gains & GAINS_STATUS_A_VDIRTY))  &&
+       (split->gains_split) &&
+       (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) return;
+
+   /* Yow! If amount is zero, there's nothing to do! Amount-zero splits 
+    * may exist if users attempted to manually record gains. */
    if (gnc_numeric_zero_p (split->amount)) return;
 
    opening_split = gnc_lot_get_earliest_split(lot);
    if (split == opening_split)
    {
-      /* Check to make sure this split doesn't have a cap-gain 
-       * transaction associated with it.  If it does, that's
-       * wrong, and we ruthlessly destroy it.
+      /* Check to make sure that this opening split doesn't 
+       * have a cap-gain transaction associated with it.  
+       * If it does, that's wrong, and we ruthlessly destroy it.
        * XXX Don't do this, it leads to infinite loops.
        * We need to scrub out errors like this elsewhere!
        */
-#if MOVE_THIS_ELSEWHERE
+#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
       if (xaccSplitGetCapGainsSplit (split))
       {
          Split *gains_split = xaccSplitGetCapGainsSplit(split);
@@ -695,10 +730,22 @@ xaccSplitGetCapGains(Split * split)
 {
    if (!split) return gnc_numeric_zero();
 
-   /* XXX Do *not! recomp gains every time; use a 'dirty' flag instead */
-   xaccSplitComputeCapGains (split, NULL);
+   if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+   if ((split->gains & GAINS_STATUS_A_VDIRTY) || 
+       (split->gains_split && (split->gains_split->gains & GAINS_STATUS_A_VDIRTY)))
+   {
+      xaccSplitComputeCapGains (split, NULL);
+   }
 
-   split = xaccSplitGetCapGainsSplit (split);
+   /* If this is the source split, get the gains from the one 
+    * that records the gains.  If this already is the gains split, 
+    * its a no-op. */
+   if (!(GAINS_STATUS_GAINS & split->gains))
+   {
+      /* split = xaccSplitGetCapGainsSplit (split); */
+      split = split->gains_split;
+   }
+
    if (!split) return gnc_numeric_zero();
 
    return split->value;

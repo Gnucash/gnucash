@@ -538,9 +538,8 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 */
 /*@{*/
 
-/** The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
- * sets the amount in the account's commodity that the split should
- * have.
+/** The xaccSplitSetAmount() method sets the amount in the account's 
+ * commodity that the split should have.
  *
  * The following four setter functions set the prices and amounts.
  * All of the routines always maintain balance: that is, invoking any
@@ -559,7 +558,10 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 
-/** Returns the amount of the split in the account's commodity. */
+/** Returns the amount of the split in the account's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+ */
 gnc_numeric   xaccSplitGetAmount (const Split * split);
 
 /** The xaccSplitSetValue() method sets the value of this split in the
@@ -570,7 +572,10 @@ gnc_numeric   xaccSplitGetAmount (const Split * split);
  */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
 
-/** Returns the value of this split in the transaction's commodity. */
+/** Returns the value of this split in the transaction's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+*/
 gnc_numeric   xaccSplitGetValue (const Split * split);
 
 /** The xaccSplitSetSharePriceAndAmount() method will simultaneously
@@ -766,34 +771,7 @@ const char * xaccSplitGetCorrAccountCode(const Split *sa);
  * split. DEPRECATED - set the value and amount instead. */
 void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetAmount (Split *s, double damt); 
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. 
- *
- * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
- * behavior.  The later divides the value given by the current value and set's 
- * the result as the new split value.  Is that a but or just strange undocumented
- * feature?  Benoit Grégoire 2002-6-12 */
-void         DxaccSplitSetValue (Split *split, double value);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetValue (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
-                                               double amount);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetShareAmount (Split *split, double amount);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetShareAmount (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetSharePrice (Split *split, double price);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-double        DxaccSplitGetSharePrice (const Split * split);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void         DxaccSplitSetBaseValue (Split *split, double value,
-                                     const gnc_commodity * base_currency);
 /*@}*/
-
-
 
 
 /********************************************************************\

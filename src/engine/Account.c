@@ -1038,6 +1038,7 @@ void
 xaccAccountInsertSplit (Account *acc, Split *split)
 {
   Transaction *trans;
+  gnc_numeric old_amt;
 
   if (!acc) return;
   if (!split) return;
@@ -1047,19 +1048,13 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   g_return_if_fail (acc->book == split->book);
 
   trans = xaccSplitGetParent (split);
+  old_amt = xaccSplitGetAmount (split);
 
   xaccAccountBeginEdit(acc);
   xaccTransBeginEdit(trans);
 
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
-
-  /* Convert the split to the new account's denominator */
-  /* If the denominator can't be exactly converted, it's an error */
-  /* FIXME : need to enforce ordering of insertion/value */
-  split->amount = gnc_numeric_convert(split->amount, 
-                                      xaccAccountGetCommoditySCU(acc),
-                                      GNC_RND_ROUND);
 
   /* If this split belongs to another account, remove it from there
    * first.  We don't want to ever leave the system in an inconsistent
@@ -1090,10 +1085,11 @@ xaccAccountInsertSplit (Account *acc, Split *split)
       }
 
       mark_account (acc);
-      if (split->parent)
-          gnc_engine_generate_event (&split->parent->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
   }
 
+  /* Setting the amount casues a conversion to the new account's 
+   * denominator AKA 'SCU Smallest Currency Unit'. */
+  xaccSplitSetAmount(split, old_amt);
   xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
@@ -1197,16 +1193,17 @@ xaccAccountRecomputeBalance (Account * acc)
 
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *split = (Split *) lp->data;
+    gnc_numeric amt = xaccSplitGetAmount (split);
 
-    balance = gnc_numeric_add_fixed(balance, split->amount);
+    balance = gnc_numeric_add_fixed(balance, amt);
 
     if (NREC != split->reconciled)
-      cleared_balance = gnc_numeric_add_fixed(cleared_balance, split->amount);
+      cleared_balance = gnc_numeric_add_fixed(cleared_balance, amt);
 
     if (YREC == split->reconciled ||
         FREC == split->reconciled) {
       reconciled_balance =
-        gnc_numeric_add_fixed(reconciled_balance, split->amount);
+        gnc_numeric_add_fixed(reconciled_balance, amt);
     }
 
     split->balance = balance;
@@ -1459,7 +1456,7 @@ xaccAccountSetNotes (Account *acc, const char *str)
   xaccAccountCommitEdit(acc);
 }
 
-/* FIXME : is this the right way to do this? */
+/* FIXME : is this the right way to do this? Uhh, I think so ?? */
 static void
 update_split_commodity(Account * acc) 
 {
@@ -1474,11 +1471,11 @@ update_split_commodity(Account * acc)
   {
     Split *s = (Split *) lp->data;
     Transaction *trans = xaccSplitGetParent (s);
+    gnc_numeric amt;
 
+    amt = xaccSplitGetAmount (s);
     xaccTransBeginEdit (trans);
-    s->amount = gnc_numeric_convert(s->amount,
-				    xaccAccountGetCommoditySCU(acc),
-                                    GNC_RND_ROUND);
+    xaccSplitSetAmount (s, amt);
     xaccTransCommitEdit (trans);
   }
 

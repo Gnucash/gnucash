@@ -84,7 +84,9 @@
 #define GAINS_STATUS_AMNT_DIRTY     0x20
 #define GAINS_STATUS_VALU_DIRTY     0x40
 #define GAINS_STATUS_LOT_DIRTY      0x80
-#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
+#define GAINS_STATUS_ADIRTY    (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_LOT_DIRTY)
+#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_VALU_DIRTY)
+#define GAINS_STATUS_A_VDIRTY  (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
 
 struct split_s
 {
@@ -248,7 +250,7 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
  */
 Transaction * xaccDupeTransaction (Transaction *t);
 
-/* compute the value of a list of splits in the given currency,
+/* Compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
 gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                     const gnc_commodity * base_currency);
@@ -261,13 +263,6 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
 void xaccTransSetVersion (Transaction*, gint32);
 gint32 xaccTransGetVersion (const Transaction*);
 
-/* The xaccTransFindCommonCurrency () method returns a gnc_commodity
- *    indicating a currency denomination that all of the splits in this
- *    transaction have in common, using the old currency/security fields
- *    of the split accounts. */
-gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
-                                                QofBook *book);
-
 /* Code to register Split and Transaction types with the engine */
 gboolean xaccSplitRegister (void);
 gboolean xaccTransRegister (void);
@@ -278,5 +273,31 @@ gboolean xaccTransRegister (void);
  *    transaction.
  */
 QofBackend * xaccTransactionGetBackend (Transaction *trans);
+
+/* The xaccSplitDetermineGainStatus() routine will analyze the 
+ *   the split, and try to set the internal status flags 
+ *   appropriately for the split.  These flags indicate if the split
+ *   represents cap gains, and if the gains value/amount needs to be 
+ *   recomputed.
+ */
+void xaccSplitDetermineGainStatus (Split *split);
+
+/* ---------------------------------------------------------------- */
+/* Depricated routines */
+void         DxaccSplitSetSharePriceAndAmount (Split *split, 
+                                               double price,
+                                               double amount);
+void         DxaccSplitSetShareAmount (Split *split, double amount);
+
+/* The deprecated xaccTransFindCommonCurrency () method returns 
+ *    a gnc_commodity indicating a currency denomination that all 
+ *    of the splits in this transaction have in common, using the 
+ *    old currency/security fields of the split accounts.  DO NOT
+ *    USE THIS ROUTINE! */
+gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
+                                                QofBook *book);
+
+/*@}*/
+
 
 #endif /* XACC_TRANSACTION_P_H */

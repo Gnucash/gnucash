@@ -141,11 +141,11 @@ xaccOpenLog (void)
    g_free (timestamp);
 
    /* use tab-separated fields */
-   fprintf (trans_log, "mod	trans_guid	split_guid	time_now	" \
-                       "date_entered	date_posted	" \
-                       "acc_guid	acc_name	num	description	" \
-                       "notes	memo	action	reconciled	" \
-                       "amount	value	date_reconciled\n");
+   fprintf (trans_log, "mod        trans_guid        split_guid        time_now        " \
+                       "date_entered        date_posted        " \
+                       "acc_guid        acc_name        num        description        " \
+                       "notes        memo        action        reconciled        " \
+                       "amount        value        date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 }
 
@@ -190,23 +190,31 @@ xaccTransWriteLog (Transaction *trans, char flag)
    trans_notes = xaccTransGetNotes(trans);
    fprintf (trans_log, "===== START\n");
 
-   for (node = trans->splits; node; node = node->next) {
+   for (node = trans->splits; node; node = node->next) 
+   {
       Split *split = node->data;
       const char * accname = "";
       char acc_guid_str[GUID_ENCODING_LENGTH+1];
+      gnc_numeric amt,val;
 
-      if (xaccSplitGetAccount(split)){
+      if (xaccSplitGetAccount(split))
+      {
         accname = xaccAccountGetName (xaccSplitGetAccount(split));
-	guid_to_string_buff(xaccAccountGetGUID(xaccSplitGetAccount(split)),
-			    acc_guid_str);
-      } else {
-	acc_guid_str[0] = '\0';
+        guid_to_string_buff(xaccAccountGetGUID(xaccSplitGetAccount(split)),
+                            acc_guid_str);
+      } 
+      else 
+      {
+        acc_guid_str[0] = '\0';
       }
       
-         timespecFromTime_t(&ts,split->date_reconciled.tv_sec);
-	 gnc_timespec_to_iso8601_buff (ts, drecn);
+      timespecFromTime_t(&ts,split->date_reconciled.tv_sec);
+      gnc_timespec_to_iso8601_buff (ts, drecn);
 
       guid_to_string_buff (xaccSplitGetGUID(split), split_guid_str);
+      amt = xaccSplitGetAmount (split);
+      val = xaccSplitGetValue (split);
+
       /* use tab-separated fields */
       fprintf (trans_log,
                "%c\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
@@ -216,7 +224,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
                dnow ? dnow : "",
                dent ? dent : "", 
                dpost ? dpost : "", 
-	       acc_guid_str,
+               acc_guid_str,
                accname ? accname : "",
                trans->num ? trans->num : "", 
                trans->description ? trans->description : "",
@@ -224,10 +232,10 @@ xaccTransWriteLog (Transaction *trans, char flag)
                split->memo ? split->memo : "",
                split->action ? split->action : "",
                split->reconciled,
-               (long long int) gnc_numeric_num(split->amount), 
-               (long long int) gnc_numeric_denom(split->amount),
-               (long long int) gnc_numeric_num(split->value), 
-               (long long int) gnc_numeric_denom(split->value),
+               (long long int) gnc_numeric_num(amt), 
+               (long long int) gnc_numeric_denom(amt),
+               (long long int) gnc_numeric_num(val), 
+               (long long int) gnc_numeric_denom(val),
                drecn ? drecn : "");
    }
 
@@ -248,12 +256,13 @@ xaccTransWriteLog (Transaction *trans, char flag)
  */
 
 char *
-xaccSplitAsString(Split *split, const char prefix[]) {
+xaccSplitAsString(Split *split, const char prefix[]) 
+{
   char *result = NULL;
   size_t result_size;
   FILE *stream = open_memstream(&result, &result_size); 
   const char *split_memo = xaccSplitGetMemo(split);
-  const double split_value = DxaccSplitGetValue(split);
+  const double split_value = gnc_numeric_to_double(xaccSplitGetValue(split));
   Account *split_dest = xaccSplitGetAccount(split);
   const char *dest_name =
     split_dest ? xaccAccountGetName(split_dest) : NULL;
@@ -287,7 +296,8 @@ xaccTransGetDateStr (Transaction *trans)
 }
 
 char *
-xaccTransAsString(Transaction *txn, const char prefix[]) {
+xaccTransAsString(Transaction *txn, const char prefix[]) 
+{
   char *result = NULL;
   size_t result_size;
   FILE *stream = open_memstream(&result, &result_size); 
@@ -295,7 +305,7 @@ xaccTransAsString(Transaction *txn, const char prefix[]) {
   const char *num = xaccTransGetNum(txn);
   const char *desc = xaccTransGetDescription(txn);
   const char *memo = xaccSplitGetMemo(xaccTransGetSplit(txn, 0));
-  const double total = DxaccSplitGetValue(xaccTransGetSplit(txn, 0));
+  const double total = gnc_numeric_to_double(xaccSplitGetValue(xaccTransGetSplit(txn, 0)));
   
   g_return_val_if_fail (stream, NULL);
 
