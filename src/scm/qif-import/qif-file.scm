@@ -116,11 +116,13 @@
                           (string-append current "\n" value))))
                       
                       ;; N : check number / transaction number /xtn direction
-                      ;; this could be a number or a string; no point in
-                      ;; keeping it numeric just yet. 
+                      ;; there's both an action and a number in gnucash,
+                      ;; one for securities, one for banks. 
                       ((#\N)
-                       (qif-xtn:set-number! current-xtn value))
-                      
+                       (if (eq? qstate-type 'type:invst)
+                           (qif-xtn:set-action! current-xtn value)
+                           (qif-xtn:set-number! current-xtn value)))
+
                       ;; C : cleared flag 
                       ((#\C)
                        (qif-xtn:set-cleared! current-xtn value))
@@ -350,9 +352,11 @@
         ;; to change the category to point to the equity account that
         ;; the opening balance comes from.
         (begin
-          (qif-split:set-category! 
+          (qif-split:set-category-private! 
            (car (qif-xtn:splits xtn))
-           (default-equity-category))
+           (default-equity-account))
+          (qif-split:set-category-is-account?! 
+           (car (qif-xtn:splits xtn)) #t) 
           (if (eq? (qif-file:default-account self) 'unknown)
               (qif-file:set-default-account! self category)))
         
@@ -435,6 +439,10 @@
       qif-xtn:cleared qif-xtn:set-cleared!
       qif-parse:parse-cleared-field (qif-file:xtns self) set-error)
 
+     (parse-field 
+      qif-xtn:action qif-xtn:set-action!
+      qif-parse:parse-action-field (qif-file:xtns self) set-error)
+     
      (check-and-parse-field 
       qif-xtn:share-price qif-xtn:set-share-price!
       qif-parse:check-number-format '(decimal comma) 

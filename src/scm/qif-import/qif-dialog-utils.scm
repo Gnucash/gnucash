@@ -9,20 +9,25 @@
 
 (gnc:support "qif-import/qif-dialog-utils.scm")
 
-(define (default-dividend-acct security)
-  (string-append "Dividends:" security))
+(define (default-stock-acct brokerage security)
+  (string-append brokerage ":" security))
 
-(define (default-interest-acct security) 
-  (string-append "Interest:" security))
+(define (default-dividend-acct brokerage security)
+  (string-append "Dividends:" brokerage ":" security))
 
-(define (default-cglong-acct security)
-  (string-append "Cap. gain (long):" security))
+(define (default-interest-acct brokerage security) 
+  (string-append "Interest:" brokerage ":" security))
 
-(define (default-cgshort-acct security)
-  (string-append "Cap. gain (short):" security))
+(define (default-cglong-acct brokerage security)
+  (string-append "Cap. gain (long):" brokerage ":" security))
 
-(define (default-equity-account) "Retained Earnings")
-(define (default-equity-category) "[Retained Earnings]")
+(define (default-cgshort-acct brokerage security)
+  (string-append "Cap. gain (short):" brokerage ":" security))
+
+(define (default-equity-holding  security) 
+  (string-append "Retained Holdings:" security))
+
+(define (default-equity-account) "Retained Earnings")  
 
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
@@ -72,14 +77,13 @@
        (for-each 
         (lambda (xtn)
           (let ((stock-acct (qif-xtn:security-name xtn))
-                (action (qif-xtn:number xtn))
-                (action-sym #f)
+                (action (qif-xtn:action xtn))
                 (from-acct (qif-xtn:from-acct xtn))
                 (qif-account #f)
                 (qif-account-types #f)
                 (entry #f))
             
-            (if (and stock-acct (string? action))
+            (if (and stock-acct action)
                 ;; stock transactions are weird.  there can be several
                 ;; accounts associated with stock xtns: the security,
                 ;; the brokerage, a dividend account, a long-term CG
@@ -87,14 +91,14 @@
                 ;; account.  Make sure all of the right ones get stuck
                 ;; in the map.
                 (begin
-                  (set! action-sym (qif-parse:parse-action-field action))
                   ;; first: figure out what the near-end account is.
                   ;; it's generally the security account, but could be 
                   ;; an interest, dividend, or CG account.
-                  (case action-sym
+                  (case action
                     ((buy buyx sell sellx reinvint reinvdiv reinvsh reinvsg 
-                          reinvlg shrsin stksplit)
-                     (set! qif-account stock-acct)
+                          reinvlg shrsin shrsout stksplit)
+                     (set! qif-account 
+                           (default-stock-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-STOCK-TYPE 
                                                    GNC-MUTUAL-TYPE)))
                     ((div cgshort cglong intinc miscinc miscexp xin xout)
@@ -107,10 +111,7 @@
                            (qif-split:category 
                             (car (qif-xtn:splits xtn))))
                      (set! qif-account-types (list GNC-BANK-TYPE
-                                                   GNC-CCARD-TYPE)))
-                    (else 
-                     (display "HEY! HEY! action-sym = ")
-                     (display action-sym) (newline)))
+                                                   GNC-CCARD-TYPE))))
                                     
                   ;; now reference the near-end account 
                   (if qif-account
@@ -128,12 +129,12 @@
                   ;; now figure out the other end of the transaction.
                   ;; the far end will be the brokerage for buy, sell,
                   ;; etc, or the "L"-referenced account for buyx,
-                  ;; sellx, etc, or an equity account for ShrsIn
+                  ;; sellx, etc, or an equity account for ShrsIn/ShrsOut
 
                   ;; miscintx and miscexpx are very, very "special" 
                   ;; cases which I don't quite handle correctly yet. 
                   (set! qif-account #f)
-                  (case action-sym
+                  (case action
                     ((buy sell)
                      (set! qif-account from-acct)
                      (set! qif-account-types (list GNC-BANK-TYPE
@@ -146,12 +147,13 @@
                                                    GNC-CCARD-TYPE)))
                     
                     ((stksplit)
-                     (set! qif-account stock-acct)
+                     (set! qif-account 
+                           (default-stock-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-STOCK-TYPE 
                                                    GNC-MUTUAL-TYPE)))
                     ((cgshort cgshortx reinvsg reinvsh)
                      (set! qif-account
-                           (default-cgshort-acct stock-acct))
+                           (default-cgshort-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
                     ((miscincx)
@@ -168,31 +170,27 @@
                     
                     ((cglong cglongx reinvlg)
                      (set! qif-account
-                           (default-cglong-acct stock-acct))
+                           (default-cglong-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
                     ((intinc intincx reinvint)
                      (set! qif-account
-                           (default-interest-acct stock-acct))
+                           (default-interest-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
                     ((div divx reinvdiv)
                      (set! qif-account
-                           (default-dividend-acct stock-acct))
+                           (default-dividend-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
                     
-                    ((shrsin)
+                    ((shrsin shrsout)
                      (set! qif-account
-                           (default-equity-account))
+                           (default-equity-holding stock-acct))
                      (set! qif-account-types (list GNC-EQUITY-TYPE)))
-
+                    
                     ((miscinc miscexp)
                      ;; these reference a category on the other end 
-                     (set! qif-account #f))
-
-                    (else 
-                     (display "HEY! HEY! action-sym = ")
-                     (display action-sym) (newline)))
+                     (set! qif-account #f)))
                   
                   ;; now reference the far-end account 
                   (if qif-account 

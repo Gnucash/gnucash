@@ -27,7 +27,6 @@
      default-account-type ;; either GNC-BANK-TYPE or GNC-STOCK-TYPE 
      y2k-threshold
      currency             ;; this is a string.. no checking 
-     accts-mentioned
      xtns                
      markable-xtns        ;; we prune xtns to speed up marking.  
      accounts 
@@ -67,12 +66,6 @@
 (define qif-file:set-currency!
   (simple-obj-setter <qif-file> 'currency))
 
-(define qif-file:accts-mentioned 
-  (simple-obj-getter <qif-file> 'accts-mentioned))
-
-(define qif-file:set-accts-mentioned!
-  (simple-obj-setter <qif-file> 'accts-mentioned))
-
 (define qif-file:cats 
   (simple-obj-getter <qif-file> 'cats))
 
@@ -108,7 +101,6 @@
     (qif-file:set-default-account! self account)
     (qif-file:set-currency! self currency)
     (qif-file:set-y2k-threshold! self 50)
-    (qif-file:set-accts-mentioned! self '())
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
     (qif-file:set-cats! self '())
@@ -202,7 +194,7 @@
 (define <qif-xtn>
   (make-simple-class 
    'qif-xtn
-   '(date payee address number cleared  
+   '(date payee address number action cleared  
           from-acct share-price num-shares security-name commission 
           splits mark)))
 
@@ -232,6 +224,12 @@
 
 (define qif-xtn:set-number! 
   (simple-obj-setter <qif-xtn> 'number))
+
+(define qif-xtn:action
+  (simple-obj-getter <qif-xtn> 'action))
+
+(define qif-xtn:set-action! 
+  (simple-obj-setter <qif-xtn> 'action))
 
 (define qif-xtn:cleared
   (simple-obj-getter <qif-xtn> 'cleared))
@@ -456,23 +454,6 @@
   (simple-obj-print self))
 
 (define (qif-file:add-xtn! self xtn)
-  (let ((splits (qif-xtn:splits xtn)))
-    (for-each 
-     (lambda (split)
-       (let ((accts (qif-split:accounts-affected split xtn))
-             (mentioned (qif-file:accts-mentioned self)))
-         ;; add the near account to the mentioned-list
-         ;; but only for the first split
-         (if (and (eq? (car splits) split)
-                  (not (member (car accts) mentioned)))
-             (qif-file:set-accts-mentioned! 
-              self (cons (car accts) mentioned)))
-         ;; add the far account for each split 
-         (set! mentioned (qif-file:accts-mentioned self))
-         (if (not (member (cadr accts) mentioned))
-             (qif-file:set-accts-mentioned!
-              self (cons (cadr accts) mentioned)))))
-     splits))  
   (qif-file:set-xtns! self 
                       (cons xtn (qif-file:xtns self))))
 
