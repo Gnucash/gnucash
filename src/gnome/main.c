@@ -82,7 +82,7 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
   main_window_init(topgroup);
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void gnucash_shutdown (GtkWidget *widget, gpointer *data)
 {
   gtk_main_quit ();
 }
@@ -116,7 +116,7 @@ main( int argc, char *argv[] )
  
   gnome_init ("GnuCash", NULL, argc, argv,
               0, NULL);
-  
+
   prepare_app(); 
 
   {

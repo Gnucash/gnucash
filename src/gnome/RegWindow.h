@@ -1,5 +1,5 @@
 /********************************************************************\
- * main.h -- main for xacc (X-Accountant)                           *
+ * RegWindow.h -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,51 +22,31 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __REGWINDOW_H__
+#define __REGWINDOW_H__
 
 #include <gtk/gtk.h>
 
 #include "config.h"
 
-#include "main.h"
-#include "FileIO.h"
-#include "Group.h"
-#include "util.h"
-#include "MainWindow.h" 
-
-
-/** HELP STUFF: *****************************************************/
-#define HELP_VAR     "XACC_HELP"
-#define HELP_ROOT    "./Docs/"
-#define HH_ABOUT     "xacc-about.html"
-#define HH_ACC       "xacc-accwin.html"
-#define HH_REGWIN    "xacc-regwin.html"
-#define HH_RECNWIN   "xacc-recnwin.html"
-#define HH_ADJBWIN   "xacc-adjbwin.html"
-#define HH_MAIN      "xacc-main.html"
-#define HH_GPL       "xacc-gpl.html"
-
-/** STRUCTS *********************************************************/
-
-/** PROTOTYPES ******************************************************/
-void gnucash_shutdown (GtkWidget *widget, gpointer *data);
-void file_cmd_open (GtkWidget *widget, gpointer data);
-void file_cmd_quit (GtkWidget *widget, gpointer data);
-void prepare_app ( void );
+#include "Account.h"
 
 /** GLOBALS *********************************************************/
-extern char  *helpPath;
-extern GtkWidget   *app;
 
-#endif
+/** STRUCTS *********************************************************/
+typedef struct _RegWindow RegWindow;
+
+/** PROTOTYPES ******************************************************/
+void       accRefresh (Account *);
+RegWindow *regWindowSimple( Account *account );
+RegWindow *regWindowAccGroup( Account *account_group );
+RegWindow *regWindowLedger( Account *lead, Account **account, int type);
 
 /*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
+ * The xaccDestroyRegWindow() subroutine can be called from 
+ * anywhere to shut down the Register window.  Used primarily when
+ * destroying the underlying account.
+ */
+void       xaccDestroyRegWindow (Account *);
+
+#endif

@@ -1,6 +1,5 @@
 * From: Rob Browning <rlb@cs.utexas.edu>
 
-
 For those of you interested, below is an extremely simple example of a
 tiny standalone program that can read an .xac file (specified as the
 first argument and then let you select accounts to plot from a Gtk
@@ -14,8 +13,8 @@ ftp://ftp.gnu.org/pub/gnu/plotutils-2.0.tar.gz
 
 Issues:
 
-This program is trivial, and it only works via a Gtk GUI, but I think
-that in the end we should support both interactive and non-interactive
+This program is trivial, and it only works via a Gtk GUI.  In the end
+I think we should support both interactive and non-interactive
 operation of our graphing and reporting tools.  Whether this happens
 via special arguments to xacc, or by providing separate standalone
 programs that link to a common library (libxaccplot?) I don't know,
@@ -27,25 +26,17 @@ axis labels or anything.  This could obviously be improved, but there
 are limits to how flexible the graph program is.  It can't, for
 example, do pie or bar charts at the moment.
 
-However, the lower level library (libplot) that it's based on will
-allow us to do whatever we want.  In that case, though, we have to do
-the scaling, drawing, etc, ourselves, so I think we're better off to
-use "graph" for now, and go back and re-implement things in libplot,
-adding bells and whistles and other types of graphs later.  I did
-create libplot code for simple bars in a bargraph just to make sure I
-though it would be feasible.
-
-The other disadvantage to calling graph (as opposed to using libplot
-directly) is that it brings up it's own independent X window on each
-invocation.  This can also be overcome by switching to the more
-primitive libplot, where you can specify your own X drawable as the
-output device.
-
-I've actually contacted the plotutils author about providing the more
-sophisticated "graph" level plotting behaviors (autoscaling, etc.) as
-part of a library (libplotutils) rather than only as a standalone
-program.  My guess is that this will happen, but I haven't heard back
-yet.
+The lower level library (libplot) that graph is based on will allow us
+to do whatever we want, although we'll have to do all the scaling,
+drawing, etc, that graph normally handles.  Right now, graph's
+functionality is only availble in the executable, but after talking to
+the upstream author, he's decided to turn most of graph into a
+library.  As a result it doesn't make sense to spend a lot of time
+right now re-implementing graph's functionality in libplot.  We should
+just wait, executing graph as a separate process to handle normal XY
+plots for now.  Our current efforts should be directed at implementing
+graph types plotutils doesn't handle (like pie and bar), and into work
+on the general graphing infrastructure.
 
 -- 
 Rob Browning <rlb@cs.utexas.edu>

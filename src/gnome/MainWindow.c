@@ -1,4 +1,4 @@
- /********************************************************************\
+/********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
  * Copyright (C) 1998 Jeremy Collins				    *
@@ -23,6 +23,7 @@
 #include "MainWindow.h"
 #include "MenuBar.h"
 #include "messages.h"
+#include "RegWindow.h"
 
 #include "main.h"
 
@@ -37,13 +38,24 @@ struct main_window {
 
 };
 
-/* This should most likely be rewritting to use a Tree, not a Clist so
-   we can represent the heirarchical account structure */
+static void
+acct_tree_open_selected(GtkWidget *child) {  
+  Account *acct = gtk_object_get_user_data(GTK_OBJECT(child));
+  fprintf(stderr, "calling regWindowSimple(%p)\n", acct);
+  regWindowSimple(acct);
+}
+
+static void
+acct_tree_select(GtkTree *tree, GtkWidget *child) {
+  //if(bevent && bevent->type == GDK_2BUTTON_PRESS) {
+  acct_tree_open_selected(child);
+  //}
+}
+
 static void
 cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
   int count = xaccGetNumAccounts(accts);
   int i;
-  
   
   for(i=0; i<count; i++) 
   {
@@ -58,10 +70,18 @@ cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
     rowstrs[2] = xaccAccountGetNotes (acc);
 
     tree_item = gtk_tree_item_new_with_label( rowstrs[0] );
+    /* Set the tree item to point to the actual account so we can reach it
+       trivially when the user selects the row.  (Should we use
+       gtk_*_data_full and have a destroy notify?) */
+    gtk_object_set_user_data(GTK_OBJECT(tree_item), acc); 
 
     gtk_tree_append(GTK_TREE(maintree), tree_item ); 
     gtk_widget_show ( tree_item );
   }
+  gtk_signal_connect (GTK_OBJECT (maintree), 
+                      "select_child",
+                      (GtkSignalFunc) acct_tree_select, 
+                      NULL);
 }
 
 /* Function: 	add_account				
@@ -239,10 +259,15 @@ main_window_init(AccountGroup *accts)
   /* create a bunch of buttons */
     
   button_bar = gtk_hbox_new(FALSE, 1);
-  toolBar[0] = gtk_button_new_with_label ( OPEN_STR );
-  toolBar[1] = gtk_button_new_with_label ( NEW_STR );
-  toolBar[2] = gtk_button_new_with_label ( EDIT_STR );
-  toolBar[3] = gtk_button_new_with_label ( DELETE_STR );
+  toolBar[open] = gtk_button_new_with_label ( OPEN_STR );
+  toolBar[close] = gtk_button_new_with_label ( NEW_STR );
+  toolBar[button3] = gtk_button_new_with_label ( EDIT_STR );
+  toolBar[button4] = gtk_button_new_with_label ( DELETE_STR );
+  toolBar[exit] = gtk_button_new_with_label (" Exit ");
+
+  /* Initialize callbacks */
+  gtk_signal_connect(GTK_OBJECT(toolBar[exit]), "clicked",
+                     GTK_SIGNAL_FUNC (file_cmd_quit), NULL);
 
   /* Initilize ToolTips */
 
@@ -251,18 +276,21 @@ main_window_init(AccountGroup *accts)
   gtk_tooltips_set_tip (tooltip, toolBar[close], TOOLTIP_NEW , NULL);
   gtk_tooltips_set_tip (tooltip, toolBar[button3], TOOLTIP_EDIT, NULL);
   gtk_tooltips_set_tip (tooltip, toolBar[button4], TOOLTIP_DELETE, NULL); 
+  gtk_tooltips_set_tip (tooltip, toolBar[exit], TOOLTIP_EDIT, NULL);  
 
   /* Pack the buttons into the toolbar */ 
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[0], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[1], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[2], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[3], FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(button_bar), toolBar[4], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(main_vbox), button_bar, FALSE, TRUE, 1);
 
   gtk_widget_show(toolBar[open]);
   gtk_widget_show(toolBar[close]);
   gtk_widget_show(toolBar[button3]);
   gtk_widget_show(toolBar[button4]);
+  gtk_widget_show(toolBar[exit]);
   gtk_widget_show(button_bar);
   gtk_widget_show(maintree);
 
@@ -270,6 +298,11 @@ main_window_init(AccountGroup *accts)
 	
   gtk_signal_connect (GTK_OBJECT (toolBar[1]), "clicked",
 		      GTK_SIGNAL_FUNC (add_account), accts);
+
+  //gtk_signal_connect (GTK_OBJECT(window), "destroy",
+  //                    GTK_SIGNAL_FUNC (gnucash_shutdown), NULL);
+  //gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+  //                    GTK_SIGNAL_FUNC (gnucash_shutdown), NULL);		       
 
   gtk_widget_set_usize ( app, 400, 400 );		      
 		      
