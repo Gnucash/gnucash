@@ -25,7 +25,7 @@ msgid ""
 "The GNU way to manage your money!"
 msgstr ""
 "Le gestionnaire de finances personnelles GnuCash.\n"
-"La voie GNU pour gérer votre argent!"
+"La voie GNUeveau pour gérer votre argent!"
 
 # messages-i18n.c:12
 #: messages-i18n.c:12
