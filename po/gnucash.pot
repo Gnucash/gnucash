@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-09-21 00:44-0700\n"
+"POT-Creation-Date: 2000-09-21 21:23-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Account Name"
 msgstr ""
 
-#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4089
+#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4098
 msgid "Account Type"
 msgstr ""
 
@@ -1034,7 +1034,7 @@ msgstr ""
 msgid "Mutual Fund"
 msgstr ""
 
-#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3925
+#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3934
 msgid "New Account"
 msgstr ""
 
@@ -1082,7 +1082,7 @@ msgstr ""
 msgid "Pick One"
 msgstr ""
 
-#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4122
+#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4131
 msgid "Parent Account"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Purch Price"
 msgstr ""
 
-#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4139
+#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4148
 msgid "Price Quote Source"
 msgstr ""
 
@@ -1247,7 +1247,7 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:3940
+#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:3949
 msgid "Account Information"
 msgstr ""
 
@@ -1563,7 +1563,7 @@ msgid "(none)"
 msgstr ""
 
 #: messages-i18n.c:366 po/guile_strings.txt:216
-#: src/gnome/glade-gnc-dialogs.c:4164
+#: src/gnome/glade-gnc-dialogs.c:4173
 msgid "Notes"
 msgstr ""
 
@@ -3176,7 +3176,7 @@ msgid "Selected account:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:112 src/gnome/glade-gnc-dialogs.c:2529
-#: src/gnome/glade-gnc-dialogs.c:2616 src/gnome/glade-gnc-dialogs.c:3972
+#: src/gnome/glade-gnc-dialogs.c:2616 src/gnome/glade-gnc-dialogs.c:3981
 msgid "Description:"
 msgstr ""
 
@@ -3233,7 +3233,7 @@ msgid "To:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:500 src/gnome/glade-gnc-dialogs.c:507
-#: src/gnome/glade-gnc-dialogs.c:4045 src/gnome/glade-gnc-dialogs.c:4067
+#: src/gnome/glade-gnc-dialogs.c:4054 src/gnome/glade-gnc-dialogs.c:4076
 msgid "Select..."
 msgstr ""
 
@@ -3408,7 +3408,7 @@ msgid "/"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1459 src/gnome/glade-gnc-dialogs.c:1511
-#: src/gnome/glade-gnc-dialogs.c:4469
+#: src/gnome/glade-gnc-dialogs.c:4478
 msgid "Select ..."
 msgstr ""
 
@@ -3589,7 +3589,7 @@ msgid "Entry"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:2538 src/gnome/glade-gnc-dialogs.c:3587
-#: src/gnome/glade-gnc-dialogs.c:3752
+#: src/gnome/glade-gnc-dialogs.c:3755
 msgid "Type:"
 msgstr ""
 
@@ -3782,63 +3782,82 @@ msgstr ""
 msgid "New..."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3714
+#: src/gnome/glade-gnc-dialogs.c:3717
 msgid "New Currency/Security"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3736
+#: src/gnome/glade-gnc-dialogs.c:3739
 msgid "Full name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3744
+#: src/gnome/glade-gnc-dialogs.c:3747
 msgid "Symbol/abbreviation:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3760
+#: src/gnome/glade-gnc-dialogs.c:3763
 msgid "Numeric identifier:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3768
+#: src/gnome/glade-gnc-dialogs.c:3771
 msgid "Fraction traded:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3825
+#: src/gnome/glade-gnc-dialogs.c:3792
+msgid "Enter the full name of the commodity. Example: US Dollars"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3800
+msgid ""
+"Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3822
+msgid ""
+"If you know the numeric identifier for the commodity, enter it here. It is "
+"safe to leave this field blank."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3831
 msgid "1 /"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3963
+#: src/gnome/glade-gnc-dialogs.c:3845
+msgid "Enter the smallest fraction of the commodity which can be traded."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3972
 msgid "Account Name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3981
+#: src/gnome/glade-gnc-dialogs.c:3990
 msgid "Currency:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3990
+#: src/gnome/glade-gnc-dialogs.c:3999
 msgid "Security:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3999
+#: src/gnome/glade-gnc-dialogs.c:4008
 msgid "Account Code:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4115
+#: src/gnome/glade-gnc-dialogs.c:4124
 msgid "label812"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4155
+#: src/gnome/glade-gnc-dialogs.c:4164
 msgid "The source for price quotes:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4247
+#: src/gnome/glade-gnc-dialogs.c:4256
 msgid "Import currency and stock information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4268
+#: src/gnome/glade-gnc-dialogs.c:4277
 msgid "Import currency and stock information "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4269
+#: src/gnome/glade-gnc-dialogs.c:4278
 msgid ""
 "The file you are loading is from an older version of Gnucash. \n"
 "Information about currencies, stocks, and mutual funds needs to\n"
@@ -3852,11 +3871,11 @@ msgid ""
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4281
+#: src/gnome/glade-gnc-dialogs.c:4290
 msgid "Update your accounts with the new information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4282
+#: src/gnome/glade-gnc-dialogs.c:4291
 msgid ""
 "Click \"Finish\" to update your accounts to use the new \n"
 "information you have entered.\n"
@@ -3866,15 +3885,15 @@ msgid ""
 "Click \"Back\" to review your currency selections."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4397
+#: src/gnome/glade-gnc-dialogs.c:4406
 msgid "QIF Import"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4418
+#: src/gnome/glade-gnc-dialogs.c:4427
 msgid "Import QIF files"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4419
+#: src/gnome/glade-gnc-dialogs.c:4428
 msgid ""
 "Gnucash can import financial data from QIF (Quicken \n"
 "Interchange Format) files written by Quicken/Quickbooks,\n"
@@ -3888,11 +3907,11 @@ msgid ""
 "to abort the process. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4430
+#: src/gnome/glade-gnc-dialogs.c:4439
 msgid "Select a QIF file to load"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4438
+#: src/gnome/glade-gnc-dialogs.c:4447
 msgid ""
 "Please select a file to load. When you click \"Next\", the file will\n"
 "be loaded into a staging area and analyzed. You may need\n"
@@ -3902,15 +3921,15 @@ msgid ""
 "so don't worry if your data is in multiple files. \n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4453
+#: src/gnome/glade-gnc-dialogs.c:4462
 msgid "QIF Filename:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4485
+#: src/gnome/glade-gnc-dialogs.c:4494
 msgid "Set the default QIF account name"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4493
+#: src/gnome/glade-gnc-dialogs.c:4502
 msgid ""
 "The QIF file that you just loaded appears to contain \n"
 "transactions for just one account, but the file does not have\n"
@@ -3922,23 +3941,23 @@ msgid ""
 "that program.\n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4508
+#: src/gnome/glade-gnc-dialogs.c:4517
 msgid "Account name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4532
+#: src/gnome/glade-gnc-dialogs.c:4541
 msgid "QIF files you have loaded"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4540
+#: src/gnome/glade-gnc-dialogs.c:4549
 msgid "QIF Files"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4563
+#: src/gnome/glade-gnc-dialogs.c:4572
 msgid "label827"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4570
+#: src/gnome/glade-gnc-dialogs.c:4579
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time.\n"
 "Do this if you have saved your accounts to separate QIF files.\n"
@@ -3947,19 +3966,19 @@ msgid ""
 "of the QIF import process. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4585
+#: src/gnome/glade-gnc-dialogs.c:4594
 msgid "Load another file"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4592
+#: src/gnome/glade-gnc-dialogs.c:4601
 msgid "Unload selected file"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4608
+#: src/gnome/glade-gnc-dialogs.c:4617
 msgid "Your accounts and stock holdings"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4616
+#: src/gnome/glade-gnc-dialogs.c:4625
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds\n"
@@ -3983,31 +4002,31 @@ msgid ""
 "alone.\n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4633
+#: src/gnome/glade-gnc-dialogs.c:4642
 msgid "Match QIF accounts with Gnucash accounts"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4660
+#: src/gnome/glade-gnc-dialogs.c:4669
 msgid "QIF account name"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4667 src/gnome/glade-gnc-dialogs.c:4756
+#: src/gnome/glade-gnc-dialogs.c:4676 src/gnome/glade-gnc-dialogs.c:4765
 msgid "Gnucash account name"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4674 src/gnome/glade-gnc-dialogs.c:4763
+#: src/gnome/glade-gnc-dialogs.c:4683 src/gnome/glade-gnc-dialogs.c:4772
 msgid "New?"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4681
+#: src/gnome/glade-gnc-dialogs.c:4690
 msgid "Click \"Next\" to check matchings for QIF categories. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4697
+#: src/gnome/glade-gnc-dialogs.c:4706
 msgid "Income and expense categories"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4705
+#: src/gnome/glade-gnc-dialogs.c:4714
 msgid ""
 "Gnucash uses separate Income and Expense accounts rather than categories\n"
 "to classify your transactions. Each of the categories in your QIF file will "
@@ -4023,25 +4042,25 @@ msgid ""
 "within GnuCash."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4722
+#: src/gnome/glade-gnc-dialogs.c:4731
 msgid "Match QIF categories with Gnucash accounts"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4749
+#: src/gnome/glade-gnc-dialogs.c:4758
 msgid "QIF category name"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4770
+#: src/gnome/glade-gnc-dialogs.c:4779
 msgid ""
 "Click \"Next\" to enter information about the currency used in your QIF "
 "files."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4786
+#: src/gnome/glade-gnc-dialogs.c:4795
 msgid "Enter the currency used for new accounts"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4794
+#: src/gnome/glade-gnc-dialogs.c:4803
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF \n"
 "files. All the accounts in the QIF file(s) you are importing must\n"
@@ -4052,17 +4071,17 @@ msgid ""
 "QIF files:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4816
+#: src/gnome/glade-gnc-dialogs.c:4825
 msgid ""
 "Click \"Next\" to enter information about stocks and\n"
 "mutual funds in the imported data."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4832
+#: src/gnome/glade-gnc-dialogs.c:4841
 msgid "Tradable commodities"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4840
+#: src/gnome/glade-gnc-dialogs.c:4849
 msgid ""
 "In the next pages, you will be asked to provide information about stocks, \n"
 "mutual funds, and other tradable commodities that appear in the QIF file(s)\n"
@@ -4080,11 +4099,11 @@ msgid ""
 "or listing for its type.  \n"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4859
+#: src/gnome/glade-gnc-dialogs.c:4868
 msgid "Update your Gnucash accounts"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4860
+#: src/gnome/glade-gnc-dialogs.c:4869
 msgid ""
 "Click \"Finish\" to import data from the staging area and update\n"
 "your Gnucash accounts. The account and category matching\n"

@@ -3710,6 +3710,9 @@ create_New_Commodity_Dialog (void)
   GtkWidget *button66;
   GtkWidget *button67;
   GtkWidget *button68;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
 
   New_Commodity_Dialog = gnome_dialog_new (_("New Currency/Security"), NULL);
   gtk_object_set_data (GTK_OBJECT (New_Commodity_Dialog), "New_Commodity_Dialog", New_Commodity_Dialog);
@@ -3786,6 +3789,7 @@ create_New_Commodity_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fullname_entry);
   gtk_box_pack_start (GTK_BOX (vbox78), fullname_entry, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, fullname_entry, _("Enter the full name of the commodity. Example: US Dollars"), NULL);
 
   mnemonic_entry = gtk_entry_new ();
   gtk_widget_ref (mnemonic_entry);
@@ -3793,6 +3797,7 @@ create_New_Commodity_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (mnemonic_entry);
   gtk_box_pack_start (GTK_BOX (vbox78), mnemonic_entry, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, mnemonic_entry, _("Enter the ticker symbol or currency code for the commodity. Example: USD"), NULL);
 
   namespace_combo = gtk_combo_new ();
   gtk_widget_ref (namespace_combo);
@@ -3814,6 +3819,7 @@ create_New_Commodity_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (numeric_spinbutton);
   gtk_box_pack_start (GTK_BOX (vbox78), numeric_spinbutton, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, numeric_spinbutton, _("If you know the numeric identifier for the commodity, enter it here. It is safe to leave this field blank."), NULL);
 
   hbox64 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox64);
@@ -3836,6 +3842,7 @@ create_New_Commodity_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fraction_spinbutton);
   gtk_box_pack_start (GTK_BOX (hbox64), fraction_spinbutton, TRUE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, fraction_spinbutton, _("Enter the smallest fraction of the commodity which can be traded."), NULL);
 
   dialog_action_area13 = GNOME_DIALOG (New_Commodity_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (New_Commodity_Dialog), "dialog_action_area13", dialog_action_area13);
@@ -3876,6 +3883,8 @@ create_New_Commodity_Dialog (void)
   gtk_signal_connect (GTK_OBJECT (button68), "clicked",
                       GTK_SIGNAL_FUNC (gnc_ui_new_commodity_help_cb),
                       New_Commodity_Dialog);
+
+  gtk_object_set_data (GTK_OBJECT (New_Commodity_Dialog), "tooltips", tooltips);
 
   return New_Commodity_Dialog;
 }
