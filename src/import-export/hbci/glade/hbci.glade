@@ -25,8 +25,8 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_MOUSE</position>
   <modal>False</modal>
-  <default_width>640</default_width>
-  <default_height>480</default_height>
+  <default_width>650</default_width>
+  <default_height>580</default_height>
   <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
@@ -57,7 +57,10 @@ containing
 
 This information will be needed in the following. Press 'Next' now.
 
-NOTE: THIS IS ALL-EXPERIMENTAL. NO WARRANTIES FOR ANYTHING.
+NOTE: NO WARRANTIES FOR ANYTHING. Some banks are running a poorly
+implemented HBCI. You should not rely on time-critical transfers
+through HBCI, since sometimes your bank does not give you correct
+feedback when a transfer has been rejected.
 
 Press 'Cancel' if you do not wish to setup any 
 HBCI connection now.</text>
@@ -118,6 +121,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>configfile-entry</focus_target>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
@@ -208,6 +212,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>country_code_entry</focus_target>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
@@ -282,6 +287,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>bank_code_entry</focus_target>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
@@ -332,6 +338,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>ip_address_entry</focus_target>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
@@ -405,14 +412,14 @@ HBCI connection now.</text>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 
 	  <widget>
 	    <class>GtkHBox</class>
 	    <name>hbox114</name>
-	    <border_width>10</border_width>
+	    <border_width>5</border_width>
 	    <homogeneous>False</homogeneous>
 	    <spacing>5</spacing>
 
@@ -516,7 +523,7 @@ HBCI connection now.</text>
 	    <class>GtkTable</class>
 	    <name>table3</name>
 	    <border_width>10</border_width>
-	    <rows>3</rows>
+	    <rows>4</rows>
 	    <columns>4</columns>
 	    <homogeneous>False</homogeneous>
 	    <row_spacing>5</row_spacing>
@@ -532,6 +539,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>user_id_entry</focus_target>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
@@ -582,6 +590,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>user_name_entry</focus_target>
 	      <child>
 		<left_attach>2</left_attach>
 		<right_attach>3</right_attach>
@@ -632,6 +641,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>customer_id_entry</focus_target>
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
@@ -658,6 +668,7 @@ HBCI connection now.</text>
 	      <yalign>0.5</yalign>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
+	      <focus_target>customer_name_entry</focus_target>
 	      <child>
 		<left_attach>2</left_attach>
 		<right_attach>3</right_attach>
@@ -740,6 +751,33 @@ HBCI connection now.</text>
 		<yfill>False</yfill>
 	      </child>
 	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8877438</name>
+	      <label>If your bank did not specify a Customer ID, simply enter the User ID here.</label>
+	      <justify>GTK_JUSTIFY_LEFT</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <focus_target>customer_id_entry</focus_target>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
 	  </widget>
 	</widget>
 
@@ -751,14 +789,14 @@ HBCI connection now.</text>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+	    <expand>True</expand>
+	    <fill>True</fill>
 	  </child>
 
 	  <widget>
 	    <class>GtkVBox</class>
 	    <name>vbox142</name>
-	    <border_width>10</border_width>
+	    <border_width>5</border_width>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 
@@ -780,7 +818,7 @@ HBCI connection now.</text>
 	    <widget>
 	      <class>GtkVBox</class>
 	      <name>vbox143</name>
-	      <border_width>20</border_width>
+	      <border_width>5</border_width>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 	      <child>
@@ -808,8 +846,9 @@ HBCI connection now.</text>
 		  <wrap>False</wrap>
 		  <xalign>0.5</xalign>
 		  <yalign>0.5</yalign>
-		  <xpad>5</xpad>
+		  <xpad>12</xpad>
 		  <ypad>0</ypad>
+		  <focus_target>entry1</focus_target>
 		  <child>
 		    <padding>0</padding>
 		    <expand>False</expand>
@@ -847,14 +886,17 @@ HBCI connection now.</text>
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label8477409</name>
-		<label>If you already have a key file, please choose it here. 
-If you do not have one yet, choose a filename, and a key file will be created there.</label>
+		<label>If you already have a key file, please choose it here and make sure the User ID and
+Customer ID match the ones when you created that key file earlier. 
+If you do not have one yet, choose a filename, and a key file will be created there. Make
+sure to remember the exact User ID and Customer ID specified now.</label>
 		<justify>GTK_JUSTIFY_LEFT</justify>
 		<wrap>False</wrap>
 		<xalign>4.47035e-08</xalign>
 		<yalign>1</yalign>
-		<xpad>0</xpad>
+		<xpad>12</xpad>
 		<ypad>0</ypad>
+		<focus_target>entry1</focus_target>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -871,6 +913,24 @@ If you do not have one yet, choose a filename, and a key file will be created th
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
 	      <group>choose_medium</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8877439</name>
+	      <label>If you have a Chip Card but are not sure about the exact User ID and Customer ID, you can 
+use the tool 'hbcicard' from the libchipcard package to read these numbers from the Chip Card.</label>
+	      <justify>GTK_JUSTIFY_FILL</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0</yalign>
+	      <xpad>17</xpad>
+	      <ypad>0</ypad>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>

@@ -1,3 +1,8 @@
+2003-01-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/glade/hbci.glade: Some more GUI work for
+	HBCI setup, like clarifying some comments.
+
 2003-01-25  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_update_cal): Fix
