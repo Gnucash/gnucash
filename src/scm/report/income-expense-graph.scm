@@ -18,6 +18,7 @@
       (pagename-display (N_ "Display"))
       (optname-inc-exp (N_ "Show Income/Expense"))
       (optname-show-profit (N_ "Show Net Profit"))
+      (optname-stacked (N_ "Stacked"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
@@ -76,6 +77,11 @@
        (gnc:make-simple-boolean-option
         pagename-display optname-show-profit
         "b" (_ "Show the net profit?") #f))
+
+      (add-option
+       (gnc:make-simple-boolean-option
+        pagename-display optname-stacked
+        "ba" (_ "Show barchart as stacked?") #t))
 
       (add-option
        (gnc:make-number-range-option
@@ -143,6 +149,7 @@
 
 	   (show-net? (op-value pagename-display optname-show-profit))
 	   (show-incexp? (op-value pagename-display optname-inc-exp))
+	   (stacked? (op-value pagename-display optname-stacked))
 	   (height (op-value pagename-display optname-plot-height))
 	   (width (op-value pagename-display optname-plot-width))
 
@@ -187,6 +194,7 @@
       (gnc:html-barchart-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
       (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+      (gnc:html-barchart-set-stacked?! chart stacked?)
 
       (if show-incexp?
           (begin

@@ -507,6 +507,8 @@ gnc_html_embedded_barchart(gnc_html * parent,
   int         datarows=0;
   int         datacols=0;
   int         rotate=0;
+  int         stacked=0;  
+  int         normalize_stacks=0;  
   double      * data=NULL;
   char        ** col_labels=NULL;
   char        ** row_labels=NULL;
@@ -577,6 +579,20 @@ gnc_html_embedded_barchart(gnc_html * parent,
     arglist[argind].name   = "rotate_x_axis_labels";
     arglist[argind].type   = GTK_TYPE_BOOL;
     GTK_VALUE_BOOL(arglist[argind]) = rotate;
+    argind++;    
+  }
+  if((param = g_hash_table_lookup(params, "stacked")) != NULL) {
+    sscanf(param, "%d", &stacked);
+    arglist[argind].name   = "stacked";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = stacked;
+    argind++;    
+  }
+  if((param = g_hash_table_lookup(params, "normalize_stacks")) != NULL) {
+    sscanf(param, "%d", &normalize_stacks);
+    arglist[argind].name   = "normalize_stacks";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = normalize_stacks;
     argind++;    
   }
   if((param = g_hash_table_lookup(params, "bar_urls_1")) != NULL) {

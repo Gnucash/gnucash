@@ -35,6 +35,7 @@
                       row-labels 
                       col-colors 
                       row-labels-rotated?
+		      stacked?
                       data)))
 
 (define gnc:html-barchart? 
@@ -49,7 +50,7 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
-  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() #f '()))
+  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() #f #f '()))
 
 (define gnc:html-barchart-data
   (record-accessor <html-barchart> 'data))
@@ -92,6 +93,12 @@
 
 (define gnc:html-barchart-set-row-labels-rotated?!
   (record-modifier <html-barchart> 'row-labels-rotated?))
+
+(define gnc:html-barchart-stacked?
+  (record-accessor <html-barchart> 'stacked?))
+
+(define gnc:html-barchart-set-stacked?!
+  (record-modifier <html-barchart> 'stacked?))
 
 (define gnc:html-barchart-col-labels
   (record-accessor <html-barchart> 'col-labels))
@@ -306,6 +313,8 @@
             (if rot? 
                 (push "1\">\n")
                 (push "0\">\n")))
+	  (if (gnc:html-barchart-stacked? barchart)
+            (push "  <param name=\"stacked\" value=\"1\">\n"))
           (push "Unable to push bar chart\n")
           (push "</object>"))
         " ")
