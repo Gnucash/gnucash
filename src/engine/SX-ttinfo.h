@@ -34,25 +34,8 @@
 #include "gnc-numeric.h"
 #include "gnc-commodity.h"
 
-/* kvp_frame policy? */
-typedef struct 
-{
-  /* FIXME add notes field */
-  char *description; /* owned by us */
-  char *num;         /* owned  by us */
-  gnc_commodity *common_currency; /* not freed */
-  
-  GList *splits; /* list of template splits, owned by us */
-} TTInfo;
-
-typedef struct
-{
-  char *action; /* owned by us */
-  /* FIXME: What about the split's kvp_frame */
-  char *memo; /* owned by us */
-  char *credit_formula, *debit_formula; /* owned by us */
-  Account *acc; 
-} TTSplitInfo;
+typedef struct TTInfo_s TTInfo;
+typedef struct TTSplitInfo_s TTSplitInfo;
 
 TTInfo *gnc_ttinfo_malloc(void);
 

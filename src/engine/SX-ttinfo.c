@@ -27,6 +27,26 @@
 
 #include "SX-ttinfo.h"
 
+/* kvp_frame policy? */
+struct TTInfo_s
+{
+  /* FIXME add notes field */
+  char *description; /* owned by us */
+  char *num;         /* owned  by us */
+  gnc_commodity *common_currency; /* not freed */
+  
+  GList *splits; /* list of template splits, owned by us */
+};
+
+struct TTSplitInfo_s
+{
+  char *action; /* owned by us */
+  /* FIXME: What about the split's kvp_frame */
+  char *memo; /* owned by us */
+  char *credit_formula, *debit_formula; /* owned by us */
+  Account *acc; 
+};
+
 TTInfo *
 gnc_ttinfo_malloc(void)
 {
