@@ -770,7 +770,7 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
     medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
     g_assert (medr);
 
-    has_signkey = HBCI_MediumRDH_has_instPubSignKey (medr);
+    has_signkey = HBCI_MediumRDH_hasInstSignKey (medr);
     tmp = HBCI_MediumRDH_getInstIniLetterHash(medr, has_signkey);
     hash = to_hexstring_hash (tmp);
     free (tmp);
