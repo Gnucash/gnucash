@@ -1135,8 +1135,10 @@ gnc_main_window_create_child_toolbar(GNCMainInfo * mi,
          (child->toolbar_size - 1)*sizeof(GnomeUIInfo));
   cur += child->toolbar_size - 1;
   memcpy(cur, post_tb, sizeof(post_tb));
-  
+
   child->toolbar      = GTK_WIDGET(tb);
+
+  g_free(child->toolbar_info);
 
   child->toolbar_info = tbinfo;
   child->toolbar_size = 
