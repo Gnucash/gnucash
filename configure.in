@@ -74,6 +74,11 @@ AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 
+AC_CHECK_HEADERS(ltdl.h)
+if test "x$ac_cv_header_ltdl_h" = xno; then
+  AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
+fi
+
 AM_PATH_GLIB
 
 if test ${no_glib}x = yesx
