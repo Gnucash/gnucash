@@ -431,7 +431,8 @@ makePassive (Table *table)
 /* ==================================================== */
 
 static void 
-doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
+doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
+              int do_move_gui)
 {
    int i,j;
    int phys_row_origin, phys_col_origin;
@@ -1217,7 +1218,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
       (*dest_col >= table->num_phys_cols) || (*dest_col < 0)) 
   {
     PERR("gnc_table_traverse_update: destination (%d, %d) out of bounds (%d, %d)\n",
-      *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
+         *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
     return GNC_T;
   }
 

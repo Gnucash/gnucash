@@ -1,3 +1,11 @@
+2000-04-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c: more generalizations needed for general
+ 	ledger operation.
+
+	* src/register/splitreg.c (configLayout): add the xto cell into
+	the transaction cursor.
+
  2000-03-31  Rob Browning  <rlb@cs.utexas.edu>
 
  	* src/scm/bootstrap.scm.in: use new GNC_EXPANDED_ vars.

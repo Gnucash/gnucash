@@ -1963,7 +1963,6 @@ recordCB(GtkWidget *w, gpointer data)
     gnc_register_include_date(regData, xaccTransGetDate(trans));
 
   xaccSRRedrawRegEntry(regData->ledger->ledger);
-  gnc_refresh_main_window ();
 }
 
 

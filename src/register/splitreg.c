@@ -373,7 +373,6 @@ configLayout (SplitRegister *reg)
 {
    CellBlock *curs, *header;
    int type = (reg->type) & REG_TYPE_MASK;
-   gncBoolean include_balance = GNC_T;
    int i;
 
    /* define header for macros */
@@ -390,11 +389,6 @@ configLayout (SplitRegister *reg)
    }
 
    switch (type) {
-      case INCOME_LEDGER:
-      case GENERAL_LEDGER:
-      case SEARCH_LEDGER:
-        include_balance = GNC_F;
-        /* fall through */
       case BANK_REGISTER:
       case CASH_REGISTER:
       case ASSET_REGISTER:
@@ -412,10 +406,7 @@ configLayout (SplitRegister *reg)
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-
-         if (include_balance) {
-           FANCY (BALN,   balance,  7,  0);
-         }
+         FANCY (BALN,   balance,  7,  0);
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -424,13 +415,11 @@ configLayout (SplitRegister *reg)
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
+         FANCY (XTO,    xto,      3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-
-         if (include_balance) {
-           FANCY (BALN,   balance,  7,  0);
-         }
+         FANCY (BALN,   balance,  7,  0);
 
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
@@ -439,7 +428,52 @@ configLayout (SplitRegister *reg)
          FANCY (NDEBT,  ndebit,   5,  0);
          FANCY (NCRED,  ncredit,  6,  0);
 
-         /* basic common 8 column config */
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (BALN,   balance,  7,  0);
+
+         break;
+      }
+
+      /* --------------------------------------------------------- */
+      case INCOME_LEDGER:
+      case GENERAL_LEDGER:
+      case SEARCH_LEDGER:
+      {
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (MEMO,   memo,     2,  1);
+
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (XTO,    xto,      3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (MEMO,   memo,     2,  0);
+         FANCY (XFRM,   xfrm,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
+
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
@@ -449,21 +483,68 @@ configLayout (SplitRegister *reg)
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
 
-         if (include_balance) {
-           FANCY (BALN,   balance,  7,  0);
-         }
+         break;
+      }
+
+      /* --------------------------------------------------------- */
+      case STOCK_REGISTER:
+      case CURRENCY_REGISTER:
+      {
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
+
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (MEMO,   memo,     2,  1);
+
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (XTO,    xto,      3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
+
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (MEMO,   memo,     2,  0);
+         FANCY (XFRM,   xfrm,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
+
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         FANCY (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     2,  0);
+         FANCY (MXFRM,  mxfrm,    3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
 
          break;
       }
 
       /* --------------------------------------------------------- */
       case PORTFOLIO_LEDGER:
-        include_balance = GNC_F;
-        /* fall through */
-      case STOCK_REGISTER:
-      case CURRENCY_REGISTER:
       {
-         /* prep the second row of the double style */
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
@@ -476,28 +557,20 @@ configLayout (SplitRegister *reg)
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
 
-         if (include_balance) {
-           FANCY (BALN,   balance,  10, 0);
-         }
-
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
 
-         /* only the transaction cursor gets used */
          curs = reg->trans_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
+         FANCY (XTO,    xto,      3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-
-         if (include_balance) {
-           FANCY (BALN,   balance,  10, 0);
-         }
 
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
@@ -506,7 +579,6 @@ configLayout (SplitRegister *reg)
          FANCY (NDEBT,  ndebit,   5,  0);
          FANCY (NCRED,  ncredit,  6,  0);
 
-         /* 11 column config */
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
@@ -519,12 +591,9 @@ configLayout (SplitRegister *reg)
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
 
-         if (include_balance) {
-           FANCY (BALN,   balance,  10, 0);
-         }
-
          break;
       }
+
       /* --------------------------------------------------------- */
       default:
          PERR ("configLayout(): unknown register type %d \n", type);
@@ -1009,8 +1078,13 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    /* the xfer cells */
    xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, XFER_CELL_HELP);
    xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, XFER_CELL_HELP);
+   xaccSetBasicCellBlankHelp (&reg->xtoCell->cell, XFER_TO_CELL_HELP);
+
    xaccComboCellSetIgnoreString (reg->mxfrmCell, SPLIT_STR);
+   xaccComboCellSetIgnoreString (reg->xtoCell, SPLIT_STR);
+
    xaccComboCellSetIgnoreHelp (reg->mxfrmCell, TOOLTIP_MULTI_SPLIT);
+   xaccComboCellSetIgnoreHelp (reg->xtoCell, TOOLTIP_MULTI_SPLIT);
 
    /* the memo cell */
    xaccSetBasicCellBlankHelp (&reg->memoCell->cell, MEMO_CELL_HELP);
