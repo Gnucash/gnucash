@@ -384,6 +384,14 @@
 
 	* src/test/test-stuff.[ch]: fix warning
 
+2001-06-18  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-transaction-xml-v2.c
+	(gnc_transaction_end_handler): use dom_tree_to_transaction.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler): use
+	dom_tree_to_account. 
+
 2001-06-18  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/report/report-list.scm: switch to use-modules for
