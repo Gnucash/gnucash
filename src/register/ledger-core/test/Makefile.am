@@ -37,8 +37,4 @@ bin_PROGRAMS = \
 
 #EXTRA_DIST = test-load-module
 
-INCLUDES = \
-  -I${top_srcdir}/src/test-core \
-  -I..
-
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ -I${top_srcdir}/src/test-core -I.. ${GLIB_CFLAGS}
