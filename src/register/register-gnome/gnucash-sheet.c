@@ -32,6 +32,7 @@
 
 #include "gnucash-sheet.h"
 
+#include "dialog-utils.h"
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-cursor.h"

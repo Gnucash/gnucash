@@ -40,6 +40,7 @@
 #include <time.h>
 
 #include "datecell.h"
+#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "gnucash-date-picker.h"
 #include "gnucash-item-edit.h"
@@ -481,117 +482,8 @@ gnc_date_cell_direct_update (BasicCell *bcell,
   char buff[DATE_BUF];
   GDate gdate;
 
-  if (event->type != GDK_KEY_PRESS)
+  if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
     return FALSE;
-
-  g_date_set_dmy (&gdate, 
-                  box->date.tm_mday,
-                  box->date.tm_mon + 1,
-                  box->date.tm_year + 1900);
-
-  switch (event->keyval)
-  {
-    case GDK_KP_Add:
-    case GDK_plus:
-    case GDK_equal:
-      if (event->state & GDK_SHIFT_MASK)
-        g_date_add_days (&gdate, 7);
-      else if (event->state & GDK_MOD1_MASK)
-        g_date_add_months (&gdate, 1);
-      else if (event->state & GDK_CONTROL_MASK)
-        g_date_add_years (&gdate, 1);
-      else
-        g_date_add_days (&gdate, 1);
-      break;
-
-    case GDK_minus:
-      if ((bcell->value_len != 0) && (dateSeparator () == '-'))
-      {
-        int i;
-        int count;
-
-        /* rough check for existing date */
-        for (i = count = 0; i < bcell->value_len; i++)
-        {
-          if (bcell->value_w[i] == '-')
-            count++;
-        }
-
-        if (count < 2)
-          return FALSE;
-      }
-
-      /* fall through */
-    case GDK_KP_Subtract:
-    case GDK_underscore:
-      if (event->state & GDK_SHIFT_MASK)
-        g_date_subtract_days (&gdate, 7);
-      else if (event->state & GDK_MOD1_MASK)
-        g_date_subtract_months (&gdate, 1);
-      else if (event->state & GDK_CONTROL_MASK)
-        g_date_subtract_years (&gdate, 1);
-      else
-        g_date_subtract_days (&gdate, 1);
-      break;
-
-    case GDK_braceright:
-    case GDK_bracketright:
-      /* increment month */
-      g_date_add_months (&gdate, 1);
-      break;
-
-    case GDK_braceleft:
-    case GDK_bracketleft:
-      /* decrement month */
-      g_date_subtract_months (&gdate, 1);
-      break;
-
-    case GDK_M:
-    case GDK_m:
-      /* beginning of month */
-      g_date_set_day (&gdate, 1);
-      break;
-
-    case GDK_H:
-    case GDK_h:
-      /* end of month */
-      g_date_set_day (&gdate, 1);
-      g_date_add_months (&gdate, 1);
-      g_date_subtract_days (&gdate, 1);
-      break;
-
-    case GDK_Y:
-    case GDK_y:
-      /* beginning of year */
-      g_date_set_day (&gdate, 1);
-      g_date_set_month (&gdate, 1);
-      break;
-
-    case GDK_R:
-    case GDK_r:
-      /* end of year */
-      g_date_set_day (&gdate, 1);
-      g_date_set_month (&gdate, 1);
-      g_date_add_years (&gdate, 1);
-      g_date_subtract_days (&gdate, 1);
-      break;
-
-    case GDK_T:
-    case GDK_t:
-      {
-        /* today */
-        GTime gtime;
-
-        gtime = time (NULL);
-        g_date_set_time (&gdate, gtime);
-        break;
-      }
-
-    default:
-      return FALSE;
-  }
-
-  g_date_to_struct_tm (&gdate, &(box->date));
 
   printDate (buff,
              box->date.tm_mday,

@@ -75,6 +75,10 @@ int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
+gboolean gnc_handle_date_accelerator (GdkEventKey *event,
+                                      struct tm *tm,
+                                      const char *date_str);
+
 
 /* This function sets or clears a check mark in a GtkCList row.
  * There are some restrictions on using this function. If you mix
@@ -91,5 +95,21 @@ void gnc_clist_columns_autosize (GtkCList *list);
 
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
+
+
+/* Multibyte/wide char string helper functions. */
+
+/* Allocate new wide char string in dest_p. Return number of
+ * wide chars or < 0 if error. */
+gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);
+
+/* Return new multibyte string or NULL if failure. */
+char *       gnc_wcstombs (const GdkWChar *src);
+
+/* Len of wide char string in chars */
+gint         gnc_wcslen   (const GdkWChar *src);
+
+/* Duplicate wide char string */
+GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
 #endif

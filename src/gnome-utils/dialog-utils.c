@@ -27,6 +27,8 @@
 #include <glade/glade.h>
 #include <gnome.h>
 
+#include "basiccell.h"       /* FIXME: remove when multi-byte functions
+                                are in app-utils, (or just glib) */
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-commodity.h"
@@ -587,6 +589,140 @@ gnc_window_adjust_for_screen(GtkWindow * window)
   gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
+gboolean
+gnc_handle_date_accelerator (GdkEventKey *event,
+                             struct tm *tm,
+                             const char *date_str)
+{
+  GDate gdate;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (tm != NULL, FALSE);
+  g_return_val_if_fail (date_str != NULL, FALSE);
+
+  if (event->type != GDK_KEY_PRESS)
+    return FALSE;
+
+  g_date_set_dmy (&gdate, 
+                  tm->tm_mday,
+                  tm->tm_mon + 1,
+                  tm->tm_year + 1900);
+
+  switch (event->keyval)
+  {
+    case GDK_KP_Add:
+    case GDK_plus:
+    case GDK_equal:
+      if (event->state & GDK_SHIFT_MASK)
+        g_date_add_days (&gdate, 7);
+      else if (event->state & GDK_MOD1_MASK)
+        g_date_add_months (&gdate, 1);
+      else if (event->state & GDK_CONTROL_MASK)
+        g_date_add_years (&gdate, 1);
+      else
+        g_date_add_days (&gdate, 1);
+      break;
+
+    case GDK_minus:
+      if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
+      {
+        GdkWChar *wcs;
+        int count;
+        int len;
+        int i;
+
+        len = gnc_mbstowcs (&wcs, date_str);
+        if (len < 0)
+          return FALSE;
+
+        /* rough check for existing date */
+        for (i = count = 0; i < len; i++)
+        {
+          if (wcs[i] == '-')
+            count++;
+        }
+
+        g_free (wcs);
+
+        if (count < 2)
+          return FALSE;
+      }
+
+      /* fall through */
+    case GDK_KP_Subtract:
+    case GDK_underscore:
+      if (event->state & GDK_SHIFT_MASK)
+        g_date_subtract_days (&gdate, 7);
+      else if (event->state & GDK_MOD1_MASK)
+        g_date_subtract_months (&gdate, 1);
+      else if (event->state & GDK_CONTROL_MASK)
+        g_date_subtract_years (&gdate, 1);
+      else
+        g_date_subtract_days (&gdate, 1);
+      break;
+
+    case GDK_braceright:
+    case GDK_bracketright:
+      /* increment month */
+      g_date_add_months (&gdate, 1);
+      break;
+
+    case GDK_braceleft:
+    case GDK_bracketleft:
+      /* decrement month */
+      g_date_subtract_months (&gdate, 1);
+      break;
+
+    case GDK_M:
+    case GDK_m:
+      /* beginning of month */
+      g_date_set_day (&gdate, 1);
+      break;
+
+    case GDK_H:
+    case GDK_h:
+      /* end of month */
+      g_date_set_day (&gdate, 1);
+      g_date_add_months (&gdate, 1);
+      g_date_subtract_days (&gdate, 1);
+      break;
+
+    case GDK_Y:
+    case GDK_y:
+      /* beginning of year */
+      g_date_set_day (&gdate, 1);
+      g_date_set_month (&gdate, 1);
+      break;
+
+    case GDK_R:
+    case GDK_r:
+      /* end of year */
+      g_date_set_day (&gdate, 1);
+      g_date_set_month (&gdate, 1);
+      g_date_add_years (&gdate, 1);
+      g_date_subtract_days (&gdate, 1);
+      break;
+
+    case GDK_T:
+    case GDK_t:
+      {
+        /* today */
+        GTime gtime;
+
+        gtime = time (NULL);
+        g_date_set_time (&gdate, gtime);
+        break;
+      }
+
+    default:
+      return FALSE;
+  }
+
+  g_date_to_struct_tm (&gdate, tm);
+
+  return TRUE;
+}
+
 
 typedef struct
 {
@@ -882,4 +1018,86 @@ gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
   if (!xml) return NULL;
 
   return glade_xml_get_widget (xml, name);
+}
+
+gint
+gnc_mbstowcs (GdkWChar **dest_p, const char *src)
+{
+  GdkWChar *dest;
+  gint src_len;
+  gint retval;
+
+  if (!src)
+    return -1;
+
+  src_len = strlen (src);
+
+  dest = g_new0 (GdkWChar, src_len + 1);
+
+  retval = gdk_mbstowcs (dest, src, src_len);
+
+  if (retval < 0)
+  {
+    PERR ("bad multi-byte conversion");
+  }
+
+  if (dest_p)
+    *dest_p = dest;
+  else
+    g_free (dest);
+
+  return retval;
+}
+
+char *
+gnc_wcstombs (const GdkWChar *src)
+{
+  char *retval;
+
+  if (!src)
+    return NULL;
+
+  retval = gdk_wcstombs (src);
+  if (!retval)
+  {
+    PERR ("bad multi-byte conversion");
+  }
+
+  return retval;
+}
+
+gint
+gnc_wcslen (const GdkWChar *src)
+{
+  int len = 0;
+
+  if (!src)
+    return 0;
+
+  while (src[len])
+    len++;
+
+  return len;
+}
+
+GdkWChar *
+gnc_wcsdup (const GdkWChar *src)
+{
+  GdkWChar *dest;
+  int len;
+  int i;
+
+  if (!src)
+    return NULL;
+
+  len = gnc_wcslen (src);
+
+  dest = g_new (GdkWChar, len + 1);
+
+  for (i = 0; i < len; i++)
+    dest[i] = src[i];
+
+  dest[len] = 0;
+
+  return dest;
 }

@@ -39,6 +39,7 @@
 #include <string.h>
 
 #include "basiccell.h"
+#include "dialog-utils.h"
 #include "gnc-engine-util.h"
 
 
@@ -311,88 +312,4 @@ gnc_basic_cell_set_wcvalue_internal (BasicCell *cell, const GdkWChar *value)
 
   g_free (cell->value_w);
   cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
-}
-
-/* ===================================================== */
-
-gint
-gnc_mbstowcs (GdkWChar **dest_p, const char *src)
-{
-  GdkWChar *dest;
-  gint src_len;
-  gint retval;
-
-  if (!src)
-    return -1;
-
-  src_len = strlen (src);
-
-  dest = g_new0 (GdkWChar, src_len + 1);
-
-  retval = gdk_mbstowcs (dest, src, src_len);
-
-  if (retval < 0)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  if (dest_p)
-    *dest_p = dest;
-  else
-    g_free (dest);
-
-  return retval;
-}
-
-char *
-gnc_wcstombs (const GdkWChar *src)
-{
-  char *retval;
-
-  if (!src)
-    return NULL;
-
-  retval = gdk_wcstombs (src);
-  if (!retval)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  return retval;
-}
-
-gint
-gnc_wcslen (const GdkWChar *src)
-{
-  int len = 0;
-
-  if (!src)
-    return 0;
-
-  while (src[len])
-    len++;
-
-  return len;
-}
-
-GdkWChar *
-gnc_wcsdup (const GdkWChar *src)
-{
-  GdkWChar *dest;
-  int len;
-  int i;
-
-  if (!src)
-    return NULL;
-
-  len = gnc_wcslen (src);
-
-  dest = g_new (GdkWChar, len + 1);
-
-  for (i = 0; i < len; i++)
-    dest[i] = src[i];
-
-  dest[len] = 0;
-
-  return dest;
 }

@@ -41,9 +41,10 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "date.h"
+#include "dialog-utils.h"
 #include "gnc-date-edit.h"
 #include "messages.h"
-#include "date.h"
 
 
 enum {
@@ -532,146 +533,13 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	GNCDateEdit *gde = data;
         char *string;
         struct tm tm;
-        GDate gdate;
-
-        switch (event->keyval) {
-                case GDK_plus:
-                case GDK_KP_Add:
-                case GDK_equal:
-                case GDK_KP_Equal:
-                case GDK_underscore:
-                case GDK_minus:
-                case GDK_KP_Subtract:
-                case GDK_bracketright:
-                case GDK_braceright:
-                case GDK_bracketleft:
-                case GDK_braceleft:
-                case GDK_M:
-                case GDK_m:
-                case GDK_H:
-                case GDK_h:
-                case GDK_Y:
-                case GDK_y:
-                case GDK_R:
-                case GDK_r:
-                case GDK_T:
-                case GDK_t:
-                        break;
-                default:
-                        return FALSE;
-        }
 
         string = gtk_entry_get_text (GTK_ENTRY (widget));
 
         tm = gnc_date_edit_get_date_internal (gde);
 
-        g_date_set_dmy (&gdate, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-
-        switch (event->keyval)
-        {
-                case GDK_KP_Add:
-                case GDK_plus:
-                case GDK_equal:
-                        if (event->state & GDK_SHIFT_MASK)
-                                g_date_add_days (&gdate, 7);
-                        else if (event->state & GDK_MOD1_MASK)
-                                g_date_add_months (&gdate, 1);
-                        else if (event->state & GDK_CONTROL_MASK)
-                                g_date_add_years (&gdate, 1);
-                        else
-                                g_date_add_days (&gdate, 1);
-                        break;
-
-                case GDK_minus:
-                        if ((strlen (string) != 0) && (dateSeparator () == '-'))
-                        {
-                                int i;
-                                int len;
-                                int count;
-
-                                len = strlen (string);
-                                /* rough check for existing date */
-                                for (i = count = 0; i < len; i++)
-                                {
-                                        if (string[i] == '-')
-                                                count++;
-                                }
-
-                                if (count < 2)
-                                        return FALSE;
-                        }
-
-                        /* fall through */
-                case GDK_KP_Subtract:
-                case GDK_underscore:
-                        if (event->state & GDK_SHIFT_MASK)
-                                g_date_subtract_days (&gdate, 7);
-                        else if (event->state & GDK_MOD1_MASK)
-                                g_date_subtract_months (&gdate, 1);
-                        else if (event->state & GDK_CONTROL_MASK)
-                                g_date_subtract_years (&gdate, 1);
-                        else
-                                g_date_subtract_days (&gdate, 1);
-                        break;
-
-                case GDK_braceright:
-                case GDK_bracketright:
-                        /* increment month */
-                        g_date_add_months (&gdate, 1);
-                        break;
-
-                case GDK_braceleft:
-                case GDK_bracketleft:
-                        /* decrement month */
-                        g_date_subtract_months (&gdate, 1);
-                        break;
-
-                case GDK_M:
-                case GDK_m:
-                        /* beginning of month */
-                        g_date_set_day (&gdate, 1);
-                        break;
-
-                case GDK_H:
-                case GDK_h:
-                        /* end of month */
-                        g_date_set_day (&gdate, 1);
-                        g_date_add_months (&gdate, 1);
-                        g_date_subtract_days (&gdate, 1);
-                        break;
-
-                case GDK_Y:
-                case GDK_y:
-                        /* beginning of year */
-                        g_date_set_day (&gdate, 1);
-                        g_date_set_month (&gdate, 1);
-                        break;
-
-                case GDK_R:
-                case GDK_r:
-                        /* end of year */
-                        g_date_set_day (&gdate, 1);
-                        g_date_set_month (&gdate, 1);
-                        g_date_add_years (&gdate, 1);
-                        g_date_subtract_days (&gdate, 1);
-                        break;
-
-                case GDK_T:
-                case GDK_t:
-                        {
-                                /* today */
-                                GTime gtime;
-
-                                gtime = time (NULL);
-                                g_date_set_time (&gdate, gtime);
-                                break;
-                        }
-
-                default:
-                        return FALSE;
-        }
-
-        g_date_to_struct_tm (&gdate, &tm);
+        if (!gnc_handle_date_accelerator (event, &tm, string))
+                return FALSE;
 
         if (mktime (&tm) == -1)
         {

@@ -46,6 +46,7 @@
 #endif
 
 #include "basiccell.h"
+#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "quickfillcell.h"
 

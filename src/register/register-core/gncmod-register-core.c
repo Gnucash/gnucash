@@ -36,6 +36,13 @@ gnc_module_init(int refcount) {
     {
       return FALSE;
     }
+
+    /* FIXME. We need this for the wide-character functions.
+     * When fixing, get rid of gnome-utils includes, too. */
+    if(!gnc_module_load("gnucash/gnome-utils", 0)) 
+    {
+      return FALSE;
+    }
   }
   return TRUE;
 }

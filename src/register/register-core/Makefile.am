@@ -47,6 +47,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/guile \
   ${GLIB_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
