@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-24 01:47+0100\n"
-"PO-Revision-Date: 2002-11-24 01:53+0100\n"
+"POT-Creation-Date: 2002-11-24 22:12+0100\n"
+"PO-Revision-Date: 2002-11-24 22:14+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -149,7 +149,7 @@ msgstr "Beschreibung"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:133 intl-scm/guile-strings.c:295
-#: intl-scm/guile-strings.c:1544 src/engine/Account.c:2188
+#: intl-scm/guile-strings.c:1544 src/engine/Account.c:2192
 #: src/gnome/glade/tax.glade.h:6
 msgid "Expense"
 msgstr "Aufwendungen"
@@ -161,7 +161,7 @@ msgstr "Formular"
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:131 intl-scm/guile-strings.c:321
 #: intl-scm/guile-strings.c:1168 intl-scm/guile-strings.c:1542
-#: src/engine/Account.c:2187 src/gnome/glade/tax.glade.h:8
+#: src/engine/Account.c:2191 src/gnome/glade/tax.glade.h:8
 #: src/register/ledger-core/split-register.c:2053
 msgid "Income"
 msgstr "Erträge"
@@ -512,7 +512,7 @@ msgstr "Möchten Sie..."
 #: src/business/business-gnome/dialog-invoice.c:1561
 #: src/business/business-gnome/glade/invoice.glade.h:26
 #: src/gnome/glade/commodities.glade.h:5 src/gnome/glade/price.glade.h:11
-#: src/gnome/glade/sched-xact.glade.h:62 src/gnome/gnc-split-reg.c:2243
+#: src/gnome/glade/sched-xact.glade.h:62 src/gnome/gnc-split-reg.c:2226
 #: src/gnome/window-acct-tree.c:843 src/gnome/window-reconcile.c:1410
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1361,7 +1361,7 @@ msgstr "Änderungen des aktuellen Geschäftsvorgangs übernehmen"
 msgid "Register date ranges"
 msgstr "Datumbereich des Kassenberichts"
 
-#: src/gnome/glade/register.glade.h:50 src/gnome/gnc-split-reg.c:955
+#: src/gnome/glade/register.glade.h:50 src/gnome/gnc-split-reg.c:941
 msgid "Remove Transaction Splits"
 msgstr "Gegenbuchungen entfernen"
 
@@ -2706,7 +2706,7 @@ msgid "Commodity"
 msgstr "Währung/Aktie"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:129 src/engine/Account.c:2186
+#: intl-scm/guile-strings.c:129 src/engine/Account.c:2190
 #: src/gnome/dialog-price-edit-db.c:490 src/gnome/glade/price.glade.h:7
 msgid "Currency"
 msgstr "Währung"
@@ -2948,98 +2948,98 @@ msgstr "Nr"
 msgid "Reconciled:R"
 msgstr "Reconciled:J"
 
-#: src/gnome/druid-loan.c:361
+#: src/gnome/druid-loan.c:374
 msgid "Fixed"
 msgstr "Festverzinslich"
 
-#: src/gnome/druid-loan.c:361
+#: src/gnome/druid-loan.c:374
 msgid "A Fixed-Rate loan"
 msgstr "Ein festverzinsliches Darlehen"
 
 #. Translators: ARM = Adjustable Rate Mortgage
-#: src/gnome/druid-loan.c:363
+#: src/gnome/druid-loan.c:376
 msgid "3/1 Year"
 msgstr "3/1 ARM"
 
-#: src/gnome/druid-loan.c:363
+#: src/gnome/druid-loan.c:376
 msgid "A 3/1 Year ARM"
 msgstr "3/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:364
+#: src/gnome/druid-loan.c:377
 msgid "5/1 Year"
 msgstr "5/1 ARM"
 
-#: src/gnome/druid-loan.c:364
+#: src/gnome/druid-loan.c:377
 msgid "A 5/1 Year ARM"
 msgstr "5/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:365
+#: src/gnome/druid-loan.c:378
 msgid "7/1 Year"
 msgstr "7/1 ARM"
 
-#: src/gnome/druid-loan.c:365
+#: src/gnome/druid-loan.c:378
 msgid "A 7/1 Year ARM"
 msgstr "7/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
-#: src/gnome/druid-loan.c:366
+#: src/gnome/druid-loan.c:379
 msgid "10/1 Year"
 msgstr "10/1 ARM"
 
-#: src/gnome/druid-loan.c:366
+#: src/gnome/druid-loan.c:379
 msgid "A 10/1 Year ARM"
 msgstr "10/1 jährige Adjustable Rate Mortgage (zinsvariable Hypothek)"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
 #. * "Insurance", or similar.
-#: src/gnome/druid-loan.c:443
+#: src/gnome/druid-loan.c:456
 #, c-format
 msgid "... pay \"%s\"?"
 msgstr "... \"%s\" zahlen?"
 
-#: src/gnome/druid-loan.c:455
+#: src/gnome/druid-loan.c:468
 msgid "via Escrow account?"
 msgstr "über Treuhandkonto?"
 
-#: src/gnome/druid-loan.c:600 src/register/ledger-core/split-register.c:2010
+#: src/gnome/druid-loan.c:613 src/register/ledger-core/split-register.c:2010
 msgid "Loan"
 msgstr "Darlehen"
 
-#: src/gnome/druid-loan.c:724
+#: src/gnome/druid-loan.c:737
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
 msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
-#: src/gnome/druid-loan.c:841
+#: src/gnome/druid-loan.c:854
 msgid "Please select a valid loan account."
 msgstr "Sie müssen ein gültiges Darlehen-Konto auswählen."
 
-#: src/gnome/druid-loan.c:929
+#: src/gnome/druid-loan.c:942
 msgid "Please select a valid Escrow Account."
 msgstr "Sie müssen ein gültiges Treuhand-Konto auswählen."
 
-#: src/gnome/druid-loan.c:995 src/gnome/druid-loan.c:1198
+#: src/gnome/druid-loan.c:1008 src/gnome/druid-loan.c:1211
 msgid "Please select a valid \"from\" account."
 msgstr "Sie müssen ein gültiges Herkunftskonto angeben."
 
-#: src/gnome/druid-loan.c:1003 src/gnome/druid-loan.c:1205
+#: src/gnome/druid-loan.c:1016 src/gnome/druid-loan.c:1218
 msgid "Please select a valid \"to\" account."
 msgstr "Sie müssen ein gültiges Zielkonto angeben."
 
-#: src/gnome/druid-loan.c:1011
+#: src/gnome/druid-loan.c:1024
 msgid "Please select a valid \"interest\" account."
 msgstr "Sie müssen ein gültiges Zinskonto angeben."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: src/gnome/druid-loan.c:1133
+#: src/gnome/druid-loan.c:1146
 #, c-format
 msgid "Payment: \"%s\""
 msgstr "Zahlung: \"%s\""
 
-#: src/gnome/druid-loan.c:1435
+#: src/gnome/druid-loan.c:1448
 msgid "Repayment - Principal Portion"
 msgstr "Tilgung - Kapitalanteil"
 
-#: src/gnome/druid-loan.c:1451
+#: src/gnome/druid-loan.c:1464
 msgid "Repayment - Interest Portion"
 msgstr "Tilgung - Zinsanteil"
 
@@ -3107,12 +3107,12 @@ msgstr ""
 "Änderungen rückgängig gemacht. Sind Sie sicher, daß Sie alle\n"
 "Änderungen in den Terminierten Buchungen verwerfen wollen?"
 
-#: src/gnome/gnc-split-reg.c:712
+#: src/gnome/gnc-split-reg.c:700
 msgid "<No information>"
 msgstr "<keine Informationen>"
 
-#: src/gnome/gnc-split-reg.c:830
-#: src/register/ledger-core/split-register-control.c:1101
+#: src/gnome/gnc-split-reg.c:816
+#: src/register/ledger-core/split-register-control.c:1153
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -3121,13 +3121,13 @@ msgstr ""
 "Die aktuelle Buchung wurde verändert.\n"
 "Soll sie gespeichert werden?"
 
-#: src/gnome/gnc-split-reg.c:957
+#: src/gnome/gnc-split-reg.c:943
 msgid "Are you sure you want to remove the Splits of this transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Gegenbuchungen dieses Geschäftsvorgangs "
 "entfernen wollen?"
 
-#: src/gnome/gnc-split-reg.c:960
+#: src/gnome/gnc-split-reg.c:946
 msgid ""
 "You would be modifying a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3135,7 +3135,7 @@ msgstr ""
 "Sie würden einen Geschäftsvorgang mit abgeglichenen Buchungen\n"
 "ändern. Ihr abgeglichener Saldo könnte dadurch fehlerhaft werden."
 
-#: src/gnome/gnc-split-reg.c:1053
+#: src/gnome/gnc-split-reg.c:1039
 #, c-format
 msgid ""
 "Are you sure you want to delete\n"
@@ -3149,7 +3149,7 @@ msgstr ""
 "   %s \n"
 "löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1055
+#: src/gnome/gnc-split-reg.c:1041
 msgid ""
 "You would be deleting a reconciled split!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3157,20 +3157,20 @@ msgstr ""
 "Sie würden eine abgeglichene Buchung löschen! Das würde bewirken, daß\n"
 "Ihr Saldo nicht mehr abgeglichen ist."
 
-#: src/gnome/gnc-split-reg.c:1063
+#: src/gnome/gnc-split-reg.c:1049
 msgid "(no memo)"
 msgstr "(kein Buchungstext)"
 
-#: src/gnome/gnc-split-reg.c:1066
+#: src/gnome/gnc-split-reg.c:1052
 msgid "(no description)"
 msgstr "(Keine Beschreibung)"
 
-#: src/gnome/gnc-split-reg.c:1099
+#: src/gnome/gnc-split-reg.c:1085
 msgid "Are you sure you want to delete the current transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
 
-#: src/gnome/gnc-split-reg.c:1101
+#: src/gnome/gnc-split-reg.c:1087
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
@@ -3179,31 +3179,31 @@ msgstr ""
 "Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
 "verändert wird."
 
-#: src/gnome/gnc-split-reg.c:1791
+#: src/gnome/gnc-split-reg.c:1777
 msgid "Present:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:1792
+#: src/gnome/gnc-split-reg.c:1778
 msgid "Future:"
 msgstr "Zukünftiger Wert:"
 
-#: src/gnome/gnc-split-reg.c:1793
+#: src/gnome/gnc-split-reg.c:1779
 msgid "Cleared:"
 msgstr "Bestätigt:"
 
-#: src/gnome/gnc-split-reg.c:1794
+#: src/gnome/gnc-split-reg.c:1780
 msgid "Reconciled:"
 msgstr "Abgeglichen:"
 
-#: src/gnome/gnc-split-reg.c:1798
+#: src/gnome/gnc-split-reg.c:1784
 msgid "Shares:"
 msgstr "Anteile:"
 
-#: src/gnome/gnc-split-reg.c:1799
+#: src/gnome/gnc-split-reg.c:1785
 msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
-#: src/gnome/gnc-split-reg.c:2026
+#: src/gnome/gnc-split-reg.c:2012
 msgid ""
 "This account may not be edited.  If you want\n"
 "to edit transactions in this register, please\n"
@@ -3215,7 +3215,7 @@ msgstr ""
 "\"Konto Eigenschaften\" und deaktivieren Sie die Option\n"
 "\"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2033
+#: src/gnome/gnc-split-reg.c:2019
 msgid ""
 "One of the sub-accounts selected may not be\n"
 "edited.  If you want to edit transactions in\n"
@@ -3229,13 +3229,13 @@ msgstr ""
 "Dialogfenster \"Konto Eigenschaften\" des Unterkontos und deaktivieren\n"
 "Sie die Option \"Platzhalter-Konto\"."
 
-#: src/gnome/gnc-split-reg.c:2057
+#: src/gnome/gnc-split-reg.c:2043
 #, c-format
 msgid "%s [Read-Only]"
 msgstr "%s [Nur-Lesen]"
 
 #: src/business/business-gnome/dialog-invoice.c:1564
-#: src/gnome/gnc-split-reg.c:2248
+#: src/gnome/gnc-split-reg.c:2231
 msgid "View"
 msgstr "Ansicht"
 
@@ -3282,7 +3282,7 @@ msgstr ""
 "Diese terminierte Buchung wurde geändert. Sind Sie sicher, daß Sie\n"
 "abbrechen wollen?"
 
-#: src/gnome/dialog-scheduledxaction.c:673
+#: src/gnome/dialog-scheduledxaction.c:670
 msgid ""
 "The Scheduled Transaction Editor cannot automatically\n"
 "balance this transaction. Should it still be created?"
@@ -3290,11 +3290,11 @@ msgstr ""
 "Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch\n"
 "ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
 
-#: src/gnome/dialog-scheduledxaction.c:692
+#: src/gnome/dialog-scheduledxaction.c:689
 msgid "Please name the Scheduled Transaction."
 msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
 
-#: src/gnome/dialog-scheduledxaction.c:716
+#: src/gnome/dialog-scheduledxaction.c:713
 #, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists.\n"
@@ -3303,7 +3303,7 @@ msgstr ""
 "Eine terminierte Buchung mit dem Namen \"%s\" existiert bereits. \n"
 "Sind Sie sicher, daß die aktuelle den gleichen Namen erhalten soll?"
 
-#: src/gnome/dialog-scheduledxaction.c:742
+#: src/gnome/dialog-scheduledxaction.c:739
 msgid ""
 "Scheduled Transactions with variables\n"
 "cannot be automatically created."
@@ -3311,15 +3311,15 @@ msgstr ""
 "Terminierte Buchungen mit Variablen können nicht automatisch erstellt\n"
 "werden."
 
-#: src/gnome/dialog-scheduledxaction.c:756
+#: src/gnome/dialog-scheduledxaction.c:753
 msgid "Please provide a valid end selection."
 msgstr "Bitte geben Sie ein gültiges Enddatum ein."
 
-#: src/gnome/dialog-scheduledxaction.c:772
+#: src/gnome/dialog-scheduledxaction.c:769
 msgid "There must be some number of occurrences."
 msgstr "Es muß eine Anzahl des Auftretens geben."
 
-#: src/gnome/dialog-scheduledxaction.c:780
+#: src/gnome/dialog-scheduledxaction.c:777
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
@@ -3328,7 +3328,7 @@ msgstr ""
 "Die Zahl des verbleibenden Auftretens (%d) ist größer als die Zahl des "
 "totalen Auftretens (%d)."
 
-#: src/gnome/dialog-scheduledxaction.c:814
+#: src/gnome/dialog-scheduledxaction.c:811
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run.\n"
 "Do you really want to do this?"
@@ -3336,11 +3336,11 @@ msgstr ""
 "Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie\n"
 "auftritt. Wollen Sie wirklich fortsetzen?"
 
-#: src/gnome/dialog-scheduledxaction.c:1441
+#: src/gnome/dialog-scheduledxaction.c:1444
 msgid "(never)"
 msgstr "(niemals)"
 
-#: src/gnome/dialog-scheduledxaction.c:1618
+#: src/gnome/dialog-scheduledxaction.c:1621
 msgid ""
 "The following transactions are presently being edited;\n"
 "are you sure you want to delete them?"
@@ -3348,11 +3348,11 @@ msgstr ""
 "Die folgenden Geschäftsvorgänge werden zur Zeit bearbeitet; wollen Sie\n"
 "diese wirklich löschen?"
 
-#: src/gnome/dialog-scheduledxaction.c:1621
+#: src/gnome/dialog-scheduledxaction.c:1624
 msgid "Delete the selected Scheduled Transactions?"
 msgstr "Ausgewählte terminierte Buchung löschen?"
 
-#: src/gnome/dialog-scheduledxaction.c:1940
+#: src/gnome/dialog-scheduledxaction.c:1943
 msgid ""
 "The current template transaction has been changed.\n"
 "Would you like to record the changes?"
@@ -4046,7 +4046,7 @@ msgstr "Gewinnrücklagen"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:135 intl-scm/guile-strings.c:1734
-#: src/app-utils/gnc-ui-util.c:892 src/engine/Account.c:2189
+#: src/app-utils/gnc-ui-util.c:892 src/engine/Account.c:2193
 #: src/register/ledger-core/split-register.c:2037
 msgid "Equity"
 msgstr "Eigenkapital"
@@ -4615,9 +4615,20 @@ msgstr "Datei schreiben..."
 msgid "Error message not available"
 msgstr "Fehlermeldung nicht verfügbar"
 
+#. Translators: %d is the (internal) error number. %s is the
+#. * human-readable error description.
+#: src/engine/Account.c:488
+#, c-format
+msgid ""
+"Error occurred while saving Account:\n"
+"%d: %s"
+msgstr ""
+"Fehler aufgetreten beim Speichern eines Kontos:\n"
+"%d: %s"
+
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:115 intl-scm/guile-strings.c:1152
-#: src/engine/Account.c:2179 src/import-export/hbci/glade/hbci.glade.h:12
+#: src/engine/Account.c:2183 src/import-export/hbci/glade/hbci.glade.h:12
 #: src/import-export/hbci/gnc-hbci-gettrans.c:319
 #: src/import-export/hbci/gnc-hbci-gettrans.c:322
 #: src/import-export/hbci/gnc-hbci-transfer.c:175
@@ -4627,39 +4638,39 @@ msgstr "Bank"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:117 intl-scm/guile-strings.c:1154
-#: src/engine/Account.c:2180
+#: src/engine/Account.c:2184
 msgid "Cash"
 msgstr "Bargeld"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:121 src/engine/Account.c:2181
+#: intl-scm/guile-strings.c:121 src/engine/Account.c:2185
 msgid "Asset"
 msgstr "Aktiva"
 
-#: src/engine/Account.c:2182
+#: src/engine/Account.c:2186
 msgid "Credit Card"
 msgstr "Kreditkarte"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:123 src/engine/Account.c:2183
+#: intl-scm/guile-strings.c:123 src/engine/Account.c:2187
 msgid "Liability"
 msgstr "Passiva"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:125 src/engine/Account.c:2184
+#: intl-scm/guile-strings.c:125 src/engine/Account.c:2188
 msgid "Stock"
 msgstr "Depot"
 
 #. src/scm/main-window.scm
-#: intl-scm/guile-strings.c:127 src/engine/Account.c:2185
+#: intl-scm/guile-strings.c:127 src/engine/Account.c:2189
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: src/engine/Account.c:2190
+#: src/engine/Account.c:2194
 msgid "A/Receivable"
 msgstr "Forderungen"
 
-#: src/engine/Account.c:2191
+#: src/engine/Account.c:2195
 msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
@@ -5045,7 +5056,7 @@ msgstr "Fehlerhafte Berichts ID: %s"
 msgid "Lost Accounts"
 msgstr "Verlorene Konten"
 
-#: src/backend/postgres/PostgresBackend.c:1845
+#: src/backend/postgres/PostgresBackend.c:1846
 #, c-format
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
 msgstr ""
@@ -8973,7 +8984,7 @@ msgstr "Buchungsbetrag in diesem Konto anpassen"
 msgid "Adjust other account split total"
 msgstr "Buchungsbetrag im anderen Konto anpassen"
 
-#: src/register/ledger-core/split-register-control.c:1172
+#: src/register/ledger-core/split-register-control.c:1224
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -13370,7 +13381,10 @@ msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
-msgstr "Minimal notwendige Bewertung, damit eine mögliche Zuordnung zu einer existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und angezeigt wird."
+msgstr ""
+"Minimal notwendige Bewertung, damit eine mögliche Zuordnung zu einer "
+"existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und "
+"angezeigt wird."
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:2640
@@ -13383,7 +13397,10 @@ msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "treshold but below or equal to the Auto-ADD treshold) will be ADDed by "
 "default."
-msgstr "Eine Buchung, deren beste Bewertung einer bereits existierenden Buchung im roten Bereich liegt (größer als Anzeige-Schwelle aber kleiner oder gleich der Auto-Hinzufügen-Schwelle) hat als Voreinstellung 'Hinzufügen'."
+msgstr ""
+"Eine Buchung, deren beste Bewertung einer bereits existierenden Buchung im "
+"roten Bereich liegt (größer als Anzeige-Schwelle aber kleiner oder gleich "
+"der Auto-Hinzufügen-Schwelle) hat als Voreinstellung 'Hinzufügen'."
 
 #. src/import-export/generic-import.scm
 #: intl-scm/guile-strings.c:2646
@@ -13395,7 +13412,10 @@ msgstr "Entscheidungsschwelle für automatisches Abgleichen"
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "Eine Buchung, deren beste Bewertung einer bereits existierenden Buchung im grünen Bereich liegt (größer oder gleich der Auto-Abgleich-Schwelle) hat als Voreinstellung 'Abgleichen'."
+msgstr ""
+"Eine Buchung, deren beste Bewertung einer bereits existierenden Buchung im "
+"grünen Bereich liegt (größer oder gleich der Auto-Abgleich-Schwelle) hat als "
+"Voreinstellung 'Abgleichen'."
 
 #. src/gnome-utils/gnc-menu-extensions.scm
 #: intl-scm/guile-strings.c:2650
