@@ -1,7 +1,3 @@
-2003-11-17  Derek Atkins  <derek@ihtfp.com>
-
-	* Makefile.DEPS: change timeout from 60 to 5 seconds.  Fixes #120207
-
 2003-11-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test-core/test-engine-stuff.c:  don't make a timespec
