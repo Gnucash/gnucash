@@ -85,6 +85,7 @@ noinst_HEADERS = \
   dialog-print-check.h \
   dialog-progress.h \
   dialog-style-sheet.h \
+  dialog-sx-from-trans.h \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
