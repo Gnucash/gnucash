@@ -213,6 +213,12 @@
 ;; other function will be called when the option's setter is called
 ;; (that is, when the user selects "OK" or "Apply").
 
+;; The option-widget-changed-cb is tested for procedurehood before
+;; it is called, so it is not validated to be a procedure here.
+;; However, since there could be an option-widget-changed-cb but not
+;; a setter-function-called-cb, the procedurehood of the
+;; setter-function-called-cb is checked here.
+
 (define (gnc:make-complex-boolean-option
 	 section
 	 name
@@ -226,8 +232,10 @@
     (gnc:make-option
      section name sort-tag 'boolean documentation-string
      (lambda () value)
-     (lambda (x) (set! value x)
-                 (setter-function-called-cb x))
+     (if (procedure? setter-function-called-cb)
+       (lambda (x) (set! value x)
+                   (setter-function-called-cb x))
+       (lambda (x) (set! value x)))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (x)

@@ -154,6 +154,9 @@ void gnc_set_log_level_global(gncLogLevel level);
 /* enable/disable the auto decimal option */
 void gnc_set_auto_decimal_enabled(gboolean enabled);
 
+/* set how many auto decimal places to use */
+void gnc_set_auto_decimal_places(int places);
+
 
 /********************************************************/
 /* libc 'enhancements' */
@@ -200,6 +203,9 @@ struct lconv * gnc_localeconv();
 
 /* Returns the 3 character currency code of the current locale. */
 const char * gnc_locale_default_currency();
+
+/* Return the number of decimal places for this locale. */
+int gnc_locale_decimal_places( void );
 
 
 /*

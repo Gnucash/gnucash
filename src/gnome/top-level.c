@@ -79,6 +79,8 @@ static void gnc_configure_auto_raise_cb(void * foo) { }
 static void gnc_configure_auto_raise(void) { }
 static void gnc_configure_auto_decimal_cb(void *);
 static void gnc_configure_auto_decimal(void);
+static void gnc_configure_auto_decimal_places_cb(void *);
+static void gnc_configure_auto_decimal_places(void);
 static void gnc_configure_register_font_cb(void *);
 static void gnc_configure_register_font(void);
 static void gnc_configure_register_hint_font_cb(void *);
@@ -102,6 +104,7 @@ static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
+static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
@@ -204,6 +207,12 @@ gnucash_ui_init()
       gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
                                           NULL, "General",
                                          "Automatic Decimal Point");
+
+    gnc_configure_auto_decimal_places();
+    auto_decimal_places_callback_id = 
+       gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
+                                           NULL, "General",
+                                           "Auto Decimal Places");
 
     gnc_configure_register_font();
     register_font_callback_id =
@@ -747,7 +756,7 @@ gnc_configure_reverse_balance(void)
 
 /* gnc_configure_auto_decimal_cb
  *     Callback called when options change -
- *     sets auto decimal option and refreshes the UI
+ *     sets auto decimal option.
  * 
  *  Args: Nothing
  *  Returns: Nothing
@@ -775,6 +784,37 @@ gnc_configure_auto_decimal(void)
 
   gnc_set_auto_decimal_enabled(enabled);
 }
+
+/* gnc_configure_auto_decimal_places_cb
+ *     Callback called when options change -
+ *     sets auto decimal places option.
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+static void
+gnc_configure_auto_decimal_places_cb(void *not_used)
+{
+  gnc_configure_auto_decimal_places();
+}
+
+/* gnc_configure_auto_decimal_places
+ *     Pass the global value for the auto decimal places range to the engine.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_decimal_places(void)
+{
+   gnc_set_auto_decimal_places
+      ( 
+         (int) gnc_lookup_number_option( "General",
+                                         "Auto Decimal Places",
+                                         2 )
+      );
+}
+
 
 /* gnc_configure_register_font_cb
  *     Callback called when options change -

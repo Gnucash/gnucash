@@ -82,12 +82,20 @@ gnc_set_log_level_global(gncLogLevel level)
 
 /* xaccParseAmount configuration */
 static gboolean auto_decimal_enabled = FALSE;
+static int auto_decimal_places = 2;    /* default, can be changed */
 
 /* enable/disable the auto_decimal_enabled option */
 void
 gnc_set_auto_decimal_enabled(gboolean enabled)
 {
-   auto_decimal_enabled = enabled;
+  auto_decimal_enabled = enabled;
+}
+
+/* set the number of auto decimal places to use */
+void
+gnc_set_auto_decimal_places( int places )
+{
+  auto_decimal_places = places;
 }
 
 
@@ -450,7 +458,7 @@ const char *
 gnc_locale_default_currency()
 {
   static char currency[4];
-  gboolean got_it = FALSE;
+  static gboolean got_it = FALSE;    /* pretty sure "static" is needed */
   struct lconv *lc;
   int i;
 
@@ -468,6 +476,30 @@ gnc_locale_default_currency()
 
   return currency;
 }
+
+
+/* Return the number of decimal places for this locale. */
+int 
+gnc_locale_decimal_places( void )
+{
+  static gboolean got_it = FALSE;
+  static int places;
+  struct lconv *lc;
+
+  if( got_it )
+    return( places );
+
+  lc = gnc_localeconv();
+  places = (int)lc->frac_digits;
+
+  /* frac_digits is already initialized by gnc_localeconv,
+   * hopefully to a reasonable default.                    */
+
+  got_it = TRUE;
+
+  return( places );
+}
+
 
 /* Utility function for printing non-negative amounts */
 static int
@@ -803,7 +835,7 @@ double xaccParseAmount (const char * instr, gboolean monetary)
    char negative_sign;
    char thousands_sep;
    char decimal_point;
-   int len;
+   int len, i;
 
    if (!instr) return 0.0;
    if (*instr == '\0') return 0.0;
@@ -938,13 +970,16 @@ double xaccParseAmount (const char * instr, gboolean monetary)
       }
 
    } else if( auto_decimal_enabled ) {
-      /* no decimal point and auto decimal point enabled, so assume that
-       * the value is an integer number of cents.
+      /* No decimal point and auto decimal point enabled, so assume that
+       * the value is an integer number of cents or a cent-type unit.
+       * For each auto decimal place requested, move the final decimal
+       * point one place to the left.
        */
       amount += ((double) (atoi (str)));
-      amount *= 0.01;    /* temporarily assume two decimal points */
+      for( i = 0; i < auto_decimal_places; i++ )
+         amount *= 0.1;
 
-      /* Note: further additions to amount after this point will
+      /* NOTE: further additions to amount after this point will
        * generate incorrect results.
        */
 
