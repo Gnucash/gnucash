@@ -113,7 +113,7 @@ install:
     -e ${GNC_BINDIR}/gnucash.gnome.static -o \
     -e ${GNC_BINDIR}/gnucash.qt \
   ]
-	$(INSTALL_DATA) src/quotes/gnc-prices ${GNC_BINDIR}
+	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
 
 	@mkdir -p ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/swig/perl5/gnucash.pm ${GNC_LIBDIR}
