@@ -195,7 +195,12 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         info->text_rect.y      = dy + 1;
         info->text_rect.width  = wd - toggle_space;
         info->text_rect.height = hd - 2;
-	pango_layout_set_width (info->layout, (wd - toggle_space - 2 * CELL_HPADDING) * PANGO_SCALE);
+
+        // this width affects line-wrapping; setting it to -1 should turn wrapping off:
+        pango_layout_set_width( info->layout, -1 );
+
+        // pango_layout_set_ellipsize(...) as of pango 1.6 may be useful for
+        // strings longer than the field width.
 
         switch (gnc_table_get_align (table, item_edit->virt_loc))
         {
@@ -651,12 +656,12 @@ gnc_item_edit_finalize (GObject *object)
 
 gboolean
 gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
-                          VirtualLocation virt_loc, int x,
-                          gboolean changed_cells,
-                          gboolean extend_selection)
+                              VirtualLocation virt_loc,
+                              int x,
+                              gboolean changed_cells,
+                              gboolean extend_selection)
 {
         GtkEditable *editable;
-        // TextDrawInfo info;
         Table *table;
         gint pos = 0;
         gint o_x, o_y;
@@ -698,58 +703,87 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
                         x -= item_edit->popup_toggle.toggle_offset;
         }
 
-        // WTF!?  All the `pos` setting logic has been silently removed from
-        // this location.  Compare to 1.8 sources...  *grumble*
+
+        // get the text index for the mouse position into pos
         {
-                PangoLayout *pl;
+                PangoLayout *layout;
                 int textIndex, textTrailing;
                 gboolean insideText;
 
-                pl = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
-                insideText = pango_layout_xy_to_index( pl, (x - o_x) * PANGO_SCALE,
-                                                       10 * PANGO_SCALE, &textIndex, &textTrailing );
+                layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
+                insideText = pango_layout_xy_to_index( layout,
+                                                       (x - o_x) * PANGO_SCALE, 10 * PANGO_SCALE,
+                                                       &textIndex, &textTrailing );
                 pos = textIndex;
         }
 
-        // I think we can remove the TextDrawInfo-related stuff since Pango handles it, and better.
-        //gnc_item_edit_draw_info (item_edit, o_x, o_y, &info);
-
         if (extend_selection)
         {
+                // Setting the selection-range on the GtkEditable implicitly
+                // sets the `position` to the end of the range; this is
+                // unfortunate if you're setting and using the `position` to
+                // be at the end or beginning of the selection range to
+                // discriminate the forward- or reverse- nature of the
+                // dragging.  Now we just keep even-more-explicit enumeration
+                // of the selection-direction. -- jsled, Mar 2005, Gnome2 port
+
                 gboolean selection_exists;
-                gint current_pos, start_sel, end_sel;
+                gint current_pos, start_sel, end_sel, orig_start, orig_end;
 
                 current_pos = gtk_editable_get_position (editable);
 		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+                orig_start = start_sel;
+                orig_end = end_sel;
 
-                if (start_sel == end_sel)
+                if ( item_edit->selection_dir == UNKNOWN && start_sel == end_sel )
                 {
                         start_sel = current_pos;
                         end_sel = pos;
                 }
-                else if (current_pos == start_sel)
+
+                // determine direction
+                if ( item_edit->selection_dir == UNKNOWN )
+                {
+                        if ( pos < start_sel )
+                        {
+                                item_edit->selection_dir = REVERSE;
+                        }
+                        else if ( pos > end_sel )
+                        {
+                                item_edit->selection_dir = FORWARD;
+                        }
+                }
+
+                // act accordingly
+                if ( item_edit->selection_dir == FORWARD )
+                {
+                        end_sel = pos;
+                }
+                else if ( item_edit->selection_dir == REVERSE )
                 {
                         start_sel = pos;
                 }
                 else
                 {
-                        end_sel = pos;
+                        // @@FIXME : don't printf... so ghetto.
+                        printf( "unknown, but with movement\n" );
                 }
 
                 gtk_editable_set_position (editable, pos);
+
                 gtk_editable_select_region(editable, start_sel, end_sel);
 
-		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+                pos = gtk_editable_get_position (editable);
+                selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
         }
         else
         {
                 gtk_editable_select_region(editable, 0, 0);
                 gtk_editable_set_position (editable, pos);
+                item_edit->selection_dir = UNKNOWN;
         }
 
         queue_sync (item_edit);
-
-        //gnc_item_edit_free_draw_info_members(&info);
 
         return TRUE;
 }

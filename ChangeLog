@@ -1,3 +1,13 @@
+2005-03-13  Joshua Sled  <jsled@asynchronous.org>
+
+	* GNOME2_STATUS: Updates; removed some incorrectness, updated for
+	other changes.  Added many new things. :(
+
+	* src/register/register-gnome/gnucash-item-edit.c
+	(gnc_item_edit_set_cursor_pos): Fix reverse dragging/selection,
+	broken because of a change in gtk_editable semantics. :(
+	(gnc_item_edit_draw_info): Turn off pango line wrapping.
+
 2005-03-07  Neil Williams <linux@codehelp.co.uk>
 	* ./src/engine/qofsession.c:Fixing references 
 	and empty partial books

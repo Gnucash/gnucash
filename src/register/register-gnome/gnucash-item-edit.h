@@ -104,6 +104,8 @@ typedef struct {
         gboolean reset_pos;
         gint x_offset;
 
+        enum { UNKNOWN, FORWARD, REVERSE } selection_dir;
+
         /* Where are we */
         VirtualLocation virt_loc;
 
