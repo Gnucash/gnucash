@@ -414,7 +414,7 @@ configLayout (SplitRegister *reg)
           (reg->recnCell != reg->split_cursor->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & reg->split_cursor->cells[i][j]->input_output)) \
       {							\
-         NEXT_RIGHT  (i, j);				\
+         NEXT_RIGHT  (i+1, j);				\
          break;						\
       }							\
    }							\
@@ -442,7 +442,7 @@ configTraverse (SplitRegister *reg)
    first_r = prev_r; first_c = prev_c;
    TRAVERSE_NON_NULL_CELLS ();
    /* for double-line, hop back one row */
-   NEXT_RIGHT (-1-first_r + curs->numRows, -1-first_c);
+   NEXT_RIGHT (-1-first_r, -1-first_c);
 
    curs = reg->trans_cursor;
    FIRST_NON_NULL (0,0);
@@ -616,10 +616,6 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    /* config the layout of the cells in the cursors */
    configLayout (reg);
 
-   /* -------------------------------- */   
-   /* define how traversal works */
-   configTraverse (reg);
-
    /* --------------------------- */
    /* do some misc cell config */
    configCursors (reg);
@@ -666,6 +662,13 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     * The format is a printf-style format for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
    xaccSetPriceCellFormat (reg->priceCell, "%.3f");
+
+   /* -------------------------------- */   
+   /* define how traversal works. This must be done *after* the balance, etc.
+    * cells have been marked read-only, since otherwise config will try
+    * to pick them up.
+    */
+   configTraverse (reg);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
