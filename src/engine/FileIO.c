@@ -1,8 +1,8 @@
 /********************************************************************\
- * FileIO.c -- read from and writing to a datafile for xacc         *
- *             (X-Accountant)                                       *
+ * FileIO.c -- read from and writing to a datafile for gnucash      *
+ *             (GnuCash/X-Accountant)                               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,38 +18,28 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
- *                                                                  *
- *                                                                  *
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
  *       functions are called in important                          *
  *                                                                  *
  * Version 1 is the original file format                            *
- *                                                                  *
  * Version 2 of the file format supports reading and writing of     *
- * double-entry transactions.                                       *
- *                                                                  *
+ *    double-entry transactions.                                    *
  * Version 3 of the file format supports actions (Buy, Sell, etc.)  *
- *                                                                  *
  * Version 4 of the file format adds account groups                 *
- *                                                                  *
  * Version 5 of the file format adds splits                         *
- *                                                                  *
  * Version 6 of the file format removes the source split            *
- *                                                                  *
  * Version 7 of the file format adds currency & security types      *
- *                                                                  *
  * Version 8 of the file format adds misc fields                    *
+ * Version 9 changes the time format to a 64-bit int                *
+ * Version 10 adds auxilliary account info                          *
  *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
  *   Group       ::== numAccounts (Account)^numAccounts             *
  *   Account     ::== accID flags type accountName accountCode      *
  *                    description notes currency security           *
+ *                    AccInfo                                       *
  *                    numTran (Transaction)^numTrans                * 
  *                    numGroups (Group)^numGroups                   *
  *   Transaction ::== num date_entered date_posted description      *
@@ -68,6 +58,7 @@
  *   notes       ::== String                                        *  
  *   currency    ::== String                                        *  
  *   security    ::== String                                        *  
+ *   AccInfo     ::== (variable, depends on account type, ... )     *
  *                                                                  *
  *   num         ::== String                                        * 
  *   date_entered::== Date                                          * 
@@ -110,7 +101,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 9
+#define VERSION 10
 
 
 /* hack alert the current file format does not support most of the
@@ -142,6 +133,7 @@ static Account     *springAccount (int acc_id);
 
 static AccountGroup *readGroup( int fd, Account *, int token );
 static Account      *readAccount( int fd, AccountGroup *, int token );
+static AccInfo      *readAccInfo( int fd, Account *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
@@ -151,6 +143,7 @@ static int           readTSDate( int fd, Timespec *, int token );
 static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
 static int writeAccount( int fd, Account *account );
+static int writeAccInfo( int fd, AccInfo *accinfo );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
@@ -511,6 +504,11 @@ readAccount( int fd, AccountGroup *grp, int token )
      xaccAccountSetCurrency (acc, DEFAULT_CURRENCY);
   }
 
+  /* aux account info first appears in versin ten files */
+  if (10 <= token) {
+     readAccInfo( fd, acc, token );
+  }
+
   err = read( fd, &numTrans, sizeof(int) );
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
@@ -638,6 +636,50 @@ springAccount (int acc_id)
    return NULL;
 }
  
+/********************************************************************\
+ * readInvAcct                                                      * 
+ *   reads in the auxilliary account info                           *
+ *                                                                  * 
+ * Args:   fd    - the filedescriptor of the data file              * 
+ *         token - the datafile version                             * 
+ * Return: the accinfo structure                                    * 
+\********************************************************************/
+
+static void 
+readInvAcct( int fd, InvAcct *invacct, int token )
+{
+  char * tmp;
+
+  tmp = readString( fd, token );
+  if( NULL == tmp ) { free (tmp); return; }
+  xaccInvAcctSetPriceSrc (invacct, tmp);
+  free (tmp);
+}
+
+/********************************************************************\
+ * readAccInfo                                                      * 
+ *   reads in the auxilliary account info                           *
+ *                                                                  * 
+ * Args:   fd    - the filedescriptor of the data file              * 
+ *         token - the datafile version                             * 
+ * Return: the accinfo structure                                    * 
+\********************************************************************/
+
+static AccInfo *
+readAccInfo( int fd, Account *acc, int token )
+{
+  AccInfo * accinfo;
+  InvAcct *invacct;
+
+  accinfo = xaccAccountGetAccInfo (acc);
+  invacct = xaccCastToInvAcct (accinfo);
+  if (invacct) {
+    readInvAcct (fd, invacct, token);
+  }
+
+  return accinfo;
+}
+
 /********************************************************************\
  * readTransaction                                                  * 
  *   reads in the data for a transaction from the datafile          *
@@ -1428,6 +1470,11 @@ writeAccount( int fd, Account *acc )
     char ff_acctype;
     int acctype;
     acctype = xaccAccountGetType (acc);
+    /* we need to keep the file-format numbers from ever changing,
+     * even if the account-type numbering does change.  As a result,
+     * we need to build a translation table from one numbering scheme 
+     * to the other. 
+     */
     switch (acctype) {
       case BANK: 	{ ff_acctype = FF_BANK; 	break; }
       case CASH: 	{ ff_acctype = FF_CASH; 	break; }
@@ -1450,7 +1497,7 @@ writeAccount( int fd, Account *acc )
     if( err != sizeof(char) )
       return -1;
   }
-  
+
   tmp = xaccAccountGetName (acc);
   err = writeString( fd, tmp );
   if( -1 == err ) return err;
@@ -1475,6 +1522,9 @@ writeAccount( int fd, Account *acc )
   err = writeString( fd, tmp );
   if( -1 == err ) return err;
   
+  err = writeAccInfo (fd, xaccAccountGetAccInfo (acc));    
+  if( -1 == err ) return err;
+
   /* figure out numTrans -- it will be less than the total
    * number of transactions in this account, because some 
    * of the double entry transactions will already have been 
@@ -1654,6 +1704,54 @@ writeSplit ( int fd, Split *split )
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
+
+  return err;
+  }
+
+/********************************************************************\
+ * writeInvAcct                                                     * 
+ *   saves the data for investment account auxilliary info          *
+ *                                                                  * 
+ * Args:   fd       - the filedescriptor of the data file           * 
+ *         invacct  - the data to save                              * 
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+static int
+writeInvAcct ( int fd, InvAcct * invacct )
+  {
+  int err=0;
+
+  ENTER ("writeInvAcct");
+  if (!invacct) return 0;
+  
+  err = writeString( fd, xaccInvAcctGetPriceSrc (invacct) );
+  if( -1 == err )
+    return err;
+  
+  return err;
+  }
+
+/********************************************************************\
+ * writeAccInfo                                                     * 
+ *   saves the data for auxilliary account info to the datafile     *
+ *                                                                  * 
+ * Args:   fd       - the filedescriptor of the data file           * 
+ *         iacc     - the aux data to save                          * 
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+static int
+writeAccInfo ( int fd, AccInfo *accinfo )
+  {
+  int err=0;
+  InvAcct *invacct=NULL;
+
+  ENTER ("writeAccInfo");
+  if (!accinfo) return err;
+
+  invacct = xaccCastToInvAcct (accinfo);
+  if (invacct) {
+    err = writeInvAcct (fd, invacct);
+  }
 
   return err;
   }
