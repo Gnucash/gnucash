@@ -34,6 +34,7 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "util.h"
+#include "date.h"
 
 
 /* 
@@ -548,6 +549,19 @@ xaccTransCommitEdit (Transaction *trans)
    CHECK_OPEN (trans);
 
    xaccTransRebalance (trans);
+
+   /* um, theoritically, it is impossible for splits
+    * to get inserted out of order. But we'll get paranoid,
+    * and check anyway, at the loss of some performance.
+    */
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      acc = split ->acc;
+      xaccCheckDateOrder(acc, trans->splits[i]);
+      i++;
+      split = trans->splits[i];
+   }
 
    i=0;
    split = trans->splits[i];

@@ -221,6 +221,4 @@ int  xaccSplitOrder (Split **sa, Split **sb);
  */
 int xaccCountTransactions (Transaction **tarray);
 
-/** GLOBALS *********************************************************/
-
 #endif /* __XACC_TRANSACTION_H__ */
