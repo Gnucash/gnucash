@@ -3,11 +3,15 @@
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2002;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002.
 #
+# - I messaggi ancora dubbi sono marcati come fuzzy.
+# - Quando qui sono indicate più traduzioni, la prima è quella usata
+#   nel .po vero del programma.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.x\n"
 "POT-Creation-Date: 2002-01-06 11:28+0100\n"
-"PO-Revision-Date: 2002-03-03 13:24+01:00\n"
+"PO-Revision-Date: 2002-04-13 15:03+02:00\n"
 "Last-Translator: Lorenzo Cappelletti <L.Cappelletti@mail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +52,7 @@ msgstr "tipo conto: valuta, conto finanziario"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "tipo conto: valore netto, capitale"
+msgstr "tipo conto: capitale, valore netto"
 
 #. "-"
 #, fuzzy
@@ -78,7 +82,7 @@ msgstr "tipo conto: di risparmio"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "tipo conto: azione"
+msgstr "tipo conto: azionario"
 
 #. "-"
 msgid "account: parent account"
@@ -93,19 +97,17 @@ msgid "account: top level account"
 msgstr "conto: conto livello principale"
 
 #. "The process of doing something that caused a transaction to happen"
-#, fuzzy
 msgid "Action (register)"
 msgstr "Operazione (registro)"
 
 # Non vorrei che Bancomat fosse uno degli sportelli di prelievo possibili.
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "operazione: sportello automatico, Bancomat"
+msgstr "operazione: Bancomat, sportello automatico"
 
 #. "Transaction was an auto deposit"
-#, fuzzy
 msgid "action: autoDep"
-msgstr "operazione: "
+msgstr "operazione: autodep"
 
 #. "-"
 msgid "action: buy"
@@ -121,21 +123,20 @@ msgid "action: direct debit"
 msgstr "operazione: "
 
 #. "transaction is a distribution (???)"
-#, fuzzy
 msgid "action: dist"
-msgstr "operazione: dist"
+msgstr "operazione: dist, distribuzione"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "operazione: dividendo"
+msgstr "operazione: div, dividendo"
 
 #. "-"
 msgid "action: fee"
-msgstr "operazione: onorario, emolumento, parcella, commission, tassa"
+msgstr "operazione: onorario, emolumento, parcella, commissione, tassa"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "operazione: interessi"
+msgstr "operazione: int, interessi"
 
 #. "-"
 msgid "action: loan"
@@ -228,9 +229,8 @@ msgid "close, to"
 msgstr "chiudere"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
-#, fuzzy
 msgid "commodity"
-msgstr "prodotto, valuta, azione"
+msgstr "titolo (prodotto, valuta)"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -241,8 +241,9 @@ msgid "commodity option: fraction"
 msgstr ""
 
 #. "e.g. USD, DEM"
+#, fuzzy
 msgid "commodity option: Symbol"
-msgstr ": simbolo"
+msgstr "opzione titolo: simbolo"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -350,12 +351,13 @@ msgid "interest"
 msgstr "interesse"
 
 #. "A list of goods sold or services provided together with the prices charged; a bill"
+#, fuzzy
 msgid "invoice"
-msgstr "scontrino"
+msgstr "ricevuta, scontrino"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
-msgstr "libro mastro, mastro, registro"
+msgstr "libro mastro, mastro"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 #, fuzzy
@@ -379,6 +381,7 @@ msgid "MDI modus"
 msgstr "modalità MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
+#, fuzzy
 msgid "Memo"
 msgstr "Memo"
 
@@ -416,7 +419,6 @@ msgid "open, to"
 msgstr "aprire"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
-#, fuzzy
 msgid "opening balance"
 msgstr "bilancio d'apertura"
 
@@ -499,10 +501,9 @@ msgstr "riconciliare"
 msgid "record keeping"
 msgstr ""
 
-# `mastrino' forse non esiste
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "registro, conto, mastrino"
+msgstr "registro (termine generico e più comprensibile)"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -514,15 +515,15 @@ msgstr "elemento di registro: scissione azionaria"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "registro: registro ad auto-suddivisione"
+msgstr "registro: (libro) mastro auto-suddiviso"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "registro: registro di base"
+msgstr "registro: (libro) mastro di base"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "registro: registro generale"
+msgstr "registro: (libro) mastro generale"
 
 #. "another form of register"
 msgid "register: transaction journal"
@@ -546,14 +547,12 @@ msgid "scrub, to"
 msgstr "cancellare, annullare"
 
 #. "A document or certificate showing who owns shares"
-#, fuzzy
 msgid "security"
-msgstr "garanzia, titoli, obbligazioni"
+msgstr "certificato, ipoteca, titoli, obbligazioni"
 
 #. "-"
-#, fuzzy
 msgid "Share Balance (register)"
-msgstr "bilancio condiviso (registro)"
+msgstr "bilancio quote (registro)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -608,18 +607,16 @@ msgid "transaction state: frozen"
 msgstr "stato movimento: congelata"
 
 #. "A transaction that was reconciled with the bank's statement."
-#, fuzzy
 msgid "transaction state: reconciled"
-msgstr "stato movimento: riconciliata"
+msgstr "stato movimento: riconciliato"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
 msgstr "trasferimento"
 
 #. "The account where an amount is transferred to"
-#, fuzzy
 msgid "transfer account"
-msgstr "conto di destinazione"
+msgstr "conto destinazione"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
