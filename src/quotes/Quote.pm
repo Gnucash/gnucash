@@ -371,8 +371,7 @@ sub vanguard {
     }
 
     my @symbols = @_;
-    # my(@q,%aa,$ua,$url,$sym, $fid);
-    my($url, $sym, $i, $fid, $reply, $ua);
+    my($url, $sym, $i, $fid, $reply, $ua, @q, %aa);
 
     # convert ticker symbols into fund numbers; build first url
     $url = $VANGUARD_QUERY_URL;
@@ -386,9 +385,11 @@ sub vanguard {
        }
        if ($fid) {
           $url .= "ROWS=".$fid."&";  
-print "got $fid $url\n";
+          # print "found $fid $url\n";
        }
     }
+    if ($url eq  $VANGUARD_QUERY_URL) { return undef; }
+
     $url .="COLS=COL1%2C3&COLS=COL4&COLS=COL5&COLS=COL11%2C12&ACTION=Accept";
     $ua = LWP::UserAgent->new;
     $reply = $ua->request(GET $url)->content;
@@ -396,14 +397,22 @@ print "got $fid $url\n";
     undef $url;
     foreach (split('\n',$reply)) {
        if (/FileName=V(.*)\.txt/) {
-           print "yxxxxxxxxxxxxxxxxxx $_\n";
-print "yo $1 and $2 and $3 \n";
            $url = $VANGUARD_CSV_URL . "V" . $1 . ".txt";
            last;
        }
     }
-print "its $url\n";
-1;
+    print "second url is $url\n";
+    $reply = $ua->request(GET $url)->content;
+
+    foreach (split('\n',$reply)) {
+       @q = split (/,/);
+       ($sym = $q[0]) =~ s/\W//;
+       $aa {$sym, "exchange"} = "Vanguard";  # Fidelity
+       if (! $q[1]) last;     # error if comma sepoaration didn't work
+       ($aa {$sym, "nav"} = $q[1]) =~ s/\S//;
+       ($aa {$sym, "date"} = $q[2]) =~ s/\S//;
+    }
+    return %aa;
 }
 
 # =======================================================================
