@@ -38,6 +38,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
+#include "gncObject.h"
 
 static short module = MOD_ENGINE;
 
@@ -1273,6 +1274,68 @@ xaccGroupForEachAccount (AccountGroup *grp,
   }
 
   return(NULL);
+}
+
+/* ============================================================== */
+/* gncObject function implementation and registration */
+
+static void
+group_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
+{
+  // GNCEntityTable *et;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+printf ("duude calling group foreach \n");
+/*
+  et = gnc_book_get_entity_table (book);
+  xaccForeachEntity (et, GNC_ID_GROUP, cb, ud);
+*/
+}
+
+static void 
+group_book_begin (GNCBook *book)
+{
+printf ("duude call group book begin \n");
+  xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
+}
+
+static void 
+group_book_end (GNCBook *book)
+{
+  xaccSetAccountGroup (book, NULL);
+}
+
+static gboolean
+group_is_dirty (GNCBook *book)
+{
+  return xaccGroupNotSaved(xaccGetAccountGroup(book));
+}
+
+static void
+group_mark_clean(GNCBook *book)
+{
+  xaccGroupMarkSaved(xaccGetAccountGroup(book));
+}
+
+static GncObject_t group_object_def = 
+{
+  interface_version: GNC_OBJECT_VERSION,
+  name:              GNC_ID_GROUP,
+  type_label:        "AccountGroup",
+  book_begin:        group_book_begin,
+  book_end:          group_book_end,
+  is_dirty:          group_is_dirty,
+  mark_clean:        group_mark_clean,
+  foreach:           group_foreach,
+  printable:         NULL,
+};
+
+gboolean 
+xaccGroupRegister (void)
+{
+  return gncObjectRegister (&group_object_def);
 }
 
 /* ========================= END OF FILE ======================== */

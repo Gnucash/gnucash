@@ -31,8 +31,9 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
-#include "TransactionP.h"
 #include "AccountP.h"
+#include "GroupP.h"
+#include "TransactionP.h"
 #include "gnc-book-p.h"
 #include "gnc-lot-p.h"
 
@@ -83,6 +84,7 @@ gnc_engine_init(int argc, char ** argv)
   xaccSplitRegister ();
   xaccTransRegister ();
   xaccAccountRegister ();
+  xaccGroupRegister ();
   gnc_book_register ();
   gnc_lot_register ();
 

@@ -118,7 +118,6 @@ gnc_book_mark_saved(GNCBook *book)
 
   book->dirty = FALSE;
 
-  xaccGroupMarkSaved(xaccGetAccountGroup(book));
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
@@ -145,8 +144,6 @@ gnc_book_populate (GNCBook *book)
   }
   gnc_commodity_table_set_table (book, ct);
   
-  xaccSetAccountGroup (book, xaccMallocAccountGroup(book));
-  
   gnc_pricedb_set_db (book, gnc_pricedb_create(book));
 
   gnc_book_set_schedxactions (book, NULL);
@@ -157,9 +154,6 @@ gnc_book_populate (GNCBook *book)
 static void
 gnc_book_depopulate (GNCBook *book)
 {
-  /* unhook the top-level group */
-  xaccSetAccountGroup (book, NULL);
-
   /* unhook the prices */
   gnc_pricedb_set_db (book, NULL);
 
@@ -178,8 +172,6 @@ gnc_book_not_saved(GNCBook *book)
   if (!book) return FALSE;
 
   return(book->dirty
-         ||
-         xaccGroupNotSaved(xaccGetAccountGroup(book))
          ||
          gnc_pricedb_dirty(gnc_book_get_pricedb(book))
          ||

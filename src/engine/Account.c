@@ -3146,6 +3146,7 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
   return( trans );
 }
 
+/* ================================================================ */
 /* gncObject function implementation and registration */
 
 static void
