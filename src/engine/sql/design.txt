@@ -4,6 +4,22 @@ SQL Tables
 These mostly parallel the data structures in the gnc engine.
 See table-create.sql for more info.
 
+General Theory of Operation
+---------------------------
+The entire backend is built upon the premise that the local
+gnucash process acts only as a 'cache' of (some of) the
+'true' data in a remote SQL database.  The motivation of 
+this design is to allow the local process to quickly access
+and manipulate data (because it is local), without loosing
+the benefits of a remote, shared, persisitant storage 
+server (the sql database).  If the code seems complex,
+that is because it is expending a considerable amount of
+effort in trying to maintain the local cache consistent
+with the remote store.  In the following text (and in the 
+notes in the source code), "the engine" is used as a 
+sysnonym for "the cache", and always refers to the 
+local data running in the local process.
+
 
 Session Table, Session Modes
 ----------------------------
@@ -39,35 +55,89 @@ indicates which mode the database is functioning.
    mode=single-update
    Only one user can have access to the database at a time.  Updates 
    to data are stored in the DB as they are made in the GUI; there
-   is no need to perform a mass-save at the end of a session.
+   is no need to perform a mass-save at the end of a session.  
+
+   When a database is opened in this mode, *all* of the database
+   data is copied from the database into the local engine.  This
+   might result in the gnucash process getting quite large, 
+   especially if the database is large.
 
    This mode is more robust in that there is minimal/no data loss in 
-   the event of a crash.
+   the event of a crash.  If the database needs to be accessed in
+   single-user mode, this is teh preffered mode to use.
 
 -- "Multi-User Polled" -- 
-   mode=multi-user
+   mode=multi-user-poll
    Multiple users are assumed, GnuCash polls the database to detect 
-   changes in the data.  Mostly implemented. 
+   changes in the data.   Data storage is incremental, essentially
+   the same as in the single-update mode.  Data fetch is also
+   incremental: only the data that is immediately being viewed/edited
+   is pulled into the local engine.  The idea is that the SQL database
+   may be quite large, but that only some smaller amount of data will
+   be viewed/edited by a user at any given time.  Thus, we save 
+   on network traffic and local memory usage by only pulling in 
+   the data that we need. Note that 'old' data is not purged, so
+   if a gnucash session runs for a long time in this mode, it may
+   pull in significant amounts of the dataset, and thus grow quite 
+   large.
 
+   Multiple users may simultaneously edit the data in this mode.
+   However, in this mode, changes made by remote users do not
+   'automatically' show up as they are made.  To see other users
+   changes, one has to (for example) close a register window, and
+   reopen it.  The local cache of data is synced with the remote
+   database on an as-needed basis:  for example, if the local
+   user tries to edit the same transaction that some remote user
+   has modified, then the local copy of transaction will be updated, 
+   and the user warned that a remote change has occured. 
 
--- "Multi-User Events" --
-   mode=multi-user-event
-   GnuCash uses the SQL LISTEN/NOTIFY async message delivery routines.
-   Not implemented.  Probably won't be.  These messages do not provide 
-   a sufficient level of detail needed for the kind of notification that 
-   would be useful to gnucash.  Ideally, we would like to have notification 
-   when some other process has modified a particular record.  But there
-   is no way to indicate which record was modified: the local process
-   would have to query all records its interested in, thus providing no
-   better performance than mere polling.
+-- "Multi-User Events" (Default Mode) --
+   mode=multi-user
+   Multiple sers are assumed.  This mode works essentially the
+   same way as the multi-user-poll mode, except that (asynchronous) 
+   events are delivered to the local process when remote users 
+   make changes.  This will cause the local GUI display to automatically
+   update when remote users make changes.  (In the current design,
+   there is a 10 second delay between updates).
+
+   This automatic update puts slightly more burden on the local
+   process, on the network, and on the SQL server.  Thus, it won't
+   scale well with lots of users.   We don't know where that limit
+   is; we are guessing its somewhere between 5 and 20 simultaneous 
+   users.  Depends on the power of the DB server, of course.
 
 
 Safety Lockout
 --------------
-There is a safety lockout that prevents a single-user mode database from
-being accessed by another user, and from having a multi-user mode 
-database from being accessed by a single-user-mode client.
+There is a safety lockout that prevents a database that is 
+currently open in single-user mode from being opened by a 
+second user at the same time.  Similarly, a database that
+is currently open in multi-user mode cannot be opened in
+single-user mode.
 
+Note, however, that swithcing modes after all users have
+logged off is perfectly safe:  If all the multi-users
+log off, then the database can be opened in single-user mode
+(and vice-versa).  Logoff happens 'automatically' when 
+a user exits gnucash.
+
+If gnucash dies or is killed, a user might be left logged
+on.  If it dies in multi-user mode, it may seem that many
+users are still logged on; this will prevent the database
+from subsequently being opened in single-user mode.
+
+To force a log-off, you can issue the following command:
+
+echo "UPDATE gncsession SET time_off='NOW' WHERE time_off = 'infinity';" | psql dbname
+
+Just be sure that all users really are logged off when
+you do this.
+
+
+gncSession Table
+----------------
+Shows logon, logoff time, login name and the users 'true name',
+and the FQDN hostname.
 
 Session Design Notes
 --------------------

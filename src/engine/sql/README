@@ -130,17 +130,34 @@ password, *NOT* your unix login name and password.
 
 Access Modes
 ------------
-There are three different ways or 'modes' in which to access your 
+There are four different ways or 'modes' in which to access your 
 database.  These are 
 
 mode=single-file
 mode=single-update
+mode=multi-user-poll
 mode=multi-user
 
-The first two are single-user access modes; single-update is the 
-default mode (and the preferred single-user mode).
+The first two are single-user access modes.  These are the
+'safest' modes to use if you don't need multi-user capability.
+The single-update mode is strongly preffered over single-file.
+(single-file can loose your data if your sql connection dies
+at unexpected times).
 
-The multi-user mode is mostly implemented and might be usable.
+The multi-user modes are intended for use when multiple users
+need to view and make changes to the data.  The default mode
+is multi-user.  
+
+If you have many users (more than a helf-dozen or so), you may 
+want to run in multi-user-poll mode, instead of the default 
+multi-user.  This will stop the automatic updates of the 
+local instance of gnucash, and thus reduce the amount of
+GUI redraws that happen automatically as other users
+edit data.  It should also reduce network traffic
+slightly, and present a slightly lower load on the 
+sql server.  Different users can mix-n-match the
+two multi-user modes. 
+
 See the file 'design.txt' for an in-depth explanation of these 
 modes.
 
@@ -269,19 +286,15 @@ To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
 
-Most of the items on this list are 'critical' in the sense that
-multi-user mode is fundamentally broken unless they are fixed. 
-
--- before going beta: turn down debugging.  
+Most of the items on this list are 'good-to-fix' but are not
+truly critical.  They may result in abberations, but general
+operation is probably OK.
 
 -- if always in multi-mode, then initial checkpoints not set up.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
 
--- we should use LISTEN/NOTIFY to let others know tht things have 
-   changed.  This is of limited utility, but still...
-   It could be used to update the balances in the main window 
-   dynamically.
+-- NOTIFY is not updating main window balances ...
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
