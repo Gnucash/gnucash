@@ -16,6 +16,7 @@
 #include "qofobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "kvp_frame.h"
 
 #include "qofbook.h"
 #include "qofid-p.h"
@@ -42,6 +43,8 @@ struct _gncCustomer {
   gnc_numeric	discount;
   gnc_numeric	credit;
   GncTaxIncluded taxincluded;
+  KvpFrame *kvp_data;
+
   gboolean	active;
   GList *	jobs;
 
@@ -94,6 +97,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
+  cust->kvp_data = kvp_frame_new();
 
   qof_entity_guid_new (qof_book_get_entity_table (book),&cust->guid);
   addObj (cust);
@@ -122,6 +126,7 @@ static void gncCustomerFree (GncCustomer *cust)
   gncAddressDestroy (cust->addr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
+  kvp_frame_delete (cust->kvp_data);
 
   remObj (cust);
 
@@ -418,6 +423,12 @@ GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer)
 {
   if (!customer) return NULL;
   return customer->taxtable;
+}
+
+KvpFrame* gncCustomerGetSlots (GncCustomer *customer)
+{
+  if (!customer) return NULL;
+  return customer->kvp_data;
 }
 
 GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)

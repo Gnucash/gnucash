@@ -16,6 +16,7 @@ typedef struct _gncCustomer GncCustomer;
 #include "gncJob.h"
 
 #include "gnc-numeric.h"
+#include "kvp_frame.h"
 
 #define GNC_CUSTOMER_MODULE_NAME "gncCustomer"
 
@@ -64,6 +65,7 @@ gnc_commodity * gncCustomerGetCurrency (GncCustomer *customer);
 gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer);
 GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 
+KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 
 GUID gncCustomerRetGUID (GncCustomer *customer);
