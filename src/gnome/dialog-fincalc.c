@@ -503,15 +503,16 @@ close_handler (gpointer user_data)
   gnome_dialog_close (GNOME_DIALOG (fcd->dialog));
 }
 
-static void
+static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
 {
   FinCalcDialog *fcd = user_data;
 
   if (!fcd)
-    return;
+    return(FALSE);
   gtk_window_present (GTK_WINDOW(fcd->dialog));
+  return(TRUE);
 }
 
 void

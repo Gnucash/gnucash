@@ -651,6 +651,15 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *invoice_guid = find_data;
+  InvoiceWindow *iw = user_data;
+
+  return(iw && guid_equal(&iw->invoice_guid, invoice_guid));
+}
+
 static InvoiceWindow *
 gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
 			InvoiceDialogType type, GncInvoice *invoice,
@@ -661,7 +670,37 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *iwd;
+  const char * class_name;
 
+  switch (type) {
+   case EDIT_INVOICE:
+    class_name = DIALOG_EDIT_INVOICE_CM_CLASS;
+    break;
+   case VIEW_INVOICE:
+   default:
+    class_name = DIALOG_VIEW_INVOICE_CM_CLASS;
+    break;
+  }
+
+  /*
+   * Find an existing window for this invoice.  If found, bring it to
+   * the front.
+   */
+  if ((invoice) && (type != NEW_INVOICE)) {
+    GUID invoice_guid;
+
+    invoice_guid = *gncInvoiceGetGUID (invoice);
+    iw = gnc_find_first_gui_component (class_name, find_handler,
+				       &invoice_guid);
+    if (iw) {
+      gtk_window_present (GTK_WINDOW(iw->dialog));
+      return(iw);
+    }
+  }
+  
+  /*
+   * No existing invoice window found.  Build a new one.
+   */
   gnc_configure_register_colors ();
 
   iw = g_new0 (InvoiceWindow, 1);
@@ -755,28 +794,13 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   /* Setup initial values */
   iw->invoice_guid = *gncInvoiceGetGUID (invoice);
 
-  {
-    char * class_name = NULL;
+  gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
 
-    switch (type) {
-    case VIEW_INVOICE:
-    default:
-      class_name = DIALOG_VIEW_INVOICE_CM_CLASS;
-      /* FALLTHROUGH */
-    case EDIT_INVOICE:
-      gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
-      
-      if (class_name == NULL)
-	class_name = DIALOG_EDIT_INVOICE_CM_CLASS;
-      break;
-    }
-
-    iw->component_id =
-      gnc_register_gui_component (class_name,
-				  gnc_invoice_window_refresh_handler,
-				  gnc_invoice_window_close_handler,
-				  iw);
-  }
+  iw->component_id =
+    gnc_register_gui_component (class_name,
+				gnc_invoice_window_refresh_handler,
+				gnc_invoice_window_close_handler,
+				iw);
 
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,

@@ -273,6 +273,18 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
         return gnc_ui_sxsincelast_dialog_create();
 }
 
+static gboolean
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  GtkWidget *window = user_data;
+
+  if (!window)
+    return(FALSE);
+  gtk_window_present (GTK_WINDOW(window));
+  return(TRUE);
+}
+
 /**
  * Returns TRUE if the dialogs were created, FALSE if not.  The caller
  * probably wants to use this to inform the user in the manner appropriate to
@@ -284,7 +296,14 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
 gboolean
 gnc_ui_sxsincelast_dialog_create()
 {
-        sxSinceLastData        *sxsld = g_new0( sxSinceLastData, 1 );
+        sxSinceLastData        *sxsld;
+
+	if (gnc_forall_gui_components (DIALOG_SXSINCELAST_CM_CLASS,
+				       show_handler, NULL))
+		return TRUE;
+
+
+	sxsld = g_new0( sxSinceLastData, 1 );
 
         sxsld->toCreateList = sxsld->reminderList = sxsld->toRemoveList = NULL;
         sxsld->sxInitStates = g_hash_table_new( g_direct_hash, g_direct_equal );
@@ -1427,6 +1446,9 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
         DEBUG( "sxsincelast_destroy called\n" );
+	gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
+					      sxsld->sincelast_window );
+
         /* appropriate place to destroy data structures */
         clean_sincelast_data( sxsld );
         gnc_ledger_display_close( sxsld->ac_ledger );

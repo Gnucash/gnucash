@@ -291,6 +291,15 @@ gnc_vendor_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *vendor_guid = find_data;
+  VendorWindow *vw = user_data;
+
+  return(vw && guid_equal(&vw->vendor_guid, vendor_guid));
+}
+
 static VendorWindow *
 gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncVendor *vendor)
@@ -299,6 +308,25 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
   GladeXML *xml;
   GnomeDialog *vwd;
 
+  /*
+   * Find an existing window for this vendor.  If found, bring it to
+   * the front.
+   */
+  if (vendor) {
+    GUID vendor_guid;
+    
+    vendor_guid = *gncVendorGetGUID (vendor);
+    vw = gnc_find_first_gui_component (DIALOG_EDIT_VENDOR_CM_CLASS,
+				       find_handler, &vendor_guid);
+    if (vw) {
+      gtk_window_present (GTK_WINDOW(vw->dialog));
+      return(vw);
+    }
+  }
+  
+  /*
+   * No existing employee window found.  Build a new one.
+   */
   vw = g_new0 (VendorWindow, 1);
 
   vw->book = bookp;

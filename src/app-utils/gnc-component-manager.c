@@ -853,12 +853,6 @@ gnc_find_first_gui_component (const char *component_class,
   if (!component_class)
     return NULL;
 
-  if (!find_handler)
-  {
-    PERR ("no find handler");
-    return NULL;
-  }
-
   list = gnc_find_gui_components (component_class, find_handler, find_data);
   if (!list)
     return NULL;
@@ -912,8 +906,8 @@ gnc_forall_gui_components (const char *component_class,
     if (!ci)
       continue;
 
-    handler (ci->component_class, ci->component_id, ci->user_data, iter_data);
-    count++;
+    if (handler (ci->component_class, ci->component_id, ci->user_data, iter_data))
+      count++;
   }
 
   g_list_free (list);

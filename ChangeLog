@@ -1,3 +1,32 @@
+2002-04-23  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-component-manager.h: Change
+	GNCComponentHandler handler type to return gboolean to indicate
+	success/failure.
+
+	* src/app-utils/gnc-component-manager.c
+	(gnc_find_first_gui_component): Don't need to check for a NULL
+	find_handler argument.  The called gnc_find_gui_components routine
+	will DTRT without it.
+	(gnc_forall_gui_components): Count successful calls to the
+	callback routine, not all calls.
+
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-fincalc.c: 
+	* src/gnome/dialog-price-editor.c:
+	* src/import-export/qif-import/druid-qif-import.c: Show_handler()
+	routine now returns T/F.
+	
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	* src/gnome/dialog-sxsincelast.c: Add new logic for raising
+	windows.
+
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_destroy): Unregister
+	when window destroyed.
+
 2002-04-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sx-from-trans.c (sxftd_advanced_clicked): Since

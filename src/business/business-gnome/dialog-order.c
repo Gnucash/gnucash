@@ -532,6 +532,15 @@ gnc_order_update_window (OrderWindow *ow)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *order_guid = find_data;
+  OrderWindow *ow = user_data;
+
+  return(ow && guid_equal(&ow->order_guid, order_guid));
+}
+
 static OrderWindow *
 gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 		      OrderDialogType type, GncOrder *order, GncOwner *owner)
@@ -541,7 +550,37 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *owd;
+  const char * class_name;
 
+  switch (type) {
+   case EDIT_ORDER:
+    class_name = DIALOG_EDIT_ORDER_CM_CLASS;
+    break;
+   case VIEW_ORDER:
+   default:
+    class_name = DIALOG_VIEW_ORDER_CM_CLASS;
+    break;
+  }
+
+  /*
+   * Find an existing window for this order.  If found, bring it to
+   * the front.
+   */
+  if (order) {
+    GUID order_guid;
+
+    order_guid = *gncOrderGetGUID(order);
+    ow = gnc_find_first_gui_component (class_name, find_handler,
+				       &order_guid);
+    if (ow) {
+      gtk_window_present (GTK_WINDOW(ow->dialog));
+      return(ow);
+    }
+  }
+  
+  /*
+   * No existing order window found.  Build a new one.
+   */
   gnc_configure_register_colors ();
 
   ow = g_new0 (OrderWindow, 1);
@@ -628,28 +667,13 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   /* Setup initial values */
   ow->order_guid = *gncOrderGetGUID (order);
 
-  {
-    char * class_name = NULL;
+  gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
-    switch (type) {
-    case VIEW_ORDER:
-    default:
-      class_name = DIALOG_VIEW_ORDER_CM_CLASS;
-      /* FALLTHROUGH */
-    case EDIT_ORDER:
-      gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
-      
-      if (class_name == NULL)
-	class_name = DIALOG_EDIT_ORDER_CM_CLASS;
-      break;
-    }
-
-    ow->component_id =
-      gnc_register_gui_component (class_name,
-				  gnc_order_window_refresh_handler,
-				  gnc_order_window_close_handler,
-				  ow);
-  }
+  ow->component_id =
+    gnc_register_gui_component (class_name,
+				gnc_order_window_refresh_handler,
+				gnc_order_window_close_handler,
+				ow);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 

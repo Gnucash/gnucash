@@ -94,11 +94,13 @@ typedef gboolean (*GNCComponentFindHandler) (gpointer find_data,
  * component_class: class of component
  * component_id:    id of component
  * iter_data:       user_data supplied by caller
+ *
+ * Return: TRUE if the callback did something
  */
-typedef void (*GNCComponentHandler) (const char *class,
-                                     gint component_id,
-				     gpointer user_data,
-                                     gpointer iter_data);
+typedef gboolean (*GNCComponentHandler) (const char *class,
+					 gint component_id,
+					 gpointer user_data,
+					 gpointer iter_data);
 
 /* gnc_component_manager_init
  *   Initialize the component manager.

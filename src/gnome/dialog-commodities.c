@@ -460,15 +460,16 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_commodities_load_commodities (cd);
 }
 
-static void
+static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
 {
   CommoditiesDialog *cd = user_data;
 
   if (!cd)
-    return;
+    return(FALSE);
   gtk_window_present (GTK_WINDOW(cd->dialog));
+  return(TRUE);
 }
 
 /********************************************************************\

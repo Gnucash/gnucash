@@ -254,6 +254,15 @@ gnc_job_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *job_guid = find_data;
+  JobWindow *jw = user_data;
+
+  return(jw && guid_equal(&jw->job_guid, job_guid));
+}
+
 static JobWindow *
 gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
 		    GncJob *job)
@@ -264,6 +273,25 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
   GnomeDialog *jwd;
   GtkObject *jwo;
 
+  /*
+   * Find an existing window for this job.  If found, bring it to
+   * the front.
+   */
+  if (job) {
+    GUID job_guid;
+
+    job_guid = *gncJobGetGUID (job);
+    jw = gnc_find_first_gui_component (DIALOG_EDIT_JOB_CM_CLASS,
+				       find_handler, &job_guid);
+    if (jw) {
+      gtk_window_present (GTK_WINDOW(jw->dialog));
+      return(jw);
+    }
+  }
+  
+  /*
+   * No existing job window found.  Build a new one.
+   */
   jw = g_new0 (JobWindow, 1);
   jw->book = bookp;
   gncOwnerCopy (owner, &(jw->owner)); /* save it off now, we know it's valid */

@@ -979,14 +979,14 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_prices_load_prices (pdb_dialog);
 }
 
-static void
+static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
 {
   PricesDialog *pdb_dialog = user_data;
 
   if (!pdb_dialog)
-    return;
+    return(FALSE);
 
   gtk_window_present (GTK_WINDOW(pdb_dialog->dialog));
 
@@ -994,6 +994,7 @@ show_handler (const char *class, gint component_id,
   if (pdb_dialog->price_dialog) {
     gtk_window_present (GTK_WINDOW(pdb_dialog->price_dialog));
   }
+  return(TRUE);
 }
 
 /********************************************************************\

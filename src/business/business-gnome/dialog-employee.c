@@ -316,6 +316,15 @@ gnc_employee_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *employee_guid = find_data;
+  EmployeeWindow *ew = user_data;
+
+  return(ew && guid_equal(&ew->employee_guid, employee_guid));
+}
+
 static EmployeeWindow *
 gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncEmployee *employee)
@@ -327,6 +336,25 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
   gnc_commodity *commodity;
   GNCPrintAmountInfo print_info;
 
+  /*
+   * Find an existing window for this employee.  If found, bring it to
+   * the front.
+   */
+  if (employee) {
+    GUID employee_guid;
+    
+    employee_guid = *gncEmployeeGetGUID (employee);
+    ew = gnc_find_first_gui_component (DIALOG_EDIT_EMPLOYEE_CM_CLASS,
+				       find_handler, &employee_guid);
+    if (ew) {
+      gtk_window_present (GTK_WINDOW(ew->dialog));
+      return(ew);
+    }
+  }
+  
+  /*
+   * No existing employee window found.  Build a new one.
+   */
   ew = g_new0 (EmployeeWindow, 1);
 
   ew->book = bookp;

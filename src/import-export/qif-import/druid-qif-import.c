@@ -1679,15 +1679,16 @@ gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w) {
 
 /* ======================================================== */
 
-static void
+static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
 {
   QIFImportWindow *qif_win = user_data;
 
   if (!qif_win)
-    return;
+    return(FALSE);
   gtk_window_present (GTK_WINDOW(qif_win->window));
+  return(TRUE);
 }
 
 void

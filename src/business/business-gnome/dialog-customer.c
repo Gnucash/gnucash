@@ -362,6 +362,15 @@ gnc_customer_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static gboolean
+find_handler (gpointer find_data, gpointer user_data)
+{
+  const GUID *customer_guid = find_data;
+  CustomerWindow *cw = user_data;
+
+  return(cw && guid_equal(&cw->customer_guid, customer_guid));
+}
+
 static CustomerWindow *
 gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncCustomer *cust)
@@ -372,7 +381,26 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   GnomeDialog *cwd;
   gnc_commodity *commodity;
   GNCPrintAmountInfo print_info;
+  
+  /*
+   * Find an existing window for this customer.  If found, bring it to
+   * the front.
+   */
+  if (cust) {
+    GUID customer_guid;
 
+    customer_guid = *gncCustomerGetGUID(cust);
+    cw = gnc_find_first_gui_component (DIALOG_EDIT_CUSTOMER_CM_CLASS,
+				       find_handler, &customer_guid);
+    if (cw) {
+      gtk_window_present (GTK_WINDOW(cw->dialog));
+      return(cw);
+    }
+  }
+  
+  /*
+   * No existing customer window found.  Build a new one.
+   */
   cw = g_new0 (CustomerWindow, 1);
 
   cw->book = bookp;
