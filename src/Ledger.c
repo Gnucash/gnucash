@@ -335,7 +335,9 @@ printf ("load reg of %d entries --------------------------- \n",i);
       split = (Split *) reg->user_hook;
    } else {
       trans = xaccMallocTransaction ();
+      xaccTransBeginEdit (trans);
       xaccTransSetDateToday (trans);
+      xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
       xaccAccountInsertSplit (default_source_acc, split);
       reg->user_hook =  (void *) split;
