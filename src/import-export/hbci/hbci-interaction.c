@@ -71,6 +71,15 @@ void GNCInteractor_hide(GNCInteractor *i)
   gtk_widget_hide_all (i->dialog);
 }
 
+void GNCInteractor_delete(GNCInteractor *data)
+{
+  if (data == NULL)
+    return;
+  if (data->dialog != NULL) 
+    gtk_widget_destroy (data->dialog);
+  data->dialog = NULL;
+}
+
 
 /********************************************************
  * Now all the callback functions 

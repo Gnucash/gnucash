@@ -152,15 +152,19 @@ reset_initial_info (HBCIInitialInfo *info)
   
   if (info->api != NULL) 
     HBCI_API_delete (info->api);
+  info->api = NULL;
   info->newcustomer = NULL;
   info->newbank = NULL;
   
   if (info->configfile != NULL) 
     g_free (info->configfile);
+  info->configfile = NULL;
     
   delete_hash (info->hbci_hash);
+  info->hbci_hash = NULL;
   if (info->gnc_hash != NULL)
     g_hash_table_destroy (info->gnc_hash);
+  info->gnc_hash = NULL;
 }
 
 static void
@@ -463,11 +467,13 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   HBCIInitialInfo *info = user_data;
   g_assert (info);
 
-  if (info->configfile &&
-      (strcmp(info->configfile, 
-	      gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) {
-    /* Name of configfile has changed */
-    gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
+
+  if (info->configfile) {
+    if (!gnc_hbci_get_book_configfile (gnc_get_current_book ()) ||
+	(strcmp(info->configfile, 
+		gnc_hbci_get_book_configfile (gnc_get_current_book ())) != 0)) 
+      /* Name of configfile has changed */
+      gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
   }
   
   {
@@ -901,7 +907,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
 
-    HBCI_Hbci_setDebugLevel(2);
+    HBCI_Hbci_setDebugLevel(0);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -927,7 +933,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
 
-    HBCI_Hbci_setDebugLevel(2);
+    HBCI_Hbci_setDebugLevel(0);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -1061,7 +1067,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
   
-    HBCI_Hbci_setDebugLevel(2);
+    HBCI_Hbci_setDebugLevel(0);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -1196,7 +1202,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
   if (info->gotkeysforCustomer == info->newcustomer) {
     /* Execute a SendKey job. */
     HBCI_OutboxJob *job;
-    /*HBCI_Error *err;*/
+    HBCI_Error *err;
     
     job = HBCI_OutboxJobSendKeys_OutboxJob 
       (HBCI_OutboxJobSendKeys_new (info->api, info->newcustomer));
@@ -1204,9 +1210,15 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
 
     if (info->interactor)
       GNCInteractor_show (info->interactor);
-  
-    HBCI_Hbci_setDebugLevel(2);
-    /*err = HBCI_API_executeQueue (info->api, TRUE);
+    else
+      printf("on_iniletter_userinfo_next: Ooops, GNCInteractor is broken! Crash will follow.\n");
+
+    /*gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
+      "Sorry, Sending Keys not yet implemented/disabled until it works correctly. 
+      Nothing has been sent to the bank.");*/
+
+    HBCI_Hbci_setDebugLevel(0);
+    err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("on_iniletter_userinfo_next: Error at executeQueue: %s",
@@ -1220,11 +1232,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
     HBCI_Error_delete (err);
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);*/
-    gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
-				"Sorry, Sending Keys not yet implemented/disabled until it works correctly. 
-Nothing has been sent to the bank.");
-
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
   }
   else {
     printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");
@@ -1411,8 +1419,9 @@ void gnc_hbci_initial_druid (void)
        "activate", 
        GTK_SIGNAL_FUNC (on_configfile_activate), info);
     /* Set the saved filename, if that is a valid file */
-    info->configfile =
-      g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book () ));
+    if (gnc_hbci_get_book_configfile (gnc_get_current_book ()))
+      info->configfile =
+	g_strdup (gnc_hbci_get_book_configfile (gnc_get_current_book () ));
     if (info->configfile && 
 	g_file_test (info->configfile, 
 		     G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)) 

@@ -1,3 +1,14 @@
+2002-10-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Fix and activate
+	the initialization functions again; therefore, the HBCI subsystem
+	is now open for testing (requires openhbci-CVS as of Oct 03). 
+
+	* src/import-export/hbci/hbci-interaction.[hc]: Close button
+	hides, not destroys.
+
+	* src/import-export/hbci/hbci-account-picker.c: Fix account picker.
+
 2002-10-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/druid-loan.c: The druid now enforces valid account

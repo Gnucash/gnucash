@@ -25,7 +25,6 @@
 
 #include <guile/gh.h>
 
-void gnc_hbci_final_druid (void);
-SCM  scm_hbci_final_druid (void);
+/* Empty file at the moment. */
 
 #endif

@@ -35,24 +35,6 @@
 int debug_pmonitor = FALSE;
 
 
-static void close_dialog (GNCInteractor *data)
-{
-  if (data == NULL)
-    return;
-  if (data->dialog != NULL) 
-    gtk_widget_destroy (data->dialog);
-  data->dialog = NULL;
-}
-
-void delete_GNCInteractor (GNCInteractor *data) 
-{
-  if (data == NULL)
-    return;
-
-  close_dialog(data);
-
-  g_free (data);
-}
 static void GNCInteractor_setRunning (GNCInteractor *data)
 {
   g_assert(data);
@@ -309,7 +291,7 @@ static void destr(void *user_data)
 {
   GNCInteractor *data = user_data;
 
-  delete_GNCInteractor (data);
+  GNCInteractor_delete (data);
 }
 static void
 on_button_clicked (GtkButton *button,
@@ -324,7 +306,7 @@ on_button_clicked (GtkButton *button,
     GNCInteractor_setAborted(data);
   } else if (strcmp (name, "close_button") == 0) {
     if (data->state != RUNNING)
-      close_dialog (data);
+      GNCInteractor_hide (data);
   } else {
     printf("on_button_clicked: Oops, unknown button: %s\n",
 	   name);

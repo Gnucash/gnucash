@@ -43,52 +43,64 @@ struct _accountpickerdialog {
   GHashTable *hash;
 };
 
+static gpointer add_acc_cb (Account *a, gpointer user_data);
+typedef struct 
+{
+  GtkCTree * tree; 
+  GtkCTreeNode * parent;
+  char *acctinfo[2];
+  int *row;
+  HBCIAccountPickerDialog *wind;
+} add_acc_data;
+
 static void
 acct_tree_add_accts(AccountGroup *accts, 
 		    GtkCTree * tree, GtkCTreeNode * parent,
                     char * base_name, int *row, 
-		    HBCIAccountPickerDialog *wind) {
-  char         * acctinfo[2];
-  char         * acctname;
-  char         sep[2] = " ";
-  GtkCTreeNode * node; 
-  gboolean     leafnode;
-  AccountList *current;
-  AccountList *list, *lastlist;
-  AccountGroup *children;
-    
-  sep[0] = gnc_get_account_separator();
-  acctinfo[1] = "";
-  list = xaccGroupGetAccountList (accts);
-  current = g_list_first (list);
-  lastlist = g_list_last (list);
+		    HBCIAccountPickerDialog *wind) 
+{
+  add_acc_data user_data;
   
-  while(current && (current != lastlist)) {
+  user_data.acctinfo[1] = "";
+  user_data.tree = tree;
+  user_data.parent = parent;
+  user_data.row = row;
+  user_data.wind = wind;
 
-    acctname = g_strdup (xaccAccountGetName (current->data));
-    acctinfo[0] = acctname;
-    
-    children = xaccAccountGetChildren (current->data);
-    
-    leafnode = (children) ? FALSE : TRUE;
-    
-    node = gtk_ctree_insert_node(tree, parent, NULL, 
-                                 acctinfo, 2,
-                                 NULL, NULL, NULL, NULL,
-                                 leafnode, TRUE);
-    /* set some row data */ 
-    gtk_ctree_node_set_row_data(tree, node, current->data);
-    g_hash_table_insert (wind->hash, node, current->data);
-    
-    gnc_clist_set_check (GTK_CLIST (tree), (*row)++, 1,
-                         FALSE);
+  /* Let the list traversal be done by the Group's foreach function. */
+  xaccGroupForEachAccount (accts, add_acc_cb, &user_data, FALSE);
+}
 
-    if(!leafnode) {
-      acct_tree_add_accts(children, tree, node, acctname, row, wind);
-    }
+static gpointer add_acc_cb (Account *current, gpointer user_data)
+{
+  char* acctname;
+  GtkCTreeNode * node; 
+  AccountGroup *children;
+  gboolean     leafnode;
+  add_acc_data *data = user_data;
+  g_assert (current);
+  g_assert (data);
+  
+  acctname = g_strdup (xaccAccountGetName (current));
+  data->acctinfo[0] = acctname;
     
-    current = g_list_next (current);
-  }
+  children = xaccAccountGetChildren (current);
+  leafnode = (children) ? FALSE : TRUE;
+    
+  node = gtk_ctree_insert_node(data->tree, data->parent, NULL, 
+			       data->acctinfo, 2,
+			       NULL, NULL, NULL, NULL,
+			       leafnode, TRUE);
+  /* set some row data */ 
+  gtk_ctree_node_set_row_data(data->tree, node, current);
+  g_hash_table_insert (data->wind->hash, node, current);
+  gnc_clist_set_check (GTK_CLIST (data->tree), 
+		       (*(data->row))++, 1, FALSE);
+
+  if(!leafnode) 
+    acct_tree_add_accts(children, data->tree, node, acctname, 
+			data->row, data->wind);
+  return NULL;
 }
 
 static void

@@ -1151,9 +1151,11 @@ retrieval, you need to verify those against the Ini-Letter that
 your bank gave to you on paper.
 
 Press 'Next' now to retrieve the keys from the bank. If you have just
-created a new key file, you have to enter its PIN again. You can 
-then see the progress of the HBCI connection in the HBCI 
-connection window.</label>
+created a new key file, you have to enter its PIN again. 
+
+You can then see the progress of the HBCI connection in the HBCI
+connection window. Please do not close the HBCI connection window
+before this whole druid has finished.</label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -1325,13 +1327,18 @@ connection window.</label>
 	  <name>label8877423</name>
 	  <label>Now you need to send your cryptographic public keys to the bank
 server. Once you press 'Next', you public keys are sent to the 
-bank. Note that you cannot undo this action -- once you sent your
-keys to the bank server, you definitely need to use those keys.
+bank. ATTENTION: This step cannot be undone. Once you have sent 
+your keys to the bank, you cannot generate new ones but instead 
+have to use these for months to come (unless you personally ask 
+your bank to reset them).
 
-NOT YET IMPLEMENTED. Nothing will be sent to the bank for now.
+AGAIN ATTENTION: If you happen to encounter a bug in this unstable
+Gnucash version and/or OpenHBCI, these keys might get broken and you
+might actually have ask your bank to reset them and generate new ones.
 
-Press 'Next' now to send the keys to the bank. You can then see 
-the progress of the HBCI connection in the HBCI connection window.</label>
+If you are really sure to proceed, then press 'Next' now to send 
+the keys to the bank. You can then see the progress of the HBCI 
+connection in the HBCI connection window.</label>
 	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
@@ -2358,7 +2365,7 @@ Press 'Finish' now.</text>
   <class>GnomeDialog</class>
   <name>HBCI_connection_dialog</name>
   <title>HBCI Connection Window</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
+  <type>GTK_WINDOW_DIALOG</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
   <default_width>350</default_width>
