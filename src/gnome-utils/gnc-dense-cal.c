@@ -1415,7 +1415,7 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                          * stop processing. */
                         break;
                 }
-
+		dcal->marks[doc] = g_list_append( dcal->marks[doc], newMark );
                 newMark->ourMarks = g_list_append( newMark->ourMarks,
                                                    GINT_TO_POINTER(doc) );
         }
