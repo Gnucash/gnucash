@@ -112,6 +112,7 @@ char * xaccAccountGetTypeStr (int type); /* GUI names */
    "INCOME". */
 char *   xaccAccountTypeEnumAsString (int type); 
 gboolean xaccAccountStringToType (const char* str, int *type);
+GNCAccountType xaccAccountStringToEnum (const char* str);
 
 gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
 

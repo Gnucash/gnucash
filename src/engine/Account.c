@@ -1453,6 +1453,17 @@ xaccAccountStringToType(const char* str, int *type) {
 
 #undef GNC_RETURN_ON_MATCH
 
+/* impedance mismatch is a source of loss */
+GNCAccountType
+xaccAccountStringToEnum(const char* str) 
+{
+  int type;
+  gboolean rc;
+  rc = xaccAccountStringToType(str, &type);
+  if (FALSE == rc) return BAD_TYPE;
+  return ((GNCAccountType) type);
+}
+
 /********************************************************************\
 \********************************************************************/
 
