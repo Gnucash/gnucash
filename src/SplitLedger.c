@@ -2572,9 +2572,6 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
 
   gnc_suspend_gui_refresh ();
 
-  /* make a copy of all of the accounts that will be  
-   * affected by this deletion, so that we can update
-   * their register windows after the deletion. */
   trans = xaccSplitGetParent (split);
 
   splits = g_list_copy (xaccTransGetSplitList (trans));

@@ -2753,6 +2753,30 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 
+static gboolean
+trans_has_reconciled_splits (Transaction *trans)
+{
+  GList *node;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    switch (xaccSplitGetReconcile (split))
+    {
+      case YREC:
+      case FREC:
+        return TRUE;
+
+      default:
+        break;
+    }
+  }
+
+  return FALSE;
+}
+
+
 /********************************************************************\
  * gnc_transaction_delete_query                                     *
  *   creates and displays a dialog which asks the user wheter they  *
@@ -2763,7 +2787,7 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
  * Returns: DeleteType choice indicator                             *
  \*******************************************************************/
 static DeleteType
-gnc_transaction_delete_query(GtkWindow *parent)
+gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
 {
   GtkWidget *dialog;
   GtkWidget *dvbox;
@@ -2775,16 +2799,26 @@ gnc_transaction_delete_query(GtkWindow *parent)
   GSList    *group;
   gint       pos = 0;
   gint       result;
+  gboolean   reconciled;
 
   const char *usual = _("This selection will delete the whole "
                         "transaction. This is what you usually want.");
-  const char *warn  = _("Warning: Just deleting all the splits will "
+  const char *usual_recn = _("This selection will delete the whole "
+                             "transaction.\n\n"
+                             "You would be deleting a transaction "
+                             "with reconciled splits!");
+  const char *warn  = _("Warning: Just deleting all the other splits will "
                         "make your account unbalanced. You probably "
                         "shouldn't do this unless you're going to "
                         "immediately add another split to bring the "
                         "transaction back into balance.");
+  const char *warn_recn = _("You would be deleting reconciled splits!");
+  const char *cbuf;
+  char *buf;
 
   DeleteType return_value;
+
+  reconciled = trans_has_reconciled_splits (trans);
 
   dialog = gnome_dialog_new(_("Delete Transaction"),
                             GNOME_STOCK_BUTTON_OK,
@@ -2814,21 +2848,27 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   gtk_signal_connect(GTK_OBJECT(trans_button), "toggled",
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
-                     (gpointer) usual);
+                     (gpointer) reconciled ? usual_recn : usual);
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
-  splits_button = gtk_radio_button_new_with_label(group,
-                                                  _("Delete all the splits"));
+  splits_button =
+    gtk_radio_button_new_with_label(group, _("Delete all the other splits"));
   gtk_object_set_user_data(GTK_OBJECT(splits_button), text);
   gtk_box_pack_start(GTK_BOX(vbox), splits_button, TRUE, TRUE, 0);
 
+  if (reconciled)
+    buf = g_strconcat (warn, "\n\n", warn_recn, NULL);
+  else
+    buf = g_strdup (warn);
+
   gtk_signal_connect(GTK_OBJECT(splits_button), "toggled",
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
-                     (gpointer) warn);
+                     (gpointer) buf);
 
   gtk_box_pack_start(GTK_BOX(dvbox), frame, TRUE, TRUE, 0);
 
-  gtk_editable_insert_text(GTK_EDITABLE(text), usual, strlen(warn), &pos);
+  cbuf = reconciled ? usual_recn : usual;
+  gtk_editable_insert_text(GTK_EDITABLE(text), cbuf, strlen(cbuf), &pos);
   gtk_text_set_line_wrap(GTK_TEXT(text), TRUE);
   gtk_text_set_word_wrap(GTK_TEXT(text), TRUE);
   gtk_text_set_editable(GTK_TEXT(text), FALSE);
@@ -2837,6 +2877,8 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gtk_widget_show_all(dvbox);
 
   result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+
+  g_free (buf);
 
   if (result != 0)
     return_value = DELETE_CANCEL;
@@ -2905,8 +2947,10 @@ deleteCB(GtkWidget *widget, gpointer data)
   {
     const char *format = _("Are you sure you want to delete\n   %s\n"
                            "from the transaction\n   %s ?");
+    const char *recn_warn = _("You would be deleting a reconciled split!");
     const char *memo;
     const char *desc;
+    char recn;
 
     memo = xaccSplitGetMemo (split);
     memo = (memo && *memo) ? memo : _("(no memo)");
@@ -2916,6 +2960,16 @@ deleteCB(GtkWidget *widget, gpointer data)
 
     /* ask for user confirmation before performing permanent damage */
     buf = g_strdup_printf (format, memo, desc);
+
+    recn = xaccSplitGetReconcile (split);
+    if (recn == YREC || recn == FREC)
+    {
+      char *new_buf;
+
+      new_buf = g_strconcat (buf, "\n\n", recn_warn, NULL);
+      g_free (buf);
+      buf = new_buf;
+    }
 
     result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
 
@@ -2936,8 +2990,18 @@ deleteCB(GtkWidget *widget, gpointer data)
   {
     const char *message = _("Are you sure you want to delete the current "
                             "transaction?");
+    const char *recn_warn = _("You would be deleting a transaction "
+                              "with reconciled splits!");
+    char *buf;
 
-    result = gnc_verify_dialog_parented(regData->window, message, FALSE);
+    if (trans_has_reconciled_splits (trans))
+      buf = g_strconcat (message, "\n\n", recn_warn, NULL);
+    else
+      buf = g_strdup (message);
+
+    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
+
+    g_free (buf);
 
     if (!result)
       return;
@@ -2953,7 +3017,8 @@ deleteCB(GtkWidget *widget, gpointer data)
   {
     DeleteType del_type;
 
-    del_type = gnc_transaction_delete_query(GTK_WINDOW(regData->window));
+    del_type = gnc_transaction_delete_query (GTK_WINDOW(regData->window),
+                                             trans);
 
     if (del_type == DELETE_CANCEL)
       return;

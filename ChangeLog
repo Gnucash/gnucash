@@ -1,3 +1,8 @@
+2001-04-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-register.c: add additional warnings when
+	deleting reconciled splits/transactions
+
 2001-04-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/guile/gnc.gwp: g-wrap all the euro-related functions.
