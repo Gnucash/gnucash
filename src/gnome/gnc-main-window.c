@@ -255,7 +255,7 @@ static EggToggleActionEntry toggle_entries [] =
 	  G_CALLBACK (gnc_main_window_cmd_view_summary), TRUE },
 	{ "ViewStatusbarAction", NULL, N_("_Status Bar"), NULL,
 	  N_("Show/hide the status bar on this window"),
-	  G_CALLBACK (gnc_main_window_cmd_view_statusbar),  },
+	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
@@ -480,6 +480,13 @@ gnc_main_window_close_page (GncMainWindow *window,
 
 	gnc_plugin_page_destroy_widget (page);
 	g_object_unref(page);
+
+	/* If this isn't the last window, go ahead and destroy it. */
+	if (window->priv->installed_pages == NULL) {
+		if (g_list_length(active_windows) > 1) {
+			gtk_widget_destroy(GTK_WIDGET(window));
+		}
+	}
 }
 
 GncPluginPage *
@@ -871,28 +878,49 @@ gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
 	GncMainWindow *new_window;
-	const gchar *name, *uri;
-	GncPlugin *plugin;
 	GncPluginPage *page;
+	GtkNotebook *notebook;
+	GtkWidget *tab_widget;
+	gint page_num;
 
-	/* FIXME GNOME 2 Port (Open the correct view in the new window) */
+	/* Setup */
+	priv = window->priv;
+	if (priv->current_page == NULL)
+		return;
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	page = priv->current_page;
+	tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
 
+	/* Remove the page from its old window, but hang onto a ref */
+	g_object_ref(page);
+	g_object_ref(tab_widget);
+	g_object_ref(page->notebook_page);
+	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
+	gtk_notebook_remove_page (notebook, page_num);
+	priv->installed_pages = g_list_remove (priv->installed_pages, page);
+	gnc_plugin_page_removed (page);
+	egg_menu_merge_ensure_update (window->ui_merge);
+	gnc_window_set_status (GNC_WINDOW(window), page, NULL);
+
+	/* Create the new window */
 	new_window = gnc_main_window_new ();
+	gtk_widget_show(GTK_WIDGET(new_window));
+	priv = new_window->priv;
+	notebook = GTK_NOTEBOOK (priv->notebook);
 
-	if (window->priv->current_page != NULL) {
-		name = gnc_plugin_page_get_name(window->priv->current_page);
-		uri = window->priv->current_page->uri;
-		plugin = gnc_plugin_manager_get_plugin (gnc_plugin_manager_get (), name);
-		page = gnc_plugin_create_page (plugin, uri);
+	/* Now add it to the new window */
+	page->window = GTK_WIDGET(new_window);
+	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
+	g_object_unref(tab_widget);
+	g_object_unref(page->notebook_page);
+	gnc_plugin_page_inserted (page);
+	gtk_notebook_set_current_page (notebook, -1);
+	priv->installed_pages = g_list_append (priv->installed_pages, page);
+	g_signal_emit (new_window, main_window_signals[PAGE_ADDED], 0, page);
 
-		if (page != NULL) {
-			gnc_main_window_open_page (new_window, page);
-			gnc_main_window_close_page (window, window->priv->current_page);
-		}
-	}
-
-	gtk_widget_show (GTK_WIDGET (new_window));
+	g_object_unref(page);
 }
 
 static void
