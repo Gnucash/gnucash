@@ -1029,6 +1029,9 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   const char *message;
   
   /* Make sure we NEED this for this type of register */
+  if (!gnc_split_reg_has_rate_cell (reg->type))
+    return FALSE;
+
   rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
   if (!rate_cell)
     return FALSE;
@@ -1099,8 +1102,8 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    * transaction in order to edit it.
    */
   if (!expanded && osplit &&
-      gnc_split_register_split_needs_amount (split) &&
-      gnc_split_register_split_needs_amount (osplit)) {
+      gnc_split_register_split_needs_amount (reg, split) &&
+      gnc_split_register_split_needs_amount (reg, osplit)) {
     gnc_error_dialog (message);
     return TRUE;
   }

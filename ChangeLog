@@ -32,7 +32,13 @@
 	* src/gnome/dialog-find-transactions.c: search on NOTES
 	  add code to prevent searching on template-txn accounts so SXes don't
 	  show up in find results.
-	  
+
+	* src/register/ledger-core/*: gnc_table_layout_get_cell() doesn't
+	  look at the current cursor, so the multi-currency code was acting
+	  all the time, instead of only in registers that needed to be corrected.
+	  Fix the code to only apply the multi-currency changes to the correct
+	  register types (e.g., NOT stock registers).  Fixes 102549.
+	
 2003-01-03  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-hierarchy.c:

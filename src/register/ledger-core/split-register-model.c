@@ -919,7 +919,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
   txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
 
   if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
-      !gnc_split_register_needs_conv_rate (txn, xaccSplitGetAccount (split)))
+      !gnc_split_register_needs_conv_rate (reg, txn, xaccSplitGetAccount (split)))
   {
     split = osplit;
   }
@@ -1298,14 +1298,45 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
 }
 
+/* return TRUE if we have a RATE_CELL; return FALSE if we do not.
+ * (note: should match split-register-layout.c)
+ */
+gboolean
+gnc_split_reg_has_rate_cell (SplitRegisterType type)
+{
+  switch (type)
+  {
+  case BANK_REGISTER:
+  case CASH_REGISTER:
+  case ASSET_REGISTER:
+  case CREDIT_REGISTER:
+  case LIABILITY_REGISTER:
+  case INCOME_REGISTER:
+  case EXPENSE_REGISTER:
+  case EQUITY_REGISTER:
+  case GENERAL_LEDGER:
+  case INCOME_LEDGER:
+  case PORTFOLIO_LEDGER:
+    return TRUE;
+
+  default:
+    return FALSE;
+  }
+}
+
 /* returns TRUE if you need to convert the split's value to the local
  * (account) display currency.  Returns FALSE if you can just use the
  * split->value directly.
  */
 gboolean
-gnc_split_register_needs_conv_rate (Transaction *txn, Account *acc)
+gnc_split_register_needs_conv_rate (SplitRegister *reg,
+				    Transaction *txn, Account *acc)
 {
   gnc_commodity *txn_cur, *acc_com;
+
+  /* If there is not a RATE_CELL, then don't do anything */
+  if (!gnc_split_reg_has_rate_cell (reg->type))
+    return FALSE;
 
   /* if txn->currency == acc->commodity, then return FALSE */
   acc_com = xaccAccountGetCommodity (acc);
@@ -1448,7 +1479,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     imbalance = gnc_numeric_abs (imbalance);
 
     acc = gnc_split_register_get_default_account (reg);
-    if (gnc_split_register_needs_conv_rate (trans, acc)) {
+    if (gnc_split_register_needs_conv_rate (reg, trans, acc)) {
       imbalance = gnc_numeric_mul (imbalance,
 				   gnc_split_register_get_conv_rate (trans, acc),
 				   gnc_commodity_get_fraction (currency),

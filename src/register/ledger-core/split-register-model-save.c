@@ -371,12 +371,12 @@ gnc_split_register_get_rate_cell (SplitRegister *reg, const char *cell_name)
 }
 
 gboolean
-gnc_split_register_split_needs_amount (Split *split)
+gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split)
 {
   Transaction *txn = xaccSplitGetParent (split);
   Account *acc = xaccSplitGetAccount (split);
 
-  return gnc_split_register_needs_conv_rate (txn, acc);
+  return gnc_split_register_needs_conv_rate (reg, txn, acc);
 }
 
 static void
@@ -417,7 +417,7 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
    * currency but we need to convert to the txn currency.
    */
   acc = gnc_split_register_get_default_account (reg);
-  if (gnc_split_register_needs_conv_rate (sd->trans, acc)) {
+  if (gnc_split_register_needs_conv_rate (reg, sd->trans, acc)) {
     gnc_commodity *curr, *reg_com, *xfer_com;
     Account *xfer_acc;
 
@@ -449,7 +449,7 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
    */
   value = xaccSplitGetValue (sd->split);
 
-  if (gnc_split_register_split_needs_amount (sd->split)) {
+  if (gnc_split_register_split_needs_amount (reg, sd->split)) {
     acc = xaccSplitGetAccount (sd->split);
     new_amount = gnc_numeric_mul (value, convrate,
 				  xaccAccountGetCommoditySCU (acc),
@@ -500,7 +500,7 @@ gnc_split_register_save_cells (gpointer save_data,
     Account *acc;
     gboolean split_needs_amount;
 
-    split_needs_amount = gnc_split_register_split_needs_amount (sd->split);
+    split_needs_amount = gnc_split_register_split_needs_amount (reg, sd->split);
 
     /* We are changing the rate on the current split, but it was not
      * handled in the debcred handler, so we need to do it here.
@@ -518,7 +518,7 @@ gnc_split_register_save_cells (gpointer save_data,
     /* Now reverse the value for the other split */
     value = gnc_numeric_neg (value);
 
-    if (gnc_split_register_split_needs_amount (other_split))
+    if (gnc_split_register_split_needs_amount (reg, other_split))
     {
       acc = xaccSplitGetAccount (other_split);
 
@@ -541,7 +541,7 @@ gnc_split_register_save_cells (gpointer save_data,
 
     xaccSplitScrub (other_split);
   }
-  else if (gnc_split_register_split_needs_amount (sd->split) &&
+  else if (gnc_split_register_split_needs_amount (reg, sd->split) &&
 	   ! gnc_numeric_zero_p (rate))
   {
     /* this is either a multi-split or expanded transaction, so only

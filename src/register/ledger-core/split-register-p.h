@@ -165,8 +165,9 @@ gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
 /* Determine if we need to perform any conversion on the splits in this
  * transaction, and if so, what conversion we need
  */
-gboolean gnc_split_register_split_needs_amount (Split *split);
-gboolean gnc_split_register_needs_conv_rate (Transaction *txn, Account *acc);
+gboolean gnc_split_reg_has_rate_cell (SplitRegisterType type);
+gboolean gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split);
+gboolean gnc_split_register_needs_conv_rate (SplitRegister *reg, Transaction *txn, Account *acc);
 gnc_numeric gnc_split_register_get_conv_rate (Transaction *txn, Account *acc);
 
 #endif
