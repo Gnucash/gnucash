@@ -26,6 +26,7 @@
 
 #include <gnome.h>
 
+#include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
 #include "gnc-component-manager.h"

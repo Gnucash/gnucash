@@ -53,17 +53,18 @@
 #include <gnome.h>
 #include <glib.h>
 
-#include "date.h"
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "Scrub.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 #include "dialog-utils.h"
 #include "finvar.h"
 #include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "gnc-date.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"

@@ -27,14 +27,15 @@
 #include <locale.h>
 #include <time.h>
 
-#include "date.h"
 #include "FreqSpec.h"
 #include "SchedXaction.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
 #include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
 #include "gnc-engine-util.h"

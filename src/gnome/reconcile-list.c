@@ -26,7 +26,7 @@
 
 #include <gnome.h>
 
-#include "date.h"
+#include "gnc-date.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-ui-util.h"

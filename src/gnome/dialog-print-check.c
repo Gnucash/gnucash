@@ -29,7 +29,7 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 
-#include "date.h"
+#include "gnc-date.h"
 #include "messages.h"
 #include "gnc-numeric.h"
 #include "window-register.h"
