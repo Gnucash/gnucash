@@ -35,7 +35,7 @@
 #include <guile/gh.h>
 #include <gmodule.h>
 
-#include "libofx/libofx.h"
+#include <libofx/libofx.h>
 #include "import-account-matcher.h"
 #include "import-commodity-matcher.h"
 #include "import-utilities.h"
