@@ -43,6 +43,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+
 #include "gnc-numeric.h"
 #include "gnc-commodity.h"
 #include "kvp_frame.h"
@@ -158,8 +159,7 @@ struct _account {
 void         xaccAccountRemoveSplit (Account *, Split *);
 
 /* the following recompute the partial balances (stored with the
- * transaction)
- * and the total balance, for this account */
+ * transaction) and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
 

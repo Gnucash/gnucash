@@ -254,7 +254,7 @@ gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
   if (account == NULL)
     return gnc_default_print_info (use_symbol);
 
-  info.commodity = xaccAccountGetSecurity (account);
+  info.commodity = xaccAccountGetEffectiveSecurity (account);
 
   is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
                          GNC_COMMODITY_NS_ISO) == 0);

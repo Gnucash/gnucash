@@ -184,7 +184,7 @@ gnc_ui_to_account(AccountWindow *aw)
         !gnc_commodity_equiv(commodity, xaccAccountGetSecurity(aw->account)))
       xaccAccountSetSecurity (aw->account, commodity);
 
-    if((STOCK == aw->type) || (MUTUAL == aw->type))
+    if ((STOCK == aw->type) || (MUTUAL == aw->type))
     {
       gint code;
 

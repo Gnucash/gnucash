@@ -67,7 +67,7 @@ int force_double_entry = 0;
 #define BEING_DESTROYED 0x4
 
 /* arbitrary price per share increment FIXME */
-#define PRICE_DENOM 100000
+#define PRICE_DENOM 1000000
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -333,7 +333,7 @@ xaccCountSplits (Split **tarray)
 static int
 get_currency_denom(Split * s) {  
   if(!s) return 0;
-  
+
   else if(!(s->acc)) {
     return 100000;
   }
@@ -360,7 +360,7 @@ void
 DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
   xaccSplitSetSharePriceAndAmount
-    (s, 
+    (s,
      double_to_gnc_numeric(price, PRICE_DENOM, GNC_RND_ROUND),
      double_to_gnc_numeric(amt, get_security_denom(s), GNC_RND_ROUND));
 }
@@ -786,60 +786,65 @@ void
 xaccSplitSetBaseValue (Split *s, gnc_numeric value, 
                        const gnc_commodity * base_currency)
 {
-   if (!s) return;
+  const gnc_commodity *currency;
+  const gnc_commodity *security;
 
-   MARK_SPLIT(s);
-   
-   /* Novice/casual users may not want or use the double entry 
-    * features of this engine. So, in particular, there
-    * may be the occasional split without a parent account. 
-    * Well, that's ok, we'll just go with the flow. 
-    */
-   if (!(s->acc)) {
-     if (force_double_entry) {
-       PERR ("split must have a parent\n");
-       assert (s->acc);
-     } 
-     else { 
-       /* this is a change in semantics.  previously, calling 
-        * setbasevalue on the same split twice would set the 
-        * amount the first time and the value the second.  
-        * that's bogus. -- bg */
-       s->value = value;
-       s->damount = value;
-     }
-     return;
-   }
-   
-   /* if the base_currency is the account currency, set the 
-    * value.  If it's the account security, set the damount. 
-    * If both, set both. */
-   if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-     if(gnc_commodity_equiv(s->acc->security, base_currency)) {
-       s->damount = gnc_numeric_convert(value,
-                                        get_security_denom(s), 
-                                        GNC_RND_NEVER);
-     }
-     s->value = gnc_numeric_convert(value, 
-                                    get_currency_denom(s),
-                                    GNC_RND_NEVER);
-   } 
-   else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-     s->damount = gnc_numeric_convert(value, get_security_denom(s),
-                                      GNC_RND_NEVER);
-   } 
-   else if ((0x0==base_currency) && (0 == force_double_entry)) { 
-     s->value = gnc_numeric_convert(value, get_currency_denom(s),
-                                    GNC_RND_NEVER);
-   }
-   else {
-     PERR ("inappropriate base currency %s "
-           "given split currency=%s and security=%s\n",
-           gnc_commodity_get_printname(base_currency), 
-           gnc_commodity_get_printname(s->acc->currency), 
-           gnc_commodity_get_printname(s->acc->security));
-     return;
-   }
+  if (!s) return;
+
+  MARK_SPLIT(s);
+
+  /* Novice/casual users may not want or use the double entry
+   * features of this engine. So, in particular, there may be the
+   * occasional split without a parent account. Well, that's ok,
+   * we'll just go with the flow. */
+  if (!(s->acc)) {
+    if (force_double_entry) {
+      PERR ("split must have a parent\n");
+      assert (s->acc);
+    } 
+    else { 
+      /* this is a change in semantics.  previously, calling 
+       * setbasevalue on the same split twice would set the 
+       * amount the first time and the value the second.  
+       * that's bogus. -- bg */
+      s->value = value;
+      s->damount = value;
+    }
+    return;
+  }
+
+  currency = xaccAccountGetCurrency (s->acc);
+  security = xaccAccountGetSecurity (s->acc);
+
+  /* if the base_currency is the account currency, set the 
+   * value.  If it's the account security, set the damount. 
+   * If both, set both. */
+  if (gnc_commodity_equiv(currency, base_currency)) {
+    if(gnc_commodity_equiv(security, base_currency)) {
+      s->damount = gnc_numeric_convert(value,
+                                       get_security_denom(s), 
+                                       GNC_RND_NEVER);
+    }
+    s->value = gnc_numeric_convert(value, 
+                                   get_currency_denom(s),
+                                   GNC_RND_NEVER);
+  }
+  else if (gnc_commodity_equiv(security, base_currency)) {
+    s->damount = gnc_numeric_convert(value, get_security_denom(s),
+                                     GNC_RND_NEVER);
+  }
+  else if ((NULL==base_currency) && (0 == force_double_entry)) { 
+    s->value = gnc_numeric_convert(value, get_currency_denom(s),
+                                   GNC_RND_NEVER);
+  }
+  else {
+    PERR ("inappropriate base currency %s "
+          "given split currency=%s and security=%s\n",
+          gnc_commodity_get_printname(base_currency), 
+          gnc_commodity_get_printname(currency), 
+          gnc_commodity_get_printname(security));
+    return;
+  }
 }
 
 
@@ -851,8 +856,12 @@ DxaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 
 
 gnc_numeric
-xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency) {
+xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
+{
+  const gnc_commodity *currency;
+  const gnc_commodity *security;
   gnc_numeric value;
+
   if (!s) return gnc_numeric_zero();
   
   /* ahh -- users may not want or use the double entry 
@@ -868,27 +877,30 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency) {
       return s->value;
     }
   }
-  
-  /* be more precise -- the value depends on the currency 
-   * we want it expressed in.
-   */
-  if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
+
+  currency = xaccAccountGetCurrency (s->acc);
+  security = xaccAccountGetSecurity (s->acc);
+
+  /* be more precise -- the value depends on the currency we want it
+   * expressed in.  */
+  if (gnc_commodity_equiv(currency, base_currency)) {
     value = s->value;
-  } 
-  else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+  }
+  else if (gnc_commodity_equiv(security, base_currency)) {
     value = s->damount;   
-  } 
-  else if ((NULL==base_currency) && (0 == force_double_entry)) {
+  }
+  else if ((NULL == base_currency) && (0 == force_double_entry)) {
     value = s->value;
-  } 
+  }
   else {
     PERR ("inappropriate base currency %s "
           "given split currency=%s and security=%s\n",
           gnc_commodity_get_printname(base_currency), 
-          gnc_commodity_get_printname(s->acc->currency), 
-          gnc_commodity_get_printname(s->acc->security));
+          gnc_commodity_get_printname(currency), 
+          gnc_commodity_get_printname(security));
     return gnc_numeric_zero();
   }
+
   return value;
 }
 
@@ -911,11 +923,10 @@ ComputeValue (GList *splits, Split * skip_me,
     if (s == skip_me)
       continue;
 
-    /* ahh -- users may not want or use the double entry 
-     * features of this engine.  So, in particular, there
-     * may be the occasional split without a parent account. 
-     * Well, that's ok, we'll just go with the flow. 
-     */
+    /* ahh -- users may not want or use the double entry features of
+     * this engine. So, in particular, there may be the occasional
+     * split without a parent account. Well, that's ok, we'll just
+     * go with the flow. */
     if (!(s->acc)) {
       if (force_double_entry) {
         assert (s->acc);
@@ -925,27 +936,32 @@ ComputeValue (GList *splits, Split * skip_me,
                                 GNC_DENOM_REDUCE);
       }
     } 
-    else if ((0x0 == base_currency) && (0 == force_double_entry)) {
+    else if ((NULL == base_currency) && (0 == force_double_entry)) {
       value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
                               GNC_DENOM_REDUCE);
     } 
-    else {         
-      /* OK, we've got a parent account, we've got currency, 
-       * lets behave like professionals now, instead of the
-       * shenanigans above.
-       */
-      if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
+    else {
+      const gnc_commodity *currency;
+      const gnc_commodity *security;
+
+      currency = xaccAccountGetCurrency (s->acc);
+      security = xaccAccountGetSecurity (s->acc);
+
+      /* OK, we've got a parent account, we've got currency, lets
+       * behave like professionals now, instead of the shenanigans
+       * above. */
+      if (gnc_commodity_equiv(currency, base_currency)) {
         value = gnc_numeric_add_fixed(value, s->value);
       } 
-      else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-        value  = gnc_numeric_add_fixed(value, s->damount);
+      else if (gnc_commodity_equiv(security, base_currency)) {
+        value = gnc_numeric_add_fixed(value, s->damount);
       } 
       else {
         PERR ("inconsistent currencies\n");      
         printf("base = '%s', curr='%s', sec='%s'\n",
                gnc_commodity_get_printname(base_currency),
-               gnc_commodity_get_printname(s->acc->currency),
-               gnc_commodity_get_printname(s->acc->security));
+               gnc_commodity_get_printname(currency),
+               gnc_commodity_get_printname(security));
         assert (0);
       }
     }
@@ -1064,8 +1080,8 @@ FindCommonExclSCurrency (GList *splits, const gnc_commodity * ra,
     else if (s->acc == NULL)
       continue;
 
-    sa = s->acc->currency;
-    sb = s->acc->security;
+    sa = xaccAccountGetCurrency (s->acc);
+    sb = xaccAccountGetSecurity (s->acc);
 
     if (ra && rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1121,8 +1137,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
 
   if (split->acc == NULL) return NULL;
 
-  ra = split->acc->currency;
-  rb = split->acc->security;
+  ra = xaccAccountGetCurrency (split->acc);
+  rb = xaccAccountGetSecurity (split->acc);
 
   return FindCommonCurrency (trans->splits, ra, rb);
 }
@@ -1186,9 +1202,9 @@ xaccSplitRebalance (Split *split)
     assert (trans->splits->data);
 
     /* lets find out if we are dealing with multiple currencies,
-     * and which one(s) all of the splits have in common.  */
-    ra = split->acc->currency;
-    rb = split->acc->security;
+     * and which one(s) all of the splits have in common. */
+    ra = xaccAccountGetCurrency (split->acc);
+    rb = xaccAccountGetSecurity (split->acc);
     base_currency = FindCommonCurrency (trans->splits, ra, rb);
 
     if (!base_currency) {
@@ -1200,8 +1216,8 @@ xaccSplitRebalance (Split *split)
         if (s->acc) {
           PERR ("\taccount=%s currency=%s security=%s\n",
                 s->acc->accountName, 
-                gnc_commodity_get_printname(s->acc->currency), 
-                gnc_commodity_get_printname(s->acc->security));
+                gnc_commodity_get_printname(xaccAccountGetCurrency (s->acc)), 
+                gnc_commodity_get_printname(xaccAccountGetSecurity (s->acc)));
         } else {
           PERR ("\t*** No parent account *** \n");
         }

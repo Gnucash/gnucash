@@ -68,7 +68,7 @@ xaccInitAccount (Account * acc) {
   acc->share_cleared_balance = gnc_numeric_zero();
   acc->share_reconciled_balance = gnc_numeric_zero();
 
-  acc->type  = -1;
+  acc->type = NO_TYPE;
 
   acc->accountName = g_strdup("");
   acc->accountCode = g_strdup("");
@@ -168,7 +168,7 @@ xaccFreeAccount( Account *acc )
   acc->share_cleared_balance = gnc_numeric_zero();
   acc->share_reconciled_balance = gnc_numeric_zero();
 
-  acc->type  = -1;
+  acc->type = NO_TYPE;
 
   acc->accountName = NULL;
   acc->description = NULL;
@@ -450,11 +450,11 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
     split->damount = gnc_numeric_convert(split->damount, 
                                          xaccAccountGetSecuritySCU(acc),
                                          GNC_RND_ROUND);
-    
+
     split->value   = gnc_numeric_convert(split->value, 
                                          xaccAccountGetCurrencySCU(acc),
                                          GNC_RND_ROUND);
-    
+
     /* if this split belongs to another account, remove it from there
      * first.  We don't want to ever leave the system in an inconsistent
      * state.  Note that it might belong to the current account if we're
@@ -910,16 +910,18 @@ xaccAccountSetNotes (Account *acc, const char *str) {
 static void
 update_split_currency(Account * acc) {
   GList *lp;
-  
+
   if(!acc) return;
-  
+
   /* iterate over splits */
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *s = (Split *) lp->data;
-    s->value  = gnc_numeric_convert(s->value, acc->currency_scu, 
-				    GNC_RND_ROUND);
-    s->damount = gnc_numeric_convert(s->damount, acc->security_scu, 
-				     GNC_RND_ROUND);    
+    s->value = gnc_numeric_convert(s->value,
+                                   xaccAccountGetCurrencySCU(acc),
+                                   GNC_RND_ROUND);
+    s->damount = gnc_numeric_convert(s->damount,
+                                     xaccAccountGetSecuritySCU(acc),
+				     GNC_RND_ROUND);
   }
 }
 
@@ -950,11 +952,11 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
   xaccAccountBeginEdit(acc);
   {
     CHECK (acc);
-    
+
     acc->security     = security;
     acc->security_scu = gnc_commodity_get_fraction(security);    
     update_split_currency(acc);
-    
+
     acc->sort_dirty = TRUE;
     acc->balance_dirty = TRUE;
   }
@@ -983,6 +985,10 @@ xaccAccountGetCurrencySCU (Account * acc) {
 int
 xaccAccountGetSecuritySCU (Account * acc) {
   if (!acc) return 0;
+
+  if (acc->security == NULL)
+    return acc->currency_scu;
+
   return acc->security_scu;
 }
 
@@ -1102,21 +1108,33 @@ xaccAccountGetNotes (Account *acc) {
   if (!acc) return NULL;
   v = kvp_frame_get_slot(xaccAccountGetSlots(acc), "notes");
   if(v) return(kvp_value_get_string(v));
-   return(NULL);
+  return(NULL);
 }
 
 const gnc_commodity * 
 xaccAccountGetCurrency (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->currency);
+  if (!acc) return NULL;
+  return (acc->currency);
 }
 
 const gnc_commodity * 
-xaccAccountGetSecurity (Account *acc)
+xaccAccountGetEffectiveSecurity (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->security);
+  if (!acc) return NULL;
+
+  if (acc->security == NULL)
+    return acc->currency;
+
+  return (acc->security);
+}
+
+const gnc_commodity *
+xaccAccountGetSecurity (Account *account)
+{
+  if (!account) return NULL;
+
+  return account->security;
 }
 
 double

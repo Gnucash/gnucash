@@ -719,7 +719,7 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
     if(!xml_add_kvp_frame(acct_xml, "slots", a->kvp_data, FALSE))
       return(FALSE);
   }
-  
+
   {
     Account *parent = xaccAccountGetParentAccount(a);
     if(parent) {
@@ -729,6 +729,7 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
         return(FALSE);
     }
   }
+
   {
     AccountGroup *g = xaccAccountGetChildren(a);
     if(g) {

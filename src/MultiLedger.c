@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include "Account.h"
-#include "AccountP.h"
 #include "Group.h"
 #include "MultiLedger.h"
 #include "Query.h"

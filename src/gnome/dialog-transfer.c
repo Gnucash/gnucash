@@ -120,25 +120,25 @@ gnc_xfer_dialog_list_curr_accts(AccountGroup *group,
   acct_list_item *list_element;
   int n;
 
-  if(!group) return;
+  if (!group) return;
 
   separator_char = gnc_get_account_separator();
 
   n = 0;
   acct = xaccGroupGetAccount(group, n);
-  while(acct)
+  while (acct)
   {
-    if(xaccAccountGetType(acct) == CURRENCY)
+    if (xaccAccountGetType(acct) == CURRENCY)
     {
       const gnc_commodity *curr, *secu;
 
       curr = xaccAccountGetCurrency(acct);
       secu = xaccAccountGetSecurity(acct);
 
-      if((gnc_commodity_equiv(from_curr, curr) && 
-	  gnc_commodity_equiv(to_curr, secu)) ||
-	 (gnc_commodity_equiv(to_curr, curr) && 
-	  gnc_commodity_equiv(from_curr, secu)))
+      if ((gnc_commodity_equiv(from_curr, curr) && 
+           gnc_commodity_equiv(to_curr, secu)) ||
+          (gnc_commodity_equiv(to_curr, curr) && 
+           gnc_commodity_equiv(from_curr, secu)))
       {
 	name = xaccAccountGetFullName(acct, separator_char);
 	/* xaccAccountGetFullName returns a string, which must be

@@ -70,7 +70,7 @@ gnc_commodity_new(const char * fullname,
   retval->fullname  = g_strdup(fullname);
   retval->namespace = g_strdup(namespace);
   retval->mnemonic  = g_strdup(mnemonic);
-  retval->exchange_code     = g_strdup(exchange_code);
+  retval->exchange_code = g_strdup(exchange_code);
   retval->fraction = fraction;
 
   retval->printname = g_strdup_printf("%s:%s (%s)",
@@ -213,6 +213,8 @@ void
 gnc_commodity_set_exchange_code(gnc_commodity * cm, 
                                 const char * exchange_code) {
   if(!cm) return;
+
+  g_free(cm->exchange_code);
   cm->exchange_code = g_strdup(exchange_code);
 }
 

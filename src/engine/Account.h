@@ -223,10 +223,13 @@ const char *   xaccAccountGetDescription (Account *);
 const char *   xaccAccountGetNotes (Account *);
 const gnc_commodity * xaccAccountGetCurrency (Account *);
 const gnc_commodity * xaccAccountGetSecurity (Account *);
+const gnc_commodity * xaccAccountGetEffectiveSecurity (Account *account);
+
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 Account *      xaccAccountGetParentAccount (Account *);
-/* deprecated old double API : thie will go away! */
+
+/* deprecated old double API : this will go away! */
 double          DxaccAccountGetBalance (Account *);
 double          DxaccAccountGetClearedBalance (Account *);
 double          DxaccAccountGetReconciledBalance (Account *);
