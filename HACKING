@@ -69,8 +69,30 @@ August 22, 2000
 
 --------------------------------------------------
 
-Starting GnuCash in GDB -- Aug 2003
+Starting Gnucash from the build tree:
 
-% gnucash-env gdb /usr/bin/guile
-[gdb output]
-% gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
+To run gnucash from your build tree:
+-- edit ./src/bin/overrides/gnucash and replace gnucash-env with
+   gnucash-build-env
+-- then start gnucash by saying ./src/bin/overrides/gnucash
+-- Make sure you undo this change before installing gnucash
+
+
+Starting GnuCash in GDB
+
+To run gdb on an installed version of gnucash (installed in /usr/local/bin:)
+
+    % gnucash-env gdb /usr/bin/guile
+    [gdb output]
+    % gdb> run -e main -s /usr/local/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+    
+To run gdb on the version in your build tree:
+
+    % gnucash-build-env gdb /usr/bin/guile
+    [gdb output]
+    % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
+
+
+Using Valgrind with gnucash
+-- run ./src/bin/overrides/gnucash-valgrind
+
