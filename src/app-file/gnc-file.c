@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <glib.h>
 #include <libguile.h>
 #include <string.h>
