@@ -262,10 +262,9 @@ xmlbeRunQuery (Backend *b, Query *q)
 /* ==================================================================== */
 
 static void
-xmlbeBookEnd (GNCBook *book) 
+xmlbeBookEnd (Backend *b)
 {
-  XMLBackend *be;
-  be = (XMLBackend *) xaccGNCBookGetBackend (book); 
+  XMLBackend *be = (XMLBackend *) b;
 
   ghttp_request_destroy (be->request);
   g_free (be->query_url);
