@@ -6,8 +6,11 @@ tiny standalone program that can read an .xac file (specified as the
 first argument and then let you select accounts to plot from a Gtk
 window.  The plot is just a per-transaction running balance, but it's
 a start.  You need Gtk and plotutils 2.0 installed for this to work.
-I just put these files in a new directory src/graph.  There's a
-Makefile and plot-test.c.
+
+try 
+ftp://ftp.digex.net/pub/gnu/plotutils-2.0.tar.gz
+ftp://prep.ai.mit.edu/pub/gnu/plotutils-2.0.tar.gz
+ftp://ftp.gnu.org/pub/gnu/plotutils-2.0.tar.gz
 
 Issues:
 
