@@ -12,6 +12,11 @@
 ;;  just store the fields "raw".
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(cond
+ ((or (string=? "1.3.4" (version))
+      (string=? "1.4" (substring (version) 0 3))) #f)
+ (else (use-modules (ice-9 rdelim))))
+
 (define (qif-file:read-file self path ticker-map)
   (false-if-exception
    (let* ((qstate-type #f)

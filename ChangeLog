@@ -1,3 +1,15 @@
+2003-01-15  David Hampton  <hampton@employees.org>
+
+	* configure.in: Remove restriction on guile versions > 1.4.
+	Provide a version dependant load path variable for the SRFI
+	location. (Empty in 1.6 since they're bundled with guile.)
+
+	* src/engine/Makefile.am: Don't hard code the location of the
+	SRFIs into the guilel load path.
+
+	* src/import-export/qif-import/qif-file.scm: The rdelim module
+	moved locations in guile 1.6
+
 2003-01-15  John H. Pierce <john@killterm.org>
 
 	* Makefile.am:
@@ -28,7 +40,8 @@
 	* src/register/register-core/Makefile.am:
 	* src/report/report-gnome/Makefile.am: Changes to make the build
 	system work on multiple architectures and with multiple versions
-	of the autotools suite.
+	of the autotools suite.  Make generated g-wrap sources depend on
+	config.status.
 
 	* Makefile.DEPS:
 	* src/bin/strsub.c: New files needed for automake 1.4.  These can
