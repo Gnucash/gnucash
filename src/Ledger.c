@@ -1,6 +1,9 @@
-
 /* 
+ * FILE:
  * Ledger.c 
+ *
+ * FUNCTION:
+ * copy transaction data into ledger
  */
 
 #include "Ledger.h"
@@ -32,6 +35,7 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
       xaccSetBasicCellValue (reg->dateCell, buff);
 
       xaccSetBasicCellValue (reg->numCell, trans->num);
+      xaccSetBasicCellValue (reg->actionCell, split->action);
       xaccSetQuickFillCellValue (reg->descCell, trans->description);
       xaccSetBasicCellValue (reg->memoCell, split->memo);
 
