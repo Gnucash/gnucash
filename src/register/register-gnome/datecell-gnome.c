@@ -104,23 +104,10 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
   parsed->tm_mday = day;
   parsed->tm_mon  = month - 1;
   parsed->tm_year = year - 1900;
-  parsed->tm_sec = 0;
-  parsed->tm_min = 0;
-  parsed->tm_hour = 0;
-  parsed->tm_isdst = -1;
 
+  gnc_tm_set_day_start(parsed);
   if (mktime (parsed) == -1)
-  {
-    time_t secs = time (NULL);
-
-    *parsed = *localtime (&secs);
-
-    parsed->tm_sec = 0;
-    parsed->tm_min = 0;
-    parsed->tm_hour = 0;
-    parsed->tm_isdst = -1;
-  }
-
+    gnc_tm_get_today_start (parsed);
   mktime (parsed);
 }
 
@@ -351,11 +338,8 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
   dada.tm_mday = day;
   dada.tm_mon  = mon - 1;
   dada.tm_year = year - 1900;
-  dada.tm_sec = 0;
-  dada.tm_min = 0;
-  dada.tm_hour = 0;
-  dada.tm_isdst = -1;
 
+  gnc_tm_set_day_start(&dada);
   mktime (&dada);
 
   box->date.tm_mday = dada.tm_mday;

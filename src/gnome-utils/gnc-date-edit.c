@@ -252,21 +252,10 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 	if (mtm.tm_year >= 1900)
 		mtm.tm_year -= 1900;
 
-        mtm.tm_sec = 0;
-        mtm.tm_min = 0;
-        mtm.tm_hour = 0;
-        mtm.tm_isdst = -1;
-
+	gnc_tm_set_day_start(&mtm);
         if (mktime (&mtm) == -1)
         {
-                time_t secs = time (NULL);
-
-                mtm = *localtime (&secs);
-                mtm.tm_sec = 0;
-                mtm.tm_min = 0;
-                mtm.tm_hour = 0;
-                mtm.tm_isdst = -1;
-
+		gnc_tm_get_today_start (&mtm);
                 gnc_date_edit_set_time (gde, mktime (&mtm));
         }
 
@@ -549,16 +538,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
                 return FALSE;
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 0;
-                tm.tm_min = 0;
-                tm.tm_hour = 0;
-                tm.tm_isdst = -1;
-        }
-
+		gnc_tm_get_today_start (&tm);
         gnc_date_edit_set_time (gde, mktime (&tm));
 
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
@@ -796,9 +776,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 	}
         else
         {
-                tm.tm_hour = 0;
-                tm.tm_min  = 0;
-                tm.tm_sec  = 0;
+		gnc_tm_set_day_start(&tm);
         }
 
 	tm.tm_isdst = -1;
@@ -823,16 +801,7 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
         tm = gnc_date_edit_get_date_internal (gde);
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 0;
-                tm.tm_min = 0;
-                tm.tm_hour = 0;
-                tm.tm_isdst = -1;
-        }
-
+		return gnc_timet_get_today_start();
 	return mktime (&tm);
 }
 
@@ -862,22 +831,10 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
         g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
         tm = gnc_date_edit_get_date_internal (gde);
-
-        tm.tm_hour = 23;
-        tm.tm_min  = 59;
-        tm.tm_sec  = 59;
+	gnc_tm_set_day_end(&tm);
 
         if (mktime (&tm) == -1)
-        {
-                time_t secs = time (NULL);
-
-                tm = *localtime (&secs);
-                tm.tm_sec = 23;
-                tm.tm_min = 59;
-                tm.tm_hour = 59;
-                tm.tm_isdst = -1;
-        }
-
+		return gnc_timet_get_today_end();
 	return mktime (&tm);
 }
 

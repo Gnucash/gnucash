@@ -2077,19 +2077,11 @@ gsr_account_present_balance (Account *account)
   GList *list;
   GList *node;
   time_t today;
-  struct tm *tm;
 
   if (!account)
     return gnc_numeric_zero ();
 
-  today = time (NULL);
-  tm = localtime (&today);
-  tm->tm_hour = 23;
-  tm->tm_min = 59;
-  tm->tm_sec = 59;
-  tm->tm_isdst = -1;
-  today = mktime (tm);
-
+  today = gnc_timet_get_today_end();
   list = xaccAccountGetSplitList (account);
   for (node = g_list_last (list); node; node = node->prev)
   {
@@ -2113,21 +2105,13 @@ gsr_account_projectedminimum_balance (Account *account)
   GList *list;
   GList *node;
   time_t today;
-  struct tm *tm;
   gnc_numeric lowest = gnc_numeric_zero ();
   int seen_a_transaction = 0;
 
   if (!account)
     return gnc_numeric_zero ();
 
-  today = time (NULL);
-  tm = localtime (&today);
-  tm->tm_hour = 23;
-  tm->tm_min = 59;
-  tm->tm_sec = 59;
-  tm->tm_isdst = -1;
-  today = mktime (tm);
-
+  today = gnc_timet_get_today_end();
   list = xaccAccountGetSplitList (account);
   for (node = g_list_last (list); node; node = node->prev)
   {

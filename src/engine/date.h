@@ -28,6 +28,14 @@
  * If a file-io thing needs date handling, it should do it itself,
  * instead of depending on the routines here. */
 
+/** @addtogroup Date
+    @{ */
+/** @file date.h 
+    @brief Date handling routines   
+    @author Copyright (C) 1997 Robin D. Clark
+    @author Copyright (C) 1999,1999,2000 Linas Vepstas <linas@linas.org>
+*/
+
 #ifndef XACC_DATE_H
 #define XACC_DATE_H
 
@@ -237,4 +245,87 @@ char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
  */
 long int gnc_timezone (struct tm *tm);
 
+
+/** @name Date Start/End Adjustment routines
+ * Given a time value, adjust it to be the beginning or end of that day.
+ */
+/** @{ */
+/** The gnc_tm_set_day_start() inline routine will set the appropriate
+ *  fields in the struct tm to indicate the first second of that day.
+ *  This routine assumes that the contents of the data structure is
+ *  already in normalized form. */
+static inline
+void gnc_tm_set_day_start (struct tm *tm)
+{
+  /* First second of the day */
+  tm->tm_hour = 0;
+  tm->tm_min = 0;
+  tm->tm_sec = 0;
+  tm->tm_isdst = -1;
+}
+
+/** The gnc_tm_set_day_start() inline routine will set the appropriate
+ *  fields in the struct tm to indicate noon of that day.  This
+ *  routine assumes that the contents of the data structure is already
+ *  in normalized form.*/
+static inline
+void gnc_tm_set_day_middle (struct tm *tm)
+{
+  /* First second of the day */
+  tm->tm_hour = 12;
+  tm->tm_min = 0;
+  tm->tm_sec = 0;
+  tm->tm_isdst = -1;
+}
+
+/** The gnc_tm_set_day_start() inline routine will set the appropriate
+ *  fields in the struct tm to indicate the last second of that day.
+ *  This routine assumes that the contents of the data structure is
+ *  already in normalized form.*/
+static inline
+void gnc_tm_set_day_end (struct tm *tm)
+{
+  /* Last second of the day */
+  tm->tm_hour = 23;
+  tm->tm_min = 59;
+  tm->tm_sec = 59;
+  tm->tm_isdst = -1;
+}
+
+/** The gnc_tm_get_day_start() routine will convert the given time in
+ *  seconds to the struct tm format, and then adjust it to the
+ *  first second of that day. */
+void   gnc_tm_get_day_start(struct tm *tm, time_t time_val);
+
+/** The gnc_tm_get_day_end() routine will convert the given time in
+ *  seconds to the struct tm format, and then adjust it to the
+ *  last second of that day. */
+void   gnc_tm_get_day_end(struct tm *tm, time_t time_val);
+
+/** The gnc_timet_get_day_start() routine will take the given time in
+ *  seconds and first it to the last second of that day. */
+time_t gnc_timet_get_day_start(time_t time_val);
+
+/** The gnc_timet_get_day_end() routine will take the given time in
+ *  seconds and adjust it to the last second of that day. */
+time_t gnc_timet_get_day_end(time_t time_val);
+
+/** The gnc_tm_get_today_start() routine takes a pointer to a struct
+ *  tm and fills it in with the first second of the today. */
+void   gnc_tm_get_today_start(struct tm *tm);
+
+/** The gnc_tm_get_today_end() routine takes a pointer to a struct
+ *  tm and fills it in with the last second of the today. */
+void   gnc_tm_get_today_end(struct tm *tm);
+
+/** The gnc_timet_get_today_start() routine returns a time_t value
+ *  corresponding to the first second of today. */
+time_t gnc_timet_get_today_start(void);
+
+/** The gnc_timet_get_today_end() routine returns a time_t value
+ *  corresponding to the last second of today. */
+time_t gnc_timet_get_today_end(void);
+/** @} */
+
 #endif /* XACC_DATE_H */
+/** @} */

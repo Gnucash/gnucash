@@ -266,38 +266,6 @@ gnc_register_raise (RegWindow *regData)
   gtk_window_present( GTK_WINDOW(regData->window) );
 }
 
-static time_t
-gnc_register_min_day_time(time_t time_val)
-{
-  struct tm *time_struct;
-
-  /* Get the equivalent time structure */
-  time_struct = localtime(&time_val);
-
-  /* First second of the day */
-  time_struct->tm_sec = 0;
-  time_struct->tm_min = 0;
-  time_struct->tm_hour = 0;
-
-  return mktime(time_struct);
-}
-
-static time_t
-gnc_register_max_day_time(time_t time_val)
-{
-  struct tm *time_struct;
-
-  /* Get the equivalent time structure */
-  time_struct = localtime(&time_val);
-
-  /* Last second of the day */
-  time_struct->tm_sec = 59;
-  time_struct->tm_min = 59;
-  time_struct->tm_hour = 23;
-
-  return mktime(time_struct);
-}
-
 static void
 gnc_date_range_set_sensitivities(RegWindow *regData)
 {
@@ -445,7 +413,7 @@ gnc_register_set_date_range(RegWindow *regData)
     time_t start;
 
     start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
-    start = gnc_register_min_day_time(start);
+    start = gnc_timet_get_day_start(start);
 
     xaccQueryAddDateMatchTT(query, 
                             TRUE, start, 
@@ -459,7 +427,7 @@ gnc_register_set_date_range(RegWindow *regData)
     time_t end;
 
     end = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
-    end = gnc_register_max_day_time(end);
+    end = gnc_timet_get_day_end(end);
 
     xaccQueryAddDateMatchTT(query, 
                             FALSE, 0,
