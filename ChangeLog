@@ -1,3 +1,9 @@
+2004-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/overrides/gnucash-build-env.in: add import-export, ofx,
+	  and hbci which should allow running with ofx and hbci in the
+	  build tree.
+
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
