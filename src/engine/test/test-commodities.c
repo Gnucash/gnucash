@@ -3,6 +3,7 @@
 #include "gnc-engine-util.h"
 
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -146,6 +147,8 @@ test_commodity(void)
 int
 main(int argc, char **argv)
 {
+    gnc_engine_init (argc, argv);
+    add_random_commodities_to_engine (FALSE);
     test_commodity();
     print_test_results();
     exit(get_rv());

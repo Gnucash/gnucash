@@ -217,6 +217,7 @@ test_real_commodity(const char *tag, gpointer globaldata, gpointer data)
 int
 main(int argc, char **argv)
 {
+    gnc_engine_init (argc, argv);
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_commodity,

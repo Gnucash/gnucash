@@ -1,7 +1,32 @@
-TESTS=test-load-module 
+TESTS = \
+  test-load-module \
+  test-db
 
 TESTS_ENVIRONMENT=\
   GNC_MODULE_PATH=${top_srcdir}/src/engine:${top_srcdir}/src/backend/postgres \
   GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module \
   LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module \
   LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs
+
+noinst_PROGRAMS = \
+  test-db
+
+LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
+        -L${top_srcdir}/src/engine -L${top_srcdir}/src/engine/.libs \
+        ${top_srcdir}/src/test-core/libgncmod-test.la \
+        ${top_srcdir}/src/gnc-module/libgncmodule.la \
+        ${top_srcdir}/src/engine/libgncmod-engine.la \
+        ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
+        -lltdl
+
+CFLAGS = ${GLIB_CFLAGS}
+
+INCLUDES = \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/test-core \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/engine/test-core \
+  -I..
+
+EXTRA_DIST = \
+  db-control.sh

@@ -9,7 +9,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "Group.h"
+#include "gnc-book.h"
 #include "Query.h"
 #include "date.h"
 #include "gnc-pricedb.h"
@@ -33,6 +33,7 @@ GUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 GNCPrice * get_random_price(void);
+void make_random_pricedb (GNCPriceDB *pdb);
 GNCPriceDB * get_random_pricedb(void);
 AccountGroup * get_random_group(void);
 Account* get_random_account(void);
@@ -42,6 +43,10 @@ gnc_commodity* get_random_commodity(void);
 const char *get_random_commodity_namespace(void);
 
 Query* get_random_query(void);
+
+GNCBook * get_random_book (void);
+
+void add_random_commodities_to_engine (gboolean add);
 
 #endif
 

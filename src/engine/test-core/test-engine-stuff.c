@@ -16,7 +16,15 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
+static gboolean add_comms_to_engine = TRUE;
+
 /***********************************************************************/
+
+void
+add_random_commodities_to_engine (gboolean add)
+{
+  add_comms_to_engine = add;
+}
 
 Timespec*
 get_random_timespec(void)
@@ -110,13 +118,10 @@ get_random_price(void)
   return p;
 }
 
-GNCPriceDB *
-get_random_pricedb(void)
+void
+make_random_pricedb (GNCPriceDB *db)
 {
-  GNCPriceDB *db;
   int num_prices;
-
-  db = gnc_pricedb_create ();
 
   num_prices = get_random_int_in_range (0, 40);
 
@@ -130,6 +135,15 @@ get_random_pricedb(void)
 
     gnc_price_unref (p);
   }
+}
+
+GNCPriceDB *
+get_random_pricedb(void)
+{
+  GNCPriceDB *db;
+
+  db = gnc_pricedb_create ();
+  make_random_pricedb (db);
 
   return db;
 }
@@ -506,17 +520,32 @@ get_random_commodity(void)
     gchar *xcode;
     int ran_int;
 
-    name = get_random_string();
-    space = get_random_commodity_namespace();
     mn = get_random_string();
+    space = get_random_commodity_namespace();
+
+    if (add_comms_to_engine)
+    {
+      ret = gnc_commodity_table_lookup (gnc_engine_commodities (), space, mn);
+
+      if (ret)
+      {
+        g_free (mn);
+        return ret;
+      }
+    }
+
+    name = get_random_string();
     xcode = get_random_string();
     ran_int = get_random_int_in_range(1, 100000);
 
-    ret = gnc_commodity_new(name, space, mn, xcode, ran_int);
+    ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
 
-    g_free(name);
     g_free(mn);
+    g_free(name);
     g_free(xcode);
+
+    if (add_comms_to_engine)
+      ret = gnc_commodity_table_insert (gnc_engine_commodities (), ret);
 
     return ret;
 }
@@ -708,3 +737,16 @@ get_random_query(void)
   return q;
 }
 
+GNCBook *
+get_random_book (void)
+{
+  GNCBook *book;
+
+  book = gnc_book_new ();
+
+  gnc_book_set_group (book, get_random_group ());
+
+  /* make_random_pricedb (gnc_book_get_pricedb (book)); */
+
+  return book;
+}
