@@ -763,6 +763,7 @@ sort_commodity_toggled_cb (GtkToggleButton *togglebutton,
 static void
 gnc_price_dialog_create (PricesDialog *pdb_dialog)
 {
+  GladeXML *xml;
   GNCPrintAmountInfo print_info;
   GtkWidget *price_dialog;
   GtkWidget *button;
@@ -771,7 +772,9 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   GtkWidget *box;
   GtkWidget *w;
 
-  price_dialog = create_Price_Dialog ();
+  xml = gnc_glade_xml_new ("price.glade", "Price Dialog");
+
+  price_dialog = glade_xml_get_widget (xml, "Price Dialog");
   pdb_dialog->price_dialog = price_dialog;
 
   gnome_dialog_button_connect (GNOME_DIALOG (price_dialog), 0,
@@ -786,7 +789,7 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
                       GTK_SIGNAL_FUNC (price_window_delete_cb),
                       pdb_dialog);
 
-  box = lookup_widget (price_dialog, "commodity_box");
+  box = glade_xml_get_widget (xml, "commodity_box");
 
   w = gnc_commodity_edit_new ();
   pdb_dialog->commodity_edit = w;
@@ -796,7 +799,7 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   gtk_signal_connect (GTK_OBJECT (w), "changed",
                       GTK_SIGNAL_FUNC (commodity_changed_cb), pdb_dialog);
 
-  box = lookup_widget (price_dialog, "currency_box");
+  box = glade_xml_get_widget (xml, "currency_box");
 
   w = gnc_currency_edit_new ();
   pdb_dialog->currency_edit = w;
@@ -806,7 +809,7 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   gtk_signal_connect (GTK_OBJECT (GTK_COMBO(w)->entry), "changed",
                       GTK_SIGNAL_FUNC (currency_changed_cb), pdb_dialog);
 
-  box = lookup_widget (price_dialog, "date_box");
+  box = glade_xml_get_widget (xml, "date_box");
 
   w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
   pdb_dialog->date_edit = w;
@@ -816,10 +819,10 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   gtk_signal_connect (GTK_OBJECT (w), "date_changed",
                       GTK_SIGNAL_FUNC (date_changed_cb), pdb_dialog);
 
-  w = lookup_widget (price_dialog, "source_entry");
+  w = glade_xml_get_widget (xml, "source_entry");
   pdb_dialog->source_entry = w;
 
-  w = lookup_widget (price_dialog, "type_option");
+  w = glade_xml_get_widget (xml, "type_option");
   pdb_dialog->type_option = w;
 
   gnc_option_menu_init (w);
@@ -827,7 +830,7 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   gtk_container_forall (GTK_CONTAINER (menu),
                         connect_type_menu_item, pdb_dialog);
 
-  box = lookup_widget (price_dialog, "price_box");
+  box = glade_xml_get_widget (xml, "price_box");
 
   w = gnc_amount_edit_new ();
   pdb_dialog->price_edit = w;
@@ -847,8 +850,11 @@ static void
 gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 {
   GtkWidget *dialog;
+  GladeXML *xml;
 
-  dialog = create_Prices_Dialog ();
+  xml = gnc_glade_xml_new ("price.glade", "Prices Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Prices Dialog");
   pdb_dialog->dialog = dialog;
 
   gnc_price_dialog_create (pdb_dialog);
@@ -875,7 +881,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     GtkWidget *income_radio;
     GtkWidget *list;
 
-    list = lookup_widget (dialog, "price_list");
+    list = glade_xml_get_widget (xml, "price_list");
     pdb_dialog->price_list = list;
 
     gtk_signal_connect (GTK_OBJECT(list), "select_row",
@@ -891,37 +897,37 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   {
     GtkWidget *button;
 
-    button = lookup_widget (dialog, "sort_by_commodity_radio");
+    button = glade_xml_get_widget (xml, "sort_by_commodity_radio");
     pdb_dialog->sort_radio = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC (sort_commodity_toggled_cb),
                         pdb_dialog);
 
-    button = lookup_widget (dialog, "edit_button");
+    button = glade_xml_get_widget (xml, "edit_button");
     pdb_dialog->edit_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (edit_clicked), pdb_dialog);
 
-    button = lookup_widget (dialog, "remove_button");
+    button = glade_xml_get_widget (xml, "remove_button");
     pdb_dialog->remove_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (remove_clicked), pdb_dialog);
 
-    button = lookup_widget (dialog, "remove_old_button");
+    button = glade_xml_get_widget (xml, "remove_old_button");
     pdb_dialog->remove_old_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (remove_old_clicked), pdb_dialog);
 
-    button = lookup_widget (dialog, "add_button");
+    button = glade_xml_get_widget (xml, "add_button");
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (add_clicked), pdb_dialog);
 
-    button = lookup_widget (dialog, "get_quotes_button");
+    button = glade_xml_get_widget (xml, "get_quotes_button");
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (get_quotes_clicked), pdb_dialog);

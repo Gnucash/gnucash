@@ -1,5 +1,9 @@
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/glade/price.glade: new file for old price dialogs
+
+	* src/gnome/dialog-price-editor.c: use libglade
+
 	* src/gnome/reconcile-list.c: obey new option below
 
 	* src/scm/prefs.scm: add option wrt checking off cleared

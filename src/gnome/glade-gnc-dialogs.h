@@ -25,5 +25,3 @@ GtkWidget* create_Stock_Split_Druid (void);
 GtkWidget* create_Username_Password_Dialog (void);
 GtkWidget* create_Edit_Column_View_Page (void);
 GtkWidget* create_Edit_Report_Size (void);
-GtkWidget* create_Prices_Dialog (void);
-GtkWidget* create_Price_Dialog (void);
