@@ -156,6 +156,38 @@
        #f)
 
       (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Shares"))
+       (make-report-spec 
+	(string-db 'lookup 'shares-string)
+	(lambda (split)
+	  (gnc:split-get-share-amount split))
+	(lambda (num) (html-right-cell (html-string num)))
+	+ ; total-proc
+	#f ; subtotal-html-proc
+	(lambda (num) (html-right-cell (html-string num))) ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
+
+      (if 
+       (gnc:option-value
+	(gnc:lookup-option options "Display" "Price"))
+       (make-report-spec 
+	(string-db 'lookup 'price-string)
+	(lambda (split)
+	  (gnc:split-get-share-price split))
+	(lambda (num) (html-right-cell (html-string num)))
+	#f ; total-proc
+	#f ; subtotal-html-proc
+	#f ; total-html-proc
+	#t ; first-last-preference
+	#f ; subs-list-proc
+	#f) ; subentry-html-proc
+       #f)
+
+      (if 
        (eq? (gnc:option-value
 	(gnc:lookup-option options "Display" "Amount")) 'single)
        (make-report-spec
@@ -465,8 +497,13 @@
 	    #(single
 	      "Single"
 	      "Display 1 line"))))
-	      	      
 
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Report Options" "Only positive Entries"
+      "da" "Display only positive Entries?" #f))
+    
+    
     (let ((key-choice-list 
 	   (list #(account
 		   "Account (w/subtotal)"
@@ -571,6 +608,16 @@
       "h" "Display the other account?  (if this is a split transaction, this parameter is guessed)." #f))
 
     (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Shares"
+      "ha" "Display the number of shares?" #f))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      "Display" "Price"
+      "hb" "Display the shares price?" #f))
+
+    (gnc:register-trep-option
      (gnc:make-multichoice-option
       "Display" "Amount"
       "i" "Display the amount?"  
@@ -611,15 +658,23 @@
                                                           "Sorting"
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
-(gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+	    (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
 	   (tr-report-style-op (gnc:lookup-option options 
-					       "Report Options"
-					       "Style"))
+						  "Report Options"
+						  "Style"))
            (accounts (gnc:option-value tr-report-account-op))
            (date-filter-pred (split-report-make-date-filter-predicate 
-                               begindate 
-                               (gnc:timepair-end-day-time
+			      begindate 
+			      (gnc:timepair-end-day-time
 			       enddate)))
+	   (filter-pred 
+	    (if (gnc:option-value 
+		 (gnc:lookup-option options "Report Options" 
+				    "Only positive Entries")) 
+		(lambda (split) 
+		  (and (date-filter-pred split)
+		       (> (gnc:split-get-sign-adjusted-value split) 0)))
+		date-filter-pred))
 	   (s1 (split-report-get-sort-spec-entry
 		(gnc:option-value tr-report-primary-key-op)
 		(eq? (gnc:option-value tr-report-primary-order-op) 'ascend)
@@ -635,7 +690,7 @@
 	     append
 	     (map
 	      (lambda (account)
-		(make-split-list account date-filter-pred))
+		(make-split-list account filter-pred))
 	      accounts)))
 	   (split-report-specs (make-split-report-spec options)))
    
@@ -676,6 +731,8 @@
   (string-db 'store 'memo-string "Memo")
   (string-db 'store 'acc-string "Account")
   (string-db 'store 'other-acc-string "Other Account")
+  (string-db 'store 'shares-string "Shares")
+  (string-db 'store 'price-string "Price")
   (string-db 'store 'amount-string "Amount")
   (string-db 'store 'debit-string "Debit")
   (string-db 'store 'credit-string "Credit")

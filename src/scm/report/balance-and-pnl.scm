@@ -40,7 +40,8 @@
 	("Currency 3" "DEM")
 	("Currency 4" "GBP")
 	("Currency 5" "FRF")))
-     (currency-option-value-prefix "Exchange rate for "))
+     (currency-option-value-prefix "Exchange rate for ")
+     (EMPTY_ROW "<tr></tr>"))
   
   (define string-db (gnc:make-string-database))
 
@@ -49,7 +50,7 @@
       (option-registerer
        (gnc:make-date-option
 	"Report" "To"
-	"a" "Calculate balance sheet up to this date"
+	"b" "Calculate balance sheet up to this date"
 	(lambda ()
 	  (let ((bdtime (localtime (current-time))))
 	    (set-tm:sec bdtime 59)
@@ -86,7 +87,7 @@
       (option-registerer
        (gnc:make-simple-boolean-option
 	"Display" "Type"
-	"b" "Display the account type?" #t))
+	"b" "Display the account type?" #f))
 
 ;      (option-registerer
 ;       (gnc:make-simple-boolean-option
@@ -173,29 +174,31 @@
                                         level-2-account)))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
-      (l2-currency-collector 
-       'format
-       (lambda (currency value)
-	 (let ((tacc account-name)
-	       (ttype type-name))
-	   (set! account-name "")
-	   (set! type-name "")
-	   (row-aligner
-	    (append
-	     (list tacc ttype)
-	     (if (equal? currency balance-currency)
-		 (list NBSP
-		       (gnc:amount->formatted-currency-string
-			value balance-currency #f))
-		 (list (gnc:amount->formatted-currency-string
-			value currency #f) 
-		       (gnc:amount->formatted-currency-string
-			(* value
-			   (let ((pair (assoc currency exchange-alist)))
-			     (if (not pair) default-exchange-rate (cadr pair))))
-			balance-currency #f)))
-	     (list NBSP NBSP)))))
-       #f)))
+      (list
+       EMPTY_ROW
+       (l2-currency-collector 
+	'format
+	(lambda (currency value)
+	  (let ((tacc account-name)
+		(ttype type-name))
+	    (set! account-name "")
+	    (set! type-name "")
+	    (row-aligner
+	     (append
+	      (list tacc ttype)
+	      (if (equal? currency balance-currency)
+		  (list NBSP
+			(gnc:amount->formatted-currency-string
+			 value balance-currency #f))
+		  (list (gnc:amount->formatted-currency-string
+			 value currency #f) 
+			(gnc:amount->formatted-currency-string
+			 (* value
+			    (let ((pair (assoc currency exchange-alist)))
+			      (if (not pair) default-exchange-rate (cadr pair))))
+			 balance-currency #f)))
+	      (list NBSP NBSP)))))
+	#f))))
   
   (define (render-level-1-account 
 	   l1-account l1-currency-collector 
@@ -203,28 +206,30 @@
     (let ((account-name (gnc:account-get-full-name l1-account))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type l1-account))))
-      (l1-currency-collector 
-       'format
-       (lambda (currency value)
-	 (let ((tacc account-name)
-	       (ttype type-name))
-	   (set! account-name "")
-	   (set! type-name "")
-	   (row-aligner
-	    (append 
-	     (list tacc ttype NBSP NBSP) 
-	     (if (equal? currency balance-currency)
-		 (list NBSP 
-		       (gnc:amount->formatted-currency-string
-			value balance-currency #f))
-		 (list (gnc:amount->formatted-currency-string
-			value currency #f)
-		       (gnc:amount->formatted-currency-string
-			(* value
-			   (let ((pair (assoc currency exchange-alist)))
-			     (if (not pair) default-exchange-rate (cadr pair))))
-			balance-currency #f)))))))
-       #f)))
+      (list 
+       EMPTY_ROW
+       (l1-currency-collector 
+	'format
+	(lambda (currency value)
+	  (let ((tacc account-name)
+		(ttype type-name))
+	    (set! account-name "")
+	    (set! type-name "")
+	    (row-aligner
+	     (append 
+	      (list tacc ttype NBSP NBSP) 
+	      (if (equal? currency balance-currency)
+		  (list NBSP 
+			(gnc:amount->formatted-currency-string
+			 value balance-currency #f))
+		  (list (gnc:amount->formatted-currency-string
+			 value currency #f)
+			(gnc:amount->formatted-currency-string
+			 (* value
+			    (let ((pair (assoc currency exchange-alist)))
+			      (if (not pair) default-exchange-rate (cadr pair))))
+			 balance-currency #f)))))))
+	#f))))
   
   (define (render-total l0-currency-collector 
 			balance-currency exchange-alist 
@@ -232,34 +237,36 @@
 			row-aligner)
     (let ((account-name (string-html-strong (string-db 'lookup 'net)))
 	  (exchanged-total 0))
-      (append
-       (l0-currency-collector 
-	'format
-	(lambda (currency value)
-	  (if (equal? currency balance-currency)
-	      (begin 
-		(set! exchanged-total (+ exchanged-total value))
-		'())
-	      (begin 
-		(set! exchanged-total 
-		      (+ exchanged-total 
-			 (* value
-			    (let ((pair (assoc currency exchange-alist)))
-			      (if (not pair) default-exchange-rate 
-				  (cadr pair))))))
-		(if (and other-currency-total? show-fcur?)
-		    (row-aligner
-		     (list 
-		      NBSP NBSP NBSP NBSP
-		      (gnc:amount->formatted-currency-string
-		       value currency #f)
-		      NBSP))
-		    '()))))
-	#f)
-       (row-aligner
-	(list account-name NBSP NBSP NBSP NBSP 
-	      (gnc:amount->formatted-currency-string
-	       exchanged-total balance-currency #f))))))
+      (list
+       EMPTY_ROW
+       (append
+	(l0-currency-collector 
+	 'format
+	 (lambda (currency value)
+	   (if (equal? currency balance-currency)
+	       (begin 
+		 (set! exchanged-total (+ exchanged-total value))
+		 '())
+	       (begin 
+		 (set! exchanged-total 
+		       (+ exchanged-total 
+			  (* value
+			     (let ((pair (assoc currency exchange-alist)))
+			       (if (not pair) default-exchange-rate 
+				   (cadr pair))))))
+		 (if (and other-currency-total? show-fcur?)
+		     (row-aligner
+		      (list 
+		       NBSP NBSP NBSP NBSP
+		       (gnc:amount->formatted-currency-string
+			value currency #f)
+		       NBSP))
+		     '()))))
+	 #f)
+	(row-aligner
+	 (list account-name NBSP NBSP NBSP NBSP 
+	       (gnc:amount->formatted-currency-string
+		exchanged-total balance-currency #f)))))))
   
   (define blank-line
     (html-table-row '()))
@@ -426,7 +433,7 @@
 		  (lambda (x) (handle-level-1-account x options))
 ;		  accounts)
 ;; obviously you can't just replace this "current-group" by 
-;; the "accounts" list. Which is a pity. -- Christian
+;; the "accounts" list. Which is a pity. 
 		  current-group)
 		 (render-total l0-collector report-currency 
 			       exchange-alist show-currency-total? show-fcur?
@@ -442,7 +449,7 @@
            "<body bgcolor=#fffde6>"
            "<body bgcolor=#f6ffdb>")
 
-       "<table cellpadding=1>"
+       "<table cellpadding=0>"
        "<caption><b>" report-name "</b></caption>"
        "<tr>"
        "<th>" (string-db 'lookup 'account-name) "</th>"
