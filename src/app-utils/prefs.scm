@@ -208,38 +208,6 @@ and expand the current transaction")))
   (N_ "Register") (N_ "Double Line Mode")
   "aa" (N_ "Show two lines of information for each transaction") #f))
 
-(gnc:register-configuration-option     
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Auto-Raise Lists")
-  "e" (N_ "Automatically raise the list of accounts or actions during input.")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show All Transactions")
-  "f" (N_ "By default, show every transaction in an account.") #t))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "_+Advanced") (N_ "Number of Rows")
-  "g" (N_ "Default number of register rows to display.")
-   20.0 ;; default
-    1.0 ;; lower bound
-  200.0 ;; upper bound
-    0.0 ;; number of decimals
-    1.0 ;; step size
-  ))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show Vertical Borders")
-  "c" (N_ "By default, show vertical borders on the cells.") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show Horizontal Borders")
-  "d" (N_ "By default, show horizontal borders on the cells.") #f))
-
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Register") (N_ "'Enter' moves to blank transaction")
@@ -379,11 +347,6 @@ to enter a credit card payment")
   "a" (N_ "Allow modification of less commonly used settings.") #f))
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Save Window Geometry")
-  "a" (N_ "Save window sizes and positions.") #t))
-
-(gnc:register-configuration-option
  (gnc:make-multichoice-option
   (N_ "General") (N_ "Toolbar Buttons")
   "b" (N_ "Choose whether to display icons, text, or both for toolbar buttons")
@@ -400,32 +363,6 @@ to enter a credit card payment")
          (list 'text_only
                (N_ "Text only")
                (N_ "Show text only"))))))
-
-(gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "_+Advanced") (N_ "Application MDI mode")
-  "ba" (N_ "Choose how new windows are created for reports and account trees.")
-  'mdi-notebook
-  (list (list->vector
-         (list 'mdi-notebook
-               (N_ "Notebook")
-               (N_ "New windows are created as notebook tabs in the \
-current top-level window")))
-        (list->vector
-         (list 'mdi-toplevel
-               (N_ "Top-level")
-               (N_ "Create a new top-level window for each report \
-or account tree")))
-        (list->vector
-         (list 'mdi-modal
-               (N_ "Single window")
-               (N_ "One window is used for all displays (select contents \
-through Window menu)")))
-        (list->vector
-         (list 'mdi-default
-               (N_ "Use GNOME default")
-               (N_ "Default MDI mode can be set in the GNOME \
-Control Center"))))))
 
 (gnc:register-configuration-option
  (gnc:make-radiobutton-option
@@ -626,6 +563,83 @@ without one.")
   50 ; max
   0  ; num-decimals
   1  ; step size
+  ))
+
+
+;;; Advanced Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Save Window Geometry")
+  "a" (N_ "Save window sizes and positions.") #t))
+
+(gnc:register-configuration-option
+ (gnc:make-multichoice-option
+  (N_ "_+Advanced") (N_ "Application MDI mode")
+  "ba" (N_ "Choose how new windows are created for reports and account trees.")
+  'mdi-notebook
+  (list (list->vector
+         (list 'mdi-notebook
+               (N_ "Notebook")
+               (N_ "New windows are created as notebook tabs in the \
+current top-level window")))
+        (list->vector
+         (list 'mdi-toplevel
+               (N_ "Top-level")
+               (N_ "Create a new top-level window for each report \
+or account tree")))
+        (list->vector
+         (list 'mdi-modal
+               (N_ "Single window")
+               (N_ "One window is used for all displays (select contents \
+through Window menu)")))
+        (list->vector
+         (list 'mdi-default
+               (N_ "Use GNOME default")
+               (N_ "Default MDI mode can be set in the GNOME \
+Control Center"))))))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show Vertical Borders")
+  "c" (N_ "By default, show vertical borders on the cells.") #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show Horizontal Borders")
+  "d" (N_ "By default, show horizontal borders on the cells.") #f))
+
+(gnc:register-configuration-option     
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Auto-Raise Lists")
+  "e" (N_ "Automatically raise the list of accounts or actions during input.")
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Show All Transactions")
+  "f" (N_ "By default, show every transaction in an account.") #t))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "_+Advanced") (N_ "Number of Rows")
+  "g" (N_ "Default number of register rows to display.")
+   20.0 ;; default
+    1.0 ;; lower bound
+  200.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "_+Advanced") (N_ "New Search Limit")
+  "j" (N_ "Default to 'new search' if there no more than this number of items.")
+    0.0 ;; default
+    0.0 ;; lower bound
+  100.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
   ))
 
 

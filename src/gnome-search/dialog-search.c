@@ -263,6 +263,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   GtkAdjustment *vadjustment;
   gfloat save_value = 0.0;
   gboolean have_list = TRUE;
+  gint64 count;
+  gdouble max_count;
 
   /* Check if this is the first time this is called for this window.
    * If so, then build the results sub-window, the scrolled listbox,
@@ -334,7 +336,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   list = g_list_reverse (gncQueryRun (sw->q));
 
   /* Add the list of items to the clist */
-  for (node = list; node; node = node->next) {
+  for (count = 0, node = list; node; node = node->next, count++) {
     gnc_search_dialog_prepend_item (sw, node->data);
   }
 
@@ -366,8 +368,9 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
       gtk_clist_moveto (GTK_CLIST (sw->result_list), row, 0, 0.5, 0);
   }
 
-  /* If there is nothing to select, then turn on the new-search */
-  if (list == NULL)
+  /* If we don't have more that max_count, then turn on the new-search */
+  max_count = gnc_lookup_number_option ("_+Advanced", "New Search Limit", 0.0);
+  if (count <= max_count)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }
 
