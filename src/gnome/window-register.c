@@ -1269,6 +1269,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#if 0
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1277,6 +1278,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+#endif
     GNOMEUIINFO_END
   };
 
