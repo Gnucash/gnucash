@@ -4,8 +4,9 @@
  *
  * FUNCTION:
  * Implements the infrastructure for the displayed table.
- * This is just a sample hack for printing html.  Its cheesey,
- * for several reasons:  
+ * This is just a sample hack for printing html to a file,
+ * or by acting as a web server.  Its cheesey, for several
+ * reasons:  
  *
  * (1) HTML should never be put in the same file as C code.
  *     Some sort of template file should be used.
@@ -16,6 +17,9 @@
  *     of doing a report.  Real report generators should
  *     get the financial data straight from the engine,
  *     not from the register.
+ *
+ * (3) The so-called "webserver" has less intelligence 
+ *     than a mosquito.
  *
  * But this code is fun, so what the hey.
  *
@@ -181,10 +185,12 @@ xaccTableWebServeHTML (Table * table, unsigned short port)
    char buff[255];
    int cnt;
 
+   /* don't slow down the parent, fork into background */
    pid = fork(); 
    if (0 < pid) return;  /* parent */
    CHKERR (pid, "cant fork");
 
+   /* create a socket */
    listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    CHKERR (listen_fd, "cant listen");
 
@@ -210,7 +216,7 @@ xaccTableWebServeHTML (Table * table, unsigned short port)
    accept_fd = accept (listen_fd, &clientsock, &clientaddrsize);
    CHKERR (rc, "cant accept");
  
-   /* count, for content-length */
+   /* count the number of chars, for content-length */
    cnt = xaccTablePrintHTML (table, "/dev/null");
    sprintf (buff, 
       "HTTP/1.0 200 OK\n"
