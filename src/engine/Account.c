@@ -490,7 +490,7 @@ xaccAccountCommitEdit (Account *acc)
        * human-readable error description. */
       PWARN_GUI(_("Error occurred while saving Account:\n%d: %s"),
 		      xaccBackendGetError(be), err);
-	    
+    
       /* push error back onto the stack */
       xaccBackendSetError (be, errcode);
       xaccBackendSetMessage (be, err);
@@ -1061,7 +1061,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   split->acc = acc;
   if (split->lot && (NULL == split->lot->account))
   {
-		xaccAccountInsertLot (acc, split->lot);
+      xaccAccountInsertLot (acc, split->lot);
   }
 
   if (g_list_index(acc->splits, split) == -1)
@@ -1970,6 +1970,26 @@ xaccAccountFindOpenLots (Account *acc,
   return retval;
 }
 
+gpointer
+xaccAccountForEachLot(Account *acc,
+                              gpointer (*proc)(GNCLot *lot, void *data),
+                              void *data) 
+{
+  LotList *node;
+
+  if (!acc) return(NULL);
+  if (!proc) return(NULL);
+  
+  for (node = acc->lots; node; node=node->next)
+  {
+    GNCLot *lot = node->data;
+    gpointer result = proc (lot, data);
+    if (result) return result;
+  }
+  
+  return(NULL);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -2127,10 +2147,10 @@ xaccAccountGetDescendantPlaceholder (Account *account)
 
   descendants = xaccGroupGetSubAccounts(account->children);
   node = g_list_first(descendants);
-  for ( ; node ; node = g_list_next(node) ) {
+  for ( ; node ; node = g_list_next(node) ) 
+  {
     account = (Account *)node->data;
-      if (xaccAccountGetPlaceholder(account))
-	return(PLACEHOLDER_CHILD);
+    if (xaccAccountGetPlaceholder(account)) return(PLACEHOLDER_CHILD);
   }
 
   return PLACEHOLDER_NONE;

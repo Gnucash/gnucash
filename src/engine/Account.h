@@ -503,6 +503,17 @@ void xaccAccountRemoveLot (Account *, GNCLot *);
  *    the lots in this account.  The same warnings as above apply. */
 LotList*        xaccAccountGetLotList (Account *account);
 
+/** The xaccAccountForEachLot() method will apply the function 'proc'
+ *    to each lot in the account.  If 'proc' returns a non-NULL value,
+ *    further application will be stopped, and the resulting value
+ *    will be returned.  There is no guarenteed order over which
+ *    the Lots will be traversed.
+ */
+gpointer xaccAccountForEachLot(Account *acc,
+                              gpointer (*proc)(GNCLot *lot, gpointer user_data),
+                              gpointer user_data);
+
+
 /** Find a list of open lots that match the match_func.  Sort according
  * to sort_func.  If match_func is NULL, then all open lots are returned.
  * If sort_func is NULL, then the returned list has no particular order.
