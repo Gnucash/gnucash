@@ -1473,6 +1473,10 @@ xaccTransCommitEdit (Transaction *trans)
                  "\t(This dialog should be a gui dialog and \n"
                  "\tshould check for errors)\n");
         }
+
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
+
         trans->editlevel++;
         xaccTransRollbackEdit (trans);
         return;
@@ -1696,12 +1700,17 @@ xaccTransRollbackEdit (Transaction *trans)
          trans->editlevel++;
          xaccTransDestroy (trans);
          xaccFreeTransaction (trans);
+
+         /* push error back onto the stack */
+         xaccBackendSetError (be, errcode);
          LEAVE ("deleted trans addr=%p\n", trans);
          return;
       }
       if (ERR_BACKEND_NO_ERR != errcode) 
       {
-	PERR ("Rollback Failed.  Ouch!");
+        PERR ("Rollback Failed.  Ouch!");
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
       }
    }
 

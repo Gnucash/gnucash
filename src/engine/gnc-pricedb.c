@@ -208,6 +208,9 @@ gnc_price_commit_edit (GNCPrice *p)
         /* XXX hack alert FIXME implement price rollback */
         PERR (" backend asked engine to rollback, but this isn't"
               " handled yet. Return code=%d", errcode);
+
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
       }
     }
     p->not_saved = FALSE;
