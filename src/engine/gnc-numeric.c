@@ -729,6 +729,33 @@ gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
 
 gnc_numeric
 gnc_numeric_reduce(gnc_numeric in) {
+  gint64   t;
+  gint64   num = (in.num < 0) ? (- in.num) : in.num ;
+  gint64   denom = in.denom;
+  gnc_numeric out;
+
+  if(gnc_numeric_check(in)) {
+    return gnc_numeric_error(GNC_ERROR_ARG);
+  }
+
+  /* the strategy is to use euclid's algorithm */
+  while (denom > 0) {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num = gcd */
+
+  /* all calculations are done on positive num, since it's not 
+   * well defined what % does for negative values */
+  out.num   = in.num / num;
+  out.denom = in.denom / num;
+  return out;
+}
+
+#if 0
+gnc_numeric
+gnc_numeric_reduce(gnc_numeric in) {
 
   gint64   current_divisor = 2;
   gint64   max_square;
@@ -800,6 +827,7 @@ gnc_numeric_reduce(gnc_numeric in) {
   out.denom = denom;
   return out;
 }
+#endif
 
 /********************************************************************
  *  double_to_gnc_numeric

@@ -1,3 +1,8 @@
+2003-01-08  Derek Atkins  <derek@ihtfp.com>
+
+	* apply patch to use Euclid's algo for gnc_numeric_reduce
+	  more fixes for #95474
+
 2003-01-08  Christian Stimming  <stimming@tuhh.de>
 
 	* po/ru.po: Updated very complete (!) Russian translation by
