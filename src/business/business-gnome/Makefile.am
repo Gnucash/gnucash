@@ -31,7 +31,6 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-employee.c \
   dialog-invoice.c \
   dialog-job.c \
-  dialog-job-select.c \
   dialog-order.c \
   dialog-vendor.c \
   gnc-business-utils.c
@@ -43,7 +42,6 @@ noinst_HEADERS = \
   dialog-employee.h \
   dialog-invoice.h \
   dialog-job.h \
-  dialog-job-select.h \
   dialog-order.h \
   dialog-vendor.h \
   gnc-business-utils.h

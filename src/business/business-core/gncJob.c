@@ -329,6 +329,7 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QUERYCORE_STRING, (QueryAccess)gncJobGetName },
     { JOB_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncJobGetReference },
     { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncJobGetOwner },
+    { JOB_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncJobGetActive },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncJobGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
     { NULL },

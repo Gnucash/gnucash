@@ -50,5 +50,6 @@ int gncJobCompare (const GncJob *a, const GncJob *b);
 #define JOB_NAME	"name"
 #define JOB_REFERENCE	"reference"
 #define JOB_OWNER	"owner"
+#define JOB_ACTIVE	"active"
 
 #endif /* GNC_JOB_H_ */
