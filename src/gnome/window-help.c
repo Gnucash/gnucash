@@ -64,6 +64,7 @@
 #endif
 
 #include "File.h"
+#include "dialog-utils.h"
 #include "glade-cb-gnc-dialogs.h"
 #include "glade-gnc-dialogs.h"
 #include "gnc-component-manager.h"
@@ -94,6 +95,10 @@ struct _gnc_help_window {
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
+static gint last_width = 0;
+static gint last_height = 0;
+
 
 /********************************************************************
  * gnc_help_window_check_urltype
@@ -486,6 +491,11 @@ close_handler (gpointer user_data)
 {
   gnc_help_window *help = user_data;
 
+  gdk_window_get_geometry (GTK_WIDGET(help->toplevel)->window, NULL, NULL,
+                           &last_width, &last_height, NULL);
+
+  gnc_save_window_size ("help_win", last_width, last_height);
+
   gnc_help_window_destroy (help);
 }
 
@@ -623,6 +633,14 @@ gnc_help_window_new (void) {
          indexfile, strerror(errno));
   }
   g_free(indexfile);
+
+  if (last_width == 0)
+    gnc_get_window_size("help_win", &last_width, &last_height);
+
+  gtk_window_set_default_size(GTK_WINDOW(help->toplevel),
+                              last_width, last_height);
+
+  gnc_window_adjust_for_screen (GTK_WINDOW(help->toplevel));
 
   gtk_widget_show_all(help->toplevel);
   

@@ -1,3 +1,11 @@
+2001-03-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-help.c: save & restore window size
+
+	* src/gnome/window-report.c: save & restore window size
+
+	* src/scm/prefs.scm: add vars for report & help win sizes
+
 2001-03-03  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/sql/README: add info about running without root

@@ -31,6 +31,7 @@
 #include <guile/gh.h>
 
 #include "dialog-options.h"
+#include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -63,6 +64,9 @@ struct _gnc_report_window {
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_HTML;
+
+static gint last_width = 0;
+static gint last_height = 0;
 
 
 /********************************************************************
@@ -387,6 +391,14 @@ close_handler (gpointer user_data)
 {
   gnc_report_window *win = user_data;
 
+  if (win->top_level)
+  {
+    gdk_window_get_geometry (GTK_WIDGET(win->container)->window, NULL, NULL,
+                             &last_width, &last_height, NULL);
+
+    gnc_save_window_size ("report_win", last_width, last_height);
+  }
+
   gnc_report_window_destroy (win);
 }
 
@@ -533,6 +545,17 @@ gnc_report_window_new(GtkWidget * container) {
 
   report->option_dialog = NULL;
   report->odb = NULL;
+
+  if (report->top_level)
+  {
+    if (last_width == 0)
+      gnc_get_window_size("report_win", &last_width, &last_height);
+
+    gtk_window_set_default_size(GTK_WINDOW(report->container),
+                                last_width, last_height);
+
+    gnc_window_adjust_for_screen (GTK_WINDOW(report->container));
+  }
 
   gtk_widget_show_all(report->container);
 

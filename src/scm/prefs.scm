@@ -585,6 +585,14 @@ the current value of the path."
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
+  "__gui" "help_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "help_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
   "__gui" "main_win_width" 0))
 
 (gnc:register-configuration-option
@@ -602,6 +610,14 @@ the current value of the path."
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gui" "reg_column_widths" '()))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "report_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "report_win_height" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
