@@ -70,7 +70,7 @@ GType gnc_frequency_get_type( void );
 
 /**
  * Create a new freq spec widget.
- * The menus and panaels will be initialized to correspond to the
+ * The menus and panels will be initialized to correspond to the
  * settings in the FreqSpec, and the date window will show the 
  * indicated date.  Either or both may be NULL.
  * For the default freq spec widget, use 'NULL'.
@@ -97,6 +97,7 @@ void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate);
  * implementation, the default label text is "Frequency:"
  */
 void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt);
+
 /**
  * Set the label text for the date entry widget. In the current
  * impelmentation, the default label text is "Start Date:"

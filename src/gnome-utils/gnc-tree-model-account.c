@@ -49,6 +49,7 @@ static void gnc_tree_model_account_init (GncTreeModelAccount *model);
 static void gnc_tree_model_account_finalize (GObject *object);
 static void gnc_tree_model_account_destroy (GtkObject *object);
 
+/** Implementation of GtkTreeModel  **************************************/
 static void gnc_tree_model_account_tree_model_init (GtkTreeModelIface *iface);
 static guint gnc_tree_model_account_get_flags (GtkTreeModel *tree_model);
 static int gnc_tree_model_account_get_n_columns (GtkTreeModel *tree_model);
@@ -80,9 +81,11 @@ static gboolean	gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 						    GtkTreeIter *iter,
     						    GtkTreeIter *child);
 
+/** Helper Functions ****************************************************/
 static void gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 						 Account *toplevel);
 
+/** Component Manager Callback ******************************************/
 static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 						  GNCEngineEventType event_type,
 						  gpointer user_data);

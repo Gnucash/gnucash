@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofclass.h -- API for registering paramters on objects           *
+ * qofclass.h -- API for registering parameters on objects          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

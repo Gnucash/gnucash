@@ -37,6 +37,16 @@
 
 #include <g-wrap-wct.h>
 
+/* TODO: 
+
+  - even though there is a make-text-option on the scheme side,
+    gnc_option_db_lookup_string_option() doesn't seem to work for
+    those, so I guess there's no way to use make-text-option
+  - for make-date-option, there seems to be only support for getting,
+    not for setting.
+*/
+
+
 /****** Structures *************************************************/
 
 struct gnc_option
@@ -2102,10 +2112,10 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  *   looks up a date option. If present, returns the absolute date  *
  *   represented in the set_ab_value argument provided, otherwise   *
  *   copies the default_value argument (if non-NULL) to the         *
- *   set_value argument. If the default_value argument is NULL,     *
+ *   set_ab_value argument. If the default_value argument is NULL,  *
  *   copies the current date to set_ab_value. Whatever value is     *
- *   stored in set_value is return as an approximate (no            *
- *   nanoseconds) time_t value. set_value may be NULL, in which     *
+ *   stored in set_ab_value is returned as an approximate (no       *
+ *   nanoseconds) time_t value.  set_ab_value may be NULL, in which *
  *   case only the return value can be used. If is_relative is      *
  *   non-NULL, it is set to whether the date option is currently    *
  *   storing a relative date.  If it is, and set_rel_value          *
@@ -2115,6 +2125,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  * Args: odb           - option database to search in               *
  *       section       - section name of option                     *
  *       name          - name of option                             *
+ *       is_relative   - location to store boolean value            *
  *       set_ab_value  - location to store absolute option value    *
  *       set_rel_value - location to store relative option value    *
  *       default       - default value if not found                 *

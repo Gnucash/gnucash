@@ -427,7 +427,9 @@
              (list #f "pixmap-option: not a string"))))
      #f #f #f #f)))
 
-;; subtype should be on of 'relative 'absolute or 'both
+;; show-time is boolean
+;; subtype should be one of 'relative 'absolute or 'both
+;; if subtype is 'absolute then relative-date-list should be #f
 ;; relative-date-list should be the list of relative dates permitted
 ;; gnc:all-relative-dates contains a list of all relative dates.
 

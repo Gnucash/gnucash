@@ -124,16 +124,15 @@ gboolean gnc_date_string_to_monthformat(const char *format_string,
 
 /** Datatypes *******************************************************/
 
-/** struct timespec64 is just like the unix 'struct timespec' except 
- * that we use a 64-bit
- * signed int to store the seconds.  This should adequately cover
- * dates in the distant future as well as the distant past, as long as
- * they're not more than a couple dozen times the age of the universe.
- * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
- * VisualAge, etc) correctly handle long long as a 64 bit quantity,
- * even on the 32-bit Intel x86 and PowerPC architectures.  I'm
- * assuming that all the other modern compilers are clean on this
- * issue too. */
+/** struct timespec64 is just like the unix 'struct timespec' except
+ * that we use a 64-bit signed int to store the seconds.  This should
+ * adequately cover dates in the distant future as well as the distant
+ * past, as long as they're not more than a couple dozen times the age
+ * of the universe.  Note that both gcc and the IBM Toronto xlC
+ * compiler (aka CSet, VisualAge, etc) correctly handle long long as a
+ * 64 bit quantity, even on the 32-bit Intel x86 and PowerPC
+ * architectures.  I'm assuming that all the other modern compilers
+ * are clean on this issue too. */
 
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
@@ -143,15 +142,15 @@ struct timespec64
 };
 #endif /* SWIG */
 
-/** The Timespec is just like the unix 'struct timespec' 
- * except that we use a 64-bit signed int to
- * store the seconds.  This should adequately cover dates in the
- * distant future as well as the distant past, as long as they're not
- * more than a couple dozen times the age of the universe.  Note that
- * both gcc and the IBM Toronto xlC compiler (aka CSet, VisualAge,
- * etc) correctly handle long long as a 64 bit quantity, even on the
- * 32-bit Intel x86 and PowerPC architectures.  I'm assuming that all
- * the other modern compilers are clean on this issue too. */
+/** The Timespec is just like the unix 'struct timespec' except that
+ * we use a 64-bit signed int to store the seconds.  This should
+ * adequately cover dates in the distant future as well as the distant
+ * past, as long as they're not more than a couple dozen times the age
+ * of the universe.  Note that both gcc and the IBM Toronto xlC
+ * compiler (aka CSet, VisualAge, etc) correctly handle long long as a
+ * 64 bit quantity, even on the 32-bit Intel x86 and PowerPC
+ * architectures.  I'm assuming that all the other modern compilers
+ * are clean on this issue too. */
 typedef struct timespec64 Timespec;
 
 
@@ -449,7 +448,7 @@ void   gnc_tm_get_day_start(struct tm *tm, time_t time_val);
 void   gnc_tm_get_day_end(struct tm *tm, time_t time_val);
 
 /** The gnc_timet_get_day_start() routine will take the given time in
- *  seconds and adjust it to the last second of that day. */
+ *  seconds and adjust it to the first second of that day. */
 time_t gnc_timet_get_day_start(time_t time_val);
 
 /** The gnc_timet_get_day_end() routine will take the given time in
@@ -457,7 +456,7 @@ time_t gnc_timet_get_day_start(time_t time_val);
 time_t gnc_timet_get_day_end(time_t time_val);
 
 /** The gnc_timet_get_day_start() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day. */
+ *  GLib GDate format and adjust it to the first second of that day. */
 time_t gnc_timet_get_day_start_gdate (GDate *date);
 
 /** The gnc_timet_get_day_end() routine will take the given time in

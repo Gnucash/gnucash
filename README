@@ -359,9 +359,9 @@ some of them:
     The second style is the FSSTND, opt-style install.  In this style,
     all of the files are installed under a common subdirectory, often
     in /usr/local/opt, with the binaries going to
-    /usr/local/opt/foo/bin, the libs going to /usr/local/opt/foo/lib,
-    etc.  To request this style of install, just use the
-    --enable-opt-style-install option to ./configure.
+    /usr/local/opt/'packagename'/bin, the libs going to
+    /usr/local/opt/'packagename'/lib, etc.  To request this style of 
+    install, just use the --enable-opt-style-install option to ./configure.
 
 If you only want a particular language installed, you can set the
 LINGUAS environment variable before you run configure. For example,

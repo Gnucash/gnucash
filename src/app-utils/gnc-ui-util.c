@@ -329,6 +329,7 @@ gnc_ui_account_get_reconciled_balance (Account *account,
  * Wrapper around gnc_ui_account_get_balance_full that converts
  * the resulting number to a character string.  The number is
  * formatted according to the specification of the account currency.
+ * The caller is responsible for g_free'ing the returned memory.
  *
  * @param fn        The underlying function in Account.c to call to retrieve
  *                  a specific balance from the account.
@@ -429,6 +430,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
   return balance;
 }
 
+/* Caller is responsible for g_free'ing returned memory */
 char *
 gnc_ui_account_get_tax_info_string (Account *account)
 {
@@ -1730,7 +1732,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       continue;
     }
 
-    /* Note we never need to check for then end of 'in_str' explicitly.
+    /* Note we never need to check for the end of 'in_str' explicitly.
      * The 'else' clauses on all the state transitions will handle that. */
     switch (state)
     {

@@ -8,7 +8,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 # directories in their path can still invoke these commands via their
 # full path, say /some/dir/not/in/path/gnucash and still have the
 # right thing happen (i.e. they'll still get the right guile, and the
-# right scripts if the sub-exec anything from their scripts).  If you
+# right scripts if they sub-exec anything from their scripts).  If you
 # want to add another gnucash script, please add the name here (which
 # will cause the bindir wrapper to be created, and then put the actual
 # code in a script of the same name in ./overrides.  Oh, and don't

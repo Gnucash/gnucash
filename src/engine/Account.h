@@ -290,7 +290,7 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
  * Note that when we say that a 'split' holds an 'amount', that amount
  *   is denominated in the account commodity.  Do not confuse 'amount'
  *   and 'value'.  The 'value' of a split is the value of the amount
- *   expressed in the currency fo the transaction.  Thus, for example,
+ *   expressed in the currency of the transaction.  Thus, for example,
  *   the 'amount' may be 12 apples, where the account commodity is
  *   'apples'.  The value of these 12 apples may be 12 dollars, where 
  *   the transaction currency is 'dollars'.

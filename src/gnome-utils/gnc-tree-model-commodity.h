@@ -25,7 +25,7 @@
 
 /** @addtogroup Engine
     @{ */
-/** @file gnc-tree-model-account.h
+/** @file gnc-tree-model-commodity.h
     @brief GtkTreeModel implementation for gnucash commodities.
     @author Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author David Hampton <hampton@employees.org>

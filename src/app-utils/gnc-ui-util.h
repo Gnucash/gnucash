@@ -333,8 +333,9 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
  * caller must provide all the locale-specific information.
  *
  * Note: if group is NULL, no group-size verification will take place.
- * 	 ignore_list is a list of characters that are completely ignored
- *	 while processing the input string.  If NULL, nothing is ignored.
+ * ignore_list is a list of characters that are completely ignored
+ * while processing the input string.  If ignore_list is NULL, nothing
+ * is ignored.
  */
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,

@@ -22,6 +22,9 @@
 	  - tweak comments
 	  - comment on and discourage use of kvp_value_get_glist
 
+	Chris Shoemaker's patch: Various comments and typo fixes.
+	* Comments and typo fixes
+
 2005-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' patch to clean up the test-book-merge:

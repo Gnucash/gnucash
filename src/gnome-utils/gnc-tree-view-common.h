@@ -72,7 +72,7 @@ typedef struct {
  *  @param stock_icon The name of the stock icon to use in the first
  *  column of the tree.  If null, no icon will be included.
  *
- *  @param defaults A pointer to the data structure destribing the
+ *  @param defaults A pointer to the data structure describing the
  *  tree view. */
 void gnc_tree_view_common_create_columns (GtkTreeView *view,
 					  const gchar *tree_name,
@@ -96,7 +96,7 @@ void gnc_tree_view_common_create_columns (GtkTreeView *view,
  *  @param section The name of a gconf section where the tree
  *  information should be saved.
  *
- *  @param defaults A pointer to the data structure destribing the
+ *  @param defaults A pointer to the data structure describing the
  *  tree view. */
 void gnc_tree_view_common_save_settings (GtkTreeView *view,
 					 const gchar *section,
@@ -115,7 +115,7 @@ void gnc_tree_view_common_save_settings (GtkTreeView *view,
  *  @param section The name of a gconf section where the tree
  *  information should be restored from.
  *
- *  @param defaults A pointer to the data structure destribing the
+ *  @param defaults A pointer to the data structure describing the
  *  tree view. */
 void gnc_tree_view_common_restore_settings (GtkTreeView *view,
 					    const gchar *section,

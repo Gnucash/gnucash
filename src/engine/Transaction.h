@@ -40,7 +40,7 @@ When double-entry rules are enforced, the sum total value of the splits
 are zero.  If there are only two splits, then the value of one must be 
 positive, the other negative: this denotes that one account is debited, 
 and another is credited by an equal amount.  By forcing the value of the
-splits to always 'add up' to zero, we can gaurentee that the balances
+splits to always 'add up' to zero, we can guarantee that the balances
 of the accounts are always correctly balanced.
 
 The engine does not enforce double-entry accounting, but provides an API

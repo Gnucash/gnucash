@@ -43,7 +43,7 @@ struct QofCollection_s
   gboolean     is_dirty;
   
   GHashTable * hash_of_entities;
-  gpointer     data;       /* place where object class can hang arbitrari data */
+  gpointer     data;       /* place where object class can hang arbitrary data */
 };
 
 /* =============================================================== */

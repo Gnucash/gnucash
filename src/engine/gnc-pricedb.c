@@ -610,6 +610,9 @@ gnc_pricedb_create(QofBook * book)
   result = g_new0(GNCPriceDB, 1);
   qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
 
+  /* This leaks result when the collection is destroyed.  When
+     qofcollection is fixed to allow a destroy notifier, we'll need to
+     provide one here. */
   qof_collection_set_data (col, result);
 
   result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
