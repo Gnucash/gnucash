@@ -536,6 +536,7 @@ gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 void
 gnc_reconcile_list_postpone (GNCReconcileList *list)
 {
+  Transaction *trans;
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
   int i;
@@ -554,7 +555,10 @@ gnc_reconcile_list_postpone (GNCReconcileList *list)
 
     recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
 
+    trans = xaccSplitGetParent(split);
+    xaccTransBeginEdit(trans);
     xaccSplitSetReconcile (split, recn);
+    xaccTransCommitEdit(trans);
   }
 }
 
