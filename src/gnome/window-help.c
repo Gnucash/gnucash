@@ -41,6 +41,7 @@
 #include "window-help.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
+#include "gnc-engine-util.h"
 #include "File.h"
 
 struct _gnc_help_window {
@@ -62,6 +63,9 @@ struct _gnc_help_window {
 };
   
 static GList * open_help_windows = NULL;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 /********************************************************************
  * gnc_help_window_check_urltype
@@ -473,10 +477,10 @@ gnc_help_window_new() {
 
   indexfile = gncFindFile("help-search-index.db");
   if((err = db_open(indexfile,
-                    DB_UNKNOWN, 0, 0666, 
+                    DB_UNKNOWN, DB_RDONLY, 0644, 
                     NULL, NULL, &(help->index_db))) != 0) {
-    printf("Failed to open help index DB '%s' : %s\n",
-           indexfile, strerror(err));
+    PERR("Failed to open help index DB '%s' : %s\n",
+         indexfile, strerror(err));
     help->index_db = NULL;
   }
   g_free(indexfile);
