@@ -58,11 +58,11 @@ gnome: ${GNOME_OBJS}
 	@cd gnome;             $(MAKE) gnome
 
 qt: $(QT_OBJS)
-        @cd engine;            $(MAKE) default
-        @cd register;          $(MAKE) qt
-        @cd reports;           $(MAKE) default
+	@cd engine;            $(MAKE) default
+	@cd register;          $(MAKE) qt
+	@cd reports;           $(MAKE) default
 	@cd swig;              $(MAKE) perl5
-        @cd qt;                $(MAKE) qt
+	@cd qt;                $(MAKE) qt
 
 .PHONY: default qt gnome motif all
 
