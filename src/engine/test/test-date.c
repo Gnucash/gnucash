@@ -130,6 +130,186 @@ run_test (void)
   check_conversion ("1969-12-31 15:23:00.000000 -0837", ts);
   check_conversion ("1969-12-31 15:45:00.000000 -0815", ts);
 
+  /* Now leaving the 60's:
+   *
+   * Black Panthers
+   * Weather Underground
+   * Kent State
+   * Evacuation of Vietnam
+   * Impeachment 
+   * Gas Crisis
+   * New York Garbage Crisis
+   * Stagflation
+   * Delapidated Bicentennial
+   * Sex Pistols
+   * Punk Rock
+   *
+   * Of course, anything had to be better than the miserable 70's, 
+   * which explains why Reagan was elected.  Food for thought.
+   */
+  ts.tv_sec = 10*365*24*3600 + 2*24*3600;
+  ts.tv_nsec = 0;
+  check_conversion ("1979-12-31 15:00:00.000000 -0900", ts);
+  check_conversion ("1979-12-31 16:00:00.000000 -0800", ts);
+  check_conversion ("1979-12-31 17:00:00.000000 -0700", ts);
+  check_conversion ("1979-12-31 18:00:00.000000 -0600", ts);
+  check_conversion ("1979-12-31 19:00:00.000000 -0500", ts);
+  check_conversion ("1979-12-31 20:00:00.000000 -0400", ts);
+  check_conversion ("1979-12-31 21:00:00.000000 -0300", ts);
+  check_conversion ("1979-12-31 22:00:00.000000 -0200", ts);
+  check_conversion ("1979-12-31 23:00:00.000000 -0100", ts);
+
+  check_conversion ("1980-01-01 00:00:00.000000 -0000", ts);
+  check_conversion ("1980-01-01 00:00:00.000000 +0000", ts);
+
+  check_conversion ("1980-01-01 01:00:00.000000 +0100", ts);
+  check_conversion ("1980-01-01 02:00:00.000000 +0200", ts);
+  check_conversion ("1980-01-01 03:00:00.000000 +0300", ts);
+  check_conversion ("1980-01-01 04:00:00.000000 +0400", ts);
+  check_conversion ("1980-01-01 05:00:00.000000 +0500", ts);
+  check_conversion ("1980-01-01 06:00:00.000000 +0600", ts);
+  check_conversion ("1980-01-01 07:00:00.000000 +0700", ts);
+  check_conversion ("1980-01-01 08:00:00.000000 +0800", ts);
+
+  /* check minute-offsets as well */
+  check_conversion ("1980-01-01 08:01:00.000000 +0801", ts);
+  check_conversion ("1980-01-01 08:02:00.000000 +0802", ts);
+  check_conversion ("1980-01-01 08:03:00.000000 +0803", ts);
+  check_conversion ("1980-01-01 08:23:00.000000 +0823", ts);
+  check_conversion ("1980-01-01 08:35:00.000000 +0835", ts);
+  check_conversion ("1980-01-01 08:47:00.000000 +0847", ts);
+  check_conversion ("1980-01-01 08:59:00.000000 +0859", ts);
+
+  check_conversion ("1979-12-31 15:01:00.000000 -0859", ts);
+  check_conversion ("1979-12-31 15:02:00.000000 -0858", ts);
+  check_conversion ("1979-12-31 15:03:00.000000 -0857", ts);
+  check_conversion ("1979-12-31 15:23:00.000000 -0837", ts);
+  check_conversion ("1979-12-31 15:45:00.000000 -0815", ts);
+
+
+  /* The 90's */
+  ts.tv_sec = 20*365*24*3600 + 5*24*3600;
+  ts.tv_nsec = 0;
+  check_conversion ("1989-12-31 15:00:00.000000 -0900", ts);
+  check_conversion ("1989-12-31 16:00:00.000000 -0800", ts);
+  check_conversion ("1989-12-31 17:00:00.000000 -0700", ts);
+  check_conversion ("1989-12-31 18:00:00.000000 -0600", ts);
+  check_conversion ("1989-12-31 19:00:00.000000 -0500", ts);
+  check_conversion ("1989-12-31 20:00:00.000000 -0400", ts);
+  check_conversion ("1989-12-31 21:00:00.000000 -0300", ts);
+  check_conversion ("1989-12-31 22:00:00.000000 -0200", ts);
+  check_conversion ("1989-12-31 23:00:00.000000 -0100", ts);
+
+  check_conversion ("1990-01-01 00:00:00.000000 -0000", ts);
+  check_conversion ("1990-01-01 00:00:00.000000 +0000", ts);
+
+  check_conversion ("1990-01-01 01:00:00.000000 +0100", ts);
+  check_conversion ("1990-01-01 02:00:00.000000 +0200", ts);
+  check_conversion ("1990-01-01 03:00:00.000000 +0300", ts);
+  check_conversion ("1990-01-01 04:00:00.000000 +0400", ts);
+  check_conversion ("1990-01-01 05:00:00.000000 +0500", ts);
+  check_conversion ("1990-01-01 06:00:00.000000 +0600", ts);
+  check_conversion ("1990-01-01 07:00:00.000000 +0700", ts);
+  check_conversion ("1990-01-01 08:00:00.000000 +0800", ts);
+
+  /* check minute-offsets as well */
+  check_conversion ("1990-01-01 08:01:00.000000 +0801", ts);
+  check_conversion ("1990-01-01 08:02:00.000000 +0802", ts);
+  check_conversion ("1990-01-01 08:03:00.000000 +0803", ts);
+  check_conversion ("1990-01-01 08:23:00.000000 +0823", ts);
+  check_conversion ("1990-01-01 08:35:00.000000 +0835", ts);
+  check_conversion ("1990-01-01 08:47:00.000000 +0847", ts);
+  check_conversion ("1990-01-01 08:59:00.000000 +0859", ts);
+
+  check_conversion ("1989-12-31 15:01:00.000000 -0859", ts);
+  check_conversion ("1989-12-31 15:02:00.000000 -0858", ts);
+  check_conversion ("1989-12-31 15:03:00.000000 -0857", ts);
+  check_conversion ("1989-12-31 15:23:00.000000 -0837", ts);
+  check_conversion ("1989-12-31 15:45:00.000000 -0815", ts);
+
+
+  /* The naughties */
+  ts.tv_sec = 30*365*24*3600 + 7*24*3600;
+  ts.tv_nsec = 0;
+  check_conversion ("1999-12-31 15:00:00.000000 -0900", ts);
+  check_conversion ("1999-12-31 16:00:00.000000 -0800", ts);
+  check_conversion ("1999-12-31 17:00:00.000000 -0700", ts);
+  check_conversion ("1999-12-31 18:00:00.000000 -0600", ts);
+  check_conversion ("1999-12-31 19:00:00.000000 -0500", ts);
+  check_conversion ("1999-12-31 20:00:00.000000 -0400", ts);
+  check_conversion ("1999-12-31 21:00:00.000000 -0300", ts);
+  check_conversion ("1999-12-31 22:00:00.000000 -0200", ts);
+  check_conversion ("1999-12-31 23:00:00.000000 -0100", ts);
+
+  check_conversion ("2000-01-01 00:00:00.000000 -0000", ts);
+  check_conversion ("2000-01-01 00:00:00.000000 +0000", ts);
+
+  check_conversion ("2000-01-01 01:00:00.000000 +0100", ts);
+  check_conversion ("2000-01-01 02:00:00.000000 +0200", ts);
+  check_conversion ("2000-01-01 03:00:00.000000 +0300", ts);
+  check_conversion ("2000-01-01 04:00:00.000000 +0400", ts);
+  check_conversion ("2000-01-01 05:00:00.000000 +0500", ts);
+  check_conversion ("2000-01-01 06:00:00.000000 +0600", ts);
+  check_conversion ("2000-01-01 07:00:00.000000 +0700", ts);
+  check_conversion ("2000-01-01 08:00:00.000000 +0800", ts);
+
+  /* check minute-offsets as well */
+  check_conversion ("2000-01-01 08:01:00.000000 +0801", ts);
+  check_conversion ("2000-01-01 08:02:00.000000 +0802", ts);
+  check_conversion ("2000-01-01 08:03:00.000000 +0803", ts);
+  check_conversion ("2000-01-01 08:23:00.000000 +0823", ts);
+  check_conversion ("2000-01-01 08:35:00.000000 +0835", ts);
+  check_conversion ("2000-01-01 08:47:00.000000 +0847", ts);
+  check_conversion ("2000-01-01 08:59:00.000000 +0859", ts);
+
+  check_conversion ("1999-12-31 15:01:00.000000 -0859", ts);
+  check_conversion ("1999-12-31 15:02:00.000000 -0858", ts);
+  check_conversion ("1999-12-31 15:03:00.000000 -0857", ts);
+  check_conversion ("1999-12-31 15:23:00.000000 -0837", ts);
+  check_conversion ("1999-12-31 15:45:00.000000 -0815", ts);
+
+
+  /* The nows */
+  ts.tv_sec = 35*365*24*3600 + 9*24*3600;
+  ts.tv_nsec = 0;
+  check_conversion ("2004-12-31 15:00:00.000000 -0900", ts);
+  check_conversion ("2004-12-31 16:00:00.000000 -0800", ts);
+  check_conversion ("2004-12-31 17:00:00.000000 -0700", ts);
+  check_conversion ("2004-12-31 18:00:00.000000 -0600", ts);
+  check_conversion ("2004-12-31 19:00:00.000000 -0500", ts);
+  check_conversion ("2004-12-31 20:00:00.000000 -0400", ts);
+  check_conversion ("2004-12-31 21:00:00.000000 -0300", ts);
+  check_conversion ("2004-12-31 22:00:00.000000 -0200", ts);
+  check_conversion ("2004-12-31 23:00:00.000000 -0100", ts);
+
+  check_conversion ("2005-01-01 00:00:00.000000 -0000", ts);
+  check_conversion ("2005-01-01 00:00:00.000000 +0000", ts);
+
+  check_conversion ("2005-01-01 01:00:00.000000 +0100", ts);
+  check_conversion ("2005-01-01 02:00:00.000000 +0200", ts);
+  check_conversion ("2005-01-01 03:00:00.000000 +0300", ts);
+  check_conversion ("2005-01-01 04:00:00.000000 +0400", ts);
+  check_conversion ("2005-01-01 05:00:00.000000 +0500", ts);
+  check_conversion ("2005-01-01 06:00:00.000000 +0600", ts);
+  check_conversion ("2005-01-01 07:00:00.000000 +0700", ts);
+  check_conversion ("2005-01-01 08:00:00.000000 +0800", ts);
+
+  /* check minute-offsets as well */
+  check_conversion ("2005-01-01 08:01:00.000000 +0801", ts);
+  check_conversion ("2005-01-01 08:02:00.000000 +0802", ts);
+  check_conversion ("2005-01-01 08:03:00.000000 +0803", ts);
+  check_conversion ("2005-01-01 08:23:00.000000 +0823", ts);
+  check_conversion ("2005-01-01 08:35:00.000000 +0835", ts);
+  check_conversion ("2005-01-01 08:47:00.000000 +0847", ts);
+  check_conversion ("2005-01-01 08:59:00.000000 +0859", ts);
+
+  check_conversion ("2004-12-31 15:01:00.000000 -0859", ts);
+  check_conversion ("2004-12-31 15:02:00.000000 -0858", ts);
+  check_conversion ("2004-12-31 15:03:00.000000 -0857", ts);
+  check_conversion ("2004-12-31 15:23:00.000000 -0837", ts);
+  check_conversion ("2004-12-31 15:45:00.000000 -0815", ts);
+
+
   /* Various leap-year days and near-leap times. */
   ts = gnc_iso8601_to_timespec_gmt ("1980-02-29 00:00:00.000000 -0000");
   check_time (ts, do_print);
