@@ -1,3 +1,11 @@
+2003-05-15  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po: New Czech translation by Miloslav Trmac
+	<mitr@volny.cz>.
+
+	* po/glossary/pt_BR.po: Updated Brazilian portugese glossary by
+	Jon Lapham <lapham@extracta.com.br>.
+
 2003-05-12  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-check.in: 

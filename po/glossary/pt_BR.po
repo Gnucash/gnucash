@@ -1,18 +1,21 @@
-# gnucash-glossary's Portuguese Translation
-# Copyright (C) 2001 Free Software Foundation, Inc.
+# gnucash-glossary's Brazilian Portuguese Translation
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# Jon Lapham <lapham@extracta.com.br>, 2003
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.6\n"
-"POT-Creation-Date: 2002-08-24 04:38+0200\n"
-"PO-Revision-Date: 2002-08-24 14:05+0000\n"
-"Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"Language-Team: Portuguese <none@none.org>\n"
+"Project-Id-Version: 1.8\n"
+"POT-Creation-Date: 2003-05-08 23:06+0200\n"
+"PO-Revision-Date: 2003-05-14 18:43+0000\n"
+"Last-Translator: Jon Lapham <lapham@extracta.com.br>\n"
+"Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+# term=prazo for "term to pay a bill"
+# term=termo for "terms of payment"
 #. "English Definition"
 msgid "Term"
 msgstr "Prazo"
@@ -47,7 +50,7 @@ msgstr "tipo de conta: moeda"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "tipo de conta: Patrimonio Inicial"
+msgstr "tipo de conta: Patrimônio Inicial"
 
 #. "-"
 msgid "account type: Expense"
@@ -189,9 +192,22 @@ msgstr "consolidar"
 msgid "bank"
 msgstr "banco"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr "fatura"
+
+# FIXME: Forma de Faturamento
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "forma de pagamento"
+
 #. "-"
 msgid "business (adjective)"
 msgstr "negociais (adjetivo)"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "negócio (substantivo)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -218,7 +234,6 @@ msgid "close, to"
 msgstr "fechar"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
-# In Brazil, commodity is called commodity
 msgid "commodity"
 msgstr "commodity"
 
@@ -294,9 +309,17 @@ msgstr "Descrição (coluna no registro)"
 msgid "double entry"
 msgstr "dupla entrada"
 
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "funcionário"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
 msgstr "patrimonio inicial"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr ""
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -342,6 +365,10 @@ msgstr "juros"
 msgid "invoice"
 msgstr "fatura"
 
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr "serviço"
+
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
 msgstr "livro de contas"
@@ -349,6 +376,10 @@ msgstr "livro de contas"
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
 msgstr "passivo/patrimonio"
+
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "empréstimo"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -369,6 +400,10 @@ msgstr "Modo IDM"
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
 msgstr "Comentário"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "Hipoteca"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -409,6 +444,10 @@ msgstr "saldo inicial"
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
 msgstr "opções"
+
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr "pedido"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -526,6 +565,10 @@ msgstr "Ganhos Retidos"
 msgid "save, to (to a file)"
 msgstr "gravar"
 
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "Transação Programada"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "limpar"
@@ -582,9 +625,9 @@ msgstr "total"
 msgid "transaction"
 msgstr "transação"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "status de transação: êxito"
+msgstr "status de transação: compensado"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -593,6 +636,10 @@ msgstr "status de transação: congelada"
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
 msgstr "status de transação: reconciliada"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "status de transação: cancelada"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -621,6 +668,10 @@ msgstr "URL"
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
 msgstr "valor (numa parcela)"
+
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "fornecedor"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
