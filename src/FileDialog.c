@@ -118,6 +118,12 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog (fmt);
       break;
 
+    case ERR_SQL_BAD_LOCATION:
+      fmt = _("Can't parse the database URL\n   %s\n");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
     case ERR_SQL_CANT_CONNECT:
       fmt = _("Can't connect to the database\n   %s\n"
               "The host, username or password were incorrect.");
@@ -134,6 +140,50 @@ show_book_error (GNCBackendError io_error, const char *newfile)
 
   if (buf) g_free(buf);
   return uh_oh;
+}
+
+/* ======================================================== */
+
+static gboolean
+gncLockFailHandler (const char *file)
+{
+  const char *format = _("Gnucash could not obtain the lock for\n"
+                         "   %s.\n"
+                         "That database may be in use by another user,\n"
+                         "in which case you should not open the database.\n"
+                         "\nDo you want to proceed with opening the database?");
+  char *message;
+  gboolean result;
+
+  if (file == NULL)
+    return FALSE;
+
+  message = g_strdup_printf (format, file);
+  result = gnc_verify_dialog (message, FALSE);
+  g_free (message);
+
+  return result;
+}
+
+/* ======================================================== */
+
+static gboolean
+gncCreateFailHandler (const char *file)
+{
+  const char *format = _("The database\n"
+                         "   %s\n"
+                         "doesn't seem to exist.  Do you want to create it?\n");
+  char *message;
+  gboolean result;
+
+  if (file == NULL)
+    return FALSE;
+
+  message = g_strdup_printf (format, file);
+  result = gnc_verify_dialog (message, FALSE);
+  g_free (message);
+
+  return result;
 }
 
 /* ======================================================== */
@@ -207,29 +257,6 @@ gncFileQuerySave (void)
 }
 
 /* ======================================================== */
-
-static gboolean
-gncLockFailHandler (const char *file)
-{
-  const char *format = _("Gnucash could not obtain the lock for\n"
-                         "   %s.\n"
-                         "That database may be in use by another user,\n"
-                         "in which case you should not open the database.\n"
-                         "\nDo you want to proceed with opening the database?");
-  char *message;
-  gboolean result;
-
-  if (file == NULL)
-    return FALSE;
-
-  message = g_strdup_printf (format, file);
-  result = gnc_verify_dialog (message, FALSE);
-  g_free (message);
-
-  return result;
-}
-
-/* ======================================================== */
 /* private utilities for file open; done in two stages */
 
 static void
@@ -272,7 +299,7 @@ gncPostFileOpen (const char * filename)
 
   new_group = NULL;
 
-  gnc_book_begin (new_book, newfile, FALSE);
+  gnc_book_begin (new_book, newfile, FALSE, FALSE);
   io_err = gnc_book_get_error (new_book);
 
   /* if file appears to be locked, ask the user ... */
@@ -281,7 +308,17 @@ gncPostFileOpen (const char * filename)
      if (gncLockFailHandler (newfile))
      {
         /* user told us to ignore locks. So ignore them. */
-        gnc_book_begin (new_book, newfile, TRUE);
+        gnc_book_begin (new_book, newfile, TRUE, FALSE);
+     }
+  }
+
+  /* if the database doesn't exist, ask the user ... */
+  else if (ERR_BACKEND_NO_SUCH_DB == io_err)
+  {
+     if (gncCreateFailHandler (newfile))
+     {
+        /* user told us to create a new database. Do it. */
+        gnc_book_begin (new_book, newfile, FALSE, TRUE);
      }
   }
 
@@ -482,17 +519,28 @@ gncFileSaveAs (void)
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal. */
   new_book = gnc_book_new ();
-  gnc_book_begin (new_book, newfile, FALSE);
+  gnc_book_begin (new_book, newfile, FALSE, FALSE);
 
   io_err = gnc_book_get_error (new_book);
+
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err) 
   {
     if (gncLockFailHandler (newfile))
     {
        /* user told us to ignore locks. So ignore them. */
-       gnc_book_begin (new_book, newfile, TRUE);
+       gnc_book_begin (new_book, newfile, TRUE, FALSE);
     }
+  }
+
+  /* if the database doesn't exist, ask the user ... */
+  else if (ERR_BACKEND_NO_SUCH_DB == io_err)
+  {
+     if (gncCreateFailHandler (newfile))
+     {
+        /* user told us to create a new database. Do it. */
+        gnc_book_begin (new_book, newfile, FALSE, TRUE);
+     }
   }
 
   /* check again for session errors (since above dialog may have 
