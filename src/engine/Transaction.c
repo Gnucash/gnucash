@@ -3037,6 +3037,24 @@ xaccSplitMakeStockSplit(Split *s)
 }
 
 
+/* ====================================================================== */
+
+static gboolean
+counter_thunk(Transaction *t, void *data)
+{
+    (*((guint*)data))++;
+    return TRUE;
+}
+
+guint
+gnc_book_count_transactions(GNCBook *book)
+{
+    guint count = 0;
+    xaccGroupForEachTransaction(xaccGetAccountGroup(book),
+                                counter_thunk, (void*)&count);
+    return count;
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -148,6 +148,14 @@ Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
     transaction associated with the given id, or NULL
     if there is no such transaction. */
 Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+
+
+/** \warning XXX FIXME 
+ * gnc_book_count_transactions is a utility function, 
+ * probably needs to be moved to a utility file somewhere.
+ */
+guint gnc_book_count_transactions(GNCBook *book);
+
 /**@}*/
 
 
