@@ -1,5 +1,9 @@
 ;;; -*-scheme-*-
 
+;(debug-enable 'backtrace)
+;(debug-enable 'debug)
+;(read-enable 'positions)
+
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 

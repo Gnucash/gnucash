@@ -69,4 +69,12 @@ const GUID * gncOwnerGetEndGUID (GncOwner *owner);
 #define OWNER_PARENTG	"parent-guid"
 #define OWNER_NAME	"name"
 
+/*
+ * These two functions are mainly for the convenience of scheme code.
+ * Normal C code has no need to ever use these two functions, and rather
+ * can just use a GncOwner directly and just pass around a pointer to it.
+ */
+GncOwner * gncOwnerCreate (void);
+void gncOwnerDestroy (GncOwner *owner);
+
 #endif /* GNC_OWNER_H_ */

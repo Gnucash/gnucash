@@ -16,6 +16,19 @@
 
 #define _GNC_MOD_NAME	GNC_OWNER_MODULE_NAME
 
+GncOwner * gncOwnerCreate (void)
+{
+  GncOwner *o = g_new0 (GncOwner, 1);
+  o->type = GNC_OWNER_NONE;
+  return o;
+}
+
+void gncOwnerDestroy (GncOwner *owner)
+{
+  if (!owner) return;
+  g_free (owner);
+}
+
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj)
 {
   if (!owner) return;

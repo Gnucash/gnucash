@@ -501,6 +501,10 @@ gnc_invoice_update_window (InvoiceWindow *iw)
       /* hide the close invoice button -- it needs to be posted first! */
       hide = glade_xml_get_widget (iw->xml, "close_invoice_button");
       gtk_widget_hide_all (hide);
+
+      /* Also hide the print invoice button, for the same reason */
+      hide = glade_xml_get_widget (iw->xml, "print_invoice_button");
+      gtk_widget_hide_all (hide);
     }
   }
 

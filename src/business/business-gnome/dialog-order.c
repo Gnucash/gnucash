@@ -598,9 +598,19 @@ gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   GncOrder *created_order = NULL;
   GncOwner owner;
 
-  if (ownerp)
-    gncOwnerCopy (ownerp, &owner);
-  else
+  if (ownerp) {
+    switch (gncOwnerGetType (ownerp)) {
+    case GNC_OWNER_CUSTOMER:
+    case GNC_OWNER_VENDOR:
+    case GNC_OWNER_JOB:
+      gncOwnerCopy (ownerp, &owner);
+      break;
+    default:
+      g_warning ("Cannot deal with unknown Owner types");
+      /* XXX: popup a warning? */
+      return NULL;
+    }
+  } else
     gncOwnerInitJob (&owner, NULL); /* XXX: pass in the owner type? */
 
   /* Make sure required options exist */
