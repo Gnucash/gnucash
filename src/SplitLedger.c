@@ -304,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans, 1);
+      xaccTransBeginEdit (trans, 0);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -775,11 +775,12 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    Table *table;
    int phys_row;
    int vrow;
-   int style;
+   int type, style;
    int multi_line, dynamic;
    CellBlock *lead_cursor;
 
    table = reg->table;
+   type  = (reg->type) & REG_TYPE_MASK;
    style = (reg->type) & REG_STYLE_MASK;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
@@ -909,8 +910,12 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
        * when doing stock accounts.   This will guess incorrectly for a 
        * ledger showing multiple stocks, but seems cool for a single stock.
        */
-      last_price = xaccSplitGetSharePrice (last_split);
-      xaccSplitSetSharePrice (split, last_price);
+      if ((STOCK_REGISTER == type) ||
+          (PORTFOLIO      == type)) 
+      {
+         last_price = xaccSplitGetSharePrice (last_split);
+         xaccSplitSetSharePrice (split, last_price);
+      }
    }
 
    /* do the split row of the blank split */
