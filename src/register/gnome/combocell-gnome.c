@@ -30,12 +30,6 @@
  * Copyright (c) 2000 Linas Vepstas <linas@linas.org>
  */
 
-/*
-   TODO: We have no use for the generic ComboCell->menuitems.  These
-   should probably be killed.  Each GUI should probably handle it's
-   own strings.
-*/
-
 #include "config.h"
 
 #include <gnome.h>
