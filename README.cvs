@@ -18,6 +18,20 @@ Owen Taylor.
    If in doubt, you can run autogen.sh, run ./configure --help,
    then re-run autogen.sh with your options.
 
+ + Some versions of gettextize don't deal well with re-running themselves.
+   You will see this as an error like:
+
+	configure.in:1141: error: `intl/Makefile' is already registered with
+	AC_CONFIG_FILES. autoconf/status.m4:844: AC_CONFIG_FILES is expanded
+	from... configure.in:1141: the top level
+	autom4te: /usr/bin/m4 failed with exit status: 1
+	autoheader: /usr/bin/autom4te failed with exit status: 1
+	**Error**: autoheader failed.
+
+   If you see this error, you may need to run "cvs update -C" to pull down
+   the repository versions of configure.in and/or Makefile.am in various places.
+   NOTE WELL: using "-C" will over-write any local changes you may have.
+
 When making changes to GnuCash and trying to commit to the repository:
 
  + Ask first. If your changes are major, or could possibly break existing

@@ -1,3 +1,8 @@
+2002-12-08  Derek Atkins  <derek@ihtfp.com>
+
+	* README.cvs: mention gettextize breakage and "cvs up -C"
+	  workaround.
+
 2002-12-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/commodity-utilities.scm: For
