@@ -85,6 +85,10 @@
  *    /book/prev-book         GUID of previous book (the closed book)
  *    
 -- hack alert -- 
+   Need to also split up the price db too.  Also need to make copies of SX,
+   and the like ... 
+
+-- hack alert -- 
   Not imlemented (yet), these should go into book:
   /book/name=some-user-supplied-name
   /book/notes=user-supplied-descriptive-comments
