@@ -1,3 +1,9 @@
+2001-03-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: reorganizing of the hierarchical
+	reports: subtotals are now printed *below* the subaccounts instead
+	of above.
+
 2001-03-04  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: define a new substitution GNC_PIXMAP_DIR for

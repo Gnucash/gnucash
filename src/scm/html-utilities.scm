@@ -120,6 +120,10 @@
 	      (string<? (gnc:account-get-code a)
 			(gnc:account-get-code b)))))
 
+    ;; just a stupid little helper
+    (define (identity a)
+      a)
+
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
     ;; inside this function.
@@ -140,14 +144,18 @@
 	(gnc:html-make-empty-cells (- current-depth 1))
 	(list (gnc:make-html-table-cell/size 
 	       1 (+ 1 (- tree-depth current-depth)) 
-	       ;; FIXME: (if boldface? (gnc:html-markup-b my-name)
-	       ;; but this doesn't seen to work
-	       my-name))
+	       ;; FIXME: grib has to fix html-text
+	       ;;(if boldface? 
+	       ;;  (and my-name ;; if my-name == #f, just use #f
+	       ;;(gnc:make-html-text (gnc:html-markup-b my-name)))
+	       my-name));;)
 	(gnc:html-make-empty-cells (- tree-depth current-depth))
 	;; the account balance
-	(list (if (and my-balance reverse-balance?)
-		  (gnc:monetary-neg my-balance) 
-		  my-balance))
+	(list (and my-balance
+		   (gnc:make-html-text
+		    ((if boldface? gnc:html-markup-b identity)
+		     ((if reverse-balance? gnc:monetary-neg identity)
+		      my-balance)))))
 	(gnc:html-make-empty-cells (- current-depth 1)))))
     
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -178,9 +186,19 @@
 	  (gnc:html-make-empty-cells (- current-depth 1))
 	  (list (gnc:make-html-table-cell/size 
 		 1 (+ 1 (- tree-depth current-depth)) 
-		 my-name))
+		 ;; FIXME: grib has to fix html-text
+		 ;;(if boldface? 
+		 ;;(and my-name
+		 ;;  (gnc:make-html-text (gnc:html-markup-b my-name)))
+		 my-name));;)
 	  (gnc:html-make-empty-cells (* 2 (- tree-depth current-depth)))
-	  (list foreign-balance	domestic-balance)
+	  (if boldface?
+	      (list 
+	       (and foreign-balance 
+		    (gnc:make-html-text (gnc:html-markup-b foreign-balance)))
+	       (and domestic-balance
+		    (gnc:make-html-text (gnc:html-markup-b domestic-balance))))
+	      (list foreign-balance domestic-balance))
 	  (gnc:html-make-empty-cells (* 2 (- current-depth 1))))))
       
       ;;;;;;;;;;
@@ -253,21 +271,6 @@
 	   (gnc:account-reverse-balance? acct)
 	   #f)))
   
-    ;; Adds rows to the table. Therefore it goes through the list of
-    ;; accounts, runs add-account-rows! on each account.  If
-    ;; tree-depth and current-depth require, it will recursively call
-    ;; itself on the list of children accounts.
-    (define (traverse-accounts! accnts current-depth)
-      (if (<= current-depth tree-depth)
-	  (for-each (lambda (acct)
-		      (begin
-			(if (show-acct? acct)
-			    (add-account-rows! acct current-depth))
-			(traverse-accounts! 
-			 (gnc:account-get-immediate-subaccounts acct)
-			 (+ 1 current-depth))))
-		    (sort-fn accnts))))
-    
     ;; Generalization for a subtotal or the total balance.
     (define (add-subtotal-row! 
 	     current-depth subtotal-name balance boldface?)
@@ -284,6 +287,49 @@
 			    balance report-commodity exchange-fn)
 			   #f boldface?)))
 
+    ;; This prints *all* the rows that belong to one group: the title
+    ;; row, the subaccount tree, and the Total row with the balance of
+    ;; the subaccounts.
+    (define (add-group! current-depth groupname subaccounts thisbalance)
+      (begin
+	;; first the group name
+	(add-subtotal-row! current-depth groupname #f #f)
+	(traverse-accounts! subaccounts (+ 1 current-depth))
+	(add-subtotal-row! 
+	 current-depth 
+	 (if (gnc:html-text? groupname)
+	     groupname ;; FIXME: let grib fix html-text handling
+	     (gnc:make-html-text (_ "Total") " " groupname))
+	 (let ((subbalance (gnc:accounts-get-balance-helper 
+			    subaccounts my-get-balance 
+			    gnc:account-reverse-balance?)))
+	   (if thisbalance (subbalance 'merge thisbalance #f))
+	   subbalance)
+	 #t)
+	;; and an empty line
+	(add-subtotal-row! current-depth #f #f #f)))
+
+    ;; Adds rows to the table. Therefore it goes through the list of
+    ;; accounts, runs add-account-rows! on each account.  If
+    ;; tree-depth and current-depth require, it will recursively call
+    ;; itself on the list of children accounts.
+    (define (traverse-accounts! accnts current-depth)
+      (if (<= current-depth tree-depth)
+	  (for-each 
+	   (lambda (acct)
+	     (let ((subaccts (filter 
+			      show-acct?
+			      (gnc:account-get-immediate-subaccounts acct))))
+	       (if (or (= current-depth tree-depth) (null? subaccts))
+		   (add-account-rows! acct current-depth)
+		   (add-group! current-depth 
+			       (gnc:html-account-anchor acct)
+			       subaccts
+			       (gnc:accounts-get-balance-helper 
+				(list acct) my-get-balance 
+				gnc:account-reverse-balance?)))))
+	   (sort-fn accnts))))
+
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     ;; start the recursive account processing
@@ -292,22 +338,11 @@
 	(for-each 
 	 (lambda (accts) 
 	   (if (and (not (null? accts)) (not (null? (cdr accts))))
-	       (let ((groupname (car accts))
-		     (gaccts (cdr accts)))
-		 ;; first the group name
-		 (add-subtotal-row! 1 groupname #f #f)
-		 (traverse-accounts! gaccts 2)
-		 (add-subtotal-row! 
-		  1 (string-append (_ "Total") " " groupname)
-		  (gnc:accounts-get-balance-helper 
-		   gaccts my-get-balance gnc:account-reverse-balance?) 
-		  #t)
-		 ;; and an empty line
-		 (add-subtotal-row! 1 #f #f #f))))
+	       (add-group! 1 (car accts) (cdr accts) #f)))
 	 (gnc:decompose-accountlist (lset-intersection 
 				     equal? accounts topl-accounts)))
 	;; No extra grouping.
-	(traverse-accounts! topl-accounts 1))
+	(traverse-accounts! (filter show-acct? topl-accounts) 1))
     
     ;; Show the total sum.
     (if show-total?
