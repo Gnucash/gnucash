@@ -98,6 +98,17 @@ typedef struct _BankAcct BankAcct;
 typedef struct _InvAcct  InvAcct;
 typedef union _AccInfo AccInfo;
 
+
+/* The AccInfo structure is just a union of the other account
+ *   auxilliary info types.  The xaccCastToXXX() functions simply
+ *   provide a safe upcast mechanism (similar to that in C++ ...
+ *   returns the address if the cast is safe, otherwise returns NULL).
+ */
+AccInfo * xaccMallocAccInfo (int typo);
+void      xaccFreeAccInfo (AccInfo *u);
+InvAcct * xaccCastToInvAcct (AccInfo *);
+
+
 InvAcct * xaccMallocInvAcct (void);
 void      xaccInitInvAcct (InvAcct *iacc);
 void      xaccFreeInvAcct (InvAcct *iacc);

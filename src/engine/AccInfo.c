@@ -23,6 +23,7 @@
 #include "AccInfo.h"
 #include "AccInfoP.h"
 #include "messages.h"
+#include "util.h"
 
 /* =========================================================== */
 
@@ -56,6 +57,38 @@ char * xaccAccountGetTypeStr (int type)
 
 /* =========================================================== */
 
+AccInfo *
+xaccMallocAccInfo (int typo)
+{
+  AccInfo *u = NULL;
+  if ((STOCK  == typo) || (MUTUAL == typo)) {
+    u = (AccInfo *) xaccMallocInvAcct ();
+    u->inv_acct.type = typo;
+  }
+  return u;
+}
+
+void
+xaccFreeAccInfo (AccInfo *u)
+{
+  if (!u) return;
+  if ((STOCK  == u->type) || (MUTUAL == u->type)) {
+    xaccFreeInvAcct ( &(u->inv_acct));
+  }
+}
+
+InvAcct *
+xaccCastToInvAcct (AccInfo *u)
+{
+  if (!u) return NULL;
+  if ((STOCK  == u->type) || (MUTUAL == u->type)) {
+    return ( &(u->inv_acct));
+  }
+  return NULL;
+}
+
+/* =========================================================== */
+
 InvAcct *
 xaccMallocInvAcct (void) 
 {
@@ -69,7 +102,7 @@ void
 xaccInitInvAcct (InvAcct *iacc)
 {
    if (!iacc) return;
-   iacc->type = -1;
+   iacc->type = STOCK;
    iacc->pricesrc = NULL;
    iacc->brokerid = NULL;
    iacc->acctid = NULL;
@@ -83,6 +116,10 @@ void
 xaccFreeInvAcct (InvAcct *iacc)
 {
    if (!iacc) return;
+
+   /* if the wrong type then a miscast. can't free. */
+   assert ((STOCK  == iacc->type) || (MUTUAL == iacc->type));
+
    if (iacc->pricesrc) { free(iacc->pricesrc); iacc->pricesrc = NULL; }
    if (iacc->brokerid) { free(iacc->brokerid); iacc->brokerid = NULL; }
    if (iacc->acctid) { free(iacc->acctid); iacc->acctid = NULL; }

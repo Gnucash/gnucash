@@ -124,16 +124,10 @@ xaccFreeAccount( Account *acc )
 
   if (NULL == acc) return;
     
-  /* recursively free children */
+  /* First, recursively free children */
   xaccFreeAccountGroup (acc->children);
-
-  if (acc->accountName) free (acc->accountName);
-  if (acc->accountCode) free (acc->accountCode);
-  if (acc->description) free (acc->description);
-  if (acc->notes) free (acc->notes);
-  if (acc->currency) free (acc->currency);
-  if (acc->security) free (acc->security);
   
+  /* Next, clean up the splits */
   /* any split pointing at this account needs to be unmarked */
   for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
@@ -158,6 +152,17 @@ xaccFreeAccount( Account *acc )
   acc->splits = NULL;
   acc->numSplits = 0;
   
+  /* Finally, clean up the account info */
+  if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
+  acc->accInfo = NULL;
+
+  if (acc->accountName) free (acc->accountName);
+  if (acc->accountCode) free (acc->accountCode);
+  if (acc->description) free (acc->description);
+  if (acc->notes) free (acc->notes);
+  if (acc->currency) free (acc->currency);
+  if (acc->security) free (acc->security);
+
   /* zero out values, just in case stray 
    * pointers are pointing here. */
 
@@ -840,6 +845,10 @@ xaccAccountSetType (Account *acc, int tip)
    /* refuse invalid account types */
    if (NUM_ACCOUNT_TYPES <= tip) return;
    acc->type = tip;
+
+   /* initialize the auxilliary account info as well */
+   if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
+   acc->accInfo = xaccMallocAccountInfo (tip);
 }
 
 void 
@@ -944,6 +953,13 @@ xaccAccountSetSecurity (Account *acc, char *str)
 
 /********************************************************************\
 \********************************************************************/
+
+AccInfo *
+xaccAccountGetAccInfo (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->accInfo);
+}
 
 AccountGroup *
 xaccAccountGetChildren (Account *acc)
