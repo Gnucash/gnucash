@@ -940,7 +940,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     break;
 
     case CURSOR_SPLIT: {
-      SplitRegisterType typo = reg->type & REG_TYPE_MASK;
       char *memo, *fullname;
       gboolean unit_price;
       Split *auto_split;
@@ -998,29 +997,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccSetComboCellValue (reg->xfrmCell, fullname);
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), GNC_T);
 
-      /* auto-complete the amounts */
-      if ((STOCK_REGISTER    == typo) ||
-          (CURRENCY_REGISTER == typo) ||
-          (PORTFOLIO_LEDGER  == typo)) 
-        amount = xaccSplitGetShareAmount (auto_split);
-      else
-        amount = xaccSplitGetValue (auto_split);
-
-      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
-      xaccBasicCellSetChanged(&(reg->debitCell->cell), GNC_T);
-      xaccBasicCellSetChanged(&(reg->creditCell->cell), GNC_T);
+      amount = xaccSplitGetValue (auto_split);
 
       xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amount);
-      xaccBasicCellSetChanged(&(reg->ndebitCell->cell), GNC_T);
-      xaccBasicCellSetChanged(&(reg->ncreditCell->cell), GNC_T);
-
-      amount = xaccSplitGetSharePrice (auto_split);
-      xaccSetPriceCellValue (reg->priceCell, amount);
-      xaccBasicCellSetChanged(&(reg->priceCell->cell), GNC_T);
-
-      amount = xaccSplitGetValue (auto_split);
-      xaccSetPriceCellValue (reg->valueCell, amount);
-      xaccBasicCellSetChanged(&(reg->valueCell->cell), GNC_T);
+      xaccBasicCellSetChanged (&(reg->ndebitCell->cell), GNC_T);
+      xaccBasicCellSetChanged (&(reg->ncreditCell->cell), GNC_T);
 
       /* copy cursor contents into the table */
       xaccCommitCursor (reg->table);

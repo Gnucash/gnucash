@@ -400,8 +400,9 @@
               (gnc-far-split (gnc:split-create)))
           
           (if (not num-shares) (set! num-shares 0.0))
-          (if (not split-amt) (set! split-amt 0.0))
-
+          (if (not share-price) (set! share-price 0.0))
+          (if (not split-amt) (set! split-amt (* num-shares share-price)))
+          
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
@@ -442,14 +443,18 @@
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split num-shares)
-             (gnc:split-set-share-amount gnc-far-split (- num-shares)))
+             (gnc:split-set-share-amount gnc-far-split (- num-shares))
+             (gnc:split-set-base-value gnc-near-split split-amt currency)
+             (gnc:split-set-base-value gnc-far-split (- split-amt) currency))
             
             ((sell sellx) 
              (if (not share-price) (set! share-price 0.0))
              (gnc:split-set-share-price gnc-near-split share-price)
              (gnc:split-set-share-price gnc-far-split share-price)
              (gnc:split-set-share-amount gnc-near-split (- num-shares))
-             (gnc:split-set-share-amount gnc-far-split num-shares))
+             (gnc:split-set-share-amount gnc-far-split num-shares)
+             (gnc:split-set-base-value gnc-near-split (- split-amt) currency)
+             (gnc:split-set-base-value gnc-far-split split-amt currency))
             
             ((cgshort cgshortx cglong cglongx intinc intincx div divx
                       miscinc miscincx xin)
@@ -495,7 +500,9 @@
                                           (/ share-price splitratio))
                (gnc:split-set-share-price gnc-far-split share-price) 
                (gnc:split-set-share-amount gnc-near-split out-shares)
-               (gnc:split-set-share-amount gnc-far-split (- in-shares))))
+               (gnc:split-set-share-amount gnc-far-split (- in-shares))
+               (gnc:split-set-base-value gnc-near-split (- split-amt) currency)
+               (gnc:split-set-base-value gnc-far-split split-amt currency)))
             (else 
              (display "symbol = " ) (write qif-action) (newline)))
           
@@ -556,7 +563,8 @@
     ;; end, we may remove more than one split from splits-left with
     ;; each call to mark-some-splits.  
     (if (not (null? splits-left))
-        (if (not (qif-split:mark (car splits-left)))
+        (if (and (not (qif-split:mark (car splits-left)))
+                 (qif-split:category-is-account? (car splits-left)))
             (set! splits-left 
                   (qif-import:mark-some-splits 
                    splits-left xtn candidate-xtns))
@@ -820,7 +828,8 @@
   ;; merge transaction fields 
   (let ((action (qif-xtn:action xtn))
         (o-action (qif-xtn:action other-xtn))
-        (security (qif-xtn:security-name other-xtn))
+        (security (qif-xtn:security-name xtn))
+        (o-security (qif-xtn:security-name other-xtn))
         (split (car splits))
         (match-type (car how))
         (match-splits (cdr how)))
@@ -852,16 +861,22 @@
        (cond 
         ;; this is a transfer involving a security xtn.  Let the 
         ;; security xtn dominate the way it's handled. 
-        ((and (not action) o-action security)
+        ((and (not action) o-action o-security)
          (qif-xtn:mark-split xtn split)
          (qif-import:merge-xtn-info xtn other-xtn)
          (qif-split:set-matching-cleared! 
           (car match-splits) (qif-xtn:cleared xtn)))
         
+        ((and action (not o-action) security)
+         (qif-xtn:mark-split other-xtn (car match-splits))
+         (qif-import:merge-xtn-info other-xtn xtn)
+         (qif-split:set-matching-cleared! 
+          split (qif-xtn:cleared other-xtn)))
+        
         ;; this is a security transaction from one brokerage to another
         ;; or within a brokerage.  The "foox" xtn has the most
         ;; information about what went on, so use it.
-        ((and action o-action security)
+        ((and action o-action o-security)
          (case o-action
            ((buyx sellx cgshortx cglongx intincx divx)
             (qif-xtn:mark-split xtn split)

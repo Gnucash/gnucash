@@ -18,7 +18,8 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   examples/scan-acct.pl \
-  perl5_swig_annotations.i
+  perl5_swig_annotations.i \
+  gnucash-swig-defines.c
 
 CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
 
@@ -67,18 +68,19 @@ SWIG_INPUT_HDRS := \
 ## same as the .pm file, and automake won't tolerate libraries that
 ## aren't named lib*.so...
 install-data-local: libgncswig.la
-	cd ${perllibdir} && rm -f gnucash.so
-	if [ -f ${perllibdir}/libgncswig.so ]; then \
-		cd ${perllibdir} && ln -s libgncswig.so gnucash.so; \
-	elif [ -f ${perllibdir}/libgncswig.so.1.1 ]; then \
-		cd ${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
+	cd ${DESTDIR}${perllibdir} && rm -f gnucash.so
+	if [ -f ${DESTDIR}${perllibdir}/libgncswig.so ]; then \
+		cd ${DESTDIR}${perllibdir} && ln -s libgncswig.so gnucash.so; \
+	elif [ -f ${DESTDIR}${perllibdir}/libgncswig.so.1.1 ]; then \
+		cd ${DESTDIR}${perllibdir} && \
+                ln -s libgncswig.so.1.1 gnucash.so; \
 	else \
 		echo "Can't find libgncswig shared library!" \
 		exit 1; \
 	fi
 
 uninstall-local:
-	rm -f ${perllibdir}/gnucash.so
+	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
 gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
 	@echo Making $@.
@@ -97,8 +99,13 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
 
 CLEANFILES += gnucash.engine.i gnucash.engine_wrap.doc
 
-gnucash-engine-perl5_wrap.c: gnucash.engine.i
-	${SWIG} -stat -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
+	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+CLEANFILES += gnucash-engine-perl5_wrap_int.c
+
+gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
+                             gnucash-engine-perl5_wrap_int.c
+	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
 CLEANFILES += gnucash-engine-perl5_wrap.c
 
 CLEANFILES += gnucash.pm gnucash.so

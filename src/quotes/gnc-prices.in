@@ -11,6 +11,10 @@
 # Created by Linas Vepstas January 1999
 # Updated by Paul Fenwick <pjf@cpan.org> to take advantage of
 #   new Finance::Quote features. (June 2000)
+# Updated by Steven Murdoch <sjmurdoch@linuxfan.com> to take
+#   account of London stock prices being quoted in pence
+#   by Yahoo Europe and improve behaviour in the case of no
+#   Internet connection (July 2000)
 #
 # Copyright (c) 1999-2000 Linas Vepstas
 
@@ -163,25 +167,41 @@ foreach $acct (@acctlist)
 
       undef $price;  # undef to make sure later if($price) not broken
 
-      %quotes = &Quote::fetch($quotesrc, $security);
-      unless ($quotes{$security,'success'})
+      # assign to a list, beacuse if fetch fails assignment
+      # to a hash will raise a warning, as it will return a one
+      # element list. where the first element is undef
+      @quotes_list = &Quote::fetch($quotesrc, $security);
+
+      # if and only if  there really is information then assign to the hash
+      %quotes = @quotes_list if $quotes_list[0];
+
+      # the fetch is OK if and only if information is returned AND
+      # it is maked as a success
+      # The first condition is needed becasue if no information 
+      # returned then %quotes is uninitialized and perl will raise a warning
+      unless ($quotes_list[0] && $quotes{$security,'success'})
       {
-      	print "Lookup of $quotesrc/$security failed: ",
-	      $quotes{$security,'errormsg'}."\n";
-        next;
+      	print "Lookup of $quotesrc/$security failed";
+	# Show the error if and only if there is an error message
+	print ": $quotes{$security,'errormsg'}" if ($quotes{$security,'errormsg'});
+        print "\n";
+	next;
       }
 
+      print "using $quotesrc\n";      
+      
       $price = $quotes{$security,'price'};
-
-      print "using $quotesrc\n";
-      print "$name: ";
-
       $dayte = $quotes {$security, "date"};
       $prodname = $quotes {$security, "name"};
 
       if ($price)
       {
-        print "$security $prodname last price = $price at $dayte\n";
+	# if and only if the price is served by Yahoo Europe AND is dealt on
+	# the London stock market then the price will be given in pence. So to
+	# convert this into GBP divide the price by 100 before storing the new price.
+	$price/=100 if (($security=~/.L$/i) && ($quotesrc eq 'YAHOO_EUROPE'));
+
+        print "$name: $security $prodname last price = $price at $dayte\n";
         # This || construction will store the price if its not already 
         # stored (in the 28 hour period surrounding "dayte")
         &checkprice ($acct, $dayte, $price) ||

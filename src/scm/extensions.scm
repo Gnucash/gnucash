@@ -85,9 +85,9 @@
       (gnc:add-extension strings-item)))
 
 
-(if (gnc:debugging?)
-    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
-                          gnc:extensions-menu-setup))
+;(if (gnc:debugging?)
+;    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
+;                          gnc:extensions-menu-setup))
 
 
 ;; Automatically pick accelerators for menu names
