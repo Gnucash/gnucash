@@ -32,6 +32,7 @@
 #include "gnc-common.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
+#include "date.h"
 
 
 /* Values for the reconciled field in Transaction: */
@@ -58,22 +59,6 @@ typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
 
-/* struct timespec64 is just like timespec except that we use 
- * a 64-bit signed int to store the seconds.  This should adequately
- * cover dates in the distant future as well as the distant past, as long
- * as they're not more than a couple dozen times the age of the universe.
- * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
- * VisualAge, etc) correctly handle long long as a 64 bit quantity,
- * even on the 32-bit Intel x86 and PowerPC architectures.  I'm assuming
- * that all the other modern compilers are clean on this issue too ...
- */
-#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
-struct timespec64 {
-   long long int tv_sec;     
-   long int tv_nsec;
-};
-#endif /* SWIG */
-typedef struct timespec64 Timespec;
 
 /** PROTOTYPES ******************************************************/
 
@@ -166,15 +151,14 @@ Transaction * xaccTransLookup (const GUID *guid);
  * strings, numbers, and structures which aren't "official" members
  * of the transaction structure. */
 
-kvp_value * xaccTransGetSlot(Transaction * trans, const char * key);
-void      xaccTransSetSlot(Transaction * trans, const char * key, 
-                           const kvp_value * value);
+kvp_value   * xaccTransGetSlot(Transaction * trans, const char * key);
+void          xaccTransSetSlot(Transaction * trans, const char * key, 
+                               const kvp_value * value);
 
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);
 
-/*
- * The xaccTransSetDateSecs() method will modify the posted date 
+/* The xaccTransSetDateSecs() method will modify the posted date 
  *    of the transaction.  (Footnote: this shouldn't matter to a user,
  *    but anyone modifying the engine should understand that when
  *    xaccTransCommitEdit() is called, the date order of each of the 
@@ -264,7 +248,15 @@ long long     xaccTransGetDateL (Transaction *);
 void          xaccTransGetDateTS (Transaction *, Timespec *);
 void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
-/* return the number of splits */
+/* The xaccTransGetDateStr() method will return a malloc'ed string
+ *    representing the posted date of the transaction, or NULL if
+ *    the argument is NULL.
+ */
+char *        xaccTransGetDateStr (Transaction *trans);
+
+/* The xaccTransCountSplits() method returns the number of splits
+ * in a transaction.
+ */
 int           xaccTransCountSplits (Transaction *trans);
 
 

@@ -43,7 +43,7 @@
 char * stpcpy (char *dest, const char *src);
 
 /** GLOBALS *********************************************************/
-gncLogLevel loglevel[MOD_NUM] =
+gncLogLevel loglevel[MOD_LAST + 1] =
 {
   GNC_LOG_NOTHING,      /* DUMMY */
   GNC_LOG_WARNING,      /* ENGINE */
@@ -75,7 +75,7 @@ gnc_set_log_level_global(gncLogLevel level)
 {
   gncModuleType module;
 
-  for (module = GNC_LOG_NOTHING; module < MOD_NUM; module++)
+  for (module = GNC_LOG_NOTHING; module <= MOD_LAST; module++)
     loglevel[module] = level;
 }
 
@@ -446,7 +446,7 @@ gnc_localeconv()
   return &lc;
 }
 
-char *
+const char *
 gnc_locale_default_currency()
 {
   static char currency[4];
@@ -758,7 +758,7 @@ xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
                                   min_trailing_zeros, curr_code);
 }
 
-char *
+const char *
 xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
 {
    /* hack alert -- this is not thread safe ... */
@@ -770,7 +770,7 @@ xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code)
    return buf;
 }
 
-char *
+const char *
 xaccPrintAmountArgs (double val, gboolean print_currency_symbol,
                      gboolean print_separators, gboolean is_shares_value,
                      const char *curr_code)

@@ -144,9 +144,9 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   GtkEntry *entry = GTK_ENTRY(widget);
   XferDialog *xferData = data;
   Account *account;
-  gchar *new_string;
+  const char *new_string;
   const char *currency;
-  gchar *string;
+  const char *string;
   double value;
 
   account = gnc_account_tree_get_current_account(xferData->from);
@@ -254,7 +254,7 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
 {
   Account *account;
   const char *currency;
-  gchar *string;
+  const char *string;
 
   if (xferData == NULL)
     return;

@@ -58,8 +58,7 @@ typedef enum
   MOD_GUILE   =  9,
   MOD_BACKEND = 10,
   MOD_QUERY   = 11,
-  MOD_LAST    = 11,
-  MOD_NUM     = MOD_LAST + 1
+  MOD_LAST    = 11
 } gncModuleType;
 
 typedef enum
@@ -72,7 +71,7 @@ typedef enum
   GNC_LOG_EVERYTHING = 5
 } gncLogLevel;
 
-extern gncLogLevel loglevel[MOD_NUM];
+extern gncLogLevel loglevel[MOD_LAST + 1];
 
 #define LERR    (1 <= loglevel[module])
 #define LWARN   (2 <= loglevel[module])
@@ -200,7 +199,7 @@ gboolean gnc_strisnum(const char *s);
 struct lconv * gnc_localeconv();
 
 /* Returns the 3 character currency code of the current locale. */
-char * gnc_locale_default_currency();
+const char * gnc_locale_default_currency();
 
 
 /*
@@ -248,8 +247,8 @@ char * gnc_locale_default_currency();
 
 typedef unsigned int GNCPrintAmountFlags;
 
-char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
-                        const char *curr_code);
+const char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
+                              const char *curr_code);
 int xaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
                       const char *curr_code);
 int xaccSPrintAmountGeneral (char * bufp, double val,
@@ -257,11 +256,11 @@ int xaccSPrintAmountGeneral (char * bufp, double val,
                              int precision,
                              int min_trailing_zeros,
                              const char *curr_sym);
-char * xaccPrintAmountArgs (double val,
-                            gboolean print_currency_symbol,
-                            gboolean print_separators,
-                            gboolean is_shares_value,
-                            const char *curr_code);
+const char * xaccPrintAmountArgs (double val,
+                                  gboolean print_currency_symbol,
+                                  gboolean print_separators,
+                                  gboolean is_shares_value,
+                                  const char *curr_code);
 
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gboolean monetary);

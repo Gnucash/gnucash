@@ -1,6 +1,6 @@
 /********************************************************************\
  * date.h -- utility functions to handle the date (adjusting, get   * 
- *           current date, etc.) for xacc (X-Accountant)            *
+ *           current date, etc.) for GnuCash                        *
  * Copyright (C) 1997 Robin D. Clark (rclark@cs.hmc.edu)            *
  * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
@@ -22,14 +22,60 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* 
- * hack alert -- the scan and print routines should probably be moved 
- * to somewhere else ... the engine really isn't involved with things 
- * like printing formats.  This is needed mostl;y by the GUI and so on.
- * If a file-io thing needs date handling, it should do it itself, instead
- * of depending on the routines here ...
- */
+/* hack alert -- the scan and print routines should probably be moved
+ * to somewhere else. The engine really isn't involved with things
+ * like printing formats. This is needed mostly by the GUI and so on.
+ * If a file-io thing needs date handling, it should do it itself,
+ * instead of depending on the routines here. */
 
+#ifndef __XACC_DATE_H__
+#define __XACC_DATE_H__
+
+#include "config.h"
+
+
+/** Constants *******************************************************/
+
+typedef enum
+{
+  DATE_FORMAT_US,       /* United states: mm/dd/yyyy */
+  DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
+  DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
+  DATE_FORMAT_ISO,      /* ISO: yyyy-mm-dd */
+  DATE_FORMAT_LOCALE    /* Take from locale information */
+} DateFormat;
+
+#define DATE_FORMAT_FIRST DATE_FORMAT_US
+#define DATE_FORMAT_LAST  DATE_FORMAT_LOCALE
+
+/* the maximum length of a string created by the date printers */
+#define MAX_DATE_LENGTH 11
+
+
+/** Datatypes *******************************************************/
+
+/* struct timespec64 is just like timespec except that we use a 64-bit
+ * signed int to store the seconds.  This should adequately cover
+ * dates in the distant future as well as the distant past, as long as
+ * they're not more than a couple dozen times the age of the universe.
+ * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
+ * VisualAge, etc) correctly handle long long as a 64 bit quantity,
+ * even on the 32-bit Intel x86 and PowerPC architectures.  I'm
+ * assuming that all the other modern compilers are clean on this
+ * issue too. */
+#ifndef SWIG /* swig 1.1p5 can't hack the long long type */
+struct timespec64
+{
+   long long int tv_sec;     
+   long int tv_nsec;
+};
+#endif /* SWIG */
+
+typedef struct timespec64 Timespec;
+
+
+/** Prototypes ******************************************************/
+void setDateFormat(DateFormat df);
 
 /**
  * printDate
@@ -46,6 +92,11 @@
  *
  * Globals: global dateFormat value
  */
+void printDate (char * buff, int day, int month, int year);
+void printDateSecs (char * buff, time_t secs);
+
+char * xaccPrintDateSecs (time_t secs);
+const char * gnc_print_date(Timespec ts);
 
 /**
  * scanDate
@@ -61,6 +112,8 @@
  *
  * Globals: global dateFormat value
  */
+void scanDate (const char *buff, int *day, int *monty, int *year);
+
 /**
  * dateSeparator
  *    Return the field separator for the current date format
@@ -71,41 +124,7 @@
  *
  * Globals: global dateFormat value
  */
-
-
-#ifndef __XACC_DATE_H__
-#define __XACC_DATE_H__
-
-#include "config.h"
-#include "Transaction.h"
-
-typedef enum
-{
-  DATE_FORMAT_US,       /* United states: mm/dd/yyyy */
-  DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
-  DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
-  DATE_FORMAT_ISO,      /* ISO: yyyy-mm-dd */
-  DATE_FORMAT_LOCALE    /* Take from locale information */
-} DateFormat;
-
-#define DATE_FORMAT_FIRST DATE_FORMAT_US
-#define DATE_FORMAT_LAST  DATE_FORMAT_LOCALE
-/* the maximum length of a string created by sprtDate() */
-#define MAX_DATE_LENGTH 11
-
-/** PROTOTYPES ******************************************************/
-void setDateFormat(DateFormat df);
-void printDate (char * buff, int day, int month, int year);
-void printDateSecs (char * buff, time_t secs);
-
-char * xaccPrintDateSecs (time_t secs);
-char * gnc_print_date(Timespec ts);
-
-void scanDate (const char *buff, int *day, int *monty, int *year);
 char dateSeparator(void);
-
-char * xaccTransGetDateStr (Transaction *trans);
-void   xaccTransSetDateStr (Transaction *trans, char *str);
 
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);

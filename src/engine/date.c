@@ -133,6 +133,7 @@ void
 printDateSecs (char * buff, time_t t)
 {
   struct tm *theTime;
+
   if (!buff) return;
   
   theTime = localtime(&t);
@@ -150,10 +151,10 @@ xaccPrintDateSecs (time_t t)
    return strdup (buff);
 }
 
-char *
+const char *
 gnc_print_date(Timespec ts)
 {
-  static char buff[256];
+  static char buff[MAX_DATE_LENGTH];
   time_t t;
 
   t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
@@ -186,11 +187,13 @@ scanDate(const char *buff, int *day, int *month, int *year)
    struct tm *now;
 
    if (!buff) return;
-   dupe = strdup (buff);
+
+   dupe = g_strdup (buff);
+
    tmp = dupe;
-   first_field = 0x0;
-   second_field = 0x0;
-   third_field = 0x0;
+   first_field = NULL;
+   second_field = NULL;
+   third_field = NULL;
 
    /* use strtok to find delimiters */
    if (tmp) {
@@ -246,13 +249,12 @@ scanDate(const char *buff, int *day, int *month, int *year)
        break;
    }
 
-   free (dupe);
+   g_free (dupe);
 
    /* if the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
-   if(iyear<100) {
+   if (iyear < 100)
      iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
-   }
 
    if (year) *year=iyear;
    if (month) *month=imonth;
@@ -272,6 +274,7 @@ scanDate(const char *buff, int *day, int *month, int *year)
 char dateSeparator()
 {
   char separator;
+
   switch(dateFormat)
   {
     case DATE_FORMAT_CE:
@@ -286,38 +289,12 @@ char dateSeparator()
       separator='/';
       break;
   }
+
   return separator;
 }
 
 /********************************************************************\
 \********************************************************************/
-
-char *
-xaccTransGetDateStr (Transaction *trans)
-{
-   char buf [MAX_DATE_LENGTH];
-   time_t secs;
-   struct tm *date;
-
-   secs = xaccTransGetDate (trans);
-
-   date = localtime (&secs);
-
-   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
-   return strdup (buf);
-}
-
-void
-xaccTransSetDateStr (Transaction *trans, char *str)
-{
-   int day, month, year;
-
-   /* hack alert -- the date string should be parsed for time values */
-   /* cvs has some cool date parsing/guessing code .. maybe steal 
-    * that code from there ...  */
-   scanDate(str, &day, &month, &year);
-   xaccTransSetDate (trans, day, month, year);
-}
 
 time_t 
 xaccDMYToSec (int day, int month, int year)

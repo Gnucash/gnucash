@@ -1865,6 +1865,22 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
    trans->date_posted.tv_nsec = ts->tv_nsec;
 }
 
+char *
+xaccTransGetDateStr (Transaction *trans)
+{
+   char buf [MAX_DATE_LENGTH];
+   struct tm *date;
+   time_t secs;
+
+   secs = xaccTransGetDate (trans);
+
+   date = localtime (&secs);
+
+   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+
+   return strdup (buf);
+}
+
 void
 xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 {

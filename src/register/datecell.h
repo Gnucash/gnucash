@@ -95,7 +95,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "Transaction.h" /* This is where Timespec is declared. Why? */
+#include "date.h"
 
 
 typedef struct _DateCell {

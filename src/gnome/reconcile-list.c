@@ -573,7 +573,7 @@ gnc_reconcile_list_set_sort_order(GNCReconcileList *list, sort_type_t key)
 static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
-  gchar *strings[list->num_columns + 1];
+  const gchar *strings[list->num_columns + 1];
   GNCPrintAmountFlags flags = PRTSEP;
   GNCAccountType account_type;
   gboolean reconciled;
@@ -600,6 +600,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
   for ( ; *splits != NULL; splits++)
   {
+    Timespec ts;
+
     split = *splits;
 
     recn = xaccSplitGetReconcile(split);
@@ -618,16 +620,18 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
     trans = xaccSplitGetParent(split);
 
-    strings[0] = xaccTransGetDateStr(trans);
-    strings[1] = (char *) xaccTransGetNum(trans);
-    strings[2] = (char *) xaccTransGetDescription(trans);
+    xaccTransGetDateTS(trans, &ts);
+
+    strings[0] = gnc_print_date(ts);
+    strings[1] = xaccTransGetNum(trans);
+    strings[2] = xaccTransGetDescription(trans);
     strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;
-    strings[4] = (char *) gnc_get_reconcile_str(recn);
+    strings[4] = gnc_get_reconcile_str(recn);
 
-    row = gtk_clist_append(GTK_CLIST(list), strings);
+    row = gtk_clist_append(GTK_CLIST(list), (gchar **) strings);
     gtk_clist_set_row_data(GTK_CLIST(list), row, split);
 
     gnc_reconcile_list_set_row_style(list, row, reconciled);
