@@ -645,6 +645,9 @@ AC_OUTPUT(
           src/scm/qif-import/Makefile
           src/scm/report/Makefile
           src/test/Makefile
+          src/test/test-files/Makefile
+          src/test/test-files/xml2/Makefile
+
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
           ,
