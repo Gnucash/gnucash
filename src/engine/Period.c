@@ -16,6 +16,7 @@ Open questions: how do we deal with the backends ???
  */
 
 #include "AccountP.h"
+#include "BackendP.h"
 #include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -88,6 +89,7 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 void 
 gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 {
+   Backend *be;
    time_t now;
    GList *split_list, *snode;
    GNCBook *partition_book;
@@ -95,6 +97,12 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 
    if (!src_book || !dest_book || !query) return;
 
+   be = src_book->backend;
+   if (be && be->book_transfer_begin)
+   {
+      (*be->book_transfer_begin)(be, dest_book);
+   }
+   
    /* First, copy the book's KVP tree */
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write a kvp merge routine,
@@ -132,6 +140,10 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
    gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);
 
+   if (be && be->book_transfer_commit)
+   {
+      (*be->book_transfer_commit)(be, dest_book);
+   }
 }
 
 /* ================================================================ */
