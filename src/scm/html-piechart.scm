@@ -25,7 +25,12 @@
 
 (define <html-piechart>
   (make-record-type "<html-piechart>"
-                    '(width height title subtitle data colors labels)))
+                    '(width height title subtitle data colors labels
+                            button-1-slice-urls button-2-slice-urls 
+                            button-3-slice-urls
+                            button-1-legend-urls button-2-legend-urls 
+                            button-3-legend-urls)))
+
 
 (define gnc:html-piechart? 
   (record-predicate <html-piechart>))
@@ -84,6 +89,42 @@
 (define gnc:html-piechart-set-subtitle!
   (record-modifier <html-piechart> 'subtitle))
 
+(define gnc:html-piechart-button-1-slice-urls
+  (record-accessor <html-piechart> 'button-1-slice-urls))
+
+(define gnc:html-piechart-set-button-1-slice-urls!
+  (record-modifier <html-piechart> 'button-1-slice-urls))
+
+(define gnc:html-piechart-button-2-slice-urls
+  (record-accessor <html-piechart> 'button-2-slice-urls))
+
+(define gnc:html-piechart-set-button-2-slice-urls!
+  (record-modifier <html-piechart> 'button-2-slice-urls))
+
+(define gnc:html-piechart-button-3-slice-urls
+  (record-accessor <html-piechart> 'button-3-slice-urls))
+
+(define gnc:html-piechart-set-button-3-slice-urls!
+  (record-modifier <html-piechart> 'button-3-slice-urls))
+
+(define gnc:html-piechart-button-1-legend-urls
+  (record-accessor <html-piechart> 'button-1-legend-urls))
+
+(define gnc:html-piechart-set-button-1-legend-urls!
+  (record-modifier <html-piechart> 'button-1-legend-urls))
+
+(define gnc:html-piechart-button-2-legend-urls
+  (record-accessor <html-piechart> 'button-2-legend-urls))
+
+(define gnc:html-piechart-set-button-2-legend-urls!
+  (record-modifier <html-piechart> 'button-2-legend-urls))
+
+(define gnc:html-piechart-button-3-legend-urls
+  (record-accessor <html-piechart> 'button-3-legend-urls))
+
+(define gnc:html-piechart-set-button-3-legend-urls!
+  (record-modifier <html-piechart> 'button-3-legend-urls))
+
 (define (gnc:html-piechart-render piechart doc)
   (define (ensure-positive-numbers nlist)
     (map
@@ -123,6 +164,24 @@
     (lambda ()
       (let ((title (gnc:html-piechart-title piechart))
             (subtitle (gnc:html-piechart-subtitle piechart))
+            (url-1
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-1-slice-urls piechart)))
+            (url-2 
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-2-slice--urls piechart)))
+            (url-3
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-3-slice--urls piechart)))
+            (legend-1
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-1-legend-urls piechart)))
+            (legend-2 
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-2-legend-urls piechart)))
+            (legend-3
+             (catenate-escaped-strings 
+              (gnc:html-piechart-button-3-legend-urls piechart)))
             (data 
              (ensure-positive-numbers (gnc:html-piechart-data piechart)))
             (labels 
@@ -167,6 +226,36 @@
                   (begin 
                     (display "  <param name=\"labels\" value=\"")
                     (display labels)
+                    (display "\">\n")))
+              (if url-1 
+                  (begin 
+                    (display "  <param name=\"slice_urls_1\" value=\"")
+                    (display url-1)
+                    (display "\">\n")))
+              (if url-2
+                  (begin 
+                    (display "  <param name=\"slice_urls_2\" value=\"")
+                    (display url-2)
+                    (display "\">\n")))
+              (if url-3 
+                  (begin 
+                    (display "  <param name=\"slice_urls_3\" value=\"")
+                    (display url-3)
+                    (display "\">\n")))
+              (if legend-1 
+                  (begin 
+                    (display "  <param name=\"legend_urls_1\" value=\"")
+                    (display legend-1)
+                    (display "\">\n")))
+              (if legend-2
+                  (begin 
+                    (display "  <param name=\"legend_urls_2\" value=\"")
+                    (display legend-2)
+                    (display "\">\n")))
+              (if legend-3 
+                  (begin 
+                    (display "  <param name=\"legend_urls_3\" value=\"")
+                    (display legend-3)
                     (display "\">\n")))
               (display "Unable to display pie chart\n")
               (display "</object>"))

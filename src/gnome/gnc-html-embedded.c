@@ -24,8 +24,9 @@
 
 #include <gnome.h>
 #include <glib.h>
+#include <guile/gh.h>
+
 #ifdef USE_GUPPI
-/* #include <libguppi/guppi-memory.h> */
 #include <libguppitank/guppi-tank.h>
 #endif
 
@@ -102,25 +103,163 @@ free_strings(char ** strings, int nstrings) {
 
 
 #ifdef USE_GUPPI
+
+struct guppi_chart_data {
+  GtkWidget    * widget;
+  GuppiObject  * guppiobject;
+  gnc_html     * parent;
+
+  GPtrArray    * data_1_callbacks;
+  GPtrArray    * data_2_callbacks;
+  GPtrArray    * data_3_callbacks;
+
+  GPtrArray    * legend_1_callbacks;
+  GPtrArray    * legend_2_callbacks;
+  GPtrArray    * legend_3_callbacks;  
+};
+
+static struct guppi_chart_data *
+gnc_guppi_chart_data_new(void) {
+  struct guppi_chart_data * rv = g_new0(struct guppi_chart_data, 1);
+  rv->widget      = NULL;
+  rv->guppiobject = NULL;
+  return rv;
+}
+
+static void
+gnc_guppi_chart_data_destroy(struct guppi_chart_data * d) {
+  g_free(d);
+}
+
+
+/* callbacks for button double-click on a pie slice, barchart bar, or
+ * legend element.  generic_callback is used by all of them. */
+
+static void
+guppi_generic_callback(gnc_html * html, GPtrArray * array, gint index) {
+  URLType   type;
+  char      * location = NULL;
+  char      * label = NULL;
+  char      * url = g_ptr_array_index(array, index);
+
+  if(!url) return;
+  
+  type = gnc_html_parse_url(html, url, &location, &label);
+  gnc_html_show_url(html, type, location, label, 0);
+  
+  g_free(location);
+  g_free(label);
+  
+  return;
+}
+
+static void
+guppi_slice_1_callback(gint slice, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_1_callbacks,
+                         slice);
+}
+
+static void
+guppi_slice_2_callback(gint slice, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_2_callbacks,
+                         slice);
+}
+
+static void
+guppi_slice_3_callback(gint slice, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_3_callbacks,
+                         slice);
+}
+
+static void
+guppi_legend_1_callback(gint item, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->legend_1_callbacks,
+                         item);
+}
+
+static void
+guppi_legend_2_callback(gint item, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->legend_2_callbacks,
+                         item);
+}
+
+static void
+guppi_legend_3_callback(gint item, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->legend_3_callbacks,
+                         item);
+}
+
+static void
+guppi_bar_1_callback(gint row, gint col, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_1_callbacks,
+                         (col*row) + col);  
+}
+
+static void
+guppi_bar_2_callback(gint row, gint col, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_1_callbacks,
+                         (col*row) + col);  
+}
+
+static void
+guppi_bar_3_callback(gint row, gint col, gpointer user_data) {
+  struct guppi_chart_data * chart = user_data;
+  guppi_generic_callback(chart->parent, 
+                         chart->data_1_callbacks,
+                         (col*row) + col);  
+}
+
+static GPtrArray * 
+convert_string_array(char ** strings, int nstrings) {
+  GPtrArray  * retval = g_ptr_array_new();
+  int        i;
+
+  /*  g_ptr_array_set_size(retval, nstrings); */
+  for(i=0; i < nstrings; i++) {
+    g_ptr_array_add(retval, strings[i]);    
+  }
+  return retval;
+}
+
 /********************************************************************
  * gnc_html_embedded_piechart
  * create a Guppi piechart from an HTML <object> block
  ********************************************************************/
 
 GtkWidget * 
-gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
+gnc_html_embedded_piechart(gnc_html * parent, int w, int h, 
+                           GHashTable * params) {
+  struct guppi_chart_data * chart = gnc_guppi_chart_data_new();
   GuppiObject * piechart = NULL;
   GuppiObject * title = NULL;
-  GtkWidget   * rv;
-  GtkArg      arglist[5];
+  GtkArg      arglist[17];
   int         argind=0;
   char        * param;
   int         datasize;
   double      * data=NULL;
   char        ** labels=NULL;
   char        ** colors=NULL;
+  char        ** callbacks=NULL;
   char        * gtitle;
   
+  chart->parent = parent;
+
   if((param = g_hash_table_lookup(params, "datasize")) != NULL) {
     sscanf(param, "%d", &datasize);
     arglist[argind].name   = "data_size";
@@ -149,6 +288,90 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
     GTK_VALUE_POINTER(arglist[argind]) = colors;
     argind++;
   }
+  if((param = g_hash_table_lookup(params, "slice_urls_1")) != NULL) {
+    arglist[argind].name   = "slice_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_1_callback;
+    argind++;
+    arglist[argind].name   = "slice_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datasize);
+    chart->data_1_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "slice_urls_2")) != NULL) {
+    arglist[argind].name   = "slice_callback2";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_2_callback;
+    argind++;
+    arglist[argind].name   = "slice_callback2_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+
+    callbacks = read_strings(param, datasize);
+    chart->data_2_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "slice_urls_3")) != NULL) {
+    arglist[argind].name   = "slice_callback3";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_3_callback;
+    argind++;
+    arglist[argind].name   = "slice_callback3_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+
+    callbacks = read_strings(param, datasize);
+    chart->data_3_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_1")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_1_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datasize);
+    chart->legend_1_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_2")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_2_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datasize);
+    chart->legend_2_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_3")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_3_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datasize);
+    chart->legend_3_callbacks = convert_string_array(callbacks, datasize);
+    g_free(callbacks);
+  }
   
   piechart = guppi_object_newv("pie", w, h,
                                argind, arglist);
@@ -161,23 +384,27 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
                                                                "subtitle"),
                                "subobject", piechart,
                                "on_top", TRUE, NULL);
-      rv = guppi_object_build_widget(title);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+      chart->widget = guppi_object_build_widget(title);  
+      chart->guppiobject = title;
     }
     else {
-      rv = guppi_object_build_widget(piechart);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)piechart);
+      chart->widget = guppi_object_build_widget(piechart);  
+      chart->guppiobject = piechart; 
     }      
   }
   else {
-    rv = NULL;
+    gnc_guppi_chart_data_destroy(chart);
+    chart = NULL;
   }
 
   g_free(data);
   free_strings(labels, datasize);
   free_strings(colors, datasize);
   
-  return rv;
+  if(chart)
+    return chart->widget;
+  else 
+    return NULL;
 }
 
 
@@ -187,13 +414,13 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
  ********************************************************************/
 
 GtkWidget * 
-gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
-
+gnc_html_embedded_barchart(gnc_html * parent, 
+                           int w, int h, GHashTable * params) {
+  struct guppi_chart_data * chart = gnc_guppi_chart_data_new();
   GuppiObject * barchart = NULL;
   GuppiObject * title = NULL;
-  GtkArg      arglist[9];
+  GtkArg      arglist[21];
   int         argind=0;
-  GtkWidget   * rv;
   char        * param;
   int         datarows=0;
   int         datacols=0;
@@ -202,6 +429,7 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
   char        ** col_labels=NULL;
   char        ** row_labels=NULL;
   char        ** col_colors=NULL;
+  char        ** callbacks=NULL;
   char        * gtitle = NULL;
 
   if((param = g_hash_table_lookup(params, "data_rows")) != NULL) {
@@ -225,6 +453,7 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
     GTK_VALUE_POINTER(arglist[argind]) = data;
     argind++;    
   }
+
 #if 0
   if((param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
     arglist[argind].name   = "x_axis_label";
@@ -239,6 +468,7 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
     argind++;    
   }
 #endif
+
   if((param = g_hash_table_lookup(params, "col_labels")) != NULL) {
     col_labels = read_strings(param, datacols);
     arglist[argind].name   = "column_labels";
@@ -267,6 +497,97 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
     GTK_VALUE_BOOL(arglist[argind]) = rotate;
     argind++;    
   }
+  if((param = g_hash_table_lookup(params, "bar_urls_1")) != NULL) {
+    arglist[argind].name   = "bar_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_bar_1_callback;
+    argind++;
+    arglist[argind].name   = "bar_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->data_1_callbacks = convert_string_array(callbacks, 
+                                                   datarows*datacols);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "bar_urls_2")) != NULL) {
+    arglist[argind].name   = "bar_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_bar_2_callback;
+    argind++;
+    arglist[argind].name   = "bar_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->data_2_callbacks = convert_string_array(callbacks, 
+                                                   datarows*datacols);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "bar_urls_3")) != NULL) {
+    arglist[argind].name   = "bar_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_bar_3_callback;
+    argind++;
+    arglist[argind].name   = "bar_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->data_3_callbacks = convert_string_array(callbacks, 
+                                                   datarows*datacols);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_1")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_1_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->legend_1_callbacks = convert_string_array(callbacks, 
+                                                     datarows*datacols);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_2")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_2_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->legend_2_callbacks = convert_string_array(callbacks, 
+                                                     datarows*datacols);
+    g_free(callbacks);
+  }
+  if((param = g_hash_table_lookup(params, "legend_urls_3")) != NULL) {
+    arglist[argind].name   = "legend_callback1";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_3_callback;
+    argind++;
+    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = chart;
+    argind++;
+    
+    callbacks = read_strings(param, datarows*datacols);
+    chart->legend_3_callbacks = convert_string_array(callbacks, 
+                                                     datarows*datacols);
+    g_free(callbacks);
+  }
+  
 
   barchart = guppi_object_newv("barchart", w, h,
                                argind, arglist);
@@ -280,16 +601,17 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
                                "subobject", barchart,
                                "on_top", TRUE, NULL);
       
-      rv = guppi_object_build_widget(title);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+      chart->widget = guppi_object_build_widget(title);  
+      chart->guppiobject = title;
     }
     else {
-      rv = guppi_object_build_widget(barchart);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)barchart);
+      chart->widget = guppi_object_build_widget(barchart);  
+      chart->guppiobject = barchart;
     }
   }
   else {
-    rv = NULL;
+    gnc_guppi_chart_data_destroy(chart);
+    chart = NULL;
   }
 
   g_free(data);
@@ -297,7 +619,10 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
   free_strings(row_labels, datarows);
   free_strings(col_colors, datacols);
 
-  return rv;
+  if(chart) 
+    return chart->widget;
+  else
+    return NULL;
 }
 
 
@@ -307,11 +632,11 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
  ********************************************************************/
 
 GtkWidget * 
-gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
-
+gnc_html_embedded_scatter(gnc_html * parent, 
+                          int w, int h, GHashTable * params) {
+  struct guppi_chart_data * chart = gnc_guppi_chart_data_new();
   GuppiObject * scatter = NULL;
   GuppiObject * title = NULL;
-  GtkWidget   * rv;
   GtkArg      arglist[8];
   int         argind=0;
   char        * param;
@@ -368,7 +693,6 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
     argind++;    
   }
   
-  
   scatter = guppi_object_newv("scatter", w, h,
                              argind, arglist);
 
@@ -380,22 +704,27 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
                                                                "subtitle"),
                                "subobject", scatter,
                                "on_top", TRUE, NULL);
-      rv = guppi_object_build_widget(title);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+      chart->widget = guppi_object_build_widget(title);  
+      chart->guppiobject = title;
     }
     else {
-      rv = guppi_object_build_widget(scatter);  
-      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)scatter);
+      chart->widget = guppi_object_build_widget(scatter);  
+      chart->guppiobject = scatter;
     }
   }
   else {
-    rv = NULL;
+    gnc_guppi_chart_data_destroy(chart);
+    chart = NULL;
   }
   g_free(x_data);
   g_free(y_data);
   
-  return rv;
+  if(chart)
+    return chart->widget;
+  else 
+    return NULL;
 }
+
 #endif /* USE_GUPPI */
 
 /********************************************************************
@@ -421,8 +750,10 @@ set_bools(char * indices, gboolean * array, int num) {
   }
 }
 
+
 GtkWidget * 
-gnc_html_embedded_account_tree(int w, int h, GHashTable * params) {
+gnc_html_embedded_account_tree(gnc_html * parent, 
+                               int w, int h, GHashTable * params) {
   AccountViewInfo info;
   GtkWidget       * tree = gnc_mainwin_account_tree_new();
   char            * param;

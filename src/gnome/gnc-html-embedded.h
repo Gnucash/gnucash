@@ -24,10 +24,15 @@
 #define __GNC_HTML_EMBEDDED_H__
 
 #include <gnome.h>
+#include "gnc-html.h"
 
-GtkWidget * gnc_html_embedded_piechart(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_barchart(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_scatter(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_account_tree(gint w, gint h, GHashTable * prms);
+GtkWidget * gnc_html_embedded_piechart(gnc_html * parent, 
+                                       gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_barchart(gnc_html * parent,
+                                       gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_scatter(gnc_html * parent,
+                                      gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_account_tree(gnc_html * parent,
+                                           gint w, gint h, GHashTable * prms);
 
 #endif

@@ -44,6 +44,11 @@
         (_ "General")
         (_ "Background Pixmap") "b" (_ "Background tile for reports.")
         ""))
+      (opt-register
+       (gnc:make-simple-boolean-option
+        (_ "General")
+        (_ "Enable Links") "c" (_ "Enable hyperlinks in reports.")
+        #t))
       (opt-register 
        (gnc:make-number-range-option 
         (_ "Tables")
@@ -73,6 +78,7 @@
                                 (_ "General")
                                 (_ "Background Color"))))
            (bgpixmap (opt-val (_ "General") (_ "Background Pixmap")))
+           (links? (opt-val (_ "General") (_ "Enable Links")))
            (spacing (opt-val (_ "Tables") (_ "Table cell spacing")))
            (padding (opt-val (_ "Tables") (_ "Table cell padding")))
            (border (opt-val (_ "Tables") (_ "Table border width"))))
@@ -93,7 +99,13 @@
        'attribute (list "border" border)
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
-
+      
+      ;; don't surround marked-up links with <a> </a>
+      (if (not links?)
+          (gnc:html-document-set-style!
+           ssdoc "a"
+           'tag ""))
+      
       (let ((title (gnc:html-document-title doc)))
         (if title
             (gnc:html-document-add-object!

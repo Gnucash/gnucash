@@ -1,3 +1,32 @@
+2001-01-30  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/report/stylesheet-{plain,fancy}.scm: add a new boolean
+	option to disable hyperlinks in reports.  This will make it nicer
+	to have a "printing" style sheet that disables links when you want
+	to print.  (if you change a report's style sheet, click "Reload"
+	to see it take effect.  this needs to be fixed)
+
+	* src/gnome/gnc-html-embedded.c: add support for URLsa attached to
+	double clicks of pie slices, bar chart bars, and legend entries of
+	guppi graphs.  Still need to do this for scatter chart.
+
+	* src/scm/html-{piechart,barchart}.scm: add API for callbacks.
+	Not totally finished with barchart yet.
+
+	* src/scm/qif-import/qif-to-gnc.scm: check for currency and type
+	mismatches between QIF-imported and existing GNC accounts.  If
+	there's a name conflict, rename the new account with a unique name
+	and a description indicating there was a conflict.  This should
+	fix several reports of crashes for multi-currency users.
+
+	* src/scm/report-utilities.scm: back out my previous breakage of
+	gnc:amount->string
+
+	* src/scm/report.scm: Thanks to the guile mailing list for
+	pointing my at this odd bit of code needed to print backtraces on
+	guile exceptions while still running.  You need to run with
+	--debug to get the trace.
+	
 2001-01-26  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/gnc-gpg.{c,h}: if Linas can add useless prototype

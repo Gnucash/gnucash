@@ -52,6 +52,12 @@
         (_ "Show preparer info") "c"
         (_ "Name of organization or company") 
         #f))
+      (opt-register 
+       (gnc:make-simple-boolean-option
+        (_ "General")
+        (_ "Enable Links") "c"
+        (_ "Enable hyperlinks in reports") 
+        #t))
       
       (opt-register
        (gnc:make-pixmap-option
@@ -124,6 +130,7 @@
            (preparer (opt-val (_ "General") (_ "Preparer")))
            (prepared-for (opt-val (_ "General") (_ "Prepared for")))
            (show-preparer? (opt-val (_ "General") (_ "Show preparer info")))
+           (links? (opt-val (_ "General") (_ "Enable Links")))           
            (bgcolor (color-val (_ "Colors") (_ "Background Color")))
            (textcolor (color-val (_ "Colors") (_ "Text Color")))
            (linkcolor (color-val (_ "Colors") (_ "Link Color")))
@@ -153,6 +160,11 @@
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
 
+      ;; don't surround marked-up links with <a> </a>
+      (if (not links?)
+          (gnc:html-document-set-style!
+           ssdoc "a" 'tag ""))
+      
       (let ((t (gnc:make-html-table)))
         ;; we don't want a bevel for this table, but we don't want 
         ;; that to propagate 

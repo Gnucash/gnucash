@@ -27,15 +27,53 @@
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
           (gnc:get-account-from-full-name acct-group gnc-name separator))
-         (make-new-acct #f))
+         (allowed-types 
+          (qif-map-entry:allowed-types acct-info))
+         (make-new-acct #f)
+         (incompatible-acct #f))
 
-    (if (or (not same-gnc-account) 
-            (and same-gnc-account
-                 (not (string=? 
-                       (gnc:account-get-full-name same-gnc-account)
-                       gnc-name))))
-        (set! make-new-acct #t))
+    (define (make-unique-name-variant long-name short-name)
+      (if (gnc:get-account-from-full-name acct-group long-name separator)
+          (let loop ((count 2))
+            (let ((test-name 
+                   (string-append long-name (sprintf #f " %a" count))))
+              (if (gnc:get-account-from-full-name 
+                   acct-group test-name separator)
+                  (loop (+ 1 count))
+                  test-name)))
+          short-name))
 
+    ;; just because we found an account doesn't mean we can use it.
+    ;; if the name is in use but the currency, security, or type are
+    ;; incompatible, we need to create a new account with a modified
+    ;; name.
+    (if same-gnc-account 
+        (if (and (gnc:commodity-equiv? 
+                  currency (gnc:account-get-currency same-gnc-account))
+                 (gnc:commodity-equiv? 
+                  security (gnc:account-get-security same-gnc-account))
+                 (list? allowed-types)
+                 (memq (gnc:account-get-type same-gnc-account)
+                       allowed-types))
+            (begin 
+              ;; everything is ok, so we can just use the same
+              ;; account.  Make sure we make the same type. 
+              (set! make-new-acct #f)
+              (set! incompatible-acct #f)
+              (set! allowed-types 
+                    (list (gnc:account-get-type same-gnc-account))))
+            (begin 
+              ;; there's an existing account with that name, so we
+              ;; have to make a new acct with different properties and
+              ;; something to indicate that it's different
+              (set! make-new-acct #t)
+              (set! incompatible-acct #t)))
+        (begin 
+          ;; otherwise, there is no existing account with the same 
+          ;; name.
+          (set! make-new-acct #t)
+          (set! incompatible-acct #f)))
+    
     (if existing-account 
         existing-account 
         (let ((new-acct (gnc:malloc-account))
@@ -44,12 +82,13 @@
               (acct-name #f)
               (last-colon #f))
           (set! last-colon (string-rindex gnc-name separator))
-
+          
           (gnc:account-begin-edit new-acct)
 
-          ;; if this is a copy of an existing gnc account, 
-          ;; copy the account properties 
-          (if (not make-new-acct)
+          ;; if this is a copy of an existing gnc account, copy the
+          ;; account properties.  For incompatible existing accts,
+          ;; we'll do something different later.
+          (if same-gnc-account
               (begin 
                 (gnc:account-set-name 
                  new-acct (gnc:account-get-name same-gnc-account))
@@ -96,7 +135,18 @@
                 (gnc:account-set-currency new-acct currency)
                 (gnc:account-set-security new-acct security)
                 
-                ;; set the account type FIXME !!
+                ;; if it's an incompatible account, set the
+                ;; name to be unique, and a description that 
+                ;; hints what's happening 
+                (if incompatible-acct
+                    (let ((new-name (make-unique-name-variant 
+                                     gnc-name acct-name)))
+                      (gnc:account-set-name new-acct new-name)
+                      (gnc:account-set-description 
+                       new-acct 
+                       (_ "QIF import: Name conflict with another account."))))
+                
+                ;; set the account type.  this could be smarter. 
                 (if (qif-map-entry:allowed-types acct-info)
                     (gnc:account-set-type 
                      new-acct (car (qif-map-entry:allowed-types acct-info))))))
@@ -473,8 +523,8 @@
             
             ((cgshort cgshortx cgmid cgmidx cglong cglongx intinc intincx 
                       div divx miscinc miscincx xin rtrncap rtrncapx)
-             (gnc:split-set-value gnc-near-split split-amt)
-             (gnc:split-set-share-amount gnc-near-split split-amt)
+             (gnc:split-set-value gnc-near-split xtn-amt)
+             (gnc:split-set-share-amount gnc-near-split xtn-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
              (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
             
@@ -485,19 +535,12 @@
              (gnc:split-set-share-amount gnc-far-split  xtn-amt))
             
             ((shrsin)
-             ;; for shrsin, the near account is the security account.
-             ;; we'll need to set the share-price after a little 
-             ;; trickery post-adding-to-account
-             
              ;; getting rid of the old equity-acct-per-stock trick.
-             ;; you must now have a cash value for the stock. 
+             ;; you must now have a cash/basis value for the stock.
              (gnc:split-set-share-amount gnc-near-split num-shares)
              (gnc:split-set-value gnc-near-split split-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
              (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
-            
-;;;             (gnc:split-set-share-amount gnc-near-split num-shares)
-;;;             (gnc:split-set-value gnc-far-split num-shares))
             
             ((shrsout)
              ;; shrsout is like shrsin             

@@ -316,7 +316,10 @@ ghttp_check_callback(gpointer data) {
   GList               * current; 
   ghttp_status        status;
   struct request_info * req;
-
+  URLType             type;
+  char                * location = NULL;
+  char                * label = NULL;
+        
   /* walk the request list to deal with any complete requests */
   for(current = html->requests; current; current = current->next) {
     req = current->data;
@@ -348,6 +351,11 @@ ghttp_check_callback(gpointer data) {
                        ghttp_get_body(req->request), 
                        ghttp_get_body_len(req->request));
         gtk_html_end(GTK_HTML(html->html), req->handle, GTK_HTML_STREAM_OK);
+
+        type = gnc_html_parse_url(html, req->uri, &location, &label);
+        if(label) {
+          gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
+        }
       }
       else {
         gtk_html_write(GTK_HTML(html->html), req->handle, error_404, 
@@ -466,7 +474,9 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
     }
     g_free(fdata);
-    
+    if(label) {
+      gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
+    }
     break;
     
   case URL_TYPE_HTTP:
@@ -496,6 +506,9 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
           free(fdata);
           fdata = NULL;
           fsize = 0;
+          if(label) {
+            gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
+          }
         }
         else {
           gtk_html_write(GTK_HTML(html->html), handle, error_404, 
@@ -613,11 +626,12 @@ static int
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
                              gpointer data) {
   GtkWidget * widg = NULL;
+  gnc_html  * gnchtml = data; 
   int retval = FALSE;
 
   if(!strcmp(eb->classid, "gnc-guppi-pie")) {
 #ifdef USE_GUPPI
-    widg = gnc_html_embedded_piechart(eb->width, eb->height, 
+    widg = gnc_html_embedded_piechart(gnchtml, eb->width, eb->height, 
                                       eb->params); 
 #endif /* USE_GUPPI */
     if(widg) {
@@ -632,7 +646,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
   }
   else if(!strcmp(eb->classid, "gnc-guppi-bar")) {
 #ifdef USE_GUPPI
-    widg = gnc_html_embedded_barchart(eb->width, eb->height, 
+    widg = gnc_html_embedded_barchart(gnchtml, eb->width, eb->height, 
                                       eb->params); 
 #endif /* USE_GUPPI */
     if(widg) {
@@ -647,7 +661,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
   }
   else if(!strcmp(eb->classid, "gnc-guppi-scatter")) {
 #ifdef USE_GUPPI
-    widg = gnc_html_embedded_scatter(eb->width, eb->height, 
+    widg = gnc_html_embedded_scatter(gnchtml, eb->width, eb->height, 
                                      eb->params); 
 #endif /* USE_GUPPI */
     if(widg) {
@@ -661,7 +675,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     }
   }
   else if(!strcmp(eb->classid, "gnc-account-tree")) {
-    widg = gnc_html_embedded_account_tree(eb->width, eb->height, 
+    widg = gnc_html_embedded_account_tree(gnchtml, eb->width, eb->height, 
                                           eb->params); 
     if(widg) {
       gtk_widget_show_all(widg);

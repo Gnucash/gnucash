@@ -191,16 +191,20 @@
 
 
 (define (gnc:report-run id)
+  (define (dumper key . args)
+    (let ((stack (make-stack #t dumper)))
+      (display-backtrace stack (current-error-port))
+      (apply display-error stack (current-error-port) args)
+      (throw 'ignore)))
+  
   (catch 
-   #t
-   (lambda () (gnc:report-run-unsafe id))
+   'ignore
+   (lambda () 
+     (lazy-catch #t 
+                 (lambda () (gnc:report-run-unsafe id))
+                 dumper))
    (lambda (key . args)
-     (if (gnc:debugging?)
-         (begin 
-           (display (gnc:error->string key args))
-           (newline)))
      #f)))
-
 
 (define (gnc:report-run-unsafe id)
   (let ((report (gnc:find-report id)))

@@ -21,7 +21,7 @@
 (gnc:depend "engine-utilities.scm")
 
 (define (gnc:amount->string amount info)
-  (gnc:amount->string-helper (exact->inexact amount) info))
+  (d-gnc:amount->string-helper (exact->inexact amount) info))
 
 (define (gnc:commodity-amount->string amount info)
   (gnc:amount->string-helper amount info))
