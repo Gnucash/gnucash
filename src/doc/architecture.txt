@@ -60,10 +60,10 @@ Finance::Quote available at SourceForge.
 
 Scheme
 ------
-"The Scheme" (src/scm, src/guile, src/prefs) is a scheme based
-infrastructure meant to provide general extensibility, as well
-as command-line/resource file processing, user-preferences state
-management, & other functions.  Under development.
+"The Scheme" (src/scm, src/guile) is a scheme based infrastructure
+meant to provide general extensibility, as well as command-line/resource
+file processing, user-preferences state management, & other functions.
+Under development.
 
 GnuCash
 -------
@@ -80,4 +80,4 @@ beginner.
 
 Currently, the Gnome interface is the only operational interface. The
 Motif code no longer compiles and is not being maintained. The Qt code
-won't compile, most-all functions are missing.
+won't compile, most/all functions are missing.
