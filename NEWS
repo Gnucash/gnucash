@@ -1,6 +1,30 @@
 Version history:
 ------- -------
 
+ 1.8.8  - 17 Nov 2003
+ 	 o HBCI - Improve error message when receiving zero balance from bank.
+	 o Add account template for Swiss German businesses "KMU" by Tom
+	   Winterhalder
+	 o Add *big* account template for German businesses "SKR04" by Betina
+	   Schmidt
+	 o Add Catalan and Turkish translation, Updated German, Italian,
+	   Czech, Greek and Dutch translations.
+	 o Add Turkish account template. Updated Greek account templates.
+	 o Remove debian scripts
+	 o Add a comment about minimum string length
+	 o Fix the ISO_DATELEN to be "long enough"
+	 o Fix handling of HBCI direct debits (fix wrong textkey). Fix and
+	   initially implement handling of multiple banks/users/customers.
+	 o Fixed extremly stupid, old bug that causes weird HBCI errors.
+	   Improved user messages.
+	 o Refactor some GUI code. Improve user messages.
+	 o BillTermDecRef should have been BillTermIncRef when setting new
+	   bill term.
+	 o Applied Frank Pavageau's patch regarding capital gains to handle
+	   split transactions.
+	 o Don't make a timespec with tv_sec == 0.  Fixes some tests on the
+	   alpha platform.
+	 
  1.8.7  - 14 Sept 2003
  	 o Use <libofx/libofx.h> instead of "libofx/libofx.h" as it's not part
 	   of our system. Fixes a dependency problem in 1.8.6 release.
