@@ -46,7 +46,8 @@ Alternate-site:	http://linas.org/linux/xacc
 		540KB  xacc-1.0b7-sgi-irix.inst.tar
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
 		861KB  xacc-1.0b9.tar.gz
-		267KB  xacc-1.0b4-bin-linux-i386-motif.tar.gz
+		1500KB  xacc-1.0b10-bin-linux-i386.tar.gz
+Alternate-site:	ftp.x.org /contrib/applications
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel/PowerPC 
 Copying-policy:	GPL
 End
