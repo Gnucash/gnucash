@@ -140,9 +140,15 @@ GList * qof_query_run (QofQuery *query);
  */
 GList * qof_query_last_run (QofQuery *query);
 
+/** DOCUMENT ME !! */
 void qof_query_clear (QofQuery *query);
+/** DOCUMENT ME !! */
 void qof_query_purge_terms (QofQuery *q, GSList *param_list);
+
+/** Return boolean FALSE if there are no terms in the query */
 int qof_query_has_terms (QofQuery *q);
+
+/** Return the number of terms in thq query. */
 int qof_query_num_terms (QofQuery *q);
 
 gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
