@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Order
+    @{ */
+/** @file gncOrder.h
+    @brief Business Order Interface
+    @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_ORDER_H_
 #define GNC_ORDER_H_
@@ -101,3 +104,5 @@ gboolean gncOrderIsClosed (GncOrder *order);
 #define gncOrderGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 
 #endif /* GNC_ORDER_H_ */
+/** @} */
+/** @} */

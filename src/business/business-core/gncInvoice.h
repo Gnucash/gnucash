@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Invoice
+    @{ */
+/** @file gncInvoice.h
+    @brief  Business Invoice Interface 
+    @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_INVOICE_H_
 #define GNC_INVOICE_H_
@@ -43,13 +46,14 @@ typedef struct _gncInvoice GncInvoice;
 #define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
 #define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
-/* Create/Destroy Functions */
-
+/** @name Create/Destroy Functions */
+/** @{ */
 GncInvoice *gncInvoiceCreate (QofBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
+/** @} */
 
-/* Set Functions */
-
+/** @name Set Functions */
+/** @{ */
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
@@ -61,16 +65,17 @@ void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
+/** @} */
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 
-/* Call this function when adding an entry to a bill instead of an invoice */
+/** Call this function when adding an entry to a bill instead of an invoice */
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
-/* Get Functions */
-
+/** @name Get Functions */
+/** @{ */
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
@@ -88,8 +93,9 @@ gboolean gncInvoiceGetActive (GncInvoice *invoice);
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
+/** @} */
 
-/* return the "total" amount of the invoice */
+/** return the "total" amount of the invoice */
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
@@ -97,7 +103,7 @@ gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
-/* Post this invoice to an account.  Returns the new Transaction
+/** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
  * the supplied posted date, due date, and memo.  The Transaction
  * description is set to the name of the company.
@@ -107,7 +113,7 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 Timespec *posted_date, Timespec *due_date,
 			 const char *memo);
 
-/*
+/**
  * UNpost this invoice.  This will destroy the posted transaction and
  * return the invoice to its unposted state.  It may leave empty lots
  * out there.  If reset_tax_tables is TRUE, then it will also revert
@@ -120,7 +126,7 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 gboolean
 gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 
-/*
+/**
  * Apply a payment of "amount" for the owner, between the xfer_account
  * (bank or other asset) and the posted_account (A/R or A/P).
  *
@@ -133,10 +139,10 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
 		      const char *memo, const char *num);
 
 
-/* Given a transaction, find and return the Invoice */
+/** Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 
-/* Given a LOT, find and return the Invoice attached to the lot */
+/** Given a LOT, find and return the Invoice attached to the lot */
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
 /** Return a pointer to the instance gncInvoice that is identified
@@ -181,3 +187,5 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))
 
 #endif /* GNC_INVOICE_H_ */
+/** @} */
+/** @} */

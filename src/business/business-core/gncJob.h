@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001, 2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Job
+    @{ */
+/** @file gncJob.h
+    @brief  Job Interface
+    @author Copyright (C) 2001, 2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_JOB_H_
 #define GNC_JOB_H_
@@ -90,3 +93,5 @@ int gncJobCompare (const GncJob *a, const GncJob *b);
 #define gncJobLookupDirect(G,B) gncJobLookup((B),&(G))
 
 #endif /* GNC_JOB_H_ */
+/** @} */
+/** @} */

@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * Copyright (C) 2001,2002 Derek Atkins
- * Author: Derek Atkins <warlord@MIT.EDU>
- */
+/** @addtogroup Business
+    @{ */
+/** @addtogroup Entry
+    @{ */
+/** @file gncEntry.h
+    @brief  Business Entry Interface
+    @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
+*/
 
 #ifndef GNC_ENTRY_H_
 #define GNC_ENTRY_H_
@@ -54,7 +57,7 @@ typedef enum {
 #define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
 #define GNC_ENTRY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ENTRY, GncEntry))
 
-/* How to apply the discount and taxes.  There are three distinct ways to
+/** How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
  *
  * Type:	discount	tax
@@ -69,22 +72,26 @@ gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
 const char * gncEntryPaymentTypeToString (GncEntryPaymentType type);
 gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type);
 
-/* Create/Destroy Functions */
-
+/** @name Create/Destroy Functions */
+/** @{ */
 GncEntry *gncEntryCreate (QofBook *book);
 void gncEntryDestroy (GncEntry *entry);
+/** @} */
 
 /* SET FUNCTIONS */
 
-/* Generic (shared) data */
+/** @name Generic (shared) data */
+/** @{ */
 void gncEntrySetDate (GncEntry *entry, Timespec date);
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetNotes (GncEntry *entry, const char *notes);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
+/** @} */
 
-/* Customer Invoices */
+/** @name Customer Invoices */
+/** @{ */
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
 void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetInvTaxable (GncEntry *entry, gboolean taxable);
@@ -93,8 +100,10 @@ void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount);
 void gncEntrySetInvDiscountType (GncEntry *entry, GncAmountType type);
 void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how);
+/** @} */
 
-/* Vendor Bills (and Employee Expenses) */
+/** @name Vendor Bills (and Employee Expenses) */
+/** @{ */
 void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
 void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetBillTaxable (GncEntry *entry, gboolean taxable);
@@ -102,20 +111,26 @@ void gncEntrySetBillTaxIncluded (GncEntry *entry, gboolean tax_included);
 void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetBillable (GncEntry *entry, gboolean billable);
 void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
+/** @} */
 
-/* employee-stuff */
+/** @name employee-stuff */
+/** @{ */
 void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
+/** @} */
 
 /* GET FUNCTIONS */
-/* Generic (shared) data */
+/** @name Generic (shared) data */
+/** @{ */
 Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
 const char * gncEntryGetNotes (GncEntry *notes);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
+/** @} */
 
-/* Customer Invoices */
+/** @name Customer Invoices */
+/** @{ */
 Account * gncEntryGetInvAccount (GncEntry *entry);
 gnc_numeric gncEntryGetInvPrice (GncEntry *entry);
 gnc_numeric gncEntryGetInvDiscount (GncEntry *entry);
@@ -124,8 +139,10 @@ GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry);
 gboolean gncEntryGetInvTaxable (GncEntry *entry);
 gboolean gncEntryGetInvTaxIncluded (GncEntry *entry);
 GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry);
+/** @} */
 
-/* Vendor Bills (and Employee Expenses) */
+/** @name Vendor Bills (and Employee Expenses) */
+/** @{ */
 Account * gncEntryGetBillAccount (GncEntry *entry);
 gnc_numeric gncEntryGetBillPrice (GncEntry *entry);
 gboolean gncEntryGetBillTaxable (GncEntry *entry);
@@ -135,10 +152,13 @@ gboolean gncEntryGetBillable (GncEntry *entry);
 GncOwner *gncEntryGetBillTo (GncEntry *entry);
 
 GncEntryPaymentType gncEntryGetBillPayment (GncEntry* entry);
+/** @} */
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
-/* The first three return the rounded values -- the last returns the
+/** @name Getting Values */
+/** @{ */
+/** The first three return the rounded values -- the last returns the
  * list of unrounded account-values.  The list belongs to the entry
  * and will be destroyed, so use it quickly.
  */
@@ -147,7 +167,7 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv);
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv);
 GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
 
-/* Compute the Entry value, tax-value, and discount_value, based on
+/** Compute the Entry value, tax-value, and discount_value, based on
  * the quantity, price, discount, tax-table, and types.  The value is
  * the amount the merchant gets, the taxes are what the gov't gets,
  * and the discount is how much the customer saved.
@@ -167,6 +187,8 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   /* return values */
 			   gnc_numeric *value, gnc_numeric *discount_value,
 			   GList **tax_values);
+
+/** @} */
 
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
@@ -206,3 +228,5 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define gncEntryGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_ENTRY_H_ */
+/** @} */
+/** @} */
