@@ -231,6 +231,7 @@ regRefresh( RegWindow *regData )
       
       newData[row+1][NUM_CELL_C] = XtNewString("");
       
+      
       sprintf( buf, "%s", trans->description );
       newData[row][DESC_CELL_C]   = XtNewString(buf);
       
@@ -306,10 +307,16 @@ regRefresh( RegWindow *regData )
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row][PRIC_CELL_C] = XtNewString(buf);
           newData[row+1][PRIC_CELL_C] = XtNewString("");
+
+          /* don't set number of shares here -- this is computed later,
+           * in recomputeBalance. */
           newData[row][SHRS_CELL_C]   = XtNewString("");
           newData[row+1][SHRS_CELL_C] = XtNewString("");
-          newData[row][ACTN_CELL_C]   = XtNewString(""); 
-          newData[row+1][ACTN_CELL_C] = XtNewString(""); 
+
+          sprintf( buf, "%s", trans->action );
+          newData[row][ACTN_CELL_C]   = XtNewString(buf);
+          newData[row+1][ACTN_CELL_C] = XtNewString("");
+      
           break;
         default:
           fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -559,7 +566,7 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_ACTN");
     /* ... the action ... */
     XtFree( trans->action );
-    actn = XbaeMatrixGetCell(regData->reg,row+1,ACTN_CELL_C);
+    actn = XbaeMatrixGetCell(regData->reg,row,ACTN_CELL_C);
     trans->action = XtNewString( actn );
     }
   
@@ -643,6 +650,7 @@ regSaveTransaction( RegWindow *regData, int position )
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
+        (strcmp("",trans->action) == 0)      &&
         (0 == trans->catagory)               &&
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) )
@@ -1033,7 +1041,7 @@ regWindow( Widget parent, Account *acc )
         break;
       }
     
-    data = (String **)XtMalloc(2*sizeof(String *));
+    data = (String **)XtMalloc(3*sizeof(String *));
     data[0] = &(acc -> rows[0][0]);
     data[1] = &(acc -> rows[1][0]);
     data[2] = &(acc -> rows[2][0]);
@@ -1437,6 +1445,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
                ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
         {
            SetActionBox (regData->ab, row, col);
+           regData->changed |= MOD_ACTN;
         }
       break;
     }
@@ -1601,6 +1610,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
         regData->changed |= MOD_PRIC;
 
+      /* Note: for cell widgets, this callback will never
+       * indicate a row,col with a cell widget in it.  
+       * Thus, the following if statment will never be true
+       */
       if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
           ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
