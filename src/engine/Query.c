@@ -150,7 +150,8 @@ xaccQueryPrint(Query * q)
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_AMOUNT:
-          printf ("amount\n");
+          printf ("amount sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
           break;
         case PR_BALANCE:
           printf ("balance\n");
@@ -191,10 +192,12 @@ xaccQueryPrint(Query * q)
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_PRICE:
-          printf ("price\n");
+          printf ("price sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
           break;
         case PR_SHRS:
-          printf ("shrs\n");
+          printf ("shrs sense=%d how=%d\n", qt->data.amount.sense, qt->data.amount.how);
+          printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
           break;
 
         default:
