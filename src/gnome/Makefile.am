@@ -43,6 +43,11 @@ gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_DATA = gnucash.desktop
 
+appicondir = $(datadir)/pixmaps
+
+mimedir = $(datadir)/mime-info
+mime_DATA = gnucash.keys gnucash.mime
+
 noinst_HEADERS = \
   account-tree.h \
   cursors.h \
@@ -92,9 +97,14 @@ GLADE_FILES = \
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
-  gnucash.desktop
+  gnucash.desktop \
+  gnucash.keys.in \
+  gnucash.mime
 
-CFLAGS = @CFLAGS@ ${G_WRAP_COMPILE_ARGS} ${GNOME_PRINT_CFLAGS} ${GTKHTML_CFLAGS}
+CFLAGS = @CFLAGS@ \
+         ${G_WRAP_COMPILE_ARGS} \
+         ${GNOME_PRINT_CFLAGS} \
+         ${GTKHTML_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \
@@ -106,3 +116,15 @@ INCLUDES = \
   -I${top_srcdir}/src/register/gnome \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
+
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+gnucash.keys: gnucash.keys.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-icondir-@:${appicondir}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
