@@ -1377,6 +1377,7 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    CHECK_OPEN (trans);
 
    trans->date_posted.tv_sec = secs;
+   trans->date_posted.tv_nsec = 0;
 
    /* Because the date has changed, we need to make sure that each of the
     * splits is properly ordered in each of thier accounts.  We could do that
@@ -1395,6 +1396,7 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
    CHECK_OPEN (trans);
 
    trans->date_entered.tv_sec = secs;
+   trans->date_entered.tv_nsec = 0;
 }
 
 void
@@ -1439,10 +1441,14 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 void
 xaccTransSetDateToday (Transaction *trans)
 {
-   time_t secs;
+   struct timeval tv;
 
-   secs = time (0);
-   xaccTransSetDateSecs (trans, secs);
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   gettimeofday (&tv, NULL);
+   trans->date_posted.tv_sec = tv.tv_sec;
+   trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 }
 
 
@@ -1607,6 +1613,32 @@ xaccSplitSetReconcile (Split *split, char recn)
    split->reconciled = recn;
    MARK_SPLIT (split);
    xaccAccountRecomputeBalance (split->acc);
+}
+
+void
+xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
+{
+   if (!split) return;
+   MARK_SPLIT (split);
+
+   split->date_reconciled.tv_sec = secs;
+   split->date_reconciled.tv_nsec = 0;
+}
+
+void
+xaccSplitSetDateReconciledTS (Split *split, struct timespec *ts)
+{
+   if (!split) return;
+   MARK_SPLIT (split);
+
+   split->date_reconciled =  *ts;
+}
+
+void
+xaccSplitGetDateReconciledTS (Split * split, Timespec *ts)
+{
+   if (!split || !ts) return;
+   *ts = (split->date_reconciled);
 }
 
 /********************************************************************\

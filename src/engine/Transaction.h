@@ -212,6 +212,10 @@ void          xaccSplitSetAction (Split *, const char *);
  * are "no", "cleared" and "reconciled"
  */
 void          xaccSplitSetReconcile (Split *, char);
+void          xaccSplitSetDateReconciledSecs (Split *, time_t);
+void          xaccSplitSetDateReconciledTS (Split *, struct timespec *);
+void          xaccSplitGetDateReconciledTS (Split *, struct timespec *);
+
 
 /* 
  * The following four functions set the prices and amounts.

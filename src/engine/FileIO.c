@@ -54,8 +54,8 @@
  *                    numGroups (Group)^numGroups                   *
  *   Transaction ::== num date_entered date_posted description      *
  *                    numSplits (Split)^numSplits                   *
- *   Split       ::== memo action reconciled                        *
- *                     amount share_price account                   *
+ *   Split       ::== memo action reconciled  date_recned           *
+ *                    amount share_price account                    *
  *   token       ::== int  [the version of file format == VERSION]  * 
  *   numTrans    ::== int                                           * 
  *   numAccounts ::== int                                           * 
@@ -72,6 +72,7 @@
  *   num         ::== String                                        * 
  *   date_entered::== Date                                          * 
  *   date_posted ::== Date                                          * 
+ *   date_recned ::== Date                                          * 
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
@@ -989,6 +990,25 @@ readSplit ( int fd, int token )
   }
   xaccSplitSetReconcile (split, recn);
 
+  /* version 8 and newwer files store date-reconciled */ 
+  if (8 <= token)  {
+     struct timespec ts;
+     int rc;
+
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Split at date");
+       xaccSplitDestroy (split);
+       return NULL;
+       }
+     xaccSplitSetDateReconciledTS (split, &ts);
+  } else {
+     time_t now;
+     now = time (0);
+     xaccSplitSetDateReconciledSecs (split, now);
+  }
+
   /* first, read number of shares ... */
   err = read( fd, &num_shares, sizeof(double) );
   if( sizeof(double) != err )
@@ -1513,6 +1533,7 @@ writeSplit ( int fd, Split *split )
   {
   int err=0;
   int acc_id;
+  struct timespec ts;
   double damount;
   Account *xfer_acc;
   char recn;
@@ -1531,6 +1552,10 @@ writeSplit ( int fd, Split *split )
   err = write( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
     return -1;
+
+  xaccSplitGetDateReconciledTS (split, &ts);
+  err = writeTSDate( fd, &ts);
+  if( -1 == err ) return err;
   
   damount = xaccSplitGetShareAmount (split);
   INFO_2 ("writeSplit: amount=%f \n", damount);
