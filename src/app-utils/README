@@ -1,0 +1,10 @@
+
+After loading this module, you must also call
+
+  (gnc:setup-gettext)
+  (setlocale LC_ALL "")
+
+at some point to finish initializing the app.  This is not done
+automatically from gncmod-app-utils.c via app-utils.scm because you
+may need to handle setlocale yourself (or you may already have other
+code that does).
