@@ -95,6 +95,9 @@
    g_free(table->prev_entry_text); table->prev_entry_text = NULL;	\
 }
 
+/* nothing to resize */
+#define TABLE_PRIVATE_DATA_RESIZE(table)
+
 typedef struct _Table Table;
 
 /* create the GtkWidget */

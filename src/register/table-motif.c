@@ -480,6 +480,9 @@ SetupColorTable (Table *table)
    XColor * colors;
    int i, ncolors;
 
+   /* if already initialized, do nothing */
+   if (0 != table->ncolors) return;
+
    /* get the number of colors in our colormap */
    dpy = XtDisplay (table->table_widget);
    win = XtWindow (table->table_widget);
@@ -655,25 +658,104 @@ GetColormapIndex (Table *table, int argb)
 
 /* ==================================================== */
 
+#define NOOP(x)  /* do nothing */
+
+void
+xaccMotifResizeTable (Table * table,
+                 int new_phys_rows, int new_phys_cols,
+                 int new_virt_rows, int new_virt_cols)
+
+{
+   XACC_RESIZE_ARRAY ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->bg_hues),
+               Pixel,
+               1,
+               NOOP);
+
+   XACC_RESIZE_ARRAY ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->fg_hues),
+               Pixel,
+               0,
+               NOOP);
+}
+
+/* ==================================================== */
+
 void        
 xaccRefreshTableGUI (Table * table)
 {
+   int iphys, jphys;
+   int bg_cache, fg_cache;
+   Pixel bg_cache_val, fg_cache_val;
+   Pixel white, black;
+
 {int i;
 printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d act:%s descr: %s \n", i, table->entries[i][2],
+printf ("cell %d color: 0x%x act:%s descr: %s \n", i, table->bg_colors[i][3], table->entries[i][2],
 table->entries[i][3]);
 }}
+
+   /* make sure that the color table is initialized.
+    * it would be slightly more efficient if we called 
+    * this from a realize method, but we don't have one 
+    * of these handy.
+    */ 
+   SetupColorTable (table);
+
+   black = GetColormapIndex (table,  0x0);
+   fg_cache = 0x0;
+   fg_cache_val = black;
+
+   white = GetColormapIndex (table,  0xffffff);
+   bg_cache = 0xffffff;
+   bg_cache_val = white;
+
+   for (iphys=0; iphys<table->num_phys_rows; iphys++)
+   {
+      for (jphys = 0; jphys < table->num_phys_cols; jphys++)
+      {
+         /* fill in the colormap entry that is the equivalent 
+          * of th requested background color */
+         if (0xffffff == table->bg_colors[iphys][jphys]) {
+            table->bg_hues[iphys][jphys] = white;
+         } else
+         if (bg_cache == table->bg_colors[iphys][jphys]) {
+            table->bg_hues[iphys][jphys] = bg_cache_val;
+         } else {
+            bg_cache = table->bg_colors[iphys][jphys];
+            bg_cache_val = GetColormapIndex (table,  bg_cache);
+            table->bg_hues[iphys][jphys] = bg_cache_val;
+         }
+
+         /* fill in the colormap entry that is the equivalent 
+          * of th requested foreground color */
+         if (0xffffff == table->fg_colors[iphys][jphys]) {
+            table->fg_hues[iphys][jphys] = white;
+         } else
+         if (fg_cache == table->fg_colors[iphys][jphys]) {
+            table->fg_hues[iphys][jphys] = fg_cache_val;
+         } else {
+            fg_cache = table->fg_colors[iphys][jphys];
+            fg_cache_val = GetColormapIndex (table,  fg_cache);
+            table->fg_hues[iphys][jphys] = fg_cache_val;
+         }
+      }
+   }
+
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
                                       XmNcells,   table->entries, 
-                                      /* XmNcellBackgrounds, table->?? */ 
+                                      XmNcellBackgrounds, table->bg_hues,
+                                      XmNcolors, table->fg_hues,
                                       NULL);
 
-
-   SetupColorTable (table);
-{Pixel p=GetColormapIndex (table,0x99ee33);
-printf ("its %d\n", p); }
 }
 
 /* ================== end of file ======================= */

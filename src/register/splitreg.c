@@ -362,6 +362,12 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    FANCY (desc,    QuickFill, DESC);
    FANCY (balance, Price,     BALN);
 
+   /* set the color of the cells in the transaction cursor */
+   reg->descCell->cell.bg_color = 0xccccff;
+   reg->balanceCell->cell.bg_color = 0xccccff;
+   reg->dateCell->cell.bg_color = 0xccccff;
+   reg->numCell->bg_color = 0xccccff;
+
    /* --------------------------- */
    /* define the ledger cursor that handles splits */
    /* the cursor is 1 row tall */

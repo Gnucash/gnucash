@@ -192,7 +192,7 @@ void        xaccCommitCursor (Table *);
 
 /* hack alert --
  * for all practical purposes, RefreshHeader is identical
- * tp CommitCursor(), except that it acts on cellblock 0,0.
+ * to CommitCursor(), except that it acts on cellblock 0,0.
  * it should probably be made obsolete.
  */
 void        xaccRefreshHeader (Table *);
@@ -207,6 +207,119 @@ void        xaccRefreshHeader (Table *);
 
 void
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
+
+/* ==================================================== */
+/* 
+ * In C, we don't have things like C++ templates. 
+ * So cook up a #define that acts like a template.  
+ * This one will resize a 2D array in a reasonably 
+ * efficient manner.
+ */
+
+
+#define XACC_RESIZE_ARRAY(table_rows,table_cols,new_rows,new_cols,arr,type,null_val,free_cell_op) \
+{									\
+   int old_rows, old_cols;						\
+   int i,j;								\
+									\
+   /* save old table size */						\
+   old_rows = table_rows;						\
+   old_cols = table_cols;						\
+   if (0 > old_rows) old_rows = 0;					\
+   if (0 > old_cols) old_cols = 0;					\
+									\
+   /* realloc to get the new table size.  Note that the */		\
+   /* new table may be wider or slimmer, taller or shorter. */		\
+   if (old_rows >= new_rows) {						\
+      if (old_cols >= new_cols) {					\
+									\
+         /* if we are here, new table has fewer cols */			\
+         /* simply truncate columns */					\
+         for (i=0; i<new_rows; i++) {					\
+            for (j=new_cols; j<old_cols; j++) {				\
+               free_cell_op (arr[i][j]);				\
+               arr[i][j] = 0x0; /* plain null, not null_val */		\
+            }								\
+         }								\
+      } else {								\
+									\
+         /* if we are here, the new table has more */			\
+         /* columns. Realloc the columns.  */				\
+         for (i=0; i<new_rows; i++) {					\
+            type *old_row;						\
+									\
+            old_row = arr[i];						\
+            arr[i] = (type *) malloc (new_cols * sizeof (type));	\
+            for (j=0; j<old_cols; j++) {				\
+               arr[i][j] = old_row[j];					\
+            }								\
+            for (j=old_cols; j<new_cols; j++) {				\
+               arr[i][j] = null_val;					\
+            }								\
+            free (old_row);						\
+         }								\
+      }									\
+									\
+      /* new table has fewer rows.  Simply truncate the rows */		\
+      for (i=new_rows; i<old_rows; i++) {				\
+         for (j=0; j<old_cols; j++) {					\
+            free_cell_op (arr[i][j]);					\
+         }								\
+         free (arr[i]);							\
+         arr[i] = NULL;							\
+      }									\
+									\
+   } else {								\
+      type **old_entries;						\
+									\
+      /* if we are here, there are more new than old rows */		\
+      if (old_cols >= new_cols) {					\
+									\
+         /* new table has fewer columns. */ 				\
+         /* Simply truncate the columns  */				\
+         for (i=0; i<old_rows; i++) {					\
+            for (j=new_cols; j<old_cols; j++) {				\
+               free_cell_op (arr[i][j]);				\
+               arr[i][j] = 0x0; /* plain null, not null_val */		\
+            }								\
+         }								\
+      } else {								\
+									\
+         /* if we are here, the new table has more */			\
+         /* columns. Realloc the columns.  */				\
+         for (i=0; i<old_rows; i++) {					\
+            type *old_row;						\
+									\
+            old_row = arr[i];						\
+            arr[i] = (type *) malloc (new_cols * sizeof (type));	\
+            for (j=0; j<old_cols; j++) {				\
+               arr[i][j] = old_row[j];					\
+            }								\
+            for (j=old_cols; j<new_cols; j++) {				\
+               arr[i][j] = null_val;					\
+            }								\
+            free (old_row);						\
+         }								\
+      }									\
+									\
+      /* now, add all new rows */					\
+      old_entries = arr;						\
+      arr = (type **) malloc (new_rows * sizeof (type *));		\
+      for (i=0; i<old_rows; i++) {					\
+         arr[i] = old_entries[i];					\
+      }									\
+      if (old_entries) free (old_entries);				\
+									\
+      for (i=old_rows; i<new_rows; i++) {				\
+         arr[i] = (type *) malloc (new_cols * sizeof (type));		\
+         for (j=0; j<new_cols; j++) {					\
+            arr[i][j] = null_val;					\
+         }								\
+      }									\
+   }									\
+}
+
+/* ==================================================== */
 
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 

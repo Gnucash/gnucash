@@ -53,8 +53,10 @@
   /* Motif specific private data */				\
   Widget table_widget;          /* the XbaeMatrix */		\
   Widget next_tab_group;        /* where to traverse in the end */  \
-  unsigned int ncolors;         /* number of colors in colormap */ \
-  XColor *colors;               /* colormap entries */
+  unsigned int ncolors;         /* number of colors in colormap */  \
+  XColor *colors;               /* colormap entries */              \
+  Pixel **bg_hues;              /* background cell colors */        \
+  Pixel **fg_hues;              /* foreground (text) cell colors */
 
 
 #define TABLE_PRIVATE_DATA_INIT(table) {		\
@@ -62,16 +64,25 @@
    table->next_tab_group = 0;				\
    table->ncolors = 0;					\
    table->colors = 0x0;					\
+   table->bg_hues = 0x0;				\
+   table->fg_hues = 0x0;				\
 }
 
 /* hack alert -- shouldn't destroy get rid of the widget? */
+/* hack alert -- I think destroy should unmalloc colors ?? */
 #define TABLE_PRIVATE_DATA_DESTROY(table) 
+
+#define TABLE_PRIVATE_DATA_RESIZE  xaccMotifResizeTable
 
 typedef struct _Table Table;
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
 void        xaccNextTabGroup (Table *, Widget);
+
+void        xaccMotifResizeTable (Table * table,
+                 int new_phys_rows, int new_phys_cols,
+                 int new_virt_rows, int new_virt_cols);
 
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);
