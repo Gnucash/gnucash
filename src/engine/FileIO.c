@@ -482,7 +482,7 @@ readAccount( int fd, AccountGroup *grp, int token )
       break;
       }
 #ifdef DELINT_BLANK_SPLITS_HACK
-      /* This is a dangerous hack, as it can destroy real data. */
+      /* This is dangerous, as it can destroy real data. */
       {
         int j=0;   
         Split *s = trans->splits[0];
