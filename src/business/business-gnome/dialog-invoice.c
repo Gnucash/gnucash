@@ -10,6 +10,9 @@
 #include <g-wrap-wct.h>
 #include <libguile.h>
 
+#include "gncObject.h"
+#include "QueryCore.h"
+
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -26,7 +29,6 @@
 #include "dialog-search.h"
 #include "search-param.h"
 
-#include "gncObject.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 
