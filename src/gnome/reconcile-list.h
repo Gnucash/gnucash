@@ -29,8 +29,8 @@ extern "C" {
 #define GTK_TYPE_GNC_RECONCILE_LIST (gnc_reconcile_list_get_type ())
 #define GNC_RECONCILE_LIST(obj) (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_RECONCILE_LIST, GNCReconcileList))
 #define GNC_RECONCILE_LIST_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_RECONCILE_LIST, GNCReconcileListClass))
-#define GTK_IS_GNC_RECONCILE_LIST(obj) (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_RECONCILE_LIST))
-#define GTK_IS_GNC_RECONCILE_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_RECONCILE_LIST))
+#define IS_GNC_RECONCILE_LIST(obj) (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_RECONCILE_LIST))
+#define IS_GNC_RECONCILE_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_RECONCILE_LIST))
 
 typedef struct _GNCReconcileList      GNCReconcileList;
 typedef struct _GNCReconcileListClass GNCReconcileListClass;
@@ -45,7 +45,7 @@ struct _GNCReconcileList
 {
   GtkCList clist;
 
-  gint list_type; /* DEBIT or CREDIT */
+  GNCReconcileListType list_type;
 
   gint num_splits;
   gint num_columns;
@@ -54,6 +54,7 @@ struct _GNCReconcileList
   Split *current_split;
 
   gboolean no_toggle;
+  gboolean always_unselect;
 
   GHashTable *reconciled;
 
@@ -94,6 +95,9 @@ void gnc_reconcile_list_commit(GNCReconcileList *list);
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
 gboolean gnc_reconcile_list_changed(GNCReconcileList *list);
+
+void gnc_reconcile_list_set_selection_mode(GNCReconcileList *list,
+                                           GtkSelectionMode mode);
 
 
 #ifdef __cplusplus

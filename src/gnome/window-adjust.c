@@ -1,7 +1,7 @@
 /********************************************************************\
  * window-adjust.c -- the adjust balance window                     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +28,7 @@
 #include <gnome.h>
 #include <time.h>
 
+#include "gnome-top-level.h"
 #include "ui-callbacks.h"
 #include "MultiLedger.h"
 #include "AdjBWindow.h"
@@ -93,6 +94,8 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 
   string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
   new_balance = xaccParseAmount(string, GNC_T);
+  if (gnc_reverse_balance(adjBData->account))
+    new_balance = -new_balance;
 
   time = gnome_date_edit_get_date(GNOME_DATE_EDIT(adjBData->date_entry));
 

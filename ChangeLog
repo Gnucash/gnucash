@@ -1,4 +1,17 @@
+2000-03-02  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_init): print
+ 	selected 'y' reconcile flags in yellow for better contrast.
+	(gnc_reconcile_list_unselect_row): don't unselect the row if we
+ 	are toggling the current row.
+
+	* src/gnome/window-reconcile.c (recnRecalculateBalance): reverse the
+	balance if appropriate.
+
 2000-03-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-adjust.c (gnc_ui_AdjBWindow_ok_cb): reverse the
+ 	balance if appropriate.
 
 	* src/scm/extensions.scm: add the extensions menu if  debugging.
 

@@ -2,7 +2,7 @@
  * reconcile-list.c -- A list of accounts to be reconciled for      *
  *                     GnuCash.                                     *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -105,6 +105,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   list->current_row = -1;
   list->current_split = NULL;
   list->no_toggle = FALSE;
+  list->always_unselect = FALSE;
 
   while (titles[list->num_columns] != NULL)
     list->num_columns++;
@@ -150,7 +151,12 @@ gnc_reconcile_list_init(GNCReconcileList *list)
 
     gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
 
-    style->fg[GTK_STATE_SELECTED] = style->fg[GTK_STATE_NORMAL];
+    /* A nice yellow */
+    style->fg[GTK_STATE_SELECTED].red   = 65280;
+    style->fg[GTK_STATE_SELECTED].green = 62976;
+    style->fg[GTK_STATE_SELECTED].blue  = 36608;
+
+    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
 #endif
   }
 }
@@ -212,7 +218,7 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   char recn;
   gint row;
 
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  assert(IS_GNC_RECONCILE_LIST(list));
   assert(list->reconciled != NULL);
 
   if (list->no_toggle)
@@ -222,10 +228,7 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   split = gtk_clist_get_row_data(GTK_CLIST(list), row);
   current = g_hash_table_lookup(list->reconciled, split);
 
-  if (list->current_split != split)
-    list->current_split = split;
-  else
-    list->current_split = NULL;
+  list->current_split = split;
 
   if (current == NULL)
   {
@@ -268,7 +271,11 @@ gnc_reconcile_list_unselect_row(GtkCList *clist, gint row, gint column,
   GNCReconcileList *list = GNC_RECONCILE_LIST(clist);
 
   if (row == list->current_row)
+  {
     gnc_reconcile_list_toggle(list);
+    if (!list->always_unselect)
+      return;
+  }
 
   GTK_CLIST_CLASS(parent_class)->unselect_row(clist, row, column, event);
 }
@@ -297,7 +304,8 @@ gnc_reconcile_list_destroy(GtkObject *object)
 gint
 gnc_reconcile_list_get_row_height(GNCReconcileList *list)
 {
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_val_if_fail(list != NULL, 0);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0);
 
   if (!GTK_WIDGET_REALIZED(list))
     return 0;
@@ -310,7 +318,8 @@ gnc_reconcile_list_get_row_height(GNCReconcileList *list)
 gint
 gnc_reconcile_list_get_num_splits(GNCReconcileList *list)
 {
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_val_if_fail(list != NULL, 0);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0);
 
   return list->num_splits;
 }
@@ -318,7 +327,8 @@ gnc_reconcile_list_get_num_splits(GNCReconcileList *list)
 Split *
 gnc_reconcile_list_get_current_split(GNCReconcileList *list)
 {
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_val_if_fail(list != NULL, NULL);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), NULL);
 
   return list->current_split;
 }
@@ -339,7 +349,8 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
   Split *old_split;
   gint new_row;
 
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail(list != NULL);
+  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
 
   adjustment = gtk_clist_get_vadjustment(GTK_CLIST(list));
   if (adjustment != NULL)
@@ -396,7 +407,8 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
   int account_type;
   int i;
 
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_val_if_fail(list != NULL, 0.0);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0.0);
 
   if (list->reconciled == NULL)
     return 0.0;
@@ -434,7 +446,8 @@ gnc_reconcile_list_commit(GNCReconcileList *list)
   Split *split;
   int i;
 
-  assert(GTK_IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail(list != NULL);
+  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
 
   if (list->reconciled == NULL)
     return;
@@ -459,10 +472,15 @@ gnc_reconcile_list_commit(GNCReconcileList *list)
 void
 gnc_reconcile_list_unselect_all(GNCReconcileList *list)
 {
-  GtkCList *clist = GTK_CLIST(list);
+  g_return_if_fail(list != NULL);
+  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
 
   list->no_toggle = TRUE;
-  gtk_clist_unselect_all(clist);
+  list->always_unselect = TRUE;
+
+  gtk_clist_unselect_all(GTK_CLIST(list));
+
+  list->always_unselect = FALSE;
   list->no_toggle = FALSE;
 
   list->current_split = NULL;
@@ -480,7 +498,7 @@ gboolean
 gnc_reconcile_list_changed(GNCReconcileList *list)
 {
   g_return_val_if_fail(list != NULL, FALSE);
-  g_return_val_if_fail(GTK_IS_GNC_RECONCILE_LIST(list), FALSE);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), FALSE);
 
   return g_hash_table_size(list->reconciled) != 0;
 }

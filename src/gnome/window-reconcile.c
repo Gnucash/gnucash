@@ -1,6 +1,7 @@
 /********************************************************************\
  * window-reconcile.c -- the reconcile window                       *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,7 +30,7 @@
 #include <stdio.h>
 #include <gnome.h>
 
-#include "date.h"
+#include "gnome-top-level.h"
 #include "MultiLedger.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
@@ -47,6 +48,7 @@
 #include "AdjBWindow.h"
 #include "Scrub.h"
 #include "util.h"
+#include "date.h"
 
 
 /** STRUCTS *********************************************************/
@@ -148,7 +150,10 @@ recnRecalculateBalance(RecnWindow *recnData)
   double dcredit = 0.0;
   double ddiff   = 0.0;
   short shares = PRTSYM | PRTSEP;
+  gboolean reverse_balance;
   int account_type;
+
+  reverse_balance = gnc_reverse_balance(recnData->account);
 
   account_type = xaccAccountGetType(recnData->account);
   if ((account_type == STOCK ) || (account_type == MUTUAL) ||
@@ -156,6 +161,9 @@ recnRecalculateBalance(RecnWindow *recnData)
     shares |= PRTSHR;
 
   value = xaccAccountGetReconciledBalance(recnData->account);
+  if (reverse_balance)
+    value = -value;
+
   amount = xaccPrintAmount(value, shares);
   gnc_set_label_color(recnData->starting, value);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
@@ -167,8 +175,13 @@ recnRecalculateBalance(RecnWindow *recnData)
 
   ddebit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->debit));
+  if (reverse_balance)
+    ddebit = -ddebit;
+
   dcredit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->credit));
+  if (reverse_balance)
+    dcredit = -dcredit;
 
   /* Update the difference field, and the total fields */
   amount = xaccPrintAmount(DABS(ddebit), shares);
@@ -237,6 +250,8 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
    * may have to be adjusted for stock price fluctuations.
    */
   dendBalance = xaccAccountGetReconciledBalance(account);
+  if (gnc_reverse_balance(account))
+    dendBalance = -dendBalance;
 
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -368,15 +383,18 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
                               gpointer data)
 {
   RecnWindow *recnData = (RecnWindow *) data;
-  GNCReconcileList *this_list, *debit, *credit;
+  GNCReconcileList *this_list, *other_list;
+  GNCReconcileList *debit, *credit;
 
   this_list = GNC_RECONCILE_LIST(widget);
 
   debit  = GNC_RECONCILE_LIST(recnData->debit);
   credit = GNC_RECONCILE_LIST(recnData->credit);
 
+  other_list = GNC_RECONCILE_LIST(this_list == debit ? credit : debit);
+
   /* clear the *other* list so we always have no more than one selection */
-  gnc_reconcile_list_unselect_all((this_list == debit) ? credit : debit);
+  gnc_reconcile_list_unselect_all(other_list);
 }
 
 static GtkWidget *
@@ -520,8 +538,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
-   * their register windows after the deletion.
-   */
+   * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
   num_splits = xaccTransCountSplits(trans);
   affected_accounts = (Account **) malloc((num_splits + 1) *
