@@ -36,6 +36,7 @@
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "gnc-window.h"
 
 #define GNC_MDI_CM_CLASS "gnc-mdi"
 
@@ -65,38 +66,15 @@ dispatch_menu_paths[GNC_DISP_LAST] = {
 gncUIWidget
 gnc_ui_get_toplevel (void)
 {
-#if 0
-  GList *containers = gtk_window_list_toplevels ();
-  GList *containerstop = containers;
+  GtkWidget *toRet;
 
-  GnomeApp *app = NULL;
-  
-  for (; containers; containers = containers->next)
-  {
-    GtkWidget *w = containers->data;
-    GNCMDIInfo *gnc_mdi;
-
-    if (!GNOME_IS_APP (w))
-      continue;
-
-    app = GNOME_APP (w);
-
-    gnc_mdi = g_object_get_data (G_OBJECT (w), "gnc_mdi");
-    if (!gnc_mdi)
-      continue;
-
-    app = gnome_mdi_get_active_window (gnc_mdi->mdi);
-
-    break;
-  }
-  g_list_free (containerstop);
-
-  if (app)
-    return GTK_WIDGET (app);
-
-#endif // 0
-
-  return NULL;
+  GList *containers = gtk_window_list_toplevels();
+  if ( g_list_length( containers ) == 0 )
+    return NULL;
+  // otherwise, return the first one...
+  toRet = GTK_WIDGET(containers->data);
+  g_list_free( containers );
+  return toRet;
 }
 
 gboolean
@@ -138,7 +116,7 @@ gnc_mdi_set_summarybar_visibility (gboolean visible)
 void
 gnc_mdi_show_progress (const char *message, double percentage)
 {
-  PERR( "FIXME: show progress." );
+  gnc_window_show_progress( message, percentage );
 }
 
 typedef struct {

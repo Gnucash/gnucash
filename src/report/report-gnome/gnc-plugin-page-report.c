@@ -32,16 +32,17 @@
 #include <g-wrap-wct.h>
 #include <libguile.h>
 
-#include "gnc-component-manager.h"
 #include "egg-menu-merge.h"
-#include "gnc-plugin-page-report.h"
-#include "messages.h"
-#include "gnc-html.h"
-#include "gnc-html-history.h"
-#include "gnc-report.h"
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-html-history.h"
+#include "gnc-html.h"
+#include "gnc-plugin-page-report.h"
+#include "gnc-report.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "gnc-window.h"
+#include "messages.h"
 #include "option-util.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
@@ -61,8 +62,6 @@ static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass )
 static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
 static void gnc_plugin_page_report_finalize (GObject *object);
 static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
-
-//static void gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId );
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
@@ -296,7 +295,10 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         type = gnc_html_parse_url( report->html, child_name, &url_location, &url_label);
         DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
                id_name, child_name, type, url_location, url_label );
+
+        gnc_window_set_progressbar_window( GNC_WINDOW(gnc_ui_get_toplevel()) );
         gnc_html_show_url(report->html, type, url_location, url_label, 0);
+        gnc_window_set_progressbar_window( NULL );
 
         gtk_signal_connect(GTK_OBJECT(report->container), "draw",
                            GTK_SIGNAL_FUNC(gnc_plugin_page_report_draw_cb), report);
@@ -513,7 +515,9 @@ gnc_plugin_page_report_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointe
         }
 
         win->need_reload = FALSE;
+        gnc_window_set_progressbar_window( GNC_WINDOW(gnc_ui_get_toplevel()) );
         gnc_html_reload(win->html);
+        gnc_window_set_progressbar_window( NULL );
         LEAVE( "reload forced" );
 }
 
@@ -521,7 +525,7 @@ gnc_plugin_page_report_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointe
 static void
 gnc_plugin_page_report_refresh (gpointer data)
 {
-        // FIXME
+        // FIXME?
         DEBUG( "report-refresh called" );
         return;
 }
@@ -529,7 +533,7 @@ gnc_plugin_page_report_refresh (gpointer data)
 static void
 gnc_plugin_page_report_set_fwd_button(GncPluginPageReportPrivate * win, int enabled)
 {
-#if 0 /* as it says -- broken code. */
+#if 0
         GnomeApp    * app = win->mc->app;
         GnomeUIInfo * info;
 
@@ -546,7 +550,7 @@ gnc_plugin_page_report_set_fwd_button(GncPluginPageReportPrivate * win, int enab
 static void
 gnc_plugin_page_report_set_back_button(GncPluginPageReportPrivate * win, int enabled)
 {
-#if 0 /* as is says: broken */
+#if 0
         GnomeApp    * app = win->mc->app;
         GnomeUIInfo * info;
 
@@ -626,18 +630,6 @@ gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
         // FIXME: ui-unmerge
 }
 
-#if 0
-static void
-gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId )
-{
-        GncPluginPageReportPrivate *priv;
-        priv = page->priv;
-        priv->reportId = reportId;
-        DEBUG( "setting reportid = %d / %d",
-               reportId, priv->reportId );
-}
-#endif /* 0 */
-
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
@@ -694,11 +686,10 @@ gnc_plugin_page_report_new( int reportId )
 {
 	GncPluginPageReport *plugin_page;
 
+        DEBUG( "report id = %d", reportId );
 	plugin_page = g_object_new( GNC_TYPE_PLUGIN_PAGE_REPORT,
                                     "report_id", reportId, NULL );
         DEBUG( "plugin_page: %p", plugin_page );
-        //gnc_plugin_page_report_set_report_id( plugin_page, reportId );
-        //gnc_plugin_page_report_setup( plugin_page );
         DEBUG( "set %d on page %p", reportId, plugin_page );
 	return GNC_PLUGIN_PAGE( plugin_page );
 }

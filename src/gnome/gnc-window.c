@@ -26,10 +26,12 @@
 
 #include <gtk/gtk.h>
 
+#include "gnc-trace.h"
 #include "gnc-file.h"
 #include "gnc-plugin-page.h"
 #include "gnc-window.h"
 
+static short module = MOD_TEST;
 
 GType
 gnc_window_get_type (void)
@@ -148,12 +150,16 @@ gnc_window_show_progress (const char *message, double percentage)
   GtkWidget *progressbar;
 
   window = progress_bar_hack_window;
-  if (window == NULL)
+  if (window == NULL) {
+    DEBUG( "no [progress_bar_hack]window" );
     return;
+  }
 
   progressbar = gnc_window_get_progressbar (window);
-  if (progressbar == NULL)
+  if (progressbar == NULL) {
+    DEBUG( "no progressbar in hack-window" );
     return;
+  }
 
   if (percentage < 0) {
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), NULL);
