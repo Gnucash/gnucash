@@ -81,6 +81,177 @@ sql_Query_destroy (sqlQuery *sq)
 }
 
 /* =========================================================== */
+/* sorting order */
+
+static char *
+sql_sort_order (char *p, sort_type_t sort_type, gboolean increasing)
+{
+   ENTER ("sort type=%d, incr=%d", sort_type, increasing);
+
+   switch (sort_type)
+   {
+      case BY_STANDARD:
+         if (TRUE == increasing)
+         {
+            p = stpcpy (p, "gncTransaction.date_posted ASC, gncTransaction.num ASC, "
+                           "gncTransaction.date_entered ASC, gncTransaction.description");
+         } else {
+            p = stpcpy (p, "gncTransaction.date_posted DESC, gncTransaction.num DESC, "
+                           "gncTransaction.date_entered DESC, gncTransaction.description");
+         }
+         break;
+      case BY_DATE:
+         p = stpcpy (p, "gncTransaction.date_posted");
+         break;
+      case BY_DATE_ROUNDED:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_DATE_ROUNDED badly implemented");
+         p = stpcpy (p, "gncTransaction.date_posted");
+         break;
+      case BY_DATE_ENTERED:
+         p = stpcpy (p, "gncTransaction.date_entered");
+         break;
+      case BY_DATE_ENTERED_ROUNDED:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_DATE_ENTERED_ROUNDED badly implemented");
+         p = stpcpy (p, "gncTransaction.date_entered");
+         break;
+      case BY_DATE_RECONCILED:
+         p = stpcpy (p, "gncEntry.date_reconciled");
+         break;
+      case BY_DATE_RECONCILED_ROUNDED:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_DATE_RECONCILED_ROUNDED badly implemented");
+         p = stpcpy (p, "gncEntry.date_reconciled");
+         break;
+      case BY_NUM:
+         p = stpcpy (p, "gncTransaction.num");
+         break;
+      case BY_AMOUNT:
+         p = stpcpy (p, "gncEntry.amount");
+         break;
+      case BY_MEMO:
+         p = stpcpy (p, "gncEntry.memo");
+         break;
+      case BY_DESC:
+         p = stpcpy (p, "gncTransaction.description");
+         break;
+      case BY_RECONCILE:
+         p = stpcpy (p, "gncEntry.reconciled");
+         break;
+      case BY_ACCOUNT_FULL_NAME:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_ACCOUNT_FULL_NAME badly implemented");
+         p = stpcpy (p, "gncAccount.accountName");
+         break;
+      case BY_ACCOUNT_CODE:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_ACCOUNT_CODE badly implemented");
+         p = stpcpy (p, "gncAccount.accountCode");
+         break;
+      case BY_CORR_ACCOUNT_FULL_NAME:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_CORR_ACCOUNT_FULL_NAME not implemented");
+         p = stpcpy (p, "gncAccount.accountName");
+         break;
+      case BY_CORR_ACCOUNT_CODE:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_CORR_ACCOUNT_CODE not implemented");
+         p = stpcpy (p, "gncAccount.accountCode");
+         break;
+      case BY_NONE:
+         break;
+      default:
+         PERR ("unknown sort type %d", sort_type);
+         break;
+   }
+
+   if (TRUE == increasing)
+   {
+      p = stpcpy (p, " ASC ");
+   }
+   else 
+   {
+      p = stpcpy (p, " DESC ");
+   }
+
+   return p;
+}
+ 
+/* =========================================================== */
+/* distinct clauses */
+
+static char *
+sql_sort_distinct (char *p, sort_type_t sort_type)
+{
+   ENTER ("sort type=%d", sort_type);
+
+   if (BY_NONE != sort_type)
+   {
+      p = stpcpy (p, ", ");
+   }
+
+   switch (sort_type)
+   {
+      case BY_STANDARD:
+         p = stpcpy (p, "gncTransaction.date_posted, gncTransaction.num, "
+                        "gncTransaction.date_entered, gncTransaction.description");
+         break;
+      case BY_DATE:
+      case BY_DATE_ROUNDED:
+         p = stpcpy (p, "gncTransaction.date_posted");
+         break;
+      case BY_DATE_ENTERED:
+      case BY_DATE_ENTERED_ROUNDED:
+         p = stpcpy (p, "gncTransaction.date_entered");
+         break;
+      case BY_DATE_RECONCILED:
+      case BY_DATE_RECONCILED_ROUNDED:
+         p = stpcpy (p, "gncEntry.date_reconciled");
+         break;
+      case BY_NUM:
+         p = stpcpy (p, "gncTransaction.num");
+         break;
+      case BY_AMOUNT:
+         p = stpcpy (p, "gncEntry.amount");
+         break;
+      case BY_MEMO:
+         p = stpcpy (p, "gncEntry.memo");
+         break;
+      case BY_DESC:
+         p = stpcpy (p, "gncTransaction.description");
+         break;
+      case BY_RECONCILE:
+         p = stpcpy (p, "gncEntry.reconciled");
+         break;
+      case BY_ACCOUNT_FULL_NAME:
+         p = stpcpy (p, "gncAccount.accountName");
+         break;
+      case BY_ACCOUNT_CODE:
+         p = stpcpy (p, "gncAccount.accountCode");
+         break;
+      case BY_CORR_ACCOUNT_FULL_NAME:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_CORR_ACCOUNT_FULL_NAME not implemented");
+         p = stpcpy (p, "gncAccount.accountName");
+         break;
+      case BY_CORR_ACCOUNT_CODE:
+         /* XXX hack alert FIXME implement this */
+         PERR ("BY_CORR_ACCOUNT_CODE not implemented");
+         p = stpcpy (p, "gncAccount.accountCode");
+         break;
+      case BY_NONE:
+         break;
+      default:
+         PERR ("unknown sort type %d", sort_type);
+         break;
+   }
+
+   return p;
+}
+ 
+
+/* =========================================================== */
 /* Macro for PD_STRING query types
  * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
@@ -179,7 +350,7 @@ sql_Query_destroy (sqlQuery *sq)
 /* =========================================================== */
 
 const char *
-sqlQuery_build (sqlQuery*sq, Query *q)
+sqlQuery_build (sqlQuery *sq, Query *q)
 {
    GList *il, *jl, *qterms, *andterms;
    QueryTerm *qt;
@@ -187,13 +358,21 @@ sqlQuery_build (sqlQuery*sq, Query *q)
    int more_or = 0;
    int more_and = 0;
    int max_rows;
+   sort_type_t sorter;
 
    if (!sq || !q) return NULL;
 
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT DISTINCT gncEntry.transGuid "
+               "SELECT DISTINCT gncEntry.transGuid ");
+
+   /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
+   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetPrimarySortOrder(q));
+   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetSecondarySortOrder(q));
+   sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetTertiarySortOrder(q));
+
+   sq->pq = stpcpy(sq->pq, 
                "  FROM gncEntry, gncTransaction, gncAccount, gncCommodity "
                "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
 
@@ -468,6 +647,32 @@ sqlQuery_build (sqlQuery*sq, Query *q)
 
    sq->pq = stpcpy(sq->pq, ")");
 
+   /* ---------------------------------------------------- */
+   /* implement sorting order as well; bad sorts lead to bad data
+    * if the limit is set to a finite number of rows. 
+    */
+   sorter = xaccQueryGetPrimarySortOrder(q);
+   if (BY_NONE != sorter)
+   {
+      sq->pq = stpcpy(sq->pq, "ORDER BY ");
+      sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortPrimaryIncreasing (q));
+
+      sorter = xaccQueryGetSecondarySortOrder(q);
+      if (BY_NONE != sorter)
+      {
+         sq->pq = stpcpy(sq->pq, ", ");
+         sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortSecondaryIncreasing (q));
+
+         sorter = xaccQueryGetTertiarySortOrder(q);
+         if (BY_NONE != sorter)
+         {   
+            sq->pq = stpcpy(sq->pq, ", ");
+            sq->pq = sql_sort_order (sq->pq, sorter, xaccQueryGetSortTertiaryIncreasing (q));
+         }
+      }
+   }
+
+   /* ---------------------------------------------------- */
    /* limit the query result to a finite numbe of rows */
    max_rows = xaccQueryGetMaxSplits (q);
    if (0 <= max_rows)
