@@ -43,9 +43,9 @@
     
     (gnc:query-set-book query (gnc:get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
-    (gnc:query-add-account-match 
-     query (gnc:list->glist currency-accounts)
-     'acct-match-any 'query-and)
+    (gnc:query-add-account-match query
+                                 currency-accounts
+                                 'acct-match-any 'query-and)
     (gnc:query-add-date-match-timepair 
      query #f end-date-tp #t end-date-tp 'query-and) 
     
@@ -70,17 +70,16 @@
 				   commodity trans-comm)
 				  (gnc:commodity-equiv?
 				   commodity acc-comm)))))
-		  (gnc:glist->list 
-		   (gnc:query-get-splits query) 
-		   <gnc:Split*>)))
+		  (gnc:query-get-splits query)))
     (gnc:free-query query)
     splits))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
 ;; to 'end-date-tp' which have the 'commodity' and one other commodity
 ;; involved. The splits are sorted by date.
-(define (gnc:get-match-commodity-splits-sorted
-	 currency-accounts end-date-tp commodity)
+(define (gnc:get-match-commodity-splits-sorted currency-accounts
+                                               end-date-tp
+                                               commodity)
   (sort (gnc:get-match-commodity-splits currency-accounts 
 					end-date-tp commodity)
 	(lambda (a b)
@@ -91,8 +90,7 @@
 
 ;; Returns a list of all splits in the currency-accounts up to
 ;; end-date which have two *different* commodities involved.
-(define (gnc:get-all-commodity-splits 
-	 currency-accounts end-date-tp)
+(define (gnc:get-all-commodity-splits currency-accounts end-date-tp)
   (gnc:get-match-commodity-splits currency-accounts end-date-tp #f))
 
 
