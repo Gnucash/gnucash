@@ -5,6 +5,9 @@
 
 	* src/guile/gnc.gwp: wrap safe_strcmp.
 
+	* src/gnome/dialog-print-check.c: revert inadvertant change
+	(sorry . . .).
+
 2001-07-17  Dave Peticolas  <dave@krondo.com>
 
 	* doc/sgml/C/xacc-features.sgml: Matt Krai's doc patch
