@@ -103,6 +103,7 @@ lv_show_splits (GNCLotViewer *lv)
 {
    GNCLot *lot = lv->selected_lot;
    SplitList *split_list, *node;
+   gnc_numeric baln = gnc_numeric_zero();
 
    if (NULL == lot) return;
 
@@ -116,9 +117,11 @@ lv_show_splits (GNCLotViewer *lv)
       char amtbuff[200];
       char valbuff[200];
       char gainbuff[200];
+      char balnbuff[200];
       gnc_commodity *currency;
       Transaction *trans = xaccSplitGetParent (split);
       time_t date = xaccTransGetDate (trans);
+      gnc_numeric gains;
       const char *row_vals[MINI_NUM_COLS];
       int row;
 
@@ -138,14 +141,36 @@ lv_show_splits (GNCLotViewer *lv)
       row_vals[MINI_AMNT_COL] = amtbuff;
 
       currency = xaccTransGetCurrency (trans);
-      xaccSPrintAmount (valbuff, xaccSplitGetValue (split),
+      xaccSPrintAmount (valbuff, 
+                 gnc_numeric_neg (xaccSplitGetValue (split)),
                  gnc_commodity_print_info (currency, TRUE));
       row_vals[MINI_VALU_COL] = valbuff;
 
-      xaccSPrintAmount (gainbuff, xaccSplitGetCapGains (split),
+      /* Gains */
+      gains = gnc_numeric_neg (xaccSplitGetCapGains (split));
+      if (gnc_numeric_zero_p(gains))
+      {
+         gainbuff[0] = 0;
+      }
+      else
+      {
+         xaccSPrintAmount (gainbuff, gains,
                  gnc_commodity_print_info (currency, TRUE));
+      }
       row_vals[MINI_GAIN_COL] = gainbuff;
-      row_vals[MINI_BALN_COL] = "-";
+
+      /* Balance of Gains */
+      gnc_numeric_add_fixed (baln, gains);
+      if (gnc_numeric_zero_p(baln))
+      {
+         balnbuff[0] = 0;
+      }
+      else
+      {
+         xaccSPrintAmount (balnbuff, baln,
+                 gnc_commodity_print_info (currency, TRUE));
+      }
+      row_vals[MINI_BALN_COL] = balnbuff;
 
       /* Self-reference */
       row = gtk_clist_append (lv->mini_clist, (char **)row_vals);
