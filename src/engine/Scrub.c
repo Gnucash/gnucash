@@ -203,6 +203,12 @@ xaccSplitScrub (Split *split)
   account = xaccSplitGetAccount (split);
   if (!account)
   {
+/* xxxxxxxxxx FIXME:  if theres no account, we should
+scrub for orphans, and fix that  !!
+only then should we proceed!
+    xaccTransScrubOrphans (trans, 
+--linas march 2003
+*/
     value = xaccSplitGetValue (split);
 
     if (gnc_numeric_same (xaccSplitGetAmount (split),
@@ -402,6 +408,14 @@ xaccTransScrubCurrency (Transaction *trans)
 
   if (!trans) return;
 
+/* If there are any orphaned splits in a transaction, then the 
+ * TransScrubCurrency will fail for that transaction. 
+xxxxxxxxxxxxxxxxa FIXME: finish fixing me!!
+--linas march 2003
+    xaccTransScrubOrphans (xaccSplitGetParent (split),
+                           xaccAccountGetRoot (acc));
+*/
+
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
   
@@ -414,12 +428,41 @@ xaccTransScrubCurrency (Transaction *trans)
   }
   else
   {
-    PWARN ("no common transaction currency found");
+    if (NULL == trans->splits)
+    {
+      PWARN ("Transaction \"%s\" has no splits in it!", trans->description);
+    }
+    else
+    {
+      SplitList *node;
+      PWARN ("no common transaction currency found for trans=\"%s\"", trans->description);
+      for (node=trans->splits; node; node=node->next)
+      {
+        Split *split = node->data;
+        if (NULL == split->acc)
+        {
+          PWARN (" split=\"%s\" is not in any account!", split->memo);
+        }
+        else
+        {
+          PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"", 
+              split->memo, split->acc->accountName, gnc_commodity_get_mnemonic (split->acc->commodity));
+        }
+      }
+    }
   }
   {
-    Split *sp;
-    int i;
-    for (i=0; (sp = xaccTransGetSplit (trans, i)); i++) {
+    SplitList *node;
+    for (node=trans->splits; node; node=node->next)
+    {
+      Split *sp = node->data;
+/*
+xxxxxxxxxxxxxxx  FIXME: this loop should perform the more
+through SplitScrub at this point, although the actual flow 
+of logic for fixing things needs to be tweaked, because 
+some of the fixes are being done in the wrong order.
+--linas march 2003
+*/
       if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
 			     xaccSplitGetValue (sp))) 
       {
