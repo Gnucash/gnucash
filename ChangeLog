@@ -1,3 +1,9 @@
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-date-edit.c: hide the calendar popup
+	  on enter/return keypress events (in addition to ESC).
+	Fixes #118500
+
 2003-07-27  Matt Vanecek  <mevanecek@yahoo.com>
 
     * src/backend/postgres/PostgresBackend.c: Added pgendGetBook(),

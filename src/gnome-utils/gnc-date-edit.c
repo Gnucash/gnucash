@@ -171,8 +171,10 @@ key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GNCDateEdit *gde = data;
 
-	if (event->keyval != GDK_Escape)
-		return date_accel_key_press(gde->date_entry, event, data);
+	if (event->keyval != GDK_Return &&
+	    event->keyval != GDK_KP_Enter &&
+	    event->keyval != GDK_Escape)
+	  return date_accel_key_press(gde->date_entry, event, data);
 
 	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 	hide_popup (gde);
