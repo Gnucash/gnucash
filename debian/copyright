@@ -1,10 +1,15 @@
-This package was debianized by Tyson Dowd <trd@cs.mu.oz.au>
-Wed, 7 Jan 1998 11:17:45 +1100.
 
-It was downloaded from
-http://www.cs.hmc.edu/~rclark/xacc/download/xacc-1.0b11-linux-i386-bin.tar.gz
+This is the Debian GNU/Linux prepackaged version of gnucash, an application
+to track finances in multiple accounts, keeping running and reconciled
+balances.  Gnucash was written by Robin D. Clark and Linas Vepstas.
+
+This package was debianized by Tyson Dowd <trd@cs.mu.oz.au>
+Wed, 10 Mar 1999 13:02:16 +1100. It was downloaded from
+ftp://ftp.gnucash.org/pub/gnucash/gnucash/sources/unstable/1.3.x/1.3.3/gnucash-1.3.3.tar.gz
 
 Copyright:
+
+	Gnucash is under the GNU GPL.
 
 	Copyright (C) 1997 Robin D. Clark
 	Copyright (C) 1997 Linas Vepstas
@@ -19,11 +24,9 @@ Copyright:
         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public
-	License along with this program; if not, write to the Free
-	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
-
-See /usr/doc/copyright for a copy of the GNU GPL license.
+	You should have received a copy of the GNU General Public License 
+	along with this program; if not, write to the Free Software Foundation, 
+	Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 The source package includes the Motif widget ComboBox-1.33, which is GPL:
 
@@ -31,7 +34,7 @@ The source package includes the Motif widget ComboBox-1.33, which is GPL:
 	This software is Free Software. Please refer to the file
 	COPYING, which you should have received together this file and the
 	source code of the combo box widget.  However if you find this
-	widget to be usefull, you are encouraged to donate a reasonable
+	widget to be useful, you are encouraged to donate a reasonable
 	amount to a charitable institution -- there are enough people
 	out there who need help! Sometimes I got the strong impression
 	that programmers tend to get lost in their own "virtual reality"
@@ -64,51 +67,5 @@ XbaeMatrix, which is available under a BSD-like license:
 	INCLUDING ANY  LOST   PROFITS OR  OTHER INCIDENTAL   OR  CONSEQUENTIAL
 	DAMAGES RELATING TO THE INFORMATION.
 
-The source package includes a modified version of the Motif widget
-XmHTML, which is available under the GNU GPL:
-
-	This is a public BETA release of XmHTML, a Motif Widget capable of
-	rendering HTML3.2 conforming documents.
-
-	(C) Copyright 1993-1997 Ripley Software Development
-
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Library General Public
-	License as published by the Free Software Foundation; either
-	version 2 of the License, or (at your option) any later version.
-
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Library General Public License for more details.
-
-	You should have received a copy of the GNU Library General Public
-	License along with this library; if not, write to the Free
-	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-The source package includes a modified version of the Motif widget
-ComboBox, which is available under the GNU GPL:
-
-	(c) 1993, 1994, 1995 Harald Albrecht
-	Institut fuer Geometrie und Praktische Mathematik
-	RWTH Aachen, Germany
-	albrecht@igpm.rwth-aachen.de
-
-	(c) 1997 Linas Vepstas
-	linas@linas.org
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License as
-	published by the Free Software Foundation; either version 2 of the
-	License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program (see the file COPYING for more details);
-	if not, write to the Free Software Foundation, Inc., 675 Mass Ave, 
-	Cambridge, MA 02139, USA.
-
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License can be found in `/usr/doc/copyright/GPL'.

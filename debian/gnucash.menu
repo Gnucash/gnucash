@@ -1,0 +1,4 @@
+?package(gnucash):needs=x11 section=Apps/Tools                   \
+        title="GnuCash"                                          \
+        longtitle="GnuCash personal finance tracking program"    \
+        command="gnucash"

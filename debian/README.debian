@@ -1,7 +1,8 @@
-xacc for DEBIAN
+gnucash for DEBIAN
 ----------------------
 
-The documentation is installed in /usr/doc/xacc.
-The sample data files are in /usr/doc/xacc/samples.
+This is BETA software.  It works to a degree but there are still many
+bugs and unimplemented features.  If you want a stable version, it
+is recommended you use "xacc" which is also packaged for Debian.
 
-Tyson Dowd <trd@cs.mu.oz.au>, Wed, 7 Jan 1998 11:16:55 +1100
+Tyson Dowd <trd@cs.mu.oz.au>, Wed, 10 Mar 1999 13:00:12 +1100

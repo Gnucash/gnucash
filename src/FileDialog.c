@@ -20,6 +20,7 @@
 \********************************************************************/
 
 #include <errno.h>
+#include <string.h>
 
 #include "top-level.h"
 

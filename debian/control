@@ -1,14 +1,21 @@
-Source: xacc
+Source: gnucash
 Section: utils
 Priority: extra
 Maintainer: Tyson Dowd <trd@cs.mu.oz.au>
-Standards-Version: 2.3.0.1
+Standards-Version: 3.1.0.0
 
-Package: xacc
+Package: gnucash
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, libwww-perl, slib, scm, guile1.3, libguile6-slib, perl-5.005, eperl
 Description: A personal finance tracking program.
- X-Accountant can track finances in multiple accounts, keeping running
+ Gnucash can track finances in multiple accounts, keeping running
  and reconciled balances. It has an X based graphical user interface,
  double entry, a hierarchy of accounts, expense accounts (categories),
  and can import Quicken QIF files.
+ .
+ Gnucash is derived from xacc.  It adds perl and guile extensibility,
+ and can produce HTML output.
+ .
+ This is BETA software.  It works to a degree but there are still many
+ bugs and unimplemented features.  If you want a stable version, try the
+ xacc package instead.

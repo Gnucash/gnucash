@@ -1,8 +1,140 @@
-xacc (1.0.15-1) unstable; urgency=low
+gnucash (1.3.4-3) frozen unstable; urgency=high
+
+  * Make wrapper script executable when installed.
+    Fixes #62424, #62410
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Mon, 17 Apr 2000 13:45:29 +1000
+
+gnucash (1.3.4-2) frozen unstable; urgency=high
+
+  * Use wrapper script to avoid locale problems.
+    Should fix #60417 (another try at this one).
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Fri, 14 Apr 2000 13:34:31 +1000
+
+gnucash (1.3.4-1) frozen unstable; urgency=high
+
+  * New upstream release.  Should fix #60417, #60615, and #60655.
+    Thanks to Robert Merkel <rgmerk@mira.net> for his help in preparing
+    this release.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu, 13 Apr 2000 13:14:49 +1100
+
+gnucash (1.2.5.cvs.20000204-1) unstable; urgency=low
+
+  * New upsteam version (taken from CVS) including many bug fixes.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Fri,  4 Feb 2000 12:32:41 +1100
+
+gnucash (1.2.5.cvs.20000106-1) unstable; urgency=low
+
+  * New upstream version (taken from CVS).
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu,  6 Jan 2000 16:02:44 +1100
+
+gnucash (1.2.3.cvs.19991026-5) unstable; urgency=low
+
+  * Depend on eperl.  Fixes #51424.  Thanks to Craig Sanders for
+    reporting this as I hadn't noticed it.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu,  6 Jan 2000 16:02:40 +1100
+
+gnucash (1.2.3.cvs.19991026-4) unstable; urgency=low
+
+  * Depend on libguile6-slib.
+    This should fix a few problems with the slib catalog not being
+    correctly setup, which causes gnucash to die when starting up.
+    (Fixes #51555, #51773)
+  * Use -fPIC instead of -fpic (Fixes #51545).  Thanks to Ben Collins
+    for reporting and giving the fix.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu,  2 Dec 1999 17:00:48 +1100
+
+gnucash (1.2.3.cvs.19991026-3) unstable; urgency=low
+
+  * Add string.h to includes for FileDialog.
+    This should fix #49485.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Sat, 27 Nov 1999 17:43:42 +1100
+
+gnucash (1.2.3.cvs.19991026-2) unstable; urgency=low
+
+  * Rebuild to use new libguile6 instead of libguile4.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu, 25 Nov 1999 02:30:33 +1100
+
+gnucash (1.2.3.cvs.19991026-1) unstable; urgency=low
+
+  * New upstream version (Update from CVS version).
+  * Recompile for gnome.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Thu, 25 Nov 1999 02:30:17 +1100
+
+gnucash (1.2.3-3) unstable; urgency=low
+
+  * Add patch for powerpc supplied by 
+    Konstantinos Margaritis <markos@debian.org> (Fixes #39050).
+  * Add improved documention in description as suggested by
+    reiter@netspace.net.au (Fixes #45229).
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Tue, 19 Oct 1999 16:37:23 +1000
+
+gnucash (1.2.3-2) unstable; urgency=low
+
+  * Compiled against new lesstif package (Fixes #47692).
+  * Depend on perl-5.005 explicitly (Fixes #43823 and #43822).
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Tue, 19 Oct 1999 08:13:38 +0200
+
+gnucash (1.2.3-1) unstable; urgency=low
+
+  * New upstream version.
+  * Compiled against potato.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Tue, 10 Aug 1999 01:34:02 +0200
+
+gnucash (1.2.1-1) unstable; urgency=low
+
+  * New upstream version.
+  * Add patch provided by Tomas Pospisek <tpo@spin.ch> to add a
+    menu entry for gnucash. 
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Sat, 17 Jul 1999 17:29:48 -0700
+
+gnucash (1.2.0-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Fri,  2 Jul 1999 22:13:58 -0700
+
+gnucash (1.1.27-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Tue, 25 May 1999 16:02:44 +1000
+
+gnucash (1.1.26-2) unstable; urgency=low
+
+  * Add a few missing dependencies.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Mon, 15 Mar 1999 14:11:36 +1100
+
+gnucash (1.1.26-1.1) unstable; urgency=low
+
+  * debian/rules: converted to debhelper
+  * debian/copyright: correct FSF address, fix spelling
+  * debian/control: add Conflicts: and Replaces: for xacc
+  * debian/control: add Depends: on libwww-perl
+  * debian/rules: let gnc-prices, gnucash{,.motif} have undocumented(7)
+  * debian/rules: strip usr/lib/gnucash/gnucash.so
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Wed, 10 Mar 1999 22:37:37 -0500
+
+gnucash (1.1.26-1) unstable; urgency=low
 
   * Initial Release.
 
- -- Tyson Dowd <trd@cs.mu.oz.au>  Wed, 7 Jan 1998 11:16:55 +1100
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Wed, 10 Mar 1999 13:00:52 +1100
 
 Local variables:
 mode: debian-changelog

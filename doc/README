@@ -407,18 +407,17 @@ Getting Source with CVS
 A read-only version of the cvs tree is available on the net.
 To access it, first, login, as so:
 
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+  cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+
 The password is "guest"
 
-To get a copy of the source in the experimental development tree
-do a
+To get a copy of the source in the experimental development tree do a
 
-cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
+  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
 
-To get a copy of the source in the gnucash-1.2 stable production
-tree do a
+To get a copy of the source in the gnucash-1.2 stable production tree do a
 
-cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
+  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
 
 Developing GnuCash
@@ -533,7 +532,14 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
    infrastructure, is handling the whole guile/perl extension language 
    thing, and is dealing with configuration & configurability.
 
-Dirk Schoenberger <schoenberger@signsoft.com> is working on the Qt/KDE port
+Dave Peticolas <peticola@cs.ucdavis.edu> hacks obsessively on
+   GnuCash. But he can stop anytime he wants to. Really.
+
+Bill Gribble <grib@cs.utexas.edu> works magic. If your checks print
+   wrong, blame him. If you don't like the amount printed on your
+   checks, blame him. If you don't like your your bank balances,
+   your bank, or your life, blame him too.
+
 
 Fixes & Patches:
 ----------------
@@ -550,7 +556,7 @@ Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
-Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint
+Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Paul Fenwick <pjf@schools.net.au> ASX support
@@ -587,7 +593,9 @@ Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
+Tomas Pospisek <tpo@spin.ch> debian patches
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
 Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
