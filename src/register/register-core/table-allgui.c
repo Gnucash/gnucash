@@ -169,6 +169,15 @@ gnc_table_restore_current_cursor (Table *table,
                                    table->current_cursor, buffer);
 }
 
+int
+gnc_table_get_current_cell_type (Table *table)
+{
+  if (table == NULL)
+    return -1;
+
+  return gnc_table_get_cell_type (table, table->current_cursor_loc);
+}
+
 gboolean
 gnc_table_virtual_cell_out_of_bounds (Table *table,
                                       VirtualCellLocation vcell_loc)
@@ -387,6 +396,44 @@ gnc_table_get_help (Table *table)
     return FALSE;
 
   return xaccBasicCellGetHelp (cb_cell->cell);
+}
+
+BasicCell *
+gnc_table_get_cell (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlock *cellblock;
+  CellBlockCell *cb_cell;
+
+  if (table == NULL)
+    return NULL;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return NULL;
+
+  cellblock = vcell->cellblock;
+
+  cb_cell = gnc_cellblock_get_cell (cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+
+  if (cb_cell == NULL)
+    return NULL;
+
+  return cb_cell->cell;
+}
+
+int
+gnc_table_get_cell_type (Table *table, VirtualLocation virt_loc)
+{
+  BasicCell *cell;
+
+  cell = gnc_table_get_cell (table, virt_loc);
+  if (cell == NULL)
+    return -1;
+
+  return gnc_table_layout_get_cell_type (table->layout, cell);
 }
 
 void 

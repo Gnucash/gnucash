@@ -2439,7 +2439,7 @@ xaccSRTemplateGetEntryHandler( VirtualLocation virt_loc,
   kvp_frame        *kvpf;
   GUID                *tmpguid;
 
-  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
   if (split == NULL)
@@ -2554,7 +2554,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
   if (conditionally_changed)
     *conditionally_changed = FALSE;
 
-  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
   if (split == NULL)
@@ -2895,7 +2895,7 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
   SplitRegister *reg = user_data;
   CellType cell_type;
 
-  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
   switch (cell_type)
   {
@@ -3020,7 +3020,7 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
   CellType cell_type;
   Split *split;
 
-  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
   switch (cell_type)
   {
@@ -3084,7 +3084,7 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
 
   trans = xaccSplitGetParent (split);
 
-  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
   is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                     virt_loc.vcell_loc);
@@ -3232,7 +3232,7 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
   {
     CellType cell_type;
 
-    cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+    cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
 
     if ((cell_type != DEBT_CELL)  &&
         (cell_type != CRED_CELL)  &&

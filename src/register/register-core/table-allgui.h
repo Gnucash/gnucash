@@ -159,6 +159,8 @@ void        gnc_table_save_current_cursor (Table *table, CursorBuffer *buffer);
 void        gnc_table_restore_current_cursor (Table *table,
                                               CursorBuffer *buffer);
 
+int         gnc_table_get_current_cell_type (Table *table);
+
 
 /* This function checks the given location and returns true
  * if it is out of bounds of the table. */
@@ -191,6 +193,10 @@ gboolean       gnc_table_is_popup (Table *table, VirtualLocation virt_loc);
 
 char *         gnc_table_get_help (Table *table);
 
+BasicCell *    gnc_table_get_cell (Table *table, VirtualLocation virt_loc);
+
+int            gnc_table_get_cell_type (Table *table,
+                                        VirtualLocation virt_loc);
 
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);

@@ -199,13 +199,6 @@ CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
 
 CursorClass     xaccCursorNameToClass (const char *cursor_name);
 
-/* Returns the type of the current cell */
-CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);
-
-/* Returns the type of the cell at the given virtual row and column. */
-CellType        xaccSplitRegisterGetCellType (SplitRegister *reg,
-                                              VirtualLocation virt_loc);
-
 /* Returns the virtual location in the current cursor of the
  * given cell using the pointer values. The function returns true if
  * the given cell type is in the current cursor, false otherwise. */

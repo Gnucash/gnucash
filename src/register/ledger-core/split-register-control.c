@@ -556,7 +556,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
     return FALSE;
 
   cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
-  cell_type = xaccSplitRegisterGetCurrentCellType (reg);
+  cell_type = gnc_table_get_current_cell_type (reg->table);
 
   switch (cursor_class)
   {
@@ -856,7 +856,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     Account *account;
     char *name;
 
-    cell_type = xaccSplitRegisterGetCurrentCellType (reg);
+    cell_type = gnc_table_get_current_cell_type (reg->table);
 
     if (!(cell_type == XFRM_CELL ||
           cell_type == MXFRM_CELL))
