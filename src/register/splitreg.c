@@ -325,6 +325,7 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    Table * table;
    CellBlock *curs, *header;
    int phys_r, phys_c;
+   int i;
 
    reg->user_hook = NULL;
    reg->destroy = NULL;
@@ -357,27 +358,23 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    curs = xaccMallocCellBlock (1, reg->num_cols);
    reg->trans_cursor = curs;
    
-{
-/* hack alertoid yeah */
-/* 
-make sure that "blank" cells stay blank, and don't
-get trailing garbage in them as things move about. 
-but this is broken, as when the cuirsor is moved,
-the contents of the register are copied into the 
-supposedly "blank" cell, and all is screwed up.
-Fix this later ....
-*/
-int i;
-BasicCell *nullcell;
-nullcell = xaccMallocBasicCell();
-xaccSetBasicCellValue (nullcell, "");
-nullcell->input_output = 0;
-nullcell->width = 1;
-nullcell->bg_color = 0xccccff;
-for (i=0; i<reg->num_cols; i++) {
-xaccAddCell (curs, nullcell, 0, i);
-}
-}
+  /* 
+   * The Null Cell is used to make sure that "empty"
+   * cells stay empty.  This solves the problem of 
+   * having the table be reformatted, the result of
+   * which is that an empty cell has landed on a cell
+   * that was previously non-empty.  We want to make 
+   * sure that we erase those cell contents. The null
+   * cells handles this for us.
+   */
+
+   reg -> nullTransCell = xaccMallocBasicCell();
+   reg -> nullTransCell -> input_output = XACC_CELL_ALLOW_NONE;
+   reg -> nullTransCell -> width = 1;
+   xaccSetBasicCellValue (reg->nullTransCell, "");
+   for (i=0; i<reg->num_cols; i++) {
+      xaccAddCell (curs, reg->nullTransCell, 0, i);
+   }
 
    FANCY (date,    Date,      DATE);
    BASIC (num,     Text,      NUM);
@@ -397,6 +394,7 @@ xaccAddCell (curs, nullcell, 0, i);
    reg->balanceCell->cell.bg_color = 0xccccff;
    reg->dateCell->cell.bg_color = 0xccccff;
    reg->numCell->bg_color = 0xccccff;
+   reg->nullTransCell->bg_color = 0xccccff;
 
    /* --------------------------- */
    /* define the ledger cursor that handles splits */
@@ -404,18 +402,19 @@ xaccAddCell (curs, nullcell, 0, i);
    curs = xaccMallocCellBlock (1, reg->num_cols);
    reg->split_cursor = curs;
    
-{
-/* hack alertoid yeah */
-int i;
-BasicCell *nullcell;
-nullcell = xaccMallocBasicCell();
-xaccSetBasicCellValue (nullcell, "");
-nullcell->input_output = 0;
-nullcell->width = 1;
-for (i=0; i<reg->num_cols; i++) {
-xaccAddCell (curs, nullcell, 0, i);
-}
-}
+  /* 
+   * The Null Cell is used to make sure that "empty"
+   * cells stay empty.  See above.
+   */
+
+   reg -> nullSplitCell = xaccMallocBasicCell();
+   reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
+   reg -> nullSplitCell -> width = 1;
+   xaccSetBasicCellValue (reg->nullSplitCell, "");
+   for (i=0; i<reg->num_cols; i++) {
+      xaccAddCell (curs, reg->nullSplitCell, 0, i);
+   }
+
    FANCY (xfrm,    Combo,     XFRM);
    FANCY (xto,     Combo,     XTO);
    FANCY (action,  Combo,     ACTN);
@@ -435,7 +434,7 @@ xaccAddCell (curs, nullcell, 0, i);
    /* do some misc cell config */
 
    /* balance cell does not accept input; its display only.  */
-   reg->balanceCell->cell.input_output = 0;
+   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
 
    /* the debit/credit/value cells show blank if value is 0.00 */
    reg->debitCell->blank_zero = 1;

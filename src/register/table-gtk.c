@@ -105,7 +105,8 @@ verify_cell_interaction_OK(Table *table, const int row, const int col)
     } else {
       /* if cell is marked as output-only,
        * then don't call callbacks */
-      if (0 == (arr->cells[rel_row][rel_col])->input_output) {
+      if (0 == (XACC_CELL_ALLOW_INPUT & ((arr->cells[rel_row][rel_col])->input_output))) 
+      {
         invalid = TRUE;
       }
     }

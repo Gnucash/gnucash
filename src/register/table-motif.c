@@ -125,7 +125,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
       } else {
          /* if cell is marked as output-only,
           * then don't call callbacks */
-         if (0 == (arr->cells[rel_row][rel_col])->input_output) {
+         if (0 == (XACC_CELL_ALLOW_INPUT & ((arr->cells[rel_row][rel_col])->input_output))) 
+         {
             invalid = TRUE;
          }
       }

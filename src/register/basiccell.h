@@ -35,10 +35,19 @@
  * to understand special cell formats.
  *
  * MEMBERS:
- * The input_output member is zero if the cell is supposed 
- * to only display values, but not accept user input.  If
- * non-zero, then the callbacks below are used to when the
- * cell is entered.
+ * The input_output member controls how the cell accepts 
+ *   input, and whether it displays it's value.  It is a 
+ *   a flag of OR-ed together values. Flag bits include:
+ *
+ *     XACC_CELL_ALLOW_INPUT  accept keyboard & mouse
+ *       input from the user. 
+ *     XACC_CELL_ALLOW_SHADOW copy ("shadow") the contents
+ *       of register cells.   
+ *
+ *   If ALLOW_INPUT is not set, the cell is supposed  to
+ *   to only display values, but not accept user input.  If
+ *   set, then the callbacks below are used to when the
+ *   cell is entered.
  *
  *
  * USER CALLBACKS:
@@ -130,6 +139,12 @@
 
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
+
+/* define a bitmask */
+#define XACC_CELL_ALLOW_NONE     0x0
+#define XACC_CELL_ALLOW_SHADOW   0x1
+#define XACC_CELL_ALLOW_INPUT    0x2
+#define XACC_CELL_ALLOW_ALL      0x3
 
 typedef struct _BasicCell BasicCell;
 typedef unsigned int uint32;

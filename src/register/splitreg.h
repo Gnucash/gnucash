@@ -109,6 +109,9 @@ struct _SplitRegister {
    ComboCell     * xtoCell;
    PriceCell     * balanceCell;
 
+   BasicCell     * nullTransCell;
+   BasicCell     * nullSplitCell;
+
    /* the type of the register, must be one of the enumerated types
     * above *_REGISTER, *_LEDGER, above */
    int type;

@@ -435,8 +435,10 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
             /* OK, now copy the string value from the table at large 
              * into the cell handler. */
-            xaccSetBasicCellValue (cell, cell_val);
-            cell->changed = 0;
+            if (XACC_CELL_ALLOW_SHADOW & (cell->input_output)) {
+               xaccSetBasicCellValue (cell, cell_val);
+               cell->changed = 0;
+            }
 
             /* umm, a right now, we'll let the active cursor color override the
              * individual cell defaults, but for now this is an experiment.

@@ -45,7 +45,7 @@ BasicCell * xaccMallocBasicCell (void)
 
 void xaccInitBasicCell (BasicCell *cell)
 {
-   cell->input_output = 1;
+   cell->input_output = XACC_CELL_ALLOW_ALL;
    cell->width = 0;
    cell->alignment = 0;
    cell->bg_color = 0xffffff;  /* white */

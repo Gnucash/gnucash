@@ -363,7 +363,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    FANCY (value,   Price,     VALU);
 
    FANCY (balance, Price,     BALN);
-   reg->balanceCell->cell.input_output = 0;
+   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
    reg->debitCell->blank_zero = 1;
    reg->creditCell->blank_zero = 1;
    reg->valueCell->blank_zero = 1;
