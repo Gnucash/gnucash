@@ -30,8 +30,8 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "BackendP.h"
 
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
@@ -506,7 +506,7 @@ static void compile_terms (QofQuery *q)
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
     QofBook *book = node->data;
-    Backend *be = book->backend;
+    QofBackend *be = book->backend;
 
     if (be && be->compile_query) {
       gpointer result = (be->compile_query)(be, q);
@@ -568,7 +568,7 @@ static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
   QofBook* book = key;
-  Backend* be = book->backend;
+  QofBackend* be = book->backend;
 
   if (be && be->free_query)
     (be->free_query)(be, value);
@@ -690,7 +690,7 @@ GList * qof_query_run (QofQuery *q)
     /* For each book */
     for (node=q->books; node; node=node->next) {
       QofBook *book = node->data;
-      Backend *be = book->backend;
+      QofBackend *be = book->backend;
 
       /* run the query in the backend */
       if (be) {

@@ -27,13 +27,13 @@
 #include <glib.h>
 #include <string.h>
 
-#include "BackendP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
 #include "kvp-util.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -169,7 +169,7 @@ gnc_price_begin_edit (GNCPrice *p)
   /* See if there's a backend.  If there is, invoke it. */
   /* We may not be able to find the backend, so make not of that .. */
   if (p->db) {
-    Backend *be;
+    QofBackend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->begin) {
        (be->begin) (be, GNC_ID_PRICE, p);
@@ -200,7 +200,7 @@ gnc_price_commit_edit (GNCPrice *p)
   /* See if there's a backend.  If there is, invoke it. */
   /* We may not be able to find the backend, so make not of that .. */
   if (p->db) {
-    Backend *be;
+    QofBackend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->commit) {
       QofBackendError errcode;
@@ -1914,7 +1914,7 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 
 /* ==================================================================== */
 
-Backend *
+QofBackend *
 xaccPriceDBGetBackend (GNCPriceDB *prdb)
 {
   if (!prdb || !prdb->book) return NULL;

@@ -76,7 +76,7 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
 gpointer qof_book_get_data (QofBook *book, const char *key);
 
 /** DOCUMENT ME! */
-QofBackend qof_book_get_backend (QofBook *book);
+QofBackend *qof_book_get_backend (QofBook *book);
 void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** qof_book_not_saved() will return TRUE if any 

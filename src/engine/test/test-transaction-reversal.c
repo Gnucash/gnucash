@@ -7,7 +7,7 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
+#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -38,11 +38,11 @@ run_test (void)
   Account *acc1, *acc2;
   Transaction *transaction, *new_trans;
   gnc_numeric old, new, result;
-  GNCBook *book;
+  QofBook *book;
   char *msg;
   int i;
 
-  book = gnc_book_new();
+  book = qof_book_new();
 
   acc1 = get_random_account(book);
   acc2 = get_random_account(book);

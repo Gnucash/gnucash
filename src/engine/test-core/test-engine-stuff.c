@@ -31,7 +31,7 @@ static gint max_group_accounts = 10;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 static gpointer get_random_list_element (GList *list);
-static void add_random_splits(GNCBook *book, Transaction *trn);
+static void add_random_splits(QofBook *book, Transaction *trn);
 
 
 /***********************************************************************/
@@ -159,7 +159,7 @@ get_random_commodity_namespace(void)
 }
 
 void
-make_random_changes_to_price (GNCBook *book, GNCPrice *p)
+make_random_changes_to_price (QofBook *book, GNCPrice *p)
 {
   Timespec *ts;
   char *string;
@@ -193,7 +193,7 @@ make_random_changes_to_price (GNCBook *book, GNCPrice *p)
 }
 
 GNCPrice *
-get_random_price(GNCBook *book)
+get_random_price(QofBook *book)
 {
   GNCPrice *p;
 
@@ -205,7 +205,7 @@ get_random_price(GNCBook *book)
 }
 
 void
-make_random_pricedb (GNCBook *book, GNCPriceDB *db)
+make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
   int num_prices;
 
@@ -224,7 +224,7 @@ make_random_pricedb (GNCBook *book, GNCPriceDB *db)
 }
 
 GNCPriceDB *
-get_random_pricedb(GNCBook *book)
+get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
@@ -245,7 +245,7 @@ price_accumulator (GNCPrice *p, gpointer data)
 }
 
 void
-make_random_changes_to_pricedb (GNCBook *book, GNCPriceDB *pdb)
+make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb)
 {
   GList *list = NULL;
   GList *node;
@@ -529,7 +529,7 @@ set_account_random_string(Account* act,
 }
 
 static void
-account_add_subaccounts (GNCBook *book, Account *account, int depth)
+account_add_subaccounts (QofBook *book, Account *account, int depth)
 {
   int num_accounts;
 
@@ -549,7 +549,7 @@ account_add_subaccounts (GNCBook *book, Account *account, int depth)
 }
 
 static void
-make_random_group_depth (GNCBook *book, AccountGroup *group, int depth)
+make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
 {
   int num_accounts;
 
@@ -572,7 +572,7 @@ make_random_group_depth (GNCBook *book, AccountGroup *group, int depth)
 }
 
 static void
-make_random_group (GNCBook *book, AccountGroup * group)
+make_random_group (QofBook *book, AccountGroup * group)
 {
   int depth;
 
@@ -585,7 +585,7 @@ make_random_group (GNCBook *book, AccountGroup * group)
 }
 
 AccountGroup *
-get_random_group (GNCBook *book)
+get_random_group (QofBook *book)
 {
   AccountGroup * group;
 
@@ -604,7 +604,7 @@ typedef struct
 } TransInfo;
 
 void
-make_random_changes_to_transaction_and_splits (GNCBook *book,
+make_random_changes_to_transaction_and_splits (QofBook *book,
                                                Transaction *trans,
                                                GList *accounts)
 {
@@ -700,7 +700,7 @@ add_trans_helper (Transaction *trans, gpointer data)
 }
 
 void
-make_random_changes_to_group (GNCBook *book, AccountGroup *group)
+make_random_changes_to_group (QofBook *book, AccountGroup *group)
 {
   Account *new_account;
   Account *account;
@@ -828,7 +828,7 @@ make_random_changes_to_group (GNCBook *book, AccountGroup *group)
 }
 
 Account*
-get_random_account(GNCBook *book)
+get_random_account(QofBook *book)
 {
     Account *ret;
     int tmp_int;
@@ -855,7 +855,7 @@ get_random_account(GNCBook *book)
 }
 
 void
-make_random_changes_to_account (GNCBook *book, Account *account)
+make_random_changes_to_account (QofBook *book, Account *account)
 {
     int tmp_int;
 
@@ -894,7 +894,7 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
-get_random_split(GNCBook *book, gnc_numeric num)
+get_random_split(QofBook *book, gnc_numeric num)
 {
     Split *ret;
     gnc_numeric oneVal;
@@ -959,7 +959,7 @@ set_tran_random_string(Transaction* trn,
 }
 
 static void
-add_random_splits(GNCBook *book, Transaction *trn)
+add_random_splits(QofBook *book, Transaction *trn)
 {
     gnc_numeric num = get_random_gnc_numeric();
 
@@ -980,7 +980,7 @@ trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
 
     
 Transaction *
-get_random_transaction_with_currency(GNCBook *book,
+get_random_transaction_with_currency(QofBook *book,
                                      gnc_commodity *currency)
 {
     Transaction* ret;
@@ -1017,13 +1017,13 @@ get_random_transaction_with_currency(GNCBook *book,
 }
 
 Transaction*
-get_random_transaction (GNCBook *book)
+get_random_transaction (QofBook *book)
 {
   return get_random_transaction_with_currency (book, NULL);
 }
 
 void
-make_random_changes_to_transaction (GNCBook *book, Transaction *trans)
+make_random_changes_to_transaction (QofBook *book, Transaction *trans)
 {
   g_return_if_fail (trans && book);
 
@@ -1095,7 +1095,7 @@ get_random_commodity_from_table (gnc_commodity_table *table)
 }
 
 gnc_commodity*
-get_random_commodity (GNCBook *book)
+get_random_commodity (QofBook *book)
 {
     gnc_commodity *ret;
     gchar *name;
@@ -1523,12 +1523,12 @@ get_random_query(void)
   return q;
 }
 
-GNCBook *
+QofBook *
 get_random_book (void)
 {
-  GNCBook *book;
+  QofBook *book;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
 
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
@@ -1536,15 +1536,15 @@ get_random_book (void)
   return book;
 }
 
-GNCSession *
+QofSession *
 get_random_session (void)
 {
-  GNCSession *session;
-  GNCBook *book;
+  QofSession *session;
+  QofBook *book;
 
-  session = gnc_session_new ();
+  session = qof_session_new ();
 
-  book = gnc_session_get_book (session);
+  book = qof_session_get_book (session);
 
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
@@ -1553,7 +1553,7 @@ get_random_session (void)
 }
 
 void
-add_random_transactions_to_book (GNCBook *book, gint num_transactions)
+add_random_transactions_to_book (QofBook *book, gint num_transactions)
 {
   gnc_commodity_table *table;
   GList *accounts;
@@ -1599,7 +1599,7 @@ add_random_transactions_to_book (GNCBook *book, gint num_transactions)
 }
 
 void
-make_random_changes_to_book (GNCBook *book)
+make_random_changes_to_book (QofBook *book)
 {
   g_return_if_fail (book);
 
@@ -1612,11 +1612,11 @@ make_random_changes_to_book (GNCBook *book)
 }
 
 void
-make_random_changes_to_session (GNCSession *session)
+make_random_changes_to_session (QofSession *session)
 {
   g_return_if_fail (session);
 
-  make_random_changes_to_book (gnc_session_get_book (session));
+  make_random_changes_to_book (qof_session_get_book (session));
 }
 
 typedef struct

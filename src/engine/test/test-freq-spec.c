@@ -17,7 +17,7 @@
 #include "gnc-module.h"
 #include "gnc-book.h"
 
-static GNCBook *book;
+static QofBook *book;
 
 static void
 test_once (void)
