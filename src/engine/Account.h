@@ -422,7 +422,7 @@ void xaccAccountDeleteOldData (Account *account);
  * that are used in persistant storage, communications.  These
  * strings should *not* be translated to the local language.
  * Typical converstion is INCOME -> "INCOME". */
-char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
+const char * xaccAccountTypeEnumAsString (GNCAccountType type); 
 /**
  * Conversion routines for the account types to/from strings
  * that are used in persistant storage, communications.  These
