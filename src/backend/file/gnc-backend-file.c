@@ -626,6 +626,8 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
     const gchar *datafile;
     char *tmp_name;
     GNCBook *book;
+    struct stat statbuf;
+    int rc;
 
     book = gnc_session_get_book (be->session);
 
@@ -651,6 +653,20 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
   
     if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
     {
+        /* Record the file's permissions before unlinking it */
+        rc = stat(datafile, &statbuf);
+        if(rc == 0)
+        {
+            /* Use the permissions from the original data file */
+            if(chmod(tmp_name, statbuf.st_mode) != 0)
+            {
+                PWARN("unable to chmod filename %s: %s",
+                        datafile ? datafile : "(null)", 
+                        strerror(errno) ? strerror(errno) : ""); 
+                g_free(tmp_name);
+                return FALSE;
+            }
+        }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
             xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);

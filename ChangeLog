@@ -1,3 +1,8 @@
+2002-07-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/backend/file/gnc-backend-file.c: File permission fix by Matt
+	Brubeck <mbrubeck@cs.hmc.edu>
+
 2002-07-11  Derek Atkins  <derek@ihtfp.com>
 
 	* change gncEntry->account into gncEntry->invAccount and
