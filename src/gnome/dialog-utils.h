@@ -108,9 +108,9 @@ struct _GNCOptionInfo
 
 
 /**** PROTOTYPES *************************************************/
-char * gnc_ui_get_account_field_name(int field);
+const char * gnc_ui_get_account_field_name(int field);
 
-char * gnc_ui_get_account_field_value_string(Account *account, int field);
+const char * gnc_ui_get_account_field_value_string(Account *account, int field);
 
 double gnc_ui_account_get_balance(Account *account, gboolean include_children);
 

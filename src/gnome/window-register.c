@@ -1,7 +1,7 @@
 /*******************************************************************\
  * window-register.c -- the register window for GnuCash             *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <peticola@cs.ucdavis.edu> *
  *                                                                  *
@@ -1722,7 +1722,7 @@ regRefresh(xaccLedgerDisplay *ledger)
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);
-  char *currency = xaccAccountGetCurrency(ledger->leader);
+  const char *currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   euro = (euro && strncasecmp("EUR", currency, 3) &&

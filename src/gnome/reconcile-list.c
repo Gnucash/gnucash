@@ -580,8 +580,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Transaction *trans;
   Split **splits;
   Split *split;
-
-  char *currency;
+  const char *currency;
   char recn_str[2];
   char recn;
 
@@ -620,8 +619,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     trans = xaccSplitGetParent(split);
 
     strings[0] = xaccTransGetDateStr(trans);
-    strings[1] = xaccTransGetNum(trans);
-    strings[2] = xaccTransGetDescription(trans);
+    strings[1] = (char *) xaccTransGetNum(trans);
+    strings[2] = (char *) xaccTransGetDescription(trans);
     strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;

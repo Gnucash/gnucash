@@ -89,9 +89,10 @@ GtkWidget *
 gnc_ui_create_account_label(int field_type)
 {
   GtkWidget *label;
-  gchar *label_string = gnc_ui_get_account_field_name(field_type);
+  gchar *label_string;
+  const gchar *l = gnc_ui_get_account_field_name(field_type);
 
-  label_string = g_strconcat(label_string, ":", NULL);
+  label_string = g_strconcat(l, ":", NULL);
 
   label = gtk_label_new (label_string);
   gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
@@ -534,7 +535,7 @@ gnc_ui_install_field_strings(Account * account,
 			     gboolean new_code)
 {
   int accType;
-  gchar * old;
+  const char * old;
 
   xaccAccountSetName(account, strings->name);
   xaccAccountSetDescription(account, strings->description);
@@ -570,7 +571,7 @@ gnc_ui_install_field_strings(Account * account,
 
 /* =========================================================== */
 
-char *
+const char *
 gnc_ui_get_account_field_name(int field)
 {
   assert((field >= 0) && (field < NUM_ACCOUNT_FIELDS));
@@ -643,7 +644,7 @@ gnc_ui_account_get_balance(Account *account, gboolean include_children)
 }
 
 
-char *
+const char *
 gnc_ui_get_account_field_value_string(Account *account, int field)
 {
   if (account == NULL)
@@ -684,7 +685,7 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       break;
     case ACCOUNT_BALANCE_EURO :
       {
-	char *account_currency = xaccAccountGetCurrency(account);
+	const char *account_currency = xaccAccountGetCurrency(account);
         double balance = gnc_ui_account_get_balance(account, FALSE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 
@@ -701,7 +702,7 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
       break;
     case ACCOUNT_TOTAL_EURO :
       {
-	char *account_currency = xaccAccountGetCurrency(account);
+	const char *account_currency = xaccAccountGetCurrency(account);
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 	double euro_balance = gnc_convert_to_euro(account_currency, balance);
 

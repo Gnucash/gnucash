@@ -65,7 +65,7 @@ struct _GNCAccountTree
   gint    total_column;
   gint    column_fields[NUM_ACCOUNT_FIELDS];
 
-  gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
+  const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
   GtkStyle *deficit_style;
 

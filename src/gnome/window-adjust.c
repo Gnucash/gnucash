@@ -156,7 +156,7 @@ gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   GtkEntry *entry = GTK_ENTRY(widget);
   Account *account = data;
   gchar *new_string;
-  gchar *currency;
+  const char *currency;
   gchar *string;
   double value;
 
@@ -249,7 +249,7 @@ adjBWindow(Account *account)
     GtkWidget *hbox, *vbox;
     GtkWidget *amount, *date;
     GtkWidget *label, *entry;
-    gchar *currency;
+    const char *currency;
     gchar *string;
 
     tooltips = gtk_tooltips_new();

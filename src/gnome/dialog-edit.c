@@ -349,8 +349,8 @@ fill_helper(gpointer key, gpointer value, gpointer data)
     return;
 
   strings[0] = xaccAccountGetFullName(account, gnc_get_account_separator());
-  strings[1] = gnc_ui_get_account_field_name(fs->field);
-  strings[2] = gnc_ui_get_account_field_value_string(account, fs->field);
+  strings[1] = (gchar *) gnc_ui_get_account_field_name(fs->field);
+  strings[2] = (gchar *) gnc_ui_get_account_field_value_string(account, fs->field);
   strings[4] = NULL;
 
   switch (fs->field)

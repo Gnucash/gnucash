@@ -168,7 +168,7 @@ static double
 recnRecalculateBalance(RecnWindow *recnData)
 {
   char *amount;
-  char *currency;
+  const char *currency;
   double debit;
   double credit;
   double starting;
@@ -256,7 +256,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   GNCPrintAmountFlags flags;
   Account *account = data;
   int account_type;
-  char  *currency;
+  const char  *currency;
   gchar *new_string;
   gchar *string;
   double value;
@@ -303,7 +303,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 double *new_ending, time_t *statement_date)
 {
   GtkWidget *dialog, *end_value, *date_value;
-  char *amount, *title, *currency;
+  char *amount, *title;
+  const char *currency;
   GNCAccountType account_type;
   GNCPrintAmountFlags flags;
   double dendBalance;

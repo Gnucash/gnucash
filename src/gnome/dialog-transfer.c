@@ -136,7 +136,7 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
   XferDialog *xferData = data;
   Account *account;
   gchar *new_string;
-  gchar *currency;
+  const char *currency;
   gchar *string;
   double value;
 
