@@ -176,9 +176,15 @@ This list only affects the multi-user and advanced/optional features.
 
 -- checkpoint ending balance is showing up as starting balance
 
--- transaction rollback is 'incorrect'; sort of ?? since we should
-   roll back to what's in the db, and not the old stored transaction ...
-   but the way the register works, it hides this problem ...
+-- if another user deletes a transaction, or an account, there is no way
+   for us to know.  Thus, any sort of sync will proabably (incorrectly)
+   add the deleted transaction back in.  Question: what is the best way
+   of having the backend detect that another user has deleted a 
+   transaction?
+   Method A) keep a master list of all transactions, and compare to
+     that.
+   Method B) keep an audit trail of deleted transactions, and check
+     that.
 
 -- store account balances in database.  This will be tricky ...
    -- split query gets hard ... 
@@ -186,8 +192,36 @@ This list only affects the multi-user and advanced/optional features.
 
 -- provide support for more query types in gncquery.c
 
+-- multi-user 'save-as' is incorrect:
+   As it currently works, save-as (sync) is a mass-copy of all data 
+   out of the engine into the named storage location.  If the indicated 
+   storage location doesn't exist, its created, and all of the engine 
+   data is copied into it.  If the storage location (i.e. database) 
+   does exist, and contains data, then the engine contents are merged 
+   into it.
+
+   From the engine point of view, the above is the easiest thing to do.
+   However, in the multi-user mode, it may not be what the user is 
+   expecting.  In the multi-user mode, the engine would not contain 
+   a full copy of the database data; instead, it contains only a subset. 
+   A 'save as', if implemented as above, would save only that subset, 
+   instead of all of the data.   If the user thought 'save as'
+   means the same thing as 'copy', they would be sorely disappointed. 
+   I don't currently have an opinion on the 'best' way of dealing with 
+   this situation.
+
 -- implement account rollback (i.e. of other user has modified the
    account, we need to do something to merge their work into ours...)
+
+-- transaction rollback is 'incorrect'; sort of ?? since we should
+   roll back to what's in the db, and not the old stored transaction ...
+   (Currently, the register uses xaccTransRollback() to implement
+   a single level of undo; it performs the 'undo' from what it has
+   cached, rather than from the contents in the DB.  This is OK,
+   as long as some other user hasn't modified the DB in the meanwhile.)
+   This may not be a problem, as practically speaking, its highly
+   unlkikly that one user is modifying data while the other is undoing
+   the same transaction.
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
