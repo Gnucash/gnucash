@@ -1037,7 +1037,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Schedule..."), 
-      N_("Create a Scheduled Transaction using the current "
+      N_("Create a Scheduled Transaction with the current "
          "transaction as a template"),
       emit_schedule_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL, 
