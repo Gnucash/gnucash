@@ -30,8 +30,7 @@ oferece, consulte a página das <link linkend="xacc-features">Funcionalidades
     anterior. Estas versões são bastante estáveis, com todos os erros
     conhecidos corrigidos.
     O ramo "experimental" actual é o gnucash-1.7.x, que se encontra já 
-    em versão beta. Esta é a versão que está de momento a utilizar, 
-    obviamente! Se estiver a utilizar esta versão com dados reais, 
+    em versão beta. Se estiver a utilizar esta versão com dados reais, 
     POR FAVOR FAÇA CÓPIAS DE SEGURANÇA REGULARMENTE!
 
     Quando a série 1.7.x estabilizar, a próxima série estável será
@@ -143,7 +142,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossterm><email>dres@debian.org</email> James LewisMoss</glossterm>
 <glossdef>
 <para>
    modificações ao desenho dos documentos, re-estruturação do XML, 
@@ -153,7 +152,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>stimming@tuhh.de</email>Christian
+<glossterm><email>stimming@tuhh.de</email> Christian
    Stimming</glossterm>
 <glossdef>
 <para>
@@ -165,7 +164,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>jsled@asynchronous.org</email>Joshua Sled</glossterm>
+<glossterm><email>jsled@asynchronous.org</email> Joshua Sled</glossterm>
 <glossdef>
 <para>
   trabalhos nas transacções agendadas e orçamentação.
@@ -249,11 +248,19 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="http://www.hex.net/~cbbrowne">Christopher B.
-      Browne</ulink></glossterm>
+<glossterm><email>cbbrowne@acm.org</email> Christopher B.
+      Browne</glossterm>
 <glossdef>
 <para>pelos scripts para acções em perl, código de importação QIF baseado em Guile, 
       várias alterações à documentação em Inglês, e muito código em guile</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kemitix@users.sourceforge.net</email> Paul
+      Campbell</glossterm>
+<glossdef>
+<para>modificação para reconciliar contas filhas com a pai</para>
 </glossdef>
 </glossentry>
 
@@ -270,6 +277,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
       Carlson</glossterm>
 <glossdef>
 <para>melhoramentos de performance</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>davefx@aspl.f2s.com</email> David Mar?n 
+      Carre?o </glossterm>
+<glossdef>
+<para>tradução para espanhol das contas iniciais de configuração</para>
 </glossdef>
 </glossentry>
 
@@ -297,7 +312,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>china@thewrittenword.com</email>Albert
+<glossterm><email>china@thewrittenword.com</email> Albert
       Chin-A-Young</glossterm>
 <glossdef>
 <para>correcção do configure.in</para>
@@ -313,7 +328,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>jcollins@gnucash.org</email> Jeremey
+<glossterm><email>cyba@gnome.pl</email> Zbigniew Chyla</glossterm>
+<glossdef>
+<para>tradução para Polaco</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jcollins@gnucash.org</email> Jeremy
       Collins</glossterm>
 <glossdef>
 <para>pelo GnoMoney e conversão para GTK</para>
@@ -523,14 +545,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm> 
+<glossterm><email>claus_h@image.dk</email> Claus Hindsgaul</glossterm> 
 <glossdef>
 <para>Tradução para Dinamarquês</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jjvmjv@mundomail.net</email>Miquel Jordana
+<glossterm><email>jjvmjv@mundomail.net</email> Miquel Jordana
       Vilamitjana</glossterm> 
 <glossdef>
 <para>Tradução para Espanhol do manual</para>
@@ -554,7 +576,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossterm><email>ben.kelly@ieee.org</email> Ben Kelly</glossterm>
 <glossdef>
 <para>correcção de erro de menu em Motif, correcções de erros</para>
 </glossdef>
@@ -564,6 +586,14 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
 <glossdef>
 <para>conversão para SGI Irix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kraai@alumni.carnegiemellon.edu</email> Matt
+      Kraai</glossterm>
+<glossdef>
+<para>correcção de erro no acelerador de datas</para>
 </glossdef>
 </glossentry>
 
@@ -598,7 +628,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossterm><email>minfrin@sharp.fm</email> Graham Leggett</glossterm>
 <glossdef>
 <para>por corrigir um erro que prendia o funcionamento</para>
 </glossdef>
@@ -644,7 +674,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossterm><email>kmaraas@gnome.org</email> Kjartan Maraas</glossterm>
 <glossdef>
 <para>traduções para Norueguês</para>
 </glossdef>
@@ -732,7 +762,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossentry>
 
 <glossentry>
-<glossterm><email>j.e.nielsen@iname.com</email>Johnny Ernst
+<glossterm><email>j.e.nielsen@iname.com</email> Johnny Ernst
 Nielsen</glossterm>
 <glossdef>
 <para>Tradução para Dinamarquês</para>
@@ -904,7 +934,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>keld@dkuug.dk</email>Keld Simonsen</glossterm>
+<glossterm><email>keld@dkuug.dk</email> Keld Simonsen</glossterm>
 <glossdef>
 <para>Tradução para Dinamarquês</para>
 </glossdef>
@@ -973,7 +1003,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossterm><email>troeger@samart.co.th</email> Arnold Troeger</glossterm>
 <glossdef>
 <para>Pacotes para Mandrake</para>
 </glossdef>
@@ -1048,7 +1078,7 @@ Nielsen</glossterm>
 <sect1 id="xacc-oses">
 <title>Sistemas Operativos Suportados</title>
 
-<para>Sabe-se que o GnuCash 1.5.0 funciona nos seguintes sistemas: 
+<para>Sabe-se que o GnuCash 1.6.0 funciona nos seguintes sistemas: 
 
 <itemizedlist>
 
