@@ -17,11 +17,11 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
- *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-/** @file gnc-err-popup.h @brief GnuCash GUI error loging facility */
+/** @file gnc-err-popup.h @brief GnuCash GUI error loging facility 
+ * Copyright (c) 2001 Linux Developers Group, Inc.
+ */
 
 #ifndef GNC_ERR_POPUP_H
 #define GNC_ERR_POPUP_H

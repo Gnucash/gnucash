@@ -1,5 +1,6 @@
 /********************************************************************\
  * gnc-err-popup.c -- GnuCash error GUI popups                      *
+ * Copyright (c) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
