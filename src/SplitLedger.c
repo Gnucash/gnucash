@@ -2607,8 +2607,6 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
         other_split = xaccMallocSplit ();
 
-        xaccSplitSetMemo (other_split, xaccSplitGetMemo (split));
-        xaccSplitSetAction (other_split, xaccSplitGetAction (split));
         xaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
 
         xaccTransAppendSplit (trans, other_split);
