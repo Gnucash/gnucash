@@ -409,8 +409,19 @@ static GncBillTerm *gncBillTermCopy (GncBillTerm *term)
 
   if (!term) return NULL;
   t = gncBillTermCreate (term->book);
+
+  gncBillTermBeginEdit(t);
+
   gncBillTermSetName (t, term->name);
   gncBillTermSetDescription (t, term->desc);
+
+  t->type = term->type;
+  t->due_days = term->due_days;
+  t->disc_days = term->disc_days;
+  t->discount = term->discount;
+  t->cutoff = term->cutoff;
+
+  gncBillTermCommitEdit(t);
 
   return t;
 }

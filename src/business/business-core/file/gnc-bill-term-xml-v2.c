@@ -429,9 +429,9 @@ dom_tree_to_billterm (xmlNodePtr node, GNCBook *book)
   successful = dom_tree_generic_parse (node, billterm_handlers_v2,
 				       &billterm_pdata);
 
-  if (successful)
+  if (successful) {
     gncBillTermCommitEdit (billterm_pdata.term);
-  else {
+  } else {
     PERR ("failed to parse billing term tree");
     gncBillTermDestroy (billterm_pdata.term);
     billterm_pdata.term = NULL;
@@ -565,8 +565,29 @@ billterm_scrub_cb (gpointer term_p, gpointer list_p)
   GncBillTerm *term = term_p;
   GList **list = list_p;
 
-  if (billterm_is_grandchild(term) || gncBillTermGetType(term) == 0)
+  if (billterm_is_grandchild(term)) {
     *list = g_list_prepend(*list, term);
+
+  } else if (!gncBillTermGetType(term)) {
+    GncBillTerm *t = gncBillTermGetParent(term);
+    if (t) {
+      /* Fix up the broken "copy" function */
+      PWARN("Fixing broken child billterm: %s",
+	    guid_to_string(gncBillTermGetGUID(term)));
+
+      gncBillTermBeginEdit(term);
+      gncBillTermSetType(term, gncBillTermGetType(t));
+      gncBillTermSetDueDays (term, gncBillTermGetDueDays(t));
+      gncBillTermSetDiscountDays (term, gncBillTermGetDiscountDays(t));
+      gncBillTermSetDiscount (term, gncBillTermGetDiscount(t));
+      gncBillTermSetCutoff (term, gncBillTermGetCutoff(t));
+      gncBillTermCommitEdit(term);
+
+    } else {
+      /* No parent?  Must be a standalone */
+      *list = g_list_prepend(*list, term);
+    }
+  }
 }
 
 /* for each invoice, check the bill terms.  If the bill terms are
@@ -582,16 +603,19 @@ billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
 
   term = gncInvoiceGetTerms(invoice);
   if (term) {
-    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
-    count++;
-    g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
     if (billterm_is_grandchild(term)) {
-      PINFO("Fixing i-billterm on invoice %s\n",
+      PWARN("Fixing i-billterm on invoice %s\n",
 	     guid_to_string(gncInvoiceGetGUID(invoice)));
       new_bt = billterm_find_senior(term);
       gncInvoiceBeginEdit(invoice);
       gncInvoiceSetTerms(invoice, new_bt);
       gncInvoiceCommitEdit(invoice);
+      term = new_bt;
+    }
+    if (term) {
+      count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
+      count++;
+      g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
     }
   }
 }
