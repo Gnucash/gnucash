@@ -1,3 +1,9 @@
+2003-05-12  David Hampton  <hampton@employees.org>
+
+	* src/quotes/finance-quote-check.in: 
+	* src/quotes/update-finance-quote.in: Add HTML::Parser to the list
+	of items checked/installed. #104197
+
 2003-05-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-query-list.[ch]: an abstracted Query list
@@ -62,7 +68,8 @@
 	* src/gnome-utils/dialog-commodity.h:
 	* src/gnome-utils/dialog-utils.c:
 	* src/gnome-utils/dialog-utils.h: Migrate fields and functions
-	related to price quotes from the account to the commodity.
+	related to price quotes from the account to the commodity.  Fixed
+	the original complatint in #104197 as part of these changes.
 
 	* src/backend/file/io-gncxml-v2.c:
 	* src/engine/Scrub.c:
