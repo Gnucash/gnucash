@@ -41,5 +41,24 @@ void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
 /* this is a global table of known commodity types. */
 gnc_commodity_table * gnc_engine_commodities(void);
 
+/* Many strings used throughout the engine are likely to be duplicated.
+ * So we provide a reference counted cache system for the strings, which
+ * shares strings whenever possible.
+ *
+ * Use g_cache_insert to insert a string into the cache (it will return a
+ * pointer to the cached string).
+ * Basically you should use this instead of g_strdup.
+ *
+ * Use g_cache_remove (giving it a pointer to a cached string) if the string
+ * is unused.  If this is the last reference to the string it will be
+ * removed from the cache, otherwise it will just decrement the
+ * reference count.
+ * Basically you should use this instead of g_free.
+ *
+ * Note that all the work is done when inserting or removing.  Once
+ * cached the strings are just plain C strings.
+ */
+extern GCache *gnc_string_cache;
+
 #endif
 

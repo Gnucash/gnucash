@@ -23,11 +23,15 @@
 
 #include "kvp_frame.h"
 #include "guid.h"
+#include "gnc-engine.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <glib.h>
 
+ /* Note that we keep the keys for this hash table in a GCache
+  * (gnc_string_cache), as it is likely we will see the same keys
+  * over and over again  */
 struct _kvp_frame {
   GHashTable  * hash;
 };
@@ -84,7 +88,7 @@ kvp_frame_new(void) {
 
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) {
-  g_free(key);
+  g_cache_remove(gnc_string_cache, key);
   kvp_value_delete((kvp_value *)value);  
 }
 
@@ -107,7 +111,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
   kvp_frame * dest = (kvp_frame *)user_data;
   g_hash_table_freeze(dest->hash);
   g_hash_table_insert(dest->hash,
-                      (gpointer)g_strdup(key), 
+                      (gpointer)g_cache_insert(gnc_string_cache, key), 
                       (gpointer)kvp_value_copy(value));
   g_hash_table_thaw(dest->hash);
 }
@@ -142,11 +146,15 @@ kvp_frame_set_slot_destructively(kvp_frame * frame, const char * slot,
                                             & orig_key, & orig_value);
   if(key_exists) {
     g_hash_table_remove(frame->hash, slot);
-    g_free(orig_key);
+    g_cache_remove(gnc_string_cache, orig_key);
     kvp_value_delete(orig_value);
   }
 
-  if(new_value) g_hash_table_insert(frame->hash, g_strdup(slot), new_value);
+  if(new_value) {
+    g_hash_table_insert(frame->hash,
+                        g_cache_insert(gnc_string_cache, (gpointer) slot),
+      new_value);
+  }
 
   g_hash_table_thaw(frame->hash);
 }

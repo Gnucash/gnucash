@@ -29,7 +29,7 @@
 static GList * engine_init_hooks = NULL;
 static gnc_commodity_table * known_commodities = NULL;
 static int engine_is_initialized = 0;
-
+GCache * gnc_string_cache = NULL;
 
 /********************************************************************
  * gnc_engine_init
@@ -42,6 +42,11 @@ gnc_engine_init(int argc, char ** argv) {
   GList                  * cur;
 
   engine_is_initialized = 1;
+
+  /* initialize the string cache */
+  gnc_string_cache = g_cache_new( (GCacheNewFunc) g_strdup,
+    g_free, (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
+    g_str_hash, g_str_equal);
 
   /* initialize the commodity table (it starts empty) */
   known_commodities = gnc_commodity_table_new();

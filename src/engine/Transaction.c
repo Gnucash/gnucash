@@ -42,6 +42,7 @@
 #include "date.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /* 
  * The "force_double_entry" flag determines how 
@@ -91,8 +92,8 @@ xaccInitSplit(Split * split)
   split->acc         = NULL;
   split->parent      = NULL;
 
-  split->action      = g_strdup("");
-  split->memo        = g_strdup("");
+  split->action      = g_cache_insert(gnc_string_cache, "");
+  split->memo        = g_cache_insert(gnc_string_cache, "");
   split->reconciled  = NREC;
   split->damount     = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -140,8 +141,8 @@ xaccCloneSplit (Split *s)
   split->acc         = s->acc;
   split->parent      = s->parent;
 
-  split->action      = g_strdup(s->action);
-  split->memo        = g_strdup(s->memo);
+  split->action      = g_cache_insert(gnc_string_cache, s->action);
+  split->memo        = g_cache_insert(gnc_string_cache, s->memo);
   split->reconciled  = s->reconciled;
   split->damount     = s->damount;
   split->value       = s->value;
@@ -173,8 +174,8 @@ xaccFreeSplit( Split *split )
 {
   if (!split) return;
 
-  g_free (split->memo);
-  g_free (split->action);
+  g_cache_remove(gnc_string_cache, split->memo);
+  g_cache_remove(gnc_string_cache, split->action);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = NULL;
@@ -207,8 +208,9 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     if(!guid_equal(&(sa->guid), &(sb->guid))) return FALSE;
   }
 
-  if(safe_strcmp(sa->memo, sb->memo) != 0) return FALSE;
-  if(safe_strcmp(sa->action, sb->action) != 0) return FALSE;
+    /* Since these strings are cached we can just use pointer equality */
+  if(sa->memo != sb->memo) return FALSE;
+  if(sa->action != sb->action) return FALSE;
 
   if(kvp_frame_compare(sa->kvp_data, sb->kvp_data) != 0) return FALSE;
 
@@ -557,8 +559,8 @@ static void
 xaccInitTransaction (Transaction * trans)
 {
   /* Fill in some sane defaults */
-  trans->num         = g_strdup("");
-  trans->description = g_strdup("");
+  trans->num         = g_cache_insert(gnc_string_cache, "");
+  trans->description = g_cache_insert(gnc_string_cache, "");
 
   trans->splits = NULL;
 
@@ -605,8 +607,8 @@ xaccCloneTransaction (Transaction *t)
 
   trans = g_new(Transaction, 1);
 
-  trans->num         = g_strdup(t->num);
-  trans->description = g_strdup(t->description);
+  trans->num         = g_cache_insert(gnc_string_cache, t->num);
+  trans->description = g_cache_insert(gnc_string_cache, t->description);
 
   trans->splits = g_list_copy (t->splits);
   for (node = trans->splits; node; node = node->next)
@@ -648,8 +650,8 @@ xaccFreeTransaction (Transaction *trans)
   trans->splits = NULL;
 
   /* free up transaction strings */
-  g_free (trans->num);
-  g_free (trans->description);
+  g_cache_remove(gnc_string_cache, trans->num);
+  g_cache_remove(gnc_string_cache, trans->description);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = NULL;
@@ -698,8 +700,11 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
   if(!timespec_equal(&(ta->date_entered), &(tb->date_entered))) return FALSE;
   if(!timespec_equal(&(ta->date_posted), &(tb->date_posted))) return FALSE;
-  if(safe_strcmp(ta->num, tb->num) != 0) return FALSE;
-  if(safe_strcmp(ta->description, tb->description) != 0) return FALSE;
+  	/* Since we use cached strings, we can just compare pointer
+	 * equality for num and description
+	 */
+  if(ta->num != tb->num) return FALSE;
+  if(ta->description != tb->description) return FALSE;
 
   if(kvp_frame_compare(ta->kvp_data, tb->kvp_data) != 0) return FALSE;
 
@@ -1219,14 +1224,14 @@ xaccSplitRebalance (Split *split)
           xaccTransAppendSplit (trans, s); 
           xaccAccountInsertSplit (split->acc, s);
 
-          g_free (s->memo);
-          g_free (s->action);
+	  g_cache_remove(gnc_string_cache, s->memo);
+	  g_cache_remove(gnc_string_cache, s->action);
           
           xaccSplitSetValue(s, gnc_numeric_neg(split->value));
           xaccSplitSetShareAmount(s, gnc_numeric_neg(split->value));
 
-          s->memo    = g_strdup (split->memo);
-          s->action  = g_strdup (split->action);
+	  s->memo    = g_cache_insert(gnc_string_cache, split->memo);
+	  s->action  = g_cache_insert(gnc_string_cache, split->action);
         }
       }
     }
@@ -1425,9 +1430,11 @@ xaccTransRollbackEdit (Transaction *trans)
 
 #define PUT_BACK(val) { g_free(trans->val); \
                         trans->val=orig->val; orig->val=NULL; }
+#define PUT_BACK_CACHE(val) { g_cache_remove(gnc_string_cache, trans->val); \
+                        trans->val=orig->val; orig->val=NULL; }
 
    PUT_BACK (num);
-   PUT_BACK (description);
+   PUT_BACK_CACHE (description);
 
    trans->date_entered.tv_sec  = orig->date_entered.tv_sec;
    trans->date_entered.tv_nsec = orig->date_entered.tv_nsec;
@@ -1903,8 +1910,8 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    if (!trans || !xnum) return;
    CHECK_OPEN (trans);
 
-   tmp = g_strdup (xnum);
-   g_free (trans->num);
+   tmp = g_cache_insert(gnc_string_cache, (gpointer) xnum);
+   g_cache_remove(gnc_string_cache, trans->num);
    trans->num = tmp;
    MarkChanged (trans);
 }
@@ -1916,8 +1923,8 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    if (!trans || !desc) return;
    CHECK_OPEN (trans);
 
-   tmp = g_strdup (desc);
-   g_free (trans->description);
+   tmp = g_cache_insert(gnc_string_cache, (gpointer) desc);
+   g_cache_remove(gnc_string_cache, trans->description);
    trans->description = tmp;
    MarkChanged (trans);
 }
@@ -1991,8 +1998,9 @@ xaccSplitSetMemo (Split *split, const char *memo)
 {
    char * tmp;
    if (!split || !memo) return;
-   tmp = g_strdup (memo);
-   g_free (split->memo);
+
+   tmp = g_cache_insert(gnc_string_cache, (gpointer) memo);
+   g_cache_remove(gnc_string_cache, split->memo);
    split->memo = tmp;
    MARK_SPLIT (split);
 }
@@ -2002,8 +2010,9 @@ xaccSplitSetAction (Split *split, const char *actn)
 {
    char * tmp;
    if (!split || !actn) return;
-   tmp = g_strdup (actn);
-   g_free (split->action);
+
+   tmp = g_cache_insert(gnc_string_cache, (gpointer) actn);
+   g_cache_remove(gnc_string_cache, split->action);
    split->action = tmp;
    MARK_SPLIT (split);
 }
