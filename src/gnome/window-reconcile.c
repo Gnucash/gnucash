@@ -182,13 +182,18 @@ recnRecalculateBalance(RecnWindow *recnData)
 
   reverse_balance = gnc_reverse_balance(recnData->account);
 
-  print_info = gnc_account_print_info (recnData->account, TRUE);
-
   /* update the starting balance */
   if (recnData->use_shares)
+  {
     starting = DxaccAccountGetShareReconciledBalance(recnData->account);
+    print_info = gnc_account_quantity_print_info (recnData->account, TRUE);
+  }
   else
+  {
     starting = DxaccAccountGetReconciledBalance(recnData->account);
+    print_info = gnc_account_value_print_info (recnData->account, TRUE);
+  }
+
   if (reverse_balance)
     starting = -starting;
 
@@ -263,7 +268,8 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   value = 0.0;
   DxaccParseAmount(string, TRUE, &value, NULL);
 
-  print_info = gnc_account_print_info (account, FALSE);
+  /* FIXME */
+  print_info = gnc_account_value_print_info (account, FALSE);
 
   new_string = DxaccPrintAmount(value, print_info);
 
@@ -301,15 +307,19 @@ startRecnWindow(GtkWidget *parent, Account *account,
   char *title;
   int result;
 
-  print_info = gnc_account_print_info (account, TRUE);
-
   account_type = xaccAccountGetType(account);
 
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
       (account_type == CURRENCY))
+  {
     dendBalance = DxaccAccountGetShareReconciledBalance(account);
+    print_info = gnc_account_quantity_print_info (account, TRUE);
+  }
   else
+  {
     dendBalance = DxaccAccountGetReconciledBalance(account);
+    print_info = gnc_account_value_print_info (account, TRUE);
+  }
 
   if (gnc_reverse_balance(account))
   {

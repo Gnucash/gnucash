@@ -277,7 +277,7 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
         double balance = gnc_ui_account_get_balance(account, FALSE);
 
         return DxaccPrintAmount(balance,
-                                gnc_account_print_info (account, TRUE));
+                                gnc_account_value_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_BALANCE_EURO :
@@ -297,7 +297,7 @@ gnc_ui_get_account_field_value_string(Account *account, int field)
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 
         return DxaccPrintAmount(balance,
-                                gnc_account_print_info (account, TRUE));
+                                gnc_account_value_print_info (account, TRUE));
       }
       break;
     case ACCOUNT_TOTAL_EURO :

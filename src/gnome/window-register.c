@@ -1827,7 +1827,7 @@ regRefresh(xaccLedgerDisplay *ledger)
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
 
-  print_info = gnc_account_print_info (ledger->leader, TRUE);
+  print_info = gnc_account_value_print_info (ledger->leader, TRUE);
 
   if (regData->window != NULL)
   {

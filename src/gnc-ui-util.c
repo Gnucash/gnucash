@@ -282,31 +282,87 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 }
 
 GNCPrintAmountInfo
-gnc_account_print_info (Account *account, gboolean use_symbol)
+gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
 {
-  const gnc_commodity *currency;
+  GNCPrintAmountInfo info;
+  gboolean is_iso;
+  int scu;
 
-  currency = xaccAccountGetCurrency (account);
-  if (currency == NULL)
+  if (account == NULL)
     return gnc_default_print_info (use_symbol);
 
-  return gnc_commodity_print_info (currency, use_symbol);
+  info.commodity = xaccAccountGetSecurity (account);
+
+  is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
+                         GNC_COMMODITY_NS_ISO) == 0);
+
+  scu = xaccAccountGetSecuritySCU (account);
+
+  if (is_decimal_fraction (scu, &info.max_decimal_places))
+  {
+    if (is_iso)
+      info.min_decimal_places = info.max_decimal_places;
+    else
+      info.min_decimal_places = 0;
+  }
+  else
+    info.max_decimal_places = info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = use_symbol ? 1 : 0;
+  info.use_locale = is_iso ? 1 : 0;
+  info.monetary = 1;
+
+  return info;
+}
+
+GNCPrintAmountInfo
+gnc_account_value_print_info (Account *account, gboolean use_symbol)
+{
+  GNCPrintAmountInfo info;
+  gboolean is_iso;
+  int scu;
+
+  if (account == NULL)
+    return gnc_default_print_info (use_symbol);
+
+  info.commodity = xaccAccountGetCurrency (account);
+
+  is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
+                         GNC_COMMODITY_NS_ISO) == 0);
+
+  scu = xaccAccountGetCurrencySCU (account);
+
+  if (is_decimal_fraction (scu, &info.max_decimal_places))
+  {
+    if (is_iso)
+      info.min_decimal_places = info.max_decimal_places;
+    else
+      info.min_decimal_places = 0;
+  }
+  else
+    info.max_decimal_places = info.min_decimal_places = 0;
+
+  info.use_separators = 1;
+  info.use_symbol = use_symbol ? 1 : 0;
+  info.use_locale = is_iso ? 1 : 0;
+  info.monetary = 1;
+
+  return info;
 }
 
 GNCPrintAmountInfo
 gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 {
-  return gnc_account_print_info (xaccSplitGetAccount (split), use_symbol);
+  return gnc_account_quantity_print_info (xaccSplitGetAccount (split),
+                                          use_symbol);
 }
 
 GNCPrintAmountInfo
 gnc_split_value_print_info (Split *split, gboolean use_symbol)
 {
-  const gnc_commodity *security;
-
-  security = xaccAccountGetSecurity (xaccSplitGetAccount (split));
-
-  return gnc_commodity_print_info (security, use_symbol);
+  return gnc_account_value_print_info (xaccSplitGetAccount (split),
+                                       use_symbol);
 }
 
 GNCPrintAmountInfo
