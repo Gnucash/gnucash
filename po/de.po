@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
 "POT-Creation-Date: 2001-09-23 23:16-0700\n"
-"PO-Revision-Date: 2001-08-24 23:24+02:00\n"
+"PO-Revision-Date: 2001-09-25 21:50+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -192,7 +192,6 @@ msgstr ""
 "Möchten Sie die Datei zur aktuellen Version aktualisieren lassen?"
 
 #: src/FileDialog.c:186
-#, fuzzy
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff.\n"
@@ -200,9 +199,9 @@ msgid ""
 "documentation to learn how to clear out dangling login\n"
 "sessions."
 msgstr ""
-"Die SQL-Datenbank wird von anderen Anwendern benutzt. Die geänderten\n"
-"Daten können nicht geschrieben werden, solange die anderen Benutzer\n"
-"sich nicht abmelden. \n"
+"Die SQL-Datenbank wird von anderen Anwendern benutzt. Die\n"
+"aktualisierten Daten können nicht geschrieben werden, solange die\n"
+"anderen Benutzer sich nicht abmelden.\n"
 "\n"
 "Falls Sie sicher sind, daß keine anderen Benutzer im System sind, dann\n"
 "befolgen Sie bitte die Dokumentation Ihrer Datenbank, um\n"
@@ -370,14 +369,14 @@ msgstr "(kein Name)"
 #: src/guile/guile-util.c:1063 src/scm/report/guile-strings.c:473
 #: src/scm/report/guile-strings.c:617
 msgid "Debit"
-msgstr "Belastung"
+msgstr "Soll"
 
 #: src/SplitLedger.c:4011 src/gnome/glade-gnc-dialogs.c:1122
 #: src/guile/guile-util.c:1108 src/register/splitreg.c:177
 #: src/register/splitreg.c:193 src/scm/guile-strings.c:144
 #: src/scm/report/guile-strings.c:474 src/scm/report/guile-strings.c:618
 msgid "Credit"
-msgstr "Gutschrift"
+msgstr "Haben"
 
 #: src/SplitLedger.c:4027 src/gnome/dialog-price-editor.c:740
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4803
@@ -459,11 +458,11 @@ msgstr "Gesamt %s"
 
 #: src/SplitLedger.c:4087
 msgid "Tot Credit"
-msgstr "Gesamt Gutschrift"
+msgstr "Gesamt Haben"
 
 #: src/SplitLedger.c:4104
 msgid "Tot Debit"
-msgstr "Gesamt Belastung"
+msgstr "Gesamt Soll"
 
 #: src/SplitLedger.c:4109
 msgid "Tot Shares"
@@ -1440,7 +1439,7 @@ msgstr "Suche "
 
 #: src/gnome/glade-gnc-dialogs.c:1119
 msgid "Credit or Debit"
-msgstr "Gutschrift oder Belastung"
+msgstr "Soll oder Haben"
 
 #: src/gnome/glade-gnc-dialogs.c:1130
 msgid "splits having amounts of:"
@@ -3622,12 +3621,12 @@ msgstr "Unterkonten einschließen"
 
 #: src/gnome/window-reconcile.c:644 src/gnome/window-reconcile.c:1147
 msgid "Debits"
-msgstr "Belastungen"
+msgstr "Soll"
 
 #: src/gnome/window-reconcile.c:654 src/gnome/window-reconcile.c:1148
 #: src/scm/guile-strings.c:460
 msgid "Credits"
-msgstr "Gutschriften"
+msgstr "Haben"
 
 #: src/gnome/window-reconcile.c:732
 msgid "Total:"
@@ -5619,8 +5618,7 @@ msgstr "Buchungsüberschriften aus Rechnungswesen"
 
 #: src/scm/guile-strings.c:377
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr ""
-"Nur 'Belastung' und 'Gutschrift' anstatt informeller Bezeichnungen benutzen"
+msgstr "Nur 'Soll' und 'Haben' anstatt informeller Bezeichnungen benutzen"
 
 #: src/scm/guile-strings.c:379
 msgid "Display \"Tip of the Day\""
