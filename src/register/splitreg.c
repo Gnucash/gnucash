@@ -857,7 +857,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
 
   /* Use 5 decimal places for prices */
-  xaccSetPriceCellFraction (reg->priceCell, 100000);
+  xaccSetPriceCellFraction (reg->priceCell, 1000000);
 
   /* The reconcile cell should only be entered with the pointer, and
    * only then when the user clicks directly on the cell.  */
