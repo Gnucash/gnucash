@@ -1,3 +1,14 @@
+2003-09-07  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin.c: Make the plugin widget destructor
+	function optional.
+
+	* src/business/business-gnome/business-gnome.scm:
+	* src/business/business-gnome/businessmod-gnome.c:
+	* src/business/business-gnome/gnc-plugin-business.[ch]:
+	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
+	Migrate the main business menu from g1 style to g2 style.
+	
 2003-09-06  David Hampton  <hampton@employees.org>
 
 	* lib/egg/eggtreemodelfilter.c: Couple of bug fixes related to

@@ -1153,6 +1153,7 @@ AC_OUTPUT( m4/Makefile
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
           src/business/business-gnome/glade/Makefile
+          src/business/business-gnome/ui/Makefile
           src/business/business-ledger/Makefile
           src/business/business-reports/Makefile
 

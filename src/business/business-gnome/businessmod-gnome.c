@@ -23,6 +23,9 @@
 #include "business-options-gnome.h"
 #include "business-urls.h"
 
+#include "gnc-plugin-manager.h"
+#include "gnc-plugin-business.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_business_gnome_LTX_gnc_module_system_interface = 0;
 
@@ -84,6 +87,9 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 				   (GNCSearchCoreNew) gnc_search_owner_new);
     gnc_business_urls_initialize ();
     gnc_business_options_gnome_initialize ();
+
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
+				   gnc_plugin_business_new ());
   }
 
   return TRUE;

@@ -1,0 +1,41 @@
+<Root>
+<menu>
+
+<placeholder name="AdditionalMenusPlaceholder">
+    <submenu verb="BusinessAction">
+	<submenu name="CustomerMenu" verb="CustomerMenuAction">
+	    <menuitem name="CustomerNewCustomerOpen"  verb="CustomerNewCustomerOpenAction"/>
+	    <menuitem name="CustomerFindCustomerOpen" verb="CustomerFindCustomerOpenAction"/>
+	    <menuitem name="CustomerNewInvoiceOpen"   verb="CustomerNewInvoiceOpenAction"/>
+	    <menuitem name="CustomerFindInvoiceOpen"  verb="CustomerFindInvoiceOpenAction"/>
+	    <menuitem name="CustomerNewJobOpen"       verb="CustomerNewJobOpenAction"/>
+	    <menuitem name="CustomerFindJobOpen"      verb="CustomerFindJobOpenAction"/>
+	    <menuitem name="CustomerProcessPayment"   verb="CustomerProcessPaymentAction"/>
+	</submenu>
+
+	<submenu name="VendorMenu" verb="VendorMenuAction">
+	    <menuitem name="VendorNewVendorOpen"  verb="VendorNewVendorOpenAction"/>
+	    <menuitem name="VendorFindVendorOpen" verb="VendorFindVendorOpenAction"/>
+	    <menuitem name="VendorNewBillOpen"    verb="VendorNewBillOpenAction"/>
+	    <menuitem name="VendorFindBillOpen"   verb="VendorFindBillOpenAction"/>
+	    <menuitem name="VendorNewJobOpen"     verb="VendorNewJobOpenAction"/>
+	    <menuitem name="VendorFindJobOpen"    verb="VendorFindJobOpenAction"/>
+	    <menuitem name="VendorProcessPayment" verb="VendorProcessPaymentAction"/>
+	</submenu>
+
+	<submenu name="EmployeeMenu" verb="EmployeeMenuAction">
+	    <menuitem name="EmployeeNewEmployeeOpen"  verb="EmployeeNewEmployeeOpenAction"/>
+	    <menuitem name="EmployeeFindEmployeeOpen" verb="EmployeeFindEmployeeOpenAction"/>
+	    <menuitem name="EmployeeNewExpenseOpen"   verb="EmployeeNewExpenseVoucherOpenAction"/>
+	    <menuitem name="EmployeeFindExpenseOpen"  verb="EmployeeFindExpenseVoucherOpenAction"/>
+	    <menuitem name="EmployeeProcessPayment"   verb="EmployeeProcessPaymentAction"/>
+	</submenu>
+
+	<menuitem name="TaxTablesOpen" verb="TaxTablesOpenAction"/>
+	<menuitem name="BillingTermsOpen" verb="BillingTermsOpenAction"/>
+	<menuitem name="BillsDueReminderOpen" verb="BillsDueReminderOpenAction"/>
+    </submenu>
+</placeholder>
+
+</menu>
+</Root>

@@ -1,4 +1,4 @@
-SUBDIRS = . glade
+SUBDIRS = . glade ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 
@@ -15,6 +15,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/lib/egg \
+  -DGNC_UI_DIR=\"$(GNC_UI_DIR)\"   \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
@@ -41,6 +42,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-order.c \
   dialog-payment.c \
   dialog-vendor.c \
+  gnc-plugin-business.c \
   search-owner.c
 
 noinst_HEADERS = \
@@ -56,6 +58,7 @@ noinst_HEADERS = \
   dialog-order.h \
   dialog-payment.h \
   dialog-vendor.h \
+  gnc-plugin-business.h \
   search-owner.h \
   gw-business-gnome.h
 
