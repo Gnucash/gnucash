@@ -495,7 +495,11 @@ mainWindow( Widget parent )
                                          */
 					NULL );
   
-  /* Umm... this doesn't seem to be getting called */
+  /* Umm... the closeMainWindow callback doesn't get called if the user 
+   * kills the window from the window manager; don't know why, since
+   * VendorShell should have handled WM_DELETE ...
+   * closeMainWindow does get called if "quit" is selected from the menu
+   */
   XtAddCallback( mainwindow, XmNdestroyCallback, 
 		 closeMainWindow, (XtPointer)NULL );
   
