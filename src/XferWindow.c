@@ -264,6 +264,7 @@ xferWindow( Widget parent )
     accountMenu[i].sensitive     = True;
     accountMenu[i].callback      = menuCB;
     accountMenu[i].callback_data = xferData->menuData[2*i];
+    accountMenu[i].widget        = 0;
     accountMenu[i].subitems      = (MenuItem *)NULL;
     }
   accountMenu[i] .label= NULL;
@@ -298,6 +299,7 @@ xferWindow( Widget parent )
     accountMenu[i].sensitive     = True;
     accountMenu[i].callback      = menuCB;
     accountMenu[i].callback_data = xferData->menuData[2*i+1];
+    accountMenu[i].widget        = 0;
     accountMenu[i].subitems      = (MenuItem *)NULL;
     }
   accountMenu[i] .label= NULL;

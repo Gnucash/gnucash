@@ -27,7 +27,6 @@
 
 #include "config.h"
 
-#include "BuildMenu.h"
 #include "Data.h"
 #include "FileBox.h"
 #include "FileIO.h"

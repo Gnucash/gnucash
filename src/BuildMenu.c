@@ -128,6 +128,9 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
 					NULL );
       }
 
+    /* return the widget to the caller */
+    items[i].widget = widget;
+
     /* possible grey out menu entries */
     XtSetSensitive (widget, items[i].sensitive);
 

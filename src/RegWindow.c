@@ -1811,43 +1811,46 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   \******************************************************************/
   MenuItem reportMenu[] = {
     { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
-      NULL, (XtPointer)0,  (MenuItem *)NULL },
-    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
+      NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
+    { NULL,                 NULL,                      0,  NULL, NULL, False,
+      NULL, (XtPointer)0,  (MenuItem *)NULL, 0 },
   };
   
   MenuItem activityMenu[] = {
     { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
-      accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
+      accountMenubarCB, (XtPointer)AMB_TRNS,   (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
+      NULL,              NULL,                 (MenuItem *)NULL, 0 },
     { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
-      startRecnCB, NULL, (MenuItem *)NULL },
+      startRecnCB,       NULL,                 (MenuItem *)NULL, 0 },
     { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      startAdjBCB, NULL, (MenuItem *)NULL },
+      startAdjBCB,       NULL,                 (MenuItem *)NULL, 0 },
     { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
-      NULL, (XtPointer)0,  reportMenu },
+      NULL,              (XtPointer)0,         reportMenu,       0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
+      NULL,              NULL,                 (MenuItem *)NULL, 0 },
     { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
-      deleteCB,     NULL,      (MenuItem *)NULL },
+      deleteCB,          NULL,                 (MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
+      NULL,              NULL,                 (MenuItem *)NULL, 0 },
     { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
-      destroyShellCB, NULL, (MenuItem *)NULL },
-    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
+      destroyShellCB,    NULL,                 (MenuItem *)NULL, 0 },
+    { NULL,                 NULL,                      0,  NULL, NULL, False,
+      NULL,              (XtPointer)0,         (MenuItem *)NULL, 0 },
   };
 
   
   MenuItem helpMenu[] = {
     { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
+      helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL, 0 },
     { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL },
+      helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL, 0 },
     { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
+      NULL,          NULL,                 (MenuItem *)NULL, 0 },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
+      helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL, 0 },
+    { NULL,                 NULL,                      0,  NULL, NULL, False,
+      NULL,          (XtPointer)0,         (MenuItem *)NULL, 0 },
   };
   
 

@@ -157,6 +157,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     menuList[i].accel_text    = NULL;
     menuList[i].callback      = xaccAccountMenuCB;
     menuList[i].callback_data = accData->menuEntry[*offset];
+    menuList[i].widget        = 0;
 
     (*offset) ++;
     menuList[i].subitems      = (MenuItem *)NULL;
@@ -180,6 +181,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     menuList[i+pad].accel_text    = NULL;
     menuList[i+pad].callback      = xaccAccountMenuCB;
     menuList[i+pad].callback_data = accData->menuEntry[*offset];
+    menuList[i+pad].widget        = 0;
     menuList[i+pad].subitems      = (MenuItem *) NULL;
 
     (*offset) ++;
@@ -203,6 +205,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
        menuList[i+pad].accel_text    = NULL;
        menuList[i+pad].callback      = xaccAccountMenuCB;
        menuList[i+pad].callback_data = accData->menuEntry[*offset];
+       menuList[i+pad].widget        = 0;
 
        (*offset) ++;
        menuList[i+pad].subitems      = xaccBuildAccountSubMenu (acc->children, accData, offset, 0);
