@@ -57,8 +57,8 @@ typedef struct _RegWindow {
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
   unsigned short changed;     /* bitmask of fields that have changed in  *
-                               * transaction lastTrans                   */
-  unsigned short lastTrans;   /* to keep track of last edited transaction*/
+                               * transaction currEntry                   */
+  unsigned short currEntry;   /* to keep track of last edited transaction*/
   XmTextPosition insert;      /* used by quickfill for detecting deletes */
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
@@ -233,7 +233,9 @@ regRefresh( RegWindow *regData )
     while( (trans = getTransaction (acc,++i)) != NULL )
       {
       int  row = i*2+1;
-      
+
+      XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) trans);   
+
       sprintf( buf, "%2d/%2d\0", 
                trans->date.month,
                trans->date.day );
@@ -531,9 +533,9 @@ regRecalculateBalance( RegWindow *regData )
 }
 
 
-/* DATE_REORDER needs to null out lastTrans, because 
+/* DATE_REORDER needs to null out currEntry, because 
  * during date reordering we removed and re-inserted
- * the transaction... reset lastTrans to zero to prevent it from
+ * the transaction... reset currEntry to zero to prevent it from
  * indicating a row that doesn't exist.  (That shouldn't happen
  * anyways!) 
  */
@@ -544,7 +546,7 @@ regRecalculateBalance( RegWindow *regData )
   if (xfer_acc) {						\
     xfer_reg = (RegWindow *) (xfer_acc->regData);		\
     if (xfer_reg) {						\
-      xfer_reg->lastTrans = 0;					\
+      xfer_reg->currEntry = 0;					\
     }								\
   }								\
 }
@@ -589,7 +591,7 @@ regSaveTransaction( RegWindow *regData, int position )
   /* Be sure to prompt the user to save to disk after changes are made! */
   acc->parent->saved = False;
 
-  trans = getTransaction( acc, position );
+  trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, row);
   
   if( trans == NULL )
     {
@@ -852,7 +854,7 @@ regWindow( Widget parent, Account *acc )
   acc -> regData = regData;        /* avoid having two open registers for one account */
   regData->acc       = acc;
   regData->changed   = 0;          /* Nothing has changed yet! */
-  regData->lastTrans = 0;
+  regData->currEntry = 0;
   regData->qf = acc->qfRoot;
   regData->insert    = 0;          /* the insert (cursor) position in
                                     * quickfill cells */
@@ -1333,7 +1335,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   
   /* Save any unsaved changes */
   XbaeMatrixCommitEdit( regData->reg, False );
-  regSaveTransaction( regData, regData->lastTrans );
+  regSaveTransaction( regData, regData->currEntry );
   
   /* hack alert -- free the ComboBox popup boxes data structures too */
 
@@ -1391,7 +1393,7 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
   RegWindow *regData = (RegWindow *)cd;
   
   XbaeMatrixCommitEdit( regData->reg, False );
-  regSaveTransaction( regData, regData->lastTrans );
+  regSaveTransaction( regData, regData->currEntry );
   }
 
 /********************************************************************\
@@ -1409,13 +1411,17 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   RegWindow *regData = (RegWindow *)cd;
   Account   *acc     = regData->acc;
   Transaction *trans;
+  int currow;
   
-  trans = getTransaction (acc, regData->lastTrans );
+  currow = 2 *regData->currEntry +1;
+  trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, currow);
+
   if( NULL != trans)
     {
-    char *msg = TRANS_DEL_MSG;
+    char buf[BUFSIZE];
+    sprintf (buf, TRANS_DEL_MSG, trans->description);
     
-    if( verifyBox( toplevel, msg ) )
+    if( verifyBox( toplevel, buf ) )
       {
       Account * cred = (Account *) (trans->credit);
       Account * deb = (Account *) (trans->debit);
@@ -1485,15 +1491,15 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUGCMD(printf(" row = %d\n col = %d\n",row,col));
       /* figure out if we are editing a different transaction... if we 
        * are, then we need to save the transaction we left */
-      if( regData->lastTrans != (row-1)/2 )
+      if( regData->currEntry != (row-1)/2 )
         {
         DEBUG("Save Transaction\n");
-        DEBUGCMD(printf(" lastTrans = %d\n currTrans = %d\n", 
-                        regData->lastTrans, (row+1)/2 ));
+        DEBUGCMD(printf(" currEntry = %d\n currTrans = %d\n", 
+                        regData->currEntry, (row+1)/2 ));
         
-        regSaveTransaction( regData, regData->lastTrans );
+        regSaveTransaction( regData, regData->currEntry );
         
-        regData->lastTrans = (row-1)/2;
+        regData->currEntry = (row-1)/2;
         regData->insert    = 0;
         regData->qf = acc->qfRoot;
         }
@@ -1565,7 +1571,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * first time by looking at regData->changed */
       if( regData->changed == MOD_NONE )
         {
-        Transaction *trans = getTransaction( acc, regData->lastTrans );
+        int currow;
+        Transaction *trans;
+
+        currow = 2 * regData->currEntry + 1;
+        trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, currow);
+
         /* If trans==NULL, then this must be a new transaction */
         if( (trans != NULL) && (trans->reconciled == YREC) )
           {
