@@ -665,6 +665,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 /* Make sure this file actually has a date before unlinking */
                 if (res && res != name+pathlen+1 &&
                     /* We consumed some but not all of the filename */
+		    !strcmp(res, ".xac") &&
                     file_time > 0 &&
                     /* we actually have a reasonable time and it is old enough */
                     days > file_retention_days) 

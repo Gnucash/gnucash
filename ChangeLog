@@ -10,6 +10,12 @@
 	  (lone zb subtotals, spurious 'recursive-bal, typos)
 	  needed to make the new account-summary.scm work.
 
+	Thomas Bushnell's patch to protect non-backup pruning (#164875)
+	* src/backend/file/gnc-backend-file.c:
+	  When working on the file foo.xac, backups are named
+	  foo.DATE.xac.  But the backup file pruner will prune any old
+	  file named foo.DATE.anything.
+
 2005-01-29  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, src/tax/us/gncmod-tax-us.c,
