@@ -34,7 +34,7 @@ Currently the only files which include this file are:
 #define XACC_FREQSPECP_H
 
 #include "FreqSpec.h"
-#include "GNCIdP.h"
+#include "qofid.h"
 
 /**
  * Scheduled transactions have a frequency defined by a frequency

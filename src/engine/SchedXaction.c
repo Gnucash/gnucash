@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "FreqSpec.h"
-#include "GNCId.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "SX-book.h"
@@ -42,6 +41,7 @@
 #include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 
 static short module = MOD_SX;
 
@@ -59,7 +59,7 @@ xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 
    sx->freq = xaccFreqSpecMalloc(book);
 
-   xaccGUIDNew( &sx->guid, book );
+   qof_entity_guid_new (sx->entity_table, &sx->guid);
    qof_entity_store( sx->entity_table, sx,
                     &sx->guid, GNC_ID_SCHEDXACTION );
    g_date_clear( &sx->last_date, 1 );

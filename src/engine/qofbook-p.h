@@ -31,9 +31,9 @@
 #define QOF_BOOK_P_H
 
 #include "Backend.h"
-#include "GNCIdP.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 struct _QofBook
 {

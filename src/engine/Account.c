@@ -31,7 +31,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -48,6 +47,7 @@
 
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 #include "qofqueryobject.h"
 
@@ -127,7 +127,7 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->book = book;
 
-  xaccGUIDNew(&acc->guid, book);
+  qof_entity_guid_new (book->entity_table, &acc->guid);
   qof_entity_store(book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }

@@ -82,7 +82,7 @@ gnc_engine_init(int argc, char ** argv)
   /* initialize the string cache */
   gnc_engine_get_string_cache();
   
-  xaccGUIDInit ();
+  guid_init ();
   qof_object_initialize ();
   qof_query_init ();
   qof_book_register ();
@@ -116,11 +116,9 @@ void
 gnc_engine_shutdown (void)
 {
   qof_query_shutdown ();
-
-  gnc_engine_string_cache_destroy ();
-
   qof_object_shutdown ();
-  xaccGUIDShutdown ();
+  guid_shutdown();
+  gnc_engine_string_cache_destroy ();
 }
 
 /********************************************************************

@@ -24,8 +24,8 @@
 #ifndef XACC_SCHEDXACTION_P_H
 #define XACC_SCHEDXACTION_P_H
 
-#include "GNCIdP.h"
 #include "SchedXaction.h"
+#include "qofid.h"
 
 /**
  * A single scheduled transaction.

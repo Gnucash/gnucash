@@ -39,10 +39,10 @@
 #include "config.h"
 
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Transaction.h"
 #include "gnc-numeric.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 
 /** STRUCTS *********************************************************/

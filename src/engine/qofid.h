@@ -60,8 +60,8 @@ typedef const char * QofIdTypeConst;
 
 typedef struct _QofEntityTable QofEntityTable;
 
-QofIdType qof_guid_type (const GUID * guid,
-                                   QofEntityTable *entity_table);
+/** Return the type of the indicated guid */
+QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * guid_null (void);

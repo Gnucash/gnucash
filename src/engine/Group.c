@@ -31,7 +31,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "BackendP.h"
-#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -40,6 +39,7 @@
 #include "gnc-numeric.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 #include "qofobject.h"
 
 static short module = MOD_ENGINE;

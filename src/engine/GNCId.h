@@ -14,7 +14,7 @@
  * void xaccGUIDNew (GUID *guid, QofBook *book)
  */
 #define xaccGUIDNew(guid,book)     \
-      qof_entity_guid_new ((guid), qof_book_get_entity_table (book))
+      qof_entity_guid_new (qof_book_get_entity_table (book), (guid))
                                                                                 
 
 #endif

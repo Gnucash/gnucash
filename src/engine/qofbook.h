@@ -35,7 +35,7 @@
 
 #include <glib.h>
 
-#include "GNCId.h"
+#include "qofid.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset

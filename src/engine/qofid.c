@@ -51,43 +51,10 @@ struct gnc_entity_table
 
 
 /** Static global variables *****************************************/
-static GMemChunk *guid_memchunk = NULL;
 static short module = MOD_ENGINE;
 
 
 /** Function implementations ****************************************/
-
-void
-xaccGUIDInit (void)
-{
-  if (!guid_memchunk)
-    guid_memchunk = g_mem_chunk_create (GUID, 512, G_ALLOC_AND_FREE);
-}
-
-void
-xaccGUIDShutdown (void)
-{
-  if (guid_memchunk)
-  {
-    g_mem_chunk_destroy (guid_memchunk);
-    guid_memchunk = NULL;
-  }
-}
-
-GUID *
-guid_malloc (void)
-{
-  return g_chunk_new (GUID, guid_memchunk);
-}
-
-void
-guid_free (GUID *guid)
-{
-  if (!guid)
-    return;
-
-  g_chunk_free (guid, guid_memchunk);
-}
 
 static gboolean
 entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
@@ -188,7 +155,7 @@ qof_entity_new (void)
 }
 
 QofIdType
-qof_guid_type (const GUID * guid, QofEntityTable *entity_table)
+qof_guid_type (QofEntityTable *entity_table, const GUID * guid);
 {
   EntityNode *e_node;
 

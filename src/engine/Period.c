@@ -46,6 +46,7 @@ Open questions: how do we deal with the backends ???
 #include "TransactionP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_BOOK;

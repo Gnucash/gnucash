@@ -43,12 +43,12 @@
 
 #include "Account.h"
 #include "Backend.h"
-#include "GNCIdP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 
 /** STRUCTS *********************************************************/
