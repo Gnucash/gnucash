@@ -1,3 +1,12 @@
+2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>	
+	More Doxygenification.  Created an Engine module, and a 
+	Deprecated list.  Unfortunately, unless we turn on EXTRACT_ALL
+	(not very practical currently) not all functions will appear 
+	unless they are all documented. 
+	* src/engine/Transaction.h: More Doxygenification	
+	* src/engine/Account.h: Doxygenify
+	* src/doc/doxygen.cfg.in: Minor config change.
+	
 2002-12-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c: Fix adding the balancing
@@ -24,7 +33,7 @@
 	* po/nl.po: Fix use of msgid_plural by adding the appropriate
 	header entry.
 
-2002-13-6  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/ofx/gnc-ofx-import.c:  Do the "right" 
 	thing for setting split amount and value.
