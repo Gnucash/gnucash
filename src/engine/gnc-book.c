@@ -587,31 +587,39 @@ xaccResolveFilePath (const char * filefrag)
 
   /* check for an absolute file path */
   if ('/' == *filefrag)
-    return strdup (filefrag);
+    return g_strdup (filefrag);
 
   /* get conservative on the length so that sprintf(getpid()) works ... */
   /* strlen ("/.LCK") + sprintf (%x%d) */
   namelen = strlen (filefrag) + 25; 
 
-  for (i=-2; 1 ; i++) 
+  for (i = -2; TRUE ; i++) 
   {
     switch (i)
     {
       case -2:
         /* try to find a file by this name in the cwd ... */
         path = getcwd (pathbuf, PATH_MAX);
-        if (!path) continue;
+        if (!path)
+          continue;
+
         len = strlen (path) + namelen;
-        if (PATH_MAX <= len) continue;
+        if (PATH_MAX <= len)
+          continue;
+
         strcat (path, "/");
         break;
 
       case -1:
         /* look for something in $HOME/.gnucash/data */
         path = getenv ("HOME");
-        if (!path) continue;
+        if (!path)
+          continue;
+
         len = strlen (path) + namelen + 20;
-        if (PATH_MAX <= len) continue;
+        if (PATH_MAX <= len)
+          continue;
+
         strcpy (pathbuf, path);
         strcat (pathbuf, "/.gnucash/data/");
         path = pathbuf;
@@ -623,7 +631,9 @@ xaccResolveFilePath (const char * filefrag)
         if (path)
         {
           len = strlen (path) + namelen;
-          if (PATH_MAX <= len) continue;
+          if (PATH_MAX <= len)
+            continue;
+
           strcpy (pathbuf, path);
           path = pathbuf;
         }
@@ -638,7 +648,7 @@ xaccResolveFilePath (const char * filefrag)
     strcat (path, filefrag);
     rc = stat (path, &statbuf);
     if ((!rc) && (S_ISREG(statbuf.st_mode)))
-      return (strdup (path));
+      return (g_strdup (path));
   }
 
   /* make sure that the gnucash home dir exists. */
@@ -662,7 +672,7 @@ xaccResolveFilePath (const char * filefrag)
       strcpy (pathbuf, path);
       strcat (pathbuf, "/.gnucash/data/");
       strcat (pathbuf, filefrag);
-      return (strdup (pathbuf));
+      return (g_strdup (pathbuf));
     }
   } 
 
@@ -676,7 +686,7 @@ xaccResolveFilePath (const char * filefrag)
     {
       strcat (path, "/");
       strcat (path, filefrag);
-      return (strdup (path));
+      return (g_strdup (path));
     }
   }
 

@@ -740,9 +740,11 @@ gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
       break;
     case FMB_SAVE:
       gncFileSave();
+      gnc_refresh_main_window_title();
       break;
     case FMB_SAVEAS:
       gncFileSaveAs();
+      gnc_refresh_main_window_title();
       break;
     case FMB_IMPORT:
       gncFileQIFImport();

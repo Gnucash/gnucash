@@ -32,15 +32,19 @@
 #include "Group.h"
 #include "TransLog.h"
 #include "file-history.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-event.h"
 #include "gnc-ui.h"
 #include "messages.h"
 
+
+/** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-/** GLOBALS *********************************************************/
 static GNCBook *current_book = NULL;
+
 
 /* ======================================================== */
 
@@ -161,7 +165,9 @@ gncFileNew (void)
   xaccGroupWindowDestroy (group);
 
   /* close any ongoing file sessions, and free the accounts.
-   * disable logging so we don't get all that junk. */
+   * disable logging and events so we don't get all that junk. */
+  gnc_engine_suspend_events ();
+
   xaccLogDisable();
   gnc_book_destroy (book);
   current_book = NULL;
@@ -169,6 +175,9 @@ gncFileNew (void)
 
   /* start a new book */
   gncGetCurrentBook ();
+
+  gnc_engine_resume_events ();
+  gnc_gui_refresh_all ();
 }
 
 /* ======================================================== */
@@ -265,9 +274,11 @@ gncPostFileOpen (const char * filename)
   /* but first, check to make sure we've got a book going. */
   new_book = gnc_book_new ();
 
-  /* disable logging while we move over to the new set of accounts to
-   * edit; the mass deletetion of accounts and transactions during
-   * switchover is not something we want to keep in a journal.  */
+  /* disable logging and events while moving over to the new set of
+   * accounts; the mass deletetion of accounts and transactions during
+   * switchover is not something we want to keep in a journal. */
+  gnc_engine_suspend_events ();
+
   gnc_set_busy_cursor (NULL);
   xaccLogDisable ();
   new_group = NULL;
@@ -307,7 +318,7 @@ gncPostFileOpen (const char * filename)
   {
     gnc_book_destroy (new_book);
 
-    /* well, no matter what, I think its a good idea to have a
+    /* well, no matter what, I think it's a good idea to have a
      * topgroup around.  For example, early in the gnucash startup
      * sequence, the user opens a file; if this open fails for any
      * reason, we don't want to leave them high & dry without a
@@ -315,7 +326,11 @@ gncPostFileOpen (const char * filename)
      * happen. */
     gncGetCurrentBook ();
 
-    free (newfile);
+    g_free (newfile);
+
+    gnc_engine_resume_events ();
+    gnc_gui_refresh_all ();
+
     return;
   }
 
@@ -330,11 +345,14 @@ gncPostFileOpen (const char * filename)
 
   xaccLogEnable();
 
+  gnc_engine_resume_events ();
+  gnc_gui_refresh_all ();
+
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
   gnc_history_add_file (newfile);
-  free (newfile);
+  g_free (newfile);
 
   /* run a file-opened hook. For now, the main thing it will do 
    * is notice if legacy currencies are being imported. */
@@ -483,7 +501,7 @@ gncFileSaveAs (void)
   oldfile = gnc_book_get_file_path (book);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
-    free (newfile);
+    g_free (newfile);
     gncFileSave ();
     return;
   }
@@ -511,7 +529,7 @@ gncFileSaveAs (void)
     gnc_book_destroy (new_book);
     xaccLogEnable ();
 
-    free (newfile);
+    g_free (newfile);
     gnc_refresh_main_window();
 
     return;
@@ -541,7 +559,10 @@ gncFileSaveAs (void)
 
     /* if user says cancel, we should break out */
     if (!result)
+    {
+      g_free (newfile);
       return;
+    }
 
     /* Whoa-ok. Blow away the previous file. Do not disable
      * logging. We want to capture the old file in the log, just in
@@ -553,8 +574,7 @@ gncFileSaveAs (void)
   gnc_book_set_group (new_book, group);
   gncFileSave ();
 
-  free (newfile);
-  gnc_refresh_main_window();
+  g_free (newfile);
 }
 
 /* ======================================================== */
@@ -566,12 +586,18 @@ gncFileQuit (void)
 
   book = gncGetCurrentBook ();
 
-  /* disable logging; the mass deletetion of accounts and transactions
-   * during shutdown is not something we want to keep in a journal.  */
+  /* disable logging and events; the mass deletetion of accounts and
+   * transactions during shutdown is not something we want to keep in
+   * a journal. */
+  gnc_engine_suspend_events ();
+
   xaccLogDisable();
 
   gnc_book_destroy (book);
   current_book = NULL;
+
+  gnc_engine_resume_events ();
+  gnc_gui_refresh_all ();
 }
 
 /* ======================================================== */
