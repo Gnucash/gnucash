@@ -74,9 +74,6 @@ offers, have a look at the <link linkend="xacc-features">Features
       version 1.1 &amp; 1.2, the engine was expanded and refined, and the
       register window code completely redesigned and made mostly
       Motif-(and GUI-)independent. 
-    Linas is now active with Gnumatic Incorporated, a company formed to
-    enhance and support GnuCash for everyone, from home desktop users
-    to commercial and professional accountants.
 </para>
 
 </glossdef>
@@ -120,11 +117,9 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <glossentry>
 <glossterm><email>dave@krondo.com</email> Dave Peticolas</glossterm>
 <glossdef>
-<para>hacks obsessively on GnuCash. But he can stop anytime he
-      wants to. Really.
-      (As he is now the gatekeeper of the GnuCash CVS tree, be nice to him,
-      or he may decide to stop hacking in the middle of your patch).
-      </para>
+<para>worked on most parts of Gnucash, especially
+   the register and GUI.
+</para>
 </glossdef>
 </glossentry>
 
@@ -182,6 +177,35 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossdef>
 </glossentry>
 
+<glossentry>
+<glossterm><email>warlord@MIT.EDU</email> Derek
+      Atkins</glossterm>
+<glossdef>
+<para>wrote the business-accounting package
+   for Gnucash. This includes the Customer/Vendor database, Job tracking,
+   Order entry, Invoicing, Accounts Payable, Accounts Receivable, and
+   related technologies.  In the process he we-wrote the Query engine,
+   modularized the Book object storage, and modularized the backend
+   to allow pluggable objects.
+</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>hampton@employees.org</email> David Hampton</glossterm>
+<glossdef>
+<para>is an all-around making-things-better guy.</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>chris@wilddev.net</email> Chris Lyttle</glossterm>
+<glossdef>
+<para>writes documentation and administers the GnuCash
+   bug list.</para>
+</glossdef>
+</glossentry>
+
 </glosslist>
 
 </para>
@@ -207,14 +231,6 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
       Armstrong</glossterm>
 <glossdef>
 <para>for misc fixes</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>warlord@MIT.EDU</email> Derek
-      Atkins</glossterm>
-<glossdef>
-<para>build system patch, rpc backend</para>
 </glossdef>
 </glossentry>
 
@@ -343,14 +359,6 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 Christiansen</glossterm>
 <glossdef>
 <para>Danish translation</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>jcollins@gnucash.org</email> Jeremy
-      Collins</glossterm>
-<glossdef>
-<para>for GnoMoney and GTK port</para>
 </glossdef>
 </glossentry>
 
@@ -488,11 +496,10 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>grib@billgribble.com</email> Bill
-      Gribble</glossterm>
+<glossterm><email>bock@step.polymtl.ca</email>Benoit Grégoire
+      </glossterm>
 <glossdef>
-<para>QIF import code, check printing, transaction find
-      dialog</para>
+<para>OFX import</para>
 </glossdef>
 </glossentry>
 
@@ -516,13 +523,6 @@ Christiansen</glossterm>
       Hammersmith</glossterm>
 <glossdef>
 <para>for RedHat RPM packaging</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>hampton@employees.org</email> David Hampton</glossterm>
-<glossdef>
-<para>qif import patch</para>
 </glossdef>
 </glossentry>
 
@@ -693,13 +693,6 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>chris@wilddev.net</email> Chris Lyttle</glossterm>
-<glossdef>
-<para>Register documentation and screenshots.</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
 <glossterm><email>kmaraas@gnome.org</email> Kjartan Maraas</glossterm>
 <glossdef>
 <para>Norwegian translations</para>
@@ -719,15 +712,6 @@ Christiansen</glossterm>
       Martin</glossterm>
 <glossdef>
 <para>guile error handling code</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>rgmerk@mira.net</email> Robert Graham
-      Merkel</glossterm>
-<glossdef>
-<para>extensive work on reports and reporting infrastructure, gnome
-      GUI work, and user preferences.</para>
 </glossdef>
 </glossentry>
 
@@ -760,14 +744,6 @@ Christiansen</glossterm>
       III</glossterm>
 <glossdef>
 <para>for QIF core dump fix</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>dres@phoenixdsl.com</email> James
-      LewisMoss</glossterm>
-<glossdef>
-<para>design doc patches</para>
 </glossdef>
 </glossentry>
 
@@ -1015,14 +991,6 @@ Nielsen</glossterm>
       Stephenson</glossterm>
 <glossdef>
 <para>register &amp; file history patches</para>
-</glossdef>
-</glossentry>
-
-<glossentry>
-<glossterm><email>stimming@tuhh.de</email> Christian
-      Stimming</glossterm>
-<glossdef>
-<para>report patch</para>
 </glossdef>
 </glossentry>
 
