@@ -1,3 +1,22 @@
+2001-07-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/gnc-test-stuff.c (get_random_query): not so many terms
+
+	* src/test/Makefile.am: add test-scm-query
+
+	* src/test/.cvsignore: add test-scm-query
+
+	* src/test/test-scm-query.c: new test -- check query<->scm
+	conversion
+
+	* src/guile/gnucash.h: new func api
+
+	* src/guile/gnucash.c.in (gnc_gw_init): new func
+
+	* src/guile/gnc-helpers.c: fix bugs
+
+	* src/engine/Query.c: fix bugs
+
 2001-07-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/glade/sched-xact.glade: tweak

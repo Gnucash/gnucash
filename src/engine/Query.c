@@ -104,6 +104,12 @@ xaccQueryPrint(Query * q)
   GList * i, * j;
   QueryTerm * qt;
 
+  if (!q)
+  {
+    printf("Query: null\n");
+    return;
+  }
+
   printf("Query: max splits = %d\n", q->max_splits);
 
   /* print and & or terms */
@@ -1335,7 +1341,7 @@ xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
     case PD_AMOUNT:
       if (qt1->data.amount.how != qt2->data.amount.how) return FALSE;
       if (qt1->data.amount.amt_sgn != qt2->data.amount.amt_sgn) return FALSE;
-      if (!DEQ (qt1->data.amount.amount, qt2->data.amount.amount))
+      if (qt1->data.amount.amount != qt2->data.amount.amount)
         return FALSE;
       break;
 
@@ -1968,7 +1974,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   qt->data.base.term_type   = PR_PRICE;
   qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);
@@ -1988,7 +1994,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
 
 /********************************************************************
  * DxaccQueryAddSharesMatch
- * Add a share-price filter to an existing query. 
+ * Add a quantity filter to an existing query. 
  * FIXME ?? fix what ??
  ********************************************************************/
  
@@ -2005,7 +2011,7 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   qt->data.base.term_type   = PR_SHRS;
   qt->data.base.sense       = 1;
   qt->data.amount.how       = how;
-  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
   xaccInitQuery(qs, qt);
