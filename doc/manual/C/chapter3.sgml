@@ -1,0 +1,376 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: October 11, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Originally written by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+
+<book id="index">
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+
+ <chapter id="chapter3">
+  <title>Chapter 3  Organizing Your Accounts</title>
+    <para>
+As explained in section (?2.1), every transaction you record in GnuCash requires at least two accounts.   An account is a record of either:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+changes in value of something you own or owe *OR*
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+money that comes in or goes out
+   </para>
+    </listitem>
+   </orderedlist>
+    <para>
+The first type of account represents the traditional *balance-sheet* accounts: assets, liabilities and equity.    These basically represent things you own or things you owe.  The second type of account, called *categories* in other financial programs like Quicken (?TM), measures incoming money (income) or outgoing money (expenses).
+   </para>
+  <sect1 id="categories1">
+   <title>3.1 Using Accounts vs. Categories (Discussion)</title>
+    <para>
+"Where does it all go?" is a common question when discussing personal finances. One of the most useful features Gnucash offers is the ability to track what you earn (income) versus what you spend (expenses). If you are new to personal finance software, you will enjoy the increased visibility into your spending habits. At tax time, the records you keep in Gnucash will prove invaluable. And by keeping track of what you earn and where you spend, Gnucash can produce several useful reports that answer the age-old question, "Where does it all go?"
+    </para>
+    <para>
+If you are familiar with other personal finance programs, you are already accustomed to tracking your income and expenses as categories. Since Gnucash is a double-entry system (refer to section ?2.1), incomes and expenses are tracked in accounts. The basic concept is the same, but the account structure allows more consistency with accepted business practices. So, if you are a business user as well as a home user, Gnucash makes it easy to keep track of your business as well as your personal accounts.
+    </para>
+    <para>
+Income and expense accounts give you the same information you would get with categories, but they also give you more flexibility in entering your transactions.    In GnuCash, you have the option to enter transactions directly into income and expense accounts through their account registers.   Other programs that use categories do not offer this option, because there is no "account register" for a category.
+    </para>
+    <para>
+You also have the option in GnuCash to treat income and expense accounts exactly as you would treat categories, if you are more comfortable with that method.  In Quicken (?TM) and similar programs,  transactions require an account and a category.   Substitute an income or expense account name in GnuCash where you would normally enter a category name in the other programs, and the result should be the same.   We will discuss transaction entry in Chapter (?4) in greater detail.
+    </para>
+  </sect1>
+  <sect1 id="types1">
+   <title>3.2 Types of GnuCash Accounts (Discussion)</title>
+    <para>
+Each account must have a unique name (that you assign) and one of the account types defined in GnuCash.  In accounting, the five main types of accounts are *assets*, *liabilities*, *equity*, *income* and *expenses*.    As mentioned earlier, the first three types, assets, liabilities and equity, are balance-sheet accounts.  You are generally more concerned with the *balances* of these accounts than you are in the activity going on in them, because the balances in these accounts determine your net worth at a specific point in time.  The purpose of a balance sheet report (covered in section ?10.2) is to provide a snapshot of the balances in these accounts.
+    </para>
+     <para>
+On the other hand, income and expense accounts are much more dynamic, and you are generally more interested in the *movement* that takes place in these accounts.  On a regular basis, money moves into your GnuCash environment through one or more income accounts.  Also on a regular basis, money moves out of your GnuCash environment through several expense accounts.   The report that tracks this movement over a period of time is the (?profit and loss report), which we will discuss in section (?10.2).
+    </para>
+     <para>
+(?Insert a graphic of a circle containing balance sheet accounts, with an incoming arrow for income accounts and an outgoing arrow for expense accounts.)
+    </para>
+   <sect2 id="balance2">
+    <title>3.2.1  Balance sheet accounts</title>
+     <para>
+*Assets* refer to things you own.  Specifically, assets are things you own for which *you want to track the value,* such as bank accounts, investments, cash or your house.   In theory, assets can be converted to cash, although you might not get what you originally paid for them.   Tracking the asset balances accurately, then,  lets you know how much these assets are worth in cash at a given point in time. 
+     </para>
+     <para>
+(?TIP) For all assets, a *debit* (left-column value entry) increases the account balance and a *credit* (right-column value entry) decreases the balance.  (See sidebar later in this chapter.) (/?)
+     </para>
+     <para>
+ To help you organize your asset accounts and to simplify transaction entry, GnuCash supports several types of asset accounts:
+     </para>
+   <orderedlist>
+    <listitem>
+     <para>
+[Cash] Use this account to track the money you have on hand, in your wallet, in your piggybank, under your mattress, or wherever you choose to keep it handy.  This is the most *liquid*, or easily traded, type of asset.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Bank] This account is used to track  your cash balance that you keep in institutions such as banks, credit unions, savings and loan, or brokerage firms---wherever someone else safeguards your money.   This is the second most *liquid* type of account, because you can easily convert it to cash on hand.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Stock] Track your individual stocks and bonds using this type of account.   The stock account's register provides extra columns for entering number of shares and price of your investment.  With these types of assets, you may not be able to easily convert them to  cash unless you can find a buyer, and you are not guaranteed to get the same amount of cash you paid for them.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Mutual fund] This is similar to the stock account, except that it is used to track funds.  Its account register provides the same extra columns for entering share and price information.   Funds represent ownership shares of a variety of investments, and like stocks they do not offer any guaranteed cash value.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Currency] If you trade other currencies as investments, you can use this type of account to keep track of them.  The register is similar to the stock register, except that you enter exchange rates instead of prices.  (?Need more detail on this---what will it be used for, and how will non-investment currency exchanges be handled?)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Asset]  For personal finances, use this type of account to track "big-ticket" item purchases that significantly impact your net worth.  Generally, you can think of these as things you insure, such as a house, vehicles, jewelry, and other expensive belongings.   Smaller, less consequential purchases are tracked as expenses, which we will cover shortly.
+   </para>
+    </listitem>
+   </orderedlist>
+    <para>
+*Liabilities* refer to what you owe, money you have borrowed and are obligated to pay back some day.  These represent the rights of your lenders to obtain repayment from you.   Tracking the liability balances lets you know how much debt you have at a given point in time.
+     </para>
+     <para>
+(?TIP) Liabilities in accounting act in an opposite manner from assets:  *credits*(right-column value entries) increase liability account balances and *debits* (left-column value entries) decrease them.  (See sidebar later in this chapter)(/?)
+     </para>
+     <para>
+GnuCash offers a couple of liability account types:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+[Credit card] Use this to track your credit card receipts and reconcile your credit card statements.   Credit cards represent a short-term loan that you are obligated to repay to the credit card company.  This type of account can also be used for other short-term loans such as a line of credit from your bank.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+[Liability] Use this type of account for all other loans, generally larger long-term loans such as a mortgage or vehicle loan.  This account can help you keep track of how much you owe and how much you have already repaid.
+    </para>
+    </listitem>
+   </orderedlist>
+    <para>
+*Equity* is the same as "net worth."   It represents what is left over after you subtract your liabilities from your assets, so it is the portion of your assets that you own outright, without any debt.   In GnuCash, use this type of account as the source of your opening bank balances, because these balances represent your beginning net worth.
+     </para>
+     <para>
+(?TIP) In equity accounts, credits increase account balances and debits decrease them.  (See sidebar later in this chapter) (?/)
+     </para>
+     <para>
+(? NOTE: The accounting equation that links balance-sheet accounts is Assets = Liabilities + Equity.  Another way to look at this is: Assets - Liabilities = Equity.  So, in common terms, the *things you own* minus the *things you owe* equals your *net worth*. (?/)
+     </para>
+   </sect2>
+   <sect2 id="income2">
+    <title>3.2.2 Income and Expense Accounts</title>
+     <para>
+*Income* is the payment you receive for your time, services you provide, or the use of your money.   When you receive a paycheck, for example, that check is a payment for labor you provided to an employer. Your employer tracks your paycheck as an expense to the company, but you track it as personal income. Other examples of income include commissions, tips, dividend income, and interest income.   In GnuCash, use an [income] type account to track these.
+     </para>
+     <para>
+ (?TIP) Credits increase income account balances and debits decrease them.  As described in (?Chapter 2), credits represent money transferred *from* an account.   So in these special income accounts, when you transfer money *from* (credit) the income account to another account, the balance of the income account *increases*.  For example, when you deposit a paycheck and record the transaction as a transfer from an income account to a bank account, the balances of both accounts increase. (?/)
+     </para>
+     <para>
+*Expenses* refer to money you spend to purchase goods or services provided by someone else.  When you buy something, you are either incurring an expense or investing in an asset. So how should you record purchases in GnuCash? In general, if the purchase involves an item that increases or decreases in value over time,  such as a car, house, or stock, you should record this purchase in one of the asset type accounts listed in (?3.2.1).
+     </para>
+     <para>
+All other purchases of goods and services involve expense accounts. Expenses include such things as utilities, rent, food, loan interest, taxes, and car repair.   When you buy food, for example,  you are paying someone else for that item.  The grocery store records this payment as income, but to you it is an expense.  In GnuCash, use an [expense] type account to track your expenses.
+     </para>
+     <para>
+(?TIP) Debits increase expense account balances and credits decrease them.  (See sidebar later in this chapter. ) (?/)
+     </para>
+     <para>
+(?NOTE: When you subtract total expenses from total income for a time period, you get net income.  This net income is then added to the balance sheet as retained earnings, which is a type of [equity] account.  
+
+(?Insert a chart that shows common accounts and recommended account types for these)
+     </para>
+     <para>
+(?SIDEBAR )  MORE ON DEBITS AND CREDITS
+Remember the terms debit and credit discussed in (?Ch. 2 )?  Contrary to popular belief and even some dictionary definitions,  accounting debits and credits do not mean ?decrease? and ?increase.?  The only constant definition of debits and credits is that debits are left-column entries and credits are right-column entries.  In fact, debits and credits each increase certain types of accounts and decrease others.    In asset and expense type accounts, debits increase the balance and credits decrease the balance.  In liability, equity and income type accounts, credits increase the balance and debits decrease the balance.
+     </para>
+     <para>
+For example, debits *increase* your bank account balance and credits *decrease* your bank account balance.  ?Wait a minute,? you might say, ?a *debit* card *decreases* the balance in my checking account, because I take money out of it.  And when the bank gives me money back on something, they *credit* my account.?  So why is this  reversed in accounting?
+     </para>
+     <para>
+Banks report transactions from *their* perspective, not yours.  Their perspective is exactly opposite to yours.  To you, your bank account represents an asset, something you own.  To the bank, your bank account represents a loan, or liability,  because they owe you that money.  As explained in this chapter, asset and liability accounts are exact opposites in the way they behave.  In a liability account, debits *decrease* the balance and credits *increase* the balance.
+     </para>
+     <para>
+When you take money out of your bank account, the balance in your account decreases.  To you, this is a decrease in an asset, so you *credit* your bank account.  To the bank, this is a decrease in a liability, so they *debit* your bank account.    (?/SIDEBAR)
+     </para>
+   </sect2>
+   <sect1 id="chart1">
+    <title>3.3 Setting Up a Chart of Accounts (Discussion)</title>
+     <para>
+The Chart of Accounts is a hierarchy of account relationships that you define.  For example, you may want to define a top-level bank account with checking and savings subaccounts.  GnuCash offers the ability to set up parent accounts and subaccounts, all from the Account Information dialog (covered in section ?3.4).  You can set up your own chart of accounts, or you can use the default GnuCash chart of accounts based on your answers in the (?New User Setup)  (?This is still being developed---add more doc. later.)
+     </para>
+   </sect1>
+   <sect1 id="newaccount1">
+    <title>3.4 Setting Up a New Account (How-To)</title>
+     <para>
+To set up a new account:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Select the [New] button from the toolbar or Accounts|New Account... from the menu.    The Account Information dialog box will appear:
+(?insert newacct.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter the account name and description in the blanks provided.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Select the currency type from the drop-down list.  The default currency is U.S. dollars.  Each currency also displays its ISO (International Standards Organization) code.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+If this is a stock, mutual fund or currency type account,  click on the {Select...] button to the right of the "Security" blank to bring up the following box:
+(?This box is confusing, because it isn't evident that you need to select [New] to enter a currency/security---maybe should be changed.  Also, why do you have to put currency in two places if you have a currency account? Check on this.) (?insert security.png)
+
+(Add documentation to this .)  Click [OK] to accept the security.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter a numerical account code if you want to display accounts in a certain sort order in the (?main window).   For example, you might number an account "100" if you want that account to appear before an account with code "200."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Select the account type for this account from the list provided.  See section (?3.2) for a discussion of account types.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+If this is your first account, select "New top level account" from the "Parent Account" list box.  If not, you can either choose "New top level account" or select one of your other accounts as a parent account.  This creates a hierarchy, or chart of accounts, as discussed in section (?3.4).
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+If this account is a stock, mutual fund, or currency type account, you can select a source for online price quotes from the drop-down list for price quotes.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter any notes in the box provided for "Notes."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+If this account is tax-related, select the box next to "Tax Related."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Click [OK] to accept the account information.
+    </para>
+    </listitem>
+   </orderedlist>
+     <para>
+(?NOTE: An option to fill in opening balances is supposed to be added to this dialog soon---need to document when it is added.  If it is not added, fill in details of manual Opening Balance entries in Ch. 4.)
+     </para>
+   </sect1>
+  <sect1 id="editing1">
+   <title>3.5 Editing an Account (How-To)</title>
+     <para>
+You can edit any of the selections you made in setting up an account.   To edit an account:
+     </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Highlight the account name in the main window by selecting it.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Select the [Edit] button from the toolbar or Accounts|Edit Account... from the menu.    The Account Information dialog box will appear:
+(?insert editaccts.png)
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Make your changes to any of the applicable fields in this dialog.  GnuCash allows you to change all of these fields, including parent account and account type.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Once you have finished your changes, click [OK] to complete the edit.
+    </para>
+    </listitem>
+   </orderedlist>
+  </sect1>
+  <sect1 id="examples1">
+   <title>3.6 Putting It All Together (Examples of setting up a simple chart of accounts with cash, checking, savings, credit card, income and expense accounts)</title>
+    <para>
+In (?Chapter 2) you created a file called (?gcashdata).   In these examples, we will work with that file, so start by opening (?gcashdata).
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Let's set up a simple chart of accounts that you might use on a regular basis.  Create the following accounts in your home currency:
+     </para>
+     <para>
+-Checking (account type "Bank," parent account "New top level account")
+-Savings (account type "Bank," parent account "New top level account")
+-Credit Card (account type "Credit card," parent account "New top level account")
+-Salary (account type "Income," parent account "New top level account")
+-Groceries (account type "Expense," parent account "New top level account")
+-Utilities (account type "Expense," parent account "New top level account")
+-Electric (account type "Expense," parent account "New top level account") 
+-Opening Balances (account type "Equity," parent account "New top level account")
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Now edit the "Electric" account.  In the Account Information dialog, change the parent account of "Electric" to "Utilities."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Review your chart of accounts in the main window. (?Will this still apply?)  Your new chart of accounts should look like this:
+(?insert chartaccts.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Save your file.  We will use these accounts in the next (?chapter).
+    </para>
+    </listitem>
+   </orderedlist>
+  </sect1>
+ </chapter>
+</book>

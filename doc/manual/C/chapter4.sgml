@@ -1,0 +1,481 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: October 11, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Originally written by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+
+<book id="index">
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+
+ <chapter id="chapter4">
+  <title>Chapter 4 Entering Transactions</title>
+    <para>
+This chapter will give you the basic information you need to enter transactions in GnuCash.   The next chapters address more specific cases you may have.
+    </para>
+    <para>
+We mentioned before that transactions must consist of at least two parts, the part transferring money <emphasis>from</emphasis> an account and the part transferring money <emphasis>to</emphasis> an account.  Accountants call these parts of a transaction <emphasis>ledger entries</emphasis>.  In GnuCash, they are also called <emphasis> splits</emphasis>.
+    </para>
+  <sect1 id="registers1">
+   <title>4.1 Overview of Registers (Discussion)</title>
+    <para>
+To view an account register, highlight the account name in the main window and double-click to open it.  You can also click the Open button in the tool bar or use the right mouse button menu to open the account.  GnuCash will display the account register window.  An account <emphasis> register</emphasis> displays a summary of all the splits affecting that account.
+    </para>
+    <para>
+For example, here is a checking account register:
+(?insert register.png)
+    </para>
+    <para>
+The title bar of the register displays the account name, which in this case is "Checking."   Below the title bar, the menu bar displays the menu options available within the register, and the tool bar contains handy buttons that help you work with the register.
+    </para>
+    <para>
+Although each transaction has at least two splits, all you see in the basic register is a summary of the splits affecting the current account, which is "Checking."  In the Transfer column, you can see the other account from which money is <emphasis> transferred </emphasis> into or out of this account.   If the transaction affects more than two accounts, GnuCash displays "-- Split Transaction --" to show it is a multiple-split transaction.  You can see the individual splits of each transaction by clicking the "Split" button in the tool bar.
+    </para>
+    <para>
+For example, if you highlight the (?"Paycheck") register line above and click the "Split" button, you get an expanded transaction that looks like this:
+(?insert registersplit.png)
+    </para>
+    <para>
+The first line of the transaction is the <emphasis> transaction line </emphasis>.   It contains a date, optional number (such as a check number), transaction description, total amount affecting the current account, and updated account balance after the current transaction.  Note that in the expanded view, the "Transfer" column heading disappears, and there is no account name listed in that field.  This line shows you only a summary of the transaction's effect on the current account.  For more detailed information, you need to look below at the individual splits that make up the transaction.
+    </para>
+    <para>
+The partial lines below the transaction line are the <emphasis> split lines </emphasis>, and they are separated by gray lines.   As you highlight one of the split lines, the column headings change to show the split-related  fields:
+
+(insert registersplit2.png)
+    </para>
+    <para>
+Each split contains an optional action, or type of split, which you can either type in or choose from a pull-down list. The split also contains an optional memo which describes the split.  Each split affects an account, which can be selected from a pull-down list of your accounts.  The "R" field indicates whether the split has been reconciled.  The last two columns show the amount of the split and whether money is coming into or going out of the account.
+    </para>
+    <para>
+As we discussed in section (?2.1), total debits (left-column entries) must equal total credits (right-column entries) for each transaction.  In the example shown above, the total debits equal the total credits, so this transaction is balanced.   If you notice, the transaction line contains the same debit amount as the "Checking" split line.  Why is this shown twice?  Because the transaction line is merely a <em> summary</em> of the transaction's effect on the current account, which is "Checking."   The same transaction in a different account will have a different transaction line, one that shows the effect on that particular account.  You can see this by highlighting another split line and clicking the "Jump" button on the tool bar.
+    </para>
+    <para>
+In this example, if you jump to the "Salary" account, GnuCash brings up the same transaction in the Salary account register:
+
+(?insert registersplit3.png)
+    </para>
+    <para>
+Note that the transaction line total now summarizes the effect on the Salary account instead of the Checking account, because you are looking at the Salary account register.    The splits are exactly the same, but the transaction line now reflects the credit to the Salary account.
+    </para>
+    <para>
+At the bottom left of the register window, GnuCash displays helpful messages as you move about the register.   To the right, you can see the current account balance and the total of cleared splits.
+    </para>
+  </sect1>
+  <sect1 id="regstyle1">
+   <title>4.2 Choosing a Register Style (Discussion)</title>
+    <para>
+GnuCash offers several options for viewing your registers.  The default style is "Basic Ledger" mode, which displays only the summary of splits affecting the current account.  This is the style that most closely resembles other popular personal financial packages.
+    </para>
+     <para>
+You can choose a different register style by selecting "Register|Style" from the menu.  The "Auto-Split Ledger" style expands the current transaction automatically.  As you highlight a new transaction in the register, the transaction automatically expands to show all splits.    The "Transaction Journal" style is more like an accounting journal, in which all splits are shown for all transactions.
+    </para>
+     <para>
+All styles permit you to view your data in either single-line or double-line format.  In the "Register|Style" menu option, check the box next to "Double Line," and you will see your transaction line expand to two register lines.
+    </para>
+   <sect2 id="openbalance2">
+    <title>***4.3 Entering Opening Balances (Discussion, How-To)</title>
+     <para>
+ (???This discussion will move to section 3.4 "Setting Up a New Account," since it sounds like a wizard is being developed for this as part of account setup.   More doc. needed on this when it is ready.)  **** 
+(?In the current version, opening balances are entered as a transfer from an equity account to the bank account.)
+     </para>
+   </sect2>
+   <sect1 id="entering1">
+    <title>4.3 Entering a Basic Transaction (How-To)</title>
+     <para>
+A basic transaction contains only two splits.  GnuCash provides a couple of ways to enter basic transactions.   You can enter them either directly in the register or from the Transfer dialog.
+     </para>
+   </sect1>
+   <sect2 id="using2">
+    <title>4.3.1 Using the Register</title>
+     <para>
+To enter a transaction in the register:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Open the register of one of the accounts affected by the transaction.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+On a blank line of the register, enter the date of the transaction.  You can either type the date in the date 	 field or click the down-arrow to select the date from a calendar:
+(?insert date.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Tab to the Num field, and enter a transaction number such as a check number (optional).
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Tab to the Description field and enter a description of the transaction.   This can be the payee or simply a 	note about the purpose of the transaction, such as "Pay electric bill."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Tab to the Transfer field and enter the other account affected by this transaction.  You can either type in 	the name or select it from a drop-down list of your accounts:
+(?insert transferacct.png) 
+
+
+	Press TAB to accept the account name. 
+	(?TIP: If the account you type is not found in your account list,  a dialog will ask if you want to create a 	new account.  If you click "Yes," GnuCash will bring up the account information window, where you can 	easily create the new account./TIP)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter the transaction amount as it affects the current account.  If you are transferring money from this 	account, enter the amount in the right-hand (credit) column.  If you are transferring money to this account, 	enter the amount in the left-hand (debit) column.  For example, if you are paying a bill from checking, then 	you are transferring money <emphasis> from </emphasis> checking.  So you would enter the amount in 	the right-hand checking account column, in this case labeled "Withdrawal."
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Click Enter to record the transaction.
+    </para>
+    </listitem>
+   </orderedlist>
+   </sect2>
+  <sect2 id="">
+   <title>4.3.2 Using the Transfer Dialog</title>
+     <para>
+You can also enter transactions from the Transfer dialog box.  From the main window, select 	Accounts|Transfer... from the menu.    You  should then get a dialog like this:
+(?insert transfer.png)
+     </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Fill in the amount, date, number and description of the transaction.  You also have the option to enter a 	memo that will appear on both splits of this transaction.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Select the source account from the "Transfer From" list of accounts.  To include income and expense 	accounts in this list, click the box next to "Show Income/Expense."
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Select the destination account from the "Transfer To" list of accounts.   To include income and expense 	accounts in this list, click the box next to "Show Income/Expense."
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Click OK to record the transaction.
+    </para>
+    </listitem>
+   </orderedlist>
+  </sect2>
+  <sect1 id="1">
+   <title>4.4 Entering a Multi-Split Transaction (How-To)</title>
+    <para>
+A transaction containing more than two splits is a <emphasis> multi-split transaction</emphasis>.  To enter a multi-split transaction:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Open the register of one of the accounts involved.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+Click on a blank line of the register.  If you are using the default Basic Ledger register style, click the Splits button on the tool bar to expand the transaction.  If you are in either Auto-Split Ledger or Transaction Journal register styles, the transaction is already expanded for you.   The blank transaction, regardless of register style, should look like this:
+(?insert splittxn.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter the date, transaction number, and description on the transaction line, just as you would for a basic transaction.  Tab out of the description field and note that the cursor automatically moves to the first split line below the transaction line:
+(?insert splittxn2.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Note the column headings have changed to relate to the individual splits of this transaction.  Your cursor should now be in the Action field.  This is an optional field where you can enter the type of split, or you can choose one from the pull-down list.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Tab to the memo field and enter a memo for this split.  As you can see from the account field, this split affects the current account.  GnuCash automatically fills in the current account name in the account field of the first split.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter the amount of this split in either the debit or credit column (in this case, Deposit or Withdrawal column).
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Tab to complete the split, and notice that a new split line appears:
+(?insert splittxn3.png)
+
+
+Enter the second split on this line.  GnuCash automatically keeps a running tab of any transaction remaining balance on the last split line of the transaction, and it marks unbalanced transactions with small gray diagonal marks in the upper left corner of the amount fields.  Choose the account from the pull-down list, and enter the amount of the second split.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Continue entering splits until you have a balanced transaction.  When the gray marks disappear, the transaction is balanced.  The total of debit splits should now equal the total of credit splits:
+(?insert splittxn4.png)
+
+
+Notice that GnuCash reorders the splits so that all of the debit splits are first, followed by the credit splits.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+When the transaction is balanced, press Enter to record it.
+    </para>
+    </listitem>
+   </orderedlist>
+  </sect1>
+  <sect1 id="shortcuts1">
+   <title>4.5 Using Entry Shortcuts (How-To)</title>
+    <para>
+GnuCash provides several time-saving shortcuts for entering your data.  When you type the first few characters of a description that you have used before, the QuickFill feature automatically fills in the rest of the transaction as you last entered it.   When you type in the first character(s) of an account name in either the Transfer field of the transaction line or the Account field of the split line, QuickFill will automatically complete the name from your account list.  It also helps you with entering subaccounts in these fields: simply type the first character(s) of the parent account name followed by a colon and the first character(s) of the subaccount name.  For example, to enter "Assets:Checking," you might type "A:C" and let GnuCash fill in the rest.
+    </para>
+    <para>
+Register keyboard shortcuts also save you time, and GnuCash provides several of them.  In the date field, you can type:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
++ or = to increment the date and - or _ to decrement the date
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+] or } to increment the month and [ or { to decrement the month
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+M or m to enter the first date of the month
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+H or h to enter the last date of the month
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Y or y to enter the first date of the year
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+R or r to enter the last date of the year
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+T or t to enter today's date
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+In the Num field of the transaction line, you can type "+" to increment the transaction number from the last one you typed in.  Typing "-" will decrement the number.  This will also work in the Action field of the split line, if you choose to enter split numbers there.  The Action field also supports QuickFill---if you type the first character(s) of a common action (such as Deposit), GnuCash will fill in the rest.
+    </para>
+     <para>
+In any of the amount fields, you can use a built-in calculator.  Simply type in the first value, followed by +, -, *, or /, then type in the second value.  GnuCash will perform the calculation and return the resulting value to the amount field when you press the TAB key.
+    </para>
+     <para>
+Most of the menu items have keyboard shortcuts, and these are marked by underlined characters in the menu names.  Press Alt + [underlined character] to bring up the menu,  then select an option by typing its underlined character.  For example, typing Alt+T brings up the Transaction menu, then typing S will split the transaction.  A few of the menu options use Control key shortcuts instead, and these are listed next to the options.
+    </para>
+     <para>
+To move around the register, use these keys to save time:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+TAB to move to the next field, Shift+TAB to move to the previous field
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Home to move to the beginning of the field, End to move to the end of the field
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter or down arrow to move to the next transaction, up arrow to move to the previous transaction
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Page Up to move up one screen, Page Dn to move down one screen
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Shift+Page Up to go to the first transaction, Shift+PageDn to go to the last transaction
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+In the Reconcile window, which we will cover in the next section, you can use these keyboard shortcuts:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+TAB moves to the next box and Shift+TAB moves to the previous box
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Space bar  toggles the status between "reconciled" and "not reconciled"
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+Up and down arrows navigate through the entries within the current box
+    </para>
+    </listitem>
+   </itemizedlist>
+  </sect1>
+  <sect1 id="reconcile1">
+   <title>4.6 Reconciling Transactions (How-To)</title>
+    <para>
+Reconciling your account is a necessary process of making sure your records match up with the bank's record of your transactions.   When you do it by hand, it can be a tedious process, but it is important to reconcile your account regularly so that you can catch any errors that either you or the bank may have made. 
+    </para>
+    <para>
+Fortunately, GnuCash offers an easy way to reconcile your accounts with your bank statements.  If you have used other personal finance software, you will find this process very similar to the other programs.      The most common accounts to reconcile are the bank and credit card accounts, but you can use this reconcile process for any of your accounts:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+Open the register of the account you wish to reconcile.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Select Account|Reconcile from the menu.  A dialog box like this will appear:
+(?insert reconcile.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Enter the statement date by typing it in or selecting it from the calendar by clicking on the down arrow.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+GnuCash automatically fills in the starting balance for you.   From your bank statement, enter the ending balance for the period.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Click OK to proceed to the Reconcile window:
+(?insert reconcile2.png)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Compare the entries with transactions listed on your statement.  Click on each entry that matches your statement, and notice that GnuCash inserts a "y" in the R (Reconciled) column.  This means that the entry has been reconciled, and the entry amount is automatically added to the Reconciled Balance total in the box below.  It is also a good idea to check off these transactions with a pen or pencil on your statement as you go.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+If you need to edit an entry,  double-click on the entry in the Reconcile window.  GnuCash will automatically jump to the transaction line of this entry in the current account, and you can edit it from there.   Click on the Reconcile window to return to the reconcile process.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Continue selecting matching entries until the Difference amount in the box on the lower right goes to 0.  When this happens, your account is reconciled with the statement.  Click the Finish button to complete the reconcile process.
+    </para>
+    </listitem>
+   </orderedlist>
+    <para>
+(?Sidebar)
+If you have trouble getting your account to reconcile with the statement,  here are a few things to check:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+Are there transactions that appear on your statement but not in your GnuCash account?  In that case, you may have forgotten to enter the transaction.  Or in rare cases, the bank may have made a mistake and charged your account incorrectly.  If the missing transaction is an oversight on your part, simply enter the missing transaction in your GnuCash account and reconcile it to your statement.   If it is a bank error, contact the bank.  You can then decide whether to wait for a revised statement to complete the reconcile process,  or enter the incorrect transaction and reconcile it now.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Do all of the amounts in the reconciled entries match the amounts in the statement?   If not, either the statement amount or your entered amount is incorrect.  If you determine that the incorrect amount is in the GnuCash account, double-click the entry in the Reconcile window to edit the transaction.  If this is a bank error, contact the bank to resolve.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Is your starting balance correct?  If not, check to see if you completed the reconcile process on the last statement.   You can easily see this by looking at the account register.  All of the reconciled transactions will have "y" entered in the R column.
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+Is your ending balance correct?  If not, select Reconcile|Reconcile Information... from the menu and change the ending balance there.  (?/sidebar)
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+As you finish reconciling your accounts, you will probably find transactions that appear in your account but not on your statement.  These are usually outstanding transactions that have not yet cleared the bank, but you should check the dates on them.  If these transactions are still outstanding after a month, you may want to investigate why.  Did a check or deposit get lost in transit?  Or did the payee simply not cash the check?  In some cases, you may find that you entered duplicate transactions,  so you will want to delete the "extra" transactions.  The reconcile process will quickly point out these exceptions and allow you to easily make the necessary changes to keep your account up-to-date.
+    </para>
+  </sect1>
+ </chapter>
+</book>

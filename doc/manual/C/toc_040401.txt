@@ -1,0 +1,231 @@
+Copyright © Carol Champagne 2001
+This document is released under the terms of the Free Document License.
+
+GnuCash User Guide Outline
+
+PART ONE: GETTING STARTED
+
+Chapter 1 Overview of GnuCash
+
+1.1 Introduction to GnuCash (Discussion)
+1.2 About This Book (Discussion)
+1.3 Top Ten Reasons to Use GnuCash (Discussion)
+1.4 Installation (How-To)
+		
+
+Chapter 2  Basic Structure and Setup
+
+2.1 Data Entry Concepts (Discussion)
+	2.1.1 Files, Accounts and Transactions
+	2.1.2 Double Entry
+2.2 The GnuCash Interface (Discussion)
+	2.2.1 New User Setup
+	2.2.2 Tip of Day
+	2.2.3 Main Window
+	2.2.4 Register Window
+	2.2.5 Tool Bar Buttons
+	2.2.6 Menu Options
+	2.2.7 Menu Shortcuts
+2.3 Setting Preferences (Discussion)
+2.4 Getting Help (Discussion)
+	2.4.1 Manual
+	2.4.2 Web Access
+	2.4.3 Network Registration
+	2.4.4 Topic Search
+2.5 Creating, Saving and Opening Files (How-To)
+2.6 Importing QIF Files (How-To)
+2.7 Backing Up Data  (How-To)
+2.8 Putting It All Together (Examples of creating and saving a file, importing a qif, and changing a preference)
+
+Chapter 3  Organizing Your Accounts
+
+3.1 Accounts vs. Categories (Discussion)
+3.2 Types of GnuCash Accounts (Discussion)
+3.3 Setting Up a New Account (How-To)
+	3.3.1 General Info
+	3.3.2 Opening Balance
+3.4 Setting Up a Chart of Accounts (How-To)
+3.5 Changing Accounts (How-To)
+	3.5.1 Editing an Account
+	3.5.2 Deleting an Account
+3.6 Changing a Chart of Accounts
+	3.6.1 Moving From Subaccount to Parent Account
+	3.6.2 Moving From Parent Account to Subaccount
+	3.6.3 Moving To a Different Parent Account
+3.7 Opening Accounts and Subaccounts
+3.8 Scrubbing Accounts
+3.9 Putting It All Together (Examples of setting up a simple chart of accounts with cash, checking, savings, credit card, income and expense accounts)
+
+Chapter 4 Entering Transactions
+
+4.1 Overview of Registers (Discussion)
+4.2 Setting Register Options (Discussion)
+	4.2.1 Style
+	4.2.2 Sort Order
+	4.2.3 Date Range
+	4.2.4 Preferences
+4.3 Entering a Transaction (How-To)
+	4.3.1 Register
+	4.3.2 Transfer Dialog
+	4.3.3 General Ledger Tool
+4.4 Entering Multiple Splits (How-To)  
+4.5 Using Entry Shortcuts (How-To)
+	4.5.1 Autofill
+	4.5.2 Keyboard shortcuts
+4.6 Working with Existing Transactions (How-To)
+	4.6.1 Editing
+	4.6.2 Deleting
+	4.6.3 Copying
+	4.6.4 Jumping to Other Account
+	4.6.5 Finding
+4.7  Reconciling to a Statement (How-To)
+4.8  Recurring/Scheduled Transactions (How-To)
+4.9  Putting It All Together (Example of entering an opening balance in checking,  entering a paycheck with deductions, entering a second paycheck using QuickFill, and scheduling a recurring paycheck transaction)
+
+
+
+PART TWO: MANAGING YOUR RECORDS
+
+Chapter 5  Your Checkbook  and Wallet
+
+5.1 Setting up Accounts (Discussion)
+5.2 Entering Deposits(Discussion)
+	5.2.1 Net Pay (How-To)
+	5.2.2 Gross Pay(How-To)
+	5.2.3 Interest Income (How-To)
+	5.2.4 Other (Non-Income) Deposits (How-To)
+5.3 Entering Withdrawals (Discussion)
+	5.3.1 Check Payments (How-To)
+	5.3.2 ATM/Cash Withdrawals(How-To)
+	5.3.3 Service Charges (How-To)
+	5.3.4 Other Withdrawals (How-To)
+5.4 Printing Checks (How-To)
+5.5 Reconciling Bank and Cash Accounts (How-To)
+5.6 Adjusting the Balance (How-To)
+5.7 Putting It All Together (Examples)
+
+Chapter 6 Credit Cards  
+
+6.1 Setting Up Accounts (Discussion)
+6.2 Opening Credit Card Balance (How-To)
+6.3 Entering Charges(Discussion)
+	6.3.1 Purchases (How-To)
+	6.3.2 Finance/Late Charges (How-To)
+6.4 Entering Payments (Discussion)
+	6.4.1 Monthly Payments (How-To)
+	6.4.2 Refunds/Credits (How-To)
+6.5 Reconciling Credit Card Accounts (How-To)
+6.6 Adjusting the Balance (How-To)
+6.7 Putting It All Together (Examples)
+
+Chapter 7  Investments 
+7.1 Setting up Accounts (Discussion - brokerage, IRA, 401(K), stock options)
+	-Brokerage
+	-CD?s
+	-Treasury Bills
+	-Money Market
+	-Mutual Funds
+	-Stocks
+	-Bonds
+	-Retirements accounts
+7.2 Creating a Portfolio for Your Current Holdings (How-To)
+7.3 Buying New Investments (How-To)
+7.4 Selling Investments (How-To)
+7.5 Recording Dividends and Interest (How-To)
+7.6 Recording Stock Splits and Mergers (How-To)
+7.7 Recording Employee Stock Plans (Discussion)
+	7.7.1 Stock Purchase Plans (How-To)
+	7.7.2 Stock Options (How-To)
+7.8 Managing your Portfolio (Discussion)
+	7.8.1  Portfolio View
+	7.8.2 Updating Prices (How-To)
+	7.8.3 Measuring Capital Gains (Discussion)
+7.9 Reconciling with the Brokerage Statement (How-To)
+7.10 Putting It All Together (Examples)	 
+  
+Chapter 8 Assets and Loans 
+8.1 Setting up Accounts (Discussion of ways to handle appreciation, depreciation, principal and interest payments, gains)
+8.2 Buying a House with Related Mortgage (How-To)
+8.3 Buying a Vehicle with Related Loan (How-To)
+8.4 Entering a Payment Schedule
+	8.4.1 Monthly Payments (How-To)
+	8.4.2 Final Payment (How-To)
+8.5 Selling a House or Vehicle (How-To)
+8.6 Recording Changes in Value
+	8.6.1 Appreciation (How-To)
+	8.6.2 Depreciation (How-To) 
+	8.6.3 Capital Gains (How-To)
+8.7 Tracking Other Assets (How-To)
+8.8 Reconciling with the Loan Statements (How-To)
+8.9 Putting It All Together (Examples)
+
+Chapter 9  Multiple Currencies 
+
+9.1 Setting up Accounts (Discussion of ISO codes, setup of currency accounts)
+9.2 GnuCash Currency Support (Discussion of Euro support, exchange rates)
+9.3 Setting International Preferences (Discussion)
+9.4 Recording Currency Exchange (How-To)
+9.5 Recording Purchases in a Foreign Currency (How-To) 
+9.6 Tracking Currency Investments (How-To)
+9.7 Reconciling Statements in a Foreign Currency (How-To)
+9.8 Updating Exchange Rates (How-To)
+9.9 Putting It All Together (Examples)
+
+Chapter 10 Reports and Graphs
+
+10.1 Overview of Reports and Graphs (Discussion)
+10.2 Types of Reports and Graphs (Discussion)
+10.3 Creating Standard Reports and Graphs (How-To)
+10.4 Customizing (How-To) 
+10.5 Printing Reports and Graphs (How-To)
+10.6 Putting It All Together (Examples) 
+
+
+Chapter 11 Going Online
+
+11.1 Available Online Features (Discussion) 
+11.2 Using Online Help (How-To)
+11.3 Getting Online Software Updates (How-To)
+11.4 Getting Online Quotes and Exchange Rates (How-To)
+11.5 Importing Online Bank Statements (How-To)
+11.6 Putting It All Together (Examples)
+
+
+PART THREE:  ADVANCED TOPICS 
+
+Chapter 12  Planning for the Future 
+
+12.1 Preparing for Tax Time (Discussion)
+12.2 Creating and Using Budgets (Discussion)
+12.3 Planning for Loans (Discussion)
+12.4 Planning to Buy a House (Discussion)
+
+Chapter 13 Business Needs
+13.1 Overview of Business vs. Personal Needs
+13.2 More on Double-Entry Accounting
+13.3 General Ledger
+13.4 Payables and Receivables
+13.5 Inventory
+13.6 Payroll
+
+APPENDICES
+
+Appendix A Guide for Former Users of Quicken and other QIF Applications
+
+Organization of QIF Files (Discussion)
+Common Duplication Issues (Discussion)
+Checking QIF Data (Discussion)
+
+Appendix B Frequently Asked Questions
+
+(Notes: How to treat taxes (payable or expense?), how to record a txn on different 
+dates (actual date and bank date), how to provide security for GC data using CFS, 
+etc.)
+
+
+Appendix C Troubleshooting Guide
+
+
+
+
+

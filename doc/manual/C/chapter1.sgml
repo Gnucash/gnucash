@@ -1,0 +1,343 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: October 11, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Originally written by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+
+<book id="index">
+
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+
+ <chapter id="chapter1">
+  <title>Chapter 1 Overview of GnuCash</title>
+
+  <sect1 id="intro1">
+   <title>1.1 Introduction to GnuCash (Discussion)</title>
+    <para>
+GnuCash is the personal finance software package made for you.   It is versatile enough to keep track of all your financial information, from the simple to the very complex.   It is one of the few financial software packages that supports global currencies, and it is the only Linux open-source program of its kind.  And best of all, it is easy to use!
+    </para>
+    <para>
+So what can GnuCash do for you?  It can keep track of your finances in as much detail as you prefer.   If you are just starting out, use GnuCash to keep track of your checkbook.    You may then decide to track cash purchases, as well as credit card purchases, so you can better determine where your money is being spent.   When you start investing, you can use GnuCash's investing features to help you monitor your portfolio.  Buying a vehicle or a home?  GnuCash can help you with planning the investment, as well as tracking loan payments.   And if your financial records span the globe, GnuCash can provide all the multiple-currency support you need.
+    </para>
+  </sect1>
+
+  <sect1 id="about1">
+   <title>1.2 About this Book (Discussion)</title>
+    <para>
+The goal of this manual is to save you time and to get you started in GnuCash as quickly as possible.  Each chapter follows a simple format:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+       "Concepts" discussion
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       "How-To" specific procedures
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       "Putting It All Together" examples
+    </para>
+    </listitem>
+   </orderedlist>
+    <para>
+Beginning users will find the "Concepts" sections helpful, since they provide a reference and ideas for the best ways to track your finances.   Experienced users  can flip to the "How-To" sections to quickly scan procedures.   These sections provide quick, to-the-point steps for accomplishing specific tasks.    The "Putting It All Together" sections present real-world examples in the form of a tutorial, beginning with creation of a file  in Chapter 2.  Each successive chapter will build on the previous chapter's tutorial.
+    </para>
+    <para>
+This manual is organized into 3 main parts:
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+       Getting Started
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Managing Your Records
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Advanced Topics
+    </para>
+    </listitem>
+   </orderedlist>
+    <para>
+The first part, Getting Started, contains 4 chapters that give you the basic information needed to use GnuCash:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+       Installing and running GnuCash (Ch. 1)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Creating and working with files (Ch. 2)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Creating and using accounts (Ch. 3)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Entering transactions (Ch. 4)
+    </para>
+    </listitem>
+   </itemizedlist>
+    <para>
+Use this part as a quick-start guide; it will cover everything you need to get up and running in GnuCash.
+    </para>
+    <para>
+The second part, Managing your Records, addresses common applications and features of GnuCash in greater detail.  You will see more specific cases, based on frequently asked questions about applying GnuCash to everyday situations.  Here are the applications and features covered in this part:
+    </para>
+    <para>
+      Applications
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+       Keeping track of checkbook and cash (Ch. 5)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Managing credit cards (Ch. 6)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Tracking investments (Ch. 7)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Monitoring assets and loans (Ch. 8)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Handling multiple currencies (Ch. 9)
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+       Features
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+       Reports and graphs (Ch. 10)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Online features (Ch. 11)
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+The last part, Advanced Topics, discusses more advanced uses for GnuCash.  Some of these uses are not yet supported by GnuCash, but these chapters discuss ways to work around features still under development.
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+       Planning for taxes, mortgages, and other needs (Ch. 12)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Using GnuCash to manage a business (Ch. 13)
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+This manual also has an appendix, which contains more information you might want to know:
+    </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+       Guide for former Quicken, MS Money or other QIF users
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+       Troubleshooting guide
+    </para>
+    </listitem>
+   </itemizedlist>
+     <para>
+Last but not least, a glossary and index help you quickly locate the topics you need.
+    </para>
+  </sect1>
+  <sect1 id="reasons1">
+   <title>1.3 Top Ten Reasons to Use GnuCash (Discussion)</title>
+    <para>
+We've already discussed some of the general advantages of using GnuCash.    Here are some specific features offered by GnuCash that may not exist in other programs.
+    </para>
+   <orderedlist>
+    <listitem>
+     <para>
+       Simple user interface
+     </para>
+     <para>
+GnuCash is a Linux financial software package that is as easy to use as a checkbook register.   It's even easier to use than a paper register, because features like auto-completion and other entry shortcuts do most of the entry work for you.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Easy import
+     </para>
+     <para>
+GnuCash allows you to import your data from your online bank statement or from another software package using QIF (Quicken Interchange Format) files.  An easy-to-use "wizard" walks you through loading your files, reviewing them for changes, and importing them into GnuCash.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Statement reconciliation
+     </para>
+     <para>
+Reconcile those monthly statements quickly by entering the statement ending balance and checking off transactions.  GnuCash helps you catch any discrepancies between your data and the statements you receive.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Investment tracking
+     </para>
+     <para>
+GnuCash offers a host of ways to track your investment portfolio.  Special investment accounts simplify your data entry, and online update tools allow you to update the prices of your holdings as the markets change.  Reports complete the picture, allowing you to analyze your investment decisions.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Multiple currency support
+     </para>
+     <para>
+GnuCash allows you to track multiple currencies.  If you have bank accounts, investments or other financial data in different currencies, you can monitor these in GnuCash.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Customized reports and graphs
+     </para>
+     <para>
+Reports and graphs can give you valuable information for filing taxes, budgeting, or simply figuring out where all the money goes.  GnuCash offers a variety of easy-to-use reports and graphs to help you analyze your financial position.  It also gives you the freedom to customize your own reports to suit your unique needs.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Double entry
+     </para>
+     <para>
+To provide complete records, GnuCash uses the double entry method of bookkeeping.  Double entry simply means that money doesn't just appear or disappear - an equal amount must come from one location and go to another location.   By entering both locations, you provide information that GnuCash can then use to give you detailed reports of your data.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Sources of help
+     </para>
+     <para>
+A Tip of the Day dialog gives helpful tips to new users about GnuCash features.  Within the program, a searchable Help menu guides you to the information you need or connects you to the GnuCash web page for further assistance.  GnuCash also has  strong developer and user communities, and it is easy to get help from these communities through mailing lists.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Shortcuts
+     </para>
+     <para>
+GnuCash offers many shortcuts to help you enter your data.   When you type the first few characters of a common entry, it will automatically fill in the rest of the entry.  You can also use copy, paste and duplicate functions to save typing time.  Keyboard shortcuts let you quickly choose a menu option or to enter numerical data.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+       Open source
+     </para>
+     <para>
+GnuCash doesn't hide its methods from you.  If you wonder how GnuCash computed a number, you can easily find it out.  In addition, you can set preferences that tell GnuCash how much information to display to you.  There is no "secret code" used in GnuCash---it continues to be an open-source program.
+     </para>
+    </listitem>
+   </orderedlist>
+     <para>
+These are only a few of the advantages you'll discover when you start using GnuCash to track your financial information.  Now get ready to enjoy the benefits of GnuCash for yourself!
+     </para>
+  </sect1>
+  <sect1 id="install1">
+   <title>1.4 Installation (How-To)</title>
+    <para>
+      FIXME
+    </para>
+  </sect1>
+ </chapter>
+</book>
+
