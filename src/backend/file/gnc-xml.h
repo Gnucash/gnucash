@@ -40,10 +40,10 @@ sixtp* gnc_account_sixtp_parser_create(void);
 xmlNodePtr gnc_book_dom_tree_create(GNCBook *book);
 sixtp* gnc_book_sixtp_parser_create(void);
 
-xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *act);
+xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *com);
 sixtp* gnc_commodity_sixtp_parser_create(void);
 
-xmlNodePtr gnc_transaction_dom_tree_create(Transaction *com);
+xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
 sixtp* gnc_transaction_sixtp_parser_create(void);
 
 xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
