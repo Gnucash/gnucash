@@ -49,6 +49,7 @@ gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
 const char * gncOwnerGetName (GncOwner *owner);
+gnc_commodity * gncOwnerGetCommodity (GncOwner *owner);
 
 /* Get the GUID of the immediate owner */
 const GUID * gncOwnerGetGUID (GncOwner *owner);

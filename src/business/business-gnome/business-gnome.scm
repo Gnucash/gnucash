@@ -62,10 +62,19 @@
 			    (gnc:job-search #f last-cust
 					  (gnc:get-current-book)))))
 
+    (define payment-item
+      (gnc:make-menu-item (N_ "Process Payment")
+			  (N_ "Process Payment")
+			  (list "Extensions" "Customers" "")
+			  (lambda ()
+			    (gnc:payment-new last-cust
+					     (gnc:get-current-book)))))
+
 
     (gnc:owner-init-customer last-cust #f)
 
     (gnc:add-extension customer-menu)
+    (gnc:add-extension payment-item)
     (gnc:add-extension find-job-item)
     (gnc:add-extension new-job-item)
     (gnc:add-extension find-invoice-item)
@@ -131,9 +140,18 @@
 					  (gnc:get-current-book)))))
 
 
+    (define payment-item
+      (gnc:make-menu-item (N_ "Process Payment")
+			  (N_ "Process Payment")
+			  (list "Extensions" "Vendors" "")
+			  (lambda ()
+			    (gnc:payment-new last-vendor
+					     (gnc:get-current-book)))))
+
     (gnc:owner-init-vendor last-vendor #f)
 
     (gnc:add-extension vendor-menu)
+    (gnc:add-extension payment-item)
     (gnc:add-extension find-job-item)
     (gnc:add-extension new-job-item)
     (gnc:add-extension find-invoice-item)

@@ -32,6 +32,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-invoice.c \
   dialog-job.c \
   dialog-order.c \
+  dialog-payment.c \
   dialog-vendor.c \
   gnc-business-utils.c
 
@@ -43,6 +44,7 @@ noinst_HEADERS = \
   dialog-invoice.h \
   dialog-job.h \
   dialog-order.h \
+  dialog-payment.h \
   dialog-vendor.h \
   gnc-business-utils.h
 
@@ -72,6 +74,7 @@ glade_DATA = \
   invoice.glade \
   job.glade \
   order.glade \
+  payment.glade \
   vendor.glade
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}

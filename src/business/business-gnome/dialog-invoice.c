@@ -270,7 +270,6 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   Account *acc = NULL;
   GList * acct_types = NULL;
   Timespec ddue, postdate;
-  gboolean reverse = FALSE;
 
   /* Make sure the invoice is ok */
   if (!gnc_invoice_window_verify_ok (iw))
@@ -297,17 +296,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   acct_label = _("Post to Account");
 
   /* Determine the type of account to post to */
-  switch (gncOwnerGetType (&(iw->owner))) {
-  case GNC_OWNER_CUSTOMER:
-    acct_types = g_list_prepend (NULL, (gpointer)RECEIVABLE);
-    reverse = TRUE;
-    break;
-  case GNC_OWNER_VENDOR:
-    acct_types = g_list_prepend (NULL, (gpointer)PAYABLE);
-    break;
-  default:
-    acct_types = g_list_prepend (NULL, (gpointer)NO_TYPE);
-  }
+  acct_types = gnc_business_account_types (&(iw->owner));
 
   /* Get the due date and posted account */
   timespecFromTime_t (&postdate, time(NULL));
@@ -328,7 +317,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */
-  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, reverse);
+  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo);
   gnc_resume_gui_refresh ();
 
   if (memo)
@@ -1279,6 +1268,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
     columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
 					INVOICE_OWNER, OWNER_PARENT,
 					OWNER_NAME, NULL);
+    columns = gnc_search_param_prepend (columns, _("Type"), NULL, type,
+					INVOICE_TYPE, NULL);
     columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
 					INVOICE_POSTED, NULL);
     columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,

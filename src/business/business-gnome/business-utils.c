@@ -9,6 +9,11 @@
 
 #include <gnome.h>
 
+#include "Group.h"
+#include "Account.h"
+#include "gnc-ui-util.h"
+#include "gnc-engine-util.h"
+
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
@@ -133,4 +138,79 @@ void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
 
   gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget),
 				   owner->owner.undefined);
+}
+
+
+void
+gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
+			       GList *acct_types)
+{
+  GList *list, *node, *names = NULL;
+  char *text;
+  gboolean found = FALSE;
+
+  g_return_if_fail (combo);
+  g_return_if_fail (book);
+  g_return_if_fail (acct_types);
+
+  /* Figure out if anything is set in the combo */
+  text = gtk_entry_get_text (GTK_ENTRY ((GTK_COMBO (combo))->entry));
+  if (text && strcmp (text, ""))
+    text = g_strdup (text);
+  else
+    text = NULL;
+
+  list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+
+  /* Create a list of names.  Figure out if we've got the 'saved' one */
+  for (node = list; node; node = node->next) {
+    Account *account = node->data;
+    char *name;
+
+    /* Only present accounts of the appropriate type */
+    if (g_list_index (acct_types, (gpointer)xaccAccountGetType (account))
+	== -1)
+      continue;
+
+    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    if (name != NULL) {
+      names = g_list_append (names, name);
+      if (!safe_strcmp (name, text))
+	found = TRUE;
+    }
+  }
+
+  g_list_free (list);
+
+  /* set the popdown strings and the default to last selected choice
+   * (or the first entry if none was previously selected */
+
+  if (names) {
+    gtk_combo_set_popdown_strings (GTK_COMBO (combo), names);
+    gtk_entry_set_text (GTK_ENTRY ((GTK_COMBO (combo))->entry),
+			found ? text : names->data);
+  }
+
+  for (node = names; node; node = node->next)
+    g_free (node->data);
+  g_list_free (names);
+
+  if (text)
+    g_free (text);
+}
+
+GList *
+gnc_business_account_types (GncOwner *owner)
+{
+  g_return_val_if_fail (owner, NULL);
+
+  switch (gncOwnerGetType (owner)) {
+  case GNC_OWNER_CUSTOMER:
+    return (g_list_prepend (NULL, (gpointer)RECEIVABLE));
+  case GNC_OWNER_VENDOR:
+    return (g_list_prepend (NULL, (gpointer)PAYABLE));
+    break;
+  default:
+    return (g_list_prepend (NULL, (gpointer)NO_TYPE));
+  }
 }

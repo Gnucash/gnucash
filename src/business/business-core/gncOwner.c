@@ -91,6 +91,22 @@ GncVendor * gncOwnerGetVendor (const GncOwner *owner)
   return owner->owner.vendor;
 }
 
+gnc_commodity * gncOwnerGetCommodity (GncOwner *owner)
+{
+  if (!owner) return NULL;
+  switch (owner->type) {
+  case GNC_OWNER_NONE:
+  case GNC_OWNER_UNDEFINED:
+    return NULL;
+  case GNC_OWNER_CUSTOMER:
+    return gncCustomerGetCommodity (owner->owner.customer);
+  case GNC_OWNER_VENDOR:
+    return gncVendorGetCommodity (owner->owner.vendor);
+  case GNC_OWNER_JOB:
+    return gncOwnerGetCommodity (gncJobGetOwner (owner->owner.job));
+  }
+}
+
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
 {
   if (!src || !dest) return;

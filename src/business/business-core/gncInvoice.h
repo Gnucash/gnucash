@@ -47,6 +47,7 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
 const char * gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
+const char * gncInvoiceGetType (GncInvoice *invoice); 
 gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
@@ -57,14 +58,13 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
 /* Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
- * the posted date.  Set reverse to TRUE to reverse the sense of
- * the splits (necessary for posting to A/R accounts from Income
- * splits).
+ * the supplied posted date, due date, and memo.  The Transaction
+ * description is set to the name of the company.
  */
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 Timespec *posted_date, Timespec *due_date,
-			 const char *description, gboolean reverse);
+			 const char *memo);
 
 
 /* Given a transaction, find and return the Invoice */
@@ -89,5 +89,6 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
+#define INVOICE_TYPE	"type"
 
 #endif /* GNC_INVOICE_H_ */

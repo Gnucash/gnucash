@@ -20,4 +20,12 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
 void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
 
+
+/* Return a list of account-types based on the owner type */
+GList * gnc_business_account_types (GncOwner *owner);
+
+/* Fill in a combo box with the appropriate list of accounts */
+void gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
+				    GList *acct_types);
+
 #endif /* GNC_BUSINESS_UTILS_H_ */

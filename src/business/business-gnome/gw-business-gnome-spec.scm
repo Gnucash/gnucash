@@ -37,6 +37,7 @@
       "#include <dialog-invoice.h>\n"
       "#include <dialog-job.h>\n"
       "#include <dialog-order.h>\n"
+      "#include <dialog-payment.h>\n"
       "#include <dialog-vendor.h>\n"
       )))
 
@@ -192,6 +193,18 @@
    "Dialog: Select a GncOrder.  Either start_selection or "
    "order_owner may be NULL.")
   
+  ;;
+  ;; dialog-payment.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:payment-new
+   '<gw:void>
+   "gnc_ui_payment_new"
+   '((<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: Enter a payment.  The owner may be NULL.")
+
   ;;
   ;; dialog-vendor.h
   ;;

@@ -314,6 +314,29 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice)
   return invoice->notes;
 }
 
+static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
+{
+  GncOwner *owner;
+  g_return_val_if_fail (invoice, GNC_OWNER_NONE);
+
+  owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+  return (gncOwnerGetType (owner));
+}
+
+const char * gncInvoiceGetType (GncInvoice *invoice)
+{
+  if (!invoice) return NULL;
+
+  switch (gncInvoiceGetOwnerType (invoice)) {
+  case GNC_OWNER_CUSTOMER:
+    return _("Invoice");
+  case GNC_OWNER_VENDOR:
+    return _("Bill");
+  default:
+    return NULL;
+  }
+}
+
 gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
@@ -390,12 +413,13 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
-				       const char * memo, gboolean reverse)
+				       const char * memo)
 {
   Transaction *txn;
   GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
+  gboolean reverse;
   const char *name;
   struct acct_val {
     Account *	acc;
@@ -403,6 +427,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   } *acc_val;
 
   if (!invoice || !acc) return NULL;
+
+  reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
@@ -489,7 +515,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* Set action/memo */
 
     xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, reverse ? _("Invoice") : _("Bill"));
+    xaccSplitSetAction (split, gncInvoiceGetType (invoice));
 			   
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
 			   invoice->common_commodity);
@@ -661,6 +687,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
+    { INVOICE_TYPE, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetType },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { NULL },

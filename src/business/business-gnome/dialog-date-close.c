@@ -8,7 +8,6 @@
 
 #include <gnome.h>
 
-#include "Group.h"
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-gui-query.h"
@@ -17,6 +16,7 @@
 #include "AccWindow.h"
 #include "gnc-date-edit.h"
 
+#include "business-utils.h"
 #include "dialog-date-close.h"
 
 typedef struct _dialog_date_close_window {
@@ -132,36 +132,7 @@ gnc_dialog_date_close_cb (GnomeDialog *dialog, gpointer data)
 static void
 fill_in_acct_info (DialogDateClose *ddc)
 {
-  GList *list, *node, *names = NULL;
-
-  list = xaccGroupGetSubAccounts (gnc_book_get_group (ddc->book));
-
-  for (node = list; node; node = node->next) {
-    Account *account = node->data;
-    char *name;
-
-    /* Only present accounts of the appropriate type */
-    if (g_list_index (ddc->acct_types,
-		      (gpointer)xaccAccountGetType (account)) == -1)
-      continue;
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    if (name != NULL)
-      names = g_list_append (names, name);
-  }
-
-  g_list_free (list);
-
-  /* set the popdown strings and the default to the first one */
-  if (names) {
-    gtk_combo_set_popdown_strings (GTK_COMBO (ddc->acct_combo), names);
-    gtk_entry_set_text (GTK_ENTRY ( (GTK_COMBO (ddc->acct_combo))->entry),
-			names->data);
-  }
-
-  for (node = names; node; node = node->next)
-    g_free (node->data);
-  g_list_free (names);
+  gnc_fill_account_select_combo (ddc->acct_combo, ddc->book, ddc->acct_types);
 }
 
 static void
