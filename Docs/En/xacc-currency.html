@@ -1,32 +1,55 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
 
+<html>
+  <head>
+    <title></title>
+  </head>
+
+  <body>
+    <h1> Double Entry Bookkeeping</h1>
+
+    <p>A Double Entry bookkeeping system stores both values, and
+    requires that all transactions balance:</p>
+
+    <p>Double entry states that <tt> value1+value2+value3+ ... =
+    0</tt> where each value is recorded in a different account.</p>
+
+    <p> A value is</p>
+
+    <ul>
+      <li>value=exch-rate*amount (for currency accounts) <i>
+      value=price*num-shares (for stocks/mutual-funds)</i></li>
+    </ul>
+
+    <p><i>Thus, buying a widget in Japan and using US Dollars to
+    pay for it would appear thus:</i></p>
+
+    <ul>
+      <li>
+        <i> <b>SpendAcct:</b> (an ordinary bank/cash acct valued in
+        USD)</i> 
 <pre>
-
-
-A double entry system stores both values (and makes teh transaciton balance):
-
-double entry states that value1+value2+value3+ ... = 0
-where each value is recorded in a different account.
-A value is value=exch-rate*amount (for currency accounts)
-           value=price*num-shares (for stocks/mutual-funds)
-
-Thus, buying a widget in japan and using dollars to pay for it would appears
-like so:
-
-SpendAcct: (an oridnary bank/cash acct valued in USD)
-----------
-Date      xfer from       memo                cost
+<i>Date      xfer from       memo                cost
 1/5/99    [YenAcct]       Buy widget          $1.00
-
-
-YenAcct: (a currency trading account valued in yen)
---------
-Date      xfer from       memo                purchase   rate
-1/5/99    [SpendAcct]     Buy widget          Y150       0.00667
-
-
-The engine links together all three of these values (1.0, 150, 0.00667)
-permanently and makes it imposssible to change one without changing another,
-so that the grand total is always zero.
-
-
+</i>
 </pre>
+      </li>
+
+      <li>
+        <i> <b>YenAcct</b>: (a currency trading account valued in
+        yen)</i> 
+<pre>
+<i>Date      xfer from       memo                purchase   rate
+1/5/99    [SpendAcct]     Buy widget          Y150       0.00667
+</i>
+</pre>
+      </li>
+    </ul>
+
+    <p><i>The engine links together all three of these values (1.0,
+    150, 0.00667) permanently and makes it imposssible to change
+    one without changing another, so that the grand total is always
+    zero.</i></p>
+  </body>
+</html>
+
