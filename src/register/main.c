@@ -30,8 +30,8 @@ typedef struct _BasicRegister {
    SingleCell  * dateCell;
    SingleCell  * descCell;
    SingleCell  * memoCell;
-   SingleCell  * creditCell;
-   SingleCell  * debitCell;
+   PriceCell   * creditCell;
+   PriceCell   * debitCell;
 
 } BasicRegister;
 
@@ -71,12 +71,12 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddCell (header, cell, 0, DESC_CELL_C);
    xaccSetSingleCellValue (cell, "Description");
 
-   cell = xaccMallocPriceCell();
+   cell = (SingleCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, CRED_CELL_C);
    xaccSetSingleCellValue (cell, "Credit");
    
-   cell = xaccMallocPriceCell();
+   cell = (SingleCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, DEBT_CELL_C);
    xaccSetSingleCellValue (cell, "Debit");
@@ -101,15 +101,13 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddCell (curs, cell, MEMO_CELL_R, MEMO_CELL_C);
    reg->memoCell = cell;
 
-   cell = xaccMallocPriceCell();
-   cell->width = 9;
-   xaccAddCell (curs, cell, CRED_CELL_R, CRED_CELL_C);
-   reg->creditCell = cell;
+   reg->creditCell = xaccMallocPriceCell();
+   reg->creditCell->cell.width = 9;
+   xaccAddCell (curs, &(reg->creditCell->cell), CRED_CELL_R, CRED_CELL_C);
    
-   cell = xaccMallocPriceCell();
-   cell->width = 9;
-   xaccAddCell (curs, cell, DEBT_CELL_R, DEBT_CELL_C);
-   reg->debitCell = cell;
+   reg->debitCell = xaccMallocPriceCell();
+   reg->debitCell->cell.width = 9;
+   xaccAddCell (curs, &(reg->debitCell->cell), DEBT_CELL_R, DEBT_CELL_C);
    
    table =  xaccMallocTable (0, 0);
    table -> header = header;

@@ -36,11 +36,11 @@ PriceMV (const char * old, const char *change, const char *new)
 
 /* ================================================ */
 
-SingleCell *
+PriceCell *
 xaccMallocPriceCell (void)
 {
-   SingleCell *cell;
-   cell = xaccMallocSingleCell();
+   PriceCell *cell;
+   cell = (PriceCell *) malloc (sizeof (PriceCell));
    xaccInitPriceCell (cell);
    return cell;
 }
@@ -48,12 +48,14 @@ xaccMallocPriceCell (void)
 /* ================================================ */
 
 void
-xaccInitPriceCell (SingleCell *cell)
+xaccInitPriceCell (PriceCell *cell)
 {
-  if (cell->value) free (cell->value);
-  cell ->value = strdup ("0.0");
+   xaccInitSingleCell( &(cell->cell));
+   cell->amount = 0.0;
 
-  cell ->modify_verify = PriceMV;
+   xaccSetSingleCellValue ( &(cell->cell), "0.0");
+
+   cell->cell.modify_verify = PriceMV;
 }
 
 /* --------------- end of file ---------------------- */
