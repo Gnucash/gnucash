@@ -111,11 +111,6 @@
   (string-db 'store 'net "Net")
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Menu name
-   "Stock Portfolio"
-   ;; Options Generator
-   #f
-   ;; Renderer
-   folio-renderer))
+   'version 1
+   'name "Stock Portfolio"
+   'renderer folio-renderer))

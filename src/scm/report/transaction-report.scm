@@ -547,11 +547,7 @@
   (string-db 'store 'net-inflow  "Net Inflow")
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Name
-   "Account Transactions"
-   ;; Options
-   trep-options-generator
-   ;; renderer
-   gnc:trep-renderer))
+   'version 1
+   'name "Account Transactions"
+   'options-generator trep-options-generator
+   'renderer gnc:trep-renderer))

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.X\n"
 "POT-Creation-Date: 2000-04-03 22:29-0700\n"
-"PO-Revision-Date: 2000-04-02 18:35+0100\n"
+"PO-Revision-Date: 2000-04-07 22:05+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -597,15 +597,13 @@ msgstr "Entrez la valeur totale des titres"
 
 # messages-i18n.c:129
 #: messages-i18n.c:86
-#, fuzzy
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "Entrez le compte à transférer, ou choisissez en un dans la liste."
+msgstr "Entrez le compte à transférer depuis, ou choisissez en un dans la liste."
 
 # messages-i18n.c:129
 #: messages-i18n.c:87
-#, fuzzy
 msgid "Enter the account to transfer to, or choose one from the list"
-msgstr "Entrez le compte à transférer, ou choisissez en un dans la liste."
+msgstr "Entrez le compte à transférer vers, ou choisissez en un dans la liste."
 
 # messages-i18n.c:132
 #: messages-i18n.c:88
@@ -1386,7 +1384,7 @@ msgstr "Nettoyer"
 
 #: messages-i18n.c:239
 msgid "Search Results"
-msgstr ""
+msgstr "Résultats de la recherche"
 
 # messages-i18n.c:330 po/guile_strings.txt:161
 #: messages-i18n.c:240 po/guile_strings.txt:164
@@ -2115,9 +2113,8 @@ msgstr "Calculer le bilan jusqu'à cette date"
 
 # messages-i18n.c:346
 #: po/guile_strings.txt:133
-#, fuzzy
 msgid "Transaction Report"
-msgstr "Transaction"
+msgstr "Rapport de transaction"
 
 # po/guile_strings.txt:131
 #: po/guile_strings.txt:134

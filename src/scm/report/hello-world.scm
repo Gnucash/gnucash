@@ -355,16 +355,16 @@
   (gnc:define-report
 
    ;; The version of this report.
-   1
+   'version 1
 
    ;; The name of this report. This will be used, among other things,
    ;; for making its menu item in the main menu. You need to use the
    ;; untranslated value here! It will be registered and translated
    ;; elsewhere.
-   "Hello, World"
+   'name "Hello, World"
 
    ;; The options generator function defined above.
-   options-generator
+   'options-generator options-generator
 
    ;; The rendering function defined above.
-   hello-world-renderer))
+   'renderer hello-world-renderer))

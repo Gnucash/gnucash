@@ -1,3 +1,9 @@
+2000-04-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Makefile.in: changed [ -e filename ] to [ -f filename ]
+
+	* src/scm/report.scm: Changed the report format to be a record.
+
 2000-04-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* configure.in: removed check for eperl

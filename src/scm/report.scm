@@ -13,8 +13,8 @@
 ;; to generate the reports menu whenever a new window opens and to
 ;; figure out what to do when a report needs to be generated.
 ;;
-;; The key is the string naming the report and the value is the
-;; rendering thunk.
+;; The key is the string naming the report and the value is the report
+;; structure.
 
 (define (gnc:run-report report-name options)
   ;; Return a string consisting of the contents of the report.
@@ -34,22 +34,22 @@
         (lambda (item) (display-report-list-item item port))
         lines))))
 
-  (define (call-report rendering-thunk options)
-    (let ((lines (rendering-thunk options)))
+  (define (call-report renderer options)
+    (let ((lines (renderer options)))
       (report-output->string lines)))
 
   (let ((report (hash-ref *gnc:_report-info_* report-name)))
     (if (not report)
         #f
-        (let ((rendering-thunk (gnc:report-rendering-thunk report)))
-          (call-report rendering-thunk options)))))
+        (let ((renderer (gnc:report-renderer report)))
+          (call-report renderer options)))))
 
 (define (gnc:report-menu-setup win)
 
   (define menu (gnc:make-menu "_Reports" (list "_Settings")))
   (define menu-namer (gnc:new-menu-namer))
-  (define (add-report-menu-item name report)
 
+  (define (add-report-menu-item name report)
     (let* ((report-string "Report")
            (title (string-append (gnc:_ report-string) ": " (gnc:_ name)))
            (item #f))
@@ -77,14 +77,17 @@
 
   (hash-for-each add-report-menu-item *gnc:_report-info_*))
 
-(define (gnc:define-report version name option-generator rendering-thunk)
+(define report-record-structure
+  (make-record-type "report-record-structure"
+                    ; The data items in a report record
+                    '(version name options-generator renderer)))
+
+(define (gnc:define-report . args) 
   ;; For now the version is ignored, but in the future it'll let us
   ;; change behaviors without breaking older reports.
   ;;
-  ;; FIXME: If we wanted to be uber-dynamic we might want to consider
-  ;; re-generating the menus whenever this function is called.
-  
-  ;; The rendering-thunk should be a function that generates the report
+  ;; The renderer should be a function that accepts one argument,
+  ;; a set of options, and generates the report.
   ;;
   ;; This code must return as its final value a collection of strings in
   ;; the form of a list of elements where each element (recursively) is
@@ -106,17 +109,38 @@
   ;; ("<html>" "</html>")
   ;; ("<html>" " some text " "</html>")
   ;; ("<html>" ("some" ("other" " text")) "</html>")
-  (let ((report (vector version name option-generator rendering-thunk)))
-    (hash-set! *gnc:_report-info_* name report)))
 
-(define (gnc:report-version report)
-  (vector-ref report 0))
-(define (gnc:report-name report)
-  (vector-ref report 1))
-(define (gnc:report-options-generator report)
-  (vector-ref report 2))
-(define (gnc:report-rendering-thunk report)
-  (vector-ref report 3))
+  (define (blank-report)
+    ;; Number of #f's == Number of data members
+    ((record-constructor report-record-structure) #f #f #f #f))
+
+  (define (args-to-defn in-report-rec args)
+    (let ((report-rec (if in-report-rec
+                          in-report-rec
+                          (blank-report))))
+     (if (null? args)
+         in-report-rec
+         (let ((id (car args))
+               (value (cadr args))
+               (remainder (cddr args)))
+           ((record-modifier report-record-structure id) report-rec value)
+           (args-to-defn report-rec remainder)))))
+
+  (let ((report-rec (args-to-defn #f args)))
+    (if (and report-rec
+             (gnc:report-name report-rec))
+        (hash-set! *gnc:_report-info_*
+                   (gnc:report-name report-rec) report-rec)
+        (gnc:warn "gnc:define-report: bad report"))))
+
+(define gnc:report-version
+  (record-accessor report-record-structure 'version))
+(define gnc:report-name
+  (record-accessor report-record-structure 'name))
+(define gnc:report-options-generator
+  (record-accessor report-record-structure 'options-generator))
+(define gnc:report-renderer
+  (record-accessor report-record-structure 'renderer))
 
 (define (gnc:report-new-options report)
   (let ((generator (gnc:report-options-generator report)))

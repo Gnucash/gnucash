@@ -146,24 +146,24 @@ install:
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
-	-[ -e gnucash.qt.static ] && \
+	-[ -f gnucash.qt.static ] && \
      ${MAKE} FLAVOR=qt.static GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.qt ] && ${MAKE} FLAVOR=qt GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.motif.static ] && \
+	-[ -f gnucash.qt ] && ${MAKE} FLAVOR=qt GNC_BINDIR=${GNC_BINDIR} install-bin
+	-[ -f gnucash.motif.static ] && \
      ${MAKE} FLAVOR=motif.static GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.motif ] && ${MAKE} FLAVOR=motif GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.gnome.static ] && \
+	-[ -f gnucash.motif ] && ${MAKE} FLAVOR=motif GNC_BINDIR=${GNC_BINDIR} install-bin
+	-[ -f gnucash.gnome.static ] && \
      ${MAKE} FLAVOR=gnome.static GNC_BINDIR=${GNC_BINDIR} install-bin
-	-[ -e gnucash.gnome ] && ${MAKE} FLAVOR=gnome GNC_BINDIR=${GNC_BINDIR} install-bin
+	-[ -f gnucash.gnome ] && ${MAKE} FLAVOR=gnome GNC_BINDIR=${GNC_BINDIR} install-bin
 
   # Make sure at least one succeeded
 	[ \
-    -e ${GNC_BINDIR}/gnucash.motif -o \
-    -e ${GNC_BINDIR}/gnucash.motif.static -o \
-    -e ${GNC_BINDIR}/gnucash.gnome -o \
-    -e ${GNC_BINDIR}/gnucash.gnome.static -o \
-    -e ${GNC_BINDIR}/gnucash.qt -o \
-    -e ${GNC_BINDIR}/gnucash.qt.static \
+    -f ${GNC_BINDIR}/gnucash.motif -o \
+    -f ${GNC_BINDIR}/gnucash.motif.static -o \
+    -f ${GNC_BINDIR}/gnucash.gnome -o \
+    -f ${GNC_BINDIR}/gnucash.gnome.static -o \
+    -f ${GNC_BINDIR}/gnucash.qt -o \
+    -f ${GNC_BINDIR}/gnucash.qt.static \
   ]
 	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
 

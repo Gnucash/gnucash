@@ -854,8 +854,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	  * for the very, very first transaction. This also seems to be the case
 	  * for Quicken 5.0 (and others?).
 	  */
-	 if (opening_balance) {
-	   if (guess_name) {
+	 if (opening_balance && guess_name) {
 	     /* remove square brackets from name, remove carriage return ... */
 	     qifline = &qifline[1];
 	     if ('[' == qifline[0]) {
@@ -868,7 +867,6 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	     tmp = strchr (qifline, '\n');
 	     if (tmp) *tmp = 0x0;
 	     xaccAccountSetName (acc, qifline);
-	   }
 	 } else {
 	   /* locate the transfer account */
 	   xfer_acc = xaccGetXferQIFAccount (acc, qifline);

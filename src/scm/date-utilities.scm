@@ -17,7 +17,7 @@
 (define (gnc:date-get-month datevec)
   (+ (vector-ref datevec 4) 1))
 (define (gnc:date-get-week-day datevec)
-  (vector-ref datevec 6))
+  (+ (vector-ref datevec 6) 1))
 ;; jan 1 == 1
 (define (gnc:date-get-year-day datevec)
   (+ (vector-ref datevec 7) 1))

@@ -240,30 +240,23 @@
   (string-db 'store 'pnl-desc "This page shows your profits and losses.")
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Menu name
-   "Balance sheet"
-   ;; Options Generator 
-   balsht-options-generator
-   ;; Code to generate the report
-   (lambda (options)
-     (generate-balance-sheet-or-pnl (string-db 'lookup 'bal-title)
-                                    (string-db 'lookup 'bal-desc)
-                                    options
-                                    #t)))
+   'version 1
+   'name "Balance sheet"
+   'options-generator balsht-options-generator
+   'renderer (lambda (options)
+               (generate-balance-sheet-or-pnl
+                (string-db 'lookup 'bal-title)
+                (string-db 'lookup 'bal-desc)
+                options
+                #t)))
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Menu name
-   "Profit and Loss"
-   ;; Options
-   pnl-options-generator
-   ;; Code to generate the report
-   (lambda (options)
-     (generate-balance-sheet-or-pnl 
-      (string-db 'lookup 'pnl-title)
-      (string-db 'lookup 'pnl-desc)
-      options
-      #f))))
+   'version 1
+   'name "Profit and Loss"
+   'options-generator pnl-options-generator
+   'renderer (lambda (options)
+               (generate-balance-sheet-or-pnl 
+                (string-db 'lookup 'pnl-title)
+                (string-db 'lookup 'pnl-desc)
+                options
+                #f))))

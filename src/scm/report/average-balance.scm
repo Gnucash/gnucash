@@ -410,11 +410,7 @@
   (string-db 'store 'report-for-and "Report for %s and all subaccounts.")
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Name
-   "Account Balance Tracker"
-   ;; Options
-   runavg-options-generator
-   ;; renderer
-   average-balance-renderer))
+   'version 1
+   'name "Account Balance Tracker"
+   'options-generator runavg-options-generator
+   'renderer average-balance-renderer))

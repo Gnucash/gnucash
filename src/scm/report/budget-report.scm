@@ -902,76 +902,79 @@
    (make-report-spec
     "Status" (budget-delta-html-proc) 'gnc:report-first budget-report-get-delta)))
 
-(gnc:define-report
- ;; version
- 1
- ;; Name
- "Budget"
- ;; Options
- budget-report-options-generator
- ;; renderer
- (lambda (options)
-   (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
-	  (enddate (gnc:lookup-option options "Report Options" "To"))
-	  (begin-date-secs (car (gnc:timepair-canonical-day-time 
-				 (gnc:option-value begindate))))
-	  (end-date-secs (car (gnc:timepair-canonical-day-time
-			       (gnc:option-value enddate))))
- 	  (budget-hash (make-hash-table 313))
-	  (budget-list '())
- 	  (update-hash (for-each
- 			(lambda (entry)
-			  (set! budget-list (cons 
-					     (make-budget-line
-					      entry
-					      (make-empty-budget-report entry))
-					     budget-list))
-			  (for-each
-			   (lambda (account)
-			     (make-budget-hash-entry
-			      budget-hash account
-			      (make-budget-line entry (budget-line-get-report (car budget-list)))))
-			   (budget-entry-get-accounts entry)))
- 			(cdr gnc:budget-entries))))
+(define (gnc:budget-renderer options)
+  (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
+         (enddate (gnc:lookup-option options "Report Options" "To"))
+         (begin-date-secs (car (gnc:timepair-canonical-day-time 
+                                (gnc:option-value begindate))))
+         (end-date-secs (car (gnc:timepair-canonical-day-time
+                              (gnc:option-value enddate))))
+         (budget-hash (make-hash-table 313))
+         (budget-list '())
+         (update-hash (for-each
+                       (lambda (entry)
+                         (set! budget-list (cons 
+                                            (make-budget-line
+                                             entry
+                                             (make-empty-budget-report entry))
+                                            budget-list))
+                         (for-each
+                          (lambda (account)
+                            (make-budget-hash-entry
+                             budget-hash account
+                             (make-budget-line entry
+                                               (budget-line-get-report
+                                                (car budget-list)))))
+                          (budget-entry-get-accounts entry)))
+                       (cdr gnc:budget-entries))))
 
      
-     (set! budget-list (cons (make-budget-line (car gnc:budget-entries)
-					       (make-empty-budget-report 
-						(car gnc:budget-entries)))
-			     budget-list))
+    (set! budget-list (cons (make-budget-line (car gnc:budget-entries)
+                                              (make-empty-budget-report 
+                                               (car gnc:budget-entries)))
+                            budget-list))
 
-     (budget-calculate-actual! budget-hash (car budget-list) begin-date-secs end-date-secs)
+    (budget-calculate-actual! budget-hash
+                              (car budget-list) begin-date-secs end-date-secs)
        
-     (for-each 
-      (lambda (line)
-	(begin
-	  (budget-calculate-nominal! line begin-date-secs end-date-secs)
-	  (budget-calculate-expected! line begin-date-secs end-date-secs)
-	  (budget-calculate-delta! line)))
-      budget-list)
+    (for-each 
+     (lambda (line)
+       (begin
+         (budget-calculate-nominal! line begin-date-secs end-date-secs)
+         (budget-calculate-expected! line begin-date-secs end-date-secs)
+         (budget-calculate-delta! line)))
+     budget-list)
      
-     (let ((report-specs 
-	    (case (gnc:option-value
-		   (gnc:lookup-option options "Report Options" "View"))
-	      ((full) gnc:budget-full-report-specs)
-	      ((balancing) gnc:budget-balance-report-specs)
-	      ((status) gnc:budget-status-report-specs)
-	      (else (gnc:debug (list "Invalid view option" 
-				     (gnc:option-value
-				      (gnc:lookup-option options "Report Options" "View"))))))))
-       (list
-	(html-start-document)
-	"<p>This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.</p>"
-	(html-start-table)
-	(html-table-row-manual
-	 ;;(map-in-order
-	 (map
-	  (lambda (spec) 
-	    (html-cell-header 
-	     (report-spec-get-header spec)))
-	  report-specs))
-	;;(map-in-order
-	(budget-html budget-list report-specs)
-	(budget-totals-html (cdr budget-list) report-specs)
-	(html-end-table)
-	(html-end-document))))))
+    (let ((report-specs 
+           (case (gnc:option-value
+                  (gnc:lookup-option options "Report Options" "View"))
+             ((full) gnc:budget-full-report-specs)
+             ((balancing) gnc:budget-balance-report-specs)
+             ((status) gnc:budget-status-report-specs)
+             (else (gnc:debug (list "Invalid view option" 
+                                    (gnc:option-value
+                                     (gnc:lookup-option options
+                                                        "Report Options"
+                                                        "View"))))))))
+      (list
+       (html-start-document)
+       "<p>This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.</p>"
+       (html-start-table)
+       (html-table-row-manual
+        ;;(map-in-order
+        (map
+         (lambda (spec) 
+           (html-cell-header 
+            (report-spec-get-header spec)))
+         report-specs))
+       ;;(map-in-order
+       (budget-html budget-list report-specs)
+       (budget-totals-html (cdr budget-list) report-specs)
+       (html-end-table)
+       (html-end-document)))))
+
+(gnc:define-report
+ 'version 1
+ 'name "Budget"
+ 'options-generator budget-report-options-generator
+ 'renderer gnc:budget-renderer)
