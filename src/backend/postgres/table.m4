@@ -64,6 +64,7 @@ define(`modity', `gncCommodity, Commodity, gnc_commodity, c,
        mnemonic,     , char *, gnc_commodity_get_mnemonic(ptr),
        code,         , char *, gnc_commodity_get_exchange_code(ptr),
        fraction,     , int32,  gnc_commodity_get_fraction(ptr),
+       bookGUID,     , GUID *, gnc_book_get_guid(gnc_commodity_get_book(ptr)),
        commodity, KEY, char *, gnc_commodity_get_unique_name(ptr),
        ')
        
@@ -77,6 +78,7 @@ define(`price', `gncPrice, Price, GNCPrice, p,
        valueNum,     , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
        version,      , int32,    gnc_price_get_version(ptr),
+       bookGUID,     , GUID *,   gnc_book_get_guid(gnc_price_get_book(ptr)),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
        ')
        

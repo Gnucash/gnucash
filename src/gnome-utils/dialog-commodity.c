@@ -641,7 +641,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     }
 
     if (!w->edit_commodity) {
-      c = gnc_commodity_new(fullname, namespace, mnemonic, code, fraction);
+      c = gnc_commodity_new(fullname, namespace, mnemonic, code, fraction, gnc_get_current_book());
     }
     else {
       c = w->edit_commodity;
