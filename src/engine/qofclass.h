@@ -56,14 +56,19 @@
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
 
+typedef struct _QofParam QofParam;
+
 /** The QofAccessFunc defines an arbitrary function pointer
  *  for access functions.  This is needed because C doesn't have
  *  templates, so we just cast a lot.  Real functions must be of
  *  the form:
  *
  * param_type getter_func (object_type *self);
+ *
+ * XXX document the additional two args, and how/why they are 
+ * optional.
  */
-typedef gpointer (*QofAccessFunc)(gpointer);
+typedef gpointer (*QofAccessFunc)(gpointer object, QofParam *param);
 
 /** The QofSetterFunc defines an function pointer for parameter
  *  setters. Real functions must be of the form:
@@ -82,13 +87,13 @@ typedef void (*QofSetterFunc) (gpointer, gpointer);
  *
  * Either the getter or the setter may be NULL.
  */
-typedef struct _QofParam 
+struct _QofParam 
 {
   const char       * param_name;
   QofType            param_type;
   QofAccessFunc      param_getfcn;
   QofSetterFunc      param_setfcn;
-} QofParam;
+};
 
 /** This function is the default sort function for a particular object type */
 typedef int (*QofSortFunc)(gpointer, gpointer);
