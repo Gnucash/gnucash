@@ -1,0 +1,4 @@
+#!/bin/sh
+XACC_HELP=${XACC_HELP:-/usr/doc/xacc/html}
+export XACC_HELP
+exec xacc.bin $@

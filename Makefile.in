@@ -71,7 +71,8 @@ distclean: clean
 
 install: $(TARGET)
 	@mkdir -p $(PREFIX)/bin
-	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET).bin
+	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
+	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
 	@mkdir -p $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/* $(PREFIX)/$(DOCDIR)
 	@echo "Remember to set XACC_HELP to" $(PREFIX)/$DOCDIR

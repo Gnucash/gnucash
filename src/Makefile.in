@@ -43,8 +43,8 @@ CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
 LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@/.
-TARGET   = ../xacc
-STATIC   = ../xacc-static
+TARGET   = ../xacc.bin
+STATIC   = ../xacc-static.bin
 
 # LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
