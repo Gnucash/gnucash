@@ -27,7 +27,11 @@
 #include "Group.h"
 #include "LedgerUtils.h"
 #include "MultiLedger.h"
+
+#ifndef KDE
 #include "RecnWindow.h"
+#endif
+
 #include "util.h"
 
    
