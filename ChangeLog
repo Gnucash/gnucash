@@ -1,3 +1,7 @@
+2003-05-26  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Change stable version to 1.8.4 
+
 2003-05-26  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-settings.c: Fix pref page define to the proper page, should fix the problem of all prefs being ignored.  Also make strings in the lookup code translatable so that the matching won't be lost when changing language.
