@@ -309,10 +309,6 @@ guid_init(void)
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);
-
-    getdomainname(string, sizeof(string));
-    md5_process_bytes(string, sizeof(string), &guid_context);
-    bytes += sizeof(string);
   }
 
   /* plain old random */
