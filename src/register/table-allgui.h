@@ -3,6 +3,12 @@
  * table-allgui.h
  *
  * FUNCTION:
+ * The table is the complete, displayed table. 
+ * It consists of a header, followed by a simple 
+ * list of repeated entries.
+ *
+ * It provides the mechanism to handle tab-trversing.
+ *
  * Implements the gui-independent parts of the table infrastructure.
  *
  * HISTORY:
@@ -28,12 +34,6 @@
 #ifndef __XACC_TABLE_ALLGUI_H__
 #define __XACC_TABLE_ALLGUI_H__
 
-/* hack alert -- move a portion of the gui-independent
- * table structure definition, currentlu in table-motif.h, 
- * to here.  But C lacks the inheritance of C++, so this
- * is ugly. 
- */
-
 #ifdef MOTIF
 #include "table-motif.h"
 #endif 
@@ -42,6 +42,113 @@
 #include "table-gtk.h"
 #endif 
 
+#include "basiccell.h"
+#include "cellblock.h"
+
+/* the Locator structure is used provide a mapping from
+ * the physical array of cells to the logical array of 
+ * virtual cell blocks.
+ *
+ * There is one instance of Locator for each physical cell.
+ * The virt_row and virt_col members identify the corresponding
+ * cellblock/virtual cell that this physical cell is a member of.
+ * The two phys_offsets provide the location of the physical cell
+ * as an offset from the cell block origin.  That is, the offsets
+ * should never be less than zero, or greater than the size of
+ * the cell block.
+ */
+struct _Locator {
+  short phys_row_offset;
+  short phys_col_offset;
+  short virt_row;
+  short virt_col;
+};
+
+typedef struct _Locator Locator;
+
+/* The number of "physical" rows/cols is the number
+ * of displayed one-line gui rows/cols in the table.
+ * The number of physical rows can differ from the 
+ * number of "virtual" rows because each virtual row 
+ * consist of one or more physical rows.
+ *
+ * Given the location of a physical row & col, the corresponding 
+ * virtual row & col can be found by looking it up in the 
+ * "locators" member.  The locator will provide the matching 
+ * virtual row and column.  
+ *
+ * Given the location of the virtual row and column, the
+ * corresponding GUI handler, and any associated user data can 
+ * be directly accessed.
+ */
+
+struct _Table {
+
+  int num_phys_rows;
+  int num_phys_cols;
+  int num_virt_rows;
+  int num_virt_cols;
+
+  /* the current cursor row/col is the virt row/col */
+  CellBlock *current_cursor;
+  int current_cursor_phys_row;
+  int current_cursor_phys_col;
+  int current_cursor_virt_row;
+  int current_cursor_virt_col;
+
+  /* callback that is called when the cursor is moved */
+  /* hack alert -- this should be a callback list, actually */
+  void (*move_cursor) (Table *, void *client_data);
+  void * client_data;
+
+  /* string values for each cell, 
+   * of dimension num_phys_rows * num_phys_cols */
+  char ***entries;
+
+  /* handler locators for each cell, 
+   * of dimension num_phys_rows * num_phys_cols */
+  Locator ***locators;
+
+  /* user hooks, of dimension num_virt_rows * num_virt_cols */
+  void ***user_data;
+
+  /* cell blocks, of dimension num_virt_rows * num_virt_cols */
+  CellBlock ***handlers;
+
+  /* private data, caches, etc. */
+  /* This is black-box stuff that no user of this class 
+   * should ever want to access */
+
+  /* This class implements tab-key and arrow key 
+   * traversal through the cells of the table.  
+   * To perform this traversal, the location
+   * of the "previous" cell having input focus 
+   * is required.
+   */
+  int prev_phys_traverse_row;
+  int prev_phys_traverse_col;
+   
+  /* Since we are using C not C++, but we need inheritance, 
+   * cock it up with a #defined thingy that the "derived class" 
+   * can specify.
+   */
+  TABLE_PRIVATE_DATA;
+
+};
+
+
+Table     * xaccMallocTable (void);
+void        xaccInitTable (Table *);
+void        xaccDestroyTable (Table *);
+
+
+/* The xaccSetTableSize() method will resize the table to the 
+ * indicated dimensions.  This method calls the gui-independent 
+ * xaccTableResize() routine, and then does some motif-specific 
+ * cleanup.
+ */
+void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
+                                             int virt_rows, int virt_cols);
 /* free the gui-independent parts of the table structure. */
 void  xaccFreeTableEntries (Table *);
 
@@ -66,7 +173,7 @@ void        xaccMoveCursorGUI (Table *, int phys_row, int phys_col);
 /* copy text in the cursor cells to the table */
 void        xaccCommitCursor (Table *);
 
-/* hackl alert --
+/* hack alert --
  * for all practical purposes, RefreshHeader is identical
  * tp CommitCursor(), except that it acts on cellblock 0,0.
  * it should probably be made obsolete.

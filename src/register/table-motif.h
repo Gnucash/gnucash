@@ -34,115 +34,39 @@
 #define __XACC_TABLE_MOTIF_H__
 
 #include <Xm/Xm.h>
-#include "basiccell.h"
-#include "cellblock.h"
 
-/* the Locator structure is used provide a mapping from
- * the physical array of cells to the logical array of 
- * virtual cell blocks.
+/* We use C not C++ in this project, but we none-the-less need 
+ * the general mechanism of inheritance.  The three #defines
+ * below implement that.
  *
- * There is one instance of Locator for each physical cell.
- * The virt_row and virt_col members identify the corresponding
- * cellblock/virtual cell that this physical cell is a member of.
- * The two phys_offsets provide the location of the physical cell
- * as an offset from the cell block origin.  That is, the offsets
- * should never be less than zero, or greater than the size of
- * the cell block.
+ * the TABLE_PRIVATE_DATA declaration should be thought of as a
+ * "derived class" of which Table is the base class.  This
+ * define is included as a part of the definition of the Table
+ * structure in table-allgui.h
+ *
+ * The TABLE_PRIVATE_DATA_INIT and DESTROY are the constructors
+ * and destructors, respectively, for this derived class.
+ * These are included in the xaccTableInit() and the xaccTableDestroy()
+ * routines in the file table-allgui.c, where they are called, 
+ * respectively, last, and first, just as "real" constructors &
+ * destructors would be
  */
-struct _Locator {
-  short phys_row_offset;
-  short phys_col_offset;
-  short virt_row;
-  short virt_col;
-};
 
-typedef struct _Locator Locator;
+#define TABLE_PRIVATE_DATA					\
+  /* Motif specific private data */				\
+  Widget table_widget;          /* the XbaeMatrix */		\
+  Widget next_tab_group;        /* where to traverse in the end */ 
 
-/* The number of "physical" rows/cols is the number
- * of displayed one-line gui rows/cols in the table.
- * The number of physical rows can differ from the 
- * number of "virtual" rows because each virtual row 
- * consist of one or more physical rows.
- *
- * Given the location of a physical row & col, the corresponding 
- * virtual row & col can be found by looking it up in the 
- * "locators" member.  The locator will provide the matching 
- * virtual row and column.  
- *
- * Given the location of the virtual row and column, the
- * corresponding GUI handler, and any associated user data can 
- * be directly accessed.
- */
+
+#define TABLE_PRIVATE_DATA_INIT(table) {		\
+   table->table_widget = 0;				\
+   table->next_tab_group = 0;				\
+}
+
+/* hack alert -- shouldn't destroy get rid of the widget? */
+#define TABLE_PRIVATE_DATA_DESTROY(table) 
 
 typedef struct _Table Table;
-
-struct _Table {
-
-  int num_phys_rows;
-  int num_phys_cols;
-  int num_virt_rows;
-  int num_virt_cols;
-
-  /* the current cursor row/col is the virt row/col */
-  CellBlock *current_cursor;
-  int current_cursor_phys_row;
-  int current_cursor_phys_col;
-  int current_cursor_virt_row;
-  int current_cursor_virt_col;
-
-  /* callback that is called when the cursor is moved */
-  /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (Table *, void *client_data);
-  void * client_data;
-
-  /* string values for each cell, 
-   * of dimension num_phys_rows * num_phys_cols */
-  char ***entries;
-
-  /* handler locators for each cell, 
-   * of dimension num_phys_rows * num_phys_cols */
-  Locator ***locators;
-
-  /* user hooks, of dimension num_virt_rows * num_virt_cols */
-  void ***user_data;
-
-  /* cell blocks, of dimension num_virt_rows * num_virt_cols */
-  CellBlock ***handlers;
-
-  /* private data, caches, etc. */
-  /* This is black-box stuff that no user of this class 
-   * should ever want to access */
-
-  /* This class implements tab-key and arrow key 
-   * traversal through the cells of the table.  
-   * To perform this traversal, the location
-   * of the "previous" cell having input focus 
-   * is required.
-   */
-  int prev_phys_traverse_row;
-  int prev_phys_traverse_col;
-   
-  /* Motif-only date below, gui-independent data above */
-
-  /* protected data -- vital for the implementation, 
-   * but not something we want to generally expose */
-  Widget table_widget;          /* the XbaeMatrix */
-  Widget next_tab_group;        /* where to traverse in the end */
-
-};
-
-
-Table     * xaccMallocTable (void);
-void        xaccInitTable (Table *);
-void        xaccDestroyTable (Table *);
-
-/* The xaccSetTableSize() method will resize the table to the 
- * indicated dimensions.  This method calls the gui-independent 
- * xaccTableResize() routine, and then does some motif-specific 
- * cleanup.
- */
-void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
-                                             int virt_rows, int virt_cols);
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);

@@ -57,107 +57,13 @@
 
 /* ==================================================== */
 
-Table * 
-xaccMallocTable (void)
-{
-   Table *table;
-   table = (Table *) malloc (sizeof (Table));
-   xaccInitTable (table);
-   return table;
-}
-
-/* ==================================================== */
-
-void 
-xaccInitTable (Table * table)
-{
-   table->table_widget = NULL;
-   table->entry_frame = NULL;
-   table->entry_widget = NULL;
-
-   table->current_col = -1;  /* coords ignoring header lines */
-   table->current_row = -1;
-   table->prev_entry_text = NULL;
-   
-   table->next_tab_group = 0;
-
-   table->num_phys_rows = -1;
-   table->num_phys_cols = -1;
-   table->num_virt_rows = -1;
-   table->num_virt_cols = -1;
-
-   table->current_cursor = NULL;
-   table->current_cursor_virt_row = -1;
-   table->current_cursor_virt_col = -1;
-   table->current_cursor_phys_row = -1;
-   table->current_cursor_phys_col = -1;
-
-   table->move_cursor = NULL;
-   table->client_data = NULL;
-
-   table->entries = NULL;
-   table->locators = NULL;
-   table->user_data = NULL;
-   table->handlers = NULL;
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
-}
-
-/* ==================================================== */
-
-void 
-xaccDestroyTable (Table * table)
-{
-   /* free the gui-independent parts */
-   xaccFreeTableEntries (table);
-
-   /* Let GTK know we're finished with this */
-   if(table->table_widget) gtk_widget_unref(table->table_widget);
-   if(table->entry_frame) gtk_widget_unref(table->entry_frame);
-   if(table->entry_widget) gtk_widget_unref(table->entry_widget);
-   table->table_widget = NULL;
-   table->entry_frame = NULL;
-   table->entry_widget = NULL;
-
-   g_free(table->prev_entry_text); table->prev_entry_text = NULL;
-
-   /* intialize vars to null value so that any access is voided. */
-   xaccInitTable (table);
-   free (table);
-}
-
-/* ==================================================== */
-
-void 
-xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
-                                 int virt_rows, int virt_cols)
-{
-   xaccTableResize (table, phys_rows, phys_cols, virt_rows, virt_cols);
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
-
-   /* invalidate the current cursor position, if needed */
-   if ((table->current_cursor_virt_row >= table->num_virt_rows) ||
-       (table->current_cursor_virt_col >= table->num_virt_cols)) {
-      table->current_cursor_virt_row = -1;
-      table->current_cursor_virt_col = -1;
-      table->current_cursor_phys_row = -1;
-      table->current_cursor_phys_col = -1;
-      table->current_cursor = NULL;
-   }
-}
-
-/* ==================================================== */
-
 void
 xaccNextTabGroup (Table *table, GtkWidget * w)
 {
    table->next_tab_group = w;
 }
+
+/* ==================================================== */
 
 static int
 verify_cell_interaction_OK(Table *table, const int row, const int col)
@@ -300,6 +206,8 @@ cell_entered(Table *table, const int row, const int col)
    table->prev_phys_traverse_row = row;
    table->prev_phys_traverse_col = col;
 }
+
+/* ==================================================== */
 
 static void
 compute_string_single_change(const gchar *a, const gchar *b, gchar **result) {
@@ -573,6 +481,8 @@ traverseCB (GtkWidget * mw, gpointer cd, gpointer cb)
 
 #endif
 
+/* ==================================================== */
+
 static int counter;
 
 static void
@@ -598,6 +508,8 @@ table_edit_entry_cb(GtkEntry *entry, gpointer user_data) {
     printf("  cm: out %d\n", xxx);
   }
 }
+
+/* ==================================================== */
 
 static void
 table_select_row_cb(GtkCList *cl, gint row, gint column, GdkEventButton *e,
@@ -762,8 +674,8 @@ xaccCreateTable (Table *table, GtkWidget * parent)
     }
   }
   
-  /* if any of the cells have GUI specific components that need 
-   * initialization, initialize them now. 
+  /* if any of the cells have GUI specific components that 
+   * need initialization, initialize them now. 
    * The cell realize method, if present on a cell,
    * is how that cell can find out that now is the time to 
    * initialize that GUI.

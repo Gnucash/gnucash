@@ -51,87 +51,6 @@ static Boolean haveQuarks = False;
 
 /* ==================================================== */
 
-Table * 
-xaccMallocTable (void)
-{
-   Table *table;
-   table = (Table *) malloc (sizeof (Table));
-   xaccInitTable (table);
-   return table;
-}
-
-/* ==================================================== */
-
-void 
-xaccInitTable (Table * table)
-{
-   table->table_widget = 0;
-   table->next_tab_group = 0;
-
-   table->num_phys_rows = -1;
-   table->num_phys_cols = -1;
-   table->num_virt_rows = -1;
-   table->num_virt_cols = -1;
-
-   table->current_cursor = NULL;
-   table->current_cursor_virt_row = -1;
-   table->current_cursor_virt_col = -1;
-   table->current_cursor_phys_row = -1;
-   table->current_cursor_phys_col = -1;
-
-   table->move_cursor = NULL;
-   table->client_data = NULL;
-
-   table->entries = NULL;
-   table->locators = NULL;
-   table->user_data = NULL;
-   table->handlers = NULL;
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
-}
-
-/* ==================================================== */
-
-void 
-xaccDestroyTable (Table * table)
-{
-   /* free the gui-independent parts */
-   xaccFreeTableEntries (table);
-
-   /* hmmm what about the motif widget ??? */
-
-   /* intialize vars to null value so that any access is voided. */
-   xaccInitTable (table);
-   free (table);
-}
-
-/* ==================================================== */
-
-void 
-xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
-                                 int virt_rows, int virt_cols)
-{
-   xaccTableResize (table, phys_rows, phys_cols, virt_rows, virt_cols);
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_row = -1;
-   table->prev_phys_traverse_col = -1;
-
-   /* invalidate the current cursor position, if needed */
-   if ((table->current_cursor_virt_row >= table->num_virt_rows) ||
-       (table->current_cursor_virt_col >= table->num_virt_cols)) {
-      table->current_cursor_virt_row = -1;
-      table->current_cursor_virt_col = -1;
-      table->current_cursor_phys_row = -1;
-      table->current_cursor_phys_col = -1;
-      table->current_cursor = NULL;
-   }
-}
-
-/* ==================================================== */
-
 void
 xaccNextTabGroup (Table *table, Widget w)
 {
@@ -615,7 +534,9 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    table->table_widget = reg;
 
    /* if any of the cells have GUI specific components that need 
-    * initialization, initialize them now. */
+    * initialization, initialize them now. The realize() callback
+    * on the cursor cell is how we inform the cell handler that 
+    * now is the time to initialize it's GUI.  */
 
    curs = table->current_cursor;
    if (curs) {

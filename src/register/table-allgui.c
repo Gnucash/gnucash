@@ -25,12 +25,94 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "cellblock.h"
 #include "table-allgui.h"
 
+/* ==================================================== */
+
+Table * 
+xaccMallocTable (void)
+{
+   Table *table;
+   table = (Table *) malloc (sizeof (Table));
+   xaccInitTable (table);
+   return table;
+}
+
+/* ==================================================== */
+
+void 
+xaccInitTable (Table * table)
+{
+   table->num_phys_rows = -1;
+   table->num_phys_cols = -1;
+   table->num_virt_rows = -1;
+   table->num_virt_cols = -1;
+
+   table->current_cursor = NULL;
+   table->current_cursor_virt_row = -1;
+   table->current_cursor_virt_col = -1;
+   table->current_cursor_phys_row = -1;
+   table->current_cursor_phys_col = -1;
+
+   table->move_cursor = NULL;
+   table->client_data = NULL;
+
+   table->entries = NULL;
+   table->locators = NULL;
+   table->user_data = NULL;
+   table->handlers = NULL;
+
+   /* invalidate the "previous" traversed cell */
+   table->prev_phys_traverse_row = -1;
+   table->prev_phys_traverse_col = -1;
+
+   /* call the "derived" class constructor */
+   TABLE_PRIVATE_DATA_INIT (table);
+}
+
+/* ==================================================== */
+
+void 
+xaccDestroyTable (Table * table)
+{
+   /* call derived class destructor */
+   TABLE_PRIVATE_DATA_DESTROY (table);
+
+   /* free the gui-independent parts */
+   xaccFreeTableEntries (table);
+
+   /* intialize vars to null value so that any access is voided. */
+   xaccInitTable (table);
+   free (table);
+}
+
+/* ==================================================== */
+
+void 
+xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
+                                 int virt_rows, int virt_cols)
+{
+   xaccTableResize (table, phys_rows, phys_cols, virt_rows, virt_cols);
+
+   /* invalidate the "previous" traversed cell */
+   table->prev_phys_traverse_row = -1;
+   table->prev_phys_traverse_col = -1;
+
+   /* invalidate the current cursor position, if needed */
+   if ((table->current_cursor_virt_row >= table->num_virt_rows) ||
+       (table->current_cursor_virt_col >= table->num_virt_cols)) {
+      table->current_cursor_virt_row = -1;
+      table->current_cursor_virt_col = -1;
+      table->current_cursor_phys_row = -1;
+      table->current_cursor_phys_col = -1;
+      table->current_cursor = NULL;
+   }
+}
 
 /* ==================================================== */
 /* in C, we don't have templates. So cook up a $define that acts like a

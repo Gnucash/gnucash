@@ -42,18 +42,12 @@
 #define __XACC_REGISTER_H__
 
 #include "basiccell.h"
+#include "cellblock.h"
 #include "combocell.h"
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
-
-#ifdef MOTIF
-#include "table-motif.h"
-#endif
-
-#ifdef GNOME
-#include "table-gtk.h"
-#endif 
+#include "table-allgui.h"
 
 /* defined register types */
 /* "registers" are single-account display windows.
