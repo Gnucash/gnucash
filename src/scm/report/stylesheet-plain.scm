@@ -85,9 +85,8 @@
 
       (gnc:html-document-set-style! 
        ssdoc "body"
-       'tag '("body" "center")
        'attribute (list "bgcolor" bgcolor))
-
+      
       (if (and bgpixmap
                (not (string=? bgpixmap "")))
           (gnc:html-document-set-style!

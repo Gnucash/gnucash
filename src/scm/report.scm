@@ -113,7 +113,17 @@
   (gnc:add-extension asset-liability-menu)
 
   ;; push reports (new items added on top of menu)
-  (hash-for-each add-report-menu-item *gnc:_report-templates_*))
+  (hash-for-each add-report-menu-item *gnc:_report-templates_*)
+
+  ;; the Welcome to Gnucash-1.6 extravaganza 
+  (gnc:add-extension 
+   (gnc:make-menu-item 
+    ((menu-namer 'add-name) (_ "Welcome Extravaganza")) 
+    (_ "Welcome-to-gnucash screen")
+    (list "_File" "New _Report" "")
+    (lambda ()
+      (gnc:make-welcome-report)))))
+
 
 (define (gnc:save-report-options)
   (let ((port (open gnc:current-config-auto
@@ -498,7 +508,7 @@
      #f)))
 
 
-(define (gnc:report-render-html report)
+(define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
       ;; if there's clean cached text, return it 
@@ -514,32 +524,7 @@
                    (doc (renderer report))
                    (html #f))
               (gnc:html-document-set-style-sheet! doc stylesheet)
-              (set! html (gnc:html-document-render doc))
-              (gnc:report-set-ctext! report html)
-              (gnc:report-set-dirty?! report #f)              
-              html)
-            #f))))
-
-;; render the body of the report document (ignoring style sheet)
-(define (gnc:report-render-body report)
-  (if (and (not (gnc:report-dirty? report))
-           (gnc:report-ctext report))
-      ;; if there's clean cached text, return it 
-      (begin 
-        (gnc:report-ctext report))
-      
-      ;; otherwise, rerun the report 
-      (let ((template (hash-ref *gnc:_report-templates_* 
-                                (gnc:report-type report))))
-        (if template
-            (let* ((renderer (gnc:report-template-renderer template))
-                   (stylesheet (gnc:report-stylesheet report))
-                   (doc (renderer report))
-                   (html #f))
-              
-              (gnc:html-document-push-style 
-               doc (gnc:html-style-sheet-style stylesheet))
-              (set! html (gnc:html-document-render-body doc))
+              (set! html (gnc:html-document-render doc headers?))
               (gnc:report-set-ctext! report html)
               (gnc:report-set-dirty?! report #f)              
               html)
@@ -553,10 +538,11 @@
            (html #f))
        (if report
            (begin 
-             (set! html (gnc:report-render-html report))
+             (set! html (gnc:report-render-html report #t))
              (display "total time to run report: ")
              (display (gnc:time-elapsed start-time (gettimeofday)))
              (newline)
+;;             (display html) (newline)
              html)
            #f)))))
               

@@ -1,5 +1,5 @@
-/********************************************************************\
- * gnc-report-window.c                                              *
+/********************************************************************
+ * window-report.c                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
@@ -23,7 +23,7 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
-\********************************************************************/
+ ********************************************************************/
 
 #include "config.h"
 
@@ -56,7 +56,6 @@ struct _gnc_report_window {
   SCM          scm_options;
   SCM          scm_options_edit;
   SCM          name_change_callback_id;
-  GList        * open_editors;
 
   GNCOptionDB  * odb;     /* used to get callbacks from parameter edit */
 
@@ -693,6 +692,8 @@ gnc_report_window_destroy(gnc_report_window * win) {
 
   SCM  scm_wintype = gh_eval_str("<gnc:report-window*>");
   SCM  unshow_report = gh_eval_str("gnc:report-unregister-display");
+  SCM  disp_list; 
+  SCM  editor; 
 
   if(win->odb) {
     gnc_option_db_unregister_change_callback_id(win->odb, 
@@ -702,20 +703,20 @@ gnc_report_window_destroy(gnc_report_window * win) {
     win->odb = NULL;
   }
 
-  if(win->scm_report != SCM_BOOL_F) {
+  if(win->scm_report != SCM_BOOL_F) {    
     gh_call2(unshow_report, win->scm_report, 
              gw_wcp_assimilate_ptr(win, scm_wintype));
   }
 
   gnc_html_destroy(win->html);
-
+  
   win->container     = NULL;
   win->html          = NULL;
-
+  
   scm_unprotect_object(win->scm_options);
   scm_unprotect_object(win->scm_options_edit);
   scm_unprotect_object(win->scm_report);
-
+  
   g_free(win);
 }
 

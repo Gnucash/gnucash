@@ -1,3 +1,19 @@
+2001-04-19  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/top-level.c: add call to skeleton "welcome" report 
+	if user has not run 1.5/1.6 before
+
+	* src/scm/html-document.scm: changes to make sure styles are 
+	set for component reports in multicolumn view 
+
+	* src/scm/report.scm: clean up rendering with/without headers
+
+	* src/scm/report/stylesheet-plain.scm: get rid of <center> tag
+	on <body> 
+
+	* src/scm/report/welcome-to-gnucash.scm: new report and function
+	to set up welcome to gnucash report
+
 2001-04-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-edit.c (item_edit_draw_info): fix

@@ -109,11 +109,12 @@
     (do-list tree)
     retval))
 
-(define (gnc:html-document-render doc) 
-  (let ((stylesheet (gnc:html-document-style-sheet doc)))
+(define (gnc:html-document-render doc . rest) 
+  (let ((stylesheet (gnc:html-document-style-sheet doc))
+        (headers? (if (null? rest) #f (if (car rest) #t #f))))
     (if stylesheet 
         ;; if there's a style sheet, let it do the rendering 
-        (gnc:html-style-sheet-render stylesheet doc)
+        (gnc:html-style-sheet-render stylesheet doc headers?)
         
         ;; otherwise, do the trivial render. 
         (let* ((retval '())
@@ -124,52 +125,35 @@
           ;; push it 
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
 
-          (push "<html>\n")
-          (push "<head>\n")
-          (let ((title (gnc:html-document-title doc)))
-            (if title 
-                (push (list "</title>" title "<title>\n"))))
-          (push "</head>\n")
-          
-          ;; this lovely little number just makes sure that <body>
-          ;; attributes like bgcolor get included 
-          (push ((gnc:html-markup/no-end "body") doc))
+          (if (not (null? headers?))
+              (begin 
+                (push "<html>\n")
+                (push "<head>\n")
+                (let ((title (gnc:html-document-title doc)))
+                  (if title 
+                      (push (list "</title>" title "<title>\n"))))
+                (push "</head>\n")
+                
+                ;; this lovely little number just makes sure that <body>
+                ;; attributes like bgcolor get included 
+                (push ((gnc:html-markup/no-end "body") doc))))
           
           ;; now render the children
           (for-each-in-order 
            (lambda (child) 
              (push (gnc:html-object-render child doc)))
            (gnc:html-document-objects doc))
-          (push "</body>\n")
-          (push "</html>\n")
+
+          (if (not (null? headers?))
+              (begin 
+                (push "</body>\n")
+                (push "</html>\n")))
+          
           (gnc:html-document-pop-style doc)
           (gnc:html-style-table-uncompile (gnc:html-document-style doc))
 
           (apply string-append 
                  (gnc:html-document-tree-collapse retval))))))
-
-(define (gnc:html-document-render-body doc) 
-  ;; this is a q&d render with no HTML, HEAD, or BODY tags, ignoring
-  ;; the style sheet.  things *can* be pushed though.
-  (let* ((retval '())
-         (push (lambda (l) (set! retval (cons l retval)))))
-    ;; compile the doc style 
-    (gnc:html-style-table-compile (gnc:html-document-style doc)
-                                  (gnc:html-document-style-stack doc))
-    ;; push it 
-    (gnc:html-document-push-style doc (gnc:html-document-style doc))
-    
-    ;; now render the children
-    (for-each-in-order 
-     (lambda (child) 
-       (push (gnc:html-object-render child doc)))
-     (gnc:html-document-objects doc))
-    
-    (gnc:html-document-pop-style doc)
-    (gnc:html-style-table-uncompile (gnc:html-document-style doc))
-    
-    (apply string-append 
-           (gnc:html-document-tree-collapse retval))))
 
 
 (define (gnc:html-document-push-style doc style)

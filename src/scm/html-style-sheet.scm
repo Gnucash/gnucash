@@ -236,11 +236,13 @@
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:html-style-sheet-render sheet doc)
+(define (gnc:html-style-sheet-render sheet doc . rest)
   ;; render the document (returns an <html-document>)
   (let ((newdoc ((gnc:html-style-sheet-renderer sheet) 
                  (gnc:html-style-sheet-options sheet)
-                 doc)))
+                 doc))
+        (headers? (if (null? rest) #f (if (car rest) #t #f))))
+
     ;; push the style sheet's default styles 
     (gnc:html-document-push-style newdoc (gnc:html-style-sheet-style sheet))
     
@@ -261,7 +263,7 @@
     ;; render the ssdocument (using the trivial stylesheet).  since
     ;; the objects from 'doc' are now in newdoc, this renders the whole
     ;; package.
-    (gnc:html-document-render newdoc)))
+    (gnc:html-document-render newdoc headers?)))
 
 (define (gnc:get-html-style-sheets)
   (let* ((ss '()))

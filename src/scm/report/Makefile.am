@@ -21,7 +21,8 @@ gncscm_DATA = \
   transaction-report.scm \
   txf-export-help.scm \
   txf-export.scm \
-  view-column.scm
+  view-column.scm \
+  welcome-to-gnucash.scm
 
 EXTRA_DIST = \
   .cvsignore \

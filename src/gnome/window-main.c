@@ -355,7 +355,8 @@ gnc_main_window_configure_mdi_cb (gpointer data)
 
 /********************************************************************
  * gnc_main_window_create_child()
- * open an MDI child given a config string (URL).  This is used  
+ * open an MDI child given a config string (URL).  This is used at 
+ * MDI session restore time 
  ********************************************************************/
 
 GnomeMDIChild * 

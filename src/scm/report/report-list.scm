@@ -32,3 +32,6 @@
 
 ;; view templates 
 (gnc:depend "report/view-column.scm")
+
+;; welcome to gnucash
+(gnc:depend "report/welcome-to-gnucash.scm")

@@ -94,7 +94,7 @@
            ;; render the report body ... hopefully this will DTRT
            ;; and cache when it's ok to cache.
            (gnc:html-table-cell-append-objects! 
-            contents-cell (gnc:report-render-body subreport))
+            contents-cell (gnc:report-render-html subreport #f))
            
            ;; increment the alloc number for each occupied row
            (let loop ((row current-row-num))
@@ -102,7 +102,7 @@
                (if (not allocation) 
                    (set! allocation 0))
                (hash-set! column-allocs row (+ colspan allocation))
-               (if (< (- row current-row-num) rowspan)
+               (if (< (+ 1 (- row current-row-num)) rowspan)
                    (loop (+ 1 row)))))
            
            (gnc:html-table-cell-set-style!
@@ -131,7 +131,6 @@
            
            (set! current-row (append current-row (list toplevel-cell)))
            (set! current-width (+ current-width colspan))
-           
            (if (>= current-width table-width)
                (begin 
                  (gnc:html-table-append-row! column-tab current-row)

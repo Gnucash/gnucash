@@ -340,6 +340,7 @@ gnc_default_ui_start(void) {
                                 gnc_main_window_create_child) ||
        app->children == NULL) {
       gnc_main_window_open_accounts(FALSE);
+      gh_eval_str("(gnc:make-welcome-report)");
     }
     hasstarted = TRUE;
   }
