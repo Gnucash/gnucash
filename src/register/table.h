@@ -71,8 +71,10 @@ typedef struct _Table {
 } Table;
 
 
-Table     * xaccMallocTable (int tile_rows, int tile_cols);
-void        xaccInitTable (Table *, int tile_rows, int tile_cols);
+Table     * xaccMallocTable (void);
+void        xaccInitTable (Table *);
+
+void        xaccSetTableSize (Table * table, int tile_rows, int tile_cols);
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
@@ -93,7 +95,7 @@ void        xaccMoveCursor (Table *, int virt_row, int virt_col);
 void        xaccMoveCursorGUI (Table *, int virt_row, int virt_col);
 
 /* copy text in the cursor cells to the table */
-void        xaccCommitEdits (Table *);
+void        xaccCommitCursor (Table *);
 
 #endif __XACC_TABLE_H__
 /* ================== end of file ======================= */

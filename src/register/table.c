@@ -21,21 +21,18 @@ static Boolean haveQuarks = False;
 /* ==================================================== */
 
 Table * 
-xaccMallocTable (int tile_rows, int tile_cols)
+xaccMallocTable (void)
 {
    Table *table;
    table = (Table *) malloc (sizeof (Table));
-   table->header = NULL;
-   table->cursor = NULL;
-   table->entries = NULL;
-   xaccInitTable (table, tile_rows, tile_cols);
+   xaccInitTable (table);
    return table;
 }
 
 /* ==================================================== */
 
 void 
-xaccInitTable (Table * table, int tile_rows, int tile_cols)
+xaccInitTable (Table * table)
 {
    int num_header_rows;
    int num_phys_rows;
@@ -45,20 +42,40 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    table->table_widget = 0;
    table->next_tab_group = 0;
 
-   /* delete old entries */
-   num_phys_rows = table->num_phys_rows;
-   num_phys_cols = table->num_phys_cols;
-   if (table->entries) {
-      for (i=0; i<num_phys_rows; i++) {
-         if (table->entries[i]) {
-            for (j=0; j<num_phys_cols; j++) {
-               free (table->entries[i][j]);
-            }
-            free (table->entries[i]);
-         }
-      }
-      free (table->entries);
-   }
+   table->tile_height = 0;
+   table->tile_width = 0;
+   table->num_phys_rows = 0;
+   table->num_phys_cols = 0;
+   table->num_header_rows = 0;
+
+   table->num_rows = 0;
+   table->num_cols = 0;
+
+   table->current_cursor_row = -1;
+   table->current_cursor_col = -1;
+
+   table->header = NULL;
+   table->cursor = NULL;
+   table->entries = NULL;
+
+   /* invalidate the "previous" traversed cell */
+   table->prev_phys_traverse_row = -1;
+   table->prev_phys_traverse_col = -1;
+}
+
+/* ==================================================== */
+
+void 
+xaccSetTableSize (Table * table, int tile_rows, int tile_cols)
+{
+   int num_header_rows;
+   int num_phys_rows, num_phys_cols;
+   int old_phys_rows, old_phys_cols;
+   int i,j;
+
+   /* save old table size
+   old_phys_rows = table->num_phys_rows;
+   old_phys_cols = table->num_phys_cols;
 
    /* compute number of physical rows */
    num_header_rows = 0;
@@ -85,30 +102,105 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    table->num_rows = tile_rows;
    table->num_cols = tile_cols;
 
-   /* set the cursor location */
-   table->current_cursor_row = 0;
-   table->current_cursor_col = 0;
-
-   /* create an empty table */
-   if (0 == num_phys_rows) {
-      table->entries = NULL;
-      return;
-   }
-
-   table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
-   for (i=0; i<num_phys_rows; i++) {
-      table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
-      for (j=0; j<num_phys_cols; j++) {
-         /* the Xbae matrix hates null cell values, so lets
-          * accomodate it by letting empty cells have empty 
-          * strings */
-         table->entries[i][j] = strdup ("");
-      }
-   }
-
    /* invalidate the "previous" traversed cell */
    table->prev_phys_traverse_row = -1;
    table->prev_phys_traverse_col = -1;
+
+   /* realloc to get the new table size.  Note that the
+    * new table may be wider or slimmer, taller or shorter. */
+   if (old_phys_rows >= num_phys_rows) {
+      if (old_phys_cols >= num_phys_cols) {
+
+         /* if we are here, new table has fewer cols 
+          * simply truncate columns */
+         for (i=0; i<num_phys_rows; i++) {
+            for (j=num_phys_cols; j<old_phys_cols; j++) {
+               free (table->entries[i][j]);
+               table->entries[i][j] = NULL;
+            }
+         }
+      } else {
+
+         /* if we are here, the new table has more
+          * columns. Realloc the columns.  */
+         for (i=0; i<num_phys_rows; i++) {
+            char **old_row;
+
+            old_row = table->entries[i];
+            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
+            for (j=0; j<old_phys_cols; j++) {
+               table->entries[i][j] = old_row[j];
+            }
+            for (j=old_phys_cols; j<num_phys_cols; j++) {
+               table->entries[i][j] = strdup ("");
+            }
+            free (old_row);
+         }
+      }
+
+      /* new table has fewer rows.  Simply truncate the rows */
+      for (i=num_phys_rows; i<old_phys_rows; i++) {
+         for (j=0; j<old_phys_cols; j++) {
+            free (table->entries[i][j]);
+         }
+         free (table->entries[i]);
+         table->entries[i] = NULL;
+      }
+
+   } else {
+      char ***old_entries;
+
+      if (old_phys_cols >= num_phys_cols) {
+
+         /* new table has fewer columns. 
+          * Simply truncate the columns */
+         for (i=0; i<old_phys_rows; i++) {
+            for (j=num_phys_cols; j<old_phys_cols; j++) {
+               free (table->entries[i][j]);
+               table->entries[i][j] = NULL;
+            }
+         }
+      } else {
+
+         /* if we are here, the new table has more
+          * columns. Realloc the columns.  */
+         for (i=0; i<old_phys_rows; i++) {
+            char **old_row;
+
+            old_row = table->entries[i];
+            table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
+            for (j=0; j<old_phys_cols; j++) {
+               table->entries[i][j] = old_row[j];
+            }
+            for (j=old_phys_cols; j<num_phys_cols; j++) {
+               table->entries[i][j] = strdup ("");
+            }
+            free (old_row);
+         }
+      }
+
+      /* now, add all new rows */
+      old_entries = table->entries;
+      table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
+      for (i=0; i<old_phys_rows; i++) {
+         table->entries[i] = old_entries[i];
+      }
+      free (old_entries);
+
+      for (i=old_phys_rows; i<num_phys_rows; i++) {
+         table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
+         for (j=0; j<num_phys_cols; j++) {
+            table->entries[i][j] = strdup ("");
+         }
+      }
+   }
+
+   /* invalidate the current cursor position, if needed */
+   if ((table->current_cursor_row >= table->num_rows) ||
+       (table->current_cursor_col >= table->num_cols)) {
+      table->current_cursor_row = -1;
+      table->current_cursor_col = -1;
+   }
 }
 
 /* ==================================================== */
@@ -127,11 +219,12 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
    int iphys,jphys;
    BasicCell *cell;
 
+   table->current_cursor_row = virt_row;
+   table->current_cursor_col = virt_col;
+
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_rows) return;
    if (virt_col >= table->num_cols) return;
-   table->current_cursor_row = virt_row;
-   table->current_cursor_col = virt_col;
 
    /* update the cell values to reflect the new position */
    /* also, move the cell GUI, if needed */
@@ -157,11 +250,12 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
    int iphys,jphys;
    BasicCell *cell;
 
+   table->current_cursor_row = virt_row;
+   table->current_cursor_col = virt_col;
+
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_rows) return;
    if (virt_col >= table->num_cols) return;
-   table->current_cursor_row = virt_row;
-   table->current_cursor_col = virt_col;
 
    /* update the cell values to reflect the new position */
    /* also, move the cell GUI, if needed */
@@ -186,20 +280,28 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
 
 /* ==================================================== */
 
-void xaccCommitEdits (Table *table)
+void xaccCommitCursor (Table *table)
 {
    int i,j;
    int iphys,jphys;
    BasicCell *cell;
+   int virt_row, virt_col;
+
+   virt_row = table->current_cursor_row;
+   virt_col = table->current_cursor_col;
+
+   if ((0 > virt_row) || (0 > virt_col)) return;
+   if (virt_row >= table->num_rows) return;
+   if (virt_col >= table->num_cols) return;
 
    for (i=0; i<table->tile_height; i++) {
-      iphys = i + table->current_cursor_row * table->tile_height;
+      iphys = i + virt_row * table->tile_height;
       iphys += table->num_header_rows;
       for (j=0; j<table->tile_width; j++) {
          
          cell = table->cursor->cells[i][j];
          if (cell) {
-            jphys = j + table->current_cursor_col * table->tile_width;
+            jphys = j + virt_col * table->tile_width;
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
@@ -234,7 +336,7 @@ verifyCursorPosition (Table *table, int phys_row, int phys_col)
       /* before leaving, the current virtual position,
        * commit any aedits that have been accumulated 
        * in the cursor */
-      xaccCommitEdits (table);
+      xaccCommitCursor (table);
       xaccMoveCursorGUI (table, virt_row, virt_col);
    }
 }
