@@ -792,7 +792,7 @@ gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gpointer item,
 
     if(!handlers->tag) 
     {
-        PERR("Unhandled tag: %s\n",
+        PERR("Unhandled tag: %s",
              tag ? tag : "(null)");
         return FALSE;
     }
@@ -825,7 +825,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     if(!dom_tree_handlers_all_gotten_p(handlers))
     {
-        PERR("missing tag in input");
+        PERR("didn't find all of the expected tags in the input");
         successful = FALSE;
     }
 
