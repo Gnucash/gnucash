@@ -1,3 +1,8 @@
+2003-01-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ru.po: Updated very complete (!) Russian translation by
+	Vitaly Lipatov <lav@altlinux.ru>.
+
 2002-01-07 Herbert Thoma <herbie@hthoma.de>
 
 	* src/gnome-search/gncmod-gnome-search.c:
