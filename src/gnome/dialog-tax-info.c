@@ -69,6 +69,7 @@ typedef struct
   GtkWidget * txf_category_clist;
   GtkWidget * txf_help_text;
   GtkWidget * current_account_button;
+  GtkWidget * parent_account_button;
 
   GList * income_txf_infos;
   GList * expense_txf_infos;
@@ -173,18 +174,24 @@ load_txf_info (gboolean income)
     code_scm  = gh_car (codes);
     codes     = gh_cdr (codes);
 
-    txf_info = g_new0 (TXFInfo, 1);
-
-    str = gh_symbol2newstr (code_scm, NULL);
-    txf_info->code = g_strdup (str);
-    free (str);
-
     scm = gh_call2 (getters.payer_name_source, category, code_scm);
     str = gh_symbol2newstr (scm, NULL);
+    if (safe_strcmp (str, "not-impl") == 0)
+    {
+      free (str);
+      continue;
+    }
+
+    txf_info = g_new0 (TXFInfo, 1);
+
     if (safe_strcmp (str, "none") == 0)
       txf_info->payer_name_source = NULL;
     else
       txf_info->payer_name_source = g_strdup (str);
+    free (str);
+
+    str = gh_symbol2newstr (code_scm, NULL);
+    txf_info->code = g_strdup (str);
     free (str);
 
     scm = gh_call2 (getters.form, category, code_scm);
@@ -241,6 +248,34 @@ load_category_list (TaxInfoDialog *ti_dialog)
 }
 
 static void
+clear_gui (TaxInfoDialog *ti_dialog)
+{
+  gtk_toggle_button_set_active
+    (GTK_TOGGLE_BUTTON (ti_dialog->tax_related_button), FALSE);
+
+  gtk_clist_select_row (GTK_CLIST (ti_dialog->txf_category_clist), 0, 0);
+
+  gtk_toggle_button_set_active
+    (GTK_TOGGLE_BUTTON (ti_dialog->current_account_button), TRUE);
+}
+
+static void
+account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
+{
+  gboolean tax_related;
+
+  if (!account)
+  {
+    clear_gui (ti_dialog);
+    return;
+  }
+
+  tax_related = xaccAccountGetTaxRelated (account);
+  gtk_toggle_button_set_active
+    (GTK_TOGGLE_BUTTON (ti_dialog->tax_related_button), tax_related);
+}
+
+static void
 window_destroy_cb (GtkObject *object, gpointer data)
 {
   TaxInfoDialog *ti_dialog = data;
@@ -270,24 +305,6 @@ select_subaccounts_clicked (GtkWidget *widget, gpointer data)
     return;
 
   gnc_account_tree_select_subaccounts (tree, account, FALSE);
-
-  gtk_widget_grab_focus (ti_dialog->account_tree);
-}
-
-static void
-unselect_subaccounts_clicked (GtkWidget *widget, gpointer data)
-{
-  TaxInfoDialog *ti_dialog = data;
-  GNCAccountTree *tree;
-  Account *account;
-
-  tree = GNC_ACCOUNT_TREE (ti_dialog->account_tree);
-
-  account = gnc_account_tree_get_focus_account (tree);
-  if (!account)
-    return;
-
-  gnc_account_tree_unselect_subaccounts (tree, account, FALSE);
 
   gtk_widget_grab_focus (ti_dialog->account_tree);
 }
@@ -339,7 +356,7 @@ tax_info_show_income_accounts (TaxInfoDialog *ti_dialog, gboolean show_income)
   load_category_list (ti_dialog);
 }
 
-static void
+static int
 gnc_tax_info_update_accounts (TaxInfoDialog *ti_dialog)
 {
   GNCAccountTree *tree;
@@ -363,6 +380,8 @@ gnc_tax_info_update_accounts (TaxInfoDialog *ti_dialog)
   g_free (string);
 
   gtk_widget_set_sensitive (frame, num_accounts > 0);
+
+  return num_accounts;
 }
 
 static void
@@ -379,6 +398,8 @@ gnc_tax_info_income_cb (GtkWidget *w, gpointer data)
   gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (ti_dialog->account_tree));
 
   gnc_tax_info_update_accounts (ti_dialog);
+
+  clear_gui (ti_dialog);
 }
 
 static void
@@ -387,7 +408,10 @@ gnc_tax_info_select_account_cb (GNCAccountTree *tree,
 {
   TaxInfoDialog *ti_dialog = data;
 
-  gnc_tax_info_update_accounts (ti_dialog);
+  if (gnc_tax_info_update_accounts (ti_dialog) != 1)
+    return;
+
+  account_to_gui (ti_dialog, account);
 }
 
 static void
@@ -411,6 +435,7 @@ txf_code_select_row_cb (GtkCList *clist,
 {
   TaxInfoDialog *ti_dialog = user_data;
   TXFInfo *txf_info;
+  GtkWidget *frame;
   GtkEditable *ge;
   const char *text;
   gint pos = 0;
@@ -424,6 +449,30 @@ txf_code_select_row_cb (GtkCList *clist,
   gtk_editable_delete_text (ge, 0, -1);
   gtk_editable_insert_text (ge, text, strlen (text), &pos);
 
+  frame = lookup_widget (GTK_WIDGET (clist), "payer_name_source_frame");
+
+  if (txf_info->payer_name_source)
+  {
+    gboolean current;
+
+    gtk_widget_set_sensitive (frame, TRUE);
+
+    current = (strcmp ("current", txf_info->payer_name_source) == 0);
+
+    if (current)
+      gtk_toggle_button_set_active
+        (GTK_TOGGLE_BUTTON (ti_dialog->current_account_button), TRUE);
+    else
+      gtk_toggle_button_set_active
+        (GTK_TOGGLE_BUTTON (ti_dialog->parent_account_button), TRUE);
+  }
+  else
+  {
+    gtk_widget_set_sensitive (frame, FALSE);
+    gtk_toggle_button_set_active
+      (GTK_TOGGLE_BUTTON (ti_dialog->current_account_button), TRUE);
+  }
+
   gnc_tax_info_set_changed (ti_dialog, TRUE);
 }
 
@@ -432,6 +481,13 @@ tax_related_toggled_cb (GtkToggleButton *togglebutton,
                         gpointer user_data)
 {
   TaxInfoDialog *ti_dialog = user_data;
+  GtkWidget *frame;
+  gboolean on;
+
+  on = gtk_toggle_button_get_active (togglebutton);
+
+  frame = lookup_widget (GTK_WIDGET (togglebutton), "txf_categories_frame");
+  gtk_widget_set_sensitive (frame, on);
 
   gnc_tax_info_set_changed (ti_dialog, TRUE);
 }
@@ -505,6 +561,9 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     button = lookup_widget (dialog, "current_account_button");
     ti_dialog->current_account_button = button;
 
+    button = lookup_widget (dialog, "parent_account_button");
+    ti_dialog->parent_account_button = button;
+
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC (current_account_toggled_cb),
                         ti_dialog);
@@ -521,7 +580,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     gtk_clist_column_titles_hide (GTK_CLIST (ti_dialog->account_tree));
     gtk_clist_set_selection_mode (GTK_CLIST (ti_dialog->account_tree),
-                                  GTK_SELECTION_MULTIPLE);
+                                  GTK_SELECTION_EXTENDED);
     gnc_account_tree_hide_all_but_name (tree);
 
     tax_info_show_income_accounts (ti_dialog, FALSE);
@@ -548,7 +607,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
                         ti_dialog);
   }
 
-  /* account buttons */
+  /* select subaccounts button */
   {
     GtkWidget *button;
 
@@ -556,15 +615,11 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (select_subaccounts_clicked),
                         ti_dialog);
-
-    button = lookup_widget (dialog, "unselect_subaccounts_button");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (unselect_subaccounts_clicked),
-                        ti_dialog);
   }
 
   gnc_tax_info_update_accounts (ti_dialog);
   gnc_tax_info_set_changed (ti_dialog, FALSE);
+  clear_gui (ti_dialog);
 }
 
 static void
@@ -573,6 +628,16 @@ close_handler (gpointer user_data)
   TaxInfoDialog *ti_dialog = user_data;
 
   gnome_dialog_close (GNOME_DIALOG (ti_dialog->dialog));
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  TaxInfoDialog *ti_dialog = user_data;
+
+  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (ti_dialog->account_tree));
+
+  gnc_tax_info_update_accounts (ti_dialog);
 }
 
 /********************************************************************\
@@ -586,13 +651,19 @@ void
 gnc_tax_info_dialog (GtkWidget * parent)
 {
   TaxInfoDialog *ti_dialog;
+  gint component_id;
 
   ti_dialog = g_new0 (TaxInfoDialog, 1);
 
   gnc_tax_info_dialog_create (parent, ti_dialog);
 
-  gnc_register_gui_component (DIALOG_TAX_INFO_CM_CLASS,
-                              NULL, close_handler, ti_dialog);
+  component_id = gnc_register_gui_component (DIALOG_TAX_INFO_CM_CLASS,
+                                             refresh_handler, close_handler,
+                                             ti_dialog);
+
+  gnc_gui_component_watch_entity_type (component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_grab_focus (ti_dialog->account_tree);
 

@@ -1643,7 +1643,7 @@ LedgerDestroy (SplitRegister *reg)
       /* Make sure we don't commit this below */
       if (trans == pending_trans)
       {
-        info->pending_trans_guid = *xaccGUIDNULL();
+        info->pending_trans_guid = *xaccGUIDNULL ();
         pending_trans = NULL;
       }
 
@@ -1651,21 +1651,21 @@ LedgerDestroy (SplitRegister *reg)
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
 
-      info->blank_split_guid = *xaccGUIDNULL();
+      info->blank_split_guid = *xaccGUIDNULL ();
       blank_split = NULL;
    }
 
    /* be sure to take care of any open transactions */
    if (pending_trans != NULL)
    {
-      if (xaccTransIsOpen(pending_trans))
-        xaccTransRollbackEdit (pending_trans);
+      if (xaccTransIsOpen (pending_trans))
+        xaccTransCommitEdit (pending_trans);
 
-      info->pending_trans_guid = *xaccGUIDNULL();
+      info->pending_trans_guid = *xaccGUIDNULL ();
       pending_trans = NULL;
    }
 
-   xaccSRDestroyRegisterData(reg);
+   xaccSRDestroyRegisterData (reg);
 
    gnc_resume_gui_refresh ();
 }

@@ -442,11 +442,15 @@ get_security_denom(Split * s)
 void 
 DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
-  xaccSplitSetSharePriceAndAmount
-    (s,
-     double_to_gnc_numeric(price, GNC_DENOM_AUTO, 
-                           GNC_DENOM_SIGFIGS(PRICE_SIGFIGS) | GNC_RND_ROUND),
-     double_to_gnc_numeric(amt, get_security_denom(s), GNC_RND_ROUND));
+  if (!s) return;
+  check_open (s->parent);
+
+  s->damount = double_to_gnc_numeric(amt, get_security_denom(s),
+                                     GNC_RND_ROUND);
+  s->value   = double_to_gnc_numeric(price * amt, get_currency_denom(s),
+                                     GNC_RND_ROUND);
+
+  mark_split (s);
 }
 
 void 
@@ -456,7 +460,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   if (!s) return;
   check_open (s->parent);
 
-  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);;
+  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
   s->value   = gnc_numeric_mul(s->damount, price, 
                                get_currency_denom(s), GNC_RND_ROUND);
 
@@ -1091,7 +1095,12 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
     }
   }
 
-  return gnc_numeric_convert (value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  if (base_currency)
+    return gnc_numeric_convert (value,
+                                gnc_commodity_get_fraction (base_currency),
+                                GNC_RND_ROUND);
+  else
+    return gnc_numeric_convert (value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 }
 
 gnc_numeric

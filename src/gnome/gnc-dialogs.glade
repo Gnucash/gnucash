@@ -8647,26 +8647,13 @@ words.
 	      <fill>False</fill>
 	    </child>
 	  </widget>
-
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>unselect_subaccounts_button</name>
-	    <border_width>3</border_width>
-	    <can_focus>True</can_focus>
-	    <label>Unselect Subaccounts</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
 	</widget>
       </widget>
 
       <widget>
 	<class>GtkFrame</class>
 	<name>tax_info_frame</name>
+	<sensitive>False</sensitive>
 	<label>Tax Information</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -8709,7 +8696,8 @@ words.
 
 	  <widget>
 	    <class>GtkFrame</class>
-	    <name>frame42</name>
+	    <name>txf_categories_frame</name>
+	    <sensitive>False</sensitive>
 	    <label>TXF Categories</label>
 	    <label_xalign>0</label_xalign>
 	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>

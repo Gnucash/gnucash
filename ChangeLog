@@ -1,3 +1,18 @@
+2001-03-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/engine/Transaction.c (DxaccSplitSetSharePriceAndAmount):
+	do the double->numeric conversion directly.
+
+	* src/guile/gnc.gwp: remove unused deprecated functions
+
+	* src/engine/Transaction.c (xaccSplitsComputeValue): convert
+	imbalance to base_currency fraction if possible
+
+	* src/SplitLedger.c (LedgerDestroy): commit pending instead
+	of rolling back.
+
 2001-03-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/average-balance.scm: Major rework: Uses
