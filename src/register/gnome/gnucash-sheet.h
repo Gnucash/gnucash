@@ -84,6 +84,8 @@ typedef struct
         GnomeCanvasItem *item_editor;
         GtkWidget *entry;   
 
+        gboolean input_cancelled;
+
         gint top_block;  /* maybe not fully visible */
         gint bottom_block;
         gint left_block;

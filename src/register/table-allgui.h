@@ -184,6 +184,22 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
                                            PhysicalCellBorders *borders,
                                            gpointer user_data);
 
+typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
+                                         gpointer user_data);
+
+typedef struct
+{
+  TableGetEntryHandler entry_handler;
+  TableGetLabelHandler label_handler;
+  TableGetCellIOFlags io_flag_handler;
+  TableGetFGColorHandler fg_color_handler;
+  TableGetBGColorHandler bg_color_handler;
+  TableGetCellBorderHandler cell_border_handler;
+  TableConfirmHandler confirm_handler;
+
+  gpointer handler_user_data;
+} TableView;
+
 typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
 typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
@@ -210,7 +226,7 @@ struct _Table
 
   /* This value is initialized to NULL and never touched afterwards.
    * It can be used by higher-level code. */
-  void * user_data;
+  gpointer user_data;
 
   /* Determines whether the passive background
    * colors alternate between odd and even virt
@@ -229,16 +245,9 @@ struct _Table
   /* The virtual cell table */
   GTable *virt_cells;
 
-  void * ui_data;
+  gpointer ui_data;
 
-  TableGetEntryHandler entry_handler;
-  TableGetLabelHandler label_handler;
-  TableGetCellIOFlags io_flag_handler;
-  TableGetFGColorHandler fg_color_handler;
-  TableGetBGColorHandler bg_color_handler;
-  TableGetCellBorderHandler cell_border_handler;
-
-  gpointer handler_user_data;
+  TableView view;
 
   TableDestroyFunc destroy;
 
@@ -249,13 +258,7 @@ struct _Table
 
 
 /* Functions to create and destroy Tables.  */
-Table *     gnc_table_new (TableGetEntryHandler entry_handler,
-                           TableGetLabelHandler label_handler,
-                           TableGetCellIOFlags io_flag_handler,
-                           TableGetFGColorHandler fg_color_handler,
-                           TableGetBGColorHandler bg_color_handler,
-                           TableGetCellBorderHandler cell_border_handler,
-                           gpointer handler_user_data,
+Table *     gnc_table_new (TableView *view,
                            VirtCellDataAllocator allocator,
                            VirtCellDataDeallocator deallocator,
                            VirtCellDataCopy copy);
@@ -377,7 +380,7 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
 /* UI-specific functions */
 
 /* Initialize the GUI from a table */
-void        gnc_table_init_gui (gncUIWidget widget, void *data);
+void        gnc_table_init_gui (gncUIWidget widget, gpointer data);
 
 /* Refresh the current cursor gui */
 void        gnc_table_refresh_current_cursor_gui (Table * table,
@@ -424,7 +427,8 @@ const char * gnc_table_modify_update(Table *table,
                                      int newval_len,
                                      int *cursor_position,
                                      int *start_selection,
-                                     int *end_selection);
+                                     int *end_selection,
+                                     gboolean *cancelled);
 
 gboolean     gnc_table_direct_update(Table *table,
                                      VirtualLocation virt_loc,
@@ -432,7 +436,7 @@ gboolean     gnc_table_direct_update(Table *table,
                                      int *cursor_position,
                                      int *start_selection,
                                      int *end_selection,
-                                     void *gui_data);
+                                     gpointer gui_data);
 
 gboolean     gnc_table_traverse_update(Table *table,
                                        VirtualLocation virt_loc,

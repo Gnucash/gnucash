@@ -1074,20 +1074,15 @@ expand_trans_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-new_trans_cb(GtkWidget *widget, gpointer data)
+new_trans_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
   SplitRegister *reg;
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  if (xaccSRCheckReconciled (reg))
-  {
-    if (xaccSRSaveRegEntry (reg, TRUE))
-      xaccSRRedrawReg (reg);
-  }
-  else
-    xaccSRCancelCursorTransChanges (reg);
+  if (xaccSRSaveRegEntry (reg, TRUE))
+    xaccSRRedrawReg (reg);
 
   gnc_register_jump_to_blank (regData);
 }
@@ -2556,16 +2551,8 @@ recordCB (GtkWidget *w, gpointer data)
 
   trans = xaccSRGetCurrentTrans (reg);
 
-  if (xaccSRCheckReconciled (reg))
-  {
-    if (!xaccSRSaveRegEntry (reg, TRUE))
-      return;
-  }
-  else
-  {
-    xaccSRCancelCursorTransChanges (reg);
+  if (!xaccSRSaveRegEntry (reg, TRUE))
     return;
-  }
 
   if (trans != NULL)
     gnc_register_include_date (regData, xaccTransGetDate(trans));

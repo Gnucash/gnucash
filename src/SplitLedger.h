@@ -180,14 +180,6 @@ void     xaccSRRedrawReg (SplitRegister *reg);
  *    has changed cells that have not been committed. */
 gboolean xaccSRHasPendingChanges (SplitRegister *reg);
 
-/* The xaccSRCheckReconciled() method returns TRUE if the current
- * cursor has not been changed. It also returns TRUE if it has been
- * changed, but the relevant split is not reconciled or frozen. It
- * also returns TRUE if it has been changed and it is reconciled and
- * the user verifies in a dialog that the split should be changed.
- * Otherwise, it returns FALSE. */
-gboolean xaccSRCheckReconciled (SplitRegister *reg);
-
 /* If TRUE, visually indicate the demarcation between splits with post
  * dates prior to the present, and after. This will only make sense if
  * the splits are ordered primarily by post date. */
@@ -224,5 +216,7 @@ guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
 void         xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
                                          PhysicalCellBorders *borders,
                                          gpointer user_data);
+gboolean     xaccSRConfirmHandler (VirtualLocation virt_loc,
+                                   gpointer user_data);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

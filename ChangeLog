@@ -1,3 +1,27 @@
+2001-03-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/gnucash-sheet.c: if input is cancelled by
+	user during delete, ignore the insert callback.
+
+	* src/MultiLedger.c: update for new view api
+
+	* src/register/recncell.{ch}: allow setting a parent to be used
+	for the dialog.
+
+	* src/gnome/query-user.c (gnc_verify_dialog_parented): handle null
+	parent by using gnc_get_ui_data.
+
+	* src/gnome/window-register.c: eliminate calls to
+	xaccSRCheckReconciled. confirmation is done in SplitLedger.c now.
+
+	* src/SplitLedger.c: use new data entry confirmation callback
+	to confirm changes to a reconciled split.
+
+	* src/register/splitreg.{ch}: mod for table-allgui changes
+
+	* src/register/table-allgui.{ch}: encapsulate 'view' callbacks
+	into a struct. add a callback for confiming data entry.
+
 2001-03-01  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm (add-split-row): Now 
@@ -26,7 +50,6 @@
 	forthcoming.  Didn't change back because for-each is R5RS, but
 	for-each-in-order isn't.  Probably should make the substitution
 	globally.
-	
 
 2001-02-28  Dave Peticolas  <dave@krondo.com>
 
@@ -437,8 +460,8 @@
 	* src/gnome/druid-commodity.c: remove consts from
 	gnc_commoditities (after consultation with Bill).
 
-	* src/gnome/dialog-account.c: remove consts from gnc_commoditities (after
-	consultation with Bill).
+	* src/gnome/dialog-account.c: remove consts from gnc_commoditities
+	(after consultation with Bill).
 
 	* src/gnome/dialog-options.c: remove consts from gnc_commoditities
 	(after consultation with Bill).
@@ -455,11 +478,11 @@
 	* src/gnc-ui-util.c: remove consts from gnc_commoditities (after
 	consultation with Bill).
 
-	* src/engine/Transaction.h: remove consts from gnc_commoditities (after
-	consultation with Bill).
+	* src/engine/Transaction.h: remove consts from gnc_commoditities
+	(after consultation with Bill).
 
-	* src/engine/Transaction.c: remove consts from gnc_commoditities (after
-	consultation with Bill).
+	* src/engine/Transaction.c: remove consts from gnc_commoditities
+	(after consultation with Bill).
 
 	* src/engine/Scrub.c: remove consts from gnc_commoditities (after
 	consultation with Bill).
@@ -1538,9 +1561,9 @@
 	(xaccTransSetDocref): deleted.
 	(xaccTransGetDocref): deleted.
 
-	* src/engine/Transaction.h: accomodate changes to Transaction.c.	
+	* src/engine/Transaction.h: accomodate changes to Transaction.c.
 
-	* src/engine/TransactionP.h: accomodate changes to Transaction.c.	
+	* src/engine/TransactionP.h: accomodate changes to Transaction.c.
 	
 	* src/engine/Session.c:
 	(xaccSessionGetFileError): new function - migrate away from using
@@ -1757,30 +1780,34 @@
 
 2000-09-05  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/date-utilities.scm ((gnc:reldate-initialize)): New function - initialise
-	explicitly at startup rather than in ad-hoc manner
+	* src/scm/date-utilities.scm ((gnc:reldate-initialize)): New
+	function - initialise explicitly at startup rather than in ad-hoc
+	manner
 
 2000-08-31  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/report/balance-and-pnl.scm: Bug fixes for new date options.
+	* src/scm/report/balance-and-pnl.scm: Bug fixes for new date
+	options.
 
-	* src/scm/report/transaction-report.scm: Bug fixes for new date options.
+	* src/scm/report/transaction-report.scm: Bug fixes for new date
+	options.
 
 	* src/scm/report/budget-report.scm: Bug fixes for new date options.
 
 2000-08-30  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/report/hello-world.scm: A couple of new functions to test the relative
-	and combination date style options.
+	* src/scm/report/hello-world.scm: A couple of new functions to
+	test the relative and combination date style options.
 
-	* src/scm/report/*.scm: Modified date options to take the new function.  Most
-	are still using absolute options at this stage, will get modified to use relative
-	dates later.
+	* src/scm/report/*.scm: Modified date options to take the new
+	function.  Most are still using absolute options at this stage,
+	will get modified to use relative dates later.
 
-	* src/scm/options.scm (gnc:make-option): new argument (option-data-fns) 
-	for manipulating multi-choice style options.  Changes
-	to option-makers to either support this.  
-	(gnc:make-date-option): modified to support relative and combination dates.
+	* src/scm/options.scm (gnc:make-option): new argument
+	(option-data-fns) for manipulating multi-choice style options.
+	Changes to option-makers to either support this.
+	(gnc:make-date-option): modified to support relative and
+	combination dates.
 
 	* src/scm/date-utilities.scm: Extensive additions for manipulating 
 	relative dates.
@@ -1889,7 +1916,8 @@
 	startup.
 	(gnc:main): support --evalutate properly.
 
-	* src/scm/engine-utilities.scm (gnc:transaction-map-splits): moved here.
+	* src/scm/engine-utilities.scm (gnc:transaction-map-splits): moved
+	here.
 	(gnc:group-map-accounts): moved here.
 
 	* src/scm/command-line.scm (gnc:*arg-defs*): add --evaluate

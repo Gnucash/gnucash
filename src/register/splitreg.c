@@ -141,12 +141,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
-                       TableGetEntryHandler entry_handler,
-                       TableGetLabelHandler label_handler,
-                       TableGetCellIOFlags io_flag_handler,
-                       TableGetFGColorHandler fg_color_handler,
-                       TableGetBGColorHandler bg_color_handler,
-                       TableGetCellBorderHandler cell_border_handler,
+                       TableView *view,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
@@ -555,19 +550,18 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
-                         TableGetEntryHandler entry_handler,
-                         TableGetLabelHandler label_handler,
-                         TableGetCellIOFlags io_flag_handler,
-                         TableGetFGColorHandler fg_color_handler,
-                         TableGetBGColorHandler bg_color_handler,
-                         TableGetCellBorderHandler cell_border_handler,
+                         TableView *view,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy)
 {
   SplitRegister * reg;
 
+  g_return_val_if_fail (view != NULL, NULL);
+
   reg = g_new0 (SplitRegister, 1);
+
+  view->handler_user_data = reg;
 
   if (type >= NUM_SINGLE_REGISTER_TYPES)
     style = REG_STYLE_JOURNAL;
@@ -576,12 +570,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          type,
                          style,
                          use_double_line,
-                         entry_handler,
-                         label_handler,
-                         io_flag_handler,
-                         fg_color_handler,
-                         bg_color_handler,
-                         cell_border_handler,
+                         view,
                          allocator,
                          deallocator,
                          copy);
@@ -659,12 +648,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
-                       TableGetEntryHandler entry_handler,
-                       TableGetLabelHandler label_handler,
-                       TableGetCellIOFlags io_flag_handler,
-                       TableGetFGColorHandler fg_color_handler,
-                       TableGetBGColorHandler bg_color_handler,
-                       TableGetCellBorderHandler cell_border_handler,
+                       TableView *view,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy)
@@ -817,16 +801,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  table = gnc_table_new (entry_handler,
-                         label_handler,
-                         io_flag_handler,
-                         fg_color_handler,
-                         bg_color_handler,
-                         cell_border_handler,
-                         reg,
-                         allocator,
-                         deallocator,
-                         copy);
+  table = gnc_table_new (view, allocator, deallocator, copy);
 
   reg->table = table;
 

@@ -420,7 +420,6 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
 void
 gnucash_sheet_make_cell_visible (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
-
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
@@ -656,7 +655,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
                                           new_text_wc, new_text_len,
                                           new_text_wc, new_text_len,
                                           &cursor_position,
-                                          &start_sel, &end_sel);
+                                          &start_sel, &end_sel,
+                                          NULL);
 
         g_free (new_text_wc);
 
@@ -709,6 +709,13 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         int start_sel, end_sel;
         int old_position;
         int i;
+
+        if (sheet->input_cancelled)
+        {
+                gtk_signal_emit_stop_by_name (GTK_OBJECT (sheet->entry),
+                                              "insert_text");
+                return;
+        }
 
         if (insert_text_len <= 0)
                 return;
@@ -782,7 +789,8 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         retval = gnc_table_modify_update (table, virt_loc,
                                           change_text_w, change_text_len,
                                           new_text_w, new_text_len,
-                                          position, &start_sel, &end_sel);
+                                          position, &start_sel, &end_sel,
+                                          &sheet->input_cancelled);
 
         if (retval &&
             ((safe_strcmp (retval, new_text) != 0) ||
@@ -890,7 +898,8 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                                           NULL, 0,
                                           new_text_w, new_text_len,
                                           &cursor_position,
-                                          &start_sel, &end_sel);
+                                          &start_sel, &end_sel,
+                                          &sheet->input_cancelled);
 
         if (retval && (safe_strcmp (retval, new_text) != 0))
         {
@@ -1583,7 +1592,11 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                         end_sel = 0;
                 }
 
-		result = gtk_widget_event(sheet->entry, (GdkEvent *) event);
+                sheet->input_cancelled = FALSE;
+
+		result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
+
+                sheet->input_cancelled = FALSE;
 
                 new_pos = editable->current_pos;
 
@@ -2051,6 +2064,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->bottom_block = 1;
         sheet->num_visible_blocks = 1;
         sheet->num_visible_phys_rows = 1;
+
+        sheet->input_cancelled = FALSE;
 
         sheet->num_virt_rows = 0;
         sheet->num_virt_cols = 0;

@@ -233,12 +233,7 @@ SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
-                         TableGetEntryHandler entry_handler,
-                         TableGetLabelHandler label_handler,
-                         TableGetCellIOFlags io_flag_handler,
-                         TableGetFGColorHandler fg_color_handler,
-                         TableGetBGColorHandler bg_color_handler,
-                         TableGetCellBorderHandler cell_border_handler,
+                         TableView *view,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy);

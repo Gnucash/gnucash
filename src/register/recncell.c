@@ -33,6 +33,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -95,7 +97,8 @@ RecnEnter (BasicCell *_cell,
     const char *message = _("Do you really want to mark this transaction "
                             "not reconciled?\nDoing so might make future "
                             "reconciliation difficult!");
-    if (!gnc_verify_dialog(message, TRUE))
+
+    if (!gnc_verify_dialog_parented (cell->parent, message, TRUE))
       return FALSE;
   }
 
@@ -173,6 +176,9 @@ RecnSetValue (BasicCell *_cell, const char *value)
 void
 xaccDestroyRecnCell (RecnCell *cell)
 {
+  if (!cell)
+    return;
+
   xaccDestroyBasicCell (&cell->cell);
 }
 
@@ -182,6 +188,8 @@ void
 xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 {
   const char *string;
+
+  g_return_if_fail (cell != NULL);
 
   cell->reconciled_flag = reconciled_flag;
 
@@ -195,6 +203,8 @@ xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 char
 xaccRecnCellGetFlag (RecnCell *cell)
 {
+  g_return_val_if_fail (cell != NULL, NREC);
+
   return cell->reconciled_flag;
 }
 
@@ -204,6 +214,16 @@ void
 xaccRecnCellSetStringGetter (RecnCellStringGetter getter)
 {
   string_getter = getter;
+}
+
+/* ================================================ */
+
+void
+xaccRecnCellSetParent (RecnCell *cell, gncUIWidget parent)
+{
+  g_return_if_fail (cell != NULL);
+
+  cell->parent = parent;
 }
 
 /* --------------- end of file ---------------------- */

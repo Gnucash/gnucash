@@ -23,7 +23,7 @@
  * SplitLedger.c
  *
  * FUNCTION:
- * copy transaction data from engine into split-register object.
+ * Provide view for SplitRegister object.
  *
  *
  * DESIGN NOTES:
@@ -182,6 +182,10 @@ struct _SRInfo
 
   /* true if we are loading the register for the first time */
   gboolean first_pass;
+
+  /* true if the user has already confirmed changes of a reconciled
+   * split */
+  gboolean change_confirmed;
 
   /* User data for users of SplitRegisters */
   gpointer user_data;
@@ -1013,6 +1017,9 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     info->cursor_hint_cursor_class = new_class;
   }
 
+  if (old_split != new_split)
+    info->change_confirmed = FALSE;
+
   gnc_resume_gui_refresh ();
 
   /* redrawing the register can muck everything up */
@@ -1563,15 +1570,14 @@ LedgerTraverse (Table *table,
   switch (result)
   {
     case GNC_VERIFY_YES:
+      break;
+
     case GNC_VERIFY_NO:
       {
         VirtualCellLocation vcell_loc;
         Split *new_split;
         Split *trans_split;
         CursorClass new_class;
-
-        if ((result == GNC_VERIFY_YES) && xaccSRCheckReconciled (reg))
-          break;
 
         new_split = sr_get_split(reg, virt_loc.vcell_loc);
         trans_split = xaccSRGetTransSplit(reg, virt_loc.vcell_loc, NULL);
@@ -4369,6 +4375,55 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
   }
 }
 
+gboolean
+xaccSRConfirmHandler (VirtualLocation virt_loc,
+                      gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  SRInfo *info = xaccSRGetInfo (reg);
+  guint32 changed;
+  Split *split;
+  char recn;
+
+  /* This assumes we reset the flag whenver we change splits.
+   * This happens in LedgerMoveCursor. */
+  if (info->change_confirmed)
+    return TRUE;
+
+  split = sr_get_split (reg, virt_loc.vcell_loc);
+  if (!split)
+    return TRUE;
+
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+
+  if (MOD_RECN & changed)
+    recn = xaccRecnCellGetFlag (reg->recnCell);
+  else
+    recn = xaccSplitGetReconcile (split);
+
+  if (recn == YREC)
+  {
+    gboolean confirm;
+    char *message = _("You are about to change a reconciled split.\n"
+                      "Are you sure you want to do that?");
+
+    confirm = gnc_lookup_boolean_option ("Register",
+                                         "Confirm before changing reconciled",
+                                         TRUE);
+    if (!confirm)
+      return TRUE;
+
+    confirm = gnc_verify_dialog_parented (xaccSRGetParent (reg),
+                                          message, FALSE);
+
+    info->change_confirmed = confirm;
+
+    return confirm;
+  }
+
+  return TRUE;
+}
+
 /* ======================================================== */
 
 G_INLINE_FUNC void
@@ -4814,6 +4869,9 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);
   xaccComboCellSetCompleteChar (reg->xfrmCell, account_separator);
 
+  /* set the dialog parent for the reconcile cell */
+  xaccRecnCellSetParent (reg->recnCell, xaccSRGetParent (reg));
+
   /* enable callback for cursor user-driven moves */
   table->move_cursor = LedgerMoveCursor;
   table->traverse = LedgerTraverse;
@@ -4960,38 +5018,6 @@ trans_has_reconciled_splits (Transaction *trans)
   }
 
   return FALSE;
-}
-
-gboolean
-xaccSRCheckReconciled (SplitRegister *reg)
-{
-  Transaction *trans;
-  guint32 changed;
-  gboolean confirm;
-  char *message = _("You are about to change a transaction with reconciled\n"
-                    "splits. Are you sure you want to do that?");
-
-  if (reg == NULL)
-    return TRUE;
-
-  changed = xaccSplitRegisterGetChangeFlag (reg);
-  if (!changed)
-    return TRUE;
-
-  trans = xaccSRGetCurrentTrans (reg);
-  if (trans == NULL)
-    return TRUE;
-
-  if (!trans_has_reconciled_splits (trans))
-    return TRUE;
-
-  confirm = gnc_lookup_boolean_option ("Register",
-                                       "Confirm before changing reconciled",
-                                       TRUE);
-  if (!confirm)
-    return TRUE;
-
-  return gnc_verify_dialog_parented (xaccSRGetParent (reg), message, FALSE);
 }
 
 /* ======================================================== */

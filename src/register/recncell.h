@@ -41,6 +41,7 @@
 #define __RECN_CELL_C__
 
 #include "basiccell.h"
+#include "gnc-ui.h"
 
 typedef const char * (*RecnCellStringGetter)(char);
 
@@ -49,6 +50,7 @@ typedef struct _RecnCell
   BasicCell cell;
 
   char reconciled_flag; /* The actual flag value */
+  gncUIWidget parent;
 } RecnCell;
 
 RecnCell * xaccMallocRecnCell (void);
@@ -56,6 +58,8 @@ void       xaccDestroyRecnCell (RecnCell *cell);
 
 void       xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag);
 char       xaccRecnCellGetFlag (RecnCell *cell);
+
+void       xaccRecnCellSetParent (RecnCell *cell, gncUIWidget parent);
  
 void       xaccRecnCellSetStringGetter (RecnCellStringGetter getter);
 

@@ -640,6 +640,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   xaccLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
+  TableView view;
   GList *splits;
 
   switch (ld_type)
@@ -738,13 +739,16 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE,
-                                     xaccSRGetEntryHandler,
-                                     xaccSRGetLabelHandler,
-                                     xaccSRGetIOFlagsHandler,
-                                     xaccSRGetFGColorHandler,
-                                     xaccSRGetBGColorHandler,
-                                     xaccSRGetCellBorderHandler,
+  view.entry_handler       = xaccSRGetEntryHandler;
+  view.label_handler       = xaccSRGetLabelHandler;
+  view.io_flag_handler     = xaccSRGetIOFlagsHandler;
+  view.fg_color_handler    = xaccSRGetFGColorHandler;
+  view.bg_color_handler    = xaccSRGetBGColorHandler;
+  view.cell_border_handler = xaccSRGetCellBorderHandler;
+  view.confirm_handler     = xaccSRConfirmHandler;
+  view.handler_user_data   = NULL;
+
+  ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE, &view,
                                      xaccMLGUIDMalloc,
                                      xaccMLGUIDFree,
                                      xaccMLGUIDCopy);

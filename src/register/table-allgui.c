@@ -61,30 +61,20 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 /** Implementation *****************************************************/
 
 Table * 
-gnc_table_new (TableGetEntryHandler entry_handler,
-               TableGetLabelHandler label_handler,
-               TableGetCellIOFlags io_flag_handler,
-               TableGetFGColorHandler fg_color_handler,
-               TableGetBGColorHandler bg_color_handler,
-               TableGetCellBorderHandler cell_border_handler,
-               gpointer handler_user_data,
+gnc_table_new (TableView *view,
                VirtCellDataAllocator allocator,
                VirtCellDataDeallocator deallocator,
                VirtCellDataCopy copy)
 {
    Table *table;
 
-   g_assert (entry_handler != NULL);
+   g_return_val_if_fail (view != NULL, NULL);
+   g_return_val_if_fail (view->entry_handler, NULL);
 
    table = g_new0 (Table, 1);
 
-   table->entry_handler = entry_handler;
-   table->label_handler = label_handler;
-   table->io_flag_handler = io_flag_handler;
-   table->fg_color_handler = fg_color_handler;
-   table->bg_color_handler = bg_color_handler;
-   table->cell_border_handler = cell_border_handler;
-   table->handler_user_data = handler_user_data;
+   table->view = *view;
+
    table->vcell_data_allocator = allocator;
    table->vcell_data_deallocator = deallocator;
    table->vcell_data_copy = copy;
@@ -180,9 +170,9 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
 {
   const char *entry;
 
-  entry = table->entry_handler (virt_loc,
-                                conditionally_changed,
-                                table->handler_user_data);
+  entry = table->view.entry_handler (virt_loc,
+                                     conditionally_changed,
+                                     table->view.handler_user_data);
   if (!entry)
     entry = "";
 
@@ -219,7 +209,8 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cb_cell->cell->value;
   }
 
-  entry = table->entry_handler (virt_loc, NULL, table->handler_user_data);
+  entry = table->view.entry_handler (virt_loc, NULL,
+                                     table->view.handler_user_data);
   if (!entry)
     entry = "";
 
@@ -231,10 +222,10 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->io_flag_handler)
+  if (!table->view.io_flag_handler)
     return XACC_CELL_ALLOW_NONE;
 
-  return table->io_flag_handler (virt_loc, table->handler_user_data);
+  return table->view.io_flag_handler (virt_loc, table->view.handler_user_data);
 }
 
 /* ==================================================== */
@@ -242,10 +233,10 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->label_handler)
+  if (!table->view.label_handler)
     return "";
 
-  return table->label_handler (virt_loc, table->handler_user_data);
+  return table->view.label_handler (virt_loc, table->view.handler_user_data);
 }
 
 /* ==================================================== */
@@ -253,10 +244,11 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->fg_color_handler)
+  if (!table->view.fg_color_handler)
     return 0x0; /* black */
 
-  return table->fg_color_handler (virt_loc, table->handler_user_data);
+  return table->view.fg_color_handler (virt_loc,
+                                       table->view.handler_user_data);
 }
 
 /* ==================================================== */
@@ -265,11 +257,11 @@ guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                         gboolean *hatching)
 {
-  if (!table->bg_color_handler)
+  if (!table->view.bg_color_handler)
     return 0xffffff; /* white */
 
-  return table->bg_color_handler (virt_loc, hatching,
-                                  table->handler_user_data);
+  return table->view.bg_color_handler (virt_loc, hatching,
+                                       table->view.handler_user_data);
 }
 
 /* ==================================================== */
@@ -278,10 +270,11 @@ void
 gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)
 {
-  if (!table->cell_border_handler)
+  if (!table->view.cell_border_handler)
     return;
 
-  table->cell_border_handler (virt_loc, borders, table->handler_user_data);
+  table->view.cell_border_handler (virt_loc, borders,
+                                   table->view.handler_user_data);
 }
 
 /* ==================================================== */
@@ -713,7 +706,7 @@ gnc_table_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 
 /* ==================================================== */
 
-void *
+gpointer
 gnc_table_get_vcell_data (Table *table, VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
@@ -969,7 +962,8 @@ gnc_table_modify_update(Table *table,
                         int newval_len,
                         int *cursor_position,
                         int *start_selection,
-                        int *end_selection)
+                        int *end_selection,
+                        gboolean *cancelled)
 {
   gboolean changed = FALSE;
   CellModifyVerifyFunc mv;
@@ -989,6 +983,19 @@ gnc_table_modify_update(Table *table,
   cell_col = virt_loc.phys_col_offset;
 
   ENTER ("\n");
+
+  if (table->view.confirm_handler &&
+      ! (table->view.confirm_handler (virt_loc,
+                                      table->view.handler_user_data)))
+  {
+    if (cancelled)
+      *cancelled = TRUE;
+
+    return NULL;
+  }
+
+  if (cancelled)
+    *cancelled = FALSE;
 
   /* OK, if there is a callback for this cell, call it */
   cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
@@ -1039,13 +1046,13 @@ gnc_table_modify_update(Table *table,
 /* ==================================================== */
 
 gboolean
-gnc_table_direct_update(Table *table,
-                        VirtualLocation virt_loc,
-                        char **newval_ptr,
-                        int *cursor_position,
-                        int *start_selection,
-                        int *end_selection,
-                        void *gui_data)
+gnc_table_direct_update (Table *table,
+                         VirtualLocation virt_loc,
+                         char **newval_ptr,
+                         int *cursor_position,
+                         int *start_selection,
+                         int *end_selection,
+                         gpointer gui_data)
 {
   CellBlockCell *cb_cell;
   gboolean result;
@@ -1071,15 +1078,26 @@ gnc_table_direct_update(Table *table,
   if (cell->direct_update == NULL)
     return FALSE;
 
-  old_value = g_strdup(cell->value);
+  old_value = g_strdup (cell->value);
 
-  result = cell->direct_update(cell, cursor_position, start_selection,
-                               end_selection, gui_data);
+  result = cell->direct_update (cell, cursor_position, start_selection,
+                                end_selection, gui_data);
 
-  if (safe_strcmp(old_value, cell->value) != 0)
+  if (safe_strcmp (old_value, cell->value) != 0)
   {
-    cell->changed = GNC_CELL_CHANGED;
-    *newval_ptr = cell->value;
+    if (table->view.confirm_handler &&
+        ! (table->view.confirm_handler (virt_loc,
+                                        table->view.handler_user_data)))
+    {
+      xaccSetBasicCellValue (cell, old_value);
+      *newval_ptr = NULL;
+      result = TRUE;
+    }
+    else
+    {
+      cell->changed = GNC_CELL_CHANGED;
+      *newval_ptr = cell->value;
+    }
   }
   else
     *newval_ptr = NULL;
@@ -1090,11 +1108,11 @@ gnc_table_direct_update(Table *table,
   {
     char *help_str;
 
-    help_str = xaccBasicCellGetHelp(cell);
+    help_str = xaccBasicCellGetHelp (cell);
 
-    table->set_help(table, help_str);
+    table->set_help (table, help_str);
 
-    g_free(help_str);
+    g_free (help_str);
   }
 
   return result;
