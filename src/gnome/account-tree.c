@@ -936,9 +936,9 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 
   for (i = 0; i < tree->num_columns; i++)
   {
-    text[i] = g_strdup(
-                  gnc_ui_get_account_field_value_string(acc,
-						    tree->column_fields[i]));
+    text[i] =
+      g_strdup(gnc_ui_get_account_field_value_string(acc,
+                                                     tree->column_fields[i]));
   }
 
   text[tree->num_columns] = NULL;

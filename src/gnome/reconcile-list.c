@@ -580,6 +580,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Transaction *trans;
   Split **splits;
   Split *split;
+
   const char *currency;
   char recn_str[2];
   char recn;

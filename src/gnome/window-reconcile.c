@@ -256,7 +256,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   GNCPrintAmountFlags flags;
   Account *account = data;
   int account_type;
-  const char  *currency;
+  const char *currency;
   gchar *new_string;
   gchar *string;
   double value;

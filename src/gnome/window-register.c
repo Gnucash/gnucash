@@ -1002,8 +1002,8 @@ print_check_cb(GtkWidget * widget, gpointer data)
   Split        * split    = xaccSRGetCurrentSplit(reg_data->ledger->ledger);
   Transaction  * trans    = xaccSplitGetParent(split);
 
-  char         * payee;
-  char         * memo;
+  const char   * payee;
+  const char   * memo;
   double       amount;
   time_t       date;
 
