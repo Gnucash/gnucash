@@ -135,11 +135,9 @@ put_iguid_in_tables (PGBackend *be)
 {
    char *p, buff[200];
    guint iguid;
-
-   execQuery(be, "BEGIN");
-
+	
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncSplit IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncEntry IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncKVPValue IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
@@ -157,22 +155,22 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   p = "ALTER TABLE gncSplit ADD COLUMN iguid INT4;\n"
-       "ALTER TABLE gncSplit ALTER COLUMN iguid set DEFAULT 0;\n"
-       "UPDATE gncSplit SET iguid = 0;\n" 
+   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntry ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncEntry SET iguid = 0;\n" 
        
-       "UPDATE gncSplit SET iguid = gncGUIDCache.iguid "
+       "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncSplit.splitGuid "
+       " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
 
-       "ALTER TABLE gncSplitTrail ADD COLUMN iguid INT4;\n"
-       "ALTER TABLE gncSplitTrail ALTER COLUMN iguid set DEFAULT 0;\n"
-       "UPDATE gncSplitTrail SET iguid = 0;\n" 
+       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntryTrail ALTER COLUMN iguid set DEFAULT 0;\n"
+       "UPDATE gncEntryTrail SET iguid = 0;\n" 
        
-       "UPDATE gncSplitTrail SET iguid = gncGUIDCache.iguid "
+       "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
-       " WHERE gncGUIDCache.guid = gncSplitTrail.splitGuid "
+       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -222,7 +220,6 @@ put_iguid_in_tables (PGBackend *be)
        " (1,1,1,'End Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
-   execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -231,8 +228,6 @@ static void
 fix_reconciled_balance_func (PGBackend *be)
 {
    char *p;
-
-   execQuery(be, "BEGIN");
 
    p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
@@ -248,14 +243,14 @@ fix_reconciled_balance_func (PGBackend *be)
    p = "CREATE FUNCTION "
        "gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)"
          "RETURNS INT8 "
-         "AS 'SELECT INT8(sum(gncSplit.amount)) "
-           "FROM gncSplit, gncTransaction "
+         "AS 'SELECT INT8(sum(gncEntry.amount)) "
+           "FROM gncEntry, gncTransaction "
            "WHERE "
-           "gncSplit.accountGuid = $1 AND "
-           "gncSplit.transGuid = gncTransaction.transGuid AND "
+           "gncEntry.accountGuid = $1 AND "
+           "gncEntry.transGuid = gncTransaction.transGuid AND "
            "gncTransaction.date_posted BETWEEN $2 AND $3 AND "
-           "(gncSplit.reconciled = \\'y\\' OR "
-           " gncSplit.reconciled = \\'f\\')' "
+           "(gncEntry.reconciled = \\'y\\' OR "
+           " gncEntry.reconciled = \\'f\\')' "
          "LANGUAGE 'sql';";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -264,7 +259,6 @@ fix_reconciled_balance_func (PGBackend *be)
        " (1,2,1,'End Fix gncSubtotalReconedBalance');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
-   execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -274,7 +268,6 @@ add_kvp_timespec_tables (PGBackend *be)
 {
   char *p;
 
-  execQuery(be, "BEGIN");
   p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
       " (1,3,0,'Start Add kvp_timespec tables');";
@@ -300,7 +293,6 @@ add_kvp_timespec_tables (PGBackend *be)
       " (1,3,1,'End Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
-  execQuery(be, "COMMIT");
 }
 
 /* ============================================================= */
@@ -311,7 +303,6 @@ add_multiple_book_support (PGBackend *be)
    char buff[4000];
    char *p;
  
-   execQuery(be, "BEGIN");
    p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
        "LOCK TABLE gncPrice IN ACCESS EXCLUSIVE MODE;\n"
@@ -380,7 +371,6 @@ add_multiple_book_support (PGBackend *be)
        " (1,4,1,'End Add multiple book support');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
-   execQuery(be, "COMMIT");
 }
 
 static void
@@ -532,17 +522,17 @@ pgendDBVersionIsCurrent (PGBackend *be)
    pgendVersionTable(be);
    vers = pgendGetVersion(be);
 
-   if (vers.major < 1)
+   if (1 > vers.major)
    {
       qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
 
-   if ((vers.major == PGEND_CURRENT_MAJOR_VERSION) &&
-       (vers.minor >= PGEND_CURRENT_MINOR_VERSION)) return 0;
+   if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
+       (PGEND_CURRENT_MINOR_VERSION <= vers.minor)) return 0;
 
    /* check to see if this client can connect */
-   if (vers.major > PGEND_CURRENT_MAJOR_VERSION)
+   if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
       qof_backend_set_error (&be->be, ERR_BACKEND_TOO_NEW);
       return -1;
@@ -561,22 +551,22 @@ pgendUpgradeDB (PGBackend *be)
    vers = pgendGetVersion(be);
 
    /* start adding features to bring database up to date */
-   if (vers.major == 1)
+   if (1 == vers.major)
    {
       /* version 1.1.0 add iguids to transaction and entry tables */
-      if (vers.minor < 1)
+      if (1 > vers.minor)
       {
          put_iguid_in_tables(be);
       }
-      if (vers.minor < 2)
+      if (2 > vers.minor)
       {
         fix_reconciled_balance_func (be);
       }
-      if (vers.minor < 3)
+      if (3 > vers.minor)
       {
         add_kvp_timespec_tables (be);
       }
-      if (vers.minor < 4)
+      if (4 > vers.minor)
       {
         add_multiple_book_support (be);
       }
