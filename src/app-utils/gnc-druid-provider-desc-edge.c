@@ -4,6 +4,7 @@
 #include "gnc-druid-provider-desc-edge.h"
 
 static void gnc_druid_provider_desc_edge_class_init	(GNCDruidProviderDescEdgeClass *class);
+static void gnc_druid_provider_desc_edge_init		(GNCDruidProviderDescEdge *gspaper);
 static void gnc_druid_provider_desc_edge_finalize	(GObject *obj);
 
 static GNCDruidProviderDescClass *parent_class;
@@ -23,7 +24,7 @@ gnc_druid_provider_desc_edge_get_type(void)
       NULL,
       sizeof (GNCDruidProviderDescEdge),
       0,
-      NULL,
+      (GInstanceInitFunc)gnc_druid_provider_desc_edge_init,
     };
 
     type = g_type_register_static (G_TYPE_GNC_DRUID_PROVIDER_DESC,
@@ -53,6 +54,12 @@ gnc_druid_provider_desc_edge_finalize (GObject *obj)
     g_free(desc->text);
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);
+}
+
+static void
+gnc_druid_provider_desc_edge_init (GNCDruidProviderDescEdge *o)
+{
+  o->parent.name = GNC_DRUID_PROVIDER_TYPE_EDGE;
 }
 
 GNCDruidProviderDescEdge*

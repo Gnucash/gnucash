@@ -24,6 +24,8 @@ typedef enum {
   GNC_DPE_LAST
 } GNCDruidProviderDescEdgeWhich;
 
+#define GNC_DRUID_PROVIDER_TYPE_EDGE	"edge"
+
 struct _GNCDruidProviderDescEdge
 {
   GNCDruidProviderDesc parent;
