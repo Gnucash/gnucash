@@ -1,2 +1,8 @@
+.deps
+.libs
+*.lo
+*.la
 Makefile
 Makefile.in
+a.out
+tmp.c
