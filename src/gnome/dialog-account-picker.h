@@ -24,6 +24,21 @@
 #include "glade-account-picker.h"
 #include "glade-cb-account-picker.h"
 
+#include <guile/gh.h>
+
 SCM accountPickerBox(char *initial_pick, int initial_type);
+
+typedef struct _accountpickerdialog {
+  
+  GtkWidget * dialog;
+  GtkWidget * treeview;
+  GtkWidget * acct_entry;
+  GtkWidget * descript_entry;
+  GtkWidget * type_picker;
+
+  SCM scm_acct_info;
+
+} QIFAccountPickerDialog;
+
 
 #endif

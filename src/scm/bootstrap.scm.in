@@ -91,6 +91,10 @@
   (if (gnc:debugging?)
       (debug-enable 'backtrace)))
 
+;; These are needed for a guile 1.3.4 bug
+(debug-enable 'debug)
+(read-enable 'positions)
+
 (gnc:setup-debugging)
 
 

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=GnuCash
 Comment=GnuCash Personal Finance
+Comment[sv]=GnuCash Personliga Finanser
 Exec=gnucash
 Terminal=0
 Type=Application

@@ -830,7 +830,7 @@ fi
 
 
 
-ALL_LINGUAS="fr de en_GB"
+ALL_LINGUAS="fr de en_GB sv"
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or

@@ -277,8 +277,8 @@ gncFileOpen (void)
   /* This dialogue can show up early in the startup process.
    * If the user fails to pick a file (by e.g. hitting the cancel
    * button), we might be left with a null topgroup, which leads
-   * to nastiness when user goes to create thier very first account.
-   * Don't leave thier ass in a sling, give them what they need.
+   * to nastiness when user goes to create their very first account.
+   * Don't leave their ass in a sling, give them what they need.
    */
   if (NULL == topgroup) 
   {

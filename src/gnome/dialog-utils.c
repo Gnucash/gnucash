@@ -110,11 +110,11 @@ gnc_ui_account_field_box_create(AccountEditInfo * info,
 				gboolean include_type)
 {
   GtkWidget *frame, *vbox, *hbox, *widget;
-    
+
   frame = gtk_frame_new(ACC_INFO_STR);
   gtk_container_border_width(GTK_CONTAINER(frame), 5);
   gtk_widget_show(frame);
-    
+
   hbox = gtk_hbox_new(FALSE, 5);
   gtk_container_border_width(GTK_CONTAINER(hbox), 5);
   gtk_container_add(GTK_CONTAINER(frame), hbox);

@@ -23,19 +23,18 @@ create_GNUcash_Account_Picker (void)
   GtkWidget *GNUcash_Account_Picker;
   GtkWidget *vbox1;
   GtkWidget *vbox2;
-  GtkWidget *hbox1;
   GtkWidget *frame1;
   GtkWidget *scrolledwindow1;
   GtkWidget *viewport1;
   GtkWidget *account_tree;
-  GtkWidget *hbox2;
+  GtkWidget *hbox5;
+  GtkWidget *vbox4;
   GtkWidget *label1;
-  GtkWidget *acct_entry;
-  GtkWidget *hbox3;
   GtkWidget *label2;
-  GtkWidget *acct_description_entry;
-  GtkWidget *hbox4;
   GtkWidget *label3;
+  GtkWidget *vbox5;
+  GtkWidget *acct_entry;
+  GtkWidget *acct_description_entry;
   GtkWidget *acct_type_picker;
   GtkWidget *acct_type_picker_menu;
   GtkWidget *glade_menuitem;
@@ -58,19 +57,12 @@ create_GNUcash_Account_Picker (void)
   gtk_widget_show (vbox2);
   gtk_box_pack_start (GTK_BOX (vbox1), vbox2, TRUE, TRUE, 0);
 
-  hbox1 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox1);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "hbox1", hbox1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox1);
-  gtk_box_pack_start (GTK_BOX (vbox2), hbox1, TRUE, TRUE, 0);
-
   frame1 = gtk_frame_new (_("Accounts"));
   gtk_widget_ref (frame1);
   gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "frame1", frame1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame1);
-  gtk_box_pack_start (GTK_BOX (hbox1), frame1, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), frame1, TRUE, TRUE, 0);
 
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow1);
@@ -94,74 +86,74 @@ create_GNUcash_Account_Picker (void)
   gtk_widget_show (account_tree);
   gtk_container_add (GTK_CONTAINER (viewport1), account_tree);
 
-  hbox2 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox2);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "hbox2", hbox2,
+  hbox5 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox5);
+  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "hbox5", hbox5,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (vbox2), hbox2, FALSE, FALSE, 6);
+  gtk_widget_show (hbox5);
+  gtk_box_pack_start (GTK_BOX (vbox1), hbox5, FALSE, FALSE, 0);
 
-  label1 = gtk_label_new (_("Selected account"));
+  vbox4 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox4);
+  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "vbox4", vbox4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox4);
+  gtk_box_pack_start (GTK_BOX (hbox5), vbox4, TRUE, TRUE, 5);
+
+  label1 = gtk_label_new (_("Selected account:"));
   gtk_widget_ref (label1);
   gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "label1", label1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label1);
-  gtk_box_pack_start (GTK_BOX (hbox2), label1, FALSE, FALSE, 8);
-  gtk_widget_set_usize (label1, 90, -2);
+  gtk_box_pack_start (GTK_BOX (vbox4), label1, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label1), 1, 0.5);
+
+  label2 = gtk_label_new (_("Description:"));
+  gtk_widget_ref (label2);
+  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "label2", label2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label2);
+  gtk_box_pack_start (GTK_BOX (vbox4), label2, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label2), 1, 0.5);
+
+  label3 = gtk_label_new (_("Account type:"));
+  gtk_widget_ref (label3);
+  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "label3", label3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label3);
+  gtk_box_pack_start (GTK_BOX (vbox4), label3, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label3), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label3), 1, 0.5);
+
+  vbox5 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox5);
+  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "vbox5", vbox5,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox5);
+  gtk_box_pack_start (GTK_BOX (hbox5), vbox5, TRUE, TRUE, 0);
 
   acct_entry = gtk_entry_new ();
   gtk_widget_ref (acct_entry);
   gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "acct_entry", acct_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (acct_entry);
-  gtk_box_pack_start (GTK_BOX (hbox2), acct_entry, TRUE, TRUE, 0);
-
-  hbox3 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox3);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "hbox3", hbox3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox3);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox3, FALSE, FALSE, 0);
-
-  label2 = gtk_label_new (_("Description"));
-  gtk_widget_ref (label2);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "label2", label2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label2);
-  gtk_box_pack_start (GTK_BOX (hbox3), label2, FALSE, FALSE, 8);
-  gtk_widget_set_usize (label2, 90, -2);
-  gtk_misc_set_alignment (GTK_MISC (label2), 1, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox5), acct_entry, FALSE, FALSE, 0);
 
   acct_description_entry = gtk_entry_new ();
   gtk_widget_ref (acct_description_entry);
   gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "acct_description_entry", acct_description_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (acct_description_entry);
-  gtk_box_pack_start (GTK_BOX (hbox3), acct_description_entry, TRUE, TRUE, 0);
-
-  hbox4 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox4);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "hbox4", hbox4,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox4);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox4, FALSE, FALSE, 0);
-
-  label3 = gtk_label_new (_("Account type"));
-  gtk_widget_ref (label3);
-  gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "label3", label3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label3);
-  gtk_box_pack_start (GTK_BOX (hbox4), label3, FALSE, FALSE, 8);
-  gtk_widget_set_usize (label3, 90, -2);
-  gtk_misc_set_alignment (GTK_MISC (label3), 1, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox5), acct_description_entry, FALSE, FALSE, 0);
 
   acct_type_picker = gtk_option_menu_new ();
   gtk_widget_ref (acct_type_picker);
   gtk_object_set_data_full (GTK_OBJECT (GNUcash_Account_Picker), "acct_type_picker", acct_type_picker,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (acct_type_picker);
-  gtk_box_pack_start (GTK_BOX (hbox4), acct_type_picker, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox5), acct_type_picker, FALSE, FALSE, 0);
   gtk_widget_set_usize (acct_type_picker, 150, 30);
   acct_type_picker_menu = gtk_menu_new ();
   glade_menuitem = gtk_menu_item_new_with_label (_("Bank"));

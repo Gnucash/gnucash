@@ -95,6 +95,7 @@ config.h
 *.patch
 *.diff
 *.diffs
+*.bak
 xacc
 *.xac.*.xac
 errs*
@@ -112,6 +113,7 @@ gnucash.pm
 gnucash-engine-perl5_wrap.c
 g-wrap-guile
 libgwrapguile.la
+libgwraprs.la
 gnc-autogen.h
 src/g-wrap/gnc.c
 src/g-wrap/gnc.h

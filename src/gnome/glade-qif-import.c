@@ -28,28 +28,27 @@ create_QIF_File_Import_Dialog (void)
   GtkWidget *scrolledwindow1;
   GtkWidget *viewport1;
   GtkWidget *selected_file_list;
-  GtkWidget *frame1;
-  GtkWidget *vbox1;
-  GtkWidget *hbox5;
+  GtkWidget *frame3;
+  GtkWidget *vbox2;
+  GtkWidget *hbox10;
+  GtkWidget *vbox3;
   GtkWidget *label1;
-  GtkWidget *qif_filename_entry;
-  GtkWidget *hbox8;
   GtkWidget *label679;
+  GtkWidget *currency_label;
+  GtkWidget *radix_format_label;
+  GtkWidget *date_format_label;
+  GtkWidget *vbox4;
+  GtkWidget *qif_filename_entry;
+  GtkWidget *hbox11;
   GtkWidget *qif_account_auto_check;
   GtkWidget *qif_account_entry;
-  GtkWidget *hbox2;
-  GtkWidget *currency_label;
   GtkWidget *qif_currency_entry;
-  GtkWidget *hbox3;
-  GtkWidget *radix_format_label;
   GtkWidget *qif_radix_picker;
   GtkWidget *qif_radix_picker_menu;
   GtkWidget *glade_menuitem;
-  GtkWidget *hbox4;
-  GtkWidget *date_format_label;
   GtkWidget *qif_date_picker;
   GtkWidget *qif_date_picker_menu;
-  GtkWidget *hbox6;
+  GtkWidget *hbox9;
   GtkWidget *file_select_btn;
   GtkWidget *add_file_button;
   GtkWidget *label69;
@@ -74,7 +73,7 @@ create_QIF_File_Import_Dialog (void)
 
   QIF_File_Import_Dialog = gnome_dialog_new (NULL, NULL);
   gtk_object_set_data (GTK_OBJECT (QIF_File_Import_Dialog), "QIF_File_Import_Dialog", QIF_File_Import_Dialog);
-  gtk_window_set_policy (GTK_WINDOW (QIF_File_Import_Dialog), TRUE, TRUE, FALSE);
+  gtk_window_set_policy (GTK_WINDOW (QIF_File_Import_Dialog), TRUE, TRUE, TRUE);
 
   dialog_vbox2 = GNOME_DIALOG (QIF_File_Import_Dialog)->vbox;
   gtk_object_set_data (GTK_OBJECT (QIF_File_Import_Dialog), "dialog_vbox2", dialog_vbox2);
@@ -101,7 +100,6 @@ create_QIF_File_Import_Dialog (void)
   gtk_widget_show (frame2);
   gtk_box_pack_start (GTK_BOX (hbox1), frame2, TRUE, TRUE, 0);
   gtk_widget_set_usize (frame2, 200, -2);
-  gtk_frame_set_label_align (GTK_FRAME (frame2), 0.05, 0.5);
 
   scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow1);
@@ -126,69 +124,107 @@ create_QIF_File_Import_Dialog (void)
   gtk_widget_show (selected_file_list);
   gtk_container_add (GTK_CONTAINER (viewport1), selected_file_list);
 
-  frame1 = gtk_frame_new (_("File Info"));
-  gtk_widget_ref (frame1);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "frame1", frame1,
+  frame3 = gtk_frame_new (_("File Info"));
+  gtk_widget_ref (frame3);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "frame3", frame3,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame1);
-  gtk_box_pack_start (GTK_BOX (hbox1), frame1, FALSE, FALSE, 0);
-  gtk_widget_set_usize (frame1, 325, -2);
-  gtk_frame_set_label_align (GTK_FRAME (frame1), 0.01, 0.5);
+  gtk_widget_show (frame3);
+  gtk_box_pack_start (GTK_BOX (hbox1), frame3, TRUE, TRUE, 0);
 
-  vbox1 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox1);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "vbox1", vbox1,
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox2);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "vbox2", vbox2,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox1);
-  gtk_container_add (GTK_CONTAINER (frame1), vbox1);
+  gtk_widget_show (vbox2);
+  gtk_container_add (GTK_CONTAINER (frame3), vbox2);
 
-  hbox5 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox5);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox5", hbox5,
+  hbox10 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox10);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox10", hbox10,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox5);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox5, FALSE, FALSE, 0);
+  gtk_widget_show (hbox10);
+  gtk_box_pack_start (GTK_BOX (vbox2), hbox10, TRUE, TRUE, 0);
 
-  label1 = gtk_label_new (_("QIF Filename"));
+  vbox3 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox3);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "vbox3", vbox3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox3);
+  gtk_box_pack_start (GTK_BOX (hbox10), vbox3, TRUE, TRUE, 5);
+
+  label1 = gtk_label_new (_("QIF Filename:"));
   gtk_widget_ref (label1);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "label1", label1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label1);
-  gtk_box_pack_start (GTK_BOX (hbox5), label1, FALSE, FALSE, 10);
-  gtk_widget_set_usize (label1, 70, -2);
+  gtk_box_pack_start (GTK_BOX (vbox3), label1, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label1), 1, 0.5);
+
+  label679 = gtk_label_new (_("QIF Account:"));
+  gtk_widget_ref (label679);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "label679", label679,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label679);
+  gtk_box_pack_start (GTK_BOX (vbox3), label679, FALSE, FALSE, 5);
+  gtk_label_set_justify (GTK_LABEL (label679), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label679), 1, 0.5);
+
+  currency_label = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (currency_label);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "currency_label", currency_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (currency_label);
+  gtk_box_pack_start (GTK_BOX (vbox3), currency_label, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (currency_label), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (currency_label), 1, 0.5);
+
+  radix_format_label = gtk_label_new (_("Radix format:"));
+  gtk_widget_ref (radix_format_label);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "radix_format_label", radix_format_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radix_format_label);
+  gtk_box_pack_start (GTK_BOX (vbox3), radix_format_label, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (radix_format_label), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (radix_format_label), 1, 0.5);
+
+  date_format_label = gtk_label_new (_("Date format:"));
+  gtk_widget_ref (date_format_label);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "date_format_label", date_format_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_format_label);
+  gtk_box_pack_start (GTK_BOX (vbox3), date_format_label, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (date_format_label), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (date_format_label), 1, 0.5);
+
+  vbox4 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox4);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "vbox4", vbox4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox4);
+  gtk_box_pack_start (GTK_BOX (hbox10), vbox4, TRUE, TRUE, 5);
 
   qif_filename_entry = gtk_entry_new ();
   gtk_widget_ref (qif_filename_entry);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_filename_entry", qif_filename_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_filename_entry);
-  gtk_box_pack_start (GTK_BOX (hbox5), qif_filename_entry, TRUE, TRUE, 5);
+  gtk_box_pack_start (GTK_BOX (vbox4), qif_filename_entry, FALSE, FALSE, 0);
   GTK_WIDGET_SET_FLAGS (qif_filename_entry, GTK_CAN_DEFAULT);
 
-  hbox8 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox8);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox8", hbox8,
+  hbox11 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox11);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox11", hbox11,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox8);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox8, TRUE, TRUE, 0);
-
-  label679 = gtk_label_new (_("QIF Account"));
-  gtk_widget_ref (label679);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "label679", label679,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label679);
-  gtk_box_pack_start (GTK_BOX (hbox8), label679, FALSE, FALSE, 10);
-  gtk_widget_set_usize (label679, 70, -2);
-  gtk_misc_set_alignment (GTK_MISC (label679), 1, 0.5);
+  gtk_widget_show (hbox11);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox11, TRUE, TRUE, 0);
 
   qif_account_auto_check = gtk_check_button_new_with_label (_("Auto"));
   gtk_widget_ref (qif_account_auto_check);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_account_auto_check", qif_account_auto_check,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_account_auto_check);
-  gtk_box_pack_start (GTK_BOX (hbox8), qif_account_auto_check, FALSE, FALSE, 2);
-  gtk_widget_set_usize (qif_account_auto_check, 45, 16);
+  gtk_box_pack_start (GTK_BOX (hbox11), qif_account_auto_check, FALSE, FALSE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (qif_account_auto_check), TRUE);
 
   qif_account_entry = gtk_entry_new ();
@@ -196,57 +232,21 @@ create_QIF_File_Import_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_account_entry", qif_account_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_account_entry);
-  gtk_box_pack_start (GTK_BOX (hbox8), qif_account_entry, TRUE, TRUE, 5);
-
-  hbox2 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox2);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox2", hbox2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox2, FALSE, FALSE, 0);
-
-  currency_label = gtk_label_new (_("Currency"));
-  gtk_widget_ref (currency_label);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "currency_label", currency_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (currency_label);
-  gtk_box_pack_start (GTK_BOX (hbox2), currency_label, FALSE, FALSE, 10);
-  gtk_widget_set_usize (currency_label, 70, -2);
-  gtk_label_set_justify (GTK_LABEL (currency_label), GTK_JUSTIFY_LEFT);
-  gtk_misc_set_alignment (GTK_MISC (currency_label), 1, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox11), qif_account_entry, TRUE, TRUE, 0);
 
   qif_currency_entry = gtk_entry_new ();
   gtk_widget_ref (qif_currency_entry);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_currency_entry", qif_currency_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_currency_entry);
-  gtk_box_pack_start (GTK_BOX (hbox2), qif_currency_entry, FALSE, FALSE, 5);
-  gtk_widget_set_usize (qif_currency_entry, 75, -2);
-
-  hbox3 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox3);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox3", hbox3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox3);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox3, FALSE, FALSE, 0);
-
-  radix_format_label = gtk_label_new (_("Radix format"));
-  gtk_widget_ref (radix_format_label);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "radix_format_label", radix_format_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radix_format_label);
-  gtk_box_pack_start (GTK_BOX (hbox3), radix_format_label, FALSE, FALSE, 10);
-  gtk_widget_set_usize (radix_format_label, 70, -2);
-  gtk_label_set_justify (GTK_LABEL (radix_format_label), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (radix_format_label), 1, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox4), qif_currency_entry, FALSE, FALSE, 0);
 
   qif_radix_picker = gtk_option_menu_new ();
   gtk_widget_ref (qif_radix_picker);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_radix_picker", qif_radix_picker,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_radix_picker);
-  gtk_box_pack_start (GTK_BOX (hbox3), qif_radix_picker, FALSE, FALSE, 5);
-  gtk_widget_set_usize (qif_radix_picker, 140, -2);
+  gtk_box_pack_start (GTK_BOX (vbox4), qif_radix_picker, FALSE, FALSE, 0);
   qif_radix_picker_menu = gtk_menu_new ();
   glade_menuitem = gtk_menu_item_new_with_label (_("Autodetect"));
   gtk_widget_show (glade_menuitem);
@@ -259,29 +259,12 @@ create_QIF_File_Import_Dialog (void)
   gtk_menu_append (GTK_MENU (qif_radix_picker_menu), glade_menuitem);
   gtk_option_menu_set_menu (GTK_OPTION_MENU (qif_radix_picker), qif_radix_picker_menu);
 
-  hbox4 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox4);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox4", hbox4,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox4);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox4, FALSE, FALSE, 0);
-
-  date_format_label = gtk_label_new (_("Date format"));
-  gtk_widget_ref (date_format_label);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "date_format_label", date_format_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (date_format_label);
-  gtk_box_pack_start (GTK_BOX (hbox4), date_format_label, FALSE, FALSE, 10);
-  gtk_widget_set_usize (date_format_label, 70, -2);
-  gtk_misc_set_alignment (GTK_MISC (date_format_label), 1, 0.5);
-
   qif_date_picker = gtk_option_menu_new ();
   gtk_widget_ref (qif_date_picker);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_date_picker", qif_date_picker,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_date_picker);
-  gtk_box_pack_start (GTK_BOX (hbox4), qif_date_picker, FALSE, FALSE, 5);
-  gtk_widget_set_usize (qif_date_picker, 140, -2);
+  gtk_box_pack_start (GTK_BOX (vbox4), qif_date_picker, FALSE, FALSE, 0);
   qif_date_picker_menu = gtk_menu_new ();
   glade_menuitem = gtk_menu_item_new_with_label (_("Autodetect           "));
   gtk_widget_show (glade_menuitem);
@@ -300,28 +283,26 @@ create_QIF_File_Import_Dialog (void)
   gtk_menu_append (GTK_MENU (qif_date_picker_menu), glade_menuitem);
   gtk_option_menu_set_menu (GTK_OPTION_MENU (qif_date_picker), qif_date_picker_menu);
 
-  hbox6 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox6);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox6", hbox6,
+  hbox9 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_ref (hbox9);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox9", hbox9,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox6);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox6, TRUE, TRUE, 5);
+  gtk_widget_show (hbox9);
+  gtk_box_pack_start (GTK_BOX (vbox2), hbox9, FALSE, FALSE, 5);
 
   file_select_btn = gtk_button_new_with_label (_("Select file"));
   gtk_widget_ref (file_select_btn);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "file_select_btn", file_select_btn,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (file_select_btn);
-  gtk_box_pack_start (GTK_BOX (hbox6), file_select_btn, TRUE, FALSE, 3);
-  gtk_widget_set_usize (file_select_btn, 125, -2);
+  gtk_box_pack_start (GTK_BOX (hbox9), file_select_btn, TRUE, TRUE, 5);
 
   add_file_button = gtk_button_new_with_label (_("Load file"));
   gtk_widget_ref (add_file_button);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "add_file_button", add_file_button,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (add_file_button);
-  gtk_box_pack_start (GTK_BOX (hbox6), add_file_button, TRUE, FALSE, 0);
-  gtk_widget_set_usize (add_file_button, 125, -2);
+  gtk_box_pack_start (GTK_BOX (hbox9), add_file_button, TRUE, TRUE, 5);
 
   label69 = gtk_label_new (_("Files"));
   gtk_widget_ref (label69);

@@ -60,10 +60,11 @@
       </child>
 
       <widget>
-	<class>GtkHBox</class>
-	<name>hbox1</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<class>GtkFrame</class>
+	<name>frame1</name>
+	<label>Accounts</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
@@ -71,78 +72,122 @@
 	</child>
 
 	<widget>
-	  <class>GtkFrame</class>
-	  <name>frame1</name>
-	  <label>Accounts</label>
-	  <label_xalign>0</label_xalign>
-	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow1</name>
+	  <width>250</width>
+	  <height>200</height>
+	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	  <widget>
-	    <class>GtkScrolledWindow</class>
-	    <name>scrolledwindow1</name>
-	    <width>250</width>
-	    <height>200</height>
-	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <class>GtkViewport</class>
+	    <name>viewport1</name>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	    <widget>
-	      <class>GtkViewport</class>
-	      <name>viewport1</name>
-	      <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-	      <widget>
-		<class>GtkTree</class>
-		<name>account_tree</name>
-		<signal>
-		  <name>select_child</name>
-		  <handler>gnc_ui_account_picker_select_cb</handler>
-		  <data>GNUcash_Account_Picker</data>
-		  <last_modification_time>Thu, 02 Mar 2000 21:32:14 GMT</last_modification_time>
-		</signal>
-		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-		<view_mode>GTK_TREE_VIEW_LINE</view_mode>
-		<view_line>True</view_line>
-	      </widget>
+	      <class>GtkTree</class>
+	      <name>account_tree</name>
+	      <signal>
+		<name>select_child</name>
+		<handler>gnc_ui_account_picker_select_cb</handler>
+		<data>GNUcash_Account_Picker</data>
+		<last_modification_time>Thu, 02 Mar 2000 21:32:14 GMT</last_modification_time>
+	      </signal>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <view_mode>GTK_TREE_VIEW_LINE</view_mode>
+	      <view_line>True</view_line>
 	    </widget>
 	  </widget>
 	</widget>
       </widget>
+    </widget>
+
+    <widget>
+      <class>GtkHBox</class>
+      <name>hbox5</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
 
       <widget>
-	<class>GtkHBox</class>
-	<name>hbox2</name>
-	<homogeneous>False</homogeneous>
+	<class>GtkVBox</class>
+	<name>vbox4</name>
+	<homogeneous>True</homogeneous>
 	<spacing>0</spacing>
 	<child>
-	  <padding>6</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
+	  <padding>5</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>label1</name>
-	  <width>90</width>
-	  <label>Selected account</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <label>Selected account:</label>
+	  <justify>GTK_JUSTIFY_RIGHT</justify>
 	  <wrap>False</wrap>
 	  <xalign>1</xalign>
 	  <yalign>0.5</yalign>
 	  <xpad>0</xpad>
 	  <ypad>0</ypad>
 	  <child>
-	    <padding>8</padding>
+	    <padding>0</padding>
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
 	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label2</name>
+	  <label>Description:</label>
+	  <justify>GTK_JUSTIFY_RIGHT</justify>
+	  <wrap>False</wrap>
+	  <xalign>1</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label3</name>
+	  <label>Account type:</label>
+	  <justify>GTK_JUSTIFY_RIGHT</justify>
+	  <wrap>False</wrap>
+	  <xalign>1</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkVBox</class>
+	<name>vbox5</name>
+	<homogeneous>True</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
 
 	<widget>
 	  <class>GtkEntry</class>
@@ -154,94 +199,33 @@
 	  <text></text>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 	</widget>
-      </widget>
-    </widget>
 
-    <widget>
-      <class>GtkHBox</class>
-      <name>hbox3</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-      </child>
+	<widget>
+	  <class>GtkEntry</class>
+	  <name>acct_description_entry</name>
+	  <can_focus>True</can_focus>
+	  <editable>True</editable>
+	  <text_visible>True</text_visible>
+	  <text_max_length>0</text_max_length>
+	  <text></text>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
 
-      <widget>
-	<class>GtkLabel</class>
-	<name>label2</name>
-	<width>90</width>
-	<label>Description</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>1</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
-	<child>
-	  <padding>8</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-      </widget>
-
-      <widget>
-	<class>GtkEntry</class>
-	<name>acct_description_entry</name>
-	<can_focus>True</can_focus>
-	<editable>True</editable>
-	<text_visible>True</text_visible>
-	<text_max_length>0</text_max_length>
-	<text></text>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkHBox</class>
-      <name>hbox4</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-      </child>
-
-      <widget>
-	<class>GtkLabel</class>
-	<name>label3</name>
-	<width>90</width>
-	<label>Account type</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>1</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
-	<child>
-	  <padding>8</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-      </widget>
-
-      <widget>
-	<class>GtkOptionMenu</class>
-	<name>acct_type_picker</name>
-	<width>150</width>
-	<height>30</height>
-	<can_focus>True</can_focus>
-	<items>Bank
+	<widget>
+	  <class>GtkOptionMenu</class>
+	  <name>acct_type_picker</name>
+	  <width>150</width>
+	  <height>30</height>
+	  <can_focus>True</can_focus>
+	  <items>Bank
 Cash
 Asset
 Credit
@@ -253,12 +237,13 @@ Income
 Expense
 Equity
 </items>
-	<initial_choice>0</initial_choice>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
+	  <initial_choice>0</initial_choice>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
       </widget>
     </widget>
 

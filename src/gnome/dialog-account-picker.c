@@ -25,6 +25,7 @@
 
 #include "glade-account-picker.h"
 #include "glade-cb-account-picker.h"
+#include "dialog-account-picker.h"
 
 #include <guile/gh.h>
 
@@ -85,100 +86,101 @@ build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
 
 SCM
 accountPickerBox(char * initial_selection, int initial_type) {  
+
+  QIFAccountPickerDialog * wind;
+
   AccountGroup * topgroup; 
   Account      * selected;
   int          i;
-
-  GtkWidget    * picker    = create_GNUcash_Account_Picker();
-  GtkWidget    * treeview  = gtk_object_get_data(GTK_OBJECT(picker),
-                                                "account_tree");
-  GtkWidget    * entry     = gtk_object_get_data(GTK_OBJECT(picker),
-                                                "acct_entry");
-  GtkWidget    * descript  = gtk_object_get_data(GTK_OBJECT(picker),
-                                                 "acct_description_entry");
-  GtkWidget    * type_pick = gtk_object_get_data(GTK_OBJECT(picker),
-                                                 "acct_type_picker");
   GtkWidget    * treeitem  = gtk_tree_item_new_with_label("All Accounts");
   GtkWidget    * subtree   = gtk_tree_new();
-
-  char         * selected_account = NULL;
   SCM          infolist;
-
   GtkWidget    * active, * menu;
 
-  gtk_object_set_data(GTK_OBJECT(picker), "string_return", 
-                      &selected_account);
+  wind = g_new0(QIFAccountPickerDialog, 1);
+
+  wind->dialog     = create_GNUcash_Account_Picker();
+  wind->treeview   = 
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), "account_tree");
+  wind->acct_entry = 
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_entry");
+  wind->descript_entry  = 
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_description_entry");
+  wind->type_picker = 
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_type_picker");
+
+  gtk_object_set_data(GTK_OBJECT(wind->dialog), "account-picker-dialog",
+                      wind);
 
   gtk_signal_connect(GTK_OBJECT(subtree), "select_child",
                      GTK_SIGNAL_FUNC(gnc_ui_account_picker_select_cb),
-                     picker);
+                     wind->dialog);
                      
   /* do some setup */
   topgroup  = gncGetCurrentGroup();
-  gtk_tree_append(GTK_TREE(treeview), treeitem);
+  gtk_tree_append(GTK_TREE(wind->treeview), treeitem);
   gtk_widget_show(treeitem);
 
-  build_acct_tree(topgroup, subtree, picker);
+  build_acct_tree(topgroup, subtree, wind->dialog);
   gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeitem), subtree);
 
-  gtk_tree_set_view_lines(GTK_TREE(treeview), TRUE);
+  gtk_tree_set_view_lines(GTK_TREE(wind->treeview), TRUE);
   gtk_tree_item_expand(GTK_TREE_ITEM(treeitem));
 
   /* this is a pain in the butt but there's no other way to easily 
    * find out the index of the optionmeny selection */
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(type_pick));
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(wind->type_picker));
   for(i = 0; i < 11; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick), i);
+    gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
     gtk_object_set_data(GTK_OBJECT(active), 
                         "option_index",
-                        (gpointer)(i));
+                        GINT_TO_POINTER(i));
   }
   
-  gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick), 0);
+  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker), 0);
 
   if(initial_selection) {
-    printf("setting up initial selection..\n");
     selected = xaccGetAccountFromFullName(topgroup, initial_selection, ':');
-    gtk_entry_set_text(GTK_ENTRY(entry), initial_selection);
+    gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), initial_selection);
     
     if(selected) {
       if(xaccAccountGetDescription(selected)) {
-        gtk_entry_set_text(GTK_ENTRY(descript), 
+        gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
                            xaccAccountGetDescription(selected));
       }
-      gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick),
+      gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
                                   xaccAccountGetType(selected));
-      infolist = SCM_LIST3(gh_str02scm(selected_account),
+      infolist = SCM_LIST3(gh_str02scm(initial_selection),
                            gh_int2scm(xaccAccountGetType(selected)),
                            gh_str02scm(xaccAccountGetDescription(selected)));
     }
     else {
-      gtk_entry_set_text(GTK_ENTRY(descript), "");
-      gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick),
+      gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), "");
+      gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
                                   initial_type);
-      infolist = SCM_LIST3(gh_str02scm(selected_account),
+      infolist = SCM_LIST3(gh_str02scm(initial_selection),
                            gh_int2scm(initial_type),
                            gh_str02scm(""));
     }
 
     scm_protect_object(infolist);
-    gtk_object_set_data(GTK_OBJECT(picker), 
-                        "scm_acct_info", (gpointer)infolist);    
+    wind->scm_acct_info = infolist;
   }
   
   /* make sure the window is modal, then wait on it */
-  gtk_window_set_modal(GTK_WINDOW(picker), TRUE);
-  gtk_widget_show(GTK_WIDGET(treeview));
-  gtk_widget_show(GTK_WIDGET(picker));
+  gtk_window_set_modal(GTK_WINDOW(wind->dialog), TRUE);
+  gtk_widget_show(GTK_WIDGET(wind->treeview));
+  gtk_widget_show(GTK_WIDGET(wind->dialog));
   gtk_main();
   
-  infolist = (SCM)gtk_object_get_data(GTK_OBJECT(picker),
-                                 "scm_acct_info");
+  infolist = wind->scm_acct_info;
 
-  /* murder it */
-  gtk_widget_destroy(picker);
-  
+  /* destroy the window */
+  gtk_widget_destroy(wind->dialog);
+  scm_unprotect_object(wind->scm_acct_info);
+  g_free(wind);
+
   return infolist;
 }
 
@@ -186,51 +188,43 @@ void
 gnc_ui_account_picker_select_cb(GtkTree   * tree,
                                 GtkWidget * widget,
                                 gpointer  user_data) {
+  QIFAccountPickerDialog * wind;
   AccountGroup * topgroup = gncGetCurrentGroup();
   Account      * gnc_acct;
-  GtkWidget    * acct_entry = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                  "acct_entry");
-  GtkWidget    * descript = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                "acct_description_entry");
-  GtkWidget    * type_pick = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                 "acct_type_picker");
   char         * selected_acct;
   char         * description;
   int          acct_type;
   SCM          infolist;
 
-  printf("in select cb\n");
+  wind = gtk_object_get_data(GTK_OBJECT(user_data),
+                             "account-picker-dialog");
+  
   selected_acct = gtk_object_get_data(GTK_OBJECT(widget), "acct_name");  
   gnc_acct      = xaccGetAccountFromFullName(topgroup, selected_acct, 
                                              ':');
   
-  gtk_entry_set_text(GTK_ENTRY(acct_entry), selected_acct);
+  gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), selected_acct);
   description = xaccAccountGetDescription(gnc_acct);
   acct_type = xaccAccountGetType(gnc_acct);
 
-  gtk_entry_set_text(GTK_ENTRY(descript), 
+  gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
                      description);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick),
+  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
                               acct_type);
   infolist = SCM_LIST3(gh_str02scm(selected_acct),
                        gh_int2scm(acct_type),
                        gh_str02scm(description));
   scm_protect_object(infolist);
-  gtk_object_set_data(GTK_OBJECT(user_data), 
-                      "scm_acct_info", (gpointer)infolist);
-  printf("leaving select cb\n");
+
+  scm_unprotect_object(wind->scm_acct_info);
+  wind->scm_acct_info = infolist;
 }
 
 
 void
 gnc_ui_account_picker_ok_cb(GtkButton *button,
                             gpointer   user_data) {
-  GtkWidget    * acct_entry = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                  "acct_entry");
-  GtkWidget    * descript = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                "acct_description_entry");
-  GtkWidget    * type_pick = gtk_object_get_data(GTK_OBJECT(user_data),
-                                                 "acct_type_picker");
+  QIFAccountPickerDialog * wind;
   GtkWidget    * type_menu;
   GtkWidget    * menuitem;
 
@@ -239,24 +233,29 @@ gnc_ui_account_picker_ok_cb(GtkButton *button,
   int          acct_type;
   SCM          infolist;
   
-  selected_acct = gtk_entry_get_text(GTK_ENTRY(acct_entry));
-  description = gtk_entry_get_text(GTK_ENTRY(descript));
+  wind = gtk_object_get_data(GTK_OBJECT(user_data),
+                             "account-picker-dialog");
 
-  type_menu    = gtk_option_menu_get_menu(GTK_OPTION_MENU(type_pick));
+  selected_acct = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
+  description = gtk_entry_get_text(GTK_ENTRY(wind->descript_entry));
+
+  type_menu    = gtk_option_menu_get_menu(GTK_OPTION_MENU(wind->type_picker));
   menuitem     = gtk_menu_get_active(GTK_MENU(type_menu));
   acct_type    = (int)(gtk_object_get_data(GTK_OBJECT(menuitem),
                                            "option_index"));
   
-  gtk_entry_set_text(GTK_ENTRY(descript), 
+  gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
                      description);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(type_pick),
+  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
                               acct_type);
+
   infolist = SCM_LIST3(gh_str02scm(selected_acct),
                        gh_int2scm(acct_type),
                        gh_str02scm(description));
   scm_protect_object(infolist);
-  gtk_object_set_data(GTK_OBJECT(user_data), 
-                      "scm_acct_info", (gpointer)infolist);
+
+  scm_unprotect_object(wind->scm_acct_info);
+  wind->scm_acct_info = infolist;
   
   gtk_main_quit();
 }
@@ -264,8 +263,13 @@ gnc_ui_account_picker_ok_cb(GtkButton *button,
 void
 gnc_ui_account_picker_cancel_cb(GtkButton * button,
                                 gpointer         user_data) {
-  gtk_object_set_data(GTK_OBJECT(user_data),
-                      "scm_acct_info",
-                      (gpointer)SCM_BOOL_F);
+  QIFAccountPickerDialog * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "account-picker-dialog");
+
+  scm_unprotect_object(wind->scm_acct_info);
+
+  wind->scm_acct_info = SCM_BOOL_F;
+  scm_protect_object(wind->scm_acct_info);
+
   gtk_main_quit();
 }

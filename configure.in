@@ -26,7 +26,7 @@ AC_INIT(src/guile/gnucash.h.in)
 AM_INIT_AUTOMAKE(gnucash,1.3.2)
 
 dnl Set of available languages.
-ALL_LINGUAS="fr de en_GB"
+ALL_LINGUAS="fr de en_GB sv"
 
 AC_PROG_INSTALL
 AC_PROG_RANLIB

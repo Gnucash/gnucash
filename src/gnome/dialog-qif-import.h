@@ -29,8 +29,21 @@
 typedef struct _qifimportwindow
 {
 
-  GtkWidget * parent;
+  /* on the Files tab */
   GtkWidget * dialog;
+  GtkWidget * currency_entry;
+  GtkWidget * radix_picker;
+  GtkWidget * date_picker;
+  GtkWidget * filename_entry;
+  GtkWidget * acct_auto_button;
+  GtkWidget * acct_entry;
+  GtkWidget * selected_file_list;
+
+  /* on the Accounts tab */
+  GtkWidget * acct_list;
+  
+  /* on the Categories tab */
+  GtkWidget * cat_list;
 
   SCM       imported_files;
   SCM       selected_file;
@@ -40,7 +53,7 @@ typedef struct _qifimportwindow
 
 } QIFImportWindow;
 
-QIFImportWindow * gnc_ui_qif_import_dialog_make(GtkWidget * parent);
+QIFImportWindow * gnc_ui_qif_import_dialog_make();
 void gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
 
 #endif
