@@ -105,7 +105,7 @@ create_newUserDialog (void)
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_logo_bg_color);
   gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_title_color);
   gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (newUserStartPage), _("New Account List Setup"));
-  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This wizard will help you to set up a default set of accounts to use.  If this is the first\ntime you have run GnuCash this dialog will appear.  If you choose New File in the\nFile menu this dialog will also appear unless you have set the \"No account list setup\non new file\" option."));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This wizard will help you to set up a default set of accounts to use. This wizard\nwill appear If you choose New File in the File menu unless you have set the\n\"No account list setup on new file\" option in the Preferences window."));
 
   newAccountCurrencyChoosePage = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_set_name (newAccountCurrencyChoosePage, "newAccountCurrencyChoosePage");
@@ -541,5 +541,102 @@ create_addAccountCancelDialog (void)
                       NULL);
 
   return addAccountCancelDialog;
+}
+
+GtkWidget*
+create_newUserChoiceWindow (void)
+{
+  GtkWidget *newUserChoiceWindow;
+  GtkWidget *dialog_vbox1;
+  GtkWidget *frame4;
+  GtkWidget *vbox6;
+  GSList *new_user_group_group = NULL;
+  GtkWidget *radiobutton1;
+  GtkWidget *radiobutton2;
+  GtkWidget *radiobutton3;
+  GtkWidget *dialog_action_area2;
+  GtkWidget *button1;
+  GtkWidget *button3;
+
+  newUserChoiceWindow = gnome_dialog_new (_("Welcome to GnuCash 1.6!"), NULL);
+  gtk_widget_set_name (newUserChoiceWindow, "newUserChoiceWindow");
+  gtk_object_set_data (GTK_OBJECT (newUserChoiceWindow), "newUserChoiceWindow", newUserChoiceWindow);
+  gtk_window_set_policy (GTK_WINDOW (newUserChoiceWindow), FALSE, FALSE, FALSE);
+
+  dialog_vbox1 = GNOME_DIALOG (newUserChoiceWindow)->vbox;
+  gtk_widget_set_name (dialog_vbox1, "dialog_vbox1");
+  gtk_object_set_data (GTK_OBJECT (newUserChoiceWindow), "dialog_vbox1", dialog_vbox1);
+  gtk_widget_show (dialog_vbox1);
+
+  frame4 = gtk_frame_new (NULL);
+  gtk_widget_set_name (frame4, "frame4");
+  gtk_widget_ref (frame4);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "frame4", frame4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame4);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox1), frame4, FALSE, FALSE, 0);
+
+  vbox6 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox6, "vbox6");
+  gtk_widget_ref (vbox6);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "vbox6", vbox6,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox6);
+  gtk_container_add (GTK_CONTAINER (frame4), vbox6);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox6), 3);
+
+  radiobutton1 = gtk_radio_button_new_with_label (new_user_group_group, _("Create a new set of accounts"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton1));
+  gtk_widget_set_name (radiobutton1, "radiobutton1");
+  gtk_widget_ref (radiobutton1);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton1", radiobutton1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton1);
+  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton1, FALSE, FALSE, 0);
+
+  radiobutton2 = gtk_radio_button_new_with_label (new_user_group_group, _("Import my QIF files"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton2));
+  gtk_widget_set_name (radiobutton2, "radiobutton2");
+  gtk_widget_ref (radiobutton2);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton2", radiobutton2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton2);
+  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton2, FALSE, FALSE, 0);
+
+  radiobutton3 = gtk_radio_button_new_with_label (new_user_group_group, _("Open the new user tutorial"));
+  new_user_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton3));
+  gtk_widget_set_name (radiobutton3, "radiobutton3");
+  gtk_widget_ref (radiobutton3);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "radiobutton3", radiobutton3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton3);
+  gtk_box_pack_start (GTK_BOX (vbox6), radiobutton3, FALSE, FALSE, 0);
+
+  dialog_action_area2 = GNOME_DIALOG (newUserChoiceWindow)->action_area;
+  gtk_widget_set_name (dialog_action_area2, "dialog_action_area2");
+  gtk_object_set_data (GTK_OBJECT (newUserChoiceWindow), "dialog_action_area2", dialog_action_area2);
+  gtk_widget_show (dialog_action_area2);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area2), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area2), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (newUserChoiceWindow), GNOME_STOCK_BUTTON_OK);
+  button1 = GTK_WIDGET (g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data);
+  gtk_widget_set_name (button1, "button1");
+  gtk_widget_ref (button1);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "button1", button1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button1);
+  GTK_WIDGET_SET_FLAGS (button1, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (newUserChoiceWindow), GNOME_STOCK_BUTTON_CANCEL);
+  button3 = GTK_WIDGET (g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data);
+  gtk_widget_set_name (button3, "button3");
+  gtk_widget_ref (button3);
+  gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "button3", button3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button3);
+  GTK_WIDGET_SET_FLAGS (button3, GTK_CAN_DEFAULT);
+
+  return newUserChoiceWindow;
 }
 

@@ -1,12 +1,17 @@
+2001-05-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/new-user-funs.h: add api & glade work for new
+	user choices dialog.
+
 2001-05-21  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* doc/sgml/C/xacc-multicolumn-view-reports.sgml: preliminary description.
+	* doc/sgml/C/xacc-multicolumn-view-reports.sgml: preliminary
+	description.
 
 	* doc/sgml/C/xacc-report.sgml, xacc-balancesheet.sgml, 
 	xacc-asset-liability-piecharts.sgml : more updates.
 
 	* src/scm/tip-list.scm: more tips.
-
 
 2001-05-19  Dave Peticolas  <dave@krondo.com>
 
@@ -31,7 +36,8 @@
 	pointer to NULL
 	(xaccAccountRemoveGroup): set parent's child pointer to NULL
 
-	* src/engine/sixtp-dom-parsers.c (dom_tree_to_integer): fix mem leak
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_integer): fix mem
+	leak
 
 2001-05-18  James LewisMoss  <jimdres@mindspring.com>
 

@@ -32,6 +32,8 @@
 int gnc_ui_show_new_user_window(void);
 int gnc_ui_delete_new_user_window(void);
 
+int gnc_ui_show_new_user_choice_window(void);
+
 int gnc_ui_show_nu_cancel_dialog(void);
 int gnc_ui_delete_nu_cancel_dialog(void);
 
