@@ -1,3 +1,7 @@
+2003-01-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main.scm -- mention bugzilla in the unstable message
+
 2003-01-04  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-account-xml-v2.c: 
