@@ -181,6 +181,7 @@ gnc_frequency_init( GNCFrequency *gf )
                 { "weekly_spin",      spin_changed_helper },
                 { "semimonthly_spin", spin_changed_helper },
                 { "monthly_spin",     spin_changed_helper },
+                { "yearly_spin",      spin_changed_helper },
                 { NULL,               NULL }
         };
 
@@ -217,10 +218,12 @@ gnc_frequency_init( GNCFrequency *gf )
         }
 
         /* initialize the spin buttons */
-        for ( i=0; spinVals[i].name != NULL; i++ ) {
-                o = glade_xml_get_widget( gf->gxml,
+        for ( i=0; spinVals[i].name != NULL; i++ ) 
+        {
+                if ( spinVals[i].fn != NULL ) 
+                {
+                        o = glade_xml_get_widget( gf->gxml,
                                           spinVals[i].name );
-                if ( spinVals[i].fn != NULL ) {
                         adj = gtk_spin_button_get_adjustment( GTK_SPIN_BUTTON(o) );
                         gtk_signal_connect( GTK_OBJECT(adj), "value_changed",
                                             GTK_SIGNAL_FUNC(spinVals[i].fn), gf );
