@@ -29,7 +29,7 @@ INCLPATH = -I@srcdir@/../..   \
 
 # add the -fpic flag to generate relocatable position independent code
 # for the engine so that in can be used in a shared module (e.g. a perl module)
-CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic ${GLIB_CFLAGS}
+CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic -Wall ${GLIB_CFLAGS}
 LIBS     = @LIBS@ ${GLIB_LIBS}
 
 ######################################################################
@@ -49,7 +49,7 @@ include @top_srcdir@/Makefile.common
 default: ../libengine.a
 
 ../libengine.a: ${OBJS}
-	ar vru libengine.a ${OBJS}
+	ar vrus libengine.a ${OBJS}
 	(cd .. && ln -sf engine/libengine.a .)
 
 TRASH += ../libengine.a libengine.a
