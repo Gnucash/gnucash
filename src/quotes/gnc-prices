@@ -9,10 +9,10 @@
 #
 # HISTORY:
 # Created by Linas Vepstas January 1999
-# Copyright (c) 1999 Linas Vepstas
+# Copyright (c) 1999-2000 Linas Vepstas
 
 # hack alert -- this pathname should *NOT* be hard-coded.
-use lib '/opt/gnucash/lib/gnucash/';
+use lib '/usr/lib/gnucash/';
 use Quote;
 use gnucash;
 
