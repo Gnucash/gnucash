@@ -2,14 +2,6 @@
 noinst_PROGRAMS = dbadd
 
 LDADD = \
-  ${GNOMEUI_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOME_PRINT_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
-  ${GTKHTML_LIBS} \
-  ${GHTTP_LIBS} \
-  ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS}
 

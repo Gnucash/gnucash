@@ -138,7 +138,7 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
     xmlAddChild(ret, guid_to_dom_tree("trn:id", xaccTransGetGUID(trn)));
 
-    if(xaccTransGetNum(trn))
+    if(xaccTransGetNum(trn) && (safe_strcmp(xaccTransGetNum(trn), "") != 0))
     {
         xmlNewTextChild(ret, NULL, "trn:num", xaccTransGetNum(trn));
     }
@@ -253,7 +253,7 @@ spl_value_handler(xmlNodePtr node, gpointer spl)
 static gboolean
 spl_quantity_handler(xmlNodePtr node, gpointer spl)
 {
-    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetValue);
+    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetShareAmount);
 }
 
 static gboolean

@@ -1,3 +1,8 @@
+2001-03-29  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-gncxml-v2.c (write_counts): don't add an amount if
+	it's == 0.
+
 2001-03-29  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/portfolio.scm: New file.  Stock portfolio
@@ -9,6 +14,14 @@
 	* src/engine/gnc-pricedb.[ch]: added
 	gnc_pricedb_lookup_nearest_in_time, courtesy Rob B.
 
+
+2001-03-28  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/gnc-test-stuff.c (get_random_split): set a share
+	amount.
+
+	* src/engine/gnc-transaction-xml-v2.c (spl_quantity_handler):
+	should have been xaccSplitSetShareAmount not SetValue
 
 2001-03-28  Dave Peticolas  <dave@krondo.com>
 
@@ -60,6 +73,24 @@
 
 	* src/SplitLedger.c (LedgerDestroy): commit pending instead
 	of rolling back.
+
+2001-03-28  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Transaction.c (xaccSplitGetAccount): use
+	xaccSplitSetAccount_Internal to set.  Don't want to NULL out data
+	if xaccAccountLookup doesn't give us data (for testing).
+	(xaccSplitSetAccount_Internal): new func that doesn't null out
+	account guid data
+
+	* src/engine/gnc-transaction-xml-v2.c
+	(gnc_transaction_dom_tree_create): add test to not add trn:num
+	item when it's an empty string.
+
+	* src/test/Makefile.am (clean-local): add to remove .log files.
+
+2001-03-27  James LewisMoss  <jimdres@mindspring.com>
+
+	* doc-tools/Makefile.am (LDADD): remove all the unneccesary libs.
 
 2001-03-27  Christian Stimming  <stimming@tuhh.de>
 

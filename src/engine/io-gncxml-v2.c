@@ -281,18 +281,21 @@ write_counts(FILE* out, ...)
         char *val;
         int amount = va_arg(ap, int);
 
-        val = g_strdup_printf("%d", amount);
+        if(amount != 0)
+        {
+            val = g_strdup_printf("%d", amount);
 
-        node = xmlNewNode(NULL, "gnc:count-data");
-        xmlSetProp(node, "cd:type", type);
-        xmlNodeAddContent(node, val);
+            node = xmlNewNode(NULL, "gnc:count-data");
+            xmlSetProp(node, "cd:type", type);
+            xmlNodeAddContent(node, val);
 
-        xmlElemDump(out, NULL, node);
-        fprintf(out, "\n");
+            xmlElemDump(out, NULL, node);
+            fprintf(out, "\n");
         
-        g_free(val);
-        xmlFreeNode(node);
-
+            g_free(val);
+            xmlFreeNode(node);
+        }
+        
         type = va_arg(ap, char *);
     }
 

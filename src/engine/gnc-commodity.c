@@ -314,6 +314,12 @@ count_coms(gpointer key, gpointer value, gpointer user_data)
     GHashTable *tbl = ((gnc_commodity_namespace*)value)->table;
     guint *count = (guint*)user_data;
 
+    if(safe_strcmp((char*)key, "ISO4217") == 0)
+    {
+        /* don't count default commodities */
+        return;
+    }
+    
     if(!value) return;
     
     *count += g_hash_table_size(tbl);

@@ -265,6 +265,17 @@ xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
 /********************************************************************
  * Account funcs
  ********************************************************************/
+
+static void
+xaccSplitSetAccount_Internal(Split *s, Account *act)
+{
+    if(!act)
+    {
+        return;
+    }
+    s->acc = act;
+}
+
 Account*
 xaccSplitGetAccount(Split *s)
 {
@@ -272,7 +283,7 @@ xaccSplitGetAccount(Split *s)
     
     if(!s->acc)
     {
-        xaccSplitSetAccount(s, xaccAccountLookup(&s->acc_guid));
+        xaccSplitSetAccount_Internal(s, xaccAccountLookup(&s->acc_guid));
     }
 
     return s->acc;
