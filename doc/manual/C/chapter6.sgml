@@ -1,0 +1,514 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: October 11, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Originally written by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+
+<book id="index">
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+ <chapter id="chapter6">
+ <title>Chapter 6 Managing Credit Cards</title>
+ <para>
+ This chapter will explain how to manage your credit cards using GnuCash.   Since you probably write a check to the credit card company each month, you may think of your credit card bill as an expense---but it really is not an expense.  Why?  A credit card account is a short-term loan---you buy things on that loan account, and then you eventually have to pay back the money, often with interest (your finance charge).   The purchases you make with that credit card are your expenses.
+ </para>
+ <para>
+ You have a couple of options when entering credit card transactions, so choose the one that fits your desired level of detail.  The basic level of detail is to simply track monthly payments to the credit card company.  From your checking account, you can enter a transfer of money each month to the credit card account.  This will show you the amount of money you are paying each month to the credit card company, but it won?t show you any information about your credit card balance or credit card purchases.
+ </para>
+ <para>
+ The other level of detail allows you to track your balance and purchases, but it requires more entry.  Using the credit card account register, you enter your receipts throughout the month.  When your credit card statement arrives, you reconcile the credit card account to the statement, and you enter your payment as a transfer of money from your checking account to your credit card account.   This method, in addition to giving you more information about your balance during the month, also points out any discrepancies quickly during reconciliation.
+ </para>
+ <sect1 id="setupacct1">
+ <title>6.1 Setting Up Accounts (Discussion)</title>
+ <para>
+ To begin managing your credit cards in GnuCash, you should set up a credit card type account for each credit card you use.   If you are tracking only the payments you make to the credit card company, then all you need is a bank account and a credit card account to enter your transactions. Skip to section (?6.3.1) for information on entering monthly payments.
+ </para>
+ <para>
+ If you decide to enter  more detailed records of your purchases, you will also need to create expense accounts for those purchases.   Since you will also be reconciling the balance to your credit card statements, you should also enter an opening balance in each credit card account.   The easiest way to do this is to use your last statement balance as the opening balance. (?***More detail on this when it becomes part of account setup.)
+ </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>6.2 Entering Charges(Discussion)</title>
+ <para>
+ Entering your charges provides you with a more complete picture of your spending habits.  Charges on a credit card are tracked as a transfer from the credit card account to an expense account.
+ </para>
+ <para>
+ When you swipe that credit card through the machine at a store, you are transferring money from your credit card company to that merchant.  This transaction increases the amount of money you owe the credit card company.    If you keep track of these types of transactions, you can reconcile your credit card account with your monthly statement, and you should quickly spot any transactions that look suspicious.   So how should you account for charges to your credit card?
+ </para>
+ <para>
+ One way is to manually enter all your receipts, either throughout the month or all at once.  This can be time-consuming, but it is probably the best way to make sure that all of your charges are authorized.   If you consistently enter all your receipts, you can quickly catch any errors or unauthorized transactions during your monthly reconciliation.
+ </para>
+ <para>
+ Another way is to import a credit card statement directly into your account.  If your credit card company supports a QIF file format for its statements, you have the option of directly importing the statement.  This type of import is covered in Chapter (?11), and it is a convenient way to track your purchases without having to manually enter all your receipts.
+ </para>
+ <sect2 id="purchase2">
+ <title>6.2.1 Purchases (How-To)</title>
+ <para>
+ To record a purchase, you transfer money from your credit card account to an expense.  Buying clothes at a department store, buying groceries, and buying gasoline are all examples of purchases you might make on credit card.  Online purchases and mail-order purchases are other examples for which you might not immediately get a receipt.
+ </para>
+ <para>
+ To manually enter a credit card receipt:
+ </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ Open the credit card account.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Enter a date, optional transaction number, and the payee  (e.g. ABC Grocery Store) or a description. (?NOTE: This is the same example used in section (?5.3.1) on check payments.  Credit card purchases are handled in a similar manner as check purchases, except that the transaction is a transfer from a credit card account instead of a checking account.)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ If only one other account is involved (e.g. Groceries expense), enter that account name in the Transfer column.   If more accounts are involved, click the Split button instead of entering a transfer account.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ If you entered a Transfer account, Tab to the Charge column and enter the amount.  Press Enter to record the transaction.
+ (insert credpur.png)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ If you clicked the Split button, Tab to the first split, which affects the credit card account.  Enter an optional action and memo, then enter the receipt total in the Charge column.  In this transaction, you are transferring money *from* the credit card account *to* multiple other accounts.  For each other account involved in this transaction, enter a split and a payment amount.  When you have finished entering your splits, the total payments to other accounts should equal your total charge on the credit card account for this transaction.  Press Enter to record the transaction.
+
+(?insert credmult.png)
+ </para>
+ </listitem>
+ </orderedlist>
+ </sect2>
+ <sect2 id="finance2">
+ <title>6.2.2 Finance Charges (How-To)</title>
+ <para>
+ Finance charges should be handled just like a credit card purchase, because they increase the size of your credit card balance.  To enter a finance charge, first create an expense type account for  finance charges.    Then enter a transfer from your credit card account to the finance charge account for the charge amount.
+
+(???The reconcile dialog should provide an option to enter the finance charge during the reconcile process.  Document this when feature is available.)
+ </para>
+ </sect2>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>6.3 Entering Payments (Discussion)</title>
+ <para>
+ Most payments to your credit card bill are entered as transfers from a bank account to the credit card account.  When you pay the monthly bill, you are withdrawing money from a bank account to pay down the credit card balance.    This transaction decreases both your bank account balance and the amount of credit card debt you owe.
+ </para>
+ <para>
+ When you return a purchase, you receive a refund on your credit card.  This is another type of ?payment? in that it decreases the amount of credit card debt you owe.   If you recorded the original purchase transaction as a transfer from the credit card account to the expense, you now simply reverse that transaction: transfer the money back from the expense to the credit card account.  This transaction decreases both the expense account balance and the credit card account balance.  For example, if you originally recorded a credit card purchase of clothing, the transaction is a transfer from the credit card account to the clothing expense account.  If you then return that clothing for a refund, you simply transfer the money back from the clothing expense account to the credit card account.  (?NOTE: If you did not record the original purchase because you are not tracking credit card purchases, then you do not need to record the refund.)
+ </para>
+ <sect2 id="monthly2">
+ <title>6.3.1 Monthly Payments (How-To)</title>
+ <para>
+ Monthly credit card payments are transfers from bank accounts to credit card accounts.    You may wish to enter this type of transaction from the bank account register, or you may wish to enter it from the credit card register.    From the bank account register, enter this as a payment to the credit card account.   (See section (?5.3.1) for instructions on entering check payments.)
+ </para>
+ <para>
+ To enter the same transaction from the credit card account register:
+ </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ Open the credit card account register.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Enter a date, an optional number (check number if paying by check), and a description of the transaction.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Enter the account that money is being transferred *from* in the Transfer column.  For example, if you are paying by check, then enter the checking account name.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Record the payment amount in the Payment column and hit Enter to complete the transaction.  This should decrease your outstanding credit card balance.
+
+(?insert creditpmt.png)
+ </para>
+ </listitem>
+ </orderedlist>
+ </sect2>
+ <sect2 id="refunds2">
+ <title>6.3.2 Credit Card Refunds (How-To)</title>
+ <para>
+ When you return a credit card purchase, the store usually refunds your money through your credit card account.  When you receive your credit card bill, you may notice these called ?credits? by your credit card company.  (See section (?2.1) Sidebar for more discussion of debits and credits.)    In GnuCash, treat these as a transfer from the original expense back to the credit card account.  Like payments, these refunds decrease the amount of your credit card balance.
+ </para>
+ <para>
+ Of course, if you are not tracking credit card purchases in your credit card account, then you should not track refunds either.   A refund cancels out its original transaction, so you should have entered the original transaction to get a correct balance.
+ </para>
+ <para>
+ To enter a credit card refund:
+ </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ Open the credit card account.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Enter a date, optional transaction number, and description or payee (e.g. Hi-Fashion Dept. Store.)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ In the Transfer column, enter the same Transfer account you used for the original purchase.   If you originally transferred money to a clothes expense account, for example, you will now transfer that money back from the clothes expense account.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Record the amount of the refund in the Payment column, and hit Enter to complete the transaction. (NOTE:  Your original purchase amount was recorded in the Charge column, so the amounts cancel each other out.)
+
+(?insert credrefund.png)
+ </para>
+ </listitem>
+ </orderedlist>
+ </sect2>
+ </sect1>
+ <sect1 id="statement1">
+ <title>6.4 Reconciling with the Credit Card Statement (How-To)</title>
+ <para>
+ If you track your credit card purchases and payments, then you should consider reconciling your credit card accounts each month when you get the statement.  Reconciling credit card accounts quickly points out any erroneous charges on your bill.
+ </para>
+ <para>
+ (?Section 4.6) gives detailed instructions on reconciling transactions from a statement.  The same procedures  are used for bank statements, brokerage statements, credit card statements, or any other kind of statement you may want to reconcile.  Whether you enter your credit card transactions by hand or import them from the statement,  it?s a good idea to reconcile the account with the statement once a month, just to make sure you didn?t forget to enter something or to flag any strange charges.
+ </para>
+ <para>
+ Before you begin reconciling your credit card account, review your credit card preference setting by selecting Settings|Preferences... from the main window menu.  Click on the Reconcile tab and make sure the box is selected next to ?Automatic credit card payments.?  This will automatically prompt you to enter a credit  card payment once you finish the reconcile process.  You can always deselect this preference later if you decide you don?t like the automatic prompt.
+ </para>
+ <para>
+ To reconcile your credit card account, follow the same procedures outlined in Section (?4.6) for reconciliation of accounts.    The reconcile dialog should look the same for credit card accounts as it does for bank accounts.  Once you enter the ending balance, your reconcile window should look something like this:
+
+(?insert credrecon.png)
+ </para>
+ <para>
+ ?Funds In? are the payments and refunds to your credit card.  ?Funds Out? are the credit card purchases.  When you have finished reconciling the account, the difference amount should be 0.  If it is not, check to see if any finance charges need to be added or if you forgot to record some credit card purchases.
+ </para>
+ <para>
+ Once the difference is 0, select the [Finish] button to complete the reconcile.  If you selected the ?Automatic credit card payment? option and you have a credit card balance to pay, you should now get the following Transfer dialog:
+
+(?insert autopmt.png)
+ </para>
+ <para>
+ Enter the amount you wish to pay on the credit card bill and a transaction description, and select the account that money will transfer from.  Your credit card account should already be selected as the ?Transfer To? account.   Click [OK] to complete the transaction.
+ </para>
+ <para>
+ Your credit card account register should now show the reconciled transactions marked as reconciled (?"y? or check mark in the R field), and it should contain a credit card bill payment transaction for the current month?s  bill.
+ </para>
+ </sect1>
+ <sect1 id="adjust1">
+ <title>6.5 Adjusting the Balance (How-To)</title>
+ <para>
+ So what if you just can?t get the account to reconcile?  First, check over all the transactions and make sure that all have been entered with the correct amounts.   Review (? the Sidebar in Section 4.6) and check for any of the common errors listed there.  If necessary, postpone the reconciliation by selecting Reconcile|Postpone from the Reconcile menu.
+ </para>
+ <para>
+ If you still can?t find the source of errors after checking your entries, and you still want to finish the reconciliation, you may want to enter an adjusting transaction to adjust the balance.  This is not the best way to handle discrepancies, because it hides the source of errors.  But if you decide to adjust the balance, here is how:
+ </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ Open the credit card account register, either from the main window or by selecting the [New] button from the Reconcile window.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Enter the date and a description of the adjusting transaction.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ In the Transfer column, enter the account you want to use for adjustments (e.g. Misc. expense).
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Determine the amount of adjustment you want to make.  If the Reconcile difference is positive and you want to adjust it to 0, enter the amount of the difference in the Charge column.  If the Reconcile difference is negative and you want to adjust it to 0, enter the amount of the difference in the Payment column.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Press Enter to record the transaction.
+ </para>
+ </listitem>
+ </orderedlist>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>6.6 Putting It All Together (Examples of entering credit card purchases, refunds on those purchases, payment of the monthly bill; then reconciling the account and adding finance charges.)</title>
+ <para>
+ (?Chapter 5) looked at bank and cash account transactions.   In this section, we will add some credit card transactions and reconcile the credit card account.   Go ahead and open your  (?gcashdata) file saved in the last chapter.  As a review, your chart of accounts should now look like this:
+
+(?insert chartaccts3.png)
+ </para>
+ <orderedlist>
+ <listitem>
+ <para>
+ Open the Credit Card account register.  To start tracking your credit card account,  you first need an opening balance.  For this example, assume your ending balance from your last Credit Card statement was $1000.   Enter an Opening Balance transaction with Transfer account of Opening Balances and Charge amount of $1000.  The transaction should look like this:
+
+(?insert openbal.png)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Now suppose you have several receipts to enter in your account.  Enter the following ?receipts? into the register.  (?Note:  Some of the suggested transfer accounts may need to be created, and GnuCash will prompt you through the setup dialog when you try to enter these. )
+ </para>
+ <para>
+ <table>
+ <title>Credit Card Example</title>
+ <tgroup cols=4>
+ <tbody>
+ <row>
+ <entry>2/1/01</entry>
+ <entry>Greasy Spoon Cafe</entry>
+ <entry>$25</entry>
+ <entry>(transfer account should be Dining, type expense)</entry>
+ </row>
+ <row>
+ <entry>2/3/01</entry>
+ <entry>Faux Pas Fashions</entry>
+ <entry>$100</entry>
+ <entry>(transfer account Clothes, type expense)</entry>
+ </row>
+ <row>
+ <entry>2/15/01</entry>
+ <entry>Premium Gasoline</entry>
+ <entry>$25</entry>
+ <entry>(transfer account Fuel, type expense)</entry>
+ </row>
+ <row>
+ <entry>2/20/01</entry>
+ <entry>Groceries R Us</entry>
+ <entry>$125</entry>
+ <entry>(split between accounts Groceries ($85) and Household ($40))</entry>
+ </row>
+ <row>
+ <entry>2/25/01</entry>
+ <entry>CheapMart</entry>
+ <entry>$60</entry>
+ <entry>(transfer account Household)</entry>
+ </row>
+ </tbody>
+ </tgroup>
+ </table>
+ </para>
+ <para>
+ Your register should now look like this:
+
+(?insert ex_purch.png)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Now suppose you return the clothes you bought on 2/3 from Faux Pas Fashions.  Enter a transaction for the credit card refund for the full $100 amount.   (?Note: Remember to use the same transfer account you used for the original purchase, and enter the amount under the Payment column.  GnuCash will automatically complete the name and transfer account for you, but it will also automatically enter the $100 in the Charge column.  You will need to reenter the amount in the Payment column.)  The transaction looks like this:
+
+(?insert ex_refund.png)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ When you receive the monthly statement, it shows a finance charge of $20.   Enter that charge in the register, with a transfer account of Finance Charge (type expense).   The transaction looks like this:
+
+(?insert ex_fincharge.png)
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ Now reconcile the account to this ?statement?:
+ </para>
+ <para>
+ <table>
+ <title>Statement Balance Example</title>
+ <tgroup cols=2>
+ <tbody>
+ <row>
+ <entry>Previous Balance:</entry>
+ <entry>1000</entry>
+ </row>
+ <row>
+ <entry>+Purchases</entry>
+ <entry>335</entry>
+ </row>
+ <row>
+ <entry>- Payments</entry>
+ <entry>-300</entry>
+ </row>
+ <row>
+ <entry>- Refunds</entry>
+ <entry>-100</entry>
+ </row>
+ <row>
+ <entry>+Fin.Charge</entry>
+ <entry>20</entry>
+ </row>
+ <row>
+ <entry>New Balance</entry>
+ <entry>955</entry>
+ </row>
+ </tbody>
+ </tgroup>
+ </table>
+ </para>
+ <para>
+ <table>
+ <title>Statement Transactions Example</title>
+ <tgroup cols=4 align=left>
+  <colspec colname=c1 >
+  <colspec colname=c2 >
+  <colspec colname=c3 >
+  <colspec colname=c4 >
+ <tbody>
+ <row>
+ <entry>Date</entry>
+ <entry>Ref. Number</entry>
+ <entry>Activity</entry>
+ <entry>Amount</entry>
+ </row>
+ <row>
+ <entry>2/1/01</entry>
+ <entry>xxx0012</entry>
+ <entry>Greasy Spoon Cafe</entry>
+ <entry>25</entry>
+ </row>
+ <row>
+ <entry>2/3/01</entry>
+ <entry>4jg78sf1</entry>
+ <entry>Faux Pas Fashions</entry>
+ <entry>100</entry>
+ </row>
+ <row>
+ <entry>2/5/01</entry>
+ <entry colname=c3>Payment received</entry>
+ <entry colname=c4>-300</entry>
+ </row>
+ <row>
+ <entry>2/15/01</entry>
+ <entry>asdf4289</entry>
+ <entry>Premium Gasoline</entry>
+ <entry>25</entry>
+ </row>
+ <row>
+ <entry>2/20/01</entry>
+ <entry>jklt5748f</entry>
+ <entry>Groceries R Us</entry>
+ <entry>125</entry>
+ </row>
+ <row>
+ <entry>2/25/01</entry>
+ <entry>4578dkjg</entry>
+ <entry>CheapMart</entry>
+ <entry>60</entry>
+ </row>
+ <row>
+ <entry>2/25/01</entry>
+ <entry>2347891g</entry>
+ <entry>Faux Pas Fashions</entry>
+ <entry>-100</entry>
+ </row>
+ <row>
+ <entry>2/28/01</entry>
+ <entry colname=c3>Finance Charge</entry>
+ <entry colname=c4>20</entry>
+ </row>
+ </tbody>
+ </tgroup>
+ </table>
+ </para>
+ <para>
+ Start the Reconcile dialog for this account.  You will notice that the starting balance shows 0, not 1000.  This is because the opening balance transaction has not yet been reconciled.   GnuCash should show 1255 as the ending balance, but your statement shows 955.  Enter 955 as the ending balance and click [OK].  You should now get a reconcile window that looks like this:
+ </para>
+ <para>
+ Select each item in the reconcile window that matches an item on the sample statement.   When you have finished checking off items, you should have a difference of -$300.
+ </para>
+ <para>
+ Check over the sample statement to see which transaction is missing.  You should find a payment for $300 that was not entered in the register---that is the difference amount.  In the Reconcile window, click the [New] button on the tool bar.  This brings you to the account register, where you can now enter a transaction for that $300 payment.  (Hint: Be sure to enter the correct date, and use Checking as the transfer account.)  The transaction should look like this:
+
+(?insert ex_pmt.png)
+ </para>
+ <para>
+ Record the transaction, then return to the Reconcile window.  You should see the payment transaction listed in the ?Funds In? panel.  Select it to check it off.   Now the difference should be 0, so click the [Finish] button to complete the reconcile process.
+ </para>
+ </listitem>
+ <listitem>
+ <para>
+ You should now see the Transfer dialog with an amount of 955, the ending balance.   You decide to pay $300 again this month, so change the amount to $300.   Enter a check number for the payment in the Num field, and enter a description.    Your Transfer From account should be Checking, and your Transfer To account should be Credit Card.    The Transfer dialog should look like this:
+
+(?insert ex_transf.png)
+ </para>
+ <para>
+ Click [OK] to accept the transfer.  Your credit card account should now show the new transaction.  All of the transactions you reconciled should now show up with (?y) in the ?R? column.   The only unreconciled transaction should be the newest payment transaction.
+ </para>
+ </listitem>
+ </orderedlist>
+ <para>
+ If you haven?t already done so, save your file.  We will be using it again in the next chapter, which addresses investments.    Your main window chart of accounts  should now look like this:
+
+(?insert chartaccts4.png)
+ </para>
+ </sect1>
+ </chapter>
+</book>
