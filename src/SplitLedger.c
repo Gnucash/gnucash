@@ -2573,13 +2573,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
       }
       else {
-        char *message = NULL;
+        char *message;
 
-        asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
-        assert(message != NULL);
+        message = g_strdup_printf(REG_CURR_MSG, xaccAccountGetName(new_acc));
 
         gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
-        free(message);
+        g_free(message);
       }
     }
   }
@@ -2647,13 +2646,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
           refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
         }
         else {
-          char *message = NULL;
+          char *message;
 
-          asprintf(&message, REG_CURR_MSG, xaccAccountGetName(new_acc));
-          assert(message != NULL);
+          message = g_strdup_printf(REG_CURR_MSG, xaccAccountGetName(new_acc));
 
           gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
-          free(message);
+          g_free(message);
         }
       }
     }
@@ -2693,22 +2691,19 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       char *radio_list[4] = { NULL, NULL, NULL, NULL };
 
       if (MOD_AMNT & changed)
-        asprintf(&radio_list[0], "%s (%s)", AMT_STR, CHANGED_STR);
+        radio_list[0] = g_strdup_printf("%s (%s)", AMT_STR, CHANGED_STR);
       else
-        radio_list[0] = strdup(AMT_STR);
+        radio_list[0] = g_strdup(AMT_STR);
 
       if (MOD_PRIC & changed)
-        asprintf(&radio_list[1], "%s (%s)", PRICE_STR, CHANGED_STR);
+        radio_list[1] = g_strdup_printf("%s (%s)", PRICE_STR, CHANGED_STR);
       else
-        radio_list[1] = strdup(PRICE_STR);
+        radio_list[1] = g_strdup(PRICE_STR);
 
       if (MOD_VALU & changed)
-        asprintf(&radio_list[2], "%s (%s)", VALUE_STR, CHANGED_STR);
+        radio_list[2] = g_strdup_printf("%s (%s)", VALUE_STR, CHANGED_STR);
       else
-        radio_list[2] = strdup(VALUE_STR);
-
-      for (i = 0; i < 3; i++)
-        assert(radio_list[i] != NULL);
+        radio_list[2] = g_strdup(VALUE_STR);
 
       if (!(MOD_AMNT & changed))
         default_value = 0;
@@ -2726,7 +2721,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
                                                        radio_list);
 
       for (i = 0; i < 3; i++)
-        free(radio_list[i]);
+        g_free(radio_list[i]);
 
       switch(choice)
       {
