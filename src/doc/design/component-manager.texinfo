@@ -1,0 +1,138 @@
+@node Component Manager
+@chapter Component Manager
+@cindex Component Manager
+
+The Component Manager (hereafter referred to as the CM) is a framework
+for managing GUI objects in GnuCash. The CM provides several services.
+
+First, components may request automatic invocation of a 'refresh'
+handler that is called when a component may need to be redrawn. This
+mechanism is tied into the Engine's Event mechanism (@pxref{Events}),
+so that GUI components are notified when relevant Engine entities are
+created, modified, or destroyed.
+
+Components may also provide a 'close' handler so that the component
+may be closed through the CM API.
+
+The CM also provides the ability to search for existing components.
+
+
+@menu
+* Component Manager Introduction::  
+* Refresh Mechanism::           
+* Component Manager API::       
+@end menu
+
+
+@node Component Manager Introduction, Refresh Mechanism, Component Manager, Component Manager
+@section Introduction
+
+The GnuCash GUI must manage many different components (registers,
+reconcile windows, reports, graphs, main window, etc.).  Functions which
+need to be performed on or with GUI components include:
+
+
+@itemize
+
+@item Refreshing components. When Engine objects (Accounts,
+Transactions, Splits, etc.) are created, modified, or destroyed,
+the GUI components which reference those objects must be refreshed.
+
+@item Searching for existing components. For example, when the
+user chooses to 'Reconcile' an account with an existing reconcile
+dialog, that dialog should be raised to the top in lieu of creating
+a new reconcile dialog.
+
+@item Closing components.
+
+@end itemize
+
+
+In particular, keeping components updated in the face of changes in the
+Engine is a difficult problem. Requirements for handling refreshes
+include:
+
+@itemize
+
+@item The Engine should be able to inform user code when any account
+or transaction is changed (including changing their respective splits).
+This requirement is satisfied by the Engine Events.
+
+@item The refresh mechanism should not have specific knowledge of
+individual windows and other GUI elements. It should be easy to
+add new refreshable elements to the mechanism.
+
+@item Changes should be batchable with respect to refreshes, so that
+a sequence of changes only cause a refresh after the last change
+in a batch. Batching should be nestable, for coding simplicity.
+
+@item For very large batches of changes (loading files) we need to be
+able to turn off the mechanism entirely, perform the changes, and then
+perform a global, forced refresh. This should also be nestable.
+
+@item The Engine should not be managing GUI components.
+
+@item The refresh mechanism should be extendable to a multi-user
+situation in which changes can come from external components.
+
+@item Components should be able to specify which Engine entities
+can cause refreshes. This requirement avoids allows the implementation
+to avoid unnecessary refreshing.
+
+@end itemize
+
+
+@node Refresh Mechanism, Component Manager API, Component Manager Introduction, Component Manager
+@section Refresh Mechanism
+@cindex Refresh Mechanism
+
+The major design decisions of the CM relate to the refresh
+mechanism. The refresh mechanism consists of two parts, the Engine
+component and the GUI component. The Engine component is the
+Event mechanism (@pxref{Events}), while the GUI component is the
+Component Manager, which provide refresh functionality as well
+as other services.
+
+The diagram below illustrated the design of the GnuCash refresh
+mechanism.
+
+@example
+                            ----------
+                            |        |
+                            | Engine |
+                            |        |
+                            ----------
+                                /|\
+                                 |
+                                 |--- Events (from Engine)
+                                 |
+                                \|/
+                    -------------------------
+                    |                       |
+                    |   Component Manager   |
+                    |                       |
+                    -------------------------
+                   /            /|\          \     GUI Commands
+                  /              |            \--- including refresh
+                 /              \|/            \   invocations (from CM)
+-----------------         -----------------
+|               |         |               |
+| GUI Component |         | GUI Component |           ...
+|               |         |               |
+-----------------         -----------------
+@end example
+
+The top-level component is the Engine, which emits Events to the
+Component Manager. In fact, the Engine will send events to any
+registered handler, but in GnuCash, only the CM registers with
+the engine. All other GUI components register with the CM.
+
+The CM invokes the refresh handlers of GUI components based on the
+Engine events received the CM has received as well as information
+provided by the GUI components (such as which specific Engine
+entities the components are 'watching').
+
+
+@node Component Manager API,  , Refresh Mechanism, Component Manager
+@section Component Manager API
+@cindex Component Manager API

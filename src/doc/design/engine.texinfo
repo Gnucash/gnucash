@@ -1,4 +1,4 @@
-@node Engine
+@node Engine, Component Manager, Top Level, Top
 @chapter Engine
 @cindex The Engine
 

@@ -1,5 +1,6 @@
-@node Register, Reports, Engine, Top
+@node Register, Reports, Component Manager, Top
 @chapter Register
+@cindex Register
 
 The register is an infrastructure for building a modular matrix of cells
 in which each cell may be specialized to perform a particular function,

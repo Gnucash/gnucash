@@ -66,12 +66,14 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 * Introduction::                
 * Top Level::                   
 * Engine::                      
+* Component Manager::           
 * Register::                    
 * Reports::                     
 * User Preferences::            
 * Function Index::              
 * Data Type Index::             
 * Concept Index::               
+
 
 @detailmenu
  --- The Detailed Node Listing ---
@@ -89,7 +91,7 @@ Engine
 * Accounts::                    
 * Account Groups::              
 * GNCBooks::                    
-* Scrub::                    
+* Scrub::                       
 
 Globally Unique Identifiers
 
@@ -101,7 +103,7 @@ Globally Unique Identifiers
 
 Numeric Library
 
-* Standard Numeric Arguments::
+* Standard Numeric Arguments::  
 * Creating Numeric Objects::    
 * Basic Arithmetic Operations::  
 * Numeric Comparisons and Predicates::  
@@ -109,7 +111,7 @@ Numeric Library
 * Numeric Floating Point Conversion::  
 * Numeric String Conversion::   
 * Numeric Error Handling ::     
-* Numeric Example::
+* Numeric Example::             
 
 Key-Value Pair Frames
 
@@ -138,6 +140,10 @@ GNCBooks
 
 * GNCBook API::                 
 
+Component Manager
+
+* Component Manager Introduction::  
+
 Register
 
 * Cells::                       
@@ -163,6 +169,7 @@ User Preferences
 @include intro.texinfo
 @include top-level.texinfo
 @include engine.texinfo
+@include component-manager.texinfo
 @include register.texinfo
 @include reports.texinfo
 @include user-preferences.texinfo
