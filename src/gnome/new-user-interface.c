@@ -108,7 +108,7 @@ create_newUserDialog (void)
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_logo_bg_color);
   gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_title_color);
   gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (newUserStartPage), _("New Account Hierarchy Setup"));
-  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This wizard will help you set up a new account hierarchy."));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This druid will help you create a set of GnuCash \naccounts for your assets (such as investments, \nchecking or savings accounts), liabilities (such \nas loans) and different kinds of income and \nexpenses you might have. \n\nClick 'Cancel'  if you do not wish to create any \nnew accounts now."));
 
   newAccountCurrencyChoosePage = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_set_name (newAccountCurrencyChoosePage, "newAccountCurrencyChoosePage");
@@ -156,7 +156,7 @@ create_newUserDialog (void)
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), &chooseAccountTypesPage_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), _("Choose Account Types"));
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage), _("Choose accounts to create"));
 
   druid_vbox1 = GNOME_DRUID_PAGE_STANDARD (chooseAccountTypesPage)->vbox;
   gtk_widget_set_name (druid_vbox1, "druid_vbox1");
@@ -166,13 +166,14 @@ create_newUserDialog (void)
   gtk_widget_show (druid_vbox1);
   gtk_container_set_border_width (GTK_CONTAINER (druid_vbox1), 5);
 
-  pickAccountsDescriptionLabel = gtk_label_new (_("Please choose the account types you would like to have automatically setup in GnuCash."));
+  pickAccountsDescriptionLabel = gtk_label_new (_("Select categories that correspond to the ways that you will use GnuCash.  \nEach category you select will cause several accounts to be created.  \nSelect the categories that are relevant to you.  You can always create \nadditional accounts by hand later."));
   gtk_widget_set_name (pickAccountsDescriptionLabel, "pickAccountsDescriptionLabel");
   gtk_widget_ref (pickAccountsDescriptionLabel);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "pickAccountsDescriptionLabel", pickAccountsDescriptionLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (pickAccountsDescriptionLabel);
   gtk_box_pack_start (GTK_BOX (druid_vbox1), pickAccountsDescriptionLabel, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (pickAccountsDescriptionLabel), GTK_JUSTIFY_LEFT);
 
   frame5 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame5, "frame5");
@@ -337,7 +338,7 @@ create_newUserDialog (void)
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), _("Check and Enter Final Account Info"));
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), _("Enter opening balances"));
 
   druid_vbox3 = GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage)->vbox;
   gtk_widget_set_name (druid_vbox3, "druid_vbox3");
@@ -447,7 +448,7 @@ create_newUserDialog (void)
   gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_logo_bg_color);
   gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_title_color);
   gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Finish Account Setup"));
-  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Press `Finish' to create your new account hierarchy.\n\nPress `Back' to review your selections.\n\nPress `Cancel' to close this dialog without creating any new accounts."));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Press `Finish' to create your new accounts.\n\nPress `Back' to review your selections.\n\nPress `Cancel' to close this dialog without creating any new accounts."));
 
   gtk_signal_connect (GTK_OBJECT (newUserDruid), "cancel",
                       GTK_SIGNAL_FUNC (on_accountChooseDruidPage_cancel),
@@ -555,7 +556,7 @@ create_addAccountCancelDialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area1), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (addAccountCancelDialog), GNOME_STOCK_BUTTON_OK);
-  newAccountCancelDialog_OKButton = g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data;
+  newAccountCancelDialog_OKButton = GTK_WIDGET (g_list_last (GNOME_DIALOG (addAccountCancelDialog)->buttons)->data);
   gtk_widget_set_name (newAccountCancelDialog_OKButton, "newAccountCancelDialog_OKButton");
   gtk_widget_ref (newAccountCancelDialog_OKButton);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_OKButton", newAccountCancelDialog_OKButton,
@@ -647,7 +648,7 @@ create_newUserChoiceWindow (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area2), 8);
 
   gnome_dialog_append_button (GNOME_DIALOG (newUserChoiceWindow), GNOME_STOCK_BUTTON_OK);
-  button1 = g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data;
+  button1 = GTK_WIDGET (g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data);
   gtk_widget_set_name (button1, "button1");
   gtk_widget_ref (button1);
   gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "button1", button1,
@@ -656,7 +657,7 @@ create_newUserChoiceWindow (void)
   GTK_WIDGET_SET_FLAGS (button1, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (newUserChoiceWindow), GNOME_STOCK_BUTTON_CANCEL);
-  button3 = g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data;
+  button3 = GTK_WIDGET (g_list_last (GNOME_DIALOG (newUserChoiceWindow)->buttons)->data);
   gtk_widget_set_name (button3, "button3");
   gtk_widget_ref (button3);
   gtk_object_set_data_full (GTK_OBJECT (newUserChoiceWindow), "button3", button3,
