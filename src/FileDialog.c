@@ -184,6 +184,23 @@ gncCreateFailHandler (const char *file)
 
 /* ======================================================== */
 
+static void
+gncAddHistory (GNCBook *book)
+{
+  char *url;
+
+  if (!book) return;
+
+  url = xaccResolveURL (gnc_book_get_url (book));
+
+  if (strncmp (url, "file:", 5) == 0)
+    gnc_history_add_file (url + 5);
+  else
+    gnc_history_add_file (url);
+}
+
+/* ======================================================== */
+
 void
 gncFileNew (void)
 {
@@ -363,7 +380,7 @@ gncPostFileOpen (const char * filename)
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  gnc_history_add_file (newfile);
+  gncAddHistory (new_book);
 
   /* run a file-opened hook. For now, the main thing it will do 
    * is notice if legacy currencies are being imported. */
@@ -443,7 +460,6 @@ gncFileSave (void)
   io_err = gnc_book_get_error (book);
   if (ERR_BACKEND_NO_ERR != io_err)
   {
-    newfile = gnc_book_get_file_path (book);
     show_book_error (io_err, newfile);
 
     if (been_here_before) return;
@@ -453,7 +469,7 @@ gncFileSave (void)
     return;
   }
 
-  gnc_history_add_file (newfile);
+  gncAddHistory (book);
 
   gnc_book_mark_saved(book);
   LEAVE (" ");

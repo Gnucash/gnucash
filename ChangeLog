@@ -1,3 +1,8 @@
+2001-02-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/FileDialog.c: store the original (not comma-fied) version
+	of the url in the file history.
+
 2001-02-28  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-xml-account.c (delete_random_account): new func to
