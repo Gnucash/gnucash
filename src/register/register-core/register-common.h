@@ -51,8 +51,8 @@ BasicCell * gnc_register_make_cell (const char *cell_type_name);
  */
 typedef struct _VirtualCellLocation VirtualCellLocation;
 struct _VirtualCellLocation {
-  short virt_row;
-  short virt_col;
+  int virt_row;
+  int virt_col;
 };
 
 
@@ -74,8 +74,8 @@ gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
 typedef struct _VirtualLocation VirtualLocation;
 struct _VirtualLocation {
   VirtualCellLocation vcell_loc;
-  short phys_row_offset;
-  short phys_col_offset;
+  int phys_row_offset;
+  int phys_col_offset;
 };
 
 

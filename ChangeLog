@@ -1,3 +1,9 @@
+2002-12-19  David Hampton  <hampton@employees.org>
+
+	* src/register/register-core/register-common.h: Large accounts are
+	overflowing the data types used in the register code and are
+	causing crashes. #92072, #98802
+
 2002-12-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/glade/hbci.glade: Set max size of
