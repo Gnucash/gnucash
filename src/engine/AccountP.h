@@ -105,10 +105,6 @@ struct _account {
    * 'security'. The 'amount' of each split represents the
    * transferred amount in the account's commodity (formerly known as
    * security).
-   *
-   * Meanwhile, we'll be in a transition period, where we store the
-   * currency both in the account and the transaction. Warning
-   * messages will print to the screen if things don't go well.
    */
   gnc_commodity * commodity;
   int commodity_scu;
