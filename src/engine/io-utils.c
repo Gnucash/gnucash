@@ -32,6 +32,12 @@
 #include "gnc-xml-helper.h"
 #include "io-utils.h"
 
+/*
+  <!-- Local variables: -->
+  <!-- mode: C          -->
+  <!-- End:             -->
+*/
+
 static const gchar *emacs_trailer =
 "<!-- Local variables: -->\n"
 "<!-- mode: xml        -->\n"

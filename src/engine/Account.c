@@ -151,7 +151,7 @@ xaccCloneAccountSimple(const Account *from)
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    ret->currency    = from->currency;
+    xaccAccountSetCurrency (ret, from->currency);
 
     return ret;
 }

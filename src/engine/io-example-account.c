@@ -22,24 +22,27 @@
  *                                                                  *
 \********************************************************************/
 
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
+#include "config.h"
+
 #include <ctype.h>
+#include <dirent.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <glib.h>
 #include "sixtp.h"
 
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-xml.h"
 #include "io-example-account.h"
+#include "io-gncxml-gen.h"
 #include "io-utils.h"
 #include "sixtp-dom-generators.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
-#include "io-gncxml-gen.h"
-#include "gnc-xml.h"
 
 #include "Group.h"
 #include "TransLog.h"
@@ -104,8 +107,42 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 }
 
 static void
+clear_up_account_commodity(
+    gnc_commodity_table *tbl, Account *act,
+    gnc_commodity * (*getter) (Account *account),
+    void (*setter) (Account *account, gnc_commodity *comm))
+{
+    gnc_commodity *gcom;
+    gnc_commodity *com = getter(act);
+
+    if(!com)
+    {
+        return;
+    }
+    
+    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
+                                      gnc_commodity_get_mnemonic(com));
+    if(!gcom)
+    {
+        g_warning("unable to find global commodity for %s adding new",
+                  gnc_commodity_get_unique_name(com));
+        gnc_commodity_table_insert(tbl, com);
+    }
+    else
+    {
+        gnc_commodity_destroy(com);
+        setter(act, gcom);
+    }
+}
+
+static void
 add_account_local(GncExampleAccount *gea, Account *act)
 {
+    clear_up_account_commodity(gnc_engine_commodities(), act,
+                               xaccAccountGetCurrency, xaccAccountSetCurrency);
+    clear_up_account_commodity(gnc_engine_commodities(), act,
+                               xaccAccountGetSecurity, xaccAccountSetSecurity);
+
     if(!xaccAccountGetParent(act))
     {
         xaccGroupInsertAccount(gea->group, act);

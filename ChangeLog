@@ -1,5 +1,17 @@
 2001-05-11  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/Account.c (xaccCloneAccountSimple): use
+	xaccAccountSetCurrency -- it does more than just set the pointer!
+
+	* src/gnome/new-user-funs.c (clone_account): don't use engine
+	private functions.
+
+	* src/engine/io-example-account.c (add_account_local): fix up
+	currency & security for new example accounts
+
+	* src/engine/io-utils.c: add emacs mode comment to cancel
+	XML comment
+
 	* src/gnome/new-user-callbacks.c: fix compiler warning
 
 	* src/engine/gnc-book.c (gnc_book_set_group): fix bug

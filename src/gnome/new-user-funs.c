@@ -37,7 +37,6 @@
 #include "Group.h"
 #include "io-example-account.h"
 #include "Account.h"
-#include "AccountP.h"
 
 #include <guile/gh.h>
 
@@ -51,7 +50,8 @@ clone_account(const Account* from, gnc_commodity *com)
     Account *ret;
 
     ret = xaccCloneAccountSimple(from);
-    ret->currency    = com;
+
+    xaccAccountSetCurrency (ret, com);
 
     return ret;
 }
