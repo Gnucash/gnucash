@@ -304,6 +304,9 @@
 			  (lambda () #f) #f owner-type))
 
   (gnc:register-inv-option
+   (gnc:make-internal-option "__reg" "owner-type" owner-type))
+
+  (gnc:register-inv-option
    (gnc:make-account-sel-limited-option owner-page acct-string "w"
 					(N_ "The account to search for transactions")
 					#f #f acct-type-list))
@@ -486,34 +489,32 @@
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (title #f)
-	 (book (gnc:get-current-book)))	;XXX Grab this from elsewhere
+	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
+	 (owner-type (opt-val "__reg" "owner-type"))
+	 (type-str ""))
+
+    (case owner-type
+      ((gnc-owner-customer)
+       (set! type-str (N_ "Customer")))
+      ((gnc-owner-vendor)
+       (set! type-str (N_ "Vendor")))
+      ((gnc-owner-employee)
+       (set! type-str (N_ "Employee"))))
 
     (if (gnc:owner-is-valid? owner)
 	(begin
 	  (setup-query query owner account)
 
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-		       (gnc:owner-get-type (gnc:owner-get-end-owner owner))
-		       #f))
-		(type-str ""))
-	    (case type
-	      ((gnc-owner-customer)
-	       (set! type-str (N_ "Customer")))
-	      
-	      ((gnc-owner-vendor)
-	       (set! type-str (N_ "Vendor")))
-
-	      ((gnc-owner-employee)
-	       (set! type-str (N_ "Employee"))))
-
-	    (set! title (gnc:html-markup
-			 "!" 
-			 (_ type-str )
-			 (_ " Report: ")
-			 (gnc:html-markup-anchor
-			  (gnc:owner-anchor-text owner)
-			  (gnc:owner-get-name owner)))))
+	  (set! title (gnc:html-markup
+		       "!" 
+		       (_ type-str )
+		       (_ " Report: ")
+		       (gnc:html-markup-anchor
+			(gnc:owner-anchor-text owner)
+			(gnc:owner-get-name owner))))
 	  
+	  (gnc:html-document-set-title! document title)
+
 	  (if account
 	      (begin
 		(set! table (make-txn-table (gnc:report-options report-obj)
@@ -524,9 +525,12 @@
 		 'attribute (list "cellspacing" 0)
 		 'attribute (list "cellpadding" 4)))
 
-	      (set! table (gnc:make-html-text "No Valid Account Selected")))
-
-	  (gnc:html-document-set-title! document title)
+	      (set!
+	       table
+	       (gnc:make-html-text
+		(string-append 
+		 "No Valid Account Selected.  "
+		 "Click on the Options button and select the account to use."))))
 
 	  (gnc:html-document-add-object!
 	   document
@@ -545,7 +549,9 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  "No Valid Company Selected")))
+	  (string-append
+	   "No Valid " type-str	" Selected.  "
+	   "Click on the Options button to select a company."))))
 
     (gnc:free-query query)
     document))
