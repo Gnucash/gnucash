@@ -321,10 +321,10 @@ const char*
 get_random_string_in_array(const char* str_list[])
 {
     int num;
-    const char *to_ret = NULL;
 
 	 /* count number of items in list */
-    for(num = 0; str_list[num] != NULL; num++);
+    for(num = 0; str_list[num] != NULL; num++)
+        ;
 	 
 	 num = get_random_int_in_range(0, num-1);
 	 return str_list[num];
