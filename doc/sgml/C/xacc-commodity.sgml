@@ -4,6 +4,8 @@
 <TITLE>Creating a "commodity"</TITLE>
 </ARTHEADER>
 
+    <sect1>
+      <title></title>
 <PARA>Gnucash represents national currencies, stocks, mutual funds,
 and all other tradable commodities using a unified framework.  In
 this dialog, you will specify the properties of a new commodity. 
@@ -43,6 +45,7 @@ example, stock ownership may be reckoned to 1/1000 of a share by some
 brokerage houses, though actual transactions in the stock are in
 integer numbers of shares (the fractional share ownership is an "on
 paper" accounting trick of the brokerage house).</para>
+    </sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
