@@ -1109,8 +1109,8 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
  *
  * This function tries very hard to uniquely order all transactions.
  * If two transactions occur on the same date, then thier "num" fields
- * are compared.  If the num fileds are identical, then the description
- * fileds are compared.  If these are identical, then the memo fileds 
+ * are compared.  If the num fields are identical, then the description
+ * fields are compared.  If these are identical, then the memo fields 
  * are compared.  Hopefully, there will not be any transactions that
  * occur on the same day that have all three of these values identical.
  *
@@ -1118,12 +1118,38 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
  * important for some of the ledger display functions.  In particular,
  * grep for "running_balance" in the code, and see the notes there.
  *
- * Yes, this kindof code dependency is ugly, but the alternatives seem
+ * Yes, this kind of code dependency is ugly, but the alternatives seem
  * ugly too.
  *
 \********************************************************************/
+
+
+#define DATE_CMP(aaa,bbb,field) {			\
+  /* if dates differ, return */				\
+  if ( ((*aaa)->field.tv_sec) <				\
+       ((*bbb)->field.tv_sec)) {			\
+    return -1;						\
+  } else						\
+  if ( ((*aaa)->field.tv_sec) >				\
+       ((*bbb)->field.tv_sec)) {			\
+    return +1;						\
+  }							\
+							\
+  /* else, seconds match. check nanoseconds */		\
+  if ( ((*aaa)->field.tv_nsec) <			\
+       ((*bbb)->field.tv_nsec)) {			\
+    return -1;						\
+  } else						\
+  if ( ((*aaa)->field.tv_nsec) >			\
+       ((*bbb)->field.tv_nsec)) {			\
+    return +1;						\
+  }							\
+}
+
+
+
 int
-xaccSplitOrder (Split **sa, Split **sb)
+xaccSplitDateOrder (Split **sa, Split **sb)
 {
   int retval;
   char *da, *db;
@@ -1146,6 +1172,71 @@ xaccSplitOrder (Split **sa, Split **sb)
   db = (*sb)->action;
   SAFE_STRCMP (da, db);
 
+  /* otherwise, sort on docref string */
+  da = (*sa)->docref;
+  db = (*sb)->docref;
+  SAFE_STRCMP (da, db);
+
+  /* the reconciled flag ... */
+  if (((*sa)->reconciled) < ((*sb)->reconciled)) return -1;
+  if (((*sa)->reconciled) > ((*sb)->reconciled)) return +1;
+
+  /* compare amounts */
+  if ((((*sa)->damount)+EPS) < ((*sb)->damount)) return -1;
+  if ((((*sa)->damount)-EPS) > ((*sb)->damount)) return +1;
+
+  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
+  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+
+  /* if dates differ, return */
+  DATE_CMP(sa,sb,date_reconciled);
+
+  return 0;
+}
+
+
+int
+xaccSplitOrder (Split **sa, Split **sb)
+{
+  char *da, *db;
+  char diff;
+
+  if ( (*sa) && !(*sb) ) return -1;
+  if ( !(*sa) && (*sb) ) return +1;
+  if ( !(*sa) && !(*sb) ) return 0;
+
+  /* compare amounts use parenthesis paranoia for multiplication, pointers etc. */
+  if ( ((((*sa)->damount)*((*sa)->share_price))+EPS) < 
+        (((*sb)->damount)*((*sb)->share_price))) return -1;
+
+  if ( ((((*sa)->damount)*((*sa)->share_price))-EPS) > 
+        (((*sb)->damount)*((*sb)->share_price))) return +1;
+
+  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
+  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+
+  /* otherwise, sort on memo strings */
+  da = (*sa)->memo;
+  db = (*sb)->memo;
+  SAFE_STRCMP (da, db);
+
+  /* otherwise, sort on action strings */
+  da = (*sa)->action;
+  db = (*sb)->action;
+  SAFE_STRCMP (da, db);
+
+  /* the reconciled flag ... */
+  diff = ((*sa)->reconciled) - ((*sb)->reconciled) ;
+  if (diff) return diff;
+
+  /* if dates differ, return */
+  DATE_CMP(sa,sb,date_reconciled);
+
+  /* otherwise, sort on docref string */
+  da = (*sa)->docref;
+  db = (*sb)->docref;
+  SAFE_STRCMP (da, db);
+
   return 0;
 }
 
@@ -1160,34 +1251,80 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   if ( !(*ta) && !(*tb) ) return 0;
 
   /* if dates differ, return */
-  if ( ((*ta)->date_posted.tv_sec) <
-       ((*tb)->date_posted.tv_sec)) {
-    return -1;
-  } else
-  if ( ((*ta)->date_posted.tv_sec) >
-       ((*tb)->date_posted.tv_sec)) {
-    return +1;
-  }
+  DATE_CMP(ta,tb,date_posted);
 
-  /* else, seconds match. check nanoseconds */
-  if ( ((*ta)->date_posted.tv_nsec) <
-       ((*tb)->date_posted.tv_nsec)) {
-    return -1;
-  } else
-  if ( ((*ta)->date_posted.tv_nsec) >
-       ((*tb)->date_posted.tv_nsec)) {
-    return +1;
-  }
-
-  /* otherwise, sort on transaction strings */
+  /* otherwise, sort on number string */
   da = (*ta)->num;
   db = (*tb)->num;
   SAFE_STRCMP (da, db);
 
-  /* otherwise, sort on transaction strings */
+  /* otherwise, sort on description string */
   da = (*ta)->description;
   db = (*tb)->description;
   SAFE_STRCMP (da, db);
+
+  /* if dates differ, return */
+  DATE_CMP(ta,tb,date_entered);
+
+  /* otherwise, sort on docref string */
+  da = (*ta)->docref;
+  db = (*tb)->docref;
+  SAFE_STRCMP (da, db);
+
+  return 0;
+}
+
+int
+xaccTransMatch (Transaction **tap, Transaction **tbp)
+{
+  int retval;
+  Transaction *ta, *tb;
+  Split *sa, *sb;
+  int na, nb;
+
+  /* first, do the basic comparison */
+  retval = xaccTransOrder (tap, tbp);
+  if (0 != retval) return retval;
+  ta = *tap;
+  tb = *tbp;
+
+  /* Now, start comparing splits */
+  na=0; while (ta->splits[na]) na++;
+  nb=0; while (tb->splits[nb]) nb++;
+  if (na-nb) return (na-nb);
+
+  /* Ugh, no we've got to compare individual splits.  They do not necessarily
+   * have to be in identical order to match.  So we have to cycle through them,
+   * without creating bogus matches.
+   */
+  na=0; while ((sa=ta->splits[na])) { sa->tickee = -1; na++; }
+  nb=0; while ((sb=tb->splits[nb])) { sb->tickee = -1; nb++; }
+
+  na=0; 
+  while ((sa=ta->splits[na])) { 
+     if (-1 < sa->tickee) {na++; continue;}
+    
+     nb=0; 
+     while ((sb=tb->splits[nb])) { 
+        if (-1 < sb->tickee) {nb++; continue;}
+        retval = xaccSplitOrder (&sa, &sb);
+        if ((0 == retval) && (sa->acc = sb->acc)) {
+           sb->tickee = na;
+           sa->tickee = nb;
+           break;
+        }
+        nb++;
+     }
+
+     if (-1 == sa->tickee) return -1;
+     na++;
+  }
+
+  nb=0; 
+  while ((sb=tb->splits[nb])) { 
+     if (-1 == sb->tickee) return +1;
+     nb++;
+  }
 
   return 0;
 }

@@ -275,7 +275,7 @@ disable for now till we figure out what the right thing is.
      /* Find the insertion point */
      /* to get realy fancy, could use binary search. */
      for(i = 0; i < (acc->numSplits - 1);) {
-       if(xaccSplitOrder(&(oldsplits[i]), &split) > 0) {
+       if(xaccSplitDateOrder(&(oldsplits[i]), &split) > 0) {
          break;
        } else {
          acc->splits[i] = oldsplits[i];
@@ -304,7 +304,7 @@ disable for now till we figure out what the right thing is.
      /* Find the insertion point */
      /* to get realy fancy, could use binary search. */
      for(i = 0; i < (acc->numSplits - 1);) {
-       if(xaccSplitOrder(&(acc->splits[i]), &split) > 0) {
+       if(xaccSplitDateOrder(&(acc->splits[i]), &split) > 0) {
          break;
        }
        i++;  /* Don't put this in the loop guard!  It'll go too far. */
@@ -692,23 +692,30 @@ void
 xaccConsolidateTransactions (Account * acc)
 {
    Split *sa, *sb;
+   Transaction *ta, *tb;
    int i,j;
+   int retval;
 
    if (!acc) return;
    CHECK (acc);
 
    for (i=0; i<acc->numSplits; i++) {
       sa = acc->splits[i];
+      ta = sa->parent;
       for (j=i+1; j<acc->numSplits; j++) {
          sb = acc->splits[j];
+         tb = sb->parent;
 
          /* if no match, then continue on in the loop.
           * we really must match everything to get a duplicate */
-         if (sa->parent != sb->parent) continue;
-         if (sa->reconciled != sb->reconciled) continue;
-         if (0 == DEQ(sa->damount, sb->damount)) continue;
-         if (0 == DEQ(sa->share_price, sb->share_price)) continue;
-         if (strcmp (sa->memo, sb->memo)) continue;
+         retval = xaccTransMatch (&ta, &tb);
+         if (retval) continue;
+
+         /* OK, looks like the two splits are a matching pair. 
+          * Blow one of them, and its entie associated transaction, away. 
+          * (We blow away the trasnaction because not only do the splits 
+          * match, but so do all of thier partner-splits. )
+          */
 
 #ifdef STILL_BROKEN
 /* hack alert -- still broken from splits */

@@ -123,6 +123,8 @@ struct _split
   double  share_cleared_balance;
   double  share_reconciled_balance;
 
+  /* no tickee no washee */
+  int tickee;
 };
 
 

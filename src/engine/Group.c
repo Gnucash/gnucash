@@ -518,7 +518,10 @@ xaccMergeAccounts (AccountGroup *grp)
       for (j=i+1; j<grp->numAcc; j++) {
          acc_b = grp->account[j];
          if ((0 == strcmp(acc_a->accountName, acc_b->accountName)) &&
+             (0 == strcmp(acc_a->accountCode, acc_b->accountCode)) &&
              (0 == strcmp(acc_a->description, acc_b->description)) &&
+             (0 == strcmp(acc_a->currency, acc_b->currency)) &&
+             (0 == strcmp(acc_a->security, acc_b->security)) &&
              (0 == strcmp(acc_a->notes, acc_b->notes)) &&
              (acc_a->type == acc_b->type)) {
 

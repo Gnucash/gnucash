@@ -260,14 +260,41 @@ Account *     xaccSplitGetAccount (Split *);
 /********************************************************************\
  * sorting comparison function
  *
- * returns a negative value if transaction a is dated earlier than b,        
- * returns a positive value if transaction a is dated later than b,
- * returns zero if both transactions are on the same date.
+ * The xaccTransOrder(ta,tb) method is useful for sorting.
+ *    returns a negative value if transaction ta is dated earlier than tb, 
+ *    returns a positive value if transaction ta is dated later than tb,
+ *    then compares num, description and docref values, using the strcmp()
+ *    c-library routine, returning  what strcmp would return.
+ *    Finally, it returns zero if all of the above match.
+ *    Note that it does *NOT* compare its member splits.
  *
-\********************************************************************/
+ * The xaccSplitOrder(sa,sb) method is useful for sorting.
+ *    returns a negative value if split sa has a smaller currency-value than sb,
+ *    returns a positive value if split sa has a larger currency-value than sb,
+ *    returns a negative value if split sa has a smaller share-price than sb,  
+ *    returns a positive value if split sa has a larger share-price than sb,  
+ *    then compares memo and action using the strcmp()
+ *    c-library routine, returning  what strcmp would return.
+ *    Then it compares the reconciled flags, then the reconciled dates,
+ *    Then it strcmps() the docref fields.
+ *    Finally, it returns zero if all of the above match.
+ *    Note that it does *NOT* compare its parent transaction.
+ *
+ * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
+ *    It is just like the xaccSplitOrder() routine, except that it first
+ *    calls xaccTransOrder(), and then does split comparisons only if
+ *    xaccTransOrder returned zero (i.e. that everything matched).
+ *
+ * The xaccTransMatch() method is just like the xaccTransOrder method, 
+ *    except that it also performs a comparison of each of its child splits,
+ *    and returns a zero (match) condition only if they match as well.
+ *    Note that split-matching includes matching thier parent accounts.
+ */
 
-int  xaccTransOrder (Transaction **ta, Transaction **tb);
-int  xaccSplitOrder (Split **sa, Split **sb);
+int  xaccTransOrder     (Transaction **ta, Transaction **tb);
+int  xaccTransMatch     (Transaction **ta, Transaction **tb);
+int  xaccSplitOrder     (Split **sa, Split **sb);
+int  xaccSplitDateOrder (Split **sa, Split **sb);
 
 /********************************************************************\
  * Miscellaneous utility routines.
