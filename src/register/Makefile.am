@@ -16,6 +16,7 @@ libgncregister_a_SOURCES = \
   splitreg.c \
   table-allgui.c \
   table-gnome.c \
+  table-model.c \
   textcell.c
 
 noinst_HEADERS = \
@@ -33,12 +34,11 @@ noinst_HEADERS = \
   register-common.h \
   splitreg.h \
   table-allgui.h \
+  table-model.h \
   textcell.h
 
 EXTRA_DIST = \
-  .cvsignore \
-  table-html.c \
-  table-html.h
+  .cvsignore
 
 CFLAGS = @CFLAGS@
 

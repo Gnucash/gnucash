@@ -72,7 +72,7 @@ gnc_table_new (TableModel *model)
 
    table = g_new0 (Table, 1);
 
-   table->model = *model;
+   table->model = model;
 
    gnc_table_init (table);
 
@@ -180,9 +180,9 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
 {
   const char *entry;
 
-  entry = table->model.entry_handler (virt_loc, FALSE,
-                                      conditionally_changed,
-                                      table->model.handler_user_data);
+  entry = table->model->entry_handler (virt_loc, FALSE,
+                                       conditionally_changed,
+                                       table->model->handler_user_data);
   if (!entry)
     entry = "";
 
@@ -219,8 +219,8 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cb_cell->cell->value;
   }
 
-  entry = table->model.entry_handler (virt_loc, TRUE, NULL,
-                                      table->model.handler_user_data);
+  entry = table->model->entry_handler (virt_loc, TRUE, NULL,
+                                       table->model->handler_user_data);
   if (!entry)
     entry = "";
 
@@ -232,11 +232,11 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model.io_flag_handler)
+  if (!table->model->io_flag_handler)
     return XACC_CELL_ALLOW_NONE;
 
-  return table->model.io_flag_handler (virt_loc,
-                                       table->model.handler_user_data);
+  return table->model->io_flag_handler (virt_loc,
+                                        table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -244,10 +244,11 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model.label_handler)
+  if (!table->model->label_handler)
     return "";
 
-  return table->model.label_handler (virt_loc, table->model.handler_user_data);
+  return table->model->label_handler (virt_loc,
+                                      table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -255,11 +256,11 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model.fg_color_handler)
+  if (!table->model->fg_color_handler)
     return 0x0; /* black */
 
-  return table->model.fg_color_handler (virt_loc,
-                                        table->model.handler_user_data);
+  return table->model->fg_color_handler (virt_loc,
+                                         table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -268,11 +269,11 @@ guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                         gboolean *hatching)
 {
-  if (!table->model.bg_color_handler)
+  if (!table->model->bg_color_handler)
     return 0xffffff; /* white */
 
-  return table->model.bg_color_handler (virt_loc, hatching,
-                                        table->model.handler_user_data);
+  return table->model->bg_color_handler (virt_loc, hatching,
+                                         table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -281,11 +282,11 @@ void
 gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)
 {
-  if (!table->model.cell_border_handler)
+  if (!table->model->cell_border_handler)
     return;
 
-  table->model.cell_border_handler (virt_loc, borders,
-                                    table->model.handler_user_data);
+  table->model->cell_border_handler (virt_loc, borders,
+                                     table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -384,8 +385,8 @@ gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
 
   vcell->cellblock = NULL;
 
-  if (table && table->model.cell_data_allocator)
-    vcell->vcell_data = table->model.cell_data_allocator ();
+  if (table && table->model->cell_data_allocator)
+    vcell->vcell_data = table->model->cell_data_allocator ();
   else
     vcell->vcell_data = NULL;
 
@@ -400,8 +401,8 @@ gnc_virtual_cell_destroy (gpointer _vcell, gpointer user_data)
   VirtualCell *vcell = _vcell;
   Table *table = user_data;
 
-  if (vcell->vcell_data && table && table->model.cell_data_deallocator)
-    table->model.cell_data_deallocator (vcell->vcell_data);
+  if (vcell->vcell_data && table && table->model->cell_data_deallocator)
+    table->model->cell_data_deallocator (vcell->vcell_data);
 
   vcell->vcell_data = NULL;
 }
@@ -448,8 +449,8 @@ gnc_table_set_vcell (Table *table,
   vcell->cellblock = cursor;
 
   /* copy the vcell user data */
-  if (table->model.cell_data_copy)
-    table->model.cell_data_copy (vcell->vcell_data, vcell_data);
+  if (table->model->cell_data_copy)
+    table->model->cell_data_copy (vcell->vcell_data, vcell_data);
   else
     vcell->vcell_data = (gpointer) vcell_data;
 
@@ -473,8 +474,8 @@ gnc_table_set_virt_cell_data (Table *table,
   if (vcell == NULL)
     return;
 
-  if (table->model.cell_data_copy)
-    table->model.cell_data_copy (vcell->vcell_data, vcell_data);
+  if (table->model->cell_data_copy)
+    table->model->cell_data_copy (vcell->vcell_data, vcell_data);
   else
     vcell->vcell_data = (gpointer) vcell_data;
 }
@@ -954,11 +955,11 @@ gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
   if (!table)
     return TRUE;
 
-  if (!table->model.confirm_handler)
+  if (!table->model->confirm_handler)
     return TRUE;
 
-  return table->model.confirm_handler (virt_loc,
-                                       table->model.handler_user_data);
+  return table->model->confirm_handler (virt_loc,
+                                        table->model->handler_user_data);
 }
 
 /* ==================================================== */
@@ -996,9 +997,9 @@ gnc_table_modify_update(Table *table,
 
   ENTER ("\n");
 
-  if (table->model.confirm_handler &&
-      ! (table->model.confirm_handler (virt_loc,
-                                       table->model.handler_user_data)))
+  if (table->model->confirm_handler &&
+      ! (table->model->confirm_handler (virt_loc,
+                                        table->model->handler_user_data)))
   {
     if (cancelled)
       *cancelled = TRUE;
@@ -1099,9 +1100,9 @@ gnc_table_direct_update (Table *table,
 
   if (safe_strcmp (old_value, cell->value) != 0)
   {
-    if (table->model.confirm_handler &&
-        ! (table->model.confirm_handler (virt_loc,
-                                         table->model.handler_user_data)))
+    if (table->model->confirm_handler &&
+        ! (table->model->confirm_handler (virt_loc,
+                                          table->model->handler_user_data)))
     {
       xaccSetBasicCellValue (cell, old_value);
       *newval_ptr = NULL;

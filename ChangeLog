@@ -1,5 +1,17 @@
 2001-08-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/table-html.[ch]: remove
+
+	* src/register/Makefile.am: add table-model.[ch],
+	remove table-html.[ch]
+
+	* src/MultiLedger.c: same as below
+
+	* src/register/table-allgui.[ch]: same as below
+
+	* src/register/table-model.[ch]: separate table model out from
+	table code.
+
 	* src/register/pricecell.c: fix bugs
 
 	* src/engine/sql/upgrade.h: fix warning

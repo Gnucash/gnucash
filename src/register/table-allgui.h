@@ -83,7 +83,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998,1999,2000 Linas Vepstas
- * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2000-2001 Dave Peticolas
  */
 
 #ifndef TABLE_ALLGUI_H
@@ -91,22 +91,12 @@
 
 #include <glib.h>
 
-#include "gnc-common.h"
-#include "register-common.h"
-
 #include "basiccell.h"
 #include "cellblock.h"
+#include "gnc-common.h"
 #include "gtable.h"
-
-
-typedef enum
-{
-  XACC_CELL_ALLOW_NONE       = 0,
-  XACC_CELL_ALLOW_INPUT      = 1 << 0,
-  XACC_CELL_ALLOW_SHADOW     = 1 << 1,
-  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT | XACC_CELL_ALLOW_SHADOW,
-  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2
-} CellIOFlags;
+#include "register-common.h"
+#include "table-model.h"
 
 
 typedef enum
@@ -117,7 +107,6 @@ typedef enum
   GNC_TABLE_TRAVERSE_UP,
   GNC_TABLE_TRAVERSE_DOWN
 } gncTableTraversalDir;
-
 
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct _VirtualCell VirtualCell;
@@ -130,25 +119,6 @@ struct _VirtualCell
   unsigned int visible : 1;             /* visible in the GUI */
   unsigned int start_primary_color : 1; /* color usage flag */
 };
-
-
-typedef enum
-{
-  CELL_BORDER_LINE_NONE,
-  CELL_BORDER_LINE_LIGHT,
-  CELL_BORDER_LINE_NORMAL,
-  CELL_BORDER_LINE_HEAVY,
-  CELL_BORDER_LINE_HIGHLIGHT
-} PhysicalCellBorderLineStyle;
-
-typedef struct
-{
-  PhysicalCellBorderLineStyle top;
-  PhysicalCellBorderLineStyle bottom;
-  PhysicalCellBorderLineStyle left;
-  PhysicalCellBorderLineStyle right;
-} PhysicalCellBorders;
-
 
 typedef struct _Table Table;
 
@@ -163,52 +133,6 @@ typedef void (*TableSetHelpFunc) (Table *table,
                                   const char *help_str);
 
 typedef void (*TableDestroyFunc) (Table *table);
-
-typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
-                                              gboolean translate,
-                                              gboolean *conditionally_changed,
-                                              gpointer user_data);
-
-typedef const char * (*TableGetLabelHandler) (VirtualLocation virt_loc,
-                                              gpointer user_data);
-
-typedef CellIOFlags (*TableGetCellIOFlags) (VirtualLocation virt_loc,
-                                            gpointer user_data);
-
-typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
-                                           gpointer user_data);
-
-typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,
-                                           gboolean *hatching,
-                                           gpointer user_data);
-
-typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
-                                           PhysicalCellBorders *borders,
-                                           gpointer user_data);
-
-typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
-                                         gpointer user_data);
-
-typedef gpointer (*VirtCellDataAllocator)   (void);
-typedef void     (*VirtCellDataDeallocator) (gpointer cell_data);
-typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
-
-typedef struct
-{
-  TableGetEntryHandler entry_handler;
-  TableGetLabelHandler label_handler;
-  TableGetCellIOFlags io_flag_handler;
-  TableGetFGColorHandler fg_color_handler;
-  TableGetBGColorHandler bg_color_handler;
-  TableGetCellBorderHandler cell_border_handler;
-  TableConfirmHandler confirm_handler;
-
-  gpointer handler_user_data;
-
-  VirtCellDataAllocator cell_data_allocator;
-  VirtCellDataDeallocator cell_data_deallocator;
-  VirtCellDataCopy cell_data_copy;
-} TableModel;
 
 struct _Table
 {
@@ -253,7 +177,7 @@ struct _Table
 
   gpointer ui_data;
 
-  TableModel model;
+  TableModel *model;
 
   TableDestroyFunc destroy;
 };

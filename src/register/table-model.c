@@ -1,5 +1,7 @@
 /********************************************************************\
- * table-html.h -- print table as html                              *
+ * table-model.c -- 2D grid table object model                      *
+ * Copyright (c) 2001 Free Software Foundation                      *
+ * Author: Dave Peticolas <dave@krondo.com>                         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,24 +22,25 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * FILE:
- * table-html.h
- *
- * FUNCTION:
- * This header defines the HTML specific functions
- * associated with the Table GUI.   This is just sample code. 
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
+#include "config.h"
 
-#ifndef XACC_TABLE_HTML_H
-#define XACC_TABLE_HTML_H
-
-int xaccTableDumpHTML (Table * table, int fd);
-int xaccTablePrintHTML (Table * table, char *filename);
-void xaccTableWebServeHTML (Table * table, unsigned short port);
+#include "table-model.h"
 
 
-#endif XACC_TABLE_HTML_H
+TableModel *
+gnc_table_model_new (void)
+{
+  TableModel *model;
+
+  model = g_new0 (TableModel, 1);
+
+  return model;
+}
+
+void
+gnc_table_model_destroy (TableModel *model)
+{
+  if (!model) return;
+
+  g_free (model);
+}

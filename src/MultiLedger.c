@@ -53,6 +53,7 @@ struct _xaccLedgerDisplay
   LedgerDisplayType ld_type;
 
   SplitRegister *reg;
+  TableModel *model;
 
   gboolean loading;
 
@@ -207,7 +208,7 @@ find_by_reg (gpointer find_data, gpointer user_data)
 }
 
 static SplitRegisterStyle
-gnc_get_default_register_style ()
+gnc_get_default_register_style (void)
 {
   SplitRegisterStyle new_style = REG_STYLE_LEDGER;
   char *style_string;
@@ -394,7 +395,7 @@ xaccLedgerDisplayAccGroup (Account *account)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayGL ()
+xaccLedgerDisplayGL (void)
 {
   Query *query;
   time_t start;
@@ -612,6 +613,9 @@ close_handler (gpointer user_data)
   xaccFreeQuery (ld->query);
   ld->query = NULL;
 
+  gnc_table_model_destroy (ld->model);
+  ld->model = NULL;
+
   g_free (ld);
 }
 
@@ -694,7 +698,6 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   xaccLedgerDisplay *ld;
   gboolean show_all;
   const char *class;
-  TableModel model;
   GList *splits;
 
   switch (ld_type)
@@ -800,27 +803,30 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  model.label_handler       = xaccSRGetLabelHandler;
-  model.fg_color_handler    = xaccSRGetFGColorHandler;
-  model.bg_color_handler    = xaccSRGetBGColorHandler;
-  model.cell_border_handler = xaccSRGetCellBorderHandler;
-  model.handler_user_data   = NULL;
+  ld->model = gnc_table_model_new ();
+
+  ld->model->label_handler       = xaccSRGetLabelHandler;
+  ld->model->fg_color_handler    = xaccSRGetFGColorHandler;
+  ld->model->bg_color_handler    = xaccSRGetBGColorHandler;
+  ld->model->cell_border_handler = xaccSRGetCellBorderHandler;
+  ld->model->handler_user_data   = NULL;
   /* The following handlers are changed in template mode. */
   if ( templateMode ) {
-    model.entry_handler     = xaccSRTemplateGetEntryHandler;
-    model.io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
-    model.confirm_handler   = xaccSRTemplateConfirmHandler;
+    ld->model->entry_handler     = xaccSRTemplateGetEntryHandler;
+    ld->model->io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
+    ld->model->confirm_handler   = xaccSRTemplateConfirmHandler;
   } else {
-    model.entry_handler     = xaccSRGetEntryHandler;
-    model.io_flag_handler   = xaccSRGetIOFlagsHandler;
-    model.confirm_handler   = xaccSRConfirmHandler;
+    ld->model->entry_handler     = xaccSRGetEntryHandler;
+    ld->model->io_flag_handler   = xaccSRGetIOFlagsHandler;
+    ld->model->confirm_handler   = xaccSRConfirmHandler;
   }
 
-  model.cell_data_allocator = xaccMLGUIDMalloc;
-  model.cell_data_deallocator = xaccMLGUIDFree;
-  model.cell_data_copy = xaccMLGUIDCopy;
+  ld->model->cell_data_allocator   = xaccMLGUIDMalloc;
+  ld->model->cell_data_deallocator = xaccMLGUIDFree;
+  ld->model->cell_data_copy        = xaccMLGUIDCopy;
 
-  ld->reg = gnc_register_new (reg_type, style, FALSE, &model, templateMode);
+  ld->reg = gnc_register_new (reg_type, style, FALSE, ld->model, templateMode);
+
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,
                  xaccLedgerDisplaySetHelp);
