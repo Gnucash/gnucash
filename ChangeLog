@@ -1,5 +1,13 @@
 2001-10-22  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/engine/SchedXaction.c (xaccSchedXactionInit): Fixed
+	number-of-occurances init problem.
+
+	* src/gnome/dialog-scheduledxaction.c (schedXact_editor_populate):
+	Fixed bug in populating the editor.
+
+2001-10-22  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/window-main.c (gnc_ui_mainWindow_nextrun_cb):
 	Removed obsolete dialog.
 

@@ -66,7 +66,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
         g_date_clear( &sx->start_date, 1 );
         g_date_clear( &sx->end_date, 1 );
 
-        sx->num_occurances_total = -1;
+        sx->num_occurances_total = 0;
         sx->kvp_data = kvp_frame_new();
         sx->autoCreateOption = FALSE;
         sx->autoCreateNotify = FALSE;

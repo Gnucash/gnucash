@@ -357,6 +357,11 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         if (sxed == NULL)
                 return;
 
+        if ( sxed->ledger ) {
+                sxed_close_handler( sxed );
+                return;
+        }
+
         gnc_unregister_gui_component_by_data
           (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
@@ -534,7 +539,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 g_list_free( alreadyExists );
                 return sxed;
         }
-
 
         sxed = g_new0( SchedXactionEditorDialog, 1 );
 
@@ -960,13 +964,14 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 g_free( tmpTm );
                 gnome_date_edit_set_time( GNOME_DATE_EDIT(w), tmpDate );
                 set_endgroup_toggle_states( sxed, END_DATE );
-        } else if ( xaccSchedXactionGetNumOccur( sxed->sx ) != -1 ) {
+        } else if ( xaccSchedXactionHasOccurDef( sxed->sx ) ) {
+                gint numOccur = xaccSchedXactionGetNumOccur( sxed->sx );
                 w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(w), TRUE );
                 w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
                 w = gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(w) );
                 tmpgStr = g_string_sized_new(5);
-                g_string_sprintf( tmpgStr, "%d", xaccSchedXactionGetNumOccur( sxed->sx ) );
+                g_string_sprintf( tmpgStr, "%d", numOccur );
                 gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
                 set_endgroup_toggle_states( sxed, END_OCCUR );
