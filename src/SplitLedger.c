@@ -1292,8 +1292,24 @@ LedgerTraverse (Table *table,
       return FALSE;
   }
 
-  if (changed && (split == NULL) && (dir == GNC_TABLE_TRAVERSE_RIGHT))
+  /* See if we are tabbing off the end of the blank split */
+  do
   {
+    VirtualLocation virt_loc;
+
+    if (!changed)
+      break;
+
+    if (split)
+      break;
+
+    if (dir != GNC_TABLE_TRAVERSE_RIGHT)
+      break;
+
+    virt_loc = table->current_cursor_loc;
+    if (gnc_table_move_tab (table, &virt_loc, TRUE))
+      break;
+
     /* If we are here, then: (a) the current cursor has been
      * edited, and (b) we are on the blank split of a multi-line
      * transaction, and (c) we are tabbing out of the last cell
@@ -1307,7 +1323,8 @@ LedgerTraverse (Table *table,
     info->hint_set_by_traverse = TRUE;
 
     return FALSE;
-  }
+
+  } while (FALSE);
 
   /* Check for going off the end */
   gnc_table_find_close_valid_cell (table, &virt_loc, info->exact_traversal);
@@ -3677,6 +3694,7 @@ sr_add_transaction (SplitRegister *reg,
                     gboolean start_primary_color,
                     gboolean sort_splits,
                     gboolean add_blank,
+                    Transaction *find_trans,
                     Split *find_split,
                     CursorClass find_class,
                     int *new_split_row,
@@ -3691,6 +3709,7 @@ sr_add_transaction (SplitRegister *reg,
                     gboolean start_primary_color,
                     gboolean sort_splits,
                     gboolean add_blank,
+                    Transaction *find_trans,
                     Split *find_split,
                     CursorClass find_class,
                     int *new_split_row,
@@ -3760,10 +3779,15 @@ sr_add_transaction (SplitRegister *reg,
   if (!add_blank)
     return;
 
+  if (find_trans == trans && find_split == NULL &&
+      find_class == CURSOR_CLASS_SPLIT)
+        *new_split_row = vcell_loc->virt_row;
+
   /* Add blank transaction split */
   gnc_table_set_vcell (reg->table, reg->cursor_split,
                        xaccSplitGetGUID (NULL), FALSE, TRUE, *vcell_loc);
   vcell_loc->virt_row++;
+
 }
 
 /* ======================================================== */
@@ -3851,7 +3875,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    * possible restoration. */
   changed = xaccSplitRegisterGetChangeFlag (reg);
   changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
-  if (changed && find_split && (find_split == xaccSRGetCurrentSplit (reg)))
+  if (changed && (find_split == xaccSRGetCurrentSplit (reg)))
   {
     reg_buffer = xaccMallocSplitRegisterBuffer ();
     xaccSplitRegisterSaveCursor (reg, reg_buffer);
@@ -3958,8 +3982,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       new_trans_split_row = vcell_loc.virt_row;
 
     sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                        start_primary_color, TRUE, TRUE, find_split,
-                        find_class, &new_split_row, &vcell_loc);
+                        start_primary_color, TRUE, TRUE, find_trans,
+                        find_split, find_class, &new_split_row, &vcell_loc);
 
     if (!multi_line)
       start_primary_color = !start_primary_color;
@@ -3982,7 +4006,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
   sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
                       start_primary_color, FALSE, info->blank_split_edited,
-                      find_split, find_class, &new_split_row, &vcell_loc);
+                      find_trans, find_split, find_class, &new_split_row,
+                      &vcell_loc);
 
   /* resize the table to the sizes we just counted above */
   /* num_virt_cols is always one. */
@@ -4015,15 +4040,15 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
     if (gnc_table_find_close_valid_cell (table, &save_loc, FALSE))
     {
-      gnc_table_move_cursor_gui(table, save_loc);
+      gnc_table_move_cursor_gui (table, save_loc);
       new_split_row = save_loc.vcell_loc.virt_row;
 
-      if (changed && find_split && (find_split == xaccSRGetCurrentSplit(reg)))
-        xaccSplitRegisterRestoreCursorChanged(reg, reg_buffer);
+      if (changed && (find_split == xaccSRGetCurrentSplit (reg)))
+        xaccSplitRegisterRestoreCursorChanged (reg, reg_buffer);
     }
 
     if (reg_buffer != NULL)
-      xaccDestroySplitRegisterBuffer(reg_buffer);
+      xaccDestroySplitRegisterBuffer (reg_buffer);
 
     reg_buffer = NULL;
   }
