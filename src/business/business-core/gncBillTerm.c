@@ -72,7 +72,8 @@ static short        module = MOD_BUSINESS;
 static void add_or_rem_object (GncBillTerm *term, gboolean add);
 static void maybe_resort_list (GncBillTerm *term);
 
-static void gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child);
+/* ============================================================== */
+/* Misc inl;ine utilities */
 
 G_INLINE_FUNC void mark_term (GncBillTerm *term);
 G_INLINE_FUNC void
@@ -96,6 +97,29 @@ static inline void remObj (GncBillTerm *term)
   add_or_rem_object (term, FALSE);
 }
 
+static inline void
+gncBillTermAddChild (GncBillTerm *table, GncBillTerm *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+  g_return_if_fail(table->inst.do_free == FALSE);
+
+  table->children = g_list_prepend(table->children, child);
+}
+
+static inline void
+gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
+{
+  g_return_if_fail(table);
+  g_return_if_fail(child);
+
+  if (table->inst.do_free)
+    return;
+
+  table->children = g_list_remove(table->children, child);
+}
+
+/* ============================================================== */
 
 /* Create/Destroy Functions */
 GncBillTerm * gncBillTermCreate (QofBook *book)
@@ -151,29 +175,37 @@ static void gncBillTermFree (GncBillTerm *term)
   g_free (term);
 }
 
-static void
-gncBillTermAddChild (GncBillTerm *table, GncBillTerm *child)
-{
-  g_return_if_fail(table);
-  g_return_if_fail(child);
-  g_return_if_fail(table->inst.do_free == FALSE);
 
-  table->children = g_list_prepend(table->children, child);
+GncBillTerm *
+gncCloneBillTerm (GncBillTerm *from, QofBook *book)
+{
+  GncBillTerm *term;
+
+  if (!book) return NULL;
+
+  term = g_new0 (GncBillTerm, 1);
+  qof_instance_init(&term->inst, book);
+  qof_instance_gemini (&term->inst, &from->inst);
+
+  term->name = CACHE_INSERT (from->name);
+  term->desc = CACHE_INSERT (from->desc);
+  term->type = from->type;
+  term->due_days = from->due_days;
+  term->disc_days = from->disc_days;
+  term->discount = from->discount;
+  term->cutoff = from->cutoff;
+
+  /** xxx I don't know what to do about parent, children, disconnect ... 
+   * FIXME XXX  */
+
+  addObj (term);
+  gnc_engine_generate_event (&term->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  return term;
 }
 
-static void
-gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
-{
-  g_return_if_fail(table);
-  g_return_if_fail(child);
-
-  if (table->inst.do_free)
-    return;
-
-  table->children = g_list_remove(table->children, child);
-}
-
+/* ============================================================== */
 /* Set Functions */
+
 void gncBillTermSetGUID (GncBillTerm *term, const GUID *guid)
 {
   if (!term || !guid) return;

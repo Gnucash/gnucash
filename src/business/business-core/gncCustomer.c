@@ -77,11 +77,21 @@ static short	module = MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
 
+/* ============================================================== */
+/* misc inline funcs */
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-static void addObj (GncCustomer *cust);
-static void remObj (GncCustomer *cust);
+static inline void addObj (GncCustomer *cust)
+{
+  gncBusinessAddObject (cust->inst.book, _GNC_MOD_NAME, cust, &cust->inst.guid);
+}
+
+static inline void remObj (GncCustomer *cust)
+{
+  gncBusinessRemoveObject (cust->inst.book, _GNC_MOD_NAME, &cust->inst.guid);
+}
 
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 G_INLINE_FUNC void
@@ -93,6 +103,7 @@ mark_customer (GncCustomer *customer)
   gnc_engine_generate_event (&customer->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
 }
 
+/* ============================================================== */
 /* Create/Destroy Functions */
 
 GncCustomer *gncCustomerCreate (QofBook *book)
@@ -183,6 +194,7 @@ static void gncCustomerFree (GncCustomer *cust)
   g_free (cust);
 }
 
+/* ============================================================== */
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
@@ -524,16 +536,6 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
 }
 
 /* Package-Private functions */
-
-static void addObj (GncCustomer *cust)
-{
-  gncBusinessAddObject (cust->inst.book, _GNC_MOD_NAME, cust, &cust->inst.guid);
-}
-
-static void remObj (GncCustomer *cust)
-{
-  gncBusinessRemoveObject (cust->inst.book, _GNC_MOD_NAME, &cust->inst.guid);
-}
 
 static void _gncCustomerCreate (QofBook *book)
 {
