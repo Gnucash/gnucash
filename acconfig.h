@@ -29,20 +29,11 @@
 #undef PACKAGE
 #undef VERSION
 
-/* Are we bigendian -- needed for reading binary file format */
-#undef  WORDS_BIGENDIAN     
-
 /* Are we compiling for GNOME?  The answer right now is always yes... */
 #undef GNOME
 
 /* Do some memory debugging stuff */
-#define  DEBUG_MEMORY        
-
-/* Enable debugging stuff */
-#define  USE_DEBUG           
-
-/* Standard C headers present */
-#undef STDC_HEADERS
+#define DEBUG_MEMORY        
 
 /* limits.h header present */
 #undef HAVE_LIMITS_H
@@ -53,18 +44,15 @@
 /* check for stpcpy for Solaris */
 #undef HAVE_STPCPY
 
-/* Enable quickfill in register window */
-#define  USE_QUICKFILL       
-
 /* Don't color the balance depending on whether positive
  * or negative */
-#define  USE_NO_COLOR        
+#define USE_NO_COLOR        
 
 /* If configure found libXpm, then use it */
-#define  HAVE_XPM            
+#undef HAVE_XPM            
 
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
-#define  HAVE_LIBGTKHTML 1
+#undef HAVE_LIBGTKHTML
 
 /* use gnomeprint if it's available */
 #undef HAVE_LIBGNOMEPRINT
