@@ -813,8 +813,9 @@ qof_session_begin (QofSession *session, const char * book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   char *p, *access_method, *msg;
-  if (!session) return;
   int err;
+
+  if (!session) return;
 
   ENTER (" sess=%p ignore_lock=%d, book-id=%s", 
          session, ignore_lock,
