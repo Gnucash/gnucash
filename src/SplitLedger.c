@@ -788,6 +788,62 @@ xaccSRCurrentTransExpanded (SplitRegister *reg)
   return info->trans_expanded;
 }
 
+static gboolean
+sr_balance_trans (SplitRegister *reg, Transaction *trans)
+{
+  gnc_numeric imbalance;
+
+  imbalance = xaccTransGetImbalance (trans);
+  if (!gnc_numeric_zero_p (imbalance))
+  {
+    int choice;
+    int default_value;
+    Account *default_account;
+    char *radio_list[4] = { NULL, NULL, NULL, NULL };
+    const char *title   = _("Rebalance Transaction");
+    const char *message = _("The current transaction is not balanced.");
+
+    default_account = sr_get_default_account (reg);
+
+    radio_list[0] = _("Balance it manually");
+    radio_list[1] = _("Let GnuCash add an adjusting split");
+
+    if (reg->type < NUM_SINGLE_REGISTER_TYPES)
+    {
+      radio_list[2] = _("Adjust current account split total");
+      default_value = 2;
+    }
+    else
+      default_value = 0;
+
+    choice = gnc_choose_radio_option_dialog_parented (xaccSRGetParent (reg),
+                                                      title,
+                                                      message,
+                                                      default_value,
+                                                      radio_list);
+
+    switch (choice)
+    {
+      default:
+      case 0:
+        break;
+
+      case 1:
+        xaccTransScrubImbalance (trans, gncGetCurrentGroup (), NULL);
+        break;
+
+      case 2:
+        xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
+                                 default_account);
+        break;
+    }
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 /* ======================================================== */
 /* This callback gets called when the user clicks on the gui
  * in such a way as to leave the current virtual cursor, and 
@@ -880,43 +936,26 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
-    xaccTransScrubImbalance (old_trans, gncGetCurrentGroup ());
+    sr_balance_trans (reg, old_trans);
+
     if (xaccTransIsOpen (old_trans))
       xaccTransCommitEdit (old_trans);
-    info->pending_trans_guid = *xaccGUIDNULL();
+
+    info->pending_trans_guid = *xaccGUIDNULL ();
     pending_trans = NULL;
     saved = TRUE;
   }
   else if (old_trans &&
            (old_trans != new_trans) &&
-           !trans_has_reconciled_splits (old_trans))
+           !trans_has_reconciled_splits (old_trans) &&
+           sr_balance_trans (reg, old_trans))
   {
-    gnc_numeric imbalance;
-
-    imbalance = xaccTransGetImbalance (old_trans);
-    if (!gnc_numeric_zero_p (imbalance))
-    {
-      const char *message = _("The current transaction is not balanced.\n"
-                              "You must either balance it yourself, or\n"
-                              "GnuCash will automatically balance it for\n"
-                              "you. Do you want to balance it yourself?");
-      gboolean result;
-
-      result = gnc_verify_dialog_parented (xaccSRGetParent (reg),
-                                           message, TRUE);
-
-      new_trans = old_trans;
-      new_split = old_split;
-      new_trans_split = old_trans_split;
-      new_class = old_class;
-      new_virt_loc = table->current_cursor_loc;
-
-      if (!result)
-      {
-        xaccTransScrubImbalance (old_trans, gncGetCurrentGroup ());
-        saved = TRUE;
-      }
-    }
+    /* no matter what, stay there so the user can see what happened */
+    new_trans = old_trans;
+    new_split = old_split;
+    new_trans_split = old_trans_split;
+    new_class = old_class;
+    new_virt_loc = table->current_cursor_loc;
   }
 
   if (saved)
@@ -1461,20 +1500,12 @@ LedgerTraverse (Table *table,
    * changed. See what the user wants to do. */
   {
     const char *message;
-    gnc_numeric imbalance;
 
-    imbalance = xaccTransGetImbalance (trans);
+    message = _("The current transaction has been changed.\n"
+                "Would you like to record it?");
 
-    if (gnc_numeric_zero_p (imbalance))
-      message = _("The current transaction has been changed.\n"
-                  "Would you like to record it?");
-    else
-      message = _("The current transaction has been changed\n"
-                  "and is imbalanced. Would you like to record\n"
-                  "it? (It will be automatically rebalanced)");
-
-    result = gnc_verify_cancel_dialog_parented(xaccSRGetParent(reg),
-                                               message, GNC_VERIFY_YES);
+    result = gnc_verify_cancel_dialog_parented (xaccSRGetParent (reg),
+                                                message, GNC_VERIFY_YES);
   }
 
   switch (result)

@@ -261,12 +261,13 @@ xaccAccountScrubImbalance (Account *acc)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans, xaccGetAccountRoot (acc));
+    xaccTransScrubImbalance (trans, xaccGetAccountRoot (acc), NULL);
   }
 }
 
 void
-xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
+xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
+                         Account *parent)
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
@@ -284,7 +285,10 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
     if (gnc_numeric_zero_p (imbalance))
       return;
 
-    account = GetOrMakeAccount (root, trans, _("Imbalance"));
+    if (!parent)
+      account = GetOrMakeAccount (root, trans, _("Imbalance"));
+    else
+      account = parent;
 
     for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
@@ -334,7 +338,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
 
       xaccSplitSetValue (balance_split, new_value);
 
-      if (gnc_numeric_zero_p (new_value))
+      if (!parent && gnc_numeric_zero_p (new_value))
       {
         xaccSplitDestroy (balance_split);
         balance_split = NULL;
@@ -350,7 +354,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
 
       xaccSplitSetShareAmount (balance_split, new_share_amount);
 
-      if (gnc_numeric_zero_p (new_share_amount))
+      if (!parent && gnc_numeric_zero_p (new_share_amount))
       {
         xaccSplitDestroy (balance_split);
         balance_split = NULL;
