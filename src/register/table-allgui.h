@@ -124,7 +124,7 @@ typedef enum {
   GNC_TABLE_TRAVERSE_DOWN
 } gncTableTraversalDir;
 
-/* the Locator structure is used provide a mapping from
+/* The Locator structure is used provide a mapping from
  * the physical array of cells to the logical array of 
  * virtual cell blocks.
  *
@@ -201,13 +201,14 @@ struct _Table {
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (Table *, int *p_new_phys_row, 
-                                int *p_new_phys_col, 
+  void (*move_cursor) (Table *, int *p_new_phys_row,
+                                int *p_new_phys_col,
                                 void *client_data);
 
   /* callback that is called to determine traversal */
-  void  (*traverse)  (Table *,  int *p_new_phys_row, 
-                                int *p_new_phys_col, 
+  void  (*traverse)  (Table *,  int *p_new_phys_row,
+                                int *p_new_phys_col,
+                                gncTableTraversalDir dir,
                                 void *client_data);
 
   TableSetHelpFunc set_help;

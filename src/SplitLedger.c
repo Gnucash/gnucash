@@ -138,6 +138,9 @@ struct _SRInfo
   /* A column used to remember which column to put the cursor */
   int cursor_hint_phys_col;
 
+  /* If the hints were set by the traverse callback */
+  gncBoolean hint_set_by_traverse;
+
   /* The default account where new splits are added */
   Account *default_source_account;
 
@@ -313,6 +316,28 @@ gnc_trans_prepend_account_list(Transaction *trans, GList *accounts)
   } while(1);
 }
 
+static GList *
+gnc_trans_prepend_split_list(Transaction *trans, GList *splits)
+{
+  Split *split;
+  int i = 0;
+
+  if (trans == NULL)
+    return splits;
+
+  do
+  {
+    split = xaccTransGetSplit(trans, i);
+
+    if (split == NULL)
+      return splits;
+
+    splits = g_list_prepend(splits, split);
+
+    i++;
+  } while(1);
+}
+
 static int
 gnc_trans_split_index(Transaction *trans, Split *split)
 {
@@ -418,14 +443,23 @@ LedgerMoveCursor (Table *table,
   phys_row_offset = new_phys_row - table->current_cursor_phys_row;
   phys_col_offset = new_phys_col - table->current_cursor_phys_col;
 
-  /* The transaction where we are moving to */
-  new_trans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
+  if (!info->hint_set_by_traverse)
+  {
+    /* The transaction where we are moving to */
+    new_trans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
 
-  /* The split at the transaction line we are moving to */
-  trans_split = xaccSRGetTransSplit(reg, new_phys_row, new_phys_col);
+    /* The split we are moving to */
+    new_split = xaccGetUserData(reg->table, new_phys_row, new_phys_col);
 
-  /* The split we are moving to */
-  new_split = xaccGetUserData(reg->table, new_phys_row, new_phys_col);
+    /* The split at the transaction line we are moving to */
+    trans_split = xaccSRGetTransSplit(reg, new_phys_row, new_phys_col);
+  }
+  else
+  {
+    new_trans = info->cursor_hint_trans;
+    new_split = info->cursor_hint_split;
+    trans_split = info->cursor_hint_trans_split;
+  }
 
   /* The cell offset we are moving to */
   locator = table->locators[new_phys_row][new_phys_col];
@@ -550,19 +584,22 @@ LedgerMoveCursor (Table *table,
     info->cursor_hint_trans_split = trans_split;
     info->cursor_hint_phys_col = -1;
   }
+
+  info->hint_set_by_traverse = GNC_F;
 }
 
 /* ======================================================== */
-/* this callback gets called when the user clicks on the gui
+/* This callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
  * go to a new one. It is called to verify what the coordinates
- * of the new cell will be. It currently does nothing.
+ * of the new cell will be.
  */
 
 static void
-LedgerTraverse (Table *table, 
-                int *p_new_phys_row, 
-                int *p_new_phys_col, 
+LedgerTraverse (Table *table,
+                int *p_new_phys_row,
+                int *p_new_phys_col,
+                gncTableTraversalDir dir,
                 void * client_data)
 {
   SplitRegister *reg = client_data;
@@ -573,7 +610,9 @@ LedgerTraverse (Table *table,
   int virt_row, virt_col;
   unsigned int changed;
   GNCVerifyResult result;
+  Split *split;
 
+  split = xaccSRGetCurrentSplit(reg);
   trans = xaccSRGetCurrentTrans(reg);
   if (trans == NULL)
     return;
@@ -600,6 +639,23 @@ LedgerTraverse (Table *table,
   if (trans == new_trans)
     return;
 
+  if (changed && (split == NULL) && (dir == GNC_TABLE_TRAVERSE_RIGHT))
+  {
+    /* If we are here, then: (a) the current cursor has been
+     * edited, and (b) we are on the blank split of a multi-line
+     * transaction, and (c) we are tabbing out of the last cell
+     * on the line. Thus, we want to go ahead and add the new
+     * split and end up on the new blank split of the current
+     * transaction. */
+    info->cursor_hint_trans = trans;
+    info->cursor_hint_split = split;
+    info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg);
+    info->cursor_hint_phys_col = -1;
+    info->hint_set_by_traverse = GNC_T;
+
+    return;
+  }
+
   /* Ok, we are changing transactions and the current transaction has
    * changed. See what the user wants to do. */
 
@@ -609,8 +665,34 @@ LedgerTraverse (Table *table,
 
   switch (result)
   {
-    case GNC_VERIFY_NO:
+    case GNC_VERIFY_NO: {
+      Split *new_split;
+      Split *trans_split;
+
+      new_split = xaccGetUserData(reg->table, phys_row, phys_col);
+      trans_split = xaccSRGetTransSplit(reg, phys_row, phys_col);
+
       xaccSRCancelCursorTransChanges(reg);
+
+      if (xaccSRGetTransSplitRowCol (reg, new_trans, trans_split, new_split,
+                                     &virt_row, &virt_col))
+      {
+        RevLocator *rev_locator;
+
+        rev_locator = table->rev_locators[virt_row][virt_col];
+
+        phys_row = rev_locator->phys_row;
+      }
+
+      if (phys_row >= table->num_phys_rows)
+        phys_row = table->num_phys_rows - 1;
+      if (phys_col >= table->num_phys_cols)
+        phys_col = table->num_phys_cols - 1;
+
+      *p_new_phys_row = phys_row;
+      *p_new_phys_col = phys_col;
+    }
+
       break;
     case GNC_VERIFY_CANCEL:
       *p_new_phys_row = table->current_cursor_phys_row;
@@ -1305,10 +1387,10 @@ void
 xaccSRDeleteCurrentSplit (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
-  Split *split, *s;
   Transaction *trans;
-  int i, num_splits;
-  Account *account, **affected_accounts;
+  Account *account;
+  GList *accounts;
+  Split *split;
 
   /* get the current split based on cursor position */
   split = xaccSRGetCurrentSplit(reg);
@@ -1328,17 +1410,8 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
    * affected by this deletion, so that we can update
    * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
-  num_splits = xaccTransCountSplits(trans);
-  affected_accounts = (Account **) malloc((num_splits + 1) *
-                                          sizeof(Account *));
-  assert(affected_accounts != NULL);
 
-  for (i = 0; i < num_splits; i++) 
-  {
-    s = xaccTransGetSplit(trans, i);
-    affected_accounts[i] = xaccSplitGetAccount(s);
-  }
-  affected_accounts[num_splits] = NULL;
+  accounts = gnc_trans_prepend_account_list(trans, NULL);
 
   account = xaccSplitGetAccount(split);
 
@@ -1352,9 +1425,9 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
   if (trans == info->pending_trans)
     info->pending_trans = NULL;
 
-  gnc_account_list_ui_refresh(affected_accounts);
+  gnc_account_glist_ui_refresh(accounts);
 
-  free(affected_accounts);
+  g_list_free(accounts);
 
   gnc_refresh_main_window ();
 }
@@ -1365,10 +1438,10 @@ void
 xaccSRDeleteCurrentTrans (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
-  Split *split, *s;
   Transaction *trans;
-  int i, num_splits;
-  Account *account, **affected_accounts;
+  Account *account;
+  GList *accounts;
+  Split *split;
 
   /* get the current split based on cursor position */
   split = xaccSRGetCurrentSplit(reg);
@@ -1399,20 +1472,10 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
-   * their register windows after the deletion.
-   */
+   * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
-  num_splits = xaccTransCountSplits(trans);
-  affected_accounts = (Account **) malloc((num_splits + 1) *
-                                          sizeof(Account *));
-  assert(affected_accounts != NULL);
 
-  for (i = 0; i < num_splits; i++) 
-  {
-    s = xaccTransGetSplit(trans, i);
-    affected_accounts[i] = xaccSplitGetAccount(s);
-  }
-  affected_accounts[num_splits] = NULL;
+  accounts = gnc_trans_prepend_account_list(trans, NULL);
 
   xaccTransBeginEdit(trans, 1);
   xaccTransDestroy(trans);
@@ -1422,9 +1485,9 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
   if (trans == info->pending_trans)
     info->pending_trans = NULL;
 
-  gnc_account_list_ui_refresh(affected_accounts);
+  gnc_account_glist_ui_refresh(accounts);
 
-  free(affected_accounts);
+  g_list_free(accounts);
 
   gnc_refresh_main_window ();
 }
@@ -1435,11 +1498,12 @@ void
 xaccSREmptyCurrentTrans (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
-  Split *split, *s;
-  Split **splits;
   Transaction *trans;
-  int i, num_splits;
-  Account *account, **affected_accounts;
+  Account *account;
+  GList *accounts;
+  GList *splits;
+  GList *node;
+  Split *split;
 
   /* get the current split based on cursor position */
   split = xaccSRGetCurrentSplit(reg);
@@ -1470,39 +1534,26 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
-   * their register windows after the deletion.
-   */
+   * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
-  num_splits = xaccTransCountSplits(trans);
-  affected_accounts = (Account **) malloc((num_splits + 1) *
-                                          sizeof(Account *));
-  splits = calloc(num_splits, sizeof(Split *));
 
-  assert(affected_accounts != NULL);
-  assert(splits != NULL);
-
-  for (i = 0; i < num_splits; i++) 
-  {
-    s = xaccTransGetSplit(trans, i);
-    splits[i] = s;
-    affected_accounts[i] = xaccSplitGetAccount(s);
-  }
-  affected_accounts[num_splits] = NULL;
+  accounts = gnc_trans_prepend_account_list(trans, NULL);
+  splits = gnc_trans_prepend_split_list(trans, NULL);
 
   xaccTransBeginEdit(trans, 1);
-  for (i = 0; i < num_splits; i++)
-    if (splits[i] != split)
-      xaccSplitDestroy(splits[i]);
+  for (node = splits; node; node = node->next)
+    if (node->data != split)
+      xaccSplitDestroy(node->data);
   xaccTransCommitEdit(trans);
 
   /* Check pending transaction */
   if (trans == info->pending_trans)
     info->pending_trans = NULL;
 
-  gnc_account_list_ui_refresh(affected_accounts);
+  gnc_account_glist_ui_refresh(accounts);
 
-  free(affected_accounts);
-  free(splits);
+  g_list_free(accounts);
+  g_list_free(splits);
 
   gnc_refresh_main_window ();
 }
@@ -1540,14 +1591,11 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *trans;
-  Split *split;
-  int i, num_splits = 0, more_splits = 0;
-  Account **affected_accounts = NULL;
+  GList *accounts;
 
   /* Get the currently open transaction, rollback the edits on it, and
    * then repaint everything. To repaint everything, make a note of
-   * all of the accounts that will be affected by this rollback. Geez,
-   * there must be some easier way of doing redraw notification. */
+   * all of the accounts that will be affected by this rollback. */
   trans = info->pending_trans;
 
   if (!xaccTransIsOpen(trans))
@@ -1556,34 +1604,15 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
     return;
   }
 
-  num_splits = xaccTransCountSplits (trans);
-  affected_accounts = (Account **) malloc ((num_splits+1) *
-                                           sizeof (Account *));
-
-  for (i = 0; i < num_splits; i++)
-  {
-    split = xaccTransGetSplit (trans, i);
-    affected_accounts[i] = xaccSplitGetAccount (split);
-  }
-  affected_accounts[num_splits] = NULL;
+  accounts = gnc_trans_prepend_account_list(trans, NULL);
 
   xaccTransRollbackEdit (trans);
 
-  /* and do some more redraw, for the new set of accounts .. */
-  more_splits = xaccTransCountSplits (trans);
-  affected_accounts = (Account **) realloc (affected_accounts, 
-                                            (more_splits+num_splits+1) *
-                                            sizeof (Account *));
+  accounts = gnc_trans_prepend_account_list(trans, accounts);
 
-  for (i = 0; i < more_splits; i++)
-  {
-    split = xaccTransGetSplit (trans, i);
-    affected_accounts[i+num_splits] = xaccSplitGetAccount (split);
-  }
-  affected_accounts[num_splits+more_splits] = NULL;
+  gnc_account_glist_ui_refresh(accounts);
 
-  xaccAccListDisplayRefresh (affected_accounts);
-  free (affected_accounts);
+  g_list_free(accounts);
 
   info->pending_trans = NULL;
 
@@ -1823,6 +1852,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
        * xaccSRGetCurrent will handle this case, too. We will create
        * a new split, copy the row contents to that split, and append
        * the split to the pre-existing transaction. */
+     Split *trans_split;
 
       split = xaccMallocSplit ();
       xaccTransAppendSplit (trans, split);
@@ -1832,6 +1862,12 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
       assert (reg->table->current_cursor);
       reg->table->current_cursor->user_data = (void *) split;
+
+      trans_split = xaccSRGetCurrentTransSplit (reg);
+      if ((info->cursor_hint_trans == trans) &&
+          (info->cursor_hint_trans_split == trans_split) &&
+          (info->cursor_hint_split == NULL))
+        info->cursor_hint_split = split;
    }
 
    DEBUG ("updating trans addr=%p\n", trans);
@@ -2376,7 +2412,8 @@ xaccSRCountRows (SplitRegister *reg,
                  Split         *find_trans_split,
                  gncBoolean    *ext_found_trans,
                  gncBoolean    *ext_found_split,
-                 gncBoolean    *ext_found_trans_split)
+                 gncBoolean    *ext_found_trans_split,
+                 gncBoolean    *ext_on_blank_split)
 {
    SRInfo *info = xaccSRGetInfo(reg);
    CellBlock *lead_cursor;
@@ -2388,6 +2425,8 @@ xaccSRCountRows (SplitRegister *reg,
    gncBoolean found_split = GNC_F;
    gncBoolean found_trans = GNC_F;
    gncBoolean found_trans_split = GNC_F;
+   gncBoolean on_blank_split = GNC_F;
+   gncBoolean did_expand = GNC_F;
    gncBoolean on_trans_split;
    gncBoolean multi_line;
    gncBoolean dynamic;
@@ -2466,8 +2505,6 @@ xaccSRCountRows (SplitRegister *reg,
      split = NULL;
 
    while (split) {
-     gncBoolean did_expand = GNC_F;
-
       /* do not count the blank split */
       if (split != info->blank_split) {
          gncBoolean do_expand;
@@ -2589,25 +2626,34 @@ xaccSRCountRows (SplitRegister *reg,
          if (on_trans_split || !found_trans_split)
            found_split = GNC_T;
          found_trans = GNC_T;
+         on_blank_split = GNC_T;
       }
       else if (!found_split && (trans == find_trans)) {
          save_cursor_phys_row = num_phys_rows;
          save_cursor_virt_row = num_virt_rows;
          found_trans = GNC_T;
+         on_blank_split = GNC_T;
       }
    }
 
-   if (multi_line) {
+   if (multi_line || dynamic) {
       if (!found_split && (find_split == NULL) && (trans == find_trans)) {
         save_cursor_phys_row = num_phys_rows + 1;
         save_cursor_virt_row = num_virt_rows + 1;
         if (on_trans_split || !found_trans_split)
           found_split = GNC_T;
         found_trans = GNC_T;
+        on_blank_split = GNC_T;
       }
-      num_virt_rows += 2;
-      num_phys_rows += reg->trans_cursor->numRows;
-      num_phys_rows += reg->split_cursor->numRows;
+      if (multi_line || (dynamic && on_blank_split)) {
+        num_virt_rows += 2;
+        num_phys_rows += reg->trans_cursor->numRows;
+        num_phys_rows += reg->split_cursor->numRows;
+      }
+      else {
+        num_virt_rows += 1;
+        num_phys_rows += reg->trans_cursor->numRows;
+      }
    } else {
       num_virt_rows += 1;
       num_phys_rows += lead_cursor->numRows;
@@ -2638,6 +2684,8 @@ xaccSRCountRows (SplitRegister *reg,
      *ext_found_split = found_split;
    if (ext_found_trans_split != NULL)
      *ext_found_trans_split = found_trans_split;
+   if (ext_on_blank_split != NULL)
+     *ext_on_blank_split = on_blank_split;
 }
 
 /* ======================================================== */
@@ -2660,6 +2708,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    gncBoolean found_split = GNC_F;
    gncBoolean found_trans = GNC_F;
    gncBoolean found_trans_split = GNC_F;
+   gncBoolean did_expand = GNC_F;
+   gncBoolean on_blank_split;
    gncBoolean multi_line;
    gncBoolean dynamic;
 
@@ -2705,7 +2755,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* count the number of rows, looking for the place we want to go. */
    xaccSRCountRows (reg, slist,
                     find_trans, find_split, find_trans_split,
-                    &found_trans, &found_split, &found_trans_split);
+                    &found_trans, &found_split, &found_trans_split,
+                    &on_blank_split);
 
    /* If the current cursor has changed, and the 'current split'
     * is still among the living, we save the values for later
@@ -2745,7 +2796,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
      split = NULL;
 
    while (split) {
-     gncBoolean did_expand = GNC_F;
 
      if (info->pending_trans == xaccSplitGetParent (split))
        found_pending = GNC_T;
@@ -2850,7 +2900,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    }
 
    /* do the split row of the blank split */
-   if (multi_line) {
+   if (multi_line || dynamic) {
       Transaction *trans;
 
       /* do the transaction row of the blank split */
@@ -2860,13 +2910,15 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       vrow ++;
       phys_row += reg->trans_cursor->numRows; 
 
-      trans = xaccSplitGetParent (split);
-      split = xaccTransGetSplit (trans, 1);
-      xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-      xaccMoveCursor (table, phys_row, 0);
-      xaccSRLoadRegEntry (reg, split);
-      vrow ++;
-      phys_row += reg->split_cursor->numRows; 
+      if (multi_line || (dynamic && on_blank_split)) {
+        trans = xaccSplitGetParent (split);
+        split = xaccTransGetSplit (trans, 1);
+        xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+        xaccMoveCursor (table, phys_row, 0);
+        xaccSRLoadRegEntry (reg, split);
+        vrow ++;
+        phys_row += reg->split_cursor->numRows;
+      }
    } else {
       xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
       xaccMoveCursor (table, phys_row, 0);
@@ -2910,6 +2962,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
    info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg);
    info->cursor_hint_phys_col = -1;
+   info->hint_set_by_traverse = GNC_F;
 
    xaccRefreshTableGUI (table);
 

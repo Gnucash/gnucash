@@ -535,10 +535,13 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col,
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
 
-   /* setting the previous traversal value to the last of a traversal chain will
-    * guarantee that first entry into a register will occur at the first cell */
-   table->prev_phys_traverse_row  = phys_row_origin + curs->last_reenter_traverse_row;
-   table->prev_phys_traverse_col  = phys_col_origin + curs->last_reenter_traverse_col; 
+   /* setting the previous traversal value to the last of a traversal chain
+    * will guarantee that the first entry into a register will occur at the
+    * first cell */
+   table->prev_phys_traverse_row = (phys_row_origin +
+                                    curs->last_reenter_traverse_row);
+   table->prev_phys_traverse_col = (phys_col_origin +
+                                    curs->last_reenter_traverse_col);
 
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
@@ -1241,7 +1244,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
 
   /* next, check the current row and column.  If they are out of bounds
    * we can recover by treating the traversal as a mouse point. This can
-   * occur whenever the Xbae widget is resized smaller. */
+   * occur whenever the register widget is resized smaller, maybe?. */
   if ((row >= table->num_phys_rows) || (row < 0) ||
       (col >= table->num_phys_cols) || (col < 0)) {
 
@@ -1335,7 +1338,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
 
   /* Call the table traverse callback for any modifications. */
   if (table->traverse)
-    (table->traverse) (table, dest_row, dest_col, table->client_data);
+    (table->traverse) (table, dest_row, dest_col, dir, table->client_data);
 
   table->prev_phys_traverse_row = *dest_row;
   table->prev_phys_traverse_col = *dest_col;

@@ -2116,10 +2116,8 @@ recordCB(GtkWidget *w, gpointer data)
   RegWindow *regData = (RegWindow *) data;
   gncBoolean really_saved;
   Transaction *trans;
-  Split *split;
 
-  split = xaccSRGetCurrentSplit(regData->ledger->ledger);
-  trans = xaccSplitGetParent(split);
+  trans = xaccSRGetCurrentTrans(regData->ledger->ledger);
 
   really_saved = xaccSRSaveRegEntry(regData->ledger->ledger, NULL);
   if (!really_saved)

@@ -1,4 +1,14 @@
+2000-05-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c: some simplification, some additional
+	complexity :) Fixed a crash-bug with traversing out of the
+	pending transaction and rolling it back. Fixed traversal out
+	of the blank line of a multi-split transaction that has been
+	edited.
+
 2000-05-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine: removed QIF routines from the engine.
 
 	* src/scm/options.scm: add a currency option type.
 
