@@ -1,5 +1,8 @@
 2002-12-11  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/el_GR/acctchrt_common.gnucash-xea: Greek account
+	templates by Nikos Charonitakis <frolix68@yahoo.gr>
+
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix broken changes
 	by Benoit.
 
