@@ -1,5 +1,5 @@
 /********************************************************************\
- * window-html -- an html window for gnucash.                       *
+ * window-html.h -- an html window for gnucash.                     *
  * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *

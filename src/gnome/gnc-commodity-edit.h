@@ -1,4 +1,6 @@
 /*
+ * gnc-commodity-edit.h -- Commodity editing widget
+ *
  * Copyright (C) 2000 Free Software Foundation
  * All rights reserved.
  *

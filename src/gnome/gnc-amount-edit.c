@@ -1,4 +1,6 @@
 /*
+ * gnc-amount-edit.c -- Amount editor widget
+ *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
  * All rights reserved.
  *

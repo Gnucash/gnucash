@@ -1,4 +1,6 @@
 /*
+ * gnc-currency-edit.h -- Currency editor widget
+ *
  * Copyright (C) 2000 Free Software Foundation
  * All rights reserved.
  *

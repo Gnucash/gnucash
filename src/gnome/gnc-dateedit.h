@@ -1,4 +1,6 @@
 /*
+ * gnc-dateedit.c -- Date editor widget
+ *
  * Copyright (C) 1997, 1998, 1999, 2000 Free Software Foundation
  * All rights reserved.
  *

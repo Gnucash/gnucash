@@ -1,5 +1,5 @@
 /********************************************************************\
- * mainwindow-account-list.c -- composite account selection widget  *
+ * mainwindow-account-tree.c -- composite account selection widget  *
  *                              wrapped up for the main window      * 
  *                  and callback functions for GnuCash              *
  * Copyright (C) 2000 Gnumatic, Inc.                                *

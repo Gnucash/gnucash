@@ -1,4 +1,4 @@
-/* gtkselect - select widget for gtk+
+/* gtkselect.c - select widget for gtk+
  * Copyright 1997 Paolo Molaro (from gtkcombo, where this was copied from)
  * Copyright 2000 Gordon Oliver
  *
