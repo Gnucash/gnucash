@@ -929,30 +929,72 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCBook *book)
          pd = &qt->data;
          switch (pd->base.term_type) 
          {
-            /* FIXME: this doesn't correctly implement ACCT_MATCH_ALL or
-             *        ACCT_MATCH_ANY for account lists with more than one
-             *        account. */
             case PR_ACCOUNT: 
             {
-               int got_more = 0;
                GList *acct;
 
                PINFO("term is PR_ACCOUNT");
 
+               if (!pd->acct.sense)
+               {
+                 sq->pq = stpcpy (sq->pq, "NOT ");
+               }
+
+               sq->pq = stpcpy(sq->pq, "(");
+
                for (acct = pd->acct.account_guids; acct; acct=acct->next)
                {
-                  if (got_more) sq->pq = stpcpy(sq->pq, " AND ");
-                  got_more = 1;
-
-                  if ((0 == pd->acct.sense && ACCT_MATCH_NONE != pd->acct.how) ||
-                      (1 == pd->acct.sense && ACCT_MATCH_NONE == pd->acct.how))
-                  {
+                 switch (pd->acct.how)
+                 {
+                   case ACCT_MATCH_NONE:
                      sq->pq = stpcpy (sq->pq, "NOT ");
-                  }
-                  sq->pq = stpcpy(sq->pq, "gncEntry.accountGuid='");
-                  sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
-                  sq->pq = stpcpy(sq->pq, "'");
+                     /* fall through */
+
+                   case ACCT_MATCH_ANY:
+                     sq->pq = stpcpy(sq->pq, "gncEntry.accountGuid='");
+                     sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "'");
+                     break;
+
+                   case ACCT_MATCH_ALL:
+                     sq->pq = stpcpy (sq->pq,
+                                      " EXISTS ( SELECT true FROM gncEntry e"
+                                      "          WHERE "
+                                      "e.transGuid = gncTransaction.transGuid"
+                                      " AND "
+                                      "e.accountGuid='");
+                     sq->pq = guid_to_string_buff ((GUID*) acct->data, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "')");
+
+                     break;
+
+                   default:
+                     PERR ("unexpected account match type: %d",pd->acct.how);
+                     break;
+                 }
+
+                 if (acct->next)
+                 {
+                   switch (pd->acct.how)
+                   {
+                     case ACCT_MATCH_ANY:
+                       sq->pq = stpcpy(sq->pq, " OR ");
+                       break;
+
+                     case ACCT_MATCH_ALL:
+                     case ACCT_MATCH_NONE:
+                       sq->pq = stpcpy(sq->pq, " AND ");
+                       break;
+
+                     default:
+                       PERR ("unexpected account match type: %d",pd->acct.how);
+                       break;
+                   }
+                 }
                }
+
+               sq->pq = stpcpy(sq->pq, ")");
+
                break;
             }
 
