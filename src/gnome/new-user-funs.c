@@ -393,8 +393,7 @@ gnc_ui_show_new_user_choice_window(void)
   }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
   {
-    /* FIXME: change to tutorial */
-    helpWindow (NULL, NULL, HH_ABOUT);
+    helpWindow (NULL, NULL, HH_QUICKSTART);
   }
 
   gncp_new_user_finish ();
