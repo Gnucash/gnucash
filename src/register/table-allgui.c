@@ -1075,11 +1075,13 @@ gnc_table_physical_cell_valid(Table *table,
   cell_row = pcell->virt_loc.phys_row_offset;
   cell_col = pcell->virt_loc.phys_col_offset;
 
+  vcell = gnc_table_get_virtual_cell(table, virt_row, virt_col);
+  if (vcell == NULL)
+    return FALSE;
+
   /* verify that offsets are valid. This may occur if the app that is
    * using the table has a paritally initialized cursor. (probably due
    * to a programming error, but maybe they meant to do this). */
-  invalid = invalid || (0 > virt_row);
-  invalid = invalid || (0 > virt_col);
   invalid = invalid || (0 > cell_row);
   invalid = invalid || (0 > cell_col);
 
