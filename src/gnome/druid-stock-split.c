@@ -499,20 +499,6 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
-static gboolean
-account_currency_filter (Account *account, gpointer user_data)
-{
-  StockSplitInfo *info = user_data;
-  Account *split_account = xaccAccountLookup (&info->account,
-                                              gnc_get_current_book ());
-
-  if (!account)
-    return FALSE;
-
-  return gnc_commodity_equiv (xaccAccountGetCommodity (split_account),
-                              xaccAccountGetCommodity (account));
-}
-
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
@@ -623,10 +609,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
 
-    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
-                                            account_currency_filter,
-                                            info);
-
     gtk_widget_show (tree);
 
     scroll = glade_xml_get_widget (xml, "income_scroll");
@@ -647,10 +629,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
         (type == BANK) || (type == CASH) || (type == ASSET);
 
     gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &view_info);
-
-    gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (tree),
-                                            account_currency_filter,
-                                            info);
 
     gtk_widget_show (tree);
 
