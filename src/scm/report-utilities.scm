@@ -365,7 +365,7 @@
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
-(define (gnc:account-get-balance-at-date account date include-children?)
+(define (d-gnc:account-get-balance-at-date account date include-children?)
   (let ((children-balance
          (if include-children?
              (gnc:group-get-balance-at-date
@@ -385,6 +385,8 @@
     (set! splits (gnc:glist->list 
                   (gnc:query-get-splits query) 
                   <gnc:Split*>))
+    (gnc:free-query query);
+
     (if (and splits (not (null? splits)))
         (set! balance (gnc:numeric-to-double 
                        (gnc:split-get-balance (car splits))))
@@ -418,18 +420,22 @@
     (set! splits (gnc:glist->list 
                   (gnc:query-get-splits query) 
                   <gnc:Split*>))
+    (gnc:free-query query);
+
     (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
 			   (gnc:split-get-balance (car splits))))
     balance-collector))
 
 ;; get the balance of a group of accounts at the specified date.
-;; all children are included in the calculation
+;; The childrens are NOT included in the calculation since
+;; account-get-children already returned ALL children, whether
+;; they are immediate children or not.
 (define (gnc:group-get-balance-at-date group date)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
-            (gnc:account-get-balance-at-date account date #t)) 
+            (gnc:account-get-balance-at-date account date #f)) 
           group)))
 
 ;; returns a commodity-collector
@@ -439,7 +445,7 @@
 	      (gnc:group-map-accounts
 	       (lambda (account)
 		 (gnc:account-get-comm-balance-at-date 
-		  account date #t)) 
+		  account date #f)) 
 	       group))
     this-collector))
 

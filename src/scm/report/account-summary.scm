@@ -1,8 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; account-summary.scm : brief account listing 
-;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
-;; 
-;; Original version by  Terry D. Boldt (tboldt@attglobal.net>
+;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
+;; Copyright 2000-2001 Bill Gribble <grib@gnumatic.com>
+;;
+;; Even older original version by  Terry D. Boldt (tboldt@attglobal.net>
 ;;   Author makes no implicit or explicit guarantee of accuracy of
 ;;   these calculations and accepts no responsibility for direct
 ;;   or indirect losses incurred as a result of using this software.
@@ -28,8 +29,8 @@
 (gnc:support "report/account-summary.scm")
 (gnc:depend  "report-html.scm")
 
-;; account summary report 
-;; prints a simple table of account information with clickable 
+;; account summary report
+;; prints a table of account information with clickable 
 ;; links to open the corresponding register window.
 
 (let () 
@@ -67,70 +68,122 @@
         #f #t))
       
       (opt-register 
-       (gnc:make-simple-boolean-option
-        (_ "General") (_ "Sub-Accounts")
-        "c" (_ "Include sub-accounts of each selected account?") #f))      
+       (gnc:make-multichoice-option
+        (_ "General") (_ "Account Display Depth")
+        "c" (_ "Show accounts to this depth.") 1
+        (list (list->vector
+	       (list 'all
+		     (_ "All")
+		     (_ "Show all accounts")))
+	      (list->vector
+               (list 1
+                     "1"
+                     (_ "Top-level")))
+              (list->vector
+               (list 2
+                     "2"
+                     (_ "Second-level")))
+              (list->vector
+               (list 3
+                     "3"
+                     (_ "Third-level")))
+              (list->vector
+               (list 4
+                     "4"
+                     (_ "Fourth-level"))))))
       
       (opt-register 
        (gnc:make-simple-boolean-option
         (_ "General") (_ "Include Sub-Account balances")
-        "d" (_ "Include sub-account balances in printed balance?") #f))      
+        "d" (_ "Include sub-account balances in printed balance?") #t))
       
       options))
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Start of report generating code
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; pair is a list of one gnc:commodity and one gnc:numeric
+  ;; value. This function should disappear once this is an "official"
+  ;; data type.
+  (define (commodity-value->string pair)
+    (gnc:commodity-amount->string 
+     (cadr pair) (gnc:commodity-print-info (car pair) #t)))
 
+  ;; returns a list with n one-space-strings (" ") which, hopefully,
+  ;; result in empty cells
+  (define (make-empty-cells n)
+    (if (> n 0)
+	(append (list " ") (make-empty-cells (- n 1)))
+	'()))
+
+  ;; returns a html-table-cell object that has the content content and
+  ;; (hopefully) an option colspan=n
+  (define (make-cell-colspan n content)
+    (if (> n 0)
+	(let ((cell (gnc:make-html-table-cell)))
+	  (gnc:html-table-cell-set-col-span! cell n)
+	  (gnc:html-table-cell-append-objects! 
+	   cell content)
+	  cell)
+	content))
+    
+  ;; returns a list which is ready to be passed to the
+  ;; html-table-append-row! function (one row of our table)
+  (define (make-row acct end-date tree-depth current-depth subtot?)
+    (append
+     (make-empty-cells (- current-depth 1))
+     ;; the account name
+     (list (make-cell-colspan 
+	    (+ 1 (- tree-depth current-depth)) 
+	    (gnc:make-html-text (gnc:html-markup-anchor
+				 (string-append 
+				  "gnc-register:account=" 
+				  (gnc:account-get-full-name acct))
+				 (gnc:account-get-name acct)))))
+     (make-empty-cells (- tree-depth current-depth))
+     ;; the account balance
+     (list 
+      (let ((pair ((gnc:account-get-comm-balance-at-date 
+		    acct end-date subtot?) 
+		   'getpair (gnc:account-get-commodity acct) #f)))
+	;; pair is a list of one gnc:commodity and 
+	;; one gnc:numeric value. 
+	(commodity-value->string pair)))
+     (make-empty-cells (- current-depth 1))))
+
+  ;; Goes through the list of accounts, runs make-row on each account.
+  ;; If tree-depth and current-depth require, it will recursively call
+  ;; itself on the list of children accounts.
+  (define (traverse-accounts accounts table end-date 
+			     tree-depth current-depth subtot?)
+    (if (<= current-depth tree-depth)
+	(map (lambda (acct)
+	       (begin
+		 (gnc:html-table-append-row!
+		  table 
+		  (make-row acct end-date tree-depth current-depth 
+			    subtot?))
+		 (let* ((children 
+			 (gnc:account-get-immediate-subaccounts acct)))
+		   (if (not (null? children))
+		       (traverse-accounts children table end-date
+					  tree-depth (+ 1 current-depth)
+					  subtot?)))))
+	     accounts)))
+	
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; build-acct-table
-  ;; does the dirty work of building a table for a set of accounts. 
+  ;; builds the tree-shaped table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (define (build-acct-table accounts end-date do-subs? sub-balances?)
+  (define (build-acct-table accounts end-date tree-depth do-subtot?)
     (let ((table (gnc:make-html-table)))
-      ;; column 1: account names 
-      (gnc:html-table-append-column!
-       table 
-       (map (lambda (acct)
-              (gnc:make-html-text (gnc:html-markup-anchor
-                                   (string-append 
-                                    "gnc-register:account=" 
-                                    (gnc:account-get-full-name acct))
-                                   (gnc:account-get-name acct))))
-            accounts))
-      
-      ;; column 2 (optional): subaccount info
-      (if do-subs? 
-          (let* ((has-subs? #f)
-                 (data 
-                  (map (lambda (acct)
-                         (let* ((children 
-                                 (gnc:account-get-immediate-subaccounts acct)))
-                           (if (not (null? children))
-                               (begin 
-                                 (set! has-subs? #t)
-                                 (build-acct-table children end-date 
-                                                   #t sub-balances?))
-                               #f)))
-                       accounts)))
-            (if has-subs? 
-                (begin 
-                  (gnc:html-table-append-column! table data)))))
-      
-      ;; column 3: balances 
-      (gnc:html-table-append-column! 
-       table
-       (map (lambda (acct)
-              (let ((pair 
-		     ((gnc:account-get-comm-balance-at-date 
-		       acct end-date sub-balances?) 
-		      'getpair (gnc:account-get-commodity acct) #f)))
-		;; pair is a list of one gnc:commodity and 
-		;; one gnc:numeric value
-		 (gnc:commodity-amount->string 
-		  (cadr pair) 
-		  (gnc:commodity-print-info (car pair) #t))))
-	    accounts))
-      
-      ;; set column and table styles 
+
+      ;; start the recursive account processing
+      (traverse-accounts accounts table end-date tree-depth 1 do-subtot?)
+            
+      ;; set some column and table styles - needs to be improved.
       (let ((bal-col (- (gnc:html-table-num-columns table) 1)))
         (gnc:html-table-set-col-style! 
          table 0 "td" 
@@ -152,6 +205,29 @@
       
       table))
   
+  ;; returns the maximum integer>0 in the given list... I'm
+  ;; sure there is a predefined function for this task, but I don't
+  ;; know where to look for that.
+  (define (find-max-int l)
+    (if (null? l)
+	0
+	(let ((a (find-max-int (cdr l))))
+	  (if (> a (car l))
+	      a
+	      (car l)))))
+  
+  ;; return the depth of the given account tree (needed if no
+  ;; tree-depth was specified)
+  (define (find-depth tree)
+    (find-max-int
+     (map (lambda (acct)
+	    (let ((children 
+		   (gnc:account-get-immediate-subaccounts acct)))
+	      (if (null? children)
+		  1
+		  (+ 1 (find-depth children)))))
+	  tree)))
+  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; accsum-renderer
   ;; set up the document and add the table
@@ -164,28 +240,31 @@
     
     (let ((accounts (get-option (_ "Account")))
           (date-tp (vector-ref (get-option (_ "Date")) 1))
-          (do-subs? (get-option (_ "Sub-Accounts")))
+          (display-depth (get-option (_ "Account Display Depth")))
           (do-subtotals? (get-option (_ "Include Sub-Account balances")))
           (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! doc "Account Summary")
       (if (not (null? accounts))
-          (let ((table (build-acct-table accounts date-tp 
-                                         do-subs? do-subtotals?)))
-            ;; set the column headers 
-            (if (= (gnc:html-table-num-columns table) 3)
-                (begin 
-                  (gnc:html-table-set-col-style! 
-                   table 1 "table" 
-                   'attribute '("width" "100%"))
-                  (gnc:html-table-set-col-headers!
-                   table 
-                   (list (_ "Account name") (_ "Sub-Accounts") (_ "Balance"))))
-                (begin 
-                  (gnc:html-table-set-col-headers!
-                   table (list (_ "Account name") (_ "Balance")))))
-            ;; add the table 
-            (gnc:html-document-add-object! doc table))
+	  ;; if no max. tree depth is given we have to find the
+	  ;; maximum existing depth
+	  (let ((tree-depth (if (equal? display-depth 'all)
+				(find-depth accounts)
+				display-depth)))
+	    ;; do the (recursive) processing here
+	    (let ((table (build-acct-table accounts date-tp 
+					   tree-depth do-subtotals?)))
+	      ;; set some column headers 
+	      
+	      ;;(gnc:html-table-set-col-style! 
+	      ;; table 1 "table" 
+	      ;; 'attribute '("width" "100%"))
+	      (gnc:html-table-set-col-headers!
+	       table 
+	       (list (make-cell-colspan (- tree-depth 1) (_ "Account name"))
+		     (make-cell-colspan (- tree-depth 1) (_ "Balance"))))
+	      ;; add the table 
+	      (gnc:html-document-add-object! doc table)))
           
           ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
@@ -202,8 +281,3 @@
    'name (_ "Account Summary")
    'options-generator accsum-options-generator
    'renderer accsum-renderer))
-
-
-          
-      
-          
