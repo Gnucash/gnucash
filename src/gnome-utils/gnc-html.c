@@ -954,6 +954,11 @@ gnc_html_show_url(gnc_html * html, URLType type,
       gnc_error_dialog (error_message);
  
       g_free (error_message);
+
+      if (html->load_cb)
+        html->load_cb (html, result.url_type,
+                       location, label,
+                       html->load_cb_data);
     }
     else if (result.load_to_stream)
     {
@@ -976,6 +981,11 @@ gnc_html_show_url(gnc_html * html, URLType type,
       stream = gtk_html_begin (GTK_HTML(html->html));
       gnc_html_load_to_stream (html, stream, result.url_type,
                                new_location, new_label);
+
+      if (html->load_cb)
+        html->load_cb (html, result.url_type,
+                       new_location, new_label,
+                       html->load_cb_data);
     }
 
     g_free (result.location);
