@@ -33,7 +33,7 @@
 #include "qofbackend-p.h"
 #include "qofsession.h"
 
-static short module = MOD_IO;
+static short module = MOD_BACKEND;
 
 struct FileBackend_struct
 {
@@ -64,10 +64,11 @@ static gboolean file_compression = FALSE;
 static void gnc_file_be_load_from_file(QofBackend *, QofBook *);
 
 static gboolean gnc_file_be_get_file_lock (FileBackend *be);
-static gboolean gnc_file_be_write_to_file(FileBackend *be,
+static gboolean gnc_file_be_write_to_file(FileBackend *be, QofBook *,
+                                          const gchar *filepath,
                                           gboolean make_backup);
 static void gnc_file_be_write_accounts_to_file(QofBackend *be,
-					       QofBook *book);
+                                               QofBook *book);
 static void gnc_file_be_remove_old_files(FileBackend *be);
 
 QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
@@ -84,21 +85,21 @@ gnc_file_be_set_compression (gboolean compress)
     file_compression = compress;
 }
 
+/* ================================================================= */
+
 static void
-file_session_begin(QofBackend *be_start, QofSession *session, const char *book_id,
+file_session_begin(QofBackend *be_start, QofSession *session, 
+                   const char *book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
-    FileBackend* be;
+    FileBackend *be = (FileBackend*) be_start;
     char *p;
 
     ENTER (" ");
 
-    be = (FileBackend*) be_start;
-
     be->session = session;
 
     /* Make sure the directory is there */
-
     be->dirname = g_strdup (qof_session_get_file_path (session));
     be->fullpath = g_strdup (be->dirname);
     p = strrchr (be->dirname, '/');
@@ -108,7 +109,6 @@ file_session_begin(QofBackend *be_start, QofSession *session, const char *book_i
         int rc;
 
         *p = '\0';
-
         rc = stat (be->dirname, &statbuf);
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
@@ -143,13 +143,13 @@ file_session_begin(QofBackend *be_start, QofSession *session, const char *book_i
     return;
 }
 
+/* ================================================================= */
 
 static void
 file_session_end(QofBackend *be_start)
 {
-    FileBackend* be;
-
-    be = (FileBackend*)be_start;
+    FileBackend *be = (FileBackend*)be_start;
+    ENTER (" ");
 
     if (be->linkfile)
         unlink (be->linkfile);
@@ -171,6 +171,7 @@ file_session_end(QofBackend *be_start)
 
     g_free (be->linkfile);
     be->linkfile = NULL;
+    LEAVE (" ");
 }
 
 static void
@@ -182,9 +183,74 @@ file_destroy_backend(QofBackend *be)
 static void
 file_sync_all(QofBackend* be, QofBook *book)
 {
-    gnc_file_be_write_to_file((FileBackend*)be, TRUE);
-    gnc_file_be_remove_old_files((FileBackend*)be);
+    FileBackend *fbe = (FileBackend *) be;
+    gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
+    gnc_file_be_remove_old_files (fbe);
 }
+
+/* ================================================================= */
+/* Routines to deal with the creation of multiple books */
+
+static char *
+build_period_filepath (FileBackend *fbe, QofBook *book)
+{
+    int len;
+    char *str, *p, *q;
+
+    len = strlen (fbe->fullpath) + GUID_ENCODING_LENGTH + 14;
+    str = g_new (char, len);
+    strcpy (str, fbe->fullpath);
+
+    /* XXX it would be nice for the user if we made the book 
+     * closing date and/or title part of the file-name. */
+    p = strrchr (str, '/');
+    p++;
+    p = stpcpy (p, "book-");
+    p = guid_to_string_buff (qof_book_get_guid(book), p);
+    p = stpcpy (p, "-");
+    q = strrchr (fbe->fullpath, '/');
+    q++;
+    p = stpcpy (p, q);
+    p = stpcpy (p, ".gml");
+
+    return str;
+}
+
+static void
+file_begin_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+{
+    FileBackend *fbe = (FileBackend *) be;
+    QofBook *book = gp;
+    const char * filepath;
+
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    filepath = build_period_filepath(fbe, book);
+    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
+}
+
+static void
+file_rollback_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+{
+    QofBook *book = gp;
+
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    PINFO ("book=%p", book);
+}
+
+static void
+file_commit_edit (QofBackend *be, QofIdTypeConst typ, gpointer gp)
+{
+    FileBackend *fbe = (FileBackend *) be;
+    QofBook *book = gp;
+    const char * filepath;
+
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    filepath = build_period_filepath(fbe, book);
+    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
+    gnc_file_be_write_to_file(fbe, book, filepath, FALSE);
+}
+
+/* ================================================================= */
 
 QofBackend *
 libgncmod_backend_file_LTX_gnc_backend_new(void)
@@ -202,14 +268,12 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
 
     be->load = gnc_file_be_load_from_file;
 
-    /* The file backend will never have transactional
-     * behaviour.  So these vectors are null. */
+    /* The file backend treats accounting periods transactionally. */
+    be->begin = file_begin_edit;
+    be->commit = file_commit_edit;
+    be->rollback = file_rollback_edit;
 
-    be->begin = NULL;
-    be->commit = NULL;
-    be->rollback = NULL;
-
-    /* the file backend always loads all data ... */
+    /* The file backend always loads all data ... */
     be->compile_query = NULL;
     be->free_query = NULL;
     be->run_query = NULL;
@@ -217,7 +281,7 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
 
     be->counter = NULL;
 
-    /* the file backend will never be multi-user... */
+    /* The file backend will never be multi-user... */
     be->events_pending = NULL;
     be->process_events = NULL;
 
@@ -235,7 +299,7 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     return be;
 }
 
-/* ---------------------------------------------------------------------- */
+/* ================================================================= */
 
 static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
@@ -259,15 +323,15 @@ gnc_file_be_get_file_lock (FileBackend *be)
     {
         /* oops .. we can't create the lockfile .. */
         switch (errno) {
-	case EACCES:
-	case EROFS:
-	case ENOSPC:
-	  be_err = ERR_BACKEND_READONLY;
-	  break;
-	default:
-	  be_err = ERR_BACKEND_LOCKED;
-	  break;
-	}
+        case EACCES:
+        case EROFS:
+        case ENOSPC:
+          be_err = ERR_BACKEND_READONLY;
+          break;
+        default:
+          be_err = ERR_BACKEND_LOCKED;
+          break;
+        }
         qof_backend_set_error ((QofBackend*)be, be_err);
         return FALSE;
     }
@@ -418,7 +482,6 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
 }
 
 /* ---------------------------------------------------------------------- */
-
 /* Write the financial data in a book to a file, returning FALSE on
    error and setting the error_result to indicate what went wrong if
    it's not NULL.  This function does not manage file locks in any
@@ -433,7 +496,7 @@ static gboolean
 copy_file(const char *orig, const char *bkup)
 {
     static int buf_size = 1024;
- char buf[buf_size];
+    char buf[buf_size];
     int orig_fd;
     int bkup_fd;
     ssize_t count_write;
@@ -556,8 +619,8 @@ gnc_file_be_select_files (const struct dirent *d)
         return(0);
   
     return((strcmp(d->d_name + len, ".LNK") == 0) ||
-	   (strcmp(d->d_name + len, ".xac") == 0) ||
-	   (strcmp(d->d_name + len, ".log") == 0));
+           (strcmp(d->d_name + len, ".xac") == 0) ||
+           (strcmp(d->d_name + len, ".log") == 0));
 }
 
 static void
@@ -600,42 +663,50 @@ gnc_file_be_remove_old_files(FileBackend *be)
         char *name;
         int len;
 
-	if (gnc_file_be_select_files (dent) == 0)
-	    continue;
+        if (gnc_file_be_select_files (dent) == 0)
+             continue;
 
-	name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
-	len = strlen(name) - 4;
+        name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
+        len = strlen(name) - 4;
 
         /* Is this file associated with the current data file */
-        if (strncmp(name, be->fullpath, pathlen) == 0) {
-
+        if (strncmp(name, be->fullpath, pathlen) == 0) 
+        {
             if ((safe_strcmp(name + len, ".LNK") == 0) &&
-		/* Is a lock file. Skip the active lock file */
+                /* Is a lock file. Skip the active lock file */
                 (safe_strcmp(name, be->linkfile) != 0) &&
                 /* Only delete lock files older than the active one */
                 (stat(name, &statbuf) == 0) &&
-                (statbuf.st_mtime <lockstatbuf.st_mtime)) {
-	            unlink(name);
-            } else if (file_retention_days > 0) {
-	        time_t file_time;
-	        struct tm file_tm;
-	        int days;
-		const char* res;
+                (statbuf.st_mtime <lockstatbuf.st_mtime)) 
+            {
+                PINFO ("unlink lock file: %s", name);
+                unlink(name);
+            } 
+            else if (file_retention_days > 0) 
+            {
+                time_t file_time;
+                struct tm file_tm;
+                int days;
+                const char* res;
+
+                PINFO ("file retention = %d days", file_retention_days);
 
                 /* Is the backup file old enough to delete */
                 memset(&file_tm, 0, sizeof(file_tm));
                 res = strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
-		file_time = mktime(&file_tm);
-		days = (int)(difftime(now, file_time) / 86400);
+                file_time = mktime(&file_tm);
+                days = (int)(difftime(now, file_time) / 86400);
 
-		/* Make sure this file actually has a date before unlinking */
-		if (res && res != name+pathlen+1 &&
-		    /* We consumed some but not all of the filename */
-		    file_time > 0 &&
-		    /* we actually have a reasonable time and it is old enough */
-		    days > file_retention_days) {
-		    unlink(name);
-		}
+                /* Make sure this file actually has a date before unlinking */
+                if (res && res != name+pathlen+1 &&
+                    /* We consumed some but not all of the filename */
+                    file_time > 0 &&
+                    /* we actually have a reasonable time and it is old enough */
+                    days > file_retention_days) 
+                {
+                    PINFO ("unlink stale (%d days old) file: %s", days, name);
+                    unlink(name);
+                }
             }
         }
         g_free(name);
@@ -643,34 +714,34 @@ gnc_file_be_remove_old_files(FileBackend *be)
     closedir (dir);
 }
 
+/* ---------------------------------------------------------------------- */
     
 static gboolean
-gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
+gnc_file_be_write_to_file(FileBackend *fbe, 
+                          QofBook *book, 
+                          const gchar *datafile,
+                          gboolean make_backup)
 {
-    const gchar *datafile;
+    QofBackend *be = &fbe->be;
     char *tmp_name;
-    QofBook *book;
     struct stat statbuf;
     int rc;
     QofBackendError be_err;
 
-    book = qof_session_get_book (be->session);
-
-    datafile = be->fullpath;
-    
+    ENTER (" book=%p file=%s", book, datafile);
     tmp_name = g_new(char, strlen(datafile) + 12);
     strcpy(tmp_name, datafile);
     strcat(tmp_name, ".tmp-XXXXXX");
 
     if(!mktemp(tmp_name))
     {
-        qof_backend_set_error((QofBackend*)be, ERR_BACKEND_MISC);
+        qof_backend_set_error(be, ERR_BACKEND_MISC);
         return FALSE;
     }
   
     if(make_backup)
     {
-        if(!gnc_file_be_backup_file(be))
+        if(!gnc_file_be_backup_file(fbe))
         {
             return FALSE;
         }
@@ -706,21 +777,21 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
-            qof_backend_set_error((QofBackend*)be, ERR_BACKEND_MISC);
+            qof_backend_set_error(be, ERR_BACKEND_MISC);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
             return FALSE;
         }
-        if(!gnc_int_link_or_make_backup(be, tmp_name, datafile))
+        if(!gnc_int_link_or_make_backup(fbe, tmp_name, datafile))
         {
             g_free(tmp_name);
             return FALSE;
         }
         if(unlink(tmp_name) != 0)
         {
-            qof_backend_set_error((QofBackend*)be, ERR_BACKEND_MISC);
+            qof_backend_set_error(be, ERR_BACKEND_MISC);
             PWARN("unable to unlink temp filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
@@ -728,23 +799,24 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
             return FALSE;
         }
         g_free(tmp_name);
+        LEAVE (" book=%p file=%s", book, datafile);
         return TRUE;
     }
     else
     {
         if(unlink(tmp_name) != 0)
         {
-	    switch (errno) {
-	    case ENOENT:	/* tmp_name doesn't exist?  Assume "RO" error */
-	    case EACCES:
-	    case EPERM:
-	    case EROFS:
-	      be_err = ERR_BACKEND_READONLY;
-	      break;
-	    default:
-	      be_err = ERR_BACKEND_MISC;
-	    }
-            qof_backend_set_error((QofBackend*)be, be_err);
+            switch (errno) {
+            case ENOENT:     /* tmp_name doesn't exist?  Assume "RO" error */
+            case EACCES:
+            case EPERM:
+            case EROFS:
+              be_err = ERR_BACKEND_READONLY;
+              break;
+            default:
+              be_err = ERR_BACKEND_MISC;
+            }
+            qof_backend_set_error(be, be_err);
             PWARN("unable to unlink temp_filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
@@ -753,6 +825,7 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         g_free(tmp_name);
         return FALSE;
     }
+    return TRUE;
 }
 
 static void
@@ -764,3 +837,4 @@ gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
     gnc_book_write_accounts_to_xml_file_v2(be, book, datafile);
 }
 
+/* ========================== END OF FILE ===================== */
