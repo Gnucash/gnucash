@@ -458,7 +458,7 @@ guid_to_string(const GUID * guid)
 char *
 guid_to_string_buff(const GUID * guid, char *string)
 {
-  if (!string || !guid) return;
+  if (!string || !guid) return NULL;
 
   encode_md5_data(guid->data, string);
 
