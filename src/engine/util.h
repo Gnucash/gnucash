@@ -81,7 +81,9 @@ size_t dcoresize();
 #endif
 
 /** COOL MACROS *****************************************************/
+#ifndef ABS
 #define ABS(x)   ((x)>=0) ? (x) : (-1*(x))
+#endif
 #define DABS(x)  ((x)>=0.0) ? (x) : (-1.0*(x))
 #define DMAX(x,y) ((x)>(y)) ? (x) : (y)
 #define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
