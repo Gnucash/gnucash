@@ -37,7 +37,7 @@
 #include "MainWindow.h"
 #include "messages.h"
 #include "util.h"
-//#include "xtutil.h"
+#include "xtutil.h"
 
 /** STRUCTS *********************************************************/
 struct _RecnWindow
@@ -66,7 +66,7 @@ static void recnCB(GtkWidget *w, gpointer data);
 static RecnWindow **recnList = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module  MOD_GUI;
+static short module = MOD_GUI;
 
 /********************************************************************/
 
@@ -170,7 +170,7 @@ recn_recalc_share_balance_helper(gpointer item, gpointer data) {
   GtkListItem *li = GTK_LIST_ITEM(item);
   GtkCheckButton *checkbutton = GTK_CHECK_BUTTON(li->item.bin.child);
   Split *split = gtk_object_get_user_data(GTK_OBJECT(checkbutton));
-  const char recn = xaccSplitGetReconcile(split);
+  // const char recn = xaccSplitGetReconcile(split);
 
   if(GTK_TOGGLE_BUTTON(checkbutton)->active) {
     *total += xaccSplitGetShareAmount(split);
@@ -183,7 +183,7 @@ recn_recalc_non_share_balance_helper(gpointer item, gpointer data) {
   GtkListItem *li = GTK_LIST_ITEM(item);
   GtkCheckButton *checkbutton = GTK_CHECK_BUTTON(li->item.bin.child);
   Split *split = gtk_object_get_user_data(GTK_OBJECT(checkbutton));
-  const char recn = xaccSplitGetReconcile(split);
+  // const char recn = xaccSplitGetReconcile(split);
   
   if(GTK_TOGGLE_BUTTON(checkbutton)->active) {
     *total += xaccSplitGetValue(split);
@@ -314,7 +314,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
                             NULL);
   free(title);
   
-  gnome_dialog_set_modal(GNOME_DIALOG(dialog));
+  // gnome_dialog_set_modal(GNOME_DIALOG(dialog));
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 1);
   gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
@@ -402,7 +402,6 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
 RecnWindow *
 recnWindow(GtkWidget *parent, Account *acc)
 {
-  int    position;
   RecnWindow *recnData;
   double ddiff;
   gchar *title = NULL;
@@ -435,7 +434,7 @@ recnWindow(GtkWidget *parent, Account *acc)
                       GTK_SIGNAL_FUNC(recnClose), (gpointer) recnData);
 
   
-  gnome_dialog_set_modal(GNOME_DIALOG(recnData->dialog));
+  // gnome_dialog_set_modal(GNOME_DIALOG(recnData->dialog));
   gnome_dialog_set_default(GNOME_DIALOG(recnData->dialog), 1);
   gnome_dialog_set_close(GNOME_DIALOG(recnData->dialog), FALSE);
   gnome_dialog_close_hides(GNOME_DIALOG(recnData->dialog), FALSE);
@@ -559,7 +558,7 @@ recnClose(GtkWidget *w, gpointer data)
 
 static void
 recn_ok_cb_set_reconciled_helper(gpointer item, gpointer data) {
-  double *total = (double *) data;
+  // double *total = (double *) data;
   GtkListItem *li = GTK_LIST_ITEM(item);
   GtkCheckButton *checkbutton = GTK_CHECK_BUTTON(li->item.bin.child);
   Split *split = gtk_object_get_user_data(GTK_OBJECT(checkbutton));

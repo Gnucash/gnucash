@@ -40,7 +40,7 @@ static GtkWidget *filebox = NULL;
 static gint       filebox_quit;
 
 /* This static indicates the debugging module that this .o belongs to.   */
-static short module  MOD_GUI;
+static short module = MOD_GUI;
 
 /** PROTOTYPES ******************************************************/
 void fileBoxCB( GtkWidget mw, gpointer *data );

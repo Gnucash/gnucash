@@ -23,10 +23,12 @@
 #include <gnome.h>
 
 #include "AccInfo.h"
+#include "Account.h"
 #include "Add_Dialog.h"
 #include "MenuBar.h"
 #include "messages.h"
 #include "top-level.h"
+#include "Transaction.h"
 
 /** Globals *********************************************************/
 
@@ -144,20 +146,18 @@ build_omenu ( GtkMenu *menu, add_account_dialog *accWindow, Account *acct,
   /* Create an popup menu to select which account to add this new account too */
   /* needs to create submenus for each Parent account that has subaccounts    */
   
-  GtkWidget *omenu;
-  GtkWidget *submenu;
-  GtkWidget *menuitem;
+  GtkWidget *omenu=NULL;
+  GtkWidget *submenu=NULL;
+  GtkWidget *menuitem=NULL;
   int i;
-  int count = xaccGroupGetNumAccounts(acct);
+  int count = xaccGroupGetNumAccounts(xaccAccountGetChildren(acct));
      
-  GSList *omenu_group;
+  GSList *omenu_group=NULL;
  
   if ( is_submenu == -1 )
   {
     omenu = gtk_option_menu_new ();
     menu = gtk_menu_new ();
-    submenu = NULL;
-    omenu_group = NULL;
   }
   
   menuitem = gtk_radio_menu_item_new_with_label (omenu_group, "New TopLevel Account" );
