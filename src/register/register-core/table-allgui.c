@@ -431,19 +431,22 @@ gnc_table_is_popup (Table *table, VirtualLocation virt_loc)
 char *
 gnc_table_get_help (Table *table)
 {
-  BasicCell *cell;
+  TableGetHelpHandler help_handler;
   VirtualLocation virt_loc;
+  const char * cell_name;
 
   if (!table)
     return NULL;
 
   virt_loc = table->current_cursor_loc;
 
-  cell = gnc_table_get_cell (table, virt_loc);
-  if (!cell)
-    return FALSE;
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-  return xaccBasicCellGetHelp (cell);
+  help_handler = gnc_table_model_get_help_handler (table->model, cell_name);
+  if (!help_handler)
+    return NULL;
+
+  return help_handler (virt_loc, table->model->handler_user_data);
 }
 
 BasicCell *

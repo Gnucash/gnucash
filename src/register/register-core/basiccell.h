@@ -145,7 +145,7 @@
 #include "gnc-ui-common.h"
 
 
-typedef struct _BasicCell BasicCell;
+typedef struct basic_cell BasicCell;
 
 typedef BasicCell * (*CellCreateFunc) (void);
 
@@ -180,8 +180,6 @@ typedef void (*CellMoveFunc) (BasicCell *cell);
 
 typedef void (*CellDestroyFunc) (BasicCell *cell);
 
-typedef char * (*CellGetHelpFunc) (BasicCell *cell);
-
 typedef enum
 {
   CELL_ALIGN_RIGHT,
@@ -189,12 +187,11 @@ typedef enum
   CELL_ALIGN_LEFT
 } CellAlignment;
 
-struct _BasicCell
+struct basic_cell
 {
   char * cell_name;
 
   char * value;                  /* current value */
-  char * blank_help;             /* help when value is blank */
 
   GdkWChar * value_w;            /* value as wide chars */
 
@@ -212,8 +209,6 @@ struct _BasicCell
   CellModifyVerifyFunc modify_verify;
   CellDirectUpdateFunc direct_update;
   CellLeaveFunc        leave_cell;
-
-  CellGetHelpFunc get_help_value;
 
   /* private, GUI-specific callbacks */
   CellRealizeFunc gui_realize;
@@ -260,9 +255,6 @@ gboolean     gnc_basic_cell_get_conditionally_changed (BasicCell *cell);
 void         gnc_basic_cell_set_changed (BasicCell *cell, gboolean changed);
 void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
                                                        gboolean changed);
-
-void         xaccSetBasicCellBlankHelp (BasicCell *bcell, const char *help);
-char *       xaccBasicCellGetHelp (BasicCell *bcell);
 
 /* for sub-class use only */
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,

@@ -2,6 +2,8 @@ Makefile
 Makefile.in
 .deps
 *.diff
+*.lo
+*.la
 .scm-links
 gw-binary-import.c
 gw-binary-import.h

@@ -1983,70 +1983,20 @@ gnc_split_register_config_action (SplitRegister *reg)
 static void
 gnc_split_register_config_cells (SplitRegister *reg)
 {
-  /* The num cell is the transaction number */
-  xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
-                                                        NUM_CELL),
-                             _("Enter the transaction number, such as the "
-                               "check number"));
+  gnc_combo_cell_add_ignore_string
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+     _("-- Split Transaction --"));
 
-  /* the xfer cells */
-  {
-    const char *help = _("Enter the account to transfer from, or choose "
-                         "one from the list");
-    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
-                                                          MXFRM_CELL), help);
-    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
-                                                          XFRM_CELL), help);
-  }
-
-  {
-    const char *help = _("This transaction has multiple splits; "
-                         "press the Split button to see them all");
-
-    gnc_combo_cell_add_ignore_string
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-       _("-- Split Transaction --"), help);
-  }
-
-  {
-    const char *help = _("This transaction is a stock split; "
-                         "press the Split button to see details");
-
-    gnc_combo_cell_add_ignore_string
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-       _("-- Stock Split --"), help);
-  }
+  gnc_combo_cell_add_ignore_string
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+     _("-- Stock Split --"));
 
   /* the action cell */
   gnc_combo_cell_set_autosize
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
-
-  /* the memo cell */
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL),
-     _("Enter a description of the split"));
-
-  /* the desc cell */
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
-     _("Enter a description of the transaction"));
-
-  /* the notes cell */
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
-     _("Enter notes for the transaction"));
-
-  /* the formula cells */
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, FCRED_CELL),
-     _("Enter credit formula for real transaction"));
-
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, FDEBT_CELL),
-     _("Enter debit formula for real transaction"));
 
   /* Use 6 decimal places for prices */
   gnc_price_cell_set_fraction
@@ -2067,11 +2017,6 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
 
-  xaccSetBasicCellBlankHelp
-    (gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL),
-     _("Enter the type of transaction, or choose "
-       "one from the list"));
-
   /* number format for share quantities in stock ledgers */
   switch (reg->type)
   {
@@ -2082,14 +2027,6 @@ gnc_split_register_config_cells (SplitRegister *reg)
         ((PriceCell *)
          gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
          gnc_default_price_print_info ());
-
-      xaccSetBasicCellBlankHelp
-        (gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-         _("Enter the share price"));
-
-      xaccSetBasicCellBlankHelp
-        (gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
-         _("Enter the number of shares bought or sold"));
       break;
 
     default:
@@ -2288,7 +2225,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
    gnc_resume_gui_refresh ();
 }
 
-void 
+void
 gnc_split_register_destroy (SplitRegister *reg)
 {
   GList *node;

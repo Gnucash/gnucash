@@ -64,6 +64,9 @@ typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
 typedef const char * (*TableGetLabelHandler) (VirtualLocation virt_loc,
                                               gpointer user_data);
 
+typedef char * (*TableGetHelpHandler) (VirtualLocation virt_loc,
+                                       gpointer user_data);
+
 typedef CellIOFlags (*TableGetCellIOFlagsHandler) (VirtualLocation virt_loc,
                                                    gpointer user_data);
 
@@ -92,6 +95,7 @@ typedef struct
 {
   GHashTable *entry_handlers;
   GHashTable *label_handlers;
+  GHashTable *help_handlers;
   GHashTable *io_flags_handlers;
   GHashTable *fg_color_handlers;
   GHashTable *bg_color_handlers;
@@ -134,6 +138,17 @@ void gnc_table_model_set_default_label_handler
                                      (TableModel *model,
                                       TableGetLabelHandler label_handler);
 TableGetLabelHandler gnc_table_model_get_label_handler
+                                     (TableModel *model,
+                                      const char * cell_name);
+
+void gnc_table_model_set_help_handler
+                                     (TableModel *model,
+                                      TableGetHelpHandler help_handler,
+                                      const char * cell_name);
+void gnc_table_model_set_default_help_handler
+                                     (TableModel *model,
+                                      TableGetHelpHandler help_handler);
+TableGetHelpHandler gnc_table_model_get_help_handler
                                      (TableModel *model,
                                       const char * cell_name);
 

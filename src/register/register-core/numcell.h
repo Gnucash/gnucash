@@ -37,7 +37,7 @@
 
 #include "basiccell.h"
 
-typedef struct _NumCell
+typedef struct
 {
   BasicCell cell;
   long int next_num;

@@ -162,24 +162,6 @@ gnc_price_cell_leave (BasicCell *_cell)
   gnc_price_cell_parse (cell, TRUE);
 }
 
-static char *
-PriceHelp (BasicCell *bcell)
-{
-  if ((bcell->value != NULL) && (bcell->value[0] != 0))
-  {
-    const char *help_str;
-
-    help_str = bcell->value;
-
-    return g_strdup (help_str);
-  }
-
-  if (bcell->blank_help != NULL)
-    return g_strdup (bcell->blank_help);
-
-  return NULL;
-}
-
 BasicCell *
 gnc_price_cell_new (void)
 {
@@ -209,7 +191,6 @@ gnc_price_cell_init (PriceCell *cell)
   cell->cell.modify_verify = gnc_price_cell_modify_verify;
   cell->cell.leave_cell = gnc_price_cell_leave;
   cell->cell.set_value = gnc_price_cell_set_value_internal;
-  cell->cell.get_help_value = PriceHelp;
 }
 
 static const char *

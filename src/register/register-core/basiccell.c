@@ -65,18 +65,6 @@ gnc_basic_cell_new (void)
   return cell;
 }
 
-static char *
-BasicCellHelpValue(BasicCell *cell)
-{
-  if ((cell->value != NULL) && (cell->value[0] != 0))
-    return g_strdup(cell->value);
-
-  if (cell->blank_help != NULL)
-    return g_strdup(cell->blank_help);
-
-  return NULL;
-}
-
 static void
 gnc_basic_cell_clear (BasicCell *cell)
 {
@@ -90,7 +78,6 @@ gnc_basic_cell_clear (BasicCell *cell)
   cell->value_w = NULL;
   cell->value_len = 0;
 
-  cell->blank_help = NULL;
   cell->set_value = NULL;
   cell->enter_cell = NULL;
   cell->modify_verify = NULL;
@@ -99,7 +86,6 @@ gnc_basic_cell_clear (BasicCell *cell)
   cell->gui_realize = NULL;
   cell->gui_move = NULL;
   cell->gui_destroy = NULL;
-  cell->get_help_value = NULL;
 
   cell->is_popup = FALSE;
 
@@ -117,8 +103,6 @@ gnc_basic_cell_init (BasicCell *cell)
   cell->value = g_strdup ("");
 
   cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
-
-  cell->get_help_value = BasicCellHelpValue;
 }
 
 void
@@ -137,9 +121,6 @@ gnc_basic_cell_destroy (BasicCell *cell)
 
   g_free (cell->value_w);
   cell->value_w = NULL;
-
-  g_free (cell->blank_help);
-  cell->blank_help = NULL;
 
   /* help prevent access to freed memory */
   gnc_basic_cell_clear (cell);
@@ -257,32 +238,6 @@ gnc_basic_cell_set_conditionally_changed (BasicCell *cell, gboolean changed)
   if (!cell) return;
 
   cell->conditionally_changed = changed;
-}
-
-void
-xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
-{
-  if (cell == NULL)
-    return;
-
-  g_free (cell->blank_help);
-
-  if (blank_help == NULL)
-    cell->blank_help = NULL;
-  else
-    cell->blank_help = g_strdup (blank_help);
-}
-
-char *
-xaccBasicCellGetHelp (BasicCell *cell)
-{
-  if (cell == NULL)
-    return NULL;
-
-  if (cell->get_help_value == NULL)
-    return NULL;
-
-  return cell->get_help_value(cell);
 }
 
 void

@@ -70,7 +70,6 @@ typedef struct _PopBox
         char complete_char; /* char to be used for auto-completion */
 
         GList *ignore_strings;
-        GList *ignore_helps;
 } PopBox;
 
 
@@ -137,7 +136,6 @@ gnc_combo_cell_init (ComboCell *cell)
         box->complete_char = '\0';
 
         box->ignore_strings = NULL;
-        box->ignore_helps = NULL;
 }
 
 static void
@@ -316,15 +314,6 @@ gnc_combo_cell_destroy (BasicCell *bcell)
 
                 g_list_free (box->ignore_strings);
                 box->ignore_strings = NULL;
-
-                for (node = box->ignore_helps; node; node = node->next)
-                {
-                        g_free (node->data);
-                        node->data = NULL;
-                }
-
-                g_list_free (box->ignore_helps);
-                box->ignore_helps = NULL;
 
 		g_free(box);
 		cell->cell.gui_private = NULL;
@@ -670,39 +659,6 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         return TRUE;
 }
 
-static char *
-ComboHelpValue (BasicCell *bcell)
-{
-        ComboCell *cell = (ComboCell *) bcell;
-        PopBox *box = cell->cell.gui_private;
-
-        if ((bcell->value != NULL) && (bcell->value[0] != 0))
-        {
-                GList *node;
-                GList *help_node = box->ignore_helps;
-
-                for (node = box->ignore_strings; node;
-                     node = node->next, help_node = help_node->next)
-                {
-                        if (!node->data)
-                                continue;
-
-                        if (strcmp (bcell->value, node->data) != 0)
-                                continue;
-
-                        if (help_node->data != NULL)
-                                return g_strdup (help_node->data);
-                }
-
-                return g_strdup (bcell->value);
-        }
-
-        if (bcell->blank_help != NULL)
-                return g_strdup (bcell->blank_help);
-
-        return NULL;
-}
-
 static void
 gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 {
@@ -727,7 +683,6 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 	cell->cell.gui_destroy = gnc_combo_cell_gui_destroy;
 	cell->cell.modify_verify = gnc_combo_cell_modify_verify;
         cell->cell.direct_update = gnc_combo_cell_direct_update;
-        cell->cell.get_help_value = ComboHelpValue;
 }
 
 static void
@@ -895,8 +850,7 @@ gnc_combo_cell_set_complete_char (ComboCell *cell, char complete_char)
 
 void
 gnc_combo_cell_add_ignore_string (ComboCell *cell,
-                                  const char *ignore_string,
-                                  const char *ignore_help)
+                                  const char *ignore_string)
 {
 	PopBox *box;
 
@@ -910,8 +864,6 @@ gnc_combo_cell_add_ignore_string (ComboCell *cell,
 
         box->ignore_strings = g_list_prepend (box->ignore_strings,
                                               g_strdup (ignore_string));
-        box->ignore_helps = g_list_prepend (box->ignore_helps,
-                                            g_strdup (ignore_help));
 }
 
 void

@@ -52,7 +52,7 @@
 #include "basiccell.h"
 
 
-typedef struct _ComboCell
+typedef struct
 {
   BasicCell cell;
 } ComboCell;
@@ -75,12 +75,9 @@ void         gnc_combo_cell_set_complete_char (ComboCell *cell,
                                                char complete_char);
 
 /* Add a string to a list of strings which, if the cell has that value,
- * will cause the cell to be uneditable on 'enter'. If the cell has
- * that value, the ignore_help string will be returned by the
- * help handler. */
+ * will cause the cell to be uneditable on 'enter'. */
 void         gnc_combo_cell_add_ignore_string (ComboCell *cell,
-                                               const char *ignore_string,
-                                               const char *ignore_help);
+                                               const char *ignore_string);
 
 /* Determines whether the popup list autosizes itself or uses
  * all available space. FALSE by default. */

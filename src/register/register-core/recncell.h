@@ -47,7 +47,7 @@
 typedef const char * (*RecnCellStringGetter) (char flag);
 typedef gboolean (*RecnCellConfirm) (char old_flag, gpointer data);
 
-typedef struct _RecnCell
+typedef struct
 {
   BasicCell cell;
 

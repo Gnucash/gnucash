@@ -135,43 +135,6 @@ gnc_date_cell_print_date (DateCell *cell, char *buff)
              box->date.tm_year+1900);
 }
 
-static char *
-DateCellHelpValue (BasicCell *bcell)
-{
-  DateCell *cell = (DateCell *) bcell;
-  PopBox *box = cell->cell.gui_private;
-
-  if ((bcell->value != NULL) && (bcell->value[0] != 0))
-  {
-    char string[1024];
-    struct tm time;
-
-    if (bcell->value != NULL)
-      gnc_parse_date (&time, bcell->value);
-    else
-    {
-      time.tm_mday = box->date.tm_mday;
-      time.tm_mon  = box->date.tm_mon;
-      time.tm_year = box->date.tm_year;
-      time.tm_sec = 0;
-      time.tm_min = 0;
-      time.tm_hour = 0;
-      time.tm_isdst = -1;
-
-      mktime (&time);
-    }
-
-    strftime (string, sizeof (string), "%A %d %B %Y", &time);
-
-    return g_strdup (string);
-  }
-
-  if (bcell->blank_help != NULL)
-    return g_strdup (bcell->blank_help);
-
-  return NULL;
-}
-
 static void
 gnc_date_cell_init (DateCell *cell)
 {
@@ -190,7 +153,6 @@ gnc_date_cell_init (DateCell *cell)
   cell->cell.modify_verify = gnc_date_cell_modify_verify;
   cell->cell.direct_update = gnc_date_cell_direct_update;
   cell->cell.set_value = gnc_date_cell_set_value_internal;
-  cell->cell.get_help_value = DateCellHelpValue;
 
   box = g_new0 (PopBox, 1);
 

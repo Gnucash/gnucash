@@ -132,6 +132,7 @@ gnc_table_model_new (void)
 
   model->entry_handlers = gnc_table_model_handler_hash_new ();
   model->label_handlers = gnc_table_model_handler_hash_new ();
+  model->help_handlers = gnc_table_model_handler_hash_new ();
   model->io_flags_handlers = gnc_table_model_handler_hash_new ();
   model->fg_color_handlers = gnc_table_model_handler_hash_new ();
   model->bg_color_handlers = gnc_table_model_handler_hash_new ();
@@ -153,6 +154,9 @@ gnc_table_model_destroy (TableModel *model)
 
   gnc_table_model_handler_hash_destroy (model->label_handlers);
   model->label_handlers = NULL;
+
+  gnc_table_model_handler_hash_destroy (model->help_handlers);
+  model->help_handlers = NULL;
 
   gnc_table_model_handler_hash_destroy (model->io_flags_handlers);
   model->io_flags_handlers = NULL;
@@ -236,6 +240,38 @@ gnc_table_model_get_label_handler (TableModel *model, const char * cell_name)
 
   return gnc_table_model_handler_hash_lookup (model->label_handlers,
                                               cell_name);
+}
+
+void
+gnc_table_model_set_help_handler (TableModel *model,
+                                  TableGetHelpHandler help_handler,
+                                  const char * cell_name)
+{
+  g_return_if_fail (model != NULL);
+  g_return_if_fail (cell_name != NULL);
+
+  gnc_table_model_handler_hash_insert (model->help_handlers,
+                                       cell_name,
+                                       help_handler);
+}
+
+void
+gnc_table_model_set_default_help_handler (TableModel *model,
+                                          TableGetHelpHandler help_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->help_handlers,
+                                       DEFAULT_HANDLER,
+                                       help_handler);
+}
+
+TableGetHelpHandler
+gnc_table_model_get_help_handler (TableModel *model, const char * cell_name)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->help_handlers, cell_name);
 }
 
 void

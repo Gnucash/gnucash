@@ -1,5 +1,7 @@
 Makefile
 Makefile.in
+*.lo
+*.la
 .deps
 *.diff
 gnc-dir.h
