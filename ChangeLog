@@ -1,5 +1,9 @@
 2001-05-11  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user-callbacks.c: fix compiler warning
+
+	* src/engine/gnc-book.c (gnc_book_set_group): fix bug
+
 	* src/engine/sql/Makefile.am: add files for make dist
 
 2001-05-11  Bill Gribble  <grib@billgribble.com>

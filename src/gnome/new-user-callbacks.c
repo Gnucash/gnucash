@@ -404,7 +404,7 @@ add_to_ctree_final_account(Account* toadd, gpointer data)
     return NULL;
 }
 
-void
+static void
 gnc_new_user_insert_final_accounts(GtkCTree *tree, AccountGroup *group)
 {
     FinalInsertData data;

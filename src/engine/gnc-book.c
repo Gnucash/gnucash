@@ -198,7 +198,10 @@ void
 gnc_book_set_group (GNCBook *book, AccountGroup *grp)
 {
   if(!book) return;
-  if(book->topgroup) xaccFreeAccountGroup(book->topgroup);
+
+  /* Do not free the old topgroup here unless you also fix
+   * all the other uses of gnc_book_set_group! */
+
   book->topgroup = grp;
 }
 
