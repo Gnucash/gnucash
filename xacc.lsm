@@ -1,6 +1,6 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	0.9t
+Version:	0.9u
 Entered-date:	24NOV97
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
@@ -9,7 +9,7 @@ Description:    xacc is a program to keep track of your finances.  It
                 - Multiple Accounts
                 - Each account keeps a running balance and
                   a reconciled balance, so you can keep track
-                  of the checks that have clear your account.
+                  of the checks that have cleared your account.
                 - A simple interface.  If you can use the
                   register in the back of your checkbook,
                   you can use xacc.
@@ -33,10 +33,8 @@ Description:    xacc is a program to keep track of your finances.  It
 
                 This is a beta development version with known
                 minor user interface bugs and no known major bugs.
-                Under rare circumstances, it will core dump (due to
-                Motif problems) so save often! It has been tested 
-                only lightly but seems to work. It is not beleived to
-                corrupt data.
+                It has been tested only lightly but seems to work. 
+                It is not beleived to corrupt data.
 
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
@@ -44,7 +42,7 @@ Maintained-by:	linas@linas.org (Linas Vepstas)
 Primary-site:	http://www3.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		544kB  xacc-0.9t.tar.gz
+		544kB  xacc-0.9u.tar.gz
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel 
 Copying-policy:	GPL
 End
