@@ -81,12 +81,13 @@ gnc_book_init (GNCBook *book)
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup(book);
+  book->commodity_table = gnc_commodity_table_new ();
 
-  /* FIXME: the gnc_engine_commodity_table_new() routine invokes
-   * guile/scheme to load the default list of currencies.  This 
-   * forces the engine to link to guile, which is an obvious 
-   * architecture flaw.  */
-  book->commodity_table = gnc_engine_commodity_table_new ();
+  if(book->commodity_table)
+  {
+    if(!gnc_commodity_table_add_default_data(book->commodity_table))
+      g_warning("unable to initialize book's commodity_table");
+  }
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
 }
