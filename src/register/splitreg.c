@@ -476,7 +476,7 @@ configLayout (SplitRegister *reg)
 }
 
 
-#define NEXT_RIGHT(r,c) {			\
+#define NEXT_RIGHT(r,c) {			        \
    xaccNextRight (curs, prev_r, prev_c, (r), (c));	\
    prev_r = r; prev_c = c;				\
 }
@@ -532,7 +532,7 @@ configLayout (SplitRegister *reg)
    }							\
 }
 
-#define EXIT_RIGHT() { \
+#define EXIT_RIGHT() {                                  \
   curs->right_exit_r = prev_r;     curs->right_exit_c = prev_c;  \
 }
 
@@ -564,20 +564,20 @@ configLayout (SplitRegister *reg)
 
 #define TRAVERSE_NON_NULL_CELLS_LEFT() {		\
    i = prev_r;						\
-   for (j=prev_c -1; j>=0; j--) {		\
+   for (j=prev_c -1; j>=0; j--) {		        \
       if ((reg->nullCell != curs->cells[i][j]) &&	\
           (reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
-      {			\
+      {	                                                \
          NEXT_LEFT  (i, j);				\
       }							\
    }							\
-   for (i=prev_r-1; i>=0; i--) {		\
+   for (i=prev_r-1; i>=0; i--) {	                \
       for (j=curs->numCols-1; j>=0; j--) {		\
          if ((reg->nullCell != curs->cells[i][j]) &&	\
              (reg->recnCell != curs->cells[i][j]) &&	\
              (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
-         {					\
+         {					        \
             NEXT_LEFT  (i, j);				\
          }						\
       }							\
@@ -610,7 +610,7 @@ configLayout (SplitRegister *reg)
    }							\
 }
 
-#define EXIT_LEFT() {           \
+#define EXIT_LEFT() {                                   \
   curs->left_exit_r = prev_r;  curs->left_exit_c = prev_c;      \
 }
 
@@ -683,7 +683,6 @@ configTraverse (SplitRegister *reg)
    EXIT_LEFT ();
    PREVIOUS_SPLIT ();
 
-   printf ("SPLIT\n");
    curs = reg->split_cursor;
    FIRST_NON_NULL (0,0);
    TRAVERSE_NON_NULL_CELLS ();
@@ -896,6 +895,11 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     */
    reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
    reg->shrsCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
+
+   /* The reconcile cell should only be entered with the pointer,
+    * and only then when the user clicks directly on the cell.
+    */
+   reg->recnCell->input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
    /* the debit/credit/value cells show blank if value is 0.00 */
    reg->debitCell->blank_zero = 1;

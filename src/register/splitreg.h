@@ -157,13 +157,16 @@ struct _SplitRegister {
    int type;
 
    /* some private data; outsiders should not access this */
-   short num_cols;
-   short num_header_rows;
+   int num_cols;
+   int num_header_rows;
 
-   short num_phys_rows;
-   short num_virt_rows;
-   short cursor_phys_row;
-   short cursor_virt_row;
+   int num_phys_rows;
+   int num_virt_rows;
+
+   int cursor_virt_row;
+
+   int cursor_phys_row;
+   int cursor_phys_col;
 
    BasicCell *header_label_cells[NUM_CELLS];
 

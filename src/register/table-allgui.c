@@ -28,13 +28,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "util.h"
 #include "cellblock.h"
 #include "table-allgui.h"
-
-#include "util.h"
 
 #ifdef KDE
 #define TRUE (1==1)
@@ -381,7 +378,7 @@ makePassive (Table *table)
    int r_origin, c_origin;
 
 
-   /* Change the cell background colors to thier "passive" values.
+   /* Change the cell background colors to their "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
     * (But only do this if the cursor has a valid current location) 
@@ -434,7 +431,8 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    CellBlock *curs;
 
    ENTER("doMoveCursor(): new_phys=(%d %d) do_move_gui=%d\n", 
-       new_phys_row, new_phys_col, do_move_gui);
+         new_phys_row, new_phys_col, do_move_gui);
+
    /* Change the cell background colors to their "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
@@ -525,7 +523,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
 
    /* setting the previous traversal value to the last of a traversal chain will
-    * gaurentee that first entry into a register will occur at the first cell */
+    * guarantee that first entry into a register will occur at the first cell */
    table->prev_phys_traverse_row  = phys_row_origin + curs->last_reenter_traverse_row;
    table->prev_phys_traverse_col  = phys_col_origin + curs->last_reenter_traverse_col; 
 
@@ -682,16 +680,17 @@ xaccRefreshHeader (Table *table)
  * with respect to a row/column position, and repositions 
  * the cursor if necessary. This includes saving any uncommited
  * data in the old cursor, and then moving the cursor and its
- * GUI.
+ * GUI. Returns true if the cursor was repositioned.
  */
 
-void
+gncBoolean
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
 {
    int virt_row, virt_col;
-   int do_commit = 0;
+   gncBoolean do_commit = GNC_F;
+   gncBoolean moved_cursor = GNC_F;
 
-   if (!table) return;
+   if (!table) return FALSE;
 
    /* Someone may be trying to intentionally invalidate the cursor, 
     * in which case the physical addresses could be out of bounds.
@@ -714,11 +713,11 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
    }
 
    if (do_commit) {
-      /* before leaving the current virtual position,
-       * commit any edits that have been accumulated 
-       * in the cursor */
-      xaccCommitCursor (table);
-      xaccMoveCursorGUI (table, phys_row, phys_col);
+     /* before leaving the current virtual position, commit any edits
+      * that have been accumulated in the cursor */
+     xaccCommitCursor (table);
+     xaccMoveCursorGUI (table, phys_row, phys_col);
+     moved_cursor = GNC_T;
    } else {
 
       /* The request might be to move to a cell that is one column over.
@@ -728,9 +727,20 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
        * may also be one row up or down, which, for a two-row cursor,
        * also might not require a cursor movement).
        */
-      table->current_cursor_phys_row = phys_row;
-      table->current_cursor_phys_col = phys_col;
+      if (table->current_cursor_phys_row != phys_row)
+      {
+        table->current_cursor_phys_row = phys_row;
+        moved_cursor = GNC_T;
+      }
+
+      if (table->current_cursor_phys_col != phys_col)
+      {
+        table->current_cursor_phys_col = phys_col;
+        moved_cursor = GNC_T;
+      }
    }
+
+   return moved_cursor;
 }
 
 /* ==================================================== */
@@ -790,20 +800,22 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
    CellBlock *save_curs = table->current_cursor;
    const int save_phys_row = table->current_cursor_phys_row;
    const int save_phys_col = table->current_cursor_phys_col;
+   gncBoolean moved_cursor;
 
    ENTER("wrapVerifyCursorPosition(): (%d %d) val=%s\n", 
          row,col, table->entries[row][col]);
-   /* VerifyCursor will do all sorts of gui-independent machinations */
-   xaccVerifyCursorPosition (table, row, col);
 
-   if ((save_phys_row != table->current_cursor_phys_row) ||
-       (save_phys_col != table->current_cursor_phys_col))
+   /* VerifyCursor will do all sorts of gui-independent machinations */
+   moved_cursor = xaccVerifyCursorPosition (table, row, col);
+
+   if (moved_cursor)
    {
       /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table, TRUE);
+      xaccRefreshCursorGUI (table, GNC_T);
       doRefreshCursorGUI (table, save_curs,
-                          save_phys_row, save_phys_col, FALSE);
+                          save_phys_row, save_phys_col, GNC_F);
    }
+
    LEAVE ("wrapVerifyCursorPosition()\n");
 }
 
@@ -820,8 +832,8 @@ xaccRefreshCursorGUI (Table * table, gncBoolean do_scroll)
 
 /* ==================================================== */
 
-int
-gnc_register_cell_valid(Table *table, int row, int col) 
+gncBoolean
+gnc_register_cell_valid(Table *table, int row, int col, gncBoolean exact_cell)
 {
   int invalid = 0;
   int io_flag;
@@ -872,6 +884,11 @@ gnc_register_cell_valid(Table *table, int row, int col)
   io_flag = arr->cells[rel_row][rel_col]->input_output;
   if (0 == (XACC_CELL_ALLOW_INPUT & io_flag)) return GNC_F;
 
+  /* if cell is pointer only and this is not an exact pointer test,
+   * it cannot be entered. */
+  if (!exact_cell && ((XACC_CELL_ALLOW_EXACT_ONLY & io_flag) != 0))
+    return GNC_F;
+
   if (invalid) return GNC_F;
   return GNC_T;
 }
@@ -881,8 +898,7 @@ gnc_register_cell_valid(Table *table, int row, int col)
 */
 
 const char *
-gnc_table_enter_update(Table *table,
-                       int row, int col)
+gnc_table_enter_update(Table *table, int row, int col)
 {
   /* If text should be changed, then new_text will be set to non-null
      on return */
@@ -898,11 +914,9 @@ gnc_table_enter_update(Table *table,
         "enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
          row, col, rel_row, rel_col, 
          arr->cells[rel_row][rel_col], table->entries[row][col]);
-  
-  
+
   /* OK, if there is a callback for this cell, call it */
   enter = arr->cells[rel_row][rel_col]->enter_cell;
-
 
   if (enter) {
     const char *val;
@@ -1050,14 +1064,52 @@ gnc_table_modify_update(Table *table, int row, int col,
 /* ==================================================== */
 
 gncBoolean
+gnc_table_find_valid_cell_horiz(Table *table, int *row, int *col,
+                                gncBoolean exact_cell)
+{
+  int left = *col - 1;
+  int right = *col + 1;
+
+  if ((*row < 0) || (*col < 0) ||
+      (*row >= table->num_phys_rows) ||
+      (*col >= table->num_phys_cols))
+    return GNC_F;
+
+  if (gnc_register_cell_valid(table, *row, *col, exact_cell))
+    return GNC_T;
+
+  while (left >= 0 || right < table->num_phys_cols)
+  {
+    if (gnc_register_cell_valid(table, *row, right, GNC_F))
+    {
+      *col = right;
+      return GNC_T;
+    }
+
+    if (gnc_register_cell_valid(table, *row, left, GNC_F))
+    {
+      *col = left;
+      return GNC_T;
+    }
+
+    left--;
+    right++;
+  }
+
+  return GNC_F;
+}
+
+/* ==================================================== */
+
+gncBoolean
 gnc_table_traverse_update(Table *table, int row, int col,
                           gncTableTraversalDir dir,
                           int *dest_row,
                           int *dest_col) 
 {
-  gncBoolean exit_register = FALSE;
+  gncBoolean exit_register = GNC_F;
   CellBlock *arr = table->current_cursor;
-  
+
   ENTER("gnc_table_traverse_update(): proposed (%d %d) -> (%d %d)\n",
         row, col, *dest_row, *dest_col);
 
@@ -1068,7 +1120,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
   {
     PERR("gnc_table_traverse_update: destination (%d, %d) out of bounds (%d, %d)\n",
       *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
-    return TRUE;
+    return GNC_T;
   }
 
   /* next, check the current row and column.  If they are out of bounds
@@ -1092,21 +1144,28 @@ gnc_table_traverse_update(Table *table, int row, int col,
 	/* cannot compute the cell location until we have checked that
 	 * row and column have valid values. compute the cell location.
 	 */
-        int next_row, next_col;
         const int rel_row = table->locators[row][col]->phys_row_offset;
-      const int rel_col = table->locators[row][col]->phys_col_offset;
+        const int rel_col = table->locators[row][col]->phys_col_offset;
 
-  if (dir == GNC_TABLE_TRAVERSE_RIGHT) {
-    *dest_row = row - rel_row + arr->right_traverse_r[rel_row][rel_col];
-    *dest_col = col - rel_col + arr->right_traverse_c[rel_row][rel_col];
-    exit_register= ((rel_row == arr->right_exit_r) && (rel_col == arr->right_exit_c));
-  }   else {
-    *dest_row = row - rel_row + arr->left_traverse_r[rel_row][rel_col];
-    *dest_col = col - rel_col + arr->left_traverse_c[rel_row][rel_col];
-    exit_register = ((rel_row == arr->left_exit_r) && (rel_col == arr->left_exit_c));    
-  }
-
+        if (dir == GNC_TABLE_TRAVERSE_RIGHT) {
+          *dest_row = row - rel_row + arr->right_traverse_r[rel_row][rel_col];
+          *dest_col = col - rel_col + arr->right_traverse_c[rel_row][rel_col];
+          exit_register = ((rel_row == arr->right_exit_r) &&
+                           (rel_col == arr->right_exit_c));
+        } else {
+          *dest_row = row - rel_row + arr->left_traverse_r[rel_row][rel_col];
+          *dest_col = col - rel_col + arr->left_traverse_c[rel_row][rel_col];
+          exit_register = ((rel_row == arr->left_exit_r) &&
+                           (rel_col == arr->left_exit_c));    
+        }
       }
+
+      if (gnc_register_cell_valid(table, *dest_row, *dest_col, GNC_F))
+	break;
+
+      if (!gnc_table_find_valid_cell_horiz(table, dest_row, dest_col, GNC_F))
+        return GNC_T;
+
       break;
 
     case GNC_TABLE_TRAVERSE_UP:
@@ -1119,14 +1178,19 @@ gnc_table_traverse_update(Table *table, int row, int col,
 	/* Keep going in the specified direction until we find a valid
 	 * row to land on, or we hit the end of the table. At the end,
 	 * turn around and go back until we find a valid row or we get
-	 * to where we started.
+	 * to where we started. If we still can't find anything, try
+         * going left and right.
 	 */
 	increment = (dir == GNC_TABLE_TRAVERSE_DOWN) ? 1 : -1;
 
-	while (!gnc_register_cell_valid(table, new_row, *dest_col))
+	while (!gnc_register_cell_valid(table, new_row, *dest_col, GNC_F))
 	{
 	  if (new_row == row)
-	    return TRUE;
+          {
+            new_row = *dest_row;
+            gnc_table_find_valid_cell_horiz(table, &new_row, dest_col, GNC_F);
+            break;
+          }
 
 	  if ((new_row < header->numRows) || (new_row >= table->num_phys_rows))
 	  {
@@ -1140,39 +1204,14 @@ gnc_table_traverse_update(Table *table, int row, int col,
 	*dest_row = new_row;
       }
 
-      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
-	return TRUE;
+      if (!gnc_register_cell_valid(table, *dest_row, *dest_col, GNC_F))
+	return GNC_T;
 
       break;
 
     case GNC_TABLE_TRAVERSE_POINTER:
-      /* Fan out right and left looking for a valid column to land on. */
-      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
-      {
-        int left = *dest_col - 1;
-        int right = *dest_col + 1;
-
-        while (left >= 0 || right < table->num_phys_cols)
-        {
-          if (gnc_register_cell_valid(table, *dest_row, right))
-          {
-            *dest_col = right;
-            break;
-          }
-
-          if (gnc_register_cell_valid(table, *dest_row, left))
-          {
-            *dest_col = left;
-            break;
-          }
-
-          left--;
-          right++;
-        }
-      }
-
-      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
-	return TRUE;
+      if (!gnc_table_find_valid_cell_horiz(table, dest_row, dest_col, GNC_T))
+        return GNC_T;
 
       break;
 

@@ -174,7 +174,8 @@ typedef struct
 
 GtkType    gnucash_sheet_get_type (void);
 GtkWidget *gnucash_sheet_new 	 (Table *table);
-void gnucash_sheet_load_table (GnucashSheet *sheet, Table *table);
+
+void gnucash_sheet_table_load (GnucashSheet *sheet);
 
 GtkType    gnucash_register_get_type (void);
 
@@ -193,6 +194,7 @@ gint gnucash_sheet_col_get_distance(GnucashSheet *sheet, int col_a, int col_b);
 gint gnucash_sheet_row_get_distance (GnucashSheet *sheet, int row_a,
 				     int row_b);
 
+void gnucash_sheet_redraw_all (GnucashSheet *sheet);
 void gnucash_sheet_redraw_block (GnucashSheet *sheet, gint row, gint col);
 
 void gnucash_sheet_cursor_set (GnucashSheet *gsheet,
@@ -201,6 +203,9 @@ void gnucash_sheet_cursor_set (GnucashSheet *gsheet,
 
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 					       const gchar *new_text);
+
+void gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
+                                         gint virt_col);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
                                           gncBoolean do_scroll);

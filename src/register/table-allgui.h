@@ -196,10 +196,12 @@ struct _Table {
   void (*move_cursor) (Table *, int *p_new_phys_row, 
                                 int *p_new_phys_col, 
                                 void *client_data);
+
   /* callback that is called to determine traversal */
   void  (*traverse)  (Table *,  int *p_new_phys_row, 
                                 int *p_new_phys_col, 
                                 void *client_data);
+
   void * client_data;
 
   /* string values for each cell, 
@@ -305,10 +307,11 @@ void        xaccRefreshHeader (Table *);
  *    the cursor with respect to a physical row/column position, 
  *    and if the resulting virtual position has changed, commits 
  *    the changes in the old position, and the repositions the 
- *    cursor & gui to the new position.
+ *    cursor & gui to the new position. Returns true if the
+ *    cursor was repositioned.
  */
 
-void
+gncBoolean
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
 
 /*
@@ -331,9 +334,10 @@ gnc_table_column_width(Table *table, int col);
 
 void 
 wrapVerifyCursorPosition (Table *table, int row, int col);
- 
-int
-gnc_register_cell_valid(Table *table, int row, int col);
+
+gncBoolean
+gnc_register_cell_valid(Table *table, int row, int col,
+                        gncBoolean exact_pointer);
 
 void        
 doRefreshCursorGUI (Table * table, CellBlock *curs,
@@ -372,6 +376,12 @@ gnc_table_traverse_update(Table *table, int row, int col,
                           gncTableTraversalDir dir,
                           int *dest_row,
                           int *dest_col);
+
+/* Find the closest valid horizontal cell */
+gncBoolean
+gnc_table_find_valid_cell_horiz(Table *table, int *row, int *col,
+                                gncBoolean exact_cell);
+
 
 /* ==================================================== */
 /* 

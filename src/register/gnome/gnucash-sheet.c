@@ -258,7 +258,7 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 
         style = gnucash_sheet_get_style (sheet, virt_row, virt_col);
         if (style->cursor_type == GNUCASH_CURSOR_HEADER ||
-            !gnc_register_cell_valid (table, p_row, p_col) )
+            !gnc_register_cell_valid (table, p_row, p_col, GNC_T))
                 return;
 
         new_text = gnc_table_enter_update (table, p_row, p_col);
@@ -775,7 +775,7 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor),
 				&v_row, &v_col, &c_row, &c_col);
 
-        if (!gnc_register_cell_valid (table, p_row, p_col))
+        if (!gnc_register_cell_valid (table, p_row, p_col, GNC_T))
                 return NULL;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -847,7 +847,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &v_row,
 				 &v_col, &c_row, &c_col);
         
-        if (!gnc_register_cell_valid (table, p_row, p_col))
+        if (!gnc_register_cell_valid (table, p_row, p_col, GNC_F))
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -923,7 +923,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         gnucash_cursor_get_virt (GNUCASH_CURSOR (sheet->cursor),
 				 &v_row, &v_col, &c_row, &c_col);
 
-        if (!gnc_register_cell_valid (table, p_row, p_col))
+        if (!gnc_register_cell_valid (table, p_row, p_col, GNC_F))
                 return;
         
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
@@ -1108,10 +1108,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (exit_register)
 		return TRUE;
 
-        /* Shouldn't gnc_table_traverse_update fill in valid cells? */
-        if (!gnc_register_cell_valid (table, new_p_row, new_p_col))
-                return TRUE;
-
         changed_cells = gnucash_sheet_cursor_move (sheet,
                                                    new_p_row, new_p_col);
 
@@ -1215,10 +1211,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
             direction != GNC_TABLE_TRAVERSE_LEFT)
 		return TRUE;
 
-	/* Shouldn't gnc_table_traverse_update fill in valid cells ? */
-	if (!gnc_register_cell_valid (table, new_p_row, new_p_col))
-		return TRUE;
-
 	gnucash_sheet_cursor_move (sheet, new_p_row, new_p_col);
   
         /* return true because we handled the key press */
@@ -1251,10 +1243,6 @@ gnucash_sheet_goto_virt_row_col (GnucashSheet *sheet,
                  GNC_TABLE_TRAVERSE_POINTER, &new_p_row, &new_p_col);
 
 	if (exit_register)
-		return;
-
-	/* Shouldn't gnc_table_traverse_update fill in valid cells ? */
-	if (!gnc_register_cell_valid (table, new_p_row, new_p_col))
 		return;
 
 	gnucash_sheet_cursor_move (sheet, new_p_row, new_p_col);
@@ -1518,7 +1506,7 @@ gnucash_sheet_block_new (GnucashSheet *sheet, gint virt_row, gint virt_col)
 }
 
 
-void
+static void
 gnucash_sheet_resize (GnucashSheet *sheet)
 {
         gint i, j;
@@ -1565,7 +1553,7 @@ gnucash_sheet_resize (GnucashSheet *sheet)
         sheet->num_virt_cols = sheet->table->num_virt_cols;
 }
 
-        
+
 void
 gnucash_sheet_table_load (GnucashSheet *sheet)
 {

@@ -140,7 +140,10 @@ void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 void        xaccDestroyCellBlock (CellBlock *);
 
 /* define next cell to traverse to */
-void        xaccNextRight (CellBlock *, int row,      int col, 
+void        xaccNextRight (CellBlock *, int row,      int col,
                                         int next_row, int next_col);
+
+void        xaccNextLeft (CellBlock *arr, int row,      int col,
+                                          int next_row, int next_col);
 
 #endif /* __XACC_CELL_BLOCK_H__ */

@@ -245,7 +245,7 @@ static int
 pointer_on_resize_line (GnucashHeader *header, int x, int y)
 {
         SheetBlockStyle *style = header->style;
-        int i, j;
+        int j;
         int pixels = 0;
 
         for (j = 0; j < style->ncols; j++) {
@@ -278,6 +278,8 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                         gdk_window_set_cursor (GTK_WIDGET(canvas)->window,
                                                header->normal_cursor);
 
+                break;
+        default:
                 break;
         }
         

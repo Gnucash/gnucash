@@ -160,10 +160,11 @@
 #define __XACC_BASIC_CELL_H__
 
 /* define a bitmask */
-#define XACC_CELL_ALLOW_NONE     0x0
-#define XACC_CELL_ALLOW_SHADOW   0x1
-#define XACC_CELL_ALLOW_INPUT    0x2
-#define XACC_CELL_ALLOW_ALL      0x3
+#define XACC_CELL_ALLOW_NONE       0x0
+#define XACC_CELL_ALLOW_SHADOW     0x1
+#define XACC_CELL_ALLOW_INPUT      0x2
+#define XACC_CELL_ALLOW_ALL        0x3
+#define XACC_CELL_ALLOW_EXACT_ONLY 0x4
 
 typedef struct _BasicCell BasicCell;
 typedef unsigned int uint32;

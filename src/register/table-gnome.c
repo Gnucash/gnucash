@@ -52,15 +52,6 @@
 #include "gnome/gnucash-color.h"
 #include "gnome/gnucash-style.h"
 
-static gint
-register_destroy_event (GtkWidget *widget, Table *table)
-{
-        if (table)
-                table->table_widget = NULL;
-
-        return FALSE;
-}
-
 
 void
 xaccCreateTable (GtkWidget *widget, void *data)
@@ -180,8 +171,6 @@ doRefreshCursorGUI (Table * table, CellBlock *curs,
 int
 gnc_table_column_width(Table *table, const int col)
 {
-        GnucashSheet *sheet = GNUCASH_SHEET(table->table_widget);
-
         return 0;
 }
 

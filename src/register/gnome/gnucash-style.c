@@ -475,7 +475,6 @@ set_dimensions_pass_three (GnucashSheet *sheet, SheetBlockStyle *style,
                            int row, int ideal_width)
 {
         int i = row, j;
-        int w = 0;
         int space = compute_row_width (style, row, 0, style->ncols-1) - ideal_width;
         int cellspace;
         int nfills;
@@ -566,7 +565,6 @@ static void
 set_dimensions_aligned (GnucashSheet *sheet, SheetBlockStyle *style, int row)
 {
         int i = row, j;
-        int width;
         int c1, c2;
         int r;
         

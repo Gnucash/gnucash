@@ -99,7 +99,6 @@ static const char *
 PriceLeave (BasicCell *_cell, const char *val) 
 {
    PriceCell *cell = (PriceCell *) _cell;
-   double amount;
    char *newval;
 
    newval = xaccPriceCellPrintValue(cell);

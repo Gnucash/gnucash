@@ -242,7 +242,7 @@ xaccNextRight (CellBlock *arr, int row,      int col,
 
 void        
 xaccNextLeft (CellBlock *arr, int row,      int col, 
-                               int next_row, int next_col)
+                              int next_row, int next_col)
 {
    if (!arr) return;
 

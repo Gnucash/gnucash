@@ -99,7 +99,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
      wrapVerifyCursorPosition (table, row, col);
    }
 
-   invalid = ! gnc_register_cell_valid(table, row, col);
+   invalid = ! gnc_register_cell_valid(table, row, col, GNC_T);
 
    /* oops the callback failed for some reason ... 
     * reject the enter/edit/leave  and return */

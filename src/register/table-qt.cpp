@@ -49,7 +49,8 @@ xaccNextTabGroup (Table *table, void * w) {
 /* ==================================================== */
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+doRefreshCursorGUI (Table * table, CellBlock *curs,
+                    int from_row, int from_col, gncBoolean do_scroll)
 {
 }
 

@@ -317,6 +317,10 @@ const char * leaveCombo (BasicCell *bcell, const char *value)
   return NULL;
 }
 
+void xaccClearComboCellMenu (ComboCell * cell)
+{
+}
+
 }
 
 /* =============== end of file =================== */
