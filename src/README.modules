@@ -7,10 +7,13 @@ program that loads them all.
 
 We're not there yet :) 
 
+core-utils                  The lowest level.  Very basic code.
+                            Should not depend on any other modules.
+                            This module is not a gnc-module (and
+                            perhaps shouldn't be).
+
 Here are the bits that have been converted to use the module system so
 far.
-
-core-utils                  The lowest level.  Very basic code.
 
 gnc-module                  The module system (actually not a module itself)
 
