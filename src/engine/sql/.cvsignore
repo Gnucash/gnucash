@@ -5,4 +5,7 @@
 Makefile
 Makefile.in
 a.out
-tmp.c
+autogen.c
+table-create.c
+table-drop.c
+
