@@ -1621,10 +1621,11 @@ up based on currency, commodity, and time.
 
 @menu
 * Price Lists::                 
+* General Price Database API::  
 @end menu
 
 
-@node Price Lists,  , Price Databases, Price Databases
+@node Price Lists, General Price Database API, Price Databases, Price Databases
 @subsection Price Lists
 
 Price Lists are used by Price Databases to organize prices for a given
@@ -1645,6 +1646,32 @@ Remove price @var{p} from the list @var{prices}, calling
 @deftypefun void gnc_price_list_destroy (GList * @var{prices})
 Destroy the price list @var{prices}, calling @code{gnc_price_unref}
 on all the prices in the list.
+@end deftypefun
+
+
+@node General Price Database API,  , Price Lists, Price Databases
+@subsection General Price Database API
+
+@deftypefun {GNCPriceDB *} gnc_pricedb_create (void)
+Create and return a new price database.
+@end deftypefun
+
+@deftypefun void gnc_pricedb_destroy (GNCPriceDB * @var{db})
+Destroy the price database @var{db} and unreference all of
+the prices it contains. This may not deallocate all of those
+prices; other code may still be holding references to them.
+@end deftypefun
+
+@deftypefun gboolean gnc_pricedb_add_price (GNCPriceDB * @var{db}, GNCPrice * @var{p})
+Add the price @var{p} to @var{db}. This will increase the
+reference count of @var{p}, so user code may safely drop
+its reference to the price (i.e. call @code{gnc_price_unref})
+if the call succeeds (returns true).
+@end deftypefun
+
+@deftypefun gboolean gnc_pricedb_remove_price (GNCPriceDB * @var{db}, GNCPrice * @var{p})
+Removes the price @var{p} from the price database @var{db}. Returns true
+if successful and false otherwise.
 @end deftypefun
 
 

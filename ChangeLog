@@ -1,3 +1,9 @@
+2001-06-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
 2001-06-08  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-file-operations.sgml, xacc-quickstart.sgml, 

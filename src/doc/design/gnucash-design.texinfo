@@ -150,6 +150,7 @@ Prices
 Price Databases
 
 * Price Lists::                 
+* General Price Database API::  
 
 Splits
 
