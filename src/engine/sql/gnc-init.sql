@@ -4,6 +4,17 @@
 -- these tables are hand-built, but maybe they should be 
 -- autobuilt with the m4 macros ...
 
+-- Commodity structure
+
+DROP TABLE gncCommodity;
+CREATE TABLE gncCommodity (
+        commodity	TEXT PRIMARY KEY,
+	fullname	TEXT,
+	namespace	TEXT,
+	mnemonic	TEXT,
+	code		TEXT,
+	fraction	INT DEFAULT '100'
+);
 
 -- Account structure -- parentGUID points to parent account
 -- guid. There is no supports for Groups in this schema.
@@ -22,7 +33,7 @@ CREATE TABLE gncAccount (
 	description 	TEXT,
 	notes	 	TEXT,
 	type		TEXT,
-	currency	TEXT
+	commodity	TEXT
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
@@ -33,10 +44,11 @@ CREATE TABLE gncAccount (
 DROP TABLE gncTransaction;
 CREATE TABLE gncTransaction (
 	transGuid		CHAR(32) PRIMARY KEY,
-	date_entered	 	DATETIME,
+	date_entered	 	DATETIME DEFAULT 'NOW',
 	date_posted	 	DATETIME,
 	num			TEXT,
-	description		TEXT
+	description		TEXT,
+        currency                TEXT
 );
 
 -- a gncEntry is what we call 'Split' elsewhere in the engine
@@ -48,7 +60,7 @@ CREATE TABLE gncEntry (
 	transGuid		CHAR(32),
 	memo			TEXT,
 	action			TEXT,
-	reconciled		CHAR,
+	reconciled		CHAR DEFAULT 'n',
 	date_reconciled 	DATETIME,
 	amountNum		INT8 DEFAULT '0',
 	amountDenom		INT8 DEFAULT '100',

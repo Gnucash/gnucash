@@ -44,6 +44,7 @@ void sqlBuild_Set_Char  (sqlBuilder *b, const char *tag, char val);
 void sqlBuild_Set_GUID  (sqlBuilder *b, const char *tag, const GUID *val);
 void sqlBuild_Set_Date  (sqlBuilder *b, const char *tag, Timespec val);
 void sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 val);
+void sqlBuild_Set_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 
 
 /* build the update 'where' clause */

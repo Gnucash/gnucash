@@ -4,9 +4,8 @@
  *
  * FUNCTION:
  * Implements the callbacks for the postgress backend.
- * this is somewhat broken code.
- * its a quick hack just to check things out.
- * it needs extensive review and design checking
+ * this is code kinda usually works.
+ * it needs review and design checking
  *
  * HISTORY:
  * Copyright (c) 2000, 2001 Linas Vepstas
@@ -24,6 +23,8 @@
 #include "BackendP.h"
 #include "Group.h"
 #include "gnc-book.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "guid.h"
@@ -36,7 +37,6 @@
 #include "PostgresBackend.h"
 
 static short module = MOD_BACKEND; 
-
 
 static void pgendDisable (PGBackend *be);
 static void pgendEnable (PGBackend *be);
@@ -134,7 +134,7 @@ static void pgendEnable (PGBackend *be);
 #define GET_DB_VAL(str,n) (PQgetvalue (result, n, PQfnumber (result, str)))
 
 #define COMP_STR(sqlname,fun,ndiffs) { 				\
-   if (strcmp (GET_DB_VAL(sqlname,0),fun)) {			\
+   if (null_strcmp (GET_DB_VAL(sqlname,0),fun)) {		\
       PINFO("%s sql='%s', eng='%s'", sqlname, 			\
          GET_DB_VAL (sqlname,0), fun); 				\
       ndiffs++; 						\
@@ -143,7 +143,7 @@ static void pgendEnable (PGBackend *be);
 
 #define COMP_GUID(sqlname,fun, ndiffs) { 			\
    const char *tmp = guid_to_string(fun); 			\
-   if (strcmp (GET_DB_VAL(sqlname,0),tmp)) { 			\
+   if (null_strcmp (GET_DB_VAL(sqlname,0),tmp)) { 		\
       PINFO("%s sql='%s', eng='%s'", sqlname, 			\
          GET_DB_VAL(sqlname,0), tmp); 				\
       ndiffs++; 						\
@@ -177,6 +177,20 @@ static void pgendEnable (PGBackend *be);
    }								\
 }
 
+/* a very special date comp */
+#define COMP_NOW(sqlname,fun,ndiffs) { 	 			\
+    Timespec eng_time = xaccTransRetDateEnteredTS(ptr);		\
+    Timespec sql_time = gnc_iso8601_to_timespec(		\
+                     GET_DB_VAL(sqlname,0)); 			\
+    if (eng_time.tv_sec != sql_time.tv_sec) {			\
+       time_t tmp = eng_time.tv_sec;				\
+       PINFO("%s sql='%s' eng=%s", sqlname, 			\
+         GET_DB_VAL(sqlname,0), ctime(&tmp)); 			\
+      ndiffs++; 						\
+   }								\
+}
+
+
 #define COMP_INT64(sqlname,fun,ndiffs) { 			\
    if (atoll (GET_DB_VAL(sqlname,0)) != fun) {			\
       PINFO("%s sql='%s', eng='%lld'", sqlname, 		\
@@ -184,9 +198,40 @@ static void pgendEnable (PGBackend *be);
       ndiffs++; 						\
    }								\
 }
+
+#define COMP_INT32(sqlname,fun,ndiffs) { 			\
+   if (atol (GET_DB_VAL(sqlname,0)) != fun) {			\
+      PINFO("%s sql='%s', eng='%d'", sqlname, 			\
+         GET_DB_VAL (sqlname,0), fun); 				\
+      ndiffs++; 						\
+   }								\
+}
+
 /* ============================================================= */
 
 #include "tmp.c"
+
+/* ============================================================= */
+/* This routine updates the commodity structure if needed, and/or
+ * stores it the first time if it hasn't yet been stored.
+ */
+
+static void
+pgendStoreCommodityNoLock (PGBackend *be, const gnc_commodity *com)
+{
+   gnc_commodity *commie = (gnc_commodity *) com;
+   int ndiffs;
+   if (!be || !com) return;
+
+   ndiffs = pgendCompareOnegnc_commodityOnly (be, commie);
+
+   /* update commodity if there are differences ... */
+   if (0<ndiffs) pgendStoreOnegnc_commodityOnly (be, commie, SQL_UPDATE);
+   /* insert commodity if it doesn't exist */
+   if (0>ndiffs) pgendStoreOnegnc_commodityOnly (be, commie, SQL_INSERT);
+
+   LEAVE(" ");
+}
 
 /* ============================================================= */
 /* This routine updates the account structure if needed, and/or
@@ -200,6 +245,7 @@ static void
 pgendStoreAccountNoLock (PGBackend *be, Account *acct,
                          gboolean do_mark)
 {
+   const gnc_commodity *com;
    int ndiffs;
 
    if (!be || !acct) return;
@@ -223,6 +269,11 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    if (0<ndiffs) pgendStoreOneAccountOnly (be, acct, SQL_UPDATE);
    /* insert account if it doesn't exist */
    if (0>ndiffs) pgendStoreOneAccountOnly (be, acct, SQL_INSERT);
+
+   /* make sure the account's commodity is in the commodity table */
+   com = xaccAccountGetCurrency (acct);
+   pgendStoreCommodityNoLock (be, com);
+
    LEAVE(" ");
 }
 
@@ -396,7 +447,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    Account *acc, *previous_acc=NULL;
    gboolean do_set_guid=FALSE;
    gboolean engine_data_is_newer = FALSE;
-   int i, nrows;
+   int i, j, nrows;
+   GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
    
    ENTER ("be=%p", be);
    if (!be || !trans_guid) return;
@@ -428,10 +480,11 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    do {
       GET_RESULTS (be->connection, result);
       {
-         int j=0, jrows;
+         int jrows;
          int ncols = PQnfields (result);
          jrows = PQntuples (result);
          nrows += jrows;
+         j = 0;
          PINFO ("query result %d has %d rows and %d cols",
             i, nrows, ncols);
 
@@ -546,10 +599,6 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
                s = xaccMallocSplit();
                xaccSplitSetGUID(s, &guid);
             }
-            else
-            {
-               PERR ("split already exists ... - implement me ..");
-            }
 
             /* next, restore some split data */
             /* hack alert - not all split fields handled */
@@ -591,12 +640,39 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
                }
                xaccAccountInsertSplit(acc, s);
             }
+
+            /* --------------------------------------------- */
+            /* finally tally them up; we use this below to clean 
+             * out deleted splits */
+            db_splits = g_list_prepend (db_splits, s);
          }
       }
    } while (result);
 
    /* close out dangling edit session */
    xaccAccountCommitEdit (previous_acc);
+
+   i=0; j=0;
+   engine_splits = xaccTransGetSplitList(trans);
+   for (node = engine_splits; node; node=node->next)
+   {
+      /* if not found, mark for deletion */
+      if (NULL == g_list_find (db_splits, node->data))
+      {
+         delete_splits = g_list_prepend (delete_splits, node->data);
+         j++;
+      }
+      i++;
+   }
+   PINFO ("%d of %d splits marked for deletion", j, i);
+
+   /* now, delete them ... */
+   for (node=delete_splits; node; node=node->next)
+   {
+      xaccSplitDestroy ((Split *) node->data);
+   }
+   g_list_free (delete_splits);
+   g_list_free (db_splits);
 
    xaccTransCommitEdit (trans);
 
@@ -653,7 +729,7 @@ pgendGetAllAccounts (PGBackend *be)
             GUID guid;
 
             /* first, lets see if we've already got this one */
-	    PINFO ("account GUID=%s\n", GET_DB_VAL("accountGUID",j));
+	    PINFO ("account GUID=%s", GET_DB_VAL("accountGUID",j));
 	    guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (GET_DB_VAL("accountGUID",j), &guid);
             acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
@@ -668,8 +744,27 @@ pgendGetAllAccounts (PGBackend *be)
             xaccAccountSetDescription(acc, GET_DB_VAL("description",j));
             xaccAccountSetCode(acc, GET_DB_VAL("accountCode",j));
             xaccAccountSetType(acc, xaccAccountStringToEnum(GET_DB_VAL("type",j)));
+
+            /* hop through a couple of hoops for the commodity */
+            /* it would be nice to simplify this ... */
+            {
+               gnc_commodity_table *comtab;
+               gnc_commodity *com;
+               char *str, *name;
+
+               str = g_strdup(GET_DB_VAL("commodity",j));
+               name = strchr (str, ':');
+               *name = 0;
+               name += 2;
+
+               comtab = gnc_engine_commodities();
+               com = gnc_commodity_table_lookup(comtab, str, name);
+               xaccAccountSetCommodity(acc, com);
+               g_free (str);
+            }
+
             /* try to find the parent account */
-	    PINFO ("parent GUID=%s\n", GET_DB_VAL("parentGUID",j));
+	    PINFO ("parent GUID=%s", GET_DB_VAL("parentGUID",j));
 	    guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (GET_DB_VAL("parentGUID",j), &guid);
             if (guid_equal(xaccGUIDNULL(), &guid)) 
@@ -710,6 +805,31 @@ pgendGetAllAccounts (PGBackend *be)
 }
 
 /* ============================================================= */
+/* return TRUE if this appears to be a fresh, 'null' transaction */
+/* it would be better is somehow we could get the gui to mark this
+ * as a fresh transaction, rather than having to scan a bunch of 
+ * fields.  But this is minor in the scheme of things.
+ */
+
+static gboolean
+is_trans_empty (Transaction *trans)
+{
+   Split *s;
+   if (!trans) return TRUE;
+   if (0 != (xaccTransGetDescription(trans))[0]) return FALSE;
+   if (0 != (xaccTransGetNum(trans))[0]) return FALSE;
+   if (1 != xaccTransCountSplits(trans)) return FALSE;
+
+   s = xaccTransGetSplit(trans, 0);
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
+   if ('n' != xaccSplitGetReconcile(s)) return FALSE;
+   if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
+   if (0 != (xaccSplitGetAction(s))[0]) return FALSE;
+   return TRUE;
+}
+
+/* ============================================================= */
 
 static int
 pgend_trans_commit_edit (Backend * bend, 
@@ -729,36 +849,46 @@ pgend_trans_commit_edit (Backend * bend,
              "LOCK TABLE gncTransaction IN EXCLUSIVE MODE; "
              "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
              "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
+             "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; "
              );
    SEND_QUERY (be,be->buff, 555);
    FINISH_QUERY(be->connection);
 
-   /* See if the database is in the state that we last left it in.
-    * Basically, the database should contain the 'old transaction'.
-    * If it doesn't, then someone else has modified this transaction,
-    * and thus, any further action on our part would be unsafe.  It
-    * would be best to spit this back at the GUI, and let a human
-    * decide.
+   /* Check to see if this is a 'new' transaction, or not. 
+    * The hallmark of a 'new' transaction is that all the 
+    * fields are empty.  If its new, then we just go ahead 
+    * and commit.  If its old, then we need some consistency 
+    * checks.
     */
-   ndiffs = pgendCompareOneTransactionOnly (be, oldtrans); 
-   if (ndiffs) rollback++;
-
-   /* be sure to check the old splits as well ... */
-   nsplits = xaccTransCountSplits (oldtrans);
-   for (i=0; i<nsplits; i++) {
-      Split * s = xaccTransGetSplit (oldtrans, i);
-      ndiffs = pgendCompareOneSplitOnly (be, s);
-      if (ndiffs) rollback++;
+   if (FALSE == is_trans_empty (oldtrans))
+   {
+      /* See if the database is in the state that we last left it in.
+       * Basically, the database should contain the 'old transaction'.
+       * If it doesn't, then someone else has modified this transaction,
+       * and thus, any further action on our part would be unsafe.  It
+       * is recommended that this be spit back at the GUI, and let a 
+       * human decide what to do next.
+       */
+      ndiffs = pgendCompareOneTransactionOnly (be, oldtrans); 
+      if (0 < ndiffs) rollback++;
+   
+      /* be sure to check the old splits as well ... */
+      nsplits = xaccTransCountSplits (oldtrans);
+      for (i=0; i<nsplits; i++) {
+         Split * s = xaccTransGetSplit (oldtrans, i);
+         ndiffs = pgendCompareOneSplitOnly (be, s);
+         if (0 < ndiffs) rollback++;
+      }
+   
+      if (rollback) {
+         snprintf (be->buff, be->bufflen, "ROLLBACK;");
+         SEND_QUERY (be,be->buff,444);
+         FINISH_QUERY(be->connection);
+   
+         LEAVE ("rolled back");
+         return 666;   /* hack alert */
+      } 
    }
-
-   if (rollback) {
-      snprintf (be->buff, be->bufflen, "ROLLBACK;");
-      SEND_QUERY (be,be->buff,444);
-      FINISH_QUERY(be->connection);
-
-      LEAVE (" ");
-      return 666;   /* hack alert */
-   } 
 
    /* if we are here, we are good to go */
    pgendStoreTransactionNoLock (be, trans, FALSE);
@@ -767,7 +897,60 @@ pgend_trans_commit_edit (Backend * bend,
    SEND_QUERY (be,be->buff,333);
    FINISH_QUERY(be->connection);
 
-   LEAVE (" ");
+   /* hack alert -- the following code will get rid of that annoying
+    * message from the GUI about saving one's data. However, it doesn't
+    * do the right thing if the connection to the backend was ever lost.
+    * what should happen is the user should get a chance to
+    * resynchronize thier data with the backend, before quiting out.
+    */
+   {
+      Split * s = xaccTransGetSplit (trans, 0);
+      Account *acc = xaccSplitGetAccount (s);
+      AccountGroup *top = xaccGetAccountRoot (acc);
+      xaccGroupMarkSaved (top);
+   }
+
+   LEAVE ("commited");
+   return 0;
+}
+
+/* ============================================================= */
+
+static int
+pgend_account_commit_edit (Backend * bend, 
+                           Account * acct)
+{
+   PGBackend *be = (PGBackend *)bend;
+
+   ENTER ("be=%p, acct=%p", be, acct);
+   if (!be || !acct) return 1;  /* hack alert hardcode literal */
+
+   /* lock it up so that we query and store atomically */
+   /* its not at all clear to me that this isn't rife with deadlocks. */
+   snprintf (be->buff, be->bufflen, 
+             "BEGIN; "
+             "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
+             "LOCK TABLE gncCommodity IN EXCLUSIVE MODE; "
+             );
+   SEND_QUERY (be,be->buff, 555);
+   FINISH_QUERY(be->connection);
+
+   /* hack alert -- we aren't comparing old to new, 
+    * i.e. not comparing version numbers, to see if 
+    * we're clobbering someone elses changes.  */
+   pgendStoreAccountNoLock (be, acct, FALSE);
+
+   snprintf (be->buff, be->bufflen, "COMMIT;");
+   SEND_QUERY (be,be->buff,333);
+   FINISH_QUERY(be->connection);
+
+   /* mark this up so that we don't get that annoying gui dialog
+    * about having to save to file.  unfortunately,however, this
+    * is too liberal, and could screw up synchronization if we've lost
+    * contact with the back end at some point.  So hack alert -- fix 
+    * this. */
+   xaccGroupMarkSaved (xaccAccountGetParent(acct));
+   LEAVE ("commited");
    return 0;
 }
 
@@ -858,7 +1041,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid)
    g_free(url);
 
    /* handle localhost as a special case */
-   if (!strcmp("localhost", be->hostname))
+   if (!safe_strcmp("localhost", be->hostname))
    {
       g_free (be->hostname);
       be->hostname = NULL;
@@ -882,7 +1065,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid)
       return;
    }
 
-   DEBUGCMD (PQtrace(be->connection, stderr));
+   // DEBUGCMD (PQtrace(be->connection, stderr));
 
    /* set the datestyle to something we can parse */
    snprintf (be->buff, be->bufflen, "SET DATESTYLE='ISO';");
@@ -1032,7 +1215,7 @@ pgendEnable (PGBackend *be)
    PINFO("nest count=%d", be->nest_count);
    if (be->nest_count) return;
    be->be.account_begin_edit = NULL;
-   be->be.account_commit_edit = NULL;
+   be->be.account_commit_edit = pgend_account_commit_edit;
    be->be.trans_begin_edit = NULL;
    be->be.trans_commit_edit = pgend_trans_commit_edit;
    be->be.trans_rollback_edit = NULL;

@@ -11,6 +11,7 @@ define(`account', `gncAccount, Account,
        description,    , char *, xaccAccountGetDescription(ptr),
        notes,          , char *, xaccAccountGetNotes(ptr),
        type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
+       commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
@@ -40,10 +41,22 @@ define(`split', `gncEntry, Split,
 define(`transaction', `gncTransaction, Transaction,
        num,            , char *,   xaccTransGetNum(ptr),
        description,    , char *,   xaccTransGetDescription(ptr),
-       date_entered,   , char *,   "CURRENT",
+       currency,       , char *,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
+       date_entered,   , now,      "NOW",
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
        ')
+
+
+define(`modity', `gncCommodity, gnc_commodity,
+       namespace,    , char *, gnc_commodity_get_namespace(ptr),
+       fullname,     , char *, gnc_commodity_get_fullname(ptr),
+       mnemonic,     , char *, gnc_commodity_get_mnemonic(ptr),
+       code,         , char *, gnc_commodity_get_exchange_code(ptr),
+       fraction,     , int32,  gnc_commodity_get_fraction(ptr),
+       commodity, KEY, char *, gnc_commodity_get_unique_name(ptr),
+       ')
+       
 
 /* ------------------------------------------------------- */
 /* symbolic names for the table accessors */
@@ -54,7 +67,7 @@ define(`firstrec', `shift(shift($@))')
 define(`nextrec', `shift(shift(shift(shift($@))))')
 
 /* -------- */
-/* macros that use teh sql builder to build a query */
+/* macros that use the sql builder to build a query */
 
 define(`sql_setter', `ifelse($2, `KEY',
                      `ifelse($1, `char *',   sqlBuild_Where_Str,
@@ -62,6 +75,8 @@ define(`sql_setter', `ifelse($2, `KEY',
 
                              $2,     ,
                      `ifelse($1, `char *',   sqlBuild_Set_Str,
+                             $1, `now',      sqlBuild_Set_Str,
+                             $1, `int32',    sqlBuild_Set_Int32,
                              $1, `int64',    sqlBuild_Set_Int64,
                              $1, `GUID *',   sqlBuild_Set_GUID,
                              $1, `Timespec', sqlBuild_Set_Date,
@@ -80,6 +95,8 @@ define(`set_fields', `set_fields_r(firstrec($@))')
 /* macros to compare a query result */
 
 define(`cmp_value', `ifelse($1, `char *',   COMP_STR,
+                            $1, `now',      COMP_NOW,
+                            $1, `int32',    COMP_INT32,
                             $1, `int64',    COMP_INT64,
                             $1, `GUID *',   COMP_GUID,
                             $1, `Timespec', COMP_DATE,
@@ -180,7 +197,9 @@ divert
 store_one_only(account)
 store_one_only(transaction)
 store_one_only(split)
+store_one_only(modity)
 
 compare_one_only(account)
 compare_one_only(transaction)
 compare_one_only(split)
+compare_one_only(modity)

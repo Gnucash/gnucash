@@ -262,6 +262,14 @@ sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 nval)
 /* ================================================ */
 
 void
+sqlBuild_Set_Int32 (sqlBuilder *b, const char *tag, gint32 nval)
+{
+   sqlBuild_Set_Int64 (b, tag, (gint64) nval);
+}
+
+/* ================================================ */
+
+void
 sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 {
    if (!b || !tag || !val) return;
