@@ -1,5 +1,8 @@
 2001-05-10  Dave Peticolas  <dave@krondo.com>
 
+	* src/guile/File.c (gncFindFile): handle NULL arg
+	(gncReadFile): use glib mem routines
+
 	* src/doc/design/engine.texinfo: update docs
 
 	* src/scm/command-line.scm: fix bugs
