@@ -647,8 +647,8 @@ compute_optimal_width (GnucashSheet *sheet)
         if (!style)
                 return DEFAULT_REGISTER_WIDTH;
 
-        if (sheet->window_width >= 0)
-                return sheet->window_width;
+	//	if (sheet->window_width >= 0)
+	//	        return sheet->window_width;
 
         if (!style->dimensions)
                 return DEFAULT_REGISTER_WIDTH;
@@ -668,8 +668,8 @@ compute_optimal_height (GnucashSheet *sheet)
         if (!sheet)
                 return DEFAULT_REGISTER_HEIGHT;
 
-        if (sheet->window_height >= 0)
-                return sheet->window_height;
+	//	if (sheet->window_height >= 0)
+	//	       return sheet->window_height;
 
         style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
         if (!style)

@@ -425,10 +425,10 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
+  <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
-  <enable_layout_config>True</enable_layout_config>
+  <enable_layout_config>False</enable_layout_config>
 
   <widget>
     <class>GnomeDock</class>
@@ -496,7 +496,7 @@
 	<child>
 	  <padding>3</padding>
 	  <expand>False</expand>
-	  <fill>False</fill>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
@@ -990,18 +990,7 @@
 	</child>
 
 	<widget>
-	  <class>GtkVBox</class>
-	  <name>ledger_vbox</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-
-	  <widget>
-	    <class>Placeholder</class>
-	  </widget>
-
-	  <widget>
-	    <class>Placeholder</class>
-	  </widget>
+	  <class>Placeholder</class>
 	</widget>
       </widget>
     </widget>

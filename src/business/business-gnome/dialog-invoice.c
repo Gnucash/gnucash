@@ -84,6 +84,8 @@ struct _invoice_window {
   GtkWidget *	billing_id_entry;
   GtkWidget *	terms_entry;
 
+  gint		width;
+
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
 
@@ -96,6 +98,9 @@ struct _invoice_window {
   GncOwner	job;
 
 };
+
+#define WIDTH_PREFIX "invoice_reg"
+static int last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
@@ -633,6 +638,43 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
   return popup;
 }
 
+static void
+gnc_invoice_save_size (InvoiceWindow *iw)
+{
+  gdk_window_get_geometry (iw->dialog->window, NULL, NULL, &last_width,
+			   NULL, NULL);
+  gnc_save_window_size (WIDTH_PREFIX, last_width, 0);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               GtkAllocation *allocation,
+               gpointer user_data)
+{
+  InvoiceWindow *iw = user_data;
+  gboolean resize = FALSE;
+
+  /* HACK ALERT. this seems to be the only thing to get the
+   * freekin register window to stop freekin resizing itself
+   * all the freekin time.
+   *
+   * NOTE: Only resize on the SECOND time through.  I don't know why,
+   * but this really seems to have an effect on the window the
+   * _second_ time you pop one up.
+   */
+
+  if (iw->width == allocation->width)
+    return;
+
+  if (iw->width > 0)
+    resize = TRUE;
+
+  iw->width = allocation->width;
+
+  if (resize)
+    gtk_window_set_default_size (GTK_WINDOW(iw->dialog), iw->width, 0);
+}
+
 static int
 gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -781,7 +823,14 @@ gnc_invoice_window_close_handler (gpointer user_data)
   InvoiceWindow *iw = user_data;
 
   if (iw) {
-    /* XXX Save the register size */
+    switch (iw->dialog_type) {
+    case VIEW_INVOICE:
+    case EDIT_INVOICE:
+      gnc_invoice_save_size (iw);
+      break;
+    default:
+      break;
+    }
     gtk_widget_destroy (iw->dialog);
   }
 }
@@ -912,6 +961,19 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   }
 
   gnc_invoice_update_job_choice (iw);
+
+
+  switch (iw->dialog_type) {
+  case VIEW_INVOICE:
+  case EDIT_INVOICE:
+    if (last_width == 0)
+      gnc_get_window_size (WIDTH_PREFIX, &last_width, NULL);
+
+    gtk_window_set_default_size (GTK_WINDOW (iw->dialog), last_width, 0);
+    break;
+  default:
+    break;
+  }
 
   gtk_widget_show_all (iw->dialog);
 
@@ -1064,6 +1126,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw = g_new0 (InvoiceWindow, 1);
   iw->book = bookp;
   iw->dialog_type = type;
+  iw->width = -1;
 
   /* Save this for later */
   gncOwnerCopy (gncOwnerGetEndOwner (owner), &(iw->owner));
@@ -1116,39 +1179,6 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   /* Set the entry_ledger's invoice */
   gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
 
-  /* Create the register */
-  {
-    GtkWidget *regWidget, *vbox;
-    GtkWidget *popup;
-    guint num_rows;
-
-    num_rows = (guint) gnc_lookup_number_option ("Register",
-                                                 "Number of Rows", 20.0);
-    gnucash_register_set_initial_rows( num_rows );
-
-    /* Watch the order of operations, here... */
-    regWidget = gnucash_register_new (gnc_entry_ledger_get_table
-				      (entry_ledger));
-    gnc_table_init_gui( regWidget, entry_ledger );
-
-    vbox = glade_xml_get_widget (xml, "ledger_vbox");
-    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
-    
-    iw->reg = GNUCASH_REGISTER (regWidget);
-    GNUCASH_SHEET (iw->reg->sheet)->window = GTK_WIDGET(iw->dialog);
-
-    gtk_signal_connect (GTK_OBJECT(regWidget), "activate_cursor",
-			GTK_SIGNAL_FUNC(recordCB), iw);
-    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_all",
-			GTK_SIGNAL_FUNC(gnc_invoice_redraw_all_cb), iw);
-    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_help",
-			GTK_SIGNAL_FUNC(gnc_invoice_redraw_help_cb), iw);
-
-    popup = gnc_invoice_window_create_popup_menu (iw);
-    gnucash_register_attach_popup (GNUCASH_REGISTER (regWidget),
-				   popup, iw);
-  }
-
   /* load the menu bar */
   /*
   {
@@ -1184,12 +1214,50 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
+  gtk_signal_connect (GTK_OBJECT (iw->dialog), "size-allocate",
+		      GTK_SIGNAL_FUNC(size_allocate), iw);
+
+  /* Create the register */
+  {
+    GtkWidget *regWidget, *frame;
+    GtkWidget *popup;
+    guint num_rows;
+
+    num_rows = (guint) gnc_lookup_number_option ("Invoice",
+                                                 "Number of Rows", 10.0);
+    gnucash_register_set_initial_rows( num_rows );
+
+    /* Watch the order of operations, here... */
+    regWidget = gnucash_register_new (gnc_entry_ledger_get_table
+				      (entry_ledger));
+    gnc_table_init_gui( regWidget, entry_ledger );
+
+    frame = glade_xml_get_widget (xml, "ledger_frame");
+    gtk_container_add (GTK_CONTAINER (frame), regWidget);
+    
+    iw->reg = GNUCASH_REGISTER (regWidget);
+    GNUCASH_SHEET (iw->reg->sheet)->window = iw->dialog;
+
+    gtk_signal_connect (GTK_OBJECT(regWidget), "activate_cursor",
+			GTK_SIGNAL_FUNC(recordCB), iw);
+    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_all",
+			GTK_SIGNAL_FUNC(gnc_invoice_redraw_all_cb), iw);
+    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_help",
+			GTK_SIGNAL_FUNC(gnc_invoice_redraw_help_cb), iw);
+
+    popup = gnc_invoice_window_create_popup_menu (iw);
+    gnucash_register_attach_popup (GNUCASH_REGISTER (regWidget),
+				   popup, iw);
+
+  }
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
   /* Now fill in a lot of the pieces and display properly */
   gnc_invoice_update_window (iw);
+
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
+  gnc_window_adjust_for_screen (GTK_WINDOW(iw->dialog));
 
   return iw;
 }
@@ -1203,17 +1271,10 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   GnomeDialog *iwd;
   GtkWidget *hbox;
 
-  iw = g_new0 (InvoiceWindow, 1);
-
-  if (invoice == NULL) {
-    iw->dialog_type = NEW_INVOICE;
-    invoice = gncInvoiceCreate (bookp);
-    gncInvoiceSetCommonCommodity (invoice, gnc_default_currency ()); /* XXX */
-    iw->book = bookp;
-  } else {
+  if (invoice) {
     /*
-     * Find an existing window for this invoice.  If found, bring it to
-     * the front.
+     * Try to find an existing window for this invoice.  If found,
+     * bring it to the front.
      */
     GUID invoice_guid;
 
@@ -1224,11 +1285,20 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
       gtk_window_present (GTK_WINDOW(iw->dialog));
       return(iw);
     }
-  
-    /*
-     * No existing invoice window found.  Build a new one.
-     */
+  }
 
+  /*
+   * No existing invoice window found.  Build a new one.
+   */
+
+  iw = g_new0 (InvoiceWindow, 1);
+
+  if (invoice == NULL) {
+    iw->dialog_type = NEW_INVOICE;
+    invoice = gncInvoiceCreate (bookp);
+    gncInvoiceSetCommonCommodity (invoice, gnc_default_currency ()); /* XXX */
+    iw->book = bookp;
+  } else {
     iw->dialog_type = MOD_INVOICE;
     owner = gncInvoiceGetOwner (invoice);
     iw->book = gncInvoiceGetBook (invoice);

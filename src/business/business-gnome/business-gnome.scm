@@ -298,3 +298,18 @@
 )
 
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "invoice_reg_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "Invoice") (N_ "Number of Rows")
+  "d" (N_ "Default number of register rows to display.")
+   10.0 ;; default
+    1.0 ;; lower bound
+  200.0 ;; upper bound
+    0.0 ;; number of decimals
+    1.0 ;; step size
+  ))
