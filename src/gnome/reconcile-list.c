@@ -27,12 +27,14 @@
 #include <gnome.h>
 
 #include "gnc-date.h"
+#include "QueryCore.h"
+#include "Transaction.h"
+
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
-#include "Transaction.h"
 #include "search-param.h"
 #include "gnc-component-manager.h"
 
