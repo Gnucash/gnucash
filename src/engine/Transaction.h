@@ -482,6 +482,9 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  * If these are not available, then amounts/values will be set to 
  * -1/0, which is an invalid value.  I beleive this order dependency
  * is a bug, but I'm too lazy to find, fix & test at the moment ... 
+ *
+ * @note If you use this on a newly created transaction, make sure
+ * that the 'value' is also set so that it doesn't remain zero.
  */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 
@@ -489,7 +492,11 @@ void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 gnc_numeric   xaccSplitGetAmount (const Split * split);
 
 /** The xaccSplitSetValue() method sets the value of this split in the
- * transaction's commodity.  */
+ * transaction's commodity. 
+ *
+ * @note If you use this on a newly created transaction, make sure
+ * that the 'amount' is also set so that it doesn't remain zero.
+ */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
 
 /** Returns the value of this split in the transaction's commodity. */
@@ -512,10 +519,12 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
 /** Depending on the base_currency, set either the value or the amount
  * of this split or both: If the base_currency is the transaction's
  * commodity, set the value.  If it's the account's commodity, set the
- * amount. If both, set both.
+ * amount. If both, set both. 
  *
- * @note FIXME: is this function deprecated, or is this function supposed to
- * be used? */
+ * @note This function is useful when filling in the value/amount for
+ * a newly created transaction, since otherwise you have to manually
+ * make sure that both Value and Amount are correctly set (and not
+ * that value or amount remains zero).  */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
 
