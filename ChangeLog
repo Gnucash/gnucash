@@ -1,5 +1,30 @@
 2001-11-21  Rob Browning  <rlb@defaultvalue.org>
 
+	* src/scm/startup-design.txt: some updates -- needs overhaul.
+
+	* src/bin/guile.in: trivial guile override wrapper.
+
+	* src/bin/gnucash.in: rearrange code so that the file can be
+	interactively loaded for debugging without firing up gnucash
+	immediately.
+
+	* src/bin/gnucash-env.in: add the script-override directory to the
+	front of the user's PATH.
+
+	* src/bin/Makefile.am (gncoverridedir): new var.
+	(gncoverride_SCRIPTS): new var -- add guile.
+	(guile): new target -- guile override stub script.
+
+	* src/bin/.cvsignore: add guile.
+
+	* doc/gnucash.1: remove some vestigal envt var refs.
+
+	* configure.in: add GNC_LIBEXECDIR.
+	(AC_OUTPUT): add src/bin/Makefile.
+
+	* src/bin/gnucash-env.in: carefully setup PATH to pick up correct
+	guile.
+
 	* src/bin/: new directory.  Added so that scripts will be in a
 	subdir and can be re-made/installed without a full build.
 
