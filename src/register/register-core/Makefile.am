@@ -63,10 +63,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
-  ${GLIB_CFLAGS} \
+  ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_INCLUDEDIR} \
-  ${GUILE_INCS}
+  ${GLIB_CFLAGS}
+
 
 gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-register-core-spec.scm
 	FLAVOR=gnome guile -c \
