@@ -1156,34 +1156,6 @@ progress of the HBCI connection in the HBCI connection window.</label>
 
 	    <widget>
 	      <class>GtkButton</class>
-	      <name>addbank_button</name>
-	      <can_focus>True</can_focus>
-	      <label>Add 
-Bank</label>
-	      <relief>GTK_RELIEF_NORMAL</relief>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkButton</class>
-	      <name>adduser_button</name>
-	      <can_focus>True</can_focus>
-	      <label>Add 
-User</label>
-	      <relief>GTK_RELIEF_NORMAL</relief>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkButton</class>
 	      <name>hbciversion_button</name>
 	      <can_focus>True</can_focus>
 	      <label>HBCI
@@ -1209,14 +1181,57 @@ account list</label>
 		<fill>False</fill>
 	      </child>
 	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>addaccount_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Manually add
+Account</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>addbank_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Add 
+Bank</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>adduser_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Add 
+User</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
 	  </widget>
 	</widget>
 
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>label828</name>
-	  <label>Click &quot;Next&quot; when all desired accounts are matching.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <label>Click on the line of a HBCI account name if you want to match it to a GnuCash account.
+Click &quot;Next&quot; when all desired accounts are matching.</label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
 	  <yalign>0.5</yalign>

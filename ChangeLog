@@ -1,3 +1,10 @@
+2003-07-09  Christian Stimming  <stimming@tuhh.de>
+
+	* README: Added remark about gnucash-docs.
+	
+	* src/import-export/hbci/druid-hbci-initial.c: Clarify the part of
+	the HBCI setup about potentially adding HBCI accounts manually.
+
 2003-07-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-price-edit-db.c: Add a couple of extra checks
