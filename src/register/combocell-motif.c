@@ -54,7 +54,11 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
 static void realizeCombo (BasicCell *bcell, void *w, int width);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (BasicCell *bcell);
+
+#if 0
 static void setComboValue (BasicCell *bcell, const char *value);
+#endif
+
 static const char * enterCombo (BasicCell *bcell, const char *value);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
 
@@ -229,12 +233,16 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
 
 /* =============================================== */
 
+#if 0
+
 static void
 setComboValue (BasicCell *_cell, const char *str)
 {
    ComboCell * cell = (ComboCell *) _cell;
    xaccSetComboCellValue (cell, str);
 }
+
+#endif
 
 /* =============================================== */
 
