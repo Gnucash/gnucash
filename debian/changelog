@@ -1,0 +1,10 @@
+xacc (1.0b11-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Tyson Dowd <trd@cs.mu.oz.au>  Fri, 19 Dec 1997 00:55:55 +1100
+
+Local variables:
+mode: debian-changelog
+add-log-mailing-address: "trd@cs.mu.oz.au"
+End:
