@@ -176,7 +176,13 @@ foreach (@files)
 		# s/xaccRemoveEntity/qof_entity_remove/g;
 		# s/xaccForeachEntity/qof_entity_foreach/g;
 
-		s/foreachObjectCB/QofEntityForeachCB/g;
+		# s/foreachObjectCB/QofEntityForeachCB/g;
+
+		s/GNCSession/QofSession/g;
+		s/gnc_session/qof_session/g;
+		s/GNCPercentageFunc/QofPercentageFunc/g;
+		s/gnc_get_current_session/qof_session_get_current_session/g;
+		s/gnc_set_current_session/qof_session_set_current_session/g;
 
 		print OF $_;
 	}

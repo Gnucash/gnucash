@@ -2368,7 +2368,7 @@ gnc_book_to_scm (QofBook *book)
  * gnc_session_to_scm
  ********************************************************************/
 SCM
-gnc_session_to_scm (GNCSession *session)
+gnc_session_to_scm (QofSession *session)
 {
   static SCM session_type = SCM_UNDEFINED;
 

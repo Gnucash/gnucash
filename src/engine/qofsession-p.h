@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-session-p.h -- private functions for gnc sessions.           *
+ * qofsession-p.h -- private functions for QOF sessions.            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,13 +26,13 @@
  * Copyright (c) 1998-2003 Linas Vepstas <linas@linas.org>
  */
 
-#ifndef GNC_SESSION_P_H
-#define GNC_SESSION_P_H
+#ifndef QOF_SESSION_P_H
+#define QOF_SESSION_P_H
 
-#include "gnc-session.h"
 #include "qofbook.h"
+#include "qofsession.h"
 
-struct gnc_session_struct
+struct _QofSession
 {
   /* A book holds pointers to the various types of datasets used
    * by GnuCash.  A session may have open multiple books.  */
@@ -64,17 +64,17 @@ struct gnc_session_struct
 
 
 /* 
- * gnc_session_set_book() has funny semantics.
+ * qof_session_set_book() has funny semantics.
  * The session stores a list of books.  If you call this routine
  * with a book that is closed, then its added to the list.  If
  * you call this routine with a book that is open, then the
  * old list is blown away.
  */
-void gnc_session_set_book (GNCSession *session, QofBook *book);
+void qof_session_set_book (QofSession *session, QofBook *book);
 
-Backend * gnc_session_get_backend (GNCSession *session);
+Backend * qof_session_get_backend (QofSession *session);
 
-void gnc_session_push_error (GNCSession *session, GNCBackendError err,
+void qof_session_push_error (QofSession *session, GNCBackendError err,
                              const char *message);
 
 Backend* gncBackendInit_file(const char *book_id, void *data);

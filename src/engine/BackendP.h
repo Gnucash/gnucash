@@ -43,9 +43,9 @@
 #include "config.h"
 
 #include "Backend.h"
-#include "gnc-session.h"
 #include "qofbook.h"
 #include "qofquery.h"
+#include "qofsession.h"
 
 /*
  * The session_begin() routine gives the backend a second initialization
@@ -226,7 +226,7 @@
 struct backend_s
 {
   void (*session_begin) (Backend *be,
-                         GNCSession *session,
+                         QofSession *session,
                          const char *book_id, 
                          gboolean ignore_lock,
                          gboolean create_if_nonexistent);

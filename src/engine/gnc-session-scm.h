@@ -42,11 +42,12 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include "gnc-engine.h"
+#include "qofsession.h"
 
-void gnc_session_scm_load (GNCSession *session);
-gboolean gnc_session_scm_export (GNCSession *tmp_session,
-				 GNCSession *real_session);
-void     gnc_session_scm_save (GNCSession *session);
-void gnc_session_scm_set_callback (SCM percentage_cb);
+void gnc_session_scm_load (QofSession *session);
+gboolean gnc_session_scm_export (QofSession *tmp_session,
+                                 QofSession *real_session);
+void     gnc_session_scm_save (QofSession *session);
+void     gnc_session_scm_set_callback (SCM percentage_cb);
 
 #endif /* GNC_SESSION_SCM_H */

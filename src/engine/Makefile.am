@@ -31,7 +31,6 @@ libgncmod_engine_la_SOURCES = \
   gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
-  gnc-session.c \
   gnc-session-scm.c \
   gnc-trace.c \
   gncmod-engine.c \
@@ -42,10 +41,11 @@ libgncmod_engine_la_SOURCES = \
   messages.c \
   qofbook.c \
   qofid.c \
+  qofobject.c \
   qofquery.c \
   qofquerycore.c \
   qofqueryobject.c \
-  qofobject.c
+  qofsession.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -91,10 +91,11 @@ gncinclude_HEADERS = \
   messages.h \
   qofbook.h \
   qofid.h \
+  qofobject.h \
   qofquery.h \
   qofquerycore.h \
   qofqueryobject.h \
-  qofobject.h
+  qofsession.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -118,10 +119,11 @@ noinst_HEADERS = \
   gw-kvp.h \
   qofbook-p.h \
   qofid-p.h \
+  qofobject-p.h \
   qofquery-p.h \
   qofquerycore-p.h \
   qofqueryobject-p.h \
-  qofobject-p.h
+  qofsession-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 

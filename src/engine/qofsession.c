@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-sesssion.c -- session access (connection to backend)         *
+ * qofsesssion.c -- session access (connection to backend)          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,10 +21,10 @@
 
 /*
  * FILE:
- * gnc-session.c
+ * qofsession.c
  *
  * FUNCTION:
- * Encapsulate a connection to a GnuCash backend.
+ * Encapsulate a connection to a storage backend.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
@@ -46,12 +46,13 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "gnc-event.h"
-#include "gnc-session.h"
-#include "gnc-session-p.h"
 #include "gnc-trace.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofsession.h"
+#include "qofsession-p.h"
 
+/* Some gnucash-specific code */
 #ifdef GNUCASH
 #include "gnc-module.h"
 #include "TransLog.h"
@@ -61,14 +62,14 @@
 #define xaccLogDisable()
 #endif /* GNUCASH */
 
-static GNCSession * current_session = NULL;
+static QofSession * current_session = NULL;
 static short module = MOD_IO;
 
 /* ====================================================================== */
 /* error handling routines */
 
 static void
-gnc_session_clear_error (GNCSession *session)
+qof_session_clear_error (QofSession *session)
 {
   GNCBackendError err;
 
@@ -87,7 +88,7 @@ gnc_session_clear_error (GNCSession *session)
 }
 
 void
-gnc_session_push_error (GNCSession *session, GNCBackendError err,
+qof_session_push_error (QofSession *session, GNCBackendError err,
                         const char *message)
 {
   if (!session) return;
@@ -99,7 +100,7 @@ gnc_session_push_error (GNCSession *session, GNCBackendError err,
 }
 
 GNCBackendError
-gnc_session_get_error (GNCSession * session)
+qof_session_get_error (QofSession * session)
 {
   GNCBackendError err;
 
@@ -126,7 +127,7 @@ get_default_error_message(GNCBackendError err)
 }
 
 const char *
-gnc_session_get_error_message(GNCSession *session)
+qof_session_get_error_message(QofSession *session)
 {
     if(!session) return "";
     if(!session->error_message)
@@ -135,14 +136,14 @@ gnc_session_get_error_message(GNCSession *session)
 }
 
 GNCBackendError
-gnc_session_pop_error (GNCSession * session)
+qof_session_pop_error (QofSession * session)
 {
   GNCBackendError err;
 
   if (!session) return ERR_BACKEND_NO_BACKEND;
 
-  err = gnc_session_get_error(session);
-  gnc_session_clear_error(session);
+  err = qof_session_get_error(session);
+  qof_session_clear_error(session);
 
   return err;
 }
@@ -150,7 +151,7 @@ gnc_session_pop_error (GNCSession * session)
 /* ====================================================================== */
 
 static void
-gnc_session_init (GNCSession *session)
+qof_session_init (QofSession *session)
 {
   if (!session) return;
 
@@ -160,24 +161,24 @@ gnc_session_init (GNCSession *session)
   session->logpath = NULL;
   session->backend = NULL;
 
-  gnc_session_clear_error (session);
+  qof_session_clear_error (session);
 }
 
-GNCSession *
-gnc_session_new (void)
+QofSession *
+qof_session_new (void)
 {
-  GNCSession *session = g_new0(GNCSession, 1);
-  gnc_session_init(session);
+  QofSession *session = g_new0(QofSession, 1);
+  qof_session_init(session);
   return session;
 }
 
-GNCSession *
-gnc_get_current_session (void)
+QofSession *
+qof_session_get_current_session (void)
 {
   if (!current_session)
   {
     gnc_engine_suspend_events ();
-    current_session = gnc_session_new ();
+    current_session = qof_session_new ();
     gnc_engine_resume_events ();
   }
 
@@ -185,13 +186,13 @@ gnc_get_current_session (void)
 }
 
 void
-gnc_set_current_session (GNCSession *session)
+qof_session_set_current_session (QofSession *session)
 {
   current_session = session;
 }
 
 QofBook *
-gnc_session_get_book (GNCSession *session)
+qof_session_get_book (QofSession *session)
 {
    GList *node;
    if (!session) return NULL;
@@ -205,7 +206,7 @@ gnc_session_get_book (GNCSession *session)
 }
 
 void
-gnc_session_set_book (GNCSession *session, QofBook *addbook)
+qof_session_set_book (QofSession *session, QofBook *addbook)
 {
   GList *node;
   if (!session) return;
@@ -237,21 +238,21 @@ gnc_session_set_book (GNCSession *session, QofBook *addbook)
 }
 
 Backend * 
-gnc_session_get_backend (GNCSession *session)
+qof_session_get_backend (QofSession *session)
 {
    if (!session) return NULL;
    return session->backend;
 }
 
 const char *
-gnc_session_get_file_path (GNCSession *session)
+qof_session_get_file_path (QofSession *session)
 {
    if (!session) return NULL;
    return session->fullpath;
 }
 
 const char *
-gnc_session_get_url (GNCSession *session)
+qof_session_get_url (QofSession *session)
 {
    if (!session) return NULL;
    return session->book_id;
@@ -260,7 +261,7 @@ gnc_session_get_url (GNCSession *session)
 /* ====================================================================== */
 
 static void
-gnc_session_int_backend_load_error(GNCSession *session,
+qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
 {
     PWARN (message, dll_err ? dll_err : "");
@@ -274,7 +275,7 @@ gnc_session_int_backend_load_error(GNCSession *session,
     g_free(session->book_id);
     session->book_id = NULL;
 
-    gnc_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
+    qof_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
 }
 
 
@@ -284,7 +285,7 @@ gnc_session_int_backend_load_error(GNCSession *session,
  * use traditional dlopen calls.
  */
 static void
-gnc_session_load_backend(GNCSession * session, char * backend_name)
+qof_session_load_backend(QofSession * session, char * backend_name)
 {
   GNCModule  mod = 0;
   Backend    *(* be_new_func)(void);
@@ -315,13 +316,13 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
     }
     else
     {
-      gnc_session_int_backend_load_error(session, " can't find backend_new ",
+      qof_session_int_backend_load_error(session, " can't find backend_new ",
                                          "");
     }      
   }
   else
   {
-    gnc_session_int_backend_load_error(session,
+    qof_session_int_backend_load_error(session,
                                        " failed to load '%s' backend", 
                                        backend_name);
   }
@@ -333,7 +334,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 #else /* GNUCASH */
 
 static void
-gnc_session_load_backend(GNCSession * session, char * backend_name)
+qof_session_load_backend(QofSession * session, char * backend_name)
 {
   ENTER (" ");
   LEAVE (" ");
@@ -343,7 +344,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 /* ====================================================================== */
 
 static void
-gnc_session_destroy_backend (GNCSession *session)
+qof_session_destroy_backend (QofSession *session)
 {
   g_return_if_fail (session);
 
@@ -368,7 +369,7 @@ gnc_session_destroy_backend (GNCSession *session)
 }
 
 void
-gnc_session_begin (GNCSession *session, const char * book_id, 
+qof_session_begin (QofSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   if (!session) return;
@@ -378,12 +379,12 @@ gnc_session_begin (GNCSession *session, const char * book_id,
          book_id ? book_id : "(null)");
 
   /* clear the error condition of previous errors */
-  gnc_session_clear_error (session);
+  qof_session_clear_error (session);
 
   /* check to see if this session is already open */
-  if (gnc_session_get_url(session))
+  if (qof_session_get_url(session))
   {
-    gnc_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
+    qof_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
     LEAVE("push error book is already open ");
     return;
   }
@@ -391,7 +392,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   /* seriously invalid */
   if (!book_id)
   {
-    gnc_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
     LEAVE("push error missing book_id");
     return;
   }
@@ -402,7 +403,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   session->fullpath = xaccResolveURL(book_id);
   if (!session->fullpath)
   {
-    gnc_session_push_error (session, ERR_FILEIO_FILE_NOT_FOUND, NULL);
+    qof_session_push_error (session, ERR_FILEIO_FILE_NOT_FOUND, NULL);
     LEAVE("push error: can't resolve file path");
     return;  
   }
@@ -412,13 +413,13 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   PINFO ("logpath=%s", session->logpath ? session->logpath : "(null)");
 
   /* destroy the old backend */
-  gnc_session_destroy_backend(session);
+  qof_session_destroy_backend(session);
 
   /* check to see if this is a type we know how to handle */
   if (!g_strncasecmp(book_id, "file:", 5) ||
       *session->fullpath == '/')
   {
-    gnc_session_load_backend(session, "file" ); 
+    qof_session_load_backend(session, "file" ); 
   }
 #if 0
   /* load different backend based on URL.  We should probably
@@ -432,11 +433,11 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 #endif
   else if (!g_strncasecmp(book_id, "postgres://", 11))
   {
-    gnc_session_load_backend(session, "postgres");
+    qof_session_load_backend(session, "postgres");
   }
   else if (!g_strncasecmp(book_id, "rpc://", 6))
   {
-    gnc_session_load_backend(session, "rpc");
+    qof_session_load_backend(session, "rpc");
   }
 
   /* if there's a begin method, call that. */
@@ -446,7 +447,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
       char * msg;
       
       (session->backend->session_begin)(session->backend, session,
-                                  gnc_session_get_url(session), ignore_lock,
+                                  qof_session_get_url(session), ignore_lock,
                                   create_if_nonexistent);
       PINFO("Done running session_begin on backend");
       err = xaccBackendGetError(session->backend);
@@ -459,7 +460,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
           session->logpath = NULL;
           g_free(session->book_id);
           session->book_id = NULL;
-          gnc_session_push_error (session, err, msg);
+          qof_session_push_error (session, err, msg);
           LEAVE("backend error %d", err);
           return;
       }
@@ -472,7 +473,7 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   /* No backend was found. That's bad. */
   if (NULL == session->backend)
   {
-    gnc_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
   }
   LEAVE (" sess=%p book-id=%s", 
          session,  book_id ? book_id : "(null)");
@@ -481,8 +482,8 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 /* ====================================================================== */
 
 void
-gnc_session_load (GNCSession *session,
-		  GNCPercentageFunc percentage_func)
+qof_session_load (QofSession *session,
+		  QofPercentageFunc percentage_func)
 {
   QofBook *newbook;
   QofBookList *oldbooks, *node;
@@ -490,10 +491,10 @@ gnc_session_load (GNCSession *session,
   GNCBackendError err;
 
   if (!session) return;
-  if (!gnc_session_get_url(session)) return;
+  if (!qof_session_get_url(session)) return;
 
-  ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+  ENTER ("sess=%p book_id=%s", session, qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 
 
   /* At this point, we should are supposed to have a valid book 
@@ -506,7 +507,7 @@ gnc_session_load (GNCSession *session,
 
   xaccLogSetBaseName(session->logpath);
 
-  gnc_session_clear_error (session);
+  qof_session_clear_error (session);
 
   /* This code should be sufficient to initialize *any* backend,
    * whether http, postgres, or anything else that might come along.
@@ -530,7 +531,7 @@ gnc_session_load (GNCSession *session,
       if (be->load) 
       {
           be->load (be, newbook);
-          gnc_session_push_error (session, xaccBackendGetError(be), NULL);
+          qof_session_push_error (session, xaccBackendGetError(be), NULL);
       }
 
       /* we just got done loading, it can't possibly be dirty !! */
@@ -539,7 +540,7 @@ gnc_session_load (GNCSession *session,
       xaccLogEnable();
   }
 
-  err = gnc_session_get_error(session);
+  err = qof_session_get_error(session);
   if ((err != ERR_BACKEND_NO_ERR) &&
       (err != ERR_FILEIO_FILE_TOO_OLD) &&
       (err != ERR_SQL_DB_TOO_OLD))
@@ -550,7 +551,7 @@ gnc_session_load (GNCSession *session,
       qof_book_destroy (newbook);
       g_list_free (session->books);
       session->books = oldbooks;
-      LEAVE("error from backend %d", gnc_session_get_error(session));
+      LEAVE("error from backend %d", qof_session_get_error(session));
       xaccLogEnable();
       return;
   }
@@ -564,14 +565,14 @@ gnc_session_load (GNCSession *session,
   }
   xaccLogEnable();
 
-  LEAVE ("sess = %p, book_id=%s", session, gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+  LEAVE ("sess = %p, book_id=%s", session, qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 }
 
 /* ====================================================================== */
 
 gboolean
-gnc_session_save_may_clobber_data (GNCSession *session)
+qof_session_save_may_clobber_data (QofSession *session)
 {
   /* FIXME: Make sure this doesn't need more sophisticated semantics
    * in the face of special file, devices, pipes, symlinks, etc. */
@@ -586,14 +587,14 @@ gnc_session_save_may_clobber_data (GNCSession *session)
 }
 
 static gboolean
-save_error_handler(Backend *be, GNCSession *session)
+save_error_handler(Backend *be, QofSession *session)
 {
     int err;
     err = xaccBackendGetError(be);
     
     if (ERR_BACKEND_NO_ERR != err)
     {
-        gnc_session_push_error (session, err, NULL);
+        qof_session_push_error (session, err, NULL);
       
         /* we close the backend here ... isn't this a bit harsh ??? */
         if (be->session_end)
@@ -606,8 +607,8 @@ save_error_handler(Backend *be, GNCSession *session)
 }
 
 void
-gnc_session_save (GNCSession *session,
-		  GNCPercentageFunc percentage_func)
+qof_session_save (QofSession *session,
+		  QofPercentageFunc percentage_func)
 {
   GList *node;
   Backend *be;
@@ -616,8 +617,8 @@ gnc_session_save (GNCSession *session,
 
   ENTER ("sess=%p book_id=%s", 
          session, 
-         gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+         qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 
   /* If there is a backend, and the backend is reachable
    * (i.e. we can communicate with it), then synchronize with 
@@ -657,11 +658,11 @@ gnc_session_save (GNCSession *session,
 
   /* If the fullpath doesn't exist, either the user failed to initialize,
    * or the lockfile was never obtained. Either way, we can't write. */
-  gnc_session_clear_error (session);
+  qof_session_clear_error (session);
 
   if (!session->fullpath)
   {
-    gnc_session_push_error (session, ERR_BACKEND_MISC, NULL);
+    qof_session_push_error (session, ERR_BACKEND_MISC, NULL);
     return;
   }
 
@@ -672,20 +673,20 @@ gnc_session_save (GNCSession *session,
 /* XXX what does this function do ?? */
 
 gboolean
-gnc_session_export (GNCSession *tmp_session,
-		    GNCSession *real_session,
-		    GNCPercentageFunc percentage_func)
+qof_session_export (QofSession *tmp_session,
+		    QofSession *real_session,
+		    QofPercentageFunc percentage_func)
 {
   QofBook *book;
   Backend *be;
 
   if ((!tmp_session) || (!real_session)) return FALSE;
 
-  book = gnc_session_get_book (real_session);
+  book = qof_session_get_book (real_session);
   ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
          tmp_session, real_session, book,
-         gnc_session_get_url(tmp_session)
-         ? gnc_session_get_url(tmp_session) : "(null)");
+         qof_session_get_url(tmp_session)
+         ? qof_session_get_url(tmp_session) : "(null)");
 
   /* There must be a backend or else.  (It should always be the file
    * backend too.)
@@ -708,12 +709,12 @@ gnc_session_export (GNCSession *tmp_session,
 /* ====================================================================== */
 
 void
-gnc_session_end (GNCSession *session)
+qof_session_end (QofSession *session)
 {
   if (!session) return;
 
-  ENTER ("sess=%p book_id=%s", session, gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+  ENTER ("sess=%p book_id=%s", session, qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 
   /* close down the backend first */
   if (session->backend && session->backend->session_end)
@@ -721,7 +722,7 @@ gnc_session_end (GNCSession *session)
     (session->backend->session_end)(session->backend);
   }
 
-  gnc_session_clear_error (session);
+  qof_session_clear_error (session);
 
   g_free (session->fullpath);
   session->fullpath = NULL;
@@ -732,25 +733,25 @@ gnc_session_end (GNCSession *session)
   g_free (session->book_id);
   session->book_id = NULL;
 
-  LEAVE ("sess=%p book_id=%s", session, gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+  LEAVE ("sess=%p book_id=%s", session, qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 }
 
 void 
-gnc_session_destroy (GNCSession *session) 
+qof_session_destroy (QofSession *session) 
 {
   GList *node;
   if (!session) return;
 
   ENTER ("sess=%p book_id=%s", session, 
-         gnc_session_get_url(session)
-         ? gnc_session_get_url(session) : "(null)");
+         qof_session_get_url(session)
+         ? qof_session_get_url(session) : "(null)");
 
   xaccLogDisable();
-  gnc_session_end (session);
+  qof_session_end (session);
 
   /* destroy the backend */
-  gnc_session_destroy_backend(session);
+  qof_session_destroy_backend(session);
 
   for (node=session->books; node; node=node->next)
   {
@@ -774,7 +775,7 @@ gnc_session_destroy (GNCSession *session)
 /* this call is weird. */
 
 void
-gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
+qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 {
   GList *books_1, *books_2, *node;
 
@@ -806,7 +807,7 @@ gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 /* ====================================================================== */
 
 gboolean
-gnc_session_events_pending (GNCSession *session)
+qof_session_events_pending (QofSession *session)
 {
   if (!session) return FALSE;
   if (!session->backend) return FALSE;
@@ -816,7 +817,7 @@ gnc_session_events_pending (GNCSession *session)
 }
 
 gboolean
-gnc_session_process_events (GNCSession *session)
+qof_session_process_events (QofSession *session)
 {
   if (!session) return FALSE;
   if (!session->backend) return FALSE;
