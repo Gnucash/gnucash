@@ -152,6 +152,9 @@
 (define (gnc:html-markup-tt . rest)
   (apply gnc:html-markup "tt" rest))
 
+(define (gnc:html-markup-em . rest)
+  (apply gnc:html-markup "em" rest))
+
 (define (gnc:html-markup-b . rest)
   (apply gnc:html-markup "b" rest))
 

@@ -39,7 +39,8 @@
 ;;  font-face   : string for <font face="">
 ;;  font-size   : string for <font size="">
 ;;  font-color  : color (a valid HTML color spec)
-;;  closing-font-tag: private data (computed from font-face, font-size, font-color)
+;;  closing-font-tag: private data (computed from font-face,
+;;                                  font-size, font-color)
 ;;                    don't set directly, please!
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -128,7 +129,9 @@
 
 (define (gnc:html-markup-style-info-set-font-face! record value)
   (begin
-    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))    (gnc:html-markup-style-info-set-font-face-internal! record value)))
+    (gnc:html-markup-style-info-set-closing-font-tag!
+     record (not (eq? value #f)))
+    (gnc:html-markup-style-info-set-font-face-internal! record value)))
 
 (define gnc:html-markup-style-info-font-size
   (record-accessor <html-markup-style-info> 'font-size))
@@ -138,11 +141,9 @@
 
 (define (gnc:html-markup-style-info-set-font-size! record value)
   (begin
-    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))
+    (gnc:html-markup-style-info-set-closing-font-tag!
+     record (not (eq? value #f)))
     (gnc:html-markup-style-info-set-font-size-internal! record value)))
-
-
-
 
 (define gnc:html-markup-style-info-font-color
   (record-accessor <html-markup-style-info> 'font-color))
@@ -152,7 +153,8 @@
 
 (define (gnc:html-markup-style-info-set-font-color! record value)
   (begin
-    (gnc:html-markup-style-info-set-closing-font-tag! record (not (eq? value #f)))
+    (gnc:html-markup-style-info-set-closing-font-tag!
+     record (not (eq? value #f)))
     (gnc:html-markup-style-info-set-font-color-internal! record value)))
 
 (define gnc:html-markup-style-info-closing-font-tag

@@ -206,7 +206,7 @@
              (set! tag markup))
             ((string=? tag "")
              (set! tag #f)))
-      
+
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval)))))
         (if tag 
@@ -224,9 +224,8 @@
               (if extra-attrib
                   (for-each
                    (lambda (attr)
-                     (if (string? attr)
-                         (begin
-                           (push " ") (push attr))))
+                     (cond ((string? attr) (push " ") (push attr))
+                           (attr (gnc:warn "non-string attribute" attr))))
                    extra-attrib))
               (push ">")))
         (if (or face size color)
@@ -364,9 +363,3 @@
       ((gnc:html-object-renderer obj) (gnc:html-object-data obj) doc)
       (let ((htmlo (gnc:make-html-object obj)))
         (gnc:html-object-render htmlo doc))))
-
-
-
-
-
-

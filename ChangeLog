@@ -1,3 +1,40 @@
+2001-03-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sixtp-utils.c (gnc_timegm): new func. define as
+	timegm if present, otherwise implement using mktime.
+	(string_to_timespec_secs): use gnc_timegm for UTC parsing
+
+	* src/engine/io-gncxml-r.c (gnc_book_load_from_xml_file): remove
+	TZ save & restore.
+
+	* src/test/test-date-converting.c: remove putenv
+
+	* src/test/test-dom-converters1.c: remove putenv
+
+	* src/test/test-xml-transaction.c: remove putenv
+
+	* src/gnome/gnc-http.c: same as below
+
+	* src/engine/NetIO.c (setup_request): use config.h instead
+	of hard-coding package and version
+
+	* configure.in: check for timegm function
+
+	* src/scm/report/taxtxf.scm: more porting work
+
+	* src/scm/html-text.scm (gnc:html-markup-em): new func
+
+	* src/scm/report/stylesheet-plain.scm: add some default styles
+
+	* src/scm/html-style-sheet.scm: remove non-type styles
+
+	* src/scm/html-document.scm (gnc:html-document-markup-start):
+	check for non-string attributes
+
+2001-03-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/html-style-info.scm: cleanup
+
 2001-03-12  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/gnome/window-main.c (gnc_ui_xml_v2_cb): new func.

@@ -43,7 +43,7 @@ AC_PROG_MAKE_SET
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
-AC_CHECK_FUNCS(stpcpy memcpy)   
+AC_CHECK_FUNCS(stpcpy memcpy timegm)
 
 AM_PATH_GLIB
 

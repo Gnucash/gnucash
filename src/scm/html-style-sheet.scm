@@ -156,21 +156,10 @@
            rv "<gnc-monetary>" 
            gnc:default-html-gnc-monetary-renderer #f)
 
-          (gnc:html-style-sheet-set-style!
-           rv "<number-cell>"
-           'tag "td"
-           'attribute (list "align" "right"))
-
-          (gnc:html-style-sheet-set-style!
-           rv "<number-header>"
-           'tag "th"
-           'attribute (list "align" "right"))
-
           ;; store it in the style sheet hash 
           (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
           rv)
         #f)))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -230,4 +219,3 @@
 (define (gnc:html-style-sheet-remove sheet)
   (if (not (string=? (gnc:html-style-sheet-name sheet) (_ "Default")))
       (hash-remove! *gnc:_style-sheets_* (gnc:html-style-sheet-name sheet))))
-

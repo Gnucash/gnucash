@@ -190,8 +190,9 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
                                      (void *)http);
 #endif
   ghttp_set_uri(info->request, (char *)uri);
-  ghttp_set_header(info->request, http_hdr_User_Agent, 
-                   "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
+  ghttp_set_header(info->request, http_hdr_User_Agent,
+                   PACKAGE "/" VERSION
+                   " (Financial Browser for Linux; http://gnucash.org)");
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_get);
   ghttp_prepare(info->request);
@@ -227,8 +228,9 @@ gnc_http_start_post(gnc_http * http, const char * uri,
                                      (void *)http);
 #endif
   ghttp_set_uri(info->request, (char *)uri);
-  ghttp_set_header(info->request, http_hdr_User_Agent, 
-                   "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
+  ghttp_set_header(info->request, http_hdr_User_Agent,
+                   PACKAGE "/" VERSION
+                   " (Financial Browser for Linux; http://gnucash.org)");
   ghttp_set_header(info->request, http_hdr_Content_Type, content_type);
   ghttp_set_sync(info->request, ghttp_async);
   ghttp_set_type(info->request, ghttp_type_post);

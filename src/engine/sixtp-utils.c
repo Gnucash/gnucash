@@ -339,6 +339,31 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
 }
 
 
+#ifdef HAVE_TIMEGM
+#  define gnc_timegm timegm
+#else
+static time_t
+gnc_timegm (struct tm *tm)
+{
+  time_t result;
+  char *put_str;
+  char *old_tz;
+
+  old_tz = g_strdup (getenv ("TZ"));
+  putenv ("TZ=UTC");
+
+  result = mktime (tm);
+
+  put_str = g_strdup_printf ("TZ=%s", old_tz ? old_tz : "");
+  putenv (put_str);
+
+  g_free (put_str);
+  g_free (old_tz);
+
+  return result;
+}
+#endif
+
 
 /****************************************************************************/
 /* generic timespec handler.
@@ -355,9 +380,6 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
    the Timespec * and passes it to the children.  The <s> block sets
    the seconds and the <ns> block (if any) sets the nanoseconds.  If
    all goes well, returns the Timespec* as the result.
-
-   This code assumes that the TZ timezone environment variable is set
-   to UTC.
 */
 
 gboolean
@@ -406,7 +428,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
     parsed_time.tm_isdst = -1;
   }
 
-  parsed_secs = mktime(&parsed_time);
+  parsed_secs = gnc_timegm(&parsed_time);
 
   if(parsed_secs == (time_t) -1) return(FALSE);
 

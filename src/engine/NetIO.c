@@ -31,6 +31,7 @@
  * loaded ...
  */
 
+#include "config.h"
 
 #include <ghttp.h>
 #include <glib.h>
@@ -146,8 +147,9 @@ setup_request (XMLBackend *be)
   /* clean is needed to clear out old request bodies, headers, etc. */
   ghttp_clean (request);
   ghttp_set_header (be->request, http_hdr_Connection, "close");
-  ghttp_set_header (be->request, http_hdr_User_Agent, 
-       "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
+  ghttp_set_header (be->request, http_hdr_User_Agent,
+                    PACKAGE "/" VERSION
+                    " (Financial Browser for Linux; http://gnucash.org)");
   ghttp_set_sync (be->request, ghttp_sync);
 
   if (be->auth_cookie) {

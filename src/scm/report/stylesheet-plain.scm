@@ -65,7 +65,7 @@
         (N_ "Table border width") "e" (N_ "Bevel depth on tables")
         0 0 20 0 1))
       options))
-  
+
   (define (plain-renderer options doc)
     (let* ((ssdoc (gnc:make-html-document))
            (opt-val 
@@ -75,14 +75,13 @@
            (bgcolor 
             (gnc:color-option->html
              (gnc:lookup-option options 
-                                (N_ "General")
-                                (N_ "Background Color"))))
-           (bgpixmap (opt-val (N_ "General") (N_ "Background Pixmap")))
-           (links? (opt-val (N_ "General") (N_ "Enable Links")))
-           (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
-           (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
-           (border (opt-val (N_ "Tables") (N_ "Table border width"))))
-      
+                                "General"
+                                "Background Color")))
+           (bgpixmap (opt-val "General" "Background Pixmap"))
+           (links? (opt-val "General" "Enable Links"))
+           (spacing (opt-val "Tables" "Table cell spacing"))
+           (padding (opt-val "Tables" "Table cell padding"))
+           (border (opt-val "Tables" "Table border width")))
 
       (gnc:html-document-set-style! 
        ssdoc "body" 
@@ -93,13 +92,23 @@
           (gnc:html-document-set-style!
            ssdoc "body" 
            'attribute (list "background" bgpixmap)))
-      
+
       (gnc:html-document-set-style!
        ssdoc "table" 
        'attribute (list "border" border)
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
       
+      (gnc:html-document-set-style!
+       ssdoc "number-cell"
+       'tag "td"
+       'attribute (list "align" "right"))
+
+      (gnc:html-document-set-style!
+       ssdoc "number-header"
+       'tag "th"
+       'attribute (list "align" "right"))
+
       ;; don't surround marked-up links with <a> </a>
       (if (not links?)
           (gnc:html-document-set-style!

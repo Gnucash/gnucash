@@ -45,10 +45,7 @@
 
 ;; Just a private scope.
 (let* ((MAX-LEVELS 16)			; Maximum Account Levels
-       (levelx-collector (make-level-collector MAX-LEVELS))
-       (red   "#ff0000")
-       (white "#ffffff")
-       (blue  "#0000ff"))
+       (levelx-collector (make-level-collector MAX-LEVELS)))
 
   ;; This and the next function are the same as in transaction-report.scm
   (define (make-split-list account split-filter-pred)
@@ -85,36 +82,6 @@
                                                                      warn-msg))
                         item))
      (else (gnc:warn warn-msg item " is the wrong type."))))
-
-  ;; make a list of accounts from a group pointer
-  (define (gnc:group-ptr->list group-prt)
-    (if (not group-prt)
-        '()
-        (gnc:group-map-accounts (lambda (x) x) group-prt)))
-
-  ;; some html helpers
-  (define (html-blue html)
-    (if html
-        (string-append  "<font color=\"#0000ff\">"  html "</font>")
-        #f))
-
-  (define (html-red html)
-    (if html
-        (string-append  "<font color=\"#ff0000\">"  html "</font>")
-        #f))
-
-  (define (html-black html)
-    (if html
-        (string-append  "<font color=\"#000000\">"  html "</font>")
-        #f))
-
-  (define (html-table-row-align-color color lst align-list)
-    (if (string? lst)
-        lst
-        lst))
-;      (list "<TR bgcolor=" color ">"
-;	    (map html-table-col-align lst align-list)
-;	    "</TR>")))
 
   ;; a few string functions I couldn't find elsewhere
   (define (string-search string sub-str start)
@@ -401,23 +368,28 @@
 	    #f))))
 
   ;; print txf help strings
-  (define (txf-print-help vect inc)
-    (let* ((form-desc (vector-ref vect 1))
+  (define (txf-print-help table vect inc)
+    (let* ((markup (if inc "income" "expense"))
+           (form-desc (vector-ref vect 1))
 	   (code (symbol->string (vector-ref vect 0)))
 	   (desc-len (string-length form-desc))
 	   (bslash (string-search form-desc "\\" 0))
 	   (form (substring form-desc 0 (+ bslash 2)))
 	   (desc (substring form-desc (+ bslash 2) desc-len))
-	   (form-code-desc (string-append 
-			    "<b>" (string-substitute form "<" "&lt;" 0) "</b>"
-			    code "<br>" desc))
 	   (help (vector-ref vect 2)))
-      (html-table-row-align (if inc
-				(list (html-blue form-code-desc) 
-				      (html-blue help))
-				(list (html-red form-code-desc)
-				      (html-red help)))
-			    (list "left" "left"))))
+      (gnc:html-table-append-row!
+       table
+       (list
+        (gnc:make-html-table-cell
+         (gnc:make-html-text
+          (gnc:html-markup markup
+                           (gnc:html-markup-b form)
+                           code
+                           (gnc:html-markup-br)
+                           desc)))
+         (gnc:make-html-table-cell
+          (gnc:make-html-text
+           (gnc:html-markup markup help)))))))
 
   ;; Set or Reset txf string in account notes. str == #f resets.
   ;; Returns a code that indicates the function executed.
@@ -483,10 +455,10 @@
   ;; containing the function code executed and the txf-string or error message
   (define (txf-function acc txf-inc txf-exp txf-payer)
     (if acc
-	(let ((txf-type (gw:enum-GNCAccountType-val->sym
-			 (gnc:account-get-type acc) #f)))
-	  (if (is-type-income-or-expense? txf-type)
-	      (let* ((str (if (is-type-income? txf-type)
+	(let ((txf-type (gw:enum-<gnc:AccountType>-val->sym
+                         (gnc:account-get-type acc) #f)))
+	  (if (gnc:account-is-inc-exp? acc)
+	      (let* ((str (if (eq? txf-type 'income)
 			      (txf-string txf-inc 
 					  txf-income-catagories)
 			      (txf-string txf-exp 
@@ -578,16 +550,20 @@
           (text (gnc:make-html-text)))
       (if (not (null? dups))
 	  (begin
-            (gnc:html-text-set-style! text 'font-color "#0000ff")
             (gnc:html-document-add-object! doc text)
             (gnc:html-text-append!
              text
              (gnc:html-markup-p
-              (_ "ERROR: There are duplicate TXF codes assigned\
+              (gnc:html-markup
+               "blue"
+               (_ "ERROR: There are duplicate TXF codes assigned\
  to some accounts.  Only TXF codes prefixed with \"&lt;\" or \"^\" may be\
- repeated.")))
+ repeated."))))
             (map (lambda (s)
-                   (gnc:html-text-append! text (gnc:html-markup-p s)))
+                   (gnc:html-text-append!
+                    text
+                    (gnc:html-markup-p
+                     (gnc:html-markup "blue" s))))
                  dups)))))
 
   ;; some codes require special handling
@@ -601,8 +577,8 @@
       (if (and txf?
 	       ;; (not (equal? account-value 0.0)) ; fails, round off, I guess
 	       (not (equal? value (gnc:amount->string 0 print-info))))
-	  (let* ((type (gw:enum-GNCAccountType-val->sym (gnc:account-get-type
-                                                         account) #f))
+	  (let* ((type (gw:enum-<gnc:AccountType>-val->sym
+                        (gnc:account-get-type account) #f))
 		 (code (gnc:account-get-txf-code account))
 		 (date-str (if date
 			       (strftime "%m/%d/%Y" (localtime (car date)))
@@ -615,7 +591,7 @@
 				    (gnc:group-get-parent
 				     (gnc:account-get-parent account)))
 				   (gnc:account-get-name account))) 
-		 (value (if (is-type-income? type) ; negate expenses
+		 (value (if (eq? type 'income) ; negate expenses
 			    value
 			    (string-append 
 			     "$-" (substring value 1 (string-length value)))))
@@ -643,53 +619,43 @@
 	  "")))
 
   ;; Render any level
-  (define (render-level-x-account level max-level account lx-value
+  (define (render-level-x-account table level max-level account lx-value
 				  suppress-0 full-names txf-date)
-    (let* ((indent-1 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-	   (account-name (if txf-date	; special split
+    (let* ((account-name (if txf-date	; special split
 			     (strftime "%Y-%b-%d" (localtime (car txf-date)))
 			     (if (or full-names (equal? level 1))
 				 (gnc:account-get-full-name account)
 				 (gnc:account-get-name account))))
 	   (blue? (gnc:account-get-txf account))
-	   (color white)
 	   (print-info (gnc:account-value-print-info account #f))
 	   (value (gnc:amount->string lx-value print-info))
-	   (value-formatted (if blue?
-				(html-blue value)
-				(html-black value)))
-	   (account-name (do ((i 1 (+ i 1))
-			      (accum (if blue?
-					 (html-blue account-name)
-					 (html-black account-name))
-				     (string-append indent-1 accum)))
-			     ((>= i level) accum)))
-           (nbsp-x-value (if (= max-level level)
-			     (list value-formatted)
-			     (append (vector->list (make-vector
-						    (- max-level level)
-						    "&nbsp;"))
-				     (list value-formatted))))
-	   (align-x (append (list "left")
-	        	    (vector->list
-			     (make-vector (- (+ max-level 1) level)
-					  "right")))))
+	   (value-formatted
+            (gnc:make-html-text
+             (if blue?
+                 (gnc:html-markup "blue" value)
+                 value)))
+	   (account-name (if blue?
+                             (gnc:html-markup "blue" account-name)
+                             account-name))
+           (blank-cells (make-list (- max-level level)
+                                   (gnc:make-html-table-cell #f))))
       (if (and blue? (not txf-date))	; check for duplicate txf codes
 	  (txf-check-dups account))
       ;;(if (not (equal? lx-value 0.0)) ; this fails, round off, I guess
       (if (or (not suppress-0) (= level 1)
               (not (equal? value (gnc:amount->string 0 print-info))))
-	  (html-table-row-align-color 
-	   color 
-	   (append (list account-name) nbsp-x-value) 
-	   align-x)
-	  '())))
-
-  (define (is-type-income-or-expense? type)
-    (member type '(income expense)))
-
-  (define (is-type-income? type)
-    (member type '(income)))
+          (gnc:html-table-append-row!
+           table
+           (append
+            (list
+             (gnc:make-html-table-cell
+              (apply gnc:make-html-text
+                     (append (make-list level "&nbsp;")
+                             (list account-name)))))
+            blank-cells
+            (list
+             (gnc:make-html-table-cell/markup "number-cell"
+                                              value-formatted)))))))
 
   ;; Recursivly validate children if parent is not a tax account.
   ;; Don't check children if parent is valid.
@@ -700,7 +666,7 @@
                              (list a)
                              ;; check children
                              (if (null? (validate
-                                         (gnc:group-ptr->list
+                                         (gnc:group-get-subaccounts
                                           (gnc:account-get-children a))))
                                  '()
                                  (list a))))
@@ -729,7 +695,7 @@
 		       (gnc:account-set-notes a (string-append notes key))))
 	       (if kids			; recurse to all sub accounta
 		   (key-status 
-		    (gnc:group-ptr->list (gnc:account-get-children a))
+		    (gnc:group-get-subaccounts (gnc:account-get-children a))
 		    set key end-key #t))))
 	   accounts)))
 
@@ -772,7 +738,7 @@
 	   ;; If no selected accounts, check all.
 	   (selected-accounts (if (not (null? user-sel-accnts))
 				  valid-user-sel-accnts
-				  (validate (gnc:group-ptr->list
+				  (validate (gnc:group-get-subaccounts
 					     (gnc:get-current-group)))))
 	   (generations (if (pair? selected-accounts)
 			    (apply max (map (lambda (x) (num-generations x 1))
@@ -907,47 +873,42 @@
 				      to-value
 				      tmp-date)))
 		       (if tax-mode
-			   (render-level-x-account lev max-level account
+			   (render-level-x-account table lev max-level account
 						   value suppress-0 #f date #f)
 			   (render-txf-account account value date))))
 		   split-list))
 	    '()))
 
       (define (handle-level-x-account level account)
-	(let ((type (gw:enum-GNCAccountType-val->sym
+	(let ((type (gw:enum-<gnc:AccountType>-val->sym
                      (gnc:account-get-type account) #f))
 	      (name (gnc:account-get-name account)))
-	  (if (is-type-income-or-expense? type)
-	      (let* ((children (gnc:account-get-children account))
-		     (childrens-output (if (not children)
-					   (handle-txf-special-splits 
-					    level account from-value
-					    to-value)
-					   (gnc:group-map-accounts
-					    (lambda (x)
-					      (if (>= max-level (+ 1 level))
-						  (handle-level-x-account
-						   (+ 1 level) x)
-						  '()))
-					    children)))
 
-		     (account-balance (if (gnc:account-get-tax account)
-					  (d-gnc:account-get-balance-interval
-					   account from-value to-value #f)
-					  0))) ; don't add non tax related
+	  (if (gnc:account-is-inc-exp? account)
+	      (let ((children (gnc:account-get-children account))
+                    (account-balance (if (gnc:account-get-tax account)
+                                         (gnc:account-get-balance-interval
+                                          account from-value to-value #f)
+                                         0))) ; don't add non tax related
 
-		(set! account-balance (+ (if (> max-level level)
+                (if (and tax-mode (not children))
+                    (handle-txf-special-splits 
+                     level account from-value to-value))
+
+                (set! account-balance (+ (if (> max-level level)
 					     (lx-collector (+ 1 level)
 							   'total #f)
 					     0)
 					 ;; make positive
-					 (if (is-type-income? type)
-					     (- account-balance )
+					 (if (eq? type 'income)
+					     (- account-balance)
 					     account-balance)))
 		(lx-collector level 'add account-balance)
+
 		(let ((level-x-output
 		       (if tax-mode
-			   (render-level-x-account level max-level account
+			   (render-level-x-account table level
+                                                   max-level account
 						   account-balance
 						   suppress-0 full-names #f)
 			   (render-txf-account account account-balance #f))))
@@ -955,19 +916,13 @@
 		      (lx-collector 1 'reset #f))
 		  (if (> max-level level)
 		      (lx-collector (+ 1 level) 'reset #f))
-		  (if (null? level-x-output)
-		      '()
-		      (if (null? childrens-output)
-			  level-x-output
-			  (if tax-mode
-			      (list level-x-output
-				    childrens-output
-				    (html-table-row (list "&nbsp;")))
-			      (if (not children) ; swap for txf special splt
-				  (list childrens-output level-x-output)
-				  (list level-x-output childrens-output)))))))
-	      ;; Ignore
-	      '())))
+
+                  (if (and tax-mode children)
+                      (gnc:group-map-accounts
+                       (lambda (x)
+                         (if (>= max-level (+ 1 level))
+                             (handle-level-x-account (+ 1 level) x)))
+                       children)))))))
 
       (let* ((tax-stat (get-option tab-title "Set/Reset Tax Status"))
              (txf-acc-lst (get-option "TXF Export Init" "Select Account"))
@@ -987,7 +942,7 @@
                                     (map gnc:account-get-full-name
                                          txf-acc-lst)
                                     '(#f)))
-             (not-used 
+             (not-used
               (case tax-stat
                 ((tax-set)
                  (key-status user-sel-accnts #t tax-key tax-end-key #f))
@@ -1005,8 +960,8 @@
         (set! txf-feedback-str-lst (map txf-feedback-str txf-fun-str-lst
                                         txf-full-name-lst)))
 
-      (let ((from-date (strftime "%Y-%b-%d" (localtime (car from-value))))
-	    (to-date (strftime "%Y-%b-%d" (localtime (car to-value))))
+      (let ((from-date  (strftime "%Y-%b-%d" (localtime (car from-value))))
+	    (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
 	    (today-date (strftime "D%m/%d/%Y" 
 				  (localtime 
 				   (car (gnc:timepair-canonical-day-time
@@ -1022,7 +977,7 @@
           (if (eq? max-level 0)
               '()
               (cons (gnc:make-html-table-header-cell/markup
-                     "<number-header>"
+                     "number-header"
                      "(" (_ "Sub") " " (number->string max-level) ")")
                     (make-sub-headers (- max-level 1)))))
 
@@ -1076,16 +1031,21 @@
 		    (close-output-port port)))))
 
 	(set! tax-mode #t)		; now do tax mode to display report
-;	(set! output (list 
-;		      (if txf-help
-;			  (append (map (lambda (x) (txf-print-help x #t))
-;				       txf-help-catagories)
-;				  (map (lambda (x) (txf-print-help x #t))
-;				       txf-income-catagories)
-;				  (map (lambda (x) (txf-print-help x #f))
-;				       txf-expense-catagories))
-;			  (map (lambda (x) (handle-level-x-account 1 x))
-;			       selected-accounts))))
+
+        (gnc:html-document-set-style! 
+         doc "blue"
+         'tag "font"
+         'attribute (list "color" "#0000ff"))
+
+        (gnc:html-document-set-style! 
+         doc "income"
+         'tag "font"
+         'attribute (list "color" "#0000ff"))
+
+        (gnc:html-document-set-style! 
+         doc "expense"
+         'tag "font"
+         'attribute (list "color" "#ff0000"))
 
         (gnc:html-document-set-title! doc report-title)
 
@@ -1096,37 +1056,40 @@
            (gnc:html-markup/format
             (_ "Period from %s to %s") from-date to-date))))
 
-        (let ((text (gnc:make-html-text)))
-          (gnc:html-text-set-style! text "p" 'font-color blue)
-          (gnc:html-document-add-object! doc text)
-
-          (if tax-mode-in
-              (if (not txf-help)
-                  (gnc:html-text-append!
-                   text
+        (gnc:html-document-add-object!
+         doc
+         (gnc:make-html-text
+          (gnc:html-markup
+           "blue"
+           (if tax-mode-in
+               (if (not txf-help)
                    (gnc:html-markup-p
-                    (_ "Blue items are exportable to a TXF file."))))
-              (gnc:html-text-append!
-               text
+                    (_ "Blue items are exportable to a TXF file."))
+                   "")
                (gnc:html-markup-p
                 (if file-name
                     (gnc:html-markup/format
                      (_ "Blue items were exported to file %s.")
                      (gnc:html-markup-tt file-name))
                     (_ "Blue items were <em>not</em> exported to \
-txf file!")))))
+txf file!")))))))
 
-          (if (not txf-help)
-              (map (lambda (s)
-                     (gnc:html-text-append! text (gnc:html-markup-p s)))
-                   txf-feedback-str-lst)))
+        (if (not txf-help)
+            (map (lambda (s)
+                   (gnc:html-document-add-object!
+                    doc
+                    (gnc:make-html-text
+                     (gnc:html-markup "blue" (gnc:html-markup-p s)))))
+                 txf-feedback-str-lst))
 
         (txf-print-dups doc)
 
         (gnc:html-document-add-object! doc table)
 
         (if txf-help
-            (gnc:html-table-set-style! 'attribute (list "border" "1")))
+            (gnc:html-document-set-style! doc
+                                          "table"
+                                          'attribute (list "border" "1")))
 
         (if txf-help
             (gnc:html-table-append-row!
@@ -1134,13 +1097,15 @@ txf file!")))))
              (list
               (gnc:make-html-table-header-cell
                (_ "Tax Form \\ TXF Code")
-               (gnc:html-markup-br)
+               (gnc:make-html-text (gnc:html-markup-br))
                (_ "Description"))
-              (gnc:make-html-table-header-cell "")
               (gnc:make-html-table-header-cell
                (_ "Extended TXF Help messages") " "
-               (html-blue "Income") " "
-               (html-red "Expense"))))
+               (gnc:make-html-text
+                (gnc:html-markup "income" (_ "Income")))
+               " "
+               (gnc:make-html-text
+                (gnc:html-markup "expense" (_ "Expense"))))))
             (gnc:html-table-append-row!
              table
              (append
@@ -1150,19 +1115,27 @@ txf file!")))))
               (make-sub-headers max-level)
               (list
                (gnc:make-html-table-header-cell/markup
-                "<number-header>" (_ "Total"))))))
+                "number-header" (_ "Total"))))))
+
+        (if txf-help
+            (begin
+              (map (lambda (x) (txf-print-help table x #t))
+                   txf-help-catagories)
+              (map (lambda (x) (txf-print-help table x #t))
+                   txf-income-catagories)
+              (map (lambda (x) (txf-print-help table x #f))
+                   txf-expense-catagories))
+            (map (lambda (x) (handle-level-x-account 1 x))
+                 selected-accounts))
 
         (if (null? selected-accounts)
-            #f)
+            (gnc:html-document-add-object!
+             doc
+             (gnc:make-html-text
+              (gnc:html-markup-p
+               (_ "No Tax Related accounts were found. \
+Go the the Tax Information dialog to set up tax-related accounts.")))))
 
-        (list
-	 (if (null? selected-accounts)
-	     (string-append
-              "<p><b>"
-              (_ "No Tax Related accounts were found. Click \
-\"Parameters\" to set some  with the \"Set/Reset Tax Status:\" parameter.")
-              "</b></p>\n")
-	     " "))
         doc)))
 
   ;; copy help strings to category structures.

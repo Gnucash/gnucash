@@ -628,5 +628,3 @@
     (push (gnc:html-document-markup-end doc "table"))
     (gnc:html-document-pop-style doc)
     retval))
-
-
