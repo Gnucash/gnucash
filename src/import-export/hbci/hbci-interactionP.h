@@ -77,6 +77,8 @@ struct _inter_data
   /* The cached PIN and the HBCI_User it's cached for. */
   char *pw;
   const HBCI_User *user;
+  /* Whether this PIN is really valid or not. */
+  gboolean cache_valid;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);

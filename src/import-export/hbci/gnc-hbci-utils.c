@@ -425,6 +425,7 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
     return FALSE;
   }
 
+  GNCInteractor_set_cache_valid (inter, TRUE);
   if (resultcode <= 20) {
     HBCI_Error_delete (err);
     return TRUE;
