@@ -59,3 +59,4 @@
 		#define QUERYCORE_NUMERIC QOF_QUERYCORE_NUMERIC
 
 		#define QueryAccess QofQueryAccess
+		#define gncQueryCoreToString qof_query_core_to_string
