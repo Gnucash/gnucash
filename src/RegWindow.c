@@ -1319,35 +1319,36 @@ regSaveTransaction( RegWindow *regData, int position )
   
     /* if a transfer account exists, and we are not trying to transfer
      * from ourself to ourself, then proceed, otheriwse ignore. */
-    /* hack alert -- should put up a popup warning if user tries 
-     * to transfer from & to the same account -- the two must differ! */
-    if (xfer_acct && (
-         ((1 <  regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
-      || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) )) {
+    if (xfer_acct) {
+      if (((1 < regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
+      || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) ) {
       
-      /* for a new transaction, the default will be that the
-       * transfer occurs from the debited account */
-      if( regData->changed & MOD_NEW) {
-         trans->debit = (struct _account *)xfer_acct;
-      }
-
-      /* for a general ledger, the transfer *must* occur 
-       * from the debited account. */
-      if ( (GEN_LEDGER == regData->type) ||
-           (INC_LEDGER == regData->type) ||
-           (PORTFOLIO  == regData->type) ) {
-         trans->debit = (struct _account *)xfer_acct;
-      }
-
-      /* for non-new transactions, the transfer may be from the
-       * debited or the credited account.  Which one it was depends
-       * entirely on which account pointer is null after the 
-       * removal of the old entry.  The insertTransaction()
-       * subroutine will find the null slot, and will insert 
-       * into it automatically. */
-
-      /* insert the transaction into the transfer account */
-      insertTransaction (xfer_acct, trans);
+        /* for a new transaction, the default will be that the
+         * transfer occurs from the debited account */
+        if( regData->changed & MOD_NEW) {
+           trans->debit = (struct _account *)xfer_acct;
+        }
+  
+        /* for a general ledger, the transfer *must* occur 
+         * from the debited account. */
+        if ( (GEN_LEDGER == regData->type) ||
+             (INC_LEDGER == regData->type) ||
+             (PORTFOLIO  == regData->type) ) {
+           trans->debit = (struct _account *)xfer_acct;
+        }
+  
+        /* for non-new transactions, the transfer may be from the
+         * debited or the credited account.  Which one it was depends
+         * entirely on which account pointer is null after the 
+         * removal of the old entry.  The insertTransaction()
+         * subroutine will find the null slot, and will insert 
+         * into it automatically. */
+  
+        /* insert the transaction into the transfer account */
+        insertTransaction (xfer_acct, trans);
+        } else {
+           errorBox (toplevel, XFER_SAME_MSG);
+        }
       }
     }
 
@@ -1370,14 +1371,23 @@ regSaveTransaction( RegWindow *regData, int position )
     xfer_acct = xaccGetAccountFromName (topgroup, name);
 
     if (xfer_acct) {
-      /* for a ledger, the transfer-to account is always the credited
-       * account. */
-      trans->credit = (struct _account *)xfer_acct;
-
-      /* insert the transaction into the transfer account */
-      insertTransaction (xfer_acct, trans);
+      if (xfer_acct != ((Account *) (trans->debit))) {
+        /* for a ledger, the transfer-to account is always 
+         * the credited account. */
+        if (NULL != trans->credit) {
+           printf ("Internal Error: regSaveTransaction(): ");
+           printf ("the credited account is not null. \n");
+           printf (" was 0x%x will be 0x%x \n", trans->credit, xfer_acct);
+        }
+        trans->credit = (struct _account *)xfer_acct;
+  
+        /* insert the transaction into the transfer account */
+        insertTransaction (xfer_acct, trans);
+      } else {
+        errorBox (toplevel, XFER_SAME_MSG);
       }
     }
+  }
   
   if( regData->changed & MOD_NUM )
     {
