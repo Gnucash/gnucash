@@ -1,3 +1,11 @@
+2003-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/main.scm:
+	* src/scm/command-line.scm:
+	  Add a flag to make it easier to turn on and off the various debug
+	  messages (except the tip-list, which needs to be done manually).
+	* src/scm/tip-list.scm: change the 'development' message
+
 2003-02-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is

@@ -100,6 +100,15 @@
 
 ;;(use-modules (ice-9 statprof))
 
+;;
+;; A flag: is this a development version?  This will flag whether or not
+;; to print out various 'development version' strings throughout the code.
+;; #t == development version, #f == stable version
+;;
+;; NOTE: You still need to comment out the message in tip-list.scm by hand!
+;;
+(define gnc:*is-development-version?* #t)
+
 ;; A list of things to do when in batch mode after the initial
 ;; startup.  List items may be strings, in which case they're read and
 ;; evaluated or procedures, in which case they're just executed.
@@ -337,15 +346,17 @@ string and 'directories' must be a list of strings."
             (loop prefixes (cdr dirs))))))
 
 (define (gnc:print-unstable-message)
-  (display
-   (string-append
-    "\n\n"
-    (_ "This is a development version. It may or may not work.\n")
-    (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
-    (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-    (_ "The last stable version was ") "GnuCash 1.8.0" "\n"
-    (_ "The next stable version will be ") "GnuCash 2.0"
-    "\n\n")))
+  (if
+   gnc:*is-development-version?*
+   (display
+    (string-append
+     "\n\n"
+     (_ "This is a development version. It may or may not work.\n")
+     (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
+     (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
+     (_ "The last stable version was ") "GnuCash 1.8.0" "\n"
+     (_ "The next stable version will be ") "GnuCash 2.0"
+     "\n\n"))))
 
 (define (gnc:startup-pass-1)
   (gnc:debug "starting up (1).")
