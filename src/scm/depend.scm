@@ -26,7 +26,7 @@
 
 (define (gnc:depend name)
   (let ((supported? (hash-ref gnc:*_supported-files_* name))
-        (time-load? #t))
+        (time-load? #f))
     (if supported?
         #t
         (if time-load? 

@@ -1,3 +1,10 @@
+2001-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/depend.scm: disable load time output
+
+	* src/scm/commodity-utilities.scm: use srfi-1 to get the
+	right 'last'.
+
 2001-07-04  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/gnome/glade/.cvsignore: create and add Makefile and
