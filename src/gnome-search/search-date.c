@@ -284,6 +284,10 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
 
+  /* Make sure we actually use the currently-entered date */
+  if (fi->priv->entry)
+    fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (fi->priv->entry));
+
   return gncQueryDatePredicate (fi->how, DATE_MATCH_NORMAL, fi->ts);
 }
 

@@ -6,6 +6,10 @@
 	  funds, but the logic for that can be added later.  This fixes
 	  bug #109641.
 
+	* src/gnome-search/search-date.c: Evaluate the date during
+	  get_predicate() in case the user just "hit return" (and the
+	  auto-evaluate didn't happen).  Fixes bug #106444.
+	
 2003-04-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-report/transactions.scm: symbols are not
