@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-10-10 02:40-0700\n"
-"PO-Revision-Date: 2000-10-08 09:20+0100\n"
+"PO-Revision-Date: 2000-10-22 10:35+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH  <FR@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid ""
 "The GNU way to manage your money!"
 msgstr ""
 "Le gestionnaire de finances personnelles GnuCash.\n"
-"La voie GNUeveau pour gérer votre argent!"
+"La voie GNU pour gérer votre argent!"
 
 # messages-i18n.c:12
 #: messages-i18n.c:12
@@ -936,9 +936,8 @@ msgstr "Entrez le cours du titre"
 
 # messages-i18n.c:127
 #: messages-i18n.c:146
-#, fuzzy
 msgid "Enter the number of shares bought or sold"
-msgstr "Entrez le nombre de titres vendus"
+msgstr "Entrez le nombre de titres achetés ou vendus"
 
 # messages-i18n.c:128
 #: messages-i18n.c:147
@@ -2752,6 +2751,9 @@ msgid ""
 "You should back up your files regularly.  Just copy\n"
 "the GnuCash .xac file to a floppy or other backup device.\n"
 msgstr ""
+"Vous devriez sauvegarder vos fichiers régulièrement. Copiez\n"
+"juste le fichier .xac de Gnucash vers une disquette ou tous\n"
+"autres périphériques de sauvegarde.\n"
 
 # po/guile_strings.txt:69
 #: po/guile_strings.txt:93
@@ -2813,7 +2815,7 @@ msgstr "Europe continentale: jj.mm.aaaa"
 
 #: po/guile_strings.txt:105
 msgid "Confirm before changing reconciled"
-msgstr ""
+msgstr "Confirmer avant de changer le rapprochement"
 
 #: po/guile_strings.txt:106
 msgid "The font used to show hints in the register"
@@ -2840,6 +2842,10 @@ msgid ""
 "If you are looking for a stable personal finance application,\n"
 "you should use the latest release of GnuCash 1.4.\n"
 msgstr ""
+"Attention!! C'est une version de DEVELOPPEMENT de Gnucash.\n"
+"Elle a probablement beaucoup de bugs et de fonctions instables!\n"
+"Si vous recherchez une application de finances personnelles stable,\n"
+"vous devriez utiliser la dernière version de Gnucash 1.4.\n"
 
 # po/guile_strings.txt:80
 #: po/guile_strings.txt:115
@@ -2936,6 +2942,8 @@ msgid ""
 "GnuCash does not use categories like Quicken does.\n"
 "Instead, you should use Income and Expense accounts.\n"
 msgstr ""
+"Gnucash n'utilise pas les catégories comme Quicken le fait.\n"
+"A la place, vous devrez utiliser des comptes de Revenus et Dépenses.\n"
 
 # po/guile_strings.txt:93
 #: po/guile_strings.txt:135
@@ -3028,7 +3036,7 @@ msgstr "Trier par heure exacte entrée"
 
 #: po/guile_strings.txt:158
 msgid "Use accounting labels"
-msgstr "Utiliser les étiquetttes de comptabilité"
+msgstr "Utiliser les étiquettes de comptabilité"
 
 # po/guile_strings.txt:110
 #: po/guile_strings.txt:159
@@ -3156,6 +3164,8 @@ msgstr "Suivi du solde du compte"
 msgid ""
 "If selected, use a dialog to confirm a change to a reconciled transaction."
 msgstr ""
+"Si sélectionné, utilise une boite de dialogue pour confirmer un changement\n"
+"dans une transaction rapprochée."
 
 # po/guile_strings.txt:127
 #: po/guile_strings.txt:189
@@ -3404,6 +3414,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information.\n"
 "You can access the manual under the Help menu.\n"
 msgstr ""
+"Le manuel en ligne de Gnucash a beaucoup d'informations utiles.\n"
+"Vous pouvez accéder au manuel par le menu Aide.\n"
 
 # po/guile_strings.txt:169
 #: po/guile_strings.txt:248
@@ -3436,6 +3448,10 @@ msgid ""
 "You can also press Tab and Shift-Tab to move between\n"
 "deposits and withdrawals.\n"
 msgstr ""
+"Dans la fenêtre rapprochement, vous pouvez appuyez sur la\n"
+"barre d'espace pour marquer les transactions comme rapprochées.\n"
+"Vous pouvez aussi appuyez sur Tab et Shift-Tab pour vous\n"
+"déplacez entre les dépots et retraits.\n" 
 
 # po/guile_strings.txt:173
 #: po/guile_strings.txt:259 src/gnome/glade-gnc-dialogs.c:2036
@@ -3528,6 +3544,10 @@ msgid ""
 "press '+' to enter the next number. You can use '+'\n"
 "and '-' to increment and decrement the number, respectively.\n"
 msgstr ""
+"Quand vous entrez les numéros de chèques dans le registre, vous\n"
+"pouvez appuyez sur '+' pour entrer le prochain numéro.Vous pouvez\n"
+"utiliser '+' et '-' respectivement pour incrémenter et décrémenter le\n"
+"numéro.\n"
 
 # po/guile_strings.txt:189
 #: po/guile_strings.txt:285
@@ -4013,17 +4033,15 @@ msgid "One Year Ago"
 msgstr "Il y a 1 an"
 
 #: po/guile_strings.txt:388
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you need an intermediate currency trading account.\n"
 "Please see the GnuCash online manual for details\n"
 msgstr ""
-"Vous ne pouvez pas transférer des fonds depuis le compte %s.\n"
-"Il n'a pas la monnaie correspondante.\n"
 "Pour transférer des fonds entre comptes avec différentes monnaies\n"
 "vous avez besoin d'un compte de monnaie intermédiaire.\n"
-"S'il vous plait regardez le manuel en ligne de Gnucash"
+"S'il vous plait regardez le manuel en ligne de Gnucash\n"
+"pour plus de détails\n"
 
 # po/guile_strings.txt:261
 #: po/guile_strings.txt:392
@@ -4228,9 +4246,8 @@ msgstr "Revenus et dépenses"
 
 # messages-i18n.c:96
 #: po/guile_strings.txt:433
-#, fuzzy
 msgid "Display negative amounts in red"
-msgstr "Afficher le montant?"
+msgstr "Afficher montants négatifs en rouge"
 
 # po/guile_strings.txt:296
 #: po/guile_strings.txt:434
@@ -4270,9 +4287,8 @@ msgstr "Vous devez entrer les valeurs des autres quantitées."
 
 # messages-i18n.c:13
 #: src/gnome/dialog-fincalc.c:322
-#, fuzzy
 msgid "You must enter a valid expression."
-msgstr "Vous devez choisir un compte parent valide."
+msgstr "Vous devez entrer une expression valide."
 
 #: src/gnome/dialog-fincalc.c:371
 msgid "The interest rate cannot be zero."
@@ -4284,7 +4300,7 @@ msgstr "Le nombre de paiements ne peut être zéro"
 
 #: src/gnome/dialog-progress.c:331 src/gnome/dialog-progress.c:334
 msgid "Complete"
-msgstr ""
+msgstr "Terminé"
 
 # src/gnome/dialog-qif-import.c:221
 #: src/gnome/dialog-qif-import.c:190
@@ -5070,15 +5086,13 @@ msgstr "Composé continu"
 
 # messages-i18n.c:312
 #: src/gnome/glade-gnc-dialogs.c:3717
-#, fuzzy
 msgid "Payment Total:"
-msgstr "Paiements:"
+msgstr "Total paiement:"
 
 # messages-i18n.c:344
 #: src/gnome/glade-gnc-dialogs.c:3725
-#, fuzzy
 msgid "total"
-msgstr "Total"
+msgstr "total"
 
 # messages-i18n.c:210
 #: src/gnome/glade-gnc-dialogs.c:3797
@@ -5116,19 +5130,17 @@ msgstr "La source des cours des actions:"
 
 # messages-i18n.c:307 po/guile_strings.txt:148
 #: src/gnome/glade-gnc-dialogs.c:4355
-#, fuzzy
 msgid "Num:"
-msgstr "Num"
+msgstr "Num:"
 
 #: src/gnome/glade-gnc-dialogs.c:4544
 msgid "Working..."
-msgstr ""
+msgstr "Travaille..."
 
 # po/guile_strings.txt:212
 #: src/gnome/glade-gnc-dialogs.c:4556
-#, fuzzy
 msgid "Heading"
-msgstr "Ascendant"
+msgstr "En-tête/Titre"
 
 # src/gnome/print-session.c:230
 #: src/gnome/print-session.c:245
@@ -5155,12 +5167,11 @@ msgstr ""
 
 # messages-i18n.c:48
 #: src/SplitLedger.c:3755
-#, fuzzy
 msgid ""
 "You are about to change a reconciled transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Vous êtes sur le point d'écraser une transaction existante.\n"
+"Vous êtes sur le point de changer une transaction rapprochée.\n"
 "Etes-vous sûr de vouloir faire celà?"
 
 #~ msgid "Schedule"
