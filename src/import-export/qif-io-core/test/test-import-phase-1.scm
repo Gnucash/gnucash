@@ -14,7 +14,10 @@
   (gnc:module-load "gnucash/qif-io/core" 0)
   
   (let ((qiffile (qif-io:make-empty-file))
-        (acct-table (qif-io:make-empty-acct-table)))
+        (acct-table (qif-io:make-empty-acct-table))
+        (com-table (gnc:commodity-table-new)))
+
+    (gnc:engine-commodity-table-construct com-table)
 
     ;; read the file and look at data formats. we need to do this
     ;; immediately when loading a file.
@@ -36,9 +39,8 @@
     (if (qif-io:file-xtns-need-acct? qiffile)
         (qif-io:file-set-default-src-acct! qiffile filename))
 
-    (let ((commodity 
-           (gnc:commodity-table-lookup 
-            (gnc:engine-commodities) "ISO4217" "USD")))
+    (let ((commodity (gnc:commodity-table-lookup com-table "ISO4217" "USD")))
+
       ;; import the bank transactions 
       (for-each 
        (lambda (xtn)
@@ -50,7 +52,7 @@
        (lambda (xtn)
          (qif-io:invst-xtn-import xtn qiffile acct-table commodity))
        (qif-io:file-invst-xtns qiffile))
-      
+
       ;; build a gnucash account group
       (let ((group (qif-io:acct-table-make-gnc-group 
                     acct-table qiffile commodity)))
@@ -108,6 +110,3 @@
     (if all-pass
         (exit 0)
         (exit -1))))
-
-  
-  

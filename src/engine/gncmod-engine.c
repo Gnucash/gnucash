@@ -45,12 +45,6 @@ gnc_module_init(int refcount)
   gh_eval_str("(use-modules (gnucash engine))");
   gh_eval_str("(use-modules (g-wrapped gw-engine))");
 
-  if(refcount == 0)
-  {
-    /* and set up the gnc-commodity stuff */
-    gh_eval_str("(gnc:load-iso-4217-currencies)");
-    gh_eval_str("(gnc:setup-default-namespaces)");
-  }
   return TRUE;
 }
 

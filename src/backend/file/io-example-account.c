@@ -53,26 +53,6 @@
 #define GNC_ACCOUNT_LONG "gnc-act:long-description"
 #define GNC_ACCOUNT_TITLE "gnc-act:title"
 
-GncExampleAccount*
-gnc_create_example_account(AccountGroup *grp,
-                           const char *title,
-                           const char *filename,
-                           const char *short_descrip,
-                           const char *long_descrip)
-{
-    GncExampleAccount *ret;
-
-    ret = g_new0(GncExampleAccount, 1);
-
-    ret->title = g_strdup(title);
-    ret->filename = g_strdup(filename);
-    ret->group = grp;
-    ret->short_description = g_strdup(short_descrip);
-    ret->long_description = g_strdup(long_descrip);
-
-    return ret;
-}
-
 void
 gnc_destroy_example_account(GncExampleAccount *gea)
 {
@@ -108,6 +88,48 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 }
 
 static void
+clear_up_account_commodity_session(
+    GNCSession *session, Account *act,
+    gnc_commodity * (*getter) (Account *account, GNCSession *session),
+    void (*setter) (Account *account, gnc_commodity *comm,
+                    GNCSession *session))
+{
+    gnc_commodity_table *tbl;
+    gnc_commodity *gcom;
+    gnc_commodity *com;
+
+    tbl = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+    com = getter (act, session);
+    if(!com)
+    {
+        return;
+    }
+
+    g_return_if_fail (tbl != NULL);
+
+    gcom = gnc_commodity_table_lookup(tbl,
+                                      gnc_commodity_get_namespace(com),
+                                      gnc_commodity_get_mnemonic(com));
+
+    if(gcom == com)
+    {
+        return;
+    }
+    else if(!gcom)
+    {
+        g_warning("unable to find global commodity for %s adding new",
+                  gnc_commodity_get_unique_name(com));
+        gnc_commodity_table_insert(tbl, com);
+    }
+    else
+    {
+        gnc_commodity_destroy(com);
+        setter(act, gcom, session);
+    }
+}
+
+static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
     gnc_commodity * (*getter) (Account *account),
@@ -120,8 +142,11 @@ clear_up_account_commodity(
     {
         return;
     }
-    
-    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
+
+    g_return_if_fail (tbl != NULL);
+
+    gcom = gnc_commodity_table_lookup(tbl,
+                                      gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
 
     if(gcom == com)
@@ -144,16 +169,24 @@ clear_up_account_commodity(
 static void
 add_account_local(GncExampleAccount *gea, Account *act)
 {
-    clear_up_account_commodity(gnc_engine_commodities(), act,
-                               DxaccAccountGetCurrency, DxaccAccountSetCurrency);
-    clear_up_account_commodity(gnc_engine_commodities(), act,
-                               DxaccAccountGetSecurity, DxaccAccountSetSecurity);
-    clear_up_account_commodity(gnc_engine_commodities(), act,
-                               xaccAccountGetCommodity, xaccAccountSetCommodity);
+    gnc_commodity_table *table;
 
-    xaccAccountScrubCommodity (act);
+    table = gnc_book_get_commodity_table (gnc_session_get_book (gea->session));
 
-    if(!xaccAccountGetParent(act))
+    clear_up_account_commodity_session(gea->session, act,
+                                       DxaccAccountGetCurrency,
+                                       DxaccAccountSetCurrency);
+    clear_up_account_commodity_session(gea->session, act,
+                                       DxaccAccountGetSecurity,
+                                       DxaccAccountSetSecurity);
+
+    clear_up_account_commodity(table, act,
+                               xaccAccountGetCommodity,
+                               xaccAccountSetCommodity);
+
+    xaccAccountScrubCommodity (act, gea->session);
+
+    if (!xaccAccountGetParent(act))
     {
         xaccGroupInsertAccount(gea->group, act);
     }
@@ -205,7 +238,7 @@ gnc_short_descrip_end_handler(gpointer data_for_children,
                               gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->data;
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->short_description = grab_clean_string((xmlNodePtr)data_for_children);
     
@@ -225,7 +258,7 @@ gnc_long_descrip_end_handler(gpointer data_for_children,
                              gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->data;
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->long_description = grab_clean_string((xmlNodePtr)data_for_children);
     
@@ -245,7 +278,7 @@ gnc_title_end_handler(gpointer data_for_children,
                              gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->data;
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->title = grab_clean_string((xmlNodePtr)data_for_children);
     
@@ -260,17 +293,20 @@ gnc_titse_sixtp_parser_create(void)
 
 
 GncExampleAccount*
-gnc_read_example_account(const gchar *filename)
+gnc_read_example_account(GNCSession *session, const gchar *filename)
 {
     GncExampleAccount *gea;
     sixtp *top_parser;
     sixtp *main_parser;
-    
+
+    g_return_val_if_fail (session != NULL, NULL);
+
     gea = g_new0(GncExampleAccount, 1);
 
+    gea->session = session;
     gea->filename = g_strdup(filename);
     gea->group = xaccMallocAccountGroup();
-    
+
     top_parser = sixtp_new();
     main_parser = sixtp_new();
 
@@ -293,7 +329,8 @@ gnc_read_example_account(const gchar *filename)
         return FALSE;
     }
 
-    if(!gnc_xml_parse_file(top_parser, filename, generic_callback, gea))
+    if(!gnc_xml_parse_file(top_parser, filename,
+                           generic_callback, gea, session))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
@@ -380,7 +417,7 @@ is_directory(const gchar *filename)
 }
     
 GSList*
-gnc_load_example_account_list(const char *dirname)
+gnc_load_example_account_list(GNCSession *session, const char *dirname)
 {
     GSList *ret;
     DIR *dir;
@@ -403,7 +440,7 @@ gnc_load_example_account_list(const char *dirname)
 
         if(!is_directory(filename))
         {
-            gea = gnc_read_example_account(filename);
+            gea = gnc_read_example_account(session, filename);
 
             if(gea == NULL)
             {

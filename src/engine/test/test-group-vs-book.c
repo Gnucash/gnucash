@@ -1,9 +1,11 @@
 
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "GNCIdP.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
+#include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -37,13 +39,16 @@ group_has_book (AccountGroup *group, GNCBook *book)
 static void
 run_test (void)
 {
+  GNCSession *session;
   AccountGroup *group1;
   AccountGroup *group2;
   Account *account1;
   Account *account2;
   GNCBook *book;
 
-  group1 = get_random_group ();
+  session = gnc_session_new ();
+
+  group1 = get_random_group (session);
   if(!group1)
   {
     failure("group1 not created");
@@ -70,7 +75,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  group2 = get_random_group ();
+  group2 = get_random_group (session);
   if(!group2)
   {
     failure("group2 not created");
@@ -91,7 +96,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  account1 = get_random_account ();
+  account1 = get_random_account (session);
   if(!account1)
   {
     failure("account1 not created");
@@ -105,7 +110,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  account2 = get_random_account ();
+  account2 = get_random_account (session);
   if(!account2)
   {
     failure("account2 not created");
@@ -133,12 +138,12 @@ run_test (void)
   }
 }
 
-int
-main (int argc, char **argv)
+static void
+main_helper (int argc, char **argv)
 {
   int i;
 
-  gnc_engine_init (argc, argv);
+  gnc_module_load("gnucash/engine", 0);
 
   for (i = 0; i < 10; i++)
     run_test ();
@@ -146,4 +151,11 @@ main (int argc, char **argv)
   success ("group/book stuff seems to work");
   print_test_results();
   exit(get_rv());
+}
+
+int
+main (int argc, char **argv)
+{
+  gh_enter (argc, argv, main_helper);
+  return 0;
 }

@@ -1071,10 +1071,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
-    page->commodity = gnc_commodity_table_insert(gnc_engine_commodities(),
+    page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
   }
-  
+
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
   retval = gh_apply(qif_to_gnc, 
@@ -1311,7 +1311,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   }
 
   if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0 &&
-      !gnc_commodity_table_lookup (gnc_engine_commodities (),
+      !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    namespace, mnemonic))
   {
     gnc_warning_dialog_parented(wind->window,

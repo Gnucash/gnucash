@@ -264,7 +264,8 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
    xaccAccountSetCommodity(acc, 
-                 gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
+                           gnc_string_to_commodity (DB_GET_VAL("commodity",j),
+                                                    be->session));
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 

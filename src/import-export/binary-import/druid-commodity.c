@@ -91,10 +91,11 @@ static void gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page,
 
 
 void
-gnc_import_legacy_commodities(const char * filename) {
+gnc_import_legacy_commodities(const char * filename)
+{
   CommodityDruid * d;
 
-  if (!gnc_commodity_table_has_namespace (gnc_engine_commodities (),
+  if (!gnc_commodity_table_has_namespace (gnc_get_current_commodities (),
                                           GNC_COMMODITY_NS_LEGACY))
     return;
 
@@ -166,7 +167,7 @@ gnc_ui_commodity_druid_create(const char * filename) {
   d->new_map = g_hash_table_new(g_str_hash, g_str_equal);
   d->old_map = g_hash_table_new(g_str_hash, g_str_equal);
   orphans = 
-    gnc_commodity_table_get_commodities(gnc_engine_commodities(),
+    gnc_commodity_table_get_commodities(gnc_get_current_commodities(),
                                         GNC_COMMODITY_NS_LEGACY);
 
   /* make a new list with the (saved) old mnemonic and the 
@@ -176,7 +177,7 @@ gnc_ui_commodity_druid_create(const char * filename) {
     
     /* if the mnemonic is an ISO-4217 currency, use that as 
      * the default */
-    found = gnc_commodity_table_lookup(gnc_engine_commodities(),
+    found = gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                        GNC_COMMODITY_NS_ISO,
                                        gnc_commodity_get_mnemonic(lost));
 
@@ -346,7 +347,7 @@ gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {
   CommodityDruidPage * cdp;
 
   /* remove the old commodities no matter how we exit */
-  gnc_commodity_table_delete_namespace(gnc_engine_commodities(),
+  gnc_commodity_table_delete_namespace(gnc_get_current_commodities(),
                                        GNC_COMMODITY_NS_LEGACY);
 
   for(p=cd->pages; p; p=p->next) {
@@ -415,7 +416,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   }
 
   if (safe_strcmp (new_type, GNC_COMMODITY_NS_ISO) == 0 &&
-      !gnc_commodity_table_lookup (gnc_engine_commodities (),
+      !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    new_type, new_mnemonic))
   {
     gnc_warning_dialog_parented(cd->window,
@@ -451,7 +452,7 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
 
   /* key is the old mnemonic, value is a pointer to the gnc_commodity 
    * structure. */
-  comm = gnc_commodity_table_insert(gnc_engine_commodities(), comm);
+  comm = gnc_commodity_table_insert(gnc_get_current_commodities(), comm);
 
   /* s/old commodity/new commodity/g  in the pricedb */
   gnc_pricedb_substitute_commodity(gnc_book_get_pricedb(book),
@@ -461,19 +462,26 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
   /* now replace all the accounts using old_comm with new_comm */
   accts = xaccGroupGetSubAccounts(gnc_get_current_group ());
 
-  for(node = accts; node; node = node->next) {
+  for(node = accts; node; node = node->next)
+  {
     Account *account = node->data;
+    GNCSession *session;
+
+    session = gnc_get_current_session ();
 
     xaccAccountBeginEdit(account);
-    if(gnc_commodity_equiv(DxaccAccountGetCurrency(account), old_comm)) {
-      DxaccAccountSetCurrency(account, comm);
-    }
-    if(gnc_commodity_equiv(DxaccAccountGetSecurity(account), old_comm)) {
-      DxaccAccountSetSecurity(account, comm);
-    }
-    if(gnc_commodity_equiv(xaccAccountGetCommodity(account), old_comm)) {
+
+    if (gnc_commodity_equiv (DxaccAccountGetCurrency(account, session),
+                             old_comm))
+      DxaccAccountSetCurrency (account, comm, session);
+
+    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account, session),
+                             old_comm))
+      DxaccAccountSetSecurity(account, comm, session);
+
+    if (gnc_commodity_equiv (xaccAccountGetCommodity(account), old_comm))
       xaccAccountSetCommodity(account, comm);
-    }
+
     xaccAccountCommitEdit(account);    
   }
 
@@ -491,7 +499,8 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
 
   /* Fix account and transaction commodities */
-  xaccGroupScrubCommodities (gnc_get_current_group ());
+  xaccGroupScrubCommodities (gnc_get_current_group (),
+                             gnc_get_current_session ());
 
   /* Fix split amount/value */
   xaccGroupScrubSplits (gnc_get_current_group ());

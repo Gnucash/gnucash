@@ -46,33 +46,34 @@
 #include "io-gncxml.h"
 
 #include "sixtp.h"
+#include "sixtp-dom-parsers.h"
 #include "sixtp-stack.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 
 /* from Transaction-xml-parser-v1.c */
-sixtp* gnc_transaction_parser_new(void);
+static sixtp* gnc_transaction_parser_new(void);
 
 /* from Account-xml-parser-v1.c */
-sixtp* gnc_account_parser_new(void);
+static sixtp* gnc_account_parser_new(void);
 
 /* from Ledger-xml-parser-v1.c */
-sixtp* ledger_data_parser_new(void);
+static sixtp* ledger_data_parser_new(void);
 
 /* from Commodity-xml-parser-v1.c */
-sixtp* commodity_restore_parser_new(void);
+static sixtp* commodity_restore_parser_new(void);
 
 /* from Commodity-xml-parser-v1.c */
-sixtp* generic_gnc_commodity_lookup_parser_new(void);
+static sixtp* generic_gnc_commodity_lookup_parser_new(void);
 
 /* from Query-xml-parser-v1.c */
-sixtp* query_server_parser_new (void);
+static sixtp* query_server_parser_new (void);
 
 /* from sixtp-kvp-parser.c */
-sixtp* kvp_frame_parser_new(void);
+static sixtp* kvp_frame_parser_new(void);
 
 /* from gnc-pricedb-xml-v1.c */
-sixtp* gnc_pricedb_parser_new(void);
+static sixtp* gnc_pricedb_parser_new(void);
 
 
 typedef enum {
@@ -89,6 +90,9 @@ typedef struct {
      after we see the file version. */
   sixtp *gnc_parser;
 
+  /* The session */
+  GNCSession *session;
+
   /* The account group */
   AccountGroup *account_group;
 
@@ -97,9 +101,10 @@ typedef struct {
 
   /* The query */
   Query *query;
-  
+
   GNCParseErr error;
 } GNCParseStatus;
+
 
 /* result for a characters handler is shared across all character
    handlers for a given node.  result for start/end pair is shared as
@@ -352,6 +357,8 @@ gnc_session_load_from_xml_file(GNCSession *session)
   const gchar *filename;
   GNCBook *book;
 
+  global_parse_status.session = session;
+
   book = gnc_session_get_book (session);
 
   g_return_val_if_fail(session, FALSE);
@@ -401,7 +408,7 @@ gnc_session_load_from_xml_file(GNCSession *session)
     }
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book));
+    xaccGroupScrubCommodities (gnc_book_get_group(book), session);
 
     /* Fix split amount/value */
     xaccGroupScrubSplits (gnc_book_get_group(book));
@@ -1059,7 +1066,7 @@ kvp_frame_result_cleanup(sixtp_child_result *cr)
   if(f) kvp_frame_delete(f);
 }
 
-sixtp*
+static sixtp*
 kvp_frame_parser_new(void) 
 {
   sixtp *top_level;
@@ -1209,7 +1216,7 @@ ledger_data_result_cleanup(sixtp_child_result *cr)
 }
 
 
-sixtp*
+static sixtp*
 ledger_data_parser_new(void) 
 {
   sixtp *top_level;
@@ -1373,7 +1380,10 @@ account_restore_after_child_handler(gpointer data_for_children,
                                     sixtp_child_result *child_result)
 {
   Account *a = (Account *) data_for_children;
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+
   g_return_val_if_fail(a, FALSE);
+
   if(!child_result) return(TRUE);
   if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
   if(strcmp(child_result->tag, "slots") == 0) {
@@ -1386,15 +1396,15 @@ account_restore_after_child_handler(gpointer data_for_children,
   else if(strcmp(child_result->tag, "currency") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetCurrency(a)) return FALSE;
-    DxaccAccountSetCurrency(a, com);
+    if(DxaccAccountGetCurrency(a, pstatus->session)) return FALSE;
+    DxaccAccountSetCurrency(a, com, pstatus->session);
     /* let the normal child_result handler clean up com */
   }
   else if(strcmp(child_result->tag, "security") == 0) {
     gnc_commodity *com = (gnc_commodity *) child_result->data;
     g_return_val_if_fail(com, FALSE);
-    if(DxaccAccountGetSecurity(a)) return FALSE;
-    DxaccAccountSetSecurity(a, com);
+    if(DxaccAccountGetSecurity(a, pstatus->session)) return FALSE;
+    DxaccAccountSetSecurity(a, com, pstatus->session);
     /* let the normal child_result handler clean up com */
   }
 
@@ -1725,7 +1735,7 @@ parent_lookup_parser_new(void)
                          SIXTP_NO_MORE_HANDLERS);
 }
 
-sixtp *
+static sixtp *
 gnc_account_parser_new(void)
 {
   sixtp *restore_pr;
@@ -1848,7 +1858,8 @@ commodity_restore_start_handler(GSList* sibling_data, gpointer parent_data,
                                 gpointer *data_for_children, gpointer *result,
                                 const gchar *tag, gchar **attrs)
 {
-  CommodityParseInfo *cpi = (CommodityParseInfo *) g_new0(CommodityParseInfo, 1);
+  CommodityParseInfo *cpi =
+    (CommodityParseInfo *) g_new0(CommodityParseInfo, 1);
 
   g_return_val_if_fail(cpi, FALSE);
 
@@ -1910,6 +1921,7 @@ commodity_restore_end_handler(gpointer data_for_children,
                               gpointer *result, const gchar *tag)
 {
   CommodityParseInfo *cpi = (CommodityParseInfo *) data_for_children;
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   gboolean ok = FALSE;
   gnc_commodity *comm = NULL;
 
@@ -1928,9 +1940,15 @@ commodity_restore_end_handler(gpointer data_for_children,
                              cpi->id,
                              cpi->xcode,
                              cpi->fraction);
-    if(comm) {
-      gnc_commodity_table *ctab = gnc_engine_commodities();
-      if(ctab) {
+    if(comm)
+    {
+      gnc_commodity_table *ctab;
+
+      ctab = gnc_book_get_commodity_table
+        (gnc_session_get_book (pstatus->session));
+
+      if(ctab)
+      {
         gnc_commodity_table_insert(ctab, comm);
         ok = TRUE;
       }
@@ -1949,7 +1967,7 @@ commodity_restore_end_handler(gpointer data_for_children,
 }
 
 
-sixtp *
+static sixtp *
 commodity_restore_parser_new(void) 
 {
   sixtp *top_level;
@@ -2083,15 +2101,20 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
 {
   CommodityLookupParseInfo *cpi =
   (CommodityLookupParseInfo *) data_for_children;
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   gboolean ok = FALSE;
 
   g_return_val_if_fail(cpi, FALSE);
 
   if(cpi->namespace && cpi->id) {
-    gnc_commodity *com =
-      gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                 cpi->namespace,
-                                 cpi->id);
+    gnc_commodity_table *table;
+    gnc_commodity *com;
+
+    table = gnc_book_get_commodity_table
+      (gnc_session_get_book (pstatus->session));
+
+    com = gnc_commodity_table_lookup(table, cpi->namespace, cpi->id);
+
     if(com) {
       *result = com;
       ok = TRUE;
@@ -2101,11 +2124,12 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
   g_free(cpi->namespace);
   g_free(cpi->id);
   g_free(cpi);
+
   return(ok);
 }
 
 
-sixtp *
+static sixtp *
 generic_gnc_commodity_lookup_parser_new(void) 
 {
   sixtp *top_level;
@@ -2573,7 +2597,7 @@ qrestore_datepred_parser_new(void)
         0);
 }
 
-sixtp*
+static sixtp*
 query_server_parser_new (void) 
 {
   sixtp *top_level;
@@ -3425,7 +3449,7 @@ gnc_txn_restore_split_parser_new(void)
 
 /***************************************************************************/
 
-sixtp *
+static sixtp *
 gnc_transaction_parser_new(void) 
 {
   sixtp *top_level;
@@ -3477,6 +3501,274 @@ gnc_transaction_parser_new(void)
   }
 
   return(top_level);
+}
+
+/****************************************************************************/
+/****************************************************************************/
+
+/* Read and Write the pricedb as XML -- something like this:
+
+  <pricedb>
+    price-1
+    price-2
+    ...
+  </pricedb>
+
+  where each price should look roughly like this:
+
+  <price>
+    <price:id>
+      00000000111111112222222233333333
+    </price:id>
+    <price:commodity>
+      <cmdty:space>NASDAQ</cmdty:space>
+      <cmdty:id>RHAT</cmdty:id>
+    </price:commodity>
+    <price:currency>
+      <cmdty:space>ISO?</cmdty:space>
+      <cmdty:id>USD</cmdty:id>
+    </price:currency>
+    <price:time><ts:date>Mon ...</ts:date><ts:ns>12</ts:ns></price:time>
+    <price:source>Finance::Quote</price:source>
+    <price:type>bid</price:type>
+    <price:value>11011/100</price:value>
+  </price>
+
+*/
+
+/***********************************************************************/
+/* READING */
+/***********************************************************************/
+
+/****************************************************************************/
+/* <price>
+
+  restores a price.  Does so via a walk of the XML tree in memory.
+  Returns a GNCPrice * in result.
+
+  Right now, a price is legitimate even if all of it's fields are not
+  set.  We may need to change that later, but at the moment.  
+
+*/
+
+static gboolean
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCSession *session)
+{
+  if(!p || !sub_node) return FALSE;
+
+  gnc_price_begin_edit (p);
+
+  if(safe_strcmp("price:id", sub_node->name) == 0) {
+    GUID *c = dom_tree_to_guid(sub_node);
+    if(!c) return FALSE; 
+    gnc_price_set_guid(p, c);
+    g_free(c);
+  } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    if(!c) return FALSE;
+    gnc_price_set_commodity(p, c);
+  } else if(safe_strcmp("price:currency", sub_node->name) == 0) {
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    if(!c) return FALSE;
+    gnc_price_set_currency(p, c);
+  } else if(safe_strcmp("price:time", sub_node->name) == 0) {
+    Timespec *t = dom_tree_to_timespec(sub_node);
+    if(!t) return FALSE;
+    gnc_price_set_time(p, *t);
+    g_free(t);
+  } else if(safe_strcmp("price:source", sub_node->name) == 0) {
+    char *text = dom_tree_to_text(sub_node);
+    if(!text) return FALSE;
+    gnc_price_set_source(p, text);
+    g_free(text);
+  } else if(safe_strcmp("price:type", sub_node->name) == 0) {
+    char *text = dom_tree_to_text(sub_node);
+    if(!text) return FALSE;
+    gnc_price_set_type(p, text);
+    g_free(text);
+  } else if(safe_strcmp("price:value", sub_node->name) == 0) {
+    gnc_numeric *value = dom_tree_to_gnc_numeric(sub_node);
+    if(!value) return FALSE;
+    gnc_price_set_value(p, *value);
+    g_free(value);
+  }
+  gnc_price_commit_edit (p);
+  return TRUE;
+}
+
+static gboolean
+price_parse_xml_end_handler(gpointer data_for_children,
+                            GSList* data_from_children,
+                            GSList* sibling_data,
+                            gpointer parent_data,
+                            gpointer global_data,
+                            gpointer *result,
+                            const gchar *tag)
+{
+  gboolean ok = TRUE;
+  xmlNodePtr price_xml = (xmlNodePtr) data_for_children;
+  xmlNodePtr child;
+  GNCPrice *p = NULL;
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+
+  /* we haven't been handed the *top* level node yet... */
+  if(parent_data) return TRUE;
+
+  *result = NULL;
+
+  if(!price_xml) return FALSE;
+  if(price_xml->next) { ok = FALSE; goto cleanup_and_exit; }
+  if(price_xml->prev) { ok = FALSE; goto cleanup_and_exit; }
+  if(!price_xml->xmlChildrenNode) { ok = FALSE; goto cleanup_and_exit; }
+  
+  p = gnc_price_create();
+  if(!p) { ok = FALSE; goto cleanup_and_exit; }
+  
+  for(child = price_xml->xmlChildrenNode; child; child = child->next) {
+    switch(child->type) {
+    case XML_COMMENT_NODE:
+      break;
+    case XML_ELEMENT_NODE:
+      if(!price_parse_xml_sub_node(p, child, pstatus->session)) {
+        ok = FALSE;
+        goto cleanup_and_exit;
+      }
+      break;
+    default:
+      PERR("Unknown node type (%d) while parsing gnc-price xml.", child->type);
+      child = NULL;
+      ok = FALSE;
+      goto cleanup_and_exit;
+      break;
+    }
+  }
+  
+ cleanup_and_exit:
+  if(ok) {
+    *result = p;
+  } else {
+    *result = NULL;
+    gnc_price_unref(p);
+  }
+  xmlFreeNode(price_xml);
+  return ok;
+}
+
+static void
+cleanup_gnc_price(sixtp_child_result *result)
+{
+  if(result->data) gnc_price_unref((GNCPrice *) result->data);
+}
+
+static sixtp *
+gnc_price_parser_new (void)
+{
+  return sixtp_dom_parser_new(price_parse_xml_end_handler,
+                              cleanup_gnc_price,
+                              cleanup_gnc_price);
+}
+
+
+/****************************************************************************/
+/* <pricedb> (lineage <ledger-data>)
+   
+   restores a pricedb.  We allocate the new db in the start block, the
+   children add to it, and it gets returned in result.  Note that the
+   cleanup handler will destroy the pricedb, so the parent needs to
+   stop that if desired.
+ 
+   result: GNCPriceDB*
+
+   start: create new GNCPriceDB*, and leave in *data_for_children.
+   cleanup-result: destroy GNCPriceDB*
+   result-fail: destroy GNCPriceDB*
+
+*/
+
+static gboolean
+pricedb_start_handler(GSList* sibling_data,
+                      gpointer parent_data,
+                      gpointer global_data,
+                      gpointer *data_for_children,
+                      gpointer *result,
+                      const gchar *tag,
+                      gchar **attrs)
+{
+  GNCPriceDB *db = gnc_pricedb_create();
+  g_return_val_if_fail(db, FALSE);
+  *result = db;
+  return(TRUE);
+}
+
+static gboolean
+pricedb_after_child_handler(gpointer data_for_children,
+                            GSList* data_from_children,
+                            GSList* sibling_data,
+                            gpointer parent_data,
+                            gpointer global_data,
+                            gpointer *result,
+                            const gchar *tag,
+                            const gchar *child_tag,
+                            sixtp_child_result *child_result)
+{
+  GNCPriceDB *db = (GNCPriceDB *) *result;
+
+  g_return_val_if_fail(db, FALSE);
+
+  /* right now children have to produce results :> */
+  if(!child_result) return(FALSE);
+  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(FALSE);
+
+  if(strcmp(child_result->tag, "price") == 0) {
+    GNCPrice *p = (GNCPrice *) child_result->data;
+
+    g_return_val_if_fail(p, FALSE);
+    gnc_pricedb_add_price(db, p);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+  return FALSE;
+}
+
+static void
+pricedb_cleanup_result_handler(sixtp_child_result *result)
+{
+  if(result->data) {
+    GNCPriceDB *db = (GNCPriceDB *) result->data;
+    if(db) gnc_pricedb_destroy(db);
+    result->data = NULL;
+  }
+}
+
+static sixtp*
+gnc_pricedb_parser_new(void) 
+{
+  sixtp *top_level;
+  sixtp *price_parser;
+
+  top_level = 
+    sixtp_set_any(sixtp_new(), TRUE,
+                  SIXTP_START_HANDLER_ID, pricedb_start_handler,
+                  SIXTP_AFTER_CHILD_HANDLER_ID, pricedb_after_child_handler,
+                  SIXTP_CHARACTERS_HANDLER_ID,
+                  allow_and_ignore_only_whitespace,
+                  SIXTP_RESULT_FAIL_ID, pricedb_cleanup_result_handler,
+                  SIXTP_CLEANUP_RESULT_ID, pricedb_cleanup_result_handler,
+                  SIXTP_NO_MORE_HANDLERS);
+
+  if(!top_level) return NULL;
+
+  price_parser = gnc_price_parser_new();
+
+  if(!price_parser) {
+    sixtp_destroy(top_level);
+    return NULL;
+  }
+
+  sixtp_add_sub_parser(top_level, "price", price_parser);
+
+  return top_level;
 }
 
 /* ======================= END OF FILE ============================== */

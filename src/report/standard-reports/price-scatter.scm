@@ -75,7 +75,7 @@
       pagename-price optname-price-commodity
       "e"
       (N_ "Calculate the price of this commodity.")
-      (gnc:default-currency)))
+      (gnc:locale-default-iso-currency-code)))
 
     (add-option
      (gnc:make-multichoice-option

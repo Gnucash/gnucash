@@ -21,6 +21,7 @@
 #include "GNCIdP.h"
 #include "gnc-book.h"
 
+static GNCSession *session;
 
 struct pricedb_data_struct
 {
@@ -88,7 +89,7 @@ test_db (int i, GNCPriceDB *db)
                     __FILE__, __LINE__, "%d", i);
     }
     else if (!gnc_xml_parse_file (parser, filename1, test_add_pricedb,
-                                  (gpointer)&data))
+                                  (gpointer)&data, session))
     {
       failure_args ("gnc_xml_parse_file returned FALSE",
                     __FILE__, __LINE__, "%d", i);
@@ -109,7 +110,7 @@ test_generation (void)
   {
     GNCPriceDB *db;
 
-    db = get_random_pricedb ();
+    db = get_random_pricedb (session);
 
     if (gnc_pricedb_get_num_prices (db))
       test_db (i, db);
@@ -118,13 +119,23 @@ test_generation (void)
   }
 }
 
-int
-main (int argc, char **argv)
+static void
+guile_main(int argc, char **argv)
 {
-  gnc_engine_init (argc, argv);
+  gnc_module_system_init();
+  gnc_module_load("gnucash/engine", 0);
+
+  session = gnc_session_new ();
 
   test_generation ();
 
   print_test_results ();
   exit (get_rv ());
+}
+
+int
+main(int argc, char ** argv)
+{
+  gh_enter (argc, argv, guile_main);
+  return 0;
 }

@@ -58,7 +58,6 @@ run_tests (void)
 static void
 main_helper (int argc, char **argv)
 {
-
   gnc_module_load("gnucash/engine", 0);
   run_tests ();
 

@@ -351,7 +351,8 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
     gchar *locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
 
     gnc_suspend_gui_refresh ();
-    list = gnc_load_example_account_list (locale_dir);
+    list = gnc_load_example_account_list (gnc_get_current_session (),
+                                          locale_dir);
     gnc_resume_gui_refresh ();
 
     clist = get_account_types_clist ();

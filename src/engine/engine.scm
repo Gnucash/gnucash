@@ -40,9 +40,7 @@
 (export GNC_COMMODITY_NS_EUREX)
 (export GNC_COMMODITY_NS_MUTUAL)
 
-
-(export gnc:setup-default-namespaces)
-(export gnc:load-iso-4217-currencies)
+(export gnc:engine-commodity-table-construct)
 
 (export gnc:url->loaded-session)
 (export gnc:transaction-map-splits)

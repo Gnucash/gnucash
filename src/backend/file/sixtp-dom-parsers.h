@@ -21,8 +21,8 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef _SIXTP_DOM_PARSERS_H_
-#define _SIXTP_DOM_PARSERS_H_
+#ifndef SIXTP_DOM_PARSERS_H
+#define SIXTP_DOM_PARSERS_H
 
 #include "config.h"
 
@@ -30,22 +30,17 @@
 
 #include "gnc-xml-helper.h"
 
-#include "gnc-commodity.h"
-#include "kvp_frame.h"
 #include "date.h"
-#include "gnc-numeric.h"
+#include "gnc-commodity.h"
+#include "gnc-session.h"
 
 #include "GNCId.h"
 
 #include "FreqSpec.h"
-#include "Account.h"
-#include "Transaction.h"
 
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
-gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node);
-gnc_commodity* associate_commodity_ref_with_engine_commodity(
-    gnc_commodity *com);
+gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
 
 FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node );
@@ -71,15 +66,14 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
-// jsled-added...
-Account* dom_tree_to_account( xmlNodePtr node );
-Transaction* dom_tree_to_transaction( xmlNodePtr node );
+Account* dom_tree_to_account(xmlNodePtr node, GNCSession *session);
+Transaction* dom_tree_to_transaction(xmlNodePtr node);
 
 struct dom_tree_handler
 {
     const char *tag;
 
-    gboolean (*handler) (xmlNodePtr, gpointer);
+    gboolean (*handler) (xmlNodePtr, gpointer data);
 
     int required;
     int gotten;
@@ -88,7 +82,6 @@ struct dom_tree_handler
 gboolean dom_tree_generic_parse(xmlNodePtr node,
                                 struct dom_tree_handler *handlers,
                                 gpointer data);
-
 
 
 #endif /* _SIXTP_DOM_PARSERS_H_ */

@@ -303,7 +303,8 @@ grab_file_doc(const char *filename)
     
 static void
 test_load_file(const char *filename, gxpf_callback cb,
-               sixtp *parser, const char *parser_tag)
+               sixtp *parser, const char *parser_tag,
+               GNCSession *session)
 {
     xmlNodePtr node;
     sixtp *main_parser;
@@ -320,7 +321,7 @@ test_load_file(const char *filename, gxpf_callback cb,
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
-    
+
     if(!sixtp_add_some_sub_parsers(
         top_parser, TRUE,
         "gnc-v2", main_parser,
@@ -337,7 +338,7 @@ test_load_file(const char *filename, gxpf_callback cb,
         return;
     }
 
-    if(!gnc_xml_parse_file(top_parser, filename, cb, (gpointer)(node->childs)))
+    if(!gnc_xml_parse_file(top_parser, filename, cb, node->childs, session))
     {
         failure_args("failure to parse file", __FILE__, __LINE__,
                      "%s", filename);
@@ -348,7 +349,8 @@ test_load_file(const char *filename, gxpf_callback cb,
     
 void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
-                  sixtp *parser, const char *parser_tag)
+                  sixtp *parser, const char *parser_tag,
+                  GNCSession *session)
 {
     int count;
 
@@ -364,7 +366,7 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
         {
             if(!S_ISDIR(file_info.st_mode))
             {
-                test_load_file(to_open, cb, parser, parser_tag);
+                test_load_file(to_open, cb, parser, parser_tag, session);
             }
         }
     }

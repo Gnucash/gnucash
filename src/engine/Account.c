@@ -28,16 +28,13 @@
 #include <glib.h>
 #include <string.h>
 
-#include "Account.h"
 #include "AccountP.h"
 #include "BackendP.h"
 #include "GNCIdP.h"
-#include "Group.h"
 #include "GroupP.h"
-#include "Transaction.h"
 #include "TransactionP.h"
 #include "date.h"
-#include "gnc-commodity.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -1089,11 +1086,15 @@ xaccAccountGetCommoditySCU (Account * acc) {
 /* below follow the old, deprecated currency/security routines. */
 
 void 
-DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency) {
+DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency,
+                         GNCSession *session)
+{
   const char *string;
   gnc_commodity *commodity;
 
   if ((!acc) || (!currency)) return;
+
+  g_return_if_fail (session);
 
   xaccAccountBeginEdit(acc);
   string = gnc_commodity_get_unique_name (currency);
@@ -1103,18 +1104,26 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency) {
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 
-  commodity = DxaccAccountGetCurrency (acc);
+  commodity = DxaccAccountGetCurrency (acc, session);
   if (!commodity)
-    gnc_commodity_table_insert (gnc_engine_commodities (), currency);
+  {
+    GNCBook * book = gnc_session_get_book (session);
+
+    gnc_commodity_table_insert (gnc_book_get_commodity_table (book), currency);
+  }
 }
 
 void 
-DxaccAccountSetSecurity (Account *acc, gnc_commodity * security) {
+DxaccAccountSetSecurity (Account *acc, gnc_commodity * security,
+                         GNCSession *session)
+{
   const char *string;
   gnc_commodity *commodity;
 
   if ((!acc) || (!security)) return;
-  
+
+  g_return_if_fail (session);
+
   xaccAccountBeginEdit(acc);
   string = gnc_commodity_get_unique_name (security);
   kvp_frame_set_slot_nc(acc->kvp_data, "old-security",
@@ -1123,9 +1132,13 @@ DxaccAccountSetSecurity (Account *acc, gnc_commodity * security) {
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 
-  commodity = DxaccAccountGetSecurity (acc);
+  commodity = DxaccAccountGetSecurity (acc, session);
   if (!commodity)
-    gnc_commodity_table_insert (gnc_engine_commodities (), security);
+  {
+    GNCBook * book = gnc_session_get_book (session);
+
+    gnc_commodity_table_insert (gnc_book_get_commodity_table (book), security);
+  }
 }
 
 void 
@@ -1289,12 +1302,16 @@ xaccAccountGetNotes (Account *acc)
 }
 
 gnc_commodity * 
-DxaccAccountGetCurrency (Account *acc)
+DxaccAccountGetCurrency (Account *acc, GNCSession *session)
 {
   kvp_value *v;
   const char *s;
+  GNCBook *book;
+  gnc_commodity_table *table;
 
   if (!acc) return NULL;
+
+  g_return_val_if_fail (session, NULL);
 
   v = kvp_frame_get_slot(acc->kvp_data, "old-currency");
   if (!v) return NULL;
@@ -1302,7 +1319,11 @@ DxaccAccountGetCurrency (Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  return gnc_commodity_table_lookup_unique (gnc_engine_commodities (), s);
+  book = gnc_session_get_book (session);
+
+  table = gnc_book_get_commodity_table (book);
+
+  return gnc_commodity_table_lookup_unique (table, s);
 }
 
 gnc_commodity * 
@@ -1314,12 +1335,16 @@ xaccAccountGetCommodity (Account *acc)
 }
 
 gnc_commodity *
-DxaccAccountGetSecurity (Account *acc)
+DxaccAccountGetSecurity (Account *acc, GNCSession *session)
 {
   kvp_value *v;
   const char *s;
+  GNCBook *book;
+  gnc_commodity_table *table;
 
   if (!acc) return NULL;
+
+  g_return_val_if_fail (session, NULL);
 
   v = kvp_frame_get_slot(acc->kvp_data, "old-security");
   if (!v) return NULL;
@@ -1327,7 +1352,11 @@ DxaccAccountGetSecurity (Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  return gnc_commodity_table_lookup_unique (gnc_engine_commodities (), s);
+  book = gnc_session_get_book (session);
+
+  table = gnc_book_get_commodity_table (book);
+
+  return gnc_commodity_table_lookup_unique (table, s);
 }
 
 gnc_numeric

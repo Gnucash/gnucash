@@ -48,6 +48,7 @@
 #include "GroupP.h"
 #include "SchedXaction.h"
 #include "TransLog.h"
+#include "engine-helpers.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
 #include "DateUtils.h"
@@ -60,8 +61,6 @@
 static short module = MOD_IO;
 
 /* ---------------------------------------------------------------------- */
-
-const char *TEMPLATE_ACCOUNT_NAME = "__account for template transactions__";
 
 static void
 gnc_book_init (GNCBook *book)
@@ -77,6 +76,8 @@ gnc_book_init (GNCBook *book)
   book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup();
 
+  book->commodity_table = gnc_engine_commodity_table_new ();
+
   xaccGroupSetBook (book->topgroup, book);
   xaccGroupSetBook (book->template_group, book);
 }
@@ -91,10 +92,11 @@ gnc_book_new (void)
 
 /* ---------------------------------------------------------------------- */
 
-gnc_commodity_table*
+gnc_commodity_table *
 gnc_book_get_commodity_table(GNCBook *book)
 {
-    return gnc_engine_commodities();
+  if (!book) return NULL;
+  return book->commodity_table;
 }
 
 AccountGroup * 
@@ -286,6 +288,9 @@ gnc_book_destroy (GNCBook *book)
 
   gnc_pricedb_destroy (book->pricedb);
   book->pricedb = NULL;
+
+  gnc_commodity_table_destroy (book->commodity_table);
+  book->commodity_table = NULL;
 
   /* FIXME: destroy SX data members here, too */
 

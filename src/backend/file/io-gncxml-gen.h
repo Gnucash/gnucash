@@ -28,19 +28,21 @@
 #include <glib.h>
 #include "sixtp.h"
 
-typedef gboolean (*gxpf_callback)(const char *tag, gpointer globaldata,
+typedef gboolean (*gxpf_callback)(const char *tag, gpointer parsedata,
                                   gpointer data);
 
 struct gxpf_data_struct
 {
     gxpf_callback cb;
-    gpointer data;
+    gpointer parsedata;
+    gpointer sessiondata;
 };
 
 typedef struct gxpf_data_struct gxpf_data;
 
 gboolean
 gnc_xml_parse_file(sixtp *top_parser, const char *filename,
-                   gxpf_callback callback, gpointer data);
+                   gxpf_callback callback, gpointer parsedata,
+                   gpointer sessiondata);
 
 #endif /* IO_GNCXML_GEN_H */

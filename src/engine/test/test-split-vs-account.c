@@ -1,10 +1,13 @@
 
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "GNCIdP.h"
 
 #include "Account.h"
 #include "gnc-engine.h"
+#include "gnc-module.h"
+#include "gnc-session.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -25,36 +28,37 @@ is_null_guid(const GUID *id)
     return TRUE;
 }
 
-int
-main(int argc, char **argv)
+static void
+run_test (void)
 {
     Account *act1;
     Account *act2;
     Split *spl;
     gnc_numeric num;
+    GNCSession *session;
 
-    gnc_engine_init (argc, argv);
+    session = gnc_session_new ();
 
-    act1 = get_random_account();
+    act1 = get_random_account(session);
     if(!act1)
     {
         failure("act1 not created");
-        return(get_rv());
+        return;
     }
     
-    act2 = get_random_account();
+    act2 = get_random_account(session);
     if(!act2)
     {
         failure("act2 not created");
-        return(get_rv());
+        return;
     }
 
     num = get_random_gnc_numeric();
-    spl = get_random_split(num);
+    spl = get_random_split(session, num);
     if(!spl)
     {
         failure("spl not created");
-        return(get_rv());
+        return;
     }
 
     xaccSplitSetAccount(spl, act1);
@@ -62,14 +66,14 @@ main(int argc, char **argv)
     if(act1 != xaccSplitGetAccount(spl))
     {
         failure("xaccSplitSetAccount is broken");
-        return(get_rv());
+        return;
     }
 
     if(!guid_equal(xaccAccountGetGUID(act1), xaccSplitGetAccountGUID(spl)))
     {
-	 failure("xaccSplitGetAccountGUID "
-                 "after xaccSplitSetAccount failed");
-        return(get_rv());
+        failure("xaccSplitGetAccountGUID "
+                "after xaccSplitSetAccount failed");
+        return;
     }
 
     xaccSplitSetAccountGUID(spl, *xaccAccountGetGUID(act2));
@@ -77,7 +81,7 @@ main(int argc, char **argv)
     if(act2 != xaccSplitGetAccount(spl))
     {
         failure("xaccSplitSetAccountGUID is broken");
-        return(get_rv());
+        return;
     }
 
     xaccSplitSetAccount(spl, NULL);
@@ -86,18 +90,33 @@ main(int argc, char **argv)
     {
         failure_args("xaccSplitSetAccount(NULL)", 
 		     __FILE__, __LINE__, "account not NULL");
-        return(get_rv());
+        return;
     }
 
     if(!is_null_guid(xaccSplitGetAccountGUID(spl)))
     {
         failure_args("xaccSplitSetAccount(NULL)", 
 		     __FILE__, __LINE__, "account guid not NULL");
-        return(get_rv());
+        return;
     }
-    
-    success("split account crap seems to work");
+}
 
-    print_test_results();
-    return(get_rv());
+static void
+main_helper (int argc, char **argv)
+{
+  gnc_module_load("gnucash/engine", 0);
+
+  run_test ();
+
+  success("split account crap seems to work");
+
+  print_test_results();
+  exit(get_rv());
+}
+
+int
+main (int argc, char **argv)
+{
+  gh_enter (argc, argv, main_helper);
+  return 0;
 }

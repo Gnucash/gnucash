@@ -439,7 +439,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, sx );
 
     if ( successful ) {
-            gdata->cb( tag, gdata->data, sx );
+            gdata->cb( tag, gdata->parsedata, sx );
     } else {
             xmlElemDump( stdout, NULL, tree );
             xaccSchedXactionFree( sx );
@@ -451,13 +451,17 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             AccountGroup *ag = NULL;
             char *id = NULL;
             Account *acct = NULL;
+            sixtp_gdv2 *sixdata = gdata->parsedata;
+            GNCBook *book;
+
+            book = gnc_session_get_book (sixdata->session);
 
             /* We're dealing with a pre-200107<near-end-of-month> rgmerk
                change re: storing template accounts. */
             /* Fix: get account with name of our GUID from the template
                accounts group.  Make that our template_acct pointer. */
             id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
-            ag = gnc_book_get_template_group( ((sixtp_gdv2*)gdata->data)->book );
+            ag = gnc_book_get_template_group(book);
             if ( ag == NULL )
             {
                     PERR( "Error getting template account group from being-parsed Book." );
@@ -502,7 +506,7 @@ tt_act_handler( xmlNodePtr node, gpointer data )
         Account *acc;
         gnc_commodity *com;
 
-        acc = dom_tree_to_account( node );
+        acc = dom_tree_to_account(node, txd->session);
 
         if ( acc == NULL ) {
                 return FALSE;
@@ -556,17 +560,24 @@ struct dom_tree_handler tt_dom_handlers[] = {
 
 static gboolean
 gnc_template_transaction_end_handler(gpointer data_for_children,
-                                     GSList* data_from_children, GSList* sibling_data,
-                                     gpointer parent_data, gpointer global_data,
-                                     gpointer *result, const gchar *tag)
+                                     GSList* data_from_children,
+                                     GSList* sibling_data,
+                                     gpointer parent_data,
+                                     gpointer global_data,
+                                     gpointer *result,
+                                     const gchar *tag)
 {
-        gboolean                        successful = FALSE;
-        xmlNodePtr                        achild;
-        xmlNodePtr                        tree = (xmlNodePtr)data_for_children;
-        gxpf_data                        *gdata = (gxpf_data*)global_data;
-        GList                                *n;
-        gnc_template_xaction_data        *txd =
-                g_new0( gnc_template_xaction_data, 1 );
+        gboolean   successful = FALSE;
+        xmlNodePtr achild;
+        xmlNodePtr tree = data_for_children;
+        gxpf_data  *gdata = global_data;
+        GNCSession *session = gdata->sessiondata;
+        GList      *n;
+        gnc_template_xaction_data *txd;
+
+        txd = g_new0 (gnc_template_xaction_data, 1);
+
+        txd->session = session;
 
         /* the DOM tree will have an account tree [the template group
            and account] and a list of transactions [which will be
@@ -589,7 +600,7 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         successful = dom_tree_generic_parse( tree, tt_dom_handlers, txd );
 
         if ( successful ) {
-                gdata->cb( tag, gdata->data, txd );
+                gdata->cb( tag, gdata->parsedata, txd );
         } else {
                 xmlElemDump( stdout, NULL, tree );
         }

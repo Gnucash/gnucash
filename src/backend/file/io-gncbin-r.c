@@ -197,7 +197,8 @@ mark_potential_quote(Split *s, double price, double quantity)
 }
 
 static gboolean
-cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
+cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
+                                            GNCSession *session)
 {
   GSList *item = potential_quotes;
 
@@ -220,8 +221,10 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
       Timespec time = xaccTransRetDatePostedTS(txn);
 
       gnc_price_begin_edit(price);
-      gnc_price_set_commodity(price, DxaccAccountGetSecurity(split_acct));
-      gnc_price_set_currency(price, DxaccAccountGetCurrency(split_acct));
+      gnc_price_set_commodity(price,
+                              DxaccAccountGetSecurity(split_acct, session));
+      gnc_price_set_currency(price,
+                             DxaccAccountGetCurrency(split_acct, session));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");
@@ -249,8 +252,9 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
 /** PROTOTYPES ******************************************************/
 static Account     *locateAccount (int acc_id); 
 
-static AccountGroup *readGroup( int fd, Account *, int token );
-static Account      *readAccount( int fd, AccountGroup *, int token );
+static AccountGroup *readGroup( GNCSession *, int fd, Account *, int token );
+static Account      *readAccount( GNCSession *session, int fd,
+                                  AccountGroup *, int token );
 static gboolean      readAccInfo( int fd, Account *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
@@ -367,11 +371,17 @@ xaccFlipLongLong (gint64 val)
  ********************************************************************/
 
 static gnc_commodity * 
-gnc_commodity_import_legacy(const char * currency_name) {
+gnc_commodity_import_legacy(GNCSession *session, const char * currency_name)
+{
+  gnc_commodity_table *table;
   gnc_commodity * old = NULL;
 
+  table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+  g_return_val_if_fail (table != NULL, NULL);
+
   if(currency_name && (currency_name[0] != 0) ) {
-    old = gnc_commodity_table_lookup(gnc_engine_commodities(),
+    old = gnc_commodity_table_lookup(table,
                                      GNC_COMMODITY_NS_LEGACY,
                                      currency_name);
     
@@ -379,7 +389,7 @@ gnc_commodity_import_legacy(const char * currency_name) {
       old = gnc_commodity_new(currency_name, 
                               GNC_COMMODITY_NS_LEGACY, currency_name,
                               0, 100000);
-      old = gnc_commodity_table_insert(gnc_engine_commodities(), old);
+      old = gnc_commodity_table_insert(table, old);
     }
     return old;
   }
@@ -401,12 +411,15 @@ gnc_commodity_import_legacy(const char * currency_name) {
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static gboolean
-gnc_load_financials_from_fd(GNCBook *book, int fd)
+gnc_load_financials_from_fd(GNCSession *session, int fd)
 {
   int  err=0;
   int  token=0;
   int  num_unclaimed;
   AccountGroup *grp = 0x0;
+  GNCBook *book;
+
+  book = gnc_session_get_book (session);
 
   maingrp = 0x0;
   error_code = ERR_BACKEND_NO_ERR;
@@ -463,7 +476,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
   holder = xaccMallocAccountGroup();
-  grp = readGroup (fd, NULL, token);
+  grp = readGroup (session, fd, NULL, token);
 
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
@@ -493,7 +506,8 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
 
   {
     GNCPriceDB *tmpdb;
-    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb)) {
+    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb, session))
+    {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
       gnc_book_set_pricedb(book, tmpdb);
       if(db) gnc_pricedb_destroy(db);
@@ -546,7 +560,7 @@ gnc_session_load_from_binfile(GNCSession *session)
     return;
   }
 
-  if (!gnc_load_financials_from_fd(gnc_session_get_book (session), fd))
+  if (!gnc_load_financials_from_fd(session, fd))
     return;
 
   close(fd);
@@ -560,7 +574,7 @@ gnc_session_load_from_binfile(GNCSession *session)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 static AccountGroup *
-readGroup (int fd, Account *aparent, int token)
+readGroup (GNCSession *session, int fd, Account *aparent, int token)
   {
   int  numAcc;
   int  err=0;
@@ -587,7 +601,7 @@ readGroup (int fd, Account *aparent, int token)
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
     {
-    Account * acc = readAccount( fd, grp, token );
+    Account * acc = readAccount( session, fd, grp, token );
     if( NULL == acc ) {
       PERR("Short group read: \n"
            "\texpected %d, got %d accounts\n",numAcc,i);
@@ -608,13 +622,14 @@ readGroup (int fd, Account *aparent, int token)
  * readAccount                                                      * 
  *   reads in the data for an account from the datafile             *
  *                                                                  * 
- * Args:   fd    - the filedescriptor of the data file              * 
+ * Args:   session - the session                                    *
+ *         fd    - the filedescriptor of the data file              * 
  *         acc   - the account structure to be filled in            *
  *         token - the datafile version                             * 
  * Return: error value, 0 if OK, else -1                            * 
 \********************************************************************/
 static Account *
-readAccount( int fd, AccountGroup *grp, int token )
+readAccount( GNCSession *session, int fd, AccountGroup *grp, int token )
 {
   int err=0;
   int i;
@@ -625,7 +640,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   char * tmp;
 
   ENTER (" ");
-  
+
   /* version 1 does not store the account number */
   if (1 < token) {
     err = read( fd, &accID, sizeof(int) );
@@ -705,8 +720,8 @@ readAccount( int fd, AccountGroup *grp, int token )
      if( NULL == tmp ) return NULL;
      
      PINFO ("currency is %s", tmp);
-     currency = gnc_commodity_import_legacy(tmp);
-     DxaccAccountSetCurrency (acc, currency);
+     currency = gnc_commodity_import_legacy(session, tmp);
+     DxaccAccountSetCurrency (acc, currency, session);
      
      if(tmp) free (tmp);
 
@@ -730,15 +745,15 @@ readAccount( int fd, AccountGroup *grp, int token )
      }
 
      PINFO ("security is %s", tmp);
-     security = gnc_commodity_import_legacy(tmp);
-     DxaccAccountSetSecurity (acc, security);
+     security = gnc_commodity_import_legacy(session, tmp);
+     DxaccAccountSetSecurity (acc, security, session);
 
      if(tmp) free (tmp);
   } 
   else {
     /* set the default currency when importing old files */
-    currency = gnc_commodity_import_legacy(DEFAULT_CURRENCY);
-    DxaccAccountSetCurrency (acc, currency);
+    currency = gnc_commodity_import_legacy(session, DEFAULT_CURRENCY);
+    DxaccAccountSetCurrency (acc, currency, session);
   }
 
   /* aux account info first appears in version ten files */
@@ -782,7 +797,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     }
     XACC_FLIP_INT (numGrps);
     if (numGrps) {
-       readGroup (fd, acc, token);
+       readGroup (session, fd, acc, token);
     }
   }
 

@@ -630,7 +630,8 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
             xaccTransSetDateEnteredTS (trans, &ts);
             xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
-            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
+                                                be->session);
             xaccTransSetCurrency (trans, currency);
             trans->idata = atoi(DB_GET_VAL("iguid",j));
          }

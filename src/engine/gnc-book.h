@@ -56,14 +56,10 @@ void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
 
 GNCBook * xaccGroupGetBook (AccountGroup *group);
+GNCBook * xaccAccountGetBook (Account *account);
 
 guint gnc_book_count_transactions(GNCBook *book);
 
-/*
- * gnc_book_get_commodity_table returns the commodity table associated with
- * the BOOK.  At the moment this just returns the global commodity table,
- * but if we get everything using this we can make it a non-global table :)
- */
 gnc_commodity_table* gnc_book_get_commodity_table(GNCBook *book);
 
 /**

@@ -428,8 +428,9 @@ gnc_ledger_display_template_gl (char *id)
 
   q = xaccMallocQuery ();
 
-  ag = gnc_book_get_template_group
-    (xaccGroupGetBook (gnc_get_current_group ()));
+  book = gnc_get_current_book ();
+
+  ag = gnc_book_get_template_group (book);
   acct = xaccGetAccountFromName (ag, id);
   if (!acct)
   {
@@ -438,7 +439,6 @@ gnc_ledger_display_template_gl (char *id)
   }
 
   xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
-  book = xaccGroupGetBook (gnc_get_current_group ());
   xaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,

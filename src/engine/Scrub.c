@@ -388,16 +388,18 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 /* ================================================================ */
 
 void
-xaccTransScrubCurrency (Transaction *trans)
+xaccTransScrubCurrency (Transaction *trans, GNCSession *session)
 {
   gnc_commodity *currency;
 
   if (!trans) return;
 
+  g_return_if_fail (session);
+
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
 
-  currency = xaccTransFindOldCommonCurrency (trans);
+  currency = xaccTransFindOldCommonCurrency (trans, session);
   if (currency)
   {
     xaccTransBeginEdit (trans);
@@ -413,23 +415,25 @@ xaccTransScrubCurrency (Transaction *trans)
 /* ================================================================ */
 
 void
-xaccAccountScrubCommodity (Account *account)
+xaccAccountScrubCommodity (Account *account, GNCSession *session)
 {
   gnc_commodity *commodity;
 
   if (!account) return;
 
+  g_return_if_fail (session);
+
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;
 
-  commodity = DxaccAccountGetSecurity (account);
+  commodity = DxaccAccountGetSecurity (account, session);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
     return;
   }
 
-  commodity = DxaccAccountGetCurrency (account);
+  commodity = DxaccAccountGetCurrency (account, session);
   if (commodity)
   {
     xaccAccountSetCommodity (account, commodity);
@@ -442,30 +446,39 @@ xaccAccountScrubCommodity (Account *account)
 /* ================================================================ */
 
 static gboolean
-scrub_trans_currency_helper (Transaction *t, void *unused)
+scrub_trans_currency_helper (Transaction *t, gpointer data)
 {
-  xaccTransScrubCurrency (t);
+  GNCSession *session = data;
+
+  xaccTransScrubCurrency (t, session);
+
   return TRUE;
 }
 
 static gpointer
-scrub_account_commodity_helper (Account *account, gpointer unused)
+scrub_account_commodity_helper (Account *account, gpointer data)
 {
-  xaccAccountScrubCommodity (account);
+  GNCSession *session = data;
+
+  xaccAccountScrubCommodity (account, session);
   xaccAccountDeleteOldData (account);
+
   return NULL;
 }
 
 void
-xaccGroupScrubCommodities (AccountGroup *group)
+xaccGroupScrubCommodities (AccountGroup *group, GNCSession *session)
 {
   if (!group) return;
 
+  g_return_if_fail (session != NULL);
+
   xaccAccountGroupBeginEdit (group);
 
-  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
+  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, session);
 
-  xaccGroupForEachAccount (group, scrub_account_commodity_helper, NULL, TRUE);
+  xaccGroupForEachAccount (group, scrub_account_commodity_helper,
+                           session, TRUE);
 
   xaccAccountGroupCommitEdit (group);
 }

@@ -38,6 +38,34 @@
 
 #include <g-wrap-runtime-guile.h>
 
+gnc_commodity_table *
+gnc_engine_commodity_table_new (void)
+{
+  static SCM commodity_table_type = SCM_UNDEFINED;
+  gnc_commodity_table *commodity_table;
+  SCM ct_scm;
+  SCM func;
+
+  commodity_table = gnc_commodity_table_new ();
+
+  if (commodity_table_type == SCM_UNDEFINED)
+  {
+    commodity_table_type = gh_eval_str("<gnc:commodity-table*>");
+    /* don't really need this - types are bound globally anyway. */
+    if (commodity_table_type != SCM_UNDEFINED)
+      scm_protect_object (commodity_table_type);
+  }
+  
+  ct_scm =  gw_wcp_assimilate_ptr ((void *) commodity_table,
+                                   commodity_table_type);
+
+  func = gh_eval_str ("gnc:engine-commodity-table-construct");
+
+  gh_call1 (func, ct_scm);
+
+  return commodity_table;
+}
+
 Timespec
 gnc_transaction_get_date_posted(Transaction *t) {
   Timespec result;

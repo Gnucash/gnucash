@@ -12,10 +12,6 @@ EXIT_VALUE=0
 
 if test $EXIT_VALUE != 0; then exit $EXIT_VALUE; fi
 
-diff -u test-file-1 test-file-2 || EXIT_VALUE=1
-
-if test $EXIT_VALUE != 0; then exit $EXIT_VALUE; fi
-
 #./db-control.sh destroy
 
 exit $EXIT_VALUE

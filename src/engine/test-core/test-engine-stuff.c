@@ -16,7 +16,6 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
-static gboolean add_comms_to_engine = TRUE;
 static gboolean glist_strings_only = FALSE;
 
 static GHashTable *exclude_kvp_types = NULL;
@@ -84,12 +83,6 @@ glist_type_excluded (kvp_value_t kvp_type)
 }
 
 void
-add_random_commodities_to_engine (gboolean add)
-{
-  add_comms_to_engine = add;
-}
-
-void
 random_glist_strings_only (gboolean strings_only)
 {
   glist_strings_only = strings_only;
@@ -131,7 +124,7 @@ get_random_commodity_namespace(void)
 }
 
 GNCPrice *
-get_random_price(void)
+get_random_price(GNCSession *session)
 {
   GNCPrice *p;
   Timespec *ts;
@@ -140,12 +133,10 @@ get_random_price(void)
 
   p = gnc_price_create ();
 
-  c = get_random_commodity ();
-  c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
+  c = get_random_commodity (session);
   gnc_price_set_commodity (p, c);
 
-  c = get_random_commodity ();
-  c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
+  c = get_random_commodity (session);
   gnc_price_set_currency (p, c);
 
   ts = get_random_timespec ();
@@ -166,7 +157,7 @@ get_random_price(void)
 }
 
 void
-make_random_pricedb (GNCPriceDB *db)
+make_random_pricedb (GNCSession *session, GNCPriceDB *db)
 {
   int num_prices;
 
@@ -176,7 +167,7 @@ make_random_pricedb (GNCPriceDB *db)
   {
     GNCPrice *p;
 
-    p = get_random_price ();
+    p = get_random_price (session);
 
     gnc_pricedb_add_price (db, p);
 
@@ -185,12 +176,12 @@ make_random_pricedb (GNCPriceDB *db)
 }
 
 GNCPriceDB *
-get_random_pricedb(void)
+get_random_pricedb(GNCSession *session)
 {
   GNCPriceDB *db;
 
   db = gnc_pricedb_create ();
-  make_random_pricedb (db);
+  make_random_pricedb (session, db);
 
   return db;
 }
@@ -411,7 +402,7 @@ set_account_random_string(Account* act,
 }
 
 static void
-account_add_subaccounts (Account *account, int depth)
+account_add_subaccounts (GNCSession *session, Account *account, int depth)
 {
   int num_accounts;
 
@@ -422,16 +413,16 @@ account_add_subaccounts (Account *account, int depth)
 
   while (num_accounts-- > 0)
   {
-    Account *sub = get_random_account ();
+    Account *sub = get_random_account (session);
 
     xaccAccountInsertSubAccount (account, sub);
 
-    account_add_subaccounts (sub, depth - 1);
+    account_add_subaccounts (session, sub, depth - 1);
   }
 }
 
 static AccountGroup *
-get_random_group_depth(int depth)
+get_random_group_depth(GNCSession *session, int depth)
 {
   AccountGroup *group;
   int num_accounts;
@@ -445,32 +436,32 @@ get_random_group_depth(int depth)
 
   while (num_accounts-- > 0)
   {
-    Account *account = get_random_account ();
+    Account *account = get_random_account (session);
 
     xaccGroupInsertAccount (group, account);
 
-    account_add_subaccounts (account, depth - 1);
+    account_add_subaccounts (session, account, depth - 1);
   }
 
   return group;
 }
 
 AccountGroup *
-get_random_group(void)
+get_random_group (GNCSession *session)
 {
   int depth;
 
   depth = get_random_int_in_range (1, max_group_depth);
 
-  return get_random_group_depth (depth);
+  return get_random_group_depth (session, depth);
 }
 
 Account*
-get_random_account(void)
+get_random_account(GNCSession *session)
 {
     Account *ret;
     int tmp_int;
-    
+
     ret = xaccMallocAccount();
 
     xaccAccountBeginEdit(ret);
@@ -483,11 +474,12 @@ get_random_account(void)
     set_account_random_string(ret, xaccAccountSetCode);
     set_account_random_string(ret, xaccAccountSetDescription);
 
-    xaccAccountSetCommodity(ret, get_random_commodity());
-    
+    xaccAccountSetCommodity(ret, get_random_commodity(session));
+
     xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
-    
+
     xaccAccountCommitEdit(ret);
+
     return ret;
 }
 
@@ -506,7 +498,7 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { 'c', 'y', 'f', 'n' };
 
 Split*
-get_random_split(gnc_numeric num)
+get_random_split(GNCSession *session, gnc_numeric num)
 {
     Split *ret;
     gnc_numeric oneVal;
@@ -533,7 +525,7 @@ get_random_split(gnc_numeric num)
         xaccSplitSetAccountGUID(ret, *ranguid);
         g_free(ranguid);
     }
-    
+
     return ret;
 }
 
@@ -550,11 +542,12 @@ set_tran_random_string(Transaction* trn,
 }
 
 static void
-add_random_splits(Transaction *trn)
+add_random_splits(GNCSession *session, Transaction *trn)
 {
     gnc_numeric num = get_random_gnc_numeric();
-    xaccTransAppendSplit(trn, get_random_split(num));
-    xaccTransAppendSplit(trn, get_random_split(gnc_numeric_neg(num)));
+
+    xaccTransAppendSplit(trn, get_random_split(session, num));
+    xaccTransAppendSplit(trn, get_random_split(session, gnc_numeric_neg(num)));
 }
 
 static void
@@ -570,7 +563,7 @@ trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
 
     
 Transaction*
-get_random_transaction(void)
+get_random_transaction(GNCSession *session)
 {
     Transaction* ret;
 
@@ -578,7 +571,7 @@ get_random_transaction(void)
 
     xaccTransBeginEdit(ret);
 
-    xaccTransSetCurrency(ret, get_random_commodity ());
+    xaccTransSetCurrency(ret, get_random_commodity (session));
 
     set_tran_random_string(ret, xaccTransSetNum);
 
@@ -589,7 +582,7 @@ get_random_transaction(void)
 
     xaccTransSetSlots_nc(ret, get_random_kvp_frame());
 
-    add_random_splits(ret);
+    add_random_splits(session, ret);
 
     xaccTransCommitEdit(ret);
     
@@ -597,7 +590,7 @@ get_random_transaction(void)
 }
 
 gnc_commodity*
-get_random_commodity (void)
+get_random_commodity (GNCSession *session)
 {
     gnc_commodity *ret;
     gchar *name;
@@ -605,13 +598,16 @@ get_random_commodity (void)
     gchar *mn;
     gchar *xcode;
     int ran_int;
+    gnc_commodity_table *table;
 
     mn = get_random_string();
     space = get_random_commodity_namespace();
 
-    if (add_comms_to_engine)
+    table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+    if (table)
     {
-      ret = gnc_commodity_table_lookup (gnc_engine_commodities (), space, mn);
+      ret = gnc_commodity_table_lookup (table, space, mn);
 
       if (ret)
       {
@@ -630,8 +626,8 @@ get_random_commodity (void)
     g_free(name);
     g_free(xcode);
 
-    if (add_comms_to_engine)
-      ret = gnc_commodity_table_insert (gnc_engine_commodities (), ret);
+    if (table)
+      ret = gnc_commodity_table_insert (table, ret);
 
     return ret;
 }
@@ -824,13 +820,13 @@ get_random_query(void)
 }
 
 GNCBook *
-get_random_book (void)
+get_random_book (GNCSession *session)
 {
   GNCBook *book;
 
   book = gnc_book_new ();
 
-  gnc_book_set_group (book, get_random_group ());
+  gnc_book_set_group (book, get_random_group (session));
 
   /* make_random_pricedb (gnc_book_get_pricedb (book)); */
 

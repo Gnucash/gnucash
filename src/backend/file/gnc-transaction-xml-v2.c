@@ -502,7 +502,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
     trn = dom_tree_to_transaction(tree);
     if(trn != NULL)
     {
-        gdata->cb(tag, gdata->data, trn);
+        gdata->cb(tag, gdata->parsedata, trn);
         successful = TRUE;
     }
 

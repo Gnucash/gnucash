@@ -224,6 +224,12 @@ gnc_get_current_group (void)
   return gnc_book_get_group (gnc_get_current_book ());
 }
 
+gnc_commodity_table *
+gnc_get_current_commodities (void)
+{
+  return gnc_book_get_commodity_table (gnc_get_current_book ());
+}
+
 const char *
 gnc_ui_account_get_field_name (AccountFieldCode field)
 {
@@ -340,7 +346,7 @@ gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_c
 
 static gnc_numeric
 gnc_account_get_reconciled_balance_in_currency (Account *account,
-                                     gnc_commodity *currency)
+                                                gnc_commodity *currency)
 {
   GNCBook *book;
   GNCPriceDB *pdb;
@@ -354,9 +360,10 @@ gnc_account_get_reconciled_balance_in_currency (Account *account,
     return gnc_numeric_zero ();
 
   balance = xaccAccountGetReconciledBalance (account);
-  balance_currency = DxaccAccountGetCurrency (account);
+  balance_currency = xaccAccountGetCommodity (account);
 
-  return gnc_ui_convert_balance_to_currency (balance, balance_currency, currency);
+  return gnc_ui_convert_balance_to_currency (balance, balance_currency,
+                                             currency);
 }
 
 typedef struct
@@ -523,7 +530,7 @@ gnc_ui_account_get_reconciled_balance (Account *account,
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  currency = DxaccAccountGetCurrency (account);
+  currency = xaccAccountGetCommodity (account);
 
   balance = gnc_account_get_reconciled_balance_in_currency (account, currency);
 
@@ -556,7 +563,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  currency = DxaccAccountGetCurrency (account);
+  currency = xaccAccountGetCommodity (account);
   balance = xaccAccountGetBalanceAsOfDate (account, date);
 
   if (include_children)
@@ -567,14 +574,14 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
     children_group = xaccAccountGetChildren (account);
     children = xaccGroupGetSubAccounts (children_group);
 
-    for( node = children; node; node = node->next )
+    for (node = children; node; node = node->next)
     {
       Account *child;
       gnc_commodity *child_currency;
       gnc_numeric child_balance;
 
-      child = (Account *)node->data;
-      child_currency = DxaccAccountGetCurrency (child);
+      child = node->data;
+      child_currency = xaccAccountGetCommodity (child);
       child_balance = xaccAccountGetBalanceAsOfDate (child, date);
       child_balance = gnc_ui_convert_balance_to_currency
         (child_balance, child_currency, currency);
@@ -1003,41 +1010,44 @@ gnc_localeconv (void)
   return &lc;
 }
 
+const char *
+gnc_locale_default_iso_currency_code (void)
+{
+  static char *code = NULL;
+  struct lconv *lc;
+
+  if (code)
+    return code;
+
+  lc = gnc_localeconv ();
+
+  code = g_strdup (lc->int_curr_symbol);
+
+  /* The int_curr_symbol includes a space at the end! Note: you
+   * can't just change "USD " to "USD" in gnc_localeconv, because
+   * that is only used if int_curr_symbol was not defined in the
+   * current locale. If it was, it will have the space! */
+  g_strstrip (code);
+
+  return code;
+}
+
 gnc_commodity *
 gnc_locale_default_currency (void)
 {
-  static gnc_commodity * currency;
-  struct lconv         * lc;
-  static gboolean      got_it = FALSE;
+  gnc_commodity * currency;
+  gnc_commodity_table *table;
+  const char *code;
 
-  if (!got_it)
-  {
-    char *symbol;
+  table = gnc_get_current_commodities ();
+  code = gnc_locale_default_iso_currency_code ();
 
-    lc = gnc_localeconv();
+  currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, code);
 
-    symbol = g_strdup (lc->int_curr_symbol);
+  if (currency)
+    return currency;
 
-    /* The int_curr_symbol includes a space at the end! Note: you
-     * can't just change "USD " to "USD" in gnc_localeconv, because
-     * that is only used if int_curr_symbol was not defined in the
-     * current locale. If it was, it will have the space! */
-    g_strstrip (symbol);
-
-    currency = gnc_commodity_table_lookup (gnc_engine_commodities(),
-                                           GNC_COMMODITY_NS_ISO,
-                                           symbol);
-
-    if (!currency)
-      currency = gnc_commodity_table_lookup (gnc_engine_commodities(),
-                                             GNC_COMMODITY_NS_ISO,
-                                             "USD");
-
-    g_free (symbol);
-    got_it = TRUE;
-  }
-
-  return currency;
+  return gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, "USD");
 }
 
 
@@ -1100,16 +1110,16 @@ gnc_default_print_info (gboolean use_symbol)
 {
   static GNCPrintAmountInfo info;
   static gboolean got_it = FALSE;
-
   struct lconv *lc;
 
+  /* These must be updated each time. */
   info.use_symbol = use_symbol ? 1 : 0;
+  info.commodity = gnc_default_currency ();
+
   if (got_it)
     return info;
 
   lc = gnc_localeconv ();
-
-  info.commodity = gnc_default_currency ();
 
   info.max_decimal_places = lc->frac_digits;
   info.min_decimal_places = lc->frac_digits;

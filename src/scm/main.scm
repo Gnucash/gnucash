@@ -36,7 +36,7 @@
   (newline)
   (display (_ "Report bugs and other problems to gnucash-devel@gnucash.org."))
   (newline)
-  (display (sprintf #f (_ "The last stable version was %s.") "GnuCash 1.6.2"))
+  (display (sprintf #f (_ "The last stable version was %s.") "GnuCash 1.6.4"))
   (newline)
   (display (sprintf #f (_ "The next stable version will be %s.")
                     "GnuCash 1.8.0"))

@@ -1095,11 +1095,14 @@ xaccTransGetImbalance (Transaction * trans)
 static gnc_commodity *
 FindCommonExclSCurrency (GList *splits,
                          gnc_commodity * ra, gnc_commodity * rb,
-                         Split *excl_split)
+                         Split *excl_split,
+                         GNCSession *session)
 {
   GList *node;
 
   if (!splits) return NULL;
+
+  g_return_val_if_fail (session, NULL);
 
   for (node = splits; node; node = node->next)
   {
@@ -1115,12 +1118,12 @@ FindCommonExclSCurrency (GList *splits,
      * Well, that's ok,  we'll just go with the flow. 
      */
     if (force_double_entry)
-       assert (xaccSplitGetAccount(s));
+       g_return_val_if_fail (xaccSplitGetAccount(s), NULL);
     else if (xaccSplitGetAccount(s) == NULL)
       continue;
 
-    sa = DxaccAccountGetCurrency (xaccSplitGetAccount(s));
-    sb = DxaccAccountGetSecurity (xaccSplitGetAccount(s));
+    sa = DxaccAccountGetCurrency (xaccSplitGetAccount(s), session);
+    sb = DxaccAccountGetSecurity (xaccSplitGetAccount(s), session);
 
     if (ra && rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1158,13 +1161,14 @@ FindCommonExclSCurrency (GList *splits,
  * common currency.  
  */
 static gnc_commodity *
-FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
+FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb,
+                    GNCSession *session)
 {
-  return FindCommonExclSCurrency(splits, ra, rb, NULL);
+  return FindCommonExclSCurrency(splits, ra, rb, NULL, session);
 }
 
 gnc_commodity *
-xaccTransFindOldCommonCurrency (Transaction *trans)
+xaccTransFindOldCommonCurrency (Transaction *trans, GNCSession *session)
 {
   gnc_commodity *ra, *rb, *retval;
   Split *split;
@@ -1173,14 +1177,16 @@ xaccTransFindOldCommonCurrency (Transaction *trans)
 
   if (trans->splits == NULL) return NULL;
 
+  g_return_val_if_fail (session, NULL);
+
   split = trans->splits->data;
 
   if (xaccSplitGetAccount(split) == NULL) return NULL;
 
-  ra = DxaccAccountGetCurrency (xaccSplitGetAccount(split));
-  rb = DxaccAccountGetSecurity (xaccSplitGetAccount(split));
+  ra = DxaccAccountGetCurrency (xaccSplitGetAccount(split), session);
+  rb = DxaccAccountGetSecurity (xaccSplitGetAccount(split), session);
 
-  retval = FindCommonCurrency (trans->splits, ra, rb);
+  retval = FindCommonCurrency (trans->splits, ra, rb, session);
 
   /* compare this value to what we think should be the 'right' value */
   if (!trans->common_currency)

@@ -197,7 +197,7 @@
     pagename name-report-currency
     sort-tag 
     (N_ "Select the currency to display the values of this report in.")
-    (gnc:default-currency))))
+    (gnc:locale-default-iso-currency-code))))
 
 ;; These are common options for the selection of the report's
 ;; currency/commodity.

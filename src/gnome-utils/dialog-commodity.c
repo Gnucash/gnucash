@@ -30,6 +30,7 @@
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-gui-query.h"
+#include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "window-help.h"
@@ -196,13 +197,16 @@ g_strcmp(gconstpointer a, gconstpointer b) {
 void
 gnc_ui_update_commodity_picker(GtkWidget * combobox, 
                                const char * namespace,
-                               const char * init_string) {  
-  GList      * commodities = 
-    gnc_commodity_table_get_commodities(gnc_engine_commodities(),
-                                        namespace);
+                               const char * init_string)
+{
+  GList      * commodities; 
   GList      * iterator = NULL;
   GList      * commodity_items = NULL;
+  gnc_commodity_table *table;
   const char * current;
+
+  table = gnc_book_get_commodity_table (gnc_get_current_book ());
+  commodities = gnc_commodity_table_get_commodities(table, namespace);
 
   for(iterator = commodities; iterator; iterator = iterator->next) {
     commodity_items = 
@@ -249,9 +253,9 @@ gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
 
 static void
 gnc_ui_select_commodity_ok_cb(GtkButton * button,
-                              gpointer user_data) {
+                              gpointer user_data)
+{
   SelectCommodityWindow * w = user_data;
-
   const char    * namespace;  
   char          * fullname;
   gnc_commodity * retval = NULL;
@@ -259,7 +263,7 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
   namespace       = gnc_ui_namespace_picker_ns (w->namespace_combo);
   fullname        = gtk_entry_get_text(GTK_ENTRY(w->commodity_entry));
   
-  retval = gnc_commodity_table_find_full(gnc_engine_commodities(), 
+  retval = gnc_commodity_table_find_full(gnc_get_current_commodities(), 
                                          namespace,
                                          fullname);
   if(retval) {
@@ -347,7 +351,8 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
 
   /* fetch a list of the namespaces */
   if (!include_all)
-    namespaces = gnc_commodity_table_get_namespaces(gnc_engine_commodities());
+    namespaces =
+      gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
   else
   {
     namespaces = NULL;
@@ -629,7 +634,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
   if(fullname && fullname[0] &&
      namespace && namespace[0] &&
      mnemonic && mnemonic[0]) {
-    c = gnc_commodity_table_lookup (gnc_engine_commodities(),
+    c = gnc_commodity_table_lookup (gnc_get_current_commodities(),
                                     namespace, mnemonic);
 
     if ((!w->edit_commodity && c) ||
@@ -645,7 +650,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     else {
       c = w->edit_commodity;
 
-      gnc_commodity_table_remove (gnc_engine_commodities(), c);
+      gnc_commodity_table_remove (gnc_get_current_commodities(), c);
 
       gnc_commodity_set_fullname (c, fullname);
       gnc_commodity_set_mnemonic (c, mnemonic);
@@ -655,7 +660,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     }
 
     /* remember the commodity */
-    c = gnc_commodity_table_insert(gnc_engine_commodities(), c);
+    c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);
 
     /* if there's a callback (generally to fill in some fields with 
      * info about the commodity) call it */

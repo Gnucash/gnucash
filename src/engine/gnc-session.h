@@ -53,11 +53,7 @@
 #define GNC_SESSION_H
 
 #include "gnc-book.h"
-
-/** TYPES **********************************************************/
-
-typedef struct gnc_session_struct GNCSession;
-
+#include "gnc-engine.h"
 
 /** PROTOTYPES ******************************************************/
 

@@ -14,7 +14,7 @@ libgncmod_backend_file_la_SOURCES = \
   gnc-backend-file.c \
   gnc-commodity-xml-v2.c \
   gnc-freqspec-xml-v2.c \
-  gnc-pricedb-xml-v1.c \
+  gnc-pricedb-xml-v2.c \
   gnc-schedxaction-xml-v2.c \
   gnc-transaction-xml-v2.c \
   io-example-account.c \

@@ -212,7 +212,7 @@ gnc_main_window_can_cancel_save (GNCMDIInfo *wind)
 static gboolean
 gnc_main_window_can_restore_cb (const char * filename)
 {
-  return !gnc_commodity_table_has_namespace (gnc_engine_commodities (),
+  return !gnc_commodity_table_has_namespace (gnc_get_current_commodities (),
                                              GNC_COMMODITY_NS_LEGACY);
 }
 

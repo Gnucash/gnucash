@@ -182,7 +182,7 @@
             (separator (string-ref (gnc:account-separator-char) 0))
             (default-currency 
               (gnc:commodity-table-find-full 
-               (gnc:engine-commodities) 
+               (gnc:book-get-commodity-table (gnc:get-current-book))
                GNC_COMMODITY_NS_ISO default-currency-name))
             (sorted-accounts-list '())
             (markable-xtns '())

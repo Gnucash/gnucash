@@ -26,7 +26,11 @@
 
 #include "gnc-commodity.h"
 
+/** TYPES **********************************************************/
+
+typedef struct gnc_session_struct GNCSession;
 typedef void (* gnc_engine_init_hook_t)(int, char **);
+
 
 /** PROTOTYPES ******************************************************/
 
@@ -45,9 +49,6 @@ void gnc_engine_shutdown (void);
 /* pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
-
-/* this is a global table of known commodity types. */
-gnc_commodity_table * gnc_engine_commodities(void);
 
 /* Many strings used throughout the engine are likely to be duplicated.
  * So we provide a reference counted cache system for the strings, which
@@ -71,4 +72,3 @@ gnc_commodity_table * gnc_engine_commodities(void);
 GCache* gnc_engine_get_string_cache(void);
 
 #endif
-

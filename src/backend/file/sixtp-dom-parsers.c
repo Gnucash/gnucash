@@ -700,25 +700,27 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
 }
 
 gnc_commodity*
-dom_tree_to_commodity_ref(xmlNodePtr node)
+dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session)
 {
     gnc_commodity *daref;
     gnc_commodity *ret;
-    
+    gnc_commodity_table *table;
+
     daref = dom_tree_to_commodity_ref_no_engine(node);
-    ret = associate_commodity_ref_with_engine_commodity(daref);
+
+    table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+    g_return_val_if_fail (table != NULL, NULL);
+
+    ret =  gnc_commodity_table_lookup (table,
+                                       gnc_commodity_get_namespace(daref),
+                                       gnc_commodity_get_mnemonic(daref));
 
     gnc_commodity_destroy(daref);
 
-    return ret;
-}
+    g_return_val_if_fail (ret != NULL, NULL);
 
-gnc_commodity *
-associate_commodity_ref_with_engine_commodity(gnc_commodity *com)
-{
-    return gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                      gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
+    return ret;
 }
 
 /***********************************************************************/
@@ -749,9 +751,9 @@ dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
     return ret;
 }
 
-        
+
 static gboolean
-gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gboolean *item,
+gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gpointer item,
                  struct dom_tree_handler *handlers)
 {
     for(;handlers->tag != NULL; handlers++)
@@ -763,7 +765,7 @@ gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gboolean *item,
             break;
         }
     }
-    
+
     if(!handlers->tag) 
     {
         PERR("Unhandled tag: %s\n",
@@ -780,7 +782,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 {
     xmlNodePtr achild;
     gboolean successful = TRUE;
-    
+
     dom_tree_handlers_reset(handlers);
 
     for(achild = node->xmlChildrenNode; achild; achild = achild->next)

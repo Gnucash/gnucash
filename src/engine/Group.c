@@ -199,6 +199,18 @@ xaccGroupSetBook (AccountGroup *group, GNCBook *book)
   }
 }
 
+GNCBook *
+xaccAccountGetBook (Account *account)
+{
+  AccountGroup *group;
+
+  if (!account) return NULL;
+
+  group = xaccAccountGetParent (account);
+
+  return xaccGroupGetBook (group);
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -9,7 +9,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "gnc-book.h"
+#include "gnc-session.h"
 #include "Query.h"
 #include "date.h"
 #include "gnc-pricedb.h"
@@ -37,21 +37,18 @@ void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 void set_max_group_depth (gint max_group_depth);
 void set_max_group_accounts (gint max_group_accounts);
 
-GNCPrice * get_random_price(void);
-void make_random_pricedb (GNCPriceDB *pdb);
-GNCPriceDB * get_random_pricedb(void);
-AccountGroup * get_random_group(void);
-Account* get_random_account(void);
-Split* get_random_split(gnc_numeric num);
-Transaction* get_random_transaction(void);
-gnc_commodity* get_random_commodity(void);
+GNCPrice * get_random_price(GNCSession *session);
+void make_random_pricedb (GNCSession *session, GNCPriceDB *pdb);
+GNCPriceDB * get_random_pricedb(GNCSession *session);
+AccountGroup * get_random_group(GNCSession * session);
+Account* get_random_account(GNCSession * session);
+Split* get_random_split(GNCSession *session, gnc_numeric num);
+Transaction* get_random_transaction(GNCSession *session);
+gnc_commodity* get_random_commodity(GNCSession *session);
 const char *get_random_commodity_namespace(void);
 
 Query* get_random_query(void);
 
-GNCBook * get_random_book (void);
-
-void add_random_commodities_to_engine (gboolean add);
+GNCBook * get_random_book (GNCSession *session);
 
 #endif
-

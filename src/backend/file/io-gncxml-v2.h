@@ -58,12 +58,12 @@ typedef struct
     int schedXactions_loaded;
 } load_counter;
 
-struct sixtp_global_data_v2_struct
+typedef struct
 {
-    GNCBook *book;
+    GNCSession *session;
     load_counter counter;
     void (*countCallback)(const char *type, load_counter counter);
-};
+} sixtp_gdv2;
 
 /**
  * Struct used to pass the account group/accounts and trasnactions in
@@ -75,9 +75,8 @@ typedef struct
 {
 	GList	*accts;
 	GList	*transactions;
+        GNCSession *session;
 } gnc_template_xaction_data;
-
-typedef struct sixtp_global_data_v2_struct sixtp_gdv2;
 
 /* read in an account group from a file */
 gboolean gnc_session_load_from_xml_file_v2(

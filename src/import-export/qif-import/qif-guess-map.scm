@@ -157,8 +157,9 @@
                  (namespace (cadr entry))
                  (mnemonic (caddr entry)))
              (hash-set! table name
-                        (gnc:commodity-table-lookup (gnc:engine-commodities) 
-                                                    namespace mnemonic)))))
+                        (gnc:commodity-table-lookup
+                         (gnc:book-get-commodity-table (gnc:get-current-book))
+                         namespace mnemonic)))))
      commlist)
     table))
                               

@@ -39,6 +39,7 @@
 
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
+#include "io-gncxml-v2.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
@@ -71,10 +72,11 @@ gnc_account_dom_tree_create(Account *act)
     ret = xmlNewNode(NULL, gnc_account_string);
     xmlSetProp(ret, "version", account_version_string);
 
-    xmlAddChild(ret, text_to_dom_tree(act_name_string, xaccAccountGetName(act)));
+    xmlAddChild(ret, text_to_dom_tree(act_name_string,
+                                      xaccAccountGetName(act)));
     
     xmlAddChild(ret, guid_to_dom_tree(act_id_string, xaccAccountGetGUID(act)));
-    
+
     xmlAddChild(ret, text_to_dom_tree(
                     act_type_string,
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
@@ -121,6 +123,12 @@ gnc_account_dom_tree_create(Account *act)
 
 /***********************************************************************/
 
+struct account_pdata
+{
+  Account *account;
+  GNCSession *session;
+};
+
 static gboolean
 set_string(xmlNodePtr node, Account* act,
            void (*func)(Account *act, const gchar *txt))
@@ -136,18 +144,21 @@ set_string(xmlNodePtr node, Account* act,
 }
 
 static gboolean
-account_name_handler (xmlNodePtr node, gpointer act)
+account_name_handler (xmlNodePtr node, gpointer act_pdata)
 {
-    return set_string(node, (Account*)act, xaccAccountSetName);
+    struct account_pdata *pdata = act_pdata;
+
+    return set_string(node, pdata->account, xaccAccountSetName);
 }
 
 static gboolean
-account_id_handler (xmlNodePtr node, gpointer act)
+account_id_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    xaccAccountSetGUID((Account*)act, guid);
+    xaccAccountSetGUID(pdata->account, guid);
 
     g_free(guid);
     
@@ -155,8 +166,9 @@ account_id_handler (xmlNodePtr node, gpointer act)
 }
 
 static gboolean
-account_type_handler (xmlNodePtr node, gpointer act)
+account_type_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     int type;
     char *string;
 
@@ -164,87 +176,101 @@ account_type_handler (xmlNodePtr node, gpointer act)
     xaccAccountStringToType(string, &type);
     xmlFree (string);
 
-    xaccAccountSetType((Account*)act, type);
+    xaccAccountSetType(pdata->account, type);
 
     return TRUE;
 }
 
 static gboolean
-account_commodity_handler (xmlNodePtr node, gpointer act)
+account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    xaccAccountSetCommodity((Account*)act, ref);
+    xaccAccountSetCommodity(pdata->account, ref);
 
     return TRUE;
 }
 
 static gboolean
-account_commodity_scu_handler (xmlNodePtr node, gpointer act)
+account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gint64 val;
+
     dom_tree_to_integer(node, &val);
-    xaccAccountSetCommoditySCU((Account*)act, val);
+    xaccAccountSetCommoditySCU(pdata->account, val);
 
     return TRUE;
 }
 
 static gboolean
-account_currency_handler (xmlNodePtr node, gpointer act)
+account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    DxaccAccountSetCurrency((Account*)act, ref);
+    DxaccAccountSetCurrency(pdata->account, ref, pdata->session);
 
     return TRUE;
 }
 
 static gboolean
-account_currency_scu_handler (xmlNodePtr node, gpointer act)
+account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gint64 val;
+
     dom_tree_to_integer(node, &val);
-    DxaccAccountSetCurrencySCU((Account*)act, val);
+    DxaccAccountSetCurrencySCU(pdata->account, val);
 
     return TRUE;
 }
 
 static gboolean
-account_security_handler (xmlNodePtr node, gpointer act)
+account_security_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
+
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    DxaccAccountSetSecurity((Account*)act, ref);
+    DxaccAccountSetSecurity(pdata->account, ref, pdata->session);
 
     return TRUE;
 }
 
 static gboolean
-account_security_scu_handler (xmlNodePtr node, gpointer act)
+account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gint64 val;
+
     dom_tree_to_integer(node, &val);
-    xaccAccountSetCommoditySCU((Account*)act, val);
+    xaccAccountSetCommoditySCU(pdata->account, val);
 
     return TRUE;
 }
 
 static gboolean
-account_slots_handler (xmlNodePtr node, gpointer act)
+account_slots_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     gboolean success;
 
-    success = dom_tree_to_kvp_frame_given (node, xaccAccountGetSlots (act));
+    success = dom_tree_to_kvp_frame_given
+      (node, xaccAccountGetSlots (pdata->account));
+
     g_return_val_if_fail(success, FALSE);
     
     return TRUE;
 }
 
 static gboolean
-account_parent_handler (xmlNodePtr node, gpointer act)
+account_parent_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    struct account_pdata *pdata = act_pdata;
     Account *parent;
     GUID *gid;
 
@@ -258,7 +284,7 @@ account_parent_handler (xmlNodePtr node, gpointer act)
       g_return_val_if_fail(parent, FALSE);
     }
 
-    xaccAccountInsertSubAccount(parent, (Account*)act);
+    xaccAccountInsertSubAccount(parent, pdata->account);
 
     g_free (gid);
 
@@ -266,15 +292,19 @@ account_parent_handler (xmlNodePtr node, gpointer act)
 }
 
 static gboolean
-account_code_handler(xmlNodePtr node, gpointer act)
+account_code_handler(xmlNodePtr node, gpointer act_pdata)
 {
-    return set_string(node, (Account*)act, xaccAccountSetCode);
+    struct account_pdata *pdata = act_pdata;
+
+    return set_string(node, pdata->account, xaccAccountSetCode);
 }
 
 static gboolean
-account_description_handler(xmlNodePtr node, gpointer act)
+account_description_handler(xmlNodePtr node, gpointer act_pdata)
 {
-    return set_string(node, (Account*)act, xaccAccountSetDescription);
+    struct account_pdata *pdata = act_pdata;
+
+    return set_string(node, pdata->account, xaccAccountSetDescription);
 }
 
 static struct dom_tree_handler account_handlers_v2[] = {
@@ -305,7 +335,8 @@ gnc_account_end_handler(gpointer data_for_children,
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    
+    GNCSession *session = gdata->sessiondata;
+
     successful = TRUE;
 
     if(parent_data)
@@ -319,13 +350,13 @@ gnc_account_end_handler(gpointer data_for_children,
     {
         return TRUE;
     }
-    
+
     g_return_val_if_fail(tree, FALSE);
-    
-    acc = dom_tree_to_account(tree);
+
+    acc = dom_tree_to_account(tree, session);
     if(acc != NULL)
     {
-        gdata->cb(tag, gdata->data, acc);
+        gdata->cb(tag, gdata->parsedata, acc);
         /*
          * Now return the account to the "edit" state.  At the end of reading
          * all the transactions, we will Commit.  This replaces #splits
@@ -333,28 +364,35 @@ gnc_account_end_handler(gpointer data_for_children,
          */
         xaccAccountBeginEdit(acc);
     }
-    
+
     xmlFreeNode(tree);
 
     return acc != NULL;
 }
 
 Account*
-dom_tree_to_account( xmlNodePtr node )
+dom_tree_to_account (xmlNodePtr node, GNCSession * session)
 {
+    struct account_pdata act_pdata;
     Account *accToRet;
     gboolean successful;
-	
+
     accToRet = xaccMallocAccount();
     xaccAccountBeginEdit(accToRet);
-        
-    successful = dom_tree_generic_parse( node, account_handlers_v2, accToRet );
-    xaccAccountCommitEdit( accToRet );
 
-    if ( !successful ) {
-        xaccFreeAccount( accToRet );
+    act_pdata.account = accToRet;
+    act_pdata.session = session;
+
+    successful = dom_tree_generic_parse (node, account_handlers_v2,
+                                         &act_pdata);
+    xaccAccountCommitEdit (accToRet);
+
+    if (!successful)
+    {
+        xaccAccountDestroy (accToRet);
         accToRet = NULL;
     }
+
     return accToRet;
 }
 

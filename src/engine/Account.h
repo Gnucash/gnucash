@@ -27,6 +27,7 @@
 
 #include "GNCId.h"
 #include "Transaction.h"
+#include "gnc-engine.h"
 #include "kvp_frame.h"
 
 
@@ -215,10 +216,14 @@ void xaccAccountSetCommoditySCU (Account *account, int frac);
  * the 'commodity'. Use xaccAccountGetCommodity() to fetch it.
  */
 /* these two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
-void DxaccAccountSetSecurity (Account *account, gnc_commodity *security);
-gnc_commodity * DxaccAccountGetCurrency (Account *account);
-gnc_commodity * DxaccAccountGetSecurity (Account *account);
+void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
+                              GNCSession *session);
+void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
+                              GNCSession *session);
+gnc_commodity * DxaccAccountGetCurrency (Account *account,
+                                         GNCSession *session);
+gnc_commodity * DxaccAccountGetSecurity (Account *account,
+                                         GNCSession *session);
 void DxaccAccountSetCurrencySCU (Account *account, int frac);
 int  DxaccAccountGetCurrencySCU (Account *account);
 

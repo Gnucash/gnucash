@@ -269,8 +269,6 @@ gnc_file_new (void)
   gnc_session_destroy (session);
   current_session = NULL;
 
-  gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
-
   /* start a new book */
   gnc_get_current_session_internal ();
 
@@ -356,8 +354,6 @@ gnc_post_file_open (const char * filename)
 
   gnc_session_destroy (current_session);
   current_session = NULL;
-
-  gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a session going. */

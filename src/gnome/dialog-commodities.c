@@ -110,7 +110,7 @@ gnc_load_namespace (gpointer data, gpointer user_data)
       safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
     return;
 
-  ct = gnc_engine_commodities ();
+  ct = gnc_get_current_commodities ();
 
   commodities = gnc_commodity_table_get_commodities (ct, namespace);
 
@@ -163,7 +163,7 @@ gnc_commodities_load_commodities (CommoditiesDialog *cd)
   int new_row;
   guint size;
 
-  ct = gnc_engine_commodities ();
+  ct = gnc_get_current_commodities ();
 
   namespaces = gnc_commodity_table_get_namespaces (ct);
   namespaces = g_list_sort (namespaces, namespace_compare);
@@ -271,7 +271,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
 
   if (do_delete)
   {
-    gnc_commodity_table *ct = gnc_engine_commodities ();
+    gnc_commodity_table *ct = gnc_get_current_commodities ();
 
     gnc_commodity_table_remove (ct, cd->commodity);
     gnc_commodity_destroy (cd->commodity);

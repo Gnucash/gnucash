@@ -1,9 +1,11 @@
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "gnc-engine-util.h"
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -20,7 +22,7 @@ test_commodity(void)
 
         success("commodity new and destroy");
     }
-    
+
     {
         char *fullname;
         const char *namespace;
@@ -103,15 +105,17 @@ test_commodity(void)
         int j;
         gnc_commodity_table *tbl;
         gnc_commodity *coms[20];
+        GNCSession *session;
 
-        tbl = gnc_commodity_table_new();
+        session = gnc_session_new ();
+        tbl = gnc_commodity_table_new ();
 
         do_test(gnc_commodity_table_get_size(tbl) == 0,
-                            "test size for 0 table");
+                "test size for 0 table");
 
         for(i = 0; i < 20; i++)
         {
-            coms[i] = get_random_commodity();
+            coms[i] = get_random_commodity(session);
 
             do_test(
                 gnc_commodity_table_insert(tbl, coms[i]) != NULL,
@@ -119,8 +123,10 @@ test_commodity(void)
 
             do_test_args(
                 gnc_commodity_table_get_size(tbl) == i + 1,
-                "test next size table", __FILE__, __LINE__, "should be %d and is %d", i + 1, gnc_commodity_table_get_size(tbl));
-            
+                "test next size table", __FILE__, __LINE__,
+                "should be %d and is %d", i + 1,
+                gnc_commodity_table_get_size(tbl));
+
             for(j = 0; j <= i; j++)
             {
                 gnc_commodity *testcom;
@@ -144,12 +150,18 @@ test_commodity(void)
     
 }
 
-int
-main(int argc, char **argv)
+static void
+main_helper (int argc, char **argv)
 {
-    gnc_engine_init (argc, argv);
-    add_random_commodities_to_engine (FALSE);
-    test_commodity();
-    print_test_results();
-    exit(get_rv());
+  gnc_module_load("gnucash/engine", 0);
+  test_commodity();
+  print_test_results();
+  exit(get_rv());
+}
+
+int
+main (int argc, char **argv)
+{
+  gh_enter (argc, argv, main_helper);
+  return 0;
 }

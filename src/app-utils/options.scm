@@ -255,7 +255,8 @@
   (define (scm->currency currency)
     (if (string? currency)
         (gnc:commodity-table-lookup
-         (gnc:engine-commodities) GNC_COMMODITY_NS_ISO currency)
+         (gnc:book-get-commodity-table (gnc:get-current-book))
+         GNC_COMMODITY_NS_ISO currency)
         currency))
 
    (let* ((value (currency->scm default-value))
@@ -279,13 +280,18 @@
  	 default-value)
 
   (define (commodity->scm commodity)
-    (list 'commodity-scm
-          (gnc:commodity-get-namespace commodity)
-          (gnc:commodity-get-mnemonic commodity)))
+    (if (string? commodity)
+        (list 'commodity-scm
+              GNC_COMMODITY_NS_ISO
+              commodity)
+        (list 'commodity-scm
+              (gnc:commodity-get-namespace commodity)
+              (gnc:commodity-get-mnemonic commodity))))
 
   (define (scm->commodity scm)
     (gnc:commodity-table-lookup
-     (gnc:engine-commodities) (cadr scm) (caddr scm)))
+     (gnc:book-get-commodity-table (gnc:get-current-book))
+     (cadr scm) (caddr scm)))
 
    (let* ((value (commodity->scm default-value))
           (value->string (lambda ()

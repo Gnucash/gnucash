@@ -158,7 +158,7 @@
  (gnc:make-currency-option
   (N_ "International") (N_ "Default Currency")
   "b" (N_ "Default currency for new accounts")
-  (gnc:locale-default-currency)))
+  (gnc:locale-default-iso-currency-code)))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -169,7 +169,7 @@
  (gnc:make-simple-boolean-option
   (N_ "International") (N_ "Enable EURO support")
   "d" (N_ "Enables support for the European Union EURO currency") 
-  (gnc:is-euro-currency (gnc:default-currency))))
+  (gnc:is-euro-currency-code (gnc:locale-default-iso-currency-code))))
 
 
 ;;; Register options

@@ -21,13 +21,12 @@
 ;;  in the engine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:setup-default-namespaces)
-  (let ((table (gnc:engine-commodities)))
-    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_AMEX)
-    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NYSE)
-    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NASDAQ)
-    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_EUREX)
-    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_MUTUAL)))
+(define (gnc:setup-default-namespaces table)
+  (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_AMEX)
+  (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NYSE)
+  (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NASDAQ)
+  (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_EUREX)
+  (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_MUTUAL))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -35,9 +34,8 @@
 ;;  load the default table of ISO-4217 currency information. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:load-iso-4217-currencies) 
-  (let ((table (gnc:engine-commodities))
-	(curr-path (%search-load-path gnc:*iso-4217-currency-file*)))
+(define (gnc:load-iso-4217-currencies table)
+  (let ((curr-path (%search-load-path gnc:*iso-4217-currency-file*)))
     (if curr-path
 	(with-input-from-file curr-path
 	  (lambda ()
@@ -70,3 +68,7 @@
 				(gnc:commodity-table-insert table comm)))))
 		    (loop (read)))))))
 	(display "Unable to load iso-4217 currency definitions\n"))))
+
+(define (gnc:engine-commodity-table-construct table)
+  (gnc:load-iso-4217-currencies table)
+  (gnc:setup-default-namespaces table))

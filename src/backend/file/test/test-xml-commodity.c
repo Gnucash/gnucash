@@ -22,12 +22,13 @@
 
 #include "Account.h"
 
+static GNCSession *session;
 
 static gchar*
 node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
 {
     xmlNodePtr mark;
-    
+
     if(!check_dom_tree_version(node, "2.0.0"))
     {
         return "version wrong.  Not 2.0.0 or not there";
@@ -142,7 +143,7 @@ test_generation(void)
         int fd;
         gchar *compare_msg;
         
-        ran_com = get_random_commodity();
+        ran_com = get_random_commodity(session);
 
         test_node = gnc_commodity_dom_tree_create(ran_com);
         if(!test_node)
@@ -186,7 +187,7 @@ test_generation(void)
             parser = gnc_commodity_sixtp_parser_create();
             
             if(!gnc_xml_parse_file(parser, filename1, test_add_commodity,
-                                   (gpointer)&data))
+                                   (gpointer)&data, session))
             {
                 failure_args("gnc_xml_parse_file returned FALSE",  
 			     __FILE__, __LINE__, "%d", i);
@@ -214,20 +215,32 @@ test_real_commodity(const char *tag, gpointer globaldata, gpointer data)
     return TRUE;
 }
 
-int
-main(int argc, char **argv)
+static void
+guile_main(int argc, char **argv)
 {
-    gnc_engine_init (argc, argv);
+    gnc_module_system_init();
+    gnc_module_load("gnucash/engine", 0);
+
+    session = gnc_session_new ();
+
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_commodity,
                           gnc_commodity_sixtp_parser_create(),
-                          "gnc:commodity");
+                          "gnc:commodity", session);
     }
     else
     {
         test_generation();
     }
+
     print_test_results();
     exit(get_rv());
+}
+
+int
+main(int argc, char ** argv)
+{
+  gh_enter (argc, argv, guile_main);
+  return 0;
 }

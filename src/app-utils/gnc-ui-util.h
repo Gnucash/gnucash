@@ -49,6 +49,7 @@ void gnc_set_current_session_handler (GNCSessionCB cb);
 GNCSession * gnc_get_current_session (void);
 GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
+gnc_commodity_table * gnc_get_current_commodities (void);
 
 typedef enum
 {
@@ -135,6 +136,9 @@ struct lconv * gnc_localeconv (void);
 
 /* Returns the default currency of the current locale. */
 gnc_commodity * gnc_locale_default_currency (void);
+
+/* Returns the default ISO currency string of the current locale. */
+const char * gnc_locale_default_iso_currency_code (void);
 
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);

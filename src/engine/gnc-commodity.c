@@ -110,15 +110,30 @@ gnc_commodity_new(const char * fullname,
  ********************************************************************/
 
 void
-gnc_commodity_destroy(gnc_commodity * cm) {
+gnc_commodity_destroy(gnc_commodity * cm)
+{
   if(!cm) return;
+
   g_free(cm->fullname);
+  cm->fullname = NULL;
+
   g_free(cm->printname);
+  cm->printname = NULL;
+
   g_free(cm->namespace);
+  cm->namespace = NULL;
+
   g_free(cm->exchange_code);
+  cm->exchange_code = NULL;
+
   g_free(cm->mnemonic);
+  cm->mnemonic = NULL;
+
   g_free(cm->unique_name);
+  cm->unique_name = NULL;
+
   cm->mark = 0;
+
   g_free(cm);
 }
 

@@ -149,11 +149,13 @@ pgendGetTopGroup (PGBackend *be)
  */
 
 gnc_commodity *
-gnc_string_to_commodity (const char *str)
+gnc_string_to_commodity (const char *str, GNCSession *session)
 {
-   gnc_commodity_table *comtab = gnc_engine_commodities();
+   gnc_commodity_table *comtab;
    gnc_commodity *com;
    char *space, *name;
+
+   comtab = gnc_book_get_commodity_table (gnc_session_get_book (session));
 
    space = g_strdup(str);
    name = strchr (space, ':');
@@ -338,7 +340,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetDateEnteredTS (trans, &ts);
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->session);
    xaccTransSetCurrency (trans, currency);
 
    trans->marker = 1;

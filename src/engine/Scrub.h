@@ -86,14 +86,14 @@ void xaccGroupScrubImbalance (AccountGroup *grp);
 /* The xaccTransScrubCurrency method fixes transactions without a
  * common_currency by using the old account currency and security
  * fields of the parent accounts of the transaction's splits. */
-void xaccTransScrubCurrency (Transaction *trans);
+void xaccTransScrubCurrency (Transaction *trans, GNCSession *session);
 
 /* The xaccAccountScrubCommodity method fixed accounts without
  * a commodity by using the old account currency and security. */
-void xaccAccountScrubCommodity (Account *account);
+void xaccAccountScrubCommodity (Account *account, GNCSession *session);
 
 /* The xaccGroupScrubCommodities will scrub the currency/commodity
  * of all accounts & transactions in the group. */
-void xaccGroupScrubCommodities (AccountGroup *group);
+void xaccGroupScrubCommodities (AccountGroup *group, GNCSession *session);
 
 #endif /* XACC_SCRUB_H */

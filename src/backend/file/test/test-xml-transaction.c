@@ -27,6 +27,7 @@
 #include "Transaction.h"
 #include "GNCIdP.h"
 
+static GNCSession *session;
 
 static xmlNodePtr
 find_appropriate_node(xmlNodePtr node, Split *spl)
@@ -319,7 +320,7 @@ test_transaction(void)
         FILE *cmp_file;
         int fd;
 
-        ran_trn = get_random_transaction();
+        ran_trn = get_random_transaction(session);
 
         com = xaccTransGetCurrency (ran_trn);
 
@@ -369,7 +370,7 @@ test_transaction(void)
             parser = gnc_transaction_sixtp_parser_create();
             
             if(!gnc_xml_parse_file(parser, filename1, test_add_transaction,
-                                   (gpointer)&data))
+                                   (gpointer)&data, session))
             {
                 failure_args("gnc_xml_parse_file returned FALSE", 
 			     __FILE__, __LINE__, "%d", i);
@@ -399,23 +400,34 @@ test_real_transaction(const char *tag, gpointer global_data, gpointer data)
     return TRUE;
 }
 
-int
-main(int argc, char **argv)
+static void
+guile_main(int argc, char **argv)
 {
-    gnc_engine_init (argc, argv);
+    gnc_module_system_init();
+    gnc_module_load("gnucash/engine", 0);
+
     xaccLogDisable();
-    
+
+    session = gnc_session_new ();
+
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_transaction,
                           gnc_transaction_sixtp_parser_create(),
-                          "gnc:transaction");
+                          "gnc:transaction", session);
     }
     else
     {
         test_transaction();
     }
-    
+
     print_test_results();
     exit(get_rv());
+}
+
+int
+main(int argc, char ** argv)
+{
+  gh_enter (argc, argv, guile_main);
+  return 0;
 }

@@ -11,6 +11,7 @@
 
 #include "date.h"
 #include "gnc-commodity.h"
+#include "gnc-session.h"
 #include "gnc-xml-helper.h"
 #include "guid.h"
 #include "io-gncxml-gen.h"
@@ -40,6 +41,7 @@ gboolean equals_node_val_vs_int(xmlNodePtr node, gint64 val);
 
 void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
-                  sixtp *parser, const char *parser_tag);
+                  sixtp *parser, const char *parser_tag,
+                  GNCSession *session);
 
 #endif

@@ -2116,6 +2116,14 @@ of having a parent transaction with which one is working...")
 
   (gw:wrap-function
    mod
+   'gnc:commodity-table-new
+   '<gnc:commodity-table*>
+   "gnc_commodity_table_new"
+   '()
+   "Return a new commodity table.");
+
+  (gw:wrap-function
+   mod
    'gnc:commodity-table-lookup
    '<gnc:commodity*>
    "gnc_commodity_table_lookup"
@@ -2187,17 +2195,7 @@ of having a parent transaction with which one is working...")
      ((<gw:m-chars-caller-owned> gw:const) namespace))
    "Return a list of all the namespaces in the table.")
 
-  (gw:wrap-function
-   mod
-   'gnc:engine-commodities
-   '<gnc:commodity-table*>
-   "gnc_engine_commodities"
-   '()
-   "Get the engine's list of known commodity types.")
-
-
   ;;=========
-
 
   (gw:wrap-function
    mod

@@ -88,6 +88,22 @@
 
   (gw:wrap-function
    mod
+   'gnc:get-current-group
+   '<gnc:AccountGroup*>
+   "gnc_get_current_group"
+   '()
+   "Get the current top-level group.")
+
+  (gw:wrap-function
+   mod
+   'gnc:get-current-book
+   '<gnc:Book*>
+   "gnc_get_current_book"
+   '()
+   "Get the current top-level book.")
+
+  (gw:wrap-function
+   mod
    'gnc:exp-parser-init
    '<gw:void>
    "gnc_exp_parser_init"
@@ -207,6 +223,14 @@ determines formatting details.")
 
   (gw:wrap-function
    mod
+   'gnc:locale-default-iso-currency-code
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_locale_default_iso_currency_code"
+   '()
+   "Return the default iso currency code for the current locale.")
+
+  (gw:wrap-function
+   mod
    'gnc:suspend-gui-refresh
    '<gw:void>
    "gnc_suspend_gui_refresh"
@@ -299,6 +323,14 @@ determines formatting details.")
    '<gw:bool>
    "gnc_is_euro_currency"
    '((<gnc:commodity*> currency))
+   "Check if a given currency is a EURO currency")
+
+  (gw:wrap-function
+   mod
+   'gnc:is-euro-currency-code
+   '<gw:bool>
+   "gnc_is_euro_currency_code"
+   '((<gw:m-chars-caller-owned> gw:const))
    "Check if a given currency is a EURO currency")
 
   (gw:wrap-function

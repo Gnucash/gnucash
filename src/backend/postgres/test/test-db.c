@@ -22,8 +22,9 @@ run_test (void)
   GNCBackendError io_err;
   char *filename;
 
-  book = get_random_book ();
   session = gnc_session_new ();
+
+  book = get_random_book (session);
 
   gnc_session_set_book (session, book);
 

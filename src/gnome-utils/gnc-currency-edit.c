@@ -40,6 +40,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 
 
@@ -145,7 +146,7 @@ fill_currencies(GNCCurrencyEdit *gce)
         GList *node;
 
         currencies = gnc_commodity_table_get_commodities
-                (gnc_engine_commodities (), GNC_COMMODITY_NS_ISO);
+                (gnc_get_current_commodities (), GNC_COMMODITY_NS_ISO);
 
         currencies = g_list_sort(currencies, currency_compare);
 
@@ -212,7 +213,7 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 
         mnemonic = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(gce)->entry));
 
-        return gnc_commodity_table_lookup (gnc_engine_commodities (),
+        return gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                            GNC_COMMODITY_NS_ISO,
                                            mnemonic);
 }

@@ -21,11 +21,11 @@
 static const gchar *da_ending = ".gnucash-xea";
 
 static void
-test_load_file(const char *filename)
+test_load_file(GNCSession *session, const char *filename)
 {
     GncExampleAccount *gea;
 
-    gea = gnc_read_example_account(filename);
+    gea = gnc_read_example_account(session, filename);
 
     if(gea != NULL)
     {
@@ -39,17 +39,19 @@ test_load_file(const char *filename)
     }
 }
 
-int
-main(int argc, char **argv)
+static void
+guile_main(int argc, char **argv)
 {
     const char *location = "../../../../accounts/C";
+    GSList *list = NULL;
     DIR *ea_dir;
-    GSList *list;
+    GNCSession *session;
 
-    list = NULL;
-    
-    gnc_engine_init(argc, argv);
-    
+    gnc_module_system_init();
+    gnc_module_load("gnucash/engine", 0);
+
+    session = gnc_session_new ();
+
     if((ea_dir = opendir(location)) == NULL)
     {
         failure("unable to open ea directory");
@@ -73,7 +75,7 @@ main(int argc, char **argv)
                 {
                     if(!S_ISDIR(file_info.st_mode))
                     {
-                        test_load_file(to_open);
+                        test_load_file(session, to_open);
                     }
                 }
                 g_free(to_open);
@@ -83,7 +85,7 @@ main(int argc, char **argv)
     closedir(ea_dir);
     
     {
-        list = gnc_load_example_account_list(location);
+        list = gnc_load_example_account_list(session, location);
 
         do_test(list != NULL, "gnc_load_example_account_list");
         
@@ -93,4 +95,11 @@ main(int argc, char **argv)
     
     print_test_results();
     exit(get_rv());
+}
+
+int
+main(int argc, char ** argv)
+{
+  gh_enter (argc, argv, guile_main);
+  return 0;
 }

@@ -231,6 +231,7 @@ gint32 xaccTransGetVersion (Transaction*);
  *    indicating a currency denomination that all of the splits in this
  *    transaction have in common, using the old currency/security fields
  *    of the split accounts. */
-gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans);
+gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
+                                                GNCSession *session);
 
 #endif /* XACC_TRANSACTION_P_H */

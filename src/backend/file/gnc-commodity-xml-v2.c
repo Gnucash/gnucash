@@ -193,7 +193,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
         return FALSE;
     }
 
-    gdata->cb(tag, gdata->data, com);
+    gdata->cb(tag, gdata->parsedata, com);
 
     xmlFreeNode(tree);
     

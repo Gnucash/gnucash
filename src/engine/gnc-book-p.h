@@ -41,12 +41,13 @@ struct gnc_book_struct
 {
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
+
   GList *sched_xactions;
   AccountGroup *template_group;
+  gboolean sx_notsaved; /* true if sched_xactions is changed */
 
-  /* should be set true if sched_xactions is changed */
-  gboolean sx_notsaved; 
- 
+  gnc_commodity_table *commodity_table;
+
   Backend *backend;
 };
 
