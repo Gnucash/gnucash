@@ -1,3 +1,13 @@
+2005-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	Neil Williams' QOF sync patch:
+	* This patch updates the QOF merge code to current QOF to bring
+	  the g2 branch into sync. This update also makes
+	  qof_book_merge_param_as_string output strings that are
+	  compatible with QSF: using false instead of FALSE in string
+	  output and using the QSF_XSD_TIME for the datestrings. KVP
+	  handling will be added in the next version.
+
 2005-01-26  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' QSF Backend.

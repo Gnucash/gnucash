@@ -1,6 +1,6 @@
 /*********************************************************************
  * test-book-merge.c -- test implementation api for QoFBook merge    *
- * Copyright (C) 2004 Neil Williams <linux@codehelp.co.uk>           *
+ * Copyright (C) 2004-2005 Neil Williams <linux@codehelp.co.uk>      *
  *                                                                   *
  * This program is free software; you can redistribute it and/or     *
  * modify it under the terms of the GNU General Public License as    *
@@ -45,7 +45,7 @@
 #define OBJ_MINOR "tiny"
 #define OBJ_ACTIVE "ofcourse"
 
-static void test_rule_loop (qof_book_mergeRule*, guint);
+static void test_rule_loop (qof_book_mergeData*, qof_book_mergeRule*, guint);
 static void test_merge (void);
 gboolean myobjRegister (void);
 
@@ -265,6 +265,7 @@ test_merge (void)
 	gint64 minor;
 	gchar *import_init, *target_init;
 	gnc_numeric obj_amount;
+	qof_book_mergeData *mergeData;
 	
 	target = qof_book_new();
 	import = qof_book_new();
@@ -346,21 +347,21 @@ test_merge (void)
 	obj_setMinor(target_obj, minor);
 	obj_setDate(target_obj, tc );
 	
-	result = qof_book_mergeInit(import, target);
-	do_test ( result != -1, "FATAL: Merge could not be initialised!\t aborting . . ");
-	g_return_if_fail(result != -1);
- 	qof_book_mergeRuleForeach(test_rule_loop, MERGE_REPORT);
-	qof_book_mergeRuleForeach(test_rule_loop, MERGE_UPDATE);
-	qof_book_mergeRuleForeach(test_rule_loop, MERGE_NEW);
+	mergeData = qof_book_mergeInit(import, target);
+	do_test ( mergeData != NULL, "FATAL: Merge could not be initialised!\t aborting . . ");
+	g_return_if_fail(mergeData != NULL);
+ 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_REPORT);
+	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_UPDATE);
+	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_NEW);
  	/* reserved calls - test only */
- 	qof_book_mergeRuleForeach(test_rule_loop, MERGE_ABSOLUTE);
- 	qof_book_mergeRuleForeach(test_rule_loop, MERGE_DUPLICATE);
+ 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_ABSOLUTE);
+ 	qof_book_mergeRuleForeach(mergeData, test_rule_loop, MERGE_DUPLICATE);
 
 	/* import should not be in the target - pass if import_init fails match with target */
 	do_test (((safe_strcmp(obj_getName(import_obj),obj_getName(target_obj))) != 0), "Init value test #1");
 	
 	/* a good commit returns zero */
- 	do_test (qof_book_mergeCommit() == 0, "Commit failed");
+ 	do_test (qof_book_mergeCommit(mergeData) == 0, "Commit failed");
 
 	/* import should be in the target - pass if import_init matches target */
 	do_test (((safe_strcmp(import_init,obj_getName(target_obj))) == 0), "Merged value test #1");
@@ -392,7 +393,7 @@ test_merge (void)
 }
 
 static void
-test_rule_loop (qof_book_mergeRule *rule, guint remainder)
+test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint remainder)
 {
 	GSList *testing;
 	QofParam *eachParam;
@@ -463,14 +464,13 @@ test_rule_loop (qof_book_mergeRule *rule, guint remainder)
 	} // end param loop
 	/* set each rule dependent on the user involvement response above. */
 	/* test routine just sets all MERGE_REPORT to MERGE_UPDATE */
-	qof_book_mergeUpdateResult(rule,MERGE_UPDATE);
+	mergeData = qof_book_mergeUpdateResult(mergeData, MERGE_UPDATE);
 	do_test ((rule->mergeResult != MERGE_REPORT), "update result fail");
 }
 
 static void
 main_helper (void *closure, int argc, char **argv)
 {
-//	gnc_module_load("gnucash/engine", 0);
 	gnc_engine_init(argc, argv);
 	myobjRegister();
 	test_merge();
