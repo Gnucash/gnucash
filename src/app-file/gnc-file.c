@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "Backend.h"
-#include "Group.h"
 #include "global-options.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -36,6 +35,7 @@
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
 #include "gnc-file-p.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -47,30 +47,30 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GNCBook *current_book = NULL;
+static GNCSession * current_session = NULL;
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
 
 
-static GNCBook *
-gnc_get_current_book_internal (void)
+static GNCSession *
+gnc_get_current_session_internal (void)
 {
-  if (!current_book)
-    current_book = gnc_book_new ();
+  if (!current_session)
+    current_session = gnc_session_new ();
 
-  return current_book;
+  return current_session;
 }
 
 void
 gnc_file_init (void)
 {
-  gnc_set_current_book_handler (gnc_get_current_book_internal);
+  gnc_set_current_session_handler (gnc_get_current_session_internal);
 
-  /* Make sure we have a curent book. */
-  gnc_get_current_book_internal ();
+  /* Make sure we have a current session. */
+  gnc_get_current_session_internal ();
 }
 
 static gboolean
-show_book_error (GNCBackendError io_error, const char *newfile)
+show_session_error (GNCBackendError io_error, const char *newfile)
 {
   gboolean uh_oh = TRUE;
   const char *fmt;
@@ -220,13 +220,13 @@ show_book_error (GNCBackendError io_error, const char *newfile)
 }
 
 static void
-gnc_add_history (GNCBook *book)
+gnc_add_history (GNCSession * session)
 {
   char *url;
 
-  if (!book) return;
+  if (!session) return;
 
-  url = xaccResolveURL (gnc_book_get_url (book));
+  url = xaccResolveURL (gnc_session_get_url (session));
   if (!url)
     return;
 
@@ -243,20 +243,20 @@ gnc_book_opened (void)
 {
   gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
             gh_eval_str("gnc:*book-opened-hook*"),
-            gh_str02scm(gnc_book_get_url(current_book))); 
+            gh_str02scm(gnc_session_get_url(current_session))); 
 }
 
 void
 gnc_file_new (void)
 {
-  GNCBook *book;
+  GNCSession *session;
 
   /* If user attempts to start a new session before saving results of
    * the last one, prompt them to clean up their act. */
   if (!gnc_file_query_save ())
     return;
 
-  book = gnc_get_current_book_internal ();
+  session = gnc_get_current_session_internal ();
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -264,15 +264,15 @@ gnc_file_new (void)
 
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_book_get_url(book)));
-  
-  gnc_book_destroy (book);
-  current_book = NULL;
+           gh_str02scm(gnc_session_get_url(session)));
+
+  gnc_session_destroy (session);
+  current_session = NULL;
 
   gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* start a new book */
-  gnc_get_current_book_internal ();
+  gnc_get_current_session_internal ();
 
   gh_call1(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*new-book-hook*"));
@@ -286,7 +286,7 @@ gnc_file_new (void)
 gboolean
 gnc_file_query_save (void)
 {
-  GNCBook * book = gnc_get_current_book_internal ();
+  GNCSession * session = gnc_get_current_session_internal ();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -294,7 +294,7 @@ gnc_file_query_save (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (gnc_book_not_saved(book))
+  while (gnc_book_not_saved(gnc_session_get_book (session)))
   {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
@@ -326,9 +326,8 @@ gnc_file_query_save (void)
 static gboolean
 gnc_post_file_open (const char * filename)
 {
-  GNCBook *new_book;
+  GNCSession *new_session;
   gboolean uh_oh = FALSE;
-  AccountGroup *new_group;
   char * newfile;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
@@ -337,7 +336,7 @@ gnc_post_file_open (const char * filename)
   newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
-    show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
+    show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
     return FALSE;
   }
 
@@ -353,29 +352,27 @@ gnc_post_file_open (const char * filename)
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_book_get_url(current_book)));           
+           gh_str02scm(gnc_session_get_url(current_session)));           
 
-  gnc_book_destroy (current_book);
-  current_book = NULL;
+  gnc_session_destroy (current_session);
+  current_session = NULL;
 
   gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* load the accounts from the users datafile */
-  /* but first, check to make sure we've got a book going. */
-  new_book = gnc_book_new ();
+  /* but first, check to make sure we've got a session going. */
+  new_session = gnc_session_new ();
 
-  new_group = NULL;
-
-  gnc_book_begin (new_book, newfile, FALSE, FALSE);
-  io_err = gnc_book_get_error (new_book);
+  gnc_session_begin (new_session, newfile, FALSE, FALSE);
+  io_err = gnc_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
   {
-    if (FALSE == show_book_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile))
     {
       /* user told us to ignore locks. So ignore them. */
-      gnc_book_begin (new_book, newfile, TRUE, FALSE);
+      gnc_session_begin (new_session, newfile, TRUE, FALSE);
     }
     else
     {
@@ -391,17 +388,17 @@ gnc_post_file_open (const char * filename)
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
-    if (FALSE == show_book_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile))
     {
       /* user told us to create a new database. Do it. */
-      gnc_book_begin (new_book, newfile, FALSE, TRUE);
+      gnc_session_begin (new_session, newfile, FALSE, TRUE);
     }
   }
 
   /* Check for errors again, since above may have cleared the lock.
    * If its still locked, still, doesn't exist, still too old, then
    * don't bother with the message, just die. */
-  io_err = gnc_book_get_error (new_book);
+  io_err = gnc_session_get_error (new_session);
   if ((ERR_BACKEND_LOCKED == io_err) ||
       (ERR_BACKEND_NO_SUCH_DB == io_err) ||
       (ERR_SQL_DB_TOO_OLD == io_err))
@@ -410,25 +407,27 @@ gnc_post_file_open (const char * filename)
   }
   else
   {
-    uh_oh = show_book_error (io_err, newfile);
+    uh_oh = show_session_error (io_err, newfile);
   }
 
   if (!uh_oh)
   {
-    gnc_book_load (new_book);
+    AccountGroup *new_group;
+
+    gnc_session_load (new_session);
 
     /* check for i/o error, put up appropriate error dialog */
-    io_err = gnc_book_get_error (new_book);
-    uh_oh = show_book_error (io_err, newfile);
+    io_err = gnc_session_get_error (new_session);
+    uh_oh = show_session_error (io_err, newfile);
 
-    new_group = gnc_book_get_group (new_book);
+    new_group = gnc_book_get_group (gnc_session_get_book (new_session));
     if (uh_oh) new_group = NULL;
-    
+
     /* Umm, came up empty-handed, but no error: 
      * The backend forgot to set an error. So make one up. */
     if (!uh_oh && !new_group) 
     {
-      uh_oh = show_book_error (ERR_BACKEND_MISC, newfile);
+      uh_oh = show_session_error (ERR_BACKEND_MISC, newfile);
     }
   }
 
@@ -437,7 +436,7 @@ gnc_post_file_open (const char * filename)
   /* going down -- abandon ship */
   if (uh_oh) 
   {
-    gnc_book_destroy (new_book);
+    gnc_session_destroy (new_session);
 
     /* well, no matter what, I think it's a good idea to have a
      * topgroup around.  For example, early in the gnucash startup
@@ -445,7 +444,7 @@ gnc_post_file_open (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    current_book = gnc_get_current_book_internal ();
+    current_session = gnc_get_current_session_internal ();
 
     g_free (newfile);
 
@@ -459,14 +458,14 @@ gnc_post_file_open (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  current_book = new_book;
+  current_session = new_session;
 
   gnc_book_opened ();
 
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  gnc_add_history (current_book);
+  gnc_add_history (current_session);
 
   g_free (newfile);
 
@@ -492,7 +491,7 @@ gnc_file_open (void)
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  gnc_get_current_book_internal ();
+  gnc_get_current_session_internal ();
 
   return result;
 }
@@ -516,15 +515,15 @@ gnc_file_save (void)
 {
   GNCBackendError io_err;
   const char * newfile;
-  GNCBook *book;
+  GNCSession *session;
   ENTER (" ");
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* If we don't have a filename/path to save to get one. */
-  book = gnc_get_current_book_internal ();
+  session = gnc_get_current_session_internal ();
 
-  if (!gnc_book_get_file_path (book))
+  if (!gnc_session_get_file_path (session))
   {
     gnc_file_save_as ();
     return;
@@ -532,16 +531,16 @@ gnc_file_save (void)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
-  gnc_book_save (book);
+  gnc_session_save (session);
   gnc_unset_busy_cursor (NULL);
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
-  newfile = gnc_book_get_file_path (book);
-  io_err = gnc_book_get_error (book);
+  newfile = gnc_session_get_file_path (session);
+  io_err = gnc_session_get_error (session);
   if (ERR_BACKEND_NO_ERR != io_err)
   {
-    show_book_error (io_err, newfile);
+    show_session_error (io_err, newfile);
 
     if (been_here_before) return;
     been_here_before = TRUE;
@@ -550,13 +549,13 @@ gnc_file_save (void)
     return;
   }
 
-  gnc_add_history (book);
+  gnc_add_history (session);
 
-  gnc_book_mark_saved (book);
+  gnc_book_mark_saved (gnc_session_get_book (session));
 
   /* save the main window state */
   gh_call1 (gh_eval_str("gnc:main-window-save-state"),
-            gh_str02scm(gnc_book_get_url(current_book))); 
+            gh_str02scm(gnc_session_get_url(current_session))); 
 
   LEAVE (" ");
 }
@@ -564,11 +563,8 @@ gnc_file_save (void)
 void
 gnc_file_save_as (void)
 {
-  AccountGroup *group;
-  GNCPriceDB *pdb;
-  GList	*sxList;
-  AccountGroup *templateGroup;
-  GNCBook *new_book;
+  GNCSession *new_session;
+  GNCSession *session;
   GNCBook *book;
   const char *filename;
   char *newfile;
@@ -585,12 +581,12 @@ gnc_file_save_as (void)
   newfile = xaccResolveURL (filename);
   if (!newfile)
   {
-     show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
+     show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
      return;
   }
 
-  book = gnc_get_current_book_internal ();
-  oldfile = gnc_book_get_file_path (book);
+  session = gnc_get_current_session_internal ();
+  oldfile = gnc_session_get_file_path (session);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
     g_free (newfile);
@@ -600,26 +596,23 @@ gnc_file_save_as (void)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-  // FIXME: this might want to be a function of the GNCBook, since it
-  // needs to sync with changes to the internals/structure of
-  // GNCBook... --jsled
-  group = gnc_book_get_group(book);
-  pdb = gnc_book_get_pricedb(book);
-  sxList = gnc_book_get_schedxactions(book);
-  templateGroup = gnc_book_get_template_group(book);
+  /* FIXME: this might want to be a function of the GNCSession, since
+   * it needs to sync with changes to the internals/structure of
+   * GNCSession. */
+  book = gnc_session_get_book (session);
 
-  new_book = gnc_book_new ();
-  gnc_book_begin (new_book, newfile, FALSE, FALSE);
+  new_session = gnc_session_new ();
+  gnc_session_begin (new_session, newfile, FALSE, FALSE);
 
-  io_err = gnc_book_get_error (new_book);
+  io_err = gnc_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err) 
   {
-    if (FALSE == show_book_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile))
     {
        /* user told us to ignore locks. So ignore them. */
-       gnc_book_begin (new_book, newfile, TRUE, FALSE);
+      gnc_session_begin (new_session, newfile, TRUE, FALSE);
     }
   }
 
@@ -627,37 +620,37 @@ gnc_file_save_as (void)
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
-     if (FALSE == show_book_error (io_err, newfile))
-     {
-        /* user told us to create a new database. Do it. */
-        gnc_book_begin (new_book, newfile, FALSE, TRUE);
-     }
+    if (FALSE == show_session_error (io_err, newfile))
+    {
+      /* user told us to create a new database. Do it. */
+      gnc_session_begin (new_session, newfile, FALSE, TRUE);
+    }
   }
 
   /* check again for session errors (since above dialog may have 
    * cleared a file lock & moved things forward some more) 
    * This time, errors will be fatal.
    */
-  io_err = gnc_book_get_error (new_book);
+  io_err = gnc_session_get_error (new_session);
   if (ERR_BACKEND_NO_ERR != io_err) 
   {
-    show_book_error (io_err, newfile);
-    gnc_book_destroy (new_book);
+    show_session_error (io_err, newfile);
+    gnc_session_destroy (new_session);
     g_free (newfile);
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_book_set_group(book, NULL);
-  gnc_book_set_pricedb(book, NULL);
-  gnc_book_destroy (book);
-  current_book = new_book;
+  gnc_session_set_book (session, NULL);
+  gnc_session_destroy (session);
+
+  current_session = new_session;
 
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* oops ... file already exists ... ask user what to do... */
-  if (gnc_book_save_may_clobber_data (new_book))
+  if (gnc_session_save_may_clobber_data (new_session))
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
@@ -679,10 +672,7 @@ gnc_file_save_as (void)
   }
 
   /* OK, save the data to the file ... */
-  gnc_book_set_group(new_book, group);
-  gnc_book_set_pricedb(new_book, pdb);
-  gnc_book_set_schedxactions(new_book, sxList);
-  gnc_book_set_template_group(new_book, templateGroup);
+  gnc_session_set_book (new_session, book);
 
   gnc_file_save ();
 
@@ -693,9 +683,9 @@ gnc_file_save_as (void)
 void
 gnc_file_quit (void)
 {
-  GNCBook *book;
+  GNCSession *session;
 
-  book = gnc_get_current_book_internal ();
+  session = gnc_get_current_session_internal ();
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
@@ -703,10 +693,10 @@ gnc_file_quit (void)
 
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
-           gh_str02scm(gnc_book_get_url(book)));           
+           gh_str02scm(gnc_session_get_url(session)));           
   
-  gnc_book_destroy (book);
-  current_book = NULL;
+  gnc_session_destroy (session);
+  current_session = NULL;
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();

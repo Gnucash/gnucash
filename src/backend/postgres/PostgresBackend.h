@@ -107,14 +107,16 @@ struct _pgend {
    int path_cache_size;
    int ipath_max;
 
-   /* enginge data caches -- not used anywhere except in session_end */
-   AccountGroup *topgroup;
+   /* enginge data caches */
+   GNCSession *session;
 };
 
 /*
- * pgendNew creates a new postgress backend
+ * pgendNew creates a new postgres backend
  */
 Backend * pgendNew (void);
+
+AccountGroup * pgendGetTopGroup (PGBackend *be);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);

@@ -5,7 +5,7 @@
 
 #include "test-stuff.h"
 #include "gnc-engine-util.h"
-#include "gnc-book.h"
+#include "gnc-session.h"
 
 struct test_strings_struct
 {

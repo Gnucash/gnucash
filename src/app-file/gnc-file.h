@@ -114,8 +114,6 @@
 
 #include <glib.h>
 
-#include "gnc-book.h"
-
 void gnc_file_new (void);
 gboolean gnc_file_open (void);
 void gnc_file_save (void);

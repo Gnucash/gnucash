@@ -732,7 +732,7 @@ get_random_query(void)
       case PR_CLEARED:
         xaccQueryAddClearedMatch
           (q,
-           get_random_int_in_range (1, CLEARED_FROZEN),
+           get_random_int_in_range (1, CLEARED_VOIDED),
            get_random_queryop ());
         break;
 

@@ -180,10 +180,10 @@ xaccPriceDBGetBackend (GNCPriceDB *prdb)
 void
 xaccInitBackend(Backend *be)
 {
-    be->book_begin = NULL;
+    be->session_begin = NULL;
     be->book_load = NULL;
     be->price_load = NULL;
-    be->book_end = NULL;
+    be->session_end = NULL;
     be->destroy_backend = NULL;
 
     be->account_begin_edit = NULL;
@@ -196,8 +196,8 @@ xaccInitBackend(Backend *be)
 
     be->run_query = NULL;
     be->price_lookup = NULL;
-    be->all_sync = NULL;
-    be->sync = NULL;
+    be->sync_all = NULL;
+    be->sync_group = NULL;
     be->sync_price = NULL;
 
     be->events_pending = NULL;

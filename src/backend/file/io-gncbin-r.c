@@ -286,7 +286,7 @@ static int           readTSDate( int fd, Timespec *, int token );
 /*******************************************************/
 
 GNCBackendError
-gnc_book_get_binfile_io_error(void)
+gnc_get_binfile_io_error(void)
 {
    /* reset the error code */
    int rc = error_code;
@@ -495,8 +495,8 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
     GNCPriceDB *tmpdb;
     if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb)) {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
-      if(db) gnc_pricedb_destroy(db);
       gnc_book_set_pricedb(book, tmpdb);
+      if(db) gnc_pricedb_destroy(db);
     } else {
       PWARN("pricedb import failed.");
       error_code = ERR_BACKEND_MISC;
@@ -508,8 +508,8 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
 
   {
     AccountGroup *g = gnc_book_get_group(book);
-    if (g) xaccFreeAccountGroup(g);
     gnc_book_set_group(book, grp);
+    if (g) xaccFreeAccountGroup(g);
   }
 
   /* mark the newly read book as saved, since the act of putting it
@@ -527,17 +527,17 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 void
-gnc_book_load_from_binfile(GNCBook *book)
+gnc_session_load_from_binfile(GNCSession *session)
 {
   int  fd;
 
-  const gchar *datafile = gnc_book_get_file_path(book);
+  const gchar *datafile = gnc_session_get_file_path(session);
   if(!datafile) {
     error_code = ERR_BACKEND_MISC;
     return;
   }
 
-  maingrp = 0x0;
+  maingrp = NULL;
   error_code = ERR_BACKEND_NO_ERR;
 
   fd = open( datafile, RFLAGS, 0 );
@@ -546,10 +546,10 @@ gnc_book_load_from_binfile(GNCBook *book)
     return;
   }
 
-  if(!gnc_load_financials_from_fd(book, fd)) return;
+  if (!gnc_load_financials_from_fd(gnc_session_get_book (session), fd))
+    return;
 
   close(fd);
-  return;
 }
 
 /********************************************************************\

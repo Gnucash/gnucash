@@ -289,13 +289,13 @@ pgendProcessEvents (Backend *bend)
                case GNC_EVENT_MODIFY: 
                   /* if the remote user created an account, mirror it here */
                   pgendCopyAccountToEngine (be, &(ev->guid));
-                  xaccGroupMarkSaved (be->topgroup);
+                  xaccGroupMarkSaved (pgendGetTopGroup (be));
                   break;
                case GNC_EVENT_DESTROY: {
                   Account * acc = xaccAccountLookup (&(ev->guid));
                   xaccAccountBeginEdit (acc);
                   xaccAccountDestroy (acc);
-                  xaccGroupMarkSaved (be->topgroup);
+                  xaccGroupMarkSaved (pgendGetTopGroup (be));
                   break;
                }
             }

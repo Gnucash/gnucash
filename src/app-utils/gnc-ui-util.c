@@ -52,7 +52,7 @@ static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-static GNCBookCB book_cb = NULL;
+static GNCSessionCB session_cb = NULL;
 
 
 /********************************************************************\
@@ -198,30 +198,30 @@ gnc_reverse_balance (Account *account)
 }
 
 void
-gnc_set_current_book_handler (GNCBookCB cb)
+gnc_set_current_session_handler (GNCSessionCB cb)
 {
-  book_cb = cb;
+  session_cb = cb;
+}
+
+GNCSession *
+gnc_get_current_session (void)
+{
+  if (session_cb)
+    return session_cb ();
+
+  return NULL;
 }
 
 GNCBook *
 gnc_get_current_book (void)
 {
-  GNCBook *book;
-
-  if (book_cb)
-    return book_cb ();
-
-  return NULL;
+  return gnc_session_get_book (gnc_get_current_session ());
 }
 
 AccountGroup *
 gnc_get_current_group (void)
 {
-  GNCBook *book;
-
-  book = gnc_get_current_book ();
-
-  return gnc_book_get_group (book);
+  return gnc_book_get_group (gnc_get_current_book ());
 }
 
 const char *

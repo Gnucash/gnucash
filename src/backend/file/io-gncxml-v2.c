@@ -393,16 +393,19 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
 }
 
 gboolean
-gnc_book_load_from_xml_file_v2(
-    GNCBook *book,
+gnc_session_load_from_xml_file_v2(
+    GNCSession *session,
     void (*countcallback)(const char *type, load_counter count))
 {
+    GNCBook *book;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
     sixtp *main_parser;
 
     gd = g_new0(sixtp_gdv2, 1);
-    
+
+    book = gnc_session_get_book (session);
+
     gd->book = book;
     gd->counter.accounts_loaded = 0;
     gd->counter.accounts_total = 0;
@@ -417,12 +420,12 @@ gnc_book_load_from_xml_file_v2(
 
     {
         AccountGroup *g = gnc_book_get_group(book);
-        if(g) xaccFreeAccountGroup(g);
         gnc_book_set_group(book, xaccMallocAccountGroup());
+        if(g) xaccFreeAccountGroup(g);
     }
-    
+
     gd->countCallback = countcallback;
-    
+
     top_parser = sixtp_new();
     main_parser = sixtp_new();
 
@@ -451,7 +454,7 @@ gnc_book_load_from_xml_file_v2(
     /* stop logging while we load */
     xaccLogDisable ();
 
-    if(!gnc_xml_parse_file(top_parser, gnc_book_get_file_path(book),
+    if(!gnc_xml_parse_file(top_parser, gnc_session_get_file_path(session),
                            generic_callback, gd))
     {
         sixtp_destroy(top_parser);

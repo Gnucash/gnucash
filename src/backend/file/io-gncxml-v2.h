@@ -33,14 +33,14 @@
 
 #include <glib.h>
 
-#include "gnc-book.h"
+#include "gnc-session.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
-struct _load_counter_struct
+typedef struct
 {
     int accounts_total;
     int accounts_loaded;
@@ -56,9 +56,7 @@ struct _load_counter_struct
 
     int schedXactions_total;
     int schedXactions_loaded;
-};
-
-typedef struct _load_counter_struct load_counter;
+} load_counter;
 
 struct sixtp_global_data_v2_struct
 {
@@ -73,7 +71,7 @@ struct sixtp_global_data_v2_struct
  * gnc-schedxactions-xml-v2.c and the add-to-book callback in
  * io-gncxml-v2.c.
  **/
-typedef struct _gnc_template_xaction_data
+typedef struct
 {
 	GList	*accts;
 	GList	*transactions;
@@ -82,8 +80,8 @@ typedef struct _gnc_template_xaction_data
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;
 
 /* read in an account group from a file */
-gboolean gnc_book_load_from_xml_file_v2(
-    GNCBook *book,
+gboolean gnc_session_load_from_xml_file_v2(
+    GNCSession *session,
     void (*countcallback)(const char *type, load_counter count));
 
 /* write all account info to a file */

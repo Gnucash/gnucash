@@ -102,7 +102,7 @@ static void rpcendEnable (RPCBackend *be)
    be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.price_lookup        = be->snr.price_lookup;
-   be->be.sync                = be->snr.sync;
+   be->be.sync_all            = be->snr.sync_all;
    be->be.sync_price          = be->snr.sync_price;
 }
 
@@ -125,7 +125,7 @@ static void rpcendDisable (RPCBackend *be)
    be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.price_lookup        = be->be.price_lookup;
-   be->snr.sync                = be->be.sync;
+   be->snr.sync_all            = be->be.sync_all;
    be->snr.sync_price          = be->be.sync_price;
 
    /* And turn off future calls */
@@ -138,7 +138,7 @@ static void rpcendDisable (RPCBackend *be)
    be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
    be->be.price_lookup        = NULL;
-   be->be.sync                = NULL;
+   be->be.sync_all            = NULL;
    be->be.sync_price          = NULL;
 }
 
@@ -329,7 +329,7 @@ static void rpcend_add_gnccommoditylist (RPCBackend *be, gnc_commoditylist *cl)
 /*
  * book_load will only load the commodity table and account tree 
  */
-static AccountGroup * 
+static void
 rpcend_book_load (Backend *bend)
 {
   RPCBackend *be = (RPCBackend *)bend;
@@ -337,7 +337,7 @@ rpcend_book_load (Backend *bend)
   gncrpc_ptr backend;
   gncrpc_book_load_ret ret;
 
-  VERIFY_BE (be, NULL);
+  VERIFY_BEV (be);
 
   ENTER ("be=%p", be);
 
@@ -350,7 +350,7 @@ rpcend_book_load (Backend *bend)
 
   if (ret.error != 0) {
     xaccBackendSetError (&be->be, ret.error);
-    return NULL;
+    return;
   }
 
   /* suspend events */
@@ -363,7 +363,11 @@ rpcend_book_load (Backend *bend)
   /* Parse the AccountGroup */
   ag = gnc_book_get_group (be->book);
   if (!ag)
+  {
     ag = xaccMallocAccountGroup ();
+    gnc_book_set_group (be->book, ag);
+  }
+
   rpcend_add_gncacctlist (be, ag, ret.acctlist);
 
   /* Mark the newly read group as saved, since the act of putting
@@ -375,22 +379,22 @@ rpcend_book_load (Backend *bend)
   gnc_engine_resume_events ();
 
   /* Free the RPC results */
-  CLNT_FREERES (be->client, (xdrproc_t)xdr_gncrpc_book_load_ret, (caddr_t)&ret);
+  CLNT_FREERES (be->client,
+                (xdrproc_t)xdr_gncrpc_book_load_ret,
+                (caddr_t)&ret);
 
   LEAVE ("be=%p, ag=%p", be, ag);
-
-  return ag;
 }
 
-static GNCPriceDB * 
+static void
 rpcend_price_load (Backend *bend)
 {
    /* XXX hack alert -- implement this */
    PERR ("price loading not implemented");
-   return gnc_pricedb_create();
 }
 
-static void rpcend_book_end (Backend *bend)
+static void
+rpcend_session_end (Backend *bend)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_ptr backend;
@@ -732,7 +736,7 @@ static void rpcend_run_query (Backend *bend, Query *q)
 }
 
 static void 
-rpcend_sync (Backend *bend, AccountGroup *acctgrp)
+rpcend_sync_all (Backend *bend, GNCBook *book)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_sync1_args args1;
@@ -740,6 +744,8 @@ rpcend_sync (Backend *bend, AccountGroup *acctgrp)
   gncrpc_sync2_args args2;
   int ret2 = -1;
   gnc_commodity_table *ct = gnc_book_get_commodity_table (be->book);
+  AccountGroup *acctgrp = gnc_book_get_group (be->book);
+
   VERIFY_BEV (be);
   ENTER ("be=%p, ag=%p", be, acctgrp);
 
@@ -855,10 +861,13 @@ static gboolean rpcend_process_events (Backend *bend)
   return changed;
 }
 
-static void rpcend_book_begin (Backend *backend, GNCBook *book,
-                               const char *book_id, 
-			       gboolean ignore_lock, gboolean create)
+static void
+rpcend_session_begin (Backend *backend,
+                      GNCSession *session,
+                      const char *book_id, 
+                      gboolean ignore_lock, gboolean create)
 {
+  GNCBook *book;
   RPCBackend *be;
   char *url, *start, *end, *rest;
 
@@ -871,8 +880,10 @@ static void rpcend_book_begin (Backend *backend, GNCBook *book,
 	(ignore_lock == TRUE ? "true" : "false"),
 	(create == TRUE ? "true" : "false"));
 
+  book = gnc_session_get_book (session);
+
   /* close any dangling sessions from before and then reinitialize */
-  rpcend_book_end ((Backend *)be);
+  rpcend_session_end ((Backend *)be);
   rpcendInit (be);
 
   /* Remember my book */
@@ -952,7 +963,7 @@ static void rpcend_book_begin (Backend *backend, GNCBook *book,
   /* Setup callbacks */
   /* XXX hack alert -- need to implement price saving/loading */
   rpcendEnable (be);
-  be->be.book_end = rpcend_book_end;
+  be->be.session_end = rpcend_session_end;
   be->be.book_load = rpcend_book_load;
   be->be.price_load = rpcend_price_load;
   be->be.account_begin_edit = rpcend_account_begin_edit;
@@ -964,7 +975,7 @@ static void rpcend_book_begin (Backend *backend, GNCBook *book,
   be->be.price_commit_edit = rpcend_price_commit_edit;
   be->be.run_query = rpcend_run_query;
   be->be.price_lookup = rpcend_price_lookup;
-  be->be.sync = rpcend_sync;
+  be->be.sync_all = rpcend_sync_all;
   be->be.sync_price = rpcend_sync_price;
   be->be.events_pending = rpcend_events_pending;
   be->be.process_events = rpcend_process_events;
@@ -977,7 +988,7 @@ rpcendInit (RPCBackend *be)
 {
   /* The only callback that should work is Begin */
   xaccInitBackend((Backend*)be);
-  be->be.book_begin = rpcend_book_begin;
+  be->be.session_begin = rpcend_session_begin;
 
   rpcendDisable (be);
   be->be.last_err = ERR_BACKEND_NO_ERR;

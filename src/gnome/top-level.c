@@ -608,25 +608,25 @@ gnc_ui_destroy (void)
 static gboolean
 gnc_ui_check_events (gpointer not_used)
 {
-  GNCBook *book;
+  GNCSession *session;
   gboolean force;
 
   if (gtk_main_level() != 1)
     return TRUE;
 
-  book = gnc_get_current_book ();
-  if (!book)
+  session = gnc_get_current_session ();
+  if (!session)
     return TRUE;
 
   if (gnc_gui_refresh_suspended ())
     return TRUE;
 
-  if (!gnc_book_events_pending (book))
+  if (!gnc_session_events_pending (session))
     return TRUE;
 
   gnc_suspend_gui_refresh ();
 
-  force = gnc_book_process_events (book);
+  force = gnc_session_process_events (session);
 
   gnc_resume_gui_refresh ();
 

@@ -91,6 +91,6 @@ typedef enum {
 } GNCBackendError;
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
-typedef struct _backend Backend;
+typedef struct backend_s Backend;
 
 #endif /* XACC_BACKEND_H */

@@ -343,17 +343,21 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 /* ================================================================== */
 
 gboolean
-gnc_book_load_from_xml_file(GNCBook *book)
+gnc_session_load_from_xml_file(GNCSession *session)
 {
   gboolean parse_ok;
   gpointer parse_result = NULL;
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
   const gchar *filename;
+  GNCBook *book;
 
+  book = gnc_session_get_book (session);
+
+  g_return_val_if_fail(session, FALSE);
   g_return_val_if_fail(book, FALSE);
 
-  filename = gnc_book_get_file_path(book);
+  filename = gnc_session_get_file_path(session);
   g_return_val_if_fail(filename, FALSE);
 
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
@@ -374,25 +378,26 @@ gnc_book_load_from_xml_file(GNCBook *book)
     {
       AccountGroup *g = gnc_book_get_group(book);
 
-      if(g) xaccFreeAccountGroup(g);
       gnc_book_set_group(book, global_parse_status.account_group);
+
+      if(g) xaccFreeAccountGroup(g);
     }
 
     if(global_parse_status.pricedb)
     {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
 
-      if(db) gnc_pricedb_destroy(db);
-
       gnc_book_set_pricedb(book, global_parse_status.pricedb);
+
+      if(db) gnc_pricedb_destroy(db);
     }
     else
     {
       GNCPriceDB *db = gnc_book_get_pricedb(book);
 
-      if(db) gnc_pricedb_destroy(db);
-
       gnc_book_set_pricedb(book, gnc_pricedb_create());
+
+      if(db) gnc_pricedb_destroy(db);
     }
 
     /* Fix account and transaction commodities */

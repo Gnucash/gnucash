@@ -23,8 +23,7 @@
 #include "io-gncxml-v2.h"
 
 #include "gnc-backend-api.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "gnc-session.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
@@ -39,7 +38,7 @@ struct FileBackend_struct
     char *linkfile;
     int lockfd;
 
-    GNCBook *book;
+    GNCSession *session;
 };
 
 typedef struct FileBackend_struct FileBackend;
@@ -58,8 +57,8 @@ static gboolean gnc_file_be_write_to_file(FileBackend *be,
                                           gboolean make_backup);
 
 static void
-file_book_begin(Backend *be_start, GNCBook *book, const char *book_id, 
-                gboolean ignore_lock, gboolean create_if_nonexistent)
+file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
+                   gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend* be;
     char *dirname;
@@ -67,13 +66,14 @@ file_book_begin(Backend *be_start, GNCBook *book, const char *book_id,
 
     ENTER (" ");
 
-    be = (FileBackend*)be_start;
-    be->book = book;
-  
+    be = (FileBackend*) be_start;
+
+    be->session = session;
+
     /* Make sure the directory is there */
 
-    dirname = g_strdup (book->fullpath);
-    be->fullpath = g_strdup (book->fullpath);
+    dirname = g_strdup (gnc_session_get_file_path (session));
+    be->fullpath = g_strdup (dirname);
     p = strrchr (dirname, '/');
     if (p && p != dirname)
     {
@@ -116,51 +116,29 @@ file_load_file(Backend *be)
     if(!gnc_file_be_load_from_file((FileBackend*)be))
     {
         xaccBackendSetError(be, ERR_BACKEND_MISC);
-        g_free(((FileBackend*)be)->lockfile); ((FileBackend*)be)->lockfile = NULL;
+        g_free(((FileBackend*)be)->lockfile);
+        ((FileBackend*)be)->lockfile = NULL;
         return FALSE;
     }
     return TRUE;
 }
 
-static AccountGroup*
-file_book_load(Backend *be)
+static void
+file_book_load (Backend *be)
 {
-    AccountGroup* ret = gnc_book_get_group(((FileBackend*)be)->book);
-    if(ret == NULL)
+    if (!file_load_file(be))
     {
-        if(!file_load_file(be))
-        {
-            PERR("file_load_file returned FALSE");
-            return NULL;
-        }
+      PERR("file_load_file returned FALSE");
     }
-    ret = gnc_book_get_group(((FileBackend*)be)->book);
-    return ret;
-}
-
-static GNCPriceDB*
-file_price_load(Backend *be)
-{
-    GNCPriceDB* ret = gnc_book_get_pricedb(((FileBackend*)be)->book);
-    if(ret == NULL)
-    {
-        if(!file_load_file(be))
-        {
-            PERR("file_load_file returned FALSE");
-            return NULL;
-        }
-    }
-    ret = gnc_book_get_pricedb(((FileBackend*)be)->book);
-    return ret;
 }
 
 static void
-file_book_end(Backend *be_start)
+file_session_end(Backend *be_start)
 {
     FileBackend* be;
 
     be = (FileBackend*)be_start;
-    
+
     if (be->linkfile)
         unlink (be->linkfile);
 
@@ -187,7 +165,7 @@ file_destroy_backend(Backend *be)
 }
 
 static void
-file_all_sync(Backend* be, AccountGroup *ag, GNCPriceDB *pricedb)
+file_sync_all(Backend* be, GNCBook *book)
 {
     gnc_file_be_write_to_file((FileBackend*)be, TRUE);
 }
@@ -202,10 +180,10 @@ gnc_backend_new(void)
     be = (Backend*)fbe;
     xaccInitBackend(be);
     
-    be->book_begin = file_book_begin;
+    be->session_begin = file_session_begin;
     be->book_load = file_book_load;
-    be->price_load = file_price_load;
-    be->book_end = file_book_end;
+    be->price_load = NULL;
+    be->session_end = file_session_end;
     be->destroy_backend = file_destroy_backend;
 
 /*     be->account_begin_edit = file_account_begin_edit; */
@@ -218,7 +196,7 @@ gnc_backend_new(void)
 
 /*     be->run_query = file_run_query; */
 /*     be->price_lookup = file_price_lookup; */
-    be->all_sync = file_all_sync;
+    be->sync_all = file_sync_all;
 
 /*     be->events_pending = file_events_pending; */
 /*     be->process_events = file_process_events; */
@@ -228,8 +206,8 @@ gnc_backend_new(void)
     fbe->linkfile = NULL;
     fbe->lockfd = -1;
 
-    fbe->book = NULL;
-    
+    fbe->session = NULL;
+
     return be;
 }
 
@@ -386,20 +364,20 @@ gnc_file_be_load_from_file(FileBackend *be)
     {
     case GNC_BOOK_XML2_FILE:
         return happy_or_push_error((Backend*)be,
-                                   gnc_book_load_from_xml_file_v2(be->book,
-                                                                  NULL),
+                                   gnc_session_load_from_xml_file_v2
+                                   (be->session, NULL),
                                    ERR_BACKEND_MISC);
     case GNC_BOOK_XML1_FILE:
         return happy_or_push_error((Backend*)be,
-                                   gnc_book_load_from_xml_file(be->book),
+                                   gnc_session_load_from_xml_file(be->session),
                                    ERR_BACKEND_MISC);
     case GNC_BOOK_BIN_FILE:
     {
         /* presume it's an old-style binary file */
         GNCBackendError error;
 
-        gnc_book_load_from_binfile(be->book);
-        error = gnc_book_get_binfile_io_error();
+        gnc_session_load_from_binfile(be->session);
+        error = gnc_get_binfile_io_error();
 
         if(error == ERR_BACKEND_NO_ERR) {
             return TRUE;
@@ -552,6 +530,9 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
 {
     const gchar *datafile;
     char *tmp_name;
+    GNCBook *book;
+
+    book = gnc_session_get_book (be->session);
 
     datafile = be->fullpath;
     
@@ -573,7 +554,7 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
         }
     }
   
-    if(gnc_book_write_to_xml_file_v2(be->book, tmp_name)) 
+    if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
     {
         if(unlink(datafile) != 0 && errno != ENOENT)
         {

@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-book-p.h -- private functions for gnc books.                 *
+ * gnc-session-p.h -- private functions for gnc sessions.           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,45 +22,62 @@
 
 /*
  * HISTORY:
- * Created 2001 by Rob Browning
- * Copyright (c) 2001 Rob Browning
+ * Copyright (c) 2001 Linux Developers Group
  */
 
-#ifndef GNC_BOOK_P_H
-#define GNC_BOOK_P_H
+#ifndef GNC_SESSION_P_H
+#define GNC_SESSION_P_H
 
 #include "BackendP.h"
-#include "DateUtils.h"
 #include "TransLog.h"
 #include "gnc-book.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-pricedb-p.h"
+#include "gnc-session.h"
 
-struct gnc_book_struct
+struct gnc_session_struct
 {
-  AccountGroup *topgroup;
-  GNCPriceDB *pricedb;
-  GList *sched_xactions;
-  AccountGroup *template_group;
+  GNCBook *book;
 
-  /* should be set true if sched_xactions is changed */
-  gboolean sx_notsaved; 
- 
+  /* the requested book id, in the form or a URI, such as
+   * file:/some/where, or sql:server.host.com:555
+   */
+  char *book_id;
+
+  /* if any book subroutine failed, this records the failure reason 
+   * (file not found, etc).
+   * This is a 'stack' that is one deep.
+   * FIXME: This is a hack.  I'm trying to move us away from static
+   * global vars. This may be a temp fix if we decide to integrate
+   * FileIO errors into GNCBook errors. 
+   */
+  GNCBackendError last_err;
+  char *error_message;
+
+  char *fullpath;
+  char *logpath;
+
+  /* ---------------------------------------------------- */
+  /* This struct member applies for network, rpc and SQL i/o */
+  /* It is not currently used for file i/o, but it should be. */
   Backend *backend;
 };
 
 
-void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
-void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
+void gnc_session_set_book (GNCSession *session, GNCBook *book);
 
-void gnc_book_set_backend (GNCBook *book, Backend *be);
+Backend *  gnc_session_get_backend (GNCSession *session);
 
 /*
  * used by backends to mark the notsaved as FALSE just after 
  * loading.  Do not use otherwise!
  */
 
-void gnc_book_mark_saved(GNCBook *book);
 
-#endif /* GNC_BOOK_P_H */
+void gnc_session_push_error (GNCSession *session, GNCBackendError err,
+                             const char *message);
+
+Backend* gncBackendInit_file(const char *book_id, void *data);
+
+#endif
+

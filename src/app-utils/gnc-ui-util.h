@@ -28,12 +28,10 @@
 #include <glib.h>
 #include <locale.h>
 
-#include "gnc-book.h"
-#include "gnc-commodity.h"
-#include "gnc-numeric.h"
+#include "gnc-session.h"
 
 
-typedef GNCBook * (*GNCBookCB) (void);
+typedef GNCSession * (*GNCSessionCB) (void);
 
 
 /* User Settings ****************************************************/
@@ -46,8 +44,9 @@ gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
 /* Engine enhancements & i18n ***************************************/
-void gnc_set_current_book_handler (GNCBookCB cb);
+void gnc_set_current_session_handler (GNCSessionCB cb);
 
+GNCSession * gnc_get_current_session (void);
 GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 

@@ -340,7 +340,7 @@ static gnc_splitlist * rpcend_build_splitlist (GList *lst)
     split->reconciled = olds->reconciled;
     split->date_reconciled = *((gncTimespec *)&(olds->date_reconciled));
     split->value = *((gncNumeric *)&(olds->value));
-    split->damount = *((gncNumeric *)&(olds->damount));
+    split->damount = *((gncNumeric *)&(olds->amount));
 
     new = malloc (sizeof (*new));
     new->split = split;

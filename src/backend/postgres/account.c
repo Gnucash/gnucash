@@ -384,7 +384,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       pbuff = stpcpy (pbuff, "';");
    
       SEND_QUERY (be,be->buff, 0);
-      pgendGetResults (be, get_account_cb, be->topgroup);
+      pgendGetResults (be, get_account_cb, pgendGetTopGroup (be));
 
       acc = xaccAccountLookup (acct_guid);
       /* restore any kvp data associated with the transaction and splits */

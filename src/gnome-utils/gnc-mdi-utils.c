@@ -79,7 +79,7 @@ gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
   if (!childwin || !childwin->app)
     return;
 
-  filename = gnc_book_get_url (gnc_get_current_book ());
+  filename = gnc_session_get_url (gnc_get_current_session ());
 
   if (!filename)
     filename = _("<no file>");

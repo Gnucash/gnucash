@@ -68,43 +68,43 @@ test_file(const char *filename)
 
     for(i = 0; possible_envs[i] != NULL; i++)
     {
-        GNCBook *book;
+        GNCSession *session;
         char *cmd;
         char *new_file = gen_new_file_name(filename, possible_envs[i]);
         char *putenv_str;
-        GNCBook *new_book;
+        GNCSession *new_session;
         
-        book = gnc_book_new();
+        session = gnc_session_new();
 
-        if(!gnc_book_begin(book, filename, TRUE, FALSE))
+        if(!gnc_session_begin(session, filename, TRUE, FALSE))
         {
-            gnc_book_destroy(book);
-            return g_strdup("gnc_book_begin");
+            gnc_session_destroy(session);
+            return g_strdup("gnc_session_begin");
         }
 
-        if(!gnc_book_load(book))
+        if(!gnc_session_load(session))
         {
-            int error = gnc_book_get_error(book);
-            gnc_book_destroy(book);
-            return g_strdup_printf("gnc_book_load errorid %d", error);
+            int error = gnc_session_get_error(session);
+            gnc_session_destroy(session);
+            return g_strdup_printf("gnc_session_load errorid %d", error);
         }
 
         putenv_str = g_strdup_printf ("%s=%s", "LANG", possible_envs[i]);
         putenv (putenv_str);
         g_free (putenv_str);
 
-        new_book = gnc_book_new();
+        new_session = gnc_session_new();
         
-        if(!gnc_book_begin(new_book, new_file, FALSE, FALSE))
+        if(!gnc_session_begin(new_session, new_file, FALSE, FALSE))
         {
             g_free(new_file);
-            gnc_book_destroy(book);
-            gnc_book_destroy(new_book);
-            return g_strdup_printf("gnc_book_begin 2 with LANG=%s",
+            gnc_session_destroy(session);
+            gnc_session_destroy(new_session);
+            return g_strdup_printf("gnc_session_begin 2 with LANG=%s",
                                    possible_envs[i]);
         }
 
-        gnc_book_save(new_book);
+        gnc_session_save(new_session);
 
         cmd = g_strdup_printf(diff_command, filename, new_file);
 
@@ -112,16 +112,16 @@ test_file(const char *filename)
         {
             g_free(cmd);
             g_free(new_file);
-            gnc_book_destroy(book);
-            gnc_book_destroy(new_book);
+            gnc_session_destroy(session);
+            gnc_session_destroy(new_session);
             return g_strdup_printf("run_command_get_return with LANG=%s",
                                    possible_envs[i]);
         }
 
         g_free(new_file);
         g_free(cmd);
-        gnc_book_destroy(book);
-        gnc_book_destroy(new_book);
+        gnc_session_destroy(session);
+        gnc_session_destroy(new_session);
     }
 
     return NULL;

@@ -55,13 +55,14 @@
       (let ((group (qif-io:acct-table-make-gnc-group 
                     acct-table qiffile commodity)))
         ;; write the file
-        (let ((book (gnc:book-new))
-              (name (simple-format #f "file:~A.gnc" filename)))
+        (let* ((session (gnc:session-new))
+               (book (gnc:session-get-book session))
+               (name (simple-format #f "file:~A.gnc" filename)))
           (simple-format #t "using book name='~A'\n" name)
           (gnc:book-set-group book group)
-          (gnc:book-begin book name #t #t)
-          (gnc:book-save book)
-          (gnc:book-end book)))))
+          (gnc:session-begin session name #t #t)
+          (gnc:session-save book)
+          (gnc:session-end book)))))
   0)
 
 (define (run-test)

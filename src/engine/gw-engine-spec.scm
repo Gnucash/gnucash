@@ -313,7 +313,7 @@
       "#include <GNCIdP.h>\n"
       "#include <Query.h>\n"
       "#include <Backend.h>\n"
-      "#include <gnc-book.h>\n"
+      "#include <gnc-session.h>\n"
       "#include <gnc-engine-util.h>\n"
       "#include <date.h>\n"
       "#include <engine-helpers.h>\n"
@@ -336,6 +336,8 @@
   (gw:wrap-non-native-type mod '<gnc:AccountGroup*> 
                            "AccountGroup*" "const AccountGroup*")
   (gw:wrap-non-native-type mod '<gnc:Book*> "GNCBook*" "const GNCBook*")
+  (gw:wrap-non-native-type mod '<gnc:Session*>
+                           "GNCSession*" "const GNCSession**")
 
   (gw:wrap-non-native-type mod '<gnc:Split*> "Split*" "const Split*")
   (gw:wrap-non-native-type mod '<gnc:Transaction*> 
@@ -434,6 +436,7 @@
     (gw:enum-add-value! wt "CLEARED_CLEARED" 'cleared-match-cleared)
     (gw:enum-add-value! wt "CLEARED_RECONCILED" 'cleared-match-reconciled)
     (gw:enum-add-value! wt "CLEARED_FROZEN" 'cleared-match-frozen)
+    (gw:enum-add-value! wt "CLEARED_VOIDED" 'cleared-match-voided)
     #t)
 
   (let ((wt (gw:wrap-enumeration mod '<gnc:balance-match-how>
@@ -1412,48 +1415,61 @@ when no longer needed.")
 
   (gw:wrap-function
    mod
-   'gnc:book-new '<gnc:Book*> "gnc_book_new" '()
-   "Create a new book.")
+   'gnc:session-new
+   '<gnc:Session*>
+   "gnc_session_new" '()
+   "Create a new session.")
 
   (gw:wrap-function
    mod
-   'gnc:book-destroy '<gw:void> "gnc_book_destroy" '((<gnc:Book*> book))
-   "Destroy the given book.")
+   'gnc:session-destroy
+   '<gw:void>
+   "gnc_session_destroy"
+   '((<gnc:Session*> session))
+   "Destroy the given session.")
 
   (gw:wrap-function
    mod
-   'gnc:book-begin
+   'gnc:session-get-book
+   '<gnc:Book*>
+   "gnc_session_get_book"
+   '((<gnc:Session*> session))
+   "Get the book of the given session.")
+
+  (gw:wrap-function
+   mod
+   'gnc:session-begin
    '<gw:bool>
-   "gnc_book_begin"
-   '((<gnc:Book*> book)
+   "gnc_session_begin"
+   '((<gnc:Session*> session)
      ((<gw:m-chars-caller-owned> gw:const) id)
      (<gw:bool> ignore-lock?)
      (<gw:bool> create-if-nonexistent?))
-   "Setup the book for use.")
+   "Setup the session for use.")
 
   (gw:wrap-function
    mod
-   'gnc:book-load
+   'gnc:session-load
    '<gw:bool>
-   "gnc_book_load"
-   '((<gnc:Book*> book))
-   "Load the data associated with the given book.")
+   "gnc_session_load"
+   '((<gnc:Session*> session))
+   "Load the data associated with the given session.")
 
   (gw:wrap-function
    mod
-   'gnc:book-save
+   'gnc:session-save
    '<gw:void>
-   "gnc_book_save"
-   '((<gnc:Book*> book))
-   "Save the data in the book.")
+   "gnc_session_save"
+   '((<gnc:Session*> session))
+   "Save the data in the session.")
 
   (gw:wrap-function
    mod
-   'gnc:book-end
+   'gnc:session-end
    '<gw:void>
-   "gnc_book_end"
-   '((<gnc:Book*> book))
-   "Indicate you're finished with the book.")
+   "gnc_session_end"
+   '((<gnc:Session*> session))
+   "Indicate you're finished with the session.")
 
   (gw:wrap-function
    mod
@@ -1489,18 +1505,18 @@ when no longer needed.")
 
   (gw:wrap-function
    mod
-   'gnc:book-get-error
+   'gnc:session-get-error
    '<gnc:BackendError>
-   "gnc_book_get_error"
-   '((<gnc:Book*> book))
+   "gnc_session_get_error"
+   '((<gnc:Session*> session))
    "Check for a pending error.")
 
   (gw:wrap-function
    mod
-   'gnc:book-pop-error
+   'gnc:session-pop-error
    '<gnc:BackendError>
-   "gnc_book_pop_error"
-   '((<gnc:Book*> book))
+   "gnc_session_pop_error"
+   '((<gnc:Session*> session))
    "Remove an error, if any, from the error stack.")
 
   (gw:wrap-function

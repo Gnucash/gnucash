@@ -9,8 +9,7 @@
 
 #include "Backend.h"
 #include "TransLog.h"
-#include "gnc-book.h"
-#include "gnc-book.h"
+#include "gnc-session.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "io-gncxml-v2.h"
@@ -45,22 +44,28 @@ remove_locks(const char *filename)
 static void
 test_load_file(const char *filename)
 {
+    GNCSession *session;
     GNCBook *book;
 
-    book = gnc_book_new();
+    session = gnc_session_new();
 
     remove_locks(filename);
     
-    gnc_book_begin(book, filename, FALSE, FALSE);
+    gnc_session_begin(session, filename, FALSE, FALSE);
     
-    gnc_book_load_from_xml_file_v2(book, NULL);
+    gnc_session_load_from_xml_file_v2(session, NULL);
+
+    book = gnc_session_get_book (session);
+
+    do_test (xaccGroupGetBook (gnc_book_get_group (book)) == book,
+             "book and group don't match");
 
     do_test_args(
-        gnc_book_get_error(book) == ERR_BACKEND_NO_ERR,
-        "book load xml2", __FILE__, __LINE__, "%d for file %s",
-        gnc_book_get_error(book), filename);
+        gnc_session_get_error(session) == ERR_BACKEND_NO_ERR,
+        "session load xml2", __FILE__, __LINE__, "%d for file %s",
+        gnc_session_get_error(session), filename);
 
-    gnc_book_destroy(book);
+    gnc_session_destroy(session);
 }
 
 static void

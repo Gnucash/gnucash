@@ -44,7 +44,7 @@
 (export gnc:setup-default-namespaces)
 (export gnc:load-iso-4217-currencies)
 
-(export gnc:url->loaded-book)
+(export gnc:url->loaded-session)
 (export gnc:transaction-map-splits)
 (export gnc:group-map-all-accounts)
 (export gnc:group-map-accounts)

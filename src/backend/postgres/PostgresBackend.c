@@ -135,6 +135,14 @@ pgendGetUserGecos (PGBackend *be)
    return NULL;
 }
 
+AccountGroup *
+pgendGetTopGroup (PGBackend *be)
+{
+  if (!be) return NULL;
+
+  return gnc_book_get_group (gnc_session_get_book (be->session));
+}
+
 /* ============================================================= */
 /* This routine finds the commodity by parsing a string
  * of the form NAMESPACE::MNEMONIC
@@ -490,6 +498,7 @@ pgendRunQuery (Backend *bend, Query *q)
 {
    PGBackend *be = (PGBackend *)bend;
    const char * sql_query_string;
+   AccountGroup *topgroup;
    sqlQuery *sq;
    GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
@@ -505,8 +514,10 @@ pgendRunQuery (Backend *bend, Query *q)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
+   topgroup = pgendGetTopGroup (be);
+
    /* stage transactions, save some postgres overhead */
-   xaccGroupBeginStagedTransactionTraversals (be->topgroup);
+   xaccGroupBeginStagedTransactionTraversals (topgroup);
 
    /* We will be doing a bulk insertion of transactions below.
     * We can gain a tremendous performance improvement,
@@ -521,16 +532,16 @@ pgendRunQuery (Backend *bend, Query *q)
     * by not very much.
     */
    ncalls = 0;
-   xaccAccountGroupBeginEdit(be->topgroup);
+   xaccAccountGroupBeginEdit(topgroup);
    pgendFillOutToCheckpoint (be, sql_query_string);
-   xaccAccountGroupCommitEdit(be->topgroup);
+   xaccAccountGroupCommitEdit(topgroup);
    PINFO ("number of calls to fill out=%d", ncalls);
 
    sql_Query_destroy(sq);
 
    /* the fill-out will dirty a lot of data. That's irrelevent,
     * mark it all as having been saved. */
-   xaccGroupMarkSaved (be->topgroup);
+   xaccGroupMarkSaved (topgroup);
 
    pgendEnable(be);
    gnc_engine_resume_events();
@@ -641,9 +652,11 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 
 
 static void
-pgendSync (Backend *bend, AccountGroup *grp)
+pgendSync (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
+   AccountGroup *grp = gnc_book_get_group (book);
+
    ENTER ("be=%p, grp=%p", be, grp);
 
    be->version_check = (guint32) time(0);
@@ -714,12 +727,14 @@ trans_traverse_cb (Transaction *trans, void *cb_data)
 }
 
 static void
-pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
+pgendSyncSingleFile (Backend *bend, GNCBook *book)
 {
    char *p;
    PGBackend *be = (PGBackend *)bend;
+   AccountGroup *grp = gnc_book_get_group (book);
+
    ENTER ("be=%p, grp=%p", be, grp);
-    
+
    p = "BEGIN;\n"
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
@@ -852,14 +867,14 @@ pgendSessionGetMode (PGBackend *be)
 /* ============================================================= */
 /* Instead of loading the book, just set the lock error */
 
-static AccountGroup *
+static void
 pgend_book_load_single_lockerr (Backend *bend)
 {
    PGBackend *be = (PGBackend *)bend;
-   if (!be) return NULL;
+
+   if (!be) return;
 
    xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
-   return NULL;
 }
 
 /* ============================================================= */
@@ -1139,8 +1154,8 @@ pgend_session_end (Backend *bend)
 
    /* prevent further callbacks into backend */
    pgendDisable(be);
-   be->be.book_begin = NULL;
-   be->be.book_end = NULL;
+   be->be.session_begin = NULL;
+   be->be.session_end = NULL;
 
    /* note the logoff time in the session directory */
    pgendSessionEnd (be);
@@ -1177,13 +1192,16 @@ pgend_session_end (Backend *bend)
  *    and never the transactions, need to be loaded. 
  */
 
-static AccountGroup *
+static void
 pgend_book_load_poll (Backend *bend)
 {
    Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
-   if (!be) return NULL;
+
+   if (!be) return;
+
+   grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1191,39 +1209,12 @@ pgend_book_load_poll (Backend *bend)
    be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
-   grp = pgendGetAllAccounts (be, NULL);
+   pgendGetAllAccounts (be, grp);
    pgendGroupGetAllBalances (be, grp, ts);
 
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
-
-   be->topgroup = grp;
-   return grp;
-}
-
-/* ============================================================= */
-/* The pgend_price_load_poll() routine creates the pricedb, but
- * doesn't actually put any prices in it.  These are polled on 
- * an as-needed basis.
- */
-
-static GNCPriceDB *
-pgend_price_load_poll (Backend *bend)
-{
-   GNCPriceDB *prdb;
-   PGBackend *be = (PGBackend *)bend;
-   if (!be) return NULL;
-
-   /* don't send events  to GUI  */
-   gnc_engine_suspend_events();
-
-   prdb = gnc_pricedb_create();
-
-   /* re-enable events */
-   gnc_engine_resume_events();
-
-   return prdb;
 }
 
 /* ============================================================= */
@@ -1234,12 +1225,15 @@ pgend_price_load_poll (Backend *bend)
  *    not handled.
  */
 
-static AccountGroup *
+static void
 pgend_book_load_single (Backend *bend)
 {
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
-   if (!be) return NULL;
+
+   if (!be) return;
+
+   grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1247,15 +1241,12 @@ pgend_book_load_single (Backend *bend)
    be->version_check = (guint32) time(0);
 
    pgendKVPInit(be);
-   grp = pgendGetAllAccounts (be, NULL);
+   pgendGetAllAccounts (be, grp);
    pgendGetMassTransactions (be, grp);
 
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
-
-   be->topgroup = grp;
-   return grp;
 }
 
 /* ============================================================= */
@@ -1263,25 +1254,28 @@ pgend_book_load_single (Backend *bend)
  *    price data from the database.  
  */
 
-static GNCPriceDB *
+static void
 pgend_price_load_single (Backend *bend)
 {
-   GNCPriceDB *prdb;
    PGBackend *be = (PGBackend *)bend;
-   if (!be) return NULL;
+   GNCBook *book;
+   GNCPriceDB *db;
+
+   if (!be) return;
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   prdb = pgendGetAllPrices (be, NULL);
+   book = gnc_session_get_book (be->session);
+   db = gnc_book_get_pricedb (book);
+
+   pgendGetAllPrices (be, db);
 
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
-
-   return prdb;
 }
 
 /* ============================================================= */
@@ -1305,8 +1299,11 @@ db_exists_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 static void
-pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid, 
-                    gboolean ignore_lock, gboolean create_new_db)
+pgend_session_begin (Backend *backend,
+                     GNCSession *session,
+                     const char * sessionid, 
+                     gboolean ignore_lock,
+                     gboolean create_new_db)
 {
    int really_do_create = 0;
    int rc;
@@ -1320,13 +1317,15 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
 
    if (!backend) return;
    be = (PGBackend*)backend;
-   
+
    ENTER("be=%p, sessionid=%s", be,
          sessionid ? sessionid : "(null)");
 
    /* close any dangling sessions from before; reinitialize */
    pgend_session_end ((Backend *) be);
    pgendInit (be);
+
+   be->session = session;
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -1783,13 +1782,13 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             be->be.price_commit_edit = NULL;
             be->be.run_query = NULL;
             be->be.price_lookup = NULL;
-            be->be.sync = pgendSyncSingleFile;
+            be->be.sync_all = pgendSyncSingleFile;
             be->be.sync_price = pgendSyncPriceDBSingleFile;
             be->be.events_pending = NULL;
             be->be.process_events = NULL;
             PWARN ("mode=single-file is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
-                   "there aren't any! We think its safe to use.\n");
+                   "there aren't any! We think it's safe to use.\n");
             break;
 
          case MODE_SINGLE_UPDATE:
@@ -1805,19 +1804,19 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = NULL;
             be->be.price_lookup = NULL;
-            be->be.sync = pgendSync;
+            be->be.sync_all = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             be->be.events_pending = NULL;
             be->be.process_events = NULL;
             PWARN ("mode=single-update is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
-                   "there aren't any! We think its safe to use.\n");
+                   "there aren't any! We think it's safe to use.\n");
             break;
 
          case MODE_POLL:
             pgendEnable(be);
             be->be.book_load = pgend_book_load_poll;
-            be->be.price_load = pgend_price_load_poll;
+            be->be.price_load = NULL;
             be->be.account_begin_edit = NULL;
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
@@ -1827,7 +1826,7 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
-            be->be.sync = pgendSync;
+            be->be.sync_all = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             be->be.events_pending = NULL;
             be->be.process_events = NULL;
@@ -1844,7 +1843,7 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             pgendSessionSetupNotifies (be);
 
             be->be.book_load = pgend_book_load_poll;
-            be->be.price_load = pgend_price_load_poll;
+            be->be.price_load = NULL;
             be->be.account_begin_edit = NULL;
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
@@ -1854,7 +1853,7 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.price_lookup = pgendPriceLookup;
-            be->be.sync = pgendSync;
+            be->be.sync_all = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
             be->be.events_pending = pgendEventsPending;
             be->be.process_events = pgendProcessEvents;
@@ -1898,7 +1897,7 @@ pgendDisable (PGBackend *be)
    be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.price_lookup        = be->be.price_lookup;
-   be->snr.sync                = be->be.sync;
+   be->snr.sync_all            = be->be.sync_all;
    be->snr.sync_price          = be->be.sync_price;
    be->snr.events_pending      = be->be.events_pending;
    be->snr.process_events      = be->be.process_events;
@@ -1912,7 +1911,7 @@ pgendDisable (PGBackend *be)
    be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
    be->be.price_lookup        = NULL;
-   be->be.sync                = NULL;
+   be->be.sync_all            = NULL;
    be->be.sync_price          = NULL;
    be->be.events_pending      = NULL;
    be->be.process_events      = NULL;
@@ -1941,7 +1940,7 @@ pgendEnable (PGBackend *be)
    be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.price_lookup        = be->snr.price_lookup;
-   be->be.sync                = be->snr.sync;
+   be->be.sync_all            = be->snr.sync_all;
    be->be.sync_price          = be->snr.sync_price;
    be->be.events_pending      = be->snr.events_pending;
    be->be.process_events      = be->snr.process_events;
@@ -1968,8 +1967,9 @@ pgendInit (PGBackend *be)
 
    /* generic backend handlers */
    xaccInitBackend((Backend*)be);
-   be->be.book_begin = pgend_session_begin;
-   be->be.book_end = pgend_session_end;
+
+   be->be.session_begin = pgend_session_begin;
+   be->be.session_end = pgend_session_end;
 
    be->nest_count = 0;
    pgendDisable(be);
@@ -2015,7 +2015,7 @@ pgendInit (PGBackend *be)
    }
    be->ipath_max = 0;
 
-   be->topgroup = NULL;
+   be->session = NULL;
 }
 
 /* ============================================================= */

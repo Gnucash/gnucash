@@ -28,6 +28,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-event.c \
   gnc-numeric.c \
   gnc-pricedb.c \
+  gnc-session.c \
   gncmod-engine.c \
   guid.c \
   kvp_frame.c \
@@ -59,6 +60,8 @@ gncinclude_HEADERS = \
   gnc-event.h \
   gnc-numeric.h \
   gnc-pricedb.h \
+  gnc-session.h \
+  gnc-session-p.h \
   guid.h \
   kvp_frame.h \
   messages.h

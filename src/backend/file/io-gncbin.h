@@ -31,7 +31,7 @@
 #define IO_GNCBIN_H
 
 #include "Backend.h"
-#include "gnc-book.h"
+#include "gnc-session.h"
 
 /** PROTOTYPES ******************************************************/
 
@@ -40,17 +40,16 @@
  *    are not inherently safe against file-locking errors.  For direct
  *    file IO, the gnc-book's higher level functions should be used.
  *
- * gnc_book_load_from_binfile() will load the financial data
+ * gnc_session_load_from_binfile() will load the financial data
  *   represented by the book's file_path into the indicated book.
  *
- * gnc_book_get_binfile_io_error() will return an error code for any
- *   error detected that occured during reading or writing.  It will
- *   reset the error code after being called.  The current
- *   implementation can be thought of as a "stack of depth one", and
- *   this routine as a "pop".  Future implementations may have a
- *   deeper stack.
- *     */
-void            gnc_book_load_from_binfile(GNCBook *book);
-GNCBackendError gnc_book_get_binfile_io_error(void);
+ * gnc_get_binfile_io_error() will return an error code for any error
+ * detected that occured during reading or writing.  It will reset the
+ * error code after being called.  The current implementation can be
+ * thought of as a "stack of depth one", and this routine as a "pop".
+ * Future implementations may have a deeper stack.
+*/
+void            gnc_session_load_from_binfile(GNCSession *session);
+GNCBackendError gnc_get_binfile_io_error(void);
 
 #endif /* IO_GNCBIN_H */

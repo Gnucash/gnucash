@@ -34,14 +34,14 @@
 
 #include <glib.h>
 
-#include "gnc-book.h"
+#include "gnc-session.h"
 #include "Query.h"
 
 /* FIXME: eventually, we probably need to add an error stack
    accessable via gnc_book_get_xml_io_error() a la binfile. */
 
 /* read in an account group from a file */
-gboolean gnc_book_load_from_xml_file(GNCBook *book);
+gboolean gnc_session_load_from_xml_file(GNCSession *session);
 
 /* The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.

@@ -692,18 +692,19 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                                    prices)))))))
 
 (define (gnc:add-quotes-to-book-at-url url)
-  (let* ((book (gnc:url->loaded-book url #f #f))
+  (let* ((session (gnc:url->loaded-session url #f #f))
+         (book (gnc:session-get-book session))
          (quote-ok? (and book (gnc:book-add-quotes book))))
 
     (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
-    (and book (gnc:book-save book))
+    (and session (gnc:session-save session))
     (if (not (eq? 'no-err
                   (gw:enum-<gnc:BackendError>-val->sym
-                   (gnc:book-get-error book) #f)))
+                   (gnc:session-get-error session) #f)))
         (set! quote-ok? #f))
     (if (not quote-ok?)
-        (gnc:msg "book-save failed " (gnc:book-get-error book)))
-    (and book (gnc:book-destroy book))
+        (gnc:msg "book-save failed " (gnc:session-get-error session)))
+    (and session (gnc:session-destroy session))
     quote-ok?))
 
 ; (define (get-1-quote exchange . items)

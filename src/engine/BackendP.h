@@ -47,11 +47,11 @@
 #include "Group.h"
 #include "Query.h"
 #include "Transaction.h"
-#include "gnc-book.h"
+#include "gnc-session.h"
 #include "gnc-pricedb.h"
 
 /*
- * The book_begin() routine gives the backend a second initialization
+ * The session_begin() routine gives the backend a second initialization
  *    opportunity.  It is suggested that the backend check that 
  *    the URL is syntactically correct, and that it is actually
  *    reachable.  This is probably(?) a good time to initialize
@@ -156,13 +156,16 @@
  *    a stack) of all the errors that have occurred.
  */
 
-struct _backend 
+struct backend_s
 {
-  void (*book_begin) (Backend *be, GNCBook *book, const char *book_id, 
-                      gboolean ignore_lock, gboolean create_if_nonexistent);
-  AccountGroup * (*book_load) (Backend *);
-  GNCPriceDB * (*price_load) (Backend *);
-  void (*book_end) (Backend *);
+  void (*session_begin) (Backend *be,
+                         GNCSession *session,
+                         const char *book_id, 
+                         gboolean ignore_lock,
+                         gboolean create_if_nonexistent);
+  void (*book_load) (Backend *);
+  void (*price_load) (Backend *);
+  void (*session_end) (Backend *);
   void (*destroy_backend) (Backend *);
 
   void (*account_begin_edit) (Backend *, Account *);
@@ -176,13 +179,13 @@ struct _backend
 
   void (*run_query) (Backend *, Query *);
   void (*price_lookup) (Backend *, GNCPriceLookup *);
-  void (*all_sync) (Backend *, AccountGroup *, GNCPriceDB *);
-  void (*sync) (Backend *, AccountGroup *);
+  void (*sync_all) (Backend *, GNCBook *book);
+  void (*sync_group) (Backend *, AccountGroup *);
   void (*sync_price) (Backend *, GNCPriceDB *);
 
   gboolean (*events_pending) (Backend *be);
   gboolean (*process_events) (Backend *be);
-    
+
   GNCBackendError last_err;
 };
 
