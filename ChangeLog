@@ -1,3 +1,17 @@
+2004-02-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po: Update Czech translation by Miloslav Trmac
+	<mitr@volny.cz>
+
+	* po/es.po: Updated Spanish translation by Eneko Lacunza
+	<enlar@enlar.net>.
+	
+	* po/ru.po: Updated Russian translation by Vitaly Lipatov
+	<lav@altlinux.ru>
+	
+	* po/it.po, po/glossary/it.po: Updated Italian translation by
+	Lorenzo Cappelletti <lorenzo.cappelletti@email.it>.
+
 2004-01-31  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
