@@ -34,7 +34,8 @@
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
-
+#include "gnc-hbci-trans-templ.h"
+#include "gnc-hbci-kvp.h"
 
 
 void 
@@ -91,10 +92,35 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     HBCI_Customer_custId ((HBCI_Customer *)customer));*/
 
   {
+    GList *template_list = 
+      gnc_trans_templ_glist_from_kvp_glist
+      ( gnc_hbci_get_book_template_list
+	( xaccAccountGetBook(gnc_acc)));
+    unsigned nr_templates = g_list_length(template_list);
+
     /* Now open the HBCI_trans_dialog. */
     HBCI_Transaction *h_trans = gnc_hbci_trans (parent, api, interactor,
 						h_acc, customer, 
-						trans_type);
+						trans_type, &template_list);
+
+    /* New templates? If yes, store them */
+    if (nr_templates < g_list_length(template_list)) {
+      if (h_trans || (gnc_verify_dialog_parented
+		      (parent, 
+		       FALSE,
+		       _("You have created a new online transfer template, but \n"
+			 "you cancelled the transfer dialog. Do you nevertheless \n"
+			 "want to store the new online transfer template?")))) {
+	GList *kvp_list = gnc_trans_templ_kvp_glist_from_glist (template_list);
+	/*printf ("Now having %d templates. List: '%s'\n", 
+	  g_list_length(template_list),
+	  kvp_value_glist_to_string(kvp_list));*/
+	gnc_hbci_set_book_template_list
+	  (xaccAccountGetBook(gnc_acc), kvp_list);
+      }
+    }
+    gnc_trans_templ_delete_glist (template_list);
+    
     if (!h_trans)
       return;
 
