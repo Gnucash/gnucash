@@ -27,6 +27,7 @@
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
+#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
@@ -1088,4 +1089,28 @@ gnc_split_register_control_new (void)
   control->traverse = gnc_split_register_traverse;
 
   return control;
+}
+
+gboolean
+gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
+{
+  SplitRegister *reg = data;
+
+  if (old_flag == YREC)
+  {
+    const char *message = _("Do you really want to mark this transaction "
+                            "not reconciled?\nDoing so might make future "
+                            "reconciliation difficult!");
+    gboolean confirm;
+
+    confirm = gnc_lookup_boolean_option ("Register",
+                                         "Confirm before changing reconciled",
+                                         TRUE);
+    if (!confirm)
+      return TRUE;
+
+    return gnc_verify_dialog_parented (xaccSRGetParent (reg), message, TRUE);
+  }
+
+  return TRUE;
 }

@@ -5,6 +5,7 @@ libgncmod_ledger_core_la_SOURCES = \
   SplitLedger.c \
   MultiLedger.c \
   split-register-control.c \
+  split-register-load.c \
   split-register-model.c \
   split-register-model-save.c \
   split-register-util.c
