@@ -464,24 +464,12 @@ xaccAccountCommitEdit (Account *acc)
 
     if (ERR_BACKEND_NO_ERR != errcode)
     {
-      char * err;
-      /* destroys must be rolled back as well ... ??? */
+      /* Destroys must be rolled back as well ... */
       acc->do_free = FALSE;
+
       /* XXX hack alert FIXME implement account rollback */
-      PERR (" backend asked engine to rollback, but this isn't"
+      PERR ("Backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", errcode);
-      err = qof_backend_get_message(be);
-      /* g_strdup here, because err needs to be g_freed if from Backend */
-      err = err ? err : g_strdup(_("Error message not available"));
-      /* Translators: %d is the (internal) error number. %s is the
-       * human-readable error description. */
-      PWARN_GUI(_("Error occurred while saving Account:\n%d: %s"),
-		      qof_backend_get_error(be), err);
-    
-      /* push error back onto the stack */
-      qof_backend_set_error (be, errcode);
-      qof_backend_set_message (be, err);
-      g_free(err);
     }
   }
   acc->core_dirty = FALSE;

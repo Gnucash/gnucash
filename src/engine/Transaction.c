@@ -1612,7 +1612,7 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
   check_open (trans);
 
-  if (xaccTransWarnReadOnly (trans)) return;
+  if (xaccTransGetReadOnly (trans)) return;
 
   trans->do_free = TRUE;
 }
@@ -1751,14 +1751,15 @@ xaccTransCommitEdit (Transaction *trans)
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode)
       {
-         /* if the backend puked, then we must roll-back 
+         /* If the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
+          * The GUI should check for error conditions ... 
           */
         if (ERR_BACKEND_MODIFIED == errcode)
         {
-           PWARN_GUI(_("Another user has modified this transaction\n"
-                       "\tjust a moment ago. Please look at their changes,\n"
-                       "\tand try again, if needed.\n"));
+           PWARN("Another user has modified this transaction\n"
+                 "\tjust a moment ago. Please look at their changes,\n"
+                 "\tand try again, if needed.\n");
         }
 
         /* push error back onto the stack */
@@ -1799,6 +1800,14 @@ xaccTransCommitEdit (Transaction *trans)
    LEAVE ("trans addr=%p\n", trans);
 }
 
+/* Ughhh. The Rollback function is terribly complex, and, what's worse,
+ * it only rolls back the basics.  The TransCommit functions did a bunch
+ * of Lot/Cap-gains scrubbing that don't get addressed/undone here, and
+ * so the rollback can potentially leave a bit of a mess behind.  We
+ * really need a more robust undo capability.  Part of the problem is
+ * that the biggest user of the undo is the multi-user backend, which
+ * also adds complexity.
+ */
 void
 xaccTransRollbackEdit (Transaction *trans)
 {
@@ -2055,26 +2064,6 @@ xaccTransGetVersion (const Transaction *trans)
 }
 
 /********************************************************************\
-\********************************************************************/
-
-gboolean
-xaccTransWarnReadOnly (const Transaction *trans)
-{
-  const gchar *reason;
-
-  if (!trans) return FALSE;
-
-  reason = xaccTransGetReadOnly (trans);
-  if (reason) {
-    gnc_send_gui_error("Cannot modify or delete this transaction.\n"
-                       "This transaction is marked read-only because:\n\n'%s'",
-                       reason);
-    return TRUE;
-  }
-  return FALSE;
-}
-
-/********************************************************************\
  * TransRemoveSplit is an engine private function and does not/should
  * not cause any rebalancing to occur.
 \********************************************************************/
@@ -2101,7 +2090,7 @@ xaccSplitDestroy (Split *split)
 
    acc = split->acc;
    trans = split->parent;
-   if (acc && !acc->do_free && xaccTransWarnReadOnly (trans))
+   if (acc && !acc->do_free && xaccTransGetReadOnly (trans))
        return FALSE;
 
    check_open (trans);
@@ -2747,6 +2736,9 @@ const char *
 xaccTransGetReadOnly (const Transaction *trans)
 {
   if (!trans) return NULL;
+  /* XXX This flag should be cached in the transaction structure
+   * for performance reasons, since its checked every trans commit.
+   */
   return kvp_frame_get_string (trans->kvp_data, TRANS_READ_ONLY_REASON);
 }
 

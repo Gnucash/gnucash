@@ -248,8 +248,6 @@ void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
 void	      xaccTransClearReadOnly (Transaction *trans);
 /** FIXME: document me */
 const char *  xaccTransGetReadOnly (const Transaction *trans);
-/** FIXME: document me */
-gboolean      xaccTransWarnReadOnly (const Transaction *trans);
 
 /** Returns the number of splits in this transaction. */
 int           xaccTransCountSplits (const Transaction *trans);
