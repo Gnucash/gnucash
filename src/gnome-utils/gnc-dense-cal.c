@@ -529,9 +529,7 @@ gnc_dense_cal_finalize (GObject *object)
         g_return_if_fail (object != NULL);
         g_return_if_fail (GNC_IS_DENSE_CAL (object));
 
-        /* mark data */
         dcal = GNC_DENSE_CAL(object);
-        gdc_free_all_mark_data( dcal );
 
         if (G_OBJECT_CLASS (parent_class)->finalize)
                 (* G_OBJECT_CLASS (parent_class)->finalize) (object);
