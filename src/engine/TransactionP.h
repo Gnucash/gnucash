@@ -49,10 +49,10 @@
 #include <glib.h>
 
 #include "config.h"
-#include "kvp_frame.h"
+#include "gnc-engine.h"   /* for typedefs */
 #include "gnc-numeric.h"
-#include "Transaction.h"   /* for typedefs */
 #include "GNCIdP.h"
+#include "kvp_frame.h"
 
 
 /** STRUCTS *********************************************************/
@@ -233,6 +233,8 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
  * not a properly registered Entity.  The splits are copied, but
  * these are also funny: they aren't inserted into the accounts 
  * they claim to be in.  The splits also have bogus GUID's.
+ * Another 'feature': the splits point at the old transaction
+ * as the parent, not the new transaction.  
  */
 Transaction * xaccDupeTransaction (Transaction *t);
 

@@ -1783,7 +1783,8 @@ xaccTransRollbackEdit (Transaction *trans)
          gen_event (s);
       }
 
-      if (so != s)
+      /* if the number of splits were not identical... then force */
+      if (node || node_orig)
       {
         force_it = 1;
         mismatch = i;
@@ -1798,6 +1799,8 @@ xaccTransRollbackEdit (Transaction *trans)
    {
       GList *node;
 
+      /* In this loop, we tuck the fixed-up splits back into 
+       * orig array, for temp safekeeping. */
       for (i = 0, node = trans->splits ;
            node && i < mismatch ;
            i++, node = node->next)
@@ -1810,16 +1813,18 @@ xaccTransRollbackEdit (Transaction *trans)
          node_orig->data = s;
       }
 
+      /* in this loop, we remove excess new splits that had been added */
       for (node = g_list_nth (trans->splits, mismatch) ;
            node ; node = node->next)
       {
          Split *s = node->data;
+         Account *acc = xaccSplitGetAccount(s);
 
          trans->editlevel++;
 
          mark_split (s);
-         xaccAccountRemoveSplit (xaccSplitGetAccount(s), s);
-         xaccAccountRecomputeBalance (xaccSplitGetAccount(s));
+         xaccAccountRemoveSplit (acc, s);
+         xaccAccountRecomputeBalance (acc);
          gen_event (s);
          xaccRemoveEntity(s->book->entity_table, &s->guid);
          xaccFreeSplit (s);
@@ -1832,12 +1837,14 @@ xaccTransRollbackEdit (Transaction *trans)
       trans->splits = orig->splits;
       orig->splits = NULL;
 
+      /* in this loop, we fix up the remaining orig splits to be healthy */
       for (node = g_list_nth (trans->splits, mismatch) ;
            node ; node = node->next)
       {
          Split *s = node->data;
          Account *account = xaccSplitGetAccount(s);
 
+         s->parent = trans;
          xaccSplitSetAccount(s, NULL);
          xaccStoreEntity(s->book->entity_table, s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (account, s);
@@ -1847,6 +1854,8 @@ xaccTransRollbackEdit (Transaction *trans)
       }
    }
 
+   /* Now that the engine copy is back to its original version,
+    * get the backend to fix it in the database */
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_rollback_edit) 
    {
