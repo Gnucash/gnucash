@@ -206,7 +206,7 @@ string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 {
   guint64 str_len;
   guchar *data;
-  int i, j;
+  unsigned int i, j;
 
   g_return_val_if_fail(v != NULL, FALSE);
   g_return_val_if_fail(data_len != NULL, FALSE);
@@ -480,7 +480,7 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
 
     ret = g_new(gnc_numeric, 1);
 
-    if(string_to_gnc_numeric(content, ret) != NULL)
+    if(string_to_gnc_numeric(content, ret))
     {
         g_free(content);
         return ret;

@@ -70,6 +70,9 @@ struct gnc_report_window_s
   
   SCM          edited_reports;
 
+  /* This is set to mark the fact that we need to reload the html */
+  gboolean	need_reload;
+
   gnc_html     * html;
 };
 
@@ -386,7 +389,7 @@ gnc_get_export_type_choice (SCM export_types)
     return SCM_BOOL_T;
 
   choice--;
-  if (choice >= gh_length (export_types))
+  if (choice >= (int)gh_length (export_types))
     return SCM_BOOL_F;
 
   return gh_list_ref (export_types, gh_int2scm (choice));
@@ -528,6 +531,33 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   return TRUE;
 }
 
+static int
+gnc_report_window_save_cb(GtkWidget * w, gpointer data)
+{
+  gnc_report_window * report = data;
+  SCM save_func = gh_eval_str("gnc:report-save-to-savefile");
+
+  if(report->cur_report != SCM_BOOL_F)
+  {
+    gh_call1(save_func, report->cur_report);
+  }
+
+  return TRUE;
+}
+
+/* We got a draw event.  See if we need to reload the report */
+static void
+gnc_report_window_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointer data)
+{
+  gnc_report_window *win = data;
+
+  if (!win->need_reload)
+    return;
+
+  win->need_reload = FALSE;
+  gnc_html_reload(win->html);
+}
+
 static void
 gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
 {
@@ -536,7 +566,10 @@ gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
 
   if(report->cur_report != SCM_BOOL_F) {
     gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
-    gnc_html_reload(report->html);
+
+    /* now queue the fact that we need to reload this report */
+    report->need_reload = TRUE;
+    gtk_widget_queue_draw(report->container);
   }
 }
 
@@ -585,7 +618,10 @@ gnc_report_window_option_change_cb(gpointer data)
   if(report->cur_report != SCM_BOOL_F) {
     /* it's probably already dirty, but make sure */
     gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
-    gnc_html_reload(report->html);
+
+    /* now queue the fact that we need to reload this report */
+    report->need_reload = TRUE;
+    gtk_widget_queue_draw(report->container);
   }
 }
 
@@ -791,6 +827,9 @@ gnc_report_window_new(GNCMDIChildInfo * mc)
   gtk_signal_connect(GTK_OBJECT(report->container), "destroy",
                      GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb),
                      report);
+  gtk_signal_connect(GTK_OBJECT(report->container), "draw",
+		     GTK_SIGNAL_FUNC(gnc_report_window_draw_cb), report);
+
   
   gtk_widget_show_all(report->container);
   
@@ -873,6 +912,15 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
       GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
+    { GNOME_APP_UI_ITEM,
+      _("Save report"),
+      _("Save the current report for later use in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu. Will go into effect at the next startup of gnucash."),
+      gnc_report_window_save_cb, win,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_SAVE,
+      0, 0, NULL
+    },    
     GNOMEUIINFO_END
   };
   
@@ -1063,7 +1111,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     if (ptr != SCM_BOOL_F) {
       title = gh_scm2newstr(ptr, NULL);
     }
-    prm->win         = gnc_options_dialog_new(TRUE, title);
+    /* Don't forget to translate the window title */
+    prm->win         = gnc_options_dialog_new(TRUE, _(title));
     
     if (title) {
       free(title);

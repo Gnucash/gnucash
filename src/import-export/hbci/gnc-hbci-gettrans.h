@@ -24,9 +24,20 @@
 #define GNC_HBCI_GETTRANS_H
 
 #include <gnome.h>
+#include <aqbanking/jobgettransactions.h>
 #include "Account.h"
 
+/** Start a GetTrans job. */
 void
 gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
+
+/** Finalizes all the things that have to be done with a GetTrans
+ * job.  Returns true if everything has been finished succesfully. */
+gboolean
+gnc_hbci_gettrans_final(GtkWidget *parent, 
+			Account *gnc_acc, 
+			const AB_JOB *trans_job,
+			gboolean run_until_done);
+
 
 #endif /* GNC_HBCI_GETTRANS_H */

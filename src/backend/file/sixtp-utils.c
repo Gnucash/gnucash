@@ -496,7 +496,7 @@ gboolean
 string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 {
   long int nanosecs;
-  int charcount;
+  unsigned int charcount;
 
   if (!str || !ts) return FALSE;
 

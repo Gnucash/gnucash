@@ -7,3 +7,12 @@ Finance::Quote
 --------------
 
 Available from http://finance-quote.sourceforge.net.
+
+------------------------------------------------
+
+guppi-legend.patch: Apply this patch to the Guppi 0.40.3 package (and
+                    compile and install the patched version) in order
+                    to fix the reversed legend problem with stacked
+                    barcharts.
+
+------------------------------------------------

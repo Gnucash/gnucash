@@ -10,14 +10,64 @@
       BAFöG, Studiengebühren
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Einkommen</act:name>
+  <act:name>Passiva</act:name>
+  <act:id type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Passiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredite</act:name>
+  <act:id type="new">13df44e66790069c74d563946aa0394e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Kredite</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>BAF&#246;G</act:name>
+  <act:id type="new">98a42f23d7d77f9f18560564e00f7fac</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Darlehensanteil des BAF&#246;Gs</act:description>
+  <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Erträge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Einkommen</act:description>
+  <act:description>Erträge</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>BAF&#246;G</act:name>
@@ -31,14 +81,20 @@
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ausgaben</act:name>
+  <act:name>Aufwendungen</act:name>
   <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ausgaben</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:description>Aufwendungen</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bildung</act:name>
@@ -49,6 +105,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Bildung</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

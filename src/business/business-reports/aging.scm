@@ -79,6 +79,9 @@
 (define company-get-owner-obj
   (record-accessor company-info 'owner-obj))
 
+(define company-set-owner-obj!
+  (record-modifier company-info 'owner-obj))
+
 (define company-get-buckets
   (record-accessor company-info 'bucket-vector))
 
@@ -98,14 +101,16 @@
     (gnc:timepair-lt this-date current-bucket))
 
   (define (find-bucket current-bucket bucket-intervals date)  
+    (gnc:debug "looking for bucket for date: " date)
     (begin
-      (gnc:debug "current bucket" current-bucket)
-      (gnc:debug "bucket-intervals" bucket-intervals)
-      (gnc:debug "date" date)
+      (gnc:debug "current bucket: " current-bucket)
+      (gnc:debug "bucket-intervals: " bucket-intervals)
       (if (> current-bucket (vector-length bucket-intervals))
 	  (gnc:error "sanity check failed in find-bucket")
 	  (if (in-interval date (vector-ref bucket-intervals current-bucket))
-	      current-bucket
+	      (begin
+		(gnc:debug "found bucket")
+		current-bucket)
 	      (find-bucket (+ current-bucket 1) bucket-intervals date)))))
 
   (define (calculate-adjusted-values amount overpayment)
@@ -151,10 +156,14 @@
   
   (let ((overpayment (company-get-overpayment company)))
 	;; if there's already an overpayment, make it bigger
+    (gnc:debug "processing payment of " amount)
+    (gnc:debug "overpayment was " overpayment)
+
 	(if (gnc:numeric-positive-p overpayment)
 	    (company-set-overpayment company (gnc:numeric-add-fixed overpayment amount))
 	    
 	    (let ((result (process-payment-driver amount (company-get-buckets company) 0)))
+	      (gnc:debug "payment-driver processed.  new overpayment: " result)
 	      (company-set-overpayment company result)))))
 		  
 		    
@@ -166,54 +175,66 @@
 
 (define (update-company-hash hash split bucket-intervals
 			     reverse?)
-  (let* ((transaction (gnc:split-get-parent split))
-	 (temp-owner (gnc:owner-create))
-	 (owner (gnc:owner-from-split split temp-owner)))
 
-    (if
-     owner
-     (let* ((guid (gnc:owner-get-guid owner))
-	    (this-currency (gnc:transaction-get-currency transaction))
-	    (value (gnc:split-get-value split))
-	    (this-date (gnc:transaction-get-date-posted transaction))
-	    (company-info (hash-ref hash guid)))
+  (define (do-update value)
+    (let* ((transaction (gnc:split-get-parent split))
+	   (temp-owner (gnc:owner-create))
+	   (owner (gnc:owner-from-split split temp-owner)))
 
-       (gnc:debug "update-company-hash called")
-       (gnc:debug "guid" guid)
-       (gnc:debug "split-value" value)
-       (if reverse? (set! value (gnc:numeric-neg value)))
-       (if company-info
-	   ;; if it's an existing company, destroy the temp owner and
-	   ;; then make sure the currencies match
-	   (begin
-	     (gnc:owner-destroy temp-owner)
-	     (if (not (gnc:commodity-equiv? this-currency
-					    (company-get-currency company-info)))
-		 (cons #f (sprintf (_ "Transactions relating to company  %d contain \
+      (if
+       owner
+       (let* ((guid (gnc:owner-get-guid owner))
+	      (this-currency (gnc:transaction-get-currency transaction))
+	      (this-date (gnc:transaction-get-date-posted transaction))
+	      (company-info (hash-ref hash guid)))
+
+	 (gnc:debug "update-company-hash called")
+	 (gnc:debug "owner: " owner ", guid: " guid)
+	 (gnc:debug "split-value: " value)
+	 (if reverse? (set! value (gnc:numeric-neg value)))
+	 (if company-info
+	     ;; if it's an existing company, destroy the temp owner and
+	     ;; then make sure the currencies match
+	     (begin
+	       (gnc:owner-destroy temp-owner)
+	       (if (not (gnc:commodity-equiv?
+			 this-currency
+			 (company-get-currency company-info)))
+		   (cons #f (sprintf
+			     (_ "Transactions relating to company  %d contain \
 more than one currency.  This report is not designed to cope with this possibility.")))
-		 (begin
-		   (gnc:debug "it's an old company")
-		   (if (gnc:numeric-negative-p value)
-		       (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
-		       (process-payment company-info value))
-		   (hash-set! hash guid company-info)
-		   (cons #t guid))))
-	   
-	   ;; if it's a new company
-	   (begin
-	     (gnc:debug "value" value)
-	     (if (gnc:numeric-negative-p value) ;; if it's a new debt
-		 ;; if not ignore it
-	                                     ;;; XXX: is this right ?
-		 (let ((new-company (make-company this-currency owner)))
-		   (process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
-		   (hash-set! hash guid new-company))
-		 (gnc:owner-destroy temp-owner))
-	     (cons #t guid))))
+		   (begin
+		     (gnc:debug "it's an old company")
+		     (if (gnc:numeric-negative-p value)
+			 (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
+			 (process-payment company-info value))
+		     (hash-set! hash guid company-info)
+		     (cons #t guid))))
+		 
+	     ;; if it's a new company
+	     (begin
+	       (gnc:debug "value" value)
+	       (let ((new-company (make-company this-currency owner)))
+		 (if (gnc:numeric-negative-p value)
+		     (process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
+		     (process-payment new-company value))
+		 (hash-set! hash guid new-company))
+	       (cons #t guid))))
+       ; else (no owner)
+       (gnc:owner-destroy temp-owner))))
+  
+  ;; figure out if this split is part of a closed lot
+  ;; also save the split value...
+  (let* ((lot (gnc:split-get-lot split))
+	 (value (gnc:split-get-value split))
+	 (is-paid? (if (null? lot) #f (gnc:lot-closed? lot))))
 
-     ; else (no owner)
-     (gnc:owner-destroy temp-owner))))
-
+    ;; if it's closed, then ignore it because it doesn't matter.
+    ;; XXX: we _could_ just set the value to 0 in order to list
+    ;;      the company.  I'm not sure what to do.  Perhaps add an
+    ;;      option?
+    (if (not is-paid?)
+	(do-update value))))
 
 ;; get the total debt from the buckets
 (define (buckets-get-total buckets)
@@ -269,10 +290,7 @@ more than one currency.  This report is not designed to cope with this possibili
   
     
 ;; set up the query to get the splits in the chosen account
-;; XXX: Need a better method to actually sort through the 'active'
-;; transactions.  Currently go back a year, but obviously we need
-;; a way to tell that a transaction is 'paid'
-;;; FIXME: begindate is a hack
+;; XXX: FIXME: begindate is a hack -- we currently only go back a year
 (define (setup-query query account date)
   (define (date-copy date)
     (cons (car date) (cdr date)))
@@ -443,8 +461,8 @@ totals to report currency")
 	 column-totals)))
 
   ;; convert the buckets in the header data structure 
-  (define (convert-to-monetary-list bucket-list currency)
-    (let* ((running-total (gnc:numeric-zero))
+  (define (convert-to-monetary-list bucket-list currency overpayment)
+    (let* ((running-total (gnc:numeric-neg overpayment))
 	   (monetised-buckets
 	   (map (lambda (bucket-list-entry)
 		  (begin
@@ -532,9 +550,10 @@ totals to report currency")
 
 	    ;; build the table
 	    (set! work-to-do (length splits))
+	    ;; work-done is already zero
 	    (for-each (lambda (split)
-			(set! work-done (+ 1 work-done))
 			(gnc:report-percent-done (* 50 (/ work-done work-to-do)))
+			(set! work-done (+ 1 work-done))
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
@@ -553,13 +572,16 @@ totals to report currency")
 
 	    ;; build the table
 	    (set! work-to-do (length company-list))
+	    (set! work-done 0)
 	    (for-each (lambda (company-list-entry)
-			(set! work-done (+ 1 work-done))
 			(gnc:report-percent-done (+ 50 (* 50 (/ work-done work-to-do))))
+			(set! work-done (+ 1 work-done))
 			(let* ((monetary-list (convert-to-monetary-list
 					       (company-get-buckets
 						(cdr company-list-entry))
 					       (company-get-currency
+						(cdr company-list-entry))
+					       (company-get-overpayment
 						(cdr company-list-entry))))
 			       (owner (company-get-owner-obj
 				       (cdr company-list-entry)))
@@ -604,7 +626,9 @@ totals to report currency")
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  "No Valid Account Selected")))
+	  (string-append
+	   "No Valid Account Selected.  "
+	   "Click on the Options button and select the account to use."))))
     (gnc:free-query query)
     (gnc:report-finished)
     document))

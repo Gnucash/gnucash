@@ -344,7 +344,7 @@ the current value of the path.")
 (define (gnc:prefs-show-version)
   (display "GnuCash ")
   (display gnc:version)
-  (display " development version")
+  ;;(display " development version")
   (newline))
 
 (define (gnc:prefs-show-usage)

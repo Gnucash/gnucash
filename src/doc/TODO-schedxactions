@@ -3,6 +3,15 @@ Author: jsled@asynchronous.org
 Main Scheduled Transaction todo list
 ------------------------------------
 
+. Bug#102311...
+
+  . As per comment 2004-01-05T16:31, there is an issue when other pieces of
+    the system change accounts that SXes depend on.  We have two options:
+    1: handle change at account-deletion time ["remove this acocunt will
+       affect this scheduled transaction ... what to do?"]
+    2: break out of SX since-last-run processing ["this account was removed;
+       {edit,delete} SX?"].
+
 ##################################################
 ### To-Do
 ###

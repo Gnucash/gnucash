@@ -45,6 +45,7 @@
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncVendorP.h"
+#include "gncEmployeeP.h"
 
 #include "gnc-engine-util.h"
 
@@ -71,6 +72,9 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
       break;
     case GNC_OWNER_VENDOR:
       type_str = GNC_VENDOR_MODULE_NAME;
+      break;
+    case GNC_OWNER_EMPLOYEE:
+      type_str = GNC_EMPLOYEE_MODULE_NAME;
       break;
     default:
       PWARN ("Invalid owner type: %d", gncOwnerGetType (owner));
@@ -108,6 +112,8 @@ owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
     gncOwnerInitJob (pdata->owner, NULL);
   else if (!safe_strcmp (txt, GNC_VENDOR_MODULE_NAME))
     gncOwnerInitVendor (pdata->owner, NULL);
+  else if (!safe_strcmp (txt, GNC_EMPLOYEE_MODULE_NAME))
+    gncOwnerInitEmployee (pdata->owner, NULL);
   else {
     PWARN ("Unknown owner type: %s", txt);
     g_free(txt);
@@ -156,6 +162,16 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
       gncVendorSetGUID (vendor, guid);
     }
     gncOwnerInitVendor (pdata->owner, vendor);
+    break; 
+  }
+  case GNC_OWNER_EMPLOYEE:
+  {
+    GncEmployee *employee = gncEmployeeLookup (pdata->book, guid);
+    if (!employee) {
+      employee = gncEmployeeCreate (pdata->book);
+      gncEmployeeSetGUID (employee, guid);
+    }
+    gncOwnerInitEmployee (pdata->owner, employee);
     break; 
   }
   default:

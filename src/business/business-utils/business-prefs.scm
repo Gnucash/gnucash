@@ -28,6 +28,10 @@
   "__gui" "bill_reg_width" 0))
 
 (gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "voucher_reg_width" 0))
+
+(gnc:register-configuration-option
  (gnc:make-number-range-option
   gnc:*business-label* (N_ "Number of Rows")
   "a" (N_ "Default number of register rows to display in Invoices.")
@@ -37,6 +41,15 @@
     0.0 ;; number of decimals
     1.0 ;; step size
   ))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  gnc:*business-label* (N_ "Accumulate splits on Post?")
+  "f0" (N_ (string-append
+	   "Whether multiple entries in an invoice which transfer to "
+	   "the same account should be accumulated into a single split by default."
+	   "This setting can be changed in the Post dialog."))
+  #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -55,10 +68,14 @@
   #f))
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
+ (gnc:make-complex-boolean-option
   gnc:*business-label* (N_ "Notify Bills Due?")
   "g" (N_ "Whether to display the list of Bills Due at startup.")
-  #t))
+  #t #f
+  (lambda (x) (gnc:set-option-selectable-by-name gnc:*business-label*
+						 "Bills Due Days"
+						 x))
+  ))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option

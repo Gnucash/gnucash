@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Gyerektartás költségei
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Számla gyerektartás költségeinek nyomonkövetéséhez
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Akkor érdemes kiválasztani ezt ha önnek vannak gyerektartási költségei.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Költségek</act:name>
+  <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Költségek</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gyerektartás</act:name>
+  <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Gyerektartás</act:description>
+  <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
