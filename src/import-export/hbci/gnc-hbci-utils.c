@@ -196,6 +196,9 @@ print_list_int (const list_int *list)
 static void *
 get_resultcode_error_cb (int value, void *user_data)
 {
+  int *tmp_result = user_data;
+  if (value > *tmp_result)
+    *tmp_result = value;
   if (value >= 9000)
     return (void*) value;
   else
@@ -205,45 +208,89 @@ static int
 get_resultcode_error (const list_int *list)
 {
   g_assert (list);
-  return (int) list_int_foreach (list, &get_resultcode_error_cb, NULL);
+  int tmp_result = 0, cause = 0;
+  cause = (int) list_int_foreach (list, &get_resultcode_error_cb, &tmp_result);
+  return MAX(tmp_result, cause);
 }
 
-void 
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
+int
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose)
 {
   list_int *list;
   const char *msg;
-  int cause;
+  int cause = 0;
   
   g_assert (job);
 /*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
 /*     return; */
 /*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
 /*     return; */
-  list = HBCI_OutboxJob_resultCodes (job);
-  if (list_int_size (list) > 0) {
-    printf("OutboxJob failed. Resultcodes were: ");
-    print_list_int (list);
-    cause = get_resultcode_error (list);
-    switch (cause) {
-    case 9310:
-      msg = "Schluessel noch nicht hinterlegt";
+
+  if (verbose) {
+    printf("OutboxJob status: ");
+    switch(HBCI_OutboxJob_status (job)) {
+    case HBCI_JOB_STATUS_TODO:
+      printf("todo");
       break;
-    case 9320:
-      msg = "Schluessel noch nicht freigeschaltet";
-      break;
-    case 9330:
-      msg = "Schluessel gesperrt";
-      break;
-    case 9340:
-      msg = "Schluessel falsch";
+    case HBCI_JOB_STATUS_DONE:
+      printf("done");
       break;
     default:
-      msg = "Unknown";
+    case HBCI_JOB_STATUS_NONE:
+      printf("none");
+      break;
     }
-    printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+
+    printf(", result: ");
+    switch(HBCI_OutboxJob_result (job)) {
+    case HBCI_JOB_RESULT_SUCCESS:
+      printf("success");
+      break;
+    case HBCI_JOB_RESULT_FAILED:
+      printf("failed");
+      break;
+    default:
+    case HBCI_JOB_STATUS_NONE:
+      printf("none");
+      break;
+    }
+    printf("\n");
+  }
+  
+  list = HBCI_OutboxJob_resultCodes (job);
+  if (list_int_size (list) > 0) {
+
+    cause = get_resultcode_error (list);
+
+    if (verbose) {
+      printf("OutboxJob resultcodes: ");
+      print_list_int (list);
+
+      switch (cause) {
+      case 9310:
+	msg = "Schluessel noch nicht hinterlegt";
+	break;
+      case 9320:
+	msg = "Schluessel noch nicht freigeschaltet";
+	break;
+      case 9330:
+	msg = "Schluessel gesperrt";
+	break;
+      case 9340:
+	msg = "Schluessel falsch";
+	break;
+      default:
+	msg = "Unknown";
+      }
+      printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+    }
+  } else {
+    if (verbose)
+      printf("OutboxJob's resultCodes list has zero length.\n");
   }
   list_int_delete (list);
+
+  return cause;
 }
 
 
@@ -339,6 +386,7 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 		      HBCI_OutboxJob *job, GNCInteractor *inter)
 {
   HBCI_Error *err;
+  int resultcode;
 	  
   if (inter)
     GNCInteractor_show (inter);
@@ -354,6 +402,7 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
     g_assert (err);
   } while (gnc_hbci_error_retry (parent, err, inter));
   
+  resultcode = gnc_hbci_debug_outboxjob (job, FALSE);
   if (!HBCI_Error_isOk(err)) {
     char *errstr = 
       g_strdup_printf("gnc_hbci_api_execute: Error at executeQueue: %s",
@@ -363,12 +412,18 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 				      (HBCI_API_Hbci (api)), errstr);
     g_free (errstr);
     HBCI_Error_delete (err);
-    gnc_hbci_debug_outboxjob (job);
+    gnc_hbci_debug_outboxjob (job, TRUE);
+    GNCInteractor_show_nodelete (inter);
     return FALSE;
   }
 
   HBCI_Error_delete (err);
-  return TRUE;
+  if (resultcode <= 20) 
+    return TRUE;
+  else {
+    GNCInteractor_show_nodelete (inter);
+    return FALSE;
+  }
 }
 
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */

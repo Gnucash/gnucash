@@ -1,3 +1,10 @@
+2003-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, gnc-hbci-utils.h,
+	gnc-hbci-utils.c, hbci-interaction.h, hbci-interaction.c: Add
+	*much* better error checking -- the user now gets almost always
+	correct feedback if an online transfer cannot be executed.
+
 2003-05-05  David Hampton  <hampton@employees.org>
 
 	* macros/openhbci.m4: Fix problem with latest versions of autoconf.

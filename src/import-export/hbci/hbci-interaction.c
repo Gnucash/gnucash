@@ -73,7 +73,7 @@ gboolean GNCInteractor_aborted(const GNCInteractor *i)
   return !(i->keepAlive);
 }
 
-void GNCInteractor_show(GNCInteractor *i)
+void GNCInteractor_show_nodelete(GNCInteractor *i)
 {
   gboolean cache_pin = 
     gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
@@ -89,7 +89,11 @@ void GNCInteractor_show(GNCInteractor *i)
     if (cache_pin == FALSE)
       GNCInteractor_erasePIN (i);
   }
-
+}
+void GNCInteractor_show(GNCInteractor *i)
+{
+  g_assert(i);
+  GNCInteractor_show_nodelete(i);
   /* Clear log window. */
   gtk_editable_delete_text (GTK_EDITABLE (i->log_text), 0, -1);
 }

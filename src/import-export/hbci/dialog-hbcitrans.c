@@ -296,7 +296,21 @@ gnc_hbci_trans (GtkWidget *parent,
 	  
 	  if (!successful) {
 	    /* HBCI_API_executeOutbox failed. */
+	    if ((HBCI_OutboxJob_status (job) == HBCI_JOB_STATUS_DONE) &&
+		(HBCI_OutboxJob_result (job) == HBCI_JOB_RESULT_FAILED)) 
+	      	successful = !gnc_verify_dialog_parented
+		  (parent, 
+		   FALSE,
+		   _("The job was successfully sent to the bank, but the \n"
+		     "bank is refusing to execute the job. Please check \n"
+		     "the log window for the exact error message of the \n"
+		     "bank. The line with the error message contains a \n"
+		     "code number that is greater than 9000.\n"
+		     "\n"
+		     "Do you want to enter the job again?"));
+
 	    HBCI_Transaction_delete (trans);
+	    trans = NULL;
 	    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
 	  }
 	} /* result == 0 */
