@@ -67,7 +67,21 @@
     By keeping track of your income and expenses, you can ultimately
     keep track of your equity:  Simply put, after years of earning and
     spending, what you have left is what you got in, minus the 
-    amount you spent.
+    amount you spent.  
+    </PARA>
+
+<PARA>
+(At this point, the documentation should discuss in greater
+detail what happens when you spend money to buy a sofa
+(except for money lost to taxes and shipping fees, 
+your net worth doesn't change much), and what happens as that sofa
+wears out (depreciation).  Again, these are transfers of money between
+accounts.  What's left over is the equity.  Be sure to point out that
+using doubble-entry against income+expense accounts is the correct way
+to track the change over time.)
+    </PARA>
+
+<PARA>
     This is discussed in more detail in the 
     <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK> 
     chapter.
