@@ -8,10 +8,6 @@
 
 (use-modules (gnucash printing number-to-words))
 
-(gnc:support "printing/print-check.scm")
-(gnc:depend  "qif-import/simple-obj.scm")
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <print-check-format> class
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
