@@ -216,7 +216,7 @@ Optional:
 every book gets not only a unique guid, and also stores some 
 meta-information (as book-level kvp's):
 
-/book/name=some-user-supplied-name
+/book/title=some-user-supplied-name
 /book/notes=user-supplied-descriptive-comments
 /book/start-date=xxx
 /book/end-date=xxx
@@ -231,15 +231,23 @@ I am not aware of any con's to plan A at this point.
 Implementation Notes:
 ---------------------
 Plan A has been implemented in the engine. 
+-- src/engine/Period.c,h
+      Implements the main logic to split one book into two, and populate
+      it with the appropriate keys, markup, etc. and to carry balances 
+      forward, etc.
+
+   src/engine/gemini
+   src/engine/lots
+   src/gnome/druid-acct-period.c,h 
+      Implements a druid interface to specifying book closing dates, etc.
+
 -- The Postgres backend has been modified to support multiple books.
    All books are stored in the same database; there is no performance
    penalty for storing all books together in the same SQL database,
    because they can be easily picked apart by an appropriate SQL query.
 -- The xml-file backend can store multiple books, but there is currently
    no support for spreading things out across multiple files (for
-   faster load, by not loading old books).  The XML format
-   fails to store the kvp's in a book structure ??
-
+   faster load, by not loading old books).  
 
 The current implementation of books is broken because it does not
 yet make use of 'lots'.  The problem is that for stock accounts (and
@@ -249,8 +257,8 @@ the dates and quantities of a purchase need to be easily available.
 See "lots.txt" for details.
 
 
-Open Issues
------------
+Open Issues / ToDo
+------------------
 *) Naming convention for the different books?  When the XML file backend
    is used, different books need to be stored as different files (in order
    to avoid the performance penalty of a large file load).  This hasn't
@@ -258,14 +266,16 @@ Open Issues
 
 *) Special considerations for scheduled transactions/recurring transactions?
 
-*) Trimming of price database ???
-
 *) Handling of multi-book reports ???  Need to work out the recommended way
    of making this happen....
 
 *) Lots are now implemented in the engine, but not yet used in this code.
    
-   
+*) Need to mark closed book as unalterable, and respect that markup.
+
+*) Need to trimming of price database 
+
+*) Make sure <book:slots> really works
 
 =========================== end of file ========================
 
