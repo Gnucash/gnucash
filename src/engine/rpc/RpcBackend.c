@@ -98,6 +98,8 @@ static void rpcendEnable (RPCBackend *be)
    be->be.trans_begin_edit    = be->snr.trans_begin_edit;
    be->be.trans_commit_edit   = be->snr.trans_commit_edit;
    be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
+   be->be.price_begin_edit    = be->snr.price_begin_edit;
+   be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.sync                = be->snr.sync;
    be->be.sync_price          = be->snr.sync_price;
@@ -118,6 +120,8 @@ static void rpcendDisable (RPCBackend *be)
    be->snr.trans_begin_edit    = be->be.trans_begin_edit;
    be->snr.trans_commit_edit   = be->be.trans_commit_edit;
    be->snr.trans_rollback_edit = be->be.trans_rollback_edit;
+   be->snr.price_begin_edit    = be->be.price_begin_edit;
+   be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.sync                = be->be.sync;
    be->snr.sync_price          = be->be.sync_price;
@@ -128,6 +132,8 @@ static void rpcendDisable (RPCBackend *be)
    be->be.trans_begin_edit    = NULL;
    be->be.trans_commit_edit   = NULL;
    be->be.trans_rollback_edit = NULL;
+   be->be.price_begin_edit    = NULL;
+   be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
    be->be.sync                = NULL;
    be->be.sync_price          = NULL;
@@ -565,6 +571,18 @@ static int rpcend_trans_rollback_edit (Backend *bend, Transaction *txn)
   return ret;
 }
 
+static int rpcend_price_begin_edit (Backend *bend, GNCPrice *pr)
+{
+  PERR ("not implemented");
+  return 0;
+}
+
+static int rpcend_price_commit_edit (Backend *bend, GNCPrice *pr)
+{
+  PERR ("not implemented");
+  return 0;
+}
+
 static void rpcend_run_query (Backend *bend, Query *q)
 {
   RPCBackend *be = (RPCBackend *)bend;
@@ -907,6 +925,8 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be->be.trans_begin_edit = rpcend_trans_begin_edit;
   be->be.trans_commit_edit = rpcend_trans_commit_edit;
   be->be.trans_rollback_edit = rpcend_trans_rollback_edit;
+  be->be.price_begin_edit = rpcend_price_begin_edit;
+  be->be.price_commit_edit = rpcend_price_commit_edit;
   be->be.run_query = rpcend_run_query;
   be->be.sync = rpcend_sync;
   be->be.sync_price = rpcend_sync_price;

@@ -292,8 +292,10 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    pgendPutOneAccountOnly (be, acct);
 
    /* make sure the account's commodity is in the commodity table */
-   /* hack alert -- it would be more efficient to do this elsewhere,
-    * and not here.  Or put a mark on it ... */
+   /* XXX hack alert FIXME -- it would be more efficient to do 
+    * this elsewhere, and not here.  Or put a mark on it ... 
+    * See StoreAllPrices for an example of how to do this. 
+    */
    com = xaccAccountGetCommodity (acct);
    pgendPutOneCommodityOnly (be, (gnc_commodity *) com);
 
@@ -1301,17 +1303,53 @@ static gboolean
 foreach_price_cb (GNCPrice *pr, gpointer bend)
 {
    PGBackend *be = (PGBackend *) bend;
+   gnc_commodity *modity;
+   gint16 mark;
+
+   /* make sure that we've stored the commodity 
+    * and currency before we store the price.
+    * We use marks to avoid redundant stores. 
+    */
+   modity = gnc_price_get_commodity (pr);
+   mark = gnc_commodity_get_mark (modity);
+   if (!mark) {
+      pgendPutOneCommodityOnly (be, modity);
+      gnc_commodity_set_mark (modity, 1);
+   }
+
+   modity = gnc_price_get_currency (pr);
+   mark = gnc_commodity_get_mark (modity);
+   if (!mark) {
+      pgendPutOneCommodityOnly (be, modity);
+      gnc_commodity_set_mark (modity, 1);
+   }
 
    pgendPutOnePriceOnly (be, pr);
-   
+
+   return TRUE;
+}
+
+static gboolean
+commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
+{
+   gint32 v = ((gint32) user_data) & 0xffff;
+   gnc_commodity_set_mark (cm, (gint16) v);
    return TRUE;
 }
 
 static void
 pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
 {
+   gnc_commodity_table *comtab = gnc_engine_commodities();
+
+   /* clear the marks on commodities -- we use this to mark 
+    * the thing as 'already stored', avoiding redundant stores */
+   gnc_commodity_table_foreach_commodity (comtab, commodity_mark_cb, 0);
+
    gnc_pricedb_foreach_price (prdb, foreach_price_cb,
                               (gpointer) be, FALSE);
+
+   gnc_commodity_table_foreach_commodity (comtab, commodity_mark_cb, 0);
 }
 
 static void
@@ -1358,11 +1396,17 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
    pr = gnc_price_lookup (&guid);
 
-   if (pr) return prdb;
-
-   /* no we don't ... restore it */
-   pr = gnc_price_create();
-   gnc_price_set_guid (pr, &guid);
+   if (!pr) 
+   { 
+      pr = gnc_price_create();
+      gnc_price_begin_edit (pr);
+      gnc_price_set_guid (pr, &guid);
+   } 
+   else
+   {
+      gnc_price_ref (pr);
+      gnc_price_begin_edit (pr);
+   }
 
    modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j));
    gnc_price_set_commodity (pr, modity);
@@ -1382,6 +1426,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_set_value (pr, value);
 
    gnc_pricedb_add_price(prdb, pr);
+   gnc_price_commit_edit (pr);
    gnc_price_unref (pr);
 
    return prdb;
@@ -1389,14 +1434,19 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 static GNCPriceDB *
-pgendGetAllPrices (PGBackend *be)
+pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb)
 {
-   GNCPriceDB *prdb;
    char * p;
 
    if (!be) return NULL;
    ENTER ("be=%p, conn=%p", be, be->connection);
-   prdb = gnc_pricedb_create();
+
+   if (!prdb) {
+      prdb = gnc_pricedb_create();
+   }
+
+   /* first, make sure commodities table is up to date */
+   pgendGetAllCommodities (be);
 
    /* Get them ALL */
    p = "SELECT * FROM gncPrice;";
@@ -1584,6 +1634,17 @@ pgend_trans_commit_edit (Backend * bend,
    return 0;
 }
 
+static int
+pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
+{
+   PGBackend *be = (PGBackend *)bend;
+
+   ENTER ("be=%p, price=%p", be, pr);
+PERR ("not implemented");
+   LEAVE ("commited");
+   return 0;
+}
+
 /* ============================================================= */
 /* hack alert -- the sane-ness of this algorithm should be reviewed.
  * I can't vouch that there aren't any subtle issues or race conditions
@@ -1638,7 +1699,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
     */
    pgendGroupRecomputeAllCheckpoints (be, grp);
 
-   /* don't send events  to GUI, don't accept callaback to backend */
+   /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
@@ -1715,11 +1776,29 @@ pgendSyncSingleFile (Backend *bend, AccountGroup *grp)
 }
 
 /* ============================================================= */
+/* Please read the commend for pgendSync to truly understand
+ * how this routine works.  Its somewhat subtle.
+ */
 
 static void
 pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
 {
-   PERR ("not implemented");
+   PGBackend *be = (PGBackend *)bend;
+   ENTER ("be=%p, prdb=%p", be, prdb);
+
+   pgendStorePriceDB (be, prdb);
+
+   /* don't send events  to GUI, don't accept callbacks to backend */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   pgendGetAllPrices (be, prdb);
+
+   /* re-enable events */
+   pgendEnable(be);
+   gnc_engine_resume_events();
+
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -2049,7 +2128,7 @@ pgend_book_load_poll (Backend *bend)
    PGBackend *be = (PGBackend *)bend;
    if (!be) return NULL;
 
-   /* don't send events  to GUI, don't accept callaback to backend */
+   /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
@@ -2079,7 +2158,7 @@ pgend_book_load_single (Backend *bend)
    PGBackend *be = (PGBackend *)bend;
    if (!be) return NULL;
 
-   /* don't send events  to GUI, don't accept callaback to backend */
+   /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
@@ -2106,11 +2185,11 @@ pgend_price_load_single (Backend *bend)
    PGBackend *be = (PGBackend *)bend;
    if (!be) return NULL;
 
-   /* don't send events  to GUI, don't accept callaback to backend */
+   /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   prdb = pgendGetAllPrices (be);
+   prdb = pgendGetAllPrices (be, NULL);
 
    /* re-enable events */
    pgendEnable(be);
@@ -2426,6 +2505,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = NULL;
             be->be.trans_rollback_edit = NULL;
+            be->be.price_begin_edit = NULL;
+            be->be.price_commit_edit = NULL;
             be->be.run_query = NULL;
             be->be.sync = pgendSyncSingleFile;
             be->be.sync_price = pgendSyncPriceDBSingleFile;
@@ -2443,6 +2524,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
             be->be.trans_rollback_edit = NULL;
+            be->be.price_begin_edit = NULL;
+            be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = NULL;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
@@ -2459,6 +2542,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
             be->be.trans_rollback_edit = NULL;
+            be->be.price_begin_edit = NULL;
+            be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
@@ -2498,6 +2583,8 @@ pgendDisable (PGBackend *be)
    be->snr.trans_begin_edit    = be->be.trans_begin_edit;
    be->snr.trans_commit_edit   = be->be.trans_commit_edit;
    be->snr.trans_rollback_edit = be->be.trans_rollback_edit;
+   be->snr.price_begin_edit    = be->be.price_begin_edit;
+   be->snr.price_commit_edit   = be->be.price_commit_edit;
    be->snr.run_query           = be->be.run_query;
    be->snr.sync                = be->be.sync;
    be->snr.sync_price          = be->be.sync_price;
@@ -2507,6 +2594,8 @@ pgendDisable (PGBackend *be)
    be->be.trans_begin_edit    = NULL;
    be->be.trans_commit_edit   = NULL;
    be->be.trans_rollback_edit = NULL;
+   be->be.price_begin_edit    = NULL;
+   be->be.price_commit_edit   = NULL;
    be->be.run_query           = NULL;
    be->be.sync                = NULL;
    be->be.sync_price          = NULL;
@@ -2531,6 +2620,8 @@ pgendEnable (PGBackend *be)
    be->be.trans_begin_edit    = be->snr.trans_begin_edit;
    be->be.trans_commit_edit   = be->snr.trans_commit_edit;
    be->be.trans_rollback_edit = be->snr.trans_rollback_edit;
+   be->be.price_begin_edit    = be->snr.price_begin_edit;
+   be->be.price_commit_edit   = be->snr.price_commit_edit;
    be->be.run_query           = be->snr.run_query;
    be->be.sync                = be->snr.sync;
    be->be.sync_price          = be->snr.sync_price;
@@ -2564,6 +2655,8 @@ pgendInit (PGBackend *be)
    be->be.trans_begin_edit = NULL;
    be->be.trans_commit_edit = NULL;
    be->be.trans_rollback_edit = NULL;
+   be->be.price_begin_edit = NULL;
+   be->be.price_commit_edit = NULL;
    be->be.run_query = NULL;
    be->be.sync = NULL;
    be->be.sync_price = NULL;

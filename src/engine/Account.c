@@ -348,6 +348,7 @@ xaccAccountCommitEdit (Account *acc)
     {
       /* destroys must be rolled back as well ... ??? */
       acc->do_free = FALSE;
+      /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", rc);
     }

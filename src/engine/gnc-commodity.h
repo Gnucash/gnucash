@@ -53,7 +53,8 @@ const char * gnc_commodity_get_fullname(const gnc_commodity * cm);
 const char * gnc_commodity_get_printname(const gnc_commodity * cm);
 const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
 const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
-int   gnc_commodity_get_fraction(const gnc_commodity * cm);
+int     gnc_commodity_get_fraction(const gnc_commodity * cm);
+gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
 
 void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
 void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
@@ -61,6 +62,7 @@ void  gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname);
 void  gnc_commodity_set_exchange_code(gnc_commodity * cm, 
                                       const char * exchange_code);
 void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
+void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
 
 gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
 
@@ -99,5 +101,13 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
                                                const char * namespace);
 
 void      gnc_commodity_table_remove_non_iso (gnc_commodity_table *t);
+
+/* gnc_commodity_table_foreach_commodity - call f once for each commodity in 
+ *    table, until and unless f returns FALSE.  
+ */
+gboolean gnc_commodity_table_foreach_commodity(gnc_commodity_table * table,
+                                       gboolean (*f)(gnc_commodity *cm,
+                                                     gpointer user_data),
+                                       gpointer user_data);
 
 #endif

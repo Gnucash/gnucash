@@ -93,6 +93,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
 {
   if(!p || !sub_node) return FALSE;
 
+  gnc_price_begin_edit (p);
   if(safe_strcmp("price:id", sub_node->name) == 0) {
     GUID *c = dom_tree_to_guid(sub_node);
     if(!c) return FALSE; 
@@ -126,6 +127,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
     gnc_price_set_value(p, *value);
     g_free(value);
   }  
+  gnc_price_commit_edit (p);
   return TRUE;
 }
 

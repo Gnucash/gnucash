@@ -158,7 +158,10 @@ Core bugs/features that still need work:
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).
 
--- add support for rlb's price db
+-- add support for rlb's price db. Partial support is in place.
+   mass save & restore for mode=single-file is implemented.
+   To Be Done: price deletion and price queries.
+   implement pgend_price_commit_edit()
 
 -- error code should include strings passed back, to be shown in 
    GUI dialogs. This is because the backend needs to return things

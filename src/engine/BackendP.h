@@ -49,8 +49,6 @@
 #include "Transaction.h"
 #include "gnc-book.h"
 
-typedef struct _backend Backend;
-
 /*
  * The book_begin() routine gives the backend a second initialization
  *    opportunity.  It is suggested that the backend check that 
@@ -139,6 +137,8 @@ typedef struct _backend Backend;
  *    a stack) of all the errors that have occurred.
  */
 
+typedef struct _backend Backend;
+
 struct _backend 
 {
   void (*book_begin) (GNCBook *, const char *book_id, 
@@ -146,11 +146,15 @@ struct _backend
   AccountGroup * (*book_load) (Backend *);
   GNCPriceDB * (*price_load) (Backend *);
   void (*book_end) (Backend *);
+
   int (*account_begin_edit) (Backend *, Account *);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *);
   int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
   int (*trans_rollback_edit) (Backend *, Transaction *);
+
+  int (*price_begin_edit) (Backend *, GNCPrice *);
+  int (*price_commit_edit) (Backend *, GNCPrice *);
 
   void (*run_query) (Backend *, Query *);
   void (*sync) (Backend *, AccountGroup *);
@@ -195,5 +199,10 @@ void xaccGroupSetBackend (AccountGroup *group, Backend *be);
 Backend * xaccGroupGetBackend (AccountGroup *group);
 Backend * xaccGNCBookGetBackend (GNCBook *book);
 
+/* 
+ * Put a link to the backend that handles this pricedb 
+ */
+void xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be);
+Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
 
 #endif /* __XACC_BACKEND_P_H__ */

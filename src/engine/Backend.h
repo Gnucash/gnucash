@@ -83,5 +83,4 @@ typedef enum {
 } GNCBackendError;
 /* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
-
 #endif /* __XACC_BACKEND_H__ */

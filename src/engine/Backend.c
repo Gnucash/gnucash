@@ -29,6 +29,8 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "gnc-engine-util.h"
+#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "TransactionP.h"
 
 /* static short module = MOD_ENGINE; */
@@ -148,6 +150,24 @@ xaccGroupGetBackend (AccountGroup *grp)
      grp = parent->parent;
    }
    return NULL;
+}
+
+/********************************************************************\
+ * Set the backend                                                  *
+\********************************************************************/
+
+void
+xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be)
+{
+  if (!prdb) return;
+  prdb->backend = be;
+}
+
+Backend *
+xaccPriceDBGetBackend (GNCPriceDB *prdb)
+{
+  if (!prdb) return NULL;
+  return prdb->backend;
 }
 
 /************************* END OF FILE ********************************/

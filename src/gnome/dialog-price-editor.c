@@ -362,11 +362,13 @@ gui_to_price (PricesDialog *pdb_dialog)
   value = gnc_amount_edit_get_amount
     (GNC_AMOUNT_EDIT (pdb_dialog->price_edit));
 
+  gnc_price_begin_edit (pdb_dialog->price);
   gnc_price_set_commodity (pdb_dialog->price, commodity);
   gnc_price_set_currency (pdb_dialog->price, currency);
   gnc_price_set_time (pdb_dialog->price, date);
   gnc_price_set_type (pdb_dialog->price, type);
   gnc_price_set_value (pdb_dialog->price, value);
+  gnc_price_commit_edit (pdb_dialog->price);
 
   return NULL;
 }
@@ -601,11 +603,13 @@ add_clicked (GtkWidget *widget, gpointer data)
   pdb_dialog->new = TRUE;
   pdb_dialog->changed = TRUE;
 
+  gnc_price_begin_edit (pdb_dialog->price);
   gnc_price_set_source (pdb_dialog->price, "user:price-editor");
 
   date.tv_sec = time (NULL);
   date.tv_nsec = 0;
   gnc_price_set_time (pdb_dialog->price, date);
+  gnc_price_commit_edit (pdb_dialog->price);
 
   gtk_widget_show (pdb_dialog->price_dialog);
 }

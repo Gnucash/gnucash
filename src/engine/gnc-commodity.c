@@ -1,6 +1,7 @@
 /********************************************************************
  * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
+ * Copyright (C) 2001 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -47,6 +48,7 @@ struct _gnc_commodity {
   char   * exchange_code;  /* CUSIP or other identifying code */
   int    fraction;
   char   * unique_name;  
+  gint16 mark;             /* user-defined mark, handy for traversals */
 };
 
 struct _gnc_commodity_namespace {
@@ -94,6 +96,7 @@ gnc_commodity_new(const char * fullname,
   retval->mnemonic  = g_strdup(mnemonic);
   retval->exchange_code = g_strdup(exchange_code);
   retval->fraction = fraction;
+  retval->mark = 0;
 
   reset_printname(retval);
   reset_unique_name(retval);
@@ -115,6 +118,7 @@ gnc_commodity_destroy(gnc_commodity * cm) {
   g_free(cm->exchange_code);
   g_free(cm->mnemonic);
   g_free(cm->unique_name);
+  cm->mark = 0;
   g_free(cm);
 }
 
@@ -193,6 +197,15 @@ gnc_commodity_get_fraction(const gnc_commodity * cm) {
   return cm->fraction;
 }
 
+/********************************************************************
+ * gnc_commodity_get_mark
+ ********************************************************************/
+
+gint16
+gnc_commodity_get_mark(const gnc_commodity * cm) {
+  if(!cm) return 0;
+  return cm->mark;
+}
 
 /********************************************************************
  * gnc_commodity_set_mnemonic
@@ -265,6 +278,15 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
   cm->fraction = fraction;
 }
 
+/********************************************************************
+ * gnc_commodity_get_mark
+ ********************************************************************/
+
+void
+gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) {
+  if(!cm) return;
+  cm->mark = mark;
+}
 
 /********************************************************************
  * gnc_commodity_equiv
@@ -625,6 +647,53 @@ gnc_commodity_table_remove_non_iso (gnc_commodity_table *t)
 }
 
 /********************************************************************
+ * gnc_commodity_table_foreach_commodity
+ * call user-defined function once for every commodity in every
+ * namespace 
+ ********************************************************************/
+
+typedef struct {
+  gboolean ok;
+  gboolean (*func)(gnc_commodity *, gpointer);
+  gpointer user_data;
+} IterData;
+
+static void
+iter_commodity (gpointer key, gpointer value, gpointer user_data)
+{
+  IterData *iter_data = (IterData *) user_data;
+  gnc_commodity *cm = (gnc_commodity *) value;
+
+  if (iter_data->ok) 
+  {
+    iter_data->ok = (iter_data->func)(cm, iter_data->user_data);
+  }
+}
+
+static void
+iter_namespace (gpointer key, gpointer value, gpointer user_data)
+{
+  GHashTable *namespace_hash = ((gnc_commodity_namespace *) value)->table;
+  g_hash_table_foreach (namespace_hash, iter_commodity, user_data);
+}
+
+gboolean 
+gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
+                          gboolean (*f)(gnc_commodity *, gpointer),
+                          gpointer user_data)
+{
+  IterData iter_data;
+
+  iter_data.ok = TRUE;
+  iter_data.func = f;
+  iter_data.user_data = user_data;
+
+  g_hash_table_foreach(tbl->table, iter_namespace, (gpointer)&iter_data);
+
+  return iter_data.ok;
+}
+
+/********************************************************************
  * gnc_commodity_table_destroy
  * cleanup and free. 
  ********************************************************************/
@@ -648,3 +717,5 @@ gnc_commodity_table_destroy(gnc_commodity_table * t) {
   g_hash_table_destroy(t->table);
   g_free(t);
 }
+
+/* ========================= END OF FILE ============================== */

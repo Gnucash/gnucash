@@ -1,6 +1,6 @@
 /********************************************************************
  * gnc-pricedb.c -- a simple price database for gnucash.            *
- * Copyright (C) 2001 Rob Browning                                  *
+ * Copyright (C) 2001 Rob Browning, Linas Vepstas                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include "Backend.h"
 #include "GNCId.h"
 #include "GNCIdP.h"
 #include "gnc-engine.h"
@@ -39,14 +40,9 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
-struct _GNCPriceDB {
-  GHashTable *commodity_hash;
-  gboolean dirty;
-};
-
 struct _GNCPrice {
-  GUID guid;                  /* globally unique price id */
-  guint32 refcount;
+  /* 'public' data fields */
+  GUID    guid;                  /* globally unique price id */
   GNCPriceDB *db;
   gnc_commodity *commodity;
   gnc_commodity *currency;
@@ -54,9 +50,14 @@ struct _GNCPrice {
   char *source;
   char *type;
   gnc_numeric value;
+
+  /* 'private' object management fields */
+  guint32  refcount;             /* garbage collection reference count */
+  gint32   editlevel;            /* nesting level of begin/end edit calls */
+  gboolean not_saved;            /* price edit saved flag */
 };
 
-/****************************************************************************/
+/* ==================================================================== */
 /* GNCPrice functions
  */
 
@@ -66,6 +67,8 @@ gnc_price_create()
 {
   GNCPrice *p = g_new0(GNCPrice, 1);
   p->refcount = 1;
+  p->editlevel = 0;
+  p->not_saved = FALSE;
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
@@ -102,6 +105,8 @@ gnc_price_unref(GNCPrice *p)
   }
 }
 
+/* ==================================================================== */
+
 GNCPrice *
 gnc_price_clone(GNCPrice* p)
 {
@@ -111,6 +116,8 @@ gnc_price_clone(GNCPrice* p)
   if(!p) return NULL;
   new_p = gnc_price_create();
   if(!new_p) return NULL;
+
+  gnc_price_begin_edit(new_p);
   /* never ever clone guid's */
   gnc_price_set_commodity(new_p, gnc_price_get_commodity(p));
   gnc_price_set_time(new_p, gnc_price_get_time(p));
@@ -118,10 +125,86 @@ gnc_price_clone(GNCPrice* p)
   gnc_price_set_type(new_p, gnc_price_get_type(p));
   gnc_price_set_value(new_p, gnc_price_get_value(p));
   gnc_price_set_currency(new_p, gnc_price_get_currency(p));
+  gnc_price_commit_edit(new_p);
+
   return(new_p);
 }
 
+/* ==================================================================== */
+
+void 
+gnc_price_begin_edit (GNCPrice *p)
+{
+  if (!p) return;
+  p->editlevel++;
+  if (1 < p->editlevel) return;
+
+  if (0 >= p->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", p->editlevel);
+    p->editlevel = 1;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  /* We may not be able to find the backend, so make not of that .. */
+  if (p->db) {
+    Backend *be;
+    be = xaccPriceDBGetBackend (p->db);
+    if (be && be->price_begin_edit) {
+       (be->price_begin_edit) (be, p);
+    }
+    p->not_saved = FALSE;
+  } else {
+    p->not_saved = TRUE;
+  }
+
+}
+
+void 
+gnc_price_commit_edit (GNCPrice *p)
+{
+  if (!p) return;
+
+  p->editlevel--;
+  if (0 < p->editlevel) return;
+
+  if (0 > p->editlevel)
+  {
+    PERR ("unbalanced call - resetting (was %d)", p->editlevel);
+    p->editlevel = 0;
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  /* We may not be able to find the backend, so make not of that .. */
+  if (p->db) {
+    Backend *be;
+    be = xaccPriceDBGetBackend (p->db);
+    if (be && be->price_commit_edit) {
+      int rc;
+
+      /* if we haven't been able to call begin edit before, call it now */
+      if (TRUE == p->not_saved) {
+        if (be->price_begin_edit) {
+          (be->price_begin_edit) (be, p);
+        }
+      }
+
+      rc = (be->price_commit_edit) (be, p);
+      if (rc) {
+        /* XXX hack alert FIXME implement price rollback */
+        PERR (" backend asked engine to rollback, but this isn't"
+              " handled yet. Return code=%d", rc);
+      }
+    }
+    p->not_saved = FALSE;
+  } else {
+    p->not_saved = TRUE;
+  }
+}
+
+/* ==================================================================== */
 /* setters */
+
 void 
 gnc_price_set_guid (GNCPrice *p, const GUID *guid)
 {
@@ -136,36 +219,43 @@ void
 gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(!gnc_commodity_equiv(p->commodity, c)) {
     p->commodity = c;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(!gnc_commodity_equiv(p->currency, c)) {
     p->currency = c;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_time(GNCPrice *p, Timespec t)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(!timespec_equal(&(p->time), &t)) {
     p->time = t;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_source(GNCPrice *p, const char *s)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(safe_strcmp(p->source, s) != 0) {
     GCache *cache = gnc_engine_get_string_cache();
     char *tmp = g_cache_insert(cache, (gpointer) s);
@@ -173,12 +263,14 @@ gnc_price_set_source(GNCPrice *p, const char *s)
     p->source = tmp;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_type(GNCPrice *p, const char* type)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(safe_strcmp(p->type, type) != 0) {
     GCache *cache = gnc_engine_get_string_cache();
     gchar *tmp = g_cache_insert(cache, (gpointer) type);
@@ -186,20 +278,23 @@ gnc_price_set_type(GNCPrice *p, const char* type)
     p->type = tmp;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_value(GNCPrice *p, gnc_numeric value)
 {
   if(!p) return;
+  gnc_price_begin_edit (p);
   if(!gnc_numeric_eq(p->value, value)) {
     p->value = value;
     if(p->db) p->db->dirty = TRUE;
   }
+  gnc_price_commit_edit (p);
 }
 
 
-/***********/
+/* ==================================================================== */
 /* getters */
 
 GNCPrice *
@@ -266,6 +361,7 @@ gnc_price_get_currency(GNCPrice *p)
   return p->currency;
 }
 
+/* ==================================================================== */
 /* setters */
 
 static gint
@@ -330,7 +426,7 @@ gnc_price_list_destroy(GList *prices)
   g_list_free(prices);
 }
 
-/****************************************************************************/
+/* ==================================================================== */
 /* GNCPriceDB functions
 
    Structurally a GNCPriceDB contains a hash mapping price commodities
@@ -346,6 +442,7 @@ GNCPriceDB *
 gnc_pricedb_create(void)
 {
   GNCPriceDB * result = g_new0(GNCPriceDB, 1);
+  result->backend = NULL;
   result->commodity_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
@@ -406,8 +503,11 @@ gnc_pricedb_destroy(GNCPriceDB *db)
                         NULL);
   g_hash_table_destroy (db->commodity_hash);
   db->commodity_hash = NULL;
+  db->backend = NULL;
   g_free(db);
 }
+
+/* ==================================================================== */
 
 gboolean
 gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
@@ -444,6 +544,12 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   g_hash_table_insert(currency_hash, currency, price_list);
   db->dirty = TRUE;
   p->db = db;
+
+  /* if we haven't been able to call the backend before, call it now */
+  if (TRUE == p->not_saved) {
+    gnc_price_begin_edit(p);
+    gnc_price_commit_edit(p);
+  }
   return TRUE;
 }
 
@@ -481,6 +587,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   gnc_price_unref(p);
   return TRUE;
 }
+
+/* ==================================================================== */
 
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,
@@ -561,7 +669,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   return result;
 }
 
-/***************************************************************************/
+/* ==================================================================== */
 /* gnc_pricedb_foreach_price infrastructure
  */
 
@@ -578,9 +686,10 @@ pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
   GList *node = price_list;
   GNCPriceDBForeachData *foreach_data = (GNCPriceDBForeachData *) user_data;
 
+  /* stop traversal when func returns FALSE */
   while(foreach_data->ok && node) {
     GNCPrice *p = (GNCPrice *) node->data;
-    foreach_data->func(p, foreach_data->user_data);
+    foreach_data->ok = foreach_data->func(p, foreach_data->user_data);
     node = node->next;
   }
 }
@@ -667,6 +776,9 @@ stable_price_traversal(GNCPriceDB *db,
 
       for(node = (GList *) price_list; node; node = node->next) {
         GNCPrice *price = (GNCPrice *) node->data;
+
+        /* stop traversal when f returns FALSE */
+        if (FALSE == ok) break;
         if(!f(price, user_data)) ok = FALSE;
       }
     }
@@ -683,6 +795,18 @@ stable_price_traversal(GNCPriceDB *db,
   }
   return ok;
 }
+
+gboolean
+gnc_pricedb_foreach_price(GNCPriceDB *db,
+                          gboolean (*f)(GNCPrice *p, gpointer user_data),
+                          gpointer user_data,
+                          gboolean stable_order)
+{
+  if(stable_order) return stable_price_traversal(db, f, user_data);
+  return unstable_price_traversal(db, f, user_data);
+}
+
+/* ==================================================================== */
 
 GNCPrice *
 gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
@@ -744,16 +868,6 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
 
   gnc_price_ref(result);
   return result;
-}
-
-gboolean
-gnc_pricedb_foreach_price(GNCPriceDB *db,
-                          gboolean (*f)(GNCPrice *p, gpointer user_data),
-                          gpointer user_data,
-                          gboolean stable_order)
-{
-  if(stable_order) return stable_price_traversal(db, f, user_data);
-  return unstable_price_traversal(db, f, user_data);
 }
 
 /***************************************************************************/
@@ -905,3 +1019,5 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
   gnc_pricedb_foreach_price(db, print_pricedb_adapter, f, FALSE);
   fprintf(f, "</gnc:pricedb>\n");
 }
+
+/* ========================= END OF FILE ============================== */

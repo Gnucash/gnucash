@@ -410,12 +410,14 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
     price = gnc_price_create ();
 
+    gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, xaccAccountGetSecurity (account));
     gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
     gnc_price_set_time (price, ts);
     gnc_price_set_source (price, "user:stock-split");
     gnc_price_set_type (price, "unknown");
     gnc_price_set_value (price, amount);
+    gnc_price_commit_edit (price);
 
     book = gncGetCurrentBook ();
     pdb = gnc_book_get_pricedb (book);

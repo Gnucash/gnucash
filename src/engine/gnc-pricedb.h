@@ -1,6 +1,6 @@
 /********************************************************************
  * gnc-pricedb.h -- a simple price database for gnucash.            *
- * Copyright (C) 2001 Rob Browning                                  *
+ * Copyright (C) 2001 Rob Browning, Linas Vepstas                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -136,9 +136,18 @@ void      gnc_price_unref(GNCPrice *p);
 /* setters */
 
 /* As mentioned above, all of the setters store copies of the data
-   given, with the exception of the commodity field which just stores
-   the pointer given.  It is assumed that commodities are a global
-   resource and are pointer unique. */
+ * given, with the exception of the commodity field which just stores
+ * the pointer given.  It is assumed that commodities are a global
+ * resource and are pointer unique. 
+ *
+ * Invocations of the setters should be wrapped with calls to
+ * gnc_price_begin_edit() and commit_edit().  The begin/commit
+ * calls help ensure that the local price db is synchronized with 
+ * the backend.
+ */
+void gnc_price_begin_edit (GNCPrice *p);
+void gnc_price_commit_edit (GNCPrice *p);
+
 void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_time(GNCPrice *p, Timespec t);

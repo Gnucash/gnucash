@@ -29,7 +29,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2000 Linas Vepstas
+ * Copyright (c) 1998-2001 Linas Vepstas
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -890,6 +890,7 @@ gnc_book_load (GNCBook *book)
        if (be->price_load) 
        {
           book->pricedb = (be->price_load) (be);
+          xaccPriceDBSetBackend (book->pricedb, be);
           gnc_book_push_error(book, xaccBackendGetError(be), NULL);
        }
        xaccLogEnable();
@@ -961,6 +962,7 @@ gnc_book_save (GNCBook *book)
     
     /* if invoked as SaveAs(), then backend not yet set */
     xaccGroupSetBackend (book->topgroup, be);
+    xaccPriceDBSetBackend (book->pricedb, be);
 
     if (be->sync && book->topgroup) {
       GNCBackendError err;
@@ -1067,6 +1069,7 @@ gnc_book_destroy (GNCBook *book)
   /* destroy the backend */
   if (book->backend) g_free(book->backend);
   xaccGroupSetBackend (book->topgroup, NULL);
+  xaccPriceDBSetBackend (book->pricedb, NULL);
 
   /* mark the accounts as being freed
    * to avoid tons of balance recomputations. */

@@ -219,12 +219,14 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
       GNCPrice *price = gnc_price_create();
       Timespec time = xaccTransRetDateEnteredTS(txn);
 
+      gnc_price_begin_edit(price);
       gnc_price_set_commodity(price, xaccAccountGetSecurity(split_acct));
       gnc_price_set_currency(price, xaccAccountGetCurrency(split_acct));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");
       gnc_price_set_value(price, q->price);
+      gnc_price_commit_edit(price);
       if(!gnc_pricedb_add_price(*prices, price)) {
         PERR("problem adding price to pricedb.\n");
       }

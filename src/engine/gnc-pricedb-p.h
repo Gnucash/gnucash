@@ -24,7 +24,17 @@
 #ifndef __GNC_PRICEDB_P_H__
 #define __GNC_PRICEDB_P_H__
 
+#include <glib.h>
+
+#include "BackendP.h"
 #include "gnc-pricedb.h"
+
+struct _GNCPriceDB {
+  GHashTable *commodity_hash;
+  Backend *backend;
+  gboolean dirty;
+};
+
 
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,

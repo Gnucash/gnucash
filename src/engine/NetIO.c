@@ -302,6 +302,8 @@ xmlendNew (void)
   be->be.trans_begin_edit = NULL;
   be->be.trans_commit_edit = NULL;
   be->be.trans_rollback_edit = NULL;
+  be->be.price_begin_edit = NULL;
+  be->be.price_commit_edit = NULL;
   be->be.run_query = xmlbeRunQuery;
   be->be.sync = NULL;
   be->be.sync_price = NULL;
