@@ -328,6 +328,45 @@ xaccSetCursor (Table *table, CellBlock *curs,
 /* ==================================================== */
 
 static void 
+makePassive (Table *table)
+{
+   int i,j;
+   CellBlock *curs;
+   int r_origin = table->current_cursor_phys_row;
+   int c_origin = table->current_cursor_phys_col;
+
+
+   /* Change the cell background colors to thier "passive" values.
+    * This denotes that the cursor has left this location (which means more or
+    * less the same thing as "the current location is no longer being edited.")
+    * (But only do this if the cursor has a valid current location) 
+    */
+   if ((0 > r_origin) || (0 > c_origin)) return;
+
+   curs = table->current_cursor;
+
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         BasicCell *cell;
+      
+         table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
+         cell = curs->cells[i][j];
+         if (cell) {
+            if (cell->use_bg_color) {
+               table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
+            }
+            if (cell->use_fg_color) {
+               table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
+            }
+         }
+      }
+   }
+}
+
+
+/* ==================================================== */
+
+static void 
 doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 {
    int i,j;
@@ -338,38 +377,21 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    /* Change the cell background colors to thier "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
-    * (But only do this if the cursor has a valid current location) 
     */
-   if ((0 <= table->current_cursor_phys_row) &&
-       (0 <= table->current_cursor_phys_col)) 
-   {
-      int r_origin = table->current_cursor_phys_row;
-      int c_origin = table->current_cursor_phys_col;
-      curs = table->current_cursor;
-
-      for (i=0; i<curs->numRows; i++) {
-         for (j=0; j<curs->numCols; j++) {
-            BasicCell *cell;
-         
-            table->bg_colors[i+r_origin][j+c_origin] = curs->passive_bg_color;
-            cell = curs->cells[i][j];
-            if (cell) {
-               if (cell->use_bg_color) {
-                  table->bg_colors[i+r_origin][j+c_origin] = cell->bg_color;
-               }
-               if (cell->use_fg_color) {
-                  table->fg_colors[i+r_origin][j+c_origin] = cell->fg_color;
-               }
-            }
-         }
-      }
-   }
+   makePassive (table);
 
    /* call the callback, allowing the app to commit any changes 
-    * associated with the current location of the cursor.   */
+    * associated with the current location of the cursor.  
+    * Note that this callback may recursively call this routine. */
    if (table->move_cursor) {
       (table->move_cursor) (table, new_phys_row, new_phys_col, 
                             table->client_data);
+
+      /* The above callback can cause this routine to be called recursively.
+       * As a result of this recursion, the cursor may have gotten repositioned. 
+       * we need to make sure we make passive again.
+       */
+      makePassive (table);
    }
 
    /* check for out-of-bounds conditions (which may be deliberate) */
@@ -530,8 +552,12 @@ void xaccCommitCursor (Table *table)
                free (table->entries[iphys][jphys]);
             }
             table->entries[iphys][jphys] = strdup (cell->value);
-            table->bg_colors[iphys][jphys] = cell->bg_color;
-            table->fg_colors[iphys][jphys] = cell->fg_color;
+            if (cell->use_bg_color) {
+               table->bg_colors[iphys][jphys] = cell->bg_color;
+            }
+            if (cell->use_fg_color) {
+               table->fg_colors[iphys][jphys] = cell->fg_color;
+            }
          }
       }
    }
