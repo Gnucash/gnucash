@@ -35,7 +35,6 @@
  * Identifiers can be encoded as hex strings. */
 
 #include "guid.h"
-// #include "gnc-engine.h"
 
 /* Identifiers are 'typed' with strings. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
@@ -53,14 +52,15 @@ typedef const char * GNCIdTypeConst;
 #define GNC_ID_ACCOUNT        "Account"
 #define GNC_ID_BOOK           "Book"
 #define GNC_ID_FREQSPEC       "FreqSpec"
+#define GNC_ID_GROUP          "AccountGroup"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_NULL           "null"
+#define GNC_ID_PERIOD	      "Period"
 #define GNC_ID_PRICE          "Price"
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_SESSION        "Session"
 #define GNC_ID_TRANS          "Trans"
-#define GNC_ID_PERIOD	      "Period"
 
 
 typedef struct gnc_entity_table GNCEntityTable;
