@@ -89,12 +89,12 @@ install: $(TARGET)
 	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
 	@mkdir -p $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.html $(PREFIX)/$(DOCDIR)
-
-# Local Variables:
-# tab-width: 2
-# End:
 	$(INSTALL_DATA) Docs/*.gif $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.jpg $(PREFIX)/$(DOCDIR)
 	$(INSTALL_DATA) Docs/*.xpm $(PREFIX)/$(DOCDIR)
 	@mkdir -p $(PREFIX)/$(DOCDIR)/logos
 	$(INSTALL_DATA) Docs/logos/* $(PREFIX)/$(DOCDIR)/logos
+
+# Local Variables:
+# tab-width: 2
+# End:
