@@ -1,5 +1,5 @@
 
-This directory contains code for SQL/postgres support.  The
+This directory contains code for SQL/Postgres support.  The
 SQL backend can be used in several modes. The single-user modes
 are more-or-less beta: they work, but haven't been well tested.
 The multi-user code is experimental: it still has a variety of
@@ -11,7 +11,7 @@ Postgres Install Instructions
 -----------------------------
 1) Install postgresql server, client and devel packages.
 2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
-   will setup and initialize basic postgres first-time setup & config.
+   will setup and initialize basic Postgres first-time setup & config.
 3) as root, su - postgres then run 'createuser' to add your user id
 4) (don't set a password on your postgres db name, yet, gnucash doesn't 
     have a GUI to ask for your password yet)
@@ -43,7 +43,7 @@ c) enter the following URL instead of a filename in the file picker:
 
 The above steps will copy your data into that database.  You can 
 then restart gnucash (or keep working) and type in the same URL
-in the file open dialogs.  Or try it on the commandline:
+in the file open dialogs.  Or try it on the command line:
 
 /usr/local/bin/gnucash postgres://localhost/dbname_whatever
 
@@ -55,8 +55,8 @@ postgres://some.where.com/dbname
 However, these URL's require that the host 'some.where.com' have
 TCPIP access enabled (by following instructions (6) above).
 This is true even if the hostname is your local machine.  Thus,
-unless you've setup postrgress TCPIP connections, you *MUST* use
-url's of the form postgres://localhost/dbname
+unless you've setup Postgres TCPIP connections, you *MUST* use
+URL's of the form postgres://localhost/dbname
 
 You can specify usernames and passwords in the URL as follows:
 
@@ -74,9 +74,9 @@ mode=single-update
 mode=multi-user-poll
 mode=multi-user
 
-The last mode is prefered, but not yet implemented.
+The last mode is preferred, but not yet implemented.
 See the file 'design.txt' for an explanation.
-Enable these by specifying the url
+Enable these by specifying the URL
 
 postgres://localhost/dbname?mode=whatever
 
@@ -92,9 +92,12 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
--- When importing to sql from file, the 'date entered' in the
-   transaction is not respected.  This is a bug, or a feature, 
-   figure out which & fix.
+-- distinguish between 'save' and 'save-as' in gnc-book & backend.
+
+-- document the need for the 'gnucash' database & what its role is.
+
+-- single-update mode is asking to 'save' data  at end of session
+   fix this (again,  ...)
 
 -- allow user to enter URL in GUI dialog, get GUI to remember the URL 
 
@@ -104,7 +107,7 @@ Core bugs/features that still need work:
 -- add support for rlb's price db
 
 -- error code should include strings passed back, to be shown in 
-   gui dialogs. This is because the backen needs to return things
+   GUI dialogs. This is because the backend needs to return things
    like usernames, etc. in the dialogs, and the backend doesn't 
    have the interfaces for passing this kind of info.
 
@@ -115,12 +118,12 @@ Core bugs/features that still need work:
 -- review (actually, design & architect) the communications error
    handling policy.  For example, CopyToEngine() will leave
    the backend in a disabled state if a communication error occurs;
-   there will be other debiliting conditions if the backend disappears,
+   there will be other debilitating conditions if the backend disappears,
    leaving the engine in a possibly confused state.
 
    for example, if postgres user is misconfigured, the LOCK TABLE
    will fail on session validate, and FINISH_QUERY will close the
-   connection.  ubsequent sql will core dump gnucash, even though this 
+   connection.  subsequent sql will core dump gnucash, even though this 
    is a sysadmin error.
 
 -- during sync, detect and report conflicting edits to accounts 
@@ -137,7 +140,7 @@ Core bugs/features that still need work:
 -- during transaction edit, query of splits is run twice --
    once during edit recordCB()->xaccSRSaveRegEntry(), and again
    recordCB()->xaccSRRedrawReg().  As above, this is performance 
-   problem waiting to aggrevate.
+   problem waiting to aggravate.
 
 
 To Be Done, Part II
@@ -146,7 +149,7 @@ This list only affects the multi-user and advanced/optional features.
 
 -- checkpoint ending balance is showing up as starting balance
 
--- transaction rollbck is 'incorrect'; sort of ?? since we should
+-- transaction rollback is 'incorrect'; sort of ?? since we should
    roll back to what's in the db, and not the old stored transaction ...
    but the way the register works, it hides this problem ...
 
@@ -157,12 +160,12 @@ This list only affects the multi-user and advanced/optional features.
 -- provide support for more query types in gncquery.c
 
 -- implement account rollback (i.e. of other user has modified the
-   account, we need to do something to merge thier work into ours...)
+   account, we need to do something to merge their work into ours...)
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
    and then when contact with backend re-established, we should spit
-   them out.  The pgendSync routine should more or less dothe trick;
+   them out.  The pgendSync routine should more or less do the trick;
    note, however, that the file format needs to save the version number
    ...
 
@@ -184,11 +187,11 @@ This list only affects the multi-user and advanced/optional features.
    are allowed; however, only one wins, and others are kicked back. 
    The losers know themselves because they are trying to update info 
    of the wrong version. 
-   -- pgend_transaction_commit does it correctly; but the gui doesn't
+   -- pgend_transaction_commit does it correctly; but the GUI doesn't
       report a rollback.
-   -- pgTransactionSync() is broken, but its not used anywher.
+   -- pgTransactionSync() is broken, but its not used anywhere.
    -- pgend_account_commit checks version but doesn't rollback.
-      (nor does the dui report a rollback.
+      (nor does the GUI report a rollback.
    -- pgendSync does the right thing, except that it doesn't
       detect any version conflicts, nor does it notify the user
       of such conflicts.
@@ -196,7 +199,7 @@ This list only affects the multi-user and advanced/optional features.
    I'm not sure how critical this all is; with a small number of users
    it shouldn't be a problem.  With a huge number of users, each editing
    the same transaction (unlikely!?) then there is risk of clobbered
-   data, but so what?  ersioning is at least partly a people-management
+   data, but so what?  versioning is at least partly a people-management
    problem.  Anyway, what's there now should be pretty good & should
    work for now.  Except its mostly untested.
 
@@ -205,6 +208,6 @@ This list only affects the multi-user and advanced/optional features.
 
 -- use version numbers for commodities.  Right now, multi-user
    updates of commodities are not detected (this seem OK for
-   now, since this is a rare occurrance, right ???)
+   now, since this is a rare occurrence, right ???)
 
 
