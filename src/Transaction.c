@@ -124,7 +124,6 @@ initTransaction( Transaction * trans )
   
   /* fill in some sane defaults */
   trans->debit = 0x0;
-  trans->credit = 0x0;
   
   trans->num         = XtNewString("");
   trans->description = XtNewString("");
@@ -171,7 +170,7 @@ freeTransaction( Transaction *trans )
   /* free a transaction only if it is not claimed
    * by any accounts. */
   if (trans->debit) return;
-  if (trans->credit) return;
+  if (trans->credit_split.acc) return;
 /*
 hack alert -- don't do this until splits are fully
 implemented and tested.

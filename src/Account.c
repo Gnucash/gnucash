@@ -133,9 +133,9 @@ freeAccount( Account *acc )
     if (!trans) continue;
     /* free the transaction only if its not 
      * a part of a double entry */
-    if (_acc == trans->credit) trans->credit = NULL;
+    if (_acc == trans->credit_split.acc) trans->credit_split.acc = NULL;
     if (_acc == trans->debit) trans->debit  = NULL;
-    if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
+    if ( (NULL == trans->debit) && (NULL == trans->credit_split.acc) ) {
       freeTransaction( trans );
     }
   }
@@ -257,7 +257,8 @@ removeTransaction( Account *acc, int num )
 
   /* if this is a double-entry transaction, be sure to
    * unmark it. */
-  if (((Account *)trans->credit) == acc) trans->credit = NULL;
+  if (((Account *)trans->credit_split.acc) == acc)
+       trans->credit_split.acc = NULL;
   if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
 
   return trans;
@@ -307,11 +308,11 @@ insertTransaction( Account *acc, Transaction *trans )
    * in another account, assume this is the other half. 
    */
   
-  if ( (acc != (Account *) trans->credit) &&
+  if ( (acc != (Account *) trans->credit_split.acc) &&
        (acc != (Account *) trans->debit) ) {
 
-    if (NULL == trans->credit) {
-      trans->credit = (struct _account *) acc;
+    if (NULL == trans->credit_split.acc) {
+      trans->credit_split.acc = (struct _account *) acc;
     } else 
     if (NULL == trans->debit) {
       trans->debit = (struct _account *) acc;
@@ -323,7 +324,7 @@ insertTransaction( Account *acc, Transaction *trans )
     }
   }
 
-  if (trans->debit == trans->credit) {
+  if (trans->debit == trans->credit_split.acc) {
     printf ("Internal Error: insertTransaction(): \n");
     printf ("debited and credit accounts cannot be the same\n");
     return -1;
@@ -448,9 +449,9 @@ xaccGetOtherAccount( Account *acc, Transaction *trans )
   if (NULL == acc) return NULL;
 
   if (acc == ((Account *) trans->debit)) {
-     return ((Account *) trans->credit);
+     return ((Account *) trans->credit_split.acc);
   } else
-  if (acc == ((Account *) trans->credit)) {
+  if (acc == ((Account *) trans->credit_split.acc)) {
      return ((Account *) trans->debit);
   } else {
      printf ("Internal Error: xaccGetOtherAccount(): inconsistent entry \n");
@@ -477,19 +478,22 @@ double xaccGetAmount (Account *acc, Transaction *trans)
 double xaccGetShareAmount (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+   struct _account *_acc = (struct _account *) acc;
+
    if (NULL == trans) return 0.0;
    if (NULL == acc) return 0.0;
       
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       themount = trans->damount;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       themount = - (trans->damount);
    } else {
       printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
-      printf ("acc=%p deb=%p cred=%p\n", acc, trans->debit, trans->credit);
+      printf ("acc=%p deb=%p cred=%p\n", 
+             acc, trans->debit, trans->credit_split.acc);
       themount = 0.0;  /* punt */
    }
    return themount;
@@ -500,11 +504,13 @@ double xaccGetShareAmount (Account *acc, Transaction *trans)
 
 void xaccSetShareAmount (Account *acc, Transaction *trans, double themount)
 {
+   struct _account *_acc = (struct _account *) acc;
+
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       trans->damount = themount;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       trans->damount = - themount;
    } else {
       printf ("Internal Error: xaccSetShareAmount: missing double entry \n");
@@ -530,12 +536,13 @@ void xaccSetAmount (Account *acc, Transaction *trans, double themount)
 double xaccGetBalance (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+   struct _account *_acc = (struct _account *) acc;
       
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       themount = trans->credit_balance;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       themount = trans->debit_balance;
    } else {
       printf ("Internal Error: xaccGetBalance: missing double entry \n");
@@ -551,12 +558,13 @@ double xaccGetBalance (Account *acc, Transaction *trans)
 double xaccGetClearedBalance (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
-      
+   struct _account *_acc = (struct _account *) acc;
+
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       themount = trans->credit_cleared_balance;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       themount = trans->debit_cleared_balance;
    } else {
       printf ("Internal Error: xaccGetClearedBalance: missing double entry \n");
@@ -572,12 +580,13 @@ double xaccGetClearedBalance (Account *acc, Transaction *trans)
 double xaccGetReconciledBalance (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+   struct _account *_acc = (struct _account *) acc;
       
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       themount = trans->credit_reconciled_balance;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       themount = trans->debit_reconciled_balance;
    } else {
       printf ("Internal Error: xaccGetReconciledBalance: missing double entry \n");
@@ -593,12 +602,13 @@ double xaccGetReconciledBalance (Account *acc, Transaction *trans)
 double xaccGetShareBalance (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+   struct _account *_acc = (struct _account *) acc;
       
    /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit == ((struct _account *) acc) ) {
+   if ( trans->credit_split.acc == _acc ) {
       themount = trans->credit_share_balance;
    } else 
-   if ( trans->debit == ((struct _account *) acc) ) {
+   if ( trans->debit == _acc ) {
       themount = trans->debit_share_balance;
    } else {
       printf ("Internal Error: xaccGetShareBalance: missing double entry \n");
@@ -669,7 +679,7 @@ xaccRecomputeBalance( Account * acc )
       dreconciled_balance += amt * (trans->share_price);
     }
 
-    tracc = (Account *) trans->credit;
+    tracc = (Account *) trans->credit_split.acc;
     if (tracc == acc) {
       /* For bank accounts, the invarient subtotal is the dollar
        * amount.  For stock accoounts, the invarient is the share amount */
@@ -797,7 +807,7 @@ xaccCheckDateOrderDE (Transaction *trans )
 
   if (NULL == trans) return 0;
 
-  acc = (Account *) (trans->credit);
+  acc = (Account *) (trans->credit_split.acc);
   outOfOrder += xaccCheckDateOrder (acc, trans);
   acc = (Account *) (trans->debit);
   outOfOrder += xaccCheckDateOrder (acc, trans);
@@ -882,7 +892,7 @@ xaccConsolidateTransactions (Account * acc)
 
          /* if no match, then continue on in the loop.
           * we really must match everything to get a duplicate */
-         if (ta->credit != tb->credit) continue;
+         if (ta->credit_split.acc != tb->credit_split.acc) continue;
          if (ta->debit != tb->debit) continue;
          if (ta->credit_split.reconciled != tb->credit_split.reconciled) continue;
          if (ta->date.year != tb->date.year) continue;
@@ -898,13 +908,13 @@ xaccConsolidateTransactions (Account * acc)
          /* if we got to here, then there must be a duplicate. */
          /* before deleting it, remove it from the other 
           * double-entry account */
-         if (acc == (Account *) tb->credit) {
+         if (acc == (Account *) tb->credit_split.acc) {
             xaccRemoveTransaction ((Account *) tb->debit, tb);
          }
          if (acc == (Account *) tb->debit) {
-            xaccRemoveTransaction ((Account *) tb->credit, tb);
+            xaccRemoveTransaction ((Account *) tb->credit_split.acc, tb);
          }
-         tb->credit = NULL;
+         tb->credit_split.acc = NULL;
          tb->debit = NULL;
 
          /* Free the transaction, and shuffle down by one.

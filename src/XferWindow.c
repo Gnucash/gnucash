@@ -474,7 +474,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* make note of which accounts this was transfered from & to */
   trans->debit       = (struct _account *) getAccount(grp,xferData->from);
-  trans->credit      = (struct _account *) getAccount(grp,xferData->to);
+  trans->credit_split.acc = (struct _account *) getAccount(grp,xferData->to);
 
   /* insert transaction into from acount */
   acc = getAccount(grp,xferData->from);

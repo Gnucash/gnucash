@@ -642,7 +642,7 @@ readTransaction( int fd, Account *acc, int token )
     XACC_FLIP_INT (acc_id);
     INFO_2 ("readTransaction(): credit %d\n", acc_id);
     peer_acc = locateAccount (acc_id);
-    trans -> credit = (struct _account *) peer_acc;
+    trans -> credit_split.acc = (struct _account *) peer_acc;
 
     /* insert the transaction into both the debit and 
      * the credit accounts; first the credit ... */
@@ -1032,7 +1032,7 @@ writeTransaction( int fd, Transaction *trans )
     return -1;
 
   /* write the double-entry values */
-  xfer_acc = (Account *) (trans->credit);
+  xfer_acc = (Account *) (trans->credit_split.acc);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
   INFO_2 ("writeTransaction: credit %d \n", acc_id);

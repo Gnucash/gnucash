@@ -371,7 +371,7 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
         acc = (Account *) (trans->debit);
         show_debit = xaccIsAccountInList (acc, regData->blackacc);
 
-        acc = (Account *) (trans->credit);
+        acc = (Account *) (trans->credit_split.acc);
         show_credit = xaccIsAccountInList (acc, regData->blackacc);
 
         /* attempt to keep all displayed quantities positive by
@@ -427,7 +427,7 @@ xaccGetDisplayAmountStrings (RegWindow *regData,
         }
 
         show_credit = 0;
-        acc = (Account *) (trans->credit);
+        acc = (Account *) (trans->credit_split.acc);
         if (acc) {
           if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
             show_credit = xaccIsAccountInList (acc, regData->blackacc);
@@ -562,8 +562,8 @@ regRefresh( RegWindow *regData )
       trans = tarray[i];
       if (0.0 > trans->damount) {
         struct _account *tmp;
-        tmp = trans->credit;
-        trans->credit = trans->debit;
+        tmp = trans->credit_split.acc;
+        trans->credit_split.acc = trans->debit;
         trans->debit = tmp;
         trans->damount = - (trans->damount);
       }
@@ -597,7 +597,7 @@ regRefresh( RegWindow *regData )
           sprintf( buf, "%s", xfer_acc->accountName );
           newData[row+XFRM_CELL_R][XFRM_CELL_C] = XtNewString(buf);
         }
-        xfer_acc = (Account *) trans -> credit;
+        xfer_acc = (Account *) trans -> credit_split.acc;
         if (xfer_acc) {
           sprintf( buf, "%s", xfer_acc->accountName );
           newData[row+XTO_CELL_R][XTO_CELL_C] = XtNewString(buf);
@@ -703,7 +703,7 @@ regRefresh( RegWindow *regData )
           }
 
           show_credit = 0;
-          acc = (Account *) (trans->credit);
+          acc = (Account *) (trans->credit_split.acc);
           if (acc) {
              if ( (MUTUAL == acc->type) || (STOCK == acc->type) ) {
                show_credit = xaccIsAccountInList (acc, regData->blackacc);
@@ -838,7 +838,7 @@ regRecalculateBalance( RegWindow *regData )
       continue;
     }
 
-    credit_acc = (Account *) (trans->credit);
+    credit_acc = (Account *) (trans->credit_split.acc);
     debit_acc = (Account *) (trans->debit);
 
     /* figure out if this transaction shows up as a debit
@@ -1040,7 +1040,7 @@ regRecalculateBalance( RegWindow *regData )
 #else 
           value = DABS(value);
 #endif
-          acc = (Account *) (trans->credit);
+          acc = (Account *) (trans->credit_split.acc);
           show = xaccIsAccountInList (acc, regData->blackacc);
           /* show only if value is non-zero (it may be zero if a price
            * is recorded) */
@@ -1067,7 +1067,7 @@ regRecalculateBalance( RegWindow *regData )
              }
           }
 
-          acc = (Account *) (trans->credit);
+          acc = (Account *) (trans->credit_split.acc);
           if (acc) {
              if ((MUTUAL == acc->type) || (STOCK == acc->type)) {
                 show += xaccIsAccountInList (acc, regData->blackacc);
@@ -1235,12 +1235,12 @@ regSaveTransaction( RegWindow *regData, int position )
       acc->parent->saved = False;
 
       /* by default, new transactions are considered credits */
-      trans->credit = (struct _account *) acc;
+      trans->credit_split.acc = (struct _account *) acc;
     }
   } else {
     /* Be sure to prompt the user to save to disk after changes are made! */
     Account *acc;
-    acc = (Account *) trans->credit;
+    acc = (Account *) trans->credit_split.acc;
     if (acc) acc->parent->saved = False;
     acc = (Account *) trans->debit;
     if (acc) acc->parent->saved = False;
@@ -1268,7 +1268,7 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_XTO_PHASE_ONE\n");
 
     /* for a general ledger, from and to are easy to determine */
-    xfer_acct = (Account *) trans->credit;
+    xfer_acct = (Account *) trans->credit_split.acc;
 
     if (xfer_acct) {
       /* remove the transaction from wherever it used to be */
@@ -1320,7 +1320,7 @@ regSaveTransaction( RegWindow *regData, int position )
     /* if a transfer account exists, and we are not trying to transfer
      * from ourself to ourself, then proceed, otheriwse ignore. */
     if (xfer_acct) {
-      if (((1 < regData->numAcc) && (xfer_acct != (Account *) (trans->credit)))
+      if (((1 < regData->numAcc) && (xfer_acct != (Account *) (trans->credit_split.acc)))
       || ((1 >= regData->numAcc) && (xfer_acct != regData->blackacc[0])) ) {
       
         /* for a new transaction, the default will be that the
@@ -1374,12 +1374,13 @@ regSaveTransaction( RegWindow *regData, int position )
       if (xfer_acct != ((Account *) (trans->debit))) {
         /* for a ledger, the transfer-to account is always 
          * the credited account. */
-        if (NULL != trans->credit) {
+        if (NULL != trans->credit_split.acc) {
            printf ("Internal Error: regSaveTransaction(): ");
            printf ("the credited account is not null. \n");
-           printf (" was 0x%x will be 0x%x \n", trans->credit, xfer_acct);
+           printf (" was 0x%x will be 0x%x \n", 
+                   trans->credit_split.acc, xfer_acct);
         }
-        trans->credit = (struct _account *)xfer_acct;
+        trans->credit_split.acc = (struct _account *)xfer_acct;
   
         /* insert the transaction into the transfer account */
         insertTransaction (xfer_acct, trans);
@@ -1478,7 +1479,7 @@ regSaveTransaction( RegWindow *regData, int position )
 
         acc = (Account *) (trans->debit);
         show += xaccIsAccountInList (acc, regData->blackacc);
-        acc = (Account *) (trans->credit);
+        acc = (Account *) (trans->credit_split.acc);
         show += xaccIsAccountInList (acc, regData->blackacc);
 
         themount = 0.0;
@@ -1578,7 +1579,7 @@ regSaveTransaction( RegWindow *regData, int position )
 
       /* for single-account registers, the insertion account
        * is always the credited account */
-      trans->credit = (struct _account *) acc;
+      trans->credit_split.acc = (struct _account *) acc;
       insertTransaction (acc, trans);
     } 
 
@@ -1591,7 +1592,7 @@ regSaveTransaction( RegWindow *regData, int position )
      * where to insert.
      *
      * Warn the user about this.  */
-    if ((NULL == trans->credit) && (NULL == trans->debit)) {
+    if ((NULL == trans->credit_split.acc) && (NULL == trans->debit)) {
       errorBox (toplevel, XFER_NO_ACC_MSG);
       freeTransaction (trans);
       regData->changed = MOD_NONE;
@@ -1621,7 +1622,7 @@ regSaveTransaction( RegWindow *regData, int position )
    * recalculate the balances */
   if( regData->changed & (MOD_XFRM | MOD_XTO | MOD_RECN | 
                           MOD_AMNT | MOD_PRIC | MOD_NEW)) {
-    RECALC_BALANCE ((trans->credit));
+    RECALC_BALANCE ((trans->credit_split.acc));
     RECALC_BALANCE ((trans->debit));
 
     /* if this is a ledger window, then we have to update
@@ -1644,7 +1645,7 @@ regSaveTransaction( RegWindow *regData, int position )
     REFRESH_REGISTER (old_xto_acct);
   }
 
-  REFRESH_REGISTER ((trans->credit));
+  REFRESH_REGISTER ((trans->credit_split.acc));
   REFRESH_REGISTER ((trans->debit));
   /* if this is a ledger window, then we have to update
    * it as well.  If this is not a ledger window, one of 
@@ -1694,7 +1695,7 @@ regSaveTransaction( RegWindow *regData, int position )
   }							\
 }
 
-  REFRESH_RECONCILE_WIN ((trans->credit));
+  REFRESH_RECONCILE_WIN ((trans->credit_split.acc));
   REFRESH_RECONCILE_WIN ((trans->debit));
 
   regData->changed = MOD_NONE;
@@ -2678,7 +2679,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
     
     if( verifyBox( toplevel, buf ) )
       {
-      Account * cred = (Account *) (trans->credit);
+      Account * cred = (Account *) (trans->credit_split.acc);
       Account * deb = (Account *) (trans->debit);
       
       /* remove the transaction from both accounts */

@@ -606,7 +606,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    if (!qifline) {
       xaccRemoveTransaction ((Account *) trans->debit, trans);
-      xaccRemoveTransaction ((Account *) trans->credit, trans);
+      xaccRemoveTransaction ((Account *) trans->credit_split.acc, trans);
       freeTransaction (trans);
       return NULL;
    }
@@ -774,7 +774,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
     * transaction, and return */
    if ('!' == qifline[0]) {
       xaccRemoveTransaction ((Account *) trans->debit, trans);
-      xaccRemoveTransaction ((Account *) trans->credit, trans);
+      xaccRemoveTransaction ((Account *) trans->credit_split.acc, trans);
       freeTransaction (trans);
       return qifline;
    }
@@ -807,7 +807,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * sub_acc; the security account is credited.
           * But, just in case its missing, avoid a core dump */
          if (sub_acc) {
-            trans->credit = (struct _account *) sub_acc;
+            trans->credit_split.acc = (struct _account *) sub_acc;
             insertTransaction (sub_acc, trans);
          }
       } else {
@@ -819,10 +819,10 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * account gets the dividend credit; otherwise, the 
           * main account gets it */
          if (xfer_acc) {
-            trans->credit = (struct _account *) xfer_acc;
+            trans->credit_split.acc = (struct _account *) xfer_acc;
             insertTransaction (xfer_acc, trans);
          } else {
-            trans->credit = (struct _account *) acc;
+            trans->credit_split.acc = (struct _account *) acc;
             insertTransaction( acc, trans );
          }
       }
@@ -836,7 +836,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       }
 
       /* the transaction itself appears as a credit */
-      trans->credit = (struct _account *) acc;
+      trans->credit_split.acc = (struct _account *) acc;
       insertTransaction( acc, trans );
    }
 

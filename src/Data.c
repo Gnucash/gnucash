@@ -561,8 +561,10 @@ xaccMergeAccounts (AccountGroup *grp)
                Transaction *trans;
                trans = acc_b->transaction[k];
                acc_b->transaction[k] = NULL;
-               if (acc_b == (Account *) trans->debit) trans->debit = (struct _account *) acc_a;
-               if (acc_b == (Account *) trans->credit) trans->credit = (struct _account *) acc_a;
+               if (acc_b == (Account *) trans->debit) 
+                   trans->debit = (struct _account *) acc_a;
+               if (acc_b == (Account *) trans->credit_split.acc) 
+                   trans->credit_split.acc = (struct _account *) acc_a;
                insertTransaction (acc_a, trans);
             }
 
