@@ -38,8 +38,8 @@ INCLPATH = -I/usr/include \
            -I./../../lib/ComboBox-1.33 \
            -I./../../lib/Xbae-4.6.2-linas 
 
-CFLAGS   =   -DCELL_WIDGETS=1
-LFLAGS   = -O2
+CFLAGS   = -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects  -DCELL_WIDGETS=1
+LFLAGS   = -g -Wall
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib 
 TARGET   = ../libregister.a

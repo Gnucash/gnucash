@@ -40,8 +40,8 @@ INCLPATH = -I/usr/include \
 # and general brokenness
 #           -I./../../lib/libhtmlw 
 
-CFLAGS   = 
-LFLAGS   = -O2
+CFLAGS   = -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects
+LFLAGS   = -g -Wall
 # LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBS     = -lgtk -lgdk -lglib -lXpm -lXext -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib/.
