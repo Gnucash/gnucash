@@ -64,4 +64,15 @@ GNCSearchCoreType *	gnc_search_core_type_clone (GNCSearchCoreType *fe);
 GtkWidget *		gnc_search_core_type_get_widget (GNCSearchCoreType *fe);
 QueryPredData_t		gnc_search_core_type_get_predicate (GNCSearchCoreType *fe);
 
+/* Register a new type in the Core Type Database */
+typedef GNCSearchCoreType * (*GNCSearchCoreNew) (void);
+void gnc_search_core_register_type (const char *type_name,
+				    GNCSearchCoreNew fcn);
+
+
+/* Initialize and Finalize the Core Type Database */
+void gnc_search_core_initialize (void);
+void gnc_search_core_finalize (void);
+
+
 #endif /* ! _GNCSEARCH_CORE_TYPE_H */

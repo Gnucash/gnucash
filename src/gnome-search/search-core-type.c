@@ -52,6 +52,8 @@ enum {
   LAST_SIGNAL
 };
 
+static GHashTable *typeTable = NULL;
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 guint
@@ -182,30 +184,19 @@ gnc_search_core_type_get_predicate (GNCSearchCoreType *fe)
 GNCSearchCoreType *
 gnc_search_core_type_new_type_name (const char *type)
 {
+  GNCSearchCoreNew fcn;
+
+  g_return_val_if_fail (typeTable, NULL);
+
   if (type == NULL)
     return NULL;
 
-  if (!strcmp (type, QUERYCORE_STRING)) {
-    return (GNCSearchCoreType *)gnc_search_string_new ();
-  } else if (!strcmp (type, QUERYCORE_DATE)) {
-    return (GNCSearchCoreType *)gnc_search_date_new ();
-  } else if (!strcmp (type, QUERYCORE_INT64)) {
-    return (GNCSearchCoreType *)gnc_search_int64_new ();
-  } else if (!strcmp (type, QUERYCORE_DOUBLE)) {
-    return (GNCSearchCoreType *)gnc_search_double_new ();
-  } else if (!strcmp (type, QUERYCORE_NUMERIC)) {
-    return (GNCSearchCoreType *)gnc_search_numeric_new ();
-  } else if (!strcmp (type, QUERYCORE_DEBCRED)) {
-    return (GNCSearchCoreType *)gnc_search_numeric_debcred_new ();
-  } else if (!strcmp (type, QUERYCORE_BOOLEAN)) {
-    return (GNCSearchCoreType *)gnc_search_boolean_new ();
-  } else if (!strcmp (type, GNC_ID_ACCOUNT)) {
-    return (GNCSearchCoreType *)gnc_search_account_new ();
-  } else if (!strcmp (type, "account-match-all")) {
-    return (GNCSearchCoreType *)gnc_search_account_matchall_new ();
+  fcn = g_hash_table_lookup (typeTable, type);
+  if (fcn) {
+    return ((fcn)());
   } else {
     g_warning("Unknown search type '%s'", type);
-    return 0;
+    return NULL;
   }
 }
 
@@ -214,4 +205,53 @@ static gboolean
 validate (GNCSearchCoreType *fe)
 {
   return TRUE;
+}
+
+void
+gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
+{
+  g_return_if_fail (type_name || *type_name || fcn);
+  g_return_if_fail (typeTable);
+  g_hash_table_insert (typeTable, (char *) type_name, (gpointer) fcn);
+}
+
+static void
+init_table (void)
+{
+  gnc_search_core_register_type (QUERYCORE_STRING,
+				 (GNCSearchCoreNew) gnc_search_string_new);
+  gnc_search_core_register_type (QUERYCORE_DATE,
+				 (GNCSearchCoreNew) gnc_search_date_new);
+  gnc_search_core_register_type (QUERYCORE_INT64,
+				 (GNCSearchCoreNew) gnc_search_int64_new);
+  gnc_search_core_register_type (QUERYCORE_DOUBLE,
+				 (GNCSearchCoreNew) gnc_search_double_new);
+  gnc_search_core_register_type (QUERYCORE_NUMERIC,
+				 (GNCSearchCoreNew) gnc_search_numeric_new);
+  gnc_search_core_register_type (QUERYCORE_DEBCRED,
+				 (GNCSearchCoreNew)
+				 gnc_search_numeric_debcred_new);
+  gnc_search_core_register_type (QUERYCORE_BOOLEAN,
+				 (GNCSearchCoreNew) gnc_search_boolean_new);
+  gnc_search_core_register_type (GNC_ID_ACCOUNT,
+				 (GNCSearchCoreNew) gnc_search_account_new);
+  gnc_search_core_register_type ("account-match-all",
+				 (GNCSearchCoreNew) 
+				 gnc_search_account_matchall_new);
+}
+
+void
+gnc_search_core_initialize (void)
+{
+  g_return_if_fail (typeTable == NULL);
+  typeTable = g_hash_table_new (g_str_hash, g_str_equal);
+  init_table ();
+}
+
+void
+gnc_search_core_finalize (void)
+{
+  g_return_if_fail (typeTable);
+  g_hash_table_destroy (typeTable);
+  typeTable = NULL;
 }

@@ -12,6 +12,8 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "search-core-type.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_gnome_search_LTX_gnc_module_system_interface = 0;
 
@@ -47,7 +49,7 @@ libgncmod_gnome_search_LTX_gnc_module_init(int refcount)
   if(refcount == 0) 
   {
     /* initialize known types */
-    ;
+    gnc_search_core_initialize ();
   }
   
   gh_eval_str("(use-modules (g-wrapped gw-gnome-search))");
@@ -58,5 +60,12 @@ libgncmod_gnome_search_LTX_gnc_module_init(int refcount)
 
 int
 libgncmod_gnome_search_LTX_gnc_module_end(int refcount) {
+  /* XXX Unload the other modules */
+
+  if (refcount == 0) {
+    /* Shutdown */
+    gnc_search_core_finalize ();
+  }
+
   return TRUE;
 }
