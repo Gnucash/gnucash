@@ -39,6 +39,7 @@ EXTRA_DIST = \
   po/glossary/da.po \
   po/glossary/de.po \
   po/glossary/es.po \
+  po/glossary/es_NI-policy.txt \
   po/glossary/no.po \
   po/glossary/sv.po \
   po/glossary/gnc-glossary.txt \
