@@ -350,7 +350,7 @@ Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
-Patrick Condron for free webserver hw and T3 connection.
+Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
