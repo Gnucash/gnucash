@@ -262,13 +262,13 @@ Use: The next unused lot id number, used to autogenerate
 
 
 Name: /lot-split/
-Type: kvp_frame
+Type: kvp_glist
 Entities: Split
-Use:  A gemini-style kvp subdirectory holding identification of splits
-      that were split off of this split.  See /gemini/ for additional 
-      doco's.
+Use:  A bag of kvp frames holding identification of splits
+      that were split off of this split.  Same style as the 
+      /gemini/, look there for additional doco's.
 
-Name: /lot-split/0/peer_guid
+Name: /lot-split/*/peer_guid
 Type: GUID
 Entities: Split
 Use:  The GUID of the peer split which was split from this split.
