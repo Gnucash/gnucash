@@ -404,7 +404,7 @@ msgstr "Descrizione"
 #: src/register/splitreg.c:96
 #, fuzzy
 msgid "Reconciled:R"
-msgstr "Approssima"
+msgstr ""
 
 # messages-i18n.c:191
 #: src/SplitLedger.c:4030 src/SplitLedger.c:4103
@@ -670,19 +670,19 @@ msgstr "Trasferire Informazioni "
 #: src/gnc-ui-util.c:365
 #, fuzzy
 msgid "not cleared:n"
-msgstr "Non cancellare (n)"
+msgstr ""
 
 # messages-i18n.c:260
 #: src/gnc-ui-util.c:366
 #, fuzzy
 msgid "cleared:c"
-msgstr "Cancellato"
+msgstr ""
 
 # messages-i18n.c:322
 #: src/gnc-ui-util.c:367
 #, fuzzy
 msgid "reconciled:y"
-msgstr "Approssimare (y)"
+msgstr ""
 
 #: src/gnc-ui-util.c:368
 msgid "frozen:f"
