@@ -1,3 +1,9 @@
+2003-08-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-splash.[ch]:
+	* src/gnome-utils/gnc-splash.[ch]: Move this code to the
+	gnome-utils directory.
+
 2003-08-10  Derek Atkins  <derek@ihtfp.com>
 
 	* rpm/Makefile.am: add gnucash.spec to the DIST; clean during
