@@ -1,8 +1,8 @@
 /*********************************************************************
- * gncmod-tax-us.c
- * module definition/initialization for us tax info 
+ * gncmod-hbci.c
+ * module definition/initialization for HBCI support
  * 
- * Copyright (c) 2001 Linux Developers Group, Inc. 
+ * Copyright (c) 2002 Christian <stimming@tuhh.de>
  *********************************************************************/
 
 #include <stdio.h>
@@ -37,13 +37,6 @@ libgncmod_hbci_LTX_gnc_module_description(void) {
   return g_strdup("Support for HBCI protocol");
 }
 
-static void
-lmod(char * mn) 
-{
-  char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  gh_eval_str(form);
-  g_free(form);
-}
 
 int
 libgncmod_hbci_LTX_gnc_module_init(int refcount) {
@@ -54,6 +47,9 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount) {
 
   /* load the app-utils (we depend on it) */
   if(!gnc_module_load("gnucash/app-utils", 0)) {
+    return FALSE;
+  }
+  if(!gnc_module_load("gnucash/gnome-utils", 0)) {
     return FALSE;
   }
 
