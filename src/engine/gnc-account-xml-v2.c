@@ -305,18 +305,8 @@ gnc_account_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
     
-    acc = xaccMallocAccount();
-    g_return_val_if_fail(acc, FALSE);
-    xaccAccountBeginEdit(acc);
-
-    successful = dom_tree_generic_parse(tree, account_handlers_v2, acc);
-    xaccAccountCommitEdit(acc);
-    
-    if(!successful)
-    {
-        xaccFreeAccount(acc);
-    }
-    else
+    acc = dom_tree_to_account(tree);
+    if(acc != NULL)
     {
         gdata->cb(tag, gdata->data, acc);
         /*
@@ -329,7 +319,7 @@ gnc_account_end_handler(gpointer data_for_children,
     
     xmlFreeNode(tree);
 
-    return successful;
+    return acc != NULL;
 }
 
 Account*
@@ -339,6 +329,8 @@ dom_tree_to_account( xmlNodePtr node )
 	gboolean	successful;
 	
 	accToRet = xaccMallocAccount();
+        xaccAccountBeginEdit(accToRet);
+        
 	successful = dom_tree_generic_parse( node, account_handlers_v2, accToRet );
 	xaccAccountCommitEdit( accToRet );
 
@@ -346,8 +338,8 @@ dom_tree_to_account( xmlNodePtr node )
 		xaccFreeAccount( accToRet );
 		accToRet = NULL;
 	}
-	// jsled_FIXME?  See note above.
-	xaccAccountBeginEdit( accToRet );
+	/* jsled_FIXME?  See note above. */
+	/* xaccAccountBeginEdit( accToRet ); */
 	return accToRet;
 }
 
