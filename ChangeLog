@@ -1,3 +1,7 @@
+2001-06-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/test-stuff.[ch]: fix warning
+
 2001-06-18  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/report/report-list.scm: switch to use-modules for
@@ -77,7 +81,6 @@
 
 	* src/FileDialog.c: Added support for copying
 	scheduled-transaction-related GNCBook fields.
-	src/engine/
 
 	* src/engine/FreqSpec.{h,c}: Added.
 
@@ -128,7 +131,9 @@
 	interest transfer dialog.
 
 	* src/scm/prefs.scm: added new Reconcile boolean: Automatic
-	Interest Transfer * src/engine/Account.c,h: Add access functions
+	Interest Transfer
+
+	* src/engine/Account.c,h: Add access functions
 	for per-account auto interest xfer kvp
 
 	* src/engine/kvp_doc.txt: Document new kvps.
