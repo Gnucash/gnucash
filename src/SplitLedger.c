@@ -49,7 +49,7 @@
  * scheme.  On the engine side, one must always call BeginEdit()
  * before starting to edit a transaction.  When you think you're done,
  * you can call CommitEdit() to commit the changes, or RollbackEdit() to
- * go back to how things were before you started the edit.  Think of it as
+ * go back to how things were before you started the edit. Think of it as
  * a one-shot mega-undo for that transaction.
  * 
  * Note that the query engine uses the original values, not the currently
@@ -268,6 +268,7 @@ get_today_midnight (void)
   tm.tm_sec  = 0;
   tm.tm_min  = 0;
   tm.tm_hour = 0;
+  tm.tm_isdst = -1;
 
   return mktime (&tm);
 }
@@ -903,6 +904,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
+    xaccTransScrubImbalance (old_trans);
     if (xaccTransIsOpen (old_trans))
       xaccTransCommitEdit (old_trans);
     info->pending_trans_guid = *xaccGUIDNULL();
@@ -1433,8 +1435,19 @@ LedgerTraverse (Table *table,
   /* Ok, we are changing transactions and the current transaction has
    * changed. See what the user wants to do. */
   {
-    const char *message = _("The current transaction has been changed.\n"
-                            "Would you like to record it?");
+    const char *message;
+    gnc_numeric imbalance;
+
+    imbalance = xaccTransGetImbalance (trans);
+
+    if (gnc_numeric_zero_p (imbalance))
+      message = _("The current transaction has been changed.\n"
+                  "Would you like to record it?");
+    else
+      message = _("The current transaction has been changed\n"
+                  "and is imbalanced. Would you like to record\n"
+                  "it? (It will be automatically rebalanced)");
+
     result = gnc_verify_cancel_dialog_parented(xaccSRGetParent(reg),
                                                message, GNC_VERIFY_YES);
   }
@@ -4322,6 +4335,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     tm->tm_sec = 59;
     tm->tm_min = 59;
     tm->tm_hour = 23;
+    tm->tm_isdst = -1;
 
     present = mktime (tm);
   }
