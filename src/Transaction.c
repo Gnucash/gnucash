@@ -74,6 +74,11 @@ void
 freeTransaction( Transaction *trans )
   {
   if( trans != NULL ) {
+
+    XtFree(trans->num);
+    XtFree(trans->description);
+    XtFree(trans->memo);
+
     initTransaction (trans);   /* just in case someone looks up freed memory ... */
     _free(trans);
     }

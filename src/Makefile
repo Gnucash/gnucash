@@ -26,10 +26,10 @@
 ######################################################################
 # DO NOT EDIT THE STUFF BELOW THIS LINE!                             #
 
-OBJS = main.o util.o date.o MainWindow.o RegWindow.o BuildMenu.o \
-       AccWindow.o FileIO.o Account.o Data.o XferWindow.o FileBox.o \
-       QuickFill.o Reports.o RecnWindow.o HelpWindow.o AdjBWindow.o \
-       QIFIO.o Transaction.o
+OBJS = Account.o AccWindow.o AdjBWindow.o BuildMenu.o Data.o date.o \
+       FileBox.o FileIO.o HelpWindow.o main.o MainWindow.o \
+       QIFIO.o QuickFill.o RecnWindow.o RegWindow.o Reports.o \
+       Transaction.o util.o XferWindow.o
 
 SRCS = ${OBJS:.o=.c}
 

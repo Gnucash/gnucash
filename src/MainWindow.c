@@ -611,7 +611,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("AMB_OPEN");
         {
         Account *acc = getAccount(data,row);
-        if( acc->regData == NULL )
+        if( NULL == acc->regData )   /* avoid having two registers updating one account */
           acc->regData = regWindow( toplevel, acc );
         }
       break;

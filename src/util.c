@@ -276,6 +276,7 @@ textBox( Widget parent, char *title, char *text, Boolean editable )
                                  XmNdeleteResponse, XmDESTROY,
                                  XmNminWidth,       150,
                                  XmNminHeight,      200,
+                                 XmNtransient,      FALSE,  /* allow window to be repositioned */
                                  NULL );
   
   /* Create a PanedWindow Manager for the dialog box... the child 

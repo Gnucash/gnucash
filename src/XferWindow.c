@@ -446,7 +446,6 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->debit       = (struct _account *) getAccount(data,xferData->from);
   trans->credit      = (struct _account *) getAccount(data,xferData->to);
 
-
   /* insert transaction into from acount */
   acc = getAccount(data,xferData->from);
   insertTransaction( acc, trans );

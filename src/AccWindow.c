@@ -64,7 +64,7 @@ typedef struct _editaccwindow {
   Widget  name;          /* The account name text field             */
   Widget  desc;          /* Account description text field          */
   
-  Account *account;      /* The text from the "Notes" window        */
+  Account *account;      /* The account to edit                     */
 } EditAccWindow;
 
 /** GLOBALS *********************************************************/

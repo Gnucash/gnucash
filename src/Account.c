@@ -117,15 +117,31 @@ getTransaction( Account *acc, int num )
 
 /********************************************************************\
 \********************************************************************/
+int
+getNumOfTransaction( Account *acc, Transaction *trans )
+  {
+  int i;
+  for (i=0; i<acc->numTrans; i++) {
+      if (trans == acc->transaction[i]) return i;
+    }
+  return -1;
+  }
+
+/********************************************************************\
+\********************************************************************/
 Transaction *
 removeTransaction( Account *acc, int num )
   {
   Transaction *trans = NULL;
+
   if( acc != NULL )
     {
     int  i,j;
     struct _account * _acc = (struct _account *) acc; 
     Transaction **oldTrans = acc->transaction;
+
+    /* check for valid number */
+    if( (0 > num) || (num >= acc->numTrans) ) return NULL;
 
     /* Set this flag, so we know we need to save the data file: */
     if( data != NULL )

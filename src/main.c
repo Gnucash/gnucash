@@ -135,8 +135,8 @@ main( int argc, char *argv[] )
     datafile = fileBox( toplevel, OPEN );
   
   if( datafile != NULL )
-    /* data = readData(datafile);     /* load the accounts data from datafile*/
-    data = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
+    data = readData(datafile);     /* load the accounts data from datafile*/
+    /* data = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
   
   if( data == NULL )
     {

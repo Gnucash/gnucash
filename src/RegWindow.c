@@ -494,21 +494,23 @@ regSaveTransaction( RegWindow *regData, int position )
     tmp = XbaeMatrixGetCell(regData->reg,row+1,MEMO_CELL_C);
 
     /* if its a transfer, indicate where its from ... */
+    /* hack alert -- this algorithm is fundamentally broken if
+     * memo field is repeatedly edited ... */
     if ((NULL != trans->debit) && (NULL != trans->credit)) {
       Account *fromAccount = NULL;
-      if (((struct _account *) acc) == trans->debit) {
+      if (acc == ((Account *) trans->debit) ) {
           fromAccount = (Account *) trans->credit;
         } else {
           fromAccount = (Account *) trans->debit;
         }
-
         /* Get the memo, and add the "from" account name to it */
         memo = (String)malloc (strlen(tmp)+
                                strlen(fromAccount->accountName)+
                                strlen("[From: ] ") );
 
         sprintf( memo, "[From: %s] %s\0", fromAccount->accountName, tmp);
-    
+
+        XbaeMatrixSetCell( regData->reg, row+1, MEMO_CELL_C, memo );
         trans->memo = memo;
       } else {
         trans->memo = XtNewString( tmp );
@@ -702,6 +704,7 @@ regWindow( Widget parent, Account *acc )
     }
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
+  acc -> regData = regData;        /* avoid having two open registers for one account */
   regData->acc       = acc;
   regData->changed   = 0;          /* Nothing has changed yet! */
   regData->lastTrans = 0;
@@ -771,6 +774,10 @@ regWindow( Widget parent, Account *acc )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL,
       deleteCB,     (XtPointer)regData,      (MenuItem *)NULL },
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+      NULL,         NULL,                    (MenuItem *)NULL },
+    { "Close Window", &xmPushButtonWidgetClass, 'Q', NULL, NULL,
+      destroyShellCB,(XtPointer)(regData->dialog),(MenuItem *)NULL },
     NULL,
   };
   
@@ -1036,6 +1043,22 @@ regWindow( Widget parent, Account *acc )
   XtAddCallback( widget, XmNactivateCallback, 
                  cancelCB, (XtPointer)regData );
   
+  /* the "close" button */
+  position++;
+  widget = XtVaCreateManagedWidget( "Close", 
+				    xmPushButtonWidgetClass, buttonform,
+				    XmNtopAttachment,      XmATTACH_FORM,
+				    XmNbottomAttachment,   XmATTACH_FORM,
+				    XmNleftAttachment,     XmATTACH_POSITION,
+				    XmNleftPosition,       position,
+				    XmNrightAttachment,    XmATTACH_POSITION,
+				    XmNrightPosition,      position+1,
+				    XmNshowAsDefault,      True,
+				    NULL );
+  
+  XtAddCallback( widget, XmNactivateCallback, 
+                 destroyShellCB, (XtPointer)(regData->dialog) );
+  
   position+=2;
   
   /* Fix button area of the pane to its current size, and not let 
@@ -1188,6 +1211,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   Account   *acc     = regData->acc;
+  Account   *otherAcc = 0x0;
   
   if( getTransaction(acc,regData->lastTrans) != NULL )
     {
@@ -1204,11 +1228,27 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
       XbaeMatrixDeleteRows( regData->reg, row, 2 );
       XbaeMatrixRefresh(regData->reg);
       
+      /* if this is a double entry transaction, 
+       * remove it from the other account too ...... */
+      if (trans->credit) otherAcc = (Account *) trans->credit; 
+      if (trans->debit) otherAcc = (Account *) trans->debit; 
+      if (otherAcc) {
+        RegWindow *otherRegData = otherAcc -> regData;
+        int otherrow;
+        int n = getNumOfTransaction (otherAcc, trans);
+        trans = removeTransaction( otherAcc, n );
+
+        /* remove the rows from the matrix */
+        if (otherRegData) {
+          otherrow = 2*n + 1;
+          XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );
+          XbaeMatrixRefresh( otherRegData->reg);
+          regRecalculateBalance (otherRegData);
+        }
+      }
+
       /* Delete the transaction */
-      XtFree(trans->num);
-      XtFree(trans->description);
-      XtFree(trans->memo);
-      _free(trans);
+      freeTransaction (trans);
       
       regRecalculateBalance(regData);
       }
