@@ -21,6 +21,8 @@
 #include "eggtreemodelfilter.h"
 #include <gtk/gtksignal.h>
 #include <string.h>
+
+/* FIXME: remove this when we move it to GTK+ */
 #include "eggintl.h"
 
 /* ITER FORMAT:
@@ -979,14 +981,10 @@ egg_tree_model_filter_row_changed (GtkTreeModel *c_model,
     gtk_tree_model_get_iter (c_model, &real_c_iter, c_path);
 
   /* is this node above the virtual root? */
-  if (filter->virtual_root)
-    {
-      if (gtk_tree_path_get_depth (filter->virtual_root) >=
-	  gtk_tree_path_get_depth (c_path))
-	{
-	  goto done;
-	}
-    }
+  if (filter->virtual_root
+      && (gtk_tree_path_get_depth (filter->virtual_root)
+          >= gtk_tree_path_get_depth (c_path)))
+    goto done;
 
   /* what's the requested state? */
   requested_state = egg_tree_model_filter_visible (filter, &real_c_iter);
@@ -1102,8 +1100,8 @@ egg_tree_model_filter_row_inserted (GtkTreeModel *c_model,
                                     gpointer      data)
 {
   EggTreeModelFilter *filter = EGG_TREE_MODEL_FILTER (data);
-  GtkTreePath *path;
-  GtkTreePath *real_path;
+  GtkTreePath *path = NULL;
+  GtkTreePath *real_path = NULL;
   GtkTreeIter iter;
 
   GtkTreeIter real_c_iter;
@@ -1282,14 +1280,19 @@ done_and_emit:
 								FALSE, TRUE);
 
   if (!path)
-    return;
+    goto done;
 
   egg_tree_model_filter_increment_stamp (filter);
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
 
+  gtk_tree_path_free (path);
+
 done:
+  if (real_path)
+    gtk_tree_path_free (real_path);
+
   if (free_c_path)
     gtk_tree_path_free (c_path);
 }
@@ -1393,89 +1396,80 @@ egg_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 								c_path,
 								FALSE,
 								FALSE);
+
   if (!path)
     {
-      path = egg_real_tree_model_filter_convert_child_path_to_path (filter,
-								    c_path,
-								    FALSE,
-								    TRUE);
+      /* fixup the offsets */
+      GtkTreePath *real_path;
 
-      if (!path)
+      if (!filter->root)
+        return;
+
+      level = FILTER_LEVEL (filter->root);
+
+      /* subtract vroot if necessary */
+      if (filter->virtual_root)
         {
-	  /* fixup the offsets */
-	  GtkTreePath *real_path;
+          real_path = egg_tree_model_filter_remove_root (c_path,
+                                                         filter->virtual_root);
+          /* we don't handle this */
+          if (!real_path)
+            return;
+        }
+      else
+        real_path = gtk_tree_path_copy (c_path);
 
-	  if (!filter->root)
-	    return;
-
-	  level = FILTER_LEVEL (filter->root);
-
-	  /* subtract vroot if necessary */
-	  if (filter->virtual_root)
-	    {
-	      real_path = egg_tree_model_filter_remove_root (c_path,
-							     filter->virtual_root);
-	      /* we don't handle this */
-	      if (!real_path)
-		return;
-	    }
-	  else
-	    real_path = gtk_tree_path_copy (c_path);
-
-	  i = 0;
-	  if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
-	    {
-	      while (i < gtk_tree_path_get_depth (real_path) - 1)
-	        {
-		  gint j;
-
-		  if (!level)
-		    {
-		      /* we don't cover this */
-		      gtk_tree_path_free (real_path);
-		      return;
-		    }
-
-                  elt = bsearch_elt_with_offset (level->array,
-                                                 gtk_tree_path_get_indices (real_path)[i],
-                                                 &j);
-
-
-		  if (!elt || !elt->children)
-		    {
-		      /* parent is filtered out, so no level */
-		      gtk_tree_path_free (real_path);
-		      return;
-		    }
-
-		  level = elt->children;
-		  i++;
-		}
-	    }
-
-	  offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
-	  gtk_tree_path_free (real_path);
-
-	  if (!level)
-	    return;
-
-	  /* we need:
-	   * - the offset of the removed item
-	   * - the level
-	   */
-          for (i = 0; i < level->array->len; i++)
+      i = 0;
+      if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+        {
+          while (i < gtk_tree_path_get_depth (real_path) - 1)
             {
-              elt = &g_array_index (level->array, FilterElt, i);
-              if (elt->offset > offset)
-	        elt->offset--;
-              if (elt->children)
-	        elt->children->parent_elt = elt;
+              gint j;
+
+              if (!level)
+                {
+                  /* we don't cover this */
+                  gtk_tree_path_free (real_path);
+                  return;
+                }
+
+              elt = bsearch_elt_with_offset (level->array,
+                                             gtk_tree_path_get_indices (real_path)[i],
+                                             &j);
+
+
+              if (!elt || !elt->children)
+                {
+                  /* parent is filtered out, so no level */
+                  gtk_tree_path_free (real_path);
+                  return;
+                }
+
+              level = elt->children;
+              i++;
             }
+        }
 
-	  return;
-	}
+      offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
+      gtk_tree_path_free (real_path);
 
-      emit_signal = FALSE;
+      if (!level)
+        return;
+
+      /* we need:
+       * - the offset of the removed item
+       * - the level
+       */
+      for (i = 0; i < level->array->len; i++)
+        {
+          elt = &g_array_index (level->array, FilterElt, i);
+          if (elt->offset > offset)
+            elt->offset--;
+          if (elt->children)
+            elt->children->parent_elt = elt;
+        }
+
+      return;
     }
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
