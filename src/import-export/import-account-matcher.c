@@ -162,7 +162,7 @@ static void
 gnc_ui_generic_account_picker_new_cb(GtkButton * w, gpointer user_data) {
   struct _accountpickerdialog * picker = user_data;  
   GList * valid_types = NULL;
-  DEBUG("Begin");  
+  /*DEBUG("Begin");  */
   
   if(picker->new_account_default_type!=NO_TYPE)
     {
@@ -242,7 +242,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
   picker->new_account_default_type = new_account_default_type;
   picker->selected_acct=default_selection;
 
-  DEBUG("Looking for account with online_id: %s", account_online_id_value);
+  /*DEBUG("Looking for account with online_id: %s", account_online_id_value);*/
   if(account_online_id_value!=NULL)
     {
       retval = xaccGroupForEachAccount(picker->acct_group,
@@ -308,9 +308,9 @@ Account * gnc_import_select_account(char * account_online_id_value,
     {
       ok_pressed_retval=TRUE; /* There was no dialog involved, so the computer "pressed" ok */
     }   
-  printf("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); 
+  /*FIXME: DEBUG("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); */
   g_free(picker);
-  DEBUG("Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");
+  /*DEBUG("Return value: %p%s%s%s",retval,", account name:",xaccAccountGetName(retval),"\n");*/
   if(ok_pressed!=NULL)
     {
       *ok_pressed=ok_pressed_retval;

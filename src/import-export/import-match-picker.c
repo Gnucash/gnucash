@@ -57,7 +57,8 @@ static const int MATCHER_CLIST_AMOUNT = 2;
 static const int MATCHER_CLIST_DESCRIPTION = 3;
 static const int MATCHER_CLIST_MEMO = 4;
 
-static short module = MOD_IMPORT;
+/* Needs to be commented in again if any DEBUG() macro is used here. */
+/*static short module = MOD_IMPORT;*/
 
 /********************************************************************\
  *   Constants, should idealy be defined a user preference dialog    *
@@ -89,7 +90,7 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
 
   g_assert(matcher);
   g_assert(transaction_info);
-  DEBUG("Begin");
+  /*DEBUG("Begin");*/
   row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
 					    transaction_info);
   
@@ -150,7 +151,7 @@ downloaded_transaction_select_cb (GtkCList *clist,
   GList * list_element;
   gint row_number;
   const char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /*DEBUG("row: %d%s%d",row,", column: ",column);*/
   
   matcher->selected_trans_info = gtk_clist_get_row_data(clist, row);
   
@@ -243,7 +244,7 @@ match_transaction_select_cb (GtkCList *clist,
 			     GdkEventButton *event,
 			     gpointer user_data) {
   GNCImportMatchPicker * matcher = user_data;
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /*DEBUG("row: %d%s%d",row,", column: ",column);*/
   matcher->selected_match_info =
     gtk_clist_get_row_data(clist, row);
 }
@@ -255,7 +256,7 @@ match_transaction_unselect_cb(GtkCList *clist,
 			      GdkEventButton *event,
 			      gpointer user_data) {
   GNCImportMatchPicker * matcher = user_data;
-  DEBUG("row: %d%s%d",row,", column: ",column);
+  /*DEBUG("row: %d%s%d",row,", column: ",column);*/
   matcher->selected_match_info=NULL;
 
 }
@@ -358,10 +359,10 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
   old = gnc_import_TransInfo_get_selected_match(transaction_info);
   
   /* Let this dialog run and close. */
-  DEBUG("Right before run and close");
+  /*DEBUG("Right before run and close");*/
   result = 
     gnome_dialog_run_and_close (GNOME_DIALOG (matcher->transaction_matcher));
-  DEBUG("Right after run and close");
+  /*DEBUG("Right after run and close");*/
   /* DEBUG("Result was %d.", result); */
   if (result == 0 && matcher->selected_match_info != old)
     {    /* OK was pressed */

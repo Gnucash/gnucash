@@ -55,7 +55,7 @@ static short module = MOD_IMPORT;
 \********************************************************************/
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 25;
+static const int MATCH_DATE_NOT_THRESHOLD = 21;
 /**Transaction's who have an online_id kvp frame have been downloaded 
   online can probably be skipped in the match list, since it is very 
   unlikely that they would match a transaction downloaded at a later
@@ -444,7 +444,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 			   xaccSplitGetAmount(split)))
 	{
 	  prob = prob+3;
-	  DEBUG("heuristics:  probability + 3 (amount)");
+	  /*DEBUG("heuristics:  probability + 3 (amount)");*/
 	}
       else if (fabs (downloaded_split_amount - match_split_amount) <= 
 	       fuzzy_amount_difference)
@@ -453,7 +453,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	     So you withdraw 100$ and get charged 101,25$ in the same
 	     transaction */ 
 	  prob = prob+2;
-	  DEBUG("heuristics:  probability + 2 (amount)");
+	  /*DEBUG("heuristics:  probability + 2 (amount)");*/
 	}
       else
 	{
@@ -478,19 +478,19 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       if (datediff_day == 0)
 	{
 	  prob = prob+3;
-	  DEBUG("heuristics:  probability + 3 (date)");
+	  /*DEBUG("heuristics:  probability + 3 (date)");*/
 	}
       else if (datediff_day <= MATCH_DATE_THRESHOLD)
 	{
 	  prob = prob+2;
-	  DEBUG("heuristics:  probability + 2 (date)");
+	  /*DEBUG("heuristics:  probability + 2 (date)");*/
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
 	  /* Extra penalty if that split lies awfully far away
 	     from the given one. */
 	  prob = prob-10;
-	   DEBUG("heuristics:  probability - 10 (date)"); 
+	  /*DEBUG("heuristics:  probability - 10 (date)"); */
 	}
       
     
@@ -513,7 +513,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	     number some banks seem to include in the memo but someone
 	     should write something more sophisticated */ 
       	  prob = prob+1;
-	  DEBUG("heuristics:  probability + 1 (memo)");	
+	  /*DEBUG("heuristics:  probability + 1 (memo)");	*/
 	}
 
       /* Description heuristics */  
@@ -524,7 +524,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	{	
 	  /*An exact match of Description gives a +2 */
 	  prob = prob+2;
-	  DEBUG("heuristics:  probability + 2 (description)");
+	  /*DEBUG("heuristics:  probability + 2 (description)");*/
 	}
       else if((strncmp(xaccTransGetDescription
 		       (gnc_import_TransInfo_get_trans (trans_info)),
@@ -538,7 +538,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	     number some banks seem to include in the memo but someone
 	     should write something more sophisticated */ 
       	  prob = prob+1;
-	  DEBUG("heuristics:  probability + 1 (description)");	
+	  /*DEBUG("heuristics:  probability + 1 (description)");	*/
 	}
 
       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&

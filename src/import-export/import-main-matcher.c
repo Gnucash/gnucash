@@ -285,7 +285,7 @@ clist_select_row_cb (GtkCList *clist,
   GNCImportMainMatcher *gui = user_data; 
   GNCImportTransInfo *trans_info;
   gboolean should_refresh = TRUE;
-  DEBUG("row_number: %d%s%d",row_number,", column: ",column);
+  /*DEBUG("row_number: %d%s%d",row_number,", column: ",column);*/
   trans_info = gtk_clist_get_row_data (clist, row_number);
   if (trans_info == NULL)
     return;
@@ -531,7 +531,7 @@ refresh_clist_row (GNCImportMainMatcher *gui,
   gchar *tmp,*imbalance;
   g_assert (gui);
   g_assert (info);
-    DEBUG("Begin");
+  /*DEBUG("Begin");*/
   gnc_gen_trans_list_freeze(gui);
   
   for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)

@@ -1,5 +1,14 @@
 2003-02-01  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/import-backend.c: Reduced the
+	MATCH_DATE_NOT_THRESHOLD to 21 days. Yeah, this should rather be a
+	user preference, but IMHO three weeks should already cover the
+	basic problem.
+
+	* src/import-export/import-account-matcher.c, import-backend.c,
+	import-main-matcher.c, import-match-picker.c: Comment out
+	stderr debugging output.
+
 	* src/import-export/generic-import.scm: Move transaction matcher
 	preferences to "Online Banking & Import" preference page.
 
