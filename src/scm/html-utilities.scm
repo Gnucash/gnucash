@@ -321,6 +321,6 @@
 	      (gnc:numeric-convert 
 	       (cadr pair) 
                GNC-DENOM-AUTO 
-               (logor (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))))
+               (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))))
    alist))
 

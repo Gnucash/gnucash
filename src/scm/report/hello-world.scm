@@ -448,7 +448,7 @@ new, totally cool report, consult the mailing list ")
    ;; The name of this report. This will be used, among other things,
    ;; for making its menu item in the main menu. You need to use the
    ;; untranslated value here!
-   'name (_ "Hello, World")
+   'name (N_ "Hello, World")
    
    ;; The options generator function defined above.
    'options-generator options-generator
