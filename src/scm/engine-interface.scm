@@ -23,7 +23,7 @@
 (define gnc:split-structure
   (make-record-type
    "gnc:split-structure"
-   '(split-guid account-guid transaction-guid memo action docref
+   '(split-guid account-guid transaction-guid memo action
                 reconcile-state reconciled-date share-amount share-price)))
 
 ;; constructor
@@ -49,9 +49,6 @@
 
 (define gnc:split-scm-get-action
   (record-accessor gnc:split-structure 'action))
-
-(define gnc:split-scm-get-docref
-  (record-accessor gnc:split-structure 'docref))
 
 (define gnc:split-scm-get-reconcile-state
   (record-accessor gnc:split-structure 'reconcile-state))
@@ -81,9 +78,6 @@
 (define gnc:split-scm-set-action
   (record-modifier gnc:split-structure 'action))
 
-(define gnc:split-scm-set-docref
-  (record-modifier gnc:split-structure 'docref))
-
 (define gnc:split-scm-set-reconcile-state
   (record-modifier gnc:split-structure 'reconcile-state))
 
@@ -106,7 +100,6 @@
    (gnc:transaction-get-guid (gnc:split-get-parent split))
    (gnc:split-get-memo split)
    (gnc:split-get-action split)
-   (gnc:split-get-docref split)
    (gnc:split-get-reconcile-state split)
    (gnc:split-get-reconciled-date split)
    (gnc:split-get-share-amount split)
@@ -123,12 +116,10 @@
       (begin
         (let ((memo   (gnc:split-scm-get-memo split-scm))
               (action (gnc:split-scm-get-action split-scm))
-              (docref (gnc:split-scm-get-docref split-scm))
               (price  (gnc:split-scm-get-share-price split-scm))
               (amount (gnc:split-scm-get-share-amount split-scm)))
           (if memo   (gnc:split-set-memo split memo))
           (if action (gnc:split-set-action split action))
-          (if docref (gnc:split-set-docref split docref))
           (if (and price amount)
               (gnc:split-set-share-price-and-amount split price amount)))
         (let ((account (gnc:account-lookup
@@ -160,8 +151,7 @@
 (define gnc:transaction-structure
   (make-record-type
    "gnc:transaction-structure"
-   '(transaction-guid date-entered date-posted num
-                      description docref split-scms)))
+   '(transaction-guid date-entered date-posted num description split-scms)))
 
 ;; constructor
 (define gnc:make-transaction-scm
@@ -186,9 +176,6 @@
 
 (define gnc:transaction-scm-get-description
   (record-accessor gnc:transaction-structure 'description))
-
-(define gnc:transaction-scm-get-docref
-  (record-accessor gnc:transaction-structure 'docref))
 
 (define gnc:transaction-scm-get-split-scms
   (record-accessor gnc:transaction-structure 'split-scms))
@@ -222,9 +209,6 @@
 (define gnc:transaction-scm-set-description
   (record-modifier gnc:transaction-structure 'description))
 
-(define gnc:transaction-scm-set-docref
-  (record-modifier gnc:transaction-structure 'docref))
-
 (define gnc:transaction-scm-set-split-scms
   (record-modifier gnc:transaction-structure 'split-scms))
 
@@ -248,7 +232,6 @@
    (gnc:transaction-get-date-posted trans)
    (gnc:transaction-get-num trans)
    (gnc:transaction-get-description trans)
-   (gnc:transaction-get-docref trans)
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
@@ -266,9 +249,12 @@
 
         ;; copy in the transaction values
         (let ((description (gnc:transaction-scm-get-description trans-scm))
-              (docref      (gnc:transaction-scm-get-docref trans-scm)))
+              (num         (gnc:transaction-scm-get-num trans-scm))
+              (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
           (if description (gnc:transaction-set-description trans description))
-          (if docref      (gnc:transaction-set-docref trans docref)))
+          (if num         (gnc:transaction-set-xnum trans num))
+          (if date-posted (gnc:transaction-set-date-time-pair
+                           trans date-posted)))
 
         ;; strip off the old splits
         (let loop ((split (gnc:transaction-get-split trans 0)))
