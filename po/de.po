@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
 "POT-Creation-Date: 2001-12-16 21:58-0800\n"
-"PO-Revision-Date: 2001-12-09 21:13+01:00\n"
+"PO-Revision-Date: 2001-12-31 13:58+01:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -415,7 +415,7 @@ msgstr "Reconciled:J"
 
 #: src/SplitLedger.c:4039 src/SplitLedger.c:4112
 msgid "Share Balance"
-msgstr "Aktiensalso"
+msgstr "Aktiensaldo"
 
 #: src/SplitLedger.c:4042 src/SplitLedger.c:4115 src/gnc-ui-util.c:136
 #: src/gnc-ui-util.c:139 src/gnome/glade-gnc-dialogs.c:1527
