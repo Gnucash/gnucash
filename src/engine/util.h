@@ -44,8 +44,6 @@
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
 
-#define LG(condition,args...)	if (condition) fprintf(stderr, ##args)
-
 typedef enum
 {
   MOD_DUMMY   =  0,
@@ -65,40 +63,46 @@ typedef enum
 
 typedef enum
 {
-  GNC_LOG_NOTHING    = 0,
-  GNC_LOG_ERROR      = 1,
-  GNC_LOG_WARNING    = 2,
-  GNC_LOG_INFO       = 3,
-  GNC_LOG_DEBUG      = 4,
-  GNC_LOG_EVERYTHING = 5
+  GNC_LOG_FATAL   = 0,
+  GNC_LOG_ERROR   = 1,
+  GNC_LOG_WARNING = 2,
+  GNC_LOG_INFO    = 3,
+  GNC_LOG_DEBUG   = 4,
+  GNC_LOG_DETAIL  = 5
 } gncLogLevel;
 
 extern gncLogLevel loglevel[MOD_LAST + 1];
 
-#define LERR    (1 <= loglevel[module])
-#define LWARN   (2 <= loglevel[module])
-#define LINFO   (3 <= loglevel[module])
-#define LDEBUG  (4 <= loglevel[module])
-#define LDETAIL (5 <= loglevel[module])
+void gnc_log (gncModuleType module, gncLogLevel log_level,
+              const char *prefix, const char *function_name,
+              const char *format, ...) G_GNUC_PRINTF(5,6);
 
-#ifdef KDE
-#undef DEBUG
-#endif
+#define FATAL(format, args...) \
+  gnc_log(module, GNC_LOG_FATAL, "Fatal Error", __FUNCTION__, format, ## args);
 
-/* some preprocessors use ugly __FUNCTION__ substitution ... */
-char * prettify (const char *); 
+#define PERR(format, args...) \
+  gnc_log(module, GNC_LOG_ERROR, "Error", __FUNCTION__, format, ##args);
 
-/* utility macros  */
-#define FATAL(x...)    LG(1, "Fatal Error: %s: ",  prettify(__FUNCTION__));  LG(1,       ##x);
-#define PERR(x...)     LG(LERR,    "Error: %s: ",  prettify(__FUNCTION__));  LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Warning: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
-#define PINFO(x...)    LG(LINFO,   "Info: %s: ",   prettify(__FUNCTION__));  LG(LINFO,   ##x);
-#define DEBUG(x...)    LG(LDEBUG,  "Debug: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
-#define ENTER(x...)    LG(LDEBUG,  "Enter: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
-#define LEAVE(x...)    LG(LDEBUG,  "Leave: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
-#define DETAIL(x...)   LG(LDETAIL, "Detail: %s: ", prettify(__FUNCTION__));  LG(LDETAIL, ##x);
+#define PWARN(format, args...) \
+  gnc_log(module, GNC_LOG_WARNING, "Warning", __FUNCTION__, format, ## args);
 
-#define DEBUGCMD(x) { if (LINFO) { x; }}
+#define PINFO(format, args...) \
+  gnc_log(module, GNC_LOG_INFO, "Info", __FUNCTION__, format, ## args);
+
+#define DEBUG(format, args...) \
+  gnc_log(module, GNC_LOG_DEBUG, "Debug", __FUNCTION__, format, ## args);
+
+#define ENTER(format, args...) \
+  gnc_log(module, GNC_LOG_DEBUG, "Enter", __FUNCTION__, format, ## args);
+
+#define LEAVE(format, args...) \
+  gnc_log(module, GNC_LOG_DEBUG, "Leave", __FUNCTION__, format, ## args);
+
+#define DETAIL(format, args...) \
+  gnc_log(module, GNC_LOG_DETAIL, "Detail", __FUNCTION__, format, ## args);
+
+
+#define DEBUGCMD(x) { if (loglevel[module] >= GNC_LOG_DEBUG) { x; }}
 
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));

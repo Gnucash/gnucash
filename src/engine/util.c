@@ -40,6 +40,7 @@
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
+#include <stdarg.h>
 #include <stdlib.h>
 
 #include "messages.h"
@@ -51,7 +52,7 @@
 /** GLOBALS *********************************************************/
 gncLogLevel loglevel[MOD_LAST + 1] =
 {
-  GNC_LOG_NOTHING,      /* DUMMY */
+  GNC_LOG_FATAL,        /* DUMMY */
   GNC_LOG_WARNING,      /* ENGINE */
   GNC_LOG_WARNING,      /* IO */
   GNC_LOG_WARNING,      /* REGISTER */
@@ -85,10 +86,60 @@ gnc_set_log_level_global(gncLogLevel level)
 {
   gncModuleType module;
 
-  for (module = GNC_LOG_NOTHING; module <= MOD_LAST; module++)
+  for (module = 0; module <= MOD_LAST; module++)
     loglevel[module] = level;
 }
 
+/* prettify() cleans up subroutine names. AIX/xlC has the habit of
+ * printing signatures not names; clean this up. On other operating
+ * systems, truncate name to 30 chars. Note this routine is not thread
+ * safe. Note we wouldn't need this routine if AIX did something more
+ * reasonable. Hope thread safety doesn't poke us in eye. */
+static const char *
+prettify (const char *name)
+{
+  static char bf[128];
+  char *p;
+
+  strncpy (bf, name, 29); bf[28] = 0;
+  p = strchr (bf, '(');
+
+  if (p)
+  {
+    *(p+1) = ')';
+    *(p+2) = 0x0;
+  }
+  else
+    strcpy (&bf[26], "...()");
+
+  return bf;
+}
+
+void
+gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
+         const char *function_name, const char *format, ...)
+{
+  va_list ap;
+
+  if (module < 0 || module > MOD_LAST)
+  {
+    PERR ("Bad module: %d", module);
+    return;
+  }
+
+  if (log_level > loglevel[module])
+    return;
+
+  fprintf (stderr, "%s: %s: ", prefix, prettify (function_name));
+
+  va_start (ap, format);
+
+  vfprintf (stderr, format, ap);
+
+  va_end (ap);
+
+  fprintf (stderr, "\n");
+}
 
 /* DxaccParseAmount configuration */
 static gboolean auto_decimal_enabled = FALSE;
@@ -111,32 +162,6 @@ gnc_set_auto_decimal_places( int places )
 
 /********************************************************************\
 \********************************************************************/
-/* prettify() cleans up subroutine names.
- * AIX/xlC has the habit of printing signatures not names; clean this up.
- * On other operating systems, truncate name to 30 chars.
- * Note this routine is not thread safe. Note we wouldn't need this
- * routine if AIX did something more reasonable.  Hope thread safety
- * doesn't poke us in eye.
- */
-char *
-prettify (const char *name)
-{
-   static char bf[35];
-   char *p;
-   strncpy (bf, name, 29); bf[28] = 0;
-   p = strchr (bf, '(');
-   if (p)
-   {
-      *(p+1) = ')';
-      *(p+2) = 0x0;
-   }
-   else
-   {
-      strcpy (&bf[26], "...()");
-   }
-   return bf;
-}
-
 
 /********************************************************************\
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 
