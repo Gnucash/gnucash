@@ -1,3 +1,11 @@
+2001-07-04  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/druid-qif-import.c: fix cut-n-paste error in 
+	default_acct_back handler; fixes bug #106.  
+
+	* src/gnome/glade/qif.glade: add some explanatory text about 
+	what the "back" button does where it's not obvious
+
 2001-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* Makefile.am: add gnc-glossary.txt to the dist

@@ -42,6 +42,7 @@ gchar *s = N_("The QIF file format does not specify which order the day, month, 
               "software are likely  to be in \"d-m-y\" or day-month-year format, where\n"
               "US QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
               "");
+gchar *s = N_("Click \"Back\" to cancel the loading of this file and choose another.");
 gchar *s = N_("Set the default QIF account name");
 gchar *s = N_("The QIF file that you just loaded appears to contain transactions for just \n"
               "one account, but the file does not specify a name for that account.  \n"
@@ -51,6 +52,7 @@ gchar *s = N_("The QIF file that you just loaded appears to contain transactions
               "in that program.\n"
               "");
 gchar *s = N_("Account name:");
+gchar *s = N_("Click \"Back\" to cancel the loading of this file and choose another.");
 gchar *s = N_("QIF files you have loaded");
 gchar *s = N_("QIF Files");
 gchar *s = N_("label827");
