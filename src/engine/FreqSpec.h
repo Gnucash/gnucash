@@ -82,18 +82,9 @@ typedef struct gncp_freq_spec FreqSpec;
 /** PROTOTYPES ******************************************************/
 
 /**
- * Allocates memory for a FreqSpec.
- * Calls xaccFreqSpecInit() to initialise.
+ * Allocates memory for a FreqSpec and initializes it.
  **/
 FreqSpec* xaccFreqSpecMalloc(void);
-
-/**
- * Initializes a FreqSpec by setting it's to type INVALID.
- * Use this to initialise a stack object.
- * FreqSpec objects must be initalised before being used by
- * any other method.
- **/
-void xaccFreqSpecInit( FreqSpec *fs );
 
 /**
  * destroys any private data belonging to the FreqSpec.

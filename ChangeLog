@@ -1,3 +1,23 @@
+2001-07-26  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.c (xaccSchedTransactionInit):
+	change declaration to static, uncommented g_free usage.  
+
+	* src/engine/SchedXaction.c: Moved a couple of functions
+	about.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecInit): change
+	declaration to static.  Moved a couple of functions
+	about.
+
+	* src/engine/FreqSpec.h, SchedXaction.h: remove "Init"
+	function prototypes
+
+2001-07-25  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.c 
+	(sxprivtransactionListMapDelete): renamed function.
+
 2001-07-24  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-sxeditor.sgml: New file.

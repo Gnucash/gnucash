@@ -44,21 +44,12 @@
 static short module = MOD_SX;
 
 /** Local data defs *****/
-void _transactionListMapDelete( gpointer data, gpointer user_data );
+void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 /** Local Prototypes *****/
 
-SchedXaction*
-xaccSchedXactionMalloc( GNCBook *book )
-{
-        SchedXaction *sx;
-        sx = g_new0( SchedXaction, 1 );
-        xaccSchedXactionInit( sx, book );
-        gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
-        return sx;
-}
 
-void
+static void
 xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
 {
         Account                *acct;
@@ -87,17 +78,36 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
         xaccAccountSetName( acct, name );
         xaccAccountSetCommodity( acct,
                                 gnc_commodity_new( "template", "template", "template", "template", 1 ) );
-        /* FIXME: g_free?
-           FIXME: leaks
-           g_free( name ); */
+	g_free( name );
         xaccAccountSetType( acct, BANK );
         ag = gnc_book_get_template_group( book );
         xaccGroupInsertAccount( ag, acct );
 }
 
+SchedXaction*
+xaccSchedXactionMalloc( GNCBook *book )
+{
+        SchedXaction *sx;
+        sx = g_new0( SchedXaction, 1 );
+        xaccSchedXactionInit( sx, book );
+        gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
+        return sx;
+}
+
+
+void
+sxprivtransactionListMapDelete( gpointer data, gpointer user_data )
+{
+        Transaction *t = (Transaction*)data;
+        xaccTransBeginEdit( t );
+        xaccTransDestroy( t );
+        xaccTransCommitEdit( t );
+}
+
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
+  gchar *name;
         if ( sx == NULL ) return;
 
         xaccFreqSpecFree( sx->freq );
@@ -105,7 +115,7 @@ xaccSchedXactionFree( SchedXaction *sx )
         xaccRemoveEntity( &sx->guid );
 
         g_list_foreach( sx->templateSplits,
-                        _transactionListMapDelete,
+                        sxprivtransactionListMapDelete,
                         NULL );
         g_list_free( sx->templateSplits );
         if ( sx->name )
@@ -113,16 +123,17 @@ xaccSchedXactionFree( SchedXaction *sx )
         g_free( sx );
 
         /* FIXME: clean up our template account */
+	/* FIXME: jsled, check this, it might be right, but it might be
+	 * Horribly brutally wrong
+	 */
+	name = guid_to_string(&sx->name);
+
+	   
 }
 
-void
-_transactionListMapDelete( gpointer data, gpointer user_data )
-{
-        Transaction *t = (Transaction*)data;
-        xaccTransBeginEdit( t );
-        xaccTransDestroy( t );
-        xaccTransCommitEdit( t );
-}
+
+
+
 
 FreqSpec *
 xaccSchedXactionGetFreqSpec( SchedXaction *sx )

@@ -86,13 +86,7 @@ typedef struct gncp_SchedXaction {
  * Creates and initializes a scheduled transaction.
  **/
 SchedXaction        *xaccSchedXactionMalloc( GNCBook *book );
-/**
- * Initially created with a null name, the default frequency, a
- * start-date of today, no end date, no counted occurances, no
- * templates transactions, and null kvp data.
- **/
-void xaccSchedXactionInit( SchedXaction *sx, GNCBook *book );
-/**
+/*
  * Cleans up and frees a SchedXaction and it's associated data.
  **/
 void xaccSchedXactionFree( SchedXaction *sx );

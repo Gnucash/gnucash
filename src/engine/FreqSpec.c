@@ -164,6 +164,25 @@ struct monthDesc monthInfo[] = {
 };
 
 /** Local Prototypes *****/
+static void xaccFreqSpecInit( FreqSpec *fs );
+
+/**
+ * Initializes a FreqSpec by setting it's to type INVALID.
+ * Use this to initialise a stack object.
+ * FreqSpec objects must be initalised before being used by
+ * any other method.
+ **/
+
+static void
+xaccFreqSpecInit( FreqSpec *fs )
+{
+        g_return_if_fail( fs );
+        xaccGUIDNew( &fs->guid );
+        xaccStoreEntity( fs, &fs->guid, GNC_ID_FREQSPEC );
+        fs->type = INVALID;
+        fs->uift = UIFREQ_ONCE;
+        memset( &(fs->s), 0, sizeof(fs->s) );
+}
 
 FreqSpec*
 xaccFreqSpecMalloc(void)
@@ -175,16 +194,6 @@ xaccFreqSpecMalloc(void)
         return fs;
 }
 
-void
-xaccFreqSpecInit( FreqSpec *fs )
-{
-        g_return_if_fail( fs );
-        xaccGUIDNew( &fs->guid );
-        xaccStoreEntity( fs, &fs->guid, GNC_ID_FREQSPEC );
-        fs->type = INVALID;
-        fs->uift = UIFREQ_ONCE;
-        memset( &(fs->s), 0, sizeof(fs->s) );
-}
 
 void
 xaccFreqSpecCleanUp( FreqSpec *fs )
