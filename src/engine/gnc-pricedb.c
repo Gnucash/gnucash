@@ -700,9 +700,17 @@ gnc_pricedb_get_db(GNCBook *book)
 void
 gnc_pricedb_set_db(GNCBook *book, GNCPriceDB *db)
 {
+  GNCPriceDB *old_db;
+  
   if(!book) return;
+  
+  old_db = gnc_pricedb_get_db (book);
+  if (db == old_db) return;
+  
   gnc_book_set_data (book, GNC_PRICEDB, db);
   if (db) db->book = book;
+
+  gnc_pricedb_destroy (old_db);
 }
 
 /* ==================================================================== */
