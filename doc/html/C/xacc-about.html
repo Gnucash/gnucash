@@ -194,21 +194,26 @@
       <dt> <a href="mailto:rlb@cs.utexas.edu"> Rob
       Browning</a></dt>
 
-      <dd>abused everyone for not using perl, and then added
+      <dd>abused everyone for not using perl, and then after we added
+      perl support, dumped perl in favor of 
       guile/scheme support. Rob maintains the build infrastructure,
       is handling the whole guile/perl extension language thing,
       and is dealing with configuration and configurability.</dd>
-
-      <dt> <a href="mailto:schoenberger@signsoft.com"> Dirk
-      Schoenberger</a></dt>
-
-      <dd>is working on the Qt/KDE port</dd>
 
       <dt> <a href="mailto:peticola@cs.ucdavis.edu"> Dave
       Peticolas</a></dt>
 
       <dd>hacks obsessively on GnuCash. But he can stop anytime he
       wants to. Really.</dd>
+
+      <dt> <a href="mailto:peticola@cs.ucdavis.edu"> Bill Gribble
+      </a></dt>
+
+      <dd>works magic. If your checks print wrong, blame him. 
+      If you don't like the amount printed on your checks, blame him.
+      If you don't like your your bank balances, your bank, or your
+      life, blame him too.
+      </dd>
     </dl>
 
     <h2>Fixers and Patchers</h2>
@@ -430,6 +435,11 @@
 
       <dd>for SCO Unixware and OpenServer binaries</dd>
 
+      <dt> <a href="mailto:schoenberger@signsoft.com"> Dirk
+      Schoenberger</a></dt>
+
+      <dd>began the Qt/KDE port</dd>
+
       <dt> <a href="mailto:jan.schrage@urz.uni-heidelberg.de"> Jan
       Schrage</a></dt>
 
@@ -542,13 +552,11 @@
 
         <th>gnome</th>
 
-        <th>qt</th>
+        <th>scheme</th>
 
-        <th>prefs (scm)</th>
+        <th>docs</th>
 
-        <th>docs (html)</th>
-
-        <th>misc</th>
+        <th>txt</th>
 
         <th>Total</th>
       </tr>
@@ -570,14 +578,12 @@
 
         <td>-</td>
 
-        <td>-</td>
-
         <td>5 files<br>
          (0.4)</td>
 
-        <td>-</td>
+        <td>1 file<br>(0.1)</td>
 
-        <td>39 files<br>
+        <td>40 files<br>
          (8.8)</td>
       </tr>
 
@@ -598,15 +604,13 @@
 
         <td>-</td>
 
-        <td>-</td>
-
         <td>9 files<br>
          (0.8)</td>
 
-        <td>-</td>
+        <td>1 file<br>(0.1)</td>
 
-        <td>60 files<br>
-         (16.1)</td>
+        <td>61 files<br>
+         (16.2)</td>
       </tr>
 
       <tr align="center">
@@ -626,15 +630,13 @@
 
         <td>-</td>
 
-        <td>-</td>
-
         <td>12 files<br>
          (1.4)</td>
 
-        <td>-</td>
+        <td>4 files<br>(0.3)</td>
 
-        <td>64 files<br>
-         (18.0)</td>
+        <td>68 files<br>
+         (18.3)</td>
       </tr>
 
       <tr align="center">
@@ -656,30 +658,63 @@
         <td>17 files<br>
          (3.4+0.5)</td>
 
-        <td>16 files<br>
-         (1.2+0.2)</td>
-
         <td>3 files<br>
          (0.3)</td>
 
         <td>16 files<br>
          (1.9)</td>
 
-        <td>not counted<br>
-         (&gt;1.0)</td>
+        <td>17 files<br>
+         (1.8)</td>
 
-        <td>142 files<br>
-         (32.9)</td>
+        <td>159 files<br>
+         (34.7)</td>
       </tr>
+
+    <tr align=center>
+    <td>gnucash-1.2.2<br>Aug 99
+    <td>41 files<br>(10.2+3.6)
+    <td>28 files<br>(5.5+1.7)
+    <td>14 files<br>(2.4+0.6)
+    <td>26 files<br>(8.7+0.5)
+    <td> - 
+    <td>14 files<br>(1.4)
+    <td>30 files<br>(2.6)
+    <td>15 files<br>(1.8)
+    <td>168 files<br>(39.0)
+
+    <tr align=center>
+    <td>gnucash-1.3.6<br>April 2000
+    <td>41 files<br>(12.9+4.0)
+    <td>32 files<br>(6.8+2.1)
+    <td>19 files<br>(4.0+0.8)
+    <td> - 
+    <td>78 files<br>(32.2+3.0)
+    <td>74 files<br>(17.0)
+    <td>33 files<br>(7.8)
+    <td>25 files<br>(4.5)
+    <td>302 files<br>(95.1)
+
     </table>
 
-    <p> Each cell contains:<br>
+    <p> Each cell displays the following:<br>
     <br>
      number of *c and *.h files<br>
-     (KLOCS in *.c + KLOCS in *.h),</p>
+     (KLOCS in *.c + KLOCS in *.h)</p>
+(unless its the scheme directories, in which case its *scm files, etc)
 
     <p> where KLOC == kilo-lines-of-code, as reported by <tt>
     wc</tt>.</p>
+
+<p>
+<ul>
+<li>engine -- contents of the src/engine and the include directories
+<li>register -- contents of the register directory
+<li>gnome -- src/gnome plus src/register/gnome
+<li>scheme -- scheme and guile code -- src/scm plus src/guile
+<li>docs -- english-only html docs (user documentation)
+<li>txt -- internal README and *.txt documentation files in all subdirs
+</ul>
     <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
