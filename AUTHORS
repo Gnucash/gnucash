@@ -63,7 +63,7 @@ Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
 Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    for Gnucash. This includes the Customer/Vendor database, Job tracking,
    Order entry, Invoicing, Accounts Payable, Accounts Receivable, and
-   related technologies.  In the process he we-wrote the Query engine,
+   related technologies.  In the process he re-wrote the Query engine,
    modularized the Book object storage, and modularized the backend
    to allow pluggable objects.
 
