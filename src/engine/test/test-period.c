@@ -26,11 +26,18 @@ run_test (void)
   Timespec ts;
 
   int ok = 1;
+
+  if(!gnc_module_load("gnucash/engine", 0))
+  {
+    failure("couldn't load gnucash/engine");
+    exit(get_rv());
+  }
+
   if (!ok)
   {
     failure ("its borken");
   }
-
+  
   book = gnc_book_new ();
   if (!book)
   {
@@ -51,10 +58,8 @@ run_test (void)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
-  gnc_module_load("gnucash/engine", 0);
-
   run_test ();
 
   success ("periods aren't realy tested yet");
@@ -66,6 +71,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile(argc, argv, main_helper, NULL);
   return 0;
 }
