@@ -123,6 +123,8 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         GtkJustification align;
         SheetBlockStyle *style;
         GtkEditable *editable;
+        CellStyle *cs;
+
         int text_len, total_width;
         int pre_cursor_width;
         int width_1, width_2;
@@ -135,8 +137,11 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 
         info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
 
-        info->bg_color = style->active_bg_color[item_edit->cell_row]
-                                               [item_edit->cell_col];
+        cs = gnucash_style_get_cell_style (style,
+                                           item_edit->cell_row,
+                                           item_edit->cell_col);
+
+        info->bg_color = cs->active_bg_color;
         info->fg_color = &gn_black;
 
         info->bg_color2 = &gn_dark_gray;
@@ -176,8 +181,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->bg_rect.width = wd - (2 * CELL_HPADDING);
         info->bg_rect.height = hd - (2 * CELL_VPADDING - info->font->descent);
 
-        align = item_edit->style->alignments[item_edit->cell_row]
-                                            [item_edit->cell_col];
+        align = cs->alignment;
 
         toggle_space = (item_edit->is_combo) ?
                 item_edit->combo_toggle.toggle_offset : 0;
@@ -492,9 +496,13 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
 
         if (changed_cells) {
                 GtkJustification align;
+                CellStyle *cs;
 
-                align = item_edit->style->alignments[item_edit->cell_row]
-                                                    [item_edit->cell_col];
+                cs = gnucash_style_get_cell_style (item_edit->style,
+                                                   item_edit->cell_row,
+                                                   item_edit->cell_col);
+
+                align = cs->alignment;
 
                 if (align == GTK_JUSTIFY_RIGHT)
                         gtk_editable_set_position(editable, -1);

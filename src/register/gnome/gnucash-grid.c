@@ -260,6 +260,7 @@ draw_cell (GnucashGrid *grid, int block,
         Table *table = grid->sheet->table;
         gchar *text;
         GdkFont *font;
+        CellStyle *cs;
         SheetBlock *sheet_block;
         VirtualCellLocation vcell_loc = { block, 0 };
 
@@ -272,22 +273,24 @@ draw_cell (GnucashGrid *grid, int block,
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
 
+        cs = gnucash_style_get_cell_style (style, i, j);
+
         /* top */
-        if (style->borders[i][j] & STYLE_BORDER_TOP)
+        if (cs->border & STYLE_BORDER_TOP)
                 gdk_draw_line (drawable, grid->gc, x, y, x+width, y);
 
         /* right */
-        if (style->borders[i][j] & STYLE_BORDER_RIGHT)
+        if (cs->border & STYLE_BORDER_RIGHT)
                 gdk_draw_line (drawable, grid->gc, x+width, y,
                                x+width, y+height);
 
         /* bottom */
-        if (style->borders[i][j] & STYLE_BORDER_BOTTOM)
+        if (cs->border & STYLE_BORDER_BOTTOM)
                 gdk_draw_line (drawable, grid->gc, x+width,
                                y+height, x, y+height);
 
         /* left */
-        if (style->borders[i][j] & STYLE_BORDER_LEFT)
+        if (cs->border & STYLE_BORDER_LEFT)
                 gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
 
 #undef ROUNDED_CORNERS        
@@ -302,7 +305,7 @@ draw_cell (GnucashGrid *grid, int block,
         gdk_draw_line (drawable, grid->gc, x+width, y+5, x+width, y+height-5);
         gdk_draw_line (drawable, grid->gc, x+width-5, y+height, x+5, y+height);
         gdk_draw_line (drawable, grid->gc, x, y+height-5, x, y+5);        
-        
+
         gdk_draw_arc (drawable, grid->gc, FALSE,
                       x, y,
                       10, 10,
@@ -334,7 +337,7 @@ draw_cell (GnucashGrid *grid, int block,
 	    (!text || strlen(text) == 0)) {
                 font = grid->italic_font;
                 gdk_gc_set_foreground (grid->gc, &gn_light_gray);
-                text = style->labels[i][j];
+                text = cs->label;
         }
 
         if (text) {
@@ -343,7 +346,7 @@ draw_cell (GnucashGrid *grid, int block,
 
                 y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
 
-                switch (style->alignments[i][j ]) {
+                switch (cs->alignment) {
                 default:
                 case GTK_JUSTIFY_LEFT:
                 case GTK_JUSTIFY_FILL:

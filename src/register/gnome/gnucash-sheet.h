@@ -63,12 +63,10 @@ typedef struct _SheetBlockStyle SheetBlockStyle;
 
 typedef struct  
 {
-        /* the virtual row/column in the table this block
-           is associated to */
+        /* The virtual location in the table of this block */
         VirtualCellLocation vcell_loc;
 
-        /* The style for this block, derived from the handlers for
-           the virt row/col */
+        /* The style for this block */
         SheetBlockStyle *style;
 
         GdkColor ***fg_colors;

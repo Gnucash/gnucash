@@ -57,8 +57,16 @@ typedef struct
         gint refcount;
 } BlockDimensions;
 
-typedef struct _CellLayoutInfo CellLayoutInfo;
+typedef struct
+{
+        gchar *label;
+        GtkJustification alignment;
+        GdkColor *active_bg_color;
+        GdkColor *inactive_bg_color;
+        int border;
+} CellStyle;
 
+typedef struct _CellLayoutInfo CellLayoutInfo;
 struct _SheetBlockStyle
 {
         gint nrows;
@@ -70,14 +78,9 @@ struct _SheetBlockStyle
         CellLayoutInfo *layout_info;
         BlockDimensions *dimensions;
 
-        gchar ***labels;              /* for the header */
+        GTable *cell_styles;
+
         GdkFont *header_font;          
-
-        GtkJustification **alignments;
-
-        GdkColor ***active_bg_color;
-        GdkColor ***inactive_bg_color;
-        int **borders;
 
         gint refcount;
 };
@@ -97,6 +100,9 @@ gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
                                                     int row, int col);
+
+CellStyle * gnucash_style_get_cell_style (SheetBlockStyle *style,
+                                          int row, int col);
 
 void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
                                         SheetBlockStyle *style,

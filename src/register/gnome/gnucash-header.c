@@ -71,12 +71,14 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         int w = 0, h = 0;
         gchar *text;
         GdkFont *font;
+        CellStyle *cs;
 
         header_style = header->sheet->cursor_style[GNUCASH_CURSOR_HEADER];
 
+        cs = gnucash_style_get_cell_style (header_style, 0, 0);
+
         /* Assume all cells have the same color */
-        gdk_gc_set_foreground(header->gc,
-                              header_style->inactive_bg_color[0][0]);
+        gdk_gc_set_foreground(header->gc, cs->inactive_bg_color);
         gdk_draw_rectangle(drawable, header->gc, TRUE, 0, 0, width, height);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
@@ -105,6 +107,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    consistently, and cut down on maintenance issues. */
                 for (j = 0; j < style->ncols; j++) {
                         cd = gnucash_style_get_cell_dimensions (style, i, j);
+                        cs = gnucash_style_get_cell_style (style, i, j);
 
                         if (header->in_resize && (j == header->resize_col))
                                 w = header->resize_col_width;
@@ -116,7 +119,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         gdk_draw_rectangle (drawable, header->gc, FALSE,
                                             xpaint, ypaint, w, h);
 
-                        text = style->labels[i][j];
+                        text = cs->label;
 
                         if (text) {
                                 gint x_offset, y_offset;
@@ -125,7 +128,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                 y_offset = h - MAX(CELL_VPADDING,
                                                    font->descent + 4);
 
-                                switch (style->alignments[i][j]) {
+                                switch (cs->alignment) {
                                 default:
                                 case GTK_JUSTIFY_LEFT:
                                 case GTK_JUSTIFY_FILL:

@@ -2124,7 +2124,10 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                                 font = GNUCASH_GRID(sheet->grid)->normal_font;
 
                                 if (!text || strlen(text) == 0) {
-                                        text = style->labels[cell_row][cell_col];
+                                        CellStyle *cs;
+
+                                        cs = gnucash_style_get_cell_style (style, cell_row, cell_col);
+                                        text = cs->label;
                                         font = style->header_font;
                                 }
 

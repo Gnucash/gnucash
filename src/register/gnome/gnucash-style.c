@@ -1215,28 +1215,197 @@ gnucash_sheet_style_set_col_width (GnucashSheet *sheet, SheetBlockStyle *style,
 }
 
 
+/* Recompiles the style information from the cellblock, without
+ * recomputing the layout info or the dimensions. WARNING: this
+ * function assumes that the space for the style info has been
+ * allocated already. */
 void
-gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
+gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
+                              SplitRegister *sr, gint cursor_type)
 {
-        gint i, j;
+        gint i, j, type;
+        char *label;
+
+        for (i = 0; i < style->nrows; i++) {
+                for (j = 0; j < style->ncols; j++) {
+                        CellBlockCell *cb_cell;
+                        CellStyle *cs;
+
+                        cb_cell = gnc_cellblock_get_cell (cellblock, i, j);
+                        cs = gnucash_style_get_cell_style (style, i, j);
+
+                        type = cb_cell->cell_type;
+
+                        style->header_font = gnucash_register_font;
+
+                        gnucash_style_set_borders (style, reg_borders);
+
+                        if (type > -1)
+                                label = sr->header_label_cells[type]->value;
+                        else if (cursor_type == GNUCASH_CURSOR_HEADER)
+                                label = cb_cell->cell->value;
+                        else
+                                label = "";
+
+                        g_free(cs->label);
+                        cs->label = g_strdup(label);
+
+                        cs->active_bg_color =
+                                gnucash_color_argb_to_gdk
+                                (cellblock->active_bg_color);
+
+                        cs->inactive_bg_color =
+                                gnucash_color_argb_to_gdk
+                                (cellblock->passive_bg_color);
+
+                        switch (cb_cell->alignment) {
+                                case CELL_ALIGN_RIGHT:
+                                        cs->alignment = GTK_JUSTIFY_RIGHT;
+                                        break;
+                                case CELL_ALIGN_CENTER:
+                                        cs->alignment = GTK_JUSTIFY_CENTER;
+                                        break;
+                                default:
+                                case CELL_ALIGN_FILL:
+                                case CELL_ALIGN_LEFT:
+                                        cs->alignment = GTK_JUSTIFY_LEFT;
+                                        break;
+                        }
+                }
+        }
+}
+
+void
+gnucash_style_set_cell_borders (SheetBlockStyle *style,
+                                int row, int col, int border)
+{
+        CellStyle *cs;
+
+        if (style == NULL)
+                return;
+
+        cs = gnucash_style_get_cell_style (style, row, col);
+        if (cs == NULL)
+                return;
+
+        cs->border = border;
+}
+
+void
+gnucash_style_set_register_borders (int reg_borders_new)
+{
+        reg_borders = reg_borders_new;
+}
+
+
+void
+gnucash_style_set_borders (SheetBlockStyle *style, int border)
+{
+        int row, col;
 
         g_return_if_fail (style != NULL);
 
-        for ( i = 0; i < style->nrows; i++) {
-                g_free(style->alignments[i]);
-                g_free(style->active_bg_color[i]);
-                g_free(style->inactive_bg_color[i]);
-                for (j = 0; j < style->ncols; j++)
-                        g_free (style->labels[i][j]);
-                g_free (style->labels[i]);
-                g_free (style->borders[i]);
-        }
+        for (row  = 0; row < style->nrows; row++) {
+                CellStyle *cs;
 
-        g_free(style->alignments);
-        g_free(style->active_bg_color);
-        g_free(style->inactive_bg_color);
-        g_free(style->labels);
-        g_free (style->borders);
+                for (col = 0; col < style->ncols; col++)
+                        gnucash_style_set_cell_borders (style, row, col,
+                                                        border);
+
+                cs = gnucash_style_get_cell_style (style, row, 0);
+                cs->border |= STYLE_BORDER_LEFT;
+
+                cs = gnucash_style_get_cell_style (style, row,
+                                                   style->ncols - 1);
+                cs->border |= STYLE_BORDER_RIGHT;
+        }
+}
+
+void
+gnucash_sheet_set_borders (GnucashSheet *sheet, int border)
+{
+        int i;
+
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
+
+        for (i = 0; i < GNUCASH_CURSOR_LAST; i++)
+                gnucash_style_set_borders (sheet->cursor_style[i], border);
+}
+
+CellStyle *
+gnucash_style_get_cell_style (SheetBlockStyle *style, int row, int col)
+{
+        if (style == NULL)
+                return NULL;
+
+        return g_table_index (style->cell_styles, row, col);
+}
+
+static gpointer
+cell_style_new (void)
+{
+        CellStyle *cs;
+
+        cs = g_new0 (CellStyle, 1);
+
+        return cs;
+}
+
+static void
+cell_style_free (gpointer _cs)
+{
+        CellStyle *cs = _cs;
+
+        g_free(cs->label);
+        cs->label = NULL;
+
+        g_free(cs);
+}
+
+SheetBlockStyle *
+gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
+			     gint cursor_type)
+{
+        SheetBlockStyle *style;
+        SplitRegister *sr;
+
+        g_return_val_if_fail (sheet != NULL, NULL);
+        g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
+        g_return_val_if_fail (cellblock != NULL, NULL);
+
+        sr = sheet->split_register;
+
+        style  = g_new0(SheetBlockStyle, 1);
+
+        style->reg_type = sr->type;
+        style->cursor_type = cursor_type;
+
+        style->nrows = cellblock->num_rows;
+        style->ncols = cellblock->num_cols;
+
+        style->cell_styles = g_table_new (cell_style_new, cell_style_free);
+        g_table_resize (style->cell_styles, style->nrows, style->ncols);
+
+        gnucash_sheet_style_recompile(style, cellblock, sr, cursor_type);
+
+        gnucash_style_layout_init (sheet, style);
+        gnucash_style_dimensions_init (sheet, style);
+        gnucash_sheet_style_set_dimensions (sheet, style, DEFAULT_STYLE_WIDTH);
+
+        return style;
+}
+
+
+void
+gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        if (sheet == NULL)
+                return;
+        if (style == NULL)
+                return;
+
+        g_table_destroy (style->cell_styles);
+        style->cell_styles = NULL;
 
         style->layout_info->refcount--;
 
@@ -1255,159 +1424,6 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
         }
 
         g_free (style);
-}
-
-
-/* Recompiles the style information from the cellblock, without
- * recomputing the layout info or the dimensions. WARNING: this
- * function assumes that the space for the style info has been
- * allocated already. */
-void
-gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
-                              SplitRegister *sr, gint cursor_type)
-{
-        gint i, j, type;
-        char *label;
-
-        for (i = 0; i < style->nrows; i++) {
-                for (j = 0; j < style->ncols; j++) {
-                        CellBlockCell *cb_cell;
-
-                        cb_cell = gnc_cellblock_get_cell (cellblock, i, j);
-
-                        type = cb_cell->cell_type;
-
-                        style->header_font = gnucash_register_font;
-
-                        gnucash_style_set_borders (style, reg_borders);
-
-                        if (type > -1)
-                                label = sr->header_label_cells[type]->value;
-                        else if (cursor_type == GNUCASH_CURSOR_HEADER)
-                                label = cb_cell->cell->value;
-                        else
-                                label = "";
-
-                        g_free(style->labels[i][j]);
-                        style->labels[i][j] = g_strdup(label);
-
-                        style->active_bg_color[i][j] =
-                                gnucash_color_argb_to_gdk
-                                (cellblock->active_bg_color);
-
-                        style->inactive_bg_color[i][j] =
-                                gnucash_color_argb_to_gdk
-                                (cellblock->passive_bg_color);
-
-                        switch (cb_cell->alignment) {
-                                case CELL_ALIGN_RIGHT:
-                                        style->alignments[i][j] =
-                                                GTK_JUSTIFY_RIGHT;
-                                        break;
-                                case CELL_ALIGN_CENTER:
-                                        style->alignments[i][j] =
-                                                GTK_JUSTIFY_CENTER;
-                                        break;
-                                default:
-                                case CELL_ALIGN_FILL:
-                                case CELL_ALIGN_LEFT:
-                                        style->alignments[i][j] =
-                                                GTK_JUSTIFY_LEFT;
-                                        break;
-                        }
-                }
-        }
-}
-
-void
-gnucash_style_set_cell_borders (SheetBlockStyle *style,
-                                      int row, int col, int border)
-{
-        g_return_if_fail (style != NULL);
-
-        if (row >= 0 && row < style->nrows && col >= 0 && col < style->ncols) 
-                style->borders[row][col] = border;
-}
-
-void
-gnucash_style_set_register_borders (int reg_borders_new)
-{
-        reg_borders = reg_borders_new;
-}
-
-
-void
-gnucash_style_set_borders (SheetBlockStyle *style, int border)
-{
-        int row, col;
-
-        g_return_if_fail (style != NULL);
-
-        for (row  = 0; row < style->nrows; row++) {
-                for (col = 0; col < style->ncols; col++)
-                        gnucash_style_set_cell_borders (style, row, col,
-                                                        border);
-
-                style->borders[row][0] |= STYLE_BORDER_LEFT;
-                style->borders[row][style->ncols - 1] |= STYLE_BORDER_RIGHT;
-        }
-}
-
-void
-gnucash_sheet_set_borders (GnucashSheet *sheet, int border)
-{
-        int i;
-
-        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
-
-        for (i = 0; i < GNUCASH_CURSOR_LAST; i++)
-                gnucash_style_set_borders (sheet->cursor_style[i], border);
-}
-
-
-SheetBlockStyle *
-gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
-			     gint cursor_type)
-{
-        SheetBlockStyle *style;
-        SplitRegister *sr;
-        gint i;
-
-        g_return_val_if_fail (sheet != NULL, NULL);
-        g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
-        g_return_val_if_fail (cellblock != NULL, NULL);
-
-        sr = sheet->split_register;
-
-        style  = g_new0(SheetBlockStyle, 1);
-
-        style->reg_type = sr->type;
-        style->cursor_type = cursor_type;
-
-        style->nrows = cellblock->num_rows;
-        style->ncols = cellblock->num_cols;
-
-        style->alignments = g_new0 (GtkJustification *, style->nrows);
-        style->active_bg_color = g_new0 (GdkColor **, style->nrows);
-        style->inactive_bg_color = g_new0 (GdkColor **, style->nrows);
-        style->labels = g_new0 (char **, style->nrows);
-        style->borders = g_new0 (int *, style->nrows);
-
-        for ( i = 0; i < style->nrows; i++) {
-                style->alignments[i] = g_new0 (GtkJustification, style->ncols);
-                style->active_bg_color[i] = g_new0 (GdkColor *, style->ncols);
-                style->inactive_bg_color[i] = g_new0(GdkColor *, style->ncols);
-                style->labels[i] = g_new0 (char *, style->ncols);
-                style->borders[i] = g_new0 (int, style->ncols);
-        }
-
-        gnucash_sheet_style_recompile(style, cellblock, sr, cursor_type);
-
-        gnucash_style_layout_init (sheet, style);
-        gnucash_style_dimensions_init (sheet, style);
-        gnucash_sheet_style_set_dimensions (sheet, style, DEFAULT_STYLE_WIDTH);
-
-        return style;
 }
 
 
