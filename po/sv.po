@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.3.2\n"
-"POT-Creation-Date: 2000-03-23 03:24-0800\n"
+"POT-Creation-Date: 2000-03-24 14:08-0800\n"
 "PO-Revision-Date: 2000-03-02 10:23+0100\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -1444,7 +1444,7 @@ msgstr "Inställningar"
 msgid "Price"
 msgstr "Pris"
 
-#: messages-i18n.c:314
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:978
 msgid "Print"
 msgstr "Utskrift"
 
@@ -2821,22 +2821,62 @@ msgstr "Kontotyp"
 msgid "Mutual"
 msgstr "Aktiefond"
 
-#: src/gnome/glade-gnc-dialogs.c:763
+#: src/gnome/glade-gnc-dialogs.c:786
+msgid "Print Dialog"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:794
 #, fuzzy
-msgid "Print Check"
+msgid "Print Setup"
 msgstr "Check"
 
-#: src/gnome/glade-gnc-dialogs.c:778
+#: src/gnome/glade-gnc-dialogs.c:815
 #, fuzzy
-msgid "Select Printer"
+msgid "Printer:"
+msgstr "Utskrift"
+
+#: src/gnome/glade-gnc-dialogs.c:823
+msgid "Paper size:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:831
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:876
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:884
+#, fuzzy
+msgid "Selected"
 msgstr "Välj allt"
 
-#: src/gnome/glade-gnc-dialogs.c:785
+#: src/gnome/glade-gnc-dialogs.c:906
+#, fuzzy
+msgid "From:"
+msgstr "Från"
+
+#: src/gnome/glade-gnc-dialogs.c:921
+#, fuzzy
+msgid "To:"
+msgstr "Till"
+
+#: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
+#, fuzzy
+msgid "Select..."
+msgstr "Välj allt"
+
+#: src/gnome/glade-gnc-dialogs.c:986
 #, fuzzy
 msgid "Preview"
 msgstr "Pris"
 
-#: src/gnome/print-session.c:118
+#: src/gnome/print-session.c:220
 #, fuzzy
 msgid "You must select a printer first."
 msgstr "Du måste välja ett konto att städa upp."
+
+#, fuzzy
+#~ msgid "Select Printer"
+#~ msgstr "Välj allt"

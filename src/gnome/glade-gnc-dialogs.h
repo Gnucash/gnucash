@@ -6,3 +6,4 @@ GtkWidget* create_QIF_File_Import_Dialog (void);
 GtkWidget* create_QIF_Import_Account_Picker (void);
 GtkWidget* create_Print_Preview_Dialog (void);
 GtkWidget* create_Print_Dialog (void);
+GtkWidget* create_Paper_Size_Selector_Dialog (void);

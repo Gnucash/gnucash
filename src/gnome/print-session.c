@@ -17,11 +17,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#define _GNU_SOURCE
+
 #include "config.h"
 
+#include <stdio.h>
 #include <gnome.h>
 
 #include "print-session.h"
+#include "ui-callbacks.h"
 
 #ifdef HAVE_LIBGNOMEPRINT
 
@@ -33,7 +37,8 @@ gnc_ui_print_preview_create(PrintSession * ps) {
                                       "preview_canvas");
   ppd->session  = ps;
   ppd->pc = 
-    gnome_print_preview_new (GNOME_CANVAS(ppd->canvas), "US-Letter");
+    gnome_print_preview_new (GNOME_CANVAS(ppd->canvas), 
+                             ps->paper);
   
   gtk_object_set_data(GTK_OBJECT(ppd->toplevel), "print_preview_struct",
                       ppd);
@@ -70,15 +75,73 @@ gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd) {
 PrintDialog *
 gnc_ui_print_dialog_create(PrintSession * ps) {
   PrintDialog * pcd = g_new0(PrintDialog, 1);
+  char        * printer_string;
+
   pcd->toplevel = create_Print_Dialog();
   pcd->session  = ps;
+  
+  pcd->paper_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
+                                         "paper_entry");
+
+  pcd->printer_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
+                                           "printer_entry");
   
   gtk_object_set_data(GTK_OBJECT(pcd->toplevel), "print_struct",
                       pcd);
   
+  if(ps->printer->driver) {
+    if(ps->printer->filename) {
+      asprintf(&printer_string, "(%s) %s",
+               ps->printer->driver, ps->printer->filename);
+    }
+    else {
+      printer_string = ps->printer->driver;
+    }
+  }
+  else {
+    printer_string = "(none)";
+  }
+
+  gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), ps->paper);
+  gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
   gtk_widget_show_all(pcd->toplevel);
   
   return pcd;
+}
+
+void
+gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) {
+  gtk_object_set_data(GTK_OBJECT(user_data), "quit-cause",
+                      GINT_TO_POINTER(0));
+  gtk_main_quit();
+}
+
+void
+gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {
+  gtk_object_set_data(GTK_OBJECT(user_data), "quit-cause",
+                      GINT_TO_POINTER(1));
+  gtk_main_quit();  
+}
+
+
+char *
+gnc_ui_paper_dialog_new_modal() {
+  GtkWidget * dialog = create_Paper_Size_Selector_Dialog();
+  GtkWidget * papersel = gtk_object_get_data(GTK_OBJECT(dialog),
+                                             "paperselector1");
+  char * newpaper = NULL;
+  
+  gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+  gtk_widget_show_all(dialog);
+  gtk_main();
+
+  if(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(dialog), "quit-cause"))) {
+    newpaper = strdup(gnome_paper_selector_get_name
+                      (GNOME_PAPER_SELECTOR(papersel)));
+  }
+  gtk_widget_destroy(dialog);
+
+  return newpaper;
 }
 
 
@@ -92,11 +155,50 @@ gnc_ui_print_dialog_destroy(PrintDialog * pcd) {
 
 void
 gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
-  PrintDialog * pcd;
+  PrintDialog  * pcd;
+  GnomePrinter * printer;
+  char         * printer_string;
+
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
-    pcd->session->printer = 
+    printer = 
       gnome_printer_dialog_new_modal();
+
+    if(printer) {
+      pcd->session->printer = printer;
+
+      if(pcd->session->printer->driver) {
+        if(pcd->session->printer->filename) {
+          asprintf(&printer_string, "(%s) %s",
+                   pcd->session->printer->driver, 
+                   pcd->session->printer->filename);
+        }
+        else {
+          printer_string = pcd->session->printer->driver;
+        }
+      }
+      else {
+        printer_string = "(none)";
+      }
+      
+      gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
+    }
+  }
+}
+
+void
+gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, gpointer user_data) {
+  PrintDialog * pcd;
+  char        * paper;
+
+  if(user_data) {
+    pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
+    paper = 
+      gnc_ui_paper_dialog_new_modal();
+    if(paper) {
+      pcd->session->paper = paper;
+      gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), pcd->session->paper);
+    }
   }
 }
 
@@ -139,8 +241,10 @@ gnc_print_session_create() {
 
   /* this is about the most basic we can get */
   ps->meta         = gnome_print_meta_new();
-  ps->default_font = gnome_font_new("Courier", 13);
-  
+  ps->default_font = gnome_font_new("Courier", 12);
+  ps->printer      = gnome_printer_new_generic_ps("gnucash-output.ps");
+  ps->paper        = g_strdup(gnome_paper_name_default());
+
   gnome_print_setrgbcolor(GNOME_PRINT_CONTEXT(ps->meta),
                           0.0, 0.0, 0.0);
   gnome_print_setfont(GNOME_PRINT_CONTEXT(ps->meta), 
@@ -153,6 +257,7 @@ void
 gnc_print_session_destroy(PrintSession * ps) {
   gtk_object_unref(GTK_OBJECT(ps->meta));
   gtk_object_unref(GTK_OBJECT(ps->default_font));
+  g_free(ps->paper);
 
   g_free(ps);
 }

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-03-23 03:24-0800\n"
+"POT-Creation-Date: 2000-03-24 14:08-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1341,7 +1341,7 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: messages-i18n.c:314
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:978
 msgid "Print"
 msgstr ""
 
@@ -2666,18 +2666,50 @@ msgstr ""
 msgid "Mutual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:763
-msgid "Print Check"
+#: src/gnome/glade-gnc-dialogs.c:786
+msgid "Print Dialog"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:778
-msgid "Select Printer"
+#: src/gnome/glade-gnc-dialogs.c:794
+msgid "Print Setup"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:785
+#: src/gnome/glade-gnc-dialogs.c:815
+msgid "Printer:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:823
+msgid "Paper size:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:831
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:876
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:884
+msgid "Selected"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:906
+msgid "From:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:921
+msgid "To:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
+msgid "Select..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:986
 msgid "Preview"
 msgstr ""
 
-#: src/gnome/print-session.c:118
+#: src/gnome/print-session.c:220
 msgid "You must select a printer first."
 msgstr ""

@@ -40,6 +40,7 @@ typedef struct {
   GnomePrintMeta     * meta;
   GnomePrinter       * printer;
   GnomeFont          * default_font;
+  char               * paper;
 } PrintSession;
 
 typedef struct {
@@ -51,6 +52,8 @@ typedef struct {
 
 typedef struct {
   GtkWidget         * toplevel;
+  GtkWidget         * printer_entry;
+  GtkWidget         * paper_entry;
   PrintSession      * session;
 } PrintDialog;
 
@@ -63,6 +66,12 @@ typedef int PrintDialog;
 
 #endif
 
+/* paper selector dialog */
+void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data);
+void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data);
+char * gnc_ui_paper_dialog_new_modal();
+
+
 /* print preview dialog stuff */
 PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps);
 void gnc_ui_print_preview_OK_cb(GtkWidget * widget, gpointer user_data);
@@ -74,6 +83,8 @@ void gnc_ui_print_dialog_destroy(PrintDialog * pcd);
 
 void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, 
                                            gpointer user_data);
+void gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, 
+                                         gpointer user_data);
 void gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data);
 void gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data);
 void gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data);

@@ -14,11 +14,11 @@
 ;; text origin, (0,0) at lower left of page, in inches, for
 ;; US-Letter format paper. 
 (define quicken-check-3up-at-top-us-letter
-  '((payee . (1.0625 9.625))
-    (amount-words . (1.0625 9.325))
-    (amount-number . (6.5 9.625))
-    (date . (6.5 10.1))
-    (memo . (1.0625 8.15))))
+  '((payee . (1.25 9.5625))
+    (amount-words . (1.25 9.1875))
+    (amount-number . (7.0 9.625))
+    (date . (7.0 10.0625))
+    (memo . (0.75 8.0625))))
 
 (define (gnc:print-check payee amount date memo)
   (let* ((int-part (inexact->exact (truncate amount)))

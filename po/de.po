@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.1\n"
-"POT-Creation-Date: 2000-03-23 03:24-0800\n"
+"POT-Creation-Date: 2000-03-24 14:08-0800\n"
 "PO-Revision-Date: 2000-03-16 15:20+0100\n"
 "Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1424,7 +1424,7 @@ msgstr "Einstellungen"
 msgid "Price"
 msgstr "Preis"
 
-#: messages-i18n.c:314
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:978
 msgid "Print"
 msgstr "Drucken"
 
@@ -2686,7 +2686,7 @@ msgstr "Währung:"
 
 #: src/gnome/glade-gnc-dialogs.c:182
 msgid "Radix format:"
-msgstr "Darstellungsformat"
+msgstr "Darstellungsformat:"
 
 #: src/gnome/glade-gnc-dialogs.c:191
 msgid "Date format:"
@@ -2758,7 +2758,7 @@ msgstr "QIF Kategorie"
 
 #: src/gnome/glade-gnc-dialogs.c:415
 msgid "Categories"
-msgstr "Kategorien Anzeigen"
+msgstr "Kategorien"
 
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Selected account:"
@@ -2777,25 +2777,62 @@ msgstr "Kontoart:"
 msgid "Mutual"
 msgstr "Investmentfonds"
 
-#: src/gnome/glade-gnc-dialogs.c:763
-#, fuzzy
-msgid "Print Check"
-msgstr "Scheck"
+#: src/gnome/glade-gnc-dialogs.c:786
+msgid "Print Dialog"
+msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:778
+#: src/gnome/glade-gnc-dialogs.c:794
 #, fuzzy
-msgid "Select Printer"
+msgid "Print Setup"
+msgstr "Scheck drucken"
+
+#: src/gnome/glade-gnc-dialogs.c:815
+#, fuzzy
+msgid "Printer:"
+msgstr "Drucken"
+
+#: src/gnome/glade-gnc-dialogs.c:823
+msgid "Paper size:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:831
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:876
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:884
+#, fuzzy
+msgid "Selected"
 msgstr "Datei auswählen"
 
-#: src/gnome/glade-gnc-dialogs.c:785
+#: src/gnome/glade-gnc-dialogs.c:906
 #, fuzzy
-msgid "Preview"
-msgstr "Preis"
+msgid "From:"
+msgstr "Von"
 
-#: src/gnome/print-session.c:118
+#: src/gnome/glade-gnc-dialogs.c:921
 #, fuzzy
+msgid "To:"
+msgstr "Zu"
+
+#: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
+#, fuzzy
+msgid "Select..."
+msgstr "Alle auswählen"
+
+#: src/gnome/glade-gnc-dialogs.c:986
+msgid "Preview"
+msgstr "Vorschau"
+
+#: src/gnome/print-session.c:220
 msgid "You must select a printer first."
-msgstr "Wählen sie ein Konto zum Ausbuchen"
+msgstr "Sie müssen erst einen Drucker auswählen"
+
+#~ msgid "Select Printer"
+#~ msgstr "Drucker auswählen"
 
 #~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
 #~ msgstr ""

@@ -65,7 +65,7 @@ gnc_ui_print_dialog_select_printer_cb  (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_print_dialog_preview_cb         (GtkButton       *button,
+gnc_ui_print_dialog_select_paper_cb    (GtkButton       *button,
                                         gpointer         user_data);
 
 void
@@ -73,5 +73,17 @@ gnc_ui_print_dialog_ok_cb              (GtkButton       *button,
                                         gpointer         user_data);
 
 void
+gnc_ui_print_dialog_preview_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
 gnc_ui_print_dialog_cancel_cb          (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_paper_dialog_ok_cb              (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_paper_dialog_cancel_cb          (GtkButton       *button,
                                         gpointer         user_data);

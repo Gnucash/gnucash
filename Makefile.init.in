@@ -27,6 +27,7 @@ CC           = @CC@
 CXX          = @CXX@
 CFLAGS       = @CFLAGS@
 CPPFLAGS     = @CPPFLAGS@
+DEFS         = @DEFS@
 INSTALL      = @INSTALL@
 RANLIB       = @RANLIB@
 INSTALL_DATA = @INSTALL_DATA@

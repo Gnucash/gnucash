@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.3\n"
-"POT-Creation-Date: 2000-03-23 03:24-0800\n"
+"POT-Creation-Date: 2000-03-24 14:08-0800\n"
 "PO-Revision-Date: 2000-03-23 22:24+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -291,7 +291,8 @@ msgstr "Le chargement du fichier QIF a échoué."
 
 #: messages-i18n.c:45
 msgid "QIF file load failed. Check settings and reload."
-msgstr "Le chargement du fichier QIF a échoué.Vérifiez les paramètres et rechargez"
+msgstr ""
+"Le chargement du fichier QIF a échoué.Vérifiez les paramètres et rechargez"
 
 #: messages-i18n.c:46
 msgid "The source for price quotes"
@@ -1438,7 +1439,7 @@ msgstr "Préferences"
 msgid "Price"
 msgstr "Cours"
 
-#: messages-i18n.c:314
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:978
 msgid "Print"
 msgstr "Imprimer"
 
@@ -2627,8 +2628,8 @@ msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
 msgstr ""
-"L'arrière-plan en couleur pour une répartition active en mode multi lignes et "
-"en modes auto"
+"L'arrière-plan en couleur pour une répartition active en mode multi lignes "
+"et en modes auto"
 
 #: po/guile_strings.txt:278
 msgid "This is a multi choice option."
@@ -2796,21 +2797,62 @@ msgstr "Type de compte:"
 msgid "Mutual"
 msgstr "Fonds communs"
 
-#: src/gnome/glade-gnc-dialogs.c:763
-msgid "Print Check"
+#: src/gnome/glade-gnc-dialogs.c:786
+msgid "Print Dialog"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:794
+#, fuzzy
+msgid "Print Setup"
 msgstr "Imprimer chèque"
 
-#: src/gnome/glade-gnc-dialogs.c:778
-msgid "Select Printer"
-msgstr "Sélectionner une imprimante"
+#: src/gnome/glade-gnc-dialogs.c:815
+#, fuzzy
+msgid "Printer:"
+msgstr "Imprimer"
 
-#: src/gnome/glade-gnc-dialogs.c:785
+#: src/gnome/glade-gnc-dialogs.c:823
+msgid "Paper size:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:831
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:876
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:884
+#, fuzzy
+msgid "Selected"
+msgstr "Sélectionner un fichier"
+
+#: src/gnome/glade-gnc-dialogs.c:906
+#, fuzzy
+msgid "From:"
+msgstr "Depuis"
+
+#: src/gnome/glade-gnc-dialogs.c:921
+#, fuzzy
+msgid "To:"
+msgstr "Vers"
+
+#: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
+#, fuzzy
+msgid "Select..."
+msgstr "Tout sélectionner"
+
+#: src/gnome/glade-gnc-dialogs.c:986
 msgid "Preview"
 msgstr "Prévisualisation"
 
-#: src/gnome/print-session.c:118
+#: src/gnome/print-session.c:220
 msgid "You must select a printer first."
 msgstr "Vous devez dabord sélectionner une imprimante."
+
+#~ msgid "Select Printer"
+#~ msgstr "Sélectionner une imprimante"
 
 #~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
 #~ msgstr ""

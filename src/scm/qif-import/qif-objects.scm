@@ -142,7 +142,7 @@
 (define <qif-split>
   (make-simple-class 
    'qif-split
-   '(category class memo amount category-is-account? mark)))
+   '(category class memo amount category-is-account? matching-cleared mark)))
 
 (define (qif-split:category self)
   (simple-obj-getter self <qif-split> 'category))
@@ -182,6 +182,12 @@
 
 (define (qif-split:set-mark! self value)
   (simple-obj-setter self <qif-split> 'mark value))
+
+(define (qif-split:matching-cleared self)
+  (simple-obj-getter self <qif-split> 'matching-cleared))
+
+(define (qif-split:set-matching-cleared! self value)
+  (simple-obj-setter self <qif-split> 'matching-cleared value))
 
 (define (qif-split:category-is-account? self)
   (simple-obj-getter self <qif-split> 'category-is-account?))

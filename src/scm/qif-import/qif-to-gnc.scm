@@ -286,11 +286,10 @@
                             (qif-split:memo (car (qif-xtn:splits qif-xtn)))))
     
     (let ((cleared (qif-xtn:cleared qif-xtn)))
-      (cond ((eq? 'cleared cleared)
-             (gnc:split-set-reconcile gnc-near-split #\c))
-            ((eq? 'reconciled cleared)
-             (gnc:split-set-reconcile gnc-near-split #\r))))
-            
+      (if (or 
+           (eq? 'cleared cleared)
+           (eq? 'reconciled cleared))
+          (gnc:split-set-reconcile gnc-near-split #\c)))            
         
     ;; iterate over QIF splits 
     (for-each 
@@ -375,12 +374,13 @@
                  (list-ref far-acct-info 1))
            (set! far-acct (hash-ref gnc-acct-hash far-acct-name))))
          
-         ;; set the reconcile status
-         (let ((cleared (qif-xtn:cleared qif-xtn)))
-           (cond ((eq? 'cleared cleared)
-                  (gnc:split-set-reconcile gnc-far-split #\c))
-                 ((eq? 'reconciled cleared)
-                  (gnc:split-set-reconcile gnc-far-split #\r))))
+         ;; set the reconcile status.  I thought I could set using 
+         ;; the quicken type, but it looks like #\r reconcile
+         ;; states aren't preserved across gnucash save/restores.
+         (let ((cleared (qif-split:matching-cleared qif-split)))
+           (if (or (eq? 'cleared cleared)
+                   (eq? 'reconciled cleared))
+               (gnc:split-set-reconcile gnc-far-split #\c)))
          
          ;; finally, plug the splits into the accounts 
          (gnc:transaction-append-split gnc-xtn gnc-far-split)
@@ -405,11 +405,13 @@
    (lambda (split)
      (if (not (qif-split:mark split))
          (if (qif-split:category-is-account? split)
-             (begin                
+             (begin 
                (qif-split:set-mark! split #t)
-               (qif-import:mark-matching-split split xtn qif-file qif-files))
-             (qif-split:set-mark! split #t))))   
-   (qif-xtn:splits xtn))
+               (qif-split:set-matching-cleared! 
+                split
+                (qif-import:mark-matching-split split xtn qif-file qif-files))
+               (qif-split:set-mark! split #t)))))
+     (qif-xtn:splits xtn))
   (qif-xtn:set-mark! xtn #t))
 
 (define (qif-import:mark-matching-split split xtn qif-file qif-files)
@@ -419,6 +421,7 @@
         (amount (- (qif-split:amount split)))
         (memo (qif-split:memo split))        
         (bank-xtn? (qif-xtn:bank-xtn? xtn))
+        (cleared? #f)
         (done #f))
 
     (if bank-xtn?
@@ -450,6 +453,7 @@
                       (begin
 			;;; (display "found ")(write (car splits))(newline)
                         (qif-split:set-mark! (car splits) #t)
+                        (set! cleared? (qif-xtn:cleared (car xtns)))
                         (set! done #t)
                         (let ((all-marked #t))
                           (for-each 
@@ -466,7 +470,8 @@
                 (xtn-loop (cdr xtns)))))
       (if (and (not done)
                (not (null? (cdr files))))
-          (file-loop (cdr files))))))
+          (file-loop (cdr files))))
+    cleared?))
 
 
 

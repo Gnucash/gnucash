@@ -1,5 +1,9 @@
 2000-03-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* Makefile.common: add the value of DEFS to the compile flags
+
+	* Makefile.init.in: get the value for DEFS.
+
 	* src/register/numcell.c: new cell for entering numbers. Handles
 	accelerators for increasing/decreasing the number and remembers
 	the largest number for auto-filling.
