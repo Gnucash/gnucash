@@ -40,7 +40,8 @@
 #include "gnc-ofx-import.h"
 #include "gnc-file-dialog.h"
 #include "gnc-engine-util.h"
-
+#include "gnc-book.h"
+#include "gnc-ui-util.h"
 
 static short module = MOD_IMPORT;
 /********************************************************************\
@@ -64,6 +65,7 @@ void gnc_file_ofx_import (void)
   extern int ofx_STATUS_msg;
   char *filenames[3];
   char file[255] = "/home/bock/pfe/scratch/stmtrs_spec201.xml";
+  char *selected_filename;
 
   ofx_PARSER_msg = false;
   ofx_DEBUG_msg = false;
@@ -72,25 +74,24 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
+  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  DEBUG("gnc_file_ofx_import(): Begin...\n");
 
-  /* if (gnc_forall_gui_components (DRUID_QIF_IMPORT_CM_CLASS,
-     show_handler, NULL))
-     return;*/
-
-  /* pop up the QIF File Import dialog box */
-  /*gnc_ui_qif_import_druid_make();*/
-  printf("gnc_file_ofx_import(): Begin...\n");
-
-  strncpy(file,gnc_file_dialog ("Select an OFX/QFX file to process",
+selected_filename = gnc_file_dialog ("Select an OFX/QFX file to process",
 				NULL,
-				NULL), 255);
+				NULL);
 
-
-  filenames[0]=NULL;
-  filenames[1]=file;
-  filenames[2]=NULL;
-  ofx_proc_file(2, filenames);
-
+  if(selected_filename!=NULL)
+    {
+  /*strncpy(file,selected_filename, 255);*/
+  DEBUG("Filename found: %s",selected_filename);
+      filenames[0]=NULL;
+      filenames[1]= selected_filename;
+/*      filenames[1]=file;*/
+      filenames[2]=NULL;
+      DEBUG("Opening selected file");
+      ofx_proc_file(2, filenames);
+    }
 
 }
 
@@ -111,7 +112,7 @@ int ofx_proc_transaction(struct OfxTransactionData data)
   gnc_numeric gnc_amount;
   
   if(data.account_id_valid==true){
-    account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
+    account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE);
     if(account!=NULL)
       {
 	book = xaccAccountGetBook(account);
@@ -280,32 +281,52 @@ int ofx_proc_statement(struct OfxStatementData data)
 int ofx_proc_account(struct OfxAccountData data)
 {
   Account *selected_account;
+  gnc_commodity_table * commodity_table;
+  gnc_commodity * default_commodity;
+  GNCAccountType default_type=NO_TYPE;
 
   if(data.account_id_valid==true){
     //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");
     printf("WRITEME:  ofx_proc_account() Fill in the account type, default name, currency, etc.  \n"); 
-    selected_account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
+    commodity_table = gnc_book_get_commodity_table(gnc_get_current_book());
+    if( data.currency_valid == true)
+      {
+	DEBUG("Currency from libofx: %s",data.currency);
+	default_commodity = gnc_commodity_table_lookup(commodity_table,
+						  GNC_COMMODITY_NS_ISO,
+						  data.currency);
+
+
+      }
+    else
+      {
+	default_commodity = NULL;
+      }
+    
+    if(data.account_type_valid==true){
+      switch(data.account_type){
+      case OFX_CHECKING : default_type=BANK;
+	break;
+      case OFX_SAVINGS : default_type=BANK;
+	break;
+      case OFX_MONEYMRKT : default_type=MONEYMRKT;
+	break;
+      case OFX_CREDITLINE : default_type=CREDITLINE;
+	break;
+      case OFX_CMA : default_type=NO_TYPE;
+	break;
+      case OFX_CREDITCARD : default_type=CREDIT;
+	break;
+      default: PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
+      }
+    }
+
+    selected_account = gnc_import_select_account(data.account_id, 1, NULL, default_commodity, default_type);
   }
   else
     {
-      printf("Gnucash ofx_proc_account():FATAL ERROR' account online ID not available\n");
+      PERR("Gnucash ofx_proc_account():FATAL ERROR' account online ID not available\n");
     }
-  /*  if(data.account_type_valid==true){
-      switch(data.account_type){
-      case OFX_CHECKING : printf("!Type:Bank\n");
-      break;
-      case OFX_SAVINGS : printf("!Type:Bank\n");
-      break;
-      case OFX_MONEYMRKT : printf("!Type:Oth A\n");
-      break;
-      case OFX_CREDITLINE : printf("!Type:Oth L\n");
-      break;
-      case OFX_CMA : printf("!Type:Oth A\n");
-      break;
-      case OFX_CREDITCARD : printf("!Type:CCard\n");
-      break;
-      default: printf("WRITEME: ofx_proc_account() This is an unknown account type!");
-      }
-      }*/
+
   return 0;
 }
