@@ -235,7 +235,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 	  g_free(tmp);
 	}
 	if(data.date_funds_available_valid==true){
-	  strftime(dest_string,sizeof(dest_string),"%c %Z",localtime(&(data.date_funds_available)));
+	  Timespec ts;
+	  timespecFromTime_t(&ts, data.date_funds_available);
+	  gnc_timespec_to_iso8601_buff (ts, dest_string);
 	  tmp=notes;
 	  notes=g_strdup_printf("%s%s%s",tmp,"|Date funds available:", dest_string);
 	  g_free(tmp);

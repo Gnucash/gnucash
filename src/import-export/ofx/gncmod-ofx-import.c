@@ -20,8 +20,8 @@ int libgncmod_ofx_LTX_gnc_module_current  = 0;
 int libgncmod_ofx_LTX_gnc_module_revision = 0;
 int libgncmod_ofx_LTX_gnc_module_age      = 0;
 
-static GNCModule bus_core;
-static GNCModule file;
+//static GNCModule bus_core;
+//static GNCModule file;
 
 /* forward references */
 char *libgncmod_ofx_LTX_gnc_module_path(void);

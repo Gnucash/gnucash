@@ -6,6 +6,9 @@
 	  so users can define where to look for libofx.
 	* import-export/ofx/Makefile.am -- use new configure glue
 
+	* import-export/ofx/gnc-ofx-import.c: use gnc_timespec_to_iso8601_buff() instead of strftime()
+	* import-export/ofx/gncmod-ofx-import.c: "remove" two unused variables
+	
 2002-10-28  Christian Stimming  <stimming@tuhh.de>
 
 	* intl-scm/xgettext.scm: Add the file name of scheme files to
