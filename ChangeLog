@@ -1,3 +1,174 @@
+2002-01-09  Rob Browning  <rlb@defaultvalue.org>
+
+	* lib/srfi/Makefile.am: handle conditional per-SRFI install.
+
+	* src/engine/engine-helpers.c: removed various glist processing
+	helpers -- now handled by g-wrap.  However g-wrap doesn't ATM
+	publish the glist->list and list->glist functions on the scheme
+	side.  If we need that, it can be added.
+
+	* configure.in: switch to check and only install the srfis we
+	need. do the same for guile-www.
+	(AM_PATH_GWRAP): require g-wrap 1.3.2. 
+	(CFLAGS): add -Wno-uninitialized and -Wno-unused to accomodate
+	g-wrap issues.
+	(GNUCASH_ENGINE_LIBS): remove libgw-glib -- now provided by g-wrap.
+
+	* src/scm/main.scm (gnc:safe-strcmp): new public function -- we
+	were using a g-wrapped version, but that seemed more expensive
+	than necessary.
+
+	* src/gnome-utils/dialog-options.c
+	(gnc_option_set_ui_value_internal): switch to using
+	gnc_scm_list_to_glist directly.
+	(gnc_option_get_ui_value_internal): switch to using
+	gnc_scm_glist_to_list directly.
+
+	* src/report/standard-reports/transaction.scm (trep-renderer):
+	quit using gnc:glist->list and gnc:list->glist -- new g-wrap
+	eliminates need.
+
+	* src/report/standard-reports/register.scm (reg-renderer): quit
+	using gnc:glist->list -- new g-wrap eliminates need.
+
+	* src/report/standard-reports/average-balance.scm (renderer): quit
+	using gnc:glist->list and gnc:list->glist -- new g-wrap eliminates
+	need.
+
+	* src/report/standard-reports/aging.scm (aging-renderer): quit
+	using gnc:glist->list -- new g-wrap eliminates need.
+
+	* src/report/report-system/report-utilities.scm
+	(gnc:account-get-comm-balance-at-date): quit using gnc:glist->list
+	-- new g-wrap eliminates need.
+
+	* src/report/report-system/commodity-utilities.scm
+	(gnc:get-match-commodity-splits): quit using gnc:list->glist --
+	new g-wrap eliminates need.
+	(gnc:get-match-commodity-splits): quit using gnc:glist->list --
+	new g-wrap eliminates need.
+
+	* src/report/report-gnome/window-report.c: 
+	g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/report/report-gnome/dialog-column-view.c:
+	g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/report/report-system/report-system.scm: fix for new g-wrap.
+
+	* src/report/report-gnome/Makefile.am: fix for new g-wrap.
+
+	* src/report/locale-specific/us/taxtxf.scm (make-split-list): quit
+	using gnc:glist->list -- new g-wrap eliminates need.
+
+	* src/import-export/qif-import/qif-merge-groups.scm
+	(gnc:group-get-transactions): quit using gnc:list->glist -- new
+	g-wrap eliminates need.
+	(gnc:group-find-duplicates): quit using gnc:glist->list -- new
+	g-wrap eliminates need.
+	(gnc:group-find-duplicates): quit using gnc:glist->list -- new
+	g-wrap eliminates need.
+
+	* src/import-export/qif-import/druid-qif-import.c:
+	g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/register/register-core/Makefile.am: fix for new g-wrap.
+
+	* src/import-export/binary-import/Makefile.am: fix for new g-wrap.
+
+	* src/gnome-utils/Makefile.am: fix for new g-wrap.
+
+	* src/report/report-gnome/gw-report-gnome-spec.scm: fix for new g-wrap.
+
+	* src/register/register-core/gw-register-core-spec.scm: fix for
+	new g-wrap.
+
+	* src/import-export/binary-import/gw-binary-import-spec.scm: fix
+	for new g-wrap.
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: fix for new g-wrap.
+
+	* src/gnome/window-register.c: g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/gnome/top-level.c: g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/gnome/gw-gnc-spec.scm: fix for new g-wrap.
+
+	* src/gnome/Makefile.am: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-foo/gnc-mod-foo.c: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-bar/gnc-mod-bar.c: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-baz/gnc-mod-baz.c: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-foo/foo-gwrap.scm: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-bar/bar-gwrap.scm: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-baz/baz-gwrap.scm: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-foo/Makefile.am: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-bar/Makefile.am: fix for new g-wrap.
+
+	* src/gnc-module/test/mod-baz/Makefile.am: fix for new g-wrap.
+
+	* src/gnc-module/gw-gnc-module-spec.scm: fix for new g-wrap.
+
+	* src/gnc-module/gnc-module.scm: fix for new g-wrap.
+
+	* src/gnc-module/Makefile.am: fix for new g-wrap.
+
+	* src/engine/test/Makefile.am (LDADD): remove libgw-glib.
+
+	* src/engine/kvp-scm.c: g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/engine/gw-kvp-spec.scm: fix for new g-wrap.
+
+	* src/engine/gw-engine-spec.scm: fix for new g-wrap.
+
+	* src/engine/gncmod-engine.c: fix for new g-wrap.
+
+	* src/engine/engine.scm: fix for new g-wrap.
+
+	* src/engine/engine-helpers.h: accomodate changes to
+	engine-helpers.c.
+
+	* src/engine/Makefile.am: fix for new g-wrap.
+
+	* src/core-utils/gw-core-utils-spec.scm: fix for new g-wrap.
+
+	* src/core-utils/Makefile.am: fix for new g-wrap.
+
+	* src/business/business-gnome/gw-business-gnome-spec.scm: fix for
+	new g-wrap.
+
+	* src/business/business-gnome/Makefile.am: fix for new g-wrap.
+
+	* src/business/business-core/gw-business-core-spec.scm: fix for
+	new g-wrap.
+
+	* src/business/business-core/Makefile.am: fix for new g-wrap.
+
+	* src/backend/postgres/test/Makefile.am (LDADD): remove libgw-glib.la.
+
+	* src/backend/file/test/Makefile.am (LDADD): remove libgw-glib.la.
+
+	* src/app-utils/test/Makefile.am (LDADD): remove libgw-glib.la.
+
+	* src/app-utils/option-util.c: g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/app-utils/gw-app-utils-spec.scm: fix for new g-wrap.
+
+	* src/app-utils/guile-util.c: g-wrap-runtime-guile.h -> g-wrap-wct.h
+
+	* src/app-utils/Makefile.am: fix for new g-wrap.
+
+	* src/app-file/gw-app-file-spec.scm: fix for new g-wrap.
+
+	* src/app-file/Makefile.am: fix for new g-wrap.
+
 2002-01-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/backend/postgres/test/test-db.c: test for new accounts
