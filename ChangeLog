@@ -1,3 +1,12 @@
+2005-02-15  Derek Atkins  <derek@ihtfp.com>
+
+	Chris Shoemaker's patch: Avoid use of unitialized values in guid.c.
+	* Avoid use of uninitialized values in guid.c
+	  - prevent md5 seeding from using uninitialized stack contents
+	  - give used/null GUID recognizable memory signature
+	  - add a simple test case that helped testing for use of
+	    uninitialized values
+
 2005-02-13  Derek Atkins  <derek@ihtfp.com>
 
 	Chris Shoemaker's patch: Fix various memory leaks.

@@ -99,17 +99,18 @@ guid_free (GUID *guid)
 const GUID *
 guid_null(void)
 {
-  static int null_inited = (0 == 1);
+  static int null_inited = 0;
   static GUID null_guid;
 
   if (!null_inited)
   {
     int i;
+    char *tmp = "NULLGUID.EMPTY.";
 
     for (i = 0; i < 16; i++)
-      null_guid.data[i] = 0;
+      null_guid.data[i] = tmp[i];
 
-    null_inited = (0 == 0);
+    null_inited = 1;
   }
 
   return &null_guid;
@@ -186,6 +187,7 @@ init_from_file(const char *filename, size_t max_size)
   size_t file_bytes;
   FILE *fp;
 
+  memset(&stats, 0, sizeof(stats));
   if (stat(filename, &stats) != 0)
     return 0;
 
@@ -244,6 +246,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
     if ((result < 0) || (result >= (int)sizeof(filename)))
       continue;
 
+    memset(&stats, 0, sizeof(stats));
     if (stat(filename, &stats) != 0)
       continue;
     md5_process_bytes(&stats, sizeof(stats), &guid_context);
@@ -298,7 +301,8 @@ guid_init(void)
 {
   size_t bytes = 0;
 
-  guid_memchunk_init();
+  /* Not needed; taken care of on first malloc.
+   * guid_memchunk_init(); */
 
   md5_init_ctx(&guid_context);
 
@@ -388,6 +392,7 @@ guid_init(void)
   {
     char string[1024];
 
+    memset(string, 0, sizeof(string));
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);

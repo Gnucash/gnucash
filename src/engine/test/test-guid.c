@@ -16,8 +16,20 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofsession.h"
+#include "guid.h"
 
+static void test_null_guid(void)
+{
+  GUID g;
+  GUID *gp;
 
+  g = guid_new_return();
+  gp = guid_malloc();
+  guid_new(gp);
+
+  do_test(guid_equal(guid_null(), guid_null()), "null guids equal");
+  do_test(!guid_equal(&g, gp), "two guids equal");
+}
 
 static void
 run_test (void)
@@ -47,6 +59,9 @@ run_test (void)
 	 ent->e_type = type;
 	 qof_collection_insert_entity (col, ent);
   }
+
+  /* Make valgrind happy -- destroy the session. */
+  qof_session_destroy(sess);
 }
 
 static void
@@ -55,7 +70,8 @@ main_helper (void *closure, int argc, char **argv)
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
   do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "couldn't load engine");
 
-  run_test ();
+  test_null_guid();
+  run_test();
 
   print_test_results();
   exit(get_rv());
