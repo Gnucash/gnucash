@@ -291,6 +291,7 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   int    position=0;
   char *windowname;
   char buf [BUFSIZE];
+  short reg_type;
 
   /******************************************************************\
    * Set up the menubar menu-items.                                 *
@@ -492,7 +493,38 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   strcpy (buf, "reg");
   strcat(buf,accRes[regData->type]);
 
-  regData->ledger = xaccMallocBasicRegister (BANK_REGISTER);
+  switch (regData->type) {
+    case BANK:
+      reg_type = BANK_LEDGER;
+      break;
+    case CASH:
+      reg_type = CASH_LEDGER;
+      break;
+    case ASSET:
+      reg_type = ASSET_LEDGER;
+      break;
+    case CREDIT:
+      reg_type = CREDIT_LEDGER;
+      break;
+    case LIABILITY:
+      reg_type = LIABILITY_LEDGER;
+      break;
+    case STOCK:
+    case MUTUAL:
+      reg_type = STOCK_LEDGER;
+      break;
+    case INCOME:
+      reg_type = INCOME_LEDGER;
+      break;
+    case EXPENSE:
+      reg_type = EXPENSE_LEDGER;
+      break;
+    case EQUITY:
+      reg_type = EQUITY_LEDGER;
+      break;
+  }
+
+  regData->ledger = xaccMallocBasicRegister (reg_type);
   reg = xaccCreateTable (regData->ledger->table, frame, buf);
   
   regData->reg     = reg;
