@@ -23,8 +23,6 @@
                         (else (list (substring locale 0 2)
                                     (substring locale 0 5)
                                     locale)))))
-    (display locale) (newline)
-    (display strings) (newline)
     (reverse (cons "C" strings))))
 
 (define (gnc:default-doc-dirs)
