@@ -17,7 +17,7 @@ backend does not support some of the newer GnuCash features;
 in particular, it doesn't support the business objects needed for
 the business accounting. It also doesn't currently support 
 scheduled/recurring transactions.  Although the development is
-currently dormant, we beleive that it may heat up real soon, 
+currently dormant, we believe that it may heat up real soon, 
 since there is a core group of developers who are interested 
 in making SQL the default for all future versions of GnuCash.
 
@@ -25,7 +25,7 @@ As long as development is dormant, note that you may not get
 prompt support on the mailing list, and, if you find bugs, they
 might not be fixed quickly.
 
-Currently, only postgres is supported, but other databases are 
+Currently, only Postgres is supported, but other databases are 
 planned.  See also the 'to be done' list at the bottom for more 
 detail.
 
@@ -299,7 +299,7 @@ Core bugs/features that still need work:
 
 High Priority:
 --------------
-Currently, the databasse backend is completely missing support for
+Currently, the database backend is completely missing support for
 "lots", and thus cannot support capital gains computations.  It is 
 also missing support for business objects.
 
