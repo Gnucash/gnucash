@@ -244,6 +244,11 @@ do
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
+      echo
+      echo "*** WARNING ***"
+      echo "*** Ignore any instruction above about running aclocal by hand."
+      echo "*** I repeat, do not run aclocal by hand.  You have been warned....."
+      echo
       if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
         echo "Running ${INTLTOOLIZE} ..."
         ${INTLTOOLIZE} --copy --force --automake
@@ -267,6 +272,7 @@ do
 
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running ${AUTOHEADER}..."
+	echo "Note: you can ignore messages about using deprecated aux files"
 	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
       fi
       echo "Running ${AUTOMAKE} --gnu $am_opt ..."
