@@ -25,6 +25,7 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
+#include <Xm/RowColumn.h>
 
 #include "Account.h"
 #include "BuildMenu.h"
@@ -34,12 +35,14 @@
 typedef struct _accMenuEntry
 {
   int option;
-  int *chosen;
+  char * label;
+  struct _accountMenu *am;
 } AccMenuEntry;
 
 typedef struct _accountMenu
 {
   Widget menu_widget;
+  Widget pulldown_widget;
   int choice;
   int numMenuEntries;
   AccMenuEntry **menuEntry;
@@ -89,11 +92,22 @@ xaccGetAccountMenuSelection (AccountMenu *menu) {
 static
 void
 xaccAccountMenuCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
+  XmString labelStr;
   AccMenuEntry *menuEntry = (AccMenuEntry *)cd;
+  AccountMenu *menu;
+
+  menu = (AccountMenu *) (menuEntry->am);
   
-  *(menuEntry->chosen) = menuEntry->option;
-  }
+  menu->choice = menuEntry->option;
+
+  labelStr = XmStringCreateSimple (menuEntry->label);
+  XtVaSetValues (menu->pulldown_widget,
+                 XmNlabelString, labelStr,
+                 NULL );
+  XmStringFree (labelStr);
+
+}
 
 /********************************************************************\
  * build menus recuresively                                         *
@@ -108,20 +122,24 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
   MenuItem   *menuList;
   int        i;
   int        nacc;
+  char * tmp;
   
   if (NULL == grp) return NULL;
   
   nacc = grp->numAcc;
 
-  menuList = (MenuItem *) _malloc((nacc+pad+1)*sizeof(MenuItem));
+  menuList = (MenuItem *) _malloc((2*nacc+pad+1)*sizeof(MenuItem));
   
   for( i=0; i<pad; i++ )
     {
     accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
     accData->menuEntry[*offset]->option = -1;
-    accData->menuEntry[*offset]->chosen = &(accData->choice);
+    accData->menuEntry[*offset]->label = "(none)";
+    accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
     
-    menuList[i].label         = "(none)";
+    tmp = (char *) _malloc (strlen ("(none)")+1);
+    strcpy (tmp, "(none)");
+    menuList[i].label         = tmp;
     menuList[i].wclass        = &xmPushButtonWidgetClass;
     menuList[i].mnemonic      = 0;
     menuList[i].accelerator   = NULL;
@@ -138,9 +156,12 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     
     accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
     accData->menuEntry[*offset]->option = xaccGetAccountID (acc);
-    accData->menuEntry[*offset]->chosen = &(accData->choice);
+    accData->menuEntry[*offset]->label = acc->accountName;
+    accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
     
-    menuList[i+pad].label         = acc->accountName;
+    tmp = (char *) _malloc (strlen (acc->accountName) + 1);
+    strcpy (tmp, acc->accountName);
+    menuList[i+pad].label         = tmp;
     menuList[i+pad].wclass        = &xmPushButtonWidgetClass;
     menuList[i+pad].mnemonic      = 0;
     menuList[i+pad].accelerator   = NULL;
@@ -154,16 +175,21 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
        pad ++;
        accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
        accData->menuEntry[*offset]->option = xaccGetAccountID (acc);
-       accData->menuEntry[*offset]->chosen = &(accData->choice);
+       accData->menuEntry[*offset]->label = acc->accountName;
+       accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
        
-       menuList[i+pad].label         = acc->accountName;
+       /* submenu lists in the menu will be distintively bracketed for easy visual id */
+       tmp = (char *) _malloc (strlen (acc->accountName) + 3);
+       strcpy (tmp, "[");
+       strcat (tmp, acc->accountName);
+       strcat (tmp, "]");
+       menuList[i+pad].label         = tmp;
        menuList[i+pad].wclass        = &xmPushButtonWidgetClass;
        menuList[i+pad].mnemonic      = 0;
        menuList[i+pad].accelerator   = NULL;
        menuList[i+pad].accel_text    = NULL;
        menuList[i+pad].callback      = xaccAccountMenuCB;
        menuList[i+pad].callback_data = accData->menuEntry[*offset];
-       menuList[i+pad].subitems      = (MenuItem *) NULL;
 
        (*offset) ++;
        menuList[i+pad].subitems      = xaccBuildAccountSubMenu (acc->children, accData, offset, 0);
@@ -187,6 +213,8 @@ xaccFreeAccountSubMenu (MenuItem *menuList)
 
   i = 0;
   while (NULL != menuList[i].label) {
+    _free (menuList[i].label);
+    menuList[i].label = NULL;
     xaccFreeAccountSubMenu (menuList[i].subitems);
     i++;
   }
@@ -200,8 +228,10 @@ xaccFreeAccountSubMenu (MenuItem *menuList)
 AccountMenu *
 xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label) 
 {
+  Widget     bar_widget;
   MenuItem   *menuList;
   AccountMenu *accData;
+  XmString   labelStr;
   int        i;
   int        offset = 0;
   int        nacc;
@@ -222,11 +252,22 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
     accData->menuEntry[i] = NULL;
   }
 
+  /* top-level widget will be a menu widget; this is the only thing
+   * that will accept cascading menus as a parent */
+  bar_widget = XmCreateMenuBar( parent, "accmenubar", NULL, 0);
+  accData->menu_widget = bar_widget;
+
+  XtVaSetValues (bar_widget,
+                 XmNorientation, XmVERTICAL,
+                 NULL );
+
+  XtManageChild (bar_widget);
+
   offset = 0;
   menuList = xaccBuildAccountSubMenu (grp, accData, &offset, pad);
   
-  accData->menu_widget = BuildMenu( parent, XmMENU_OPTION, label, 'F', 
-                           False, 0, menuList );
+  accData->pulldown_widget = 
+        BuildMenu( bar_widget, XmMENU_PULLDOWN, label, 'F', False, 0, menuList );
   
   xaccFreeAccountSubMenu (menuList);
   

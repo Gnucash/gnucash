@@ -106,16 +106,12 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
      */
     if( items[i].subitems )
       {
-/*
- * hack alert -- what we want is a cascading option menu, and this
- * seems to be the esiest way to get it, even if its technically
- * illegal.  I dunno, what else am I supposed to do ????
- *     if( menu_type == XmMENU_OPTION ) xxxxxxxxxxxxxxxx 
- *	{
- *	XtWarning("You can't have submenus from option menu items.");
- *	continue;
- *	} else 
- */
+
+      if( menu_type == XmMENU_OPTION )
+ 	{
+ 	XtWarning("You can't have submenus from option menu items.");
+ 	continue;
+ 	} else 
         {
         widget = BuildMenu( menu, XmMENU_PULLDOWN, items[i].label, 
 			    items[i].mnemonic, tear_off, 0, 

@@ -27,7 +27,7 @@
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
 #include <Xm/Form.h>
-#include <Xm/LabelGP.h>
+#include <Xm/LabelG.h>
 #include <Xm/PushB.h>
 #include <Xm/Text.h>
 #include <string.h>

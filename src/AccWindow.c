@@ -271,12 +271,14 @@ accWindow( Widget parent )
 			     XmNrightPosition,   35,        /* 35% */
 			     NULL );
   
-  accData->accMenu = xaccBuildAccountMenu (grp, form, "");
+  accData->accMenu = xaccBuildAccountMenu (grp, form, "Pick One");
   group_menu = xaccGetAccountMenuWidget (accData->accMenu);
 
   /* account subroups are not implemented, so grey this out */
+/*
   XtSetSensitive (label, False);
   XtSetSensitive (group_menu, False);
+*/
    
   XtVaSetValues( group_menu,
                              XmNtopAttachment,  XmATTACH_WIDGET,
