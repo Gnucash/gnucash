@@ -1,3 +1,8 @@
+2003-12-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c:  Rich Johnson's patch to convert
+	  atoll() -> strtoll()
+
 2003-12-08  Benoit Grégoire  <bock@step.polymtl.ca>
 	*src/import-export/log-replay/gnc-log-replay.c:  Increase read buffer size.
 	Hopefully fixes 127421, but this time someone please do test the fix...
