@@ -9,7 +9,7 @@
 ;(gnc:support "qif-import/qif-parse.scm")
 
 (define qif-category-compiled-rexp 
-  (make-regexp "^ *(\\[)?([^]/]*)(]?)(/?)([^\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
+  (make-regexp "^ *(\\[)?([^]/\\|]*)(]?)(/?)([^\|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
 (define qif-date-compiled-rexp 
   (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9]).*$"))
@@ -27,35 +27,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category 
 ;;  this one just gets nastier and nastier. 
-;;  ATM we return a list of 3 elements: parsed category name 
-;;  (without [] if it was an account name), bool stating if it 
-;;  was an account name, and string representing the class name 
-;;  (or #f if no class).
+;;  ATM we return a list of 6 elements: 
+;;    parsed category name (without [] if it was an account name)
+;;    bool stating if it was an account name
+;;    class of account or #f 
+;;    string representing the "miscx category" if any 
+;;    bool if miscx category is an account
+;;    class of miscx cat or #f 
 ;;  gosh, I love regular expressions. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-split:parse-category self value)
   (let ((match (regexp-exec qif-category-compiled-rexp value)))
     (if match
-        (begin 
-          (list (match:substring match 2)
-                (if (and (match:substring match 1)
-                         (match:substring match 3))
-                    #t #f)
-                (if (match:substring match 4)
-                    (match:substring match 5)
-                    #f)
-                ;; miscx category name 
-                (if (match:substring match 6)
-                    (match:substring match 8)
-                    #f)
-                ;; is it an account? 
-                (if (and (match:substring match 7)
-                         (match:substring match 9))
-                    #t #f)
-                (if (match:substring match 10)
-                    (match:substring match 11)
-                    #f)))                
+        (let ((rv
+               (list (match:substring match 2)
+                     (if (and (match:substring match 1)
+                              (match:substring match 3))
+                         #t #f)
+                     (if (match:substring match 4)
+                         (match:substring match 5)
+                         #f)
+                     ;; miscx category name 
+                     (if (match:substring match 6)
+                         (match:substring match 8)
+                         #f)
+                     ;; is it an account? 
+                     (if (and (match:substring match 7)
+                              (match:substring match 9))
+                         #t #f)
+                     (if (match:substring match 10)
+                         (match:substring match 11)
+                         #f))))
+          rv)
         (begin 
           (display "qif-split:parse-category : can't parse ")
           (display value) (newline)

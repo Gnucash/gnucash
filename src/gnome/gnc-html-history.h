@@ -34,6 +34,9 @@ struct _gnc_html_history_node {
   gchar   * label;  
 };
 
+typedef void (* gnc_html_history_destroy_cb)(gnc_html_history_node * n,
+                                             gpointer user_data);
+
 gnc_html_history      * gnc_html_history_new(void);
 void                    gnc_html_history_destroy(gnc_html_history * hist);
 
@@ -44,6 +47,9 @@ gnc_html_history_node * gnc_html_history_forward(gnc_html_history * h);
 gnc_html_history_node * gnc_html_history_back(gnc_html_history * h);
 int                     gnc_html_history_forward_p(gnc_html_history * h);
 int                     gnc_html_history_back_p(gnc_html_history * h);
+void  gnc_html_history_set_node_destroy_cb(gnc_html_history * h,
+                                           gnc_html_history_destroy_cb cb,
+                                           gpointer cb_data);
 
 gnc_html_history_node * gnc_html_history_node_new(URLType type,
                                                   const gchar * location, 
@@ -51,6 +57,7 @@ gnc_html_history_node * gnc_html_history_node_new(URLType type,
 
 void                    gnc_html_history_node_destroy(gnc_html_history_node * 
                                                       node);
+
 
 #endif
 

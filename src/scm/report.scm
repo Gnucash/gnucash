@@ -144,7 +144,7 @@
           options))))
 
 (define <report> 
-  (make-record-type "<report>" '(type id options ctext)))
+  (make-record-type "<report>" '(type id options children dirty? ctext)))
 
 (define gnc:report-type 
   (record-accessor <report> 'type))
@@ -164,6 +164,22 @@
 (define gnc:report-set-options!
   (record-modifier <report> 'options))
 
+(define gnc:report-children 
+  (record-accessor <report> 'children))
+
+(define gnc:report-set-children!
+  (record-modifier <report> 'children))
+
+(define (gnc:report-add-child! report child)
+  (gnc:report-set-children! report 
+                            (cons child (gnc:report-children report))))
+
+(define gnc:report-dirty? 
+  (record-accessor <report> 'dirty?))
+
+(define gnc:report-set-dirty?!
+  (record-modifier <report> 'dirty?))
+
 (define gnc:report-ctext 
   (record-accessor <report> 'ctext))
 
@@ -171,7 +187,7 @@
   (record-modifier <report> 'ctext))
 
 (define (gnc:make-report template-name . rest)
-  (let ((r ((record-constructor <report>) template-name #f #f #f))
+  (let ((r ((record-constructor <report>) template-name #f #f '() #t #f))
         (template (hash-ref *gnc:_report-templates_* template-name))
         (id *gnc:_report-next-serial_*))
     (gnc:report-set-id! r id)
@@ -185,10 +201,16 @@
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
+(define (gnc:report-remove-by-id id)
+  (let ((r (hash-ref *gnc:_reports_* id)))
+    (for-each 
+     (lambda (child)
+       (gnc:report-remove-by-id (gnc:report-id child)))
+     (gnc:report-children r))
+    (hash-remove! *gnc:_reports_* id)))
 
 (define (gnc:find-report id) 
   (hash-ref  *gnc:_reports_* id))
-
 
 (define (gnc:report-run id)
   (define (dumper key . args)
@@ -207,29 +229,57 @@
      #f)))
 
 (define (gnc:report-run-unsafe id)
-  (let ((report (gnc:find-report id)))
+  (let ((report (gnc:find-report id))
+        (start-time #f)
+        (end-time #f))
     (if report
-        (let ((template (hash-ref *gnc:_report-templates_* 
-                                  (gnc:report-type report))))
-          (if template
-              (let* ((renderer (gnc:report-template-renderer template))
-                     (doc (renderer (gnc:report-options report)))
-                     (stylesheet-name
-                      (symbol->string (gnc:option-value
-                                       (gnc:lookup-option 
-                                        (gnc:report-options report)
-                                        (_ "General") (_ "Stylesheet")))))
-                     (stylesheet 
-                      (gnc:html-style-sheet-find stylesheet-name))
-                     (html #f))
-                (gnc:html-document-set-style-sheet! doc stylesheet)
-                (set! html (gnc:html-document-render doc))
-                (display html)
-                (gnc:report-set-ctext! report html)
-                html)
-              #f))
+        (if (and (not (gnc:report-dirty? report))
+                 (gnc:report-ctext report))
+            ;; if there's clean cached text, return it 
+            (begin 
+              (display "using cached text.\n")
+              (gnc:report-ctext report))
+            
+            ;; otherwise, rerun the report 
+            (let ((template (hash-ref *gnc:_report-templates_* 
+                                      (gnc:report-type report))))
+              (if template
+                  (let* ((renderer (gnc:report-template-renderer template))
+                         (stylesheet-name
+                          (symbol->string (gnc:option-value
+                                           (gnc:lookup-option 
+                                            (gnc:report-options report)
+                                            (_ "General") (_ "Stylesheet")))))
+                         (stylesheet 
+                          (gnc:html-style-sheet-find stylesheet-name))
+                         (doc #f)
+                         (html #f))
+                    (display "rerunning report.\n")
+
+                    (if (gnc:debugging?)
+                        (set! start-time (gettimeofday)))
+                    (set! doc (renderer report))
+                    (if (gnc:debugging?)
+                        (begin 
+                          (set! end-time (gettimeofday))
+                          (display "time to generate report: ")
+                          (display (gnc:time-elapsed start-time end-time))
+                          (newline)
+                          (set! start-time (gettimeofday))))
+                    
+                    (gnc:html-document-set-style-sheet! doc stylesheet)
+                    (set! html (gnc:html-document-render doc))
+                    (if (gnc:debugging?)
+                        (begin 
+                          (set! end-time (gettimeofday))
+                          (display "time to render report to HTML: ")
+                          (display (gnc:time-elapsed start-time end-time))
+                          (newline)))
+
+                    (gnc:report-set-ctext! report html)
+                    (gnc:report-set-dirty?! report #f)
+                    html)
+                  #f)))
         #f)))
   
-
-
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)

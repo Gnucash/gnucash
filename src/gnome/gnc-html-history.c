@@ -30,6 +30,10 @@ struct _gnc_html_history {
   GList * nodes;
   GList * current_node; 
   GList * last_node;
+
+  /* call this whenever a node is destroyed */
+  gnc_html_history_destroy_cb destroy_cb;
+  gpointer                    destroy_cb_data;
 };
 
 /********************************************************************
@@ -56,6 +60,10 @@ gnc_html_history_destroy(gnc_html_history * hist) {
   GList * n;
 
   for(n = hist->nodes; n ; n=n->next) {
+    if(hist->destroy_cb) {
+      (hist->destroy_cb)((gnc_html_history_node *)n->data,
+                         hist->destroy_cb_data);
+    }
     gnc_html_history_node_destroy((gnc_html_history_node *)n->data);
   }
   g_list_free(hist->nodes);
@@ -64,6 +72,18 @@ gnc_html_history_destroy(gnc_html_history * hist) {
   hist->current_node  = NULL;
   hist->last_node     = NULL;
   g_free(hist);
+}
+
+/********************************************************************
+ * gnc_html_history_set_node_destroy_cb
+ ********************************************************************/
+
+void
+gnc_html_history_set_node_destroy_cb(gnc_html_history * hist, 
+                                     gnc_html_history_destroy_cb cb,
+                                     gpointer cb_data) {
+  hist->destroy_cb = cb;
+  hist->destroy_cb_data = cb_data;
 }
 
 static int 
@@ -98,12 +118,20 @@ gnc_html_history_append(gnc_html_history * hist,
     if((hn->type == node->type) &&
        !g_strcmp(hn->location, node->location) &&
        !g_strcmp(hn->label, node->label)) {      
+      if(hist->destroy_cb) {
+        (hist->destroy_cb)((gnc_html_history_node *)n->data,
+                           hist->destroy_cb_data);
+      }
       gnc_html_history_node_destroy(node);
       return;
     }
     
     /* blow away the history after this point, if there is one */
     for(n=hist->current_node->next; n; n=n->next) {
+      if(hist->destroy_cb) {
+        (hist->destroy_cb)((gnc_html_history_node *)n->data,
+                           hist->destroy_cb_data);
+      }
       gnc_html_history_node_destroy((gnc_html_history_node *)n->data); 
     }
     g_list_free(hist->current_node->next);

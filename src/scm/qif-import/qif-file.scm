@@ -204,7 +204,8 @@
                         (if first-xtn 
                             (let ((opening-balance-payee 
                                    (qif-file:process-opening-balance-xtn 
-                                    self current-xtn qstate-type)))
+                                    self current-account-name current-xtn 
+                                    qstate-type)))
                               (if (not current-account-name)
                                   (set! current-account-name 
                                         opening-balance-payee))
@@ -376,30 +377,33 @@
 ;;  even if the payee isn't "Opening Balance", we know that if there's
 ;;  no default from-account by this time, we need to set one.  In that
 ;;  case, we set the default account based on the file name.
+;;  
+;;  If we DO know the account already, and this is a tranfer to it, 
+;;  it's also an opening balance regardless of the payee. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:process-opening-balance-xtn self xtn type) 
+(define (qif-file:process-opening-balance-xtn self acct-name xtn type) 
   (let ((payee (qif-xtn:payee xtn))
-        (category (qif-split:category 
-                   (car (qif-xtn:splits xtn))))
+        (category (qif-split:category (car (qif-xtn:splits xtn))))
         (cat-is-acct? (qif-split:category-is-account? 
                        (car (qif-xtn:splits xtn))))
-        (security (qif-xtn:security-name xtn))
-        (acct-name #f))
-    (if (and payee (string? payee)              
-             (not security)
-             (string=? (string-remove-trailing-space payee)
-                       "Opening Balance")
-             cat-is-acct?)
+        (security (qif-xtn:security-name xtn)))
+    (if (or (and (not acct-name)
+                 (not security)
+                 payee (string? payee) 
+                 (string=? (string-remove-trailing-space payee)
+                           "Opening Balance")
+                 cat-is-acct?)
+            (and acct-name (string? acct-name)
+                 (string=? acct-name category)
+                 (not security)))
         ;; this is an explicit "Opening Balance" transaction.  we need
         ;; to change the category to point to the equity account that
         ;; the opening balance comes from.
         (begin
-          (qif-split:set-category-private! 
-           (car (qif-xtn:splits xtn))
-           (default-equity-account))
-          (qif-split:set-category-is-account?! 
-           (car (qif-xtn:splits xtn)) #t)
+          (qif-split:set-category-private! (car (qif-xtn:splits xtn))
+                                           (default-equity-account))
+          (qif-split:set-category-is-account?! (car (qif-xtn:splits xtn)) #t)
           (set! acct-name category)))
     acct-name))
 

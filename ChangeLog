@@ -1,3 +1,42 @@
+2001-02-01  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/gnc-html-history.{h,c}: add destroy callback. part of
+	report memory management cleanup
+
+	* src/gnome/window-report.c: set report dirty flag when options
+	apply or reload is clicked.  Store report object in window 
+	struct while it's visible. 
+
+	* src/scm/qif-import/qif-file.scm: expand detection of opening
+	balance transactions.  
+
+	* src/scm/qif-import/qif-parse.scm: fix regexp bug in miscincx and
+	miscexpx category parsing (thanks carol!)
+
+	* src/scm/qif-import/qif-to-gnc.scm: use correct amount for
+	non-stock investment transactions (dividends etc).  Use fuzzy
+	equality predicate for inexact numbers.
+
+	* src/scm/report.scm: Add dirty flag and 'children' (other reports
+	created by this report... nobody uses it yet) to report struct.
+	Add function to clean up report when it's erased from the window
+	history.  Add some debugging timing bits to the report-run
+	function.  Display cached HTML if not dirty.   
+
+	* src/scm/report.scm: WARNING! Change prototype of report
+	rendering functions... they take a <report> object as argument
+	instead of an options object.  This is necessary for memory
+	management stuff when reports create other reports.
+
+	* src/scm/report/account-summary.scm: fix to use new renderer
+	signature
+
+	* src/scm/report/average-balance.scm: fix to use new renderer
+	signature
+
+	* src/scm/report/hello-world.scm: fix to use new renderer
+	signature
+
 2001-01-30  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/report/stylesheet-{plain,fancy}.scm: add a new boolean

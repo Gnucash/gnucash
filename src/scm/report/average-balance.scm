@@ -228,11 +228,11 @@
   ;; Renderer
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (define (renderer options)
+  (define (renderer report-obj)
     (let* ((opt-val 
             (lambda (sec value)
               (gnc:option-value 
-               (gnc:lookup-option options sec value))))
+               (gnc:lookup-option (gnc:report-options report-obj) sec value))))
            (begindate (gnc:date-option-absolute-time 
                        (opt-val  (_ "General") (_ "From"))))
            (enddate   (gnc:timepair-end-day-time 

@@ -290,10 +290,11 @@
   ;; set up the document and add the table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (define (accsum-renderer options)
+  (define (accsum-renderer report-obj)
     (define (get-option optname)
       (gnc:option-value
-       (gnc:lookup-option options (_ "General") optname)))
+       (gnc:lookup-option 
+        (gnc:report-options report-obj) (_ "General") optname)))
     
     (let ((accounts (get-option (_ "Account")))
           (display-depth (get-option (_ "Account Display Depth")))

@@ -14,6 +14,9 @@
 (define GNC-DENOM-REDUCE 32)
 (define GNC-DENOM-LCD 48)
 
+(define (gnc:qif-fuzzy= num-1 num-2)
+  (< (abs (- num-1 num-2)) .00000001))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  find-or-make-acct:
 ;;  given a colon-separated account path, return an Account* to
@@ -529,8 +532,8 @@
              (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
             
             ((xout miscexp miscexpx margint margintx)
-             (gnc:split-set-value gnc-near-split (n- split-amt))
-             (gnc:split-set-share-amount gnc-near-split (n- split-amt))
+             (gnc:split-set-value gnc-near-split (n- xtn-amt))
+             (gnc:split-set-share-amount gnc-near-split (n- xtn-amt))
              (gnc:split-set-value gnc-far-split  xtn-amt)
              (gnc:split-set-share-amount gnc-far-split  xtn-amt))
             
@@ -778,10 +781,10 @@
                     ;; we might be done if this-amt is either equal 
                     ;; to the split amount or the group amount.
                     (cond 
-                     ((= this-amt amount)
+                     ((gnc:qif-fuzzy= this-amt amount)
                       (set! how 
                             (cons 'one-to-one (list split))))
-                     ((and group-amt (= this-amt group-amt))
+                     ((and group-amt (gnc:qif-fuzzy= this-amt group-amt))
                       (set! how
                             (cons 'one-to-many (list split))))
                      (#t
@@ -797,7 +800,7 @@
           ;; now we're out of the loop.  if 'how' isn't set, 
           ;; we can still have a many-to-one match.
           (if (and (not how)
-                   (= this-group-amt amount))
+                   (gnc:qif-fuzzy= this-group-amt amount))
               (begin 
                 (set! how 
                       (cons 'many-to-one same-acct-splits))))))

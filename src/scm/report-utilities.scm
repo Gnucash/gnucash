@@ -383,7 +383,7 @@
     (set! splits (gnc:glist->list 
                   (gnc:query-get-splits query) 
                   <gnc:Split*>))
-    (gnc:free-query query);
+    (gnc:free-query query)
 
     (if (and splits (not (null? splits)))
         (set! balance (gnc:numeric-to-double 
@@ -418,7 +418,7 @@
     (set! splits (gnc:glist->list 
                   (gnc:query-get-splits query) 
                   <gnc:Split*>))
-    (gnc:free-query query);
+    (gnc:free-query query)
 
     (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
@@ -540,8 +540,8 @@
 			(gnc:glist->list 
 			 (gnc:query-get-splits query) 
 			 <gnc:Split*>)))
-	  (gnc:free-query query);
-	  
+	  (gnc:free-query query)
+
 	  ;; Now go through all splits and add up all value-amounts
 	  ;; and share-amounts
 	  (for-each 
@@ -619,4 +619,3 @@
 				    ;; not a durable solution
 				    100 GNC-RND-ROUND)))
 	     '())))))
-

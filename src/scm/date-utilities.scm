@@ -25,7 +25,7 @@
 (define gnc:reldate-list '())
 
 (define (gnc:timepair->secs tp)
-  (inexact->exact
+  (inexact->exact 
    (+ (car tp)
       (/ (cdr tp) 1000000000))))
 
@@ -253,6 +253,13 @@
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
   (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))
+
+;; find float difference between times 
+(define (gnc:time-elapsed t1 t2)
+  (+ (- (car t2)
+        (car t1))
+     (/ (- (cdr t2)
+           (cdr t1)) 1000000.0)))
 
 ;; timepair manipulation functions
 ;; hack alert  - these should probably be put somewhere else

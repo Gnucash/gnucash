@@ -207,11 +207,11 @@ option like this.")
   ;; includes all the relevant Scheme code. The option database passed
   ;; to the function is one created by the options-generator function
   ;; defined above.
-  (define (hello-world-renderer options)
+  (define (hello-world-renderer report-obj)
     
     ;; These are some helper functions for looking up option values.
     (define (get-op section name)
-      (gnc:lookup-option options section name))
+      (gnc:lookup-option (gnc:report-options report-obj) section name))
     
     (define (op-value section name)
       (gnc:option-value (get-op section name)))

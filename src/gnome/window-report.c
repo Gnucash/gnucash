@@ -38,18 +38,20 @@
 #include "query-user.h"
 
 struct _gnc_report_window {
-  GtkWidget   * toplevel;  
-  GtkWidget   * paned;
+  GtkWidget    * toplevel;  
+  GtkWidget    * paned;
 
-  GtkWidget   * popup;
-  GtkWidget   * back_widg;
-  GtkWidget   * fwd_widg;
+  GtkWidget    * popup;
+  GtkWidget    * back_widg;
+  GtkWidget    * fwd_widg;
 
   GNCOptionWin * option_dialog;
   GNCOptionDB  * odb;
+
+  SCM          scm_report;
   SCM          scm_options;
 
-  gnc_html   * html;
+  gnc_html     * html;
 };
 
 /* all open report windows... makes cleanup easier */
@@ -116,7 +118,10 @@ gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
 
 static int
 gnc_report_window_reload_button_cb(GtkWidget * w, gpointer data) {
-  gnc_report_window       * report = data;
+  gnc_report_window * report = data;
+  SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
+
+  gh_call2(dirty_report, report->scm_report, SCM_BOOL_T);
   gnc_html_reload(report->html);
   return TRUE;
 }
@@ -137,8 +142,11 @@ gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
 static void
 gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
 			    gpointer user_data) {
+  SCM  dirty_report = gh_eval_str("gnc:report-set-dirty?!");
   gnc_report_window * win = user_data;
+  
   gnc_option_db_commit(win->odb);
+  gh_call2(dirty_report, win->scm_report, SCM_BOOL_T);
   gnc_html_reload(win->html);
 }
 
@@ -229,6 +237,10 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   win->scm_options = inst_options;
   scm_protect_object(win->scm_options);
 
+  scm_unprotect_object(win->scm_report);
+  win->scm_report = inst_report;
+  scm_protect_object(win->scm_report);
+
   if(gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
     gnc_report_window_set_fwd_button(win, TRUE); 
   }
@@ -295,6 +307,27 @@ gnc_report_window_print_cb(GtkWidget * w, gpointer data) {
   gnc_html_print(win->html);
 }
 
+static void 
+gnc_report_window_history_destroy_cb(gnc_html_history_node * node, 
+                                     gpointer user_data) {
+  static SCM         remover = SCM_BOOL_F;
+  int                report_id;
+  
+  if(remover == SCM_BOOL_F) {
+    remover = gh_eval_str("gnc:report-remove-by-id");
+  }
+  
+  if(node && 
+     (node->type == URL_TYPE_REPORT) && 
+     !strncmp("id=", node->location, 3)) {
+    sscanf(node->location+3, "%d", &report_id);
+    printf("unreffing report %d and children\n", report_id);
+    gh_call1(remover, gh_int2scm(report_id));
+  }
+  else {
+    return;
+  }
+}
 
 /********************************************************************
  * gnc_report_window_new 
@@ -387,9 +420,16 @@ gnc_report_window_new(GtkWidget * container) {
     GNOMEUIINFO_END
   };
   
-  report->html        = gnc_html_new();
-  report->scm_options = SCM_BOOL_F;
+  report->html         = gnc_html_new();
+  report->scm_options  = SCM_BOOL_F;
+  report->scm_report   = SCM_BOOL_F;
+
+  gnc_html_history_set_node_destroy_cb(gnc_html_get_history(report->html),
+                                       gnc_report_window_history_destroy_cb,
+                                       (gpointer)report);
+  
   scm_protect_object(report->scm_options);
+  scm_protect_object(report->scm_report);
 
   if(container) {
     report->toplevel = container;    
