@@ -277,15 +277,14 @@ Supported OS's:
 ---------------
 GnuCash version 1.2.x is known to work in the following configs:
 
-Linux 2.x.x           -- Intel  
+GNU/Linux             -- Intel  
 FreeBSD               -- Intel
 OpenBSD               -- Intel
 
-Xacc-1.0.18, the predecessor to GnuCash, is known to work on the following
+Xacc-1.0.18, the predecessor to GnuCash, is known to work on these additional
 platforms:
 
 Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
-Linux 2.x.x           -- Intel  w/ Lesstif v0.81
 SGI IRIX              -- MIPS 
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
