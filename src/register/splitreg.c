@@ -273,8 +273,11 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell->label = g_strdup (hcell->value);
   cb_cell->sample_text = g_strdup (_(ss->string + ss->offset));
   cb_cell->alignment = cell_alignments[cell_type];
-  cb_cell->expandable = reg->cells[cell_type] == (BasicCell *) reg->descCell;
-  cb_cell->span = reg->cells[cell_type] == (BasicCell *) reg->memoCell;
+  cb_cell->expandable =
+    reg->cells[cell_type] == (BasicCell *) reg->descCell;
+  cb_cell->span =
+    reg->cells[cell_type] == (BasicCell *) reg->memoCell ||
+    reg->cells[cell_type] == (BasicCell *) reg->notesCell;
 
   cb_cell = gnc_cellblock_get_cell (reg->cursor_header, row, col);
 
@@ -287,7 +290,9 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
     cb_cell->alignment = cell_alignments[cell_type];
     cb_cell->expandable =
       reg->cells[cell_type] == (BasicCell *) reg->descCell;
-    cb_cell->span = reg->cells[cell_type] == (BasicCell *) reg->memoCell;
+    cb_cell->span =
+      reg->cells[cell_type] == (BasicCell *) reg->memoCell ||
+      reg->cells[cell_type] == (BasicCell *) reg->notesCell;
   }
 }
 

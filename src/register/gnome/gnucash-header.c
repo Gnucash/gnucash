@@ -67,10 +67,12 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         SheetBlockStyle *style = header->style;
         Table *table = header->sheet->table;
         VirtualLocation virt_loc;
+        VirtualCell *vcell;
         CellDimensions *cd;
         GdkColor *bg_color;
         int xpaint, ypaint;
         const char *text;
+        CellBlock *cb;
         GdkFont *font;
         guint32 argb;
         int i, j;
@@ -109,10 +111,15 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         gdk_gc_set_foreground (header->gc, &gn_black);
         font = gnucash_register_font;
 
+        vcell = gnc_table_get_virtual_cell
+                (table, table->current_cursor_loc.vcell_loc);
+        cb = vcell ? vcell->cellblock : NULL;
+
         ypaint = -y;
         h = 0;
 
-        for (i = 0; i < style->nrows; i++) {
+        for (i = 0; i < style->nrows; i++)
+        {
                 xpaint = -x;
                 virt_loc.phys_row_offset = i;
 
@@ -120,9 +127,12 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    Can we abstract at least the cell drawing routine?
                    That way we'll be sure everything is drawn
                    consistently, and cut down on maintenance issues. */
-                for (j = 0; j < style->ncols; j++) {
+
+                for (j = 0; j < style->ncols; j++)
+                {
                         gint x_offset, y_offset;
                         GdkRectangle rect;
+                        CellBlockCell *cb_cell;
 
                         virt_loc.phys_col_offset = j;
 
@@ -132,6 +142,13 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                 w = header->resize_col_width;
                         else
                                 w = cd->pixel_width;
+
+                        cb_cell = gnc_cellblock_get_cell (cb, i, j);
+                        if (!cb_cell || cb_cell->cell_type < 0)
+                        {
+                                xpaint += w;
+                                continue;
+                        }
 
                         h = cd->pixel_height;
 
@@ -161,7 +178,8 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         case CELL_ALIGN_CENTER:
                                 if (w < gdk_string_measure (font, text))
                                         x_offset = CELL_HPADDING;
-                                else {
+                                else
+                                {
                                         x_offset = w / 2;
                                         x_offset -= gdk_string_measure (font, text) / 2;
                                 }
