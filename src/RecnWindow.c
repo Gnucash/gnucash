@@ -147,6 +147,8 @@ recnRefresh (Account *acc)
           XbaeMatrixSetRowUserData( recnData->credit,nrows, (XtPointer)split );
           }
         }
+      i++;
+      split = acc->splits[i];
       }
     
     recnRecalculateBalance(recnData);
@@ -841,7 +843,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     }
   
   /* refresh the register window */
-  regRefresh(recnData->acc);
+  accRefresh(recnData->acc);
   }
 
 /********************************************************************\

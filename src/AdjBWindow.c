@@ -322,7 +322,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccSetAmount (&(trans->credit_split), dcurrAmount - themount);
   
   /* Refresh the account register window */
-  regRefresh(acc);
+  accRefresh(acc);
 
   /* Refresh the account reconcile window */
   recnRefresh (acc);

@@ -90,7 +90,7 @@ static RegWindow **fullList = NULL;    /* all registers */
 
 /** PROTOTYPES ******************************************************/
 RegWindow * regWindowLedger( Widget parent, Account *lead, Account **acclist, int type);
-void        regRefresh (Account *acc);
+void        accRefresh (Account *acc);
 
 static void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
 static void startRecnCB( Widget mw, XtPointer cd, XtPointer cb );
@@ -466,7 +466,7 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   activityMenu[4].subitems = reportMenu;
 
   /* can't adjust the balance on a ledger window */
-  if (1 != regData->numAcc) {
+  if (1 < regData->numAcc) {
     activityMenu[2].sensitive = False;
     activityMenu[3].sensitive = False;
   }
@@ -632,8 +632,7 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   /******************************************************************/
   XtManageChild(pane);
   
-  /* hack alert -- if no leader, should be refreshing from list */
-  regRefresh (regData->leader);
+  accRefresh (regData->leader);
   
   XtPopup( regData->dialog, XtGrabNone );
   
@@ -643,10 +642,20 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
 }
 
 /********************************************************************\
+ * refresh only the indicated register window                       *
+\********************************************************************/
+
+void regRefresh (RegWindow *regData)
+{
+   /* hack alert -- should be recomputing the list of splits */
+   xaccLoadRegister (regData->ledger, regData->leader->splits);
+}
+
+/********************************************************************\
  * refresh *all* register windows which contain this account        * 
 \********************************************************************/
 
-void regRefresh (Account *acc)
+void accRefresh (Account *acc)
 {
    RegWindow *regData;
    int n;
@@ -665,7 +674,7 @@ void regRefresh (Account *acc)
       if (got_one) {
         /* hack alert -- should be recomputing the list of splits */
         /* and problbly the balance too */
-        xaccLoadRegister (regData->ledger, acc->splits);
+        regRefresh (regData);
       }
       n++;
       regData = fullList[n];

@@ -7,6 +7,7 @@
  */
 
 #include "Ledger.h"
+#include "messages.h"
 #include "register.h"
 #include "Transaction.h"
 
@@ -63,20 +64,27 @@ xaccSaveRegEntry (BasicRegister *reg)
 
 /* ======================================================== */
 
-static Account *
-GetPeerAcc (Split *split)
+static char * 
+GetPeerAccName (Split *split)
 {
-   Account *acc;
+   Account *acc = NULL;
    Transaction *trans;
    trans = (Transaction *) (split->parent);
 
-   /* hack alert -- this is incorrect for splits in general */
    if (split != &(trans->credit_split)) {
       acc = (Account *) trans->credit_split.acc;
    } else {
-      acc = (Account *) trans->debit_splits[0]->acc;
+      if (trans->debit_splits) {
+        /* if only one split, then use that */
+        if (NULL == trans->debit_splits[1]) {
+           acc = (Account *) trans->debit_splits[0]->acc;
+        } else {
+           return SPLIT_STR;
+        }
+      } 
    }
-   return acc;
+   if (acc) return acc->accountName;
+   return "";
 }
 
 /* ======================================================== */
@@ -85,7 +93,7 @@ void
 xaccLoadRegEntry (BasicRegister *reg, Split *split)
 {
    Transaction *trans;
-   Account *acc;
+   char *accname;
    char buff[2];
 
    if (!split) return;
@@ -105,8 +113,9 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    xaccSetBasicCellValue (reg->recnCell, buff);
 
    /* the transfer account */
-   acc = GetPeerAcc (split);
-   xaccSetBasicCellValue (&(reg->xfrmCell->cell), acc->accountName);
+   /* hack alert -- this is incorrect for splits in general */
+   accname = GetPeerAccName (split);
+   xaccSetBasicCellValue (&(reg->xfrmCell->cell), accname);
 
    xaccSetDebCredCellValue (reg->debitCell, 
                             reg->creditCell, split->damount);

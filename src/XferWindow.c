@@ -476,23 +476,16 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccTransSetReconcile (trans, NREC);
   
   /* make note of which accounts this was transfered from & to */
-  split->acc              = (struct _account *) getAccount(grp,xferData->from);
-  trans->credit_split.acc = (struct _account *) getAccount(grp,xferData->to);
-
-  /* insert transaction into from acount */
-  xaccInsertSplit (((Account *) (split->acc)), split);
-  
-  /* Refresh the "from" account register window */
-  regRefresh(acc);
-  /* Refresh the "from" account reconcile window */
+  acc =  getAccount(grp,xferData->from);
+  split->acc = (struct _account *) acc;
+  xaccInsertSplit (acc, split);
+  accRefresh(acc);
   recnRefresh(acc);
-  
-  /* insert transaction into to acount */
-  xaccInsertSplit (((Account *) (trans->credit_split.acc)), &(trans->credit_split));
 
-  /* Refresh the "to" account register window */
-  regRefresh(acc);
-  /* Refresh the "to" account reconcile window */
+  acc = getAccount(grp,xferData->to);
+  trans->credit_split.acc = (struct _account *) acc;
+  xaccInsertSplit (acc, &(trans->credit_split));
+  accRefresh(acc);
   recnRefresh(acc);
 
   refreshMainWindow();
