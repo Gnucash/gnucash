@@ -52,6 +52,8 @@ struct _GncDenseCal
 {
         GtkWidget widget;
 
+        GdkPixmap *drawbuf;
+
         gboolean initialized;
 
         gboolean showPopup;
@@ -95,7 +97,7 @@ struct _GncDenseCal
          **/
         GList *markData;
         int numMarks;
-        // array of GList*s of per-cell markings.
+        /* array of GList*s of per-cell markings. */
         GList **marks;
 };
 

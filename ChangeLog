@@ -1,5 +1,10 @@
 2002-11-16  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_draw_to_buffer):
+	Added double-buffering support to GncDenseCal.  Fixes Bug#96475.
+
+2002-11-16  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/gnc-split-reg.c (gsr_setup_status_widgets): Only setup
 	the status check if we've created it to prevent some
 	warning/critical noise.
