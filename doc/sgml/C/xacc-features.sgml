@@ -17,7 +17,8 @@
 
     <itemizedlist>
       <listitem> 
-	<para><emphasis>Multiple Accounts.</emphasis> Create a GnuCash
+	<para><emphasis>Multiple Accounts.</emphasis></para>
+	<para>Create a GnuCash
 	 account for each of your bank accounts.  Each account
 	  maintains both a running balance and a reconciled balance, 
 	  so you can keep track of the checks that have cleared your 
@@ -64,11 +65,9 @@
       </listitem>
       
       <listitem>
-	<para>Support for <emphasis><link linkend="xacc-currencyhandling">multiple
-	      currencies</link></emphasis> and <emphasis>currency trading accounts.
-	  </emphasis>
-	  (partial, still limited). 
-	  Bank accounts may be established in different
+	<para><emphasis><link linkend="xacc-currencyhandling">Multiple
+	      currencies.</link></emphasis></para>
+	<para>Bank accounts may be established in different
 	  currencies, and trades at varying exchange rates may be
 	  made, in much the same way stocks trade at varying
 	  prices.
@@ -78,7 +77,7 @@
       </listitem>
       
       <listitem>
-	<para><emphasis><link linkend="XACC-QIF-IMPORT">Quicken File Import</link>.</emphasis> 
+	<para><emphasis><link linkend="XACC-QIF-IMPORT">Quicken File Import.</link></emphasis> 
 	</para>
 	<para>Imports Quicken-style QIF files.  The import wizard automatically
 	  merges duplicate transactions.
@@ -86,7 +85,7 @@
       </listitem>
       
       <listitem>
-	<para><emphasis>Gnome MDI Interface</emphasis></para>
+	<para><emphasis>Gnome MDI Interface.</emphasis></para>
 	<para>Have multiple views of your financial data, arranged how you want
 	  them, in one or more windows that stay around through GnuCash sessions.
 	</para>
@@ -94,9 +93,9 @@
       
       <listitem>
 	<para><emphasis><link
-	linkend="xacc-reports">Reports</link>.</emphasis> Display,
-	export as HTML, or print a variety of reports, including
-	Balance Sheet, Account Summary, Profit and Loss, Stock
+	linkend="xacc-reports">Reports.</link></emphasis></para>
+	<para>Display, export as HTML, or print a variety of reports,
+	including Balance Sheet, Account Summary, Profit and Loss, Stock
 	Portfolios, and Transaction Reports.  Reports are saved from
 	session to session, and rolling reports are possible with
 	relative dates.  GnuCash also supports a variety of
@@ -114,7 +113,7 @@
 
     <itemizedlist>
 <listitem>
-<para> <emphasis><link linkend="xacc-chartofaccts">Chart of Accounts</link></emphasis> 
+<para> <emphasis><link linkend="xacc-chartofaccts">Chart of Accounts.</link></emphasis> 
 
  </para>
 <para>A master account can have a hierarchy of more detailed
@@ -127,7 +126,7 @@
 </listitem>
 <listitem>
 <para><emphasis><link linkend="xacc-doubleentry">Double
-      Entry</link></emphasis> 
+      Entry.</link></emphasis> 
 
  </para>
 <para>Every transaction must debit one account and credit others
@@ -139,7 +138,7 @@
 </listitem>
 <listitem>
 <para><emphasis><link linkend="xacc-incomeexpense">Income/Expense Account
-      Types (Categories)</link></emphasis> 
+      Types (Categories).</link></emphasis> 
  </para>
 <para>These serve not only to categorize your cash flow, but when used
 properly with the double-entry feature and equity accounts, these can
@@ -148,7 +147,7 @@ provide an accurate Profit & Loss statement.
 </listitem>
 
 <listitem>
-<para><emphasis>General Ledger</emphasis> </para>
+<para><emphasis>General Ledger.</emphasis> </para>
 
 <para>Multiple accounts may be displayed in one register
         window at the same time. This can make it easier to track

@@ -94,15 +94,33 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog (buf);
       break;
 
-    case ERR_BACKEND_LOCKED:
-      fmt = _("The URL \n    %s\n"
-              "is in use by another user.");
+    case ERR_BACKEND_TOO_NEW:
+      fmt = _("This file/URL appears to be from a newer version\n"
+              "of GnuCash. You must upgrade your version of GnuCash\n"
+              "to work with this data.");
+      gnc_error_dialog (fmt);
+      break;
+
+    case ERR_BACKEND_NO_SUCH_DB:
+      fmt = _("The database\n"
+              "   %s\n"
+              "doesn't seem to exist. Do you want to create it?\n");
       buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      if (gnc_verify_dialog (buf, TRUE)) { uh_oh = FALSE; }
+      break;
+
+    case ERR_BACKEND_LOCKED:
+      fmt = _("GnuCash could not obtain the lock for\n"
+              "   %s.\n"
+              "That database may be in use by another user,\n"
+              "in which case you should not open the database.\n"
+              "\nDo you want to proceed with opening the database?");
+      buf = g_strdup_printf (fmt, newfile);
+      if (gnc_verify_dialog (buf, TRUE)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:
-      fmt = _("The URL \n    %s\n"
+      fmt = _("The file/URL \n    %s\n"
               "does not contain GnuCash data or the data is corrupt.");
       buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
@@ -111,6 +129,12 @@ show_book_error (GNCBackendError io_error, const char *newfile)
     case ERR_BACKEND_SERVER_ERR:
       fmt = _("The server at URL \n    %s\n"
               "experienced an error or encountered bad or corrupt data.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_BACKEND_PERM:
+      fmt = _("You do not have permission to access\n    %s\n");
       buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
       break;
@@ -139,13 +163,6 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog (buf);
       break;
 
-    case ERR_FILEIO_FILE_TOO_NEW:
-      fmt = _("This file appears to be from a newer version\n"
-              "of GnuCash. You must upgrade GnuCash to read\n"
-              "this file.");
-      gnc_error_dialog (fmt);
-      break;
-
     case ERR_FILEIO_FILE_TOO_OLD:
       fmt = _("This file is from an older version of GnuCash.\n"
               "Do you want to continue?");
@@ -158,6 +175,22 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       gnc_error_dialog(buf);
       break;
       
+    case ERR_SQL_DB_TOO_OLD:
+      fmt = _("This database is from an older version of GnuCash.\n"
+              "Do you want to upgrade the database "
+              "to the current version?");
+      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
+      break;
+
+    case ERR_SQL_DB_BUSY:
+      fmt = _("The SQL database is in use by other users, "
+              "and the upgrade cannot be performed until they logoff.\n"
+              "If there are currently no other users, consult the \n"
+              "documentation to learn how to clear out dangling login\n"
+              "sessions.");
+      gnc_error_dialog (fmt);
+      break;
+
     default:
       PERR("FIXME: Unhandled error %d", io_error);
       fmt = _("An unknown I/O error occurred.");
@@ -167,50 +200,6 @@ show_book_error (GNCBackendError io_error, const char *newfile)
 
   if (buf) g_free(buf);
   return uh_oh;
-}
-
-/* ======================================================== */
-
-static gboolean
-gncLockFailHandler (const char *file)
-{
-  const char *format = _("GnuCash could not obtain the lock for\n"
-                         "   %s.\n"
-                         "That database may be in use by another user,\n"
-                         "in which case you should not open the database.\n"
-                         "\nDo you want to proceed with opening the database?");
-  char *message;
-  gboolean result;
-
-  if (file == NULL)
-    return FALSE;
-
-  message = g_strdup_printf (format, file);
-  result = gnc_verify_dialog (message, FALSE);
-  g_free (message);
-
-  return result;
-}
-
-/* ======================================================== */
-
-static gboolean
-gncCreateFailHandler (const char *file)
-{
-  const char *format = _("The database\n"
-                         "   %s\n"
-                         "doesn't seem to exist. Do you want to create it?\n");
-  char *message;
-  gboolean result;
-
-  if (file == NULL)
-    return FALSE;
-
-  message = g_strdup_printf (format, file);
-  result = gnc_verify_dialog (message, FALSE);
-  g_free (message);
-
-  return result;
 }
 
 /* ======================================================== */
@@ -299,8 +288,15 @@ gncFileQuerySave (void)
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
 
-    result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
-    
+    if (gnc_ui_can_cancel_save ())
+      result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
+    else
+    {
+      gboolean do_save = gnc_verify_dialog (message, TRUE);
+
+      result = do_save ? GNC_VERIFY_YES : GNC_VERIFY_NO;
+    }
+
     if (result == GNC_VERIFY_CANCEL)
       return FALSE;
 
@@ -365,7 +361,7 @@ gncPostFileOpen (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
   {
-     if (gncLockFailHandler (newfile))
+     if (FALSE == show_book_error (io_err, newfile))
      {
         /* user told us to ignore locks. So ignore them. */
         gnc_book_begin (new_book, newfile, TRUE, FALSE);
@@ -381,19 +377,27 @@ gncPostFileOpen (const char * filename)
   }
 
   /* if the database doesn't exist, ask the user ... */
-  else if (ERR_BACKEND_NO_SUCH_DB == io_err)
+  else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
+           (ERR_SQL_DB_TOO_OLD == io_err))
   {
-     if (gncCreateFailHandler (newfile))
+     if (FALSE == show_book_error (io_err, newfile))
      {
         /* user told us to create a new database. Do it. */
         gnc_book_begin (new_book, newfile, FALSE, TRUE);
      }
   }
 
-  /* Check for errors again, since above may have cleared the lock */
-  /* If its still locked, don't bother with the message */
+  /* Check for errors again, since above may have cleared the lock.
+   * If its still locked, still, doesn't exist, still too old, then
+   * don't bother with the message, just die. */
   io_err = gnc_book_get_error (new_book);
-  if (ERR_BACKEND_LOCKED != io_err)
+  if ((ERR_BACKEND_LOCKED == io_err) ||
+      (ERR_BACKEND_NO_SUCH_DB == io_err) ||
+      (ERR_SQL_DB_TOO_OLD == io_err))
+  {
+    uh_oh = TRUE;
+  }
+  else
   {
     uh_oh = show_book_error (io_err, newfile);
   }
@@ -544,6 +548,11 @@ gncFileSave (void)
   gncAddHistory (book);
 
   gnc_book_mark_saved(book);
+
+  /* save the main window state */
+  gh_call1(gh_eval_str("gnc:main-window-save-state"),
+           gh_str02scm(gnc_book_get_url(current_book))); 
+
   LEAVE (" ");
 }
 
@@ -596,7 +605,7 @@ gncFileSaveAs (void)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err) 
   {
-    if (gncLockFailHandler (newfile))
+    if (FALSE == show_book_error (io_err, newfile))
     {
        /* user told us to ignore locks. So ignore them. */
        gnc_book_begin (new_book, newfile, TRUE, FALSE);
@@ -604,9 +613,10 @@ gncFileSaveAs (void)
   }
 
   /* if the database doesn't exist, ask the user ... */
-  else if (ERR_BACKEND_NO_SUCH_DB == io_err)
+  else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
+           (ERR_SQL_DB_TOO_OLD == io_err))
   {
-     if (gncCreateFailHandler (newfile))
+     if (FALSE == show_book_error (io_err, newfile))
      {
         /* user told us to create a new database. Do it. */
         gnc_book_begin (new_book, newfile, FALSE, TRUE);

@@ -477,41 +477,52 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:parse-number/format 
 ;;  assuming we know what the format is, parse the string. 
+;;  returns a gnc-numeric; the denominator is set so as to exactly 
+;;  represent the number
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-number/format value-string format) 
   (case format 
     ((decimal)
-     (let ((read-val
-            (with-input-from-string 
-                (string-remove-char 
-                 (string-remove-char value-string #\,)
-                 #\$)
-              (lambda () (read)))))
+     (let* ((filtered-string
+             (string-remove-char 
+              (string-remove-char value-string #\,)
+              #\$))
+            (read-val
+             (with-input-from-string filtered-string
+               (lambda () (read)))))
        (if (number? read-val)
-           (+ 0.0 read-val)
-           #f)))
+           (gnc:double-to-gnc-numeric
+            (+ 0.0 read-val) GNC-DENOM-AUTO
+            (logior (GNC-DENOM-SIGFIGS (- (string-length filtered-string) 1))
+                    GNC-RND-ROUND))
+           (gnc:numeric-zero))))
     ((comma)
-     (let ((read-val
-            (with-input-from-string 
-                (string-remove-char 
-                 (string-replace-char! 
-                  (string-remove-char value-string #\.)
-                  #\, #\.)
-                 #\$)
-              (lambda () (read)))))
+     (let* ((filtered-string 
+             (string-remove-char 
+              (string-replace-char! 
+               (string-remove-char value-string #\.)
+               #\, #\.)
+              #\$))             
+            (read-val
+             (with-input-from-string filtered-string
+               (lambda () (read)))))
        (if (number? read-val)
-           (+ 0.0 read-val)
-           #f)))
+           (gnc:double-to-gnc-numeric
+            (+ 0.0 read-val) GNC-DENOM-AUTO
+            (logior (GNC-DENOM-SIGFIGS (- (string-length filtered-string) 1))
+                    GNC-RND-ROUND))
+           (gnc:numeric-zero))))
     ((integer)
      (let ((read-val
             (with-input-from-string 
                 (string-remove-char value-string #\$)
               (lambda () (read)))))
        (if (number? read-val)
-           (+ 0.0 read-val)
-           #f)))))
-     
+           (gnc:double-to-gnc-numeric
+            (+ 0.0 read-val) 1 GNC-RND-ROUND)
+           (gnc:numeric-zero))))))
+
 (define (qif-parse:check-number-formats amt-strings formats)
   (let ((retval formats))
     (for-each 
@@ -533,7 +544,7 @@
                    (if (not tmp)
                        (set! all-ok #f))
                    tmp)
-                 0.0))
+                 (gnc:numeric-zero)))
            amt-strings)))
     (if all-ok parsed #f)))
 

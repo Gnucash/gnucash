@@ -19,7 +19,14 @@
       <para>The price editor is available from the "Tools" menu. Selecting
 	it brings up the editor:</para>
       
-      <para><emphasis>PICTURE NEEDED</emphasis></para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/pricedb.png">
+	    
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
       
       <para>Each entry in the editor shows a record of a price:</para>
       <itemizedlist>

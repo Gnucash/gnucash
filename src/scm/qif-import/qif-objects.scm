@@ -281,6 +281,7 @@
 (define (qif-xtn:print self)
   (simple-obj-print self))
 
+
 (define (qif-xtn:split-amounts self)
   (map 
    (lambda (split)
@@ -614,10 +615,10 @@
   (simple-obj-print self))
 
 (define (make-qif-stock-symbol)
-  (make-simple-obj <qif-stock-symbol>))
-
-
-
+  (let ((retval (make-simple-obj <qif-stock-symbol>)))
+    (qif-stock-symbol:set-name! retval "")
+    (qif-stock-symbol:set-symbol! retval "")
+    retval))
 
 (define <qif-ticker-map>
   (make-simple-class

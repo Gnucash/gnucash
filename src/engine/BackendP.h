@@ -50,8 +50,6 @@
 #include "gnc-book.h"
 #include "gnc-pricedb.h"
 
-#define BACKEND_ROLLBACK_DESTROY 999
-
 /*
  * The book_begin() routine gives the backend a second initialization
  *    opportunity.  It is suggested that the backend check that 
@@ -106,8 +104,8 @@
  *    gives the backend a chance to clean up failed commits.
  *
  *    If the second user tries to modify a transaction that
- *    the first user deleted, then the backend should return
- *    BACKEND_ROLLBACK_DESTROY from this routine, so that the 
+ *    the first user deleted, then the backend should set the error
+ *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the 
  *    engine can properly clean up.
  *
  * The run_query() callback takes a GnuCash query object. 
@@ -168,14 +166,14 @@ struct _backend
   GNCPriceDB * (*price_load) (Backend *);
   void (*book_end) (Backend *);
 
-  int (*account_begin_edit) (Backend *, Account *);
-  int (*account_commit_edit) (Backend *, Account *);
-  int (*trans_begin_edit) (Backend *, Transaction *);
-  int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
-  int (*trans_rollback_edit) (Backend *, Transaction *);
+  void (*account_begin_edit) (Backend *, Account *);
+  void (*account_commit_edit) (Backend *, Account *);
+  void (*trans_begin_edit) (Backend *, Transaction *);
+  void (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);
+  void (*trans_rollback_edit) (Backend *, Transaction *);
 
-  int (*price_begin_edit) (Backend *, GNCPrice *);
-  int (*price_commit_edit) (Backend *, GNCPrice *);
+  void (*price_begin_edit) (Backend *, GNCPrice *);
+  void (*price_commit_edit) (Backend *, GNCPrice *);
 
   void (*run_query) (Backend *, Query *);
   void (*price_lookup) (Backend *, GNCPriceLookup *);

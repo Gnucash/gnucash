@@ -24,6 +24,7 @@ libgncgnome_a_SOURCES = \
   dialog-transfer.c \
   dialog-userpass.c \
   dialog-utils.c \
+  druid-euro-conv.c \
   druid-commodity.c \
   druid-qif-import.c \
   druid-stock-split.c \
@@ -123,16 +124,6 @@ noinst_HEADERS = \
   window-register.h \
   window-report.h
 
-GLADE_FILES = \
-  glade-gnc-dialogs.c \
-  glade-cb-gnc-dialogs.h \
-  glade-gnc-dialogs.h \
-  glade-support.c \
-  glade-support.h
-
-#${GLADE_FILES}: gnc-dialogs.glade
-#	${GLADE} --write-source ${srcdir}/gnc-dialogs.glade
-
 EXTRA_DIST = \
   .cvsignore \
   gnc-dialogs.glade \
@@ -145,6 +136,7 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \
          ${GNOME_PRINT_CFLAGS} \
+         ${GDK_PIXBUF_CFLAGS} \
          ${GTKHTML_CFLAGS} \
 	 ${GHTTP_CFLAGS} \
 	 ${GUPPI_CFLAGS} 
@@ -157,6 +149,7 @@ INCLUDES = \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register \
   -I${top_srcdir}/src/register/gnome \
+  ${GUPPI_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
 

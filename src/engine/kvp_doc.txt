@@ -78,6 +78,12 @@ Type: frame
 Entities: Account
 Use: store reconcile information about accounts
 
+Name: reconcile-info/include-children
+Type: gint64
+Entities: Account
+Use: A boolean flag indicating whether transactions in sub-accounts should be
+     included during reconcilition.
+
 Name: reconcile-info/last-date
 Type: frame
 Entities: Account

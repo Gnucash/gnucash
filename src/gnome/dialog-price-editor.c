@@ -54,6 +54,8 @@ typedef struct
   GtkWidget * dialog;
   GtkWidget * price_dialog;
 
+  guint       price_dialog_destroy_signal;
+
   GtkWidget * sort_radio;
 
   GtkWidget * price_list;
@@ -388,6 +390,9 @@ window_destroy_cb (GtkObject *object, gpointer data)
     pdb_dialog->price = NULL;
   }
 
+  gtk_signal_disconnect (GTK_OBJECT (pdb_dialog->price_dialog),
+                         pdb_dialog->price_dialog_destroy_signal);
+
   gtk_widget_destroy (pdb_dialog->price_dialog);
   pdb_dialog->price_dialog = NULL;
 
@@ -404,12 +409,10 @@ window_destroy_cb (GtkObject *object, gpointer data)
   g_free (pdb_dialog);
 }
 
-static gboolean
-price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
+static void
+price_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-
-  gtk_widget_hide (pdb_dialog->price_dialog);
 
   if (pdb_dialog->price && pdb_dialog->new)
   {
@@ -422,9 +425,6 @@ price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
   gnc_price_dialog_create (pdb_dialog);
 
   gnc_prices_load_prices (pdb_dialog);
-
-  /* delete the window */
-  return FALSE;
 }
 
 static void
@@ -702,6 +702,14 @@ date_changed_cb (GNCDateEdit *gde, gpointer data)
 }
 
 static void
+date_entry_changed_cb (GtkWidget *w, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+
+  gnc_prices_set_changed (pdb_dialog, TRUE);
+}
+
+static void
 type_menu_changed (GtkButton *button, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
@@ -782,9 +790,10 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
                                GTK_SIGNAL_FUNC (price_cancel_clicked),
                                pdb_dialog);
 
-  gtk_signal_connect (GTK_OBJECT (price_dialog), "delete_event",
-                      GTK_SIGNAL_FUNC (price_window_delete_cb),
-                      pdb_dialog);
+  pdb_dialog->price_dialog_destroy_signal =
+    gtk_signal_connect (GTK_OBJECT (price_dialog), "destroy",
+                        GTK_SIGNAL_FUNC (price_window_destroy_cb),
+                        pdb_dialog);
 
   box = lookup_widget (price_dialog, "commodity_box");
 
@@ -799,6 +808,8 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
   box = lookup_widget (price_dialog, "currency_box");
 
   w = gnc_currency_edit_new ();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT (w),
+                                  gnc_default_currency ());
   pdb_dialog->currency_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
@@ -815,6 +826,9 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
 
   gtk_signal_connect (GTK_OBJECT (w), "date_changed",
                       GTK_SIGNAL_FUNC (date_changed_cb), pdb_dialog);
+
+  gtk_signal_connect (GTK_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
+                      GTK_SIGNAL_FUNC (date_entry_changed_cb), pdb_dialog);
 
   w = lookup_widget (price_dialog, "source_entry");
   pdb_dialog->source_entry = w;

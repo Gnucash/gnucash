@@ -89,6 +89,8 @@ struct _RegWindow
 
   GtkWidget * statusbar;
 
+  GtkWidget * double_line_check;
+
   GtkWidget * split_button;
   GtkWidget * split_menu_check;
   GtkWidget * split_popup_check;
@@ -832,6 +834,15 @@ gnc_register_create_tool_bar (RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
+      N_("Close"),
+      N_("Close this register window"),
+      closeCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
       N_("Enter"),
       N_("Record the current transaction"),
       recordCB, NULL, NULL,
@@ -927,15 +938,6 @@ gnc_register_create_tool_bar (RegWindow *regData)
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Close"),
-      N_("Close this register window"),
-      closeCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
-      0, 0, NULL
-    },
     GNOMEUIINFO_END
   };
 
@@ -946,7 +948,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
 
   regData->toolbar = toolbar;
 
-  regData->split_button = toolbar_info[6].widget;
+  regData->split_button = toolbar_info[8].widget;
 
   return toolbar;
 }
@@ -1525,18 +1527,18 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub All"),
-      N_("Identify and fix problems in the "
-         "transactions displayed in this register"),
+      N_("_Check & Repair All"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in all transactions of this account"),
       gnc_register_scrub_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Scrub Current"),
-      N_("Identify and fix problems in the "
-         "current transaction"),
+      N_("Check & _Repair Current"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this transaction"),
       gnc_register_scrub_current_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1597,6 +1599,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
                                       register_window_menu);
 
+  regData->double_line_check = style_menu[2].widget;
   regData->split_menu_check = transaction_menu[6].widget;
 
   /* Make sure the right style radio item is active */
@@ -2142,6 +2145,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   {
     gboolean use_double_line;
+    GtkCheckMenuItem *check;
 
     use_double_line = gnc_lookup_boolean_option ("Register",
                                                  "Double Line Mode",
@@ -2149,6 +2153,18 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
     /* be sure to initialize the gui elements associated with the cursor */
     xaccConfigSplitRegister (reg, reg->type, reg->style, use_double_line);
+
+    check = GTK_CHECK_MENU_ITEM (regData->double_line_check);
+
+    gtk_signal_handler_block_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
+
+    gtk_check_menu_item_set_active (check, use_double_line);
+
+    gtk_signal_handler_unblock_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
   }
 
   /* Allow grow, allow shrink, auto-shrink */

@@ -49,6 +49,8 @@ typedef struct _account       Account;
 typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
+typedef GList                 AccountList;
+typedef GList                 SplitList;
 
 
 /** PROTOTYPES ******************************************************/
@@ -159,7 +161,9 @@ void          xaccTransSetDate (Transaction *trans,
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateToday (Transaction *trans);
 void          xaccTransSetDateTS (Transaction *trans, const Timespec *ts);
+#ifndef SWIG   /* swig  doesn't like this define */
 #define   xaccTransSetDatePostedTS xaccTransSetDateTS
+#endif /* SWIG */
 
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
@@ -204,7 +208,7 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 /* The xaccTransGetSplitList() method returns a GList of the splits
  * in a transaction.  This list must not be modified.  Do *NOT* free
  * this list when you are done with it. */
-GList *       xaccTransGetSplitList (Transaction *trans);
+SplitList *   xaccTransGetSplitList (Transaction *trans);
 
 /* These routines return the Num (or ID field), the description, 
  * the notes, and the date field.
@@ -213,10 +217,14 @@ const char *  xaccTransGetNum (Transaction *trans);
 const char *  xaccTransGetDescription (Transaction *trans);
 const char *  xaccTransGetNotes (Transaction *trans);
 time_t        xaccTransGetDate (Transaction *trans);
+#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 long long     xaccTransGetDateL (Transaction *trans);
+#endif /* SWIG */
 
 void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
+#ifndef SWIG   /* swig  doesn't like this define */
 #define xaccTransGetDatePostedTS xaccTransGetDateTS
+#endif /* SWIG */
 
 void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
@@ -380,6 +388,13 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  * All of the routines always maintain balance: that is, 
  * invoking any of them will cause other splits in the transaction
  * to be modified so that the net value of the transaction is zero. 
+ *
+ * IMPORTANT: The split should be parented by an account before
+ * any of these routines are invoked!  This is because the actual
+ * setting of amounts/values requires SCU settings from the account.
+ * If these are not available, then amounts/values will be set to 
+ * -1/0, which is an invalid value.  I beleive this order dependency
+ * is a bug, but I'm too lazy to find, fix & test at the moment ... 
  *
  * The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
  *     sets the amount in the account's commodity that the split

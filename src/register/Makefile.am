@@ -10,6 +10,7 @@ libgncregister_a_SOURCES = \
   pricecell.c \
   quickfillcell.c \
   recncell.c \
+  register-common.c \
   splitreg.c \
   table-allgui.c \
   table-gnome.c \

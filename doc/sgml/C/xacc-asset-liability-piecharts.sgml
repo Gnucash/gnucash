@@ -4,8 +4,13 @@
 </artheader>
 <sect1>
 <title></title>
-<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
-</para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/asset-piechart.png">
+	    </imageobject>
+	</mediaobject>
+      </screenshot>
 <para>These piecharts are useful for getting an
 view of how your assets and liabilities are categorized.
 By selecting options appropriately, you can examine, say,

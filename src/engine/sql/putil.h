@@ -282,7 +282,7 @@ gnc_commodity * gnc_string_to_commodity (const char *str);
 
 /* Compare long-long integers */
 #define COMP_INT64(sqlname,fun,ndiffs) { 			\
-   if (atoll (DB_GET_VAL(sqlname,0)) != fun) {			\
+   if (strtoll (DB_GET_VAL(sqlname,0), NULL, 0) != fun) {	\
       PINFO("mis-match: %s sql='%s', eng='%lld'", sqlname, 	\
          DB_GET_VAL (sqlname,0), fun); 				\
       ndiffs++; 						\
@@ -291,7 +291,7 @@ gnc_commodity * gnc_string_to_commodity (const char *str);
 
 /* compare 32-bit ints */
 #define COMP_INT32(sqlname,fun,ndiffs) { 			\
-   if (atol (DB_GET_VAL(sqlname,0)) != fun) {			\
+   if (strtoll (DB_GET_VAL(sqlname,0), NULL, 0) != fun) {	\
       PINFO("mis-match: %s sql='%s', eng='%d'", sqlname, 	\
          DB_GET_VAL (sqlname,0), fun); 				\
       ndiffs++; 						\

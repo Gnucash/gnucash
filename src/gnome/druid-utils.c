@@ -33,28 +33,6 @@
 static short module = MOD_GUI;
 
 void
-gnc_druid_set_watermark_image (GnomeDruid *druid, char *image_path)
-{
-  GdkImlibImage *image;
-  GList         *pages = GNOME_DRUID(druid)->children;
-
-  while(pages != NULL) {
-
-    image = gnc_get_gdk_imlib_image(image_path); 
-
-    if (g_list_previous(pages) == NULL) {
-      gnome_druid_page_start_set_watermark
-        (GNOME_DRUID_PAGE_START(pages->data), image);
-    } else if (g_list_next(pages) == NULL) {
-      gnome_druid_page_finish_set_watermark
-        (GNOME_DRUID_PAGE_FINISH(pages->data), image);
-    } 
-
-    pages = g_list_next(pages);
-  }
-}
-
-void
 gnc_druid_set_title_image (GnomeDruid *druid, char *image_path)
 {
   GtkWidget       *canvas;
@@ -89,6 +67,53 @@ gnc_druid_set_title_image (GnomeDruid *druid, char *image_path)
                                   NULL);
 
     gnome_canvas_item_raise_to_top (title_item);
+
+    pages = g_list_next(pages);
+  }
+}
+
+void
+gnc_druid_set_watermark_image (GnomeDruid *druid, char *image_path)
+{
+  GdkImlibImage *image;
+  GList         *pages = GNOME_DRUID(druid)->children;
+
+  while(pages != NULL) {
+
+    image = gnc_get_gdk_imlib_image(image_path); 
+
+    if (g_list_previous(pages) == NULL) {
+      gnome_druid_page_start_set_watermark
+        (GNOME_DRUID_PAGE_START(pages->data), image);
+    } else if (g_list_next(pages) == NULL) {
+      gnome_druid_page_finish_set_watermark
+        (GNOME_DRUID_PAGE_FINISH(pages->data), image);
+    } 
+
+    pages = g_list_next(pages);
+  }
+}
+
+void
+gnc_druid_set_logo_image (GnomeDruid *druid, char *image_path)
+{
+  GdkImlibImage   *image;
+  GList           *pages = GNOME_DRUID(druid)->children;
+	
+  while(pages != NULL) {
+
+    image = gnc_get_gdk_imlib_image(image_path); 
+
+    if (g_list_previous(pages) == NULL) {
+      gnome_druid_page_start_set_logo
+        (GNOME_DRUID_PAGE_START(pages->data), image);
+    } else if (g_list_next(pages) == NULL) {
+      gnome_druid_page_finish_set_logo
+        (GNOME_DRUID_PAGE_FINISH(pages->data), image);
+    } else {
+      gnome_druid_page_standard_set_logo
+        (GNOME_DRUID_PAGE_STANDARD(pages->data), image);
+    }
 
     pages = g_list_next(pages);
   }

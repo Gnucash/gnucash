@@ -30,6 +30,7 @@
 #include <math.h>
 
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "guid.h"
 #include "kvp_frame.h"
@@ -61,6 +62,9 @@ struct _kvp_value {
     kvp_frame *frame;    
   } value;
 };
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 /********************************************************************
  * kvp_frame functions
@@ -114,6 +118,14 @@ kvp_frame_delete(kvp_frame * frame) {
     frame->hash = NULL;
   }
   g_free(frame);
+}
+
+gboolean
+kvp_frame_is_empty(kvp_frame * frame) 
+{
+  if (!frame) return TRUE;
+  if (!frame->hash) return TRUE;
+  return FALSE;
 }
 
 static void
@@ -891,7 +903,7 @@ kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
     return kvp_frame_compare(kva->value.frame, kvb->value.frame);
     break;
   }
-  fprintf(stderr, "DANGER: reached unreachable code (kvp_value_equal).\n");
+  PERR ("reached unreachable code.");
   return FALSE;
 }
 

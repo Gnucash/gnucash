@@ -140,7 +140,7 @@
     Intrevalo Datas</guimenuitem><guimenuitem>Mostrar Todas</guimenuitem></menuchoice>.
    </para>
   </sect2>
-    <sect2 id=xacc-general-ledger>
+    <sect2 id="xacc-general-ledger">
   <title>
   O Plano de Contas
   </title>
@@ -152,9 +152,13 @@
     <emphasis>todas</emphasis> as contas seleccionando <guimenu>Plano de Contas</guimenu>
     no item de menu principal <guimenu>Ferramentas</guimenu>.
     </para>
-  <para>
-    <emphasis>CORRIGIR: Provavelmente será necessária imagem</emphasis>
-  </para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/general-ledger.png">
+    </imageobject>
+  </mediaobject>
+      </screenshot>
   <para>
     Planos de contas mostram as entradas em todas as contas em que 
     uma transacção surge, que você pode editar directamente.  Note

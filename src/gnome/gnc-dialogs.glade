@@ -166,6 +166,7 @@
 	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
       </signal>
       <label>New Account (child of selected) ...</label>
+      <relief>GTK_RELIEF_NORMAL</relief>
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
@@ -2850,6 +2851,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Add</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 
 	      <widget>
@@ -2859,6 +2861,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Delete</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 	    </widget>
 
@@ -2879,6 +2882,7 @@ Exactly
 		<tooltip>Move the selected item up</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -2892,6 +2896,7 @@ Exactly
 		<tooltip>Move the selected item down</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3045,6 +3050,7 @@ No Total
 		<name>match_button</name>
 		<can_focus>True</can_focus>
 		<label>Matching Transactions...</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -3466,6 +3472,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3479,6 +3486,7 @@ Contingency
 		<name>payment_periods_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3550,6 +3558,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3563,6 +3572,7 @@ Contingency
 		<name>interest_rate_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3634,6 +3644,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3647,6 +3658,7 @@ Contingency
 		<name>present_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3718,6 +3730,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3731,6 +3744,7 @@ Contingency
 		<name>periodic_payment_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3802,6 +3816,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3815,6 +3830,7 @@ Contingency
 		<name>future_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -5956,6 +5972,7 @@ worry if your data is in multiple files.
 	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
 	    </signal>
 	    <label>Select...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>3</padding>
 	      <expand>False</expand>
@@ -5977,9 +5994,9 @@ worry if your data is in multiple files.
       </signal>
       <signal>
 	<name>back</name>
-	<handler>gnc_ui_qif_import_generic_back_cb</handler>
+	<handler>gnc_ui_qif_import_default_acct_back_cb</handler>
 	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:06:44 GMT</last_modification_time>
+	<last_modification_time>Wed, 04 Jul 2001 22:43:02 GMT</last_modification_time>
       </signal>
       <title>Set a date format for this QIF file</title>
       <title_color>255,255,255</title_color>
@@ -6050,6 +6067,24 @@ US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.
 	    <text_max_length>0</text_max_length>
 	    <text></text>
 	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label8477431</name>
+	  <label>Click &quot;Back&quot; to cancel loading this file and choose another.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	    <pack>GTK_PACK_END</pack>
+	  </child>
 	</widget>
       </widget>
     </widget>
@@ -6152,6 +6187,24 @@ in that program.
 	      <fill>True</fill>
 	    </child>
 	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label8477432</name>
+	  <label>Click &quot;Back&quot; to cancel loading this file and select another.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	    <pack>GTK_PACK_END</pack>
+	  </child>
 	</widget>
       </widget>
     </widget>
@@ -6290,6 +6343,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
 	    </signal>
 	    <label>Load another file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -6308,6 +6362,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
 	    </signal>
 	    <label>Unload selected file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -8100,6 +8155,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
 
       <widget>
@@ -8109,6 +8165,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
     </widget>
   </widget>
@@ -8317,6 +8374,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 		  <last_modification_time>Fri, 15 Dec 2000 18:13:53 GMT</last_modification_time>
 		</signal>
 		<label>Search</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -8335,6 +8393,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 		  <last_modification_time>Fri, 15 Dec 2000 18:14:21 GMT</last_modification_time>
 		</signal>
 		<label>Help</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -8901,6 +8960,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
 	    <label>Select Subaccounts</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
@@ -9374,6 +9434,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <name>new_button</name>
 	    <can_focus>True</can_focus>
 	    <label>New...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -9386,6 +9447,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <name>delete_button</name>
 	    <can_focus>True</can_focus>
 	    <label>Delete</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -10383,6 +10445,7 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:37:59 GMT</last_modification_time>
 	</signal>
 	<label>Add  &gt;&gt;</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10401,6 +10464,7 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:06 GMT</last_modification_time>
 	</signal>
 	<label>&lt;&lt; Remove</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10436,6 +10500,7 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:13 GMT</last_modification_time>
 	</signal>
 	<label>Move up</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10454,6 +10519,7 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:19 GMT</last_modification_time>
 	</signal>
 	<label>Move down</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10489,6 +10555,7 @@ quit without making any changes.</text>
 	  <last_modification_time>Sat, 24 Mar 2001 17:51:58 GMT</last_modification_time>
 	</signal>
 	<label>Size...</label>
+	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -11037,6 +11104,7 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Add</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11046,6 +11114,7 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11055,6 +11124,7 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove Old...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11064,6 +11134,7 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Edit</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11073,6 +11144,7 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Get Quotes</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 	</widget>
       </widget>
@@ -11610,6 +11682,7 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Add</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -11619,6 +11692,7 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Remove</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -11627,10 +11701,283 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Edit</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 	  </widget>
 	</widget>
       </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>Euro Conversion Druid</name>
+  <title>window1</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>euro_conv_druid</name>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>druidpagestart1</name>
+      <title>Euro Conversion Druid</title>
+      <text>This druid will help you converting your existing accounts to the
+currency Euro (EUR). 
+
+In the following, the term 'Euroland currency' will denote 
+the currencies that are being replaced by the Euro.
+
+No changes will be made until you press 'Finish' on the last page
+of this druid.</text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>page_accountplace</name>
+      <title>Where to create the Euro accounts?</title>
+      <title_color>255,255,255</title_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox48</name>
+	<border_width>5</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox130</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label8477433</name>
+	    <label>For each of your Euroland accounts, the druid will create a new EUR account. 
+
+Please choose the place in your account hierarchy where you would
+like the EUR accounts to be created.</label>
+	    <justify>GTK_JUSTIFY_LEFT</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox134</name>
+	    <border_width>30</border_width>
+	    <homogeneous>True</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>10</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton_newtoplevel</name>
+	      <can_focus>True</can_focus>
+	      <label>Create a new toplevel account hierarchy as a copy of the existing one</label>
+	      <active>True</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>place_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton_sametoplevel</name>
+	      <can_focus>True</can_focus>
+	      <label>Use same toplevel accounts. Create a copy of the rest of the accounts</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>place_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton_leafaccounts</name>
+	      <can_focus>True</can_focus>
+	      <label>Use existing account hierarchy. Create only a copy of those 
+accounts that have no subaccounts</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>place_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>page_accountname</name>
+      <title>How to name the new accounts?</title>
+      <title_color>255,255,255</title_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox49</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox132</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label8477434</name>
+	    <label>Please choose a naming scheme for the new Euro accounts 
+and the old Euroland accounts.</label>
+	    <justify>GTK_JUSTIFY_LEFT</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>5</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox133</name>
+	    <border_width>30</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>10</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton_new_eur</name>
+	      <can_focus>True</can_focus>
+	      <label>The name of each newly created Euro account is copied from
+the old Euroland account, plus an appended 'EUR'</label>
+	      <active>True</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>name_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton_old_euroland</name>
+	      <can_focus>True</can_focus>
+	      <label>The name of each old Euroland account is modified by appending 
+the respective currency symbol of the Euroland currency. 
+The name of the newly created Euro account is copied from the
+old Euroland account.</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>name_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>finish_page</name>
+      <title>Finish Euro Conversion</title>
+      <text>If you have finished choosing your Euro conversion settings,
+press 'Finish'.
+
+The druid will then perform the following steps:
+
+1. Create new accounts according to your settings.
+2. Create currency exchange accounts.
+3. Exchange all amounts from Euroland accounts to their
+respective Euro account.
+
+You may also press 'Back' to review your settings, or 'Cancel'
+to quit without making any changes.</text>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
     </widget>
   </widget>
 </widget>

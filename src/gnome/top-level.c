@@ -152,7 +152,13 @@ gnc_ui_get_toplevel(void) {
   /* FIXME */
   return gnc_main_window_get_toplevel(app);
 }
-  
+
+gboolean
+gnc_ui_can_cancel_save (void)
+{
+  return gnc_main_window_can_cancel_save (app);
+}
+
 
 static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 
