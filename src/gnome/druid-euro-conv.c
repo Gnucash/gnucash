@@ -58,23 +58,22 @@ typedef struct
   GtkWidget *radiobutton_new_eur;
   GtkWidget *radiobutton_old_euroland;
 
+  /* the list of all accounts that are to be converted. */
   GList * account_list;
+  /* a hash of struct CurrencyAccount to find the appropriate exchange accounts. */
   GHashTable * currency_hash;
-
+  /* a hash of old_account vs. new_account to create the hierarchy. */
+  GHashTable * account_hash;
 } EuroConvInfo;
 
-/* for the accounts that belong together. */
-typedef struct
-{
-  Account * old_account;
-  Account * eur_account;
-} AccountPair;
 
+/* and where the currency accounts are remembered */
 typedef struct
 {
   gnc_commodity * currency;
   Account * account;
 } CurrencyAccount;
+
 
 
 /** implementations ****************************************************/
@@ -89,6 +88,13 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static gboolean
+account_is_toplevel(Account *a)
+{
+  return (xaccAccountGetParent(a) == gncGetCurrentGroup() );
+}
+
+/* return true if this account shall be converted to EUR, else false. */
+static gboolean
 check_account_selection (Account *a, EuroConvInfo *info)
 {
   /* Check whether this account is to be converted, according to the
@@ -99,8 +105,7 @@ check_account_selection (Account *a, EuroConvInfo *info)
       (GTK_TOGGLE_BUTTON(info->radiobutton_newtoplevel)))
     return TRUE;
 
-  p = xaccAccountGetParent(a);
-  if ( p == gncGetCurrentGroup() )
+  if ( account_is_toplevel(a) )
     return FALSE;
 
   if (gtk_toggle_button_get_active
@@ -116,6 +121,7 @@ check_account_selection (Account *a, EuroConvInfo *info)
     return TRUE;
 }
 
+/* fills the info->account_list with all accounts that should be converted. */
 static int
 fill_account_list (EuroConvInfo *info)
 {
@@ -123,14 +129,6 @@ fill_account_list (EuroConvInfo *info)
   gint num_accounts = 0;
   GHashTable *currencyhash = NULL;
   CurrencyAccount *currencyinfo = NULL;;
-
-  printf("radiobuttons: toplevel %d, subtoplevel %d, leaf %d\n",
-	 gtk_toggle_button_get_active
-	 (GTK_TOGGLE_BUTTON(info->radiobutton_newtoplevel)),
-	 gtk_toggle_button_get_active
-	 (GTK_TOGGLE_BUTTON(info->radiobutton_sametoplevel)),
-	 gtk_toggle_button_get_active
-	 (GTK_TOGGLE_BUTTON(info->radiobutton_leafaccounts)));
 
   if (info->account_list != NULL)
     g_list_free(info->account_list);
@@ -165,10 +163,11 @@ fill_account_list (EuroConvInfo *info)
       continue;
 
     /* okay, this one needs conversion, so we store it. */
-    num_accounts++;
     accounts = g_list_prepend(accounts, account);
-    printf("Account needs conversion: %s\n",
-	   xaccAccountGetName (account));
+
+    num_accounts++;
+    /*     printf("Account needs conversion: %s\n", */
+    /* 	   xaccAccountGetName (account)); */
 
     /* record the currency */
     if (!g_hash_table_lookup(currencyhash, currency))
@@ -181,11 +180,196 @@ fill_account_list (EuroConvInfo *info)
   
   info->account_list = g_list_reverse(accounts);
   info->currency_hash = currencyhash;
-  printf("Total %d accounts to be converted.\n",num_accounts);
+  info->account_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+  /*   printf("Total %d accounts to be converted.\n",num_accounts); */
 
   return num_accounts;
 }
 
+/* function will be executed once for each currency that we need to exchange. */
+static void
+foreach_currency_cb (gpointer key, gpointer value, gpointer user_data)
+{
+  CurrencyAccount *caccount = value;
+  EuroConvInfo *info = user_data;
+  Account *a;
+  char *accountname;
+
+  g_return_if_fail (caccount != NULL);
+  g_return_if_fail (info != NULL);
+  /*   printf("Called upon %s.\n",  */
+  /* 	 gnc_commodity_get_printname(caccount->currency)); */
+
+  accountname = 
+    g_strdup_printf ("%s %s - EUR",
+		     _("Exchange"),
+		     gnc_commodity_get_mnemonic(caccount->currency));
+
+  /* Create the new currency exchange account. */
+  a = xaccMallocAccount();
+  xaccAccountBeginEdit(a);
+  xaccAccountSetType(a, CURRENCY);
+  xaccAccountSetName(a, accountname);
+  xaccAccountSetDescription(a, _("Euro conversion"));
+  xaccAccountSetCurrency(a, caccount->currency);
+  xaccAccountSetSecurity(a, gnc_get_euro() );
+  /* insert it into the toplevel group */
+  xaccGroupInsertAccount(gncGetCurrentGroup(), a);
+  xaccAccountCommitEdit(a);
+
+  /* and store a pointer in the hash_table */
+  caccount->account = a;
+}
+
+/* function where the exchange transactions are created and
+   inserted. old_a is of Euroland currency, *exchange is of the right
+   Euroland currency and with Security EUR, new_a is of currency
+   EUR. */
+static void
+exchange_amounts(Account *old_a, Account *exchange, Account *new_a)
+{
+  Transaction *trans;
+  Split *split;
+  gnc_numeric amount, eur_amount;
+
+  g_return_if_fail (old_a != NULL);
+  g_return_if_fail (exchange != NULL);
+  g_return_if_fail (new_a != NULL);
+  /*   printf("Exchanging from %s over %s to %s\n",  */
+  /* 	 xaccAccountGetName (old_a), */
+  /* 	 xaccAccountGetName (exchange), */
+  /* 	 xaccAccountGetName (new_a)); */
+
+  amount = xaccAccountGetBalance(old_a);
+  if (!gnc_numeric_zero_p(amount))
+    {
+      xaccAccountBeginEdit (old_a);
+      xaccAccountBeginEdit (exchange);
+      xaccAccountBeginEdit (new_a);
+      
+      eur_amount = gnc_convert_to_euro (xaccAccountGetCurrency(old_a),
+					amount);
+      trans = xaccMallocTransaction ();
+      xaccTransBeginEdit (trans);
+      
+      split = xaccMallocSplit ();
+      xaccSplitSetAmount (split, gnc_numeric_neg(amount));
+      xaccSplitSetValue (split, gnc_numeric_neg(amount));
+      xaccTransAppendSplit (trans, split);
+      xaccAccountInsertSplit (old_a, split);
+  
+      split = xaccMallocSplit ();
+      xaccTransAppendSplit (trans, split);
+      xaccSplitSetValue (split, amount);
+      xaccSplitSetAmount (split, eur_amount);
+      xaccAccountInsertSplit (exchange, split);
+      
+      xaccTransSetDescription (trans, _("Euro conversion"));     
+      xaccTransSetDateToday (trans);
+      xaccTransCommitEdit (trans);
+
+      trans = xaccMallocTransaction ();
+      xaccTransBeginEdit (trans);
+      
+      split = xaccMallocSplit ();
+      xaccSplitSetAmount (split, eur_amount);
+      xaccSplitSetValue (split, eur_amount);
+      xaccTransAppendSplit (trans, split);
+      xaccAccountInsertSplit (new_a, split);
+      
+      split = xaccMallocSplit ();
+      xaccTransAppendSplit (trans, split);
+      xaccSplitSetValue (split, gnc_numeric_neg(amount));
+      xaccSplitSetAmount (split, gnc_numeric_neg(eur_amount));
+      xaccAccountInsertSplit (exchange, split);
+
+      xaccTransSetDescription (trans, _("Euro conversion"));     
+      xaccTransSetDateToday (trans);
+      xaccTransCommitEdit (trans);
+      
+      xaccAccountCommitEdit(old_a);
+      xaccAccountCommitEdit(exchange);
+      xaccAccountCommitEdit(new_a);
+    };
+}
+
+
+/* function where the work happens. Gets executed once for each account that
+   we exchange to EUR. */
+static void
+foreach_account_cb (gpointer data, gpointer user_data)
+{
+  Account *old_a = data;
+  EuroConvInfo *info = user_data;
+  Account *new_a, *parent, *new_parent;
+  char *new_name, *old_name;
+  AccountGroup *parentGroup;
+  CurrencyAccount *caccount;
+
+  if (old_a == NULL)
+    return;
+
+  g_return_if_fail (old_a != NULL);
+  g_return_if_fail (info != NULL);
+
+  /* Naming scheme; new_name holds the name for the new account. */
+  if (gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON(info->radiobutton_new_eur)))
+    new_name = g_strdup_printf ("%s EUR",
+				xaccAccountGetName (old_a));
+  else
+    {
+      new_name = g_strdup( xaccAccountGetName (old_a));
+      old_name = g_strdup_printf ("%s %s",
+				  new_name,
+				  gnc_commodity_get_mnemonic
+				  (xaccAccountGetCurrency(old_a)));
+      xaccAccountBeginEdit(old_a);
+      xaccAccountSetName(old_a, old_name);
+      xaccAccountCommitEdit(old_a);
+    };
+
+  /* Create the new currency exchange account. */
+  new_a = xaccCloneAccountSimple(old_a);
+  xaccAccountBeginEdit(new_a);
+  xaccAccountSetName(new_a, new_name);
+  xaccAccountSetCurrency(new_a, gnc_get_euro());
+
+  /* Where to put this account? */
+  parentGroup = xaccAccountGetParent(old_a);
+  if (gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON(info->radiobutton_leafaccounts)))
+    xaccGroupInsertAccount(parentGroup, new_a);
+  else if (account_is_toplevel(old_a))
+    xaccGroupInsertAccount(parentGroup, new_a);
+  else
+    {
+      parent = xaccAccountGetParentAccount(old_a);
+      new_parent = 
+	(Account*) g_hash_table_lookup(info->account_hash, parent);
+      if (new_parent != NULL)
+	xaccAccountInsertSubAccount(new_parent, new_a);
+      else
+	xaccGroupInsertAccount(parentGroup, new_a);
+    };
+  xaccAccountCommitEdit(new_a);
+  /* ---------- Finished creating the new account. */
+
+  /* Store a reference to this newly created account. */
+  g_hash_table_insert(info->account_hash, old_a, new_a);
+
+  /* Now the exchange transactions have to be made. */
+
+  /* Find the exchange account. */
+  caccount = (CurrencyAccount *) 
+    g_hash_table_lookup(info->currency_hash, 
+			xaccAccountGetCurrency(old_a));
+  g_return_if_fail (caccount != NULL);
+  g_return_if_fail (caccount->account != NULL);
+
+  exchange_amounts(old_a, caccount->account, new_a);
+
+}
 
 static void
 euro_conv_finish (GnomeDruidPage *druidpage,
@@ -208,9 +392,17 @@ euro_conv_finish (GnomeDruidPage *druidpage,
       gnc_close_gui_component_by_data (DRUID_EURO_CONV_CM_CLASS, info);
       return;
     }
-  
+
   gnc_suspend_gui_refresh ();
 
+  g_hash_table_foreach(info->currency_hash,
+		       foreach_currency_cb, 
+		       info);
+
+  g_list_foreach(info->account_list,
+		 foreach_account_cb, 
+		 info);
+  
   gnc_resume_gui_refresh ();
 
   gnc_close_gui_component_by_data (DRUID_EURO_CONV_CM_CLASS, info);

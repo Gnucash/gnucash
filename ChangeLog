@@ -1,5 +1,7 @@
 2001-12-08  Christian Stimming  <stimming@tuhh.de>
 
+	* src/EuroUtils.c: Fixed rounding error.
+
 	* src/gnome/druid-euro-conv.c, src/gnome/Makefile.am,
 	src/gnc-ui.h, src/gnome/gnc-dialogs.glade,
 	src/gnome/window-acct-tree.c, src/pixmaps/Makefile.am,
