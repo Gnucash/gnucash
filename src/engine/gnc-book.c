@@ -61,6 +61,7 @@
 #include "gnc-event-p.h"
 #include "gnc-module.h"
 #include "gncObjectP.h"
+#include "QueryObject.h"
 
 static short module = MOD_IO;
 
@@ -496,5 +497,21 @@ gnc_book_get_counter (GNCBook *book, const char *counter_name)
   /* and return the value */
   return counter;
 }
+
+/* gncObject function implementation and registration */
+gboolean gnc_book_register (void)
+{
+  static QueryObjectDef params[] = {
+    { BOOK_KVP, QUERYCORE_KVP, (QueryAccess)gnc_book_get_slots },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_book_get_guid },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params);
+
+  return TRUE;
+}
+
+
 
 /* ========================== END OF FILE =============================== */

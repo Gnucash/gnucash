@@ -1,3 +1,17 @@
+2002-05-24  Derek Atkins   <derek@ihtfp.com>
+
+	* src/engine/GNCId.c: Implement xaccForeachEntity() as a which
+	allows a traversal of all entities of a particular type.
+
+	* Register GncObject_t descriptions for Splits, Transactions, and
+	Accounts.  Move the QueryObject definitions into the actual module
+	sources for Transactions, Splits, Accounts, and Books.  This
+	allows QueryNew searches for Splits, Transactions, and Accounts.
+
+	* gnc-engine.c: call the registration functions for Splits,
+	Transactions, Accounts, and Books to enable searching using the
+	new search subsystem.
+	
 2002-05-23  David Hampton  <hampton@employees.org>
 
 	* src/gnome/reconcile-list.c: Encapsulate all list sorting logic

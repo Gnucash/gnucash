@@ -70,6 +70,10 @@ void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
 GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
                                    GNCEntityTable *entity_table);
 
+/* Call a function for each object of type 'type' in the entity table */
+void xaccForeachEntity (GNCEntityTable *entity_table, GNCIdType type,
+			foreachObjectCB cb_func, gpointer user_data);
+
 /* Initialize and shutdown the GNC Id system. */
 void xaccGUIDInit (void);
 void xaccGUIDShutdown (void);

@@ -17,7 +17,6 @@
 #define GNC_OBJECT_VERSION 1
 
 typedef struct _gncObjectDef GncObject_t;
-typedef void (*foreachObjectCB) (gpointer object, gpointer user_data);
 typedef void (*foreachTypeCB) (GncObject_t *type, gpointer user_data);
 typedef void (*foreachBackendTypeCB) (GNCIdTypeConst type,
 				      gpointer backend_data,

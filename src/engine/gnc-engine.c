@@ -30,6 +30,10 @@
 #include "gncObjectP.h"
 #include "gnc-engine.h"
 
+#include "TransactionP.h"
+#include "AccountP.h"
+#include "gnc-book-p.h"
+
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
 GCache * gnc_string_cache = NULL;
@@ -74,6 +78,12 @@ gnc_engine_init(int argc, char ** argv)
   xaccGUIDInit ();
   gncObjectInitialize ();
   gncQueryNewInit ();
+
+  /* Now register our core types */
+  xaccSplitRegister ();
+  xaccTransRegister ();
+  xaccAccountRegister ();
+  gnc_book_register ();
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

@@ -200,4 +200,7 @@ void xaccFreeAccount (Account *account);
 void xaccAccountSetVersion (Account*, gint32);
 gint32 xaccAccountGetVersion (Account*);
 
+/* Register Accounts with the engine */
+gboolean xaccAccountRegister (void);
+
 #endif /* XACC_ACCOUNT_P_H */

@@ -71,4 +71,7 @@ const GUID * xaccGUIDNULL (void);
 GUID * xaccGUIDMalloc (void);
 void   xaccGUIDFree (GUID *guid);
 
+/* Callback type for xaccForeachEntity */
+typedef void (*foreachObjectCB) (gpointer object, gpointer user_data);
+
 #endif

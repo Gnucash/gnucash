@@ -16,123 +16,11 @@
 #include "QueryObjectP.h"
 #include "QueryNew.h"
 
-#include "Account.h"
-#include "Transaction.h"
-
 static short module = MOD_QUERY;
 
 static GHashTable *paramTable = NULL;
 static GHashTable *sortTable = NULL;
 static gboolean initialized = FALSE;
-
-static gpointer split_account_guid_getter (gpointer obj)
-{
-  Split *s = obj;
-  Account *acc;
-
-  if (!s) return NULL;
-  acc = xaccSplitGetAccount (s);
-  if (!acc) return NULL;
-  return ((gpointer)xaccAccountGetGUID (acc));
-}
-
-static void init_split (void)
-{
-  static const QueryObjectDef params[] = {
-    { SPLIT_KVP, QUERYCORE_KVP, (QueryAccess)xaccSplitGetSlots },
-    { SPLIT_DATE_RECONCILED, QUERYCORE_DATE,
-      (QueryAccess)xaccSplitRetDateReconciledTS },
-    { "d-share-amount", QUERYCORE_DOUBLE,
-      (QueryAccess)DxaccSplitGetShareAmount },
-    { "d-share-int64", QUERYCORE_INT64, (QueryAccess)xaccSplitGetGUID },
-    { SPLIT_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccSplitGetBalance },
-    { SPLIT_CLEARED_BALANCE, QUERYCORE_NUMERIC,
-      (QueryAccess)xaccSplitGetClearedBalance },
-    { SPLIT_RECONCILED_BALANCE, QUERYCORE_NUMERIC,
-      (QueryAccess)xaccSplitGetReconciledBalance },
-    { SPLIT_MEMO, QUERYCORE_STRING, (QueryAccess)xaccSplitGetMemo },
-    { SPLIT_ACTION, QUERYCORE_STRING, (QueryAccess)xaccSplitGetAction },
-    { SPLIT_RECONCILE, QUERYCORE_CHAR, (QueryAccess)xaccSplitGetReconcile },
-    { SPLIT_AMOUNT, QUERYCORE_NUMERIC, (QueryAccess)xaccSplitGetAmount },
-    { SPLIT_SHARE_PRICE, QUERYCORE_NUMERIC,
-      (QueryAccess)xaccSplitGetSharePrice },
-    { SPLIT_VALUE, QUERYCORE_DEBCRED, (QueryAccess)xaccSplitGetValue },
-    { SPLIT_TYPE, QUERYCORE_STRING, (QueryAccess)xaccSplitGetType },
-    { SPLIT_VOIDED_AMOUNT, QUERYCORE_NUMERIC,
-      (QueryAccess)xaccSplitVoidFormerAmount },
-    { SPLIT_VOIDED_VALUE, QUERYCORE_NUMERIC,
-      (QueryAccess)xaccSplitVoidFormerValue },
-    { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
-    { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
-    { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess) xaccSplitGetGUID },
-    { NULL },
-  };
-
-  gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder, params);
-}
-
-static void init_txn (void)
-{
-  static QueryObjectDef params[] = {
-    { TRANS_KVP, QUERYCORE_KVP, (QueryAccess)xaccTransGetSlots },
-    { TRANS_NUM, QUERYCORE_STRING, (QueryAccess)xaccTransGetNum },
-    { TRANS_DESCRIPTON, QUERYCORE_STRING, (QueryAccess)xaccTransGetDescription },
-    { TRANS_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateEnteredTS },
-    { TRANS_DATE_POSTED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDatePostedTS },
-    { TRANS_DATE_DUE, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateDueTS },
-    { TRANS_TYPE, QUERYCORE_CHAR, (QueryAccess)xaccTransGetTxnType },
-    { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },
-    { TRANS_VOID_REASON, QUERYCORE_STRING, (QueryAccess)xaccTransGetVoidReason },
-    { TRANS_VOID_TIME, QUERYCORE_DATE, (QueryAccess)xaccTransGetVoidTime },
-    { TRANS_SPLITLIST, GNC_ID_SPLIT, (QueryAccess)xaccTransGetSplitList },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccTransGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccTransGetGUID },
-    { NULL },
-  };
-
-  gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder, params);
-}
-
-static void init_account (void)
-{
-  static QueryObjectDef params[] = {
-    { ACCOUNT_KVP, QUERYCORE_KVP, (QueryAccess)xaccAccountGetSlots },
-    { ACCOUNT_NAME_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetName },
-    { ACCOUNT_CODE_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetCode },
-    { ACCOUNT_DESCRIPTION_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetDescription },
-    { ACCOUNT_NOTES_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetNotes },
-    { ACCOUNT_BALANCE_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
-    { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },
-    { NULL },
-  };
-
-  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
-}
-
-static void init_book (void)
-{
-  static QueryObjectDef params[] = {
-    { BOOK_KVP, QUERYCORE_KVP, (QueryAccess)gnc_book_get_slots },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_book_get_guid },
-    { NULL },
-  };
-
-  gncQueryObjectRegister (GNC_ID_BOOK, NULL, params);
-}
-
-static void init_tables (void)
-{
-  init_split ();
-  init_txn ();
-  init_account ();
-  init_book ();
-}
 
 static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 {
@@ -178,8 +66,6 @@ void gncQueryObjectInit(void)
 
   paramTable = g_hash_table_new (g_str_hash, g_str_equal);
   sortTable = g_hash_table_new (g_str_hash, g_str_equal);
-
-  init_tables ();
 }
 
 void gncQueryObjectShutdown (void)

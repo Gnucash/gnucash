@@ -257,4 +257,9 @@ gint32 xaccTransGetVersion (Transaction*);
 gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans,
                                                 GNCBook *book);
 
+/* Code to register Split and Transaction types with the engine */
+gboolean xaccSplitRegister (void);
+gboolean xaccTransRegister (void);
+
+
 #endif /* XACC_TRANSACTION_P_H */

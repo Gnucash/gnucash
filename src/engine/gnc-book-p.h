@@ -109,4 +109,7 @@ GNCEntityTable * gnc_book_get_entity_table (GNCBook *book);
  */
 void gnc_book_mark_saved(GNCBook *book);
 
+/* Register books with the engine */
+gboolean gnc_book_register (void);
+
 #endif /* GNC_BOOK_P_H */

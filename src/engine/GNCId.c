@@ -330,3 +330,37 @@ xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid)
     entity_node_destroy (old_guid, node, NULL);
   }
 }
+
+struct _iterate {
+  foreachObjectCB	fcn;
+  gpointer		data;
+  GNCIdType		type;
+};
+
+static void foreach_cb (gpointer key, gpointer item, gpointer arg)
+{
+  struct _iterate *iter = arg;
+  EntityNode *e_node = item;
+
+  /* Call the callback if this entity is of the proper type */
+  if (!safe_strcmp (e_node->entity_type, iter->type))
+    iter->fcn (e_node->entity, iter->data);
+}
+
+void
+xaccForeachEntity (GNCEntityTable *entity_table, GNCIdType type,
+		   foreachObjectCB cb_func, gpointer user_data)
+{
+  struct _iterate iter;
+
+  g_return_if_fail (entity_table);
+  g_return_if_fail (type);
+  g_return_if_fail (*type);
+  g_return_if_fail (cb_func);
+
+  iter.fcn = cb_func;
+  iter.data = user_data;
+  iter.type = type;
+
+  g_hash_table_foreach (entity_table->hash, foreach_cb, &iter);
+}

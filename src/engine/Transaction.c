@@ -46,6 +46,8 @@
 #include "gnc-lot-p.h"
 #include "messages.h"
 
+#include "gncObject.h"
+#include "QueryObject.h"
 
 /* 
  * The "force_double_entry" flag determines how 
@@ -3110,5 +3112,131 @@ xaccTransGetVoidTime(Transaction *tr)
 
   return void_time;
 }
+
+/* gncObject function implementation */
+static void
+do_foreach (GNCBook *book, GNCIdType type, foreachObjectCB cb, gpointer ud)
+{
+  GNCEntityTable *et;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+  et = gnc_book_get_entity_table (book);
+  xaccForeachEntity (et, type, cb, ud);
+}
+
+static void
+split_foreach (GNCBook *book, foreachObjectCB fcn, gpointer user_data)
+{
+  do_foreach (book, GNC_ID_SPLIT, fcn, user_data);
+}
+
+/* hook into the gncObject registry */
+
+static GncObject_t split_object_def = {
+  GNC_OBJECT_VERSION,
+  GNC_ID_SPLIT,
+  "Split",
+  NULL,				/* book_begin */
+  NULL,				/* book_end */
+  NULL,				/* is_dirty */
+  NULL,				/* mark_clean */
+  split_foreach,		/* foreach */
+  xaccSplitGetMemo		/* printable */
+};
+
+static gpointer split_account_guid_getter (gpointer obj)
+{
+  Split *s = obj;
+  Account *acc;
+
+  if (!s) return NULL;
+  acc = xaccSplitGetAccount (s);
+  if (!acc) return NULL;
+  return ((gpointer)xaccAccountGetGUID (acc));
+}
+
+gboolean xaccSplitRegister (void)
+{
+  static const QueryObjectDef params[] = {
+    { SPLIT_KVP, QUERYCORE_KVP, (QueryAccess)xaccSplitGetSlots },
+    { SPLIT_DATE_RECONCILED, QUERYCORE_DATE,
+      (QueryAccess)xaccSplitRetDateReconciledTS },
+    { "d-share-amount", QUERYCORE_DOUBLE,
+      (QueryAccess)DxaccSplitGetShareAmount },
+    { "d-share-int64", QUERYCORE_INT64, (QueryAccess)xaccSplitGetGUID },
+    { SPLIT_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccSplitGetBalance },
+    { SPLIT_CLEARED_BALANCE, QUERYCORE_NUMERIC,
+      (QueryAccess)xaccSplitGetClearedBalance },
+    { SPLIT_RECONCILED_BALANCE, QUERYCORE_NUMERIC,
+      (QueryAccess)xaccSplitGetReconciledBalance },
+    { SPLIT_MEMO, QUERYCORE_STRING, (QueryAccess)xaccSplitGetMemo },
+    { SPLIT_ACTION, QUERYCORE_STRING, (QueryAccess)xaccSplitGetAction },
+    { SPLIT_RECONCILE, QUERYCORE_CHAR, (QueryAccess)xaccSplitGetReconcile },
+    { SPLIT_AMOUNT, QUERYCORE_NUMERIC, (QueryAccess)xaccSplitGetAmount },
+    { SPLIT_SHARE_PRICE, QUERYCORE_NUMERIC,
+      (QueryAccess)xaccSplitGetSharePrice },
+    { SPLIT_VALUE, QUERYCORE_DEBCRED, (QueryAccess)xaccSplitGetValue },
+    { SPLIT_TYPE, QUERYCORE_STRING, (QueryAccess)xaccSplitGetType },
+    { SPLIT_VOIDED_AMOUNT, QUERYCORE_NUMERIC,
+      (QueryAccess)xaccSplitVoidFormerAmount },
+    { SPLIT_VOIDED_VALUE, QUERYCORE_NUMERIC,
+      (QueryAccess)xaccSplitVoidFormerValue },
+    { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
+    { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
+    { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess) xaccSplitGetGUID },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_SPLIT, (QuerySort)xaccSplitDateOrder, params);
+
+  return gncObjectRegister (&split_object_def);
+}
+
+static void
+trans_foreach (GNCBook *book, foreachObjectCB fcn, gpointer user_data)
+{
+  do_foreach (book, GNC_ID_TRANS, fcn, user_data);
+}
+
+static GncObject_t trans_object_def = {
+  GNC_OBJECT_VERSION,
+  GNC_ID_TRANS,
+  "Transaction",
+  NULL,				/* book_begin */
+  NULL,				/* book_end */
+  NULL,				/* is_dirty */
+  NULL,				/* mark_clean */
+  trans_foreach,		/* foreach */
+  xaccTransGetDescription	/* printable */
+};
+
+gboolean xaccTransRegister (void)
+{
+  static QueryObjectDef params[] = {
+    { TRANS_KVP, QUERYCORE_KVP, (QueryAccess)xaccTransGetSlots },
+    { TRANS_NUM, QUERYCORE_STRING, (QueryAccess)xaccTransGetNum },
+    { TRANS_DESCRIPTON, QUERYCORE_STRING, (QueryAccess)xaccTransGetDescription },
+    { TRANS_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateEnteredTS },
+    { TRANS_DATE_POSTED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDatePostedTS },
+    { TRANS_DATE_DUE, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateDueTS },
+    { TRANS_TYPE, QUERYCORE_CHAR, (QueryAccess)xaccTransGetTxnType },
+    { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },
+    { TRANS_VOID_REASON, QUERYCORE_STRING, (QueryAccess)xaccTransGetVoidReason },
+    { TRANS_VOID_TIME, QUERYCORE_DATE, (QueryAccess)xaccTransGetVoidTime },
+    { TRANS_SPLITLIST, GNC_ID_SPLIT, (QueryAccess)xaccTransGetSplitList },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccTransGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccTransGetGUID },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder, params);
+
+  return gncObjectRegister (&trans_object_def);
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/

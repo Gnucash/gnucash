@@ -44,6 +44,9 @@
 #include "kvp-util-p.h"
 #include "messages.h"
 
+#include "gncObject.h"
+#include "QueryObject.h"
+
 static short module = MOD_ENGINE; 
 
 
@@ -2714,6 +2717,54 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
   finder_help_function(account, description, NULL, &trans );
 
   return( trans );
+}
+
+/* gncObject function implementation and registration */
+
+static void
+account_foreach (GNCBook *book, foreachObjectCB cb, gpointer ud)
+{
+  GNCEntityTable *et;
+
+  g_return_if_fail (book);
+  g_return_if_fail (cb);
+
+  et = gnc_book_get_entity_table (book);
+  xaccForeachEntity (et, GNC_ID_ACCOUNT, cb, ud);
+}
+
+static GncObject_t account_object_def = {
+  GNC_OBJECT_VERSION,
+  GNC_ID_ACCOUNT,
+  "Account",
+  NULL,				/* book_begin */
+  NULL,				/* book_end */
+  NULL,				/* is_dirty */
+  NULL,				/* mark_clean */
+  account_foreach,		/* foreach */
+  xaccAccountGetName		/* printable */
+};
+
+gboolean xaccAccountRegister (void)
+{
+  static QueryObjectDef params[] = {
+    { ACCOUNT_KVP, QUERYCORE_KVP, (QueryAccess)xaccAccountGetSlots },
+    { ACCOUNT_NAME_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetName },
+    { ACCOUNT_CODE_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetCode },
+    { ACCOUNT_DESCRIPTION_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetDescription },
+    { ACCOUNT_NOTES_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetNotes },
+    { ACCOUNT_BALANCE_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetBalance },
+    { ACCOUNT_CLEARED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
+    { ACCOUNT_RECONCILED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
+    { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
+
+  return gncObjectRegister (&account_object_def);
 }
 
 /********************************************************************\
