@@ -46,6 +46,12 @@ typedef struct {
   GtkWidget * format_entry;
 
   GtkWidget * units_picker;
+
+  GtkWidget * month_label, * year_label;
+  GtkWidget * month_name, * month_name_long;
+  GtkWidget * include_century, * sample_date;
+  GtkWidget * custom_label, * custom_format;
+  gchar *format_string;
   
   SCM callback;
 

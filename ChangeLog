@@ -1,5 +1,31 @@
 2002-10-12  David Hampton  <hampton@employees.org>
 
+	* src/scm/printing/print-check.scm (gnc:*stock-check-positions*):
+	Move the bottom check up by 1/2 inch. #95016 (gnc:print-check):
+	Actually print the memo field on the check. #95015
+
+	* src/gnome/window-register.c (gnc_register_print_check_cb): Print
+	the Notes field of the transaction, not the memo field of the
+	split. #95015
+
+	* src/gnome/dialog-print-check.c
+	(gnc_ui_print_compute_new_format): Update the sample date value in
+	the dialog box any time one of the controls is updated.
+	(gnc_ui_print_check_format_changed_cb): New callback function.
+	(gnc_ui_print_check_dialog_create): Update for new controls and
+	for the dynamicly updating sample date string. #95022
+
+	* src/gnome-utils/dialog-utils.c (gnc_option_menu_init_w_signal):
+	Set up an option menu with an attached callback so that the
+	program knows when the user changes the setting of the option
+	menu.
+
+	* src/engine/date.c (getDateFormat): New routines for getting
+	preferred date style. (getDateFormatString): Get the numeric
+	format string for a date, i.e. "12/31/2000".
+	(getDateTextFormatString): Get the textual format string for a
+	date, i.e. "December 31, 2000".
+
 	* src/engine/gnc-session.c:
 	* src/app-file/gnc-file.c:
 	* src/app-utils/gnc-ui-util.c: Move gnc_get_current_session() into
