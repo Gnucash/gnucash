@@ -401,23 +401,6 @@ xaccTransDestroy (Transaction *trans)
 \********************************************************************/
 
 void
-xaccTransBeginEdit (Transaction *trans)
-{
-   trans->open = 1;
-   xaccOpenLog ();
-}
-
-void
-xaccTransCommitEdit (Transaction *trans)
-{
-   trans->open = 0;
-   xaccTransWriteLog (trans);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
 xaccTransRebalance (Transaction * trans)
 {
   xaccSplitRebalance (trans->splits[0]);
@@ -530,6 +513,51 @@ xaccSplitRebalance (Split *split)
 /********************************************************************\
 \********************************************************************/
 
+#define CHECK_OPEN(trans) {					\
+   if (!trans->open) {						\
+      printf ("Error: transaction %p not open for editing\n", trans);	\
+      assert (trans->open); 					\
+      printf ("%s:%d \n", __FILE__, __LINE__);			\
+      /* return; */						\
+   }								\
+}
+
+
+void
+xaccTransBeginEdit (Transaction *trans)
+{
+   trans->open = 1;
+   xaccOpenLog ();
+}
+
+void
+xaccTransCommitEdit (Transaction *trans)
+{
+   int i;
+   Split *split;
+   Account *acc;
+
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   xaccTransRebalance (trans);
+
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      acc = split ->acc;
+      xaccAccountRecomputeBalance (acc); 
+      i++;
+      split = trans->splits[i];
+   }
+
+   trans->open = 0;
+   xaccTransWriteLog (trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccTransAppendSplit (Transaction *trans, Split *split) 
 {
@@ -539,6 +567,8 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 
    if (!trans) return;
    if (!split) return;
+
+   CHECK_OPEN (trans);
 
    /* first, make sure that the split isn't already inserted 
     * elsewhere. If so, then remove it. */
@@ -751,8 +781,12 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    Account *acc;
    int i=0;
 
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
    /* hack alert -- for right now, keep the posted and the entered
     * dates in sync.  Later, we'll have to split these up. */
+
 
    trans->date_entered.tv_sec = secs;
    trans->date_posted.tv_sec = secs;
@@ -814,7 +848,11 @@ xaccTransSetDateToday (Transaction *trans)
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
-   char * tmp = strdup (xnum);
+   char * tmp;
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   tmp = strdup (xnum);
    if (trans->num) free (trans->num);
    trans->num = tmp;
    MarkChanged (trans);
@@ -823,7 +861,11 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
 void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
-   char * tmp = strdup (desc);
+   char * tmp;
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   tmp = strdup (desc);
    if (trans->description) free (trans->description);
    trans->description = tmp;
    MarkChanged (trans);
@@ -832,6 +874,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 #define SET_TRANS_FIELD(trans,field,value)			\
 {								\
    if (!trans) return;						\
+   CHECK_OPEN (trans);						\
 								\
    /* the engine *must* always be internally consistent */	\
    assert (trans->splits);					\
