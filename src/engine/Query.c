@@ -41,6 +41,7 @@
 #include "Query.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "gnc-lot.h"
 
 static short module = MOD_QUERY;
 
@@ -166,6 +167,72 @@ xaccQueryGetTransactions (Query * q, query_txn_match_t runtype)
   }
 
   g_hash_table_destroy(trans_hash);
+
+  return retval;
+}
+
+/********************************************************************
+ * xaccQueryGetLots
+ * Get lots matching the query terms, specifying whether 
+ * we require some or all splits to match 
+ ********************************************************************/
+
+static void
+query_match_all_lot_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
+  GNCLot *	l = key;
+  int		num_matches = GPOINTER_TO_INT(value);
+  GList **	matches = user_data;
+
+  if(num_matches == gnc_lot_count_splits(l)) {
+    *matches = g_list_prepend(*matches, l);
+  }
+}
+
+static void
+query_match_any_lot_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
+  GNCLot *	t = key;
+  GList **	matches = user_data;
+  *matches = g_list_prepend(*matches, t);
+}
+
+LotList * 
+xaccQueryGetLots (Query * q, query_txn_match_t runtype) 
+{
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current = NULL;
+  GList       * retval = NULL;
+  GHashTable  * lot_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+  GNCLot      * lot = NULL;
+  gpointer    val = NULL;
+  int         count = 0;
+
+  /* iterate over matching splits, incrementing a match-count in
+   * the hash table */
+  for(current = splits; current; current=current->next) {
+    lot = xaccSplitGetLot((Split *)(current->data));
+    
+    /* don't waste time looking up unless we need the count 
+     * information */
+    if(runtype == QUERY_TXN_MATCH_ALL) {
+      val   = g_hash_table_lookup(lot_hash, lot);
+      count = GPOINTER_TO_INT(val);
+    }
+    g_hash_table_insert(lot_hash, lot, GINT_TO_POINTER(count + 1));
+  }
+  
+  /* now pick out the transactions that match */
+  if(runtype == QUERY_TXN_MATCH_ALL) {
+    g_hash_table_foreach(lot_hash, query_match_all_lot_filter_func, 
+                         &retval);
+  }
+  else {
+    g_hash_table_foreach(lot_hash, query_match_any_lot_filter_func, 
+                         &retval);
+  }
+
+  g_hash_table_destroy(lot_hash);
 
   return retval;
 }

@@ -97,6 +97,9 @@ typedef enum {
  *    the caller. The query_run_t argument is used to provide account
  *    matching in the following way:
  *
+ * The xaccQueryGetLots() routine is just like GetTransactions() except
+ *    it returns a list of Lots.
+ *
  *    query_txn_match_t describes how to match accounts when querying 
  *    for transactions with xaccQueryGetTransactions().
  *    What is the difference between 'ANY' and 'ALL', you 
@@ -115,6 +118,7 @@ typedef enum {
 #define xaccQueryGetSplits	gncQueryRun
 SplitList   * xaccQueryGetSplitsUniqueTrans(Query *q);
 TransList   * xaccQueryGetTransactions(Query * q, query_txn_match_t type);
+LotList     * xaccQueryGetLots(Query * q, query_txn_match_t type);
 
 /*******************************************************************
  *  match-adding API 
