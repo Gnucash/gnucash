@@ -477,10 +477,6 @@ finish_helper(gpointer key, gpointer value, gpointer data)
                              old_comm))
       DxaccAccountSetCurrency (account, comm);
 
-    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account),
-                             old_comm))
-      DxaccAccountSetSecurity(account, comm);
-
     if (gnc_commodity_equiv (xaccAccountGetCommodity(account), old_comm))
       xaccAccountSetCommodity(account, comm);
 
