@@ -26,7 +26,7 @@
 #include <gnome.h>
 #include <time.h>
 
-#include "glade-gnc-dialogs.h"
+#include "dialog-utils.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
@@ -75,11 +75,12 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
                              time_t date, const char *num_str)
 {
   GtkWidget *dialog;
-  GtkObject *dtdo;
+  GladeXML  *xml;
 
-  dialog = create_Duplicate_Transaction_Dialog ();
+  xml = gnc_glade_xml_new ("register.glade", "Duplicate Transaction Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Duplicate Transaction Dialog");
   dt_dialog->dialog = dialog;
-  dtdo = GTK_OBJECT (dialog);
 
   /* parent */
   if (parent != NULL)
@@ -94,7 +95,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     GtkWidget *hbox;
 
     date_edit = gnc_date_edit_new (date, FALSE, FALSE);
-    hbox = gtk_object_get_data (dtdo, "date_hbox");
+    hbox = glade_xml_get_widget (xml, "date_hbox");
     gtk_widget_show (date_edit);
 
     gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
@@ -105,7 +106,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     GtkWidget *num_spin;
     long int num;
 
-    num_spin = gtk_object_get_data (dtdo, "num_spin");
+    num_spin = glade_xml_get_widget (xml, "num_spin");
     dt_dialog->num_edit = num_spin;
 
     gnome_dialog_editable_enters (GNOME_DIALOG (dialog),

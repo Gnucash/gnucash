@@ -872,3 +872,16 @@ gnc_glade_xml_new (const char *filename, const char *root)
 
   return xml;
 }
+
+GtkWidget *
+gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
+{
+  GladeXML *xml;
+
+  if (!widget || !name) return NULL;
+
+  xml = glade_get_widget_tree (widget);
+  if (!xml) return NULL;
+
+  return glade_xml_get_widget (xml, name);
+}

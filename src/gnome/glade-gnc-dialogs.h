@@ -17,5 +17,3 @@ GtkWidget* create_Transfer_Dialog (void);
 GtkWidget* create_Progress_Dialog (void);
 GtkWidget* create_Help_Window (void);
 GtkWidget* create_Report_Window (void);
-GtkWidget* create_Tax_Information_Dialog (void);
-GtkWidget* create_Duplicate_Transaction_Dialog (void);

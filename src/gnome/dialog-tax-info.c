@@ -28,8 +28,6 @@
 
 #include "account-tree.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
@@ -136,7 +134,7 @@ gnc_tax_info_set_changed (TaxInfoDialog *ti_dialog, gboolean changed)
 {
   GtkWidget *button;
 
-  button = lookup_widget (ti_dialog->dialog, "apply_button");
+  button = gnc_glade_lookup_widget (ti_dialog->dialog, "apply_button");
   gtk_widget_set_sensitive (button, changed);
 
   ti_dialog->changed = changed;
@@ -538,8 +536,8 @@ gnc_tax_info_update_accounts (TaxInfoDialog *ti_dialog)
 
   num_accounts = g_list_length (accounts);
 
-  label = lookup_widget (ti_dialog->dialog, "num_accounts_label");
-  frame = lookup_widget (ti_dialog->dialog, "tax_info_frame");
+  label = gnc_glade_lookup_widget (ti_dialog->dialog, "num_accounts_label");
+  frame = gnc_glade_lookup_widget (ti_dialog->dialog, "tax_info_frame");
 
   string = g_strdup_printf ("%d", num_accounts);
   gtk_label_set_text (GTK_LABEL (label), string);
@@ -625,12 +623,13 @@ txf_code_select_row_cb (GtkCList *clist,
   gtk_editable_delete_text (ge, 0, -1);
   gtk_editable_insert_text (ge, text, strlen (text), &pos);
 
-  scroll = lookup_widget (GTK_WIDGET (clist), "help_scroll");
+  scroll = gnc_glade_lookup_widget (GTK_WIDGET (clist), "help_scroll");
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scroll));
   gtk_adjustment_set_value (adj, 0.0);
 
-  frame = lookup_widget (GTK_WIDGET (clist), "payer_name_source_frame");
+  frame = gnc_glade_lookup_widget (GTK_WIDGET (clist),
+                                   "payer_name_source_frame");
 
   if (txf_info->payer_name_source)
   {
@@ -667,7 +666,8 @@ tax_related_toggled_cb (GtkToggleButton *togglebutton,
 
   on = gtk_toggle_button_get_active (togglebutton);
 
-  frame = lookup_widget (GTK_WIDGET (togglebutton), "txf_categories_frame");
+  frame = gnc_glade_lookup_widget (GTK_WIDGET (togglebutton),
+                                   "txf_categories_frame");
   gtk_widget_set_sensitive (frame, on);
 
   gnc_tax_info_set_changed (ti_dialog, TRUE);
@@ -687,8 +687,11 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 {
   GtkWidget *dialog;
   GtkObject *tido;
+  GladeXML  *xml;
 
-  dialog = create_Tax_Information_Dialog ();
+  xml = gnc_glade_xml_new ("tax.glade", "Tax Information Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Tax Information Dialog");
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
@@ -723,13 +726,13 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     GtkWidget *clist;
     GtkWidget *text;
 
-    button = lookup_widget (dialog, "tax_related_button");
+    button = glade_xml_get_widget (xml, "tax_related_button");
     ti_dialog->tax_related_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC (tax_related_toggled_cb), ti_dialog);
 
-    text = lookup_widget (dialog, "txf_help_text");
+    text = glade_xml_get_widget (xml, "txf_help_text");
     gtk_text_set_word_wrap (GTK_TEXT (text), TRUE);
     ti_dialog->txf_help_text = text;
 
@@ -745,17 +748,17 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         gtk_widget_set_usize (text, 0, (font->ascent + font->descent) * 5 + 6);
     }
 
-    clist = lookup_widget (dialog, "txf_category_clist");
+    clist = glade_xml_get_widget (xml, "txf_category_clist");
     gtk_clist_column_titles_passive (GTK_CLIST (clist));
     ti_dialog->txf_category_clist = clist;
 
     gtk_signal_connect (GTK_OBJECT (clist), "select-row",
                         GTK_SIGNAL_FUNC (txf_code_select_row_cb), ti_dialog);
 
-    button = lookup_widget (dialog, "current_account_button");
+    button = glade_xml_get_widget (xml, "current_account_button");
     ti_dialog->current_account_button = button;
 
-    button = lookup_widget (dialog, "parent_account_button");
+    button = glade_xml_get_widget (xml, "parent_account_button");
     ti_dialog->parent_account_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
@@ -792,10 +795,10 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     gtk_widget_show (ti_dialog->account_tree);
 
-    scroll = gtk_object_get_data (tido, "account_scroll");
+    scroll = glade_xml_get_widget (xml, "account_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), ti_dialog->account_tree);
 
-    income_radio = lookup_widget (dialog, "income_radio");
+    income_radio = glade_xml_get_widget (xml, "income_radio");
     gtk_signal_connect (GTK_OBJECT (income_radio), "toggled",
                         GTK_SIGNAL_FUNC (gnc_tax_info_income_cb),
                         ti_dialog);
@@ -805,7 +808,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   {
     GtkWidget *button;
 
-    button = lookup_widget (dialog, "select_subaccounts_button");
+    button = glade_xml_get_widget (xml, "select_subaccounts_button");
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (select_subaccounts_clicked),
                         ti_dialog);
