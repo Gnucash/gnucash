@@ -2,8 +2,6 @@
 noinst_LIBRARIES = libgnccalc.a
 
 libgnccalc_a_SOURCES = \
-  amort_opt.c \
-  amort_prt.c \
   expression_parser.c \
   fin.c \
   numeric_ops.c
@@ -17,6 +15,8 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   README \
+  amort_opt.c \
+  amort_prt.c \
   fin-interactive.c \
   fin-main.c
 
