@@ -16,7 +16,10 @@ libgncmod_business_core_la_SOURCES = \
   gncBusiness.c \
   gncCustomer.c \
   gncEmployee.c \
+  gncEntry.c \
+  gncInvoice.c \
   gncJob.c \
+  gncOrder.c \
   gncVendor.c
 
 noinst_HEADERS = \
@@ -26,6 +29,8 @@ noinst_HEADERS = \
   gncCustomerP.h \
   gncEmployee.h \
   gncEmployeeP.h \
+  gncEntry.h \
+  gncEntryP.h \
   gncJob.h \
   gncJobP.h \
   gncVendor.h \

@@ -169,3 +169,20 @@ GHashTable * gncBusinessEntityTable (GncBusiness *bus, const char *name)
   if (!bus || !name) return NULL;
   return (g_hash_table_lookup (bus->objects, name));
 }
+
+void gncBusinessAddEntity (GncBusiness *bus, const char *name,
+			   const GUID *guid, gpointer obj)
+{
+  GHashTable *ht = gncBusinessEntityTable (bus, name);
+  if (!ht || !obj || !guid) return;
+  g_hash_table_insert (ht, (gpointer)guid, obj);
+}
+
+void gncBusinessRemoveEntity (GncBusiness *bus, const char *name,
+			      const GUID *guid)
+{
+  GHashTable *ht = gncBusinessEntityTable (bus, name);
+  if (!ht || !guid) return;
+  g_hash_table_remove (ht, guid);
+}
+

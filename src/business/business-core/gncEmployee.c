@@ -11,6 +11,7 @@
 
 #include "guid.h"
 #include "messages.h"
+#include "gnc-engine-util.h"
 
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
@@ -33,9 +34,6 @@ struct _gncEmployee {
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
-static void gncEmployeeAdd (GncEmployee *employee);
-static void gncEmployeeRemove (GncEmployee *employee);
 
 /* Create/Destroy Functions */
 
@@ -60,7 +58,8 @@ GncEmployee *gncEmployeeCreate (GncBusiness *business)
   
   guid_new (&employee->guid);
 
-  gncEmployeeAdd (employee);
+  gncBusinessAddEntity (business, GNC_EMPLOYEE_MODULE_NAME, &employee->guid,
+			employee);
 
   return employee;
 }
@@ -75,7 +74,8 @@ void gncEmployeeDestroy (GncEmployee *employee)
   CACHE_REMOVE (employee->acl);
   gncAddressDestroy (employee->addr);
 
-  gncEmployeeRemove (employee);
+  gncBusinessRemoveEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
+			   &employee->guid);
 
   g_free (employee);
 }
@@ -119,9 +119,11 @@ void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
 {
   if (!employee || !guid) return;
   if (guid_equal (guid, &employee->guid)) return;
-  gncEmployeeRemove (employee);
+  gncBusinessRemoveEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
+			   &employee->guid);
   employee->guid = *guid;
-  gncEmployeeAdd (employee);
+  gncBusinessAddEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
+			&employee->guid, employee);
 }
 
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
@@ -240,22 +242,6 @@ static gint gncEmployeeSortFunc (gconstpointer a, gconstpointer b) {
 }
 
 /* Package-Private functions */
-
-static void gncEmployeeAdd (GncEmployee *employee)
-{
-  GHashTable *ht = gncBusinessEntityTable (employee->business,
-					   GNC_EMPLOYEE_MODULE_NAME);
-  if (ht)
-    g_hash_table_insert (ht, &employee->guid, employee);
-}
-
-static void gncEmployeeRemove (GncEmployee *employee)
-{
-  GHashTable *ht = gncBusinessEntityTable (employee->business,
-					   GNC_EMPLOYEE_MODULE_NAME);
-  if (ht)
-    g_hash_table_remove (ht, &employee->guid);
-}
 
 struct _iterate {
   GList *list;

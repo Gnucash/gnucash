@@ -11,6 +11,7 @@
 
 #include "guid.h"
 #include "messages.h"
+#include "gnc-engine-util.h"
 
 #include "gnc-numeric.h"
 #include "gncJob.h"
@@ -27,9 +28,6 @@ struct _gncJob {
   gboolean	active;
   gboolean	dirty;
 };
-
-static void _gncJobAdd (GncJob *job);
-static void _gncJobRemove (GncJob *job);
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -53,7 +51,7 @@ GncJob *gncJobCreate (GncBusiness *business)
   job->active = TRUE;
 
   guid_new (&job->guid);
-  _gncJobAdd (job);
+  gncBusinessAddEntity (business, GNC_JOB_MODULE_NAME, &job->guid, job);
 
   return job;
 }
@@ -69,7 +67,7 @@ void gncJobDestroy (GncJob *job)
   if (job->cust)
     gncCustomerRemoveJob (job->cust, job);
 
-  _gncJobRemove (job);
+  gncBusinessRemoveEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid);
 
   g_free (job);
 }
@@ -114,9 +112,9 @@ void gncJobSetGUID (GncJob *job, const GUID *guid)
   if (!guid) return;
   if (guid_equal (guid, &job->guid)) return;
 
-  _gncJobRemove (job);
+  gncBusinessRemoveEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid);
   job->guid = *guid;
-  _gncJobAdd (job);
+  gncBusinessAddEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid, job);
 }
 
 void gncJobSetCustomer (GncJob *job, GncCustomer *cust)
@@ -206,27 +204,11 @@ gint gncJobSortFunc (gconstpointer a, gconstpointer b) {
 
   if (!a || !b) return 0;
 
-  return (strcmp(ja->id, jb->id));
+  return (safe_strcmp(ja->id, jb->id));
 }
 
 
 /* Package-Private functions */
-
-static void _gncJobAdd (GncJob *job)
-{
-  GHashTable *ht = gncBusinessEntityTable (job->business,
-					   GNC_JOB_MODULE_NAME);
-  if (ht)
-    g_hash_table_insert (ht, &job->guid, job);
-}
-
-static void _gncJobRemove (GncJob *job)
-{
-  GHashTable *ht = gncBusinessEntityTable (job->business,
-					   GNC_JOB_MODULE_NAME);
-  if (ht)
-    g_hash_table_remove (ht, &job->guid);
-}
 
 static GList * _gncJobGetList (GncBusiness *obj, gboolean show_all)
 {

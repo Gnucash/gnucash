@@ -11,6 +11,7 @@
 
 #include "guid.h"
 #include "messages.h"
+#include "gnc-engine-util.h"
 
 #include "gncVendor.h"
 #include "gncVendorP.h"
@@ -33,9 +34,6 @@ struct _gncVendor {
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-static void gncVendorAdd (GncVendor *vendor);
-static void gncVendorRemove (GncVendor *vendor);
-
 /* Create/Destroy Functions */
 
 GncVendor *gncVendorCreate (GncBusiness *business)
@@ -57,7 +55,8 @@ GncVendor *gncVendorCreate (GncBusiness *business)
 
   guid_new (&vendor->guid);
 
-  gncVendorAdd (vendor);
+  gncBusinessAddEntity (business, GNC_VENDOR_MODULE_NAME, &vendor->guid,
+			vendor);
 
   return vendor;
 }
@@ -71,7 +70,8 @@ void gncVendorDestroy (GncVendor *vendor)
   CACHE_REMOVE (vendor->notes);
   gncAddressDestroy (vendor->addr);
 
-  gncVendorRemove (vendor);
+  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
+			   &vendor->guid);
 
   g_free (vendor);
 }
@@ -81,7 +81,7 @@ void gncVendorDestroy (GncVendor *vendor)
 #define SET_STR(member, str) { \
 	char * tmp; \
 	\
-	if (!strcmp (member, str)) return; \
+	if (!safe_strcmp (member, str)) return; \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -115,9 +115,11 @@ void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
 {
   if (!vendor || !guid) return;
   if (guid_equal (guid, &vendor->guid)) return;
-  gncVendorRemove (vendor);
+  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
+			   &vendor->guid);
   vendor->guid = *guid;
-  gncVendorAdd (vendor);
+  gncBusinessAddEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
+			&vendor->guid, vendor);
 }
 
 void gncVendorSetTerms (GncVendor *vendor, gint terms)
@@ -222,22 +224,6 @@ static gint gncVendorSortFunc (gconstpointer a, gconstpointer b) {
 }
 
 /* Package-Private functions */
-
-static void gncVendorAdd (GncVendor *vendor)
-{
-  GHashTable *ht = gncBusinessEntityTable (vendor->business,
-					   GNC_VENDOR_MODULE_NAME);
-  if (ht)
-    g_hash_table_insert (ht, &vendor->guid, vendor);
-}
-
-static void gncVendorRemove (GncVendor *vendor)
-{
-  GHashTable *ht = gncBusinessEntityTable (vendor->business,
-					   GNC_VENDOR_MODULE_NAME);
-  if (ht)
-    g_hash_table_remove (ht, &vendor->guid);
-}
 
 struct _iterate {
   GList *list;

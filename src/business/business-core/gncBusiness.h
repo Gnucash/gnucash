@@ -49,6 +49,14 @@ const char * gncBusinessPrintable (GncBusiness *business,
 /* Grab the entity table for an object */
 GHashTable * gncBusinessEntityTable (GncBusiness *business, const char *name);
 
+/* Add an entity to the table */
+void gncBusinessAddEntity (GncBusiness *business, const char *name,
+			   const GUID *guid, gpointer obj);
+
+/* Remove it from the table */
+void gncBusinessRemoveEntity (GncBusiness *business, const char *name,
+			      const GUID *guid);
+
 /* REGISTRATION AND REG-LOOKUP FUNCTIONS */
 
 /* Register new types of business objects */

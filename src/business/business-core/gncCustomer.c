@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "messages.h"
+#include "gnc-engine-util.h"
 
 #include "gnc-numeric.h"
 #include "gncCustomer.h"
@@ -37,9 +38,6 @@ struct _gncCustomer {
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-static void gncCustomerAdd (GncCustomer *cust);
-static void gncCustomerRemove (GncCustomer *cust);
-
 /* Create/Destroy Functions */
 
 GncCustomer *gncCustomerCreate (GncBusiness *business)
@@ -65,7 +63,8 @@ GncCustomer *gncCustomerCreate (GncBusiness *business)
 
   guid_new (&cust->guid);
 
-  gncCustomerAdd (cust);
+  gncBusinessAddEntity (business, GNC_CUSTOMER_MODULE_NAME,
+			&cust->guid, cust);
 
   return cust;
 }
@@ -81,7 +80,8 @@ void gncCustomerDestroy (GncCustomer *cust)
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
 
-  gncCustomerRemove (cust);
+  gncBusinessRemoveEntity (cust->business, GNC_CUSTOMER_MODULE_NAME,
+			   &cust->guid);
 
   g_free (cust);
 }
@@ -91,7 +91,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 #define SET_STR(member, str) { \
 	char * tmp; \
 	\
-	if (!strcmp (member, str)) return; \
+	if (!safe_strcmp (member, str)) return; \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -125,9 +125,11 @@ void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
 {
   if (!cust || !guid) return;
   if (guid_equal (guid, &cust->guid)) return;
-  gncCustomerRemove (cust);
+  gncBusinessRemoveEntity (cust->business, GNC_CUSTOMER_MODULE_NAME,
+			   &cust->guid);
   cust->guid = *guid;
-  gncCustomerAdd (cust);
+  gncBusinessAddEntity (cust->business, GNC_CUSTOMER_MODULE_NAME, &cust->guid,
+			cust);
 }
 
 void gncCustomerSetTerms (GncCustomer *cust, gint terms)
@@ -310,22 +312,6 @@ static gint gncCustomerSortFunc (gconstpointer a, gconstpointer b) {
 }
 
 /* Package-Private functions */
-
-static void gncCustomerAdd (GncCustomer *cust)
-{
-  GHashTable *ht = gncBusinessEntityTable (cust->business,
-					   GNC_CUSTOMER_MODULE_NAME);
-  if (ht)
-    g_hash_table_insert (ht, &cust->guid, cust);
-}
-
-static void gncCustomerRemove (GncCustomer *cust)
-{
-  GHashTable *ht = gncBusinessEntityTable (cust->business,
-					   GNC_CUSTOMER_MODULE_NAME);
-  if (ht)
-    g_hash_table_remove (ht, &cust->guid);
-}
 
 struct _iterate {
   GList *list;

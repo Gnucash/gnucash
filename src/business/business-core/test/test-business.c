@@ -98,7 +98,7 @@ static void test_business (void)
 
     /* Now add to the table and look up again */
     ptr = get_random_string ();
-    g_hash_table_insert (ht, &guid, ptr);
+    gncBusinessAddEntity (bus, TEST_MODULE_NAME, &guid, ptr);
 
     /* now let's see if we can look for it */
     do_test (gncBusinessLookupGUID (NULL, NULL, NULL) == NULL,
@@ -118,6 +118,10 @@ static void test_business (void)
     res = gncBusinessLookupGUID (bus, TEST_MODULE_NAME, &guid);
     do_test (res != NULL, "business: lookupGUID(2): bus, mod_name, guid");
     do_test (res == ptr, "business: lookupGUID(2): check the same pointer");
+
+    gncBusinessRemoveEntity (bus, TEST_MODULE_NAME, &guid);
+    res = gncBusinessLookupGUID (bus, TEST_MODULE_NAME, &guid);
+    do_test (res == NULL, "business: lookupGUID(3): bus, mod_name, guid");
 
     test_printable (bus, TEST_MODULE_NAME, ptr);
   }

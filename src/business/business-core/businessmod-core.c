@@ -16,7 +16,10 @@
 #include "gncBusinessP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
+#include "gncEntryP.h"
+#include "gncInvoiceP.h"
 #include "gncJobP.h"
+#include "gncOrderP.h"
 #include "gncVendorP.h"
 
 /* version of the gnc module system interface we require */
@@ -55,7 +58,10 @@ gnc_module_init(int refcount)
     /* initialize known types */
     gncCustomerRegister ();
     gncEmployeeRegister ();
+    gncEntryRegister ();
+    gncInvoiceRegister ();
     gncJobRegister ();
+    gncOrderRegister ();
     gncVendorRegister ();
   }
   
