@@ -30,19 +30,11 @@
 #include "search-core-type.h"
 #include "search-string.h"
 #include "search-date.h"
-
-#if 0
-#include "search-input.h"
-#include "search-option.h"
-#include "search-code.h"
-#include "search-colour.h"
-#include "search-datespec.h"
-#include "search-score.h"
-#include "search-int.h"
-#include "search-folder.h"
-#include "search-source.h"
-#endif
-
+#include "search-debcred.h"
+#include "search-double.h"
+#include "search-int64.h"
+#include "search-numeric.h"
+#include "search-boolean.h"
 
 static gboolean validate (GNCSearchCoreType *fe);
 
@@ -197,29 +189,16 @@ gnc_search_core_type_new_type_name (const char *type)
     return (GNCSearchCoreType *)gnc_search_string_new ();
   } else if (!strcmp (type, QUERYCORE_DATE)) {
     return (GNCSearchCoreType *)gnc_search_date_new ();
-#if 0
-  } else if (!strcmp (type, "folder")) {
-    return (GNCSearchCoreType *)gnc_search_folder_new ();
-  } else if (!strcmp (type, "address")) {
-    /* FIXME: temporary ... need real address type */
-    return (GNCSearchCoreType *)gnc_search_input_new_type_name (type);
-  } else if (!strcmp (type, "code")) {
-    return (GNCSearchCoreType *)gnc_search_code_new ();
-  } else if (!strcmp (type, "colour")) {
-    return (GNCSearchCoreType *)gnc_search_colour_new ();
-  } else if (!strcmp (type, "optionlist") || !strcmp (type, "system-flag")) {
-    return (GNCSearchCoreType *)gnc_search_option_new ();
-  } else if (!strcmp (type, "datespec")) {
-    return (GNCSearchCoreType *)gnc_search_datespec_new ();
-  } else if (!strcmp (type, "score")) {
-    return (GNCSearchCoreType *)gnc_search_score_new ();
-  } else if (!strcmp (type, "integer")) {
-    return (GNCSearchCoreType *)gnc_search_int_new ();
-  } else if (!strcmp (type, "regex")) {
-    return (GNCSearchCoreType *)gnc_search_input_new_type_name (type);
-  } else if (!strcmp (type, "source")) {
-    return (GNCSearchCoreType *)gnc_search_source_new ();
-#endif
+  } else if (!strcmp (type, QUERYCORE_INT64)) {
+    return (GNCSearchCoreType *)gnc_search_int64_new ();
+  } else if (!strcmp (type, QUERYCORE_DOUBLE)) {
+    return (GNCSearchCoreType *)gnc_search_double_new ();
+  } else if (!strcmp (type, QUERYCORE_NUMERIC)) {
+    return (GNCSearchCoreType *)gnc_search_numeric_new ();
+  } else if (!strcmp (type, QUERYCORE_DEBCRED)) {
+    return (GNCSearchCoreType *)gnc_search_debcred_new ();
+  } else if (!strcmp (type, QUERYCORE_BOOLEAN)) {
+    return (GNCSearchCoreType *)gnc_search_boolean_new ();
   } else {
     g_warning("Unknown search type '%s'", type);
     return 0;

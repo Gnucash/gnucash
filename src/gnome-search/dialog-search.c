@@ -371,23 +371,43 @@ gnc_search_dialog_destroy (GNCSearchWindow *sw)
   gnc_close_gui_component_by_data (DIALOG_SEARCH_CM_CLASS, sw);
 }
 
+static GNCSearchParam *
+make_param (GNCIdTypeConst type, const char *title, const char *path1,
+	    const char *path2)
+{
+  GSList *l = NULL;
+  GNCSearchParam *param = gnc_search_param_new ();
+  gnc_search_param_set_title (param, title);
+
+  if (path2)
+    l = g_slist_prepend (l, path2);
+  l = g_slist_prepend (l, path1);
+
+  gnc_search_param_set_param_path (param, type, l);
+
+  return param;
+}
+
 static GList *
 get_params_list (GNCIdTypeConst type)
 {
   GList *list = NULL;
   GNCSearchParam *param;
 
-  param = gnc_search_param_new ();
-  gnc_search_param_set_title (param, "Split Memo");
-  gnc_search_param_set_param_path (param, type,
-				   g_slist_prepend (NULL, SPLIT_MEMO));
-  list = g_list_prepend (list, param);
-
-  param = gnc_search_param_new ();
-  gnc_search_param_set_title (param, "Date Reconciled");
-  gnc_search_param_set_param_path (param, type,
-				   g_slist_prepend (NULL, SPLIT_DATE_RECONCILED));
-  list = g_list_prepend (list, param);
+  list = g_list_prepend (list, make_param (type, "Split->Txn->Void?",
+					   SPLIT_TRANS, TRANS_VOID_STATUS));
+  list = g_list_prepend (list, make_param (type, "Split Int64",
+					   "d-share-int64", NULL));
+  list = g_list_prepend (list, make_param (type, "Split Amount (double)",
+					   "d-share-amount", NULL));
+  list = g_list_prepend (list, make_param (type, "Split Value (debcred)",
+					   SPLIT_VALUE, NULL));
+  list = g_list_prepend (list, make_param (type, "Split Amount (numeric)",
+					   SPLIT_AMOUNT, NULL));
+  list = g_list_prepend (list, make_param (type, "Date Reconciled (date)",
+					   SPLIT_DATE_RECONCILED, NULL));
+  list = g_list_prepend (list, make_param (type, "Split Memo (string)",
+					   SPLIT_MEMO, NULL));
 
   return list;
 }
