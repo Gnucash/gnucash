@@ -66,13 +66,20 @@ run_test (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
+  int i;
+
   gnc_module_load("gnucash/engine", 0);
 
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
   xaccLogDisable ();
 
-  run_test ();
+  /* Always start from the same random seed so we fail consistently */
+  srand(0);
+
+  /* Loop the test. */
+  for (i=0; i < 10; i++)
+    run_test ();
 
   success("queries seem to work");
 

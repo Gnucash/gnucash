@@ -2805,7 +2805,7 @@ xaccSplitGetValue (const Split * cs)
 gnc_numeric
 xaccSplitGetSharePrice (const Split * split) 
 {
-  gnc_numeric amt, val;
+  gnc_numeric amt, val, price;
   if(!split)
   {
     return gnc_numeric_create(1, 1);
@@ -2826,10 +2826,22 @@ xaccSplitGetSharePrice (const Split * split)
     }
     return gnc_numeric_create(0, 1);
   }
-  return gnc_numeric_div(val, amt,
+  price = gnc_numeric_div(val, amt,
                          GNC_DENOM_AUTO, 
                          GNC_HOW_DENOM_SIGFIGS(PRICE_SIGFIGS) |
                          GNC_HOW_RND_ROUND);
+
+  /* During random checks we can get some very weird prices.  Let's
+   * handle some overflow and other error conditions by returning
+   * zero.  But still print an error to let us know it happened.
+   */
+  if (gnc_numeric_check(price)) {
+    PERR("Computing Shares Price Failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
+	 gnc_numeric_check(price), val.num, val.denom, amt.num, amt.denom);
+    return gnc_numeric_create(0,1);
+  }
+
+  return price;
 }
 
 /********************************************************************\
