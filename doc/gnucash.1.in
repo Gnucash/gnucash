@@ -2,7 +2,7 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH GNUCASH 1 "January 2002" Version "1.6.6"
+.TH GNUCASH 1 "@-DATE-@" Version "@-VERSION-@"
 .SH NAME
 gnucash \- personal finance manager
 .SH SYNOPSIS
@@ -65,18 +65,17 @@ MANUALLY!
 Enable debugging output.  This allows you to turn on the debugging
 earlier in the startup process than you can with
 .B --debug.
-.IP GNC_RUN_AS_SHELL
-If set, makes
-.B GnuCash
-pop up in a guile shell with all the GnuCash functions loaded. See
-the README for more details.
-.IP GNC_BOOTSTRAP_SCM
-Location of the initial bootstrapping scheme code.  Hopefully, you
-won't need to change this.
-.IP GNC_SCM_LOAD_PATH
+.IP GUILE_LOAD_PATH
 An override for the
 .B GnuCash
 scheme load path. You shouldn't need to alter this.  For more
+information see the README file.
+.IP GNC_MODULE_PATH
+An override for the
+.B GnuCash
+scheme load path for
+.B Gnucash
+modules. You shouldn't need to alter this.  For more
 information see the README file.
 .SH BUGS
 .B Please report any bugs using the bug reporting form on the
@@ -84,8 +83,6 @@ information see the README file.
 web site.
 
 .SH "SEE ALSO"
-.BR gnc-prices (1),
-
 .B GnuCash
 has extensive on-line help available from the "help" menu.
 

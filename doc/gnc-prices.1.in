@@ -2,7 +2,7 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH GNC-PRICES 1 "January 2002" Version "1.6.6"
+.TH GNC-PRICES 1 "@-DATE-@" Version "@-VERSION-@"
 .SH NAME
 gnc-prices \- update stock prices from online sources for gnucash
 .SH SYNOPSIS

@@ -1,3 +1,16 @@
+2002-09-26  David Hampton  <hampton@employees.org>
+
+	* README: Updated the section on running gnucash.
+
+	* doc/Makefile.am: Automatically update the date and version
+	number in the man pages.
+	
+	* src/app-file/gnc-file.c(gnc_post_file_open): Change the button
+	labels to be even more explicit.
+	
+	* src/report/standard-reports/balance-sheet.scm: Use the report
+	name from the options instead of a hard coded report title.
+	
 2002-09-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-gui-query.c: Add routines to put up the

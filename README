@@ -204,61 +204,31 @@ versions of required packages.
 Running
 -------
 
-FIXME: THIS SECTION IS OBSOLETE NOW.
-
 For GnuCash invocation details, see the manpage in doc/gnucash.1.
 You can also run gnucash --help for the command line options.
 
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
-accounts can be found in "data" subdirectory.  *.dat files are GnuCash
+accounts can be found in "data" subdirectory.  *.xac files are GnuCash
 accounts that can opened with the "Open File" menu entry.  *.qif files
 are Quicken Import Format files that can be opened with the "Import
 QIF" menu entry.
 
 GnuCash responds to the following environment variables:
 
-  GNC_RUN_AS_SHELL - if set, makes GnuCash pop up in a guile shell
-  with all the gnucash functions loaded.  From there, you can get the
-  normal startup behavior like this:
-
-    GNC_RUN_AS_SHELL=t ./gnucash
-    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
-    guile> (gnc:load "startup.scm")
-    guile> (gnc:main)
-
-  This is the same thing that happens if you don't use this
-  environment variable.  This can be helpful when trying to write and
-  test new .scm files.
-
   GNC_BOOTSTRAP_SCM - the location of the initial bootstrapping scheme code.
 
-  GNC_SCM_LOAD_PATH - an override for the GnuCash scheme load path.
-  it should be a string representing a proper scheme list.  Each
-  element can either be a string representing a directory, the symbol
-  'default which will expand to the default path, or 'current which
-  will expand to the current load-path at the instant it encounters
-  the symbol.
+  GUILE_LOAD_PATH - an override for the GnuCash load path, used when
+  loading scheme files.  It should be a string in the same form as the
+  PATH or LD_LIBRARY_PATH environment variable.
+
+  GNC_MODULE_PATH - an override for the GnuCash load path, used when
+  loading gnucash modules.  It should be a string representing a
+  proper scheme list.  It should be a string in the same form as the
+  PATH or LD_LIBRARY_PATH environment variable.
 
   GNC_DEBUG - enable debugging output.  This allows you to turn on
   debugging earlier in the startup process than you can with --debug.
-
-As an example, here's a wrapper script we used to use to allow you
-to run GnuCash from a local directory:
-
-  #! /bin/sh
-
-  export GNC_BOOTSTRAP_SCM=./share/scm/bootstrap.scm
-  export GNC_SCM_LOAD_PATH='("./share/scm")'
-  export GNC_DEBUG=t
-
-  # Run whichever one was built last.
-  exec ./src/gnucash \
-    --debug \
-    --share-dir ./share \
-    --config-dir ./etc \
-    --doc-path '("./doc/html/C")' \
-    "$@"
 
 
 ####################
