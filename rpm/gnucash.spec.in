@@ -24,7 +24,7 @@ double-entry accounting principles to ensure balanced books.
 
 %build
 ./configure --prefix=/usr --sysconfdir=/etc
-make gnome
+make
 
 
 %install
