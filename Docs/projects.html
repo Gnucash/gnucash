@@ -448,6 +448,11 @@ immediately, independent of the major goals.
 <dt><b>Quicken(TM) Export</b>
 <dd>Ability to export Quicken QIF files.  Quicken import is implemented
     and mostly works.
+    (Note: Quicken import worked in v 1.0, but got slightly broken in v 1.1
+    It no longer merges duplicate transactions when importing two or
+    more QIF files.  This should be easy to fix, as the "merge" routine
+    is there in the code somewhere; its just not called because it was
+    never restructured for the vv 1.1 engine.)
     <p>
 
 <dt><b>Tab-delimited ASCII file format</b>
