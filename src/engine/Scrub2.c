@@ -245,6 +245,16 @@ restart_loop:
 
 /* ============================================================== */
 
+static Timespec  
+gnc_lot_get_close_date (GNCLot *lot)
+{
+   Split *s = gnc_lot_get_latest_split (lot);
+   Transaction *trans = s->parent;
+   return trans->date_posted;
+}
+
+/* ============================================================== */
+
 void
 xaccAccountScrubDoubleBalance (Account *acc)
 {
@@ -288,31 +298,56 @@ xaccAccountScrubDoubleBalance (Account *acc)
              
       }
 
-      /* Is the value of the lot zero?  If not, add a balancing split */
+      /* Is the value of the lot zero?  If not, add a balancing transaction.
+       * As per design doc lots.txt: the transaction has two splits, 
+       * with equal & opposite values.  The amt of one iz zero (so as
+       * not to upset the lot balance), the amt of the other is the same 
+       * as its value (its the realized gain/loss).
+       */
       if (FALSE == gnc_numeric_equal (value, zero))
       {
          AccountGroup * root;
-         Account * baln_acc;
-         Split * baln_split;
+         Transaction *trans;
+         Account *lot_acc, *gain_acc;
+         Split *lot_split, *gain_split;
+         Timespec ts;
 
-         baln_split = xaccMallocSplit (acc->book);
+         lot_split = xaccMallocSplit (acc->book);
+         gain_split = xaccMallocSplit (acc->book);
+
          root = xaccAccountGetRoot(acc);
-         baln_acc = xaccScrubUtilityGetOrMakeAccount (root, currency, _("Gain/Loss"));
-         xaccAccountBeginEdit (baln_acc);
-         xaccAccountInsertSplit (baln_acc, baln_split);
-         xaccAccountCommitEdit (baln_acc);
+         gain_acc = xaccScrubUtilityGetOrMakeAccount (root, currency, _("Realized Gain/Loss"));
+         xaccAccountBeginEdit (gain_acc);
+         xaccAccountInsertSplit (gain_acc, gain_split);
+         xaccAccountCommitEdit (gain_acc);
 
-#if 0
-need a second split too, as per 'lots.txt' docs
+         lot_acc = acc;
+         xaccAccountBeginEdit (lot_acc);
+         xaccAccountInsertSplit (lot_acc, lot_split);
+         xaccAccountCommitEdit (lot_acc);
+
+         trans = xaccMallocTransaction (acc->book);
+
          xaccTransBeginEdit (trans);
-         xaccSplitSetValue (baln_split)
-         SetDate to date of lot closure ... 
-         set trans currency
-         xaccTransSetDesc (split, _("Realized Gain/Loss"));
-         xaccSplitSetMemo (split, _("Realized Gain/Loss"));
-         xaccTransAppendSplit (trans, baln_split);
+         xaccTransSetCurrency (trans, currency);
+         xaccTransSetDescription (trans, _("Realized Gain/Loss"));
+         ts = gnc_lot_get_close_date (lot);
+         xaccTransSetDatePostedTS (trans, &ts);
+         xaccTransSetDateEnteredSecs (trans, time(0));
+
+         xaccTransAppendSplit (trans, lot_split);
+         xaccTransAppendSplit (trans, gain_split);
+
+         xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
+         xaccSplitSetAmount (lot_split, zero);
+         xaccSplitSetValue (lot_split, gnc_numeric_neg (value));
+         gnc_lot_add_split (lot, lot_split);
+
+         xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
+         xaccSplitSetAmount (gain_split, value);
+         xaccSplitSetValue (gain_split, value);
          xaccTransCommitEdit (trans);
-#endif
+
       }
    }
 }
