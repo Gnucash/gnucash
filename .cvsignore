@@ -8,6 +8,7 @@ Makefile.in
 TAGS
 TAGS.stamp
 aclocal.m4
+autom4te.cache
 autom4te-2.53.cache
 configure
 config.cache
