@@ -1,5 +1,5 @@
 ############################################################
-          Gnucash 1.7.x README.patches file.
+          Gnucash 1.9.x README.patches file.
 
 NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
 BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
@@ -13,9 +13,20 @@ If you want something a bit more tested, please use the
 Submitting a Patch:
 
   Once you have done some work that you would like to submit, you need
-  to send a patch. There is a perl script called make-gnucash-patch
-  provided with the distribution that you can use to create the
-  patch. Here is how to use that perl script.
+  to send a patch.  There are two ways to submit a patch.  First, if
+  you're using CVS and only made changes to existing CVS files you
+  can generate the patch using:
+
+      cvs -q diff -u > /tmp/mypatch
+
+  and send /tmp/mypatch into the developers.  Note that this ONLY WORKS
+  if you have NOT added any new files to the source tree.  If you've
+  added new files then you should use a script called "make-gnucash-patch"
+  to help you create the patch for submission.
+
+  The script make-gnucash-patch is a perl script provided with the
+  gnucash distribution that you can use to create your patch.  The
+  rest of this file explains how to use that perl script.
 
   This file comes in two parts:
   - A  quick summary of the common ways to use make-gnucash-patch; and
