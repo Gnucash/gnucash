@@ -256,7 +256,7 @@ G_WRAP_LINK_ARGS=""
 AM_PATH_GWRAP(1.1.3, , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
-  enough.  Right now gnucash requires at least version 1.1.1 to build.
+  enough.  Right now gnucash requires at least version 1.1.3 to build.
   If you need to install g-wrap, you can find it at
   ftp://ftp.gnucash.org/pub/g-wrap.
 ])])
