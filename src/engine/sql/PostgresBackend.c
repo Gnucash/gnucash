@@ -335,10 +335,25 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    /* restore the transactions */
    for (node=xaction_list; node; node=node->next)
    {
+      Transaction *trans;
       int engine_data_is_newer;
       GUID *trans_guid = (GUID *)node->data;
 
-      engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
+      /* use markers to avoid redundant traversals of transactions we've
+       * already checked recently. */
+      trans = xaccTransLookup (trans_guid);
+      if (NULL == trans || 0 == trans->marker)
+      {
+         engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
+         trans = xaccTransLookup (trans_guid);
+         trans->marker = 1;
+         PINFO ("copy result=%d", engine_data_is_newer);
+      }
+      else
+      {
+         PINFO ("avoided scan");
+         engine_data_is_newer = 1;
+      }
 
       /* if we restored this transaction from the db, scan over the accounts 
        * it affects and see how far back the data goes.
@@ -347,9 +362,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       {
          GList *split_list, *snode;
          Timespec ts;
-         Transaction *trans;
 
-         trans = xaccTransLookup (trans_guid);
          ts = xaccTransRetDatePostedTS (trans);
 
          /* Back off by a second to disambiguate time.
@@ -444,6 +457,8 @@ pgendRunQuery (Backend *bend, Query *q)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
+   /* stage transactions, save some postgres overhead */
+   xaccGroupBeginStagedTransactionTraversals (be->topgroup);
    ncalls = 0;
    pgendFillOutToCheckpoint (be, sql_query_string);
    PINFO ("number of calls to fill out=%d", ncalls);
