@@ -146,8 +146,8 @@ xaccOpenLog (void)
    /* use tab-separated fields */
    fprintf (trans_log, "mod	id	time_now	" \
                        "date_entered	date_posted	" \
-                       "num description	" \
-                       "account	memo	action	reconciled	" \
+                       "account	num	description	" \
+                       "memo	action	reconciled	" \
                        "amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 
@@ -191,16 +191,16 @@ xaccTransWriteLog (Transaction *trans, char flag)
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
-      fprintf (trans_log, "%c	%p	%s	%s	%s	%s	%s	" \
+      fprintf (trans_log, "%c	%p/%p	%s	%s	%s	%s	%s	" \
                "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
                flag,
-               trans,
+               trans, split,  /* trans+split make up unique id */
                dnow,
                dent, 
                dpost, 
+               accname,
                trans->num, 
                trans->description,
-               accname,
                split->memo,
                split->action,
                split->reconciled,
