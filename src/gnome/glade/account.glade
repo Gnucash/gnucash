@@ -156,6 +156,23 @@
 
 	      <widget>
 		<class>GtkLabel</class>
+		<name>label811</name>
+		<label>Account Code:</label>
+		<justify>GTK_JUSTIFY_RIGHT</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
 		<name>label808</name>
 		<label>Description:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
@@ -190,8 +207,8 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label811</name>
-		<label>Account Code:</label>
+		<name>label8477389</name>
+		<label>Smallest Fraction:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -221,6 +238,21 @@
 	      <widget>
 		<class>GtkEntry</class>
 		<name>name_entry</name>
+		<can_focus>True</can_focus>
+		<editable>True</editable>
+		<text_visible>True</text_visible>
+		<text_max_length>0</text_max_length>
+		<text></text>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkEntry</class>
+		<name>code_entry</name>
 		<can_focus>True</can_focus>
 		<editable>True</editable>
 		<text_visible>True</text_visible>
@@ -265,13 +297,20 @@
 	      </widget>
 
 	      <widget>
-		<class>GtkEntry</class>
-		<name>code_entry</name>
+		<class>GtkOptionMenu</class>
+		<name>account_scu</name>
+		<tooltip>Smallest fraction of this commodity that can be referenced.</tooltip>
 		<can_focus>True</can_focus>
-		<editable>True</editable>
-		<text_visible>True</text_visible>
-		<text_max_length>0</text_max_length>
-		<text></text>
+		<items>Use Commodity Value
+1
+1/10
+1/100
+1/1000
+1/10000
+1/100000
+1/1000000
+</items>
+		<initial_choice>0</initial_choice>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>

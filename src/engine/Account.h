@@ -266,7 +266,11 @@ const char *   xaccAccountGetLastNum (Account *account);
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 gnc_commodity * xaccAccountGetCommodity (Account *account);
 int  xaccAccountGetCommoditySCU (Account *account);
+int  xaccAccountGetCommoditySCUi (Account *account);
 void xaccAccountSetCommoditySCU (Account *account, int frac);
+void xaccAccountSetCommoditySCUandFlag (Account *account, int frac);
+void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
+gboolean  xaccAccountGetNonStdSCU (Account *account);
 
 
 gnc_numeric     xaccAccountGetBalance (Account *account);

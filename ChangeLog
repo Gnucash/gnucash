@@ -1,3 +1,23 @@
+2002-12-11  David Hampton  <hampton@employees.org>
+
+	* src/gnc-ui.h: New help URLs for Wilddev.
+
+	* src/engine/Account.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome-utils/dialog-account.c: Support for having an account
+	scu that doesn't match the account commodity's scu.  This allows a
+	user to notice/correct a case where the two are out of whack and
+	corect them (#100295), or to intentionally set them that
+	way. (E.G. A currency trading account that trades in $0.0001 USD
+	even though the scu for USD is $0.01.)
+
+	* src/backend/file/io-gncxml-v2.c: Call new routines to set the
+	account non-standard scu flag, and to get the actual scu on the
+	account regardless of the flag.
+
+	* src/backend/file/gnc-account-xml-v2.c: Read/write new indicator
+	that the account scu doesn't match the account commodity's scu.
+
 2002-12-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-transfer.c -- lookup and store entries in

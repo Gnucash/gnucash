@@ -101,6 +101,7 @@ struct account_s
    */
   gnc_commodity * commodity;
   int commodity_scu;
+  gboolean non_standard_scu;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").

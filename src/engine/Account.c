@@ -108,6 +108,7 @@ xaccInitAccount (Account * acc, GNCBook *book)
 
   acc->commodity     = NULL;
   acc->commodity_scu = 0;
+  acc->non_standard_scu = FALSE;
 
   acc->splits = NULL;
   acc->lots = NULL;
@@ -172,6 +173,7 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 
     ret->commodity    = from->commodity;
     ret->commodity_scu = from->commodity_scu;
+    ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
 
     LEAVE (" ");
@@ -206,6 +208,7 @@ xaccCloneAccount (const Account *from, GNCBook *book)
 
     ret->commodity    = from->commodity;
     ret->commodity_scu = from->commodity_scu;
+    ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
 
     /* make a note of where the copy came from */
@@ -1032,7 +1035,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   /* if the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
   split->amount = gnc_numeric_convert(split->amount, 
-                                      acc->commodity_scu,
+                                      xaccAccountGetCommoditySCU(acc),
                                       GNC_RND_ROUND);
 
   /* if this split belongs to another account, remove it from there
@@ -1444,7 +1447,7 @@ update_split_commodity(Account * acc)
 
     xaccTransBeginEdit (trans);
     s->amount = gnc_numeric_convert(s->amount,
-                                    acc->commodity_scu,
+				    xaccAccountGetCommoditySCU(acc),
                                     GNC_RND_ROUND);
     xaccTransCommitEdit (trans);
   }
@@ -1489,12 +1492,66 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
   xaccAccountCommitEdit(acc);
 }
 
+/*
+ * Set the account scu and then check to see if it is the same as the
+ * commodity scu.  This function is called when parsing the data file
+ * and is designed to catch cases where the two were accidentally set
+ * to mismatched values in the past.
+ */
+void
+xaccAccountSetCommoditySCUandFlag (Account *acc, int scu)
+{
+  if (!acc) return;
+
+  xaccAccountBeginEdit(acc);
+  {
+    acc->commodity_scu = scu;
+    if (scu != gnc_commodity_get_fraction(acc->commodity))
+      acc->non_standard_scu = TRUE;
+    mark_account (acc);
+  }
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+}
+
+int
+xaccAccountGetCommoditySCUi (Account * acc) 
+{
+  if (!acc) return 0;
+
+  return acc->commodity_scu;
+}
+
 int
 xaccAccountGetCommoditySCU (Account * acc) 
 {
   if (!acc) return 0;
 
-  return acc->commodity_scu;
+  if (acc->non_standard_scu)
+    return acc->commodity_scu;
+  return gnc_commodity_get_fraction(acc->commodity);
+}
+
+void
+xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
+{
+  if (!acc) return;
+
+  xaccAccountBeginEdit(acc);
+  {
+    acc->non_standard_scu = flag;
+    mark_account (acc);
+  }
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+}
+
+gboolean
+xaccAccountGetNonStdSCU (Account * acc) 
+{
+  if (!acc) return 0;
+
+  return acc->non_standard_scu;
 }
 
 /********************************************************************\

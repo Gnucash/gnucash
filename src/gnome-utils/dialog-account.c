@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <math.h>
 #include <string.h>
 
 #include "AccWindow.h"
@@ -79,6 +80,7 @@ struct _AccountWindow
   GtkWidget * notes_text;
 
   GtkWidget * commodity_edit;
+  GtkWidget * account_scu;
   
   GList * valid_types;
   GtkWidget * type_list;
@@ -159,8 +161,8 @@ gnc_account_to_ui(AccountWindow *aw)
   Account *account = aw_get_account (aw);
   gnc_commodity * commodity;
   const char *string;
-  gboolean tax_related, placeholder;
-  gint pos = 0;
+  gboolean tax_related, placeholder, nonstd_scu;
+  gint pos = 0, index;
 
   if (!account)
     return;
@@ -176,6 +178,15 @@ gnc_account_to_ui(AccountWindow *aw)
   commodity = xaccAccountGetCommodity (account);
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
                                     commodity);
+
+  nonstd_scu = xaccAccountGetNonStdSCU (account);
+  if (nonstd_scu) {
+    index = xaccAccountGetCommoditySCUi(account);
+    index = log10(index) + 1;
+  } else {
+    index = 0;
+  }
+  gtk_option_menu_set_history(GTK_OPTION_MENU(aw->account_scu), index);
 
   string = xaccAccountGetCode (account);
   if (string == NULL) string = "";
@@ -293,8 +304,9 @@ gnc_ui_to_account(AccountWindow *aw)
   const char *string;
   gboolean tax_related, placeholder;
   gnc_numeric balance;
-  gboolean use_equity;
+  gboolean use_equity, nonstd;
   time_t date;
+  gint index, old_scu, new_scu;
 
   if (!account)
     return;
@@ -317,8 +329,20 @@ gnc_ui_to_account(AccountWindow *aw)
   commodity = (gnc_commodity *)
     gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
   if (commodity &&
-      !gnc_commodity_equiv(commodity, xaccAccountGetCommodity (account)))
+      !gnc_commodity_equiv(commodity, xaccAccountGetCommodity (account))) {
     xaccAccountSetCommodity (account, commodity);
+    old_scu = 0;
+  } else {
+    old_scu = xaccAccountGetCommoditySCU(account);
+  }
+
+  index = gnc_option_menu_get_active(aw->account_scu);
+  nonstd = (index != 0);
+  if (nonstd != xaccAccountGetNonStdSCU(account))
+    xaccAccountSetNonStdSCU(account, nonstd);
+  new_scu = (nonstd ? pow(10,index-1) : gnc_commodity_get_fraction(commodity));
+  if (old_scu != new_scu)
+    xaccAccountSetCommoditySCU(account, new_scu);
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->code_entry));
   old_string = xaccAccountGetCode (account);
@@ -1501,6 +1525,9 @@ gnc_account_window_create(AccountWindow *aw)
 
   gtk_signal_connect (GTK_OBJECT (aw->commodity_edit), "changed",
                       GTK_SIGNAL_FUNC (commodity_changed_cb), aw);
+
+  aw->account_scu = glade_xml_get_widget (xml, "account_scu");
+  gnc_option_menu_init(aw->account_scu);
 
   if (gnc_price_source_have_fq()) {
     gtk_widget_destroy(glade_xml_get_widget (xml, "finance_quote_warning"));

@@ -59,6 +59,7 @@ const gchar *account_version_string = "2.0.0";
 #define act_type_string "act:type"
 #define act_commodity_string "act:commodity"
 #define act_commodity_scu_string "act:commodity-scu"
+#define act_non_standard_scu_string "act:non-standard-scu"
 #define act_code_string "act:code"
 #define act_description_string "act:description"
 #define act_slots_string "act:slots"
@@ -97,7 +98,10 @@ gnc_account_dom_tree_create(Account *act)
                                                xaccAccountGetCommodity(act)));
 
     xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
-                                     xaccAccountGetCommoditySCU(act)));
+                                     xaccAccountGetCommoditySCUi(act)));
+    
+    if (xaccAccountGetNonStdSCU(act))
+      xmlNewChild(ret, NULL, act_non_standard_scu_string, NULL);
     
     str = xaccAccountGetCode(act);
     if (str && strlen(str) > 0)
@@ -224,6 +228,16 @@ account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 
     dom_tree_to_integer(node, &val);
     xaccAccountSetCommoditySCU(pdata->account, val);
+
+    return TRUE;
+}
+
+static gboolean
+account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
+{
+    struct account_pdata *pdata = act_pdata;
+
+    xaccAccountSetNonStdSCU(pdata->account, TRUE);
 
     return TRUE;
 }
@@ -372,6 +386,7 @@ static struct dom_tree_handler account_handlers_v2[] = {
     { act_type_string, account_type_handler, 1, 0 },
     { act_commodity_string, account_commodity_handler, 0, 0 },
     { act_commodity_scu_string, account_commodity_scu_handler, 0, 0 },
+    { act_non_standard_scu_string, account_non_standard_scu_handler, 0, 0 },
     { act_code_string, account_code_handler, 0, 0 },
     { act_description_string, account_description_handler, 0, 0},
     { act_slots_string, account_slots_handler, 0, 0 },
@@ -448,10 +463,9 @@ dom_tree_to_account (xmlNodePtr node, GNCBook *book)
 
     successful = dom_tree_generic_parse (node, account_handlers_v2,
                                          &act_pdata);
-    xaccAccountCommitEdit (accToRet);
-
-    if (!successful)
-    {
+    if (successful) {
+      xaccAccountCommitEdit (accToRet);
+    } else {
         PERR ("failed to parse account tree");
         xaccAccountDestroy (accToRet);
         accToRet = NULL;

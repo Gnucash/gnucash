@@ -169,7 +169,7 @@ clear_up_account_commodity(
 static void
 clear_up_transaction_commodity(
     gnc_commodity_table *tbl, Transaction *trans,
-    gnc_commodity * (*getter) (Transaction *trans),
+    gnc_commodity * (*getter) (const Transaction *trans),
     void (*setter) (Transaction *trans, gnc_commodity *comm))
 {
     gnc_commodity *gcom;
@@ -223,8 +223,8 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     clear_up_account_commodity(table, act,
                                xaccAccountGetCommodity,
                                xaccAccountSetCommodity,
-                               xaccAccountGetCommoditySCU,
-                               xaccAccountSetCommoditySCU);
+                               xaccAccountGetCommoditySCUi,
+                               xaccAccountSetCommoditySCUandFlag);
 
     xaccAccountScrubCommodity (act, data->book);
 
