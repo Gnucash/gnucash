@@ -17,4 +17,4 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	  (gw:generate-module \"bar-gwrap\")"
 
 BUILT_SOURCES += bar-gwrap.c bar-gwrap.h
-CLEANFILES += *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.htmldiff -up /dev/null 'gnucash-1.7/src/gnc-module/test/mod-bar/bar-gwrap.scm'
+CLEANFILES += *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html
