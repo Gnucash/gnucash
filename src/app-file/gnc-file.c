@@ -170,6 +170,11 @@ show_session_error (GNCBackendError io_error, const char *newfile)
       if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
+    case ERR_FILEIO_PARSE_ERROR:
+      fmt = _("There was an error parsing the file \n    %s\n");
+      gnc_error_dialog (fmt, newfile);
+      break;
+
     case ERR_FILEIO_FILE_EMPTY:
       fmt = _("The file \n    %s\n is empty.");
       gnc_error_dialog (fmt, newfile);
