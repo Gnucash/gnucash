@@ -24,8 +24,55 @@ easier to add and work with new types of constraints.
 
 Introduction:
 -------------
+There are three very different classes of constraints within GnuCash,
+which should not be confused with each other. They work in very
+different ways and have very different goals.  First, there are
+the "GUI Constraints", which are implemented as events: they make
+sure that the the GUI displays the data in the engine as it currently
+stands.  Next are the "Multi-User Constraints", which are implemented
+in the Postgres SQL backend: They make sure that as one user alters
+data, that it is reflected in what the other users see.  Finally,
+there are the "Financial Constraints", implemented in the engine,
+that make sure that the financial data recorded in the engine meets 
+a set of core and extended accounting rules.  This document deals 
+primarily with this third class.
 
-two very different types of constraints: GUI 
-Constraints and Financial Constraints.  The GUI Constraints are
-implemented as 'events', and are used to make sure that the GUI 
-is appropriately
+Note that some financial constraints are so core, so key to GnuCash 
+that they are woven into the object design itself.  For example, the 
+posted date is a part of the transaction: different splits cannot 
+possibly have different posted dates, as there is no mechanism to 
+represent this.  All splits get thier posted date from thier parent 
+transaction.
+
+The constraints that we are most interested in are the ones that 
+are implemented as 'triggers' or 'scrubbers':  these are not reflected
+in the core structure, but are rather implemented as routines that
+run at specific times and alter the data to be self-consistent in 
+certain ways.   The 'double-entry' constraint belongs to this class:
+it computes the total value of all the splits in a transaction, and 
+adds one, if needed, to bring the total to zero.  This constraint
+runs when the transaction is commited.   Although this is an important
+cosntraint, there is no (easy) way to reflect it directly in the
+object design; thus, it acts as a rule that must be periodically
+imposed.
+
+At this time, the financial constraints within gnucash are impelmented
+in an ad-hoc manner, with no governing framework.  This may change,
+as there is pressure to support more complex constraints that vary
+by region/country, by account type, by industry, etc.
+
+List of Constraints
+-------------------
+The following is a list of the constraints that are currently
+implemented in the GnuCash Engine, with a short description of what
+they are, and how they work.
+
+-- Double Entry
+-- Double-Balance
+-- Date Posted of Gains Transaction
+-- Value of Gains Transaction
+
+
+
+
+
