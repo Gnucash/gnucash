@@ -14,6 +14,7 @@ config.log
 config.status
 config.h
 config.h.in
+config.rpath
 cscope.out
 cscope.files
 depcomp
@@ -23,6 +24,7 @@ install-sh
 intl
 libtool
 ltconfig
+m4
 make-gnucash-patch
 make-gnucash-potfiles
 missing

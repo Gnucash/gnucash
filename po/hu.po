@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: gnucash 1.7.X\n"
 "POT-Creation-Date: 2001-09-30 14:16-0700\n"
 "PO-Revision-Date: 2001-12-07 20:51GMT\n"
 "Last-Translator: Péter Hosszú <hosszu@web.de>\n"

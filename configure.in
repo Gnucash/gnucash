@@ -54,7 +54,6 @@ ALL_LINGUAS="da de en_GB es es_NI fr hu it ja no pt pt_BR ru sv"
 AM_GNU_GETTEXT
 
 
-AC_CANONICAL_HOST
 AM_MAINTAINER_MODE
 AM_ACLOCAL_INCLUDE(macros)
 

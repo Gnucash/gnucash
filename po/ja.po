@@ -57,6 +57,7 @@ msgid ""
 "Connection was lost, unable to send data."
 msgstr ""
 "次のホストに接続できません\n"
+"   %s\n"
 "接続が消失しました。データを送ることができません"
 
 #: src/FileDialog.c:98

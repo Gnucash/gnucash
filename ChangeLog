@@ -1,3 +1,16 @@
+2002-05-14  David Hampton  <hampton@employees.org>
+
+	* configure.in (AC_CANONICAL_HOST): Remove redundant command.
+	
+	* Makefile.am (ACLOCAL_AMFLAGS): New variable required by gettext
+	0.11.
+
+	* po/hu.po:
+	* po/it.po:
+	* po/jp.po: Fix errors that have become fatal in gettext 0.11.
+
+	* po/Makevars: New file required by gettext 0.11.
+
 2002-05-13   Derek Atkins   <derek@ihtfp.com>
 
 	Change the Search Dialog to use a CList and allow each object to

@@ -100,3 +100,5 @@ TAGS:
 endif
 
 .PHONY: TAGS
+
+ACLOCAL_AMFLAGS = -I m4
