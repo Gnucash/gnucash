@@ -275,10 +275,6 @@
   (gw:wrap-non-native-type mod '<gnc:AccountGroup*> 
                            "AccountGroup*" "const AccountGroup*")
   (gw:wrap-non-native-type mod '<gnc:Book*> "GNCBook*" "const GNCBook*")
-  (gw:wrap-non-native-type mod '<gnc:kvp-frame*> 
-                           "kvp_frame*" "const kvp_frame*")
-  (gw:wrap-non-native-type mod '<gnc:kvp-value*> 
-                           "kvp_value*" "const kvp_value*")
 
   (gw:wrap-non-native-type mod '<gnc:Split*> "Split*" "const Split*")
   (gw:wrap-non-native-type mod '<gnc:Transaction*> 
@@ -1630,30 +1626,6 @@ of having a parent transaction with which one is working...")
      (<gnc:numeric> price)
      (<gnc:numeric> amount))
    "Set the share price and amount for split entry")
-
-  (gw:wrap-function
-   mod
-   'gnc:split-get-slots
-   '<gnc:kvp-frame*>
-   "xaccSplitGetSlots"
-   '((<gnc:Split*> s))
-   "Get the split's slots.")
-
-  (gw:wrap-function
-   mod
-   'gnc:transaction-get-slots
-   '<gnc:kvp-frame*>
-   "xaccTransGetSlots"
-   '((<gnc:Transaction*> s))
-   "Get the transaction's slots.")
-
-  (gw:wrap-function
-   mod
-   'gnc:account-get-slots
-   '<gnc:kvp-frame*>
-   "xaccAccountGetSlots"
-   '((<gnc:Account*> s))
-   "Get the account's slots.")
 
   (gw:wrap-function
    mod

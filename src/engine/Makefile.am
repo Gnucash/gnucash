@@ -64,6 +64,7 @@ noinst_HEADERS = \
   gnc-pricedb.h \
   guid.h \
   kvp_frame.h \
+  kvp-scm.h \
   md5.h \
   FreqSpec.h \
   SchedXaction.h
@@ -74,10 +75,13 @@ libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GUILE_LIBS} ${GLIB_LIBS}
 
 libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
-libgw_glib_la_LDFLAGS=-module
+libgw_glib_la_LDFLAGS=-module -lg-wrap-runtime-guile
 
 libgw_engine_la_SOURCES=gw-engine.c engine-helpers.c
-libgw_engine_la_LDFLAGS=-module
+libgw_engine_la_LDFLAGS=-module -lg-wrap-runtime-guile
+
+libgw_kvp_la_SOURCES=gw-kvp.c kvp-scm.c
+libgw_kvp_la_LDFLAGS=-module -lg-wrap-runtime-guile
 
 gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA=engine.scm 
@@ -87,8 +91,8 @@ gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
 engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm 
 
 gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
-gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la 
-gwmod_DATA=gw-engine-spec.scm gw-glib-spec.scm
+gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la libgw-kvp.la
+gwmod_DATA=gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
 
 EXTRA_DIST = \
   .cvsignore \
@@ -116,5 +120,12 @@ gw-glib.c gw-glib.h: .scm-links gw-glib-spec.scm
 	 (primitive-load \"./gw-glib-spec.scm\") \
 	 (gw:generate-module \"gw-glib\")"
 
-BUILT_SOURCES += gw-engine.c gw-engine.h gw-glib.c gw-glib.h
-CLEANFILES += gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links
+gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	 (set! %load-path (cons \"${PWD}\" %load-path)) \
+	 (primitive-load \"./gw-kvp-spec.scm\") \
+	 (gw:generate-module \"gw-kvp\")"
+
+BUILT_SOURCES += gw-engine.c gw-engine.h gw-glib.c gw-glib.h gw-kvp.c gw-kvp.h
+CLEANFILES += gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.c gw-kvp.h

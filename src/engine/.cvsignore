@@ -11,3 +11,6 @@ gw-glib.h
 gw-glib.html
 *.lo
 *.la
+gw-kvp.c
+gw-kvp.h
+gw-kvp.html
