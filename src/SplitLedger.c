@@ -1285,7 +1285,10 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
    /* If we are committing the blank split, add it to the account now */
    if (xaccTransGetSplit(trans, 0) == info->blank_split)
+   {
      xaccAccountInsertSplit (info->default_source_account, info->blank_split);
+     xaccTransSetDateEnteredSecs(trans, time(NULL));
+   }
 
    if (split == NULL) {
       /* If we were asked to save data for a row for which there is no

@@ -1,4 +1,19 @@
+2000-05-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): print the
+	amount using the account's currency.
+
+	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_create): remove the
+	currency symobl from the dialog and use the account currency, if
+	available, in printing amounts.
+
+	* src/gnome/window-adjust.c: remove the currency symbol from the
+	dialog and use the account currency in printing amounts.
+
 2000-05-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRSaveRegEntry): set the date entered
+	time of the blank split transaction.
 
 	* src/gnome/window-reconcile.c: print different currencies
 	correctly. Print reconciled balance so far.

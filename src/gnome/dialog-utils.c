@@ -93,7 +93,7 @@ gnc_ui_create_account_label(int field_type)
   label_string = g_strconcat(label_string, ":", NULL);
 
   label = gtk_label_new (label_string);
-  gtk_misc_set_alignment (GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
 
   g_free(label_string);
@@ -324,7 +324,7 @@ gnc_ui_account_source_box_create(AccountEditInfo * info)
   gtk_widget_show(hbox);
 
   widget = gtk_label_new(QUOTE_SRC_MSG);
-  gtk_misc_set_alignment (GTK_MISC(widget), 0.95, 0.5);
+  gtk_misc_set_alignment (GTK_MISC(widget), 1.0, 0.5);
   gtk_widget_show(widget);
 
   gtk_box_pack_start(GTK_BOX(hbox), widget, FALSE, FALSE, 5);

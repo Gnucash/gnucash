@@ -1080,11 +1080,11 @@ mainWindow()
     gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
     label = gtk_label_new(ASSETS_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
     label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
     main_info->assets_label = label;
 
@@ -1092,11 +1092,11 @@ mainWindow()
     gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
     label = gtk_label_new(PROFITS_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
     label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
     main_info->profits_label = label;
   }

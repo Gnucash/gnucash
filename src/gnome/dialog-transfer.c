@@ -133,9 +133,16 @@ static gboolean
 gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY(widget);
+  XferDialog *xferData = data;
+  Account *account;
   gchar *new_string;
+  gchar *currency;
   gchar *string;
   double value;
+
+  account = gnc_account_tree_get_current_account(xferData->from);
+  if (account == NULL)
+    account = gnc_account_tree_get_current_account(xferData->to);
 
   string = gtk_entry_get_text(entry);
 
@@ -144,7 +151,9 @@ gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 
   value = xaccParseAmount(string, GNC_T);
 
-  new_string = xaccPrintAmount(value, PRTSEP, NULL);
+  currency = xaccAccountGetCurrency(account);
+
+  new_string = xaccPrintAmount(value, PRTSEP, currency);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -203,14 +212,9 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 
     {
       GtkWidget *amount;
-      gchar *currency_symbol;
-      gchar *string;
 
-      currency_symbol = gnc_localeconv()->currency_symbol;
-      string = g_strconcat(AMOUNT_C_STR, " ", currency_symbol, NULL);
-      label = gtk_label_new(string);
-      g_free(string);
-      gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+      label = gtk_label_new(AMOUNT_C_STR);
+      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
       amount = gtk_entry_new();
@@ -218,7 +222,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       xferData->amount_entry = amount;
 
       gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",
-                         GTK_SIGNAL_FUNC(gnc_xfer_update_cb), NULL);
+                         GTK_SIGNAL_FUNC(gnc_xfer_update_cb), xferData);
 
       gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(amount));
     }
@@ -227,7 +231,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       GtkWidget *date;
 
       label = gtk_label_new(DATE_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
       date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
@@ -253,11 +257,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
       label = gtk_label_new(DESC_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
       label = gtk_label_new(MEMO_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
     }
 

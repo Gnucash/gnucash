@@ -895,11 +895,11 @@ gnc_register_create_status_bar(RegWindow *regData)
   gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
   label = gtk_label_new(CLEARED_C_STR);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
   label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   regData->cleared_label = label;
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -907,11 +907,11 @@ gnc_register_create_status_bar(RegWindow *regData)
   gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
   label = gtk_label_new(BALN_C_STR);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
   label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   regData->balance_label = label;
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 

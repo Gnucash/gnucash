@@ -524,6 +524,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Transaction *trans;
   Split *split;
   gboolean reconciled;
+  char *currency;
   int num_splits;
   int account_type;
   double amount;
@@ -535,6 +536,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
   account_type = xaccAccountGetType(list->account);
   num_splits = xaccAccountGetNumSplits(list->account);
+  currency = xaccAccountGetCurrency(list->account);
   strings[4] = recn_str;
   strings[5] = NULL;
 
@@ -565,7 +567,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = xaccTransGetDateStr(trans);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = xaccPrintAmount(DABS(amount), shares, NULL);
+    strings[3] = xaccPrintAmount(DABS(amount), shares, currency);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
 
