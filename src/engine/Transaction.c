@@ -33,6 +33,7 @@
 
 #include "AccountP.h"
 #include "Group.h"
+#include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -1673,61 +1674,6 @@ do_destroy (Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
-/** The xaccScrubGainsDate() routine is used to keep the posted date
- *    of gains splis in sync with the posted date of the transaction
- *    that caused the gains.
- *  
- *    The posted date is kept in sync using a lazy-evaluation scheme.
- *    If xaccTransactionSetDatePosted() is called, the date change is
- *    accepted, and the split is marked date-dirty.  If the posted date
- *    is queried for (using GetDatePosted()), then the transaction is
- *    evaluated. If its a gains-transaction, then it's date is copied 
- *    from the source transaction that created the gains.
- */
-
-static inline void
-xaccScrubGainsDate (Transaction *trans)
-{
-   SplitList *node;
-   Timespec ts = {0,0};
-   gboolean do_set;
-restart_search:
-   do_set = FALSE;
-   for (node = trans->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
-
-      if ((GAINS_STATUS_GAINS & s->gains) && 
-          s->gains_split &&
-          ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
-           (s->gains & GAINS_STATUS_DATE_DIRTY)))
-      {
-         Transaction *source_trans = s->gains_split->parent;
-         ts = source_trans->date_posted;
-         do_set = TRUE;
-         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
-         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
-         break;
-      }
-   }
-
-   if (do_set)
-   {
-      xaccTransBeginEdit (trans);
-      xaccTransSetDatePostedTS(trans, &ts);
-      xaccTransCommitEdit (trans);
-      for (node = trans->splits; node; node=node->next)
-      {
-         Split *s = node->data;
-         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
-      }
-      goto restart_search;
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
 
 /* Temporary hack for data consitency */
 static int scrub_data = 1;
@@ -1738,14 +1684,14 @@ void xaccDisableDataScrubbing(void) { scrub_data = 0; }
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   Split *split;
    QofBackend *be;
 
    if (!trans) return;
    trans->editlevel--;
    if (0 < trans->editlevel) return;
 
-   ENTER ("trans addr=%p", trans);
+   ENTER ("trans addr=%p %s", trans, 
+             trans->description ? trans->description : "(null)");
    if (0 > trans->editlevel)
    {
       PERR ("unbalanced call - resetting (was %d)", trans->editlevel);
@@ -1766,111 +1712,30 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (scrub_data)
+   if (trans->splits && !(trans->do_free) && scrub_data)
    {
-      /* Lock down posted date to be synced to the source of cap gains */
-      xaccScrubGainsDate(trans);
-
-      /* Fix up split value */
-      if (trans->splits && !(trans->do_free))
-      {
-         SplitList *node;
-
-         /* Fix up split amount */
-restart:
-         for (node=trans->splits; node; node=node->next)
-         {
-            split = node->data;
-            CHECK_GAINS_STATUS (split);
-            if (split->gains & GAINS_STATUS_ADIRTY)
-            {
-               gboolean altered = FALSE;
-               split->gains |= ~GAINS_STATUS_ADIRTY;
-               if (split->lot) altered = xaccScrubLot (split->lot);
-               if (altered) goto restart;
-            }
-         }
-  
-         /* Fix up gains split value */
-         for (node=trans->splits; node; node=node->next)
-         {
-            split = node->data;
-            if ((split->gains & GAINS_STATUS_VDIRTY) ||
-                (split->gains_split &&
-                (split->gains_split->gains & GAINS_STATUS_VDIRTY)))
-            {
-               xaccSplitComputeCapGains (split, NULL);
-            }
-         }
-      }
+     /* The total value of the transaction should sum to zero. 
+      * Call the trans scrub routine to fix it.   Indirectly, this 
+      * routine also performs a number of other transaction fixes too.
+      */
+     xaccTransScrubImbalance (trans, NULL, NULL);
+     /* Get the cap gains into a consistent state as well. */
+     xaccTransScrubGains (trans, NULL);
    }
 
-
-   /* At this point, we check to see if we have a valid transaction.
-    * There are two possiblities:
-    *   1) Its more or less OK, and needs a little cleanup
-    *   2) It has zero splits, i.e. is meant to be destroyed.
-    * We handle 1) immediately, and we call the backend before 
-    * we go through with 2).
-    */
-   if (trans->splits && !(trans->do_free))
+   /* Record the time of last modification */
+   if (0 == trans->date_entered.tv_sec) 
    {
-      PINFO ("cleanup trans=%p", trans);
-      split = trans->splits->data;
- 
-      /* Try to get the sorting order lined up according to 
-       * when the user typed things in.  */
-      if (0 == trans->date_entered.tv_sec) {
-         struct timeval tv;
-         gettimeofday (&tv, NULL);
-         trans->date_entered.tv_sec = tv.tv_sec;
-         trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
-      }
-
-#if SCRUB_BEFORE_COMMITTING
-      /* XXX the below is a weak attempt to scrub the transaction
-       * before committing it.  Not clear if this is a good idea
-       * or not, since the scrubbers can run independently/in parallel.
-       */
-      /* Alternately the transaction may have only one split in 
-       * it, in which case that's OK if and only if the split has no 
-       * value (i.e. is only recording a price). Otherwise, a single
-       * split with a value can't possibly balance, thus violating the 
-       * rules of double-entry, and that's way bogus. So create 
-       * a matching opposite and place it here.
-       * XXX should be using Scrub routine to do this correctly ... 
-       */
-      if ((NULL == g_list_nth(trans->splits, 1)) &&
-          (!gnc_numeric_zero_p(xaccSplitGetAmount(split)))) 
-      {
-        Split * s = xaccMallocSplit(trans->book);
-        xaccTransAppendSplit (trans, s);
-        xaccAccountInsertSplit (s->acc, s);
-        s->amount = gnc_numeric_neg(xaccSplitGetAmount(split));
-        s->value = gnc_numeric_neg(xaccSplitGetValue(split));
-        xaccSplitSetMemo (s, split->memo);
-        xaccSplitSetAction (s, split->action);
-        SET_GAINS_A_VDIRTY(s);
-      }
-#endif
+      struct timeval tv;
+      gettimeofday (&tv, NULL);
+      trans->date_entered.tv_sec = tv.tv_sec;
+      trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
    }
 
-   /* ------------------------------------------------- */
-   /* OK, at this point, we are done making sure that 
-    * we've got a validly constructed transaction.
-    *
-    * Next, sort the splits
-    */
+   /* Sort the splits. Why do we need to do this ?? */
    xaccTransSortSplits(trans);
 
-   /*
-    * Next, we send it off to the back-end, to see if the
-    * back-end will accept it.
-    */
-
    /* See if there's a backend.  If there is, invoke it. */
-   PINFO ("descr is %s", trans->description ? trans->description : "(null)");
-
    be = xaccTransactionGetBackend (trans);
    if (be && be->commit) 
    {
