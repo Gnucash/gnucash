@@ -1,5 +1,8 @@
 2003-07-02  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/it/*: Added Italian account templates by Lorenzo
+	Cappelletti <lorenzo.cappelletti@email.it>
+
 	* src/import-export/hbci/gnc-hbci-transfer.c,
 	src/import-export/hbci/dialog-hbcitrans.c: Change HBCI online
 	transfer action so that first the gnucash Transaction is created
