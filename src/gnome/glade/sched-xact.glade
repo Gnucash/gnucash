@@ -92,7 +92,7 @@
 	<class>GtkHBox</class>
 	<name>hbox95</name>
 	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<spacing>3</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -102,7 +102,6 @@
 	<widget>
 	  <class>GtkVBox</class>
 	  <name>vbox106</name>
-	  <border_width>5</border_width>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 	  <child>
@@ -117,7 +116,7 @@
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 	    <child>
-	      <padding>0</padding>
+	      <padding>2</padding>
 	      <expand>True</expand>
 	      <fill>True</fill>
 	    </child>
@@ -170,6 +169,7 @@
 	    <widget>
 	      <class>GtkVBox</class>
 	      <name>vbox133</name>
+	      <border_width>2</border_width>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 
@@ -373,7 +373,6 @@
 	  <widget>
 	    <class>GtkFrame</class>
 	    <name>frame47</name>
-	    <border_width>1</border_width>
 	    <label>End</label>
 	    <label_xalign>0.05</label_xalign>
 	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -386,6 +385,7 @@
 	    <widget>
 	      <class>GtkVBox</class>
 	      <name>vbox107</name>
+	      <border_width>2</border_width>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
 
@@ -523,8 +523,7 @@
 	<widget>
 	  <class>GtkFrame</class>
 	  <name>recur_frame</name>
-	  <border_width>4</border_width>
-	  <label>Recurrance Frequency</label>
+	  <label>Recurrence Frequency</label>
 	  <label_xalign>0.1</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
@@ -553,7 +552,6 @@
 	<widget>
 	  <class>GtkFrame</class>
 	  <name>tempxaction_frame</name>
-	  <border_width>2</border_width>
 	  <label>Template Transaction</label>
 	  <label_xalign>0.05</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -597,7 +595,7 @@
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label847788</name>
-		<label>REPLACEME with the Register control box...</label>
+		<label>REPLACEME with the Register control box</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
 		<xalign>0.5</xalign>
