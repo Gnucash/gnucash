@@ -360,6 +360,8 @@ mainWindow( Widget parent )
       fileMenubarCB, (XtPointer)FMB_NEW,   (MenuItem *)NULL },
     { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,  (MenuItem *)NULL },
+    { "Import File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
+      fileMenubarCB, (XtPointer)FMB_IMPORT,  (MenuItem *)NULL },
     { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
     { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
@@ -793,6 +795,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
    * which of the file menubar options was chosen
    *   FMB_NEW    -  New datafile
    *   FMB_OPEN   -  Open datfile
+   *   FMB_IMPORT -  Open & merge in Quicken QIF File
    *   FMB_SAVE   -  Save datafile
    *   FMB_SAVEAS -  Save datafile As
    *   FMB_QUIT   -  Quit
@@ -823,7 +826,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
           }
         }
-      newfile = fileBox(toplevel,OPEN);
+      newfile = fileBox(toplevel,OPEN, "*.dat");
       if (newfile) {
         datafile = newfile;
         freeAccountGroup (grp);
@@ -839,6 +842,34 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       }
       break;
     }
+
+    case FMB_IMPORT: {
+      char * newfile;
+      char buf[BUFSIZE];
+
+      DEBUG("FMB_IMPORT\n");
+
+      newfile = fileBox(toplevel,OPEN, "*.qif");
+      if (newfile) {
+        strcpy (buf, newfile);
+        strcat (buf, ".dat");
+        datafile = XtNewString (buf);
+      
+        /* load the accounts from the users datafile */
+        grp = xaccReadQIFData (newfile);
+      
+        if( NULL == topgroup ) {
+          /* no topgroup exists */
+          topgroup = mallocAccountGroup();
+        }
+
+        /* since quicken will not export all accounts 
+         * into one file, we must merge them in one by one */
+        xaccMergeGroup (topgroup, grp);
+      }
+      break;
+    }
+
     case FMB_SAVE:
       DEBUG("FMB_SAVE\n");
       /* hack alert -- Somehow make sure all in-progress edits get committed! */
@@ -855,13 +886,14 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       char * newfile;
       DEBUG("FMB_SAVEAS\n");
 
-      newfile = fileBox(toplevel,OPEN);
+      newfile = fileBox(toplevel,OPEN, "*.dat");
       if ( newfile ) {
          datafile = newfile;
          fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
       }
       break;
     }
+
     case FMB_QUIT:
       DEBUG("FMB_QUIT\n");
       {
@@ -894,6 +926,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       return;                      /* to avoid the refreshMainWindow */
       }
       break;
+
     default:
       PERR("fileMenubarCB(): We shouldn't be here!");
     }

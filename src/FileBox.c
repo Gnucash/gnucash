@@ -51,16 +51,20 @@ void fileBoxCB( Widget mw, XtPointer cd, XtPointer cb );
  *         done    - whether fileBox should return                  * 
 \********************************************************************/
 char *
-fileBox( Widget parent, int type )
+fileBox( Widget parent, int type, char * filter)
   {
   Widget   dialog;
   char*    fileName = NULL;
-  XmString filterpattern = XmStringCreateSimple( "*.dat" ),
-           dialogname;
+  XmString filterpattern, dialogname;
 
   if( !done )
     return NULL;                   /* Don't open if there already is
 				    * an instance of fileBox */
+  if (!filter) {
+    filterpattern = XmStringCreateSimple( "*.dat" );
+  } else {
+    filterpattern = XmStringCreateSimple( filter );
+  }
   
   done = False;
   

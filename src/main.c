@@ -141,11 +141,10 @@ main( int argc, char *argv[] )
   if( argc > 1 )
     datafile = argv[1];
   else
-    datafile = fileBox( toplevel, OPEN );
+    datafile = fileBox( toplevel, OPEN, "*.dat" );
   
   if( datafile != NULL )
     topgroup = readData(datafile);     /* load the accounts data from datafile*/
-    /* topgroup = xaccReadQIFData(datafile);     /* load the accounts data from datafile*/
   
   if( NULL == topgroup )
     {

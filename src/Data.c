@@ -494,4 +494,26 @@ xaccGetRootGroupOfAcct (Account *acc)
    return grp;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccMergeGroup (AccountGroup *togrp, AccountGroup *fromgrp)
+{
+   Account * acc;
+   int i;
+
+   if (!togrp) return;
+   if (!fromgrp) return;
+   
+   for (i=0; i<fromgrp->numAcc; i++) {
+      acc = fromgrp->account[i];
+      insertAccount (togrp, acc);
+      fromgrp->account[i] = NULL;
+   }
+   _free (fromgrp->account);
+   fromgrp->account = NULL;
+   fromgrp->numAcc = 0;
+}
+
 /****************** END OF FILE *************************************/
