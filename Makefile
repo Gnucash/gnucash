@@ -68,10 +68,10 @@ distclean: clean
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
 
-# ???
-#install: $(TARGET)
-#	@mkdir -p $(PREFIX)/bin
-#	@mkdir -p $(PREFIX)/share/xacc
-#	$(INSTALL) $(TARGET) $(PREFIX)/bin
-#       install html help files too!
+install: $(TARGET)
+	@mkdir -p $(PREFIX)/bin
+	$(INSTALL) $(TARGET) $(PREFIX)/bin
+	@mkdir -p $(PREFIX)/share/xacc/Docs
+	$(INSTALL_DATA) Docs/* $(PREFIX)/share/xacc/Docs
+	@echo "Remember to set XACC_HELP to" $(PREFIX)"/share/xacc/Docs"
 
