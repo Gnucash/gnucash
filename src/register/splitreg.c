@@ -197,7 +197,7 @@ configLayout (SplitRegister *reg)
 {
    CellBlock *curs, *header;
    int type = (reg->type) & REG_TYPE_MASK;
-   int style = (reg->type) & REG_STYLE_MASK;
+   // int style = (reg->type) & REG_STYLE_MASK;
    int i;
 
    /* fill things up with null cells */
@@ -224,127 +224,104 @@ configLayout (SplitRegister *reg)
 
       case INCOME_LEDGER:     /* hack alert do xto cell too */
       case GENERAL_LEDGER:    /* hack alert do xto cell too */
+      {
 
          /* basic common 8 column config */
-         if ((REG_SINGLE_LINE == style) ||
-             (REG_SINGLE_DYNAMIC == style)) 
-         {
-            curs = reg->single_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
-            FANCY (BALN,   balance,  7,  0);
-         }
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (BALN,   balance,  7,  0);
 
-         if ((REG_DOUBLE_LINE == style) ||
-             (REG_DOUBLE_DYNAMIC == style)) 
-         {
-            curs = reg->double_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
-            FANCY (BALN,   balance,  7,  0);
-   
-            FANCY (ACTN,   action,   1,  1);
-            FANCY (XFRM,   xfrm,     2,  1);
-            BASIC (MEMO,   memo,     3,  1);
-         }
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (BALN,   balance,  7,  0);
+  
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (XFRM,   xfrm,     2,  1);
+         BASIC (MEMO,   memo,     3,  1);
 
-         if ((REG_MULTI_LINE == style) ||
-             (REG_SINGLE_DYNAMIC == style) ||
-             (REG_DOUBLE_DYNAMIC == style)) 
-         {
-            /* only the transaction cursor gets used */
-            curs = reg->trans_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (BALN,   balance,  7,  0);
-      
-            curs = reg->split_cursor;
-            FANCY (ACTN,   action,   1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
-            BASIC (MEMO,   memo,     3,  0);
-            FANCY (NDEBT,  ndebit,   5,  0);
-            FANCY (NCRED,  ncredit,  6,  0);
-         }
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (BALN,   balance,  7,  0);
+     
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         BASIC (MEMO,   memo,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
          break;
+      }
 
       /* --------------------------------------------------------- */
       case STOCK_REGISTER:
       case PORTFOLIO:
+      {
          /* 11 column config */
-         if ((REG_SINGLE_LINE == style) ||
-             (REG_SINGLE_DYNAMIC == style)) 
-         {
-            curs = reg->single_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
-            FANCY (PRIC,   price,    7,  0);
-            FANCY (VALU,   value,    8,  0);
-            FANCY (SHRS,   shrs,     9,  0);
-            FANCY (BALN,   balance,  10, 0);
-         }
+         curs = reg->single_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
 
          /* prep the second row of the double style */
-         if ((REG_DOUBLE_LINE == style) ||
-             (REG_DOUBLE_DYNAMIC == style)) 
-         {
-            curs = reg->double_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
-            FANCY (PRIC,   price,    7,  0);
-            FANCY (VALU,   value,    8,  0);
-            FANCY (SHRS,   shrs,     9,  0);
-            FANCY (BALN,   balance,  10, 0);
+         curs = reg->double_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
 
-            FANCY (ACTN,   action,   1,  1);
-            FANCY (XFRM,   xfrm,     2,  1);
-            BASIC (MEMO,   memo,     3,  1);
-         }
+         FANCY (ACTN,   action,   1,  1);
+         FANCY (XFRM,   xfrm,     2,  1);
+         BASIC (MEMO,   memo,     3,  1);
 
-         if ((REG_MULTI_LINE == style) ||
-             (REG_SINGLE_DYNAMIC == style) ||
-             (REG_DOUBLE_DYNAMIC == style)) 
-         {
-            /* only the transaction cursor gets used */
-            curs = reg->trans_cursor;
-            FANCY (DATE,   date,     0,  0);
-            BASIC (NUM,    num,      1,  0);
-            FANCY (DESC,   desc,     3,  0);
-            BASIC (RECN,   recn,     4,  0);
-            FANCY (DEBT,   debit,    5,  0);
-            FANCY (CRED,   credit,   6,  0);
-            FANCY (PRIC,   price,    7,  0);
-            FANCY (VALU,   value,    8,  0);
-            FANCY (SHRS,   shrs,     9,  0);
-            FANCY (BALN,   balance,  10, 0);
-      
-            curs = reg->split_cursor;
-            FANCY (ACTN,   action,   1,  0);
-            FANCY (XFRM,   xfrm,     2,  0);
-            BASIC (MEMO,   memo,     3,  0);
-            FANCY (NDEBT,  ndebit,   5,  0);
-            FANCY (NCRED,  ncredit,  6,  0);
-         }
+         /* only the transaction cursor gets used */
+         curs = reg->trans_cursor;
+         FANCY (DATE,   date,     0,  0);
+         BASIC (NUM,    num,      1,  0);
+         FANCY (DESC,   desc,     3,  0);
+         BASIC (RECN,   recn,     4,  0);
+         FANCY (DEBT,   debit,    5,  0);
+         FANCY (CRED,   credit,   6,  0);
+         FANCY (PRIC,   price,    7,  0);
+         FANCY (VALU,   value,    8,  0);
+         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (BALN,   balance,  10, 0);
+    
+         curs = reg->split_cursor;
+         FANCY (ACTN,   action,   1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
+         BASIC (MEMO,   memo,     3,  0);
+         FANCY (NDEBT,  ndebit,   5,  0);
+         FANCY (NCRED,  ncredit,  6,  0);
          break;
+      }
       /* --------------------------------------------------------- */
       default:
          printf ("Internal Error: configLayout(): "
@@ -700,9 +677,6 @@ xaccConfigSplitRegister (SplitRegister *reg, int newtype)
    if (!reg) return;
 
    reg->type = newtype;
-   configLayout (reg);
-   configTraverse (reg);
-   configCursors (reg);
 
    /* Make sure that any GU elemnts associated with this reconfig 
     * are properly initialized.  */
