@@ -62,6 +62,7 @@ gncinclude_HEADERS = \
   gnc-session.h \
   guid.h \
   kvp_frame.h \
+  kvp-scm.h \
   messages.h
 
 noinst_HEADERS = \
@@ -77,7 +78,6 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \
-  kvp-scm.h \
   md5.h
 
 libgncmod_engine_la_LDFLAGS = -module
