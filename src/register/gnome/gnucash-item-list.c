@@ -162,6 +162,7 @@ static void
 gnc_item_list_init(GNCItemList *item_list)
 {
         item_list->clist = NULL;
+        item_list->box   = NULL;
 }
 
 
@@ -394,6 +395,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
         item_list = GNC_ITEM_LIST(item);
 
 	item_list->clist = GTK_CLIST(clist);
+        item_list->box = hbox;
 
 	gtk_signal_connect_after(GTK_OBJECT(hbox), "button_press_event",
 				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),

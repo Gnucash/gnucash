@@ -1,3 +1,13 @@
+2001-04-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_show_list):
+	fix to show scrollbars in gtk+-1.2.9.
+
+	* src/register/gnome/gnucash-item-list.c: fix for above
+
+	* src/gnome/window-register.c (gnc_register_check_close): fix
+	compiler warning
+
 2001-03-29  Dave Peticolas  <dave@krondo.com>
 
 	* doc/html/C/xacc-expense.html: fix debit/credit distinction

@@ -2413,7 +2413,7 @@ gnc_register_check_close(RegWindow *regData)
   if (pending_changes)
   {
     if (gnc_verify_dialog_parented
-        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, GNC_T))
+        (regData->window, TRANS_CHANGED_MSG, GNC_T))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorTransChanges(regData->ledger->ledger);
