@@ -121,6 +121,46 @@ Books will be closed on midnight of the selected date.</label>
     </widget>
 
     <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>book_page</name>
+      <title>Close Book</title>
+      <title_color>255,255,255</title_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox-yy</name>
+	<border_width>5</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>10</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>book label</name>
+	  <label>xxx</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
       <class>GnomeDruidPageFinish</class>
       <name>finish_page</name>
       <title>Finish Closing Books</title>
