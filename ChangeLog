@@ -1,3 +1,17 @@
+2004-12-16  Joshua Sled  <jsled@asynchronous.org>
+
+	Stephen Evanchik's GncGeneralSelect GObject cleanup patch:
+	* src/gnome-utils/gnc-general-select.h:
+          Removed #include <glib-object.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCGeneralSelect
+	* src/gnome-utils/gnc-general-select.c:
+          Converted the following functions to use GObject:
+                gnc_general_select_get_type,
+                gnc_general_select_class_init
+          Added gnc_general_select_dispose function that handles
+          child widget destruction
+
 2004-12-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-item-edit.c

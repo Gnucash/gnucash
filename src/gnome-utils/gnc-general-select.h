@@ -32,6 +32,7 @@
 #define GNC_GENERAL_SELECT_H
 
 #include <gnome.h>
+#include <glib.h>
 
 #define GNC_GENERAL_SELECT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)
 #define GNC_GENERAL_SELECT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), \ GNCGeneralSelectClass)
@@ -57,6 +58,8 @@ typedef struct {
   GNCGeneralSelectGetStringCB	get_string;
   GNCGeneralSelectNewSelectCB	new_select;
   gpointer			cb_arg;
+
+  int disposed; /* private */
 } GNCGeneralSelect;
 
 typedef struct {
@@ -75,7 +78,7 @@ void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
 gpointer   gnc_general_select_get_selected   (GNCGeneralSelect *gsl);
 const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
 					      gpointer selection);
-guint      gnc_general_select_get_type       (void);
+GType      gnc_general_select_get_type       (void);
 
 #endif
 

@@ -45,6 +45,7 @@ enum
 
 static void gnc_general_select_init         (GNCGeneralSelect      *gsl);
 static void gnc_general_select_class_init   (GNCGeneralSelectClass *class);
+static void gnc_general_select_dispose      (GObject               *object);
 static void gnc_general_select_finalize     (GObject               *object);
 
 static GtkHBoxClass *parent_class;
@@ -56,24 +57,28 @@ static guint general_select_signals[LAST_SIGNAL];
  *
  * Returns the GtkType for the GNCGeneralSelect widget
  */
-guint
+GType
 gnc_general_select_get_type (void)
 {
-	static guint general_select_type = 0;
+	static GType general_select_type = 0;
 
-	if (!general_select_type){
-		GtkTypeInfo general_select_info = {
-			"GNCGeneralSelect",
-			sizeof (GNCGeneralSelect),
+	if (general_select_type == 0) {
+		static const GTypeInfo general_select_info = {
 			sizeof (GNCGeneralSelectClass),
-			(GtkClassInitFunc) gnc_general_select_class_init,
-			(GtkObjectInitFunc) gnc_general_select_init,
 			NULL,
+			NULL,
+			(GClassInitFunc) gnc_general_select_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCGeneralSelect),
+			0,
+			(GInstanceInitFunc) gnc_general_select_init,
 			NULL,
 		};
 
-		general_select_type = gtk_type_unique (gtk_hbox_get_type (),
-                                                       &general_select_info);
+		general_select_type = g_type_register_static(GTK_TYPE_HBOX,
+							"GNCGeneralSelect",
+							 &general_select_info, 0);
 	}
 
 	return general_select_type;
@@ -109,19 +114,21 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 
 	object_class = (GObjectClass*) klass;
 
-	parent_class = gtk_type_class (gtk_hbox_get_type ());
+	parent_class = g_type_class_ref(GTK_TYPE_HBOX);
 
         general_select_signals[SELECTION_CHANGED] =
-                gtk_signal_new("changed",
-                               GTK_RUN_FIRST,
-                               GTK_CLASS_TYPE(object_class),
-                               GTK_SIGNAL_OFFSET(GNCGeneralSelectClass,
-                                                 changed),
-                               gtk_marshal_NONE__NONE,
-                               GTK_TYPE_NONE, 0);
+                g_signal_new("changed",
+                               G_TYPE_FROM_CLASS(object_class),
+                               G_SIGNAL_RUN_FIRST,
+                               G_STRUCT_OFFSET(GNCGeneralSelectClass,
+                                                changed),
+                               NULL, NULL,
+                               g_cclosure_marshal_VOID__VOID,
+                               G_TYPE_NONE, 0);
 
 	container_class->forall = gnc_general_select_forall;
 
+	object_class->dispose = gnc_general_select_dispose;
 	object_class->finalize = gnc_general_select_finalize;
 
         klass->changed = NULL;
@@ -130,6 +137,7 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 static void
 gnc_general_select_init (GNCGeneralSelect *gsl)
 {
+        gsl->disposed = FALSE;
         gsl->selected_item = NULL;
 }
 
@@ -143,11 +151,36 @@ gnc_general_select_finalize (GObject *object)
 
         gsl = GNC_GENERAL_SELECT (object);
 
-        gsl->entry = NULL;
-        gsl->button = NULL;
 
 	if (G_OBJECT_CLASS (parent_class)->finalize)
 		G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gnc_general_select_dispose (GObject *object)
+{
+        GNCGeneralSelect *gsl;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
+
+        gsl = GNC_GENERAL_SELECT (object);
+
+        if(gsl->disposed)
+                return;
+
+        gsl->disposed = TRUE;
+
+
+        gtk_widget_destroy(GTK_WIDGET(gsl->entry));
+        gsl->entry = NULL;
+
+        gtk_widget_destroy(GTK_WIDGET(gsl->button));
+        gsl->button = NULL;
+
+
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+		G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
