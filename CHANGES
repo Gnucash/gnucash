@@ -8,6 +8,33 @@ Version history:
             May not compile, will probably core dump.
             This is alpha level code, not for general use.
 
+ 1.0.18 - 20 Feb 98
+         o Fix Quicken QIF import to recognize "transaction cleared" flag.
+         o Add RedHat RPM spec files.
+
+ 1.0.17 - 14 Feb 98
+         o Fix core dump when deleting account with open register windows.
+         o Fix core dump when transfering money to deleted (non-existant) account.
+         o Fix tabbing between ledger entry and record/cancel/close buttons.
+         o MS Money QIF import fixes.
+         o obscure fix to Xbae table widget that may fix some mystery core dumps.
+         o add CBB, MS-Money QIF export sample files
+         o add SCO UnixWare, OpenServer build files
+         o precompiled SCO UnixWare 7 and OpenServer 5 binaries
+
+ 1.0.16 - 7 Jan 98
+         o Leap year fix
+         o Solaris compile patches
+         o precompiled AIX 4.1 for IBM RS/6000 binary
+
+ 1.0.14 - 6 Jan 98
+         o Debian package version
+         o QIF File format patch for reading CBB-exported QIF's
+         o Date bug fix
+
+ 1.0.11 - 11 Dec 97
+         o large variety of bug fixes, patches, enhancements.
+
  1.0b1 - 29 Nov 97
          o  Many, many changes by Linas Vepstas to give double entry
             bookkeeping, sub-accounts, income/expense account types, and
@@ -21,6 +48,7 @@ Version history:
          o  The environment variable XACC_HELP will tell xacc where to
             find the files for the hypertext help.  If XACC_HELP isn't
             set, xacc will default to "./Docs" as the help path.
+
  0.9 - 08 Sep 97
          o  Lots of code-cleanup.
          o  Adjust Balance window.
@@ -95,23 +123,4 @@ Version history:
        Don't do anything.  The register window is still pretty
        buggy.
 
-
-
-
-
-Things to do/fix:    (in no particular order)
------- -- ------
-
-  o  Reg window segfaults on close... (I think this might be a
-     lesstif problem, so try a newer version)
- 
-  o  memorized transactions/quickfill (They work, but you need
-     a newer than v4.6.1 Xbae Widget)
-
-  o  Bug Fixes!  There are still a few bugs floating around.
-     (Let me know if you find any)
-
-  o  a README and/or man page!
-
-  o  use configure or Imake?  or at least a proper "make install"
 

@@ -31,6 +31,7 @@ PREFIX  = /usr/local
 INSTALL = /usr/bin/ginstall -c
 INSTALL_DATA = ${INSTALL} -m 644
 TARGET  = xacc
+DOCDIR	= share/xacc/Docs
 CPU     = @target_cpu@
 
 ######################################################################
@@ -65,14 +66,14 @@ clean:
 	@cd src;    $(MAKE) clean
 
 distclean: clean
-	rm -f *~ *.o *.bak Makefile config.cache config.log config.status config.h
+	rm -f *~ *.o *.bak Makefile xacc
+	rm -f config.cache config.log config.status config.h
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
 
 install: $(TARGET)
 	@mkdir -p $(PREFIX)/bin
-	$(INSTALL) $(TARGET) $(PREFIX)/bin
-	@mkdir -p $(PREFIX)/share/xacc/Docs
-	$(INSTALL_DATA) Docs/* $(PREFIX)/share/xacc/Docs
-	@echo "Remember to set XACC_HELP to" $(PREFIX)"/share/xacc/Docs"
-
+	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
+	$(INSTALL) $(TARGET).bin $(PREFIX)/bin/$(TARGET).bin
+	@mkdir -p $(PREFIX)/$(DOCDIR)
+	$(INSTALL_DATA) Docs/* $(PREFIX)/$(DOCDIR)

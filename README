@@ -34,8 +34,7 @@ of the features of xacc are:
     individually (one per account) or in portfolio
     of accounts (a group of accounts that can be 
     displayed together).  
-  - Quicken File Import. Import Quicken Version 3.0 
-    QIF files.
+  - Quicken File Import. Import Quicken QIF files.
 
 Advanced Features
 -----------------
@@ -75,18 +74,31 @@ Home Page:
 ----------
 http://www.cs.hmc.edu/~rclark/xacc
 
+Important Note:
+---------------
+Numerous core dumps have been reported that occur with lesstif
+version 0.82.  These core dumps do not occur with lesstif v 0.81,
+nor with RedHat Motif.  If it's crashing, please try using the
+statically-linked Motif version, as described below.
+
 
 Running:
 --------
-The binary-only distribution includes two files: 'xacc' and
-'xacc-static'. The former requires a Motif shared library;
+The binary-only distribution includes two binary files: 'xacc.bin'
+and 'xacc-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
-'xacc-static' to 'xacc'.
+'xacc-static.bin' to 'xacc.bin'.
 
 Access to the on-line help documentation requires the that
 the environment variable XACC_HELP be set to the 'Docs'
-directory.  For example, for csh/tcsh, 
+directory.  The 'xacc' shell script sets this variable to
+the configured directory before running the main program,
+so you don't have to set this by hand.
+
+If you want to override the path to the Docs directory:
+
+For csh/tcsh
 
 % setenv XACC_HELP /usr/local/share/xacc/Docs
 
@@ -134,23 +146,69 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 1.0b11:
+As of version 1.0.16:
 
 xacc is known to work in the following configs:
-Linux 2.0.x -- Intel  w/ RedHat Motif
-Linux 2.0.x -- Intel  w/ Lesstif v0.81
-SGI IRIX    -- 
+Linux 2.0.x           -- Intel  w/ RedHat Motif
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+Linux 2.0.x           -- Intel  w/ Lesstif v0.81
+SGI IRIX              -- 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+
+See http://linas.org/linux/xacc for precompiled binaries for these platforms
 
 xacc seems to be having problems with:
 Solaris -- Sparc  -- won't compile due to va-args in XmHTML
 Linux 2.0.x -- Intel w/ Lesstif v0.82
 
+Download Sites:
+---------------
+All of the precompiled binaries & the latest source versions can be found
+at http://linas.org/linux/xacc  However, it is recommended that the master
+sites for each particular binary be used instead, for two reasons:
+1) bandwidth
+2) OS-specific info & support
+
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- use pkgadd to install
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- in SGI install format
+      -- warning, this is a very down-level version
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+Linux Debian
+      -- use debian tools to install
+      http://linas.org/linux/xacc/xacc_1.0.15-1_i386.deb
 
 That's all folks!
 
-
-Credits:
---------
+Main Developers:
+----------------
 Robin Clark <rclark@hmc.edu> for original xacc
 Linas Vepstas <linas@lins.org> for extensive enhancements
+
+Fixes & Patches:
+----------------
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+... and I am sure that I have missed many others ...
+

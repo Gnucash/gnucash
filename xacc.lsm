@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	1.0b11
-Entered-date:	9DEC97
+Version:	1.0.18
+Entered-date:	20FEB98
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -31,19 +31,22 @@ Description:    xacc is a program to keep track of your finances.  It
                    o General Ledger for displaying multiple
                      accounts at once.
                 - Quicken Import. Support for import from 
-                  Quicken Version 3 QIF files.
+                  Quicken QIF files.
                  
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
 Maintained-by:	linas@linas.org (Linas Vepstas)
 Primary-site:	http://www.cs.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
-		540KB  xacc-1.0b7-sgi-irix.inst.tar
+		540KB  xacc-1.0b7.bin-sgi-irix.inst.tar
+                535KB  xacc-1.0.16-ibm-aix415.exe
+                356KB  xacc-1.0.16-sco-osr.vols.gz
+                301KB  xacc_1.0.15-1_i386.deb
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		871KB  xacc-1.0b11.tar.gz
-		1349KB  xacc-1.0b11-bin-linux-i386.tar.gz
+		918KB  xacc-1.0.17.tar.gz
+		1388KB xacc-1.0.17.bin-linux-i386.tar.gz
 Alternate-site:	ftp.x.org /contrib/applications
-Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel/PowerPC 
+Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Mootif/Sparc/Intel/PowerPC 
 Copying-policy:	GPL
 End
 

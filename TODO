@@ -1,15 +1,13 @@
 Open, known bugs, desired enhancements:
 
-> 3)  Selecting "File", "New File" does nothing..
+3)  Selecting "File", "New File" does nothing..
 
 Its supposed to work that way, erasing old work.  Clarify
 the docs or change the menu entry name.
 
 10) cleared balances are incorrectly shown for stock accounts
 
-12) all messages should be moved out so that translation to foreign
-    languages would be possible.
-    -- long messages now in include/main.h, short words are not.
+Hmm. verify that this is still broken!?!
 
 13) transfer window should allow share prices to be entered;
     but these should grey out when dealing with ordinary bank accounts.
@@ -19,7 +17,8 @@ the docs or change the menu entry name.
 18) add (none) to transfer list, or explain that a second selection 
     will clear it.
 
-20) fix quickfill for ledgers.
+20) fix quickfill for general ledgers. (it works for
+    simple register windows).
 
 21) add "number of shares" to XferWindow
 
@@ -41,12 +40,13 @@ the docs or change the menu entry name.
 
 29) add short-cut menu-icon bar
 
-30) add icons for minimuzation
+30) add icons for minimization
 
 31) move resources out of main.c into a resource file.
     This requires fixing install first.
 
 32) "make install" should work
+    Umm, I think it does now ??? check this to be sure ...
 
 33) automatic deposit-withdrawl on regular basis.
 
@@ -58,19 +58,11 @@ the docs or change the menu entry name.
 
 36) business features, for tracking inventory, costing jobs, etc.
 
-37) clean distinction between the data view (the register window)
-    and the data (Account.h, Transaction.h) so that data can be feteched
-    from multi-user SQL database instead of simple flat files.
-
-38) Find, if it exists, some ANSI/ISO/POSIX/whatever standard for 
-    fincancial software, and code to that.  That in heory makes it more
-    interoperable with other possible projects.
-
 39) create Java version of RegWindow, so that accounts&transactions could
     be deleivered by a web server, and the actual data viewed/modified
     with regwindow.
 
-40) add check-priniting ability.
+40) add check-printing ability.
 
 41) add short-cut button-bar, like quicken/lotus
 
@@ -84,15 +76,13 @@ the docs or change the menu entry name.
     has sub-accounts.
 
 47) provide a simplified portfolio ledger window.
-
-48) allow tab traversal from memo field to commit button in the ledger
-    window.
+    Deffered, will be in version 1.1.x
 
 52) add sql interfaces. Use optimistic record modification policies,
     to avoid record locking. Something that is CVS, as opposed to 
     RCS, in style & philosophy.
 
-53) mnemonics don't work in the menus
+56) mnemonics don't work in the menus
 
 
 Fixed bugs:
@@ -148,6 +138,13 @@ Fixed.
 11) stock portfolio should indicate total $ amount of transaction
 fixed.
 
+12) all messages should be moved out so that translation to foreign
+    languages would be possible.
+    -- long messages now in include/main.h, short words are not.
+    -- see alpha version 1.1, which has completed work on separating 
+       messages, to include/messages.h
+    Done January 1998
+
 14) Allow transfers of funds to be done in-line
 fixed.
 
@@ -160,13 +157,42 @@ fixed. changed XmNnavigation
 19) verify that tabbing works for mutual funds and for ledgers
 fixed.
 
+37) clean distinction between the data view (the register window)
+    and the data (Account.h, Transaction.h) so that data can be feteched
+    from multi-user SQL database instead of simple flat files.
+    Done, January 1998, in version 1.1.  Engine has been striped of all
+    gui elements.
+
+38) Find, if it exists, some ANSI/ISO/POSIX/whatever standard for 
+    fincancial software, and code to that.  That in theory makes it more
+    interoperable with other possible projects.
+    Done, February 1998. Found the "open financial exchange" docs
+    which is an intuit/microsoft/checkfree proposal.  No other
+    financial standards seem to exist. The ofx dtd's are included
+    in version 1.1
+
 46) fix traversal for ledger windows
 fixed.
+
+48) allow tab traversal from memo field to commit button in the ledger
+    window.
+Fixed in version 1.0.17
 
 49) fix recn window. Its completely broken right now.
 fixed, I think.
 
 50) provide a menu item to not show income/expense accounts.
     this makes it work more like quicken categories.  See also #26
-done.
+done. 
+
+53) core dump when reading MS-Money QIF files
+Fixed in 1.0.17
+
+54) core dump when deleting an account with open windows
+Hack-fixed in 1.0.17 by allowing a memory leak to occur.
+Non-memory-leak requires major redesign, and is in version 1.1
+
+55) core dump when picking deleted account in the transfer
+    pull-down.
+Feb 98 fixed
 
