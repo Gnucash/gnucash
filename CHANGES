@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.1.6 - 8 March 98
+         o German README from Henning Spruth
+         o First drop of GTK code from Jeremy Collins
+         o First stab at GTK plotting from Rob Browning
+         o Stock Ledger cleanup
+
  1.1.4 - 1 March 98
          o gui-independent engine code moved to src/engine
          o main motif app code moved to src/motif
