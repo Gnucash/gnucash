@@ -74,6 +74,11 @@ void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table);
 
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
+
+/** added for QOF standardisation */
+void gncCustomerSetTaxIncluded_q (GncCustomer *customer, gint taxincl);
+gint gncCustomerGetTaxIncluded_q (GncCustomer *cust);
+
 /** @} */
 
 /** @name Get Functions */
@@ -111,11 +116,14 @@ GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
-#define CUSTOMER_ID	"id"
-#define CUSTOMER_NAME	"name"
-#define CUSTOMER_ADDR	"addr"
+#define CUSTOMER_ID			"id"
+#define CUSTOMER_NAME		"name"
+#define CUSTOMER_ADDR		"addr"
 #define CUSTOMER_SHIPADDR	"shipaddr"
-
+#define CUSTOMER_NOTES 		"notes"
+#define CUSTOMER_DISCOUNT 	"amount of discount"
+#define CUSTOMER_CREDIT 	"amount of credit"
+#define CUSTOMER_TT_OVER 	"tax table override"
 /** @deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncCustomerRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))

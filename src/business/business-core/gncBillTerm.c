@@ -691,6 +691,22 @@ static QofObject gncBillTermDesc =
 gboolean gncBillTermRegister (void)
 {
   static QofParam params[] = {
+    { GNC_BILLTERM_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncBillTermGetName,
+      (QofSetterFunc)gncBillTermSetName },
+    { GNC_BILLTERM_DESC, QOF_TYPE_STRING, (QofAccessFunc)gncBillTermGetDescription,
+      (QofSetterFunc)gncBillTermSetDescription },
+    { GNC_BILLTERM_TYPE, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetType, 
+      (QofSetterFunc)gncBillTermSetType },
+    { GNC_BILLTERM_DUEDAYS, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetDueDays, 
+      (QofSetterFunc)gncBillTermSetDueDays },
+    { GNC_BILLTERM_DISCDAYS, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetDiscountDays,
+      (QofSetterFunc)gncBillTermSetDiscountDays },
+    { GNC_BILLTERM_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncBillTermGetDiscount,
+      (QofSetterFunc)gncBillTermSetDiscount },
+    { GNC_BILLTERM_CUTOFF, QOF_TYPE_INT32, (QofAccessFunc)gncBillTermGetCutoff, 
+      (QofSetterFunc)gncBillTermSetCutoff },
+    { GNC_BILLTERM_REFCOUNT, QOF_TYPE_INT64, (QofAccessFunc)gncBillTermGetRefcount, NULL },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },

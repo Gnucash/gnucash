@@ -1169,7 +1169,7 @@ static QofObject gncEntryDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Order/Invoice/Bill Entry",
-  create:             NULL,
+  create:             (gpointer)gncEntryCreate,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,

@@ -1,3 +1,14 @@
+2004-18-19  Derek Atkins  <derek@ihtfp.com>
+
+	Neil Williams's "QOF create: functionality added" patch:
+
+	QOF create: adding functions to be used with
+	qof_object_new_instance for new qof_book_merge objects, including
+	business objects.
+
+	Small documentation tweak to make QofEntity and QofParam
+	structures visible to doxygen.
+
 2004-08-19  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: change the gtkhtml order to search for >= 1.1 before

@@ -73,7 +73,7 @@ struct _gncCustomer
   gboolean        active;
   GList *         jobs;
 
-  /* The following fields aer unique to 'customer' */
+  /* The following fields are unique to 'customer' */
   gnc_numeric     credit;
   gnc_numeric     discount;
   GncAddress *    shipaddr;
@@ -270,6 +270,13 @@ void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
   gncCustomerCommitEdit (cust);
 }
 
+void gncCustomerSetTaxIncluded_q (GncCustomer *cust, gint taxincl)
+{
+	GncTaxIncluded g = taxincl;
+	if(!g) return;
+	gncCustomerSetTaxIncluded(cust, g);
+}
+
 void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 {
   if (!cust) return;
@@ -444,6 +451,11 @@ GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
   return cust->terms;
 }
 
+gint gncCustomerGetTaxIncluded_q (GncCustomer *cust)
+{
+	return (GncTaxIncluded)gncCustomerGetTaxIncluded(cust);
+}
+
 GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
 {
   if (!cust) return GNC_TAXINCLUDED_USEGLOBAL;
@@ -536,7 +548,7 @@ static QofObject gncCustomerDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Customer",
-  create:             NULL,
+  create:             (gpointer)gncCustomerCreate,
   book_begin:         NULL,
   book_end:           NULL,
   is_dirty:           qof_collection_is_dirty,
@@ -551,8 +563,15 @@ gboolean gncCustomerRegister (void)
   static QofParam params[] = {
     { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
     { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, (QofSetterFunc)gncCustomerSetName },
+	{ CUSTOMER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetNotes, (QofSetterFunc)gncCustomerSetNotes },
+	{ CUSTOMER_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetDiscount,
+		(QofSetterFunc)gncCustomerSetDiscount },
+	{ CUSTOMER_CREDIT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetCredit,
+		(QofSetterFunc)gncCustomerSetCredit },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
     { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
+	{ CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride, 
+		(QofSetterFunc)gncCustomerSetTaxTableOverride },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

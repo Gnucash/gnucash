@@ -2836,7 +2836,7 @@ static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
   e_type:                GNC_ID_ACCOUNT,
   type_label:            "Account",
-  create:                NULL,
+  create:                (gpointer)xaccMallocAccount,
   book_begin:            NULL,
   book_end:              NULL,
   is_dirty:              NULL,

@@ -92,11 +92,13 @@ Account * gncEmployeeGetCCard (GncEmployee *employee);
 
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
-
-
-#define EMPLOYEE_ID	"id"
+#define EMPLOYEE_ID			"id"
 #define EMPLOYEE_USERNAME	"username"
-#define EMPLOYEE_ADDR	"addr"
+#define EMPLOYEE_ADDR		"addr"
+#define EMPLOYEE_LANGUAGE 	"native language"
+#define EMPLOYEE_ACL		"acl"
+#define EMPLOYEE_WORKDAY	"workday"
+#define EMPLOYEE_RATE		"rate"
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))

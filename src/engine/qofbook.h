@@ -62,6 +62,7 @@
   (c_type *) val;                                           \
 })
 
+/** \brief QofBook reference */
 typedef struct _QofBook       QofBook;
                                                                                 
 /** GList of QofBook */
