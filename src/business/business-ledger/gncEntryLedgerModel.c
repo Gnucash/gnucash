@@ -60,12 +60,12 @@ static const char * get_disc_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_distype_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("DT");
+  return _("Discount Type");
 }
 
 static const char * get_dishow_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("DH");
+  return _("Discount How");
 }
 
 static const char * get_pric_label (VirtualLocation virt_loc, gpointer data)
