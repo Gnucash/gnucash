@@ -36,7 +36,7 @@
     In the course  of maintaining large, complex sets of accounts with many
     transactions, it is very easy to make errors that may go undetected for
     a long time, and be appallingly difficult to track down, even when
-    double-entry bookkepping is used.
+    double-entry bookkeeping is used.
 
     </PARA>
 </SECT1>
@@ -49,7 +49,8 @@
     accounting; if you add something in to one account, you 
     have to subtract it from somewhere else.
     When this is done regularly and consistently, this results in the
-    magical identity of accounting:
+    identity of accounting:
+    <ANCHOR ID="IDENTITY">
     <ENVAR>Total of Debits = Total of Credits.</ENVAR>
 
 
@@ -86,11 +87,10 @@
     somewhat more accurate to call it <EMPHASIS>multiple-</EMPHASIS>entry
     bookkeeping. Unfortunately, there's 700 years of history of use
     of the term, which sufficiently discourages changing it. (And you
-    thought parts of Unix were criufty and old!)
+    thought parts of Unix were crufty and old!)
 
     </PARA>
 
-    </PARA>
 <PARA><EMPHASIS>Insider knowledge:</EMPHASIS> 
     Bank statements are frequently written up from the 
     <EMPHASIS>bank's</EMPHASIS> perspective, which is 
