@@ -1545,7 +1545,7 @@ regSaveTransaction( RegWindow *regData, int position )
       newrow += NUM_ROWS_PER_TRANS;
       nt = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, newrow);
     }
-    XbaeMatrixMakeCellVisible( regData->reg, newrow+DATE_CELL_R, DATE_CELL_C );
+    XbaeMatrixMakeCellVisible( regData->reg, newrow+YEAR_CELL_R, YEAR_CELL_C );
 
     /* Set the currEntry transaction pointer for this register window.
      * During date reordering we removed and re-inserted
