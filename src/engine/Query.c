@@ -154,10 +154,10 @@ xaccQueryPrint(Query * q)
           printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn, qt->data.amount.amount);
           break;
         case PR_BALANCE:
-          printf ("balance\n");
+          printf ("balance sense=%d how=%d\n", qt->data.balance.sense, qt->data.balance.how);
           break;
         case PR_CLEARED:
-          printf ("cleared\n");
+          printf ("cleared sense=%d how=%d\n", qt->data.cleared.sense, qt->data.cleared.how);
           break;
         case PR_DATE: {
           char buff[40];
@@ -180,6 +180,14 @@ xaccQueryPrint(Query * q)
           printf ("desc sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
+
+        case PR_GUID: {
+          char buff[40];
+          printf ("guid sense=%d\n", qt->data.guid.sense);
+          guid_to_string_buff (&qt->data.guid.guid, buff);
+          printf ("\tguid %s\n", buff);
+          break;
+        }
         case PR_MEMO:
           printf ("memo sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
@@ -201,7 +209,7 @@ xaccQueryPrint(Query * q)
           break;
 
         default:
-          printf ("unkown\n");
+          printf ("unkown term type=%d \n", qt->data.base.term_type);
       }
     }
     printf("\n");
@@ -1787,7 +1795,7 @@ xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
 /********************************************************************
  * DxaccQueryAddAmountMatch
  * Add a value filter to an existing query. 
- * FIXME 
+ * FIXME ?? fix what ??
  ********************************************************************/
 
 void
@@ -1826,7 +1834,7 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
 /********************************************************************
  * DxaccQueryAddSharePriceMatch
  * Add a share-price filter to an existing query. 
- * FIXME 
+ * FIXME  ?? fix what ??
  ********************************************************************/
 
 void
@@ -1863,7 +1871,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
 /********************************************************************
  * DxaccQueryAddSharesMatch
  * Add a share-price filter to an existing query. 
- * FIXME 
+ * FIXME ?? fix what ??
  ********************************************************************/
  
 void

@@ -74,7 +74,7 @@ typedef enum {
 typedef enum {
   PR_ACCOUNT=1,
   PR_ACTION,
-  PR_AMOUNT,
+  PR_AMOUNT,   /* FIXME: misnamed, should be PR_VALUE */
   PR_BALANCE,
   PR_CLEARED,
   PR_DATE,
@@ -84,7 +84,7 @@ typedef enum {
   PR_MISC,
   PR_NUM,
   PR_PRICE,
-  PR_SHRS
+  PR_SHRS   /* FIXME: misnamed, should be PR_AMT */
 } pr_type_t;
 
 typedef enum {
