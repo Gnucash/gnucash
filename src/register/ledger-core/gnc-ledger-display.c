@@ -578,17 +578,6 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
   splits = xaccQueryGetSplits (ld->query);
 
-  /*
-   * If the user is in the middle of editing a transaction, make sure
-   * that transaction stays in the register instead of ripping it out
-   * from underneath them.
-   */
-  current_split = gnc_split_register_get_current_split (ld->reg);
-  if (current_split &&
-      (g_list_find(splits, current_split) == NULL)) {
-    g_list_append(splits, current_split);
-  }
-
   gnc_ledger_display_set_watches (ld, splits);
 
   gnc_ledger_display_refresh_internal (ld, splits);
