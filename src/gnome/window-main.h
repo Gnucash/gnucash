@@ -32,9 +32,6 @@ void mainWindow(void);
 
 GNCAccountTree * gnc_get_current_account_tree();
 
-Account * gnc_get_current_account();
-GList *   gnc_get_current_accounts();
-
 void gnc_ui_mainWindow_save_size();
 
 #endif

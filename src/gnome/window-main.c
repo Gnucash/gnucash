@@ -32,11 +32,13 @@
 #include "AccWindow.h"
 #include "AdjBWindow.h"
 #include "global-options.h"
+#include "dialog-options.h"
 #include "FileDialog.h"
 #include "g-wrap.h"
 #include "gnucash.h"
 #include "MainWindow.h"
 #include "Destroy.h"
+#include "ui-callbacks.h"
 #include "enriched-messages.h"
 #include "RegWindow.h"
 #include "Refresh.h"
@@ -51,10 +53,10 @@
 #include "dialog-qif-import.h"
 #include "dialog-find-transactions.h"
 #include "file-history.h"
+#include "EuroUtils.h"
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
-#include "EuroUtils.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */

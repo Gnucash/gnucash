@@ -1189,7 +1189,7 @@ xaccAccountGetParentAccount (Account * acc)
 int
 xaccAccountGetType (Account *acc)
 {
-   if (!acc) return 0;
+   if (!acc) return NO_TYPE;
    return (acc->type);
 }
 

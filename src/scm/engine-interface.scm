@@ -286,17 +286,3 @@
 
         ;; close the transaction
         (gnc:transaction-commit-edit trans))))
-
-
-;; Return a scheme symbol identifying the type of guid passed in.
-(define gnc:guid-type #f)
-(let ()
-  (define entity-types (vector 'gnc-id-none
-                               'gnc-id-null
-                               'gnc-id-group
-                               'gnc-id-account
-                               'gnc-id-trans
-                               'gnc-id-split))
-  (set! gnc:guid-type
-        (lambda (guid)
-          (vector-ref entity-types (gnc:guid-type-helper guid)))))

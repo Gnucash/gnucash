@@ -26,7 +26,10 @@
 #ifndef __UI_CALLBACKS_H__
 #define __UI_CALLBACKS_H__
 
-#include <gnc-common.h>
+#include <glib.h>
+
+#include "top-level.h"
+
 
 /* Dialog windows ***************************************************/
 typedef enum
@@ -69,6 +72,9 @@ void gnc_ui_destroy_all_subwindows( void );
 void gnc_set_busy_cursor( gncUIWidget w );
 void gnc_unset_busy_cursor( gncUIWidget w );
 
+/* Getting main window information **********************************/
+Account * gnc_get_current_account();
+GList   * gnc_get_current_accounts();
 
 /* QIF Import Windows ***********************************************/
 typedef struct _qifimportwindow QIFImportWindow;

@@ -26,6 +26,7 @@ INCLPATH = -I@top_srcdir@/ \
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/src/engine/guid \
 	   -I@top_srcdir@/src/gnome \
+           -I@top_srcdir@/src/guile \
            -I@prefix@/include \
            -I@top_srcdir@/src/register
 

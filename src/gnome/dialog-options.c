@@ -27,11 +27,14 @@
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "option-util.h"
+#include "guile-util.h"
 #include "query-user.h"
 #include "gnc-helpers.h"
 #include "account-tree.h"
 #include "gnc-dateedit.h"
 #include "global-options.h"
+#include "query-user.h"
+#include "window-help.h"
 #include "messages.h"
 #include "util.h"
 
@@ -1125,4 +1128,69 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 
   if (default_section_name != NULL)
     free(default_section_name);
+}
+
+
+static void
+gnc_options_dialog_apply_cb(GnomePropertyBox *propertybox,
+			    gint arg1, gpointer user_data)
+{
+  GNCOptionDB *global_options = user_data;
+
+  if (arg1 == -1)
+    gnc_option_db_commit(global_options);
+}
+
+static void
+gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
+			   gint arg1, gpointer user_data)
+{
+  helpWindow(NULL, HELP_STR, HH_GLOBPREFS);
+}
+
+/* Options dialog... this should house all of the config options     */
+/* like where the docs reside, and whatever else is deemed necessary */
+void
+gnc_show_options_dialog()
+{
+  static GnomePropertyBox *options_dialog = NULL;
+  GNCOptionDB *global_options;
+
+  global_options = gnc_get_global_options();
+
+  if (gnc_option_db_num_sections(global_options) == 0)
+  {
+    gnc_warning_dialog("No options!");
+    return;
+  }
+
+  if (gnc_option_db_dirty(global_options))
+  {
+    if (options_dialog != NULL)
+      gtk_widget_destroy(GTK_WIDGET(options_dialog));
+
+    options_dialog = NULL;
+  }
+
+  if (options_dialog == NULL)
+  {
+    options_dialog = GNOME_PROPERTY_BOX(gnome_property_box_new());
+    gnome_dialog_close_hides(GNOME_DIALOG(options_dialog), TRUE);
+
+    gnc_build_options_dialog_contents(options_dialog, global_options);
+    gnc_option_db_clean(global_options);
+
+    gtk_window_set_title(GTK_WINDOW(options_dialog), GNC_PREFS);
+
+    gtk_signal_connect(GTK_OBJECT(options_dialog), "apply",
+		       GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),
+		       global_options);
+
+    gtk_signal_connect(GTK_OBJECT(options_dialog), "help",
+		       GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb),
+		       global_options);
+  }
+
+  gtk_widget_show(GTK_WIDGET(options_dialog));  
+  gdk_window_raise(GTK_WIDGET(options_dialog)->window);
 }

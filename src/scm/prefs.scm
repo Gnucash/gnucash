@@ -84,6 +84,47 @@
 
 ;;;;;; Create default options and config vars
 
+(define gnc:*debit-strings*
+  (list '(NO_TYPE   . "Funds In")
+        '(BANK      . "Deposit")
+        '(CASH      . "Receive")
+        '(CREDIT    . "Payment")
+        '(ASSET     . "Appreciation")
+        '(LIABILITY . "Debit")
+        '(STOCK     . "Bought")
+        '(MUTUAL    . "Bought")
+        '(CURRENCY  . "Bought")
+        '(INCOME    . "Charge")
+        '(EXPENSE   . "Expense")
+        '(EQUITY    . "Debit")))
+
+(define gnc:*credit-strings*
+  (list '(NO_TYPE   . "Funds Out")
+        '(BANK      . "Payment")
+        '(CASH      . "Spend")
+        '(CREDIT    . "Charge")
+        '(ASSET     . "Depreciation")
+        '(LIABILITY . "Credit")
+        '(STOCK     . "Sold")
+        '(MUTUAL    . "Sold")
+        '(CURRENCY  . "Sold")
+        '(INCOME    . "Income")
+        '(EXPENSE   . "Rebate")
+        '(EQUITY    . "Credit")))
+
+(if (gnc:debugging?)
+    (let ((thunk (lambda (pair)
+                   (gnc:register-translatable-strings (cdr pair)))))
+      (map thunk gnc:*debit-strings*)
+      (map thunk gnc:*credit-strings*)))
+
+(define (gnc:get-debit-string type)
+  (assoc-ref gnc:*debit-strings* type))
+
+(define (gnc:get-credit-string type)
+  (assoc-ref gnc:*debit-strings* type))
+
+
 ;; Main Window options
 
 (gnc:register-configuration-option

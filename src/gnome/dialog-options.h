@@ -28,12 +28,9 @@
 
 #include "option-util.h"
 
+void gnc_show_options_dialog();
 
 void gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
                                        GNCOptionDB *odb);
-
-SCM  gnc_option_get_ui_value(GNCOption *option);
-void gnc_option_set_ui_value(GNCOption *option, gboolean use_default);
-
 
 #endif /* __OPTIONS_DIALOG_H__ */

@@ -13,13 +13,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __TOP_LEVEL_H__
@@ -31,32 +30,25 @@
 #include "gnc-common.h"
 
 /** HELP STUFF: *****************************************************/
-#define HH_ABOUT     "xacc-about.html"
-#define HH_ACC       "xacc-accwin.html"
-#define HH_REGWIN    "xacc-regwin.html"
-#define HH_RECNWIN   "xacc-recnwin.html"
-#define HH_ADJBWIN   "xacc-adjbwin.html"
-#define HH_MAIN      "xacc-main.html"
-#define HH_GPL       "xacc-gpl.html"
-#define HH_GLOBPREFS "xacc-globalprefs.html"
-#define HH_ACCEDIT   "xacc-accountedit.html"
-#define HH_QIFIMPORT "xacc-qif-import.html"
-#define HH_PRINTCHECK "xacc-print-check.html"
+#define HH_ABOUT             "xacc-about.html"
+#define HH_ACC               "xacc-accwin.html"
+#define HH_REGWIN            "xacc-regwin.html"
+#define HH_RECNWIN           "xacc-recnwin.html"
+#define HH_ADJBWIN           "xacc-adjbwin.html"
+#define HH_MAIN              "xacc-main.html"
+#define HH_GPL               "xacc-gpl.html"
+#define HH_GLOBPREFS         "xacc-globalprefs.html"
+#define HH_ACCEDIT           "xacc-accountedit.html"
+#define HH_QIFIMPORT         "xacc-qif-import.html"
+#define HH_PRINTCHECK        "xacc-print-check.html"
 #define HH_FIND_TRANSACTIONS "xacc-find-transactions.html"
-#define HH_PRINT "xacc-print.html"
+#define HH_PRINT             "xacc-print.html"
 
 /** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
 
-/** GLOBALS *********************************************************/
-extern Session *current_session;
-
-#if defined(MOTIF)
-  extern gncUIWidget gnc_get_ui_data();
-#elif defined(GNOME)
-  extern gncUIWidget gnc_get_ui_data();
-#endif
+extern gncUIWidget gnc_get_ui_data();
 
 extern void gnc_ui_shutdown();
 

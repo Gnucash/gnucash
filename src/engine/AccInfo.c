@@ -41,6 +41,7 @@ static short module = MOD_ENGINE;
 char *
 xaccAccountTypeEnumAsString(int type) {
   switch(type) {
+    GNC_RETURN_ENUM_AS_STRING(NO_TYPE);
     GNC_RETURN_ENUM_AS_STRING(BANK);
     GNC_RETURN_ENUM_AS_STRING(CASH);
     GNC_RETURN_ENUM_AS_STRING(CREDIT);

@@ -59,7 +59,7 @@ motif motif.static: ${MOTIF_OBJS}
 	@cd register        && $(MAKE) motif
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) motif
-	@cd guile           && $(MAKE) default
+	@cd guile           && $(MAKE) motif
 	@cd swig            && $(MAKE) motif
 	@cd motif           && $(MAKE) $@
 
@@ -70,7 +70,7 @@ gnome gnome.static: ${GNOME_OBJS}
 	@cd register        && $(MAKE) gnome
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) gnome
-	@cd guile           && $(MAKE) default
+	@cd guile           && $(MAKE) gnome
 	@cd swig            && $(MAKE) gnome
 	@cd gnome           && $(MAKE) $@
 
@@ -81,7 +81,7 @@ qt qt.static: $(QT_OBJS)
 	@cd register        && $(MAKE) qt
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) qt
-	@cd guile           && $(MAKE) default 	
+	@cd guile           && $(MAKE) qt 	
 	@cd swig            && $(MAKE) qt
 	@cd qt              && $(MAKE) $@
 
