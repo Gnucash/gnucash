@@ -17,7 +17,8 @@
 #include "gncAddress.h"
 #include "gncAddressP.h"
 
-struct _gncAddress {
+struct _gncAddress 
+{
   QofBook *	book;
   const GUID *	parent_guid;
   QofIdType	parent_type;
@@ -30,7 +31,6 @@ struct _gncAddress {
   char *	phone;
   char *	fax;
   char *	email;
-
 };
 
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
@@ -49,7 +49,8 @@ mark_address (GncAddress *address)
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
+GncAddress * 
+gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
 {
   GncAddress *addr;
 
@@ -69,6 +70,31 @@ GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptyp
   addr->phone = CACHE_INSERT ("");
   addr->fax = CACHE_INSERT ("");
   addr->email = CACHE_INSERT ("");
+
+  return addr;
+}
+
+GncAddress * 
+gncCloneAddress (GncAddress *from, QofBook *book)
+{
+  GncAddress *addr;
+
+  if (!book) return NULL;
+
+  addr = g_new0 (GncAddress, 1);
+  addr->book = book;
+  addr->dirty = TRUE;
+  addr->parent_guid = from->parent_guid;
+  addr->parent_type = from->parent_type;
+
+  addr->name = CACHE_INSERT (from->name);
+  addr->addr1 = CACHE_INSERT (from->addr1);
+  addr->addr2 = CACHE_INSERT (from->addr2);
+  addr->addr3 = CACHE_INSERT (from->addr3);
+  addr->addr4 = CACHE_INSERT (from->addr4);
+  addr->phone = CACHE_INSERT (from->phone);
+  addr->fax = CACHE_INSERT (from->fax);
+  addr->email = CACHE_INSERT (from->email);
 
   return addr;
 }
