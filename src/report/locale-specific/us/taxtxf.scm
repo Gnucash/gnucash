@@ -29,6 +29,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 (define-module (gnucash report taxtxf))
 
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'printf)
