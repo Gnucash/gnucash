@@ -65,10 +65,9 @@
        options pagename-general optname-date "a")
 
       ;; all about currencies
-      (gnc:options-add-currency-selection!
+      (gnc:options-add-currency!
        options pagename-general 
-       optname-show-foreign optname-report-currency
-       "b")
+       optname-report-currency "b")
 
       ;; accounts to work on
       (gnc:options-add-account-selection! 
@@ -99,6 +98,12 @@
 	pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #t))
 
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	gnc:pagename-display optname-show-foreign 
+	"e" (N_ "Display the account's foreign currency amount?") #f))
+
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options pagename-general)      
 
@@ -126,7 +131,7 @@
 					    optname-show-parent-balance))
           (show-parent-total? (get-option pagename-display
 					  optname-show-parent-total))
-	  (show-fcur? (get-option pagename-general optname-show-foreign))
+	  (show-fcur? (get-option pagename-display optname-show-foreign))
 	  (report-currency (get-option pagename-general 
 				       optname-report-currency))
           (date-tp (gnc:timepair-end-day-time 

@@ -57,10 +57,9 @@
        optname-from-date optname-to-date "a")
 
       ;; all about currencies
-      (gnc:options-add-currency-selection!
+      (gnc:options-add-currency!
        options gnc:pagename-general
-       optname-show-foreign optname-report-currency
-       "b")
+       optname-report-currency "b")
 
       ;; accounts to work on
       (gnc:options-add-account-selection! 
@@ -93,8 +92,14 @@
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
+	gnc:pagename-display optname-show-foreign 
+	"e" (N_ "Display the account's foreign currency amount?") #f))
+
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
 	gnc:pagename-display optname-show-rates
-	"e" (N_ "Show the exchange rates used") #t))
+	"f" (N_ "Show the exchange rates used") #t))
 
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options gnc:pagename-general)      
@@ -126,7 +131,7 @@
 					    optname-show-parent-balance))
           (show-parent-total? (get-option gnc:pagename-display
 					  optname-show-parent-total))
-	  (show-fcur? (get-option gnc:pagename-general
+	  (show-fcur? (get-option gnc:pagename-display
 				  optname-show-foreign))
 	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))

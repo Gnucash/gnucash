@@ -1,5 +1,11 @@
 2001-05-10  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/report/account-summary.scm, balance-sheet.scm, pnl.scm:
+	moved foreign currency display option to display tab.
+
+	* src/scm/html-utilities.scm
+	(gnc:html-acct-table-comm-row-helper!): fixed display bug.
+
 	* src/engine/gnc-pricedb.c (gnc_pricedb_lookup_nearest_in_time):
 	Fixed this function so that it works properly now.
 

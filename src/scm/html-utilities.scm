@@ -192,83 +192,87 @@
 	 current-depth my-name my-commodity balance 
 	 reverse-balance? is-stock-account? main-row-style other-rows-style 
 	 boldface? group-header-line?) 
-  ;; Adds one row to the table. my-name is the html-object
-  ;; displayed in the name column; foreign-balance is the
-  ;; <gnc-monetary> for the foreign column or #f if to be left
-  ;; empty; domestic-balance is the <gnc-monetary> for the
-  ;; domestic column.
-  (define (commodity-row-helper! 
-	   my-name foreign-balance domestic-balance row-style)
-    (gnc:html-table-append-row/markup!
-     table
-     row-style
-     (append
-      ;; left third of the table
-      (gnc:html-make-empty-cells (- current-depth 1))
-      (list (gnc:html-acct-table-cell (+ 1 (- tree-depth current-depth))
-				      my-name boldface?))
-      ;; right two-thirds of the table
-      (gnc:html-make-empty-cells 
-       (* 2 (- tree-depth (+ current-depth (if group-header-line? 1 0)))))
-      (if boldface?
-	  (list 
-	   (and foreign-balance 
-		(gnc:make-html-text (gnc:html-markup-b foreign-balance)))
-	   (and domestic-balance
-		(gnc:make-html-text (gnc:html-markup-b domestic-balance))))
-	  (list foreign-balance domestic-balance))
-      (gnc:html-make-empty-cells (* 2 (- current-depth 
-					 (if group-header-line? 0 1)))))))
-  
-      ;;;;;;;;;;
-  ;; the first row for each account: shows the name and the
-  ;; balance in the report-commodity
-  (if (and (not is-stock-account?)
-	   ;; FIXME: need to check whether we really have only one
-	   ;; foreign currency if is-stock-account==#t.
-	   (gnc:commodity-equiv? my-commodity report-commodity))
-      ;; usual case: the account balance in terms of report
-      ;; commodity
-      (commodity-row-helper! 
-       my-name #f
-       (if balance 
-	   (balance 'getmonetary report-commodity reverse-balance?)
-	   #f)
-       main-row-style)
-      ;; Special case for stock-accounts: then the foreign commodity
-      ;; gets displayed in this line rather then the following lines
-      ;; (loop below). Is also used if is-stock-account? is true.
-      (let ((my-balance 
-	     (if balance (balance 'getmonetary 
-				  my-commodity reverse-balance?) #f)))
+  (let ((already-printed #f))
+    ;; Adds one row to the table. my-name is the html-object
+    ;; displayed in the name column; foreign-balance is the
+    ;; <gnc-monetary> for the foreign column or #f if to be left
+    ;; empty; domestic-balance is the <gnc-monetary> for the
+    ;; domestic column.
+    (define (commodity-row-helper! 
+	     my-name foreign-balance domestic-balance row-style)
+      (gnc:html-table-append-row/markup!
+       table
+       row-style
+       (append
+	;; left third of the table
+	(gnc:html-make-empty-cells (- current-depth 1))
+	(list (gnc:html-acct-table-cell (+ 1 (- tree-depth current-depth))
+					my-name boldface?))
+	;; right two-thirds of the table
+	(gnc:html-make-empty-cells 
+	 (* 2 (- tree-depth (+ current-depth (if group-header-line? 1 0)))))
+	(if boldface?
+	    (list 
+	     (and foreign-balance 
+		  (gnc:make-html-text (gnc:html-markup-b foreign-balance)))
+	     (and domestic-balance
+		  (gnc:make-html-text (gnc:html-markup-b domestic-balance))))
+	    (list foreign-balance domestic-balance))
+	(gnc:html-make-empty-cells (* 2 (- current-depth 
+					   (if group-header-line? 0 1)))))))
+    
+    ;;;;;;;;;;
+    ;; the first row for each account: shows the name and the
+    ;; balance in the report-commodity
+    (if (and (not is-stock-account?)
+	     ;; FIXME: need to check whether we really have only one
+	     ;; foreign currency if is-stock-account==#t.
+	     (gnc:commodity-equiv? my-commodity report-commodity))
+	;; usual case: the account balance in terms of report
+	;; commodity
 	(commodity-row-helper! 
-	 my-name
-	 my-balance
-	 (exchange-fn my-balance report-commodity)
-	 main-row-style)))
-  
-  ;; The additional rows: show no name, but the foreign currency
-  ;; balance and its corresponding value in the
-  ;; report-currency. One row for each non-report-currency. 
-  (if (and balance (not is-stock-account?))
-      (balance 
-       'format 
-       (lambda (curr val)
-	 (if (gnc:commodity-equiv? curr report-commodity)
-	     '()
-	     (let ((bal 
-		    (if reverse-balance?
-			(gnc:monetary-neg (gnc:make-gnc-monetary curr val))
-			(gnc:make-gnc-monetary curr val))))
-	       (commodity-row-helper!
-		;; print no account name 
-		(car (gnc:html-make-empty-cells 1))
-		;; print the account balance in the respective
-		;; commodity
-		bal
-		(exchange-fn bal report-commodity)
-		other-rows-style))))
-       #f)))
+	 my-name #f
+	 (if balance 
+	     (balance 'getmonetary report-commodity reverse-balance?)
+	     #f)
+	 main-row-style)
+	;; Special case for stock-accounts: then the foreign commodity
+	;; gets displayed in this line rather then the following lines
+	;; (loop below). Is also used if is-stock-account? is true.
+	(let ((my-balance 
+	       (if balance (balance 'getmonetary 
+				    my-commodity reverse-balance?) #f)))
+	  (set! already-printed my-commodity)
+	  (commodity-row-helper! 
+	   my-name
+	   my-balance
+	   (exchange-fn my-balance report-commodity)
+	   main-row-style)))
+    
+    ;; The additional rows: show no name, but the foreign currency
+    ;; balance and its corresponding value in the
+    ;; report-currency. One row for each non-report-currency. 
+    (if (and balance (not is-stock-account?))
+	(balance 
+	 'format 
+	 (lambda (curr val)
+	   (if (or (gnc:commodity-equiv? curr report-commodity)
+		   (and already-printed
+			(gnc:commodity-equiv? curr already-printed)))
+	       '()
+	       (let ((bal 
+		      (if reverse-balance?
+			  (gnc:monetary-neg (gnc:make-gnc-monetary curr val))
+			  (gnc:make-gnc-monetary curr val))))
+		 (commodity-row-helper!
+		  ;; print no account name 
+		  (car (gnc:html-make-empty-cells 1))
+		  ;; print the account balance in the respective
+		  ;; commodity
+		  bal
+		  (exchange-fn bal report-commodity)
+		  other-rows-style))))
+	 #f))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -419,7 +423,8 @@
       (gnc:html-acct-table-comm-row-helper!
        table tree-depth report-commodity exchange-fn
        current-depth my-name my-commodity balance 
-       reverse-balance? is-stock-account? main-row-style other-rows-style boldface? group-header-line?))
+       reverse-balance? is-stock-account? 
+       main-row-style other-rows-style boldface? group-header-line?))
         
     ;; Adds all appropriate rows to the table which belong to one
     ;; account. Uses the above helper function, i.e. here the
@@ -447,7 +452,8 @@
     ;; Generalization of add-account-rows! for a subtotal or for the
     ;; total balance.
     (define (add-subtotal-row! 
-	     current-depth subtotal-name balance row-style boldface? group-header-line?)
+	     current-depth subtotal-name balance 
+	     row-style boldface? group-header-line?)
       (if show-other-curr?
 	  (add-commodity-rows! current-depth subtotal-name 
 			       report-commodity 
