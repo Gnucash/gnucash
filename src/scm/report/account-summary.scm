@@ -52,7 +52,11 @@
        (gnc:make-date-option
         (_ "General") (_ "Date")
         "a" (_ "Select a date to report on")
-        (lambda () (cons 'absolute (cons (current-time) 0)))
+	(lambda ()
+	  (cons 'absolute 
+		(gnc:timepair-end-day-time     
+		 (gnc:secs->timepair 
+		  (car (mktime (localtime (current-time))))))))
         #f 'absolute #f))
       
       ;; set of accounts to do report on 
@@ -179,7 +183,7 @@
 		       (set! sumlist (cons pair sumlist))))
 		 ((caadr pair) 'add (cadr foreignlist))
 		 ((cdadr pair) 'add (caddr foreignlist))))
-		   ;(warn 
+		   ;(display 
 		    ;(commodity-value->string 
 		     ;(list (car foreignlist) (cadr foreignlist)))
 		    ;(commodity-value->string 
@@ -188,7 +192,7 @@
 	    (map 
 	     (lambda (e)
 	       (begin
-		 ;(warn 		    
+		 ;(display
 		 ; (commodity-value->string 
 		 ;  (list (car e) ((caadr e) 'total #f)))
 		 ; (commodity-value->string 
@@ -407,15 +411,12 @@
           (do-subtotals? (get-option (_ "Include Sub-Account balances")))
 	  (show-fcur? (get-option (_ "Show Foreign Currencies")))
 	  (report-currency (get-option (_ "Report's currency")))
-	  ;; FIXME: Without this +[one day] only those splits which
-	  ;; have a date <= the first second of the desired end-date
-	  ;; are returned. Permanent repair: Change the semantics of
+	  ;; FIXME: So which splits are actually included and which
+	  ;; are not??  Permanent repair (?): Change the semantics of
 	  ;; the date-option to return not the first but the last
-	  ;; second of the desired day. However, this bugfix will lead
-	  ;; to wrong results for the (current-time)
-          (date-tp (cons (+ 86399 
-			    (car (vector-ref (get-option (_ "Date")) 1)))
-			 0))
+	  ;; second of the desired day.
+          (date-tp (gnc:timepair-end-day-time 
+		    (vector-ref (get-option (_ "Date")) 1)))
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
       
