@@ -57,6 +57,10 @@ $(TARGET): $(OBJS)
 	@echo "+++"
 	$(CC) -c $(CFLAGS) $(INCLPATH) $<
 
+swig:
+	swig -I. -guile swig.i
+
+
 depend:
 	makedepend -- $(INCLPATH) $(DEFN) -- $(SRCS)
 
