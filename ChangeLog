@@ -1,5 +1,8 @@
 2003-01-02  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/html-utilities.scm: Fix malformed URLs
+	for bringing up a report options window.
+
 	* src/report/report-system/options-utilities.scm:
 	* src/report/report-system/report-system.scm: Add new option for
 	specifying sort critera for piecharts and barcharts.

@@ -773,7 +773,7 @@
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
 	   (gnc:html-build-url gnc:url-type-options
-			       (string-append "report-id"
+			       (string-append "report-id="
 					      (sprintf #f "%a" report-id))
 			       #f)
 	   (_ "Edit report options")))))
