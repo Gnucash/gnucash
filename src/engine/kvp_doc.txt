@@ -121,9 +121,27 @@ Type: gint64
 Entities: Account
 Use: A boolean flag indicated whether the Account is tax-related.
 
+Name: sched-xaction
+Type: frame
+Entities: Split in a SchedXaction
+Use: Storage for the various fields of a scheduled transaction's
+     template Splits.
+
+Name: sched-xaction/xfrm
+Type: GUID
+Entities: Split
+Use: The GUID of this Split's xfrm account.
+
+Name: sched-xaction/amnt
+Type: string
+Entities: Split in a SchedXaction
+Use: The amount field of a SchedXaction might be a formula, which we
+     store here.
+
 Name: user-keys
 Type: frame
 Entities: All
 Use: This frame is used to store keys which are editable directly by
      the user. The program should not attach any semantics to keys
      under this frame.
+

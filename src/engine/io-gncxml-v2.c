@@ -39,6 +39,8 @@
 
 #include "Group.h"
 
+#include "Transaction.h"
+
 #define GNC_V2_STRING "gnc-v2"
 
 static void
@@ -120,8 +122,59 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 
     data->counter.transactions_loaded++;
     run_callback(data, "transaction");
-    
     return TRUE;
+}
+
+static
+gboolean
+add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
+{
+        GList        *list;
+        list = gnc_book_get_schedxactions( data->book );
+        list = g_list_append( list, sx );
+        gnc_book_set_schedxactions( data->book, list );
+        return TRUE;
+}
+
+static
+gboolean
+add_template_transaction_local( sixtp_gdv2 *data,
+                                gnc_template_xaction_data *txd )
+{
+        GList                *n;
+        Account                *tmpAcct;
+        AccountGroup        *acctGroup;
+
+        // expect a struct of:
+        //  . template accounts.
+        //  . transactions in those accounts.
+        for ( n = txd->accts; n; n = n->next ) {
+                if ( xaccAccountGetParent( (Account*)n->data ) == NULL ) {
+                        // remove the gnc_book_init-created account of
+                        // the same name
+                        acctGroup =
+                                gnc_book_get_template_group( data->book );
+                        tmpAcct =
+                                xaccGetAccountFromName( acctGroup,
+                                                        xaccAccountGetName( (Account*)n->data ) );
+                        if ( tmpAcct != NULL ) {
+                                xaccGroupRemoveAccount( acctGroup, tmpAcct );
+                        }
+
+                        xaccGroupInsertAccount( acctGroup, (Account*)n->data );
+                }
+
+                // This doesn't care about the "AccountCommitEdit-at-end"
+                // paradigm of the normal accounts/transactions so much,
+                // because there's only one template Account.
+                xaccAccountCommitEdit( (Account*)n->data );
+        }
+
+        for ( n = txd->transactions; n; n = n->next ) {
+                // insert transactions into accounts
+                add_transaction_local( data, (Transaction*)n->data );
+        }
+        return TRUE;
 }
 
 static gboolean
@@ -189,6 +242,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         sixdata->counter.commodities_total = val;
     }
+    else if(safe_strcmp(type, "schedxaction") == 0)
+    {
+        sixdata->counter.schedXactions_total = val;
+    }
     else
     {
         g_warning("Unknown type: %s",
@@ -218,6 +275,8 @@ print_counter_data(load_counter data)
            data.accounts_total, data.accounts_loaded);
     printf("Commodities: Total: %d, Loaded: %d\n",
            data.commodities_total, data.commodities_loaded);
+    printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+           data.schedXactions_total, data.schedXactions_loaded);
 }
 
 static const char *ACCOUNT_TAG = "gnc:account";
@@ -225,6 +284,8 @@ static const char *PRICEDB_TAG = "gnc:pricedb";
 static const char *COMMODITY_TAG = "gnc:commodity";
 static const char *COUNT_DATA_TAG = "gnc:count-data";
 static const char *TRANSACTION_TAG = "gnc:transaction";
+static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
+static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
 
 static gboolean
 generic_callback(const char *tag, gpointer globaldata, gpointer data)
@@ -246,6 +307,14 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
     else if(safe_strcmp(tag, TRANSACTION_TAG) == 0)
     {
         add_transaction_local(gd, (Transaction*)data);
+    }
+    else if(safe_strcmp(tag, SCHEDXACTION_TAG) == 0)
+    {
+        add_schedXaction_local(gd, (SchedXaction*)data);
+    }
+    else if(safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG ) == 0 )
+    {
+        add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
     }
     return TRUE;
 }
@@ -270,6 +339,8 @@ gnc_book_load_from_xml_file_v2(
     gd->counter.transactions_total = 0;
     gd->counter.prices_loaded = 0;
     gd->counter.prices_total = 0;
+    gd->counter.schedXactions_loaded = 0;
+    gd->counter.schedXactions_total = 0;
 
     {
         AccountGroup *g = gnc_book_get_group(book);
@@ -297,6 +368,8 @@ gnc_book_load_from_xml_file_v2(
            COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
            ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
+           SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
+           TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
         return FALSE;
@@ -483,9 +556,42 @@ xml_add_trn_data(Transaction *t, gpointer data) {
 static void
 write_transactions(FILE *out, GNCBook *book)
 {
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                xml_add_trn_data,
-                                (gpointer) out);
+        xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                    xml_add_trn_data,
+                                    (gpointer) out);
+}
+
+static void
+write_template_transaction_data( FILE *out, GNCBook *book )
+{
+        fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
+        write_account_group( out, gnc_book_get_template_group(book) );
+        xaccGroupForEachTransaction( gnc_book_get_template_group(book),
+                                     xml_add_trn_data,
+                                     (gpointer)out );
+        fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
+}
+
+static void
+write_schedXactions( FILE *out, GNCBook *book )
+{
+    GList                *schedXactions;
+    SchedXaction        *tmpSX;
+    xmlNodePtr                node;
+
+    // get list of scheduled transactions from GNCBook
+    schedXactions = gnc_book_get_schedxactions( book );
+
+    if ( schedXactions == NULL )
+        return;
+
+    do {
+        tmpSX = schedXactions->data;
+        node = gnc_schedXaction_dom_tree_create( tmpSX );
+        xmlElemDump( out, NULL, node );
+        fprintf( out, "\n" );
+        xmlFreeNode( node );
+    } while ( (schedXactions = schedXactions->next) );
 }
 
 gboolean
@@ -506,6 +612,8 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
                  xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
                  "transaction",
                  gnc_book_count_transactions(book),
+                 "schedxaction",
+                 g_list_length( gnc_book_get_schedxactions(book) ),
                  NULL);
 
     write_commodities(out, book);
@@ -515,6 +623,10 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     write_accounts(out, book);
 
     write_transactions(out, book);
+
+    write_template_transaction_data(out, book);
+
+    write_schedXactions(out, book);
 
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     write_emacs_trailer(out);

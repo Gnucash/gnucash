@@ -565,6 +565,8 @@ gncFileSaveAs (void)
 {
   AccountGroup *group;
   GNCPriceDB *pdb;
+  GList	*sxList;
+  AccountGroup *templateGroup;
   GNCBook *new_book;
   GNCBook *book;
   const char *filename;
@@ -596,8 +598,14 @@ gncFileSaveAs (void)
   }
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
+
+  // FIXME: this might want to be a function of the GNCBook, since it
+  // needs to sync with changes to the internals/structure of
+  // GNCBook... --jsled
   group = gnc_book_get_group(book);
   pdb = gnc_book_get_pricedb(book);
+  sxList = gnc_book_get_schedxactions(book);
+  templateGroup = gnc_book_get_template_group(book);
 
   new_book = gnc_book_new ();
   gnc_book_begin (new_book, newfile, FALSE, FALSE);
@@ -671,6 +679,8 @@ gncFileSaveAs (void)
   /* OK, save the data to the file ... */
   gnc_book_set_group(new_book, group);
   gnc_book_set_pricedb(new_book, pdb);
+  gnc_book_set_schedxactions(new_book, sxList);
+  gnc_book_set_template_group(new_book, templateGroup);
   gncFileSave ();
 
   g_free (newfile);

@@ -207,7 +207,7 @@ gnc_verify_dialog_parented(gncUIWidget parent, const char *message,
   if (parent != NULL)
     gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
   
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
+  gnome_dialog_set_default(GNOME_DIALOG(verify_box), (yes_is_default ? 0 : 1));
 
   return (gnome_dialog_run_and_close(GNOME_DIALOG(verify_box)) == 0);
 }

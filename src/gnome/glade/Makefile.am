@@ -15,7 +15,8 @@ glade_DATA = \
 	stocks.glade \
 	tax.glade \
 	transfer.glade \
-	userpass.glade
+	userpass.glade \
+	sched-xact.glade
 
 STRING_FILES = \
 	account_strings.c \
@@ -33,6 +34,7 @@ STRING_FILES = \
 	stocks_strings.c \
 	tax_strings.c \
 	transfer_strings.c \
-	userpass_strings.c
+	userpass_strings.c \
+	sched-xact_strings.c
 
 EXTRA_DIST = $(glade_DATA) $(STRING_FILES)

@@ -1,6 +1,6 @@
 /********************************************************************\
- * query-user.h -- functions for creating dialogs for GnuCash       * 
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
+ * dialog-nextrun.h - Beginnings of "since last run" dialog.        *
+ * Copyright (c) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,20 +20,4 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __QUERY_USER_H__
-#define __QUERY_USER_H__
-
-// +jsled: for line below.
-#include "gnc-ui.h"
-
-void gnc_info_dialog(const char *message);
-void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
-
-void gnc_warning_dialog(const char *message);
-
-void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
-
-// +jsled: export so dialog-scheduledxaction can see it...
-gboolean gnc_verify_dialog_parented(gncUIWidget parent, const char *message, gboolean yes_is_default);
-
-#endif
+void gnc_ui_nextrun_dialog_create( void );

@@ -80,6 +80,8 @@ struct _SplitRegisterBuffer
   CellBuffer sharesCell;
   CellBuffer mxfrmCell;
   CellBuffer notesCell;
+  CellBuffer formCreditCell;
+  CellBuffer formDebitCell;
 };
 
 typedef struct
@@ -110,6 +112,8 @@ static sample_string cell_sample_strings[] =
   { N_("sample:999,999.000"), 7},                    /* tshrbaln cell */
   { N_("sample:999,999.000"), 7},                    /* tbalance cell */
   { N_("sample:Notes field sample text string"), 7}, /* notes cell */
+  { N_("sample:(x + 0.33 * y + (x+y) )"), 7 },       /* formula credit cell */
+  { N_("sample:(x + 0.33 * y + (x+y) )"), 7 },       /* formula debit cell */
 };
 
 static CellAlignment cell_alignments[] =
@@ -134,6 +138,8 @@ static CellAlignment cell_alignments[] =
   CELL_ALIGN_RIGHT,  /* tshrbaln cell */
   CELL_ALIGN_RIGHT,  /* tbalance cell */
   CELL_ALIGN_LEFT,   /* notes cell */
+  CELL_ALIGN_LEFT,   /* formula credit cell */
+  CELL_ALIGN_LEFT,   /* formula debit cell */
 };
 
 
@@ -145,7 +151,8 @@ xaccInitSplitRegister (SplitRegister *reg,
                        TableView *view,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
-                       VirtCellDataCopy copy);
+                       VirtCellDataCopy copy,
+                       gboolean templateMode);
 
 
 /* ============================================== */
@@ -240,6 +247,7 @@ configAction (SplitRegister *reg)
       xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); 
       xaccAddComboCellMenuItem (reg->actionCell, _("Split"));
       break;
+
     default:
       xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
@@ -322,6 +330,8 @@ configLayout (SplitRegister *reg)
   CellBlock *curs;
   int i;
 
+  printf( "configLayout with type %d\n", reg->type );
+
   /* fill things up with null cells */
   for (i = 0; i < reg->cursor_header->num_cols; i++)
   {
@@ -369,8 +379,13 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DESC_CELL,  0, 2);
         set_cell (reg, curs, MXFRM_CELL, 0, 3);
         set_cell (reg, curs, RECN_CELL,  0, 4);
-        set_cell (reg, curs, DEBT_CELL,  0, 5);
-        set_cell (reg, curs, CRED_CELL,  0, 6);
+        if ( reg->template ) {
+                set_cell( reg, curs, FDEBT_CELL, 0, 5);
+                set_cell( reg, curs, FCRED_CELL, 0, 6);
+        } else {
+                set_cell (reg, curs, DEBT_CELL,  0, 5);
+                set_cell (reg, curs, CRED_CELL,  0, 6);
+        }
         set_cell (reg, curs, BALN_CELL,  0, 7);
 
         curs = reg->cursor_ledger_double;
@@ -397,8 +412,13 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
         set_cell (reg, curs, RECN_CELL, 0, 4);
-        set_cell (reg, curs, DEBT_CELL, 0, 5);
-        set_cell (reg, curs, CRED_CELL, 0, 6);
+        if ( reg->template ) {
+                set_cell( reg, curs, FDEBT_CELL, 0, 5);
+                set_cell( reg, curs, FCRED_CELL, 0, 6);
+        } else {
+                set_cell (reg, curs, DEBT_CELL, 0, 5);
+                set_cell (reg, curs, CRED_CELL, 0, 6);
+        }
 
         break;
       }
@@ -414,8 +434,13 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DESC_CELL,  0, 2);
         set_cell (reg, curs, MXFRM_CELL, 0, 3);
         set_cell (reg, curs, RECN_CELL,  0, 4);
-        set_cell (reg, curs, DEBT_CELL,  0, 5);
-        set_cell (reg, curs, CRED_CELL,  0, 6);
+        if ( reg->template ) {
+                set_cell (reg, curs, FDEBT_CELL,  0, 5);
+                set_cell (reg, curs, FCRED_CELL,  0, 6);
+        } else {
+                set_cell (reg, curs, DEBT_CELL,  0, 5);
+                set_cell (reg, curs, CRED_CELL,  0, 6);
+        }
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -440,8 +465,13 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
         set_cell (reg, curs, RECN_CELL, 0, 4);
-        set_cell (reg, curs, DEBT_CELL, 0, 5);
-        set_cell (reg, curs, CRED_CELL, 0, 6);
+        if ( reg->template ) {
+                set_cell (reg, curs, FDEBT_CELL,  0, 5);
+                set_cell (reg, curs, FCRED_CELL,  0, 6);
+        } else {
+                set_cell (reg, curs, DEBT_CELL,  0, 5);
+                set_cell (reg, curs, CRED_CELL,  0, 6);
+        }
 
         break;
       }
@@ -540,7 +570,6 @@ configLayout (SplitRegister *reg)
 
         break;
       }
-
       /* --------------------------------------------------------- */
     default:
       PERR ("unknown register type %d \n", reg->type);
@@ -557,7 +586,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          TableView *view,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
-                         VirtCellDataCopy copy)
+                         VirtCellDataCopy copy,
+                         gboolean templateMode)
 {
   SplitRegister * reg;
 
@@ -577,7 +607,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          view,
                          allocator,
                          deallocator,
-                         copy);
+                         copy,
+                         templateMode);
 
   return reg;
 }
@@ -655,7 +686,8 @@ xaccInitSplitRegister (SplitRegister *reg,
                        TableView *view,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
-                       VirtCellDataCopy copy)
+                       VirtCellDataCopy copy,
+                       gboolean templateMode)
 {
   Table * table;
 
@@ -666,6 +698,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   reg->type = type;
   reg->style = style;
   reg->use_double_line = use_double_line;
+  reg->template = templateMode;
 
   /* --------------------------- */
   /* define the number of columns in the display, malloc the cursors */
@@ -705,6 +738,8 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (TSHRBALN, tshrbaln, Price);
   NEW (TBALN,    tbalance, Price);
   NEW (NOTES,    notes,    QuickFill);
+  NEW (FCRED,    formCredit, QuickFill);
+  NEW (FDEBT,    formDebit,  QuickFill);
 
   /* --------------------------- */
 
@@ -761,6 +796,11 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* the notes cell */
   xaccSetBasicCellBlankHelp (&reg->notesCell->cell,
                              _("Enter notes for the transaction"));
+  /* the formula cell */
+  xaccSetBasicCellBlankHelp( &reg->formCreditCell->cell,
+                             _("Enter credit formula for real transaction"));
+  xaccSetBasicCellBlankHelp( &reg->formDebitCell->cell,
+                             _("Enter debit formula for real transaction"));
 
   /* Use 6 decimal places for prices */
   xaccSetPriceCellFraction (reg->priceCell, 1000000);
@@ -918,6 +958,8 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->tshrbalnCell);
   xaccDestroyPriceCell     (reg->tbalanceCell);
   xaccDestroyQuickFillCell (reg->notesCell);
+  xaccDestroyQuickFillCell (reg->formCreditCell);
+  xaccDestroyQuickFillCell (reg->formDebitCell);
 
   reg->nullCell     = NULL;
   reg->dateCell     = NULL;
@@ -940,6 +982,8 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->tshrbalnCell = NULL;
   reg->tbalanceCell = NULL;
   reg->notesCell    = NULL;
+  reg->formCreditCell  = NULL;
+  reg->formDebitCell  = NULL;
 
   for (i = 0; i < CELL_TYPE_COUNT; i++)
   {
@@ -987,6 +1031,9 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
   changed |= MOD_MXFRM & reg->mxfrmCell->cell.changed;
   changed |= MOD_NOTES & reg->notesCell->cell.changed;
 
+  changed |= MOD_AMNT  & reg->formCreditCell->cell.changed;
+  changed |= MOD_AMNT  & reg->formDebitCell->cell.changed;
+
   return changed;
 }
 
@@ -1009,6 +1056,9 @@ xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg)
   changed |= MOD_SHRS  & reg->sharesCell->cell.conditionally_changed; 
   changed |= MOD_MXFRM & reg->mxfrmCell->cell.conditionally_changed;
   changed |= MOD_NOTES & reg->notesCell->cell.conditionally_changed;
+  
+  changed |= MOD_AMNT  & reg->formCreditCell->cell.conditionally_changed;
+  changed |= MOD_AMNT  & reg->formDebitCell->cell.conditionally_changed;
 
   return changed;
 }
@@ -1031,6 +1081,8 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->sharesCell->cell.changed = 0;
    reg->mxfrmCell->cell.changed = 0;
    reg->notesCell->cell.changed = 0;
+   reg->formDebitCell->cell.changed = 0;
+   reg->formCreditCell->cell.changed = 0;
 }
 
 /* ============================================== */
@@ -1309,6 +1361,8 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->sharesCell);
   destroyCellBuffer(&srb->mxfrmCell);
   destroyCellBuffer(&srb->notesCell);
+  destroyCellBuffer(&srb->formCreditCell);
+  destroyCellBuffer(&srb->formDebitCell);
 
   g_free(srb);
 }
@@ -1349,6 +1403,8 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->sharesCell->cell, &srb->sharesCell);
   saveCell(&sr->mxfrmCell->cell, &srb->mxfrmCell);
   saveCell(&sr->notesCell->cell, &srb->notesCell);
+  saveCell(&sr->formCreditCell->cell, &srb->formCreditCell);
+  saveCell(&sr->formDebitCell->cell, &srb->formDebitCell);
 }
 
 /* ============================================== */
@@ -1412,6 +1468,8 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell, cursor);
   restoreCellChanged(&sr->mxfrmCell->cell, &srb->mxfrmCell, cursor);
   restoreCellChanged(&sr->notesCell->cell, &srb->notesCell, cursor);
+  restoreCellChanged(&sr->formCreditCell->cell, &srb->formCreditCell, cursor);
+  restoreCellChanged(&sr->formDebitCell->cell, &srb->formDebitCell, cursor);
 }
 
 /* keep in sync with CellType enum */
@@ -1435,7 +1493,9 @@ static const char *cell_names[] =
   "trans-debit",
   "trans-share-balance",
   "trans-balance",
-  "notes"
+  "notes",
+  "credit formula",
+  "debit formula",
 };
 
 const char *

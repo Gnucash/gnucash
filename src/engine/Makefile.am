@@ -55,7 +55,11 @@ libgncengine_la_SOURCES = \
   sixtp-to-dom-parser.c \
   sixtp-utils.c \
   sixtp-xml-write-utils.c \
-  sixtp.c
+  sixtp.c \
+  FreqSpec.c \
+  SchedXaction.c \
+  gnc-freqspec-xml-v2.c \
+  gnc-schedxaction-xml-v2.c
 
 libgncengine_la_LDFLAGS = -version-info 2:3:1
 
@@ -107,7 +111,9 @@ noinst_HEADERS = \
   sixtp-utils.h \
   sixtp-writers.h \
   sixtp-xml-write-utils.h \
-  sixtp.h
+  sixtp.h \
+  FreqSpec.h \
+  SchedXaction.h
 
 EXTRA_DIST = \
   .cvsignore \

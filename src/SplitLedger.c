@@ -195,6 +195,7 @@ struct _SRInfo
 
   /* hook to set help string */
   SRSetHelpCallback set_help;
+
 };
 
 
@@ -230,8 +231,13 @@ static Transaction * xaccSRGetTrans (SplitRegister *reg,
                                      VirtualCellLocation vcell_loc);
 static Split * xaccSRGetCurrentTransSplit (SplitRegister *reg,
                                            VirtualCellLocation *vcell_loc);
+static void xaccSRActuallySaveChangedCells (SplitRegister *reg, Transaction *trans,
+                                            Split *split, guint32 changed );
 static void xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans,
                                     Split *split);
+static void xaccSRSaveChangedTemplateCells (SplitRegister *reg,
+                                            Transaction *trans,
+                                            Split *split);
 static gboolean xaccSRFindSplit (SplitRegister *reg,
                                  Transaction *trans, Split *trans_split,
                                  Split *split, CursorClass cursor_class,
@@ -393,7 +399,7 @@ gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
 }
 
 /* Uses the scheme transaction copying routines */
-static void
+void
 gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
                           gboolean use_cut_semantics,
                           gboolean do_commit)
@@ -1272,7 +1278,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       info->blank_split_edited = TRUE;
 
-      xaccSRSaveChangedCells(reg, trans, blank_split);
+      if ( reg->template ) {
+              xaccSRSaveChangedTemplateCells( reg, trans, blank_split );
+      } else {
+              xaccSRSaveChangedCells(reg, trans, blank_split);
+      }
 
       gnc_resume_gui_refresh ();
 
@@ -2673,6 +2683,8 @@ xaccSRRedrawReg (SplitRegister *reg)
 /* Copy from the register object to scheme. This needs to be
  * in sync with xaccSRSaveRegEntry and xaccSRSaveChangedCells. */
 
+
+// jsled: This will need to be modified, as well.
 static gboolean
 xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
                          gboolean use_cut_semantics)
@@ -2815,7 +2827,9 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
 
 /* ======================================================== */
 /* Copy from the register object to the engine */
-
+// jsled: okay... the fun.
+// actually, not really the fun, but scan this to see if anything
+// jumps out; the 
 gboolean
 xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 {
@@ -2828,6 +2842,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    Split *split;
    const char *memo;
    const char *desc;
+
+   //DEBUG( "=== In xaccSRSaveRegEntry\n" );
 
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
@@ -2922,13 +2938,16 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    DEBUG ("updating trans addr=%p\n", trans);
 
-   xaccSRSaveChangedCells (reg, trans, split);
+   if ( reg->template ) {
+           xaccSRSaveChangedTemplateCells( reg, trans, split );
+   } else {
+           xaccSRSaveChangedCells (reg, trans, split);
+   }
 
    memo = xaccSplitGetMemo (split);
    memo = memo ? memo : "(null)";
    desc = xaccTransGetDescription (trans);
    desc = desc ? desc : "(null)";
-
    PINFO ("finished saving split %s of trans %s \n", memo, desc);
 
    /* If the modified split is the "blank split", then it is now an
@@ -3122,7 +3141,6 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
                                                       message,
                                                       default_value,
                                                       radio_list);
-
     for (node = radio_list; node; node = node->next)
       g_free (node->data);
 
@@ -3190,14 +3208,149 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
 /* ======================================================== */
 
 static void
-xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
+xaccSRSaveChangedTemplateCells( SplitRegister *reg,
+                                Transaction *trans,
+                                Split *split )
+{
+        SRInfo		*info = xaccSRGetInfo( reg );
+        Split		*other_split = NULL;
+        guint32		changed;
+        kvp_frame	*kvpf;
+        AccountGroup	*template_ag;
+        Account		*template_acc;
+        kvp_value	*tag_val;
+
+        DEBUG( "=== In xaccSRSaveChangedTemplateCells\n" );
+
+        //template_acc = gncGetTemplateAccount();
+        //template_ag = gnc_book_get_template_group( gncGetCurrentBook() );
+        template_acc = reg->templateAcct;
+
+        changed = xaccSplitRegisterGetChangeFlag( reg );
+        changed |= xaccSplitRegisterGetConditionalChangeFlag( reg );
+        if ( (MOD_DATE & changed) ||
+             (MOD_NUM  & changed) || 
+             (MOD_RECN & changed) )
+        {
+                PERR( "unexpected changed field in a template register: %32x\n", changed );
+        }
+
+        // We'll be using the Split's KVP frame a lot...
+        kvpf = xaccSplitGetSlots( split );
+
+        if ( MOD_XFRM & changed )
+        {
+                // FIXME: This should probably do the same checks as
+                // xaccSRSaveChangedCells regarding account types
+                // [between different currency accounts, mainly]
+                char              *new_name;
+                Account              *acct;
+                AccountGroup       *acctGrp;
+                GUID              *acctGUID;
+
+                // save the account GUID into the kvp_data.
+                new_name = reg->xfrmCell->cell.value;
+                acctGrp = gnc_book_get_group( gncGetCurrentBook() );
+                acct = xaccGetAccountFromFullName( acctGrp, new_name,
+                                                   gnc_get_account_separator() );
+                if ( acct == NULL ) {
+                        PERR( "unknown group \"%s\"\n", new_name );
+                        return;
+                }
+                acctGUID = (const GUID *)xaccAccountGetGUID( acct );
+                kvp_frame_set_slot( kvpf, "sched-xaction/xfrm",
+                                    kvp_value_new_guid( acctGUID ) );
+                kvpf = xaccSplitGetSlots( split );
+                changed ^= MOD_XFRM;
+                // +DEBUG
+                if ( 0 ) {
+                        GList *foo = xaccAccountGetSplitList( template_acc );
+                        if ( foo ) {
+                                printf( "Splits:\n" );
+                                do {
+                                        printf ("\tsplit: \"%s\"\n", xaccSplitGetMemo( (Split*)foo->data ) );
+                                } while ( (foo = foo->next) );
+                        } else {
+                                printf( "No Splits.\n" );
+                        }
+                }
+                // -DEBUG
+
+              // set the actual account to the fake account for
+              // these templates...
+                xaccAccountInsertSplit (template_acc, split);
+
+                // +DEBUG
+                if ( 0 ) { 
+                        GList *foo = xaccAccountGetSplitList( template_acc );
+                        if ( foo ) {
+                                printf( "Splits:\n" );
+                                do {
+                                        printf ("\tsplit: \"%s\"\n", xaccSplitGetMemo( (Split*)foo->data ) );
+                                } while ( (foo = foo->next) );
+                        } else {
+                                printf( "No Splits.\n" );
+                        }
+                }
+                // -DEBUG
+       
+        }
+        if ( MOD_MXFRM & changed )
+        {
+                // DTRT
+                DEBUG( "Template: Got MOD_MXFRM changed\n" );
+                changed ^= MOD_MXFRM;
+        }
+        if ( MOD_AMNT & changed )
+        {
+                char       *amountStr = "x + y/42";
+                gnc_numeric new_amount;
+                gnc_numeric credit;
+                gnc_numeric debit;
+
+                //credit = xaccGetPriceCellValue(reg->creditCell);
+                //debit  = xaccGetPriceCellValue(reg->debitCell);
+                //new_amount = gnc_numeric_sub_fixed (debit, credit);
+
+                // FIXME: the credit/debit cells are limited to
+                // numeric values by definition [and code]. Blegh.
+                DEBUG( "kvp_frame before: %s\n", kvp_frame_to_string( kvpf ) );
+                //amountStr = gnc_numeric_to_string( new_amount );
+                kvp_frame_set_slot( kvpf, "sched-xaction/credit_formula",
+                                    kvp_value_new_string( reg->formCreditCell->cell.value ) );
+                kvp_frame_set_slot( kvpf, "sched-xaction/debit_formula",
+                                    kvp_value_new_string( reg->formDebitCell->cell.value ) );
+                DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
+                changed ^= MOD_AMNT;
+                // set the amount to an innocuous value
+                xaccSplitSetValue (split, gnc_numeric_create(0, 1) );
+        }
+        if ( MOD_SHRS & changed )
+        {
+                char       *sharesStr = "(x + y)/42";
+
+                // FIXME: shares cells are numeric by definition.
+                DEBUG( "kvp_frame before: %s\n", kvp_frame_to_string( kvpf ) );
+              
+                //sharesStr = gnc_numeric_to_string( sharesStr );
+                kvp_frame_set_slot( kvpf, "sched-xaction/shares",
+                                    kvp_value_new_string( sharesStr ) );
+                DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
+                // set the shares to an innocuous value
+                xaccSplitSetSharePriceAndAmount (split,
+                                                 gnc_numeric_create(0, 1),
+                                                 gnc_numeric_create(0, 1) );
+                changed ^= MOD_SHRS;
+        }
+
+        xaccSRActuallySaveChangedCells( reg, trans, split, changed );
+}
+
+static void
+xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *split, guint32 changed )
 {
   SRInfo *info = xaccSRGetInfo (reg);
   Split *other_split = NULL;
-  guint32 changed;
-
-  changed = xaccSplitRegisterGetChangeFlag (reg);
-  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
 
   /* copy the contents from the cursor to the split */
   if (MOD_DATE & changed)
@@ -3214,7 +3367,6 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     xaccTransSetDateTS (trans, &ts);
   }
-
   if (MOD_NUM & changed)
   {
     DEBUG ("MOD_NUM: %s\n",
@@ -3273,6 +3425,10 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
    * a two-line display, we want to reparent the "other" split, but
    * only if there is one.  XFRM is the straight split, MXFRM is the
    * mirrored split. */
+
+  // jsled: this is where it starts to get fun.  in the template
+  // register, we save the XFRM account in the kvp frame.
+  // also, when loading, we load from the kvp data.
   if (MOD_XFRM & changed)
   {
     Account *old_acc;
@@ -3377,13 +3533,13 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
         currency = xaccAccountGetCurrency(new_acc);
         currency = xaccTransIsCommonExclSCurrency(trans, 
-						  currency, other_split);
+                                                  currency, other_split);
 
         if (currency == NULL)
         {
           security = xaccAccountGetSecurity(new_acc);
           security = xaccTransIsCommonExclSCurrency(trans, 
-						    security, other_split);
+                                                    security, other_split);
         }
 
         if ((currency != NULL) || (security != NULL))
@@ -3473,6 +3629,22 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       xaccSplitScrub (other_split);
     }
   }
+
+}
+
+static void
+xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+  Split *other_split = NULL;
+  guint32 changed;
+
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
+
+  // all the code in xaccSRActuallySaveChangedCells was right here,
+  // before. -- jsled
+  xaccSRActuallySaveChangedCells( reg, trans, split, changed );
 }
 
 /* ======================================================== */
@@ -3630,6 +3802,125 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
     return TRUE;
 
   return FALSE;
+}
+
+const char *
+xaccSRTemplateGetEntryHandler( VirtualLocation virt_loc,
+                               gboolean translate,
+                               gboolean *conditionally_changed,
+                               gpointer user_data )
+{
+        SplitRegister *reg = user_data;
+        const char *value = "";
+        CellType cell_type;
+        Transaction *trans;
+        Split *split;
+        kvp_frame        *kvpf;
+        GUID                *tmpguid;
+
+        //DEBUG( "In xaccSRTemplateGetEntryHandler\n" );
+
+        cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+
+        split = sr_get_split (reg, virt_loc.vcell_loc);
+        if (split == NULL)
+        {
+                return xaccSRGetEntryHandler( virt_loc, translate,
+                                              conditionally_changed, user_data );
+        }
+
+
+        trans = xaccSplitGetParent (split);
+        kvpf = xaccSplitGetSlots( split );
+
+        switch (cell_type) {
+        case XFRM_CELL:
+        {
+                static char *name = NULL;
+                char        account_separator;
+                        
+                if ( kvpf != NULL ) {
+                        DEBUG( "kvp_frame: %s\n", kvp_frame_to_string( kvpf ) );
+                        tmpguid = kvp_value_get_guid( kvp_frame_get_slot( kvpf,
+                                                                          "sched-xaction/xfrm" ) );
+                        DEBUG( "Got the guid \"%s\"\n", guid_to_string( tmpguid ) );
+                        account_separator = gnc_get_account_separator();
+                        DEBUG( "foo\n" );
+                        name = xaccAccountGetFullName (xaccAccountLookup( tmpguid ),
+                                                       account_separator);
+                        DEBUG( "bar\n" );
+
+                        DEBUG( "Got the full name: %s\n", name );
+                } else {
+                        name = "";
+                }
+
+                return name;
+        }
+        break;
+        case CRED_CELL:
+        case DEBT_CELL:
+        {
+                char        *amtStr;
+                gnc_numeric amount;
+
+                if ( kvpf != NULL ) {
+                        amtStr = kvp_value_get_string( kvp_frame_get_slot( kvpf,
+                                                                           "sched-xaction/amnt" ) );
+                        amount = gnc_numeric_create( 0, 1 );
+                        string_to_gnc_numeric( amtStr, &amount );
+                        
+                        if (gnc_numeric_zero_p (amount))
+                                return "";
+
+                        if (gnc_numeric_negative_p (amount) && (cell_type == DEBT_CELL))
+                                return "";
+
+                        if (gnc_numeric_positive_p (amount) && (cell_type == CRED_CELL))
+                                return "";
+
+                        amount = gnc_numeric_abs (amount);
+
+                        //return xaccPrintAmount (amount,
+                        //gnc_split_value_print_info (split, FALSE));
+
+                        // jsled_FIXME: This should be fixed
+                        // to be correct for the "fake" account.
+                        return xaccPrintAmount( amount,
+                                                gnc_default_print_info( FALSE ) );
+                } else {
+                        return "";
+                }
+        }
+        break;
+        case FCRED_CELL:
+        {
+                char *formulaStr;
+                if ( kvpf != NULL ) {
+                        return kvp_value_get_string( kvp_frame_get_slot( kvpf,
+                                                                         "sched-xaction/credit_formula" ) );
+                }
+        }
+        break;
+        case FDEBT_CELL:
+        {
+                char *formulaStr;
+                if ( kvpf != NULL ) {
+                        return kvp_value_get_string( kvp_frame_get_slot( kvpf,
+                                                                         "sched-xaction/debit_formula" ) );
+                }
+        }
+        break;
+        case MXFRM_CELL:
+        {
+                return "FIXME:MXFRM";
+        }
+        break;
+        } // end switch
+        return xaccSRGetEntryHandler( virt_loc,
+                                      translate,
+                                      conditionally_changed,
+                                      user_data );
 }
 
 const char *
@@ -3796,8 +4087,6 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       {
         static char *name = NULL;
 
-        g_free (name);
-
         name = xaccAccountGetFullName (xaccSplitGetAccount (split),
                                        account_separator);
 
@@ -3867,8 +4156,6 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       {
          Split *s = xaccSplitGetOtherSplit (split);
          static char *name = NULL;
-
-         g_free (name);
 
          if (s)
            name = xaccAccountGetFullName (xaccSplitGetAccount (s),
@@ -4108,6 +4395,11 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
     case NOTES_CELL:
       return _("Notes");
 
+    case FCRED_CELL:
+      return _("Credit Formula");
+    case FDEBT_CELL:
+      return _("Debit Formula");
+
     case NO_CELL:
       return "";
 
@@ -4118,6 +4410,15 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
   PERR ("bad cell type: %d", cell_type);
 
   return "";
+}
+
+CellIOFlags
+xaccSRTemplateGetIOFlagsHandler( VirtualLocation virt_loc,
+				 gpointer user_data )
+{
+	//printf( "In xaccSRTemplateGetIOFlagsHandler\n" );
+	return xaccSRGetIOFlagsHandler( virt_loc,
+					user_data );
 }
 
 CellIOFlags
@@ -4139,6 +4440,8 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
     case MEMO_CELL:
     case MXFRM_CELL:
     case NOTES_CELL:
+    case FCRED_CELL:
+    case FDEBT_CELL:
       return XACC_CELL_ALLOW_ALL;
 
     case CRED_CELL:
@@ -4356,7 +4659,9 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
     if ((cell_type != DEBT_CELL)  &&
         (cell_type != CRED_CELL)  &&
         (cell_type != TDEBT_CELL) &&
-        (cell_type != TCRED_CELL))
+        (cell_type != TCRED_CELL) &&
+	(cell_type != FCRED_CELL) &&
+	(cell_type != FDEBT_CELL) )
       *hatching = FALSE;
     else
     {
@@ -4437,6 +4742,14 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
       PWARN("Unexpected cursor type: %d\n", vcell->cellblock->cursor_type);
       return bg_color;
   }
+}
+
+gboolean
+xaccSRTemplateConfirmHandler( VirtualLocation virt_loc,
+			      gpointer user_data )
+{
+	//DEBUG( "In xaccSRConfirmHandler\n" );
+	return xaccSRConfirmHandler( virt_loc, user_data );
 }
 
 gboolean

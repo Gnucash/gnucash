@@ -37,6 +37,10 @@
 
 #include "GNCId.h"
 
+#include "FreqSpec.h"
+#include "Account.h"
+#include "Transaction.h"
+
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
 gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node);
@@ -44,7 +48,10 @@ gnc_commodity* associate_commodity_ref_with_engine_commodity(
     gnc_commodity *com);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
 
+FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node );
+
 Timespec* dom_tree_to_timespec(xmlNodePtr node);
+GDate* dom_tree_to_gdate(xmlNodePtr node);
 gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);
 gboolean string_to_binary(const gchar *str,  void **v, guint64 *data_len);
@@ -62,6 +69,9 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
+// jsled-added...
+Account* dom_tree_to_account( xmlNodePtr node );
+Transaction* dom_tree_to_transaction( xmlNodePtr node );
 
 struct dom_tree_handler
 {

@@ -69,6 +69,8 @@ struct _gnc_book
 {
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
+  GList *sched_xactions;
+  AccountGroup *template_group;
 
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
@@ -157,13 +159,21 @@ gnc_book_pop_error (GNCBook * book)
 
 /* ---------------------------------------------------------------------- */
 
+const char *TEMPLATE_ACCOUNT_NAME = "__account for template transactions__";
+
 static void
 gnc_book_init (GNCBook *book)
 {
+  Account *template_acct;
+
   if(!book) return;
 
   book->topgroup = xaccMallocAccountGroup();
   book->pricedb = gnc_pricedb_create();
+
+  book->sched_xactions = NULL;
+  book->template_group = xaccMallocAccountGroup();
+
   book->book_id = NULL;
   gnc_book_clear_error (book);
   book->fullpath = NULL;
@@ -239,6 +249,34 @@ gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {
   if(!book) return;
   book->pricedb = db;
+}
+
+GList *
+gnc_book_get_schedxactions( GNCBook *book )
+{
+        if ( book == NULL ) return NULL;
+        return book->sched_xactions;
+}
+
+void
+gnc_book_set_schedxactions( GNCBook *book, GList *newList )
+{
+        if ( book == NULL ) return;
+        book->sched_xactions = newList;
+}
+
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+        if ( book == NULL ) return NULL;
+        return book->template_group;
+}
+
+void
+gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup )
+{
+        if ( book == NULL ) return;
+        book->template_group = templateGroup;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -967,7 +1005,7 @@ gnc_book_load (GNCBook *book)
   else if ((strncmp(book->book_id, "http://", 7) == 0) ||
            (strncmp(book->book_id, "https://", 8) == 0) ||
            (strncmp(book->book_id, "postgres://", 11) == 0) ||
-	   (strncmp(book->book_id, "rpc://", 6)) == 0)
+           (strncmp(book->book_id, "rpc://", 6)) == 0)
   {
     /* This code should be sufficient to initialize *any* backend,
      * whether http, postgres, or anything else that might come along.

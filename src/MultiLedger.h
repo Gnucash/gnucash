@@ -32,6 +32,7 @@
 #include "Query.h"
 #include "splitreg.h"
 #include "SplitLedger.h"
+#include "SchedXaction.h"
 #include "Transaction.h"
 
 
@@ -50,7 +51,8 @@ typedef enum
 {
   LD_SINGLE,
   LD_SUBACCOUNT,
-  LD_GL
+  LD_GL,
+  LD_TEMPLATE,
 } LedgerDisplayType;
 
 
@@ -82,6 +84,16 @@ xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
 xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
 xaccLedgerDisplay * xaccLedgerDisplayGL (void);
+xaccLedgerDisplay * xaccLedgerDisplayGLTemplate( char *id );
+
+/**
+ * Displays a template ledger.
+ * This lists template Splits from the given ScheduledTransaction.
+ *
+ * Really, requires a GList of scheduled transactions and kvp-frame
+ * data.
+ **/
+xaccLedgerDisplay * xaccLedgerDisplayTemplateGL( );
 
 /* display a general ledger for an arbitrary query */
 xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,

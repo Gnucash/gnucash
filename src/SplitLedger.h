@@ -166,6 +166,8 @@ void    xaccSRLoadRegister (SplitRegister *reg, GList * slist,
  *    a refresh will result in a new blank transaction.
  *    The method returns TRUE if something was changed. */
 gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
+gboolean xaccSRTemplateSaveRegEntry (SplitRegister *reg,
+				     gboolean do_commit);
 
 /* The xaccSRRedrawReg() method should be called soon 
  *    after the xaccSRSaveRegEntry() method.  It checks the 
@@ -209,10 +211,16 @@ const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                     gboolean translate,
                                     gboolean *changed,
                                     gpointer user_data);
+const char * xaccSRTemplateGetEntryHandler (VirtualLocation virt_loc,
+					    gboolean translate,
+					    gboolean *changed,
+					    gpointer user_data);
 const char * xaccSRGetLabelHandler (VirtualLocation virt_loc,
                                     gpointer user_data);
 CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
+CellIOFlags  xaccSRTemplateGetIOFlagsHandler (VirtualLocation virt_loc,
+					      gpointer user_data);
 guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
@@ -223,5 +231,14 @@ void         xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
                                          gpointer user_data);
 gboolean     xaccSRConfirmHandler (VirtualLocation virt_loc,
                                    gpointer user_data);
+gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
+					   gpointer user_data);
+
+// jsled-added 2001.05.19 for export to dialog-nextrun.c [which will
+// change its name at some point]
+void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
+			       gboolean use_cut_semantics,
+			       gboolean do_commit);
+
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

@@ -258,6 +258,11 @@ gnc_cm_event_handler (GUID *entity,
     case GNC_ID_NONE:
       break;
 
+    case GNC_ID_SCHEDXACTION:
+    case GNC_ID_FREQSPEC:
+      DEBUG( "FIXME for GNC_ID %d", id_type );
+      break;
+
     default: {
       char guid_str[GUID_ENCODING_LENGTH+1];
       guid_to_string_buff (entity, guid_str);

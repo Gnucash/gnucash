@@ -75,6 +75,7 @@ typedef enum
   INCOME_LEDGER,
   PORTFOLIO_LEDGER,
   SEARCH_LEDGER,
+  
   NUM_REGISTER_TYPES
 } SplitRegisterType;
 
@@ -103,7 +104,9 @@ typedef enum
   TSHRBALN_CELL,
   TBALN_CELL,
   NOTES_CELL,
-  CELL_TYPE_COUNT
+  FCRED_CELL, // formula credit, used by the template ledger
+  FDEBT_CELL, // formula debit, used by the template ledger
+  CELL_TYPE_COUNT,
 } CellType;
 
 /*
@@ -139,6 +142,8 @@ typedef enum
   MOD_PRIC   = 1 <<  9,
   MOD_SHRS   = 1 << 10,
   MOD_NOTES  = 1 << 11,
+  MOD_FCRED  = 1 << 12,
+  MOD_FDEBT  = 1 << 13,
   MOD_ALL    = 0xffff
 } CellModifiedFlags;
 
@@ -204,6 +209,9 @@ struct _SplitRegister
   PriceCell     * tbalanceCell;
   QuickFillCell * notesCell;
 
+  QuickFillCell * formCreditCell;
+  QuickFillCell * formDebitCell;
+
   SplitRegisterType type;
   SplitRegisterStyle style;
   gboolean use_double_line;
@@ -212,6 +220,17 @@ struct _SplitRegister
 
   BasicCell *header_cells[CELL_TYPE_COUNT];
   BasicCell *cells[CELL_TYPE_COUNT];
+
+  /**
+   * A flag indicating a "template" register.
+   **/
+  gboolean	template;
+	
+  /**
+   * The template account which the transactions in a template
+   * splitregister will belong to.
+   **/
+  Account	*templateAcct;
 
   /* user_data allows users of this object to hang
    * private data onto it */
@@ -236,7 +255,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          TableView *view,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
-                         VirtCellDataCopy copy);
+                         VirtCellDataCopy copy,
+			 gboolean templateMode);
 
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,

@@ -123,6 +123,11 @@ char * xaccPrintDateSecs (time_t secs);
 const char * gnc_print_date(Timespec ts);
 
 /**
+ * Turns a time_t into a Timespec
+ **/
+void timespecFromTime_t( Timespec *ts, time_t t );
+
+/**
  * scanDate
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.

@@ -419,6 +419,7 @@ dom_tree_to_text(xmlNodePtr tree)
       return g_strdup("");
   }
 
+
   result = g_strdup("");
   
   for(current = tree->xmlChildrenNode; current; current = current->next) {
@@ -569,6 +570,71 @@ dom_tree_to_timespec(xmlNodePtr node)
   
   return ret;
 }
+
+GDate*
+dom_tree_to_gdate(xmlNodePtr node)
+{
+  /* Turn something like this
+
+     <sx:startdate>
+         <gdate>2001-04-03</gdate>
+     </sx:startdate>
+
+     into a GDate.  If the xml is invalid, returns NULL. */
+
+  GDate *ret;
+  gboolean seen_date = FALSE;
+  xmlNodePtr n;
+
+  /* creates an invalid date */
+  ret = g_date_new();
+
+  for(n = node->xmlChildrenNode; n; n = n->next) {
+    switch(n->type) {
+    case XML_COMMENT_NODE:
+      break;
+    case XML_ELEMENT_NODE:
+      if(safe_strcmp("gdate", n->name) == 0) {
+        if(seen_date) {
+            goto failure;
+        } else {
+          gchar *content = dom_tree_to_text(n);
+          gint year, month, day;
+          if(!content) {
+              goto failure;
+          }
+
+          if(sscanf(content, "%d-%d-%d", &year, &month, &day ) != 3) {
+            g_free(content);
+            goto failure;
+          }
+          g_free(content);
+          seen_date = TRUE;
+          g_date_set_dmy( ret, day, month, year );
+          if( !g_date_valid( ret ) ) {
+            g_warning("dom_tree_to_gdate: invalid date");
+            goto failure;
+          }
+        }
+      }
+      break;
+    default:
+      PERR("dom_tree_to_gdate: unexpected sub-node.");
+      goto failure;
+    }
+  }
+
+  if(!seen_date) {
+      g_warning("dom_tree_to_gdate: no gdate node found.");
+      goto failure;
+  }
+
+  return ret;
+failure:
+  g_date_free( ret );
+  return NULL;
+}
+
 
 gnc_commodity *
 dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)

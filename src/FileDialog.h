@@ -138,6 +138,8 @@ void gncFileQuit (void);
 
 AccountGroup *gncGetCurrentGroup (void);
 
+Account *gncGetTemplateAccount(void);
+
 GNCBook *gncGetCurrentBook (void);
 
 #endif /* __GNC_FILE_DIALOG_H__ */

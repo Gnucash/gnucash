@@ -1,3 +1,50 @@
+2001-06-17  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/gnc-account-xml-v2.c (dom_tree_to_account): Added.
+
+	* src/engine/gnc-transaction-xml-v2.c (dom_tree_to_transaction):
+	Added.
+
+	* src/FileDialog.c: Added support for copying
+	scheduled-transaction-related GNCBook fields.
+	src/engine/
+
+	* src/engine/FreqSpec.{h,c}: Added.
+
+	* src/engine/SchedXaction.{h,c}: Added.
+
+	* src/engine/gnc-{freqspec,schedxaction}-xml-v2.c: Added
+
+	* src/engine/gnc-book.c: Added the template group [template
+	transaction belong to the template group] and the Scheduled
+	Trasnaction list.
+
+	* src/gnome/glade/sched_xact.glade: Added.
+
+	* src/gnome/dialog-nextrun.{h,c}: Added.
+
+	* src/gnome/dialog-scheduledxaction.{h,c}: Added.
+
+	* src/gnome/gnc-frequency.{h,c}: Added.
+
+	* src/SplitLedger.c, src/MultiLedger.c: Added support for a
+	Template Ledger.
+
+	* src/guile/gnc.gwp: Added wrapping for
+	dialog-{scheduledxactions,nextrun}-creation functions.
+
+	* src/register/splitreg.c: Added formula credit and debit cells,
+	and flags for template-register support.
+
+	* src/register/formulacell.h: Added.
+
+	* src/gnome/gnc-dateedit.h: Added explanatory comment from dave_p
+	in IRC.
+
+	* src/gnome/query-user.h: Added prototype of
+ 	gnc_verify_dialog_parented(...), so I could use it the SX UI
+	stuff.
+
 2001-06-17  Kevin Finn  <kevinfinn@mediaone.net>
 
 	* src/gnome/window-reconcile.c: Implemented automatic interest
@@ -75,7 +122,7 @@
 	creation druid code. Rename api calls to reflect the more
 	general use of the druid.
 
-2001-06-16  Robert Graham Merkel <rgmerk@mira.net
+2001-06-16  Robert Graham Merkel <rgmerk@mira.net>
 
 	* po/POTFILES.in : remove references to deleted files.
 

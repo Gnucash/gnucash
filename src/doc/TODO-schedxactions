@@ -1,0 +1,144 @@
+Author: jsled@asynchronous.org
+
+Main Scheduled Transaction todo list
+------------------------------------
+
+. Engine ...Init() functions should be private.
+. FreqSpec.c
+  . xaccFreqSpecGetFreqStr [display] needs to go away
+
+. finish the GNCFrequency widget
+  . finish/recreate restoring UI state from FreqSpec.
+X add the ...GetFreqStr() code for the complex composite FreqSpecs
+X fix the ...GetNextInstance() code
+X XMLv2 I/O
+X create a template register
+  X store account and amount data in kvp_frames.
+  . find a way to list multiple registers for template transaction purposes.
+    . this is a "normal" general ledger + a "stock" general ledger
+    . this is going to be: a tabbed notebook in which the tabs contain
+      the number of transactions the GL they hold contain.
+X need policy for start-dates in GNCFrequency
+X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
+  X also needs to deal with >28-mday values WRT last-occur date + multipliers
+
+. add a big calendar [gnome-pim?  evo?]  SXaction List code
+. match existing transactions for long-time users
+  . based off template-transaction data, some big existing-transaction
+    scanning code.
+. need "since-last-run" UI for instanatiation.
+  . create transactions
+    X numeric
+    . formula
+      . need variable fill-in UI...
+        . re-use gnome-sheet code for a variable-binding table?
+. register mods
+  . to see upcoming xactions, modifying future balance
+  . to instantiate xactions.
+  . to note which are "recurring"
+    . the mozilla "reload" glyph is kinda neat...
+. would like "don't even tell me you instantiated it, just fscking do
+  it!" option for non-manual-conf SXes
+. deal better with formulas in template transactions [real FormulaCell]
+  . recognize purely numeric template transactions and balance at
+    template-creation time.
+. GNCFrequency
+  . weekly options
+  . restoring FreqSpec into GNCFrequency UI
+  . initial-settings synchronization [start date, optionmenus]
+. backend support
+  . PostgreSQL
+  . others? 
+
+
+Enhancements:
+. SX name should be default value for template transaction description
+. loan/repayment SX's
+  . integrate "Financial Calculator"
+  . auto-determine number of occurances/end condition from liability
+    account amount.
+
+========================================
+
+Template Registers/Transactions
+
+Template-option registers are used for users to enter the template
+transaction to be created when the scheduled transaction comes due.
+Most fields will be copied directly, but certain fields will need to
+be modified upon instantiation, and the template version of these
+transactions will need to contain the information necessary to do that
+instiantion.  For some fields, this will be a derivable quantity, and
+for others the user will need to be prompted.  This will show up
+mostly for the amount of variable-amount transactions; perhaps the
+amount is then derivable from some external source.  These amounts
+will then be represented by a variable, a function, or a formula
+including both.
+
+Examples...
+
+Verizon bill: "108.83 +- x"
+	. x: tax amounts [user-input]
+Power: "seasonal_util_gas( 'OAK_CA', '100 therms' ) + seasonal_util_elec( 'OAK_CA', '220 kwhrs' )"
+	. seasonal_util_gas( loc, amt ): regional/seasonal power price
+	. seasonal_util_elec( loc, amt ): regional/seasonal electricity price
+Rent: 1900
+Phone: "26"
+Internet: "80 - 40 - 10" [3 splits]
+Daily: "4 + 6 (+ 26)"
+	. 4: cigarettes
+	. 6: avg lunch
+	. (opt) 20: wine
+Gas: "regional_auto_gas( 'BERK_CA', 'premium', 14 gal +- 2 )"
+	. regional_gas( loc, type, formula )
+		. loc: location
+		. type: subclass of gasoline
+		. formula: formula to use for user-query
+TROA: "220.14"
+
+User-input
+
+When user input is required for scheduled transaction instantiation,
+we should have some sort of simple, spreadsheet-like UI for the entry
+and verification of values.  This would allow the entry of all values
+necessary for the formula to be calculated.
+
+We also need a way to defer instantiation of a scheduled transaction
+until the information can be obtained.
+
+Example...
+
+ type  | date       | formula           | variable | value |          total
++---------------------------------------------------------------------------+
+| PG&E | 2001.04.12 | lookup(x) + lookup|      	   |   	   |   	    184     |
+|---------------------------------------------------------------------------|
+|      |	    |                  	|   x  	   |  142  |   	       	    |
+|---------------------------------------------------------------------------|
+|      |	    |		       	|   y  	   |   42  |	     	    |
+|---------------------------------------------------------------------------|
+| gas  | 2001.03.01 | cost/gal * gal   	|  	   |	   |	       	    |
+|---------------------------------------------------------------------------|
+|      |	    |			| cost/gal | 1.949 |	  14.27	    |
+|---------------------------------------------------------------------------|
+|      |	    |			| gal  	   | 12.32 |	       	    |
+|---------------------------------------------------------------------------|
+| gas  | 2001.03.12 | cost/gal * gal	|	   |	   |   	       	    |
+|---------------------------------------------------------------------------|
+|      |	    |		       	| cost/gal | 1.959 |	  15.39	    |
+|---------------------------------------------------------------------------|
+|      |	    |			| gal  	   | 13.43 |		    |
++---------------------------------------------------------------------------+
+
+I believe this means we can use the existing gnc-sheet/register-style
+thingy.
+
+We probably want to defer the lookup-based stuff until
+1.8/2.0/gnumatic-provided network backing for this.
+
+Stocks/recurring share purchases can make use of this, as well.  The
+idea is then, probably, that the user will have a fixed amount with
+which to buy as many shares as possible; the num-shares, then, is a
+formula based on a lookup at the given time [the share price],
+involving the function FLOOR.
+
+It'd be nice if this formula could be either a simple infix syntax for
+normal people, or a sexp for Schemers.

@@ -689,5 +689,13 @@ gnc_timezone (struct tm *tm)
 #endif
 }
 
+
+void
+timespecFromTime_t( Timespec *ts, time_t t )
+{
+    ts->tv_sec = t;
+    ts->tv_nsec = 0;
+}
+
 /********************** END OF FILE *********************************\
 \********************************************************************/

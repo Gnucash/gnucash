@@ -510,6 +510,34 @@ gnc_transaction_end_handler(gpointer data_for_children,
     return successful;
 }
 
+Transaction *
+dom_tree_to_transaction( xmlNodePtr node )
+{
+    Transaction *trn;
+    gboolean	successful;
+
+    g_return_val_if_fail(node, FALSE);
+    
+    trn = xaccMallocTransaction();
+    g_return_val_if_fail(trn, FALSE);
+    xaccTransBeginEdit(trn);
+
+    successful = dom_tree_generic_parse(node, trn_dom_handlers, trn);
+    
+    xaccTransCommitEdit(trn);
+
+    if ( !successful )
+    {
+        xmlElemDump(stdout, NULL, node);
+        xaccTransBeginEdit(trn);
+        xaccTransDestroy(trn);
+        xaccTransCommitEdit(trn);
+	trn = NULL;
+    }
+
+    //xmlFreeNode(tree);
+    return trn;
+}
 
 sixtp*
 gnc_transaction_sixtp_parser_create(void)

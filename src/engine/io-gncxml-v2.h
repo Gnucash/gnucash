@@ -38,6 +38,7 @@
 #include "Transaction.h"
 #include "gnc-commodity.h"
 #include "gnc-pricedb.h"
+#include "SchedXaction.h"
 
 struct _load_counter_struct
 {
@@ -52,6 +53,9 @@ struct _load_counter_struct
 
     int prices_total;
     int prices_loaded;
+
+    int schedXactions_total;
+    int schedXactions_loaded;
 };
 
 typedef struct _load_counter_struct load_counter;
@@ -62,6 +66,18 @@ struct sixtp_global_data_v2_struct
     load_counter counter;
     void (*countCallback)(const char *type, load_counter counter);
 };
+
+/**
+ * Struct used to pass the account group/accounts and trasnactions in
+ * the <gnc:template-transactions> section between the parser in
+ * gnc-schedxactions-xml-v2.c and the add-to-book callback in
+ * io-gncxml-v2.c.
+ **/
+typedef struct _gnc_template_xaction_data
+{
+	GList	*accts;
+	GList	*transactions;
+} gnc_template_xaction_data;
 
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;
 
@@ -77,6 +93,5 @@ gboolean gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename);
  * chars of the file look like gnc-xml data.
  */
 gboolean gnc_is_xml_data_file_v2(const gchar *name);
-
 
 #endif /* __IO_GNCXML_V2_H__ */

@@ -61,7 +61,8 @@ typedef enum
   MOD_EVENT   = 13,
   MOD_TXN     = 14,
   MOD_KVP     = 15,
-  MOD_LAST    = 15
+  MOD_SX      = 16,
+  MOD_LAST    = 16
 } gncModuleType;
 
 typedef enum

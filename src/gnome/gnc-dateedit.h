@@ -7,6 +7,12 @@
  * This file was part of the Gnome Library. It was modifed by
  * Dave Peticolas <peticola@cs.ucdavis.edu> for use in GnuCash.
  *
+ * 2001.05.13T1647 [PDT], #gnucash:
+ * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
+ *         on _why_ such a thing was done... any help?
+ * <dave_p> jsled: gnome date edit isn't i18n'd properly. also, we
+ *          added the register date hotkeys.
+ *
  * GnuCash is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -23,8 +29,7 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
- *
- */
+ * */
 /*
   @NOTATION@
  */

@@ -1,7 +1,6 @@
 /********************************************************************\
- * gnc-xml.h -- api for gnucash xml i/o                             *
- *                                                                  *
- * Copyright (C) 2001 James LewisMoss <dres@debian.org>             *
+ * dialog-scheduledxaction.h : dialogs for a scheduled transactions *
+ * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,46 +18,34 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
 \********************************************************************/
 
-#ifndef __GNC_XML_H__
-#define __GNC_XML_H__
+#ifndef __DIALOG_SCHEDULEDXACTION_H_
+#define __DIALOG_SCHEDULEDXACTION_H_
 
 #include "config.h"
-
-#include "gnc-xml-helper.h"
-
-#include "Account.h"
-#include "gnc-commodity.h"
-
-#include "sixtp.h"
-#include "gnc-pricedb.h"
-
-#include "FreqSpec.h"
+#include <gnome.h>
 #include "SchedXaction.h"
 
-xmlNodePtr gnc_account_dom_tree_create(Account *act);
-sixtp* gnc_account_sixtp_parser_create(void);
+struct _SchedXactionDialog;
+struct _SchedXactionEditorDialog;
 
-xmlNodePtr gnc_commodity_dom_tree_create(const gnc_commodity *act);
-sixtp* gnc_commodity_sixtp_parser_create(void);
+typedef struct _SchedXactionDialog SchedXactionDialog;
+typedef struct _SchedXactionEditorDialog SchedXactionEditorDialog;
 
-xmlNodePtr gnc_transaction_dom_tree_create(Transaction *com);
-sixtp* gnc_transaction_sixtp_parser_create(void);
+SchedXactionDialog * gnc_ui_scheduled_xaction_dialog_create(void);
+void gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd);
+void row_select_handler( GtkCList *clist, gint row, gint col, GdkEventButton *event, gpointer d );
 
-xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
-Split* dom_tree_to_split(xmlNodePtr node);
+SchedXactionEditorDialog *
+gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
+					       SchedXaction *sx );
+void gnc_ui_scheduled_xaction_editor_dialog_destroy(SchedXactionEditorDialog *sxd);
 
-xmlNodePtr gnc_pricedb_dom_tree_create(GNCPriceDB *db);
-sixtp* gnc_pricedb_sixtp_parser_create(void);
+#endif
 
-xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
-sixtp* gnc_schedXaction_sixtp_parser_create(void);
-
-xmlNodePtr gnc_freqSpec_dom_tree_create( FreqSpec *fs );
-sixtp* gnc_freqSpec_sixtp_parser_create(void);
-
-sixtp* gnc_template_transaction_sixtp_parser_create(void);
-
-#endif /* __GNC_XML_H__ */
+/**
+ * TODO:
+ * . date-entries should back-stop each other?
+ * . modify gtkentry to prohibit fracation num-occurance values.
+ **/

@@ -130,6 +130,9 @@ gint          double_compare(double v1, double v2);
 
 void          kvp_value_delete(kvp_value * value);
 kvp_value   * kvp_value_copy(const kvp_value * value);
+/**
+ * Similar returns as strcmp.
+ **/
 gint          kvp_value_compare(const kvp_value *va, const kvp_value *vb);
 
 /* list convenience funcs. */

@@ -25,6 +25,7 @@ libgncgnome_a_SOURCES = \
   dialog-transfer.c \
   dialog-userpass.c \
   dialog-utils.c \
+  dialog-scheduledxaction.c \
   druid-commodity.c \
   druid-hierarchy.c \
   druid-qif-import.c \
@@ -38,6 +39,7 @@ libgncgnome_a_SOURCES = \
   gnc-datedelta.c \
   gnc-dateedit.c \
   gnc-gpg.c \
+  gnc-frequency.c \
   gnc-html-history.c \
   gnc-html-guppi.c \
   gnc-html.c \
@@ -56,7 +58,8 @@ libgncgnome_a_SOURCES = \
   window-main-summarybar.c \
   window-reconcile.c \
   window-register.c \
-  window-report.c
+  window-report.c \
+  dialog-nextrun.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -83,6 +86,7 @@ noinst_HEADERS = \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
+  dialog-scheduledxaction.h \
   druid-commodity.h \
   druid-hierarchy.h \
   druid-qif-import.h \
@@ -95,6 +99,7 @@ noinst_HEADERS = \
   gnc-dateedit.h \
   gnc-dir.h \
   gnc-gpg.h \
+  gnc-frequency.h \
   gnc-html-history.h \
   gnc-html-guppi.h \
   gnc-html.h \
@@ -113,7 +118,8 @@ noinst_HEADERS = \
   window-main-summarybar.h \
   window-reconcile.h \
   window-register.h \
-  window-report.h
+  window-report.h \
+  dialog-nextrun.h
 
 EXTRA_DIST = \
   .cvsignore \

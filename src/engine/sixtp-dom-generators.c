@@ -127,39 +127,55 @@ timespec_nsec_to_string(const Timespec *ts)
 xmlNodePtr
 timespec_to_dom_tree(const char *tag, const Timespec *spec)
 {
-    xmlNodePtr ret;
-    gchar *date_str = NULL;
-    gchar *ns_str = NULL;
+	xmlNodePtr ret;
+	gchar *date_str = NULL;
+	gchar *ns_str = NULL;
     
-    g_return_val_if_fail(spec, NULL);
+	g_return_val_if_fail(spec, NULL);
 
-    date_str = timespec_sec_to_string(spec);
+	date_str = timespec_sec_to_string(spec);
 
-    if(!date_str)
-    {
-        return NULL;
-    }
+	if(!date_str) {
+		return NULL;
+	}
     
-    ret = xmlNewNode(NULL, tag);
+	ret = xmlNewNode(NULL, tag);
     
-    xmlNewTextChild(ret, NULL, "ts:date", date_str);
+	xmlNewTextChild(ret, NULL, "ts:date", date_str);
 
-    if(spec->tv_nsec > 0)
-    {
-        ns_str = timespec_nsec_to_string(spec);
-        if(ns_str)
-        {
-            xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
-        }
-    }
+	if(spec->tv_nsec > 0){
+		ns_str = timespec_nsec_to_string(spec);
+		if(ns_str){
+			xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
+		}
+	}
 
-    g_free(date_str);
-    if(ns_str)
-    {
-        g_free(ns_str);
-    }
+	g_free(date_str);
+	if(ns_str){
+		g_free(ns_str);
+	}
     
-    return ret;
+	return ret;
+}
+
+xmlNodePtr
+gdate_to_dom_tree(const char *tag, GDate *date)
+{
+	xmlNodePtr ret;
+	gchar *date_str = NULL;
+
+	g_return_val_if_fail(date, NULL);
+	date_str = g_new( gchar, 512 );
+
+	g_date_strftime( date_str, 512, "%Y-%m-%d", date );
+
+	ret = xmlNewNode(NULL, tag);
+
+	xmlNewTextChild(ret, NULL, "gdate", date_str);
+
+	g_free(date_str);
+
+	return ret;
 }
 
 xmlNodePtr
@@ -328,6 +344,23 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
     
     g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
     
+    return ret;
+}
+
+xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int)
+{
+    xmlNodePtr ret;
+    gchar *numstr;
+
+    numstr = g_strdup_printf( "%u", an_int );
+    g_return_val_if_fail(numstr, NULL);
+
+    ret = xmlNewNode(NULL, tag);
+
+    xmlNodeAddContent(ret, numstr);
+
+    g_free(numstr);
+
     return ret;
 }
 

@@ -132,6 +132,15 @@ guint gnc_book_count_transactions(GNCBook *book);
  */
 gnc_commodity_table* gnc_book_get_commodity_table(GNCBook *book);
 
+/**
+ * Returns the list of scheduled transactions.
+ **/
+GList * gnc_book_get_schedxactions( GNCBook *book );
+void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
+
+AccountGroup *gnc_book_get_template_group( GNCBook *book );
+void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
+
 /* The gnc_book_get_file_path() routine returns the fully-qualified file
  *    path for the book. That is, if a relative or partial filename
  *    was for the book, then it had to have been fully resolved to

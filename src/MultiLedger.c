@@ -41,6 +41,7 @@
 #define REGISTER_SINGLE_CM_CLASS     "register-single"
 #define REGISTER_SUBACCOUNT_CM_CLASS "register-subaccount"
 #define REGISTER_GL_CM_CLASS         "register-gl"
+#define REGISTER_TEMPLATE_CM_CLASS   "register-template"
 
 
 struct _xaccLedgerDisplay
@@ -74,7 +75,8 @@ static xaccLedgerDisplay *
 xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                            LedgerDisplayType ld_type,
                            SplitRegisterType reg_type,
-                           SplitRegisterStyle style);
+                           SplitRegisterStyle style,
+                           gboolean templateMode );
 static void xaccLedgerDisplayRefreshInternal (xaccLedgerDisplay *ld,
                                               GList *splits);
 
@@ -358,7 +360,7 @@ xaccLedgerDisplaySimple (Account *account)
   reg_type = get_reg_type (account, LD_SINGLE);
 
   return xaccLedgerDisplayInternal (account, NULL, LD_SINGLE, reg_type,
-                                    gnc_get_default_register_style ());
+                                    gnc_get_default_register_style (), FALSE );
 }
 
 /********************************************************************\
@@ -378,8 +380,10 @@ xaccLedgerDisplayAccGroup (Account *account)
   reg_type = get_reg_type (account, LD_SUBACCOUNT);
 
   return xaccLedgerDisplayInternal (account, NULL, LD_SUBACCOUNT,
-                                    reg_type, REG_STYLE_JOURNAL);
+                                    reg_type, REG_STYLE_JOURNAL, FALSE );
 }
+
+
 
 /********************************************************************\
  * xaccLedgerDisplayGL                                              *
@@ -390,7 +394,7 @@ xaccLedgerDisplayAccGroup (Account *account)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayGL (void)
+xaccLedgerDisplayGL ()
 {
   Query *query;
   time_t start;
@@ -423,7 +427,48 @@ xaccLedgerDisplayGL (void)
 
   return xaccLedgerDisplayInternal (NULL, query, LD_GL,
                                     GENERAL_LEDGER,
-                                    REG_STYLE_JOURNAL);
+                                    REG_STYLE_JOURNAL, FALSE );
+}
+
+/**
+ * id is some identifier that can be:
+ * . used in a query to look for the transaction which belong to this
+ *   template ledger
+ * . set in a specific key value for new transactions which belong to
+ *   this template ledger.
+ **/
+xaccLedgerDisplay *
+xaccLedgerDisplayTemplateGL( char *id )
+{
+  GNCBook *book;
+  Query *q;
+  time_t start;
+  struct tm *tm;
+  xaccLedgerDisplay *ld;
+  SplitRegister *sr;
+  AccountGroup *ag;
+  Account *acct;
+
+  q = xaccMallocQuery();
+
+  ag = gnc_book_get_template_group( gncGetCurrentBook() );
+  acct = xaccGetAccountFromName( ag, id );
+  if ( acct == NULL ) {
+    // FIXME
+    printf( "can't get template account for id \"%s\"\n", id );
+  }
+  xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
+  book = gncGetCurrentBook();
+  xaccQuerySetGroup( q, gnc_book_get_template_group(book) );
+
+  ld = xaccLedgerDisplayInternal( NULL, q, LD_GL,
+                                  GENERAL_LEDGER,
+                                  REG_STYLE_JOURNAL,
+                                  TRUE ); // template mode?  TRUE.
+
+  sr = xaccLedgerDisplayGetSR( ld );
+  sr->templateAcct = acct;
+  return ld;
 }
 
 static gncUIWidget
@@ -541,8 +586,6 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
-  xaccQuerySetGroup (ld->query, gncGetCurrentGroup ());
-
   splits = xaccQueryGetSplits (ld->query);
 
   ledger_set_watches (ld, splits);
@@ -590,6 +633,7 @@ make_ledger_query (xaccLedgerDisplay *ld,
       break;
 
     case LD_GL:
+    case LD_TEMPLATE:
       return;
 
     default:
@@ -637,14 +681,15 @@ xaccLedgerDisplay *
 xaccLedgerDisplayQuery (Query *query, SplitRegisterType type,
                         SplitRegisterStyle style)
 {
-  return xaccLedgerDisplayInternal (NULL, query, LD_GL, type, style);
+  return xaccLedgerDisplayInternal (NULL, query, LD_GL, type, style, FALSE);
 }
 
 static xaccLedgerDisplay *
 xaccLedgerDisplayInternal (Account *lead_account, Query *q,
                            LedgerDisplayType ld_type,
                            SplitRegisterType reg_type,
-                           SplitRegisterStyle style)
+                           SplitRegisterStyle style,
+                           gboolean templateMode )
 {
   xaccLedgerDisplay *ld;
   gboolean show_all;
@@ -712,9 +757,16 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
       break;
 
+  case LD_TEMPLATE:
+    class = REGISTER_TEMPLATE_CM_CLASS;
+    // FIXME: sanity checks?
+    // Check for kvp-frame data?
+    break;
+    
     default:
       PERR ("bad ledger type: %d", ld_type);
       return NULL;
+
   }
 
   ld = g_new (xaccLedgerDisplay, 1);
@@ -748,23 +800,32 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  view.entry_handler       = xaccSRGetEntryHandler;
   view.label_handler       = xaccSRGetLabelHandler;
-  view.io_flag_handler     = xaccSRGetIOFlagsHandler;
   view.fg_color_handler    = xaccSRGetFGColorHandler;
   view.bg_color_handler    = xaccSRGetBGColorHandler;
   view.cell_border_handler = xaccSRGetCellBorderHandler;
-  view.confirm_handler     = xaccSRConfirmHandler;
   view.handler_user_data   = NULL;
+  // The following handlers are changed in template mode.
+  if ( templateMode ) {
+    view.entry_handler     = xaccSRTemplateGetEntryHandler;
+    view.io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
+    view.confirm_handler   = xaccSRTemplateConfirmHandler;
+  } else {
+    view.entry_handler     = xaccSRGetEntryHandler;
+    view.io_flag_handler   = xaccSRGetIOFlagsHandler;
+    view.confirm_handler   = xaccSRConfirmHandler;
+  }
 
   ld->reg = xaccMallocSplitRegister (reg_type, style, FALSE, &view,
                                      xaccMLGUIDMalloc,
                                      xaccMLGUIDFree,
-                                     xaccMLGUIDCopy);
-
+                                     xaccMLGUIDCopy,
+                                     templateMode);
   xaccSRSetData (ld->reg, ld,
                  xaccLedgerDisplayParent,
                  xaccLedgerDisplaySetHelp);
+
+  ld->reg->template = templateMode;
 
   splits = xaccQueryGetSplits (ld->query);
 
@@ -825,6 +886,8 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
   if (!ld || ld->loading)
     return;
 
+  //xaccQueryPrint( ld->query );
+
   xaccLedgerDisplayRefreshInternal (ld, xaccQueryGetSplits (ld->query));
 }
 
@@ -859,6 +922,13 @@ xaccLedgerDisplayRefreshByReg (SplitRegister *reg)
     xaccLedgerDisplayRefresh (ld);
     return;
   }
+
+  ld = gnc_find_first_gui_component (REGISTER_TEMPLATE_CM_CLASS,
+                                     find_by_reg, reg );
+  if (ld)
+    {
+      xaccLedgerDisplayRefresh (ld);
+    }
 }
 
 /********************************************************************\
@@ -892,6 +962,8 @@ xaccDestroyLedgerDisplay (Account *account)
   xaccDestroyLedgerDisplayClass (account, REGISTER_SINGLE_CM_CLASS);
   xaccDestroyLedgerDisplayClass (account, REGISTER_SUBACCOUNT_CM_CLASS);
   xaccDestroyLedgerDisplayClass (account, REGISTER_GL_CM_CLASS);
+  // no TEMPLATE_CM_CLASS, because it doesn't correspond to any account
+  // FIXME: but there probably should be an analagous method
 }
 
 void

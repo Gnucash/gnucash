@@ -1058,7 +1058,6 @@ gnc_register_create_status_bar (RegWindow *regData)
   return statusbar;
 }
 
-
 void
 gnc_register_jump_to_blank (RegWindow *regData)
 {

@@ -51,6 +51,8 @@
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "dialog-scheduledxaction.h"
+#include "dialog-nextrun.h"
 
 #include "window-help.h"
 #include "window-main.h"
@@ -881,6 +883,18 @@ gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data) {
 }
 
 static void
+gnc_ui_mainWindow_scheduled_xaction_cb(GtkWidget *widget, gpointer data)
+{
+  gnc_ui_scheduled_xaction_dialog_create();
+}
+
+static void
+gnc_ui_mainWindow_nextrun_cb( GtkWidget *widget, gpointer d )
+{
+	gnc_ui_nextrun_dialog_create();
+}
+
+static void
 gnc_main_window_gl_cb(GtkWidget *widget, gpointer data) {
   xaccLedgerDisplay *ld;
   RegWindow *regData;
@@ -1100,12 +1114,18 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     GNOMEUIINFO_END
   };
 
+  static GnomeUIInfo gnc_developer_menu_template[] =
+  {
+      GNOMEUIINFO_END
+  };
+
   static GnomeUIInfo gnc_main_menu_template[] =
   {
     GNOMEUIINFO_MENU_FILE_TREE(gnc_file_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Tools"), gnc_tools_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Settings"), gnc_settings_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Windows"), gnc_windows_menu_template),    
+    // GNOEMUIINFO_SUBTREE(N_("_Developer Options"), gnc_developer_menu_template),
     GNOMEUIINFO_MENU_HELP_TREE(gnc_help_menu_template),
     GNOMEUIINFO_END
   };

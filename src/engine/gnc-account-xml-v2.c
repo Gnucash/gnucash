@@ -326,6 +326,25 @@ gnc_account_end_handler(gpointer data_for_children,
     return successful;
 }
 
+Account*
+dom_tree_to_account( xmlNodePtr node )
+{
+	Account		*accToRet;
+	gboolean	successful;
+	
+	accToRet = xaccMallocAccount();
+	successful = dom_tree_generic_parse( node, account_handlers_v2, accToRet );
+	xaccAccountCommitEdit( accToRet );
+
+	if ( !successful ) {
+		xaccFreeAccount( accToRet );
+		accToRet = NULL;
+	}
+	// jsled_FIXME?  See note above.
+	xaccAccountBeginEdit( accToRet );
+	return accToRet;
+}
+
 sixtp*
 gnc_account_sixtp_parser_create(void)
 {

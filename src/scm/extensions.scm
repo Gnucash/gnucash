@@ -66,6 +66,20 @@
 ;                        (list "Extensions" "")
 ;                        (lambda () (gnc:main-win-account-group-write win))))
   
+
+  (define schedxact-editor-item
+    (gnc:make-menu-item (N_ "SchedXact: Editor")
+			(N_ "Editor of Scheduled Transactions")
+			(list "Extensions" "")
+			(lambda () (gnc:sx-editor)))
+    )
+  (define schedxact-slr-item
+    (gnc:make-menu-item (N_ "SchedXact: Since Last Run")
+			(N_ "since last run dialog")
+			(list "Extensions" "")
+			(lambda () (gnc:sx-since-last-run)))
+    )
+
   (define progress-item
     (gnc:make-menu-item (N_ "Test progress dialog")
                         (N_ "Test progress dialog")
@@ -91,7 +105,14 @@
 
   (gnc:add-extension menu)
 ;  (gnc:add-extension export-item)
-  (gnc:add-extension progress-item))
+
+;; NOTE: this is the inverse order from how you may want them to
+;; appear in the menu [prepending to some list]...
+
+  (gnc:add-extension progress-item)
+  (gnc:add-extension schedxact-slr-item)
+  (gnc:add-extension schedxact-editor-item)
+)
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*ui-startup-hook*
