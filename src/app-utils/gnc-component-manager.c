@@ -663,9 +663,9 @@ changes_match (ComponentEventInfo *cei, ComponentEventInfo *changes)
     return FALSE;
 
   /* check types first, for efficiency */
-  changes->match = FALSE;
+  cei->match = FALSE;
   g_hash_table_foreach (changes->event_masks, match_type_helper, cei);
-  if (changes->match)
+  if (cei->match)
     return TRUE;
 
   if (g_hash_table_size (cei->entity_events) <=
