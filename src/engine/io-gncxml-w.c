@@ -727,15 +727,15 @@ gncxml_write(AccountGroup *group, const gchar *filename) {
   int status;
   
   doc = xmlNewDoc("1.0");
-  doc->root = xmlNewDocNode(doc, NULL, "gnc", NULL);
+  doc->xmlRootNode = xmlNewDocNode(doc, NULL, "gnc", NULL);
    
-  tmpnode = xmlNewChild(doc->root, NULL, "version", "1");
+  tmpnode = xmlNewChild(doc->xmlRootNode, NULL, "version", "1");
   if(!tmpnode) {
     xmlFreeDoc(doc);
     return FALSE;
   }
 
-  ledger_data = xmlNewChild(doc->root, NULL, "ledger-data", NULL);
+  ledger_data = xmlNewChild(doc->xmlRootNode, NULL, "ledger-data", NULL);
   if(!ledger_data) {
     xmlFreeDoc(doc);
     return FALSE;
