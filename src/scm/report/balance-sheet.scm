@@ -277,9 +277,15 @@
 	    (gnc:html-table-prepend-row/markup! 
 	     asset-table 
 	     "primary-subheading"
-	     (list (gnc:html-acct-table-cell (* (if show-fcur? 3 2) 
-						tree-depth) 
-					     (_ "Assets") #t)))
+	     (append
+	      (list (gnc:html-acct-table-cell tree-depth
+					      (_ "Assets") #t))
+	      ;; Workaround to force gtkhtml into displaying wide
+	      ;; enough columns.
+	      (make-list (* (if show-fcur? 2 1) tree-depth)
+			 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")))
 
 	    (add-subtotal-line 
 	     asset-table (_ "Assets") asset-balance)	    

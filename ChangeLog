@@ -1,3 +1,8 @@
+2001-04-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/balance-sheet.scm: Added workaround for gtkhtml
+	column width.
+
 2001-04-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/SplitLedger.c (xaccSRExpandCurrentTrans): if expanding
