@@ -1,4 +1,5 @@
 Makefile
 Makefile.in
+.scm-links
 bootstrap.scm
 guile-strings.c
