@@ -1,10 +1,4 @@
 /********************************************************************\
- * Account-matcher.h -- Account selection and matching functions for* 
- * import modules.                                                  *
- *                                                                  *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -23,7 +17,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /**@file
- * \brief Account matching and account picking functionnality
+ * \brief Account-matcher.h: A very generic and flexible account matcher/picker
+ \author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #ifndef ACCOUNT_MATCHER_H
 #define ACCOUNT_MATCHER_H

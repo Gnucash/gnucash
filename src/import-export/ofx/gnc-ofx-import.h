@@ -1,8 +1,4 @@
 /********************************************************************\
- * gnc-ofx-import.h -- OFX file import                              *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,9 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /**@file
- \brief Ofx import module
- \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ /** @file
+     @brief Ofx import module interface
+     *
+     gnc-ofx-import.h
+     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H

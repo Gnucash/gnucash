@@ -3,24 +3,30 @@ SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
 libgncmod_generic_import_la_SOURCES = \
-	Account-matcher.c \
-	Commodity-matcher.c \
-	Transaction-matcher.c \
-	gnc-gen-utilities.c \
-	gnc-import-match-map.c \
+	import-account-matcher.c \
+	import-commodity-matcher.c \
+	import-backend.c \
+	import-match-picker.c \
+	import-utilities.c \
+	import-settings.c \
+	import-match-map.c \
 	gnc-gen-transaction.c \
+	import-main-matcher.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gnc-import-match-map.h
+  import-match-map.h
 
 noinst_HEADERS = \
   gnc-gen-transaction.h \
-  Transaction-matcher.h \
-  Account-matcher.h \
-  Commodity-matcher.h \
-  gnc-gen-utilities.h
+  import-main-matcher.h \
+  import-backend.h \
+  import-match-picker.h \
+  import-account-matcher.h \
+  import-commodity-matcher.h \
+  import-utilities.h \
+  import-settings.h
 
 libgncmod_generic_import_la_LDFLAGS = -module
 

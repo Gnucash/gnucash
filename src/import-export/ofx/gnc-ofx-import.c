@@ -1,8 +1,4 @@
 /********************************************************************\
- * ofx-import.c -- OFX files import                                 *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,9 +16,11 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /**@file
- \brief Ofx import module code
- \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ /** @file
+     @brief Ofx import module code
+     *
+     gnc-ofx-import.c
+     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #define _GNU_SOURCE
 
@@ -37,10 +35,10 @@
 #include <gmodule.h>
 
 #include "libofx/libofx.h"
-#include "Transaction-matcher.h"
-#include "Account-matcher.h"
-#include "Commodity-matcher.h"
-#include "gnc-gen-utilities.h"
+#include "import-account-matcher.h"
+#include "import-commodity-matcher.h"
+#include "import-utilities.h"
+#include "import-main-matcher.h"
 
 #include "Account.h"
 #include "Transaction.h"
@@ -50,7 +48,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
-#include "gnc-gen-transaction.h"
+
 
 #include "dialog-utils.h"
 
@@ -106,11 +104,9 @@ void gnc_file_ofx_import (void)
       /*      filenames[1]=file;*/
       filenames[2]=NULL;
 
-      /* CS: Create the Generic transaction importer GUI. */
-      gnc_ofx_importer_gui = gnc_gen_trans_new(NULL, NULL);
-      /* Set the allowed fuzzy amount difference to something higher than zero. */
-      gnc_gen_trans_set_fuzzy_amount (gnc_ofx_importer_gui, 
-				      MATCH_ATM_FEE_THRESHOLD);
+      /* Create the Generic transaction importer GUI. */
+      gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE);
+
       DEBUG("Opening selected file");
       ofx_proc_file(2, filenames);
     }
@@ -166,6 +162,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   Split *split;
   gchar *notes, *tmp;
   
+  g_assert(gnc_ofx_importer_gui);
+
   if(data.account_id_valid==true){
     account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE, NULL);
     if(account!=NULL)
@@ -366,8 +364,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		xaccTransAppendSplit(transaction,split);
 		xaccAccountInsertSplit(account,split);
 		/*gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);*/
-		DxaccSplitSetBaseValue(split, data.amount,xaccAccountGetCommodity(account));
 		
+		DxaccSplitSetBaseValue(split, data.amount, currency);
+		    
 		/* Also put the ofx transaction's memo in the split's memo field */ 
 		if(data.memo_valid==true){
 		  xaccSplitSetMemo(split, data.memo);
@@ -509,11 +508,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		  }
 	      }
 
-//gnc_import_add_trans(transaction);
-	    /* Previous importer GUI: gnc_import_add_trans(transaction); */
-	    /* CS: Use new importer GUI. */
-	    if (gnc_ofx_importer_gui)
-	      gnc_gen_trans_add_trans (gnc_ofx_importer_gui, transaction);
+	    /* Use new importer GUI. */
+	    DEBUG("%d splits sent to the importer gui",xaccTransCountSplits(transaction));
+	    gnc_gen_trans_list_add_trans (gnc_ofx_importer_gui, transaction);
 	  }
 	else
 	  {

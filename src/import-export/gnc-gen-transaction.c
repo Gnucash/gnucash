@@ -1,8 +1,4 @@
 /********************************************************************\
- * gnc-gen-transaction.c -- window/dialog for generic transaction 
- *                                                       processing *
- * Copyright (C) 2002 Christian Stimming                            *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,8 +16,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
- * \brief Transaction matcher main window
+/** @file
+    @brief Christian Stimming's matcher
+    @author Copyright (C) 2002 Christian Stimming
  */
 #include "config.h"
 
@@ -35,15 +32,18 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 
-#include "gnc-import-match-map.h"
-#include "Transaction-matcher.h"
-#include "Account-matcher.h"
+#include "import-match-map.h"
+#include "import-match-picker.h"
+#include "import-backend.h"
+#include "import-account-matcher.h"
 
 struct _generic_transaction_info
 {
   GtkWidget *dialog;
   GtkWidget *clist;
+  GNCImportSettings *user_settings;
 
+  /* BG: This is all obsolete, you should rip clear_threshold & al from your data structures */
   int clear_threshold;
   int add_threshold;
   int display_threshold;
@@ -69,6 +69,7 @@ void gnc_gen_trans_delete (GNCGenTransaction *info)
 {
   if (info == NULL) 
     return;
+  gnc_import_Settings_delete (info->user_settings);
   gtk_widget_destroy (GTK_WIDGET (info->dialog));
   g_free (info);
 }
@@ -113,30 +114,26 @@ run_account_picker_dialog (GNCGenTransaction *info,
 {
   Account *old_acc, *new_acc;
   old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-/*  new_acc = gnc_account_picker_dialog(old_acc);*/
+  /*  new_acc = gnc_account_picker_dialog(old_acc);*/
   new_acc = gnc_import_select_account(NULL,
 				      TRUE,
 				      _("A destination split for the transaction you selected."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
 				      NO_TYPE,
 				      old_acc);
-  if (old_acc != new_acc) {
-    gnc_import_TransInfo_set_destacc (trans_info, new_acc);
+    gnc_import_TransInfo_set_destacc (trans_info,
+				      new_acc,
+				      TRUE);
     refresh_clist_row (info, row, trans_info);
-  }
 }
 
 static void 
 run_match_dialog (GNCGenTransaction *info, 
 		  gint row, GNCImportTransInfo *trans_info)
 {
-  GNCImportMatchInfo *old = 
-    gnc_import_TransInfo_get_selected_match (trans_info);
   
   gnc_import_match_picker_run_and_close (trans_info);
-
-  if (old != gnc_import_TransInfo_get_selected_match (trans_info))
-    refresh_clist_row (info, row, trans_info);
+  refresh_clist_row (info, row, trans_info);
 }
 
 static void
@@ -219,16 +216,15 @@ GNCGenTransaction *gnc_gen_trans_new (GtkWidget *parent,
 
   info = g_new0 (GNCGenTransaction, 1);
 
+  /* Initialize user Settings. */
+  info->user_settings = gnc_import_Settings_new ();
+
   /* Initialize misc. data members */
-  info->clear_threshold =
-    gnc_lookup_number_option("Transaction Matcher","Auto-CLEAR threshold",
-			     DEFAULT_CLEAR_THRESHOLD);
-  info->add_threshold =
-    gnc_lookup_number_option("Transaction Matcher","Auto-ADD threshold",
-			     DEFAULT_ADD_THRESHOLD);
-  info->display_threshold =
-    gnc_lookup_number_option("Transaction Matcher","Match display threshold",
-			     DEFAULT_DISPLAY_THRESHOLD);
+  /* BG: This is obsolete, you should rip clear_threshold & al from your data structure */
+  info->clear_threshold = gnc_import_Settings_get_clear_threshold (info->user_settings);
+  info->add_threshold = gnc_import_Settings_get_add_threshold (info->user_settings);
+  info->display_threshold = gnc_import_Settings_get_display_threshold (info->user_settings);
+
 
   /* Initialize the GnomeDialog. */
   xml = gnc_glade_xml_new ("generic-import.glade", "transaction_list_dialog");
@@ -398,10 +394,7 @@ void gnc_gen_trans_add_trans(GNCGenTransaction *gui, Transaction *trans)
       transaction_info = gnc_import_TransInfo_new(trans, NULL);
       
       gnc_import_TransInfo_init_matches (transaction_info, 
-					 gui->add_threshold, 
-					 gui->add_threshold,
-					 gui->display_threshold,
-					 gnc_gen_trans_get_fuzzy_amount (gui));
+					 gui->user_settings);
 
       row_number = gtk_clist_append(GTK_CLIST (gui->clist),
 				    text_for_transInfo (transaction_info));

@@ -1,0 +1,786 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/**@file
+   @brief  import-main-mathcer.c: Transaction matcher main window
+   @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming    
+*/
+#include "config.h"
+
+#include <gnome.h>
+
+#include "import-main-matcher.h"
+
+#include "dialog-utils.h"
+#include "gnc-ui.h"
+#include "global-options.h"
+#include "gnc-ui-util.h"
+#include "gnc-engine-util.h"
+#include "import-settings.h"
+#include "import-match-map.h"
+#include "import-match-picker.h"
+#include "import-backend.h"
+#include "import-account-matcher.h"
+
+struct _generic_transaction_info
+{
+  GtkWidget *dialog;
+  GtkWidget *clist;
+  GNCImportSettings *user_settings;
+  GdkPixmap* fleche_pixmap;
+  GdkPixmap* checkbox_checked_pixmap;
+  GdkPixmap* checkbox_unchecked_pixmap;
+  int selected_row;
+};
+
+#define NUM_COLUMNS_DOWNLOADED_CLIST 10
+#define DOWNLOADED_CLIST_ACCOUNT 1
+#define DOWNLOADED_CLIST_DATE 0
+#define DOWNLOADED_CLIST_AMOUNT 2
+#define DOWNLOADED_CLIST_DESCRIPTION 3
+#define DOWNLOADED_CLIST_MEMO 4
+#define DOWNLOADED_CLIST_IMBALANCE 5
+#define DOWNLOADED_CLIST_ACTION_ADD 6
+#define DOWNLOADED_CLIST_ACTION_CLEAR 7
+#define DOWNLOADED_CLIST_ACTION_EDIT 8
+#define DOWNLOADED_CLIST_ACTION_INFO 9
+static short module = MOD_IMPORT;
+
+/* XPM */
+static char * fleche_xpm[] = {
+"17 22 41 1",
+" 	c None",
+".	c #FFFFFF",
+"+	c #000000",
+"@	c #FFFAFF",
+"#	c #F6FFF6",
+"$	c #EEEEE6",
+"%	c #B4B29C",
+"&	c #F6F6F6",
+"*	c #F6F2F6",
+"=	c #EFF7EF",
+"-	c #EEF2EE",
+";	c #EEEEEE",
+">	c #F6EEF6",
+",	c #E6EEE6",
+"'	c #EEEAEE",
+")	c #E6EAE6",
+"!	c #EEE6EE",
+"~	c #E6E6E6",
+"{	c #DEE2DE",
+"]	c #E6E2E6",
+"^	c #DEDEDE",
+"/	c #E6DEE6",
+"(	c #DEDADE",
+"_	c #D5DED5",
+":	c #D5DAD5",
+"<	c #DED6DE",
+"[	c #D5D6D5",
+"}	c #D5D2D5",
+"|	c #CDD6CD",
+"1	c #CDD2CD",
+"2	c #CDCECD",
+"3	c #D5CED5",
+"4	c #CDCACD",
+"5	c #C5CAC5",
+"6	c #C5C6C5",
+"7	c #CDC6CD",
+"8	c #BDC6BD",
+"9	c #C5C2C5",
+"0	c #C5BEC5",
+"a	c #BDC2BD",
+"b	c #BDBEBD",
+".+++++++++++++++.",
+"+@.............#+",
+"+.$$$$$$$$$$$$$%+",
+"+.$&&*&&&&&=&&&%+",
+"+.$*--*-**-*-*-%+",
+"+.$;;;;>-;;;;;-%+",
+"+.$,',';;';',';%+",
+"+.$)!)!)!))))')%+",
+"+.$~~~~~~~~~~~~%+",
+"+.${]+++++++]]]%+",
+"+.${^/+++++/{^{%+",
+"+.$(^(_+++((_(^%+",
+"+.$:<:(<+<::<(<%+",
+"+.$[[<[[[[[<[[[%+",
+"+.$}|}}}}|}}}}}%+",
+"+.$111112131131%+",
+"+.$242442422424%+",
+"+.$454545444545%+",
+"+.$676676656767%+",
+"+.$689689696966%+",
+"+0%%%%%%%%%%%%%a+",
+"b+++++++++++++++b"};
+
+/* XPM */
+static char * checkbox_checked_xpm[] = {
+"16 16 28 1",
+" 	c None",
+".	c #20449C",
+"+	c #000000",
+"@	c #FFFFFF",
+"#	c #D5D2D5",
+"$	c #EEEEEE",
+"%	c #B4B6B4",
+"&	c #20409C",
+"*	c #DEE2DE",
+"=	c #E6E6E6",
+"-	c #EEEAEE",
+";	c #838183",
+">	c #184094",
+",	c #CDCACD",
+"'	c #8B898B",
+")	c #949594",
+"!	c #9C999C",
+"~	c #A4A5A4",
+"{	c #C5C6C5",
+"]	c #949194",
+"^	c #A4A1A4",
+"/	c #BDBABD",
+"(	c #DEDADE",
+"_	c #C5C2C5",
+":	c #BDBEBD",
+"<	c #DEDEDE",
+"[	c #D5D6D5",
+"}	c #ACAAAC",
+" .............. ",
+"................",
+"..++++++++++++..",
+"..+@@@@@@@@@#+..",
+"..+@$$$$$$$+%+..",
+"..+@$$$$$$++++&.",
+"..+@$+*=-+++;+>.",
+"..+@+++,+++''+&.",
+"..+@=+++++)!~+..",
+"..+@-{+++]^//+..",
+"..+@$(_+]^_#:+..",
+"..+@<[#/}/#[:+..",
+"..+#:::/%/:::+..",
+"..++++++++++++..",
+"................",
+" .............. "};
+
+
+/* XPM */
+static char * checkbox_unchecked_xpm[] = {
+"12 12 14 1",
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
+"@	c #A4A5A4",
+"#	c #DEE2DE",
+"$	c #7B7D7B",
+"%	c #DEDEDE",
+"&	c #D5D6D5",
+"*	c #CDD2CD",
+"=	c #CDCACD",
+"-	c #C5C6C5",
+";	c #C5C2C5",
+">	c #BDBEBD",
+",	c #ACAEAC",
+"............",
+".+++++++++@.",
+".+########$.",
+".+%%%%%%%%$.",
+".+&&&&&&&&$.",
+".+********$.",
+".+========$.",
+".+--;---;-$.",
+".+>>>>>>>>$.",
+".+,,,,,,,,$.",
+".@$$$$$$$$$.",
+"............"};
+
+static void
+refresh_clist_row (GNCGenTransaction *gui, 
+		   int row_number, GNCImportTransInfo *info);
+
+void gnc_gen_trans_list_delete (GNCGenTransaction *info)
+{
+  if (info == NULL) 
+    return;
+
+  gnc_import_Settings_delete (info->user_settings);
+  gtk_widget_destroy (GTK_WIDGET (info->dialog));
+  g_free (info);
+}
+
+static void 
+on_matcher_ok_clicked (GtkButton *button,
+			   gpointer user_data)
+{
+  GNCGenTransaction *info = user_data;
+  g_assert (info);
+  /*   DEBUG ("Begin") */
+  gnc_import_process_trans_clist (GTK_CLIST (info->clist), NULL);
+  /* DEBUG ("Deleting") */
+  gnc_gen_trans_list_delete (info);
+  /* DEBUG ("End") */
+}
+
+static void 
+on_matcher_cancel_clicked (GtkButton *button,
+			   gpointer user_data)
+{
+  GNCGenTransaction *info = user_data;
+  gnc_gen_trans_list_delete (info);
+}
+
+static void 
+run_account_picker_dialog (GNCGenTransaction *info, 
+			   gint row, GNCImportTransInfo *trans_info)
+{
+  Account *old_acc, *new_acc;
+  g_assert (trans_info);
+  old_acc = gnc_import_TransInfo_get_destacc (trans_info);
+  new_acc = gnc_import_select_account(NULL,
+				      TRUE,
+				      _("A destination split for the transaction you selected."),
+				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
+				      NO_TYPE,
+				      old_acc);
+  gnc_import_TransInfo_set_destacc (trans_info,
+				    new_acc,
+				    TRUE);
+  refresh_clist_row (info, row, trans_info);
+}
+
+static void 
+run_match_dialog (GNCGenTransaction *info, 
+		  gint row, GNCImportTransInfo *trans_info)
+{
+  gnc_import_match_picker_run_and_close (trans_info);
+  refresh_clist_row (info, row, trans_info);
+}
+
+static void
+clist_select_row_cb (GtkCList *clist,
+		     gint row_number,
+		     gint column,
+		     GdkEventButton *event,
+		     gpointer user_data) 
+{
+  GNCGenTransaction *gui = user_data; 
+  GNCImportTransInfo *trans_info;
+  gboolean should_refresh = TRUE;
+  DEBUG("row_number: %d%s%d",row_number,", column: ",column);
+  trans_info = gtk_clist_get_row_data (clist, row_number);
+  if (trans_info == NULL)
+    return;
+
+  switch(column)
+    {
+    case DOWNLOADED_CLIST_ACTION_ADD:
+     if( gnc_import_TransInfo_get_action(trans_info)==GNCImport_ADD 
+	 && gnc_import_Settings_get_action_skip_enabled (gui->user_settings)==TRUE)
+       {
+	 gnc_import_TransInfo_set_action(trans_info, GNCImport_SKIP);
+       }
+     else
+       {
+	 gnc_import_TransInfo_set_action(trans_info, GNCImport_ADD);
+       }
+      break;
+    case DOWNLOADED_CLIST_ACTION_CLEAR:
+      if( gnc_import_TransInfo_get_action(trans_info)==GNCImport_CLEAR
+	  && gnc_import_Settings_get_action_skip_enabled (gui->user_settings)==TRUE)
+	{
+	  gnc_import_TransInfo_set_action(trans_info, GNCImport_SKIP);
+	}
+      else
+	{
+	  gnc_import_TransInfo_set_action(trans_info, GNCImport_CLEAR);
+	}
+      break;
+    case DOWNLOADED_CLIST_ACTION_EDIT: 
+      if( gnc_import_TransInfo_get_action(trans_info)==GNCImport_EDIT
+	  && gnc_import_Settings_get_action_skip_enabled (gui->user_settings)==TRUE)
+	{
+	  gnc_import_TransInfo_set_action(trans_info, GNCImport_SKIP);
+	}
+      else
+	{
+	  gnc_import_TransInfo_set_action(trans_info, GNCImport_EDIT);
+	}
+      break;
+    case DOWNLOADED_CLIST_ACTION_INFO:
+      switch(gnc_import_TransInfo_get_action (trans_info))
+	{
+	case GNCImport_ADD:
+	  if(gnc_import_TransInfo_is_balanced(trans_info)==FALSE)
+	    {
+	      run_account_picker_dialog (gui, row_number, trans_info);
+	    }
+	  break;
+	case GNCImport_CLEAR:
+	  run_match_dialog (gui, row_number, trans_info);
+	  break;
+	case GNCImport_SKIP:
+	  /*The information displayed is only informative, until you select an action*/
+	  break;
+	default:
+	  PERR("I don't know what to do! (Yet...)");
+	}
+      break;
+    default:
+      /*Do nothing for other columns*/
+      should_refresh = FALSE;
+    }
+  
+  if(should_refresh == TRUE)/*If there was a change, refresh the GUI for that row*/
+    {
+      refresh_clist_row (gui, row_number, trans_info);
+    }
+  gtk_clist_unselect_row (clist,
+			  row_number,
+			  column);
+}
+
+void gnc_gen_trans_list_freeze (GNCGenTransaction *gui)
+{
+  g_assert (gui);
+  gtk_clist_freeze (GTK_CLIST (gui->clist));
+}
+
+void gnc_gen_trans_list_thaw (GNCGenTransaction *gui)
+{
+  g_assert (gui);
+  gtk_clist_thaw (GTK_CLIST (gui->clist));
+}
+
+GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent, 
+					   const gchar* heading,
+					   gboolean all_from_same_account)
+{
+  GNCGenTransaction *info;
+  GladeXML *xml;
+  GtkWidget *heading_label;
+  
+  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+
+  info = g_new0 (GNCGenTransaction, 1);
+
+  /* Initialize user Settings. */
+  info->user_settings = gnc_import_Settings_new ();
+
+  /* Initialize the GnomeDialog. */
+  xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");
+
+  g_assert
+    (info->dialog = glade_xml_get_widget (xml, "transaction_matcher"));
+  g_assert 
+    (info->clist = glade_xml_get_widget (xml, "downloaded_clist"));
+  g_assert
+    (heading_label = glade_xml_get_widget (xml, "heading_label"));
+
+  /*if (parent)
+    gnome_dialog_set_parent (GNOME_DIALOG (info->dialog), 
+			     GTK_WINDOW (parent));*/
+
+  /* Connect signals */
+  glade_xml_signal_connect_data(xml, "downloaded_transaction_select_cb",
+				GTK_SIGNAL_FUNC(clist_select_row_cb), 
+				info);
+  glade_xml_signal_connect_data(xml, "on_matcher_ok_clicked", 
+				GTK_SIGNAL_FUNC(on_matcher_ok_clicked),
+				info);
+  glade_xml_signal_connect_data(xml, "on_matcher_cancel_clicked", 
+				GTK_SIGNAL_FUNC(on_matcher_cancel_clicked),
+				info);
+
+  /*Initialise pixmaps*/
+  info->fleche_pixmap =  gdk_pixmap_colormap_create_from_xpm_d (NULL,
+								gtk_widget_get_colormap(info->dialog),
+								NULL,
+								NULL,
+								fleche_xpm);
+  info->checkbox_checked_pixmap =  gdk_pixmap_colormap_create_from_xpm_d (NULL,
+									  gtk_widget_get_colormap(info->dialog),
+									  NULL,
+									  NULL,
+									  checkbox_checked_xpm);
+  info->checkbox_unchecked_pixmap =  gdk_pixmap_colormap_create_from_xpm_d (NULL,
+									    gtk_widget_get_colormap(info->dialog),
+									    NULL,
+									    NULL,
+									    checkbox_unchecked_xpm);
+  
+  /*Ajust column size*/
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_DATE,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_AMOUNT,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_IMBALANCE,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_ACTION_ADD,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_ACTION_CLEAR,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_ACTION_EDIT,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
+				    DOWNLOADED_CLIST_ACTION_INFO,
+				    TRUE);
+  /*Set column visibility*/
+  if(all_from_same_account==TRUE)
+    {
+      gtk_clist_set_column_visibility (GTK_CLIST (info->clist),
+				       DOWNLOADED_CLIST_ACCOUNT,
+				       FALSE);
+    }
+  if(gnc_import_Settings_get_action_edit_enabled (info->user_settings)==FALSE)
+    {
+      gtk_clist_set_column_visibility (GTK_CLIST (info->clist),
+				       DOWNLOADED_CLIST_ACTION_EDIT,
+				       FALSE);
+    }
+  
+
+  if (heading)
+    gtk_label_set_text (GTK_LABEL (heading_label), heading);
+  
+  /* Hide on close instead of destroy since we still need the values
+     from the boxes. */
+  /*gnome_dialog_close_hides (GNOME_DIALOG (info->dialog), TRUE);*/
+  gtk_widget_show_all (GTK_WIDGET (info->dialog));
+  return info;
+}
+
+gboolean gnc_gen_trans_list_run (GNCGenTransaction *info) 
+{
+  gboolean result;
+  
+  /* DEBUG("Begin"); */
+
+  result = gnome_dialog_run_and_close (GNOME_DIALOG (info->dialog));
+
+  /* DEBUG("Result was %d", result); */
+
+  /* No destroying here since the dialog was already destroyed through
+     the ok_clicked handlers. */
+  return result;
+}
+
+/* For cleaning up dangling row data. */
+static void
+trans_clist_row_destroy_cb (gpointer data)
+{
+  GNCImportTransInfo * transaction_info = data;
+  /*DEBUG("Begin");*/
+  gnc_import_TransInfo_delete (transaction_info);
+}
+
+
+static void free_clist_row_text (GNCGenTransaction *gui, 
+			  int row_number)
+{
+  gchar *tmp;
+  gint i;
+
+  DEBUG("Begin");
+  g_assert (gui); 
+  for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
+    {
+      tmp=NULL;
+      if(gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
+			     i, 
+			     &tmp)==1)
+	{
+	  g_free(tmp);
+	}
+    }
+}
+
+static char ** gen_clist_row_text (GNCImportTransInfo *info)
+{
+  static char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
+  const char * AUTO_SELECTED_TEXT=_("Auto-Selected");
+  const char * MANUALY_SELECTED_TEXT=_("User-Selected");
+  gint i;
+  gchar *tmp;
+  const char *select_origin;
+  DEBUG("Begin");
+  g_assert (info);
+  for(i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
+    {
+      text[i]=NULL;
+    }
+
+/*  row_number = gtk_clist_find_row_from_data(matcher->downloaded_clist,
+					    transaction_info);*/
+
+  /* Note that ALL strings must be duplicated with g_strdup or equivalent, so that they can
+     be g_freed by free_clist_row_text*/
+  
+  /*Account:*/
+  text[DOWNLOADED_CLIST_ACCOUNT] = g_strdup(xaccAccountGetName(xaccSplitGetAccount(gnc_import_TransInfo_get_fsplit (info))));
+
+  /*Date*/
+
+  text[DOWNLOADED_CLIST_DATE] = g_strdup( xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) ));
+  
+  /*Amount*/
+  text[DOWNLOADED_CLIST_AMOUNT] = g_strdup(xaccPrintAmount (xaccSplitGetAmount (gnc_import_TransInfo_get_fsplit(info) ), 
+							     gnc_split_amount_print_info(gnc_import_TransInfo_get_fsplit(info), TRUE) 
+							    ) );
+  
+  /*Description*/
+  text[DOWNLOADED_CLIST_DESCRIPTION] = g_strdup(xaccTransGetDescription(gnc_import_TransInfo_get_trans(info) ) );
+  
+  /*Memo*/
+  text[DOWNLOADED_CLIST_MEMO] = g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) ) );
+  
+  /*Imbalance*/
+  text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup(xaccPrintAmount (xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) ), 
+							      gnc_default_print_info (TRUE) )
+					     );
+  /*Actions*/
+  text[DOWNLOADED_CLIST_ACTION_ADD] = g_strdup("");
+  text[DOWNLOADED_CLIST_ACTION_CLEAR] = g_strdup("");
+  text[DOWNLOADED_CLIST_ACTION_EDIT] = g_strdup("");
+  
+  
+  switch(gnc_import_TransInfo_get_action(info))
+    {
+    case GNCImport_ADD:
+      if(gnc_import_TransInfo_is_balanced(info)==TRUE)
+	{
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add the transaction (Already balanced)"));
+	}
+      else
+	{
+	  if (gnc_import_TransInfo_get_destacc (info) != NULL) {
+	    tmp = xaccAccountGetFullName 
+	      (gnc_import_TransInfo_get_destacc (info),
+	       gnc_get_account_separator ());
+	    if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
+	      {
+		select_origin=MANUALY_SELECTED_TEXT;
+	      }
+	    else
+	      {
+		select_origin=AUTO_SELECTED_TEXT;
+	      }
+	    text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (%s) account \"%s\""),select_origin,tmp);
+	    free (tmp);
+	  }
+	  else
+	    {
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add UNBALANCED!"));
+	    }
+	}
+      break;
+    case GNCImport_CLEAR: 
+      if(gnc_import_TransInfo_get_selected_match(info))
+	{
+	  if(gnc_import_TransInfo_get_match_selected_manually(info)==TRUE)
+	    {
+	      select_origin=MANUALY_SELECTED_TEXT;
+	    }
+	  else
+	    {
+	      select_origin=AUTO_SELECTED_TEXT;
+	    }
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Reconcile the (%s) match"),select_origin);
+	}
+      else
+	{
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select other action or a transaction to reconcile"));
+	}
+      break;
+    case GNCImport_EDIT: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
+      break;
+    case GNCImport_SKIP: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Will NOT import: inconclusive match or SKIP selected"));
+      break;
+    default:
+      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("WRITEME, this is an unknown action");
+    }
+  
+  return text;
+}
+
+
+static void
+refresh_clist_row (GNCGenTransaction *gui, 
+		   int row_number, GNCImportTransInfo *info)
+{
+  static char ** text;
+  gint i;
+  g_assert (gui);
+  g_assert (info);
+  
+  gnc_gen_trans_list_freeze(gui);
+  
+/*What the hell, neither freeing the memory used by the previous values here or elsewhere seems to work, WHY?*/
+
+  /*free_clist_row_text (gui, 
+		       row_number);*/
+  text=gen_clist_row_text (info);
+
+  for (i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
+    {
+      /*DEBUG("gtk_clist_set_text %d",i);*/
+      /*gtk_clist_get_text (GTK_CLIST (gui->clist), row_number, 
+			  i, 
+			  &tmp);*/
+      gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
+			  i, 
+			  text[i]);
+      /*g_free(tmp);*/
+    }  
+
+
+  if(gnc_import_TransInfo_get_action(info)==GNCImport_ADD)
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_ADD,
+			     text[DOWNLOADED_CLIST_ACTION_ADD],
+			     3,
+			     gui->checkbox_checked_pixmap,
+			     NULL);
+
+      if(gnc_import_TransInfo_is_balanced(info)==FALSE)
+	{
+	  /*Show the arrow button*/
+	  gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+				 DOWNLOADED_CLIST_ACTION_INFO,
+				 text[DOWNLOADED_CLIST_ACTION_INFO],
+				 3,
+				 gui->fleche_pixmap,
+				 NULL);
+	}
+
+    }
+  else
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_ADD,
+			     text[DOWNLOADED_CLIST_ACTION_ADD],
+			     3,
+			     gui->checkbox_unchecked_pixmap,
+			     NULL);
+    }
+  
+  if(gnc_import_TransInfo_get_action(info)==GNCImport_SKIP)
+    {      
+      /*Show the best match's confidence pixmap in the info column*/
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_INFO,
+			     text[DOWNLOADED_CLIST_ACTION_INFO],
+			     3,
+			     gen_probability_pixmap( gnc_import_MatchInfo_get_probability 
+						     ( gnc_import_TransInfo_get_selected_match (info)),
+						     gui->user_settings, 
+						     GTK_WIDGET(gui->clist)),
+			     NULL);
+    }
+
+  if(gnc_import_TransInfo_get_action(info)==GNCImport_CLEAR)
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_CLEAR,
+			     text[DOWNLOADED_CLIST_ACTION_CLEAR],
+			     3,
+			     gui->checkbox_checked_pixmap,
+			     NULL);
+      /*Show the best match's confidence pixmap in the info column*/
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_INFO,
+			     text[DOWNLOADED_CLIST_ACTION_INFO],
+			     3,
+			     gen_probability_pixmap( gnc_import_MatchInfo_get_probability 
+						     ( gnc_import_TransInfo_get_selected_match (info)),
+						     gui->user_settings, 
+						     GTK_WIDGET(gui->clist)),
+			     NULL);
+    }
+  else
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_CLEAR,
+			     text[DOWNLOADED_CLIST_ACTION_CLEAR],
+			     3,
+			     gui->checkbox_unchecked_pixmap,
+			     NULL);
+    }
+
+  if(gnc_import_TransInfo_get_action(info)==GNCImport_EDIT)
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_EDIT,
+			     text[DOWNLOADED_CLIST_ACTION_EDIT],
+			     3,
+			     gui->checkbox_checked_pixmap,
+			     NULL);
+    }
+  else
+    {
+      gtk_clist_set_pixtext (GTK_CLIST (gui->clist), row_number,
+			     DOWNLOADED_CLIST_ACTION_EDIT,
+			     text[DOWNLOADED_CLIST_ACTION_EDIT],
+			     3,
+			     gui->checkbox_unchecked_pixmap,
+			     NULL);
+    }
+
+  gtk_clist_set_row_height        (GTK_CLIST (gui->clist),
+				   24);
+
+  
+  gnc_gen_trans_list_thaw(gui);
+
+
+}
+
+void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans)
+{
+  GNCImportTransInfo * transaction_info = NULL;
+  gint row_number;
+  g_assert (gui);
+  g_assert (trans);
+  
+
+  if (gnc_import_exists_online_id (trans))
+    return;
+  else
+    {
+      transaction_info = gnc_import_TransInfo_new(trans, NULL);
+      
+      gnc_import_TransInfo_init_matches (transaction_info, 
+					 gui->user_settings);
+
+      row_number = gtk_clist_append(GTK_CLIST (gui->clist),
+				    gen_clist_row_text (transaction_info));
+      gtk_clist_set_row_data_full(GTK_CLIST (gui->clist),
+				  row_number,
+				  transaction_info,
+				  trans_clist_row_destroy_cb);
+      refresh_clist_row (gui, 
+			 row_number, 
+			 transaction_info);
+    }
+  return;
+}/* end gnc_import_add_trans() */
+

@@ -1,10 +1,4 @@
 /********************************************************************\
- * Commodity-matcher.c --       * 
- * See file generic-import-design.txt for         *
- * description                                                      *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -22,8 +16,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
- * \brief Generic Commodity matching functionnality
+/** @file
+  @brief import-commodity-matcher.h: A Generic commodity matcher/picker
+  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
  */
 #define _GNU_SOURCE
 
@@ -37,7 +32,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "Commodity-matcher.h"
+#include "import-commodity-matcher.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-commodity.h"

@@ -1,12 +1,30 @@
-/**@file
- * \brief Generic import mapper service, maps strings->accounts
- *
- An import mapper service that stores Account Maps for the
- generic importer.  This allows importers to map various
- "strings" to Gnucash accounts in a generic manner.
- \author Derek Atkins <derek@ihtfp.com>
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/** @file
+    @brief Generic import mapper service, maps strings->accounts
+    *
+    import-match-map.c: An import mapper service that stores Account Maps for the
+    generic importer.  This allows importers to map various
+    "strings" to Gnucash accounts in a generic manner.
+    @author Copyright (C) 2002 Derek Atkins <derek@ihtfp.com>
  */
-#include "gnc-import-match-map.h"
+#include "import-match-map.h"
 #include "kvp_frame.h"
 
 struct _GncImportMatchMap {

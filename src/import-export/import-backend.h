@@ -22,16 +22,18 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/**@file
- * \brief Transaction duplicate matching functionnality
- */
+/** @file
+    @brief import-backend.h: Generic importer backend interface
+    @author Copyright (C) 2002 Benoit Grégoire,  Christian Stimming
+*/
  
 #ifndef TRANSACTION_MATCHER_H
 #define TRANSACTION_MATCHER_H
 
 #include <gtk/gtk.h>
 #include "Transaction.h"
-#include "gnc-import-match-map.h"
+#include "import-match-map.h"
+#include "import-settings.h"
 
 typedef struct _transactioninfo GNCImportTransInfo;
 typedef struct _matchinfo GNCImportMatchInfo;
@@ -40,58 +42,11 @@ typedef enum _action {
   GNCImport_SKIP,
   GNCImport_ADD,
   GNCImport_CLEAR,
-  GNCImport_REPLACE,
+  GNCImport_EDIT,
   GNCImport_LAST_ACTION,
   GNCImport_INVALID_ACTION
 } GNCImportAction;
 /* Note: If you modify this, modify also get_next_action(). */
-
-
-/************************************************************************
- * GUI Functions 
- ************************************************************************/
-
-/** @name Benoitg's Transaction Matcher 
- *
- * Original Transaction Matcher (by benoitg), where the actual GUI
- * objects are not visible from the outside since they are kept in
- * static data.
- */
-/*@{*/
-/** Your import module should create a new transaction in the current book,
-   add as many splits as it knows about, and associate each split with an 
-   account.  It should then call gnc_import_add_trans() with that transaction
-   if a transaction with the same online_id kvp_frame exists in any of the
-   transaction's split's accounts, the transaction will be destroyed.  
-   Otherwise it will be added.
-   Not yet implemented:  GUI to balance the transaction using heuristics
-*/
-void gnc_import_add_trans (Transaction *trans);
-/*@}*/
-
-/** @name Match_Picker Dialog
- *
- * A dialog where the user should pick the best match for *one* given
- * transaction.
- */
-/*@{*/
-/** 
- * Run a match_picker dialog so that the selected-MatchInfo in the
- * given trans_info is updated accordingly. This functions will only
- * return after the user clicked Ok, Cancel, or Window-Close.
- *
- * The dialog uses the same functionality as the one created through
- * gnc_import_add_trans(), except that its two listviews are shown
- * above one another, and the listview of downloaded transactions
- * shows only one transaction, namely, the given trans_info.
- *
- * This function is used from the gnc-gen-transaction code.
- *
- * @param trans_info The TransInfo for which the user is supposed to
- * pick a matching transaction. */
-void 
-gnc_import_match_picker_run_and_close (GNCImportTransInfo *trans_info);
-/*@}*/
 
 /************************************************************************
  * @name Non-GUI Functions 
@@ -149,10 +104,7 @@ void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
  * exact matches. */
 void 
 gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
-				   gint clear_threshold, 
-				   gint add_threshold,
-				   gint process_threshold, 
-				   double fuzzy_amount_difference);
+				   GNCImportSettings *settings);
 
 /** This function is intended to be called when the importer dialog is
  * finished. It iterates through the GtkCList of imported transaction
@@ -172,6 +124,24 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 void
 gnc_import_process_trans_clist (GtkCList *clist, 
 				GncImportMatchMap *matchmap);
+
+/** This function generates a new pixmap representing a match score.
+    It is a series of vertical bars of different colors.  
+    -Below or at the add_threshold the bars are red
+    -Above or at the clear_threshold the bars are green
+    -Between the two threshold the bars are yellow
+ 
+    @param score The score for which to generate a pixmap.
+
+    @param settings The user settings from which to get the threshold
+
+    @param widget The parent widget in which the pixmap will eventually
+    be added.  Will be used to generate the colormap.
+ */
+GdkPixmap* gen_probability_pixmap (gint score, 
+				   GNCImportSettings *settings,
+				   GtkWidget * widget);
+
 /*@}*/
 
 
@@ -196,43 +166,63 @@ gnc_import_process_trans_clist (GtkCList *clist,
 GNCImportTransInfo *
 gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap);
 
-/* Destructor */
+/** Destructor */
 void gnc_import_TransInfo_delete (GNCImportTransInfo *info);
 
-/* Returns the stored list of possible matches. */
+/** Returns the stored list of possible matches. */
 GList *gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info);
 
-/* Returns the transaction of this TransInfo. */
+/** Returns the transaction of this TransInfo. */
 Transaction *gnc_import_TransInfo_get_trans (const GNCImportTransInfo *info);
 
-/* Returns the first split of the transaction of this TransInfo. */
+/** Returns if the transaction stored in the TransInfo is currently balanced. */
+gboolean gnc_import_TransInfo_is_balanced (const GNCImportTransInfo *info);
+
+/** Returns the first split of the transaction of this TransInfo. */
 Split *gnc_import_TransInfo_get_fsplit (const GNCImportTransInfo *info);
 
-/* Returns the currently selected match in this TransInfo. */
+/** Returns the currently selected match in this TransInfo. */
 GNCImportMatchInfo *
 gnc_import_TransInfo_get_selected_match (const GNCImportTransInfo *info);
 
-/* Sets the currently selected match in this TransInfo. */
+/** Sets the currently selected match in this TransInfo.
+    @param selected_manually TRUE or FALSE; Was this match set as a result of a selection 
+    by the user or by an algorithm?
+*/
 void
 gnc_import_TransInfo_set_selected_match (GNCImportTransInfo *info,
-				       GNCImportMatchInfo *match);
+					 GNCImportMatchInfo *match,
+					 gboolean selected_manually);
 
-/* Returns the currently selected action for this TransInfo. */
+/** Returns if the currently selected match was selected by the user. */
+gboolean
+gnc_import_TransInfo_get_match_selected_manually (const GNCImportTransInfo *info);
+
+/** Returns the currently selected action for this TransInfo. */
 GNCImportAction
 gnc_import_TransInfo_get_action (const GNCImportTransInfo *info);
 
-/* Set the action for this TransInfo. */
+/** Set the action for this TransInfo. Also sets the previous action. */
 void
 gnc_import_TransInfo_set_action (GNCImportTransInfo *info, 
 				 GNCImportAction action);
 
-/* Returns the 'other account' of this transaction. May return NULL. */
+/** Returns the 'other account' of this transaction. May return NULL. */
 Account *
 gnc_import_TransInfo_get_destacc (const GNCImportTransInfo *info);
 
-/* Set the 'other account' of this transaction. May be set to NULL. */
+/** Set the 'other account' of this transaction (used for auto-balance if needed). May be set to NULL.
+    @param selected_manually TRUE or FALSE; Was this account set as a result of a selection 
+    by the user or by an algorithm?
+*/
 void 
-gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info, Account *acc);
+gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
+				  Account *acc,
+				  gboolean selected_manually);
+
+/** Returns if the currently selected destination account for auto-matching was selected by the user. */
+gboolean
+gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *info);
 
 /*@}*/
 
@@ -242,21 +232,12 @@ gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info, Account *acc);
 /* Get the split ('this-side split') of this MatchInfo. */
 Split * 
 gnc_import_MatchInfo_get_split (const GNCImportMatchInfo * info);
+
+
+/* Get the probability (confidence level) of this MatchInfo. 
+@param info Can be NULL, in which case the function returns 0*/
+gint 
+gnc_import_MatchInfo_get_probability (const GNCImportMatchInfo * info);
 /*@}*/
-
-
-/* Transaction who's best match probability is equal or higher than
-   this will reconcile their best match by default */
-#define DEFAULT_CLEAR_THRESHOLD 5
-/* Transaction who's best match probability is below or equal to 
-   this will be added as new by default */
-#define DEFAULT_ADD_THRESHOLD 2
-/* Transaction's match probability must be at least this much to be 
-   displayed in the match list.  Dont set this to 0 except for 
-   debugging purposes, otherwise all transactions of every accounts 
-   will be shown in the list */
-#define DEFAULT_DISPLAY_THRESHOLD 1
-#define MATCH_ATM_FEE_THRESHOLD 3.00
-
 
 #endif

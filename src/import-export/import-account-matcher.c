@@ -1,10 +1,4 @@
 /********************************************************************\
- * generic-import.c -- Functions and utilities to help writing      * 
- * import modules.   See file generic-import-design.txt for         *
- * description                                                      *
- *                        (GnuCash)                                 *
- * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -23,7 +17,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /**@file
- * \brief Account matching and account picking functionnality
+ * \brief Account-matcher.h: A very generic and flexible account matcher/picker
+ \author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #define _GNU_SOURCE
 
@@ -36,9 +31,8 @@
 #include <glade/glade.h>
 
 #include <stdlib.h>
-#include "Account-matcher.h"
-#include "gnc-gen-utilities.h"
-#include "Account.h"
+#include "import-account-matcher.h"
+#include "import-utilities.h"
 #include "dialog-utils.h"
 #include "AccWindow.h"
 

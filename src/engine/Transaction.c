@@ -666,6 +666,21 @@ DxaccSplitSetShareAmount (Split *s, double damt)
 }
 
 void 
+DxaccSplitSetAmount (Split *s, double damt) 
+{
+  gnc_numeric amt = double_to_gnc_numeric(damt, 
+                                          get_currency_denom(s), 
+                                          GNC_RND_ROUND);
+  if (!s) return;
+  check_open (s->parent);
+
+  s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
+
+  mark_split (s);
+  gen_event (s);
+}
+
+void 
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
@@ -1322,7 +1337,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
        * doesn't mean the denominators are the same! */
       if (base_currency &&
           gnc_commodity_equiv(currency, base_currency)) {
-        value = gnc_numeric_add(value, s->value,
+        value = gnc_numeric_add(value, s->amount,
                                 GNC_DENOM_AUTO, GNC_DENOM_LCD);
       }
       else if (base_currency && 

@@ -14,8 +14,8 @@
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "Transaction Matcher") (N_ "Enable REPLACE match action")
-  "b" (N_ "Enable the REPLACE action in the transaction matcher.  If the REPLACE action is selected, the downloaded transaction's data will replace the selected match")
+  (N_ "Transaction Matcher") (N_ "Enable EDIT match action")
+  "b" (N_ "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED")
   #f))
 
 (gnc:register-configuration-option
@@ -49,4 +49,15 @@
   6.0 ;; upper bound
   0.0 ;; number of decimals
   1.0 ;; step size
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-number-range-option
+  (N_ "Transaction Matcher") (N_ "Commercial ATM fees threshold")
+  "g" (N_ "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add it's fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.")
+  2.00 ;; default
+  0.0 ;; lower bound
+  1000.0 ;; upper bound
+  2.0 ;; number of decimals
+  0.01 ;; step size
   ))

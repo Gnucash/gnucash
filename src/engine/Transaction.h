@@ -357,11 +357,17 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  *     update the share price and the number of shares. This 
  *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
  *     followed by and xaccSplitSetAmount(), except that it incurs the
- *     processing overhead of balancing only once, instead of twice.  */
+ *     processing overhead of balancing only once, instead of twice.  
+ *
+ * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
+ * behavior.  The later divides the value given by the current value and set's 
+ * the result as the new split value.  Is that a but or just strange undocumented
+ * feature?  Benoit Grégoire 2002-6-12 */
 
 void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
                                                double amount);
 void         DxaccSplitSetShareAmount (Split *split, double amount);
+void         DxaccSplitSetAmount (Split *s, double damt); 
 void         DxaccSplitSetSharePrice (Split *split, double price);
 void         DxaccSplitSetValue (Split *split, double value);
 void         DxaccSplitSetBaseValue (Split *split, double value,

@@ -1,3 +1,56 @@
+2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	Huge patch, this is the new generic import 
+	architecture/transaction matcher.  Many old
+	files were renamed, split or deleted.
+	
+	* src/engine/Transaction.c,h: 
+	- Add a DxaccSplitSetAmount function, 
+	- Fix a bug in xaccSplitsComputeValue (Split values were 
+	sometimes being summed, which is illogical) that caused 
+	xaccTransGetImbalance to sometimes return incorrect values.
+	Somebody please review this.  Playing in the engine during
+	freeze isn't ideal.
+	
+	* src/import-export/import-backend.c,h: There is now a 
+	real backend, completely independent of the GUI.
+
+	* src/import-export/gnc-gen-transaction.c: This is Christian's
+	old matcher, I tried to maintain compatibility, but couldn't 
+	really test.  Please note that there is some code 
+	simplification that could be done there now that there is a 
+	clean backend, and that some values passed between the functions
+	might no longuer have any effect.
+	
+	* src/import-export/ofx/gnc-ofx-import.c:  Update for new 
+	matcher.  Use the currency reported by libofx and 
+	xaccSpiltSetBaseValue when adding a banking/credit card 
+	transaction.
+
+	* src/import-export/import-account-matcher.c,h: This is a
+	very generic and flexible account matcher/picker.
+	
+	* src/import-export/import-commodity-matcher.c,h: This is
+	a generic commodity matcher/picker.
+
+	* src/import-export/import-main-matcher.c,h: This is the 
+	main transaction matcher GUI. It's mostly feature complete
+	and should be fairly stable, but probably leaks memory.
+	
+	* src/import-export/import-match-map.c,h: Derek Atkin's
+	generic string/account matching infrastructure.
+	
+	* src/import-export/import-match-picker.c,h:  This is the 
+	interface to pick a matching transaction.  It has been 
+	completely ripped from the backend.
+	
+	* src/import-export/import-settings.c,h:  All user
+	settings (or compiled-in settings) are now abstracted in 
+	an opaque structure with getter functions.
+
+	* src/import-export/import-utilities.c:	These are utility
+	functions to help import module writers. 
+
 2002-12-06  Christian Stimming  <stimming@tuhh.de>
 
 	* po/nl.po, po/uk.po: Updated translations by Hendrik-Jan Heins
