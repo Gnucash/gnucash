@@ -62,6 +62,9 @@ typedef const char * QofIdTypeConst;
 #define QOF_ID_NULL           "null"
 #define QOF_ID_SESSION        "Session"
 
+/* simple,cheesy cast but holds water for now */
+#define QOF_ENTITY(object) ((QofEntity *)(object))
+
 typedef struct QofEntity_s QofEntity;
 typedef struct QofCollection_s QofCollection;
 
@@ -79,11 +82,15 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
 
+GUID * qof_entity_get_guid (QofEntity *);
+
+/** collections of entities */
 QofCollection * qof_collection_new (QofIdType type);
 void qof_collection_destroy (QofCollection *col);
 
 /** Find the entity going only from its guid */
 QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
+
 
 /* Callback type for qof_entity_foreach */
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);

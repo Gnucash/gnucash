@@ -92,6 +92,12 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
   qof_collection_insert_entity (ent->collection, ent);
 }
 
+GUID *
+qof_entity_get_guid (QofEntity *ent)
+{
+  return &ent->guid;
+}
+
 /* =============================================================== */
 
 static guint
