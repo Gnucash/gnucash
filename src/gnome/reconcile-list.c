@@ -58,6 +58,8 @@ static void gnc_reconcile_list_unselect_row(GtkCList *clist, gint row,
 					    gint column, GdkEvent *event);
 static void gnc_reconcile_list_destroy(GtkObject *object);
 static void gnc_reconcile_list_fill(GNCReconcileList *list);
+static void gnc_reconcile_click_column_cb(GtkWidget *w, gint column,
+					  gpointer data);
 
 
 GtkType
@@ -156,6 +158,28 @@ update_toggle (GtkCList *list, gint row)
   gnc_clist_set_check (list, row, 4, reconciled);
 }
 
+static GtkWidget *
+gnc_reconcile_list_column_title (GtkCList *clist, gint column,
+				 const gchar *title)
+{
+  GtkWidget *hbox, *label, *arrow;
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(hbox);
+  gtk_clist_set_column_widget(clist, column, hbox);
+
+  label = gtk_label_new(title);
+  gtk_widget_show(label);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_ETCHED_IN);
+  gtk_widget_show(arrow);
+  gtk_widget_set_sensitive(arrow, column == 0);
+  gtk_box_pack_end(GTK_BOX(hbox), arrow, FALSE, FALSE, 0);
+
+  return(arrow);
+}
+
 static void
 gnc_reconcile_list_init (GNCReconcileList *list)
 {
@@ -186,9 +210,22 @@ gnc_reconcile_list_init (GNCReconcileList *list)
 
   gtk_clist_construct (clist, list->num_columns, titles);
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
+
+  list->date_arrow   = gnc_reconcile_list_column_title(clist, 0, titles[0]);
+  list->num_arrow    = gnc_reconcile_list_column_title(clist, 1, titles[1]);
+  list->desc_arrow   = gnc_reconcile_list_column_title(clist, 2, titles[2]);
+  list->amount_arrow = gnc_reconcile_list_column_title(clist, 3, titles[3]);
+
+  gtk_clist_set_column_justification (clist, 1, GTK_JUSTIFY_CENTER);
   gtk_clist_set_column_justification (clist, 3, GTK_JUSTIFY_RIGHT);
   gtk_clist_set_column_justification (clist, 4, GTK_JUSTIFY_CENTER);
-  gtk_clist_column_titles_passive (clist);
+  gtk_clist_column_title_passive (clist, 4);
+
+  gtk_signal_connect (GTK_OBJECT (clist), "click_column",
+		      GTK_SIGNAL_FUNC(gnc_reconcile_click_column_cb), NULL);
+
+  list->key = BY_STANDARD;
+  list->increasing = TRUE;
 
   style = gtk_widget_get_style (GTK_WIDGET(list));
 
@@ -721,21 +758,58 @@ gnc_reconcile_list_changed (GNCReconcileList *list)
 void
 gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 {
+  GtkWidget *arrow;
+
   g_return_if_fail (list != NULL);
   g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
   g_return_if_fail (list->query != NULL);
+
+  list->increasing = (list->key == key) ? !list->increasing : TRUE;
+  list->key = key;
+
+  gtk_widget_set_sensitive(list->date_arrow, FALSE);
+  gtk_widget_set_sensitive(list->num_arrow, FALSE);
+  gtk_widget_set_sensitive(list->amount_arrow, FALSE);
+  gtk_widget_set_sensitive(list->desc_arrow, FALSE);
+  switch (key) {
+    default:
+    case BY_STANDARD:	arrow = list->date_arrow;    break;
+    case BY_NUM:	arrow = list->num_arrow;     break;
+    case BY_AMOUNT:	arrow = list->amount_arrow;  break;
+    case BY_DESC:	arrow = list->desc_arrow;    break;
+  }
+
+  gtk_arrow_set(GTK_ARROW(arrow),
+		list->increasing ? GTK_ARROW_DOWN : GTK_ARROW_UP,
+		GTK_SHADOW_ETCHED_IN);
+  gtk_widget_set_sensitive(arrow, TRUE);
 
   xaccQuerySetSortOrder (list->query, key,
                          (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
                          BY_NONE);
 
-  if (list->list_type == RECLIST_DEBIT)
-    return;
-
   xaccQuerySetSortIncreasing (list->query,
-                              !(key == BY_AMOUNT),
-                              !(key == BY_AMOUNT),
-                              !(key == BY_AMOUNT));
+			      list->increasing,
+			      list->increasing,
+			      list->increasing);
+
+  gnc_reconcile_list_refresh(list);
+}
+
+static void
+gnc_reconcile_click_column_cb(GtkWidget *w, gint column, gpointer data)
+{
+  GNCReconcileList *list = GNC_RECONCILE_LIST(w);
+  sort_type_t type;
+
+  switch (column) {
+   case 0:  type = BY_STANDARD; break;
+   case 1:  type = BY_NUM;    	break;
+   case 2:  type = BY_DESC;   	break;
+   case 3:  type = BY_AMOUNT; 	break;
+   default: return;
+  }
+  gnc_reconcile_list_set_sort_order(list, type);
 }
 
 static void

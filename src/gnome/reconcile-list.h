@@ -69,6 +69,14 @@ struct _GNCReconcileList
   Query *query;
 
   GNCReconcileList *sibling;
+
+  /* Sorting info */
+  sort_type_t key;
+  gboolean increasing;
+  GtkWidget *date_arrow;
+  GtkWidget *num_arrow;
+  GtkWidget *amount_arrow;
+  GtkWidget *desc_arrow;
 };
 
 struct _GNCReconcileListClass

@@ -1,5 +1,12 @@
 2002-05-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome/reconcile-list.c: Encapsulate all list sorting logic
+	within the GNCReconcileList object.  Reconciliation lists are now
+	sorted by clicking on the column titles, and sorts can be both
+	increasing and decreasing.
+
+	* src/gnome/window-reconcile.c: Remove all list sorting logic.
+
 	* src/gnome-utils/gnc-amount-edit.c: Reparent the amount editor
 	widget so it is based upon a GtkEntry.  This allows trivial
 	GtkEntry <-> GncAmountEdit conversions.
