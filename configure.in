@@ -581,6 +581,7 @@ AC_OUTPUT(Makefile
 	  po/Makefile.in
 	  po/extract-macros.perl
           include/messages_i18n.h
+          rpm/gnucash.spec
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile

@@ -1,5 +1,11 @@
 2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* configure.in: make gnucash.spec configured
+
+	* rpm/gnucash.spec.in: new file, same as old gnucash.spec, but
+	with @VERSION@ instead of a hard-coded version number. Removed
+	gnucash.spec.
+
 	* src/scm/prefs.scm: make the default field types be description
  	and total
 
