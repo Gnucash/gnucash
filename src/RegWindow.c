@@ -826,38 +826,66 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
 
 static void
 deleteCB( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   RegWindow *regData = (RegWindow *)cd;
+  Split * split;
   Transaction *trans;
-  int currow;
+  char buf[BUFSIZE];
+  int num_splits;
   
-#ifdef JUNK
-  if( NULL != trans)
-    {
-    char buf[BUFSIZE];
-    sprintf (buf, TRANS_DEL_MSG, trans->description);
-    
-    if( verifyBox( toplevel, buf ) )
-      {
-      Account * cred = (Account *) (trans->credit_split.acc);
-      Account * deb = (Account *) (trans->debit);
-      
-      /* remove the transaction from both accounts */
-      REMOVE_TRANS (cred, trans);
-      REMOVE_TRANS (deb, trans);
+  /* get the current split based on cursor position */
+  split = xaccGetCurrentSplit (regData->ledger);
+  if (NULL == split ) return;
 
-      RECALC_BALANCE (deb);
-      RECALC_BALANCE (cred);
+  /* ask for user confirmation before performing 
+   * permanent daamge */
+  trans = (Transaction *) split->parent;
+  sprintf (buf, TRANS_DEL_MSG, trans->description);
+  if (!verifyBox (toplevel, buf)) return;
 
-      REFRESH_REGISTER (deb);
-      REFRESH_REGISTER (cred);
+  /* if this split is the credit split, or if it
+   * is the only debit split for this transaction,
+   * then delete the entire transaction; otherwise, 
+   * delete only the split, and readjust the 
+   * transaction totals.
+   */
+  num_splits = xaccCountSplits (trans->debit_splits);
+  if ((split == &(trans->credit_split)) || (1 >= num_splits)) {
+    Account *acc;
+    int i = 0;
 
-      /* Delete the transaction */
-      freeTransaction (trans);
-      }
+    /* loop over all of the debit splits, killing each of them */
+    split = trans->debit_splits[i];
+    while (split) {
+      acc = (Account *) (split->acc);
+      xaccRemoveSplit (acc, split);
+      xaccFreeSplit (split);
+
+      i++;
+      split = trans->debit_splits[i];
     }
-#endif
+
+    /* kill the credit split */
+    acc = (Account *) (trans->credit_split.acc);
+    xaccRemoveSplit (acc, &(trans->credit_split));
+    xaccFreeTransaction (trans);
+
+  } else {
+    Account *credit_acc, *debit_acc;
+    debit_acc = (Account *) (split->acc);
+    credit_acc = (Account *) (trans->credit_split.acc);
+
+    xaccTransRemoveSplit (trans, split);
+    xaccTransRecomputeAmount (trans);
+
+    xaccRemoveSplit (debit_acc, split);
+    split->acc = NULL;
+    xaccFreeSplit (split);
+
+    accRefresh (debit_acc);
+    accRefresh (credit_acc);
   }
+}
 
 /********************************************************************\
  * cancelCB                                                         *
