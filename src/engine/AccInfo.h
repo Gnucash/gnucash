@@ -27,6 +27,8 @@
 #define __ACCINFO_H__
 
 #include "config.h"
+#include "gnc-common.h"
+
 
 /*
  * The account types are used to determine how the transaction data
@@ -41,6 +43,9 @@
 
 enum 
 {
+  BAD_TYPE = -1,
+  /* Not a type */
+
   BANK = 0,
   /* The bank account type denotes a savings or checking account
    * held at a bank.  Often interest bearing.
@@ -101,6 +106,9 @@ char * xaccAccountGetTypeStr (int type); /* GUI names */
 /* Just the name of the enum as a string.  i.e. INCOME -> "INCOME".
    Used for text exports */
 char * xaccAccountTypeEnumAsString (int type); 
+
+gncBoolean xaccAccountTypesCompatible (int parent_type, int child_type);
+
 
 typedef struct _BankAcct BankAcct;
 typedef struct _InvAcct  InvAcct;

@@ -25,6 +25,11 @@
 #include "messages.h"
 #include "util.h"
 
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
+
 /* =========================================================== */
 
 #define GNC_RETURN_ENUM_AS_STRING(x) case x: return #x;
@@ -83,6 +88,48 @@ char * xaccAccountGetTypeStr (int type)
    if (0 > type) return "";
    if (NUM_ACCOUNT_TYPES <= type) return "";
    return (account_type_name [type]);
+}
+
+/* =========================================================== */
+gncBoolean
+xaccAccountTypesCompatible (int parent_type, int child_type)
+{
+  gncBoolean compatible = GNC_F;
+
+  switch(parent_type)
+  {
+    case BANK:
+    case CASH: 
+    case ASSET:
+    case STOCK:
+    case MUTUAL:
+    case CURRENCY:
+      compatible = ((child_type == BANK)   ||
+		    (child_type == CASH)   ||
+		    (child_type == ASSET)  ||
+		    (child_type == STOCK)  ||
+		    (child_type == MUTUAL) ||
+		    (child_type == CURRENCY));
+      break;
+    case CREDIT:
+    case LIABILITY:
+      compatible = ((child_type == CREDIT) || (child_type == LIABILITY));
+      break;
+    case INCOME:
+      compatible = (child_type == INCOME);
+      break;
+    case EXPENSE:
+      compatible = (child_type == EXPENSE);
+      break;
+    case EQUITY:
+      compatible = (child_type == EQUITY);
+      break;
+    default:
+      PERR("xaccAccountTypesCompatible: bad account type: %d", parent_type);
+      break;
+  }
+
+  return compatible;
 }
 
 /* =========================================================== */
