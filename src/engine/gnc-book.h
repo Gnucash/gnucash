@@ -109,10 +109,10 @@ gboolean gnc_book_load (GNCBook *book);
  * 
  *    Some important error values:
  *       EINVAL  -- bad argument
- *       ETXTBSY -- session id is in use; its locked by someone else.
+ *       ETXTBSY -- book id is in use; it's locked by someone else.
  *       ENOSYS  -- unsupported URI type.
  *       ERANGE  -- file path too long
- *       ENOLCK  -- session not open when SessionSave() was called.
+ *       ENOLCK  -- book not open when SessionSave() was called.
  */
 int gnc_book_get_error (GNCBook *book);
 
