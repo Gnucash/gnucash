@@ -103,10 +103,12 @@ struct _split
   char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
 
-  /* value is the amount of the account's currency involved,
-   * damount is the amount of the account's security.  For 
-   * bank-type accounts, currency == security and 
-   * value == damount. */
+  /* New semantics: 'value' is the amount of the transaction balancing
+   * commodity (i.e. currency) involved, 'damount' is the amount of
+   * the account's commodity (formerly known as 'security') involved.
+   *
+   * Old semantics: value is the amount of the account's currency 
+   * involved, damount is the amount of the account's security.  */
   gnc_numeric  value;         
   gnc_numeric  damount;  
 
@@ -154,17 +156,17 @@ struct _transaction
   kvp_frame * kvp_data;
 
 
-  /* The common_currency field indicates the currency type that
-   * all of the splits in this transaction share in common.  This
-   * field is going to replace the currency field in the account
-   * structures.  However, right now we are in a transition period:
-   * we store it here an in the account, and test its value dynamically
+  /* The common_currency field is the balancing common currency for
+   * all the splits in the transaction. 
+   *
+   * This field is going to replace the currency field in the account
+   * structures.  However, right now we are in a transition period: we
+   * store it here an in the account, and test its value dynamically
    * for correctness.  If we can run for a few months without errors,
    * then we'll make the conversion permanent.
    *
    * Alternate, better(?) name: "valuation currency": it is the
-   * currency in which all of the splits can be valued.
-   */
+   * currency in which all of the splits can be valued.  */
   const gnc_commodity *common_currency;
 
   /* version number, used for tracking multiuser updates */

@@ -91,11 +91,26 @@ struct _account {
    */
   GNCAccountType type;
 
-  /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  The gnc_commodity type
-   * represents the namespace, full name, and symbol for the currency.
-   * Currency trading accounts allow splits between accounts when the
-   * currency string matches the security string.  */
+  /* Old semantics: The currency field denotes the default currency in
+   * which all splits in this account are denominated.  Currency
+   * trading accounts allow splits between accounts when the currency
+   * string matches the security string.
+   *
+   * The gnc_commodity type represents the namespace, full name, and
+   * symbol for the currency.
+   *
+   * New semantics, likely to appear soon: This account structure will
+   * no longer store a 'currency' and a 'security'. Instead it will
+   * store only one commodity (i.e. currency), that is the one
+   * formerly known as 'security'.  The 'damount' of each split
+   * represents the transferred amount in the account's commodity
+   * (formerly known as security).
+   *
+   * Meanwhile, we'll be in a transition period, where we store the
+   * currency both in the account and the transaction. Warning
+   * messages will print to the screen if things don't go well.
+
+*/
   const gnc_commodity * currency;
   const gnc_commodity * security;
   int  currency_scu;

@@ -201,16 +201,19 @@ const char *   xaccAccountGetDescription (Account *account);
 const char *   xaccAccountGetNotes (Account *account);
 
 /* New commodity access routines.
- * In the near future, there will only be one commodity associated
- * with an account, rather than two.  Use the 
- * xaccAccountSetCommodity() and xaccAccountGetCommodity() 
+ *
+ * In the near future, the account structure will no longer store two
+ * commodities ('currency' and 'security'). Instead it will store only
+ * one commodity, that is the one formerly known as 'security'.  Use
+ * the xaccAccountSetCommodity() and xaccAccountGetCommodity()
  * routines to set and fetch it.
  *
- * Basically, the next version of the engine will eliminate the 
+ * Basically, the next version of the engine will eliminate the
  * 'currency' field of the Account structure.  Instead, the common
- * currency will be stored with the transaction.  This will 
- * vastly simplify inter-account transfers.
- */
+ * currency will be stored with the transaction.  The 'value' of a
+ * split is a translation of the Split's 'damount' (which is the
+ * amount of the Account's commodity involved) into the Transaction's
+ * balancing currency.  */
 #define xaccAccountGetCommodity xaccAccountGetEffectiveSecurity
 void xaccAccountSetCommodity (Account *account, const gnc_commodity *comm);
 
