@@ -207,11 +207,12 @@ xaccGetAccountID (Account *acc)
 
 #define CHECK(acc) {					\
    if (0 == acc->open) {				\
-      /* not today, soem day in the future ... */	\
+      /* not today, some day in the future ... */	\
       /* printf ("Error: Account not open for editing\n"); */	\
       /* assert (0); */					\
       /* return; */					\
    }							\
+  if (NULL != acc->parent) acc->parent->saved = FALSE;	\
 }
 
 /********************************************************************\
@@ -246,10 +247,8 @@ disable for now till we figure out what the right thing is.
   }
 */
 
-  /* mark the account as having changed, and
-   * the account group as requiring a save */
+  /* mark the account as having changed */
   acc -> changed = TRUE;
-  if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
   /* if this split belongs to another acount, remove it from 
    * there first.  We don't want to ever leave the system
@@ -342,10 +341,8 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
   if (acc->open & ACC_BEING_DESTROYED) return;
   CHECK (acc);
 
-  /* mark the account as having changed, and
-   * the account group as requiring a save */
+  /* mark the account as having changed */
   acc -> changed = TRUE;
-  if( acc->parent != NULL ) acc->parent->saved = FALSE;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
@@ -681,6 +678,7 @@ xaccAccountAutoCode (Account *acc, int digits)
 
   /* print */
   acc->accountCode = ultostr ((unsigned long) maxcode, BASE);
+  top->saved = FALSE;
 }
 
 /********************************************************************\
