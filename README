@@ -140,6 +140,7 @@ As of version 1.0.16:
 
 xacc is known to work in the following configs:
 Linux 2.0.x           -- Intel  w/ RedHat Motif
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
 Linux 2.0.x           -- Intel  w/ Lesstif v0.81
 SGI IRIX              -- 
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
