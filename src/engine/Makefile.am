@@ -17,7 +17,6 @@ libgncmod_engine_la_SOURCES = \
   Period.c \
   Query.c \
   QueryNew.c \
-  QueryCore.c \
   QueryObject.c \
   SchedXaction.c \
   SX-book.c \
@@ -45,6 +44,7 @@ libgncmod_engine_la_SOURCES = \
   md5.c \
   messages.c \
   qofbook.c \
+  qofquerycore.c \
   qofobject.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -90,6 +90,7 @@ gncinclude_HEADERS = \
   kvp-util.h \
   messages.h \
   qofbook.h \
+  qofquerycore.h \
   qofobject.h
 
 noinst_HEADERS = \
@@ -101,7 +102,6 @@ noinst_HEADERS = \
   QueryP.h \
   QueryNewP.h \
   QueryObjectP.h \
-  QueryCoreP.h \
   SchedXactionP.h \
   ScrubP.h \
   SX-book.h \
@@ -117,6 +117,7 @@ noinst_HEADERS = \
   gw-engine.h \
   gw-kvp.h \
   qofbook-p.h \
+  qofquerycore-p.h \
   qofobject-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
@@ -147,10 +148,10 @@ gncscm_DATA = \
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-engine.scm \
-  gw-kvp.scm \
   gw-engine-spec.scm \
-  gw-kvp-spec.scm
+  gw-engine.scm \
+  gw-kvp-spec.scm \
+  gw-kvp.scm
 
 EXTRA_DIST = \
   .cvsignore \

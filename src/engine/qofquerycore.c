@@ -26,28 +26,29 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
-#include "QueryCoreP.h"
+#include "qofquerycore.h"
+#include "qofquerycore-p.h"
 #include "QueryNew.h"
 
 static short module = MOD_QUERY;
 
 /* A function to destroy a query predicate's pdata */
-typedef void (*QueryPredDataFree) (QueryPredData_t pdata);
+typedef void (*QueryPredDataFree) (QofQueryPredData *pdata);
 
 /* A function to copy a query's predicate data */
-typedef QueryPredData_t (*QueryPredicateCopy) (QueryPredData_t pdata);
+typedef QofQueryPredData *(*QueryPredicateCopy) (QofQueryPredData *pdata);
 
 /* A function to take the object, apply the get_fcn, and return
- * a printable string.  Note that this QueryAccess function should
+ * a printable string.  Note that this QofQueryAccess function should
  * be returning a type equal to this core object type.
  *
  * Note that this string MUST be freed by the caller.
  */
-typedef char * (*QueryToString) (gpointer object, QueryAccess get_fcn);
+typedef char * (*QueryToString) (gpointer object, QofQueryAccess get_fcn);
 
 /* A function to test for equality of predicate data */
-typedef gboolean (*QueryPredicateEqual) (QueryPredData_t p1, 
-					 QueryPredData_t p2);
+typedef gboolean (*QueryPredicateEqual) (QofQueryPredData *p1, 
+					 QofQueryPredData *p2);
 
 /* This function registers a new Core Object with the QueryNew
  * subsystem.  It maps the "core_name" object to the given
@@ -62,7 +63,7 @@ static void gncQueryRegisterCoreObject (char const *type_name,
 				 QueryPredicateEqual pred_equal);
 /* An example:
  *
- * gncQueryRegisterCoreObject (QUERYCORE_STRING, string_match_predicate,
+ * gncQueryRegisterCoreObject (QOF_QUERYCORE_STRING, string_match_predicate,
  *			       string_compare_fcn, string_free_pdata,
  *			       string_print_fcn, pred_equal_fcn);
  */
@@ -72,35 +73,35 @@ static QueryPredDataFree gncQueryCoreGetPredFree (char const *type);
 
 /* Core Type Predicate helpers */
 typedef const char * (*query_string_getter) (gpointer);
-static const char * query_string_type = QUERYCORE_STRING;
+static const char * query_string_type = QOF_QUERYCORE_STRING;
 
 typedef Timespec (*query_date_getter) (gpointer);
-static const char * query_date_type = QUERYCORE_DATE;
+static const char * query_date_type = QOF_QUERYCORE_DATE;
 
 typedef gnc_numeric (*query_numeric_getter) (gpointer);
-static const char * query_numeric_type = QUERYCORE_NUMERIC;
+static const char * query_numeric_type = QOF_QUERYCORE_NUMERIC;
 
 typedef GList * (*query_glist_getter) (gpointer);
 typedef const GUID * (*query_guid_getter) (gpointer);
-static const char * query_guid_type = QUERYCORE_GUID;
+static const char * query_guid_type = QOF_QUERYCORE_GUID;
 
 typedef gint32 (*query_int32_getter) (gpointer);
-static const char * query_int32_type = QUERYCORE_INT32;
+static const char * query_int32_type = QOF_QUERYCORE_INT32;
 
 typedef gint64 (*query_int64_getter) (gpointer);
-static const char * query_int64_type = QUERYCORE_INT64;
+static const char * query_int64_type = QOF_QUERYCORE_INT64;
 
 typedef double (*query_double_getter) (gpointer);
-static const char * query_double_type = QUERYCORE_DOUBLE;
+static const char * query_double_type = QOF_QUERYCORE_DOUBLE;
 
 typedef gboolean (*query_boolean_getter) (gpointer);
-static const char * query_boolean_type = QUERYCORE_BOOLEAN;
+static const char * query_boolean_type = QOF_QUERYCORE_BOOLEAN;
 
 typedef char (*query_char_getter) (gpointer);
-static const char * query_char_type = QUERYCORE_CHAR;
+static const char * query_char_type = QOF_QUERYCORE_CHAR;
 
 typedef kvp_frame * (*query_kvp_getter) (gpointer);
-static const char * query_kvp_type = QUERYCORE_KVP;
+static const char * query_kvp_type = QOF_QUERYCORE_KVP;
 
 /* Tables for predicate storage and lookup */
 static gboolean initialized = FALSE;
@@ -135,10 +136,10 @@ static GHashTable *predEqualTable = NULL;
 /********************************************************************/
 /* TYPE-HANDLING FUNCTIONS */
 
-/* QUERYCORE_STRING */
+/* QOF_QUERYCORE_STRING */
 
-static int string_match_predicate (gpointer object, QueryAccess get_fcn,
-				   QueryPredData_t pd)
+static int string_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				   QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
   const char *s;
@@ -155,7 +156,7 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
     if (!regexec (&pdata->compiled, s, 1, &match, 0))
       ret = 1;
 
-  } else if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {
+  } else if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) {
     if (strcasestr (s, pdata->matchstring))
       ret = 1;
 
@@ -165,9 +166,9 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
   }
 
   switch (pd->how) {
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return ret;
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return !ret;
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -176,7 +177,7 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int string_compare_func (gpointer a, gpointer b, gint options,
-				QueryAccess get_fcn)
+				QofQueryAccess get_fcn)
 {
   const char *s1, *s2;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -184,13 +185,13 @@ static int string_compare_func (gpointer a, gpointer b, gint options,
   s1 = ((query_string_getter)get_fcn) (a);
   s2 = ((query_string_getter)get_fcn) (b);
 
-  if (options == STRING_MATCH_CASEINSENSITIVE)
+  if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
     return safe_strcasecmp (s1, s2);
 
   return safe_strcmp (s1, s2);
 }
 
-static void string_free_pdata (QueryPredData_t pd)
+static void string_free_pdata (QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
 
@@ -204,17 +205,18 @@ static void string_free_pdata (QueryPredData_t pd)
   g_free (pdata);
 }
 
-static QueryPredData_t string_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *string_copy_predicate (QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
 
   VERIFY_PDATA_R (query_string_type);
 
-  return gncQueryStringPredicate (pd->how, pdata->matchstring, pdata->options,
+  return qof_query_string_predicate (pd->how, pdata->matchstring, pdata->options,
 				  pdata->is_regex);
 }
 
-static gboolean string_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean string_predicate_equal (QofQueryPredData *p1,
+QofQueryPredData *p2)
 {
   query_string_t pd1 = (query_string_t) p1;
   query_string_t pd2 = (query_string_t) p2;
@@ -224,15 +226,15 @@ static gboolean string_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (safe_strcmp (pd1->matchstring, pd2->matchstring) == 0);
 }
 
-QueryPredData_t gncQueryStringPredicate (query_compare_t how,
-					 char *str, string_match_t options,
+QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
+					 char *str, QofStringMatch options,
 					 gboolean is_regex)
 {
   query_string_t pdata;
 
   g_return_val_if_fail (str, NULL);
   g_return_val_if_fail (*str != '\0', NULL);
-  g_return_val_if_fail (how == COMPARE_EQUAL || how == COMPARE_NEQ, NULL);
+  g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
 
   pdata = g_new0 (query_string_def, 1);
   pdata->pd.type_name = query_string_type;
@@ -242,17 +244,17 @@ QueryPredData_t gncQueryStringPredicate (query_compare_t how,
 
   if (is_regex) {
     int flags = REG_EXTENDED;
-    if (options == STRING_MATCH_CASEINSENSITIVE)
+    if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
       flags |= REG_ICASE;
 
     regcomp(&pdata->compiled, str, flags);
     pdata->is_regex = TRUE;
   }
 
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * string_to_string (gpointer object, QueryAccess get)
+static char * string_to_string (gpointer object, QofQueryAccess get)
 {
   const char *res = ((query_string_getter)get)(object);
   if (res)
@@ -260,11 +262,11 @@ static char * string_to_string (gpointer object, QueryAccess get)
   return NULL;
 }
 
-/* QUERYCORE_DATE */
+/* QOF_QUERYCORE_DATE */
 
-static int date_compare (Timespec ta, Timespec tb, date_match_t options)
+static int date_compare (Timespec ta, Timespec tb, QofDateMatch options)
 {
-  if (options == DATE_MATCH_ROUNDED) {
+  if (options == QOF_DATE_MATCH_ROUNDED) {
     ta = timespecCanonicalDayTime (ta);
     tb = timespecCanonicalDayTime (tb);
   }
@@ -282,8 +284,8 @@ static int date_compare (Timespec ta, Timespec tb, date_match_t options)
   return 0;
 }
 
-static int date_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int date_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   query_date_t pdata = (query_date_t)pd;
   Timespec objtime;
@@ -295,17 +297,17 @@ static int date_match_predicate (gpointer object, QueryAccess get_fcn,
   compare = date_compare (objtime, pdata->date, pdata->options);
 
   switch (pd->how) {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (compare < 0);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (compare <= 0);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (compare == 0);
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (compare > 0);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (compare >= 0);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return (compare != 0);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -314,7 +316,7 @@ static int date_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int date_compare_func (gpointer a, gpointer b, gint options,
-			      QueryAccess get_fcn)
+			      QofQueryAccess get_fcn)
 {
   Timespec ta, tb;
 
@@ -326,7 +328,7 @@ static int date_compare_func (gpointer a, gpointer b, gint options,
   return date_compare (ta, tb, options);
 }
 
-static void date_free_pdata (QueryPredData_t pd)
+static void date_free_pdata (QofQueryPredData *pd)
 {
   query_date_t pdata = (query_date_t)pd;
 
@@ -335,16 +337,17 @@ static void date_free_pdata (QueryPredData_t pd)
   g_free (pdata);
 }
 
-static QueryPredData_t date_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+date_copy_predicate (QofQueryPredData *pd)
 {
   query_date_t pdata = (query_date_t)pd;
 
   VERIFY_PDATA_R (query_date_type);
 
-  return gncQueryDatePredicate (pd->how, pdata->options, pdata->date);
+  return qof_query_date_predicate (pd->how, pdata->options, pdata->date);
 }
 
-static gboolean date_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean date_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_date_t pd1 = (query_date_t) p1;
   query_date_t pd2 = (query_date_t) p2;
@@ -353,8 +356,9 @@ static gboolean date_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return timespec_equal (&(pd1->date), &(pd2->date));
 }
 
-QueryPredData_t gncQueryDatePredicate (query_compare_t how,
-				       date_match_t options, Timespec date)
+QofQueryPredData *
+qof_query_date_predicate (QofQueryCompare how,
+				       QofDateMatch options, Timespec date)
 {
   query_date_t pdata;
 
@@ -363,10 +367,10 @@ QueryPredData_t gncQueryDatePredicate (query_compare_t how,
   pdata->pd.how = how;
   pdata->options = options;
   pdata->date = date;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * date_to_string (gpointer object, QueryAccess get)
+static char * date_to_string (gpointer object, QofQueryAccess get)
 {
   Timespec ts = ((query_date_getter)get)(object);
 
@@ -376,10 +380,10 @@ static char * date_to_string (gpointer object, QueryAccess get)
   return NULL;
 }
 
-/* QUERYCORE_NUMERIC */
+/* QOF_QUERYCORE_NUMERIC */
 
-static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
-				    QueryPredData_t pd)
+static int numeric_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				    QofQueryPredData* pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   gnc_numeric obj_val;
@@ -390,17 +394,17 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
   obj_val = ((query_numeric_getter)get_fcn) (object);
 
   switch (pdata->options) {
-  case NUMERIC_MATCH_CREDIT:
+  case QOF_NUMERIC_MATCH_CREDIT:
     if (gnc_numeric_positive_p (obj_val)) return 0;
     break;
-  case NUMERIC_MATCH_DEBIT:
+  case QOF_NUMERIC_MATCH_DEBIT:
     if (gnc_numeric_negative_p (obj_val)) return 0;
     break;
   default:
     break;
   }
 
-  if (pd->how == COMPARE_EQUAL || pd->how == COMPARE_NEQ) {
+  if (pd->how == QOF_COMPARE_EQUAL || pd->how == QOF_COMPARE_NEQ) {
     gnc_numeric cmp_val = gnc_numeric_create (1, 10000);
     compare =
       (gnc_numeric_compare (gnc_numeric_abs
@@ -412,17 +416,17 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
     compare = gnc_numeric_compare (gnc_numeric_abs (obj_val), pdata->amount);
 
   switch (pd->how) {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (compare < 0);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (compare <= 0);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return compare;
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (compare > 0);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (compare >= 0);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return !compare;
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -431,7 +435,7 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int numeric_compare_func (gpointer a, gpointer b, gint options,
-				 QueryAccess get_fcn)
+				 QofQueryAccess get_fcn)
 {
   gnc_numeric va, vb;
 
@@ -443,21 +447,23 @@ static int numeric_compare_func (gpointer a, gpointer b, gint options,
   return gnc_numeric_compare (va, vb);  
 }
 
-static void numeric_free_pdata (QueryPredData_t pd)
+static void numeric_free_pdata (QofQueryPredData* pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   VERIFY_PDATA (query_numeric_type);
   g_free (pdata);
 }
 
-static QueryPredData_t numeric_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+numeric_copy_predicate (QofQueryPredData *pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   VERIFY_PDATA_R (query_numeric_type);
-  return gncQueryNumericPredicate (pd->how, pdata->options, pdata->amount);
+  return qof_query_numeric_predicate (pd->how, pdata->options, pdata->amount);
 }
 
-static gboolean numeric_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+numeric_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_numeric_t pd1 = (query_numeric_t) p1;
   query_numeric_t pd2 = (query_numeric_t) p2;
@@ -466,8 +472,9 @@ static gboolean numeric_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return gnc_numeric_equal (pd1->amount, pd2->amount);
 }
 
-QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
-					  numeric_match_t options,
+QofQueryPredData *
+qof_query_numeric_predicate (QofQueryCompare how,
+					  QofNumericMatch options,
 					  gnc_numeric value)
 {
   query_numeric_t pdata;
@@ -476,27 +483,27 @@ QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
   pdata->pd.how = how;
   pdata->options = options;
   pdata->amount = value;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * numeric_to_string (gpointer object, QueryAccess get)
+static char * numeric_to_string (gpointer object, QofQueryAccess get)
 {
   gnc_numeric num = ((query_numeric_getter)get)(object);
 
   return g_strdup (gnc_numeric_to_string (num));
 }
 
-static char * debcred_to_string (gpointer object, QueryAccess get)
+static char * debcred_to_string (gpointer object, QofQueryAccess get)
 {
   gnc_numeric num = ((query_numeric_getter)get)(object);
 
   return g_strdup (gnc_numeric_to_string (num));
 }
 
-/* QUERYCORE_GUID */
+/* QOF_QUERYCORE_GUID */
 
-static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int guid_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
   GList *node, *o_list;
@@ -506,7 +513,7 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 
   switch (pdata->options) {
 
-  case GUID_MATCH_ALL:
+  case QOF_GUID_MATCH_ALL:
     /* object is a GList of objects; get_fcn must be called on each one.
      * See if every guid in the predicate is accounted-for in the
      * object list
@@ -537,7 +544,7 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 
     break;
 
-  case GUID_MATCH_LIST_ANY:
+  case QOF_GUID_MATCH_LIST_ANY:
     /* object is a single object, getter returns a GList* of GUID*
      *
      * see if any GUID* in the returned list matches any guid in the
@@ -582,15 +589,15 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
   }
 
   switch (pdata->options) {
-  case GUID_MATCH_ANY:
-  case GUID_MATCH_LIST_ANY:
+  case QOF_GUID_MATCH_ANY:
+  case QOF_GUID_MATCH_LIST_ANY:
     return (node != NULL);
     break;
-  case GUID_MATCH_NONE:
-  case GUID_MATCH_ALL:
+  case QOF_GUID_MATCH_NONE:
+  case QOF_GUID_MATCH_ALL:
     return (node == NULL);
     break;
-  case GUID_MATCH_NULL:
+  case QOF_GUID_MATCH_NULL:
     return (guid == NULL);
     break;
   default:
@@ -599,7 +606,7 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
   }
 }
 
-static void guid_free_pdata (QueryPredData_t pd)
+static void guid_free_pdata (QofQueryPredData *pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
   GList *node;
@@ -610,14 +617,16 @@ static void guid_free_pdata (QueryPredData_t pd)
   g_free (pdata);
 }
 
-static QueryPredData_t guid_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+guid_copy_predicate (QofQueryPredData *pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
   VERIFY_PDATA_R (query_guid_type);
-  return gncQueryGUIDPredicate (pdata->options, pdata->guids);
+  return qof_query_guid_predicate (pdata->options, pdata->guids);
 }
 
-static gboolean guid_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+guid_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_guid_t pd1 = (query_guid_t) p1;
   query_guid_t pd2 = (query_guid_t) p2;
@@ -631,13 +640,14 @@ static gboolean guid_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return TRUE;
 }
 
-QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids)
+QofQueryPredData *
+qof_query_guid_predicate (QofGuidMatch options, GList *guids)
 {
   query_guid_t pdata;
   GList *node;
 
   pdata = g_new0 (query_guid_def, 1);
-  pdata->pd.how = COMPARE_EQUAL;
+  pdata->pd.how = QOF_COMPARE_EQUAL;
   pdata->pd.type_name = query_guid_type;
   pdata->options = options;
   pdata->guids = g_list_copy (guids);
@@ -646,14 +656,14 @@ QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids)
     *guid = *((GUID *)node->data);
     node->data = guid;
   }
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
 /* ================================================================ */
-/* QUERYCORE_INT32 */
+/* QOF_QUERYCORE_INT32 */
 
-static int int32_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int int32_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   gint32 val;
   query_int32_t pdata = (query_int32_t)pd;
@@ -663,17 +673,17 @@ static int int32_match_predicate (gpointer object, QueryAccess get_fcn,
   val = ((query_int32_getter)get_fcn) (object);
 
   switch (pd->how) {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (val <= pdata->val);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (val >= pdata->val);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -682,7 +692,7 @@ static int int32_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int int32_compare_func (gpointer a, gpointer b, gint options,
-			      QueryAccess get_fcn)
+			      QofQueryAccess get_fcn)
 {
   gint32 v1, v2;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -695,21 +705,23 @@ static int int32_compare_func (gpointer a, gpointer b, gint options,
   return 0;
 }
 
-static void int32_free_pdata (QueryPredData_t pd)
+static void int32_free_pdata (QofQueryPredData *pd)
 {
   query_int32_t pdata = (query_int32_t)pd;
   VERIFY_PDATA (query_int32_type);
   g_free (pdata);
 }
 
-static QueryPredData_t int32_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+int32_copy_predicate (QofQueryPredData *pd)
 {
   query_int32_t pdata = (query_int32_t)pd;
   VERIFY_PDATA_R (query_int32_type);
-  return gncQueryInt32Predicate (pd->how, pdata->val);
+  return qof_query_int32_predicate (pd->how, pdata->val);
 }
 
-static gboolean int32_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+int32_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_int32_t pd1 = (query_int32_t) p1;
   query_int32_t pd2 = (query_int32_t) p2;
@@ -717,16 +729,17 @@ static gboolean int32_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (pd1->val == pd2->val);
 }
 
-QueryPredData_t gncQueryInt32Predicate (query_compare_t how, gint32 val)
+QofQueryPredData *
+qof_query_int32_predicate (QofQueryCompare how, gint32 val)
 {
   query_int32_t pdata = g_new0 (query_int32_def, 1);
   pdata->pd.type_name = query_int32_type;
   pdata->pd.how = how;
   pdata->val = val;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * int32_to_string (gpointer object, QueryAccess get)
+static char * int32_to_string (gpointer object, QofQueryAccess get)
 {
   gint32 num = ((query_int32_getter)get)(object);
 
@@ -734,10 +747,10 @@ static char * int32_to_string (gpointer object, QueryAccess get)
 }
 
 /* ================================================================ */
-/* QUERYCORE_INT64 */
+/* QOF_QUERYCORE_INT64 */
 
-static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int int64_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   gint64 val;
   query_int64_t pdata = (query_int64_t)pd;
@@ -747,17 +760,17 @@ static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
   val = ((query_int64_getter)get_fcn) (object);
 
   switch (pd->how) {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (val <= pdata->val);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (val >= pdata->val);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -766,7 +779,7 @@ static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int int64_compare_func (gpointer a, gpointer b, gint options,
-			      QueryAccess get_fcn)
+			      QofQueryAccess get_fcn)
 {
   gint64 v1, v2;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -779,21 +792,23 @@ static int int64_compare_func (gpointer a, gpointer b, gint options,
   return 0;
 }
 
-static void int64_free_pdata (QueryPredData_t pd)
+static void int64_free_pdata (QofQueryPredData *pd)
 {
   query_int64_t pdata = (query_int64_t)pd;
   VERIFY_PDATA (query_int64_type);
   g_free (pdata);
 }
 
-static QueryPredData_t int64_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+int64_copy_predicate (QofQueryPredData *pd)
 {
   query_int64_t pdata = (query_int64_t)pd;
   VERIFY_PDATA_R (query_int64_type);
-  return gncQueryInt64Predicate (pd->how, pdata->val);
+  return qof_query_int64_predicate (pd->how, pdata->val);
 }
 
-static gboolean int64_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+int64_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_int64_t pd1 = (query_int64_t) p1;
   query_int64_t pd2 = (query_int64_t) p2;
@@ -801,16 +816,17 @@ static gboolean int64_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (pd1->val == pd2->val);
 }
 
-QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val)
+QofQueryPredData *
+qof_query_int64_predicate (QofQueryCompare how, gint64 val)
 {
   query_int64_t pdata = g_new0 (query_int64_def, 1);
   pdata->pd.type_name = query_int64_type;
   pdata->pd.how = how;
   pdata->val = val;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * int64_to_string (gpointer object, QueryAccess get)
+static char * int64_to_string (gpointer object, QofQueryAccess get)
 {
   gint64 num = ((query_int64_getter)get)(object);
 
@@ -818,10 +834,10 @@ static char * int64_to_string (gpointer object, QueryAccess get)
 }
 
 /* ================================================================ */
-/* QUERYCORE_DOUBLE */
+/* QOF_QUERYCORE_DOUBLE */
 
-static int double_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int double_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   double val;
   query_double_t pdata = (query_double_t)pd;
@@ -831,17 +847,17 @@ static int double_match_predicate (gpointer object, QueryAccess get_fcn,
   val = ((query_double_getter)get_fcn) (object);
 
   switch (pd->how) {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (val < pdata->val);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (val <= pdata->val);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (val > pdata->val);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (val >= pdata->val);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -850,7 +866,7 @@ static int double_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int double_compare_func (gpointer a, gpointer b, gint options,
-			      QueryAccess get_fcn)
+			      QofQueryAccess get_fcn)
 {
   double v1, v2;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -863,21 +879,23 @@ static int double_compare_func (gpointer a, gpointer b, gint options,
   return 0;
 }
 
-static void double_free_pdata (QueryPredData_t pd)
+static void double_free_pdata (QofQueryPredData *pd)
 {
   query_double_t pdata = (query_double_t)pd;
   VERIFY_PDATA (query_double_type);
   g_free (pdata);
 }
 
-static QueryPredData_t double_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+double_copy_predicate (QofQueryPredData *pd)
 {
   query_double_t pdata = (query_double_t)pd;
   VERIFY_PDATA_R (query_double_type);
-  return gncQueryDoublePredicate (pd->how, pdata->val);
+  return qof_query_double_predicate (pd->how, pdata->val);
 }
 
-static gboolean double_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+double_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_double_t pd1 = (query_double_t) p1;
   query_double_t pd2 = (query_double_t) p2;
@@ -885,26 +903,27 @@ static gboolean double_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (pd1->val == pd2->val);
 }
 
-QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val)
+QofQueryPredData *
+qof_query_double_predicate (QofQueryCompare how, double val)
 {
   query_double_t pdata = g_new0 (query_double_def, 1);
   pdata->pd.type_name = query_double_type;
   pdata->pd.how = how;
   pdata->val = val;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * double_to_string (gpointer object, QueryAccess get)
+static char * double_to_string (gpointer object, QofQueryAccess get)
 {
   double num = ((query_double_getter)get)(object);
 
   return g_strdup_printf ("%f", num);
 }
 
-/* QUERYCORE_BOOLEAN */
+/* QOF_QUERYCORE_BOOLEAN */
 
-static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int boolean_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   gboolean val;
   query_boolean_t pdata = (query_boolean_t)pd;
@@ -914,9 +933,9 @@ static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
   val = ((query_boolean_getter)get_fcn) (object);
 
   switch (pd->how) {
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (val == pdata->val);
-  case  COMPARE_NEQ:
+  case  QOF_COMPARE_NEQ:
     return (val != pdata->val);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -925,7 +944,7 @@ static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int boolean_compare_func (gpointer a, gpointer b, gint options,
-				 QueryAccess get_fcn)
+				 QofQueryAccess get_fcn)
 {
   gboolean va, vb;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -936,21 +955,23 @@ static int boolean_compare_func (gpointer a, gpointer b, gint options,
   return 0;
 }
 
-static void boolean_free_pdata (QueryPredData_t pd)
+static void boolean_free_pdata (QofQueryPredData *pd)
 {
   query_boolean_t pdata = (query_boolean_t)pd;
   VERIFY_PDATA (query_boolean_type);
   g_free (pdata);
 }
 
-static QueryPredData_t boolean_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+boolean_copy_predicate (QofQueryPredData *pd)
 {
   query_boolean_t pdata = (query_boolean_t)pd;
   VERIFY_PDATA_R (query_boolean_type);
-  return gncQueryBooleanPredicate (pd->how, pdata->val);
+  return qof_query_boolean_predicate (pd->how, pdata->val);
 }
 
-static gboolean boolean_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+boolean_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_boolean_t pd1 = (query_boolean_t) p1;
   query_boolean_t pd2 = (query_boolean_t) p2;
@@ -958,29 +979,30 @@ static gboolean boolean_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (pd1->val == pd2->val);
 }
 
-QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val)
+QofQueryPredData *
+qof_query_boolean_predicate (QofQueryCompare how, gboolean val)
 {
   query_boolean_t pdata;
-  g_return_val_if_fail (how == COMPARE_EQUAL || how == COMPARE_NEQ, NULL);
+  g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
 
   pdata = g_new0 (query_boolean_def, 1);
   pdata->pd.type_name = query_boolean_type;
   pdata->pd.how = how;
   pdata->val = val;
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * boolean_to_string (gpointer object, QueryAccess get)
+static char * boolean_to_string (gpointer object, QofQueryAccess get)
 {
   gboolean num = ((query_boolean_getter)get)(object);
 
   return g_strdup_printf ("%s", (num ? "X" : ""));
 }
 
-/* QUERYCORE_CHAR */
+/* QOF_QUERYCORE_CHAR */
 
-static int char_match_predicate (gpointer object, QueryAccess get_fcn,
-				 QueryPredData_t pd)
+static int char_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				 QofQueryPredData *pd)
 {
   char c;
   query_char_t pdata = (query_char_t)pd;
@@ -990,10 +1012,10 @@ static int char_match_predicate (gpointer object, QueryAccess get_fcn,
   c = ((query_char_getter)get_fcn) (object);
 
   switch (pdata->options) {
-  case CHAR_MATCH_ANY:
+  case QOF_CHAR_MATCH_ANY:
     if (strchr (pdata->char_list, c)) return 1;
     return 0;
-  case CHAR_MATCH_NONE:
+  case QOF_CHAR_MATCH_NONE:
     if (!strchr (pdata->char_list, c)) return 1;
     return 0;
   default:
@@ -1003,7 +1025,7 @@ static int char_match_predicate (gpointer object, QueryAccess get_fcn,
 }
 
 static int char_compare_func (gpointer a, gpointer b, gint options,
-			      QueryAccess get_fcn)
+			      QofQueryAccess get_fcn)
 {
   char va, vb;
   g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
@@ -1012,7 +1034,7 @@ static int char_compare_func (gpointer a, gpointer b, gint options,
   return (va-vb);
 }
 
-static void char_free_pdata (QueryPredData_t pd)
+static void char_free_pdata (QofQueryPredData *pd)
 {
   query_char_t pdata = (query_char_t)pd;
   VERIFY_PDATA (query_char_type);
@@ -1020,14 +1042,16 @@ static void char_free_pdata (QueryPredData_t pd)
   g_free (pdata);  
 }
 
-static QueryPredData_t char_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+char_copy_predicate (QofQueryPredData *pd)
 {
   query_char_t pdata = (query_char_t)pd;
   VERIFY_PDATA_R (query_char_type);
-  return gncQueryCharPredicate (pdata->options, pdata->char_list);
+  return qof_query_char_predicate (pdata->options, pdata->char_list);
 }
 
-static gboolean char_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+char_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_char_t pd1 = (query_char_t) p1;
   query_char_t pd2 = (query_char_t) p2;
@@ -1036,29 +1060,30 @@ static gboolean char_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (safe_strcmp (pd1->char_list, pd2->char_list) == 0);
 }
 
-QueryPredData_t gncQueryCharPredicate (char_match_t options, const char *chars)
+QofQueryPredData *
+qof_query_char_predicate (QofCharMatch options, const char *chars)
 {
   query_char_t pdata;
   g_return_val_if_fail (chars, NULL);
   pdata = g_new0 (query_char_def, 1);
   pdata->pd.type_name = query_char_type;
-  pdata->pd.how = COMPARE_EQUAL;
+  pdata->pd.how = QOF_COMPARE_EQUAL;
   pdata->options = options;
   pdata->char_list = g_strdup (chars);
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
-static char * char_to_string (gpointer object, QueryAccess get)
+static char * char_to_string (gpointer object, QofQueryAccess get)
 {
   char num = ((query_char_getter)get)(object);
 
   return g_strdup_printf ("%c", num);
 }
 
-/* QUERYCORE_KVP */
+/* QOF_QUERYCORE_KVP */
 
-static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
-				QueryPredData_t pd)
+static int kvp_match_predicate (gpointer object, QofQueryAccess get_fcn,
+				QofQueryPredData *pd)
 {
   int compare;
   kvp_frame *kvp;
@@ -1082,17 +1107,17 @@ static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
 
   switch (pd->how)
   {
-  case COMPARE_LT:
+  case QOF_COMPARE_LT:
     return (compare < 0);
-  case COMPARE_LTE:
+  case QOF_QOF_COMPARE_LTE:
     return (compare <= 0);
-  case COMPARE_EQUAL:
+  case QOF_COMPARE_EQUAL:
     return (compare == 0);
-  case COMPARE_GTE:
+  case QOF_QOF_COMPARE_GTE:
     return (compare >= 0);
-  case COMPARE_GT:
+  case QOF_COMPARE_GT:
     return (compare > 0);
-  case COMPARE_NEQ:
+  case QOF_COMPARE_NEQ:
     return (compare != 0);
   default:
     PWARN ("bad match type: %d", pd->how);
@@ -1100,7 +1125,7 @@ static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
   }
 }
 
-static void kvp_free_pdata (QueryPredData_t pd)
+static void kvp_free_pdata (QofQueryPredData *pd)
 {
   query_kvp_t pdata = (query_kvp_t)pd;
   GSList *node;
@@ -1115,14 +1140,16 @@ static void kvp_free_pdata (QueryPredData_t pd)
   g_free (pdata);  
 }
 
-static QueryPredData_t kvp_copy_predicate (QueryPredData_t pd)
+static QofQueryPredData *
+kvp_copy_predicate (QofQueryPredData *pd)
 {
   query_kvp_t pdata = (query_kvp_t)pd;
   VERIFY_PDATA_R (query_kvp_type);
-  return gncQueryKVPPredicate (pd->how, pdata->path, pdata->value);
+  return qof_query_kvp_predicate (pd->how, pdata->path, pdata->value);
 }
 
-static gboolean kvp_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+static gboolean 
+kvp_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   query_kvp_t pd1 = (query_kvp_t) p1;
   query_kvp_t pd2 = (query_kvp_t) p2;
@@ -1141,7 +1168,8 @@ static gboolean kvp_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
   return (kvp_value_compare (pd1->value, pd2->value) == 0);
 }
 
-QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
+QofQueryPredData *
+qof_query_kvp_predicate (QofQueryCompare how,
 				      GSList *path, const kvp_value *value)
 {
   query_kvp_t pdata;
@@ -1157,7 +1185,7 @@ QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
   for (node = pdata->path; node; node = node->next)
     node->data = g_strdup (node->data);
 
-  return ((QueryPredData_t)pdata);
+  return ((QofQueryPredData*)pdata);
 }
 
 /* initialization */
@@ -1174,37 +1202,37 @@ static void init_tables (void)
     QueryToString toString;
     QueryPredicateEqual pred_equal;
   } knownTypes[] = {
-    { QUERYCORE_STRING, string_match_predicate, string_compare_func,
+    { QOF_QUERYCORE_STRING, string_match_predicate, string_compare_func,
       string_copy_predicate, string_free_pdata, string_to_string, 
       string_predicate_equal },
-    { QUERYCORE_DATE, date_match_predicate, date_compare_func,
+    { QOF_QUERYCORE_DATE, date_match_predicate, date_compare_func,
       date_copy_predicate, date_free_pdata, date_to_string,
       date_predicate_equal },
-    { QUERYCORE_DEBCRED, numeric_match_predicate, numeric_compare_func,
+    { QOF_QUERYCORE_DEBCRED, numeric_match_predicate, numeric_compare_func,
       numeric_copy_predicate, numeric_free_pdata, debcred_to_string,
       numeric_predicate_equal },
-    { QUERYCORE_NUMERIC, numeric_match_predicate, numeric_compare_func,
+    { QOF_QUERYCORE_NUMERIC, numeric_match_predicate, numeric_compare_func,
       numeric_copy_predicate, numeric_free_pdata, numeric_to_string,
       numeric_predicate_equal },
-    { QUERYCORE_GUID, guid_match_predicate, NULL,
+    { QOF_QUERYCORE_GUID, guid_match_predicate, NULL,
       guid_copy_predicate, guid_free_pdata, NULL,
       guid_predicate_equal },
-    { QUERYCORE_INT32, int32_match_predicate, int32_compare_func,
+    { QOF_QUERYCORE_INT32, int32_match_predicate, int32_compare_func,
       int32_copy_predicate, int32_free_pdata, int32_to_string,
       int32_predicate_equal },
-    { QUERYCORE_INT64, int64_match_predicate, int64_compare_func,
+    { QOF_QUERYCORE_INT64, int64_match_predicate, int64_compare_func,
       int64_copy_predicate, int64_free_pdata, int64_to_string,
       int64_predicate_equal },
-    { QUERYCORE_DOUBLE, double_match_predicate, double_compare_func,
+    { QOF_QUERYCORE_DOUBLE, double_match_predicate, double_compare_func,
       double_copy_predicate, double_free_pdata, double_to_string,
       double_predicate_equal },
-    { QUERYCORE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
+    { QOF_QUERYCORE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
       boolean_copy_predicate, boolean_free_pdata, boolean_to_string,
       boolean_predicate_equal },
-    { QUERYCORE_CHAR, char_match_predicate, char_compare_func,
+    { QOF_QUERYCORE_CHAR, char_match_predicate, char_compare_func,
       char_copy_predicate, char_free_pdata, char_to_string,
       char_predicate_equal },
-    { QUERYCORE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
+    { QOF_QUERYCORE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
       kvp_free_pdata, NULL, kvp_predicate_equal },
   };
 
@@ -1267,7 +1295,7 @@ static void gncQueryRegisterCoreObject (char const *core_name,
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-void gncQueryCoreInit (void)
+void qof_query_core_init (void)
 {
   /* Only let us initialize once */
   if (initialized) return;
@@ -1284,7 +1312,7 @@ void gncQueryCoreInit (void)
   init_tables ();
 }
 
-void gncQueryCoreShutdown (void)
+void qof_query_core_shutdown (void)
 {
   if (!initialized) return;
   initialized = FALSE;
@@ -1297,19 +1325,19 @@ void gncQueryCoreShutdown (void)
   g_hash_table_destroy (predEqualTable);
 }
 
-QueryPredicate gncQueryCoreGetPredicate (char const *type)
+QueryPredicate qof_query_core_get_predicate (char const *type)
 {
   g_return_val_if_fail (type, NULL);
   return g_hash_table_lookup (predTable, type);
 }
 
-QueryCompare gncQueryCoreGetCompare (char const *type)
+QueryCompare qof_query_core_get_compare (char const *type)
 {
   g_return_val_if_fail (type, NULL);
   return g_hash_table_lookup (cmpTable, type);
 }
 
-void gncQueryCorePredicateFree (QueryPredData_t pdata)
+void qof_query_core_predicate_free (QofQueryPredData *pdata)
 {
   QueryPredDataFree free_fcn;
 
@@ -1320,7 +1348,8 @@ void gncQueryCorePredicateFree (QueryPredData_t pdata)
   free_fcn (pdata);
 }
 
-QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata)
+QofQueryPredData *
+qof_query_core_predicate_copy (QofQueryPredData *pdata)
 {
   QueryPredicateCopy copy;
 
@@ -1331,8 +1360,8 @@ QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata)
   return (copy (pdata));
 }
 
-char * gncQueryCoreToString (char const *type, gpointer object,
-			     QueryAccess get)
+char * qof_query_core_to_string (char const *type, gpointer object,
+			     QofQueryAccess get)
 {
   QueryToString toString;
 
@@ -1346,7 +1375,8 @@ char * gncQueryCoreToString (char const *type, gpointer object,
   return toString (object, get);
 }
 
-gboolean gncQueryCorePredicateEqual (QueryPredData_t p1, QueryPredData_t p2)
+gboolean 
+qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 {
   QueryPredicateEqual pred_equal;
 

@@ -3190,19 +3190,19 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QueryObjectDef params[] = {
-    { ACCOUNT_KVP, QUERYCORE_KVP, (QueryAccess)xaccAccountGetSlots },
-    { ACCOUNT_NAME_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetName },
-    { ACCOUNT_CODE_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetCode },
-    { ACCOUNT_DESCRIPTION_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetDescription },
-    { ACCOUNT_NOTES_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetNotes },
-    { ACCOUNT_PRESENT_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetPresentBalance },
-    { ACCOUNT_BALANCE_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
-    { ACCOUNT_FUTURE_MINIMUM_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetProjectedMinimumBalance },
-    { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },
+    { ACCOUNT_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)xaccAccountGetSlots },
+    { ACCOUNT_NAME_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetName },
+    { ACCOUNT_CODE_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetCode },
+    { ACCOUNT_DESCRIPTION_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetDescription },
+    { ACCOUNT_NOTES_, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccAccountGetNotes },
+    { ACCOUNT_PRESENT_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetPresentBalance },
+    { ACCOUNT_BALANCE_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetBalance },
+    { ACCOUNT_CLEARED_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetClearedBalance },
+    { ACCOUNT_RECONCILED_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetReconciledBalance },
+    { ACCOUNT_FUTURE_MINIMUM_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetProjectedMinimumBalance },
+    { ACCOUNT_TAX_RELATED, QOF_QUERYCORE_BOOLEAN, (QofQueryAccess)xaccAccountGetTaxRelated },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccAccountGetBook },
+    { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccAccountGetGUID },
     { NULL },
   };
 

@@ -108,7 +108,7 @@ const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
   return (g_hash_table_lookup (ht, parameter));
 }
 
-QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
+QofQueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
 					      const char *parameter)
 {
   const QueryObjectDef *obj;
@@ -123,7 +123,7 @@ QueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
   return NULL;
 }
 
-QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
+QofQueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 					   const char *param_name)
 {
   const QueryObjectDef *obj;

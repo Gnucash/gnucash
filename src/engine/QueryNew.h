@@ -30,7 +30,7 @@
 #define GNC_QUERYNEW_H
 
 #include "GNCId.h"
-#include "QueryCore.h"
+#include "qofquerycore.h"
 #include "qofbook.h"
 
 /** A Query */
@@ -86,20 +86,20 @@ void gncQuerySetBook (QueryNew *q, QofBook *book);
  *
  * For example:
  *
- * acct_name_pred_data = make_string_pred_data(STRING_MATCH_CASEINSENSITIVE,
+ * acct_name_pred_data = make_string_pred_data(QOF_STRING_MATCH_CASEINSENSITIVE,
  *					       account_name);
  * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME, NULL);
- * gncQueryAddTerm (query, param_list, COMPARE_EQUAL,
+ * gncQueryAddTerm (query, param_list, QOF_COMPARE_EQUAL,
  *		    acct_name_pred_data, QUERY_AND);
  */
 
 void gncQueryAddTerm (QueryNew *query, GSList *param_list,
-		      QueryPredData_t pred_data, QueryOp op);
+		      QofQueryPredData *pred_data, QueryOp op);
 
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
 			   const GUID *guid, QueryOp op);
 void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
-			       GList *guid_list, guid_match_t options,
+			       GList *guid_list, QofGuidMatch options,
 			       QueryOp op);
 
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,

@@ -33,17 +33,18 @@
 #include "BackendP.h"
 
 #include "QueryObjectP.h"
-#include "QueryCoreP.h"
 #include "QueryNewP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofobject.h"
+#include "qofquerycore.h"
+#include "qofquerycore-p.h"
 
 static short module = MOD_QUERY;
 
 typedef struct query_new_term {
   GSList *                param_list;
-  QueryPredData_t         pdata;
+  QofQueryPredData        *pdata;
   gboolean                invert;
 
   /* These values are filled in during "compilation" of the query
@@ -173,7 +174,7 @@ static void free_query_term (QueryNewTerm *qt)
 {
   if (!qt) return;
 
-  gncQueryCorePredicateFree (qt->pdata);
+  qof_query_core_predicate_free (qt->pdata);
   g_slist_free (qt->param_list);
   g_slist_free (qt->param_fcns);
   g_free (qt);
@@ -188,7 +189,7 @@ static QueryNewTerm * copy_query_term (QueryNewTerm *qt)
   memcpy (new_qt, qt, sizeof(QueryNewTerm));
   new_qt->param_list = g_slist_copy (qt->param_list);
   new_qt->param_fcns = g_slist_copy (qt->param_fcns);
-  new_qt->pdata = gncQueryCorePredicateCopy (qt->pdata);
+  new_qt->pdata = qof_query_core_predicate_copy (qt->pdata);
   return new_qt;
 }
 
@@ -274,7 +275,7 @@ static int cmp_func (QueryNewSort_t sort, QuerySort default_sort,
 {
   GSList *node;
   gpointer conva, convb;
-  QueryAccess get_fcn = NULL;        /* to appease the compiler */
+  QofQueryAccess get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
   g_return_val_if_fail (default_sort, 0);
@@ -359,7 +360,7 @@ check_object (QueryNew *q, gpointer object)
       qt = (QueryNewTerm *)(and_ptr->data);
       if (qt->param_fcns && qt->pred_fcn) {
         GSList *node;
-        QueryAccess get_fcn;
+        QofQueryAccess get_fcn;
         gpointer conv_obj = object;
 
         /* iterate through the conversions */
@@ -448,7 +449,7 @@ static void compile_sort (QueryNewSort_t sort, GNCIdType obj)
    * If not, check if this is the default sort.
    */
   if (sort->param_fcns) {
-    sort->comp_fcn = gncQueryCoreGetCompare (resObj->param_type);
+    sort->comp_fcn = qof_query_core_get_compare (resObj->param_type);
 
     /* Hrm, perhaps this is an object compare, not a core compare? */
     if (sort->comp_fcn == NULL)
@@ -482,7 +483,7 @@ static void compile_terms (QueryNew *q)
        */
 
       if (qt->param_fcns)
-        qt->pred_fcn = gncQueryCoreGetPredicate (resObj->param_type);
+        qt->pred_fcn = qof_query_core_get_predicate (resObj->param_type);
       else
         qt->pred_fcn = NULL;
     }
@@ -598,7 +599,7 @@ gncQueryBuildParamList (char const *param, ...)
 }
 
 void gncQueryAddTerm (QueryNew *q, GSList *param_list,                      
-                      QueryPredData_t pred_data, QueryOp op)
+                      QofQueryPredData *pred_data, QueryOp op)
 {
   QueryNewTerm *qt;
   QueryNew *qr, *qs;
@@ -1109,17 +1110,17 @@ void gncQuerySetMaxResults (QueryNew *q, int n)
 }
 
 void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
-                               GList *guid_list, guid_match_t options,
+                               GList *guid_list, QofGuidMatch options,
                                QueryOp op)
 {
-  QueryPredData_t pdata;
+  QofQueryPredData *pdata;
 
   if (!q || !param_list) return;
 
   if (!guid_list)
-    g_return_if_fail (options == GUID_MATCH_NULL);
+    g_return_if_fail (options == QOF_GUID_MATCH_NULL);
 
-  pdata = gncQueryGUIDPredicate (options, guid_list);
+  pdata = qof_query_guid_predicate (options, guid_list);
   gncQueryAddTerm (q, param_list, pdata, op);
 }
 
@@ -1134,7 +1135,7 @@ void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
     g = g_list_prepend (g, (gpointer)guid);
 
   gncQueryAddGUIDListMatch (q, param_list, g,
-                            g ? GUID_MATCH_ANY : GUID_MATCH_NULL, op);
+                            g ? QOF_GUID_MATCH_ANY : QOF_GUID_MATCH_NULL, op);
 
   g_list_free (g);
 }
@@ -1156,10 +1157,10 @@ void gncQuerySetBook (QueryNew *q, QofBook *book)
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
                               QueryOp op)
 {
-  QueryPredData_t pdata;
+  QofQueryPredData *pdata;
   if (!q || !param_list) return;
 
-  pdata = gncQueryBooleanPredicate (COMPARE_EQUAL, value);
+  pdata = qof_query_boolean_predicate (QOF_COMPARE_EQUAL, value);
   gncQueryAddTerm (q, param_list, pdata, op);
 }
 
@@ -1169,14 +1170,14 @@ void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,
 void gncQueryNewInit (void)
 {
   PINFO("New Query Module Initialization");
-  gncQueryCoreInit ();
+  qof_query_core_init ();
   gncQueryObjectInit ();
 }
 
 void gncQueryNewShutdown (void)
 {
   gncQueryObjectShutdown ();
-  gncQueryCoreShutdown ();
+  qof_query_core_shutdown ();
 }
 
 int gncQueryGetMaxResults (QueryNew *q)
@@ -1204,7 +1205,7 @@ GSList * gncQueryTermGetParamPath (QueryNewTerm_t qt)
   return qt->param_list;
 }
 
-QueryPredData_t gncQueryTermGetPredData (QueryNewTerm_t qt)
+QofQueryPredData *gncQueryTermGetPredData (QueryNewTerm_t qt)
 {
   if (!qt)
     return NULL;
@@ -1259,7 +1260,7 @@ static gboolean gncQueryTermEqual (QueryNewTerm_t qt1, QueryNewTerm_t qt2)
 
   if (qt1->invert != qt2->invert) return FALSE;
   if (param_list_cmp (qt1->param_list, qt2->param_list)) return FALSE;
-  return gncQueryCorePredicateEqual (qt1->pdata, qt2->pdata);
+  return qof_query_core_predicate_equal (qt1->pdata, qt2->pdata);
 }
 
 static gboolean gncQuerySortEqual (QueryNewSort_t qs1, QueryNewSort_t qs2)
@@ -1323,15 +1324,15 @@ static GList *gncQueryPrintTerms (QueryNew * query, GList * output);
 static GList *gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts,
                                   GList * output);
 static GList *gncQueryPrintAndTerms (GList * terms, GList * output);
-static gchar *gncQueryPrintStringForHow (query_compare_t how);
-static gchar *gncQueryPrintStringMatch (string_match_t s);
-static gchar *gncQueryPrintDateMatch (date_match_t d);
-static gchar *gncQueryPrintNumericMatch (numeric_match_t n);
-static gchar *gncQueryPrintGuidMatch (guid_match_t g);
-static gchar *gncQueryPrintCharMatch (char_match_t c);
-static GString *gncQueryPrintPredData (QueryPredData_t pd);
+static gchar *gncQueryPrintStringForHow (QofQueryCompare how);
+static gchar *gncQueryPrintStringMatch (QofStringMatch s);
+static gchar *gncQueryPrintDateMatch (QofDateMatch d);
+static gchar *gncQueryPrintNumericMatch (QofNumericMatch n);
+static gchar *gncQueryPrintGuidMatch (QofGuidMatch g);
+static gchar *gncQueryPrintCharMatch (QofCharMatch c);
+static GString *gncQueryPrintPredData (QofQueryPredData *pd);
 static GString *gncQueryPrintParamPath (GSList * parmList);
-static void gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs);
+static void gncQueryPrintValueForParam (QofQueryPredData *pd, GString * gs);
 static void gncQueryPrintOutput (GList * output);
 
 /*
@@ -1484,7 +1485,7 @@ gncQueryPrintAndTerms (GList * terms, GList * output)
 {
   const char *prefix = "  AND Terms:";
   QueryNewTerm_t qt;
-  QueryPredData_t pd;
+  QofQueryPredData *pd;
   GSList *path;
   GList *lst;
   gboolean invert;
@@ -1528,7 +1529,7 @@ gncQueryPrintParamPath (GSList * parmList)
         Process the PredData of the AND terms
 */
 static GString *
-gncQueryPrintPredData (QueryPredData_t pd)
+gncQueryPrintPredData (QofQueryPredData *pd)
 {
   GString *gs;
 
@@ -1544,26 +1545,26 @@ gncQueryPrintPredData (QueryPredData_t pd)
 
 /*
         Get a string representation for the
-        query_compare_t enum type.
+        QofQueryCompare enum type.
 */
 static gchar *
-gncQueryPrintStringForHow (query_compare_t how)
+gncQueryPrintStringForHow (QofQueryCompare how)
 {
 
   switch (how)
   {
-    case COMPARE_LT:
-      return "COMPARE_LT";
-    case COMPARE_LTE:
-      return "COMPARE_LTE";
-    case COMPARE_EQUAL:
-      return "COMPARE_EQUAL";
-    case COMPARE_GT:
-      return "COMPARE_GT";
-    case COMPARE_GTE:
-      return "COMPARE_GTE";
-    case COMPARE_NEQ:
-      return "COMPARE_NEQ";
+    case QOF_COMPARE_LT:
+      return "QOF_COMPARE_LT";
+    case QOF_QOF_COMPARE_LTE:
+      return "QOF_QOF_COMPARE_LTE";
+    case QOF_COMPARE_EQUAL:
+      return "QOF_COMPARE_EQUAL";
+    case QOF_COMPARE_GT:
+      return "QOF_COMPARE_GT";
+    case QOF_QOF_COMPARE_GTE:
+      return "QOF_QOF_COMPARE_GTE";
+    case QOF_COMPARE_NEQ:
+      return "QOF_COMPARE_NEQ";
   }
 
   return "INVALID HOW";
@@ -1571,10 +1572,10 @@ gncQueryPrintStringForHow (query_compare_t how)
 
 
 static void
-gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
+gncQueryPrintValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
-  if (!safe_strcmp (pd->type_name, QUERYCORE_GUID))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_GUID))
   {
     GList *node;
     query_guid_t pdata = (query_guid_t) pd;
@@ -1587,7 +1588,7 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
     }
     return;
   }
-  if (!safe_strcmp (pd->type_name, QUERYCORE_STRING))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_STRING))
   {
     query_string_t pdata = (query_string_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1597,7 +1598,7 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
                        pdata->matchstring);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QUERYCORE_NUMERIC))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_NUMERIC))
   {
     query_numeric_t pdata = (query_numeric_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1606,7 +1607,7 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
                        gnc_numeric_to_string (pdata->amount));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QUERYCORE_DATE))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DATE))
   {
     query_date_t pdata = (query_date_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1614,7 +1615,7 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
     g_string_sprintfa (gs, " query_date: %s", gnc_print_date (pdata->date));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QUERYCORE_CHAR))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_CHAR))
   {
     query_char_t pdata = (query_char_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1622,7 +1623,7 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
     g_string_sprintfa (gs, " char list: %s", pdata->char_list);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QUERYCORE_KVP))
+  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_KVP))
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
@@ -1637,76 +1638,76 @@ gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
 
 /*
  * Print out a string representation of the
- * string_match_t enum
+ * QofStringMatch enum
  */
 static gchar *
-gncQueryPrintStringMatch (string_match_t s)
+gncQueryPrintStringMatch (QofStringMatch s)
 {
   switch (s)
   {
-    case STRING_MATCH_NORMAL:
-      return "STRING_MATCH_NORMAL";
-    case STRING_MATCH_CASEINSENSITIVE:
-      return "STRING_MATCH_CASEINSENSITIVE";
+    case QOF_STRING_MATCH_NORMAL:
+      return "QOF_STRING_MATCH_NORMAL";
+    case QOF_STRING_MATCH_CASEINSENSITIVE:
+      return "QOF_STRING_MATCH_CASEINSENSITIVE";
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintStringMatch */
 
 /*
  * Print out a string representation of the
- * date_match_t enum
+ * QofDateMatch enum
  */
 static gchar *
-gncQueryPrintDateMatch (date_match_t d)
+gncQueryPrintDateMatch (QofDateMatch d)
 {
   switch (d)
   {
-    case DATE_MATCH_NORMAL:
-      return "DATE_MATCH_NORMAL";
-    case DATE_MATCH_ROUNDED:
-      return "DATE_MATCH_ROUNDED";
+    case QOF_DATE_MATCH_NORMAL:
+      return "QOF_DATE_MATCH_NORMAL";
+    case QOF_DATE_MATCH_ROUNDED:
+      return "QOF_DATE_MATCH_ROUNDED";
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintDateMatch */
 
 /*
  * Print out a string representation of the
- * numeric_match_t enum
+ * QofNumericMatch enum
  */
 static gchar *
-gncQueryPrintNumericMatch (numeric_match_t n)
+gncQueryPrintNumericMatch (QofNumericMatch n)
 {
   switch (n)
   {
-    case NUMERIC_MATCH_DEBIT:
-      return "NUMERIC_MATCH_DEBIT";
-    case NUMERIC_MATCH_CREDIT:
-      return "NUMERIC_MATCH_CREDIT";
-    case NUMERIC_MATCH_ANY:
-      return "NUMERIC_MATCH_ANY";
+    case QOF_NUMERIC_MATCH_DEBIT:
+      return "QOF_NUMERIC_MATCH_DEBIT";
+    case QOF_NUMERIC_MATCH_CREDIT:
+      return "QOF_NUMERIC_MATCH_CREDIT";
+    case QOF_NUMERIC_MATCH_ANY:
+      return "QOF_NUMERIC_MATCH_ANY";
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintNumericMatch */
 
 /*
  * Print out a string representation of the
- * guid_match_t enum
+ * QofGuidMatch enum
  */
 static gchar *
-gncQueryPrintGuidMatch (guid_match_t g)
+gncQueryPrintGuidMatch (QofGuidMatch g)
 {
   switch (g)
   {
-    case GUID_MATCH_ANY:
-      return "GUID_MATCH_ANY";
-    case GUID_MATCH_ALL:
-      return "GUID_MATCH_ALL";
-    case GUID_MATCH_NONE:
-      return "GUID_MATCH_NONE";
-    case GUID_MATCH_NULL:
-      return "GUID_MATCH_NULL";
-    case GUID_MATCH_LIST_ANY:
-      return "GUID_MATCH_LIST_ANY";
+    case QOF_GUID_MATCH_ANY:
+      return "QOF_GUID_MATCH_ANY";
+    case QOF_GUID_MATCH_ALL:
+      return "QOF_GUID_MATCH_ALL";
+    case QOF_GUID_MATCH_NONE:
+      return "QOF_GUID_MATCH_NONE";
+    case QOF_GUID_MATCH_NULL:
+      return "QOF_GUID_MATCH_NULL";
+    case QOF_GUID_MATCH_LIST_ANY:
+      return "QOF_GUID_MATCH_LIST_ANY";
   }
 
   return "UNKNOWN MATCH TYPE";
@@ -1714,17 +1715,17 @@ gncQueryPrintGuidMatch (guid_match_t g)
 
 /*
  * Print out a string representation of the
- * char_match_t enum
+ * QofCharMatch enum
  */
 static gchar *
-gncQueryPrintCharMatch (char_match_t c)
+gncQueryPrintCharMatch (QofCharMatch c)
 {
   switch (c)
   {
-    case CHAR_MATCH_ANY:
-      return "CHAR_MATCH_ANY";
-    case CHAR_MATCH_NONE:
-      return "CHAR_MATCH_NONE";
+    case QOF_CHAR_MATCH_ANY:
+      return "QOF_CHAR_MATCH_ANY";
+    case QOF_CHAR_MATCH_NONE:
+      return "QOF_CHAR_MATCH_NONE";
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintGuidMatch */
