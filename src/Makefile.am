@@ -72,6 +72,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   README.modules \
+  gnucash-make-guids.in \
   gnucash-run-script.in
 
 CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
