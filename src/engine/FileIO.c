@@ -84,8 +84,8 @@
  *   String      ::== size (char)^size                              * 
  *   size        ::== int                                           * 
  *   Date        ::== seconds nanoseconds                           * 
- *   seconds     ::== unsigned 32 bit int                           * 
- *   nanoseconds ::== unsigned 32 bit int                           * 
+ *   seconds     ::== signed 64 bit int                             * 
+ *   nanoseconds ::== signed 32 bit int                             * 
 \********************************************************************/
 
 #include <fcntl.h>
@@ -110,7 +110,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 8
+#define VERSION 9
 
 
 /* hack alert the current file format does not support most of the
@@ -146,7 +146,7 @@ static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
-static int           readTSDate( int fd, struct timespec *, int token );
+static int           readTSDate( int fd, Timespec *, int token );
 
 static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
@@ -154,7 +154,7 @@ static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
-static int writeTSDate( int fd, struct timespec *);
+static int writeTSDate( int fd, Timespec *);
 
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
@@ -230,15 +230,33 @@ double xaccFlipDouble (double val)
   return u.d;
 }
 
+long long xaccFlipLongLong (long long val) 
+  {
+  union {
+     unsigned int i[2];
+     long long d;
+  } u;
+  unsigned int w0, w1;
+  u.d = val;
+  w0 = xaccFlipInt (u.i[0]);
+  w1 = xaccFlipInt (u.i[1]);
+
+  u.i[0] = w1;
+  u.i[1] = w0;
+  return u.d;
+}
+
 /* if we are running on a little-endian system, we need to
  * do some endian flipping, because the xacc native data
- * format is big-endian */
+ * format is big-endian. In particular, Intel x86 is little-endian. */
 #ifndef WORDS_BIGENDIAN
   #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
+  #define XACC_FLIP_LONG_LONG(x) { (x) = xaccFlipLongLong (x); }
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
   #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
 #else
   #define XACC_FLIP_DOUBLE(x)
+  #define XACC_FLIP_LONG_LONG(x) 
   #define XACC_FLIP_INT(x) 
   #define XACC_FLIP_SHORT(x) 
 #endif /* WORDS_BIGENDIAN */
@@ -673,7 +691,7 @@ readTransaction( int fd, Account *acc, int token )
      xaccTransSetDateSecs (trans, secs);
      xaccTransSetDateEnteredSecs (trans, secs);
   } else  {
-     struct timespec ts;
+     Timespec ts;
      int rc;
 
      /* read posted date first ... */
@@ -1011,9 +1029,9 @@ readSplit ( int fd, int token )
   }
   xaccSplitSetReconcile (split, recn);
 
-  /* version 8 and newwer files store date-reconciled */ 
+  /* version 8 and newer files store date-reconciled */ 
   if (8 <= token)  {
-     struct timespec ts;
+     Timespec ts;
      int rc;
 
      rc = readTSDate( fd, &ts, token );
@@ -1124,20 +1142,37 @@ readString( int fd, int token )
  * Return: the Date struct                                          * 
 \********************************************************************/
 static int
-readTSDate( int fd, struct timespec *ts, int token )
+readTSDate( int fd, Timespec *ts, int token )
   {
   int  err=0;
-  unsigned int secs, nsecs;
+  long long int secs = 0;   /* 64-bit int */
+  long int nsecs = 0;
   
-  err = read( fd, &secs, sizeof(unsigned int) );
-  if( err != sizeof(unsigned int) )
+  /* secs is a 32-bit in in version 8 & earlier files, 
+   * and goes 64-bit in the later files */
+  if (8 >= token) 
     {
-    return -1;
+    long int sicks;
+    err = read( fd, &sicks, sizeof(long int) );
+    if( err != sizeof(long int) )
+      {
+      return -1;
+      }
+    XACC_FLIP_INT (sicks);
+    secs = sicks;
+    } 
+  else 
+    {
+    err = read( fd, &secs, sizeof(long long int) );
+    if( err != sizeof(long long int) )
+      {
+      return -1;
+      }
+    XACC_FLIP_LONG_LONG (secs);
     }
-  XACC_FLIP_INT (secs);
   
-  err = read( fd, &nsecs, sizeof(unsigned int) );
-  if( err != sizeof(unsigned int) )
+  err = read( fd, &nsecs, sizeof(long int) );
+  if( err != sizeof(long int) )
     {
     return -1;
     }
@@ -1511,7 +1546,7 @@ writeTransaction( int fd, Transaction *trans )
   Split *s;
   int err=0;
   int i=0;
-  struct timespec ts;
+  Timespec ts;
 
   ENTER ("writeTransaction");
   /* If we've already written this transaction, don't write 
@@ -1570,7 +1605,7 @@ writeSplit ( int fd, Split *split )
   {
   int err=0;
   int acc_id;
-  struct timespec ts;
+  Timespec ts;
   double damount;
   Account *xfer_acc = NULL;
   char recn;
@@ -1663,21 +1698,22 @@ writeString( int fd, char *str )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeTSDate( int fd, struct timespec *ts)
+writeTSDate( int fd, Timespec *ts)
   {
   int err=0;
-  unsigned int tmp;
+  int tmp;
+  long long ltmp;
 
-  /* write 32 bits to file format, even if time_t is 64 bits */
-  tmp = ts->tv_sec;
-  XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(unsigned int) );
-  if( err != sizeof(int) )
+  /* write 64 bits to file format */
+  ltmp = ts->tv_sec;
+  XACC_FLIP_LONG_LONG (ltmp);
+  err = write( fd, &tmp, sizeof(long long int) );
+  if( err != sizeof(long long int) )
     return -1;
   
   tmp = ts->tv_nsec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(unsigned int) );
+  err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   

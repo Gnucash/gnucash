@@ -50,13 +50,6 @@
 #include "config.h"
 #include "Transaction.h"   /* for typedefs */
 
-/* Major-League Hack Alert -- bit Y2K problem:  struct timespec seems 
- * to have declared tv_sec to be a signed long, not an unsigned long. 
- * This majorly hoses in the year 2004, as date comparisons suddenly
- * fail because the seconds value will go negative.
- */
-typedef struct timespec Timespec;
-
 /** STRUCTS *********************************************************/
 /* 
  * Double-entry is forced by having at least two splits in every

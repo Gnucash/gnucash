@@ -892,8 +892,11 @@ xaccTransCommitEdit (Transaction *trans)
        (trans->orig->date_posted.tv_sec  != trans->date_posted.tv_sec))
    {
 
-      DEBUG ("xaccTransCommitEdit(): date changed to %lu %s\n",
-             trans->date_posted.tv_sec, ctime (&trans->date_posted.tv_sec));
+      DEBUGCMD ({
+             time_t sicko = trans->date_posted.tv_sec;
+             DEBUG ("xaccTransCommitEdit(): date changed to %Lu %s\n",
+             trans->date_posted.tv_sec, ctime (&sicko));
+      })
       /* since the date has changed, we need to be careful to 
        * make sure all associated splits are in proper order
        * in thier accounts.  The easiest way of ensuring this
@@ -1443,7 +1446,7 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    if (!trans) return;
    CHECK_OPEN (trans);
    PINFO ("xaccTransSetDateSecs(): addr=%p set date to %lu %s \n",
-         trans, secs, ctime (&secs));
+           trans, secs, ctime (&secs));
 
    trans->date_posted.tv_sec = secs;
    trans->date_posted.tv_nsec = 0;
@@ -1469,19 +1472,22 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 }
 
 void
-xaccTransSetDateTS (Transaction *trans, struct timespec *ts)
+xaccTransSetDateTS (Transaction *trans, Timespec *ts)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
-   PINFO ("xaccTransSetDateTS(): addr=%p set date to %lu %s \n",
-         trans, ts->tv_sec, ctime (&ts->tv_sec));
+   DEBUGCMD ({
+         time_t sicko = ts->tv_sec;
+         PINFO ("xaccTransSetDateTS(): addr=%p set date to %Lu %s \n",
+                trans, ts->tv_sec, ctime (&sicko));
+    })
 
    trans->date_posted.tv_sec = ts->tv_sec;
    trans->date_posted.tv_nsec = ts->tv_nsec;
 }
 
 void
-xaccTransSetDateEnteredTS (Transaction *trans, struct timespec *ts)
+xaccTransSetDateEnteredTS (Transaction *trans, Timespec *ts)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
@@ -1740,7 +1746,7 @@ xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 }
 
 void
-xaccSplitSetDateReconciledTS (Split *split, struct timespec *ts)
+xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 {
    if (!split) return;
    MARK_SPLIT (split);

@@ -79,6 +79,8 @@ xaccMallocQuery (void)
 
 static int Sort_DATE_NUM_AMOUNT (Split **, Split **);
 
+#define LONG_LONG_MAX 0x7fffffffffffffffLL
+
 void 
 xaccInitQuery (Query *q)
 {
@@ -89,23 +91,17 @@ xaccInitQuery (Query *q)
    q->changed = 0; 
    q->max_num_splits = INT_MAX ;
 
-   q->earliest.tv_sec = 0; 
+   q->earliest.tv_sec = - (LONG_LONG_MAX) - 1; 
    q->earliest.tv_nsec = 0; 
 
-/* hack alert HACK ALERT Y2K problem -- danger danger.
- * For some stupid reason,  struct Timespec uses long int
- * instead of time_t for seconds. This means we will have 
- * overflow in year 2004 which is stupid, and needs to be 
- * fixed.
- */
-   /* q->latest.tv_sec = ULONG_MAX; */
-   q->latest.tv_sec = LONG_MAX;
+   /* Its a signed, 64-bit int */
+   q->latest.tv_sec = LONG_LONG_MAX;
    q->latest.tv_nsec = 0; 
 
-   q->earliest_found.tv_sec = LONG_MAX; 
+   q->earliest_found.tv_sec = LONG_LONG_MAX;
    q->earliest_found.tv_nsec = 0; 
 
-   q->latest_found.tv_sec = 0;
+   q->latest_found.tv_sec = - (LONG_LONG_MAX) - 1;
    q->latest_found.tv_nsec = 0; 
 
    q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMOUNT;

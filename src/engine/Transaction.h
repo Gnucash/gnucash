@@ -54,6 +54,20 @@ typedef struct _account_group AccountGroup;
 typedef struct _split         Split;
 typedef struct _transaction   Transaction;
 
+/* struct timespec64 is just like timespec except that we use 
+ * a 64-bit signed int to store the seconds.  This should adequetely
+ * cover dates in the distant future as well as the distant past, as long
+ * as they're not more than a couple dozen times the age of the universe.
+ * Note that both gcc and the IBM Toronto xlC compiler (aka CSet,
+ * VisualAge, etc) correctly handle long long as a 64 bit quantity,
+ * even on the 32-bit Intel x86 and PowerPC architectures.  I'm assuming
+ * that all the other modern compilers are clean on this issue too ...
+ */
+struct timespec64 {
+   long long int tv_sec;     
+   long int tv_nsec;
+};
+typedef struct timespec64 Timespec;
 
 /** PROTOTYPES ******************************************************/
 /*
@@ -115,7 +129,7 @@ void          xaccTransRollbackEdit (Transaction *);
  *    xaccTransSetDateSecs(), but takes a convenient day-month-year format.
  *
  * The xaccTransSetDateTS() method does the same thing as 
- *    xaccTransSetDateSecs(), but takes a struct timespec.
+ *    xaccTransSetDateSecs(), but takes a struct timespec64.
  *
  * The xaccTransSetDateToday() method does the same thing as 
  *    xaccTransSetDateSecs(), but sets the date to the current system
@@ -124,10 +138,10 @@ void          xaccTransRollbackEdit (Transaction *);
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);
 void          xaccTransSetDateToday (Transaction *);
-void          xaccTransSetDateTS (Transaction *, struct timespec *);
+void          xaccTransSetDateTS (Transaction *, Timespec *);
 
 void          xaccTransSetDateEnteredSecs (Transaction *, time_t);
-void          xaccTransSetDateEnteredTS (Transaction *, struct timespec *);
+void          xaccTransSetDateEnteredTS (Transaction *, Timespec *);
 
 
 /* set the Num and Description fields ... */
@@ -188,8 +202,8 @@ char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 char *        xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
-void          xaccTransGetDateTS (Transaction *, struct timespec *);
-void          xaccTransGetDateEnteredTS (Transaction *, struct timespec *);
+void          xaccTransGetDateTS (Transaction *, Timespec *);
+void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
@@ -260,8 +274,8 @@ void          xaccSplitSetDocref (Split *, const char *);
  */
 void          xaccSplitSetReconcile (Split *, char);
 void          xaccSplitSetDateReconciledSecs (Split *, time_t);
-void          xaccSplitSetDateReconciledTS (Split *, struct timespec *);
-void          xaccSplitGetDateReconciledTS (Split *, struct timespec *);
+void          xaccSplitSetDateReconciledTS (Split *, Timespec *);
+void          xaccSplitGetDateReconciledTS (Split *, Timespec *);
 
 
 /* 
