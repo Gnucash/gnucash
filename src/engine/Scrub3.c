@@ -94,7 +94,7 @@ xaccScrubLot (GNCLot *lot)
   GNCPolicy *pcy;
 
   if (!lot) return FALSE;
-  ENTER (" ");
+  ENTER ("(lot=%p)", lot);
 
   acc = gnc_lot_get_account (lot);
   pcy = acc->policy;
@@ -103,6 +103,7 @@ xaccScrubLot (GNCLot *lot)
 
   /* If the lot balance is zero, we don't need to rebalance */
   lot_baln = gnc_lot_get_balance (lot);
+  PINFO ("lot baln=%s", gnc_numeric_to_string (lot_baln));
   if (! gnc_numeric_zero_p (lot_baln))
   {
     SplitList *node;
@@ -110,6 +111,7 @@ xaccScrubLot (GNCLot *lot)
 
     /* Get the opening balance for this lot */
     pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, NULL, NULL);
+    PINFO ("lot opner baln=%s", gnc_numeric_to_string (opening_baln));
 
     /* If the lot is fat, give the boot to all the non-opening 
      * splits, and refill it */

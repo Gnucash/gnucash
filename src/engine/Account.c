@@ -895,7 +895,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
    * denominator AKA 'SCU Smallest Currency Unit'. */
   /* xaccSplitSetAmount(split, old_amt); */
   split->amount = gnc_numeric_convert (old_amt,
-                xaccAccountGetCommoditySCU(acc), GNC_RND_ROUND);
+                xaccAccountGetCommoditySCU(acc), GNC_HOW_RND_ROUND);
   xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
@@ -1818,7 +1818,7 @@ xaccAccountBalanceHelper (Account *account, gpointer data)
   balance = xaccAccountGetXxxBalanceInCurrency (account, cb->fn, cb->currency);
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
-                                 GNC_RND_ROUND);
+                                 GNC_HOW_RND_ROUND);
   return NULL;
 }
 

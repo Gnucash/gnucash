@@ -404,13 +404,15 @@ numeric_match_predicate (gpointer object, QofParam *getter,
     break;
   }
 
+  /* Amounts are considered to be 'equal' if they match to 
+   * four decimal places. (epsilon=1/10000) */
   if (pd->how == QOF_COMPARE_EQUAL || pd->how == QOF_COMPARE_NEQ) {
     gnc_numeric cmp_val = gnc_numeric_create (1, 10000);
     compare =
       (gnc_numeric_compare (gnc_numeric_abs
                             (gnc_numeric_sub (gnc_numeric_abs (obj_val),
                                               gnc_numeric_abs (pdata->amount),
-                                              100000, GNC_RND_ROUND)),
+                                              100000, GNC_HOW_RND_ROUND)),
                             cmp_val) < 0);
   } else
     compare = gnc_numeric_compare (gnc_numeric_abs (obj_val), pdata->amount);

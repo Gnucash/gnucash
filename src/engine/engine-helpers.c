@@ -1285,7 +1285,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       query_term_scm = SCM_CDR (query_term_scm);
       amount = scm_num2dbl (scm, __FUNCTION__);
 
-      val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, GNC_RND_ROUND);
+      val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, 
+                       GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND);
 
       if (!safe_strcmp (pr_type, "pr-price")) {
         xaccQueryAddSharePriceMatch (q, val, how, QOF_QUERY_OR);

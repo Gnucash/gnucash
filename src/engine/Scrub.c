@@ -250,7 +250,7 @@ xaccSplitScrub (Split *split)
   value = xaccSplitGetValue (split);
 
   if (gnc_numeric_same (xaccSplitGetAmount (split),
-                        value, scu, GNC_RND_ROUND))
+                        value, scu, GNC_HOW_RND_ROUND))
   {
     return;
   }
@@ -398,7 +398,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
      * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (old_value, imbalance,
              gnc_commodity_get_fraction(currency), 
-             GNC_RND_ROUND);
+             GNC_HOW_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
