@@ -567,7 +567,7 @@ txf_code_select_row_cb (GtkCList *clist,
   frame = gnc_glade_lookup_widget (GTK_WIDGET (clist),
                                    "payer_name_source_frame");
 
-  if (txf_info->payer_name_source)
+  if (txf_info && txf_info->payer_name_source)
   {
     gboolean current;
 
