@@ -15,10 +15,10 @@ typedef struct _customer_window CustomerWindow;
 
 /* Functions to create and edit a customer */
 CustomerWindow * gnc_ui_customer_edit (GncCustomer *cust);
-CustomerWindow * gnc_ui_customer_new (GNCBook *book);
+CustomerWindow * gnc_ui_customer_new (QofBook *book);
 
 /* Search for customers */
-GNCSearchWindow *gnc_customer_search (GncCustomer *start, GNCBook *book);
+GNCSearchWindow *gnc_customer_search (GncCustomer *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget
