@@ -1993,12 +1993,11 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       break;
     case RECEIVABLE_REGISTER:
-      gnc_combo_cell_add_menu_item (cell, _("Invoice"));
-      gnc_combo_cell_add_menu_item (cell, _("Receipt"));
-      break;
     case PAYABLE_REGISTER:
       gnc_combo_cell_add_menu_item (cell, _("Invoice"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
       break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:

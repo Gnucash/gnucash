@@ -128,7 +128,7 @@
         (cons 'INCOME    (N_ "Income"))
         (cons 'EXPENSE   (N_ "Rebate"))
 	(cons 'PAYABLE   (N_ "Invoice"))
-	(cons 'RECEIVABLE (N_ "Receipt"))
+	(cons 'RECEIVABLE (N_ "Payment"))
         (cons 'EQUITY    (N_ "Increase"))))
 
 (define (gnc:get-debit-string type)
