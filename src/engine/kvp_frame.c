@@ -99,7 +99,7 @@ init_frame_body_if_needed(KvpFrame *f)
 KvpFrame * 
 kvp_frame_new(void) 
 {
-  KvpFrame * retval = g_new0(kvp_frame, 1);
+  KvpFrame * retval = g_new0(KvpFrame, 1);
   /* save space until we have data */
   retval->hash = NULL;
   return retval;
@@ -571,7 +571,7 @@ kvp_glist_compare(const GList * list1, const GList * list2)
 
 KvpValue *
 kvp_value_new_gint64(gint64 value) {
-  KvpValue * retval  = g_new0(kvp_value, 1);
+  KvpValue * retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_GINT64;
   retval->value.int64 = value;
   return retval;
@@ -579,7 +579,7 @@ kvp_value_new_gint64(gint64 value) {
 
 KvpValue *
 kvp_value_new_double(double value) {
-  KvpValue * retval  = g_new0(kvp_value, 1);
+  KvpValue * retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_DOUBLE;
   retval->value.dbl   = value;
   return retval;
@@ -587,7 +587,7 @@ kvp_value_new_double(double value) {
 
 KvpValue *
 kvp_value_new_gnc_numeric(gnc_numeric value) {
-  KvpValue * retval    = g_new0(kvp_value, 1);
+  KvpValue * retval    = g_new0(KvpValue, 1);
   retval->type          = KVP_TYPE_NUMERIC;
   retval->value.numeric = value;
   return retval;
@@ -595,7 +595,7 @@ kvp_value_new_gnc_numeric(gnc_numeric value) {
 
 KvpValue *
 kvp_value_new_string(const char * value) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_STRING;
   retval->value.str  = g_strdup(value);
   return retval;
@@ -603,7 +603,7 @@ kvp_value_new_string(const char * value) {
 
 KvpValue *
 kvp_value_new_guid(const GUID * value) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GUID;
   retval->value.guid = g_new0(GUID, 1);
   memcpy(retval->value.guid, value, sizeof(GUID));
@@ -612,7 +612,7 @@ kvp_value_new_guid(const GUID * value) {
 
 KvpValue *
 kvp_value_new_timespec(Timespec value) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_TIMESPEC;
   retval->value.timespec = value;
   return retval;
@@ -620,7 +620,7 @@ kvp_value_new_timespec(Timespec value) {
 
 KvpValue *
 kvp_value_new_binary(const void * value, guint64 datasize) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type = KVP_TYPE_BINARY;
   retval->value.binary.data = g_new0(char, datasize);
   retval->value.binary.datasize = datasize;
@@ -630,7 +630,7 @@ kvp_value_new_binary(const void * value, guint64 datasize) {
 
 KvpValue *
 kvp_value_new_binary_nc(void * value, guint64 datasize) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type = KVP_TYPE_BINARY;
   retval->value.binary.data = value;
   retval->value.binary.datasize = datasize;
@@ -639,7 +639,7 @@ kvp_value_new_binary_nc(void * value, guint64 datasize) {
 
 KvpValue *
 kvp_value_new_glist(const GList * value) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GLIST;
   retval->value.list = kvp_glist_copy(value);
   return retval;
@@ -647,7 +647,7 @@ kvp_value_new_glist(const GList * value) {
 
 KvpValue *
 kvp_value_new_glist_nc(GList * value) {
-  KvpValue * retval = g_new0(kvp_value, 1);
+  KvpValue * retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GLIST;
   retval->value.list = value;
   return retval;
@@ -655,7 +655,7 @@ kvp_value_new_glist_nc(GList * value) {
 
 KvpValue *
 kvp_value_new_frame(const KvpFrame * value) {
-  KvpValue * retval  = g_new0(kvp_value, 1);
+  KvpValue * retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_FRAME;
   retval->value.frame = kvp_frame_copy(value);
   return retval;  
@@ -663,7 +663,7 @@ kvp_value_new_frame(const KvpFrame * value) {
 
 KvpValue *
 kvp_value_new_frame_nc(KvpFrame * value) {
-  KvpValue * retval  = g_new0(kvp_value, 1);
+  KvpValue * retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_FRAME;
   retval->value.frame = value;
   return retval;  
@@ -933,7 +933,8 @@ typedef struct {
 } kvp_frame_cmp_status;
 
 static void
-kvp_frame_compare_helper(const char *key, kvp_value* val, gpointer data) {
+kvp_frame_compare_helper(const char *key, KvpValue * val, gpointer data) 
+{
   kvp_frame_cmp_status *status = (kvp_frame_cmp_status *) data;
   if(status->compare == 0) {
     KvpFrame *other_frame = status->other_frame;
@@ -948,7 +949,8 @@ kvp_frame_compare_helper(const char *key, kvp_value* val, gpointer data) {
 }
 
 gint
-kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb) {
+kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb) 
+{
   kvp_frame_cmp_status status;
 
   if(fa == fb) return 0;
@@ -1005,7 +1007,7 @@ kvp_value_glist_to_string(const GList *list)
     {
         gchar *tmp3;
 
-        tmp3 = KvpValueTypeo_string((kvp_value*)cursor->data);
+        tmp3 = KvpValueTypeo_string((KvpValue *)cursor->data);
         tmp2 = g_strdup_printf("%s %s,", tmp1, tmp3 ? tmp3 : "");
         g_free(tmp1);
         g_free(tmp3);
@@ -1059,11 +1061,11 @@ KvpValueTypeo_string(const KvpValue *val)
 
     case KVP_TYPE_TIMESPEC:
         tmp1 = g_new0 (char, 40);
-	gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
-	tmp2 = g_strdup_printf("KVP_VALUE_TIMESPEC(%s)", tmp1);
-	g_free(tmp1);
-	return tmp2;
-	break;
+        gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
+        tmp2 = g_strdup_printf("KVP_VALUE_TIMESPEC(%s)", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
 
     case KVP_TYPE_BINARY:
     {
@@ -1102,7 +1104,7 @@ kvp_frame_to_string_helper(gpointer key, gpointer value, gpointer data)
     gchar **str = (gchar**)data;
     gchar *old_data = *str;
 
-    tmp_val = KvpValueTypeo_string((kvp_value*)value);
+    tmp_val = KvpValueTypeo_string((KvpValue *)value);
 
     *str = g_strdup_printf("%s    %s => %s,\n",
                            *str ? *str : "",
