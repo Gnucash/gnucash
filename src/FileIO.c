@@ -293,6 +293,7 @@ readTransaction( int fd, int token )
   int err=0;
   Date *date;
   Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
+  int amount;
   
   trans->num = readString( fd, token );
   if( trans->num == NULL )
@@ -363,7 +364,7 @@ readTransaction( int fd, int token )
   if( (trans->reconciled != YREC) && (trans->reconciled != CREC) )
     trans->reconciled = NREC;
   
-  err = read( fd, &(trans->amount), sizeof(int) );
+  err = read( fd, &amount, sizeof(int) );
   if( err != sizeof(int) )
     {
     XtFree(trans->memo);
@@ -372,7 +373,8 @@ readTransaction( int fd, int token )
     _free(trans);
     return NULL;
     }
-  XACC_FLIP_INT (trans->amount);
+  XACC_FLIP_INT (amount);
+  trans->damount = 0.01 * ((double) amount); /* file stores pennies */
   
   return trans;
   }
@@ -597,7 +599,7 @@ writeTransaction( int fd, Transaction *trans )
   if( err != sizeof(char) )
     return -1;
   
-  tmp = trans->amount;
+  tmp = (int) (100.0 * (trans->damount));  /* file stores pennies */
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )

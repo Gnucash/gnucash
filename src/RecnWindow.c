@@ -44,7 +44,7 @@
 typedef struct _RecnWindow
 {
   Account *acc;             /* The account that we are reconciling  */
-  int     diff;             /* The amount ($$$) to reconcile        */
+  double  ddiff;            /* The amount ($$$) to reconcile        */
   Widget  dialog;           /* The reconcile window dialog          */
   Widget  difference;       /* Text field, amount left to reconcile */
   Widget  totDebit;         /* Text field, total debit reconciled   */
@@ -112,12 +112,10 @@ recnRefresh( RecnWindow *recnData )
                  (trans->date.year%100) );
         rows[2] = XtNewString(buf);
         rows[3] = trans->description;
-        sprintf( buf, "%d.%02d\0",
-                 ABS(trans->amount/100),
-                 ABS(trans->amount % 100) );
+        sprintf( buf, "%.2f\0", DABS(trans->damount) );
         rows[4] = XtNewString(buf);
         
-        if( trans->amount < 0 )
+        if( 0.0 > trans->damount)
           {
           XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
           XbaeMatrixAddRows( recnData->debit, nrows, rows, NULL, NULL, 1 );
@@ -150,9 +148,9 @@ recnRecalculateBalance( RecnWindow *recnData )
   Transaction *trans;
   char buf[BUFSIZE];
   int  i,nrows;
-  int  debit  = 0;
-  int  credit = 0;
-  int  diff   = 0;
+  double ddebit  = 0.0;
+  double dcredit = 0.0;
+  double ddiff   = 0.0;
   
   /* Calculate the total debit: */
   XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
@@ -162,7 +160,7 @@ recnRecalculateBalance( RecnWindow *recnData )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
-      debit += trans->amount;
+      ddebit += trans->damount;
       }
     }
   
@@ -174,26 +172,22 @@ recnRecalculateBalance( RecnWindow *recnData )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
-      credit += trans->amount;
+      dcredit += trans->damount;
       }
     }
   
   /* Update the difference field, and the total fields */
-  sprintf( buf, " $ %d.%02d\0", 
-           ABS(debit/100), ABS(debit%100) );
+  sprintf( buf, " $ %.2f\0", DABS(ddebit) );
   XmTextSetString( recnData->totDebit, buf );
   
-  sprintf( buf, " $ %d.%02d\0", 
-           (credit/100), ABS(credit%100) );
+  sprintf( buf, " $ %.2f\0", dcredit );
   XmTextSetString( recnData->totCredit, buf );
 
-  diff = recnData->diff + credit + debit;
-  if( diff < 0 )
-    sprintf( buf, "-$ %d.%02d\0",
-             ABS(diff/100), ABS(diff%100) );
+  ddiff = recnData->ddiff + dcredit + ddebit;
+  if( 0.0 > ddiff )
+    sprintf( buf, "-$ %.2f\0", DABS(ddiff) );
   else
-    sprintf( buf, " $ %d.%02d\0",
-             (diff/100), ABS(diff%100) );    
+    sprintf( buf, " $ %.2f\0", ddiff );    
   XmTextSetString( recnData->difference, buf );
   }
 
@@ -222,7 +216,7 @@ startRecnCancelCB( Widget wm, XtPointer cd, XtPointer cb )
  * Global: app - the app context                                    *
 \********************************************************************/
 Boolean
-startRecnWindow( Widget parent, Account *acc, int *diff )
+startRecnWindow( Widget parent, Account *acc, double *diff )
   {
   Widget   dialog,
            pane,
@@ -230,18 +224,19 @@ startRecnWindow( Widget parent, Account *acc, int *diff )
            actionform,
            widget, endB, newB;
   Transaction *trans;
-  char  buf[BUFSIZE];
-  int   j, endBalance;
-  int   done=-1;
+  char   buf[BUFSIZE];
+  int    j;
+  double dendBalance;
+  int    done=-1;
   
   setBusyCursor( parent );
   
   /* Figure out previous ending balance: */
-  endBalance=0;
+  dendBalance=0.0;
   j=0;
   while( (trans = getTransaction(acc,j++)) != NULL )
     if( trans->reconciled == YREC )
-      endBalance += trans->amount;
+      dendBalance += trans->damount;
   
   /* Create the dialog box... XmNdeleteResponse is set to
    * XmDESTROY so the dialog's memory is freed when it is closed */
@@ -283,7 +278,7 @@ startRecnWindow( Widget parent, Account *acc, int *diff )
                                     XmNrightPosition,   50,
                                     NULL );
   
-  sprintf( buf, "%d.%02d", (endBalance/100), ABS(endBalance%100) );
+  sprintf( buf, "%.2f", dendBalance );
   endB = XtVaCreateManagedWidget( "text",
                                   xmTextWidgetClass,  controlform,
                                   XmNvalue,           buf,
@@ -395,7 +390,7 @@ startRecnWindow( Widget parent, Account *acc, int *diff )
   int    dollar=0,cent=0;
   str = XmTextGetString(newB);
   sscanf( str, "%d.%2d", &dollar, &cent );
-  *diff = endBalance - (100*dollar + cent);
+  *diff = dendBalance - (((double) dollar) + 0.01 * ((double) cent));
   }
   
   XtDestroyWidget(dialog);
@@ -418,18 +413,18 @@ recnWindow( Widget parent, Account *acc )
   int    position;
   char   title[BUFSIZE];
   RecnWindow *recnData;
-  int diff;
+  double ddiff;
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
-  if( !startRecnWindow(parent,acc,&diff) )
+  if( !startRecnWindow(parent,acc,&ddiff) )
     return NULL;
     
   setBusyCursor(parent);
   
   recnData = (RecnWindow *)_malloc(sizeof(RecnWindow));
   recnData->acc = acc;
-  recnData->diff = diff;
+  recnData->ddiff = ddiff;
   
   sprintf( title, "%s: Reconcile", acc->accountName );
   

@@ -213,40 +213,40 @@ void xaccParseQIFDate (Date * dat, char * str)
  * Return: int -- in pennies                                        * 
 \********************************************************************/
 
-int xaccParseQIFAmount (char * str) 
+double xaccParseQIFAmount (char * str) 
 {
    char * tok;
-   int pennies = 0;
+   double dollars = 0;
 
    if (!str) return 0;
 
    tok = strchr (str, ',');
    if (tok) {
       *tok = 0x0;
-      pennies = 100 * 1000 * atoi (str);
+      dollars = ((double) (1000 * atoi (str)));
       str = tok+sizeof(char);
    }
 
    tok = strchr (str, ',');
    if (tok) {
       *tok = 0x0;
-      pennies *= 1000;
-      pennies += 100 * 1000 * atoi (str);
+      dollars *= 1000.0;
+      dollars += ((double) (1000 * atoi (str)));
       str = tok+sizeof(char);
    }
 
    tok = strchr (str, '.');
    if (!tok) return 0;
    *tok = 0x0;
-   pennies += 100 * atoi (str);
+   dollars += ((double) (atoi (str)));
 
    str = tok+sizeof(char);
    tok = strchr (str, '\r');
-   if (!tok) return pennies;
+   if (!tok) return dollars;
    *tok = 0x0;
-   pennies += atoi (str);
+   dollars += 0.01 * ((double) atoi (str));
 
-   return pennies;
+   return dollars;
 }
 
 /********************************************************************\
@@ -272,7 +272,7 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
    trans -> description = 0x0;  /* string */
    trans -> num = 0x0;          /* string */ 
    trans -> catagory = 0;       /* category is int */
-   trans -> amount = 0;         /* amount is int */
+   trans -> damount = 0.0;      /* amount is double */
    trans -> reconciled = NREC;  /* reconciled is byte */
    /* other possible values ... */
    /* trans->reconciled = YREC;  trans->reconciled = CREC; */
@@ -302,8 +302,8 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
          xaccParseQIFDate (&(trans->date), &qifline[1]);
      } else 
      if ('T' == qifline [0]) {   /* T == total */
-         trans -> amount = xaccParseQIFAmount (&qifline[1]);         /* amount is int */
-         if (isneg) trans -> amount = - (trans->amount);
+         trans -> damount = xaccParseQIFAmount (&qifline[1]);         /* amount is int */
+         if (isneg) trans -> damount = - (trans->damount);
      } else 
      if ('I' == qifline [0]) {   /* I == share price */
          /* hack alert */

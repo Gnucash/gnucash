@@ -91,16 +91,16 @@ refreshMainWindow( void )
     String rows[3];
     Transaction *trans=NULL;
     Account *acc = getAccount( data, i );
-    int  balance = 0;
+    double dbalance = 0;
     
     j=0;
     while( (trans = getTransaction(acc,j++)) != NULL )
-      balance += trans->amount;
+      dbalance += trans->damount;
     
-    if( balance < 0 )
-      sprintf( buf,"-$%d.%02d\0", ABS(balance/100), ABS(balance % 100) );
+    if( 0.0 > dbalance )
+      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
     else
-      sprintf( buf,"$%d.%02d\0", ABS(balance/100), ABS(balance % 100) );
+      sprintf( buf,"$%.2f\0", DABS(dbalance) );
     
     rows[0] = acc->accountName;
     rows[1] = type[acc->type];
@@ -111,7 +111,7 @@ refreshMainWindow( void )
 #ifndef USE_NO_COLOR
     /* Set the color of the text, depending on whether the
      * balance is negative or positive */
-    if( balance < 0 )
+    if( 0.0 > dbalance )
       XbaeMatrixSetCellColor( accountlist, nrows, 2, negPixel );
     else
       XbaeMatrixSetCellColor( accountlist, nrows, 2, posPixel );    

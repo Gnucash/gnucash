@@ -1,6 +1,7 @@
 /********************************************************************\
  * RegWindow.c -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -62,7 +63,7 @@ typedef struct _RegWindow {
 
 
 /** PROTOTYPES ******************************************************/
-int  regRecalculateBalance( RegWindow *regData );
+double regRecalculateBalance( RegWindow *regData );
 void regSaveTransaction( RegWindow *regData, int position );
 
 void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
@@ -115,6 +116,8 @@ extern Pixel negPixel;
 #define PAY_CELL_C   4
 #define DEP_CELL_R   0
 #define DEP_CELL_C   5
+#define BALN_CELL_R  0
+#define BALN_CELL_C  6
 #define MEMO_CELL_R  1
 #define MEMO_CELL_C  2
 
@@ -148,7 +151,7 @@ regRefresh( RegWindow *regData )
   if( regData != NULL )
     {
     Transaction *trans;
-    int    i,j,nrows,drows,nnrows;
+    int    i,j,nrows,drows,nnrows,ncols;
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
@@ -159,18 +162,19 @@ regRefresh( RegWindow *regData )
     /* The number of rows we need to add/subtract (ie, delta-rows :) */
     nnrows = (regData->acc->numTrans)*2 + 3; 
     drows  = (nnrows-1) - (nrows-1);
+    ncols  = regData->acc->numCols; 
 
     /* allocate a new matrix: */
     newData = (String **)_malloc(nnrows*sizeof(String *));
     for( i=0; i<nnrows; i++ )
       {
-      newData[i] = (String *)_malloc(7*sizeof(String *));
-      for( j=0; j<7; j++ )
+      newData[i] = (String *)_malloc(ncols*sizeof(String *));
+      for( j=0; j<ncols; j++ )
         newData[i][j] = NULL;
       }
 
     /* add the column headers, from the old data: */
-    for( j=0; j<7; j++ )
+    for( j=0; j<ncols; j++ )
       newData[0][j] = XtNewString(data[0][j]);
     
     /* adjust the size of the matrix, only after copying old column headers: */
@@ -188,49 +192,67 @@ regRefresh( RegWindow *regData )
       sprintf( buf, "%2d/%2d\0", 
                trans->date.month,
                trans->date.day );
-      newData[row][0]   = XtNewString(buf);
+      newData[row][DATE_CELL_C]   = XtNewString(buf);
       
       sprintf( buf, "%4d", trans->date.year );
-      newData[row+1][0] = XtNewString(buf);
+      newData[row+1][DATE_CELL_C] = XtNewString(buf);
       
       sprintf( buf, "%s", trans->num );
-      newData[row][1]   = XtNewString(buf);
+      newData[row][NUM_CELL_C]   = XtNewString(buf);
       
-      newData[row+1][1] = XtNewString("");
+      newData[row+1][NUM_CELL_C] = XtNewString("");
       
       sprintf( buf, "%s", trans->description );
-      newData[row][2]   = XtNewString(buf);
+      newData[row][DESC_CELL_C]   = XtNewString(buf);
       
       sprintf( buf, "%s", trans->memo );
-      newData[row+1][2] = XtNewString(buf);
+      newData[row+1][DESC_CELL_C] = XtNewString(buf);
       
       sprintf( buf, "%c", trans->reconciled );
-      newData[row][3]   = XtNewString(buf);
+      newData[row][RECN_CELL_C]   = XtNewString(buf);
 
-      newData[row+1][3] = XtNewString("");
+      newData[row+1][RECN_CELL_C] = XtNewString("");
       
-      if( trans->amount < 0 )
+      if( 0.0 > trans->damount )
         {
-        sprintf( buf, "%d.%02d ", 
-                 ((-1*(trans->amount))/100),
-                 ((-1*(trans->amount))%100) );
-        newData[row][4] = XtNewString(buf);
-        newData[row][5] = XtNewString("");
+        sprintf( buf, "%.2f ", (-1.0*(trans->damount)) );
+        newData[row][PAY_CELL_C] = XtNewString(buf);
+        newData[row][DEP_CELL_C] = XtNewString("");
         }
       else
         {
-        sprintf( buf, "%d.%02d ", 
-                 ((trans->amount)/100),
-                 ((trans->amount)%100) );
-        newData[row][4] = XtNewString("");
-        newData[row][5] = XtNewString(buf);
+        sprintf( buf, "%.2f ", (trans->damount) );
+        newData[row][PAY_CELL_C] = XtNewString("");
+        newData[row][DEP_CELL_C] = XtNewString(buf);
         }
       
-      newData[row+1][4] = XtNewString("");
-      newData[row+1][5] = XtNewString("");
+      newData[row+1][PAY_CELL_C] = XtNewString("");
+      newData[row+1][DEP_CELL_C] = XtNewString("");
       
-      newData[row][6]   = XtNewString("");
-      newData[row+1][6] = XtNewString("");
+      newData[row][BALN_CELL_C]   = XtNewString("");
+      newData[row+1][BALN_CELL_C] = XtNewString("");
+
+      /* ----------------------------------- */
+      /* extra columns for mutual funds, etc. */
+      switch(regData->acc->type)
+        {
+        case BANK:
+        case CASH:
+        case ASSET:
+        case CREDIT:
+        case LIABILITY:
+          break;
+        case PORTFOLIO:
+        case MUTUAL:
+          /* hackk alert -- this is probably incorrect */
+          newData[row][7]   = XtNewString("");
+          newData[row+1][7] = XtNewString("");
+          newData[row][8]   = XtNewString("");
+          newData[row+1][8] = XtNewString("");
+          break;
+        default:
+          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", regData->acc->type);
+        }
       }
 
     /* fill in the empty cells at the end: */
@@ -240,7 +262,7 @@ regRefresh( RegWindow *regData )
     
     for( i=(2*i)+1; i<nnrows; i++ )
       {
-      for( j=0; j<7; j++ )
+      for( j=0; j<ncols; j++ )
         {
         if( IN_DATE_CELL(i,j) )
           {
@@ -281,13 +303,13 @@ regRefresh( RegWindow *regData )
  * Args:   regData -- this RegWindow                                *
  * Return: the final balance                                        *
 \********************************************************************/
-int
+double
 regRecalculateBalance( RegWindow *regData )
   {
   int  i; 
   int  position   = 1;
-  int  balance    = 0;
-  int  clearedBalance = 0;
+  double  dbalance    = 0.0;
+  double  dclearedBalance = 0.0;
   char buf[BUFSIZE];
   Transaction *trans;
   Widget reg;
@@ -299,21 +321,21 @@ regRecalculateBalance( RegWindow *regData )
   
   for( i=0; (trans=getTransaction(regData->acc,i)) != NULL; i++ )
     {
-    balance += trans->amount;
+    dbalance += trans->damount;
     
     if( trans->reconciled != NREC )
-      clearedBalance += trans->amount;
+      dclearedBalance += trans->damount;
     
     if( reg != NULL )
       {
 #ifdef USE_NO_COLOR
-      sprintf( buf, "%d.%02d ", (balance/100), ABS(balance%100) );
+      sprintf( buf, "%.2f ", dbalance );
 #else
-      sprintf( buf, "%d.%02d ", ABS(balance/100), ABS(balance%100) );
+      sprintf( buf, "%.2f ", DABS(dbalance) );
       
       /* Set the color of the text, depending on whether the
        * balance is negative or positive */
-      if( balance < 0 )
+      if( 0.0 > dbalance )
         XbaeMatrixSetCellColor( reg, position, 6, negPixel );
       else
         XbaeMatrixSetCellColor( reg, position, 6, posPixel );
@@ -329,9 +351,8 @@ regRecalculateBalance( RegWindow *regData )
     {
     if( regData->balance != NULL )
       {
-      sprintf( buf, "$ %d.%02d \n$ %d.%02d \0", 
-               (balance/100), ABS(balance%100),
-      	       (clearedBalance/100), ABS(clearedBalance%100) );
+      sprintf( buf, "$ %.2f \n$ %.2f \0", 
+               dbalance, dclearedBalance );
       
       XmTextSetString( regData->balance, buf );
       }
@@ -339,7 +360,7 @@ regRecalculateBalance( RegWindow *regData )
   
   refreshMainWindow();        /* make sure the balance field in
                                * the main window is up to date */
-  return balance;
+  return dbalance;
   }
 
 /********************************************************************\
@@ -388,7 +409,7 @@ regSaveTransaction( RegWindow *regData, int position )
     trans->memo        = NULL;
     trans->catagory    = 0;
     trans->reconciled  = NREC;
-    trans->amount      = 0;
+    trans->damount     = 0.0;
     
     regData->changed = MOD_ALL;
     }
@@ -435,27 +456,23 @@ regSaveTransaction( RegWindow *regData, int position )
     /* ...and the amounts */
     amount = XbaeMatrixGetCell(regData->reg,row,5);
     sscanf( amount, "%d.%2d", &dollar, &cent );
-    trans->amount = 100 * dollar + cent;
+    trans->damount = ((double) dollar) + 0.01 * ((double) cent);
     
     dollar = 0; cent = 0;
     amount = XbaeMatrixGetCell(regData->reg,row,4); 
     sscanf( amount, "%d.%2d", &dollar, &cent );
-    trans->amount -= 100 * dollar + cent;
+    trans->damount -= ((double) dollar) + 0.01 * ((double) cent);
     
     /* Reset so there is only one field filled */
-    if( trans->amount < 0 )
+    if( 0.0 > trans->damount )
       {
-      sprintf( buf, "%d.%02d ", 
-               ((-1*(trans->amount))/100),
-               ((-1*(trans->amount))%100) );
+      sprintf( buf, "%.2f ", (-1.0*(trans->damount)) );
       XbaeMatrixSetCell( regData->reg, row, 4, buf );
       XbaeMatrixSetCell( regData->reg, row, 5, "" );
       }
     else
       {
-      sprintf( buf, "%d.%02d ", 
-               ((trans->amount)/100),
-               ((trans->amount)%100) );
+      sprintf( buf, "%.2f ", (trans->damount) );
       XbaeMatrixSetCell( regData->reg, row, 4, "" );
       XbaeMatrixSetCell( regData->reg, row, 5, buf );
       }
@@ -472,8 +489,8 @@ regSaveTransaction( RegWindow *regData, int position )
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
-        (trans->catagory == 0)               &&
-        (trans->amount == 0) )
+        (0 == trans->catagory)               &&
+        (0.0 == trans->damount) )
       {
       _free(trans);
       return;
@@ -685,53 +702,142 @@ regWindow( Widget parent, Account *acc )
     {
     char   buf[BUFSIZE];
     String **data;
-    short  colWidths[] = {4,4,35,1,8,8,8};   /* the widths of columns */
-    static String rows[3][7] = {{"Date","Num","Description","",
-                                 "","","Balance"},
-                                {"","","","","","",""},
-                                {"","","","","","",""}};
-    unsigned char alignments[7] = {XmALIGNMENT_END,
-                                   XmALIGNMENT_END,
-                                   XmALIGNMENT_BEGINNING,
-                                   XmALIGNMENT_CENTER,
-                                   XmALIGNMENT_END,
-                                   XmALIGNMENT_END,
-                                   XmALIGNMENT_END};
-    
-    /* Put the appropriate heading names in the column titles */
+    int i,j;
+    /* ----------------------------------- */
+    /* set up number of displayed columns */
     switch(acc->type)
       {
       case BANK:
-        rows[0][4] = "Payment";
-        rows[0][5] = "Deposit";
-        break;
       case CASH:
-        rows[0][4] = "Spend";
-        rows[0][5] = "Receive";
-        break;
       case ASSET:
-        rows[0][4] = "Decrease";
-        rows[0][5] = "Increase";
-        break;
       case CREDIT:
-        rows[0][4] = "Charge";
-        rows[0][5] = "Payment";
-        break;
       case LIABILITY:
-        rows[0][4] = "Increase";
-        rows[0][5] = "Decrease";
+        acc -> numCols = 7;
         break;
       case PORTFOLIO:
       case MUTUAL:
-        fprintf( stderr, "Account type: %s, not supported yet!\n", 
-                 accRes[acc->type]);
+        acc -> numCols = 9;
+        break;
+      default:
+        fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+      }
+
+    /* ----------------------------------- */
+    /* set up column widths */
+
+    acc -> colWidths[DATE_CELL_C] = 4;   /* the widths of columns */
+    acc -> colWidths[NUM_CELL_C]  = 4;   /* the widths of columns */
+    acc -> colWidths[DESC_CELL_C] = 35;  /* the widths of columns */
+    acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
+    acc -> colWidths[PAY_CELL_C]  = 8;   /* the widths of columns */
+    acc -> colWidths[DEP_CELL_C]  = 8;   /* the widths of columns */
+    acc -> colWidths[BALN_CELL_C] = 8;   /* the widths of columns */
+
+    switch(acc->type)
+      {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+        break;
+      case PORTFOLIO:
+      case MUTUAL:
+        acc -> colWidths[6] = 8;   /* price */
+        acc -> colWidths[7] = 8;   /* share balance */
+        acc -> colWidths[8] = 8;   /* $ balance */
+        break;
+      }
+    
+    /* ----------------------------------- */
+    /* set up column alignments */
+
+    acc -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
+    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_END;
+    acc -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
+    acc -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
+    acc -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
+    acc -> alignments[DEP_CELL_C]  = XmALIGNMENT_END;
+    acc -> alignments[BALN_CELL_C] = XmALIGNMENT_END;
+
+    switch(acc->type)
+      {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+        break;
+
+      case PORTFOLIO:
+      case MUTUAL:
+        acc -> alignments[6] = XmALIGNMENT_END;  /* price */
+        acc -> alignments[7] = XmALIGNMENT_END;  /* share balance */
+        acc -> alignments[8] = XmALIGNMENT_END;  /* $balance */
+        break;
+      }
+    
+    /* ----------------------------------- */
+    /* Put the appropriate heading names in the column titles */
+    for (i=0; i<3; i++) {
+       for (j=0; j<XACC_NUM_COLS; j++) {
+          acc->rows[i][j] = "";
+       }
+    }
+
+    acc -> rows[0][DATE_CELL_C] = "Date";
+    acc -> rows[0][NUM_CELL_C]  = "Num";
+    acc -> rows[0][DESC_CELL_C] = "Description";
+    switch(acc->type)
+      {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+        acc -> rows[0][BALN_CELL_C] = "Balance";
+        break;
+      case PORTFOLIO:
+      case MUTUAL:
+        acc -> rows[0][6] = "Price";
+        acc -> rows[0][7] = "Tot Shrs";
+        acc -> rows[0][8] = "Balance";
+        break;
+      }
+    
+    switch(acc->type)
+      {
+      case BANK:
+        acc -> rows[0][PAY_CELL_C] = "Payment";
+        acc -> rows[0][DEP_CELL_C] = "Deposit";
+        break;
+      case CASH:
+        acc -> rows[0][PAY_CELL_C] = "Spend";
+        acc -> rows[0][DEP_CELL_C] = "Receive";
+        break;
+      case ASSET:
+        acc -> rows[0][PAY_CELL_C] = "Decrease";
+        acc -> rows[0][DEP_CELL_C] = "Increase";
+        break;
+      case CREDIT:
+        acc -> rows[0][PAY_CELL_C] = "Charge";
+        acc -> rows[0][DEP_CELL_C] = "Payment";
+        break;
+      case LIABILITY:
+        acc -> rows[0][PAY_CELL_C] = "Increase";
+        acc -> rows[0][DEP_CELL_C] = "Decrease";
+        break;
+      case PORTFOLIO:
+      case MUTUAL:
+        acc -> rows[0][PAY_CELL_C] = "Shares Bought";
+        acc -> rows[0][DEP_CELL_C] = "Shares Sold";
         break;
       }
     
     data = (String **)XtMalloc(2*sizeof(String *));
-    data[0] = &rows[0][0];
-    data[1] = &rows[1][0];
-    data[2] = &rows[2][0];
+    data[0] = &(acc -> rows[0][0]);
+    data[1] = &(acc -> rows[1][0]);
+    data[2] = &(acc -> rows[2][0]);
     sprintf( buf, "reg" );
     reg = XtVaCreateWidget( strcat(buf,accRes[acc->type]),
                             xbaeMatrixWidgetClass,  frame,
@@ -741,9 +847,9 @@ regWindow( Widget parent, Account *acc )
                             XmNrows,                2,
                             XmNvisibleRows,         20,
                             XmNfill,                True,
-                            XmNcolumns,             7,
-                            XmNcolumnWidths,        colWidths,
-                            XmNcolumnAlignments,    alignments,
+                            XmNcolumns,             acc -> numCols,
+                            XmNcolumnWidths,        acc -> colWidths,
+                            XmNcolumnAlignments,    acc -> alignments,
                             XmNtraverseFixedCells,  False,
                             XmNgridType,            XmGRID_SHADOW_IN,
                             XmNshadowType,          XmSHADOW_ETCHED_IN,
@@ -1251,11 +1357,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             tcbs->next_column = PAY_CELL_C;
             if( regData->qf != NULL )
               if( regData->qf->trans != NULL )
-                if( regData->qf->trans->amount < 0 )
+                if( 0.0 > regData->qf->trans->damount )
                   {
-                  sprintf( buf, "%d.%02d ", 
-                           ((-1*(regData->qf->trans->amount))/100),
-                           ((-1*(regData->qf->trans->amount))%100) );
+                  sprintf( buf, "%.2f ", (-1.0*(regData->qf->trans->damount)) );
                   XbaeMatrixSetCell( reg, tcbs->next_row, 
                                      tcbs->next_column, buf );
                   }
@@ -1281,11 +1385,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               tcbs->next_column = DEP_CELL_C;
               if( regData->qf != NULL )
                 if( regData->qf->trans != NULL )
-                  if( regData->qf->trans->amount >= 0 )
+                  if( 0.0 <= regData->qf->trans->damount )
                     {
-                    sprintf( buf, "%d.%02d ", 
-                             ((regData->qf->trans->amount)/100),
-                             ((regData->qf->trans->amount)%100) );
+                    sprintf( buf, "%.2f ", (regData->qf->trans->damount) );
                     XbaeMatrixSetCell( reg, tcbs->next_row, 
                                        tcbs->next_column, buf );
                     }

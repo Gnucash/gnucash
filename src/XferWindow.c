@@ -435,7 +435,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
           &(toTrans->date.day), &(toTrans->date.year) );
   str = XmTextGetString(xferData->amount);
   sscanf( str, "%d.%2d", &dollar, &cent );
-  toTrans->amount      = 100*dollar + cent;
+  toTrans->damount     = ((double) dollar) + 0.01 * ((double) cent);
   toTrans->num         = XtNewString("");
   
   /* Get the memo, and add the "from" account name to it */
@@ -471,7 +471,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   todaysDate(&(fromTrans->date));
   sscanf( str, "%d/%d/%d", &(fromTrans->date.month), 
           &(fromTrans->date.day), &(fromTrans->date.year) );
-  fromTrans->amount      = -1*toTrans->amount;
+  fromTrans->damount     = -1.0*toTrans->damount;
   fromTrans->num         = XtNewString("");
   
   /* Get the memo, and add the "to" account name to it */

@@ -197,7 +197,9 @@ accWindow( Widget parent )
 			     XmNindicatorType,   XmONE_OF_MANY,
 			     NULL);
   /* Portfolio account not supported yet, so grey it out: */
+/* hack alert 
   XtSetSensitive( accData->portfolio, False );
+*/
   
   accData->mutual =
     XtVaCreateManagedWidget( "Mutual Fund",
@@ -205,7 +207,9 @@ accWindow( Widget parent )
 			     XmNindicatorType,   XmONE_OF_MANY,
 			     NULL);
   /* Mutual Fund account not supported yet, so grey it out: */
+/* hack alert
   XtSetSensitive( accData->mutual, False );
+*/
   
   /******************************************************************\
    * Text fields....                                                *
@@ -363,6 +367,11 @@ editAccWindow( Widget parent, Account *account )
   Widget dialog, form, widget, label, buttonform;
   EditAccWindow *editAccData;
   
+  /* hack alert -- if no account selected for editing,
+   * put up a popup and tell the user to pick something.
+   * for the moment, we just no-op. */
+  if (0x0 == account) return;
+
   setBusyCursor( parent );
   
   editAccData = (EditAccWindow *)_malloc(sizeof(EditAccWindow));
@@ -632,7 +641,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->memo        = XtNewString("");
   trans->catagory    = 0;
   trans->reconciled  = NREC;
-  trans->amount      = 0;
+  trans->damount     = 0.0;
   
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
