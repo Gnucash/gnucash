@@ -1,5 +1,11 @@
 2003-01-02  Derek Atkins  <derek@ihtfp.com>
 
+	* src/engine/test-core/test-engine-stuff.c: random queries only
+	  get up to 3 terms, not 4
+	* src/app-utils/test/test-scm-query-string.c: loop the test 1000
+	  times, now that the queries are smaller.
+	Fixes #127492
+
 	* src/business/business-reports/aging.scm:  When computing the aging
 	  report, ignore splits that belong to closed lots.  This way we wont
 	  get the wrong values when the invoice falls outside the 360-day

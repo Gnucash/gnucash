@@ -63,7 +63,7 @@ run_tests (void)
   val2str = gh_eval_str ("gnc:value->string");
   g_return_if_fail (gh_procedure_p (val2str));
 
-  for (i = 0; i < 200; i++) {
+  for (i = 0; i < 1000; i++) {
     q = get_random_query ();
     test_query (q, val2str);
     xaccFreeQuery (q);

@@ -1351,7 +1351,7 @@ get_random_query(void)
   Query *q;
   int num_terms;
 
-  num_terms = get_random_int_in_range (1, 4);
+  num_terms = get_random_int_in_range (1, 3);
 
   q = xaccMallocQuery ();
 
