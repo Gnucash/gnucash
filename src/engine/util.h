@@ -36,7 +36,7 @@
 /* The debuging macros enable the setting of trace messages */
 #include <stdio.h>
 
-#if HAVE_NANA_H
+#ifdef HAVE_NANA_H
 #include <nana.h>
 
 /* override standard system assert with nana I assertion */
