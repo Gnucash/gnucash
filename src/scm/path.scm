@@ -30,7 +30,7 @@
                              (list gnc:_share-dir-default_ "html" prefix))
                            (gnc:locale-prefixes)))
         (pix-paths (map (lambda (prefix)
-                          (list gnc:_share-dir-default_ "html" prefix "pix"))
+                          (list gnc:_share-dir-default_ "html" prefix "image"))
                         (gnc:locale-prefixes)))
         (base-paths (list
                      (list gnc:_share-dir-default_ "html"))))

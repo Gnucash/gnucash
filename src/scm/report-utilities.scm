@@ -18,6 +18,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (gnc:support "report-utilities.scm")
+(gnc:depend "engine-utilities.scm")
 
 (define (gnc:amount->string amount print_currency_symbol?
                             print_separators? shares_value?)
@@ -146,24 +147,6 @@
           (loop (+ index 1)
                 (gnc:account-get-split account (+ index 1))
                 (cons split slist))))))
-
-;; Pull a scheme list of accounts (including subaccounts) from group grp
-(define (gnc:group-get-account-list grp)
-  (if (pointer-token-null? grp)
-      '()
-      (let ((account-array (gnc:get-accounts grp)))
-        (let loop ((index 0)
-                   (account (gnc:account-nth-account account-array 0))
-                   (account-list '()))
-          (if (pointer-token-null? account)
-              (reverse account-list)
-              (loop (+ index 1)
-                    (gnc:account-nth-account account-array (+ index 1))
-                    (cons account account-list)))))))
-
-;; map over all accounts (including subaccounts) in a group
-(define (gnc:group-map-all-accounts thunk group)
-  (map thunk (gnc:group-get-account-list group)))
 
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group

@@ -1,0 +1,487 @@
+###########################################################################
+                       DEVELOPMENT  RELEASE
+
+The version 1.3.x series of GnuCash are experimental development
+releases.  They may or may not work. Use at your own risk.
+
+The last stable, production version was gnucash-1.2.5 The next stable,
+production version will be gnucash-1.4.x
+
+###########################################################################
+
+Table of Contents:
+
+  - Overview
+  - Dependencies
+  - Invocation/running
+  - Internationalization
+  - Other Tools
+  - Building and Installing
+  - Supported OSes
+  - Additional Download Sites
+  - Getting the Source via CVS
+  - Developing GnuCash
+
+========
+Overview
+--------
+
+GnuCash is a personal finance manager.  A check-book like 
+register GUI allows you to enter and track bank accounts,
+stocks, income and even currency trades.  The interface is 
+designed to be simple and easy to use, but is backed with 
+double-entry accounting principles to ensure balanced books.
+
+Features include:
+
+  - An easy-to-use interface.  If you can use the
+    register in the back of your checkbook, you 
+    can use GnuCash.  Type directly into the register,
+    tab between fields, and use quick-fill to
+    automatically complete the transaction.
+  - Reconcile window  with running reconciled 
+    and cleared balances makes reconciliation easy.
+  - Stock/Mutual Fund Portfolios:  Track stocks
+    individually (one per account) or in portfolio
+    of accounts (a group of accounts that can be 
+    displayed together).  
+  - Multiple Currencies & Currency Trading: Multiple 
+    currencies are supported and can be bought and
+    sold (traded).  Currency movements between accounts
+    are fully balanced when double-entry is enabled.
+    (Some aspects of multiple currency support are not 
+    fully implemented.)
+  - Quicken File Import: Import Quicken QIF style files.
+    QIF files are automatically merged to eliminate 
+    duplicate transactions.
+  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
+    Valuation, or print them as HTML.
+  - Chart of Accounts: A master account can have a hierarchy
+    of detail accounts underneath it.  This allows similar
+    account types (e.g. Cash, Bank, Stock) to be grouped 
+    into one master account (e.g. Assets).
+  - Split Transactions: A single transaction can be split
+    into several pieces to record taxes, fees, and
+    other compound entries.
+  - Double Entry: When enabled, every transaction must 
+    debit one account and credit another by an equal amount.
+    This ensures that the "books balance": that the 
+    difference between income and outflow exactly equals
+    the sum of all assets, be they bank, cash, stock or other.
+  - Income/Expense Account Types (Categories):  
+    These serve not only to categorize your cash flow, 
+    but when used properly with the double-entry feature,
+    these can provide an accurate Profit&Loss statement.
+  - General Ledger: Multiple accounts can be displayed 
+    in one register window at the same time.  This can
+    ease the trouble of tracking down typing/entry errors.
+    It also provides a convenient way of viewing a
+    portfolio of many stocks, by showing all transactions
+    in that portfolio.
+  - Written in C with embedded scheme support via Guile.
+  - Perl support is optionally available for stand-alone scripting via SWIG.
+  - File access is locked in a network-safe fashion, preventing
+    accidental damage if several users attempt to access the 
+    same file, even if the file is NFS-mounted.
+  - Provides a byte-stream format, which allows accounts and
+    account groups to be transmitted to other processes
+    via pipes or sockets.
+  - Get Stock & Mutual Fund quotes from various web sites, 
+    update portfolio automatically (more funds being added 
+    regularly).
+  - European date handling, French, German, Swedish, and Great
+    Britain translations.
+
+
+Home Page:
+http://gnucash.org/
+
+Original X-Accountant home page:
+http://www.cs.hmc.edu/~rclark/xacc
+
+Precompiled binaries:
+http://www.gnucash.org/pub/gnucash/redhat-6.x/1.2.5/
+
+Development versions:
+http://www.gnucash.org/source_code.php3
+
+============
+Dependencies
+------------
+
+Only the 1.2.5 Motif version of GnuCash is currently stable. The Gnome
+version is a development version, but will soon be stable enough for
+regular use. Development of the Motif version has ceased and has
+recently been removed from CVS.  Older versions may be retrieved from
+CVS should someone want to resume the work.  The next stable release
+will be a full Gnome version, but will only require that you have the
+Gnome libraries available, not that you be running a Gnome desktop.
+
+The following packages are required to be installed to run gnucash:
+
+  guile: provides main extension language infrastructure, used
+    extensively in gnucash for initialization & startup.  Requires
+    version 1.3 or later. (The guile-1.3-7 rpm works.)
+
+  slib: scheme libraries for guile. Need version slib2c4 or later.
+
+  libpng: portable network graphics library. Any version.
+
+  libjpeg: JPEG image handling library. Any version.
+
+  libz: compression library. Any version.
+
+  xpm: X Pixmap extension. Any version.
+
+  gnome-libs: version 1.0.40 or higher should work. These libraries
+    require numerous other supporting libraries, such as gtk and glib.
+
+To be able to use certain features of GnuCash, such as reports and
+network stock price downloads, you must have the following packages
+below installed (in addition to those listed above).
+RPM's for most of these can be found at http://rufus.w3.org/linux/
+
+  perl: Almost any version of perl5 should work.  I run perl-5.004 
+
+In addition, some perl modules need to be installed:
+
+  perl-LWP/libwww-perl-5.36
+  perl-HTML/HTML-0.6
+  perl-HTML/HTML-Parser-2.20
+        -- these perl modules are used to fetch stock & mutual fund quotes
+           off the net.  You can pick up RPMS at
+           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/gnucash (last resort)
+           or sources at
+           http://www.cpan.org/CPAN.html
+
+
+=======
+Running
+-------
+
+For GnuCash invocation details, see the manpage in doc/gnucash.1.
+Soon, you'll be able to also run gnucash --help, but that's not
+finished yet...
+
+You can start GnuCash at the command-line, with "gnucash" or "gnucash
+<filename>", where <filename> is a GnuCash account file.  Sample
+accounts can be found in "data" subdirectory.  *.dat files are GnuCash
+accounts that can opened with the "Open File" menu entry.  *.qif files
+are Quicken Import Format files that can be opened with the "Import
+QIF" menu entry.
+
+GnuCash responds to the following environment variables:
+
+  GNC_RUN_AS_SHELL - if set, makes GnuCash pop up in a guile shell
+  with all the gnucash functions loaded.  From there, you can get the
+  normal startup behavior like this:
+
+    GNC_RUN_AS_SHELL=t ./gnucash
+    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
+    guile> (gnc:load "startup.scm")
+    guile> (gnc:main)
+
+  This is the same thing that happens if you don't use this
+  environment variable.  This can be helpful when trying to write and
+  test new .scm files.
+
+  GNC_BOOTSTRAP_SCM - the location of the initial bootstrapping scheme code.
+
+  GNC_SCM_LOAD_PATH - an override for the GnuCash scheme load path.
+  it should be a string representing a proper scheme list.  Each
+  element can either be a string representing a directory, the symbol
+  'default which will expand to the default path, or 'current which
+  will expand to the current load-path at the instant it encounters
+  the symbol.
+
+  GNC_DEBUG - enable debugging output.  This allows you to turn on
+  debugging earlier in the startup process than you can with --debug.
+
+As an example, here's a wrapper script we used to use to allow you
+to run gnucash from a local directory:
+
+  #! /bin/sh
+
+  export GNC_BOOTSTRAP_SCM=./share/scm/bootstrap.scm
+  export GNC_SCM_LOAD_PATH='("./share/scm")'
+  export GNC_DEBUG=t
+
+  # Run whichever one was built last.
+  exec ./src/gnucash \
+    --debug \
+    --share-dir ./share \
+    --config-dir ./etc \
+    --doc-path '("./doc/html/C")' \
+    "$@"
+
+
+====================
+Internationalization
+--------------------
+Message catalogues exist for French and German.  These are enabled with 
+environment variables.  For example, 
+
+Francais, en bash:
+    export LANG=fr_FR
+
+Francais, en tcsh:
+    setenv LANG fr_FR
+
+German version:
+    export LANG=de_DE
+
+
+Other locales that should mostly work, but are still in development:
+
+en_US
+en_GB
+fr_CH
+de_CH
+
+
+===========
+Other Tools
+-----------
+
+A tool to generate (ascii) reports from gnucash/xacc files can be found 
+at http://www.zeta.org.au/~grahamc/xacc_rpts.html.
+
+=====================
+Building & Installing
+---------------------
+
+(For additional build system details, see doc/README.build-system.)
+
+GnuCash uses GNU Automake to handle the build process, so for most of
+the details, see the generic instructions in INSTALL.  Below we detail
+the GnuCash specific bits.
+
+Prior to building GnuCash, you will have to obtain and install the
+following packages:
+
+  libtool: Available at ftp://ftp.gnu.org/gnu.
+    RPM's and debs are widely available with most distributions.
+
+  SWIG: Used to autogenerate perl wrappers - available at www.swig.org
+    need 1.1p5 or later ...
+
+GnuCash understands a few non-standard ./configure options.  You
+should run ./configure --help for the most up to date summary of the
+supported options, but here are some more detailed descriptions of
+some of them:
+
+  --enable-opt-style-install
+
+    Gnucash supports two types of install, the first is the normal
+    /usr or /usr/local/ style, where the files are installed into
+    /usr/bin /usr/lib, etc.  This is the default.
+
+    The second style is the FSSTND, opt-style install.  In this style,
+    all of the files are installed under a common subdirectory, often
+    in /usr/local/opt, with the binaries going to
+    /usr/local/opt/foo/bin, the libs going to /usr/local/opt/foo/lib,
+    etc.  To request this style of install, just use the
+    --enable-opt-style-install option to ./configure.
+
+If you only want a particular language installed, you can set the
+LINGUAS environment variable before you run configure. For example,
+to only install the French translations, run
+
+  $ export LINGUAS=fr
+  $ ./configure
+
+If you want to make sure that all languages get installed, run
+
+  $ unset LINGUAS
+  $ ./configure
+
+The last stable release of GnuCash had a Motif based user interface,
+and there was also an experimental, but never finished qt interface.
+Both of these have been removed from the source tree during the
+process of migrating to automake, but anyone who is interested in
+resurrecting these bits can easily retrieve them from CVS.
+
+The Gnome version is receiving all of the current development effort,
+and will be the next stable release.  Note that although the next
+stable release will have a Gnome user interface, it will not require
+that you be running a Gnome desktop, just that you have the Gnome
+libraries available, an important distinction.
+
+Although the Gnome version is being actively developed, we cannot say
+for sure that it has reached the stability level of the 1.2.5 Motif
+version.  It certainly has has more features, and has worked well for
+many, but right now the older 1.2.5 Motif version is the official
+stable version, and has had more thorough testing.
+
+Runtime and install destinations are separate.  The --prefix you
+specify to configure determines where the resulting binary will look
+for things at runtime.  Normally this determines where a "make
+install" will put all the files.  However, automake also supports the
+variable.  DESTDIR is used during the `make install' step to relocate
+install objects into a staging area.  Each object and path is prefixed
+with the value of `DESTDIR' before being copied into the install area.
+Here is an example of typical DESTDIR usage:
+
+     make DESTDIR=/tmp/staging install
+
+   This places install objects in a directory tree built under
+`/tmp/staging'.  If `/gnu/bin/foo' and `/gnu/share/aclocal/foo.m4' are
+to be installed, the above command would install
+`/tmp/staging/gnu/bin/foo' and `/tmp/staging/gnu/share/aclocal/foo.m4'.
+
+DESTDIR can be helpful when trying to build install images and
+packages.
+
+==============
+Supported OS's
+--------------
+GnuCash version 1.2.x is known to work in the following configs:
+
+GNU/Linux             -- Intel 
+FreeBSD               -- Intel
+OpenBSD               -- Intel
+
+Xacc-1.0.18, the predecessor to GnuCash, is known to work on these additional
+platforms:
+
+Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+SGI IRIX              -- MIPS 
+IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
+Unixware 7            -- Intel
+SCO OpenServer 5.0.4  -- Intel
+Solaris               -- Sparc  
+
+See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
+or  http://linas.org/linux/gnucash (slow-www ) 
+for precompiled binaries for these platforms
+
+
+=========================
+Additional Download Sites
+-------------------------
+
+Precompiled binaries & pre-requisite packages can be found at
+
+IBM AIX 4.1.5 
+      -- SMIT-installable images 
+      http://www.bull.de/pub/
+      see also http://www-frec.bull.com/
+
+SCO OpenServer 5.0.4 
+      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+
+Unixware 7
+      -- use pkgadd to install
+      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+
+SGI Irix
+      -- in SGI install format
+      -- warning, this is a very down-level version
+      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+
+
+=======================
+Getting Source with CVS
+-----------------------
+A read-only version of the cvs tree is available on the net.
+To access it, first, login, as so:
+
+  cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+
+The password is "guest"
+
+To get a copy of the source in the experimental development tree do a
+
+  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
+
+To get a copy of the source in the gnucash-1.2 stable production tree do a
+
+  cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
+
+
+==================
+Developing GnuCash
+------------------
+Before you start developing GnuCash, you should do the following:
+
+1. Read the file src/doc/coding-style.txt to learn about the coding-styles
+   used in the GnuCash source code.
+
+2. Several of the directories under src contain files called design.txt
+   which explain many aspects of GnuCash's design. Read those.
+
+3. Go to the gnucash website and skim the archives of the gnucash
+   development mailing list.
+
+4. Join the GnuCash development mailing list. See the gnucash website
+   for details on how to do this.
+
+
+Submitting a Patch:
+
+  Once you have done some work that you would like to submit, you need
+  to send a patch. There is a perl script called make-gnucash-patch
+  provided with the distribution that you can use to create the
+  patch. Here is how to use that perl script.
+
+  First, set up your development directories as follows:
+
+  < GnuCash home development directory >
+      |
+      |---- < directory containing original GnuCash sources >
+      |
+      |---- < directory containing your modified GnuCash sources >
+
+  A concrete example of those directories might be:
+
+  /home/me/gnucash
+      |
+      |---- /home/me/gnucash/gnucash.pristine (original sources)
+      |
+      |---- /home/me/gnucash/gnucash.mywork (original sources + my edits)
+
+  Copy the make-gnucash-patch script to the home development directory
+  (/home/me/gnucash above). Now set three environment variables to
+  reflect the names of your directories. Given the names above, you
+  would use:
+
+  export GNC_MAKEPATCH_OLD_DIR=gnucash.pristine
+  export GNC_MAKEPATCH_NEW_DIR=gnucash.mywork
+  export GNC_MAKEPATCH_HOME_DIR=/home/me/gnucash
+
+  Right before you make your patch, make sure *both* your working and
+  your pristine directories are in sync with cvs. Run 'cvs -z3 update
+  -dP' in both directories to ensure that is the case. Updating from
+  cvs in your working directory may cause conficts in a file. You must
+  resolve those conficts before making a patch.
+
+  Now run the script. Note that this script requires the programs
+  'makepatch', 'gzip', 'diff', and 'uuencode' (and, of course, 'perl')
+  to run.
+
+  When you run the script, three files will be generated:
+
+  gnc.diff: This file is an ascii text file containing the differences
+    between the original sources and your edits. At the bottom of this
+    file is a list of the files which were added, changed, or deleted.
+
+    Please examine this file (especially the list at the bottom) to
+    make sure that all of your changes (and no other changes) are
+    present in the file.
+
+    Do not submit this file!
+
+  gnucash.diff.gz: This is a gzipped version of the above file.
+    Do not submit this file!
+
+  gnucash.diff.gz.uue: This is a uuencoded (ascii-encoded) version of
+    the above file.
+
+    This is the file you submit.
+
+  Send gnucash.diff.gz.uue to gnucash-patches@gnucash.org
+
+  Thanks in advance for your contribution!
+

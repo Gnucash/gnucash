@@ -1,19 +1,18 @@
 This directory contains
 
--- cbb      -- misc perl scripts for loading cbb files
--- engine   -- a directory containing gui-independent accounting engine
--- gnome    -- the gtk/gnome implementation of gnucash
--- motif    -- the motif implementation of gnucash
--- ofx      -- Open Financial Exchange 
--- qt       -- the Qt/KDE implementation of gnucash
--- register -- a directory containg the register object
--- swig     -- perl, etc. wrappers for engine code
+  doc: various notes about design, etc.
+  engine: a directory containing gui-independent accounting engine.
+  experimental: for experimental systems.
+  gnome: most of the code for the gtk/gnome front end.
+  guile: guile related code including g-wrap bits.
+  optional: bits supported via ./configure --enable-* or --with-* args.
+  pixmaps: various runtime images.
+  quotes: code for downloading stock quotes.
+  register: a directory containg the register object.
+  scm: all of the scheme code.
 
 This directory contains a smatttering of gui-independent mis files.
 
-Ledger.c       -- obsolete, will be removed soon.
-SplitLedger.c  -- loads a register window with data from the engine
-MultiLedger.c  -- utilities for handling and updating multiple
-                  register windows at once.  
-
-
+  Ledger.c       -- obsolete, will be removed soon.
+  SplitLedger.c  -- loads a register window with data from the engine
+  MultiLedger.c  -- utilities for handling and updating multiple

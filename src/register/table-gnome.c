@@ -52,9 +52,9 @@
 #include "util.h"
 #include "splitreg.h"
 
-#include "gnome/gnucash-sheet.h"
-#include "gnome/gnucash-color.h"
-#include "gnome/gnucash-style.h"
+#include "gnucash-sheet.h"
+#include "gnucash-color.h"
+#include "gnucash-style.h"
 
 
 void

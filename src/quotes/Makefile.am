@@ -1,0 +1,23 @@
+
+bin_SCRIPTS = gnc-prices
+
+perllibdir = ${GNC_LIBDIR}/perl
+
+perlsharedir = ${GNC_SHAREDIR}/perl
+perlshare_DATA = \
+  Quote.pm
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+gnc-prices: gnc-prices.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-GNC_PERLSHAREDIR-@:${perlsharedir}:g' \
+            -e 's:@-GNC_PERLLIBDIR-@:${perllibdir}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+CLEANFILES += gnc-prices

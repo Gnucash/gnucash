@@ -24,6 +24,7 @@
 (if gnc:*load-slib-backup*
     (gnc:load "slib-backup.scm"))
 
+(gnc:load "depend.scm")
 (gnc:load "config-var.scm")
 (gnc:load "utilities.scm")
 (gnc:load "path.scm")

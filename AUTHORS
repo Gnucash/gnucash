@@ -1,0 +1,110 @@
+-*-text-*-
+
+Main Developers:
+----------------
+Robin Clark <rclark@hmc.edu> wrote the original X-Accountant in Motif 
+   as a school project, taking it to version 0.9 by October 1997.
+
+Linas Vepstas <linas@linas.org> liked what he saw: the GUI was slick,
+   the code was documented and well structured, and it was all GPL'ed.  
+   And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that 
+   the combobox and arrows would make an even slicker GUI, rewrote the 
+   X-Accountant internals to add double-entry, an account hierarchy,
+   split out a transaction mini-engine, add support for stocks, and spiff
+   up the help menus.  This was version 1.0 as of January 1998.  Since
+   then, for version 1.1, the engine was expanded & refined, and the 
+   register window code completely redesigned and made mostly 
+   Motif-(and GUI-)independent.  Did some prototype OFX work.
+
+Jeremy Collins <jcollins@gnucash.org> publicized the GnoMoney project 
+   widely and broadly, and then changed its name to GnuCash.  Jeremy
+   created the gnucash.org web site, registered the domain, got the 
+   initial GTK/gnome code working.
+
+Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
+   and then added guile/scheme support. Rob maintains the build 
+   infrastructure, is handling the whole guile/perl extension language 
+   thing, and is dealing with configuration & configurability.
+
+Dave Peticolas <peticola@cs.ucdavis.edu> hacks obsessively on
+   GnuCash. But he can stop anytime he wants to. Really.
+
+Bill Gribble <grib@billgribble.com> works magic. If your checks print
+   wrong, blame him. If you don't like the amount printed on your
+   checks, blame him. If you don't like your your bank balances,
+   your bank, or your life, blame him too.
+
+
+Fixes & Patches:
+----------------
+
+Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
+Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
+Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
+Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
+Simon Britnell <simon.britnell@peace.com> patch to RPM spec
+Christopher B. Browne <cbbrowne@hex.net> for perl and lots of scheme
+Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
+George Chen <georgec@sco.com> for MS-Money QIF's & fixes
+Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
+Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
+Matthew Condell <mcondell@bbn.com> FreeBSD patch
+Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Paul Fenwick <pjf@schools.net.au> ASX support
+Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
+Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
+Ron Forrester <rjf@aracnet.com> for gnome patches
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Bill Gribble <grib@billgribble.com> qif importation code
+Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Eric Hanchrow <offby1@blarg.net> updated currency documentation
+Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
+John Hasler <john@dhh.gt.org> engine patch
+Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
+Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
+Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Sven Kuenzler <sk@xgm.de> for SuSE README file
+Bryan Larsen <blarsen@ada-works.com> guile budget report
+Graham Leggett <minfrin@sharp.fm> for fixing a hang
+Ted Lemon <mellon@andare.fugue.com> for NetBSD port
+Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
+Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
+Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
+Matt Martin <mgmartin@abacusnet.net> guile error handling code
+Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
+Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
+G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
+Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
+Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
+Dave Peticolas <peticola@morpheus.cs.ucdavis.edu> extensive intelligent patches
+Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
+Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
+Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
+Tomas Pospisek <tpo@spin.ch> debian patches
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
+Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
+Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
+Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Robby Stephenson <robby.stephenson@usa.net> register & file history patches
+Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
+Diane Trout <detrout@earthlink.net> scheme qif import patch
+Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices
+Rob Walker <rob@valinux.com> guile and register patches
+David Woodhouse <dwmw2@infradead.org> Great Britain translations
+Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
+Shimpei Yamashita <shimpei@gol.com> Japanese translation
+
+... and I am sure that I have missed many others ...

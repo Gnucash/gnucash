@@ -1,4 +1,7 @@
-# -*-shell-script-*-
+## -*-m4-*-
+
+dnl Process this file with autoconf to produce a configure script.
+
 # FILE:
 # configure.in
 #
@@ -15,24 +18,22 @@
 #   Libraries - Check for libraries
 #   Footer    - Autoconf footer stuff
 
-
-
 ### --------------------------------------------------------------------------
 ### Headers
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
 
 AC_INIT(src/guile/gnucash.h)
-
 AM_INIT_AUTOMAKE(gnucash,1.3.8)
+AM_CONFIG_HEADER(config.h)
 
 dnl Set of available languages.
 ALL_LINGUAS="fr de en_GB sv ja"
 
+AM_PROG_LIBTOOL
+
 AC_PROG_INSTALL
 AC_PROG_RANLIB
-
-### AC_PROG_CC sets CFLAGS if it's not already set.
 AC_PROG_CC
 
 AC_ISC_POSIX
@@ -43,7 +44,6 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy)   
 
-
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
@@ -52,23 +52,49 @@ AC_CHECK_FUNCS(stpcpy memcpy)
 AC_DEFINE(USE_QUICKFILL,1)
 
 # Should we uses color (red/black) balances?
-AC_ARG_ENABLE( color,
+AC_ARG_ENABLE(color,
        [  --disable-color         don't use color (red/black) balances],
        AC_DEFINE(USE_NO_COLOR,1),
        AC_DEFINE(USE_NO_COLOR,0) )
 
-AC_ARG_WITH( opt-style-install,
-  [  --with-opt-style-install   install everything in subdirs of --prefix],
-  OPT_STYLE_INSTALL=1
-  CPPFLAGS="$CPPFLAGS -I$prefix/include"
-  CFLAGS="$CLFAGS -L$prefix/lib",
-  OPT_STYLE_INSTALL=0)
-AC_SUBST(OPT_STYLE_INSTALL)
+AC_ARG_ENABLE(opt-style-install,
+  [  --enable-opt-style-install   install everything in subdirs of --prefix],
+  [case "${enableval}" in
+     yes) gnc_opt_style_install=true ;;
+     no)  gnc_opt_style_install=false ;;
+     *) AC_MSG_ERROR(bad value ${enableval} for --enable-opt-style-install) ;;
+   esac],
+   [gnc_opt_style_install=false])
+
+if test x${gnc_opt_style_install} = xtrue
+then
+  GNC_CONFIGDIR='${sysconfdir}'
+  GNC_LIBDIR='${libdir}'
+  GNC_SHAREDIR='${datadir}'
+  GNC_SCM_INSTALL_DIR='${datadir}/scm'
+  GNC_DOC_INSTALL_DIR='${datadir}/doc'
+else
+  GNC_CONFIGDIR='${sysconfdir}/gnucash'
+  GNC_LIBDIR='${pkglibdir}'
+  GNC_SHAREDIR='${pkgdatadir}'
+  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
+  GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
+fi
+
+AC_SUBST(GNC_CONFIGDIR)
+AC_SUBST(GNC_LIBDIR)
+AC_SUBST(GNC_SHAREDIR)
+AC_SUBST(GNC_SCM_INSTALL_DIR)
+AC_SUBST(GNC_DOC_INSTALL_DIR)
+
+
+# We should always see these errors...
+CFLAGS="${CFLAGS} -Wall"
 
 AC_ARG_ENABLE( debug,
        [  --enable-debug          compile with debugging flags set],
-       CFLAGS="${CFLAGS} -g -Wall"
-       LDFLAGS="${LDFLAGS} -g -Wall"
+       CFLAGS="${CFLAGS} -g"
+       LDFLAGS="${LDFLAGS} -g"
        AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1),
        AC_DEFINE(DEBUG_MEMORY,0) AC_DEFINE(USE_DEBUG,0) )
 
@@ -93,30 +119,17 @@ AC_ARG_WITH( locale-dir,
 
 AC_SUBST(LOCALE_DIR)
 
+
+
+# (rlb) As far as I can tell from the gettext info pages, this stuff...
+
 # We need the variable below defined for the gettext checks to work
-ac_cv_header_locale_h=yes
-AC_CAN_USE_GNU_GETTEXT
+#ac_cv_header_locale_h=yes
+#AC_CAN_USE_GNU_GETTEXT
 
-### --------------------------------------------------------------------------
-## qt-version of gnucash
-# The qt version of gnucash is far from doing anything usefull, so most people
-# don't care about it. Those who want to play with it, must specify --enable-qt
+# (rlb) should be replaced with this...
 
-AC_ARG_ENABLE(qt,
-              [  --enable-qt               enable building of the Qt version of gnucash],
-              GNC_QT_ENABLED=yes)
-
-if test x"$GNC_QT_ENABLED" = xyes; then
-  QT_TARGET="qt.real"
-  QT_STATIC_TARGET="qt.static.real"
-else
-  QT_TARGET="qt.disable"
-  QT_STATIC_TARGET="qt.disable"
-fi
-
-AC_SUBST(QT_TARGET)
-AC_SUBST(QT_STATIC_TARGET)
-
+AM_GNU_GETTEXT
 
 ### --------------------------------------------------------------------------
 ### Check for perl
@@ -183,7 +196,16 @@ if test x"${GLIB_CONFIG_BIN}" = x
 then
   AC_PATH_PROG(GLIB_CONFIG_BIN, glib-config, GLIB_CONFIG_NOT_FOUND)
 fi
+
+if test "${GLIB_CONFIG_BIN}"x != GLIB_CONFIG_NOT_FOUNDx
+then
+  GLIB_CFLAGS=`${GLIB_CONFIG_BIN} --cflags`
+  GLIB_LIBS=`${GLIB_CONFIG_BIN} --libs`
+fi
+
 AC_SUBST(GLIB_CONFIG_BIN)
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
 
 # Let the user specify gnome paths:
 GNOME_CONFIG_BIN="gnome-config"
@@ -216,31 +238,13 @@ fi
 # This is how to use the variables set by AC_PATH_XTRA:
 #	cc @X_CFLAGS@ -c -o foo.o foo.c
 #	cc @X_LIBS@ (-lfoo...) @X_PRE_LIBS@ -lX11 @X_EXTRA_LIBS@
-# (But see also the test for Motif libraries, below.)
 # (Perhaps X_LIBS should have been called X_LDFLAGS.)
 
 # XXX - Not all programs need all of these, surely.
 X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
-# XXX - Ask Motif what it wants
-MOTIF_LIBS="-lXm"
 
 ### --------------------------------------------------------------------------
-### Motif libs -- these are needed for the motif builds only
-# Let the user specify motif paths:
-AC_ARG_WITH( motif, 
-       [  --with-motif=PATH       specify where to look for motif includes and libs],
-       X_LIBS="${X_LIBS} -L$with_motif/lib" X_CFLAGS="$X_CFLAGS -I$with_motif/include" )
-
-AC_ARG_WITH( motif-includes, 
-       [  --with-motif-includes=DIR    specify where to look for motif includes],
-       X_CFLAGS="${X_CFLAGS} -I$with_motif_includes" )
-
-AC_ARG_WITH( motif-libraries, 
-       [  --with-motif-libraries=DIR   specify where to look for motif libs],
-       X_LIBS="${X_LIBS} -L$with_motif_libraries" )
-
-### --------------------------------------------------------------------------
-### Gnome libs -- these are needed for the gnome builds only
+### Gnome libs -- these are needed for the gnome builds
 # Let the user specify gnome paths:
 # -I...libgnomesupport is to fix bug in gnome-1.3 release
 #
@@ -265,17 +269,6 @@ AC_ARG_WITH( imlib,
        [  --with-imlib=PATH       specify where to look for imlib includes and libs],
        X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
-### --------------------------------------------------------------------------
-# The XmHTML widget is used by motif.
-
-AC_ARG_WITH( xmhtml-includes, 
-       [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
-       X_CFLAGS="-I$with_xmhtml_includes ${X_CFLAGS}" )
-
-AC_ARG_WITH( xmhtml-libraries, 
-       [  --with-xmhtml-libraries=DIR   specify where to look for xmhtml libs],
-       X_LIBS="-L$with_xmhtml_libraries ${X_LIBS}" )
-
 # the XmHTML widget needs libz, libjpeg, libpng and libm
 # it also uses #ifdef's not #if's so DONT #def to zero.
 AC_CHECK_LIB(z, deflateEnd,
@@ -293,21 +286,8 @@ AC_CHECK_LIB(png, png_read_image,
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
         AC_DEFINE(HAVE_XPM,0)
-        AC_MSG_WARN([Cannot find Xpm library -- gnome build disabled (not required for motif)]) 
-        GNOME_TARGET="gnome.disabled" 
-        GNOME_STATIC_TARGET="gnome.disabled",
+        AC_MSG_ERROR([Cannot find required Xpm library]),
         $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS)
-
-
-# Don't build the xmhtml source if user already has it installed...
-# this is ugly, there must be a nicer way of setting this up ...
-AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
-        MOTIF_LIBS="-lXmHTML $MOTIF_LIBS",
-        ,
-        $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS $X_LIBS) 
-
-AC_SUBST(XMHTML_TARGET)
-AC_SUBST(XMHTML_INC)
 
 ### -------------------------------------------------------------------------
 ## gtk-xmhtml
@@ -333,9 +313,7 @@ GNOME_STATIC_TARGET="gnome.static.real"
 # this guarantees it - it works.  Promise!!
 AC_MSG_CHECKING([gtk-xmhtml/gtk-xmhtml.h])
 AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>], AC_MSG_RESULT(yes) ,
-    AC_MSG_WARN([Cannot find gtk-xmhtml.h -- gnome build disabled (not required for motif)]) 
-    GNOME_TARGET="gnome.disabled" 
-    GNOME_STATIC_TARGET="gnome.disabled")
+    AC_MSG_ERROR([Cannot find gtk-xmhtml.h]))
 
 #undo damage to CPPFLAGS
 CPPFLAGS="$OLDCPPFLAGS"
@@ -347,12 +325,10 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkxmhtml`
 #check for gtkxmhtml, export library link to variable GTK_XMHTML
 AC_CHECK_LIB(gtkxmhtml, gtk_xmhtml_new,
         GTK_XMHTML="gtkxmhtml",
-        AC_MSG_WARN([Cannotfind libgtkxmhtml -- gnome build disabled (not required for motif)]) 
-	GNOME_TARGET="gnome.disabled" 
-	GNOME_STATIC_TARGET="gnome.disabled",
+        AC_MSG_ERROR([Cannot find libgtkxmhtml.]),
         $EXTRALIBS)
 AC_SUBST(GTK_XMHTML)
- 
+
 
 ### --------------------------------------------------------------------------
 EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
@@ -360,9 +336,7 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
 #check for libxml
 AC_CHECK_LIB(xml, xmlDefaultSAXHandlerInit,
         ,
-        AC_MSG_WARN([Cannotfind libxml -- gnome build disabled (not required for motif)]) 
-	GNOME_TARGET="gnome.disabled" 
-	GNOME_STATIC_TARGET="gnome.disabled",
+        AC_MSG_ERROR([Cannot find libxml.]),
         $EXTRALIBS)
 
 
@@ -371,12 +345,33 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 
 # check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
 # if found
-AC_CHECK_LIB(gnomeprint, gnome_print_context_new, , , $EXTRALIBS)
-
+AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} print"
+             AC_DEFINE(HAVE_LIBGNOMEPRINT),
+             ,
+             $EXTRALIBS)
 
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)
 
+### --------------------------------------------------------------------------
+## For now, we just presume you're using the GNOME version.  The other
+## UI's haven't been carried over during the automake transition.  At
+## some point, if it's deemed worthwhile, they can be resurrected...
+
+GNOME=1
+AC_DEFINE(GNOME)
+
+GNOMEBUILDLIBS="gnomeui gnome gtkxmhtml xml ${GNOMEBUILDLIBS}"
+
+if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
+then
+  GNOME_CFLAGS=`${GNOME_CONFIG_BIN} --cflags ${GNOMEBUILDLIBS}`
+  GNOME_LIBS=`${GNOME_CONFIG_BIN} --libs ${GNOMEBUILDLIBS}`
+fi
+
+AC_SUBST(GNOME_CFLAGS)
+AC_SUBST(GNOME_LIBS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -446,93 +441,45 @@ AC_SUBST(GUILE_CONFIG)
 AC_SUBST(GUILE_COMPILE_ARGS)
 AC_SUBST(GUILE_LINK_ARGS)
 
-### --------------------------------------------------------------------------
-### Plotutils
-
-#AC_CHECK_LIB(plot, pl_openpl,
-#  AC_DEFINE(HAVE_PLOTUTILS,1)
-#  HAVE_PLOTUTILS=1
-#  AC_DEFINE(PLOTUTILS_LIBS,"-lXaw -lXt -lplot"),
-#  ,
-#  $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS) 
-
-# We need this in at least one of the Makefile.in's
-#AC_SUBST(HAVE_PLOTUTILS)
-#AC_SUBST(PLOTUTILS_LIBS) 
-
-AC_SUBST(MOTIF_LIBS)
-
-### --------------------------------------------------------------------------
-#############################################################
-### Set up the install style and all the default paths... ###
-
-# some confusion due to FSSTND stuff --
-# the readme's and miscellaneous docs are in /usr/doc (or equivalent)
-# the online help system is in /usr/share/gnucash/Doc and various subdirs
-# the parsed-html report supsystem is in /usr/share/gnucash/Reports
-
-if test ${OPT_STYLE_INSTALL} = 1
-then
-  GNC_DOCDIR='${prefix}/doc'
-  GNC_BINDIR='${prefix}/bin'
-  GNC_LIBDIR='${prefix}/lib'
-  GNC_CONFIGDIR='${sysconfdir}'
-  GNC_SHAREDIR='${datadir}'
-else
-  GNC_DOCDIR='${prefix}/doc/gnucash'
-  GNC_BINDIR='${prefix}/bin'
-  GNC_LIBDIR='${prefix}/lib/gnucash'
-  GNC_CONFIGDIR='${sysconfdir}/gnucash'
-  GNC_SHAREDIR='${datadir}/gnucash'
-fi
-
-GNC_MANDIR='${mandir}'
-
-AC_SUBST(GNC_DOCDIR)
-AC_SUBST(GNC_BINDIR)
-AC_SUBST(GNC_LIBDIR)
-AC_SUBST(GNC_CONFIGDIR)
-AC_SUBST(GNC_SHAREDIR)
-AC_SUBST(GNC_MANDIR)
-
-# Get the absolute top level directory.  This is only used to add some
-# ./lib/* paths to PATH for local build binaries like gwrap.  For all
-# other purposes, you should probably be using top_srcdir.  configure
-# automagically provides it, but you have to be careful to set it
-# directly within each Makefile.in since it's the *relative* path to
-# the top of the source tree rather than an absolute path.  You can't
-# just put it in Makefile.init.in or Makefile.common.
-
-ABSOLUTE_TOP_SRCDIR=`pwd`
-AC_SUBST(ABSOLUTE_TOP_SRCDIR)
-
-AC_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(
           dnl # Makefiles
-	  po/Makefile.in
-	  src/register/gnome/Makefile
           Makefile
-          Makefile.init
-          lib/ComboBox-1.33/Makefile
-          lib/Makefile
-          lib/Xbae-4.6.2-linas/Makefile
-          lib/Xbae-4.6.2-linas/src/Makefile
+          doc/Makefile
+          doc/examples/Makefile
+          doc/html/Makefile
+          doc/html/C/Makefile
+          doc/html/C/image/Makefile
+          doc/html/fr/Makefile
+          doc/html/fr/image/Makefile
+          intl/Makefile
+	  po/Makefile.in
+          raw/Makefile
+          raw/ofx/Makefile
+          raw/ofx/dtd/Makefile
+          raw/ofx/explore/Makefile
+          raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
           src/engine/Makefile
-          src/g-wrap/Makefile
           src/gnome/Makefile
           src/guile/Makefile
-          src/motif/Makefile
-          src/qt/Makefile
+          src/optional/Makefile
+          src/optional/swig/Makefile
+          src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile
-          src/reports/Makefile
+          src/register/gnome/Makefile
           src/scm/Makefile
-          src/swig/Makefile
-          src/swig/perl5/Makefile
+          src/scm/gnumeric/Makefile
+          src/scm/printing/Makefile
+          src/scm/qif-import/Makefile
+          src/scm/report/Makefile
+          src/scm/srfi/Makefile
+          dnl # src/swig/Makefile
+          dnl # src/swig/perl5/Makefile
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
           ,
-          chmod a+x ./gnucash)
+          dnl # commands go here, but we don't have any right now
+          )

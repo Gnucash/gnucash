@@ -11,10 +11,9 @@
 # Created by Linas Vepstas January 1999
 # Copyright (c) 1999-2000 Linas Vepstas
 
-# hack alert -- this pathname should *NOT* be hard-coded, nor should the
-#               ones below it.
-use lib '@-GNC_LIBDIR-@';
+use lib '@-GNC_PERLSHAREDIR-@';
 use Quote;
+use lib '@-GNC_PERLLIBDIR-@';
 use gnucash;
 
 # --------------------------------------------------
@@ -222,3 +221,7 @@ foreach $acct (@acctlist)
 
 gnucash::xaccSessionSave ($sess);
 gnucash::xaccSessionEnd ($sess);
+
+## Local Variables:
+## mode: perl
+## End:

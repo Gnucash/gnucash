@@ -302,8 +302,11 @@
     (cond ((null? accounts) '())
           (else 
            (append 
-            (gnc:group-get-account-list 
-             (gnc:account-get-children (car accounts)))
+            (or
+             (gnc:group-get-account-list
+              (gnc:account-get-children
+               (car accounts)))
+             '())
             (allsubaccounts (cdr accounts))))))
 
   (define string-db (gnc:make-string-database))

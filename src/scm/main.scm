@@ -27,8 +27,6 @@
   (gnc:load "srfi/srfi-1.unclear.scm")
   (gnc:load "srfi/srfi-1.r5rs.scm")
 
-  (gnc:load "depend.scm")
-
   ;; Now we can load a bunch of files.
 
   (gnc:depend "doc.scm")

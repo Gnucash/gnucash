@@ -1,43 +1,4 @@
 
-The various peices of code needed to build X-Accountant are contained
-here.  Some of these have been modified from thier original
-distribution.  In general, its a *really bad idea* to try to fix
-bugs here, you should probably start afresh with the real, original
-sources.
+This directory is intended to hold any external code that is needed in
+order to build gnucash, but isn't considered widely available.
 
-Some of the stuff here may be down-level, different, or patched to work
-with Xbae.  In all cases, examples and non-essential files have been
-deleted to keep the overall distribution small.  
-
-The stuff here will be slowly removed when patched/standard versions
-that work with Xbae become available, and become easy to build & use.
-
-XbaeMatrix:  
-  -- modified to support cell widgets
-  -- modified to support cursor position
-  -- variety of assorted bug fixes
-  -- fix core dumpes when adding rows/cols to widget with
-     row/column/cell user data.
-  -- modified by deleting examples, other non-essential stuff.
-
-libhtmlw: *OBSOLETE*
-  -- eliminated due to license restrictions and overall brokeness.
-     Use XmHTML instead.
-
-ComboBox:
-  -- variety of assorted bug fixes & enhancements.
-  -- modified by deleting examples, other non-essential stuff.
-
-XmHTML: *OBSOLETE* Use newer version
-  -- modified by deleting examples, other non-essential stuff.
-
-urlget: *OBSOLETE*
-  -- you'll do a let better by gettig the latest from
-     http://www.fts.frontec.se/~dast/curl/
-     Its now called "curl", not "urlget".
-
-gtksheet: *OBSOLETE*
-  -- This was the basis for the GNOME version's register.
-
-gtkfilesel2: *OBSOLETE*
-  -- Was used as a gnome file box. No longer used.

@@ -22,6 +22,8 @@
 #ifndef __GNC_COMMON_H__
 #define __GNC_COMMON_H__
 
+#include "config.h"
+
 #if defined(GNOME)
   #include <gtk/gtk.h>
 #elif defined(MOTIF)

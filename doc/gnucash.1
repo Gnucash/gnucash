@@ -1,0 +1,69 @@
+.\" Written by Robert Merkel (rgmerk@mira.net)
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH GNUCASH 1 "MARCH 2000" Version "1.3.x"
+.SH NAME
+gnucash \- personal finance manager
+.SH SYNOPSIS
+.B gnucash [--debug] [
+.I xacc-data.xac
+.B ]
+.SH DESCRIPTION
+.B gnucash
+is a personal accounting package that allows you to record
+and track income, expenses, assets, and investments.  It supports
+reconciliation, has substantial reporting capabilities, and is
+extensible using guile.  It can import QIF data from Quicken(TM) and
+many other commercial accounting packages. It uses GTK+ and GNOME to
+provide an attractive user interface, and has extensive online help.
+
+.SH OPTIONS
+.IP --debug
+Turn on debug mode.  Mainly of interest to developers.
+.SH FILES
+.I ~/.gnucash/config.auto
+.RS
+Automatically generated per-user configuration file.  DO NOT EDIT 
+MANUALLY!
+.SH ENVIRONMENT
+.IP GNC_DEBUG
+Enable debugging output.  This allows you to turn on the debugging
+earlier in the startup process than you can with 
+.B --debug.
+.IP GNC_RUN_AS_SHELL
+If set, makes 
+.B gnucash
+pop up in a guile shell with all the gnucash functions loaded.  See 
+the README for more details.
+.IP GNC_BOOTSTRAP_SCM
+Location of the initial bootstrapping scheme code.  Hopefully, you
+won't need to change this.
+.IP GNC_SCM_LOAD_PATH
+An override for the 
+.B gnucash
+scheme load path.  You shouldn't need to alter this.  For more
+information see the README file.
+.SH BUGS
+.B gnucash
+is beta software, and consequently still has bugs and incomplete
+features.  QIF import, in particular, is still incomplete at this
+stage.  Please report any bugs using the bug reporting form on the 
+.B gnucash 
+web site.
+
+.SH "SEE ALSO"
+.BR gnc-prices (1),
+
+.B gnucash 
+has extensive on-line help available from the "help" menu.
+
+Additional information and the latest version is available 
+at the web site:
+.B http://gnucash.org
+
+.SH AUTHOR
+Robert Merkel <rgmerk@mira.net> wrote this manpage.  
+
+.B gnucash
+was written by Robin Clark, Linas Vepstas, and a cast of thousands.
