@@ -1,3 +1,10 @@
+2003-03-20  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: don't add -I$(GNC_INCLUDE_DIR) to the engine
+	  cflags, because it can cause build warnings on platforms with
+	  gcc-3.2, and frankly we don't need it since we don't install
+	  before we're building.
+
 2003-03-18  Benoit Grégoire  <bock@step.polymtl.ca>
 	* Documentation update
 
