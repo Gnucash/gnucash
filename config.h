@@ -31,10 +31,10 @@
 /* #undef  WORDS_BIGENDIAN */     
 
 /* Do some memory debugging stuff */
-#define  DEBUG_MEMORY        0
+#define  DEBUG_MEMORY        1
 
 /* Enable debugging stuff */
-#define  USE_DEBUG           0
+#define  USE_DEBUG           1
 
 /* Enable quickfill in register window */
 #define  USE_QUICKFILL       1
