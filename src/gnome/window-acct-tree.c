@@ -155,7 +155,8 @@ gnc_acct_tree_window_find_popup_item(GNCAcctTreeWin * win, GtkWidget *popup,
 
 static GtkWidget * 
 gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
-                           gpointer user_data) {
+                           gpointer user_data)
+{
   GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = NULL;
   char             * name = NULL;
@@ -194,7 +195,8 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
 
 
 static void
-gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
+gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data)
+{
   GNCMDIChildInfo * mc = user_data;
   GNCAcctTreeWin * w = mc->user_data;
 
@@ -269,7 +271,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
   if (mc->menu_info) {
     popup = gnc_mainwin_account_tree_attach_popup
       (GNC_MAINWIN_ACCOUNT_TREE (win->account_tree),
-       mc->menu_info->moreinfo, child);
+       mc->menu_info->moreinfo, maininfo);
     gnc_acct_tree_window_find_popup_item(win, popup, "Open Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Open Subaccounts");
     gnc_acct_tree_window_find_popup_item(win, popup, "Edit Account");
@@ -295,7 +297,8 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
  ********************************************************************/
 
 GnomeMDIChild * 
-gnc_acct_tree_window_create_child(const gchar * url) {
+gnc_acct_tree_window_create_child(const gchar * url)
+{
   GNCMDIInfo          * maininfo = gnc_mdi_get_current ();
   GnomeMDIGenericChild * accountchild = 
     gnome_mdi_generic_child_new(url);
@@ -316,7 +319,8 @@ gnc_acct_tree_window_create_child(const gchar * url) {
  ********************************************************************/
 
 void
-gnc_main_window_open_accounts(gboolean toplevel) {
+gnc_main_window_open_accounts(gboolean toplevel)
+{
   GNCMDIInfo * maininfo = gnc_mdi_get_current ();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
@@ -464,14 +468,32 @@ gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget,
   gnc_acct_tree_window_delete_common (account);
 }
 
+
+static Account *
+gnc_acct_tree_find_account_from_gncmdi(GNCMDIInfo * info)
+{
+  GnomeMDIChild   * child;
+  GNCMDIChildInfo * mc;
+  GNCAcctTreeWin  * win;
+  Account         * account;
+
+  child = gnome_mdi_get_active_child(info->mdi);
+  mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  win = mc->user_data;
+  account = gnc_acct_tree_window_get_current_account(win);
+
+  return account;
+}
+
+
 static void
 gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account          * account = gnc_acct_tree_window_get_current_account(win);
-  RegWindow        * regData;
+                                       GNCMDIInfo * info)
+{
+  Account   *account;
+  RegWindow *regData;
   
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL) {
     const char *message = _("To open an account, you must first\n"
                             "choose an account to open.");
@@ -489,13 +511,12 @@ gnc_acct_tree_window_menu_open_subs_cb(GtkWidget * widget,
 
 static void
 gnc_acct_tree_window_menu_edit_cb (GtkWidget * widget, 
-                                   GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
-  
+                                   GNCMDIInfo * info)
+{
+  Account       *account;
   AccountWindow *edit_window_data;
   
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account != NULL)
   {
     edit_window_data = gnc_ui_edit_account_window(account);
@@ -512,12 +533,12 @@ gnc_acct_tree_window_menu_edit_cb (GtkWidget * widget,
 
 static void
 gnc_acct_tree_window_menu_reconcile_cb(GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
-  RecnWindow     * recnData;
+				       GNCMDIInfo * info)
+{
+  Account    *account;
+  RecnWindow *recnData;
   
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account != NULL)
   {
     recnData = recnWindow(gnc_ui_get_toplevel(), account);
@@ -532,51 +553,53 @@ gnc_acct_tree_window_menu_reconcile_cb(GtkWidget * widget,
 }
 
 static void
-gnc_acct_tree_window_menu_transfer_cb (GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
 
+gnc_acct_tree_window_menu_transfer_cb (GtkWidget * widget, 
+				       GNCMDIInfo * info)
+{
+  Account *account;
+
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   gnc_xfer_dialog (gnc_ui_get_toplevel (), account);
 }
 
 static void
 gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget, 
-                                          GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+					  GNCMDIInfo * info)
+{
+  Account *account;
 
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   gnc_stock_split_dialog (account);
 }
 
 static void
 gnc_acct_tree_window_menu_add_account_cb (GtkWidget * widget, 
-                                          GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+                                          GNCMDIInfo * info)
+{
+  Account *account;
+
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   gnc_ui_new_account_window_with_default (NULL, account);
 }
 
 static void
 gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget, 
-                                             GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+                                             GNCMDIInfo * info)
+{
+  Account *account;
 
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   gnc_acct_tree_window_delete_common (account);
 }
 
 static void
 gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget, 
-                                   GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+				   GNCMDIInfo * info)
+{
+  Account *account;
 
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL)
   {
     const char *message = _("You must select an account to check and repair.");
@@ -594,11 +617,11 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 
 static void
 gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
+				       GNCMDIInfo * info)
+{
+  Account *account;
   
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL)
   {
     const char *message = _("You must select an account to check and repair.");
@@ -616,7 +639,8 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
 
 static void
 gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget, 
-                                       GnomeMDIChild * child) {
+				       GNCMDIInfo * info)
+{
   AccountGroup *group = gnc_get_current_group ();
 
   gnc_suspend_gui_refresh ();
@@ -628,13 +652,12 @@ gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget,
 }
 
 static void
-gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GnomeMDIChild * child)
+gnc_acct_tree_window_menu_open_cb (GtkWidget *widget, GNCMDIInfo * info)
 {
-  GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
-  RegWindow      * regData;
+  Account   *account;
+  RegWindow *regData;
   
+  account = gnc_acct_tree_find_account_from_gncmdi(info);
   if (account == NULL) {
     const char *message = _("To open an account, you must first\n"
                             "choose an account to open.");
@@ -682,8 +705,8 @@ gnc_acct_tree_window_activate_cb(GNCMainWinAccountTree *tree,
 }
 
 static void
-gnc_acct_tree_window_configure (GNCAcctTreeWin * info) {
-
+gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
+{
   GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
   GSList *list, *node;
@@ -1228,6 +1251,7 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
 static void
 gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
 {
+  GNCMDIInfo     * info = mc->gnc_mdi;
   GNCAcctTreeWin * win;
   GtkWidget      * widget;
   GnomeUIInfo fileitems1[] =
@@ -1236,7 +1260,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_New Account..."),
       N_("Create a new account"),
-      gnc_acct_tree_window_menu_add_account_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_add_account_cb, info, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
@@ -1248,7 +1272,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_Open Account"),
       N_("Open the selected account"),
-      gnc_acct_tree_window_menu_open_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_open_cb, info, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       'o', GDK_CONTROL_MASK, NULL
     },
@@ -1256,7 +1280,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("Open S_ubaccounts"),
       N_("Open the selected account and all its subaccounts"),
-      gnc_acct_tree_window_menu_open_subs_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_open_subs_cb, info, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       0, 0, NULL
     },
@@ -1270,7 +1294,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_Edit Account"),
       N_("Edit the selected account"),
-      gnc_acct_tree_window_menu_edit_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_edit_cb, info, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
       'e', GDK_CONTROL_MASK, NULL
     },
@@ -1278,7 +1302,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       N_("_Delete Account"),
       N_("Delete selected account"),
       gnc_acct_tree_window_menu_delete_account_cb, 
-      mc->child,
+      info,
       NULL,
       GNOME_APP_PIXMAP_STOCK,
       GNOME_STOCK_PIXMAP_REMOVE,
@@ -1295,7 +1319,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_Transfer..."),
       N_("Transfer funds from one account to another"),
-      gnc_acct_tree_window_menu_transfer_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_transfer_cb, info, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
     },
@@ -1303,7 +1327,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("_Reconcile..."),
       N_("Reconcile the selected account"),
-      gnc_acct_tree_window_menu_reconcile_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_reconcile_cb, info, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'r', GDK_CONTROL_MASK, NULL
     },
@@ -1311,7 +1335,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
       GNOME_APP_UI_ITEM,
       N_("Stock S_plit..."),
       N_("Record a stock split or a stock merger"),
-      gnc_acct_tree_window_menu_stock_split_cb, mc->child, NULL,
+      gnc_acct_tree_window_menu_stock_split_cb, info, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -1335,9 +1359,9 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
     return;
     
   /* Do not i18n these strings!!! */
-  dup_scrub[0].user_data = mc->child;
-  dup_scrub[1].user_data = mc->child;
-  dup_scrub[2].user_data = mc->child;
+  dup_scrub[0].user_data = info;
+  dup_scrub[1].user_data = info;
+  dup_scrub[2].user_data = info;
   gnome_app_insert_menus (mc->app, "File/_New File", fileitems1);
   gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
   gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
