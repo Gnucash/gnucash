@@ -1090,6 +1090,10 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
 		     gpointer         user_data)
 {
   HBCIInitialInfo *info = user_data;
+  const HBCI_Customer *customer = NULL;
+  const HBCI_User *user = NULL;
+  const HBCI_Medium *medium = NULL;
+  const HBCI_Bank *bank = NULL;
   g_assert(info);
   
   /* of course we need to know for which customer we do this */
@@ -1099,110 +1103,116 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
   if (info->newcustomer == NULL) 
     return FALSE;
 
+  customer = info->newcustomer;
+  user = HBCI_Customer_user(customer);
+  bank = HBCI_User_bank(user);
+  medium = HBCI_User_medium(user);
+  
   {
     HBCI_OutboxJob *job;
       
-    /* FIXME: Only do this sync job if this is a rdh medium. */
     /* Execute a Synchronize job, then a GetAccounts job. */
-    job = HBCI_OutboxJob_new("JobSync", 
-			     (HBCI_Customer *)info->newcustomer, "");
-    HBCI_Outbox_addJob (info->outbox, job);
-    
-    {
-      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
-      HBCI_Job_setIntProperty
-	(jjob, "open/ident/country", 
-	 HBCI_Bank_country(HBCI_User_bank
-			   (HBCI_Customer_user(info->newcustomer))));
-      HBCI_Job_setProperty
-	(jjob, "open/ident/bankcode", 
-	 HBCI_Bank_bankCode(HBCI_User_bank
-			    (HBCI_Customer_user(info->newcustomer))));
-      HBCI_Job_setProperty
-	(jjob, "open/ident/customerid", HBCI_Customer_custId(info->newcustomer));
+    if (HBCI_Medium_securityMode(medium) == 
+	HBCI_SECURITY_RDH) {
+      /* Only do this sync job if this is a rdh medium. */
+      if ((strlen(HBCI_User_systemId(user)) == 0) ||
+	  (strcmp(HBCI_User_systemId(user), "0") == 0)) {
+	/* Only do this sync job if we don't have a systemId yet (not
+	   sure whether this is a good idea though */
+	job = HBCI_OutboxJob_new("JobSync", 
+				 (HBCI_Customer *)customer, "");
+	HBCI_Outbox_addJob (info->outbox, job);
+      
+	{
+	  HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+	  HBCI_Job_setIntProperty
+	    (jjob, "open/ident/country", HBCI_Bank_country(bank));
+	  HBCI_Job_setProperty
+	    (jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+	  HBCI_Job_setProperty
+	    (jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
 
-      /* for getting a system id */
-      HBCI_Job_setIntProperty(jjob, "open/sync/mode",0);
-      HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
-    }
+	  /* for getting a system id */
+	  HBCI_Job_setIntProperty(jjob, "open/sync/mode",0);
+	  HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
+	}
 
-    /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
-			       job, info->interactor)) {
-      /* HBCI_API_executeOutbox failed. */
-      GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
-      printf("on_accountinfo_next: oops, executeOutbox of JobSync failed.\n");
+	/* Execute Outbox. */
+	if (!gnc_hbci_api_execute (info->window, info->api, info->outbox, 
+				   job, info->interactor)) {
+	  /* HBCI_API_executeOutbox failed. */
+	  GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+	  printf("on_accountinfo_next: oops, executeOutbox of JobSync failed.\n");
 
-      printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
-      GWEN_DB_Dump(rsp, stdout, 1);
-      GWEN_DB_Group_free(rsp);
+	  printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+	  GWEN_DB_Dump(rsp, stdout, 1);
+	  GWEN_DB_Group_free(rsp);
 
-      rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
-      printf("on_accountinfo_next: Complete HBCI_Job response:\n");
-      if (rsp) 
-	GWEN_DB_Dump(rsp, stderr, 1);
-      /*return FALSE;*/
-      /* -- it seems to be no problem if this fails ?! */
-    }
+	  rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+	  printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+	  if (rsp) 
+	    GWEN_DB_Dump(rsp, stderr, 1);
+	  /*return FALSE;*/
+	  /* -- it seems to be no problem if this fails ?! */
+	}
 
-    /* Now process the response of the JobSync */
-    {
-      const char *sysid = 
-	HBCI_Job_getProperty(HBCI_OutboxJob_Job(job), 
-			     "response/syncresponse/systemid", "");
-      g_assert(sysid);
+	/* Now process the response of the JobSync */
+	{
+	  const char *sysid = 
+	    HBCI_Job_getProperty(HBCI_OutboxJob_Job(job), 
+				 "response/syncresponse/systemid", "");
+	  g_assert(sysid);
 
-      if (strlen(sysid) > 0) {
-	HBCI_User_setSystemId((HBCI_User*) HBCI_Customer_user(info->newcustomer), sysid);
-	printf("on_accountinfo_next: Ok. Got sysid '%s'.\n", sysid);
-      }
-      else {
-	/* Got no sysid. */
-	GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
-	printf("on_accountinfo_next: oops, got no sysid.\n");
+	  if (strlen(sysid) > 0) {
+	    HBCI_User_setSystemId((HBCI_User*) user, sysid);
+	    printf("on_accountinfo_next: Ok. Got sysid '%s'.\n", sysid);
+	  }
+	  else {
+	    /* Got no sysid. */
+	    GWEN_DB_NODE *rsp = HBCI_Outbox_response(info->outbox);
+	    printf("on_accountinfo_next: oops, got no sysid.\n");
 	
-	printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
-	GWEN_DB_Dump(rsp, stdout, 1);
-	GWEN_DB_Group_free(rsp);
+	    printf("on_accountinfo_next: Complete HBCI_Outbox response:\n");
+	    GWEN_DB_Dump(rsp, stdout, 1);
+	    GWEN_DB_Group_free(rsp);
 
-	rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
-	printf("on_accountinfo_next: Complete HBCI_Job response:\n");
-	if (rsp) 
-	  GWEN_DB_Dump(rsp, stderr, 1);
-	return FALSE;
-      }
-    }
+	    rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+	    printf("on_accountinfo_next: Complete HBCI_Job response:\n");
+	    if (rsp) 
+	      GWEN_DB_Dump(rsp, stderr, 1);
+	    return FALSE;
+	  }
+	}
+      } /* if strlen(systemid)==0 */
+    } /* if securityMode == RDH */
     
-
   
     /* Now the GetAccounts job. */
     job = HBCI_OutboxJob_new("JobGetAccounts", 
-			     (HBCI_Customer *)info->newcustomer, "");
+			     (HBCI_Customer *)customer, "");
     HBCI_Outbox_addJob (info->outbox, job);
     
     {
-      char *mediumid;
       HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
       HBCI_Job_setIntProperty
-	(jjob, "open/ident/country", 
-	 HBCI_Bank_country(HBCI_User_bank
-			   (HBCI_Customer_user(info->newcustomer))));
+	(jjob, "open/ident/country", HBCI_Bank_country(bank));
       HBCI_Job_setProperty
-	(jjob, "open/ident/bankcode", 
-	 HBCI_Bank_bankCode(HBCI_User_bank
-			    (HBCI_Customer_user(info->newcustomer))));
+	(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
       HBCI_Job_setProperty
-	(jjob, "open/ident/customerid", HBCI_Customer_custId(info->newcustomer));
+	(jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
       HBCI_Job_setIntProperty(jjob, "open/prepare/updversion",0);
 
-      /* FIXME: Only set this for RDH medium */
-      mediumid = HBCI_Medium_mediumId((HBCI_Medium *)HBCI_User_medium(HBCI_Customer_user(info->newcustomer)));
-      g_assert(mediumid);
-      if (strlen(mediumid)==0)
-	HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
-      else
-	HBCI_Job_setProperty(jjob, "open/ident/systemId", mediumid);
-      free(mediumid);
+      if (HBCI_Medium_securityMode(medium) == 
+	  HBCI_SECURITY_RDH) {
+	/* Only set this for RDH medium */
+	char *mediumid = HBCI_Medium_mediumId((HBCI_Medium *)medium);
+	g_assert(mediumid);
+	if (strlen(mediumid)==0)
+	  HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
+	else
+	  HBCI_Job_setProperty(jjob, "open/ident/systemId", mediumid);
+	free(mediumid);
+      }
     }
     
 
@@ -1348,32 +1358,42 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
 			  gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
+  const HBCI_Customer *customer = NULL;
+  const HBCI_User *user = NULL;
+  const HBCI_Bank *bank = NULL;
   g_assert(info);
 
   if (info->newcustomer == NULL) 
     return FALSE;
 
+  customer = info->newcustomer;
+  user = HBCI_Customer_user(customer);
+  bank = HBCI_User_bank(user);
+  
   if (info->gotkeysforCustomer == NULL) {
     /* Execute a GetKey job. */
     HBCI_OutboxJob *job;
     
-    job = HBCI_OutboxJob_new("JobGetKeys", 
-			     (HBCI_Customer*)info->newcustomer, "");
+    job = HBCI_OutboxJob_new("JobGetKeys", (HBCI_Customer*)customer, "");
     
     {
       HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
       /* Copied from libaqmoney's JobGetKeys::JobGetKeys(Pointer<Customer> c) */
-      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
-      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
       HBCI_Job_setProperty(jjob, "open/ident/customerId", "9999999999");
       HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
 
-      HBCI_Job_setIntProperty(jjob, "open/signkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
-      HBCI_Job_setProperty(jjob, "open/signkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setIntProperty(jjob, "open/signkey/key/country", 
+			      HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/signkey/key/bankcode", 
+			   HBCI_Bank_bankCode(bank));
       /*HBCI_Job_setProperty(jjob, "open/signkey/key/userid", "9999999999");*/
 
-      HBCI_Job_setIntProperty(jjob, "open/cryptkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
-      HBCI_Job_setProperty(jjob, "open/cryptkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/key/country", 
+			      HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/cryptkey/key/bankcode", 
+			   HBCI_Bank_bankCode(bank));
       /*HBCI_Job_setProperty(jjob, "open/cryptkey/key/userid", "9999999999");*/
     }
     HBCI_Outbox_addJob (info->outbox, job);
@@ -1401,15 +1421,15 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
 
     /* Get keys from Job; store them in the customer's medium @§%&! */
     if (!gnc_hbci_evaluate_GetKeys(info->outbox, job,
-				   (HBCI_Customer *)info->newcustomer)) {
+				   (HBCI_Customer *)customer)) {
       return FALSE;
     }
     
     HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
-    info->gotkeysforCustomer = info->newcustomer;
+    info->gotkeysforCustomer = customer;
 
   }
-  else if (info->gotkeysforCustomer != info->newcustomer) {
+  else if (info->gotkeysforCustomer != customer) {
     printf("on_iniletter_info_next: Oops, already got keys for another customer. Not yet implemented.\n");
 
     /* And clean everything up */
@@ -1422,7 +1442,6 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     char *res;
     const HBCI_Medium *med;
     const HBCI_MediumRDHBase *medr;
-    const HBCI_Bank *bank;
     gboolean use_cryptkey;
     char *tmp, *hash, *exponent, *modulus;
     const char *bankcode, *bankname, *bankip;
@@ -1430,15 +1449,12 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     time_t now = time(NULL);
     char *time_now = ctime(&now);
 
-    bank = HBCI_User_bank (HBCI_Customer_user 
-			   ((HBCI_Customer *)info->newcustomer));
     bankcode = HBCI_Bank_bankCode (bank);
     bankname = HBCI_Bank_name (bank);
     bankname = (strlen (bankname) > 0 ? bankname : _("Unknown"));
     bankip = HBCI_Bank_addr (bank);    
 
-    med = HBCI_User_medium (HBCI_Customer_user
-			    ((HBCI_Customer *)info->newcustomer));
+    med = HBCI_User_medium (user);
     medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium *)med);
     g_assert (medr);
 

@@ -132,20 +132,23 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     *list_accounts = gnc_hbci_accountlist;
 
   {
-    /* FIXME FIXME FIXME : Use a sane directory here. FIXME FIXME
-       FIXME FIXME FIXME FIXME FIXME FIXME FIXME it's a BUUUUG
-       uuuuh-ooh BUUUUG */
-    char homebuffer[256];
-    const char *dirname = "/.gnucash/hbci";
-    // create default path
-    if (GWEN_Directory_GetHomeDirectory(homebuffer, 
-					sizeof(homebuffer)-strlen(dirname))) {
-      fprintf(stderr, "Buffer for home path too small");
-      return NULL;
-    }
-    strcat(homebuffer, dirname);
-    /*fprintf(stderr, "Setting log dir to %s\n", homebuffer);*/
-    HBCI_Hbci_setApplicationDataDir(HBCI_API_Hbci(api), homebuffer);
+    /* Well, currently gnucash doesn't offer a way to uniformly ask
+       for the ~/.gnucash directory, so we have to generate that path
+       here by hand. */
+    gchar *homebuffer;
+    gchar *databuffer;
+
+    /* Get home directory */
+    gnc_init_default_directory(&homebuffer);
+
+    /* Join it with the directory name */
+    databuffer = g_strjoin("", homebuffer, "/.gnucash/hbci");
+
+    /*fprintf(stderr, "Setting log dir to %s\n", databuffer);*/
+    HBCI_Hbci_setApplicationDataDir(HBCI_API_Hbci(api), databuffer);
+
+    g_free(databuffer);
+    g_free(homebuffer);
   }
 
   return api;
