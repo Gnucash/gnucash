@@ -542,7 +542,6 @@ static void
 xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
    char buff[2];
-   time_t secs;
    double baln;
    int typo = reg->type & REG_TYPE_MASK;
    /* int style = reg->type & REG_STYLE_MASK; */
@@ -571,12 +570,13 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetPriceCellValue (reg->valueCell, 0.0);
 
    } else {
+      long long secs;
       double amt;
       char * accname=NULL;
       Transaction *trans = xaccSplitGetParent (split);
    
-      secs = xaccTransGetDate (trans);
-      xaccSetDateCellValueSecs (reg->dateCell, secs);
+      secs = xaccTransGetDateL (trans);
+      xaccSetDateCellValueSecsL (reg->dateCell, secs);
    
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
       xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
