@@ -10,8 +10,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 /*
@@ -34,7 +38,8 @@
 typedef struct _NumCell
 {
   BasicCell cell;
-  long int max_num;
+  long int next_num;
+  gncBoolean next_num_set;
 } NumCell;
 
 NumCell * xaccMallocNumCell (void);
@@ -42,5 +47,6 @@ void      xaccInitNumCell (NumCell *);
 void      xaccDestroyNumCell (NumCell *);
 
 void      xaccSetNumCellValue (NumCell *cell, const char *str);
+void      xaccSetNumCellLastNum (NumCell *cell, const char *str);
 
 #endif /* __GNC_NUM_CELL_H__ */

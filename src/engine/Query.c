@@ -310,7 +310,6 @@ xaccQueryShowLatestDateFound (Query *q)
  */
 
 #define PROLOG 					\
-  char *da, *db;				\
   Transaction *ta;				\
   Transaction *tb;				\
   int retval;					\
@@ -358,6 +357,7 @@ xaccQueryShowLatestDateFound (Query *q)
 
 #define CNUM {					\
   /* sort on transaction number */		\
+  char *da, *db;                                \
   unsigned long n1;                             \
   unsigned long n2;                             \
   da = ta->num;					\
@@ -394,6 +394,7 @@ xaccQueryShowLatestDateFound (Query *q)
 
 #define CMEMO {					\
   /* sort on memo strings */			\
+  char *da, *db;                                \
   da = (*sa)->memo;				\
   db = (*sb)->memo;				\
   if (da && db) {				\
@@ -411,6 +412,7 @@ xaccQueryShowLatestDateFound (Query *q)
 
 #define CDESC {					\
   /* sort on transaction strings */		\
+  char *da, *db;                                \
   da = ta->description;				\
   db = tb->description;				\
   if (da && db) {				\

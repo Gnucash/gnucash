@@ -1,4 +1,15 @@
+2000-04-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccLoadXferCell): == not = Doh!!!
+
 2000-04-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Query.c (PROLOG): move declaration of da and db
+	locals into the macros that actually use them. This gets rid
+	of some annoying warnings.
+
+	* src/register/numcell.c: added method to set the last number
+ 	entered.  The next number entered is now the last number + 1.
 
 	* Makefile.in: changed [ -e filename ] to [ -f filename ]
 

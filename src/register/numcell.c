@@ -10,8 +10,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 /*
@@ -69,13 +73,14 @@ NumEnter (BasicCell *_cell,
           int *end_selection)
 {
   NumCell *cell = (NumCell *) _cell;
-  gncBoolean is_num;
-  long int number;
 
-  is_num = parse_num(curr, &number);
+  if (!cell->next_num_set)
+  {
+    long int number;
 
-  if (is_num && (number >= cell->max_num))
-    cell->max_num = number + 1;
+    if (parse_num(curr, &number))
+      cell->next_num = number + 1;
+  }
 
   return curr;
 }
@@ -150,7 +155,7 @@ NumMV (BasicCell *_cell,
     char buff[128];
 
     if (!is_num)
-      number = cell->max_num;
+      number = cell->next_num;
 
     strcpy(buff, "");
     snprintf(buff, sizeof(buff), "%ld", number);
@@ -177,13 +182,14 @@ static const char *
 NumLeave (BasicCell *_cell, const char * curr)
 {
   NumCell *cell = (NumCell *) _cell;
-  gncBoolean is_num;
-  long int number;
 
-  is_num = parse_num(curr, &number);
+  if (!cell->next_num_set)
+  {
+    long int number;
 
-  if (is_num && (number >= cell->max_num))
-    cell->max_num = number + 1;
+    if (parse_num(curr, &number))
+      cell->next_num = number + 1;
+  }
 
   return NULL;
 }
@@ -193,8 +199,10 @@ NumCell *
 xaccMallocNumCell (void)
 {
   NumCell *cell;
-  cell = (NumCell *) malloc (sizeof (NumCell));
+
+  cell = (NumCell *) malloc(sizeof(NumCell));
   xaccInitNumCell (cell);
+
   return cell;
 }
 
@@ -210,13 +218,14 @@ static void
 setNumCellValue (BasicCell *_cell, const char *str)
 {
   NumCell *cell = (NumCell *) _cell;
-  gncBoolean is_num;
-  long int number;
 
-  is_num = parse_num(str, &number);
+  if (!cell->next_num_set)
+  {
+    long int number;
 
-  if (is_num && (number >= cell->max_num))
-    cell->max_num = number + 1;
+    if (parse_num(str, &number))
+      cell->next_num = number + 1;
+  }
 
   if (cell->cell.value) free (cell->cell.value);
   cell->cell.value = strdup (str);
@@ -231,11 +240,25 @@ xaccSetNumCellValue (NumCell *cell, const char *str)
 
 /* ================================================ */
 void
+xaccSetNumCellLastNum (NumCell *cell, const char *str)
+{
+  long int number;
+
+  if (parse_num(str, &number))
+  {
+    cell->next_num = number + 1;
+    cell->next_num_set = GNC_T;
+  }
+}
+
+/* ================================================ */
+void
 xaccInitNumCell (NumCell *cell)
 {
   xaccInitBasicCell (&(cell->cell));
 
-  cell->max_num = 0;
+  cell->next_num = 0;
+  cell->next_num_set = GNC_F;
  
   cell->cell.enter_cell = NumEnter;
   cell->cell.modify_verify = NumMV;

@@ -1324,6 +1324,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
    if (MOD_NUM & changed) {
       DEBUG ("xaccSRSaveRegEntry(): MOD_NUM: %s\n", reg->numCell->cell.value);
       xaccTransSetNum (trans, reg->numCell->cell.value);
+      xaccSetNumCellLastNum(reg->numCell, reg->numCell->cell.value);
    }
 
    if (MOD_DESC & changed) {
@@ -1356,8 +1357,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
     * XFRM is the straight split, MXFRM is the mirrored split.
-    * XTO is the straight split, too :) Only one should be in
-    * a given cursor.
+    * XTO is the straight split, too :) Only one of XFRM or XTO
+    * should be in a given cursor.
     */
    if ((MOD_XFRM | MOD_XTO) & changed) {
       Account *old_acc=NULL, *new_acc=NULL;
@@ -2408,7 +2409,7 @@ xaccLoadXferCell (ComboCell *cell,
   curr = xaccAccountGetCurrency (base_account);
   secu = xaccAccountGetSecurity (base_account);
 
-  if ((secu != NULL) && (secu[0] = 0))
+  if ((secu != NULL) && (secu[0] == 0))
     secu = NULL;
 
   xaccClearComboCellMenu (cell);
