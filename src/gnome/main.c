@@ -111,6 +111,36 @@ void file_cmd_quit (GtkWidget *widget, gpointer data)
   gtk_main_quit();
 }
 
+static void
+foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
+  const int num_accts = xaccGroupGetNumAccounts(g);
+  Account **acc_list = (Account **) _malloc((num_accts  + 1) *
+                                            sizeof(Account *));
+  Account *acct;
+  int i, pos;
+  Split **splits;
+  Split **split_cursor;
+    
+  for(i = 0, pos = 0; i < num_accts; i++) {
+    acct = xaccGetAccountFromID(g, i);
+    if(acct) {
+      acc_list[pos++] = acct;
+    }
+  }
+  acc_list[pos] = NULL;
+  
+  splits = accListGetSortedSplits(acc_list);
+  
+  split_cursor = splits;
+  while(*split_cursor) {
+    f(*split_cursor);
+    split_cursor++;
+  }
+  _free(splits);
+  _free(acc_list);
+}
+
+
 /********************************************************************\
  * main                                                             *
  *  the entry point for the program... sets up the top level widget * 
@@ -172,7 +202,7 @@ main( int argc, char *argv[] )
     
     /* load the accounts data from datafile*/
     topgroup = xaccReadAccountGroup (datafile); 
-    
+
     if ( topgroup == NULL )
     {
       GtkWidget *dialog;
@@ -224,8 +254,8 @@ prepare_app()
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c
   c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
+  eval: (c-set-offset 'substatement-open 0)
   End:
 */

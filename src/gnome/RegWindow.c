@@ -34,6 +34,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 //#include "AdjBWindow.h"
 //#include "BuildMenu.h"
 #include "Group.h"
@@ -42,7 +43,7 @@
 #include "MainWindow.h"
 #include "main.h"
 #include "messages.h"
-//#include "RecnWindow.h"
+#include "RecnWindow.h"
 #include "RegWindow.h"
 #include "Transaction.h"
 #include "util.h"
@@ -65,7 +66,6 @@ struct _RegWindow {
   /* display widgets */
   GtkWidget *   dialog;
   GtkWidget *   reg;               /* The matrix widget...  */
-  GtkWidget *   balance;           /* The balance text field */
   GtkWidget *   record;            /* the record transaction button */
 
 };
@@ -85,13 +85,14 @@ void        regRefresh (RegWindow *regData);
 
 static void closeRegWindow(GtkWidget * mw, gpointer data);
 
+static void startRecnCB(GtkWidget *w, gpointer data);
+static void deleteCB(GtkWidget *w, gpointer data);
+static void recordCB(GtkWidget *w, gpointer data);
+static void cancelCB(GtkWidget *w, gpointer data);
+
 #if 0
 
-static void startRecnCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
 static void startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
-static void recordCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
-static void deleteCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
-static void cancelCB( GtkWidget * mw, XtPointer cd, XtPointer cb );
 
 #endif
 
@@ -187,9 +188,9 @@ ledgerIsMember (RegWindow *reg, Account * acc) {
 \********************************************************************/
 RegWindow *
 regWindowSimple(Account *acc) {
-  RegWindow *retval;
+  RegWindow *retval = (RegWindow *) 1; /* for error case later */
   int acc_type;
-  int reg_type;
+  int reg_type = 0;
   
   acc_type = xaccAccountGetType (acc);
   
@@ -223,9 +224,14 @@ regWindowSimple(Account *acc) {
   case EQUITY:
     reg_type = EQUITY_REGISTER;
     break;
+  default:
+    fprintf(stderr,
+            "regWindowSimple: Unknown account type (serious error)\n");
+    retval = NULL;
+    break;
   }
   
-  retval = regWindowLedger (acc, NULL, reg_type);
+  if(retval) retval = regWindowLedger (acc, NULL, reg_type);
   return retval;
 }
 
@@ -337,11 +343,11 @@ RegWindow *
 regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
 {
   RegWindow   *regData = NULL;
-  //GtkWidget * menubar, pane, buttonform, frame, reg, widget;
   GtkWidget *reg = NULL;
-  int    position=0;
   char *windowname;
-  //char buf [BUFSIZE];
+  GtkWidget *register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  GtkWidget *register_vbox = gtk_vbox_new(FALSE, 0);
+  GtkWidget *table_frame = gtk_frame_new(NULL);
 
     fprintf(stderr, "regWindowLedger(%p, %p, %d)\n",
             lead_acc, acclist, ledger_type);
@@ -452,13 +458,13 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
     switch (regData->type) {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
-      asprintf(&windowname, "%s General Ledger", acc_name);
+      asprintf(&windowname, "%s (general ledger)", acc_name);
       break;
     case PORTFOLIO:
-      asprintf(&windowname, "%s Portfolio", acc_name);
+      asprintf(&windowname, "%s (portfolio)", acc_name);
       break;
     default:
-      asprintf(&windowname, "%s Register", acc_name);
+      asprintf(&windowname, "%s (register)", acc_name);
       break;
     }
   } else {
@@ -467,11 +473,17 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
   assert(windowname);
 
   //setBusyCursor(parent);
-
-  regData->dialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
+  gtk_box_pack_start(GTK_BOX(register_vbox), table_frame, TRUE, TRUE, 0); 
+  regData->dialog = table_frame;
+  
+  ///* Initialize callbacks */
+    //gtk_signal_connect(GTK_OBJECT(toolBar[exit]), "clicked",
+    //                 GTK_SIGNAL_FUNC (file_cmd_quit), NULL);
 
-  gtk_window_set_title(GTK_WINDOW(regData->dialog), windowname);
+
+
+  gtk_window_set_title(GTK_WINDOW(register_window), windowname);
   
   /* when the window is given the "delete_event" signal (this is given
    * by the window manager (usually the 'close' option, or on the
@@ -735,7 +747,56 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
     gtk_widget_set_usize(regData->dialog, list_width + 80, 500);
   }
 
-  gtk_widget_show(regData->dialog);
+  /* Add controls at the bottom. */
+  {
+    GtkWidget *hb = gtk_handle_box_new();
+    GtkWidget *toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL,
+                                         GTK_TOOLBAR_TEXT); 
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
+                            "Record",
+                            "Commit modifications to "
+                            "the current transaction.",
+                            "Commit modifications to "
+                            "the current transaction.",
+                            NULL,
+                            GTK_SIGNAL_FUNC(recordCB), (gpointer) regData);
+
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
+                            "Cancel",
+                            "Cancel modifications to "
+                            "the current transaction.",
+                            "Cancel modifications to "
+                            "the current transaction.",
+                            NULL,
+                            GTK_SIGNAL_FUNC(cancelCB), (gpointer) regData);
+
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
+                            "Delete",
+                            "Delete the current transaction.",
+                            "Delete the current transaction.",
+                            NULL,
+                            GTK_SIGNAL_FUNC(deleteCB), (gpointer) regData);
+  
+    gtk_toolbar_append_item(GTK_TOOLBAR(toolbar),
+                            "Reconcile",
+                            "Reconcile transactions with bank statement.",
+                            "Reconcile transactions with bank statement.",
+                            NULL,
+                            GTK_SIGNAL_FUNC(startRecnCB),
+                            (gpointer) regData);
+
+    gtk_box_pack_end(GTK_BOX(register_vbox), hb, FALSE, FALSE, 0); 
+    gtk_container_add(GTK_CONTAINER(hb), toolbar); 
+    gtk_widget_show(toolbar);
+    gtk_widget_show(hb);
+  }
+
+  gtk_container_add(GTK_CONTAINER(register_window), register_vbox);
+
+  gtk_widget_show(table_frame);  
+  gtk_widget_show(register_vbox);
+  gtk_widget_show(register_window);
+
   if(windowname) free(windowname);
   return regData;
 }
@@ -760,23 +821,34 @@ void regRefresh (RegWindow *regData)
                      xaccAccountGetSplitList (regData->leader),
                      regData->leader);
 
-
+   xaccAccountRecomputeBalance(regData->leader);
   /* hack alert -- this is incorrect for multi-account ledgers */
-  if( NULL != regData->balance ) {
-    char buf [BUFSIZE];
-    char * amt;
-    double prt_balance, prt_clearedBalance;
+  if( NULL != regData->dialog ) {
+    char *reglabel = NULL; 
+    char *balance_str, *cleared_balance_str, *reconciled_balance_str;
+    double prt_balance, prt_clearedBalance, prt_reconciledBalance;
     prt_balance = xaccAccountGetBalance (regData->leader);
     prt_clearedBalance = xaccAccountGetClearedBalance (regData->leader);
-
-    amt = xaccPrintAmount (prt_balance, PRTSYM);
-    strcpy (buf, amt);
-    strcat (buf, "\n");
-    amt = xaccPrintAmount (prt_clearedBalance, PRTSYM);
-    strcat (buf, amt);
-
-    //XmTextSetString( regData->balance, buf );
-
+    prt_reconciledBalance =
+      xaccAccountGetReconciledBalance (regData->leader);
+    
+    balance_str = strdup(xaccPrintAmount(prt_balance, PRTSYM));
+    cleared_balance_str = strdup(xaccPrintAmount(prt_clearedBalance, PRTSYM));
+    reconciled_balance_str =
+      strdup(xaccPrintAmount(prt_reconciledBalance, PRTSYM));
+    
+    asprintf(&reglabel, "%s (Reconciled: %s) (Cleared: %s) (Final: %s)",
+             xaccAccountGetName(regData->leader),
+             reconciled_balance_str,
+             cleared_balance_str,
+             balance_str
+             );
+    
+    gtk_frame_set_label(GTK_FRAME(regData->dialog), reglabel);
+    free(balance_str);
+    free(cleared_balance_str);
+    free(reconciled_balance_str);
+    free(reglabel);
   }
 }
 
@@ -888,6 +960,8 @@ closeRegWindow( GtkWidget * mw, gpointer data)
   RegWindow *regData = (RegWindow *)data;
   Account *acc = regData->leader;
   
+  fprintf(stderr, "Closing register safely\n");
+
   /* Save any unsaved changes */
   xaccSaveRegEntry (regData->ledger);
 
@@ -933,6 +1007,8 @@ startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
   adjBWindow( toplevel, acc );
 }
 
+#endif
+
 /********************************************************************\
  * startRecnCB -- open up the reconcile window... called from       *
  *   menubar.                                                       *
@@ -943,9 +1019,9 @@ startAdjBCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 static void 
-startRecnCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
+startRecnCB(GtkWidget * w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *)cd;
+  RegWindow *regData = (RegWindow *) data;
   Account *acc;
   
   /* Must have number of accounts be one.  If not one,
@@ -958,7 +1034,7 @@ startRecnCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
     if (1 != regData->numAcc) return;
     acc = regData->blackacc[0];
   }
-  recnWindow( toplevel, acc );
+  recnWindow(w, acc);
 }
 
 /********************************************************************\
@@ -970,9 +1046,9 @@ startRecnCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 static void
-recordCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
+recordCB( GtkWidget *w, gpointer data)
 {
-  RegWindow *regData = (RegWindow *)cd;
+  RegWindow *regData = (RegWindow *) data;
   
   xaccSaveRegEntry (regData->ledger);
 }
@@ -987,9 +1063,9 @@ recordCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
 \********************************************************************/
 
 static void
-deleteCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
+deleteCB(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *)cd;
+  RegWindow *regData = (RegWindow *) data;
   Split * split;
   Transaction *trans;
   char buf[BUFSIZE];
@@ -1004,7 +1080,7 @@ deleteCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
    * permanent damage */
   trans = xaccSplitGetParent (split);
   sprintf (buf, TRANS_DEL_MSG, xaccTransGetDescription (trans));
-  if (!verifyBox (toplevel, buf)) return;
+  if (!verifyBox(toplevel, buf)) return;
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
@@ -1036,17 +1112,16 @@ deleteCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 static void
-cancelCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
+cancelCB( GtkWidget *w, gpointer data)
 {
-   RegWindow *regData = (RegWindow *)cd;
-   Split * split;
-
+  RegWindow *regData = (RegWindow *) data;
+  Split * split;
+  
   /* when cancelling edits, reload the cursor from the transaction */
   split = xaccGetCurrentSplit (regData->ledger);
   xaccLoadRegEntry (regData->ledger, split);
   xaccRefreshTableGUI (regData->ledger->table);
 }
-#endif /* 0 */
 
 /************************** END OF FILE *************************/
 
@@ -1054,8 +1129,6 @@ cancelCB( GtkWidget * mw, XtPointer cd, XtPointer cb )
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c
-  c-indentation-style: gnu
-  eval: (c-set-offset 'substatement-open 0)
+  eval: (c-set-style "gnu")
   End:
 */

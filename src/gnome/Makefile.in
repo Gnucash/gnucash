@@ -42,7 +42,8 @@ OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Dialogs.c
+GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Dialogs.c xtutil.c \
+              RecnWindow.c
 #        AccWindow.c AccountMenu.c AdjBWindow.c    \
 #        BuildMenu.c Destroy.c FileBox.c HelpWindow.c  \
 #        RecnWindow.c RegWindow.c Reports.c TextBox.c  \
