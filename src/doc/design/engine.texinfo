@@ -1746,6 +1746,7 @@ In addition to the above, Accounts contain a key-value pair frame.
 * General Account API::         
 * Account Type API::            
 * Account Getters::             
+* Account Tax API::             
 @end menu
 
 
@@ -1890,7 +1891,7 @@ engine, but one day it may be!
 @end deftypefun
 
 
-@node Account Getters,  , Account Type API, Accounts
+@node Account Getters, Account Tax API, Account Type API, Accounts
 @subsection Account Getters
 
 @deftypefun GNCAccountType xaccAccountGetType (Account * @var{account})
@@ -2021,6 +2022,44 @@ O(number of splits in account).
 @deftypefun {GList *} xaccAccountGetSplitList (Account * @var{account})
 Return a @code{GList} of the Splits in @var{account}. This list must
 not be modified in any way.
+@end deftypefun
+
+
+@node Account Tax API,  , Account Getters, Accounts
+@subsection Account Tax API
+
+This set of API calls is related to tax information. All accounts have a
+tax-related boolean flag that can be set or unset. There is an
+additional set of API calls related to United States taxes that have
+`US' in the function call names. Future API calls that are specific to
+other countries should include the appropriate 2-letter country code in
+the function names.
+
+@deftypefun gboolean xaccAccountGetTaxRelated (Account * @var{account})
+Return the tax-related flag of @var{account}.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxRelated (Account * @var{account}, gboolean @var{tax_related})
+Set the tax-related flag of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetTaxUSCode (Account * @var{account})
+Get the US-specific tax code associated with @var{account}, or
+@code{NULL} if there is none. These codes are internal to GnuCash
+and currently defined in @file{src/scm/report/txf-export.scm}.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxUSCode (Account * @var{account}, const char * @var{code})
+Set the US-specific tax code associated with @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetTaxUSPayerNameSource (Account * @var{account})
+Get the payer name source associated with @var{account}. See
+@file{src/scm/repot/taxtxf.scm} for details.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxUSPayerNameSource (Account * @var{account}, const char * @var{source})
+Set the payer name source associated with @var{account}.
 @end deftypefun
 
 
