@@ -64,13 +64,6 @@
  */
 int force_double_entry = 0;
 
-/* bit-field flags for controlling transaction commits */
-typedef enum
-{
-  BEGIN_EDIT      = 1 << 0,
-  BEING_DESTROYED = 1 << 1,
-} TransFlags;
-
 /* arbitrary price per share increment FIXME */
 #define PRICE_DENOM 1000000
 
@@ -968,8 +961,8 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
         value = gnc_numeric_add_fixed(value, s->damount);
       } 
       else {
-        PERR ("inconsistent currencies\n");      
-        printf("base = '%s', curr='%s', sec='%s'\n",
+        PERR ("inconsistent currencies\n"   
+              "\tbase = '%s', curr='%s', sec='%s'\n",
                gnc_commodity_get_printname(base_currency),
                gnc_commodity_get_printname(currency),
                gnc_commodity_get_printname(security));
@@ -1171,9 +1164,9 @@ xaccTransSetCurrency (Transaction *trans, const gnc_commodity *curr)
     trans->common_currency = curr;
 
     /* The following code will be obsolete when we finally eliminate
-     * the storage of the currency with the account. But in the meanwhile.
-     * we will try to keep it in sync, so that both the old and new ways
-     * work.
+     * the storage of the reporting currency with the account. But in 
+     * the meanwhile, we will try to keep it in sync, so that both the 
+     * old and new ways work.
      *
      * This is a cheesy and potentially error-prone algorithm;
      * but lets give it a spin and try our luck ...
@@ -1255,49 +1248,44 @@ xaccTransCommitEdit (Transaction *trans)
    check_open (trans);
 
    /* At this point, we check to see if we have a valid transaction.
-    * As a result of editing, we could end up with a transaction that
-    * has no splits in it, in which case we delete the transaction and
-    * return.  
+    * There are two possiblities:
+    *   1) Its more or less OK, and needs a little cleanup
+    *   2) It has zero splits, i.e. is meant to be destroyed.
+    * We handle 1) immediately, and we call the backend before 
+    * we go through with 2).
     */
-   if (!trans->splits || (trans->open & BEING_DESTROYED))
+   if (trans->splits && !(trans->open & BEING_DESTROYED))
    {
-      PINFO ("delete trans at addr=%p", trans);
-      /* Make a log in the journal before destruction.  */
-      xaccTransWriteLog (trans, 'D');
-      xaccRemoveEntity(&trans->guid);
-      xaccFreeTransaction (trans);
-      return;
-   }
-
-   split = trans->splits->data;
-
-   /* try to get the sorting order lined up according to 
-    * when the user typed things in.  */
-   if (0 == trans->date_entered.tv_sec) {
-      struct timeval tv;
-      gettimeofday (&tv, NULL);
-      trans->date_entered.tv_sec = tv.tv_sec;
-      trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
-   }
-
-   /* Alternately the transaction may have only one split in 
-    * it, in which case that's OK if and only if the split has no 
-    * value (i.e. is only recording a price). Otherwise, a single
-    * split with a value can't possibly balance, thus violating the 
-    * rules of double-entry, and that's way bogus. So create 
-    * a matching opposite and place it either here (if force==1), 
-    * or in some dummy account (if force==2).
-    */
-   if ((1 == force_double_entry) &&
-       (NULL == g_list_nth(trans->splits, 1)) &&
-       (!gnc_numeric_zero_p(split->damount))) {
-     Split * s = xaccMallocSplit();
-     xaccTransAppendSplit (trans, s);
-     xaccAccountInsertSplit (split->acc, s);
-     xaccSplitSetMemo (s, split->memo);
-     xaccSplitSetAction (s, split->action);
-     xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
-     xaccSplitSetValue(s, gnc_numeric_neg(split->value));
+      split = trans->splits->data;
+ 
+      /* Try to get the sorting order lined up according to 
+       * when the user typed things in.  */
+      if (0 == trans->date_entered.tv_sec) {
+         struct timeval tv;
+         gettimeofday (&tv, NULL);
+         trans->date_entered.tv_sec = tv.tv_sec;
+         trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
+      }
+   
+      /* Alternately the transaction may have only one split in 
+       * it, in which case that's OK if and only if the split has no 
+       * value (i.e. is only recording a price). Otherwise, a single
+       * split with a value can't possibly balance, thus violating the 
+       * rules of double-entry, and that's way bogus. So create 
+       * a matching opposite and place it either here (if force==1), 
+       * or in some dummy account (if force==2).
+       */
+      if ((1 == force_double_entry) &&
+          (NULL == g_list_nth(trans->splits, 1)) &&
+          (!gnc_numeric_zero_p(split->damount))) {
+        Split * s = xaccMallocSplit();
+        xaccTransAppendSplit (trans, s);
+        xaccAccountInsertSplit (split->acc, s);
+        xaccSplitSetMemo (s, split->memo);
+        xaccSplitSetAction (s, split->action);
+        xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
+        xaccSplitSetValue(s, gnc_numeric_neg(split->value));
+      }
    }
 
    /* ------------------------------------------------- */
@@ -1319,9 +1307,24 @@ xaccTransCommitEdit (Transaction *trans)
           * at this point, and let the user know that we failed.
           */
         /* XXX hack alert -- finish this */
+        PWARN("Another user has modified the transaction\n"
+              "Please refresh your browser and try again.\n"
+              "(This dialog should be a gui dialog and \n"
+              "should check for errors)\n");
         PERR("Backend asked engine to rollback, but we don't "
              "handle this case yet. Return code=%d", rc);
       }
+   }
+
+   /* ------------------------------------------------- */
+   if (!trans->splits || (trans->open & BEING_DESTROYED))
+   {
+      PINFO ("delete trans at addr=%p", trans);
+      /* Make a log in the journal before destruction.  */
+      xaccTransWriteLog (trans, 'D');
+      xaccRemoveEntity(&trans->guid);
+      xaccFreeTransaction (trans);
+      return;
    }
 
    /* ------------------------------------------------- */

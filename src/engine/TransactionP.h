@@ -54,6 +54,13 @@
 #include "Transaction.h"   /* for typedefs */
 #include "GNCId.h"
 
+/* bit-field flags for controlling transaction commits */
+typedef enum
+{
+  BEGIN_EDIT      = 1 << 0,
+  BEING_DESTROYED = 1 << 1,
+} TransFlags;
+
 
 /** STRUCTS *********************************************************/
 /* 
