@@ -227,6 +227,15 @@ void          xaccSplitSetAccountGUID(Split *s, GUID id);
  */
 void  xaccFreeSplit (Split *split);    /* frees memory */
 
+/* This routine makes a 'duplicate' of the indicated transaction.
+ * This routine cannot be exposed publically since the duplicate
+ * is wrong in many ways: it is not issued a unique guid, and thus
+ * not a properly registered Entity.  The splits are copied, but
+ * these are also funny: they aren't inserted into the accounts 
+ * they claim to be in.  The splits also have bogus GUID's.
+ */
+Transaction * xaccDupeTransaction (Transaction *t);
+
 /* compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
 gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
