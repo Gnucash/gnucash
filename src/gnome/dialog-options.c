@@ -1736,6 +1736,8 @@ gnc_show_options_dialog(void)
   {
     options_dialog = GNOME_PROPERTY_BOX(gnome_property_box_new());
     gnome_dialog_close_hides(GNOME_DIALOG(options_dialog), TRUE);
+    gnome_dialog_set_parent(GNOME_DIALOG(options_dialog),
+                            GTK_WINDOW (gnc_get_ui_data()));
 
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);
