@@ -234,6 +234,9 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    split->lot = lot;
 
    lot->splits = g_list_append (lot->splits, split);
+
+    /* for recomputation of is-closed */
+   lot->is_closed = -1;
 }
 
 void
@@ -244,11 +247,11 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 	ENTER ("(lot=%p, split=%p)", lot, split);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
+   lot->is_closed = -1;	/* force an is-closed computation */
 
    if (NULL == lot->splits)
    {
       lot->account = NULL;
-      lot->is_closed = FALSE;
    }
 }
 
