@@ -26,9 +26,15 @@ Version history:
             May not compile, will probably core dump.
             This is alpha level code, not for general use.
 
- 1.0.18 - 20 Feb 98
+ 1.0.18 - 14 June 98
          o Fix Quicken QIF import to recognize "transaction cleared" flag.
          o Add RedHat RPM spec files.
+         o Fix a bug in configure.in re. motif flags.
+         o Enable European-style dates with --enable-eurodates
+         o Fix core dump reading QIF files
+         o Fix core dump closing certain windows
+         o enable prompt to save to file when WM closes window
+         o fix garbling to description field when cancel button hit
 
  1.0.17 - 14 Feb 98
          o Fix core dump when deleting account with open register windows.
