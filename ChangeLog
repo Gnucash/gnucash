@@ -13,7 +13,8 @@
 	modifying the transaction, leave it in "open" state and mark it as
 	the currently pending transaction.  This insures that the register
 	does the right thing when leaving this transaction. Also fix
-	spelling error in function name.
+	spelling error in function name. Fix this function to work
+	correctly on the blank split. #98134
 	(gnc_split_register_empty_current_trans): Fix spelling error in
 	function name.
 

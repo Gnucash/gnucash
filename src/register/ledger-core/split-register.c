@@ -1020,70 +1020,29 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 void
 gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *split)
 {
-  SRInfo *info = gnc_split_register_get_info (reg);
-  Transaction *pending_trans;
+  SRInfo *info;
   Transaction *trans;
-  Split *blank_split;
-  Account *account;
   GList *splits;
   GList *node;
 
-  if (!reg) return;
-
-  blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                 gnc_get_current_book ());
-
-  pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_book ());
-
-  if (split == NULL)
+  if ((reg == NULL)  || (split == NULL))
     return;
-
-  /* If we just deleted the blank split, clean up. The user is
-   * allowed to delete the blank split as a method for discarding
-   * any edits they may have made to it. */
-  if (split == blank_split)
-  {
-    trans = xaccSplitGetParent (blank_split);
-    account = xaccSplitGetAccount (split);
-
-    /* Make sure we don't commit this later on */
-    if (trans == pending_trans)
-    {
-      info->pending_trans_guid = *xaccGUIDNULL ();
-      pending_trans = NULL;
-    }
-
-    gnc_suspend_gui_refresh ();
-
-    xaccTransBeginEdit (trans);
-    xaccTransDestroy (trans);
-    xaccTransCommitEdit (trans);
-
-    info->blank_split_guid = *xaccGUIDNULL ();
-    blank_split = NULL;
-
-    gnc_resume_gui_refresh ();
-    return;
-  }
 
   gnc_suspend_gui_refresh ();
 
   trans = xaccSplitGetParent (split);
-
   splits = g_list_copy (xaccTransGetSplitList (trans));
-
   xaccTransBeginEdit (trans);
   for (node = splits; node; node = node->next)
     if (node->data != split)
       xaccSplitDestroy (node->data);
+  g_list_free (splits);
 
   /* This is now the  pending transaction */
+  info = gnc_split_register_get_info (reg);
   info->pending_trans_guid = *xaccTransGetGUID(trans);
 
   gnc_resume_gui_refresh ();
-
-  g_list_free (splits);
 }
 
 void
