@@ -1,3 +1,13 @@
+2003-06-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-date-format.*: Create a new "date format"
+	  widget to let the user choose a date format (and see the results
+	  of what the date would look like).
+	* src/gnome-utils/Makedile.am: add gnc-date-format files to the build
+	* src/gnome/dialog-print-check.c: use the new date-format widget
+	* src/gnome/glade/print.glade: remove data that is now part of the
+	  date-format widget.
+
 2003-05-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-gnome/dialog-customer.c:
