@@ -87,9 +87,9 @@ static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
 /********************************************************************
  ********************************************************************/
 
-#if 0
-static void 
-print_query(Query * q) {
+void 
+xaccQueryPrint(Query * q) 
+{
   GList * aterms;
   GList * i, * j;
   QueryTerm * qt;
@@ -110,7 +110,6 @@ print_query(Query * q) {
   }
   printf("\n");
 }
-#endif
 
 
 /********************************************************************
@@ -1052,6 +1051,69 @@ xaccQueryGetSplits(Query * q) {
 
 
 /********************************************************************
+ * xaccQueryAddPredicate
+ * Add a predicate an existing query. 
+ ********************************************************************/
+
+/* hack alert --  this is atemproray API */
+void
+xaccQueryAddPredicate (Query * q, 
+                       int snes,
+                       PredicateData *pred,
+                       QueryOp op) 
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->sense  = snes;
+  qt->data   = *pred;
+
+  /* hack alert this switch stement is clearly wrong !!!!! */
+  switch (pred->type) {
+    case PD_DATE:
+      qt->p = & xaccDateMatchPredicate;
+      break;
+    case PD_AMOUNT:
+      qt->p = & xaccAmountMatchPredicate;
+      qt->p = & xaccSharePriceMatchPredicate;
+      qt->p = & xaccSharesMatchPredicate;
+      break;
+    case PD_ACCOUNT:
+      qt->p = & xaccAccountMatchPredicate;
+      break;
+    case PD_STRING:
+      qt->p = & xaccDescriptionMatchPredicate;
+      qt->p = & xaccMemoMatchPredicate;
+      qt->p = & xaccNumberMatchPredicate;
+      qt->p = & xaccActionMatchPredicate;
+      break;
+    case PD_CLEARED:
+      qt->p = & xaccClearedMatchPredicate;
+      break;
+    case PD_BALANCE:
+      qt->p = & xaccBalanceMatchPredicate;
+      break;
+    case PD_MISC:
+      break;
+
+  }
+  
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
  * xaccQueryAddAccountMatch
  * Add an account filter to an existing query. 
  ********************************************************************/
@@ -1226,42 +1288,6 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
 
 
 /********************************************************************
- * xaccQueryAddDateMatch
- * Add a date filter to an existing query. 
- ********************************************************************/
-
-void
-xaccQueryAddDateMatch(Query * q, 
-                      int use_start, int sday, int smonth, int syear,
-                      int use_end, int eday, int emonth, int eyear,
-                      QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
-  QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
-
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type           = PD_DATE;
-  qt->data.date.use_start = use_start;
-  qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
-  qt->data.date.use_end   = use_end;
-  qt->data.date.end       = gnc_dmy2timespec_end(eday, emonth, eyear);
-
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
-}
-
-/********************************************************************
  * xaccQueryAddDateMatchTS
  * Add a date filter to an existing query. 
  ********************************************************************/
@@ -1300,6 +1326,25 @@ xaccQueryAddDateMatchTS(Query * q,
 }
 
 /********************************************************************
+ * xaccQueryAddDateMatch
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatch(Query * q, 
+                      int use_start, int sday, int smonth, int syear,
+                      int use_end, int eday, int emonth, int eyear,
+                      QueryOp op) 
+{
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start,
+                           gnc_dmy2timespec(sday, smonth, syear),
+                           use_end,
+                           gnc_dmy2timespec_end(eday, emonth, eyear),
+                           op);
+}
+
+/********************************************************************
  * xaccQueryAddDateMatchTT
  * Add a date filter to an existing query. 
  ********************************************************************/
@@ -1310,10 +1355,8 @@ xaccQueryAddDateMatchTT(Query * q,
                         time_t stt,
                         int    use_end,
                         time_t ett,
-                        QueryOp op) {
-  Query      * qs  = xaccMallocQuery(); 
-  QueryTerm  * qt  = g_new0(QueryTerm, 1);
-  Query      * qr;  
+                        QueryOp op) 
+{
   Timespec   sts;
   Timespec   ets;
   
@@ -1322,27 +1365,11 @@ xaccQueryAddDateMatchTT(Query * q,
 
   ets.tv_sec  = (long long)ett;
   ets.tv_nsec = 0;
+
+  /* gcc -O3 will auto-inline this function, avoiding a call overhead */
+  xaccQueryAddDateMatchTS (q, use_start, sts,
+                           use_end, ets, op);
   
-  qt->p      = & xaccDateMatchPredicate;
-  qt->sense  = 1;
-  qt->data.type           = PD_DATE;  
-  qt->data.date.use_start = use_start;
-  qt->data.date.use_end   = use_end;
-  qt->data.date.start     = sts;
-  qt->data.date.end       = ets;
-  
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qr);
-  xaccFreeQuery(qs);
 }
 
 /********************************************************************

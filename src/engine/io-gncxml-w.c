@@ -886,11 +886,11 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
        xml_add_gint32(p, "use-end", qt->data.date.use_end);
        if (qt->data.date.use_start) {
           xml_add_editable_timespec(p, "start-date", 
-                                   &qt->data.date.start, FALSE);
+                                   &(qt->data.date.start), FALSE);
        }
        if (qt->data.date.use_end) {
           xml_add_editable_timespec(p, "end-date", 
-                                   &qt->data.date.end, FALSE);
+                                   &(qt->data.date.end), FALSE);
        }
        break;
 
@@ -943,14 +943,14 @@ xml_add_qterm_restorer(xmlNodePtr qxml, QueryTerm *qt)
 static gboolean
 xml_add_query_restorers(xmlNodePtr p, Query *q) 
 {
-  xmlNodePtr qxml, restore_xml;
-  GList *list;
-  GList *node;
+  xmlNodePtr qxml, restore_xml, and_xml;
+  GList *aterms, *oterms;
+  GList *anode, *onode;
   
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(q, FALSE);
 
-  list = xaccQueryGetTerms (q);
+  oterms = xaccQueryGetTerms (q);
 
   /* write the nested <query> <restore> */
   qxml = xmlNewTextChild(p, NULL, "query", NULL);  
@@ -959,9 +959,15 @@ xml_add_query_restorers(xmlNodePtr p, Query *q)
   restore_xml = xmlNewTextChild(qxml, NULL, "restore", NULL);  
   g_return_val_if_fail(restore_xml, FALSE);
 
-  for (node = list; node; node = node->next) {
-    QueryTerm *qt = node->data;
-    xml_add_qterm_restorer(restore_xml, qt);
+  for (onode = oterms; onode; onode = onode->next) {
+    aterms = onode->data;
+    and_xml = xmlNewTextChild(restore_xml, NULL, "and-terms", NULL);  
+    g_return_val_if_fail(and_xml, FALSE);
+
+    for (anode = aterms; anode; anode = anode->next) {
+      QueryTerm *qt = anode->data;
+      xml_add_qterm_restorer(and_xml, qt);
+    }
   }
   return(TRUE);
 }

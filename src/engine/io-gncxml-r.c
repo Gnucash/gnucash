@@ -3920,8 +3920,17 @@ START_HANDLER(query_server)
 
 END_HANDLER(query_server)
 {
-  Query *q = (Query *) data_for_children;
-printf ("server duuuude its %p\n", q);
+  Query *q;
+  sixtp_child_result *cr;
+
+  g_return_val_if_fail(data_from_children, FALSE);
+
+  cr = (sixtp_child_result *) data_from_children->data;
+  g_return_val_if_fail(cr, FALSE);
+
+  q = (Query *) (cr->data);
+  g_return_val_if_fail(q, FALSE);
+
   *result = q;
   return(TRUE);
 }
@@ -3954,13 +3963,20 @@ START_HANDLER(query)
 
 END_HANDLER(query)
 {
-  Query *q = (Query *) data_for_children;
-printf ("query duuuude its %p\n", q);
+  Query *q;
+  sixtp_child_result *cr;
+
+  g_return_val_if_fail(data_from_children, FALSE);
+
+  cr = (sixtp_child_result *) data_from_children->data;
+  g_return_val_if_fail(cr, FALSE);
+
+  q = (Query *) (cr->data);
+  g_return_val_if_fail(q, FALSE);
+
   *result = q;
   return(TRUE);
 }
-
-
 
 /* ================================================================= */
 /* <restore> (lineage <query> <query-server>)
@@ -3995,8 +4011,7 @@ START_HANDLER(query_restore)
 
 END_HANDLER(query_restore)
 {
-  Query *q = (Query *) result;
-printf ("query restore duuuude its %p\n", q);
+  Query *q = (Query *) data_for_children;
   g_return_val_if_fail(q, FALSE);
   *result = q;
   return(TRUE);
@@ -4024,14 +4039,43 @@ AFTER_CHILD(query_restore)
 }
 
 /* ================================================================= */
-/* <datepred> (lineage <restore> <query> <query-server>)
+
+#define CVT_INT(to) {							\
+  gint32 val;								\
+  gboolean ok;								\
+  gchar *txt = NULL;							\
+									\
+  txt = concatenate_child_result_chars(data_from_children);		\
+  g_return_val_if_fail(txt, FALSE);					\
+									\
+  ok = (gboolean) string_to_gint32(txt, &val);				\
+  g_free(txt);								\
+  g_return_val_if_fail(ok, FALSE);					\
+  (to) = val;								\
+}
+
+#define CVT_DATE(to) {							\
+  TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;	\
+  									\
+  g_return_val_if_fail(info, FALSE);					\
+  if(!timespec_parse_ok(info)) {					\
+    g_free(info);							\
+    return(FALSE);							\
+  }									\
+									\
+  to = info->ts;							\
+  g_free(info);								\
+}
+
+/* ================================================================= */
+/* <datepred> (lineage <and-terms> <restore> <query> <query-server>)
    Restores a given date predicate.  
  
    from parent: Query*
    for children: NA
    result: NA
    -----------
-   start: ??
+   start: malloc a date predicate
    chars: allow and ignore only whitespace.
    end: AddDateMatch to Query
    cleanup-result: NA
@@ -4043,22 +4087,23 @@ AFTER_CHILD(query_restore)
 
 START_HANDLER(qrestore_datepred)
 {
-  // Split *s = xaccMallocSplit();
-  // g_return_val_if_fail(s, FALSE);
-  // *data_for_children = s;
+  DatePredicateData *dp = g_new (DatePredicateData, 1);
+  g_return_val_if_fail(dp, FALSE);
+  bzero (dp, sizeof (DatePredicateData));
+  dp->type = PD_DATE;
+  *data_for_children = dp;
   return(TRUE);
 }
 
 END_HANDLER(qrestore_datepred)
 {
   Query *q = (Query *) parent_data;
+  PredicateData *dp = (PredicateData *) data_for_children;
 
   g_return_val_if_fail(q, FALSE);
+  g_return_val_if_fail(dp, FALSE);
 
-#if 0
-  Split *s = (Split *) data_for_children;
-  g_return_val_if_fail(s, FALSE);
-#endif
+  xaccQueryAddPredicate (q, 1, dp, QUERY_OR);
 
   return(TRUE);
 }
@@ -4090,10 +4135,11 @@ AFTER_CHILD(qrestore_datepred)
 
 FAIL_HANDLER(qrestore_datepred)
 {
+  g_free (data_for_children);
 }
 
 /* ================================================================= */
-/* <end-date> (lineage <date-pred> <restore> <query>)
+/* <end-date> (lineage <date-pred> <and-terms> <restore> <query>)
    restores a given query's end-date.
    Just uses a generic_timespec parser, but with our own end handler.
    end: set end-date.
@@ -4101,38 +4147,36 @@ FAIL_HANDLER(qrestore_datepred)
 
 END_HANDLER(datepred_use_start)
 {
+  DatePredicateData *dp = (DatePredicateData *) parent_data;
+  CVT_INT(dp->use_start);
   return(TRUE);
 }
 
 END_HANDLER(datepred_use_end)
 {
+  DatePredicateData *dp = (DatePredicateData *) parent_data;
+  CVT_INT(dp->use_end);
   return(TRUE);
 }
 
 END_HANDLER(datepred_start_date)
 {
+  DatePredicateData *dp = (DatePredicateData *) parent_data;
+  CVT_DATE (dp->start);
   return(TRUE);
 }
 
 END_HANDLER(datepred_end_date)
 {
-  // Split *s = (Split *) parent_data;
-  TimespecParseInfo *info = (TimespecParseInfo *) data_for_children;
-  
-  g_return_val_if_fail(info, FALSE);
-  if(!timespec_parse_ok(info)) {
-    g_free(info);
-    return(FALSE);
-  }
-
-  // xaccSplitSetDateReconciledTS(s, &(info->ts));
-  g_free(info);
-
+  DatePredicateData *dp = (DatePredicateData *) parent_data;
+  CVT_DATE (dp->end);
   return(TRUE);
 }
 
 END_HANDLER(generic_pred_sense)
 {
+  DatePredicateData *dp = (DatePredicateData *) parent_data;
+  // CVT_INT(dp->sense);
   return(TRUE);
 }
 

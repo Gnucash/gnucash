@@ -186,6 +186,9 @@ GList   * xaccQueryGetTerms(Query * q);
 
 GList   * xaccQueryGetSplits(Query * q);
 
+/* handy for debugging */
+void    xaccQueryPrint(Query *q);
+
 /*******************************************************************
  *  match-adding API 
  *******************************************************************/
@@ -209,8 +212,8 @@ void DxaccQueryAddSharePriceMatch(Query * q, double amount,
 void DxaccQueryAddSharesMatch(Query * q, double amount, 
                               amt_match_t how, QueryOp op);
 void xaccQueryAddDateMatch(Query * q, 
-                           int use_start, int syear, int smonth, int sday, 
-                           int use_end, int eyear, int emonth, int eday,
+                           int use_start, int sday, int smonth, int syear, 
+                           int use_end, int eday, int emonth, int eyear,
                            QueryOp op);
 void xaccQueryAddDateMatchTS(Query * q, 
                              int use_start, Timespec sts, 
@@ -226,6 +229,9 @@ void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
 void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
+
+void xaccQueryAddPredicate (Query * q, int sense, PredicateData *pred,
+                            QueryOp op);
 
 
 /*******************************************************************
