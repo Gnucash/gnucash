@@ -208,12 +208,16 @@ md5_process_bytes (buffer, len, ctx)
      size_t len;
      struct md5_ctx *ctx;
 {
+#define NUM_MD5_WORDS 1024
+  size_t add = 0;
+
   /* When we already have some bits in our internal buffer concatenate
      both inputs first.  */
   if (ctx->buflen != 0)
     {
       size_t left_over = ctx->buflen;
-      size_t add = 128 - left_over > len ? len : 128 - left_over;
+
+      add = 128 - left_over > len ? len : 128 - left_over;
 
       memcpy (&ctx->buffer[left_over], buffer, add);
       ctx->buflen += add;
@@ -234,8 +238,29 @@ md5_process_bytes (buffer, len, ctx)
   /* Process available complete blocks.  */
   if (len > 64)
     {
-      md5_process_block (buffer, len & ~63, ctx);
-      buffer = (const char *) buffer + (len & ~63);
+      if ((add & 3) == 0) /* buffer is still 32-bit aligned */
+        {
+          md5_process_block (buffer, len & ~63, ctx);
+          buffer = (const char *) buffer + (len & ~63);
+        }
+      else                /* buffer is not 32-bit aligned */
+        {
+          md5_uint32 md5_buffer[NUM_MD5_WORDS];
+          size_t num_bytes;
+          size_t buf_bytes;
+
+          num_bytes = len & ~63;
+          while (num_bytes > 0)
+            {
+              buf_bytes = (num_bytes < sizeof(md5_buffer)) ?
+                           num_bytes : sizeof(md5_buffer);
+              memcpy (md5_buffer, buffer, buf_bytes);
+              md5_process_block (md5_buffer, buf_bytes, ctx);
+              num_bytes -= buf_bytes;
+              buffer = (const char *) buffer + buf_bytes;
+            }
+        }
+
       len &= 63;
     }
 
