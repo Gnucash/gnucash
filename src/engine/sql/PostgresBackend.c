@@ -1951,10 +1951,36 @@ pgend_trans_commit_edit (Backend * bend,
       }
       }
 #else
+      /* roll things back is sql version is newer */
+      if (0 < pgendTransactionCompareVersion (be, oldtrans)) { rollback = 1; }
+
       /* first, see if someone else has already deleted this transaction */
-      if (-1 < pgendTransactionGetDeletedVersion (be, oldtrans)) { rollback ++; }
-      else
-      if (0 < pgendTransactionCompareVersion (be, oldtrans)) { rollback ++; }
+      if (-1 < pgendTransactionGetDeletedVersion (be, oldtrans)) 
+      { 
+         if (rollback)
+         {
+            /* Although this situation should never happen, we'll try
+             * to gracefully handle it anyway, because otherwuise the 
+             * transaction becomes un-modifiable, undeleteable.
+             * (This situation might occur with the right combo of bugs 
+             * and crashes. We've fixed the bugs, but ...
+             */
+            char buf[80];
+            gnc_timespec_to_iso8601_buff (xaccTransRetDatePostedTS (trans), buf);
+            PERR ("The impossible has happened, and thats not good!\n"
+                  "\tThe SQL database contains an active transaction that\n"
+                  "\talso appears in the audit trail as deleted !!\n"
+                  "\tWill try to delete transaction for good\n"
+                  "\ttransaction is '%s' %s\n",
+                  xaccTransGetDescription (trans), buf);
+            rollback = 0;
+            trans->do_free = TRUE;
+         }
+         else
+         {
+            rollback = 1;
+         }
+      }
 #endif
    
       if (rollback) {

@@ -155,6 +155,21 @@ Prices need to have version numbers added.
  */
 
 
+Audit Trails
+------------
+The backend keeps an audit trail of created, modified and deleted
+transactions.  These are stored in s set of tables inheriting from
+the gncAuditTrail table.  Identified are the date of modification,
+the the session id, and the type of change.  
+
+There is currently no support within the GUI to view the audit trails,
+nor is there any way to rollback to some previous state based on this 
+trail.
+
+The audit trails are used internally to resolve certain multi-user 
+editing conflicts, for example, when one user attempts to edit a 
+transaction that has been deleteed by another.
+
 
 Balances
 --------

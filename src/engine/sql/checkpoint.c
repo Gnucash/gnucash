@@ -360,6 +360,8 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = stpcpy (p, "'   ORDER BY date_start DESC LIMIT 1;");
    SEND_QUERY (be,be->buff, );
    
+   /* provide default value, in case there are no checkpoints */
+   chk->date_start = gnc_iso8601_to_timespec_local (CK_EARLIEST_DATE);
    pgendGetResults (be, get_checkpoint_date_cb, chk);
 
    LEAVE("be=%p", be);
