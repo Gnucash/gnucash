@@ -7,6 +7,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --gnc-module-dir ${top_builddir}/src/report/stylesheets \
+  --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/tax/us \

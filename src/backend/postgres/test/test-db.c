@@ -299,12 +299,12 @@ remove_unneeded_commodities (GNCSession *session)
   g_hash_table_destroy (cdi.hash);
 }
 
-static void
-multi_user_get_everything (GNCSession *session, GNCSession *base)
+static Query *
+make_get_all_query (GNCSession * session)
 {
   Query *q;
 
-  g_return_if_fail (session);
+  g_return_val_if_fail (session, NULL);
 
   q = xaccMallocQuery ();
 
@@ -317,6 +317,18 @@ multi_user_get_everything (GNCSession *session, GNCSession *base)
                             QUERY_AND);
 
   xaccQuerySetGroup (q, gnc_book_get_group (gnc_session_get_book (session)));
+
+  return q;
+}
+
+static void
+multi_user_get_everything (GNCSession *session, GNCSession *base)
+{
+  Query *q;
+
+  g_return_if_fail (session);
+
+  q = make_get_all_query (session);
 
   xaccQueryGetSplits (q);
 
@@ -336,8 +348,6 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
   GNCSession *session_2;
   char *filename;
   gboolean ok;
-
-  return TRUE;
 
   g_return_val_if_fail (session && db_name && mode, FALSE);
 
