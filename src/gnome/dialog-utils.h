@@ -167,4 +167,6 @@ int  gnc_option_menu_get_active(GtkWidget * option_menu);
 
 void gnc_window_adjust_for_screen(GtkWindow * window);
 
+const char * gnc_get_reconcile_str(char reconciled_flag);
+
 #endif

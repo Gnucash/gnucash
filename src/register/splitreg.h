@@ -36,7 +36,7 @@
  * The xaccConfigSplitRegister() subroutine allows the configuration 
  * of the register to be changed on the fly (dynamically).  In particular,
  * the register type, and/or the flags controlling the register display
- * can be changed on the fly ... 
+ * can be changed on the fly. 
  *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
@@ -56,6 +56,7 @@
 #include "quickfillcell.h"
 #include "pricecell.h"
 #include "numcell.h"
+#include "recncell.h"
 #include "table-allgui.h"
 
 /* defined register types */
@@ -175,7 +176,7 @@ struct _SplitRegister {
    DateCell      * dateCell;
    NumCell       * numCell;
    QuickFillCell * descCell;
-   BasicCell     * recnCell;   /* main transaction line reconcile */
+   RecnCell      * recnCell;   /* main transaction line reconcile */
    PriceCell     * shrsCell;
    PriceCell     * balanceCell;
    BasicCell     * nullCell;

@@ -1,10 +1,43 @@
+2000-06-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c (gnucash_ui_init): set the reconciled cell
+	string getter to the dialog-utils function for i18ning the reconcile
+	flag value.
+
+	* src/engine/Transaction.c (xaccSplitSetReconcile): make sure the
+	reconciled flag given is good.
+
+	* src/register/splitreg.c: modify for the changes in the reconcile
+	cell.
+
+	* src/SplitLedger.c: modify for the changes in the reconcile cell.
+
+	* src/register/recncell.c: make the reconcile cell a real object,
+	not just a BasicCell with some extra functions. Add functionality
+	for distinguishing between the flag value and the displayed value.
+
+2000-06-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-utils.c (gnc_get_reconcile_str): new function.
+	Return i18n'd string for reconciled flag.
+
+	* src/gnome/reconcile-list.c: use i18n'd reconciled flag string.
+
+	* src/scm/tip-of-the-day.scm: put the check for whether tips
+	should be shown or not inside the hook. We can't do the check
+	here because the options haven't been loaded yet.
+
+	* src/scm/options.scm: fix bug in writing options. Use 'write'
+	to output section and option names for proper escaping.
+
 2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/date-utilities.scm: Added date-granularity timepair comparison
-	functions.
+	* src/scm/date-utilities.scm: Added date-granularity timepair
+	comparison functions. Removed direct access functions to the time
+	structures in various functions (Dave also worked on this).
 
 	* src/scm/report/transaction-report.scm: Changed to use date
-	comparison functions in date-utilities.scm
+	comparison functions in date-utilities.scm.
 
 2000-06-26  Robert Graham Merkel  <rgmerk@mira.net>
 

@@ -47,74 +47,115 @@
  */
 #include "Transaction.h"
 
+static RecnCellStringGetter string_getter = NULL;
+
+/* ================================================ */
+
+static const char *
+RecnCellGetString(char reconciled_flag)
+{
+  static char str[2] = { 0, 0 };
+
+  if (string_getter != NULL)
+    return (string_getter)(reconciled_flag);
+
+  str[0] = reconciled_flag;
+
+  return str;
+}
 
 /* ================================================ */
 
 static const char * 
-ToggleRecn (BasicCell *_cell, const char *cur_val,
+ToggleRecn (BasicCell *_cell,
+            const char *cur_val,
             int *cursor_position,
             int *start_selection,
             int *end_selection)
 {
-   BasicCell *cell = (BasicCell *) _cell;
-   char buff[2];
+  RecnCell *cell = (RecnCell *) _cell;
 
-   /* throw up a popup if the user tries to undo a reconciled transaction
-      hack alert -- this sets a new precedent ... gnc_verify_dialog is 
-      defined in both the motif and the gnome subdirs; I don't think I like 
-      it that way. Now it's in ui-callbacks.h which is UI independent, 
-      but that's still perhaps not optimal...  */
+  /* throw up a popup if the user tries to undo a reconciled transaction
+     hack alert -- this sets a new precedent. gnc_verify_dialog is defined
+     in both the motif and the gnome subdirs; I don't think I like it that
+     way. Now it's in ui-callbacks.h which is UI independent, but that's
+     still perhaps not optimal. */
 
-   if (cur_val[0] == YREC) {
-     if(!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T)) {
-       return strdup(cur_val);
-     }
-   }
+  if (cell->reconciled_flag == YREC)
+    if (!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T))
+      return NULL;
 
-   if (NREC == cur_val[0]) {
-     buff[0] = CREC;
-   } else {
-     buff[0] = NREC;
-   }
-   buff[1] = 0x0;
+  if (cell->reconciled_flag == NREC) {
+    cell->reconciled_flag = CREC;
+  } else {
+    cell->reconciled_flag = NREC;
+  }
 
-   xaccSetBasicCellValue (cell, buff);
-   return strdup (buff);
+  xaccRecnCellSetFlag (cell, cell->reconciled_flag);
+  return strdup (_cell->value);
 }
 
 /* ================================================ */
 
-BasicCell *
+RecnCell *
 xaccMallocRecnCell (void)
 {
-   BasicCell *cell;
-   cell = xaccMallocBasicCell();
-   xaccInitRecnCell (cell);
-   return cell;
+  RecnCell * cell = malloc(sizeof(RecnCell));
+
+  assert(cell != NULL);
+  xaccInitRecnCell (cell);
+
+  return cell;
 }
 
 /* ================================================ */
 
 void
-xaccInitRecnCell (BasicCell *cell)
+xaccInitRecnCell (RecnCell *cell)
 {
-   char buff[2];
+  xaccInitBasicCell(&cell->cell);
 
-   buff[0] = NREC;
-   buff[1] = 0x0;
+  xaccRecnCellSetFlag(cell, NREC);
 
-   if (cell->value) free (cell->value);
-   cell ->value = strdup (buff);
-
-   cell->enter_cell = ToggleRecn;
+  cell->cell.enter_cell = ToggleRecn;
 }
 
 /* ================================================ */
 
 void
-xaccDestroyRecnCell (BasicCell *cell)
+xaccDestroyRecnCell (RecnCell *cell)
 {
-   xaccDestroyBasicCell (cell);
+  xaccDestroyBasicCell (&cell->cell);
+}
+
+/* ================================================ */
+
+void
+xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
+{
+  const char *string;
+
+  cell->reconciled_flag = reconciled_flag;
+
+  string = RecnCellGetString(reconciled_flag);
+
+  xaccSetBasicCellValue(&cell->cell, string);
+}
+
+/* ================================================ */
+
+char
+xaccRecnCellGetFlag (RecnCell *cell)
+{
+  return cell->reconciled_flag;
+}
+
+/* ================================================ */
+
+void
+xaccRecnCellSetStringGetter (RecnCellStringGetter getter)
+{
+  string_getter = getter;
 }
 
 /* --------------- end of file ---------------------- */

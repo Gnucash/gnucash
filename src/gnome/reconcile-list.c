@@ -27,10 +27,10 @@
 #include <gnome.h>
 
 #include "gnucash.h"
-#include "messages.h"
-#include "Query.h"
 #include "reconcile-listP.h"
+#include "dialog-utils.h"
 #include "FileDialog.h"
+#include "messages.h"
 #include "date.h"
 #include "util.h"
 
@@ -114,7 +114,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
       NUM_STR,
       DESC_STR,
       AMT_STR,
-      "?",
+      RECONCILE_ABBREV,
       NULL
     };
 
@@ -233,8 +233,8 @@ static void
 gnc_reconcile_list_toggle(GNCReconcileList *list)
 {
   Split *split, *current;
-  char recn_str[2];
   gboolean reconciled;
+  const char *recn_str;
   char recn;
   gint row;
 
@@ -262,7 +262,8 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
   }
 
   recn = xaccSplitGetReconcile(split);
-  g_snprintf(recn_str, 2, "%c", reconciled ? YREC : recn);
+  recn = reconciled ? YREC : recn;
+  recn_str = gnc_get_reconcile_str(recn);
   gtk_clist_set_text(GTK_CLIST(list), row, 4, recn_str);
 
   gnc_reconcile_list_set_row_style(list, row, reconciled);
@@ -582,7 +583,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Split *split;
 
   const char *currency;
-  char recn_str[2];
   char recn;
 
   double amount;
@@ -590,7 +590,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
   account_type = xaccAccountGetType(list->account);
   currency = xaccAccountGetCurrency(list->account);
-  strings[4] = recn_str;
   strings[5] = NULL;
 
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -625,11 +624,11 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
-
-    g_snprintf(recn_str, 2, "%c", reconciled ? YREC : recn);
+    recn = reconciled ? YREC : recn;
+    strings[4] = (char *) gnc_get_reconcile_str(recn);
 
     row = gtk_clist_append(GTK_CLIST(list), strings);
-    gtk_clist_set_row_data(GTK_CLIST(list), row, (gpointer) split);
+    gtk_clist_set_row_data(GTK_CLIST(list), row, split);
 
     gnc_reconcile_list_set_row_style(list, row, reconciled);
 

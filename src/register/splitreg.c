@@ -177,7 +177,7 @@ configLabels (SplitRegister *reg)
   LABEL (DATE,  DATE_STR);
   LABEL (NUM,   NUM_STR);
   LABEL (DESC,  DESC_STR);
-  LABEL (RECN,  "R");
+  LABEL (RECN,  RECONCILE_ABBREV);
   LABEL (SHRS,  TOTAL_SHARES_STR);
   LABEL (BALN,  BALN_STR);
   LABEL (ACTN,  ACTION_STR);
@@ -376,7 +376,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
@@ -389,7 +389,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
@@ -406,7 +406,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
@@ -425,7 +425,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
          FANCY (MXFRM,  mxfrm,    4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
 
@@ -438,7 +438,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    mxfrm,    3,  0);
          FANCY (XFRM,   xto,      4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
 
@@ -455,7 +455,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
          FANCY (MXFRM,  mxfrm,    4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
 
@@ -471,7 +471,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (PRIC,   price,    7,  0);
@@ -487,7 +487,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (PRIC,   price,    7,  0);
@@ -507,7 +507,7 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
+         FANCY (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (PRIC,   price,    7,  0);
@@ -527,7 +527,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
          FANCY (MXFRM,  mxfrm,    4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
          FANCY (PRIC,   price,    8,  0);
@@ -543,7 +543,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    mxfrm,    3,  0);
          FANCY (XFRM,   xto,      4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
          FANCY (PRIC,   price,    8,  0);
@@ -563,7 +563,7 @@ configLayout (SplitRegister *reg)
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
          FANCY (MXFRM,  mxfrm,    4,  0);
-         BASIC (RECN,   recn,     5,  0);
+         FANCY (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
          FANCY (PRIC,   price,    8,  0);
@@ -600,7 +600,7 @@ configLayout (SplitRegister *reg)
    i = prev_r;						\
    for (j=prev_c+1; j<curs->numCols; j++) {		\
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {							\
          NEXT_RIGHT  (i, j);				\
@@ -609,7 +609,7 @@ configLayout (SplitRegister *reg)
    for (i=prev_r+1; i<curs->numRows; i++) {		\
       for (j=0; j<curs->numCols; j++) {			\
          if ((reg->nullCell != curs->cells[i][j]) &&	\
-             (reg->recnCell != curs->cells[i][j]) &&	\
+             ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
              (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
          {						\
             NEXT_RIGHT  (i, j);				\
@@ -623,7 +623,7 @@ configLayout (SplitRegister *reg)
    i = r;						\
    for (j=c; j<curs->numCols; j++) {			\
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {							\
          FIRST_RIGHT  (i, j);				\
@@ -637,7 +637,7 @@ configLayout (SplitRegister *reg)
    i = r;						\
    for (j=c+1; j<curs->numCols; j++) {			\
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {							\
          NEXT_RIGHT  (i, j);				\
@@ -655,7 +655,7 @@ configLayout (SplitRegister *reg)
    i = 0;						\
    for (j=0; j<reg->split_cursor->numCols; j++) {	\
       if ((reg->nullCell != reg->split_cursor->cells[i][j]) &&	\
-          (reg->recnCell != reg->split_cursor->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != reg->split_cursor->cells[i][j]) && \
           (XACC_CELL_ALLOW_INPUT & reg->split_cursor->cells[i][j]->input_output)) \
       {							\
          NEXT_RIGHT  (i+1, j);				\
@@ -680,7 +680,7 @@ configLayout (SplitRegister *reg)
    i = prev_r;						\
    for (j=prev_c -1; j>=0; j--) {		        \
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {	                                                \
          NEXT_LEFT  (i, j);				\
@@ -689,7 +689,7 @@ configLayout (SplitRegister *reg)
    for (i=prev_r-1; i>=0; i--) {	                \
       for (j=curs->numCols-1; j>=0; j--) {		\
          if ((reg->nullCell != curs->cells[i][j]) &&	\
-             (reg->recnCell != curs->cells[i][j]) &&	\
+             ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
              (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
          {					        \
             NEXT_LEFT  (i, j);				\
@@ -702,7 +702,7 @@ configLayout (SplitRegister *reg)
    i = r;						\
    for (j=c; j>=0; j--) {			        \
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {							\
          LAST_LEFT  (i, j);				\
@@ -715,7 +715,7 @@ configLayout (SplitRegister *reg)
    i = r;						\
    for (j=c-1; j>=0; j--) {			        \
       if ((reg->nullCell != curs->cells[i][j]) &&	\
-          (reg->recnCell != curs->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != curs->cells[i][j]) &&	\
           (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) \
       {							\
          NEXT_LEFT  (i, j);				\
@@ -732,7 +732,7 @@ configLayout (SplitRegister *reg)
    i = reg->split_cursor->numRows-1;				\
    for (j=reg->split_cursor->numCols-1; j>=0; j--) {	        \
       if ((reg->nullCell != reg->split_cursor->cells[i][j]) &&	\
-          (reg->recnCell != reg->split_cursor->cells[i][j]) &&	\
+          ((BasicCell *) reg->recnCell != reg->split_cursor->cells[i][j]) && \
           (XACC_CELL_ALLOW_INPUT & reg->split_cursor->cells[i][j]->input_output)) \
       {							\
          NEXT_LEFT  (i-1, j);				\
@@ -1090,7 +1090,7 @@ xaccInitSplitRegister (SplitRegister *reg,
    /* The reconcile cell should only be entered with the pointer,
     * and only then when the user clicks directly on the cell.
     */
-   reg->recnCell->input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
+   reg->recnCell->cell.input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
    /* Initialize price cells */
    xaccSetPriceCellValue (reg->debitCell, 0.0);
@@ -1221,7 +1221,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
    xaccDestroyDateCell      (reg->dateCell);
    xaccDestroyNumCell       (reg->numCell);
    xaccDestroyQuickFillCell (reg->descCell);
-   xaccDestroyBasicCell     (reg->recnCell);
+   xaccDestroyRecnCell      (reg->recnCell);
    xaccDestroyPriceCell     (reg->shrsCell);
    xaccDestroyPriceCell     (reg->balanceCell);
 
@@ -1274,7 +1274,7 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    changed |= MOD_DATE  & reg->dateCell->cell.changed;
    changed |= MOD_NUM   & reg->numCell->cell.changed;
    changed |= MOD_DESC  & reg->descCell->cell.changed;
-   changed |= MOD_RECN  & reg->recnCell->changed;
+   changed |= MOD_RECN  & reg->recnCell->cell.changed;
 
    changed |= MOD_ACTN  & reg->actionCell->cell.changed;
    changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
@@ -1300,7 +1300,7 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->dateCell->cell.changed = 0;
    reg->numCell->cell.changed = 0;
    reg->descCell->cell.changed = 0;
-   reg->recnCell->changed = 0;
+   reg->recnCell->cell.changed = 0;
 
    reg->actionCell->cell.changed = 0;
    reg->xfrmCell->cell.changed = 0;
@@ -1652,7 +1652,7 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->dateCell->cell, &srb->dateCell);
   saveCell(&sr->numCell->cell, &srb->numCell);
   saveCell(&sr->descCell->cell, &srb->descCell);
-  saveCell(sr->recnCell, &srb->recnCell);
+  saveCell(&sr->recnCell->cell, &srb->recnCell);
   saveCell(&sr->shrsCell->cell, &srb->shrsCell);
   saveCell(&sr->balanceCell->cell, &srb->balanceCell);
   saveCell(&sr->actionCell->cell, &srb->actionCell);
@@ -1693,7 +1693,7 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->dateCell->cell, &srb->dateCell);
   restoreCellChanged(&sr->numCell->cell, &srb->numCell);
   restoreCellChanged(&sr->descCell->cell, &srb->descCell);
-  restoreCellChanged(sr->recnCell, &srb->recnCell);
+  restoreCellChanged(&sr->recnCell->cell, &srb->recnCell);
   restoreCellChanged(&sr->shrsCell->cell, &srb->shrsCell);
   restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell);
   restoreCellChanged(&sr->actionCell->cell, &srb->actionCell);

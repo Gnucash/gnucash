@@ -527,8 +527,8 @@
              (name (gnc:option-name option)))
         (string-append
          "(let ((option (gnc:lookup-option " options-string "\n"
-         "                                 \"" section "\"\n"
-         "                                 \"" name "\")))\n"
+         "                                 " (gnc:value->string section) "\n"
+         "                                 " (gnc:value->string name) ")))\n"
          "  (" restore-code " option))\n\n")))
 
     (define (generate-forms port)

@@ -676,5 +676,12 @@
 #define YEARS_STR           _("Years")
 #define YES_STR             _("Yes")
 
+/* single letters */
+#define CLEARED_ABBREV      _("cleared:c"+8)
+#define FROZEN_ABBREV       _("frozen:f"+7)
+#define NOT_CLEARED_ABBREV  _("not cleared:n"+12)
+#define RECONCILE_ABBREV    _("Reconciled:R"+11)
+#define RECONCILED_ABBREV   _("reconciled:y"+11)
+
 
 #endif /* __XACC_MESSAGES_I18N_H__ */

@@ -1084,3 +1084,26 @@ gnc_window_adjust_for_screen(GtkWindow * window)
   gdk_window_resize(GTK_WIDGET(window)->window, width, height);
   gtk_widget_queue_resize(GTK_WIDGET(window));
 }
+
+
+/********************************************************************\
+ * gnc_get_reconcile_str                                            *
+ *   return the i18n'd string for the given reconciled flag         *
+ *                                                                  *
+ * Args: reconciled_flag - the flag to stringize                    *
+ * Returns: the i18n'd reconciled string                            *
+\********************************************************************/
+const char *
+gnc_get_reconcile_str(char reconciled_flag)
+{
+  switch (reconciled_flag)
+  {
+    case NREC: return NOT_CLEARED_ABBREV;
+    case CREC: return CLEARED_ABBREV;
+    case YREC: return RECONCILED_ABBREV;
+    case FREC: return FROZEN_ABBREV;
+    default:
+      PERR("Bad reconciled flag\n");
+      return NULL;
+  }
+}

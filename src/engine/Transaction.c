@@ -2061,6 +2061,18 @@ xaccSplitSetReconcile (Split *split, char recn)
 {
    if (!split) return;
 
+   switch (recn)
+   {
+     case NREC:
+     case CREC:
+     case YREC:
+     case FREC:
+       break;
+     default:
+       PERR("Bad reconciled flag");
+       return;
+   }
+
    split->reconciled = recn;
    MARK_SPLIT (split);
 

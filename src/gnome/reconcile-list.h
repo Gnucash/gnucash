@@ -25,6 +25,8 @@
 
 #include <gtk/gtkclist.h>
 
+#include "Query.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif				/* __cplusplus */

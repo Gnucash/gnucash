@@ -100,11 +100,11 @@
 
 (gnc:read-tips)
 
-(let ((tip-opt (gnc:lookup-global-option "General"
-                                         "Display \"Tip of the Day\"")))
-  (if (gnc:option-value tip-opt)
-      (let ((mainopen-hook (gnc:hook-lookup 'main-window-opened-hook)))
-      (gnc:hook-add-dangler 
-       mainopen-hook
-       (lambda (window) 
-	 (gnc:ui-totd-dialog-create-and-run))))))
+(let ((mainopen-hook (gnc:hook-lookup 'main-window-opened-hook)))
+  (gnc:hook-add-dangler 
+   mainopen-hook
+   (lambda (window) 
+     (let ((tip-opt (gnc:lookup-global-option "General"
+                                              "Display \"Tip of the Day\"")))
+       (if (gnc:option-value tip-opt)
+           (gnc:ui-totd-dialog-create-and-run))))))

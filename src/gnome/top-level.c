@@ -54,6 +54,7 @@
 #include "guile-util.h"
 #include "splitreg.h"
 #include "combocell.h"
+#include "recncell.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -181,6 +182,8 @@ gnucash_ui_init()
                                           "Auto-Raise Lists");
 
     gnc_configure_sr_label_callbacks();
+
+    xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
 
     mainWindow();
 

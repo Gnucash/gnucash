@@ -2208,7 +2208,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
     gnc_trans_scm_set_description(trans_scm, reg->descCell->cell.value);
 
   if (MOD_RECN & changed)
-    gnc_split_scm_set_reconcile_state(split_scm, reg->recnCell->value[0]);
+    gnc_split_scm_set_reconcile_state(split_scm,
+                                      xaccRecnCellGetFlag(reg->recnCell));
 
   if (MOD_ACTN & changed)
     gnc_split_scm_set_action(split_scm, reg->actionCell->cell.value);
@@ -2513,8 +2514,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if (MOD_RECN & changed) {
-    DEBUG ("MOD_RECN: %c\n", reg->recnCell->value[0]);
-    xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+    DEBUG ("MOD_RECN: %c\n", xaccRecnCellGetFlag(reg->recnCell));
+    xaccSplitSetReconcile (split, xaccRecnCellGetFlag(reg->recnCell));
   }
 
   if (MOD_ACTN & changed) {
@@ -2834,7 +2835,6 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
    SRInfo *info = xaccSRGetInfo(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
    SplitRegisterType reg_type = reg->type;
-   char buff[2];
    double baln;
 
    /* don't even bother doing a load if there is no current cursor */
@@ -2847,7 +2847,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetDateCellValueSecs (reg->dateCell, 0);
       xaccSetNumCellValue (reg->numCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
-      xaccSetBasicCellValue (reg->recnCell, "");
+      xaccRecnCellSetFlag (reg->recnCell, NREC);
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
@@ -2876,9 +2876,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetQuickFillCellValue (reg->descCell,
                                  xaccTransGetDescription (trans));
 
-      buff[0] = xaccSplitGetReconcile (split);
-      buff[1] = 0x0;
-      xaccSetBasicCellValue (reg->recnCell, buff);
+      xaccRecnCellSetFlag (reg->recnCell, xaccSplitGetReconcile (split));
 
       /* If the reverse_balance callback is present use that.
        * Otherwise, reverse income and expense by default. */
@@ -2958,10 +2956,6 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       }
 
       xaccSetQuickFillCellValue (reg->memoCell, xaccSplitGetMemo (split));
-
-      buff[0] = xaccSplitGetReconcile (split);
-      buff[1] = 0x0;
-      xaccSetBasicCellValue (reg->recnCell, buff);
 
       if ((STOCK_REGISTER    == reg_type) ||
           (CURRENCY_REGISTER == reg_type) ||

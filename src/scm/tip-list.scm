@@ -1,5 +1,6 @@
 (
- ("Hello World" "I'm a teapot")
- ("Hi there" "Yoo hoo!")
- ("Misc Tips" "Yes, it's me!!")
+ ("The GnuCash online manual has a lot of helpful information."
+  "You can access the manual under the Help menu.")
+ ("GnuCash does not use categories like Quicken."
+  "Instead, you should use Income and Expense accounts.")
 )
