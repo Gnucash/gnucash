@@ -94,7 +94,8 @@ qof_sql_query_set_kvp (QofSqlQuery *q, KvpFrame *kvp)
 }
 
 /* =================================================================== */
-/* Return NULL if the field is whitespace (blank, tab, formfeed etc.)  */
+/* Return NULL if the field is whitespace (blank, tab, formfeed etc.)  
+ * Else return pointer to first non-whitespace character. */
 
 static const char *
 whitespace_filter (const char * val)
@@ -144,6 +145,20 @@ get_table_and_param (char * str, char **tab, char **param)
 	*param = end+1;
 }
 
+static inline char * 
+dequote_string (char *str)
+{
+	/* strip out quotation marks ...  */
+	if (('\'' == str[0]) ||
+	    ('\"' == str[0]))
+	{
+		str ++;
+		size_t len = strlen(str);
+		str[len-1] = 0;
+	}
+	return str;
+}
+
 static QofQuery *
 handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 {
@@ -183,7 +198,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	/* XXX fix this so it can be either left or right */
 	if (NULL == cond->d.pair.right)
 	{
-		printf ("duude missing right paramter\n");
+		printf ("Error: missing right paramter\n");
 		return NULL;
 	}
 	sql_field_item * svalue = cond->d.pair.right->item;
@@ -198,17 +213,22 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		printf ("Error: we missing value\n");
 		return NULL;
 	}
+	qvalue_name = dequote_string (qvalue_name);
+	qvalue_name = whitespace_filter (qvalue_name);
 
 	/* Look to see if its the special KVP value holder.
 	 * If it is, look up the value. */
-	if (0 == strncasecmp (qvalue_name, "kvp:/", 5))
+	if (0 == strncasecmp (qvalue_name, "kvp://", 6))
 	{
 		if (NULL == query->kvp_join)
 		{
 			printf ("Error: missing kvp frame\n");
 			return NULL;
 		}
-		KvpValue *kv = kvp_frame_get_value (query->kvp_join, qvalue_name+4);
+		KvpValue *kv = kvp_frame_get_value (query->kvp_join, qvalue_name+5);
+		/* If there's no value, its not an error; 
+		 * we just don't do this predicate */
+		if (!kv) return NULL;  
 		KvpValueType kvt = kvp_value_get_type (kv);
 
 		tmpbuff[0] = 0x0;
@@ -228,7 +248,10 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 				break;
 			}
 			case KVP_TYPE_STRING:
+				/* If there's no value, its not an error; 
+				 * we just don't do this predicate */
 				qvalue_name = kvp_value_get_string (kv);
+				if (!qvalue_name) return NULL;
 				break;
 			case KVP_TYPE_GUID:
 			case KVP_TYPE_TIMESPEC:
@@ -283,17 +306,9 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 
 	if (!strcmp (param_type, QOF_TYPE_STRING))
 	{
-		/* strip out quotation marks ...  */
-		if (('\'' == qvalue_name[0]) ||
-		    ('\"' == qvalue_name[0]))
-		{
-			qvalue_name ++;
-			size_t len = strlen(qvalue_name);
-			qvalue_name[len-1] = 0;
-		}
 		pred_data = 
-		    qof_query_string_predicate (qop, /* comparison to make */
-		          qvalue_name,                 /* string to match */
+		    qof_query_string_predicate (qop,        /* comparison to make */
+		          qvalue_name,                      /* string to match */
 		          QOF_STRING_MATCH_CASEINSENSITIVE,  /* case matching */
 		          FALSE);                            /* use_regexp */
 	}
@@ -325,6 +340,9 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	{
 		// XXX FIXME: this doesn't handle time strings, only date strings
 		// XXX should also see if we need to do a day-compare or time-compare.
+		/* work around highly bogus locale setting */
+		qof_date_format_set(QOF_DATE_FORMAT_US);
+
 		time_t exact;
 		int rc = qof_scan_date_secs (qvalue_name, &exact);
 		if (0 == rc) 
