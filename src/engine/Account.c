@@ -457,7 +457,9 @@ xaccAccountCommitEdit (Account *acc)
   else 
   {
     xaccAccountBringUpToDate(acc);
-    xaccGroupInsertAccount(acc->parent, acc); /* resort parent group */
+
+    /* force re-sort of parent group */
+    xaccGroupInsertAccount(acc->parent, acc); 
   }
 
   /* See if there's a backend.  If there is, invoke it. */
