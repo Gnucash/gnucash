@@ -127,7 +127,7 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 {
   kvp_value *value;
 
-  if (!imap || !key || !acc) return;
+  if (!imap || !key || !acc || (strlen (key) == 0)) return;
   if (!category) {
     category = key;
     key = NULL;

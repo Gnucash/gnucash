@@ -1,5 +1,8 @@
 2002-12-14  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/import-backend.c (matchmap_store_destination):
+	Fix error messages when memo or description is empty.
+
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Switch to always
 	using the import-main-matcher.
 

@@ -364,6 +364,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 {
   GncImportMatchMap *tmp_matchmap = NULL;
   Account *dest;
+  char *descr, *memo;
   g_assert (trans_info);
 
   /* This will store the destination account of the selected match if 
@@ -384,16 +385,20 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 		  (xaccSplitGetAccount
 		   (gnc_import_TransInfo_get_fsplit (trans_info))));
 
-  gnc_imap_add_account (tmp_matchmap, 
-			GNCIMPORT_DESC, 
-			xaccTransGetDescription 
-			(gnc_import_TransInfo_get_trans (trans_info)), 
-			dest);
-  gnc_imap_add_account (tmp_matchmap, 
-			GNCIMPORT_MEMO, 
-			xaccSplitGetMemo 
-			(gnc_import_TransInfo_get_fsplit (trans_info)),
-			dest);
+  descr = xaccTransGetDescription 
+      (gnc_import_TransInfo_get_trans (trans_info));
+  if (descr && (strlen (descr) > 0))
+      gnc_imap_add_account (tmp_matchmap, 
+			    GNCIMPORT_DESC, 
+			    descr,
+			    dest);
+  memo = xaccSplitGetMemo 
+      (gnc_import_TransInfo_get_fsplit (trans_info));
+  if (memo && (strlen (memo) > 0))
+      gnc_imap_add_account (tmp_matchmap, 
+			    GNCIMPORT_MEMO, 
+			    memo,
+			    dest);
 
   if (matchmap == NULL)
     gnc_imap_destroy (tmp_matchmap);
@@ -701,7 +706,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 
 	      /* Erase the downloaded transaction */
 	      xaccTransDestroy(trans_info->trans);
-	      DEBUG("CommitEdit trans")
+	      /*DEBUG("CommitEdit trans")*/
 	      xaccTransCommitEdit(trans_info->trans);
 	    }
 	  break;
