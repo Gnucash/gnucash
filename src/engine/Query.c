@@ -1,6 +1,6 @@
 /********************************************************************\
  * Query.c : api for finding transactions                           *
- * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,6 +37,11 @@
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
+
+static short module = MOD_QUERY;
+
+/********************************************************************
+ ********************************************************************/
 
 #if 0
 static void 
