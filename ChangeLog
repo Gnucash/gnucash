@@ -1,3 +1,8 @@
+2003-05-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-lot.[ch]: add LOT_IS_CLOSED and LOT_BALANCE
+	  query parameter methods
+
 2003-05-17  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-file.scm:  the numeric test

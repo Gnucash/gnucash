@@ -331,6 +331,8 @@ void gnc_lot_register (void)
   static const QueryObjectDef params[] = {
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gnc_lot_get_book },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_lot_get_guid },
+    { LOT_IS_CLOSED, QUERYCORE_BOOLEAN, (QueryAccess)gnc_lot_is_closed },
+    { LOT_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)gnc_lot_get_balance },
     { NULL },
   };
 
