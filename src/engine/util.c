@@ -137,6 +137,102 @@ dcoresize(void)
 /********************************************************************\
 \********************************************************************/
 
+#define UPPER(c) (((c) >= 'a' && (c) <= 'z') ? (c) + 'A' - 'a' : (c))
+
+/* Search for str2 in first nchar chars of str1, ignore case.. 
+ * Return pointer to first match, or null.
+ */
+
+char *
+strncasestr(const char *str1, const char *str2, size_t len) 
+{
+    while (*str1 && len--) 
+   {
+      if (UPPER(*str1) == UPPER(*str2)) 
+      {
+         if (strncasecmp(str1,str2,strlen(str2)) == 0) 
+         {
+            return (char *) str1;
+         }
+      }
+      str1++;
+   }
+   return NULL;
+}
+
+/* Search for str2 in str1, ignore case. 
+ * Return pointer to first match, or null. 
+ */
+
+char *
+strcasestr(const char *str1, const char *str2) 
+{
+   size_t len = strlen (str1);
+   char * retval = strncasestr (str1, str2, len);
+   return retval;
+}
+
+/* Reversed strstr -- search for a needle in the haystack,
+ * from the far end 
+ */
+
+char *
+rstrstr (const char *haystack, const char * needle)
+{
+    int haylen = strlen (haystack);
+    int neelen = strlen (needle);
+
+    const char * hp = haystack + haylen - 1;
+    const char * np = needle + neelen - 1;
+
+    if ((0 == neelen) || (0 == haylen)) return 0x0;
+
+    while (hp >= haystack+neelen) {
+        if (*hp == *np) {
+            --np;
+            if (np < needle) return (char *) hp;
+        } else {
+            np = needle + neelen - 1;
+        }
+        --hp;
+    }
+
+    return 0x0;
+}
+
+
+/* The strpskip() function locates the first occurrence in the
+ * string s that does not match any of the characters in "reject".
+ * This is the opposite of strpbrk()
+ */
+
+char * 
+strpskip (const char * s, const char *reject)
+{
+   size_t i, rlen;
+   char * retval;
+
+   if (!s) return NULL;
+   if (!reject) return (char *) s;
+
+   rlen = sizeof (reject);
+   retval = (char *) s;
+
+   while (*retval) {
+      int match = 0;
+      for (i=0; i<rlen; i++) {
+         if (reject[i] == *retval) {match=1; break; }
+      }
+      if (!match) return retval;
+      retval ++;
+   }
+   return NULL;
+}
+
+
+/********************************************************************\
+\********************************************************************/
+
 int 
 safe_strcmp (const char * da, const char * db)
 {

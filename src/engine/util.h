@@ -129,6 +129,31 @@ size_t dcoresize();
 int safe_strcmp (const char * da, const char * db);
 
 /********************************************************/
+/* libc 'enhancements' */
+
+/* Search for needle in haystack, from the back of the haystack. 
+ * This is a reversed version of strstr() 
+ */
+extern char * rstrstr (const char *, const char *);
+
+/* Search for str2 in first nchar chars of str1, ignore case.. 
+ * Return pointer to first match, or null.
+ * These are just like that strnstr and the strstr functions, except 
+ * that they ignore the case. 
+ */
+extern char *strncasestr(const char *str1, const char *str2, size_t len);
+extern char *strcasestr(const char *str1, const char *str2);
+
+/* The strpskip() function locates the first occurrence in the
+ * string s that does not match any of the characters in "reject".
+ * This is the opposite of strpbrk().
+ * An alernate (better??) implementation might be  
+ * #define strpskip(s,r) (s+strspn(s,r))
+ */
+
+extern char * strpskip (const char * s, const char *reject);
+
+/********************************************************/
 /* the ultostr() subroutihne is the inverse of strtoul().
  *    It accepts a number and prints it in the indicated base.
  *    The returned string should be freed when done.
