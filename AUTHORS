@@ -159,6 +159,7 @@ Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Dave Peticolas <dave@krondo.com> extensive intelligent patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
+Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches

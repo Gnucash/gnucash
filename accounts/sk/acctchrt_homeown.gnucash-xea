@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Výdaje z vlastníctva domu
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Výdaje, ktoré sú spojené s vlastnením domu
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Zvoµte si túto sadu úètov, ak vlastníte dom. Táto sada poskytuje skupinu úètov na sledovanie výdajov na dom (poistenie, dane, opravy domu).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Výdaje</act:name>
+  <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Výdaje</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Opravy domu</act:name>
+  <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Opravy domu</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Poistenie</act:name>
+  <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Poistenie</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Poistenie</act:name>
+  <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Poistenie</act:description>
+  <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dane</act:name>
+  <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dane</act:description>
+  <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Majetková daò</act:name>
+  <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Majetková daò</act:description>
+  <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

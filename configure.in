@@ -712,6 +712,7 @@ AC_OUTPUT(
           accounts/de_DE/Makefile
           accounts/es_ES/Makefile
           accounts/pt_PT/Makefile
+          accounts/sk/Makefile
           debian/Makefile
           doc/Makefile
           doc/examples/Makefile

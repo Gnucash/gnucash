@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      ©tudijná pô¾ièka 
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Úèty pre ¹tudijnú pô¾ièku
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	Zvoµte si túto sadu úètov, ak ste si zobrali pô¾ièku na ¹túdium.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Pasíva</act:name>
+  <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Pasíva</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dlhy</act:name>
+  <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dlhy</act:description>
+  <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+    <act:name>©tudijná pô¾ièka</act:name>
+  <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>©tudijná pô¾ièka</act:description>
+  <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Výdaje</act:name>
+  <act:id type="new">fdbf47b39f70e8818f325eee7931039a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Výdaje</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Úrok</act:name>
+  <act:id type="new">1cfcd30ea97b954ffb550ab87d561033</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Úrok</act:description>
+  <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Úrok zo ¹tudijnej pô¾ièky</act:name>
+  <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Úrok zo ¹tudijnej pô¾ièky</act:description>
+  <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
