@@ -84,98 +84,93 @@ static void
 gnc_ui_EditAccWindow_finished_callback(GtkWidget *dialog, gpointer data)
 {
   Account      		*acc;
-  EditAccWindow         *editAccData = data; 
-  GtkWidget             *entryAccountName;
-  GtkWidget             *entryDescription;
-  GtkWidget             *entryCurrency;
-  GtkWidget             *entrySecurity;
-  GtkWidget	        *entryAccountCode;
-  GtkWidget             *notesWidget;
-  gchar                 *name, *tmp;
+  EditAccWindow         *editAccData = (EditAccWindow*)data; 
   char                  *oldval;
-  
-  entryAccountName = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountName");
-  entryDescription = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
-  entryCurrency    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryCurrency"   );
-  entrySecurity    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entrySecurity"   );
-  entryAccountCode = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountCode");
-  notesWidget      = gnc_ui_get_widget(GTK_WIDGET(dialog), "notesText");
+
+  char *make_valid_name(const char *); /* implemented in dialog-add.c */
+  GtkWidget *w;
+  char *n;
+
+  /* we only check once is dialog is a GTK_WIDGET */
+  GTK_WIDGET(dialog);
   
   acc = editAccData->account;
-  
-  /* The account has to have a name! */
-  name = gtk_entry_get_text(GTK_ENTRY(entryAccountName));
-  if(0 != strcmp( name, "" ))
-  {
-    xaccAccountSetName (acc, name);
-  }
+
+  xaccAccountBeginEdit(acc, 0);
+
+  /* account name */
+  w = gnc_ui_get_widget(dialog, "entryAccountName");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  if(n)
+    xaccAccountSetName(acc, n);
   else
   {
     GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( "You must enter a name for the account",
+    msgbox = gnome_message_box_new( "You must enter a valid name for the account",
                                      GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
     gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
     gtk_widget_show ( msgbox );
     return;
   }
   
-  xaccAccountBeginEdit(acc, 0);
-  
-  tmp = gtk_entry_get_text(GTK_ENTRY(entryDescription));
-  xaccAccountSetDescription (acc, tmp);
-  
-  tmp = gtk_entry_get_text(GTK_ENTRY(entryAccountCode));
-  xaccAccountSetCode (acc, tmp);
-  
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  xaccAccountSetDescription (acc, n);
+
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountCode");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));  
+  if(n)
+    xaccAccountSetCode (acc, n);
+  /* else leave the original account code */
+
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryCurrency");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
   oldval = xaccAccountGetCurrency (acc);
   if (!oldval) oldval = "";
   if ((0x0 == oldval[0]) || unsafe_edits) {
     char * oldval = xaccAccountGetCurrency (acc);
-    tmp = gtk_entry_get_text(GTK_ENTRY(entryCurrency));
     if (0x0 == oldval[0]) {
-      xaccAccountSetCurrency (acc, tmp);
+      xaccAccountSetCurrency (acc, n);
     } else 
-      if (strcmp (oldval, tmp)) {
+      if (strcmp (oldval, n)) {
         char buff[1000];
-        sprintf (buff, EDIT_CURRENCY_MSG, oldval, tmp);
+        sprintf (buff, EDIT_CURRENCY_MSG, oldval, n);
         if (verifyBox (buff)) {
-          xaccAccountSetCurrency (acc, tmp);
+          xaccAccountSetCurrency (acc, n);
         }
       }
   }
-  
+
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "entrySecurity");
   /* if this field wasn't displayed, then don't try to deal with it */
-  if (entrySecurity) {
+  if (w) {
+    n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
     oldval = xaccAccountGetSecurity (acc);
     if (!oldval) oldval = "";
     if ((0x0 == oldval[0]) || unsafe_edits) {
       char * oldval = xaccAccountGetSecurity (acc);
-      tmp = gtk_entry_get_text(GTK_ENTRY(entrySecurity));
       if (0x0 == oldval[0]) {
-        xaccAccountSetSecurity (acc, tmp);
+        xaccAccountSetSecurity (acc, n);
       } else 
-        if (strcmp (oldval, tmp)) {
+        if (strcmp (oldval, n)) {
           char buff[1000];
-          sprintf (buff, EDIT_SECURITY_MSG, oldval, tmp);
+          sprintf (buff, EDIT_SECURITY_MSG, oldval, n);
           if (verifyBox (buff)) {
-            xaccAccountSetSecurity (acc, tmp);
+            xaccAccountSetSecurity (acc, n);
           }
         }
-      
     }
   }
-  
-  {
-    char *notes = gtk_editable_get_chars(GTK_EDITABLE(notesWidget), 0, -1);
-    xaccAccountSetNotes(acc, notes);
-  }
+
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "notesText");
+  n = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
+  xaccAccountSetNotes(acc, n);
   
   //  gnome_dialog_close(GNOME_DIALOG(gtk_widget_get_toplevel(dialog)));
   
   xaccAccountCommitEdit (acc);
   
   refreshMainWindow();
-  
 }
 
 
@@ -192,6 +187,7 @@ editAccWindow( Account *acc ) {
   EditAccWindow *editAccData;
   GtkWidget *vbox1;
   gchar     *title = EDIT_ACCT_STR;
+  char *n;
   
   FETCH_FROM_LIST (EditAccWindow, editAccList, acc, account, editAccData);
   
@@ -255,7 +251,8 @@ editAccWindow( Account *acc ) {
     gtk_table_attach_defaults(GTK_TABLE(table), item, 0, 1, 2, 3);
     
     item = gtk_entry_new();
-    gtk_entry_set_text(GTK_ENTRY(item), xaccAccountGetCode(acc));
+    n = xaccAccountGetCode(acc);
+    if(n) gtk_entry_set_text(GTK_ENTRY(item), n);
     gtk_widget_show(item);
     gtk_table_attach_defaults(GTK_TABLE(table), item, 1, 2, 2, 3);
     gtk_object_set_data (GTK_OBJECT (editAccData->dialog), "entryAccountCode", item);
@@ -264,9 +261,10 @@ editAccWindow( Account *acc ) {
     gtk_widget_show(item);
     gtk_misc_set_alignment (GTK_MISC (item), 0.95, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), item, 0, 1, 3, 4);
-    
+
+    n = xaccAccountGetCurrency(acc);
     item = gtk_entry_new();
-    gtk_entry_set_text(GTK_ENTRY(item), xaccAccountGetCurrency(acc));
+    if(n) gtk_entry_set_text(GTK_ENTRY(item), n);
     gtk_widget_show(item);
     gtk_table_attach_defaults(GTK_TABLE(table), item, 1, 2, 3, 4);
     gtk_object_set_data (GTK_OBJECT (editAccData->dialog), "entryCurrency", item);
@@ -282,10 +280,11 @@ editAccWindow( Account *acc ) {
       int accType = xaccAccountGetType(acc);
       if ((STOCK == accType) || (MUTUAL == accType) || (CURRENCY== accType)) 
       {
-        gtk_entry_set_text(GTK_ENTRY(item), xaccAccountGetSecurity(acc));
-        gtk_widget_set_sensitive(item, TRUE);
-        gtk_object_set_data(GTK_OBJECT(editAccData->dialog), 
-                            "entrySecurity", item);
+         n = xaccAccountGetSecurity(acc);
+         if(n) gtk_entry_set_text(GTK_ENTRY(item), n);
+         gtk_widget_set_sensitive(item, TRUE);
+         gtk_object_set_data(GTK_OBJECT(editAccData->dialog), 
+                             "entrySecurity", item);
       }
       else
       {
@@ -303,18 +302,18 @@ editAccWindow( Account *acc ) {
     gtk_table_attach_defaults(GTK_TABLE(table), item, 0, 1, 5, 6);
     
     item = gtk_entry_new();
-    gtk_entry_set_text(GTK_ENTRY(item), xaccAccountGetDescription(acc));
+    n = xaccAccountGetDescription(acc);
+    if(n) gtk_entry_set_text(GTK_ENTRY(item), n);
     gtk_widget_show(item);
     gtk_object_set_data(GTK_OBJECT(editAccData->dialog), "entryDescription", item);
     gtk_table_attach_defaults(GTK_TABLE(table), item, 1, 2, 5, 6);    
-    
     
     gtk_widget_show(frame);
   }
   
   {
     /* the notes box */
-    GtkWidget *frame, *text, *box;
+    GtkWidget *frame, *text, *table, *vscr;
     char *notes;
     
     frame = gtk_frame_new("Notes");
@@ -322,10 +321,10 @@ editAccWindow( Account *acc ) {
     gtk_widget_show(frame);
     gtk_box_pack_start(GTK_BOX(vbox1), frame, FALSE, TRUE, 0);
     
-    box = gtk_hbox_new(TRUE, 5);
-    gtk_widget_show(box);
-    gtk_container_add(GTK_CONTAINER(frame), box);
-    gtk_container_border_width (GTK_CONTAINER (box), 5);
+    table = gtk_table_new(1,2, FALSE);
+    gtk_widget_show(table);
+    gtk_container_add(GTK_CONTAINER(frame), table);
+    gtk_container_border_width (GTK_CONTAINER (table), 3);
     
     text = gtk_text_new(NULL, NULL);
     gtk_object_set_data (GTK_OBJECT(editAccData->dialog), "notesText", text);
@@ -336,8 +335,15 @@ editAccWindow( Account *acc ) {
     gtk_text_set_editable(GTK_TEXT(text), TRUE);
     
     gtk_widget_show(text);    
+
+    gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+                      GTK_FILL | GTK_EXPAND,
+                      GTK_FILL | GTK_EXPAND | GTK_SHRINK, 0, 0);
     
-    gtk_box_pack_start(GTK_BOX(box), text, TRUE, TRUE, 0);
+    vscr = gtk_vscrollbar_new(GTK_TEXT(text)->vadj);
+    gtk_table_attach(GTK_TABLE(table), vscr, 1, 2, 0, 1,
+                     GTK_FILL, GTK_EXPAND | GTK_FILL | GTK_SHRINK, 0, 0);
+    gtk_widget_show(vscr);
   }
   
   gnome_dialog_button_connect (GNOME_DIALOG (editAccData->dialog), 0,

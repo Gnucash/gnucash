@@ -25,8 +25,21 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+/* TODO: 
+ * -- tooltips for the widgets in the window
+ * -- history boxes (i'm not sure they are called this way) for the text 
+ *    input boxes.
+ * -- the user should be able to operate the window with the keybard only
+ * -- the notes box should have scrollbar if the text excedes the visible area
+ *    (a scrolled window does not do the trick :)
+ * -- the parent account widget should show up *always* with the selected account in the 
+ *    visible area. (if there are lots of accounts the selected account is offscreen)
+ * -- make the account code work.
+ */
+
 #include <gnome.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "config.h"
 
@@ -130,7 +143,9 @@ static void
 gnc_ui_accWindow_list_fill ( GtkWidget *listOfTypes )
 {
   gint       i;
-  GtkWidget *list_item;  
+  GtkWidget *list_item;
+  /* one "dynamic" cast is enough! */
+  GtkContainer *l = GTK_CONTAINER(listOfTypes);
   
   for (i=0; i<NUM_ACCOUNT_TYPES; i++) 
   {
@@ -140,7 +155,7 @@ gnc_ui_accWindow_list_fill ( GtkWidget *listOfTypes )
     acctype = xaccAccountGetTypeStr (i);
     
     list_item=gtk_list_item_new_with_label (acctype);
-    gtk_container_add(GTK_CONTAINER(listOfTypes), list_item);
+    gtk_container_add(l, list_item);
     gtk_object_set_data(GTK_OBJECT(list_item), "accType", (gpointer)i);
     gtk_widget_show(list_item);
   }
@@ -169,7 +184,6 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
   int        accountType, parentAccType;
 
   AccWindow   *accData;
-  gint clicked;
 	
   /* Find accData so we can set the account type */
   toplevel    = gtk_widget_get_toplevel(GTK_WIDGET(widget));
@@ -340,6 +354,16 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
   }
 }
 
+/*
+ * these are used to select the coresponding child in the created
+ * tree. they are needed because we can only select the item after the
+ * whole tree is created. we've got a recursive call too, and passing the
+ * same data in the recursive call does not make much sense.
+ */
+static GtkWidget *selected_tree = NULL;
+static GtkWidget *selected_child = NULL;
+static Account *selectedOne = NULL;
+
 /********************************************************************\
  * Function: gnc_ui_accWindow_tree_fill- fills the tree widget      *
  *           with accounts                                          *
@@ -351,10 +375,9 @@ gnc_ui_accWindow_tree_select ( GtkWidget *widget, GtkWidget *child,
  *          account                                                 *
  \*******************************************************************/
 static int
-gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts, 
-                            Account *selectedOne) 
+gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts) 
 {
-  GtkWidget *treeItem;
+  GtkTreeItem *treeItem;
   GtkWidget *subtree;
   gint       totalAccounts = xaccGroupGetNumAccounts(accts);
   gint       currentAccount;
@@ -376,16 +399,17 @@ gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts,
     if(acc == selectedOne)
       myRetVal = currentAccount;
     
-    treeItem = gtk_tree_item_new_with_label(xaccAccountGetName(acc));
+    treeItem = (GtkTreeItem*)
+      gtk_tree_item_new_with_label(xaccAccountGetName(acc));
     gtk_object_set_user_data(GTK_OBJECT(treeItem), acc);
-    gtk_tree_append(GTK_TREE(tree), treeItem);
+    gtk_tree_append(tree, GTK_WIDGET(treeItem));
     
     /* Check to see if this account has any children. If it
      * does then we need to build a subtree and fill it 
      */
     hasChildren = xaccAccountGetChildren(acc); 
     
-    gtk_widget_show(treeItem);
+    gtk_widget_show(GTK_WIDGET(treeItem));
     
     if(hasChildren)
     {
@@ -396,9 +420,8 @@ gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts,
       gtk_signal_connect(GTK_OBJECT(subtree), "unselect-child",
                          GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select),
                          (gpointer)0);
-      retVal = gnc_ui_accWindow_tree_fill(GTK_TREE(subtree), hasChildren, 
-                                          selectedOne);  
-      gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
+      retVal = gnc_ui_accWindow_tree_fill(GTK_TREE(subtree), hasChildren);  
+      gtk_tree_item_set_subtree(treeItem, GTK_WIDGET(subtree));
     } 
     else {
       retVal = -2;
@@ -409,8 +432,14 @@ gnc_ui_accWindow_tree_fill (GtkTree *tree, AccountGroup *accts,
     
     if(retVal > -2) /* this subtree contains the selected node */
     {
-      gtk_tree_item_expand(GTK_TREE_ITEM(treeItem));
+      gtk_tree_item_expand(treeItem);
       myRetVal = -1;
+    }
+
+    if(acc == selectedOne)
+    {
+      selected_tree = GTK_WIDGET(tree);
+      selected_child = GTK_WIDGET(treeItem);
     }
   }
   return myRetVal;
@@ -433,6 +462,45 @@ gnc_ui_accWindow_cancelled_callback( GtkWidget *ignore, gpointer data )
 }
 
 /********************************************************************\
+ * make_valid_name                                                  *
+ *   tests whether the name has at least a non-whitespace           *
+ *   character in it, used to prevent the user from entring         *
+ *   only whitespace names. it also trims all leading and           *
+ *   trailing whitespace                                            *
+ *                                                                  *
+ * Note: other parts of the program could also benefit from this    *
+ *       function                                                   *
+ *                                                                  *
+ * Args: name - a character string representing the name            *
+ * Return: a character string representing the new name, allocated  *
+ *         with malloc                                              *
+ \*******************************************************************/
+char *make_valid_name(const char *name)
+{
+  int l;
+  const char *s = NULL, *p = name;
+  char *r;
+
+  while(*p)
+    if(isspace(*p)) p++;
+    else { s = p; break; }
+
+  if(!s) return NULL;
+
+  p = name + strlen(name) -1;
+  while(p != name)
+    if(!isspace(*p)) break;
+    else p--;
+
+  l = p - s + 1;
+  r = (char *)malloc((l + 1)*sizeof(char));
+  strncpy(r, s, l);
+  r[l] = '\0';
+  return r;
+}
+
+
+/********************************************************************\
  * gnc_ui_accWindow_create_callback                                 *
  *    This function does the actually creating of the new account.  *
  *    It also validates the data entered first.                     *
@@ -444,46 +512,44 @@ gnc_ui_accWindow_cancelled_callback( GtkWidget *ignore, gpointer data )
 static void 
 gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
 {
-
-  Transaction  *trans;
   Account      *account;
-  AccWindow    *accData = data; 
-  GtkWidget    *entryAccountName;
-  GtkWidget    *entryDescription;
-  GtkWidget    *entryCurrency;
-  GtkWidget    *entrySecurity;
-  GtkWidget    *notesWidget;
-  gchar        *text[3];
-  gchar         buf[BUFSIZE];
-  GtkCTreeNode *newRow = NULL;
-  GtkCTreeNode *parentRow;
-  GtkCTreeNode *ctreeParent;
-  GtkCTree     *ctree;
-  GtkWidget    *app;
-  double        dbalance;
-  
-  entryAccountName = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryAccountName");
-  entryDescription = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryDescription");
-  entryCurrency    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entryCurrency"   );
-  entrySecurity    = gnc_ui_get_widget(GTK_WIDGET(dialog), "entrySecurity"   );
-  notesWidget      = gnc_ui_get_widget(GTK_WIDGET(dialog), "notesText"       );
-  
-  app         = gnc_get_ui_data();
-  ctree       = gtk_object_get_data(GTK_OBJECT(app), "ctree");
-  ctreeParent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");  
+  AccWindow    *accData = (AccWindow *)data; 
 
-  /* Check to make sure something was entered */
-  if( strcmp( gtk_entry_get_text(GTK_ENTRY(entryAccountName)), "" ) == 0 ) 
-  {
-    GtkWidget *msgbox;
-    msgbox = gnome_message_box_new ( "You must enter a name for the account",
-                                     GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
-    gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
-    gtk_widget_show ( msgbox );
-    return;
-  }
+  GtkWidget *w;
+  char *n;
   
-  if( accData->type == -1 ) 
+  /* we only check once if dialog is a GTK_WIDGET */
+  GTK_WIDGET(dialog);
+
+  account = accData->newAccount;
+
+  xaccAccountBeginEdit (account, 0); /* were is xaccAccountRollbackEdit ? */
+
+  if (accData->parentAccount) {
+    xaccInsertSubAccount (accData->parentAccount, account);
+  } else {
+    xaccGroupInsertAccount(gncGetCurrentGroup(), account );
+  }
+
+  { /* the account name */
+    w = gnc_ui_get_widget(dialog, "entryAccountName");
+    n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+    if(n)
+      xaccAccountSetName(account, n);
+    else
+    {
+      GtkWidget *msgbox;
+      msgbox = gnome_message_box_new ( "You must enter a valid name for the account",
+                                       GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
+      gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
+      gtk_widget_show ( msgbox );
+      return;
+    }
+  }
+
+  if( accData->type != -1 ) 
+    xaccAccountSetType (account, accData->type);
+  else
   {
     GtkWidget *msgbox;
     msgbox = gnome_message_box_new ( "You must select a type for the account",
@@ -492,59 +558,77 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
     gtk_widget_show ( msgbox );
     return;
   }
-  
-  account = accData->newAccount;
-  
-  accData->newAccount = NULL;
-            
-  xaccAccountBeginEdit (account, 0);
-  
-  xaccAccountSetName        (account, 
-                             gtk_entry_get_text(GTK_ENTRY(entryAccountName)));
-  xaccAccountSetDescription (account, 
-                             gtk_entry_get_text(GTK_ENTRY(entryDescription)));
-  xaccAccountSetType        (account, accData->type);
-  xaccAccountSetCurrency    (account, 
-                             gtk_entry_get_text(GTK_ENTRY(entryCurrency)));
-  xaccAccountSetSecurity    (account, 
-                             gtk_entry_get_text(GTK_ENTRY(entrySecurity)));
-  
-  {
-    char *notes = gtk_editable_get_chars(GTK_EDITABLE(notesWidget), 0, -1);
-    xaccAccountSetNotes(account, notes);
+
+  /* description */
+  w = gnc_ui_get_widget(dialog, "entryDescription");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  xaccAccountSetDescription (account, n);
+
+  /* curency */
+  w = gnc_ui_get_widget(dialog, "entryCurrency");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  xaccAccountSetCurrency(account, n);
+
+  /* security */
+  w = gnc_ui_get_widget(dialog, "entrySecurity");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  xaccAccountSetSecurity(account, n);
+
+  /* account code */
+  w = gnc_ui_get_widget(dialog, "entryCode");
+  n = make_valid_name(gtk_entry_get_text(GTK_ENTRY(w)));
+  if(n)
+  { /* we should check whether the code is unique in the session! */
+    xaccAccountSetCode(account, n);
+  } else
+  { /* default code */
+    xaccAccountAutoCode(account, 4);
   }
   
-  trans = xaccMallocTransaction();
+  /* notes */
+  w = gnc_ui_get_widget(GTK_WIDGET(dialog), "notesText");
+  n = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
+  xaccAccountSetNotes(account, n);
+  
+  { /* make a default transaction */
+    Transaction  *trans = xaccMallocTransaction();
  
-  xaccTransBeginEdit(trans, 1);
-  xaccTransSetDateToday (trans);
-  xaccTransSetDescription (trans, OPEN_BALN_STR);
-  xaccTransCommitEdit(trans);
+    xaccTransBeginEdit(trans, 1);
+    xaccTransSetDateToday (trans);
+    xaccTransSetDescription (trans, OPEN_BALN_STR);
+    xaccTransCommitEdit(trans);
             
-  xaccAccountInsertSplit (account, xaccTransGetSplit (trans, 0) );
-  
-  if (accData->parentAccount) {
-    xaccInsertSubAccount (accData->parentAccount, account);
-  } else {
-    xaccGroupInsertAccount(gncGetCurrentGroup(), account );
+    xaccAccountInsertSplit (account, xaccTransGetSplit (trans, 0) );
   }
+
   xaccAccountCommitEdit (account);
 
-  dbalance = xaccAccountGetBalance(account);
-  xaccSPrintAmount (buf, dbalance, PRTSYM | PRTSEP);
+  {
+    GtkWidget *app = gnc_get_ui_data();
+    GtkCTree *ctree = gtk_object_get_data(GTK_OBJECT(app), "ctree");
+    GtkCTreeNode *ctreeParent = gtk_object_get_data(GTK_OBJECT(app), 
+                                                    "ctree_parent");
+    double dbalance = xaccAccountGetBalance(account);
+    GtkCTreeNode *newRow = NULL;
+    GtkCTreeNode *parentRow;
+    gchar *text[3];
+    gchar buf[BUFSIZE];
+
+    xaccSPrintAmount (buf, dbalance, PRTSYM | PRTSEP);
     
-  text[0] = xaccAccountGetName(account);
-  text[1] = xaccAccountGetDescription(account);
-  text[2] = buf;
-
-  /* Find the parent account row & add our new account to it... */
-  parentRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), ctreeParent, 
-                                         accData->parentAccount);
-  newRow    = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
+    text[0] = xaccAccountGetName(account);
+    text[1] = xaccAccountGetDescription(account);
+    text[2] = buf;
+    
+    /* Find the parent account row & add our new account to it... */
+    parentRow = gtk_ctree_find_by_row_data(GTK_CTREE(ctree), ctreeParent, 
+                                           accData->parentAccount);
+    newRow    = gtk_ctree_insert_node (ctree, parentRow, newRow, text, 0,
                                      NULL, NULL, NULL, NULL, /* PIXMAP INFO */
-                                     FALSE, TRUE);
-
-  gtk_ctree_node_set_row_data(GTK_CTREE(ctree), newRow, account);
+                                       TRUE, TRUE);
+    
+    gtk_ctree_node_set_row_data(GTK_CTREE(ctree), newRow, account);
+  }
 
   /* FIXME: Maybe
    *   Should we refresh the statusbar here?  I don't think it should be
@@ -553,43 +637,6 @@ gnc_ui_accWindow_create_callback(GtkWidget * dialog, gpointer data)
 
   gnome_dialog_close(GNOME_DIALOG(gtk_widget_get_toplevel(dialog)));
 }
-
-/********************************************************************\
- * gnc_ui_accWindow_tree_expand
- *   expands the accounts tree to the node containing the 
- *   given account
- *                                                                  * 
- * Args:           tree - the tree to check for the account
- *                    account - the account to check for 
- * Return:  the GtkTreeItem containing the account, or NULL if not
- *                      found
-\********************************************************************/
-GtkTreeItem *
-gnc_ui_accWindow_tree_expand (GtkTree *tree, Account *account)
-{
-	GList *l;
-
-	
-	if (!tree)
-		return NULL;
-	
-	for (l = tree->children; l; l=l->next) {
-		GtkTreeItem *item = l->data;
-		if ( account == gtk_object_get_user_data (GTK_OBJECT(item)))
-		  return item;
-
-		if (item->subtree) {
-			GtkTreeItem *subitem;
-			subitem = gnc_ui_accWindow_tree_expand(GTK_TREE(item->subtree), account);
-			if (subitem){
-				gtk_tree_item_expand(item);
-				return subitem;
-			}
-		}
-	}
-	return NULL;
-}
-
 
 /********************************************************************\
  * accWindow                                                        *
@@ -631,7 +678,7 @@ accWindow (AccountGroup *grp)
   gtk_widget_show (vbox);
   
   {
-    /* the account name, description, curency and security */
+    /* the account name, description, curency security and code */
     GtkWidget *frame, *accInfoTable, *aWidget;
     
     frame = gtk_frame_new("Account Info");
@@ -639,7 +686,7 @@ accWindow (AccountGroup *grp)
     gtk_widget_show(frame);
     gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, TRUE, 0);
     
-    accInfoTable = gtk_table_new(4, 2, TRUE);
+    accInfoTable = gtk_table_new(5, 2, TRUE);
     gtk_container_border_width(GTK_CONTAINER(accInfoTable), 5);
     gtk_table_set_row_spacings(GTK_TABLE(accInfoTable), 3);
     gtk_table_set_col_spacings(GTK_TABLE(accInfoTable), 5);
@@ -699,6 +746,19 @@ accWindow (AccountGroup *grp)
     gtk_widget_show(aWidget);
     gtk_table_attach_defaults(GTK_TABLE(accInfoTable), aWidget,
                               1, 2, 3, 4);
+
+    aWidget = gtk_label_new("Code:");
+    gtk_widget_show(aWidget);
+    gtk_misc_set_alignment (GTK_MISC (aWidget), 0.95, 0.5);
+    gtk_table_attach_defaults(GTK_TABLE(accInfoTable), aWidget,
+                              0, 1, 4, 5);
+    
+    aWidget = gtk_entry_new();
+    gtk_object_set_data (GTK_OBJECT (accData->dialog), "entryCode", 
+                         aWidget);
+    gtk_widget_show(aWidget);
+    gtk_table_attach_defaults(GTK_TABLE(accInfoTable), aWidget,
+                              1, 2, 4, 5);
   }
   
   hbox = gtk_hbox_new (FALSE, 5);
@@ -778,35 +838,47 @@ accWindow (AccountGroup *grp)
       gtk_signal_connect(GTK_OBJECT(subtree), "unselect-child",
                          GTK_SIGNAL_FUNC(gnc_ui_accWindow_tree_select),
                          (gpointer)0);
-      
+      /* so that we will know if we have to select something */
+      selected_tree = NULL; 
+      selectedOne = (Account*)grp;
       retVal = gnc_ui_accWindow_tree_fill(GTK_TREE(subtree),
-                                          gncGetCurrentGroup(),
-                                          (Account*)grp); 
+                                          gncGetCurrentGroup());
+      selectedOne = NULL;
       gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeItem), GTK_WIDGET(subtree));
 
       gtk_widget_show(treeItem);
       gtk_widget_show(accountTree);
+      gtk_widget_map(accountTree); /* i have no ideea why do I need the call, 
+                                      but without it it coredumps! */
       
       if(retVal > -2) /* this subtree contains the selected node */
       {
         gtk_tree_item_expand(GTK_TREE_ITEM(treeItem));
       }
+
+      if(selected_tree)
+      {
+        gtk_widget_map(GTK_WIDGET(selected_tree));
+        gtk_tree_select_child(GTK_TREE(selected_tree), selected_child);
+      }
+      else
+         gtk_tree_select_item(GTK_TREE(accountTree), 0);
     }
   }
   
   {
     /* the notes box */
-    GtkWidget *frame, *text, *box;
+    GtkWidget *frame, *text, *table, *vscr;
     
     frame = gtk_frame_new("Notes");
     gtk_container_border_width(GTK_CONTAINER(frame), 5);
     gtk_widget_show(frame);
     gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, TRUE, 0);
-    
-    box = gtk_hbox_new(TRUE, 5);
-    gtk_widget_show(box);
-    gtk_container_add(GTK_CONTAINER(frame), box);
-    gtk_container_border_width (GTK_CONTAINER (box), 5);
+   
+    table = gtk_table_new(1,2, FALSE);
+    gtk_widget_show(table);
+    gtk_container_add(GTK_CONTAINER(frame), table);
+    gtk_container_border_width (GTK_CONTAINER (table), 3);
     
     text = gtk_text_new(NULL, NULL);
     gtk_object_set_data (GTK_OBJECT(accData->dialog), "notesText", text);
@@ -814,7 +886,14 @@ accWindow (AccountGroup *grp)
     gtk_widget_show(text);
     gtk_text_set_editable(GTK_TEXT(text), TRUE);
     
-    gtk_box_pack_start(GTK_BOX(box), text, TRUE, TRUE, 0);
+    gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+                      GTK_FILL | GTK_EXPAND,
+                      GTK_FILL | GTK_EXPAND | GTK_SHRINK, 0, 0);
+
+    vscr = gtk_vscrollbar_new(GTK_TEXT(text)->vadj);
+    gtk_table_attach(GTK_TABLE(table), vscr, 1, 2, 0, 1,
+                     GTK_FILL, GTK_EXPAND | GTK_FILL | GTK_SHRINK, 0, 0);
+    gtk_widget_show(vscr);
   }
   
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 0,
@@ -822,11 +901,9 @@ accWindow (AccountGroup *grp)
                                accData);
   
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 1,
-                               GTK_SIGNAL_FUNC (gnc_ui_accWindow_cancelled_callback), 
+                               GTK_SIGNAL_FUNC (gnc_ui_accWindow_cancelled_callback),
                                accData);
                                
-                     
-
   gtk_widget_show(GTK_WIDGET(accData->dialog));  
 
   return accData;
