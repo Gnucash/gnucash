@@ -227,8 +227,8 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         GTable *cd_table;
         CellBlock *cursor;
 
-        const int num_cols = sheet->table->num_phys_cols;
-        int widths[num_cols];
+        int num_cols;
+        int *widths;
         int width;
         int row, col;
         int i;
@@ -238,6 +238,8 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         cursor = sheet->cursors[GNUCASH_CURSOR_HEADER];
 
         width = 0;
+        num_cols = cursor->num_cols;
+        widths = g_new(int, num_cols);
 
         /* find header widths */
         for (col = 0; col < num_cols; col++)
@@ -330,6 +332,8 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                         }
                 }
         }
+
+        g_free (widths);
 }
 
 gint

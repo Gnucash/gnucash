@@ -76,16 +76,4 @@ virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2)
           (vl1.phys_col_offset == vl2.phys_col_offset));
 }
 
-
-/*  The PhysicalLocation contains physical row and column coordinates.
- *  It is used to provide a mapping from a virtual cell block to the
- *  origin of the block in physical coordinates.
- *
- *  There is one instance of a PhysicalLocation for each virtual cell.  */
-typedef struct _PhysicalLocation PhysicalLocation;
-struct _PhysicalLocation {
-  short phys_row;
-  short phys_col;
-};
-
 #endif

@@ -48,7 +48,6 @@ typedef union _TableCell TableCell;
 union _TableCell
 {
   VirtualCell virt_cell;
-  PhysicalCell phys_cell;
 };
 
 
@@ -64,13 +63,9 @@ static GMemChunk *cell_mem_chunk = NULL;
 static void gnc_table_init (Table * table);
 static void gnc_table_free_data (Table * table);
 static gpointer gnc_virtual_cell_new (gpointer user_data);
-static gpointer gnc_physical_cell_new (gpointer user_data);
 static void gnc_virtual_location_init (VirtualLocation *vloc);
 static void gnc_virtual_cell_free (gpointer tcell, gpointer user_data);
-static void gnc_physical_cell_free (gpointer tcell, gpointer user_data);
-static void gnc_table_resize (Table * table,
-                              int new_phys_rows, int new_phys_cols,
-                              int new_virt_rows, int new_virt_cols);
+static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 
 /** Implementation *****************************************************/
@@ -103,9 +98,6 @@ gnc_table_new (TableGetEntryHandler entry_handler,
    table->virt_cells = g_table_new(gnc_virtual_cell_new,
                                    gnc_virtual_cell_free, table);
 
-   table->phys_cells = g_table_new(gnc_physical_cell_new,
-                                   gnc_physical_cell_free, table);
-
    return table;
 }
 
@@ -114,8 +106,6 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 static void
 gnc_table_init (Table * table)
 {
-   table->num_phys_rows = -1;
-   table->num_phys_cols = -1;
    table->num_virt_rows = -1;
    table->num_virt_cols = -1;
 
@@ -135,7 +125,6 @@ gnc_table_init (Table * table)
    /* initialize private data */
 
    table->virt_cells = NULL;
-   table->phys_cells = NULL;
 
    table->ui_data = NULL;
    table->destroy = NULL;
@@ -155,7 +144,6 @@ gnc_table_destroy (Table * table)
 
    /* free the cell tables */
    g_table_destroy(table->virt_cells);
-   g_table_destroy(table->phys_cells);
 
    /* intialize vars to null value so that any access is voided. */
    gnc_table_init (table);
@@ -180,25 +168,6 @@ gnc_table_get_virtual_cell (Table *table, VirtualCellLocation vcell_loc)
     return NULL;
 
   return &tcell->virt_cell;
-}
-
-/* ==================================================== */
-
-PhysicalCell *
-gnc_table_get_physical_cell (Table *table, PhysicalLocation phys_loc)
-{
-  TableCell *tcell;
-
-  if (table == NULL)
-    return NULL;
-
-  tcell = g_table_index (table->phys_cells,
-                         phys_loc.phys_row, phys_loc.phys_col);
-
-  if (tcell == NULL)
-    return NULL;
-
-  return &tcell->phys_cell;
 }
 
 /* ==================================================== */
@@ -358,9 +327,7 @@ gnc_table_get_bg_color_virtual (Table *table, VirtualLocation virt_loc)
 /* ==================================================== */
 
 void 
-gnc_table_set_size (Table * table,
-                    int phys_rows, int phys_cols,
-                    int virt_rows, int virt_cols)
+gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
 {
   /* Invalidate the current cursor position, if the array is
    * shrinking. This must be done since the table is probably
@@ -368,15 +335,13 @@ gnc_table_set_size (Table * table,
    * good chance (100% with current design) that the cursor is
    * located on the deleted rows. */
   if ((virt_rows < table->num_virt_rows) ||
-      (virt_cols < table->num_virt_cols) ||
-      (phys_rows < table->num_phys_rows) ||
-      (phys_cols < table->num_phys_cols)) 
+      (virt_cols < table->num_virt_cols))
   {
     gnc_virtual_location_init (&table->current_cursor_loc);
     table->current_cursor = NULL;
   }
 
-  gnc_table_resize (table, phys_rows, phys_cols, virt_rows, virt_cols);
+  gnc_table_resize (table, virt_rows, virt_cols);
 }
 
 /* ==================================================== */
@@ -388,7 +353,6 @@ gnc_table_free_data (Table * table)
     return;
 
   g_table_resize (table->virt_cells, 0, 0);
-  g_table_resize (table->phys_cells, 0, 0);
 }
 
 /* ==================================================== */
@@ -403,18 +367,6 @@ gnc_virtual_location_init (VirtualLocation *vloc)
   vloc->phys_col_offset = -1;
   vloc->vcell_loc.virt_row = -1;
   vloc->vcell_loc.virt_col = -1;
-}
-
-/* ==================================================== */
-
-static void
-gnc_physical_location_init (PhysicalLocation *ploc)
-{
-  if (ploc == NULL)
-    return;
-
-  ploc->phys_row = -1;
-  ploc->phys_col = -1;
 }
 
 /* ==================================================== */
@@ -464,58 +416,12 @@ gnc_virtual_cell_free (gpointer _tcell, gpointer user_data)
 
 /* ==================================================== */
 
-static gpointer
-gnc_physical_cell_new (gpointer user_data)
-{
-  TableCell *tcell;
-  PhysicalCell *pcell;
-
-  tcell = g_chunk_new(TableCell, cell_mem_chunk);
-
-  pcell = &tcell->phys_cell;
-
-  gnc_virtual_location_init(&pcell->virt_loc);
-
-  return tcell;
-}
-
-/* ==================================================== */
-
-static void
-gnc_physical_cell_free (gpointer _tcell, gpointer user_data)
-{
-  TableCell *tcell = _tcell;
-
-  if (tcell == NULL)
-    return;
-
-  g_mem_chunk_free(cell_mem_chunk, tcell);
-}
-
-/* ==================================================== */
-
 static void 
-gnc_table_resize (Table * table,
-                  int new_phys_rows, int new_phys_cols,
-                  int new_virt_rows, int new_virt_cols)
+gnc_table_resize (Table * table, int new_virt_rows, int new_virt_cols)
 {
   if (!table) return;
 
-  if ((new_phys_rows < new_virt_rows) ||
-      (new_phys_cols < new_virt_cols))
-  {
-    FATAL ("xaccTableResize(): the number of physical rows (%d %d)"
-           "must equal or exceed the number of virtual rows (%d %d)\n",
-           new_phys_rows, new_phys_cols,
-           new_virt_rows, new_virt_cols);
-    exit (1);
-  }
-
   g_table_resize (table->virt_cells, new_virt_rows, new_virt_cols);
-  g_table_resize (table->phys_cells, new_phys_rows, new_phys_cols);
-
-  table->num_phys_rows = new_phys_rows;
-  table->num_phys_cols = new_phys_cols;
 
   table->num_virt_rows = new_virt_rows;
   table->num_virt_cols = new_virt_cols;
@@ -525,16 +431,11 @@ gnc_table_resize (Table * table,
 
 void
 gnc_table_set_cursor (Table *table, CellBlock *curs,
-                      PhysicalLocation phys_origin,
                       VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
-  int cell_row, cell_col;
 
   if ((table == NULL) || (curs == NULL))
-    return;
-
-  if (gnc_table_physical_cell_out_of_bounds (table, phys_origin))
     return;
 
   vcell = gnc_table_get_virtual_cell (table, vcell_loc);
@@ -543,22 +444,6 @@ gnc_table_set_cursor (Table *table, CellBlock *curs,
 
   /* this cursor is the handler for this block */
   vcell->cellblock = curs;
-
-  /* intialize the mapping so that we will be able to find
-   * the handler, given this range of physical cell addresses */
-  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
-    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
-    {
-      PhysicalCell *pcell;
-      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
-                                phys_origin.phys_col + cell_col };
-
-      pcell = gnc_table_get_physical_cell (table, ploc);
-
-      pcell->virt_loc.phys_row_offset = cell_row;
-      pcell->virt_loc.phys_col_offset = cell_col;
-      pcell->virt_loc.vcell_loc = vcell_loc;
-    }
 }
 
 /* ==================================================== */

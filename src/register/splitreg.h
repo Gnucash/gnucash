@@ -191,7 +191,6 @@ struct _SplitRegister {
    SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
-   int num_cols;
    int num_header_rows;
 
    int num_phys_rows;

@@ -26,11 +26,8 @@
  * The Table object defines the structure and the GUI required
  * to display a two-dimensional grid. It provides several 
  * important functions:
- * -- An array of physical cells. These cells provide mappings
- *    from physical locations to virtual locations.
  * -- An array of virtual cells. These cells contain:
  *    -- the cellblock handler for that virtual cell.
- *    -- a mapping to physical locations
  *    -- a user data pointer
  * -- Tab-traversing mechanism so that operator can tab in a
  *    predefined order between cells.
@@ -117,14 +114,6 @@ struct _VirtualCell
 };
 
 
-/* The PhysicalCell structure holds information for each physical location. */
-typedef struct _PhysicalCell PhysicalCell;
-struct _PhysicalCell
-{
-  VirtualLocation virt_loc; /* Cell virtual location */
-};
-
-
 typedef struct _Table Table;
 
 typedef void (*TableMoveFunc) (Table *table,
@@ -147,34 +136,11 @@ typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
 typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
 
-/* The number of "physical" rows/cols is the number
- * of displayed one-line gui rows/cols in the table.
- * The number of physical rows can differ from the 
- * number of "virtual" rows because each virtual row 
- * consist of one or more physical rows.
- *
- * Given the location of a physical row & col, the corresponding 
- * virtual row & col can be found by looking it up in the 
- * Location member. The Location will provide the matching 
- * virtual row and column.  
- *
- * Given the location of the virtual row and column, the
- * corresponding GUI handler, and any associated user data
- * can be directly accessed.
- */
 struct _Table
 {
-  short num_phys_rows;
-  short num_phys_cols;
   short num_virt_rows;
   short num_virt_cols;
 
-  /* The position of the current cursor in "virtual" space
-   * is given by the virt_row and virt_col fields below.
-   * The fields termed "phys_row" and "phys_col" would
-   * be better termed phys row and column "origins", as the
-   * cursor extends down and to the right from the location
-   * given by the physical values. */
   CellBlock *current_cursor;
 
   VirtualLocation current_cursor_loc;
@@ -206,9 +172,8 @@ struct _Table
 
   /* This is black-box stuff that higher-level code should not access */
 
-  /* The virtual and physical cell information */
+  /* The virtual cell table */
   GTable *virt_cells;
-  GTable *phys_cells;
 
   void * ui_data;
 
@@ -232,9 +197,9 @@ Table *     gnc_table_new (TableGetEntryHandler entry_handler,
 
 void        gnc_table_destroy (Table *table);
 
-/* These functions check the bounds of virtal and physical locations
- * in the table and return TRUE if they are out of bounds. If possible,
- * they are compiled inline. */
+/* These functions check the bounds of virtal locations in the table
+ * and return TRUE if they are out of bounds. If possible, they are
+ * compiled inline. */
 G_INLINE_FUNC
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
                                                VirtualCellLocation vcell_loc);
@@ -251,30 +216,11 @@ gnc_table_virtual_cell_out_of_bounds (Table *table,
           (vcell_loc.virt_col >= table->num_virt_cols));
 }
 
-G_INLINE_FUNC gboolean
-gnc_table_physical_cell_out_of_bounds (Table *table,
-                                       PhysicalLocation phys_loc);
-G_INLINE_FUNC gboolean
-gnc_table_physical_cell_out_of_bounds (Table *table,
-                                       PhysicalLocation phys_loc)
-{
-  if (!table)
-    return TRUE;
-
-  return ((phys_loc.phys_row < 0) ||
-          (phys_loc.phys_row >= table->num_phys_rows) ||
-          (phys_loc.phys_col < 0) ||
-          (phys_loc.phys_col >= table->num_phys_cols));
-}
-
-/* These functions return the virtual/physical cell associated with a
- *   particular virtual/physical row & column pair. If the pair is out
- *   of bounds, NULL is returned. */
+/* This function returns the virtual cell associated with a particular
+ *   virtual location. If the location is out of bounds, NULL is
+ *   returned. */
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
                                            VirtualCellLocation vcell_loc);
-
-PhysicalCell * gnc_table_get_physical_cell (Table *table,
-                                            PhysicalLocation phys_loc);
 
 const char *   gnc_table_get_entry_virtual (Table *table,
                                             VirtualLocation virt_loc);
@@ -290,9 +236,7 @@ VirtualCell *  gnc_table_get_header_cell (Table *table);
 
 /* The gnc_table_set_size() method will resize the table to the
  *   indicated dimensions.  */
-void        gnc_table_set_size (Table * table,
-                                int phys_rows, int phys_cols,
-                                int virt_rows, int virt_cols);
+void        gnc_table_set_size (Table * table, int virt_rows, int virt_cols);
 
 /* The gnc_table_create_cursor() method can be called whenever a
  *   reconfig of the cursor may require new gui elements to be
@@ -301,7 +245,6 @@ void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
 
 /* Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_cursor (Table *table, CellBlock *curs,
-                                  PhysicalLocation phys_origin,
                                   VirtualCellLocation vcell_loc);
 
 /* Set the virtual cell data for a particular location. */
@@ -322,10 +265,10 @@ void        gnc_table_move_cursor (Table *table, VirtualLocation virt_loc);
 void        gnc_table_move_cursor_gui (Table *table, VirtualLocation virt_loc);
 
 /* The gnc_table_verify_cursor_position() method checks the location
- *   of the cursor with respect to a physical row/column position, and
- *   if the resulting virtual position has changed, repositions the cursor
- *   and gui to the new position. Returns true if the cell cursor was
- *   repositioned. */
+ *   of the cursor with respect to a virtual location position, and if
+ *   the resulting virtual location has changed, repositions the
+ *   cursor and gui to the new position. Returns true if the cell
+ *   cursor was repositioned. */
 gboolean    gnc_table_verify_cursor_position (Table *table,
                                               VirtualLocation virt_loc);
 

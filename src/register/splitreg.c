@@ -341,7 +341,7 @@ configLayout (SplitRegister *reg)
   header = reg->header;
 
   /* fill things up with null cells */
-  for (i=0; i<reg->num_cols; i++)
+  for (i=0; i < header->num_cols; i++)
   {
     CellBlockCell *cb_cell;
 
@@ -688,6 +688,8 @@ configCursors (SplitRegister *reg)
 static void
 mallocCursors (SplitRegister *reg)
 {
+  int num_cols;
+
   switch (reg->type) {
     case BANK_REGISTER:
     case CASH_REGISTER:
@@ -697,38 +699,40 @@ mallocCursors (SplitRegister *reg)
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
-      reg->num_cols = 8;
+      num_cols = 8;
       break;
 
     case INCOME_LEDGER:
     case GENERAL_LEDGER:
     case SEARCH_LEDGER:
-      reg->num_cols = 8;
+      num_cols = 8;
       break;
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
-      reg->num_cols = 11;
+      num_cols = 11;
       break;
 
     case PORTFOLIO_LEDGER:
-      reg->num_cols = 11;
+      num_cols = 11;
       break;
 
     default:
-      break;
+      PERR("Bad register type");
+      g_assert (FALSE);
+      return;
   }
 
   reg->num_header_rows = 1;
-  reg->header = gnc_cellblock_new (reg->num_header_rows, reg->num_cols);
+  reg->header = gnc_cellblock_new (reg->num_header_rows, num_cols);
 
   /* cursors used in the single & double line displays */
-  reg->single_cursor = gnc_cellblock_new (1, reg->num_cols);
-  reg->double_cursor = gnc_cellblock_new (2, reg->num_cols);
+  reg->single_cursor = gnc_cellblock_new (1, num_cols);
+  reg->double_cursor = gnc_cellblock_new (2, num_cols);
 
   /* the two cursors used for multi-line and dynamic displays */
-  reg->trans_cursor = gnc_cellblock_new (1, reg->num_cols);
-  reg->split_cursor = gnc_cellblock_new (1, reg->num_cols);
+  reg->trans_cursor = gnc_cellblock_new (1, num_cols);
+  reg->split_cursor = gnc_cellblock_new (1, num_cols);
 }
 
 /* ============================================== */
@@ -754,7 +758,6 @@ xaccInitSplitRegister (SplitRegister *reg,
 {
   Table * table;
   CellBlock *header;
-  int phys_r, phys_c;
 
   reg->table = NULL;
   reg->user_data = NULL;
@@ -896,28 +899,21 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  phys_r = header->num_rows;
   reg->cursor_virt_row = 1;
-
-  phys_r += reg->single_cursor->num_rows;
-  reg->num_phys_rows = phys_r;
   reg->num_virt_rows = 2;  /* one header, one single_cursor */
 
-  phys_c = header->num_cols;
-  reg->num_cols = phys_c;
-
   table = gnc_table_new (entry_handler, reg, allocator, deallocator, copy);
-  gnc_table_set_size (table, phys_r, phys_c, reg->num_virt_rows, 1);
+  gnc_table_set_size (table, reg->num_virt_rows, 1);
+
+  /* Set up header */
   {
-    PhysicalLocation ploc = { 0, 0 };
     VirtualCellLocation vcell_loc = { 0, 0 };
 
-    gnc_table_set_cursor (table, header, ploc, vcell_loc);
+    gnc_table_set_cursor (table, header, vcell_loc);
   }
 
-  /* Set up default configuration. */
+  /* Set up first and only cursor */
   {
-    PhysicalLocation ploc = { 1, 0 };
     VirtualLocation vloc;
 
     vloc.vcell_loc.virt_row = reg->cursor_virt_row;
@@ -925,7 +921,7 @@ xaccInitSplitRegister (SplitRegister *reg,
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
-    gnc_table_set_cursor (table, reg->single_cursor, ploc, vloc.vcell_loc);
+    gnc_table_set_cursor (table, reg->single_cursor, vloc.vcell_loc);
     gnc_table_move_cursor (table, vloc);
   }
 
