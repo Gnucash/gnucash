@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.0\n"
-"POT-Creation-Date: 2000-03-19 01:34-0800\n"
+"POT-Creation-Date: 2000-03-19 17:00-0800\n"
 "PO-Revision-Date: 2000-03-15 23:47+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,7 +239,8 @@ msgstr ""
 " est vide."
 
 #: messages-i18n.c:39
-msgid "Changes have been made since last Save.  Save data to file?"
+#, fuzzy
+msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
 "Des changements ont été fait depuis la derniere sauvegarde.\n"
 "Enregistrer les changements dans le fichier?"
@@ -2591,34 +2592,34 @@ msgstr "Arrière-plan de la répartition active en mode multi"
 msgid "All Accounts"
 msgstr "Comptes"
 
-#: src/gnome/dialog-qif-import.c:201
+#: src/gnome/dialog-qif-import.c:228
 #, fuzzy
 msgid "Select QIF File"
 msgstr "Tout sélectionner"
 
-#: src/gnome/dialog-qif-import.c:286
+#: src/gnome/dialog-qif-import.c:313
 msgid "You must specify a file to load."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:290
+#: src/gnome/dialog-qif-import.c:317
 #, fuzzy
 msgid "You must specify a currency."
 msgstr "Vous devez sélectionner un type de compte."
 
-#: src/gnome/dialog-qif-import.c:304 src/gnome/dialog-qif-import.c:632
-#: src/gnome/dialog-qif-import.c:734 src/gnome/dialog-qif-import.c:832
+#: src/gnome/dialog-qif-import.c:331 src/gnome/dialog-qif-import.c:659
+#: src/gnome/dialog-qif-import.c:761 src/gnome/dialog-qif-import.c:859
 msgid "QIF File scheme code not loaded properly."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:327
+#: src/gnome/dialog-qif-import.c:354
 msgid "QIF File already loaded. Reload with current settings?"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:360
+#: src/gnome/dialog-qif-import.c:387
 msgid "Failed to load QIF file. Are you sure it's a QIF file?"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:762 src/gnome/dialog-qif-import.c:860
+#: src/gnome/dialog-qif-import.c:789 src/gnome/dialog-qif-import.c:887
 msgid "Something is very wrong with QIF Importing."
 msgstr ""
 

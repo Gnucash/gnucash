@@ -1,3 +1,22 @@
+/********************************************************************\
+ * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas (linas@linas.org)   *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
 /*
  * FILE:
  * FileDialog.h
@@ -5,9 +24,9 @@
  * FUNCTION:
  * A set of file-handling utility dialogs for GUI menubars and menubuttons.
  * These utilities will "do the right thing" when used in the "File..."
- * pulldown menu, for the "New", "Open", "Save", "SaveAs", etc. menu entires.
+ * pulldown menu, for the "New", "Open", "Save", "SaveAs", etc. menu entries.
  * In particular, they will verify that old files don't get clobbered,
- * they'll put up dialogue boxes to ask the user to confirm thier actions,
+ * they'll put up dialogue boxes to ask the user to confirm their actions,
  * etc. 
  * 
  * These utilities are written in a GUI-independent fashion, and should
@@ -32,29 +51,32 @@
  *    open for further editing.
  *
  * The gncFileSaveAs() routine will prompt the user for a filename
- *    to save the account data to (using the standad GUI file dialogue
+ *    to save the account data to (using the standard GUI file dialogue
  *    box).  If the user specifies a filename, the account data will be
  *    saved. If an error occurs, a popup dialogue will inform the user 
  *    of the error.  One possible error is that another user has 
- *    the indicated file already loccked up in a different session
+ *    the indicated file already locked up in a different session
  *    (in which case it is up to the user to try again, or to pick
  *    a different filename).  If it is possible to save without 
  *    an error, then a new session is started for the indicated 
- *    filename, locking out other users.  This new session reamins
+ *    filename, locking out other users.  This new session remains
  *    open for further editing.
  *
  * The gncFileQuerySave() routine will display a popup dialog asking
- *    the user if they wish to save thier current work. If they answer
- *    "yes", thier work will be saved (using the gncFileSave function),
- *    otherwise no action will be performed.  If there is no currently
+ *    the user if they wish to save their current work. If they answer
+ *    "yes", their work will be saved (using the gncFileSave function),
+ *    otherwise no action will be performed. If there is no currently
  *    locked session, a popup will query the user for a filename
- *    (using the  gncFileSaveAs() routine).
+ *    (using the gncFileSaveAs() routine). The routine will return
+ *    GNC_T if the user hits "Yes" or "No" and GNC_F if the user
+ *    hits "Cancel". If nothing needed to be saved, the routine
+ *    will return GNC_T.
  *
  * The gncFileNew() routine will check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it, 
  *    (using the gncFileQuerySave() dialogue).  Then the current 
  *    session will be destroyed, file locks will be removed, and 
- *    account gropup structures will be set up for a new session.
+ *    account group structures will be set up for a new session.
  *
  * The gncFileOpen() routine check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it.
@@ -68,7 +90,7 @@
  *    dialogue.  If the file cannot be found, or if a read
  *    error occurs, a popup describing the error will pop up.
  *    One possible error is that another user has the indicated 
- *    file already loccked up in a different session (in which 
+ *    file already locked up in a different session (in which 
  *    case it is up to the user to try again, or to pick
  *    a different filename).
  *
@@ -82,7 +104,7 @@
  *    into the existing session (if any).  The current session continues
  *    to remain open for editing.
  *
- * The gncFileQuit() routine will close out and destroy the curren session.
+ * The gncFileQuit() routine will close out and destroy the current session.
  *    The user WILL NOT BE PROMPTED to confirm this action, or do do
  *    any kind of saving beforehand.
  *
@@ -94,27 +116,10 @@
  * Derived from Rob Clark's original MainWindow.c code, Dec 1998
  */
 
-/********************************************************************\
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas (linas@linas.org)         *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
-
 #ifndef __GNC_FILE_DIALOG_H__
 #define __GNC_FILE_DIALOG_H__
+
+#include "top-level.h"
 
 #include "Group.h"
 #include "Session.h"
@@ -127,7 +132,8 @@ void gncFileSaveAs (void);
 
 void gncFileOpenFile (const char *);
 
-void gncFileQuerySave (void);
+gncBoolean gncFileQuerySave (void);
+
 void gncFileQuit (void);
 
 AccountGroup *gncGetCurrentGroup (void);

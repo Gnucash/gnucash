@@ -57,19 +57,18 @@
   (cond ((gnc:ui-is-running?)
 	 (if (not (gnc:ui-is-terminating?))
 	     (begin
-	       (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
-	       (gnc:ui-shutdown))))
-
-	(else
+               (gnc:ui-destroy-all-subwindows)
+               (if (gnc:file-query-save)
+                   (begin
+                     (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
+                     (gnc:ui-shutdown))))))
+        (else
 	 (gnc:ui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
 	 (exit exit-status))))
 
 (define (gnc:ui-finish)
   (gnc:debug "UI Shutdown hook.")
-
-  (gnc:ui-destroy-all-subwindows)
-  (gnc:file-query-save)
   (gnc:file-quit))
 
 (define (gnc:main)

@@ -2,7 +2,7 @@
  * FileDialog.c -- file-handling utility dialogs for gnucash.       * 
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999,2000 Linas Vepstas                      *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -39,7 +39,7 @@
 
 /** GLOBALS *********************************************************/
 static Session *current_session = NULL;
-static AccountGroup *topgroup = NULL;    /* the current top of the heriarchy */
+static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
 
 /********************************************************************\
  * fileMenubarCB -- handles file menubar choices                    * 
@@ -110,9 +110,10 @@ gncFileNew (void)
   AccountGroup *grp;
 
   /* If user attempts to start a new session before saving
-   * results of the last one, prompt them to clean up thier 
+   * results of the last one, prompt them to clean up their 
    * act. */
-  gncFileQuerySave ();
+  if (!gncFileQuerySave ())
+    return;
 
   sess = current_session;
   grp = xaccSessionGetGroup (sess);
@@ -130,7 +131,7 @@ gncFileNew (void)
   topgroup = NULL;
 
   /* disable logging while we move over to the new set of accounts to
-   * edit; the mass deletetion of accounts and transactions during
+   * edit; the mass deletion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
   xaccLogDisable();
   xaccFreeAccountGroup (grp);
@@ -141,16 +142,19 @@ gncFileNew (void)
 
 /* ======================================================== */
 
-void
+gncBoolean
 gncFileQuerySave (void)
 {
   Session *sess;
   AccountGroup *grp;
+  gncUIWidget app;
 
   sess = current_session;
   grp = xaccSessionGetGroup (sess);
   /* if session not yet started ... */
   if (!grp) grp = topgroup;
+
+  app = gnc_get_ui_data();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -160,13 +164,22 @@ gncFileQuerySave (void)
    */
   while ( xaccAccountGroupNotSaved (grp) ) 
   {
-    if( gnc_verify_dialog( FMB_SAVE_MSG, GNC_T ) ) 
-    {
-      gncFileSave ();
-    }
-    else
-      return;
+    GNCVerifyResult result;
+
+    result = gnc_verify_cancel_dialog_parented( app,
+                                                FMB_SAVE_MSG,
+                                                GNC_VERIFY_YES );
+
+    if (result == GNC_VERIFY_CANCEL)
+      return FALSE;
+
+    if (result == GNC_VERIFY_NO)
+      return TRUE;
+
+    gncFileSave ();
   }
+
+  return TRUE;
 }
 
 /* ======================================================== */
@@ -270,7 +283,9 @@ gncFileOpen (void)
 {
   char * newfile;
 
-  gncFileQuerySave ();
+  if (!gncFileQuerySave ())
+    return;
+
   newfile = fileBox( OPEN_STR, "*.xac");
   gncPostFileOpen (newfile);
 
@@ -290,7 +305,10 @@ void
 gncFileOpenFile (const char * newfile)
 {
   if (!newfile) return;
-  gncFileQuerySave ();
+
+  if (!gncFileQuerySave ())
+    return;
+
   gncPostFileOpen (newfile);
 }
 

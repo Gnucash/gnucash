@@ -25,35 +25,7 @@
 
 #include "glade-qif-import.h"
 #include "glade-cb-qif-import.h"
+#include "ui-callbacks.h"
 
-typedef struct _qifimportwindow
-{
-
-  /* on the Files tab */
-  GtkWidget * dialog;
-  GtkWidget * currency_entry;
-  GtkWidget * radix_picker;
-  GtkWidget * date_picker;
-  GtkWidget * filename_entry;
-  GtkWidget * acct_auto_button;
-  GtkWidget * acct_entry;
-  GtkWidget * selected_file_list;
-
-  /* on the Accounts tab */
-  GtkWidget * acct_list;
-  
-  /* on the Categories tab */
-  GtkWidget * cat_list;
-
-  SCM       imported_files;
-  SCM       selected_file;
-  SCM       mapping_info; 
-  SCM       cat_display_info;
-  SCM       acct_display_info;
-
-} QIFImportWindow;
-
-QIFImportWindow * gnc_ui_qif_import_dialog_make();
-void gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
 
 #endif
