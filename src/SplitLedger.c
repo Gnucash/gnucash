@@ -3588,6 +3588,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   SplitRegisterBuffer *reg_buffer;
+  GHashTable *trans_table = NULL;
   CellBlock *lead_cursor;
   Transaction *find_trans;
   Transaction *trans;
@@ -3698,6 +3699,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
   table->dividing_row = -1;
 
+  if (multi_line)
+    trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
+
   /* populate the table */
   if (slist)
     split = slist[0]; 
@@ -3714,6 +3718,13 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     /* do not load the blank split */
     if (split == blank_split)
       continue;
+
+    if (multi_line)
+    {
+      if (g_hash_table_lookup (trans_table, trans))
+        continue;
+      g_hash_table_insert (trans_table, trans, trans);
+    }
 
     if (info->show_present_divider &&
         !found_divider &&
@@ -3755,6 +3766,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     if (!multi_line)
       start_primary_color = !start_primary_color;
   }
+
+  if (multi_line)
+    g_hash_table_destroy (trans_table);
 
   /* add the blank split at the end. */
   split = blank_split;
