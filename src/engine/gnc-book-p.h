@@ -72,7 +72,6 @@ struct gnc_book_struct
 
   /* version number, used for tracking multiuser updates */
   gint32  version;
-  guint32 version_check;  /* data aging timestamp */
 
   /* To be technically correct, backends belong to sessions and
    * not books.  So the pointer below "really shouldn't be here", 

@@ -94,7 +94,6 @@ gnc_book_init (GNCBook *book)
 
   book->book_open = 'y';
   book->version = 0;
-  book->version_check = 0;
   book->idata = 0;
 }
 
