@@ -670,5 +670,5 @@
      p 
      (gnc:html-markup-h2 (_ "No data"))
      (gnc:html-markup-p
-      (_ "The selected accounts contain no data for the selected time period")))
+      (_ "The selected accounts contain no data (or only zeroes) for the selected time period")))
     p))

@@ -31,7 +31,8 @@ ways.  </para> </listitem>
 
 <listitem> <para><link linkend="xacc-portfolio-report">Stock Portfolio
 </link> provides a quick summary of your stocks, their current value,
-and profits made.  </para></listitem>
+and profits made.  The <link linkend="xacc-stock-price-report">Stock Price Tracker
+</link> lets you track the price of a particular stock over time.</para></listitem>
 
 <listitem> <para><link linkend="xacc-tax-report">Tax Report / TXF
 Export:</link> shows tax related Income and Expenses.  Can <link

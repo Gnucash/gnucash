@@ -38,6 +38,7 @@
 <!entity xaccregwinkbd system "xacc-regwin-kbd.sgml">
 <!entity xaccreports system "xacc-reports.sgml">
 <!entity xaccrepdev system "xacc-repdev.sgml">
+<!entity xaccstockpricereport system "xacc-stock-price-report.sgml">
 <!entity xaccticker system "xacc-ticker.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
@@ -75,7 +76,6 @@
 &xaccincomeexpensebarcharts;
 &xaccincomeexpensepiecharts;
 &xacclocatingtxns;
-&xaccmulticolumnviewreports;
 &xaccpreferences;
 &xaccchartofaccts;
 &xaccuserdocs;
@@ -100,6 +100,7 @@
 &xacctxfexport;
 &xaccdochack;
 &xaccscheme;
+&xaccstockpricereport;
 &xaccrepdev;
 &xaccy2k;
 &xaccgpl;

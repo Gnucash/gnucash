@@ -24,7 +24,7 @@ beginning of this year" or "today", and are highly convenient for
 doing "rolling reports".</para></listitem>
 
 <listitem>
-<para><emphasis><anchor id="xacc-options-interval">Interval</emphasis></para>
+<para><emphasis><anchor id="xacc-options-interval">Interval/Step Size</emphasis></para>
 <para>This option is used on bar charts to determine the interval
 which each bar represents.  Typical values are daily, weekly,
 monthly, and yearly.</para></listitem>
@@ -48,8 +48,8 @@ parent account is.</para>
 <listitem>
 <para><emphasis><anchor id="xacc-options-depth">Depth</emphasis></para>
 <para>This option allows the selection of how "deep" the 
-reports display subaccounts.  If the subaccounts go deeper 
-than selected, the report will calculate an overall value
+report displays subaccounts.  If the subaccounts go deeper 
+than selected, most reports will calculate an overall value
 for all the subaccounts and include it in a higher-level
 total.  If you want to make sure every account selected is 
 individually displayed, select "All".</para>
@@ -64,11 +64,15 @@ the global Style Sheet menu item.</para>
 </listitem>
 
 <listitem>
-<para><emphasis><anchor id="xacc-options-plot-dimensions">Plot Dimensions</emphasis></para>
-<para>There are "Width" and "Height" options for most of the graphs,
-which specify the displayed dimensions (in pixels).</para>
+  <para><emphasis><anchor id="xacc-options-plot-dimensions">Plot
+	Dimensions</emphasis></para> 
+	  
+  <para>There are "Width" and "Height"
+    options for most of the graphs, which specify the 
+    displayed dimensions
+    (in pixels).</para>
 </listitem>
-
+	
 <listitem>
 <para><emphasis><anchor id="xacc-options-report-currency">Report Currency</emphasis></para>
 <para>Most reports allow you to select the report currency (the default

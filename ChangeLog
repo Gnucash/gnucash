@@ -1,3 +1,14 @@
+2001-05-16  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/html-utilities.scm ((gnc:html-make-empty-data-warning)): 
+	update message.
+
+	* src/scm/{gnucash.sgml, xacc-account-summary.sgml, 
+	xacc-asset-liability-barcharts.sgml, xacc-reports.sgml}: more new
+	material.
+
+	* src/scm/xacc-stock-price-report.sgml: new file.
+
 2001-05-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm: added another case to
