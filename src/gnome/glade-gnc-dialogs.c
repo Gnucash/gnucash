@@ -2684,8 +2684,8 @@ create_Budget_Dialog (void)
   GtkWidget *label773;
   GtkWidget *hbox43;
   GtkWidget *hbuttonbox2;
-  GtkWidget *add_entry_button;
-  GtkWidget *delete_entry_button;
+  GtkWidget *entry_add_button;
+  GtkWidget *entry_delete_button;
   GtkWidget *hbox44;
   GtkWidget *entry_up_button;
   GtkWidget *entry_down_button;
@@ -2865,23 +2865,23 @@ create_Budget_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox2), 6);
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (hbuttonbox2), 75, 0);
 
-  add_entry_button = gtk_button_new_with_label (_("Add"));
-  gtk_widget_ref (add_entry_button);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "add_entry_button", add_entry_button,
+  entry_add_button = gtk_button_new_with_label (_("Add"));
+  gtk_widget_ref (entry_add_button);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "entry_add_button", entry_add_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (add_entry_button);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox2), add_entry_button);
-  GTK_WIDGET_SET_FLAGS (add_entry_button, GTK_CAN_DEFAULT);
-  gtk_tooltips_set_tip (tooltips, add_entry_button, _("Add a new entry or subentry"), NULL);
+  gtk_widget_show (entry_add_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox2), entry_add_button);
+  GTK_WIDGET_SET_FLAGS (entry_add_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, entry_add_button, _("Add a new entry or subentry"), NULL);
 
-  delete_entry_button = gtk_button_new_with_label (_("Delete"));
-  gtk_widget_ref (delete_entry_button);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "delete_entry_button", delete_entry_button,
+  entry_delete_button = gtk_button_new_with_label (_("Delete"));
+  gtk_widget_ref (entry_delete_button);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "entry_delete_button", entry_delete_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (delete_entry_button);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox2), delete_entry_button);
-  GTK_WIDGET_SET_FLAGS (delete_entry_button, GTK_CAN_DEFAULT);
-  gtk_tooltips_set_tip (tooltips, delete_entry_button, _("Delete the selected entry or subentry"), NULL);
+  gtk_widget_show (entry_delete_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox2), entry_delete_button);
+  GTK_WIDGET_SET_FLAGS (entry_delete_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, entry_delete_button, _("Delete the selected entry or subentry"), NULL);
 
   hbox44 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox44);
@@ -3192,22 +3192,6 @@ create_Budget_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (help_button);
   GTK_WIDGET_SET_FLAGS (help_button, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (Budget_Dialog), "destroy",
-                      GTK_SIGNAL_FUNC (on_Budget_Dialog_destroy),
-                      Budget_Dialog);
-  gtk_signal_connect (GTK_OBJECT (entry_tree), "tree_select_row",
-                      GTK_SIGNAL_FUNC (on_budget_entry_tree_tree_select_row),
-                      Budget_Dialog);
-  gtk_signal_connect (GTK_OBJECT (entry_tree), "tree_unselect_row",
-                      GTK_SIGNAL_FUNC (on_budget_entry_tree_tree_unselect_row),
-                      Budget_Dialog);
-  gtk_signal_connect_after (GTK_OBJECT (entry_tree), "scroll_vertical",
-                            GTK_SIGNAL_FUNC (on_budget_entry_tree_scroll_vertical),
-                            Budget_Dialog);
-  gtk_signal_connect (GTK_OBJECT (cancel_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_budget_cancel_button_clicked),
-                      Budget_Dialog);
 
   gtk_object_set_data (GTK_OBJECT (Budget_Dialog), "tooltips", tooltips);
 

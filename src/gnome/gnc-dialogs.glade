@@ -4005,12 +4005,6 @@ Exactly
 <widget>
   <class>GnomeDialog</class>
   <name>Budget Dialog</name>
-  <signal>
-    <name>destroy</name>
-    <handler>on_Budget Dialog_destroy</handler>
-    <data>Budget_Dialog</data>
-    <last_modification_time>Tue, 25 Apr 2000 06:44:25 GMT</last_modification_time>
-  </signal>
   <title>Budget</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
@@ -4071,12 +4065,6 @@ Exactly
 	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<signal>
-	  <name>clicked</name>
-	  <handler>on_budget_cancel_button_clicked</handler>
-	  <data>Budget_Dialog</data>
-	  <last_modification_time>Wed, 26 Apr 2000 07:30:13 GMT</last_modification_time>
-	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
       </widget>
 
@@ -4230,25 +4218,6 @@ Exactly
 		  <class>GtkCTree</class>
 		  <name>entry_tree</name>
 		  <can_focus>True</can_focus>
-		  <signal>
-		    <name>tree_select_row</name>
-		    <handler>on_budget_entry_tree_tree_select_row</handler>
-		    <data>Budget_Dialog</data>
-		    <last_modification_time>Thu, 27 Apr 2000 03:28:06 GMT</last_modification_time>
-		  </signal>
-		  <signal>
-		    <name>tree_unselect_row</name>
-		    <handler>on_budget_entry_tree_tree_unselect_row</handler>
-		    <data>Budget_Dialog</data>
-		    <last_modification_time>Thu, 27 Apr 2000 03:28:17 GMT</last_modification_time>
-		  </signal>
-		  <signal>
-		    <name>scroll_vertical</name>
-		    <handler>on_budget_entry_tree_scroll_vertical</handler>
-		    <after>True</after>
-		    <data>Budget_Dialog</data>
-		    <last_modification_time>Thu, 27 Apr 2000 09:01:40 GMT</last_modification_time>
-		  </signal>
 		  <columns>1</columns>
 		  <column_widths>80</column_widths>
 		  <selection_mode>GTK_SELECTION_BROWSE</selection_mode>
@@ -4300,7 +4269,7 @@ Exactly
 
 	      <widget>
 		<class>GtkButton</class>
-		<name>add_entry_button</name>
+		<name>entry_add_button</name>
 		<tooltip>Add a new entry or subentry</tooltip>
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
@@ -4309,7 +4278,7 @@ Exactly
 
 	      <widget>
 		<class>GtkButton</class>
-		<name>delete_entry_button</name>
+		<name>entry_delete_button</name>
 		<tooltip>Delete the selected entry or subentry</tooltip>
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>

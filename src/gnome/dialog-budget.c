@@ -31,6 +31,7 @@
 #include "util.h"
 
 
+/** Datatypes ***********************************************************/
 struct _BudgetDialog
 {
   GtkWidget *dialog;
@@ -49,6 +50,14 @@ struct _BudgetDialog
   GtkWidget *subentry_mechanism_menu;
   GtkWidget *subentry_grace_delta;
   GtkWidget *subentry_frame;
+
+  GtkWidget *bill_day_box;
+  GtkWidget *grace_box;
+
+  GtkWidget *entry_add_button;
+  GtkWidget *entry_delete_button;
+  GtkWidget *entry_up_button;
+  GtkWidget *entry_down_button;
 
   GtkWidget *apply_button;
 
@@ -132,6 +141,12 @@ static gboolean getters_initialized = FALSE;
 static gboolean preds_initialized = FALSE;
 
 
+/** Prototypes **********************************************************/
+static void set_move_button_sensitivity(BudgetDialog *bd);
+static void select_node (BudgetDialog *bd, GtkCTreeNode *node);
+
+
+/** Implementations *****************************************************/
 static void
 initialize_getters()
 {
@@ -320,13 +335,8 @@ period_units(SCM period_type)
 static void
 allow_mechanism_edits(BudgetDialog *bd, gboolean allow)
 {
-  GtkWidget *box;
-
-  box = gtk_object_get_data(GTK_OBJECT(bd->dialog), "bill_day_box");
-  gtk_widget_set_sensitive(box, allow);
-
-  box = gtk_object_get_data(GTK_OBJECT(bd->dialog), "grace_box");
-  gtk_widget_set_sensitive(box, allow);
+  gtk_widget_set_sensitive(bd->bill_day_box, allow);
+  gtk_widget_set_sensitive(bd->grace_box, allow);
 }
 
 static void
@@ -581,6 +591,50 @@ get_previous_sibling_node(BudgetDialog *bd, GtkCTreeNode *node)
   return sibling;
 }
 
+static GtkCTreeNode *
+get_next_sibling_node(BudgetDialog *bd, GtkCTreeNode *node)
+{
+  GtkCTreeNode *sibling;
+  GtkCTree *ctree;
+  BudgetItem *bi;
+  EntryType type;
+
+  if (node == NULL)
+    return NULL;
+
+  ctree = GTK_CTREE(bd->entry_tree);
+
+  bi = gtk_ctree_node_get_row_data(ctree, node);
+  type = bi->type;
+
+  sibling = GTK_CTREE_NODE_NEXT(node);
+  if (sibling == NULL)
+    return NULL;
+
+  bi = gtk_ctree_node_get_row_data(ctree, sibling);
+  switch (type)
+  {
+    case BUDGET_ENTRY:
+      while (bi->type != BUDGET_ENTRY)
+      {
+        sibling = GTK_CTREE_NODE_NEXT(sibling);
+        if (sibling == NULL)
+          return NULL;
+        bi = gtk_ctree_node_get_row_data(ctree, sibling);
+      }
+      break;
+    case BUDGET_SUBENTRY:
+      if (bi->type == BUDGET_ENTRY)
+        return NULL;
+      break;
+    default:
+      g_warning("get_previous_sibling_node: bad entry type");
+      return NULL;
+  }
+
+  return sibling;
+}
+
 static void
 entry_description_entry_changed(GtkEditable *editable, BudgetDialog *bd)
 {
@@ -639,6 +693,70 @@ subentry_description_entry_changed(GtkEditable *editable, BudgetDialog *bd)
   g_free(text);
 }
 
+static gboolean
+set_delete_button_sensitivity(BudgetDialog *bd)
+{
+  GtkCTreeNode *node;
+  gboolean sensitive;
+
+  node = get_selected_node(bd, BUDGET_ANY);
+
+  if (node == NULL)
+    sensitive = FALSE;
+  else
+  {
+    GtkCTreeNode *sibling;
+    GtkCTree *ctree;
+    BudgetItem *bi;
+
+    ctree = GTK_CTREE(bd->entry_tree);
+
+    bi = gtk_ctree_node_get_row_data(ctree, node);
+    switch(bi->type)
+    {
+      case BUDGET_ENTRY:
+        sensitive = TRUE;
+        break;
+      case BUDGET_SUBENTRY:
+        sibling = get_previous_sibling_node(bd, node);
+        if (sibling != NULL)
+        {
+          sensitive = TRUE;
+          break;
+        }
+        sibling = get_next_sibling_node(bd, node);
+        if (sibling != NULL)
+          sensitive = TRUE;
+        else
+          sensitive = FALSE;
+        break;
+      default:
+        g_warning("entry_delete_button_clicked: bad entry type");
+        return FALSE;
+    }
+  }
+
+  gtk_widget_set_sensitive(bd->entry_delete_button, sensitive);
+
+  return sensitive;
+}
+
+static void
+entry_delete_button_clicked(GtkButton *button, BudgetDialog *bd)
+{
+  GtkCTreeNode *node;
+
+  if (!set_delete_button_sensitivity(bd))
+    return;
+
+  node = get_selected_node(bd, BUDGET_ANY);
+
+  gtk_ctree_remove_node(GTK_CTREE(bd->entry_tree), node);
+
+  node = get_selected_node(bd, BUDGET_ANY);
+  select_node(bd, node);
+}
+
 static void
 entry_up_button_clicked(GtkButton *button, BudgetDialog *bd)
 {
@@ -667,6 +785,40 @@ entry_up_button_clicked(GtkButton *button, BudgetDialog *bd)
   gtk_ctree_move(ctree, node, parent, sibling);
   if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
     gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0);
+
+  set_move_button_sensitivity(bd);
+}
+
+static void
+entry_down_button_clicked(GtkButton *button, BudgetDialog *bd)
+{
+  GtkCTreeRow *row;
+  GtkCTreeNode *node;
+  GtkCTreeNode *parent;
+  GtkCTreeNode *sibling;
+  GtkCTree *ctree;
+
+  if (bd->num_entries == 0)
+    return;
+
+  node = get_selected_node(bd, BUDGET_ANY);
+  if (node == NULL)
+    return;
+
+  ctree = GTK_CTREE(bd->entry_tree);
+  row   = GTK_CTREE_ROW(node);
+
+  parent  = row->parent;
+  sibling = get_next_sibling_node(bd, node);
+
+  if (sibling == NULL)
+    return;
+
+  gtk_ctree_move(ctree, node, parent, sibling);
+  if (gtk_ctree_node_is_visible(ctree, node) != GTK_VISIBILITY_FULL)
+    gtk_ctree_node_moveto(ctree, node, 0, 0.5, 0);
+
+  set_move_button_sensitivity(bd);
 }
 
 static void
@@ -768,13 +920,28 @@ mechanism_menu_changed(GtkButton *button, BudgetDialog *bd)
 }
 
 static void
+set_move_button_sensitivity(BudgetDialog *bd)
+{
+  GtkCTreeNode *node;
+  GtkCTreeNode *sibling;
+
+  node = get_selected_node(bd, BUDGET_ANY);
+
+  sibling = get_previous_sibling_node(bd, node);
+  gtk_widget_set_sensitive(bd->entry_up_button, sibling != NULL);
+
+  sibling = get_next_sibling_node(bd, node);
+  gtk_widget_set_sensitive(bd->entry_down_button, sibling != NULL);
+}
+
+static void
 allow_edits(BudgetDialog *bd, gboolean allow_edits)
 {
   gtk_widget_set_sensitive(bd->entry_frame, allow_edits);
   gtk_widget_set_sensitive(bd->subentry_frame, allow_edits);
 }
 
-void
+static void
 select_node (BudgetDialog *bd, GtkCTreeNode *node)
 {
   GtkCTreeRow *row;
@@ -784,116 +951,96 @@ select_node (BudgetDialog *bd, GtkCTreeNode *node)
   BudgetEntry *be;
   BudgetItem *bi;
 
-  ctree = GTK_CTREE(bd->entry_tree);
-
-  row = GTK_CTREE_ROW(node);
-
   bd->current_entry    = SCM_UNDEFINED;
   bd->current_subentry = SCM_UNDEFINED;
 
-  bi = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(node));
-  switch (bi->type)
+  if (node != NULL)
   {
-    case BUDGET_ENTRY: {
-      be = &bi->entry_s;
+    ctree = GTK_CTREE(bd->entry_tree);
 
-      bd->current_entry = be->entry;
+    row = GTK_CTREE_ROW(node);
 
-      if (row->children == NULL)
-        break;
+    bi = gtk_ctree_node_get_row_data(ctree, GTK_CTREE_NODE(node));
+    switch (bi->type)
+    {
+      case BUDGET_ENTRY: {
+        be = &bi->entry_s;
 
-      bse = gtk_ctree_node_get_row_data(ctree, row->children);
-      if ((bse == NULL) || (bse->type != BUDGET_SUBENTRY))
-        break;
+        bd->current_entry = be->entry;
 
-      bd->current_subentry = bse->subentry;
-    }
-    break;
+        if (row->children == NULL)
+          break;
 
-    case BUDGET_SUBENTRY: {
-      bse = &bi->subentry_s;
+        bse = gtk_ctree_node_get_row_data(ctree, row->children);
+        if ((bse == NULL) || (bse->type != BUDGET_SUBENTRY))
+          break;
 
-      bd->current_subentry = bse->subentry;
-
-      if (row->parent == NULL)
-        break;
-
-      be = gtk_ctree_node_get_row_data(ctree, row->parent);
-      if ((be == NULL) || (be->type != BUDGET_ENTRY))
-        break;
-
-      bd->current_entry = be->entry;
-    }
-    break;
-
-    default:
-      g_warning("on_budget_entry_tree_tree_select_row: bad type");
+        bd->current_subentry = bse->subentry;
+      }
       break;
+
+      case BUDGET_SUBENTRY: {
+        bse = &bi->subentry_s;
+
+        bd->current_subentry = bse->subentry;
+
+        if (row->parent == NULL)
+          break;
+
+        be = gtk_ctree_node_get_row_data(ctree, row->parent);
+        if ((be == NULL) || (be->type != BUDGET_ENTRY))
+          break;
+
+        bd->current_entry = be->entry;
+      }
+      break;
+
+      default:
+        g_warning("on_budget_entry_tree_tree_select_row: bad type");
+        break;
+    }
   }
 
   allow_edits(bd, ((bd->current_entry != SCM_UNDEFINED) ||
                    (bd->current_subentry != SCM_UNDEFINED)));
   load_entry(bd);
   load_subentry(bd);
+  set_move_button_sensitivity(bd);
+  set_delete_button_sensitivity(bd);
 }
 
-void
-on_budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
-                                        GList           *node,
-                                        gint             column,
-                                        gpointer         user_data)
+static void
+budget_entry_tree_tree_select_row   (GtkCTree        *ctree,
+                                     GList           *node,
+                                     gint             column,
+                                     BudgetDialog    *bd)
 {
-  GtkObject *obj = GTK_OBJECT(user_data);
-  BudgetDialog *bd;
-
   if (column < 0)
-    return;
-
-  bd = gtk_object_get_data(obj, "budget_dialog_structure");
-  if (bd == NULL)
     return;
 
   select_node(bd, GTK_CTREE_NODE(node));
 }
 
-void
-on_budget_entry_tree_tree_unselect_row (GtkCTree        *ctree,
-                                        GList           *node,
-                                        gint             column,
-                                        gpointer         user_data)
+static void
+budget_entry_tree_tree_unselect_row (GtkCTree        *ctree,
+                                     GList           *node,
+                                     gint             column,
+                                     BudgetDialog    *bd)
 {
-  GtkObject *obj = GTK_OBJECT(user_data);
-  BudgetDialog *bd;
-
   if (column < 0)
     return;
 
-  bd = gtk_object_get_data(obj, "budget_dialog_structure");
-  if (bd == NULL)
-    return;
-
-  bd->current_entry    = SCM_UNDEFINED;
-  bd->current_subentry = SCM_UNDEFINED;
-
-  allow_edits(bd, FALSE);
-  load_entry(bd);
-  load_subentry(bd);
+  select_node(bd, NULL);
 }
 
-void
-on_budget_entry_tree_scroll_vertical   (GtkCList        *clist,
-                                        GtkScrollType    scroll_type,
-                                        gfloat           position,
-                                        gpointer         user_data)
+static void
+budget_entry_tree_scroll_vertical   (GtkCList        *clist,
+                                     GtkScrollType    scroll_type,
+                                     gfloat           position,
+                                     BudgetDialog    *bd)
 {
-  GtkObject *obj = GTK_OBJECT(user_data);
   GtkCTreeNode *node;
-  BudgetDialog *bd;
   int row;
-
-  bd = gtk_object_get_data(obj, "budget_dialog_structure");
-  if (bd == NULL)
-    return;
 
   row = GTK_CLIST(bd->entry_tree)->focus_row;
   if (row < 0)
@@ -926,6 +1073,23 @@ connect_mechanism_menu_item(GtkWidget *item, gpointer data)
                      GTK_SIGNAL_FUNC(mechanism_menu_changed), data);
 }
 
+static void
+on_budget_cancel_button_clicked(GtkButton       *button,
+                                BudgetDialog    *bd)
+{
+  gnc_ui_budget_dialog_destroy(bd);
+}
+
+static void
+budget_dialog_destroy(GtkObject       *object,
+                      BudgetDialog    *bd)
+{
+  bd->dialog = NULL;
+  gnc_unregister_c_side_scheme_ptr_id(bd->apply_func_id);
+
+  g_free(bd);
+}
+
 BudgetDialog *
 gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
 {
@@ -946,6 +1110,8 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
 
   bd->dialog = create_Budget_Dialog();
   bdo = GTK_OBJECT(bd->dialog);
+  gtk_signal_connect(bdo, "destroy",
+                     GTK_SIGNAL_FUNC(budget_dialog_destroy), bd);
 
   bd->apply_func = apply_func;
   bd->apply_func_id = gnc_register_c_side_scheme_ptr(apply_func);
@@ -955,6 +1121,13 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
                      GTK_SIGNAL_FUNC(budget_name_entry_changed), bd);
 
   bd->entry_tree = gtk_object_get_data(bdo, "entry_tree");
+  gtk_signal_connect(GTK_OBJECT(bd->entry_tree), "tree_select_row",
+                     GTK_SIGNAL_FUNC(budget_entry_tree_tree_select_row), bd);
+  gtk_signal_connect(GTK_OBJECT(bd->entry_tree), "tree_unselect_row",
+                     GTK_SIGNAL_FUNC(budget_entry_tree_tree_unselect_row), bd);
+  gtk_signal_connect_after
+    (GTK_OBJECT(bd->entry_tree), "scroll_vertical",
+     GTK_SIGNAL_FUNC(budget_entry_tree_scroll_vertical), bd);
 
   bd->entry_description_entry =
     gtk_object_get_data(bdo, "entry_description_entry");
@@ -988,7 +1161,16 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
 
   bd->subentry_frame = gtk_object_get_data(bdo, "subentry_frame");
 
+  button = gtk_object_get_data(bdo, "entry_add_button");
+  bd->entry_add_button = button;
+
+  button = gtk_object_get_data(bdo, "entry_delete_button");
+  bd->entry_delete_button = button;
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                     GTK_SIGNAL_FUNC(entry_delete_button_clicked), bd);
+
   button = gtk_object_get_data(bdo, "entry_up_button");
+  bd->entry_up_button = button;
   arrow = gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_IN);
   gtk_container_remove(GTK_CONTAINER(button), GTK_BIN(button)->child);
   gtk_container_add(GTK_CONTAINER(button), arrow);
@@ -996,9 +1178,12 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
                      GTK_SIGNAL_FUNC(entry_up_button_clicked), bd);
 
   button = gtk_object_get_data(bdo, "entry_down_button");
+  bd->entry_down_button = button;
   arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_IN);
   gtk_container_remove(GTK_CONTAINER(button), GTK_BIN(button)->child);
   gtk_container_add(GTK_CONTAINER(button), arrow);
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                     GTK_SIGNAL_FUNC(entry_down_button_clicked), bd);
 
   box = gtk_object_get_data(bdo, "period_box");
   bd->subentry_period_delta = gnc_date_delta_new(FALSE);
@@ -1007,7 +1192,9 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
                      GTK_SIGNAL_FUNC(subentry_period_delta_changed), bd);
   gtk_widget_show(bd->subentry_period_delta);
 
-  box = gtk_object_get_data(bdo, "grace_box");
+  bd->bill_day_box = gtk_object_get_data(bdo, "bill_day_box");
+
+  bd->grace_box = box = gtk_object_get_data(bdo, "grace_box");
   bd->subentry_grace_delta = gnc_date_delta_new(FALSE);
   gtk_box_pack_start(GTK_BOX(box), bd->subentry_grace_delta, FALSE, FALSE, 0);
   gtk_signal_connect(GTK_OBJECT(bd->subentry_grace_delta), "delta_changed",
@@ -1017,7 +1204,9 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
   bd->apply_button = gtk_object_get_data(bdo, "apply_button");
   gtk_widget_set_sensitive(bd->apply_button, FALSE);
 
-  gtk_object_set_data(bdo, "budget_dialog_structure", bd);
+  button = gtk_object_get_data(bdo, "cancel_button");
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                     GTK_SIGNAL_FUNC(on_budget_cancel_button_clicked), bd);
 
   load_budget(bd, budget);
 
@@ -1046,38 +1235,4 @@ gnc_ui_budget_dialog_destroy(BudgetDialog *bd)
 
   if (bd->dialog != NULL)
     gnome_dialog_close(GNOME_DIALOG(bd->dialog));
-}
-
-void
-on_Budget_Dialog_destroy(GtkObject       *object,
-                         gpointer         user_data)
-{
-  BudgetDialog *bd;
-
-  if (object == NULL) return;
-
-  bd = gtk_object_get_data(object, "budget_dialog_structure");
-  if (bd == NULL)
-    return;
-
-  bd->dialog = NULL;
-  gnc_unregister_c_side_scheme_ptr_id(bd->apply_func_id);
-
-  g_free(bd);
-
-  gtk_object_set_data(object, "budget_dialog_structure", NULL);
-}
-
-void
-on_budget_cancel_button_clicked(GtkButton       *button,
-                                gpointer         user_data)
-{
-  GnomeDialog *dialog = user_data;
-  BudgetDialog *bd;
-
-  if (dialog == NULL)
-    return;
-
-  bd = gtk_object_get_data(GTK_OBJECT(user_data), "budget_dialog_structure");
-  gnc_ui_budget_dialog_destroy(bd);
 }
