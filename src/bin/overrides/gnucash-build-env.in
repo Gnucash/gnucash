@@ -21,7 +21,7 @@ fi
 
 if test "${GNC_SHARE_PATH}"x = x
 then
-  GNC_SHARE_PATH="(\"${top_srcdir}/src/scm\")"
+  GNC_SHARE_PATH="(\"${top_srcdir}/src/scm\" \"${top_srcdir}/src/quotes\")"
   export GNC_SHARE_PATH
 fi
 
@@ -61,6 +61,7 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
   --gnc-module-dir ${top_builddir}/src/business/business-core/file \
   --gnc-module-dir ${top_builddir}/src/business/dialog-tax-table \
+  --gnc-module-dir ${top_builddir}/src/business/business-utils \
   --gnc-module-dir ${top_builddir}/src/business/business-ledger \
   --gnc-module-dir ${top_builddir}/src/business/business-gnome \
   --guile-load-dir ${top_builddir}/src/business/business-reports \
