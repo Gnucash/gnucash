@@ -254,4 +254,4 @@ file in all of the directories specified by gnc:*load-path*."
                      '(default))))
   (set! gnc:*load-path* (gnc:expand-load-path new-path)))
 
-(gnc:load "main.scm")
+(load-from-path "main.scm")
