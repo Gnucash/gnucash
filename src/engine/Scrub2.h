@@ -1,4 +1,6 @@
 /********************************************************************\
+ * Scrub2.h -- Convert Stock Accounts to use Lots                   *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -36,47 +38,6 @@
 
 #include "gnc-engine.h"
 
-/** The xaccAccountHasTrades() method checks to see if the 
- *    indicated account is used in the trading of commodities.
- *    A 'trading' account will contain transactions whose 
- *    transaction currency is not the same as the account
- *    commodity.  The existance of such transactions is
- *    the very definition of a 'trade'.   This routine returns
- *    TRUE if this is a trading account, else it returns
- *    FALSE.
- */
-gboolean xaccAccountHasTrades (Account *);
-
-/** The xaccAccountFindEarliestOpenLot() method is a handy
- *   utility routine for finding the earliest open lot in
- *   an account whose lot balance is *opposite* to the 
- *   passed argument 'sign'.   By 'earliest lot', we mean
- *   the lot that has a split with the earliest 'date_posted'.
- *   The sign comparison helps identify a lot that can be 
- *   added to: usually, one wants to add splits to a lot so
- *   that the balance only decreases.
- */
-GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
-
-/** The xaccAccountGetDefaultGainAccount() routine will return
- *   the account to which realized gains/losses may be posted.  
- *   Because gains may be in different currencies, one must
- *   specify the currency type in which the gains will be posted.
- *   This routine does nothing more than return the value of
- *   the "/lot-mgmt/gains-act/XXX" key, where XXX is the unique
- *   currency name.  IOf there is no default account for this
- *   currency, NULL will be returned.
- */
-Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency);
-
-/** The xaccAccountSetDefaultGainAccount() routine can be used 
- *   to set the account to which realized gains/losses will be 
- *   posted by default. This routine does nothing more than set 
- *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
- *   unique currency name of the currency of gains account.
- */
-void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
-
 /** The xaccAccountScrubLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
  *   to a lot.  Any splits that are not in a lot will be used
@@ -86,7 +47,6 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
  *   policy.
  */
 void xaccAccountScrubLots (Account *acc);
-
 
 /** The xaccAccountScrubDoubleBalance() routine examines all
  *   of the closed lots in an account, and verifies that the

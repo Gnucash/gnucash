@@ -61,6 +61,7 @@ ToDo List:
 #include "GroupP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "cap-gains.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-lot.h"
@@ -72,23 +73,230 @@ static short module = MOD_LOT;
 
 
 /* ============================================================== */
-/** The`xaccSplitFIFOAssignToLot() routine will take the indicated
- *  split and assign it to the earliest open lot that it can find.
- *  If the split already belongs to a Lot, this routine does nothing.
- *  If there are no open Lots, this routine will create a new lot
- *  and place the split into it.  If there's an open lot, and its
- *  big enough to accept the split in it's entrety, then the split
- *  will be placed into that lot.  If the split is too big to fit
- *  into the currently open lot, it will be busted up into two 
- *  (or more) pieces, and each placed into a lot accordingly.
- *  If the split needed to be broken up into several pieces, this
- *  routine will return TRUE, else it returns FALSE.
- *
- *  Because this routine always uses the earliest open lot, it
- *  implments a "FIFO" First-In First-Out accounting policy.
- *  
+
+gboolean 
+xaccAccountHasTrades (Account *acc)
+{
+   gnc_commodity *acc_comm;
+   SplitList *node;
+
+   if (!acc) return FALSE;
+
+   acc_comm = acc->commodity;
+
+   for (node=acc->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *t = s->parent;
+      if (acc_comm != t->common_currency) return TRUE;
+   }
+
+   return FALSE;
+}
+
+/* ============================================================== */
+
+struct early_lot_s
+{
+   GNCLot *lot;
+   Timespec ts;
+   int (*numeric_pred)(gnc_numeric);
+};
+
+static gpointer earliest_helper (GNCLot *lot,  gpointer user_data)
+{
+   struct early_lot_s *els = user_data;
+   Split *s;
+   Transaction *trans;
+   gnc_numeric bal;
+
+   if (gnc_lot_is_closed (lot)) return NULL;
+
+   /* We want a lot whose balance is of the correct sign */
+   bal = gnc_lot_get_balance (lot);
+   if (0 == (els->numeric_pred) (bal)) return NULL;
+   
+   s = gnc_lot_get_earliest_split (lot);
+   trans = s->parent;
+   if ((els->ts.tv_sec > trans->date_posted.tv_sec)  ||
+       ((els->ts.tv_sec == trans->date_posted.tv_sec) &&
+        (els->ts.tv_nsec > trans->date_posted.tv_nsec)))
+   {
+      els->ts = trans->date_posted;
+      els->lot = lot;
+   }
+   
+   return NULL;
+}
+
+GNCLot *
+xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+{
+   struct early_lot_s es;
+
+   es.lot = NULL;
+   es.ts.tv_sec = 10000000LL * ((long long) LONG_MAX);
+   es.ts.tv_nsec = 0;
+
+   if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_negative_p;
+   else es.numeric_pred = gnc_numeric_positive_p;
+      
+   xaccAccountForEachLot (acc, earliest_helper, &es);
+   return es.lot;
+}
+
+/* ============================================================== */
+
+static Timespec  
+gnc_lot_get_close_date (GNCLot *lot)
+{
+   Split *s = gnc_lot_get_latest_split (lot);
+   Transaction *trans = s->parent;
+   return trans->date_posted;
+}
+
+/* ============================================================== */
+/* Similar to GetOrMakeAccount, but different in important ways */
+
+static Account *
+GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
+{
+  char * accname;
+  Account * acc;
+
+  g_return_val_if_fail (root, NULL);
+
+  /* build the account name */
+  if (!currency)
+  {
+    PERR ("No currency specified!");
+    return NULL;
+  }
+
+  accname = g_strconcat (_("Orphaned Gains"), "-",
+                         gnc_commodity_get_mnemonic (currency), NULL);
+
+  /* See if we've got one of these going already ... */
+  acc = xaccGetAccountFromName (root, accname);
+
+  if (acc == NULL)
+  {
+    /* Guess not. We'll have to build one. */
+    acc = xaccMallocAccount (root->book);
+    xaccAccountBeginEdit (acc);
+    xaccAccountSetName (acc, accname);
+    xaccAccountSetCommodity (acc, currency);
+    xaccAccountSetType (acc, INCOME);
+    xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
+    xaccAccountSetNotes (acc, 
+         _("Realized Gains or Losses from\n"
+           "Commodity or Trading Accounts\n"
+           "that haven't been recorded elsewhere.\n"));
+
+    /* Hang the account off the root. */
+    xaccGroupInsertAccount (root, acc);
+    xaccAccountCommitEdit (acc);
+  }
+
+  g_free (accname);
+
+  return acc;
+}
+
+/* ============================================================== */
+
+void
+xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
+{
+  KvpFrame *cwd;
+  KvpValue *vvv;
+  const char * cur_name;
+
+  if (!acc || !gain_acct) return;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (acc->commodity);
+
+  xaccAccountBeginEdit (acc);
+  vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
+  kvp_frame_set_slot_nc (cwd, cur_name, vvv);
+  xaccAccountSetSlots_nc (acc, acc->kvp_data);
+  xaccAccountCommitEdit (acc);
+}
+
+/* ============================================================== */
+
+Account *
+xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
+{
+  Account *gain_acct = NULL;
+  KvpFrame *cwd;
+  KvpValue *vvv;
+  GUID * gain_acct_guid;
+  const char * cur_name;
+
+  if (!acc || !currency) return NULL;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (currency);
+  vvv = kvp_frame_get_slot (cwd, cur_name);
+  gain_acct_guid = kvp_value_get_guid (vvv);
+
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+  return gain_acct;
+}
+
+/* ============================================================== */
+/* Functionally identical to the following:
+ *   if (!xaccAccountGetDefaultGainAccount()) xaccAccountSetDefaultGainAccount ();
+ * except that it saves a few cycles.
  */
 
+static Account *
+GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
+{
+  Account *gain_acct = NULL;
+  KvpFrame *cwd;
+  KvpValue *vvv;
+  GUID * gain_acct_guid;
+  const char * cur_name;
+
+  cwd = xaccAccountGetSlots (acc);
+  cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
+
+  /* Accounts are indexed by thier unique currency name */
+  cur_name = gnc_commodity_get_unique_name (currency);
+  vvv = kvp_frame_get_slot (cwd, cur_name);
+  gain_acct_guid = kvp_value_get_guid (vvv);
+
+  gain_acct = xaccAccountLookup (gain_acct_guid, acc->book);
+
+  /* If there is no default place to put gains/losses 
+   * for this account, then create such a place */
+  if (NULL == gain_acct)
+  {
+      AccountGroup *root;
+
+      xaccAccountBeginEdit (acc);
+      root = xaccAccountGetRoot(acc);
+      gain_acct = GetOrMakeLotOrphanAccount (root, currency);
+
+      vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
+      kvp_frame_set_slot_nc (cwd, cur_name, vvv);
+      xaccAccountSetSlots_nc (acc, acc->kvp_data);
+      xaccAccountCommitEdit (acc);
+
+  }
+  return gain_acct;
+}
+
+/* ============================================================== */
 /* Accounting-policy callback.  Given an account and an amount, 
  * this routine should return a lot.
  */
@@ -109,7 +317,7 @@ xaccSplitAssignToLot (Split *split,
 
    /* If this split already belongs to a lot, we are done. */
    if (split->lot) return FALSE;
-   acc = split->account;
+   acc = split->acc;
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
@@ -199,11 +407,21 @@ xaccSplitAssignToLot (Split *split,
      }
      else
      {
+        gint64 id;
+        char buff[200];
+
         /* No lot was found.  Start a new lot */
         PINFO ("start new lot");
         lot = gnc_lot_new (acc->book);
         gnc_lot_add_split (lot, split);
         split = NULL;
+
+        /* Provide a reasonable title for the new lot */
+        id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
+        snprintf (buff, 200, _("Lot %lld"), id);
+        kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
+        id ++;
+        kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
      }
    }
    xaccAccountCommitEdit (acc);
@@ -247,50 +465,50 @@ void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 {
    Split *opening_split;
-	GNCLot *lot;
+   GNCLot *lot;
    gnc_commodity *currency = NULL;
    gnc_numeric zero = gnc_numeric_zero();
    gnc_numeric value = zero;
 
-	if (!split) return;
-	lot = split->lot;
+   if (!split) return;
+   lot = split->lot;
    if (!lot) return;
    currency = split->parent->common_currency;
 
    ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
-	opening_split = gnc_lot_get_earliest_split(lot);
-	if (split == opening_split)
-	{
-	   /* XXX we should check to make sure this split
-		 * doesn't have a cap-gain xaction associated with it.
-		 * If it does, itshould be trashed. 
-		 */
-		return;
-	}
-	
-	/* Check to make sure the opening split and this split
-	 * use the same currency */
-   if (FALSE == gnc_commodity_equiv (currency, 
-									opening_split->parent->common_currency))
+   opening_split = gnc_lot_get_earliest_split(lot);
+   if (split == opening_split)
    {
-		/* OK, the purchase and the sale were made in different currencies.
-		 * I don't know how to compute cap gains for that.  This is not
-		 * an error. Just punt, silently. 
-		 */
-		return;
-	}
+      /* XXX we should check to make sure this split
+       * doesn't have a cap-gain xaction associated with it.
+       * If it does, itshould be trashed. 
+       */
+      return;
+   }
+   
+   /* Check to make sure the opening split and this split
+    * use the same currency */
+   if (FALSE == gnc_commodity_equiv (currency, 
+                           opening_split->parent->common_currency))
+   {
+      /* OK, the purchase and the sale were made in different currencies.
+       * I don't know how to compute cap gains for that.  This is not
+       * an error. Just punt, silently. 
+       */
+      return;
+   }
 
-	/* The cap gains is the difference between the value of the
-	 * opening split, and the current split. */
-	value = xaccSplitGetValue (opening_split);
+   /* The cap gains is the difference between the value of the
+    * opening split, and the current split. */
+   value = xaccSplitGetValue (opening_split);
    value = gnc_numeric_add (value, xaccSplitGetValue (split),
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
    PINFO ("Split value=%s Cap Gains=%s", 
           gnc_numeric_to_string (xaccSplitGetValue(split)),
           gnc_numeric_to_string (value));
 
-	/* XXX pro-rate based on amounts! */
+   /* XXX pro-rate based on amounts! */
           
    /* Are the cap gains zero?  If not, add a balancing transaction.
     * As per design doc lots.txt: the transaction has two splits, 
@@ -309,10 +527,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       lot_split = xaccMallocSplit (book);
       gain_split = xaccMallocSplit (book);
 
-		if (NULL == gain_acc)
-		{
-      	gain_acc = GetOrMakeGainAcct (lot_acc, currency);
-		}
+      if (NULL == gain_acc)
+      {
+         gain_acc = GetOrMakeGainAcct (lot_acc, currency);
+      }
       xaccAccountBeginEdit (gain_acc);
       xaccAccountInsertSplit (gain_acc, gain_split);
       xaccAccountCommitEdit (gain_acc);
@@ -321,14 +539,14 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       xaccAccountInsertSplit (lot_acc, lot_split);
       xaccAccountCommitEdit (lot_acc);
 
-		/* XXX See if there already is an associated
-		 * gains transaction; if there is, adjust its value
-		 * as appropriate. Else, create a new gains xaction.
-		 *
-		 * XXX for new xacton, install KVP markup indicating 
-		 * that this is the gains trnasaction matching the 
-		 * orig transaction.
-		 */
+      /* XXX See if there already is an associated
+       * gains transaction; if there is, adjust its value
+       * as appropriate. Else, create a new gains xaction.
+       *
+       * XXX for new xacton, install KVP markup indicating 
+       * that this is the gains trnasaction matching the 
+       * orig transaction.
+       */
       trans = xaccMallocTransaction (book);
 
       xaccTransBeginEdit (trans);
@@ -349,7 +567,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
       xaccSplitSetAmount (gain_split, value);
       xaccSplitSetValue (gain_split, value);
-		
+
       xaccTransCommitEdit (trans);
 
    }

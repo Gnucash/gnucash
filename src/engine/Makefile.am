@@ -22,6 +22,7 @@ libgncmod_engine_la_SOURCES = \
   Scrub2.c \
   TransLog.c \
   Transaction.c \
+  cap-gains.c \
   gnc-associate-account.c \
   gnc-commodity.c \
   gnc-date.c \
@@ -68,6 +69,7 @@ gncinclude_HEADERS = \
   Scrub2.h \
   TransLog.h \
   Transaction.h \
+  cap-gains.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \

@@ -1,0 +1,130 @@
+/********************************************************************\
+ * cap-gains.h -- Automatically Compute Capital Gains/Losses        *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
+/** @addtogroup Engine
+ *     @{ */
+/** @file cap-gains.h
+ *  @breif Utilities to Automatically Compute Capital Gains/Losses.
+ *  @author Created by Linas Vepstas August 2003
+ *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *
+ *  This file implements the various routines to automatically
+ *  compute and handle Cap Gains/Losses resulting from trading 
+ *  activities.  Some of these routines might have broader 
+ *  applicability, for handling depreciation *  & etc. 
+ *
+ *  This code is under development, and is 'alpha': many important
+ *  routines are missing, many existing routines are not called 
+ *  from inside the engine as needed, and routines may be buggy.
+ *
+ *  This code does not currently handle tax distinctions, e.g
+ *  the different tax treatment that short-term and long-term 
+ *  cap gains have. 
+ */
+
+#ifndef XACC_CAP_GAINS_H
+#define XACC_CAP_GAINS_H
+
+#include "gnc-engine.h"
+
+/** The xaccAccountHasTrades() method checks to see if the 
+ *    indicated account is used in the trading of commodities.
+ *    A 'trading' account will contain transactions whose 
+ *    transaction currency is not the same as the account
+ *    commodity.  The existance of such transactions is
+ *    the very definition of a 'trade'.   This routine returns
+ *    TRUE if this is a trading account, else it returns
+ *    FALSE.
+ */
+gboolean xaccAccountHasTrades (Account *);
+
+/** The xaccAccountFindEarliestOpenLot() method is a handy
+ *   utility routine for finding the earliest open lot in
+ *   an account whose lot balance is *opposite* to the 
+ *   passed argument 'sign'.   By 'earliest lot', we mean
+ *   the lot that has a split with the earliest 'date_posted'.
+ *   The sign comparison helps identify a lot that can be 
+ *   added to: usually, one wants to add splits to a lot so
+ *   that the balance only decreases.
+ */
+GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
+
+/** The xaccAccountGetDefaultGainAccount() routine will return
+ *   the account to which realized gains/losses may be posted.  
+ *   Because gains may be in different currencies, one must
+ *   specify the currency type in which the gains will be posted.
+ *   This routine does nothing more than return the value of
+ *   the "/lot-mgmt/gains-act/XXX" key, where XXX is the unique
+ *   currency name.  IOf there is no default account for this
+ *   currency, NULL will be returned.
+ */
+Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency);
+
+/** The xaccAccountSetDefaultGainAccount() routine can be used 
+ *   to set the account to which realized gains/losses will be 
+ *   posted by default. This routine does nothing more than set 
+ *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
+ *   unique currency name of the currency of gains account.
+ */
+void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
+
+
+/** The`xaccSplitFIFOAssignToLot() routine will take the indicated
+ *  split and assign it to the earliest open lot that it can find.
+ *  If the split already belongs to a Lot, this routine does nothing.
+ *  If there are no open Lots, this routine will create a new lot
+ *  and place the split into it.  If there's an open lot, and its
+ *  big enough to accept the split in it's entrety, then the split
+ *  will be placed into that lot.  If the split is too big to fit
+ *  into the currently open lot, it will be busted up into two 
+ *  (or more) pieces, and each placed into a lot accordingly.
+ *  If the split needed to be broken up into several pieces, this
+ *  routine will return TRUE, else it returns FALSE.
+ *
+ *  Because this routine always uses the earliest open lot, it
+ *  implments a "FIFO" First-In First-Out accounting policy.
+ *  
+ */
+
+gboolean xaccSplitFIFOAssignToLot (Split *split);
+
+/** The xaccSplitComputeCapGains() routine computes the cap gains
+ *  or losses for the indicated split.  The gains are placed into
+ *  the 'gains_acct'.  If the gains_acct is NULL, then the appropriate
+ *  default account is used (and created, if needed).
+ *
+ *  To compute the gains, the split must belong to a lot. If the
+ *  split is the 'opening split', i.e. the earliest split in the 
+ *  lot, then nothing is done, as there are no gains/losses (something
+ *  must be bought *and* sold for there to be a gain/loss).
+ *
+ *  Note also: the 'amount' of the split must be of opposite sign,
+ *  and must be equal to or smaller, than the 'amount' of the opening
+ *  split; its an error otherwise.  If the 'amount' of the split is
+ *  less than the opening amount, the gains are pro-rated.
+ */
+
+void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
+
+#endif /* XACC_CAP_GAINS_H */
+/** @} */
+
+/* =========================== END OF FILE ======================= */
