@@ -38,6 +38,7 @@
       <placeholder name="EditPlaceholder"/>
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
+      <placeholder name="EditStyleSheetsPlaceholder"/>
       <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
     </menu>
   
@@ -58,6 +59,7 @@
         <menuitem name="ActionsMortgageLoan" action="ActionsMortgageLoanAction"/>
       </menu>
       <placeholder name="ActionsPlaceholder"/>
+      <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/>
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>

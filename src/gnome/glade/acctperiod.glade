@@ -41,9 +41,9 @@ data in such a way that it cannot be repaired!</property>
 	<widget class="GnomeDruidPageStandard" id="menu page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Book Closing Dates</property>
-	  <property name="title_foreground">#6f80082dceb8</property>
-	  <property name="background">#8b600831e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox-xx">
@@ -121,9 +121,10 @@ Books will be closed on midnight of the selected date.</property>
 	<widget class="GnomeDruidPageStandard" id="book page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Close Book</property>
-	  <property name="title_foreground">#dde8082cceb8</property>
-	  <property name="background">#7c380830e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
+	  <property name="contents_background">#e6e6e6e6e6e6</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox-yy">
@@ -311,7 +312,7 @@ Books will be closed on midnight of the selected date.</property>
 	  <property name="text" translatable="yes">xxx</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
-	  <property name="background_color">#666666669999</property>
+	  <property name="background_color">#666666669998</property>
 	  <property name="logo_background_color">#666666669999</property>
 	  <property name="textbox_color">#ffffffffffff</property>
 	</widget>

@@ -41,6 +41,7 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
 #include "dialog-transfer.h"
+#include "druid-acct-period.h"
 #include "druid-loan.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -108,6 +109,7 @@ static void gnc_main_window_cmd_view_statusbar (EggAction *action, GncMainWindow
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_since_last_run (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_actions_close_books (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_price_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_commodity_editor (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_tools_financial_calculator (EggAction *action, GncMainWindow *window);
@@ -218,6 +220,9 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "ActionsMortgageLoanAction", N_("_Mortgage & Loan Repayment..."), NULL, "NULL",
 	  N_("Setup scheduled transactions for repayment of a loan"),
 	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+	{ "ActionsCloseBooksAction", N_("Close Books"), NULL, "NULL",
+	  N_("Archive old data using accounting periods"),
+	  G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
 	
 	/* Tools menu */
 	{ "ToolsPriceEditorAction", N_("_Price Editor"), NULL, NULL,
@@ -1076,6 +1081,12 @@ static void
 gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *window)
 {
 	gnc_ui_sx_loan_druid_create ();
+}
+
+static void
+gnc_main_window_cmd_actions_close_books (EggAction *action, GncMainWindow *window)
+{
+	gnc_acct_period_dialog();
 }
 
 static void
