@@ -23,6 +23,7 @@
 
 SHELL=/bin/bash
 export SHELL
+mkdir = /bin/mkdir
 
 srcdir  = @srcdir@
 VPATH   = @srcdir@
