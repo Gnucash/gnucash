@@ -2684,11 +2684,11 @@ create_Budget_Dialog (void)
   GtkWidget *label773;
   GtkWidget *hbox43;
   GtkWidget *hbuttonbox2;
-  GtkWidget *insert_entry_button;
+  GtkWidget *add_entry_button;
   GtkWidget *delete_entry_button;
   GtkWidget *hbox44;
-  GtkWidget *up_button;
-  GtkWidget *down_button;
+  GtkWidget *entry_up_button;
+  GtkWidget *entry_down_button;
   GtkWidget *vbox52;
   GtkWidget *entry_frame;
   GtkWidget *hbox34;
@@ -2865,14 +2865,14 @@ create_Budget_Dialog (void)
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox2), 6);
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (hbuttonbox2), 75, 0);
 
-  insert_entry_button = gtk_button_new_with_label (_("Add"));
-  gtk_widget_ref (insert_entry_button);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "insert_entry_button", insert_entry_button,
+  add_entry_button = gtk_button_new_with_label (_("Add"));
+  gtk_widget_ref (add_entry_button);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "add_entry_button", add_entry_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (insert_entry_button);
-  gtk_container_add (GTK_CONTAINER (hbuttonbox2), insert_entry_button);
-  GTK_WIDGET_SET_FLAGS (insert_entry_button, GTK_CAN_DEFAULT);
-  gtk_tooltips_set_tip (tooltips, insert_entry_button, _("Add a new entry or subentry"), NULL);
+  gtk_widget_show (add_entry_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox2), add_entry_button);
+  GTK_WIDGET_SET_FLAGS (add_entry_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, add_entry_button, _("Add a new entry or subentry"), NULL);
 
   delete_entry_button = gtk_button_new_with_label (_("Delete"));
   gtk_widget_ref (delete_entry_button);
@@ -2890,21 +2890,21 @@ create_Budget_Dialog (void)
   gtk_widget_show (hbox44);
   gtk_box_pack_start (GTK_BOX (hbox43), hbox44, FALSE, FALSE, 0);
 
-  up_button = gtk_button_new_with_label ("");
-  gtk_widget_ref (up_button);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "up_button", up_button,
+  entry_up_button = gtk_button_new_with_label ("");
+  gtk_widget_ref (entry_up_button);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "entry_up_button", entry_up_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (up_button);
-  gtk_box_pack_start (GTK_BOX (hbox44), up_button, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, up_button, _("Move the selected item up"), NULL);
+  gtk_widget_show (entry_up_button);
+  gtk_box_pack_start (GTK_BOX (hbox44), entry_up_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, entry_up_button, _("Move the selected item up"), NULL);
 
-  down_button = gtk_button_new_with_label ("");
-  gtk_widget_ref (down_button);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "down_button", down_button,
+  entry_down_button = gtk_button_new_with_label ("");
+  gtk_widget_ref (entry_down_button);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "entry_down_button", entry_down_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (down_button);
-  gtk_box_pack_start (GTK_BOX (hbox44), down_button, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, down_button, _("Move the selected item down"), NULL);
+  gtk_widget_show (entry_down_button);
+  gtk_box_pack_start (GTK_BOX (hbox44), entry_down_button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, entry_down_button, _("Move the selected item down"), NULL);
 
   vbox52 = gtk_vbox_new (FALSE, 2);
   gtk_widget_ref (vbox52);

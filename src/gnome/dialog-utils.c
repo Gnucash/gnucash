@@ -989,24 +989,29 @@ gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
 }
 
 void
-gnc_option_menu_init(GtkWidget * w) {
+gnc_option_menu_init(GtkWidget * w)
+{
   GtkWidget * menu;
   GtkWidget * active;
   int i;
 
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
-  for(i = 0; i < g_list_length(GTK_MENU_SHELL(menu)->children); i++) {
+
+  for(i = 0; i < g_list_length(GTK_MENU_SHELL(menu)->children); i++)
+  {
     gtk_option_menu_set_history(GTK_OPTION_MENU(w), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
     gtk_object_set_data(GTK_OBJECT(active), 
                         "option_index",
                         GINT_TO_POINTER(i));
   }
+
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
 }
 
 int
-gnc_option_menu_get_active(GtkWidget * w) {
+gnc_option_menu_get_active(GtkWidget * w)
+{
   GtkWidget * menu;
   GtkWidget * menuitem;
 
@@ -1015,5 +1020,3 @@ gnc_option_menu_get_active(GtkWidget * w) {
   return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
                                              "option_index"));
 }
-
-

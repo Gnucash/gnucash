@@ -4300,7 +4300,7 @@ Exactly
 
 	      <widget>
 		<class>GtkButton</class>
-		<name>insert_entry_button</name>
+		<name>add_entry_button</name>
 		<tooltip>Add a new entry or subentry</tooltip>
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
@@ -4330,7 +4330,7 @@ Exactly
 
 	      <widget>
 		<class>GtkButton</class>
-		<name>up_button</name>
+		<name>entry_up_button</name>
 		<tooltip>Move the selected item up</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
@@ -4343,7 +4343,7 @@ Exactly
 
 	      <widget>
 		<class>GtkButton</class>
-		<name>down_button</name>
+		<name>entry_down_button</name>
 		<tooltip>Move the selected item down</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
