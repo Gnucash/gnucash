@@ -311,4 +311,12 @@ void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                 gboolean use_cut_semantics,
                                 gboolean do_commit);
 
+/* (maybe) pop up the exchange-rate dialog for the current split.
+ * if force_dialog is TRUE, the forces the dialog to to be called.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
+
 #endif

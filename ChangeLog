@@ -1,3 +1,10 @@
+2002-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-p.h:
+	* src/register/ledger-core/split-register.h:
+	  move handle_exchange() API from -p.h to .h to export it
+	  for the menus to call.
+
 2002-12-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c:
