@@ -532,6 +532,39 @@ gnc_option_menu_init(GtkWidget * w)
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
 }
 
+typedef struct {
+  int i;
+  GtkSignalFunc f;
+  gpointer cb_data;
+} menu_init_data;
+
+static void
+gnc_option_menu_set_one_item (gpointer loop_data, gpointer user_data)
+{
+  GtkObject *item = GTK_OBJECT(loop_data);
+  menu_init_data *args = (menu_init_data *) user_data;
+  
+  gtk_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
+  gtk_signal_connect(item, "activate", args->f, args->cb_data);
+}
+
+
+void
+gnc_option_menu_init_w_signal(GtkWidget * w, GtkSignalFunc f, gpointer cb_data)
+{
+  GtkWidget * menu;
+  menu_init_data foo;
+
+  foo.i = 0;
+  foo.f = f;
+  foo.cb_data = cb_data;
+
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
+  g_list_foreach(GTK_MENU_SHELL(menu)->children,
+		 gnc_option_menu_set_one_item, &foo);
+  gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
+}
+
 
 int
 gnc_option_menu_get_active(GtkWidget * w)
