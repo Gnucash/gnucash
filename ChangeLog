@@ -46,6 +46,11 @@
 	  fixes the reference to bill terms, and updates the refcounts.
 	Fixes bug #114888 for bill terms.
 
+	* src/business/business-core/gncTaxTable.c:
+	* src/business/business-core/gncBillTerm.c:
+	  Mark the data book as dirty if a tax table or bill term is
+	  destroyed.  Fixes all of #114889 that I can reproduce.
+
 2003-06-12  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/TRANSLATION_HOWTO: Added, by Jon Lapham

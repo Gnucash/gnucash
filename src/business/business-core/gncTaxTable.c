@@ -169,6 +169,7 @@ void gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->do_free = TRUE;
+  gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
   gncTaxTableCommitEdit (table);
 }
 

@@ -103,6 +103,7 @@ void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
   term->do_free = TRUE;
+  gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
   gncBillTermCommitEdit (term);
 }
 
