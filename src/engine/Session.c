@@ -29,7 +29,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
-#include <nana.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -97,7 +96,7 @@ xaccSessionGetError (Session * sess)
 {
    int retval;
 
-   if (!sess) return EBADSLT;
+   if (!sess) return EINVAL;
    retval = sess->errtype;
    sess->errtype = 0;
    return (retval);

@@ -856,7 +856,7 @@ readTransaction( int fd, Account *acc, int token )
     err = read( fd, &(dummy_category), sizeof(int) );
     if( sizeof(int) != err )
       {
-      PERR ("Premature end of Transaction at catagory");
+      PERR ("Premature end of Transaction at category");
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
       return NULL;

@@ -193,7 +193,7 @@ void          xaccTransAppendSplit (Transaction *, Split *);
 /* 
  * The xaccSplitDestroy() method will update its parent account and 
  *    transaction in a consistent maner, resulting in the complete 
- *    unlinking of the split, and the freeing of it's associated memory.
+ *    unlinking of the split, and the freeing of its associated memory.
  *    The goal of this routine is to perform the removal and destruction
  *    of the split in an atomic fashion, with no chance of accidentally
  *    leaving the accounting structure out-of-balance or otherwise

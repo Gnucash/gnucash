@@ -198,7 +198,7 @@ xaccGetAccounts ( AccountGroup *root )
 }
 
 /********************************************************************\
- * Fetch an account, given only it's ID number                      *
+ * Fetch an account, given only its ID number                      *
 \********************************************************************/
 
 Account *
@@ -253,7 +253,7 @@ xaccGetAccountRoot (Account * acc)
 }
 
 /********************************************************************\
- * Fetch an account, given only it's ID number                      *
+ * Fetch an account, given only its ID number                      *
 \********************************************************************/
 
 Account *
@@ -275,7 +275,7 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 }
 
 /********************************************************************\
- * Fetch an account, given it's name                                *
+ * Fetch an account, given its name                                *
 \********************************************************************/
 
 Account *
@@ -304,7 +304,7 @@ xaccGetAccountFromName ( AccountGroup *root, const char * name )
 }
 
 /********************************************************************\
- * Fetch an account, given it's name                                *
+ * Fetch an account, given its name                                *
 \********************************************************************/
 
 Account *

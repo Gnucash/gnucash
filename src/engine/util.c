@@ -53,7 +53,7 @@ int loglevel[MODULE_MAX] =
 \********************************************************************/
 #if DEBUG_MEMORY
 
-#if defined (__NetBSD__)
+#if defined (__NetBSD__) || defined(__FreeBSD__)
 # define malloc_usable_size(ptr) 0
 #endif
 

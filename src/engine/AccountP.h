@@ -82,7 +82,7 @@ struct _account {
   char     *notes;
 
   /* The type field is the account type, picked from the enumerated 
-   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  It's
+   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  Its
    * intended use is to be a hint to the GUI as to how to display   
    * and format the transaction data.
    */
@@ -96,7 +96,7 @@ struct _account {
   AccInfo *accInfo;
 
   /* The currency field denotes the default currency in which all
-   * splits in this account are denominated.  It's value *MUST*
+   * splits in this account are denominated.  Its value *MUST*
    * be a three-letter ISO currency code, or it must be a comma followed
    * by an arbitrary string (security name).  Currency trading accounts
    * allow splits between accounts when the currency string matches the
