@@ -1,5 +1,4 @@
 ;; -*-scheme-*-
-;; $Id$
 ;; 
 ;;  Richard -Gilligan- Uschold
 ;; These are help strings for each TXF code. See taxtxf.scm and

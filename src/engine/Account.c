@@ -1556,6 +1556,77 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
   xaccAccountCommitEdit (account);
 }
 
+const char *
+xaccAccountGetTaxCode (Account *account)
+{
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  value = kvp_frame_get_slot_path (account->kvp_data, "tax", "code", NULL);
+  if (!value)
+    return NULL;
+
+  return kvp_value_get_string (value);
+}
+
+void
+xaccAccountSetTaxCode (Account *account, const char *code)
+{
+  kvp_frame *frame;
+
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+
+  frame = kvp_frame_get_frame (account->kvp_data, "tax", NULL);
+
+  kvp_frame_set_slot_nc (frame, "code",
+                         code ? kvp_value_new_string (code) : NULL);
+
+  mark_account (account);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+}
+
+const char *
+xaccAccountGetTaxPayerNameSource (Account *account)
+{
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  value = kvp_frame_get_slot_path (account->kvp_data,
+                                   "tax", "payer-name-source", NULL);
+  if (!value)
+    return NULL;
+
+  return kvp_value_get_string (value);
+}
+
+void
+xaccAccountSetTaxPayerNameSource (Account *account, const char *source)
+{
+  kvp_frame *frame;
+
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+
+  frame = kvp_frame_get_frame (account->kvp_data, "tax", NULL);
+
+  kvp_frame_set_slot_nc (frame, "payer-name-source",
+                         source ? kvp_value_new_string (source) : NULL);
+
+  mark_account (account);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+}
+
 /********************************************************************\
 \********************************************************************/
 

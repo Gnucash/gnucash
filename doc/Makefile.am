@@ -28,5 +28,4 @@ EXTRA_DIST = \
   build-suse.txt \
   gnome-hackers.txt \
   gnc-prices.1 \
-  gnucash.1 \
-  gnucash-gdb-cmds
+  gnucash.1

@@ -685,11 +685,13 @@ kvp_value_delete(kvp_value * value) {
 
 kvp_value_t
 kvp_value_get_type(const kvp_value * value) {
+  if (!value) return -1;
   return value->type;
 }
 
 gint64
 kvp_value_get_gint64(const kvp_value * value) {
+  if (!value) return 0;
   if(value->type == KVP_TYPE_GINT64) {
     return value->value.int64;
   }
@@ -700,6 +702,7 @@ kvp_value_get_gint64(const kvp_value * value) {
 
 double 
 kvp_value_get_double(const kvp_value * value) {
+  if (!value) return 0.0;
   if(value->type == KVP_TYPE_DOUBLE) {
     return value->value.dbl;
   }
@@ -710,6 +713,7 @@ kvp_value_get_double(const kvp_value * value) {
 
 gnc_numeric 
 kvp_value_get_numeric(const kvp_value * value) {
+  if (!value) return gnc_numeric_zero ();
   if(value->type == KVP_TYPE_NUMERIC) {
     return value->value.numeric;
   }
@@ -720,6 +724,7 @@ kvp_value_get_numeric(const kvp_value * value) {
 
 char *
 kvp_value_get_string(const kvp_value * value) {
+  if (!value) return NULL;
   if(value->type == KVP_TYPE_STRING) {
     return value->value.str;
   }
@@ -730,6 +735,7 @@ kvp_value_get_string(const kvp_value * value) {
 
 GUID *
 kvp_value_get_guid(const kvp_value * value) {
+  if (!value) return NULL;
   if(value->type == KVP_TYPE_GUID) {
     return value->value.guid;
   }
@@ -740,18 +746,28 @@ kvp_value_get_guid(const kvp_value * value) {
 
 void *
 kvp_value_get_binary(const kvp_value * value, guint64 * size_return) {
+  if (!value)
+  {
+    if (size_return)
+      *size_return = 0;
+    return NULL;
+  }
+
   if(value->type == KVP_TYPE_BINARY) {
-    *size_return = value->value.binary.datasize;
+    if (size_return)
+      *size_return = value->value.binary.datasize;
     return value->value.binary.data;
   }
   else {
-    *size_return = 0;
+    if (size_return)
+      *size_return = 0;
     return NULL;
   }
 }
 
 GList *
 kvp_value_get_glist(const kvp_value * value) {
+  if (!value) return NULL;
   if(value->type == KVP_TYPE_GLIST) {
     return value->value.list;
   }
@@ -762,6 +778,7 @@ kvp_value_get_glist(const kvp_value * value) {
 
 kvp_frame *
 kvp_value_get_frame(const kvp_value * value) {
+  if (!value) return NULL;
   if(value->type == KVP_TYPE_FRAME) {
     return value->value.frame;
   }

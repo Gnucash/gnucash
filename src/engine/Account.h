@@ -261,6 +261,12 @@ gboolean        xaccAccountGetTaxRelated (Account *account);
 void            xaccAccountSetTaxRelated (Account *account,
                                           gboolean tax_related);
 
+const char *    xaccAccountGetTaxCode (Account *account);
+void            xaccAccountSetTaxCode (Account *account, const char *code);
+const char *    xaccAccountGetTaxPayerNameSource (Account *account);
+void            xaccAccountSetTaxPayerNameSource (Account *account,
+                                                  const char *source);
+
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed
  * after use. The fully qualified name of an account is the concatenation

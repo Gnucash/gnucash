@@ -75,11 +75,13 @@
 			"red3" "orange3" "yellow3" "green3"
                         "cyan3" "blue3" "purple3" "magenta3" 
   			"orchid3" "khaki3" "gold3" "orange3"))
-  (if (<= num-colors 0)
-      '()
-      (cons (list-ref base-colors
-                      (modulo (- num-colors 1) (length base-colors)))
-            (gnc:assign-colors (- num-colors 1)))))
+  (define (assign-colors i)
+    (if (<= num-colors i)
+        '()
+        (cons (list-ref base-colors
+                        (modulo i (length base-colors)))
+              (assign-colors (+ i 1)))))
+  (assign-colors 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gnc:html-build-acct-table

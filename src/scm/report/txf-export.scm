@@ -1,5 +1,4 @@
 ;; -*-scheme-*-
-;; $Id$
 ;; 
 ;;  Richard -Gilligan- Uschold
 ;; These are TXF codes and a brief description of each. See taxtxf.scm
@@ -8,12 +7,12 @@
 (gnc:support "report/txf-export.scm")
 
 ;;      #(code "  form x \\ description" "help" format multiple)
-(define txf-help-catagories
+(define txf-help-categories
   (list #(H001 "< help \\ Name of Current account is exported." "" 0 #f)
 	#(H002 "^ help \\ Name of Parent account is exported." "" 0 #f)
 	#(H003 "# help \\ Not implimented yet, Do NOT Use!" "" 0 #f)))
 
-(define txf-income-catagories
+(define txf-income-categories
   (list #(N000 "  none \\ Tax Report Only - No TXF Export" "" 0 #f)
 	#(N261 "  F1040 \\ Alimony received" "" 1 #f)
 	#(N257 "  F1040 \\ Other income, misc." "" 1 #f)
@@ -120,7 +119,7 @@
 	#(N506 "  W-2 \\ Salary or wages, spouse" "" 1 #t)
 	#(N549 "  W-2G \\ Gross winnings" "" 1 #t)))
 
-(define txf-expense-catagories
+(define txf-expense-categories
   (list #(N000 "  none \\ Tax Report Only - No TXF Export" "" 0 #f)
 	#(N264 "  F1040 \\ Alimony paid" "" 1 #f)
 	#(N265 "< F1040 \\ Early withdrawal penalty" "" 3 #f)

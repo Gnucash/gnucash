@@ -1,3 +1,16 @@
+2001-03-23  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/html-utilities.scm (gnc:assign-colors): make the order
+	of color assignment stable
+
+	* src/engine/Account.c: add api for tax info
+
+	* src/engine/kvp_frame.c: handle NULL pointers
+
+	* src/engine/kvp_doc.txt: add tax kvp keys
+
+	* doc/gnucash-gdb-cmds: remove, out of date
+
 2001-03-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/income-or-expense-pie.scm: Included new option to

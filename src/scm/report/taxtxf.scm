@@ -8,8 +8,6 @@
 ;; income to different accounts, as well as deductible and non
 ;; deductible expenses.
 ;;
-;; Tax related accounts have "{tax}" in the notes field.  This can be
-;; set/reset from the parameters dialog.
 ;; The user selects the accounts(s) to be printed, if none, all are checked.
 ;; Automatically prints up to 15 sub-account levels below selected
 ;; account.  Accounts below that are not printed. If you really need
@@ -139,6 +137,7 @@
 					 (cons (current-time) 0)))))
 	  (set-tm:mday bdtm 1)          ; 01
           (set-tm:mon bdtm 0)           ; Jan
+          (set-tm:isdst bdtm -1)
 	  (cons 'absolute (cons (car (mktime bdtm)) 0))))
       #f 'absolute #f))
 
@@ -198,27 +197,6 @@
       "g" (N_ "Print all Parent account names") #f))
 
     (gnc:register-tax-option
-     (gnc:make-multichoice-option
-      tab-title (N_ "Set/Reset Tax Status")
-      "h" (N_ "Set/Reset Selected Account Tax Status") 'tax-no-change
-      (list (list->vector
-             (list 'tax-no-change (N_ "No Change") (N_ "No Change")))
-            (list->vector
-             (list 'tax-set (N_ "Set Tax Related")
-                   (N_ "Set Selected accounts as Tax Related")))
-            (list->vector
-             (list 'tax-reset (N_ "Reset Tax Related")
-                   (N_ "Reset Selected accounts as not Tax Related")))
-            (list->vector
-             (list 'tax-set-kids (N_ "Set Tax Related & sub-accounts") 
-                   (N_ "Set Selected & sub-accounts as Tax Related")))
-            (list->vector
-             (list 'tax-reset-kids
-                   (N_ "Reset Tax Related & sub-accounts")
-                   (N_ "Reset Selected & sub-accounts as not Tax Related")))
-            )))
-
-    (gnc:register-tax-option
      (gnc:make-account-list-option
       (N_ "TXF Export Init") (N_ "Select Account")
       "a" (N_ "Select Account")
@@ -235,18 +213,18 @@
      (gnc:make-list-option
       (N_ "TXF Export Init")
       (N_ "For INCOME accounts, select here.   < ^ # see help")
-      "c" (N_ "Select a TXF Income catagory")
+      "c" (N_ "Select a TXF Income category")
       '()
-      txf-income-catagories))
+      txf-income-categories))
 
     (gnc:register-tax-option
      ;;(gnc:make-multichoice-option
      (gnc:make-list-option
       (N_ "TXF Export Init")
       (N_ "For EXPENSE accounts, select here.   < ^ # see help")
-      "d" (N_ "Select a TXF Expense catagory")
+      "d" (N_ "Select a TXF Expense category")
       '()
-      txf-expense-catagories))
+      txf-expense-categories))
 
     (gnc:register-tax-option
      (gnc:make-multichoice-option
@@ -334,7 +312,7 @@
 
   ;; return a string to insert in account-notes, or an error symbol
   ;; We only want one, but list-option returns a list.
-  (define (txf-string code-lst catagories-lst)
+  (define (txf-string code-lst categories-lst)
     (cond ((or (null? code-lst)
 	       (not (symbol? (car code-lst))))
 	   'none)
@@ -343,7 +321,7 @@
 	  ((eq? 'N000 (car code-lst))
 	   #f)
 	  (else
-	   (let ((txf-vec (txfq-ref (car code-lst) catagories-lst)))
+	   (let ((txf-vec (txfq-ref (car code-lst) categories-lst)))
 	     (if txf-vec
 		 (let ((str (vector-ref txf-vec 1)))
 		   (if (equal? "#" (substring str 0 1))
@@ -353,7 +331,7 @@
 				      " \\ " (symbol->string 
 					      (car code-lst))))))))))
 
-  ;; insert help strings in txf catagories
+  ;; insert help strings in txf categories
   (define (txf-help cat-list)
     (do ((i 0 (+ i 1))
 	 (len (length cat-list)))
@@ -460,9 +438,9 @@
 	  (if (gnc:account-is-inc-exp? acc)
 	      (let* ((str (if (eq? txf-type 'income)
 			      (txf-string txf-inc 
-					  txf-income-catagories)
+					  txf-income-categories)
 			      (txf-string txf-exp 
-					  txf-expense-catagories)))
+					  txf-expense-categories)))
 		     (fun (case str
 			    ((mult)
 			     (set! str
@@ -672,33 +650,6 @@
                                  (list a))))
                        accounts)))
 
-  ;; Set or Reset key in account notes
-  (define (key-status accounts set key end-key kids)
-    (let ((key-len (string-length key)))
-      (map (lambda (a)
-	     (let* ((notes (gnc:account-get-notes a))
-		    (notes (if notes notes ""))
-		    (key-start (string-search notes key 0))
-		    (notes-len (string-length notes)))
-	       (if key-start
-		   (if (not set)	; reset tax status
-		       (let* ((end-start (string-search notes end-key 0))
-			      (end (if end-start
-				       (+ end-start (string-length end-key))
-				       (+ key-start key-len))))
-			 (gnc:account-set-notes a 
-						(string-append
-						 (substring notes 0 key-start)
-						 (substring notes end
-							    notes-len)))))
-		   (if set		; set tax status
-		       (gnc:account-set-notes a (string-append notes key))))
-	       (if kids			; recurse to all sub accounta
-		   (key-status 
-		    (gnc:group-get-subaccounts (gnc:account-get-children a))
-		    set key end-key #t))))
-	   accounts)))
-
   (define (generate-tax-or-txf report-name
 			       report-description
 			       report-obj
@@ -776,6 +727,7 @@
 				 (set-tm:mon bdtm 6))
 				((4th-est 4th-last) ; Oct 1
 				 (set-tm:mon bdtm 9))))
+                          (set-tm:isdst bdtm -1)
 			  (cons (car (mktime bdtm)) 0))))
 
 	   (to-value (gnc:timepair-end-day-time
@@ -818,6 +770,7 @@
 			       (set-tm:mon bdtm 11))
 			      (else 
 			       (set! bdtm (gnc:timepair->date to-value)))))
+                        (set-tm:isdst bdtm -1)
 			(cons (car (mktime bdtm)) 0))))
 
            (txf-help (get-option "TXF Export Init"
@@ -830,13 +783,14 @@
 	(if (and (gnc:account-get-txf account)
 		 (txf-special-split? (gnc:account-get-txf-code account)))
 	    (let* 
-		((full-year? 
-		  (and (equal? (strftime "%Y" (localtime (car to-value)))
-			       (strftime "%Y" (localtime (car from-value))))
-		       (equal? (strftime "%m%d" (localtime (car from-value)))
-			       "0101")
-		       (equal? (strftime "%m%d" (localtime (car to-value)))
-			       "1231")))
+		((full-year?
+                  (let ((bdto (localtime (car to-value)))
+                        (bdfrom (localtime (car from-value))))
+                    (and (equal? (tm:year bdto) (tm:year bdfrom))
+                         (equal? (tm:mon bdfrom) 0)
+                         (equal? (tm:mday bdfrom) 1)
+                         (equal? (tm:mon bdto) 11)
+                         (equal? (tm:mday bdto) 31))))
 		 ;; Adjust dates so we get the final Estimated Tax
 		 ;; paymnent from the right year
 		 (from-est (if full-year?
@@ -845,6 +799,7 @@
 					     from-value))))
 				 (set-tm:mday bdtm 1) ; 01
 				 (set-tm:mon bdtm 2) ; Mar
+                                 (set-tm:isdst bdtm -1)
 				 (cons (car (mktime bdtm)) 0))
 			       from-value))
 		 (to-est (if full-year?
@@ -854,7 +809,8 @@
 			       (set-tm:mday bdtm 28) ; 28
 			       (set-tm:mon bdtm 1) ; Feb
 			       (set-tm:year bdtm (+ (tm:year bdtm) 1))
-			       (cons (car (mktime bdtm)) 0))
+                               (set-tm:isdst bdtm -1)
+                               (cons (car (mktime bdtm)) 0))
 			     to-value))
 		 (split-filter-pred (split-report-make-date-filter-predicate
 				     from-est to-est))
@@ -866,12 +822,12 @@
 		     (let* ((tmp-date (gnc:transaction-get-date-posted 
 				       (gnc:split-get-parent spl)))
 			    (value (gnc:numeric-to-double
-				    (gnc:split-get-value spl)))
-			    ;; TurboTax '99 ignores dates after 12/31/1999
-			    (date (if (and full-year? 
-					   (gnc:timepair-lt to-value tmp-date))
-				      to-value
-				      tmp-date)))
+                                    (gnc:split-get-value spl)))
+                            ;; TurboTax '99 ignores dates after 12/31/1999
+                            (date (if (and full-year? 
+                                           (gnc:timepair-lt to-value tmp-date))
+                                      to-value
+                                      tmp-date)))
 		       (if tax-mode
 			   (render-level-x-account table lev max-level account
 						   value suppress-0 #f date #f)
@@ -924,8 +880,7 @@
                              (handle-level-x-account (+ 1 level) x)))
                        children)))))))
 
-      (let* ((tax-stat (get-option tab-title "Set/Reset Tax Status"))
-             (txf-acc-lst (get-option "TXF Export Init" "Select Account"))
+      (let* ((txf-acc-lst (get-option "TXF Export Init" "Select Account"))
              (txf-account (if (null? txf-acc-lst)
                               (begin (set! txf-acc-lst '(#f))
                                      #f)
@@ -942,16 +897,6 @@
                                     (map gnc:account-get-full-name
                                          txf-acc-lst)
                                     '(#f)))
-             (not-used
-              (case tax-stat
-                ((tax-set)
-                 (key-status user-sel-accnts #t tax-key tax-end-key #f))
-                ((tax-reset)
-                 (key-status user-sel-accnts #f tax-key tax-end-key #f))
-                ((tax-set-kids)
-                 (key-status user-sel-accnts #t tax-key tax-end-key #t))
-                ((tax-reset-kids)
-                 (key-status user-sel-accnts #f tax-key tax-end-key #t))))
 
              (txf-fun-str-lst (map (lambda (a) (txf-function 
                                                 a txf-income txf-expense
@@ -1120,11 +1065,11 @@ txf file!")))))))
         (if txf-help
             (begin
               (map (lambda (x) (txf-print-help table x #t))
-                   txf-help-catagories)
+                   txf-help-categories)
               (map (lambda (x) (txf-print-help table x #t))
-                   txf-income-catagories)
+                   txf-income-categories)
               (map (lambda (x) (txf-print-help table x #f))
-                   txf-expense-catagories))
+                   txf-expense-categories))
             (map (lambda (x) (handle-level-x-account 1 x))
                  selected-accounts))
 
@@ -1139,9 +1084,9 @@ Go the the Tax Information dialog to set up tax-related accounts.")))))
         doc)))
 
   ;; copy help strings to category structures.
-  (txf-help txf-income-catagories)
-  (txf-help txf-expense-catagories)
-  (txf-help txf-help-catagories)
+  (txf-help txf-income-categories)
+  (txf-help txf-expense-categories)
+  (txf-help txf-help-categories)
 
   (gnc:define-report
    'version 1
