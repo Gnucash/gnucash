@@ -63,6 +63,7 @@ const gchar *billterm_version_string = "2.0.0";
 #define billterm_invisible_string "billterm:invisible"
 #define billterm_parent_string "billterm:parent"
 #define billterm_child_string "billterm:child"
+#define billterm_slots_string "billterm:slots"
 
 #define gnc_daystype_string "billterm:days"
 #define days_duedays_string "bt-days:due-days"
@@ -403,6 +404,12 @@ billterm_prox_data_handler (xmlNodePtr node, gpointer billterm_pdata)
   return dom_tree_to_prox_data (node, pdata);
 }
 
+static gboolean
+billterm_slots_handler (xmlNodePtr node, gpointer billterm_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler billterm_handlers_v2[] = {
     { billterm_guid_string, billterm_guid_handler, 1, 0 },
     { billterm_name_string, billterm_name_handler, 1, 0 },
@@ -411,6 +418,7 @@ static struct dom_tree_handler billterm_handlers_v2[] = {
     { billterm_invisible_string, billterm_invisible_handler, 1, 0 },
     { billterm_parent_string, billterm_parent_handler, 0, 0 },
     { billterm_child_string, billterm_child_handler, 0, 0 },
+    { billterm_slots_string, billterm_slots_handler, 0, 0 },
     { gnc_daystype_string, billterm_days_data_handler, 0, 0 },
     { gnc_proximotype_string, billterm_prox_data_handler, 0, 0 },
     { NULL, 0, 0, 0 }

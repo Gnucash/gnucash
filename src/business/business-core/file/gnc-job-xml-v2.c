@@ -62,6 +62,7 @@ const gchar *job_version_string = "2.0.0";
 #define job_reference_string "job:reference"
 #define job_owner_string "job:owner"
 #define job_active_string "job:active"
+#define job_slots_string "job:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -195,6 +196,12 @@ job_active_handler (xmlNodePtr node, gpointer job_pdata)
     return ret;
 }
 
+static gboolean
+job_slots_handler (xmlNodePtr node, gpointer job_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler job_handlers_v2[] = {
     { job_guid_string, job_guid_handler, 1, 0 },
     { job_id_string, job_id_handler, 1, 0 },
@@ -202,6 +209,7 @@ static struct dom_tree_handler job_handlers_v2[] = {
     { job_reference_string, job_reference_handler, 0, 0 },
     { job_owner_string, job_owner_handler, 1, 0 },
     { job_active_string, job_active_handler, 1, 0 },
+    { job_slots_string, job_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

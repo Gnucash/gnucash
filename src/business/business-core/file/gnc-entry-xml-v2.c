@@ -93,6 +93,7 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
 #define entry_bill_string "entry:bill"
+#define entry_slots_string "entry:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -650,6 +651,12 @@ entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
     return res;
 }
 
+static gboolean
+entry_slots_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_guid_string, entry_guid_handler, 1, 0 },
     { entry_date_string, entry_date_handler, 1, 0 },
@@ -685,6 +692,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
     { entry_bill_string, entry_bill_handler, 0, 0 },
+    { entry_slots_string, entry_slots_handler, 0, 0 },
 
     /* Old XML support */
     { "entry:acct", entry_acct_handler, 0, 0 },

@@ -72,6 +72,7 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_currency_string "invoice:currency"
 #define invoice_billto_string "invoice:billto"
 #define invoice_tochargeamt_string "invoice:charge-amt"
+#define invoice_slots_string "invoice:slots"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -398,6 +399,12 @@ invoice_tochargeamt_handler (xmlNodePtr node, gpointer invoice_pdata)
   return TRUE;
 }
 
+static gboolean
+invoice_slots_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_guid_string, invoice_guid_handler, 1, 0 },
     { invoice_id_string, invoice_id_handler, 1, 0 },
@@ -415,6 +422,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { "invoice:commodity", invoice_currency_handler, 0, 0 },
     { invoice_billto_string, invoice_billto_handler, 0, 0 },
     { invoice_tochargeamt_string, invoice_tochargeamt_handler, 0, 0},
+    { invoice_slots_string, invoice_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

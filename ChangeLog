@@ -1,3 +1,12 @@
+2003-09-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/file/gnc-*.c:
+	  Add a "slots" parameter to allow for future expansion.  Right
+	  now this is completely ignored (which will allow future releases
+	  to add a kvp-frame slots to any business function and allow that
+	  file to be read by older versions).  Right now the slot is ignored,
+	  but that's better than barfing on the data file.
+
 2003-09-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-transfer.c:  during the dialog startup it

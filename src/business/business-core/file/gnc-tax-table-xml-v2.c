@@ -63,6 +63,7 @@ const gchar *taxtable_version_string = "2.0.0";
 #define taxtable_parent_string "taxtable:parent"
 #define taxtable_child_string "taxtable:child"
 #define taxtable_entries_string "taxtable:entries"
+#define taxtable_slots_string "taxtable:slots"
 
 #define gnc_taxtableentry_string "gnc:GncTaxTableEntry"
 #define ttentry_account_string "tte:acct"
@@ -357,6 +358,12 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
   return TRUE;
 }
 
+static gboolean
+taxtable_slots_handler (xmlNodePtr node, gpointer taxtable_pdata)
+{
+  return TRUE;
+}
+
 static struct dom_tree_handler taxtable_handlers_v2[] = {
     { taxtable_guid_string, taxtable_guid_handler, 1, 0 },
     { taxtable_name_string, taxtable_name_handler, 1, 0 },
@@ -365,6 +372,7 @@ static struct dom_tree_handler taxtable_handlers_v2[] = {
     { taxtable_parent_string, taxtable_parent_handler, 0, 0 },
     { taxtable_child_string, taxtable_child_handler, 0, 0 },
     { taxtable_entries_string, taxtable_entries_handler, 1, 0 },
+    { taxtable_slots_string, taxtable_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
