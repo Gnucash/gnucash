@@ -49,10 +49,16 @@
 #include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject-p.h"
+#include "gnc-engine-util.h"
 
 #include "guid.h"
 
 static short module = MOD_ENGINE;
+
+static void coll_destroy(gpointer col)
+{
+  qof_collection_destroy((QofCollection *) col);
+}
 
 /* ====================================================================== */
 /* constructor / destructor */
@@ -62,7 +68,9 @@ qof_book_init (QofBook *book)
 {
   if (!book) return;
 
-  book->hash_of_collections = g_hash_table_new (g_str_hash, g_str_equal);
+  book->hash_of_collections = g_hash_table_new_full(g_str_hash, g_str_equal, 
+						    gnc_string_cache_remove,
+						    coll_destroy);
 
   qof_instance_init (&book->inst, QOF_ID_BOOK, book);
 
@@ -87,14 +95,6 @@ qof_book_new (void)
   gnc_engine_gen_event (&book->inst.entity, GNC_EVENT_CREATE);
   LEAVE ("book=%p", book);
   return book;
-}
-
-static gboolean
-coll_destroy(gpointer key, gpointer value, gpointer not_used)
-{
-  QofCollection *col = value;
-  qof_collection_destroy (col);
-  return TRUE;
 }
 
 static void
@@ -128,8 +128,6 @@ qof_book_destroy (QofBook *book)
 
   qof_instance_release (&book->inst);
 
-  g_hash_table_foreach_remove (book->hash_of_collections,
-                               coll_destroy, NULL);
   g_hash_table_destroy (book->hash_of_collections);
   book->hash_of_collections = NULL;
 
@@ -236,20 +234,16 @@ QofCollection *
 qof_book_get_collection (QofBook *book, QofIdType entity_type)
 {
   QofCollection *col;
-                                                                                
+
   if (!book || !entity_type) return NULL;
 
   col = g_hash_table_lookup (book->hash_of_collections, entity_type);
   if (col) return col;
-                                                                                
+
   col = qof_collection_new (entity_type);
-                                                                                
-  /* XXX should use string_cache instead of strdup */
-  /* Need strdup because values are sometimes freed */
-  /* this is a memory leak, since malloc'ed value is not freed */
-  /* ??? huh ?? freed where? by whom? */
+
   g_hash_table_insert (book->hash_of_collections,
-          (gpointer)g_strdup(entity_type), col);
+		       gnc_string_cache_insert((gpointer) entity_type), col);
                                                                                 
   return col;
 }

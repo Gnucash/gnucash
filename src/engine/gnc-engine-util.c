@@ -221,6 +221,7 @@ qof_util_bool_to_int (const char * val)
 
 static GCache * gnc_string_cache = NULL;
 
+/* maybe better to make this function static */
 GCache*
 gnc_engine_get_string_cache(void)
 {
@@ -239,6 +240,16 @@ gnc_engine_string_cache_destroy (void)
 {
   g_cache_destroy (gnc_string_cache);
   gnc_string_cache = NULL;
+}
+
+void gnc_string_cache_remove(gpointer key)
+{
+  g_cache_remove(gnc_engine_get_string_cache(), key);
+}
+
+gpointer gnc_string_cache_insert(gpointer key)
+{
+  return g_cache_insert(gnc_engine_get_string_cache(), key);
 }
 
 /************************* END OF FILE ******************************\

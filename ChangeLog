@@ -1,12 +1,20 @@
 2005-02-13  Derek Atkins  <derek@ihtfp.com>
 
-	Chris Shoemaker's patch:
+	Chris Shoemaker's patch: Fix various memory leaks.
 	* Fix memory leak of xml parser context in sixtp-stack.c, string in
 	  gnc_plugin_file_history, gdkCursor in cursors.c, GtkIconSources in
 	  gnc-icons.c, several strings in gnc-menu-extensions.c, TimeSpec and
 	  strings in test-engine-stuff.c
 	* added some constness to gnc_ext_gen_action_name()
 
+	Chris Shoemaker's patch: Allow use of gcache'd strings in hashtables.
+	* allow the use of gcache'd strings in ghashtables without leaking
+	  - Introduce functions gnc_string_cache_remove() and
+	    gnc_string_cache_insert()
+	* add comment warning about dangerous macro SAFE_STRCMP_REAL
+	* fix qofbook's leaking of strings in ghashtable by using new
+          gnc_string_cache_* functions
+	
 2005-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' patch to clean up the test-book-merge:
