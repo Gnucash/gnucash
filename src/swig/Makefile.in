@@ -31,7 +31,7 @@ all: default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: guile
+default: guile perl5
 
 ifeq (${HAVE_PLOTUTILS},1)
 guile: plot.preproc.h ${OBJS}
