@@ -1,3 +1,17 @@
+2002-11-24  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gncmod-app-file.c: 
+	* src/gnome-utils/gnc-mdi-utils.c:
+	* src/gnome-utils/gnc-mdi-utils.h: Rename the
+	gnc_mdi_file_percentage function to gnc_mdi_show_progress.
+	
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Wrap the
+	gnc_mdi_show_progress function so it is accessible from scheme.
+
+	* src/report/report-system/report-system.scm:
+	* src/report/report-system/report-utilities.scm: Create utility
+	functions for giving progress updates while building reports.
+
 2002-11-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/prefs.scm (gnc:make-number-range-option): Fix

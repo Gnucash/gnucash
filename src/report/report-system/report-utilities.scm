@@ -667,3 +667,20 @@
 (define (gnc:split-voided? split)
   (let ((trans (gnc:split-get-parent split)))
     (gnc:transaction-get-void-status trans)))
+
+(define (gnc:report-starting report-name)
+  (gnc:mdi_show_progress (sprintf #f (_ "Building '%s' report ...") report-name) 0))
+
+(define (gnc:report-percent-done percent)
+  (gnc:mdi_show_progress #f (truncate percent)))
+
+(define (gnc:report-finished)
+  (gnc:mdi_show_progress #f -1))
+
+;; function to count the total number of splits to be iterated
+(define (gnc:accounts-count-splits accounts)
+  (if (not (null? accounts))
+      (+ (length (gnc:account-get-split-list (car accounts)))
+	 (gnc:accounts-count-splits (cdr accounts)))
+      0))
+

@@ -74,7 +74,7 @@ libgncmod_app_file_LTX_gnc_module_init(int refcount)
                            gnc_history_get_last,
                            gnc_file_dialog);    
 
-    gnc_file_set_pct_handler (gnc_mdi_file_percentage);
+    gnc_file_set_pct_handler (gnc_mdi_show_progress);
 
     gnc_file_init ();
   }

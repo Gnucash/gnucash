@@ -97,7 +97,7 @@ gnc_mdi_set_toolbar_visibility (gboolean visible)
 }
 
 void
-gnc_mdi_file_percentage (const char *message, int percentage)
+gnc_mdi_show_progress (const char *message, int percentage)
 {
   GtkWidget *app;
   GnomeAppBar *appbar;
