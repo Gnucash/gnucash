@@ -166,9 +166,15 @@ gnc_numeric gnc_numeric_neg(gnc_numeric a);
 /** Return the absolute value of the argument */
 gnc_numeric gnc_numeric_abs(gnc_numeric a);
 
-/** Shortcut for common operations */
+/** 
+ * Shortcut for most common case: gnc_numeric_add(a, b, GNC_DENOM_AUTO,
+ *                        GNC_DENOM_FIXED | GNC_RND_NEVER);
+ */
 gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);
-/** Shortcut for common operations */
+/** 
+ * Shortcut for most common case: gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
+ *                        GNC_DENOM_FIXED | GNC_RND_NEVER);
+ */
 gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b);
 /*@}*/
 
