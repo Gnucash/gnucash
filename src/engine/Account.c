@@ -2056,6 +2056,48 @@ xaccAccountGetQuoteTZ(Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+void
+xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
+{ 
+  kvp_frame *frame;
+  if (!account)
+    return;
+  
+  xaccAccountBeginEdit (account);
+  
+  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info", NULL);
+  kvp_frame_set_slot_nc (frame,
+			 "include-children",
+                         status ? kvp_value_new_gint64 (status) : NULL);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+  return;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+gboolean
+xaccAccountGetReconcileChildrenStatus(Account *account)
+{
+  kvp_value *status;
+  if (!account)
+    return FALSE;
+  /* access the account's kvp-data for status and return that, if no value
+   * is found then we can assume not to include the children, that being
+   * the default behaviour 
+   */
+  status = kvp_frame_get_slot_path (account->kvp_data,
+				    "reconcile-info",
+				    "include-children",
+				    NULL);
+  if (!status)
+    return FALSE;
+  return kvp_value_get_gint64 (status);
+}
+
+/********************************************************************\
+\********************************************************************/
 
 gboolean
 xaccAccountVisitUnvisitedTransactions(Account *acc,

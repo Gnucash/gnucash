@@ -268,6 +268,14 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
+<glossterm><email>kemitix@users.sourceforge.net</email> Paul
+      Campbell</glossterm>
+<glossdef>
+<para>reconcile children patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>conrad@mail.watersprite.com.au</email> Conrad
       Canterford</glossterm>
 <glossdef>

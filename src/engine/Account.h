@@ -234,6 +234,9 @@ gnc_numeric     xaccAccountGetBalance (Account *account);
 gnc_numeric     xaccAccountGetClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
 
+void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
+
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 
 GList*          xaccAccountGetSplitList (Account *account);

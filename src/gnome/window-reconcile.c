@@ -224,7 +224,7 @@ recnRecalculateBalance (RecnWindow *recnData)
   gnc_numeric reconciled;
   gnc_numeric diff;
   GNCPrintAmountInfo print_info;
-  gboolean reverse_balance;
+  gboolean reverse_balance, include_children;
 
   account = recn_get_account (recnData);
   if (!account)
@@ -233,7 +233,8 @@ recnRecalculateBalance (RecnWindow *recnData)
   reverse_balance = gnc_reverse_balance(account);
 
   /* update the starting balance */
-  starting = xaccAccountGetReconciledBalance(account);
+  include_children = xaccAccountGetReconcileChildrenStatus(account);
+  starting = gnc_ui_account_get_reconciled_balance(account, include_children);
   print_info = gnc_account_print_info (account, TRUE);
 
   if (reverse_balance)
@@ -553,13 +554,14 @@ static gboolean
 startRecnWindow(GtkWidget *parent, Account *account,
                 gnc_numeric *new_ending, time_t *statement_date)
 {
-  GtkWidget *dialog, *end_value, *date_value;
+  GtkWidget *dialog, *end_value, *date_value, *include_children_button;
   startRecnWindowData data = { NULL };
   gboolean auto_interest_xfer_option;
   GNCPrintAmountInfo print_info;
   gnc_numeric ending;
   char *title;
   int result;
+  gboolean include_children;
 
   /* Initialize the data structure that will be used for several callbacks
    * throughout this file with the relevant info.  Some initialization is
@@ -575,7 +577,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
   auto_interest_xfer_option =
      gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-  ending = xaccAccountGetReconciledBalance(account);
+  include_children = xaccAccountGetReconcileChildrenStatus(account);
+
+  ending = gnc_ui_account_get_reconciled_balance(account,
+                                                 include_children);
   print_info = gnc_account_print_info (account, TRUE);
 
   if (gnc_reverse_balance(account))
@@ -610,9 +615,15 @@ startRecnWindow(GtkWidget *parent, Account *account,
     GtkWidget *end_title = gtk_label_new(_("Ending Balance:"));
     GtkWidget *start_value =
       gtk_label_new(xaccPrintAmount (ending, print_info));
+    GtkWidget *blank_label = gtk_label_new("");
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     GtkWidget *entry;
     GtkWidget *interest = NULL;
+
+    include_children_button =
+      gtk_check_button_new_with_label(_("Include Subaccounts"));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children_button),
+                                 include_children);
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
 
@@ -655,10 +666,12 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gtk_box_pack_start(GTK_BOX(left_column), date_title, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(left_column), start_title, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(left_column), end_title, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(left_column), blank_label, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(right_column), date_value, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(right_column), start_value, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(right_column), include_children_button, TRUE, TRUE, 0);
 
     /* if it's possible to enter an interest payment or charge for this
      * account, add a button so that the user can pop up the appropriate
@@ -707,6 +720,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
       if (gnc_reverse_balance(account))
         *new_ending = gnc_numeric_neg (*new_ending);
+
+      xaccAccountSetReconcileChildrenStatus
+        (account, GTK_TOGGLE_BUTTON(include_children_button)->active);
     }
 
     /* cancel or delete */
@@ -1604,7 +1620,10 @@ gnc_get_reconcile_info (Account *account,
     /* if the account wasn't previously postponed, try to predict
      * the statement balance based on the statement date.
      */
-    *new_ending = xaccAccountGetBalanceAsOfDate(account, *statement_date);
+    *new_ending =
+      gnc_ui_account_get_balance_as_of_date
+      (account, *statement_date, 
+       xaccAccountGetReconcileChildrenStatus(account));
   }
 }
 
@@ -1843,6 +1862,9 @@ recnWindow (GtkWidget *parent, Account *account)
     credits_box = gnc_reconcile_window_create_list_box
       (account, RECLIST_CREDIT, recnData,
        &recnData->credit, &recnData->total_credit);
+
+    GNC_RECONCILE_LIST(recnData->debit)->sibling = GNC_RECONCILE_LIST(recnData->credit);
+    GNC_RECONCILE_LIST(recnData->credit)->sibling = GNC_RECONCILE_LIST(recnData->debit);
 
     popup = gnc_recn_create_popup_menu(recnData);
     gnome_popup_menu_attach(popup, recnData->debit, recnData);

@@ -84,6 +84,7 @@ Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
 Richard Braakman <dark@xs4all.nl) xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
+Paul Campbell <kemitix@users.sourceforge.net> reconcile children patch
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix
 Bill Carlson <wwc@wwcnet.nu> performance improvements
 David Mar?n Carre?o <davefx@aspl.f2s.com> Spanish translation of account setup.
