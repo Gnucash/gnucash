@@ -91,7 +91,8 @@ EXTRA_DIST = \
   .cvsignore \
   gnucash.desktop.in \
   gnucash.keys.in \
-  gnucash.mime
+  gnucash.mime \
+  ${gwmod_DATA}
 
 
 AM_CFLAGS = \

@@ -60,6 +60,11 @@ gwmod_DATA = \
   gw-business-core.scm \
   gw-business-core-spec.scm
 
+EXTRA_DIST = \
+  .cvsignore \
+  ${gncmod_DATA} \
+  ${gwmod_DATA}
+
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
