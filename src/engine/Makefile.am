@@ -100,9 +100,9 @@ gncscmdir=${GNC_SHAREDIR}/scm
 gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
 engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm 
 
-gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
-gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la libgw-kvp.la
-gwmod_DATA=gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_LTLIBRARIES = libgw-glib.la libgw-engine.la libgw-kvp.la
+gwmod_DATA = gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
 
 EXTRA_DIST = \
   .cvsignore \

@@ -49,6 +49,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "table-allgui.h"
+#include "table-gnome.h"
 
 
 void

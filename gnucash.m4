@@ -30,17 +30,11 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
      fi
   fi
 
-  for module in . $4
-  do
-      case "$module" in
-         engine)
-             gnucash_config_args="$gnucash_config_args engine"
-         ;;
-         gnucash)
-             gnucash_config_args="$gnucash_config_args gnucash"
-         ;;
-      esac
-  done
+  if test "x$4" = "x"; then
+     gnucash_config_args="$gnucash_config_args gnucash"
+  else
+     gnucash_config_args="$gnucash_config_args $4"
+  fi
 
   AC_PATH_PROG(GNUCASH_CONFIG, gnucash-config, no)
   min_gnucash_version=ifelse([$1], ,1.7.0,$1)

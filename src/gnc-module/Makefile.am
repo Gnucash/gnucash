@@ -16,7 +16,7 @@ libgw_gnc_module_la_LDFLAGS = -module -L. -L.libs -lgncmodule
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm
 
-gwmoddir = ${GNC_SHAREDIR}/guile-modules/g-wrapped
+gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_LTLIBRARIES = libgw-gnc-module.la
 gwmod_DATA = gw-gnc-module-spec.scm 
 

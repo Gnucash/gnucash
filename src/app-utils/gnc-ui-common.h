@@ -25,12 +25,16 @@
 #ifndef GNC_UI_COMMON_H
 #define GNC_UI_COMMON_H
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #if defined(GNOME)
   #include <gtk/gtk.h>
 #elif defined(MOTIF)
   #include <Xm/Xm.h>
+#else
+  **** No GUI selected ***
 #endif
 
 #if defined(GNOME)

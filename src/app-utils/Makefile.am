@@ -23,7 +23,8 @@ libgncmod_app_utils_la_SOURCES = \
   guile-util.c \
   option-util.c 
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   gfec.h \
   global-options.h \
   gnc-component-manager.h \
@@ -42,13 +43,14 @@ libgncmod_app_utils_la_LIBADD = \
   -L../gnc-module -L../gnc-module/.libs -lgncmodule \
   -L../engine -L../engine/.libs -lgncmod-engine \
   -L../calculation -L../calculation/.libs -lgncmod-calculation \
-  ${GUILE_LIBS} ${GLIB_LIBS}
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS}
 
-libgw_app_utils_la_SOURCES=gw-app-utils.c
-libgw_app_utils_la_LDFLAGS=-module
+libgw_app_utils_la_SOURCES = gw-app-utils.c
+libgw_app_utils_la_LDFLAGS = -module
 
-gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA=app-utils.scm 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = app-utils.scm 
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
@@ -58,11 +60,11 @@ gncscm_DATA = \
   options.scm \
   utilities.scm
 
-gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
-gwmod_LTLIBRARIES=libgw-app-utils.la
-gwmod_DATA=gw-app-utils-spec.scm
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_LTLIBRARIES = libgw-app-utils.la
+gwmod_DATA = gw-app-utils-spec.scm
 
-noinst_DATA=.scm-links
+noinst_DATA = .scm-links
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
