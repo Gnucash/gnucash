@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+TARGET_SCRIPT="$1"
+GNC_OVERRIDES_DIR="$2"
+
+rm -f ${TARGET_SCRIPT}.tmp
+
+cat > ${TARGET_SCRIPT}.tmp <<EOF
+#!/bin/sh
+PATH="${GNC_OVERRIDES_DIR}:\${PATH}"
+export PATH
+
+exec "${TARGET_SCRIPT}" "\$@"
+EOF
+
+mv ${TARGET_SCRIPT}.tmp ${TARGET_SCRIPT}
+chmod u+x ${TARGET_SCRIPT}
