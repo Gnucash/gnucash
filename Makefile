@@ -69,14 +69,14 @@ clean :
 	rm -f core junk tmp *~ *.bak
 	@cd include ; rm -f *~
 	@cd help    ; rm -f *~
-	@cd libhtmlw ; $(MAKE) clean
+	@cd lib/libhtmlw ; $(MAKE) clean
 	@cd src ; $(MAKE) clean
-	@cd ComboBox-1.33 ; $(MAKE) clean
-	@cd Xbae-4.6.2-linas ; $(MAKE) clean
+	@cd lib/ComboBox-1.33 ; $(MAKE) clean
+	@cd lib/Xbae-4.6.2-linas ; $(MAKE) clean
 
 really_clean : clean
 	@cd src ; $(MAKE) really_clean
-	@cd libhtmlw ; $(MAKE) really_clean
+	@cd lib/libhtmlw ; $(MAKE) really_clean
 
 realclean: really_clean
 
