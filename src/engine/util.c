@@ -843,7 +843,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
        return 0.0;
 
      isneg = GNC_T;
-     *str++;
+     str++;
      *tok = '\0';
    }
 
