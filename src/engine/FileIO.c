@@ -253,8 +253,10 @@ xaccReadAccountGroup( char *datafile )
 
     /* create a lost account, put the missing accounts there */
     acc = xaccMallocAccount();
-    acc -> accountName = strdup (LOST_ACC_STR);
+    xaccAccountBeginEdit (acc);
+    xaccAccountSetName (acc, LOST_ACC_STR);
     acc -> children = holder;
+    xaccAccountCommitEdit (acc);
     insertAccount (grp, acc);
   } else {
     xaccFreeAccountGroup (holder);
@@ -336,6 +338,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   int numTrans, accID;
   Account *acc;
   char acctype;
+  char * tmp;
 
   ENTER ("readAccount");
   
@@ -350,22 +353,30 @@ readAccount( int fd, AccountGroup *grp, int token )
     insertAccount (holder, acc);
   }
   
+  xaccAccountBeginEdit (acc);
+
   err = read( fd, &(acc->flags), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }
   
   err = read( fd, &(acctype), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }
-  acc->type = acctype;
+  xaccAccountSetType (acc, acctype);
   
-  acc->accountName = readString( fd, token );
-  if( acc->accountName == NULL ) { return NULL; }
-  INFO_2 ("readAccount(): reading acct %s \n", acc->accountName);
+  tmp = readString( fd, token );
+  if( NULL == tmp)  { free (tmp);  return NULL; }
+  INFO_2 ("readAccount(): reading acct %s \n", tmp);
+  xaccAccountSetName (acc, tmp);
+  free (tmp);
   
-  acc->description = readString( fd, token );
-  if( acc->description == NULL ) { return NULL; }
+  tmp = readString( fd, token );
+  if( NULL == tmp ) { free (tmp); return NULL; }
+  xaccAccountSetDescription (acc, tmp);
+  free (tmp);
   
-  acc->notes = readString( fd, token );
-  if( acc->notes == NULL ) { return NULL; }
+  tmp = readString( fd, token );
+  if( NULL == tmp ) { free (tmp); return NULL; }
+  xaccAccountSetNotes (acc, tmp);
+  free (tmp);
   
   err = read( fd, &numTrans, sizeof(int) );
   if( err != sizeof(int) ) { return NULL; }
@@ -403,6 +414,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   }
 
   xaccAccountRecomputeBalance (acc);
+  xaccAccountCommitEdit (acc);
 
   return acc;
 }
@@ -502,18 +514,21 @@ readTransaction( int fd, Account *acc, int token )
   double share_price = 0.0;
   time_t secs;
 
-  /* create a transaction structure */
-  trans = xaccMallocTransaction();
-  
   ENTER ("readTransaction");
 
-  trans->num = readString( fd, token );
-  if( trans->num == NULL )
+  /* create a transaction structure */
+  trans = xaccMallocTransaction();
+  xaccTransBeginEdit (trans);  
+
+  tmp = readString( fd, token );
+  if (NULL == tmp)
     {
     PERR ("Premature end of Transaction at num");
     xaccTransDestroy(trans);
     return NULL;
     }
+  xaccTransSetNum (trans, tmp);
+  free (tmp);
   
   secs = readDate( fd, token );
   if( 0 == secs )
@@ -524,19 +539,23 @@ readTransaction( int fd, Account *acc, int token )
     }
   xaccTransSetDateSecs (trans, secs);
   
-  trans->description = readString( fd, token );
-  if( trans->description == NULL )
+  tmp = readString( fd, token );
+  if( NULL == tmp )
     {
     PERR ("Premature end of Transaction at description");
     xaccTransDestroy(trans);
     return NULL;
     }
+  xaccTransSetDescription (trans, tmp);
+  free (tmp);
   
   /* At version 5, most of the transaction stuff was 
    * moved to splits. Thus, vast majority of stuff below 
    * is skipped 
    */
-  if (4 >= token) { 
+  if (4 >= token) 
+    { 
+    Split * s;
     tmp = readString( fd, token );
     if( NULL == tmp )
       {
@@ -550,18 +569,19 @@ readTransaction( int fd, Account *acc, int token )
     /* action first introduced in version 3 of the file format */
     if (3 <= token) {
        tmp = readString( fd, token );
-       if( tmp == NULL )
+       if( NULL == tmp )
          {
          PERR ("Premature end of Transaction at action");
          xaccTransDestroy (trans);
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
+       free (tmp);
       }
     
     /* category is now obsolete */
     err = read( fd, &(dummy_category), sizeof(int) );
-    if( err != sizeof(int) )
+    if( sizeof(int) != err )
       {
       PERR ("Premature end of Transaction at catagory");
       xaccTransDestroy (trans);
@@ -569,14 +589,16 @@ readTransaction( int fd, Account *acc, int token )
       }
     
     err = read( fd, &recn, sizeof(char) );
-    if( err != sizeof(char) )
+    if( sizeof(char) != err )
       {
       PERR ("Premature end of Transaction at reconciled");
       xaccTransDestroy(trans);
       return NULL;
       }
-    xaccSplitSetReconcile (trans->splits[0], recn);
-    xaccSplitSetReconcile (trans->splits[1], recn);
+    s = xaccTransGetSplit (trans, 0);
+    xaccSplitSetReconcile (s, recn);
+    s = xaccTransGetSplit (trans, 1);
+    xaccSplitSetReconcile (s, recn);
     
     if( 1 >= token ) {
       /* Note: this is for version 0 of file format only.
@@ -585,8 +607,10 @@ readTransaction( int fd, Account *acc, int token )
        * use the reconcile window to mark the transaction reconciled
        */
       if( YREC == recn ) {
-        xaccSplitSetReconcile (trans->splits[0], CREC);
-        xaccSplitSetReconcile (trans->splits[1], CREC);
+        s = xaccTransGetSplit (trans, 0);
+        xaccSplitSetReconcile (s, CREC);
+        s = xaccTransGetSplit (trans, 1);
+        xaccSplitSetReconcile (s, CREC);
       }
     }
   
@@ -597,7 +621,7 @@ readTransaction( int fd, Account *acc, int token )
     if (1 == token) {
       int amount;
       err = read( fd, &amount, sizeof(int) );
-      if( err != sizeof(int) )
+      if( sizeof(int) != err )
         {
         PERR ("Premature end of Transaction at V1 amount");
         xaccTransDestroy(trans);
@@ -605,13 +629,14 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_INT (amount);
       num_shares = 0.01 * ((double) amount); /* file stores pennies */
-      trans->splits[0]->damount = num_shares;
+      s = xaccTransGetSplit (trans, 0);
+      xaccSplitSetShareAmount (s, num_shares);
     } else {
       double damount;
   
       /* first, read number of shares ... */
       err = read( fd, &damount, sizeof(double) );
-      if( err != sizeof(double) )
+      if( sizeof(double) != err )
         {
         PERR ("Premature end of Transaction at amount");
         xaccTransDestroy(trans);
@@ -619,7 +644,6 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       num_shares  = damount;
-      trans->splits[0]->damount = num_shares;
   
       /* ... next read the share price ... */
       err = read( fd, &damount, sizeof(double) );
@@ -631,7 +655,8 @@ readTransaction( int fd, Account *acc, int token )
         }
       XACC_FLIP_DOUBLE (damount);
       share_price = damount;
-      trans->splits[0]->share_price = share_price;
+      s = xaccTransGetSplit (trans, 0);
+      xaccSplitSetSharePriceAndAmount (s, share_price, num_shares);
     }  
   
     INFO_2 ("readTransaction(): num_shares %f \n", num_shares);
@@ -654,7 +679,8 @@ readTransaction( int fd, Account *acc, int token )
   
       /* insert the split part of the transaction into 
        * the credited account */
-      if (peer_acc) xaccAccountInsertSplit( peer_acc, trans->splits[0]);
+      s = xaccTransGetSplit (trans, 0);
+      if (peer_acc) xaccAccountInsertSplit( peer_acc, s);
   
       /* next read the debit account number */
       err = read( fd, &acc_id, sizeof(int) );
@@ -668,21 +694,23 @@ readTransaction( int fd, Account *acc, int token )
       INFO_2 ("readTransaction(): debit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
       if (peer_acc) {
-         Split *split = trans->splits[1];
+         Split *split;
+         s = xaccTransGetSplit (trans, 0);
+         split = xaccTransGetSplit (trans, 1);
 
          /* duplicate many of the attributes in the credit split */
-         split->damount = -num_shares;
-         split->share_price = share_price;
-         split->reconciled = trans->splits[0]->reconciled;
-         xaccSplitSetMemo (split, trans->splits[0]->memo);
-         xaccSplitSetAction (split, trans->splits[0]->action);
+         xaccSplitSetSharePriceAndAmount (split, share_price, -num_shares);
+         xaccSplitSetReconcile (split, xaccSplitGetReconcile (s));
+         xaccSplitSetMemo (split, xaccSplitGetMemo (s));
+         xaccSplitSetAction (split, xaccSplitGetAction (s));
          xaccAccountInsertSplit (peer_acc, split);
       }
   
     } else {
 
       /* Version 1 files did not do double-entry */
-      xaccAccountInsertSplit( acc, (trans->splits[0]) );
+      s = xaccTransGetSplit (trans, 0);
+      xaccAccountInsertSplit( acc, s );
     }
   } else { /* else, read version 5 and above files */
     Split *split;
@@ -743,7 +771,7 @@ readSplit ( int fd, int token )
   int acc_id;
   char *tmp;
   char recn;
-  double damount;
+  double num_shares, share_price;
 
   /* create a split structure */
   split = xaccMallocSplit();
@@ -790,33 +818,32 @@ readSplit ( int fd, int token )
   xaccSplitSetReconcile (split, recn);
 
   /* first, read number of shares ... */
-  err = read( fd, &damount, sizeof(double) );
-  if( err != sizeof(double) )
+  err = read( fd, &num_shares, sizeof(double) );
+  if( sizeof(double) != err )
     {
     PERR ("Premature end of Split at amount");
     xaccSplitDestroy (split);
     return NULL;
     }
-  XACC_FLIP_DOUBLE (damount);
-  split -> damount = damount;
+  XACC_FLIP_DOUBLE (num_shares);
 
   /* ... next read the share price ... */
-  err = read( fd, &damount, sizeof(double) );
-  if( err != sizeof(double) )
+  err = read( fd, &share_price, sizeof(double) );
+  if( sizeof(double) != err )
   {
     PERR ("Premature end of Split at share_price");
     xaccSplitDestroy (split);
     return NULL;
   }
-  XACC_FLIP_DOUBLE (damount);
-  split->share_price = damount;
+  XACC_FLIP_DOUBLE (share_price);
+  xaccSplitSetSharePriceAndAmount (split, share_price, num_shares);
 
-  INFO_2 ("readSplit(): num_shares %f \n", damount);
+  INFO_2 ("readSplit(): num_shares %f \n", num_shares);
 
   /* Read the account number */
 
   err = read( fd, &acc_id, sizeof(int) );
-  if( err != sizeof(int) )
+  if( sizeof(int) != err )
   {
     PERR ("Premature end of Split at account");
     xaccSplitDestroy (split);
@@ -1048,6 +1075,7 @@ writeAccount( int fd, Account *acc )
   int acc_id;
   int numChildren = 0;
   char acctype;
+  char * tmp;
   
   INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
 
@@ -1061,20 +1089,23 @@ writeAccount( int fd, Account *acc )
   if( err != sizeof(char) )
     return -1;
   
-  acctype = (char) (acc->type);
+  acctype = (char) xaccAccountGetType (acc);
   err = write( fd, &(acctype), sizeof(char) );
   if( err != sizeof(char) )
     return -1;
   
-  err = writeString( fd, acc->accountName );
+  tmp = xaccAccountGetName (acc);
+  err = writeString( fd, tmp );
   if( -1 == err )
     return err;
   
-  err = writeString( fd, acc->description );
+  tmp = xaccAccountGetDescription (acc);
+  err = writeString( fd, tmp );
   if( -1 == err )
     return err;
   
-  err = writeString( fd, acc->notes );
+  tmp = xaccAccountGetNotes (acc);
+  err = writeString( fd, tmp );
   if( -1 == err )
     return err;
   
@@ -1170,24 +1201,19 @@ writeTransaction( int fd, Transaction *trans )
   if( -1 == err ) return err;
   
   /* count the number of splits */
-  i = 0;
-  s = trans->splits[i];
-  while (s) {
-    i++;
-    s = trans->splits[i];
-  }
+  i = xaccTransCountSplits (trans);
   XACC_FLIP_INT (i);
   err = write( fd, &i, sizeof(int) );
   if( err != sizeof(int) ) return -1;
   
   /* now write the splits */
   i = 0;
-  s = trans->splits[i];
+  s = xaccTransGetSplit (trans, i);
   while (s) {
     err = writeSplit (fd, s);
     if( -1 == err ) return err;
     i++;
-    s = trans->splits[i];
+    s = xaccTransGetSplit (trans, i);
   }
   
   return err;
@@ -1208,29 +1234,31 @@ writeSplit ( int fd, Split *split )
   int acc_id;
   double damount;
   Account *xfer_acc;
+  char recn;
 
   ENTER ("writeSplit");
   
-  err = writeString( fd, split->memo );
+  err = writeString( fd, xaccSplitGetMemo (split) );
   if( -1 == err )
     return err;
   
-  err = writeString( fd, split->action );
+  err = writeString( fd, xaccSplitGetAction (split) );
   if( -1 == err )
     return err;
   
-  err = write( fd, &(split->reconciled), sizeof(char) );
+  recn = xaccSplitGetReconcile (split);
+  err = write( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
     return -1;
   
-  damount = split->damount;
+  damount = xaccSplitGetShareAmount (split);
   INFO_2 ("writeSplit: amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
     return -1;
 
-  damount = split->share_price;  
+  damount = xaccSplitGetSharePrice (split);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
