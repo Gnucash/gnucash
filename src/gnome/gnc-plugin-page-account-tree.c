@@ -791,7 +791,7 @@ delete_account_helper (Account * account, gpointer data)
 		}
 	}
 
-	return (gpointer) (helper_res->has_splits || helper_res->has_ro_splits);
+	return GINT_TO_POINTER (helper_res->has_splits || helper_res->has_ro_splits);
 }
 
 static void

@@ -753,7 +753,7 @@ egg_menu_merge_add_ui_from_file (EggMenuMerge *self,
 				 GError **error)
 {
   gchar *buffer;
-  gint length;
+  gsize length;
   guint res;
 
   if (!g_file_get_contents (filename, &buffer, &length, error))

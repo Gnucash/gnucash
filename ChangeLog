@@ -1,3 +1,11 @@
+2004-10-31  Derek Atkins  <derek@ihtfp.com>
+
+	Heath Martin's x86_64 patch:
+	* lib/egg/egg-menu-merge.c:
+	  change a gint to a gsize
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	  use GINT_TO_POINTER() instead of a direct cast.
+
 2004-08-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-budget*:
