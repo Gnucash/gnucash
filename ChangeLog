@@ -1,3 +1,8 @@
+2003-09-11  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sk.po: Updated Slovak translation by Zdenko Podobný
+	<zdpo1@centrum.sk>
+
 2003-09-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-transfer.c:  during the dialog startup it
