@@ -568,7 +568,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
       sub_ptr ++;
       rootgrp = xfer_acc->children;
       if (!rootgrp) {
-         rootgrp = mallocAccountGroup();
+         rootgrp = xaccMallocAccountGroup();
          xfer_acc->children = rootgrp;
          rootgrp->parent = xfer_acc;
       }
@@ -602,7 +602,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
    if(tmp) *tmp = 0x0;
 
    /* see if the account exists, create it if not */
-   rootgrp = xaccGetRootGroupOfAcct (acc);
+   rootgrp = xaccGetAccountRoot (acc);
    xfer_acc = GetSubQIFAccount (rootgrp, qifline, acc_type);
 
    return xfer_acc;
@@ -695,7 +695,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          /* Quicken uses C* and Cx, while MS Money uses CX.
           * I don't know what * and x are supposed to differentiate 
           */
-        trans->reconciled = CREC;
+        xaccTransSetReconcile (trans, CREC);
      } else 
 
      /* D == date */
