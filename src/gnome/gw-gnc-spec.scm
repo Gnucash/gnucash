@@ -43,7 +43,6 @@
    (lambda (client-only?)
      (list
       "#include <glib.h>\n"
-      "#include <gnucash.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-menu-extensions.h>\n"
