@@ -404,14 +404,20 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 /********************************************************************\
 \********************************************************************/
 
-#define CHECK(acc) {					\
-   if (acc->editlevel <= 0) {				\
-      /* not today, some day in the future ... */	\
-      /* PERR ("Account not open for editing\n"); */	\
-      /* assert (0); */					\
-      /* return; */					\
-   }							\
-  if (NULL != acc->parent) acc->parent->saved = FALSE;	\
+G_INLINE_FUNC void check_and_mark (Account *account);
+G_INLINE_FUNC void
+check_and_mark (Account *account)
+{
+  if (account->editlevel <= 0)
+  {
+    /* not today, some day in the future ... */
+    /* PERR ("Account not open for editing\n"); */
+    /* assert (0); */
+    /* return; */
+  }
+
+  if (account->parent)
+    account->parent->saved = FALSE;
 }
 
 /********************************************************************\
@@ -439,7 +445,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split ) {
   xaccAccountBeginEdit(acc);
   {
     Account *oldacc;
-    CHECK (acc);
+    check_and_mark (acc);
 
     acc->balance_dirty = TRUE;
     acc->sort_dirty = TRUE;
@@ -483,7 +489,7 @@ xaccAccountRemoveSplit ( Account *acc, Split *split ) {
   
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);  
+    check_and_mark (acc);  
     acc->balance_dirty = TRUE;
     acc->splits = g_list_remove(acc->splits, split);
     split->acc = NULL;
@@ -823,7 +829,7 @@ xaccAccountSetType (Account *acc, int tip) {
 
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);
+    check_and_mark (acc);
     
     /* refuse invalid account types, and don't bother if not new type. */
     if((NUM_ACCOUNT_TYPES > tip) && (acc->type != tip)) {
@@ -842,7 +848,7 @@ xaccAccountSetName (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     CHECK (acc);
+     check_and_mark (acc);
 
      /* make strdup before freeing */
      tmp = g_strdup (str);
@@ -859,7 +865,7 @@ xaccAccountSetCode (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     CHECK (acc);
+     check_and_mark (acc);
      
      /* make strdup before freeing */
      tmp = g_strdup (str);
@@ -876,7 +882,7 @@ xaccAccountSetDescription (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     CHECK (acc);
+     check_and_mark (acc);
      
      /* make strdup before freeing */
      tmp = g_strdup (str);
@@ -894,7 +900,7 @@ xaccAccountSetNotes (Account *acc, const char *str) {
 
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);
+    check_and_mark (acc);
     
     new_value = kvp_value_new_string(str);
     if(new_value) {
@@ -934,7 +940,7 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
   
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);
+    check_and_mark (acc);
     
     acc->currency     = currency;
     acc->currency_scu = gnc_commodity_get_fraction(currency);
@@ -953,7 +959,7 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
   
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);
+    check_and_mark (acc);
 
     acc->security     = security;
     acc->security_scu = gnc_commodity_get_fraction(security);    
@@ -972,7 +978,7 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 
   xaccAccountBeginEdit(acc);
   {
-    CHECK (acc);
+    check_and_mark (acc);
     acc->currency_scu = scu;
   }
   xaccAccountCommitEdit(acc);
@@ -1273,7 +1279,7 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 
   xaccAccountBeginEdit (account);
   {
-    CHECK (account);
+    check_and_mark (account);
 
     kvp_frame_set_slot(xaccAccountGetSlots (account),
                        "tax-related", new_value);

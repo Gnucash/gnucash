@@ -381,14 +381,13 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
 {
   if (!s) return;
 
-  mark_split (s);
-
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);;
   s->value   = gnc_numeric_mul(s->damount, price, 
                                get_currency_denom(s), GNC_RND_ROUND);
 
   /* force double entry to always balance */
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 void 
@@ -401,13 +400,12 @@ void
 xaccSplitSetSharePrice (Split *s, gnc_numeric price) {
   if (!s) return;
 
-  mark_split (s);
-
   s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
 
   /* force double entry to always balance */
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 void 
@@ -417,8 +415,6 @@ DxaccSplitSetShareAmount (Split *s, double damt) {
                                           GNC_RND_ROUND); 
   if (!s) return;
   
-  mark_split (s);
-
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
                                 GNC_DENOM_REDUCE);
@@ -434,17 +430,17 @@ DxaccSplitSetShareAmount (Split *s, double damt) {
   
   /* force double entry to always balance */
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 void 
 xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
   if(!s) return;
 
-  mark_split (s);
-
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
 
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 void 
@@ -454,8 +450,6 @@ DxaccSplitSetValue (Split *s, double damt) {
                                           GNC_RND_ROUND);
   gnc_numeric old_price;
   if (!s) return;
-
-  mark_split (s);
 
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
@@ -475,17 +469,17 @@ DxaccSplitSetValue (Split *s, double damt) {
 
   /* force double entry to always balance */
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 void 
 xaccSplitSetValue (Split *s, gnc_numeric amt) {
   if(!s) return;
 
-  mark_split (s);
-  
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);;
 
   xaccSplitRebalance (s);
+  mark_split (s);
 }
 
 /********************************************************************\
@@ -812,8 +806,6 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
   if (!s) return;
 
-  mark_split (s);
-
   /* Novice/casual users may not want or use the double entry
    * features of this engine. So, in particular, there may be the
    * occasional split without a parent account. Well, that's ok,
@@ -831,6 +823,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
       s->value = value;
       s->damount = value;
     }
+    mark_split (s);
     return;
   }
 
@@ -866,6 +859,8 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
           gnc_commodity_get_printname(security));
     return;
   }
+
+  mark_split (s);
 }
 
 
@@ -1494,8 +1489,8 @@ xaccTransRollbackEdit (Transaction *trans)
          /* do NOT check date order until all of the other fields 
           * have been properly restored */
          xaccAccountFixSplitDateOrder (s->acc, s); 
-         mark_split (s);
          xaccAccountRecomputeBalance (s->acc);
+         mark_split (s);
       }
 
       if (so != s)
@@ -1547,10 +1542,10 @@ xaccTransRollbackEdit (Transaction *trans)
       {
          Split *s = node->data;
 
-         mark_split (s);
          xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (s->acc, s);
          xaccAccountRecomputeBalance (s->acc);
+         mark_split (s);
       }
    }
 
@@ -2100,9 +2095,9 @@ xaccSplitSetReconcile (Split *split, char recn)
    }
 
    split->reconciled = recn;
-   mark_split (split);
 
    xaccAccountRecomputeBalance (split->acc);
+   mark_split (split);
 }
 
 void
@@ -2110,10 +2105,9 @@ xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 {
    if (!split) return;
 
-   mark_split (split);
-
    split->date_reconciled.tv_sec = secs;
    split->date_reconciled.tv_nsec = 0;
+   mark_split (split);
 }
 
 void
@@ -2121,9 +2115,8 @@ xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 {
    if (!split || !ts) return;
 
-   mark_split (split);
-
    split->date_reconciled = *ts;
+   mark_split (split);
 }
 
 void

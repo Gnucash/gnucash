@@ -122,6 +122,8 @@ gnc_engine_unregister_event_handler (gint handler_id)
 
     return;
   }
+
+  PERR ("no such handler: %d", handler_id);
 }
 
 void
