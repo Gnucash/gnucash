@@ -53,11 +53,7 @@
  ((N_ "More on GnuCash") ""
   (((N_ "Hacking Documentation") "gnc-help:xacc-dochack.html" #f)
    ((N_ "GNU GPL") "gnc-help:xacc-gpl.html" #f)))
- ((N_ "Support") ""
-  (((N_ "Register GnuCash") 
-    "gnc-action:get?url=user-reg.php" #f)
-   ((N_ "GnuCash Network Home") 
-    "gnc-action:get/auth?url=gnc-network-home.php" #f)))
+ ((N_ "Report a bug") "http://www.linuxdevel.com/submit-bug.php" #f)
  ((N_ "URL Tests") ""
   (((N_ "gnucash.org") "http://www.gnucash.org" #f)
    ((N_ "gnumatic.com") "http://www.gnumatic.com" #f)
