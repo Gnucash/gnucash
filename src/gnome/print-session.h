@@ -32,7 +32,7 @@
 #include <libgnomeprint/gnome-print-meta.h>
 #include <libgnomeprint/gnome-print-preview.h>
 #include <libgnomeprint/gnome-printer-dialog.h>
-#include <libgnomeprint/gnome-printer-profile.h>
+/* #include <libgnomeprint/gnome-printer-profile.h> */
 #include <libgnomeprint/gnome-font.h>
 
 #include "glade-gnc-dialogs.h"
