@@ -109,19 +109,21 @@
              (slist '()))
     (if (pointer-token-null? split)
         (reverse slist)
-        (loop (+ index 1) 
+        (loop (+ index 1)
               (gnc:ith-split split-array (+ index 1))
               (cons split slist)))))
 
 ;; pull a scheme list of splits from an account
 (define (gnc:account-get-split-list account)
   (let ((num-splits (gnc:account-get-split-count account)))
-    (let loop ((index 0))
+    (let loop ((index 0)
+               (split (gnc:account-get-split account 0))
+               (slist '()))
       (if (= index num-splits)
-	  '()
-	  (cons
-	   (gnc:account-get-split account index)
-	   (loop (+ index 1)))))))
+	  (reverse slist)
+          (loop (+ index 1)
+                (gnc:account-get-split account (+ index 1))
+                (cons split slist))))))
 
 ;; Pull a scheme list of accounts (including subaccounts) from group grp
 (define (gnc:group-get-account-list grp)
