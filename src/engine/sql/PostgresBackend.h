@@ -102,8 +102,14 @@ typedef struct _checkpoint {
 /* -------------------------------------------------------- */
 /* the following prototypes belong in a 'checkpoint.h' file */
 
-void pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp);
-void pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, gint64 start_date);
-void pgendAccountGetBalance (PGBackend *be, Account *acct, gint64 start_date);
+#define CK_EARLIEST_DATE "1903-01-02 08:35:46.00"
+#define CK_AFTER_EARLIEST_DATE "1903-01-03 03:03:03.00"
+#define CK_LAST_DATE "2038-01-02 08:35:46.00"
+#define CK_AFTER_LAST_DATE "2038-01-02 12:12:12.00"
+
+
+void pgendGroupRecomputeAllCheckpoints (PGBackend *, AccountGroup *);
+void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, gint64 as_of_date);
+void pgendAccountGetBalance (PGBackend *, Account *, gint64 as_of_date);
 
 #endif /* __POSTGRES_BACKEND_H__ */

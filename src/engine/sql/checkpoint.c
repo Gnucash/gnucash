@@ -90,7 +90,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    /* malloc a new checkpoint, set it to the dawn of unix time ... */
    bp = g_chunk_new0 (Checkpoint, chunk);
    checkpoints = g_list_prepend (checkpoints, bp);
-   this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00");
+   this_ts = gnc_iso8601_to_timespec_local (CK_EARLIEST_DATE);
    bp->date_start = this_ts;
    bp->account_guid = acct_guid;
    bp->commodity = commodity_name;
@@ -167,7 +167,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
 done:
 
    /* set the timestamp on the final checkpoint into the distant future */
-   this_ts = gnc_iso8601_to_timespec_local ("2038-01-02 08:35:46.00");
+   this_ts = gnc_iso8601_to_timespec_local (CK_LAST_DATE);
    bp->date_end = this_ts;
 
    /* now store the checkpoints */
@@ -241,8 +241,8 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = guid_to_string_buff (chk->account_guid, p);
    p = stpcpy (p, "'   AND commodity='");
    p = stpcpy (p, chk->commodity);
-   p = stpcpy (p, "'   AND date_start <'");
-   p = gnc_timespec_to_iso8601_buff (chk->date_start, p);
+   p = stpcpy (p, "'   AND date_end <'");
+   p = gnc_timespec_to_iso8601_buff (chk->date_end, p);
    p = stpcpy (p, "';");
    SEND_QUERY (be,be->buff, );
 
@@ -282,7 +282,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 /* get checkpoint value for one accounts */
 
 void
-pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 start_date)
+pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
 {
    Checkpoint chk;
    const gnc_commodity *com;
@@ -295,8 +295,8 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 start_date)
    ENTER("be=%p", be);
 
    /* setup what we will match for */
-   chk.date_start.tv_sec = start_date;
-   chk.date_start.tv_nsec = 0;
+   chk.date_end.tv_sec = as_of_date;
+   chk.date_end.tv_nsec = 0;
 
    com = xaccAccountGetCommodity(acc);
    chk.commodity = gnc_commodity_get_unique_name(com);
@@ -324,7 +324,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 start_date)
 
 void
 pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
-                             gint64 start_date)
+                             gint64 as_of_date)
 {
    GList *acclist, *node;
 
@@ -336,7 +336,7 @@ pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp,
    for (node=acclist; node; node=node->next)
    {
       Account *acc = (Account *) node->data;
-      pgendAccountGetBalance (be, acc, start_date);
+      pgendAccountGetBalance (be, acc, as_of_date);
    }
 
    g_list_free (acclist);

@@ -219,7 +219,14 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- checkpoint ending balance is showing up as starting balance
+-- checkpoint balance is broken for the type of queries used in
+   reports. 
+
+-- checkpoint balance is broken for when register asks for only a small
+   number of splits.
+
+-- provide support for more query types in gncquery.c
+   (reports are currently broken as a result).
 
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)
@@ -235,12 +242,6 @@ multi-user mode is fundamentally broken unless they are fixed.
    and transactions.  See the notes for pgendSync() for details
    as to what this is about.  For the first pass, this is not a 
    serious issue; its a 'nice to have' thing.
-
--- store account balances in database.  This will be tricky ...
-   -- split query gets hard ... 
-   -- use postgres aggregates ?? 
-
--- provide support for more query types in gncquery.c
 
 -- add support for price queries.
 

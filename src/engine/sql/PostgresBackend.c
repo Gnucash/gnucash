@@ -1301,14 +1301,13 @@ pgendRunQueryToCheckpoint (Backend *bend, Query *q)
       GList *o, *a, *p;
       QueryTerm *qt;
       Account *acct;
+      Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_EARLIEST_DATE);
+
       o = xaccQueryGetTerms(q); 
       a = o->data;
       qt = a->data;
       for (p=qt->data.acct.accounts; p; p=p->next) {
-         /* hack alert -- 0xff000000 is a negative data,
-          * around 1910 or so */
-// this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00")
-         pgendAccountGetBalance (be, p->data, 0xff000000);
+         pgendAccountGetBalance (be, p->data, ts.tv_sec);
       }
    }
 
@@ -1821,7 +1820,8 @@ pgendSync (Backend *bend, AccountGroup *grp)
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
-      pgendGroupGetAllBalances (be, grp, time(0));
+      Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_LAST_DATE);
+      pgendGroupGetAllBalances (be, grp, ts.tv_sec);
    } 
    else
    {
@@ -2234,6 +2234,7 @@ pgend_session_end (Backend *bend)
 static AccountGroup *
 pgend_book_load_poll (Backend *bend)
 {
+   Timespec ts = gnc_iso8601_to_timespec_local (CK_AFTER_LAST_DATE);
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
    if (!be) return NULL;
@@ -2244,7 +2245,7 @@ pgend_book_load_poll (Backend *bend)
 
    pgendKVPInit(be);
    grp = pgendGetAllAccounts (be, NULL);
-   pgendGroupGetAllBalances (be, grp, time(0));
+   pgendGroupGetAllBalances (be, grp, ts.tv_sec);
 
    /* re-enable events */
    pgendEnable(be);
