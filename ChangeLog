@@ -1,5 +1,9 @@
 2001-04-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/taxtxf.scm: don't use deprecated calls
+
+	* src/guile/gnc.gwp: wrap xaccAccountGetSplitList
+
 	* src/engine/Query-xml-parser-v1.c
 	(qrestore_datepred_start_handler): use g_new0 instead of bzero --
 	more portable

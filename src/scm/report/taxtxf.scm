@@ -47,17 +47,9 @@
 
   ;; This and the next function are the same as in transaction-report.scm
   (define (make-split-list account split-filter-pred)
-    (let ((num-splits (gnc:account-get-split-count account)))
-      (let loop ((index 0)
-                 (split (gnc:account-get-split account 0))
-                 (slist '()))
-        (if (= index num-splits)
-            (reverse slist)
-            (loop (+ index 1)
-                  (gnc:account-get-split account (+ index 1))
-                  (if (split-filter-pred split)
-                      (cons split slist)
-                      slist))))))
+    (filter split-filter-pred
+            (gnc:glist->list (gnc:account-get-split-list account)
+                             <gnc:Split*>)))
 
   ;; returns a predicate that returns true only if a split is
   ;; between early-date and late-date
