@@ -734,7 +734,10 @@ regRecalculateBalance( RegWindow *regData )
 \********************************************************************/
 
 /* RECALC_BALANCE recomputes the balance shown in 
- * the register window, if its is visible 
+ * the register window, if it is visible. 
+ * hack alert -- xxxxxx 
+ * this macro should also track down ledger windows displaying
+ * this account, and update those as well.
  */
 
 #define RECALC_BALANCE(sacc) {					\
@@ -751,6 +754,9 @@ regRecalculateBalance( RegWindow *regData )
 
 /* REFRESH_REGISTER redisplays the register window,
  * if it is visible 
+ * hack alert -- xxxxxx 
+ * this macro should also track down ledger windows displaying
+ * this account, and update those as well.
  */
 #define REFRESH_REGISTER(sacc) {				\
   Account * xfer_acc;						\
@@ -764,24 +770,6 @@ regRecalculateBalance( RegWindow *regData )
   }								\
 }
 
-
-/* DATE_REORDER needs to null out currEntry, because 
- * during date reordering we removed and re-inserted
- * the transaction... reset currEntry to zero to prevent it from
- * indicating a row that doesn't exist.  (That shouldn't happen
- * anyways!) 
- */
-#define DATE_REORDER(sacc) {					\
-  Account * xfer_acc;						\
-  RegWindow * xfer_reg;						\
-  xfer_acc = (Account *) (sacc);				\
-  if (xfer_acc) {						\
-    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
-    if (xfer_reg) {						\
-      xfer_reg->currEntry = 0;					\
-    }								\
-  }								\
-}
 
 /* REMOVE_TRANS will not only remove a transaction from an account,
  * but it will also delete the appropriate rows from the register 
@@ -816,6 +804,7 @@ regSaveTransaction( RegWindow *regData, int position )
   char buf[BUFSIZE];
   int  row = position * NUM_ROWS_PER_TRANS + NUM_HEADER_ROWS;
   Transaction *trans;
+  Boolean dateOutOfOrder = False;
 
   /* If nothing has changed, we have nothing to do */
   if (MOD_NONE == regData->changed) return;
@@ -827,23 +816,13 @@ regSaveTransaction( RegWindow *regData, int position )
     /* This must be a new transaction */
     DEBUG("New Transaction\n");
     
+    trans = mallocTransaction();
+    regData->changed = MOD_ALL;
+
     if (1 == regData->numAcc) {
       /* Be sure to prompt the user to save to disk after changes are made! */
       Account *acc = regData->blackacc[0];
       acc->parent->saved = False;
-
-      trans = mallocTransaction();
-      trans->credit = (struct _account *) acc;
-  
-      /* insert the transaction now.  If we later discover that 
-       * the user hs not made any entries, we will remove it again.
-       * However, for some of the itntermediate processing, we must 
-       * have a valid transaction present in the account.
-       */
-      insertTransaction (acc, trans);
-      regData->changed = MOD_ALL;
-      } else {
-         PERR ("regSaveTransaction(): can't have new transaction in ledger \n");
       }
     } else {
       /* Be sure to prompt the user to save to disk after changes are made! */
@@ -863,13 +842,13 @@ regSaveTransaction( RegWindow *regData, int position )
                  XbaeMatrixGetCell(regData->reg,row+NUM_CELL_R,NUM_CELL_C)); 
     }
   
-  if( regData->changed & ( MOD_XFRM | MOD_XTO ) ) 
+  if( regData->changed & MOD_XFRM ) 
     {
     /* ... the transfer ... */
     char * name;
     Account *xfer_acct = NULL;
 
-    DEBUG("MOD_XFER\n");
+    DEBUG("MOD_XFRM\n");
 
     /* the way that transfers are handled depends on whether this
      * is a ledger account, or a single-account register */
@@ -877,21 +856,17 @@ regSaveTransaction( RegWindow *regData, int position )
          (INC_LEDGER == regData->type) ||
          (PORTFOLIO  == regData->type) ) {
 
-      /* for a general ledger, from and to are easy to determine */
-      if (regData->changed & MOD_XFRM) { 
-         xfer_acct = (Account *) trans->debit;
-      } else {
-         xfer_acct = (Account *) trans->credit;
-      }
+      /* for a general ledger, the transfer-from account is obvious */
+      xfer_acct = (Account *) trans->debit;
     } else {
 
       /* if not a ledger, then there is only one account,
        * and the transfer account is the other half of the 
-       * pairing */
-      if (regData->changed & MOD_XFRM) { 
-        xfer_acct = xaccGetOtherAccount (regData->blackacc[0], trans);
-      } else {
+       * pairing. -- Unless, of course, this is a new transaction. */
+      if( regData->changed & MOD_NEW) {
          xfer_acct = NULL;
+      } else {
+         xfer_acct = xaccGetOtherAccount (regData->blackacc[0], trans);
       }
     }
 
@@ -911,6 +886,69 @@ regSaveTransaction( RegWindow *regData, int position )
     xfer_acct = xaccGetAccountFromName (topgroup, name);
   
     if (xfer_acct) {
+
+      /* for a new transaction, the default will be that the
+       * transfer occurs from the debited account */
+      if( regData->changed & MOD_NEW) {
+         trans->debit = (struct _account *)xfer_acct;
+      }
+
+      /* for a general ledger, the transfer *must* occur 
+       * from the debited account. */
+      if ( (GEN_LEDGER == regData->type) ||
+           (INC_LEDGER == regData->type) ||
+           (PORTFOLIO  == regData->type) ) {
+         trans->debit = (struct _account *)xfer_acct;
+      }
+
+      /* for non-new transactions, the transfer may be from the
+       * debited or the credited account.  Which one it was depends
+       * entirely on which account pointer is null after the 
+       * removal of the old entry.  The insertTransaction()
+       * subroutine will find the null slot, and will insert 
+       * into it automatically. */
+
+      /* insert the transaction into the new account */
+      insertTransaction (xfer_acct, trans);
+      }
+    }
+
+
+  /* if not a ledger, then we shouldn't get here ... */
+  if( (regData->changed & MOD_XTO ) &&
+     ((GEN_LEDGER == regData->type) ||
+      (INC_LEDGER == regData->type) ||
+      (PORTFOLIO  == regData->type)) )
+    {
+    /* ... the transfer ... */
+    char * name;
+    Account *xfer_acct;
+
+    DEBUG("MOD_XTO\n");
+
+    /* for a general ledger, from and to are easy to determine */
+    xfer_acct = (Account *) trans->credit;
+
+    if (xfer_acct) {
+      /* remove the transaction from wherever it used to be */
+      REMOVE_TRANS (xfer_acct, trans);
+ 
+      /* recalculate the balance and redisplay the window for the old acct */
+      RECALC_BALANCE (xfer_acct);
+      REFRESH_REGISTER (xfer_acct);
+      }
+   
+    /* get the new account name */
+    name = XbaeMatrixGetCell(regData->reg,row+XTO_CELL_R, XTO_CELL_C);
+
+    /* get the new account from the name */
+    xfer_acct = xaccGetAccountFromName (topgroup, name);
+
+    if (xfer_acct) {
+      /* for a ledger, the transfer-to account is always the credited
+       * account. */
+      trans->credit = (struct _account *)xfer_acct;
+
       /* insert the transaction into the new account */
       insertTransaction (xfer_acct, trans);
       }
@@ -1087,9 +1125,57 @@ regSaveTransaction( RegWindow *regData, int position )
     XbaeMatrixSetCell( regData->reg, row+PRIC_CELL_R, PRIC_CELL_C, buf );
     }
   
+  /* If this is a new transaction, and the user did not 
+   * actually enter any data, then we should not really
+   * consider this to be a new transaction! Free it, and 
+   * bail out */
+  if (regData->changed & MOD_NEW) {
+    if( (strcmp("",trans->num) == 0)         &&
+        (strcmp("",trans->description) == 0) &&
+        (strcmp("",trans->memo) == 0)        &&
+        (strcmp("",trans->action) == 0)      &&
+        (0 == trans->catagory)               &&
+        (NULL == trans->credit)              && 
+        (NULL == trans->debit)               &&
+        (1.0 == trans->share_price)          &&
+        (0.0 == trans->damount) ) {
+      freeTransaction (trans);
+      return;
+    }
+
+    /* if we got to here, we've got a live one. Insert it into 
+     * an account, if we haven't done so already.  Do this 
+     * before we get to the date code below, since date the
+     * date code can/will break if the transaction is not yet 
+     * inserted. */
+
+    if (1 == regData->numAcc) {
+      Account * acc = regData->blackacc[0];
+
+      /* for single-account registers, the insertion account
+       * is always the credited account */
+      trans->credit = (struct _account *) acc;
+      insertTransaction (acc, trans);
+    } 
+  }
+
+  /* for ledgers, the user *MUST* specify either a 
+   * credited or a debited account, or both.  If they 
+   * have specified these, then the account is already 
+   * inserted, and we have nothing to do.  If they have
+   * not specified either one, then it is an error 
+   * condition -- we cannot insert, because we don't know
+   * where to insert.
+   *
+   * Warn the user about this.  */
+  if ((NULL == trans->credit) && (NULL == trans->debit)) {
+    errorBox (toplevel, XFER_NO_ACC_MSG);
+    freeTransaction (trans);
+    return;
+  }
+      
   if( regData->changed & MOD_DATE )
     {
-    Boolean outOfOrder = False;
 
     DEBUG("MOD_DATE\n");
     /* read in the date stuff... */
@@ -1097,62 +1183,63 @@ regSaveTransaction( RegWindow *regData, int position )
             &(trans->date.month),
             &(trans->date.day) );
     
-    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,row+YEAR_CELL_R,YEAR_CELL_C));
+    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,
+                                    row+YEAR_CELL_R,YEAR_CELL_C));
     
     /* take care of re-ordering implications on the register.
      * If the date changed on a double-entry (transfer) transaction,
      * then make sure that both register windows are updated .. */
-    outOfOrder = xaccCheckDateOrderDE (trans);
-    if( outOfOrder )
-      {
-      int pos;
-      /* hack alert xxxxxxxxxxx this is incorrect for ledger */
-      Account *main_acc = regData->blackacc[0];
-
-      DATE_REORDER ((trans->credit));
-      DATE_REORDER ((trans->debit));
-    
-      /* Scroll to the new location of the reordered transaction;
-       * but do this only for this register, not any other register 
-       * windows. */  
-      pos = getNumOfTransaction (main_acc, trans);
-      XbaeMatrixMakeCellVisible( regData->reg, 
-         pos*NUM_ROWS_PER_TRANS+NUM_HEADER_ROWS, DESC_CELL_C );
-      }
+    dateOutOfOrder = xaccCheckDateOrderDE (trans);
     }
     
-  /* 
-   * If this is a new transaction, and the user did not 
-   * actually enter any data, then we should not really
-   * consider this to be a new transaction! */
-  if (regData->changed & MOD_NEW) {
-    /* hack alert xxxxxxxxxxxxxxx this is incorrect for ledger */
-    Account *main_acc = regData->blackacc[0];
-    if( (strcmp("",trans->num) == 0)         &&
-        (strcmp("",trans->description) == 0) &&
-        (strcmp("",trans->memo) == 0)        &&
-        (strcmp("",trans->action) == 0)      &&
-        (0 == trans->catagory)               &&
-        /* (NULL == xaccGetOtherAccount (acc, trans)) && */
-        (NULL == trans->debit)               &&
-        (1.0 == trans->share_price)          &&
-        (0.0 == trans->damount) ) 
-      {
-      xaccRemoveTransaction (main_acc, trans);
-      freeTransaction (trans);
-      return;
-      }
-    }
-  
   /* For many, but not all changes, we need to 
    * recalculate the balances */
-  if( regData->changed & (MOD_XFRM | MOD_RECN | MOD_AMNT | MOD_PRIC | MOD_NEW)) {
+  if( regData->changed & (MOD_XFRM | MOD_XTO | MOD_RECN | 
+                          MOD_AMNT | MOD_PRIC | MOD_NEW)) {
     RECALC_BALANCE ((trans->credit));
     RECALC_BALANCE ((trans->debit));
+
+    /* if this is a ledger window, then we have to update
+     * it as well.  If this is not a ledger window, one of 
+     * the above two lines will have handled it already */
+    if (1 < regData->numAcc) {
+      regRecalculateBalance (regData);
+    }
   }
 
   REFRESH_REGISTER ((trans->credit));
   REFRESH_REGISTER ((trans->debit));
+  /* if this is a ledger window, then we have to update
+   * it as well.  If this is not a ledger window, one of 
+   * the above two lines will have handled it already */
+  if (1 < regData->numAcc) {
+    regRefresh (regData);
+  }
+
+  /* if the update changed the date ordering of the transactions,
+   * then scroll the register to the new location of the transaction. 
+   * Do so only for this window, not any of the others. */
+  if( dateOutOfOrder ) {
+    int newrow;
+    Transaction *nt;
+
+    /* find the location of the new row ... */
+    newrow = NUM_HEADER_ROWS;
+    nt = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, newrow);
+    while (nt) {
+      if (trans == nt) break;
+      newrow += NUM_ROWS_PER_TRANS;
+      nt = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, newrow);
+    }
+    XbaeMatrixMakeCellVisible( regData->reg, newrow+DATE_CELL_R, DATE_CELL_C );
+
+    /* Set the currEntry transaction pointer for this register window.
+     * During date reordering we removed and re-inserted
+     * the transaction at a new location.  currEntry should reflect that 
+     * new location, in casee the user does additional editing.
+     */
+    regData->currEntry = (newrow-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
+  }
 
   /* reset the "changed" bitfield */
   regData->changed   = 0;

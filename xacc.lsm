@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	0.9r
-Entered-date:	23NOV97
+Version:	0.9s
+Entered-date:	24NOV97
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -19,7 +19,7 @@ Description:    xacc is a program to keep track of your finances.  It
                   the previous transaction.  Handy if you have
                   similar transactions on a regular basis.
                   (such as depositing your paycheck every week :)
-                - General Ledger. Well, not yet, but double-entry
+                - General Ledger. Well, not yet, almost but double-entry
                   is supported (transfers between accounts),
                   sub-accounts are supported (so that master accounts
                   can contain detail accounts), as well as 
@@ -38,7 +38,7 @@ Maintained-by:	linas@linas.org (Linas Vepstas)
 Primary-site:	http://www3.hmc.edu/~rclark/xacc/
 Alternate-site:	http://linas.org/linux/xacc 
 Alternate-site:	sunsite.unc.edu /pub/Linux/apps/financial/accounting/
-		524kB  xacc-0.9r.tar.gz
+		527kB  xacc-0.9s.tar.gz
 Platforms:      Linux/Unix/X Windows/Lesstif/Motif/Sparc/Intel 
 Copying-policy:	GPL
 End
