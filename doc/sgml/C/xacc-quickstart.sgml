@@ -5,12 +5,7 @@
       </title>
     </artheader>
     
-    <sect1>
-      <title>
-	Getting Started
-      </title>
-      
-      <sect2>
+      <sect1>
 	<title>
 	  Welcome
 	</title>
@@ -31,9 +26,9 @@
 	  Therefore, we highly recommend that you spend a few minutes
 	  reading this manual page.  
 	</para>
-      </sect2>
+      </sect1>
       
-      <sect2>
+      <sect1>
 	<title>
 	  Remedial Accounting 101
 	</title>
@@ -86,9 +81,9 @@
 	<para>
 	  Now let's go create some accounts!
 	</para>
-      </sect2>
+      </sect1>
       
-      <sect2>
+      <sect1>
 	<title>
 	  Setting up accounts from scratch
 	</title>
@@ -121,9 +116,9 @@
 	  "Opening Balances", and all opening balances consist
 	  of a transfer to (or from) this account.
 	</para>
-      </sect2>
+      </sect1>
 
-      <sect2 id="xacc-data-from-existing">
+      <sect1 id="xacc-data-from-existing">
 	<title>
 	  Importing data from other personal finance programs
 	</title>
@@ -157,9 +152,9 @@
 	    </para>
 	  </listitem>
         </itemizedlist>
-      </sect2>
+      </sect1>
 
-      <sect2>
+      <sect1>
 	<title>
 	  Starting to use GnuCash
 	</title>
@@ -181,8 +176,7 @@
 	  in this online manual.  You'll get much more out of 
 	  it!
 	</para>
-      </sect2>
-    </sect1>
+      </sect1>
   </article>
   
   <!-- Local variables: -->
