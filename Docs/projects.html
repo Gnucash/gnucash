@@ -134,6 +134,16 @@ architectural goals.
     Project Kontor and also FreeMoney is working on SQL schemas;
     Kontor is also working on Java RMI/CORBA interfaces.
     <p>
+    The following industrial-strength features are still needed:
+    <ul>
+    <li>transaction-oriented queing of updates
+    <li>event subscription channel for updates
+    <li>user authentication
+    <li>user authorization
+    <li>non-repudiability 
+    <li>encryption of network connections
+    </ul>
+    <p>
 
 <dt><b>SQL I/O</b>
 <dd>A module is necessary to allow data to be fetched from an SQL
@@ -147,13 +157,16 @@ architectural goals.
     SQL does NOT require locks to be held for long periods of time!
     <p>
 
-<dt><b>Financial Objects</b>
+<dt><b>Engine, Financial Objects</b>
 <dd>The current system makes a distinction between the data (account,
     transaction) and they GUI that displays it.  This distinction should
     be further strengthened, and a set of financial objects, residing in
-    their own library, should be created.  Current Status: 
-    ready to split this stuff off into its own library.  The basic engine 
-    has been detangled from the GUI elements.
+    their own library, should be created. 
+    <p>
+    <b>Current Status:</b> The basic engine has been detangled from 
+    the GUI elements.  This is in  version 1.1.3, version 1.1.4
+    will move it to a separate directory.
+
     <p>
 
 <dt><b>OFX support</b>
@@ -457,7 +470,7 @@ have contributed fixes and patches.  I've tried to credit them in the README.
 </ul>
 
 <hr>
-Draft version 0.16 February 1998<br>
+Draft version 0.17 February 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
