@@ -52,7 +52,3 @@ default: ../libengine.a
 TRASH += ../libengine.a libengine.a
 
 .PHONY: all default
-
-# Local Variables:
-# tab-width: 2
-# End:

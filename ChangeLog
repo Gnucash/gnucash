@@ -1,3 +1,17 @@
+2000-03-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c (xaccSPrintAmount): add a PRTNMN flag for
+ 	printing non-monetary values.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): update for
+ 	changes to the price cell api.
+
+	* src/engine/util.c (xaccSPrintAmount): set the precision based on
+ 	the locale.
+
+	* src/register/pricecell.c: remove some unneeded api calls and
+	add one for specifying that the cell contains a share quantity.
+
 2000-03-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-options.c (gnc_option_set_ui_widget): request

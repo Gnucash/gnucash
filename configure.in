@@ -171,6 +171,21 @@ if test x"$SWIG" = xno; then
     AC_MSG_ERROR([Cannot find Swig. Try using the --with-swig flag.])
 fi
 
+### -------------------------------------------------------------------
+
+# Let the user specify glib paths:
+GLIB_CONFIG_BIN="glib-config"
+AC_ARG_WITH( glib-config, 
+  [  --with-glib-config=executable  which glib-config to use to find glib ],
+  GLIB_CONFIG_BIN="$with_glib_config")
+
+# If the user hasn't specified the binary, then try to find it.
+if test x"${GLIB_CONFIG_BIN}" = x
+then
+  AC_PATH_PROG(GLIB_CONFIG_BIN, glib-config, GLIB_CONFIG_NOT_FOUND)
+fi
+AC_SUBST(GLIB_CONFIG_BIN)
+
 # Let the user specify gnome paths:
 GNOME_CONFIG_BIN="gnome-config"
 AC_ARG_WITH( gnome-config, 
