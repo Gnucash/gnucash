@@ -180,7 +180,7 @@ test_access (const char *db_name, const char *mode, gboolean multi_user)
   session_2 = gnc_session_new ();
 
   gnc_session_begin (session_2, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session_1);
+  io_err = gnc_session_get_error (session_2);
 
   if (multi_user)
   {
@@ -410,6 +410,138 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
 }
 
 static gboolean
+num_trans_helper (Transaction *trans, gpointer data)
+{
+  int *num = data;
+
+  *num += 1;
+
+  return TRUE;
+}
+
+static int
+session_num_trans (GNCSession *session)
+{
+  AccountGroup *group;
+  GNCBook *book;
+  int num = 0;
+
+  g_return_val_if_fail (session, 0);
+
+  book = gnc_session_get_book (session);
+  group = gnc_book_get_group (book);
+
+  xaccGroupForEachTransaction (group, num_trans_helper, &num);
+
+  return num;
+}
+
+typedef struct
+{
+  GNCSession *session_base;
+  const char *db_name;
+  const char *mode;
+  gint loaded;
+  gint total;
+} QueryTestData;
+
+static gboolean
+test_trans_query (Transaction *trans, gpointer data)
+{
+  QueryTestData *qtd = data;
+  GNCBackendError io_err;
+  GNCSession *session;
+  AccountGroup *group;
+  char *filename;
+  GNCBook *book;
+  GList *list;
+  Query *q;
+
+  filename = db_file_url (qtd->db_name, qtd->mode);
+
+  session = gnc_session_new ();
+
+  gnc_session_begin (session, filename, FALSE, FALSE);
+  io_err = gnc_session_get_error (session);
+  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                     "Beginning db session",
+                     __FILE__, __LINE__,
+                     "can't begin session for %s",
+                     filename))
+    return FALSE;
+
+  gnc_session_load (session);
+  io_err = gnc_session_get_error (session);
+  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                     "Loading db session",
+                     __FILE__, __LINE__,
+                     "can't load session for %s",
+                     filename))
+    return FALSE;
+
+  book = gnc_session_get_book (session);
+  group = gnc_book_get_group (book);
+
+  q = make_trans_query (trans);
+  xaccQuerySetGroup (q, group);
+
+  list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
+  if (g_list_length (list) != 1)
+  {
+    failure_args ("test num returned", __FILE__, __LINE__,
+                  "number of matching transactions %d not 1",
+                  g_list_length (list));
+    return FALSE;
+  }
+
+  qtd->loaded += session_num_trans (session);
+  qtd->total += session_num_trans (qtd->session_base);
+
+  if (!xaccTransEqual (trans, list->data, TRUE, TRUE))
+  {
+    failure ("matching transaction is wrong");
+    return FALSE;
+  }
+
+  success ("found right transaction");
+
+  xaccFreeQuery (q);
+  gnc_session_destroy (session);
+  g_free (filename);
+
+  return TRUE;
+}
+
+static gboolean
+test_queries (GNCSession *session_base, const char *db_name, const char *mode)
+{
+  QueryTestData qtd;
+  AccountGroup *group;
+  GNCBook *book;
+  gboolean ok;
+
+  g_return_val_if_fail (db_name && mode, FALSE);
+
+  book = gnc_session_get_book (session_base);
+  group = gnc_book_get_group (book);
+
+  qtd.session_base = session_base;
+  qtd.db_name = db_name;
+  qtd.mode = mode;
+  qtd.loaded = 0;
+  qtd.total = 0;
+
+  ok = xaccGroupForEachTransaction (group, test_trans_query, &qtd);
+
+#if 0
+  g_warning ("average percentage loaded = %3.2f%%",
+             (qtd.loaded / (double) qtd.total) * 100.0);
+#endif
+
+  return ok;
+}
+
+static gboolean
 test_mode (const char *db_name, const char *mode,
            gboolean updates, gboolean multi_user)
 {
@@ -419,8 +551,7 @@ test_mode (const char *db_name, const char *mode,
 
   session = get_random_session ();
 
-  add_random_transactions_to_session (session,
-                                      get_random_int_in_range (10, 20));
+  add_random_transactions_to_session (session, 20);
 
   if (!save_db_file (session, db_name, "single-update"))
     return FALSE;
@@ -466,6 +597,9 @@ test_mode (const char *db_name, const char *mode,
   if (updates && !test_updates (session_db, db_name, mode, multi_user))
     return FALSE;
 
+  if (multi_user && !test_queries (session_db, db_name, mode))
+    return FALSE;
+
   gnc_session_destroy (session);
   gnc_session_destroy (session_db);
 
@@ -478,13 +612,22 @@ run_test (void)
 #if 0
   if (!test_mode ("single_file", "single-file", FALSE, FALSE))
     return;
+#endif
 
+#if 0
   if (!test_mode ("single_update", "single-update", TRUE, FALSE))
     return;
 #endif
 
+#if 0
   if (!test_mode ("multi_user", "multi-user", TRUE, TRUE))
     return;
+#endif
+
+#if 1
+  if (!test_mode ("multi_user_poll", "multi-user-poll", TRUE, TRUE))
+    return;
+#endif
 }
 
 static void
@@ -506,9 +649,12 @@ guile_main (int argc, char **argv)
   set_max_kvp_frame_elements (3);
 
   set_max_group_depth (3);
-  set_max_group_accounts (5);
+  set_max_group_accounts (3);
 
   random_timespec_zero_nsec (TRUE);
+
+  /* Querying on exact prices is problematic. */
+  trans_query_include_price (FALSE);
 
   xaccLogDisable ();
 
