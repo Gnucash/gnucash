@@ -455,7 +455,7 @@ guid_to_string(const GUID * guid)
   return string;
 }
 
-void
+char *
 guid_to_string_buff(const GUID * guid, char *string)
 {
   if (!string || !guid) return;
@@ -463,6 +463,7 @@ guid_to_string_buff(const GUID * guid, char *string)
   encode_md5_data(guid->data, string);
 
   string[GUID_ENCODING_LENGTH] = '\0';
+  return &string[GUID_ENCODING_LENGTH];
 }
 
 gboolean

@@ -84,9 +84,11 @@ void guid_new(GUID *guid);
  *    string is written into the memory pointed at by buff.  The
  *    buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
  *    This routine is handy for avoiding a malloc/free cycle.
+ *    It returns a pointer to the >>end<< of what was written.
+ *    (i.e. it can be used like 'stpcpy' during string concatenation)
  */
 char * guid_to_string (const GUID * guid);
-void guid_to_string_buff (const GUID * guid, char *buff);
+char * guid_to_string_buff (const GUID * guid, char *buff);
 
 
 /* Given a string, decode the id into the guid if guid is non-NULL.
