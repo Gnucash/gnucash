@@ -38,8 +38,8 @@ static GnomeCanvasItem *gnucash_grid_parent_class;
 
 /* Our arguments */
 enum {
-        ARG_0,
-        ARG_SHEET
+        PROP_0,
+        PROP_SHEET
 };
 
 
@@ -617,17 +617,6 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 
 static void
-gnucash_grid_destroy (GtkObject *object)
-{
-	GNUCASH_GRID(object);
-
-        if (GTK_OBJECT_CLASS (gnucash_grid_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS
-		 (gnucash_grid_parent_class)->destroy)(object);
-}
-
-
-static void
 gnucash_grid_init (GnucashGrid *grid)
 {
         GnomeCanvasItem *item = GNOME_CANVAS_ITEM (grid);
@@ -644,68 +633,105 @@ gnucash_grid_init (GnucashGrid *grid)
 
 
 static void
-gnucash_grid_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
+gnucash_grid_set_property (GObject         *object,
+                             guint            prop_id,
+                             const GValue    *value,
+                             GParamSpec      *pspec)
 {
         GnomeCanvasItem *item;
         GnucashGrid *grid;
 
-        item = GNOME_CANVAS_ITEM (o);
-        grid = GNUCASH_GRID (o);
+        item = GNOME_CANVAS_ITEM (object);
+        grid = GNUCASH_GRID (object);
 
-        switch (arg_id){
-        case ARG_SHEET:
-                grid->sheet = GTK_VALUE_POINTER (*arg);
-                break;
+        switch (prop_id){
+                case PROP_SHEET:
+                        grid->sheet = 
+                                GNUCASH_SHEET (g_value_get_object (value));
+                        break;
+                default:
+                        break;
         }
 }
 
 
 static void
-gnucash_grid_class_init (GnucashGridClass *grid_class)
+gnucash_grid_get_property (GObject         *object,
+                             guint            prop_id,
+                             GValue          *value,
+                             GParamSpec      *pspec)
 {
-        GtkObjectClass  *object_class;
+        GnomeCanvasItem *item;
+        GnucashGrid *grid;
+
+        item = GNOME_CANVAS_ITEM (object);
+        grid = GNUCASH_GRID (object);
+
+        switch (prop_id){
+                case PROP_SHEET:
+                        g_value_set_object (value, grid->sheet);
+                        break;
+                default:
+                        break;
+        }
+}
+
+
+static void
+gnucash_grid_class_init (GnucashGridClass *class)
+{
+        GObjectClass  *object_class;
         GnomeCanvasItemClass *item_class;
 
-        gnucash_grid_parent_class =
-		gtk_type_class (gnome_canvas_item_get_type());
+        object_class = G_OBJECT_CLASS (class);
+        item_class = GNOME_CANVAS_ITEM_CLASS (class);
 
-        object_class = (GtkObjectClass *) grid_class;
-        item_class = (GnomeCanvasItemClass *) grid_class;
+        gnucash_grid_parent_class = g_type_class_peek_parent (class);
 
-        gtk_object_add_arg_type ("GnucashGrid::Sheet", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_SHEET);
-
-        object_class->set_arg = gnucash_grid_set_arg;
-        object_class->destroy = gnucash_grid_destroy;
+        /* GObject method overrides */
+        object_class->set_property = gnucash_grid_set_property;
+        object_class->get_property = gnucash_grid_get_property;
 
         /* GnomeCanvasItem method overrides */
         item_class->update      = gnucash_grid_update;
         item_class->realize     = gnucash_grid_realize;
         item_class->unrealize   = gnucash_grid_unrealize;
         item_class->draw        = gnucash_grid_draw;
+        
+        /* properties */
+        g_object_class_install_property 
+                        (object_class,
+                         PROP_SHEET,
+                         g_param_spec_object ("sheet",
+                                              "Sheet Value",
+                                              "Sheet Value",
+                                              GNUCASH_TYPE_SHEET,
+                                              G_PARAM_READWRITE));
 }
 
 
-GtkType
+GType
 gnucash_grid_get_type (void)
 {
-        static GtkType gnucash_grid_type = 0;
+        static GType gnucash_grid_type = 0;
 
         if (!gnucash_grid_type) {
-                GtkTypeInfo gnucash_grid_info = {
-                        "GnucashGrid",
-                        sizeof (GnucashGrid),
+                static const GTypeInfo gnucash_grid_info = {
                         sizeof (GnucashGridClass),
-                        (GtkClassInitFunc) gnucash_grid_class_init,
-                        (GtkObjectInitFunc) gnucash_grid_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_grid_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashGrid),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_grid_init
                 };
 
                 gnucash_grid_type =
-			gtk_type_unique (gnome_canvas_item_get_type (),
-					 &gnucash_grid_info);
+			g_type_register_static (gnome_canvas_item_get_type (),
+						"GnucashGrid",
+						&gnucash_grid_info, 0);
         }
 
         return gnucash_grid_type;

@@ -1,3 +1,14 @@
+2004-03-04  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-cursor.c:
+	* src/register/register-gnome/gnucash-cursor.h:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-grid.h:
+	* src/register/register-gnome/gnucash-header.h:
+	* src/register/register-gnome/gnucash-sheet.c:
+	* src/register/register-gnome/gnucash-sheet.h:
+	  Convert to new GType-/GObject-System.
+
 2004-02-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/Makefile.am: added new 'format' provider desc

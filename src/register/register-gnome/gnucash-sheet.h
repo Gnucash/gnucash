@@ -127,14 +127,14 @@ typedef struct
 } GnucashRegister;
 
 
-GtkType    gnucash_sheet_get_type (void);
+GType      gnucash_sheet_get_type (void);
 GtkWidget *gnucash_sheet_new (Table *table);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
 
 void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
 
-GtkType gnucash_register_get_type (void);
+GType gnucash_register_get_type (void);
 
 /* this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);

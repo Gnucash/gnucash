@@ -29,7 +29,7 @@
 
 #define GNUCASH_TYPE_GRID     (gnucash_grid_get_type ())
 #define GNUCASH_GRID(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_GRID, GnucashGrid))
-#define GNUCASH_GRID_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_GRID))
+#define GNUCASH_GRID_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_GRID, GnucashGridClass))
 #define GNUCASH_IS_GRID(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_GRID))
 
 
@@ -61,7 +61,7 @@ typedef struct {
 } GnucashGridClass;
 
 
-GtkType    gnucash_grid_get_type (void);
+GType      gnucash_grid_get_type (void);
 GtkWidget *gnucash_grid_new 	 (GnucashSheet *sheet);
 
 gboolean   gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
