@@ -1,3 +1,19 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
 /*
  * FILE:
  * splitreg.h
@@ -23,24 +39,8 @@
  * file.  Might make good sense to use scheme/guile for the layout.
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
-
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #ifndef __XACC_SPLITREG_H__
 #define __XACC_SPLITREG_H__
@@ -51,6 +51,7 @@
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
+#include "numcell.h"
 #include "table-allgui.h"
 
 /* defined register types */
@@ -132,7 +133,7 @@ struct _SplitRegister {
    CellBlock     * header;
 
    DateCell      * dateCell;
-   BasicCell     * numCell;
+   NumCell       * numCell;
    QuickFillCell * descCell;
    BasicCell     * recnCell;   /* main transaction line reconcile */
    PriceCell     * shrsCell;

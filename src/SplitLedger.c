@@ -1171,10 +1171,10 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
    }
 
    if (MOD_NUM & changed) {
-      DEBUG ("xaccSRSaveRegEntry(): MOD_NUM: %s\n", reg->numCell->value);
-      xaccTransSetNum (trans, reg->numCell->value);
+      DEBUG ("xaccSRSaveRegEntry(): MOD_NUM: %s\n", reg->numCell->cell.value);
+      xaccTransSetNum (trans, reg->numCell->cell.value);
    }
-   
+
    if (MOD_DESC & changed) {
       DEBUG ("xaccSRSaveRegEntry(): MOD_DESC: %s\n",
              reg->descCell->cell.value);
@@ -1447,7 +1447,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    if (!split) {
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
-      xaccSetBasicCellValue (reg->numCell, "");
+      xaccSetNumCellValue (reg->numCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
       xaccSetBasicCellValue (reg->recnCell, "");
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
@@ -1473,7 +1473,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       secs = xaccTransGetDateL (trans);
       xaccSetDateCellValueSecsL (reg->dateCell, secs);
 
-      xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
+      xaccSetNumCellValue (reg->numCell, xaccTransGetNum (trans));
       xaccSetQuickFillCellValue (reg->descCell,
                                  xaccTransGetDescription (trans));
 

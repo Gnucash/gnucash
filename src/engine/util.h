@@ -130,6 +130,9 @@ int safe_strcmp (const char * da, const char * db);
 
 char * ultostr (unsigned long val, int base);
 
+/* Returns true if string s is a number, possibly
+ * surrounded by whitespace. */
+gncBoolean gnc_strisnum(const char *s);
 
 /* The gnc_localeconv() subroutine returns an lconv structure
  * containing locale information. If no locale is set, the

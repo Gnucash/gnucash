@@ -28,6 +28,7 @@
 #include <math.h>
 #include <string.h>
 #include <locale.h>
+#include <ctype.h>
 
 /* #include <glib.h> */
 
@@ -191,6 +192,35 @@ util_fptostr(char *buf, double val, int prec)
   sprintf(buf, formatString, val);
 
   return strlen(buf);
+}
+
+/********************************************************************\
+ * returns GNC_T if the string is a number, possibly with whitespace
+\********************************************************************/
+
+gncBoolean
+gnc_strisnum(const char *s)
+{
+  if (s == NULL) return GNC_F;
+  if (*s == 0) return GNC_F;
+
+  while (*s && isspace(*s))
+    s++;
+
+  if (*s == 0) return GNC_F;
+  if (!isdigit(*s)) return GNC_F;
+
+  while (*s && isdigit(*s))
+    s++;
+
+  if (*s == 0) return GNC_T;
+
+  while (*s && isspace(*s))
+    s++;
+
+  if (*s == 0) return GNC_T;
+
+  return GNC_F;
 }
 
 /********************************************************************\

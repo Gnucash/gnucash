@@ -1,14 +1,3 @@
-/*
- * FILE:
- * datecell.c
- *
- * FUNCTION:
- * implements a gui-independent date handling cell.
- *
- * HISTORY:
- * Copyright (C) 1997 Robin D. Clark
- * Copyright (c) 1998 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +18,18 @@
  *  Address: 609 8th Street                                         *
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * datecell.c
+ *
+ * FUNCTION:
+ * implements a gui-independent date handling cell.
+ *
+ * HISTORY:
+ * Copyright (C) 1997 Robin D. Clark
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #include <ctype.h>
 #include <stdio.h>
@@ -477,7 +478,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
    /* try to deal with dates earlier than December 1901 
     * or later than Jan 2038.  Note that xaccValidateDate
     * should be handling centential (non-) leap years.
-    * The suffix LL indicates that consts shouold be handled
+    * The suffix LL indicates that consts should be handled
     * long long 64-bit consts.
     */
    if ((0x80000000LL > secs) || (0x7fffffffLL < secs)) 

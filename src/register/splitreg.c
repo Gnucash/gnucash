@@ -1,19 +1,3 @@
-/*
- * FILE:
- * splitreg.c
- *
- * FUNCTION:
- * Implements the register object.
- * Specifies the physical layout of the register cells.
- * See the header file for additional documentation.
- *
- * hack alert -- most of the code in this file should be 
- * replaced by a guile/scheme based config file.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +13,22 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * splitreg.c
+ *
+ * FUNCTION:
+ * Implements the register object.
+ * Specifies the physical layout of the register cells.
+ * See the header file for additional documentation.
+ *
+ * hack alert -- most of the code in this file should be 
+ * replaced by a guile/scheme based config file.
+ *
+ * HISTORY:
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -371,7 +371,7 @@ configLayout (SplitRegister *reg)
       {
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
@@ -384,7 +384,7 @@ configLayout (SplitRegister *reg)
 
          curs = reg->trans_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -401,7 +401,7 @@ configLayout (SplitRegister *reg)
          /* basic common 8 column config */
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
@@ -420,7 +420,7 @@ configLayout (SplitRegister *reg)
          /* prep the second row of the double style */
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
@@ -437,7 +437,7 @@ configLayout (SplitRegister *reg)
          /* only the transaction cursor gets used */
          curs = reg->trans_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -457,7 +457,7 @@ configLayout (SplitRegister *reg)
          /* 11 column config */
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
+         FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (MXFRM,  mxfrm,    3,  0);
          BASIC (RECN,   recn,     4,  0);
@@ -907,7 +907,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    NEW (null,    Basic);
    NEW (date,    Date);
-   NEW (num,     Text);
+   NEW (num,     Num);
    NEW (desc,    QuickFill);
    NEW (recn,    Recn);
    NEW (shrs,    Price);
@@ -952,7 +952,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetBasicCellValue (reg->nullCell, "");
 
    /* The num cell is the transaction number */
-   xaccSetBasicCellBlankHelp (reg->numCell, NUM_CELL_HELP);
+   xaccSetBasicCellBlankHelp (&reg->numCell->cell, NUM_CELL_HELP);
 
    /* the xfer cells */
    xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, XFER_CELL_HELP);
@@ -1101,7 +1101,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->split_cursor = NULL;
 
    xaccDestroyDateCell      (reg->dateCell);
-   xaccDestroyBasicCell     (reg->numCell);
+   xaccDestroyNumCell       (reg->numCell);
    xaccDestroyQuickFillCell (reg->descCell);
    xaccDestroyBasicCell     (reg->recnCell);
    xaccDestroyPriceCell     (reg->shrsCell);
@@ -1154,7 +1154,7 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
 
    /* be careful to use bitwise ands and ors to assemble bit flag */
    changed |= MOD_DATE  & reg->dateCell->cell.changed;
-   changed |= MOD_NUM   & reg->numCell->changed;
+   changed |= MOD_NUM   & reg->numCell->cell.changed;
    changed |= MOD_DESC  & reg->descCell->cell.changed;
    changed |= MOD_RECN  & reg->recnCell->changed;
 
@@ -1180,7 +1180,7 @@ void
 xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
 {
    reg->dateCell->cell.changed = 0;
-   reg->numCell->changed = 0;
+   reg->numCell->cell.changed = 0;
    reg->descCell->cell.changed = 0;
    reg->recnCell->changed = 0;
 

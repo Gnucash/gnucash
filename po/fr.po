@@ -1,12 +1,12 @@
 # Messages en francais pour Gnucash
-# Copyright (C) 1999 Free Software Foundation, Inc.
-# Yannick LE NY <y-le-ny@ifrance.com>, 1998,1999,2000.
+# Copyright (C) 1998,1999,2000 Free Software Foundation, Inc.
+# Copyright (C) 1998,1999,2000 Yannick LE NY <y-le-ny@ifrance.com>, 
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.3\n"
 "POT-Creation-Date: 2000-03-23 03:24-0800\n"
-"PO-Revision-Date: 2000-03-20 16:47+0200\n"
+"PO-Revision-Date: 2000-03-23 22:24+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Voulez-vous créer un nouveau compte?\n"
 "Sinon, sélectionnez alors un compte\n"
-"fuzzà ouvrir dans la fenetre principale.\n"
+"à ouvrir dans la fenêtre principale.\n"
 
 #: messages-i18n.c:15
 msgid ""
@@ -147,7 +147,7 @@ msgid ""
 "Are You Sure?\n"
 msgstr ""
 "Il est dangereux de changer le type de monnaie\n"
-"d'un compte.  Vous demandez a le changer\n"
+"d'un compte.  Vous demandez à le changer\n"
 "de %s vers %s\n"
 "Etes-vous sur?\n"
 
@@ -240,7 +240,7 @@ msgstr ""
 #: messages-i18n.c:39
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
-"Des changements ont été fait depuis la derniere sauvegarde.\n"
+"Des changements ont été fait depuis la dernière sauvegarde.\n"
 "Enregistrer les changements dans le fichier?"
 
 #: messages-i18n.c:40
@@ -282,16 +282,16 @@ msgstr ""
 
 #: messages-i18n.c:43
 msgid "You need to install the gnome-print library."
-msgstr ""
+msgstr "Vous avez besoin d'installer la librairie gnome-print."
 
 #: messages-i18n.c:44
 #, c-format
 msgid "QIF file load failed. %s"
-msgstr ""
+msgstr "Le chargement du fichier QIF a échoué."
 
 #: messages-i18n.c:45
 msgid "QIF file load failed. Check settings and reload."
-msgstr ""
+msgstr "Le chargement du fichier QIF a échoué.Vérifiez les paramètres et rechargez"
 
 #: messages-i18n.c:46
 msgid "The source for price quotes"
@@ -410,7 +410,7 @@ msgstr ""
 
 #: messages-i18n.c:62
 msgid "You can't transfer from and to the same account!"
-msgstr "Vous ne pouvez pas transférer depuis et vers le meme compte!"
+msgstr "Vous ne pouvez pas transférer depuis et vers le même compte!"
 
 #: messages-i18n.c:63
 msgid ""
@@ -566,7 +566,7 @@ msgstr "Ouvrir la boîte des préférences globales."
 
 #: messages-i18n.c:98
 msgid "Print a check using a standard format"
-msgstr ""
+msgstr "Imprimer un chèque en utilisant un format standard"
 
 #: messages-i18n.c:99
 msgid "Reconcile the selected account"
@@ -766,7 +766,7 @@ msgstr "Préférences"
 
 #: messages-i18n.c:148
 msgid "_Print Check (unfinished!)"
-msgstr ""
+msgstr "Imprimer chèques (non terminé!)"
 
 #: messages-i18n.c:149
 msgid "_Reconcile"
@@ -1701,7 +1701,7 @@ msgstr "Trier par date"
 #: po/guile_strings.txt:34
 #, c-format
 msgid "Report for %s and all subaccounts."
-msgstr ""
+msgstr "Rapport pour %s et tous les sous-comptes."
 
 #: po/guile_strings.txt:35
 msgid "Account types to display"
@@ -1736,9 +1736,8 @@ msgid "US-style: mm/dd/yyyy"
 msgstr "Style-US: mm/jj/aaaa"
 
 #: po/guile_strings.txt:43
-#, fuzzy
 msgid "You have not selected an account."
-msgstr "Vous devez sélectionner un type de compte."
+msgstr "Vous n'avez pas sélectionné un compte."
 
 #: po/guile_strings.txt:44
 msgid "By default, show every transaction in an account."
@@ -1785,9 +1784,8 @@ msgid "Display the Hello, World report."
 msgstr "Affiche le rapport Bonjour,tout le monde"
 
 #: po/guile_strings.txt:58
-#, fuzzy
 msgid "Gain"
-msgstr "Gain net"
+msgstr ""
 
 #: po/guile_strings.txt:59
 msgid "Hello Again"
@@ -1844,7 +1842,7 @@ msgstr ""
 
 #: po/guile_strings.txt:72
 msgid "Import QIF File - Scripted in Guile."
-msgstr "Importer des fichiers QIF - lu par Guile."
+msgstr "Importer des fichiers QIF - écrit en Guile."
 
 #: po/guile_strings.txt:73
 msgid "Show Horizontal Borders"
@@ -1884,9 +1882,8 @@ msgid "The background color for the active transaction in single mode"
 msgstr "La couleur de l'arrière-plan pour la transaction active en mode simple"
 
 #: po/guile_strings.txt:81
-#, fuzzy
 msgid "Loss"
-msgstr "Gain/Pertes"
+msgstr "Pertes"
 
 #: po/guile_strings.txt:82
 msgid "Credit Accounts"
@@ -1915,7 +1912,7 @@ msgstr "Options de numérotation"
 #: po/guile_strings.txt:89
 #, fuzzy, c-format
 msgid "Report for %s."
-msgstr "Rapports"
+msgstr "Rapports pour %s."
 
 #: po/guile_strings.txt:90
 msgid "Reverse Income and Expense Accounts"
@@ -2006,9 +2003,8 @@ msgid "Date Format Display"
 msgstr "Affichage du format de date"
 
 #: po/guile_strings.txt:114
-#, fuzzy
 msgid "Ending"
-msgstr "Ascendant"
+msgstr "Final"
 
 #: po/guile_strings.txt:115
 msgid "Reversed-balance account types"
@@ -2028,7 +2024,7 @@ msgstr "Options du rapport"
 
 #: po/guile_strings.txt:122
 msgid "Calculate balance sheet up to this date"
-msgstr "Calculer la feuille du solde/bilan jsqu'à cette date"
+msgstr "Calculer la feuille du solde/bilan jusqu'à cette date"
 
 #: po/guile_strings.txt:123
 msgid "Alternate the even and odd colors with each transaction, not each row"
@@ -2286,7 +2282,7 @@ msgstr "vrai"
 
 #: po/guile_strings.txt:191
 msgid "Period Ending"
-msgstr ""
+msgstr "Période finale"
 
 #: po/guile_strings.txt:192
 msgid "Income.Salary.Taxable"
@@ -2334,7 +2330,7 @@ msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
-"C'est un exemple de rapport de Gnucash. Regardez le code source de Guile "
+"C'est un exemple de rapport de Gnucash. Regardez le code source en Guile "
 "(scheme) dans %s pour les détails sur l'écriture de vos propres rapports, ou "
 "étendez les rapports existants."
 
@@ -2350,7 +2346,7 @@ msgstr ""
 
 #: po/guile_strings.txt:207
 msgid "Display the Budget report."
-msgstr "Affiche le rapport de la feuille du solde/bilan"
+msgstr "Affiche le rapport du budget."
 
 #: po/guile_strings.txt:208
 msgid "_Hello, World"
@@ -2613,7 +2609,7 @@ msgstr "Eléments du rapport jusqu'à et incluant cette date"
 
 #: po/guile_strings.txt:275
 msgid "Beginning"
-msgstr ""
+msgstr "Début"
 
 #: po/guile_strings.txt:276
 #, c-format
@@ -2631,7 +2627,7 @@ msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
 msgstr ""
-"L'arrière-plan en couleur pour une répartition active en mode multi ligneset "
+"L'arrière-plan en couleur pour une répartition active en mode multi lignes et "
 "en modes auto"
 
 #: po/guile_strings.txt:278
@@ -2801,24 +2797,20 @@ msgid "Mutual"
 msgstr "Fonds communs"
 
 #: src/gnome/glade-gnc-dialogs.c:763
-#, fuzzy
 msgid "Print Check"
-msgstr "Vérifier"
+msgstr "Imprimer chèque"
 
 #: src/gnome/glade-gnc-dialogs.c:778
-#, fuzzy
 msgid "Select Printer"
-msgstr "Sélectionner un fichier"
+msgstr "Sélectionner une imprimante"
 
 #: src/gnome/glade-gnc-dialogs.c:785
-#, fuzzy
 msgid "Preview"
-msgstr "Cours"
+msgstr "Prévisualisation"
 
 #: src/gnome/print-session.c:118
-#, fuzzy
 msgid "You must select a printer first."
-msgstr "Vous devez sélectionner un type de compte."
+msgstr "Vous devez dabord sélectionner une imprimante."
 
 #~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
 #~ msgstr ""

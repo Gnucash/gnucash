@@ -1,3 +1,19 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
 /*
  * FILE:
  * basiccell.h
@@ -13,7 +29,7 @@
  * by the "user".  In the text below, the "user" is the 
  * person controlling the mouse and keyboard.  Thus, when 
  * the user makes a move, it means that they have somehow 
- * intereacted with the cell, by clikcing with mouse or by 
+ * interacted with the cell, by clicking with mouse or by 
  * typing at the keyboard.  This class provides three 
  * callbacks which allow the programmer to understand what 
  * the user is doing.
@@ -45,7 +61,7 @@
  *       of register cells.   
  *
  *   If ALLOW_INPUT is not set, the cell is supposed  to
- *   to only display values, but not accept user input.  If
+ *   to only display values, but not accept user input. If
  *   set, then the callbacks below are used to when the
  *   cell is entered.
  *
@@ -94,7 +110,7 @@
  *    
  *    The arguments passed in are :
  *    "old", the string prior to user's attempted modification,
- *    "add", the string the user is attemptiong to add
+ *    "add", the string the user is attempting to add
  *           (will be null if text is being deleted).
  *    "new", the string that would result is user's changes
  *           are accepted.
@@ -139,7 +155,7 @@
  * initialization & changes.
  *
  * The realize() callback will be called when GUI-specific 
- *    initalization needs to be done.  For Xt/Motif, the second
+ *    initialization needs to be done.  For Xt/Motif, the second
  *    argument will be cast to the parent widget.  The third
  *    argument passes in the desired pixel-width for the GUI 
  *    element.  (Yes, the pixel-size thing is a hack that we
@@ -151,7 +167,7 @@
  * The move() callback will be called when the GUI element needs
  *    to be positioned to a new location within the table grid.
  *    The second and third arguments are the physical (not virtual)
- *    row and column that the GUI elemnt should be moved to.
+ *    row and column that the GUI element should be moved to.
  *
  * The gui_private member may be used by the derived class to 
  *    store any additional GUI-specific data.
@@ -165,22 +181,6 @@
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
-
-/********************************************************************\
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
-\********************************************************************/
 
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__

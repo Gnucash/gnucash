@@ -32,7 +32,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
-#include <ctype.h>
 
 #include "config.h"
 
@@ -352,31 +351,6 @@ xaccQueryShowLatestDateFound (Query *q)
        (tb->date_posted.tv_nsec)) {		\
     return +1;					\
   }						\
-}
-
-static gncBoolean
-gnc_strisnum(char *s)
-{
-  if (s == NULL) return GNC_F;
-  if (*s == 0) return GNC_F;
-
-  while (*s && isspace(*s))
-    s++;
-
-  if (*s == 0) return GNC_F;
-  if (!isdigit(*s)) return GNC_F;
-
-  while (*s && isdigit(*s))
-    s++;
-
-  if (*s == 0) return GNC_T;
-
-  while (*s && isspace(*s))
-    s++;
-
-  if (*s == 0) return GNC_T;
-
-  return GNC_F;
 }
 
 #define CNUM {					\
