@@ -1,3 +1,11 @@
+2003-05-19  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation.
+
+	* src/gnome-utils/gnc-account-tree.c, src/scm/main-window.scm:
+	Patch by Herbert Thoma: adds the the strings that were not
+	translated due to the 1.8.3 string freeze.
+
 2003-05-18  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated complete Italian translation by Lorenzo
