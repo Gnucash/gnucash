@@ -66,9 +66,10 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    if (!trans || !book) return;
    
-   /* if this is the same book, its a no-op. */
+   /* If this is the same book, its a no-op. */
    if (trans->book == book) return;
 
+   ENTER ("trans=%p %s", trans, trans->description);
    newtrans = xaccDupeTransaction (trans);
    for (node = newtrans->splits; node; node = node->next)
    {
@@ -103,8 +104,6 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       }
       else
       {
-        /* force to null, so remove doesn't occur */
-        s->acc = NULL;
         xaccAccountInsertSplit (twin, s);
         twin->balance_dirty = TRUE;
         twin->sort_dirty = TRUE;
@@ -113,10 +112,11 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    xaccTransCommitEdit (newtrans);
    gnc_engine_generate_event (&newtrans->guid, GNC_ID_TRANS, GNC_EVENT_CREATE);
+   LEAVE ("trans=%p %s", trans, trans->description);
 }
 
 /* ================================================================ */
-/* Reparent transaction to new book.  This routine does this by simply
+/* Reparent transaction to new book.  This routine does this by 
  * moving GUID's to the new book's entity tables.
  */
 
@@ -137,6 +137,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       gnc_book_insert_trans_clobber (book, trans);
       return;
    }
+   ENTER ("trans=%p %s", trans, trans->description);
 
    /* Fiddle the transaction into place in the new book */
    xaccTransBeginEdit (trans);
@@ -163,8 +164,6 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       }
       else
       {
-        /* force to null, so remove doesn't occur */
-        s->acc = NULL;
         xaccAccountInsertSplit (twin, s);
         twin->balance_dirty = TRUE;
         twin->sort_dirty = TRUE;
@@ -173,17 +172,18 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
 
    xaccTransCommitEdit (trans);
    gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+   LEAVE ("trans=%p %s", trans, trans->description);
 }
 
 /* ================================================================ */
 
 void 
-gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
+gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
    AccountGroup *src_grp, *dst_grp;
    QofBackend *be;
    time_t now;
-   GList *split_list, *snode;
+   GList *trans_list, *tnode;
 
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
@@ -216,15 +216,13 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
    /* Next, run the query */
    xaccAccountGroupBeginEdit (dst_grp);
    xaccAccountGroupBeginEdit (src_grp);
-   xaccQuerySetBook (query, src_book);
-   split_list = xaccQueryGetSplitsUniqueTrans (query);
+   qof_query_set_book (query, src_book);
+   trans_list = qof_query_run (query);
 
    /* And start moving transactions over */
-   for (snode = split_list; snode; snode=snode->next)
+   for (tnode = trans_list; tnode; tnode=tnode->next)
    {
-      Split *s = snode->data;
-      Transaction *trans = s->parent;
-
+      Transaction *trans = tnode->data;
       gnc_book_insert_trans (dest_book, trans);
    }
    xaccAccountGroupCommitEdit (src_grp);
@@ -243,7 +241,7 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
 }
 
 /* ================================================================ */
-/* find nearest equity account */
+/* Find nearest equity account */
 
 static Account *
 find_nearest_equity_acct (Account *acc)
@@ -292,7 +290,7 @@ find_nearest_equity_acct (Account *acc)
 }
 
 /* ================================================================ */
-/* traverse all accounts, get account balances */
+/* Traverse all accounts, get account balances */
 
 static void
 add_closing_balances (AccountGroup *closed_grp, 
@@ -444,7 +442,9 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                        Account *equity_account,
                        const char * memo)
 {
-   Query *query;
+   QofQuery *query;
+   QofQueryPredData *pred_data;
+   GSList *param_list;
    QofBook *closing_book;
    KvpFrame *exist_cwd, *partn_cwd;
    KvpValue *vvv;
@@ -455,16 +455,19 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 
    /* Get all transactions that are *earlier* than the calve date,
     * and put them in the new book.  */
-   query = xaccMallocQuery();
-   xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
-                                   TRUE, calve_date,
-                                   QOF_QUERY_AND);
+   query = qof_query_create_for (GNC_ID_TRANS);
+   pred_data = qof_query_date_predicate (QOF_COMPARE_LTE,
+                                         QOF_DATE_MATCH_NORMAL,
+                                         calve_date);
+   param_list = qof_query_build_param_list (TRANS_DATE_POSTED, NULL);
+   qof_query_add_term (query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+
    closing_book = qof_book_new();
    qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
    gnc_book_partition (closing_book, existing_book, query);
 
-   xaccFreeQuery (query);
+   qof_query_destroy (query);
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */

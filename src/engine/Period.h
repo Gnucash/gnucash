@@ -1,13 +1,32 @@
+/********************************************************************\
+ * Period.h -- Implement accounting Periods                         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/** @addtogroup Engine
+    @{ */
 /** @file Period.h
+ *  @breif Implement accounting periods.
+ *  @author Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  *
- * Implement accounting periods.
+ *  @note CAUTION: this is currently a semi-functional, untested
+ *    implementation of the design described in src/doc/book.txt
  *
- * CAUTION: this is currently a semi-functional, untested implementation
- * of the design described in src/doc/book.txt
- *
- * HISTORY:
- * created by Linas Vepstas November 2001
- * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
  */
 
 
@@ -15,7 +34,7 @@
 #define XACC_PERIOD_H
 
 #include "gnc-engine.h"
-#include "Query.h"
+#include "qofquery.h"
 #include "qofbook.h"
 
 
@@ -125,7 +144,7 @@ QofBook * gnc_book_close_period (QofBook *, Timespec,
  *    For the current usage, this bug aint important, and I'm too 
  *    lazy to fix it.
  */
-void gnc_book_partition (QofBook *dest, QofBook *src, Query *);
+void gnc_book_partition (QofBook *dest, QofBook *src, QofQuery *);
 
 /** The gnc_book_insert_trans_clobber() routine takes an existing 
  *    transaction that is located in one book, and moves it to 
@@ -147,4 +166,4 @@ void gnc_book_insert_trans (QofBook *book, Transaction *trans);
 void gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans);
 
 #endif /* XACC_PERIOD_H */
-
+/** @} */
