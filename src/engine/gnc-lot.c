@@ -54,7 +54,7 @@ gnc_lot_init (GNCLot *lot, GNCBook *book)
    lot->kvp_data = NULL;
    lot->account = NULL;
    lot->splits = NULL;
-   lot->is_closed = FALSE;
+   lot->is_closed = -1;
   
    lot->book = book;
    xaccGUIDNew (&lot->guid, book);
@@ -126,6 +126,7 @@ gboolean
 gnc_lot_is_closed (GNCLot *lot)
 {
    if (!lot) return TRUE;
+	if (0 > lot->is_closed) gnc_lot_get_balance (lot);
    return lot->is_closed;
 }
 

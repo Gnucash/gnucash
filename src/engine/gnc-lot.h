@@ -57,7 +57,11 @@ Account * gnc_lot_get_account (GNCLot *);
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
-/* flag: is this lot closed? */
+/* The gnc_lot_is_closed() routine returns a boolean flag: is this 
+ *    lot closed?  A lot is closed if its balance is zero.  This 
+ *    routine is faster than using gnc_lot_get_balance() because
+ *    once the balance goes to zero, this fact is cached.  
+ */
 gboolean gnc_lot_is_closed (GNCLot *);
 
 kvp_frame * gnc_lot_get_slots (GNCLot *);

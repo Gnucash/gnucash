@@ -61,7 +61,8 @@ struct gnc_lot_struct
   SplitList *splits;
 
   /* handy cached value to indicate if lot is closed */
-  gboolean is_closed;
+  /* if value is negative, then the cache is invalid */
+  char is_closed;
 };
 
 void gnc_lot_set_guid(GNCLot *lot, GUID guid);
