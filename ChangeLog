@@ -1,3 +1,8 @@
+2002-12-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-model-save.c -- fix a bug
+	  updating two-split multi-currency transactions from the basic ledger.
+
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
 	
 	* src/doc/Makefile.am: fix for failure when building rpm

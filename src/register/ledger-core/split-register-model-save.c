@@ -469,17 +469,20 @@ gnc_split_register_save_cells (gpointer save_data,
 
     value = gnc_numeric_neg (value);
 
-    xaccSplitSetValue (other_split, value);
-    if (gnc_split_register_split_needs_amount (other_split) &&
-	! gnc_numeric_zero_p (rate))
+    if (gnc_split_register_split_needs_amount (other_split))
     {
       Account *acc = xaccSplitGetAccount (other_split);
       gnc_numeric amount;
+
+      if (gnc_numeric_zero_p (rate))
+	rate = gnc_split_register_get_conv_rate (xaccSplitGetParent (other_split),
+						 acc);
 
       amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
 				GNC_RND_ROUND);
       xaccSplitSetAmount (other_split, amount);
     }
+    xaccSplitSetValue (other_split, value);
 
     xaccSplitScrub (other_split);
   }
