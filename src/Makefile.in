@@ -48,7 +48,7 @@ all: default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: $(OBJS)
+default: motif $(OBJS)
 
 motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
