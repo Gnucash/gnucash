@@ -73,8 +73,6 @@ GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
 /* Returns the Entry where the cursor is currently located. */
 GncEntry * gnc_entry_ledger_get_current_entry (GncEntryLedger *ledger)
 {
-  GUID *guid;
-
   if (!ledger) return NULL;
 
   return
@@ -230,7 +228,7 @@ gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
 				      VirtualCellLocation *vcell_loc)
 {
   Table *table = ledger->table;
-  int v_row, v_col;
+  int v_row;
   GncEntry *e;
 
   for (v_row = 1; v_row < table->num_virt_rows; v_row++) {

@@ -17,20 +17,24 @@ test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncJob *, const char *str),
 		 const char * (*get)(GncJob *));
 
+#if 0
 static void
 test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
 		  gnc_numeric (*get)(GncJob *));
+#endif
 
 static void
 test_bool_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncJob *, gboolean),
 		  gboolean (*get) (GncJob *));
 
+#if 0
 static void
 test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
 	       gint (*get) (GncJob *));
+#endif
 
 static void
 test_job (void)
@@ -128,6 +132,7 @@ test_string_fcn (GNCBook *book, const char *message,
   gncJobSetActive (job, FALSE); count++;
 }
 
+#if 0
 static void
 test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
@@ -142,6 +147,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
   do_test (gnc_numeric_equal (get (job), num), message);
   gncJobSetActive (job, FALSE); count++;
 }
+#endif
 
 static void
 test_bool_fcn (GNCBook *book, const char *message,
@@ -160,6 +166,7 @@ test_bool_fcn (GNCBook *book, const char *message,
   gncJobSetActive (job, FALSE); count++;
 }
 
+#if 0
 static void
 test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
@@ -174,6 +181,7 @@ test_gint_fcn (GNCBook *book, const char *message,
   do_test (get (job) == num, message);
   gncJobSetActive (job, FALSE); count++;
 }
+#endif
 
 static void
 main_helper (int argc, char **argv)

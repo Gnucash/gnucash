@@ -73,8 +73,6 @@ typedef struct _PopBox
 } PopBox;
 
 
-static void gnc_combo_cell_block_list_signals (ComboCell *cell);
-static void gnc_combo_cell_unblock_list_signals (ComboCell *cell);
 static void gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer w);
 static void gnc_combo_cell_gui_move (BasicCell *bcell);
 static void gnc_combo_cell_gui_destroy (BasicCell *bcell);

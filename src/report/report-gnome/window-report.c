@@ -40,7 +40,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
-/* #include "gnc-ui.h" */
+#include "gnc-ui.h"
 #include "option-util.h"
 #include "window-report.h"
 

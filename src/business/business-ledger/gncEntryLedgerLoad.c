@@ -37,7 +37,6 @@ const char * gnc_entry_ledger_type_string_getter (char flag)
 static void load_tax_type_cells (GncEntryLedger *ledger)
 {
   RecnCell *cell;
-  const char * s;
 
   if (!ledger) return;
 
@@ -54,7 +53,6 @@ static void load_tax_type_cells (GncEntryLedger *ledger)
 static void load_discount_type_cells (GncEntryLedger *ledger)
 {
   RecnCell *cell;
-  const char * s;
 
   if (!ledger) return;
 

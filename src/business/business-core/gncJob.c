@@ -244,6 +244,7 @@ static void remObj (GncJob *job)
   g_hash_table_remove (ht, &job->guid);
 }
 
+#if 0
 static GList * _gncJobGetList (GNCBook *obj, gboolean show_all)
 {
   if (!obj) return NULL;
@@ -251,6 +252,7 @@ static GList * _gncJobGetList (GNCBook *obj, gboolean show_all)
   /* XXX */
   return NULL;
 }
+#endif
 
 static const char * _gncJobPrintable (gpointer item)
 {

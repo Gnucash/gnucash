@@ -23,6 +23,7 @@ void gncInvoiceDestroy (GncInvoice *invoice);
 /* Set Functions */
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
+void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateDue (GncInvoice *invoice, const Timespec *date);
 void gncInvoiceSetDateClosed (GncInvoice *invoice, const Timespec *date);

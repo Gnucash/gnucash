@@ -343,7 +343,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *date)
 {
   Transaction *txn;
-  GList *item, *iter;
+  GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
   gnc_commodity *commonCommodity = NULL;

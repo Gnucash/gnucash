@@ -82,7 +82,6 @@ ew_get_employee (EmployeeWindow *ew)
 static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 {
   GncAddress *addr;
-  gnc_numeric num;
 
   addr = gncEmployeeGetAddr (employee);
 
@@ -125,6 +124,7 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
   gnc_resume_gui_refresh ();
 }
 
+#if 0
 static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
 				   gnc_numeric *min, gnc_numeric *max,
 				   const char * error_message)
@@ -146,6 +146,7 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
   }
   return FALSE;
 }
+#endif
 
 static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry, 
 				      const char * error_message)
@@ -163,9 +164,6 @@ static void
 gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   EmployeeWindow *ew = data;
-  char *res;
-  GncEmployee *employee;
-  gnc_numeric min, max;
 
   /* Check for valid id */
   if (check_entry_nonempty (ew->dialog, ew->id_entry,
@@ -216,7 +214,6 @@ gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  EmployeeWindow *ew = data;
   char *help_file = "";		/* xxx */
 
   helpWindow(NULL, NULL, help_file);
@@ -426,8 +423,6 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
   /* Setup initial values */
   if (employee != NULL) {
     GncAddress *addr;
-    const char *string;
-    gint pos = 0;
 
     ew->dialog_type = EDIT_EMPLOYEE;
     ew->employee_guid = *gncEmployeeGetGUID (employee);
@@ -462,7 +457,6 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 				  gnc_employee_window_close_handler,
 				  ew);
   } else {
-    gnc_numeric num;
     employee = gncEmployeeCreate (bookp);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
@@ -551,7 +545,6 @@ static gpointer gnc_employee_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 static void gnc_employee_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
 {
   GncEmployee *employee = obj;
-  struct _employee_select_window *sw = arg;
 
   if (!arg || !obj) return;
 
@@ -578,7 +571,6 @@ gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
   GncEmployee *employee = v;
 
   g_return_val_if_fail (employee != NULL, NULL);

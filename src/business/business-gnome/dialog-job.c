@@ -145,7 +145,6 @@ gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  JobWindow *jw = data;
   char *help_file = "";		/* xxx */
 
   /* XXX */
@@ -414,6 +413,7 @@ gnc_job_edit (GtkWidget *parent, GncJob *job)
 
 /* Functions for widgets for job selection */
 
+#if 0
 static gpointer gnc_job_edit_new_cb (gpointer arg)
 {
   struct _job_select_window *sw = arg;
@@ -431,6 +431,7 @@ static void gnc_job_edit_edit_cb (gpointer arg, gpointer obj)
 
   gnc_job_edit (sw->toplevel, job);
 }
+#endif
 
 gpointer gnc_job_edit_new_select (gpointer job, GtkWidget *toplevel,
 				  GncCustomer *cust)

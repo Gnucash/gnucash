@@ -54,7 +54,6 @@ gnc_split_register_save_date_cell (BasicCell * cell,
                                    gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
   Timespec ts;
 
@@ -93,7 +92,6 @@ gnc_split_register_save_due_date_cell (BasicCell * cell,
                                        gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
   Timespec ts;
 
@@ -146,7 +144,6 @@ gnc_split_register_save_desc_cell (BasicCell * cell,
                                    gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, DESC_CELL));
@@ -164,7 +161,6 @@ gnc_split_register_save_notes_cell (BasicCell * cell,
                                     gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, NOTES_CELL));
@@ -182,7 +178,6 @@ gnc_split_register_save_recn_cell (BasicCell * bcell,
                                    gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   RecnCell *cell = (RecnCell *) bcell;
 
   g_return_if_fail (gnc_basic_cell_has_name (bcell, RECN_CELL));
@@ -198,7 +193,6 @@ gnc_split_register_save_actn_cell (BasicCell * cell,
                                    gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, ACTN_CELL));
@@ -216,7 +210,6 @@ gnc_split_register_save_memo_cell (BasicCell * cell,
                                    gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   const char *value;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, MEMO_CELL));
@@ -307,7 +300,6 @@ gnc_split_register_save_shares_cell (BasicCell * bcell,
                                      gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   PriceCell *cell = (PriceCell *) bcell;
   gnc_numeric amount;
 
@@ -328,7 +320,6 @@ gnc_split_register_save_price_cell (BasicCell * bcell,
                                     gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   PriceCell *cell = (PriceCell *) bcell;
   gnc_numeric price;
 
@@ -382,7 +373,6 @@ gnc_split_register_save_cells (gpointer save_data,
                                gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   Split *other_split;
 
   g_return_if_fail (sd != NULL);
@@ -469,9 +459,6 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
   SplitRegister *reg = user_data;
   kvp_frame *kvpf;
   const char *value;
-  gnc_numeric new_amount;
-  gnc_numeric credit;
-  gnc_numeric debit;
 
   g_return_if_fail (gnc_basic_cell_has_name (cell, FDEBT_CELL) ||
                     gnc_basic_cell_has_name (cell, FCRED_CELL));
@@ -513,7 +500,6 @@ gnc_template_register_save_shares_cell (BasicCell * cell,
                                         gpointer user_data)
 {
   SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   kvp_frame *kvpf;
   char *sharesStr = "(x + y)/42";
 

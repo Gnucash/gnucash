@@ -17,10 +17,12 @@ test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
 		 const char * (*get)(GncVendor *));
 
+#if 0
 static void
 test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
 		  gnc_numeric (*get)(GncVendor *));
+#endif
 
 static void
 test_bool_fcn (GNCBook *book, const char *message,
@@ -112,6 +114,7 @@ test_string_fcn (GNCBook *book, const char *message,
   gncVendorSetActive (vendor, FALSE); count++;
 }
 
+#if 0
 static void
 test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
@@ -126,6 +129,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
   do_test (gnc_numeric_equal (get (vendor), num), message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
+#endif
 
 static void
 test_bool_fcn (GNCBook *book, const char *message,

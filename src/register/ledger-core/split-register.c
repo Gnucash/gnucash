@@ -2305,8 +2305,6 @@ gnc_split_register_cleanup (SplitRegister *reg)
 void
 gnc_split_register_destroy (SplitRegister *reg)
 {
-  GList *node;
-
   if (!reg)
     return;
 

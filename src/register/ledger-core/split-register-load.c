@@ -62,7 +62,6 @@ static void
 gnc_split_register_load_type_cells (SplitRegister *reg)
 {
   RecnCell *cell;
-  const char * s;
 
   if (!reg) return;
 

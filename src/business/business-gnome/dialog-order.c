@@ -102,7 +102,6 @@ static void
 gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
-  GncOrder *order;
 
   {
     const char *res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
@@ -138,7 +137,6 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
   char *help_file = "";		/* xxx */
 
   helpWindow(NULL, NULL, help_file);
@@ -420,7 +418,6 @@ void
 gnc_order_edit (GtkWidget *parent, GncOrder *order)
 {
   OrderWindow *ow;
-  GncOwner owner;
 
   if (!order) return;
 
@@ -451,7 +448,6 @@ static gpointer gnc_order_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 static void gnc_order_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
 {
   GncOrder *order = obj;
-  struct _order_select_window *sw = arg;
 
   if (!arg || !obj) return;
 
@@ -478,7 +474,6 @@ gpointer gnc_order_edit_new_select (gpointer bookp, gpointer order,
 gpointer gnc_order_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
   GncOrder *order = v;
 
   g_return_val_if_fail (order != NULL, NULL);

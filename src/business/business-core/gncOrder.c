@@ -78,8 +78,6 @@ GncOrder *gncOrderCreate (GNCBook *book)
 
 void gncOrderDestroy (GncOrder *order)
 {
-  GList *item;
-
   if (!order) return;
 
   g_list_free (order->entries);

@@ -193,8 +193,6 @@ static void
 gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   CustomerWindow *cw = data;
-  char *res;
-  GncCustomer *cust;
   gnc_numeric min, max;
 
   /* Check for valid id */
@@ -259,7 +257,6 @@ gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_customer_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  CustomerWindow *cw = data;
   char *help_file = "";		/* xxx */
 
   helpWindow(NULL, NULL, help_file);
@@ -551,7 +548,6 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 				  gnc_customer_window_close_handler,
 				  cw);
   } else {
-    gnc_numeric num;
     cust = gncCustomerCreate (bookp);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
@@ -644,7 +640,6 @@ static gpointer gnc_customer_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 static void gnc_customer_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
 {
   GncCustomer *cust = obj;
-  struct _customer_select_window *sw = arg;
 
   if (!arg || !obj) return;
 
@@ -671,9 +666,6 @@ gpointer gnc_customer_edit_new_select (gpointer bookp, gpointer cust,
 gpointer gnc_customer_edit_new_edit (gpointer bookp, gpointer cust,
 				     GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
-  GncCustomer *customer = cust;
-
   g_return_val_if_fail (cust != NULL, NULL);
 
   gnc_customer_edit (toplevel, cust);

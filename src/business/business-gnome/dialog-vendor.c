@@ -160,9 +160,7 @@ static void
 gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
-  char *res;
-  GncVendor *vendor;
-  gnc_numeric min, max;
+  gnc_numeric min;
 
   /* Check for valid id */
   if (check_entry_nonempty (vw->dialog, vw->id_entry,
@@ -215,7 +213,6 @@ gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  VendorWindow *vw = data;
   char *help_file = "";		/* xxx */
 
   helpWindow(NULL, NULL, help_file);
@@ -323,7 +320,6 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
   GladeXML *xml;
   GtkWidget *hbox, *edit;
   GnomeDialog *vwd;
-  gnc_commodity *commodity;
   GNCPrintAmountInfo print_info;
 
   vw = g_new0 (VendorWindow, 1);
@@ -452,7 +448,6 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 				  gnc_vendor_window_close_handler,
 				  vw);
   } else {
-    gnc_numeric num;
     vendor = gncVendorCreate (bookp);
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
@@ -541,7 +536,6 @@ static gpointer gnc_vendor_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 static void gnc_vendor_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
 {
   GncVendor *vendor = obj;
-  struct _vendor_select_window *sw = arg;
 
   if (!arg || !obj) return;
 
@@ -568,7 +562,6 @@ gpointer gnc_vendor_edit_new_select (gpointer bookp, gpointer vendor,
 gpointer gnc_vendor_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
   GncVendor *vendor = v;
 
   g_return_val_if_fail (vendor != NULL, NULL);

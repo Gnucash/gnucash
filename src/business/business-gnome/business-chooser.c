@@ -43,7 +43,7 @@ chooser_choice_changed_cb(GtkList *list, GtkWidget *li, gpointer user_data)
 static void
 update_selection_picker (struct business_chooser_window *w)
 {
-  GList *objs, *iterator;
+  GList *iterator;
   GtkWidget *li;
   GList *obj_list;
   gpointer selected;

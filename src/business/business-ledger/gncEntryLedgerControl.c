@@ -27,8 +27,6 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   VirtualLocation new_virt_loc = *p_new_virt_loc;
-  VirtualCellLocation old_entry_loc;
-  GncEntry *pending_entry;
   GncEntry *new_entry;
   GncEntry *old_entry;
   gboolean saved;
@@ -95,11 +93,8 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 				  gncTableTraversalDir dir,
 				  VirtualLocation *p_new_virt_loc)
 {
-  VirtualLocation new_virt_loc;
   GncEntry *entry;
   GncEntry *blank_entry;
-  const char *cell_name;
-  BasicCell *cell;
 
   blank_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
 

@@ -442,7 +442,6 @@ gnc_date_cell_direct_update (BasicCell *bcell,
   PopBox *box = cell->cell.gui_private;
   GdkEventKey *event = gui_data;
   char buff[DATE_BUF];
-  GDate gdate;
 
   if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
     return FALSE;

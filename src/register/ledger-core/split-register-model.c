@@ -1083,7 +1083,6 @@ gnc_split_register_get_xfrm_entry (VirtualLocation virt_loc,
 
   SplitRegister *reg = user_data;
   Split *split;
-  Split *s;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 

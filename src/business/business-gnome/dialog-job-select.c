@@ -158,7 +158,6 @@ select_job_customer_changed_cb(GtkList *list, GtkWidget *li,
 			       gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GList *node;
 
   if (!li)
     return;
@@ -172,7 +171,6 @@ static void
 select_job_job_changed_cb(GtkList *list, GtkWidget *li, gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GList *node;
 
   if (!li)
     return;
@@ -262,7 +260,6 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
   struct select_job_window * win =
     g_new0(struct select_job_window, 1);
   GladeXML *xml;
-  GtkWidget *choice_name_label;
   GncJob *retval;
 
   g_return_val_if_fail (book != NULL, NULL);

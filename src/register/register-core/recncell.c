@@ -44,8 +44,6 @@
 #include "gnc-engine-util.h"
 #include "recncell.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_REGISTER;
 
 static void gnc_recn_cell_set_value (BasicCell *_cell, const char *value);
 

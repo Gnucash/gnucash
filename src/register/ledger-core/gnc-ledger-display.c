@@ -427,8 +427,6 @@ gnc_ledger_display_template_gl (char *id)
 {
   GNCBook *book;
   Query *q;
-  time_t start;
-  struct tm *tm;
   GNCLedgerDisplay *ld;
   SplitRegister *sr;
   AccountGroup *ag;

@@ -111,7 +111,6 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
 					TableLayout *layout)
 {
   CellBlock *curs;
-  CellBlock *curs_last;
   int x = 0;
 
   switch (ledger->type) {
