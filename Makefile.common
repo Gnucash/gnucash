@@ -15,6 +15,11 @@
 # OBJS is for flavor independent files
 # GNOME/MOTIF_OBJS  is for flavor dependent files
 
+# Clear all of the default suffix rules.  They were causing a great
+# deal of agony when trying to get the .tmpl rules to work.  In
+# general, we want to take charge of these for now.
+.SUFFIXES:
+
 OBJS       := $(addprefix obj/,${INDEP_SRCS:.c=.o})
 GNOME_OBJS := $(addprefix obj/gnome/,${COMMON_SRCS:.c=.o})
 GNOME_OBJS += $(addprefix obj/gnome/,${GNOME_SRCS:.c=.o})
@@ -32,6 +37,7 @@ endif
 QT_FLAGS   := 
 
 
+# All c files depend on headers with the same names.
 %.c : %.h
 
 # Basically take the output foo.d file and put it in the right

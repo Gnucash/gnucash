@@ -6,7 +6,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-guess-map.scm")
+(gnc:support "qif-import/qif-guess-map.scm")
 
 (define GNC-BANK-TYPE 0)
 (define GNC-CASH-TYPE 1)

@@ -6,7 +6,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-utils.scm")
+(gnc:support "qif-import/qif-utils.scm")
 
 (define (simple-filter pred list)
   (let ((retval '()))

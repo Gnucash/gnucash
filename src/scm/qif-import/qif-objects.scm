@@ -6,8 +6,8 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-objects.scm")
-(gnc:depend "simple-obj.scm")
+(gnc:support "qif-import/qif-objects.scm")
+(gnc:depend "qif-import/simple-obj.scm")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

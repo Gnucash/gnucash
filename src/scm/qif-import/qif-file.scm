@@ -6,10 +6,10 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-file.scm")
-(gnc:depend "qif-objects.scm")
-(gnc:depend "qif-parse.scm")
-(gnc:depend "qif-utils.scm")
+(gnc:support "qif-import/qif-file.scm")
+(gnc:depend "qif-import/qif-objects.scm")
+(gnc:depend "qif-import/qif-parse.scm")
+(gnc:depend "qif-import/qif-utils.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:read-file self path  

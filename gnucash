@@ -9,5 +9,5 @@ exec ./gnucash.bin \
  --debug \
  --share-dir ./share \
  --config-dir ./etc \
- --doc-path '("./Docs/En" "./Docs" "./Reports")' \
+ --doc-path '("./doc/html/C")' \
  "$@"

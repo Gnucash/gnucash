@@ -1341,7 +1341,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
    if (((MOD_AMNT | MOD_PRIC | MOD_VALU) & changed) &&
        ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
 	(CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-	(PORTFOLIO         == (reg->type & REG_TYPE_MASK)))) {
+	(PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))) {
 
      double value;
      double price;
@@ -1469,62 +1469,32 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
       if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
           (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO         == (reg->type & REG_TYPE_MASK)))
+          (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
         xaccSplitSetShareAmount (split, new_amount);
       else
         xaccSplitSetValue (split, new_amount);
    }
 
    if (MOD_PRIC & changed) {
-      Account *acc;
       double price;
-      int n;
 
       price = xaccGetPriceCellValue(reg->priceCell);
 
       DEBUG ("xaccSRSaveRegEntry(): MOD_PRIC: %f\n", price);
 
       xaccSplitSetSharePrice (split, price);
-
-      /* Here we handle a very special case: the user just created 
-       * an account, which now has two splits in it, and the user 
-       * is editing the opening balance split.  Then copy the price
-       * over to the last split, so that the account balance, when
-       * computed, won't be obviously bad.  Strictly speaking, everything
-       * will automatically fix itself once the user closes the window,
-       * or if they start editing the second split, and so we don't
-       * really have to do this.  This is more of a feel-good thing,
-       * so that they won't see even briefly what looks like bad values, 
-       * and that might give them the willies.  We want them to feel good.
-       */
-      acc = xaccSplitGetAccount (split);
-      n = xaccAccountGetNumSplits (acc);
-      if (2 == n) {
-         Split *s = xaccAccountGetSplit (acc, 0);
-         if (s == split) {
-            Transaction *t;
-            double currprice;
-            s = xaccAccountGetSplit (acc, 1);
-            currprice = xaccSplitGetSharePrice (s);
-            if (DEQ (currprice, 1.0)) {
-               t = xaccSplitGetParent (s);
-               xaccTransBeginEdit (t, 0);
-               xaccSplitSetSharePrice (s, price);
-               xaccTransCommitEdit (t);
-            }
-         }
-      }
    }
 
    if (MOD_VALU & changed) {
       double value = xaccGetPriceCellValue(reg->valueCell);
 
       DEBUG ("xaccSRSaveRegEntry(): MOD_VALU: %f\n", value);
+
       xaccSplitSetValue (split, value);
    }
 
    PINFO ("xaccSRSaveRegEntry(): finished saving split %s of trans %s \n", 
-      xaccSplitGetMemo(split), xaccTransGetDescription(trans));
+          xaccSplitGetMemo(split), xaccTransGetDescription(trans));
 
    /* If the modified split is the "blank split", then it is now an
     * official part of the account. Set the blank split to NULL, so
@@ -1668,7 +1638,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       if ((EQUITY_REGISTER   == typo) ||
           (STOCK_REGISTER    == typo) ||
           (CURRENCY_REGISTER == typo) ||
-          (PORTFOLIO         == typo)) 
+          (PORTFOLIO_LEDGER  == typo)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
@@ -2071,8 +2041,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
        * when doing stock accounts.   This will guess incorrectly for a 
        * ledger showing multiple stocks, but seems cool for a single stock.
        */
-      if ((STOCK_REGISTER == type) ||
-          (PORTFOLIO      == type)) 
+      if ((STOCK_REGISTER   == type) ||
+          (PORTFOLIO_LEDGER == type)) 
       {
          last_price = xaccSplitGetSharePrice (last_split);
          xaccSplitSetSharePrice (split, last_price);
@@ -2120,9 +2090,13 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
        {
          xaccSplitRegisterRestoreCursorChanged(reg, reg_buffer);
          xaccCommitCursor (reg->table);
-         xaccDestroySplitRegisterBuffer(reg_buffer);
-         reg_buffer = NULL;
        }
+     }
+
+     if (reg_buffer != NULL)
+     {
+       xaccDestroySplitRegisterBuffer(reg_buffer);
+       reg_buffer = NULL;
      }
    }
 

@@ -1,0 +1,38 @@
+-*-text-*-
+
+===========================================================================
+
+Deleting .SUFFIX rules
+
+While working on some other problems, I discovered that this implicit
+rule 
+
+  % : %.tmpl
+    ...
+
+fails for files like message_i18n.h.tmpl because some other .h
+implicit rule that's been defined is keeping this one from working.  I
+could have worked around it by defining a "terminal rule" using "::"
+instead (See "Match-Anything Pattern Rules" in the make info pages),
+and in truth, :: might be more appropriate here anyway, but instead I
+used .SUFFIX: to delete all the default suffix rules.  I think that we
+probably want control of this anyhow...
+
+===========================================================================
+
+*EXPANDED* .in file variables:
+
+I've added some rules to configure.in that look like GNC_EXPANDED_*.
+These are intended for use in any non-makefile .in files.  The
+difference between them and another variable of the same name
+(i.e. the difference between GNC_LIBDIR and GNC_EXPANDED_LIBDIR is
+that the latter has been expended in configure.in via
+recursively_expand().  This is critical for variables that are going
+in to non-makefiles because there's no other way for any variable
+references to get expanded.  For example, what if configure were to
+assign GNC_CONFIGDIR to be "${prefix}/etc/gnucash" and then this exact
+string were substituted into gnucash.h.in or bootstrap.scm?  The C
+compiler and Scheme interpreter would have no idea what to do with
+$prefix, so you'd be stuck.  recursively_expand fixes this.
+
+===========================================================================

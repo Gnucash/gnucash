@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!@PERL@
 #
 # This perl script is used to make a patch for your GnuCash
 # development work. All patches should be submitted to the
@@ -78,6 +78,10 @@ system('gzip -9vf gnucash.diff');
 system('uuencode gnucash.diff.gz gnucash.diff.gz > gnucash.diff.gz.uue');
 
 exit(0);
+
+# Local Variables:
+# mode: perl
+# End:
 
 __DATA__
 

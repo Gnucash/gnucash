@@ -1,11 +1,8 @@
-# -*-makefile-*-
-
 @SET_MAKE@
 
 export PATH := @GUILE_BIN@:@ABSOLUTE_TOP_SRCDIR@/lib/g-wrap-install/bin/:${PATH}
 
 srcdir  = @srcdir@
-top_srcdir = @top_srcdir@
 VPATH   = @srcdir@
 
 prefix=@prefix@
@@ -23,6 +20,8 @@ sysconfdir=@sysconfdir@
 
 includedir=@includedir@
 
+ABSOLUTE_TOP_SRCDIR=@ABSOLUTE_TOP_SRCDIR@
+
 CC           = @CC@
 CXX          = @CXX@
 CFLAGS       = @CFLAGS@
@@ -33,7 +32,6 @@ RANLIB       = @RANLIB@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 SWIG         = @SWIG@
-GWRAP        = @top_srcdir@/lib/g-wrap-install/bin
 PERL         = @PERL@
 
 CPU          = @target_cpu@
@@ -51,3 +49,7 @@ GNC_MANDIR=@GNC_MANDIR@
 HAVE_PLOTUTILS=@HAVE_PLOTUTILS@
 GLIB_CONFIG_BIN=@GLIB_CONFIG_BIN@
 GNOME_CONFIG_BIN=@GNOME_CONFIG_BIN@
+
+# Local Variables:
+# mode: makefile
+# End:

@@ -6,7 +6,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "number-to-words.scm")
+(gnc:support "printing/number-to-words.scm")
 
 (define (integer-to-words val)
   (let ((current-string "")

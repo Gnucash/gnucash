@@ -16,6 +16,7 @@
 #   Footer    - Autoconf footer stuff
 
 
+
 ### --------------------------------------------------------------------------
 ### Headers
 ### check for various programs, and stuff (do this first because later
@@ -39,6 +40,28 @@ AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
 AC_CHECK_FUNCS(stpcpy)   
+
+### --------------------------------------------------------------------------
+### Useful POSIX shell functions
+###
+
+# This has to be a variable because we need to be able to export it,
+# and POSIX shells AFAIK don't have "export -f"
+
+gnc_recursively_expand_var () {
+
+  # Note that this function will only work for cases where any sign of
+  # a $ means that there is a variable reference that can be expanded.
+  # I.e. it would fail miserably for something like pattern='^bar.*$'.
+
+  local expanded_var=${1}
+  while echo $expanded_var | grep '\$' > /dev/null
+  do
+    expanded_var=$(eval echo ${expanded_var})
+  done
+  echo $expanded_var
+}
+
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -81,7 +104,11 @@ AC_ARG_WITH( locale-dir,
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
   LOCALE_DIR="$prefix/share/locale")
+
+GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${GNC_LOCALE_DIR}")
+
 AC_SUBST(LOCALE_DIR)
+AC_SUBST(GNC_EXPANDED_LOCALE_DIR)
 
 AC_CHECK_HEADER(locale.h, ac_cv_header_locale_h=yes, ac_cv_header_locale_h=no)
 AC_CAN_USE_GNU_GETTEXT
@@ -164,9 +191,10 @@ fi
 # for some reason the code needs both the full path and the basename.
 # these get dumped into src/guile/pathconfig.h
 
-EPERL_PATH="$EPERL"
-EPERL_NAME=`basename $EPERL`
-AC_SUBST(EPERL_PATH)
+GNC_EXPANDED_EPERL_PATH=$(gnc_recursively_expand_var "${EPERL}")
+EPERL_NAME=$(basename $EPERL)
+
+AC_SUBST(GNC_EXPANDED_EPERL_PATH)
 AC_SUBST(EPERL_NAME)
 
 ### -------------------------------------------------------------------
@@ -510,6 +538,10 @@ else
   GNC_SHAREDIR=${datadir}/gnucash
 fi
 
+GNC_EXPANDED_LIBDIR=$(gnc_recursively_expand_var "${GNC_LIBDIR}")
+GNC_EXPANDED_CONFIGDIR=$(gnc_recursively_expand_var "${GNC_CONFIGDIR}")
+GNC_EXPANDED_SHAREDIR=$(gnc_recursively_expand_var "${GNC_SHAREDIR}")
+
 GNC_MANDIR=${mandir}
 
 AC_SUBST(GNC_DOCDIR)
@@ -518,29 +550,24 @@ AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_MANDIR)
-
+AC_SUBST(GNC_EXPANDED_LIBDIR)
+AC_SUBST(GNC_EXPANDED_CONFIGDIR)
+AC_SUBST(GNC_EXPANDED_SHAREDIR)
 
 # HACK : inserts the path to gnucash.pm, which is used in the
 # reporting code and is defined in gnucash.h
 
-GNC_RUNTIME_PERLLIBPATH=`eval echo ${GNC_LIBDIR}`
+GNC_EXPANDED_PERLLIBPATH=$(gnc_recursively_expand_var "${GNC_LIBDIR}")
 
-AC_SUBST(GNC_RUNTIME_PERLLIBPATH)
+AC_SUBST(GNC_EXPANDED_PERLLIBPATH)
 
-
-# The variables GNC_RUNTIME_SHAREDIR and GNC_RUNTIME_CONFIGDIR are used
-# to configure bootstrap.scm and gnucash.h. This configuration is performed
-# by Makefile.config.finish, invoked at the end of AC_OUTPUT. We have to
-# handle these separately, because they are the *runtime* (not install
-# time) defaults, and thus
-#  1) We don't want them to change if you do
-#     make prefix=foo install
-#     This allows you to build distributions in a separate directory.
-#  2) They are normally defined in terms of $prefix, and AC_OUPUT does
-#     not do recursive substitution, i.e., if we USED AC_OUTPUT to
-#     generate them, we would get ${prefix}/share/gnucash instead
-#     of the fully expanded directory name.
-
+# Get the absolute top level directory.  This is only used to add some
+# ./lib/* paths to PATH for local build binaries like gwrap.  For all
+# other purposes, you should probably be using top_srcdir.  configure
+# automagically provides it, but you have to be careful to set it
+# directly within each Makefile.in since it's the *relative* path to
+# the top of the source tree rather than an absolute path.  You can't
+# just put it in Makefile.init.in or Makefile.common.
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
 AC_SUBST(ABSOLUTE_TOP_SRCDIR)
@@ -549,27 +576,31 @@ AC_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(Makefile
           Makefile.init
+          make-gnucash-patch
           src/Makefile
           src/engine/Makefile
           src/guile/Makefile
+          src/guile/gnucash.h
           src/guile/i18n.h
           src/scm/Makefile
+          src/scm/bootstrap.scm
           src/g-wrap/Makefile
           src/gnome/Makefile
           src/motif/Makefile
           src/qt/Makefile
+          src/quotes/gnc-prices
           src/register/Makefile
 	  src/register/gnome/Makefile
           src/reports/Makefile
-	  src/reports/pathconfig.h
+          src/reports/pathconfig.h
           src/swig/Makefile
           src/swig/perl5/Makefile
 	  po/Makefile.in
 	  po/extract-macros.perl
-	  include/messages_i18n.h
+          include/messages_i18n.h
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
           lib/ComboBox-1.33/Makefile,
-          chmod +x gnucash
-          ${MAKE-make} -f Makefile.config.finish)
+          chmod a+x ./gnucash
+          chmod a+x ./make-gnucash-patch)

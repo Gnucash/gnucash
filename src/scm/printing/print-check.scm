@@ -6,9 +6,9 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "print-check.scm")
-(gnc:depend  "number-to-words.scm")
-(gnc:depend  "simple-obj.scm")
+(gnc:support "printing/print-check.scm")
+(gnc:depend  "printing/number-to-words.scm")
+(gnc:depend  "qif-import/simple-obj.scm")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

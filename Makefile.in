@@ -54,8 +54,8 @@ gnome-static: gnome.static
 qt-static: qt.static
 
 build-flavor: config.status
-	@cd lib;    $(MAKE) ${FLAVOR}
-	@cd src;    $(MAKE) ${FLAVOR}
+	@cd lib     && ${MAKE} ${FLAVOR}
+	@cd src     && ${MAKE} ${FLAVOR}
 	ln -sf gnucash.${FLAVOR} gnucash.bin
 	(cd share && rm -f scm && ln -sf ../src/scm scm)
 
@@ -101,6 +101,8 @@ qt.disable:
 	echo "Qt build disabled by configure. Try configure --enable-qt"
 	false
 
+.PHONY: all
+
 depend:
 	@echo make depend is now superfluous.
 
@@ -134,7 +136,8 @@ install-bin: gnucash.${FLAVOR}
 	(cd ${GNC_BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
 
 install:
-	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR}
+	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR}
+	$(INSTALL) -d ${GNC_DOCDIR} ${GNC_CONFIGDIR}
 	$(INSTALL) -d ${GNC_DOCDIR}/examples ${GNC_MANDIR}/man1
 	$(INSTALL) -d ${GNC_SHAREDIR} ${GNC_SHAREDIR}/html
 	$(INSTALL) -d ${GNC_SHAREDIR}/html/C ${GNC_SHAREDIR}/html/C/pix
@@ -209,7 +212,7 @@ install:
   # place for this stuff ...  For now, we will simply touch the one file that
   # the scheme initialization is looking for, and punt on the rest ...
 
-	$(INSTALL_DATA) etc/conf* ${GNC_SHAREDIR}
+	$(INSTALL_DATA) etc/conf* ${GNC_CONFIGDIR}
 
 	$(MAKE) -C po install
 

@@ -147,7 +147,7 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 
 xaccLedgerDisplay *
 xaccLedgerDisplaySimple (Account *acc)
-  {
+{
   xaccLedgerDisplay *retval;
   int acc_type;
   int reg_type = -1;
@@ -197,7 +197,7 @@ xaccLedgerDisplaySimple (Account *acc)
 
   retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
-  }
+}
 
 /********************************************************************\
  * xaccLedgerDisplayAccGroup                                        *
@@ -229,8 +229,8 @@ xaccLedgerDisplayAccGroup (Account *acc)
     case CREDIT:
     case LIABILITY:
        /* if any of the sub-accounts have STOCK or MUTUAL types,
-        * then we must use the PORTFOLIO type ledger.  Otherise,
-        * a plain old GEN_LEDGER will do. */
+        * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
+        * a plain old GENERAL_LEDGER will do. */
        ledger_type = GENERAL_LEDGER;
 
        le = list[0];
@@ -238,7 +238,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
        while (le) {
           le_type = xaccAccountGetType (le);
           if ((STOCK == le_type) || (MUTUAL == le_type)) {
-             ledger_type = PORTFOLIO;
+             ledger_type = PORTFOLIO_LEDGER;
           }
           n++;
           le = list[n];
@@ -247,9 +247,9 @@ xaccLedgerDisplayAccGroup (Account *acc)
 
     case STOCK:
     case MUTUAL:
-       ledger_type = PORTFOLIO;
+       ledger_type = PORTFOLIO_LEDGER;
        break;
-    
+
     case INCOME:
     case EXPENSE:
        ledger_type = INCOME_LEDGER;
@@ -314,7 +314,8 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
+xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
+                          int ledger_type)
 {
   xaccLedgerDisplay *regData = NULL;
 
@@ -333,7 +334,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
    *
    * A third possibility exists: a multiple-account register, with
    * no leader account.  In such a case, the list of accounts being
-   * displayed have no particular relationshp to each other.  There
+   * displayed have no particular relationship to each other.  There
    * can be an arbitrary number of multiple-account leader-less
    * registers.
    */
@@ -345,7 +346,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
        FETCH_FROM_LIST (xaccLedgerDisplay, ledgerList, lead_acc, leader, regData);
      }
   }
-  
+
   /* if regData is null, then no leader account was specified */
   if (!regData) {
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
@@ -395,7 +396,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
 
   regData->dirty = 1;
   xaccLedgerDisplayRefresh (regData);
-  
+
   return regData;
 }
 

@@ -838,6 +838,21 @@ gnc_register_create_status_bar(RegWindow *regData)
 			       GNC_T, /* has status area */
 			       GNOME_PREFERENCES_USER);
 
+  regData->statusbar = statusbar;
+
+  switch (regData->ledger->ledger->type & REG_TYPE_MASK)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+    case PORTFOLIO_LEDGER:
+    case SEARCH_LEDGER:
+      regData->cleared_label = NULL;
+      regData->balance_label = NULL;
+      return statusbar;
+    default:
+      break;
+  }
+
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
@@ -861,8 +876,6 @@ gnc_register_create_status_bar(RegWindow *regData)
   gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
   regData->balance_label = label;
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-  regData->statusbar = statusbar;
 
   return statusbar;
 }
@@ -1382,36 +1395,44 @@ gnc_reg_set_window_name(RegWindow *regData)
   gchar *windowname;
   gchar *account_name;
   gchar *reg_name;
+  gboolean single_account;
 
   if (regData == NULL)
     return;
 
+  switch (regData->ledger->type & REG_TYPE_MASK)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+      reg_name = GENERAL_LEDGER_STR;
+      single_account = GNC_F;
+      break;
+    case PORTFOLIO_LEDGER:
+      reg_name = PORTFOLIO_STR;
+      single_account = GNC_F;
+      break;
+    case SEARCH_LEDGER:
+      reg_name = SEARCH_RESULTS_STR;
+      single_account = GNC_F;
+      break;
+    default:
+      reg_name = REGISTER_STR;
+      single_account = GNC_T;
+      break;
+  }
+
   leader = regData->ledger->leader;
 
-  if (leader != NULL)
+  if ((leader != NULL) && single_account)
   {
     account_name = xaccAccountGetFullName(leader, gnc_get_account_separator());
-
-    switch (regData->ledger->type)
-    {
-      case GENERAL_LEDGER:
-      case INCOME_LEDGER:
-        reg_name = GENERAL_LEDGER_STR;
-        break;
-      case PORTFOLIO:
-        reg_name = PORTFOLIO_STR;
-        break;
-      default:
-        reg_name = REGISTER_STR;
-        break;
-    }
 
     windowname = g_strconcat(account_name, " - ", reg_name, NULL);
 
     free(account_name);
   }
   else
-    windowname = g_strdup(GENERAL_LEDGER_STR);
+    windowname = g_strdup(reg_name);
 
   gtk_window_set_title(GTK_WINDOW(regData->window), windowname);
 
@@ -1431,7 +1452,7 @@ gnc_toolbar_change_cb(void *data)
  *   opens up a ledger window for the account list                  *
  *                                                                  *
  * Args:   ledger - ledger data structure                           *
- * Return: regData  - the register window instance                  *
+ * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
 regWindowLedger(xaccLedgerDisplay *ledger)
@@ -1474,8 +1495,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
   /* Invoked when window is being destroyed. */
   gtk_signal_connect(GTK_OBJECT(regData->window), "destroy",
-		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb),
-		     (gpointer) regData);
+		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
 
   regData->date_window = gnc_register_date_window(regData);
   gnc_register_set_date_range(regData);
@@ -1563,7 +1583,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
     switch (type)
     {
       case STOCK_REGISTER:
-      case PORTFOLIO:
+      case PORTFOLIO_LEDGER:
       case CURRENCY_REGISTER:
         prefix = "reg_stock_win";
         width = &last_stock_width;
@@ -1619,21 +1639,27 @@ regRefresh(xaccLedgerDisplay *ledger)
     gboolean reverse = gnc_reverse_balance(ledger->leader);
     double amount;
 
-    amount = ledger->balance;
-    if (reverse)
-      amount = -amount;
+    if (regData->balance_label != NULL)
+    {
+      amount = ledger->balance;
+      if (reverse)
+        amount = -amount;
 
-    gnc_set_label_color(regData->balance_label, amount);
-    gtk_label_set_text(GTK_LABEL(regData->balance_label),
-		       xaccPrintAmount(amount, print_flags));
+      gnc_set_label_color(regData->balance_label, amount);
+      gtk_label_set_text(GTK_LABEL(regData->balance_label),
+                         xaccPrintAmount(amount, print_flags));
+    }
 
-    amount = ledger->clearedBalance;
-    if (reverse)
-      amount = -amount;
+    if (regData->cleared_label != NULL)
+    {
+      amount = ledger->clearedBalance;
+      if (reverse)
+        amount = -amount;
 
-    gnc_set_label_color(regData->cleared_label, amount);
-    gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                       xaccPrintAmount(amount, print_flags));
+      gnc_set_label_color(regData->cleared_label, amount);
+      gtk_label_set_text(GTK_LABEL(regData->cleared_label),
+                         xaccPrintAmount(amount, print_flags));
+    }
 
     gnc_reg_set_window_name(regData);
   }
@@ -1643,15 +1669,13 @@ regRefresh(xaccLedgerDisplay *ledger)
 static void
 gnc_reg_save_size(RegWindow *regData)
 {
-  int type;
   int *width;
   char *prefix;
 
-  type = regData->ledger->ledger->type & REG_TYPE_MASK;
-  switch (type)
+  switch (regData->ledger->ledger->type & REG_TYPE_MASK)
   {
     case STOCK_REGISTER:
-    case PORTFOLIO:
+    case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
       prefix = "reg_stock_win";
       width = &last_stock_width;
@@ -1989,13 +2013,15 @@ gnc_transaction_delete_query(GtkWindow *parent)
   gchar *usual = DEL_USUAL_MSG;
   gchar *warn  = DEL_WARN_MSG;
 
+  DeleteType return_value;
+
   dialog = gnome_dialog_new(DEL_TRANS_STR,
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
                             NULL);
 
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
+  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
   gnome_dialog_set_parent(GNOME_DIALOG(dialog), parent);
 
   dvbox = GNOME_DIALOG(dialog)->vbox;
@@ -2037,15 +2063,17 @@ gnc_transaction_delete_query(GtkWindow *parent)
   result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
 
   if (result != 0)
-    return DELETE_CANCEL;
+    return_value = DELETE_CANCEL;
+  else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(trans_button)))
+    return_value = DELETE_TRANS;
+  else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(splits_button)))
+    return_value = DELETE_SPLITS;
+  else
+    return_value = DELETE_CANCEL;
 
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(trans_button)))
-    return DELETE_TRANS;
+  gtk_widget_destroy(dialog);
 
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(splits_button)))
-    return DELETE_SPLITS;
-
-  return DELETE_CANCEL;
+  return return_value;
 }
 
 
@@ -2132,7 +2160,8 @@ deleteCB(GtkWidget *widget, gpointer data)
     return;
   }
 
-  /* At this point we are on a transaction cursor with more than 2 splits.
+  /* At this point we are on a transaction cursor with more than 2 splits
+   * or we are on a transaction cursor in multi-line mode or an auto mode.
    * We give the user two choices: delete the whole transaction or delete
    * all the splits except the transaction split. */
   {

@@ -6,7 +6,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "simple-obj.scm")
+(gnc:support "qif-import/simple-obj.scm")
 
 ;;  this is an extremely rudimentary object system.  Each object is a
 ;;  cons cell, where the car is a symbol with the class name and the

@@ -7,7 +7,7 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "qif-dialog-utils.scm")
+(gnc:support "qif-import/qif-dialog-utils.scm")
 
 (define (qif-dialog:munge-account-mapping old-map new-info)
   (let ((new-name (car new-info))
