@@ -18,7 +18,10 @@
  *                                                                  *
 \********************************************************************/
 /**
- * @addtogroup Engine_SchedXaction
+ * @addtogroup Engine
+ * @{ */
+/**
+ * @addtogroup SchedXaction
  * @{ */
 /**
  * @file SchedXaction.h
@@ -223,4 +226,5 @@ void xaccSchedXactionSetSlot( SchedXaction *sx,
 
 #endif /* XACC_SCHEDXACTION_H */
 
+/** @} */
 /** @} */

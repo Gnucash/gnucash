@@ -19,6 +19,8 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Account
+    @{ */
 /** @file Account.h 
     @brief Account handling public routines   
     @author Copyright (C) 1997 Robin D. Clark
@@ -727,4 +729,5 @@ const char * dxaccAccountGetQuoteTZ (Account *account);
 #define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
 
 #endif /* XACC_ACCOUNT_H */
+/** @} */
 /** @} */

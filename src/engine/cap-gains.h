@@ -21,11 +21,8 @@
 
 /** @addtogroup Engine
  *     @{ */
-/** @file cap-gains.h
- *  @breif Utilities to Automatically Compute Capital Gains/Losses.
- *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- *
+
+/** @addtogroup CapGains Cap Gains
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
  *  activities.  Some of these routines might have broader 
@@ -38,6 +35,12 @@
  *  This code does not currently handle tax distinctions, e.g
  *  the different tax treatment that short-term and long-term 
  *  cap gains have. 
+ *     @{ */
+
+/** @file cap-gains.h
+ *  @breif Utilities to Automatically Compute Capital Gains/Losses.
+ *  @author Created by Linas Vepstas August 2003
+ *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_CAP_GAINS_H
@@ -186,6 +189,7 @@ void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
 void xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc);
 
 #endif /* XACC_CAP_GAINS_H */
+/** @} */
 /** @} */
 
 /* =========================== END OF FILE ======================= */

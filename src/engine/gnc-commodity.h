@@ -22,15 +22,22 @@
 
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Commodity Commodities
+    A commodity is something of value that is easily tradeable or
+    sellable; for example, currencies, stocks, bonds, grain,
+    copper, and oil are all commodities.  This file provides
+    an API for defining a commodities, and for working with 
+    collections of commodities.  All GnuCash financial transactions
+    must identify the commodity that is being traded.
+
+    @warning The system used here does not follow the object
+    handling and identification system (GUID's, Entities, etc.)
+    that the other parts of GnuCash use.  The API really should be
+    ported over.  This would allow us to get rid of the 
+    commodity table reoutines defined below. 
+
+    @{ */
 /** @file gnc-commodity.h
- *
- *  This file contains the functions to manipulate two different
- *  objects.  These are an object of type gnc_commodity, and an object
- *  of type gnc_commodity_table. The gnc_commodity object corresponds
- *  one-to-one with some type of tradable commodity; a currency, a
- *  stock, a mutual fund, etc.  The gnc_commodity_table object is a
- *  database containing objects of type gnc_commodity.
- *
  *  @brief Commodity handling public routines   
  *  @author Copyright (C) 2000 Bill Gribble
  *  @author Copyright (C) 2001 Linas Vepstas <linas@linas.org>
@@ -783,4 +790,5 @@ gboolean gnc_commodity_table_register (void);
 
 
 #endif /* GNC_COMMODITY_H */
+/** @} */
 /** @} */

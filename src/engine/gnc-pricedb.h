@@ -37,12 +37,7 @@
 
 /** @addtogroup Engine
     @{ */
-/**********************************************************************/
-/** @file gnc-pricedb.h
-    @author Copyright (C) 2001 Rob Browning
-    @author Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>
-    @brief a simple price database for gnucash
-
+/** @addtogroup PriceDB  Price Database
     The PriceDB is intended to be a database of price quotes, or more
     specifically, a database of GNCPrices.  For the time being, it is
     still a fairly simple database supporting only fairly simple
@@ -54,12 +49,14 @@
     Every QofBook contains a GNCPriceDB, accessable via
     gnc_book_get_pricedb.
 
+    \warning The PriceDB does not currently use the object
+    system used elsewhere in the GnuCash Engine, i.e. it does
+    not use GUISD's, Entities and Collections.  Its should.
+    In particular, this means that currently prices cannot
+    be queried with the same emchanism as everything else.
 */
 
-/* *********************************************************************/ 
-
-/** GNCPrice:
-
+/** @addtogroup Price  Prices
     Each price in the database represents an "instantaneous" quote for
     a given commodity with respect to another commodity.  For example,
     a given price might represent the value of LNUX in USD on
@@ -116,13 +113,24 @@
       exception of the commodity field which just stores the pointer
       given.  It is assumed that commodities are a global resource and
       are pointer unique.
+   */
+/** @file gnc-pricedb.h
+    @author Copyright (C) 2001 Rob Browning
+    @author Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>
+    @brief a simple price database for gnucash
+*/
 
- */
+/* ================================================================ */
+
+/** @addtogroup Price  Prices
+ @{ */
+
 /** */
 typedef struct gnc_price_lookup_s GNCPriceLookup;
 
-/****************/
-/* constructors */
+/* ------------------ */
+/** @name Constructors 
+    @{ */
 
 /** gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
@@ -132,9 +140,11 @@ GNCPrice *gnc_price_create(QofBook *book);
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
 GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
+/**  @} */
 
-/*********************/
-/* memory management */
+/* ------------------ */
+/** @name  Memory Management
+    @{ */
 
 /** gnc_price_ref - indicate your need for a given price to stick
    around (i.e. increase its reference count by 1). */
@@ -143,9 +153,11 @@ void      gnc_price_ref(GNCPrice *p);
 /** gnc_price_ref - indicate you're finished with a price
    (i.e. decrease its reference count by 1). */
 void      gnc_price_unref(GNCPrice *p);
+/**  @} */
 
-/***********/
-/* setters */
+/* ------------------ */
+/** @name  Setters
+    @{ */
 
 /* As mentioned above, all of the setters store copies of the data
  * given, with the exception of the commodity field which just stores
@@ -167,9 +179,11 @@ void gnc_price_set_source(GNCPrice *p, const char *source);
 void gnc_price_set_type(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 void gnc_price_set_version(GNCPrice *p, gint32 versn);
+/**  @} */
 
-/***********/
-/* getters */
+/* ------------------ */
+/** @name  Getters
+    @{ */
 
 /** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
@@ -186,10 +200,10 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 #define gnc_price_get_guid(X)    qof_entity_get_guid(QOF_ENTITY(X))
 #define gnc_price_return_guid(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
 #define gnc_price_get_book(X)    qof_instance_get_book(QOF_INSTANCE(X))
+/**  @} */
 
-/* ******************************************************************** */
-/** GNCPrice lists:
-
+/* ================================================================ */
+/** @name GNCPrice lists
     The database communicates multiple prices in and out via gnc price
     lists.  These are just time sorted GLists of GNCPrice pointers.
     Functions for manipulating these lists are provided.  These
@@ -198,7 +212,7 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
     held in a given list.  I.e. insert "refs" the prices being
     inserted, remove and destroy "unref" the prices that will no
     longer be referred to by the list.
-
+   @{
 */
 
 /** gnc_price_list_insert - insert a price into the given list, calling
@@ -214,10 +228,10 @@ gboolean gnc_price_list_remove(GList **prices, GNCPrice *p);
 void     gnc_price_list_destroy(GList *prices);
 
 gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
+/**  @} */
 
-/* ******************************************************************** */
-/** GNCPriceDB
-
+/* ================================================================ */
+/** @addtogroup PriceDB
   Whenever a you store a price in the pricedb, the pricedb adds its
   own reference to the price, so you can safely unref that price after
   inserting it into the DB if you're finished with it otherwise.
@@ -226,10 +240,10 @@ gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
   or in a price list, the price will have had a ref added for you, so
   you only need to unref the price(s) when you're finished with
   it/them.
-
+  @{
 */
+/** Data type */
 typedef struct gnc_price_db_s GNCPriceDB;
-
 
 /** gnc_pricedb_create - create a new pricedb.  Normally you won't need
      this; you will get the pricedb via gnc_pricedb_get_db. */
@@ -379,5 +393,8 @@ void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
 #define PRICE_VALUE      "price-value"
 /**@}*/
 
+/** @} */
+
 #endif /* GNC_PRICEDB_H */
+/** @} */
 /** @} */

@@ -20,6 +20,8 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Period Accounting Periods
+    @{ */
 /** @file Period.h
  *  @breif Implement accounting periods, as per design in src/doc/books.txt
  *  @author Copyright (c) 2001,2003 Linas Vepstas <linas@linas.org>
@@ -182,4 +184,5 @@ void gnc_book_insert_price (QofBook *book, GNCPrice *prc);
 void gnc_book_insert_price_clobber (QofBook *book, GNCPrice *prc);
 
 #endif /* XACC_PERIOD_H */
+/** @} */
 /** @} */

@@ -21,6 +21,43 @@
 
 #ifndef QOF_H_
 #define QOF_H_
+/** @defgroup QOF Query Object Framework */
+/** @{ */
+
+/**
+    @addtogroup Date Date:  Date and Time Printing, Parsing and Manipulation
+    @ingroup QOF
+*/
+/**
+    @addtogroup Entity Entity: Types, Identity and Instance Framework
+    @ingroup QOF
+
+*/
+/**
+    @addtogroup KVP KVP: Key-Value Pairs
+    @ingroup QOF
+*/
+/**
+    @addtogroup Numeric Numeric: Rational Number Handling w/ Rounding Error Control
+    @ingroup QOF
+*/
+/**
+    @addtogroup Object Object: Dynamic Object Class Framework
+    @ingroup QOF
+*/
+/**
+    @addtogroup Query Query: Querying for Objects
+    @ingroup QOF
+*/
+/**
+    @addtogroup Trace Trace: Error Reporting and Debugging
+    @ingroup QOF
+*/
+/**
+    @addtogroup Utilities Misc Utilities
+    @ingroup QOF
+*/
+/** @} */
 
 #include "qof/gnc-date.h"
 #include "qof/gnc-engine-util.h"

@@ -17,7 +17,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Engine_SchedXaction
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup FreqSpec  Frequency Specification
     @{ */
 /** @file FreqSpec.h
     @brief Period / Date Frequency Specification
@@ -232,4 +234,5 @@ void xaccFreqSpecGetNextInstance( FreqSpec *fs,
 int gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b );
 
 #endif /* XACC_FREQSPEC_H */
+/**@}*/
 /**@}*/
