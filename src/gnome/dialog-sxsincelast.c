@@ -56,6 +56,7 @@
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
+#include "QueryNew.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "Scrub.h"

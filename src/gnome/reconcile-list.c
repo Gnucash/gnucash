@@ -28,6 +28,7 @@
 
 #include "gnc-date.h"
 #include "QueryCore.h"
+#include "QueryNew.h"
 #include "Transaction.h"
 
 #include "dialog-utils.h"
