@@ -106,6 +106,9 @@
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
 (gw:wrap-as-wct ws '<gnc:Transaction*> "Transaction*" "const Transaction*")  
 (gw:wrap-as-wct ws '<gnc:commodity*> "gnc_commodity*" "const gnc_commodity*")
+(gw:wrap-as-wct ws '<gnc:commodity-namespace*>
+                "gnc_commodity_namespace*" 
+                "const gnc_commodity_namespace*")
 (gw:wrap-as-wct ws '<gnc:commodity-table*>
                 "gnc_commodity_table*" 
                 "const gnc_commodity_table*")
@@ -2019,7 +2022,8 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-create
  '<gnc:commodity*>
  "gnc_commodity_new"
- '(((<gw:mchars> caller-owned const) fullname)
+ '((<gnc:Book*> book)
+   ((<gw:mchars> caller-owned const) fullname)
    ((<gw:mchars> caller-owned const) namespace)
    ((<gw:mchars> caller-owned const) mnemonic)
    ((<gw:mchars> caller-owned const) exchange-code)
@@ -2147,7 +2151,7 @@ of having a parent transaction with which one is working...")
 (gw:wrap-function
  ws
  'gnc:commodity-table-add-namespace
- '<gw:void>
+ '<gnc:commodity-namespace*>
  "gnc_commodity_table_add_namespace"
  '((<gnc:commodity-table*> table)
    ((<gw:mchars> caller-owned const) namespace))
@@ -2185,7 +2189,8 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-table-add-default-data
  '<gw:bool>
  "gnc_commodity_table_add_default_data"
- '((<gnc:commodity-table*> table))
+ '((<gnc:commodity-table*> table)
+   (<gnc:Book*> book))
  "Add default commodities to the commodity table.")
 
 ;;=========

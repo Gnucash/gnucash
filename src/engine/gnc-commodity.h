@@ -43,6 +43,8 @@
 #include "gnc-engine.h"
 #include "qofbook.h"
 
+#define GNC_COMMODITY_TABLE "gnc_commodity_table"
+
 /** The commodity namespace definitions are used to tag a commodity by
  *  its type, or a stocks by the exchange where it is traded.
  *  
@@ -247,7 +249,8 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *
  *  @return A pointer to the new commodity.
  */
-gnc_commodity * gnc_commodity_new(const char * fullname, 
+gnc_commodity * gnc_commodity_new(QofBook *book,
+				  const char * fullname, 
                                   const char * namespace,
                                   const char * mnemonic,
                                   const char * exchange_code,
@@ -293,6 +296,16 @@ const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
  *  is owned by the engine and should not be freed by the caller.
  */
 const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
+
+/** Retrieve the namespace data strucure for the specified commodity.
+ *  This will be a pointer to another data structure.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @return A pointer to the namespace data structure for this
+ *  commodity.
+ */
+gnc_commodity_namespace *gnc_commodity_get_namespace_ds(const gnc_commodity * cm);
 
 /** Retrieve the full name for the specified commodity.  This will be
  *  a pointer to a null terminated string of the form "Acme Systems,
@@ -585,6 +598,10 @@ gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
 gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
+
+gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
+gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book);
+
 /** @} */
 /* ---------------------------------------------------------- */
 
@@ -623,12 +640,30 @@ void gnc_commodity_table_remove(gnc_commodity_table * table,
  *  table.
  *
  *  @param table A pointer to the commodity table */
-gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
+gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book);
 
 /** @} */
 /* ---------------------------------------------------------- */
 /** @name Commodity Table Namespace functions */
 /** @{ */
+
+/** Return the textual name of a namespace data strucure.
+ *
+ *  @param ns A pointer to the namespace data strucure.
+ *
+ *  @return A pointer to the name of the namespace.  This string is
+ *  owned by the engine and should not be freed by the caller. */
+const char * gnc_commodity_namespace_get_name (gnc_commodity_namespace *ns) ;
+
+
+/** Return a list of all commodity data structures in the specified namespace.
+ *
+ *  @return A pointer to the list of structures.  NULL if an invalid
+ *  argument was supplied.
+ *
+ *  @note This list is owned by the engine.  The caller must not free the list. */
+GList * gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace * ns);
+
 
 /** Return a count of the number of namespaces in the commodity table.
  *  This count includes both system and user defined namespaces.
@@ -657,14 +692,36 @@ int gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
  *  @note It is the callers responsibility to free the list. */
 GList * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
 
+/** Return a list of all namespace data structures in the commodity table.  This
+ *  returns both system and user defined namespace structures.
+ *
+ *  @return A pointer to the list of structures.  NULL if an invalid
+ *  argument was supplied.
+ *
+ *  @note This list is owned by the engine.  The caller must not free the list. */
+GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
+
 /** This function adds a new string to the list of commodity namespaces.
  *  If the new namespace already exists, nothing happens.
  *
  *  @param table A pointer to the commodity table 
  *
- *  @param namespace The new namespace to be added.*/
-void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-                                            const char * namespace);
+ *  @param namespace The new namespace to be added.
+ *
+ *  @return A pointer to the newly created namespace. */
+gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
+							    const char * namespace);
+
+/** This function finds a commodity namespace in the set of existing commodity namespaces.
+ *
+ *  @param table A pointer to the commodity table 
+ *
+ *  @param namespace The new namespace to be added.
+ *
+ *  @return The a pointer to the namespace found, or NULL if the
+ *  namespace doesn't exist. */
+gnc_commodity_namespace * gnc_commodity_table_find_namespace(gnc_commodity_table * table,
+							     const char * namespace);
 
 /** This function deletes a string from the list of commodity namespaces.
  *  If the namespace does not exist, nothing happens.
@@ -740,6 +797,7 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
                                        gpointer user_data);
 /** @} */
 
+
 /* ---------------------------------------------------------- */
 /** @name Commodity Table Private/Internal-Use Only Routines */
 /** @{ */
@@ -760,11 +818,6 @@ void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
  */
 gnc_commodity_table * gnc_commodity_table_new(void);
 void          gnc_commodity_table_destroy(gnc_commodity_table * table);
-
-/** You should probably not be using gnc_commodity_table_set_table()
- * directly.  Its for internal use only.
- */
-void gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct);
 
 /** Given the commodity 'from', this routine will find and return the
  *   equivalent commodity (commodity with the same 'unique name') in 

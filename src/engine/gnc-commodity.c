@@ -36,11 +36,14 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-event-p.h"
 #include "gnc-trace.h"
 #include "guid.h"
 #include "messages.h"
 #include "qofbook.h"
 #include "qofobject.h"
+#include "qofid-p.h"
+#include "qofinstance-p.h"
 
 static short module = MOD_COMMODITY; 
 
@@ -51,8 +54,11 @@ static short module = MOD_COMMODITY;
 
 struct gnc_commodity_s 
 { 
+  QofInstance inst;
+
+  gnc_commodity_namespace *namespace;
+
   char    * fullname;  
-  char    * namespace;
   char    * mnemonic;
   char    * printname;
   char    * exchange_code;  /* CUSIP or other identifying code */
@@ -67,7 +73,9 @@ struct gnc_commodity_s
 
 struct gnc_commodity_namespace_s 
 {
-  char    * namespace;
+  QofInstance inst;
+
+  char       * name;
   GHashTable * cm_table;
   GList      * cm_list;
 };
@@ -76,10 +84,7 @@ struct gnc_commodity_table_s
 {
   GHashTable * ns_table;
   GList      * ns_list;
-  gboolean     dirty;
 };
-
-typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
 struct gnc_new_iso_code
 {
@@ -449,6 +454,14 @@ gnc_quote_source_set_fq_installed (GList *sources_list)
   if(str) { g_cache_remove(str_cache, str); str = NULL; }
 
 static void
+mark_commodity_dirty (gnc_commodity *cm)
+{
+  cm->inst.dirty = TRUE;	/* No-one uses or clears this flag. */
+  qof_collection_mark_dirty (cm->inst.entity.collection);
+  gnc_engine_gen_event (&cm->inst.entity, GNC_EVENT_MODIFY);
+}
+
+static void
 reset_printname(gnc_commodity *com)
 {
     g_free(com->printname);
@@ -460,23 +473,36 @@ reset_printname(gnc_commodity *com)
 static void
 reset_unique_name(gnc_commodity *com)
 {
+    gnc_commodity_namespace *ns;
+
     g_free(com->unique_name);
+    ns = com->namespace;
     com->unique_name = g_strdup_printf("%s::%s",
-                                       com->namespace ? com->namespace : "",
+                                       ns ? ns->name : "",
                                        com->mnemonic ? com->mnemonic : "");
 }
 
 gnc_commodity *
-gnc_commodity_new(const char * fullname, 
+gnc_commodity_new(QofBook *book, const char * fullname, 
                   const char * namespace, const char * mnemonic, 
                   const char * exchange_code, 
                   int fraction)
 {
   GCache *str_cache = gnc_engine_get_string_cache ();
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
+  gnc_commodity_table *table;
+
+  qof_instance_init (&retval->inst, GNC_ID_COMMODITY, book);
+  table = gnc_commodity_table_get_table(book);
+  if (namespace) {
+    retval->namespace = gnc_commodity_table_find_namespace(table, namespace);
+    if (!retval->namespace)
+      retval->namespace = gnc_commodity_table_add_namespace(table, namespace);
+  } else {
+    retval->namespace = NULL;
+  }
 
   CACHE_INSERT (retval->fullname, fullname);
-  CACHE_INSERT (retval->namespace, namespace);
   CACHE_INSERT (retval->mnemonic, mnemonic);
   CACHE_INSERT (retval->exchange_code, exchange_code);
   retval->fraction = fraction;
@@ -487,6 +513,7 @@ gnc_commodity_new(const char * fullname,
 
   reset_printname(retval);
   reset_unique_name(retval);
+  gnc_engine_gen_event (&retval->inst.entity, GNC_EVENT_CREATE);
 
   return retval;
 }
@@ -502,9 +529,11 @@ gnc_commodity_destroy(gnc_commodity * cm)
   GCache *str_cache = gnc_engine_get_string_cache ();
   if(!cm) return;
 
+  gnc_engine_gen_event (&cm->inst.entity, GNC_EVENT_DESTROY);
+
   /* Set at creation */
   CACHE_REMOVE (cm->fullname);
-  CACHE_REMOVE (cm->namespace);
+  cm->namespace = NULL;
   CACHE_REMOVE (cm->exchange_code);
   CACHE_REMOVE (cm->mnemonic);
   CACHE_REMOVE (cm->quote_tz);
@@ -521,6 +550,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   cm->mark = 0;
 
+  qof_instance_release (&cm->inst);
   g_free(cm);
 }
 
@@ -528,7 +558,7 @@ void
 gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
 {
   gnc_commodity_set_fullname (dest, src->fullname);
-  gnc_commodity_set_namespace (dest, src->namespace);
+  dest->namespace = src->namespace;
   gnc_commodity_set_fraction (dest, src->fraction);
   gnc_commodity_set_exchange_code (dest, src->exchange_code);
   gnc_commodity_set_quote_flag (dest, src->quote_flag);
@@ -543,7 +573,7 @@ gnc_commodity_clone(gnc_commodity *src)
   gnc_commodity * dest = g_new0(gnc_commodity, 1);
 
   CACHE_INSERT (dest->fullname, src->fullname);
-  CACHE_INSERT (dest->namespace, src->namespace);
+  dest->namespace = src->namespace;
   CACHE_INSERT (dest->mnemonic, src->mnemonic);
   CACHE_INSERT (dest->exchange_code, src->exchange_code);
   CACHE_INSERT (dest->quote_tz, src->quote_tz);
@@ -591,9 +621,15 @@ const char *
 gnc_commodity_get_namespace(const gnc_commodity * cm) 
 {
   if(!cm) return NULL;
-  return cm->namespace;
+  return gnc_commodity_namespace_get_name(cm->namespace);
 }
 
+gnc_commodity_namespace *
+gnc_commodity_get_namespace_ds(const gnc_commodity * cm) 
+{
+  if(!cm) return NULL;
+  return cm->namespace;
+}
 
 /********************************************************************
  * gnc_commodity_get_fullname
@@ -710,6 +746,7 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
   CACHE_REMOVE (cm->mnemonic);
   CACHE_INSERT (cm->mnemonic, mnemonic);
 
+  mark_commodity_dirty (cm);
   reset_printname(cm);
   reset_unique_name(cm);
 }
@@ -721,13 +758,19 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
 void
 gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) 
 {
-  GCache *str_cache = gnc_engine_get_string_cache ();
+  QofBook *book;
+  gnc_commodity_table *table;
+  gnc_commodity_namespace *nsp;
+
   if(!cm) return;
-  if(cm->namespace == namespace) return;
+  book = qof_instance_get_book (&cm->inst);
+  table = gnc_commodity_table_get_table(book);
+  nsp = gnc_commodity_table_add_namespace(table, namespace);
+  if (cm->namespace == nsp)
+    return;
 
-  CACHE_REMOVE (cm->namespace);
-  CACHE_INSERT (cm->namespace, namespace);
-
+  cm->namespace = nsp;
+  mark_commodity_dirty(cm);
   reset_printname(cm);
   reset_unique_name(cm);
 }
@@ -746,6 +789,7 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
   CACHE_REMOVE (cm->fullname);
   CACHE_INSERT (cm->fullname, fullname);
 
+  mark_commodity_dirty(cm);
   reset_printname(cm);
 }
 
@@ -763,6 +807,7 @@ gnc_commodity_set_exchange_code(gnc_commodity * cm,
 
   CACHE_REMOVE (cm->exchange_code);
   CACHE_INSERT (cm->exchange_code, exchange_code);
+  mark_commodity_dirty(cm);
 }
 
 /********************************************************************
@@ -774,6 +819,7 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction)
 {
   if(!cm) return;
   cm->fraction = fraction;
+  mark_commodity_dirty(cm);
 }
 
 /********************************************************************
@@ -798,6 +844,7 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 
   if(!cm) return;
   cm->quote_flag = flag;
+  mark_commodity_dirty(cm);
   LEAVE(" ");
 }
 
@@ -812,6 +859,7 @@ gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 
   if(!cm) return;
   cm->quote_source = src;
+  mark_commodity_dirty(cm);
   LEAVE(" ");
 }
 
@@ -828,8 +876,10 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
   if(!cm) return;
 
   CACHE_REMOVE (cm->quote_tz);
-  if (tz && *tz) CACHE_INSERT (cm->quote_tz, tz);
+  if (tz && *tz)
+    CACHE_INSERT (cm->quote_tz, tz);
 
+  mark_commodity_dirty(cm);
   LEAVE(" ");
 }
 
@@ -847,7 +897,7 @@ gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
 {
   if(a == b) return TRUE;
   if(!a || !b) return FALSE;
-  if(safe_strcmp(a->namespace, b->namespace) != 0) return FALSE;
+  if(a->namespace != b->namespace) return FALSE;
   if(safe_strcmp(a->mnemonic, b->mnemonic) != 0) return FALSE;
   return TRUE;
 }
@@ -863,9 +913,11 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
     return FALSE;
   }
 
-  if (safe_strcmp(a->namespace, b->namespace) != 0)
+  if (a->namespace != b->namespace)
   {
-    DEBUG ("namespaces differ: %s vs %s", a->namespace, b->namespace);
+    DEBUG ("namespaces differ: %p(%s) vs %p(%s)",
+	   a->namespace, gnc_commodity_namespace_get_name(a->namespace),
+	   b->namespace, gnc_commodity_namespace_get_name(b->namespace));
     return FALSE;
   }
 
@@ -898,6 +950,32 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 }
 
 
+/************************************************************
+ *                   Namespace functions                    *
+ ************************************************************/
+const char *
+gnc_commodity_namespace_get_name (gnc_commodity_namespace *ns)
+{
+  if (ns == NULL)
+    return NULL;
+  return ns->name;
+}
+
+GList * 
+gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *namespace) 
+{
+  if (!namespace)
+    return NULL;
+
+  return namespace->cm_list;
+}
+
+gboolean
+gnc_commodity_namespace_is_iso(const char *namespace)
+{
+  return (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0);
+}
+
 /********************************************************************
  * gnc_commodity_table_new
  * make a new commodity table 
@@ -909,7 +987,6 @@ gnc_commodity_table_new(void)
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
   retval->ns_table = g_hash_table_new(&g_str_hash, &g_str_equal);
   retval->ns_list = NULL;
-  retval->dirty = FALSE;
   return retval;
 }
 
@@ -917,24 +994,11 @@ gnc_commodity_table_new(void)
  * book anchor functons
  ********************************************************************/
 
-#define GNC_COMMODITY_TABLE "gnc_commodity_table"
 gnc_commodity_table *
 gnc_commodity_table_get_table(QofBook *book)
 {
   if (!book) return NULL;
   return qof_book_get_data (book, GNC_COMMODITY_TABLE);
-}
-
-void
-gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
-{
-  gnc_commodity_table *old_ct;
-  if (!book) return;
-
-  old_ct = gnc_commodity_table_get_table (book);
-  if (old_ct == ct) return;
-  qof_book_set_data (book, GNC_COMMODITY_TABLE, ct);
-  gnc_commodity_table_destroy (old_ct);
 }
 
 gnc_commodity *
@@ -959,7 +1023,7 @@ gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
 }
 
 /********************************************************************
- * gnc_commodity_get_size
+ * gnc_commodity_table_get_size
  * get the size of the commodity table
  ********************************************************************/
 
@@ -1112,12 +1176,14 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   GCache *str_cache;
   gnc_commodity_namespace * nsp = NULL;
   gnc_commodity *c;
+  const char *ns_name;
 
   if (!table) return NULL;
   if (!comm) return NULL;
 
   ENTER ("(table=%p, comm=%p) %s %s", table, comm, comm->mnemonic, comm->fullname);
-  c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
+  ns_name = gnc_commodity_namespace_get_name(comm->namespace);
+  c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
 
   if (c) 
   {
@@ -1130,25 +1196,16 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     return c;
   }
 
-  nsp = g_hash_table_lookup(table->ns_table, (gpointer)(comm->namespace));
+  nsp = g_hash_table_lookup(table->ns_table, (gpointer)ns_name);
   str_cache = gnc_engine_get_string_cache ();
   
-  if(!nsp) 
-  {
-    nsp = g_new0(gnc_commodity_namespace, 1);
-    nsp->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
-    nsp->namespace = g_cache_insert(str_cache, comm->namespace);
-    g_hash_table_insert(table->ns_table, 
-                        nsp->namespace, 
-                        (gpointer)nsp);
-    table->ns_list = g_list_append(table->ns_list, nsp);
-  }
-
-  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->cm_table, nsp->namespace);
+  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->cm_table, nsp->name);
   g_hash_table_insert(nsp->cm_table, 
                       (gpointer)g_cache_insert(str_cache, comm->mnemonic),
                       (gpointer)comm);
+  nsp->cm_list = g_list_append(nsp->cm_list, comm);
 
+  gnc_engine_gen_event (&comm->inst.entity, GNC_EVENT_ADD);
   LEAVE ("(table=%p, comm=%p)", table, comm);
   return comm;
 }
@@ -1164,14 +1221,18 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 {
   gnc_commodity_namespace * nsp;
   gnc_commodity *c;
+  const char *ns_name;
 
   if (!table) return;
   if (!comm) return;
 
-  c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
+  ns_name = gnc_commodity_namespace_get_name(comm->namespace);
+  c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
   if (c != comm) return;
 
-  nsp = g_hash_table_lookup (table->ns_table, comm->namespace);
+  gnc_engine_gen_event (&comm->inst.entity, GNC_EVENT_REMOVE);
+
+  nsp = g_hash_table_lookup (table->ns_table, ns_name);
   if (!nsp) return;
 
   nsp->cm_list = g_list_remove(nsp->cm_list, comm);
@@ -1245,17 +1306,23 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
   return g_hash_table_keys(table->ns_table);
 }
 
-gboolean
-gnc_commodity_namespace_is_iso(const char *namespace)
+GList * 
+gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table) 
 {
-  return (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0);
+  if (!table)
+    return NULL;
+
+  return table->ns_list;
 }
 
 gboolean
 gnc_commodity_is_iso(const gnc_commodity * cm)
 {
+  const gchar *ns_name;
+
   if (!cm) return FALSE;
-  return (safe_strcmp(cm->namespace, GNC_COMMODITY_NS_ISO) == 0);
+  ns_name = gnc_commodity_namespace_get_name(cm->namespace);
+  return (safe_strcmp(ns_name, GNC_COMMODITY_NS_ISO) == 0);
 }
 
 /********************************************************************
@@ -1354,7 +1421,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
  * add an empty namespace if it does not exist 
  ********************************************************************/
 
-void 
+gnc_commodity_namespace * 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
                                   const char * namespace) 
 {
@@ -1365,18 +1432,53 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
   }
   
-  if(!ns) 
+  if(!ns)
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
-    ns->namespace = g_cache_insert(str_cache, (gpointer)namespace);
+    ns->name = g_cache_insert(str_cache, (gpointer)namespace);
+    gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_CREATE);
+    
     g_hash_table_insert(table->ns_table,
-                        (gpointer) ns->namespace, 
-                        (gpointer) ns);
+			(gpointer) ns->name, 
+			(gpointer) ns);
     table->ns_list = g_list_append(table->ns_list, ns);
+    gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_ADD);
   }
+  return ns;
 }
+
+
+gnc_commodity_namespace * 
+gnc_commodity_table_find_namespace(gnc_commodity_table * table,
+				   const char * namespace) 
+{
+  if (!table || !namespace)
+    return NULL;
+
+  return g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+}
+
+
+gnc_commodity *
+gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book)
+{
+  QofCollection *col;
+  if (!guid || !book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_COMMODITY);
+  return (gnc_commodity *) qof_collection_lookup_entity (col, guid);
+}
+
+gnc_commodity_namespace *
+gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book)
+{
+  QofCollection *col;
+  if (!guid || !book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_COMMODITY_NAMESPACE);
+  return (gnc_commodity_namespace *) qof_collection_lookup_entity (col, guid);
+}
+
 
 
 /********************************************************************
@@ -1399,22 +1501,28 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                      const char * namespace) 
 {
   gnc_commodity_namespace * ns;
+  GCache *str_cache;
+
   if (!table) return;
 
   ns = g_hash_table_lookup(table->ns_table, namespace);
-  if (ns)
-  {
-    GCache *str_cache = gnc_engine_get_string_cache ();
-    g_hash_table_remove(table->ns_table, namespace);
-    table->ns_list = g_list_remove(table->ns_list, ns);
+  if (!ns)
+    return;
 
-    g_list_free(ns->cm_list);
-    ns->cm_list = NULL;
-    g_hash_table_foreach_remove(ns->cm_table, ns_helper, str_cache);
-    g_hash_table_destroy(ns->cm_table);
-    g_cache_remove (str_cache, ns->namespace);
-    g_free(ns);
-  }
+  gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_REMOVE);
+  g_hash_table_remove(table->ns_table, namespace);
+  table->ns_list = g_list_remove(table->ns_list, ns);
+
+  g_list_free(ns->cm_list);
+  ns->cm_list = NULL;
+
+  str_cache = gnc_engine_get_string_cache ();
+  g_hash_table_foreach_remove(ns->cm_table, ns_helper, str_cache);
+  g_hash_table_destroy(ns->cm_table);
+  g_cache_remove (str_cache, ns->name);
+
+  gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_DESTROY);
+  g_free(ns);
 }
 
 /********************************************************************
@@ -1471,31 +1579,23 @@ gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
  * cleanup and free. 
  ********************************************************************/
 
-static int
-ct_helper(gpointer key, gpointer value, gpointer data) 
-{
-  GCache *str_cache = gnc_engine_get_string_cache ();
-  gnc_commodity_namespace * ns = value;
-
-  g_list_free(ns->cm_list);
-  ns->cm_list = NULL;
-
-  g_hash_table_foreach_remove(ns->cm_table, ns_helper, str_cache);
-  g_hash_table_destroy(ns->cm_table);
-  ns->cm_table = NULL;
-  g_cache_remove (str_cache, ns->namespace);
-  g_free(ns);
-  return TRUE;
-}
-
 void
 gnc_commodity_table_destroy(gnc_commodity_table * t) 
 {
+  gnc_commodity_namespace * ns;
+  GList *item, *next;
+
   if (!t) return;
   ENTER ("table=%p", t);
   
+  for (item = t->ns_list; item; item = next) {
+    next = g_list_next(item);
+    ns = item->data;
+    gnc_commodity_table_delete_namespace(t, ns->name);
+  }
+
   g_list_free(t->ns_list);
-  g_hash_table_foreach_remove(t->ns_table, ct_helper, NULL);
+  t->ns_list = NULL;
   g_hash_table_destroy(t->ns_table);
   t->ns_table = NULL;
   g_free(t);
@@ -1562,23 +1662,50 @@ gnc_commodity_table_copy(gnc_commodity_table *dest,
  ********************************************************************/
 
 gboolean
-gnc_commodity_table_add_default_data(gnc_commodity_table *table)
+gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 {
   ENTER ("table=%p", table);
-  #include "iso-4217-currencies.c"
-
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+
+  #include "iso-4217-currencies.c"
+
   LEAVE ("table=%p", table);
   return TRUE;
 }
 
 /********************************************************************
  ********************************************************************/
-/* gncObject function implementation and registration */
+/* QofObject function implementation and registration */
+
+static QofObject commodity_object_def = 
+{
+  interface_version: QOF_OBJECT_VERSION,
+  e_type:            GNC_ID_COMMODITY,
+  type_label:        "Commodity",
+  book_begin:        NULL,
+  book_end:          NULL,
+  is_dirty:          qof_collection_is_dirty,
+  mark_clean:        qof_collection_mark_clean,
+  foreach:           qof_collection_foreach,
+  printable:         (const char* (*)(gpointer)) gnc_commodity_get_fullname,
+};
+
+static QofObject namespace_object_def = 
+{
+  interface_version: QOF_OBJECT_VERSION,
+  e_type:            GNC_ID_COMMODITY_NAMESPACE,
+  type_label:        "Namespace",
+  book_begin:        NULL,
+  book_end:          NULL,
+  is_dirty:          NULL,
+  mark_clean:        NULL,
+  foreach:           NULL,
+  printable:         NULL,
+};
 
 static void 
 commodity_table_book_begin (QofBook *book)
@@ -1586,54 +1713,30 @@ commodity_table_book_begin (QofBook *book)
   gnc_commodity_table *ct;
   ENTER ("book=%p", book);
   
+  if (gnc_commodity_table_get_table(book))
+    return;
+
   ct = gnc_commodity_table_new ();
-  if(!gnc_commodity_table_add_default_data(ct))
+  qof_book_set_data (book, GNC_COMMODITY_TABLE, ct);
+
+  if(!gnc_commodity_table_add_default_data(ct, book))
   {
     PWARN("unable to initialize book's commodity_table");
   }
-  gnc_commodity_table_set_table (book, ct);
+
   LEAVE ("book=%p", book);
 }
 
 static void 
 commodity_table_book_end (QofBook *book)
 {
-  gnc_commodity_table_set_table (book, NULL);
-}
-
-#ifdef COMMODITY_CONVERTED_TO_QOF_COLLECTION
-static gboolean
-commodity_table_is_dirty (QofBook *book)
-{
   gnc_commodity_table *ct;
 
-  if (!book)
-    return FALSE;
   ct = gnc_commodity_table_get_table (book);
-  if (!ct)
-    return FALSE;
-  return(ct->dirty);
+  qof_book_set_data (book, GNC_COMMODITY_TABLE, NULL);
+  gnc_commodity_table_destroy (ct);
 }
 
-static void
-commodity_table_mark_clean(QofBook *book)
-{
-  gnc_commodity_table *ct;
-
-  if (!book)
-    return;
-  ct = gnc_commodity_table_get_table (book);
-  if (!ct)
-    return;
-  ct->dirty = FALSE;
-}
-#endif
-
-
-/* XXX Why is the commodity table never marked dirty/clean?
- * Don't we have to save user-created/modified commodities?
- * I don't get it ... does this need fixing?
- */
 static QofObject commodity_table_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
@@ -1641,10 +1744,8 @@ static QofObject commodity_table_object_def =
   type_label:        "CommodityTable",
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
-#ifdef COMMODITY_CONVERTED_TO_QOF_COLLECTION
-  is_dirty:          commodity_table_is_dirty,
-  mark_clean:        commodity_table_mark_clean,
-#endif
+  is_dirty:          NULL,
+  mark_clean:        NULL,
   foreach:           NULL,
   printable:         NULL,
 };
@@ -1653,6 +1754,11 @@ gboolean
 gnc_commodity_table_register (void)
 {
   gnc_quote_source_init_tables();
+  
+  if (!qof_object_register (&commodity_object_def))
+    return FALSE;
+  if (!qof_object_register (&namespace_object_def))
+    return FALSE;
   return qof_object_register (&commodity_table_object_def);
 }
 

@@ -59,6 +59,7 @@
 
 #define GNC_ID_ACCOUNT        "Account"
 #define GNC_ID_COMMODITY      "Commodity"
+#define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_GROUP          "AccountGroup"
@@ -127,6 +128,9 @@ typedef struct transaction_s         Transaction;
  * defined in a private source file. For accessing that data, only use
  * the functions in gnc-commodity.h .*/
 typedef struct gnc_commodity_s       gnc_commodity;
+
+/** @brief A gnc_commodity_namespace is an collection of commodities. */
+typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;

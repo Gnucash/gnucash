@@ -17,9 +17,13 @@ test_commodity(void)
     gnc_commodity *com;
 
     {
-        com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0);
+        QofBook *book;
+
+        book = qof_book_new ();
+        com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0);
 
         gnc_commodity_destroy(com);
+	qof_book_destroy (book);
 
         success("commodity new and destroy");
     }
@@ -31,14 +35,16 @@ test_commodity(void)
         char *exchange_code;
         int fraction;
         gnc_commodity *com2;
-        
+        QofBook *book;
+
+        book = qof_book_new ();
         fullname = get_random_string();
         namespace = get_random_commodity_namespace();
         mnemonic = get_random_string();
         exchange_code = get_random_string();
         fraction = get_random_int_in_range(0, 10000);
 
-        com = gnc_commodity_new(fullname, namespace, mnemonic,
+        com = gnc_commodity_new(book, fullname, namespace, mnemonic,
                                 exchange_code, fraction);
 
         do_test(
@@ -94,11 +100,12 @@ test_commodity(void)
             gnc_commodity_get_fraction(com) == fraction,
             "reset fraction code equal test");
 
-        com2 = gnc_commodity_new(fullname, namespace, mnemonic,
+        com2 = gnc_commodity_new(book, fullname, namespace, mnemonic,
                                  exchange_code, fraction);
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 
+	qof_book_destroy (book);
     }
     
     {

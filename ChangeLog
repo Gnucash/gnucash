@@ -1,3 +1,14 @@
+2003-11-28  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Clarify variable names in data
+	strutures.  Promote the commodity namespace to a externally
+	visible opaque object.  Make commodities and namespaces Qof
+	Instances.  Add more events related to commodities and namespaces.
+	Require the book when creating a new commodity.
+
+	* <bunch-o-files>: Update to provide the book when creating a new
+	commodity.
+
 2003-11-08  David Hampton  <hampton@employees.org>
 
 	* src/app-file/gnc-file.c: Give immediate feedback when the user
