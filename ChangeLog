@@ -1,3 +1,8 @@
+2004-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-layout.c:  Remove the
+	  RECN cell from payable/receivable to stop confusing people.
+
 2004-01-25  Benoit Grégoire <bock@step.polymtl.ca>
 
 	* po/fr.po:  Further translation from Luc Maisonobe.  Also replaced 
