@@ -1083,6 +1083,44 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   }  
 }
 
+static void
+gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  char *id, *wintype = NULL, *objtype = NULL, *title;
+
+  if (!iw) return;
+
+  id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
+
+  switch (iw->dialog_type) {
+  case NEW_INVOICE:
+    wintype = _("New");
+    break;
+  case MOD_INVOICE:
+  case EDIT_INVOICE:
+    wintype = _("Edit");
+    break;
+  case VIEW_INVOICE:
+    wintype = _("View");
+    break;
+  }
+
+  switch (gncOwnerGetType (&iw->owner)) {
+  case GNC_OWNER_CUSTOMER:
+    objtype = _("Invoice");
+    break;
+  case GNC_OWNER_VENDOR:
+    objtype = _("Bill");
+    break;
+  default:
+  }  
+
+  title = g_strconcat (wintype, " ", objtype, " - ", id, NULL);
+  gtk_window_set_title (GTK_WINDOW (iw->dialog), title);
+  g_free (title);
+}
+
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
@@ -1225,6 +1263,8 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "size-allocate",
 		      GTK_SIGNAL_FUNC(size_allocate), iw);
+  gtk_signal_connect (GTK_OBJECT (iw->id_entry), "changed",
+		      gnc_invoice_id_changed_cb, iw);
 
   /* Create the register */
   {
@@ -1344,6 +1384,8 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
 
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
+  gtk_signal_connect (GTK_OBJECT (iw->id_entry), "changed",
+		      gnc_invoice_id_changed_cb, iw);
 
   gnome_dialog_button_connect (iwd, 0,
   			       GTK_SIGNAL_FUNC(gnc_invoice_window_ok_cb), iw);
