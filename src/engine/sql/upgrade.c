@@ -73,7 +73,8 @@ pgendVersionTable (PGBackend *be)
        "  major    INT NOT NULL,\n"
        "  minor    INT NOT NULL,\n"
        "  rev      INT DEFAULT '0',\n"
-       "  name     TEXT UNIQUE NOT NULL CHECK (name <> '')\n"
+       "  name     TEXT UNIQUE NOT NULL CHECK (name <> ''),\n"
+       "  date     DATETIME DEFAULT 'NOW' \n"
        ");\n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,0,0,'Version Table');";
@@ -206,6 +207,7 @@ put_iguid_in_tables (PGBackend *be)
 
    sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
    SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
 	   
    p = "DROP TABLE gncGUIDCache;";
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
@@ -261,8 +263,7 @@ pgendUpgradeDB (PGBackend *be)
       /* version 1.1.0 add iguids to transaction and entry tables */
       if (1> vers.minor)
       {
-         // put_iguid_in_tables(be);
-PWARN (" pretending to upgrade database !xxxxxxxxxxxxxxxx\nm");
+         put_iguid_in_tables(be);
       }
    }
 

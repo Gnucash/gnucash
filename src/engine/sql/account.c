@@ -109,6 +109,12 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    acct->version ++;  /* be sure to update the version !! */
    acct->version_check = be->version_check;
 
+   if ((0 == acct->idata) &&
+       (FALSE == kvp_frame_is_empty (xaccAccountGetSlots(acct))))
+   {
+      acct->idata = pgendNewGUIDidx(be);
+   }
+
    pgendPutOneAccountOnly (be, acct);
 
    /* make sure the account's commodity is in the commodity table */
@@ -119,7 +125,10 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    com = xaccAccountGetCommodity (acct);
    pgendPutOneCommodityOnly (be, (gnc_commodity *) com);
 
-   pgendKVPStore (be, &(acct->guid), acct->kvp_data);
+   if (acct->idata)
+   {
+      pgendKVPStore (be, acct->idata, acct->kvp_data);
+   }
    LEAVE(" ");
 }
 
@@ -205,7 +214,8 @@ static gpointer
 restore_cb (Account *acc, void * cb_data)
 {
    PGBackend *be = (PGBackend *) cb_data;
-   acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
+   if (0 == acc->idata) return NULL;
+   acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
    return NULL;
 }
 
@@ -377,7 +387,10 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 
       acc = xaccAccountLookup (acct_guid);
       /* restore any kvp data associated with the transaction and splits */
-      acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
+      if (acc->idata)
+      {
+         acc->kvp_data = pgendKVPFetch (be, acc->idata, acc->kvp_data);
+      }
 
       acc->version_check = be->version_check;
    }
@@ -449,7 +462,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       const GUID *guid = xaccAccountGetGUID(acct);
       pgendStoreAuditAccount (be, acct, SQL_DELETE);
-      pgendKVPDelete (be, guid);
+      pgendKVPDelete (be, acct->idata);
 
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");

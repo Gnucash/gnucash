@@ -247,6 +247,13 @@ the trick ... some different algorithm is needed.
 Handy for raw-file-loading performance measurement is the the 
 script 'scan-acct.pl' in src/optional/swig/examples'
 
+Weird shit: loading the same data, but in slightly different
+order, can make a *huge* difference in the speed of balance
+subtotal calculations (used only in multi-user mode.)  Merely
+rearranging the order of the splits in a transaction can cause
+a factor of 20 (twenty) difference in performance. This can turn 
+a 4.5 second load into a minute & a half load !!!! Yow! 
+Investigating ...
 
 To Be Done
 ----------

@@ -99,6 +99,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+   trans->idata = atoi (DB_GET_VAL("iguid",j));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
    trans_frac = gnc_commodity_get_fraction (currency);
@@ -150,6 +151,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccSplitSetDateReconciledTS (s, &ts);
 
    xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
+   s->idata = atoi (DB_GET_VAL("iguid",j));
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
@@ -223,9 +225,6 @@ pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
    SEND_QUERY (be, "SELECT * FROM gncEntry;", );
    pgendGetResults (be, get_mass_entry_cb, NULL);
 
-   /* hack alert !!!!  not restoring transaction/split slots for now !!!! */
-   /* this has a huge sucking sound, fix later!! */
-   xaction_list = NULL;
    for (node=xaction_list; node; node=node->next)
    {
       Transaction *trans = (Transaction *)node->data;
@@ -236,13 +235,19 @@ pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
        * We won't do this en-mass, as there currently seems to be no
        * performance advantage to doing so */
    
-      trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+      if (trans->idata)
+      {
+         trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
+      }
    
       splits = xaccTransGetSplitList(trans);
       for (snode = splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+         if (s->idata)
+         {
+            s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+         }
       }
 
       /* ------------------------------------------------- */

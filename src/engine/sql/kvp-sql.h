@@ -47,7 +47,7 @@ void pgendKVPInit (PGBackend *);
 
 /* The pgendKVPStore() routine copies the contents of the kvp-frame
  *    to the SQL database, associating the root of the kvp-frame
- *    with the indicated GUID.
+ *    with the indicated GUID cache index 'iguid'.
  *    (Note that currently it does not delete excess kvp data.
  *    That is, if the database has more kvp data in it than
  *    what was passed to this routine, then it does not delete 
@@ -56,15 +56,20 @@ void pgendKVPInit (PGBackend *);
  *
  * The pgendKVPDelete() and pgendKVPDeleteStr() routines delete
  *    all kvp data in the database associated with the indicated 
- *    GUID.
+ *    GUID cache index 'iguid'.
  *
  * The pgendKVPFetch() routine pulls kvp data out of the database.
+ *
+ * The pgendNewGUIDidx() routine generates a new number suitable for
+ *    use as a GUID cache index.
  */
 
-void pgendKVPStore (PGBackend *, const GUID *, kvp_frame *);
-void pgendKVPDelete (PGBackend *, const GUID *);
-void pgendKVPDeleteStr (PGBackend *, const char *guid_string);
+void pgendKVPStore (PGBackend *, guint32 iguid, kvp_frame *);
+void pgendKVPDelete (PGBackend *, guint32 iguid);
 
-kvp_frame * pgendKVPFetch (PGBackend *, const GUID *, kvp_frame *);
+kvp_frame * pgendKVPFetch (PGBackend *, guint32 iguid, kvp_frame *);
+
+guint32 pgendNewGUIDidx (PGBackend *be);
+
 
 #endif /* KVP_SQL_H */

@@ -22,6 +22,16 @@
 -- Copyright (C) 2000, 2001 Linas Vepstas
 --
 
+CREATE TABLE gncVersion (
+	major	INT NOT NULL,
+	minor	INT NOT NULL,
+	rev	INT DEFAULT '0',
+	name	TEXT UNIQUE NOT NULL CHECK (name <> ''),
+	date	DATETIME DEFAULT 'NOW'
+);
+INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table');
+INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables');
+
 -- Commodity structure
 -- Store currency, security types.  Namespace includes
 -- ISO4217 for currencies, NASDAQ, AMEX, NYSE, EUREX for 
@@ -48,7 +58,8 @@ CREATE TABLE gncAccount (
 	description 	TEXT,
 	type		TEXT NOT NULL,
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	iguid		INT4 DEFAULT 0
 );
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
@@ -61,7 +72,8 @@ CREATE TABLE gncTransaction (
 	num		TEXT,
 	description	TEXT,
         currency	TEXT NOT NULL CHECK (currency <> ''),
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	iguid		INT4 DEFAULT 0
 );
 
 CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted);
@@ -78,7 +90,8 @@ CREATE TABLE gncEntry (
 	reconciled		CHAR DEFAULT 'n',
 	date_reconciled 	DATETIME,
 	amount			INT8 DEFAULT '0',
-	value			INT8 DEFAULT '0'
+	value			INT8 DEFAULT '0',
+	iguid			INT4 DEFAULT 0
 );
 
 CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
@@ -151,12 +164,7 @@ CREATE TABLE gncPathCache (
 	path		TEXT
 );
 
-CREATE TABLE gncGUIDCache (
-	iguid		SERIAL PRIMARY KEY,
-	guid		CHAR(32) UNIQUE NOT NULL
-);
-
-CREATE INDEX gncGUIDCache_guid_idx ON gncGUIDCache (guid);
+CREATE SEQUENCE gnc_iguid_seq START 1;
 
 CREATE TABLE gncKVPvalue (
 	iguid		INT4,

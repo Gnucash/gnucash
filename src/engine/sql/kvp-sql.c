@@ -43,6 +43,28 @@
 static short module = MOD_KVP; 
 
 /* =========================================================== */
+/* get a unique iguid index */
+
+static gpointer
+iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+  int iguid = atoi (DB_GET_VAL ("iguid", 0));
+  return (gpointer) iguid;
+}
+
+
+guint32
+pgendNewGUIDidx (PGBackend *be)
+{
+   guint32 iguid;
+   char * p;
+
+   p = "SELECT nextval('gnc_iguid_seq') AS iguid;";
+   iguid = (guint32) pgendGetResults (be, iguid_cb, (gpointer) 0);
+   return iguid;
+}
+
+/* =========================================================== */
 /* given integer ipath (path id) and a string, poke the string 
  * into a cache in local memory
  */
@@ -91,17 +113,13 @@ pgendPeekPathCache (PGBackend *be, int ipath)
 static gpointer
 ival_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-  int ival = atoi (DB_GET_VAL ((char *)data, 0));
+  int ival = atoi (DB_GET_VAL ("ipath", 0));
   return (gpointer) ival;
 }
 
 
 static int
-pgendGetCache (PGBackend *be, 
-               const char *table_name,
-               const char *key_name,
-               const char *cache_name,
-               const char *val_str)
+pgendGetCache (PGBackend *be, const char *val_str)
 {
    char *p;
    int ival =0;
@@ -111,29 +129,19 @@ pgendGetCache (PGBackend *be,
    /* first, lets see if we can find the guid or path. 
     * If we can then  just return it */
    p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT ");
-   p = stpcpy (p, cache_name);
-   p = stpcpy (p, " FROM ");
-   p = stpcpy (p, table_name);
-   p = stpcpy (p, " WHERE ");
-   p = stpcpy (p, key_name);
-   p = stpcpy (p, " ='");
+   p = stpcpy (p, "SELECT ipath FROM gncPathCache WHERE path='");
    p = stpcpy (p, val_str);
    p = stpcpy (p, "';");
 
    SEND_QUERY (be,be->buff, 0);
-   ival = (int) pgendGetResults (be, ival_cb, (gpointer) cache_name);
-   if (ival && (ival != (int)cache_name)) return ival;
+   ival = (int) pgendGetResults (be, ival_cb, (gpointer) 0);
+   if (ival) return ival;
 
    /* Else, this guid has never been stored before. 
     * Poke it into the the database */
 
    p = be->buff; *p = 0;
-   p = stpcpy (p, "INSERT INTO ");
-   p = stpcpy (p, table_name);
-   p = stpcpy (p, " (");
-   p = stpcpy (p, key_name);
-   p = stpcpy (p, ") VALUES ('");
+   p = stpcpy (p, "INSERT INTO gncPathCache (path) VALUES ('");
    p = stpcpy (p, val_str);
    p = stpcpy (p, "');");
 
@@ -141,7 +149,7 @@ pgendGetCache (PGBackend *be,
    FINISH_QUERY(be->connection);
 
    /* and requery to get the serial number ... */
-   ival = pgendGetCache (be, table_name, key_name, cache_name, val_str);
+   ival = pgendGetCache (be, val_str);
    return ival;
 }
 
@@ -152,37 +160,12 @@ static int
 pgendGetPathCache (PGBackend *be, const char *path_str)
 {
    int ival;
-   ival = pgendGetCache (be, "gncPathCache", "path", "ipath", path_str);
+   ival = pgendGetCache (be, path_str);
    PINFO ("cached %d for %s", ival, path_str ? path_str : "(null)");
 
    if (0 >= ival) return ival;
    pgendPokePathCache (be, ival, path_str);
    return ival;
-}
-
-/* =========================================================== */
-/* given a string, return the corresponding int from the sql db. */
-
-static int
-pgendGetGUIDCacheIDStr (PGBackend *be, const char *guid_str)
-{
-   int ival;
-   ival = pgendGetCache (be, "gncGUIDCache", "guid", "iguid", guid_str);
-   PINFO ("cached %d for %s", ival, guid_str ? guid_str : "(null)");
-   return ival;
-}
-
-/* =========================================================== */
-/* given a guid, return the corresponding int from the sql db. */
-
-static int
-pgendGetGUIDCacheID (PGBackend *be, const GUID *guid)
-{
-   char guid_str[GUID_ENCODING_LENGTH+1];
-   if (!be || !guid_str) return 0;
-
-   guid_to_string_buff (guid, guid_str);
-   return pgendGetGUIDCacheIDStr (be, guid_str);
 }
 
 /* =========================================================== */
@@ -326,15 +309,11 @@ store_cb (const char *key, kvp_value *val, gpointer p)
 }
 
 void 
-pgendKVPStore (PGBackend *be, const GUID *guid, kvp_frame *kf)
+pgendKVPStore (PGBackend *be, guint32 iguid, kvp_frame *kf)
 {
    store_data_t cb_data;
-   int iguid;
-   if (!be || !guid || !kf) return;
+   if (!be || 0 == iguid || !kf) return;
    ENTER (" ");
-
-   iguid = pgendGetGUIDCacheID (be, guid);
-   if (0 == iguid) return;
 
    cb_data.be = be;
    cb_data.iguid = iguid;
@@ -494,13 +473,12 @@ count_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 kvp_frame * 
-pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
+pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
 {
    char * p;
    char iguid_str[40];
-   int iguid = 0;
    int count = 0;
-   if (!be || !guid) return kf;
+   if (!be || 0 == iguid) return kf;
 
    ENTER (" ");
 
@@ -508,18 +486,7 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
    pgendKVPInit (be);   
 
    /* get the effective iguid for this object */
-   iguid = pgendGetGUIDCacheID (be, guid);
-   if (0 == iguid) return kf;
    snprintf (iguid_str, 40, "%d;", iguid);
-
-   /* save on some sql queries by avoiding kvp data fetches when 
-    * there is no data */
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT count(*) FROM gncKVPValue WHERE iguid="); 
-   p = stpcpy (p, iguid_str);
-   SEND_QUERY (be,be->buff, kf);
-   pgendGetResults (be, count_handler, &count);	
-   if (0 == count) return kf;
 
    /* now troll the individual tables for data */
    GET_KVP(int64);
@@ -545,15 +512,11 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
 }
 
 void 
-pgendKVPDeleteStr (PGBackend *be, const char *guid)
+pgendKVPDelete (PGBackend *be, guint32 iguid)
 {
    char iguid_str[80], sess_str[80];
    char * p;
-   int iguid = 0;
-   if (!be || !guid) return;
-
-   iguid = pgendGetGUIDCacheIDStr (be, guid);
-   if (0 == iguid) return;
+   if (!be || 0 == iguid) return;
 
    sprintf (iguid_str, "%d;\n", iguid);
    guid_to_string_buff (be->sessionGuid, sess_str);
@@ -587,18 +550,6 @@ pgendKVPDeleteStr (PGBackend *be, const char *guid)
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
-}
-
-/* =========================================================== */
-
-void 
-pgendKVPDelete (PGBackend *be, const GUID *guid)
-{
-   char guid_str[33];
-   if (!be || !guid) return;
-
-   guid_to_string_buff (guid, guid_str);
-   return pgendKVPDeleteStr (be, guid_str);
 }
 
 /* =========================== END OF FILE ===================== */

@@ -166,7 +166,11 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       /* destroy any associated kvp data as well */
       for (node=deletelist; node; node=node->next)
       {
-         pgendKVPDeleteStr (be, (char *)(node->data));
+         Split *s;
+         GUID guid;
+         string_to_guid ((char *)(node->data), &guid);
+         s = xaccSplitLookup(&guid);
+         pgendKVPDelete (be, s->idata);
          g_free (node->data);
       }
    }
@@ -179,11 +183,21 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
+         if ((0 == s->idata) &&
+             (FALSE == kvp_frame_is_empty (xaccSplitGetSlots(s))))
+         {
+            s->idata = pgendNewGUIDidx(be);
+         }
          pgendPutOneSplitOnly (be, s);
-         pgendKVPStore (be, &(s->guid), s->kvp_data);
+         if (s->idata) { pgendKVPStore (be, s->idata, s->kvp_data); }
+      }
+      if ((0 == trans->idata) &&
+          (FALSE == kvp_frame_is_empty (xaccTransGetSlots(trans))))
+      {
+         trans->idata = pgendNewGUIDidx(be);
       }
       pgendPutOneTransactionOnly (be, trans);
-      pgendKVPStore (be, &(trans->guid), trans->kvp_data);
+      if (trans->idata) { pgendKVPStore (be, trans->idata, trans->kvp_data); }
    }
    else
    {
@@ -215,9 +229,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
-         pgendKVPDelete (be, &(s->guid));
+         if (0 != s->idata) pgendKVPDelete (be, s->idata);
       }
-      pgendKVPDelete (be, &(trans->guid));
+      if (0 != trans->idata) pgendKVPDelete (be, trans->idata);
    }
 
    LEAVE(" ");
@@ -405,6 +419,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             xaccSplitSetDateReconciledTS (s, &ts);
 
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
+            s->idata = atoi(DB_GET_VAL("iguid",j));
 
             /* --------------------------------------------- */
             /* next, find the account that this split goes into */
@@ -617,6 +632,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
             currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
             xaccTransSetCurrency (trans, currency);
+            trans->idata = atoi(DB_GET_VAL("iguid",j));
          }
       }
       PQclear (result);
@@ -644,13 +660,19 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    /* ------------------------------------------------- */
    /* restore any kvp data associated with the transaction and splits */
 
-   trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+   if (0 != trans->idata)
+   {
+      trans->kvp_data = pgendKVPFetch (be, trans->idata, trans->kvp_data);
+   }
 
    engine_splits = xaccTransGetSplitList(trans);
    for (node = engine_splits; node; node=node->next)
    {
       Split *s = node->data;
-      s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+      if (0 != s->idata)
+      {
+         s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+      }
    }
 
    /* ------------------------------------------------- */

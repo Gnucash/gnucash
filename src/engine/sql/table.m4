@@ -12,6 +12,7 @@ define(`account', `gncAccount, Account, Account, a,
        type,           , char *, xaccAccountTypeEnumAsString(xaccAccountGetType(ptr)),
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
+       iguid,          , int32,  ptr->idata,
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
@@ -25,6 +26,7 @@ define(`split', `gncEntry, Split, Split, e,
        date_reconciled, , Timespec, xaccSplitRetDateReconciledTS(ptr),
        amount,          , int64,    gnc_numeric_num(xaccSplitGetAmount(ptr)),
        value,           , int64,    gnc_numeric_num(xaccSplitGetValue(ptr)),
+       iguid,           , int32,    ptr->idata,
        entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
@@ -43,6 +45,7 @@ define(`transaction', `gncTransaction, Transaction, Transaction, t,
        date_entered,   , Timespec, xaccTransRetDateEnteredTS(ptr),
        date_posted,    , Timespec, xaccTransRetDatePostedTS(ptr),
        version,        , int32,    xaccTransGetVersion(ptr),
+       iguid,          , int32,    ptr->idata,
        transGUID,   KEY, GUID *,   xaccTransGetGUID(ptr),
        ')
 

@@ -33,7 +33,8 @@ CREATE TABLE gncAccountTrail (
 	description 	TEXT,
 	type		TEXT NOT NULL,
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	iguid		INT4 DEFAULT 0
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncAccountTrail_account_idx ON gncAccountTrail (accountGuid);
@@ -58,7 +59,8 @@ CREATE TABLE gncEntryTrail (
 	reconciled		CHAR DEFAULT 'n',
 	date_reconciled 	DATETIME,
 	amount			INT8 DEFAULT '0',
-	value			INT8 DEFAULT '0'
+	value			INT8 DEFAULT '0',
+	iguid			INT4 DEFAULT 0
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncEntryTrail_entry_idx ON gncEntryTrail (entryGuid);
@@ -85,7 +87,8 @@ CREATE TABLE gncTransactionTrail (
 	num		TEXT,
 	description	TEXT,
         currency	TEXT NOT NULL CHECK (currency <> ''),
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	iguid		INT4 DEFAULT 0
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncTransactionTrail_trans_idx ON gncTransactionTrail (transGuid);
