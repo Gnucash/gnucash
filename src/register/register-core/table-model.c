@@ -123,6 +123,8 @@ gnc_table_model_new (void)
   model->io_flags_handlers = gnc_table_model_handler_hash_new ();
   model->fg_color_handlers = gnc_table_model_handler_hash_new ();
   model->bg_color_handlers = gnc_table_model_handler_hash_new ();
+  model->cell_border_handlers = gnc_table_model_handler_hash_new ();
+  model->confirm_handlers = gnc_table_model_handler_hash_new ();
 
   model->dividing_row = -1;
 
@@ -148,6 +150,12 @@ gnc_table_model_destroy (TableModel *model)
 
   gnc_table_model_handler_hash_destroy (model->bg_color_handlers);
   model->bg_color_handlers = NULL;
+
+  gnc_table_model_handler_hash_destroy (model->cell_border_handlers);
+  model->cell_border_handlers = NULL;
+
+  gnc_table_model_handler_hash_destroy (model->confirm_handlers);
+  model->confirm_handlers = NULL;
 
   g_free (model);
 }
@@ -323,5 +331,77 @@ gnc_table_model_get_bg_color_handler (TableModel *model,
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->bg_color_handlers,
+                                              cell_type);
+}
+
+void
+gnc_table_model_set_cell_border_handler
+                                (TableModel *model,
+                                 TableGetCellBorderHandler cell_border_handler,
+                                 int cell_type)
+{
+  g_return_if_fail (model != NULL);
+  g_return_if_fail (cell_type >= 0);
+
+  gnc_table_model_handler_hash_insert (model->cell_border_handlers,
+                                       cell_type,
+                                       cell_border_handler);
+}
+
+void
+gnc_table_model_set_default_cell_border_handler
+                                (TableModel *model,
+                                 TableGetCellBorderHandler cell_border_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->cell_border_handlers,
+                                       DEFAULT_HANDLER,
+                                       cell_border_handler);
+}
+
+TableGetCellBorderHandler
+gnc_table_model_get_cell_border_handler (TableModel *model,
+                                      int cell_type)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->cell_border_handlers,
+                                              cell_type);
+}
+
+void
+gnc_table_model_set_confirm_handler
+                                (TableModel *model,
+                                 TableConfirmHandler confirm_handler,
+                                 int cell_type)
+{
+  g_return_if_fail (model != NULL);
+  g_return_if_fail (cell_type >= 0);
+
+  gnc_table_model_handler_hash_insert (model->confirm_handlers,
+                                       cell_type,
+                                       confirm_handler);
+}
+
+void
+gnc_table_model_set_default_confirm_handler
+                                (TableModel *model,
+                                 TableConfirmHandler confirm_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->confirm_handlers,
+                                       DEFAULT_HANDLER,
+                                       confirm_handler);
+}
+
+TableConfirmHandler
+gnc_table_model_get_confirm_handler (TableModel *model,
+                                      int cell_type)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->confirm_handlers,
                                               cell_type);
 }

@@ -95,9 +95,9 @@ typedef struct
   GHashTable *io_flags_handlers;
   GHashTable *fg_color_handlers;
   GHashTable *bg_color_handlers;
+  GHashTable *cell_border_handlers;
+  GHashTable *confirm_handlers;
 
-  TableGetCellBorderHandler cell_border_handler;
-  TableConfirmHandler confirm_handler;
   TableSaveHandler save_handler;
 
   gpointer handler_user_data;
@@ -167,6 +167,28 @@ void gnc_table_model_set_default_bg_color_handler
                                  (TableModel *model,
                                   TableGetBGColorHandler io_flags_handler);
 TableGetBGColorHandler gnc_table_model_get_bg_color_handler
+                                 (TableModel *model,
+                                  int cell_type);
+
+void gnc_table_model_set_cell_border_handler
+                                 (TableModel *model,
+                                  TableGetCellBorderHandler io_flags_handler,
+                                  int cell_type);
+void gnc_table_model_set_default_cell_border_handler
+                                 (TableModel *model,
+                                  TableGetCellBorderHandler io_flags_handler);
+TableGetCellBorderHandler gnc_table_model_get_cell_border_handler
+                                 (TableModel *model,
+                                  int cell_type);
+
+void gnc_table_model_set_confirm_handler
+                                 (TableModel *model,
+                                  TableConfirmHandler io_flags_handler,
+                                  int cell_type);
+void gnc_table_model_set_default_confirm_handler
+                                 (TableModel *model,
+                                  TableConfirmHandler io_flags_handler);
+TableConfirmHandler gnc_table_model_get_confirm_handler
                                  (TableModel *model,
                                   int cell_type);
 

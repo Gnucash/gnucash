@@ -1501,8 +1501,14 @@ gnc_split_register_model_new (void)
                                     gnc_split_register_get_debcred_bg_color,
                                     FDEBT_CELL);
 
-  model->cell_border_handler = gnc_split_register_get_border;
-  model->confirm_handler     = gnc_split_register_confirm;
+
+  gnc_table_model_set_default_cell_border_handler
+                                   (model,
+                                    gnc_split_register_get_border);
+
+
+  gnc_table_model_set_default_confirm_handler (model,
+                                               gnc_split_register_confirm);
 
   model->cell_data_allocator   = gnc_split_register_guid_malloc;
   model->cell_data_deallocator = gnc_split_register_guid_free;

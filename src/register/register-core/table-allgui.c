@@ -348,11 +348,11 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
   TableGetBGColorHandler bg_color_handler;
   int cell_type;
 
-  if (!table || !table->model)
-    return 0xffffff; /* white */
-
   if (hatching)
     *hatching = FALSE;
+
+  if (!table || !table->model)
+    return 0xffffff; /* white */
 
   cell_type = gnc_table_get_cell_type (table, virt_loc);
 
@@ -369,11 +369,20 @@ void
 gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)
 {
-  if (!table || !table->model->cell_border_handler)
+  TableGetCellBorderHandler cell_border_handler;
+  int cell_type;
+
+  if (!table || !table->model)
     return;
 
-  table->model->cell_border_handler (virt_loc, borders,
-                                     table->model->handler_user_data);
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  cell_border_handler = gnc_table_model_get_cell_border_handler (table->model,
+                                                                 cell_type);
+  if (!cell_border_handler)
+    return;
+
+  cell_border_handler (virt_loc, borders, table->model->handler_user_data);
 }
 
 CellAlignment
@@ -544,8 +553,6 @@ gnc_virtual_location_init (VirtualLocation *vloc)
   vloc->vcell_loc.virt_col = -1;
 }
 
-/* ==================================================== */
-
 static void
 gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
 {
@@ -562,8 +569,6 @@ gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
   vcell->visible = 1;
 }
 
-/* ==================================================== */
-
 static void
 gnc_virtual_cell_destroy (gpointer _vcell, gpointer user_data)
 {
@@ -576,8 +581,6 @@ gnc_virtual_cell_destroy (gpointer _vcell, gpointer user_data)
   vcell->vcell_data = NULL;
 }
 
-/* ==================================================== */
-
 static void 
 gnc_table_resize (Table * table, int new_virt_rows, int new_virt_cols)
 {
@@ -588,8 +591,6 @@ gnc_table_resize (Table * table, int new_virt_rows, int new_virt_cols)
   table->num_virt_rows = new_virt_rows;
   table->num_virt_cols = new_virt_cols;
 }
-
-/* ==================================================== */
 
 void
 gnc_table_set_vcell (Table *table,
@@ -627,8 +628,6 @@ gnc_table_set_vcell (Table *table,
   vcell->start_primary_color = start_primary_color ? 1 : 0;
 }
 
-/* ==================================================== */
-
 void
 gnc_table_set_virt_cell_data (Table *table,
                               VirtualCellLocation vcell_loc,
@@ -649,8 +648,6 @@ gnc_table_set_virt_cell_data (Table *table,
     vcell->vcell_data = (gpointer) vcell_data;
 }
 
-/* ==================================================== */
-
 void
 gnc_table_set_virt_cell_visible (Table *table,
                                  VirtualCellLocation vcell_loc,
@@ -668,8 +665,6 @@ gnc_table_set_virt_cell_visible (Table *table,
   vcell->visible = visible ? 1 : 0;
 }
 
-/* ==================================================== */
-
 void
 gnc_table_set_virt_cell_cursor (Table *table,
                                 VirtualCellLocation vcell_loc,
@@ -686,8 +681,6 @@ gnc_table_set_virt_cell_cursor (Table *table,
 
   vcell->cellblock = cursor;
 }
-
-/* ==================================================== */
 
 static void 
 gnc_table_move_cursor_internal (Table *table,
@@ -813,8 +806,6 @@ gnc_table_move_cursor_internal (Table *table,
   LEAVE("did move\n");
 }
 
-/* ==================================================== */
-
 void
 gnc_table_move_cursor (Table *table, VirtualLocation new_virt_loc)
 {
@@ -831,8 +822,6 @@ gnc_table_move_cursor_gui (Table *table, VirtualLocation new_virt_loc)
 
   gnc_table_move_cursor_internal (table, new_virt_loc, TRUE);
 }
-
-/* ==================================================== */
 
 /* gnc_table_verify_cursor_position checks the location of the cursor
  * with respect to a virtual location, and repositions the cursor
@@ -870,8 +859,6 @@ gnc_table_verify_cursor_position (Table *table, VirtualLocation virt_loc)
 
   return moved_cursor;
 }
-
-/* ==================================================== */
 
 gpointer
 gnc_table_get_vcell_data (Table *table, VirtualCellLocation vcell_loc)
@@ -936,8 +923,6 @@ gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
    LEAVE ("\n");
 }
 
-/* ==================================================== */
-
 void        
 gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
 {
@@ -946,8 +931,6 @@ gnc_table_refresh_current_cursor_gui (Table * table, gboolean do_scroll)
   gnc_table_refresh_cursor_gui (table, table->current_cursor_loc.vcell_loc,
                                 do_scroll);
 }
-
-/* ==================================================== */
 
 gboolean
 gnc_table_virtual_loc_valid(Table *table,
@@ -990,8 +973,6 @@ gnc_table_virtual_loc_valid(Table *table,
 
   return TRUE;
 }
-
-/* ==================================================== */
 
 /* Handle the non gui-specific parts of a cell enter callback */
 gboolean
@@ -1053,8 +1034,6 @@ gnc_table_enter_update (Table *table,
   return can_edit;
 }
 
-/* ==================================================== */
-
 void
 gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
 {
@@ -1099,24 +1078,26 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
   }
 }
 
-/* ==================================================== */
-
 gboolean
 gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
 {
-  if (!table)
+  TableConfirmHandler confirm_handler;
+  int cell_type;
+
+  if (!table || !table->model)
     return TRUE;
 
-  if (!table->model->confirm_handler)
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  confirm_handler = gnc_table_model_get_confirm_handler (table->model,
+                                                         cell_type);
+  if (!confirm_handler)
     return TRUE;
 
-  return table->model->confirm_handler (virt_loc,
-                                        table->model->handler_user_data);
+  return confirm_handler (virt_loc, table->model->handler_user_data);
 }
 
-/* ==================================================== */
-
-/* returned result should not be touched by the caller.
+/* Returned result should not be touched by the caller.
  * NULL return value means the edit was rejected. */
 const char *
 gnc_table_modify_update (Table *table,
@@ -1148,9 +1129,7 @@ gnc_table_modify_update (Table *table,
 
   ENTER ("\n");
 
-  if (table->model->confirm_handler &&
-      ! (table->model->confirm_handler (virt_loc,
-                                        table->model->handler_user_data)))
+  if (!gnc_table_confirm_change (table, virt_loc))
   {
     if (cancelled)
       *cancelled = TRUE;
@@ -1203,8 +1182,6 @@ gnc_table_modify_update (Table *table,
     return NULL;
 }
 
-/* ==================================================== */
-
 gboolean
 gnc_table_direct_update (Table *table,
                          VirtualLocation virt_loc,
@@ -1245,9 +1222,7 @@ gnc_table_direct_update (Table *table,
 
   if (safe_strcmp (old_value, cell->value) != 0)
   {
-    if (table->model->confirm_handler &&
-        ! (table->model->confirm_handler (virt_loc,
-                                          table->model->handler_user_data)))
+    if (!gnc_table_confirm_change (table, virt_loc))
     {
       gnc_basic_cell_set_value (cell, old_value);
       *newval_ptr = NULL;
@@ -1269,8 +1244,6 @@ gnc_table_direct_update (Table *table,
 
   return result;
 }
-
-/* ==================================================== */
 
 static gboolean
 gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
@@ -1324,8 +1297,6 @@ gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
 
   return TRUE;
 }
-
-/* ==================================================== */
 
 static gboolean
 gnc_table_find_valid_cell_horiz(Table *table,
@@ -1388,8 +1359,6 @@ gnc_table_find_valid_cell_horiz(Table *table,
   return FALSE;
 }
 
-/* ==================================================== */
-
 gboolean
 gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
                                  gboolean exact_pointer)
@@ -1399,8 +1368,6 @@ gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
 
   return gnc_table_find_valid_cell_horiz (table, virt_loc, exact_pointer);
 }
-
-/* ==================================================== */
 
 gboolean
 gnc_table_move_tab (Table *table,
@@ -1478,8 +1445,6 @@ gnc_table_move_tab (Table *table,
     return changed;
   }
 }
-
-/* ==================================================== */
 
 gboolean
 gnc_table_move_vertical_position (Table *table,
@@ -1572,8 +1537,6 @@ gnc_table_move_vertical_position (Table *table,
     return changed;
   }
 }
-
-/* ==================================================== */
 
 gboolean
 gnc_table_traverse_update(Table *table,
@@ -1685,5 +1648,3 @@ gnc_table_traverse_update(Table *table,
 
   return abort_move;
 }
-
-/* ================== end of file ======================= */
