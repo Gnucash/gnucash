@@ -57,7 +57,8 @@ gnucash_make_guids_LDADD = \
   engine/libgncengine.la \
   ${DL_LIB} \
   ${GNOME_XML_LIB} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${INTLLIBS}
 
 gnucash_make_guids_SOURCES = \
   gnucash-make-guids.c

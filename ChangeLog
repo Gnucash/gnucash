@@ -1,3 +1,13 @@
+2001-07-09  Dave Peticolas  <dave@krondo.com>
+
+	* src/Makefile.am: link intl libs with gnucash-make-guids
+
+	* src/register/QuickFill.c: same as below
+
+	* src/register/quickfillcell.c: conditionally include wctype.h
+
+	* configure.in: check for wctype.h
+
 2001-07-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/gnc-test-stuff.c (get_random_query): not so many terms

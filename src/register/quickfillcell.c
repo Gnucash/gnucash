@@ -40,7 +40,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_WCTYPE_H
 #include <wctype.h>
+#endif
 
 #include "basiccell.h"
 #include "gnc-ui-util.h"
