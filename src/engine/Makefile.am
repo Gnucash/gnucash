@@ -11,47 +11,47 @@ lib_LTLIBRARIES = libgncengine.la
 
 # Build hell from main.c and libhello.la
 libgncengine_la_SOURCES = \
+  Account-xml-parser-v1.c \
   Account.c \
   Backend.c \
+  Commodity-xml-parser-v1.c \
   DateUtils.c \
+  GNCId.c \
   Group.c \
+  Ledger-xml-parser-v1.c \
   NetIO.c \
+  Query-xml-parser-v1.c \
   Query.c \
   Scrub.c \
-  Transaction.c \
   TransLog.c \
+  Transaction-xml-parser-v1.c \
+  Transaction.c \
   date.c \
-  GNCId.c \
   gnc-account-xml-v2.c \
+  gnc-associate-account.c \
+  gnc-book.c \
   gnc-commodity-xml-v2.c \
+  gnc-commodity.c \
+  gnc-engine-util.c \
+  gnc-engine.c \
+  gnc-event.c \
+  gnc-numeric.c \
+  gnc-pricedb-xml-v1.c \
+  gnc-pricedb.c \
   guid.c \
   io-gncbin-r.c \
   io-gncxml-r.c \
   io-gncxml-w.c \
-  md5.c \
   kvp_frame.c \
-  gnc-associate-account.c \
-  gnc-book.c \
-  gnc-commodity.c \
-  gnc-engine.c \
-  gnc-engine-util.c \
-  gnc-event.c \
-  gnc-numeric.c \
-  gnc-pricedb.c \
-  gnc-pricedb-xml-v1.c \
+  md5.c \
   sixtp-dom-generators.c \
   sixtp-dom-parsers.c \
   sixtp-kvp-parser.c \
   sixtp-stack.c \
+  sixtp-to-dom-parser.c \
   sixtp-utils.c \
   sixtp-xml-write-utils.c \
-  sixtp-to-dom-parser.c \
-  sixtp.c \
-  Account-xml-parser-v1.c \
-  Commodity-xml-parser-v1.c \
-  Ledger-xml-parser-v1.c \
-  Query-xml-parser-v1.c \
-  Transaction-xml-parser-v1.c
+  sixtp.c
 
 libgncengine_la_LDFLAGS = -version-info 2:3:1
 
@@ -72,29 +72,32 @@ noinst_HEADERS = \
   Transaction.h \
   TransactionP.h \
   date.h \
+  gnc-associate-account.h \
+  gnc-book.h \
+  gnc-book-p.h \
+  gnc-commodity.h \
   gnc-common.h \
+  gnc-engine-util.h \
+  gnc-engine.h \
+  gnc-event-p.h \
+  gnc-event.h \
+  gnc-numeric.h \
+  gnc-pricedb.h \
+  gnc-pricedb-p.h \
+  gnc-xml-helper.h \
+  gnc-xml.h \
   guid.h \
   io-gncbin.h \
   io-gncxml.h \
-  md5.h \
+  io-gncxml-p.h \
   kvp_frame.h \
-  gnc-associate-account.h \
-  gnc-book.h \
-  gnc-commodity.h \
-  gnc-engine.h \
-  gnc-engine-util.h \
-  gnc-event.h \
-  gnc-event-p.h \
-  gnc-numeric.h \
-  gnc-pricedb.h \
-  gnc-xml-helper.h \
-  gnc-xml.h \
+  md5.h \
   sixtp-dom-generators.h \
   sixtp-dom-parsers.h \
   sixtp-parsers.h \
-  sixtp-writers.h \
   sixtp-stack.h \
   sixtp-utils.h \
+  sixtp-writers.h \
   sixtp-xml-write-utils.h \
   sixtp.h
 
