@@ -1287,7 +1287,6 @@ LedgerTraverse (Table *table,
     cell_type = xaccSplitRegisterGetCurrentCellType (reg);
 
     if (!(cell_type == XFRM_CELL ||
-          cell_type == XTO_CELL  ||
           cell_type == MXFRM_CELL))
       break;
 
@@ -1298,10 +1297,6 @@ LedgerTraverse (Table *table,
       case XFRM_CELL:
         if (changed & MOD_XFRM)
           cell = reg->xfrmCell;
-        break;
-      case XTO_CELL:
-        if (changed & MOD_XTO)
-          cell = reg->xtoCell;
         break;
       case MXFRM_CELL:
         if (changed & MOD_MXFRM)
@@ -2561,14 +2556,11 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   if (MOD_MEMO & changed)
     gnc_split_scm_set_memo(split_scm, reg->memoCell->cell.value);
 
-  if ((MOD_XFRM | MOD_XTO) & changed) {
+  if (MOD_XFRM & changed) {
     Account *new_account;
     char *new_name;
 
-    if (MOD_XFRM & changed)
-      new_name = reg->xfrmCell->cell.value;
-    else
-      new_name = reg->xtoCell->cell.value;
+    new_name = reg->xfrmCell->cell.value;
 
     new_account = xaccGetAccountByFullName(trans, new_name, account_separator);
 
@@ -2859,31 +2851,20 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
    * just reparent the indicated split, its it, and that's that. For
    * a two-line display, we want to reparent the "other" split, but
    * only if there is one.  XFRM is the straight split, MXFRM is the
-   * mirrored split.  XTO is the straight split, too :) Only one of
-   * XFRM or XTO should be in a given cursor. */
-  if ((MOD_XFRM | MOD_XTO) & changed)
+   * mirrored split. */
+  if (MOD_XFRM & changed)
   {
     Account *old_acc;
     Account *new_acc;
     char *new_name;
 
-    if (MOD_XFRM & changed)
-    {
-      DEBUG ("MOD_XFRM: %s", reg->xfrmCell->cell.value);
-    }
-    else
-    {
-      DEBUG ("MOD_XTO: %s", reg->xtoCell->cell.value);
-    }
+    DEBUG ("MOD_XFRM: %s", reg->xfrmCell->cell.value);
 
     /* do some reparenting. Insertion into new account will automatically
      * delete this split from the old account */
     old_acc = xaccSplitGetAccount (split);
 
-    if (MOD_XFRM & changed)
-      new_name = reg->xfrmCell->cell.value;
-    else
-      new_name = reg->xtoCell->cell.value;
+    new_name = reg->xfrmCell->cell.value;
 
     new_acc = xaccGetAccountByFullName (trans, new_name, account_separator);
 
@@ -3446,7 +3427,6 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
       break;
 
     case XFRM_CELL:
-    case XTO_CELL:
       {
         static char *name = NULL;
 
@@ -3582,7 +3562,6 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
     case DESC_CELL:
     case ACTN_CELL:
     case XFRM_CELL:
-    case XTO_CELL:
     case MEMO_CELL:
     case CRED_CELL:
     case DEBT_CELL:
@@ -4303,7 +4282,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   /* set the completion character for the xfer cells */
   xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);
   xaccComboCellSetCompleteChar (reg->xfrmCell, account_separator);
-  xaccComboCellSetCompleteChar (reg->xtoCell, account_separator);
 
   /* enable callback for cursor user-driven moves */
   table->move_cursor = LedgerMoveCursor;
@@ -4409,7 +4387,6 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 
   xaccLoadXferCell(reg->xfrmCell, group, base_account);
   xaccLoadXferCell(reg->mxfrmCell, group, base_account);
-  xaccLoadXferCell(reg->xtoCell, group, base_account);
 }
 
 /* ======================================================== */

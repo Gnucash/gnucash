@@ -73,7 +73,6 @@ struct _SplitRegisterBuffer
   CellBuffer balanceCell;
   CellBuffer actionCell;
   CellBuffer xfrmCell;
-  CellBuffer xtoCell;
   CellBuffer memoCell;
   CellBuffer creditCell;
   CellBuffer debitCell;
@@ -93,7 +92,6 @@ static char *cell_sample_strings[] =
   N_("sample:999,999.000"+7),                    /* balance cell */
   N_("Transfer"),                                /* action cell */
   N_("sample:Expenses:Automobile:Gasoline"+7),   /* xfrm cell */
-  N_("sample:Expenses:Automobile:Gasoline"+7),   /* xto cell */
   N_("sample:Memo field sample text string"+7),  /* memo cell */
   N_("sample:999,999.000"+7),                    /* credit cell */
   N_("sample:999,999.000"+7),                    /* debit cell */
@@ -118,7 +116,6 @@ static CellAlignment cell_alignments[] =
   CELL_ALIGN_RIGHT,  /* balance cell */
   CELL_ALIGN_LEFT,   /* action cell */
   CELL_ALIGN_RIGHT,  /* xfrm cell */
-  CELL_ALIGN_RIGHT,  /* xto cell */
   CELL_ALIGN_LEFT,   /* memo cell */
   CELL_ALIGN_RIGHT,  /* credit cell */
   CELL_ALIGN_RIGHT,  /* debit cell */
@@ -187,7 +184,6 @@ configLabels (SplitRegister *reg)
   LABEL (BALN,     _("Balance"));
   LABEL (ACTN,     _("Action"));
   LABEL (XFRM,     _("Account"));
-  LABEL (XTO,      _("Account"));
   LABEL (MEMO,     _("Memo"));
   LABEL (CRED,     _("Credit"));
   LABEL (DEBT,     _("Debit"));
@@ -487,11 +483,10 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, XTO_CELL,   0, 3);
-        set_cell (reg, curs, MXFRM_CELL, 0, 4);
-        set_cell (reg, curs, RECN_CELL,  0, 5);
-        set_cell (reg, curs, DEBT_CELL,  0, 6);
-        set_cell (reg, curs, CRED_CELL,  0, 7);
+        set_cell (reg, curs, MXFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL,  0, 4);
+        set_cell (reg, curs, DEBT_CELL,  0, 5);
+        set_cell (reg, curs, CRED_CELL,  0, 6);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -503,8 +498,8 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, TDEBT_CELL, 0, 6);
-        set_cell (reg, curs, TCRED_CELL, 0, 7);
+        set_cell (reg, curs, TDEBT_CELL, 0, 5);
+        set_cell (reg, curs, TCRED_CELL, 0, 6);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -514,10 +509,10 @@ configLayout (SplitRegister *reg)
         curs = reg->cursor_split;
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
-        set_cell (reg, curs, XFRM_CELL, 0, 4);
-        set_cell (reg, curs, RECN_CELL, 0, 5);
-        set_cell (reg, curs, DEBT_CELL, 0, 6);
-        set_cell (reg, curs, CRED_CELL, 0, 7);
+        set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL, 0, 4);
+        set_cell (reg, curs, DEBT_CELL, 0, 5);
+        set_cell (reg, curs, CRED_CELL, 0, 6);
 
         break;
       }
@@ -580,13 +575,12 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, XTO_CELL,   0, 3);
-        set_cell (reg, curs, MXFRM_CELL, 0, 4);
-        set_cell (reg, curs, RECN_CELL,  0, 5);
-        set_cell (reg, curs, SHRS_CELL,  0, 6);
-        set_cell (reg, curs, PRIC_CELL,  0, 7);
-        set_cell (reg, curs, DEBT_CELL,  0, 8);
-        set_cell (reg, curs, CRED_CELL,  0, 9);
+        set_cell (reg, curs, MXFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL,  0, 4);
+        set_cell (reg, curs, SHRS_CELL,  0, 5);
+        set_cell (reg, curs, PRIC_CELL,  0, 6);
+        set_cell (reg, curs, DEBT_CELL,  0, 7);
+        set_cell (reg, curs, CRED_CELL,  0, 8);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -598,9 +592,9 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, TSHRS_CELL, 0, 6);
-        set_cell (reg, curs, TDEBT_CELL, 0, 8);
-        set_cell (reg, curs, TCRED_CELL, 0, 9);
+        set_cell (reg, curs, TSHRS_CELL, 0, 5);
+        set_cell (reg, curs, TDEBT_CELL, 0, 7);
+        set_cell (reg, curs, TCRED_CELL, 0, 8);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -610,12 +604,12 @@ configLayout (SplitRegister *reg)
         curs = reg->cursor_split;
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
-        set_cell (reg, curs, XFRM_CELL, 0, 4);
-        set_cell (reg, curs, RECN_CELL, 0, 5);
-        set_cell (reg, curs, SHRS_CELL, 0, 6);
-        set_cell (reg, curs, PRIC_CELL, 0, 7);
-        set_cell (reg, curs, DEBT_CELL, 0, 8);
-        set_cell (reg, curs, CRED_CELL, 0, 9);
+        set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL, 0, 4);
+        set_cell (reg, curs, SHRS_CELL, 0, 5);
+        set_cell (reg, curs, PRIC_CELL, 0, 6);
+        set_cell (reg, curs, DEBT_CELL, 0, 7);
+        set_cell (reg, curs, CRED_CELL, 0, 8);
 
         break;
       }
@@ -645,6 +639,9 @@ xaccMallocSplitRegister (SplitRegisterType type,
   SplitRegister * reg;
 
   reg = g_new0 (SplitRegister, 1);
+
+  if (type >= NUM_SINGLE_REGISTER_TYPES)
+    style = REG_STYLE_JOURNAL;
 
   xaccInitSplitRegister (reg,
                          type,
@@ -685,7 +682,7 @@ mallocCursors (SplitRegister *reg)
     case INCOME_LEDGER:
     case GENERAL_LEDGER:
     case SEARCH_LEDGER:
-      num_cols = 8;
+      num_cols = 7;
       break;
 
     case STOCK_REGISTER:
@@ -694,7 +691,7 @@ mallocCursors (SplitRegister *reg)
       break;
 
     case PORTFOLIO_LEDGER:
-      num_cols = 10;
+      num_cols = 9;
       break;
 
     default:
@@ -776,7 +773,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (SHRBALN,  shrbaln,  Price);
   NEW (BALN,     balance,  Price);
   NEW (XFRM,     xfrm,     Combo);
-  NEW (XTO,      xto,      Combo);
   NEW (ACTN,     action,   Combo);
   NEW (MEMO,     memo,     QuickFill);
   NEW (CRED,     credit,   Price);
@@ -820,20 +816,13 @@ xaccInitSplitRegister (SplitRegister *reg,
     xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, help);
   }
 
-  xaccSetBasicCellBlankHelp (&reg->xtoCell->cell,
-                             _("Enter the account to transfer to, or choose "
-                               "one from the list"));
-
   xaccComboCellSetIgnoreString (reg->mxfrmCell, _("Split"));
-  xaccComboCellSetIgnoreString (reg->xtoCell, _("Split"));
-
 
   {
     const char *help = _("This transaction has multiple splits; "
                          "switch to auto-split or transaction "
                          "mode to see them all");
     xaccComboCellSetIgnoreHelp (reg->mxfrmCell, help);
-    xaccComboCellSetIgnoreHelp (reg->xtoCell, help);
   }
 
   /* the memo cell */
@@ -943,6 +932,10 @@ xaccConfigSplitRegister (SplitRegister *reg,
   if (!reg) return;
 
   reg->type = newtype;
+
+  if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
+    newstyle = REG_STYLE_JOURNAL;
+
   reg->style = newstyle;
   reg->use_double_line = use_double_line;
 
@@ -994,7 +987,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->balanceCell);
   xaccDestroyComboCell     (reg->actionCell);
   xaccDestroyComboCell     (reg->xfrmCell);
-  xaccDestroyComboCell     (reg->xtoCell);
   xaccDestroyQuickFillCell (reg->memoCell);
   xaccDestroyPriceCell     (reg->creditCell);
   xaccDestroyPriceCell     (reg->debitCell);
@@ -1016,7 +1008,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->balanceCell  = NULL;
   reg->actionCell   = NULL;
   reg->xfrmCell     = NULL;
-  reg->xtoCell      = NULL;
   reg->memoCell     = NULL;
   reg->creditCell   = NULL;
   reg->debitCell    = NULL;
@@ -1058,7 +1049,6 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
   changed |= MOD_RECN  & reg->recnCell->cell.changed;
   changed |= MOD_ACTN  & reg->actionCell->cell.changed;
   changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
-  changed |= MOD_XTO   & reg->xtoCell->cell.changed; 
   changed |= MOD_MEMO  & reg->memoCell->cell.changed;
   changed |= MOD_AMNT  & reg->creditCell->cell.changed;
   changed |= MOD_AMNT  & reg->debitCell->cell.changed;
@@ -1082,7 +1072,6 @@ xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg)
   changed |= MOD_RECN  & reg->recnCell->cell.conditionally_changed;
   changed |= MOD_ACTN  & reg->actionCell->cell.conditionally_changed;
   changed |= MOD_XFRM  & reg->xfrmCell->cell.conditionally_changed;
-  changed |= MOD_XTO   & reg->xtoCell->cell.conditionally_changed; 
   changed |= MOD_MEMO  & reg->memoCell->cell.conditionally_changed;
   changed |= MOD_AMNT  & reg->creditCell->cell.conditionally_changed;
   changed |= MOD_AMNT  & reg->debitCell->cell.conditionally_changed;
@@ -1105,7 +1094,6 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->recnCell->cell.changed = 0;
    reg->actionCell->cell.changed = 0;
    reg->xfrmCell->cell.changed = 0;
-   reg->xtoCell->cell.changed = 0;
    reg->memoCell->cell.changed = 0;
    reg->creditCell->cell.changed = 0;
    reg->debitCell->cell.changed = 0;
@@ -1363,7 +1351,6 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->balanceCell);
   destroyCellBuffer(&srb->actionCell);
   destroyCellBuffer(&srb->xfrmCell);
-  destroyCellBuffer(&srb->xtoCell);
   destroyCellBuffer(&srb->memoCell);
   destroyCellBuffer(&srb->creditCell);
   destroyCellBuffer(&srb->debitCell);
@@ -1404,7 +1391,6 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->balanceCell->cell, &srb->balanceCell);
   saveCell(&sr->actionCell->cell, &srb->actionCell);
   saveCell(&sr->xfrmCell->cell, &srb->xfrmCell);
-  saveCell(&sr->xtoCell->cell, &srb->xtoCell);
   saveCell(&sr->memoCell->cell, &srb->memoCell);
   saveCell(&sr->creditCell->cell, &srb->creditCell);
   saveCell(&sr->debitCell->cell, &srb->debitCell);
@@ -1468,7 +1454,6 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell, cursor);
   restoreCellChanged(&sr->actionCell->cell, &srb->actionCell, cursor);
   restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell, cursor);
-  restoreCellChanged(&sr->xtoCell->cell, &srb->xtoCell, cursor);
   restoreCellChanged(&sr->memoCell->cell, &srb->memoCell, cursor);
   restoreCellChanged(&sr->creditCell->cell, &srb->creditCell, cursor);
   restoreCellChanged(&sr->debitCell->cell, &srb->debitCell, cursor);
@@ -1489,7 +1474,6 @@ static const char *cell_names[] =
   "balance",
   "action",
   "account",
-  "split-account",
   "memo",
   "credit",
   "debit",

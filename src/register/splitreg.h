@@ -89,7 +89,6 @@ typedef enum
   BALN_CELL,
   ACTN_CELL,
   XFRM_CELL,
-  XTO_CELL,
   MEMO_CELL,
   CRED_CELL,
   DEBT_CELL,
@@ -133,12 +132,11 @@ typedef enum
   MOD_ACTN   = 1 <<  4,
   MOD_XFRM   = 1 <<  5,
   MOD_MXFRM  = 1 <<  6,
-  MOD_XTO    = 1 <<  7,
-  MOD_MEMO   = 1 <<  8,
-  MOD_AMNT   = 1 <<  9,
-  MOD_PRIC   = 1 << 10,
-  MOD_SHRS   = 1 << 11,
-  MOD_NOTES  = 1 << 12,
+  MOD_MEMO   = 1 <<  7,
+  MOD_AMNT   = 1 <<  8,
+  MOD_PRIC   = 1 <<  9,
+  MOD_SHRS   = 1 << 10,
+  MOD_NOTES  = 1 << 11,
   MOD_ALL    = 0xffff
 } CellModifiedFlags;
 
@@ -191,7 +189,6 @@ struct _SplitRegister
   PriceCell     * balanceCell;
   ComboCell     * actionCell;
   ComboCell     * xfrmCell;
-  ComboCell     * xtoCell;
   QuickFillCell * memoCell;
   PriceCell     * creditCell;
   PriceCell     * debitCell;

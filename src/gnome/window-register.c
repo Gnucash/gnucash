@@ -1794,13 +1794,15 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   {
     gboolean use_double_line;
 
-    use_double_line = gnc_lookup_boolean_option("Register",
-                                                "Double Line Mode",
-                                                FALSE);
+    use_double_line = gnc_lookup_boolean_option ("Register",
+                                                 "Double Line Mode",
+                                                 FALSE);
 
     /* be sure to initialize the gui elements associated with the cursor */
-    xaccConfigSplitRegister(ledger->ledger, ledger->type,
-                            ledger->ledger->style, use_double_line);
+    xaccConfigSplitRegister (ledger->ledger,
+                             ledger->type,
+                             ledger->ledger->style,
+                             use_double_line);
   }
 
   /* Allow grow, allow shrink, auto-shrink */
