@@ -232,10 +232,7 @@ static const gchar *actions_requiring_account[] = {
 };
 
 /* DRH - Suggest this be added to libegg */
-struct {
-  const char *action_name;
-  const char *label;
-} short_labels[] = {
+static action_short_labels short_labels[] = {
   { "ActionsTransferAction", 	  N_("Transfer") },
   { "RecordTransactionAction", 	  N_("Enter") },
   { "CancelTransactionAction", 	  N_("Cancel") },
@@ -410,29 +407,11 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	object_class->finalize = gnc_plugin_page_register_finalize;
 
 	gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
-	gnc_plugin_class->plugin_name     = GNC_PLUGIN_REGISTER_NAME;
+	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_REGISTER_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
 	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
-}
-
-static void
-gnc_plugin_page_register_init_short_names (EggActionGroup *action_group)
-{
-  EggAction *action;
-  GValue value = { 0, };
-  gint i;
-
-  g_value_init (&value, G_TYPE_STRING);
-
-  for (i = 0; short_labels[i].action_name; i++) {
-    /* Add a couple of short labels for the toolbar */
-    action = egg_action_group_get_action (action_group,
-					  short_labels[i].action_name);
-    g_value_set_static_string (&value, gettext(short_labels[i].label));
-    g_object_set_property (G_OBJECT(action), "short_label", &value);
-  }
 }
 
 static void
@@ -484,7 +463,8 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 					    REG_STYLE_LEDGER,
 					    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
 					    plugin_page);
-	gnc_plugin_page_register_init_short_names (action_group);
+
+	gnc_gnome_utils_init_short_names (action_group, short_labels);
 	gnc_plugin_page_register_init_values (action_group);
 
 	priv->ui_description = g_strdup("gnc-plugin-page-register-ui.xml");
@@ -517,7 +497,7 @@ gnc_plugin_page_register_finalize (GObject *object)
 }
 
 
-static Account *
+Account *
 gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 { 
 	GNCLedgerDisplayType ledger_type;
@@ -537,20 +517,11 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
 	Account *account;
-	EggAction *action;
-	GValue value = { 0 };
-	gint i;
 
 	priv = page->priv;
 	account = gnc_plugin_page_register_get_account (page);
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, account != NULL);
-	for (i = 0; actions_requiring_account[i]; i++) {
-	  	action = egg_action_group_get_action (priv->action_group,
-						      actions_requiring_account[i]);
-		g_object_set_property (G_OBJECT(action), "sensitive", &value);
-	}
-
+	gnc_gnome_utils_update_actions(priv->action_group, actions_requiring_account,
+				 "sensitive", account != NULL);
 }
 
 

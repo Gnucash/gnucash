@@ -128,6 +128,51 @@ GtkWidget * gnc_gnome_get_pixmap (const char *name);
  */
 GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
 
+
+typedef struct {
+  const char *action_name;
+  const char *label;
+} action_short_labels;
+
+/** Add "short" labels to existing actions.  The "short" label is the
+ *  string used on toolbar buttons when the action is visible.
+ *
+ *  @param action_group The group of all actions associated with a
+ *  plugin or plugin page.  All actions to me modified must be in this
+ *  group.
+ *
+ *  @param short_labels A pointer to a data structure containing
+ *  [action name, label string] string pairs.
+ */
+void gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
+				       action_short_labels *short_labels);
+
+
+/** Update the status of existing UI actions.  This function can
+ *  modify actions making them visible, invisible, sensitive, or
+ *  insensitive.
+ *
+ *  @param action_group The group of all actions associated with a
+ *  plugin or plugin page.  All actions to me modified must be in this
+ *  group.
+ *
+ *  @param action_names A NULL terminated list of strings containing
+ *  the names of actions.  The actions named in this list will be
+ *  modified.
+ *
+ *  @param property_name The property name to be changed on the
+ *  specified actions. This name must be either "visible" oor
+ *  "sensitive".
+ *
+ *  @param enabled A boolean specifying the new state of the
+ *  associated property.
+ */
+void gnc_gnome_utils_update_actions (EggActionGroup *action_group,
+				     const gchar **action_names,
+				     const gchar *property_name,
+				     gboolean enabled);
+
+
 /** Load a new set of actions into an existing UI.
  *
  *  @param ui_merge The existing set of merged actions. This is the ui
@@ -146,6 +191,5 @@ GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
 gint gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
 				 EggActionGroup *action_group,
 				 const gchar *filename);
-
 #endif
 /** @} */

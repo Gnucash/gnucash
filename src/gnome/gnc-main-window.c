@@ -57,6 +57,14 @@
 #include "window-main.h"
 #include "messages.h"
 
+
+enum {
+  PAGE_ADDED,
+  PAGE_CHANGED,
+  LAST_SIGNAL
+};
+
+
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
 static GList *active_windows = NULL;
@@ -129,6 +137,8 @@ typedef struct {
 	guint merge_id;
 	EggActionGroup *action_group;
 } MergedActionEntry;
+
+static guint main_window_signals[LAST_SIGNAL] = { 0 };
 
 static EggActionEntry gnc_menu_entries [] =
 {
@@ -432,6 +442,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 
 	window->priv->installed_pages =
 	  g_list_append (window->priv->installed_pages, page);
+
+	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
 }
 
 void
@@ -454,6 +466,10 @@ gnc_main_window_close_page (GncMainWindow *window,
 	notebook = GTK_NOTEBOOK (window->priv->notebook);
 	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
 	gtk_notebook_remove_page (notebook, page_num);
+	if ( gtk_notebook_get_current_page(notebook) == -1) {
+	  /* Synthesize a page changed signal when the last page is removed. */
+	  g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, NULL);
+	}
 	window->priv->installed_pages =
 	  g_list_remove (window->priv->installed_pages, page);
 
@@ -585,6 +601,26 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
 	object_class->finalize = gnc_main_window_finalize;
 	object_class->dispose = gnc_main_window_dispose;
+
+	main_window_signals[PAGE_ADDED] =
+	  g_signal_new ("page_added",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (GncMainWindowClass, page_added),
+			NULL, NULL,
+			g_cclosure_marshal_VOID__OBJECT,
+			G_TYPE_NONE, 1,
+			G_TYPE_OBJECT);
+
+	main_window_signals[PAGE_CHANGED] =
+	  g_signal_new ("page_changed",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (GncMainWindowClass, page_changed),
+			NULL, NULL,
+			g_cclosure_marshal_VOID__OBJECT,
+			G_TYPE_NONE, 1,
+			G_TYPE_OBJECT);
 }
 
 static void
@@ -770,6 +806,8 @@ gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 		gnc_plugin_page_selected (page);
 		gnc_window_update_status (GNC_WINDOW(window), page);
 	}
+
+	g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
 }
 
 static void
@@ -843,7 +881,7 @@ gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *wind
 	new_window = gnc_main_window_new ();
 
 	if (window->priv->current_page != NULL) {
-		name = GNC_PLUGIN_PAGE_GET_CLASS (window->priv->current_page)->plugin_name;
+		name = gnc_plugin_page_get_name(window->priv->current_page);
 		uri = window->priv->current_page->uri;
 		plugin = gnc_plugin_manager_get_plugin (gnc_plugin_manager_get (), name);
 		page = gnc_plugin_create_page (plugin, uri);

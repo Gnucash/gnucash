@@ -61,12 +61,19 @@
 static short module = MOD_GUI;
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 
+enum {
+  ACCOUNT_SELECTED,
+  LAST_SIGNAL
+};
 
+
+/************************************************************
+ *                        Prototypes                        *
+ ************************************************************/
+/* Plugin Actions */
 static void gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass);
 static void gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_finalize (GObject *object);
-
-static Account *gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page);
 
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
@@ -105,6 +112,10 @@ static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPl
 
 static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
 static void gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv);
+
+
+static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
+
 
 static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
@@ -167,6 +178,16 @@ static const gchar *actions_requiring_account[] = {
 	"ActionsReconcileAction",
 	"ActionsLotsAction",
 	NULL
+};
+
+/* DRH - Suggest this be added to libegg */
+static action_short_labels short_labels[] = {
+  { "FileOpenAccountAction", 	    N_("Open") },
+  { "EditEditAccountAction", 	    N_("Edit") },
+  { "EditAccountViewOptionsAction", N_("Options") },
+  { "FileNewAccountAction",    	    N_("New") },
+  { "EditDeleteAccountAction", 	    N_("Delete") },
+  { NULL, NULL },
 };
 
 struct GncPluginPageAccountTreePrivate
@@ -243,42 +264,21 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 	object_class->finalize = gnc_plugin_page_account_tree_finalize;
 
 	gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
-	gnc_plugin_class->plugin_name     = GNC_PLUGIN_ACCOUNT_TREE_NAME;
+	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
 	gnc_plugin_class->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
 	gnc_plugin_class->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
-}
 
-/* DRH - Suggest this be added to libegg */
-static void
-gnc_plugin_page_account_tree_init_short_names (EggActionGroup *action_group)
-{
-	EggAction *action;
-	GValue value = { 0, };
-
-	g_value_init (&value, G_TYPE_STRING);
-
-	/* Add a couple of short labels for the toolbar */
-	action = egg_action_group_get_action (action_group, "FileOpenAccountAction");
-	g_value_set_static_string (&value, _("Open"));
-	g_object_set_property (G_OBJECT(action), "short_label", &value);
-
-	action = egg_action_group_get_action (action_group, "EditEditAccountAction");
-	g_value_set_static_string (&value, _("Edit"));
-	g_object_set_property (G_OBJECT(action), "short_label", &value);
-
-	action = egg_action_group_get_action (action_group, "EditAccountViewOptionsAction");
-	g_value_set_static_string (&value, _("Options"));
-	g_object_set_property (G_OBJECT(action), "short_label", &value);
-
-	action = egg_action_group_get_action (action_group, "FileNewAccountAction");
-	g_value_set_static_string (&value, _("New"));
-	g_object_set_property (G_OBJECT(action), "short_label", &value);
-
-	action = egg_action_group_get_action (action_group, "EditDeleteAccountAction");
-	g_value_set_static_string (&value, _("Delete"));
-	g_object_set_property (G_OBJECT(action), "short_label", &value);
+	plugin_page_signals[ACCOUNT_SELECTED] =
+	  g_signal_new ("account_selected",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (GncPluginPageAccountTreeClass, account_selected),
+			NULL, NULL,
+			g_cclosure_marshal_VOID__POINTER,
+			G_TYPE_NONE, 1,
+			G_TYPE_POINTER);
 }
 
 static void
@@ -325,7 +325,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 				      gnc_plugin_page_account_tree_actions,
 				      gnc_plugin_page_account_tree_n_actions,
 				      plugin_page);
-	gnc_plugin_page_account_tree_init_short_names (action_group);
+	gnc_gnome_utils_init_short_names (action_group, short_labels);
 
 	
 	/* get the options and the window ID */ 
@@ -419,7 +419,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	LEAVE(" ");
 }
 
-static Account *
+Account *
 gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page)
 {
 	Account *account;
@@ -566,6 +566,7 @@ gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
 	LEAVE(" ");
 }
 
+
 /* Callbacks */
 static gboolean
 gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
@@ -642,7 +643,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 	EggActionGroup *action_group;
 	EggAction *action;
 	GtkTreeView *view;
-	Account *account;
+	Account *account = NULL;
 	GValue value = { 0 };
 	gboolean sensitive;
 	gint i;
@@ -668,6 +669,8 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 						      actions_requiring_account[i]);
 		g_object_set_property (G_OBJECT(action), "sensitive", &value);
 	}
+
+	g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
 }
 	
 

@@ -264,6 +264,53 @@ gnc_gnome_get_gdkpixbuf (const char *name)
 }
 
 
+/** Add "short" labels to existing actions.  The "short" label is the
+ *  string used on toolbar buttons when the action is visible.*/
+void
+gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
+				  action_short_labels *short_labels)
+{
+  EggAction *action;
+  GValue value = { 0, };
+  gint i;
+
+  g_value_init (&value, G_TYPE_STRING);
+
+  for (i = 0; short_labels[i].action_name; i++) {
+    /* Add a couple of short labels for the toolbar */
+    action = egg_action_group_get_action (action_group,
+					  short_labels[i].action_name);
+    g_value_set_static_string (&value, gettext(short_labels[i].label));
+    g_object_set_property (G_OBJECT(action), "short_label", &value);
+  }
+}
+
+
+/** Update the status of existing UI actions.  This function can
+ *  modify actions making them visible, invisible, sensitive, or
+ *  insensitive. */
+void
+gnc_gnome_utils_update_actions (EggActionGroup *action_group,
+				const gchar **action_names,
+				const gchar *property_name,
+				gboolean enabled)
+{
+  EggAction    *action;
+  GValue        value = { 0 };
+  gint          i;
+
+  g_value_init (&value, G_TYPE_BOOLEAN);
+  g_value_set_boolean (&value, enabled);
+
+  for (i = 0; action_names[i]; i++) {
+    action = egg_action_group_get_action (action_group, action_names[i]);
+    g_object_set_property (G_OBJECT(action), property_name, &value);
+  }
+}
+
+
+
+/** Load a new set of actions into an existing UI. */
 gint
 gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
 			    EggActionGroup *action_group,

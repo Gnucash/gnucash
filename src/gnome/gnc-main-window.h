@@ -57,12 +57,20 @@ typedef struct {
 
 typedef struct {
 	GtkWindowClass parent;
+
+	/* callbacks */
+	void (*page_added)   (GncMainWindow *window,
+			      GncPluginPage *page);
+	void (*page_changed) (GncMainWindow *window,
+			      GncPluginPage *page);
 } GncMainWindowClass;
 
 typedef struct {
 	GncMainWindow *window;
 	gpointer data;
 } GncMainWindowActionData;
+
+typedef void (*GncMainWindowFunc) (GncMainWindow *window, GncPluginPage *page);
 
 /* function prototypes */
 GType           gnc_main_window_get_type          (void);

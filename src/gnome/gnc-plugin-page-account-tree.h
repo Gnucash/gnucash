@@ -22,12 +22,21 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup UI
+    @{ */
+/** @file gnc-plugin-page-account-tree.h 
+    @brief  utility functions for the GnuCash UI
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
+*/
+
 #ifndef __GNC_PLUGIN_PAGE_ACCOUNT_TREE_H
 #define __GNC_PLUGIN_PAGE_ACCOUNT_TREE_H
 
 #include <gtk/gtkwindow.h>
 
 #include "gnc-plugin-page.h"
+#include "Account.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +48,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE))
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE, GncPluginPageAccountTreeClass))
 
-#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "gnc-plugin_page-account-tree"
+#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "gnc-plugin-page-account-tree"
 
 /* typedefs & structures */
 typedef struct GncPluginPageAccountTreePrivate GncPluginPageAccountTreePrivate;
@@ -52,13 +61,40 @@ typedef struct {
 
 typedef struct {
 	GncPluginPageClass parent;
+
+	/* callbacks */
+	void (*account_selected) (GncPluginPage	 *page,
+				  Account	 *account);
+
 } GncPluginPageAccountTreeClass;
 
 /* function prototypes */
-GType          gnc_plugin_page_account_tree_get_type (void);
 
+/** Retrieve the type number for an "account tree" plugin page.
+ *
+ *  @return The type number.
+ */
+GType gnc_plugin_page_account_tree_get_type (void);
+
+
+/** Create a new "account tree" plugin page.
+ *
+ *  @return The newly created plugin page.
+ */
 GncPluginPage *gnc_plugin_page_account_tree_new  (void);
+
+
+/** Given a pointer to an account tree plugin page, return the
+ *  selected account (if any).
+ *
+ *  @param page The "account tree" page.
+ *
+ *  @return The currently selected account.  NULL if no account is
+ *  selected.
+ */
+Account * gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_PAGE_ACCOUNT_TREE_H */
+/** @} */
