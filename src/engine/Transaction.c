@@ -221,9 +221,9 @@ xaccFreeSplit (Split *split)
 gboolean
 xaccSplitEqual(const Split *sa, const Split *sb,
                gboolean check_guids,
-               gboolean check_txn_splits) {
-
-  if(!sa && !sb) return TRUE;
+               gboolean check_txn_splits)
+{
+  if (!sa && !sb) return TRUE;
 
   if (!sa || !sb)
   {
@@ -283,13 +283,33 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 
   if (!gnc_numeric_eq(sa->amount, sb->amount))
   {
-    PWARN ("amount differs");
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (sa->amount);
+    str_b = gnc_numeric_to_string (sb->amount);
+
+    PWARN ("amounts differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
     return FALSE;
   }
 
   if (!gnc_numeric_eq(sa->value, sb->value))
   {
-    PWARN ("value differs");
+    char *str_a;
+    char *str_b;
+
+    str_a = gnc_numeric_to_string (sa->amount);
+    str_b = gnc_numeric_to_string (sb->amount);
+
+    PWARN ("values differ: %s vs %s", str_a, str_b);
+
+    g_free (str_a);
+    g_free (str_b);
+
     return FALSE;
   }
 
