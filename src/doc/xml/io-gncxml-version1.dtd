@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!DOCTYPE gnc [
   <!ELEMENT gnc (version, defaults*, preferences*,
                  ledger-data*, prices*, recurring-transactions*)>
 
@@ -76,4 +74,4 @@
 
   <!ELEMENT restore (%combined-restores;)>
   <!ELEMENT new (%combined-news;)>
-]>
+

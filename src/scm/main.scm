@@ -146,9 +146,19 @@
         ;; (gnc:load-account-file)
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
         (gnc:ui-init)
-        (gnc:load-account-file)
-        (gnc:default-ui-start)
-        (gnc:ui-main)
+        (if (and
+             (not (string? (gnc:history-get-last)))
+             (equal? ((gnc:option-getter
+                      (gnc:lookup-global-option "__new_user" "first_startup")))
+                    1))
+            (begin
+              (gnc:show-new-user-window)
+              (gnc:start-ui-event-loop))
+            (begin
+              (gnc:load-account-file)
+              (gnc:default-ui-start)
+              (gnc:show-main-window)
+              (gnc:start-ui-event-loop)))
         (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
       
       ;; else: we're in batch mode.  Just do what the user said on the

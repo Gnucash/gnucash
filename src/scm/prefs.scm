@@ -598,3 +598,7 @@ the current value of the path."
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__exp_parser" "defined_variables" '()))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__new_user" "first_startup" 1))

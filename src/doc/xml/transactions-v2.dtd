@@ -1,0 +1,42 @@
+<!ENTITY % types SYSTEM "types.dtd">
+%types;
+
+<!ELEMENT gnc:transaction (trn:guid, trn:num?, trn:date-posted,
+                           trn:date-entered, trn:description?,
+                           trn:slots?, trn:split+)>
+<!ATTLIST gnc:transaction version CDATA #REQUIRED>
+
+<!ELEMENT trn:guid (#PCDATA)>
+<!ATTLIST trn:guid type %id-type; %default-id-type;>
+
+<!ELEMENT trn:num (#PCDATA)>
+
+<!ELEMENT trn:date-posted %date-type;>
+
+<!ELEMENT trn:date-enterede %date-type;>
+
+<!ELEMENT trn:description (#PCDATA)>
+
+<!ELEMENT trn:slots %slot-type;>
+
+<!ELEMENT trn:split (split:guid, split:memo?, split:reconciled-state,
+                     split:reconcile-date?, split:value,
+                     split:quantity, split:account)>
+
+<!ELEMENT split:guid (#PCDATA)>
+<!ATTLIST split:guid type %id-type; %default-id-type;>
+
+<!ELEMENT split:memo (#PCDATA)>
+
+<!ELEMENT split:reconciled-state (#PCDATA)>
+
+<!ELEMENT split:reconcile-date %date-type;>
+
+<!ELEMENT split:value (#PCDATA)>
+
+<!ELEMENT split:quantity (#PCDATA)>
+
+<!ELEMENT split:account (#PCDATA)>
+<!ATTLIST split:account type %id-type; %default-id-type;>
+
+ 

@@ -61,6 +61,8 @@
 #include "window-help.h"
 #include "window-main.h"
 #include "window-report.h"
+#include "new-user-interface.h"
+#include "new-user-funs.h"
 
 #include <g-wrap-runtime-guile.h>
 
@@ -343,15 +345,13 @@ gnc_ui_destroy (void)
 /* ============================================================== */
 
 int
-gnc_ui_main(void)
+gnc_ui_show_main_window(void)
 {
   /* Initialize gnome */
   gnucash_ui_init();
   gnc_default_ui_start();
   
   gtk_widget_show(app);
-
-  gnome_is_running = TRUE;
 
   /* Get the main window on screen. */
   while (gtk_events_pending())
@@ -364,6 +364,13 @@ gnc_ui_main(void)
     SCM window = gw_wcp_assimilate_ptr(app, gh_lookup("<gw:wt-gncUIWidget>"));
     gh_call2(run_danglers, hook, window); 
   }
+  return 0;
+}
+
+int
+gnc_ui_start_event_loop(void)
+{
+  gnome_is_running = TRUE;
 
   /* Enter gnome event loop */
   gtk_main();
@@ -372,6 +379,15 @@ gnc_ui_main(void)
   gnome_is_terminating = FALSE;
 
   return 0;
+}
+
+
+int
+gnc_ui_main(void)
+{
+    gnc_ui_show_main_window();
+
+    return gnc_ui_start_event_loop();
 }
 
 /* ============================================================== */

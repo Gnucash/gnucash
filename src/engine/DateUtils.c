@@ -25,6 +25,8 @@
 #include <string.h>
 #include <time.h>
 
+#include <glib.h>
+
 #include "config.h"
 
 #include "DateUtils.h"
@@ -50,7 +52,7 @@ xaccDateUtilGetStamp (time_t thyme)
       stm->tm_sec
    );
    
-   retval = strdup (buf);
+   retval = g_strdup (buf);
    return retval;
 }
 

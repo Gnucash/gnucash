@@ -1,0 +1,9 @@
+<!ELEMENT gnc:commodity (cmdty:space, cmdty:id, cmdty:name,
+                         cmdty:xcode?, cmdty:fraction)>
+<!ATTLIST gnc:commodity version CDATA #REQUIRED>
+
+<!ELEMENT cmdty:space (#PCDATA)>
+<!ELEMENT cmdty:id (#PCDATA)>
+<!ELEMENT cmdty:name (#PCDATA)>
+<!ELEMENT cmdty:xcode (#PCDATA)>
+<!ELEMENT cmdty:fraction (#PCDATA)>

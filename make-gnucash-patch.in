@@ -64,7 +64,7 @@ if (not defined($old)) {
     exit(1);
   }
   if (not -d "tmp") {
-    mkdir "tmp", 0755];
+    mkdir "tmp", 0755;
   }
   chdir "tmp";
   system("cvs -d `cat ../$new/CVS/Root` co gnucash");

@@ -12,6 +12,8 @@
 #include <stdio.h>  
 #include <string.h>  
 
+#include <glib.h>
+
 #include "BackendP.h"
 #include "Group.h"
 #include "Session.h"
@@ -804,7 +806,7 @@ pgend_session_begin (Session *sess, const char * sessionid)
     * format should be something like
     * postgres://some.host.com:portno/db_name
     */
-   be->dbName = strdup ("gnc_bogus");
+   be->dbName = g_strdup ("gnc_bogus");
    be->connection = PQsetdbLogin (NULL, NULL, NULL, NULL, be->dbName, NULL, NULL);
 
    /* check the conmnection status */

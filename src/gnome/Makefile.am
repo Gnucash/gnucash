@@ -42,7 +42,10 @@ libgncgnome_a_SOURCES = \
   gnc-html-history.c \
   gnc-html-embedded.c \
   window-help.c \
-  window-report.c 
+  window-report.c \
+  new-user-callbacks.c \
+  new-user-interface.c \
+  new-user-funs.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -90,8 +93,10 @@ noinst_HEADERS = \
   gnc-html-history.h \
   gnc-html-embedded.h \
   window-help.h \
-  window-report.h
-
+  window-report.h \
+  new-user-callbacks.h \
+  new-user-interface.h \
+  new-user-funs.h
 
 GLADE_FILES = \
   glade-gnc-dialogs.c \
@@ -107,7 +112,8 @@ EXTRA_DIST = \
   gnc-dialogs.glade \
   gnucash.desktop \
   gnucash.keys.in \
-  gnucash.mime
+  gnucash.mime \
+  new-user.glade
 
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \

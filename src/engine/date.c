@@ -27,13 +27,16 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-#include "config.h"
+#include <glib.h>
+
 #include "date.h"
 #include "gnc-engine-util.h"
 
@@ -161,7 +164,7 @@ xaccPrintDateSecs (time_t t)
 {
    char buff[100];
    printDateSecs (buff, t);
-   return strdup (buff);
+   return g_strdup (buff);
 }
 
 const char *

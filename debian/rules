@@ -12,7 +12,11 @@ id= $(shell pwd)/debian/tmp
 #perlpriv =  $(id)$(shell perl -V:installprivlib | perl -pe 's/.*\'(.*)\'.*/\1/;')
 #perlarch = $(id)$(shell perl -V:installarchlib | perl -pe 's/.*\'(.*)\'.*/\1/;')
 
-Makefile: Makefile.in
+configure: configure.in
+	automake
+	autoconf
+
+Makefile: Makefile.in configure
 	dh_testdir
 	$(checkdir)
 	./configure --prefix=/usr \
@@ -20,8 +24,8 @@ Makefile: Makefile.in
 		--infodir=/usr/share/info \
 		--mandir=/usr/share/man
 
-build: Makefile build-stamp
-build-stamp:
+build: build-stamp
+build-stamp: Makefile 
 	dh_testdir
 	$(checkdir)
 	make 

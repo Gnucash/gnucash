@@ -1,0 +1,22 @@
+
+<!ENTITY % id-type "(guid, new)">
+<!ENTITY % default-id-type "guid">
+
+<!ENTITY % currency-type "(cur:space, cur:id)">
+
+<!ENTITY % slot-types "(string | integer | double | etc)">
+
+<!ELEMENT slot (key, value)>
+
+<!ELEMENT slot:key (#PCDATA)>
+
+<!ELEMENT slot:value (#PCDATA)>
+
+<!ATTLIST slot:value type %slot-types; "string">
+
+<!ENTITY % slot-type "(slot+)">
+
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT ns (#PCDATA)>
+
+<!ENTITY % date-type "(date, ns?)">

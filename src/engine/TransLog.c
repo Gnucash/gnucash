@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <glib.h>
+
 #include "Account.h"
 #include "AccountP.h"
 #include "DateUtils.h"
@@ -117,8 +119,8 @@ xaccLogSetBaseName (const char *basepath)
 {
    if (!basepath) return;
 
-   if (log_base_name) free (log_base_name);
-   log_base_name = strdup (basepath);
+   g_free (log_base_name);
+   log_base_name = g_strdup (basepath);
 
    if (trans_log) {
       xaccCloseLog();
@@ -138,7 +140,7 @@ xaccOpenLog (void)
    if (!gen_logs) return;
    if (trans_log) return;
 
-   if (!log_base_name) log_base_name = strdup ("translog");
+   if (!log_base_name) log_base_name = g_strdup ("translog");
 
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
@@ -159,7 +161,7 @@ xaccOpenLog (void)
       return;
    }
    free (filename);
-   free (timestamp);
+   g_free (timestamp);
 
    /* use tab-separated fields */
    fprintf (trans_log, "mod	id	time_now	" \
@@ -234,9 +236,9 @@ xaccTransWriteLog (Transaction *trans, char flag)
    }
 
    fprintf (trans_log, "===== END\n");
-   free (dnow);
-   free (dent);
-   free (dpost);
+   g_free (dnow);
+   g_free (dent);
+   g_free (dpost);
 
    /* get data out to the disk */
    fflush (trans_log);
@@ -288,7 +290,7 @@ xaccTransGetDateStr (Transaction *trans)
 
    printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
 
-   return strdup (buf);
+   return g_strdup (buf);
 }
 
 char *

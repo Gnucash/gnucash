@@ -1,0 +1,24 @@
+<!ENTITY % types SYSTEM "types.dtd">
+%types;
+
+<!ELEMENT gnc:account (act:name, act:id, act:type, act:currency,
+                       act:security?, act:slots?, act:parent?)>
+<!ATTLIST gnc:account version CDATA #REQUIRED>
+
+<!ELEMENT act:name (#PCDATA)>
+
+<!ELEMENT act:id (#PCDATA)>
+<!ATTLIST act:id type %id-types; %default-id-type;>
+
+<!ELEMENT act:type (#PCDATA)>
+
+<!ELEMENT act:currency %currency-type;>
+
+<!ELEMENT act:security %currency-type;>
+
+<!ELEMENT act:slots %slot-type;>
+
+<!ELEMENT act:parent (#PCDATA)>
+
+<!ATTLIST act:parent type %id-types; #REQUIRED>
+
