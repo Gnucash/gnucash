@@ -53,7 +53,7 @@ void xaccScrubSubSplitPrice (Split *split);
 /** The xaccScrubMergeSubSplits() routine will merge together
  *    all of the splits that were at one time split off from this
  *    split, but are no longer needed to be kept separate.  Splits
- *    migt be split up if they need to be divided over multiple
+ *    might be split up if they need to be divided over multiple
  *    lots; they can be merged back together if the lots change.
  *    In particular, two sub-splits may be merged if they are in 
  *    the same lot, or in no lot.  Note that, by definition, all
