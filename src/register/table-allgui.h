@@ -66,6 +66,7 @@
 #include "table-qt.h"
 #endif 
 
+
 #include "basiccell.h"
 #include "cellblock.h"
 

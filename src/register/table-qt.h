@@ -31,8 +31,6 @@
 #ifndef __XACC_TABLE_QT_H__
 #define __XACC_TABLE_QT_H__
 
-#include <qwidget.h>
-
 #define TABLE_PRIVATE_DATA						 
 
 #define TABLE_PRIVATE_DATA_INIT(table)  {}
@@ -44,9 +42,9 @@
 
 typedef struct _Table Table;
 
-/* create the GtkWidget */
-QWidget      *xaccCreateTable (Table *, QWidget *parent);
-void        xaccNextTabGroup (Table *, QWidget*);
+/* create the QT Widget */
+void *xaccCreateTable (Table *, void *parent);
+void        xaccNextTabGroup (Table *, void*);
 
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);

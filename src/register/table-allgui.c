@@ -33,6 +33,10 @@
 #include "table-allgui.h"
 #include "util.h"
 
+#ifdef KDE
+#define TRUE (1==1)
+#endif
+
 static void xaccFreeTableEntries (Table * table);
 static void xaccTableResize (Table * table,
                  int new_phys_rows, int new_phys_cols,

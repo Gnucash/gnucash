@@ -27,21 +27,40 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+extern "C" {
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "cellblock.h"
+#include "table-allgui.h"
+
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_QT_REG;
+// static short module = MOD_QT_REG;
 
 /* ==================================================== */
 
 void
-xaccNextTabGroup (Table *table, GtkWidget * w) {
-   table->next_tab_group = w;
+xaccNextTabGroup (Table *table, void * w) {
+//   table->next_tab_group = w;
 }
 
 /* ==================================================== */
+
+void        
+doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
+{
+}
+
+void
+xaccCreateCursor (Table *table, CellBlock *curs) 
+{
+}
+
+void        
+xaccRefreshTableGUI (Table * table) {
+}
 
 #if 0
 
@@ -165,8 +184,8 @@ cell_left(Table *table, const int row, const int col) {
 
 /* ==================================================== */
 
-QWidget *
-xaccCreateTable (Table *table, QWidget *parent)  {
+void *
+xaccCreateTable (Table *table, void *parent)  {
   return NULL;
 }
 
@@ -266,6 +285,10 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
   }
 }
 
+
+#endif
+
+}
 /* ================== end of file ======================= */
 
 
