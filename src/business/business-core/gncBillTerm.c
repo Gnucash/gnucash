@@ -74,7 +74,6 @@ struct _gncBillTerm
 
 struct _book_info 
 {
-  GncBookInfo     bi;
   GList *         terms;        /* visible terms */
 };
 
@@ -703,22 +702,6 @@ static void _gncBillTermDestroy (QofBook *book)
   g_free (bi);
 }
 
-static gboolean _gncBillTermIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncBillTermMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncBillTermForeach (QofBook *book, QofForeachCB cb,
-                              gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, (QofEntityForeachCB) cb, user_data);
-}
-
 static QofObject gncBillTermDesc = 
 {
   interface_version:   QOF_OBJECT_VERSION,
@@ -726,9 +709,9 @@ static QofObject gncBillTermDesc =
   type_label:          "Billing Term",
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,
-  is_dirty:            _gncBillTermIsDirty,
-  mark_clean:          _gncBillTermMarkClean,
-  foreach:             _gncBillTermForeach,
+  is_dirty:            qof_collection_is_dirty,
+  mark_clean:          qof_collection_mark_clean,
+  foreach:             qof_collection_foreach,
   printable:           NULL
 };
 

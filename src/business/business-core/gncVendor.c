@@ -418,52 +418,24 @@ gboolean gncVendorIsDirty (GncVendor *vendor)
 /* ============================================================== */
 /* Package-Private functions */
 
-static void _gncVendorCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncVendorIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncVendorMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncVendorForeach (QofBook *book, QofForeachCB cb,
-                               gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncVendorPrintable (gpointer item)
 {
-  GncVendor *v;
-
+  GncVendor *v = item;
   if (!item) return NULL;
-
-  v = item;
   return v->name;
 }
 
-static QofObject gncVendorDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Vendor",
-  _gncVendorCreate,
-  _gncVendorDestroy,
-  _gncVendorIsDirty,
-  _gncVendorMarkClean,
-  _gncVendorForeach,
-  _gncVendorPrintable
+static QofObject gncVendorDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Vendor",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncVendorPrintable
 };
 
 gboolean gncVendorRegister (void)

@@ -344,52 +344,25 @@ int gncJobCompare (const GncJob * a, const GncJob *b) {
 /* ================================================================== */
 /* Package-Private functions */
 
-static void _gncJobCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncJobDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncJobIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncJobMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncJobForeach (QofBook *book, QofForeachCB cb,
-                            gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static const char * _gncJobPrintable (gpointer item)
 {
   GncJob *c;
-
   if (!item) return NULL;
-
   c = item;
   return c->name;
 }
 
-static QofObject gncJobDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Job",
-  _gncJobCreate,
-  _gncJobDestroy,
-  _gncJobIsDirty,
-  _gncJobMarkClean,
-  _gncJobForeach,
-  _gncJobPrintable
+static QofObject gncJobDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Job",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncJobPrintable
 };
 
 gboolean gncJobRegister (void)

@@ -1270,33 +1270,8 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
+/* ============================================================= */
 /* Package-Private functions */
-
-static void _gncInvoiceCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncInvoiceDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncInvoiceIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static inline void _gncInvoiceMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static inline void _gncInvoiceForeach (QofBook *book, QofForeachCB cb,
-				gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
 
 static const char * _gncInvoicePrintable (gpointer obj)
 {
@@ -1315,16 +1290,17 @@ static const char * _gncInvoicePrintable (gpointer obj)
   return invoice->printname;
 }
 
-static QofObject gncInvoiceDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Invoice",
-  _gncInvoiceCreate,
-  _gncInvoiceDestroy,
-  _gncInvoiceIsDirty,
-  _gncInvoiceMarkClean,
-  _gncInvoiceForeach,
-  _gncInvoicePrintable,
+static QofObject gncInvoiceDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Invoice",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncInvoicePrintable,
 };
 
 static void

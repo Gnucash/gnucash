@@ -348,52 +348,25 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
 }
 
 /* Package-Private functions */
-static void _gncEmployeeCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncEmployeeDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncEmployeeIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncEmployeeMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncEmployeeForeach (QofBook *book, QofForeachCB cb,
-                                 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
 
 static const char * _gncEmployeePrintable (gpointer item)
 {
-  GncEmployee *v;
-
+  GncEmployee *v = item;
   if (!item) return NULL;
-
-  v = item;
   return gncAddressGetName(v->addr);
 }
 
-static QofObject gncEmployeeDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Employee",
-  _gncEmployeeCreate,
-  _gncEmployeeDestroy,
-  _gncEmployeeIsDirty,
-  _gncEmployeeMarkClean,
-  _gncEmployeeForeach,
-  _gncEmployeePrintable
+static QofObject gncEmployeeDesc = 
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Employee",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncEmployeePrintable,
 };
 
 gboolean gncEmployeeRegister (void)

@@ -355,35 +355,11 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
+/* =========================================================== */
 /* Package-Private functions */
 
-static void _gncOrderCreate (QofBook *book)
-{
-  gncBusinessCreate (book, _GNC_MOD_NAME);
-}
-
-static void _gncOrderDestroy (QofBook *book)
-{
-  gncBusinessDestroy (book, _GNC_MOD_NAME);
-}
-
-static gboolean _gncOrderIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncOrderMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncOrderForeach (QofBook *book, QofForeachCB cb,
-			      gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
-static const char * _gncOrderPrintable (gpointer obj)
+static const char * 
+_gncOrderPrintable (gpointer obj)
 {
   GncOrder *order = obj;
 
@@ -400,16 +376,17 @@ static const char * _gncOrderPrintable (gpointer obj)
   return order->printname;
 }
 
-static QofObject gncOrderDesc = {
-  QOF_OBJECT_VERSION,
-  _GNC_MOD_NAME,
-  "Order",
-  _gncOrderCreate,
-  _gncOrderDestroy,
-  _gncOrderIsDirty,
-  _gncOrderMarkClean,
-  _gncOrderForeach,
-  _gncOrderPrintable,
+static QofObject gncOrderDesc =
+{
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Order",
+  book_begin:         NULL,
+  book_end:           NULL,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          _gncOrderPrintable,
 };
 
 gboolean gncOrderRegister (void)

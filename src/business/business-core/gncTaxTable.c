@@ -76,7 +76,6 @@ struct _gncTaxTableEntry
 
 struct _book_info 
 {
-  GncBookInfo     bi;
   GList *         tables;          /* visible tables */
 };
 
@@ -811,33 +810,17 @@ static void _gncTaxTableDestroy (QofBook *book)
   g_free (bi);
 }
 
-static gboolean _gncTaxTableIsDirty (QofBook *book)
-{
-  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
-}
-
-static void _gncTaxTableMarkClean (QofBook *book)
-{
-  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
-}
-
-static void _gncTaxTableForeach (QofBook *book, QofForeachCB cb,
-                                 gpointer user_data)
-{
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static QofObject gncTaxTableDesc = 
 {
-  interface_version:   QOF_OBJECT_VERSION,
-  e_type:              _GNC_MOD_NAME,
-  type_label:          "Tax Table",
-  book_begin:          _gncTaxTableCreate,
-  book_end:            _gncTaxTableDestroy,
-  is_dirty:            _gncTaxTableIsDirty,
-  mark_clean:          _gncTaxTableMarkClean,
-  foreach:             _gncTaxTableForeach,
-  printable:           NULL
+  interface_version:  QOF_OBJECT_VERSION,
+  e_type:             _GNC_MOD_NAME,
+  type_label:         "Tax Table",
+  book_begin:         _gncTaxTableCreate,
+  book_end:           _gncTaxTableDestroy,
+  is_dirty:           qof_collection_is_dirty,
+  mark_clean:         qof_collection_mark_clean,
+  foreach:            qof_collection_foreach,
+  printable:          NULL,
 };
 
 gboolean gncTaxTableRegister (void)
