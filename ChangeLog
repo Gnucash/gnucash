@@ -1,3 +1,8 @@
+2000-05-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (configLayout): swap mirrored xfer from
+	and xfer to field in the transaction line of the ledgers.
+
 2000-05-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-add.c (gnc_ui_accWindow_create_account): insert

@@ -474,8 +474,8 @@ configLayout (SplitRegister *reg)
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (XTO,    xto,      3,  0);
-         FANCY (XFRM,   mxfrm,    4,  0);
+         FANCY (XTO,    mxfrm,    3,  0);
+         FANCY (XFRM,   xto,      4,  0);
          BASIC (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
@@ -579,8 +579,8 @@ configLayout (SplitRegister *reg)
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (XTO,    xto,      3,  0);
-         FANCY (XFRM,   mxfrm,    4,  0);
+         FANCY (XTO,    mxfrm,    3,  0);
+         FANCY (XFRM,   xto,      4,  0);
          BASIC (RECN,   recn,     5,  0);
          FANCY (DEBT,   debit,    6,  0);
          FANCY (CRED,   credit,   7,  0);
