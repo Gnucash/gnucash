@@ -676,8 +676,15 @@ readTransaction( int fd, Account *acc, int token )
          xaccTransAppendSplit (trans, split);
          split -> acc = (struct _account *) peer_acc;
          xaccInsertSplit (peer_acc, split);
+
+         /* duplicate many of the attributes in the credit split */
          split->damount = -num_shares;
          split->share_price = share_price;
+         split->reconciled = trans->credit_split.reconciled;
+         free (split->memo);
+         split->memo = strdup (trans->credit_split.memo);
+         free (split->action);
+         split->action = strdup (trans->credit_split.action);
       }
   
     } else {

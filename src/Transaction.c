@@ -467,31 +467,47 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 }
 
 void
-xaccTransSetNum (Transaction *trans, char *xnum)
+xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    if (trans->num) free (trans->num);
    trans->num = strdup (xnum);
 }
 
 void
-xaccTransSetDescription (Transaction *trans, char *desc)
+xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    if (trans->description) free (trans->description);
    trans->description = strdup (desc);
 }
 
 void
-xaccTransSetMemo (Transaction *trans, char *memo)
+xaccTransSetMemo (Transaction *trans, const char *memo)
 {
    if (trans->credit_split.memo) free (trans->credit_split.memo);
    trans->credit_split.memo = strdup (memo);
+
+   /* if there is only one split, then keep memos in sync. */
+   if (trans->debit_splits) {
+      if (0x0 == trans->debit_splits[1]) {
+         free (trans->debit_splits[0]->memo);
+         trans->debit_splits[0]->memo = strdup (memo);
+      }
+   }
 }
 
 void
-xaccTransSetAction (Transaction *trans, char *actn)
+xaccTransSetAction (Transaction *trans, const char *actn)
 {
    if (trans->credit_split.action) free (trans->credit_split.action);
    trans->credit_split.action = strdup (actn);
+
+   /* if there is only one split, then keep action in sync. */
+   if (trans->debit_splits) {
+      if (0x0 == trans->debit_splits[1]) {
+         free (trans->debit_splits[0]->action);
+         trans->debit_splits[0]->action = strdup (actn);
+      }
+   }
 }
 
 void
@@ -504,14 +520,14 @@ xaccTransSetReconcile (Transaction *trans, char recn)
 \********************************************************************/
 
 void
-xaccSplitSetMemo (Split *split, char *memo)
+xaccSplitSetMemo (Split *split, const char *memo)
 {
    if (split->memo) free (split->memo);
    split->memo = strdup (memo);
 }
 
 void
-xaccSplitSetAction (Split *split, char *actn)
+xaccSplitSetAction (Split *split, const char *actn)
 {
    if (split->action) free (split->action);
    split->action = strdup (actn);
