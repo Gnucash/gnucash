@@ -16,10 +16,6 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
 #ifndef __MENUCOMMANDS_H__
@@ -28,12 +24,6 @@
 #include <gtk/gtk.h>
 
 #include "config.h"
-
-#include "main.h"
-#include "FileIO.h"
-#include "Group.h"
-#include "util.h"
-#include "MainWindow.h" 
 
 /** STRUCTS *********************************************************/
 
@@ -48,7 +38,6 @@ void file_cmd_save (GtkWidget *widget, gpointer data);
 /** GLOBALS *********************************************************/
 //extern char  *helpPath;
 //extern GtkWidget   *app;
-//extern AccountGroup *topgroup;
 
 #endif
 

@@ -1,7 +1,6 @@
 /*-*-gnucash-c-*-****************************************************\
  * MenuCommands.c -- just what it says                              *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998 Jeremy Collins                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,8 +18,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include "FileIO.h"
+#include "Group.h"
 #include "MenuCommands.h"
 #include "MainWindow.h"
+#include "top-level.h"
+#include "util.h"
 
 void
 file_cmd_open (GtkWidget *widget, gpointer data)

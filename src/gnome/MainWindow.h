@@ -28,7 +28,6 @@
 
 #include <gtk/gtk.h>
 #include "Group.h"
-#include "Account.h"
 #include "config.h"
 
 /** HELP STUFF: *****************************************************/

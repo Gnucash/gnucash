@@ -30,15 +30,6 @@
 #include "config.h"
 #include "Group.h"
 
-/** HELP STUFF: *****************************************************/
-#define HH_ABOUT     "xacc-about.html"
-#define HH_ACC       "xacc-accwin.html"
-#define HH_REGWIN    "xacc-regwin.html"
-#define HH_RECNWIN   "xacc-recnwin.html"
-#define HH_ADJBWIN   "xacc-adjbwin.html"
-#define HH_MAIN      "xacc-main.html"
-#define HH_GPL       "xacc-gpl.html"
-
 /** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
