@@ -18,6 +18,10 @@ libgncmod_app_utils_la_SOURCES = \
   gfec.c \
   global-options.c \
   gnc-component-manager.c \
+  gnc-druid.c \
+  gnc-druid-cb.c \
+  gnc-druid-provider.c \
+  gnc-druid-provider-desc.c \
   gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
@@ -34,6 +38,10 @@ gncinclude_HEADERS = \
   gfec.h \
   global-options.h \
   gnc-component-manager.h \
+  gnc-druid.h \
+  gnc-druid-cb.h \
+  gnc-druid-provider.h \
+  gnc-druid-provider-desc.h \
   gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \

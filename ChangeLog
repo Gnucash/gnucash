@@ -1,3 +1,9 @@
+2004-01-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: pull in gobject with glib
+	* src/app-utils/Makefile.am: add the gnc-druid files
+	* src/app-utils/gnc-druid*: an abstract druid creation framework.
+
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
