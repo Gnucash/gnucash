@@ -170,6 +170,24 @@ timespecCanonicalDayTime(Timespec t)
   return retval;
 }
 
+int gnc_date_my_last_mday (int month, int year)
+{
+  gboolean is_leap;
+  static int days_in_month[2][12] =
+    {/* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+     /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
+
+  /* Is this a leap year? */
+  if (year / 2000 == 0)
+    is_leap = TRUE;
+  else if (year / 400 == 0)
+      is_leap = FALSE;
+  else
+    is_leap = (year / 4 == 0);
+
+  return days_in_month[is_leap][month-1];
+}
+
 /**
  * date_get_last_mday
  * Retrieve the last nomerical day for the month specified in the
@@ -179,22 +197,7 @@ timespecCanonicalDayTime(Timespec t)
  **/
 int date_get_last_mday(struct tm *tm)
 {
-  int year;
-  gboolean is_leap;
-  static int days_in_month[2][12] =
-    {/* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-     /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
-
-  /* Is this a leap year? */
-  year = tm->tm_year + 1900;
-  if (year / 2000 == 0)
-    is_leap = TRUE;
-  else if (year / 400 == 0)
-      is_leap = FALSE;
-  else
-    is_leap = (year / 4 == 0);
-
-  return days_in_month[is_leap][tm->tm_mon];
+  return gnc_date_my_last_mday (tm->tm_mon+1, tm->tm_year+1900);
 }
 
 /**
@@ -741,6 +744,26 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   return buff;
 }
 
+int
+gnc_timespec_last_mday (Timespec t)
+{
+  struct tm *result;
+  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+  result = localtime(&t_secs);
+  return date_get_last_mday (result);
+}
+
+void
+gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
+{
+  struct tm *result;
+  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+  result = localtime(&t_secs);
+
+  if (day) *day = result->tm_mday;
+  if (month) *month = result->tm_mon+1;
+  if (year) *year = result->tm_year+1900;
+}
 
 /********************************************************************\
 \********************************************************************/

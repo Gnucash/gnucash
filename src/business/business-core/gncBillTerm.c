@@ -371,6 +371,84 @@ gboolean gncBillTermIsDirty (GncBillTerm *term)
   return term->dirty;
 }
 
+/********************************************************/
+/* functions to compute dates from Bill Terms           */
+
+#define SECS_PER_DAY 86400
+
+/* Based on the timespec and a proximo type, compute the month and
+ * year this is due.  The actual day is filled in below.
+ */
+static void
+compute_monthyear (GncBillTerm *term, Timespec post_date,
+		   int *month, int *year)
+{
+  int iday, imonth, iyear;
+  int cutoff = term->cutoff;
+
+  g_return_if_fail (term->type == GNC_TERM_TYPE_PROXIMO);
+
+  gnc_timespec2dmy (post_date, &iday, &imonth, &iyear);
+
+  if (cutoff <= 0)
+    cutoff += gnc_timespec_last_mday (post_date);
+
+  if (iday <= cutoff) {
+    /* We apply this to next month */
+    imonth++;
+  } else {
+    /* We apply to the following month */
+    imonth += 2;
+  }
+
+  if (imonth > 12) {
+    iyear++;
+    imonth -= 12;
+  }
+
+  if (month) *month = imonth;
+  if (year) *year = iyear;
+}
+
+static Timespec
+compute_time (GncBillTerm *term, Timespec post_date, int days)
+{
+  Timespec res = post_date;
+  int day, month, year;
+
+  switch (term->type) {
+  case GNC_TERM_TYPE_DAYS:
+    res.tv_sec += (SECS_PER_DAY * days);
+    break;
+  case GNC_TERM_TYPE_PROXIMO:
+    compute_monthyear (term, post_date, &month, &year);
+    day = gnc_date_my_last_mday (month, year);
+    if (days < day)
+      day = days;
+    res = gnc_dmy2timespec (day, month, year);
+    break;
+  }
+  return res;
+}
+
+Timespec
+gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date)
+{
+  Timespec res = post_date;
+  if (!term) return res;
+
+  return compute_time (term, post_date, term->due_days);
+}
+
+Timespec
+gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date)
+{
+  Timespec res = post_date;
+  if (!term) return res;
+
+  return compute_time (term, post_date, term->disc_days);
+}
+
 /* Package-Private functions */
 
 static void add_or_rem_object (GncBillTerm *term, gboolean add)

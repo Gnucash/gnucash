@@ -10,6 +10,7 @@
 #include "date.h"
 #include "Account.h"
 #include "gnc-book.h"
+#include "gncBillTerm.h"
 
 gboolean
 gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
@@ -32,6 +33,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 				const char *acct_label_message,
 				gboolean ok_is_default,
 				GList * acct_types, GNCBook *book,
+				GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
 				char **memo, Account **acct);

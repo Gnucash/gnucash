@@ -174,6 +174,10 @@ void scanDate (const char *buff, int *day, int *month, int *year);
  */
 char dateSeparator(void);
 
+int gnc_date_my_last_mday (int month, int year);
+int gnc_timespec_last_mday (Timespec ts);
+void gnc_timespec2dmy (Timespec ts, int *day, int *month, int *year);
+
 /*
  * hack alert XXX FIXME -- these date routines return incorrect
  * values for dates before 1970.  Most of them are good only up 

@@ -307,12 +307,12 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   /* Get the due date and posted account */
   timespecFromTime_t (&postdate, time(NULL));
   ddue = postdate;
-  ddue.tv_sec += 3600*24*30;	/* XXX: due in 30 days */
   memo = NULL;
 
   if (!gnc_dialog_dates_acct_parented (iw->dialog, message, ddue_label,
-				      post_label, acct_label, TRUE, acct_types,
-				      iw->book, &ddue, &postdate, &memo, &acc))
+				       post_label, acct_label, TRUE,
+				       acct_types, iw->book, iw->terms,
+				       &ddue, &postdate, &memo, &acc))
     return;
 
   /* Yep, we're posting.  So, save the invoice... 
@@ -1078,7 +1078,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     /*
     gtk_widget_set_sensitive (iw->id_entry, FALSE);
     gtk_widget_set_sensitive (iw->terms_menu, FALSE);
-    gtk_widget_set_sensitive (iw->opened_date, FALSE);
     gtk_widget_set_sensitive (iw->notes_text, FALSE); *//* XXX: should notes remain writable? */
 
   }  
@@ -1162,6 +1161,10 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->posted_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX(iw->posted_date_hbox), iw->posted_date,
 		      TRUE, TRUE, 0);
+
+  /* Make the opened and posted dates insensitive in this window */
+  gtk_widget_set_sensitive (iw->opened_date, FALSE);
+  gtk_widget_set_sensitive (iw->posted_date, FALSE);
 
   /* Build the ledger */
   switch (type) {

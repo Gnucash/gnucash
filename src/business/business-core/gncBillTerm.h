@@ -11,6 +11,7 @@ typedef struct _gncBillTerm GncBillTerm;
 
 #include "gnc-numeric.h"
 #include "gnc-book.h"
+#include "date.h"
 
 #define GNC_BILLTERM_MODULE_NAME "gncBillTerm"
 
@@ -65,5 +66,12 @@ GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new);
 gint64 gncBillTermGetRefcount (GncBillTerm *term);
 
 int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b);
+
+/********************************************************/
+/* functions to compute dates from Bill Terms           */
+
+/* Compute the due date and discount dates from the post date */
+Timespec gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date);
+Timespec gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date);
 
 #endif /* GNC_BILLTERM_H_ */

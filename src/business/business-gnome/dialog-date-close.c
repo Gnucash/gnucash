@@ -25,6 +25,7 @@ typedef struct _dialog_date_close_window {
   GtkWidget *post_date;
   GtkWidget *acct_combo;
   GtkWidget *memo_entry;
+  GncBillTerm *terms;
   Timespec *ts, *ts2;
   GList * acct_types;
   GNCBook *book;
@@ -231,6 +232,18 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
   return retval;
 }
 
+static void
+post_date_changed_cb (GNCDateEdit *gde, gpointer d)
+{
+  DialogDateClose *ddc = d;
+  Timespec post_date;
+  Timespec due_date;
+
+  post_date = gnc_date_edit_get_date_ts (gde);
+  due_date = gncBillTermComputeDueDate (ddc->terms, post_date);
+  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), due_date);
+}
+
 gboolean
 gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 				const char *ddue_label_message,
@@ -238,6 +251,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 				const char *acct_label_message,
 				gboolean ok_is_default,
 				GList * acct_types, GNCBook *book,
+				GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
 				char **memo, Account **acct)
@@ -259,6 +273,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   ddc->book = book;
   ddc->acct_types = acct_types;
   ddc->memo = memo;
+  ddc->terms = terms;
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
@@ -287,9 +302,17 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   label = glade_xml_get_widget (xml, "acct_label");
   gtk_label_set_text (GTK_LABEL (label), acct_label_message);
 
-  /* Set the date widget */
-  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
+  /* Set the post date widget */
   gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->post_date), *post);
+
+  /* Deal with the terms handling of the due date */
+  if (terms) {
+    gtk_signal_connect (GTK_OBJECT (ddc->post_date), "date_changed",
+			post_date_changed_cb, ddc);
+    gtk_widget_set_sensitive (ddc->date, FALSE);
+    post_date_changed_cb (ddc->post_date, ddc);
+  } else
+    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
 
   /* Setup the account widget */
   fill_in_acct_info (ddc);
