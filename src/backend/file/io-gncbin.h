@@ -36,7 +36,7 @@
  *
  * NOTE: These routines should not be used directly for file IO.  They
  *    are not inherently safe against file-locking errors.  For direct
- *    file IO, the gnc-book's higher level functions should be used.
+ *    file IO, the QofBook's higher level functions should be used.
  *
  * qof_session_load_from_binfile() will load the financial data
  *   represented by the book's file_path into the indicated book.

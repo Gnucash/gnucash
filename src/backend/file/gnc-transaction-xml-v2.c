@@ -312,7 +312,7 @@ spl_account_handler(xmlNodePtr node, gpointer data)
 
     account = xaccAccountLookup (id, pdata->book);
     if (!account && gnc_transaction_xml_v2_testing &&
-        !guid_equal (id, xaccGUIDNULL ()))
+        !guid_equal (id, guid_null ()))
     {
       account = xaccMallocAccount (pdata->book);
       xaccAccountSetGUID (account, id);
@@ -338,7 +338,7 @@ spl_lot_handler(xmlNodePtr node, gpointer data)
 
     lot = gnc_lot_lookup (id, pdata->book);
     if (!lot && gnc_transaction_xml_v2_testing &&
-        !guid_equal (id, xaccGUIDNULL ()))
+        !guid_equal (id, guid_null ()))
     {
       lot = gnc_lot_new (pdata->book);
       gnc_lot_set_guid (lot, *id);
