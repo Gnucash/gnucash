@@ -216,6 +216,8 @@ gnc_book_set_guid (GNCBook *book, GUID uid)
 {
   if (!book) return;
 
+  if (guid_equal (&book->guid, &uid)) return;
+
   xaccRemoveEntity(book->entity_table, &book->guid);
   book->guid = uid;
   xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
