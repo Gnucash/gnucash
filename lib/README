@@ -16,10 +16,12 @@ XbaeMatrix:
   -- modified to support cell widgets
   -- modified to support cursor position
   -- variety of assorted bug fixes
+  -- fix core dumpes when adding rows/cols to widget with
+     row/column/cell user data.
   -- modified by deleting examples, other non-essential stuff.
 
 libhtmlw:
-  -- eliminated due to license restrictions and overall brokenness.
+  -- eliminated due to license restrictions and overall brokeness.
      Use XmHTML instead.
 
 ComboBox:
