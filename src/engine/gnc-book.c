@@ -133,6 +133,7 @@ gnc_book_init (GNCBook *book)
   book->book_id = NULL;
   gnc_book_clear_error (book);
   book->fullpath = NULL;
+  book->logpath = NULL;
   book->backend = NULL;
 }
 
@@ -288,6 +289,7 @@ book_sxns_mark_saved(GNCBook *book)
 		 NULL);
   return;
 }
+
 void
 gnc_book_mark_saved(GNCBook *book)
 {
@@ -298,10 +300,7 @@ gnc_book_mark_saved(GNCBook *book)
   
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
   book_sxns_mark_saved(book);
-  
-  return;
 }
-
 
 /* ---------------------------------------------------------------------- */
 
@@ -311,6 +310,8 @@ gnc_book_int_backend_load_error(GNCBook *book, char *message, char *dll_err)
     PWARN (message, dll_err ? dll_err : "");
     g_free(book->fullpath);
     book->fullpath = NULL;
+    g_free(book->logpath);
+    book->logpath = NULL;
     g_free(book->book_id);
     book->book_id = NULL;
     gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
@@ -325,7 +326,8 @@ gnc_book_load_backend(GNCBook * book, char * backend_name)
   Backend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
-  mod = gnc_module_load(mod_name, GNC_BACKEND_INTERFACE);
+  /* FIXME: this needs to be smarter with version numbers. */
+  mod = gnc_module_load(mod_name, 0);
   if(mod) 
   {
     be_new_func = gnc_module_lookup(mod, "gnc_backend_new");
@@ -378,7 +380,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   /* Store the sessionid URL  */
   book->book_id = g_strdup (book_id);
 
-  book->fullpath = xaccResolveFilePath(book_id);
+  book->fullpath = xaccResolveURL(book_id);
   if (!book->fullpath)
   {
     gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
@@ -386,7 +388,10 @@ gnc_book_begin (GNCBook *book, const char * book_id,
     return FALSE;    /* ouch */
   }
   PINFO ("filepath=%s", book->fullpath ? book->fullpath : "(null)");
-  
+
+  book->logpath = xaccResolveFilePath(book->fullpath);
+  PINFO ("logpath=%s", book->logpath ? book->logpath : "(null)");
+
   /* check to see if this is a type we know how to handle */
   if (!g_strncasecmp(book_id, "file:", 5) ||
       *book->fullpath == '/')
@@ -425,6 +430,8 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       {
           g_free(book->fullpath);
           book->fullpath = NULL;
+          g_free(book->logpath);
+          book->logpath = NULL;
           g_free(book->book_id);
           book->book_id = NULL;
           gnc_book_push_error (book, err, NULL);
@@ -460,7 +467,7 @@ gnc_book_load (GNCBook *book)
   gnc_pricedb_destroy(book->pricedb);
   book->pricedb = NULL;
 
-  xaccLogSetBaseName(book->fullpath);
+  xaccLogSetBaseName(book->logpath);
   xaccLogEnable();
 
   gnc_book_clear_error (book);
@@ -483,8 +490,8 @@ gnc_book_load (GNCBook *book)
       xaccLogDisable();
       if(be->book_load) 
       {
-          xaccLogSetBaseName(book->fullpath);
-          
+          xaccLogSetBaseName(book->logpath);
+
           book->topgroup = (be->book_load) (be);
           xaccGroupSetBackend (book->topgroup, be);
           gnc_book_push_error(book, xaccBackendGetError(be), NULL);

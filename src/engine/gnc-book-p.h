@@ -44,8 +44,6 @@
 #include "gnc-pricedb.h"
 #include "Group.h"
 
-#define GNC_BACKEND_INTERFACE 0
-
 struct gnc_book_struct
 {
   AccountGroup *topgroup;
@@ -76,6 +74,7 @@ struct gnc_book_struct
   char *error_message;
 
   char *fullpath;
+  char *logpath;
 
   /* ---------------------------------------------------- */
   /* This struct member applies for network, rpc and SQL i/o */

@@ -19,9 +19,9 @@
 int gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 8;
+int gnc_module_current  = 0;
 int gnc_module_revision = 0;
-int gnc_module_age      = 1;
+int gnc_module_age      = 0;
 
 GNCModule engine;
 

@@ -126,7 +126,7 @@ get_rv(void)
 	return 0;
 }
 
-void
+gboolean
 do_test_call(
     gboolean result,
     const char* test_title,
@@ -138,6 +138,8 @@ do_test_call(
 	} else {
 		failure_args( test_title, filename, line, "" );
 	}
+
+        return result;
 }
 
 void

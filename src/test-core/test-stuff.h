@@ -45,7 +45,7 @@ Otherwise, only failures are printed out.
  * title describes the test
  * Tests are automatically identified by their source file and line.
  */
-#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ );
+#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
 #define success( title ) success_call( title, __FILE__, __LINE__ );
 #define failure( title ) failure_call( title, __FILE__, __LINE__ );
 
@@ -58,7 +58,7 @@ Otherwise, only failures are printed out.
 /* Privately used to indicate a test result. You may use these if you
  * wish, but it's easier to use the do_test macro above.
  */
-void do_test_call(
+gboolean do_test_call(
 		gboolean result,
 		const char* test_title,
 		const char* filename,

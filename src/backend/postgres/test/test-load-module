@@ -6,13 +6,10 @@ exec guile -s "$0"
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
-(if (gnc:module-load "gnucash/backend/postgres" 8)
+(if (gnc:module-load "gnucash/backend/postgres" 0)
     (begin 
       (display "ok\n")
       (exit 0))
     (begin 
       (display "failed\n")
       (exit -1)))
-
-	
-
