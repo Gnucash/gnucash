@@ -34,6 +34,7 @@
  * Copyright (c) 1999 Heath Martin <martinh@pegasus.cc.ucf.edu>
  * Copyright (c) 2000 Heath Martin <martinh@pegasus.cc.ucf.edu>
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
+ * Copyright (c) 2001 Gnumatic, Inc.
  */
 
 #include "config.h"

@@ -23,7 +23,7 @@
  *
  *  Based heavily on the Gnumeric Sheet widget.
  *
- * Author:
+ * Authors:
  *     Heath Martin <martinh@pegasus.cc.ucf.edu>
  *     Dave Peticolas <dave@krondo.com>
  */
@@ -112,7 +112,8 @@ gnucash_sheet_cell_valid (GnucashSheet *sheet, VirtualLocation virt_loc)
         valid = !gnucash_sheet_virt_cell_out_of_bounds (sheet,
                                                         virt_loc.vcell_loc);
 
-        if (valid) {
+        if (valid)
+        {
                 style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
 
                 valid = (virt_loc.phys_row_offset >= 0 &&
@@ -2289,7 +2290,7 @@ gnucash_register_get_type (void)
 {
         static GtkType gnucash_register_type = 0;
 
-        if (!gnucash_register_type){
+        if (!gnucash_register_type) {
                 GtkTypeInfo gnucash_register_info = {
                         "GnucashRegister",
                         sizeof (GnucashRegister),
@@ -2311,14 +2312,15 @@ gnucash_register_get_type (void)
 
 
 void
-gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
-                              gpointer data)
+gnucash_register_attach_popup (GnucashRegister *reg,
+                               GtkWidget *popup,
+                               gpointer data)
 {
-        g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-        g_return_if_fail(GTK_IS_WIDGET(popup));
-        g_return_if_fail(reg->sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_REGISTER(reg));
+        g_return_if_fail (GTK_IS_WIDGET(popup));
+        g_return_if_fail (reg->sheet != NULL);
 
-        gnome_popup_menu_attach(popup, reg->sheet, data);
+        gnome_popup_menu_attach (popup, reg->sheet, data);
 }
 
 

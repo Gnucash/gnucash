@@ -190,6 +190,9 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         cd->pixel_height = (font->ascent + font->descent +
                                             (2 * CELL_VPADDING));
 
+                        if (cd->pixel_width > 0)
+                                continue;
+
                         cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
                         text = cb_cell->sample_text;
