@@ -1,12 +1,11 @@
 -*-text-*-
 
-************ BETA  RELEASE ******************
-The version 1.1.x series of gnucash are considered BETA development code.
-Things mopstly work these days; some things may still be broken. Feel 
-free to try it.  Please report bugs to http://www.gnucash.org/
+************ DEVELOPMENT  RELEASE ******************
+The version 1.3.x series of gnucash are experimental development
+releases.  They may or may not work. Use at your own risk.
 
-The last stable, production version was xacc-1.0.18
-The next stable, production version will be gnucash-1.2.x
+The last stable, production version was xacc-1.2.0
+The next stable, production version will be gnucash-1.4.x 
 
 ##############################################
 
@@ -394,9 +393,16 @@ To access it, first, login, as so:
 cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
 The password is "guest"
 
-To get a copy of the source, do a 
+To get a copy of the source in the experimental development tree
+do a
 
 cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD xacc
+
+To get a copy of the source in the gnucash-1.2 stable production
+tree do a
+
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch
+xacc
 
 
 Main Developers:
