@@ -386,7 +386,7 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger)
     break;
   case GNCENTRY_INVOICE_ENTRY:
     ledger->type = GNCENTRY_INVOICE_VIEWER;
-    /* XXX Reset the Query */
+    create_invoice_query (ledger);
     break;
   default:
     return;			/* Nothing to do */

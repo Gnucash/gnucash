@@ -69,6 +69,12 @@ Christian Stimming <stimming@tuhh.de> is a report-generating
 Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
    and budgeting.
 
+Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
+   for Gnucash.  This includes the Customer/Vendor database, Job tracking,
+   Order entry, Invoicing, Accounts Payable, Accounts Receivable, and
+   related technologies.  In the process he we-wrote the Query engine,
+   modularized the Book object storage, and modularized the backend
+   to allow pluggable objects.
 
 Other Contributors:
 ----------------
@@ -76,7 +82,6 @@ Other Contributors:
 
 Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
-Derek Atkins <warlord@MIT.EDU> build system patch, rpc backend
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
