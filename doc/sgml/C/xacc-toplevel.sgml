@@ -1,0 +1,91 @@
+<article id="xacc-toplevel">
+<artheader>
+<title>Top-level Menus</title>
+</artheader>
+<sect1>
+<title>The Main Menu</title>
+<para><emphasis>PICTURES NEEDED!!!!</emphasis> 
+</para>
+<para>The main menu is displayed above all top-level windows, and is
+a gateway to everything that GnuCash can do, including file operations, 
+reports, account operations, window operations, and getting help.
+It is dynamic, changing to provide the functions required depending 
+on whether you are displaying a <link linkend="xacc-reports">report</link>, 
+or an <link linkend="xacc-mainwin">account tree</link>.</para>
+<para>
+
+<para>The menus that are always present include:</para>
+	<itemizedlist><listitem><para><emphasis>File</emphasis>: Items in
+	    this menu to create, import, load, and save accounts.  See
+	    <link linkend="xacc-file-operations">File Operations</link>.
+	</para></listitem>
+	<listitem>
+	  <para>
+	    <emphasis><link linkend="xacc-reports">Reports</link></emphasis>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <emphasis>Tools</emphasis>: this menu contains the 
+	    <link linkend="xacc-general-ledger">General Ledger</link>,
+	    as well as tools to </para>
+	  <itemizedlist>
+	    <listitem><para><link linkend="xacc-commodity">edit
+	      "meta-information" about currencies, mutual funds, and
+	      stocks</link>,</para></listitem>
+	    <listitem><para><link linkend="xacc-price-editor">record
+	      stock and currency values</link>,</para></listitem> 
+	    <listitem><para><link linkend="xacc-calculator">Do financial
+	      calculations</link>, and</para></listitem>
+	    <listitem><para><link linkend="xacc-locatingtxns">Find
+		  Transactions.</link>
+		</para>
+	    </listitem>
+	  </itemizedlist>
+	  <listitem>
+	    <para>
+	    <emphasis>Settings</emphasis>: Customize 
+	    <link linkend="xacc-style-sheets">Style Sheets</link> and 
+	    <link linkend="xacc-preferences">Preferences</link>.
+	    </para></listitem>
+	  <listitem><para>
+	    <emphasis>Help</emphasis>
+	    </para></listitem>
+	  </itemizedlist>
+</sect1>
+  <sect1 id="xacc-toplevel-toolbar">
+    <title>
+      The Toolbar and the Summary Bar
+    </title>
+    <para>
+      The toolbar is located immediately below the menu bar, and
+      provides shortcuts to commonly used functions.  As with
+      the menu, it changes depending on whether the window contains
+      a report or an account tree.
+    </para>
+    <para>
+      The Summary Bar displays your net assets and profit/earnings 
+      at a glance.
+    </para>
+  </sect1>
+
+  <sect1>
+    <title>
+      Docking, Moving, and Tearing Off
+    </title>
+    <para>
+    If you have the right GNOME settings, you can move the menu bar,
+    toolbar, and summary bar around as you please by simply clicking
+    on the handle on their left, and dragging them where you want.
+    You can even drag them completely outside the GnuCash window, if 
+    you so choose.
+
+    If you can't do this, you may need to change  in the "Look and
+    Feel" tab of the GNOME configuration tool.
+    </para>
+    </sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

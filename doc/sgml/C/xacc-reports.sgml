@@ -115,6 +115,11 @@ sources, in the one place.  Use the <link linkend="xacc-gnucash-web-browser">
 Frame URL Report</link> to do so.
 </para></sect1>
 
+<sect1 id="xacc-style-sheets">
+<title>Style Sheets</title>
+<para><emphasis>FIXME:document these!!!</emphasis></para>
+</sect1>
+
 <sect1 id="xacc-customreports">
 <title> Constructing custom reports</title>
 

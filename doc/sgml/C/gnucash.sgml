@@ -7,6 +7,7 @@
 <!entity xaccassetbarcharts system "xacc-asset-liability-barcharts.sgml">
 <!entity xaccassetpiecharts system "xacc-asset-liability-piecharts.sgml">
 <!entity xaccapar system "xacc-apar.sgml">
+<!entity xacccalculator system "xacc-calculator.sgml">
 <!entity xacccommodity system "xacc-commodity.sgml">
 <!entity xacccommonreportoptions system "xacc-common-report-options.sgml">
 <!entity xaccdepreciation system "xacc-depreciation.sgml">
@@ -17,6 +18,7 @@
 <!entity xacceuro system "xacc-euro.sgml">
 <!entity xaccdateinput system "xacc-dateinput.sgml">
 <!entity xaccfeatures system "xacc-features.sgml">
+<!entity xaccfileoperations system "xacc-file-operations.sgml">
 <!entity xaccgnomemdi system "xacc-gnome-mdi.sgml">
 <!entity xaccgnucashwebbrowser system "xacc-gnucash-web-browser.sgml">
 <!entity xaccincomeexpense system "xacc-incomeexpense.sgml">
@@ -45,6 +47,7 @@
 <!entity xaccrepdev system "xacc-repdev.sgml">
 <!entity xaccstockpricereport system "xacc-stock-price-report.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
+<!entity xacctoplevel system "xacc-toplevel.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
 <!entity xacctxfcategories system "xacc-txf-categories.sgml">
 <!entity xacctxfexportanomalies system "xacc-txf-export-anomalies.sgml">
@@ -70,13 +73,15 @@
 &xaccdepreciation;
 &xaccbalancereport;
 &xaccbalancesheet;
+&xacccalculator;  
 &xacccommodity;
 &xacccommonreportoptions;
 &xacccurrencyhandling;
 &xaccdoubleentry;
 &xacceuro;
 &xaccdateinput;
-&xaccfeatures;						
+&xaccfeatures;
+&xaccfileoperations;
 &xaccgnomemdi;
 &xaccgnucashwebbrowser;
 &xaccincomeexpense;
@@ -103,6 +108,7 @@
 &xaccregwinkbd;
 &xaccreports;
 &xacctaxreport;
+&xacctoplevel;
 &xacctransreport;
 &xacctxfcategories;
 &xacctxfexportanomalies;

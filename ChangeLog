@@ -1,3 +1,26 @@
+2001-06-07  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-regwin.sgml: Chris "Wilddev" Lyttle's 
+	register documentation update.
+
+	* doc/sgml/C/image/MakeFile.am, autosplitledger.png,
+	basicledger-transfer.png, basicledger.png editaccount.png,
+	transactionjrnl.png: Wilddev's screenshots.
+
+	* doc/sgml/C/xacc-toplevel.sgml, xacc-calculator.sgml,
+	xacc-file-operations.sgml: more new docs.
+
+	* doc/sgml/C/xacc-quickstart.sgml, xacc-mainwin.sgml,
+	xacc-reports.sgml, gnucash.sgml: updates.
+
+	* doc/examples/reg_doc_example.xac: add register doc
+	example file.
+	
+	* AUTHORS: added Chris Lyttle.
+
+	* src/scm/help-topics-index.scm: Updates to reflect doc work.
+
+
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-dialogs.glade: fix string

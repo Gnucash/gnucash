@@ -1,265 +1,171 @@
-<ARTICLE ID="XACC-REGWIN">
-
-<ARTHEADER>
-<TITLE>The Register Window</TITLE>
-</ARTHEADER>
-
-<MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/regwin-single.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT> 
-
-<PARA>This is the "Register" or the "Ledger" window. Transactions
-    are entered here.
-    To enter a new transaction, just type into the last blank
-    transaction. You can use
-    the <LINK LINKEND="DATE">Date Accelerator keys</LINK> to
-    quickly enter dates. Use the mouse or the
-    <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
-    between fields, and press the <KEYCAP>Enter</KEYCAP> key or click
-    <GUIBUTTON>record</GUIBUTTON> on the toolbar to record
-    the transaction:
-
-    </PARA>
-    <MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/regwin-single2.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT> 
-<PARA>Notice how a the transaction has been recorded and a new,
-    blank transaction has been created.
-
-    </PARA>
-<PARA>You can edit existing transactions in a similar manner.
-    GnuCash will prompt you to confirm any changes you make.
-
-    </PARA>
-<PARA>After you have entered a few transactions, GnuCash will try
-    to guess some or all of the remaining details of a transaction
-    when you type into the <GUILABEL>Description</GUILABEL> field. If GnuCash has
-    guessed wrong, simply type over or delete the incorrect
-    information and replace it with the correct information.
-
-    </PARA>
-
-<SECT1 ID="XACC-MANTXN">
-<TITLE>Manipulating Transactions</TITLE>
-<PARA>You can manipulate transactions with the toolbar buttons or the
-    <GUIMENU>Transaction</GUIMENU> menu:
-
-    </PARA>
-<VARIABLELIST>
-<VARLISTENTRY><TERM><GUIBUTTON>Delete</GUIBUTTON></TERM>
-<LISTITEM><PARA> You can delete a transaction or an
-      individual split.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Cancel</GUIBUTTON></TERM>
-<LISTITEM><PARA> This undoes any changes you have made to
-      the transaction you are currently entering or changing.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>New</GUIBUTTON></TERM>
-<LISTITEM><PARA> This moves the cursor to the last line of the
-      register where new transactions are entered.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Jump</GUIBUTTON></TERM>
-<LISTITEM><PARA> When you have selected an existing transaction or split, this
-      takes you to the corresponding register entry in the other account
-      that is involved in the transaction or split.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Transfer</GUIBUTTON></TERM>
-<LISTITEM><PARA>This is an alternative way to enter a
-      transaction. You can do a transfer between any two accounts
-      without opening up other registers.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIBUTTON>Close</GUIBUTTON></TERM>
-<LISTITEM><PARA>Closes this register.
-    </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-</VARIABLELIST>
-
-</SECT1>
-<SECT1 ID="XACC-VIEWTXN">
-<TITLE> Viewing Transactions</TITLE>
-<PARA>The register can show transactions in a variety of different
-    ways, controlled by entries on the <GUIMENU>Register</GUIMENU> menu.
-
-    </PARA>
-<PARA>The register can display transactions in several different
-    styles:
-
-    </PARA>
-    <VARIABLELIST>
-<VARLISTENTRY><TERM><GUIMENUITEM>single-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed on a single line.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>double-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed over
-      two lines, with more information about each transaction
-      shown.
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>multi-line</GUIMENUITEM> mode</TERM>
-<LISTITEM><PARA>Transactions are displayed over
-      multiple lines, allowing the display of multiple entries.
-      This allows you to enter multi-split transactions (for
-      instance, when you pay multiple bills with one check).
-
-      </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-<VARLISTENTRY><TERM><GUIMENUITEM>auto-single</GUIMENUITEM> and
-      <GUIMENUITEM>auto-double</GUIMENUITEM> modes</TERM>
-<LISTITEM><PARA>Like single
-      and double-line modes, except that the currently-edited
-      transaction is displayed in multi-line form. This is a very
-      convenient way of entering multi-account transactions.
-    </PARA>
-</LISTITEM>
-</VARLISTENTRY>
-</VARIABLELIST>
-
-<PARA>To change the display style, to go the <GUIMENU>Register</GUIMENU>
-    menu and select a style from the <GUISUBMENU>Style</GUISUBMENU> submenu.
-
-    </PARA>
-<PARA>Existing transactions are normally displayed in date order,
-    but this can also be changed with the <GUIMENU>Register</GUIMENU>
-    menu's <GUISUBMENU>Sort Order</GUISUBMENU> submenu. You can also
-    select a date rate from which transactions will be displayed
-    with <GUISUBMENU>Date Range</GUISUBMENU>.
-
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-RECONCILIATION">
-<TITLE> Reconciliation</TITLE>
-<PARA>Transactions are typically checked against bank statements -
-    a process known as "reconciliation". GnuCash keeps track of the
-    reconciliation status of each transaction.
-
-    </PARA>
-<PARA>The reconciliation status of a transaction is shown by the
-    reconciliation (<GUILABEL>R</GUILABEL>) field. '<LITERAL>y</LITERAL>'
-    indicates that a transaction has been reconciled,
-    '<LITERAL>n</LITERAL>' indicates that it has not, and
-    '<LITERAL>c</LITERAL>' indicates that it has been cleared, but not
-    reconciled.  You can toggle
-    the reconciliation status between '<LITERAL>n</LITERAL>' and '<LITERAL>c</LITERAL>' by clicking in the
-    (<GUILABEL>R</GUILABEL>) field; you can set it to '<LITERAL>y</LITERAL>' by using the <LINK
-    LINKEND=XACC-RECNWIN>Reconciliation Window</LINK>. 
-
-    </PARA>
-<PARA>At the bottom of the account window, there are two running
-    totals: '<GUILABEL>Balance</GUILABEL>', and
-    '<GUILABEL>Cleared</GUILABEL>'. '<GUILABEL>Cleared</GUILABEL>' should
-    correspond to how much money the bank thinks you have in your
-    account, while '<GUILABEL>Balance</GUILABEL>' includes outstanding
+<article id="XACC-REGWIN">
+ <title>The Account Register</title>
+  <sect1>
+   <title>Introduction</title>
+   <para>
+    The Account Register is probably the window you will see most often in 
+    GnuCash. It is used to enter your financial transactions into GnuCash
+    and also print reports, checks and invoices. The Account Register has 
+    three modes to enter transactions and is flexible in its configuration
+    so you can display the transactions in a way that suits you. In this
+    section we will describe its features and configuration and how to enter
     transactions.
+   </para>
+  <sect2 id="basicledger">
+   <title>Basic Ledger Transactions</title>
+   <para>
+    Basic Ledger Mode is the default when you open the Account Register window
+    or when you select <menuchoice><guimenu>Register</guimenu><guimenuitem>
+    Style</guimenuitem><guimenuitem>Basic Ledger</guimenuitem></menuchoice>.
+   </para>
+    <figure>
+     <title>The Account Register - Basic Ledger</title>
+    <screenshot>
+     <screeninfo>The Account Register - Basic Ledger</screeninfo>
+      <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="image/basicledger.png" srccredit="wilddev">
+	    </imageobject>
+      </mediaobject>
+    </screenshot>
+    </figure>
 
-    </PARA>
-<PARA>Reconciliation can be done in the 
-      <LINK LINKEND="XACC-RECNWIN">Reconciliation Window</LINK>
+   <para>
+	When you first open the Account Register window the cursor
+	will be in the date field ready for you to enter a
+	transaction. All you need to do is tab to the next field and
+	enter the details of the transaction. If you have a number,
+	such as a check number, enter that in the next field then tab
+	again and enter a description of the transaction. The Transfer
+	field is where the double entry nature of GnuCash comes into
+	play as here you will assign the second part of the
+	transaction to another account. If you click on the right end
+	of the Transfer field an arrow box will appear that you can
+	use to select a drop-down menu of accounts to assign the
+	transaction to. As in the example below select the account to
+	assign the transaction to then fill in the amount. When you
+	press the enter key or click the enter icon the transaction is
+	added to the register and the entry field automatically moves
+	to the next transaction.
+   </para>
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-STKPTLO">
-<TITLE> Stock Portfolios</TITLE>
-<PARA>You can do stock transactions either from a single-stock
-    window, or from a portfolio-view window, shown below.
 
-    </PARA>
-<MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/foliowin.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
-     <MEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/foliowin-single.png">
-</IMAGEOBJECT>
-</MEDIAOBJECT>
+    <figure>
+     <title>Basic Ledger - Transfer</title>
+    <screenshot>
+     <screeninfo>Basic Ledger - Transfer</screeninfo>
+       <mediaobject>
+          <imageobject>
+           <imagedata fileref="image/basicledger-transfer.png" srccredit="wilddev">
+          </imageobject>
+       </mediaobject>
+    </screenshot>
+    </figure>
+   <para>
+    There are additional fields to the transactions that are accessed by 
+    selecting <menuchoice><guimenu>Register</guimenu><guimenuitem>
+    Style</guimenuitem><guimenuitem>Double Line</guimenuitem></menuchoice>.
+    These fields let you add notes to your transactions and select the type 
+    of transaction that you are entering. Any of these fields are editable
+    after you enter the transaction. The other half of the transaction is 
+    automatically updated with the changed information.
+   </para>
+  </sect2>
 
-<PARA>The portfolio ledger can seem a bit daunting at first
-    sight.  If you have trouble understanding it, then you may wish to 
-    create an account for each stock you wish to track.
-    </PARA>
-
-<PARA>Some important points to remember about the portfolio
-    window:
-
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>It shows <EMPHASIS>all</EMPHASIS> stocks in your portfolio, not just
-      one.  The share amounts shown are for each particular
-      stock.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Note that it uses a two line display. 
-      Debited accounts and debited amounts are on the upper
-      line, and credited amounts and accounts are on the lower line.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you buy or sell a stock with money from the brokerage
-      account, the total balance will not change, since the value
-      of the stock equals the amount of money exchanged.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you buy or sell a stock with money from the brokerage
-      account, the value of the transaction will appear twice, once
-      in red, and once in black. If shares are purchased, the
-      amount of money debited from the brokerage account will be in
-      red, and the value of the shares in black. If shares are
-      sold, then value of the shares is in red, and the money
-      credited to the brokerage account in black.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you are having trouble indicating a share
-      purchase/sale in the portfolio ledger, then make sure that
-      <GUILABEL>Transfer From</GUILABEL> and 
-      <GUILABEL>Transfer To</GUILABEL> accounts are in
-      the right order. A transfer from a stock account is always
-      interpreted as a sale, even if you entered the data as a
-      purchase. The vice-versa is also true.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Eventually, an alternative simpler portfolio ledger
-      window may be provided.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
-
-</PARA>
-</SECT1>
-</ARTICLE>
-
-<!-- Local variables: -->
-<!-- sgml-parent-document: "gnucash.sgml" -->
-<!-- End: -->
+  <sect2 id="autosplit">
+   <title>Auto-Split Ledger Transactions</title>
+   <para>
+    Auto-Split Ledger Mode is selected by <menuchoice><guimenu>Register
+    </guimenu><guimenuitem>Style</guimenuitem><guimenuitem>Auto-Split Ledger
+    </guimenuitem></menuchoice>. This mode lets you see both sides of the 
+    transactions you are entering as well as split any part of the transaction
+    into several accounts. Below you see that we have split the previous 
+    transaction into two to accurately reflect what the money was used for. 
+    The parts of the split automatically disappear when you move to the next
+    transaction and you will just see <guibutton>-- Split Transaction --
+    </guibutton>
+   </para>
+    <figure>
+     <title>The Account Register - Auto-Split Ledger</title>
+    <screenshot>
+     <screeninfo>The Account Register - Auto-Split Ledger</screeninfo>
+      <mediaobject>
+	 <imageobject>
+            <imagedata fileref="image/autosplitledger" srccredit="wilddev">
+         </imageobject>
+      </mediaobject>
+    </screenshot>
+    </figure>
+  </sect2>
+  <sect2 id="transjrnl">
+   <title>Transaction Journal</title>
+   <para>
+    Transaction Journal Mode is selected by <menuchoice><guimenu>Register
+    </guimenu><guimenuitem>Style</guimenuitem><guimenuitem>Transaction Journal
+    </guimenuitem></menuchoice>. This mode lets you see both sides of all 
+    transactions you have entered and the splits of those transactions. 
+    When you enter transactions in this mode the previous transactions do not 
+    have their parts hidden from view.
+   </para>
+    <figure>
+     <title>The Account Register - Transaction Journal</title>
+    <screenshot>
+     <screeninfo>The Account Register - Transaction Journal</screeninfo>
+      <mediaobject>
+        <imageobject>
+         <imagedata fileref="image/transactionjrnl" srccredit="wilddev">
+        </imageobject>
+       </mediaobject>
+    </screenshot>
+    </figure>
+  </sect2>
+  <sect2 id="xacc-register-sortorder">
+   <title>Sort Order</title>
+   <para>
+    The Sort Order for your transactions is selected by <menuchoice><guimenu>
+    Register</guimenu><guimenuitem>Sort Order</guimenuitem></menuchoice>. 
+    The default sort order is to sort by Date. Other sorting options are:
+    date of entry, statement date, Num, Amount, Memo and Description.
+   </para>
+  </sect2>
+  <sect2 id="xacc-daterange">
+   <title>Date Range</title>
+   <para>
+    GnuCash has the ability to show a selection of transactions with 
+    Date Range. This is accessed through<menuchoice><guimenu>Register
+    </guimenu><guimenuitem>Date Range</guimenuitem><guimenuitem>Set Range...
+    </guimenuitem></menuchoice>. Choose the range of dates you want to display
+    by selecting the <guibutton>Start date:</guibutton> and the <guibutton>End 
+    date:</guibutton> and then click <guibutton>Set Date Range</guibutton> to
+    apply the date range. When you need to reset the display back to all the
+    transactions click <menuchoice><guimenu>Register</guimenu><guimenuitem>
+    Date Range</guimenuitem><guimenuitem>Show All</guimenuitem></menuchoice>.
+   </para>
+  </sect2>
+    <sect2 id=xacc-general-ledger>
+	<title>
+	The General Ledger
+	</title>
+	  <para>
+	  The general ledger is a special register which contains entries
+	  for more than one, account.  You can get a general ledger for
+	  an account and its subaccounts by using the <guimenu>Open subaccounts</guimenu>
+	  menu item on an account window, or a general ledger for <emphasis>
+	    every</emphasis> account by selecting <guimenu>General Ledger</guimenu>
+	  in the <guimenu>Tools</guimenu> main menu item.
+	  </para>
+	<para>
+	  <emphasis>FIXME: Picture probably needed</emphasis>
+	</para>
+	<para>
+	  General ledgers show the ledger entries in all the accounts
+	  a transaction appears in, which you can edit directly.  Note that
+	  the general ledger window is more complicated and harder to use
+    than the individual account registers. The general ledger
+    window allows a more comprehensive overview of accounts in a
+    smaller and quicker-to-navigate (for experienced users who know exactly what 
+they are doing) space. Because of its increased complexity, it use is
+    recommended only for accounting experts.
+    </sect2>
+ </sect1>
+</article>

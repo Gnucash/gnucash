@@ -2,8 +2,7 @@ SUBDIRS = image
 
 gnucash_helpdir = $(GNC_HELPDIR)/C
 
-GNUCASH_SGML_FILES = \
-	bofa-mym.sgml \
+GNUCASH_SGML_FILES = bofa-mym.sgml \
         gnucash.sgml \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
@@ -15,6 +14,7 @@ GNUCASH_SGML_FILES = \
 	xacc-asset-liability-piecharts.sgml \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \
+	xacc-calculator.sgml
 	xacc-chartofaccts.sgml \
 	xacc-commodity.sgml \
         xacc-common-report-options.sgml \
@@ -25,6 +25,7 @@ GNUCASH_SGML_FILES = \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-features.sgml \
+	xacc-file-operations.sgml \
 	xacc-gnome-mdi.sgml \
 	xacc-gnucash-web-browser.sgml \
 	xacc-gpl.sgml \
@@ -54,6 +55,7 @@ GNUCASH_SGML_FILES = \
 	xacc-scheme.sgml \
 	xacc-stock-price-report.sgml \
 	xacc-tax-report.sgml \
+	xacc-toplevel.sgml \
 	xacc-trans-report.sgml \
 	xacc-txf-categories.sgml \
 	xacc-txf-export.sgml \

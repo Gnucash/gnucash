@@ -1,0 +1,13 @@
+<article id="xacc-file-operations">
+<artheader>
+<title>File Operations</title>
+</artheader>
+<para> This isn't currently documented, but will describe saving and loading files,
+as well as backing up your data.  It will also mention the SQL interface.
+</para>
+</article>
+
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

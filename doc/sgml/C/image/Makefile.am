@@ -6,10 +6,14 @@ image_DATA = \
   appr-income.png \
   appr-main1.png \
   appr-main2.png \
+  autosplitledger.png \
   bal-graph.png \
+  basicledger.png \
+  basicledger-transfer.png \
   contract.png \
   depr-asset.png \
   depr-main.png \
+  editaccount.png \
   expand.png \
   foliowin-single.png \
   foliowin.png \
@@ -35,7 +39,8 @@ image_DATA = \
   reportwin.png \
   tax-info-dialog.png \
   ticker-a.png \
-  ticker-b.png
+  ticker-b.png \
+  transactionjrnl.png
 
 EXTRA_DIST = \
   .cvsignore \

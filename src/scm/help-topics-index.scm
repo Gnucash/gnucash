@@ -1,14 +1,15 @@
 (((N_ "GnuCash Manual") "gnc-help:index.html" 
   (((N_ "Overview") ""
-    (((N_ "Introduction") "gnc-help:xacc-about.html" #f)
+    (((N_ "Introduction") "gnc-help:xacc-quickstart.html" #f)
      ((N_ "Help") "gnc-help:xacc-userdocs.html" #f)))
-   ((N_ "Basic Setup") ""
-    (((N_ "Main Window") "gnc-help:xacc-mainwin.html" #f)
-     ((N_ "Double Entry") "gnc-help:xacc-doubleentry.html" #f)
-     ((N_ "QIF Import") "gnc-help:xacc-qif-import.html"
+   ((N_ "Basic Setup") ""     
+     (((N_ "Gnome MDI") "gnc-help:xacc-gnome-mdi.html" #f)
+      ((N_ "Account Window") "gnc-help:xacc-mainwin.html" #f)
+      ((N_ "Double Entry") "gnc-help:xacc-doubleentry.html" #f)
+      ((N_ "QIF Import") "gnc-help:xacc-qif-import.html"
       (((N_ "Quicken") "gnc-help:xacc-quicken.html" #f)
-       ((N_ "MYM") "gnc-help:bofa-mym.html" #f)))
-     ((N_ "Preferences") "gnc-help:xacc-preferences.html" #f)))
+       ((N_ "MYM") "gnc-help:bofa-mym.html" #f))))
+     ((N_ "Preferences") "gnc-help:xacc-preferences.html" #f))
    ((N_ "Accounts") ""
     (((N_ "Types") "gnc-help:xacc-acctypes.html" #f)
      ((N_ "Vs. Categories") "gnc-help:xacc-quicken.html" #f)
@@ -47,10 +48,10 @@
 	(((N_ "TXF Export") "gnc-help:xacc-txf-export.html"#f)
 	 ((N_ "TXF Categories") "gnc-help:xacc-txf-categories.html"#f)
 	 ((N_ "TXF Anomalies") "gnc-help:xacc-txf-export-anomalies.html" #f)))))
-     ((N_ "Printing") "gnc-help:xacc-print.html" #f)))
-   ((N_ "More on GnuCash") ""
-    (((N_ "Hacking Documentation") "gnc-help:xacc-dochack.html" #f)
-     ((N_ "GNU GPL") "gnc-help:xacc-gpl.html" #f)))))
+     ((N_ "Printing") "gnc-help:xacc-print.html" #f)))))
+ ((N_ "More on GnuCash") ""
+  (((N_ "Hacking Documentation") "gnc-help:xacc-dochack.html" #f)
+   ((N_ "GNU GPL") "gnc-help:xacc-gpl.html" #f)))
  ((N_ "Support") ""
   (((N_ "Register GnuCash") 
     "gnc-action:get?url=user-reg.php" #f)

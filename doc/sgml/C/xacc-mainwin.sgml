@@ -42,14 +42,7 @@
     if you choose an account with sub-accounts (detail accounts).
     Accounts with sub-accounts will always have a box on their
     left. By choosing the <GUIMENU>Open Subaccounts</GUIMENU> menu item, a
-    general ledger window is opened, which displays all
-    transactions for the lead and the detail accounts. Note that
-    the general ledger window is more complicated and harder to use
-    than the individual account registers. The general ledger
-    window allows a more comprehensive overview of accounts in a
-    smaller space. Because of its increased complexity, it use is
-    recommended only for accounting experts.
-
+    <link linkend="xacc-general-ledger">general ledger</link> window is opened.
 </PARA>
 </sect1>
 </ARTICLE>

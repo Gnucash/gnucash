@@ -104,8 +104,11 @@
 	  not a wizard, it's a druid . . .
 	  </para>
 	<para>
-	  Anyway, the druid will take you through the process
-	  of creating a set of accounts to get you going.
+	Anyway, the druid will take you through the process
+	of creating a set of accounts to get you going.
+	To get started, go to the "File" menu (in the top left
+	hand corner of the GnuCash window), and select "new
+	account tree".
 	  Simply follow the prompts to select a default currency, 
 	  then select the types of accounts you wish to create.
 	  You will then be given the opportunity to enter opening
