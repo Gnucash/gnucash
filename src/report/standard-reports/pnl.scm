@@ -164,7 +164,8 @@
                          (get-option gnc:pagename-general
                                      optname-from-date))))
          (report-title (sprintf #f
-                                (_ "Profit and Loss - %s to %s")
+                                (_ "%s - %s to %s")
+				(get-option gnc:pagename-general gnc:optname-reportname)
                                 (gnc:print-date from-date-tp)
                                 (gnc:print-date to-date-tp)))
          (doc (gnc:make-html-document)))
