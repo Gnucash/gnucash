@@ -1,3 +1,11 @@
+2003-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/tip-list.scm: remove the tip that says that this is a development
+	  version.  (Thanks, pogma)
+
+	* src/scm/command-line.scm: remove the "development version" string
+	  when running "gnucash --version"
+
 2003-02-05  Derek Atkins  <derek@ihtfp.com>
 
 	Pull up from HEAD:
