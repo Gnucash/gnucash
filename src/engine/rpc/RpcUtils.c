@@ -1199,8 +1199,16 @@ static void rpcend_do_build_gncquery (gncQuery *gq, gncQuery *from_q,
       case PD_STRING:
 	PINFO ("BLAH...  It's a string.  I hope it doesn't have a Regex!");
       default:
-	term = malloc (sizeof (*term));
-	memcpy (term, andlist->qt, sizeof (*term));
+	/* Allocate the right size */
+	if (toRpc) {
+	  term = malloc (sizeof (*term));
+	  memset (term, 0, sizeof (*term));
+	} else {
+	  term = malloc (sizeof (*qt));
+	  memset (term, 0, sizeof (*qt));
+	}
+	/* Only copy the smaller size */
+	memcpy (term, andlist->qt, MIN(sizeof (*qt), sizeof(*term)));
       }
 
       /* Set the predicate for non-rpc copies */
