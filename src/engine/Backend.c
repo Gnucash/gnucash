@@ -93,7 +93,10 @@ xaccTransactionGetBackend (Transaction *trans)
 
   /* find an account */
   s = xaccTransGetSplit (trans, 0);
-  if (!s) return NULL;
+  if (!s) {
+     s = xaccTransGetSplit (trans->orig, 0);
+     if (!s) return NULL;
+   }
 
   /* I suppose it would be more 'technically correct' to make sure that
    * all splits share the same backend, and flag an error if they
