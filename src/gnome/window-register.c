@@ -516,7 +516,8 @@ gnc_register_set_date_range(RegWindow *regData)
     start = gnc_register_min_day_time(start);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            start, LONG_MAX,
+                            TRUE, start,
+                            FALSE, LONG_MAX,
                             QUERY_AND);
   }
 
@@ -528,8 +529,8 @@ gnc_register_set_date_range(RegWindow *regData)
     end = gnc_register_max_day_time(end);
 
     xaccQueryAddDateMatchTT(regData->ledger->query, 
-                            LONG_MIN,
-                            end,                            
+                            FALSE, LONG_MIN,
+                            TRUE, end,                            
                             QUERY_AND);
   }
 
