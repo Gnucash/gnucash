@@ -44,7 +44,7 @@ make-gnucash-patch: make-gnucash-patch.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES += cscope.files etags.files make-gnucash-patch
+DISTCLEANFILES += cscope.files cscope.out etags.files make-gnucash-patch
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files

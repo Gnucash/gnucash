@@ -301,6 +301,15 @@ AC_SUBST(GUPPI_CFLAGS)
 
 
 ### --------------------------------------------------------------------------
+### popt
+
+AC_CHECK_LIB(popt, poptStrippedArgv,, AC_MSG_ERROR([
+
+  popt 1.5 or newer is required to build gnucash. You can download
+  the latest version from ftp://people.redhat.com/sopwith/popt/
+]))
+
+### --------------------------------------------------------------------------
 ## For now, we just presume you're using the GNOME version.  The other
 ## UI's haven't been carried over during the automake transition.  At
 ## some point, if it's deemed worthwhile, they can be resurrected...

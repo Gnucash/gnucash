@@ -15,6 +15,15 @@ use strict;
 
 use File::Basename;
 
+$::ask_description = 1;
+$::should_uuencode = 1;
+
+my $rcfile = $ENV{"HOME"} . "/.gnucash-patch.rc";
+
+if (-f $rcfile) {
+  require $rcfile;
+}
+
 ###########################################################
 # This section must be configured for your own setup.     #
 ###########################################################
@@ -67,6 +76,9 @@ chdir $gnc_home . "/" . $new or die "Can't cd!\n";
 # Start out with our basic makepatch arguments
 my @args = ('-verbose', '-diff', 'diff -u', '-exclude-vc');
 
+if (not $::ask_description) {
+  push(@args, '-description', '');
+}
 # Add in the exclude patterns from the __DATA__ section
 push_exclusions(\@args);
 
@@ -123,11 +135,14 @@ if (-f "diffs/$outfilename") {
 
 # UU encode the compressed patch
 # 'gnucash.diff.gz.uue' is the file you send.
-if (-f "diffs/$outfilename.gz") {
+if (-f "diffs/$outfilename.gz" and $::should_uuencode) {
   system("uuencode diffs/$outfilename.gz $outfilename.gz > diffs/$outfilename.gz.uue");
+  print "diffs/$outfilename.gz.uue\n";
+}
+else {
+  print "diffs/$outfilename.gz\n";
 }
 
-print "diffs/$outfilename.gz.uue\n";
 
 exit(0);
 
