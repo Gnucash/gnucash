@@ -1,5 +1,12 @@
 2000-05-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* configure.in: remove check for readline. guile-config should
+	return the right values. Also, change LOCALE_DIR definition to
+	$datadir/locale. This seems to be more correct.
+
+	* src/swig/perl5/Makefile.in: use -fPIC because it's needed on
+	sparcs and doesn't seem to hurt for others.
+
 	* src/gnome/window-register.c (gnc_register_sort): just sort by the
 	given key and then by the standard order.
 

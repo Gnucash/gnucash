@@ -29,17 +29,16 @@ INCLPATH = \
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/src/engine/guid \
            -I@PERLINCL@/CORE \
-           -I$(prefix)/include \
-	         `glib-config --cflags glib`
+           -I$(prefix)/include
 
 # set -Dbool=char because the perl headers need this
 # use -fpic so that we can create loadable module
-CFLAGS := @CFLAGS@  ${INCLPATH} -Dbool=char -fPIC
+CFLAGS = @CFLAGS@ ${INCLPATH} -Dbool=char -fPIC ${GLIB_CFLAGS}
 
-LDFLAGS  = @LDFLAGS@
+LDFLAGS  = @LDFLAGS@ ${GLIB_LIBS}
 
-SWIG_FLAGS := -stat -perl5 \
-              -I.. -I@top_srcdir@/src/engine 
+SWIG_FLAGS = -stat -perl5 \
+             -I.. -I@top_srcdir@/src/engine 
 
 ######################################################################
 # SEE Makefile.common for information about these variables.

@@ -89,7 +89,7 @@ AC_ARG_ENABLE( warnings,
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="$prefix/share/locale")
+  LOCALE_DIR="$datadir/locale")
 
 AC_SUBST(LOCALE_DIR)
 
@@ -339,10 +339,6 @@ AC_TRY_CPP([#include <gtk-xmhtml/gtk-xmhtml.h>], AC_MSG_RESULT(yes) ,
 
 #undo damage to CPPFLAGS
 CPPFLAGS="$OLDCPPFLAGS"
-
-### --------------------------------------------------------------------------
-# If readline exists, just assume that guile needs it.  It probably does.
-AC_CHECK_LIB(readline, readline)
 
 
 ### --------------------------------------------------------------------------
