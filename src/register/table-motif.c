@@ -27,6 +27,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -98,6 +99,14 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     * moved the cursor, and that any subsidiary GUI elements
     * properly positioned.  Do this *before* we examine the 
     * value of the "current cursor".
+    *
+    * Hmmm ... actually, theoretically, this is not neeeded.
+    * before we get to here, we *should* have gone through 
+    * a traverse callback, and, in the traverse callback,
+    * we should have checked (verified) the cursor position,
+    * and moved it to the right location.  So, by the time
+    * we get here, the cursor should be in the right position, 
+    * and the call below should always no-op out.
     */
    if (XbaeEnterCellReason == cbs->reason) 
    {
@@ -461,32 +470,33 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
    }
 
-   /* Don't do a thing unless we verify that the row and column
-    * are in bounds. Ordinarily, they are always in bounds, except 
-    * in an unusual, arguably buggy situation: If the table has 
-    * been recently resized smaller, then the Xbae code might report
-    * a traverse out of a cell that was in the larger array, but not
-    * in the smaller array.  This is probably an Xbae bug. It 
-    * will core dump array access.
-    */
-   if ((row >= table->num_phys_rows) || 
-       (col >= table->num_phys_cols)) {
-
-      table->prev_phys_traverse_row = cbs->next_row;
-      table->prev_phys_traverse_col = cbs->next_column;
-      return;
-   }
-
-   wrapVerifyCursorPosition (table, row, col);
-
-   /* compute the cell location */
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
-
    /* process right-moving traversals */
    if (QRight == cbs->qparam) {
-      int next_row = arr->right_traverse_r[rel_row][rel_col];
-      int next_col = arr->right_traverse_c[rel_row][rel_col];
+      int next_row, next_col;
+
+      /* Don't do a thing unless we verify that the row and column
+       * are in bounds. Ordinarily, they are always in bounds, except 
+       * in an unusual, arguably buggy situation: If the table has 
+       * been recently resized smaller, then the Xbae code might report
+       * a traverse out of a cell that was in the larger array, but not
+       * in the smaller array.  This is probably an Xbae bug. It 
+       * will core dump array access.
+       */
+      if ((row >= table->num_phys_rows) || 
+          (col >= table->num_phys_cols)) {
+
+assert (0);
+         table->prev_phys_traverse_row = cbs->next_row;
+         table->prev_phys_traverse_col = cbs->next_column;
+         return;
+      }
+
+      /* compute the cell location */
+      rel_row = table->locators[row][col]->phys_row_offset;
+      rel_col = table->locators[row][col]->phys_col_offset;
+
+      next_row = arr->right_traverse_r[rel_row][rel_col];
+      next_col = arr->right_traverse_c[rel_row][rel_col];
 
       /* if we are at the end of the traversal chain,
        * hop out of this tab group, and into the next.
@@ -505,6 +515,16 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
          cbs->next_column = col - rel_col + next_col;
       }
    } 
+
+   /* 
+*/
+xxxxxxxxxxx 
+hack alert -- this is still broke -- can't really do this until 
+after the leave, since all sorts of cell fix-ups occur
+on the leave ... 
+
+   wrapVerifyCursorPosition (table, cbs->next_row, cbs->next_column);
+   cbs->next_row = table->current_cursor_phys_row;
 
    table->prev_phys_traverse_row = cbs->next_row;
    table->prev_phys_traverse_col = cbs->next_column;
@@ -834,6 +854,7 @@ table->entries[i][5]);
 static void        
 doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
 {
+   int phys_row, phys_col;
    int to_row, to_col;
    int i,j;
 
@@ -842,6 +863,10 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
    if ((0 > from_row) || (0 > from_col)) return;
 
    /* compute the physical bounds of the current cursor */
+   phys_row = from_row;
+   phys_col = from_col;
+   from_row -= table->locators[phys_row][phys_col]->phys_row_offset;
+   from_col -= table->locators[phys_row][phys_col]->phys_col_offset;
    to_row = from_row + curs->numRows;
    to_col = from_col + curs->numCols;
 
