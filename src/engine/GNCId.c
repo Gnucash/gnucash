@@ -271,6 +271,8 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
   if ((entity_type <= GNC_ID_NONE) || (entity_type > LAST_GNC_ID))
     return;
 
+  if (guid_equal(guid, xaccGUIDNULL())) return;
+
   xaccRemoveEntity(guid);
 
   e_node = g_new(EntityNode, 1);

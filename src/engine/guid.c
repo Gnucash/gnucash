@@ -40,6 +40,7 @@
 
 #include "guid.h"
 #include "md5.h"
+#include "gnc-engine-util.h"
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
@@ -54,6 +55,9 @@
 /** Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 
 /** Function implementations ****************************************/
@@ -395,7 +399,7 @@ static gboolean
 decode_md5_string(const char *string, unsigned char *data)
 {
   unsigned char n1, n2;
-  size_t count;
+  size_t count = -1;
   char c1, c2;
 
   if (NULL == data) return FALSE;
@@ -427,6 +431,7 @@ decode_md5_string(const char *string, unsigned char *data)
   return TRUE;
 
 badstring:
+  PERR ("bad string, stopped at %d\n", count);
   for (count = 0; count < 16; count++)
   {
     data[count] = 0;
@@ -448,6 +453,16 @@ guid_to_string(const GUID * guid)
   string[GUID_ENCODING_LENGTH] = '\0';
 
   return string;
+}
+
+void
+guid_to_string_buff(const GUID * guid, char *string)
+{
+  if (!string || !guid) return;
+
+  encode_md5_data(guid->data, string);
+
+  string[GUID_ENCODING_LENGTH] = '\0';
 }
 
 gboolean
