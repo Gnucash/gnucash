@@ -35,6 +35,7 @@
 #include "window-reconcile.h"
 #include "dialog-utils.h"
 #include "query-user.h"
+#include "gnc-dateedit.h"
 #include "messages.h"
 #include "util.h"
 
@@ -119,7 +120,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
   if (gnc_reverse_balance(adjBData->account))
     new_balance = -new_balance;
 
-  time = gnome_date_edit_get_date(GNOME_DATE_EDIT(adjBData->date_entry));
+  time = gnc_date_edit_get_date(GNC_DATE_EDIT(adjBData->date_entry));
 
   trans = xaccMallocTransaction();
   
@@ -273,7 +274,7 @@ adjBWindow(Account *account)
     /* Edit widget box */
     vbox = gtk_vbox_new(TRUE, 3);
 
-    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), date, TRUE, TRUE, 0);
     adjBData->date_entry = date;
 

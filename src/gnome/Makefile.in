@@ -69,7 +69,7 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               dialog-options.c dialog-filebox.c dialog-transfer.c \
               dialog-add.c dialog-edit.c dialog-utils.c \
               extensions.c query-user.c reconcile-list.c \
-	      window-report.c global-options.c \
+	      window-report.c global-options.c gnc-dateedit.c \
 	      dialog-qif-import.c glade-gnc-dialogs.c \
 	      dialog-account-picker.c print-session.c \
 	      dialog-print-check.c dialog-find-transactions.c
@@ -88,6 +88,3 @@ gnome: @top_srcdir@/gnucash.gnome
 gnome.static: @top_srcdir@/gnucash.gnome.static
 @top_srcdir@/gnucash.gnome.static: ${GNOME_OBJS} ${OTHER_OBJS}
 	$(CC) -static $(LDFLAGS) -o $@ $^ $(LIBS)
-
-
-

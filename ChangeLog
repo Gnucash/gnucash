@@ -1,5 +1,17 @@
 2000-04-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/gnome/dialog-options.c: modified to use gnc-dateedit.
+
+	* src/gnome/window-adjust.c: modified to use gnc-dateedit.
+
+	* src/gnome/window-register.c: modified to use gnc-dateedit.
+
+	* src/gnome/dialog-transfer.c: modified to use gnc-dateedit.
+
+	* src/gnome/gnc-dateedit.c: new file. gnome date editor modified
+ 	to use gnucash date printing and parsing routines. I plan on
+ 	extending this with additional features, too.
+
 	* src/engine/Group.c (xaccMallocAccountGroup): loop until we
 	get a unique id. This is just paranoia code. Ditto for Account.c
 	and Transaction.c.

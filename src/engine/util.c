@@ -424,8 +424,8 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
    struct lconv *lc;
 
    char *orig_bufp = bufp;
-   char *currency_symbol;
-   char *sign;
+   const char *currency_symbol;
+   const char *sign;
 
    char cs_precedes;
    char sep_by_space;

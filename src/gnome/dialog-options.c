@@ -27,6 +27,7 @@
 #include "query-user.h"
 #include "gnc-helpers.h"
 #include "account-tree.h"
+#include "gnc-dateedit.h"
 #include "global-options.h"
 #include "messages.h"
 #include "util.h"
@@ -105,7 +106,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
     if (gnc_timepair_p(value))
     {
       ts = gnc_timepair2timespec(value);
-      gnome_date_edit_set_time(GNOME_DATE_EDIT(option->widget), ts.tv_sec);
+      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
     }
     else
       bad_value = TRUE;
@@ -249,7 +250,7 @@ gnc_option_get_ui_value(GNCOption *option)
   {
     Timespec ts;
 
-    ts.tv_sec  = gnome_date_edit_get_date(GNOME_DATE_EDIT(option->widget));
+    ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(option->widget));
     ts.tv_nsec = 0;
 
     result = gnc_timespec2timepair(ts);
@@ -830,19 +831,19 @@ gnc_option_set_ui_widget(GNCOption *option,
     use24 = gnc_lookup_boolean_option("International",
                                       "Use 24-hour time format", FALSE);
 
-    value = gnome_date_edit_new(time(NULL), show_time, use24);
+    value = gnc_date_edit_new(time(NULL), show_time, use24);
 
     option->widget = value;
     gnc_option_set_ui_value(option, FALSE);
 
-    entry = GNOME_DATE_EDIT(value)->date_entry;
+    entry = GNC_DATE_EDIT(value)->date_entry;
     gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
 
     if (show_time)
     {
-      entry = GNOME_DATE_EDIT(value)->time_entry;
+      entry = GNC_DATE_EDIT(value)->time_entry;
       gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
       gtk_signal_connect(GTK_OBJECT(entry), "changed",
                          GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);

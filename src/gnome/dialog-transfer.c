@@ -29,6 +29,7 @@
 #include "window-reconcile.h"
 #include "query-user.h"
 #include "account-tree.h"
+#include "gnc-dateedit.h"
 #include "enriched-messages.h"
 #include "ui-callbacks.h"
 #include "util.h"
@@ -226,7 +227,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-      date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+      date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
       gtk_box_pack_start(GTK_BOX(hbox), date, TRUE, TRUE, 0);
       xferData->date_entry = date;
     }
@@ -365,7 +366,7 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
     string = gtk_entry_get_text(GTK_ENTRY(xferData.amount_entry));
     amount = xaccParseAmount(string, GNC_T);
 
-    time = gnome_date_edit_get_date(GNOME_DATE_EDIT(xferData.date_entry));
+    time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData.date_entry));
 
     {
       Transaction *trans;

@@ -51,6 +51,7 @@
 #include "gnucash-sheet.h"
 #include "global-options.h"
 #include "dialog-find-transactions.h"
+#include "gnc-dateedit.h"
 #include "util.h"
 
 
@@ -485,7 +486,7 @@ gnc_register_set_date_range(RegWindow *regData)
   if (!gtk_toggle_button_get_active(toggle)) {
     time_t start;
     
-    start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->start_date));
+    start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
     start = gnc_register_min_day_time(start);
     
     xaccQueryAddDateMatchTT(regData->ledger->query, 
@@ -497,7 +498,7 @@ gnc_register_set_date_range(RegWindow *regData)
   if (!gtk_toggle_button_get_active(toggle)) {
     time_t end;
     
-    end = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->end_date));
+    end = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
     end = gnc_register_max_day_time(end);
     
     xaccQueryAddDateMatchTT(regData->ledger->query, 
@@ -551,7 +552,7 @@ gnc_register_today_cb(GtkWidget *widget, gpointer data)
   assert(regData != NULL);
 
   regDateData = regData->date_window;
-  gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->end_date), time(NULL));
+  gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->end_date), time(NULL));
 
   gtk_widget_set_sensitive(regData->date_window->set_button, TRUE);
 }
@@ -666,22 +667,22 @@ gnc_register_date_window(RegWindow *regData)
     gtk_signal_connect(GTK_OBJECT(radio), "toggled",
 		       GTK_SIGNAL_FUNC(gnc_register_date_toggle_cb), regData);
 
-    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start(GTK_BOX(hbox), date, FALSE, FALSE, 0);
     regDateData->start_date = date;
 
     time_val = xaccQueryGetEarliestDateFound(regData->ledger->query);
     if (time_val < time(NULL))
-      gnome_date_edit_set_time(GNOME_DATE_EDIT(date), time_val);
+      gnc_date_edit_set_time(GNC_DATE_EDIT(date), time_val);
 
     gtk_signal_connect(GTK_OBJECT(date), "date-changed",
                        GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    calendar = GNOME_DATE_EDIT(date)->calendar;
+    calendar = GNC_DATE_EDIT(date)->calendar;
     gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    entry = GNOME_DATE_EDIT(date)->date_entry;
+    entry = GNC_DATE_EDIT(date)->date_entry;
     gtk_signal_connect(GTK_OBJECT(entry), "activate",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
@@ -715,18 +716,18 @@ gnc_register_date_window(RegWindow *regData)
     gtk_signal_connect(GTK_OBJECT(radio), "toggled",
 		       GTK_SIGNAL_FUNC(gnc_register_date_toggle_cb), regData);
 
-    date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start(GTK_BOX(hbox), date, FALSE, FALSE, 0);
     regDateData->end_date = date;
 
     gtk_signal_connect(GTK_OBJECT(date), "date-changed",
                        GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    calendar = GNOME_DATE_EDIT(date)->calendar;
+    calendar = GNC_DATE_EDIT(date)->calendar;
     gtk_signal_connect(GTK_OBJECT(calendar), "day_selected_double_click",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    entry = GNOME_DATE_EDIT(date)->date_entry;
+    entry = GNC_DATE_EDIT(date)->date_entry;
     gtk_signal_connect(GTK_OBJECT(entry), "activate",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
@@ -1946,18 +1947,18 @@ gnc_register_include_date(RegWindow *regData, time_t date)
 
   regDateData = regData->date_window;
 
-  start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->start_date));
-  end   = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->end_date));
+  start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
+  end   = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
 
   if (date < start)
   {
-    gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->start_date), date);
+    gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->start_date), date);
     changed = TRUE;
   }
 
   if (date > end)
   {
-    gnome_date_edit_set_time(GNOME_DATE_EDIT(regDateData->end_date), date);
+    gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->end_date), date);
     changed = TRUE;
   }
 

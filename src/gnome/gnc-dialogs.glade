@@ -4449,7 +4449,7 @@ No Total
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label781</name>
-		<label>Start Day:</label>
+		<label>Bill Day:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -4466,7 +4466,7 @@ No Total
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label782</name>
-		<label>Stop Day:</label>
+		<label>Grace Period:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -4558,7 +4558,7 @@ No Total
 
 		<widget>
 		  <class>GtkOptionMenu</class>
-		  <name>optionmenu2</name>
+		  <name>optionmenu4</name>
 		  <can_focus>True</can_focus>
 		  <items>Days
 Weeks
@@ -4684,26 +4684,55 @@ Contingency
 		</child>
 
 		<widget>
-		  <class>GtkSpinButton</class>
-		  <name>spinbutton3</name>
-		  <can_focus>True</can_focus>
-		  <climb_rate>1</climb_rate>
-		  <digits>0</digits>
-		  <numeric>True</numeric>
-		  <update_policy>GTK_UPDATE_ALWAYS</update_policy>
-		  <snap>False</snap>
-		  <wrap>False</wrap>
-		  <value>1</value>
-		  <lower>-365</lower>
-		  <upper>365</upper>
-		  <step>1</step>
-		  <page>10</page>
-		  <page_size>10</page_size>
+		  <class>GtkHBox</class>
+		  <name>hbox41</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
 		  <child>
 		    <padding>0</padding>
 		    <expand>False</expand>
 		    <fill>False</fill>
 		  </child>
+
+		  <widget>
+		    <class>GtkSpinButton</class>
+		    <name>spinbutton3</name>
+		    <can_focus>True</can_focus>
+		    <climb_rate>1</climb_rate>
+		    <digits>0</digits>
+		    <numeric>True</numeric>
+		    <update_policy>GTK_UPDATE_ALWAYS</update_policy>
+		    <snap>False</snap>
+		    <wrap>False</wrap>
+		    <value>1</value>
+		    <lower>-365</lower>
+		    <upper>365</upper>
+		    <step>1</step>
+		    <page>10</page>
+		    <page_size>10</page_size>
+		    <child>
+		      <padding>0</padding>
+		      <expand>True</expand>
+		      <fill>True</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GtkOptionMenu</class>
+		    <name>optionmenu2</name>
+		    <can_focus>True</can_focus>
+		    <items>Days
+Weeks
+Months
+Years
+</items>
+		    <initial_choice>0</initial_choice>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
 		</widget>
 
 		<widget>

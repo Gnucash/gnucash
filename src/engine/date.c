@@ -100,8 +100,7 @@ printDate (char * buff, int day, int month, int year)
    * right.
    */
   switch(dateFormat)
-    {
-      
+  {
     case DATE_FORMAT_UK:
       sprintf (buff, "%2d/%2d/%-4d", day, month, year);
       break;
@@ -127,8 +126,7 @@ printDate (char * buff, int day, int month, int year)
     default:
       sprintf (buff, "%2d/%2d/%-4d", month, day, year);
       break;
-    }
-  return;
+  }
 }
 
 void 
