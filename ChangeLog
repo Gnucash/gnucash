@@ -25,6 +25,12 @@
 	  than" to "equals" -- so by default you would search for an exact
 	  value.  Fixes #106443
 
+	* src/report/standard-reports/price-scatter.scm: "eval" changed
+	  API on guile-1.6.  Use the existing API to convert a delta
+	  symbol to a delta time.
+	* src/scm/main.scm: call eval with the right number of arguments
+	  based on early or late versions.
+	
 2003-05-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-options.c: don't let the user do anything

@@ -161,7 +161,7 @@
          (dates-list (gnc:make-date-list
                       (gnc:timepair-end-day-time from-date-tp) 
                       (gnc:timepair-end-day-time to-date-tp)
-                      (eval interval)))
+		      (gnc:deltasym-to-delta interval)))
          
          (document (gnc:make-html-document))
          (chart (gnc:make-html-scatter))
