@@ -20,7 +20,6 @@
 ( "Barbados Dollar" "dollar" "cent"  "ISO4217" "BBD" "052" 100 100 )
 ( "Belgian Franc" "franc" "centime" "ISO4217" "BEF" "056" 100 100 ) ::::
 ( "Belize Dollar" "dollar" "cent" "ISO4217" "BZD" "084" 100 100 )
-( "Colonial French Franc" "franc" "centime" "ISO4217" "XOF" "952" 100 100 )
 ( "Bermudian Dollar" "dollar" "cent" "ISO4217" "BMD" "060" 100 100 )
 ( "Bhutan Ngultrum" "ngultrum" "chetrum" "ISO4217" "BTN" "064" 100 100 )
 ( "Bolivian Boliviano" "boliviano"  "centavo" "ISO4217" "BOB" "068" 100 100 )
@@ -32,7 +31,8 @@
 ( "Brunei Dollar" "dollar" "cent" "ISO4217" "BND" "096" 100 100 )
 ( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGL" "100" 100 100 )
 ( "Burundi Franc" "franc" "centime" "ISO4217" "BIF" "108" 100 100 )
-( "Cameroon Franc" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
+( "CFA Franc BEAC" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
+( "CFA Franc BCEAO" "franc" "centime" "ISO4217" "XOF" "952" 100 100 )
 ( "Canadian Dollar" "dollar" "cent" "ISO4217" "CAD" "124" 100 100 )
 ( "Cape Verde Escudo" "escudo" "centavo" "ISO4217" "CVE" "132" 100 100 )
 ( "Cayman Islands Dollar" "dollar" "cent"  "ISO4217" "KYD" "136" 100 100 )

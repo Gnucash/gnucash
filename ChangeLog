@@ -1,6 +1,7 @@
 2001-03-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/iso-4217-currencies.scm: remove duplicate currency
+	fix colonial franc names
 
 	* src/engine/sixtp-dom-parsers.c (dom_tree_to_commodity_ref): use
 	gnc_commodity_destroy, not g_free.
