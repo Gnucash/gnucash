@@ -29,6 +29,10 @@
 #undef PACKAGE
 #undef VERSION
 
+#undef GNUCASH_MAJOR_VERSION
+#undef GNUCASH_MINOR_VERSION
+#undef GNUCASH_MICRO_VERSION
+
 /* Are we compiling for GNOME?  The answer right now is always yes... */
 #undef GNOME
 
