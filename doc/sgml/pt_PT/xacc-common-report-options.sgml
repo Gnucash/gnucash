@@ -1,11 +1,11 @@
-<article ID="XACC-COMMON-REPORT-OPTIONS"
+<article ID="XACC-COMMON-REPORT-OPTIONS">
 <artheader>
 <title>Opções Comuns de Relatórios</title>
 </artheader>
 <sect1>
 <title></title>
 <para>Muitos dos relatórios partilham tipos semelhantes de opções.  Algumas das mais 
-comuns incluem:
+comuns incluem:</para>
 
 <itemizedlist>
 <listitem>
@@ -35,6 +35,14 @@ mensalmente, e anualmente.</para></listitem>
 apropriadas.  Note que alguns relatórios apenas lhe permitem seleccionar alguns 
 tipos de contas - por exemplo, um gráfico circular de despesas apenas permitirá 
 que sejam seleccionadas contas de despesas.  </para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-show-full-names">Mostrar Nomes 
+de Contas completos</emphasis></para>
+<para>Muitos relatórios e gráficos permitem-lhe seleccionar se deseja visualizar 
+as abreviaturas das contas (por exemplo "eletricidade") ou os nomes completos (por 
+exemplo "casa:electricidade").</para>
 </listitem>
 
 <listitem>
@@ -86,7 +94,18 @@ moeda para visualização gráfica ou em totais.</para>
 Poderá seleccionar uma média ponderada ou cotações sobre todas as transacções, 
 cotações a valores actuais, ou cotações à data de realização do relatório.</para>
 </listitem>
-</itemizedlist>
-</para>
+<listitem>
+  <para><emphasis><anchor id="xacc-options-graph-totals">Totais</emphasis></para>
+  <para>Alguns gráficos circulares apresentam os totais na legenda do gráfico caso 
+    esta opção esteja seleccionada.
+    </para></listitem>
+
+<listitem>
+  <para><emphasis><anchor id="xacc-options-max-slices">Nº Máximo de Fatias</emphasis></para>
+  <para>Controla o número máximo de fatias apresentadas num gráfico circular - as outras 
+    contas serão colocadas numa fatia denominada "outras".
+  </para>
+  </listitem></itemizedlist>
+
 </sect1>
 </article>
