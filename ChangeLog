@@ -1,3 +1,8 @@
+2003-08-18  David Hampton  <hampton@employees.org>
+
+	* macros/compiler-flags.m4: Add back detailed compile time checks.
+	* various: Fix compile time warnings.
+
 2003-08-15  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/global-options.c: Prevent a crash if there's no
