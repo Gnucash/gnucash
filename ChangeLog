@@ -1,3 +1,7 @@
+2001-03-29  Dave Peticolas  <dave@krondo.com>
+
+	* doc/html/C/xacc-expense.html: fix debit/credit distinction
+
 2001-03-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/gfec.c: add missing include

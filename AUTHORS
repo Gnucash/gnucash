@@ -47,6 +47,7 @@ Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Marcus Vinicius Brito <pazu@linuxbr.com.br> Brazilian Portuguese translation
 Christopher B. Browne <cbbrowne@hex.net> for perl and lots of scheme
+Görkem Çetin <gorkem@gelecek.com.tr> Turkish translation
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Albert Chin-A-Young <china@thewrittenword.com> configure.in patch

@@ -30,7 +30,7 @@ AM_CONFIG_HEADER(config.h)
 AC_CANONICAL_HOST
 
 dnl Set of available languages.
-ALL_LINGUAS="da de en_GB es fr it no pt_BR ru sv uk"
+ALL_LINGUAS="da de en_GB es fr it no pt_BR ru sv tr uk"
 
 AM_PROG_LIBTOOL
 
