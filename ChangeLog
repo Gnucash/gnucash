@@ -1,3 +1,10 @@
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (gnc_ui_sx_loan_druid_create): Use the
+	account-list filtering capability of the GncAccountSel to only
+	show/allow-creation-of valid account-types in the
+	loan-druid. Fixes Bug#124595.
+
 2004-03-13  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
