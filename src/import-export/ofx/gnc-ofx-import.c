@@ -39,7 +39,10 @@
 #include "Transaction.h"
 #include "gnc-ofx-import.h"
 #include "gnc-file-dialog.h"
+#include "gnc-engine-util.h"
 
+
+static short module = MOD_IMPORT;
 /********************************************************************\
  * gnc_file_ofx_import
  * Entry point
@@ -53,47 +56,47 @@ SCM  scm_gnc_file_ofx_import ()
 
 void gnc_file_ofx_import (void)
 {
-extern int ofx_PARSER_msg;
-extern int ofx_DEBUG_msg;
-extern int ofx_WARNING_msg;
-extern int ofx_ERROR_msg;
-extern int ofx_INFO_msg;
-extern int ofx_STATUS_msg;
+  extern int ofx_PARSER_msg;
+  extern int ofx_DEBUG_msg;
+  extern int ofx_WARNING_msg;
+  extern int ofx_ERROR_msg;
+  extern int ofx_INFO_msg;
+  extern int ofx_STATUS_msg;
   char *filenames[3];
-char file[255] = "/home/bock/pfe/scratch/stmtrs_spec201.xml";
+  char file[255] = "/home/bock/pfe/scratch/stmtrs_spec201.xml";
 
- ofx_PARSER_msg = false;
- ofx_DEBUG_msg = false;
- ofx_WARNING_msg = true;
- ofx_ERROR_msg = true;
- ofx_INFO_msg = true;
- ofx_STATUS_msg = false;
+  ofx_PARSER_msg = false;
+  ofx_DEBUG_msg = false;
+  ofx_WARNING_msg = true;
+  ofx_ERROR_msg = true;
+  ofx_INFO_msg = true;
+  ofx_STATUS_msg = false;
 
 
- /* if (gnc_forall_gui_components (DRUID_QIF_IMPORT_CM_CLASS,
-				 show_handler, NULL))
-      return;*/
+  /* if (gnc_forall_gui_components (DRUID_QIF_IMPORT_CM_CLASS,
+     show_handler, NULL))
+     return;*/
 
   /* pop up the QIF File Import dialog box */
   /*gnc_ui_qif_import_druid_make();*/
   printf("gnc_file_ofx_import(): Begin...\n");
 
-strncpy(file,gnc_file_dialog ("Select an OFX/QFX file to process",
-                              NULL,
-                              NULL), 255);
+  strncpy(file,gnc_file_dialog ("Select an OFX/QFX file to process",
+				NULL,
+				NULL), 255);
 
 
-filenames[0]=NULL;
-filenames[1]=file;
-filenames[2]=NULL;
-ofx_proc_file(2, filenames);
+  filenames[0]=NULL;
+  filenames[1]=file;
+  filenames[2]=NULL;
+  ofx_proc_file(2, filenames);
 
 
 }
 
 int ofx_proc_status(struct OfxStatusData data)
 {
-return 0;
+  return 0;
 }
 
 int ofx_proc_transaction(struct OfxTransactionData data)
@@ -108,7 +111,7 @@ int ofx_proc_transaction(struct OfxTransactionData data)
   gnc_numeric gnc_amount;
   
   if(data.account_id_valid==true){
-     account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
+    account = gnc_import_select_account(data.account_id, NULL, NULL, NO_TYPE);
     if(account!=NULL)
       {
 	book = xaccAccountGetBook(account);
@@ -193,7 +196,7 @@ int ofx_proc_transaction(struct OfxTransactionData data)
 	  notes=g_strdup_printf("%s%s%s",tmp,"|Trans type:", dest_string);
 	  g_free(tmp);
 	}
-	if(data.memo_valid==true){
+	if(data.memo_valid==true&&data.name_valid==false){
 	  tmp=notes;
 	  notes=g_strdup_printf("%s%s%s",tmp, "|Memo:", data.memo);
 	  g_free(tmp);
@@ -239,20 +242,32 @@ int ofx_proc_transaction(struct OfxTransactionData data)
 	  xaccAccountInsertSplit(account,split);
 	  gnc_amount = double_to_gnc_numeric(data.amount,xaccAccountGetCommoditySCU(account),GNC_RND_ROUND);
 	  xaccSplitSetBaseValue(split, gnc_amount,xaccAccountGetCommodity(account));
-
+	  
+	  /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
+	  if(data.name_valid==true){
+	    xaccSplitSetMemo(split, data.name);
+	  }
+	  else if(data.memo_valid==true){
+	    xaccSplitSetMemo(split, data.memo);
+	  }
+	 /* xaccTransCommitEdit(transaction); */
+	  
+	  gnc_import_add_trans(transaction);
 	}
-	xaccTransCommitEdit(transaction);
-	//printf("Now calling gnc_import_add_trans()\n");
-	gnc_import_add_trans(transaction);
+	else
+	  {
+	    PERR("The transaction doesn't have a valid amount");
+	  }
+	
       }
     else
       {
-	printf("Gnucash: ofx_proc_transaction(): Unable to find the account!\n");
+	PERR("Unable to find the account!");
       }
   }
   else
     {
-      printf("Gnucash: ofx_proc_transaction(): account ID for this transaction is unavailable!\n");
+      PERR("account ID for this transaction is unavailable!");
     }
   return 0;
 }//end ofx_proc_transaction()
