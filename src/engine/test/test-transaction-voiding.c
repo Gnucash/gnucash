@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <guile/gh.h>
+#include <string.h>
 
 #include "GNCIdP.h"
 
