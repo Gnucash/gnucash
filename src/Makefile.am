@@ -46,6 +46,7 @@ gnucash_LDADD = \
   gnome/libgncguile.la \
   gnome/libgncgnome.la \
   gnome/libgncguile.la \
+  ${GUPPI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
   ${GNOME_PRINT_LIBS} \
@@ -54,7 +55,6 @@ gnucash_LDADD = \
   ${GTKHTML_LIBS} \
   ${GHTTP_LIBS} \
   ${GLADE_LIBS} \
-  ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS} \
   ${EFENCE_LIBS} \

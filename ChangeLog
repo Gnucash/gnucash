@@ -1,3 +1,9 @@
+2001-11-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/Makefile.am, src/gnome-utils/Makefile.am: Moved
+	${GUPPI_LIBS} to appear before GNOME_LIBDIR in *_LIBADD so that
+	--with-libguppi-prefix can have any effect at all.
+
 2001-11-13  Robert Graham Merkel <rgmerk@mira.net>
 
 	* src/gnc-module/Makefile.am: libgw-gnc-module.la needs 

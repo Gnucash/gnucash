@@ -76,6 +76,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_srcdir}/src/calculation/libgncmod-calculation.la \
   ${top_srcdir}/src/network-utils/libgncmod-network-utils.la \
   ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${GUPPI_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
@@ -83,7 +84,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
-  ${GUPPI_LIBS} \
   ${GLIB_LIBS}
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
