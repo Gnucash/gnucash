@@ -2,7 +2,9 @@
 
 #include <stdlib.h>
 
-#include "gnc-test-stuff.h"
+#include "test-stuff.h"
+#include "test-engine-stuff.h"
+#include "test-file-stuff.h"
 
 #include "kvp_frame.h"
 

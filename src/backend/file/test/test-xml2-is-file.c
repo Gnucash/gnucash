@@ -1,7 +1,10 @@
 #include <stdlib.h>
 
 #include "io-gncxml-v2.h"
-#include "gnc-test-stuff.h"
+
+#include "test-stuff.h"
+#include "test-engine-stuff.h"
+#include "test-file-stuff.h"
 
 int
 main(int argc, char **argv)

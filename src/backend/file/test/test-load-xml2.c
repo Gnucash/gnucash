@@ -15,7 +15,9 @@
 #include "Backend.h"
 #include "TransLog.h"
 
-#include "gnc-test-stuff.h"
+#include "test-stuff.h"
+#include "test-engine-stuff.h"
+#include "test-file-stuff.h"
 
 static void
 remove_files_pattern(const char *begining, const char *ending)

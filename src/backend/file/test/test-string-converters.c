@@ -7,7 +7,9 @@
 
 #include "gnc-engine-util.h"
 
-#include "gnc-test-stuff.h"
+#include "test-stuff.h"
+#include "test-engine-stuff.h"
+#include "test-file-stuff.h"
 
 #include "guid.h"
 #include "date.h"

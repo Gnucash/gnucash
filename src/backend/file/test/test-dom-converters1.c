@@ -5,7 +5,9 @@
 
 #include <glib.h>
 
-#include "gnc-test-stuff.h"
+#include "test-stuff.h"
+#include "test-engine-stuff.h"
+#include "test-file-stuff.h"
 
 #include "gnc-xml-helper.h"
 #include "gnc-engine-util.h"

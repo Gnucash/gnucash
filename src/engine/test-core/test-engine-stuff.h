@@ -1,13 +1,8 @@
-/* Created by bstanley 20010323
- * moved contents from test-stuff.h
- *
- * This file declares testing functions which rely on other parts
- * of gnucash.
- *
+/* This file declares testing functions for the engine.
  */
 
-#ifndef GNC_TEST_STUFF_H
-#define GNC_TEST_STUFF_H
+#ifndef TEST_ENGINE_STUFF_H
+#define TEST_ENGINE_STUFF_H
 
 #include "config.h"
 
@@ -49,4 +44,5 @@ const char *get_random_commodity_namespace(void);
 
 Query* get_random_query(void);
 
-#endif /* GNC_TEST_STUFF_H */
+#endif
+
