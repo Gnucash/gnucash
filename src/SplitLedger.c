@@ -220,6 +220,7 @@ LedgerDestroy (SplitRegister *reg)
       trans = xaccSplitGetParent (split);
       xaccTransBeginEdit (trans, 1);
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       reg->user_hook = NULL;
    }
 }
