@@ -742,9 +742,11 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     if( interest )
     {
+      GtkWidget *alignment = gtk_alignment_new(0.5, 0.5, 0.5, 0.5);
       data.xfer_button = interest;
 
-      gtk_box_pack_end( GTK_BOX(vbox), interest, FALSE, FALSE, 0 );
+      gtk_box_pack_end( GTK_BOX(vbox), alignment, FALSE, FALSE, 0 );
+      gtk_container_add(GTK_CONTAINER(alignment), interest);
       gtk_signal_connect(GTK_OBJECT(interest), "clicked",
                         GTK_SIGNAL_FUNC(gnc_start_recn_interest_clicked_cb),
                         (gpointer) &data );
