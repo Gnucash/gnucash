@@ -1606,8 +1606,8 @@ xaccTransCommitEdit (Transaction *trans)
         if (ERR_BACKEND_MODIFIED == errcode)
         {
            PWARN("Another user has modified this transaction\n"
-                 "\tjust a moment ago.  Please look at thier changes,\n"
-                 "\t and try again, if needed.\n"
+                 "\tjust a moment ago. Please look at their changes,\n"
+                 "\tand try again, if needed.\n"
                  "\t(This dialog should be a gui dialog and \n"
                  "\tshould check for errors)\n");
         }
