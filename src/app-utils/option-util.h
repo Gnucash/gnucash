@@ -29,10 +29,10 @@
 #include "guile-mappings.h"
 
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
 #include "gnc-ui-common.h"
-#include "date.h"
 
 
 typedef struct gnc_option GNCOption;

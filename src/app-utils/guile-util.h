@@ -27,8 +27,8 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "date.h"
 #include "gnc-book.h"
+#include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "Group.h"
 
