@@ -1,31 +1,13 @@
 
-This directory contains a sample stock quote parsing script
-from "Christopher B. Browne" <cbbrowne@knuth.brownes.org>
+This directory contains assorted stock quote scripts.
 
+value_portfolio is a stand-alone perl script for updating and printing
+    the value of a portfolio.  To use this script, edit the the first 
+    few lines at the top of the file to indicate your portfolio and 
+    purchase price.
+    (from Christopher B. Browne, cbbrowne@hex.net)
 
-From the mail archives ...
-
-> * From: Jeremy Collins <linux@cyberramp.net>
-> 
-> I was experimenting with the ability to import quotes from the web,
-> and
-> noticed that yahoo has a feature to save your quotes to a spreadsheet
-> file.  Would this not make it easier to implement this or what?
-> 
-> Here is an example of what the file would look like:
-> 
-> "MSC",12.5625,"3/4/1998","1:37PM",+0.1875,12.4375,12.6875,12.25,23600
-> 
-> This is the URL that produced the above file...  Just insert your own
-> symbols and magic... you have a file with quote info in it.
-> 
-> http://quote.yahoo.com/d/quotes.csv?s=msc&f=sl1d1t1c1ohgv&e=.csv
-> 
-> Whatcha think?
-
-* From: "Christopher B. Browne" <cbbrowne@knuth.brownes.org>
-sorta like the script that is attached?
---
-Christopher B. Browne, cbbrowne@hex.net, chris_browne@sdt.com
-Web: http://www.hex.net/~cbbrowne  SAP Basis Consultant, UNIX Guy
+getquotes.pl is a set of perl routines to fetch stock quotes from various
+   services.  dervied from the above. Still under development.
+ 
 

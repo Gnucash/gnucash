@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# real file name  value_portfolio
 #######################################################################
 # $Id$
 # Looks up investment prices on the web, and builds a report
