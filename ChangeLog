@@ -1,3 +1,9 @@
+2003-07-27  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/Makefile.am: add log-replay (make sure its built)
+	* src/import-export/log-replay/gncmod-log-replay.c: backport the
+	  guile APIs so it builds in the 1.8 framework.
+
 2003-07-26  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Backend.h: add a new error, ERR_BACKEND_READONLY

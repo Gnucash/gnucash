@@ -25,7 +25,7 @@
  */
 #include "config.h"
 #include <glib.h>
-#include <libguile.h>
+#include <guile/gh.h>
 
 
 #include "gnc-log-replay.h"
@@ -79,8 +79,8 @@ libgncmod_log_replay_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    scm_c_eval_string("(load-from-path \"log-replay/log-replay.scm\")");
-    scm_c_define_gsubr("gnc:log-replay", 0, 0, 0, scm_gnc_file_log_replay);
+    gh_eval_str("(load-from-path \"log-replay/log-replay.scm\")");
+    gh_new_procedure("gnc:log-replay", scm_gnc_file_log_replay, 0, 0, 0);
   return TRUE;
 }
 
