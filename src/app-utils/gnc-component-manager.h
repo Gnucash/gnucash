@@ -97,6 +97,7 @@ typedef gboolean (*GNCComponentFindHandler) (gpointer find_data,
  */
 typedef void (*GNCComponentHandler) (const char *class,
                                      gint component_id,
+				     gpointer user_data,
                                      gpointer iter_data);
 
 /* gnc_component_manager_init
@@ -333,7 +334,7 @@ gpointer gnc_find_first_gui_component (const char *component_class,
  * Notes on forall: components may be unregistered by the handler,
  *                  but no components should be registered.
  */
-void gnc_forall_gui_components (const char *component_class,
+gint gnc_forall_gui_components (const char *component_class,
                                 GNCComponentHandler handler,
                                 gpointer iter_data);
 

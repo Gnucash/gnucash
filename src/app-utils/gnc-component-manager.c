@@ -890,16 +890,17 @@ find_component_ids_by_class (const char *component_class)
   return list;
 }
 
-void
+gint
 gnc_forall_gui_components (const char *component_class,
                            GNCComponentHandler handler,
                            gpointer iter_data)
 {
   GList *list;
   GList *node;
+  gint count = 0;
 
   if (!handler)
-    return;
+    return(0);
 
   /* so components can be destroyed during the forall */
   list = find_component_ids_by_class (component_class);
@@ -911,8 +912,10 @@ gnc_forall_gui_components (const char *component_class,
     if (!ci)
       continue;
 
-    handler (ci->component_class, ci->component_id, iter_data);
+    handler (ci->component_class, ci->component_id, ci->user_data, iter_data);
+    count++;
   }
 
   g_list_free (list);
+  return(count);
 }
