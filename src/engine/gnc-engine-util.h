@@ -27,7 +27,9 @@
 #ifndef __GNC_ENGINE_UTIL_H__
 #define __GNC_ENGINE_UTIL_H__
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #include <assert.h>
 #include <errno.h>
@@ -210,6 +212,13 @@ char * ultostr (unsigned long val, int base);
 /* Returns true if string s is a number, possibly surrounded by
  * whitespace. */
 gboolean gnc_strisnum(const char *s);
+
+/* Define a gnucash stpcpy */
+char * gnc_stpcpy (char *dest, const char *src);
+
+#ifndef HAVE_STPCPY
+#define stpcpy gnc_stpcpy
+#endif
 
 
 /***********************************************************************\

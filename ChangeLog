@@ -1,4 +1,18 @@
+2001-06-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-html.c: don't handle keypresses, let the gtkhtml
+	object do it.
+
 2001-06-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/kvp-sql.c: include gnc-engine-util.h for stpcpy
+
+	* src/engine/gnc-engine-util.c (gnc_stpcpy): add func
+
+	* src/engine/gnc-engine-util.h: add definition of gnc_stpcpy.
+	if stpcpy is not available, define stpcpy as gnc_stpcpy.
+
+	* src/gnc-ui-util.c: remove gnc_stpcpy
 
 	* src/gnome/window-main-summarybar.c: fix bug in euro profit
 	calculation. use share prices in calculating totals.
