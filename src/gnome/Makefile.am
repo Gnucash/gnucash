@@ -129,8 +129,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GHTTP_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GUPPI_CFLAGS} \
-  ${HBCI_CFLAGS}
+  ${GUPPI_CFLAGS} 
 
 # We build this in an earlier directory.
 
