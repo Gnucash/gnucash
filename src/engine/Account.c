@@ -104,8 +104,8 @@ xaccInitAccount (Account * acc)
 
   acc->currency    = NULL;
   acc->security    = NULL;
-  acc->currency_scu = 0;
-  acc->security_scu = 0;
+  acc->currency_scu = 100000;
+  acc->security_scu = 100000;
 
   acc->splits      = NULL;
 
