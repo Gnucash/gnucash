@@ -69,6 +69,13 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
   
     if (other_split == NULL)
     {
+       /* Attempt to handle the inverted many-to-one mapping */
+       split = xaccTransGetSplit (trans, 1);
+       if (split) other_split = xaccSplitGetOtherSplit (split);
+       else split = xaccTransGetSplit (trans, 0);
+    }
+    if (other_split == NULL)
+    {
       two_accounts = FALSE;
       other_account = NULL;
     }
@@ -104,11 +111,13 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
       radio_list = g_list_append (radio_list,
                                   _("Adjust current account split total"));
 
+      default_value = 2;
       if (two_accounts)
+      {
         radio_list = g_list_append (radio_list,
                                     _("Adjust other account split total"));
-
-      default_value = 2;
+        default_value = 3;
+      }
     }
     else
       default_value = 0;
