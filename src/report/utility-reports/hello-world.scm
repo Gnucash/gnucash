@@ -5,7 +5,7 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash report hello-world))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (debug-enable 'debug)
