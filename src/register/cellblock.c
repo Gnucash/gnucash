@@ -87,34 +87,9 @@ gnc_cellblock_cell_free (gpointer _cb_cell, gpointer user_data)
 
 /* =================================================== */
 
-static gpointer
-gnc_cell_traverse_info_new (gpointer user_data)
-{
-  CellTraverseInfo *ct_info;
-
-  ct_info = g_new0(CellTraverseInfo, 1);
-
-  return ct_info;
-}
-
-/* =================================================== */
-
-static void
-gnc_cell_traverse_info_free (gpointer ct_info, gpointer user_data)
-{
-  g_free (ct_info);
-}
-
-/* =================================================== */
-
 static void        
 gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
 {
-  CellTraverseInfo *ct_info;
-  int row, col;
-
-  if (!cellblock) return;
-
   /* init colors */
   cellblock->active_bg_color   = 0xffffff; /* white */
   cellblock->passive_bg_color  = 0xffffff; /* white */
@@ -128,47 +103,6 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   cellblock->cb_cells = g_table_new (gnc_cellblock_cell_new,
                                      gnc_cellblock_cell_free, NULL);
   g_table_resize (cellblock->cb_cells, rows, cols);
-
-  /* malloc new traversal table */
-  cellblock->traverse_info = g_table_new (gnc_cell_traverse_info_new,
-                                          gnc_cell_traverse_info_free, NULL);
-  g_table_resize (cellblock->traverse_info, rows, cols);
-
-  for (row = 0; row < rows; row++)
-  {
-    for (col = 0; col < cols; col++)
-    {
-      ct_info = g_table_index (cellblock->traverse_info, row, col);
-
-      /* default right traversal is same row, next column */
-      ct_info->right_traverse_row = row;
-      ct_info->right_traverse_col = col + 1;
-
-      /* default left traversal is same row, previous column */
-      ct_info->left_traverse_row = row;
-      ct_info->left_traverse_col = col - 1;
-    }
-
-    /* at end of row, wrap to next row */
-    ct_info = g_table_index (cellblock->traverse_info, row, cols - 1);
-    ct_info->right_traverse_row = row + 1;
-    ct_info->right_traverse_col = 0;
-
-    /* at start of row, wrap to previous row */
-    ct_info = g_table_index (cellblock->traverse_info, row, 0);
-    ct_info->left_traverse_row = row - 1;
-    ct_info->left_traverse_col = cols - 1;
-  }
-
-  /* at end of block, wrap back to begining */
-  ct_info = g_table_index (cellblock->traverse_info, rows - 1, cols - 1);
-  ct_info->right_traverse_row = 0;
-  ct_info->right_traverse_col = 0;
-
-  /* at start of block, wrap back to end */
-  ct_info = g_table_index (cellblock->traverse_info, 0, 0);
-  ct_info->left_traverse_row = rows - 1;
-  ct_info->left_traverse_col = cols - 1;
 }
 
 /* =================================================== */
@@ -180,9 +114,6 @@ gnc_cellblock_destroy (CellBlock *cellblock)
 
    g_table_destroy (cellblock->cb_cells);
    cellblock->cb_cells = NULL;
-
-   g_table_destroy (cellblock->traverse_info);
-   cellblock->traverse_info = NULL;
 
    g_free (cellblock);
 }
@@ -196,71 +127,6 @@ gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
     return NULL;
 
   return g_table_index (cellblock->cb_cells, row, col);
-}
-
-/* =================================================== */
-
-CellTraverseInfo *
-gnc_cellblock_get_traverse (CellBlock *cellblock, int row, int col)
-{
-  if (cellblock == NULL)
-    return NULL;
-
-  return g_table_index (cellblock->traverse_info, row, col);
-}
-
-/* =================================================== */
-
-void        
-gnc_cellblock_next_right (CellBlock *cellblock,
-                          int row,      int col, 
-                          int next_row, int next_col)
-{
-  CellTraverseInfo *ct_info;
-
-  if (!cellblock) return;
-
-  /* avoid embarrasement if cell incorrectly specified */
-  if ((0 > row) || (0 > col)) return;
-  if ((row >= cellblock->num_rows) || (col >= cellblock->num_cols)) return;
-
-  ct_info = gnc_cellblock_get_traverse (cellblock, row, col);
-
-  /* -1 is a valid value for next_*, signifying that traversal should
-   * go to next tab group, so do not check for neg values.  */
-
-  /* if the "next" location to hop to is larger than the cursor, that
-   * just means that we should hop to the next cursor.  Thus, large
-   * values for next *are* valid.  */
-
-  ct_info->right_traverse_row = next_row;
-  ct_info->right_traverse_col = next_col;
-}
-
-void        
-gnc_cellblock_next_left (CellBlock *cellblock,
-                         int row,      int col, 
-                         int next_row, int next_col)
-{
-  CellTraverseInfo *ct_info;
-
-  if (!cellblock) return;
-
-  /* avoid embarrasement if cell incorrectly specified */
-  if ((0 > row) || (0 > col)) return;
-  if ((row >= cellblock->num_rows) || (col >= cellblock->num_cols)) return;
-
-  ct_info = gnc_cellblock_get_traverse (cellblock, row, col);
-
-  /* -1 is a valid value for next ... it signifies that traversal
-   * should go to next tab group, so do not check for neg values.  */
-
-  /* if the "next" location to hop to is larger than the cursor, that
-   * just means that we should hop to the next cursor.  Thus, large
-   * values for next *are* valid.  */
-
-  ct_info->left_traverse_row = next_row;
-  ct_info->left_traverse_col = next_col;
 }
 
 /* --------------- end of file ----------------- */
