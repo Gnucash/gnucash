@@ -69,7 +69,7 @@ typedef struct _customer_window {
   GtkWidget *	shipfax_entry;
   GtkWidget *	shipemail_entry;
 
-  GtkWidget *	terms_amount;
+  GtkWidget *	terms_entry;
   GtkWidget *	discount_amount;
   GtkWidget *	credit_amount;
 
@@ -97,7 +97,6 @@ cw_get_customer (CustomerWindow *cw)
 static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 {
   GncAddress *addr, *shipaddr;
-  gnc_numeric num;
 
   addr = gncCustomerGetAddr (cust);
   shipaddr = gncCustomerGetShipAddr (cust);
@@ -151,8 +150,8 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 		       (GTK_EDITABLE (cw->notes_text), 0, -1));
 
   /* Parse and set the terms, discount, and credit amounts */
-  num = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (cw->terms_amount));
-  gncCustomerSetTerms (cust, gnc_numeric_num (num));
+  gncCustomerSetTerms (cust, gtk_editable_get_chars
+		       (GTK_EDITABLE (cw->terms_entry), 0, -1));
   gncCustomerSetDiscount (cust, gnc_amount_edit_get_amount
 			  (GNC_AMOUNT_EDIT (cw->discount_amount)));
   gncCustomerSetCredit (cust, gnc_amount_edit_get_amount
@@ -225,10 +224,10 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
   /* Verify terms, discount, and credit are valid (or empty) */
   min = gnc_numeric_zero ();
   max = gnc_numeric_create (100, 1);
-  if (check_edit_amount (cw->dialog, cw->terms_amount, &min, NULL,
-			 _("Terms must be a positive integer or "
-			   "you must leave it blank.")))
-    return;
+  //  if (check_edit_amount (cw->dialog, cw->terms_amount, &min, NULL,
+  //			 _("Terms must be a positive integer or "
+  //			   "you must leave it blank.")))
+  //    return;
 
   if (check_edit_amount (cw->dialog, cw->discount_amount, &min, &max,
 			 _("Discount percentage must be between 0-100 "
@@ -419,21 +418,12 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   cw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
   cw->notes_text = glade_xml_get_widget (xml, "notes_text");
 
-  /* TERMS: Integer Value */
-  edit = gnc_amount_edit_new();
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  print_info = gnc_integral_print_info ();
-  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 1);
-  cw->terms_amount = edit;
-  gtk_widget_show (edit);
-
-  hbox = glade_xml_get_widget (xml, "terms_box");
-  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+  cw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
 
   /* DISCOUNT: Percentage Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  print_info = gnc_integral_print_info ();
   print_info.max_decimal_places = 5;
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
@@ -570,19 +560,16 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 				  cw);
   }
 
-
   /* I know that cust exists here -- either passed in or just created */
-  {
-    gnc_numeric terms;
 
-    /* Set the Terms, Discount, and Credit amounts */
-    terms = gnc_numeric_create (gncCustomerGetTerms (cust), 1);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->terms_amount), terms);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
-				gncCustomerGetDiscount (cust));
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->credit_amount),
-				gncCustomerGetCredit (cust));
-  }
+  gtk_entry_set_text (GTK_ENTRY (cw->terms_entry),
+		      gncCustomerGetTerms (cust));
+
+  /* Set the Discount, and Credit amounts */
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
+			      gncCustomerGetDiscount (cust));
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->credit_amount),
+			      gncCustomerGetCredit (cust));
 
   gnc_gui_component_watch_entity_type (cw->component_id,
 				       GNC_CUSTOMER_MODULE_NAME,
@@ -648,7 +635,7 @@ invoice_customer_cb (gpointer *cust_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitCustomer (&owner, cust);
-  gnc_invoice_find (sw->parent, NULL, &owner, sw->book);
+  gnc_invoice_find (NULL, &owner, sw->book);
   return TRUE;
 }
 
@@ -667,7 +654,7 @@ order_customer_cb (gpointer *cust_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitCustomer (&owner, cust);
-  gnc_order_find (sw->parent, NULL, &owner, sw->book);
+  gnc_order_find (NULL, &owner, sw->book);
   return TRUE;
 }
 

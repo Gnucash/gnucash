@@ -42,7 +42,7 @@
 			  (N_ "Find Order")
 			  (list "Extensions" "Customers" "")
 			  (lambda ()
-			    (gnc:order-find #f #f last-cust
+			    (gnc:order-find #f last-cust
 					    (gnc:get-current-book)))))
 
     (define new-invoice-item
@@ -58,7 +58,7 @@
 			  (N_ "Find Invoice")
 			  (list "Extensions" "Customers" "")
 			  (lambda ()
-			    (gnc:invoice-find #f #f last-cust
+			    (gnc:invoice-find #f last-cust
 					      (gnc:get-current-book)))))
 
     (define new-job-item
@@ -128,7 +128,7 @@
 			  (N_ "Find Order")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
-			    (gnc:order-find #f #f last-vendor
+			    (gnc:order-find #f last-vendor
 					    (gnc:get-current-book)))))
 
     (define new-invoice-item
@@ -144,7 +144,7 @@
 			  (N_ "Find Invoice")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
-			    (gnc:invoice-find #f #f last-vendor
+			    (gnc:invoice-find #f last-vendor
 					      (gnc:get-current-book)))))
 
     (define new-job-item
@@ -305,10 +305,10 @@
 			    (gnc:group-insert-account group tax-acct)
 
 			    ;; Launch the order editor
-			    (gnc:order-edit #f order)
+			    (gnc:order-edit order)
 
 			    ;; Launch the invoice editor
-			    (gnc:invoice-edit #f invoice)
+			    (gnc:invoice-edit invoice)
 			    ))))
 
 

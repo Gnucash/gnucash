@@ -48,7 +48,7 @@ struct _order_select_window {
   gboolean	no_close;
 };
 
-typedef struct _order_window {
+struct _order_window {
   GladeXML *	xml;
 
   GtkWidget *	dialog;
@@ -76,7 +76,7 @@ typedef struct _order_window {
   GncOrder *	created_order;
   GncOwner	owner;
 
-} OrderWindow;
+};
 
 static void gnc_order_update_window (OrderWindow *ow);
 
@@ -208,7 +208,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
       return;
 
   /* Ok, go make an invoice */
-  gnc_invoice_find (ow->parent, NULL, &(ow->owner), ow->book); 
+  gnc_invoice_find (NULL, &(ow->owner), ow->book); 
 
   /* refresh the window */
   gnc_order_update_window (ow);
@@ -734,6 +734,27 @@ gnc_order_window_new_order (GtkWidget *parent, GNCBook *bookp, GncOwner *owner)
   return ow;
 }
 
+OrderWindow *
+gnc_ui_order_window_create (GncOrder *order)
+{
+  OrderWindow *ow;
+  OrderDialogType type;
+
+  if (!order) return NULL;
+
+  type = EDIT_ORDER;
+  {
+    Timespec ts = gncOrderGetDateClosed (order);
+    if (ts.tv_sec || ts.tv_nsec)
+      type = VIEW_ORDER;
+  }
+
+  ow = gnc_order_new_window (NULL, gncOrderGetBook(order), type, order, 
+			     gncOrderGetOwner (order));
+
+  return ow;
+}
+
 GncOrder *
 gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 {
@@ -769,36 +790,9 @@ gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 
   /* now open up the ledger */
   if (created_order)
-    gnc_order_edit (parent, created_order);
+    gnc_ui_order_window_create (created_order);
 
   return created_order;
-}
-
-void
-gnc_order_edit (GtkWidget *parent, GncOrder *order)
-{
-  OrderWindow *ow;
-  OrderDialogType type;
-
-  if (!order) return;
-
-  type = EDIT_ORDER;
-  {
-    Timespec ts = gncOrderGetDateClosed (order);
-    if (ts.tv_sec || ts.tv_nsec)
-      type = VIEW_ORDER;
-  }
-
-  ow = gnc_order_new_window (parent, gncOrderGetBook(order), type, order, 
-			     gncOrderGetOwner (order));
-
-  gtk_signal_connect (GTK_OBJECT (ow->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
-		      NULL);
-
-  gtk_main ();
-
-  return;
 }
 
 /* Functions for order selection widgets */
@@ -806,7 +800,6 @@ gnc_order_edit (GtkWidget *parent, GncOrder *order)
 static gboolean
 edit_order_cb (gpointer *order_p, gpointer user_data)
 {
-  struct _order_select_window *sw = user_data;
   GncOrder *order;
 
   g_return_val_if_fail (order_p && user_data, TRUE);
@@ -816,7 +809,7 @@ edit_order_cb (gpointer *order_p, gpointer user_data)
   if (!order)
     return TRUE;
 
-  gnc_order_edit (sw->parent, order);
+  gnc_ui_order_window_create (order);
   return TRUE;
 }
 
@@ -923,10 +916,9 @@ gnc_order_select (GtkWidget *parent, GncOrder *start, GncOwner *owner,
 }
 
 void
-gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
-		GNCBook *book)
+gnc_order_find (GncOrder *start, GncOwner *owner, GNCBook *book)
 {
-  gnc_order_select (parent, start, owner, book, FALSE);
+  gnc_order_select (NULL, start, owner, book, FALSE);
 }
 
 GncOrder *
@@ -949,6 +941,6 @@ gpointer gnc_order_edit_new_edit (gpointer bookp, gpointer v,
 
   g_return_val_if_fail (order != NULL, NULL);
 
-  gnc_order_edit (toplevel, order);
+  gnc_ui_order_window_create (order);
   return order;
 }

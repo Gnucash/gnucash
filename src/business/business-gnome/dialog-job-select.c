@@ -158,7 +158,7 @@ gnc_ui_select_job_order_cb(GtkButton * button, gpointer user_data)
     return;
 
   gncOwnerInitJob (&owner, w->job);
-  gnc_order_find (w->parent, NULL, &owner, w->book);
+  gnc_order_find (NULL, &owner, w->book);
 }
 
 static void
@@ -171,7 +171,7 @@ gnc_ui_select_job_invoice_cb(GtkButton * button, gpointer user_data)
     return;
 
   gncOwnerInitJob (&owner, w->job);
-  gnc_invoice_find (w->parent, NULL, &owner, w->book);
+  gnc_invoice_find (NULL, &owner, w->book);
 }
 
 static void

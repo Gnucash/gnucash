@@ -8,15 +8,19 @@
 #ifndef GNC_DIALOG_ORDER_H_
 #define GNC_DIALOG_ORDER_H_
 
+typedef struct _order_window OrderWindow;
+
 #include "gncOrder.h"
 #include "gncOwner.h"
 
+/* Create an order window */
+OrderWindow * gnc_ui_order_window_create (GncOrder *order);
+
+void gnc_order_find (GncOrder *start, GncOwner *owner, GNCBook *book);
+
 /* Functions to create and edit orders */
 GncOrder * gnc_order_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
-void gnc_order_edit (GtkWidget *parent, GncOrder *order);
 
-void gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
-		     GNCBook *book);
 GncOrder * gnc_order_choose (GtkWidget *parent, GncOrder *start,
 			     GncOwner *owner, GNCBook *book);
 

@@ -124,20 +124,19 @@
    ws
    'gnc:invoice-edit
    '<gw:void>
-   "gnc_invoice_edit"
-   '((<gnc:UIWidget> parent) (<gnc:GncInvoice*> invoice))
-   "Dialog: Edit a GncInvoice.  Parent may be NULL.")
-
+   "gnc_ui_invoice_window_create"
+   '((<gnc:GncInvoice*> invoice))
+   "Dialog: Edit a GncInvoice.")
 
   (gw:wrap-function
    ws
    'gnc:invoice-find
    '<gw:void>
    "gnc_invoice_find"
-   '((<gnc:UIWidget> parent) (<gnc:GncInvoice*> start_selection)
-     (<gnc:GncOwner*> owner) (<gnc:Book*> book))
-   "Dialog: Select a GncInvoice.  Any of the parent, start_selection, "
-   "and owner may be NULL.")
+   '((<gnc:GncInvoice*> start_selection) (<gnc:GncOwner*> owner)
+     (<gnc:Book*> book))
+   "Dialog: Select a GncInvoice.  Either start_selection or "
+   "owner may be NULL.")
   
   ;;
   ;; dialog-job.h
@@ -189,9 +188,9 @@
    ws
    'gnc:order-edit
    '<gw:void>
-   "gnc_order_edit"
-   '((<gnc:UIWidget> parent) (<gnc:GncOrder*> order))
-   "Dialog: Edit a GncOrder.  Parent may be NULL.")
+   "gnc_ui_order_window_create"
+   '((<gnc:GncOrder*> order))
+   "Dialog: Edit a GncOrder.")
 
 
   (gw:wrap-function
@@ -199,9 +198,9 @@
    'gnc:order-find
    '<gw:void>
    "gnc_order_find"
-   '((<gnc:UIWidget> parent) (<gnc:GncOrder*> start_selection)
-     (<gnc:GncOwner*> order_owner) (<gnc:Book*> book) )
-   "Dialog: Select a GncOrder.  Any of parent, start_selection, and "
+   '((<gnc:GncOrder*> start_selection) (<gnc:GncOwner*> order_owner)
+     (<gnc:Book*> book) )
+   "Dialog: Select a GncOrder.  Either start_selection or "
    "order_owner may be NULL.")
   
   ;;

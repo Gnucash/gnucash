@@ -28,11 +28,11 @@ struct _gncCustomer {
   char *	id;
   char *	name;
   char *	notes;
+  char *	terms;
   GncAddress *	addr;
   GncAddress *	shipaddr;
   gnc_numeric	discount;
   gnc_numeric	credit;
-  gint		terms;
   gboolean	taxincluded;
   gboolean	active;
   GList *	jobs;
@@ -61,11 +61,11 @@ GncCustomer *gncCustomerCreate (GNCBook *book)
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
+  cust->terms = CACHE_INSERT ("Net-30");
   cust->addr = gncAddressCreate (book);
   cust->shipaddr = gncAddressCreate (book);
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->terms = 30;
   cust->taxincluded = FALSE;
   cust->active = TRUE;
   cust->jobs = NULL;
@@ -83,6 +83,7 @@ void gncCustomerDestroy (GncCustomer *cust)
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
   CACHE_REMOVE (cust->notes);
+  CACHE_REMOVE (cust->terms);
   gncAddressDestroy (cust->addr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
@@ -137,11 +138,10 @@ void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
   addObj (cust);
 }
 
-void gncCustomerSetTerms (GncCustomer *cust, gint terms)
+void gncCustomerSetTerms (GncCustomer *cust, const char *terms)
 {
-  if (!cust) return;
-  if (terms == cust->terms) return;
-  cust->terms = terms;
+  if (!cust || !terms) return;
+  SET_STR(cust->terms, terms);
   cust->dirty = TRUE;
 }
 
@@ -254,9 +254,9 @@ const char * gncCustomerGetNotes (GncCustomer *cust)
   return cust->notes;
 }
 
-gint gncCustomerGetTerms (GncCustomer *cust)
+const char * gncCustomerGetTerms (GncCustomer *cust)
 {
-  if (!cust) return 0;
+  if (!cust) return NULL;
   return cust->terms;
 }
 

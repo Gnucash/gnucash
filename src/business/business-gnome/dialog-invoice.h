@@ -8,15 +8,19 @@
 #ifndef GNC_DIALOG_INVOICE_H_
 #define GNC_DIALOG_INVOICE_H_
 
+typedef struct _invoice_window InvoiceWindow;
+
 #include "gncInvoice.h"
 #include "gncOwner.h"
 
-/* Functions to create and edit invoices */
-GncInvoice * gnc_invoice_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
-void gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice);
+/* Create an invoice window */
+InvoiceWindow * gnc_ui_invoice_window_create (GncInvoice *invoice);
 
-void gnc_invoice_find (GtkWidget *parent, GncInvoice *start,
-		       GncOwner *owner, GNCBook *book);
+void gnc_invoice_find (GncInvoice *start, GncOwner *owner, GNCBook *book);
+
+/* Functions to create and return an invoice */
+GncInvoice * gnc_invoice_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
+
 GncInvoice * gnc_invoice_choose (GtkWidget *parent, GncInvoice *start,
 				 GncOwner *owner, GNCBook *book);
 

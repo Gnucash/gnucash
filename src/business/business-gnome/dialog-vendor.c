@@ -543,7 +543,7 @@ invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_invoice_find (sw->parent, NULL, &owner, sw->book);
+  gnc_invoice_find (NULL, &owner, sw->book);
   return TRUE;
 }
 
@@ -562,7 +562,7 @@ order_vendor_cb (gpointer *vendor_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_order_find (sw->parent, NULL, &owner, sw->book);
+  gnc_order_find (NULL, &owner, sw->book);
   return TRUE;
 }
 

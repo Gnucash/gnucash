@@ -174,9 +174,11 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
   if (old == order) return;			/* I already own it */
   if (old) gncOrderRemoveEntry (old, entry);
 
-  gncEntrySetOrder (entry, order);
   order->entries = g_list_insert_sorted (order->entries, entry,
 					 (GCompareFunc)gncEntryCompare);
+
+  /* This will send out an event -- make sure we're attached */
+  gncEntrySetOrder (entry, order);
   order->dirty = TRUE;
 }
 

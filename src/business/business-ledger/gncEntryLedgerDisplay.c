@@ -56,11 +56,33 @@ static void
 gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
 {
   GList *node;
+  GNCIdType type = NULL;
 
   gnc_gui_component_clear_watches (ledger->component_id);
 
+  switch (ledger->type) {
+  case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_ORDER_VIEWER:
+    type = GNC_ORDER_MODULE_NAME;
+    break;
+
+  case GNCENTRY_INVOICE_ENTRY:
+    /* Watch the invoice owner to see when items get added via orders */
+    gnc_gui_component_watch_entity (ledger->component_id,
+				    gncOwnerGetGUID
+				    (gncInvoiceGetOwner (ledger->invoice)),
+				    GNC_EVENT_MODIFY);
+  case GNCENTRY_INVOICE_VIEWER:
+    type = GNC_INVOICE_MODULE_NAME;
+    break;
+
+  default:
+    g_warning ("Invalid ledger type");
+    break;
+  }
+
   gnc_gui_component_watch_entity_type (ledger->component_id,
-                                       GNC_ID_ACCOUNT,
+                                       type,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   for (node = entries; node; node = node->next)
@@ -76,15 +98,8 @@ static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
-  GList *entries;
 
-  if (!ledger || ledger->loading) return;
-
-  entries = gnc_entry_ledger_get_entries (ledger);
-
-  gnc_entry_ledger_set_watches (ledger, entries);
-
-  gnc_entry_ledger_refresh_internal (ledger, entries);
+  gnc_entry_ledger_display_refresh (ledger);
 }
 
 void
@@ -96,7 +111,7 @@ gnc_entry_ledger_display_init (GncEntryLedger *ledger)
   ledger->component_id = gnc_register_gui_component (ENTRYLEDGER_CLASS,
 						     refresh_handler,
 						     NULL, ledger);
-  refresh_handler (NULL, ledger);
+  gnc_entry_ledger_display_refresh (ledger);
 }
 
 void
@@ -110,9 +125,13 @@ gnc_entry_ledger_display_fini (GncEntryLedger *ledger)
 void
 gnc_entry_ledger_display_refresh (GncEntryLedger *ledger)
 {
-  if (!ledger || ledger->loading)
-    return;
+  GList *entries;
 
-  gnc_entry_ledger_refresh_internal (ledger,
-				     gnc_entry_ledger_get_entries (ledger));
+  if (!ledger || ledger->loading) return;
+
+  entries = gnc_entry_ledger_get_entries (ledger);
+
+  gnc_entry_ledger_set_watches (ledger, entries);
+
+  gnc_entry_ledger_refresh_internal (ledger, entries);
 }

@@ -14,6 +14,7 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "QueryObject.h"
+#include "gnc-event-p.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -88,6 +89,15 @@ gint gncEntryGetTypeFromStr (const char *type)
   return -1;
 }
 
+G_INLINE_FUNC void mark_entry (GncEntry *entry);
+G_INLINE_FUNC void
+mark_entry (GncEntry *entry)
+{
+  entry->dirty = TRUE;
+
+  gnc_engine_generate_event (&entry->guid, GNC_EVENT_MODIFY);
+}
+
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (GNCBook *book)
@@ -104,10 +114,10 @@ GncEntry *gncEntryCreate (GNCBook *book)
 
   {
     gnc_numeric zero = gnc_numeric_zero ();
-    gncEntrySetQuantity (entry, zero);
-    gncEntrySetPrice (entry, zero);
-    gncEntrySetTax (entry, zero);
-    gncEntrySetDiscount (entry, zero);
+    entry->quantity = zero;
+    entry->price = zero;
+    entry->tax = zero;
+    entry->discount = zero;
   }
   entry->tax_type = GNC_ENTRY_INTERP_PERCENT;
   entry->disc_type = GNC_ENTRY_INTERP_PERCENT;
@@ -116,12 +126,16 @@ GncEntry *gncEntryCreate (GNCBook *book)
   xaccGUIDNew (&entry->guid, book);
   addObj (entry);
 
+  gnc_engine_generate_event (&entry->guid, GNC_EVENT_CREATE);
+
   return entry;
 }
 
 void gncEntryDestroy (GncEntry *entry)
 {
   if (!entry) return;
+
+  gnc_engine_generate_event (&entry->guid, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -146,70 +160,70 @@ void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
   if (!entry) return;
   entry->date = date;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
 {
   if (!entry) return;
   entry->date_entered = date;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetDescription (GncEntry *entry, const char *desc)
 {
   if (!entry || !desc) return;
   SET_STR (entry->desc, desc);
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetAction (GncEntry *entry, const char *action)
 {
   if (!entry || !action) return;
   SET_STR (entry->action, action);
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
 {
   if (!entry) return;
   entry->quantity = quantity;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
 {
   if (!entry) return;
   entry->price = price;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetTax (GncEntry *entry, gnc_numeric tax)
 {
   if (!entry) return;
   entry->tax = tax;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
 {
   if (!entry) return;
   entry->discount = discount;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
   entry->account = acc;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetTaxAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
   entry->taxaccount = acc;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 /* Called from gncOrder when we're added to the Order */
@@ -217,7 +231,11 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 {
   if (!entry) return;
   entry->order = order;
-  entry->dirty = TRUE;
+  mark_entry (entry);
+
+  /* Generate an event modifying the Order's end-owner */
+  gnc_engine_generate_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
+			     GNC_EVENT_MODIFY);
 }
 
 /* called from gncInvoice when we're added to the Invoice */
@@ -225,7 +243,7 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
 {
   if (!entry) return;
   entry->invoice = invoice;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetTaxType (GncEntry *entry, gint type)
@@ -234,7 +252,7 @@ void gncEntrySetTaxType (GncEntry *entry, gint type)
   if (type < 0 || type > 1) return;
 
   entry->tax_type = type;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetDiscountType (GncEntry *entry, gint type)
@@ -243,7 +261,7 @@ void gncEntrySetDiscountType (GncEntry *entry, gint type)
   if (type < 0 || type > 3) return;
 
   entry->disc_type = type;
-  entry->dirty = TRUE;
+  mark_entry (entry);
 }
 
 void gncEntrySetDirty (GncEntry *entry, gboolean dirty)

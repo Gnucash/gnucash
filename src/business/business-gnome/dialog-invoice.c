@@ -50,7 +50,7 @@ struct _invoice_select_window {
   gboolean	no_close;
 };
 
-typedef struct _invoice_window {
+struct _invoice_window {
   GladeXML *	xml;
 
   GtkWidget *	dialog;
@@ -75,7 +75,7 @@ typedef struct _invoice_window {
   GncInvoice *	created_invoice;
   GncOwner	owner;
 
-} InvoiceWindow;
+};
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 
@@ -864,6 +864,25 @@ gnc_invoice_window_new_invoice (GtkWidget *parent, GNCBook *bookp,
   return iw;
 }
 
+InvoiceWindow * gnc_ui_invoice_window_create (GncInvoice *invoice)
+{
+  InvoiceWindow *iw;
+  InvoiceDialogType type;
+
+  if (!invoice) return NULL;
+
+  /* Immutable once we've been posted */
+  if (gncInvoiceGetPostedAcc (invoice))
+    type = VIEW_INVOICE;
+  else
+    type = EDIT_INVOICE;
+
+  iw = gnc_invoice_new_window (NULL, gncInvoiceGetBook(invoice), type,
+			       invoice, gncInvoiceGetOwner (invoice));
+
+  return iw;
+}
+
 GncInvoice *
 gnc_invoice_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 {
@@ -905,35 +924,9 @@ gnc_invoice_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   gtk_main ();
 
   if (created_invoice)
-    gnc_invoice_edit (parent, created_invoice);
+    gnc_ui_invoice_window_create (created_invoice);
 
   return created_invoice;
-}
-
-void
-gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice)
-{
-  InvoiceWindow *iw;
-  InvoiceDialogType type;
-
-  if (!invoice) return;
-
-  /* Immutable once we've been posted */
-  if (gncInvoiceGetPostedAcc (invoice))
-    type = VIEW_INVOICE;
-  else
-    type = EDIT_INVOICE;
-
-  iw = gnc_invoice_new_window (parent, gncInvoiceGetBook(invoice), type, invoice, 
-			     gncInvoiceGetOwner (invoice));
-
-  gtk_signal_connect (GTK_OBJECT (iw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_invoice_on_close_cb),
-		      NULL);
-
-  gtk_main ();
-
-  return;
 }
 
 /* Functions for invoice selection widgets */
@@ -941,7 +934,6 @@ gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice)
 static gboolean
 edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-  struct _invoice_select_window *sw = user_data;
   GncInvoice *invoice;
 
   g_return_val_if_fail (invoice_p && user_data, TRUE);
@@ -951,7 +943,7 @@ edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
   if (!invoice)
     return TRUE;
 
-  gnc_invoice_edit (sw->parent, invoice);
+  gnc_ui_invoice_window_create (invoice);
   return TRUE;
 }
 
@@ -1053,10 +1045,9 @@ gnc_invoice_select (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
 }
 
 void
-gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
-		GNCBook *book)
+gnc_invoice_find (GncInvoice *start, GncOwner *owner, GNCBook *book)
 {
-  gnc_invoice_select (parent, start, owner, book, FALSE);
+  gnc_invoice_select (NULL, start, owner, book, FALSE);
 }
 
 GncInvoice *
@@ -1079,6 +1070,7 @@ gpointer gnc_invoice_edit_new_edit (gpointer bookp, gpointer v,
 
   g_return_val_if_fail (invoice != NULL, NULL);
 
-  gnc_invoice_edit (toplevel, invoice);
+  /* XXX: figure out if this window exists and should be raised */
+  gnc_ui_invoice_window_create (invoice);
   return invoice;
 }
