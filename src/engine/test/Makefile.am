@@ -18,7 +18,9 @@ LDADD = \
 TESTS = \
   test-load-engine \
   test-create-account \
-  test-commodities
+  test-commodities \
+  test-resolve-file-path \
+  test-split-vs-account
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine" \
@@ -28,8 +30,14 @@ TESTS_ENVIRONMENT = \
 
 bin_PROGRAMS = \
   test-commodities \
-  test-load-engine
+  test-load-engine \
+  test-resolve-file-path \
+  test-split-vs-account
 
 test_load_engine_SOURCES = test-load-engine.c
 
 test_commodities_SOURCES = test-commodities.c
+
+test_resolve_file_path_SOURCES = test-resolve-file-path.c
+
+test_split_vs_account_SOURCES = test-split-vs-account.c
