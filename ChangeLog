@@ -7,6 +7,9 @@
 	  of gettextize.  Tested with both RH9 and RH7.3 to make sure
 	  it works with both old and new.  Fixes #120206.
 
+	* accounts/hu_HU/Makefile.am: don't include files in the DIST that
+	  we don't have in CVS.
+
 2004-03-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-system/report-system.scm:
