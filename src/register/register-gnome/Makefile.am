@@ -40,9 +40,8 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GTK_XIM_FLAGS}
-
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/guile \
@@ -51,5 +50,7 @@ INCLUDES = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${GTK_XIM_FLAGS} \
   ${GNOME_INCLUDEDIR}
