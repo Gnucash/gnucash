@@ -1,3 +1,8 @@
+2001-04-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/income-expense-graph.scm: Add links to new
+	reports on bars.
+
 2001-04-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/transaction-report.scm: use new api for

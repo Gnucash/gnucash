@@ -192,6 +192,33 @@
 		  '("blue" "red") '())
 	      (if show-net?
 		  '("green") '())))
+
+      (if show-incexp?
+	  (let ((set-options (list '()))
+		(urls
+		 (list
+		  (gnc:make-report-anchor
+		   "Income Over Time"
+		   (gnc:report-options report-obj)
+		   (list 
+		    (list gnc:pagename-display
+			  "Use Stacked Bars" #t)
+		    (list gnc:pagename-general
+			  gnc:optname-reportname
+			  (_ "Income Chart"))))
+		  (gnc:make-report-anchor
+		   "Expense Over Time"
+		   (gnc:report-options report-obj)
+		   (list 
+		    (list gnc:pagename-display
+			  "Use Stacked Bars" #t)
+		    (list gnc:pagename-general
+			  gnc:optname-reportname
+			  (_ "Expense Chart")))))))
+	    (gnc:html-barchart-set-button-1-bar-urls! 
+	     chart urls)
+	    (gnc:html-barchart-set-button-1-legend-urls! 
+	     chart urls)))
       
       (gnc:html-document-add-object! document chart) 
 
