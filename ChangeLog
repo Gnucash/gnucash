@@ -1,3 +1,16 @@
+2001-06-29  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-frequency.c: Added functions for dealing with
+	widget changes in the year-subset freq. panels [quarterly,
+	tri-yearly, semi-yearly, yearly].
+
+	* src/gnome/gnc-frequency.c (gnc_frequency_save_state): Some
+	improvment regarding saving the state of scheduled transactions.
+	(gnc_frequency_setup): Much improvement regarding the setup of
+	scheduled transactions.
+	(year_range_sels_changed): Added to simplify modifications to
+	year-range scheduled transactions.
+
 2001-06-29  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gnc-account-xml-v2.c: Alex Zepeda's patch
