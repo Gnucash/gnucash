@@ -250,7 +250,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Header background"
   "a" "The header background color"
-  (list 150 178 132 0)
+  (list #x96 #xb2 #x84 0)
   255
   #f))
 
@@ -258,7 +258,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Single mode default even row background"
   "b" "The default background color for even rows in single mode"
-  (list 246 255 219 0)
+  (list #xf6 #xff #xdb 0)
   255
   #f))
 
@@ -266,7 +266,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Single mode default odd row background"
   "bb" "The default background color for odd rows in single mode"
-  (list 191 222 186 0)
+  (list #xbf #xde #xba 0)
   255
   #f))
 
@@ -274,7 +274,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Single mode active background"
   "c" "The background color for the active transaction in single mode"
-  (list 255 255 255 0)
+  (list #xff #xf7 #xba 0)
   255
   #f))
 
@@ -282,7 +282,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Double mode default even row background"
   "d" "The default background color for even rows in double mode"
-  (list 246 255 219 0)
+  (list #xf6 #xff #xdb 0)
   255
   #f))
 
@@ -290,7 +290,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Double mode default odd row background"
   "e" "The default background color for odd rows in double mode"
-  (list 191 222 186 0)
+  (list #xbf #xde #xba 0)
   255
   #f))
 
@@ -304,7 +304,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Double mode active background"
   "f" "The background color for the active transaction in double mode"
-  (list 255 255 255 0)
+  (list #xff #xf7 #xba 0)
   255
   #f))
 
@@ -312,7 +312,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Multi mode default transaction background"
   "g" "The default background color for transactions in multi-line mode and the auto modes"
-  (list 246 255 219 0)
+  (list #xbf #xde #xba 0)
   255
   #f))
 
@@ -320,7 +320,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Multi mode active transaction background"
   "h" "The background color for an active transaction in multi-line mode and the auto modes"
-  (list 255 252 230 0)
+  (list #xff #xf0 #x99 0)
   255
   #f))
 
@@ -328,7 +328,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Multi mode default split background"
   "i" "The default background color for splits in multi-line mode and the auto modes"
-  (list 191 222 186 0)
+  (list #xff #xfa #xd9 0)
   255
   #f))
 
@@ -336,7 +336,7 @@ the account instead of opening a register." #f))
  (gnc:make-color-option
   "Register Colors" "Multi mode active split background"
   "j" "The background color for an active split in multi-line mode and the auto modes"
-  (list 255 247 199 0)
+  (list #xff #xf2 #xab 0)
   255
   #f))
 
