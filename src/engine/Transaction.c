@@ -2859,6 +2859,14 @@ xaccTransGetNotes (const Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
+/* The posted date is kept in sync using a lazy-evaluation scheme.
+ * If xaccTransactionSetDatePosted() is called, the date change is
+ * accepted, and the split is marked date-dirty.  If the posted date
+ * is queried for (using GetDatePosted()), then the transaction is
+ * evaluated. If its a gains-transaction, then it's date is copied 
+ * from the source transaction that created the gains.
+ */
+
 
 static inline void
 handle_gains_date (Transaction *trans)
