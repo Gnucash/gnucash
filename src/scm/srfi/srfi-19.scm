@@ -226,7 +226,7 @@
    ((char=? ch #\7) 7)
    ((char=? ch #\8) 8)
    ((char=? ch #\9) 9)
-   (else (error "Non-integer character" ch i))))	     
+   (else (error "Non-integer character" ch i))))
 
 ;; non-public procedure
 (define (normalize-year year nowyear)
@@ -416,7 +416,7 @@
 					(+ tzhour (/ tzminute 60)))
 				       (erriso2 "time zone +/-"
 					      pm-char index 
-					      string)))))))))))))))
+					      string))))))))))))))))
   
 
 (define (julian-day-number->string jdn)
@@ -474,4 +474,3 @@
 				(erriso "day" index string)
 				(encode-julian-day-number 
 				 day month year))))))))))))))))
-
