@@ -398,7 +398,7 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
 
 /* ================================================ */
 
-#define THIRTY_TWO_YEARS 0x3c30fc00L
+#define THIRTY_TWO_YEARS 0x3c30fc00LL
 
 void 
 xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
@@ -408,8 +408,11 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
 
    /* try to deal with dates earlier than December 1901 
     * or later than Jan 2038.  Note that xaccValidateDate
-    * should be handling centential (non-) leap years. */
-   if ((0x80000000L > secs) || (0x7fffffffL < secs)) 
+    * should be handling centential (non-) leap years.
+    * The suffix LL indicates that consts shouold be handled
+    * long long 64-bit consts.
+    */
+   if ((0x80000000LL > secs) || (0x7fffffffLL < secs)) 
    {
       int yrs;
       time_t rem;
