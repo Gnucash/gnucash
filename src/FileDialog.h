@@ -132,4 +132,6 @@ void gncFileQuit (void);
 
 AccountGroup *gncGetCurrentGroup (void);
 
+Session *gncGetCurrentSession (void);
+
 #endif /* __GNC_FILE_DIALOG_H__ */

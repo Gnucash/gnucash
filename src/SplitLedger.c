@@ -194,7 +194,7 @@ LedgerMoveCursor  (Table *table,
          reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
       }
       xaccRegisterRefresh (reg);
-      refreshMainWindow();
+      gnc_refresh_main_window();
 
       /* indicate what row we *should* have gone to */
       *p_new_phys_row = table->current_cursor_phys_row;
@@ -331,7 +331,7 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
     * of the splits.
     */
    xaccTransDisplayRefresh (trans);
-   refreshMainWindow();
+   gnc_refresh_main_window();
 }
 
 /* ======================================================== */
@@ -470,7 +470,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    
       /* make sure any open windows of the old account get redrawn */
       xaccAccountDisplayRefresh (old_acc);
-      refreshMainWindow();
+      gnc_refresh_main_window();
    }
 
    if (MOD_MXFRM & changed) {
@@ -513,7 +513,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    
          /* make sure any open windows of the old account get redrawn */
          xaccAccountDisplayRefresh (old_acc);
-         refreshMainWindow();
+         gnc_refresh_main_window();
       }
    }
 

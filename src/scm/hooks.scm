@@ -61,7 +61,12 @@
 (define gnc:*shutdown-hook*
   (gnc:hook-define 
    'shutdown-hook
-   "Functions to run at shutdown.  Hook args: ()"))
+   "Functions to run at guile shutdown.  Hook args: ()"))
+
+(define gnc:*ui-shutdown-hook*
+  (gnc:hook-define 
+   'ui-shutdown-hook
+   "Functions to run at ui shutdown.  Hook args: ()"))
 
 (define gnc:*main-window-opened-hook*
   (gnc:hook-define
