@@ -1,11 +1,24 @@
+2003-05-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/dialog-dup-trans.c: If the "number" is
+	  set to 0, then empty out the entry.  Considering the SpinButton
+	  wants to force a digit, this lets you set an empty number if you
+	  accidentally tab into and out of the number field.  This also
+	  means you cannot have a check numbered '0', but that is probably
+	  a reasonable limitation.  Fixes #109610.
+
 2003-05-26  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/main.scm: Change stable version to 1.8.4 
 
 2003-05-26  Benoit Grégoire  <bock@step.polymtl.ca>
 	
-	* src/import-export/import-settings.c: Fix pref page define to the proper page, should fix the problem of all prefs being ignored.  Also make strings in the lookup code translatable so that the matching won't be lost when changing language.
-	* src/import-export/generic-import.scm: Add note not to forget to change the c file as well when changing preference page.
+	* src/import-export/import-settings.c: Fix pref page define to the
+	  proper page, should fix the problem of all prefs being ignored.
+	  Also make strings in the lookup code translatable so that the
+	  matching won't be lost when changing language.
+	* src/import-export/generic-import.scm: Add note not to forget to
+	  change the c file as well when changing preference page.
 
 2003-05-25  Derek Atkins  <derek@ihtfp.com>
 
