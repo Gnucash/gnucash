@@ -1,3 +1,9 @@
+2003-11-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	Applied Frank Pavageau's patch regarding capital gains to
+	handle split transactions.
+
 2003-11-12  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/tr_TR/*.xea: Added Turkish account templates by
