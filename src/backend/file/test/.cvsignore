@@ -9,3 +9,6 @@ test-load-example-account
 test-xml-commodity
 test-xml-transaction
 test-save-in-lang
+.deps
+.libs
+Makefile.in

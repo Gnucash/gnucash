@@ -1,2 +1,7 @@
 Makefile
 *.so.*
+.deps
+.libs
+Makefile.in
+*.lo
+*.la

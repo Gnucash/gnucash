@@ -3,3 +3,8 @@ gw-gnc-module.c
 gw-gnc-module.h
 gw-gnc-module.html
 .scm-links
+.deps
+.libs
+Makefile.in
+*.lo
+*.la

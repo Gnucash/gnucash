@@ -1,2 +1,5 @@
 Makefile
 test-load-engine
+.deps
+.libs
+Makefile.in

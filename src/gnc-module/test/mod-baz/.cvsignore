@@ -3,3 +3,8 @@ Makefile
 baz-gwrap.c
 baz-gwrap.h
 baz-gwrap.html
+.deps
+.libs
+Makefile.in
+*.lo
+*.la
