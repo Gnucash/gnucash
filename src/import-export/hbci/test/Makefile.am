@@ -1,4 +1,4 @@
-TESTS=test-link
+TESTS=test-link-module
 
 noinst_PROGRAMS=test-link-module
 

@@ -12,7 +12,7 @@ libgw_core_utils_la_SOURCES = gw-core-utils.c
 libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS} ${GUILE_LIBS}
 libgw_core_utils_la_LIBADD = libcore-utils.la
 
-noinst_HEADERS = core-utils.h gw-core-utils.h
+noinst_HEADERS = core-utils.h
 
 EXTRA_DIST = .cvsignore gw-core-utils-spec.scm
 
@@ -35,7 +35,7 @@ endif
 	touch .scm-links
 
 gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
-  gw-core-utils-spec.scm .scm-links
+  gw-core-utils-spec.scm .scm-links ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (primitive-load \"./gw-core-utils-spec.scm\") \

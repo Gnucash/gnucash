@@ -116,7 +116,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-business-gnome-spec.scm
+gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
+  .scm-links gw-business-gnome-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \

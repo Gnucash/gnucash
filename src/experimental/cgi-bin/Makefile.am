@@ -5,7 +5,10 @@ bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
 EXTRA_DIST = .cvsignore
 
-AM_CFLAGS = -I../../engine ${GLIB_CFLAGS}
+AM_CFLAGS = \
+	-I../../engine -I${srcdir}/../../engine \
+	-I../../backend/file -I${srcdir}/../../backend/file \
+	${GLIB_CFLAGS}
 
 LDADD = 			\
   ../../engine/libgncengine.la 	\

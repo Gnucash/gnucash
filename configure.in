@@ -1012,6 +1012,7 @@ AC_SUBST(GNUCASH_REGISTER_CORE_CFLAGS)
 AC_SUBST(GNUCASH_REGISTER_CORE_LIBS)
 
 AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
+AM_CONDITIONAL(GNC_FALSE, false)
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via

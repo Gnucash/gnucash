@@ -55,7 +55,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: .scm-links gw-gnc-module-spec.scm
+gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
+  .scm-links gw-gnc-module-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"./gw-gnc-module-spec.scm\") \

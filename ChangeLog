@@ -1,3 +1,40 @@
+2003-01-15  John H. Pierce <john@killterm.org>
+
+	* Makefile.am:
+	* configure.in:
+	* src/app-file/Makefile.am:
+	* src/app-utils/Makefile.am:
+	* src/backend/net/Makefile.am:
+	* src/backend/rpc/Makefile.am:
+	* src/bin/Makefile.am:
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/business/dialog-tax-table/Makefile.am:
+	* src/core-utils/Makefile.am:
+	* src/engine/Makefile.am:
+	* src/experimental/cgi-bin/Makefile.am:
+	* src/experimental/cgi-bin/fastcgi-hello.c:
+	* src/experimental/cgi-bin/gnc-server.c:
+	* src/experimental/cgi-bin/hello3.c:
+	* src/gnc-module/Makefile.am:
+	* src/gnc-module/test/mod-bar/Makefile.am:
+	* src/gnc-module/test/mod-baz/Makefile.am:
+	* src/gnc-module/test/mod-foo/Makefile.am:
+	* src/gnome/Makefile.am:
+	* src/gnome-search/Makefile.am:
+	* src/gnome-utils/Makefile.am:
+	* src/import-export/binary-import/Makefile.am:
+	* src/import-export/hbci/test/Makefile.am:
+	* src/register/register-core/Makefile.am:
+	* src/report/report-gnome/Makefile.am: Changes to make the build
+	system work on multiple architectures and with multiple versions
+	of the autotools suite.
+
+	* Makefile.DEPS:
+	* src/bin/strsub.c: New files needed for automake 1.4.  These can
+	be removed when automake 1.4 is no longer supported for building
+	gnucash.
+
 2003-01-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/test/test-print-parse-amount.c: set force_fit and

@@ -6,6 +6,12 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
+if GNC_FALSE
+noinst_PROGRAMS = dummy
+
+dummy_SOURCES = dummy.c
+endif
+
 noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 doc_DATA = \
@@ -53,7 +59,9 @@ EXTRA_DIST = config.rpath  \
   po/glossary/txt-to-pot.sh \
   intltool-extract.in \
   intltool-merge.in \
-  intltool-update.in
+  intltool-update.in \
+  Makefile.DEPS \
+  distdep-automake1.4-hack
 
 bin_SCRIPTS = gnucash-config
 
@@ -79,7 +87,8 @@ make-gnucash-potfiles: make-gnucash-potfiles.in
 
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
-  cscope.files cscope.out etags.files make-gnucash-patch make-gnucash-potfiles
+  cscope.files cscope.out etags.files make-gnucash-patch \
+  make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -124,6 +133,27 @@ ACLOCAL_AMFLAGS = -I m4
 .PHONY: doc
 doc:
 	$(MAKE) -C src/doc doc
+
+.PHONY: distdep
+
+#
+# All references to distdep-automake1.4-hack can be removed when
+# Automake 1.4 is no longer used to compile gnucash.  The files
+# Makefile.DEPS and src/bin/strsub.c are also specific to AM 1.4 and
+# can be removed at the same time.  See the commit at 2003-01-15 00:45
+# UTC for more information.
+#
+distdep-automake1.4-hack: distdep
+	: > distdep-automake1.4-hack
+
+distdep:
+	test x"$(DEP_FILES)" = x || \
+	$(MAKE) $(AM_MAKE_FLAGS) -f ${top_srcdir}/Makefile.DEPS \
+		all-distdep-recursive
+
+dist-hook:
+	rm -f $(distdir)/distdep-automake1.4-hack
+	rm -f distdep-automake1.4-hack
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck

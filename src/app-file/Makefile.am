@@ -63,7 +63,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-app-file.scm gw-app-file.c gw-app-file.h: .scm-links gw-app-file-spec.scm
+gw-app-file.scm gw-app-file.c gw-app-file.h: \
+  .scm-links gw-app-file-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \

@@ -172,14 +172,16 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=${top_srcdir}/lib/:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
-gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
+gw-engine.scm gw-engine.c gw-engine.h: \
+  .scm-links gw-engine-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
 	 (gw:generate-wrapset \"gw-engine\")"
 
-gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
+gw-kvp.scm gw-kvp.c gw-kvp.h: \
+  .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
@@ -190,4 +192,7 @@ BUILT_SOURCES = \
   iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h 
+
+CLEANFILES = ${BUILT_SOURCES} gw-engine.html gw-kvp.html \
+             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
 

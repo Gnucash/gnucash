@@ -1,5 +1,4 @@
 SUBDIRS = . test
-DIST_SUBDIRS = test
 
 pkglib_LTLIBRARIES = libgncmod-binary-import.la libgw-binary-import.la
 
@@ -81,7 +80,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-binary-import.scm gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
+gw-binary-import.scm gw-binary-import.c gw-binary-import.h: \
+  .scm-links gw-binary-import-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \

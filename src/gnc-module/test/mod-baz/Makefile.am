@@ -22,7 +22,7 @@ EXTRA_DIST = \
   baz-gwrap.scm \
   gnucash/baz.scm
 
-baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
+baz-gwrap.c baz-gwrap.h: baz-gwrap.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"${srcdir}/baz-gwrap.scm\") \

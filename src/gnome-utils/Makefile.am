@@ -135,7 +135,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-dir.h: gnc-dir.h.in
+gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
@@ -143,12 +143,6 @@ gnc-dir.h: gnc-dir.h.in
 	    -e 's:@-GNC_PIXMAP_DIR-@:${GNC_PIXMAP_DIR}:g'
 	mv $@.tmp $@
 BUILT_SOURCES = gnc-dir.h
-
-# We have to do this because otherwise automake insists on putting
-# these files into the dist tarfile.  If there's a a better way,
-# by all means, let us know...
-dist-hook:
-	rm -f ${distdir}/gnc-dir.h
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
@@ -168,7 +162,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-spec.scm
+gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
+  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \

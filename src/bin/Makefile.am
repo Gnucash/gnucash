@@ -1,6 +1,8 @@
 # Order is important here.
 SUBDIRS = . overrides test
 
+AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
+
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
 # directories in their path can still invoke these commands via their
@@ -19,6 +21,10 @@ SUBDIRS = . overrides test
 gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
 
 bin_SCRIPTS = ${gnc_common_scripts}
+
+noinst_PROGRAMS = strsub
+strsub_SOURCES = strsub.c
+strsub_LDADD = ${GLIB_LIBS}
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides

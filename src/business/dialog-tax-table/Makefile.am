@@ -26,7 +26,7 @@ noinst_HEADERS = \
 libgncmod_dialog_tax_table_la_LDFLAGS = -module
 
 libgncmod_dialog_tax_table_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ../../gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
@@ -70,7 +70,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: .scm-links gw-dialog-tax-table-spec.scm
+gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
+  .scm-links gw-dialog-tax-table-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \

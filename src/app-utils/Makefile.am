@@ -91,7 +91,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-i18n.h: i18n.h.in
+i18n.h: i18n.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PACKAGE-@:${PACKAGE}:g' \
@@ -120,7 +120,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-app-utils.scm gw-app-utils.c gw-app-utils.h: .scm-links gw-app-utils-spec.scm
+gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
+  .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
