@@ -40,12 +40,12 @@ libgncmod_engine_la_SOURCES = \
   gnc-trace.c \
   gncmod-engine.c \
   guid.c \
-  gncObject.c \
   kvp_frame.c \
   kvp-util.c \
   md5.c \
   messages.c \
-  qofbook.c
+  qofbook.c \
+  qofobject.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -89,7 +89,8 @@ gncinclude_HEADERS = \
   kvp-scm.h \
   kvp-util.h \
   messages.h \
-  qofbook.h
+  qofbook.h \
+  qofobject.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -111,12 +112,12 @@ noinst_HEADERS = \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \
-  gncObjectP.h \
   kvp-util-p.h \
   md5.h \
   gw-engine.h \
   gw-kvp.h \
-  qofbook-p.h
+  qofbook-p.h \
+  qofobject-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 

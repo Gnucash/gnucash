@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "gncObject.h"
 #include "BackendP.h"
 
 #include "QueryObjectP.h"
@@ -38,12 +37,13 @@
 #include "QueryNewP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
 static short module = MOD_QUERY;
 
 typedef struct query_new_term {
   GSList *                param_list;
-  QueryPredData_t        pdata;
+  QueryPredData_t         pdata;
   gboolean                invert;
 
   /* These values are filled in during "compilation" of the query
@@ -52,22 +52,22 @@ typedef struct query_new_term {
    * convert types.
    */
   GSList *                param_fcns;
-  QueryPredicate        pred_fcn;
+  QueryPredicate          pred_fcn;
 } QueryNewTerm;
 
 typedef struct query_new_sort {
-  GSList *        param_list;
+  GSList *            param_list;
   gint                options;
-  gboolean        increasing;
+  gboolean            increasing;
 
   /* These values are filled in during "compilation" of the query
    * term, based upon the obj_name, param_name, and searched-for
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
-  gboolean        use_default;
-  GSList *        param_fcns;
-  QuerySort        obj_cmp;        /* In case you are comparing objects */
+  gboolean            use_default;
+  GSList *            param_fcns;
+  QuerySort           obj_cmp;        /* In case you are comparing objects */
   QueryCompare        comp_fcn;        /* When you are comparing core types */
 } QueryNewSort;
 

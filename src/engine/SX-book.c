@@ -38,7 +38,6 @@
 
 #include <glib.h>
 
-#include "gncObject.h"
 #include "gnc-engine.h"
 #include "gnc-trace.h"
 #include "Group.h"
@@ -48,6 +47,7 @@
 #include "SX-book-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
 static short module = MOD_SX;
 
@@ -205,7 +205,7 @@ sxtt_mark_clean(QofBook *book)
 }
 
 
-static GncObject_t sxtt_object_def = 
+static QofObject sxtt_object_def = 
 {
   interface_version: GNC_OBJECT_VERSION,
   name:              GNC_ID_SXTT,
@@ -221,7 +221,7 @@ static GncObject_t sxtt_object_def =
 gboolean 
 gnc_sxtt_register (void)
 {
-  return gncObjectRegister (&sxtt_object_def);
+  return qof_object_register (&sxtt_object_def);
 }
 
 /* ========================== END OF FILE =============================== */

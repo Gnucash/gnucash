@@ -46,9 +46,9 @@
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
-#include "gncObjectP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -82,7 +82,7 @@ qof_book_new (void)
   ENTER (" ");
   book = g_new0(QofBook, 1);
   qof_book_init(book);
-  gncObjectBookBegin (book);
+  qof_object_book_begin (book);
 
 #if 0
   gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
@@ -99,7 +99,7 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
   gnc_engine_force_event (&book->guid, GNC_EVENT_DESTROY);
 
-  gncObjectBookEnd (book);
+  qof_object_book_end (book);
 
   xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
@@ -130,7 +130,7 @@ qof_book_not_saved(QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->dirty || gncObjectIsDirty (book));
+  return(book->dirty || qof_object_is_dirty (book));
 }
 
 void
@@ -139,7 +139,7 @@ qof_book_mark_saved(QofBook *book)
   if (!book) return;
 
   book->dirty = FALSE;
-  gncObjectMarkClean (book);
+  qof_object_mark_clean (book);
 }
 
 /* ====================================================================== */
