@@ -38,6 +38,9 @@
 /* limits.h header present */
 #undef HAVE_LIMITS_H
 
+/* ieeefp.h header present */
+#undef HAVE_IEEEFP_H
+
 /* memcpy present */
 #undef HAVE_MEMCPY
 

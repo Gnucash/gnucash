@@ -27,6 +27,10 @@
 
 #include "config.h"
 
+#ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>    /* for finite in Solaris 8 */
+#endif
+
 #include <ctype.h>
 #include <errno.h>
 #include <glib.h>
