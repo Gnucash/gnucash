@@ -31,11 +31,14 @@ test_dom_tree_to_commodity_ref(void)
         gchar *test_str2;
         gnc_commodity *test_com2;
         xmlNodePtr test_node;
+        QofBook *book;
+
+        book = qof_book_new ();
 
         test_str1 = get_random_string();
         test_str2 = get_random_string();
         
-        test_com1 = gnc_commodity_new(NULL, test_str1, test_str2, NULL, 0);
+        test_com1 = gnc_commodity_new(book, NULL, test_str1, test_str2, NULL, 0);
         test_node = commodity_ref_to_dom_tree("test-com", test_com1);
 
         test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, NULL);
@@ -48,6 +51,8 @@ test_dom_tree_to_commodity_ref(void)
         gnc_commodity_destroy(test_com2);
         g_free(test_str1);
         g_free(test_str2);
+
+	qof_book_destroy (book);
     }
 }
 

@@ -778,13 +778,15 @@ void rpcend_free_verslist (gnc_vers_list *vlist, gboolean freeguid)
 void rpcend_load_gnccommodity (gnc_commodity_table *ct, gncCommodity *com)
 {
   gnc_commodity *gc;
+  QofBook * book = gnc_get_current_book ();
 
   if (!ct || !com)
     return;
 
   if ((gc = gnc_commodity_table_lookup (ct, com->namespace, com->mnemonic))
       == NULL) {
-    gc = gnc_commodity_new (com->fullname, com->namespace,
+    gc = gnc_commodity_new (book,
+			    com->fullname, com->namespace,
 			    com->mnemonic, com->exchange_code, com->fraction);
     gnc_commodity_table_insert (ct, gc);	
   }

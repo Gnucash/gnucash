@@ -79,7 +79,8 @@ get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       if (com) continue;
    
       /* no we don't ... restore it */
-      com = gnc_commodity_new (DB_GET_VAL("fullname",j),
+      com = gnc_commodity_new (book,
+			       DB_GET_VAL("fullname",j),
                                DB_GET_VAL("namespace",j),
                                DB_GET_VAL("mnemonic",j),
                                DB_GET_VAL("code",j),

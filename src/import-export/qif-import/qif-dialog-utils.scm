@@ -607,6 +607,7 @@
                       (gnc:get-current-group)
                       (qif-map-entry:gnc-name map-entry)
                       separator))
+		    (book (gnc:group-get-book (gnc:get-current-group)))
                     (existing-type 
                      (gnc:account-get-type existing-gnc-acct)))
                (if (and existing-gnc-acct 
@@ -626,7 +627,8 @@
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
-                      (gnc:commodity-create stock-name
+                      (gnc:commodity-create book
+					    stock-name
                                             GNC_COMMODITY_NS_NYSE
                                             ticker-symbol
                                             ""

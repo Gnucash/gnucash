@@ -140,6 +140,7 @@ gnc_ui_commodity_druid_create(const char * filename)
   CommodityDruidPage * new_page;
   GnomeDruidPage * back_page;
   GladeXML       * xml;
+  QofBook        * book = gnc_get_current_book ();
 
   xml = gnc_glade_xml_new ("binary-import.glade",
                            "New Commodity Format Druid");
@@ -184,7 +185,7 @@ gnc_ui_commodity_druid_create(const char * filename)
 
     /* otherwise, guess that it's a NASDAQ security. */
     if(!found) {
-      found = gnc_commodity_new(gnc_commodity_get_mnemonic(lost),
+      found = gnc_commodity_new(book, gnc_commodity_get_mnemonic(lost),
                                 GNC_COMMODITY_NS_NASDAQ,
                                 gnc_commodity_get_mnemonic(lost),
                                 NULL, 100000);

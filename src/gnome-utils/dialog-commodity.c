@@ -1051,6 +1051,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
   const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
   const char * code      = gtk_entry_get_text(GTK_ENTRY(w->code_entry));
+  QofBook * book = gnc_get_current_book ();
   int fraction = gtk_spin_button_get_value_as_int
     (GTK_SPIN_BUTTON(w->fraction_spinbutton));
   const char *string;
@@ -1087,7 +1088,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     }
 
     if (!w->edit_commodity) {
-      c = gnc_commodity_new(fullname, namespace, mnemonic, code, fraction);
+      c = gnc_commodity_new(book, fullname, namespace, mnemonic, code, fraction);
       w->edit_commodity = c;
     }
     else {

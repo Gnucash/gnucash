@@ -1938,7 +1938,8 @@ commodity_restore_end_handler(gpointer data_for_children,
     if(!cpi->name) cpi->name = g_strdup("");
     if(!cpi->xcode) cpi->xcode = g_strdup("");
 
-    comm = gnc_commodity_new(cpi->name,
+    comm = gnc_commodity_new(pstatus->book,
+			     cpi->name,
                              cpi->space,
                              cpi->id,
                              cpi->xcode,
