@@ -62,7 +62,8 @@
 
 static short module = MOD_IO;
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
+/* constructor / destructor */
 
 static void
 gnc_book_init (GNCBook *book)
@@ -86,7 +87,7 @@ gnc_book_init (GNCBook *book)
   if(book->commodity_table)
   {
     if(!gnc_commodity_table_add_default_data(book->commodity_table))
-      g_warning("unable to initialize book's commodity_table");
+      PWARN("unable to initialize book's commodity_table");
   }
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
@@ -136,7 +137,8 @@ gnc_book_destroy (GNCBook *book)
   LEAVE(" ");
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
+/* getters */
 
 const GUID *
 gnc_book_get_guid (GNCBook *book)
@@ -159,8 +161,6 @@ gnc_book_get_entity_table (GNCBook *book)
   return book->entity_table;
 }
 
-/* ---------------------------------------------------------------------- */
-
 gnc_commodity_table *
 gnc_book_get_commodity_table(GNCBook *book)
 {
@@ -173,6 +173,47 @@ gnc_book_get_group (GNCBook *book)
 {
    if (!book) return NULL;
    return book->topgroup;
+}
+
+GNCPriceDB *
+gnc_book_get_pricedb(GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->pricedb;
+}
+
+GList *
+gnc_book_get_schedxactions( GNCBook *book )
+{
+        if ( book == NULL ) return NULL;
+        return book->sched_xactions;
+}
+
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+  if (!book) return NULL;
+  return book->template_group;
+}
+
+Backend * 
+xaccGNCBookGetBackend (GNCBook *book)
+{
+   if (!book) return NULL;
+   return book->backend;
+}
+
+/* ====================================================================== */
+/* setters */
+
+void
+gnc_book_set_guid (GNCBook *book, GUID uid)
+{
+  if (!book) return;
+
+  xaccRemoveEntity(book->entity_table, &book->guid);
+  book->guid = uid;
+  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
 }
 
 void
@@ -212,33 +253,6 @@ gnc_book_set_backend (GNCBook *book, Backend *be)
   book->backend = be;
 }
 
-/* ---------------------------------------------------------------------- */
-
-static gboolean
-counter_thunk(Transaction *t, void *data)
-{
-    (*((guint*)data))++;
-    return TRUE;
-}
-
-guint
-gnc_book_count_transactions(GNCBook *book)
-{
-    guint count = 0;
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                counter_thunk, (void*)&count);
-    return count;
-}
-
-/* ---------------------------------------------------------------------- */
-
-GNCPriceDB *
-gnc_book_get_pricedb(GNCBook *book)
-{
-  if(!book) return NULL;
-  return book->pricedb;
-}
-
 void
 gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {
@@ -247,14 +261,7 @@ gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
   if (db) db->book = book;
 }
 
-/* ---------------------------------------------------------------------- */
-
-GList *
-gnc_book_get_schedxactions( GNCBook *book )
-{
-        if ( book == NULL ) return NULL;
-        return book->sched_xactions;
-}
+/* ====================================================================== */
 
 void
 gnc_book_set_schedxactions( GNCBook *book, GList *newList )
@@ -263,13 +270,6 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 
   book->sched_xactions = newList;
   book->sx_notsaved = TRUE;
-}
-
-AccountGroup *
-gnc_book_get_template_group( GNCBook *book )
-{
-  if (!book) return NULL;
-  return book->template_group;
 }
 
 void
@@ -289,12 +289,8 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   book->template_group = templateGroup;
 }
 
-Backend * 
-xaccGNCBookGetBackend (GNCBook *book)
-{
-   if (!book) return NULL;
-   return book->backend;
-}
+/* ====================================================================== */
+/* dirty flag stuff */
 
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
@@ -359,7 +355,7 @@ gnc_book_not_saved(GNCBook *book)
 	 book_sxlist_notsaved(book));
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 gboolean
 gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
@@ -394,7 +390,7 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
   return TRUE;
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 /* Store arbitrary pointers in the GNCBook for data storage extensibility */
 void gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
@@ -408,3 +404,23 @@ gpointer gnc_book_get_data (GNCBook *book, const char *key)
   if (!book || !key) return NULL;
   return g_hash_table_lookup (book->data_tables, (gpointer)key);
 }
+
+/* ====================================================================== */
+
+static gboolean
+counter_thunk(Transaction *t, void *data)
+{
+    (*((guint*)data))++;
+    return TRUE;
+}
+
+guint
+gnc_book_count_transactions(GNCBook *book)
+{
+    guint count = 0;
+    xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                counter_thunk, (void*)&count);
+    return count;
+}
+
+/* ========================== END OF FILE =============================== */

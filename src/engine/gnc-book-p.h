@@ -80,6 +80,7 @@ struct gnc_book_struct
  *    if the backends should even be doing this much, but for
  *    backwards compatibility, we leave these here.)
  */
+void gnc_book_set_guid(GNCBook *book, GUID guid);
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
