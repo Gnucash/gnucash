@@ -1,3 +1,8 @@
+2003-06-12  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/TRANSLATION_HOWTO: Added, by Jon Lapham
+	<lapham@extracta.com.br>.
+
 2003-06-11 Linas Vepstas <linas@linas.org>
 
 	* src/engine/*.[ch]: shuffle code around so that the non-accounting
