@@ -1,0 +1,7440 @@
+# GnuCash PO file, for Simplified Chinese.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Yang Yi <yang_yi_cn@yahoo.com>, 2002
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GnuCash 1.6.6\n"
+"POT-Creation-Date: 2001-12-08 22:22+0100\n"
+"PO-Revision-Date: 2002-06-11 22:16+0800\n"
+"Last-Translator: Yang Yi <yang_yi_cn@yahoo.com>\n"
+"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/FileDialog.c:62
+msgid "(null)"
+msgstr "(空)"
+
+#: src/FileDialog.c:71
+#, c-format
+msgid ""
+"The URL \n"
+"    %s\n"
+"is not supported by this version of GnuCash."
+msgstr ""
+
+#: src/FileDialog.c:78
+#, c-format
+msgid ""
+"Can't parse the URL\n"
+"   %s\n"
+msgstr ""
+
+#: src/FileDialog.c:84
+#, c-format
+msgid ""
+"Can't connect to\n"
+"   %s\n"
+"The host, username or password were incorrect."
+msgstr ""
+
+#: src/FileDialog.c:91
+#, c-format
+msgid ""
+"Can't connect to\n"
+"   %s\n"
+"Connection was lost, unable to send data."
+msgstr ""
+
+#: src/FileDialog.c:98
+msgid ""
+"This file/URL appears to be from a newer version\n"
+"of GnuCash. You must upgrade your version of GnuCash\n"
+"to work with this data."
+msgstr ""
+
+#: src/FileDialog.c:105
+#, c-format
+msgid ""
+"The database\n"
+"   %s\n"
+"doesn't seem to exist. Do you want to create it?\n"
+msgstr ""
+
+#: src/FileDialog.c:113
+#, c-format
+msgid ""
+"GnuCash could not obtain the lock for\n"
+"   %s.\n"
+"That database may be in use by another user,\n"
+"in which case you should not open the database.\n"
+"\n"
+"Do you want to proceed with opening the database?"
+msgstr ""
+
+#: src/FileDialog.c:123
+#, c-format
+msgid ""
+"The file/URL \n"
+"    %s\n"
+"does not contain GnuCash data or the data is corrupt."
+msgstr ""
+
+#: src/FileDialog.c:130
+#, c-format
+msgid ""
+"The server at URL \n"
+"    %s\n"
+"experienced an error or encountered bad or corrupt data."
+msgstr ""
+
+#: src/FileDialog.c:137
+#, c-format
+msgid ""
+"You do not have permission to access\n"
+"    %s\n"
+msgstr ""
+
+#: src/FileDialog.c:143
+#, c-format
+msgid ""
+"An error occurred while processing\n"
+"    %s\n"
+msgstr ""
+
+#: src/FileDialog.c:149
+msgid ""
+"There was an error reading the file.\n"
+"Do you want to continue?"
+msgstr ""
+
+#: src/FileDialog.c:155
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" is empty."
+msgstr ""
+
+#: src/FileDialog.c:161
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" could not be found."
+msgstr ""
+
+#: src/FileDialog.c:167
+msgid ""
+"This file is from an older version of GnuCash.\n"
+"Do you want to continue?"
+msgstr ""
+
+#: src/FileDialog.c:173
+msgid "Unknown file type"
+msgstr ""
+
+#: src/FileDialog.c:179
+msgid ""
+"This database is from an older version of GnuCash.\n"
+"Do you want to upgrade the database to the current version?"
+msgstr ""
+
+#: src/FileDialog.c:186
+msgid ""
+"The SQL database is in use by other users, and the upgrade cannot be "
+"performed until they logoff.\n"
+"If there are currently no other users, consult the \n"
+"documentation to learn how to clear out dangling login\n"
+"sessions."
+msgstr ""
+
+#: src/FileDialog.c:196
+msgid "An unknown I/O error occurred."
+msgstr ""
+
+#: src/FileDialog.c:288
+msgid "Changes have been made since the last Save. Save the data to file?"
+msgstr ""
+
+#: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
+#: src/gnome/window-reconcile.c:1361
+msgid "Open"
+msgstr "打开"
+
+#: src/FileDialog.c:574 src/gnome/window-main.c:1129
+msgid "Save"
+msgstr "保存"
+
+#: src/FileDialog.c:651 src/gnome/window-main.c:777
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" already exists.\n"
+"Are you sure you want to overwrite it?"
+msgstr ""
+
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2043
+#: src/engine/Transaction.c:2064 src/register/splitreg.c:739
+#: src/scm/report/guile-strings.c:472
+msgid "-- Split Transaction --"
+msgstr ""
+
+#: src/SplitLedger.c:126 src/register/splitreg.c:747
+msgid "-- Stock Split --"
+msgstr ""
+
+#: src/SplitLedger.c:822
+msgid "Rebalance Transaction"
+msgstr ""
+
+#: src/SplitLedger.c:823
+msgid "The current transaction is not balanced."
+msgstr ""
+
+#: src/SplitLedger.c:859
+msgid "Balance it manually"
+msgstr ""
+
+#: src/SplitLedger.c:861
+msgid "Let GnuCash add an adjusting split"
+msgstr ""
+
+#: src/SplitLedger.c:866
+msgid "Adjust current account split total"
+msgstr ""
+
+#: src/SplitLedger.c:870
+msgid "Adjust other account split total"
+msgstr ""
+
+#: src/SplitLedger.c:1468
+#, c-format
+msgid ""
+"The account %s does not exist.\n"
+"Would you like to create it?"
+msgstr ""
+
+#: src/SplitLedger.c:1589 src/SplitLedger.c:2034
+#: src/gnome/window-register.c:3123
+msgid ""
+"The current transaction has been changed.\n"
+"Would you like to record it?"
+msgstr ""
+
+#: src/SplitLedger.c:2328
+msgid ""
+"You are about to overwrite an existing split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+
+#: src/SplitLedger.c:2357
+msgid ""
+"You are about to overwrite an existing transaction.\n"
+"Are you sure you want to do that?"
+msgstr ""
+
+#: src/SplitLedger.c:3087
+msgid "Recalculate Transaction"
+msgstr ""
+
+#: src/SplitLedger.c:3088
+msgid ""
+"The values entered for this transaction are inconsistent.\n"
+"Which value would you like to have recalculated?"
+msgstr ""
+
+#: src/SplitLedger.c:3095 src/SplitLedger.c:3097 src/SplitLedger.c:4069
+#: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6571
+#: src/scm/report/guile-strings.c:469 src/scm/report/guile-strings.c:501
+#: src/scm/report/guile-strings.c:597 src/scm/report/guile-strings.c:614
+#: src/scm/report/guile-strings.c:698
+msgid "Shares"
+msgstr ""
+
+#: src/SplitLedger.c:3095 src/SplitLedger.c:3102 src/SplitLedger.c:3109
+msgid "Changed"
+msgstr ""
+
+#: src/SplitLedger.c:3102 src/SplitLedger.c:3104 src/SplitLedger.c:4063
+#: src/gnome/dialog-price-editor.c:743 src/gnome/glade-gnc-dialogs.c:1374
+#: src/gnome/glade-gnc-dialogs.c:7430 src/register/splitreg.c:229
+#: src/scm/report/guile-strings.c:418 src/scm/report/guile-strings.c:425
+#: src/scm/report/guile-strings.c:462 src/scm/report/guile-strings.c:470
+#: src/scm/report/guile-strings.c:504 src/scm/report/guile-strings.c:599
+#: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:700
+msgid "Price"
+msgstr "价格"
+
+#: src/SplitLedger.c:3109 src/SplitLedger.c:3111
+#: src/scm/report/guile-strings.c:419
+msgid "Value"
+msgstr "值"
+
+#: src/SplitLedger.c:3320 src/SplitLedger.c:3401
+#, c-format
+msgid ""
+"You cannot transfer funds from the %s account.\n"
+"It does not have a matching currency.\n"
+"To transfer funds between accounts with different currencies\n"
+"you need an intermediate currency account.\n"
+"Please see the GnuCash online manual."
+msgstr ""
+
+#: src/SplitLedger.c:3330 src/SplitLedger.c:3411
+msgid "(no name)"
+msgstr "(未命名)"
+
+#: src/SplitLedger.c:3991 src/gnome/glade-gnc-dialogs.c:1125
+#: src/guile/guile-util.c:1063 src/scm/report/guile-strings.c:473
+#: src/scm/report/guile-strings.c:617
+msgid "Debit"
+msgstr ""
+
+#: src/SplitLedger.c:4011 src/gnome/glade-gnc-dialogs.c:1122
+#: src/guile/guile-util.c:1108 src/register/splitreg.c:177
+#: src/register/splitreg.c:193 src/scm/guile-strings.c:144
+#: src/scm/report/guile-strings.c:474 src/scm/report/guile-strings.c:618
+msgid "Credit"
+msgstr ""
+
+#: src/SplitLedger.c:4027 src/gnome/dialog-price-editor.c:740
+#: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4803
+#: src/gnome/glade-gnc-dialogs.c:4851 src/gnome/glade-gnc-dialogs.c:7409
+#: src/gnome/reconcile-list.c:163 src/scm/report/guile-strings.c:159
+#: src/scm/report/guile-strings.c:410 src/scm/report/guile-strings.c:464
+#: src/scm/report/guile-strings.c:489 src/scm/report/guile-strings.c:520
+#: src/scm/report/guile-strings.c:587 src/scm/report/guile-strings.c:608
+#: src/scm/report/guile-strings.c:646 src/scm/report/guile-strings.c:684
+msgid "Date"
+msgstr "日期"
+
+#: src/SplitLedger.c:4030 src/gnome/reconcile-list.c:164
+#: src/scm/report/guile-strings.c:465 src/scm/report/guile-strings.c:492
+#: src/scm/report/guile-strings.c:589 src/scm/report/guile-strings.c:609
+#: src/scm/report/guile-strings.c:686
+msgid "Num"
+msgstr ""
+
+#: src/SplitLedger.c:4033 src/gnc-ui-util.c:124
+#: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4810
+#: src/gnome/glade-gnc-dialogs.c:4858 src/gnome/glade-gnc-dialogs.c:6115
+#: src/gnome/new-user-interface.c:222 src/gnome/reconcile-list.c:165
+#: src/scm/guile-strings.c:157 src/scm/report/guile-strings.c:466
+#: src/scm/report/guile-strings.c:495 src/scm/report/guile-strings.c:591
+#: src/scm/report/guile-strings.c:610 src/scm/report/guile-strings.c:658
+#: src/scm/report/guile-strings.c:688
+msgid "Description"
+msgstr "描述"
+
+#. desc cell
+#: src/SplitLedger.c:4036 src/gnome/reconcile-list.c:167
+#: src/register/splitreg.c:96
+msgid "Reconciled:R"
+msgstr ""
+
+#: src/SplitLedger.c:4039 src/SplitLedger.c:4112
+msgid "Share Balance"
+msgstr ""
+
+#: src/SplitLedger.c:4042 src/SplitLedger.c:4115 src/gnc-ui-util.c:136
+#: src/gnc-ui-util.c:139 src/gnome/glade-gnc-dialogs.c:1527
+#: src/scm/guile-strings.c:126 src/scm/guile-strings.c:161
+#: src/scm/report/guile-strings.c:471 src/scm/report/guile-strings.c:619
+msgid "Balance"
+msgstr ""
+
+#: src/SplitLedger.c:4045 src/gnome/glade-gnc-dialogs.c:1432
+msgid "Action"
+msgstr "动作"
+
+#: src/SplitLedger.c:4048 src/gnome/dialog-account.c:828
+#: src/gnome/glade-gnc-dialogs.c:77 src/gnome/glade-gnc-dialogs.c:878
+#: src/gnome/glade-gnc-dialogs.c:6557 src/scm/report/guile-strings.c:218
+#: src/scm/report/guile-strings.c:394 src/scm/report/guile-strings.c:414
+#: src/scm/report/guile-strings.c:467 src/scm/report/guile-strings.c:498
+#: src/scm/report/guile-strings.c:593 src/scm/report/guile-strings.c:612
+#: src/scm/report/guile-strings.c:692
+msgid "Account"
+msgstr "帐号"
+
+#: src/SplitLedger.c:4051 src/gnome/glade-gnc-dialogs.c:1234
+#: src/scm/report/guile-strings.c:607 src/scm/report/guile-strings.c:611
+#: src/scm/report/guile-strings.c:662 src/scm/report/guile-strings.c:690
+msgid "Memo"
+msgstr ""
+
+#. balance cell
+#: src/SplitLedger.c:4072 src/gnome/window-register.c:907
+#: src/register/splitreg.c:99 src/register/splitreg.c:179
+#: src/scm/report/guile-strings.c:468
+msgid "Transfer"
+msgstr "传输"
+
+#: src/SplitLedger.c:4081 src/SplitLedger.c:4098
+#, c-format
+msgid "Tot %s"
+msgstr ""
+
+#: src/SplitLedger.c:4087
+msgid "Tot Credit"
+msgstr ""
+
+#: src/SplitLedger.c:4104
+msgid "Tot Debit"
+msgstr ""
+
+#: src/SplitLedger.c:4109
+msgid "Tot Shares"
+msgstr ""
+
+#: src/SplitLedger.c:4118 src/gnc-ui-util.c:127
+#: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:158
+msgid "Notes"
+msgstr "附注"
+
+#: src/SplitLedger.c:4480
+msgid ""
+"You are about to change a reconciled split.\n"
+"Are you sure you want to do that?"
+msgstr ""
+
+#: src/SplitLedger.c:4507
+msgid ""
+"Do you really want to mark this transaction not reconciled?\n"
+"Doing so might make future reconciliation difficult!"
+msgstr ""
+
+#: src/engine/Account.c:1868 src/scm/guile-strings.c:142
+#: src/scm/guile-strings.c:458
+msgid "Bank"
+msgstr "银行"
+
+#: src/engine/Account.c:1869 src/scm/guile-strings.c:143
+#: src/scm/guile-strings.c:459
+msgid "Cash"
+msgstr "现金"
+
+#: src/engine/Account.c:1870 src/scm/guile-strings.c:145
+msgid "Asset"
+msgstr "资产"
+
+#: src/engine/Account.c:1871
+msgid "Credit Card"
+msgstr "信用卡"
+
+#: src/engine/Account.c:1872 src/scm/guile-strings.c:146
+msgid "Liability"
+msgstr "负债"
+
+#: src/engine/Account.c:1873 src/scm/guile-strings.c:147
+msgid "Stock"
+msgstr "可用函数库"
+
+#: src/engine/Account.c:1874 src/scm/guile-strings.c:148
+msgid "Mutual Fund"
+msgstr "共同基金"
+
+#: src/engine/Account.c:1875 src/gnc-ui-util.c:130
+#: src/gnome/dialog-price-editor.c:739 src/gnome/glade-gnc-dialogs.c:7402
+#: src/scm/guile-strings.c:96 src/scm/guile-strings.c:149
+#: src/scm/guile-strings.c:159
+msgid "Currency"
+msgstr "货币"
+
+#: src/engine/Account.c:1876 src/gnome/glade-gnc-dialogs.c:5986
+#: src/register/splitreg.c:238 src/scm/guile-strings.c:150
+#: src/scm/guile-strings.c:230 src/scm/guile-strings.c:466
+#: src/scm/report/guile-strings.c:378
+msgid "Income"
+msgstr "收益"
+
+#: src/engine/Account.c:1877 src/gnome/glade-gnc-dialogs.c:5994
+#: src/scm/guile-strings.c:151 src/scm/guile-strings.c:219
+#: src/scm/report/guile-strings.c:379
+msgid "Expense"
+msgstr "费用"
+
+#: src/engine/Account.c:1878 src/gnc-ui-util.c:696 src/register/splitreg.c:222
+#: src/scm/guile-strings.c:152 src/scm/report/guile-strings.c:235
+msgid "Equity"
+msgstr "权益"
+
+#: src/engine/Scrub.c:127
+msgid "Orphan"
+msgstr ""
+
+#: src/engine/Scrub.c:309
+msgid "Imbalance"
+msgstr ""
+
+#: src/engine/Transaction.c:2085 src/gnome/druid-stock-split.c:395
+#: src/gnome/window-register.c:880 src/register/splitreg.c:241
+msgid "Split"
+msgstr "分隔"
+
+#: src/engine/io-gncbin-r.c:482
+msgid "Lost Accounts"
+msgstr ""
+
+#: src/gnc-exp-parser.c:482
+msgid "Unbalanced parenthesis"
+msgstr ""
+
+#: src/gnc-exp-parser.c:484
+msgid "Stack overflow"
+msgstr ""
+
+#: src/gnc-exp-parser.c:486
+msgid "Stack underflow"
+msgstr ""
+
+#: src/gnc-exp-parser.c:488
+msgid "Undefined character"
+msgstr ""
+
+#: src/gnc-exp-parser.c:490
+msgid "Not a variable"
+msgstr ""
+
+#: src/gnc-exp-parser.c:492
+msgid "Out of memory"
+msgstr "内存不足"
+
+#: src/gnc-exp-parser.c:494
+msgid "Numeric error"
+msgstr ""
+
+#: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
+#: src/gnome/dialog-price-editor.c:742 src/gnome/glade-gnc-dialogs.c:7423
+#: src/gnome/glade-gnc-dialogs.c:7825 src/gnome/new-user-interface.c:398
+#: src/scm/guile-strings.c:155
+msgid "Type"
+msgstr "类型"
+
+#: src/gnc-ui-util.c:118 src/gnome/new-user-interface.c:390
+#: src/scm/report/guile-strings.c:557 src/scm/report/guile-strings.c:642
+msgid "Account Name"
+msgstr "帐号名"
+
+#: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:644
+msgid "Account Code"
+msgstr ""
+
+#: src/gnc-ui-util.c:133 src/scm/guile-strings.c:160
+msgid "Security"
+msgstr "安全"
+
+#: src/gnc-ui-util.c:142 src/gnc-ui-util.c:145 src/scm/guile-strings.c:124
+#: src/scm/guile-strings.c:162 src/scm/report/guile-strings.c:174
+#: src/scm/report/guile-strings.c:420 src/scm/report/guile-strings.c:518
+#: src/scm/report/guile-strings.c:558
+msgid "Total"
+msgstr "总和"
+
+#: src/gnc-ui-util.c:148 src/scm/guile-strings.c:163
+msgid "Tax Info"
+msgstr ""
+
+#: src/gnc-ui-util.c:518
+msgid "not cleared:n"
+msgstr ""
+
+#: src/gnc-ui-util.c:519
+msgid "cleared:c"
+msgstr ""
+
+#: src/gnc-ui-util.c:520
+msgid "reconciled:y"
+msgstr ""
+
+#: src/gnc-ui-util.c:521
+msgid "frozen:f"
+msgstr ""
+
+#: src/gnc-ui-util.c:536
+msgid "(none)"
+msgstr "(无)"
+
+#: src/gnc-ui-util.c:619
+msgid "Opening Balances"
+msgstr "期初节余"
+
+#: src/gnc-ui-util.c:622 src/scm/qif-import/guile-strings.c:7
+#: src/scm/qif-import/guile-strings.c:8
+msgid "Retained Earnings"
+msgstr ""
+
+#: src/gnc-ui-util.c:753 src/gnome/dialog-account.c:241
+#: src/gnome/glade-gnc-dialogs.c:3867 src/gnome/new-user-interface.c:406
+#: src/gnome/new-user-interface.c:422
+msgid "Opening Balance"
+msgstr "期初节余"
+
+#: src/gnome/dialog-account-picker.c:165
+msgid "Enter a name for the account"
+msgstr ""
+
+#: src/gnome/dialog-account.c:407
+msgid "Could not create opening balance."
+msgstr ""
+
+#: src/gnome/dialog-account.c:829
+msgid "Field"
+msgstr "域"
+
+#: src/gnome/dialog-account.c:830
+msgid "Old Value"
+msgstr ""
+
+#: src/gnome/dialog-account.c:831
+msgid "New Value"
+msgstr ""
+
+#: src/gnome/dialog-account.c:859
+msgid "Verify Changes"
+msgstr ""
+
+#: src/gnome/dialog-account.c:873
+msgid "The following changes must be made. Continue?"
+msgstr ""
+
+#: src/gnome/dialog-account.c:953 src/gnome/dialog-account.c:1096
+msgid "The account must be given a name."
+msgstr ""
+
+#: src/gnome/dialog-account.c:961 src/gnome/dialog-account.c:1147
+msgid "You must select an account type."
+msgstr ""
+
+#: src/gnome/dialog-account.c:972
+msgid "You must choose a valid parent account."
+msgstr ""
+
+#: src/gnome/dialog-account.c:984 src/gnome/dialog-account.c:1160
+msgid "You must choose a currency."
+msgstr ""
+
+#: src/gnome/dialog-account.c:993 src/gnome/dialog-account.c:1169
+msgid "You must choose a security."
+msgstr ""
+
+#: src/gnome/dialog-account.c:1138
+msgid "There is already an account with that name."
+msgstr ""
+
+#: src/gnome/dialog-account.c:1176
+msgid "You must enter a valid opening balance or leave it blank."
+msgstr ""
+
+#: src/gnome/dialog-account.c:1201
+msgid ""
+"You must select a transfer account or choose\n"
+"the opening balances equity account."
+msgstr ""
+
+#: src/gnome/dialog-account.c:1637
+msgid "New top level account"
+msgstr ""
+
+#: src/gnome/dialog-account.c:1717
+msgid "<No name>"
+msgstr ""
+
+#: src/gnome/dialog-account.c:1757
+msgid "Edit Account"
+msgstr ""
+
+#: src/gnome/dialog-account.c:1760
+#, c-format
+msgid "(%d) New Accounts"
+msgstr ""
+
+#: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3443
+msgid "New Account"
+msgstr "新建帐户"
+
+#: src/gnome/dialog-budget.c:242
+msgid "No description"
+msgstr "没有描述"
+
+#: src/gnome/dialog-column-view.c:242
+msgid "Contents"
+msgstr "内容"
+
+#: src/gnome/dialog-commodities.c:264
+msgid ""
+"That commodity is currently used by\n"
+"at least one of your accounts. You may\n"
+"not delete it."
+msgstr ""
+
+#: src/gnome/dialog-commodities.c:272
+msgid ""
+"Are you sure you want to delete the\n"
+"current commodity?"
+msgstr ""
+
+#: src/gnome/dialog-commodities.c:340 src/gnome/glade-gnc-dialogs.c:6564
+#: src/gnome/glade-gnc-dialogs.c:7832 src/scm/report/guile-strings.c:415
+msgid "Symbol"
+msgstr "符号"
+
+#: src/gnome/dialog-commodities.c:341 src/gnome/glade-gnc-dialogs.c:7839
+msgid "Name"
+msgstr "名字"
+
+#: src/gnome/dialog-commodities.c:342 src/gnome/glade-gnc-dialogs.c:7846
+#: src/scm/guile-strings.c:156
+msgid "Code"
+msgstr ""
+
+#: src/gnome/dialog-commodities.c:343 src/gnome/glade-gnc-dialogs.c:7853
+msgid "Fraction"
+msgstr "分数"
+
+#: src/gnome/dialog-commodity.c:240
+msgid ""
+"You must select a commodity.\n"
+"To create a new one, click \"New\""
+msgstr ""
+
+#: src/gnome/dialog-commodity.c:588
+msgid "You may not create a new national currency."
+msgstr ""
+
+#: src/gnome/dialog-commodity.c:602
+msgid "That commodity already exists."
+msgstr ""
+
+#: src/gnome/dialog-commodity.c:635
+msgid ""
+"You must enter a non-empty \"Full name\", \"Symbol/abbreviation\",\n"
+"and \"Type\" for the commodity."
+msgstr ""
+
+#. GtkWidget             * dialog = GTK_WIDGET(user_data);
+#: src/gnome/dialog-commodity.c:651 src/gnome/glade-gnc-dialogs.c:5670
+msgid "Help"
+msgstr "帮助"
+
+#: src/gnome/dialog-fincalc.c:342
+msgid "You must enter values for the other quantities."
+msgstr "你必须为其它变量填入数值"
+
+#: src/gnome/dialog-fincalc.c:343
+msgid "You must enter a valid expression."
+msgstr "你必须输入一个有效的表达式"
+
+#: src/gnome/dialog-fincalc.c:384
+msgid "The interest rate cannot be zero."
+msgstr "利率不能为零"
+
+#: src/gnome/dialog-fincalc.c:403
+msgid "The number of payments cannot be zero."
+msgstr "付款数额不能为零"
+
+#: src/gnome/dialog-fincalc.c:408
+msgid "The number of payments cannot be negative."
+msgstr "付款数字不能是负数"
+
+#: src/gnome/dialog-options.c:758
+msgid "Set to default"
+msgstr "设回默认值"
+
+#: src/gnome/dialog-options.c:766
+msgid "Set the option to its default value"
+msgstr "将这个选项的值设回默认值"
+
+#: src/gnome/dialog-options.c:1095 src/gnome/dialog-options.c:1241
+#: src/gnome/new-user-interface.c:239
+msgid "Select All"
+msgstr "选择全部"
+
+#: src/gnome/dialog-options.c:1102 src/gnome/dialog-options.c:1248
+#: src/gnome/new-user-interface.c:247
+msgid "Clear All"
+msgstr "全部清除"
+
+#: src/gnome/dialog-options.c:1110 src/gnome/dialog-options.c:1255
+msgid "Select Default"
+msgstr "选择默认值"
+
+#: src/gnome/dialog-options.c:1709
+msgid "Select pixmap"
+msgstr "选择位图"
+
+#: src/gnome/dialog-options.c:2118
+msgid "No options!"
+msgstr "没有选项！"
+
+#: src/gnome/dialog-options.c:2138
+msgid "GnuCash Preferences"
+msgstr " GnuCash 首选项"
+
+#: src/gnome/dialog-price-editor.c:349
+msgid "You must select a commodity."
+msgstr ""
+
+#: src/gnome/dialog-price-editor.c:354
+msgid "You must select a currency."
+msgstr "你必须选择一种货币。"
+
+#: src/gnome/dialog-price-editor.c:363 src/gnome/dialog-transfer.c:1074
+msgid "You must enter a valid amount."
+msgstr "你必须输入一个有效的数量。"
+
+#: src/gnome/dialog-price-editor.c:510
+msgid ""
+"Are you sure you want to delete the\n"
+"current price?"
+msgstr ""
+
+#: src/gnome/dialog-price-editor.c:537
+msgid "Remove old prices"
+msgstr ""
+
+#: src/gnome/dialog-price-editor.c:551
+msgid "All prices before the date below will be deleted."
+msgstr ""
+
+#: src/gnome/dialog-price-editor.c:738 src/gnome/glade-gnc-dialogs.c:7395
+#: src/scm/guile-strings.c:82
+msgid "Commodity"
+msgstr "商品"
+
+#: src/gnome/dialog-price-editor.c:741 src/gnome/glade-gnc-dialogs.c:7416
+msgid "Source"
+msgstr "来源"
+
+#: src/gnome/dialog-progress.c:356 src/gnome/dialog-progress.c:359
+msgid "Complete"
+msgstr "完成"
+
+#: src/gnome/dialog-totd.c:89
+msgid "Tip of the Day"
+msgstr "每日提示"
+
+#: src/gnome/dialog-totd.c:119
+msgid "Display this dialog next time"
+msgstr "下次还显示这个对话框"
+
+#: src/gnome/dialog-totd.c:302
+msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
+msgstr ""
+
+#: src/gnome/dialog-totd.c:303
+msgid "Tip of the Day:"
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:440
+msgid "Show the income and expense accounts"
+msgstr "显示收益和费用帐户"
+
+#: src/gnome/dialog-transfer.c:513 src/gnome/druid-stock-split.c:224
+msgid "Error"
+msgstr "错误"
+
+#: src/gnome/dialog-transfer.c:1057
+msgid ""
+"You must specify an account to transfer from,\n"
+"or to, or both, for this transaction.\n"
+"Otherwise, it will not be recorded."
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:1066
+msgid "You can't transfer from and to the same account!"
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:1087
+msgid "You must enter an amount to transfer."
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:1101
+msgid "You must enter a valid price."
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:1112
+msgid "You must enter a valid `to' amount."
+msgstr ""
+
+#: src/gnome/dialog-transfer.c:1123
+#, c-format
+msgid ""
+"No matching currency account!\n"
+"Please create a currency account\n"
+"with currency %s\n"
+"and security %s\n"
+"(or vice versa) to transfer funds\n"
+"between the selected accounts."
+msgstr ""
+
+#: src/gnome/dialog-utils.c:138
+msgid "Use local time"
+msgstr "使用当地时间格式"
+
+#: src/gnome/druid-commodity.c:246
+msgid ""
+"Pick the type of the currency or security. For national currencies, \n"
+"use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
+"pick list are inappropriate."
+msgstr ""
+
+#: src/gnome/druid-commodity.c:268
+msgid ""
+"Enter a descriptive name for the currency or stock, such as \n"
+"\"US Dollar\" or \"Red Hat Stock\""
+msgstr ""
+
+#: src/gnome/druid-commodity.c:287
+msgid ""
+"Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
+"(such as \"USD\"), or other unique abbreviation for the name."
+msgstr ""
+
+#: src/gnome/druid-commodity.c:306
+msgid ""
+"Click \"Next\" to accept the information and move \n"
+"to the next currency or stock."
+msgstr ""
+
+#: src/gnome/druid-commodity.c:390
+msgid ""
+"You must put values for the type, name,\n"
+"and abbreviation of the currency/stock."
+msgstr ""
+
+#: src/gnome/druid-commodity.c:401 src/gnome/druid-qif-import.c:1487
+msgid "You must enter an existing national currency or enter a different type."
+msgstr "你必须输入一个已经存在的国家的货币或者输入其它类型"
+
+#: src/gnome/druid-euro-conv.c:205
+msgid "Exchange"
+msgstr "汇率"
+
+#: src/gnome/druid-euro-conv.c:213 src/gnome/druid-euro-conv.c:267
+#: src/gnome/druid-euro-conv.c:286
+msgid "Euro conversion"
+msgstr "欧元转换"
+
+#: src/gnome/druid-euro-conv.c:391
+msgid "You don't have any accounts of Euroland currencies."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:490
+msgid "Select QIF File"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:550
+msgid "Please select a file to load.\n"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:556
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:568
+msgid ""
+"That QIF file is already loaded.\n"
+"Please select another file."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:594
+#, c-format
+msgid ""
+"QIF file load warning:\n"
+"%s"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:604
+msgid "An error occurred while loading the QIF file."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:612
+#, c-format
+msgid ""
+"QIF file load failed:\n"
+"%s"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:657
+msgid "An error occurred while parsing the QIF file."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:667
+#, c-format
+msgid ""
+"QIF file parse failed:\n"
+"%s"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:915
+msgid "You must enter an account name."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1257
+msgid ""
+"An error occurred while importing QIF transactions into GnuCash. Your "
+"accounts are unchanged."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1304 src/gnome/druid-qif-import.c:1743
+msgid "(split)"
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1468
+msgid "You must enter a Type for the commodity."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1473
+msgid "You must enter a name for the commodity."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1478
+msgid "You must enter an abbreviation for the commodity."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1616
+#, c-format
+msgid "Enter information about \"%s\""
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1628
+msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1652
+msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1674
+msgid ""
+"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
+"the name."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1695
+msgid "Click \"Next\" to accept the information and move on."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:243
+msgid "You must enter a valid distribution amount."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:252
+msgid "You must enter a distribution amount."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:260
+msgid ""
+"You must either enter a valid price\n"
+"or leave it blank."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:269
+msgid "The price must be positive."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:304
+msgid ""
+"You must either enter a valid cash amount\n"
+"or leave it blank."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:313
+msgid "The cash distribution must be positive."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:326
+msgid ""
+"You must select an income account\n"
+"for the cash distribution."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:336
+msgid ""
+"You must select an asset account\n"
+"for the cash distribution."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:427
+msgid "Error adding price."
+msgstr ""
+
+#: src/gnome/druid-stock-split.c:729
+msgid "You don't have any stock accounts with balances!"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:36
+msgid "Select Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:52
+msgid "Select or add a GnuCash account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:84 src/gnome/glade-gnc-dialogs.c:4464
+#: src/gnome/glade-gnc-dialogs.c:4555 src/gnome/glade-gnc-dialogs.c:4646
+msgid "New?"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:91
+msgid "New Account (child of selected) ..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:200
+msgid "Print Check"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:236
+msgid "Check format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:244 src/gnome/glade-gnc-dialogs.c:421
+msgid "Check position:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:252 src/gnome/glade-gnc-dialogs.c:429
+msgid "Date format:"
+msgstr "日期格式："
+
+#: src/gnome/glade-gnc-dialogs.c:274
+msgid "Quicken/QuickBooks (tm) US-Letter"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:277 src/gnome/glade-gnc-dialogs.c:298
+#: src/gnome/glade-gnc-dialogs.c:334
+msgid "Custom"
+msgstr "定制"
+
+#: src/gnome/glade-gnc-dialogs.c:289
+msgid "Top"
+msgstr "顶"
+
+#: src/gnome/glade-gnc-dialogs.c:292
+msgid "Middle"
+msgstr "中间名"
+
+#: src/gnome/glade-gnc-dialogs.c:295
+msgid "Bottom"
+msgstr "底"
+
+#: src/gnome/glade-gnc-dialogs.c:310
+msgid "December  31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:313
+msgid "31 December, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:316
+msgid "Dec 31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:319
+msgid "31 Dec, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:322
+msgid "12/31/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:325
+msgid "12/31/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:328
+msgid "31/12/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:331
+msgid "31/12/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:754
+#: src/gnome/window-report.c:677
+msgid "Options"
+msgstr "选项"
+
+#: src/gnome/glade-gnc-dialogs.c:346
+msgid "Custom check format"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:381
+msgid "Payee:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:389 src/gnome/glade-gnc-dialogs.c:3787
+#: src/gnome/glade-gnc-dialogs.c:5187 src/gnome/glade-gnc-dialogs.c:6251
+#: src/gnome/glade-gnc-dialogs.c:6619 src/gnome/glade-gnc-dialogs.c:7617
+msgid "Date:"
+msgstr "日期："
+
+#: src/gnome/glade-gnc-dialogs.c:397
+msgid "Amount (words):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:405
+msgid "Amount (numbers):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:413 src/gnome/glade-gnc-dialogs.c:5150
+#: src/gnome/glade-gnc-dialogs.c:6794
+msgid "Memo:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:437
+msgid "Units:"
+msgstr "单位："
+
+#: src/gnome/glade-gnc-dialogs.c:452
+msgid "x"
+msgstr "X"
+
+#: src/gnome/glade-gnc-dialogs.c:529
+msgid "Inches"
+msgstr "英寸"
+
+#: src/gnome/glade-gnc-dialogs.c:532
+msgid "Centimeters"
+msgstr "厘米"
+
+#: src/gnome/glade-gnc-dialogs.c:535
+msgid "Millimeters"
+msgstr "毫米"
+
+#: src/gnome/glade-gnc-dialogs.c:538
+msgid "Points"
+msgstr "点"
+
+#: src/gnome/glade-gnc-dialogs.c:551
+msgid "y"
+msgstr "是"
+
+#: src/gnome/glade-gnc-dialogs.c:610
+msgid "                                  "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:617
+msgid "                    "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:624
+msgid "Custom format"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:799
+msgid "Find Transactions"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:815
+msgid "Match Accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:837
+msgid "Find transactions affecting"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:851 src/scm/guile-strings.c:183
+msgid "All"
+msgstr "全部"
+
+#: src/gnome/glade-gnc-dialogs.c:854
+msgid "Any"
+msgstr "任意"
+
+#: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:373
+#: src/scm/report/guile-strings.c:634 src/scm/report/guile-strings.c:640
+#: src/scm/report/guile-strings.c:668 src/scm/report/guile-strings.c:669
+#: src/scm/report/guile-strings.c:708 src/scm/report/guile-strings.c:716
+msgid "None"
+msgstr "无"
+
+#: src/gnome/glade-gnc-dialogs.c:863
+msgid "selected accounts:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:885
+msgid "Match Date"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:900
+msgid "Find transactions occurring in the date range:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:923
+msgid "Starting "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:930
+msgid "Ending "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:967 src/gnome/glade-gnc-dialogs.c:1025
+msgid "Match Description"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:982
+msgid "Find transactions whose Description contains:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1004 src/gnome/glade-gnc-dialogs.c:1062
+#: src/gnome/glade-gnc-dialogs.c:1220 src/gnome/glade-gnc-dialogs.c:1418
+#: src/gnome/glade-gnc-dialogs.c:1572
+msgid "Case sensitive"
+msgstr "区分大小写"
+
+#: src/gnome/glade-gnc-dialogs.c:1011 src/gnome/glade-gnc-dialogs.c:1069
+#: src/gnome/glade-gnc-dialogs.c:1227 src/gnome/glade-gnc-dialogs.c:1425
+#: src/gnome/glade-gnc-dialogs.c:1580
+msgid "Regular expression"
+msgstr "正规表示式"
+
+#: src/gnome/glade-gnc-dialogs.c:1040
+msgid "Find transactions whose Number contains:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:660
+msgid "Number"
+msgstr "编号"
+
+#: src/gnome/glade-gnc-dialogs.c:1083
+msgid "Match Amount"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1105
+msgid "Find "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1119
+msgid "Credit or Debit"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1130
+msgid "splits having amounts of:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1151 src/gnome/glade-gnc-dialogs.c:1278
+#: src/gnome/glade-gnc-dialogs.c:1348
+msgid "At least"
+msgstr "至少"
+
+#: src/gnome/glade-gnc-dialogs.c:1154
+msgid "At most "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1157 src/gnome/glade-gnc-dialogs.c:1284
+#: src/gnome/glade-gnc-dialogs.c:1354
+msgid "Exactly"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1176 src/gnome/glade-gnc-dialogs.c:4817
+#: src/gnome/glade-gnc-dialogs.c:4865 src/gnome/reconcile-list.c:166
+#: src/scm/report/guile-strings.c:506 src/scm/report/guile-strings.c:523
+#: src/scm/report/guile-strings.c:601 src/scm/report/guile-strings.c:616
+#: src/scm/report/guile-strings.c:656 src/scm/report/guile-strings.c:706
+msgid "Amount"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1183
+msgid "Match Memo"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1198
+msgid "Find splits whose Memo contains:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1241
+msgid "Match number of shares"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1256
+msgid "Find securities transactions of:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1281 src/gnome/glade-gnc-dialogs.c:1351
+msgid "At most"
+msgstr "最多"
+
+#: src/gnome/glade-gnc-dialogs.c:1296
+msgid "shares"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1311
+msgid "Match share price"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1326
+msgid "Find securities transactions with share price of:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1381
+msgid "Match Action"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1396
+msgid "Find transactions whose Action contains:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1439
+msgid "Match Cleared state"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1454
+msgid "Find transactions whose Cleared status is:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1462
+msgid "Not cleared (n)"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1469
+msgid "Cleared (c)"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1476
+msgid "Reconciled (y)"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1483
+msgid "Cleared"
+msgstr "已经清除"
+
+#: src/gnome/glade-gnc-dialogs.c:1490
+msgid "Match Balance state"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1505
+msgid "Find transactions whose Balance status is:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1513
+msgid "Balanced"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1520
+msgid "Not Balanced"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1534
+msgid "Match transaction tags (CURRENTLY INOPERABLE)"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1549
+msgid "Find transactions with the tag:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1588
+msgid "Tags"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1609
+msgid "Type of search"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1624
+msgid "New search"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1632
+msgid "Refine current search"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1640
+msgid "Add results to current search"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1648
+msgid "Delete results from current search"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-register.c:916
+msgid "Find"
+msgstr "查找"
+
+#: src/gnome/glade-gnc-dialogs.c:1785 src/gnome/glade-gnc-dialogs.c:1793
+msgid "Budget"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1817 src/gnome/glade-gnc-dialogs.c:5842
+msgid "Name:"
+msgstr "名称："
+
+#: src/gnome/glade-gnc-dialogs.c:1839
+msgid "The name of this budget"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1848
+msgid "Budget Entries"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1896
+msgid "label773"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1920 src/gnome/glade-gnc-dialogs.c:7471
+#: src/gnome/glade-gnc-dialogs.c:7869
+msgid "Add"
+msgstr "添加"
+
+#: src/gnome/glade-gnc-dialogs.c:1927
+msgid "Add a new entry or subentry"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
+#: src/gnome/window-acct-tree.c:775 src/gnome/window-reconcile.c:1353
+#: src/gnome/window-register.c:862
+msgid "Delete"
+msgstr "删除"
+
+#: src/gnome/glade-gnc-dialogs.c:1936
+msgid "Delete the selected entry or subentry"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1951
+msgid "Move the selected item up"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1959
+msgid "Move the selected item down"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1968
+msgid "Entry"
+msgstr "条目"
+
+#: src/gnome/glade-gnc-dialogs.c:1992 src/gnome/glade-gnc-dialogs.c:2079
+#: src/gnome/glade-gnc-dialogs.c:3497 src/gnome/glade-gnc-dialogs.c:5142
+#: src/gnome/glade-gnc-dialogs.c:6635
+msgid "Description:"
+msgstr "说明："
+
+#: src/gnome/glade-gnc-dialogs.c:2001 src/gnome/glade-gnc-dialogs.c:3074
+#: src/gnome/glade-gnc-dialogs.c:3241 src/gnome/glade-gnc-dialogs.c:7632
+msgid "Type:"
+msgstr "类型："
+
+#: src/gnome/glade-gnc-dialogs.c:2040
+msgid "Normal"
+msgstr "普通"
+
+#: src/gnome/glade-gnc-dialogs.c:2043
+msgid "No Total"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2048
+msgid "Matching Transactions..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2055
+msgid "Subentry"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2088 src/gnome/glade-gnc-dialogs.c:5126
+msgid "Amount:"
+msgstr "程度："
+
+#: src/gnome/glade-gnc-dialogs.c:2097
+msgid "Period:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2106
+msgid "Mechanism:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2115
+msgid "Bill Day:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2124
+msgid "Grace Period:"
+msgstr "宽限时间："
+
+#: src/gnome/glade-gnc-dialogs.c:2175
+msgid "Nominal"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2178
+msgid "Bill"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2181
+msgid "Recurring"
+msgstr "正在重复"
+
+#: src/gnome/glade-gnc-dialogs.c:2184
+msgid "Contingency"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2321
+msgid "Financial Calculator"
+msgstr "财务计算器"
+
+#: src/gnome/glade-gnc-dialogs.c:2366
+msgid "Payment Periods"
+msgstr "付款周期"
+
+#: src/gnome/glade-gnc-dialogs.c:2375 src/gnome/glade-gnc-dialogs.c:2420
+#: src/gnome/glade-gnc-dialogs.c:2465 src/gnome/glade-gnc-dialogs.c:2510
+#: src/gnome/glade-gnc-dialogs.c:2555
+msgid "Clear"
+msgstr "清除"
+
+#: src/gnome/glade-gnc-dialogs.c:2381 src/gnome/glade-gnc-dialogs.c:2426
+#: src/gnome/glade-gnc-dialogs.c:2471 src/gnome/glade-gnc-dialogs.c:2516
+#: src/gnome/glade-gnc-dialogs.c:2561
+msgid "Clear the entry"
+msgstr "清除输入框"
+
+#: src/gnome/glade-gnc-dialogs.c:2383 src/gnome/glade-gnc-dialogs.c:2428
+#: src/gnome/glade-gnc-dialogs.c:2473 src/gnome/glade-gnc-dialogs.c:2518
+#: src/gnome/glade-gnc-dialogs.c:2563
+msgid "Calculate"
+msgstr "计算"
+
+#: src/gnome/glade-gnc-dialogs.c:2411
+msgid "Interest Rate"
+msgstr "利率"
+
+#: src/gnome/glade-gnc-dialogs.c:2456
+msgid "Present Value"
+msgstr "现值"
+
+#: src/gnome/glade-gnc-dialogs.c:2501
+msgid "Periodic Payment"
+msgstr "周期付款金额"
+
+#: src/gnome/glade-gnc-dialogs.c:2546
+msgid "Future Value"
+msgstr "期值"
+
+#: src/gnome/glade-gnc-dialogs.c:2607 src/gnome/glade-gnc-dialogs.c:2876
+msgid "Compounding:"
+msgstr "复利："
+
+#: src/gnome/glade-gnc-dialogs.c:2616 src/gnome/glade-gnc-dialogs.c:2885
+msgid "Payments:"
+msgstr "款项："
+
+#: src/gnome/glade-gnc-dialogs.c:2639 src/gnome/glade-gnc-dialogs.c:2681
+#: src/gnome/glade-gnc-dialogs.c:2922 src/gnome/glade-gnc-dialogs.c:2964
+msgid "Annual"
+msgstr "每年"
+
+#: src/gnome/glade-gnc-dialogs.c:2642 src/gnome/glade-gnc-dialogs.c:2684
+#: src/gnome/glade-gnc-dialogs.c:2925 src/gnome/glade-gnc-dialogs.c:2967
+msgid "Semi-annual"
+msgstr "每半年"
+
+#: src/gnome/glade-gnc-dialogs.c:2645 src/gnome/glade-gnc-dialogs.c:2687
+#: src/gnome/glade-gnc-dialogs.c:2928 src/gnome/glade-gnc-dialogs.c:2970
+msgid "Tri-annual"
+msgstr "每三分之一年"
+
+#: src/gnome/glade-gnc-dialogs.c:2648 src/gnome/glade-gnc-dialogs.c:2690
+#: src/gnome/glade-gnc-dialogs.c:2931 src/gnome/glade-gnc-dialogs.c:2973
+msgid "Quarterly"
+msgstr "每季度"
+
+#: src/gnome/glade-gnc-dialogs.c:2651 src/gnome/glade-gnc-dialogs.c:2693
+#: src/gnome/glade-gnc-dialogs.c:2934 src/gnome/glade-gnc-dialogs.c:2976
+msgid "Bi-monthly"
+msgstr "每两个月"
+
+#: src/gnome/glade-gnc-dialogs.c:2654 src/gnome/glade-gnc-dialogs.c:2696
+#: src/gnome/glade-gnc-dialogs.c:2937 src/gnome/glade-gnc-dialogs.c:2979
+#: src/scm/report/guile-strings.c:670 src/scm/report/guile-strings.c:671
+msgid "Monthly"
+msgstr "每月"
+
+#: src/gnome/glade-gnc-dialogs.c:2657 src/gnome/glade-gnc-dialogs.c:2699
+#: src/gnome/glade-gnc-dialogs.c:2940 src/gnome/glade-gnc-dialogs.c:2982
+msgid "Semi-monthly"
+msgstr "每半月"
+
+#: src/gnome/glade-gnc-dialogs.c:2660 src/gnome/glade-gnc-dialogs.c:2702
+#: src/gnome/glade-gnc-dialogs.c:2943 src/gnome/glade-gnc-dialogs.c:2985
+msgid "Bi-weekly"
+msgstr "每两周"
+
+#: src/gnome/glade-gnc-dialogs.c:2663 src/gnome/glade-gnc-dialogs.c:2705
+#: src/gnome/glade-gnc-dialogs.c:2946 src/gnome/glade-gnc-dialogs.c:2988
+msgid "Weekly"
+msgstr "每周"
+
+#: src/gnome/glade-gnc-dialogs.c:2666 src/gnome/glade-gnc-dialogs.c:2708
+#: src/gnome/glade-gnc-dialogs.c:2949 src/gnome/glade-gnc-dialogs.c:2991
+msgid "Daily (360)"
+msgstr "每天（360）"
+
+#: src/gnome/glade-gnc-dialogs.c:2669 src/gnome/glade-gnc-dialogs.c:2711
+#: src/gnome/glade-gnc-dialogs.c:2952 src/gnome/glade-gnc-dialogs.c:2994
+msgid "Daily (365)"
+msgstr "每天（365）"
+
+#: src/gnome/glade-gnc-dialogs.c:2723
+msgid "End of Period Payments"
+msgstr "定期款项结束时间"
+
+#: src/gnome/glade-gnc-dialogs.c:2732
+msgid "Beginning of Period Payments"
+msgstr "定期款项开始时间"
+
+#: src/gnome/glade-gnc-dialogs.c:2747
+msgid "Discrete Compounding"
+msgstr "离散复利"
+
+#: src/gnome/glade-gnc-dialogs.c:2756
+msgid "Continuous Compounding"
+msgstr "连续复利"
+
+#: src/gnome/glade-gnc-dialogs.c:2771
+msgid "Payment Total:"
+msgstr "款项总计："
+
+#: src/gnome/glade-gnc-dialogs.c:2778
+msgid "total"
+msgstr "总和"
+
+#: src/gnome/glade-gnc-dialogs.c:2791
+msgid "Schedule"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2836 src/gnome/glade-gnc-dialogs.c:3465
+msgid "Account Information"
+msgstr "帐号信息"
+
+#: src/gnome/glade-gnc-dialogs.c:2858
+msgid "Effective Date:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:2867
+msgid "Initial Payment:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3051
+msgid "Select currency/security "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3082
+msgid "Currency/security:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3141 src/gnome/glade-gnc-dialogs.c:6386
+msgid "New..."
+msgstr "新建..."
+
+#: src/gnome/glade-gnc-dialogs.c:3203
+msgid "New Currency/Security"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3225
+msgid "Full name:"
+msgstr "全名："
+
+#: src/gnome/glade-gnc-dialogs.c:3233
+msgid "Symbol/abbreviation:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3249
+msgid "CUSIP or other code:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3257
+msgid "Fraction traded:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3278
+msgid "Enter the full name of the commodity. Example: US Dollars"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3286
+msgid ""
+"Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3300
+msgid ""
+"Enter the type of commodity. For stocks, this is often an exchange on which "
+"the stock is traded. You can choose an existing type from the list or enter "
+"a new type with the keyboard."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3308
+msgid ""
+"Enter a unique code used to identify the commodity. Or, you may safely leave "
+"this field blank."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3317
+msgid "1 /"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3331
+msgid ""
+"Enter the smallest fraction of the commodity which can be traded. For stocks "
+"which can only be traded in whole numbers, enter 1."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3488
+msgid "Account Name:"
+msgstr "账户名称："
+
+#: src/gnome/glade-gnc-dialogs.c:3506 src/gnome/glade-gnc-dialogs.c:5255
+#: src/gnome/glade-gnc-dialogs.c:5310 src/gnome/glade-gnc-dialogs.c:6709
+#: src/gnome/glade-gnc-dialogs.c:7609
+msgid "Currency:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3515
+msgid "Security:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3524
+msgid "Account Code:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3584
+msgid "Account Type"
+msgstr "帐号类型"
+
+#: src/gnome/glade-gnc-dialogs.c:3609
+msgid "label812"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3616 src/gnome/glade-gnc-dialogs.c:6160
+msgid "Parent Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3632
+msgid "Price Quote Source"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3648
+msgid "Get Online Quotes"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3669
+msgid "The source for price quotes:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3678
+msgid "Timezone for these quotes:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3733 src/gnome/glade-gnc-dialogs.c:6059
+msgid "Tax Related"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3741
+msgid "General Information"
+msgstr "普通信息"
+
+#: src/gnome/glade-gnc-dialogs.c:3755
+msgid "Balance Information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3778
+msgid "Balance:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3817
+msgid "Transfer Type"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3833
+msgid "Use Opening Balances Equity account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3841
+msgid "Select Transfer Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3849
+msgid "Transfer Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3925
+msgid "Import currency and stock information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3946
+msgid "Import currency and stock information "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3947
+msgid ""
+"The file you are loading is from an older version of GnuCash. \n"
+"Information about currencies, stocks, and mutual funds needs to\n"
+"be updated for the new version. \n"
+"\n"
+"This dialog will prompt you for some additional information about \n"
+"each currency, stock, and mutual fund that appear in your\n"
+"accounts.  After you have entered this information, you can\n"
+"update your accounts for the new version of GnuCash.\n"
+"\n"
+"Hit \"Cancel\" now to stop loading the file. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3959
+msgid "Update your accounts with the new information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3960
+msgid ""
+"Click \"Finish\" to update your accounts to use the new \n"
+"information you have entered.\n"
+"\n"
+"Click \"Cancel\" to cancel the file-loading process.  \n"
+"\n"
+"Click \"Back\" to review your currency selections."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4126 src/scm/guile-strings.c:73
+#: src/scm/guile-strings.c:393
+msgid "QIF Import"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4147
+msgid "Import QIF files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4148
+msgid ""
+"GnuCash can import financial data from QIF (Quicken \n"
+"Interchange Format) files written by Quicken/QuickBooks,\n"
+"MS Money, Moneydance, and many other programs. \n"
+"\n"
+"The import process has several steps. Your GnuCash\n"
+"accounts will not be changed until you click \"Finish\"\n"
+"at the end of the process. \n"
+"\n"
+"Click \"Next\" to start loading your QIF data, or \"Cancel\"\n"
+"to abort the process. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4159
+msgid "Select a QIF file to load"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4168
+msgid ""
+"Please select a file to load. When you click \"Next\", the file will be "
+"loaded\n"
+"and analyzed. You may need to answer some questions about the account(s)\n"
+"in the file.\n"
+"\n"
+"You will have the opportunity to load as many files as you wish, so don't \n"
+"worry if your data is in multiple files. \n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4183
+msgid "QIF Filename:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4199 src/gnome/gnc-commodity-edit.c:191
+msgid "Select..."
+msgstr "选择..."
+
+#: src/gnome/glade-gnc-dialogs.c:4215
+msgid "Set a date format for this QIF file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4224
+msgid ""
+"The QIF file format does not specify which order the day, month, and \n"
+"year components of a date are printed.  In most cases, it is possible \n"
+"to automatically determine which format is in use in a particular file.\n"
+"However, in the file you have just imported there exist more than one\n"
+"possible format that fits the data.  \n"
+"\n"
+"Please select a date format for the file.  QIF files created by European\n"
+"software are likely  to be in \"d-m-y\" or day-month-year format, where\n"
+"US QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4247
+msgid "Click \"Back\" to cancel loading this file and choose another."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4263
+msgid "Set the default QIF account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4272
+msgid ""
+"The QIF file that you just loaded appears to contain transactions for just \n"
+"one account, but the file does not specify a name for that account.  \n"
+"\n"
+"Please enter a name for the account. If the file was exported from another\n"
+"accounting program, you should use the same account name that was used \n"
+"in that program.\n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4287
+msgid "Account name:"
+msgstr "账户名称："
+
+#: src/gnome/glade-gnc-dialogs.c:4302
+msgid "Click \"Back\" to cancel loading this file and select another."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4318
+msgid "QIF files you have loaded"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4327
+msgid "QIF Files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4351
+msgid "label827"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4358
+msgid ""
+"Click \"Load another file\" if you have more data to import at this time.\n"
+"Do this if you have saved your accounts to separate QIF files.\n"
+"\n"
+"Click \"Next\" to finish loading files and move to the next step \n"
+"of the QIF import process. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4373
+msgid "Load another file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4380
+msgid "Unload selected file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4396
+msgid "Accounts and stock holdings"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4405
+msgid ""
+"On the next page, the accounts in your QIF files and any stocks or mutual "
+"funds\n"
+"you own will be matched with GnuCash accounts. If a GnuCash account already\n"
+"exists with the same name, or a similar name and compatible type, that "
+"account\n"
+"will be used as a match; otherwise, GnuCash will create a new account with "
+"the\n"
+"same name and type as the QIF account. If you do not like the suggested\n"
+"GnuCash account, click to change it.\n"
+"\n"
+"Note that GnuCash will be creating many accounts that did not exist on your\n"
+"other personal finance program, including a separate account for each stock\n"
+"you own, separate accounts for the brokerage commissions, special \"Equity"
+"\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the "
+"source\n"
+"of your opening balances, etc. All of these accounts will appear on the "
+"next \n"
+"page so you can change them if you want to, but it is safe to leave them "
+"alone.\n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4422
+msgid "Match QIF accounts with GnuCash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4450
+msgid "QIF account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4457 src/gnome/glade-gnc-dialogs.c:4548
+#: src/gnome/glade-gnc-dialogs.c:4639
+msgid "GnuCash account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4471
+msgid "Click \"Next\" to check matchings for QIF categories. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4487
+msgid "Income and Expense categories"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4496
+msgid ""
+"GnuCash uses separate Income and Expense accounts rather than categories\n"
+"to classify your transactions. Each of the categories in your QIF file will "
+"be \n"
+"converted to a GnuCash account. \n"
+"\n"
+"On the next page, you will have an opportunity to look at the suggested "
+"matches\n"
+"between QIF categories and GnuCash accounts. You may change matches \n"
+"that you do not like by clicking on the line containing the category name.\n"
+"\n"
+"If you change your mind later, you can reorganize the account structure "
+"safely\n"
+"within GnuCash."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4513
+msgid "Match QIF categories with GnuCash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4541
+msgid "QIF category name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4562
+msgid ""
+"Click \"Next\" to enter information about the currency used in your QIF "
+"files."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4578
+msgid "Payees and memos"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4587
+msgid ""
+"QIF files downloaded from banks and other financial institutions may not "
+"have\n"
+"information about Accounts and Categories which would allow them to be\n"
+"correctly assigned to GnuCash accounts.  \n"
+"\n"
+"In the following page, you will see the text that appears in the Payee and \n"
+"Memo fields of transactions with no QIF Account or Category. By default\n"
+"these transactions are assigned to the 'Unspecified' account in GnuCash.\n"
+"If you select a different account, it will be remembered for future QIF \n"
+"files. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4604
+msgid "Match payees/memos to GnuCash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4632
+msgid "QIF payee/memo"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4662
+msgid "Enter the currency used for new accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4671
+msgid ""
+"The QIF importer cannot currently handle multi-currency QIF files. All the \n"
+"accounts in the QIF file(s) you are importing must be denominated in the\n"
+"same currency. This limitation should be removed soon.\n"
+"\n"
+"Select the currency to use for transactions imported from your QIF files:\n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4693
+msgid ""
+"Click \"Next\" to enter information about stocks and\n"
+"mutual funds in the imported data."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4709
+msgid "Tradable commodities"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4718
+msgid ""
+"In the next pages, you will be asked to provide information about stocks, \n"
+"mutual funds, and other tradable commodities that appear in the QIF file(s)\n"
+"you are importing. GnuCash requires more information about tradable \n"
+"commodities than the QIF format can represent. \n"
+"\n"
+"Each stock, mutual fund, or other commodity must have a type, which is the \n"
+"exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \n"
+"etc), a full name, and an abbreviation.\n"
+"\n"
+"Check to see if there is an existing Type that is appropriate; if not, you "
+"can\n"
+"enter a new Type name by hand in the box. Make sure that the abbreviation\n"
+"you enter matches the ticker symbol used for the commodity on the exchange\n"
+"or listing for its type."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4735
+msgid "Match duplicate transactions"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4744
+msgid ""
+"If you are importing a QIF file downloaded from a bank or other financial\n"
+"institution, some of the information in the QIF file may duplicate "
+"information\n"
+"already in your GnuCash accounts.  GnuCash will try to detect duplicates \n"
+"of existing transactions.  \n"
+"\n"
+"On the next page, you will be asked to confirm that an existing transaction\n"
+"matches an imported transaction.  Imported transactions are shown on the\n"
+"left side of the page, and possible  matches for the selected left-hand\n"
+"transaction are shown  to the right.  There may be several old "
+"transactions \n"
+"that could match an imported transaction; you will be able to select the \n"
+"correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
+"\n"
+"You can control the rules used by GnuCash to find duplicate transactions \n"
+"in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
+"\n"
+"Click \"Next\" to find duplicate transactions. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4761
+msgid "Select possible duplicates"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4777
+msgid "Imported transactions with duplicates"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4824
+msgid "Possible duplicates for selected new transaction"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4872
+msgid "Dup?"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4890
+msgid "Update your GnuCash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4891
+msgid ""
+"Click \"Finish\" to import data from the staging area and update\n"
+"your GnuCash accounts. The account and category matching\n"
+"information you have entered will be saved and used for\n"
+"defaults the next time you use the QIF import  facility. \n"
+"\n"
+"Click \"Back\" to review your account and category matchings,\n"
+"to change currency and security settings for new accounts, \n"
+"or to add more files to the staging area.\n"
+"\n"
+"Click \"Cancel\" to abort the QIF import process."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5088
+msgid "Transfer Funds"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5103
+msgid "Transfer Information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5134 src/gnome/glade-gnc-dialogs.c:6259
+msgid "Num:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5223
+msgid "Transfer From"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5263 src/gnome/glade-gnc-dialogs.c:5318
+msgid " "
+msgstr " "
+
+#: src/gnome/glade-gnc-dialogs.c:5271 src/gnome/glade-gnc-dialogs.c:5326
+#: src/scm/report/guile-strings.c:364 src/scm/report/guile-strings.c:429
+msgid "Show Income/Expense"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5278
+msgid "Transfer To"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5333
+msgid "Currency Transfer"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5356
+msgid "Currency Account:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5364
+msgid "Exchange Rate:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5373
+msgid "To Amount:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5455
+msgid "Working..."
+msgstr "正在进行..."
+
+#: src/gnome/glade-gnc-dialogs.c:5467
+msgid "Heading"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5543
+msgid "GnuCash Help"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5610
+msgid "Help Topics"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5617
+msgid "Topics"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5624
+msgid "Search GnuCash Help"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5639
+msgid "Search Term:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5654
+msgid ""
+"Type a single term into the box and hit 'search'. At the moment, this search "
+"engine does not support complex searches, just single words."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5663 src/gnome/glade-gnc-dialogs.c:5706
+#: src/scm/guile-strings.c:91
+msgid "Search"
+msgstr "搜索"
+
+#: src/gnome/glade-gnc-dialogs.c:5677
+msgid "Search results"
+msgstr "搜索结果"
+
+#: src/gnome/glade-gnc-dialogs.c:5811
+msgid "New Style Sheet"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5819
+msgid "New style sheet info"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5850
+msgid "Style sheet template:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
+#: src/gnome/window-acct-tree.c:909
+msgid "Tax Information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:5964 src/gnome/new-user-interface.c:298
+#: src/gnome/window-acct-tree.c:113 src/gnome/window-acct-tree.c:119
+#: src/gnome/window-acct-tree.c:170 src/gnome/window-main.c:704
+#: src/scm/guile-strings.c:77 src/scm/guile-strings.c:136
+#: src/scm/guile-strings.c:442 src/scm/report/guile-strings.c:144
+#: src/scm/report/guile-strings.c:165 src/scm/report/guile-strings.c:183
+#: src/scm/report/guile-strings.c:207 src/scm/report/guile-strings.c:258
+#: src/scm/report/guile-strings.c:363 src/scm/report/guile-strings.c:412
+msgid "Accounts"
+msgstr "帐户"
+
+#: src/gnome/glade-gnc-dialogs.c:6020
+msgid "Accounts Selected:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6028
+msgid "0"
+msgstr "0"
+
+#: src/gnome/glade-gnc-dialogs.c:6035
+msgid "Select Subaccounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6073 src/scm/guile-strings.c:111
+msgid "TXF Categories"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6108
+msgid "Form"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6137
+msgid "Payer Name Source"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6152
+msgid "Current Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6219
+msgid "Duplicate Transaction"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6229
+msgid "Transaction Information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6331
+msgid "HTML Style Sheets"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6341
+msgid "Style sheets"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6372
+msgid "label847668"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6400
+msgid "Style sheet options"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6483 src/gnome/glade-gnc-dialogs.c:6670
+msgid "Stock Split"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6503
+msgid "This druid will help you record a stock split or stock merger."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6514
+msgid "Stock Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6523
+msgid ""
+"Select the account for which you want to record a stock split or merger."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6587
+msgid "Stock Split Details"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6596
+msgid ""
+"Enter the date and the number of shares you gained or lost from the stock "
+"split or merger.\n"
+"For stock mergers (negative splits) use a negative value for the share "
+"distribution.\n"
+"You can also enter a description of the transaction, or accept the default "
+"one."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6627
+msgid "Share Distribution:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6679
+msgid ""
+"If you want to record a stock price for the split, enter it below.\n"
+"You may safely leave it blank."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6701
+msgid "New Price:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6747 src/gnome/glade-gnc-dialogs.c:6822
+msgid "Cash In Lieu"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6756
+msgid ""
+"If you received a cash disbursement as a result of the stock split,\n"
+"enter the details of that payment here. Otherwise, just click `Next'."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6786
+msgid "Cash Amount:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6831
+msgid "Income Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6847
+msgid "Asset Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6873
+msgid ""
+"If you are finished creating the stock split or merger, press `Finish'.\n"
+"You may also press `Back' to review your choices, or `Cancel' to\n"
+"quit without making any changes."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6896
+msgid "Username and Password"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6905
+msgid "Enter your username and password"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:6934
+msgid "Username:"
+msgstr "用户名："
+
+#: src/gnome/glade-gnc-dialogs.c:6941
+msgid "Password:"
+msgstr "口令："
+
+#: src/gnome/glade-gnc-dialogs.c:7021 src/gnome/glade-gnc-dialogs.c:7955
+msgid "window1"
+msgstr "窗口1"
+
+#: src/gnome/glade-gnc-dialogs.c:7050
+msgid "Available reports"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7064
+msgid "                       "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7071
+msgid "Add  >>"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7078
+msgid "<< Remove"
+msgstr "<< 删除"
+
+#: src/gnome/glade-gnc-dialogs.c:7092
+msgid "Move up"
+msgstr "向上移动"
+
+#: src/gnome/glade-gnc-dialogs.c:7099
+msgid "Move down"
+msgstr "向下移动"
+
+#: src/gnome/glade-gnc-dialogs.c:7113
+msgid "Size..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7147 src/gnome/window-register.c:925
+#: src/gnome/window-register.c:1351 src/gnome/window-report.c:113
+#: src/scm/guile-strings.c:445
+msgid "Report"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7154
+msgid "Cols"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7161
+msgid "Rows"
+msgstr "行"
+
+#: src/gnome/glade-gnc-dialogs.c:7218
+msgid "Enter report row/column span"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7239
+msgid "Row span:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7247
+msgid "Column span:"
+msgstr "栏宽度:"
+
+#: src/gnome/glade-gnc-dialogs.c:7348 src/gnome/glade-gnc-dialogs.c:7563
+msgid "Price Editor"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7356
+msgid "Prices"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7445
+msgid "Sort by Commodity"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7453 src/gnome/window-register.c:1289
+#: src/gnome/window-register.c:1290
+msgid "Sort by Date"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7478 src/gnome/glade-gnc-dialogs.c:7876
+msgid "Add a new price."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7480 src/gnome/glade-gnc-dialogs.c:7878
+msgid "Remove"
+msgstr "删除"
+
+#: src/gnome/glade-gnc-dialogs.c:7487 src/gnome/glade-gnc-dialogs.c:7885
+msgid "Remove the current price"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7489
+msgid "Remove Old..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7496
+msgid "Remove prices older than a user-entered date"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
+#: src/gnome/window-acct-tree.c:743 src/gnome/window-reconcile.c:1346
+msgid "Edit"
+msgstr "编辑"
+
+#: src/gnome/glade-gnc-dialogs.c:7505
+msgid "Edit the current price."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7507
+msgid "Get Quotes"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7514
+msgid "Get new online quotes for stock accounts."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7572
+msgid "Price Information"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7601
+msgid "Commodity:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7625
+msgid "Source:"
+msgstr "源文件："
+
+#: src/gnome/glade-gnc-dialogs.c:7640
+msgid "Price:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7690
+msgid "Bid"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7693
+msgid "Ask"
+msgstr "询问"
+
+#: src/gnome/glade-gnc-dialogs.c:7696
+msgid "Last"
+msgstr "姓"
+
+#: src/gnome/glade-gnc-dialogs.c:7699
+msgid "Net Asset Value"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7702
+msgid "Unknown"
+msgstr "未知"
+
+#: src/gnome/glade-gnc-dialogs.c:7765 src/gnome/glade-gnc-dialogs.c:7780
+msgid "Commodities"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7795
+msgid "Show National Currencies"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7975
+msgid "Euro Conversion Druid"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7976
+msgid ""
+"This druid will help you converting your existing accounts to the\n"
+"currency Euro (EUR). \n"
+"\n"
+"In the following, the term 'Euroland currency' will denote \n"
+"the currencies that are being replaced by the Euro.\n"
+"\n"
+"No changes will be made until you press 'Finish' on the last page\n"
+"of this druid."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7987
+msgid "Where to create the Euro accounts?"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8003
+msgid ""
+"For each of your Euroland accounts, the druid will create a new EUR "
+"account. \n"
+"\n"
+"Please choose the place in your account hierarchy where you would\n"
+"like the EUR accounts to be created."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8019
+msgid "Create a new toplevel account hierarchy as a copy of the existing one"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8028
+msgid "Use same toplevel accounts. Create a copy of the rest of the accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8036
+msgid ""
+"Use existing account hierarchy. Create only a copy of those \n"
+"accounts that have no subaccounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8053
+msgid "How to name the new accounts?"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8068
+msgid ""
+"Please choose a naming scheme for the new Euro accounts \n"
+"and the old Euroland accounts."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8085
+msgid ""
+"The name of each newly created Euro account is copied from\n"
+"the old Euroland account, plus an appended 'EUR'"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8094
+msgid ""
+"The name of each old Euroland account is modified by appending \n"
+"the respective currency symbol of the Euroland currency. \n"
+"The name of the newly created Euro account is copied from the\n"
+"old Euroland account."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8112
+msgid "Finish Euro Conversion"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8113
+msgid ""
+"If you have finished choosing your Euro conversion settings,\n"
+"press 'Finish'.\n"
+"\n"
+"The druid will then perform the following steps:\n"
+"\n"
+"1. Create new accounts according to your settings.\n"
+"2. Create currency exchange accounts.\n"
+"3. Exchange all amounts from Euroland accounts to their\n"
+"respective Euro account.\n"
+"\n"
+"You may also press 'Back' to review your settings, or 'Cancel'\n"
+"to quit without making any changes."
+msgstr ""
+
+#: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#: src/gnome/glade-support.c:116
+#, c-format
+msgid "Couldn't create pixmap from file: %s"
+msgstr ""
+
+#: src/gnome/gnc-datedelta.c:208 src/scm/report/guile-strings.c:447
+msgid "Days"
+msgstr "天"
+
+#: src/gnome/gnc-datedelta.c:209 src/scm/report/guile-strings.c:448
+msgid "Weeks"
+msgstr "周"
+
+#: src/gnome/gnc-datedelta.c:210 src/scm/report/guile-strings.c:450
+msgid "Months"
+msgstr "月"
+
+#: src/gnome/gnc-datedelta.c:211 src/scm/report/guile-strings.c:451
+msgid "Years"
+msgstr "年"
+
+#: src/gnome/gnc-datedelta.c:254
+msgid "Ago"
+msgstr "过去"
+
+#: src/gnome/gnc-datedelta.c:255
+msgid "From Now"
+msgstr ""
+
+#. Calendar label, only shown if the date editor has a time field
+#: src/gnome/gnc-dateedit.c:724
+msgid "Calendar"
+msgstr "日历"
+
+#: src/gnome/gnc-html.c:875
+msgid ""
+"GnuCash Network is disabled and the link you have clicked requires it.\n"
+"You can enable it in the Network section\n"
+"of the Preferences dialog."
+msgstr ""
+
+#: src/gnome/gnc-html.c:975
+msgid "Badly formed gnc-register: URL."
+msgstr ""
+
+#: src/gnome/gnc-html.c:998
+msgid "Badly formed gnc-options: URL."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1144
+msgid ""
+"Secure HTTP access is disabled.\n"
+"You can enable it in the Network section of\n"
+"the Preferences dialog."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1151
+msgid ""
+"Network HTTP access is disabled.\n"
+"You can enable it in the Network section of\n"
+"the Preferences dialog."
+msgstr ""
+
+#: src/gnome/gnc-html.c:1361
+msgid "Save HTML To File"
+msgstr ""
+
+#: src/gnome/gnc-html.c:1369
+#, c-format
+msgid ""
+"Could not open the file\n"
+"     %s\n"
+"%s"
+msgstr ""
+
+#: src/gnome/gnc-http.c:182
+msgid "checking SSL certificate..."
+msgstr ""
+
+#: src/gnome/gnc-http.c:184
+msgid " ... done\n"
+msgstr ""
+
+#: src/gnome/gnc-network.c:169
+msgid "Enter GnuCash Network passphrase:"
+msgstr ""
+
+#: src/gnome/gnc-network.c:224
+msgid "GnuCash Network authorization failed."
+msgstr ""
+
+#. start: get first passphrase
+#: src/gnome/gnc-network.c:357
+msgid "Enter passphrase:"
+msgstr ""
+
+#. get another and check for equality
+#: src/gnome/gnc-network.c:371
+msgid "Verify passphrase:"
+msgstr ""
+
+#: src/gnome/gnc-network.c:382
+msgid "Passphrases did not match."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:86 src/gnome/new-user-interface.c:110
+msgid "New Account Hierarchy Setup"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:111
+msgid ""
+"This druid will help you create a set of GnuCash \n"
+"accounts for your assets (such as investments, \n"
+"checking or savings accounts), liabilities (such \n"
+"as loans) and different kinds of income and \n"
+"expenses you might have. \n"
+"\n"
+"Click 'Cancel'  if you do not wish to create any \n"
+"new accounts now."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:123
+msgid "Choose Currency"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:133
+msgid "Please choose the currency to use for new accounts."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:159
+msgid "Choose accounts to create"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:169
+msgid ""
+"Select categories that correspond to the ways that you will use GnuCash.  \n"
+"Each category you select will cause several accounts to be created.  \n"
+"Select the categories that are relevant to you.  You can always create \n"
+"additional accounts by hand later."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:214
+msgid "Account Types"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:263
+msgid "Detailed Description"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:341
+msgid "Enter opening balances"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:351
+msgid ""
+"If you would like an account to have an opening balance, click on the "
+"account\n"
+"and enter the starting balance in the box on the right. All accounts except "
+"Equity\n"
+"accounts may have an opening balance."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:450
+msgid "Finish Account Setup"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:451
+msgid ""
+"Press `Finish' to create your new accounts.\n"
+"\n"
+"Press `Back' to review your selections.\n"
+"\n"
+"Press `Cancel' to close this dialog without creating any new accounts."
+msgstr ""
+
+#: src/gnome/new-user-interface.c:513
+msgid "Canceling"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:534
+msgid ""
+"Uncheck if you do not want this dialog to run if you start GnuCash up again. "
+msgstr ""
+
+#: src/gnome/new-user-interface.c:543
+msgid "Run dialog for new user again?"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:589 src/scm/report/guile-strings.c:125
+msgid "Welcome to GnuCash 1.6!"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:616
+msgid "Create a new set of accounts"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:625
+msgid "Import my QIF files"
+msgstr ""
+
+#: src/gnome/new-user-interface.c:634
+msgid "Open the new user tutorial"
+msgstr ""
+
+#: src/gnome/print-session.c:86
+msgid "Print GnuCash Document"
+msgstr ""
+
+#: src/gnome/print-session.c:139
+msgid "Print Preview"
+msgstr "打印预览"
+
+#: src/gnome/window-acct-tree.c:188 src/scm/guile-strings.c:133
+#: src/scm/guile-strings.c:137 src/scm/guile-strings.c:140
+#: src/scm/guile-strings.c:153
+msgid "Account Tree"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:189 src/scm/guile-strings.c:134
+msgid "Name of account view"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:262 src/gnome/window-acct-tree.c:352
+#: src/gnome/window-acct-tree.c:560
+msgid ""
+"To open an account, you must first\n"
+"choose an account to open."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:289 src/gnome/window-acct-tree.c:382
+msgid ""
+"To edit an account, you must first\n"
+"choose an account to edit.\n"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:457
+#, c-format
+msgid "Are you sure you want to delete the %s account?"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:479
+msgid ""
+"To delete an account, you must first\n"
+"choose an account to delete.\n"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:404
+msgid ""
+"To reconcile an account, you must first\n"
+"choose an account to reconcile."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:503 src/gnome/window-acct-tree.c:525
+msgid "You must select an account to check and repair."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:833
+msgid "Open the selected account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:744 src/gnome/window-acct-tree.c:849
+msgid "Edit the selected account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:755
+msgid "Edit the account view options"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1339
+msgid "New"
+msgstr "新建"
+
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:891
+#: src/gnome/window-register.c:1457
+msgid "Create a new account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:776 src/gnome/window-acct-tree.c:899
+msgid "Delete selected account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:799
+msgid "Check & Repair A_ccount"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:800 src/gnome/window-reconcile.c:1182
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:808
+msgid "Check & Repair Su_baccounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:809
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"account and its subaccounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:817
+msgid "Check & Repair A_ll"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:818
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in all "
+"accounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
+msgid "_Open Account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:840
+msgid "Open S_ubaccounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:841
+msgid "Open the selected account and all its subaccounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-register.c:1422
+msgid "_Edit Account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
+msgid "_Reconcile..."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:858
+msgid "Reconcile the selected account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-register.c:1439
+msgid "_Transfer..."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
+msgid "Transfer funds from one account to another"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
+msgid "Stock S_plit..."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
+msgid "Record a stock split or a stock merger"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:881
+msgid "_Euro Conversion..."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:882
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
+msgid "_New Account..."
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:898
+msgid "_Delete Account"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
+msgid "_Check & Repair"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:910
+msgid "Setup tax information for all income and expense accounts"
+msgstr ""
+
+#: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
+#: src/gnome/window-register.c:1583
+msgid "_Account"
+msgstr "帐号(_A)"
+
+#: src/gnome/window-help.c:321
+msgid "Enter URI to load:"
+msgstr ""
+
+#: src/gnome/window-help.c:599 src/gnome/window-report.c:631
+msgid "Back"
+msgstr "返回"
+
+#: src/gnome/window-help.c:600 src/gnome/window-report.c:632
+msgid "Move back one step in the history"
+msgstr ""
+
+#: src/gnome/window-help.c:608 src/gnome/window-report.c:640
+msgid "Forward"
+msgstr "向前"
+
+#: src/gnome/window-help.c:609 src/gnome/window-report.c:641
+msgid "Move forward one step in the history"
+msgstr ""
+
+#: src/gnome/window-help.c:618 src/gnome/window-report.c:649
+msgid "Reload"
+msgstr "刷新"
+
+#: src/gnome/window-help.c:619
+msgid "Reload the current document"
+msgstr "重新载入当前文件"
+
+#: src/gnome/window-help.c:628
+msgid "Open a new document"
+msgstr ""
+
+#: src/gnome/window-help.c:636 src/gnome/window-report.c:658
+msgid "Stop"
+msgstr "停止"
+
+#: src/gnome/window-help.c:637 src/gnome/window-report.c:659
+msgid "Cancel outstanding HTML requests"
+msgstr ""
+
+#: src/gnome/window-help.c:646 src/gnome/window-register.c:934
+#: src/gnome/window-register.c:1367 src/gnome/window-report.c:686
+msgid "Print"
+msgstr "打印"
+
+#: src/gnome/window-help.c:647
+msgid "Print Help window"
+msgstr ""
+
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
+#: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
+msgid "Close"
+msgstr "关闭"
+
+#: src/gnome/window-help.c:657
+msgid "Close this Help window"
+msgstr ""
+
+#: src/gnome/window-main.c:198
+msgid "<no file>"
+msgstr ""
+
+#: src/gnome/window-main.c:746 src/gnome/window-report.c:668
+msgid "Export"
+msgstr "导出"
+
+#: src/gnome/window-main.c:755
+msgid "You cannot save to that filename."
+msgstr ""
+
+#: src/gnome/window-main.c:768 src/gnome/window-main.c:794
+msgid "You cannot save to that file."
+msgstr ""
+
+#: src/gnome/window-main.c:834
+msgid "There was an error saving the file."
+msgstr ""
+
+#: src/gnome/window-main.c:874
+msgid "Select \"Exit\" to exit GnuCash."
+msgstr ""
+
+#: src/gnome/window-main.c:910
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+" GnuCash 个人财务助理。\n"
+"以 GNU 的方式理财！"
+
+#: src/gnome/window-main.c:967
+msgid "New _File"
+msgstr "新建文件(_F)"
+
+#: src/gnome/window-main.c:968
+msgid "Create a new file"
+msgstr "创建一个新文件"
+
+#: src/gnome/window-main.c:975
+msgid "Export Accounts..."
+msgstr "导出帐户……"
+
+#: src/gnome/window-main.c:976
+msgid "Export the account hierarchy to a new file"
+msgstr "将整个帐户层次导出到一个新文件"
+
+#: src/gnome/window-main.c:984
+msgid "Import QIF..."
+msgstr "导入 QIF 文件……"
+
+#: src/gnome/window-main.c:985
+msgid "Import a Quicken QIF file"
+msgstr "导入一个 Quicken 的 QIF 文件"
+
+#: src/gnome/window-main.c:993
+msgid "New _Account Tree"
+msgstr "新的树形帐户图(_A)"
+
+#: src/gnome/window-main.c:994
+msgid "Open a new account tree view"
+msgstr "开启一个新的树形帐户视图"
+
+#: src/gnome/window-main.c:1001
+msgid "Move to New Window"
+msgstr "移动到新窗口"
+
+#: src/gnome/window-main.c:1002
+msgid "Open a new top-level GnuCash window for the current view"
+msgstr "为当前视图开启一个新的顶级 GnuCash 窗口"
+
+#: src/gnome/window-main.c:1008
+msgid "Close _Window"
+msgstr "关闭窗口(_W)"
+
+#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
+msgid "Close the current notebook page"
+msgstr "关闭当前票簿页面"
+
+#: src/gnome/window-main.c:1021
+msgid "_Preferences..."
+msgstr "首选项(_P)..."
+
+#: src/gnome/window-main.c:1022
+msgid "Open the global preferences dialog"
+msgstr "开启全局首选项对话框"
+
+#: src/gnome/window-main.c:1034
+msgid "_General Ledger"
+msgstr "总分类帐"
+
+#: src/gnome/window-main.c:1035
+msgid "Open a general ledger window"
+msgstr "开启一个分类总帐窗口"
+
+#: src/gnome/window-main.c:1042
+msgid "Commodity _Editor"
+msgstr "商品编辑器(_E)"
+
+#: src/gnome/window-main.c:1043
+msgid "View and edit the commodities for stocks and mutual funds"
+msgstr "显示并编辑股票和共同基金商品"
+
+#: src/gnome/window-main.c:1050
+msgid "_Price Editor"
+msgstr "价格编辑器"
+
+#: src/gnome/window-main.c:1051
+msgid "View and edit the prices for stocks and mutual funds"
+msgstr "显示并编辑股票和共同基金的价格"
+
+#: src/gnome/window-main.c:1058
+msgid "Financial _Calculator"
+msgstr "财务计算器(_C)"
+
+#: src/gnome/window-main.c:1059
+msgid "Use the financial calculator"
+msgstr "使用财务计算器"
+
+#: src/gnome/window-main.c:1065
+msgid "_Find Transactions"
+msgstr "搜寻交易"
+
+#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
+msgid "Find transactions with a search"
+msgstr "通过搜索寻找交易"
+
+#: src/gnome/window-main.c:1078
+msgid "_Manual"
+msgstr "手册(_M)"
+
+#: src/gnome/window-main.c:1079
+msgid "Open the GnuCash Manual"
+msgstr "开启 GnuCash 手册"
+
+#: src/gnome/window-main.c:1086
+msgid "_Tips Of The Day"
+msgstr "每日提示"
+
+#: src/gnome/window-main.c:1087
+msgid "View the Tips of the Day"
+msgstr "查看今天的技巧提示"
+
+#: src/gnome/window-main.c:1106
+msgid "_Tools"
+msgstr "工具(_T)"
+
+#: src/gnome/window-main.c:1107
+msgid "_Settings"
+msgstr "设置(_S)"
+
+#: src/gnome/window-main.c:1108
+msgid "_Windows"
+msgstr "窗口(_W)"
+
+#: src/gnome/window-main.c:1130
+msgid "Save the file to disk"
+msgstr "将文件保存到磁盘"
+
+#: src/gnome/window-main.c:1155
+msgid "Exit"
+msgstr "退出"
+
+#: src/gnome/window-main.c:1156
+msgid "Exit GnuCash"
+msgstr "退出 GnuCash "
+
+#: src/gnome/window-main-summarybar.c:122
+msgid "Net Assets"
+msgstr "净资产"
+
+#: src/gnome/window-main-summarybar.c:140
+msgid "Profits"
+msgstr "收益"
+
+#: src/gnome/window-reconcile.c:418
+msgid "Reconcile Information"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:422
+msgid "Statement Date:"
+msgstr ""
+
+#. starting balance title/value
+#: src/gnome/window-reconcile.c:423 src/gnome/window-reconcile.c:1707
+msgid "Starting Balance:"
+msgstr ""
+
+#. ending balance title/value
+#: src/gnome/window-reconcile.c:424 src/gnome/window-reconcile.c:1717
+msgid "Ending Balance:"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:433
+msgid "Include Subaccounts"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:644 src/gnome/window-reconcile.c:1147
+msgid "Debits"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:654 src/gnome/window-reconcile.c:1148
+#: src/scm/guile-strings.c:460
+msgid "Credits"
+msgstr "关于作者"
+
+#: src/gnome/window-reconcile.c:732
+msgid "Total:"
+msgstr "全部："
+
+#: src/gnome/window-reconcile.c:823 src/gnome/window-register.c:3025
+msgid "Are you sure you want to delete the current transaction?"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:872 src/scm/guile-strings.c:318
+#: src/scm/guile-strings.c:321
+msgid "Reconcile"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1064
+msgid "_Reconcile Information..."
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1065
+msgid ""
+"Change the reconcile information including statement date and ending balance."
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1074
+msgid "_Finish"
+msgstr "完成(_F)"
+
+#: src/gnome/window-reconcile.c:1075 src/gnome/window-reconcile.c:1369
+msgid "Finish the reconciliation of this account"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1082
+msgid "_Postpone"
+msgstr "延迟(_P)"
+
+#: src/gnome/window-reconcile.c:1083
+msgid "Postpone the reconciliation of this account"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1090 src/gnome/window-register.c:1477
+#: src/gnome/window-register.c:1667
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: src/gnome/window-reconcile.c:1091
+msgid "Cancel the reconciliation of this account"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1101 src/gnome/window-reconcile.c:1124
+#: src/gnome/window-register.c:1286
+msgid "Standard order"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1102 src/gnome/window-reconcile.c:1125
+#: src/gnome/window-register.c:1287
+msgid "Keep normal account order"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1104 src/gnome/window-reconcile.c:1105
+#: src/gnome/window-reconcile.c:1127 src/gnome/window-reconcile.c:1128
+#: src/gnome/window-register.c:1301 src/gnome/window-register.c:1302
+msgid "Sort by Num"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1107 src/gnome/window-reconcile.c:1108
+#: src/gnome/window-reconcile.c:1130 src/gnome/window-reconcile.c:1131
+#: src/gnome/window-register.c:1310 src/gnome/window-register.c:1311
+msgid "Sort by Description"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1110 src/gnome/window-reconcile.c:1111
+#: src/gnome/window-reconcile.c:1133 src/gnome/window-reconcile.c:1134
+#: src/gnome/window-register.c:1304 src/gnome/window-register.c:1305
+msgid "Sort by Amount"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1158 src/gnome/window-reconcile.c:1361
+msgid "Open the account"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1165 src/gnome/window-register.c:1423
+msgid "Edit the main account for this register"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
+msgid "_New"
+msgstr "新增 (_N)"
+
+#: src/gnome/window-reconcile.c:1195 src/gnome/window-reconcile.c:1279
+#: src/gnome/window-reconcile.c:1339
+msgid "Add a new transaction to the account"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
+msgid "_Edit"
+msgstr "编辑(_E)"
+
+#: src/gnome/window-reconcile.c:1202 src/gnome/window-reconcile.c:1286
+#: src/gnome/window-reconcile.c:1346
+msgid "Edit the current transaction"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-reconcile.c:1293
+#: src/gnome/window-register.c:1485 src/gnome/window-register.c:1675
+msgid "_Delete"
+msgstr "删除(_D)"
+
+#: src/gnome/window-reconcile.c:1209 src/gnome/window-reconcile.c:1293
+#: src/gnome/window-reconcile.c:1353 src/gnome/window-register.c:863
+#: src/gnome/window-register.c:1486 src/gnome/window-register.c:1676
+msgid "Delete the current transaction"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1570
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: src/gnome/window-reconcile.c:1221 src/gnome/window-register.c:1571
+msgid "Open the GnuCash help window"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1231
+msgid "_Reconcile"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1232 src/gnome/window-register.c:1346
+msgid "Sort _Order"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1234 src/gnome/window-register.c:1584
+msgid "_Transaction"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1369
+msgid "Finish"
+msgstr "完成"
+
+#. reconciled balance title/value
+#: src/gnome/window-reconcile.c:1727
+msgid "Reconciled Balance:"
+msgstr ""
+
+#. difference title/value
+#: src/gnome/window-reconcile.c:1737
+msgid "Difference:"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1931
+msgid ""
+"The account is not balanced.\n"
+"Are you sure you want to finish?"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:1989
+msgid "Do you want to postpone this reconciliation and finish it later?"
+msgstr ""
+
+#: src/gnome/window-reconcile.c:2023
+msgid ""
+"You have made changes to this reconcile window.\n"
+"Are you sure you want to cancel?"
+msgstr ""
+
+#: src/gnome/window-register.c:686
+msgid "Register date ranges"
+msgstr ""
+
+#: src/gnome/window-register.c:723
+msgid "Show Earliest"
+msgstr ""
+
+#: src/gnome/window-register.c:734
+msgid "Start date:"
+msgstr "开始日期："
+
+#: src/gnome/window-register.c:773
+msgid "Show Latest"
+msgstr ""
+
+#: src/gnome/window-register.c:784
+msgid "End date:"
+msgstr ""
+
+#: src/gnome/window-register.c:810 src/scm/guile-strings.c:49
+msgid "Today"
+msgstr "今天"
+
+#: src/gnome/window-register.c:816
+msgid "Set Date Range"
+msgstr ""
+
+#: src/gnome/window-register.c:838 src/gnome/window-register.c:1377
+msgid "Close this register window"
+msgstr ""
+
+#: src/gnome/window-register.c:846
+msgid "Enter"
+msgstr "输入"
+
+#: src/gnome/window-register.c:847 src/gnome/window-register.c:1470
+#: src/gnome/window-register.c:1660
+msgid "Record the current transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:854
+msgid "Cancel"
+msgstr "取消"
+
+#: src/gnome/window-register.c:855 src/gnome/window-register.c:1478
+#: src/gnome/window-register.c:1668
+msgid "Cancel the current transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:871
+msgid "Duplicate"
+msgstr "复制"
+
+#: src/gnome/window-register.c:872 src/gnome/window-register.c:1495
+#: src/gnome/window-register.c:1685
+msgid "Make a copy of the current transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:881 src/gnome/window-register.c:1504
+#: src/gnome/window-register.c:1694
+msgid "Show all splits in the current transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:888
+msgid "Blank"
+msgstr "空白"
+
+#: src/gnome/window-register.c:889 src/gnome/window-register.c:1512
+#: src/gnome/window-register.c:1702
+msgid "Move to the blank transaction at the bottom of the register"
+msgstr ""
+
+#: src/gnome/window-register.c:897
+msgid "Jump"
+msgstr ""
+
+#: src/gnome/window-register.c:898 src/gnome/window-register.c:1521
+#: src/gnome/window-register.c:1711
+msgid "Jump to the corresponding transaction in the other account"
+msgstr ""
+
+#: src/gnome/window-register.c:926 src/gnome/window-register.c:1352
+msgid "Open a report window for this register"
+msgstr ""
+
+#: src/gnome/window-register.c:935 src/gnome/window-register.c:1368
+msgid "Print a report for this register"
+msgstr ""
+
+#: src/gnome/window-register.c:1033
+msgid "Present:"
+msgstr ""
+
+#: src/gnome/window-register.c:1034
+msgid "Future:"
+msgstr ""
+
+#: src/gnome/window-register.c:1035
+msgid "Cleared:"
+msgstr ""
+
+#: src/gnome/window-register.c:1037
+msgid "Reconciled:"
+msgstr ""
+
+#: src/gnome/window-register.c:1041
+msgid "Shares:"
+msgstr ""
+
+#: src/gnome/window-register.c:1043
+msgid "Current Value:"
+msgstr ""
+
+#: src/gnome/window-register.c:1259
+msgid "Basic Ledger"
+msgstr ""
+
+#: src/gnome/window-register.c:1260 src/scm/guile-strings.c:259
+msgid "Show transactions on one or two lines"
+msgstr ""
+
+#: src/gnome/window-register.c:1262
+msgid "Auto-Split Ledger"
+msgstr ""
+
+#: src/gnome/window-register.c:1263 src/scm/guile-strings.c:261
+msgid ""
+"Show transactions on one or two lines and expand the current transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1266
+msgid "Transaction Journal"
+msgstr ""
+
+#: src/gnome/window-register.c:1267 src/scm/guile-strings.c:263
+msgid "Show expanded transactions with all splits"
+msgstr ""
+
+#: src/gnome/window-register.c:1277
+msgid "_Double Line"
+msgstr ""
+
+#: src/gnome/window-register.c:1278 src/scm/guile-strings.c:266
+msgid "Show two lines of information for each transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1292
+msgid "Sort by date of entry"
+msgstr ""
+
+#: src/gnome/window-register.c:1293
+msgid "Sort by the date of entry"
+msgstr ""
+
+#: src/gnome/window-register.c:1296
+msgid "Sort by statement date"
+msgstr ""
+
+#: src/gnome/window-register.c:1297
+msgid "Sort by the statement date (unreconciled items last)"
+msgstr ""
+
+#: src/gnome/window-register.c:1307 src/gnome/window-register.c:1308
+msgid "Sort by Memo"
+msgstr ""
+
+#: src/gnome/window-register.c:1326
+msgid "Show _All"
+msgstr "全部显示(_A)"
+
+#: src/gnome/window-register.c:1327
+msgid "Show all of the transactions in the account"
+msgstr ""
+
+#: src/gnome/window-register.c:1334
+msgid "Set _Range..."
+msgstr ""
+
+#: src/gnome/window-register.c:1335
+msgid "Set the date range of this register"
+msgstr ""
+
+#: src/gnome/window-register.c:1345
+msgid "_Style"
+msgstr "模式(_S)"
+
+#: src/gnome/window-register.c:1347
+msgid "_Date Range"
+msgstr ""
+
+#: src/gnome/window-register.c:1359 src/gnome/window-register.c:1549
+#: src/scm/report/guile-strings.c:475 src/scm/report/guile-strings.c:478
+#: src/scm/report/guile-strings.c:481 src/scm/report/guile-strings.c:521
+#: src/scm/report/guile-strings.c:525
+msgid "Invoice"
+msgstr ""
+
+#: src/gnome/window-register.c:1360
+msgid "Open an invoice report window for this register"
+msgstr ""
+
+#: src/gnome/window-register.c:1393
+msgid "Cut Transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1394
+msgid "Cut the selected transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1401
+msgid "Copy Transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1402
+msgid "Copy the selected transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1409
+msgid "Paste Transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1410
+msgid "Paste the transaction clipboard"
+msgstr ""
+
+#: src/gnome/window-register.c:1432
+msgid "Reconcile the main account for this register"
+msgstr ""
+
+#: src/gnome/window-register.c:1469 src/gnome/window-register.c:1659
+msgid "_Enter"
+msgstr ""
+
+#: src/gnome/window-register.c:1494 src/gnome/window-register.c:1684
+msgid "D_uplicate"
+msgstr ""
+
+#: src/gnome/window-register.c:1503 src/gnome/window-register.c:1693
+msgid "_Split"
+msgstr ""
+
+#: src/gnome/window-register.c:1511 src/gnome/window-register.c:1701
+msgid "_Blank"
+msgstr ""
+
+#: src/gnome/window-register.c:1520 src/gnome/window-register.c:1710
+msgid "_Jump"
+msgstr ""
+
+#: src/gnome/window-register.c:1530
+msgid "_Check & Repair All"
+msgstr ""
+
+#: src/gnome/window-register.c:1531
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in all "
+"transactions of this account"
+msgstr ""
+
+#: src/gnome/window-register.c:1539
+msgid "Check & _Repair Current"
+msgstr ""
+
+#: src/gnome/window-register.c:1540
+msgid ""
+"Check for and repair unbalanced transactions and orphan splits in this "
+"transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1550
+msgid "Open an invoice report window for this transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:1557
+msgid "_Print Check..."
+msgstr ""
+
+#: src/gnome/window-register.c:1558
+msgid "Print a check using a standard format"
+msgstr ""
+
+#: src/gnome/window-register.c:1581
+msgid "_Register"
+msgstr ""
+
+#: src/gnome/window-register.c:1872
+msgid "General Ledger"
+msgstr "总分类帐"
+
+#: src/gnome/window-register.c:1874
+msgid "General Ledger Report"
+msgstr "总分类帐报表"
+
+#: src/gnome/window-register.c:1879
+msgid "Portfolio"
+msgstr ""
+
+#: src/gnome/window-register.c:1881
+msgid "Portfolio Report"
+msgstr ""
+
+#: src/gnome/window-register.c:1886
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: src/gnome/window-register.c:1888
+msgid "Search Results Report"
+msgstr ""
+
+#: src/gnome/window-register.c:1893 src/scm/guile-strings.c:255
+#: src/scm/guile-strings.c:264 src/scm/guile-strings.c:267
+#: src/scm/guile-strings.c:270 src/scm/guile-strings.c:273
+#: src/scm/guile-strings.c:276 src/scm/guile-strings.c:279
+#: src/scm/guile-strings.c:282 src/scm/guile-strings.c:285
+#: src/scm/guile-strings.c:288 src/scm/guile-strings.c:291
+#: src/scm/report/guile-strings.c:524
+msgid "Register"
+msgstr "寄存器"
+
+#: src/gnome/window-register.c:1895 src/scm/report/guile-strings.c:487
+msgid "Register Report"
+msgstr ""
+
+#: src/gnome/window-register.c:2409
+msgid "<No information>"
+msgstr ""
+
+#: src/gnome/window-register.c:2838
+msgid ""
+"This selection will delete the whole transaction. This is what you usually "
+"want."
+msgstr ""
+
+#: src/gnome/window-register.c:2840
+msgid ""
+"This selection will delete the whole transaction.\n"
+"\n"
+"You would be deleting a transaction with reconciled splits!"
+msgstr ""
+
+#: src/gnome/window-register.c:2844
+msgid ""
+"Warning: Just deleting all the other splits will make your account "
+"unbalanced. You probably shouldn't do this unless you're going to "
+"immediately add another split to bring the transaction back into balance."
+msgstr ""
+
+#: src/gnome/window-register.c:2849
+msgid "You would be deleting reconciled splits!"
+msgstr ""
+
+#: src/gnome/window-register.c:2857
+msgid "Delete Transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:2879
+msgid "Delete the whole transaction"
+msgstr ""
+
+#: src/gnome/window-register.c:2889
+msgid "Delete all the other splits"
+msgstr ""
+
+#: src/gnome/window-register.c:2982
+#, c-format
+msgid ""
+"Are you sure you want to delete\n"
+"   %s\n"
+"from the transaction\n"
+"   %s ?"
+msgstr ""
+
+#: src/gnome/window-register.c:2984
+msgid "You would be deleting a reconciled split!"
+msgstr ""
+
+#: src/gnome/window-register.c:2990
+msgid "(no memo)"
+msgstr ""
+
+#: src/gnome/window-register.c:2993
+msgid "(no description)"
+msgstr "(没有描述)"
+
+#: src/gnome/window-register.c:3027
+msgid "You would be deleting a transaction with reconciled splits!"
+msgstr ""
+
+#: src/gnome/window-report.c:107
+msgid "(Report not found)"
+msgstr ""
+
+#: src/gnome/window-report.c:650
+msgid "Reload the current report"
+msgstr ""
+
+#: src/gnome/window-report.c:669
+msgid "Export HTML-formatted report to file"
+msgstr ""
+
+#: src/gnome/window-report.c:678
+msgid "Edit report options"
+msgstr ""
+
+#: src/gnome/window-report.c:687
+msgid "Print report window"
+msgstr ""
+
+#: src/guile/gnucash.c:149
+msgid "This is a development version. It may or may not work."
+msgstr ""
+
+#: src/guile/gnucash.c:153
+#, c-format
+msgid "The last stable version was %s."
+msgstr ""
+
+#: src/guile/gnucash.c:155
+#, c-format
+msgid "The next stable version will be %s."
+msgstr ""
+
+#: src/register/gnome/gnucash-style.c:898
+msgid ""
+"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgstr ""
+
+#: src/register/gnome/gnucash-style.c:904
+msgid "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
+msgstr ""
+
+#: src/register/splitreg.c:93
+msgid "sample: 12/12/2000"
+msgstr ""
+
+#. date cell
+#: src/register/splitreg.c:94
+msgid "sample:99999"
+msgstr ""
+
+#. num cell
+#: src/register/splitreg.c:95
+msgid "sample:Description of a transaction"
+msgstr ""
+
+#. recn cell
+#: src/register/splitreg.c:97 src/register/splitreg.c:98
+#: src/register/splitreg.c:102 src/register/splitreg.c:103
+#: src/register/splitreg.c:104 src/register/splitreg.c:105
+#: src/register/splitreg.c:107 src/register/splitreg.c:108
+#: src/register/splitreg.c:109 src/register/splitreg.c:110
+#: src/register/splitreg.c:111
+msgid "sample:999,999.000"
+msgstr ""
+
+#. action cell
+#: src/register/splitreg.c:100 src/register/splitreg.c:106
+msgid "sample:Expenses:Automobile:Gasoline"
+msgstr ""
+
+#. xfrm cell
+#: src/register/splitreg.c:101
+msgid "sample:Memo field sample text string"
+msgstr ""
+
+#. tbalance cell
+#: src/register/splitreg.c:112
+msgid "sample:Notes field sample text string"
+msgstr ""
+
+#: src/register/splitreg.c:164 src/scm/guile-strings.c:210
+msgid "Deposit"
+msgstr ""
+
+#: src/register/splitreg.c:165
+msgid "Withdraw"
+msgstr ""
+
+#: src/register/splitreg.c:166
+msgid "Check"
+msgstr "核对"
+
+#: src/register/splitreg.c:167 src/register/splitreg.c:195
+#: src/register/splitreg.c:203 src/register/splitreg.c:210
+#: src/register/splitreg.c:233
+msgid "Int"
+msgstr "整数"
+
+#: src/register/splitreg.c:168 src/register/splitreg.c:191
+msgid "ATM"
+msgstr ""
+
+#: src/register/splitreg.c:169
+msgid "Teller"
+msgstr ""
+
+#. Action: Point Of Sale
+#: src/register/splitreg.c:171
+msgid "POS"
+msgstr "位置"
+
+#: src/register/splitreg.c:172
+msgid "Phone"
+msgstr "电话"
+
+#: src/register/splitreg.c:173 src/register/splitreg.c:196
+msgid "Online"
+msgstr "在线"
+
+#. Action: Automatic Deposit ?!?
+#: src/register/splitreg.c:175
+msgid "AutoDep"
+msgstr ""
+
+#: src/register/splitreg.c:176
+msgid "Wire"
+msgstr ""
+
+#: src/register/splitreg.c:178
+msgid "Direct Debit"
+msgstr ""
+
+#: src/register/splitreg.c:182 src/register/splitreg.c:186
+#: src/register/splitreg.c:192 src/register/splitreg.c:200
+#: src/register/splitreg.c:208 src/register/splitreg.c:215
+#: src/register/splitreg.c:220 src/register/splitreg.c:227
+#: src/register/splitreg.c:244 src/scm/guile-strings.c:215
+#: src/scm/guile-strings.c:216 src/scm/guile-strings.c:217
+msgid "Buy"
+msgstr ""
+
+#: src/register/splitreg.c:183 src/register/splitreg.c:187
+#: src/register/splitreg.c:197 src/register/splitreg.c:201
+#: src/register/splitreg.c:209 src/register/splitreg.c:216
+#: src/register/splitreg.c:221 src/register/splitreg.c:228
+#: src/register/splitreg.c:245 src/scm/guile-strings.c:227
+#: src/scm/guile-strings.c:228 src/scm/guile-strings.c:229
+msgid "Sell"
+msgstr ""
+
+#: src/register/splitreg.c:188 src/register/splitreg.c:194
+#: src/register/splitreg.c:230
+msgid "Fee"
+msgstr ""
+
+#: src/register/splitreg.c:202
+msgid "Loan"
+msgstr ""
+
+#: src/register/splitreg.c:204 src/register/splitreg.c:211
+#: src/scm/guile-strings.c:212
+msgid "Payment"
+msgstr ""
+
+#: src/register/splitreg.c:212 src/scm/guile-strings.c:231
+msgid "Rebate"
+msgstr ""
+
+#. Action: Dividend
+#: src/register/splitreg.c:232
+msgid "Div"
+msgstr ""
+
+#. Action: Long Term Capital Gains
+#: src/register/splitreg.c:235
+msgid "LTCG"
+msgstr ""
+
+#. Action: Short Term Capital Gains
+#: src/register/splitreg.c:237
+msgid "STCG"
+msgstr ""
+
+#. Action: Distribution
+#: src/register/splitreg.c:240
+msgid "Dist"
+msgstr ""
+
+#: src/register/splitreg.c:723
+msgid "Enter the transaction number, such as the check number"
+msgstr ""
+
+#: src/register/splitreg.c:728
+msgid "Enter the account to transfer from, or choose one from the list"
+msgstr ""
+
+#: src/register/splitreg.c:735
+msgid ""
+"This transaction has multiple splits; press the Split button to see them all"
+msgstr ""
+
+#: src/register/splitreg.c:743
+msgid ""
+"This transaction is a stock split; press the Split button to see details"
+msgstr ""
+
+#: src/register/splitreg.c:755
+msgid "Enter a description of the split"
+msgstr ""
+
+#: src/register/splitreg.c:759
+msgid "Enter a description of the transaction"
+msgstr ""
+
+#: src/register/splitreg.c:763
+msgid "Enter notes for the transaction"
+msgstr ""
+
+#: src/register/splitreg.c:786
+msgid "Enter the type of transaction, or choose one from the list"
+msgstr ""
+
+#: src/register/splitreg.c:799
+msgid "Enter the share price"
+msgstr ""
+
+#: src/register/splitreg.c:801
+msgid "Enter the number of shares bought or sold"
+msgstr ""
+
+#. ============ END OF FILE =====================
+#: src/scm/guile-strings.c:1
+msgid "Show GnuCash version"
+msgstr ""
+
+#: src/scm/guile-strings.c:2
+msgid "Show GnuCash usage information"
+msgstr ""
+
+#: src/scm/guile-strings.c:3
+msgid "Show this help message"
+msgstr "显示该帮助信息"
+
+#: src/scm/guile-strings.c:4
+msgid "Enable debugging mode"
+msgstr ""
+
+#: src/scm/guile-strings.c:5
+msgid "Set the logging level from 0 (least) to 6 (most)"
+msgstr ""
+
+#: src/scm/guile-strings.c:6
+msgid "Do not load the last file opened"
+msgstr ""
+
+#: src/scm/guile-strings.c:7
+msgid "Set configuration directory"
+msgstr ""
+
+#: src/scm/guile-strings.c:8
+msgid "Set shared directory"
+msgstr ""
+
+#: src/scm/guile-strings.c:9
+msgid "Set the search path for .scm files."
+msgstr ""
+
+#: src/scm/guile-strings.c:10
+msgid "Set the search path for documentation files"
+msgstr ""
+
+#: src/scm/guile-strings.c:11
+msgid "Evaluate the guile command"
+msgstr ""
+
+#: src/scm/guile-strings.c:12
+msgid "Load the given .scm file"
+msgstr ""
+
+#: src/scm/guile-strings.c:13
+msgid "Add price quotes to given FILE."
+msgstr ""
+
+#: src/scm/guile-strings.c:14
+msgid "Load the user configuration"
+msgstr ""
+
+#: src/scm/guile-strings.c:15
+msgid "Load the system configuration"
+msgstr ""
+
+#: src/scm/guile-strings.c:16
+msgid "Run the RPC Server"
+msgstr ""
+
+#: src/scm/guile-strings.c:17
+msgid "Current Year Start"
+msgstr "年初"
+
+#: src/scm/guile-strings.c:18
+msgid "Start of the current calendar year"
+msgstr "日历年度的开始"
+
+#: src/scm/guile-strings.c:19
+msgid "Current Year End"
+msgstr "年末"
+
+#: src/scm/guile-strings.c:20
+msgid "End of the current calendar year"
+msgstr "日历年度的末尾"
+
+#: src/scm/guile-strings.c:21
+msgid "Previous Year Start"
+msgstr "去年初"
+
+#: src/scm/guile-strings.c:22
+msgid "Beginning of the previous calendar year"
+msgstr "上个日历年度的开始"
+
+#: src/scm/guile-strings.c:23
+msgid "Previous Year End"
+msgstr "去年末"
+
+#: src/scm/guile-strings.c:24
+msgid "End of the Previous Year"
+msgstr "去年的末尾"
+
+#: src/scm/guile-strings.c:25
+msgid "Current Financial Year Start"
+msgstr "本财政年度初始"
+
+#: src/scm/guile-strings.c:26
+msgid "Start of the current financial year/accounting period"
+msgstr "当前财政年度／会计周期的初始"
+
+#: src/scm/guile-strings.c:27
+msgid "Previous Financial Year Start"
+msgstr "上个财政年度初始"
+
+#: src/scm/guile-strings.c:28
+msgid "The start of the previous financial year/accounting period"
+msgstr "上个财政年度／会计周期的初始"
+
+#: src/scm/guile-strings.c:29
+msgid "End Previous Financial Year"
+msgstr "上个财政年度末尾"
+
+#: src/scm/guile-strings.c:30
+msgid "End of the previous Financial year/Accounting Period"
+msgstr "上个财政年度／会计周期的末尾"
+
+#: src/scm/guile-strings.c:31
+msgid "End Current Financial Year"
+msgstr "本财政年度末"
+
+#: src/scm/guile-strings.c:32
+msgid "End of the current Financial year/Accounting Period"
+msgstr "当前财政年度／会计周期的末尾"
+
+#: src/scm/guile-strings.c:33
+msgid "Start of this month"
+msgstr "本月初"
+
+#: src/scm/guile-strings.c:34
+msgid "Start of the current month"
+msgstr "这个月份的开头"
+
+#: src/scm/guile-strings.c:35
+msgid "End of this month"
+msgstr "本月末"
+
+#: src/scm/guile-strings.c:36
+msgid "End of the current month"
+msgstr "这个月份的末尾"
+
+#: src/scm/guile-strings.c:37
+msgid "Start of previous month"
+msgstr "上月初"
+
+#: src/scm/guile-strings.c:38
+msgid "The beginning of the previous month"
+msgstr "上个月份的开头"
+
+#: src/scm/guile-strings.c:39
+msgid "End of previous month"
+msgstr "上月末"
+
+#: src/scm/guile-strings.c:40
+msgid "Last day of previous month"
+msgstr "上个月份的最后一天"
+
+#: src/scm/guile-strings.c:41
+msgid "Start of current quarter"
+msgstr "本季度开头"
+
+#: src/scm/guile-strings.c:42
+msgid "The start of the latest quarterly accounting period"
+msgstr "最近这个会计季度的开头"
+
+#: src/scm/guile-strings.c:43
+msgid "End of current quarter"
+msgstr "本季度末尾"
+
+#: src/scm/guile-strings.c:44
+msgid "The end of the latest quarterly accounting period"
+msgstr "最近这个会计季度的末尾"
+
+#: src/scm/guile-strings.c:45
+msgid "Start of previous quarter"
+msgstr "上季度开头"
+
+#: src/scm/guile-strings.c:46
+msgid "The start of the previous quarterly accounting period"
+msgstr "上一个会计季度的开头"
+
+#: src/scm/guile-strings.c:47
+msgid "End of previous quarter"
+msgstr "上季度末尾"
+
+#: src/scm/guile-strings.c:48
+msgid "End of previous quarterly accounting period"
+msgstr "上一个会计季度的末尾"
+
+#: src/scm/guile-strings.c:50
+msgid "The current date"
+msgstr "当前日期"
+
+#: src/scm/guile-strings.c:51 src/scm/guile-strings.c:52
+msgid "One Month Ago"
+msgstr "一个月前"
+
+#: src/scm/guile-strings.c:53 src/scm/guile-strings.c:54
+msgid "One Week Ago"
+msgstr "一个星期前"
+
+#: src/scm/guile-strings.c:55 src/scm/guile-strings.c:56
+msgid "Three Months Ago"
+msgstr "三个月前"
+
+#: src/scm/guile-strings.c:57 src/scm/guile-strings.c:58
+msgid "Six Months Ago"
+msgstr "六个月前"
+
+#: src/scm/guile-strings.c:59 src/scm/guile-strings.c:60
+msgid "One Year Ago"
+msgstr "一年前"
+
+#: src/scm/guile-strings.c:61 src/scm/guile-strings.c:62
+msgid "Test progress dialog"
+msgstr ""
+
+#: src/scm/guile-strings.c:63
+msgid "GnuCash Manual"
+msgstr " GnuCash 手册"
+
+#: src/scm/guile-strings.c:64
+msgid "Getting Started"
+msgstr "如何开始"
+
+#: src/scm/guile-strings.c:65
+msgid "Welcome"
+msgstr "欢迎"
+
+#: src/scm/guile-strings.c:66
+msgid "Remedial Accounting 101"
+msgstr ""
+
+#: src/scm/guile-strings.c:67
+msgid "Setting up Accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:68
+msgid "Importing Data"
+msgstr "导入数据"
+
+#: src/scm/guile-strings.c:69
+msgid "Basic Setup"
+msgstr "基础配置"
+
+#: src/scm/guile-strings.c:70
+msgid "Gnome MDI"
+msgstr " Gnome 多文档窗口界面"
+
+#: src/scm/guile-strings.c:71
+msgid "Account Window"
+msgstr "帐户窗口"
+
+#: src/scm/guile-strings.c:72
+msgid "Double Entry"
+msgstr ""
+
+#: src/scm/guile-strings.c:74
+msgid "Quicken"
+msgstr ""
+
+#: src/scm/guile-strings.c:75
+msgid "MYM"
+msgstr ""
+
+#: src/scm/guile-strings.c:76
+msgid "Preferences"
+msgstr "设置"
+
+#: src/scm/guile-strings.c:78 src/scm/guile-strings.c:103
+msgid "Types"
+msgstr "类型"
+
+#: src/scm/guile-strings.c:79
+msgid "Vs. Categories"
+msgstr ""
+
+#: src/scm/guile-strings.c:80
+msgid "Income/Expense"
+msgstr ""
+
+#: src/scm/guile-strings.c:81
+msgid "New Setup"
+msgstr ""
+
+#: src/scm/guile-strings.c:83
+msgid "Chart of"
+msgstr ""
+
+#: src/scm/guile-strings.c:84
+msgid "Editing"
+msgstr "编辑"
+
+#: src/scm/guile-strings.c:85
+msgid "Transactions"
+msgstr ""
+
+#: src/scm/guile-strings.c:86
+msgid "Registers"
+msgstr "寄存器"
+
+#: src/scm/guile-strings.c:87
+msgid "Shortcuts"
+msgstr "快捷网址缩写"
+
+#: src/scm/guile-strings.c:88
+msgid "Date Input"
+msgstr ""
+
+#: src/scm/guile-strings.c:89
+msgid "Keyboard"
+msgstr "键盘"
+
+#: src/scm/guile-strings.c:90
+msgid "Reconciliation"
+msgstr ""
+
+#: src/scm/guile-strings.c:92
+msgid "Record Keeping"
+msgstr ""
+
+#: src/scm/guile-strings.c:93
+msgid "Check Printing"
+msgstr ""
+
+#: src/scm/guile-strings.c:94
+msgid "Capital Gains"
+msgstr ""
+
+#: src/scm/guile-strings.c:95 src/scm/guile-strings.c:100
+msgid "Depreciation"
+msgstr ""
+
+#: src/scm/guile-strings.c:97
+msgid "Euro"
+msgstr "欧元"
+
+#: src/scm/guile-strings.c:98
+msgid "Business"
+msgstr "业务"
+
+#: src/scm/guile-strings.c:99
+msgid "Payables/Receivables"
+msgstr ""
+
+#: src/scm/guile-strings.c:101
+msgid "Reports"
+msgstr "报表"
+
+#: src/scm/guile-strings.c:102
+msgid "Overview"
+msgstr ""
+
+#: src/scm/guile-strings.c:104 src/scm/report/guile-strings.c:239
+#: src/scm/report/guile-strings.c:240
+msgid "Balance Sheet"
+msgstr " 资产负债表"
+
+#: src/scm/guile-strings.c:105
+msgid "Profit & Loss"
+msgstr ""
+
+#: src/scm/guile-strings.c:106
+msgid "Transaction"
+msgstr ""
+
+#: src/scm/guile-strings.c:107
+msgid "Stock Portfolio"
+msgstr ""
+
+#: src/scm/guile-strings.c:108
+msgid "Balance Tracking"
+msgstr ""
+
+#: src/scm/guile-strings.c:109
+msgid "Tax Report"
+msgstr ""
+
+#: src/scm/guile-strings.c:110
+msgid "TXF Export"
+msgstr ""
+
+#: src/scm/guile-strings.c:112
+msgid "TXF Anomalies"
+msgstr ""
+
+#: src/scm/guile-strings.c:113
+msgid "Printing"
+msgstr "正在打印"
+
+#: src/scm/guile-strings.c:114
+msgid "More on GnuCash"
+msgstr ""
+
+#: src/scm/guile-strings.c:115
+msgid "Hacking Documentation"
+msgstr ""
+
+#: src/scm/guile-strings.c:116
+msgid "GNU GPL"
+msgstr ""
+
+#: src/scm/guile-strings.c:117
+msgid "Report a bug"
+msgstr ""
+
+#: src/scm/guile-strings.c:118
+msgid "URL Tests"
+msgstr ""
+
+#: src/scm/guile-strings.c:119
+msgid "gnucash.org"
+msgstr ""
+
+#: src/scm/guile-strings.c:120
+msgid "gnumatic.com"
+msgstr ""
+
+#: src/scm/guile-strings.c:121
+msgid "slashdot.org"
+msgstr ""
+
+#: src/scm/guile-strings.c:122
+msgid "Can't save style sheet"
+msgstr ""
+
+#: src/scm/guile-strings.c:123 src/scm/guile-strings.c:454
+#: src/scm/report/guile-strings.c:115
+msgid "Default"
+msgstr "默认"
+
+#: src/scm/guile-strings.c:125
+msgid "Account name"
+msgstr "帐号名"
+
+#: src/scm/guile-strings.c:127
+msgid "Exchange rate"
+msgstr "汇率"
+
+#: src/scm/guile-strings.c:128
+msgid "Exchange rates"
+msgstr "汇率"
+
+#: src/scm/guile-strings.c:129
+msgid "No accounts selected"
+msgstr ""
+
+#: src/scm/guile-strings.c:130
+msgid "This report requires accounts to be selected."
+msgstr ""
+
+#: src/scm/guile-strings.c:131 src/scm/report/guile-strings.c:458
+msgid "No data"
+msgstr ""
+
+#: src/scm/guile-strings.c:132
+msgid ""
+"The selected accounts contain no data/transactions (or only zeroes) for the "
+"selected time period"
+msgstr ""
+
+#: src/scm/guile-strings.c:135
+msgid ""
+"If you keep multiple account views open, it may be helpful to give each one "
+"a descriptive name"
+msgstr ""
+
+#: src/scm/guile-strings.c:138
+msgid "Double click expands parent accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:139
+msgid ""
+"Double clicking on an account with children expands the account instead of "
+"opening a register."
+msgstr ""
+
+#: src/scm/guile-strings.c:141
+msgid "Account types to display"
+msgstr ""
+
+#: src/scm/guile-strings.c:154
+msgid "Account fields to display"
+msgstr ""
+
+#: src/scm/guile-strings.c:164
+msgid "Can't save window state"
+msgstr ""
+
+#: src/scm/guile-strings.c:165
+msgid "Select a date to report on"
+msgstr ""
+
+#: src/scm/guile-strings.c:166
+msgid "Start of reporting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:167
+msgid "End of reporting period"
+msgstr ""
+
+#: src/scm/guile-strings.c:168
+msgid "The amount of time between data points"
+msgstr ""
+
+#: src/scm/guile-strings.c:169 src/scm/guile-strings.c:170
+msgid "Day"
+msgstr "天"
+
+#: src/scm/guile-strings.c:171 src/scm/guile-strings.c:172
+msgid "Week"
+msgstr "周"
+
+#: src/scm/guile-strings.c:173
+msgid "2Week"
+msgstr ""
+
+#: src/scm/guile-strings.c:174
+msgid "Two Week"
+msgstr ""
+
+#: src/scm/guile-strings.c:175 src/scm/guile-strings.c:176
+msgid "Month"
+msgstr "月"
+
+#: src/scm/guile-strings.c:177 src/scm/guile-strings.c:178
+msgid "Quarter"
+msgstr ""
+
+#: src/scm/guile-strings.c:179 src/scm/guile-strings.c:180
+msgid "Half Year"
+msgstr ""
+
+#: src/scm/guile-strings.c:181 src/scm/guile-strings.c:182
+msgid "Year"
+msgstr "年"
+
+#: src/scm/guile-strings.c:184
+msgid "All accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:185 src/scm/guile-strings.c:347
+msgid "Top-level"
+msgstr ""
+
+#: src/scm/guile-strings.c:186
+msgid "Second-level"
+msgstr ""
+
+#: src/scm/guile-strings.c:187
+msgid "Third-level"
+msgstr ""
+
+#: src/scm/guile-strings.c:188 src/scm/guile-strings.c:189
+msgid "Fourth-level"
+msgstr ""
+
+#: src/scm/guile-strings.c:190
+msgid "Sixth-level"
+msgstr ""
+
+#: src/scm/guile-strings.c:191
+msgid "Show accounts to this depth, overriding any other option."
+msgstr ""
+
+#: src/scm/guile-strings.c:192
+msgid ""
+"Override account-selection and show sub-accounts of all selected accounts?"
+msgstr ""
+
+#: src/scm/guile-strings.c:193
+msgid "Report on these accounts, if display depth allows."
+msgstr ""
+
+#: src/scm/guile-strings.c:194
+msgid "Include sub-account balances in printed balance?"
+msgstr ""
+
+#: src/scm/guile-strings.c:195
+msgid "Group the accounts in main categories?"
+msgstr ""
+
+#: src/scm/guile-strings.c:196
+msgid "Select the currency to display the values of this report in."
+msgstr ""
+
+#: src/scm/guile-strings.c:197 src/scm/report/guile-strings.c:172
+#: src/scm/report/guile-strings.c:227 src/scm/report/guile-strings.c:404
+msgid "Display the account's foreign currency amount?"
+msgstr ""
+
+#: src/scm/guile-strings.c:198 src/scm/report/guile-strings.c:438
+msgid "The source of price information"
+msgstr ""
+
+#: src/scm/guile-strings.c:199 src/scm/report/guile-strings.c:439
+msgid "Weighted Average"
+msgstr ""
+
+#: src/scm/guile-strings.c:200 src/scm/report/guile-strings.c:440
+msgid "The weighted average of all currency transactions of the past"
+msgstr ""
+
+#: src/scm/guile-strings.c:201
+msgid "Most recent"
+msgstr ""
+
+#: src/scm/guile-strings.c:202
+msgid "The most recent recorded price"
+msgstr ""
+
+#: src/scm/guile-strings.c:203
+msgid "Nearest in time"
+msgstr ""
+
+#: src/scm/guile-strings.c:204
+msgid "The price recorded nearest in time to the report date"
+msgstr ""
+
+#: src/scm/guile-strings.c:205
+msgid "Width of plot in pixels."
+msgstr ""
+
+#: src/scm/guile-strings.c:206
+msgid "Height of plot in pixels."
+msgstr ""
+
+#: src/scm/guile-strings.c:207
+msgid "Choose the marker for each data point."
+msgstr ""
+
+#: src/scm/guile-strings.c:208
+msgid "GnuCash Configuration Options"
+msgstr ""
+
+#: src/scm/guile-strings.c:209
+msgid "Funds In"
+msgstr ""
+
+#: src/scm/guile-strings.c:211
+msgid "Receive"
+msgstr "接收"
+
+#: src/scm/guile-strings.c:213 src/scm/guile-strings.c:226
+#: src/scm/guile-strings.c:232
+msgid "Increase"
+msgstr "增大字体"
+
+#: src/scm/guile-strings.c:214 src/scm/guile-strings.c:220
+#: src/scm/guile-strings.c:225
+msgid "Decrease"
+msgstr "减小字体"
+
+#: src/scm/guile-strings.c:218 src/scm/guile-strings.c:224
+#: src/scm/report/guile-strings.c:522
+msgid "Charge"
+msgstr ""
+
+#: src/scm/guile-strings.c:221
+msgid "Funds Out"
+msgstr ""
+
+#: src/scm/guile-strings.c:222
+msgid "Withdrawal"
+msgstr ""
+
+#: src/scm/guile-strings.c:223
+msgid "Spend"
+msgstr ""
+
+#: src/scm/guile-strings.c:233 src/scm/guile-strings.c:246
+#: src/scm/guile-strings.c:249 src/scm/guile-strings.c:252
+msgid "International"
+msgstr "国际的"
+
+#: src/scm/guile-strings.c:234
+msgid "Date Format"
+msgstr "日期格式"
+
+#: src/scm/guile-strings.c:235
+msgid "Date Format Display"
+msgstr ""
+
+#: src/scm/guile-strings.c:236
+msgid "US"
+msgstr ""
+
+#: src/scm/guile-strings.c:237
+msgid "US-style: mm/dd/yyyy"
+msgstr ""
+
+#: src/scm/guile-strings.c:238
+msgid "UK"
+msgstr ""
+
+#: src/scm/guile-strings.c:239
+msgid "UK-style dd/mm/yyyy"
+msgstr ""
+
+#: src/scm/guile-strings.c:240
+msgid "Europe"
+msgstr "欧洲"
+
+#: src/scm/guile-strings.c:241
+msgid "Continental Europe: dd.mm.yyyy"
+msgstr ""
+
+#: src/scm/guile-strings.c:242
+msgid "ISO"
+msgstr ""
+
+#: src/scm/guile-strings.c:243
+msgid "ISO Standard: yyyy-mm-dd"
+msgstr ""
+
+#: src/scm/guile-strings.c:244
+msgid "Locale"
+msgstr "区域设置"
+
+#: src/scm/guile-strings.c:245
+msgid "Default system locale format"
+msgstr ""
+
+#: src/scm/guile-strings.c:247
+msgid "Default Currency"
+msgstr ""
+
+#: src/scm/guile-strings.c:248
+msgid "Default currency for new accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:250
+msgid "Use 24-hour time format"
+msgstr ""
+
+#: src/scm/guile-strings.c:251
+msgid "Use a 24 hour (instead of a 12 hour) time format."
+msgstr ""
+
+#: src/scm/guile-strings.c:253
+msgid "Enable EURO support"
+msgstr ""
+
+#: src/scm/guile-strings.c:254
+msgid "Enables support for the European Union EURO currency"
+msgstr ""
+
+#: src/scm/guile-strings.c:256
+msgid "Default Register Style"
+msgstr ""
+
+#: src/scm/guile-strings.c:257
+msgid "Default style for register windows"
+msgstr ""
+
+#: src/scm/guile-strings.c:258
+msgid "Ledger"
+msgstr "Ledger"
+
+#: src/scm/guile-strings.c:260
+msgid "Auto Ledger"
+msgstr ""
+
+#: src/scm/guile-strings.c:262
+msgid "Journal"
+msgstr "记录"
+
+#: src/scm/guile-strings.c:265
+msgid "Double Line Mode"
+msgstr ""
+
+#: src/scm/guile-strings.c:268
+msgid "Auto-Raise Lists"
+msgstr ""
+
+#: src/scm/guile-strings.c:269
+msgid "Automatically raise the list of accounts or actions during input."
+msgstr ""
+
+#: src/scm/guile-strings.c:271
+msgid "Show All Transactions"
+msgstr ""
+
+#: src/scm/guile-strings.c:272
+msgid "By default, show every transaction in an account."
+msgstr ""
+
+#: src/scm/guile-strings.c:274
+msgid "Number of Rows"
+msgstr ""
+
+#: src/scm/guile-strings.c:275
+msgid "Default number of register rows to display."
+msgstr ""
+
+#: src/scm/guile-strings.c:277
+msgid "Show Vertical Borders"
+msgstr ""
+
+#: src/scm/guile-strings.c:278
+msgid "By default, show vertical borders on the cells."
+msgstr ""
+
+#: src/scm/guile-strings.c:280
+msgid "Show Horizontal Borders"
+msgstr ""
+
+#: src/scm/guile-strings.c:281
+msgid "By default, show horizontal borders on the cells."
+msgstr ""
+
+#: src/scm/guile-strings.c:283
+msgid "'Enter' moves to blank transaction"
+msgstr ""
+
+#: src/scm/guile-strings.c:284
+msgid ""
+"If selected, move to the blank transaction after the user presses 'Enter'. "
+"Otherwise, move down one row."
+msgstr ""
+
+#: src/scm/guile-strings.c:286
+msgid "Confirm before changing reconciled"
+msgstr ""
+
+#: src/scm/guile-strings.c:287
+msgid ""
+"If selected, use a dialog to confirm a change to a reconciled transaction."
+msgstr ""
+
+#: src/scm/guile-strings.c:289
+msgid "Register font"
+msgstr ""
+
+#: src/scm/guile-strings.c:290
+msgid "The font to use in the register"
+msgstr ""
+
+#: src/scm/guile-strings.c:292
+msgid "Register hint font"
+msgstr ""
+
+#: src/scm/guile-strings.c:293
+msgid "The font used to show hints in the register"
+msgstr ""
+
+#: src/scm/guile-strings.c:294 src/scm/guile-strings.c:297
+#: src/scm/guile-strings.c:300 src/scm/guile-strings.c:303
+#: src/scm/guile-strings.c:306 src/scm/guile-strings.c:309
+#: src/scm/guile-strings.c:312 src/scm/guile-strings.c:315
+msgid "Register Colors"
+msgstr ""
+
+#: src/scm/guile-strings.c:295
+msgid "Header color"
+msgstr ""
+
+#: src/scm/guile-strings.c:296
+msgid "The header background color"
+msgstr ""
+
+#: src/scm/guile-strings.c:298
+msgid "Primary color"
+msgstr "主要颜色"
+
+#: src/scm/guile-strings.c:299
+msgid "The default background color for register rows"
+msgstr ""
+
+#: src/scm/guile-strings.c:301
+msgid "Secondary color"
+msgstr "次级颜色"
+
+#: src/scm/guile-strings.c:302
+msgid "The default secondary background color for register rows"
+msgstr ""
+
+#: src/scm/guile-strings.c:304
+msgid "Primary active color"
+msgstr ""
+
+#: src/scm/guile-strings.c:305
+msgid "The background color for the current register row"
+msgstr ""
+
+#: src/scm/guile-strings.c:307
+msgid "Secondary active color"
+msgstr ""
+
+#: src/scm/guile-strings.c:308
+msgid "The secondary background color for the current register row"
+msgstr ""
+
+#: src/scm/guile-strings.c:310
+msgid "Split color"
+msgstr ""
+
+#: src/scm/guile-strings.c:311
+msgid "The default background color for split rows in the register"
+msgstr ""
+
+#: src/scm/guile-strings.c:313
+msgid "Split active color"
+msgstr ""
+
+#: src/scm/guile-strings.c:314
+msgid "The background color for the current split row in the register"
+msgstr ""
+
+#: src/scm/guile-strings.c:316
+msgid "Double mode colors alternate with transactions"
+msgstr ""
+
+#: src/scm/guile-strings.c:317
+msgid ""
+"Alternate the primary and secondary colors with each transaction, not each "
+"row"
+msgstr ""
+
+#: src/scm/guile-strings.c:319
+msgid "Automatic credit card payments"
+msgstr ""
+
+#: src/scm/guile-strings.c:320
+msgid ""
+"After reconciling a credit card statement, prompt the user to enter a credit "
+"card payment"
+msgstr ""
+
+#: src/scm/guile-strings.c:322
+msgid "Check off cleared transactions"
+msgstr ""
+
+#: src/scm/guile-strings.c:323
+msgid "Automatically check off cleared transactions when reconciling"
+msgstr ""
+
+#: src/scm/guile-strings.c:324 src/scm/guile-strings.c:327
+msgid "User Info"
+msgstr "用户信息"
+
+#: src/scm/guile-strings.c:325
+msgid "User Name"
+msgstr "用户名"
+
+#: src/scm/guile-strings.c:326
+msgid "The name of the user. This is used in some reports."
+msgstr ""
+
+#: src/scm/guile-strings.c:328
+msgid "User Address"
+msgstr ""
+
+#: src/scm/guile-strings.c:329
+msgid "The address of the user. This is used in some reports."
+msgstr ""
+
+#: src/scm/guile-strings.c:330 src/scm/guile-strings.c:333
+#: src/scm/guile-strings.c:342 src/scm/guile-strings.c:353
+#: src/scm/guile-strings.c:366 src/scm/guile-strings.c:375
+#: src/scm/guile-strings.c:378 src/scm/guile-strings.c:381
+#: src/scm/guile-strings.c:384 src/scm/guile-strings.c:387
+#: src/scm/guile-strings.c:390 src/scm/guile-strings.c:441
+#: src/scm/report/guile-strings.c:1 src/scm/report/guile-strings.c:4
+#: src/scm/report/guile-strings.c:7 src/scm/report/guile-strings.c:10
+#: src/scm/report/guile-strings.c:55 src/scm/report/guile-strings.c:57
+#: src/scm/report/guile-strings.c:59 src/scm/report/guile-strings.c:61
+#: src/scm/report/guile-strings.c:96 src/scm/report/guile-strings.c:99
+#: src/scm/report/guile-strings.c:102 src/scm/report/guile-strings.c:116
+#: src/scm/report/guile-strings.c:119 src/scm/report/guile-strings.c:352
+#: src/scm/report/guile-strings.c:355 src/scm/report/guile-strings.c:484
+msgid "General"
+msgstr "常规"
+
+#: src/scm/guile-strings.c:331
+msgid "Save Window Geometry"
+msgstr "保存窗口位置"
+
+#: src/scm/guile-strings.c:332
+msgid "Save window sizes and positions."
+msgstr "保存窗口的大小和定位"
+
+#: src/scm/guile-strings.c:334
+msgid "Toolbar Buttons"
+msgstr "工具条按钮"
+
+#: src/scm/guile-strings.c:335
+msgid "Choose whether to display icons, text, or both for toolbar buttons"
+msgstr "选择在工具条按钮上显示图标还是文字，或者两者都有"
+
+#: src/scm/guile-strings.c:336
+msgid "Icons and Text"
+msgstr "图标和文字"
+
+#: src/scm/guile-strings.c:337
+msgid "Show both icons and text"
+msgstr "图标和文字都显示"
+
+#: src/scm/guile-strings.c:338
+msgid "Icons only"
+msgstr "仅图标"
+
+#: src/scm/guile-strings.c:339
+msgid "Show icons only"
+msgstr "只显示图标"
+
+#: src/scm/guile-strings.c:340
+msgid "Text only"
+msgstr "仅文本"
+
+#: src/scm/guile-strings.c:341
+msgid "Show text only"
+msgstr "只显示文字"
+
+#: src/scm/guile-strings.c:343
+msgid "Application MDI mode"
+msgstr "应用程序多文档界面模式"
+
+#: src/scm/guile-strings.c:344
+msgid "Choose how new windows are created for reports and account trees."
+msgstr "选择如何为报表和帐户树创建新窗口"
+
+#: src/scm/guile-strings.c:345
+msgid "Notebook"
+msgstr "票簿式"
+
+#: src/scm/guile-strings.c:346
+msgid ""
+"New windows are created as notebook tabs in the current top-level window"
+msgstr "在当前的顶级窗口里以票簿标签形式创建新的窗口"
+
+#: src/scm/guile-strings.c:348
+msgid "Create a new top-level window for each report or account tree"
+msgstr "为每个报表或帐户树创建一个新的顶级窗口"
+
+#: src/scm/guile-strings.c:349
+msgid "Single window"
+msgstr "单一窗口"
+
+#: src/scm/guile-strings.c:350
+msgid ""
+"One window is used for all displays (select contents through Window menu)"
+msgstr "所有的显示都用一个窗口（从“窗口”菜单里选择相应内容）"
+
+#: src/scm/guile-strings.c:351
+msgid "Use GNOME default"
+msgstr "使用 GNOME 默认值"
+
+#: src/scm/guile-strings.c:352
+msgid "Default MDI mode can be set in the GNOME Control Center"
+msgstr "默认的多文档界面模式可以在 GNOME 控制中心里设置"
+
+#: src/scm/guile-strings.c:354
+msgid "Account Separator"
+msgstr "帐户分割符"
+
+#: src/scm/guile-strings.c:355
+msgid "The character used to separate fully-qualified account names"
+msgstr "这个符号用于隔开正式的帐户名"
+
+#: src/scm/guile-strings.c:356
+msgid ": (Colon)"
+msgstr ":（冒号）"
+
+#: src/scm/guile-strings.c:357
+msgid "Income:Salary:Taxable"
+msgstr "收益:薪水:税前"
+
+#: src/scm/guile-strings.c:358
+msgid "/ (Slash)"
+msgstr "/（斜杠）"
+
+#: src/scm/guile-strings.c:359
+msgid "Income/Salary/Taxable"
+msgstr "收益/薪水/税前"
+
+#: src/scm/guile-strings.c:360
+msgid "\\ (Backslash)"
+msgstr "\\（反斜杠）"
+
+#: src/scm/guile-strings.c:361
+msgid "Income\\Salary\\Taxable"
+msgstr "收益\\薪水\\税前"
+
+#: src/scm/guile-strings.c:362
+msgid "- (Dash)"
+msgstr "-（横杠）"
+
+#: src/scm/guile-strings.c:363
+msgid "Income-Salary-Taxable"
+msgstr "收益-薪水-税前"
+
+#: src/scm/guile-strings.c:364
+msgid ". (Period)"
+msgstr ".（句点）"
+
+#: src/scm/guile-strings.c:365
+msgid "Income.Salary.Taxable"
+msgstr "收益.薪水.税前"
+
+#: src/scm/guile-strings.c:367
+msgid "Reversed-balance account types"
+msgstr ""
+
+#: src/scm/guile-strings.c:368
+msgid "The types of accounts for which balances are sign-reversed"
+msgstr ""
+
+#: src/scm/guile-strings.c:369
+msgid "Income & Expense"
+msgstr "收益和费用"
+
+#: src/scm/guile-strings.c:370
+msgid "Reverse Income and Expense Accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:371 src/scm/report/guile-strings.c:720
+msgid "Credit Accounts"
+msgstr "信用帐户"
+
+#: src/scm/guile-strings.c:372
+msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:374
+msgid "Don't reverse any accounts"
+msgstr ""
+
+#: src/scm/guile-strings.c:376
+msgid "Use accounting labels"
+msgstr ""
+
+#: src/scm/guile-strings.c:377
+msgid "Only use 'debit' and 'credit' instead of informal synonyms"
+msgstr ""
+
+#: src/scm/guile-strings.c:379
+msgid "Display \"Tip of the Day\""
+msgstr "显示 \"每日提示\""
+
+#: src/scm/guile-strings.c:380
+msgid "Display hints for using GnuCash at startup"
+msgstr "在启动时显示使用 GnuCash 的提示"
+
+#: src/scm/guile-strings.c:382 src/scm/guile-strings.c:383
+msgid "Display negative amounts in red"
+msgstr "负值以红色显示"
+
+#: src/scm/guile-strings.c:385
+msgid "Automatic Decimal Point"
+msgstr "自动小数点"
+
+#: src/scm/guile-strings.c:386
+msgid ""
+"Automatically insert a decimal point into values that are entered without "
+"one."
+msgstr "在输入的数据没有一个“.”的情况下自动加上一个小数点"
+
+#: src/scm/guile-strings.c:388
+msgid "Auto Decimal Places"
+msgstr "自动位数"
+
+#: src/scm/guile-strings.c:389
+msgid "How many automatic decimal places will be filled in."
+msgstr ""
+
+#: src/scm/guile-strings.c:391
+msgid "No account list setup on new file"
+msgstr ""
+
+#: src/scm/guile-strings.c:392
+msgid ""
+"Don't popup the new account list dialog when you choose \"New File\" from "
+"the \"File\" menu"
+msgstr ""
+
+#: src/scm/guile-strings.c:394
+msgid "Verbose documentation"
+msgstr ""
+
+#: src/scm/guile-strings.c:395
+msgid "Show some documentation-only pages in QIF Import druid"
+msgstr ""
+
+#: src/scm/guile-strings.c:396 src/scm/guile-strings.c:399
+#: src/scm/guile-strings.c:402 src/scm/guile-strings.c:405
+msgid "Network"
+msgstr "网络"
+
+#: src/scm/guile-strings.c:397
+msgid "Allow http network access"
+msgstr ""
+
+#: src/scm/guile-strings.c:398
+msgid "Enable GnuCash's HTTP client support."
+msgstr ""
+
+#: src/scm/guile-strings.c:400
+msgid "Allow https connections using OpenSSL"
+msgstr ""
+
+#: src/scm/guile-strings.c:401
+msgid "Enable secure HTTP connections using OpenSSL"
+msgstr ""
+
+#: src/scm/guile-strings.c:403
+msgid "Enable GnuCash Network"
+msgstr ""
+
+#: src/scm/guile-strings.c:404
+msgid "The GnuCash Network server provides support and other services"
+msgstr ""
+
+#: src/scm/guile-strings.c:406
+msgid "GnuCash Network server"
+msgstr ""
+
+#: src/scm/guile-strings.c:407
+msgid "Host to connect to for user registration and support services"
+msgstr ""
+
+#: src/scm/guile-strings.c:408
+msgid "Show version."
+msgstr ""
+
+#: src/scm/guile-strings.c:409 src/scm/guile-strings.c:410
+msgid "Generate an argument summary."
+msgstr ""
+
+#: src/scm/guile-strings.c:411
+msgid "Don't load any file, including autoloading the last file."
+msgstr ""
+
+#: src/scm/guile-strings.c:412
+msgid "Configuration directory."
+msgstr ""
+
+#: src/scm/guile-strings.c:413
+msgid "Shared files directory."
+msgstr ""
+
+#: src/scm/guile-strings.c:414
+msgid "Enable debugging code."
+msgstr ""
+
+#: src/scm/guile-strings.c:415
+msgid "Logging level from 0 (least logging) to 5 (most logging)."
+msgstr ""
+
+#: src/scm/guile-strings.c:416
+msgid ""
+"A list of strings indicating the load path for (gnc:load name).\n"
+"Each element must be a string representing a directory or a symbol\n"
+"where 'default expands to the default path, and 'current expands to\n"
+"the current value of the path."
+msgstr ""
+
+#: src/scm/guile-strings.c:420
+msgid ""
+"A list of strings indicating where to look for html and parsed-html files. "
+"Each element must be a string representing a directory or a symbol where "
+"'default expands to the default path, and 'current expands to the current "
+"value of the path."
+msgstr ""
+
+#: src/scm/guile-strings.c:421 src/scm/guile-strings.c:423
+msgid ""
+"You are missing some needed Perl libraries.\n"
+"Run 'update-finance-quote' as root to install them."
+msgstr ""
+
+#: src/scm/guile-strings.c:425 src/scm/guile-strings.c:426
+msgid "Unable to get quotes or diagnose the problem."
+msgstr ""
+
+#: src/scm/guile-strings.c:427 src/scm/guile-strings.c:429
+#: src/scm/guile-strings.c:430
+msgid "Unable to retrieve quotes for these items:"
+msgstr ""
+
+#: src/scm/guile-strings.c:428
+msgid "Continue using only the good quotes?"
+msgstr ""
+
+#: src/scm/guile-strings.c:431
+msgid "Continuing with good quotes."
+msgstr ""
+
+#: src/scm/guile-strings.c:432 src/scm/guile-strings.c:434
+msgid "Unable to create prices for these items:"
+msgstr ""
+
+#: src/scm/guile-strings.c:433
+msgid "Add remaining good quotes?"
+msgstr ""
+
+#: src/scm/guile-strings.c:435
+msgid "Adding remaining good quotes."
+msgstr ""
+
+#: src/scm/guile-strings.c:436
+msgid "_Reports"
+msgstr "报表(_R)"
+
+#: src/scm/guile-strings.c:437
+msgid "_Assets & Liabilities"
+msgstr "资产和负债(_A)"
+
+#: src/scm/guile-strings.c:438
+msgid "_Income & Expense"
+msgstr "收益和费用(_I)"
+
+#: src/scm/guile-strings.c:439
+msgid "_Taxes"
+msgstr "税务(_U)"
+
+#: src/scm/guile-strings.c:440
+msgid "_Utility"
+msgstr "工具(_U)"
+
+#: src/scm/guile-strings.c:443 src/scm/report/guile-strings.c:488
+#: src/scm/report/guile-strings.c:491 src/scm/report/guile-strings.c:494
+#: src/scm/report/guile-strings.c:497 src/scm/report/guile-strings.c:500
+#: src/scm/report/guile-strings.c:503 src/scm/report/guile-strings.c:505
+#: src/scm/report/guile-strings.c:512 src/scm/report/guile-strings.c:515
+#: src/scm/report/guile-strings.c:586 src/scm/report/guile-strings.c:588
+#: src/scm/report/guile-strings.c:590 src/scm/report/guile-strings.c:592
+#: src/scm/report/guile-strings.c:594 src/scm/report/guile-strings.c:596
+#: src/scm/report/guile-strings.c:598 src/scm/report/guile-strings.c:600
+#: src/scm/report/guile-strings.c:602 src/scm/report/guile-strings.c:604
+#: src/scm/report/guile-strings.c:606 src/scm/report/guile-strings.c:733
+msgid "Display"
+msgstr "显示"
+
+#: src/scm/guile-strings.c:444
+msgid "Report name"
+msgstr "报表名称"
+
+#: src/scm/guile-strings.c:446
+#, c-format
+msgid "Display the %s report"
+msgstr "显示 %s 报表"
+
+#: src/scm/guile-strings.c:447
+msgid "Style Sheets..."
+msgstr "样式表……"
+
+#: src/scm/guile-strings.c:448
+msgid "Edit report style sheets."
+msgstr "编辑报表样式表单。"
+
+#: src/scm/guile-strings.c:449
+msgid "Welcome Extravaganza"
+msgstr ""
+
+#: src/scm/guile-strings.c:450
+msgid "Welcome-to-GnuCash screen"
+msgstr ""
+
+#: src/scm/guile-strings.c:451
+msgid "Enter a descriptive name for this report"
+msgstr ""
+
+#: src/scm/guile-strings.c:452 src/scm/guile-strings.c:456
+#: src/scm/guile-strings.c:457
+msgid "Stylesheet"
+msgstr "样式表"
+
+#: src/scm/guile-strings.c:453
+msgid "Select a stylesheet for the report."
+msgstr ""
+
+#: src/scm/guile-strings.c:455
+msgid " Stylesheet"
+msgstr " 样式表"
+
+#: src/scm/guile-strings.c:461 src/scm/report/guile-strings.c:138
+#: src/scm/report/guile-strings.c:230 src/scm/report/guile-strings.c:231
+#: src/scm/report/guile-strings.c:380
+msgid "Assets"
+msgstr "资产"
+
+#: src/scm/guile-strings.c:462 src/scm/report/guile-strings.c:139
+#: src/scm/report/guile-strings.c:232 src/scm/report/guile-strings.c:233
+#: src/scm/report/guile-strings.c:381
+msgid "Liabilities"
+msgstr "负债"
+
+#: src/scm/guile-strings.c:463
+msgid "Stocks"
+msgstr "股票"
+
+#: src/scm/guile-strings.c:464
+msgid "Mutual Funds"
+msgstr "共同基金"
+
+#: src/scm/guile-strings.c:465
+msgid "Currencies"
+msgstr "现金"
+
+#: src/scm/guile-strings.c:467
+msgid "Expenses"
+msgstr "费用"
+
+#: src/scm/guile-strings.c:468
+msgid "Equities"
+msgstr "权益"
+
+#: src/scm/guile-strings.c:469
+msgid "Checking"
+msgstr "检查"
+
+#: src/scm/guile-strings.c:470
+msgid "Savings"
+msgstr "储蓄"
+
+#: src/scm/guile-strings.c:471
+msgid "Money Market"
+msgstr ""
+
+#: src/scm/guile-strings.c:472
+msgid "Credit Lines"
+msgstr ""
+
+#: src/scm/guile-strings.c:473
+msgid ""
+"The GnuCash online manual has lots of helpful information.  \n"
+"If you are upgrading from GnuCash 1.4, the section \"What's new in\n"
+"GnuCash 1.6\" is particularly interesting. You can access the manual\n"
+"under the Help menu."
+msgstr ""
+
+#: src/scm/guile-strings.c:477
+msgid ""
+"You can easily import your existing financial data from Quicken,\n"
+"MS Money or other programs that export QIF (Quicken Interchange\n"
+"Format) files.  Click the Import button in the main window tool\n"
+"bar and follow the instructions provided."
+msgstr ""
+
+#: src/scm/guile-strings.c:481
+msgid ""
+"If you are familiar with other financial programs such as Quicken,\n"
+"note that GnuCash uses accounts instead of categories to track\n"
+"income and expenses.  For more information on income and expense\n"
+"accounts, please see the GnuCash online manual."
+msgstr ""
+
+#: src/scm/guile-strings.c:485
+msgid ""
+"Create new accounts by clicking the New button in the main window\n"
+"tool bar.  This will bring up a dialog box where you can enter\n"
+"account details.  For more information on choosing an account type\n"
+"or setting up a chart of accounts, please see the GnuCash online\n"
+"manual."
+msgstr ""
+
+#: src/scm/guile-strings.c:490
+msgid ""
+"Click the right mouse button in the main window to bring up the\n"
+"account menu options. Within each register, clicking the right\n"
+"mouse button brings up the transaction menu options."
+msgstr ""
+
+#: src/scm/guile-strings.c:493
+msgid ""
+"As you enter amounts in the register, you can use the GnuCash\n"
+"calculator to add, subtract, multiply and divide .  Simply type\n"
+"the first value, then select '+', '-','*', or '/'.  Type the\n"
+"second value and press Enter to record the calculated amount."
+msgstr ""
+
+#: src/scm/guile-strings.c:497
+msgid ""
+"Quick-fill makes it easy to enter common transactions.  When you\n"
+"type the first letter(s) of a common transaction description,\n"
+"GnuCash will automatically complete the remainder of the\n"
+"transaction as it was last entered."
+msgstr ""
+
+#: src/scm/guile-strings.c:501
+msgid ""
+"Type the first letter(s) of an existing account name in the\n"
+"Transfer register column, and GnuCash will complete the name from\n"
+"your list of accounts. For subaccounts, type the first letter(s)\n"
+"of the parent account, followed by ':' and the first letter(s) of\n"
+"the subaccount (e.g. A:C for Assets:Cash.)"
+msgstr ""
+
+#: src/scm/guile-strings.c:506
+msgid ""
+"To enter multiple-split transactions such as a paycheck with\n"
+"multiple deductions, click the Split button in the tool bar.\n"
+"Alternatively, you can choose the register style Auto-Split Ledger or\n"
+"Transaction Journal from the Register|Style menu option."
+msgstr ""
+
+#: src/scm/guile-strings.c:510
+msgid ""
+"Want to see all your subaccount transactions in one register?\n"
+"From the main menu, highlight the parent account and select\n"
+"Accounts|Open Subaccounts from the menu."
+msgstr ""
+
+#: src/scm/guile-strings.c:513
+msgid ""
+"In the reconcile window, you can press the spacebar\n"
+"to mark transactions as reconciled.\n"
+"You can also press Tab and Shift-Tab to move between\n"
+"deposits and withdrawals."
+msgstr ""
+
+#: src/scm/guile-strings.c:517
+msgid ""
+"When entering check numbers in the register, you can\n"
+"type '+' to enter the next number or '-' to enter the previous\n"
+"number. You can use '+' and '-' to increment and decrement\n"
+"dates as well."
+msgstr ""
+
+#: src/scm/guile-strings.c:521
+msgid ""
+"You should back up your files regularly.  Just copy\n"
+"your GnuCash data file to a floppy or other backup device."
+msgstr ""
+
+#: src/scm/guile-strings.c:523
+msgid ""
+"To transfer funds between accounts with different currencies,\n"
+"you need an intermediate currency trading account. Click the Transfer\n"
+"button in the register toolbar to let GnuCash create the intermediate\n"
+"transaction. See the GnuCash online manual for details."
+msgstr ""
+
+#: src/scm/guile-strings.c:527
+msgid ""
+"You can pack multiple reports into a single window, \n"
+"providing all the financial information you want at a glance.\n"
+"To do so, use the \"Multicolumn View\" report."
+msgstr ""
+
+#: src/scm/guile-strings.c:530
+msgid ""
+"GnuCash can act as a simple web browser!  To display\n"
+"a web page as a report, use the \"Frame URL\" report."
+msgstr ""
+
+#: src/scm/guile-strings.c:532
+msgid ""
+"Style Sheets affect how reports are displayed.  Choose\n"
+"a style sheet for your report as a report option, and use\n"
+"the Style Sheets menu to customize style sheets."
+msgstr ""
+
+#: src/scm/guile-strings.c:535
+msgid ""
+"The GnuCash developers are easy to contact.  As well\n"
+"as several mailing lists, you can chat to them live on IRC!\n"
+"Join them on #gnucash at irc.gnome.org"
+msgstr ""
+
+#: src/scm/guile-strings.c:538
+msgid ""
+"There is a theory that if ever anyone discovers what\n"
+"the Universe is for and why it is here, it will instantly\n"
+"disappear and be replaced with something even more bizarre and\n"
+"inexplicable.\n"
+"There is another theory that this has already happened.\n"
+"Douglas Adams, \"The Restaurant at the End of the Universe\""
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:1
+msgid "Dividends"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:2
+msgid "Interest"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:3
+msgid "Cap Return"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:4
+msgid "Cap. gain (long)"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:5
+msgid "Cap. gain (mid)"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:6
+msgid "Cap. gain (short)"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:9
+msgid "Commissions"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:10
+msgid "Margin Interest"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:11
+msgid "Unspecified"
+msgstr ""
+
+#: src/scm/qif-import/guile-strings.c:12
+msgid "QIF import: Name conflict with another account."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:2 src/scm/report/guile-strings.c:56
+msgid "Preparer"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:3
+msgid "Name of person preparing the report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:5 src/scm/report/guile-strings.c:58
+msgid "Prepared for"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:6
+msgid "Name of organization or company prepared for"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:8 src/scm/report/guile-strings.c:60
+msgid "Show preparer info"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:9
+msgid "Name of organization or company"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:11 src/scm/report/guile-strings.c:62
+#: src/scm/report/guile-strings.c:103
+msgid "Enable Links"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:12
+msgid "Enable hyperlinks in reports"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:13 src/scm/report/guile-strings.c:16
+#: src/scm/report/guile-strings.c:19 src/scm/report/guile-strings.c:79
+#: src/scm/report/guile-strings.c:81 src/scm/report/guile-strings.c:83
+msgid "Images"
+msgstr "图片"
+
+#: src/scm/report/guile-strings.c:14 src/scm/report/guile-strings.c:80
+msgid "Background Tile"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:15 src/scm/report/guile-strings.c:101
+msgid "Background tile for reports."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:17 src/scm/report/guile-strings.c:82
+msgid "Heading Banner"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:18
+msgid "Banner for top of report."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:20 src/scm/report/guile-strings.c:84
+msgid "Logo"
+msgstr "徽标"
+
+#: src/scm/report/guile-strings.c:21
+msgid "Company logo image."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:22 src/scm/report/guile-strings.c:25
+#: src/scm/report/guile-strings.c:28 src/scm/report/guile-strings.c:31
+#: src/scm/report/guile-strings.c:34 src/scm/report/guile-strings.c:37
+#: src/scm/report/guile-strings.c:40 src/scm/report/guile-strings.c:43
+#: src/scm/report/guile-strings.c:63 src/scm/report/guile-strings.c:65
+#: src/scm/report/guile-strings.c:67 src/scm/report/guile-strings.c:69
+#: src/scm/report/guile-strings.c:71 src/scm/report/guile-strings.c:73
+#: src/scm/report/guile-strings.c:75 src/scm/report/guile-strings.c:77
+#: src/scm/report/guile-strings.c:723 src/scm/report/guile-strings.c:725
+#: src/scm/report/guile-strings.c:727 src/scm/report/guile-strings.c:729
+#: src/scm/report/guile-strings.c:731
+msgid "Colors"
+msgstr "颜色"
+
+#: src/scm/report/guile-strings.c:23 src/scm/report/guile-strings.c:64
+#: src/scm/report/guile-strings.c:97 src/scm/report/guile-strings.c:307
+msgid "Background Color"
+msgstr "背景颜色"
+
+#: src/scm/report/guile-strings.c:24
+msgid "General background color for report."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:26 src/scm/report/guile-strings.c:66
+#: src/scm/report/guile-strings.c:310
+msgid "Text Color"
+msgstr "文字颜色"
+
+#: src/scm/report/guile-strings.c:27
+msgid "Normal body text color."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:29 src/scm/report/guile-strings.c:68
+msgid "Link Color"
+msgstr "链接颜色"
+
+#: src/scm/report/guile-strings.c:30
+msgid "Link text color."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:32 src/scm/report/guile-strings.c:70
+msgid "Table Cell Color"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:33
+msgid "Default background for table cells."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:35 src/scm/report/guile-strings.c:72
+msgid "Alternate Table Cell Color"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:36
+msgid "Default alternate background for table cells."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:74
+msgid "Subheading/Subtotal Cell Color"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:39
+msgid "Default color for subtotal rows."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:41 src/scm/report/guile-strings.c:76
+msgid "Sub-subheading/total Cell Color"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:42
+msgid "Color for subsubtotals"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:44 src/scm/report/guile-strings.c:78
+msgid "Grand Total Cell Color"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:45
+msgid "Color for grand totals"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:46 src/scm/report/guile-strings.c:49
+#: src/scm/report/guile-strings.c:52 src/scm/report/guile-strings.c:85
+#: src/scm/report/guile-strings.c:87 src/scm/report/guile-strings.c:89
+#: src/scm/report/guile-strings.c:105 src/scm/report/guile-strings.c:108
+#: src/scm/report/guile-strings.c:111
+msgid "Tables"
+msgstr "表格"
+
+#: src/scm/report/guile-strings.c:47 src/scm/report/guile-strings.c:86
+#: src/scm/report/guile-strings.c:106
+msgid "Table cell spacing"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:48 src/scm/report/guile-strings.c:51
+#: src/scm/report/guile-strings.c:107 src/scm/report/guile-strings.c:110
+msgid "Space between table cells"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:50 src/scm/report/guile-strings.c:88
+#: src/scm/report/guile-strings.c:109
+msgid "Table cell padding"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:53 src/scm/report/guile-strings.c:90
+#: src/scm/report/guile-strings.c:112
+msgid "Table border width"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:54 src/scm/report/guile-strings.c:113
+msgid "Bevel depth on tables"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:91
+msgid "Prepared by: "
+msgstr ""
+
+#: src/scm/report/guile-strings.c:92
+msgid "Prepared for: "
+msgstr ""
+
+#: src/scm/report/guile-strings.c:93
+msgid "Date: "
+msgstr "日期: "
+
+#: src/scm/report/guile-strings.c:94
+msgid "Fancy"
+msgstr "非常花"
+
+#: src/scm/report/guile-strings.c:95
+msgid "Technicolor"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:98
+msgid "Background color for reports."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:100
+msgid "Background Pixmap"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:104
+msgid "Enable hyperlinks in reports."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:114
+msgid "Plain"
+msgstr "普通"
+
+#: src/scm/report/guile-strings.c:117 src/scm/report/guile-strings.c:120
+msgid "Number of columns"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:118
+msgid "Number of columns before wrapping to a new row"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:121
+msgid "Edit Options"
+msgstr "编辑选项"
+
+#: src/scm/report/guile-strings.c:122
+msgid "Single Report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:123
+msgid "Multicolumn View"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:124 src/scm/report/guile-strings.c:127
+msgid "Welcome to GnuCash 1.6"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:126
+msgid "GnuCash 1.6 has lots of nice features. Here are a few."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:128
+msgid "Income Piechart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:129
+msgid "Expense Piechart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:130
+msgid "Asset Piechart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:131
+msgid "Liability Piechart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:132
+msgid "Shows a piechart with the Income per given time interval"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:133
+msgid "Shows a piechart with the Expenses per given time interval"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:134
+msgid "Shows a piechart with the Assets balance at a given time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:135
+msgid "Shows a piechart with the Liabilities balance at a given time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:136
+msgid "Income Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:137
+msgid "Expense Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:140 src/scm/report/guile-strings.c:176
+#: src/scm/report/guile-strings.c:253 src/scm/report/guile-strings.c:358
+#: src/scm/report/guile-strings.c:390 src/scm/report/guile-strings.c:422
+#: src/scm/report/guile-strings.c:526 src/scm/report/guile-strings.c:620
+msgid "From"
+msgstr "从"
+
+#: src/scm/report/guile-strings.c:141 src/scm/report/guile-strings.c:177
+#: src/scm/report/guile-strings.c:215 src/scm/report/guile-strings.c:254
+#: src/scm/report/guile-strings.c:359 src/scm/report/guile-strings.c:391
+#: src/scm/report/guile-strings.c:423 src/scm/report/guile-strings.c:527
+#: src/scm/report/guile-strings.c:621
+msgid "To"
+msgstr "到"
+
+#: src/scm/report/guile-strings.c:142 src/scm/report/guile-strings.c:162
+#: src/scm/report/guile-strings.c:179 src/scm/report/guile-strings.c:221
+#: src/scm/report/guile-strings.c:256 src/scm/report/guile-strings.c:361
+#: src/scm/report/guile-strings.c:399 src/scm/report/guile-strings.c:426
+msgid "Report's currency"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:143 src/scm/report/guile-strings.c:163
+#: src/scm/report/guile-strings.c:180 src/scm/report/guile-strings.c:222
+#: src/scm/report/guile-strings.c:257 src/scm/report/guile-strings.c:362
+#: src/scm/report/guile-strings.c:400 src/scm/report/guile-strings.c:409
+#: src/scm/report/guile-strings.c:428
+msgid "Price Source"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:145 src/scm/report/guile-strings.c:259
+msgid "Show Accounts until level"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:146 src/scm/report/guile-strings.c:260
+msgid "Show long account names"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:147
+msgid "Show Totals"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:148
+msgid "Maximum Slices"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:149 src/scm/report/guile-strings.c:197
+#: src/scm/report/guile-strings.c:211 src/scm/report/guile-strings.c:263
+#: src/scm/report/guile-strings.c:368 src/scm/report/guile-strings.c:435
+msgid "Plot Width"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:150 src/scm/report/guile-strings.c:198
+#: src/scm/report/guile-strings.c:212 src/scm/report/guile-strings.c:264
+#: src/scm/report/guile-strings.c:369 src/scm/report/guile-strings.c:436
+msgid "Plot Height"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:151 src/scm/report/guile-strings.c:265
+#: src/scm/report/guile-strings.c:370
+msgid "Report on these accounts, if chosen account level allows."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:152 src/scm/report/guile-strings.c:266
+msgid "Show accounts to this depth and not further"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:153 src/scm/report/guile-strings.c:267
+msgid "Show the full account name in legend?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:154
+msgid "Show the total balance in legend?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:155
+msgid "Maximum number of slices in pie"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:156 src/scm/report/guile-strings.c:272
+msgid "Other"
+msgstr "其它"
+
+#: src/scm/report/guile-strings.c:157 src/scm/report/guile-strings.c:270
+#: src/scm/report/guile-strings.c:377 src/scm/report/guile-strings.c:446
+#, c-format
+msgid "%s to %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:158
+#, c-format
+msgid "Balance at %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:160 src/scm/report/guile-strings.c:216
+#: src/scm/report/guile-strings.c:392
+msgid "Account Display Depth"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:161
+msgid "Show Foreign Currencies/Shares of Stock"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:164 src/scm/report/guile-strings.c:217
+#: src/scm/report/guile-strings.c:393
+msgid "Always show sub-accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:166 src/scm/report/guile-strings.c:395
+msgid "Group the accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:167 src/scm/report/guile-strings.c:170
+#: src/scm/report/guile-strings.c:219 src/scm/report/guile-strings.c:225
+#: src/scm/report/guile-strings.c:396 src/scm/report/guile-strings.c:402
+msgid "Show balances for parent accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:168 src/scm/report/guile-strings.c:220
+#: src/scm/report/guile-strings.c:397
+msgid "Show subtotals"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:169 src/scm/report/guile-strings.c:224
+#: src/scm/report/guile-strings.c:401
+msgid "Show Exchange Rates"
+msgstr "显示汇率"
+
+#: src/scm/report/guile-strings.c:171 src/scm/report/guile-strings.c:226
+#: src/scm/report/guile-strings.c:403
+msgid "Show subtotals for parent accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:173 src/scm/report/guile-strings.c:228
+#: src/scm/report/guile-strings.c:405
+msgid "Show the exchange rates used"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:175
+msgid "Account Summary"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:178 src/scm/report/guile-strings.c:255
+#: src/scm/report/guile-strings.c:360 src/scm/report/guile-strings.c:424
+msgid "Step Size"
+msgstr "步长"
+
+#: src/scm/report/guile-strings.c:181
+msgid "Include Sub-Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:182
+msgid "Include sub-accounts of all selected accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:184
+msgid "Do transaction report on this account"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:185 src/scm/report/guile-strings.c:210
+msgid "Show table"
+msgstr "显示表格"
+
+#: src/scm/report/guile-strings.c:186
+msgid "Display a table of the selected data."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:187 src/scm/report/guile-strings.c:209
+msgid "Show plot"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:188
+msgid "Display a graph of the selected data."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:189 src/scm/report/guile-strings.c:208
+msgid "Plot Type"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:190
+msgid "The type of graph to generate"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:191 src/scm/report/guile-strings.c:201
+msgid "Average"
+msgstr "均值"
+
+#: src/scm/report/guile-strings.c:192 src/scm/report/guile-strings.c:213
+#: src/scm/report/guile-strings.c:214
+msgid "Average Balance"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:193 src/scm/report/guile-strings.c:206
+#: src/scm/report/guile-strings.c:407
+msgid "Profit"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:194
+msgid "Profit (Gain minus Loss)"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:195
+msgid "Gain/Loss"
+msgstr "损益"
+
+#: src/scm/report/guile-strings.c:196
+msgid "Gain And Loss"
+msgstr "损益"
+
+#: src/scm/report/guile-strings.c:199
+msgid "Period start"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:200
+msgid "Period end"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:202
+msgid "Maximum"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:203
+msgid "Minimum"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:204
+msgid "Gain"
+msgstr "增益"
+
+#: src/scm/report/guile-strings.c:205
+msgid "Loss"
+msgstr "损失"
+
+#: src/scm/report/guile-strings.c:223 src/scm/report/guile-strings.c:398
+msgid "Show Foreign Currencies"
+msgstr "显示外国货币"
+
+#: src/scm/report/guile-strings.c:229
+#, c-format
+msgid "Balance sheet at %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:234
+msgid "Unrealized Gains(Losses)"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:236 src/scm/report/guile-strings.c:382
+msgid "Net Profit"
+msgstr "净利"
+
+#: src/scm/report/guile-strings.c:237
+msgid "Total Equity"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:238
+msgid "Liabilities & Equity"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:241
+msgid "Income Barchart"
+msgstr "收益柱状图"
+
+#: src/scm/report/guile-strings.c:242
+msgid "Expense Barchart"
+msgstr "费用柱状图"
+
+#: src/scm/report/guile-strings.c:243
+msgid "Asset Barchart"
+msgstr "资产柱状图"
+
+#: src/scm/report/guile-strings.c:244
+msgid "Liability Barchart"
+msgstr "负债柱状图"
+
+#: src/scm/report/guile-strings.c:245
+msgid "Shows a barchart with the Income per interval developing over time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:246
+msgid "Shows a barchart with the Expenses per interval developing over time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:247
+msgid "Shows a barchart with the Assets developing over time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:248
+msgid "Shows a barchart with the Liabilities developing over time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:249
+msgid "Income Over Time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:250
+msgid "Expense Over Time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:251
+msgid "Assets Over Time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:252
+msgid "Liabilities Over Time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:261
+msgid "Use Stacked Bars"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:262
+msgid "Maximum Bars"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:268
+msgid "Show barchart as stacked barchart? (Guppi>=0.35.4 required)"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:269
+msgid "Maximum number of bars in the chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:271
+#, c-format
+msgid "Balances %s to %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:273 src/scm/report/guile-strings.c:276
+#: src/scm/report/guile-strings.c:287 src/scm/report/guile-strings.c:291
+#: src/scm/report/guile-strings.c:294 src/scm/report/guile-strings.c:297
+#: src/scm/report/guile-strings.c:300 src/scm/report/guile-strings.c:303
+#: src/scm/report/guile-strings.c:306 src/scm/report/guile-strings.c:309
+msgid "Hello, World!"
+msgstr "Hello, World!"
+
+#: src/scm/report/guile-strings.c:274
+msgid "Boolean Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:275
+msgid "This is a boolean option."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:277
+msgid "Multi Choice Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:278
+msgid "This is a multi choice option."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:279
+msgid "First Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:280
+msgid "Help for first option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:281
+msgid "Second Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:282
+msgid "Help for second option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:283
+msgid "Third Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:284
+msgid "Help for third option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:285
+msgid "Fourth Options"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:286
+msgid "The fourth option rules!"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:288
+msgid "String Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:289
+msgid "This is a string option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:290 src/scm/report/guile-strings.c:327
+#: src/scm/report/guile-strings.c:350
+msgid "Hello, World"
+msgstr "Hello, World"
+
+#: src/scm/report/guile-strings.c:292
+msgid "Just a Date Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:293
+msgid "This is a date option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:295
+msgid "Time and Date Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:296
+msgid "This is a date option with time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:298
+msgid "Combo Date Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:299
+msgid "This is a combination date option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:301
+msgid "Relative Date Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:302
+msgid "This is a relative date option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:304
+msgid "Number Option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:305
+msgid "This is a number option."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:308 src/scm/report/guile-strings.c:311
+msgid "This is a color option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:312 src/scm/report/guile-strings.c:315
+msgid "Hello Again"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:313
+msgid "An account list option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:314
+msgid "This is an account list option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:316
+msgid "A list option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:317
+msgid "This is a list option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:318
+msgid "The Good"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:319
+msgid "Good option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:320
+msgid "The Bad"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:321
+msgid "Bad option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:322
+msgid "The Ugly"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:323
+msgid "Ugly option"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:324
+msgid "Testing"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:325
+msgid "Crash the report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:326
+msgid ""
+"This is for testing. Your reports probably shouldn't have an option like "
+"this."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:328
+#, c-format
+msgid ""
+"This is a sample GnuCash report. See the guile (scheme) source code in %s "
+"for details on writing your own reports, or extending existing reports."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:329
+#, c-format
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:330
+#, c-format
+msgid "For details on subscribing to that list, see %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:331
+#, c-format
+msgid "You can learn more about writing scheme using this %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:332
+msgid "online book"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:333
+#, c-format
+msgid "The current time is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:334
+#, c-format
+msgid "The boolean option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:335
+msgid "true"
+msgstr "真"
+
+#: src/scm/report/guile-strings.c:336
+msgid "false"
+msgstr "假"
+
+#: src/scm/report/guile-strings.c:337
+#, c-format
+msgid "The multi-choice option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:338
+#, c-format
+msgid "The string option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:339
+#, c-format
+msgid "The date option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:340
+#, c-format
+msgid "The date and time option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:341
+#, c-format
+msgid "The relative date option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:342
+#, c-format
+msgid "The combination date option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:343
+#, c-format
+msgid "The number option is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:344
+#, c-format
+msgid "The number option formatted as currency is %s."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:345
+msgid "Items you selected:"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:346
+msgid "List items selected"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:347
+msgid "(You selected no list items.)"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:348
+msgid "You have selected no accounts."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:349
+msgid "Have a nice day!"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:351
+msgid "A sample report with examples."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:353 src/scm/report/guile-strings.c:356
+msgid "URL to frame"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:354
+msgid "URL to display in report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:357
+msgid "Frame URL"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:365 src/scm/report/guile-strings.c:430
+msgid "Show Net Profit"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:366 src/scm/report/guile-strings.c:431
+msgid "Show Asset & Liability bars"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:367 src/scm/report/guile-strings.c:432
+msgid "Show Net Worth bars"
+msgstr "显示资产净值条"
+
+#: src/scm/report/guile-strings.c:371
+msgid "Show Income and Expenses?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:372
+msgid "Show the Asset and the Liability bars?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:373
+msgid "Show the net profit?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:374
+msgid "Show a Net Worth bar?"
+msgstr "显示一根资产净值条？"
+
+#: src/scm/report/guile-strings.c:375 src/scm/report/guile-strings.c:389
+msgid "Income/Expense Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:376
+msgid "Net Worth Chart"
+msgstr "资产净值图表"
+
+#: src/scm/report/guile-strings.c:383
+msgid "Net Worth"
+msgstr "资产净值"
+
+#: src/scm/report/guile-strings.c:384
+msgid "Income Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:385
+msgid "Asset Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:386
+msgid "Expense Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:387
+msgid "Liability Chart"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:388
+msgid "Net Worth Barchart"
+msgstr "资产净值柱状图"
+
+#: src/scm/report/guile-strings.c:406
+#, c-format
+msgid "Profit and Loss - %s to %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:408
+msgid "Profit And Loss"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:411
+msgid "Report Currency"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:413
+msgid "Stock Accounts to report on"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:416
+msgid "Listing"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:417
+msgid "Units"
+msgstr "单位"
+
+#: src/scm/report/guile-strings.c:421
+msgid "Investment Portfolio"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:427
+msgid "Price of Commodity"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:433
+msgid "Marker"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:434
+msgid "Marker Color"
+msgstr "标记棒的颜色"
+
+#: src/scm/report/guile-strings.c:437
+msgid "Calculate the price of this commodity."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:441
+msgid "Actual Transactions"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:442
+msgid "The instantaneous price of actual currency transactions in the past"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:443
+msgid "Price Database"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:444
+msgid "The recorded prices"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:445
+msgid "Color of the marker"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:449
+msgid "Double-Weeks"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:452
+msgid "All Prices equal"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:453
+msgid ""
+"All the prices found are equal. This would result in a plot with one "
+"straight line. Unfortunately, the plotting tool can't handle that."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:454
+msgid "All Prices at the same date"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:455
+msgid ""
+"All the prices found are from the same date. This would result in a plot "
+"with one straight line. Unfortunately, the plotting tool can't handle that."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:456
+msgid "Only one price"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:457
+msgid ""
+"There was only one single price found for the selected commodities in the "
+"selected time period. This doesn't give a useful plot."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:459
+msgid ""
+"There is no price information available for the selected commodities in the "
+"selected time period."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:460
+msgid "Identical commodities"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:461
+msgid ""
+"Your selected commodity and the currency of the report are identical. It "
+"doesn't make sense to show prices for identical commodities."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:463
+msgid "Price Scatterplot"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:476
+msgid "Make an invoice"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:477
+msgid "Display this report as an invoice."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:479
+msgid "Client Name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:480
+msgid "The name of the client to put on the invoice."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:482
+msgid "Client Address"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:483
+msgid "The address of the client to put on the invoice"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:485
+msgid "Title"
+msgstr "名称"
+
+#: src/scm/report/guile-strings.c:486
+msgid "The title of the report"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:490 src/scm/report/guile-strings.c:685
+msgid "Display the date?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:493 src/scm/report/guile-strings.c:687
+msgid "Display the check number?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:496 src/scm/report/guile-strings.c:689
+msgid "Display the description?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:499 src/scm/report/guile-strings.c:693
+msgid "Display the account?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:502 src/scm/report/guile-strings.c:699
+msgid "Display the number of shares?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:507 src/scm/report/guile-strings.c:707
+msgid "Display the amount?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:508 src/scm/report/guile-strings.c:626
+#: src/scm/report/guile-strings.c:710
+msgid "Single"
+msgstr "单重"
+
+#: src/scm/report/guile-strings.c:509 src/scm/report/guile-strings.c:711
+msgid "Single Column Display"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:510 src/scm/report/guile-strings.c:712
+msgid "Double"
+msgstr "双重"
+
+#: src/scm/report/guile-strings.c:511 src/scm/report/guile-strings.c:713
+msgid "Two Column Display"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:513 src/scm/report/guile-strings.c:603
+#: src/scm/report/guile-strings.c:702
+msgid "Running Balance"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:514 src/scm/report/guile-strings.c:703
+msgid "Display a running balance"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:516 src/scm/report/guile-strings.c:704
+msgid "Totals"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:517 src/scm/report/guile-strings.c:705
+msgid "Display the totals?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:519
+msgid "Client"
+msgstr "客户"
+
+#: src/scm/report/guile-strings.c:528
+msgid "Alternate Period"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:529
+msgid "Override or modify From: & To:"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:530
+msgid "Use From - To"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:531
+msgid "Use From - To period"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:532
+msgid "1st Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:533
+msgid "Jan 1 - Mar 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:534
+msgid "2nd Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:535
+msgid "Apr 1 - May 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:536
+msgid "3rd Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:537
+msgid "Jun 1 - Aug 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:538
+msgid "4th Est Tax Quarter"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:539
+msgid "Sep 1 - Dec 31"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:540 src/scm/report/guile-strings.c:541
+msgid "Last Year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:542
+msgid "Last Yr 1st Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:543
+msgid "Jan 1 - Mar 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:544
+msgid "Last Yr 2nd Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:545
+msgid "Apr 1 - May 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:546
+msgid "Last Yr 3rd Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:547
+msgid "Jun 1 - Aug 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:548
+msgid "Last Yr 4th Est Tax Qtr"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:549
+msgid "Sep 1 - Dec 31, Last year"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:550
+msgid "Select Accounts (none = all)"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:551
+msgid "Select accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:552
+msgid "Suppress $0.00 values"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:553
+msgid "$0.00 valued Accounts won't be printed."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:554
+msgid "Print Full account names"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:555
+msgid "Print all Parent account names"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:556
+msgid ""
+"WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
+"codes with payer sources may be repeated."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:559
+msgid "Sub-"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:560
+msgid "Choose export format"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:561
+msgid "Choose the export format for this report:"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:562
+msgid "HTML"
+msgstr "HTML"
+
+#: src/scm/report/guile-strings.c:563
+msgid "TXF"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:564 src/scm/report/guile-strings.c:565
+msgid "Select file for .TXF export"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:566
+#, c-format
+msgid ""
+"File: \"%s\" exists.\n"
+"Overwrite?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:568
+#, c-format
+msgid "Period from %s to %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:569
+msgid "Blue items are exportable to a .TXF file."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:570
+msgid ""
+"No Tax Related accounts were found.  Go to the Accounts->Tax Information "
+"dialog to set up tax-related accounts."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:571
+msgid "Tax Report / TXF Export"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:572
+msgid "Taxable Income / Deductible Expenses / Export to .TXF file"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:573 src/scm/report/guile-strings.c:575
+msgid "Taxable Income / Deductible Expenses"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:574
+msgid "This report shows your Taxable Income and Deductible Expenses."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:576
+msgid "This page shows your Taxable Income and Deductible Expenses."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:577
+msgid "Sorting"
+msgstr "排序"
+
+#: src/scm/report/guile-strings.c:578
+msgid "Primary Key"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:579
+msgid "Primary Subtotal"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:580
+msgid "Primary Subtotal for Date Key"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:581
+msgid "Secondary Key"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:582
+msgid "Secondary Subtotal"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:583
+msgid "Secondary Subtotal for Date Key"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:584
+msgid "Total For "
+msgstr ""
+
+#: src/scm/report/guile-strings.c:585 src/scm/report/guile-strings.c:728
+msgid "Grand Total"
+msgstr "重大的合计"
+
+#: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:696
+msgid "Other Account"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:605 src/scm/report/guile-strings.c:694
+msgid "Use Full Account Name?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:613
+msgid "Transfer from/to"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:622 src/scm/report/guile-strings.c:735
+msgid "Style"
+msgstr "样式"
+
+#: src/scm/report/guile-strings.c:623
+msgid "Report style"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:624
+msgid "Multi-Line"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:625
+msgid "Display N lines"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:627
+msgid "Display 1 line"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:628
+msgid "Report Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:629
+msgid "Report on these accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:630
+msgid "Filter Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:631
+msgid "Filter on these accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:632
+msgid "Filter Type"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:633
+msgid "Filter account"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:635
+msgid "Do not do any filtering"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:636
+msgid "Include Transactions to/from Filter Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:637
+msgid "Include transactions to/from filter accounts only"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:638
+msgid "Exclude Transactions to/from Filter Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:639
+msgid "Exclude transactions to/from all filter accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:641
+msgid "Do not sort"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:643
+msgid "Sort & subtotal by account name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:645
+msgid "Sort & subtotal by account code"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:647
+msgid "Sort by date"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:648
+msgid "Exact Time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:649
+msgid "Sort by exact time"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:650
+msgid "Register Order"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:651
+msgid "Sort as with the register"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:652
+msgid "Other Account Name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:653
+msgid "Sort by account transferred from/to's name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:654
+msgid "Other Account Code"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:655
+msgid "Sort by account transferred from/to's code"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:657
+msgid "Sort by amount"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:659
+msgid "Sort by description"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:661
+msgid "Sort by check/transaction number"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:663
+msgid "Sort by memo"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:664
+msgid "Ascending"
+msgstr "升序"
+
+#: src/scm/report/guile-strings.c:665
+msgid "smallest to largest, earliest to latest"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:666
+msgid "Descending"
+msgstr "降序"
+
+#: src/scm/report/guile-strings.c:667
+msgid "largest to smallest, latest to earliest"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:672 src/scm/report/guile-strings.c:673
+msgid "Yearly"
+msgstr "每年"
+
+#: src/scm/report/guile-strings.c:674
+msgid "Sort by this criterion first"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:675
+msgid "Subtotal according to the primary key?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:676 src/scm/report/guile-strings.c:681
+msgid "Do a date subtotal"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:677
+msgid "Primary Sort Order"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:678
+msgid "Order of primary sorting"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:679
+msgid "Sort by this criterion second"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:680
+msgid "Subtotal according to the secondary key?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:682
+msgid "Secondary Sort Order"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:683
+msgid "Order of Secondary sorting"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:691
+msgid "Display the memo?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:695
+msgid "Display the full account name"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:697
+msgid ""
+"Display the other account? (if this is a split transaction, this parameter "
+"is guessed)."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:701
+msgid "Display the shares price?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:709
+msgid "No amount display"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:714 src/scm/report/guile-strings.c:734
+msgid "Sign Reverses?"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:715
+msgid "Reverse amount display for certain account types"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:717
+msgid "Don't change any displayed amounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:718
+msgid "Income and Expense"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:719
+msgid "Reverse amount display for Income and Expense Accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:721
+msgid ""
+"Reverse amount display for Liability, Equity, Credit Card,and Income accounts"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:722
+#, c-format
+msgid "From %s To %s"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:724
+msgid "Primary Subtotals/headings"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:726
+msgid "Secondary Subtotals/headings"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:730
+msgid "Split Odd"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:732
+msgid "Split Even"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:736
+msgid "No matching transactions found"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:737
+msgid ""
+"No transactions were found that match the given time interval and account "
+"selection."
+msgstr ""
+
+#: src/scm/report/guile-strings.c:738
+msgid "Transaction Report"
+msgstr ""
