@@ -26,6 +26,7 @@ libgncgnome_la_SOURCES = \
   dialog-progress.c \
   dialog-style-sheet.c \
   dialog-sx-from-trans.c \
+  dialog-sxsincelast.c \
   dialog-tax-info.c \
   dialog-totd.c \
   dialog-transfer.c \
@@ -38,6 +39,7 @@ libgncgnome_la_SOURCES = \
   gnc-splash.c \
   mainwindow-account-tree.c \
   reconcile-list.c \
+  tip-of-the-day.c \
   top-level.c \
   window-acct-tree.c \
   window-help.c \
@@ -45,8 +47,7 @@ libgncgnome_la_SOURCES = \
   window-main-summarybar.c \
   window-reconcile.c \
   window-register.c \
-  window-report.c \
-  dialog-sxsincelast.c
+  window-report.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -70,6 +71,7 @@ noinst_HEADERS = \
   dialog-progress.h \
   dialog-style-sheet.h \
   dialog-sx-from-trans.h \
+  dialog-sxsincelast.h \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-scheduledxaction.h \
@@ -79,6 +81,7 @@ noinst_HEADERS = \
   gnc-splash.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
+  tip-of-the-day.h \
   top-level.h \
   window-acct-tree.h \
   window-help.h \
@@ -86,8 +89,7 @@ noinst_HEADERS = \
   window-main-summarybar.h \
   window-reconcile.h \
   window-register.h \
-  window-report.h \
-  dialog-sxsincelast.h
+  window-report.h
 
 EXTRA_DIST = \
   .cvsignore \
