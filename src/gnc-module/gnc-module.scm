@@ -20,9 +20,10 @@
 (export gnc:module-lookup)
 
 (define (gnc:module-system-init)
-  (let ((lib (dynamic-link "libgncmodule.la")))
+  (let ((lib (if (or (string=? (version) "1.3")
+                     (string=? (version) "1.3.4"))
+                 (dynamic-link "libgncmodule.so")
+                 (dynamic-link "libgncmodule"))))
     (if lib
         (dynamic-call "gnc_module_system_init" lib)
         (throw 'gnc:module-system-init-failed))))
-
-
