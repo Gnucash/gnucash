@@ -68,8 +68,6 @@ gnc_price_cell_enter (BasicCell *_cell,
   return TRUE;
 }
 
-/* This callback only allows numbers with a single
- * decimal point in them */
 static void
 gnc_price_cell_modify_verify (BasicCell *_cell, 
                               const GdkWChar *change,
@@ -82,7 +80,7 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
 {
   PriceCell *cell = (PriceCell *) _cell;
   struct lconv *lc = gnc_localeconv ();
-  const char *toks = "+-*/=()";
+  const char *toks = "+-*/=()_";
   char decimal_point;
   char thousands_sep;
   int i;
@@ -108,6 +106,7 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
   for (i = 0; i < change_len; i++)
     if (!isdigit(change[i]) &&
         !isspace(change[i]) &&
+        !isalpha(change[i]) &&
         (decimal_point != change[i]) &&
         (thousands_sep != change[i]) &&
         (strchr (toks, change[i]) == NULL))
