@@ -48,7 +48,7 @@
 #include "messages.h"
 #include "window-help.h"
 
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 
 struct _qifimportwindow {
   GtkWidget * window;
