@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <openhbci2.h>
 #include <openhbci2/error.h>
+#include <gwenhywfar/directory.h>
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
@@ -122,6 +123,23 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
       gnc_HBCI_Account_glist_from_kvp_glist
       (gnc_hbci_get_book_account_list(gnc_get_current_book ()),
        api);
+
+  {
+    /* FIXME FIXME FIXME : Use a sane directory here. FIXME FIXME
+       FIXME FIXME FIXME FIXME FIXME FIXME FIXME it's a BUUUUG
+       uuuuh-ooh BUUUUG */
+    char homebuffer[256];
+    const char *dirname = "/.gnucash/hbci";
+    // create default path
+    if (GWEN_Directory_GetHomeDirectory(homebuffer, 
+					sizeof(homebuffer)-strlen(dirname))) {
+      fprintf(stderr, "Buffer for home path too small");
+      return NULL;
+    }
+    strcat(homebuffer, dirname);
+    /*fprintf(stderr, "Setting log dir to %s\n", homebuffer);*/
+    HBCI_Hbci_setApplicationDataDir(HBCI_API_Hbci(api), homebuffer);
+  }
 
   return api;
 }

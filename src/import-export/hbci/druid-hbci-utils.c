@@ -275,7 +275,7 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
 
   g_assert(api);
   g_assert(outbox);
-  g_assert(accountlist);
+  /*g_assert(accountlist);*/
   
   response = HBCI_Outbox_response(outbox);
   n=GWEN_DB_GetFirstGroup(response);
