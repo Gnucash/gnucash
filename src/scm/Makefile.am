@@ -26,7 +26,6 @@ gnc_regular_scm_files = \
   substring-search.scm \
   tip-list.scm \
   tip-of-the-day.scm \
-  xgettext.scm \
   xml-generator.scm
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
@@ -47,13 +46,6 @@ EXTRA_DIST = \
   bootstrap.scm.in \
   startup-design.txt \
   ${SCM_FILES}
-
-guile-strings.c: ${SCM_FILES}
-	rm -f guile-strings.c
-	guile -s ./xgettext.scm ${SCM_FILES}
-CLEANFILES += guile-strings.c
-
-all-local: guile-strings.c
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

@@ -50,3 +50,5 @@ foreach my $file (@possible_files) {
 
   print $path . $name . "\n";
 }
+
+print "intl-scm/guile-strings.c\n";

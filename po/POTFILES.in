@@ -213,6 +213,7 @@ src/gnome/file-history.c
 src/gnome/window-help.c
 src/gnome/gnc-network.c
 src/gnome/gnc-splash.c
+src/gnome/gnucash.keys.in
 src/gnome/mainwindow-account-tree.c
 src/gnome/reconcile-list.c
 src/gnome/top-level.c
@@ -222,6 +223,7 @@ src/gnome/window-main.c
 src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
+src/gnome/gnucash.desktop.in
 src/gnome/argv-list-converters.c
 src/gnome/file-utils.c
 src/gnome/dialog-sx-from-trans.c
@@ -287,3 +289,4 @@ src/report/report-system/gnc-report.c
 src/report/standard-reports/gncmod-standard-reports.c
 src/report/stylesheets/gncmod-stylesheets.c
 src/report/utility-reports/gncmod-utility-reports.c
+intl-scm/guile-strings.c

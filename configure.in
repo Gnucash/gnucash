@@ -694,6 +694,7 @@ AC_OUTPUT(
           doc/sgml/pt_PT/Makefile
           doc-tools/Makefile
           intl/Makefile
+          intl-scm/Makefile
           lib/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile

@@ -1,7 +1,6 @@
 Makefile
-guile-strings.c
+Makefile.in
 .deps
 .libs
-Makefile.in
 *.lo
 *.la
