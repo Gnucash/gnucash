@@ -1192,6 +1192,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     menubar = gnc_invoice_window_create_menubar (iw);
     gtk_container_set_border_width (GTK_CONTAINER (menubar), 2);
     gtk_container_add (GTK_CONTAINER (iw->menubar_dock), menubar);
+    gtk_widget_show_all (iw->menubar_dock);
   }
   */
 
@@ -1202,7 +1203,10 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     toolbar = gnc_invoice_window_create_toolbar (iw);
     gtk_container_set_border_width (GTK_CONTAINER (toolbar), 2);
     gtk_container_add (GTK_CONTAINER (iw->toolbar_dock), toolbar);
+    gtk_widget_show_all (iw->toolbar_dock);
   }
+
+  gtk_widget_show_all (glade_xml_get_widget (xml, "dock1"));
 
   /* Setup initial values */
   iw->invoice_guid = *gncInvoiceGetGUID (invoice);
