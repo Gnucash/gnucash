@@ -123,6 +123,7 @@ static void copyTransCB(GtkWidget *w, gpointer data);
 static void pasteTransCB(GtkWidget *w, gpointer data);
 static void startRecnCB(GtkWidget *w, gpointer data);
 static void xferCB(GtkWidget *w, gpointer data);
+static void stockSplitCB (GtkWidget * w, gpointer data);
 static void editCB(GtkWidget *w, gpointer data);
 static void helpCB(GtkWidget *w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
@@ -175,7 +176,7 @@ regWindowAccGroup (Account *account)
   xaccLedgerDisplay * ledger = xaccLedgerDisplayAccGroup (account);
 
   if (ledger != NULL)
-    result = regWindowLedger(ledger);
+    result = regWindowLedger (ledger);
 
   return result;
 }
@@ -1384,6 +1385,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Stock S_plit..."),
+      N_("Record a stock split or a stock merger"),
+      stockSplitCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -2391,7 +2400,7 @@ copyTransCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-pasteTransCB(GtkWidget *w, gpointer data)
+pasteTransCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
 
@@ -2407,12 +2416,28 @@ pasteTransCB(GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-xferCB(GtkWidget * w, gpointer data)
+xferCB (GtkWidget * w, gpointer data)
 {
   RegWindow *regData = data;
 
   gnc_xfer_dialog (regData->window,
                    xaccLedgerDisplayLeader (regData->ledger));
+}
+
+
+/********************************************************************\
+ * stockSplitCB -- open up the stock split druid                    *
+ *                                                                  *
+ * Args:   w    - the widget that called us                         *
+ *         data - the data struct for this register                 *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+stockSplitCB (GtkWidget * w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_stock_split_dialog (xaccLedgerDisplayLeader (regData->ledger));
 }
 
 

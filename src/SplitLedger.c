@@ -123,6 +123,8 @@
 
 
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
+#define STOCK_SPLIT_STR _("-- Stock Split --")
+
 
 typedef struct _SRInfo SRInfo;
 struct _SRInfo
@@ -1418,7 +1420,9 @@ LedgerTraverse (Table *table,
       break;
 
     name = cell->cell.value;
-    if (!name || *name == '\0' || safe_strcmp (name, SPLIT_TRANS_STR) == 0)
+    if (!name || *name == '\0' ||
+        safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
+        safe_strcmp (name, STOCK_SPLIT_STR) == 0)
       break;
 
     account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
@@ -3616,9 +3620,11 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
 
         return xaccPrintAmount (imbalance,
                                 gnc_split_value_print_info (split, FALSE));
+        break;
 
       default:
         return value;
+        break;
     }
   }
 
@@ -3754,6 +3760,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
         return xaccPrintAmount (amount,
                                 gnc_split_value_print_info (split, FALSE));
       }
+      break;
 
     case PRIC_CELL:
       {
@@ -3763,9 +3770,12 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
           return "";
 
         price = xaccSplitGetSharePrice (split);
+        if (gnc_numeric_zero_p (price))
+          return "";
 
         return xaccPrintAmount (price, gnc_default_price_print_info ());
       }
+      break;
 
     case SHRS_CELL:
       {
@@ -3782,6 +3792,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
         return xaccPrintAmount (shares,
                                 gnc_split_quantity_print_info (split, FALSE));
       }
+      break;
 
     case MXFRM_CELL:
       {
@@ -3795,17 +3806,20 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                           account_separator);
          else
          {
-           /* determine whether s is null because threre are three
-            * or more splits, or whether there is only one */
+           /* for multi-split transactions and stock splits,
+            * use a special value. */
            s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
            if (s)
              name = g_strdup (SPLIT_TRANS_STR);
+           else if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+             name = g_strdup (STOCK_SPLIT_STR);
            else
              name = g_strdup ("");
          }
 
          return name;
       }
+      break;
 
     case TCRED_CELL:
     case TDEBT_CELL:
@@ -3827,6 +3841,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
         return xaccPrintAmount (total,
                                 gnc_split_value_print_info (split, FALSE));
       }
+      break;
 
     case TSHRS_CELL:
       {
@@ -3837,6 +3852,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
         return xaccPrintAmount (total,
                                 gnc_split_quantity_print_info (split, FALSE));
       }
+      break;
 
     default:
       return "";
@@ -4039,6 +4055,7 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
 {
   SplitRegister *reg = user_data;
   CellType cell_type;
+  Split *split;
 
   cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
 
@@ -4050,10 +4067,16 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
     case ACTN_CELL:
     case XFRM_CELL:
     case MEMO_CELL:
-    case CRED_CELL:
-    case DEBT_CELL:
     case MXFRM_CELL:
     case NOTES_CELL:
+      return XACC_CELL_ALLOW_ALL;
+
+    case CRED_CELL:
+    case DEBT_CELL:
+      split = sr_get_split (reg, virt_loc.vcell_loc);
+      if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+        return XACC_CELL_ALLOW_NONE;
+
       return XACC_CELL_ALLOW_ALL;
 
     case RECN_CELL:

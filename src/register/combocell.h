@@ -47,6 +47,8 @@
 #ifndef __COMBO_CELL_H__
 #define __COMBO_CELL_H__
 
+#include <glib.h>
+
 #include "basiccell.h"
 #include "gnc-common.h"
 
@@ -74,16 +76,13 @@ void         xaccComboCellSetStrict (ComboCell *cell, gboolean strict);
 void         xaccComboCellSetCompleteChar (ComboCell *cell,
                                            char complete_char);
 
-/* Sets a string which, if the cell has that value, will be returned
- * on an enter, thus preventing the cell from being edited. This is
- * used for transactions with multiple splits. */
-void         xaccComboCellSetIgnoreString (ComboCell *cell,
-                                           const char *ignore_string);
-
-/* Sets a string which, if the cell has the ignore value, will be
- * returned as the help string. */
-void         xaccComboCellSetIgnoreHelp (ComboCell *cell,
-                                         const char *ignore_help);
+/* Add a string to a list of strings which, if the cell has that value,
+ * will cause the cell to be uneditable on 'enter'. If the cell has
+ * that value, the ignore_help string will be returned by the
+ * help handler. */
+void         xaccComboCellAddIgnoreString (ComboCell *cell,
+                                           const char *ignore_string,
+                                           const char *ignore_help);
 
 /* Determines whether combocells are automatically raised upon typing.
  * Defaults to false. This is a 'class' method. */

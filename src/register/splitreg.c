@@ -743,12 +743,20 @@ xaccInitSplitRegister (SplitRegister *reg,
     xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, help);
   }
 
-  xaccComboCellSetIgnoreString (reg->mxfrmCell, _("-- Split Transaction --"));
-
   {
     const char *help = _("This transaction has multiple splits; "
                          "press the Split button to see them all");
-    xaccComboCellSetIgnoreHelp (reg->mxfrmCell, help);
+
+    xaccComboCellAddIgnoreString (reg->mxfrmCell,
+                                  _("-- Split Transaction --"), help);
+  }
+
+  {
+    const char *help = _("This transaction is a stock split; "
+                         "press the Split button to see details");
+
+    xaccComboCellAddIgnoreString (reg->mxfrmCell,
+                                  _("-- Stock Split --"), help);
   }
 
   /* the memo cell */
@@ -762,9 +770,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* the notes cell */
   xaccSetBasicCellBlankHelp (&reg->notesCell->cell,
                              _("Enter notes for the transaction"));
-
-  /* by default, don't blank zeros on the price cells. */
-  xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
 
   /* Use 5 decimal places for prices */
   xaccSetPriceCellFraction (reg->priceCell, 1000000);

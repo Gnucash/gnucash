@@ -68,8 +68,8 @@ typedef struct _PopBox
 
         char complete_char; /* char to be used for auto-completion */
 
-        gchar *ignore_string;
-        gchar *ignore_help;
+        GList *ignore_strings;
+        GList *ignore_helps;
 } PopBox;
 
 
@@ -91,7 +91,8 @@ static gboolean auto_pop_combos = FALSE;
 
 /* =============================================== */
 
-ComboCell *xaccMallocComboCell (void)
+ComboCell *
+xaccMallocComboCell (void)
 {
 	ComboCell * cell;
 
@@ -102,7 +103,8 @@ ComboCell *xaccMallocComboCell (void)
 	return cell;
 }
 
-void xaccInitComboCell (ComboCell *cell)
+void
+xaccInitComboCell (ComboCell *cell)
 {
 	PopBox *box;
 
@@ -133,8 +135,8 @@ void xaccInitComboCell (ComboCell *cell)
 
         box->complete_char = '\0';
 
-        box->ignore_string = NULL;
-        box->ignore_help = NULL;
+        box->ignore_strings = NULL;
+        box->ignore_helps = NULL;
 }
 
 /* =============================================== */
@@ -268,7 +270,8 @@ destroyCombo (BasicCell *bcell)
 
 	if (cell->cell.realize == NULL)
 	{
-		if (box != NULL && box->item_list != NULL) {
+		if (box != NULL && box->item_list != NULL)
+                {
 			combo_disconnect_signals(cell);
 			gtk_object_unref(GTK_OBJECT(box->item_list));
 			box->item_list = NULL;
@@ -304,6 +307,8 @@ xaccDestroyComboCell (ComboCell *cell)
 
 	if (box != NULL)
         {
+                GList *node;
+
 		g_list_foreach(box->menustrings, menustring_free, NULL);
 		g_list_free(box->menustrings);
                 box->menustrings = NULL;
@@ -311,8 +316,23 @@ xaccDestroyComboCell (ComboCell *cell)
                 gnc_quickfill_destroy (box->qf);
                 box->qf = NULL;
 
-                g_free(box->ignore_string);
-                g_free(box->ignore_help);
+                for (node = box->ignore_strings; node; node = node->next)
+                {
+                        g_free (node->data);
+                        node->data = NULL;
+                }
+
+                g_list_free (box->ignore_strings);
+                box->ignore_strings = NULL;
+
+                for (node = box->ignore_helps; node; node = node->next)
+                {
+                        g_free (node->data);
+                        node->data = NULL;
+                }
+
+                g_list_free (box->ignore_helps);
+                box->ignore_helps = NULL;
 
 		g_free(box);
 		cell->cell.gui_private = NULL;
@@ -366,9 +386,9 @@ static void
 gnc_append_string_to_list(gpointer _string, gpointer _item_list)
 {
 	char *string = _string;
-	GNCItemList *item_list = GNC_ITEM_LIST(_item_list);
+	GNCItemList *item_list = GNC_ITEM_LIST (_item_list);
 
-	gnc_item_list_append(item_list, string);
+	gnc_item_list_append (item_list, string);
 }
 
 static void
@@ -377,9 +397,9 @@ gnc_combo_sync_edit_list(PopBox *box)
 	if (box->list_in_sync || box->item_list == NULL)
 		return;
 
-	gnc_item_list_clear(box->item_list);
-	g_list_foreach(box->menustrings, gnc_append_string_to_list,
-		       box->item_list);
+	gnc_item_list_clear (box->item_list);
+	g_list_foreach (box->menustrings, gnc_append_string_to_list,
+                        box->item_list);
 }
 
 static void
@@ -402,19 +422,20 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 		return;
 
 	box = cell->cell.gui_private;
-	box->menustrings = g_list_append(box->menustrings, g_strdup(menustr));
+	box->menustrings = g_list_append (box->menustrings,
+                                          g_strdup (menustr));
 
 	gnc_combo_sync_edit_list(box);
 
 	if (box->item_list != NULL)
         {
-                block_list_signals(cell);
+                block_list_signals (cell);
 
-		gnc_item_list_append(box->item_list, menustr);
-                if (safe_strcmp(menustr, cell->cell.value) == 0)
-                        gnc_item_list_select(box->item_list, menustr);
+		gnc_item_list_append (box->item_list, menustr);
+                if (safe_strcmp (menustr, cell->cell.value) == 0)
+                        gnc_item_list_select (box->item_list, menustr);
 
-                unblock_list_signals(cell);
+                unblock_list_signals (cell);
         }
 	else
 		box->list_in_sync = FALSE;
@@ -671,17 +692,25 @@ ComboDirect (BasicCell *bcell,
 /* =============================================== */
 
 static char *
-ComboHelpValue(BasicCell *bcell)
+ComboHelpValue (BasicCell *bcell)
 {
         ComboCell *cell = (ComboCell *) bcell;
         PopBox *box = cell->cell.gui_private;
 
         if ((bcell->value != NULL) && (bcell->value[0] != 0))
         {
-                if ((box->ignore_string != NULL) &&
-                    (box->ignore_help != NULL) &&
-                    (safe_strcmp (bcell->value, box->ignore_string) == 0))
-                        return g_strdup (box->ignore_help);
+                GList *node;
+                GList *help_node = box->ignore_helps;
+
+                for (node = box->ignore_strings; node;
+                     node = node->next, help_node = help_node->next)
+                {
+                        if (safe_strcmp (bcell->value, node->data) != 0)
+                                continue;
+
+                        if (help_node->data != NULL)
+                                return g_strdup (help_node->data);
+                }
 
                 return g_strdup (bcell->value);
         }
@@ -784,9 +813,12 @@ enterCombo (BasicCell *bcell,
 {
         ComboCell *cell = (ComboCell *) bcell;
 	PopBox *box = bcell->gui_private;
+        GList *find;
 
-        if ((box->ignore_string != NULL) &&
-            (safe_strcmp (bcell->value, box->ignore_string) == 0))
+        find = g_list_find_custom (box->ignore_strings,
+                                   bcell->value,
+                                   (GCompareFunc) safe_strcmp);
+        if (find)
                 return FALSE;
 
 	gnc_combo_sync_edit_list (box);
@@ -832,12 +864,16 @@ leaveCombo (BasicCell *bcell)
                 find = g_list_find_custom (box->menustrings,
                                            bcell->value,
                                            (GCompareFunc) safe_strcmp);
+                if (find)
+                        return;
 
-                /* The ignore string is ok, even if it's not in list. */
-                if (find == NULL &&
-                    ((box->ignore_string == NULL) ||
-                    (safe_strcmp (bcell->value, box->ignore_string) != 0)))
-                        xaccSetBasicCellValueInternal (bcell, "");
+                find = g_list_find_custom (box->ignore_strings,
+                                           bcell->value,
+                                           (GCompareFunc) safe_strcmp);
+                if (find)
+                        return;
+
+                xaccSetBasicCellValueInternal (bcell, "");
         }
 }
 
@@ -874,7 +910,9 @@ xaccComboCellSetCompleteChar (ComboCell *cell, char complete_char)
 /* =============================================== */
 
 void
-xaccComboCellSetIgnoreString (ComboCell *cell, const char *ignore_string)
+xaccComboCellAddIgnoreString (ComboCell *cell,
+                              const char *ignore_string,
+                              const char *ignore_help)
 {
 	PopBox *box;
 
@@ -883,24 +921,10 @@ xaccComboCellSetIgnoreString (ComboCell *cell, const char *ignore_string)
 
 	box = cell->cell.gui_private;
 
-        g_free (box->ignore_string);
-        box->ignore_string = g_strdup (ignore_string);
-}
-
-/* =============================================== */
-
-void
-xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
-{
-	PopBox *box;
-
-	if (cell == NULL)
-		return;
-
-	box = cell->cell.gui_private;
-
-        g_free (box->ignore_help);
-        box->ignore_help = g_strdup (ignore_help);
+        box->ignore_strings = g_list_prepend (box->ignore_strings,
+                                              g_strdup (ignore_string));
+        box->ignore_helps = g_list_prepend (box->ignore_helps,
+                                            g_strdup (ignore_help));
 }
 
 /* =============================================== */
