@@ -111,6 +111,9 @@ gnc_search_date_finalize (GObject *obj)
   GNCSearchDate *o = (GNCSearchDate *)obj;
   g_assert (IS_GNCSEARCH_DATE (o));
 
+  if (o->priv->entry)
+    gtk_widget_destroy (o->priv->entry);
+
   g_free(o->priv);
 	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
@@ -261,6 +264,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   entry = gnc_date_edit_new_ts (fi->ts, FALSE, FALSE);
   g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+  g_object_ref (entry);
   fi->priv->entry = entry;
 
   /* And return the box */

@@ -400,7 +400,6 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 	Account *account = NULL;
 	AccountGroup *group = NULL, *children;
 	gint i = 0, *indices;
-	GtkTreePath *path_copy;
 
 	{
 	  gchar *path_string = gtk_tree_path_to_string(path);
@@ -410,8 +409,6 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
-
-	path_copy = gtk_tree_path_copy (path);
 
 	if (model->priv->toplevel != NULL) {
 		if (gtk_tree_path_get_depth (path) > 1) {
@@ -661,6 +658,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
 								  account, FALSE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free (string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN:
@@ -680,6 +678,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
 								  account, FALSE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free (string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL:
@@ -699,6 +698,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, TRUE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free (string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_NOTES:

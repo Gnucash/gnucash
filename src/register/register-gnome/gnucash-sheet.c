@@ -1284,6 +1284,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         return TRUE;
                 case 3:
                         do_popup = (sheet->popup != NULL);
+			if (!do_popup)
+				return FALSE;
                         break;
                 case 4:
                 case 5:

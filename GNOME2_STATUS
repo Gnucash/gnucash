@@ -73,17 +73,13 @@ Register Core - MINIMALLY FUNCTIONAL
 
 	- Insertion point not shown. (fix gnucash-item-edit.c)
 	- Cannot hilight text with mouse (fix gnucash-item-edit.c)
-	- Popup buttons don't appear. (gnucash-item-edit.c ?)
 
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
 
-Find - MINIMALLY FUNCTIONAL
+Find - Somewhat Functional
 	- Can generate a query in the dialog.
-	- Use of the "Date" selection sometimes crashes gnucash (not
-	  when you select it, but then you change from "Date" to
-	  something else.
 
 View Summarybar - Summarybar not ported yet. Where should it go?
 	Wouldn't look good between the toolbar and the notebook tabs.
