@@ -56,7 +56,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SCRUB */
   GNC_LOG_WARNING,      /* GTK_REG */
   GNC_LOG_WARNING,      /* GUILE */
-  GNC_LOG_DEBUG,        /* BACKEND */
+  GNC_LOG_WARNING,      /* BACKEND */
   GNC_LOG_WARNING,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
 };
