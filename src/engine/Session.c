@@ -38,6 +38,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "BackendP.h"
 #include "FileIO.h"
 #include "FileIOP.h"
 #include "Group.h"
@@ -48,10 +49,18 @@ struct _session {
    AccountGroup *topgroup;
 
    /* the requested session id, in the form or a URI, such as
-    * file:/some/where
+    * file:/some/where, or sql:server.host.com:555
     */
    char *sessionid;
 
+   /* if session failed, this records the failure reason 
+    * (file not found, etc).
+    * the standard errno values are used.
+    */
+   int errtype;
+
+   /* ---------------------------------------------------- */
+   /* teh following struct members apply only for file-io */
    /* the fully-resolved path to the file */
    char *fullpath;
 
@@ -60,11 +69,10 @@ struct _session {
    char * linkfile;
    int lockfd;
 
-   /* if session failed, this records the failure reason 
-    * (file not found, etc).
-    * the standard errno values are used.
-    */
-   int errtype;
+   /* ---------------------------------------------------- */
+   /* this struct member applies only for SQL i/o */
+   Backend *backend;
+
 };
 
 /* ============================================================== */
@@ -90,6 +98,7 @@ xaccInitSession (Session *sess)
   sess->lockfile = NULL;
   sess->linkfile = NULL;
   sess->lockfd = -1;
+  sess->backend = NULL;
 };
   
 /* ============================================================== */
@@ -165,6 +174,33 @@ xaccSessionBegin (Session *sess, const char * sid)
 
    return retval;
 }
+
+/* ============================================================== */
+
+AccountGroup *
+xaccSessionBeginSQL (Session *sess, const char * dbname)
+{
+   Backend *be = NULL;
+   AccountGroup *grp = NULL;
+
+   if (!sess) return NULL;
+
+{
+/* for testing the sql, just a hack, remove later ... */
+Backend * pgendNew (void);
+be = pgendNew ();
+}
+   sess->backend = be;
+
+   if (be && be->session_begin) {
+      grp = (be->session_begin) (sess, dbname);
+   }
+   // comment out until testing done, else clobber file ...
+   // sess->topgroup = grp;
+   xaccGroupSetBackend (sess->topgroup, be);
+}
+
+/* ============================================================== */
 
 AccountGroup *
 xaccSessionBeginFile (Session *sess, const char * filefrag)
@@ -289,6 +325,12 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
    if (!rc) {
       sess->topgroup = xaccReadAccountGroupFile (sess->fullpath);
    }
+
+#ifdef SQLHACK
+/* for testing the sql, just a hack, remove later ... */
+/* this should never ever appear here ...  */
+xaccSessionBeginSQL (sess, "gnc_bogus");
+#endif
 
    return (sess->topgroup);
 }

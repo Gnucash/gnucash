@@ -1,7 +1,7 @@
 /********************************************************************\
  * Transaction.c -- the transaction data structure                  *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -32,11 +32,12 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "BackendP.h"
+#include "GNCIdP.h"
 #include "Group.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "GNCIdP.h"
 #include "util.h"
 #include "date.h"
 
@@ -463,7 +464,7 @@ xaccFreeTransaction( Transaction *trans )
 
   if (!trans) return;
 
-  ENTER ("xaccFreeTransaction(): addr=%p\n", trans);
+  ENTER ("addr=%p\n", trans);
 
   /* free up the destination splits */
   if (trans->splits) {
@@ -503,7 +504,7 @@ xaccFreeTransaction( Transaction *trans )
 
   _free(trans);
 
-  LEAVE ("xaccFreeTransaction(): addr=%p\n", trans);
+  LEAVE ("addr=%p\n", trans);
 }
 
 /********************************************************************\
@@ -575,8 +576,7 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
       s -> damount = (value / (s->share_price));   
    } else 
    {
-      PERR ("xaccSplitSetBaseValue(): "
-            " inappropriate base currency %s "
+      PERR (" inappropriate base currency %s "
             " given split currency=%s and security=%s\n",
               base_currency, s->acc->currency, s->acc->security);
       return;
@@ -617,8 +617,7 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
       value = s->damount * s->share_price;   
    } else 
    {
-      PERR ("xaccSplitGetBaseValue(): "
-            " inappropriate base currency %s "
+      PERR (" inappropriate base currency %s "
             " given split currency=%s and security=%s\n",
               base_currency, s->acc->currency, s->acc->security);
       return 0.0;
@@ -665,7 +664,7 @@ ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
             if (!safe_strcmp(s->acc->security, base_currency)) {
                value += s->damount;
             } else {
-               PERR ("Internal Error: ComputeValue(): "
+               PERR ("Internal Error: "
                      " inconsistent currencies \n");
                assert (0);
             }
@@ -851,7 +850,7 @@ xaccSplitRebalance (Split *split)
     base_currency = FindCommonCurrency (trans->splits, ra, rb);
 
     if (!base_currency) {
-      PERR ("Internal Error: SplitRebalance(): no common split currencies \n");
+      PERR ("Internal Error: no common split currencies \n");
       s = trans->splits[0];
       while (s) {
         if (s->acc) {
@@ -978,9 +977,10 @@ xaccTransCommitEdit (Transaction *trans)
    int i;
    Split *split;
    Account *acc;
+   Backend *be;
 
    if (!trans) return;
-   ENTER ("xaccTransCommitEdit(): trans addr=%p\n", trans);
+   ENTER ("trans addr=%p\n", trans);
    CHECK_OPEN (trans);
 
    /* At this point, we check to see if we have a valid transaction.
@@ -991,7 +991,7 @@ xaccTransCommitEdit (Transaction *trans)
    split = trans->splits[0];
    if (!split)
    {
-      PINFO ("xaccTransCommitEdit(): delete trans at addr=%p\n", trans);
+      PINFO ("delete trans at addr=%p\n", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
       xaccRemoveEntity(&trans->guid);
@@ -1062,7 +1062,13 @@ xaccTransCommitEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
 
-   LEAVE ("xaccTransCommitEdit(): trans addr=%p\n", trans);
+   /* see if there's a backend.  If there is, invoke it */
+   be = xaccTransactionGetBackend (trans);
+   if (be) {
+      (be->trans_commit_edit) (be, trans);
+   }
+
+   LEAVE ("trans addr=%p\n", trans);
 }
 
 void
@@ -1077,7 +1083,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    CHECK_OPEN (trans);
 
-   ENTER ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
+   ENTER ("trans addr=%p\n", trans);
 
    /* copy the original values back in. */
    orig = trans->orig;
@@ -1179,7 +1185,7 @@ xaccTransRollbackEdit (Transaction *trans)
    trans->orig = NULL;
    trans->open = 0;
 
-   LEAVE ("xaccTransRollbackEdit(): trans addr=%p\n", trans);
+   LEAVE ("trans addr=%p\n", trans);
 }
 
 gncBoolean
@@ -1645,7 +1651,7 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
-   PINFO ("xaccTransSetDateSecs(): addr=%p set date to %lu %s \n",
+   PINFO ("addr=%p set date to %lu %s \n",
            trans, secs, ctime (&secs));
 
    trans->date_posted.tv_sec = secs;
@@ -1667,7 +1673,7 @@ xaccTransSetDateSecsL (Transaction *trans, long long secs)
    CHECK_OPEN (trans);
    DEBUGCMD ({ 
       time_t sicko = secs;
-      PINFO ("xaccTransSetDateSecsL(): addr=%p set date to %Lu %s \n",
+      PINFO ("addr=%p set date to %Lu %s \n",
               trans, secs, ctime (&sicko));
    })
 
@@ -1692,7 +1698,7 @@ xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
    CHECK_OPEN (trans);
    DEBUGCMD ({
          time_t sicko = ts->tv_sec;
-         PINFO ("xaccTransSetDateTS(): addr=%p set date to %Lu %s \n",
+         PINFO ("addr=%p set date to %Lu %s \n",
                 trans, ts->tv_sec, ctime (&sicko));
     })
 
@@ -1769,7 +1775,7 @@ xaccTransSetDateToday (Transaction *trans)
    trans->date_posted.tv_sec = tv.tv_sec;
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 
-   PINFO ("xaccTransSetDateToday(): addr=%p set date to %lu %s \n",
+   PINFO ("addr=%p set date to %lu %s \n",
          trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
 }
 

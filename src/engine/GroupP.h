@@ -37,8 +37,9 @@
 #define __XACC_ACCOUNT_GROUP_P_H__
 
 #include "config.h"
-#include "Transaction.h"
+#include "BackendP.h"
 #include "GNCId.h"
+#include "Transaction.h"
 
 
 /** STRUCTS *********************************************************/
@@ -54,6 +55,8 @@ struct _account_group {
 
   GUID     guid;                   /* globally unique id */
 
+  Backend *backend;                /* persistant storage backend */
+
   /* cached parameters */
   double balance;
 };
@@ -63,6 +66,5 @@ struct _account_group {
  * a group from a datafile, or some other external source. Never
  * call this on an existing group! */
 void xaccGroupSetGUID (AccountGroup *group, GUID *guid);
-
 
 #endif /* __XACC_ACCOUNT_GROUP_P_H__ */

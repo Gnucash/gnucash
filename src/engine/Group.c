@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas                            *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,12 +29,13 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "BackendP.h"
+#include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "GNCIdP.h"
-#include "util.h"
 #include "gnc-common.h"
+#include "util.h"
 
 /* static short module = MOD_ENGINE; */
 
@@ -47,6 +48,7 @@
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
 {
@@ -58,10 +60,17 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->account[0]  = NULL;   /* null-terminated array */
 
   grp->balance     = 0.0;
+
+  xaccGUIDNew(&grp->guid);
+  xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
+
+  grp->backend     = NULL;
+
 }
 
 /********************************************************************\
 \********************************************************************/
+
 AccountGroup *
 xaccMallocAccountGroup( void )
 {
@@ -69,15 +78,12 @@ xaccMallocAccountGroup( void )
 
   xaccInitializeAccountGroup (grp);
 
-  xaccGUIDNew(&grp->guid);
-
-  xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
-
   return grp;
 }
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccFreeAccountGroup( AccountGroup *grp )
 {
@@ -104,6 +110,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountGroupMarkSaved (AccountGroup *grp)
 {
@@ -119,6 +126,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountGroupMarkNotSaved (AccountGroup *grp)
 {
@@ -170,6 +178,7 @@ void xaccGroupSetGUID (AccountGroup *group, GUID *guid)
 
 /********************************************************************\
 \********************************************************************/
+
 AccountGroup *
 xaccGroupLookup (const GUID *guid)
 {
@@ -1111,4 +1120,4 @@ xaccGroupStagedTransactionTraversal(AccountGroup *grp,
   return 0;
 }
 
-/****************** END OF FILE *************************************/
+/************************* END OF FILE ********************************/
