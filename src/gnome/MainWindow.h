@@ -31,6 +31,17 @@
 #include "Account.h"
 #include "config.h"
 
+/** HELP STUFF: *****************************************************/
+#define HELP_VAR     "XACC_HELP"
+#define HH_ABOUT     "xacc-about.html"
+#define HH_ACC       "xacc-accwin.html"
+#define HH_REGWIN    "xacc-regwin.html"
+#define HH_RECNWIN   "xacc-recnwin.html"
+#define HH_ADJBWIN   "xacc-adjbwin.html"
+#define HH_MAIN      "xacc-main.html"
+#define HH_GPL       "xacc-gpl.html"
+
+
 /** STRUCTURES ******************************************************/
 struct _main_window 
 {
@@ -41,11 +52,11 @@ struct _main_window
 typedef struct _main_window main_window;
 
 /** PROTOTYPES ******************************************************/
-void refreshMainWindow( void );
-void main_window_init(AccountGroup *);
+void gnc_ui_refreshMainWindow( void );
+void gnc_ui_mainWindow(AccountGroup *);
 void xaccMainWindowAddAccount ( GtkWidget * );
-void refresh_tree ( void );
-void acct_tree_fill ( GtkWidget *, AccountGroup *, int );
+void gnc_ui_refresh_tree ( void );
+void gnc_ui_acct_tree_fill ( GtkWidget *, AccountGroup *, int );
 
 /** GLOBALS *********************************************************/
 enum {

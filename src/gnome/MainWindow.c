@@ -63,6 +63,13 @@ acct_tree_select(GtkWidget *widget, GdkEventButton *event, GtkWidget *child)
 
 }
 
+void
+refreshMainWindow()
+{
+
+}
+
+
 /********************************************************************\
  * refresh_tree                                                     *
  *   refreshes the main window                                      *
@@ -71,7 +78,7 @@ acct_tree_select(GtkWidget *widget, GdkEventButton *event, GtkWidget *child)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-refresh_tree()
+gnc_ui_refresh_tree()
 {
   /** This is ugly... how do we do this nicer? */
   GList *items;
@@ -84,7 +91,7 @@ refresh_tree()
   
   mwindow->root_item = mwindow->maintree;  
     
-  acct_tree_fill(GTK_TREE_ITEM(mwindow->root_item), topgroup, -1);    
+  gnc_ui_acct_tree_fill(GTK_TREE_ITEM(mwindow->root_item), topgroup, -1);    
 
 }
 
@@ -100,7 +107,7 @@ refresh_tree()
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree) 
+gnc_ui_acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree) 
 {
   int accounts_in_group = xaccGroupGetNumAccounts(accts);
   int current_account;
@@ -150,7 +157,7 @@ acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree)
     acc_children = xaccAccountGetChildren(acc);
     if ( acc_children )
     {
-      acct_tree_fill ( GTK_TREE(tree_item), acc_children, 1 );
+      gnc_ui_acct_tree_fill ( GTK_TREE(tree_item), acc_children, 1 );
     }
   
     gtk_widget_show ( tree_item );
@@ -167,7 +174,7 @@ acct_tree_fill(GtkWidget *item, AccountGroup *accts, int subtree)
 /* Standard Gnome About Dialog, need I say more? */
 /* hack alert -- should display about.html documentation page instead */
 static void
-about_cb (GtkWidget *widget, gpointer data)
+gnc_ui_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
   gchar *authors[] = {
@@ -191,7 +198,7 @@ about_cb (GtkWidget *widget, gpointer data)
 
 /* Help system callback */
 static void
-help_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
   /* hack alert --  We need some config menus to setup were the docs are located */
   
@@ -209,7 +216,7 @@ help_cb ( GtkWidget *widget, gpointer data )
 /* We might want to move these to there own file =\ */
 
 static void
-file_new_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_file_new_cb ( GtkWidget *widget, gpointer data )
 {
 
 }
@@ -217,7 +224,7 @@ file_new_cb ( GtkWidget *widget, gpointer data )
 /* Options dialog... this should house all of the config options     */
 /* like where the docs reside, and whatever else is deemed necessary */
 static void
-options_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_options_cb ( GtkWidget *widget, gpointer data )
 {
   GnomePropertyBox *box;
   GtkWidget *w, *label, *box2;
@@ -250,7 +257,7 @@ options_cb ( GtkWidget *widget, gpointer data )
 }
 
 static void
-add_account ( GtkWidget *widget, gpointer data )
+gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *tree = data;
   GList *selection;
@@ -273,7 +280,7 @@ add_account ( GtkWidget *widget, gpointer data )
 }
 
 static void
-delete_account_finish_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_delete_account_finish_cb ( GtkWidget *widget, gpointer data )
 {
   Account *account = data;
   
@@ -281,12 +288,12 @@ delete_account_finish_cb ( GtkWidget *widget, gpointer data )
   xaccRemoveAccount ( account );
   xaccFreeAccount ( account );
 
-  refresh_tree ();  
+  gnc_ui_refresh_tree ();  
   
 }
 
 static void
-delete_account_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *tree = data;
   GList *selection;
@@ -304,7 +311,7 @@ delete_account_cb ( GtkWidget *widget, gpointer data )
                                        GNOME_STOCK_BUTTON_OK,
                                        GNOME_STOCK_BUTTON_CANCEL, NULL );
       gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
-                                   GTK_SIGNAL_FUNC (delete_account_finish_cb), 
+                                   GTK_SIGNAL_FUNC (gnc_ui_delete_account_finish_cb), 
                                    acc);
       gtk_widget_show ( msgbox );
     }
@@ -319,7 +326,7 @@ delete_account_cb ( GtkWidget *widget, gpointer data )
 }
 
 static void
-gnucash_mainwindow_toolbar_open ( GtkWidget *widget, gpointer data )
+gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
 {
   GtkWidget *tree = data;
   GList *selection;
@@ -344,13 +351,13 @@ gnucash_mainwindow_toolbar_open ( GtkWidget *widget, gpointer data )
 }
 
 void
-main_window_init(AccountGroup *accts)
+gnc_ui_mainWindow(AccountGroup *accts)
 {
 
   GtkWidget 	*scrolled_win;
   GtkWidget 	*main_vbox;
   GtkWidget 	*clist_vbox;
-  GtkWidget	*menubar;
+  GtkWidget	  *menubar;
   GtkWidget 	*clist;
   GtkWidget 	*notebook;
   int nmenu_items;
@@ -373,10 +380,10 @@ main_window_init(AccountGroup *accts)
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
     {"<Main>/File/Quit", "<control>Q", gnucash_shutdown, NULL },
-    {"<Main>/Options/Preferences..", "<control>A", options_cb, NULL},
-    {"<Main>/Help/Help", NULL, help_cb, NULL},
+    {"<Main>/Options/Preferences..", "<control>A", gnc_ui_options_cb, NULL},
+    {"<Main>/Help/Help", NULL, gnc_ui_help_cb, NULL},
     {"<Main>/Help/<separator>", NULL, NULL, NULL},
-    {"<Main>/Help/About..", NULL, about_cb, NULL}
+    {"<Main>/Help/About..", NULL, gnc_ui_about_cb, NULL}
   };
 
   MenuBar *main_menu_bar;
@@ -392,17 +399,17 @@ main_window_init(AccountGroup *accts)
     {
       GNOMEUIINFO_ITEM_DATA(N_("Open"), 
                        N_("Open selected account."),
-                       gnucash_mainwindow_toolbar_open, 
+                       gnc_ui_mainWindow_toolbar_open, 
                        mwindow->root_item,
                        GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_ITEM_DATA(N_("New"),
                        N_("Create a new account."),
-                       add_account, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
+                       gnc_ui_add_account, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_ITEM_DATA(N_("Edit"), 
                        N_("Edit account information."), 
                        NULL, NULL, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_ITEM_DATA(N_("Delete"), N_("Delete selected account."), 
-                       delete_account_cb, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
+                       gnc_ui_delete_account_cb, mwindow->root_item, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_ITEM(N_("Exit"), N_("Exit GnuCash."),
                        gnucash_shutdown, GNOME_APP_PIXMAP_NONE),
       GNOMEUIINFO_END
@@ -415,7 +422,7 @@ main_window_init(AccountGroup *accts)
   }
 
   /* Cram accounts into the tree widget */
-  acct_tree_fill(GTK_TREE(mwindow->root_item), accts, -1);
+  gnc_ui_acct_tree_fill(GTK_TREE(mwindow->root_item), accts, -1);
 
   /* Create the notebook */
   notebook = gtk_notebook_new ();
@@ -455,48 +462,6 @@ main_window_init(AccountGroup *accts)
   menubar = main_menu_bar->widget;
   /*accel = main_menu_bar->table;*/
 
-#if 0
-
-  {
-    /* Here's how to use the new MenuBar stuff to create multiple menu
-       bars */
-
-    GtkWidget *test_win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    GtkWidget *test_vbox = gtk_vbox_new(FALSE, 1);
-    MenuBarGroup *mbg = menuBarGroupCreate();
-    MenuBar *mb1;
-    MenuBar *mb2;
-    GtkMenuEntry items[] =
-    {
-      {"<Stumpy>/Eat/Grubs", "<control>N", NULL, NULL},
-      {"<Stumpy>/Eat/Gravel", "<control>O", NULL, NULL},
-      {"<Stumpy>/So/Scary", "<control>S", NULL, NULL},
-      {"<Stumpy2>/Eat-2/Grubs", "<control>N", NULL, NULL},
-      {"<Stumpy2>/Eat-2/Gravel", "<control>O", NULL, NULL},
-      {"<Stumpy2>/So-2/Scary/Err/Umm", "<control>S", NULL, NULL}
-    };
-    int nitems = sizeof(items) / sizeof(items[0]);
-    
-    mb1 = menuBarCreate(mbg, "<Stumpy>");
-    mb2 = menuBarCreate(mbg, "<Stumpy2>");
-    
-    menuBarGroupAddItems(mbg, items, nitems);
-
-    gtk_window_set_title(GTK_WINDOW(test_win), "Stumpy");
-    gtk_container_add(GTK_CONTAINER(test_win), test_vbox);
-    gtk_box_pack_start(GTK_BOX(test_vbox), menuBarGetWidget(mb1),
-                       FALSE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(test_vbox), menuBarGetWidget(mb2),
-                       FALSE, TRUE, 0);
-
-    gtk_widget_show(menuBarGetWidget(mb1));
-    gtk_widget_show(menuBarGetWidget(mb2));
-    gtk_widget_show(test_vbox);
-    gtk_widget_show(test_win);
-
-  }
-#endif
-
 //gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gnome_app_set_menus ( GNOME_APP (app), GTK_MENU_BAR (menubar));
   gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
@@ -531,6 +496,38 @@ main_window_init(AccountGroup *accts)
   gtk_widget_show ( app );
 
 } 
+
+
+
+/* OLD_GNOME_CODE */
+
+void
+gnucash_shutdown (GtkWidget *widget, gpointer *data)
+{
+  if ( xaccAccountGroupNotSaved(topgroup) )
+  {
+    GtkWidget *msgbox;
+    msgbox = gnome_message_box_new ( FMB_SAVE_MSG,
+                                     GNOME_MESSAGE_BOX_ERROR, 
+                                     GNOME_STOCK_BUTTON_OK,
+                                     GNOME_STOCK_BUTTON_CANCEL, NULL );
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                                 GTK_SIGNAL_FUNC (file_cmd_save), 
+                                 NULL);
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
+                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
+                                 NULL);                                 
+    gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 1,
+                                 GTK_SIGNAL_FUNC (file_cmd_quit), 
+                                 NULL);                                                    
+    gtk_widget_show ( msgbox );   
+  }
+  else
+  {
+    gtk_main_quit ();
+  }
+
+}
 
 /********************* END OF FILE **********************************/
 

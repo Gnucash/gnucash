@@ -29,6 +29,7 @@ INCLPATH = -I.. \
            -I../engine \
            -I../register \
            -I../swig \
+	   -I../guile \
            -I@srcdir@/../../include \
            -I$(includedir)
 
@@ -38,20 +39,23 @@ LDFLAGS  = @LDFLAGS@
 GUILELIBS = @GUILELIBS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
            $(shell @GTK_CONFIG_BIN@ --libs) @X_EXTRA_LIBS@ -lgnomeui \
-	   -lgnome -lgnomesupport -lgdk_imlib -ltiff \
+	   $(shell @GNOME_CONFIG_BIN@ --libs gnome gnomeui ) \
 	   $(GUILELIBS) -lintl
 
+GNOMELIBS = @GNOMELIBS@
+GTKLIBS   = @GTKLIBS@
 
 TARGET   = ../../gnucash.gnome
 STATIC   = ../../gnucash.gnome.static
 
 OTHER_OBJS := ../obj/gnome/*.o ../engine/obj/*.o ../register/obj/gnome/*.o \
-              ../guile/obj/*.o ../swig/guile/gnucash-all-guile_wrap.o
+              ../guile/obj/*.o ../swig/guile/gnucash-all-guile_wrap.o \
+              ../swig/obj/*.o
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := main.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
-              RecnWindow.c
+GNOME_SRCS := top-level.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c xtutil.c \
+              RecnWindow.c MenuCommands.c FileBox.c
 ######################################################################
 
 default: $(TARGET)
