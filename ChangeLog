@@ -1,3 +1,8 @@
+2000-05-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/quickfillcell.c: if a quickfill attempt fails,
+	replace the string with the original case string.
+
 2000-05-29  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report-2.scm (make-account-subheading): 

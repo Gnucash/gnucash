@@ -49,22 +49,24 @@
 
 typedef struct _QuickFillCell
 {
-   BasicCell cell;
-   QuickFill *qfRoot;       /* root of quickfill-tree 
-                             * handled by this cell */
-   QuickFill *qf;           /* current position in tree */
+  BasicCell cell;
+  QuickFill *qfRoot;       /* root of quickfill-tree 
+                            * handled by this cell */
+  QuickFill *qf;           /* current position in tree */
 
-   QuickFillSort sort;      /* determines order of strings matched.
-                             * default is QUICKFILL_LIFO. */
+  QuickFillSort sort;      /* determines order of strings matched.
+                            * default is QUICKFILL_LIFO. */
+
+  char *original;          /* original string entered in original case */
 } QuickFillCell;
 
-/* installs a callback to handle price recording */
 QuickFillCell *  xaccMallocQuickFillCell (void);
 void             xaccInitQuickFillCell (QuickFillCell *);
 void             xaccDestroyQuickFillCell (QuickFillCell *);
 
 void             xaccSetQuickFillCellValue (QuickFillCell *, const char *);
 void             xaccSetQuickFillSort (QuickFillCell *, QuickFillSort);
+void             xaccSetQuickFillOriginal (QuickFillCell *, const char *);
 
 /* GUI-dependent */
 void             xaccQuickFillGUIInit (QuickFillCell *);

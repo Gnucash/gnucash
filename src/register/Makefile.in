@@ -32,7 +32,7 @@ INCLPATH = -I@top_srcdir@/ \
            -I@top_srcdir@/src/register/gnome
 
 
-CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} ${CPPFLAGS}
+CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} ${CPPFLAGS} ${GLIB_CFLAGS}
 
 ######################################################################
 # See Makefile.common for information about these variables.

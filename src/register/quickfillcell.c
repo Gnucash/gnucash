@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <glib.h>
 
 #include "basiccell.h"
 #include "quickfillcell.h"
@@ -69,6 +70,8 @@ quick_enter (BasicCell *_cell, const char *val,
    *start_selection = 0;
    *end_selection = -1;
 
+   xaccSetQuickFillOriginal(cell, NULL);
+
    return val;
 }
 
@@ -92,6 +95,17 @@ quick_modify (BasicCell *_cell,
    /* If deleting, just accept */
    if (change == NULL)
    {
+     /* if the new value is a prefix of the original modulo case,
+      * just truncate the end of the original. Otherwise, set it
+      * to NULL */
+     if ((*cursor_position >= strlen(newval)) &&
+         (cell->original != NULL) &&
+         (strlen(cell->original) >= strlen(newval)) &&
+         (strncasecmp(cell->original, newval, strlen(newval)) == 0))
+       cell->original[strlen(newval)] = '\0';
+     else
+       xaccSetQuickFillOriginal(cell, NULL);
+
      SET (&(cell->cell), newval);
      return newval;
    }
@@ -100,15 +114,32 @@ quick_modify (BasicCell *_cell,
    if (*cursor_position < strlen(oldval))
    {
      SET (&(cell->cell), newval);
+     xaccSetQuickFillOriginal(cell, NULL);
      return newval;
+   }
+
+   if (cell->original == NULL)
+     cell->original = g_strdup(newval);
+   else
+   {
+     char *original = g_strconcat(cell->original, change, NULL);
+     g_free(cell->original);
+     cell->original = original;
    }
 
    match = xaccGetQuickFillStr(cell->qfRoot, newval);
 
    if ((match == NULL) || (match->text == NULL))
    {
-     SET (&(cell->cell), newval);
-     return newval;
+     if (cell->original != NULL)
+       retval = strdup(cell->original);
+     else
+       retval = newval;
+
+     *cursor_position += strlen(change);
+
+     SET (&(cell->cell), retval);
+     return retval;
    }
 
    retval = strdup(match->text);
@@ -122,7 +153,7 @@ quick_modify (BasicCell *_cell,
 }
 
 /* ================================================ */
-/* when leaving cell, make sure that text was put into the qf    */
+/* when leaving cell, make sure that text was put into the qf */
 
 static const char * 
 quick_leave (BasicCell *_cell, const char *val) 
@@ -156,6 +187,7 @@ xaccInitQuickFillCell (QuickFillCell *cell)
    cell->qfRoot = xaccMallocQuickFill();
    cell->qf = cell->qfRoot;
    cell->sort = QUICKFILL_LIFO;
+   cell->original = NULL;
 
    cell->cell.enter_cell    = quick_enter;
    cell->cell.modify_verify = quick_modify;
@@ -173,6 +205,9 @@ xaccDestroyQuickFillCell (QuickFillCell *cell)
    xaccFreeQuickFill (cell->qfRoot);
    cell->qfRoot = NULL;
    cell->qf = NULL;
+
+   g_free(cell->original);
+   cell->original = NULL;
 
    cell->cell.enter_cell    = NULL;
    cell->cell.modify_verify = NULL;
@@ -200,6 +235,22 @@ xaccSetQuickFillSort (QuickFillCell *cell, QuickFillSort sort)
     return;
 
   cell->sort = sort;
+}
+
+/* ================================================ */
+
+void
+xaccSetQuickFillOriginal (QuickFillCell *cell, const char *original)
+{
+  if (cell == NULL)
+    return;
+
+  g_free(cell->original);
+
+  if ((original != NULL) && (*original != '\0'))
+    cell->original = g_strdup(original);
+  else
+    cell->original = NULL;
 }
 
 /* =============== END OF FILE ==================== */
