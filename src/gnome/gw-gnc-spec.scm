@@ -43,7 +43,6 @@
       "#include <dialog-commodity.h>\n"
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
-      "#include <window-help.h>\n"
       "#include <gnc-html.h>\n"
       "#include <gnc-splash.h>\n"
       "#include <dialog-find-transactions.h>\n"

@@ -48,6 +48,7 @@
 #include "druid-loan.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-dir.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
@@ -60,7 +61,6 @@
 #include "gnc-version.h"
 #include "mainwindow-account-tree.h"
 #include "window-acct-tree.h"
-#include "window-help.h"
 #include "window-main.h"
 #include "window-reconcile.h"
 #include "window-register.h"
@@ -891,8 +891,7 @@ gnc_main_window_cmd_tools_find_transactions (EggAction *action, GncMainWindow *w
 static void
 gnc_main_window_cmd_help_tutorial (EggAction *action, GncMainWindow *window)
 {
-	/* FIXME GNOME 2 Port (use GNOME help) */
-	helpWindow(NULL, NULL, HH_MAIN);
+	gnc_gnome_help (HF_GUIDE, NULL);
 }
 
 static void
@@ -908,8 +907,7 @@ gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window)
 {
-	/* FIXME GNOME 2 Port (use GNOME help) */
-	helpWindow(NULL, NULL, HH_HELP);
+	gnc_gnome_help (HF_HELP, NULL);
 }
 
 static void
@@ -939,7 +937,7 @@ gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window)
 	const gchar *translator_credits = _("translator_credits");
 	GdkPixbuf *logo;
 
-	logo = gdk_pixbuf_new_from_file (GNC_PIXMAP_DIR "/appicon.png", NULL);
+	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
 
 	about = gnome_about_new ("GnuCash", VERSION, copyright, message, authors, documenters,
 				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,

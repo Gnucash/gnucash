@@ -10,7 +10,6 @@
 #include <gtk/gtk.h>
 
 #include "dialog-utils.h"
-#include "window-help.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -491,7 +490,7 @@ search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 static void
 search_help_cb (GtkButton *button, GNCSearchWindow *sw)
 {
-  helpWindow (NULL, NULL, HH_FIND_TRANSACTIONS);
+  gnc_gnome_help (HF_USAGE, HL_FIND_TRANSACTIONS);
 }
 
 static void

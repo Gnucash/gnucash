@@ -62,7 +62,6 @@
 #include "option-util.h"
 #include "top-level.h"
 #include "window-acct-tree.h"
-#include "window-help.h"
 #include "window-main-summarybar.h"
 #include "window-main.h"
 #include "window-reconcile.h"
@@ -753,7 +752,7 @@ gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data)
 void
 gnc_main_window_tutorial_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_MAIN);
+  gnc_gnome_help(HF_GUIDE, NULL);
 }
 
 void
@@ -766,7 +765,7 @@ gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
 void
 gnc_main_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_HELP);
+  gnc_gnome_help(HF_HELP, NULL);
 }
 
 void

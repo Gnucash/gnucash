@@ -16,7 +16,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnucash-sheet.h"
-#include "window-help.h"
 #include "dialog-search.h"
 #include "search-param.h"
 
@@ -206,7 +205,7 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_ORDER);
+  gnc_gnome_help(HF_USAGE, NULL);
 }
 
 void

@@ -375,7 +375,7 @@ GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
 GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
 GNC_MODULE_DIR='${pkglibdir}'
-GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
+GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
 AC_SUBST(GNC_ACCOUNTS_DIR)
 AC_SUBST(GNC_CONFIGDIR)
@@ -617,8 +617,8 @@ LANGINFO_D_FMT_CHECK
 # Used to initialize doc-path.
 AC_ARG_WITH( help-prefix,
   [  --with-help-prefix=PATH      specify where to store the help files],
-  GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
-  GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
+  GNC_HELPDIR="$with_help_prefix",
+  GNC_HELPDIR="\${datadir}")
 
 AC_SUBST(GNC_HELPDIR)
 

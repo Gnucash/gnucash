@@ -48,7 +48,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
-#include "window-help.h"
 
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
@@ -987,7 +986,6 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 			       	gpointer data)
 {
 	AccountWindow *aw = data; 
-	char *help_file;
 
 	switch (response) {
 		case GTK_RESPONSE_OK:
@@ -1009,16 +1007,15 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 		case GTK_RESPONSE_HELP:
 			switch (aw->dialog_type) {
 				case NEW_ACCOUNT:
-					help_file = HH_ACC;
+					gnc_gnome_help(HF_USAGE, HL_ACC);
 					break;
 				case EDIT_ACCOUNT:
-					help_file = HH_ACCEDIT;
+					gnc_gnome_help(HF_USAGE, HL_ACCEDIT);
 					break;
 				default:
 					g_assert_not_reached ();
 					return;
 			}
-			helpWindow(NULL, NULL, help_file);
 			break;
 		default:
 			g_assert_not_reached ();

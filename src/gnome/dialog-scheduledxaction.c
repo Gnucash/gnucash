@@ -47,7 +47,6 @@
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
-#include "window-help.h"
 #include "window-register.h"
 
 #include "gnc-split-reg.h"
@@ -296,9 +295,7 @@ static
 void
 editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
 {
-        gnc_help_window *help = gnc_help_window_new();
-	gnc_help_window_show_help(help, HH_SXEDITOR, NULL);
-	return;
+	gnc_gnome_help(HF_USAGE, HL_SXEDITOR);
 }
 
 static void

@@ -56,6 +56,8 @@ Register Core - MINIMALLY FUNCTIONAL
 	its a simple fix, and I didn't see it.  Other than this one
 	issue, the rest of the register works, as far as I can tell."
 
+Help - WORKING
+
 Financial Calculator - WORKING
 
 Price Editor - MINIMALLY FUNCTIONAL
@@ -85,7 +87,6 @@ Find - MINIMALLY FUNCTIONAL
 	- Use of the "Date" selection sometimes crashes gnucash (not
 	  when you select it, but then you change from "Date" to
 	  something else.
-	- Clicking help prints lots of errors.
 
 
 View Toolbar/Summarybar/Statusbar - NEEDS WORK

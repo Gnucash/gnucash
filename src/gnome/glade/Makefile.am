@@ -4,7 +4,6 @@ glade_DATA = \
 	acctperiod.glade \
 	commodities.glade \
 	fincalc.glade \
-	help.glade \
 	lots.glade \
 	newuser.glade \
 	price.glade \

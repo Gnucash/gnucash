@@ -41,7 +41,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
-#include "window-help.h"
 
 static short module = MOD_GUI;
 

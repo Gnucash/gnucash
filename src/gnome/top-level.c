@@ -68,7 +68,6 @@
 #include "messages.h"
 #include "split-register.h"
 #include "top-level.h"
-#include "window-help.h"
 /*#include "window-main.h" */
 #include "window-acct-tree.h"
 #include "window-register.h"
@@ -135,7 +134,7 @@ gnucash_ui_is_terminating(void)
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-  helpWindow (NULL, NULL, HH_GLOBPREFS);
+  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
 }
 
 static gboolean
@@ -287,7 +286,7 @@ gnc_html_price_url_cb (const char *location, const char *label,
 static void
 gnc_commodity_help_cb (void)
 {
-  helpWindow (NULL, _("Help"), HH_COMMODITY);
+  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
 }
 
 /* ============================================================== */

@@ -17,7 +17,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
-#include "window-help.h"
 #include "dialog-search.h"
 #include "search-param.h"
 #include "gnc-account-sel.h"
@@ -243,7 +242,7 @@ gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_EMPLOYEE);
+  gnc_gnome_help(HF_USAGE, NULL);
 }
 
 void

@@ -31,7 +31,6 @@
 #include "global-options.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
-#include "window-help.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -96,7 +95,7 @@ gnc_ui_new_user_dialog (void)
 			gncp_new_user_finish ();
 			break;
 		} else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button))) {
-			helpWindow (NULL, NULL, HH_QUICKSTART);
+			gnc_gnome_help (HF_GUIDE, NULL);
 			gncp_new_user_finish ();
 			break;
 		}

@@ -55,7 +55,6 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
-#include "window-help.h"
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "top-level.h"
@@ -1024,7 +1023,7 @@ gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 static void
 gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_RECNWIN);
+  gnc_gnome_help(HF_USAGE, HL_RECNWIN);
 }
 
 static void

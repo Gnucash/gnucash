@@ -29,23 +29,20 @@
 
 
 /** Help Files ******************************************************/
-#define HH_ACC               "gnucash-help/usage.html#acct-create"
-#define HH_ACCEDIT           "gnucash-help/usage.html#acct-edit"
-#define HH_COMMODITY         "gnucash-help/usage.html#tool-commodity"
-#define HH_CUSTOMER          "gnucash-help/usage.html"
-#define HH_EMPLOYEE          "gnucash-help/usage.html"
-#define HH_FIND_TRANSACTIONS "gnucash-help/usage.html#tool-find"
-#define HH_GLOBPREFS         "gnucash-help/custom-gnucash.html#set-prefs"
-#define HH_HELP              "gnucash-help/help.html"
-#define HH_INVOICE           "gnucash-help/usage.html"
-#define HH_JOB               "gnucash-help/usage.html"
-#define HH_MAIN              "gnucash-guide/index.html"
-#define HH_ORDER             "gnucash-help/usage.html"
-#define HH_PRINTCHECK        "gnucash-help/usage.html#print-check"
-#define HH_QUICKSTART        "gnucash-guide/index.html"
-#define HH_RECNWIN           "gnucash-help/usage.html#acct-reconcile"
-#define HH_SXEDITOR          "gnucash-help/usage.html#tran-sched"
-#define HH_VENDOR            "gnucash-help/usage.html"
+#define HF_USAGE             "gnucash-help/usage.html"
+#define HF_CUSTOM            "gnucash-help/custom-gnucash.html"
+#define HF_GUIDE             "gnucash-guide/index.html"
+#define HF_HELP              "gnucash-help/help.html"
+
+/** Links in the Help Files *****************************************/
+#define HL_ACC               "acct-create"
+#define HL_ACCEDIT           "acct-edit"
+#define HL_COMMODITY         "tool-commodity"
+#define HL_FIND_TRANSACTIONS "tool-find"
+#define HL_GLOBPREFS         "set-prefs"
+#define HL_PRINTCHECK        "print-check"
+#define HL_RECNWIN           "acct-reconcile"
+#define HL_SXEDITOR          "tran-sched"
 
 /* GTK Windows - Common Response Codes */
 
@@ -87,6 +84,8 @@ gnc_error_dialog(GtkWidget *parent,
 		 const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
 
+extern void
+gnc_gnome_help (const char *file_name, const char *target_link);
 
 int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 					 const char *title,

@@ -26,7 +26,6 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"
-#include "window-help.h"
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
@@ -413,7 +412,7 @@ gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_INVOICE);
+  gnc_gnome_help(HF_USAGE, NULL);
 }
 
 void

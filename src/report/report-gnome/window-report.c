@@ -46,7 +46,6 @@
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
-#include "window-help.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
@@ -1245,20 +1244,8 @@ gnc_html_help_url_cb (const char *location, const char *label,
                       gboolean new_window, GNCURLResult *result)
 {
   g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
 
-  if (new_window)
-  {
-    gnc_help_window * help;
-
-    help = gnc_help_window_new ();
-    gnc_help_window_show_help (help, location, label);
-
-    result->load_to_stream = FALSE;
-  }
-  else
-    result->load_to_stream = TRUE;
-
+  gnc_gnome_help (location, label);
   return TRUE;
 }
 

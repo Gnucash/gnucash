@@ -35,7 +35,6 @@
 #include "window-register.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
-#include "window-help.h"
 #include "print-session.h"
 #include "gnc-ui.h"
 #include "gnc-date-format.h"
@@ -262,5 +261,5 @@ void
 gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
                                   gpointer user_data)
 {
-  helpWindow(NULL, NULL, HH_PRINTCHECK);
+  gnc_gnome_help(HF_USAGE, HL_PRINTCHECK);
 }

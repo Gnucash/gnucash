@@ -57,7 +57,6 @@
 #include "lot-viewer.h"
 #include "messages.h"
 #include "table-allgui.h"
-#include "window-help.h"
 #include "window-main.h"
 #include "window-reconcile.h"
 #include "window-register.h"
