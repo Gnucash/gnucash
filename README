@@ -123,6 +123,7 @@ Motif or Lesstif  --
            Lesstif 0.83    works    
            Lesstif 0.86.0  is reported to work     
            Lesstif 0.86.5  crashes.   
+           Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
            Commercial Motif seems to work, but beware old libXm's 
            combined with new glibc's, 
 
