@@ -1,7 +1,29 @@
 /*
  * FILE:
  * register.c
+ *
+ * FUNCTION:
+ * implements the register object
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
  */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #include "messages.h"
 #include "register.h"
@@ -105,11 +127,11 @@ configLayout (BasicRegister *reg, int type)
    SET (DESC_CELL,  3,  0, 29,  DESC_STR);
    SET (MEMO_CELL,  3,  1, 29,  DESC_STR);
    SET (RECN_CELL,  4,  0,  1,  "R");
-   SET (CRED_CELL,  5,  0, 12,  CREDIT_STR);
-   SET (DEBT_CELL,  6,  0, 12,  DEBIT_STR);
+   SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
+   SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
    SET (BALN_CELL,  7,  0, 12,  BALN_STR);
-   SET (SHRS_CELL, -1, -1, 12,  "");
-   SET (PRIC_CELL, -1, -1, 12,  "");
+   SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
+   SET (PRIC_CELL, -1, -1, 12,  PRICE_STR);
 
    switch (type) {
       case BANK_LEDGER:
@@ -122,16 +144,16 @@ configLayout (BasicRegister *reg, int type)
       case EQUITY_LEDGER:
          reg->num_cols = 8;
          reg->num_header_rows = 1;
-         SET (XTO_CELL,  -1, -1, 14,  "");
-         SET (SHRS_CELL, -1, -1, 12,  "");
-         SET (PRIC_CELL, -1, -1, 12,  "");
+         SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
+         SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
+         SET (PRIC_CELL, -1, -1, 12,  PRICE_STR);
          break;
 
       case STOCK_LEDGER:
          reg->num_cols = 10;
-         SET (XTO_CELL,  -1, -1, 14,  "");
-         SET (SHRS_CELL,  7,  0, 12,  "");
-         SET (PRIC_CELL,  8,  0, 12,  "");
+         SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
+         SET (SHRS_CELL,  7,  0, 12,  TOT_SHRS_STR);
+         SET (PRIC_CELL,  8,  0, 12,  PRICE_STR);
          SET (BALN_CELL,  9,  0, 12,  BALN_STR);
 
       default:
@@ -140,36 +162,36 @@ configLayout (BasicRegister *reg, int type)
    /* setup custom labels for the debit/credit columns */
    switch (type) {
       case BANK_LEDGER:
-         reg->labels [CRED_CELL] = PAYMENT_STR;
-         reg->labels [DEBT_CELL] = DEPOSIT_STR;
+         reg->labels [DEBT_CELL] = PAYMENT_STR;
+         reg->labels [CRED_CELL] = DEPOSIT_STR;
          break;
       case CASH_LEDGER:
-         reg->labels [CRED_CELL] = SPEND_STR;
-         reg->labels [DEBT_CELL] = RECEIVE_STR;
+         reg->labels [DEBT_CELL] = SPEND_STR;
+         reg->labels [CRED_CELL] = RECEIVE_STR;
          break;
       case ASSET_LEDGER:
-         reg->labels [CRED_CELL] = DEPR_STR;
-         reg->labels [DEBT_CELL] = APPR_STR;
+         reg->labels [DEBT_CELL] = DEPR_STR;
+         reg->labels [CRED_CELL] = APPR_STR;
          break;
       case CREDIT_LEDGER:
-         reg->labels [CRED_CELL] = CHARGE_STR;
-         reg->labels [DEBT_CELL] = PAYMENT_STR;
+         reg->labels [DEBT_CELL] = CHARGE_STR;
+         reg->labels [CRED_CELL] = PAYMENT_STR;
          break;
       case LIABILITY_LEDGER:
-         reg->labels [CRED_CELL] = INCREASE_STR;
-         reg->labels [DEBT_CELL] = DECREASE_STR;
+         reg->labels [DEBT_CELL] = INCREASE_STR;
+         reg->labels [CRED_CELL] = DECREASE_STR;
          break;
       case INCOME_LEDGER:
-         reg->labels [CRED_CELL] = INCOME_STR;
-         reg->labels [DEBT_CELL] = CHARGE_STR;
+         reg->labels [DEBT_CELL] = INCOME_STR;
+         reg->labels [CRED_CELL] = CHARGE_STR;
          break;
       case EXPENSE_LEDGER:
-         reg->labels [CRED_CELL] = REBATE_STR;
-         reg->labels [DEBT_CELL] = EXPENSE_STR;
+         reg->labels [DEBT_CELL] = REBATE_STR;
+         reg->labels [CRED_CELL] = EXPENSE_STR;
          break;
       case EQUITY_LEDGER:
-         reg->labels [CRED_CELL] = SURPLUS_STR;
-         reg->labels [DEBT_CELL] = DEFICIT_STR;
+         reg->labels [DEBT_CELL] = SURPLUS_STR;
+         reg->labels [CRED_CELL] = DEFICIT_STR;
          break;
       default:
    }
@@ -197,12 +219,13 @@ configTraverse (BasicRegister *reg, int type)
          xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
          xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
          xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
-         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, CRED_CELL_R, CRED_CELL_C);
-         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
-         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
+         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
+         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, CRED_CELL_R, CRED_CELL_C);
+         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
          xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
          xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
 
+      case STOCK_LEDGER:
       default:
 
    }

@@ -3,8 +3,27 @@
  * Ledger.c 
  *
  * FUNCTION:
- * copy transaction data into ledger
+ * copy transaction data from engine into ledger object
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
  */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #include "Ledger.h"
 #include "messages.h"
@@ -172,6 +191,9 @@ trans->date.day, trans->date.month, trans->date.year);
                             reg->creditCell, split->damount);
 
    xaccSetAmountCellValue (reg->balanceCell, split->balance);
+
+   xaccSetAmountCellValue (reg->priceCell, split->share_price);
+   xaccSetAmountCellValue (reg->shrsCell, split->share_balance);
 
 
    reg->table->cursor->user_data = (void *) split;
