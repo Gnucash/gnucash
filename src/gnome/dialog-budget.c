@@ -597,6 +597,16 @@ budget_name_entry_changed(GtkEditable *editable, BudgetDialog *bd)
 }
 
 static void
+entry_type_menu_changed(GtkButton *button, BudgetDialog *bd)
+{
+  if (bd->ignore_changes)
+    return;
+
+  budget_changed(bd);
+  bd->entry_changed = TRUE;
+}
+
+static void
 allow_edits(BudgetDialog *bd, gboolean allow_edits)
 {
   GtkWidget *widget;
@@ -746,6 +756,13 @@ on_budget_entry_tree_scroll_vertical   (GtkCList        *clist,
   select_node(bd, node);
 }
 
+static void
+connect_entry_type_menu_item(GtkWidget *item, gpointer data)
+{
+  gtk_signal_connect(GTK_OBJECT(item), "activate",
+                     GTK_SIGNAL_FUNC(entry_type_menu_changed), data);
+}
+
 BudgetDialog *
 gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
 {
@@ -754,6 +771,7 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
   GtkWidget *button;
   GtkWidget *arrow;
   GtkWidget *box;
+  GtkWidget *menu;
 
   initialize_getters();
   initialize_preds();
@@ -781,6 +799,9 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
                      GTK_SIGNAL_FUNC(entry_description_entry_changed), bd);
 
   bd->entry_type_menu = gtk_object_get_data(bdo, "entry_type_menu");
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(bd->entry_type_menu));
+  gtk_container_forall(GTK_CONTAINER(menu), connect_entry_type_menu_item, bd);
+
   bd->entry_frame = gtk_object_get_data(bdo, "entry_frame");
 
   bd->subentry_description_entry =

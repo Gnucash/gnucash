@@ -1,3 +1,8 @@
+2000-05-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report-2.scm : Added i18n and
+	optional two-columns printout to the new transaction report.
+
 2000-04-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/engine/Queue.c (xaccQueueGetShares): computation should start
@@ -43,6 +48,11 @@
 
 	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): debits are
 	positive, credits are negative.
+
+2000-04-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+ 	* src/scm/html-generator.scm (html-table-do-entry): Bryan Larsen's
+	fix for null (#f) generators.
 
 2000-04-28  Dave Peticolas  <peticola@cs.ucdavis.edu>
 

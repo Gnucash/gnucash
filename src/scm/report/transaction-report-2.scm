@@ -10,6 +10,8 @@
 (gnc:depend "html-generator.scm")
 
 (let ()
+ (define string-db (gnc:make-string-database))
+
 
   (define (make-split-report-spec options)
     (remove-if-not
@@ -19,7 +21,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Date"))
        (make-report-spec 
-	"Date"
+	(string-db 'lookup 'date-string)
 	(lambda (split) 
 	  (gnc:transaction-get-date-posted 
 	   (gnc:split-get-parent split)))
@@ -32,12 +34,12 @@
 	#f ; subs-list-proc
 	#f)
        #f)
-
+ 
       (if 
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Num"))
        (make-report-spec 
-	"Num"
+	(string-db 'lookup 'num-string)
 	(lambda (split)
 	  (gnc:transaction-get-num
 	   (gnc:split-get-parent split)))
@@ -54,7 +56,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Description"))
        (make-report-spec 
-	"Description"
+	(string-db 'lookup 'desc-string)
 	(lambda (split)
 	  (gnc:transaction-get-description
 	   (gnc:split-get-parent split)))
@@ -71,7 +73,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Memo"))
        (make-report-spec 
-	"Memo"
+	(string-db 'lookup 'memo-string)
 	gnc:split-get-memo
 	(lambda (memo) (html-left-cell (html-string memo)))
 	#f ; total-proc
@@ -87,7 +89,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Account"))
        (make-report-spec 
-	"Account"
+	(string-db 'lookup 'acc-string)
 	(lambda (split) 
 	  (gnc:account-get-full-name 
 	   (gnc:split-get-account split)))
@@ -108,7 +110,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Other Account"))
        (make-report-spec 
-	"Other Account"
+	(string-db 'lookup 'other-acc-string)
 	(lambda (split)
 	  (let ((others (gnc:split-get-other-splits split)))
 	    (if (null? others)
@@ -125,10 +127,10 @@
        #f)
 
       (if 
-       (gnc:option-value
-	(gnc:lookup-option options "Display" "Amount"))
+       (eq? (gnc:option-value
+	(gnc:lookup-option options "Display" "Amount")) 'single)
        (make-report-spec
-	"Amount"
+	(string-db 'lookup 'amount-string)
 	gnc:split-get-value
 	(lambda (value) (html-right-cell (html-currency value)))
 	+ ; total-proc
@@ -141,6 +143,69 @@
 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
 	(lambda (value) 
 	  (html-right-cell (html-ital (html-currency value)))))
+       #f)
+
+      (if
+        (eq? (gnc:option-value
+  	(gnc:lookup-option options "Display" "Amount")) 'double)
+        (make-report-spec
+	 (string-db 'lookup 'credit-string)
+	 (lambda (split) (max 0 (gnc:split-get-value split)))
+ 	(lambda (value)
+ 	  (if (> value 0) (html-right-cell (html-currency value))
+ 	      (html-right-cell (html-string " "))))
+ 	+ ; total-proc
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))	
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	#t ; first-last-preference
+ 	(lambda (split)
+ 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ 	(lambda (value)
+ 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
+ 	      (html-right-cell (html-ital (html-string " "))))))
+        #f)
+
+       (if
+        (eq? (gnc:option-value
+ 	(gnc:lookup-option options "Display" "Amount")) 'double)
+        (make-report-spec
+ 	(string-db 'lookup -debit-string)
+ 	(lambda (split) (min 0 (gnc:split-get-value split)))
+ 	(lambda (value)
+ 	  (if (< value 0) (html-right-cell (html-currency value))
+ 	      (html-right-cell (html-string " "))))
+ 	+ ; total-proc
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	(lambda (value)
+ 	  (html-right-cell (html-strong (html-currency value))))
+ 	#t ; first-last-preference
+ 	(lambda (split)
+ 	  (map gnc:split-get-value (gnc:split-get-other-splits split)))
+ 	(lambda (value)
+ 	  (if (< value 0) (html-right-cell (html-ital (html-currency value)))
+ 	      (html-right-cell (html-ital (html-string " "))))))
+        #f)
+
+       (if 
+       (eq? (gnc:option-value
+	(gnc:lookup-option options "Display" "Amount")) 'double)
+       (make-report-spec
+	(string-db 'lookup 'total-string)
+	gnc:split-get-value
+	;(lambda (value) (html-right-cell (html-currency value)))
+	;(lambda (value) (html-right-cell (html-string "hello")))
+	#f
+	+ ; total-proc
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	(lambda (value) 
+	  (html-right-cell (html-strong (html-currency value))))
+	#t ; first-last-preference
+	#f ;
+	#f)
        #f))))
 
   (define (split-report-get-sort-spec-entry key ascending?)
@@ -266,7 +331,7 @@
 
       ((none) #f)
       (else (gnc:error "invalid sort argument"))))
-       
+    
 
   (define (make-split-list account split-filter-pred)
     (let ((num-splits (gnc:account-get-split-count account)))
@@ -352,7 +417,7 @@
 	    #(single
 	      "Single"
 	      "Display 1 line"))))
-	      
+	      	      
 
     (let ((key-choice-list 
 	   (list #(account
@@ -408,7 +473,7 @@
 	(list
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest"))))
-      
+       
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	"Sorting" "Secondary Key"
@@ -454,12 +519,16 @@
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       "Display" "Other Account"
-      "h" "Display the other account?  (if this is a split transaction, this parameter is guessed." #f))
+      "h" "Display the other account?  (if this is a split transaction, this parameter is guessed)." #f))
 
     (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+     (gnc:make-multichoice-option
       "Display" "Amount"
-      "i" "Display the amount?" #t))
+      "i" "Display the amount?" 
+      'single
+      (list #(none "None" "No amount display")
+	    #(single "Single" "Single Column Display")
+	    #(double "Double" "Two Column Display"))))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -476,7 +545,7 @@
 
     gnc:*transaction-report-options*)
 
-  (define string-db (gnc:make-string-database))
+
 
   (define (gnc:trep-renderer options)
     (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
@@ -520,7 +589,6 @@
 
       (list
        (html-start-document-title (string-db 'lookup 'title))
-       (html-para "Transaction report using the new reporting framework in html-generator.scm")
        (html-start-table)
        (if 
         (gnc:option-value
@@ -548,10 +616,21 @@
        (html-end-table)
        (html-end-document))))
 
+
   (string-db 'store 'title "Transaction Report")
+  (string-db 'store 'date-string "Date")
+  (string-db 'store 'num-string "Num")
+  (string-db 'store 'desc-string "Description")
+  (string-db 'store 'memo-string "Memo")
+  (string-db 'store 'acc-string "Account")
+  (string-db 'store 'other-acc-string "Other Account")
+  (string-db 'store 'amount-string "Amount")
+  (string-db 'store 'debit-string "Debit")
+  (string-db 'store 'credit-string "Credit")
+  (string-db 'store 'total-string "Total")
 
   (gnc:define-report
    'version 1
-   'name "Transactions 2"
+   'name (string-db 'lookup 'title)
    'options-generator trep-options-generator
    'renderer gnc:trep-renderer))

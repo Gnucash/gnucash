@@ -311,7 +311,8 @@
 (define (html-table-do-entry line specs)
   (map
    (lambda (spec)
-     (cond ((report-spec-get-get-value-proc spec)
+     (cond ((and (report-spec-get-get-value-proc spec)
+		 (report-spec-get-html-proc spec))
 	    ((report-spec-get-html-proc spec)
 	     ((report-spec-get-get-value-proc spec) line)))
 	   (else #f)))

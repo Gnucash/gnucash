@@ -173,7 +173,7 @@ install:
 	$(INSTALL_DATA) doc/*.txt ${GNC_DOCDIR}
 	$(INSTALL_DATA) doc/INSTALL ${GNC_DOCDIR}
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
-	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
+	$(INSTALL_DATA) NEWS ${GNC_DOCDIR}
 
 	$(INSTALL_DATA) doc/examples/*.xac ${GNC_DOCDIR}/examples
 	$(INSTALL_DATA) doc/examples/*.qif ${GNC_DOCDIR}/examples
