@@ -115,11 +115,39 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   GtkWidget * summarybar;
   GtkWidget * statusbar;
 
+  /* enable save and restore of menubar positions */
+  gnome_app_enable_layout_config( app, TRUE );
+
   /* add the summarybar */
   summarybar = gnc_main_window_summary_new();
-  gnome_app_add_docked(GNOME_APP(app), summarybar, "Summary Bar",
-                       GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
-                       GNOME_DOCK_TOP, 2, 0, 0);
+
+  {
+     /* This is essentially gnome_app_add_docked, but without using
+      * gnome_app_add_dock_item because it emits the layout_changed
+      * signal which creates a new layout and writes it over the saved
+      * layout config before we've had a chance to read it.
+      */
+
+     GtkWidget *item;
+     item = gnome_dock_item_new( "Summary Bar",
+                                 GNOME_DOCK_ITEM_BEH_EXCLUSIVE|GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
+     gtk_container_add( GTK_CONTAINER (item), summarybar );
+
+     if( app->layout )
+     {
+       gnome_dock_layout_add_item( app->layout,
+                                   GNOME_DOCK_ITEM(item),
+                                   GNOME_DOCK_TOP,
+                                   2, 0, 0 );
+     }
+     else
+     {
+        gnome_dock_add_item( GNOME_DOCK(app->dock),
+                             GNOME_DOCK_ITEM(item),
+                             GNOME_DOCK_TOP,
+                             2, 0, 0, FALSE );
+     }
+  }
 
   /* add the statusbar */ 
   statusbar = gnome_appbar_new(FALSE, TRUE, GNOME_PREFERENCES_USER);
