@@ -1,0 +1,3 @@
+# List of files which containing translatable strings.
+# Copyright (C) 1995, 1998 Free Software Foundation, Inc.
+include/messages_i18n.h

@@ -1,0 +1,1237 @@
+# Messages in Deutsch für GnuCash
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnucash 1.2.0\n"
+"POT-Creation-Date: 2000-01-07 02:32-0800\n"
+"PO-Revision-Date: 1999-08-24 20:03+0200\n"
+"Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: messages-i18n.c:10
+msgid "$"
+msgstr "DM"
+
+#: messages-i18n.c:11
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+
+#: messages-i18n.c:12
+#, fuzzy
+msgid ""
+"To adjust an account's balance, you must first\n"
+"choose an account to adjust.\n"
+msgstr ""
+"Um ein Konto zu bearbeiten, müssen Sie zuerst \n"
+"eines auswählen.\n"
+
+#: messages-i18n.c:13
+msgid ""
+"Do you want to create a new account?\n"
+"If not, then please select an account\n"
+"to open in the main window.\n"
+msgstr ""
+"Möchten Sie ein neues Konto erzeugen ?\n"
+"Wenn nicht, dann wählen Sie bitte ein zu\n"
+"öffnendes Konto im Haupt-Fenster.\n"
+
+#: messages-i18n.c:14
+msgid ""
+"To edit an account, you must first \n"
+"choose an account to edit.\n"
+msgstr ""
+"Um ein Konto zu bearbeiten, müssen Sie zuerst \n"
+"eines auswählen.\n"
+
+#: messages-i18n.c:15
+msgid ""
+"To delete an account, you must first \n"
+"choose an account to delete.\n"
+msgstr ""
+"Um ein Konto zu löschen, müssen Sie zuerst \n"
+"eines auswählen.\n"
+
+#: messages-i18n.c:16
+#, c-format
+msgid "Are you sure you want to delete the %s account?"
+msgstr "Sind sie sicher das sie das %s Konto löschen wollen?"
+
+#: messages-i18n.c:17
+msgid "The account must be given a name! \n"
+msgstr "Das Konto muß einen Namen erhalten! \n"
+
+#: messages-i18n.c:18
+#, fuzzy
+msgid ""
+"To open an account, you must first \n"
+"choose an account to open.\n"
+msgstr ""
+"Um ein Konto zu bearbeiten, müssen Sie zuerst \n"
+"eines auswählen.\n"
+
+#: messages-i18n.c:19
+msgid "You must select an account to scrub."
+msgstr ""
+
+#: messages-i18n.c:20
+#, fuzzy
+msgid "You must select an account type."
+msgstr "Gewahltes Konto bearbeiten."
+
+#: messages-i18n.c:21
+#, fuzzy
+msgid ""
+"To reconcile an account, you must first \n"
+"choose an account to reconcile.\n"
+msgstr ""
+"Um ein Konto zu löschen, müssen Sie zuerst \n"
+"eines auswählen.\n"
+
+#: messages-i18n.c:22
+#, fuzzy
+msgid "The amount must be a number."
+msgstr "Das Konto muß einen Namen erhalten! \n"
+
+#: messages-i18n.c:23
+#, fuzzy
+msgid "The balance must be a number."
+msgstr "Das Konto muß einen Namen erhalten! \n"
+
+#: messages-i18n.c:24
+msgid "Delete all the splits"
+msgstr ""
+
+#: messages-i18n.c:25
+#, fuzzy
+msgid "Delete the whole transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:26
+msgid ""
+"This selection will delete the whole transaction. This is what you usually "
+"want."
+msgstr ""
+
+#: messages-i18n.c:27
+msgid ""
+"Warning: Just deleting all the splits will make your account unbalanced. You "
+"probably shouldn't do this unless you're going to immediately add another "
+"split to bring the transaction back into balance."
+msgstr ""
+
+#: messages-i18n.c:28 messages-i18n.c:29
+#, c-format
+msgid ""
+"It is dangerous to change the currency type\n"
+"of an account.  You asked to change it\n"
+"from %s to %s\n"
+"Are You Sure?\n"
+msgstr ""
+"Es ist gefährlich die Währung eines Kontos\n"
+"zu ändern. Sie wollen ihn von\n"
+"%s zu %sändern.\n"
+"Sind sie sicher?\n"
+
+#: messages-i18n.c:30
+msgid ""
+"This file is from an older version of GnuCash.  \n"
+"Do you want to continue?"
+msgstr ""
+"Diese Datei ist von einer älteren Version von GnuCash.  \n"
+"Möchten sie fortfahren?"
+
+#: messages-i18n.c:31
+msgid ""
+"This file appears to be from a newer version of GnuCash.  \n"
+"Do you want to continue?"
+msgstr ""
+"Diese Datei ist von einer neueren Version von GnuCash.  \n"
+"Möchten Sie fortfahren?"
+
+#: messages-i18n.c:32
+msgid ""
+"There was an error reading the file. \n"
+"Do you want to continue?"
+msgstr ""
+"Es gab einen Fehler beim Öffnen der Datei. \n"
+"Möchten Sie fortfahren?"
+
+#: messages-i18n.c:33
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" could not be found."
+msgstr ""
+"Die Datei \n"
+"    %s\n"
+" konnte nicht gefunden werden."
+
+#: messages-i18n.c:34
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" is empty."
+msgstr ""
+"Die Datei \n"
+"    %s\n"
+" ist leer."
+
+#: messages-i18n.c:35
+msgid "Changes have been made since last Save.  Save data to file?"
+msgstr ""
+"Es wurden Veränderungen seit der letzten Speicherung vorgenommen.  "
+"Änderungen jetzt speichern?"
+
+#: messages-i18n.c:36
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" already exists.\n"
+"Are you sure you want to overwrite it?"
+msgstr ""
+"Die Datei \n"
+"    %s\n"
+" existiert bereits.\n"
+"Sind sie sicher, daß sie überschrieben werden soll?"
+
+#: messages-i18n.c:37
+#, c-format
+msgid ""
+"The filepath \n"
+"    %s\n"
+"is not a valid location in the filesystem."
+msgstr ""
+"Der Pfad \n"
+"    %s\n"
+"ist keine gültige Angabe für dieses Filesystem."
+
+#: messages-i18n.c:38
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+"appears to be in use by another user.\n"
+"If this is not right, remove the .LCK file and try again."
+msgstr ""
+"Die Datei \n"
+"    %s\n"
+"wird vermutlich von einem anderen User benutzt..\n"
+"Wenn das nicht so ist, löschen Sie bitte die .LCK Datei und versuchen Sie es "
+"erneut."
+
+#: messages-i18n.c:39
+msgid "The source for price quotes"
+msgstr ""
+
+#: messages-i18n.c:40
+#, fuzzy
+msgid ""
+"The account is not balanced.\n"
+"Are you sure you want to finish?"
+msgstr ""
+"Die Datei \n"
+"    %s\n"
+" existiert bereits.\n"
+"Sind sie sicher, daß sie überschrieben werden soll?"
+
+#: messages-i18n.c:41
+msgid "Warning!  This is a reconciled transaction. Do you want do continue?"
+msgstr "Warnung!  This is a reconciled transaction. Möchten Sie fortfahren?"
+
+#: messages-i18n.c:42
+msgid "Show the income and expense accounts."
+msgstr ""
+
+#: messages-i18n.c:43
+msgid ""
+"The current transaction has been changed.\n"
+"Would you like to record it?"
+msgstr ""
+
+#: messages-i18n.c:44
+#, c-format
+msgid ""
+"Are you sure you want to delete\n"
+"   %s\n"
+"from the transaction\n"
+"   %s ?"
+msgstr ""
+"Sind sie sicher daß sie \n"
+"  %s von der\n"
+"Transaktion löschen wollen\n"
+"   %s ?"
+
+#: messages-i18n.c:45
+#, fuzzy
+msgid "Are you sure you want to delete the current transaction?"
+msgstr "Sind sie sicher das sie das %s Konto löschen wollen?"
+
+#: messages-i18n.c:46
+msgid ""
+"There must be at least two accounts\n"
+"created before you can transfer funds."
+msgstr ""
+"Es müssen zumindest zwei Konten eröffnet\n"
+"werden bevor Sie Geld transferieren können."
+
+#: messages-i18n.c:47
+msgid ""
+"You cannot transfer between those accounts.\n"
+"They do not have a common currency."
+msgstr ""
+
+#: messages-i18n.c:48
+msgid ""
+"The \"From\" and \"To\" accounts\n"
+" must be different!"
+msgstr ""
+"Die \"Von\" und \"Zu\" Konten\n"
+" müssen verschieden sein!"
+
+#: messages-i18n.c:49
+msgid "You can't transfer from and to the same account!"
+msgstr "Sie können nicht von und zu dem selben Konto transferieren !"
+
+#: messages-i18n.c:50
+msgid ""
+"You must specify an account to transfer from, \n"
+"or to, or both, for this transaction; otherise \n"
+"it will not be recorded."
+msgstr ""
+"Sie müssen ein Konto zum Transferieren angeben zu dem, \n"
+"oder von dem transferiert werden soll oder beides; sonst \n"
+"findet keine Transaktion statt.."
+
+#: messages-i18n.c:51
+#, fuzzy
+msgid "Adjust the balance of the selected account."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:52
+#, fuzzy
+msgid "Adjust the ending balance"
+msgstr "Saldo berichtigen"
+
+#: messages-i18n.c:53
+#, fuzzy
+msgid "Adjust the balance of the main account for this register."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:54
+msgid "Double line mode with a multi-line cursor"
+msgstr ""
+
+#: messages-i18n.c:55
+msgid "Single line mode with a multi-line cursor"
+msgstr ""
+
+#: messages-i18n.c:56
+#, fuzzy
+msgid "Cancel the current transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:57
+#, fuzzy
+msgid "Close this HTML window."
+msgstr "Fenster schliessen"
+
+#: messages-i18n.c:58
+#, fuzzy
+msgid "Close this register window."
+msgstr "Fenster schliessen"
+
+#: messages-i18n.c:59
+msgid "Set the date range of this register"
+msgstr ""
+
+#: messages-i18n.c:60
+msgid "Delete selected account."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:61
+#, fuzzy
+msgid "Delete the current transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:62
+msgid "Show transactions on two lines with more information"
+msgstr ""
+
+#: messages-i18n.c:63
+#, fuzzy
+msgid "Edit the selected account."
+msgstr "Gewahltes Konto bearbeiten."
+
+#: messages-i18n.c:64
+msgid "Edit the main account for this register."
+msgstr ""
+
+#: messages-i18n.c:65
+#, fuzzy
+msgid "Edit the current transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:66
+msgid "Exit GnuCash."
+msgstr "GnuCash verlassen."
+
+#: messages-i18n.c:67
+msgid "Open the GnuCash help window."
+msgstr ""
+
+#: messages-i18n.c:68
+msgid "Move back one step in the history."
+msgstr ""
+
+#: messages-i18n.c:69
+msgid "Move forward one step in the history."
+msgstr ""
+
+#: messages-i18n.c:70
+msgid "Import a Quicken QIF file."
+msgstr ""
+
+#: messages-i18n.c:71
+#, fuzzy
+msgid "Jump to the corresponding transaction in the other account"
+msgstr "Sie können nicht von und zu dem selben Konto transferieren !"
+
+#: messages-i18n.c:72
+msgid "Show transactions on multiple lines with one line for each split"
+msgstr ""
+
+#: messages-i18n.c:73
+msgid "Create a new account."
+msgstr "Ein neues Konto eröffnen."
+
+#: messages-i18n.c:74
+#, fuzzy
+msgid "Create a new file."
+msgstr "Ein neues Konto eröffnen."
+
+#: messages-i18n.c:75
+#, fuzzy
+msgid "Add a new transaction to the account"
+msgstr "Sie können nicht von und zu dem selben Konto transferieren !"
+
+#: messages-i18n.c:76
+#, fuzzy
+msgid "Open the selected account."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:77
+#, fuzzy
+msgid "Open the selected account and all its subaccounts."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:78
+#, fuzzy
+msgid "Open a file."
+msgstr "Datei öffnen"
+
+#: messages-i18n.c:79
+msgid "Open the global preferences dialog."
+msgstr ""
+
+#: messages-i18n.c:80
+#, fuzzy
+msgid "Reconcile the selected account."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:81
+#, fuzzy
+msgid "Reconcile the main account for this register."
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:82
+#, fuzzy
+msgid "Record the current transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:83
+msgid "Set the parameters for this report."
+msgstr ""
+
+#: messages-i18n.c:84
+msgid "Save the file to disk."
+msgstr ""
+
+#: messages-i18n.c:85
+msgid "Identify and fix problems in the account."
+msgstr ""
+
+#: messages-i18n.c:86
+msgid "Identify and fix problems in all the accounts."
+msgstr ""
+
+#: messages-i18n.c:87
+msgid "Identify and fix problems in the account and its subaccounts."
+msgstr ""
+
+#: messages-i18n.c:88
+msgid "Identify and fix problems in the accounts of this register."
+msgstr ""
+
+#: messages-i18n.c:89
+msgid "Show transactions on single lines"
+msgstr ""
+
+#: messages-i18n.c:90
+msgid "Sort by Amount, then Date, then Num"
+msgstr ""
+
+#: messages-i18n.c:91
+msgid "Sort by Date, then Num, then Amount"
+msgstr ""
+
+#: messages-i18n.c:92
+msgid "Sort by Description, then Date, then Num"
+msgstr ""
+
+#: messages-i18n.c:93
+msgid "Sort by Memo, then Date, then Num"
+msgstr ""
+
+#: messages-i18n.c:94
+msgid "Sort by Num, then Date, then Amount"
+msgstr ""
+
+#: messages-i18n.c:95
+msgid "Keep normal account order"
+msgstr ""
+
+#: messages-i18n.c:96
+msgid "Transfer funds from one account to another."
+msgstr ""
+
+#: messages-i18n.c:97
+msgid "Account Code"
+msgstr "Kontonummer (intern)"
+
+#: messages-i18n.c:98
+msgid "Account Name"
+msgstr "Kontobezeichnung"
+
+#: messages-i18n.c:99
+msgid "Account Type"
+msgstr "Kontoart"
+
+#: messages-i18n.c:100
+msgid "Adjust Balance"
+msgstr "Saldo berichtigen"
+
+#: messages-i18n.c:101
+#, fuzzy
+msgid "Auto Double"
+msgstr "AutoDepot"
+
+#: messages-i18n.c:102
+msgid "Auto Single"
+msgstr ""
+
+#: messages-i18n.c:103
+#, fuzzy
+msgid "Clear All"
+msgstr "Abgestimmt"
+
+#: messages-i18n.c:104
+msgid "Close Window"
+msgstr "Fenster schliessen"
+
+#: messages-i18n.c:105
+msgid "Credit Card"
+msgstr "Kreditkarte"
+
+#: messages-i18n.c:106
+msgid "Credit Line"
+msgstr "Kreditrahmen"
+
+#: messages-i18n.c:107
+msgid "Date Range"
+msgstr ""
+
+#: messages-i18n.c:108
+msgid "Delete Account"
+msgstr "Konto löschen"
+
+#: messages-i18n.c:109
+msgid "Delete Transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:110
+msgid "Double Line"
+msgstr ""
+
+#: messages-i18n.c:111
+msgid "Edit Account"
+msgstr "Konto bearbeiten"
+
+#: messages-i18n.c:112
+msgid "Ending Balance"
+msgstr "Schlußsaldo"
+
+#: messages-i18n.c:113
+msgid "End date"
+msgstr ""
+
+#: messages-i18n.c:114
+msgid "General Ledger"
+msgstr ""
+
+#: messages-i18n.c:115
+msgid "Hide Inc/Exp"
+msgstr "Einkünfte/Ausgaben verstecken"
+
+#: messages-i18n.c:116
+msgid "Import QIF"
+msgstr "QIF-File importieren"
+
+#: messages-i18n.c:117
+msgid "Lost Accounts"
+msgstr "Verlorene Konten"
+
+#: messages-i18n.c:118
+msgid "Money Market"
+msgstr "Geldmarkt"
+
+#: messages-i18n.c:119
+msgid "Multi Line"
+msgstr ""
+
+#: messages-i18n.c:120
+msgid "Mutual Fund"
+msgstr "Investmentfonds"
+
+#: messages-i18n.c:121
+msgid "New Account"
+msgstr "Neues Konto"
+
+#: messages-i18n.c:122
+msgid "New Balance"
+msgstr "Neuer Saldo"
+
+#: messages-i18n.c:123
+msgid "New File"
+msgstr "Neue Datei"
+
+#: messages-i18n.c:124
+#, fuzzy
+msgid "New top level account"
+msgstr "Gewähltes Konto löschen."
+
+#: messages-i18n.c:125
+msgid "Open Account"
+msgstr "Konto öffnen"
+
+#: messages-i18n.c:126
+msgid "Opening Balance"
+msgstr "Eröffnungs-Saldo"
+
+#: messages-i18n.c:127
+msgid "Open File"
+msgstr "Datei öffnen"
+
+#: messages-i18n.c:128
+msgid "Open Subaccounts"
+msgstr "Öffnen Unterkonten"
+
+#: messages-i18n.c:129
+msgid "Pick One"
+msgstr "Eines auswählen"
+
+#: messages-i18n.c:130
+msgid "Parent Account"
+msgstr "Ursprungs-Konto"
+
+#: messages-i18n.c:131
+msgid "Previous Balance"
+msgstr "Vorheriger Saldo"
+
+#: messages-i18n.c:132
+msgid "Purch Price"
+msgstr "Kaufpreis"
+
+#: messages-i18n.c:133
+msgid "Price Quote Source"
+msgstr "Preisberechnungsquelle"
+
+#: messages-i18n.c:134
+msgid "Register date ranges"
+msgstr ""
+
+#: messages-i18n.c:135
+msgid "Sale Price"
+msgstr "Verkaufspreis"
+
+#: messages-i18n.c:136
+msgid "Save As"
+msgstr "Speichern als"
+
+#: messages-i18n.c:137
+#, fuzzy
+msgid "Scrub Account"
+msgstr "Konto"
+
+#: messages-i18n.c:138
+#, fuzzy
+msgid "Scrub All"
+msgstr "Ausbuchen"
+
+#: messages-i18n.c:139
+#, fuzzy
+msgid "Scrub Subaccounts"
+msgstr "Öffnen Unterkonten"
+
+#: messages-i18n.c:140
+#, fuzzy
+msgid "Select All"
+msgstr "Ausbuchen"
+
+#: messages-i18n.c:141
+#, fuzzy
+msgid "Select Default"
+msgstr "Ausbuchen"
+
+#: messages-i18n.c:142
+msgid "Set to default"
+msgstr ""
+
+#: messages-i18n.c:143
+msgid "Set Up Account"
+msgstr "Konto eröffnen"
+
+#: messages-i18n.c:144
+msgid "Show Inc/Exp"
+msgstr "Anzeigen Einnahmen/Ausgaben"
+
+#: messages-i18n.c:145
+msgid "Show Categories"
+msgstr ""
+
+#: messages-i18n.c:146
+msgid "Single Line"
+msgstr ""
+
+#: messages-i18n.c:147
+#, fuzzy
+msgid "Sort by Amount"
+msgstr "Konto"
+
+#: messages-i18n.c:148
+msgid "Sort by Date"
+msgstr ""
+
+#: messages-i18n.c:149
+#, fuzzy
+msgid "Sort by Description"
+msgstr "Beschreibung"
+
+#: messages-i18n.c:150
+msgid "Sort by Memo"
+msgstr ""
+
+#: messages-i18n.c:151
+msgid "Sort by Num"
+msgstr ""
+
+#: messages-i18n.c:152
+msgid "Sort Order"
+msgstr ""
+
+#: messages-i18n.c:153
+msgid "Start date"
+msgstr ""
+
+#: messages-i18n.c:154
+msgid "Standard order"
+msgstr ""
+
+#: messages-i18n.c:155
+msgid "Tot Shrs"
+msgstr "Anzahl Aktien gesamt"
+
+#: messages-i18n.c:156
+#, fuzzy
+msgid "Transfer Information"
+msgstr "Gegenkonto"
+
+#: messages-i18n.c:157
+msgid "Transfer Money"
+msgstr "Geld übertragen"
+
+#: messages-i18n.c:158
+msgid "Transfer From"
+msgstr "Gegenkonto"
+
+#: messages-i18n.c:159
+msgid "Transfer To"
+msgstr "Transferiere auf"
+
+#: messages-i18n.c:160
+msgid "About"
+msgstr "Über"
+
+#: messages-i18n.c:161
+msgid "Account"
+msgstr "Konto"
+
+#: messages-i18n.c:162
+msgid "Accounts"
+msgstr "Konten"
+
+#: messages-i18n.c:163
+#, fuzzy
+msgid "Account Information"
+msgstr "Gegenkonto"
+
+#: messages-i18n.c:164
+msgid "AutoDep"
+msgstr "AutoDepot"
+
+#: messages-i18n.c:165
+msgid "Action"
+msgstr "Aktion"
+
+#: messages-i18n.c:166
+msgid "Activities"
+msgstr "Aktivitäten"
+
+#: messages-i18n.c:167
+msgid "Amount"
+msgstr "Betrag"
+
+#: messages-i18n.c:168
+msgid "Appreciation"
+msgstr "Wertsteigerung"
+
+#: messages-i18n.c:169
+msgid "Phone"
+msgstr "Telefon"
+
+#: messages-i18n.c:170
+msgid "Asset"
+msgstr "Vermögen"
+
+#: messages-i18n.c:171
+msgid "Assets"
+msgstr "Vermögenssaldo"
+
+#: messages-i18n.c:172
+msgid "ATM"
+msgstr "Geldautomat"
+
+#: messages-i18n.c:173
+msgid "Back"
+msgstr "Zurück"
+
+#: messages-i18n.c:174
+msgid "Balance"
+msgstr "Saldo"
+
+#: messages-i18n.c:175
+msgid "Bank"
+msgstr "Bank"
+
+#: messages-i18n.c:176
+msgid "Bought"
+msgstr "Gekauft"
+
+#: messages-i18n.c:177
+msgid "Buy"
+msgstr "Kauf"
+
+#: messages-i18n.c:178
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: messages-i18n.c:179
+msgid "Cash"
+msgstr "Bargeld"
+
+#: messages-i18n.c:180
+msgid "Charge"
+msgstr "Belastung"
+
+#: messages-i18n.c:181
+msgid "Check"
+msgstr "Scheck"
+
+#: messages-i18n.c:182
+msgid "Checking"
+msgstr "Girokonto"
+
+#: messages-i18n.c:183
+msgid "Cleared"
+msgstr "Abgestimmt"
+
+#: messages-i18n.c:184
+msgid "Close"
+msgstr "Schliessen"
+
+#: messages-i18n.c:185
+msgid "Commit"
+msgstr "Überweisung"
+
+#: messages-i18n.c:186
+msgid "Create"
+msgstr "Anlegen"
+
+#: messages-i18n.c:187
+msgid "Credit"
+msgstr "Haben"
+
+#: messages-i18n.c:188
+msgid "Credits"
+msgstr "Kredite"
+
+#: messages-i18n.c:189
+msgid "Currency"
+msgstr "Fremdwährungsdepot"
+
+#: messages-i18n.c:190
+msgid "Date"
+msgstr "Datum"
+
+#: messages-i18n.c:191
+msgid "Debit"
+msgstr "Soll"
+
+#: messages-i18n.c:192
+msgid "Debits"
+msgstr "Schulden"
+
+#: messages-i18n.c:193
+msgid "Decrease"
+msgstr "Abnahme"
+
+#: messages-i18n.c:194
+msgid "Deficit"
+msgstr "Defizit"
+
+#: messages-i18n.c:195
+msgid "Delete"
+msgstr "Löschen"
+
+#: messages-i18n.c:196
+msgid "Deposit"
+msgstr "Gutschrift"
+
+#: messages-i18n.c:197
+msgid "Depreciation"
+msgstr "Kursverlust"
+
+#: messages-i18n.c:198
+msgid "Description"
+msgstr "Beschreibung"
+
+#: messages-i18n.c:199
+msgid "Difference"
+msgstr "Unterschiedsbetrag"
+
+#: messages-i18n.c:200
+msgid "Dist"
+msgstr "Spende"
+
+#: messages-i18n.c:201
+msgid "Div"
+msgstr "Dividende"
+
+#: messages-i18n.c:202
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: messages-i18n.c:203
+msgid "Equity"
+msgstr "Nettowert"
+
+#: messages-i18n.c:204
+#, fuzzy
+msgid "Exit"
+msgstr "Bearbeiten"
+
+#: messages-i18n.c:205
+msgid "Expense"
+msgstr "Ausgabe"
+
+#: messages-i18n.c:206
+msgid "Extensions"
+msgstr ""
+
+#: messages-i18n.c:207
+msgid "Fee"
+msgstr "Gebühr"
+
+#: messages-i18n.c:208
+msgid "File"
+msgstr "Datei"
+
+#: messages-i18n.c:209
+msgid "Forward"
+msgstr "Vorwärts"
+
+#: messages-i18n.c:210
+msgid "From"
+msgstr "Von"
+
+#: messages-i18n.c:211
+#, fuzzy
+msgid "GnuCash Preferences"
+msgstr "Unterschiedsbetrag"
+
+#: messages-i18n.c:212
+msgid "Help"
+msgstr "Hilfe"
+
+#: messages-i18n.c:213
+#, fuzzy
+msgid "Import"
+msgstr "QIF-File importieren"
+
+#: messages-i18n.c:214
+msgid "Income"
+msgstr "Einnahme"
+
+#: messages-i18n.c:215
+msgid "Increase"
+msgstr "Zunahme"
+
+#: messages-i18n.c:216
+msgid "Int"
+msgstr "Beteiligung"
+
+#: messages-i18n.c:217
+msgid "Jump"
+msgstr ""
+
+#: messages-i18n.c:218
+msgid "Liability"
+msgstr "Kreditkonto"
+
+#: messages-i18n.c:219
+msgid "License"
+msgstr "Lizenz"
+
+#: messages-i18n.c:220
+msgid "Loan"
+msgstr "Darlehen"
+
+#: messages-i18n.c:221
+msgid "LTCG"
+msgstr "Zinsen aus langfristigen Kapitalanlagen"
+
+#: messages-i18n.c:222
+msgid "Memo"
+msgstr "Memo"
+
+#: messages-i18n.c:223
+msgid "New"
+msgstr "Neu"
+
+#: messages-i18n.c:224
+msgid "No"
+msgstr "Nein"
+
+#: messages-i18n.c:225
+msgid "(none)"
+msgstr "(kein(e))"
+
+#: messages-i18n.c:226
+msgid "Notes"
+msgstr "Notizen"
+
+#: messages-i18n.c:227
+msgid "Num"
+msgstr "Num"
+
+#: messages-i18n.c:228
+msgid "Ok"
+msgstr "Ok"
+
+#: messages-i18n.c:229
+msgid "Online"
+msgstr "Online"
+
+#: messages-i18n.c:230
+msgid "Open"
+msgstr "Öffnen"
+
+#: messages-i18n.c:231
+msgid "Parameters"
+msgstr ""
+
+#: messages-i18n.c:232
+msgid "Payment"
+msgstr "Belastung"
+
+#: messages-i18n.c:233
+msgid "Portfolio"
+msgstr ""
+
+#: messages-i18n.c:234
+msgid "POS"
+msgstr "Karten-Terminal"
+
+#: messages-i18n.c:235
+#, fuzzy
+msgid "Preferences"
+msgstr "Unterschiedsbetrag"
+
+#: messages-i18n.c:236
+msgid "Price"
+msgstr "Preis"
+
+#: messages-i18n.c:237
+msgid "Print"
+msgstr "Drucken"
+
+#: messages-i18n.c:238
+msgid "Profits"
+msgstr "Saldo Einnahmen/Ausgaben"
+
+#: messages-i18n.c:239
+msgid "Quit"
+msgstr "Beenden"
+
+#: messages-i18n.c:240
+msgid "Rebate"
+msgstr "Rabatt"
+
+#: messages-i18n.c:241
+msgid "Receive"
+msgstr "Empfangen"
+
+#: messages-i18n.c:242
+msgid "Reconcile"
+msgstr "Abstimmen"
+
+#: messages-i18n.c:243
+msgid "Record"
+msgstr "Eintragen"
+
+#: messages-i18n.c:244
+msgid "Register"
+msgstr ""
+
+#: messages-i18n.c:245
+msgid "Report"
+msgstr "Bericht"
+
+#: messages-i18n.c:246
+msgid "Save"
+msgstr "Sichern"
+
+#: messages-i18n.c:247
+msgid "Savings"
+msgstr "Ersparnisse"
+
+#: messages-i18n.c:248
+msgid "Scrub"
+msgstr "Ausbuchen"
+
+#: messages-i18n.c:249
+msgid "Security"
+msgstr "Kürzel (Ticker)"
+
+#: messages-i18n.c:250
+msgid "Sell"
+msgstr "Verkauf"
+
+#: messages-i18n.c:251
+#, fuzzy
+msgid "Settings"
+msgstr "Ersparnisse"
+
+#: messages-i18n.c:252
+msgid "Simple"
+msgstr "Einfach"
+
+#: messages-i18n.c:253
+msgid "Sold"
+msgstr "Verkauft"
+
+#: messages-i18n.c:254
+msgid "Spend"
+msgstr "Ausgabe"
+
+#: messages-i18n.c:255
+msgid "Split"
+msgstr "Split"
+
+#: messages-i18n.c:256
+msgid "STCG"
+msgstr "Zinsen aus kurzfristigen Anlagen"
+
+#: messages-i18n.c:257
+msgid "Stock"
+msgstr "Depot"
+
+#: messages-i18n.c:258
+msgid "Style"
+msgstr ""
+
+#: messages-i18n.c:259
+msgid "Surplus"
+msgstr "Überschuß"
+
+#: messages-i18n.c:260
+msgid "Teller"
+msgstr "Automat"
+
+#: messages-i18n.c:261
+msgid "To"
+msgstr "Zu"
+
+#: messages-i18n.c:262
+#, fuzzy
+msgid "Today"
+msgstr "Gesamt"
+
+#: messages-i18n.c:263
+msgid "Total"
+msgstr "Gesamt"
+
+#: messages-i18n.c:264
+msgid "Type"
+msgstr "Typ"
+
+#: messages-i18n.c:265
+#, fuzzy
+msgid "Transaction"
+msgstr "Buchung löschen"
+
+#: messages-i18n.c:266
+msgid "Transfer"
+msgstr "Übertrag"
+
+#: messages-i18n.c:267
+msgid "Value"
+msgstr "Wert"
+
+#: messages-i18n.c:268
+msgid "WARNING"
+msgstr "WARNUNG"
+
+#: messages-i18n.c:269
+msgid "Wire"
+msgstr "Telegrafische Zahlung"
+
+#: messages-i18n.c:270
+msgid "Withdraw"
+msgstr "Abhebung"
+
+#: messages-i18n.c:271
+msgid "Yes"
+msgstr "Ja"
+
+#~ msgid "Open an account."
+#~ msgstr "Konto öffnen."
