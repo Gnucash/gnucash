@@ -682,7 +682,7 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   }
 
   /* Build the queries */
-  q = gncQueryCreate ();
+  q = gncQueryCreateFor (type);
   gncQuerySetBook (q, book);
 
 #if 0
