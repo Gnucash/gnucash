@@ -285,6 +285,7 @@ shift128 (qofint128 x)
   guint64 sbit = x.hi & 0x1;
   x.hi >>= 1;
   x.lo >>= 1;
+  x.isbig = 0;
   if (sbit)
   {
     sbit = 1<<30;  /* in two step to avoid 1ULL<<63 */
