@@ -954,7 +954,7 @@ gnc_reconcile_window_create_list_box(Account *account,
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
-				 GTK_POLICY_NEVER, 
+				 GTK_POLICY_AUTOMATIC,
 				 GTK_POLICY_ALWAYS);
   gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
 
@@ -1717,6 +1717,9 @@ recnWindow (GtkWidget *parent, Account *account)
 
     gnome_dock_set_client_area(GNOME_DOCK(dock), frame);
 
+    /* Force a reasonable starting size */
+    gtk_widget_set_usize(GTK_WIDGET(recnData->window), 800, 600);
+
     gtk_container_add(GTK_CONTAINER(frame), main_area);
     gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
 
@@ -1736,8 +1739,8 @@ recnWindow (GtkWidget *parent, Account *account)
     gnome_popup_menu_attach(popup, recnData->credit, recnData);
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(debcred_area), debits_box, TRUE, FALSE, 0);
-    gtk_box_pack_end(GTK_BOX(debcred_area), credits_box, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(debcred_area), debits_box, TRUE, TRUE, 0);
+    gtk_box_pack_end(GTK_BOX(debcred_area), credits_box, TRUE, TRUE, 0);
 
     {
       GtkWidget *hbox, *title_vbox, *value_vbox;

@@ -220,6 +220,7 @@ gnc_reconcile_list_init (GNCReconcileList *list)
   gtk_clist_set_column_justification (clist, 3, GTK_JUSTIFY_RIGHT);
   gtk_clist_set_column_justification (clist, 4, GTK_JUSTIFY_CENTER);
   gtk_clist_column_title_passive (clist, 4);
+  gtk_clist_set_column_resizeable (clist, 4, FALSE);
 
   gtk_signal_connect (GTK_OBJECT (clist), "click_column",
 		      GTK_SIGNAL_FUNC(gnc_reconcile_click_column_cb), NULL);
