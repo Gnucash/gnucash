@@ -151,13 +151,76 @@ bank, credit-card, stock, general ledger, etc.
 
 Portability Notes
 -----------------
-Note: neither the "cell", nor the "cellblock" contain
-any Motif-specific code.  They should be portable to
-other GUI's (e.g. GTK, QT).  The exception is the
-combo-cell, which contains Motif code for the 
-pull-down menu.
+The register should be easily portable to Qt or GTK.
+Most of the files contain no motif code, and thus do not 
+require any porting.  All Motif-specific code appears in 
+the file "table-motif.c" and "combocell.c".  All that 
+table-motif.c does is to set up the XbaeMatrix Motif widget,
+and to install callbacks for cell enter/modify/leave.  
+The combocell.c file defines a pull-down menu that can be 
+inserted into Xbae cells.
 
-All Motif-specific code appears in the "table".
+Porting hints: stub out combocell.c, and work on table-motif.c 
+first.
+
+> Could you give me a (brief) overview of what's going on in
+> table-motif.  i.e. what's the top-level widget etc. (it looks like
+> most of the functionality is provided by the XbaeMatrix which doesn't
+> have a direct GTK correspondent...), and how do the parts of that
+> widget that you use behave?
+>
+> For example, I might say "GTK's CList allows you to set up a 2d table
+> where each cell contains a text field, a pixmap, or both..."  That's
+> the level of description I'm thinking of for the stuff you use from
+> Xbae, since I don't know anything about it.
+
+Xbaematrix is "just" a table widget: it provides the following:
+
+-- each cell is a "virtual" text widget.  (there is really only one text
+   widget in xbae, it gets dynamically mapped to the currently active
+   cell.  This is all 100% transparent bothto programmer and user.
+   I only mention this because it makes xbae very efficient space and
+   speed wise for large tables.)
+-- cells can contain pixmaps
+-- cells can contain widgets (although this is kind of a hack --
+   I hacked this code in myself. Xbae internals are very complex).
+-- cells deliver enter and leave callbacks when user enters
+   or leaves with mouse/tab key/arrow key.   programmer is allowed
+   to change text upon enter/leave.
+-- cells deliver modify callback.  modify callback presents old and new
+   data as typed by the user.  callback allows programmer to accept or
+   reject the edits.  (e.g. I use this to accept only number &
+   punctuation in money cells, and only valid dates in date cells.
+   I also use this to implement accelerator keys for the date cells.)
+-- allows cells to be marked read-only (not modifieable by user).
+-- allows a fixed number of rows & cols on left, right, bottom, top.
+   (I only fix top rows).
+-- automatically puts up scroll bar on the scrolling region, when
+   the scrolling region is larger than physical window.
+-- user-defined data can be anchored to each cell, and/or row,
+   and/or column.
+-- allows variety of highlighting features. (not used).
+-- allows tab-traversal order to be set (which cells are visted
+   when tab key/arrows keys are hit).
+-- allows rows/columns to be labeled (not used).
+
+If you look at table-motif.c, you will see the following structure:
+
+xaccCreateTable() initializes the table widget
+cellCB () callback that is called when user enters/leaves a cell,
+    (by clicking on it with mouse, or with tab/arrow keys), or
+    when user attempts to edit the cell.  This callback in turn calls
+    the enterCB(), leaveCB() and modifyCB() routines, wich then call
+    GUI-independent callbacks for the register cell handlers.
+    Depending on the result of the cell calbacks, the string
+    stored in the cell is modified or not.
+traverseCB() callback that is called when user tabs through sequence of
+    cells.  This callback allows a sequence of cells to be defined
+    for tabbing trhough.
+
+That's pretty much it, except for some assorted gui-independent setup.
+
+
 
 Apologies
 ---------
