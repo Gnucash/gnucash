@@ -1,3 +1,8 @@
+2003-06-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Adapted to latest
+	OpenHBCI changes.
+
 2003-06-02  Christian Stimming  <stimming@tuhh.de>
 
 	* po/pt_BR.po: Updated Brazilian portugese translation by Jon

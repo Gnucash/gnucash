@@ -505,12 +505,14 @@ gnc_hbci_new_interactor(GNCInteractor *data)
 {
   HBCI_InteractorCB *inter;
 
-  inter = HBCI_InteractorCB_new(&destr,
+  inter = HBCI_InteractorCB_new2(&destr,
 				&msgInputPin,
 				&msgInsertMediumOrAbort,
 				&msgInsertCorrectMediumOrAbort,
 				&msgStateResponse,
 				&keepAlive,
+				NULL,
+				NULL,
 				data);
 
   return HBCI_InteractorCB_Interactor(inter);
