@@ -296,7 +296,7 @@
                   ('weighted-average 
                    (let ((pricealist 
                           (gnc:get-commoditylist-totalavg-prices
-                           commodity-list currency to-date)))
+                           commodity-list currency to-date #f #f)))
                      (lambda (foreign domestic date) 
                        (cons #f (gnc:pricealist-lookup-nearest-in-time
 				 pricealist foreign date)))))

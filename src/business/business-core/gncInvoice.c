@@ -460,6 +460,8 @@ const char * gncInvoiceGetType (GncInvoice *invoice)
     return _("Invoice");
   case GNC_OWNER_VENDOR:
     return _("Bill");
+  case GNC_OWNER_EMPLOYEE:
+    return /* XXX:FIXME: _() */ ("Expense Voucher");
   default:
     return NULL;
   }

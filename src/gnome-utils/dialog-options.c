@@ -2704,7 +2704,7 @@ gnc_option_get_ui_value_list (GNCOption *option, GtkWidget *widget)
 
   clist = GTK_CLIST(widget);
   num_rows = gnc_option_num_permissible_values(option);
-  result = gh_eval_str("()");
+  result = gh_eval_str("'()");
 
   for (row = 0; row < num_rows; row++)
   {

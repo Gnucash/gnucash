@@ -64,6 +64,16 @@ static const int MATCH_DATE_NOT_THRESHOLD = 21;
 static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE; /* DISABLE once account transfer bug is fixed! */
 
 /********************************************************************\
+ *   Forward declared prototypes                                    *
+\********************************************************************/
+
+static void
+matchmap_store_destination (GncImportMatchMap *matchmap, 
+			    GNCImportTransInfo *trans_info,
+			    gboolean use_match);
+
+
+/********************************************************************\
  *               Structures passed between the functions             *
 \********************************************************************/
 
@@ -186,6 +196,12 @@ void gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
   g_assert (info);
   info->dest_acc = acc;
   info->dest_acc_selected_manually = selected_manually;
+
+  /* Store the mapping to the other account in the MatchMap. */
+  if(selected_manually)
+    {
+      matchmap_store_destination (NULL, info, FALSE);
+    }
 }
 
 gboolean
@@ -326,6 +342,9 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
 /*-************************************************************************
  * MatchMap- related functions (storing and retrieving)
  */
+
+/* searches using the GNCImportTransInfo through all existing transactions */
+/* if there is an exact match of the description and memo */
 static Account *
 matchmap_find_destination (GncImportMatchMap *matchmap, 
 				    GNCImportTransInfo *info)
@@ -342,10 +361,16 @@ matchmap_find_destination (GncImportMatchMap *matchmap,
   result = gnc_imap_find_account 
     (tmp_map, GNCIMPORT_DESC, 
      xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
-  if (result == NULL)
-    result = gnc_imap_find_account 
-      (tmp_map, GNCIMPORT_MEMO, 
-       xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+
+  /* Disable matching by memo, until bayesian filtering is implemented. 
+     It's currently unlikely to help, and has adverse effects, causing false positives,
+     since very often the type of the transaction is stored there.
+     
+     if (result == NULL)
+     result = gnc_imap_find_account 
+     (tmp_map, GNCIMPORT_MEMO, 
+     xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+  */
   
   if (matchmap == NULL)
     gnc_imap_destroy (tmp_map);
@@ -357,7 +382,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap,
     'use_match' is true, the destination account of the selected
     matching/duplicate transaction is used; otherwise, the stored
     destination_acc pointer is used. */
-static void 
+static void
 matchmap_store_destination (GncImportMatchMap *matchmap, 
 			    GNCImportTransInfo *trans_info,
 			    gboolean use_match)
@@ -493,68 +518,90 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	  /*DEBUG("heuristics:  probability - 10 (date)"); */
 	}
       
-    
-      /* Memo heuristics */  
-      if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		 xaccSplitGetMemo(split))
-	  ==0))
-	{	
-	  /* An exact match of description gives a +2 */
-	  prob = prob+2;
-	  /* DEBUG("heuristics:  probability + 2 (memo)"); */
+      /* Check number heuristics */  
+      if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+	{     
+	  if((strcmp(xaccTransGetNum
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetNum(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of the Check number gives a +5 */
+	      prob = prob+5;
+	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
+	    }
 	}
-      else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		       xaccSplitGetMemo(split),
-		       strlen(xaccSplitGetMemo(split))/2)
-	       ==0))
+      
+      /* Memo heuristics */  
+      if(strlen(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	  if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+		     xaccSplitGetMemo(split))
+	      ==0))
+	    {	
+	      /* An exact match of memo gives a +2 */
+	      prob = prob+2;
+	      /* DEBUG("heuristics:  probability + 2 (memo)"); */
+	    }
+	  else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+			   xaccSplitGetMemo(split),
+			   strlen(xaccSplitGetMemo(split))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	    }
 	}
 
       /* Description heuristics */  
-      if((strcmp(xaccTransGetDescription
-		 (gnc_import_TransInfo_get_trans (trans_info)),
-		 xaccTransGetDescription(xaccSplitGetParent(split)))
-	  ==0))
-	{	
-	  /*An exact match of Description gives a +2 */
-	  prob = prob+2;
-	  /*DEBUG("heuristics:  probability + 2 (description)");*/
-	}
-      else if((strncmp(xaccTransGetDescription
-		       (gnc_import_TransInfo_get_trans (trans_info)),
-		       xaccTransGetDescription(xaccSplitGetParent(split)),
-		       strlen(xaccTransGetDescription
-			      (gnc_import_TransInfo_get_trans (trans_info)))/2)
-	  ==0))
+      if(strlen(xaccTransGetDescription(gnc_import_TransInfo_get_trans (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	  if((strcmp(xaccTransGetDescription
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetDescription(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of Description gives a +2 */
+	      prob = prob+2;
+	      /*DEBUG("heuristics:  probability + 2 (description)");*/
+	    }
+	  else if((strncmp(xaccTransGetDescription
+			   (gnc_import_TransInfo_get_trans (trans_info)),
+			   xaccTransGetDescription(xaccSplitGetParent(split)),
+			   strlen(xaccTransGetDescription
+				  (gnc_import_TransInfo_get_trans (trans_info)))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	    }
 	}
 
+      /*Online id punishment*/
       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&
 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
 	{
 	  /* If the pref is to show match even with online ID's,
-	     puninsh the transaction with online if */
-	  prob = prob-3;
+	     puninsh the transaction with online id */
+	  
+	  /* DISABLED, it's the wrong solution to the problem. benoitg, 24/2/2003 */
+	  /*prob = prob-3;*/
 	}
-
+      
       /* Is the probability high enough? Otherwise do nothing and return. */
       if(prob < display_threshold)
 	{
 	  return;
 	}
-
+      
       /* The probability is high enough, so allocate an object
 	 here. Allocating it only when it's actually being used is
 	 probably quite some performance gain. */
@@ -563,8 +610,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       match_info->probability = prob;
       match_info->split = split;
       match_info->trans = xaccSplitGetParent(split);
-   
-
+      
+      
       /* Append that to the list. */
       trans_info->match_list = 
 	g_list_append(trans_info->match_list,
@@ -651,9 +698,6 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	       xaccTransGetCurrency 
 	       (gnc_import_TransInfo_get_trans (trans_info)));
 	    xaccSplitSetMemo (split, _("Auto-Balance split"));
-
-	    /* Store the mapping to the other account in the MatchMap. */
-	    matchmap_store_destination (matchmap, trans_info, FALSE);
 	  }
 	  
 	  xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
@@ -813,7 +857,6 @@ gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
   
   /* Try to find a previously selected destination account 
      string match for the ADD action */
-  
   gnc_import_TransInfo_set_destacc (transaction_info, 
 				    matchmap_find_destination (matchmap, transaction_info),
 				    FALSE); 
@@ -875,5 +918,40 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
   
   trans_info->previous_action=trans_info->action;
 }
+
+
+/* Try to automatch a transaction to a destination account if the */
+/* transaction hasn't already been manually assigned to another account */
+gboolean
+gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
+				      GncImportMatchMap *matchmap)
+{
+  Account *orig_destacc;
+  Account *new_destacc = NULL;
+  g_assert(transaction_info);
+
+  orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
+
+  /* if we haven't manually selected a destination account for this transaction */
+  if(gnc_import_TransInfo_get_destacc_selected_manually(transaction_info) == FALSE)
+  {
+    /* Try to find a previous selected destination account string match for the ADD action */
+    new_destacc = matchmap_find_destination(matchmap, transaction_info);
+    gnc_import_TransInfo_set_destacc(transaction_info, new_destacc, FALSE);
+  } else
+  {
+    new_destacc = orig_destacc;
+  }
+
+  /* account has changed */
+  if(new_destacc != orig_destacc)
+  {
+    return TRUE;
+  } else /* account is the same */
+  {
+    return FALSE;
+  }
+}
+
 
 /** @} */

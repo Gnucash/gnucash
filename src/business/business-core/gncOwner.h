@@ -14,6 +14,7 @@ typedef struct gnc_owner_s GncOwner;
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
+#include "gncEmployee.h"
 #include "gnc-lot.h" 
 
 typedef enum {
@@ -21,7 +22,8 @@ typedef enum {
   GNC_OWNER_UNDEFINED,
   GNC_OWNER_CUSTOMER,
   GNC_OWNER_JOB,
-  GNC_OWNER_VENDOR
+  GNC_OWNER_VENDOR,
+  GNC_OWNER_EMPLOYEE
 } GncOwnerType;
 
 struct gnc_owner_s {
@@ -31,6 +33,7 @@ struct gnc_owner_s {
     GncCustomer *	customer;
     GncJob *		job;
     GncVendor *		vendor;
+    GncEmployee *	employee;
   } owner;
 };
 
@@ -38,12 +41,14 @@ void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
 void gncOwnerInitCustomer (GncOwner *owner, GncCustomer *customer);
 void gncOwnerInitJob (GncOwner *owner, GncJob *job);
 void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor);
+void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee);
 
 GncOwnerType gncOwnerGetType (const GncOwner *owner);
 gpointer gncOwnerGetUndefined (const GncOwner *owner);
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
 GncJob * gncOwnerGetJob (const GncOwner *owner);
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
+GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
 
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
@@ -77,6 +82,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 #define OWNER_CUSTOMER	"customer"
 #define OWNER_JOB	"job"
 #define OWNER_VENDOR	"vendor"
+#define OWNER_EMPLOYEE	"employee"
 #define OWNER_PARENT	"parent"
 #define OWNER_PARENTG	"parent-guid"
 #define OWNER_NAME	"name"

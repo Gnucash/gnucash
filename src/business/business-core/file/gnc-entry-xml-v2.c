@@ -86,6 +86,9 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_billable_string "entry:billable"
 #define entry_billto_string "entry:billto"
 
+/* emp bill */
+#define entry_billpayment_string "entry:b-pay"
+
 /* other stuff */
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
@@ -192,6 +195,8 @@ entry_dom_tree_create (GncEntry *entry)
 				       gncEntryGetBillTaxable (entry)));
       xmlAddChild(ret, int_to_dom_tree(entry_btaxincluded_string,
 				       gncEntryGetBillTaxIncluded (entry)));
+      maybe_add_string (ret, entry_billpayment_string,
+		gncEntryPaymentTypeToString (gncEntryGetBillPayment (entry)));
     }
 
     taxtable = gncEntryGetBillTaxTable (entry);
@@ -525,6 +530,27 @@ entry_billto_handler (xmlNodePtr node, gpointer entry_pdata)
   return ret;
 }
 
+/* employee bills */
+static gboolean
+entry_billpayment_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    GncEntryPaymentType type;
+    char *str;
+    gboolean ret;
+
+    str = dom_tree_to_text (node);
+    g_return_val_if_fail (str, FALSE);
+
+    ret = gncEntryPaymentStringToType (str, &type);
+    g_free (str);
+
+    if (ret)
+      gncEntrySetBillPayment(pdata->entry, type);
+
+    return ret;
+}
+
 /* The rest of the stuff */
 
 static gboolean
@@ -652,6 +678,9 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_btaxtable_string, entry_btaxtable_handler, 0, 0 },
     { entry_billable_string, entry_billable_handler, 0, 0 },
     { entry_billto_string, entry_billto_handler, 0, 0 },
+
+    /* employee stuff */
+    { entry_billpayment_string, entry_billpayment_handler, 0, 0 },
 
     /* Other stuff */
     { entry_order_string, entry_order_handler, 0, 0 },

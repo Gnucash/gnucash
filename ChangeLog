@@ -1,3 +1,318 @@
+2003-03-03  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: change to 1.8.1.5 version
+	* src/quotes/Makefile.am: add dump-finance-quote to EXTRA_DIST
+
+2003-03-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm: don't export
+	  gnc:owner-get-name -- it overrides the g-wrap'ed version
+
+2003-03-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEntry.[ch]: add interfaces
+	  to deal with bill 'payment types', in preparation for
+	  employee expense vouchers.
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	  add support for the bill payment type.
+
+	* src/business/business-core/business-core.scm:
+	  don't need gnc:owner-get-name in scheme
+	  add employee support to owners
+	  fix bug in (gnc:owner-get-id)
+	* src/business/business-core/gncEmployee.[ch]:
+	  add APIs to get-guid and lookup from scheme
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap employee-get-guid, employee-lookup, employee-get-id,
+	  employee-get-username, employee-get-addr, owner-init-employee,
+	  owner-get-employee, owner-get-name
+	* src/business/business-gnome/business-options-gnome.c:
+	  create an "employee option" widget set
+	* src/business/business-gnome/business-urls.c:
+	  define an 'employee' URL type
+	* src/business/business-gnome/dialog-employee.[ch]:
+	  remove old, unused search APIs,
+	  add new search APIs
+	* src/business/business-gnome/dialog-invoice.c:
+	  add _some_ employee support.  Still doesn't contain the code
+	  to display an employee-owned invoice (expense voucher).
+	* src/business/business-utils/business-options.scm:
+	  create an employee option type	  
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncOwner.[ch]:
+	* src/business/business-core/file/gnc-owner-xml-v2.c:
+	* src/business/business-gnome/business-gnome-utils.c
+	* src/business/business-gnome/search-owner.c:
+	  add employee support
+
+2003-03-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.h: Pull missing prototype from
+	HEAD, for gnc_import_TransInfo_refresh_destacc.
+
+2003-03-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
+
+2003-03-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation.
+
+	* src/app-utils/prefs.scm: Adjust the names of register styles in
+	the preferences to those names used in the register View
+	menu. This didn't require changes in any option lookup code.
+
+	* src/gnome/glade/register.glade: 'Duplicate Transaction' could
+	either mean 'to duplicate a transaction' or 'the duplicate of a
+	transaction'. Both need very different translations. Therefore
+	changed 'Duplicate Transaction' in the register into 'Duplicate a
+	Transaction' to resolve that ambiguity here.
+
+	* po/sk.po: Updated Slovak translation by Zdenko Podobný
+	<zdpo@mailbox.sk>.
+
+2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: Pull from HEAD
+	-Disable -3 punishment for transactions which have an online ID.  This punished credit card transfer yet added no tangible benefit.
+
+2003-02-26  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add config.rpath.
+	* configure.in (AC_OUTPUT): Add intl/Makefile,
+
+2003-02-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-register.c: Don't override the user's toolbar
+	style preference by calling gtk_widget_show_all() on the toolbar.
+	#102041
+
+2003-02-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/glade/account.glade: Increase height of
+	  account-hierarchy druid.
+
+2003-02-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Quick fix to avoid
+	online transfers being sent twice to the bank.
+
+2003-02-19  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move AS_SCRUB_INCLUDE _before_ tests so it wont
+	  fail on gcc 3.2.2 which actually cares.  This is particularly
+	  important for AC_CHECK_HEADER(S)
+
+	* configure.in: change the configure help message from
+	  "--enable-gui" to "--disable-gui", because the default is
+	  enabled.  Also changed "--enable-error-on-warning" for the
+	  same reason.
+	
+2003-02-18  David Hampton  <hampton@employees.org>
+
+	* configure.in: Add new variable for conditionally including the
+	SRFI directory when doing 'make check'.  Should be null when using
+	guile 1.6.
+
+	* Various Makefile.am files: Use new conditional include for the
+	SRFI directory when running 'make check'.
+
+2003-02-17  Derek Atkins  <derek@ihtfp.com>
+
+	Move some files around in preparation for re-factoring the
+	reconcile-list code (pull from HEAD):
+	* src/gnome-search/Makefile.am: removed search-param.[ch]
+	* src/gnome-search/search-param.[ch]: moved the search-param to gnome-utils
+	* src/gnome-utils/search-parah.[ch]: moved search-param from gnome-search
+	* src/gnome-utils/Makefile.am: added search-param.[ch]
+	* po/POTFILES.in: fix for the search-param.c move
+
+	Pull up from HEAD
+	* src/gnome-utils/dialog-transfer.c: don't round the exchange
+	  rate when returning it to callers...  Compute it from the
+	  from_amount and to_amount.
+	* src/register/ledger-core/split-register.c: change the rate-cell
+	  to a shares_print_info so we don't lose accuracy due to rounding
+	  errors.
+	  Fixes bug #106332
+
+2003-02-16  Herbert Thoma  <herbie@hthoma.de>
+
+	Pull up from HEAD:
+	* src/gnome/gnc-split-reg.c:
+	  only display an euro amount in the status bar of a register window
+	  if the account currency is a euro currency but NOT euro itself
+
+	* src/gnome-utils/gnc-account-tree.c:
+	  auto resize balance and total columns
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome/window-acct-tree.c:
+	* src/scm/main-window.scm:
+	  recycle ACCOUNT_BALANCE_EURO and ACCOUNT_TOTAL_EURO account tree 
+	  columns to display balance resp. total in default report currency
+
+2003-02-16  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm:
+	  - No need to use the 'negative' field anymore
+	  - Save the default split, even if we've got a split transaction.
+	    It will be useful later to make sure we have a properly balanced
+	    transaction and everything has the "right sign"
+	* src/import-export/qif-import/qif-objects.scm:
+	  - remove the 'negative' field of a split
+	  - add a 'default-split' field of a transaction
+	  - change the split-amounts and set-split-amounts! functions
+	    the split-amounts will also return the default-split, if it
+	    exists.  set-split-amounts! will figure out if we need to
+	    reverse the splits by seeing if the amounts add up to 0 and
+	    coping appropriately..  This is to fix a bug where SOME programs
+	    make splits positive, and some make them negative.  This should
+	    deal properly in both cases, so it's a better fix for #105139.
+
+2003-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/glade/hbci.glade: Clarify some HBCI
+	strings.
+
+2003-02-14  David Hampton  <hampton@employees.org>
+
+	* src/quotes/dump-finance-quote: Do a runtime check for
+	Finance::Quote instead of including the perl 'use' declaration.
+	The latter causes RPM to add a dependancy on F::Q.
+
+2003-02-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-options.c:  guile-1.6 doesn't like
+	  "()" as an empty list.  Change it to "'()" to make it happy.
+	  This is backwards compatible with older guiles.
+
+2003-02-12  Derek Atkins  <derek@ihtfp.com>
+
+	* applied Matthew Vanecek's patch to postgres/kvp-sql.c
+
+2003-02-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/es.po: Updated Spanish translation by Eneko Lacunza
+	<enlar@enlar.net>.
+
+	* src/import-export/hbci/glade/hbci.glade, po/de.po: Clarify some
+	HBCI strings.
+
+	* configure.in: require newer openhbci: 0.9.6, from Jan 31.
+
+2003-02-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.1
+	* rpm/gnucash.spec.in: fix info files prob
+	* NEWS: update for release
+	* src/quotes/Makefile.am: remove dump-finance-quote from build
+	  to fix problems with rpm wanting Finance::Quote
+
+2003-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c
+	  If we're expanded, ignore TRANS cursor classes.  This prevents
+	  a bug where the exchange-rate dialog is realized when there really
+	  is nothing to do (because we're in an expanded transaction).
+  	* src/register/ledger-core/split-register-model.c
+	  Don't PERR() if we have no account -- this prevents annoying
+	  messages when handling multi-currency txns in the GL.  Note:
+	  all GL txns are displayed in the locale currency (if possible).	
+	* src/register/ledger-core/split-register.c
+	  AUTO_LEDGER and JOURNAL register types _ARE_ expanded -- return
+	  TRUE, not FALSE.
+	Fixes 105319
+
+	* src/report/standard-report/advanced-portfolio.scm: add extra
+	  arguments to prevent scheme crash.
+	Fixes 105405
+
+	* src/gnome/glade/sched-xact.glade: Need to start the Editor dialog
+	  as non-visible so the ledger get's sized properly
+	* src/gnome/dialog-scheduledxaction.c: resize the cal after the
+	  dialog is shown, so it get's sized properly.
+
+	* src/register/register-gnome/gnucash-style.c: temporary fix to
+	  prevent 105346, until a real fix can be created.  There is still
+	  a visual artifact leftover, but at least it doesn't crash.
+	
+2003-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/tip-list.scm: remove the tip that says that this is a development
+	  version.  (Thanks, pogma)
+
+	* src/scm/command-line.scm: remove the "development version" string
+	  when running "gnucash --version"
+
+	Pull up from HEAD:
+	* src/import-export/import-backend.c: Add heuristic for duplicate
+	  matching by check number.  
+	* doc/README.OFX: Update
+
+2003-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is
+	  0..255 instead of -128..127.  Force a "signed char" to make sure
+	  we get the latter interpretation.
+
+	* src/app-utils/gnc-ui-utils.c: Don't round unless force_fit is true.
+	  Fixes Debian Bug #179802.
+
+	* src/bin/overrides/gnucash-build-env.in: add business-utils
+
+	* src/business/business-utils/Makefile.am: make scm-links so you
+	  can run gnucash from within the build tree
+	
+2003-02-04  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<L.Cappelletti@mail.com>.
+
+2003-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+	* src/import-export/qif-import/qif-file.scm: mark "splits" as negative
+	  to make sure the numbers are reflected appropriately.
+	* src/import-export/qif-import/qif-objects.scm: add a neg? value to
+	  a qif-split; use this when converting the split-amount.
+	Fixes bug #105179	
+
+2003-02-03  Derek Atkins  <derek@ihtfp.com>
+
+	Pull up from HEAD:
+
+	* src/calculation/Makefile.am: need to add GUILE_INCS
+
+	* src/engine/Makefile.am: add ${INTLLIBS} for gettext() et al on
+	  platforms that don't have it in libc
+
+	* src/backend/file/io-gncbin-r.c: don't need to define functions
+	  that are never used, so move the #ifdef around.  Fixes # 105124
+
+	* rpm/gnucash.in: don't call autoconf
+
+	Pull up from HEAD:
+
+	* src/import-export/qif-import/qif-file.scm: fix a
+	  wrong-number-of-arguments fatal crash when trying to reparse
+	  dates.
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* README: Changed to suit new stable release
+	* configure.in: release 1.8.0
+	* src/scm/main.scm: turn off devel version message
+	* NEWS: add whats news
+
+2003-02-02  Chris Lyttle  <chris@wilddev.net>
+
+	* rpm/gnucash.spec.in: add options to build ofx,hbci and postgresql
+
 2003-02-02  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* doc/README.OFX: I've quickly put together some docs for the ofx module and transaction matching.  Also includes a FAQ. Not perfect, but should closebug 99478.

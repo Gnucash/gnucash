@@ -1,6 +1,6 @@
 TESTS = test-load-module test-link-module 
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/calculation \
@@ -16,7 +16,6 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/network-utils \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/tax/us \
   --guile-load-dir ${top_srcdir}/src/report/report-system \

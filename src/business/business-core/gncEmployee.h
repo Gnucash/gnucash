@@ -47,6 +47,9 @@ gboolean gncEmployeeGetActive (GncEmployee *employee);
 GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
+GUID gncEmployeeRetGUID (GncEmployee *employee);
+GncEmployee * gncEmployeeLookupDirect (GUID guid, GNCBook *book);
+
 void gncEmployeeBeginEdit (GncEmployee *employee);
 void gncEmployeeCommitEdit (GncEmployee *employee);
 int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
