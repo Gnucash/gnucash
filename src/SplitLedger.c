@@ -752,16 +752,16 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
   gnc_table_set_virt_cell_cursor (reg->table,
                                   reg->table->current_cursor_loc.vcell_loc,
                                   sr_get_active_cursor (reg));
+
   xaccSRSetTransVisible (reg, reg->table->current_cursor_loc.vcell_loc,
                          expand, FALSE);
 
-  if (expand)
   {
     VirtualLocation virt_loc;
 
     virt_loc = reg->table->current_cursor_loc;
 
-    if (!gnc_table_virtual_loc_valid (reg->table, virt_loc, FALSE))
+    if (!expand || !gnc_table_virtual_loc_valid (reg->table, virt_loc, FALSE))
     {
       if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
         gnc_table_move_cursor_gui (reg->table, virt_loc);
