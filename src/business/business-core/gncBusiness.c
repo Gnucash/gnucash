@@ -91,7 +91,6 @@ void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
   xaccStoreEntity (gnc_book_get_entity_table (book), obj, guid, mod_name);
   bi = gnc_book_get_data (book, mod_name);
   g_hash_table_insert (bi->ht, (gpointer)guid, obj);
-  bi->is_dirty = TRUE;
 }
 
 void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
@@ -102,5 +101,4 @@ void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,
   xaccRemoveEntity (gnc_book_get_entity_table (book), guid);
   bi = gnc_book_get_data (book, mod_name);
   g_hash_table_remove (bi->ht, guid);
-  bi->is_dirty = TRUE;
 }

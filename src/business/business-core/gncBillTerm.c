@@ -214,6 +214,12 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
+  if (!term) return;
+
+  /* XXX Commit to DB */
+  if (term->dirty)
+    gncBusinessSetDirtyFlag (term->book, _GNC_MOD_NAME, TRUE);
+  term->dirty = FALSE;
 }
 
 

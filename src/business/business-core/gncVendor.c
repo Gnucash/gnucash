@@ -162,6 +162,9 @@ void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
 void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com)
 {
   if (!vendor || !com) return;
+  if (vendor->commodity &&
+      gnc_commodity_equal (vendor->commodity, com))
+    return;
   vendor->commodity = com;
   mark_vendor (vendor);
 }
@@ -272,7 +275,7 @@ void gncVendorCommitEdit (GncVendor *vendor)
   if (!vendor) return;
 
   /* XXX COMMIT TO DATABASE */
-  if (vendor->dirty)
+  if (gncVendorIsDirty (vendor))
     gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
   vendor->dirty = FALSE;
   gncAddressClearDirty (vendor->addr);

@@ -250,6 +250,11 @@ void gncTaxTableChanged (GncTaxTable *table)
 
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
+  if (!table) return;
+
+  if (table->dirty)
+    gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
+  table->dirty = FALSE;
 }
 
 

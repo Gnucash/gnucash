@@ -131,6 +131,7 @@ void gncOrderSetID (GncOrder *order, const char *id)
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
 {
   if (!order || !owner) return;
+  if (gncOwnerEqual (&order->owner, owner)) return;
 
   gncOwnerCopy (owner, &order->owner);
   mark_order (order);
@@ -139,6 +140,7 @@ void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
 void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 {
   if (!order) return;
+  if (timespec_equal (&order->opened, &date)) return;
   order->opened = date;
   mark_order (order);
 }
@@ -146,6 +148,7 @@ void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 void gncOrderSetDateClosed (GncOrder *order, Timespec date)
 {
   if (!order) return;
+  if (timespec_equal (&order->closed, &date)) return;
   order->closed = date;
   mark_order (order);
 }
@@ -167,6 +170,7 @@ void gncOrderSetReference (GncOrder *order, const char *reference)
 void gncOrderSetActive (GncOrder *order, gboolean active)
 {
   if (!order) return;
+  if (order->active == active) return;
   order->active = active;
   mark_order (order);
 }

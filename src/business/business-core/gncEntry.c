@@ -150,6 +150,7 @@ void gncEntrySetGUID (GncEntry *entry, const GUID *guid)
 void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
   if (!entry) return;
+  if (timespec_equal (&entry->date, &date)) return;
   entry->date = date;
   mark_entry (entry);
 }
@@ -157,6 +158,7 @@ void gncEntrySetDate (GncEntry *entry, Timespec date)
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
 {
   if (!entry) return;
+  if (timespec_equal (&entry->date_entered, &date)) return;
   entry->date_entered = date;
   mark_entry (entry);
 }
@@ -185,6 +187,7 @@ void gncEntrySetNotes (GncEntry *entry, const char *notes)
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
 {
   if (!entry) return;
+  if (gnc_numeric_eq (entry->quantity, quantity)) return;
   entry->quantity = quantity;
   entry->values_dirty = TRUE;
   mark_entry (entry);
@@ -193,6 +196,7 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
 void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
 {
   if (!entry) return;
+  if (gnc_numeric_eq (entry->price, price)) return;
   entry->price = price;
   entry->values_dirty = TRUE;
   mark_entry (entry);
@@ -201,6 +205,7 @@ void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
 {
   if (!entry) return;
+  if (gnc_numeric_eq (entry->discount, discount)) return;
   entry->discount = discount;
   entry->values_dirty = TRUE;
   mark_entry (entry);
@@ -209,6 +214,7 @@ void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
 void gncEntrySetAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
+  if (entry->account == acc) return;
   entry->account = acc;
   mark_entry (entry);
 }
@@ -217,6 +223,7 @@ void gncEntrySetAccount (GncEntry *entry, Account *acc)
 void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 {
   if (!entry) return;
+  if (entry->order == order) return;
   entry->order = order;
   mark_entry (entry);
 
@@ -229,6 +236,7 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
 {
   if (!entry) return;
+  if (entry->invoice == invoice) return;
   entry->invoice = invoice;
   mark_entry (entry);
 }
@@ -236,6 +244,7 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
 void gncEntrySetTaxable (GncEntry *entry, gboolean taxable)
 {
   if (!entry) return;
+  if (entry->taxable == taxable) return;
   entry->taxable = taxable;
   entry->values_dirty = TRUE;
   mark_entry (entry);
@@ -244,6 +253,7 @@ void gncEntrySetTaxable (GncEntry *entry, gboolean taxable)
 void gncEntrySetTaxIncluded (GncEntry *entry, gboolean taxincluded)
 {
   if (!entry) return;
+  if (entry->taxincluded == taxincluded) return;
   entry->taxincluded = taxincluded;
   entry->values_dirty = TRUE;
   mark_entry (entry);
@@ -265,6 +275,7 @@ void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table)
 void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type)
 {
   if (!entry) return;
+  if (entry->disc_type == type) return;
 
   entry->disc_type = type;
   entry->values_dirty = TRUE;
@@ -274,6 +285,7 @@ void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type)
 void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how)
 {
   if (!entry) return;
+  if (entry->disc_how == how) return;
 
   entry->disc_how = how;
   entry->values_dirty = TRUE;

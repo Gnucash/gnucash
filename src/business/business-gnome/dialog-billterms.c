@@ -612,7 +612,7 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
     gncBillTermDestroy (btw->current_term);
-    gncBillTermCommitEdit (btw->current_term);
+    //    gncBillTermCommitEdit (btw->current_term);
     btw->current_term = NULL;
     gnc_resume_gui_refresh ();
   }

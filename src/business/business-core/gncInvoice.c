@@ -72,8 +72,8 @@ struct _gncInvoice {
 static void addObj (GncInvoice *invoice);
 static void remObj (GncInvoice *invoice);
 
-G_INLINE_FUNC void mark_invoice (GncInvoice *invoice);
-G_INLINE_FUNC void
+static void mark_invoice (GncInvoice *invoice);
+static void
 mark_invoice (GncInvoice *invoice)
 {
   invoice->dirty = TRUE;
@@ -147,6 +147,7 @@ void gncInvoiceSetID (GncInvoice *invoice, const char *id)
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 {
   if (!invoice || !owner) return;
+  if (gncOwnerEqual (&invoice->owner, owner)) return;
   gncOwnerCopy (owner, &invoice->owner);
   mark_invoice (invoice);
 }
@@ -154,6 +155,7 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
+  if (timespec_equal (&invoice->date_opened, &date)) return;
   invoice->date_opened = date;
   mark_invoice (invoice);
 }
@@ -161,6 +163,7 @@ void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
+  if (timespec_equal (&invoice->date_posted, &date)) return;
   invoice->date_posted = date;
   mark_invoice (invoice);
 }
@@ -189,6 +192,7 @@ void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes)
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 {
   if (!invoice) return;
+  if (invoice->active == active) return;
   invoice->active = active;
   mark_invoice (invoice);
 }
@@ -196,6 +200,9 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
 {
   if (!invoice || !com) return;
+  if (invoice->common_commodity &&
+      gnc_commodity_equal (invoice->common_commodity, com))
+    return;
   invoice->common_commodity = com;
   mark_invoice (invoice);
 }
@@ -209,6 +216,7 @@ void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
 {
   if (!invoice) return;
+  g_return_if_fail (invoice->posted_txn == NULL);
 
   invoice->posted_txn = txn;
   mark_invoice (invoice);
@@ -217,6 +225,7 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
 {
   if (!invoice) return;
+  g_return_if_fail (invoice->posted_acc == NULL);
 
   invoice->posted_acc = acc;
   mark_invoice (invoice);

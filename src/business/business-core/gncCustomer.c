@@ -195,6 +195,7 @@ void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
 void gncCustomerSetCommodity (GncCustomer *cust, gnc_commodity *com)
 {
   if (!cust || !com) return;
+  if (cust->commodity && gnc_commodity_equal (cust->commodity, com)) return;
   cust->commodity = com;
   mark_customer (cust);
 }
@@ -234,7 +235,7 @@ void gncCustomerCommitEdit (GncCustomer *cust)
   if (!cust) return;
 
   /* XXX COMMIT TO DATABASE */
-  if (cust->dirty)
+  if (gncCustomerIsDirty (cust))
     gncBusinessSetDirtyFlag (cust->book, _GNC_MOD_NAME, TRUE);
   cust->dirty = FALSE;
   gncAddressClearDirty (cust->addr);

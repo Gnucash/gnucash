@@ -171,6 +171,9 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
 void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity *com)
 {
   if (!employee || !com) return;
+  if (employee->commodity && 
+      gnc_commodity_equal (employee->commodity, com))
+    return;
   employee->commodity = com;
   mark_employee (employee);
 }
@@ -269,7 +272,7 @@ void gncEmployeeCommitEdit (GncEmployee *employee)
   if (!employee) return;
 
   /* XXX COMMIT TO DATABASE */
-  if (employee->dirty)
+  if (gncEmployeeIsDirty (employee))
     gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
   employee->dirty = FALSE;
   gncAddressClearDirty (employee->addr);

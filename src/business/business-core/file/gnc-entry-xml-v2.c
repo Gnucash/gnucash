@@ -385,6 +385,7 @@ entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
       gncOrderSetGUID (order, guid);
     }
     gncOrderAddEntry (order, pdata->entry);
+    gncOrderCommitEdit (order);
 
     g_free(guid);
     return TRUE;
@@ -405,6 +406,7 @@ entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
       gncInvoiceSetGUID (invoice, guid);
     }
     gncInvoiceAddEntry (invoice, pdata->entry);
+    gncInvoiceCommitEdit (invoice);
 
     g_free(guid);
     return TRUE;

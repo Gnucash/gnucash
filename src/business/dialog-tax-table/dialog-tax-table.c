@@ -508,7 +508,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
     gncTaxTableDestroy (ttw->current_table);
-    gncTaxTableCommitEdit (ttw->current_table);
+    //    gncTaxTableCommitEdit (ttw->current_table);
     ttw->current_table = NULL;
     gnc_resume_gui_refresh ();
   }
