@@ -513,13 +513,23 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       }
    }
 
-/* hack alert -- this extra stuff is all wrong !?!?! */
    if (double_line) {
       /* add two rows */
-      num_virt_rows ++;
-      num_phys_rows += reg->trans_cursor->numRows; 
-      num_virt_rows ++;
-      num_phys_rows += reg->split_cursor->numRows; 
+      if (!(reg->user_hook)) {
+         i++;
+         num_virt_rows ++;
+         num_phys_rows += reg->trans_cursor->numRows; 
+         num_virt_rows ++;
+         num_phys_rows += reg->split_cursor->numRows; 
+      }
+   }
+
+   if (!multi_line && !double_line) {
+      if (!(reg->user_hook)) {
+         i++;
+         num_virt_rows += 1; 
+         num_phys_rows += reg->trans_cursor->numRows;
+      }
    }
 
    /* num_virt_cols is always one. */
@@ -581,7 +591,6 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       split = slist[i];
    }
 
-#ifdef LATER
    /* add the "blank split" at the end.  We use either the blank
     * split we've cached away previously in "user_hook", or we create
     * a new one, as needed. */
@@ -607,17 +616,16 @@ printf ("load split %d at phys row %d \n", j, phys_row);
    phys_row += reg->trans_cursor->numRows; 
    
    /* do the split row of the blank split */
-   {
-   Transaction *trans;
-   trans = xaccSplitGetParent (split);
-   split = xaccTransGetSplit (trans, 1);
-   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-   xaccMoveCursor (table, phys_row, 0);
-   xaccSRLoadRegEntry (reg, split);
-   vrow ++;
-   phys_row += reg->split_cursor->numRows; 
+   if (double_line || multi_line) {
+      Transaction *trans;
+      trans = xaccSplitGetParent (split);
+      split = xaccTransGetSplit (trans, 1);
+      xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+      xaccMoveCursor (table, phys_row, 0);
+      xaccSRLoadRegEntry (reg, split);
+      vrow ++;
+      phys_row += reg->split_cursor->numRows; 
    }
-#endif 
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
