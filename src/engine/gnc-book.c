@@ -91,6 +91,11 @@ gnc_book_init (GNCBook *book)
   }
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+
+  book->book_open = 'y';
+  book->version = 0;
+  book->version_check = 0;
+  book->idata = 0;
 }
 
 GNCBook *

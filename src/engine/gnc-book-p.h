@@ -64,12 +64,25 @@ struct gnc_book_struct
    * that will be used to hold arbitrary pointers.
    */
   GHashTable *data_tables;
-  
+
+  /* state flag: 'y' means 'open for editing', 
+   * 'n' means 'book is closed'  
+   */
+  char book_open;
+
+  /* version number, used for tracking multiuser updates */
+  gint32  version;
+  guint32 version_check;  /* data aging timestamp */
+
   /* To be technically correct, backends belong to sessions and
    * not books.  So the pointer below "really shouldn't be here", 
    * except that it provides a nice convenience, avoiding a lookup 
    * from the session.  Better solutions welcome ... */ 
   Backend *backend;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 /*
