@@ -38,7 +38,7 @@ xml_add_str(xmlNodePtr p, const char *tag, const char *str,
   if(!str && !include_if_empty) return(TRUE); 
   if((strlen(str) == 0)  && !include_if_empty) return(TRUE);
 
-  child = xmlNewChild(p, NULL, tag, str);
+  child = xmlNewTextChild(p, NULL, tag, str);
   if(!child) return(FALSE);
 
   return(TRUE);
@@ -62,7 +62,7 @@ xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
   
   numstr = g_strdup_printf("%lld", value);
   if(!numstr) return(FALSE);
-  val_xml = xmlNewChild(p, NULL, tag, numstr);
+  val_xml = xmlNewTextChild(p, NULL, tag, numstr);
   g_free((char *) numstr);
   if(!val_xml) return(FALSE);
   return(TRUE);
@@ -92,7 +92,7 @@ xml_add_double(xmlNodePtr p, const char *tag, const double value) {
     if(!numstr) {
       return(FALSE);
     } else {
-      xmlNodePtr child = xmlNewChild(p, NULL, tag, numstr);
+      xmlNodePtr child = xmlNewTextChild(p, NULL, tag, numstr);
       free((void *) numstr);
       if(!child) return(FALSE);
     }
@@ -116,7 +116,7 @@ xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
 
   /* fprintf(stderr, "%s\n", numstr); */
 
-  child = xmlNewChild(p, NULL, tag, numstr);
+  child = xmlNewTextChild(p, NULL, tag, numstr);
   g_free(numstr); numstr = FALSE;
   if(!child) return(FALSE);
 
@@ -142,7 +142,7 @@ xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
       if(!guidstr) return(FALSE);
     }
 
-    child = xmlNewChild(p, NULL, tag, guidstr);
+    child = xmlNewTextChild(p, NULL, tag, guidstr);
     if(!child) return(FALSE);
     if(guidstr) free((void *) guidstr);
   }
@@ -176,10 +176,10 @@ xml_add_editable_timespec(xmlNodePtr p,
                          &parsed_time);
   if(num_written == 0) return(FALSE);
   
-  timespec_xml= xmlNewChild(p, NULL, tag, NULL);
+  timespec_xml= xmlNewTextChild(p, NULL, tag, NULL);
   if(!timespec_xml) return(FALSE);
 
-  secs_xml = xmlNewChild(timespec_xml, NULL, "s", secs_str);
+  secs_xml = xmlNewTextChild(timespec_xml, NULL, "s", secs_str);
   if(!secs_xml) return(FALSE);
   
   if(ts->tv_nsec) {
@@ -187,7 +187,7 @@ xml_add_editable_timespec(xmlNodePtr p,
     gchar *nsec_str = g_strdup_printf("%ld", ts->tv_nsec);
 
     if(!nsec_str) return(FALSE);
-    nsec_xml = xmlNewChild(timespec_xml, NULL, "ns", nsec_str);
+    nsec_xml = xmlNewTextChild(timespec_xml, NULL, "ns", nsec_str);
     if(!nsec_xml) return(FALSE);
     g_free(nsec_str);
   }
@@ -204,14 +204,14 @@ xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c) {
     if(!c) {
       ok = TRUE;
     } else {
-      c_xml= xmlNewChild(p, NULL, tag, NULL);
+      c_xml= xmlNewTextChild(p, NULL, tag, NULL);
       if(c_xml) {
         const gchar *namestr = gnc_commodity_get_namespace(c);
         if(namestr) {
-          xmlNodePtr namespace_xml = xmlNewChild(c_xml, NULL, "space", namestr);
+          xmlNodePtr namespace_xml = xmlNewTextChild(c_xml, NULL, "space", namestr);
           if(namespace_xml) {
             const gchar *idstr = gnc_commodity_get_mnemonic(c);
-            xmlNodePtr id_xml = xmlNewChild(c_xml, NULL, "id", idstr);
+            xmlNodePtr id_xml = xmlNewTextChild(c_xml, NULL, "id", idstr);
             if(id_xml) ok = TRUE;
           }
         }
@@ -231,10 +231,10 @@ xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
   if(!p) return(FALSE);
   if(!c) return(FALSE);
 
-  comm_xml = xmlNewChild(p, NULL, "commodity", NULL);  
+  comm_xml = xmlNewTextChild(p, NULL, "commodity", NULL);  
   if(!comm_xml) return(FALSE);
 
-  rst_xml = xmlNewChild(comm_xml, NULL, "restore", NULL);  
+  rst_xml = xmlNewTextChild(comm_xml, NULL, "restore", NULL);  
   if(!rst_xml) {
     xmlFreeNode(comm_xml);
     return(FALSE);
@@ -306,7 +306,7 @@ xml_add_binary(xmlNodePtr p,
   if(!format) return(FALSE);
   if(!data) return(FALSE);
 
-  value_xml = xmlNewChild(p, NULL, tag, NULL);
+  value_xml = xmlNewTextChild(p, NULL, tag, NULL);
   if(!value_xml) return(FALSE);
   
   if(size == 0) return(TRUE);
@@ -328,7 +328,7 @@ xml_add_binary(xmlNodePtr p,
     for(i = 0; i < size; i++) {
       g_string_sprintfa(output, "%x", (int) (((char *) data)[i]));
       if(((i + 1) % max_line_len) == 0) {
-        data_xml = xmlNewChild(value_xml, NULL, "hex", output->str);
+        data_xml = xmlNewTextChild(value_xml, NULL, "hex", output->str);
         if(!data_xml) {
           return(FALSE);
           g_string_free(output, TRUE);
@@ -338,7 +338,7 @@ xml_add_binary(xmlNodePtr p,
     }
     
     if(strlen(output->str) > 0) {
-      data_xml = xmlNewChild(value_xml, NULL, "hex", output->str);
+      data_xml = xmlNewTextChild(value_xml, NULL, "hex", output->str);
       if(!data_xml) {
         g_string_free(output, TRUE);
         return(FALSE);
@@ -364,7 +364,7 @@ xml_add_kvp_glist(xmlNodePtr p, const char *tag, GList *lst) {
   if(!tag) return(FALSE);
   if(!lst) return(FALSE);
   
-  list_xml = xmlNewChild(p, NULL, tag, NULL);
+  list_xml = xmlNewTextChild(p, NULL, tag, NULL);
   if(!list_xml) return(FALSE);
 
   for(cursor = lst; cursor; cursor = cursor->next) {
@@ -431,10 +431,10 @@ xml_add_kvp_slot(xmlNodePtr p, const char *key, kvp_value *val) {
   if(!key) return(FALSE);
   if(!val) return(FALSE);
 
-  slot_xml = xmlNewChild(p, NULL, "s", NULL);
+  slot_xml = xmlNewTextChild(p, NULL, "s", NULL);
   if(!slot_xml) return(FALSE);
 
-  key_xml = xmlNewChild(slot_xml, NULL, "k", key);
+  key_xml = xmlNewTextChild(slot_xml, NULL, "k", key);
   if(!key_xml) return(FALSE);
 
   return(xml_add_kvp_value(slot_xml, val));
@@ -491,7 +491,7 @@ xml_add_transaction_split(xmlNodePtr p, Split* s) {
   if(!p) return(FALSE);
   if(!s) return(FALSE);
 
-  split_xml = xmlNewChild(p, NULL, "split", NULL);  
+  split_xml = xmlNewTextChild(p, NULL, "split", NULL);  
   if(!split_xml) return(FALSE);
 
   if(!xml_add_guid(split_xml, "guid", xaccSplitGetGUID(s)))
@@ -579,10 +579,10 @@ xml_add_txn_restore(xmlNodePtr p, Transaction* t) {
   if(!p) return(FALSE);
   if(!t) return(FALSE);
 
-  txn_xml = xmlNewChild(p, NULL, "transaction", NULL);  
+  txn_xml = xmlNewTextChild(p, NULL, "transaction", NULL);  
   if(!txn_xml) return(FALSE);
 
-  restore_xml = xmlNewChild(txn_xml, NULL, "restore", NULL);  
+  restore_xml = xmlNewTextChild(txn_xml, NULL, "restore", NULL);  
   if(!restore_xml) return(FALSE);
 
   if(!xml_add_guid(restore_xml, "guid", xaccTransGetGUID(t)))
@@ -643,10 +643,10 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
   if(!p) return(FALSE);
   if(!a) return(FALSE);
 
-  acct_xml = xmlNewChild(p, NULL, "account", NULL);  
+  acct_xml = xmlNewTextChild(p, NULL, "account", NULL);  
   if(!acct_xml) return(FALSE);
 
-  acct_xml = xmlNewChild(acct_xml, NULL, "restore", NULL);  
+  acct_xml = xmlNewTextChild(acct_xml, NULL, "restore", NULL);  
   if(!acct_xml) return(FALSE);
   
   if(!xml_add_str(acct_xml, "name",
@@ -678,7 +678,7 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
   {
     Account *parent = xaccAccountGetParentAccount(a);
     if(parent) {
-      xmlNodePtr parent_xml = xmlNewChild(acct_xml, NULL, "parent", NULL);  
+      xmlNodePtr parent_xml = xmlNewTextChild(acct_xml, NULL, "parent", NULL);  
       if(!parent_xml) return(FALSE);
       if(!xml_add_guid(parent_xml, "guid", xaccAccountGetGUID(parent)))
         return(FALSE);
@@ -729,13 +729,13 @@ gncxml_write(AccountGroup *group, const gchar *filename) {
   doc = xmlNewDoc("1.0");
   doc->xmlRootNode = xmlNewDocNode(doc, NULL, "gnc", NULL);
    
-  tmpnode = xmlNewChild(doc->xmlRootNode, NULL, "version", "1");
+  tmpnode = xmlNewTextChild(doc->xmlRootNode, NULL, "version", "1");
   if(!tmpnode) {
     xmlFreeDoc(doc);
     return FALSE;
   }
 
-  ledger_data = xmlNewChild(doc->xmlRootNode, NULL, "ledger-data", NULL);
+  ledger_data = xmlNewTextChild(doc->xmlRootNode, NULL, "ledger-data", NULL);
   if(!ledger_data) {
     xmlFreeDoc(doc);
     return FALSE;
