@@ -2,8 +2,6 @@
 <artheader>
 <title>Reports</title>
 </artheader>
-<sect1>
-<title> Reports</title>
 
 <para>A variety of financial reports can be selected on the "Reports"
 menu:
@@ -50,7 +48,7 @@ with the option of displaying both tables and a bar chart.</para>
 </itemizedlist>
 
 </para>
-</sect1>
+
 <sect1 id="xacc-reportwindow">
 <title> The Report Window</title>
 
