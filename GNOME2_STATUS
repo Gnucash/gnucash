@@ -73,16 +73,20 @@ Main Window
         - New registers should open in new top-level windows.
 
 
-Register Core - MINIMALLY FUNCTIONAL
+Register Core - MOSTLY FUNCTIONAL
 
 	- Can navigate, enter transactions, etc.
 
 	- Insertion point not shown. (fix gnucash-item-edit.c)
-	- Cannot hilight text with mouse (fix gnucash-item-edit.c)
+	- <strike>Cannot hilight text with mouse (fix gnucash-item-edit.c)</strike>
+          - Getting better; x-position -> pango-text-index works; some gtk_entry selection works.
+          - Offset for non-LEFT_ALIGN'ed fields not correct.
+          - finer points of gtk_entry selection+position setting not correct, yet.
 
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
+        - The drop-down-arrow widgets for {date,action,account-sel} don't seem to be showing.
 
 Find - Somewhat Functional
 	- Can generate a query in the dialog.
@@ -99,7 +103,6 @@ Business functions - Somewhat Functional
           gnc_extensions_menu_setup( GtkWindow, char*, EggMenuMerge )
 
 Reporting - Somewhat functional
-
         - Graphing still unsupported; [jsled] in periodic contact with Jody
           Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be
           factored out of gnumeric into libgoffice.

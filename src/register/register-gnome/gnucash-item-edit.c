@@ -323,13 +323,6 @@ gnc_item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int 
 }
 
 
-static int
-gnc_item_edit_event (GnomeCanvasItem *item, GdkEvent *event)
-{
-        return 0;
-}
-
-
 int
 gnc_item_edit_get_toggle_offset (int row_height)
 {
@@ -663,14 +656,13 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
                           gboolean extend_selection)
 {
         GtkEditable *editable;
-        TextDrawInfo info;
+        // TextDrawInfo info;
         Table *table;
         gint pos = 0;
         gint o_x, o_y;
         CellDimensions *cd;
         gint cell_row, cell_col;
         SheetBlockStyle *style;
-/*        GdkWChar *text;*/
 
         g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), FALSE);
 
@@ -706,14 +698,29 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
                         x -= item_edit->popup_toggle.toggle_offset;
         }
 
-        gnc_item_edit_draw_info (item_edit, o_x, o_y, &info);
+        // WTF!?  All the `pos` setting logic has been silently removed from
+        // this location.  Compare to 1.8 sources...  *grumble*
+        {
+                PangoLayout *pl;
+                int textIndex, textTrailing;
+                gboolean insideText;
+
+                pl = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
+                insideText = pango_layout_xy_to_index( pl, (x - o_x) * PANGO_SCALE,
+                                                       10 * PANGO_SCALE, &textIndex, &textTrailing );
+                pos = textIndex;
+        }
+
+        // I think we can remove the TextDrawInfo-related stuff since Pango handles it, and better.
+        //gnc_item_edit_draw_info (item_edit, o_x, o_y, &info);
 
         if (extend_selection)
         {
+                gboolean selection_exists;
                 gint current_pos, start_sel, end_sel;
 
                 current_pos = gtk_editable_get_position (editable);
-		gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
                 if (start_sel == end_sel)
                 {
@@ -721,24 +728,31 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
                         end_sel = pos;
                 }
                 else if (current_pos == start_sel)
+                {
                         start_sel = pos;
+                }
                 else
+                {
                         end_sel = pos;
+                }
 
+                gtk_editable_set_position (editable, pos);
                 gtk_editable_select_region(editable, start_sel, end_sel);
+
+		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
         }
         else
+        {
                 gtk_editable_select_region(editable, 0, 0);
-
-        gtk_editable_set_position (editable, pos);
+                gtk_editable_set_position (editable, pos);
+        }
 
         queue_sync (item_edit);
 
-        gnc_item_edit_free_draw_info_members(&info);
+        //gnc_item_edit_free_draw_info_members(&info);
 
         return TRUE;
 }
-
 
 static int
 entry_event (GtkEntry *entry, GdkEvent *event, GncItemEdit *item_edit)
@@ -757,7 +771,6 @@ entry_event (GtkEntry *entry, GdkEvent *event, GncItemEdit *item_edit)
 
         return FALSE;
 }
-
 
 static void
 gnc_item_edit_set_editor (GncItemEdit *item_edit, void *data)
@@ -1177,7 +1190,7 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
         item_class->point       = gnc_item_edit_point;
         item_class->realize     = gnc_item_edit_realize;
         item_class->unrealize   = gnc_item_edit_unrealize;
-        item_class->event       = gnc_item_edit_event;
+        //item_class->event       = gnc_item_edit_event;
 }
 
 
@@ -1680,3 +1693,5 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
   c-basic-offset: 8
   End:
 */
+
+
