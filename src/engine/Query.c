@@ -209,6 +209,13 @@ xaccQuerySetDateRange (Query *q, time_t early, time_t late)
 }
 
 /* ================================================== */
+/* Note that the sort order for a transaction that is
+ * currently being edited is based on its old values, 
+ * not in its current edit values.  This is somewhat
+ * arbitrary, but it does alleviate annoying behaviour 
+ * in the GUI, behaviour that could not be easily
+ * rectified there.
+ */
 
 #define PROLOG 					\
   char *da, *db;				\
@@ -222,6 +229,8 @@ xaccQuerySetDateRange (Query *q, time_t early, time_t late)
 						\
   ta = (*sa)->parent;				\
   tb = (*sb)->parent;				\
+  if (ta->orig) ta = ta->orig;			\
+  if (tb->orig) tb = tb->orig;			\
 						\
   if ( (ta) && !(tb) ) return -1;		\
   if ( !(ta) && (tb) ) return +1;		\
