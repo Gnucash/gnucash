@@ -729,7 +729,7 @@ moveCombo (BasicCell *bcell, VirtualLocation virt_loc)
 	combo_disconnect_signals ((ComboCell *) bcell);
 
 	item_edit_set_popup (box->item_edit, NULL, NULL,
-                             NULL, NULL, NULL, NULL);
+                             NULL, NULL, NULL, NULL, NULL);
 
         box->list_popped = FALSE;
 }
@@ -767,6 +767,13 @@ popup_post_show (GnomeCanvasItem *item,
         gnc_item_list_show_selected (GNC_ITEM_LIST (item));
 }
 
+static int
+popup_get_width (GnomeCanvasItem *item,
+                 gpointer user_data)
+{
+        return GTK_WIDGET (GNC_ITEM_LIST (item)->clist)->allocation.width;
+}
+
 static gboolean
 enterCombo (BasicCell *bcell,
             int *cursor_position,
@@ -786,7 +793,8 @@ enterCombo (BasicCell *bcell,
 	item_edit_set_popup (box->item_edit,
                              GNOME_CANVAS_ITEM (box->item_list),
                              get_popup_height, popup_autosize,
-                             popup_set_focus, popup_post_show, NULL);
+                             popup_set_focus, popup_post_show,
+                             popup_get_width, NULL);
 
         block_list_signals (cell);
 	gnc_item_list_select (box->item_list, bcell->value);
@@ -810,8 +818,8 @@ leaveCombo (BasicCell *bcell)
 
 	combo_disconnect_signals ((ComboCell *) bcell);
 
-	item_edit_set_popup (box->item_edit, NULL, NULL, NULL,
-                             NULL, NULL, NULL);
+	item_edit_set_popup (box->item_edit, NULL, NULL,
+                             NULL, NULL, NULL, NULL, NULL);
 
         box->list_popped = FALSE;
 

@@ -41,17 +41,17 @@ GtkType gnc_item_list_get_type (void);
 
 GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent);
 
-void gnc_item_list_clear(GNCItemList *item_list);
+void gnc_item_list_clear (GNCItemList *item_list);
 
-void gnc_item_list_append(GNCItemList *item_list, char *string);
+void gnc_item_list_append (GNCItemList *item_list, char *string);
 
-void gnc_item_list_select(GNCItemList *item_list, const char *string);
+void gnc_item_list_select (GNCItemList *item_list, const char *string);
 
-void gnc_item_list_show_selected(GNCItemList *item_list);
+void gnc_item_list_show_selected (GNCItemList *item_list);
 
-void gnc_item_list_sort(GNCItemList *item_list);
+void gnc_item_list_sort (GNCItemList *item_list);
 
-void gnc_item_list_autosize(GNCItemList *item_list);
+void gnc_item_list_autosize (GNCItemList *item_list);
 
 
 typedef struct

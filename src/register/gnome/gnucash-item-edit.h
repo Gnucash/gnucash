@@ -46,6 +46,8 @@ typedef void (*PopupSetFocus) (GnomeCanvasItem *item,
 typedef void (*PopupPostShow) (GnomeCanvasItem *item,
                                gpointer user_data);
 
+typedef int (*PopupGetWidth) (GnomeCanvasItem *item,
+                              gpointer user_data);
 
 typedef struct _PopupToggle PopupToggle;
 struct _PopupToggle
@@ -86,6 +88,7 @@ typedef struct
         PopupAutosize    popup_autosize;
         PopupSetFocus    popup_set_focus;
         PopupPostShow    popup_post_show;
+        PopupGetWidth    popup_get_width;
         gpointer         popup_user_data;
 
         GdkGC *gc;
@@ -122,6 +125,7 @@ void item_edit_set_popup (ItemEdit        *item_edit,
                           PopupAutosize    popup_autosize,
                           PopupSetFocus    popup_set_focus,
                           PopupPostShow    popup_post_show,
+                          PopupGetWidth    popup_get_width,
                           gpointer         popup_user_data);
 
 void item_edit_show_popup (ItemEdit *item_edit);

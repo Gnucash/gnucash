@@ -761,7 +761,8 @@ moveDate (BasicCell *bcell, VirtualLocation virt_loc)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL, NULL, NULL, NULL, NULL);
+  item_edit_set_popup (box->item_edit, NULL, NULL,
+                       NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
 }
@@ -802,7 +803,8 @@ enterDate (BasicCell *bcell,
   PopBox *box = bcell->gui_private;
 
   item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
-                       get_popup_height, NULL, popup_set_focus, NULL, NULL);
+                       get_popup_height, NULL, popup_set_focus,
+                       NULL, NULL, NULL);
 
   block_picker_signals (cell);
   gnc_date_picker_set_date (box->date_picker,
@@ -825,7 +827,8 @@ leaveDate (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  item_edit_set_popup (box->item_edit, NULL, NULL, NULL, NULL, NULL, NULL);
+  item_edit_set_popup (box->item_edit, NULL, NULL,
+                       NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
 }

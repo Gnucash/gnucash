@@ -148,19 +148,6 @@ gnc_item_list_autosize(GNCItemList *item_list)
 
 
 static void
-item_edit_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
-{
-	/*        GNCItemList *item_list = GNC_ITEM_LIST(object); */
-
-        switch (arg_id)
-	{
-		default:
-			break;
-        }
-}
-
-
-static void
 gnc_item_list_init(GNCItemList *item_list)
 {
         item_list->clist = NULL;
@@ -260,11 +247,9 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
         GtkObjectClass  *object_class;
 
         gnc_item_list_parent_class =
-		gtk_type_class(gnome_canvas_widget_get_type());
+		gtk_type_class (gnome_canvas_widget_get_type ());
 
         object_class = GTK_OBJECT_CLASS(item_list_class);
-
-        object_class->set_arg = item_edit_set_arg;
 
 	gnc_item_list_signals[SELECT_ITEM] =
 		gtk_signal_new("select_item",

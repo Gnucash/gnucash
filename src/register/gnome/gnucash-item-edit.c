@@ -802,7 +802,7 @@ item_edit_configure (ItemEdit *item_edit)
 
         if (!gnc_table_is_popup (item_edit->sheet->table, item_edit->virt_loc))
                 item_edit_set_popup (item_edit, NULL, NULL, NULL,
-                                     NULL, NULL, NULL);
+                                     NULL, NULL, NULL, NULL);
 
         item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
 }
@@ -1228,7 +1228,9 @@ item_edit_show_popup (ItemEdit *item_edit)
         gint y_offset;
         gint popup_x, popup_y;
         gint popup_height;
+        gint popup_max_width;
         gint view_height;
+        gint view_width;
         gint up_height;
         gint down_height;
 
@@ -1239,7 +1241,10 @@ item_edit_show_popup (ItemEdit *item_edit)
                 return;
 
         sheet = item_edit->sheet;
+
         view_height = GTK_WIDGET (sheet)->allocation.height;
+        view_width  = GTK_WIDGET (sheet)->allocation.width;
+
         gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &y_offset);
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
@@ -1260,6 +1265,8 @@ item_edit_show_popup (ItemEdit *item_edit)
 		popup_anchor = GTK_ANCHOR_NW;
                 popup_height = down_height;
         }
+
+        popup_max_width = view_width - popup_x;
 
         if (item_edit->get_popup_height)
                 popup_height = item_edit->get_popup_height
@@ -1294,12 +1301,31 @@ item_edit_show_popup (ItemEdit *item_edit)
                                             item_edit->popup_user_data);
 
         /* Make sure the popup gets shown/sized correctly */
-        while (gtk_events_pending())
-                gtk_main_iteration();
+        while (gtk_events_pending ())
+                gtk_main_iteration ();
 
         if (item_edit->popup_post_show)
                 item_edit->popup_post_show (item_edit->popup_item,
                                             item_edit->popup_user_data);
+
+        if (item_edit->popup_get_width)
+        {
+                int popup_width;
+
+                popup_width = item_edit->popup_get_width
+                        (item_edit->popup_item,
+                         item_edit->popup_user_data);
+
+                if (popup_width > popup_max_width)
+                {
+                        popup_x -= popup_width - popup_max_width;
+                        popup_x = MAX (0, popup_x);
+
+                        gnome_canvas_item_set (item_edit->popup_item,
+                                               "x", (gdouble) popup_x,
+                                               NULL);
+                }
+        }
 }
 
 
@@ -1330,6 +1356,7 @@ item_edit_set_popup (ItemEdit        *item_edit,
                      PopupAutosize    popup_autosize,
                      PopupSetFocus    popup_set_focus,
                      PopupPostShow    popup_post_show,
+                     PopupGetWidth    popup_get_width,
                      gpointer         popup_user_data)
 {
 	g_return_if_fail (IS_ITEM_EDIT(item_edit));
@@ -1344,6 +1371,7 @@ item_edit_set_popup (ItemEdit        *item_edit,
         item_edit->popup_autosize   = popup_autosize;
         item_edit->popup_set_focus  = popup_set_focus;
         item_edit->popup_post_show  = popup_post_show;
+        item_edit->popup_get_width  = popup_get_width;
         item_edit->popup_user_data  = popup_user_data;
 
         if (item_edit->is_popup)
@@ -1378,7 +1406,7 @@ item_edit_selection_clear (ItemEdit          *item_edit,
 
         /* Let the selection handling code know that the selection
          * has been changed, since we've overriden the default handler */
-        if (!gtk_selection_clear(GTK_WIDGET(item_edit->sheet), event))
+        if (!gtk_selection_clear (GTK_WIDGET(item_edit->sheet), event))
                 return FALSE;
 
         if (event->selection == GDK_SELECTION_PRIMARY)
@@ -1391,7 +1419,7 @@ item_edit_selection_clear (ItemEdit          *item_edit,
         }
         else if (event->selection == clipboard_atom)
         {
-                g_free(item_edit->clipboard);
+                g_free (item_edit->clipboard);
                 item_edit->clipboard = NULL;
         }
 
