@@ -40,7 +40,7 @@
 #include "Group.h"
 #include "Query.h"
 
-static short module = MOD_QUERY;
+/* static short module = MOD_QUERY; */
 
 /* the Query makes a subset of all splits based on 3 things: 
  *   - an AND-OR tree of predicates which combine to make a 
@@ -272,8 +272,8 @@ copy_or_terms(GList * or_terms) {
  * allocated it 
  ********************************************************************/
 
-void    
-xaccFreeQuery(Query * q) {
+static void
+xaccFreeQueryMembers(Query *q) {
   GList * cur_or;
 
   if (q == NULL)
@@ -296,10 +296,43 @@ xaccFreeQuery(Query * q) {
 
   g_list_free(q->split_list);
   q->split_list = NULL;
+}
+
+void    
+xaccFreeQuery(Query * q) {
+  if (q == NULL)
+    return;
+
+  xaccFreeQueryMembers (q);
 
   g_free(q);
 }
 
+Query *
+xaccQueryCopy(Query *q) {
+  Query *copy;
+
+  if (q == NULL)
+    return NULL;
+
+  copy = xaccMallocQuery ();
+  xaccFreeQueryMembers (copy);
+
+  copy->terms = copy_or_terms (q->terms);
+
+  copy->primary_sort = q->primary_sort;
+  copy->secondary_sort = q->secondary_sort;
+  copy->tertiary_sort = q->tertiary_sort;
+
+  copy->sort_increasing = q->sort_increasing;
+  copy->max_splits = q->max_splits;
+
+  copy->changed = q->changed;
+  copy->acct_group = q->acct_group;
+  copy->split_list = g_list_copy (q->split_list);
+
+  return copy;
+}
 
 /********************************************************************
  * xaccQueryInvert 

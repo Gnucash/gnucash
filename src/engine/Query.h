@@ -172,6 +172,7 @@ typedef struct {
 
 Query   * xaccMallocQuery(void);
 void    xaccFreeQuery(Query *);
+Query * xaccQueryCopy(Query *q);
 void    xaccQuerySetGroup(Query * q, AccountGroup * group);
 Query   * xaccQueryInvert(Query * q1);
 Query   * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
