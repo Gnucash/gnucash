@@ -6,18 +6,25 @@ libgnc_postgres_la_LDFLAGS = -version-info 6:1:6
 
 
 libgnc_postgres_la_SOURCES = \
+  PostgresBackend.c \
   builder.c \
   checkpoint.c \
   gncquery.c \
-  kvp-sql.c \
-  PostgresBackend.c 
+  kvp-sql.c
 
+noinst_HEADERS = \
+  PostgresBackend.h \
+  builder.h \
+  gncquery.h \
+  kvp-sql.h \
+  putil.h
 
 EXTRA_DIST = \
-  builder.h \
-  design.txt \
-  PostgresBackend.h \
   README \
+  base-objects.m4 \
+  check-objects.m4 \
+  design.txt \
+  kvp-objects.m4 \
   table.m4 \
   table-create.sql \
   table-drop.sql \

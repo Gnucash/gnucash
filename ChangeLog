@@ -1,3 +1,7 @@
+2001-05-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/Makefile.am: add files for make dist
+
 2001-05-11  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/main-window.scm: force-output when saving param files.
