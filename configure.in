@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 # configure.in
 #
 # FUNCTION:
-# implements checks vfor a variety of system-specific functions
+# implements checks for a variety of system-specific functions
 #
 # Contents:
 #   Headers   - Autoconf header stuff
@@ -635,7 +635,7 @@ CFLAGS="$GNC_OLDCFLAGS"
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GUILE_LIBS} ${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} -lgncmod-engine -lgw-engine -lgncmodule -lgw-glib"
+GNUCASH_ENGINE_LIBS="-L'${libdir}' -L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} -lgncmod-engine -lgncmodule"
 
 GNUCASH_ENGINE_BASE_CFLAGS="${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}"
 GNUCASH_ENGINE_CFLAGS="-I${GNC_INCLUDE_DIR} ${GNUCASH_ENGINE_BASE_CFLAGS}"

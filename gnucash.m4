@@ -44,7 +44,7 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
 
   AC_PATH_PROG(GNUCASH_CONFIG, gnucash-config, no)
   min_gnucash_version=ifelse([$1], ,1.7.0,$1)
-  AC_MSG_CHECKING(for GNUCASH - version >= $min_gnucash_version)
+  AC_MSG_CHECKING(for GnuCash - version >= $min_gnucash_version)
   no_gnucash=""
   if test "$GNUCASH_CONFIG" = "no" ; then
     no_gnucash=yes
@@ -95,7 +95,7 @@ main ()
     {
       printf("\n*** 'gnucash-config --version' returned %d.%d.%d, but GnuCash (%d.%d.%d)\n", 
              $gnucash_config_major_version, $gnucash_config_minor_version, $gnucash_config_micro_version,
-             gnucash_major_version, gnucash_minor_version, gnucash_micro_version);
+             gnucash_major_version(), gnucash_minor_version(), gnucash_micro_version());
       printf ("*** was found! If gnucash-config was correct, then it is best\n");
       printf ("*** to remove the old version of GnuCash. You may also be able to fix the error\n");
       printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
@@ -105,29 +105,29 @@ main ()
       printf("*** to point to the correct copy of gnucash-config, and remove the file config.cache\n");
       printf("*** before re-running configure\n");
     }
-/* The code below needs GNUCASH_*_VERSION defined in gnc-engine.h */
-  else if ((gnucash_major_version != GNUCASH_MAJOR_VERSION) ||
-	   (gnucash_minor_version != GNUCASH_MINOR_VERSION) ||
-           (gnucash_micro_version != GNUCASH_MICRO_VERSION))
+/* The code below needs GNUCASH_*_VERSION defined in gnc-engine.h
+  else if ((gnucash_major_version() != GNUCASH_MAJOR_VERSION) ||
+	   (gnucash_minor_version() != GNUCASH_MINOR_VERSION) ||
+           (gnucash_micro_version() != GNUCASH_MICRO_VERSION))
     {
       printf("*** GnuCash header files (version %d.%d.%d) do not match\n",
 	     GNUCASH_MAJOR_VERSION, GNUCASH_MINOR_VERSION, GNUCASH_MICRO_VERSION);
       printf("*** library (version %d.%d.%d)\n",
-	     gnucash_major_version, gnucash_minor_version, gnucash_micro_version);
+	     gnucash_major_version(), gnucash_minor_version(), gnucash_micro_version());
     }
 */
   else
     {
-      if ((gnucash_major_version > major) ||
-        ((gnucash_major_version == major) && (gnucash_minor_version > minor)) ||
-        ((gnucash_major_version == major) && (gnucash_minor_version == minor) && (gnucash_micro_version >= micro)))
+      if ((gnucash_major_version() > major) ||
+        ((gnucash_major_version() == major) && (gnucash_minor_version() > minor)) ||
+        ((gnucash_major_version() == major) && (gnucash_minor_version() == minor) && (gnucash_micro_version() >= micro)))
       {
         return 0;
        }
      else
       {
         printf("\n*** An old version of GnuCash (%d.%d.%d) was found.\n",
-               gnucash_major_version, gnucash_minor_version, gnucash_micro_version);
+               gnucash_major_version(), gnucash_minor_version(), gnucash_micro_version());
         printf("*** You need a version of GnuCash newer than %d.%d.%d. The latest version of\n",
 	       major, minor, micro);
         printf("*** GnuCash is always available from ftp://ftp.gnucash.org.\n");
@@ -166,9 +166,9 @@ main ()
           CFLAGS="$CFLAGS $GNUCASH_CFLAGS"
           LIBS="$LIBS $GNUCASH_LIBS"
           AC_TRY_LINK([
-#include <gnucash.h>
+#include <gnc-engine.h>
 #include <stdio.h>
-],      [ return ((gnucash_major_version) || (gnucash_minor_version) || (gnucash_micro_version)); ],
+],      [ return ((gnucash_major_version()) || (gnucash_minor_version()) || (gnucash_micro_version())); ],
         [ echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding GnuCash or finding the wrong"
           echo "*** version of GnuCash. If it is not finding GnuCash, you'll need to set your"
