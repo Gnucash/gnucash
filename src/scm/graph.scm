@@ -10,6 +10,7 @@
                                "peru"
                                "DarkOrchid"
                                "LimeGreen"))
+
 (set-cdr! (last-pair gnc:pie-chart-colors) gnc:pie-chart-colors)
 
 
@@ -64,8 +65,8 @@
         (lambda ()
           (set! current-color gnc:pie-chart-colors))))
 
-(define (pie-plotutils chart-items)
-  ;; ((label value) (label value) (label value))
+(define (pie-plotutils width height chart-items)
+  ;; chart-items -> ((label value) (label value) (label value))
 
   (let ((total 0)
         (current-angle 0)
@@ -78,10 +79,8 @@
 
     (for-each
      (lambda (item)
-       (let ((width 400)
-             (height 400)
-             (center-x 200)
-             (center-y 200))
+       (let ((center-x 0)
+             (center-y 0))
          
          (set! current-angle
                (+ current-angle
@@ -117,6 +116,68 @@
 ;     deletepl(handle);
 ;   }
 ; }
+
+(define (pie-legend width height names colors)
+  
+  (savestate)
+  (let ((max-name-width (apply max (map flabelwidth names)))
+        (half-width (/ width 2))
+        (half-height (/ height 2))
+        (font-height 12)
+        (inner-border 4))
+    
+    (savestate)
+    (colorname "grey83")
+    (fbox (- half-width) (- half-height) half-width half-height)
+    (restorestate)
+    
+    (colorname "black")
+    (fmove (+ (- half-width) inner-border)
+           (- half-height inner-border font-height))
+    
+    (for-each
+     (lambda (label)
+       (alabel (char->integer #\l) (char->integer #\x) label)
+       (fmoverel (- (flabelwidth label)) (- font-height)))
+     names)
+    
+    (restorestate)))
+
+(define (pie-test-drawing func)
+  (let ((handle #f)
+        (result 0))    
+    ;; create a Postscript Plotter that writes to standard output
+    (set! handle (newpl "X"
+                        (get_fileptr_stdin)
+                        (get_fileptr_stdout)
+                        (get_fileptr_stderr)))
+    (if (< handle 0) 
+        (begin
+          (display "Couldn't create Plotter\n")
+          (set! result 1)))
+    
+    (if (= result 0)
+        (begin
+          (selectpl handle)           ; select the Plotter for use
+          
+          (if (< (openpl) 0)          ; open Plotter
+              (begin
+                (display "Couldn't open Plotter\n")
+                (set! result 1)))))
+
+    (space -200 -200 200 200)
+    (colorname "grey83")
+    (box -200 -200 200 200)
+    
+    (func)
+
+    (if (< (closepl) 0)          ; close Plotter
+        (display "Couldn't close Plotter\n")
+        (set! result 1))
+    (selectpl 0)                   ; select default Plotter
+    (if (< (deletepl handle) 0)    ; delete Plotter we used
+        (display "Couldn't delete Plotter\n")
+        (set! result 1))))
 
 (define (pie-window)
   (let ((handle #f)
@@ -157,6 +218,29 @@
     (if (< (deletepl handle) 0)    ; delete Plotter we used
         (display "Couldn't delete Plotter\n")
         (set! result 1))))
+
+
+(define (pie-combination)
+  
+  (pie-test-drawing
+   (lambda ()
+     (let ((items '(("horses" 121.32)
+                    ("throbbing expanse" 350.19)
+                    ("tangibles" 23.32)
+                    ("intangibles" 45.44)
+                    ("giant fungi" 241.87))))
+       
+       (savestate)
+       (ftranslate -60 0)
+       (pie-plotutils 400 400 items)
+       (restorestate)
+
+       (savestate)
+       (ftranslate 180 -100)
+       (pie-legend 150 100 (map car items) "")
+       (restorestate)))))
+
+
 
 (define (text-test)
   (let ((handle #f)
