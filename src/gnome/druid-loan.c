@@ -2195,16 +2195,17 @@ ld_create_sxes( LoanDruidData *ldd )
         paymentSX->name  = g_strdup(ldd->ld.repMemo);
         paymentSX->start = *ldd->ld.startDate;
         paymentSX->last  = *ldd->ld.repStartDate;
+	g_date_subtract_months( &paymentSX->last, 1 );
         {
                 paymentSX->end = *ldd->ld.repStartDate;
-                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain );
+                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain - 1);
         }
         paymentSX->freq = ldd->ld.repFreq;
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
         paymentSX->instNum =
                 (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
-                - ldd->ld.numMonRemain;
+                - ldd->ld.numMonRemain + 1;
 
         paymentSX->mainTxn = gnc_ttinfo_malloc();
         gnc_ttinfo_set_currency( paymentSX->mainTxn,
@@ -2486,7 +2487,7 @@ ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
         *start = *ldd->ld.startDate;
         *end = *start;
         g_date_add_months( end,
-                           ldd->ld.numPer
+                           ldd->ld.numPer - 1
                            * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
 }
 
@@ -2590,7 +2591,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 g_date_subtract_days( &curDate, 1 );
                 xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
                                              &curDate, &curDate );
-                for ( i=0;
+                for ( i=1;
                       g_date_valid( &curDate )
                       && g_date_compare( &curDate, &end ) <= 0 ;
                       i++,
