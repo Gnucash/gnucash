@@ -205,7 +205,7 @@ void qof_book_kvp_changed (QofBook *book)
 /* ====================================================================== */
 
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
-/* XXX if data is NULL, we ashould remove the key from the hash table!
+/* XXX if data is NULL, we should remove the key from the hash table!
  *
  * XXX We need some design comments:  an equivalent storage mechanism
  * would have been to give each item a GUID, store the GUID in a kvp frame,
