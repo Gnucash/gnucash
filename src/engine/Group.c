@@ -81,12 +81,31 @@ xaccMallocAccountGroup( void )
 /********************************************************************\
 \********************************************************************/
 
+static void
+xaccAccountGroupBeginEdit( AccountGroup *grp, int defer )
+{
+  int i;
+
+  if (NULL == grp) return;
+
+  for(i = 0; i < grp->numAcc; i++ )
+  {
+    xaccAccountBeginEdit(grp->account[i], defer);
+    xaccAccountGroupBeginEdit (grp->account[i]->children, defer);
+  }
+}  
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccFreeAccountGroup( AccountGroup *grp )
 {
   int i;
 
   if (NULL == grp) return;
+
+  xaccAccountGroupBeginEdit (grp, 1);
 
   for( i=0; i<grp->numAcc; i++ )
     xaccFreeAccount( grp->account[i] );

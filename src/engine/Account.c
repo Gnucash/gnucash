@@ -441,29 +441,38 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
      
      /* Find the insertion point */
      /* to get realy fancy, could use binary search. */
-     for(i = 0; i < (acc->numSplits - 1);) {
-       if(xaccSplitDateOrder(&(oldsplits[i]), &split) > 0) {
-         break;
-       } else {
-         acc->splits[i] = oldsplits[i];
+     /* but to get just a little fancy, see if it's after the last one */
+     if ((acc->numSplits > 1)
+       && xaccSplitDateOrder(&split, &(oldsplits[acc->numSplits - 2])) > 0) {
+       i = acc->numSplits - 1;
+       memcpy (&acc->splits[0], &oldsplits[0],
+               (acc->numSplits-1) * sizeof (oldsplits[0]));
+     }
+     else {
+       for(i = 0; i < (acc->numSplits - 1);) {
+         if(xaccSplitDateOrder(&(oldsplits[i]), &split) > 0) {
+           break;
+         } else {
+           acc->splits[i] = oldsplits[i];
+         }
+         i++;  /* Don't put this in the loop guard!  It'll go too far. */
        }
-       i++;  /* Don't put this in the loop guard!  It'll go too far. */
      }
      /* Insertion point is now i */
-   
+
      PINFO ("Insertion position is: %d\n", i);
-   
+
      /* Move all the other splits down (this could be done faster with memmove)*/
      for( j = acc->numSplits; j > i; j--) {
        acc->splits[j] = oldsplits[j - 1];
      }
-   
+
      /* Now insert the new split */
      acc->splits[i] = split;
    
      /* make sure the array is NULL terminated */
      acc->splits[acc->numSplits] = NULL;
-   
+
      _free(oldsplits);
   } else {
      acc->numSplits ++;
@@ -568,6 +577,10 @@ xaccAccountRecomputeBalance( Account * acc )
   Split *split, *last_split = NULL;
 
   if( NULL == acc ) return;
+  /*
+   * if we are defering, defer!
+   */
+  if (acc->open & ACC_DEFER_REBALANCE) return;
   if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
   acc->changed &= ~ACC_INVALID_BALN;
 
