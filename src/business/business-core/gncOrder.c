@@ -291,55 +291,39 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
 
 static void addObj (GncOrder *order)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (order->book),
-		   order, &order->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (order->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &order->guid, order);
+  gncBusinessAddObject (order->book, _GNC_MOD_NAME, order, &order->guid);
 }
 
 static void remObj (GncOrder *order)
 {
-  GHashTable *ht;
-
-  xaccRemoveEntity (gnc_book_get_entity_table (order->book), &order->guid);
-  ht = gnc_book_get_data (order->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &order->guid);
+  gncBusinessRemoveObject (order->book, _GNC_MOD_NAME, &order->guid);
 }
 
 static void _gncOrderCreate (GNCBook *book)
 {
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+  gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
 static void _gncOrderDestroy (GNCBook *book)
 {
-  GHashTable *ht;
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
 
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
+static gboolean _gncOrderIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static const char * _gncOrderPrintable (GncOrder *order)
+static const char * _gncOrderPrintable (gpointer obj)
 {
+  GncOrder *order = obj;
+
   g_return_val_if_fail (order, NULL);
 
   if (order->dirty || order->printname == NULL) {
@@ -359,6 +343,7 @@ static GncObject_t gncOrderDesc = {
   "Order",
   _gncOrderCreate,
   _gncOrderDestroy,
+  _gncOrderIsDirty,
   _gncOrderForeach,
   _gncOrderPrintable,
 };
@@ -366,7 +351,6 @@ static GncObject_t gncOrderDesc = {
 gboolean gncOrderRegister (void)
 {
   static QueryObjectDef params[] = {
-    { ORDER_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
     { ORDER_ID, QUERYCORE_STRING, (QueryAccess)gncOrderGetID },
     { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncOrderGetOwner },
     { ORDER_OPENED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateOpened },
@@ -374,6 +358,7 @@ gboolean gncOrderRegister (void)
     { ORDER_CLOSED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateClosed },
     { ORDER_NOTES, QUERYCORE_STRING, (QueryAccess)gncOrderGetNotes },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
     { NULL },
   };
 

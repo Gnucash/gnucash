@@ -86,7 +86,6 @@ GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (GncEntry *a, GncEntry *b);
 
-#define ENTRY_GUID	"guid"
 #define ENTRY_DATE	"date"
 #define ENTRY_DESC	"desc"
 #define ENTRY_ACTION	"action"

@@ -261,7 +261,8 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
     ledger->query = gncQueryCreate ();
     gncQuerySetBook (ledger->query, gncOrderGetBook (order));
     gncQueryAddGUIDMatch (ledger->query,
-			  g_slist_prepend (g_slist_prepend (NULL, ORDER_GUID),
+			  g_slist_prepend (g_slist_prepend (NULL,
+							    QUERY_PARAM_GUID),
 					   ENTRY_ORDER),
 			  gncOrderGetGUID (order), QUERY_AND);
   }
@@ -296,7 +297,8 @@ static void create_invoice_query (GncEntryLedger *ledger)
   /* Term 2 */
   q = gncQueryCreate ();
   gncQueryAddGUIDMatch (q,
-			g_slist_prepend (g_slist_prepend (NULL, INVOICE_GUID),
+			g_slist_prepend (g_slist_prepend (NULL,
+							  QUERY_PARAM_GUID),
 					 ENTRY_INVOICE),
 			gncInvoiceGetGUID (ledger->invoice), QUERY_OR);
 
@@ -308,7 +310,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
     /* entry_invoice->invoice_guid == NULL */
     gncQueryAddGUIDMatch (q2,
 			  g_slist_prepend (g_slist_prepend (NULL,
-							    INVOICE_GUID),
+							    QUERY_PARAM_GUID),
 					   ENTRY_INVOICE),
 			  NULL, QUERY_OR);
 

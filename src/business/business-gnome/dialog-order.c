@@ -875,7 +875,7 @@ gnc_order_select (GtkWidget *parent, GncOrder *start, GncOwner *owner,
 
     q3 = gncQueryCreate ();
     gncQueryAddGUIDMatch (q3, g_slist_prepend
-			  (g_slist_prepend (NULL, OWNER_GUID),
+			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			   ORDER_OWNER),
 			  gncOwnerGetGUID (owner), QUERY_OR);
     gncQueryAddGUIDMatch (q3, g_slist_prepend
@@ -894,7 +894,7 @@ gnc_order_select (GtkWidget *parent, GncOrder *start, GncOwner *owner,
     if (q2 == NULL)
       q2 = gncQueryCopy (q);
 
-    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, ORDER_GUID),
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncOrderGetGUID (start), QUERY_AND);
   }
 

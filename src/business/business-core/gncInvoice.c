@@ -665,55 +665,39 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
 
 static void addObj (GncInvoice *invoice)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (invoice->book),
-		   invoice, &invoice->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (invoice->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &invoice->guid, invoice);
+  gncBusinessAddObject (invoice->book, _GNC_MOD_NAME, invoice, &invoice->guid);
 }
 
 static void remObj (GncInvoice *invoice)
 {
-  GHashTable *ht;
-
-  xaccRemoveEntity (gnc_book_get_entity_table (invoice->book), &invoice->guid);
-  ht = gnc_book_get_data (invoice->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &invoice->guid);
+  gncBusinessRemoveObject (invoice->book, _GNC_MOD_NAME, &invoice->guid);
 }
 
 static void _gncInvoiceCreate (GNCBook *book)
 {
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+  gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
 static void _gncInvoiceDestroy (GNCBook *book)
 {
-  GHashTable *ht;
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
 
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
+static gboolean _gncInvoiceIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
 				gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static const char * _gncInvoicePrintable (GncInvoice *invoice)
+static const char * _gncInvoicePrintable (gpointer obj)
 {
+  GncInvoice *invoice = obj;
+
   g_return_val_if_fail (invoice, NULL);
 
   if (invoice->dirty || invoice->printname == NULL) {
@@ -734,6 +718,7 @@ static GncObject_t gncInvoiceDesc = {
   "Invoice",
   _gncInvoiceCreate,
   _gncInvoiceDestroy,
+  _gncInvoiceIsDirty,
   _gncInvoiceForeach,
   _gncInvoicePrintable,
 };
@@ -741,7 +726,6 @@ static GncObject_t gncInvoiceDesc = {
 gboolean gncInvoiceRegister (void)
 {
   static QueryObjectDef params[] = {
-    { INVOICE_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { INVOICE_ID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetID },
     { INVOICE_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncInvoiceGetOwner },
     { INVOICE_OPENED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateOpened },
@@ -755,6 +739,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
     { INVOICE_PD_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPaidTxn },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
     { NULL },
   };
 

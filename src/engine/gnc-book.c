@@ -366,7 +366,9 @@ gnc_book_not_saved(GNCBook *book)
          ||
          gnc_pricedb_dirty(book->pricedb)
 	 ||
-	 book_sxlist_notsaved(book));
+	 book_sxlist_notsaved(book)
+	 ||
+	 gncObjectIsDirty (book));
 }
 
 /* ====================================================================== */

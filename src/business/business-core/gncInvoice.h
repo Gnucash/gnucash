@@ -84,7 +84,6 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
 gboolean gncInvoiceIsPosted (GncInvoice *invoice);
 gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 
-#define INVOICE_GUID	"guid"
 #define INVOICE_ID	"id"
 #define INVOICE_OWNER	"owner"
 #define INVOICE_OPENED	"date_opened"

@@ -32,6 +32,9 @@ typedef struct _gncObjectDef {
   void		(*book_begin)(GNCBook *);
   void		(*book_end)(GNCBook *);
 
+  /* Determine if there are any dirty items in this book */
+  gboolean	(*is_dirty)(GNCBook *);
+
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
@@ -39,6 +42,7 @@ typedef struct _gncObjectDef {
 
   /* Given a particular object, return a printable string */
   const char *	(*printable)(gpointer obj);
+
 } GncObject_t;
 
 void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 

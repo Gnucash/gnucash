@@ -258,29 +258,33 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
 
 static void addObj (GncEmployee *employee)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (employee->book),
-		   employee, &employee->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (employee->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &employee->guid, employee);
+  gncBusinessAddObject (employee->book, _GNC_MOD_NAME, employee,
+			&employee->guid);
 }
 
 static void remObj (GncEmployee *employee)
 {
-  GHashTable *ht;
+  gncBusinessRemoveObject (employee->book, _GNC_MOD_NAME, &employee->guid);
+}
 
-  xaccRemoveEntity (gnc_book_get_entity_table (employee->book),
-		    &employee->guid);
-  ht = gnc_book_get_data (employee->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &employee->guid);
+static void _gncEmployeeCreate (GNCBook *book)
+{
+  gncBusinessCreate (book, _GNC_MOD_NAME);
+}
+
+static void _gncEmployeeDestroy (GNCBook *book)
+{
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
+
+static gboolean _gncEmployeeIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncEmployeeForeach (GNCBook *book, foreachObjectCB cb,
 				 gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
@@ -294,34 +298,13 @@ static const char * _gncEmployeePrintable (gpointer item)
   return v->username;
 }
 
-static void _gncEmployeeCreate (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
-}
-
-static void _gncEmployeeDestroy (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
-}
-
 static GncObject_t gncEmployeeDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Employee",
   _gncEmployeeCreate,
   _gncEmployeeDestroy,
+  _gncEmployeeIsDirty,
   _gncEmployeeForeach,
   _gncEmployeePrintable
 };
@@ -329,11 +312,11 @@ static GncObject_t gncEmployeeDesc = {
 gboolean gncEmployeeRegister (void)
 {
   static QueryObjectDef params[] = {
-    { EMPLOYEE_GUID, QUERYCORE_GUID, (QueryAccess)gncEmployeeGetGUID },
     { EMPLOYEE_ID, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetID },
     { EMPLOYEE_USERNAME, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetUsername },
     { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncEmployeeGetAddr },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEmployeeGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncEmployeeGetGUID },
     { NULL },
   };
 

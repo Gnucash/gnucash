@@ -52,7 +52,6 @@ GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 int gncVendorCompare (GncVendor *a, GncVendor *b);
 
-#define VENDOR_GUID	"guid"
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"
 #define VENDOR_ADDR	"addr"

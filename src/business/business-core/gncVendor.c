@@ -287,28 +287,32 @@ gboolean gncVendorIsDirty (GncVendor *vendor)
 
 static void addObj (GncVendor *vendor)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (vendor->book),
-		   vendor, &vendor->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (vendor->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &vendor->guid, vendor);
+  gncBusinessAddObject (vendor->book, _GNC_MOD_NAME, vendor, &vendor->guid);
 }
 
 static void remObj (GncVendor *vendor)
 {
-  GHashTable *ht;
+  gncBusinessRemoveObject (vendor->book, _GNC_MOD_NAME, &vendor->guid);
+}
 
-  xaccRemoveEntity (gnc_book_get_entity_table (vendor->book), &vendor->guid);
-  ht = gnc_book_get_data (vendor->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &vendor->guid);
+static void _gncVendorCreate (GNCBook *book)
+{
+  gncBusinessCreate (book, _GNC_MOD_NAME);
+}
+
+static void _gncVendorDestroy (GNCBook *book)
+{
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
+
+static gboolean _gncVendorIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncVendorForeach (GNCBook *book, foreachObjectCB cb,
 			       gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
@@ -322,34 +326,13 @@ static const char * _gncVendorPrintable (gpointer item)
   return v->name;
 }
 
-static void _gncVendorCreate (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
-}
-
-static void _gncVendorDestroy (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
-}
-
 static GncObject_t gncVendorDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Vendor",
   _gncVendorCreate,
   _gncVendorDestroy,
+  _gncVendorIsDirty,
   _gncVendorForeach,
   _gncVendorPrintable
 };
@@ -357,11 +340,11 @@ static GncObject_t gncVendorDesc = {
 gboolean gncVendorRegister (void)
 {
   static QueryObjectDef params[] = {
-    { VENDOR_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
     { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
     { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
     { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncVendorGetAddr },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
     { NULL },
   };
 

@@ -979,7 +979,8 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
   if (!q || !book) return;
 
   q->books = g_list_prepend (q->books, book);
-  gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL, BOOK_GUID),
+  gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL,
+							     QUERY_PARAM_GUID),
 					    QUERY_PARAM_BOOK),
 			gnc_book_get_guid(book), QUERY_AND);
 }

@@ -604,7 +604,7 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
 
   if (start) {
     q2 = gncQueryCopy (q);
-    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, EMPLOYEE_GUID),
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncEmployeeGetGUID (start), QUERY_AND);
   }
 

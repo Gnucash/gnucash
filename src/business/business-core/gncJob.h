@@ -46,7 +46,6 @@ gboolean gncJobIsDirty (GncJob *job);
 
 int gncJobCompare (const GncJob *a, const GncJob *b);
 
-#define JOB_GUID	"guid"
 #define JOB_ID		"id"
 #define JOB_NAME	"name"
 #define JOB_REFERENCE	"reference"

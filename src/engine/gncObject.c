@@ -47,6 +47,20 @@ void gncObjectBookEnd (GNCBook *book)
   book_list = g_list_remove (book_list, book);
 }
 
+gboolean gncObjectIsDirty (GNCBook *book)
+{
+  GList *l;
+
+  if (!book) return FALSE;
+  for (l = object_modules; l; l = l->next) {
+    GncObject_t *obj = l->data;
+    if (obj->is_dirty)
+      if (obj->is_dirty (book))
+	return TRUE;
+  }
+  return FALSE;
+}
+
 void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
 		       foreachObjectCB cb, gpointer user_data)
 {

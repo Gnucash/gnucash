@@ -427,50 +427,32 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
 
 static void addObj (GncEntry *entry)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (entry->book),
-		   entry, &entry->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (entry->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &entry->guid, entry);
+  gncBusinessAddObject (entry->book, _GNC_MOD_NAME, entry, &entry->guid);
 }
 
 static void remObj (GncEntry *entry)
 {
-  GHashTable *ht;
-
-  xaccRemoveEntity (gnc_book_get_entity_table (entry->book), &entry->guid);
-  ht = gnc_book_get_data (entry->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &entry->guid);
+  gncBusinessRemoveObject (entry->book, _GNC_MOD_NAME, &entry->guid);
 }
 
 static void _gncEntryCreate (GNCBook *book)
 {
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+  gncBusinessCreate (book, _GNC_MOD_NAME);
 }
 
 static void _gncEntryDestroy (GNCBook *book)
 {
-  GHashTable *ht;
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
 
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
+static gboolean _gncEntryIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncEntryForeach (GNCBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
@@ -480,6 +462,7 @@ static GncObject_t gncEntryDesc = {
   "Order/Invoice Entry",
   _gncEntryCreate,
   _gncEntryDestroy,
+  _gncEntryIsDirty,
   _gncEntryForeach,
   NULL				/* printable */
 };
@@ -487,15 +470,15 @@ static GncObject_t gncEntryDesc = {
 gboolean gncEntryRegister (void)
 {
   static QueryObjectDef params[] = {
-    { ENTRY_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },
     { ENTRY_DATE, QUERYCORE_DATE, (QueryAccess)gncEntryGetDate },
     { ENTRY_DESC, QUERYCORE_STRING, (QueryAccess)gncEntryGetDescription },
     { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
     { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
     { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
     { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QueryAccess)gncEntryGetOrder },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },
     { NULL },
   };
 

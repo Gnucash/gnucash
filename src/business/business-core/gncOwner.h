@@ -64,7 +64,6 @@ const GUID * gncOwnerGetEndGUID (GncOwner *owner);
 #define OWNER_CUSTOMER	"customer"
 #define OWNER_JOB	"job"
 #define OWNER_VENDOR	"vendor"
-#define OWNER_GUID	"guid"
 #define OWNER_PARENT	"parent"
 #define OWNER_PARENTG	"parent-guid"
 #define OWNER_NAME	"name"

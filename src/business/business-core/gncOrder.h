@@ -55,7 +55,6 @@ int gncOrderCompare (GncOrder *a, GncOrder *b);
 
 gboolean gncOrderIsClosed (GncOrder *order);
 
-#define ORDER_GUID	"guid"
 #define ORDER_ID	"id"
 #define ORDER_OWNER	"owner"
 #define ORDER_OPENED	"date_opened"

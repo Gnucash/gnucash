@@ -982,7 +982,7 @@ gnc_invoice_select (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
    */
   if (owner && gncOwnerGetGUID (owner)) {
     gncQueryAddGUIDMatch (q, g_slist_prepend
-			  (g_slist_prepend (NULL, OWNER_GUID),
+			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			   INVOICE_OWNER),
 			  gncOwnerGetGUID (owner), QUERY_AND);
 
@@ -993,7 +993,7 @@ gnc_invoice_select (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
     if (q2 == NULL)
       q2 = gncQueryCopy (q);
 
-    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, INVOICE_GUID),
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncInvoiceGetGUID (start), QUERY_AND);
   }
 

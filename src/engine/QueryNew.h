@@ -40,9 +40,9 @@ typedef enum {
 
 /* "Known" Object Parameters */
 #define QUERY_PARAM_BOOK	"book"
+#define QUERY_PARAM_GUID	"guid"
 
 #define SPLIT_KVP		"kvp"
-#define SPLIT_GUID		"guid"
 #define SPLIT_DATE_RECONCILED	"date-reconciled"
 #define SPLIT_BALANCE		"balance"
 #define SPLIT_CLEARED_BALANCE	"cleared-balance"
@@ -61,7 +61,6 @@ typedef enum {
 #define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
 
 #define TRANS_KVP		"kvp"
-#define TRANS_GUID		"guid"
 #define TRANS_NUM		"num"
 #define TRANS_DESCRIPTON	"desc"
 #define TRANS_DATE_ENTERED	"date-entered"
@@ -74,7 +73,6 @@ typedef enum {
 #define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
 
 #define ACCOUNT_KVP		"kvp"
-#define ACCOUNT_GUID		"guid"
 #define ACCOUNT_NAME_		"name"
 #define ACCOUNT_CODE_		"code"
 #define ACCOUNT_DESCRIPTION_	"desc"
@@ -85,7 +83,6 @@ typedef enum {
 #define ACCOUNT_TAX_RELATED	"tax-related-p"
 
 #define BOOK_KVP		"kvp"
-#define BOOK_GUID		"guid"
 
 /* Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
 typedef const char * QueryCoreType;

@@ -40,7 +40,6 @@ static void init_split (void)
 {
   static const QueryObjectDef params[] = {
     { SPLIT_KVP, QUERYCORE_KVP, (QueryAccess)xaccSplitGetSlots },
-    { SPLIT_GUID, QUERYCORE_GUID, (QueryAccess) xaccSplitGetGUID },
     { SPLIT_DATE_RECONCILED, QUERYCORE_DATE,
       (QueryAccess)xaccSplitRetDateReconciledTS },
     { "d-share-amount", QUERYCORE_DOUBLE,
@@ -67,6 +66,7 @@ static void init_split (void)
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
     { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess) xaccSplitGetGUID },
     { NULL },
   };
 
@@ -77,7 +77,6 @@ static void init_txn (void)
 {
   static QueryObjectDef params[] = {
     { TRANS_KVP, QUERYCORE_KVP, (QueryAccess)xaccTransGetSlots },
-    { TRANS_GUID, QUERYCORE_GUID, (QueryAccess)xaccTransGetGUID },
     { TRANS_NUM, QUERYCORE_STRING, (QueryAccess)xaccTransGetNum },
     { TRANS_DESCRIPTON, QUERYCORE_STRING, (QueryAccess)xaccTransGetDescription },
     { TRANS_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateEnteredTS },
@@ -89,6 +88,7 @@ static void init_txn (void)
     { TRANS_VOID_TIME, QUERYCORE_DATE, (QueryAccess)xaccTransGetVoidTime },
     { TRANS_SPLITLIST, GNC_ID_SPLIT, (QueryAccess)xaccTransGetSplitList },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccTransGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccTransGetGUID },
     { NULL },
   };
 
@@ -99,7 +99,6 @@ static void init_account (void)
 {
   static QueryObjectDef params[] = {
     { ACCOUNT_KVP, QUERYCORE_KVP, (QueryAccess)xaccAccountGetSlots },
-    { ACCOUNT_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },
     { ACCOUNT_NAME_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetName },
     { ACCOUNT_CODE_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetCode },
     { ACCOUNT_DESCRIPTION_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetDescription },
@@ -109,6 +108,7 @@ static void init_account (void)
     { ACCOUNT_RECONCILED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
     { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },
     { NULL },
   };
 
@@ -119,7 +119,7 @@ static void init_book (void)
 {
   static QueryObjectDef params[] = {
     { BOOK_KVP, QUERYCORE_KVP, (QueryAccess)gnc_book_get_slots },
-    { BOOK_GUID, QUERYCORE_GUID, (QueryAccess)gnc_book_get_guid },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gnc_book_get_guid },
     { NULL },
   };
 

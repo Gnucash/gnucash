@@ -765,7 +765,7 @@ gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
 
   if (start) {
     q2 = gncQueryCopy (q);
-    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, CUSTOMER_GUID),
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			  gncCustomerGetGUID (start), QUERY_AND);
   }
 

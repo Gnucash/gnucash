@@ -11,8 +11,8 @@
 
 #include "messages.h"
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "gnc-book-p.h"
 #include "gnc-numeric.h"
 #include "gncObject.h"
 #include "QueryObject.h"
@@ -331,28 +331,32 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
 
 static void addObj (GncCustomer *cust)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (cust->book),
-		   cust, &cust->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (cust->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &cust->guid, cust);
+  gncBusinessAddObject (cust->book, _GNC_MOD_NAME, cust, &cust->guid);
 }
 
 static void remObj (GncCustomer *cust)
 {
-  GHashTable *ht;
+  gncBusinessRemoveObject (cust->book, _GNC_MOD_NAME, &cust->guid);
+}
 
-  xaccRemoveEntity (gnc_book_get_entity_table (cust->book), &cust->guid);
-  ht = gnc_book_get_data (cust->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &cust->guid);
+static void _gncCustomerCreate (GNCBook *book)
+{
+  gncBusinessCreate (book, _GNC_MOD_NAME);
+}
+
+static void _gncCustomerDestroy (GNCBook *book)
+{
+  return gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
+
+static gboolean _gncCustomerIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
 static void _gncCustomerForeach (GNCBook *book, foreachObjectCB cb,
 				 gpointer user_data)
 {
-  if (!book || !cb) return;
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
@@ -366,47 +370,26 @@ static const char * _gncCustomerPrintable (gpointer item)
   return c->name;
 }
 
-static void _gncCustomerCreate (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
-}
-
-static void _gncCustomerDestroy (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
-}
-
 static GncObject_t gncCustomerDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Customer",
   _gncCustomerCreate,
   _gncCustomerDestroy,
+  _gncCustomerIsDirty,
   _gncCustomerForeach,
-  _gncCustomerPrintable
+  _gncCustomerPrintable,
 };
 
 gboolean gncCustomerRegister (void)
 {
   static QueryObjectDef params[] = {
-    { CUSTOMER_GUID, QUERYCORE_GUID, (QueryAccess)gncCustomerGetGUID },
     { CUSTOMER_ID, QUERYCORE_STRING, (QueryAccess)gncCustomerGetID },
     { CUSTOMER_NAME, QUERYCORE_STRING, (QueryAccess)gncCustomerGetName },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncCustomerGetBook },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetAddr },
     { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetShipAddr },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncCustomerGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncCustomerGetGUID },
     { NULL },
   };
 

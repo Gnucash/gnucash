@@ -248,22 +248,33 @@ int gncJobCompare (const GncJob * a, const GncJob *b) {
 
 static void addObj (GncJob *job)
 {
-  GHashTable *ht;
-
-  xaccStoreEntity (gnc_book_get_entity_table (job->book),
-		   job, &job->guid, _GNC_MOD_NAME);
-
-  ht = gnc_book_get_data (job->book, _GNC_MOD_NAME);
-  g_hash_table_insert (ht, &job->guid, job);
+  gncBusinessAddObject (job->book, _GNC_MOD_NAME, job, &job->guid);
 }
 
 static void remObj (GncJob *job)
 {
-  GHashTable *ht;
+  gncBusinessRemoveObject (job->book, _GNC_MOD_NAME, &job->guid);
+}
 
-  xaccRemoveEntity (gnc_book_get_entity_table (job->book), &job->guid);
-  ht = gnc_book_get_data (job->book, _GNC_MOD_NAME);
-  g_hash_table_remove (ht, &job->guid);
+static void _gncJobCreate (GNCBook *book)
+{
+  gncBusinessCreate (book, _GNC_MOD_NAME);
+}
+
+static void _gncJobDestroy (GNCBook *book)
+{
+  gncBusinessDestroy (book, _GNC_MOD_NAME);
+}
+
+static gboolean _gncJobIsDirty (GNCBook *book)
+{
+  return gncBusinessIsDirty (book, _GNC_MOD_NAME);
+}
+
+static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
+			    gpointer user_data)
+{
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static const char * _gncJobPrintable (gpointer item)
@@ -276,41 +287,13 @@ static const char * _gncJobPrintable (gpointer item)
   return c->name;
 }
 
-static void _gncJobCreate (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = guid_hash_table_new ();
-  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
-}
-
-static void _gncJobDestroy (GNCBook *book)
-{
-  GHashTable *ht;
-
-  if (!book) return;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-
-  /* XXX : Destroy the objects? */
-  g_hash_table_destroy (ht);
-}
-
-static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
-			    gpointer user_data)
-{
-  if (!book || !cb) return;
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
-}
-
 static GncObject_t gncJobDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Job",
   _gncJobCreate,
   _gncJobDestroy,
+  _gncJobIsDirty,
   _gncJobForeach,
   _gncJobPrintable
 };
@@ -318,12 +301,12 @@ static GncObject_t gncJobDesc = {
 gboolean gncJobRegister (void)
 {
   static QueryObjectDef params[] = {
-    { JOB_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
     { JOB_ID, QUERYCORE_STRING, (QueryAccess)gncJobGetID },
     { JOB_NAME, QUERYCORE_STRING, (QueryAccess)gncJobGetName },
     { JOB_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncJobGetReference },
     { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncJobGetOwner },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncJobGetBook },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
     { NULL },
   };
 

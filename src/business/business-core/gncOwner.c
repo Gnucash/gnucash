@@ -194,10 +194,10 @@ gboolean gncOwnerRegister (void)
       (QueryAccess)gncOwnerGetCustomer },
     { OWNER_JOB, GNC_JOB_MODULE_NAME, (QueryAccess)gncOwnerGetJob },
     { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QueryAccess)gncOwnerGetVendor },
-    { OWNER_GUID, QUERYCORE_GUID, (QueryAccess)gncOwnerGetGUID },
     { OWNER_PARENT, _GNC_MOD_NAME, (QueryAccess)gncOwnerGetEndOwner },
     { OWNER_PARENTG, QUERYCORE_GUID, (QueryAccess)gncOwnerGetEndGUID },
     { OWNER_NAME, QUERYCORE_STRING, (QueryAccess)gncOwnerGetName },
+    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncOwnerGetGUID },
     { NULL },
   };
 

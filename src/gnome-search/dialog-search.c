@@ -690,7 +690,8 @@ get_params_list (GNCIdTypeConst type)
 				   type, SPLIT_TRANS, TRANS_SPLITLIST,
 				   SPLIT_ACCOUNT_GUID, NULL);
   list = gnc_search_param_prepend (list, "Split Account", GNC_ID_ACCOUNT,
-				   type, SPLIT_ACCOUNT, ACCOUNT_GUID, NULL);
+				   type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
+				   NULL);
   list = gnc_search_param_prepend (list, "Split->Txn->Void?", NULL, type,
 				   SPLIT_TRANS, TRANS_VOID_STATUS, NULL);
   list = gnc_search_param_prepend (list, "Split Int64", NULL, type,

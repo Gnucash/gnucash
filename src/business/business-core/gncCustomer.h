@@ -60,7 +60,6 @@ GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
-#define CUSTOMER_GUID	"guid"
 #define CUSTOMER_ID	"id"
 #define CUSTOMER_NAME	"name"
 #define CUSTOMER_ADDR	"addr"
