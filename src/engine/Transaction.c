@@ -2251,7 +2251,7 @@ int
 xaccTransOrder (Transaction *ta, Transaction *tb)
 {
   char *da, *db;
-  int retval;
+  int retval, na, nb;
 
   if ( ta && !tb ) return -1;
   if ( !ta && tb ) return +1;
@@ -2261,9 +2261,10 @@ xaccTransOrder (Transaction *ta, Transaction *tb)
   DATE_CMP(ta,tb,date_posted);
 
   /* otherwise, sort on number string */
-  da = ta->num;
-  db = tb->num;
-  SAFE_STRCMP (da, db);
+  na = atoi(ta->num);
+  nb = atoi(tb->num);
+  if (na < nb) return -1;
+  if (na > nb) return +1;
 
   /* if dates differ, return */
   DATE_CMP(ta,tb,date_entered);
