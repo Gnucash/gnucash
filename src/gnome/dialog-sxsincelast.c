@@ -44,7 +44,15 @@
 
 #define DIALOG_SXSINCELAST_CM_CLASS "dialog-sxsincelast"
 #define DIALOG_SXSINCELAST_REMIND_CM_CLASS "dialog-sxsincelast-remind"
+#define DIALOG_SXSINCELAST_OBSOLETE_CM_CLASS "dialog-sxsincelast-obsolete"
 
+#define DIALOG_SXSINCELAST_GLADE_NAME "Real Since-Last-Run Dialog"
+#define DIALOG_SXSINCELAST_REMIND_GLADE_NAME "Since-Last Reminders"
+#define DIALOG_SXSINCELAST_OBSOLETE_GLADE_NAME "Obsolete-SXs"
+
+#define SX_OBSOLETE_CLIST "sx_obsolete_clist"
+
+#define SX_GLADE_FILE "sched-xact.glade"
 static short module = MOD_SX;
 
 /**
@@ -53,17 +61,26 @@ static short module = MOD_SX;
  * handled here.
  **/
 typedef struct _sxSinceLastData {
-        GtkWidget *sxsincelastDlg;
-        GladeXML *gxml;
+  GtkWidget *sxsincelastDlg;
+  GladeXML *gxml;
+  
+  GtkWidget *dlg_remind;
+  GladeXML *gxml_remind;
+  
 
-        GtkWidget *dlg_remind;
-        GladeXML *gxml_remind;
+  GtkWidget *dlg_obsolete;
+  GladeXML *gxml_obsolete;
+  guint n_obsolete;
 
-        gboolean sincelast_displayed;
-        gboolean remind_displayed;
+  gboolean sincelast_displayed;
+  gboolean remind_displayed;
+  gboolean obsolete_displayed;
 
-        GList /* <toCreateTuple*> */ *toCreateData;
-        GList /* <reminderTuple*> */ *reminderData;
+  GList /* <toCreateTuple*> */ *toCreateData;
+  GList /* <reminderTuple*> */ *reminderData;
+
+  GList *actual_to_remove;
+
 } sxSinceLastData;
 
 typedef struct _toCreateTuple {
@@ -80,12 +97,21 @@ typedef struct _reminderTuple {
         gboolean isSelected;
 } reminderTuple;
 
+typedef struct {
+  SchedXaction *sx;
+  GDate *endDate;
+  gchar *freq_info;
+  gboolean isSelected;
+} toDeleteTuple;
+
+
 /* Next reminder clist row index to create. */
 static int rl_row = 0;
 /* Next to-create clist row index to create. */
 static int tcl_row = 0;
 /* Next auto-create clist row index to create. */
 static int acl_row = 0;
+
 
 static void sxsincelast_init( sxSinceLastData *sxsld );
 
@@ -124,6 +150,7 @@ static void processReminderList( GList *,
                                  SchedXaction * );
 static void processSelectedReminderList( GList *, sxSinceLastData * );
 
+
 static void sxsincelast_tc_row_sel( GtkCList *clist,
                                     gint row, gint column,
                                     GdkEventButton *event,
@@ -145,7 +172,22 @@ static gboolean _inform_or_add( GList *reminders,
                                 GList *badList, GList **goodList );
 
 int parse_vars_from_formula( const char *formula, GHashTable *varHash );
+static void sx_obsolete_ok_clicked(GtkButton *button, gpointer user_data);
 
+static void sx_obsolete_cancel_clicked(GtkButton *button, gpointer user_data);
+static void sx_obsolete_row_unsel(GtkCList *clist,
+				  gint row,
+				  gint column,
+				  GdkEventButton *event,
+				  gpointer user_data);
+
+static void  sx_obsolete_close_handler(gpointer user_data);
+
+static void sx_obsolete_row_sel(GtkCList *clist,
+				gint row,
+				gint column,
+				GdkEventButton *event,
+				gpointer user_data);
 void
 gnc_ui_sxsincelast_guile_wrapper( char *foo )
 {
@@ -160,42 +202,114 @@ gnc_ui_sxsincelast_dialog_create(void)
         sxsld->toCreateData = sxsld->reminderData = NULL;
         sxsld->remind_displayed = sxsld->sincelast_displayed = FALSE;
 
-        sxsld->gxml = gnc_glade_xml_new( "sched-xact.glade",
-                                         "Real Since-Last-Run Dialog" );
+        sxsld->gxml = gnc_glade_xml_new( SX_GLADE_FILE,
+                                         DIALOG_SXSINCELAST_GLADE_NAME );
         sxsld->sxsincelastDlg =
                 glade_xml_get_widget( sxsld->gxml,
-                                      "Real Since-Last-Run Dialog" );
+                                      DIALOG_SXSINCELAST_GLADE_NAME );
 
 
-        sxsld->gxml_remind = gnc_glade_xml_new( "sched-xact.glade",
-                                                "Since-Last Reminders" );
-        sxsld->dlg_remind  = glade_xml_get_widget( sxsld->gxml_remind,
-                                                   "Since-Last Reminders" );
+        sxsld->gxml_remind 
+	  = gnc_glade_xml_new( SX_GLADE_FILE,
+			       DIALOG_SXSINCELAST_REMIND_GLADE_NAME );
+        sxsld->dlg_remind  
+	  = glade_xml_get_widget( sxsld->gxml_remind,
+				  DIALOG_SXSINCELAST_REMIND_GLADE_NAME );
+
+	sxsld->gxml_obsolete 
+	  = gnc_glade_xml_new( SX_GLADE_FILE,
+			       DIALOG_SXSINCELAST_OBSOLETE_GLADE_NAME );
+
+	sxsld->dlg_obsolete
+	  = glade_xml_get_widget( sxsld->gxml_obsolete, 
+				  DIALOG_SXSINCELAST_OBSOLETE_GLADE_NAME );
 
         sxsincelast_init( sxsld );
 }
+
+
+static guint
+clist_get_n_cols(GtkCList *cl)
+{
+  GtkArgInfo info;
+  GtkArg arg;
+  
+  
+  arg.name = g_strdup("n-columns");
+  gtk_object_arg_get( GTK_OBJECT( cl ), &arg, &info);
+
+  g_free(arg.name);
+  return GTK_VALUE_UINT(arg);
+}
+
+
+static void 
+clist_set_all_cols_autoresize(GtkCList *cl, guint n_cols)
+{
+  guint col;
+  for(col = 0; col< n_cols; col++)
+  {
+    gtk_clist_set_column_auto_resize (cl, col, TRUE);
+  }
+  return;
+}
+
+typedef struct {
+  char *name;
+  char *signal;
+  void (*handlerFn)();
+} widgetSignalHandlerTuple;
+   
+static void
+dialog_widgets_attach_handlers(GladeXML *dialog_xml, 
+			       widgetSignalHandlerTuple *handler_info, 
+			       sxSinceLastData *sxsld)
+{
+  int i;
+  GtkWidget *w;
+
+  for(i = 0; handler_info[i].name != NULL; i++)
+  {
+    w = glade_xml_get_widget(dialog_xml, handler_info[i].name);
+    gtk_signal_connect( GTK_OBJECT(w), handler_info[i].signal, 
+			GTK_SIGNAL_FUNC(handler_info[i].handlerFn),
+			sxsld);
+  }
+
+  return;
+}
+			       
+/*
+ * FIXME: jsled, is it getting to the point where we should take this function
+ * apart?
+ */
 
 static void
 sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget *w;
         int i;
-        struct widgetSignalHandlerTuple {
-                char *name;
-                char *signal;
-                void (*handlerFn)();
-        } widgets[] = {
+        widgetSignalHandlerTuple widgets[] = {
                 { "ok_button",       "clicked",      sxsincelast_ok_clicked },
                 { "cancel_button",   "clicked",      sxsincelast_cancel_clicked },
                 { "to_create_clist", "select-row",   sxsincelast_tc_row_sel },
                 { "to_create_clist", "unselect-row", sxsincelast_tc_row_unsel },
                 { NULL,              NULL,           NULL }
-        }, widgets_remind[] = {
-                { "ok_button",      "clicked",      sxsld_remind_ok_clicked },
-                { "reminder_clist", "select-row",   sxsld_remind_row_toggle },
-                { "reminder_clist", "unselect-row", sxsld_remind_row_toggle },
-                { NULL,             NULL,           NULL }
         };
+	widgetSignalHandlerTuple widgets_remind[] = {
+	  { "ok_button",      "clicked",      sxsld_remind_ok_clicked },
+	  { "reminder_clist", "select-row",   sxsld_remind_row_toggle },
+	  { "reminder_clist", "unselect-row", sxsld_remind_row_toggle },
+	  { NULL,             NULL,           NULL }
+	};
+        
+	widgetSignalHandlerTuple widgets_obsolete[] = {
+	  { "ok_button",      "clicked",   sx_obsolete_ok_clicked },
+	  { "cancel_button",  "clicked",    sx_obsolete_cancel_clicked },
+	  { SX_OBSOLETE_CLIST, "select-row", sx_obsolete_row_sel},
+	  { SX_OBSOLETE_CLIST, "unselect-row", sx_obsolete_row_unsel},
+	  { NULL, NULL, NULL}
+	};
 
         gnc_register_gui_component( DIALOG_SXSINCELAST_CM_CLASS,
                                     NULL,
@@ -206,40 +320,39 @@ sxsincelast_init( sxSinceLastData *sxsld )
                                     NULL,
                                     sxsld_remind_close_handler,
                                     sxsld->dlg_remind );
-        
+
+        gnc_register_gui_component( DIALOG_SXSINCELAST_OBSOLETE_CM_CLASS,
+				    NULL, 
+				    sx_obsolete_close_handler,
+				    sxsld->dlg_obsolete );
+
         gtk_signal_connect( GTK_OBJECT(sxsld->sxsincelastDlg), "destroy",
                             GTK_SIGNAL_FUNC( sxsincelast_destroy ), sxsld );
         /* Note: we don't add a 'destroy' signal handler because the
            appropriate work [freeing since-last-run-related data structures]
            is done in the sxsincelast_destroy function. */
 
-        for ( i=0; widgets[i].name != NULL ; i++ ) {
-                w = glade_xml_get_widget( sxsld->gxml, widgets[i].name );
-                gtk_signal_connect( GTK_OBJECT(w), widgets[i].signal,
-                                    GTK_SIGNAL_FUNC(widgets[i].handlerFn),
-                                    sxsld );
-                
-        }
+	dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
+	dialog_widgets_attach_handlers(sxsld->gxml_remind, widgets_remind, sxsld);
+	dialog_widgets_attach_handlers(sxsld->gxml_obsolete, widgets_obsolete, sxsld);
+     
 
-        for ( i=0; widgets_remind[i].name != NULL ; i++ ) {
-                w = glade_xml_get_widget( sxsld->gxml_remind,
-                                          widgets_remind[i].name );
-                gtk_signal_connect( GTK_OBJECT(w), widgets_remind[i].signal,
-                                    GTK_SIGNAL_FUNC( widgets_remind[i].handlerFn ),
-                                    sxsld );
-        }
-
+	/* FIXME: Magic Numbers to be replaced */
+       
         /* set all to-create clist columns to auto-resize. */
         w = glade_xml_get_widget( sxsld->gxml, "to_create_clist" );
-        for ( i=0; i<3; i++ ) {
-                gtk_clist_set_column_auto_resize( GTK_CLIST(w), i, TRUE );
-        }
+        clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
         w = glade_xml_get_widget( sxsld->gxml_remind, "reminder_clist" );
-        for ( i=0; i<3; i++ ) {
-                gtk_clist_set_column_auto_resize( GTK_CLIST(w), i, TRUE );
-        }
+	clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
+
+
+	w = glade_xml_get_widget( sxsld->gxml_obsolete, 
+				  SX_OBSOLETE_CLIST);
+	clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
 
         rl_row = tcl_row = acl_row = 0;
+
+	sxsld->n_obsolete = 0;
 
         /* FIXME: deal with neither dialog being displayed [read:
            nothing-to-do.] */
@@ -422,6 +535,92 @@ processReminderList( GList *reminderList, sxSinceLastData *sxsld, SchedXaction *
         }
 }
 
+
+static gchar *
+freq_type_to_string(UIFreqType type)
+{
+  static gchar *strings[] = 
+  {
+    "Unspecified",
+    "Once",
+    "Daily",
+    "Daily Monday->Friday",
+    "Weekly",
+    "Biweekly",
+    "Semi-Monthly",
+    "Monthly",
+    "Quarterly",
+    "Tri-annually", /* FIXME: WRONG TERM */
+    "Semi-yearly",
+    "Yearly"
+  };
+
+  if (type < UIFREQ_NUM_UI_FREQSPECS)
+  {
+    return strings[type];
+  }
+  else
+  {
+    return NULL;
+  }
+}
+static void
+processRemoveList(GList *removeList, sxSinceLastData *sxsld)
+{
+  GtkCList *cl;
+  char *rowtext[3];
+  int row;
+  GList *sx_listentry;
+  SchedXaction *sx;
+  FreqSpec *fs;
+  rowtext[1] = g_new0(gchar, 26 ); /* FIXME - MAGIC NUMBERS */
+
+  cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_obsolete, SX_OBSOLETE_CLIST ));
+
+
+  gtk_clist_freeze(cl);
+  for(row = 0; removeList != NULL; row++, removeList = removeList->next)
+  {
+    sx_listentry = (GList *) removeList->data;
+    sx = (SchedXaction *) sx_listentry->data;
+
+    rowtext[0] = xaccSchedXactionGetName( sx );
+   
+    /* FIXME: I18N */
+
+    g_date_strftime(rowtext[1], 25, "%a, %b %e, %Y",
+		    xaccSchedXactionGetEndDate( sx ));
+
+    fs = xaccSchedXactionGetFreqSpec( sx );
+
+    
+    rowtext[2] = freq_type_to_string( xaccFreqSpecGetUIType( fs ) );
+
+    gtk_clist_insert( cl, row, rowtext );
+    gtk_clist_set_row_data(cl, row, sx_listentry );
+    sxsld->n_obsolete++;
+  }
+  
+  g_free(rowtext[1]);
+
+  /* FIXME: THIS IS UGLY!!! */
+
+  /* The idea is if the reminder list has popped up, we should wait until it's
+   * been closed to open.  If not, we should pop ourselves up at this point.
+   * 
+   * I still reckon a druid is the way to go for this, but anyway. . . 
+   */
+  
+  if( !(sxsld->remind_displayed) )
+  {
+    sxsld->obsolete_displayed = TRUE;
+    gtk_widget_show_all(sxsld->dlg_obsolete);
+  }
+      
+  return;
+}
+    
+  
 /**
  * Moves the selected reminders to the appropriate [auto-create or to-create]
  * sections of the since-last-run dialog.
@@ -457,6 +656,24 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
         }
 }
 
+
+
+/* 
+ * returns true if a scheduled transaction is not going to be instantiated again
+ * and can be deleted 
+ * FIXME: Doesn't deal w/number of occurrences ATM - nor does anything else.
+ */
+
+static gboolean
+sx_obsolete(SchedXaction *sx)
+{
+  GDate next_inst = xaccSchedXactionGetNextInstance(sx);
+  
+  return !( g_date_valid( &next_inst ));
+}
+	 
+
+ 
 /**
  * Returns TRUE if there's some populated in the dialog to show to the user,
  * FALSE if not.
@@ -467,6 +684,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
         GList *sxList, *instanceList;
         GList *autoCreateList, *toCreateList, *reminderList;
+	GList *removeList = NULL; /* list of sxlist entries to remove */
         SchedXaction *sx;
         GDate end, endPlusReminders;
         GDate *instDate;
@@ -516,65 +734,77 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                 _generate_instances( sx, &endPlusReminders, &instanceList );
 
                 if ( instanceList == NULL )
-                        continue;
-
-                xaccSchedXactionGetAutoCreate( sx, &autocreateState, &notifyState );
-                do {
-                        instDate = (GDate*)instanceList->data;
+		{
+		  /* check to see whether sx can be removed */
+		  if( sx_obsolete(sx) )
+		  {
+		    removeList = g_list_prepend(removeList, sxList); /* note, list pointers rather 
+								      * than data pointers
+								      */
+		  }
+		}
+		else
+		{
+		  xaccSchedXactionGetAutoCreate( sx, &autocreateState, &notifyState );
+		  do {
+		    instDate = (GDate*)instanceList->data;
 #if 0
 /* NOT USED */
-                        {
-                                char tmpBuf[26];
-                                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", instDate );
-                                DEBUG( "SX \"%s\" instance on %s",
-                                       xaccSchedXactionGetName(sx), tmpBuf );
-                        }
+		    {
+		      char tmpBuf[26];
+		      g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", instDate );
+		      DEBUG( "SX \"%s\" instance on %s",
+			     xaccSchedXactionGetName(sx), tmpBuf );
+		    }
 #endif /* 0 */
+		    
+		    if ( (g_date_compare( &end, &endPlusReminders ) != 0)
+			 && (g_date_compare( &end, instDate ) <= 0) ) {
+		      rt = g_new0( reminderTuple, 1 );
+		      rt->sx         = sx;
+		      rt->endDate    = &end;
+		      rt->occurDate  = instDate;
+		      rt->isSelected = FALSE;
+		      reminderList = g_list_append( reminderList, rt );
+		    } else {
+		      if ( autocreateState ) {
+			autoCreateList = g_list_append( autoCreateList,
+							instDate );
+		      } else {
+			toCreateList = g_list_append( toCreateList,
+						      instDate );
+		      }
+		    }
+		  } while ( (instanceList = instanceList->next) );
 
-                        if ( (g_date_compare( &end, &endPlusReminders ) != 0)
-                             && (g_date_compare( &end, instDate ) <= 0) ) {
-                                rt = g_new0( reminderTuple, 1 );
-                                rt->sx         = sx;
-                                rt->endDate    = &end;
-                                rt->occurDate  = instDate;
-                                rt->isSelected = FALSE;
-                                reminderList = g_list_append( reminderList, rt );
-                        } else {
-                                if ( autocreateState ) {
-                                        autoCreateList = g_list_append( autoCreateList,
-                                                                        instDate );
-                                } else {
-                                        toCreateList = g_list_append( toCreateList,
-                                                                      instDate );
-                                }
-                        }
-                } while ( (instanceList = instanceList->next) );
+		  /* Report RE:showing the dialog iff there's stuff in it to
+		   * show. */
+		  showIt |= (g_list_length( autoCreateList ) > 0);
+		  showIt |= (g_list_length( toCreateList ) > 0);
+		  
+		  processAutoCreateList( autoCreateList, sxsld, sx );
+		  processReminderList  ( reminderList,   sxsld, sx );
+		  processToCreateList  ( toCreateList,   sxsld, sx );
+		 
 
-                /* Report RE:showing the dialog iff there's stuff in it to
-                 * show. */
-                showIt |= (g_list_length( autoCreateList ) > 0);
-                showIt |= (g_list_length( toCreateList ) > 0);
-
-                processAutoCreateList( autoCreateList, sxsld, sx );
-                processReminderList  ( reminderList,   sxsld, sx );
-                processToCreateList  ( toCreateList,   sxsld, sx );
-
-                g_list_foreach( autoCreateList, _free_gdate_list_elts, NULL );
-                g_list_free( autoCreateList );
-                autoCreateList = NULL;
-
-                /* We have moved the GDates over to the toCreateData list in
-                   sxsld, so we don't free them here. */
-                g_list_free( toCreateList );
-                toCreateList = NULL;
-
-                /* We have moved the reminderTuples over to the reminderData
-                   list in sxsld, so we don't free them here. */
-                g_list_free( reminderList );
-                reminderList = NULL;
-
+		  g_list_foreach( autoCreateList, _free_gdate_list_elts, NULL );
+		  g_list_free( autoCreateList );
+		  autoCreateList = NULL;
+		  
+		  /* We have moved the GDates over to the toCreateData list in
+		     sxsld, so we don't free them here. */
+		  g_list_free( toCreateList );
+		  toCreateList = NULL;
+		  
+		  /* We have moved the reminderTuples over to the reminderData
+		     list in sxsld, so we don't free them here. */
+		  g_list_free( reminderList );
+		  reminderList = NULL;
+		}
+		
         } while ( (sxList = sxList->next) );
 
+	processRemoveList( removeList, sxsld);
         return showIt;
 }
 
@@ -601,6 +831,9 @@ _clean_sincelast_dlg( sxSinceLastData *sxsld )
 
 }
 
+/* 
+ * FIXME: This is workable w/two dialogs, but not with three!!
+ */
 /**
  * Close policy:
  * . If reminders-dialog-open
@@ -631,18 +864,19 @@ sxsincelast_close_handler( gpointer ud )
                 _clean_sincelast_dlg( sxsld );
                 gtk_widget_hide( sxsld->sxsincelastDlg );
                 sxsld->sincelast_displayed = FALSE;
-        } else {
-                DEBUG( "reminder dialog !displayed, closing both." );
-                if ( sxsld->dlg_remind != NULL ) {
-                        PERR( "How did the reminder dialog get !displayed, but !destroyed?" );
-                        sxsld_remind_close_handler( sxsld );
-                }
-
+		
+		DEBUG( "reminder dialog !displayed, closing both." );
+		if ( sxsld->dlg_remind != NULL ) {
+		  
+		  PERR( "How did the reminder dialog get !displayed, but !destroyed?" );
+		  sxsld_remind_close_handler( sxsld );
+		}
+		
                 gnome_dialog_close( GNOME_DIALOG( sxsld->sxsincelastDlg ) );
                 sxsld->sxsincelastDlg = NULL;
                 sxsld->sincelast_displayed = FALSE;
         }
-
+	
         /* FIXME -- cleanup:
          * . reminder data?
          * . memory allocated for UI elts [labels and such]?
@@ -660,6 +894,13 @@ sxsld_remind_close_handler( gpointer ud )
         gnome_dialog_close( GNOME_DIALOG( sxsld->dlg_remind ) );
         sxsld->dlg_remind = NULL;
         sxsld->remind_displayed = FALSE;
+	
+	if(sxsld->n_obsolete > 0)
+	{
+	  gtk_widget_show_all(sxsld->dlg_obsolete);
+	  sxsld->obsolete_displayed = TRUE;
+	}
+	  
 }
 
 static void
@@ -1391,6 +1632,7 @@ sxsld_remind_ok_clicked( GtkButton *b, gpointer ud )
 
                 sxsld_remind_close_handler( sxsld );
 
+		
                 /* FIXME: sufficient? we probably want the close-handler...
                 gtk_widget_destroy( sxsld->dlg_remind );
                 sxsld->dlg_remind = NULL; */
@@ -1399,6 +1641,11 @@ sxsld_remind_ok_clicked( GtkButton *b, gpointer ud )
            { Just leave the dialog alone [and let the user deal with the
               error dialog they just saw].  }
         */
+	
+
+	/* now that's finished, run the obsolete transactions dialog */
+
+	gtk_widget_show_all(sxsld->dlg_obsolete);
 }
 
 static void
@@ -1466,3 +1713,105 @@ _inform_or_add( GList *reminders,
 
         return okFlag;
 }
+
+static void
+sx_obsolete_row_sel(GtkCList *clist,
+		    gint row,
+		    gint column,
+		    GdkEventButton *event,
+		    gpointer user_data)
+{
+  sxSinceLastData *sxsld;
+
+  GList *row_sxlentry_data;
+  sxsld = (sxSinceLastData*) user_data;
+  
+  row_sxlentry_data = (GList *)gtk_clist_get_row_data(clist, row);
+
+  if (g_list_position(sxsld->actual_to_remove, row_sxlentry_data) == -1)
+  {
+    sxsld->actual_to_remove = g_list_append(sxsld->actual_to_remove, row_sxlentry_data);
+  }
+  else
+  {
+    PWARN("Something screwy with obsolete SX selection . . . ");
+  }
+  return;
+}
+
+static void
+sx_obsolete_row_unsel(GtkCList *clist,
+		      gint row,
+		      gint column,
+		      GdkEventButton *event,
+		      gpointer user_data)
+{
+  GList *position;
+  GList *row_sxlentry_data = gtk_clist_get_row_data(clist, row);
+  sxSinceLastData *sxsld = user_data;
+  
+  
+  if((position = g_list_find(sxsld->actual_to_remove, row_sxlentry_data)))
+  {
+    sxsld->actual_to_remove = g_list_remove_link(sxsld->actual_to_remove, position);
+    g_list_free_1(position);
+      
+  }
+  else
+  {
+    PWARN("Tried to remove non-selected obsolete SX");
+  }
+  return;
+}
+  
+static void
+sx_obsolete_ok_clicked(GtkButton *button, gpointer user_data)
+{
+  sxSinceLastData *sxsld = user_data;
+  SchedXaction *sx;
+  GList *actual_sx_list, *actual_sx_listref, *removelist_ref;
+  
+  GNCBook *book = gncGetCurrentBook();
+
+  actual_sx_list = gnc_book_get_schedxactions(book);
+  for(removelist_ref = sxsld->actual_to_remove;
+      removelist_ref; removelist_ref = removelist_ref->next)
+  {
+    actual_sx_listref = removelist_ref->data;
+    
+    xaccSchedXactionFree( (SchedXaction *) (actual_sx_listref->data) );
+    actual_sx_list = g_list_remove_link(actual_sx_list, 
+					actual_sx_listref);
+
+    g_list_free_1(actual_sx_listref);
+  }
+
+  g_list_free(sxsld->actual_to_remove);
+  sxsld->actual_to_remove = NULL;
+
+  gnc_book_set_schedxactions(book, actual_sx_list);
+
+  gnome_dialog_close(GNOME_DIALOG(sxsld->dlg_obsolete));
+
+  /* FIXME: what about cleaning up everything else */
+}
+ 
+
+static void 
+sx_obsolete_close_handler(gpointer user_data)
+{
+   sxSinceLastData *sxsld = user_data;
+  
+  g_list_free(sxsld->actual_to_remove);
+  sxsld->actual_to_remove = NULL;
+  
+  gnome_dialog_close(sxsld->dlg_obsolete);
+
+  /* FIXME: clean up everything else */
+}
+static void
+sx_obsolete_cancel_clicked(GtkButton *button, gpointer user_data)
+{
+  sx_obsolete_close_handler(user_data);
+}
+    

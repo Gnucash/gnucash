@@ -1,3 +1,17 @@
+2001-08-15  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.c(xaccSchedXactionFree): fix 
+	bug.
+
+	* src/gnome/dialog-sxsincelast.c: add "obsolete
+	transactions" dialog.  Extensive changes.
+
+	* src/gnome/glade/sched-xact.glade: add obsolete SX dialog
+	stuff.
+
+	* src/scm/report-utilities.scm (gnc:amount->string): fix 
+	bug.
+
 2001-08-14  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/backend/file/gnc-schedxaction-xml-v2.c: add null stuff to

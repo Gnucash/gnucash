@@ -104,20 +104,23 @@ sxprivtransactionListMapDelete( gpointer data, gpointer user_data )
 }
 
 void
-sxprivsplitListMapDelete( gpointer data, gpointer user_data )
+sxprivTransMapDelete( gpointer data, gpointer user_data )
 {
-  Split *s = (Split *) data;
-  Transaction *t = xaccSplitGetParent(s);
+  Transaction *t = (Transaction *) data;
   xaccTransBeginEdit( t );
   xaccTransDestroy( t );
   xaccTransCommitEdit( t );
+  return;
 }
 
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
         AccountGroup *group;
-	GList *templ_acct_splits;
+	GList *templ_acct_splits, *curr_split_listref;
+	GList *templ_acct_transactions=NULL;
+	Split *curr_split;
+	Transaction *split_trans;
         if ( sx == NULL ) return;
 
         xaccFreqSpecFree( sx->freq );
@@ -137,10 +140,23 @@ xaccSchedXactionFree( SchedXaction *sx )
 	templ_acct_splits 
 	  = xaccAccountGetSplitList(sx->template_acct);
 
-	g_list_foreach(templ_acct_splits, 
-		       sxprivsplitListMapDelete,
+	for(curr_split_listref = templ_acct_splits;
+	    curr_split_listref;
+	    curr_split_listref = curr_split_listref->next)
+	{
+	  curr_split = (Split *) curr_split_listref->data;
+	  split_trans = xaccSplitGetParent(curr_split);
+	  if(! (g_list_find(templ_acct_transactions, split_trans)))
+	  {
+	    templ_acct_transactions 
+	      = g_list_prepend(templ_acct_transactions, split_trans);
+	  }
+	}
+	  
+	g_list_foreach(templ_acct_transactions,
+		       sxprivTransMapDelete, 
 		       NULL);
-
+		       
 	/*
 	 * xaccAccountDestroy removes the account from
 	 * its group for us AFAICT
