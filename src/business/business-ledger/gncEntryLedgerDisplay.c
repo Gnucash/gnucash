@@ -85,6 +85,16 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
                                        type,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
+  /* To make sure the xfer cell is up to date */
+  gnc_gui_component_watch_entity_type (ledger->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  /* To make sure the taxtable cell is up to date */
+  gnc_gui_component_watch_entity_type (ledger->component_id,
+                                       GNC_TAXTABLE_MODULE_NAME,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
   for (node = entries; node; node = node->next)
   {
     GncEntry *entry = node->data;

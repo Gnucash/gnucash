@@ -1,3 +1,5 @@
+SUBDIRS = . glade
+
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 
 AM_CFLAGS = \
@@ -33,7 +35,6 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-job.c \
   dialog-order.c \
   dialog-payment.c \
-  dialog-tax-table.c \
   dialog-vendor.c \
   search-owner.c \
   gnc-business-utils.c
@@ -47,7 +48,6 @@ noinst_HEADERS = \
   dialog-job.h \
   dialog-order.h \
   dialog-payment.h \
-  dialog-tax-table.h \
   dialog-vendor.h \
   search-owner.h \
   gnc-business-utils.h
@@ -79,18 +79,6 @@ gncscm_DATA = \
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-gnome.scm
 
-gladedir = $(GNC_GLADE_DIR)
-glade_DATA = \
-  customer.glade \
-  date-close.glade \
-  employee.glade \
-  invoice.glade \
-  job.glade \
-  order.glade \
-  payment.glade \
-  tax-tables.glade \
-  vendor.glade
-
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
   gw-business-gnome.scm \
@@ -98,7 +86,6 @@ gwmod_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
-  ${glade_DATA} \
   ${gncmod_DATA} \
   ${gwmod_DATA} \
   ${gncscm_DATA} \

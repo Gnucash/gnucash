@@ -1,5 +1,12 @@
 2002-06-16  Derek Atkins   <derek@ihtfp.com>
 
+	* Refactor a lot of the business code.  Move the tax-table dialog
+	to its own directory/gnc-module.  Move the business-gnome glade
+	files to their own directory.  Create a business-reports directory
+	for the current and future business reports.
+
+2002-06-16  Derek Atkins   <derek@ihtfp.com>
+
 	Integrate the tax table into the gncEntry object; change how taxes
 	and discounts are computed, stored, and returned.  Fix the Entry
 	XML code to save/load the new taxtable data (not backwards

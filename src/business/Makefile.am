@@ -1,4 +1,6 @@
 SUBDIRS = \
   business-core \
+  dialog-tax-table \
   business-ledger \
-  business-gnome
+  business-gnome \
+  business-reports

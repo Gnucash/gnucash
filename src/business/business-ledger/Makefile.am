@@ -22,10 +22,12 @@ libgnc_business_ledger_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \

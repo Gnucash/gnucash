@@ -968,8 +968,11 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/business/business-core/Makefile
           src/business/business-core/test/Makefile
           src/business/business-core/file/Makefile
+          src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
+          src/business/business-gnome/glade/Makefile
           src/business/business-ledger/Makefile
+          src/business/business-reports/Makefile
 
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here

@@ -41,6 +41,7 @@ typedef struct _new_taxtable {
   GtkWidget *	amount_entry;
   GtkWidget *	acct_tree;
 
+  GncTaxTable *		created_table;
   TaxTableWindow *	ttw;
   GncTaxTableEntry *	entry;
   gint			type;
@@ -113,6 +114,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
     gncTaxTableSetName (table, name);
     /* Reset the current table */
     ttw->current_table = table;
+    ntt->created_table = table;
   }
 
   /* Create/edit the entry */
@@ -685,4 +687,51 @@ gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw)
     return;
 
   gnc_close_gui_component (ttw->component_id);
+}
+
+static int
+from_name_close_cb (GnomeDialog *dialog, gpointer data)
+{
+  NewTaxTable *ntt;
+  GncTaxTable **created_table = data;
+
+  ntt = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
+
+  *created_table = ntt->created_table;
+
+  gtk_main_quit ();
+
+  return FALSE;
+}
+
+/* Create a new tax-table by name */
+GncTaxTable *
+gnc_ui_tax_table_new_from_name (GNCBook *book, const char *name)
+{
+  GncTaxTable *created_table = NULL;
+  TaxTableWindow *ttw;
+  NewTaxTable *ntt;
+
+  if (!book) return NULL;
+
+  ttw = gnc_ui_tax_table_window_new (book);
+  if (!ttw) return NULL;
+
+  ntt = new_tax_table_dialog (ttw, TRUE, NULL);
+  if (!ntt) return NULL;
+
+  gtk_object_set_data (GTK_OBJECT (ntt->dialog), "dialog_info", ntt);
+  gtk_signal_connect (GTK_OBJECT (ntt->dialog), "close",
+		      GTK_SIGNAL_FUNC (from_name_close_cb), &created_table);
+
+  /* Preset the name in the new dialog */
+  if (name)
+    gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
+
+  /* I know that NTT is already modal, no need to reset it here */
+
+  /* Now run the dialog -- wait for it to close */
+  gtk_main ();
+
+  return created_table;
 }
