@@ -262,6 +262,12 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
     gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), 
                               _("You must specify a file to load."));
   }
+  else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
+    /* stay here if bad file */
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), 
+                              _("File not found or read permission denied.\n"
+                                "Please select another file."));
+  }
   else if(strlen(currency) == 0) {
     gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), 
                               _("You must specify a currency."));
