@@ -48,6 +48,7 @@
 #include "TransactionP.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
+#include "gnc-commodity.h"
 
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
@@ -361,8 +362,12 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
     new_value = xaccSplitGetValue (balance_split);
 
+    /* Note: We have to round for the commodity's fraction, NOT any
+     * already existing denominator (bug #104343), because either one
+     * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (new_value, imbalance,
-                                 new_value.denom, GNC_RND_ROUND);
+				 gnc_commodity_get_fraction(currency), 
+				 GNC_RND_ROUND);
 
     xaccSplitSetValue (balance_split, new_value);
 
