@@ -1,0 +1,8 @@
+#!/bin/sh
+
+GNC_GUILE=`pwd`/fake-guile
+export GNC_GUILE
+
+gnucash-env guile
+
+test $? -eq 42
