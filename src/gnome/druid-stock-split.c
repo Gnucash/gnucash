@@ -94,10 +94,15 @@ fill_account_list (StockSplitInfo *info)
     Account *account = node->data;
     GNCPrintAmountInfo print_info;
     const gnc_commodity *security;
+    gnc_numeric balance;
     char *strings[4];
     gint row;
 
     if (xaccAccountGetType (account) != STOCK)
+      continue;
+
+    balance = xaccAccountGetShareBalance (account);
+    if (gnc_numeric_zero_p (balance))
       continue;
 
     security = xaccAccountGetSecurity (account);
@@ -107,8 +112,7 @@ fill_account_list (StockSplitInfo *info)
     strings[0] = xaccAccountGetFullName (account,
                                          gnc_get_account_separator ());
     strings[1] = (char *) gnc_commodity_get_mnemonic (security);
-    strings[2] = (char *)
-      xaccPrintAmount (xaccAccountGetShareBalance (account), print_info);
+    strings[2] = (char *) xaccPrintAmount (balance, print_info);
     strings[3] = NULL;
 
     row = gtk_clist_append (clist, strings);
@@ -173,7 +177,7 @@ refresh_details_page (StockSplitInfo *info)
   g_free (name);
 
   amount = xaccAccountGetShareBalance (account);
-  print_info = gnc_account_quantity_print_info (account, TRUE);
+  print_info = gnc_account_quantity_print_info (account, FALSE);
 
   amount_str = xaccPrintAmount(amount, print_info);
   gtk_entry_set_text (GTK_ENTRY (info->starting_entry), amount_str);

@@ -4473,7 +4473,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   Split *find_split;
   Split *split;
   Table *table;
-  GList *gsplit;
+  GList *node;
 
   gboolean start_primary_color = TRUE;
   gboolean found_pending = FALSE;
@@ -4612,9 +4612,9 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   /* populate the table */
-  for (gsplit = slist; gsplit; gsplit = gsplit->next) 
+  for (node = slist; node; node = node->next) 
   {
-    split = gsplit->data;
+    split = node->data;
     trans = xaccSplitGetParent (split);
 
     if (pending_trans == trans)
