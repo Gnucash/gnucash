@@ -25,6 +25,7 @@ depcomp
 etags.files
 gnucash-config
 install-sh
+intltool-modules
 intl
 libtool
 ltconfig
