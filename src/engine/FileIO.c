@@ -90,6 +90,7 @@
 #include "date.h"
 #include "DateUtils.h"
 #include "FileIO.h"
+#include "FileIOP.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "messages.h"
@@ -270,6 +271,33 @@ AccountGroup *
 xaccReadAccountGroup( char *datafile )
   {
   int  fd;
+  AccountGroup *grp = 0x0;
+
+  maingrp = 0x0;
+  error_code = ERR_FILEIO_NO_ERROR;
+  
+  fd = open( datafile, RFLAGS, 0 );
+  if( 0 > fd ) 
+    {
+    error_code = ERR_FILEIO_FILE_NOT_FOUND;
+    return NULL;
+    }
+  grp = xaccReadAccountGroupFD (fd);
+
+  close(fd);
+  return grp;
+}
+  
+/********************************************************************\
+ * xaccReadAccountGroupFD                                           * 
+ *   reads in the data from file descriptor                         *
+ *                                                                  * 
+ * Args:   fd -- the file descriptor to read the data from          * 
+ * Return: the struct with the program data in it                   * 
+\********************************************************************/
+AccountGroup *
+xaccReadAccountGroupFD( int fd )
+  {
   int  err=0;
   int  token=0;
   int  num_unclaimed;
@@ -278,8 +306,8 @@ xaccReadAccountGroup( char *datafile )
   maingrp = 0x0;
   error_code = ERR_FILEIO_NO_ERROR;
   
-  fd = open( datafile, RFLAGS, 0 );
-  if( fd == -1 ) 
+  /* check for valid file descriptor */
+  if( 0 > fd ) 
     {
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
@@ -290,7 +318,6 @@ xaccReadAccountGroup( char *datafile )
   if( sizeof(int) != err ) 
     {
     error_code = ERR_FILEIO_FILE_EMPTY;
-    close(fd);
     return NULL;
     }
   XACC_FLIP_INT (token);
@@ -305,7 +332,6 @@ xaccReadAccountGroup( char *datafile )
    * with, warn the user */
   if( VERSION < token ) {
     error_code = ERR_FILEIO_FILE_TOO_NEW;
-    close(fd);
     return NULL;
   }
   
@@ -345,7 +371,6 @@ xaccReadAccountGroup( char *datafile )
   maingrp = NULL;
 
   xaccLogEnable();
-  close(fd);
   return grp;
 }
 
@@ -1356,16 +1381,70 @@ xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
  * Args:   datafile - the file to store the data in                 * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
+
 static int 
 writeAccountGroupToFile( char *datafile, AccountGroup *grp )
   {
   int err = 0;
-  int token = VERSION;    /* The file format version */
   int fd;
   
-  if (NULL == grp) return -1;
+  /* now, open the file and start writing */
+  fd = open( datafile, WFLAGS, PERMS );
+  if( 0 > fd )
+    {
+    ERROR();
+    return -1;
+    }
+  
+  err = xaccWriteAccountGroupFD (fd, grp);
 
-  /* first, zero out the write flag on all of the 
+  close(fd);
+
+  return err;
+  }
+
+/********************************************************************\
+ * xaccWriteAccountGroupFD                                          * 
+ *   writes out a group of accounts to a file                       * 
+ *                                                                  * 
+ * Args:   fd -- file descriptor                                    *
+ *         grp -- account group                                     *
+ *                                                                  *
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+int 
+xaccWriteAccountGroupFD (int fd, AccountGroup *grp )
+  {
+  int i,numAcc;
+  int token = VERSION;    /* The file format version */
+  int err = 0;
+
+  ENTER ("xaccWriteAccountGroupFD");
+  
+  XACC_FLIP_INT (token);
+  err = write( fd, &token, sizeof(int) );
+  if( err != sizeof(int) )
+    {
+    ERROR();
+    return -1;
+    }
+
+  if (NULL == grp) {
+    numAcc = 0;
+  } else {
+    numAcc = grp->numAcc;
+  }
+
+  XACC_FLIP_INT (numAcc);
+  err = write( fd, &numAcc, sizeof(int) );
+  if( err != sizeof(int) )
+    return -1;
+  
+  if (NULL == grp) {
+    return 0;
+  }
+
+  /* OK, now zero out the write flag on all of the 
    * transactions.  The write_flag is used to determine
    * if a given transaction has already been written 
    * out to the file.  This flag is necessary, since 
@@ -1376,27 +1455,13 @@ writeAccountGroupToFile( char *datafile, AccountGroup *grp )
    */
   xaccResetWriteFlags (grp);
 
-  /* now, open the file and start writing */
-  fd = open( datafile, WFLAGS, PERMS );
-  if( fd == -1 )
+  for( i=0; i<grp->numAcc; i++ )
     {
-    ERROR();
-    return -1;
+    err = writeAccount( fd, xaccGroupGetAccount(grp,i) );
+    if( -1 == err )
+      return err;
     }
   
-  XACC_FLIP_INT (token);
-  err = write( fd, &token, sizeof(int) );
-  if( err != sizeof(int) )
-    {
-    ERROR();
-    close(fd);
-    return -1;
-    }
-
-  err = writeGroup (fd, grp);
-
-  close(fd);
-
   return err;
   }
 
