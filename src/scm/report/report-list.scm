@@ -8,8 +8,10 @@
 ;; reports 
 (gnc:depend "report/account-summary.scm")
 (gnc:depend "report/average-balance.scm")
-(gnc:depend "report/hello-world.scm")
+(gnc:depend "report/income-expense-graph.scm")
+(gnc:depend "report/income-or-expense-pie.scm")
 (gnc:depend "report/pnl.scm")
+(gnc:depend "report/hello-world.scm")
 (gnc:depend "report/register.scm")
 (let ((locale (setlocale LC_MESSAGES)))
   (if (or (equal? locale "C")

@@ -5,6 +5,8 @@ gncscm_DATA = \
   account-summary.scm \
   average-balance.scm \
   pnl.scm \
+  income-expense-graph.scm \
+  income-or-expense-pie.scm \
   hello-world.scm \
   register.scm \
   report-list.scm \

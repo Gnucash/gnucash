@@ -45,7 +45,7 @@
   (record-constructor <html-piechart>))
 
 (define (gnc:make-html-piechart)
-  (gnc:make-html-piechart-internal -1 -1 #f #f #f #f #f))
+  (gnc:make-html-piechart-internal -1 -1 #f #f #f #f #f #f #f #f #f #f #f))
 
 (define gnc:html-piechart-data
   (record-accessor <html-piechart> 'data))
@@ -169,10 +169,10 @@
            (gnc:html-piechart-button-1-slice-urls piechart)))
          (url-2 
           (catenate-escaped-strings 
-           (gnc:html-piechart-button-2-slice--urls piechart)))
+           (gnc:html-piechart-button-2-slice-urls piechart)))
          (url-3
           (catenate-escaped-strings 
-           (gnc:html-piechart-button-3-slice--urls piechart)))
+           (gnc:html-piechart-button-3-slice-urls piechart)))
          (legend-1
           (catenate-escaped-strings 
            (gnc:html-piechart-button-1-legend-urls piechart)))

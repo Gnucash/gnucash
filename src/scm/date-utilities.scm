@@ -196,11 +196,11 @@
 		   (gnc:timepair-canonical-day-time t2)))
 
 ;; Build a list of time intervals 
-(define (dateloop curd endd incr) 
+(define (gnc:dateloop curd endd incr) 
   (cond ((gnc:timepair-later curd endd)
 	 (let ((nextd (incdate curd incr)))
 	 (cons (list curd (decdate nextd SecDelta) '())
-	       (dateloop nextd endd incr))))
+	       (gnc:dateloop nextd endd incr))))
 	(else '())))
 
 ; A reference zero date - the Beginning Of The Epoch
@@ -249,6 +249,10 @@
     (set-tm:mon ddt 1)
     ddt))
 
+(define QuarterDelta
+  (let ((ddt (make-zdate)))
+    (set-tm:mon ddt 3)
+    ddt))
 
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
