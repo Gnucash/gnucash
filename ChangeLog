@@ -1,3 +1,20 @@
+2001-10-09  Christian Stimming  <stimming@tuhh.de>
+ 
+	* po/glossary/no.po: Added Norwegian (bokmål) translation by
+	Kjartan Maraas <kmaraas@gnome.org>.
+
+	* po/glossary/sv.po: Added Swedish translation by Christian Rose
+	<menthos@menthos.com> who "fixed a lot of things. Thanks to Göran
+	Uddeborg <goeran@uddeborg.pp.se> for his review."
+	
+	* po/da.po: Updated translation by Keld Simonsen <keld@dkuug.dk>
+
+	* po/es.po: Updated Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+	
+	* po/sk.po, configure.in: Added Slovak translation from Zdenko
+	Podobný <zdpo@mailbox.sk>.
+
 2001-10-03  Christian Stimming  <stimming@tuhh.de>
 
 	* po/sv.po: Updated Swedish translation, by Christian Rose

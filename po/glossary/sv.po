@@ -1,0 +1,627 @@
+# Swedish messages for gnucash-glossary.
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Christian Rose <menthos@menthos.com>, 2001.
+#
+# $Id$
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnucash-glossary\n"
+"POT-Creation-Date: 2001-10-03 03:51+0200\n"
+"PO-Revision-Date: 2001-10-08 20:08+0200\n"
+"Last-Translator: Christian Rose <menthos@menthos.com>\n"
+"Language-Team: Swedish <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. "English Definition"
+msgid "Term"
+msgstr "Term"
+
+#. "A detailed record of money spent and received"
+msgid "account"
+msgstr "konto"
+
+#. "-"
+msgid "account code"
+msgstr "kontokod"
+
+#. "the tree view of all accounts"
+msgid "account hierarchy"
+msgstr "kontohierarki"
+
+#. "-"
+msgid "account name"
+msgstr "kontonamn"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+msgid "account type: Asset"
+msgstr "kontotyp: Tillgång"
+
+# src/prefs.c:210
+#. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
+msgid "account type: checking"
+msgstr "kontotyp: check"
+
+#. "-"
+msgid "account type: currency"
+msgstr "kontotyp: valuta"
+
+#. "see: Equity"
+msgid "account type: Equity"
+msgstr "kontotyp: Eget kapital"
+
+#. "-"
+msgid "account type: Expense"
+msgstr "kontotyp: Utgift"
+
+#. "-"
+msgid "account type: Income"
+msgstr "kontotyp: Inkomst"
+
+#. "A debt, a financial obligation"
+msgid "account type: Liability"
+msgstr "kontotyp: Skuld"
+
+#. "-"
+msgid "account type: money-market"
+msgstr "kontotyp: penningmarknad"
+
+#. "-"
+msgid "account type: Mutual fund"
+msgstr "kontotyp: aktiefond"
+
+#. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
+msgid "account type: saving"
+msgstr "kontotyp: spar"
+
+#. "-"
+msgid "account type: Stock"
+msgstr "kontotyp: aktie"
+
+#. "-"
+msgid "account: parent account"
+msgstr "konto: förälderkonto"
+
+#. "-"
+msgid "account: subaccount"
+msgstr "konto: underkonto"
+
+#. "-"
+msgid "account: top level account"
+msgstr "konto: huvudkonto"
+
+#. "The process of doing something that caused a transaction to happen"
+msgid "Action (register)"
+msgstr "Händelse (register)"
+
+#. "Automated teller machine"
+msgid "action: ATM"
+msgstr "händelse: bankomat"
+
+#. "Transaction was an auto deposit"
+msgid "action: autoDep"
+msgstr "händelse: stående överföring"
+
+#. "-"
+msgid "action: buy"
+msgstr "händelse: köp"
+
+#. "-"
+msgid "action: deposit"
+msgstr "händelse: insättning"
+
+#. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
+msgid "action: direct debit"
+msgstr "händelse: autogiro"
+
+#. "transaction is a distribution (???)"
+msgid "action: dist"
+msgstr "händelse: dist"
+
+#. "transaction is a dividend"
+msgid "action: div"
+msgstr "händelse: utdelning"
+
+#. "-"
+msgid "action: fee"
+msgstr "händelse: avgift"
+
+#. "transaction comes from interest"
+msgid "action: int"
+msgstr "händelse: ränta"
+
+#. "-"
+msgid "action: loan"
+msgstr "händelse: lån"
+
+#. "see: payment 1."
+msgid "action: payment"
+msgstr "händelse: betalning"
+
+#. "-"
+msgid "action: POS"
+msgstr "händelse: POS"
+
+#. "-"
+msgid "action: rebate"
+msgstr "händelse: rabatt"
+
+#. "-"
+msgid "action: sell"
+msgstr "händelse: försäljning"
+
+#. "-"
+msgid "action: Teller"
+msgstr "händelse: Kassa"
+
+#. "see: transfer 2. (=credit transfer)"
+msgid "action: transfer"
+msgstr "händelse: överföring"
+
+#. "-"
+msgid "action: wire"
+msgstr "händelse: överför elektroniskt"
+
+#. "-"
+msgid "action: withdraw"
+msgstr "händelse: uttag"
+
+#. "A sum of money"
+msgid "amount"
+msgstr "summa"
+
+#. "The result of adding several amounts together and then dividing this total by the number of amounts"
+msgid "average"
+msgstr "medelvärde"
+
+#. "The amount of money that is in one's account"
+msgid "balance (noun)"
+msgstr "saldo (substantiv)"
+
+#. "A written record of money received and paid out, showing the difference between the two total amounts"
+msgid "balance sheet"
+msgstr "balansräkning"
+
+#. "To arrange for income and spending to be equal"
+msgid "balance, to"
+msgstr "balansera, att"
+
+#. "-"
+msgid "bank"
+msgstr "bank"
+
+#. "-"
+msgid "business (adjective)"
+msgstr "företags- (adjektiv)"
+
+#. "Profits made from the sale of investments or property"
+msgid "capital gains"
+msgstr "realisationsvinster"
+
+#. "Distinguishing the uppercase and lowercase letters"
+msgid "case sensitive"
+msgstr "gör skillnad på gemener/VERSALER"
+
+#. "Money in coins or notes"
+msgid "cash"
+msgstr "kontanter"
+
+#. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
+msgid "check"
+msgstr "check"
+
+#. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
+msgid "check and repair, to"
+msgstr "kontrollera och reparera, att"
+
+#. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
+msgid "close, to"
+msgstr "stänga, att"
+
+#. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
+msgid "commodity"
+msgstr "vara"
+
+#. "e.g. NASDAQ"
+msgid "commodity listing"
+msgstr "varulista"
+
+#. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
+msgid "commodity option: fraction"
+msgstr "varualternativ: post"
+
+#. "e.g. USD, DEM"
+msgid "commodity option: Symbol"
+msgstr "varualterativ: Symbol"
+
+#. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
+msgid "Credit (column in register)"
+msgstr "Kredit (kolumn i register)"
+
+#. "-"
+msgid "Credit Card"
+msgstr "Kreditkort"
+
+#. "A transfer of money direct from one bank account to another, without using a cheque"
+msgid "credit transfer"
+msgstr "överföring"
+
+#. "The system of money used in a country"
+msgid "currency"
+msgstr "valuta"
+
+#. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
+msgid "Custom"
+msgstr "Anpassat"
+
+#. "The backend where the data is stored."
+msgid "database"
+msgstr "databas"
+
+#. "A specific numbered day of the month"
+msgid "Date"
+msgstr "Datum"
+
+#. "DD/MM/YY or MM/DD/YY or something else"
+msgid "date format"
+msgstr "datumformat"
+
+#. "A range in time that is delimited by two distinct dates."
+msgid "date range"
+msgstr "datumintervall"
+
+#. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
+msgid "Debit (column in register)"
+msgstr "Debet (kolumn i register)"
+
+#. "Each option has a default setting that it is shipped with, until the user changes the setting."
+msgid "default"
+msgstr "standardvärde"
+
+#. "see credit"
+msgid "deposit (in the reconcile dialog)"
+msgstr "insättning (i avstämningsdialogen)"
+
+#. "The process of something becoming less valuable"
+msgid "depreciation"
+msgstr "avskrivning"
+
+#. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
+msgid "Description (column in register)"
+msgstr "Beskrivning (kolumn i register)"
+
+#. "Important Buzzword :)"
+msgid "double entry"
+msgstr "dubbel bokföring"
+
+#. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
+msgid "equity"
+msgstr "eget kapital"
+
+#. "The relation in value between the money used in different countries"
+msgid "exchange rate"
+msgstr "växelkurs"
+
+#. "in the account creation dialog??"
+msgid "field"
+msgstr "fält"
+
+#. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
+msgid "file"
+msgstr "fil"
+
+#. "-"
+msgid "file type"
+msgstr "filtyp"
+
+#. "-"
+msgid "financial calculator: interest rate"
+msgstr "finansiell miniräknare: räntesats"
+
+#. "see: payment"
+msgid "financial calculator: payments"
+msgstr "finansiell miniräknare: betalningar"
+
+#. "An increase in wealth; profit; advantage (See also: capital gains)"
+msgid "gain"
+msgstr "vinst"
+
+#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+msgid "imbalance"
+msgstr "obalans"
+
+#. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
+msgid "import"
+msgstr "import"
+
+#. "Money charged for borrowing money, or paid to somebody who invests money"
+msgid "interest"
+msgstr "ränta"
+
+#. "A list of goods sold or services provided together with the prices charged; a bill"
+msgid "invoice"
+msgstr "räkning"
+
+#. "A book in which a bank, business firm, etc. records its financial accounts"
+msgid "ledger"
+msgstr "liggare"
+
+#. "The heading for the right side of the balance sheet. See also: Equity."
+msgid "liabilities/equity"
+msgstr "skulder/eget kapital"
+
+#. "The money lost in business activity"
+msgid "loss"
+msgstr "förlust"
+
+#. "name of an automatically created account"
+msgid "Lost Accounts"
+msgstr "Tappade konton"
+
+#. "The thing that the scatter plot uses to mark each data point"
+msgid "marker"
+msgstr "markering"
+
+#. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
+msgid "MDI modus"
+msgstr "MDI-läge"
+
+#. "One textfield per split that should help you remember what this split was about."
+msgid "Memo"
+msgstr "Anteckning"
+
+#. "e.g. USD, DEM, see Currency."
+msgid "national currency"
+msgstr "nationell valuta"
+
+#. "(of money) remaining when nothing more is to be taken away"
+msgid "net"
+msgstr "netto"
+
+#. "net total of all assets"
+msgid "net assets"
+msgstr "nettotillgångar"
+
+#. "The total income minus the total expenses of a given time period."
+msgid "net profit"
+msgstr "nettoresultat"
+
+#. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
+msgid "net worth"
+msgstr "nettovärde"
+
+#. "One textfield per transaction that can hold explanatory text about the transaction."
+msgid "notes (register)"
+msgstr "anteckningar (register)"
+
+#. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
+msgid "Num (column in register)"
+msgstr "Nr (kolumn i register)"
+
+#. "to make accessible"
+msgid "open, to"
+msgstr "öppna, att"
+
+#. "If an account starts with a non-zero balance, then this amount is called the opening balance."
+msgid "opening balance"
+msgstr "ingående saldo"
+
+#. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
+msgid "options"
+msgstr "alternativ"
+
+# src/languages.h:184
+#. "Name of an automatically created account that holds splits that have no account."
+msgid "orphan"
+msgstr "föräldralös"
+
+#. "A secret phrase that one needs to know in order to get access to a user account "
+msgid "passphrase"
+msgstr "lösenfras"
+
+#. "An amount that must be paid / An amount for which money has not yet been received"
+msgid "Payables/Receivables"
+msgstr "Betalningar/Fordringar"
+
+#. "A person to whom sth is paid"
+msgid "payee"
+msgstr "betalningsmottagare"
+
+#. "A person who pays or who has to pay for sth"
+msgid "payer"
+msgstr "betalare"
+
+#. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
+msgid "payment"
+msgstr "betalning"
+
+#. "A set of investments owned by a person"
+msgid "portfolio"
+msgstr "portfölj"
+
+#. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
+msgid "preferences"
+msgstr "inställningar"
+
+#. "An amount of money for which sth may be bought or sold"
+msgid "price (in a split)"
+msgstr "pris (i en delning)"
+
+#. "An ask is an offer to sell, and the price you want to sell at."
+msgid "price type: ask"
+msgstr "pristyp: säljkurs"
+
+#. "A bid is an offer to buy, and the price you want to buy at."
+msgid "price type: bid"
+msgstr "pristyp: köpkurs"
+
+#. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
+msgid "price: quotes"
+msgstr "pris: kurser"
+
+#. "Money gained in business, esp. the difference between the amount earned and the amount spent"
+msgid "profit"
+msgstr "vinst"
+
+#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+msgid "Profit & Loss"
+msgstr "Vinst och förlust"
+
+#. "-"
+msgid "quick-fill"
+msgstr "snabbifyllning"
+
+#. "-"
+msgid "rebalance, to (a transaction)"
+msgstr "ombalansera, att (en transaktion)"
+
+#. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
+msgid "reconcile, to"
+msgstr "stämma av, att"
+
+#. "-"
+msgid "record keeping"
+msgstr "bokföring"
+
+#. "A list of items; a book containing such a list"
+msgid "register"
+msgstr "register"
+
+#. "A transaction that is divided into two or more parts"
+msgid "register entry: split transaction"
+msgstr "registerpost: delad transaktion"
+
+#. "-"
+msgid "register entry: stock split"
+msgstr "registerpost: aktiedelning"
+
+#. "one form of register"
+msgid "register: auto-split ledger"
+msgstr "register: autodelningsliggare"
+
+#. "another form of register"
+msgid "register: basic ledger"
+msgstr "register: grundläggande liggare"
+
+#. "another form of register"
+msgid "register: general ledger"
+msgstr "register: allmän liggare"
+
+#. "another form of register"
+msgid "register: transaction journal"
+msgstr "register: transaktionsjournal"
+
+#. "reload the current document"
+msgid "reload, to"
+msgstr "läs om, att"
+
+#. "name of an equity account (?); to be distinguished from the opening balance."
+msgid "Retained Earnings"
+msgstr "Balanserade vinstmedel"
+
+#. "To write data (typically a file) to a storage medium, such as a disk or tape."
+msgid "save, to (to a file)"
+msgstr "spara, att (till en fil)"
+
+#. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
+msgid "scrub, to"
+msgstr "städa upp, att"
+
+#. "A document or certificate showing who owns shares"
+msgid "security"
+msgstr "värdepapper"
+
+#. "-"
+msgid "Share Balance (register)"
+msgstr "Aktiebalans (register)"
+
+#. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
+msgid "shares"
+msgstr "aktier"
+
+#. "(of a price) A place wfrom which sth comes or is obtained"
+msgid "source"
+msgstr "källa"
+
+#. "One of the two or several parts a transaction is divided into"
+msgid "split"
+msgstr "del"
+
+#. "This sets the particular design or shape of a report."
+msgid "style sheet"
+msgstr "stilmall"
+
+#. "The total of a set of figures that are part of a larger group of figures"
+msgid "subtotal"
+msgstr "delsumma"
+
+#. "field of an account"
+msgid "tax info"
+msgstr "skatteinformation"
+
+#. "if you create a new e.g. style sheet, you can start from a template"
+msgid "template"
+msgstr "mall"
+
+#. "see: date range"
+msgid "time period"
+msgstr "tidsperiod"
+
+#. "as abbreviation for Total"
+msgid "Tot"
+msgstr "Tot"
+
+#. "The full number or amount: total of some balances, of any account's running balance etc."
+msgid "total"
+msgstr "totalsumma"
+
+# src/prefs.c:239
+#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+msgid "transaction"
+msgstr "transaktion"
+
+#. "-"
+msgid "transaction state: cleared"
+msgstr "transaktionstillstånd: godkänd"
+
+#. "-"
+msgid "transaction state: frozen"
+msgstr "transaktionstillstånd: frusen"
+
+#. "A transaction that was reconciled with the bank's statement."
+msgid "transaction state: reconciled"
+msgstr "transaktionstillstånd: avstämd"
+
+#. "1. The action of transferring sth. 2. see: credit transfer"
+msgid "transfer (noun)"
+msgstr "överföring (substantiv)"
+
+#. "The account where an amount is transferred to"
+msgid "transfer account"
+msgstr "överföringskonto"
+
+#. "To move money from one account to another. Will create a transaction."
+msgid "transfer, to (register toolbar)"
+msgstr "överföra, att (registerverktygsrad)"
+
+#. "A class or things that have characteristics in common; type of an account, of a commodity etc."
+msgid "type"
+msgstr "typ"
+
+#. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
+msgid "units"
+msgstr "enheter"
+
+#. "-"
+msgid "URL"
+msgstr "URL"
+
+#. "The worth of sth in terms of money or other commodities for which it can be exchanged"
+msgid "value (in a split)"
+msgstr "värde (i en delning)"
+
+#. "see debit"
+msgid "withdraw (in the reconcile dialog)"
+msgstr "uttag (i avstämningsdialogen)"
