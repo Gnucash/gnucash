@@ -1497,7 +1497,7 @@ when no longer needed.")
    "Lookup a price at time t.")
 
   ;;===========
-  ;; GNCBook
+  ;; GNCSession
 
   (gw:wrap-function
    mod

@@ -30,9 +30,9 @@
 #include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
-#include "gnc-session-p.h"
 #include "guid.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -47,11 +47,11 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
 /* allocation */
 GNCPrice *
-gnc_price_create (GNCSession *session)
+gnc_price_create (GNCBook *book)
 {
   GNCPrice *p;
 
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
 
   p = g_new0(GNCPrice, 1);
 
@@ -62,9 +62,9 @@ gnc_price_create (GNCSession *session)
   p->version = 0;
   p->version_check = 0;
 
-  p->entity_table = gnc_session_get_entity_table (session);
+  p->entity_table = gnc_book_get_entity_table (book);
 
-  xaccGUIDNew (&p->guid, session);
+  xaccGUIDNew (&p->guid, book);
   xaccStoreEntity (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
 
@@ -115,18 +115,18 @@ gnc_price_unref(GNCPrice *p)
 /* ==================================================================== */
 
 GNCPrice *
-gnc_price_clone (GNCPrice* p, GNCSession *session)
+gnc_price_clone (GNCPrice* p, GNCBook *book)
 {
   /* the clone doesn't belong to a PriceDB */
   GNCPrice *new_p;
 
   ENTER ("pr=%p", p);
 
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
 
   if(!p) return NULL;
 
-  new_p = gnc_price_create(session);
+  new_p = gnc_price_create(book);
   if(!new_p) return NULL;
 
   new_p->version = p->version;
@@ -370,11 +370,11 @@ gnc_price_set_version(GNCPrice *p, gint32 vers)
 /* getters */
 
 GNCPrice *
-gnc_price_lookup (const GUID *guid, GNCSession *session)
+gnc_price_lookup (const GUID *guid, GNCBook *book)
 {
   if (!guid) return NULL;
-  g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (gnc_session_get_entity_table (session),
+  g_return_val_if_fail (book, NULL);
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
                            guid, GNC_ID_PRICE);
 }
 

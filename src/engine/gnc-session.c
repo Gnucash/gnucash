@@ -119,7 +119,7 @@ gnc_session_init (GNCSession *session)
 {
   if (!session) return;
 
-  session->book = gnc_book_new (session);
+  session->book = gnc_book_new ();
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
@@ -374,7 +374,7 @@ gnc_session_load (GNCSession *session)
   xaccLogDisable();
 
   gnc_book_destroy (session->book);
-  session->book = gnc_book_new (session);
+  session->book = gnc_book_new ();
 
   xaccLogSetBaseName(session->logpath);
   xaccLogEnable();
