@@ -1,5 +1,26 @@
 2002-07-24  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/ledger-core/gnc-ledger-display.c
+	(gnc_ledger_display_gl): Added filter for template
+	transaction-accounts to General Ledger, fixing Bug 86302.
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Changed wording to fix half of Bug 87622 [the other half being
+	unreproducible :(].
+
+	* src/gnome/dialog-sx-from-trans.c (sxftd_update_fs): Add support
+	for Bi-Weekly to be part of the pull-down; fixes half of
+	Bug 88178.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecGetWeekly): Keep the returned
+	day-of-week within reasonable bounds.
+	(xaccFreqSpecGetFreqStr): s/Anually/Yearly/ [sic] - Bug 88176.
+
+	* src/gnome/glade/sched-xact.glade: Dead-UI
+	removal. s/Anually/Yearly/ [sic] - Fixes Bug 88176.
+
+2002-07-24  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/scm/fin.scm: Made the exposed calcualtion functions output
 	positive values.
 

@@ -591,9 +591,10 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 if ( unbalanceable
                      && !gnc_verify_dialog_parented( sxed->dialog, FALSE,
                                                      "%s",
-                                                     _("This transaction "
-                                                       "appears unbalancable, "
-                                                       "should it still be "
+                                                     _("The Scheduled Transaction Editor "
+                                                       "cannot automatically\nbalance "
+                                                       "this transaction. "
+                                                       "Should it still be "
                                                        "created?") ) ) {
                         return FALSE;
                 }
@@ -633,7 +634,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 g_free( name );
                 if ( nameHasChanged && nameExists ) {
                         const char *sx_has_existing_name_msg =
-                                _( "A Scheduled Transaction with this "
+                                _( "A Scheduled Transaction with the "
                                    "name \"%s\" already exists.\n"
                                    "Are you sure you want to name "
                                    "this one the same?" );

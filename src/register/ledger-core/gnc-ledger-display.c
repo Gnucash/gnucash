@@ -410,7 +410,6 @@ gnc_ledger_display_subaccounts (Account *account)
 				      FALSE);
 }
 
-
 /* Opens up a general ledger window. */
 GNCLedgerDisplay *
 gnc_ledger_display_gl (void)
@@ -423,18 +422,31 @@ gnc_ledger_display_gl (void)
 
   xaccQuerySetBook (query, gnc_get_current_book());
 
+  /* In lieu of not "mis-using" some portion of the infrastructure by writing
+   * a bunch of new code, we just filter out the accounts of the template
+   * transactions.  While these are in a seperate AccountGroup just for this
+   * reason, the query engine makes no distinction between AccountGroups.
+   * See Gnome Bug 86302.
+   * 	-- jsled */
+  {
+    AccountGroup *tAG;
+    AccountList *al;
+    
+    tAG = gnc_book_get_template_group( gnc_get_current_book() );
+    al = xaccGroupGetSubAccounts( tAG );
+    xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QUERY_AND );
+    al = NULL;
+    tAG = NULL;
+  }
+
   start = time (NULL);
-
   tm = localtime (&start);
-
   tm->tm_mon--;
   tm->tm_hour = 0;
   tm->tm_min = 0;
   tm->tm_sec = 0;
   tm->tm_isdst = -1;
-
   start = mktime (tm);
-
   xaccQueryAddDateMatchTT (query, 
                            TRUE, start, 
                            FALSE, 0, 

@@ -650,7 +650,7 @@ xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek )
         if ( fs->type != WEEKLY )
                 return -1;
         *outRepeat = fs->s.weekly.interval_weeks;
-        *outDayOfWeek = fs->s.weekly.offset_from_epoch;
+        *outDayOfWeek = fs->s.weekly.offset_from_epoch % 7;
         return 0;
 }
 
@@ -872,13 +872,13 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         case UIFREQ_TRI_ANUALLY:
 
                 if ( fs->s.monthly.interval_months != 4 ) {
-                        g_string_sprintf( str, _("Tri-Annually (x%u): %u"),
+                        g_string_sprintf( str, _("Tri-Yearly (x%u): %u"),
 					  fs->s.monthly.interval_months/4,
 					  fs->s.monthly.day_of_month);
                 }
 		else
 		{
-                g_string_sprintf( str, _("Tri-Anually: %u"),
+                g_string_sprintf( str, _("Tri-Yearly: %u"),
                                    fs->s.monthly.day_of_month );
 		}
                 break;

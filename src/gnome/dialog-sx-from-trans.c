@@ -62,10 +62,11 @@ typedef enum {NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END} endType;
 typedef enum {FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
                                 * the numeric equivalences explicitly here
 				*/
-	      FREQ_WEEKLY, 
+	      FREQ_WEEKLY,
+              FREQ_BIWEEKLY,
 	      FREQ_MONTHLY, 
 	      FREQ_QUARTERLY,
-              FREQ_ANNUALLY} SxftiFreqType;
+              FREQ_ANNUALLY } SxftiFreqType;
 
 typedef struct
 {
@@ -256,6 +257,14 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     xaccFreqSpecSetWeekly(tmpfs, date, 1);
     xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
     xaccFreqSpecCompositeAdd(fs,tmpfs);
+    break;
+
+  case FREQ_BIWEEKLY:
+    tmpfs = xaccFreqSpecMalloc( gnc_get_current_book() );
+    xaccFreqSpecSetComposite( fs );
+    xaccFreqSpecSetWeekly( tmpfs, date, 2 );
+    xaccFreqSpecSetUIType( fs, UIFREQ_WEEKLY );
+    xaccFreqSpecCompositeAdd( fs, tmpfs );
     break;
 
   case FREQ_MONTHLY:
