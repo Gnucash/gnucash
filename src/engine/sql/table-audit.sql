@@ -88,6 +88,12 @@ CREATE TABLE gncTransactionTrail (
 
 CREATE INDEX gncTransactionTrail_trans_idx ON gncTransactionTrail (transGuid);
 
+CREATE TABLE gncKVPvalueTrail (
+	iguid		INT4,
+	ipath		INT4,
+	type		char(4)
+) INHERITS (gncAuditTrail);
+
 CREATE TABLE gncKVPvalue_int64Trail (
 	iguid		INT4,
 	ipath		INT4,

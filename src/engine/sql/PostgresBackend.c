@@ -1778,7 +1778,7 @@ pgend_account_commit_edit (Backend * bend,
    }
 
    p = "COMMIT;";
-   SEND_QUERY (be,p,333);
+   SEND_QUERY (be,p,336);
    FINISH_QUERY(be->connection);
 
    /* Mark this up so that we don't get that annoying gui dialog
@@ -1867,7 +1867,7 @@ pgend_trans_commit_edit (Backend * bend,
    pgendStoreTransactionNoLock (be, trans, FALSE);
 
    bufp = "COMMIT;";
-   SEND_QUERY (be,bufp,333);
+   SEND_QUERY (be,bufp,334);
    FINISH_QUERY(be->connection);
 
    /* hack alert -- the following code will get rid of that annoying
@@ -1951,7 +1951,7 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
    }
 
    bufp = "COMMIT;";
-   SEND_QUERY (be,bufp,333);
+   SEND_QUERY (be,bufp,335);
    FINISH_QUERY(be->connection);
 
    if (pr->db) pr->db->dirty = FALSE;

@@ -213,6 +213,9 @@ access).
    recordCB()->xaccSRRedrawReg().  As above, this is performance 
    problem waiting to aggravate.
 
+-- minor optimization: KVP's for null strings store null strings, 
+   this is a waste of time. This occurs primarily for transaction 
+   memos, I think.
 
 To Be Done, Part II
 -------------------
