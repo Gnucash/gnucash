@@ -152,6 +152,23 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 /* ================================================ */
 
 void
+xaccDestroyQuickFillCell (QuickFillCell *cell)
+{
+   xaccFreeQuickFill (cell->qfRoot);
+   cell->qfRoot = NULL;
+   cell->qf = NULL;
+
+   cell->cell.enter_cell    = NULL;
+   cell->cell.modify_verify = NULL;
+   cell->cell.leave_cell    = NULL;
+   cell->cell.set_value     = NULL;
+
+   xaccDestroyBasicCell (&(cell->cell));
+}
+
+/* ================================================ */
+
+void
 xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 {
    xaccQFInsertText (cell->qfRoot, value);
