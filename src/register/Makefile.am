@@ -6,6 +6,7 @@ libgncregister_a_SOURCES = \
   basiccell.c \
   cellblock.c \
   datecell.c \
+  gtable.c \
   numcell.c \
   pricecell.c \
   quickfillcell.c \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
   cellblock.h \
   combocell.h \
   datecell.h \
+  gtable.h \
   numcell.h \
   pricecell.h \
   quickfillcell.h \

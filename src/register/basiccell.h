@@ -244,7 +244,6 @@ typedef char * (*CellGetHelpFunc) (BasicCell *);
 struct _BasicCell
 {
   /* cell attributes */
-  /* hack alert -- may want to redesign color to use named color strings. */
   guint32 bg_color;       /* background color, ARGB format */
   guint32 fg_color;       /* forground (text) color ARGB format */
 
@@ -255,7 +254,7 @@ struct _BasicCell
   char * blank_help;     /* help when value is blank */
 
   guint32 changed;       /* 2^32-1 if value modified */
-  guint8  input_output;  /* zero if output-only */
+  guint8  input_output;  /* allowed behavior flags */
 
   /* "virtual", overloaded set-value method */
   CellSetValueFunc set_value;
@@ -279,14 +278,14 @@ struct _BasicCell
 
 
 BasicCell *  xaccMallocBasicCell (void);
-void         xaccInitBasicCell (BasicCell *);
-void         xaccDestroyBasicCell (BasicCell *);
+void         xaccInitBasicCell (BasicCell *bcell);
+void         xaccDestroyBasicCell (BasicCell *bcell);
 
-void         xaccSetBasicCellValue (BasicCell *, const char *);
-void         xaccSetBasicCellBlankHelp (BasicCell *, const char *);
-char *       xaccBasicCellGetHelp (BasicCell *);
+void         xaccSetBasicCellValue (BasicCell *bcell, const char *value);
 
-void         xaccBasicCellSetChanged (BasicCell *, gboolean);
+void         xaccSetBasicCellBlankHelp (BasicCell *bcell, const char *help);
+char *       xaccBasicCellGetHelp (BasicCell *bcell);
+
+void         xaccBasicCellSetChanged (BasicCell *bcell, gboolean changed);
 
 #endif /* __BASIC_CELL_H__ */
-/* ------------------ end of file ---------------------- */

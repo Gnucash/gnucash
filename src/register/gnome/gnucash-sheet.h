@@ -68,7 +68,6 @@ typedef struct
         gint width;
 
         /* per cell parameters */
-        
         gint **pixel_heights;    /* in pixels, may be zero if
                                     row/column not displayed */
         gint **pixel_widths;
@@ -78,7 +77,6 @@ typedef struct
 
         gint nrows, ncols;
         gint refcount;
-        
 } CellDimensions;
 
 typedef struct
@@ -94,11 +92,8 @@ typedef struct
 
         gchar ***labels;              /* for the header */
         GdkFont *header_font;          
-        
-        GtkJustification **alignments;
 
-        /* per cell fonts;  if NULL, use the grid normal font */
-        GdkFont ***fonts;
+        GtkJustification **alignments;
 
         GdkColor ***active_bg_color;
         GdkColor ***inactive_bg_color;

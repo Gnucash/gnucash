@@ -61,94 +61,96 @@
 
 #include "basiccell.h"
 
-enum _Alignments {
-  ALIGN_RIGHT,
-  ALIGN_CENTER,
-  ALIGN_LEFT,
-  ALIGN_FILL,
-};
+#include "gtable.h"
 
-typedef enum _Alignments Alignments;
 
-struct _CellBlock {
+typedef enum
+{
+  CELL_ALIGN_RIGHT,
+  CELL_ALIGN_CENTER,
+  CELL_ALIGN_LEFT,
+  CELL_ALIGN_FILL,
+} CellAlignment;
 
-  short numRows;
-  short numCols;
+typedef struct
+{
+  BasicCell *cell; /* cell handler */
+  short cell_type; /* cell type from splitreg.h */
 
-  /* The array "cells" of pointers to cells has dimensions of numRows*numCols.
-   * It is automatically created and managed by the routines below.
-   * It contains pointers to the cell handlers that are a part of
-   * this "block".
-   */
-  BasicCell ***cells;  /* row-col array */
+  /* GUI layout information */
+  char *sample_text; /* sample text for sizing purposes */
+  CellAlignment alignment;
+  gboolean resizable;
+} CellBlockCell;
 
-  short **cell_types;  /* row-col array of the cell types in splitreg.h */
+typedef struct
+{
+  short right_traverse_row;
+  short right_traverse_col;
+  short left_traverse_row;
+  short left_traverse_col;
+} CellTraverseInfo;
+
+typedef struct
+{
+  short num_rows;
+  short num_cols;
+
+  GTable *cb_cells; /* Holds the CellBlockCell data */
 
   /* The active_bg_color is the default color (in argb) for the cell
-   * backgrounds when this cell block needs to be "highlighted" in 
-   * some way (typically, when this cellblock represents the
-   * the currently active cursor).
+   * backgrounds when this cell block needs to be "highlighted" in
+   * some way (typically, when this cellblock represents the the
+   * currently active cursor).
    *
    * The passive_bg_color is the default color for the cell background
    * (in argb format) of the first row when the cell block is not highlighted.
    *
    * The passive_bg_color2 is the default color for cell backgrounds
-   * in other rows of the cellblock when it is not highlighted.
-   */
+   * in other rows of the cellblock when it is not highlighted.  */
   guint32 active_bg_color;
   guint32 passive_bg_color;
   guint32 passive_bg_color2;
 
-  /* other attributes */
-  Alignments *alignments;    /* column text alignments */
-
-  short     **right_traverse_r;
-  short     **right_traverse_c;
-  short     **left_traverse_r;
-  short     **left_traverse_c;
-  short     right_exit_r;
-  short     right_exit_c;
-  short     left_exit_r;
-  short     left_exit_c;
-  /* the above arrays have dimension of numRows*numCols.
-   * the are automatically created and managed by the routines below.
-   * The control the tab-traversal order through this cell block.
-   * If the cell (i,j) has input-focus, then hitting the tab key
-   * on the keyboard will take input-focus to cell (inext,jnext), where
-   * inext = right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
+  /* The traverse and exit information is automatically created and
+   * managed by the routines below. They control the tab-traversal
+   * order through this cell block. If the cell (i,j) has
+   * input-focus, then hitting the tab key on the keyboard will take
+   * input-focus to cell (inext,jnext), where inext =
+   * right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
    *
-   *  (exit_r, exit_c) is the last cell of this tab group.
-   */
+   *  (*_exit_r, *_exit_c) is the last cell of this tab group. */
+  GTable *traverse_info;
 
-  /* the last-reenter row and column should contain the very last
-   * cell when the cursor was traversed out of.  They determine 
-   * the first cell that will be entered (since the first follows 
-   * the last).
-   */
+  /* the last-reenter row and column should contain the very last cell
+   * when the cursor was traversed out of.  They determine the first
+   * cell that will be entered (since the first follows the last).  */
   short last_reenter_traverse_row;
   short last_reenter_traverse_col;
 
   short last_left_reenter_traverse_row;
   short last_left_reenter_traverse_col;
 
-  void * user_data;
-  /* above is a pointer to anything the programmer-user of this struct
-   * wants it to be.  Handy for stuff. */
-};
+  void * user_data; /* for user code use */
+} CellBlock;
 
-typedef struct _CellBlock CellBlock;
 
-CellBlock * xaccMallocCellBlock (int numrows, int numcols);
-void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
-void        xaccDestroyCellBlock (CellBlock *);
+CellBlock * gnc_cellblock_new (int rows, int cols);
+void        gnc_cellblock_destroy (CellBlock *cellblock);
+
+CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
+                                        int row, int col);
+
+CellTraverseInfo * gnc_cellblock_get_traverse (CellBlock *cellblock,
+                                               int row, int col);
 
 /* define next cell to traverse to */
-void        xaccNextRight (CellBlock *cellblock,
-                           int row,      int col,
-                           int next_row, int next_col);
+void gnc_cellblock_next_right (CellBlock *cellblock,
+                               int row,      int col,
+                               int next_row, int next_col);
 
-void        xaccNextLeft (CellBlock *cellblock,
-                          int row,      int col,
-                          int next_row, int next_col);
+void gnc_cellblock_next_left  (CellBlock *cellblock,
+                               int row,      int col,
+                               int next_row, int next_col);
 
 #endif /* __XACC_CELL_BLOCK_H__ */

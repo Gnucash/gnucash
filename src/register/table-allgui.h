@@ -106,6 +106,7 @@
 
 #include "basiccell.h"
 #include "cellblock.h"
+#include "gtable.h"
 
 
 typedef enum {
@@ -215,8 +216,8 @@ struct _Table
   /* This is black-box stuff that higher-level code should not access */
 
   /* The virtual and physical cell information */
-  GPtrArray *virt_cells;
-  GPtrArray *phys_cells;
+  GTable *virt_cells;
+  GTable *phys_cells;
 
   /* This class implements tab-key and arrow key traversal through the
    * cells of the table. To perform this traversal, the location of

@@ -1640,7 +1640,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                         new_phys_loc.phys_row =
                                 MAX(cur_phys_loc.phys_row -
                                     (sheet->bottom_block - sheet->top_block),
-                                    header->numRows);
+                                    header->num_rows);
 			break;
                 case GDK_KP_Page_Down:
 		case GDK_Page_Down:
@@ -1656,7 +1656,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 			direction = GNC_TABLE_TRAVERSE_UP;
 			new_phys_loc.phys_col = cur_phys_loc.phys_col;
 			new_phys_loc.phys_row = MAX(cur_phys_loc.phys_row - 1,
-                                                    header->numRows);
+                                                    header->num_rows);
 			break;
                 case GDK_KP_Down:
 		case GDK_Down:
@@ -2120,16 +2120,13 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                                 text = gnucash_sheet_block_get_text (sheet,
                                                                      virt_loc);
 
-                                if (style->fonts[cell_row][cell_col])
-                                        font = style->fonts[cell_row][cell_col];
-                                else
-                                        font = GNUCASH_GRID(sheet->grid)->normal_font;
+                                font = GNUCASH_GRID(sheet->grid)->normal_font;
 
                                 if (!text || strlen(text) == 0) {
                                         text = style->labels[cell_row][cell_col];
                                         font = style->header_font;
                                 }
-                                
+
                                 width = gdk_string_measure (font, text) + 2*CELL_HPADDING;
                                 max = MAX (max, width);
                         }

@@ -31,260 +31,257 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#include <stdlib.h>
 #include "cellblock.h"
+
+static void gnc_cellblock_init (CellBlock *cellblock, int rows, int cols);
+
 
 /* =================================================== */
 
 CellBlock *
-xaccMallocCellBlock (int numrows, int numcols)
+gnc_cellblock_new (int rows, int cols)
 {
+  CellBlock *cellblock;
 
-   CellBlock *cellblock;
+  cellblock = g_new0(CellBlock, 1);
 
-   cellblock = g_new(CellBlock, 1);
+  gnc_cellblock_init (cellblock, rows, cols);
 
-   cellblock->numRows = 0;
-   cellblock->numCols = 0;
+  return cellblock;
+}
 
-   cellblock->active_bg_color   = 0xffffff; /* white */
-   cellblock->passive_bg_color  = 0xffffff; /* white */
-   cellblock->passive_bg_color2 = 0xffffff; /* white */
+/* =================================================== */
 
-   cellblock->user_data = NULL;
-   cellblock->cells = NULL;
-   cellblock->cell_types = NULL;
-   cellblock->right_traverse_r = NULL;
-   cellblock->right_traverse_c = NULL;
-   cellblock->left_traverse_r = NULL;
-   cellblock->left_traverse_c = NULL;
-   cellblock->alignments = NULL;
+static gpointer
+gnc_cellblock_cell_new (void)
+{
+  CellBlockCell *cb_cell;
 
-   xaccInitCellBlock (cellblock, numrows, numcols);
+  cb_cell = g_new0(CellBlockCell, 1);
 
-   return cellblock;
+  cb_cell->cell_type = -1;
+  cb_cell->alignment = CELL_ALIGN_LEFT;
+  cb_cell->resizable = TRUE;
+
+  return cb_cell;
+}
+
+/* =================================================== */
+
+static void
+gnc_cellblock_cell_free (gpointer _cb_cell)
+{
+  CellBlockCell *cb_cell = _cb_cell;
+
+  if (cb_cell == NULL)
+    return;
+
+  g_free(cb_cell->sample_text);
+  cb_cell->sample_text = NULL;
+
+  g_free(cb_cell);
+
+  return;
+}
+
+/* =================================================== */
+
+static gpointer
+gnc_cell_traverse_info_new (void)
+{
+  CellTraverseInfo *ct_info;
+
+  ct_info = g_new0(CellTraverseInfo, 1);
+
+  return ct_info;
+}
+
+/* =================================================== */
+
+static void
+gnc_cell_traverse_info_free (gpointer ct_info)
+{
+  g_free (ct_info);
 }
 
 /* =================================================== */
 
 static void        
-FreeCellBlockMem (CellBlock *cellblock)
+gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
 {
-   int oldrows, oldcols;
-   int i;
+  CellTraverseInfo *ct_info;
+  int row, col;
 
-   oldrows = cellblock->numRows;
-   oldcols = cellblock->numCols;
+  if (!cellblock) return;
 
-   /* free cell array, if any */
-   if (cellblock->cells)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->cells[i]);
-      g_free (cellblock->cells);
-      cellblock->cells = NULL;
-   }
+  /* init colors */
+  cellblock->active_bg_color   = 0xffffff; /* white */
+  cellblock->passive_bg_color  = 0xffffff; /* white */
+  cellblock->passive_bg_color2 = 0xffffff; /* white */
 
-   /* free cell type array, if any */
-   if (cellblock->cell_types)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->cell_types[i]);
-      g_free (cellblock->cell_types);
-      cellblock->cell_types = NULL;
-   }
+  /* record new size */
+  cellblock->num_rows = rows;
+  cellblock->num_cols = cols;
 
-   /* free right traversal chain */
-   if (cellblock->right_traverse_r)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->right_traverse_r[i]);
-      g_free(cellblock->right_traverse_r);
-      cellblock->right_traverse_r = NULL;
-   }
-   if (cellblock->right_traverse_c)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->right_traverse_c[i]);
-      g_free(cellblock->right_traverse_c);
-      cellblock->right_traverse_c = NULL;
-   }
+  /* malloc new cell table */
+  cellblock->cb_cells = g_table_new (gnc_cellblock_cell_new,
+                                     gnc_cellblock_cell_free);
+  g_table_resize (cellblock->cb_cells, rows, cols);
 
-   /* free left traversal chain */
-   if (cellblock->left_traverse_r)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->left_traverse_r[i]);
-      g_free(cellblock->left_traverse_r);
-      cellblock->left_traverse_r = NULL;
-   }
-   if (cellblock->left_traverse_c)
-   {
-      for (i = 0; i < oldrows; i++)
-        g_free (cellblock->left_traverse_c[i]);
-      g_free(cellblock->left_traverse_c);
-      cellblock->left_traverse_c = NULL;
-   }
+  /* malloc new traversal table */
+  cellblock->traverse_info = g_table_new (gnc_cell_traverse_info_new,
+                                          gnc_cell_traverse_info_free);
+  g_table_resize (cellblock->traverse_info, rows, cols);
 
-   /* free alignments */
-   g_free (cellblock->alignments);
-   cellblock->alignments = NULL;
+  for (row = 0; row < rows; row++)
+  {
+    for (col = 0; col < cols; col++)
+    {
+      ct_info = g_table_index (cellblock->traverse_info, row, col);
+
+      /* default right traversal is same row, next column */
+      ct_info->right_traverse_row = row;
+      ct_info->right_traverse_col = col + 1;
+
+      /* default left traversal is same row, previous column */
+      ct_info->left_traverse_row = row;
+      ct_info->left_traverse_col = col - 1;
+    }
+
+    /* at end of row, wrap to next row */
+    ct_info = g_table_index (cellblock->traverse_info, row, cols - 1);
+    ct_info->right_traverse_row = row + 1;
+    ct_info->right_traverse_col = 0;
+
+    /* at start of row, wrap to previous row */
+    ct_info = g_table_index (cellblock->traverse_info, row, 0);
+    ct_info->left_traverse_row = row - 1;
+    ct_info->left_traverse_col = cols - 1;
+  }
+
+  /* at end of block, wrap back to begining */
+  ct_info = g_table_index (cellblock->traverse_info, rows - 1, cols - 1);
+  ct_info->right_traverse_row = 0;
+  ct_info->right_traverse_col = 0;
+
+  /* at start of block, wrap back to end */
+  ct_info = g_table_index (cellblock->traverse_info, 0, 0);
+  ct_info->left_traverse_row = rows - 1;
+  ct_info->left_traverse_col = cols - 1;
+
+  /* last is last ... */
+  cellblock->last_reenter_traverse_row = rows - 1;
+  cellblock->last_reenter_traverse_col = cols - 1;
+
+  /* first is last ... */
+  cellblock->last_left_reenter_traverse_row = 0;
+  cellblock->last_left_reenter_traverse_col = 0;
 }
 
 /* =================================================== */
 
 void        
-xaccInitCellBlock (CellBlock *cellblock, int numrows, int numcols)
-{
-   int i, j;
-
-   if (!cellblock) return;
-
-   FreeCellBlockMem (cellblock);
-
-   /* record new size */
-   cellblock->numRows = numrows;
-   cellblock->numCols = numcols;
-
-   /* malloc new cell array */
-   cellblock->cells = g_new(BasicCell **, numrows);
-   cellblock->cell_types = g_new(short *, numrows);
-   for (i = 0; i < numrows; i++) {
-      (cellblock->cells)[i] = g_new(BasicCell *, numcols);
-      (cellblock->cell_types)[i] = g_new(short, numcols);
-      for (j=0; j<numcols; j++) {
-         (cellblock->cells)[i][j] = NULL;
-         (cellblock->cell_types)[i][j] = -1;         
-      }
-   }
-
-   /* malloc new right traversal arrays */
-   cellblock->right_traverse_r = g_new(short *, numrows);
-   cellblock->right_traverse_c = g_new(short *, numrows);
-   for (i = 0; i < numrows; i++) {
-      (cellblock->right_traverse_r)[i] = g_new(short, numcols);
-      (cellblock->right_traverse_c)[i] = g_new(short, numcols);
-      for (j = 0; j < numcols - 1; j++) {
-         /* default traversal is same row, next column */
-         (cellblock->right_traverse_r)[i][j] = i;
-         (cellblock->right_traverse_c)[i][j] = j+1;
-      }
-      /* at end of row, wrap to next row */
-      (cellblock->right_traverse_r)[i][numcols-1] = i+1;
-      (cellblock->right_traverse_c)[i][numcols-1] = 0;
-   }
-   /* at end of block, wrap back to begining */
-   (cellblock->right_traverse_r)[numrows-1][numcols-1] = 0;
-   (cellblock->right_traverse_c)[numrows-1][numcols-1] = 0;
-
-   /* last is last ... */
-   cellblock->last_reenter_traverse_row = numrows - 1;
-   cellblock->last_reenter_traverse_col = numcols - 1;
-
-   /* malloc new left traversal arrays */
-   cellblock->left_traverse_r = g_new(short *, numrows);
-   cellblock->left_traverse_c = g_new(short *, numrows);
-   for (i = 0; i < numrows; i++) {
-      (cellblock->left_traverse_r)[i] = g_new(short, numcols);
-      (cellblock->left_traverse_c)[i] = g_new(short, numcols);
-      for (j = 0; j < numcols-1; j++) {
-         /* default traversal is same row, previous column */
-         (cellblock->left_traverse_r)[i][j] = i;
-         (cellblock->left_traverse_c)[i][j] = j-1;
-      }
-      /* at start of row, wrap to previous row */
-      (cellblock->left_traverse_r)[i][numcols-1] = i-1;
-      (cellblock->left_traverse_c)[i][numcols-1] = numcols-1;
-   }
-   /* at start of block, wrap back to end */
-   (cellblock->right_traverse_r)[0][0] = numrows-1;
-   (cellblock->right_traverse_c)[0][0] = numcols-1;
-
-   /* first is last ... */
-   cellblock->last_left_reenter_traverse_row = 0;
-   cellblock->last_left_reenter_traverse_col = 0;
-
-   cellblock->alignments = g_new(Alignments, numcols);
-
-   for (j = 0; j < numcols; j++)
-      cellblock->alignments[j] = ALIGN_RIGHT;
-}
-
-/* =================================================== */
-
-void        
-xaccDestroyCellBlock (CellBlock *cellblock)
+gnc_cellblock_destroy (CellBlock *cellblock)
 {
    if (!cellblock) return;
 
-   FreeCellBlockMem (cellblock);
+   g_table_destroy (cellblock->cb_cells);
+   cellblock->cb_cells = NULL;
 
-   /* finally, free this object itself */
+   g_table_destroy (cellblock->traverse_info);
+   cellblock->traverse_info = NULL;
+
    g_free (cellblock);
 }
 
 /* =================================================== */
 
-void        
-xaccNextRight (CellBlock *cellblock,
-               int row,      int col, 
-               int next_row, int next_col)
+CellBlockCell *
+gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
 {
-   if (!cellblock) return;
+  if (cellblock == NULL)
+    return NULL;
 
-   /* avoid embarrasement if cell incorrectly specified */
-   if ((0 > row) || (0 > col)) return;
-   if ((row >= cellblock->numRows) || (col >= cellblock->numCols)) return;
-
-   /* -1 is a valid value for next ... it signifies that traversal
-    * should go to next tab group, so do not check for neg values.
-    */
-
-   /* if the "next" location to hop to is larger than the cursor, that
-    * just means that we should hop to the next cursor.  Thus, large
-    * values for next *are* valid.
-    */
-
-   (cellblock->right_traverse_r)[row][col] = next_row;
-   (cellblock->right_traverse_c)[row][col] = next_col;
-
-   /* if traversing out (neg values) record this as the last ... */
-   if ((0 > next_row) || (0 > next_col)) {
-      cellblock->last_reenter_traverse_row = row;
-      cellblock->last_reenter_traverse_col = col;
-   }
-
+  return g_table_index (cellblock->cb_cells, row, col);
 }
 
+/* =================================================== */
+
+CellTraverseInfo *
+gnc_cellblock_get_traverse (CellBlock *cellblock, int row, int col)
+{
+  if (cellblock == NULL)
+    return NULL;
+
+  return g_table_index (cellblock->traverse_info, row, col);
+}
+
+/* =================================================== */
 
 void        
-xaccNextLeft (CellBlock *cellblock, int row,      int col, 
-                              int next_row, int next_col)
+gnc_cellblock_next_right (CellBlock *cellblock,
+                          int row,      int col, 
+                          int next_row, int next_col)
 {
-   if (!cellblock) return;
+  CellTraverseInfo *ct_info;
 
-   /* avoid embarrasement if cell incorrectly specified */
-   if ((0 > row) || (0 > col)) return;
-   if ((row >= cellblock->numRows) || (col >= cellblock->numCols)) return;
+  if (!cellblock) return;
 
-   /* -1 is a valid value for next ... it signifies that traversal
-    * should go to next tab group, so do not check for neg values.
-    */
+  /* avoid embarrasement if cell incorrectly specified */
+  if ((0 > row) || (0 > col)) return;
+  if ((row >= cellblock->num_rows) || (col >= cellblock->num_cols)) return;
 
-   /* if the "next" location to hop to is larger than the cursor, that
-    * just means that we should hop to the next cursor.  Thus, large
-    * values for next *are* valid.
-    */
+  ct_info = gnc_cellblock_get_traverse (cellblock, row, col);
 
-   (cellblock->left_traverse_r)[row][col] = next_row;
-   (cellblock->left_traverse_c)[row][col] = next_col;
+  /* -1 is a valid value for next_*, signifying that traversal should
+   * go to next tab group, so do not check for neg values.  */
 
-   /* if traversing out (neg values) record this as the last ... */
-   if ((0 > next_row) || (0 > next_col)) {
-      cellblock->last_left_reenter_traverse_row = row;
-      cellblock->last_left_reenter_traverse_col = col;
-   }
+  /* if the "next" location to hop to is larger than the cursor, that
+   * just means that we should hop to the next cursor.  Thus, large
+   * values for next *are* valid.  */
 
+  ct_info->right_traverse_row = next_row;
+  ct_info->right_traverse_col = next_col;
+
+  /* if traversing out (neg values) record this as the last ... */
+  if ((0 > next_row) || (0 > next_col))
+  {
+    cellblock->last_reenter_traverse_row = row;
+    cellblock->last_reenter_traverse_col = col;
+  }
+}
+
+void        
+gnc_cellblock_next_left (CellBlock *cellblock,
+                         int row,      int col, 
+                         int next_row, int next_col)
+{
+  CellTraverseInfo *ct_info;
+
+  if (!cellblock) return;
+
+  /* avoid embarrasement if cell incorrectly specified */
+  if ((0 > row) || (0 > col)) return;
+  if ((row >= cellblock->num_rows) || (col >= cellblock->num_cols)) return;
+
+  ct_info = gnc_cellblock_get_traverse (cellblock, row, col);
+
+  /* -1 is a valid value for next ... it signifies that traversal
+   * should go to next tab group, so do not check for neg values.  */
+
+  /* if the "next" location to hop to is larger than the cursor, that
+   * just means that we should hop to the next cursor.  Thus, large
+   * values for next *are* valid.  */
+
+  ct_info->left_traverse_row = next_row;
+  ct_info->left_traverse_col = next_col;
+
+  /* if traversing out (neg values) record this as the last ... */
+  if ((0 > next_row) || (0 > next_col))
+  {
+    cellblock->last_left_reenter_traverse_row = row;
+    cellblock->last_left_reenter_traverse_col = col;
+  }
 }
 
 /* --------------- end of file ----------------- */

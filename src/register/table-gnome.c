@@ -78,7 +78,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
-        sr = (SplitRegister *) data;
+        sr = data;
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);

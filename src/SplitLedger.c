@@ -3069,7 +3069,7 @@ xaccSRCountRows (SplitRegister *reg,
     * +p   where p is the sum total of all the splits in the transaction
     * +2   an editable transaction and split at the end.
     */
-   num_phys_rows = reg->header->numRows;
+   num_phys_rows = reg->header->num_rows;
    num_virt_rows = 1;
 
    /* Look for the transaction split */
@@ -3153,13 +3153,13 @@ xaccSRCountRows (SplitRegister *reg,
 
             /* add one row for a transaction */
             num_virt_rows ++;
-            num_phys_rows += reg->trans_cursor->numRows; 
+            num_phys_rows += reg->trans_cursor->num_rows; 
 
             /* Add a row for each split, minus one, plus one.
              * Essentially, do the following:
              * j = xaccTransCountSplits (trans);
              * num_virt_rows += j;
-             * num_phys_rows += j * reg->split_cursor->numRows; 
+             * num_phys_rows += j * reg->split_cursor->num_rows; 
              * except that we also have to find the saved cursor row,
              * Thus, we need a real loop over the splits.
              * The do..while will automaticaly put a blank (null) 
@@ -3186,19 +3186,19 @@ xaccSRCountRows (SplitRegister *reg,
                  }
 
                  num_virt_rows ++;
-                 num_phys_rows += reg->split_cursor->numRows; 
+                 num_phys_rows += reg->split_cursor->num_rows; 
                }
                j++;
             } while (secondary);
          } else {
            /* Try to get as close as possible to the original cell row. */
            if (found_split && (split == find_split) &&
-               (save_cell_row < lead_cursor->numRows))
+               (save_cell_row < lead_cursor->num_rows))
              save_cursor_phys_row += save_cell_row;
 
             /* the simple case ... add one row for a transaction */
             num_virt_rows ++;
-            num_phys_rows += lead_cursor->numRows; 
+            num_phys_rows += lead_cursor->num_rows; 
          }
       }
       i++;
@@ -3241,7 +3241,7 @@ xaccSRCountRows (SplitRegister *reg,
 
         /* add one row for a transaction */
         num_virt_rows ++;
-        num_phys_rows += reg->trans_cursor->numRows; 
+        num_phys_rows += reg->trans_cursor->num_rows; 
 
         /* add in the splits */
         trans = xaccSplitGetParent (split);
@@ -3264,30 +3264,30 @@ xaccSRCountRows (SplitRegister *reg,
             }
 
             num_virt_rows ++;
-            num_phys_rows += reg->split_cursor->numRows; 
+            num_phys_rows += reg->split_cursor->num_rows; 
           }
           j++;
         } while (secondary);
       }
       else {
         num_virt_rows += 1;
-        num_phys_rows += reg->trans_cursor->numRows;
+        num_phys_rows += reg->trans_cursor->num_rows;
       }
    } else {
       num_virt_rows += 1;
-      num_phys_rows += lead_cursor->numRows;
+      num_phys_rows += lead_cursor->num_rows;
    }
 
    /* check to make sure we got a good cursor position */
    if ((num_phys_rows <= save_cursor_phys_row) ||
        (num_virt_rows <= save_cursor_virt_row)) {
-     save_cursor_phys_row = num_phys_rows - reg->split_cursor->numRows;
+     save_cursor_phys_row = num_phys_rows - reg->split_cursor->num_rows;
      save_cursor_virt_row = num_virt_rows;
    }
 
-   if ((save_cursor_phys_row < (reg->header->numRows)) ||
+   if ((save_cursor_phys_row < (reg->header->num_rows)) ||
        (save_cursor_virt_row < 1)) {
-     save_cursor_phys_row = reg->header->numRows;
+     save_cursor_phys_row = reg->header->num_rows;
      save_cursor_virt_row = 1;
    }
 
@@ -3433,7 +3433,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* populate the table */
    i=0;
    vcell_loc.virt_row = 1;   /* header is vrow zero */
-   phys_loc.phys_row = reg->header->numRows;
+   phys_loc.phys_row = reg->header->num_rows;
 
    if (slist)
      split = slist[0]; 
@@ -3483,7 +3483,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             gnc_table_move_cursor (table, phys_loc);
             xaccSRLoadRegEntry (reg, split);
             vcell_loc.virt_row ++;
-            phys_loc.phys_row += reg->trans_cursor->numRows; 
+            phys_loc.phys_row += reg->trans_cursor->num_rows; 
 
             /* loop over all of the splits in the transaction. The
              * do..while will automatically put a blank (null) split
@@ -3500,7 +3500,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                   PINFO ("load split %d at phys row %d addr=%p \n", 
                           j, phys_loc.phys_row, secondary);
                   vcell_loc.virt_row ++;
-                  phys_loc.phys_row += reg->split_cursor->numRows; 
+                  phys_loc.phys_row += reg->split_cursor->num_rows; 
                }
 
                j++;
@@ -3512,7 +3512,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             gnc_table_move_cursor (table, phys_loc);
             xaccSRLoadRegEntry (reg, split);
             vcell_loc.virt_row ++;
-            phys_loc.phys_row += lead_cursor->numRows; 
+            phys_loc.phys_row += lead_cursor->num_rows; 
          }
       }
       else {
@@ -3535,7 +3535,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       gnc_table_move_cursor (table, phys_loc);
       xaccSRLoadRegEntry (reg, split);
       vcell_loc.virt_row ++;
-      phys_loc.phys_row += reg->trans_cursor->numRows; 
+      phys_loc.phys_row += reg->trans_cursor->num_rows; 
 
       if (multi_line || (dynamic && on_blank_split)) {
         Transaction *trans;
@@ -3555,7 +3555,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             PINFO ("load split %d at phys row %d addr=%p \n", 
                    j, phys_loc.phys_row, secondary);
             vcell_loc.virt_row ++;
-            phys_loc.phys_row += reg->split_cursor->numRows; 
+            phys_loc.phys_row += reg->split_cursor->num_rows; 
           }
 
           j++;
@@ -3566,7 +3566,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       gnc_table_move_cursor (table, phys_loc);
       xaccSRLoadRegEntry (reg, split);
       vcell_loc.virt_row ++;
-      phys_loc.phys_row += lead_cursor->numRows; 
+      phys_loc.phys_row += lead_cursor->num_rows; 
    }
 
    /* restore the cursor to its rightful position */

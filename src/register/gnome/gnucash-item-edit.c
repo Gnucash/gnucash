@@ -133,10 +133,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 
         style = item_edit->style;
 
-        if (style->fonts[item_edit->cell_row][item_edit->cell_col])
-                info->font = style->fonts[item_edit->cell_row][item_edit->cell_col];
-        else
-                info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
+        info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
 
         info->bg_color = style->active_bg_color[item_edit->cell_row]
                                                [item_edit->cell_col];

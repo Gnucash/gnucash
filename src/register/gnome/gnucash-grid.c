@@ -321,13 +321,10 @@ draw_cell (GnucashGrid *grid, int block,
                       10, 10,
                       180*64, 90*64);
 #endif /* ROUNDED_CORNERS */
-        
+
         text = sheet_block->entries[i][j];
 
-        if (style->fonts[i][j])
-                font = style->fonts[i][j];
-        else
-                font = grid->normal_font;
+        font = grid->normal_font;
 
         gdk_gc_set_foreground (grid->gc, sheet_block->fg_colors[i][j]);
 
