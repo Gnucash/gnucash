@@ -7,7 +7,7 @@ libgncmod_utility_reports_la_SOURCES = \
 
 libgncmod_utility_reports_la_LDFLAGS = -module
 
-INCLUDES = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
 
 .scm-links:
 	rm -f gnucash report
