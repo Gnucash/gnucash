@@ -1,5 +1,5 @@
-/*******************************************************************\
- * EuroUtils.c -- utilities for EURO currency                       *
+/********************************************************************\
+ * gnc-euro.c -- utilities for EURO currency                        *
  *                                                                  *
  * Copyright (C) 2000 Herbert Thoma                                 *
  *                                                                  *
@@ -25,8 +25,7 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-
-#include "EuroUtils.h"
+#include "gnc-euro.h"
 
 /* local structs */
 typedef struct _gnc_euro_rate_struct {
@@ -225,5 +224,3 @@ gnc_get_euro (void)
                                      GNC_COMMODITY_NS_ISO,
                                      "EUR");
 }
-
-/************************** END OF FILE *************************/

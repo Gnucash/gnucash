@@ -26,7 +26,6 @@
 
 #include <gnome.h>
 
-#include "EuroUtils.h"
 #include "FileDialog.h"
 #include "MultiLedger.h"
 #include "dialog-transfer.h"
@@ -36,6 +35,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
+#include "gnc-euro.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui.h"
 #include "messages.h"

@@ -1,5 +1,5 @@
-/*******************************************************************\
- * EuroUtils.h -- utilities for EURO currency                       *
+/********************************************************************\
+ * gnc-euro.h -- utilities for EURO currency                        *
  *                                                                  *
  * Copyright (C) 2000 Herbert Thoma                                 *
  *                                                                  *
@@ -19,8 +19,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef EURO_UTILS_H
-#define EURO_UTILS_H
+#ifndef GNC_EURO_H
+#define GNC_EURO_H
 
 #include <glib.h>
 
@@ -37,5 +37,3 @@ gnc_numeric gnc_euro_currency_get_rate (const gnc_commodity *currency);
 gnc_commodity * gnc_get_euro (void);
 
 #endif  /* EURO_UTILS_H */
-
-/************************** END OF FILE *************************/

@@ -6,13 +6,13 @@ CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 
 INCLUDES = -I${top_srcdir}/src/gnc-module \
            -I${top_srcdir}/src/calculation \
-           -I${top_srcdir}/src/engine ${GUILE_INCS} \
-           -I..
+           -I${top_srcdir}/src/engine ${GUILE_INCS}
 
 libgncmod_app_utils_la_SOURCES = \
   gfec.c \
   global-options.c \
   gnc-component-manager.c \
+  gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
@@ -23,9 +23,11 @@ libgncmod_app_utils_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-component-manager.h \
+  gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-helpers.h \
+  gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h
 

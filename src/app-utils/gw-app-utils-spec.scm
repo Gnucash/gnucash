@@ -39,6 +39,7 @@
      (list 
       "#include <global-options.h>\n"
       "#include <option-util.h>\n"
+      "#include <gnc-euro.h>\n"
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-gettext-util.h>\n"
       "#include <gnc-helpers.h>\n"
@@ -233,8 +234,44 @@ determines formatting details.")
    '<gw:bool>
    "gnc_reverse_balance"
    '((<gnc:Account*> account))
-   "Given an account, find out whether the balance should be reversed for display"))
+   "Given an account, find out whether the balance should be reversed for display")
 
+  (gw:wrap-function
+   mod
+   'gnc:is-euro-currency
+   '<gw:bool>
+   "gnc_is_euro_currency"
+   '((<gnc:commodity*> currency))
+   "Check if a given currency is a EURO currency")
 
+  (gw:wrap-function
+   mod
+   'gnc:convert-to-euro
+   '<gnc:numeric>
+   "gnc_convert_to_euro"
+   '((<gnc:commodity*> currency) (<gnc:numeric> value))
+   "Convert the value from the given currency to EURO")
 
+  (gw:wrap-function
+   mod
+   'gnc:convert-from-euro
+   '<gnc:numeric>
+   "gnc_convert_from_euro"
+   '((<gnc:commodity*> currency) (<gnc:numeric> value))
+   "Convert the value from EURO to the given currency")
 
+  (gw:wrap-function
+   mod
+   'gnc:euro-currency-get-rate
+   '<gnc:numeric>
+   "gnc_euro_currency_get_rate"
+   '((<gnc:commodity*> currency))
+   "Returns the exchange rate from the given currency to EURO")
+
+  (gw:wrap-function
+   mod
+   'gnc:get-euro
+   '<gnc:commodity*>
+   "gnc_get_euro"
+   '()
+   "Returns the commodity EURO"))

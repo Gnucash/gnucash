@@ -32,10 +32,10 @@
 #include "global-options.h"
 #include "gnc-commodity.h"
 #include "messages.h"
-#include "EuroUtils.h"
 #include "Group.h"
 #include "gnc-dir.h"
 #include "gnc-engine-util.h"
+#include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 

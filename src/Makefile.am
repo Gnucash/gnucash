@@ -58,7 +58,6 @@ gnucash_LDADD = \
   ${EFENCE_LIBS}
 
 gnucash_SOURCES = \
-  EuroUtils.c \
   FileDialog.c \
   gnc-main.c
 
@@ -75,13 +74,11 @@ gnucash_make_guids_SOURCES = \
 
 noinst_HEADERS = \
   AccWindow.h \
-  EuroUtils.h \
   FileBox.h \
   FileDialog.h \
   RecnWindow.h \
   file-history.h \
-  gnc-ui.h \
-  gnc-ui-common.h
+  gnc-ui.h
 
 EXTRA_DIST = \
   .cvsignore \
