@@ -21,6 +21,7 @@ doc_DATA = \
   xacc-expense.html \
   xacc-globalprefs.html \
   xacc-gpl.html \
+  xacc-gpl-fr.html \
   xacc-groups.html \
   xacc-main.html \
   xacc-mainwin.html \
