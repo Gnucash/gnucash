@@ -91,6 +91,10 @@ dnl Set of available languages.
 ALL_LINGUAS="da de en_GB es fr it ja no pl pt_PT ru sv"
 AM_GNU_GETTEXT
 
+if test "x${XGETTEXT}" != x; then
+  XGETTEXT="${XGETTEXT} --keyword=Q_ "
+fi
+
 
 ### --------------------------------------------------------------------------
 ### Variables
