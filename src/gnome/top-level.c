@@ -142,15 +142,17 @@ static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 static char**
 gnc_get_remaining_argv(int prelen, const char **prependargv)
 {
-    SCM rem = gh_eval_str (gnc_scheme_remaining_var);
-    return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  SCM rem = gh_eval_str ((char *) gnc_scheme_remaining_var);
+  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
 }
 
 static void
 gnc_set_remaining_argv(int len, const char **rest)
 {
-    SCM toput = gnc_argvarr_to_scheme_list(len, rest);
-    gh_define(gnc_scheme_remaining_var, toput);
+  SCM toput = gnc_argvarr_to_scheme_list(len, rest);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+  gh_define((char *) gnc_scheme_remaining_var, toput);
 }
 
 
