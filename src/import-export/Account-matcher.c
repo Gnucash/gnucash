@@ -36,7 +36,6 @@
 #include <stdlib.h>
 #include "gnc-generic-import.h"
 #include "Account.h"
-#include "Transaction.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "AccWindow.h"
@@ -59,43 +58,6 @@ struct _accountpickerdialog {
 
 };
 
-struct _transmatcherdialog {
-  GtkWidget       * transaction_matcher;
-  GtkWidget       * downloaded_clist;
-  GtkWidget       * duplicates_clist;
-  GList * transaction_list;
-
-/*  AccountGroup * acct_group;
-    Account * selected_acct;
-    gchar * account_human_description;
-    gnc_commodity * new_account_default_commodity;
-    GNCAccountType new_account_default_type;
-*/
-
-};
-
-struct _transactioninfo
-{
-  Transaction * trans;
-  char accepted_text[2];
-  char date_text[20];
-  char amount_text[20];
-  char * clist_text[4];
-  GList * match_list;
-
-
-};
-struct _matchinfo
-{
-  Transaction * trans;
-  GNC_match_probability probability;
-  char probability_text[10];
-  char date_text[20];
-  char amount_text[20];
-  char * clist_text[6];
-
-
-};
 /* static gint
    test_str_cmp(gconstpointer a, gconstpointer b) {
    return strcmp(a, b);
@@ -176,12 +138,12 @@ static void
 gnc_ui_generic_account_picker_new_cb(GtkButton * w, gpointer user_data) {
   struct _accountpickerdialog * picker = user_data;  
   GList * valid_types = NULL;
-
-  TRACE("Begin");  
+  DEBUG("Begin");  
   
   if(picker->new_account_default_type!=NO_TYPE)
     {
-      valid_types = g_list_prepend( valid_types, &(picker->new_account_default_type));
+      /*Yes, this is weird, but we really DO want to pass the value instead of the pointer...*/
+     valid_types = g_list_prepend(valid_types, (gpointer)picker->new_account_default_type);
     }
   picker->selected_acct = gnc_ui_new_accounts_from_name_with_defaults ( picker->account_human_description,
 									valid_types,
@@ -212,33 +174,6 @@ gnc_ui_generic_account_picker_unselect_cb(GtkCTree   * tree,
   picker->selected_acct = NULL;
 }
 
-#if 0 
-static int
-gnc_ui_generic_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
-  printf("gnc_ui_generic_account_picker_map_cb()\n");
-  /* update the tree display */
-  build_acct_tree(user_data);
-  return FALSE;
-}
-
-/* 0 -- With the printf here, as below, this causes a
-       *      compilation problem with GCC 3.1:
-       *
-       * gnc-generic-import.c:414: output_operand: invalid expression as operand
-       * Please submit a full bug report,
-       * with preprocessed source if appropriate.
-       * See <URL:http://bugzilla.redhat.com/bugzilla/> for instructions.
-       * make[1]: *** [gnc-generic-import.lo] Error 1
-       */
-static int
-gnc_ui_generic_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
-  printf("gnc_ui_generic_account_picker_map_cb()\n");
-  /* update the tree display */
-  build_acct_tree(user_data);
-  return FALSE;
-}
-#endif /* 0 */
-
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
   gchar * current_online_id = gnc_import_get_acc_online_id(acct);
@@ -255,18 +190,21 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
 }
 
 Account * gnc_import_select_account(char * account_online_id_value,
+				    char auto_create,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type)
 {
+  #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
   struct _accountpickerdialog * picker;
-  const int ACCOUNT_DESCRIPTION_MAX_SIZE = 255;
   gint ui_retval;
   Account * retval = NULL;
   GladeXML *xml;
   GtkWidget * online_id_label;
-  gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE];
+  gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
 
+  DEBUG("Default commodity received: %s",gnc_commodity_get_fullname( new_account_default_commodity));
+  DEBUG("Default account type received: %s",xaccAccountGetTypeStr( new_account_default_type));
   picker = g_new0(struct _accountpickerdialog, 1);
   picker->acct_group = gnc_get_current_group();
   if(picker->acct_group == NULL)
@@ -282,7 +220,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				   test_acct_online_id_match,
 				   account_online_id_value,
 				   TRUE);
-  if(retval==NULL)
+  if(retval==NULL && auto_create != 0)
     {
       /* load the interface */
       xml = gnc_glade_xml_new ("generic-import.glade", "Generic Import Account Picker");

@@ -60,11 +60,16 @@
     function will also warn the user if the found or created account's
     commodity doesn't match.
 
+    char auto_create: If 0, if the account_online_id_value in unknown,
+    the function returns NULL, otherwise, the user will be asked to 
+    create a new account.
+
   Return: A pointer to the found or created Account, or NULL if no
   account was found or created.
 
 */
 Account * gnc_import_select_account(char * account_online_id_value,
+				    char auto_create,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type);
