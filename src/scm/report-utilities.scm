@@ -265,6 +265,9 @@
 ;;       total <amount>. The results is a list of each call's result.
 ;;   'merge <currency-collector> #f: Merge the given other currency-collector into
 ;;       this one, adding all currencies' amounts, respectively.
+;;   'minusmerge <currency-collector> #f: Merge the given other 
+;;       currency-collector into this one (like above) but subtract the other's
+;;       currencies' amounts from this one's amounts, respectively.
 ;;   'reset #f #f: Delete everything that has been accumulated 
 ;;       (even the fact that any currency showed up at all).
 ;;   (internal) 'list #f #f: get the association list of currency->value-collector
@@ -295,6 +298,13 @@
 	    (else (add-currency-value (caar clist) 
 				      ((cadar clist) 'total #f))
 		  (add-currency-clist (cdr clist)))))
+
+    (define (minus-currency-clist clist)
+      (cond ((null? clist) '())
+	    (else (add-currency-value (caar clist) 
+				      (* -1 
+					 ((cadar clist) 'total #f)))
+		  (minus-currency-clist (cdr clist)))))
     
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
@@ -308,6 +318,7 @@
       (case action
 	('add (add-currency-value currency amount))
 	('merge (add-currency-clist (currency 'list #f #f)))
+	('minusmerge (minus-currency-clist (currency 'list #f #f)))
 	('format (process-currency-list currency currencylist))
 	('reset (set! currencylist '()))
 	('list currencylist) ; this one is only for internal use
@@ -378,6 +389,29 @@
                     (gnc:split-get-balance split)
                     (gnc:account-get-split account (+ index 1))))))))
 
+;; This works similar as above but returns a currency-collector, 
+;; thus takes care of children accounts with different currencies.
+(define (gnc:account-get-curr-balance-at-date account 
+					      date include-children?)
+  (let ((balance-collector
+         (if include-children?
+             (gnc:group-get-curr-balance-at-date
+              (gnc:account-get-children account) date)
+             (make-currency-collector))))
+    (let loop ((index 0)
+	       (balance 0)
+	       (split (gnc:account-get-split account 0)))
+      (if (pointer-token-null? split)
+	  (balance-collector 'add (gnc:account-get-currency account)
+			     balance)
+	  (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
+	      (balance-collector 'add (gnc:account-get-currency account)
+				 balance)
+	      (loop (+ index 1)
+		    (gnc:split-get-balance split)
+		    (gnc:account-get-split account (+ index 1))))))
+    balance-collector))
+
 ;; get the balance of a group of accounts at the specified date.
 ;; all children are included in the calculation
 (define (gnc:group-get-balance-at-date group date)
@@ -386,6 +420,15 @@
           (lambda (account)
             (gnc:account-get-balance-at-date account date #t)) group)))
 
+;; returns a currency-collector
+(define (gnc:group-get-curr-balance-at-date group date)
+  (let ((this-collector (make-currency-collector)))
+    (for-each (lambda (x) (this-collector 'merge x #f))
+	      (gnc:group-map-accounts
+	       (lambda (account)
+		 (gnc:account-get-curr-balance-at-date account date #t)) group))
+      this-collector))
+
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
@@ -393,11 +436,30 @@
   (- (gnc:account-get-balance-at-date account to include-children?)
      (gnc:account-get-balance-at-date account from include-children?)))
 
+;; the version which returns a currency-collector
+(define (gnc:account-get-curr-balance-interval 
+	 account from to include-children?)
+  (let ((this-collector (gnc:account-get-curr-balance-at-date 
+			 account to include-children?)))
+    (this-collector 'minusmerge (gnc:account-get-curr-balance-at-date 
+				 account from include-children?) #f)
+    this-collector))
+
 (define (gnc:group-get-balance-interval group from to)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
             (gnc:account-get-balance-interval account from to #t)) group)))
+
+;; the version which returns a currency-collector
+(define (gnc:group-get-curr-balance-interval group from to)
+  (let ((this-collector (make-currency-collector)))
+    (for-each (lambda (x) (this-collector 'merge x #f))
+	      (gnc:group-map-accounts
+	       (lambda (account)
+		 (gnc:account-get-curr-balance-interval 
+		  account from to #t)) group))
+    this-collector))
 
 (define (gnc:transaction-get-splits transaction)
   (let* ((num-splits (gnc:transaction-get-split-count transaction)))
