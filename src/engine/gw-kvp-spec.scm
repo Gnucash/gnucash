@@ -1,89 +1,46 @@
-(define-module (g-wrapped gw-kvp-spec)
-  :use-module (g-wrap)
-  :use-module (g-wrapped gw-glib-spec)
-  :use-module (g-wrapped gw-engine-spec))
+(define-module (g-wrapped gw-kvp-spec))
 
-(let ((mod (gw:new-module "gw-kvp")))
+;; g-wrap modules
+(use-modules (g-wrap))
+(use-modules (g-wrap simple-type))
 
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
-  
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
+;; g-wrap wrapped modules
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
-    
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
+;; other wrapped modules
+(use-modules (g-wrapped gw-engine-spec))
 
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-depends-on mod "gw-glib")
-  (gw:module-depends-on mod "gw-engine")
-  (gw:module-set-guile-module! mod '(g-wrapped gw-kvp))
+(let ((ws (gw:new-wrapset "gw-kvp")))
 
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?)
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
+
+  (gw:wrapset-depends-on ws "gw-engine")
+
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-kvp))
+
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
      (list
       "#include <kvp_frame.h>\n"
       "#include <kvp-scm.h>\n"
       "#include <Transaction.h>\n")))
-;;  (gw:module-set-init-ccodegen!
-;;   mod
-;;   (lambda (client-only?) 
-;;     (if client-only? 
-;;         '()
-;;         (gw:inline-scheme '(use-modules (gnucash kvp))))))
 
-  
-  (gw:wrap-non-native-type mod '<gnc:kvp-frame*> 
-                           "kvp_frame*" "const kvp_frame*")
+  (gw:wrap-as-wct ws '<gnc:kvp-frame*> "kvp_frame*" "const kvp_frame*")
 
-  (let ((wt (gw:wrap-type mod '<gnc:kvp-value*>
-                          "kvp_value*" "const kvp_value*")))
-    
-    (gw:type-set-scm-arg-type-test-ccodegen!
-     wt
-     (lambda (param)
-       (list "gnc_kvp_value_ptr_p(" (gw:param-get-scm-name param) ")")))
-    
-    (gw:type-set-pre-call-arg-ccodegen!
-     wt
-     (lambda (param)
-       (list (gw:param-get-c-name param) " = "
-             (list "gnc_scm_to_kvp_value_ptr("
-                   (gw:param-get-scm-name param) ")")
-             ";\n")))
-    
-    (gw:type-set-call-ccodegen! wt standard-c-call-gen)
-
-    (add-standard-result-handlers!
-     wt
-     (lambda (scm-name c-name)
-       (let ((old-func (lambda (x) (list "gnc_kvp_value_ptr_to_scm(" x ")"))))
-         (list scm-name " = " (old-func c-name) ";\n")))))
-
-;;  (gw:wrap-function
-;;   mod
-;;   'gnc:split-get-slots
-;;   '<gnc:kvp-frame*>
-;;   "xaccSplitGetSlots"
-;;   '((<gnc:Split*> s))
-;;   "Get the split's slots.")
-
+  (gw:wrap-simple-type
+   ws
+   '<gnc:kvp-value*> "kvp_value*"
+   '("gnc_kvp_value_ptr_p(" scm-var ")")
+   '(c-var " = gnc_scm_to_kvp_value_ptr(" scm-var ");\n")
+   '(scm-var " = gnc_kvp_value_ptr_to_scm(" c-var ");\n"))
   
   (gw:wrap-function
-   mod
+   ws
    'gnc:transaction-get-slots
    '<gnc:kvp-frame*>
    "xaccTransGetSlots"
@@ -91,27 +48,19 @@
    "Get the transaction's slots.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:kvp-frame-set-slot
    '<gw:void>
    "kvp_frame_set_slot"
-   '((<gnc:kvp-frame*> k) ((<gw:m-chars-caller-owned> gw:const) c)
+   '((<gnc:kvp-frame*> k)
+     ((<gw:mchars> caller-owned const) c)
      (<gnc:kvp-value*> v))
    "Sets the slot c in frame k to the value v")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:kvp-frame-get-slot
    '<gnc:kvp-value*>
    "kvp_frame_get_slot"
-   '((<gnc:kvp-frame*> k) ((<gw:m-chars-caller-owned> gw:const) c))
-   "Gets the slot c from frame k")
-  
-;;  (gw:wrap-function
-;;   mod
-;;   'gnc:account-get-slots
-;;   '<gnc:kvp-frame*>
-;;   "xaccAccountGetSlots"
-;;   '((<gnc:Account*> s))
-;;   "Get the account's slots.")
-)
+   '((<gnc:kvp-frame*> k) ((<gw:mchars> caller-owned const) c))
+   "Gets the slot c from frame k"))
