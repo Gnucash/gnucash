@@ -444,7 +444,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 /* ============================================================= */
 /* ============================================================= */
 
-int
+void
 pgend_account_commit_edit (Backend * bend, 
                            Account * acct)
 {
@@ -453,7 +453,7 @@ pgend_account_commit_edit (Backend * bend,
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, acct=%p", be, acct);
-   if (!be || !acct) return 1;  /* hack alert hardcode literal */
+   if (!be || !acct) return;
 
    if (FALSE == acct->core_dirty)
    {
@@ -468,7 +468,7 @@ pgend_account_commit_edit (Backend * bend,
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n";
 
-   SEND_QUERY (be,p, 555);
+   SEND_QUERY (be,p,);
    FINISH_QUERY(be->connection);
 
    /* check to see that the engine version is equal or newer than 
@@ -478,7 +478,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       acct->do_free = FALSE;
       p = "ROLLBACK;";
-      SEND_QUERY (be,p,444);
+      SEND_QUERY (be,p,);
       FINISH_QUERY(be->connection);
 
       /* hack alert -- we should restore the account data from the 
@@ -488,7 +488,7 @@ pgend_account_commit_edit (Backend * bend,
             " is not completely implemented !! \n");
       xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
       LEAVE ("rolled back");
-      return 445;
+      return;
    }
    acct->version ++;   /* be sure to update the version !! */
    acct->version_check = be->version_check;
@@ -503,7 +503,7 @@ pgend_account_commit_edit (Backend * bend,
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");
       p = guid_to_string_buff (guid, p);
       p = stpcpy (p, "';");
-      SEND_QUERY (be,be->buff, 444);
+      SEND_QUERY (be,be->buff,);
       FINISH_QUERY(be->connection);
    }
    else
@@ -513,7 +513,7 @@ pgend_account_commit_edit (Backend * bend,
 
    p = "COMMIT;\n"
        "NOTIFY gncAccount;";
-   SEND_QUERY (be,p,336);
+   SEND_QUERY (be,p,);
    FINISH_QUERY(be->connection);
 
    /* Mark this up so that we don't get that annoying gui dialog
@@ -524,7 +524,7 @@ pgend_account_commit_edit (Backend * bend,
    parent = xaccAccountGetParent(acct);
    if (parent) parent->saved = 1;
    LEAVE ("commited");
-   return 0;
+   return;
 }
 
 /* ======================== END OF FILE ======================== */

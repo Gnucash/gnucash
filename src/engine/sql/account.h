@@ -35,6 +35,6 @@ void pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp,
                        gboolean do_mark, gboolean do_check_version);
 int pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
 
-int pgend_account_commit_edit (Backend * bend, Account * acct);
+void pgend_account_commit_edit (Backend * bend, Account * acct);
 
 #endif /* __POSTGRES_ACCOUNT_H__ */

@@ -732,7 +732,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 
 /* ============================================================= */
 
-int
+void
 pgend_trans_commit_edit (Backend * bend, 
                          Transaction * trans,
                          Transaction * oldtrans)
@@ -742,13 +742,13 @@ pgend_trans_commit_edit (Backend * bend,
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, trans=%p", be, trans);
-   if (!be || !trans) return 1;  /* hack alert hardcode literal */
+   if (!be || !trans) return; 
 
    /* lock it up so that we query and store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
           "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
-   SEND_QUERY (be,bufp, 555);
+   SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
    /* Check to see if this is a 'new' transaction, or not. 
@@ -822,7 +822,7 @@ pgend_trans_commit_edit (Backend * bend,
    
       if (rollback) {
          bufp = "ROLLBACK;";
-         SEND_QUERY (be,bufp,444);  /* hack alert hard coded literal */
+         SEND_QUERY (be,bufp,); 
          FINISH_QUERY(be->connection);
    
          PINFO ("old tranasction didn't match DB, edit rolled back)\n");
@@ -834,7 +834,7 @@ pgend_trans_commit_edit (Backend * bend,
           * the sql database, and voila! we are good to go. 
           */
          xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
-         return 666;   /* hack alert- hard coded literal */
+         return;
       } 
    }
 
@@ -843,7 +843,7 @@ pgend_trans_commit_edit (Backend * bend,
 
    bufp = "COMMIT;\n"
           "NOTIFY gncTransaction;";
-   SEND_QUERY (be,bufp,334);
+   SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
    /* If this is the multi-user mode, we need to update the
@@ -879,7 +879,7 @@ pgend_trans_commit_edit (Backend * bend,
    }
 
    LEAVE ("commited");
-   return 0;
+   return;
 }
 
 /* ============================================================= */
@@ -894,13 +894,13 @@ pgend_trans_commit_edit (Backend * bend,
  * to sync from the changes that other users had made.
  */
 
-int
+void
 pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
    const GUID * trans_guid;
 
-   if (!be || !trans) return 0;
+   if (!be || !trans) return;
    ENTER ("be=%p, trans=%p", be, trans);
 
    /* First, lets see if the other user had deleted this transaction.
@@ -910,14 +910,14 @@ pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
    {
       LEAVE ("destroyed");
       xaccBackendSetError (&be->be, ERR_BACKEND_MOD_DESTROY);
-      return BACKEND_ROLLBACK_DESTROY;
+      return;
    }
 
    trans_guid = xaccTransGetGUID (trans);
    pgendCopyTransactionToEngine (be, trans_guid);
 
    LEAVE ("rolled back");
-   return 0;
+   return;
 }
 
 /* ======================== END OF FILE ======================== */
