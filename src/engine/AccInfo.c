@@ -108,22 +108,21 @@ xaccAccountTypesCompatible (int parent_type, int child_type)
     case STOCK:
     case MUTUAL:
     case CURRENCY:
-      compatible = ((child_type == BANK)   ||
-		    (child_type == CASH)   ||
-		    (child_type == ASSET)  ||
-		    (child_type == STOCK)  ||
-		    (child_type == MUTUAL) ||
-		    (child_type == CURRENCY));
-      break;
     case CREDIT:
     case LIABILITY:
-      compatible = ((child_type == CREDIT) || (child_type == LIABILITY));
+      compatible = ((child_type == BANK)     ||
+		    (child_type == CASH)     ||
+		    (child_type == ASSET)    ||
+		    (child_type == STOCK)    ||
+		    (child_type == MUTUAL)   ||
+		    (child_type == CURRENCY) ||
+                    (child_type == CREDIT)   ||
+                    (child_type == LIABILITY));
       break;
     case INCOME:
-      compatible = (child_type == INCOME);
-      break;
     case EXPENSE:
-      compatible = (child_type == EXPENSE);
+      compatible = ((child_type == INCOME) ||
+                    (child_type == EXPENSE));
       break;
     case EQUITY:
       compatible = (child_type == EQUITY);
