@@ -370,17 +370,14 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
         (XmCR_BROWSE_SELECT == selection->reason) ) {
       choice = XmCvtXmStringToCT (selection->value);
-printf ("aaaaaaaaa 0x%x \n", choice);
+      if (!choice) choice = XtNewString ("");   /* null if blank/unselect */
    } else 
    if (XmCR_UNSELECT == selection->reason) {
       choice = XtNewString ("");
-printf ("bbbbbbbbb \n");
    } else {
-printf ("ccccccccc\n");
       return;
    }
 
-printf ("yo choice %p %s \n", choice);
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    SET (&(cell->cell), choice);
    XtFree (choice);
