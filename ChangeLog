@@ -1,10 +1,18 @@
 2000-07-04  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/bootstrap.scm.in: bump up the stack limit
+
 	* src/engine/date.c (xaccValidateDate): move this function from
 	src/register/datecell.c to here, so it can be used elsewhere.
 
 	* src/gnome/gnc-dateedit.c: make the widget respond to the same
 	accelerators as the register date cell.
+
+2000-07-03  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/c-interface.scm: Added scheme definition for
+	pointer-token-null? if not already defined by g-wrap. Fixes bug
+	when compiling with g-wrap >= 0.9.4.
 
 2000-06-28  Dave Peticolas  <dave@krondo.com>
 
