@@ -3,6 +3,7 @@ TESTS = \
   test-load-module \
   test-component-manager \
   test-exp-parser \
+  test-scm-query-string \
   test-print-parse-amount
 
 GNC_TEST_DEPS := \
@@ -36,7 +37,9 @@ LDADD = \
 noinst_PROGRAMS = \
   test-link-module \
   test-exp-parser \
-  test-print-parse-amount
+  test-print-parse-amount \
+  test-scm-query-string \
+  test-print-queries
 
 EXTRA_DIST = \
   test-load-module \
@@ -47,4 +50,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS}
