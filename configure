@@ -2166,12 +2166,10 @@ EOF
 fi
  
 
-# X_LIBS="-lXmHTML $X_LIBS"
-
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
 echo $ac_n "checking for XmHTMLTextScrollToLine in -lXmHTML""... $ac_c" 1>&6
-echo "configure:2175: checking for XmHTMLTextScrollToLine in -lXmHTML" >&5
+echo "configure:2173: checking for XmHTMLTextScrollToLine in -lXmHTML" >&5
 ac_lib_var=`echo XmHTML'_'XmHTMLTextScrollToLine | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2179,7 +2177,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lXmHTML -lXm -L $x_libraries -lXext -lX11 $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2183 "configure"
+#line 2181 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2190,7 +2188,7 @@ int main() {
 XmHTMLTextScrollToLine()
 ; return 0; }
 EOF
-if { (eval echo configure:2194: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2192: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2221,7 +2219,7 @@ fi
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
 echo $ac_n "checking for gh_enter in -lguile""... $ac_c" 1>&6
-echo "configure:2225: checking for gh_enter in -lguile" >&5
+echo "configure:2223: checking for gh_enter in -lguile" >&5
 ac_lib_var=`echo guile'_'gh_enter | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2229,7 +2227,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lguile  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2233 "configure"
+#line 2231 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2240,7 +2238,7 @@ int main() {
 gh_enter()
 ; return 0; }
 EOF
-if { (eval echo configure:2244: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2242: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2259,7 +2257,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for gh_define in -lguile""... $ac_c" 1>&6
-echo "configure:2263: checking for gh_define in -lguile" >&5
+echo "configure:2261: checking for gh_define in -lguile" >&5
 ac_lib_var=`echo guile'_'gh_define | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2267,7 +2265,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lguile -ldl -lreadline $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2271 "configure"
+#line 2269 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2278,7 +2276,7 @@ int main() {
 gh_define()
 ; return 0; }
 EOF
-if { (eval echo configure:2282: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2280: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2297,7 +2295,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for gh_eval_file in -lguile""... $ac_c" 1>&6
-echo "configure:2301: checking for gh_eval_file in -lguile" >&5
+echo "configure:2299: checking for gh_eval_file in -lguile" >&5
 ac_lib_var=`echo guile'_'gh_eval_file | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2305,7 +2303,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lguile -ldl -lreadline -lqthreads $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2309 "configure"
+#line 2307 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2316,7 +2314,7 @@ int main() {
 gh_eval_file()
 ; return 0; }
 EOF
-if { (eval echo configure:2320: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2448,7 +2446,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "gnucash Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "gnucash Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2532,7 +2530,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"gnucash Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
+CONFIG_FILES=\${CONFIG_FILES-"gnucash Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then

@@ -27,13 +27,13 @@ srcdir   = @srcdir@
 VPATH    = @srcdir@
 
 CC       = @CC@
-INCLPATH = -I.. -I./engine -I./register -I@srcdir@/../include -I@prefix@/include
+INCLPATH = -I.. -I./engine -I./register -Ireports -I@srcdir@/../include -I@prefix@/include
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS   := SplitLedger.c MultiLedger.c
+COMMON_SRCS   := MultiLedger.c SplitLedger.c 
 CLEAN_SUBDIRS := engine gnome motif register guile swig qt
 ######################################################################
 
@@ -48,6 +48,7 @@ default: $(OBJS)
 motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
+	@cd reports;           $(MAKE) default
 	@cd guile;             $(MAKE) path-defaults.h
 	@cd swig;              $(MAKE) guile
 	@cd guile;             $(MAKE) default
@@ -56,15 +57,17 @@ motif: ${MOTIF_OBJS}
 gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
+	@cd reports;           $(MAKE) default
 	@cd guile;             $(MAKE) path-defaults.h
 	@cd swig;              $(MAKE) guile
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) gnome
 
 qt: $(QT_OBJS)
-	@cd engine;	           $(MAKE) default
-	@cd register;	         $(MAKE) qt
-	@cd qt;		             $(MAKE) qt
+	@cd engine;	       $(MAKE) default
+	@cd register;	       $(MAKE) qt
+	@cd reports;           $(MAKE) default
+	@cd qt;		       $(MAKE) qt
 
 .PHONY: default qt gnome motif all
 

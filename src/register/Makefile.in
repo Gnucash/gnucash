@@ -64,7 +64,7 @@ gnome: ${GNOME_OBJS}
 
 qt: $(QT_OBJS)
 
-.PHONY: all motif gnome
+.PHONY: all motif gnome qt
 
 # Local Variables:
 # tab-width: 2
