@@ -1,3 +1,46 @@
+2003-04-12  Herbert Thoma  <herbie@hthoma.de>
+
+        * src/backend/file/sixtp-dom-parsers.c
+        * src/backend/file/sixtp-utils.c
+        * src/backend/file/test/test-dom-converters1.c
+        * src/backend/file/test/test-string-converters.c
+        * src/business/business-ledger/gncEntryLedgerLayout.c
+        * src/business/business-ledger/gncEntryLedgerModel.c
+        * src/calculation/fin.c
+        * src/engine/GNCId.c
+        * src/engine/QueryCore.c
+        * src/engine/gnc-engine-util.c
+        * src/engine/guid.c
+        * src/engine/test/test-commodities.c
+        * src/gnome-utils/dialog-options.c
+        * src/gnome-utils/dialog-utils.c
+        * src/gnome-utils/gnc-dense-cal.c
+        * src/gnome-utils/gnc-frequency.c
+        * src/gnome-utils/gnc-html.c
+        * src/gnome/dialog-fincalc.c
+        * src/gnome/dialog-scheduledxaction.c
+        * src/gnome/dialog-sx-from-trans.c
+        * src/gnome/gnc-split-reg.h
+        * src/gnome/reconcile-list.h
+        * src/import-export/import-account-matcher.c
+        * src/network-utils/gnc-gpg.c
+        * src/register/register-core/formulacell.c
+        * src/register/register-core/pricecell.c
+        * src/register/register-gnome/combocell-gnome.c
+        * src/register/register-gnome/datecell-gnome.c
+        * src/register/register-gnome/gnucash-sheet.h:
+	  fixes for GCC 3.3 warnings
+	  comparison between signed and unsigned and
+	  dereferencing type-punned pointer will break strict-aliasing rules
+	  fixes #110320
+	
+        * src/engine/gnc-pricedb-p.h
+        * src/engine/gnc-pricedb.c
+        * src/engine/gnc-pricedb.h:
+	  gnc_pricedb_lookup_at_time_any_currency,
+	  gnc_pricedb_lookup_day_any_currency and
+	  gnc_pricedb_lookup_nearest_in_time_any_currency functions
+
 2003-04-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.c: xaccSplitGetCorrAccountCode() should

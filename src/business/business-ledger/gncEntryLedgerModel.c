@@ -1127,7 +1127,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     { ENTRY_BILLABLE_CELL, get_billable_entry, get_billable_label, get_billable_help, get_typecell_io_flags },
     { ENTRY_PAYMENT_CELL, get_payment_entry, get_payment_label, get_payment_help, get_standard_io_flags },
   };
-  int i;
+  unsigned int i;
 
   gnc_table_model_set_default_bg_color_handler
     (model, gnc_entry_ledger_get_bg_color);

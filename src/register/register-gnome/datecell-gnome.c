@@ -483,7 +483,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
   else
   {
     int i, count = 0;
-    char separator = dateSeparator ();
+    unsigned char separator = dateSeparator ();
     gboolean ok = TRUE;
 
     for (i = 0; i < change_len; i++)

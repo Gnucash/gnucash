@@ -97,7 +97,7 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     { ENTRY_PAYMENT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Payment")+7,
       CELL_ALIGN_LEFT, FALSE, FALSE }
   };
-  int i;
+  unsigned int i;
 
   for (i = 0; i < (sizeof(cells)/sizeof(*cells)); i++)
     gnc_register_add_cell (layout, cells[i].cell_name, cells[i].cell_type_name,

@@ -32,10 +32,12 @@
 
 #include <stdio.h>
 
-/**********************************************************************\
- * @file gnc-pricedb.h
+/** @addtogroup Engine
+    @{ */
+/**********************************************************************/
+/** @file gnc-pricedb.h
 
-  Introduction:
+    @brief a simple price database for gnucash
 
     The PriceDB is intended to be a database of price quotes, or more
     specifically, a database of GNCPrices.  For the time being, it is
@@ -250,8 +252,8 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
                                        gnc_commodity *currency);
 
 /** gnc_pricedb_lookup_latest_any_currency - find the most recent prices
-     for the given commodity in any available currency.  Returns NULL on
-     failure. */
+     for the given commodity in any available currency. Prices will be
+     returned as a GNCPrice list (see above). */
 GList      *gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                                    gnc_commodity *commodity);
 
@@ -270,6 +272,13 @@ GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                         gnc_commodity *currency,
                                         Timespec t);
 
+/** gnc_pricedb_lookup_at_time_any_currency - return all prices that match the
+     given commodity and timespec in any available currency.  Prices will be
+     returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
+ 		                                     gnc_commodity *c,
+		                                     Timespec t);
+
 /** gnc_pricedb_lookup_day - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
@@ -278,13 +287,26 @@ GList      * gnc_pricedb_lookup_day(GNCPriceDB *db,
 				    gnc_commodity *currency,
 				    Timespec t);
 
+/** gnc_pricedb_lookup_day_any_currency - return all prices that match the
+     given commodity and timespec in any available currency.  Prices will be
+     returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
+ 		                                 gnc_commodity *c,
+		                                 Timespec t);
+
 /** gnc_pricedb_lookup_nearest_in_time - return the price for the given
      commodity in the given currency nearest to the given time t. */
-GNCPrice *
-gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                   gnc_commodity *c,
-                                   gnc_commodity *currency,
-                                   Timespec t);
+GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                                gnc_commodity *c,
+                                                gnc_commodity *currency,
+                                                Timespec t);
+
+/** gnc_pricedb_lookup_nearest_in_time_any_currency - return all prices that
+     match the given commodity and timespec in any available currency. Prices
+     will be returned as a GNCPrice list (see above). */
+GList      * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
+ 		                                             gnc_commodity *c,
+		                                             Timespec t);
 
 /** gnc_pricedb_foreach_price - call f once for each price in db, until
      and unless f returns FALSE.  If stable_order is not FALSE, make
@@ -312,3 +334,4 @@ void gnc_price_print(GNCPrice *db, FILE *f, int indent);
 void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
 
 #endif
+/** @} */

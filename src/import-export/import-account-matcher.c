@@ -81,7 +81,7 @@ static gboolean acct_tree_add_accts(struct _accountpickerdialog * picker, Accoun
 {
   GtkCTreeNode * node;
   Account *current_acct;
-  guint i;
+  gint i;
   gboolean expand_parent = FALSE;
   gboolean expand;
   gchar * acctinfo[NUM_COLUMNS_CLIST];

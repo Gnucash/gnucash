@@ -1165,7 +1165,8 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   gint default_page = -1;
   gint num_sections;
   gint page;
-  gint i, j;
+  gint i;
+  guint j;
 
   g_return_if_fail (propertybox != NULL);
   g_return_if_fail (odb != NULL);

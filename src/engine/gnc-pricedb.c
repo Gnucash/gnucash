@@ -989,6 +989,7 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   return result;
 }
 
+
 static void
 lookup_latest(gpointer key, gpointer val, gpointer user_data)
 {
@@ -998,7 +999,7 @@ lookup_latest(gpointer key, gpointer val, gpointer user_data)
 
   if(!price_list) return;
 
-  /* the latest price ist the first in list */
+  /* the latest price is the first in list */
   gnc_price_list_insert(return_list, price_list->data);
 }
 
@@ -1014,6 +1015,15 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
   ENTER ("db=%p commodity=%p", db, commodity);
   if(!db || !commodity) return NULL;
 
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_LATEST;
+     pl.prdb = db;
+     pl.commodity = commodity;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) return NULL;
 
@@ -1026,6 +1036,7 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
   LEAVE(" ");
   return result;
 }
+
 
 GList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
@@ -1063,6 +1074,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   LEAVE (" ");
   return result;
 }
+
 
 GList *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
@@ -1113,6 +1125,68 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,
 }
 
 
+static void
+lookup_day(gpointer key, gpointer val, gpointer user_data)
+{
+  //gnc_commodity *currency = (gnc_commodity *)key;
+  GList *price_list = (GList *)val;
+  GList *item = NULL;
+  GNCPriceLookupHelper *lookup_helper = (GNCPriceLookupHelper *)user_data;
+  GList **return_list = lookup_helper->return_list;
+  Timespec t = lookup_helper->time;
+
+  item = price_list;
+  while(item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = timespecCanonicalDayTime(gnc_price_get_time(p));
+    if(timespec_equal(&price_time, &t)) {
+      gnc_price_list_insert(return_list, item->data);
+    }
+    item = item->next;
+  }
+}
+
+GList *
+gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
+ 		                    gnc_commodity *c,
+		                    Timespec t)
+{
+  GList *result = NULL;
+  GHashTable *currency_hash;
+  GNCPriceLookupHelper lookup_helper;
+
+  ENTER ("db=%p commodity=%p", db, c);
+  if(!db || !c) return NULL;
+
+  /* Convert to noon local time. */
+  t = timespecCanonicalDayTime(t);
+
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_AT_TIME;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.date = t;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  lookup_helper.return_list = &result;
+  lookup_helper.time = t;
+  g_hash_table_foreach(currency_hash, lookup_day, &lookup_helper);
+
+  if(!result) return NULL;
+
+  result = g_list_sort(result, compare_prices_by_date);
+
+  LEAVE (" ");
+  return result;
+}
+
+
 GList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                            gnc_commodity *c,
@@ -1154,6 +1228,64 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
     }
     item = item->next;
   }
+  LEAVE (" ");
+  return result;
+}
+
+static void
+lookup_time(gpointer key, gpointer val, gpointer user_data)
+{
+  //gnc_commodity *currency = (gnc_commodity *)key;
+  GList *price_list = (GList *)val;
+  GList *item = NULL;
+  GNCPriceLookupHelper *lookup_helper = (GNCPriceLookupHelper *)user_data;
+  GList **return_list = lookup_helper->return_list;
+  Timespec t = lookup_helper->time;
+
+  item = price_list;
+  while(item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = gnc_price_get_time(p);
+    if(timespec_equal(&price_time, &t)) {
+      gnc_price_list_insert(return_list, item->data);
+    }
+    item = item->next;
+  }
+}
+
+GList *
+gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
+ 		                        gnc_commodity *c,
+		                        Timespec t)
+{
+  GList *result = NULL;
+  GHashTable *currency_hash;
+  GNCPriceLookupHelper lookup_helper;
+
+  ENTER ("db=%p commodity=%p", db, c);
+  if(!db || !c) return NULL;
+
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_AT_TIME;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.date = t;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  lookup_helper.return_list = &result;
+  lookup_helper.time = t;
+  g_hash_table_foreach(currency_hash, lookup_time, &lookup_helper);
+
+  if(!result) return NULL;
+
+  result = g_list_sort(result, compare_prices_by_date);
+
   LEAVE (" ");
   return result;
 }
@@ -1230,6 +1362,96 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   }
 
   gnc_price_ref(result);
+  LEAVE (" ");
+  return result;
+}
+
+static void
+lookup_nearest(gpointer key, gpointer val, gpointer user_data)
+{
+  //gnc_commodity *currency = (gnc_commodity *)key;
+  GList *price_list = (GList *)val;
+  GNCPrice *current_price = NULL;
+  GNCPrice *next_price = NULL;
+  GNCPrice *result = NULL;
+  GList *item = NULL;
+  GNCPriceLookupHelper *lookup_helper = (GNCPriceLookupHelper *)user_data;
+  GList **return_list = lookup_helper->return_list;
+  Timespec t = lookup_helper->time;
+
+  item = price_list;
+
+  /* default answer */
+  current_price = item->data;
+
+  /* find the first candidate past the one we want.  Remember that
+     prices are in most-recent-first order. */
+  while (!next_price && item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = gnc_price_get_time(p);
+    if (timespec_cmp(&price_time, &t) <= 0) {
+      next_price = item->data;
+      break;
+    }
+    current_price = item->data;
+    item = item->next;
+  }
+
+  if (current_price) {
+    if (!next_price) {
+      result = current_price;
+    } else {
+      Timespec current_t = gnc_price_get_time(current_price);
+      Timespec next_t = gnc_price_get_time(next_price);
+      Timespec diff_current = timespec_diff(&current_t, &t);
+      Timespec diff_next = timespec_diff(&next_t, &t);
+      Timespec abs_current = timespec_abs(&diff_current);
+      Timespec abs_next = timespec_abs(&diff_next);
+      
+      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
+	result = current_price;
+      } else {
+	result = next_price;
+      }
+    }
+  }
+
+  gnc_price_list_insert(return_list, result);
+}
+
+GList *
+gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
+ 		                                gnc_commodity *c,
+		                                Timespec t)
+{
+  GList *result = NULL;
+  GHashTable *currency_hash;
+  GNCPriceLookupHelper lookup_helper;
+
+  ENTER ("db=%p commodity=%p", db, c);
+  if(!db || !c) return NULL;
+
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_NEAREST_IN_TIME;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.date = t;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  lookup_helper.return_list = &result;
+  lookup_helper.time = t;
+  g_hash_table_foreach(currency_hash, lookup_nearest, &lookup_helper);
+
+  if(!result) return NULL;
+
+  result = g_list_sort(result, compare_prices_by_date);
+
   LEAVE (" ");
   return result;
 }
