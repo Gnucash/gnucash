@@ -119,10 +119,10 @@ gnc_book_init (GNCBook *book)
 
   book->kvp_data = kvp_frame_new ();
   
+  book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+  
   /* XXX this needs to go away */
   gnc_book_populate (book);
-
-  book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
 
   book->book_open = 'y';
   book->version = 0;
@@ -207,6 +207,16 @@ printf ("duude get commoity table\n");
   return book->commodity_table;
   return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
 }
+
+#if 0
+void
+gnc_book_set_commodity_table(GNCBook *book, gnc_commodity_table *ct)
+{
+  if (!book) return NULL;
+  return book->commodity_table;
+  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
+}
+#endif
 
 #define GNC_TOP_GROUP "gnc_top_group"
 AccountGroup * 
