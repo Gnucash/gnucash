@@ -6,6 +6,12 @@
 
 2002-12-02  David Hampton  <hampton@employees.org>
 
+	* src/doc/Makefile.am: Fix build issues with the html
+	directory. Now also works in a split source/build tree.
+
+	* src/doc/doxygen.cfg: Removed.
+	* src/doc/doxygen.cfg.in: New file.
+
 	* src/gnome/gnc-split-reg.c (gsr_default_delete_handler): 
 	Convert the delete dialogs to follow the existing gnucash standard
 	where the cancel button is the rightmost button in the dialog box.
