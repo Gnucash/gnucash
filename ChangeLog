@@ -1,3 +1,8 @@
+2003-06-12  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/TRANSLATION_HOWTO: Added, by Jon Lapham
+	<lapham@extracta.com.br>.
+
 2003-06-09  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, src/import-export/hbci/dialog-hbcitrans.c: Add
