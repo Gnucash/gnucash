@@ -1,5 +1,4 @@
 
-
 SWIG = swig
 
 docdir = ${GNC_DOC_INSTALL_DIR}
@@ -29,15 +28,15 @@ EXTRA_DIST = \
   gnucash-swig-defines.c
 
 # CFLAGS = @CFLAGS@ -Dbool=char
-CFLAGS = @CFLAGS@ 
+CFLAGS = \
+  @CFLAGS@ \
+  -I@PERLINCL@/CORE \
+  ${GNOME_INCLUDEDIR} \
+  -I${top_srcdir}/src/engine
 
 #
 # technically, the engine is independent of the gnome libs, however,
 # we need to specify the inlcude path for glibconfig.h, and so this is the way
-INCLUDES = \
-  -I@PERLINCL@/CORE \
-  ${GNOME_INCLUDEDIR} \
-  -I${top_srcdir}/src/engine
 
 libgncswig_la_LIBADD = \
   -lgncengine -lxml -lgnc_postgres \
