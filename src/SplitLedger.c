@@ -2117,7 +2117,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     new_trans = xaccMallocTransaction ();
 
     xaccTransBeginEdit (new_trans);
-    gnc_copy_trans_onto_trans (trans, new_trans, FALSE, TRUE);
+    gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
     xaccTransSetDateSecs (new_trans, date);
     xaccTransSetNum (new_trans, out_num);
     xaccTransCommitEdit (new_trans);

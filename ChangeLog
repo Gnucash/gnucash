@@ -1,5 +1,7 @@
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
+	* src/SplitLedger.c (xaccSRDuplicateCurrent): fix bug
+
 	* src/gnc-ui-util.c (gnc_find_or_create_equity_account): allow
 	group to be specified
 	(gnc_account_create_opening_balance): search in given account's
