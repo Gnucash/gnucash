@@ -609,7 +609,7 @@ gnc_acctlist * rpcend_build_gncacctlist (AccountGroup *ag)
   ENTER ("ag=%p", ag);
   listinfo.end = &alist;
   listinfo.count = 0;
-  xaccGroupForEachAccountDeeply (ag, add_acctlist_cb, (void *) &listinfo);
+  xaccGroupForEachAccount (ag, add_acctlist_cb, (void *) &listinfo, TRUE);
   LEAVE ("%d accts", listinfo.count);
   return alist;
 }
@@ -739,7 +739,7 @@ gnc_vers_list * rpcend_build_gncacct_verslist (AccountGroup *ag,
   listinfo.copyguid = copyguid;
   listinfo.count = 0;
 
-  xaccGroupForEachAccountDeeply (ag, add_acctvers_cb, (void *) &listinfo);
+  xaccGroupForEachAccount (ag, add_acctvers_cb, (void *) &listinfo, TRUE);
 
   LEAVE ("%d accts", listinfo.count);
   return vlist;
