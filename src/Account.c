@@ -53,6 +53,8 @@ mallocAccount( void )
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->running_balance  = 0.0;
+  acc->running_cleared_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -533,7 +535,7 @@ xaccRecomputeBalance( Account * acc )
     share_balance += amt;
     dbalance += amt * (trans->share_price);
     
-    if( trans->reconciled != NREC ) {
+    if( NREC != trans->reconciled ) {
       share_cleared_balance += amt;
       dcleared_balance += amt * (trans->share_price);
     }
@@ -678,6 +680,43 @@ xaccIsAccountInList (Account * acc, Account **list)
       chk = list[nacc];
    }
    return nappearances;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccRecomputeBalances( Account **list )
+{
+   Account * acc;
+   int nacc = 0;
+   if (!list) return;
+
+   acc = list[0];
+   while (acc) {
+      xaccRecomputeBalance (acc);
+      nacc++;
+      acc = list[nacc];
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccZeroRunningBalances( Account **list )
+{
+   Account * acc;
+   int nacc = 0;
+   if (!list) return;
+
+   acc = list[0];
+   while (acc) {
+      acc -> running_balance = 0.0;
+      acc -> running_cleared_balance = 0.0;
+      nacc++;
+      acc = list[nacc];
+   }
 }
 
 /*************************** END OF FILE **************************** */

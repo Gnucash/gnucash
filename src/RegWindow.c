@@ -51,7 +51,7 @@
 
 
 #define NUM_COLUMNS        20
-#define NUM_HEADER_ROWS    2
+#define NUM_HEADER_ROWS    1    /* also works if #define to 2 */
 #define NUM_ROWS_PER_TRANS 2
 
 /* enumerate different ledger types */
@@ -284,20 +284,14 @@ regRefresh( RegWindow *regData )
        tarray = regData->blackacc[0]->transaction;
        ntrans = regData->blackacc[0]->numTrans;
 
-       /* if there is only one account, then allocate one
-        * extra transaction row.  That extra row is used
-        * to allow the user to add new transactions */
-       new_num_rows = NUM_ROWS_PER_TRANS*(ntrans+1) + NUM_HEADER_ROWS;
-
     } else {
        tarray = accListGetSortedTrans (regData->blackacc);
        ntrans = xaccCountTransactions (tarray);
-
-       /* for a multi-account ledger window, the addition of
-        * new transactions is not allowed. Thus, no blank 
-        * rows at the end. */
-       new_num_rows = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
     }
+
+    /* Allocate one extra transaction row.  That extra row 
+     * is used to allow the user to add new transactions */
+    new_num_rows = NUM_ROWS_PER_TRANS*(ntrans+1) + NUM_HEADER_ROWS;
 
     XtVaGetValues( regData->reg, XmNrows, &old_num_rows, NULL );
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
@@ -501,13 +495,12 @@ regRefresh( RegWindow *regData )
       }
     }
 
-    if (1 == regData->numAcc) {
+    {
       int row;
       Date date;
       todaysDate( &date );
     
-      /* if there is just one account for this ledger, then 
-       * there are some empty rows at the end, where the user
+      /* there are some empty rows at the end, where the user
        * can create new transactions. Fill them in with emptiness
        */
       row = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
@@ -521,19 +514,12 @@ regRefresh( RegWindow *regData )
       sprintf( buf, "%c", NREC);
       newData[row+RECN_CELL_R][RECN_CELL_C]   = XtNewString(buf);
 
-    } else {
+    } 
 
-      /* If the number of accounts is greater than one, 
-       * then the flat transaction array was alloc'ed and
-       * must be freed. */
-      _free (tarray);
-    }
-   
-    /* put null-terminated strings into cells that 
-     * have been otherwise left blank */
+    /* seems that Xbae doesn't like null cell entries, so fill them up. */
     for( i=0; i<new_num_rows; i++ ) {
       for( j=0; j<ncols; j++ ) {
-        if (NULL == newData[i][j]) newData[i][j] = XtNewString("");
+        if (NULL == newData[i][j]) newData[i][j] = XtNewString ("");
       }
     }
 
@@ -541,8 +527,24 @@ regRefresh( RegWindow *regData )
     XtVaSetValues( regData->reg, XmNcells, newData, NULL );
     regRecalculateBalance (regData);
     
+    /* If the number of accounts is greater than one, 
+     * then the flat transaction array was alloc'ed and
+     * must be freed. */
+    if (1 != regData->numAcc) {
+      _free (tarray);
+    }
+   
     /* and free memory!!! */
+    /* note that the XbaeMatrix widget makes a copy of everything,
+     * so it is not only safe, but necessary to free everything.
+     */
+    for( i=0; i<new_num_rows; i++ ) {
+      for( j=0; j<ncols; j++ ) {
+        if (NULL != newData[i][j]) XtFree (newData[i][j]);
+      }
+    }
     _free (newData); 
+
   }
 }
 
@@ -559,54 +561,117 @@ regRefresh( RegWindow *regData )
 double
 regRecalculateBalance( RegWindow *regData )
   {
-  int  i; 
+  int is_debit, is_credit;
+  Account *credit_acc, *debit_acc;
+  int num_rows;
   int  position   = NUM_HEADER_ROWS;
   double  dbalance    = 0.0;
   double  dclearedBalance = 0.0;
   double share_balance = 0.0;
+  double prt_balance = 0.0;
+  double prt_clearedBalance = 0.0;
+  double tmp;
   char buf[BUFSIZE];
   Transaction *trans;
   Account *acc;
   Widget reg;
   
   if( NULL == regData ) return 0.0;
-
   reg = regData->reg;
 
-  /* hack alert -- nothing here is correct for a ledger xxxxxxxxxxx*/
-  acc = regData->blackacc[0];
+  /* recompute the balances for each of the accounts involved */
+  xaccRecomputeBalances (regData->blackacc);
 
-  xaccRecomputeBalance (acc);
-  
-  for( i=0; (trans=getTransaction(acc,i)) != NULL; i++ )
-    {
-    dbalance = xaccGetBalance (acc, trans);
-    dclearedBalance = xaccGetClearedBalance (acc, trans);
-    share_balance = xaccGetShareBalance (acc, trans);
+  /* get the number of rows in the register */
+  XtVaGetValues( regData->reg, XmNrows, &num_rows, NULL );
+
+  /* subtract the last (not-yet-existant) transaction */
+  num_rows -= NUM_ROWS_PER_TRANS;
+
+  /* zero everything out */
+  dbalance = 0.0;
+  dclearedBalance = 0.0;
+  share_balance = 0.0;
+  xaccZeroRunningBalances (regData->blackacc);
     
+  /* loop over all of the rows */
+  for (position = NUM_HEADER_ROWS; position < num_rows;
+       position += NUM_ROWS_PER_TRANS) {
+
+    trans = (Transaction *) XbaeMatrixGetRowUserData (reg, position);
+    if (!trans) {
+      PERR ("regRecalculateBalance(): missing transaction\n");
+      continue;
+    }
+
+    credit_acc = (Account *) (trans->credit);
+    debit_acc = (Account *) (trans->debit);
+
+    /* figure out if this transaction shows up as a debit
+     * and/or a credit for this list of accounts.  Note
+     * that it may show up as both, and that's OK. */
+    is_credit = xaccIsAccountInList (credit_acc, regData -> blackacc );
+    is_debit  = xaccIsAccountInList (debit_acc,  regData -> blackacc );
+
+    /* increment and/or decrement the running balance as appropriate */
+    if (is_credit) {
+      share_balance = xaccGetShareBalance (credit_acc, trans);
+
+      tmp = xaccGetBalance (credit_acc, trans);
+      dbalance -= credit_acc -> running_balance;
+      dbalance += tmp;
+      credit_acc -> running_balance = tmp;
+
+      if( NREC != trans->reconciled ) {
+        tmp = xaccGetClearedBalance (credit_acc, trans);
+        dclearedBalance -= credit_acc -> running_cleared_balance;
+        dclearedBalance += tmp;
+        credit_acc -> running_cleared_balance = tmp;
+      }
+    }
+
+    if (is_debit) {
+      share_balance = xaccGetShareBalance (debit_acc, trans);
+
+      tmp = xaccGetBalance (debit_acc, trans);
+      dbalance -= debit_acc -> running_balance;
+      dbalance += tmp;
+      debit_acc -> running_balance = tmp;
+
+      if( NREC != trans->reconciled ) {
+        tmp = xaccGetClearedBalance (debit_acc, trans);
+        dclearedBalance -= debit_acc -> running_cleared_balance;
+        dclearedBalance += tmp;
+        debit_acc -> running_cleared_balance = tmp;
+      }
+    }
+
     /* for income and expense acounts, we have to reverse
-     * the meaning of balance, since, in a cual entry
+     * the meaning of balance, since, in a dual entry
      * system, income will show up as a credit to a 
      * bank account, and a debit to the income account.
      * Thus, positive and negative are interchanged */
+    prt_balance = dbalance;
     if( (EXPENSE   == regData->type) ||
         (INCOME    == regData->type) ) {
-      dbalance = - dbalance;
+      prt_balance = - dbalance;
+      prt_clearedBalance = - dclearedBalance;
     }
 
     if( reg != NULL )
       {
 #ifdef USE_NO_COLOR
-      sprintf( buf, "%.2f ", dbalance );
+      sprintf( buf, "%.2f ", prt_balance );
 #else
-      sprintf( buf, "%.2f ", DABS(dbalance) );
+      sprintf( buf, "%.2f ", DABS(prt_balance) );
       
       /* Set the color of the text, depending on whether the
        * balance is negative or positive */
-      if( 0.0 > dbalance )
+      if( 0.0 > prt_balance ) {
         XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, negPixel );
-      else
+      } else {
         XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, posPixel );
+      }
 #endif
       
       /* Put the value in the cell */
@@ -623,24 +688,24 @@ regRecalculateBalance( RegWindow *regData )
         
         /* Set the color of the text, depending on whether the
          * balance is negative or positive */
-        if( 0.0 > share_balance )
+        if( 0.0 > share_balance ) {
           XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, negPixel );
-        else
+        } else {
           XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, posPixel );
+        }
 #endif
       
         /* Put the value in the cell */
         XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
         }
 
-      position += NUM_ROWS_PER_TRANS;     /* each transaction has two rows */
       }
     }
   
   if( NULL != regData->balance )
     {
     sprintf( buf, "$ %.2f\n$ %.2f", 
-             dbalance, dclearedBalance );
+             prt_balance, prt_clearedBalance );
     
     XmTextSetString( regData->balance, buf );
     }
@@ -1908,9 +1973,6 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
     (XbaeMatrixDefaultActionCallbackStruct *)cb;
   
   RegWindow *regData = (RegWindow *)cd;
-  /* hack alert xxxxxxxxxxxxxxx incorrect for ledger */
-  Account   *acc = regData->blackacc[0];
-  
   reg = regData->reg;
   
   row  = cbs->row;
@@ -1934,7 +1996,14 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         
         regData->currEntry = (row-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
         regData->insert    = 0;
-        regData->qf = acc->qfRoot;
+
+        /* hack alert -- quick-fill mostly broken for ledgers */
+        if (1 == regData->numAcc) {
+          Account   *acc = regData->blackacc[0];
+          regData->qf = acc->qfRoot;
+          } else {
+          regData->qf = NULL;
+          }
         }
       
       /* If this is a cell which isn't editible, then don't
@@ -2200,6 +2269,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             tcbs->next_column = PAY_CELL_C;
             if( regData->qf != NULL )
               if( regData->qf->trans != NULL ) {
+                /* hack alert -- this is guarenteed to break for ledgers */
+                Account *acc = regData->blackacc[0];
                 double themount;
                 themount = xaccGetAmount (acc, regData->qf->trans);
                 if( 0.0 > themount )
@@ -2231,6 +2302,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               tcbs->next_column = DEP_CELL_C;
               if( regData->qf != NULL )
                 if( regData->qf->trans != NULL ) {
+                  /* hack alert -- this is guarenteed to break for ledgers */
+                  Account *acc = regData->blackacc[0];
                   double themount;
                   themount = xaccGetAmount (acc, regData->qf->trans);
                   if( 0.0 <= themount )

@@ -50,10 +50,11 @@ Account ** accListCopy (Account **list)
    nacc = accListCount (list);
    if (0 == nacc) return NULL;
 
-   newlist = (Account **) _malloc (nacc * sizeof (Account *));
+   newlist = (Account **) _malloc ((nacc+1) * sizeof (Account *));
    for (i=0; i<nacc; i++) {
      newlist[i] = list[i];
    }
+   newlist [nacc] = NULL;
    return newlist;
 }
 
@@ -66,7 +67,7 @@ Transaction ** accListGetSortedTrans (Account **list)
    Transaction **tarray;
    int nacc = 0;
    int ntrans = 0;
-   int i;
+   int i, j;
 
    if (!list) return 0;
 
@@ -96,6 +97,19 @@ Transaction ** accListGetSortedTrans (Account **list)
       acc = list[nacc];
    }
    tarray [ntrans] = NULL;
+
+   /* search and destroy duplicates. */
+   /* duplicates are possible due to double-entry */
+   /* one transaction can appear at most twice in the list */
+   for (i=0; i<ntrans; i++) {
+      for (j=i+1; j<ntrans; j++) {
+         if (tarray[i] == tarray[j]) {
+            tarray[j] = tarray [ntrans-1];
+            tarray[ntrans-1] = NULL;
+            ntrans --;
+         }
+      }
+   }
 
    /* run the sort routine on the array */
    qsort (tarray, ntrans, sizeof (Transaction *), xaccTransOrder);
