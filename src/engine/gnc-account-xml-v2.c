@@ -104,7 +104,13 @@ account_name_handler (xmlNodePtr node, Account* act)
 static gboolean
 account_id_handler (xmlNodePtr node, Account* act)
 {
-    xaccAccountSetGUID(act, dom_tree_to_guid(node));
+    GUID *guid;
+
+    guid = dom_tree_to_guid(node);
+    xaccAccountSetGUID(act, guid);
+
+    g_free(guid);
+    
     return TRUE;
 }
 

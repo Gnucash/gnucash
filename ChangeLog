@@ -1,3 +1,9 @@
+2001-03-01  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-account-xml-v2.c (account_id_handler): fix mem
+	leak because xaccAccountSetGUID doesn't keep pointer to guid
+	passed in.
+
 2001-03-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-sheet.c: if input is cancelled by
