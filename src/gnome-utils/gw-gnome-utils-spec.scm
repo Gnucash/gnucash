@@ -171,8 +171,25 @@
    'gnc:verify-dialog
    '<gw:bool>
    "gnc_verify_dialog"
-   '(((<gw:m-chars-caller-owned> gw:const) message) (<gw:bool> yes_is_default))
+   '(((<gw:m-chars-caller-owned> gw:const) message)
+     (<gw:bool> yes_is_default))
    "Show yes/no dialog box with given message.")
+
+  (gw:wrap-function
+   mod
+   'gnc:info-dialog
+   '<gw:void>
+   "gnc_info_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) message))
+   "Show ok dialog box with given message.")
+
+  (gw:wrap-function
+   mod
+   'gnc:warning-dialog
+   '<gw:void>
+   "gnc_warning_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) message))
+   "Show warning dialog box with given message.")
 
   (gw:wrap-function
    mod
@@ -180,11 +197,24 @@
    '<gw:void>
    "gnc_add_extension"
    '((<gw:scm> extension))
-   "")
+   "Add a menu extension.")
 
   (gw:wrap-function 
    mod
    'gnc:html-encode-string 
    '<glib:g-chars-caller-owned> 
    "gnc_html_encode_string" '(((<gw:m-chars-caller-owned> gw:const) bookname)))
+
+  (gw:wrap-function
+   mod
+   'gnc:choose-radio-option-dialog-parented
+   '<gw:int>
+   "gnc_choose_radio_option_dialog_parented"
+   '((<gnc:UIWidget> parent)
+     ((<gw:m-chars-caller-owned> gw:const) title)
+     ((<gw:m-chars-caller-owned> gw:const) msg)
+     (<gw:int> default-choice)
+     (<gnc:list-of-string> choices))
+   "Show a dialog offering different mutually exclusive choices
+in a radio list.")
 )
