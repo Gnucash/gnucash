@@ -77,18 +77,19 @@ int force_double_entry = 0;
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
+
 /********************************************************************\
  * xaccInitSplit
- * Initialize a splitaction structure
+ * Initialize a Split structure
 \********************************************************************/
 
-void
+static void
 xaccInitSplit(Split * split)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
   split->parent      = NULL;
-  
+
   split->action      = strdup("");
   split->memo        = strdup("");
   split->docref      = strdup("");

@@ -310,7 +310,6 @@ double xaccTransGetImbalance (Transaction * trans);
 
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
-void          xaccInitSplit   (Split *);    /* clears a split struct */
 
 
 /* xaccSplitGetSlot and xaccSplitSetSlot reference the kvp_data field
