@@ -1038,25 +1038,26 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button80</name>
+	<name>set_range</name>
 	<can_default>True</can_default>
 	<has_default>True</has_default>
 	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
+	<signal>
+	  <name>clicked</name>
+	  <handler>gnc_register_date_cb</handler>
+	  <last_modification_time>Sun, 08 Dec 2002 03:23:17 GMT</last_modification_time>
+	</signal>
+	<label>Set Date Range</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button80</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
       </widget>
     </widget>
-
-    <widget>
-      <class>GtkVBox</class>
-      <name>vbox96</name>
-      <border_width>5</border_width>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
-      </child>
 
       <widget>
 	<class>GtkFrame</class>
@@ -1243,25 +1244,6 @@
 	</widget>
       </widget>
 
-      <widget>
-	<class>GtkButton</class>
-	<name>set_range</name>
-	<sensitive>False</sensitive>
-	<can_focus>True</can_focus>
-	<signal>
-	  <name>clicked</name>
-	  <handler>gnc_register_date_cb</handler>
-	  <last_modification_time>Sun, 16 Jun 2002 23:56:38 GMT</last_modification_time>
-	</signal>
-	<label>Set Date Range</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-      </widget>
-    </widget>
   </widget>
 </widget>
 

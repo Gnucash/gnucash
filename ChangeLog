@@ -1,3 +1,10 @@
+2002-12-08  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/register.glade: Make the register's "Set Date
+	Range" window more intuitive by moving a button.
+
+	* src/scm/main.scm: Tweak the file name normalization code.
+	
 2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/generic-import.glade:  Add user instructions, 
