@@ -44,17 +44,19 @@ user's ownership of a stock might need to store information about
 retrieving price quotes online such as the ticker symbol and the
 exchange.
 
-The GnuCash accounting entities use Key-Value Pair Frames (hereafter
-referred to as the datatype @code{kvp_frame}). A @code{kvp_frame} is
-a set of associations between character strings (keys) and
-@code{kvp_value} structures. A @code{kvp_value} is a union with
-possible types enumerated in the @code{kvp_value_t} enum which
-indicates the type of data stored in a @code{kvp_value} object.
+To meet this need for varying data storage, the GnuCash accounting
+entities use Key-Value Pair Frames (hereafter referred to as the
+datatype @code{kvp_frame}). A @code{kvp_frame} is a set of associations
+between character strings (keys) and @code{kvp_value} structures. A
+@code{kvp_value} is a union with possible types enumerated in the
+@code{kvp_value_t} enum which indicates the type of data stored in a
+@code{kvp_value} object.
 
 @menu
 * kvp_frame::                   
 * kvp_value::                   
 * kvp_list::                    
+* Key-Value Policy::            
 @end menu
 
 
@@ -183,7 +185,7 @@ in the function, @code{NULL} is returned.
 @end deftypefun
 
 
-@node kvp_list,  , kvp_value, Key-Value Pair Frames
+@node kvp_list, Key-Value Policy, kvp_value, Key-Value Pair Frames
 @subsection kvp_list
 @tindex kvp_list
 
@@ -225,6 +227,35 @@ the arguments @var{car} and @var{cdr} are no longer the responsibility of
 the caller and should not be accessed after the function returns.
 @end deftypefun
 
+
+@node Key-Value Policy,  , kvp_list, Key-Value Pair Frames
+@subsection Key-Value Policy
+@cindex Key-Value Policy
+
+This section defines the policy that programmers should follow
+when using key-value pairs to store information. Because of the
+large amount of information which can potentially be stored using
+this mechanism, it is important to follow these guidelines so
+that order will be maintained.
+
+The following rules should be followed for using key-value pairs:
+
+@itemize
+
+@item
+The document @file{src/engine/kvp_doc.txt} should be used to document
+the use of keys and values. Please consult this document before planning
+any use of new keys.
+
+@item
+Key strings should be in all lower case with the @code{'_'} character
+separating words. Example: @code{"bank_info"}
+
+@item
+Favor longer, descriptive key strings over short ones. Example:
+@code{"online_banking_info"} is better than @code{"onln_bnk"}.
+
+@end itemize
 
 @node Sessions, Account Groups, Key-Value Pair Frames, Engine
 @section Sessions
