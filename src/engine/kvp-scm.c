@@ -11,20 +11,6 @@ int
 gnc_kvp_value_ptr_p(SCM arg)
 {
     return TRUE;
-/*   static SCM type_p = SCM_BOOL_F; */
-
-/*   if(type_p == SCM_BOOL_F) */
-/*   { */
-/*     type_p = gh_eval_str("gnc:gnc-kvp-value-ptr?"); */
-/*   } */
-/*   if(gh_call1(type_p, arg) == SCM_BOOL_F) */
-/*   { */
-/*     return FALSE; */
-/*   } */
-/*   else */
-/*   { */
-/*     return TRUE; */
-/*   } */
 }
 
 kvp_value*
