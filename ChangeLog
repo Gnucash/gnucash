@@ -1,3 +1,7 @@
+2004-01-19  Benoit Grégoire <bock@step.polymtl.ca>
+
+	* src/bin/Makefile.am:  Fix a problem with opt style installs.  Thanks Derek.
+
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
