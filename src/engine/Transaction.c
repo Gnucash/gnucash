@@ -3095,7 +3095,7 @@ xaccTransGetVoidTime(const Transaction *tr)
   val = kvp_frame_get_string(tr->inst.kvp_data, void_time_str);
   if(val)
   {
-    void_time = gnc_iso8601_to_timespec_local(val);
+    void_time = gnc_iso8601_to_timespec_gmt(val);
   }
 
   return void_time;
