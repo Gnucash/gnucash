@@ -54,14 +54,24 @@
 static void
 table_destroy_cb(Table *table)
 {
+        int header_widths[CELL_TYPE_COUNT];
+        GnucashSheet *sheet;
+        int i;
+
         if (table == NULL)
                 return;
 
         if (table->ui_data == NULL)
                 return;
 
-        if (table->ui_data)
-                gtk_widget_unref(GTK_WIDGET(table->ui_data));
+        sheet = GNUCASH_SHEET(table->ui_data);
+
+        for (i = 0; i < CELL_TYPE_COUNT; i++)
+                header_widths[i] = -1;
+
+        gnucash_sheet_get_header_widths (sheet, header_widths);
+
+        gtk_widget_unref(GTK_WIDGET(sheet));
 
         table->ui_data = NULL;
 }
@@ -82,7 +92,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
-        sheet->split_register = data;
+        sheet->split_register = sr;
         table = sheet->table;
 
         table->destroy = table_destroy_cb;

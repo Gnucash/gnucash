@@ -82,30 +82,33 @@ typedef enum
 } SplitRegisterType;
 
 /* These values are used to identify the cells in the register. */
+/* Keep these in sync with the cell_names array in splitreg.c.  */
 typedef enum
 {
   NO_CELL    = -1,
   DATE_CELL  =  0,
-  NUM_CELL   =  1,
-  DESC_CELL  =  2,
-  RECN_CELL  =  3,
-  SHRS_CELL  =  4,
-  BALN_CELL  =  5,
-  ACTN_CELL  =  6,
-  XFRM_CELL  =  7,
-  XTO_CELL   =  8,
-  MEMO_CELL  =  9,
-  CRED_CELL  = 10,
-  DEBT_CELL  = 11,
-  PRIC_CELL  = 12,
-  VALU_CELL  = 13,
+  NUM_CELL,
+  DESC_CELL,
+  RECN_CELL,
+  SHRS_CELL,
+  BALN_CELL,
+  ACTN_CELL,
+  XFRM_CELL,
+  XTO_CELL,
+  MEMO_CELL,
+  CRED_CELL,
+  DEBT_CELL,
+  PRIC_CELL,
+  VALU_CELL,
 
   /* NCRED & NDEBT handle minus the usual quantities */
-  NCRED_CELL = 14,
-  NDEBT_CELL = 15,
+  NCRED_CELL,
+  NDEBT_CELL,
 
   /* MXFRM is the "mirrored" transfer-from account */
-  MXFRM_CELL = 16
+  MXFRM_CELL,
+
+  CELL_TYPE_COUNT
 } CellType;
 
 /*
@@ -302,6 +305,9 @@ void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
 void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);
 void xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
                                            SplitRegisterBuffer *srb);
+
+const char * xaccSplitRegisterGetCellTypeName (CellType type);
+CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);
 
 
 #endif /* __XACC_SPLITREG_H__ */

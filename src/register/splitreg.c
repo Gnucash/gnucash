@@ -312,8 +312,9 @@ configAction (SplitRegister *reg)
       cb_cell->span = ((handler) == (BasicCell *) reg->memoCell);     \
                                                               \
       cb_cell = gnc_cellblock_get_cell (header, row, col);    \
-      if (cb_cell) {                                          \
+      if (cb_cell && (curs == reg->single_cursor)) {          \
         cb_cell->cell = hcell;			              \
+        cb_cell->cell_type = NAME##_CELL;                     \
         cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
         cb_cell->alignment = NAME##_CELL_ALIGN;		      \
         cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);   \
@@ -1721,6 +1722,54 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->valueCell->cell, &srb->valueCell);
   restoreCellChanged(&sr->ncreditCell->cell, &srb->ncreditCell);
   restoreCellChanged(&sr->ndebitCell->cell, &srb->ndebitCell);
+}
+
+/* keep in sync with CellType enum */
+static const char *cell_names[] =
+{
+  "date",
+  "num",
+  "description",
+  "reconcile",
+  "shares",
+  "balance",
+  "action",
+  "account",
+  "split-account",
+  "memo",
+  "credit",
+  "debit",
+  "price",
+  "value",
+  "neg-credit",
+  "neg-debit",
+  "transfer"
+};
+
+const char *
+xaccSplitRegisterGetCellTypeName (CellType type)
+{
+  if (type < 0)
+    return NULL;
+  if (type >= CELL_TYPE_COUNT)
+    return NULL;
+
+  return cell_names[type];
+}
+
+CellType
+xaccSplitRegisterGetCellTypeFromName (const char *name)
+{
+  CellType type;
+
+  if (name == NULL)
+    return NO_CELL;
+
+  for (type = 0; type < CELL_TYPE_COUNT; type++)
+    if (safe_strcmp (name, cell_names[type]) == 0)
+      return type;
+
+  return NO_CELL;
 }
 
 /* ============ END OF FILE ===================== */

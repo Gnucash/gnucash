@@ -648,9 +648,8 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
 
         sr = sheet->split_register;
 
-        style  = g_new0(SheetBlockStyle, 1);
+        style = g_new0(SheetBlockStyle, 1);
 
-        style->reg_type = sr->type;
         style->cursor = cursor;
         style->cursor_type = cursor_type;
 
@@ -761,7 +760,6 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
                                     VirtualCellLocation vcell_loc)
 {
         Table *table;
-        SplitRegister *sr;
         VirtualCell *vcell;
         CellBlock *cursor;
         int i;
@@ -770,7 +768,6 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
         g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
 
         table = sheet->table;
-        sr = sheet->split_register;
 
         vcell = gnc_table_get_virtual_cell (table, vcell_loc);
 
@@ -862,6 +859,74 @@ gnucash_style_set_register_hint_font_name(const char *name)
         g_assert(gnucash_register_hint_font != NULL);
 
         gdk_font_ref(gnucash_register_hint_font);
+}
+
+void
+gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
+{
+        SheetBlockStyle *style;
+        CellBlock *header;
+        int row, col;
+
+        g_return_if_fail(sheet != NULL);
+        g_return_if_fail(GNUCASH_IS_SHEET(sheet));
+
+        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        header = sheet->cursors[GNUCASH_CURSOR_HEADER];
+
+        g_return_if_fail(style != NULL);
+        g_return_if_fail(header != NULL);
+
+        for (row = 0; row < style->nrows; row++)
+                for (col = 0; col < style->ncols; col++)
+                {
+                        CellDimensions *cd;
+                        CellBlockCell *cb_cell;
+
+                        cd = gnucash_style_get_cell_dimensions (style,
+                                                                row, col);
+
+                        cb_cell = gnc_cellblock_get_cell (header, row, col);
+
+                        if (cb_cell->cell_type < 0)
+                                continue;
+
+                        header_widths[cb_cell->cell_type] = cd->pixel_width;
+                }
+}
+
+void
+gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
+{
+        SheetBlockStyle *style;
+        CellBlock *header;
+        int row, col;
+
+        g_return_if_fail(sheet != NULL);
+        g_return_if_fail(GNUCASH_IS_SHEET(sheet));
+
+        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        header = sheet->cursors[GNUCASH_CURSOR_HEADER];
+
+        g_return_if_fail(style != NULL);
+        g_return_if_fail(header != NULL);
+
+        for (row = 0; row < style->nrows; row++)
+                for (col = 0; col < style->ncols; col++)
+                {
+                        CellDimensions *cd;
+                        CellBlockCell *cb_cell;
+
+                        cd = gnucash_style_get_cell_dimensions (style,
+                                                                row, col);
+
+                        cb_cell = gnc_cellblock_get_cell (header, row, col);
+
+                        if (cb_cell->cell_type < 0)
+                                continue;
+
+                        cd->pixel_width = header_widths[cb_cell->cell_type];
+                }
 }
 
 const char *

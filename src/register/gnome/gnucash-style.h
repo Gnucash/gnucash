@@ -138,6 +138,9 @@ void gnucash_style_set_register_borders (int reg_borders_new);
 void gnucash_style_set_borders (SheetBlockStyle *style, int border);
 void gnucash_sheet_set_borders (GnucashSheet *sheet, int border);
 
+void gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths);
+void gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths);
+
 
 extern GdkFont *gnucash_register_font;
 extern GdkFont *gnucash_register_hint_font;
