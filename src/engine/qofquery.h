@@ -111,6 +111,7 @@ typedef enum {
 /** "Known" Object Parameters -- some objects might support these */
 #define QOF_PARAM_KVP     "kvp" 
 #define QOF_PARAM_ACTIVE  "active" 
+#define QOF_PARAM_VERSION "version" 
 
 /* --------------------------------------------------------- */
 /** @name Query Subsystem Initialization and Shudown  */
