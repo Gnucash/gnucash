@@ -492,7 +492,7 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   strcpy (buf, "reg");
   strcat(buf,accRes[regData->type]);
 
-  regData->ledger = xaccMallocBasicRegister ();
+  regData->ledger = xaccMallocBasicRegister (BANK_REGISTER);
   reg = xaccCreateTable (regData->ledger->table, frame, buf);
   
   regData->reg     = reg;

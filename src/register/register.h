@@ -15,6 +15,9 @@
 #include "recncell.h"
 #include "textcell.h"
 
+/* defined register types */
+#define BANK_REGISTER  0
+
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE  0x000
 #define MOD_DATE  0x001
@@ -30,6 +33,8 @@
 #define MOD_XTO   0x400
 #define MOD_NEW   0x800
 #define MOD_ALL   0xfff
+
+#define NUM_CELLS 20
 
 typedef struct _BasicRegister {
    Table         * table;
@@ -50,10 +55,18 @@ typedef struct _BasicRegister {
 
    PriceCell     * balanceCell;
 
+   /* some private data */
+   short num_cols;
+   short num_header_rows;
+   char *labels[NUM_CELLS];
+   short cols[NUM_CELLS];
+   short rows[NUM_CELLS];
+   short wids[NUM_CELLS];
+
 } BasicRegister;
 
-BasicRegister * xaccMallocBasicRegister (void);
-void            xaccInitBasicRegister (BasicRegister *);
+BasicRegister * xaccMallocBasicRegister (int type);
+void            xaccInitBasicRegister (BasicRegister *, int type);
 
 unsigned int    xaccGetChangeFlag (BasicRegister *);
 

@@ -1,181 +1,235 @@
-
 /*
+ * FILE:
  * register.c
  */
 
 #include "messages.h"
 #include "register.h"
 
-#define DATE_CELL_C  0
-#define DATE_CELL_R  0
-#define DATE_CELL_W  11
+/* utility defines for cell configuration data */
+#define DATE_CELL      0
+#define NUM_CELL       1
+#define ACTN_CELL      2
+#define XFRM_CELL      3
+#define XTO_CELL       4
+#define DESC_CELL      5
+#define MEMO_CELL      6
+#define RECN_CELL      7
+#define CRED_CELL      8
+#define DEBT_CELL      9
+#define BALN_CELL     10
+#define SHRS_CELL     11
+#define PRIC_CELL     12
 
-#define NUM_CELL_C  1
-#define NUM_CELL_R  0
-#define NUM_CELL_W  7
 
-#define ACTN_CELL_C  1
-#define ACTN_CELL_R  1
-#define ACTN_CELL_W  7
+/* utility defines for setting of cell values */
+#define DATE_CELL_C   (reg->cols[DATE_CELL])
+#define DATE_CELL_R   (reg->rows[DATE_CELL])
+#define DATE_CELL_W   (reg->wids[DATE_CELL])
 
-#define XFRM_CELL_C  2
-#define XFRM_CELL_R  0
-#define XFRM_CELL_W  11
+#define NUM_CELL_C   (reg->cols[NUM_CELL])
+#define NUM_CELL_R   (reg->rows[NUM_CELL])
+#define NUM_CELL_W   (reg->wids[NUM_CELL])
 
-#define XTO_CELL_C  -1
-#define XTO_CELL_R  -1
-#define XTO_CELL_W  11
+#define ACTN_CELL_C   (reg->cols[ACTN_CELL])
+#define ACTN_CELL_R   (reg->rows[ACTN_CELL])
+#define ACTN_CELL_W   (reg->wids[ACTN_CELL])
 
-#define DESC_CELL_C  3
-#define DESC_CELL_R  0
-#define DESC_CELL_W  29
+#define XFRM_CELL_C   (reg->cols[XFRM_CELL])
+#define XFRM_CELL_R   (reg->rows[XFRM_CELL])
+#define XFRM_CELL_W   (reg->wids[XFRM_CELL])
 
-#define MEMO_CELL_C  3
-#define MEMO_CELL_R  1
-#define MEMO_CELL_W  29
+#define XTO_CELL_C   (reg->cols[XTO_CELL])
+#define XTO_CELL_R   (reg->rows[XTO_CELL])
+#define XTO_CELL_W   (reg->wids[XTO_CELL])
 
-#define RECN_CELL_C  4
-#define RECN_CELL_R  0
-#define RECN_CELL_W  1
+#define DESC_CELL_C   (reg->cols[DESC_CELL])
+#define DESC_CELL_R   (reg->rows[DESC_CELL])
+#define DESC_CELL_W   (reg->wids[DESC_CELL])
 
-#define CRED_CELL_C  5
-#define CRED_CELL_R  0
-#define CRED_CELL_W  9
+#define MEMO_CELL_C   (reg->cols[MEMO_CELL])
+#define MEMO_CELL_R   (reg->rows[MEMO_CELL])
+#define MEMO_CELL_W   (reg->wids[MEMO_CELL])
 
-#define DEBT_CELL_C  6
-#define DEBT_CELL_R  0
-#define DEBT_CELL_W  9
+#define RECN_CELL_C   (reg->cols[RECN_CELL])
+#define RECN_CELL_R   (reg->rows[RECN_CELL])
+#define RECN_CELL_W   (reg->wids[RECN_CELL])
 
-#define BALN_CELL_C  7
-#define BALN_CELL_R  0
-#define BALN_CELL_W  9
+#define CRED_CELL_C   (reg->cols[CRED_CELL])
+#define CRED_CELL_R   (reg->rows[CRED_CELL])
+#define CRED_CELL_W   (reg->wids[CRED_CELL])
+
+#define DEBT_CELL_C   (reg->cols[DEBT_CELL])
+#define DEBT_CELL_R   (reg->rows[DEBT_CELL])
+#define DEBT_CELL_W   (reg->wids[DEBT_CELL])
+
+#define BALN_CELL_C   (reg->cols[BALN_CELL])
+#define BALN_CELL_R   (reg->rows[BALN_CELL])
+#define BALN_CELL_W   (reg->wids[BALN_CELL])
+
+#define SHRS_CELL_C   (reg->cols[SHRS_CELL])
+#define SHRS_CELL_R   (reg->rows[SHRS_CELL])
+#define SHRS_CELL_W   (reg->wids[SHRS_CELL])
+
+#define PRIC_CELL_C   (reg->cols[PRIC_CELL])
+#define PRIC_CELL_R   (reg->rows[PRIC_CELL])
+#define PRIC_CELL_W   (reg->wids[PRIC_CELL])
+
 
 #define MAX_COLS 8
 
 /* ============================================== */
 
-BasicRegister * xaccMallocBasicRegister (void)
+#define SET(cell,col,row,width,label) {		\
+   reg->cols[cell] = col;			\
+   reg->rows[cell] = row;			\
+   reg->wids[cell] = width;			\
+   reg->labels[cell] = label;			\
+}
+
+/* ============================================== */
+
+static void
+configLayout (BasicRegister *reg, int type)
+{
+   switch (type) {
+      case BANK_REGISTER:
+         reg->num_cols = 8;
+         reg->num_header_rows = 1;
+
+         SET (DATE_CELL,  0,  0, 11,  DATE_STR);
+         SET (NUM_CELL,   1,  0,  7,  NUM_STR);
+         SET (ACTN_CELL,  1,  1,  7,  NUM_STR);
+         SET (XFRM_CELL,  2,  0, 11,  XFRM_STR);
+         SET (XTO_CELL,  -1, -1, 11,  "");
+         SET (DESC_CELL,  3,  0, 29,  DESC_STR);
+         SET (MEMO_CELL,  3,  1, 29,  DESC_STR);
+         SET (RECN_CELL,  4,  0,  1,  "R");
+         SET (CRED_CELL,  5,  0,  9,  CREDIT_STR);
+         SET (DEBT_CELL,  6,  0,  9,  DEBIT_STR);
+         SET (BALN_CELL,  7,  0,  9,  BALN_STR);
+         SET (SHRS_CELL, -1, -1,  9,  "");
+         SET (PRIC_CELL, -1, -1,  9,  "");
+
+      default:
+
+   }
+}
+
+/* ============================================== */
+/* define the traversal order */
+/* negative cells mean "traverse out of table" */
+
+static void
+configTraverse (BasicRegister *reg, int type)
+{
+   CellBlock *curs = reg->cursor;
+
+   switch (type) {
+      case BANK_REGISTER:
+         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
+         xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
+         xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
+         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, CRED_CELL_R, CRED_CELL_C);
+         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
+         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
+         xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
+         xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+
+      default:
+
+   }
+}
+
+/* ============================================== */
+
+BasicRegister * xaccMallocBasicRegister (int type)
 {
    BasicRegister * reg;
    reg = (BasicRegister *) malloc (sizeof (BasicRegister));
-   xaccInitBasicRegister (reg);
+   xaccInitBasicRegister (reg, type);
    return reg;
 }
 
 /* ============================================== */
 
-void xaccInitBasicRegister (BasicRegister *reg)
+/* HDR is a utility to set up the header row */
+#define HDR(NAME)						\
+{								\
+   BasicCell *cell;						\
+   cell = xaccMallocTextCell();					\
+   cell->width = NAME##_CELL_W;					\
+   if (1 == reg->num_header_rows) {				\
+      xaccAddCell (header, cell, 0, NAME##_CELL_C);		\
+   } else {							\
+      xaccAddCell (header, cell, NAME##_CELL_R, NAME##_CELL_C);	\
+   }								\
+   xaccSetBasicCellValue (cell, reg->labels[NAME##_CELL]);	\
+}
+   
+/* BASIC & FANCY macros initialize cells in the register */
+
+#define FANCY(CN,CT,CL) {					\
+   reg->CN##Cell = xaccMalloc##CT##Cell();			\
+   reg->CN##Cell->cell.width = CL##_CELL_W;			\
+   xaccAddCell (curs, &(reg->CN##Cell->cell), CL##_CELL_R, CL##_CELL_C); \
+}
+
+#define BASIC(CN,CT,CL) {					\
+   reg->CN##Cell = xaccMalloc##CT##Cell();			\
+   reg->CN##Cell->width = CL##_CELL_W;				\
+   xaccAddCell (curs, reg->CN##Cell, CL##_CELL_R, CL##_CELL_C);	\
+}
+   
+
+void xaccInitBasicRegister (BasicRegister *reg, int type)
 {
    Table * table;
    CellBlock *curs, *header;
    BasicCell *cell;
 
-   /* define the header */
+   /* --------------------------- */
+   configLayout (reg, type);
 
-   header = xaccMallocCellBlock (1, MAX_COLS);
+   /* --------------------------- */
+   /* define the header */
+   header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
    reg->header = header;
 
-   cell = xaccMallocTextCell();
-   cell->width = DATE_CELL_W;
-   xaccAddCell (header, cell, 0, DATE_CELL_C);
-   xaccSetBasicCellValue (cell, DATE_STR);
-   
-   cell = xaccMallocTextCell();
-   cell->width = NUM_CELL_W;
-   xaccAddCell (header, cell, 0, NUM_CELL_C);
-   xaccSetBasicCellValue (cell, NUM_STR);
-
-   cell = xaccMallocTextCell();
-   cell->width = XFRM_CELL_W;
-   xaccAddCell (header, cell, XFRM_CELL_R, XFRM_CELL_C);
-   xaccSetBasicCellValue (cell, XFRM_STR);
-   
-   cell = xaccMallocTextCell();
-   cell->width = DESC_CELL_W;
-   xaccAddCell (header, cell, 0, DESC_CELL_C);
-   xaccSetBasicCellValue (cell, DESC_STR);
-
-   cell = xaccMallocTextCell();
-   cell->width = RECN_CELL_W;
-   xaccAddCell (header, cell, 0, RECN_CELL_C);
-   xaccSetBasicCellValue (cell, "R");
-
-   cell = xaccMallocTextCell();
-   cell->width = CRED_CELL_W;
-   xaccAddCell (header, cell, 0, CRED_CELL_C);
-   xaccSetBasicCellValue (cell, CREDIT_STR);
-   
-   cell = xaccMallocTextCell();
-   cell->width = DEBT_CELL_W;
-   xaccAddCell (header, cell, 0, DEBT_CELL_C);
-   xaccSetBasicCellValue (cell, DEBIT_STR);
-
-   cell = xaccMallocTextCell();
-   cell->width = BALN_CELL_W;
-   xaccAddCell (header, cell, 0, BALN_CELL_C);
-   xaccSetBasicCellValue (cell, BALN_STR);
-
+   HDR (DATE);
+   HDR (NUM);
+   HDR (XFRM);
+   HDR (DESC);
+   HDR (RECN);
+   HDR (CRED);
+   HDR (DEBT);
+   HDR (BALN);
+   HDR (PRIC);
+   HDR (SHRS);
    
    /* --------------------------- */
-   curs = xaccMallocCellBlock (2, MAX_COLS);
+   /* define the ledger cursor */
+   curs = xaccMallocCellBlock (2, reg->num_cols);
    reg->cursor = curs;
    
-   reg->dateCell = xaccMallocDateCell();
-   reg->dateCell->cell.width = DATE_CELL_W;
-   xaccAddCell (curs, &(reg->dateCell->cell), DATE_CELL_R, DATE_CELL_C);
-   
-   cell = xaccMallocTextCell();
-   cell->width = NUM_CELL_W;
-   xaccAddCell (curs, cell, NUM_CELL_R, NUM_CELL_C);
-   reg->numCell = cell;
-   
-   reg->actionCell = xaccMallocComboCell();
-   reg->actionCell->cell.width = ACTN_CELL_W;
-   xaccAddCell (curs, &(reg->actionCell->cell), ACTN_CELL_R, ACTN_CELL_C);
-   
-   reg->xfrmCell = xaccMallocComboCell();
-   reg->xfrmCell->cell.width = XFRM_CELL_W;
-   xaccAddCell (curs, &(reg->xfrmCell->cell), XFRM_CELL_R, XFRM_CELL_C);
-   
-   reg->descCell = xaccMallocQuickFillCell();
-   reg->descCell->cell.width = DESC_CELL_W;
-   xaccAddCell (curs, &(reg->descCell->cell), DESC_CELL_R, DESC_CELL_C);
-   
-   cell = xaccMallocTextCell();
-   cell->width = MEMO_CELL_W;
-   xaccAddCell (curs, cell, MEMO_CELL_R, MEMO_CELL_C);
-   reg->memoCell = cell;
+   FANCY (date,    Date,      DATE);
+   BASIC (num,     Text,      NUM);
+   FANCY (action,  Combo,     ACTN);
+   FANCY (xfrm,    Combo,     XFRM);
+   FANCY (desc,    QuickFill, DESC);
+   BASIC (memo,    Text,      MEMO);
+   BASIC (recn,    Recn,      RECN);
+   FANCY (credit,  Price,     CRED);
+   FANCY (debit,   Price,     DEBT);
+   FANCY (shrs,    Price,     SHRS);
+   FANCY (price,   Price,     PRIC);
 
-   cell = xaccMallocRecnCell();
-   cell->width = RECN_CELL_W;
-   xaccAddCell (curs, cell, RECN_CELL_R, RECN_CELL_C);
-   reg->recnCell = cell;
-
-   reg->creditCell = xaccMallocPriceCell();
-   reg->creditCell->cell.width = CRED_CELL_W;
-   xaccAddCell (curs, &(reg->creditCell->cell), CRED_CELL_R, CRED_CELL_C);
-   
-   reg->debitCell = xaccMallocPriceCell();
-   reg->debitCell->cell.width = DEBT_CELL_W;
-   xaccAddCell (curs, &(reg->debitCell->cell), DEBT_CELL_R, DEBT_CELL_C);
-   
-   reg->balanceCell = xaccMallocPriceCell();
-   reg->balanceCell->cell.width = BALN_CELL_W;
+   FANCY (balance, Price,     BALN);
    reg->balanceCell->cell.input_output = 0;
-   xaccAddCell (curs, &(reg->balanceCell->cell), BALN_CELL_R, BALN_CELL_C);
 
    /* -------------------------------- */   
-   /* define the traversal order */
-   /* negative cells mean "traverse out of table" */
-   xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
-   xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
-   xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
-   xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, CRED_CELL_R, CRED_CELL_C);
-   xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
-   xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
-   xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
-   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
-
+   /* define how traversal works */
+   configTraverse (reg, type);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
@@ -213,12 +267,12 @@ xaccGetChangeFlag (BasicRegister *reg)
    changed |= MOD_RECN && reg->recnCell->changed;
    changed |= MOD_AMNT && reg->creditCell->cell.changed;
    changed |= MOD_AMNT && reg->debitCell->cell.changed;
-   /* changed |= MOD_SHRS && reg->xxxxxxCell->cell.changed; */
-   /* changed |= MOD_PRIC && reg->xxxxxxCell->cell.changed; */
+   changed |= MOD_SHRS && reg->shrsCell->cell.changed; 
+   changed |= MOD_PRIC && reg->priceCell->cell.changed;
    changed |= MOD_MEMO && reg->memoCell->changed;
    changed |= MOD_ACTN && reg->actionCell->cell.changed;
    changed |= MOD_XFRM && reg->xfrmCell->cell.changed;
-   /* changed |= MOD_XTO && reg->xtoCell->cell.changed; */
+   changed |= MOD_XTO  && reg->xtoCell->cell.changed; 
 
    return changed;
 }
