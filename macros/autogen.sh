@@ -88,21 +88,19 @@ find_program()
     fi
 
     echo
-    echo "**Error**: You must have at least version $vers of $prog installed."
-    echo "Please check your distribution or the appropriate web site."
+    echo "**Warning**: Could not find a $prog that identifies itself >= $vers."
     echo
-    DIE=1
-    return 1
+    program="$prog"
 }
 
-find_program "$AUTOCONF" autoconf 2.53 "2.5 2.5x"
-[ "$?" = 0 ] && AUTOCONF="$program"
-find_program "$AUTOHEADER" autoheader 2.53 "2.5 2.5x"
-[ "$?" = 0 ] && AUTOHEADER="$program"
+find_program "$AUTOCONF" autoconf 2.53
+AUTOCONF="$program"
+find_program "$AUTOHEADER" autoheader 2.53
+AUTOHEADER="$program"
 find_program "$AUTOMAKE" automake 1.5 "1.6 1.7"
-[ "$?" = 0 ] && AUTOMAKE="$program"
+AUTOMAKE="$program"
 find_program "$ACLOCAL" aclocal 1.5 "1.6 1.7"
-[ "$?" = 0 ] && ACLOCAL="$program"
+ACLOCAL="$program"
 
 
 (${AUTOCONF} --version) < /dev/null > /dev/null 2>&1 || {

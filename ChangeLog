@@ -4,6 +4,9 @@
 	* macros/autogen.sh: add more searches for a good version of
 	  the autotools.
 
+	* configure.in: fix some AC_DEFINE macros
+	* macros/autogen.sh: a bit more work on the version searches.
+	
 2003-05-07  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: require autoconf >= 2.53 and automake >= 1.5
