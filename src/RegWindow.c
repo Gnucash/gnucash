@@ -980,7 +980,7 @@ regRecalculateBalance( RegWindow *regData )
 \********************************************************************/
 
 /* RECALC_BALANCE recomputes the balance shown in 
- * the register window, if it is visible. 
+ * register/ledger windows, if they are visible. 
  */
 
 #define RECALC_BALANCE(sacc) {					\
@@ -989,10 +989,6 @@ regRecalculateBalance( RegWindow *regData )
   struct _RegWindow **list;					\
   xfer_acc = (Account *) (sacc);				\
   if (xfer_acc) {						\
-    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
-    if (xfer_reg) {						\
-      regRecalculateBalance (xfer_reg);				\
-    }								\
     list = xfer_acc->ledgerList;				\
     if (list) {							\
       int n = 0;						\
@@ -1006,8 +1002,8 @@ regRecalculateBalance( RegWindow *regData )
   }								\
 }
 
-/* REFRESH_REGISTER redisplays the register window,
- * if it is visible. 
+/* REFRESH_REGISTER redisplays the register/ledger windows,
+ * if they are visible. 
  */
 #define REFRESH_REGISTER(sacc) {				\
   Account * xfer_acc;						\
@@ -1015,10 +1011,6 @@ regRecalculateBalance( RegWindow *regData )
   struct _RegWindow **list;					\
   xfer_acc = (Account *) (sacc);				\
   if (xfer_acc) {						\
-    xfer_reg = (RegWindow *) (xfer_acc->regData);		\
-    if (xfer_reg) {						\
-      regRefresh (xfer_reg);					\
-    }								\
     list = xfer_acc->ledgerList;				\
     if (list) {							\
       int n = 0;						\
@@ -1554,6 +1546,11 @@ regWindowSimple( Widget parent, Account *acc )
   acclist[0] = acc;
   acclist[1] = NULL;
 
+  /* don't allow more than one regster window for this account */
+  /* hack alert -- we should raise this window to the top, if
+   * we are called, and the register already exists */
+  if (acc->regData) return acc->regData;
+
   retval = regWindowLedger (parent, acclist, acc->type);
   return retval;
   }
@@ -1574,6 +1571,11 @@ regWindowAccGroup( Widget parent, Account *acc )
   int ledger_type;
   Account *le;
   int n;
+
+  /* don't allow more than one ledger window for this account */
+  /* hack alert -- we should raise this window to the top, if
+   * we are called, and the ledger already exists */
+  if (acc->regLedger) return acc->regLedger;
 
   list = xaccGroupToList (acc);
 
@@ -1619,6 +1621,7 @@ regWindowAccGroup( Widget parent, Account *acc )
       return;
   }
   retval = regWindowLedger (parent, list, ledger_type);
+  acc->regLedger = retval;
 
   if (list) _free (list);
 
@@ -1693,8 +1696,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
     /* associate register with account, so that we can do consistent
      * updates */
-    ledgerListAddList (regData->blackacc, regData);
+    regData->blackacc[0]->regLedger = regData;    
   }
+  ledgerListAddList (regData->blackacc, regData);
 
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
@@ -2328,8 +2332,9 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   if (1 == regData ->numAcc) {
      regData->blackacc[0]->regData = NULL;
   } else {
-     ledgerListRemoveList (regData->blackacc, regData);
+     regData->blackacc[0]->regLedger = NULL;
   }
+  ledgerListRemoveList (regData->blackacc, regData);
   _free(regData);
   
   DEBUG("closed RegWindow\n");

@@ -133,7 +133,7 @@ xaccGroupToList (Account *acc)
 
    list = (Account **) _malloc ((nacc+1) * sizeof (Account *));
 
-   list[0] = acc;
+   list[0] = acc;  /* must be first -- other code depends on this */
    n = 1;
    if (acc->children) {
       for (i=0; i<acc->children->numAcc; i++) {

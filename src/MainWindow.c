@@ -40,6 +40,7 @@
 #include "AccWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
+#include "Destroy.h"
 #include "FileBox.h"
 #include "FileIO.h"
 #include "HelpWindow.h"
@@ -945,10 +946,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
             accWindow(toplevel);
           }
         } else {
-          if( NULL == acc->regData ) {  
-            /* avoid having two registers updating one account */
-            acc->regData = regWindowSimple ( toplevel, acc );
-          }
+          regWindowSimple ( toplevel, acc );
         }
       }
       break;
@@ -956,8 +954,15 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_LEDGER:
       DEBUG("AMB_LEDGER\n");
       {
-        /* hack alert xxxxxxxxxxx -- don't double open  this group! */
-        regWindowAccGroup ( toplevel, selected_acc );
+        Account *acc = selected_acc;
+        if( NULL == acc ) {
+          int make_new = verifyBox (toplevel, ACC_NEW_MSG);
+          if (make_new) {
+            accWindow(toplevel);
+          }
+        } else {
+          regWindowAccGroup ( toplevel, acc );
+        }
       }
       break;
 
@@ -987,14 +992,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
             /* before deleting the account, make 
              * sure that we close any misc register 
              * windows, if they are open */
-            /* hack alert -- this should be done for 
-             * any child accounts this account might have .. */
-            xaccDestroyRegWindow (selected_acc->regData);
-            xaccDestroyRecnWindow (selected_acc->recnData);
-            xaccDestroyAdjBWindow (selected_acc->adjBData);
-            xaccDestroyEditAccWindow (selected_acc->editAccData);
-            xaccDestroyEditNotesWindow (selected_acc->editNotesData);
-
+            xaccAccountWindowDestroy (selected_acc);
             xaccRemoveAccount (selected_acc);
             freeAccount (selected_acc);
             selected_acc = NULL;
