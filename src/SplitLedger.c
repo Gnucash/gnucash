@@ -45,7 +45,7 @@ static void
 LedgerMoveCursor  (Table *table, void * client_data)
 {
    SplitRegister *reg = (SplitRegister *) client_data;
-   xaccSaveRegEntry (reg);
+   xaccSRSaveRegEntry (reg);
 }
 
 /* ======================================================== */
@@ -69,7 +69,7 @@ LedgerDestroy (SplitRegister *reg)
 /* ======================================================== */
 
 Split * 
-xaccGetCurrentSplit (SplitRegister *reg)
+xaccSRGetCurrentSplit (SplitRegister *reg)
 {
    CellBlock *cursor;
    Split *split;
@@ -113,7 +113,7 @@ GetOtherAccName (Split *split)
 /* ======================================================== */
 
 void 
-xaccSaveRegEntry (SplitRegister *reg)
+xaccSRSaveRegEntry (SplitRegister *reg)
 {
    Split *split;
    Transaction *trans;
@@ -127,7 +127,7 @@ xaccSaveRegEntry (SplitRegister *reg)
    if (!changed) return;
    
    /* get the handle to the current split and transaction */
-   split = xaccGetCurrentSplit (reg);
+   split = xaccSRGetCurrentSplit (reg);
    if (!split) return;
    trans = xaccSplitGetParent (split);
 
@@ -197,7 +197,7 @@ printf ("finished saving %s \n", xaccTransGetDescription(trans));
 /* ======================================================== */
 
 void
-xaccLoadRegEntry (SplitRegister *reg, Split *split)
+xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
    Transaction *trans;
    char *accname;
@@ -267,7 +267,7 @@ xaccLoadRegEntry (SplitRegister *reg, Split *split)
  */
 
 void
-xaccLoadRegister (SplitRegister *reg, Split **slist, 
+xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
                       Account *default_source_acc)
 {
    int i;
@@ -354,7 +354,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
             phys_row += reg->trans_cursor->numRows; 
             xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
-            xaccLoadRegEntry (reg, split);
+            xaccSRLoadRegEntry (reg, split);
          }
 
          /* now load each split that belongs to that transaction */
@@ -362,7 +362,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
          vrow ++;
          xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
          xaccMoveCursor (table, phys_row, 0);
-         xaccLoadRegEntry (reg, split);
+         xaccSRLoadRegEntry (reg, split);
       }
 
       i++; 
@@ -388,11 +388,11 @@ printf ("load reg of %d entries --------------------------- \n",i);
    xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
    
-   xaccLoadRegEntry (reg, split);
+   xaccSRLoadRegEntry (reg, split);
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
-       save_cursor_phys_row = phys_row - reg->cursor->numRows;
+       save_cursor_phys_row = phys_row - reg->split_cursor->numRows;
    }
    if (save_cursor_phys_row < (reg->header->numRows)) {
       save_cursor_phys_row = reg->header->numRows;
