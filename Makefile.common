@@ -57,12 +57,12 @@ obj/gnome/%.o: %.c
 	${cleanupdeps}
 
 clean:
-	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && make clean);)
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) clean);)
 	rm -f *~ *.bak \#* $(TRASH)
 	rm -rf obj
 
 distclean:
-	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && make distclean);)
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) distclean);)
 	rm -f *~ *.bak \#* $(TRASH)
 	rm -rf obj
 	rm -f Makefile Makefile.bak config.h
