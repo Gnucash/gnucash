@@ -392,21 +392,22 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
 
 
 static void
-gnc_parse_error_dialog (XferDialog *xferData, const char *amount_edit)
+gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
 {
-  const char *error_string;
+  const char * parse_error_string;
   char * error_phrase;
 
-  error_string = gnc_exp_parser_error_string ();
+  parse_error_string = gnc_exp_parser_error_string ();
   if (error_string == NULL)
     error_string = "";
 
-  error_phrase = g_strdup_printf(_("You must enter a valid %s.\n\n"
-                                   "Error: %s."), amount_edit,  error_string);
+  error_phrase = g_strdup_printf ("%s\n\n%s: %s.",
+                                  error_string, _("Error"),
+                                  parse_error_string);
 
-  gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), error_phrase);
+  gnc_error_dialog_parented (GTK_WINDOW(xferData->dialog), error_phrase);
 
-  g_free(error_phrase);
+  g_free (error_phrase);
 }
 
 
@@ -658,7 +659,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
   {
-    gnc_parse_error_dialog (xferData, "amount");
+    gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
     return;
   }
 
@@ -669,6 +670,13 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
 
+  if (gnc_numeric_zero_p (amount))
+  {
+    const char *message = _("You must enter an amount to transfer.");
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+    return;
+  }
+
   time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
 
   if (curr_trans)
@@ -678,7 +686,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       if (gtk_toggle_button_get_active
           (GTK_TOGGLE_BUTTON(xferData->price_radio)))
       {
-	gnc_parse_error_dialog (xferData, "price");
+	gnc_parse_error_dialog (xferData, _("You must enter a valid price."));
 	return;
       }
     }
@@ -688,7 +696,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       if (gtk_toggle_button_get_active
           (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
       {
-	gnc_parse_error_dialog (xferData, "to_amount");
+	gnc_parse_error_dialog (xferData,
+                                _("You must enter a valie `to' amount."));
 	return;
       }
     }

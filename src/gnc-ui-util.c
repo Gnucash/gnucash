@@ -678,7 +678,7 @@ gnc_default_price_print_info (void)
 
   info.commodity = NULL;
 
-  info.max_decimal_places = 5;
+  info.max_decimal_places = 6;
   info.min_decimal_places = 0;
 
   info.use_separators = 1;

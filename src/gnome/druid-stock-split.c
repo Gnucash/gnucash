@@ -33,6 +33,8 @@
 #include "glade-support.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
+#include "gnc-dateedit.h"
+#include "gnc-exp-parser.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "query-user.h"
@@ -51,16 +53,14 @@ typedef struct
   GUID account;
 
   /* info page data */
-  GtkWidget * account_entry;
-  GtkWidget * numerator_spin;
-  GtkWidget * denominator_spin;
-  GtkWidget * starting_entry;
-  GtkWidget * ending_edit;
+  GtkWidget * date_edit;
+  GtkWidget * distribution_edit;
+  GtkWidget * price_edit;
+
+  /* cash in lieu page data */
+  GtkWidget * cash_edit;
+  GtkWidget * description_entry;
 } StockSplitInfo;
-
-
-/** declarations *******************************************************/
-static void set_ending_from_spinners (StockSplitInfo *info);
 
 
 /** implementations ****************************************************/
@@ -75,7 +75,7 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static int
-fill_account_list (StockSplitInfo *info)
+fill_account_list (StockSplitInfo *info, Account *account)
 {
   GtkCList *clist;
   GList *accounts;
@@ -94,11 +94,14 @@ fill_account_list (StockSplitInfo *info)
     Account *account = node->data;
     GNCPrintAmountInfo print_info;
     const gnc_commodity *security;
+    GNCAccountType account_type;
     gnc_numeric balance;
     char *strings[4];
     gint row;
 
-    if (xaccAccountGetType (account) != STOCK)
+    account_type = xaccAccountGetType (account);
+    if (account_type != STOCK &&
+        account_type != MUTUAL)
       continue;
 
     balance = xaccAccountGetShareBalance (account);
@@ -125,7 +128,6 @@ fill_account_list (StockSplitInfo *info)
   }
 
   {
-    Account *account = xaccAccountLookup (&info->account);
     gint row = 0;
 
     if (account)
@@ -163,28 +165,17 @@ static void
 refresh_details_page (StockSplitInfo *info)
 {
   GNCPrintAmountInfo print_info;
-  gnc_numeric amount;
   Account *account;
-  const char *amount_str;
-  char *name;
 
   account = xaccAccountLookup (&info->account);
 
   g_return_if_fail (account != NULL);
 
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-  gtk_entry_set_text (GTK_ENTRY (info->account_entry), name);
-  g_free (name);
-
-  amount = xaccAccountGetShareBalance (account);
   print_info = gnc_account_quantity_print_info (account, FALSE);
 
-  amount_str = xaccPrintAmount(amount, print_info);
-  gtk_entry_set_text (GTK_ENTRY (info->starting_entry), amount_str);
-
-  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->ending_edit),
+  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->distribution_edit),
                                   print_info);
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->ending_edit),
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->distribution_edit),
                                 xaccAccountGetSecuritySCU (account));
 }
 
@@ -202,7 +193,52 @@ account_next (GnomeDruidPage *druidpage,
 
   refresh_details_page (info);
 
-  set_ending_from_spinners (info);
+  return FALSE;
+}
+
+static void
+gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
+{
+  const char * parse_error_string;
+  char * error_phrase;
+
+  parse_error_string = gnc_exp_parser_error_string ();
+  if (error_string == NULL)
+    error_string = "";
+
+  error_phrase = g_strdup_printf ("%s.\n\n%s: %s.",
+                                  error_string, _("Error"),
+                                  parse_error_string);
+
+  gnc_error_dialog_parented (GTK_WINDOW (info->window), error_phrase);
+
+  g_free (error_phrase);
+}
+
+static gboolean
+details_next (GnomeDruidPage *druidpage,
+              gpointer arg1,
+              gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+  gnc_numeric amount;
+
+  if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->distribution_edit)))
+  {
+    gnc_parse_error_dialog (info,
+                            _("You must enter a valid distribution amount."));
+    return TRUE;
+  }
+
+  amount = gnc_amount_edit_get_amount
+    (GNC_AMOUNT_EDIT (info->distribution_edit));
+
+  if (gnc_numeric_zero_p (amount))
+  {
+    const char *message = _("You must enter a distribution amount.");
+    gnc_error_dialog_parented (GTK_WINDOW (info->window), message);
+    return TRUE;
+  }
 
   return FALSE;
 }
@@ -215,50 +251,6 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
   gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
-static void
-set_ending_from_spinners (StockSplitInfo *info)
-{
-  GtkSpinButton *spin;
-  gnc_numeric starting;
-  gnc_numeric ending;
-  gint numerator;
-  gint denominator;
-  Account *account;
-
-  account = xaccAccountLookup (&info->account);
-
-  starting = xaccAccountGetShareBalance (account);
-
-  spin = GTK_SPIN_BUTTON (info->numerator_spin);
-  numerator = gtk_spin_button_get_value_as_int (spin);
-
-  spin = GTK_SPIN_BUTTON (info->denominator_spin);
-  denominator = gtk_spin_button_get_value_as_int (spin);
-
-  if (numerator > 0 && denominator > 0)
-  {
-    gnc_numeric ratio;
-    int scu;
-
-    ratio = gnc_numeric_create (numerator, denominator);
-
-    scu = xaccAccountGetSecuritySCU (account);
-
-    ending = gnc_numeric_mul (starting, ratio, scu, GNC_RND_ROUND);
-  }
-  else
-    ending = starting;
-
-  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (info->ending_edit), ending);
-}
-
-static void
-spin_changed (GtkEditable *editable, gpointer user_data)
-{
-  StockSplitInfo *info = user_data;
-
-  set_ending_from_spinners (info);
-}
 
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
@@ -300,24 +292,43 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *box;
     GtkWidget *amount;
     GtkWidget *page;
+    GtkWidget *date;
 
-    info->account_entry    = lookup_widget (info->window, "account_entry");
-    info->numerator_spin   = lookup_widget (info->window, "numerator_spin");
-    info->denominator_spin = lookup_widget (info->window, "denominator_spin");
-    info->starting_entry   = lookup_widget (info->window, "starting_entry");
+    box = lookup_widget (info->window, "date_box");
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+    info->date_edit = date;
 
-    box = lookup_widget (info->window, "ending_hbox");
-    amount = gnc_amount_edit_new();
-    gtk_box_pack_end (GTK_BOX(box), amount, TRUE, TRUE, 0);
+    box = lookup_widget (info->window, "distribution_box");
+    amount = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+    info->distribution_edit = amount;
 
-    info->ending_edit = amount;
+    box = lookup_widget (info->window, "price_box");
+    amount = gnc_amount_edit_new ();
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
+                                    gnc_default_price_print_info ());
+    gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+    info->price_edit = amount;
 
     page = lookup_widget (info->window, "details_page");
 
-    gtk_signal_connect (GTK_OBJECT (info->numerator_spin), "changed",
-                        GTK_SIGNAL_FUNC (spin_changed), info);
-    gtk_signal_connect (GTK_OBJECT (info->denominator_spin), "changed",
-                        GTK_SIGNAL_FUNC (spin_changed), info);
+    gtk_signal_connect (GTK_OBJECT (page), "next",
+                        GTK_SIGNAL_FUNC (details_next), info);
+  }
+
+  /* Cash in Lieu page */
+  {
+    GtkWidget *box;
+    GtkWidget *amount;
+
+    box = lookup_widget (info->window, "cash_box");
+    amount = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+    info->cash_edit = amount;
+
+    info->description_entry = lookup_widget (info->window,
+                                             "description_entry");
   }
 }
 
@@ -326,7 +337,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
 
-  if (fill_account_list (info) == 0)
+  if (fill_account_list (info, xaccAccountLookup (&info->account)) == 0)
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 }
 
@@ -365,7 +376,7 @@ gnc_stock_split_dialog (Account * initial)
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-  if (fill_account_list (info) == 0)
+  if (fill_account_list (info, initial) == 0)
   {
     gnc_warning_dialog (_("You don't have any stock accounts!"));
     gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
