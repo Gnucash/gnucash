@@ -34,8 +34,7 @@
 #include "table-gtk.h"
 
 
-#include "combocell-gtk.h"
-#include "combocell-gtkP.h"
+#include "combocell.h"
 
 /* Some GUI-private date that is inappropriate for 
  * the public interface.  In this impelmentation, 
