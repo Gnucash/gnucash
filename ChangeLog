@@ -1,3 +1,11 @@
+2003-03-11 TomF changes for Gnome-2 branch, 5th batch
+
+	* src/network-utils/Makefile.am: add src/engine
+	* src/network-utils/gnc-http.c: comment out ghttp usage
+
+	Added by warlord:
+	* src/network-utils/Makefile.am: remove GHTTP references
+
 2003-03-09 TomF changes for Gnome-2 branch, 4th batch
 
 	* src/gnome-utils/dialog-utils.h: Disabled declarations of 
