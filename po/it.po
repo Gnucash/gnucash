@@ -1,4 +1,4 @@
-# Messaggi in italiano per Gnucash
+# Italian translation for GnuCash
 # Copyright (C) 1998, 1999, 2000, 2002, 2003 Free Software Foundation, Inc.
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
@@ -8,7 +8,7 @@
 #
 #   auto-created          ->  auto-creato, creato automaticamente
 #   billable              ->  addebitabile
-#   company               ->  ditta
+#   company               ->  impresa
 #   cutoff day            ->  giorno limite
 #   (customer's) job      ->  lavoro
 #   (HBCI) job            ->  operazione
@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.4\n"
 "POT-Creation-Date: 2003-05-25 21:05-0700\n"
-"PO-Revision-Date: 2003-06-18 18:44+0200\n"
+"PO-Revision-Date: 2003-08-04 11:40+0200\n"
 "Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr "Numero cliente: "
 #: src/business/business-gnome/glade/customer.glade:160
 #: src/business/business-gnome/glade/vendor.glade:161
 msgid "Company Name: "
-msgstr "Nome ditta: "
+msgstr "Nome impresa: "
 
 # messages-i18n.c:240
 #: src/business/business-gnome/glade/customer.glade:178
@@ -1383,12 +1383,12 @@ msgstr "_Resoconti"
 # messages-i18n.c:104
 #: src/business/business-gnome/glade/invoice.glade:1022
 msgid "Open a company report window for the owner of this Invoice"
-msgstr "Apre una finestra di resoconto sulla ditta per l'intestatario di questa fattura"
+msgstr "Apre una finestra di resoconto sull'impresa per l'intestatario di questa fattura"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: src/business/business-gnome/glade/invoice.glade:1028
 msgid "_Company Report"
-msgstr "Resoconto _ditta"
+msgstr "Resoconto _impresa"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/invoice.glade:1037
@@ -4802,11 +4802,11 @@ msgstr "Deseleziona tutto"
 
 #: src/gnome/glade/sched-xact.glade:4282
 msgid "Mortgage/Loan Druid"
-msgstr "Druido ipoteche/prestiti"
+msgstr "Druido ipoteche/mutui"
 
 #: src/gnome/glade/sched-xact.glade:4297
 msgid "Mortgage/Loan Repayment Setup"
-msgstr "Impostazione estinzione ipoteche/prestiti"
+msgstr "Impostazione estinzione ipoteche/mutui"
 
 #: src/gnome/glade/sched-xact.glade:4298
 msgid ""
@@ -4820,8 +4820,8 @@ msgid ""
 "the created Scheduled Transactions directly."
 msgstr ""
 "Questo è un metodo passo-passo per impostare la restituzione di un\n"
-"prestito in GnuCash. In questo druido è possibile immettere i\n"
-"parametri del proprio prestito e della sua estinzione e fornire i\n"
+"mutuo in GnuCash. In questo druido è possibile immettere i\n"
+"parametri del proprio mutuo e della sua estinzione e fornire i\n"
 "dettagli per la restituzione.  Utilizzando queste informazioni,\n"
 "saranno creati i movimenti pianificati opportuni.\n"
 "\n"
@@ -4831,7 +4831,7 @@ msgstr ""
 # messages-i18n.c:231
 #: src/gnome/glade/sched-xact.glade:4316
 msgid "Loan Information"
-msgstr "Informazioni prestito"
+msgstr "Informazioni mutuo"
 
 # messages-i18n.c:227
 #: src/gnome/glade/sched-xact.glade:4352
@@ -4852,7 +4852,7 @@ msgstr "Importo:"
 # messages-i18n.c:186
 #: src/gnome/glade/sched-xact.glade:4456
 msgid "Loan Account:"
-msgstr "Conto prestito:"
+msgstr "Conto mutuo:"
 
 # po/guile_strings.txt:203
 #: src/gnome/glade/sched-xact.glade:4696
@@ -5392,7 +5392,7 @@ msgstr "fisso"
 
 #: src/gnome/druid-loan.c:512
 msgid "A Fixed-Rate loan"
-msgstr "Un prestito a tasso fisso"
+msgstr "Un mutuo a tasso fisso"
 
 # po/guile_strings.txt:182
 #: src/gnome/druid-loan.c:514
@@ -5444,17 +5444,17 @@ msgstr "Visualizzare il conto?"
 # messages-i18n.c:300
 #: src/gnome/druid-loan.c:785 src/register/ledger-core/split-register.c:2016
 msgid "Loan"
-msgstr "Prestito"
+msgstr "Mutuo"
 
 # messages-i18n.c:56
 #: src/gnome/druid-loan.c:1015
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr "Si è sicuri di voler annullare il druido di impostazione ipoteche/prestiti?"
+msgstr "Si è sicuri di voler annullare il druido di impostazione ipoteche/mutui?"
 
 # src/gnome/dialog-qif-import.c:310
 #: src/gnome/druid-loan.c:1132
 msgid "Please select a valid loan account."
-msgstr "Selezionare un conto prestiti valido."
+msgstr "Selezionare un conto mutui valido."
 
 # src/gnome/dialog-qif-import.c:310
 #: src/gnome/druid-loan.c:1220
@@ -5970,11 +5970,11 @@ msgstr "Crea i movimenti pianificati a partire dall'ultima esecuzione."
 
 #: src/gnome/window-main.c:851
 msgid "_Mortgage & Loan Repayment..."
-msgstr "Estinzione _ipoteche e prestiti..."
+msgstr "Estinzione _ipoteche e mutui..."
 
 #: src/gnome/window-main.c:852
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Imposta movimenti pianificati per l'estinzione di un prestito"
+msgstr "Imposta movimenti pianificati per l'estinzione di un mutuo"
 
 # po/guile_strings.txt:33
 #: src/gnome/window-main.c:862
@@ -10258,7 +10258,7 @@ msgstr "Internazionale"
 # src/gnome/glade-gnc-dialogs.c:1364
 #: intl-scm/guile-strings.c:150
 msgid "Date Format"
-msgstr "Formato data:"
+msgstr "Formato data"
 
 # po/guile_strings.txt:121
 #: intl-scm/guile-strings.c:152
@@ -11089,7 +11089,7 @@ msgstr "Mostra totali multi-valuta?"
 #: intl-scm/guile-strings.c:681
 #, c-format
 msgid "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
-msgstr "I movimenti relativi alla ditta %d contengono più di una valuta. Questo resoconto non è stato pensato per soddisfare a questa possibilità."
+msgstr "I movimenti relativi all'impresa %d contengono più di una valuta. Questo resoconto non è stato pensato per soddisfare a questa possibilità."
 
 #: intl-scm/guile-strings.c:683
 msgid "Sort companys by"
@@ -11097,7 +11097,7 @@ msgstr "Ordina ditte per"
 
 #: intl-scm/guile-strings.c:687
 msgid "Name of the company"
-msgstr "Nome della ditta"
+msgstr "Nome dell'impresa"
 
 # messages-i18n.c:344
 #: intl-scm/guile-strings.c:689
@@ -11106,7 +11106,7 @@ msgstr "Totale dovuto"
 
 #: intl-scm/guile-strings.c:691
 msgid "Total amount owed to/from Company"
-msgstr "Importo totale dovuto alla/dalla ditta"
+msgstr "Importo totale dovuto alla/dall'impresa"
 
 #: intl-scm/guile-strings.c:693
 msgid "Bracket Total Owed"
@@ -11388,7 +11388,7 @@ msgstr "Totale a debito"
 
 #: intl-scm/guile-strings.c:925
 msgid "The company for this report"
-msgstr "La ditta per questo resoconto"
+msgstr "L'impresa per questo resoconto"
 
 # messages-i18n.c:80
 #: intl-scm/guile-strings.c:927
@@ -11500,11 +11500,11 @@ msgstr "Numero di giorni di preavviso per le scadenze delle fatture."
 
 #: intl-scm/guile-strings.c:1025
 msgid "The name of your business"
-msgstr "Il nome della propria ditta"
+msgstr "Il nome della propria impresa"
 
 #: intl-scm/guile-strings.c:1027
 msgid "The address of your business"
-msgstr "L'indirizzo della propria ditta"
+msgstr "L'indirizzo della propria impresa"
 
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:1029
@@ -11525,11 +11525,11 @@ msgstr "La tabella predefinita per le imposte da applicare ai venditori."
 
 #: intl-scm/guile-strings.c:1037 intl-scm/guile-strings.c:3285
 msgid "Business"
-msgstr "Ditta"
+msgstr "Impresa"
 
 #: intl-scm/guile-strings.c:1041
 msgid "Company Address"
-msgstr "Indirizzo ditta"
+msgstr "Indirizzo Impresa"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -14395,7 +14395,7 @@ msgstr "Druido Dall'ultima esecuzione"
 
 #: intl-scm/guile-strings.c:3255
 msgid "Mortgage & Loan Repayment Druid"
-msgstr "Druido per l'estinzione di ipoteche e prestiti"
+msgstr "Druido per l'estinzione di ipoteche e mutui"
 
 # src/gnome/glade-gnc-dialogs.c:1149
 #: intl-scm/guile-strings.c:3257
@@ -14981,7 +14981,7 @@ msgstr ""
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #~ msgid "Loan Amount:"
-#~ msgstr "Importo prestito:"
+#~ msgstr "Importo mutuo:"
 
 # messages-i18n.c:312
 #~ msgid "Payment Amount:"
