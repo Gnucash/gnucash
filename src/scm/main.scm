@@ -57,6 +57,7 @@
   (gnc:module-load "gnucash/register/register-gnome" 0)
   (gnc:module-load "gnucash/import-export/qif-import" 0)
   (gnc:module-load "gnucash/report/report-system" 0)
+  (gnc:module-load "gnucash/report/stylesheets" 0)
   (gnc:module-load "gnucash/report/standard-reports" 0)
   (gnc:module-load "gnucash/report/utility-reports" 0)
 
