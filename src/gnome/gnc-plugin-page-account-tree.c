@@ -79,6 +79,8 @@ static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_uri (GncPluginPage
 static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 							      GdkEventButton *event,
 			       				      GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
+							       GncPluginPageAccountTree *page);
 
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAccountTree *plugin_page);
@@ -96,6 +98,7 @@ static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPl
 
 
 static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
+static void gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv);
 
 static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
@@ -146,6 +149,14 @@ static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all), NULL },
 };
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
+
+static const gchar *actions_requiring_account[] = {
+	"FileOpenAccountAction",
+	"FileOpenSubaccountsAction",
+	"EditEditAccountAction",
+	"EditDeleteAccountAction",
+	NULL
+};
 
 struct GncPluginPageAccountTreePrivate
 {
@@ -395,17 +406,14 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 static Account *
 gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page)
 {
-	GtkTreeSelection *selection;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
 	Account *account;
 
 	ENTER("page %p (tree view %p)", page, page->priv->tree_view);
-	selection = gtk_tree_view_get_selection (page->priv->tree_view);
-	if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+	account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(page->priv->tree_view));
+	if (account == NULL) {
+		LEAVE("no account");
 		return NULL;
-
-	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model), &iter);
+	}
 
 	LEAVE("account %p", account);
 	return account;
@@ -431,26 +439,40 @@ static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	GtkTreeSelection *selection;
+	GtkTreeView *tree_view;
 	GtkWidget *scrolled_window;
 
 	ENTER("page %p", plugin_page);
-	if (page->priv->widget == NULL) {
-		page->priv->widget = gtk_vbox_new (FALSE, 0);
-		gtk_widget_show (page->priv->widget);
-
-		scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-						GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-		gtk_widget_show (scrolled_window);
-		gtk_box_pack_start (GTK_BOX (page->priv->widget), scrolled_window,
-				    TRUE, TRUE, 0);
-
-		page->priv->tree_view = gnc_tree_view_account_new();
-		g_signal_connect (G_OBJECT (page->priv->tree_view), "button-press-event",
-				  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
-		gtk_widget_show (GTK_WIDGET (page->priv->tree_view));
-		gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(page->priv->tree_view));
+	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	if (page->priv->widget != NULL) {
+		LEAVE("widget = %p", page->priv->widget);
+		return page->priv->widget;
 	}
+
+	page->priv->widget = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (page->priv->widget);
+
+	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+					GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_widget_show (scrolled_window);
+	gtk_box_pack_start (GTK_BOX (page->priv->widget), scrolled_window,
+			    TRUE, TRUE, 0);
+
+	tree_view = gnc_tree_view_account_new(FALSE);
+	page->priv->tree_view = tree_view;
+	selection = gtk_tree_view_get_selection(tree_view);
+	g_signal_connect (G_OBJECT (selection), "changed",
+			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
+	g_signal_connect (G_OBJECT (tree_view), "button-press-event",
+			  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
+
+	gtk_tree_view_set_headers_visible(tree_view, TRUE);
+	gnc_plugin_page_account_tree_configure (page->priv);
+	gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);
+	gtk_widget_show (GTK_WIDGET (tree_view));
+	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
 	LEAVE("widget = %p", page->priv->widget);
 	return page->priv->widget;
@@ -554,6 +576,41 @@ gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 	}
 
 	return FALSE;
+}
+
+static void
+gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
+						   GncPluginPageAccountTree *page)
+{
+	EggActionGroup *action_group;
+	EggAction *action;
+	GtkTreeView *view;
+	Account *account;
+	GValue value = { 0 };
+	gboolean sensitive;
+	gint i;
+
+	g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+	if (!selection) {
+		sensitive = FALSE;
+	} else {
+		g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
+		view = gtk_tree_selection_get_tree_view (selection);
+		account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
+		sensitive = (account != NULL);
+
+		/* Check here for placeholder accounts, etc. */
+	}
+
+	g_value_init (&value, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&value, sensitive);
+	action_group = page->priv->action_group;
+	for (i = 0; actions_requiring_account[i]; i++) {
+	  	action = egg_action_group_get_action (action_group,
+						      actions_requiring_account[i]);
+		g_object_set_property (G_OBJECT(action), "sensitive", &value);
+	}
 }
 	
 
