@@ -1,3 +1,7 @@
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
+
 2004-01-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/options.scm: Create two new functions to centralize

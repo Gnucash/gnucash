@@ -818,7 +818,7 @@ AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 ### --------------------------------------------------------------------------
 
 AC_ARG_ENABLE(gui, 
-  [  --diable-gui                  build without the GNOME GUI components of Gnucash],
+  [  --disable-gui                  build without the GNOME GUI components of Gnucash],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
      no)  gnc_build_gui=false ;;
