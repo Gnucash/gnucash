@@ -5,20 +5,18 @@ SUBDIRS = \
   test-core \
   engine \
   backend \
+  calculation \
   app-utils \
   register \
   import-export \
   report \
-  calculation \
   experimental \
   guile \
   gnome \
   scm \
   quotes \
   pixmaps \
-  optional \
-  . \
-  test
+  optional
 
 # Engine Makefile.am file.
 bin_PROGRAMS = gnucash gnucash-make-guids
@@ -31,6 +29,7 @@ bin_PROGRAMS = gnucash gnucash-make-guids
 gnucash_LDADD = \
   -Lengine -Lengine/.libs \
   -Lgnc-module -Lgnc-module/.libs \
+  -Lcalculation -Lcalculation/.libs \
   gnc-module/libgncmodule.la \
   app-utils/libgncmod-app-utils.la \
   engine/libgncmod-engine.la \
@@ -43,7 +42,6 @@ gnucash_LDADD = \
   import-export/qif-import/libgncmod-qif-import.la \
   guile/libgncguile.a \
   gnome/libgncgnome.a \
-  calculation/libgnccalc.a \
   guile/libgncguile.a \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
@@ -61,8 +59,7 @@ gnucash_LDADD = \
 gnucash_SOURCES = \
   EuroUtils.c \
   FileDialog.c \
-  gnc-main.c \
-  gnc-exp-parser.c 
+  gnc-main.c
 
 gnucash_make_guids_LDADD = \
   gnc-module/libgncmodule.la \
@@ -94,7 +91,6 @@ CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
 INCLUDES = \
   -I./app-utils \
-  -I./calculation \
   -I./engine \
   -I./guile \
   -I./register \

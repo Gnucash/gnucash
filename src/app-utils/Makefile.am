@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-app-utils.la
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 
 INCLUDES = -I${top_srcdir}/src/gnc-module \
+           -I${top_srcdir}/src/calculation \
            -I${top_srcdir}/src/engine ${GUILE_INCS} \
            -I..
 
@@ -12,6 +13,7 @@ libgncmod_app_utils_la_SOURCES = \
   gfec.c \
   global-options.c \
   gnc-component-manager.c \
+  gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
   gncmod-app-utils.c \
@@ -21,6 +23,7 @@ libgncmod_app_utils_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-component-manager.h \
+  gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-helpers.h \
   gnc-ui-util.h \
@@ -29,8 +32,9 @@ noinst_HEADERS = \
 libgncmod_app_utils_la_LDFLAGS = -module
 
 libgncmod_app_utils_la_LIBADD = \
-  -L../engine -L../engine/.libs -lgncmod-engine \
   -L../gnc-module -L../gnc-module/.libs -lgncmodule \
+  -L../engine -L../engine/.libs -lgncmod-engine \
+  -L../calculation -L../calculation/.libs -lgncmod-calculation \
   ${GUILE_LIBS} ${GLIB_LIBS}
 
 libgw_app_utils_la_SOURCES=gw-app-utils.c

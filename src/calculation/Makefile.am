@@ -1,9 +1,12 @@
 
-noinst_LIBRARIES = libgnccalc.a
+pkglib_LTLIBRARIES = libgncmod-calculation.la
 
-libgnccalc_a_SOURCES = \
+libgncmod_calculation_la_LDFLAGS = -module
+
+libgncmod_calculation_la_SOURCES = \
   expression_parser.c \
-  fin.c
+  fin.c \
+  gncmod-calculation.c
 
 noinst_HEADERS = \
   finvar.h \
@@ -22,3 +25,5 @@ EXTRA_DIST = \
   numeric_ops.h
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+
+INCLUDES = -I${top_srcdir}/src/gnc-module

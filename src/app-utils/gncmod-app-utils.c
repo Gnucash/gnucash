@@ -47,6 +47,11 @@ gnc_module_init(int refcount) {
     return FALSE;
   }
 
+  /* load the calculation module (we depend on it) */
+  if(!gnc_module_load("gnucash/calculation", 0)) {
+    return FALSE;
+  }
+
   /* publish g-wrapped bindings */
   /* load the scheme code */
   lmod("(g-wrapped gw-app-utils)");

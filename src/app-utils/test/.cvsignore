@@ -1,5 +1,6 @@
 Makefile
 Makefile.in
+test-exp-parser
 test-link-module
 .deps
 .libs
