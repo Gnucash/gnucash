@@ -28,6 +28,9 @@
  * Generic SQL backend query builder
  * Compiles typed tag-value pairs into sql queries
  *
+ * The code here is/should be general enought to work with 
+ * any SQL implementation.
+ *
  * HISTORY:
  * Linas Vepstas January 2001
  */
