@@ -455,11 +455,18 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    int vrow;
    int style;
    int multi_line, dynamic;
+   CellBlock *lead_cursor;
 
    table = reg->table;
    style = (reg->type) & REG_STYLE_MASK;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
+   if ((REG_SINGLE_LINE == style) ||
+       (REG_SINGLE_DYNAMIC == style)) {
+      lead_cursor = reg->single_cursor;
+   } else {
+      lead_cursor = reg->double_cursor;
+   }
 
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
@@ -520,7 +527,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       } else {
          /* add one row for a transaction */
          num_virt_rows ++;
-         num_phys_rows += reg->lead_cursor->numRows; 
+         num_phys_rows += lead_cursor->numRows; 
       }
       
       i++;
@@ -546,7 +553,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       if (!(reg->user_hook)) {
          i++;
          num_virt_rows += 1; 
-         num_phys_rows += reg->lead_cursor->numRows;
+         num_phys_rows += lead_cursor->numRows;
       }
    }
 
@@ -611,11 +618,11 @@ printf ("load split %d at phys row %d \n", j, phys_row);
 
          } else {
             /* the simple case ... */
-            xaccSetCursor (table, reg->lead_cursor, phys_row, 0, vrow, 0);
+            xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
             xaccSRLoadTransEntry (reg, split, 1);
             vrow ++;
-            phys_row += reg->lead_cursor->numRows; 
+            phys_row += lead_cursor->numRows; 
          }
       }
 
@@ -674,11 +681,11 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       vrow ++;
       phys_row += reg->split_cursor->numRows; 
    } else {
-      xaccSetCursor (table, reg->lead_cursor, phys_row, 0, vrow, 0);
+      xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
       xaccMoveCursor (table, phys_row, 0);
       xaccSRLoadTransEntry (reg, split, 1);
       vrow ++;
-      phys_row += reg->lead_cursor->numRows; 
+      phys_row += lead_cursor->numRows; 
    }
    
 
