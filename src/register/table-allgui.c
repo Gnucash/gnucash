@@ -75,17 +75,27 @@ static void gnc_table_resize (Table * table,
 /** Implementation *****************************************************/
 
 Table * 
-gnc_table_new (VirtCellDataAllocator allocator,
+gnc_table_new (TableGetEntryHandler entry_handler,
+               gpointer entry_handler_data,
+               VirtCellDataAllocator allocator,
                VirtCellDataDeallocator deallocator,
                VirtCellDataCopy copy)
 {
    Table *table;
+
+   g_assert (entry_handler != NULL);
 
    /* Do this here for lower overhead. */
    if (cell_mem_chunk == NULL)
      cell_mem_chunk = g_mem_chunk_create(TableCell, 2048, G_ALLOC_AND_FREE);
 
    table = g_new0(Table, 1);
+
+   table->entry_handler = entry_handler;
+   table->entry_handler_data = entry_handler_data;
+   table->vcell_data_allocator = allocator;
+   table->vcell_data_deallocator = deallocator;
+   table->vcell_data_copy = copy;
 
    gnc_table_init (table);
 
@@ -94,10 +104,6 @@ gnc_table_new (VirtCellDataAllocator allocator,
 
    table->phys_cells = g_table_new(gnc_physical_cell_new,
                                    gnc_physical_cell_free, table);
-
-   table->vcell_data_allocator = allocator;
-   table->vcell_data_deallocator = deallocator;
-   table->vcell_data_copy = copy;
 
    return table;
 }
@@ -209,6 +215,150 @@ gnc_table_get_header_cell (Table *table)
 
 /* ==================================================== */
 
+static const char *
+gnc_table_get_entry_virtual_internal (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return "";
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return "";
+  if (cb_cell->cell_type < 0)
+    return "";
+
+  return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
+                               table->entry_handler_data);
+}
+
+const char *
+gnc_table_get_entry_virtual (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return "";
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return "";
+  if (cb_cell->cell_type < 0)
+    return "";
+
+  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
+      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+  {
+    if (cb_cell->cell == NULL)
+      return "";
+
+    if (XACC_CELL_ALLOW_SHADOW & (cb_cell->cell->input_output))
+      return cb_cell->cell->value;
+  }
+
+  return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
+                               table->entry_handler_data);
+}
+
+/* ==================================================== */
+
+guint32
+gnc_table_get_fg_color_virtual (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+  BasicCell *cell;
+  guint32 fg_color;
+
+  fg_color = 0x000000; /* black */
+
+  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
+      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+  {
+    vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+    if (vcell == NULL)
+      return fg_color;
+
+    cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                      virt_loc.phys_row_offset,
+                                      virt_loc.phys_col_offset);
+    if (cb_cell == NULL)
+      return fg_color;
+
+    cell = cb_cell->cell;
+    if (cell == NULL)
+      return fg_color;
+
+    if (cell->use_fg_color)
+      fg_color = cell->fg_color;
+  }
+
+  return fg_color;
+}
+
+/* ==================================================== */
+
+guint32
+gnc_table_get_bg_color_virtual (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+  BasicCell *cell;
+  guint32 bg_color;
+
+  bg_color = 0xffffff; /* white */
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return bg_color;
+
+  if (table->current_cursor_virt_loc.virt_row == virt_loc.vcell_loc.virt_row &&
+      table->current_cursor_virt_loc.virt_col == virt_loc.vcell_loc.virt_col)
+    bg_color = vcell->cellblock->active_bg_color;
+  else
+  {
+    if (table->alternate_bg_colors)
+    {
+      if ((virt_loc.vcell_loc.virt_row % 2) == 1)
+        bg_color = vcell->cellblock->passive_bg_color;
+      else
+        bg_color = vcell->cellblock->passive_bg_color2;
+    }
+    else if (virt_loc.phys_row_offset == 0)
+      bg_color = vcell->cellblock->passive_bg_color;
+    else
+      bg_color = vcell->cellblock->passive_bg_color2;
+
+    return bg_color;
+  }
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return bg_color;
+
+  cell = cb_cell->cell;
+  if (cell == NULL)
+    return bg_color;
+
+  if (cell->use_bg_color)
+    bg_color = cell->bg_color;
+
+  return bg_color;
+}
+
+/* ==================================================== */
+
 void 
 gnc_table_set_size (Table * table,
                     int phys_rows, int phys_cols,
@@ -224,16 +374,10 @@ gnc_table_set_size (Table * table,
        (phys_rows < table->num_phys_rows) ||
        (phys_cols < table->num_phys_cols)) 
    {
-      CellBlock *curs;
-
       table->current_cursor_virt_loc.virt_row = -1;
       table->current_cursor_virt_loc.virt_col = -1;
       table->current_cursor_phys_loc.phys_row = -1;
       table->current_cursor_phys_loc.phys_col = -1;
-
-      curs = table->current_cursor;
-
-      gnc_cellblock_clear_vcell_data (curs);
 
       table->current_cursor = NULL;
    }
@@ -338,12 +482,6 @@ gnc_physical_cell_new (gpointer user_data)
 
   pcell = &tcell->phys_cell;
 
-  pcell->entry = g_strdup("");
-  assert(pcell->entry != NULL);
-
-  pcell->fg_color = 0x000000; /* black */
-  pcell->bg_color = 0xffffff; /* white */
-
   gnc_virtual_location_init(&pcell->virt_loc);
 
   return tcell;
@@ -358,9 +496,6 @@ gnc_physical_cell_free (gpointer _tcell, gpointer user_data)
 
   if (tcell == NULL)
     return;
-
-  g_free(tcell->phys_cell.entry);
-  tcell->phys_cell.entry = NULL;
 
   g_mem_chunk_free(cell_mem_chunk, tcell);
 }
@@ -438,68 +573,25 @@ gnc_table_set_cursor (Table *table, CellBlock *curs,
 
 /* ==================================================== */
 
-/* Change the cell background colors to their "passive" values.  This
- * denotes that the cursor has left this location (which means more or
- * less the same thing as "the current location is no longer being
- * edited.") */
-static void 
-gnc_table_make_passive (Table *table)
+void
+gnc_table_set_virt_cell_data (Table *table,
+                              VirtualCellLocation vcell_loc,
+                              gpointer vcell_data)
 {
-  CellBlock *curs;
-  PhysicalCell *pcell;
-  PhysicalLocation phys_origin;
-  int cell_row, cell_col;
-  int virt_row;
+  VirtualCell *vcell;
 
-  pcell = gnc_table_get_physical_cell (table, table->current_cursor_phys_loc);
-  if (pcell == NULL)
+  if (table == NULL)
     return;
 
-  phys_origin = table->current_cursor_phys_loc;
-  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
-  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+  if (vcell == NULL)
+    return;
 
-  virt_row = pcell->virt_loc.vcell_loc.virt_row;
-
-  curs = table->current_cursor;
-
-  for (cell_row=0; cell_row < curs->num_rows; cell_row++)
-    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
-    {
-      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
-                                phys_origin.phys_col + cell_col };
-      CellBlockCell *cb_cell;
-      guint32 color;
-
-      pcell = gnc_table_get_physical_cell (table, ploc);
-
-      if (table->alternate_bg_colors)
-      {
-        if ((virt_row % 2) == 1)
-          color = curs->passive_bg_color;
-        else
-          color = curs->passive_bg_color2;
-      }
-      else if (cell_row == 0)
-        color = curs->passive_bg_color;
-      else
-        color = curs->passive_bg_color2;
-
-      pcell->bg_color = color;
-
-      cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
-      if (cb_cell && cb_cell->cell)
-      {
-        BasicCell *cell = cb_cell->cell;
-
-        if (cell->use_bg_color)
-          pcell->bg_color = cell->bg_color;
-        if (cb_cell->cell->use_fg_color)
-          pcell->fg_color = cell->fg_color;
-      }
-    }
+  if (table->vcell_data_copy)
+    table->vcell_data_copy (vcell->vcell_data, vcell_data);
+  else
+    vcell->vcell_data = vcell_data;
 }
-
 
 /* ==================================================== */
 
@@ -511,18 +603,13 @@ gnc_table_move_cursor_internal (Table *table,
   int cell_row, cell_col;
   PhysicalLocation phys_origin;
   VirtualCellLocation new_vcell_loc;
+  VirtualLocation virt_loc;
   PhysicalCell *pcell;
   VirtualCell *vcell;
   CellBlock *curs;
 
   ENTER("new_phys=(%d %d) do_move_gui=%d\n", 
         new_phys_loc.phys_row, new_phys_loc.phys_col, do_move_gui);
-
-  /* Change the cell background colors to their "passive" values.
-   * This denotes that the cursor has left this location (which means
-   * more or less the same thing as "the current location is no longer
-   * being edited.") */
-  gnc_table_make_passive (table);
 
   /* call the callback, allowing the app to commit any changes
    * associated with the current location of the cursor. Note that
@@ -535,7 +622,6 @@ gnc_table_move_cursor_internal (Table *table,
      * recursively. As a result of this recursion, the cursor may
      * have gotten repositioned. We need to make sure we make
      * passive again. */
-    gnc_table_make_passive (table);
     if (do_move_gui)
       gnc_table_refresh_current_cursor_gui (table, FALSE);
   }
@@ -558,7 +644,6 @@ gnc_table_move_cursor_internal (Table *table,
   table->current_cursor_virt_loc.virt_col = -1;
 
   curs = table->current_cursor;
-  gnc_cellblock_clear_vcell_data (curs);
   table->current_cursor = NULL;
 
   /* check for out-of-bounds conditions (which may be deliberate) */
@@ -612,18 +697,13 @@ gnc_table_move_cursor_internal (Table *table,
   phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
   phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
 
+  virt_loc.vcell_loc = new_vcell_loc;
+
   /* update the cell values to reflect the new position */
   for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
     for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
       CellBlockCell *cb_cell;
-      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
-                                phys_origin.phys_col + cell_col };
-
-      pcell = gnc_table_get_physical_cell (table, ploc);
-
-      /* change the cursor row to the active color */
-      pcell->bg_color = curs->active_bg_color;
 
       cb_cell = gnc_cellblock_get_cell(curs, cell_row, cell_col);
       if (cb_cell && cb_cell->cell)
@@ -635,27 +715,30 @@ gnc_table_move_cursor_internal (Table *table,
          * new values in the old cell locations, and that would 
          * lead to confusion of all sorts. */
         if (do_move_gui && cell->move)
+        {
+          PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
+                                    phys_origin.phys_col + cell_col };
+
           (cell->move) (cell, ploc);
+        }
 
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
         if (XACC_CELL_ALLOW_SHADOW & (cell->input_output))
         {
-          xaccSetBasicCellValue (cell, pcell->entry);
+          const char *entry;
+
+          virt_loc.phys_row_offset = cell_row;
+          virt_loc.phys_col_offset = cell_col;
+
+          entry = gnc_table_get_entry_virtual_internal (table, virt_loc);
+
+          xaccSetBasicCellValue (cell, entry);
+
           cell->changed = 0;
         }
-
-        if (cell->use_bg_color)
-          pcell->bg_color = cell->bg_color;
-        if (cell->use_fg_color)
-          pcell->fg_color = cell->fg_color;
       }
     }
-
-  if (table->vcell_data_copy)
-    table->vcell_data_copy (curs->vcell_data, vcell->vcell_data);
-  else
-    curs->vcell_data = vcell->vcell_data;
 
   LEAVE("did move\n");
 }
@@ -677,109 +760,6 @@ gnc_table_move_cursor_gui (Table *table, PhysicalLocation new_phys_loc)
   if (!table) return;
 
   gnc_table_move_cursor_internal (table, new_phys_loc, TRUE);
-}
-
-/* ==================================================== */
-
-void
-gnc_table_commit_cursor (Table *table)
-{
-  CellBlock *curs;
-  VirtualCell *vcell;
-  PhysicalCell *pcell;
-  int cell_row, cell_col;
-  VirtualCellLocation vcell_loc;
-  PhysicalLocation phys_loc;
-  PhysicalLocation phys_origin;
-
-  if (!table) return;
-
-  curs = table->current_cursor;
-  if (!curs) return;
-
-  vcell_loc = table->current_cursor_virt_loc;
-
-  /* can't commit if cursor is bad */
-  if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
-    return;
-
-  /* compute the true origin of the cell block */
-  phys_loc = table->current_cursor_phys_loc;
-
-  pcell = gnc_table_get_physical_cell (table, phys_loc);
-  if (pcell == NULL) return;
-
-  phys_origin = table->current_cursor_phys_loc;
-  phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
-  phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
-
-  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
-    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
-    {
-      CellBlockCell *cb_cell;
-      PhysicalLocation ploc = { phys_origin.phys_row + cell_row,
-                                phys_origin.phys_col + cell_col };
-
-      cb_cell = gnc_cellblock_get_cell(curs, cell_row, cell_col);
-      if (cb_cell && cb_cell->cell)
-      {
-        BasicCell *cell = cb_cell->cell;
-
-        pcell = gnc_table_get_physical_cell (table, ploc);
-
-        g_free (pcell->entry);
-        pcell->entry = g_strdup (cell->value);
-        if (cell->use_bg_color)
-          pcell->bg_color = cell->bg_color;
-        if (cell->use_fg_color)
-          pcell->fg_color = cell->fg_color;
-      }
-    }
-
-  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
-
-  if (table->vcell_data_copy)
-    table->vcell_data_copy (vcell->vcell_data, curs->vcell_data);
-  else
-    vcell->vcell_data = curs->vcell_data;
-}
-
-/* ==================================================== */
-
-void
-gnc_table_refresh_header (Table *table)
-{
-  int cell_row, cell_col;
-  VirtualCell *vcell;
-  CellBlock *cb;
-
-  if (!table) return;
-
-  vcell = gnc_table_get_header_cell (table);
-  if (vcell == NULL) return;
-
-  cb = vcell->cellblock;
-  if (cb == NULL) return;
-
-  for (cell_row = 0; cell_row < cb->num_rows; cell_row++)
-    for (cell_col = 0; cell_col < cb->num_cols; cell_col++)
-    {
-      PhysicalLocation ploc = { cell_row, cell_col };
-      CellBlockCell *cb_cell;
-      PhysicalCell *pcell;
-
-      /* Assumes header starts at physical (0, 0) */
-      pcell = gnc_table_get_physical_cell (table, ploc);
-
-      g_free(pcell->entry);
-
-      cb_cell = gnc_cellblock_get_cell(cb, cell_row, cell_col);
-
-      if (cb_cell && cb_cell->cell && cb_cell->cell->value)
-        pcell->entry = g_strdup (cb_cell->cell->value);
-      else
-        pcell->entry = g_strdup ("");
-    }
 }
 
 /* ==================================================== */
@@ -824,7 +804,6 @@ gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
   {
     /* before leaving the current virtual position, commit any edits
      * that have been accumulated in the cursor */
-    gnc_table_commit_cursor (table);
     gnc_table_move_cursor_gui (table, phys_loc);
     moved_cursor = TRUE;
   }
@@ -1024,14 +1003,14 @@ gnc_table_physical_cell_valid(Table *table,
 /* ==================================================== */
 
 /* Handle the non gui-specific parts of a cell enter callback */
-const char *
+gboolean
 gnc_table_enter_update(Table *table,
                        PhysicalLocation phys_loc,
                        int *cursor_position,
                        int *start_selection,
                        int *end_selection)
 {
-  const char *retval = NULL;
+  gboolean can_edit = TRUE;
   PhysicalCell *pcell;
   CellEnterFunc enter;
   CellBlockCell *cb_cell;
@@ -1041,20 +1020,19 @@ gnc_table_enter_update(Table *table,
   int cell_col;
 
   if (table == NULL)
-    return NULL;
+    return FALSE;
 
   cb = table->current_cursor;
 
   pcell = gnc_table_get_physical_cell (table, phys_loc);
   if (pcell == NULL)
-    return NULL;
+    return FALSE;
 
   cell_row = pcell->virt_loc.phys_row_offset;
   cell_col = pcell->virt_loc.phys_col_offset;
 
-  ENTER("enter %d %d (relrow=%d relcol=%d) val=%s\n", 
-        phys_loc.phys_row, phys_loc.phys_col,
-        cell_row, cell_col, pcell->entry);
+  ENTER("enter %d %d (relrow=%d relcol=%d)",
+        phys_loc.phys_row, phys_loc.phys_col, cell_row, cell_col);
 
   /* OK, if there is a callback for this cell, call it */
   cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
@@ -1063,29 +1041,19 @@ gnc_table_enter_update(Table *table,
 
   if (enter)
   {
-    const char *val;
+    char * old_value;
 
     DEBUG("gnc_table_enter_update(): %d %d has enter handler\n",
           cell_row, cell_col);
 
-    val = pcell->entry;
+    old_value = g_strdup(cell->value);
 
-    retval = enter(cell, val, cursor_position, start_selection, end_selection);
+    can_edit = enter(cell, cursor_position, start_selection, end_selection);
 
-    /* enter() might return null, or it might return a pointer to val,
-     * or it might return a new pointer (to newly malloc memory).
-     * Replace the old pointer with a new one only if the new one is
-     * different, freeing the old one.  (Doing a strcmp would leak
-     * memory). */
-    if (retval && (val != retval))
-    {
-      if (safe_strcmp(retval, val) != 0)
-        cell->changed = GNC_CELL_CHANGED;
-      g_free (pcell->entry);
-      pcell->entry = (char *) retval;
-    }
-    else
-      retval = NULL;
+    if (safe_strcmp(old_value, cell->value) != 0)
+      cell->changed = GNC_CELL_CHANGED;
+
+    g_free (old_value);
   }
 
   if (table->set_help)
@@ -1099,19 +1067,19 @@ gnc_table_enter_update(Table *table,
     g_free(help_str);
   }
 
-  LEAVE("return %s\n", retval);
+  LEAVE("return %d\n", can_edit);
 
-  return retval;
+  return can_edit;
 }
 
 /* ==================================================== */
 
 const char *
 gnc_table_leave_update(Table *table,
-                       PhysicalLocation phys_loc,
-                       const char *callback_text)
+                       PhysicalLocation phys_loc)
 {
-  const char *retval = NULL;
+  const char *retval;
+  gboolean changed = FALSE;
   PhysicalCell *pcell;
   CellLeaveFunc leave;
   CellBlockCell *cb_cell;
@@ -1132,12 +1100,9 @@ gnc_table_leave_update(Table *table,
   cell_row = pcell->virt_loc.phys_row_offset;
   cell_col = pcell->virt_loc.phys_col_offset;
 
-  ENTER("proposed (%d %d) rel(%d %d) \"%s\"\n",
+  ENTER("proposed (%d %d) rel(%d %d)\n",
         phys_loc.phys_row, phys_loc.phys_col,
-        cell_row, cell_col, callback_text);
-
-  if (!callback_text)
-    callback_text = "";
+        cell_row, cell_col);
 
   /* OK, if there is a callback for this cell, call it */
   cb_cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
@@ -1146,44 +1111,23 @@ gnc_table_leave_update(Table *table,
 
   if (leave)
   {
-    retval = leave(cell, callback_text);
+    char * old_value;
 
-    /* leave() might return null, or it might return a pointer to
-     * callback_text, or it might return a new pointer (to newly
-     * malloced memory). */
-    if (retval == callback_text)
-      retval = NULL;
-  }
+    old_value = g_strdup(cell->value);
 
-  if (!retval)
-    retval = g_strdup (callback_text);
+    leave (cell);
 
-  /* save whatever was returned; but lets check for  
-   * changes to avoid roiling the cells too much. */
-  if (pcell->entry)
-  {
-    if (safe_strcmp (pcell->entry, retval))
+    if (safe_strcmp(old_value, cell->value) != 0)
     {
-      g_free (pcell->entry);
-      pcell->entry = (char *) retval;
+      changed = TRUE;
       cell->changed = GNC_CELL_CHANGED;
     }
-    else
-    {
-      /* leave() allocated memory, which we will not be using */
-      g_free ((char *) retval);
-      retval = NULL;
-    }
-  }
-  else
-  {
-    pcell->entry = (char *) retval;
-    cell->changed = GNC_CELL_CHANGED;
+
+    g_free (old_value);
   }
 
-  /* return the result of the final decisionmaking */
-  if (safe_strcmp (pcell->entry, callback_text))
-    retval = pcell->entry;
+  if (changed)
+    retval = cell->value;
   else
     retval = NULL;
 
@@ -1199,14 +1143,13 @@ gnc_table_leave_update(Table *table,
 const char *
 gnc_table_modify_update(Table *table,
                         PhysicalLocation phys_loc,
-                        const char *oldval,
                         const char *change,
-                        char *newval,
+                        const char *newval,
                         int *cursor_position,
                         int *start_selection,
                         int *end_selection)
 {
-  const char *retval = NULL;
+  gboolean changed = FALSE;
   CellModifyVerifyFunc mv;
   PhysicalCell *pcell;
   CellBlockCell *cb_cell;
@@ -1214,6 +1157,7 @@ gnc_table_modify_update(Table *table,
   CellBlock *cb;
   int cell_row;
   int cell_col;
+  char * old_value;
 
   if (table == NULL)
     return NULL;
@@ -1234,28 +1178,20 @@ gnc_table_modify_update(Table *table,
   cell = cb_cell->cell;
   mv = cell->modify_verify;
 
-  if (mv)
-  {
-    retval = mv (cell, oldval, change, newval, cursor_position,
-                 start_selection, end_selection);
+  old_value = g_strdup(cell->value);
 
-    /* if the callback returned a non-null value, allow the edit */
-    if (retval)
-    {
-      /* update data. bounds check done earlier */
-      g_free (pcell->entry);
-      pcell->entry = (char *) retval;
-      cell->changed = GNC_CELL_CHANGED;
-    }
-  }
+  if (mv)
+    mv (cell, change, newval, cursor_position, start_selection, end_selection);
   else
+    xaccSetBasicCellValue (cell, newval);
+
+  if (safe_strcmp(old_value, cell->value) != 0)
   {
-    /* update data. bounds check done earlier */
-    g_free (pcell->entry);
-    pcell->entry = newval;
-    retval = newval;
+    changed = TRUE;
     cell->changed = GNC_CELL_CHANGED;
   }
+
+  g_free (old_value);
 
   if (table->set_help)
   {
@@ -1270,9 +1206,12 @@ gnc_table_modify_update(Table *table,
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 
          phys_loc.phys_row, phys_loc.phys_col,
-         cell_row, cell_col, pcell->entry);
+         cell_row, cell_col, cell->value);
 
-  return retval;
+  if (changed)
+    return cell->value;
+  else
+    return NULL;
 }
 
 /* ==================================================== */
@@ -1280,7 +1219,6 @@ gnc_table_modify_update(Table *table,
 gboolean
 gnc_table_direct_update(Table *table,
                         PhysicalLocation phys_loc,
-                        const char *oldval,
                         char **newval_ptr,
                         int *cursor_position,
                         int *start_selection,
@@ -1294,6 +1232,7 @@ gnc_table_direct_update(Table *table,
   CellBlock *cb;
   int cell_row;
   int cell_col;
+  char * old_value;
 
   if (table == NULL)
     return FALSE;
@@ -1315,15 +1254,20 @@ gnc_table_direct_update(Table *table,
   if (cell->direct_update == NULL)
     return FALSE;
 
-  result = cell->direct_update(cell, oldval, newval_ptr, cursor_position,
-                               start_selection, end_selection, gui_data);
+  old_value = g_strdup(cell->value);
 
-  if ((*newval_ptr != oldval) && (*newval_ptr != NULL))
+  result = cell->direct_update(cell, cursor_position, start_selection,
+                               end_selection, gui_data);
+
+  if (safe_strcmp(old_value, cell->value) != 0)
   {
-    g_free (pcell->entry);
-    pcell->entry = *newval_ptr;
     cell->changed = GNC_CELL_CHANGED;
+    *newval_ptr = cell->value;
   }
+  else
+    *newval_ptr = NULL;
+
+  g_free (old_value);
 
   if (table->set_help)
   {

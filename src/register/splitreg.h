@@ -29,14 +29,7 @@
  * It also determines the actual physical layout, arrangement
  * of columns, etc.
  *
- * Handles splits
- *
- * Hack alert -- finish documenting this
- *
- * The xaccConfigSplitRegister() subroutine allows the configuration 
- * of the register to be changed on the fly (dynamically).  In particular,
- * the register type, and/or the flags controlling the register display
- * can be changed on the fly. 
+ * See src/doc/design/gnucash-design.info for more information.
  *
  * DESIGN HOPES:
  * Should probably move at least some of the layout to a config 
@@ -101,10 +94,6 @@ typedef enum
   PRIC_CELL,
   SHRS_CELL,
 
-  /* NCRED & NDEBT handle minus the usual quantities */
-  NCRED_CELL,
-  NDEBT_CELL,
-
   /* MXFRM is the "mirrored" transfer-from account */
   MXFRM_CELL,
 
@@ -143,11 +132,10 @@ typedef enum
 #define MOD_XTO    0x0080
 #define MOD_MEMO   0x0100
 #define MOD_AMNT   0x0200
-#define MOD_NAMNT  0x0400
-#define MOD_PRIC   0x0800
-#define MOD_SHRS   0x1000
-#define MOD_NEW    0x2000
-#define MOD_ALL    0x3fff
+#define MOD_PRIC   0x0400
+#define MOD_SHRS   0x0800
+#define MOD_NEW    0x1000
+#define MOD_ALL    0x1fff
 
 /* Types of cursors */
 typedef enum
@@ -195,9 +183,6 @@ struct _SplitRegister {
    PriceCell     * debitCell;
    PriceCell     * priceCell;
    PriceCell     * sharesCell;
-
-   PriceCell     * ncreditCell;
-   PriceCell     * ndebitCell;
 
    /* The type of the register, must be one of the enumerated types
     * named *_REGISTER, *_LEDGER, above */
@@ -258,12 +243,15 @@ void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
+                         TableGetEntryHandler entry_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy);
+
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,
                                          SplitRegisterStyle style);
+
 void            xaccDestroySplitRegister (SplitRegister *reg);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);

@@ -35,8 +35,6 @@
 
 static gboolean
 QuickFillDirect (BasicCell *bcell,
-                 const char *oldval,
-                 char **newval_ptr,
                  int *cursor_position,
                  int *start_selection,
                  int *end_selection,
@@ -72,7 +70,7 @@ QuickFillDirect (BasicCell *bcell,
                  (*start_selection >= *cursor_position))
                 *cursor_position = *end_selection;
 
-        match = gnc_quickfill_get_string_len_match (cell->qfRoot, oldval,
+        match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value,
                                                     *cursor_position);
 
         if (match == NULL)
@@ -85,13 +83,9 @@ QuickFillDirect (BasicCell *bcell,
         match_str = gnc_quickfill_string (match);
 
         if ((match_str != NULL) &&
-            (strncmp(match_str, oldval, strlen(oldval)) == 0) && 
-            (strcmp(match_str, oldval) != 0))
-        {
-                *newval_ptr = g_strdup(match_str);
-                assert(*newval_ptr != NULL);
-                xaccSetBasicCellValue(bcell, *newval_ptr);
-        }
+            (strncmp(match_str, bcell->value, strlen(bcell->value)) == 0) && 
+            (strcmp(match_str, bcell->value) != 0))
+                xaccSetBasicCellValue(bcell, match_str);
 
         *cursor_position += prefix_len;
         *start_selection = *cursor_position;

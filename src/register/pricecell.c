@@ -67,9 +67,8 @@ static char * xaccPriceCellPrintValue (PriceCell *cell);
 
 /* ================================================ */
 
-static const char * 
+static gboolean
 PriceEnter (BasicCell *_cell,
-            const char *val,
             int *cursor_position,
             int *start_selection,
             int *end_selection)
@@ -78,16 +77,15 @@ PriceEnter (BasicCell *_cell,
   *start_selection = 0;
   *end_selection   = -1;
 
-  return val;
+  return TRUE;
 }
 
 /* ================================================ */
 /* This callback only allows numbers with a single
  * decimal point in them */
 
-static const char * 
+static void
 PriceMV (BasicCell *_cell, 
-         const char *oldval, 
          const char *change, 
          const char *newval,
          int *cursor_position,
@@ -114,60 +112,60 @@ PriceMV (BasicCell *_cell,
    {
       int i, count = 0;
 
-      for (i = 0; 0 != change[i]; i++)
+      for (i = 0; '\0' != change[i]; i++)
       {
         /* accept only numbers or a decimal point or a thousands sep */
         if (!isdigit(change[i]) &&
             (decimal_point != change[i]) &&
             (thousands_sep != change[i]) &&
             ('-' != change[i]))
-          return NULL;
+          return;
 
         if (decimal_point == change[i])
           count++;
       }
 
-      for (i = 0; 0 != oldval[i]; i++)
-        if (decimal_point == oldval[i])
+      for (i = 0; '\0' != _cell->value[i]; i++)
+        if (decimal_point == _cell->value[i])
           count++;
 
-      if (1 < count) return NULL;
+      if (1 < count)
+        return;
    }
 
    /* parse the value and store it */
    xaccParseAmount (newval, cell->monetary, &cell->amount, NULL);
    SET ((&(cell->cell)), newval);
-   return newval; 
 }
 
 /* ================================================ */
 
-static const char * 
-PriceLeave (BasicCell *_cell, const char *val) 
+static void
+PriceLeave (BasicCell *_cell) 
 {
    PriceCell *cell = (PriceCell *) _cell;
    char *newval;
+   char *oldval;
    double amount;
 
-   if (val == NULL)
-     val = "";
+   oldval = _cell->value;
+   if (oldval == NULL)
+     oldval = "";
 
-   if (*val == '\0')
+   if (*oldval == '\0')
      amount = 0.0;
-   else if (!xaccParseAmount (val, cell->monetary, &amount, NULL))
+   else if (!xaccParseAmount (oldval, cell->monetary, &amount, NULL))
      amount = 0.0;
 
    cell->amount = amount;
    newval = xaccPriceCellPrintValue(cell);
 
-   /* If they are identical, return the original */
-   if (strcmp(newval, val) == 0)
-     return val;
+   /* If they are identical do nothing */
+   if (strcmp(newval, oldval) == 0)
+     return;
 
-   /* Otherwise, return the new one. */
+   /* Otherwise, change it */
    SET ((&(cell->cell)), newval);
-
-   return g_strdup(newval);
 }
 
 /* ================================================ */

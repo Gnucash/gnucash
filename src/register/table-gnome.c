@@ -174,8 +174,6 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         gnucash_sheet_compile_styles (sheet);
 
-        gnc_table_refresh_header (table);
-
         gnucash_sheet_table_load (sheet);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
         gnucash_sheet_redraw_all (sheet);

@@ -106,28 +106,9 @@ DateCellHelpValue(BasicCell *bcell)
 
 /* ================================================ */
 
-static const char * 
-DateEnter (BasicCell *_cell,
-           const char * curr,
-           int *cursor_position,
-           int *start_selection,
-           int *end_selection)
-{
-   DateCell *cell = (DateCell *) _cell;
-
-   /* OK, we just entered a new cell. Find out
-    * what date that cell thinks it has. */
-   xaccParseDate (&(cell->date), curr);
-
-   return curr;
-}
-
-/* ================================================ */
-
 /* This code should be kept in sync with src/gnome/gnc-dateedit.c */
-static const char * 
+static void
 DateMV (BasicCell *_cell, 
-        const char *oldval, 
         const char *change, 
         const char *newval,
         int *cursor_position,
@@ -141,14 +122,14 @@ DateMV (BasicCell *_cell,
 
    /* if user hit backspace, accept the change */
    if (change == NULL) accept = TRUE;
-   else if (0x0 == change[0]) accept = TRUE;
+   else if ('\0' == change[0]) accept = TRUE;
    else
    {
       int i, count = 0;
       char separator = dateSeparator();
       gboolean ok = TRUE;
 
-      for (i = 0; 0 != change[i]; i++)
+      for (i = 0; '\0' != change[i]; i++)
       {
         /* accept only numbers or a date separator. Note that the
          * separator of '-' (for DATE_FORMAT_ISO) takes precedence
@@ -160,8 +141,8 @@ DateMV (BasicCell *_cell,
           count++;
       }
 
-      for (i=0; 0 != oldval[i]; i++)
-        if (separator == oldval[i])
+      for (i=0; '\0' != _cell->value[i]; i++)
+        if (separator == _cell->value[i])
           count++;
 
       if (2 < count)
@@ -176,12 +157,12 @@ DateMV (BasicCell *_cell,
       g_free (cell->cell.value);
       cell->cell.value = g_strdup (newval);
       xaccParseDate (&(cell->date), newval);
-      return newval;
+      return;
    }
 
    /* otherwise, maybe its an accelerator key. */
    if (strlen(change) != 1)
-     return NULL;
+     return;
 
    date = &(cell->date);
 
@@ -252,7 +233,7 @@ DateMV (BasicCell *_cell,
 
       default:
          /* reject other changes */
-         return NULL;
+         return;
    }
 
    xaccValidateDate (date);
@@ -261,37 +242,9 @@ DateMV (BasicCell *_cell,
 
    g_free (cell->cell.value);
    cell->cell.value = g_strdup (buff);
-
-   return g_strdup (buff);
 }
 
 /* ================================================ */
-
-static const char * 
-DateLeave (BasicCell *_cell, const char * curr)
-{
-   DateCell *cell = (DateCell *) _cell;
-   char buff[30];
-
-   /* OK, we are leaving the cell.  Find out
-    * what date that cell thinks it has.   */
-   xaccParseDate (&(cell->date), curr);
-
-   printDate (buff, cell->date.tm_mday, 
-                    cell->date.tm_mon+1, 
-                    cell->date.tm_year+1900);
-
-   g_free (cell->cell.value);
-   cell->cell.value = g_strdup (buff);
-
-   return g_strdup (buff);
-}
-
-/* ================================================ */
-/* for most practical purposes, the commit function
- * is identical to the DateLeave function, except that
- * it returns no value (and is publicly visible)
- */
 
 void
 xaccCommitDateCell (DateCell *cell)
@@ -360,9 +313,7 @@ xaccInitDateCell (DateCell *cell)
    g_free (cell->cell.value);
    cell->cell.value = g_strdup (buff);
  
-   cell->cell.enter_cell = DateEnter;
    cell->cell.modify_verify = DateMV;
-   cell->cell.leave_cell = DateLeave;
    cell->cell.set_value = setDateCellValue;
    cell->cell.get_help_value = DateCellHelpValue;
 }
@@ -462,7 +413,6 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
 
    g_free (cell->cell.value);
    cell->cell.value = g_strdup (buff);
-
 }
 
 /* ================================================ */

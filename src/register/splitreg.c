@@ -79,8 +79,6 @@ struct _SplitRegisterBuffer
   CellBuffer debitCell;
   CellBuffer priceCell;
   CellBuffer sharesCell;
-  CellBuffer ncreditCell;
-  CellBuffer ndebitCell;
 };
 
 static SplitRegisterColors reg_colors = {
@@ -114,8 +112,6 @@ static SplitRegisterColors reg_colors = {
 #define RECN_CELL_ALIGN    CELL_ALIGN_CENTER
 #define DEBT_CELL_ALIGN    CELL_ALIGN_RIGHT
 #define CRED_CELL_ALIGN    CELL_ALIGN_RIGHT
-#define NDEBT_CELL_ALIGN   CELL_ALIGN_RIGHT
-#define NCRED_CELL_ALIGN   CELL_ALIGN_RIGHT
 #define PRIC_CELL_ALIGN    CELL_ALIGN_RIGHT
 #define SHRS_CELL_ALIGN    CELL_ALIGN_RIGHT
 #define SHRBALN_CELL_ALIGN CELL_ALIGN_RIGHT
@@ -126,6 +122,7 @@ static void
 xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
+                       TableGetEntryHandler entry_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
@@ -162,7 +159,6 @@ static void
 configLabels (SplitRegister *reg)
 {
   SplitRegisterType type;
-  BasicCell *hc;
   char *string;
 
   type = reg->type;
@@ -202,12 +198,6 @@ configLabels (SplitRegister *reg)
       free(string);
     }
   }
-
-  /* copy debit, dredit strings to ndebit, ncredit cells */
-  hc = reg->header_label_cells[DEBT_CELL];
-  LABEL (NDEBT,  hc->value);
-  hc = reg->header_label_cells[CRED_CELL];
-  LABEL (NCRED,  hc->value);
 }
 
 /* ============================================== */
@@ -412,8 +402,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,   action,   1,  0);
         SET_CELL (MEMO,   memo,     2,  0);
         SET_CELL (XFRM,   xfrm,     3,  0);
-        SET_CELL (NDEBT,  ndebit,   5,  0);
-        SET_CELL (NCRED,  ncredit,  6,  0);
+        SET_CELL (CRED,   credit,   5,  0);
+        SET_CELL (DEBT,   debit,    6,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,   date,     0,  0);
@@ -460,8 +450,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,   action,   1,  0);
         SET_CELL (MEMO,   memo,     2,  0);
         SET_CELL (XFRM,   xfrm,     4,  0);
-        SET_CELL (NDEBT,  ndebit,   6,  0);
-        SET_CELL (NCRED,  ncredit,  7,  0);
+        SET_CELL (CRED,   credit,   6,  0);
+        SET_CELL (DEBT,   debit,    7,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,   date,     0,  0);
@@ -513,8 +503,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,    action,   1,  0);
         SET_CELL (MEMO,    memo,     2,  0);
         SET_CELL (XFRM,    xfrm,     3,  0);
-        SET_CELL (NDEBT,   ndebit,   7,  0);
-        SET_CELL (NCRED,   ncredit,  8,  0);
+        SET_CELL (CRED,    credit,   7,  0);
+        SET_CELL (DEBT,    debit,    8,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,    date,     0,  0);
@@ -568,8 +558,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,    action,   1,  0);
         SET_CELL (MEMO,    memo,     2,  0);
         SET_CELL (XFRM,    xfrm,     4,  0);
-        SET_CELL (NDEBT,   ndebit,   8,  0);
-        SET_CELL (NCRED,   ncredit,  9,  0);
+        SET_CELL (CRED,    credit,   8,  0);
+        SET_CELL (DEBT,    debit,    9,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,    date,     0,  0);
@@ -832,6 +822,7 @@ configTraverse (SplitRegister *reg)
 SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
+                         TableGetEntryHandler entry_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy)
@@ -840,7 +831,8 @@ xaccMallocSplitRegister (SplitRegisterType type,
 
   reg = g_new(SplitRegister, 1);
 
-  xaccInitSplitRegister (reg, type, style, allocator, deallocator, copy);
+  xaccInitSplitRegister (reg, type, style, entry_handler,
+                         allocator, deallocator, copy);
 
   return reg;
 }
@@ -927,9 +919,7 @@ configCursors (SplitRegister *reg)
 /* ============================================== */
 
 static void
-mallocCursors (SplitRegister *reg,
-               VirtCellDataAllocator allocator,
-               VirtCellDataDeallocator deallocator)
+mallocCursors (SplitRegister *reg)
 {
   switch (reg->type) {
     case BANK_REGISTER:
@@ -963,20 +953,15 @@ mallocCursors (SplitRegister *reg,
   }
 
   reg->num_header_rows = 1;
-  reg->header = gnc_cellblock_new (reg->num_header_rows, reg->num_cols,
-                                   allocator, deallocator);
+  reg->header = gnc_cellblock_new (reg->num_header_rows, reg->num_cols);
 
   /* cursors used in the single & double line displays */
-  reg->single_cursor = gnc_cellblock_new (1, reg->num_cols,
-                                          allocator, deallocator);
-  reg->double_cursor = gnc_cellblock_new (2, reg->num_cols,
-                                          allocator, deallocator);
+  reg->single_cursor = gnc_cellblock_new (1, reg->num_cols);
+  reg->double_cursor = gnc_cellblock_new (2, reg->num_cols);
 
   /* the two cursors used for multi-line and dynamic displays */
-  reg->trans_cursor = gnc_cellblock_new (1, reg->num_cols,
-                                         allocator, deallocator);
-  reg->split_cursor = gnc_cellblock_new (1, reg->num_cols,
-                                         allocator, deallocator);
+  reg->trans_cursor = gnc_cellblock_new (1, reg->num_cols);
+  reg->split_cursor = gnc_cellblock_new (1, reg->num_cols);
 }
 
 /* ============================================== */
@@ -995,6 +980,7 @@ static void
 xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
                        SplitRegisterStyle style,
+                       TableGetEntryHandler entry_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy)
@@ -1011,7 +997,7 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   /* --------------------------- */
   /* define the number of columns in the display, malloc the cursors */
-  mallocCursors (reg, allocator, deallocator);
+  mallocCursors (reg);
 
   /* --------------------------- */
   /* malloc the header (label) cells */
@@ -1033,9 +1019,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   HDR (SHRBALN);
   HDR (BALN);
 
-  HDR (NCRED);
-  HDR (NDEBT);
-
   /* --------------------------- */
   /* malloc the workhorse cells */
 
@@ -1056,9 +1039,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (debit,   Price);
   NEW (price,   Price);
   NEW (shares,  Price);
-
-  NEW (ncredit, Price);
-  NEW (ndebit,  Price);
 
   /* --------------------------- */
   /* configLabels merely puts strings into the label cells 
@@ -1105,28 +1085,21 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* the desc cell */
   xaccSetBasicCellBlankHelp (&reg->descCell->cell, DESC_CELL_HELP);
 
-  /* The balance cell does not accept input; it's for display only.
-   * however, we *do* want it to shadow the true cell contents when
-   * the cursor is repositioned.  Othewise, it will just display
-   * whatever previous bogus value it contained. */
-  reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
-  reg->shrbalnCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
+  /* The balance cells are just placeholders */
+  reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
+  reg->shrbalnCell->cell.input_output = XACC_CELL_ALLOW_NONE;
 
-  /* by default, don't blank zeros on the balance or price cells. */
-  xaccSetPriceCellBlankZero(reg->balanceCell, FALSE);
+  /* by default, don't blank zeros on the price cells. */
   xaccSetPriceCellBlankZero(reg->priceCell, FALSE);
 
-  /* The reconcile cell should only be entered with the pointer,
-   * and only then when the user clicks directly on the cell.
-   */
+  /* The reconcile cell should only be entered with the pointer, and
+   * only then when the user clicks directly on the cell.  */
   reg->recnCell->cell.input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
   /* Initialize price cells */
   xaccSetPriceCellValue (reg->debitCell, 0.0);
   xaccSetPriceCellValue (reg->creditCell, 0.0);
   xaccSetPriceCellValue (reg->sharesCell, 0.0);
-  xaccSetPriceCellValue (reg->ndebitCell, 0.0);
-  xaccSetPriceCellValue (reg->ncreditCell, 0.0);
 
   /* Initialize shares and share balance cells */
   xaccSetPriceCellSharesValue (reg->sharesCell, TRUE);
@@ -1176,7 +1149,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   phys_c = header->num_cols;
   reg->num_cols = phys_c;
 
-  table = gnc_table_new (allocator, deallocator, copy);
+  table = gnc_table_new (entry_handler, reg, allocator, deallocator, copy);
   gnc_table_set_size (table, phys_r, phys_c, reg->num_virt_rows, 1);
   {
     PhysicalLocation ploc = { 0, 0 };
@@ -1276,9 +1249,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->priceCell);
   xaccDestroyPriceCell     (reg->sharesCell);
 
-  xaccDestroyPriceCell     (reg->ncreditCell);
-  xaccDestroyPriceCell     (reg->ndebitCell);
-
   reg->dateCell    = NULL;
   reg->numCell     = NULL;
   reg->descCell    = NULL;
@@ -1295,9 +1265,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->debitCell   = NULL;
   reg->priceCell   = NULL;
   reg->sharesCell  = NULL;
-
-  reg->ncreditCell  = NULL;
-  reg->ndebitCell   = NULL;
 
   /* free the memory itself */
   g_free (reg);
@@ -1326,9 +1293,6 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
   changed |= MOD_PRIC  & reg->priceCell->cell.changed;
   changed |= MOD_SHRS  & reg->sharesCell->cell.changed; 
 
-  changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
-  changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;
-
   return changed;
 }
 
@@ -1351,9 +1315,6 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->debitCell->cell.changed = 0;
    reg->priceCell->cell.changed = 0;
    reg->sharesCell->cell.changed = 0;
-
-   reg->ncreditCell->cell.changed = 0;
-   reg->ndebitCell->cell.changed = 0;
 }
 
 /* ============================================== */
@@ -1464,12 +1425,6 @@ sr_cell_type (SplitRegister *reg, void * cell)
 
   if (cell == reg->sharesCell)
     return SHRS_CELL;
-
-  if (cell == reg->ncreditCell)
-    return NCRED_CELL;
-
-  if (cell == reg->ndebitCell)
-    return NDEBT_CELL;
 
   return NO_CELL;
 }
@@ -1659,8 +1614,6 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->debitCell);
   destroyCellBuffer(&srb->priceCell);
   destroyCellBuffer(&srb->sharesCell);
-  destroyCellBuffer(&srb->ncreditCell);
-  destroyCellBuffer(&srb->ndebitCell);
 
   g_free(srb);
 }
@@ -1700,8 +1653,6 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->debitCell->cell, &srb->debitCell);
   saveCell(&sr->priceCell->cell, &srb->priceCell);
   saveCell(&sr->sharesCell->cell, &srb->sharesCell);
-  saveCell(&sr->ncreditCell->cell, &srb->ncreditCell);
-  saveCell(&sr->ndebitCell->cell, &srb->ndebitCell);
 }
 
 /* ============================================== */
@@ -1741,8 +1692,6 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->debitCell->cell, &srb->debitCell);
   restoreCellChanged(&sr->priceCell->cell, &srb->priceCell);
   restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell);
-  restoreCellChanged(&sr->ncreditCell->cell, &srb->ncreditCell);
-  restoreCellChanged(&sr->ndebitCell->cell, &srb->ndebitCell);
 }
 
 /* keep in sync with CellType enum */
@@ -1762,8 +1711,6 @@ static const char *cell_names[] =
   "debit",
   "price",
   "shares",
-  "neg-credit",
-  "neg-debit",
   "transfer"
 };
 

@@ -409,6 +409,7 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (type, style,
+                                             xaccSRGetEntryHandler,
                                              xaccGUIDMalloc,
                                              xaccGUIDFree,
                                              xaccGUIDCopy);

@@ -24,32 +24,22 @@
  *
  * FUNCTION:
  * The Table object defines the structure and the GUI required
- * to display a two-dimensional grid.  It provides several 
+ * to display a two-dimensional grid. It provides several 
  * important functions:
- * -- an array of strings, one for each cell of the displayed table.
- *    These strings are kept in sync with what the user sees in 
- *    the GUI (although they may be out of sync in currently 
- *    edited row(s)).
- * -- an array of cell-block handlers.  The handlers provide
- *    the actual GUI editing infrastructure: the handlers 
- *    make sure that only allowed edits are made to a block
- *    of cells.
- * -- The "cursor", which defines the region of cells that 
- *    are currently being edited.
- * -- A lookup table that maps physical row/column addresses
- *    to the cellblock handlers that know how to handle edits
- *    to the physical, display cells.
- * -- A table of user-defined data hooks that can be associated 
- *    with each cell block.  By "user" we mean the programmer who
- *    makes use of this object.
+ * -- An array of physical cells. These cells provide mappings
+ *    from physical locations to virtual locations.
+ * -- An array of virtual cells. These cells contain:
+ *    -- the cellblock handler for that virtual cell.
+ *    -- a mapping to physical locations
+ *    -- a user data pointer
  * -- Tab-traversing mechanism so that operator can tab in a
  *    predefined order between cells.
  *
- * Please see the file "design.txt" for additional information.
+ * Please see src/doc/design/gnucash-design.info for additional information.
  *
  * This implements the gui-independent parts of the table 
- * infrastructure.  Additional, GUI-dependent parts are implemented
- * in table-gtk.c and table-motif.c
+ * infrastructure. Additional, GUI-dependent parts are implemented
+ * in table-gnome.c.
  *
  * CONCEPTS:
  * The following apply to the rows in a table:
@@ -134,12 +124,7 @@ struct _VirtualCell
 typedef struct _PhysicalCell PhysicalCell;
 struct _PhysicalCell
 {
-  char *entry;              /* The cell data */
-
   VirtualLocation virt_loc; /* Cell virtual location */
-
-  guint32 fg_color;         /* Cell foreground ARGB */
-  guint32 bg_color;         /* Cell background ARGB */
 };
 
 
@@ -156,6 +141,14 @@ typedef void (*TableSetHelpFunc) (Table *table,
                                   const char *help_str);
 
 typedef void (*TableDestroyFunc) (Table *table);
+
+typedef const char * (*TableGetEntryHandler) (gpointer vcell_data,
+                                              short cell_type,
+                                              gpointer user_data);
+
+typedef gpointer (*VirtCellDataAllocator)   (void);
+typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
+typedef void     (*VirtCellDataCopy)        (gpointer to, gpointer from);
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -223,6 +216,9 @@ struct _Table
 
   void * ui_data;
 
+  TableGetEntryHandler entry_handler;
+  gpointer entry_handler_data;
+
   TableDestroyFunc destroy;
 
   VirtCellDataAllocator   vcell_data_allocator;
@@ -232,7 +228,9 @@ struct _Table
 
 
 /* Functions to create and destroy Tables.  */
-Table *     gnc_table_new (VirtCellDataAllocator allocator,
+Table *     gnc_table_new (TableGetEntryHandler entry_handler,
+                           gpointer entry_handler_data,
+                           VirtCellDataAllocator allocator,
                            VirtCellDataDeallocator deallocator,
                            VirtCellDataCopy copy);
 
@@ -282,6 +280,15 @@ VirtualCell *  gnc_table_get_virtual_cell (Table *table,
 PhysicalCell * gnc_table_get_physical_cell (Table *table,
                                             PhysicalLocation phys_loc);
 
+const char *   gnc_table_get_entry_virtual (Table *table,
+                                            VirtualLocation virt_loc);
+
+guint32        gnc_table_get_fg_color_virtual (Table *table,
+                                               VirtualLocation virt_loc);
+
+guint32        gnc_table_get_bg_color_virtual (Table *table,
+                                               VirtualLocation virt_loc);
+
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);
 
@@ -296,10 +303,15 @@ void        gnc_table_set_size (Table * table,
  *   initialized. */
 void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
 
-/* indicate what handler should be used for a given virtual block */
+/* Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_cursor (Table *table, CellBlock *curs,
                                   PhysicalLocation phys_origin,
                                   VirtualCellLocation vcell_loc);
+
+/* Set the virtual cell data for a particular location. */
+void        gnc_table_set_virt_cell_data (Table *table,
+                                          VirtualCellLocation vcell_loc,
+                                          gpointer vcell_data);
 
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is
@@ -313,17 +325,6 @@ void        gnc_table_move_cursor (Table *table, PhysicalLocation phys_loc);
  *   GUI elements get repositioned. */
 void        gnc_table_move_cursor_gui (Table *table,
                                        PhysicalLocation phys_loc);
-
-/* The gnc_table_commit_cursor() method will copy text in the cursor
- *   cells into the table.  This function is useful during the initial
- *   load of the table with data: the cursor can be used as an
- *   intermediary to format, fix up, and otherwise control the data,
- *   and, when ready, it is commited from the cursor into the
- *   table. */
-void        gnc_table_commit_cursor (Table *table);
-
-/* Refresh the table header.  */
-void        gnc_table_refresh_header (Table *table);
 
 /* The gnc_table_verify_cursor_position() method checks the location
  *   of the cursor with respect to a physical row/column position, and
@@ -394,32 +395,26 @@ void       gnc_table_refresh_cursor_gui (Table * table, CellBlock *curs,
  *   selection position, and end selection position. If the function
  *   returns NULL, then it may change any of those values and the
  *   mapped editing widget will be modified accordingly.
- *
- * Note: since this is an internal-use-only routine, if you do not 
- * like this semantic, cut&paste this code and change it to suit you. 
- * However, don't just change it, because it will break functional code. */
-const char * gnc_table_enter_update(Table *table,
-                                    PhysicalLocation phys_loc,
-                                    int *cursor_position,
-                                    int *start_selection,
-                                    int *end_selection);
+ */
+gboolean gnc_table_enter_update(Table *table,
+                                PhysicalLocation phys_loc,
+                                int *cursor_position,
+                                int *start_selection,
+                                int *end_selection);
 
 const char * gnc_table_leave_update(Table *table,
-                                    PhysicalLocation phys_loc,
-                                    const char *old_text);
+                                    PhysicalLocation phys_loc);
 
 const char * gnc_table_modify_update(Table *table,
                                      PhysicalLocation phys_loc,
-                                     const char *oldval,
                                      const char *change,
-                                     char *newval,
+                                     const char *newval,
                                      int *cursor_position,
                                      int *start_selection,
                                      int *end_selection);
 
 gboolean     gnc_table_direct_update(Table *table,
                                      PhysicalLocation phys_loc,
-                                     const char *oldval,
                                      char **newval_ptr,
                                      int *cursor_position,
                                      int *start_selection,

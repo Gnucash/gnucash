@@ -89,12 +89,9 @@
  *    arrow keys, or otherwise "selecting" it as the current
  *    cell to edit.  
  *
- *    The current value of the cell is passed as the argument.  
- *    If the callback wishes to change the value of the cell, 
- *    it can return a non-null string.  Alternately, to leave 
- *    the value of the cell unchanged, it can return NULL.  
- *    If a string is returned, the string must be as the result 
- *    of a malloc.
+ *    The callback may change the value of the cell. The callback
+ *    should return true if the cell should allow direct editing
+ *    by the user, FALES otherwise.
  *
  *    The callback is also passed pointers to the cursor position
  *    and the start and end of the highlited region. If the callback
@@ -104,12 +101,7 @@
  * The leave_cell() callback is called when the user exits
  *    a cell.  This can be by tabbing or arrow-keying away 
  *    from it, or by using the mouse to specify a different 
- *    cell, etc.  The current value of the cell is passed as the 
- *    argument.  If the callback wishes to change the value of 
- *    the cell, it can return a non-null string.  Alternately, 
- *    to leave the value of the cell unchanged, it can return 
- *    NULL.  If a string is returned, the string must be as the 
- *    result of a malloc.
+ *    cell, etc. The callback may change the value of the cell.
  *
  * The modify_verify() callback is called when a user makes a
  *    change to a cell.  It is called after every keystroke,
@@ -118,7 +110,6 @@
  *    the usual X11 fashion).
  *    
  *    The arguments passed in are :
- *    "old", the string prior to user's attempted modification,
  *    "add", the string the user is attempting to add
  *           (will be null if text is being deleted).
  *    "new", the string that would result is user's changes
@@ -136,25 +127,13 @@
  *                       start and end to 0 for no selection.
  *                       Set the end to -1 to make the selection
  *                       go to the end of the text.
- *    It must return a string, or void if it rejects the change.
- *    The returned string will be used to update the cell value.
  *
  * The direct_update() callback is called to pass raw gui data
  *    to the cell. The exact format of the data is determined
  *    by the gui. The callback should return TRUE if the event
  *    was handled, i.e., there is no need to call the modify
- *    update. If the value needs to be changed, the newval_ptr
- *    should be set to a malloc'd new value. The other arguments
- *    work as above.
- *
- * Some memory management rules:
- * (1) the callback must not modify the values of old, change, new
- * (2) if the callback likes the new string, it may return the
- *     pointer to "new".  It must *not* return the pointer to 
- *     "change" or "old"
- * (3) if the callback chooses to not return "new", it must 
- *     malloc the memory for a new string.  It does not need
- *     to worry about garbage collection.
+ *    update. If the value needs to be changed, the cell should
+ *    go ahead and change it.
  *
  *
  * GUI CALLBACKS:
@@ -204,42 +183,37 @@
 
 typedef struct _BasicCell BasicCell;
 
-typedef void (*CellSetValueFunc) (BasicCell *,
+typedef void (*CellSetValueFunc) (BasicCell *cell,
                                   const char * new_value);
 
-typedef const char * (*CellEnterFunc) (BasicCell *,
-                                       const char * current,
-                                       int *cursor_position,
-                                       int *start_selection,
-                                       int *end_selection);
+typedef gboolean (*CellEnterFunc) (BasicCell *cell,
+                                   int *cursor_position,
+                                   int *start_selection,
+                                   int *end_selection);
 
-typedef const char * (*CellModifyVerifyFunc) (BasicCell *,
-                                              const char *old_value, 
-                                              const char *add_str, 
-                                              const char *new_value,
-                                              int *cursor_position,
-                                              int *start_selection,
-                                              int *end_selection);
+typedef void (*CellModifyVerifyFunc) (BasicCell *cell,
+                                      const char *add_str, 
+                                      const char *new_value,
+                                      int *cursor_position,
+                                      int *start_selection,
+                                      int *end_selection);
 
-typedef gboolean (*CellDirectUpdateFunc) (BasicCell *,
-                                          const char *oldval,
-                                          char **newval_ptr,
+typedef gboolean (*CellDirectUpdateFunc) (BasicCell *cell,
                                           int *cursor_position,
                                           int *start_selection,
                                           int *end_selection,
                                           void *gui_data);
 
-typedef const char * (*CellLeaveFunc) (BasicCell *,
-                                       const char * current);
+typedef void (*CellLeaveFunc) (BasicCell *cell);
 
-typedef void (*CellRealizeFunc) (BasicCell *, 
+typedef void (*CellRealizeFunc) (BasicCell *cell,
                                  void *gui_handle);
 
-typedef void (*CellMoveFunc) (BasicCell *, PhysicalLocation phys_loc);
+typedef void (*CellMoveFunc) (BasicCell *cell, PhysicalLocation phys_loc);
 
-typedef void (*CellDestroyFunc) (BasicCell *);
+typedef void (*CellDestroyFunc) (BasicCell *cell);
 
-typedef char * (*CellGetHelpFunc) (BasicCell *);
+typedef char * (*CellGetHelpFunc) (BasicCell *cell);
 
 struct _BasicCell
 {

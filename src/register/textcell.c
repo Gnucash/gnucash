@@ -40,9 +40,8 @@
 /* by definition, all text is valid text.  So accept
  * all modifications */
 
-static const char * 
+static void
 TextMV (struct _BasicCell *_cell,
-        const char *oldval, 
         const char *change, 
         const char *newval,
         int *cursor_position,
@@ -52,7 +51,6 @@ TextMV (struct _BasicCell *_cell,
    BasicCell *cell = (BasicCell *) _cell;
 
    xaccSetBasicCellValue (cell, newval);
-   return newval;
 }
 
 /* ================================================ */

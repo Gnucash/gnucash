@@ -257,21 +257,29 @@ draw_cell (GnucashGrid *grid, int block,
            int x, int y, int width, int height)
 {
         Table *table = grid->sheet->table;
-        gchar *text;
+        const char *text;
         GdkFont *font;
         CellStyle *cs;
         SheetBlock *sheet_block;
-        SheetBlockCell *sb_cell;
-        VirtualCellLocation vcell_loc = { block, 0 };
+        VirtualLocation virt_loc;
         VirtualCell *vcell;
+        GdkColor *bg_color;
+        GdkColor *fg_color;
+        guint32 argb;
+
+        virt_loc.vcell_loc.virt_row = block;
+        virt_loc.vcell_loc.virt_col = 0;
+        virt_loc.phys_row_offset = i;
+        virt_loc.phys_col_offset = j;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        sheet_block = gnucash_sheet_get_block (grid->sheet, vcell_loc);
+        sheet_block = gnucash_sheet_get_block (grid->sheet, virt_loc.vcell_loc);
 
-        sb_cell = gnucash_sheet_block_get_cell (sheet_block, i, j);
+        argb = gnc_table_get_bg_color_virtual (table, virt_loc);
+        bg_color = gnucash_color_argb_to_gdk (argb);
 
-        gdk_gc_set_foreground (grid->gc, sb_cell->bg_color);
+        gdk_gc_set_foreground (grid->gc, bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
@@ -299,7 +307,7 @@ draw_cell (GnucashGrid *grid, int block,
         /* dividing line */
         if ((i == 0) && (table->dividing_row >= 0))
         {
-                vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+                vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
                 if (vcell->phys_loc.phys_row == table->dividing_row)
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
@@ -309,7 +317,7 @@ draw_cell (GnucashGrid *grid, int block,
 
         if ((i == (style->nrows - 1)) && (table->dividing_row >= 0))
         {
-                vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+                vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
                 if (vcell->phys_loc.phys_row == (table->dividing_row - 1))
                 {
                         gdk_gc_set_foreground (grid->gc, &gn_blue);
@@ -318,45 +326,14 @@ draw_cell (GnucashGrid *grid, int block,
                 }
         }
 
-#undef ROUNDED_CORNERS        
-#ifdef ROUNDED_CORNERS        
-        gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x+1, 
-                            y+1, width-1, height-1);
-
-        gdk_gc_set_foreground (grid->gc, &gn_black);
-
-        gdk_draw_line (drawable, grid->gc, x+5, y, x+width-5, y);
-        gdk_draw_line (drawable, grid->gc, x+width, y+5, x+width, y+height-5);
-        gdk_draw_line (drawable, grid->gc, x+width-5, y+height, x+5, y+height);
-        gdk_draw_line (drawable, grid->gc, x, y+height-5, x, y+5);        
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x, y,
-                      10, 10,
-                      180*64, -90*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x+width-10, y,
-                      10, 10,
-                      0*64, 90*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x+width-10, y+height-10,
-                      10, 10,
-                      0*64, -100*64);
-
-        gdk_draw_arc (drawable, grid->gc, FALSE,
-                      x, y+height-10,
-                      10, 10,
-                      180*64, 90*64);
-#endif /* ROUNDED_CORNERS */
-
-        text = sb_cell->entry;
+        text = gnc_table_get_entry_virtual (table, virt_loc);
 
         font = grid->normal_font;
 
-        gdk_gc_set_foreground (grid->gc, sb_cell->fg_color);
+        argb = gnc_table_get_fg_color_virtual (table, virt_loc);
+        fg_color = gnucash_color_argb_to_gdk (argb);
+
+        gdk_gc_set_foreground (grid->gc, fg_color);
 
         if (table->current_cursor_virt_loc.virt_row == block &&
 	    (!text || strlen(text) == 0)) {

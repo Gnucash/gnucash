@@ -116,21 +116,23 @@ gnucash_color_argb_to_gdk (guint32 argb)
 
         color = g_hash_table_lookup (color_hash_table, &key);
 
-        if (!color) {
-                color = g_new0(GdkColor, 1);
-                newkey = g_new0(guint32, 1);
+        if (color)
+                return color;
 
-                *newkey = key;
+        color = g_new0(GdkColor, 1);
+        newkey = g_new0(guint32, 1);
+
+        *newkey = key;
                 
-                color->red = (argb & 0xff0000) >> 8;
-                color->green = argb & 0xff00;
-                color->blue = (argb & 0xff) << 8;
+        color->red = (argb & 0xff0000) >> 8;
+        color->green = argb & 0xff00;
+        color->blue = (argb & 0xff) << 8;
 
-                color->pixel = gnucash_color_alloc(color->red, color->green,
-						   color->blue);
+        color->pixel = gnucash_color_alloc(color->red,
+                                           color->green,
+                                           color->blue);
 
-                g_hash_table_insert (color_hash_table, newkey, color);
-        }
+        g_hash_table_insert (color_hash_table, newkey, color);
 
         return color;
 }

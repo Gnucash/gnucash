@@ -66,30 +66,8 @@ parse_num(const char *string, long int *num)
 }
 
 /* ================================================ */
-static const char * 
-NumEnter (BasicCell *_cell,
-          const char * curr,
-          int *cursor_position,
-          int *start_selection,
-          int *end_selection)
-{
-  NumCell *cell = (NumCell *) _cell;
-
-  if (!cell->next_num_set)
-  {
-    long int number;
-
-    if (parse_num(curr, &number))
-      cell->next_num = number + 1;
-  }
-
-  return curr;
-}
-
-/* ================================================ */
-static const char * 
+static void
 NumMV (BasicCell *_cell, 
-       const char *oldval, 
        const char *change, 
        const char *newval,
        int *cursor_position,
@@ -107,12 +85,12 @@ NumMV (BasicCell *_cell,
   {
     g_free (cell->cell.value);
     cell->cell.value = g_strdup (newval);
-    return newval;
+    return;
   }
 
   /* otherwise, it may be an accelerator key. */
 
-  is_num = parse_num(oldval, &number);
+  is_num = parse_num(_cell->value, &number);
 
   if (is_num && (number < 0))
     is_num = FALSE;
@@ -148,7 +126,7 @@ NumMV (BasicCell *_cell,
     number = 0;
 
   /* If there is already a non-number there, don't accelerate. */
-  if (accel && !is_num && (safe_strcmp(oldval, "") != 0))
+  if (accel && !is_num && (safe_strcmp(_cell->value, "") != 0))
     accel = FALSE;
 
   if (accel)
@@ -162,37 +140,18 @@ NumMV (BasicCell *_cell,
     snprintf(buff, sizeof(buff), "%ld", number);
 
     if (safe_strcmp(buff, "") == 0)
-      return NULL;
+      return;
 
     g_free (cell->cell.value);
     cell->cell.value = g_strdup (buff);
 
     *cursor_position = -1;
 
-    return g_strdup(buff);
+    return;
   }
 
   g_free (cell->cell.value);
   cell->cell.value = g_strdup (newval);
-
-  return newval;
-}
-
-/* ================================================ */
-static const char * 
-NumLeave (BasicCell *_cell, const char * curr)
-{
-  NumCell *cell = (NumCell *) _cell;
-
-  if (!cell->next_num_set)
-  {
-    long int number;
-
-    if (parse_num(curr, &number))
-      cell->next_num = number + 1;
-  }
-
-  return NULL;
 }
 
 /* ================================================ */
@@ -262,8 +221,6 @@ xaccInitNumCell (NumCell *cell)
   cell->next_num = 0;
   cell->next_num_set = FALSE;
  
-  cell->cell.enter_cell = NumEnter;
   cell->cell.modify_verify = NumMV;
-  cell->cell.leave_cell = NumLeave;
   cell->cell.set_value = setNumCellValue;
 }
