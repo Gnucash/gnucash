@@ -187,6 +187,9 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   GtkAllocation *allocation,
                                   gpointer user_data );
 
+
+void gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data);
+
 static void gnc_split_reg_class_init( GNCSplitRegClass *class );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
@@ -1591,6 +1594,16 @@ gnc_split_reg_sort_desc_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
   gnc_split_reg_sort(gsr, BY_DESC);
+}
+
+void
+gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+
+  /* XXX Ignore the return value -- we don't care if this succeeds */
+  (void)gnc_split_register_handle_exchange (reg, TRUE);
 }
 
 static void

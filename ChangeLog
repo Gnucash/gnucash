@@ -5,6 +5,9 @@
 	  move handle_exchange() API from -p.h to .h to export it
 	  for the menus to call.
 
+	* src/gnome/gnc-split-reg.c:  add a handler for
+	  exchange-rate menu items..  Partial fix for #100285
+	
 2002-12-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c:
