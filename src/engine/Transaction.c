@@ -92,13 +92,19 @@ xaccMallocSplit( void )
 void
 xaccFreeSplit( Split *split )
   {
+  Transaction *trans;
+
   if (!split) return;
 
   /* free a split only if it is not claimed
    * by any accounts. */
   if (split->acc) return;
 
-  xaccTransRemoveSplit (split->parent, split);
+  /* free the split only if its not a source split */
+  trans = split->parent;
+  if (&(trans->source_split) == split) return;
+
+  xaccTransRemoveSplit (trans, split);
 
   free(split->memo);
   free(split->action);
@@ -255,7 +261,30 @@ xaccFreeTransaction( Transaction *trans )
     s = trans->dest_splits[i];
   }
 
+  /* free up the destination splits */
+  i = 0;
+  s = trans->dest_splits[i];
+  while (s) {
+    xaccFreeSplit (s);
+    i++;
+    s = trans->dest_splits[i];
+  }
+
   _free (trans->dest_splits);
+
+
+  /* free up the source-split related stuff. */
+  free(trans->source_split.memo);
+  free(trans->source_split.action);
+
+  /* just in case someone looks up freed memory ... */
+  trans->source_split.memo        = 0x0;
+  trans->source_split.reconciled  = NREC;
+  trans->source_split.damount     = 0.0;
+  trans->source_split.share_price = 1.0;
+  trans->source_split.parent      = NULL;
+
+  /* free up transaction strings */
   free(trans->num);
   free(trans->description);
 
