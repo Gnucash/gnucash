@@ -43,13 +43,11 @@
 #include "main.h"
 #include "util.h"
 
-#define HAVE_XMHTML 1
-
-#if HAVE_HTMLW
+#if USE_HTMLW
 #include "HTML.h"
 #endif 
 
-#if HAVE_XMHTML
+#if USE_XMHTML
 #include "XmHTML.h"
 #endif 
 
@@ -188,7 +186,7 @@ static void   helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb );
 
 char      *htmlRead( char *file );
 
-#if HAVE_XMHTML
+#if USE_XMHTML
 void xaccJumpToLabel (Widget mw, char *jumpfile);
 #endif 
 
@@ -257,7 +255,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     helpwidget =
       XtVaCreateManagedWidget( "help",
-#if HAVE_HTMLW
+#if USE_HTMLW
 			       htmlWidgetClass,         controlform,
 #if HAVE_XPM
 			       WbNresolveImageFunction, htmlResolveImage,
@@ -265,7 +263,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 			       WbNdelayImageLoads,      False,
 #endif 
 
-#if HAVE_XMHTML
+#if USE_XMHTML
                                xmHTMLWidgetClass,       controlform,
                                XmNanchorButtons,        False, 
 #endif 
@@ -277,10 +275,10 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 			       XmNheight,               400,
 			       NULL );
     
-#if HAVE_HTMLW
+#if USE_HTMLW
     XtAddCallback( helpwidget, WbNanchorCallback, helpAnchorCB, NULL );
 #endif 
-#if HAVE_XMHTML
+#if USE_XMHTML
     XtAddCallback( helpwidget, XmNactivateCallback, helpAnchorCB, NULL );
 #endif
     
@@ -341,10 +339,10 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     /* we have to load the page after the widget is realized, so
      * the pictures can be drawn  ?? but its not realized yet! */
-#if HAVE_HTMLW
+#if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
 #endif
-#ifdef HAVE_XMHTML
+#ifdef USE_XMHTML
     xaccJumpToLabel( helpwidget, htmlfile );
 #endif
 
@@ -364,10 +362,10 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     }
   /* if help window is already open, just load new page */
   else {
-#if HAVE_HTMLW
+#if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
 #endif
-#ifdef HAVE_XMHTML
+#ifdef USE_XMHTML
     xaccJumpToLabel( helpwidget, htmlfile );
 #endif
     }
@@ -393,10 +391,10 @@ helpBackCB( Widget mw, XtPointer cd, XtPointer cb )
   char *file = historyBack(&helpHistory);
   if( file != NULL )
     {
-#if HAVE_HTMLW
+#if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
 #endif
-#ifdef HAVE_XMHTML
+#ifdef USE_XMHTML
     xaccJumpToLabel( helpwidget, file );
 #endif
     }
@@ -417,10 +415,10 @@ helpFwdCB( Widget mw, XtPointer cd, XtPointer cb )
   char *file = historyFwd(&helpHistory);
   if( file != NULL )
     {
-#if HAVE_HTMLW
+#if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
 #endif
-#ifdef HAVE_XMHTML
+#ifdef USE_XMHTML
     xaccJumpToLabel( helpwidget, file );
 #endif
     }
@@ -452,7 +450,7 @@ closeHelpWin( Widget mw, XtPointer cd, XtPointer cb )
 static void
 helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
   {
-#if HAVE_HTMLW
+#if USE_HTMLW
   WbAnchorCallbackData *acbs = (WbAnchorCallbackData *)cb;
   fprintf(stderr,"%d %s\n",acbs->element_id, acbs->text);
 
@@ -464,7 +462,7 @@ helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
     }
 #endif
 
-#ifdef HAVE_XMHTML
+#ifdef USE_XMHTML
    XmHTMLAnchorCallbackStruct *acbs = (XmHTMLAnchorCallbackStruct *) cb;
 
    if(acbs->reason != XmCR_ACTIVATE) return;
@@ -507,7 +505,7 @@ helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
  *     utility functions...                                         * 
 \********************************************************************/
 
-#if HAVE_XMHTML
+#if USE_XMHTML
 void
 xaccJumpToLabel (Widget mw, char *jumpfile)
 {

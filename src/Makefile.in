@@ -30,8 +30,9 @@ CC       = @CC@
 INCLPATH = -I.. \
            -I@x_includes@ \
            -I@srcdir@/../include \
-           -I@srcdir@/../lib/libhtmlw \
-           -I@srcdir@/../lib/ComboBox-1.33
+           -I@srcdir@/../lib/ComboBox-1.33 \
+           -I@srcdir@/../lib/XmHTML-1.1.0/src
+#           -I@srcdir@/../lib/libhtmlw 
 CFLAGS   = @cflags@
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
@@ -39,6 +40,7 @@ LIBPATH  = -L@x_libraries@
 TARGET   = ../xacc
 
 LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
+LIBXMHTML= ../lib/XmHTML-1.1.0/libXmHTML.a
 LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 ######################################################################
@@ -47,7 +49,8 @@ SRCS = AccWindow.c Account.c AccountMenu.c Action.c AdjBWindow.c    \
        LedgerUtils.c MainWindow.c PopBox.c QIFIO.c QuickFill.c      \
        RecnWindow.c RegWindow.c Reports.c TextBox.c Transaction.c   \
        XferBox.c XferWindow.c date.c main.c util.c
-OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
+# OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
+OBJS = ${SRCS:.c=.o} $(LIBXMHTML) $(LIBXBAE) $(LIBCOMBO)
 ######################################################################
 
 default: $(TARGET)
