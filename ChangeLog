@@ -1,3 +1,7 @@
+2005-03-07  Neil Williams <linux@codehelp.co.uk>
+	* ./src/engine/qofsession.c:Fixing references 
+	and empty partial books
+
 2005-03-07  Neil Williams  <linux@codehelp.co.uk>
 	* ./HACKING: Add a tip for using gdb with opt
 	style builds.
