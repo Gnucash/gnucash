@@ -139,7 +139,7 @@
   (cond
    ((or (string=? "1.3" (version))
         (string=? "1.3.4" (version))
-        (string=? "1.4" (version)))
+	(string=? "1.4" (substring (version) 0 3)))
     (lambda (module)
       (process-use-modules (list module))))
    (else

@@ -1,6 +1,8 @@
 2002-11-21  Derek Atkins  <derek@ihtfp.com>
 	* business-core/test/*.c -- fix the tests for begin/commit edit
 
+	* src/scm/main.scm -- fix the load of price-quotes on guile-1.4.1
+	
 2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Tweak the matching
 	heuristics.
