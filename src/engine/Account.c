@@ -2807,19 +2807,7 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
 }
 
 /* ================================================================ */
-/* gncObject function implementation and registration */
-
-static void
-account_foreach (QofBook *book, QofForeachCB cb, gpointer ud)
-{
-  QofCollection *col;
-
-  g_return_if_fail (book);
-  g_return_if_fail (cb);
-
-  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
-  qof_collection_foreach (col, (QofEntityForeachCB) cb, ud);
-}
+/* QofObject function implementation and registration */
 
 static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
@@ -2829,7 +2817,7 @@ static QofObject account_object_def = {
   book_end:              NULL,
   is_dirty:              NULL,
   mark_clean:            NULL,
-  foreach:               account_foreach,
+  foreach:               qof_collection_foreach,
   printable:             (const char* (*)(gpointer)) xaccAccountGetName
 };
 

@@ -46,6 +46,7 @@ AccountGroup *xaccMallocAccountGroup (QofBook *book);
  * account group associated with the indicated book.
  */
 AccountGroup * xaccGetAccountGroup (QofBook *book);
+AccountGroup * xaccCollGetAccountGroup (QofCollection *col);
 
 /*
  * The xaccAccountDestroy() routine will destroy and free all 

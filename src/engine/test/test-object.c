@@ -6,14 +6,14 @@
 #include "gnc-engine-util.h"
 #include "messages.h"
 #include "qofbook.h"
+#include "qofobject.h"
 
-#include "gncObject.h"
 #include "test-stuff.h"
 
 #define TEST_MODULE_NAME "object-test"
 #define TEST_MODULE_DESC "Test Object"
 
-static void foreach (QofBook *, QofForeachCB, gpointer);
+static void obj_foreach (QofCollection *, QofEntityForeachCB, gpointer);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
 static void test_foreach (QofBook *, const char *);
@@ -26,7 +26,7 @@ static QofObject bus_obj = {
   NULL,				/* destroy */
   NULL,           /* is dirty */
   NULL,				/* mark_clean */
-  foreach,
+  obj_foreach,
   printable,
 };
 
@@ -34,15 +34,15 @@ static void test_object (void)
 {
   /* Test the global registration and lookup functions */
   {
-    do_test (!gncObjectRegister (NULL), "register NULL");
-    do_test (gncObjectRegister (&bus_obj), "register test object");
-    do_test (!gncObjectRegister (&bus_obj), "register test object again");
-    do_test (gncObjectLookup (TEST_MODULE_NAME) == &bus_obj,
+    do_test (!qof_object_register (NULL), "register NULL");
+    do_test (qof_object_register (&bus_obj), "register test object");
+    do_test (!qof_object_register (&bus_obj), "register test object again");
+    do_test (qof_object_lookup (TEST_MODULE_NAME) == &bus_obj,
 	     "lookup our installed object");
-    do_test (gncObjectLookup ("snm98sn snml say  dyikh9y9ha") == NULL,
+    do_test (qof_object_lookup ("snm98sn snml say  dyikh9y9ha") == NULL,
 	     "lookup non-existant object object");
 
-    do_test (!safe_strcmp (gncObjectGetTypeLabel (TEST_MODULE_NAME),
+    do_test (!safe_strcmp (qof_object_get_type_label (TEST_MODULE_NAME),
 		      _(TEST_MODULE_DESC)),
 	     "test description return");
   }
@@ -52,17 +52,17 @@ static void test_object (void)
 }
 
 static void
-foreach (QofBook *book, QofForeachCB cb, gpointer u_d)
+obj_foreach (QofCollection *col, QofEntityForeachCB cb, gpointer u_d)
 {
   int *foo = u_d;
 
-  do_test (book != NULL, "foreach: NULL object");
+  do_test (col != NULL, "foreach: NULL collection");
   success ("called foreach callback");
 
   *foo = 1;
 }
 
-static void foreachCB (gpointer obj, gpointer u_d)
+static void foreachCB (QofEntity *ent, gpointer u_d)
 {
   do_test (FALSE, "FAIL");
 }
@@ -80,26 +80,26 @@ test_foreach (QofBook *book, const char *name)
 {
   int res = 0;
 
-  gncObjectForeach (NULL, NULL, NULL, &res);
+  qof_object_foreach (NULL, NULL, NULL, &res);
   do_test (res == 0, "object: Foreach: NULL, NULL, NULL");
-  gncObjectForeach (NULL, NULL, foreachCB, &res);
+  qof_object_foreach (NULL, NULL, foreachCB, &res);
   do_test (res == 0, "object: Foreach: NULL, NULL, foreachCB");
 
-  gncObjectForeach (NULL, book, NULL, &res);
+  qof_object_foreach (NULL, book, NULL, &res);
   do_test (res == 0, "object: Foreach: NULL, book, NULL");
-  gncObjectForeach (NULL, book, foreachCB, &res);
+  qof_object_foreach (NULL, book, foreachCB, &res);
   do_test (res == 0, "object: Foreach: NULL, book, foreachCB");
 
-  gncObjectForeach (name, NULL, NULL, &res);
+  qof_object_foreach (name, NULL, NULL, &res);
   do_test (res == 0, "object: Foreach: name, NULL, NULL");
-  gncObjectForeach (name, NULL, foreachCB, &res);
+  qof_object_foreach (name, NULL, foreachCB, &res);
   do_test (res == 0, "object: Foreach: name, NULL, foreachCB");
 
-  gncObjectForeach (name, book, NULL, &res);
+  qof_object_foreach (name, book, NULL, &res);
   do_test (res != 0, "object: Foreach: name, book, NULL");
 
   res = 0;
-  gncObjectForeach (name, book, foreachCB, &res);
+  qof_object_foreach (name, book, foreachCB, &res);
   do_test (res != 0, "object: Foreach: name, book, foreachCB");
 }
 
@@ -108,13 +108,13 @@ test_printable (const char *name, gpointer obj)
 {
   const char *res;
 
-  do_test (gncObjectPrintable (NULL, NULL) == NULL,
+  do_test (qof_object_printable (NULL, NULL) == NULL,
 	   "object: Printable: NULL, NULL");
-  do_test (gncObjectPrintable (NULL, obj) == NULL,
+  do_test (qof_object_printable (NULL, obj) == NULL,
 	   "object: Printable: NULL, object");
-  do_test (gncObjectPrintable (name, NULL) == NULL,
+  do_test (qof_object_printable (name, NULL) == NULL,
 	   "object: Printable: mod_name, NULL");
-  res = gncObjectPrintable (name, obj);
+  res = qof_object_printable (name, obj);
   do_test (res != NULL, "object: Printable: mod_name, object");
 }
 

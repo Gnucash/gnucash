@@ -31,6 +31,7 @@
 #include "gnc-numeric.h"
 #include "guid.h"
 #include "qofbook.h"
+#include "qofid.h"
 #include "qofinstance.h"
 
 
@@ -239,6 +240,7 @@ GNCPriceDB * gnc_pricedb_create(QofBook *book);
 
 /** return the pricedb associated with the book */
 GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
+GNCPriceDB * gnc_collection_get_pricedb(QofCollection *col);
 
 /** gnc_pricedb_destroy - destroy the given pricedb and unref all of
      the prices it contains.  This may not deallocate all of those

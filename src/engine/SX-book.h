@@ -27,6 +27,9 @@
  * @brief Anchor Scheduled Transaction info in a book.
  *        See src/doc/books.txt for design overview.
  * @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ * 
+ * XXX currently, this is crufty, it should be modified to use
+ * entities a bit more whole-heartedly than it does.
  **/
 
 #ifndef GNC_SX_BOOK_H
@@ -38,15 +41,19 @@
 
 #include "gnc-engine.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
-SchedXactions * gnc_book_get_schedxaction_list( QofBook *book );
+SchedXactions * gnc_collection_get_schedxaction_list( QofCollection *col);
+GList * gnc_collection_get_schedxactions( QofCollection *col);
 GList * gnc_book_get_schedxactions( QofBook *book );
 
 /** Returns the template group from the book.
  **/
 AccountGroup * gnc_book_get_template_group (QofBook *book);
+AccountGroup * gnc_collection_get_template_group( QofCollection *col );
+
 
 #endif /* GNC_SX_BOOK_H */
 /** @} */

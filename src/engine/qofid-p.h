@@ -42,5 +42,8 @@ void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
  */
 void qof_collection_insert_entity (QofCollection *, QofEntity *);
 
+/* reset value of dirty flag */
+void qof_collection_mark_clean (QofCollection *);
+void qof_collection_mark_dirty (QofCollection *);
 
 #endif /* QOF_ID_P_H */

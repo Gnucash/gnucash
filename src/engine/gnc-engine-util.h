@@ -40,9 +40,11 @@
 
 #define SAFE_STRCMP_REAL(fcn,da,db) {    \
   if ((da) && (db)) {                    \
-    int retval = fcn ((da), (db));       \
-    /* if strings differ, return */      \
-    if (retval) return retval;           \
+    if ((da) != (db)) {                  \
+      int retval = fcn ((da), (db));     \
+      /* if strings differ, return */    \
+      if (retval) return retval;         \
+    }                                    \
   } else                                 \
   if ((!(da)) && (db)) {                 \
     return -1;                           \
