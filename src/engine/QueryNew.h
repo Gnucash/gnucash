@@ -31,6 +31,7 @@
 
 #include "GNCId.h"
 #include "QueryCore.h"
+#include "gnc-book.h"
 
 /** A Query */
 typedef struct querynew_s QueryNew;
