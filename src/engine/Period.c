@@ -77,17 +77,18 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
       {
          PERR ("near-fatal: twin account not found");
       }
-
-      /* force to null, so remove doesn't occur */
-      xaccSplitSetAccount (s, NULL);  
-      xaccAccountInsertSplit (twin, s);
-      twin->balance_dirty = TRUE;
-      twin->sort_dirty = TRUE;
+      else
+      {
+        /* force to null, so remove doesn't occur */
+        xaccSplitSetAccount (s, NULL);  
+        xaccAccountInsertSplit (twin, s);
+        twin->balance_dirty = TRUE;
+        twin->sort_dirty = TRUE;
+      }
    }
 
    xaccTransCommitEdit (newtrans);
    gnc_engine_generate_event (&newtrans->guid, GNC_EVENT_CREATE);
-
 }
 
 /* ================================================================ */
