@@ -1,5 +1,7 @@
 2004-06-21  Christian Stimming  <stimming@tuhh.de>
 
+	* po/de.po: Update German translation.
+
 	* src/scm/main-window.scm, src/scm/main.scm: Fix saving of report:
 	It now appends to ~/.gnucash/saved-reports-1.8 Statusbar tip is
 	now more verbose.
