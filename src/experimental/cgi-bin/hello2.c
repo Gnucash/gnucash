@@ -1,12 +1,9 @@
 /*
  * FILE:
- * hello.c 
+ * hello2.c 
  *
  * FUNCTION:
- * The first in a sequence of demos for cgi-bin programming
- * This demo shows how to intialize the gnc_engine, and how
- * to dump the entire contents of a gnucash file to stdout.
- *
+ * the second in a series of cgi-bin programming eamples.
  */
 
 #include <stdio.h>
@@ -17,16 +14,20 @@
 #include "gnc-engine.h"
 #include "Group.h"
 #include "io-gncxml.h"
+#include "Query.h"
  
 int
 main (int argc, char *argv[]) 
 {
    int fake_argc =1;
-   char * fake_argv[] = {"hello", 0};
+   char * fake_argv[] = {"hello2", 0};
    GNCBook *book;
    AccountGroup *grp;
+   Query *q;
+   GList *split_list, *node;
+   Split *s;
    char *bufp;
-   int rc, sz;
+   int i, rc, sz;
    
 
    /* intitialize the engine */
@@ -56,7 +57,28 @@ main (int argc, char *argv[])
    /* the grp pointer points to our local cache of the data */
    grp = gnc_book_get_group (book);
    
-   gncxml_write_to_buf(grp, &bufp, &sz);
+   /* build a query */
+   q = xaccMallocQuery ();
+   xaccQuerySetGroup (q, grp);
+   xaccQuerySetMaxSplits (q, 30);
+   
+   /* Get everything between some random dates */
+   /* In real life, we would use a query as specified by the user */
+   xaccQueryAddDateMatch (q, TRUE, 1982, 2, 28,
+		             FALSE, 2010, 10, 16,
+			     QUERY_OR);
+
+   split_list = xaccQueryGetSplits (q);
+
+   /* count number of splits */
+   i = 0;
+   for (node = split_list; node; node = node->next)
+   {
+      s = node->data;
+      i++;
+   }
+		       
+   gncxml_write_query_to_buf(q, &bufp, &sz);
 
    /* print the HTTP header */
    printf ("HTTP/1.1 200 OK\n");
@@ -65,7 +87,10 @@ main (int argc, char *argv[])
    printf ("\n");
 
    printf ("%s", bufp);
+
    free (bufp);
+
+   xaccFreeQuery (q);
 
 bookerrexit:
    /* close the book */
