@@ -40,7 +40,7 @@
     (gnc:make-dir home-dir)))
 
 (define gnc:current-config-auto
-  (build-path (getenv "HOME") ".gnucash" "config-1.6.auto"))
+  (build-path (getenv "HOME") ".gnucash" "config-1.8.auto"))
 
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
@@ -62,8 +62,11 @@
           (begin
             (gnc:debug "loading user configuration")
             (or-map try-load
-                    '("config-1.6.user" "config.user"
-                      "config-1.6.auto" "config.auto")))))))
+		    ;; Don't continue adding to this list. When 2.0
+		    ;; rolls around bump the 1.4 (unnumbered) files
+		    ;; off the list.
+                    '("config-1.8.user" "config-1.6.user" "config.user"
+                      "config-1.8.auto" "config-1.6.auto" "config.auto")))))))
 
 ;; the system config should probably be loaded from some directory
 ;; that wouldn't be a site wide mounted directory, like /usr/share
