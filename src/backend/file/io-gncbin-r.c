@@ -826,12 +826,12 @@ locateAccount (int acc_id, QofBook *book)
 
    /* first, see if we've already created the account */
    acc = (Account *) g_hash_table_lookup(ids_to_finished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* next, see if its an unclaimed account */
    acc = (Account *) g_hash_table_lookup(ids_to_unfinished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* if neither, then it does not yet exist.  Create it.
@@ -839,7 +839,7 @@ locateAccount (int acc_id, QofBook *book)
    acc = xaccMallocAccount (book);
    xaccAccountBeginEdit(acc);
    g_hash_table_insert(ids_to_unfinished_accounts,
-                       (gpointer) acc_id,
+                       GINT_TO_POINTER(acc_id),
                        (gpointer) acc);
    return acc;
 }

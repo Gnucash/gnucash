@@ -1,6 +1,7 @@
 2004-09-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofquerycore.c: Fix for x86_64.
+	* src/backend/file/io-gncbin-r.c: Fixes for x86_64
 
 2004-09-22  Christian Stimming  <stimming@tuhh.de>
 
