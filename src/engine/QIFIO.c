@@ -354,7 +354,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
          if (parent) {
 
             /* trim off the parent account name ... */
-            /* tok += sizeof(char);  leave behind the colon ... */
+            tok += sizeof(char);  /* get rid of the semi-colon */
             xaccAccountSetName (acc, str);
 
             xaccInsertSubAccount( parent, acc );
