@@ -342,7 +342,6 @@ gnc_register_show_status(RegWindow *regData)
 {
   RegDateWindow *regDateData;
   GSList *param_list = NULL;
-  gboolean show_reconciled, show_unreconciled;
   cleared_match_t how = 0;
   Query *query;
 
