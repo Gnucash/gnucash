@@ -207,7 +207,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  xaccGUIDNew (&entry->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &entry->guid);
   addObj (entry);
 
   gnc_engine_generate_event (&entry->guid, GNC_EVENT_CREATE);

@@ -95,7 +95,7 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->active = TRUE;
   cust->jobs = NULL;
 
-  xaccGUIDNew (&cust->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book),&cust->guid);
   addObj (cust);
 
   gnc_engine_generate_event (&cust->guid, GNC_EVENT_CREATE);

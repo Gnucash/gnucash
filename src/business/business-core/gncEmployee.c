@@ -89,7 +89,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  xaccGUIDNew (&employee->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &employee->guid);
   addObj (employee);
 
   gnc_engine_generate_event (&employee->guid, GNC_EVENT_CREATE);

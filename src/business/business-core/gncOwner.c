@@ -340,7 +340,7 @@ reg_lot (void)
 gboolean gncOwnerRegister (void)
 {
   static QofQueryObject params[] = {
-    { OWNER_TYPE, QUERYCORE_INT64, (QofAccessFunc)gncOwnerGetType },
+    { OWNER_TYPE, QOF_QUERYCORE_INT64, (QofAccessFunc)gncOwnerGetType },
     { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
       (QofAccessFunc)gncOwnerGetCustomer },
     { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob },

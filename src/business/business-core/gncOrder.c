@@ -95,7 +95,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  xaccGUIDNew (&order->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &order->guid);
   addObj (order);
 
   gnc_engine_generate_event (&order->guid, GNC_EVENT_CREATE);

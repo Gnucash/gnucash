@@ -77,7 +77,7 @@ GncJob *gncJobCreate (QofBook *book)
   job->desc = CACHE_INSERT ("");
   job->active = TRUE;
 
-  xaccGUIDNew (&job->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &job->guid);
   addObj (job);
 
   gnc_engine_generate_event (&job->guid, GNC_EVENT_CREATE);

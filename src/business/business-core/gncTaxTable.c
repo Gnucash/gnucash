@@ -162,7 +162,7 @@ GncTaxTable * gncTaxTableCreate (QofBook *book)
   table = g_new0 (GncTaxTable, 1);
   table->book = book;
   table->name = CACHE_INSERT ("");
-  xaccGUIDNew (&table->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &table->guid);
   addObj (table);
   gnc_engine_generate_event (&table->guid, GNC_EVENT_CREATE);
   return table;

@@ -97,7 +97,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   term->name = CACHE_INSERT ("");
   term->desc = CACHE_INSERT ("");
   term->discount = gnc_numeric_zero ();
-  xaccGUIDNew (&term->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &term->guid);
   addObj (term);
   gnc_engine_generate_event (&term->guid, GNC_EVENT_CREATE);
   return term;

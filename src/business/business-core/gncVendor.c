@@ -86,7 +86,7 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
 
-  xaccGUIDNew (&vendor->guid, book);
+  qof_entity_guid_new (qof_book_get_entity_table (book), &vendor->guid);
   addObj (vendor);
 
   gnc_engine_generate_event (&vendor->guid, GNC_EVENT_CREATE);
