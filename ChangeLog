@@ -5,11 +5,18 @@
 	* src/business/business-gnome/dialog-invoice.c:
 	  Add strings to be translated for expense vouchers
 
+	  From HEAD:
 	* src/import-export/import-backend.c:
 	* src/import-export/import-match-map.c:
 	* src/import-export/import-match-map.h:
           Chris Morgan's Baysian Matching code, to match transactions
           based on Bayesian filtering of previously matched transactions.
+
+	  From HEAD:
+	* src/gnome-utils/gnc-account-sel.c:
+	  If the nameList == NULL then add a blank line, to make sure
+	  the selector list is really empty, rather than defaulting to all of
+	  the accounts in the tree if there are none matching.
 	
 2003-03-11  Derek Atkins  <derek@ihtfp.com>
 
