@@ -589,7 +589,7 @@ msgstr "Quelle"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "Buchungsteil"
+msgstr "Buchungsteil (bis gnucash 1.8.7: Buchung)"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
