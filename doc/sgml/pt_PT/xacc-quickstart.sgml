@@ -28,7 +28,7 @@
   </para>
       </sect1>
       
-      <sect1>
+      <sect1 id="xacc-remedial-accounting">
   <title>
     Princípios Contabilísticos
   </title>
@@ -80,7 +80,7 @@
   </para>
       </sect1>
       
-      <sect1>
+      <sect1 id="xacc-new-account-tree">
   <title>
     Definir contas desde o início
   </title>

@@ -6,7 +6,6 @@ GNUCASH_SGML_FILES = \
 	xacc-account-hierarchy-creator.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
-	xacc-adjbalwin.sgml \
 	xacc-apar.sgml \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \

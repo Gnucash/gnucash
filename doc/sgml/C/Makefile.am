@@ -10,7 +10,6 @@ GNUCASH_SGML_FILES = \
 	xacc-acctypes.sgml \
 	xacc-account-hierarchy-creator.sgml \
 	xacc-account-summary.sgml \
-	xacc-adjbalwin.sgml \
 	xacc-apar.sgml \
 	xacc-asset-liability-barcharts.sgml \
 	xacc-asset-liability-piecharts.sgml \

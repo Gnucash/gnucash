@@ -28,7 +28,7 @@
 	</para>
       </sect1>
       
-      <sect1>
+      <sect1 id="xacc-remedial-accounting">
 	<title>
 	  Remedial Accounting 101
 	</title>
@@ -83,7 +83,7 @@
 	</para>
       </sect1>
       
-      <sect1>
+      <sect1 id="xacc-new-account-tree">
 	<title>
 	  Setting up accounts from scratch
 	</title>

@@ -1,7 +1,10 @@
 (((N_ "GnuCash Manual") "gnc-help:index.html" 
-  (((N_ "Overview") ""
-    (((N_ "Introduction") "gnc-help:xacc-quickstart.html" #f)
-     ((N_ "Help") "gnc-help:xacc-userdocs.html" #f)))
+  (((N_ "Getting Started") ""
+    (((N_ "Welcome") "gnc-help:xacc-quickstart.html" #f)
+     ((N_ "Remedial Accounting 101")
+      "gnc-help:xacc-remedial-accounting.html" #f)
+     ((N_ "Setting up Accounts") "gnc-help:xacc-new-account-tree.html" #f)
+     ((N_ "Importing Data") "gnc-help:xacc-data-from-existing.html" #f)))
    ((N_ "Basic Setup") ""     
      (((N_ "Gnome MDI") "gnc-help:xacc-gnome-mdi.html" #f)
       ((N_ "Account Window") "gnc-help:xacc-mainwin.html" #f)
@@ -12,7 +15,7 @@
      ((N_ "Preferences") "gnc-help:xacc-preferences.html" #f))
    ((N_ "Accounts") ""
     (((N_ "Types") "gnc-help:xacc-acctypes.html" #f)
-     ((N_ "Vs. Categories") "gnc-help:xacc-quicken.html" #f)
+     ((N_ "Vs. Categories") "gnc-help:xacc-quickencats.html" #f)
      ((N_ "Income/Expense") "gnc-help:xacc-incomeexpense.html" #f)
      ((N_ "New Setup") "gnc-help:xacc-newacctwin.html" 
       (((N_ "Commodity") "gnc-help:xacc-commodity.html" #f)))
@@ -24,13 +27,11 @@
       (((N_ "Date Input") "gnc-help:xacc-dateinput.html" #f)
        ((N_ "Keyboard") "gnc-help:xacc-regwin-kbd.html" #f)))
      ((N_ "Reconciliation") "gnc-help:xacc-recnwin.html" #f)
-     ((N_ "Adjust Balance") "gnc-help:xacc-adjbalwin.html" #f)
      ((N_ "Search") "gnc-help:xacc-locatingtxns.html" #f)))
    ((N_ "Record Keeping") ""
     (((N_ "Check Printing") "gnc-help:xacc-print-check.html" #f)
      ((N_ "Capital Gains") "gnc-help:xacc-depreciation.html" #f)
-     ((N_ "Stock Ticker") "gnc-help:xacc-ticker.html" #f)
-     ((N_ "Depreciation") "gnc-help:xacc-depreciation.html" #f)
+     ((N_ "Depreciation") "gnc-help:xacc-depr.html" #f)
      ((N_ "Currency") "gnc-help:xacc-currencyhandling.html"
       ((N_ "Euro") "gnc-help:xacc-euro.html" #f))
      ((N_ "Business") ""

@@ -171,11 +171,35 @@ gnc_help_show_topic (gnc_help_window *help, const char * location)
   GtkCTreeNode *node, *n;
   GtkCTree *ctree;
   GtkCTreeRow *row;
+  gint rownum;
 
   ctree = GTK_CTREE (help->topics_tree);
 
-  node = gtk_ctree_find_by_row_data_custom (ctree, NULL, (gpointer) location,
-                                            compare_locations);
+  rownum = GTK_CLIST(ctree)->focus_row;
+
+  node = gtk_ctree_node_nth (ctree, rownum);
+
+  if (node)
+  {
+    char *node_loc;
+
+    node_loc = gtk_ctree_node_get_row_data (ctree, node);
+
+    if (safe_strcmp (location, node_loc) != 0)
+    {
+      char *help_loc;
+
+      help_loc = g_strconcat ("gnc-help:", location, NULL);
+      if (safe_strcmp (help_loc, node_loc) != 0)
+        node = NULL;
+      g_free (help_loc);
+    }
+  }
+
+  if (!node)
+    node = gtk_ctree_find_by_row_data_custom (ctree, NULL,
+                                              (gpointer) location,
+                                              compare_locations);
 
   if (!node)
   {

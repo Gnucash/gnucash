@@ -1,5 +1,20 @@
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
+	* doc/sgml/pt_PT/Makefile.am: remove adjust balance docs
+
+	* doc/sgml/C/Makefile.am: remove adjust balance docs
+
+	* doc/sgml/de_DE/xacc-quickstart.sgml: fix docs
+
+	* doc/sgml/pt_PT/xacc-quickstart.sgml: fix docs
+
+	* doc/sgml/C/xacc-quickstart.sgml: fix docs
+
+	* src/scm/help-topics-index.scm: work on index
+
+	* src/gnome/window-help.c (gnc_help_show_topic): first check
+	current location for match
+
 	* src/SplitLedger.c (xaccSRDuplicateCurrent): fix bug
 
 	* src/gnc-ui-util.c (gnc_find_or_create_equity_account): allow
