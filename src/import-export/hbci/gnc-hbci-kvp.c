@@ -125,7 +125,7 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
 kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 {
   kvp_frame *toplevel = gnc_book_get_slots (b);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  return kvp_frame_get_frame (toplevel, HBCI_KEY);
 }
 
 
@@ -134,5 +134,5 @@ kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 kvp_frame *gnc_hbci_get_account_kvp (Account *a)
 {
   kvp_frame *toplevel = xaccAccountGetSlots (a);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  return kvp_frame_get_frame (toplevel, HBCI_KEY);
 }

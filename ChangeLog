@@ -1,3 +1,18 @@
+2003-09-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-kvp.c: Fix broken compile due to
+	Linas' change of the kvp_frame_get_frame() arguments. By
+	Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.[hc]: Code
+	refactorization so that the mt940 importer can re-use the existing
+	import functions from the hbci module. By Jan-Pascal van Best
+	<j.p.vanbest@tbm.tudelft.nl>
+
+	* src/import-export/mt940/gncmod-mt940-import.[hc]: Import module
+	for SWIFT MT940 files added. By Jan-Pascal van Best
+	<j.p.vanbest@tbm.tudelft.nl>
+
 2003-09-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/postgres/test/run-tests.sh: small fix from

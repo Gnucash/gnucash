@@ -583,6 +583,16 @@ then
     AC_SUBST(HBCI_CFLAGS)
 fi
 AC_SUBST(HBCI_DIR)
+
+### --------------------------------------------------------------------------
+### MT940
+AC_ARG_ENABLE( mt940,
+  [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
+  if test "x$enableval" != "xno" ; then
+    MT940_DIR=mt940
+  fi)
+AC_SUBST(MT940_DIR)
+
 ### --------------------------------------------------------------------------
 ### i18n
 
@@ -1137,6 +1147,7 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           accounts/el_GR/Makefile
           accounts/es_ES/Makefile
           accounts/fr_FR/Makefile
+	  accounts/it/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
@@ -1205,6 +1216,7 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           src/import-export/qif-io-core/test/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
+          src/import-export/mt940/Makefile
           src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
