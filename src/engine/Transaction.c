@@ -522,7 +522,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
 }
 
 void 
-xaccSplitSetShareAmount (Split *s, gnc_numeric amt) 
+xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
   check_open (s->parent);
@@ -575,37 +575,6 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 /********************************************************************\
 \********************************************************************/
 
-double 
-DxaccSplitGetBalance (Split *s) {
-  return gnc_numeric_to_double(xaccSplitGetBalance(s));
-}
-
-double 
-DxaccSplitGetClearedBalance (Split *s) {
-  return gnc_numeric_to_double(xaccSplitGetClearedBalance(s));
-}
-
-double 
-DxaccSplitGetReconciledBalance (Split *s)  {
-  return gnc_numeric_to_double(xaccSplitGetReconciledBalance(s));
-}
-
-double 
-DxaccSplitGetShareBalance (Split *s) {
-  return gnc_numeric_to_double(xaccSplitGetShareBalance(s));
-}
-
-double 
-DxaccSplitGetShareClearedBalance (Split *s) {
-  return gnc_numeric_to_double(xaccSplitGetShareClearedBalance(s));
-}
-
-double 
-DxaccSplitGetShareReconciledBalance (Split *s) {
-  return gnc_numeric_to_double(xaccSplitGetShareReconciledBalance(s));
-}
-
-
 gnc_numeric 
 xaccSplitGetBalance (Split *s) {
    if (!s) return gnc_numeric_zero();
@@ -623,25 +592,6 @@ xaccSplitGetReconciledBalance (Split *s)  {
    if (!s) return gnc_numeric_zero();
    return s->reconciled_balance;
 }
-
-gnc_numeric 
-xaccSplitGetShareBalance (Split *s) {
-   if (!s) return gnc_numeric_zero();
-   return s->balance;
-}
-
-gnc_numeric 
-xaccSplitGetShareClearedBalance (Split *s) {
-   if (!s) return gnc_numeric_zero();
-   return s->cleared_balance;
-}
-
-gnc_numeric 
-xaccSplitGetShareReconciledBalance (Split *s) {
-   if (!s) return gnc_numeric_zero();
-   return s->reconciled_balance;
-}
-
 
 /********************************************************************\
  * xaccInitTransaction
@@ -982,14 +932,6 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   mark_split (s);
 }
 
-
-double
-DxaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
-{
-  return gnc_numeric_to_double(xaccSplitGetBaseValue(s, base_currency));
-}
-
-
 gnc_numeric
 xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 {
@@ -1242,22 +1184,6 @@ xaccTransFindOldCommonCurrency (Transaction *trans)
   return retval;
 }
 
-gnc_commodity *
-xaccTransIsCommonCurrency (Transaction *trans, gnc_commodity * ra)
-{
-  if (!trans) return NULL;
-  return FindCommonCurrency (trans->splits, ra, NULL);
-}
-
-gnc_commodity *
-xaccTransIsCommonExclSCurrency (Transaction *trans, 
-				gnc_commodity * ra, 
-                                Split *excl_split)
-{
-  if (!trans) return NULL;
-  return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
-}
-
 /********************************************************************\
 \********************************************************************/
 /* The new routine for setting the common currency */
@@ -1377,7 +1303,7 @@ xaccTransCommitEdit (Transaction *trans)
         xaccAccountInsertSplit (xaccSplitGetAccount(s), s);
         xaccSplitSetMemo (s, split->memo);
         xaccSplitSetAction (s, split->action);
-        xaccSplitSetShareAmount(s, gnc_numeric_neg(split->amount));
+        xaccSplitSetAmount(s, gnc_numeric_neg(split->amount));
         xaccSplitSetValue(s, gnc_numeric_neg(split->value));
       }
    }
@@ -2153,7 +2079,7 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 }
 
 void
-xaccTransSetDateTS (Transaction *trans, const Timespec *ts)
+xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
 {
    if (!ts) return;
    xaccTransSetDateInternal(trans, TDATE_POSTED, ts->tv_sec, ts->tv_nsec);
@@ -2172,15 +2098,6 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
   Timespec ts = gnc_dmy2timespec(day, mon, year);
   xaccTransSetDateInternal(trans, TDATE_POSTED, ts.tv_sec, ts.tv_nsec);
 }
-
-void
-xaccTransSetDateToday (Transaction *trans)
-{
-   struct timeval tv;
-   gettimeofday (&tv, NULL);
-   xaccTransSetDateInternal(trans, TDATE_POSTED, tv.tv_sec, tv.tv_usec);
-}
-
 
 /********************************************************************\
 \********************************************************************/
@@ -2272,13 +2189,6 @@ xaccTransGetNotes (Transaction *trans)
 
 time_t
 xaccTransGetDate (Transaction *trans)
-{
-   if (!trans) return 0;
-   return (trans->date_posted.tv_sec);
-}
-
-long long 
-xaccTransGetDateL (Transaction *trans)
 {
    if (!trans) return 0;
    return (trans->date_posted.tv_sec);
@@ -2445,7 +2355,7 @@ xaccSplitGetReconcile (Split *split) {
 
 double
 DxaccSplitGetShareAmount (Split * split) {
-  return gnc_numeric_to_double(xaccSplitGetShareAmount(split));
+  return gnc_numeric_to_double(xaccSplitGetAmount(split));
 }
 
 double
@@ -2460,7 +2370,7 @@ DxaccSplitGetSharePrice (Split * split)
 }
 
 gnc_numeric
-xaccSplitGetShareAmount (Split * split)
+xaccSplitGetAmount (Split * split)
 {
   if (!split) return gnc_numeric_zero();
   return split->amount;

@@ -965,7 +965,7 @@ readTransaction( int fd, Account *acc, int revision)
        xaccTransCommitEdit (trans);
        return NULL;
        }
-     xaccTransSetDateTS (trans, &ts);
+     xaccTransSetDatePostedTS (trans, &ts);
 
      /* then the entered date ... */
      rc = readTSDate( fd, &ts, revision );

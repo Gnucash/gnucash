@@ -74,7 +74,7 @@ is_trans_empty (Transaction *trans)
    if (1 != xaccTransCountSplits(trans)) return FALSE;
 
    s = xaccTransGetSplit(trans, 0);
-   if (TRUE != gnc_numeric_zero_p(xaccSplitGetShareAmount(s))) return FALSE;
+   if (TRUE != gnc_numeric_zero_p(xaccSplitGetAmount(s))) return FALSE;
    if (TRUE != gnc_numeric_zero_p(xaccSplitGetValue(s))) return FALSE;
    if ('n' != xaccSplitGetReconcile(s)) return FALSE;
    if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
@@ -571,7 +571,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
                modity = xaccAccountGetCommodity (acc);
                acct_frac = gnc_commodity_get_fraction (modity);
                amount = gnc_numeric_create (num, acct_frac);
-               xaccSplitSetShareAmount (s, amount);
+               xaccSplitSetAmount (s, amount);
 
                xaccTransAppendSplit (trans, s);
 

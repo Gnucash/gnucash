@@ -60,13 +60,6 @@
 (define (gnc:extensions-menu-setup)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
   
-;  (define export-item
-;    (gnc:make-menu-item (N_ "Export data as text (Danger: Unfinished)")
-;                        (N_ "Export data as text.")
-;                        (list "Extensions" "")
-;                        (lambda () (gnc:main-win-account-group-write win))))
-  
-
   (define schedxact-editor-item
     (gnc:make-menu-item (N_ "SchedXact: Editor")
 			(N_ "Editor of Scheduled Transactions")

@@ -337,7 +337,7 @@
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc:default-currency)))
-         (damount (gnc:split-get-share-amount split))
+         (damount (gnc:split-get-amount split))
          (split-value (gnc:make-gnc-monetary 
                        currency 
                        (if (member account-type account-types-to-reverse) 
@@ -378,7 +378,7 @@
             (addto! row-contents (gnc:split-get-corr-account-name split))))
     
     (if (used-shares column-vector)
-        (addto! row-contents (gnc:split-get-share-amount split)))
+        (addto! row-contents (gnc:split-get-amount split)))
     (if (used-price column-vector)
         (addto! 
          row-contents 

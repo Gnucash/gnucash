@@ -102,7 +102,7 @@ split_to_dom_tree(const gchar *tag, Split *spl)
 
     add_gnc_num(ret, "split:value", xaccSplitGetValue(spl));
 
-    add_gnc_num(ret, "split:quantity", xaccSplitGetShareAmount(spl));
+    add_gnc_num(ret, "split:quantity", xaccSplitGetAmount(spl));
     
     xmlAddChild(ret, guid_to_dom_tree(
                     "split:account",
@@ -271,7 +271,7 @@ spl_value_handler(xmlNodePtr node, gpointer spl)
 static gboolean
 spl_quantity_handler(xmlNodePtr node, gpointer spl)
 {
-    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetShareAmount);
+    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetAmount);
 }
 
 static gboolean

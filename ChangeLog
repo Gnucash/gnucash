@@ -1,5 +1,43 @@
 2001-07-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/transaction.scm: remove old api
+
+	* src/scm/report-utilities.scm: remove old api
+
+	* src/scm/commodity-utilities.scm: remove old api
+
+	* src/scm/engine-interface.scm: remove old api
+
+	* src/scm/extensions.scm: remove old api
+
+	* src/scm/report-utilities.scm: remove old api
+
+	* src/gnome/reconcile-list.c: remove old api
+
+	* src/scm/report/register.scm: remove old api
+
+	* src/engine/Scrub.c: remove old api
+
+	* src/engine/sql/txn.c: remove old api
+
+	* src/engine/rpc/RpcUtils.c: remove old api
+
+	* src/guile/gnc.gwp: remove cruft
+
+	* src/scm/extensions.scm: remove cruft
+
+	* src/guile/gnc-helpers.[ch]: remove old api
+
+	* src/engine/io-gncbin-r.c: remove old api
+
+	* src/guile/gnc-helpers.c: remove old api
+
+	* src/SplitLedger.c: remove old api
+
+	* src/engine/Transaction.[ch]: remove share api and older api
+
+	* src/engine/Transaction-xml-parser-v1.c: remove old api
+
 	* src/gnome/druid-stock-split.c: remove share api
 
 	* src/engine/Account.[ch]: remove 'share' api and other

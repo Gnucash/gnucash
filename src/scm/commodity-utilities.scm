@@ -132,7 +132,7 @@
 	      (account-comm (gnc:account-get-commodity 
 			     (gnc:split-get-account a)))
 	      (share-amount (gnc:numeric-abs
-			     (gnc:split-get-share-amount a)))
+			     (gnc:split-get-amount a)))
 	      (value-amount (gnc:numeric-abs
 			     (gnc:split-get-value a)))
 	      (transaction-date (gnc:transaction-get-date-posted
@@ -229,7 +229,7 @@
 	    (account-comm (gnc:account-get-commodity 
 			   (gnc:split-get-account a)))
 	    (share-amount (gnc:numeric-abs
-			   (gnc:split-get-share-amount a)))
+			   (gnc:split-get-amount a)))
 	    (value-amount (gnc:numeric-abs
 			   (gnc:split-get-value a)))
 	    (transaction-date (gnc:transaction-get-date-posted
@@ -497,7 +497,7 @@
 				 (gnc:split-get-account a)))
 		  ;; Always use the absolute value here.
 		  (share-amount (gnc:numeric-abs 
-				 (gnc:split-get-share-amount a)))
+				 (gnc:split-get-amount a)))
 		  (value-amount (gnc:numeric-abs
 				 (gnc:split-get-value a)))
 		  (tmp (assoc transaction-comm sumlist))

@@ -491,10 +491,6 @@
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
 ;;
-;; Note that this uses the gnc:split-get-share-balance rather than
-;; gnc:split-get-balance as above, which means that results for both
-;; may differ especially for stock accounts.
-;;
 ;; Also note that the commodity-collector contains <gnc:numeric>
 ;; values rather than double values.
 (define (gnc:account-get-comm-balance-at-date account 
@@ -521,9 +517,9 @@
       
       (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
-			   (gnc:split-get-share-balance (car splits))))
+			   (gnc:split-get-balance (car splits))))
       balance-collector))
-  
+
 ;; get the balance of a group of accounts at the specified date
 ;; inlcuding child accounts.
 (define (gnc:group-get-balance-at-date group date)

@@ -132,7 +132,7 @@
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc:default-currency)))
-         (damount (gnc:split-get-share-amount split))
+         (damount (gnc:split-get-amount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
 
     (if (date-col column-vector)
@@ -170,7 +170,7 @@
     (if (shares-col column-vector)
         (addto! row-contents
                 (if split-info?
-                    (gnc:split-get-share-amount split)
+                    (gnc:split-get-amount split)
                     " ")))
     (if (price-col column-vector)
         (addto! row-contents 

@@ -391,7 +391,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   xaccAccountInsertSplit (account, split);
 
-  xaccSplitSetShareAmount (split, amount);
+  xaccSplitSetAmount (split, amount);
   xaccSplitMakeStockSplit (split);
   xaccSplitSetAction (split, _("Split"));
 
@@ -450,7 +450,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
     xaccTransAppendSplit (trans, split);
 
-    xaccSplitSetShareAmount (split, amount);
+    xaccSplitSetAmount (split, amount);
     xaccSplitSetValue (split, amount);
 
     xaccSplitSetMemo (split, memo);
@@ -469,7 +469,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
     xaccTransAppendSplit (trans, split);
 
-    xaccSplitSetShareAmount (split, gnc_numeric_neg (amount));
+    xaccSplitSetAmount (split, gnc_numeric_neg (amount));
     xaccSplitSetValue (split, gnc_numeric_neg (amount));
 
     xaccSplitSetMemo (split, memo);

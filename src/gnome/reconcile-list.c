@@ -470,7 +470,6 @@ gnc_reconcile_list_reconciled_balance (GNCReconcileList *list)
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
   gnc_numeric total;
-  int account_type;
   int i;
 
   total = gnc_numeric_zero ();
@@ -481,8 +480,6 @@ gnc_reconcile_list_reconciled_balance (GNCReconcileList *list)
   if (list->reconciled == NULL)
     return total;
 
-  account_type = xaccAccountGetType (list->account);
-
   for (i = 0; i < list->num_splits; i++)
   {
     split = gtk_clist_get_row_data (clist, i);
@@ -490,11 +487,7 @@ gnc_reconcile_list_reconciled_balance (GNCReconcileList *list)
     if (g_hash_table_lookup (list->reconciled, split) == NULL)
       continue;
 
-    if ((account_type == STOCK) || (account_type == MUTUAL) ||
-        (account_type == CURRENCY))
-      total = gnc_numeric_add_fixed (total, xaccSplitGetShareAmount(split));
-    else
-      total = gnc_numeric_add_fixed (total, xaccSplitGetValue(split));
+    total = gnc_numeric_add_fixed (total, xaccSplitGetAmount(split));
   }
 
   return gnc_numeric_abs (total);
@@ -654,7 +647,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 {
   const gchar *strings[list->num_columns + 1];
   GNCPrintAmountInfo print_info;
-  GNCAccountType account_type;
   Transaction *trans;
   gboolean auto_check;
   GList *splits;
@@ -664,7 +656,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
                                           "Check off cleared transactions",
                                           TRUE);
 
-  account_type = xaccAccountGetType (list->account);
   strings[5] = NULL;
 
   print_info = gnc_account_print_info (list->account, FALSE);
@@ -682,10 +673,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     if ((recn != NREC) && (recn != CREC))
       continue;
 
-    if((account_type == STOCK) || (account_type == MUTUAL))
-      amount = xaccSplitGetShareAmount (split);
-    else
-      amount = xaccSplitGetValue (split);
+    amount = xaccSplitGetAmount (split);
 
     if (gnc_numeric_negative_p (amount) && list->list_type == RECLIST_DEBIT)
       continue;

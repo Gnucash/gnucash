@@ -347,7 +347,7 @@ txn_rest_date_posted_end_handler(gpointer data_for_children,
     return(FALSE);
   }
 
-  xaccTransSetDateTS(t, &(info->ts));
+  xaccTransSetDatePostedTS(t, &(info->ts));
   g_free(info);
   return(TRUE);
 }
@@ -472,7 +472,7 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
   else if(strcmp(child_result->tag, "quantity") == 0) {
     gnc_numeric *n = (gnc_numeric *) child_result->data;
     g_return_val_if_fail(n, FALSE);
-    xaccSplitSetShareAmount(s, *n);
+    xaccSplitSetAmount(s, *n);
     /* let the normal child_result handler clean up n */
   }
   else if(strcmp(child_result->tag, "value") == 0) {

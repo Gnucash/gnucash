@@ -1266,7 +1266,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       gnc_resume_gui_refresh ();
 
       /* now move to the non-empty amount column */
-      amount = xaccSplitGetShareAmount (blank_split);
+      amount = xaccSplitGetAmount (blank_split);
       cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
@@ -1347,7 +1347,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       gnc_table_refresh_gui (reg->table, TRUE);
 
       /* now move to the non-empty amount column */
-      amount = xaccSplitGetShareAmount (auto_split);
+      amount = xaccSplitGetAmount (auto_split);
       cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
@@ -3337,7 +3337,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
 
     xaccDateCellGetDate (reg->dateCell, &ts);
 
-    xaccTransSetDateTS (trans, &ts);
+    xaccTransSetDatePostedTS (trans, &ts);
   }
   if (MOD_NUM & changed)
   {
@@ -3486,7 +3486,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
 
     DEBUG ("MOD_SHRS");
 
-    xaccSplitSetShareAmount (split, amount);
+    xaccSplitSetAmount (split, amount);
     xaccSplitSetSharePrice (split, price);
   }
 
@@ -3522,7 +3522,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
 
     if (other_split)
     {
-      gnc_numeric amount = xaccSplitGetShareAmount (split);
+      gnc_numeric amount = xaccSplitGetAmount (split);
       gnc_numeric price = xaccSplitGetSharePrice (split);
 
       amount = gnc_numeric_neg (amount);
@@ -3606,7 +3606,7 @@ get_trans_total_shares (SplitRegister *reg, Transaction *trans)
     if (xaccSplitGetAccount (split) != account)
       continue;
 
-    total = gnc_numeric_add_fixed (total, xaccSplitGetShareAmount (split));
+    total = gnc_numeric_add_fixed (total, xaccSplitGetAmount (split));
   }
 
   return total;
@@ -3642,16 +3642,6 @@ get_trans_last_split (SplitRegister *reg, Transaction *trans)
   }
 
   return last_split;
-}
-
-static gnc_numeric
-get_trans_total_share_balance (SplitRegister *reg, Transaction *trans)
-{
-  Split *last_split;
-
-  last_split = get_trans_last_split (reg, trans);
-
-  return xaccSplitGetShareBalance (last_split);
 }
 
 static gnc_numeric
@@ -3944,9 +3934,9 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
           return "";
 
         if (cell_type == SHRBALN_CELL)
-          balance = xaccSplitGetShareBalance (split);
+          balance = xaccSplitGetBalance (split);
         else
-          balance = get_trans_total_share_balance (reg, trans);
+          balance = get_trans_total_balance (reg, trans);
 
         return xaccPrintAmount (balance,
                                 gnc_split_quantity_print_info (split, FALSE));
@@ -4050,7 +4040,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
         if (!use_security_cells (reg, virt_loc))
           return "";
 
-        shares = xaccSplitGetShareAmount (split);
+        shares = xaccSplitGetAmount (split);
 
         if (gnc_numeric_zero_p (shares))
           return "";
@@ -4417,7 +4407,7 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         else if (is_current)
           shares = xaccGetPriceCellValue (reg->sharesCell);
         else
-          shares = xaccSplitGetShareAmount (split);
+          shares = xaccSplitGetAmount (split);
 
         if (gnc_numeric_negative_p (shares))
           return red;
@@ -4432,9 +4422,9 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         gnc_numeric balance;
 
         if (cell_type == SHRBALN_CELL)
-          balance = xaccSplitGetShareBalance (split);
+          balance = xaccSplitGetBalance (split);
         else
-          balance = get_trans_total_share_balance (reg, trans);
+          balance = get_trans_total_balance (reg, trans);
 
         if (gnc_numeric_negative_p (balance))
           return red;

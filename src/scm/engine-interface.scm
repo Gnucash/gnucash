@@ -102,7 +102,7 @@
    (gnc:split-get-action split)
    (gnc:split-get-reconcile-state split)
    (gnc:split-get-reconciled-date split)
-   (gnc:split-get-share-amount split)
+   (gnc:split-get-amount split)
    (gnc:split-get-value split)))
 
 ;; Copy a scheme representation of a split onto a C split.
@@ -120,7 +120,7 @@
               (value    (gnc:split-scm-get-value split-scm)))
           (if memo     (gnc:split-set-memo split memo))
           (if action   (gnc:split-set-action split action))
-          (if quantity (gnc:split-set-share-amount split quantity))
+          (if quantity (gnc:split-set-amount split quantity))
           (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm))))

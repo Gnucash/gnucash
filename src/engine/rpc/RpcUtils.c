@@ -1053,7 +1053,7 @@ int rpcend_do_add_txn (gncTransaction * txn, gnc_commodity_table *ct)
       xaccSplitSetReconcile (s, sl->split->reconciled);
       xaccSplitSetDateReconciledTS (s, (Timespec *)&sl->split->date_reconciled);
       xaccSplitSetValue (s, *((gnc_numeric *)&(sl->split->value)));
-      xaccSplitSetShareAmount (s, *((gnc_numeric *)&(sl->split->damount)));
+      xaccSplitSetAmount (s, *((gnc_numeric *)&(sl->split->damount)));
 
       s->kvp_data = rpcend_parse_gnckvp (sl->split->kvp_data);
 

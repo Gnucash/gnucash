@@ -431,8 +431,7 @@
                    ;; currency value from the file import.
                    (set! near-split-total (n+ near-split-total split-amt))
                    (gnc:split-set-value gnc-far-split (n- split-amt))
-                   (gnc:split-set-share-amount gnc-far-split 
-                                               (n- split-amt))
+                   (gnc:split-set-amount gnc-far-split (n- split-amt))
 
                    (if memo (gnc:split-set-memo gnc-far-split memo))
                    
@@ -482,7 +481,7 @@
           
           ;; the value of the near split is the total of the far splits.
           (gnc:split-set-value gnc-near-split near-split-total)
-          (gnc:split-set-share-amount gnc-near-split near-split-total)
+          (gnc:split-set-amount gnc-near-split near-split-total)
           (gnc:transaction-append-split gnc-xtn gnc-near-split)
           (gnc:account-insert-split near-acct gnc-near-split))
         
@@ -546,45 +545,45 @@
           (case qif-action
             ((buy buyx reinvint reinvdiv reinvsg reinvsh reinvmd reinvlg)
              (if (not share-price) (set! share-price (gnc:numeric-zero)))
-             (gnc:split-set-share-amount gnc-near-split num-shares)
+             (gnc:split-set-amount gnc-near-split num-shares)
              (gnc:split-set-value gnc-near-split split-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
+             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
             
             ((sell sellx) 
              (if (not share-price) (set! share-price (gnc:numeric-zero)))
-             (gnc:split-set-share-amount gnc-near-split (n- num-shares))
+             (gnc:split-set-amount gnc-near-split (n- num-shares))
              (gnc:split-set-value gnc-near-split (n- split-amt))
              (gnc:split-set-value gnc-far-split xtn-amt)
-             (gnc:split-set-share-amount gnc-far-split xtn-amt))
+             (gnc:split-set-amount gnc-far-split xtn-amt))
             
             ((cgshort cgshortx cgmid cgmidx cglong cglongx intinc intincx 
                       div divx miscinc miscincx xin rtrncap rtrncapx)
              (gnc:split-set-value gnc-near-split xtn-amt)
-             (gnc:split-set-share-amount gnc-near-split xtn-amt)
+             (gnc:split-set-amount gnc-near-split xtn-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
+             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
             
             ((xout miscexp miscexpx margint margintx)
              (gnc:split-set-value gnc-near-split (n- xtn-amt))
-             (gnc:split-set-share-amount gnc-near-split (n- xtn-amt))
+             (gnc:split-set-amount gnc-near-split (n- xtn-amt))
              (gnc:split-set-value gnc-far-split  xtn-amt)
-             (gnc:split-set-share-amount gnc-far-split  xtn-amt))
+             (gnc:split-set-amount gnc-far-split  xtn-amt))
             
             ((shrsin)
              ;; getting rid of the old equity-acct-per-stock trick.
              ;; you must now have a cash/basis value for the stock.
-             (gnc:split-set-share-amount gnc-near-split num-shares)
+             (gnc:split-set-amount gnc-near-split num-shares)
              (gnc:split-set-value gnc-near-split split-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-share-amount gnc-far-split (n- xtn-amt)))
+             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
             
             ((shrsout)
              ;; shrsout is like shrsin             
-             (gnc:split-set-share-amount gnc-near-split (n- num-shares))
+             (gnc:split-set-amount gnc-near-split (n- num-shares))
              (gnc:split-set-value gnc-near-split (n- split-amt))
              (gnc:split-set-value gnc-far-split xtn-amt)
-             (gnc:split-set-share-amount gnc-far-split xtn-amt))
+             (gnc:split-set-amount gnc-far-split xtn-amt))
             
             ;; stock splits: QIF just specifies the split ratio, not
             ;; the number of shares in and out, so we have to fetch
@@ -597,8 +596,8 @@
                     (in-shares 
                      (gnc:account-get-balance near-acct))
                     (out-shares (n* in-shares splitratio)))
-               (gnc:split-set-share-amount gnc-near-split out-shares)
-               (gnc:split-set-share-amount gnc-far-split (n- in-shares))
+               (gnc:split-set-amount gnc-near-split out-shares)
+               (gnc:split-set-amount gnc-far-split (n- in-shares))
                (gnc:split-set-value gnc-near-split (n- split-amt))
                (gnc:split-set-value gnc-far-split split-amt))))
           
@@ -622,7 +621,7 @@
               (begin 
                 (set! commission-split (gnc:split-create))
                 (gnc:split-set-value commission-split commission-amt)
-                (gnc:split-set-share-amount commission-split commission-amt)))
+                (gnc:split-set-amount commission-split commission-amt)))
           
           (if (and qif-near-acct qif-far-acct)
               (begin 

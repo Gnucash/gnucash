@@ -205,12 +205,12 @@ xaccSplitScrub (Split *split)
   {
     value = xaccSplitGetValue (split);
 
-    if (gnc_numeric_same (xaccSplitGetShareAmount (split),
+    if (gnc_numeric_same (xaccSplitGetAmount (split),
                           xaccSplitGetValue (split),
                           value.denom, GNC_RND_ROUND))
       return;
 
-    xaccSplitSetShareAmount (split, value);
+    xaccSplitSetAmount (split, value);
 
     return;
   }
@@ -237,7 +237,7 @@ xaccSplitScrub (Split *split)
   if (!trans_was_open)
     xaccTransBeginEdit (trans);
 
-  xaccSplitSetShareAmount (split, value);
+  xaccSplitSetAmount (split, value);
 
   if (!trans_was_open)
     xaccTransCommitEdit (trans);
@@ -362,7 +362,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
     commodity = xaccAccountGetCommodity (account);
     if (gnc_commodity_equiv (currency, commodity))
-      xaccSplitSetShareAmount (balance_split, new_value);
+      xaccSplitSetAmount (balance_split, new_value);
 
     if (!parent && gnc_numeric_zero_p (new_value))
     {
