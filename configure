@@ -851,7 +851,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 
-ALL_LINGUAS="fr de en_GB sv ja"
+ALL_LINGUAS="fr de en_GB sv ja it"
 
 # Check whether --enable-shared or --disable-shared was given.
 if test "${enable_shared+set}" = set; then
