@@ -1,3 +1,10 @@
+2001-06-10  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/report/welcome-to-gnucash.scm: fix bug in "welcome to
+	gnucash" report
+
+	* src/gnome/dialog-column-view.c: remove printout 
+	
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: fix bug

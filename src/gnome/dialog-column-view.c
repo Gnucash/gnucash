@@ -182,7 +182,6 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
   gnc_column_view_edit * win = user_data;
   
   if(!win) return;
-  printf("calling option_db_commit\n");
   gnc_option_db_commit(win->odb);
   gh_call2(dirty_report, win->view, SCM_BOOL_T);
 }

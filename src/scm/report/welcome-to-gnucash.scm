@@ -39,6 +39,14 @@
     (set! options (gnc:report-options (gnc:find-report view)))
     (set-option! "General" "Report name" "Welcome to GnuCash 1.6")
     (set-option! "General" "Number of columns" 2)
+
+    ;; mark the reports as needing to be saved 
+    (gnc:report-set-needs-save?! (gnc:find-report sub-welcome) #t)
+    (gnc:report-set-needs-save?! (gnc:find-report sub-accounts) #t)
+    (gnc:report-set-needs-save?! (gnc:find-report sub-expense-pie) #t)
+    (gnc:report-set-needs-save?! (gnc:find-report sub-income-pie) #t)
+    (gnc:report-set-needs-save?! (gnc:find-report sub-bar) #t)
+
     (set-option! "__general" "report-list" 
                  (list (list sub-welcome 1 1 #f)
                        (list sub-accounts 1 1 #f)
