@@ -42,6 +42,7 @@
 
 #include "builder.h"
 #include "qofbackend-p.h"
+#include "qofbook.h"
 
 typedef struct _pgend PGBackend;
 
@@ -125,6 +126,7 @@ Account * pgendAccountLookup (PGBackend *be, const GUID *acct_guid);
 Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);
 Split * pgendSplitLookup (PGBackend *be, const GUID *split_guid);
 QofIdType pgendGUIDType (PGBackend *be, const GUID *guid);
+QofBook * pgendGetBook(PGBackend *pbe);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);

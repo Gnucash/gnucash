@@ -1,3 +1,22 @@
+2003-07-27  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Added pgendGetBook(),
+      to retrieve the QofBook from the session, instead of storing the
+      book in the backend object.
+    - Where be->book was used, use pgendGetBook() instead.
+    - Enhanced debug messages.
+    * src/backend/postgres/PostgresBackend.h: Added the qofbook.h
+      include, and the pgendGetBook() prototype
+    * src/backend/postgres/book.c: Changed pgendGetBook to
+      pgendBookRestore() to reflect its functionality of restoring
+      the book's data to the engine.
+    * src/backend/postgres/price.c: In pgendPriceFind(), couched the
+      currenct portion of the SQL statement in an "if" statement,
+      because gnc_pricedb_lookup_latest_any_currency() can pass in
+      a NULL currency, and stpcpy() doesn't like NULLs.
+    * src/backend/postgres/escape.c: enhanced debug messages.
+    Fixes bug #116546
+
 2003-07-26  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofbackend.h: add a new error, ERR_BACKEND_READONLY
