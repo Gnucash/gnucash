@@ -97,7 +97,8 @@
                       
                       ;; T : total amount 
                       ((#\T)
-                       (qif-split:set-amount! default-split value))
+                       (if default-split 
+                           (qif-split:set-amount! default-split value)))
                       
                       ;; P : payee
                       ((#\P)
@@ -129,13 +130,14 @@
                       
                       ;; M : memo 
                       ((#\M)
-                       (qif-split:set-memo! default-split value))
+                       (if default-split 
+                           (qif-split:set-memo! default-split value)))
                       
                       ;; I : share price (stock transactions)
                       ((#\I)
                        (qif-xtn:set-share-price! current-xtn value))
                       
-                      ;; Q : share price (stock transactions)
+                      ;; Q : number of shares (stock transactions)
                       ((#\Q)
                        (qif-xtn:set-num-shares! current-xtn value))
                       
@@ -149,7 +151,8 @@
                       
                       ;; L : category 
                       ((#\L)
-                       (qif-split:set-category! default-split value))
+                       (if default-split 
+                           (qif-split:set-category! default-split value)))
                       
                       ;; S : split category 
                       ((#\S)
@@ -261,7 +264,7 @@
                       ((#\D)
                        (qif-cat:set-description! current-xtn value))
                       
-                      ;; E : is this a taxable category?
+                      ;; T : is this a taxable category?
                       ((#\T)
                        (qif-cat:set-taxable! current-xtn #t))
                       
@@ -273,8 +276,7 @@
                       ((#\I)
                        (qif-cat:set-income-cat! current-xtn #t))
                       
-                      ;; R : what is the tax rate (from some table?
-                      ;; seems to be an integer)
+                      ;; R : tax form/line designator 
                       ((#\R)
                        (qif-cat:set-tax-class! current-xtn value))
                       
