@@ -25,8 +25,8 @@ TESTS = \
   test-group-vs-book \
   test-resolve-file-path \
   test-scm-query \
-  test-split-vs-account 
-#  test-transaction-voiding 
+  test-split-vs-account  \
+  test-transaction-voiding 
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine" \
@@ -41,8 +41,8 @@ bin_PROGRAMS = \
   test-load-engine \
   test-resolve-file-path \
   test-scm-query \
-  test-split-vs-account
-#  test-transaction-voiding
+  test-split-vs-account \
+  test-transaction-voiding
 
 EXTRA_DIST = \
   test-create-account \

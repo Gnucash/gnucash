@@ -1,3 +1,13 @@
+2001-10-08  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/test/test-transaction-voiding.c (run_test): remove 
+	diagnostic stuff needed for initial debugging, fix bug in test.
+
+	* src/engine/Transaction.c: removed transaction void debugging
+	stuff.
+
+	* src/engine/test/Makefile.am: enable transaction voiding test.
+
 2001-10-05  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/test/test-transaction-voiding.c: new file.
@@ -25,8 +35,9 @@
 
 	* src/engine/gw-engine-spec.scm: wrap voiding functions
 
-	* src/report/report-system/report-utilities.scm: added some convenience functions
-	for adding voiding checks to queries and checking the voiding status of splits.
+	* src/report/report-system/report-utilities.scm: added some
+	convenience functions for adding voiding checks to queries and
+	checking the voiding status of splits.
 
 	* src/report/standard-reports/*: fixed up queries to exclude voids as appropriate.
 

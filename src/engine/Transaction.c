@@ -2633,16 +2633,7 @@ xaccTransVoid(Transaction *transaction,
 
   xaccTransCommitEdit(transaction);
 
-  for(split_list = xaccTransGetSplitList(transaction);
-      split_list;
-      split_list = g_list_next(split_list))
-  {
-    char *string = gnc_numeric_to_string(xaccSplitGetAmount(split_list->data));
-
-    fprintf(stderr, "%s\n", string);
-    g_free(string);
-  }
-   
+  
   return;
 }
 
