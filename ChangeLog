@@ -1,3 +1,19 @@
+2001-03-09  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Account.c (xaccAccountInsertSplit): Remove unused
+	var oldacc (assigned to once) and the block that went with it.
+
+	* src/gnc-ui-util.c (gnc_account_print_info_helper): New helper
+	func.
+	(gnc_account_quantity_print_info): Use new helper func.
+	(gnc_account_value_print_info): same.
+	(gnc_default_print_info_helper): new helper func.
+	(gnc_default_share_print_info): use new helper func.
+	(gnc_default_price_print_info): same.
+	(gnc_split_quantity_print_info): add test for NULL split and
+	return a default.
+	(gnc_split_value_print_info): same.
+
 2001-03-08  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-stuff.c (failure): don't print num if == -1.
@@ -41,6 +57,13 @@
 
 	* src/doc/xml/transactions-v2.dtd: change guid -> id.
 
+2001-03-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/report-list.scm: load tax report if possibly in
+	US locale.
+
+	* src/scm/report/taxtxf.scm: work on tax report (unfinished)
+
 2001-03-07  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/Transaction.c (get_denom_internal): New helper func.
@@ -52,13 +75,6 @@
 	g_return_if_fail to test pdata->parsing_ok so we don't see the
 	million CRITICAL warnings.  We'll print an error at the end
 	anyway.
-
-2001-03-08  Dave Peticolas  <dave@krondo.com>
-
-	* src/scm/report/report-list.scm: load tax report if possibly in
-	US locale.
-
-	* src/scm/report/taxtxf.scm: work on tax report (unfinished)
 
 2001-03-07  Dave Peticolas  <dave@krondo.com>
 

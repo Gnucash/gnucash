@@ -623,44 +623,41 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 #endif
 
   xaccAccountBeginEdit(acc);
-  {
-    Account *oldacc;
 
-    acc->balance_dirty = TRUE;
-    acc->sort_dirty = TRUE;
+  acc->balance_dirty = TRUE;
+  acc->sort_dirty = TRUE;
 
-    /* convert the split to the new account's denominators */
-    /* if the denominator can't be exactly converted, it's an error */
-    /* FIXME : need to enforce ordering of insertion/value */
-    split->damount = gnc_numeric_convert(split->damount, 
-                                         xaccAccountGetSecuritySCU(acc),
-                                         GNC_RND_ROUND);
+  /* convert the split to the new account's denominators */
+  /* if the denominator can't be exactly converted, it's an error */
+  /* FIXME : need to enforce ordering of insertion/value */
+  split->damount = gnc_numeric_convert(split->damount, 
+                                       xaccAccountGetSecuritySCU(acc),
+                                       GNC_RND_ROUND);
 
-    split->value   = gnc_numeric_convert(split->value, 
-                                         xaccAccountGetCurrencySCU(acc),
-                                         GNC_RND_ROUND);
+  split->value   = gnc_numeric_convert(split->value, 
+                                       xaccAccountGetCurrencySCU(acc),
+                                       GNC_RND_ROUND);
 
-    /* if this split belongs to another account, remove it from there
+  /* if this split belongs to another account, remove it from there
      * first.  We don't want to ever leave the system in an inconsistent
      * state.  Note that it might belong to the current account if we're
      * just using this call to re-order.  */
-    oldacc = xaccSplitGetAccount(split);
-    if (xaccSplitGetAccount(split))
-        xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
-    xaccSplitSetAccount(split, acc);
+  if (xaccSplitGetAccount(split))
+      xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
+  xaccSplitSetAccount(split, acc);
 
-    if (acc->editlevel == 1)
-    {
+  if (acc->editlevel == 1)
+  {
       acc->splits = g_list_insert_sorted(acc->splits, split, split_sort_func);
       acc->sort_dirty = FALSE;
-    }
-    else
+  }
+  else
       acc->splits = g_list_prepend(acc->splits, split);
 
-    mark_account (acc);
-    if (split->parent)
+  mark_account (acc);
+  if (split->parent)
       gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
-  }
+
   xaccAccountCommitEdit(acc);
 }
 

@@ -559,8 +559,10 @@ gnc_commodity_print_info (gnc_commodity *commodity,
   return info;
 }
 
-GNCPrintAmountInfo
-gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
+static GNCPrintAmountInfo
+gnc_account_print_info_helper(Account *account, gboolean use_symbol,
+                              gnc_commodity * (*efffunc)(Account *),
+                              int (*scufunc)(Account*))
 {
   GNCPrintAmountInfo info;
   gboolean is_iso;
@@ -569,12 +571,12 @@ gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
   if (account == NULL)
     return gnc_default_print_info (use_symbol);
 
-  info.commodity = xaccAccountGetEffectiveSecurity (account);
+  info.commodity = efffunc (account);
 
   is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
                          GNC_COMMODITY_NS_ISO) == 0);
 
-  scu = xaccAccountGetSecuritySCU (account);
+  scu = scufunc (account);
 
   if (is_decimal_fraction (scu, &info.max_decimal_places))
   {
@@ -592,46 +594,28 @@ gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
   info.monetary = 1;
 
   return info;
+}
+
+GNCPrintAmountInfo
+gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
+{
+    return gnc_account_print_info_helper(account, use_symbol,
+                                         xaccAccountGetEffectiveSecurity,
+                                         xaccAccountGetSecuritySCU);
 }
 
 GNCPrintAmountInfo
 gnc_account_value_print_info (Account *account, gboolean use_symbol)
 {
-  GNCPrintAmountInfo info;
-  gboolean is_iso;
-  int scu;
-
-  if (account == NULL)
-    return gnc_default_print_info (use_symbol);
-
-  info.commodity = xaccAccountGetCurrency (account);
-
-  is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
-                         GNC_COMMODITY_NS_ISO) == 0);
-
-  scu = xaccAccountGetCurrencySCU (account);
-
-  if (is_decimal_fraction (scu, &info.max_decimal_places))
-  {
-    if (is_iso)
-      info.min_decimal_places = info.max_decimal_places;
-    else
-      info.min_decimal_places = 0;
-  }
-  else
-    info.max_decimal_places = info.min_decimal_places = 0;
-
-  info.use_separators = 1;
-  info.use_symbol = use_symbol ? 1 : 0;
-  info.use_locale = is_iso ? 1 : 0;
-  info.monetary = 1;
-
-  return info;
+    return gnc_account_print_info_helper(account, use_symbol,
+                                         xaccAccountGetCurrency,
+                                         xaccAccountGetCurrencySCU);
 }
 
 GNCPrintAmountInfo
 gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 {
+  if(!split) return gnc_default_share_print_info();
   return gnc_account_quantity_print_info (xaccSplitGetAccount (split),
                                           use_symbol);
 }
@@ -639,31 +623,41 @@ gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 GNCPrintAmountInfo
 gnc_split_value_print_info (Split *split, gboolean use_symbol)
 {
+  if(!split) return gnc_default_price_print_info();
   return gnc_account_value_print_info (xaccSplitGetAccount (split),
                                        use_symbol);
 }
 
+static GNCPrintAmountInfo
+gnc_default_print_info_helper(int decplaces)
+{
+    GNCPrintAmountInfo info;
+
+    info.commodity = NULL;
+    
+    info.max_decimal_places = decplaces;
+    info.min_decimal_places = 0;
+    
+    info.use_separators = 1;
+    info.use_symbol = 0;
+    info.use_locale = 1;
+    info.monetary = 1;
+
+    return info;
+}
+    
 GNCPrintAmountInfo
 gnc_default_share_print_info (void)
 {
   static GNCPrintAmountInfo info;
   static gboolean got_it = FALSE;
 
-  if (got_it)
-    return info;
-
-  info.commodity = NULL;
-
-  info.max_decimal_places = 4;
-  info.min_decimal_places = 0;
-
-  info.use_separators = 1;
-  info.use_symbol = 0;
-  info.use_locale = 1;
-  info.monetary = 1;
-
-  got_it = TRUE;
-
+  if (!got_it)
+  {
+      info = gnc_default_print_info_helper(4);
+      got_it = TRUE;
+  }
+  
   return info;
 }
 
@@ -673,20 +667,11 @@ gnc_default_price_print_info (void)
   static GNCPrintAmountInfo info;
   static gboolean got_it = FALSE;
 
-  if (got_it)
-    return info;
-
-  info.commodity = NULL;
-
-  info.max_decimal_places = 6;
-  info.min_decimal_places = 0;
-
-  info.use_separators = 1;
-  info.use_symbol = 0;
-  info.use_locale = 1;
-  info.monetary = 1;
-
-  got_it = TRUE;
+  if (!got_it)
+  {
+      info = gnc_default_print_info_helper(6);
+      got_it = TRUE;
+  }
 
   return info;
 }
@@ -697,20 +682,11 @@ gnc_integral_print_info (void)
   static GNCPrintAmountInfo info;
   static gboolean got_it = FALSE;
 
-  if (got_it)
-    return info;
-
-  info.commodity = NULL;
-
-  info.max_decimal_places = 0;
-  info.min_decimal_places = 0;
-
-  info.use_separators = 1;
-  info.use_symbol = 0;
-  info.use_locale = 1;
-  info.monetary = 1;
-
-  got_it = TRUE;
+  if (!got_it)
+  {
+      info = gnc_default_print_info_helper(0);
+      got_it = TRUE;
+  }
 
   return info;
 }
