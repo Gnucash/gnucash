@@ -1159,10 +1159,12 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           accounts/el_GR/Makefile
           accounts/es_ES/Makefile
           accounts/fr_FR/Makefile
+          accounts/hu_HU/Makefile
           accounts/it/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
+          accounts/tr_TR/Makefile
           doc/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
