@@ -295,6 +295,17 @@ operation is probably OK.
    (the first one is due to gnc_account_tree_refresh ()
    called by gnc_account_window_create() near dialog-account.c:1642)
 
+-- nice-to-have performance improvement:
+   many queries are needlessly duplicated, even in multi-user mode.
+   They are duplicated just in case some other user has modified
+   the data.  But if we last checked just a few seconds ago,
+   we don't really need to update, not yet.  We can wait a few 
+   seconds ...  doing this uniformly can cut down on sql traffic.
+   (This is particularly egregious for price queries).  Implement this 
+   by putting a datestamp in along with the version number.  Let
+   the backend check the datastamp, and if its aged less than 
+   15 seconds, skip doing the sql query.)
+
 -- if always in multi-mode, then initial checkpoints not set up.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
@@ -359,13 +370,6 @@ operation is probably OK.
 
 -- review & match up against docs at 
    http://www.lupercalia.net/gnc-db/
-
--- nice-to-have performance improvement:
-   many queries are needlessly duplicated, even in multi-user mode.
-   They are duplicated just in case some other user has modified
-   the data.  But if we last checked just a few seconds ago,
-   we don't really need to update, not yet.  We can wait a few 
-   seconds ...  doing this uniformly can cut down on sql traffic.
 
 -- use version numbers for commodities.  Right now, multi-user
    updates of commodities are not detected (this seem OK for
