@@ -1,3 +1,13 @@
+2004-08-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-budget*:
+	* src/gnome/*budget*:
+	* src/gnome/glade/budget.glade:
+	* src/gnome-utils/gnc-budget*:
+	  Darin Willits' initial budget code.  Still not fully functional
+	  but the basic UI is there.  See the GNOME2_STATUS for additional
+	  information.
+
 2004-07-20  Derek Atkins <derek@ihtfp.com>
 
 	* lib/egg/eggtoolbar.c

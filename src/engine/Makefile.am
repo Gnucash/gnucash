@@ -25,6 +25,11 @@ libgncmod_engine_la_SOURCES = \
   Transaction.c \
   cap-gains.c \
   gnc-associate-account.c \
+  gnc-budget-book.c \
+  gnc-budget-cat.c \
+  gnc-budget-period-value.c \
+  gnc-budget-period.c \
+  gnc-budget.c \
   gnc-commodity.c \
   gnc-date.c \
   gnc-engine-util.c \
@@ -79,6 +84,11 @@ gncinclude_HEADERS = \
   glib-helpers.h \
   gnc-associate-account.h \
   gnc-book.h \
+  gnc-budget-book.h \
+  gnc-budget-cat.h \
+  gnc-budget-period-value.h \
+  gnc-budget-period.h \
+  gnc-budget.h \
   gnc-commodity.h \
   gnc-date.h \
   gnc-engine-util.h \
@@ -121,6 +131,11 @@ noinst_HEADERS = \
   SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
+  gnc-budget-book-p.h \
+  gnc-budget-cat-p.h \
+  gnc-budget-period-value-p.h \
+  gnc-budget-period-p.h \
+  gnc-budget-p.h \
   gnc-event-p.h \
   gnc-lot.h \
   gnc-lot-p.h \

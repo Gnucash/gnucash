@@ -35,6 +35,7 @@
 
 #include "gnc-main-window.h"
 
+#include "dialog-budget-list.h"
 #include "gnc-menu-extensions.h"
 
 #include "dialog-fincalc.h"
@@ -111,6 +112,7 @@ static void gnc_main_window_cmd_view_toolbar (EggAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_summary (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_actions_budget_workbench(EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_since_last_run (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_close_books (EggAction *action, GncMainWindow *window);
@@ -227,6 +229,9 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "ActionsMortgageLoanAction", N_("_Mortgage & Loan Repayment..."), NULL, "NULL",
 	  N_("Setup scheduled transactions for repayment of a loan"),
 	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+	{ "ActionsBudgetWorkbenchAction", N_("_Budget Workbench (Experimental)"), NULL, NULL, 
+      N_("Create, Manage, and Monitor Budgets." ),
+      G_CALLBACK(gnc_main_window_cmd_actions_budget_workbench) },
 	{ "ActionsCloseBooksAction", N_("Close Books"), NULL, "NULL",
 	  N_("Archive old data using accounting periods"),
 	  G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
@@ -1140,6 +1145,12 @@ static void
 gnc_main_window_cmd_actions_mortgage_loan (EggAction *action, GncMainWindow *window)
 {
 	gnc_ui_sx_loan_druid_create ();
+}
+
+static void 
+gnc_main_window_cmd_actions_budget_workbench(EggAction *action, GncMainWindow *window)
+{
+    gnc_budget_list_dialog_create();
 }
 
 static void

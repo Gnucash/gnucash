@@ -24,6 +24,9 @@ libgw_gnc_la_LDFLAGS = -module \
 libgw_gnc_la_LIBADD = libgncgnome.la
 
 libgncgnome_la_SOURCES = \
+  dialog-budget-category.c \
+  dialog-budget-list.c \
+  dialog-budget-workbench.c \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -38,6 +41,7 @@ libgncgnome_la_SOURCES = \
   gnc-totd-dialog.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
+  druid-budget-create.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-loan.c \
@@ -75,6 +79,9 @@ mimedir = $(datadir)/mime-info
 mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
+  dialog-budget-category.h \
+  dialog-budget-list.h \
+  dialog-budget-workbench.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
@@ -84,6 +91,7 @@ noinst_HEADERS = \
   dialog-sxsincelast.h \
   gnc-totd-dialog.h \
   dialog-scheduledxaction.h \
+  druid-budget-create.h \
   druid-acct-period.h \
   druid-hierarchy.h \
   druid-loan.h \

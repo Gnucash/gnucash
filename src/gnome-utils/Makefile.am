@@ -39,6 +39,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   druid-utils.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
+  gnc-budget-list-tree-model.c \
+  gnc-budget-tree-model.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
@@ -90,6 +92,8 @@ gncinclude_HEADERS = \
   dialog-utils.h \
   druid-utils.h \
   gnc-account-sel.h \
+  gnc-budget-list-tree-model.h \
+  gnc-budget-tree-model.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \

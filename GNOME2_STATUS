@@ -121,6 +121,20 @@ IMPORTING
 
   HBCI - Needs new http support. [gnet]
 
+Budgeting
+    - Can create/modify budgets via the Budgeting workbench.
+      (Actions->Budgeting Workbench)
+    - Track budget tab still needs to be competed.  Should allow you to look
+      at predicted vs actual information.
+    - No save to file functionality.  Therefore budgets must currently be
+      created fresh each time gnucash is started.  First thing that I want
+      to fix.
+    - Should the budgeting workbench fit into the new windowing scheme
+      better?  Currently it is its own window but maybe each workbench
+      should be a tab in the new layout.  How would this work with the
+      sub-tabs?  Have to think about this some more.
+    - Probably more TODO but these are the main points.
+
 ========================================
               ENHANCEMENTS
 ========================================
@@ -145,3 +159,4 @@ IMPORTING
 	long term?)
 
 4/      Print-preview support.
+

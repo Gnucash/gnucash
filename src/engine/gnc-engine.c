@@ -31,6 +31,7 @@
 #include "AccountP.h"
 #include "GroupP.h"
 #include "SX-book-p.h"
+#include "gnc-budget-book-p.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
@@ -95,6 +96,7 @@ gnc_engine_init(int argc, char ** argv)
   xaccAccountRegister ();
   xaccGroupRegister ();
   gnc_sxtt_register ();
+  gnc_budget_register();
   gnc_pricedb_register ();
   gnc_commodity_table_register();
   gnc_lot_register ();
