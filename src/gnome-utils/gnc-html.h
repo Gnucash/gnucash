@@ -57,6 +57,7 @@ typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
+typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data);
 
 gnc_html    * gnc_html_new(void);
 void          gnc_html_destroy(gnc_html * html);
@@ -82,6 +83,11 @@ void          gnc_html_unregister_object_handler(const char * classid);
 void          gnc_html_register_action_handler(const char * action, 
                                                GncHTMLActionCB hand);
 void          gnc_html_unregister_action_handler(const char * action);
+
+/* stream handlers load data for particular URLTypes. */
+void          gnc_html_register_stream_handler(URLType url_type,
+                                               GncHTMLStreamCB hand);
+void          gnc_html_unregister_stream_handler(URLType url_type);
 
 /* default action handlers for GET and POST methods.  'generic_post'
  * is the trivial application/x-www-form-urlencoded submit,

@@ -2,16 +2,24 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-report-system.la
 
-libgncmod_report_system_la_SOURCES = gncmod-report-system.c 
+libgncmod_report_system_la_SOURCES = \
+  gncmod-report-system.c \
+  gnc-report.c
+
+noinst_HEADERS = \
+  gnc-report.h
+
 libgncmod_report_system_la_LDFLAGS = -module
 libgncmod_report_system_la_LIBADD = \
   -L../../gnc-module -L../../gnc-module/.libs -lgncmodule \
-  ${GLIB_LIBS} ${GUILE_LIBS} 
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS} 
 
 
 INCLUDES = \
   -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS}
 
 .scm-links:
 	rm -f gnucash report
@@ -43,5 +51,3 @@ gncscm_DATA = \
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
 
 CLEANFILES += gnucash report .scm-links
-
-

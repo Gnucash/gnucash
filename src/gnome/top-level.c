@@ -31,7 +31,7 @@
 #ifdef GTKHTML_HAVE_GCONF
 #include <gconf/gconf.h>
 #endif
-
+#include <g-wrap-runtime-guile.h>
 #include <X11/Xlib.h>
 
 #include "AccWindow.h"
@@ -44,6 +44,7 @@
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "file-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -53,7 +54,9 @@
 #ifdef USE_GUPPI
 #include "gnc-html-guppi.h"
 #endif
+#include "gnc-html.h"
 #include "gnc-gpg.h"
+#include "gnc-report.h"
 #include "gnc-ui.h"
 #include "gw-gnc.h"
 #include "gnucash-color.h"
@@ -70,7 +73,6 @@
 #include "window-acct-tree.h"
 #include "window-report.h"
 
-#include <g-wrap-runtime-guile.h>
 
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format_cb(gpointer);
@@ -169,7 +171,28 @@ gnc_set_remaining_argv(int len, const char **rest)
     gh_define(gnc_scheme_remaining_var, toput);
 }
 
-             
+
+static gboolean
+gnc_html_file_stream_handler (const char *location, char ** data)
+{
+  return (gncReadFile (location, data) > 0);
+}
+
+static gboolean
+gnc_html_report_stream_handler (const char *location, char ** data)
+{
+  gboolean ok;
+
+  ok = gnc_run_report_id_string (location, data);
+
+  if (!ok)
+    *data = g_strdup (_("<html><body><h3>Report error</h3>"
+                        "<p>An error occurred while running the report.</p>"
+                        "</body></html>"));
+
+  return ok;
+}
+
 /* ============================================================== */
 
 /* These gnucash_ui_init and gnucash_ui functions are just hacks to get
@@ -310,6 +333,13 @@ gnucash_ui_init(void)
     /* gnc_default_ui_start */
     gnucash_style_init();
     gnucash_color_init();
+
+    gnc_html_register_stream_handler (URL_TYPE_HELP,
+                                      gnc_html_file_stream_handler);
+    gnc_html_register_stream_handler (URL_TYPE_FILE,
+                                      gnc_html_file_stream_handler);
+    gnc_html_register_stream_handler (URL_TYPE_REPORT,
+                                      gnc_html_report_stream_handler);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();

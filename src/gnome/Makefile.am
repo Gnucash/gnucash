@@ -112,6 +112,7 @@ INCLUDES = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/import-export/qif-import \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}

@@ -44,7 +44,6 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "file-utils.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"
 #include "window-register.h"
@@ -101,14 +100,14 @@ static GHashTable * gnc_html_object_handlers = NULL;
  * action-args is what gets passed to the handler. */
 static GHashTable * gnc_html_action_handlers = NULL;
 
+/* hashes handlers for loading different URLType data */
+static GHashTable * gnc_html_stream_handlers = NULL;
+
 static char error_404[] = 
-"<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>";
+N_("<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>");
 
-static char error_start[] = "<html><body><h3>Error</h3><p>There was an error loading the specified URL. <p>Error message: <p> ";
+static char error_start[] = N_("<html><body><h3>Error</h3><p>There was an error loading the specified URL. <p>Error message: <p> ");
 static char error_end[] = "</body></html>";
-
-static char error_report[] = 
-"<html><body><h3>Report error</h3><p>An error occurred while running the report.</body></html>";
 
 
 static char * 
@@ -422,10 +421,11 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
       gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
     }
     else {
-      gtk_html_write(GTK_HTML(html->html), handle,
-                     error_start, strlen(error_start));
-      gtk_html_write(GTK_HTML(html->html), handle, 
-                     body, body_len);
+      char *data;
+
+      data = _(error_start);
+      gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
+      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
       gtk_html_write(GTK_HTML(html->html), handle,
                      error_end, strlen(error_end));
       gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
@@ -457,8 +457,11 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
       }
       /* request failed... body is the ghttp error text. */
       else {
+        char *data;
+
+        data = _(error_start);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       error_start, strlen(error_start));
+                       data, strlen(data));
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
                        body, body_len);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
@@ -469,7 +472,7 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
     }
     g_list_free(handles);    
   }
-  
+
   gnc_unset_busy_cursor (html->html);
 }
 
@@ -523,26 +526,36 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   if(!html) {
     return;
   }
-  
+
+  if (gnc_html_stream_handlers) {
+    GncHTMLStreamCB stream_handler;
+
+    stream_handler = g_hash_table_lookup (gnc_html_stream_handlers, &type);
+    if (stream_handler) {
+      gboolean ok = stream_handler (location, &fdata);
+
+      if(ok) {
+        fdata = fdata ? fdata : g_strdup ("");
+        gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
+        gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);      
+      }
+      else {
+        fdata = fdata ? fdata : g_strdup (_(error_404));
+        gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
+        gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
+      }
+
+      g_free(fdata);
+
+      if(label) {
+        gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
+      }
+
+      return;
+    }
+  }
+
   switch(type) {
-  case URL_TYPE_HELP:
-  case URL_TYPE_FILE:
-    fsize = gncReadFile(location, &fdata);
-    if(fsize > 0) {
-      gtk_html_write(GTK_HTML(html->html), handle, fdata, fsize);
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);      
-    }
-    else {
-      gtk_html_write(GTK_HTML(html->html), handle, error_404, 
-                     strlen(error_404));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
-    }
-    g_free(fdata);
-    if(label) {
-      gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-    }
-    break;
-    
   case URL_TYPE_SECURE:
     if(!https_allowed()) {
       gnc_error_dialog(_("Secure HTTP access is disabled.\n"
@@ -550,7 +563,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                          "the Preferences dialog."));
       break;
     }
-    
+
   case URL_TYPE_HTTP:
     if(!http_allowed()) {
       gnc_error_dialog(_("Network HTTP access is disabled.\n"
@@ -562,58 +575,16 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       gnc_html_start_request(html, fullurl, handle);
     }
     break;
-    
-  case URL_TYPE_REPORT:
-    run_report = gh_eval_str("gnc:report-run");
 
-    if(!strncmp("id=", location, 3)) {
-      /* get the report ID */
-      sscanf(location+3, "%d", &id);
-      
-      /* get the HTML text */ 
-      scmtext = gh_call1(run_report, gh_int2scm(id));
-      if(scmtext == SCM_BOOL_F) {
-        gtk_html_write(GTK_HTML(html->html), handle, 
-                       error_report, strlen(error_report));        
-      }
-      else {
-        fdata = gh_scm2newstr(scmtext, &fsize);
-        if(fdata) {
-          gtk_html_write(GTK_HTML(html->html), handle, fdata, fsize);
-          TRACE ("%s", fdata);
-          free(fdata);
-          fdata = NULL;
-          fsize = 0;
-          if(label) {
-            gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-          }
-        }
-        else {
-          gtk_html_write(GTK_HTML(html->html), handle, error_404, 
-                         strlen(error_404));
-          PWARN("report HTML generator failed.");
-        }
-      }
-    }
-
-    gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
-    break;
-    
-  case URL_TYPE_REGISTER:
-  case URL_TYPE_ACCTTREE:
-  case URL_TYPE_OPTIONS:
-  case URL_TYPE_SCHEME:
-  case URL_TYPE_FTP:
   default:
     PWARN("load_to_stream for inappropriate type\n"
           "\turl = '%s#%s'\n",
           location ? location : "(null)",
           label ? label : "(null)");
-    gtk_html_write(GTK_HTML(html->html), handle, error_404, 
-                   strlen(error_404));
+    fdata = _(error_404);
+    gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
     gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
     break;
-    
   }
 }
 
@@ -1396,9 +1367,16 @@ gnc_html_get_widget(gnc_html * html) {
 void
 gnc_html_register_object_handler(const char * classid, 
                                  GncHTMLObjectCB hand) {
+  g_return_if_fail (classid != NULL);
+
   if(!gnc_html_object_handlers) {
     gnc_html_object_handlers = g_hash_table_new(g_str_hash, g_str_equal);
   }
+
+  gnc_html_unregister_object_handler (classid);
+  if (!hand)
+    return;
+
   g_hash_table_insert(gnc_html_object_handlers, g_strdup(classid), hand);
 }
 
@@ -1407,22 +1385,29 @@ gnc_html_unregister_object_handler(const char * classid) {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
-  g_hash_table_lookup_extended(gnc_html_object_handlers,
-                               classid, 
-                               (gpointer *)&keyptr, 
-                               (gpointer *)&valptr);
-  if(keyptr) {
-    g_free(keyptr);
-    g_hash_table_remove(gnc_html_object_handlers, classid);
-  }
+  if (!g_hash_table_lookup_extended(gnc_html_object_handlers,
+                                    classid, 
+                                    (gpointer *)&keyptr, 
+                                    (gpointer *)&valptr))
+    return;
+
+  g_hash_table_remove(gnc_html_object_handlers, classid);
+  g_free(keyptr);
 }
 
 void
 gnc_html_register_action_handler(const char * actionid, 
                                  GncHTMLActionCB hand) {
+  g_return_if_fail (actionid != NULL);
+
   if(!gnc_html_action_handlers) {
     gnc_html_action_handlers = g_hash_table_new(g_str_hash, g_str_equal);
   }
+
+  gnc_html_unregister_action_handler (actionid);
+  if (!hand)
+    return;
+
   g_hash_table_insert(gnc_html_action_handlers, g_strdup(actionid), hand);
 }
 
@@ -1431,16 +1416,54 @@ gnc_html_unregister_action_handler(const char * actionid) {
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
-  g_hash_table_lookup_extended(gnc_html_action_handlers,
-                               actionid, 
-                               (gpointer *)&keyptr, 
-                               (gpointer *)&valptr);
-  if(keyptr) {
-    g_free(keyptr);
-    g_hash_table_remove(gnc_html_action_handlers, actionid);
-  }
+  g_return_if_fail (actionid != NULL);
+
+  if (!g_hash_table_lookup_extended(gnc_html_action_handlers,
+                                    actionid, 
+                                    (gpointer *)&keyptr, 
+                                    (gpointer *)&valptr))
+    return;
+
+  g_hash_table_remove(gnc_html_action_handlers, actionid);
+  g_free(keyptr);
 }
 
+void
+gnc_html_register_stream_handler(URLType url_type, GncHTMLStreamCB hand)
+{
+  URLType *key;
+
+  g_return_if_fail (url_type >= 0);
+
+  if(!gnc_html_stream_handlers) {
+    gnc_html_stream_handlers = g_hash_table_new(g_int_hash, g_int_equal);
+  }
+
+  gnc_html_unregister_stream_handler (url_type);
+  if (!hand)
+    return;
+
+  key = g_new (URLType, 1);
+  *key = url_type;
+
+  g_hash_table_insert (gnc_html_stream_handlers, key, hand);
+}
+
+void
+gnc_html_unregister_stream_handler(URLType url_type)
+{
+  gpointer keyptr;
+  gpointer valptr;
+
+  if (!g_hash_table_lookup_extended(gnc_html_stream_handlers,
+                                    &url_type, 
+                                    &keyptr, 
+                                    &valptr))
+    return;
+
+  g_hash_table_remove (gnc_html_stream_handlers, &url_type);
+  g_free (keyptr);
+}
 
 /********************************************************************
  * gnc_html_encode_string

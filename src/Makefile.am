@@ -45,6 +45,7 @@ gnucash_LDADD = \
   register/ledger-core/libgncmod-ledger-core.la \
   register/register-core/libgncmod-register-core.la \
   register/register-gnome/libgncmod-register-gnome.la \
+  report/report-system/libgncmod-report-system.la \
   import-export/qif-import/libgncmod-qif-import.la \
   guile/libgncguile.a \
   gnome/libgncgnome.a \
