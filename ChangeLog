@@ -4,6 +4,23 @@
 	  to the various columns displayed in the report currency.
 	  Partial fix for #118695.
 
+	Support "gain/loss" balancing splits on stocks:
+	* src/engine/Transaction.c: fix xaccSplitGetPrice() to return '0'
+	  if 'amount' is zero but 'value' is non-zero
+	* src/register/ledger-core/split-register-model-save.c: if we've
+	  already handled the debcred cell then DON'T handle the price cell
+	  as it will override the debcred's value.
+	* src/register/ledger-core/split-register.c: if #shares == 0,
+	  price == 0, and value (buy/sell) != 0 then allow this entry;
+	  it's an income/expense balancing split.
+	* src/register/ledger-core/split-register-control.c: if the exchange
+	  rate cell is 0 but this is NOT the blank split, then don't run
+	  the exchange-rate dialog unless specifically requested.
+	* src/register/ledger-core/split-register-model.c: when trying to
+	  find the conversion rate for a split, remember if we found
+	  a matching split (even if the amount is 0).  If all matching
+	  splits are 0, then return 0, not 1.
+
 2003-07-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif/ -- add functionality to merge multiple

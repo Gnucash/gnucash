@@ -1077,7 +1077,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   reg_acc = gnc_split_register_get_default_account (reg);
   reg_com = xaccAccountGetCommodity (reg_acc);
 
-  /* Is this a two-split txn? */
+  /* Grab the split and perhaps the "other" split (if it is a two-split txn) */
   split = gnc_split_register_get_current_split (reg);
   osplit = xaccSplitGetOtherSplit (split);
 
@@ -1122,6 +1122,15 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    */
   if (gnc_numeric_zero_p (amount))
     return FALSE;
+
+  /* If the exch_rate is zero, we're not forcing the dialog, and this is
+   * _not_ the blank split, then return FALSE -- this is a "special"
+   * gain/loss stock transaction.
+   */
+  if (gnc_numeric_zero_p(exch_rate) && !force_dialog &&
+      split != gnc_split_register_get_blank_split (reg))
+    return FALSE;
+
 
   /* We know that "amount" is always in the reg_com currency.
    * Unfortunately it is possible that neither xfer_com or txn_cur are

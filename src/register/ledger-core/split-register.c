@@ -1730,6 +1730,17 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   else
     value = xaccSplitGetValue (split);
 
+
+  /* Check if shares and price are BOTH zero (and value is non-zero).
+   * If so, we can assume that this is an income-correcting split
+   */
+  if (gnc_numeric_zero_p(amount) && gnc_numeric_zero_p(price) &&
+      !gnc_numeric_zero_p(value))
+  {
+    /* XXX: should we ask the user? */
+    return TRUE;
+  }
+
   /* Check if precisely one value is zero. If so, we can assume that the
    * zero value needs to be recalculated.   */
 

@@ -958,7 +958,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
   value = xaccSplitGetValue (split);
 
   if (gnc_numeric_zero_p (value))
-    return "";
+    return "0";
 
   convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 
@@ -1393,6 +1393,7 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
   gnc_numeric amount, value, convrate;
   GList *splits;
   Split *s;
+  gboolean found_acc_match = FALSE;
 
   /* We need to compute the conversion rate into _this account_.  So,
    * find the first split into this account, compute the conversion
@@ -1406,6 +1407,7 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
     if (xaccSplitGetAccount (s) != acc)
       continue;
 
+    found_acc_match = TRUE;
     amount = xaccSplitGetAmount (s);
 
     /* Ignore splits with "zero" amount */
@@ -1418,8 +1420,15 @@ gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
   }
 
   /* Don't error if we're in a GENERAL_LEDGER and have no account */
-  if (acc)
-    PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
+  if (acc) {
+    /* If we did find a matching account but it's amount was zero,
+     * then perhaps this is a "special" income/loss transaction
+     */
+    if (found_acc_match)
+      return gnc_numeric_zero();
+    else
+      PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
+  }
   return gnc_numeric_create (100, 100);
 }
 

@@ -3148,9 +3148,23 @@ xaccSplitGetValue (const Split * split)
 gnc_numeric
 xaccSplitGetSharePrice (const Split * split) 
 {
-  if(!split || gnc_numeric_zero_p(split->amount)) 
+  if(!split)
   {
     return gnc_numeric_create(1, 1);
+  }
+
+  /* if amount == 0 and value == 0, then return 1.
+   * if amount == 0 and value != 0 then return 0.
+   * otherwise return value/amount
+   */
+
+  if(gnc_numeric_zero_p(split->amount))
+  {
+    if(gnc_numeric_zero_p(split->value))
+    {
+      return gnc_numeric_create(1, 1);
+    }
+    return gnc_numeric_create(0, 1);
   }
   return gnc_numeric_div(split->value, 
                          split->amount,
