@@ -142,6 +142,9 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         GtkEditable *editable;
         Table *table;
 
+        gboolean hatching;
+        guint32 argb;
+
         int text_len, total_width;
         int pre_cursor_width;
         int width_1, width_2;
@@ -150,8 +153,6 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         int toggle_space, cursor_pos;
         int xoffset;
         char *text;
-        gboolean hatching;
-        guint32 argb;
 
         style = item_edit->style;
         table = item_edit->sheet->table;
@@ -233,6 +234,19 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                         break;
         }
 
+        if (!item_edit->reset_pos)
+        {
+                xoffset = item_edit->x_offset;
+
+                if (xoffset + pre_cursor_width >
+                    info->text_rect.width - CELL_HPADDING)
+                        xoffset = info->text_rect.width -
+                                (2*CELL_HPADDING + pre_cursor_width);
+
+                if (xoffset + pre_cursor_width < CELL_HPADDING)
+                        xoffset = CELL_HPADDING - pre_cursor_width;
+        }
+
         info->text_x1 = dx + xoffset;
         info->text_x2 = info->text_x1 + width_1;
         info->text_x3 = info->text_x2 + width_2;
@@ -252,6 +266,8 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                 info->hatch_rect.width = wd;
                 info->hatch_rect.height = hd;
         }
+
+        item_edit->x_offset = xoffset;
 }
 
 static void
@@ -278,6 +294,8 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         /* Get the measurements for drawing */
         item_edit_draw_info (item_edit, x, y, &info);
+
+        item_edit->reset_pos = FALSE;
 
         /* Draw the background */
         gdk_gc_set_foreground (item_edit->gc, info.bg_color);
@@ -622,6 +640,9 @@ item_edit_init (ItemEdit *item_edit)
 	item_edit->gc = NULL;
 	item_edit->style = NULL;
 
+        item_edit->reset_pos = TRUE;
+        item_edit->x_offset = 0;
+
         item_edit->virt_loc.vcell_loc.virt_row = -1;
         item_edit->virt_loc.vcell_loc.virt_col = -1;
         item_edit->virt_loc.phys_row_offset = -1;
@@ -798,11 +819,14 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
 static int
 entry_event (GtkEntry *entry, GdkEvent *event, ItemEdit *item_edit)
 {
-        switch (event->type) {
+        switch (event->type)
+        {
 		case GDK_KEY_PRESS:
 		case GDK_KEY_RELEASE:
 		case GDK_BUTTON_PRESS:
 			queue_sync (item_edit);
+                        break;
+
 		default:
 			break;
         }
@@ -833,8 +857,17 @@ item_edit_configure (ItemEdit *item_edit)
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK]);
 
-        item_edit->virt_loc.vcell_loc.virt_row = cursor->row;
-        item_edit->virt_loc.vcell_loc.virt_col = cursor->col;
+        if (item_edit->virt_loc.vcell_loc.virt_row != cursor->row)
+        {
+                item_edit->virt_loc.vcell_loc.virt_row = cursor->row;
+                item_edit->reset_pos = TRUE;
+        }
+
+        if (item_edit->virt_loc.vcell_loc.virt_col != cursor->col)
+        {
+                item_edit->virt_loc.vcell_loc.virt_col = cursor->col;
+                item_edit->reset_pos = TRUE;
+        }
 
         item_edit->style =
                 gnucash_sheet_get_style (item_edit->sheet,
@@ -843,8 +876,17 @@ item_edit_configure (ItemEdit *item_edit)
         cursor = GNUCASH_ITEM_CURSOR
 		(GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL]);
 
-        item_edit->virt_loc.phys_row_offset = cursor->row;
-        item_edit->virt_loc.phys_col_offset = cursor->col;
+        if (item_edit->virt_loc.phys_row_offset != cursor->row)
+        {
+                item_edit->virt_loc.phys_row_offset = cursor->row;
+                item_edit->reset_pos = TRUE;
+        }
+
+        if (item_edit->virt_loc.phys_col_offset != cursor->col)
+        {
+                item_edit->virt_loc.phys_col_offset = cursor->col;
+                item_edit->reset_pos = TRUE;
+        }
 
         if (!gnc_table_is_popup (item_edit->sheet->table, item_edit->virt_loc))
                 item_edit_set_popup (item_edit, NULL, NULL, NULL,

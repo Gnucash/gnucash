@@ -99,6 +99,9 @@ typedef struct
         GdkICAttr *ic_attr;
 #endif
 
+        gboolean reset_pos;
+        gint x_offset;
+
         /* Where are we */
         VirtualLocation virt_loc;
 
