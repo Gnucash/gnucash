@@ -29,12 +29,15 @@
 #include <math.h>
 #include <assert.h>
 
+#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 
 /* TODO 
  * - use longer intermediate values to make operations
  *   64-bit-overflow-proof 
  */
+
+static short module = MOD_ENGINE;
 
 static const char * _numeric_error_strings[] = 
 {
@@ -850,8 +853,7 @@ gnc_numeric_create(gint64 num, gint64 denom) {
 gnc_numeric
 gnc_numeric_error(int error_code) {
   if(abs(error_code) < 5) {
-    fprintf(stderr, " ** GNC-NUMERIC error : %s\n",
-            _numeric_error_strings[ - error_code]);
+    PERR("%s", _numeric_error_strings[ - error_code]);
   }
   return gnc_numeric_create(error_code, 0LL);
 }

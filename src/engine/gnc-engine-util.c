@@ -39,7 +39,6 @@
 #include "gnc-common.h"
 #include "gnc-engine.h"
 
-
 /** GLOBALS *********************************************************/
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -173,6 +172,17 @@ int
 safe_strcmp (const char * da, const char * db)
 {
    SAFE_STRCMP (da, db);
+   return 0;
+}
+
+int 
+null_strcmp (const char * da, const char * db)
+{
+   if (da && db) return strcmp (da, db);
+   if (!da && db && 0==db[0]) return 0;
+   if (!db && da && 0==da[0]) return 0;
+   if (!da && db) return -1;
+   if (da && !db) return +1;
    return 0;
 }
 

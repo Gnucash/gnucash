@@ -1155,25 +1155,50 @@ xaccTransSetCurrency (Transaction *trans, const gnc_commodity *curr)
 
   if (trans->common_currency)
   {
-     PWARN ("currency already set\n");
-     if (!gnc_commodity_equiv (curr,trans->common_currency))
-     {
-       PWARN ("asked to change from common currency %s to %s\n"
-              "doing so hasn't been test and may orrupt the system\n",
-           gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (curr));
-     }
+    PWARN ("currency already set\n");
+    if (!gnc_commodity_equiv (curr,trans->common_currency))
+    {
+      PWARN ("asked to change from common currency %s to %s\n"
+             "doing so hasn't been tested and may orrupt the system\n",
+          gnc_commodity_get_unique_name (trans->common_currency),
+          gnc_commodity_get_unique_name (curr));
+    }
   }
   else
   {
+    const gnc_commodity *kimono;
+    GList *node;
     trans->common_currency = curr;
 
     /* The following code will be obsolete when we finally eliminate
      * the storage of the currency with the account. But in the meanwhile.
      * we will try to keep it in sync, so that both the old and new ways
      * work.
+     *
+     * This is a cheesy and potentially error-prone algorithm;
+     * but lets give it a spin and try our luck ...
      */
-    
+    for (node = trans->splits; node; node = node->next)
+    {
+      Split *s = node->data;
+      const gnc_commodity *currency;
+      const gnc_commodity *security;
+
+      currency = xaccAccountGetCurrency (s->acc);
+      security = xaccAccountGetSecurity (s->acc);
+      if (!currency && security)
+      {
+        xaccAccountSetCurrency (s->acc, curr);
+      }
+    }
+    kimono = xaccTransFindCommonCurrency (trans);
+    if (!gnc_commodity_equiv (curr,kimono))
+    {
+      PWARN ("Transaction currency seems to be inconsistent.\n"
+             "\tdefacto common=%s, asked to set %s",
+          gnc_commodity_get_unique_name (kimono),
+          gnc_commodity_get_unique_name (curr));
+    }
   }
 }
 
@@ -1198,7 +1223,7 @@ xaccTransBeginEdit (Transaction *trans)
    char open;
    Backend *be;
 
-   assert (trans);
+   if (!trans) return;
    open = trans->open;
    trans->open = BEGIN_EDIT;
 
@@ -1294,6 +1319,8 @@ xaccTransCommitEdit (Transaction *trans)
           * at this point, and let the user know that we failed.
           */
         /* XXX hack alert -- finish this */
+        PERR("Backend asked engine to rollback, but we don't "
+             "handle this case yet. Return code=%d", rc);
       }
    }
 

@@ -130,8 +130,17 @@ void           gnc_book_set_group (GNCBook *book, AccountGroup *topgroup);
  *    path for the book. That is, if a relative or partial filename
  *    was for the book, then it had to have been fully resolved to
  *    open the book. This routine returns the result of this resolution.
+ *    The path is always guarenteed to reside in the local file system, 
+ *    even if the book itself was opened as a URL.  (currently, the
+ *    filepath is derived from the url by substituting commas for
+ *    slashes).
+ *
+ * The gnc_book_get_url() routine returns the url that was opened.
+ *    URL's for local files take the form of 
+ *    file:/some/where/some/file.gml
  */
 const char * gnc_book_get_file_path (GNCBook *book);
+const char * gnc_book_get_url (GNCBook *book);
 
 /* FIXME: This isn't as thorough as we might want it to be... */
 gboolean gnc_book_save_may_clobber_data (GNCBook *book);

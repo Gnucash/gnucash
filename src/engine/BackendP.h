@@ -116,7 +116,7 @@ struct _backend
   void (*book_begin) (GNCBook *, const char *book_id);
   AccountGroup * (*book_load) (Backend *);
   void (*book_end) (Backend *);
-  int (*account_begin_edit) (Backend *, Account *, int defer);
+  int (*account_begin_edit) (Backend *, Account *);
   int (*account_commit_edit) (Backend *, Account *);
   int (*trans_begin_edit) (Backend *, Transaction *);
   int (*trans_commit_edit) (Backend *, Transaction *new, Transaction *orig);

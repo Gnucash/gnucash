@@ -30,6 +30,7 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -291,24 +292,56 @@ xaccAccountBringUpToDate(Account *acc) {
 }
 
 void 
-xaccAccountBeginEdit (Account *acc) {
+xaccAccountBeginEdit (Account *acc) 
+{
+   Backend * be;
    if (!acc) return;
 
-   /* FIXME: we should check for editlevel overflow here and do
-      something about it. */
-
    acc->editlevel++;
+   if (1 < acc->editlevel) return;
+
+   if (0 >= acc->editlevel) 
+   {
+     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
+     acc->editlevel = 0;
+   }
+
+   /* See if there's a backend.  If there is, invoke it. */
+   be = xaccAccountGetBackend (acc);
+   if (be && be->account_begin_edit) {
+      (be->account_begin_edit) (be, acc);
+   }
 }
 
 void 
-xaccAccountCommitEdit (Account *acc) {
+xaccAccountCommitEdit (Account *acc) 
+{
+   Backend * be;
+   int rc;
+
    if (!acc) return;
+
    acc->editlevel--;
-   if(acc->editlevel < 0) {
-     PERR ("unbalanced call to xaccAccountCommitEdit - resetting");
+   if (0 < acc->editlevel) return;
+
+   if (0 > acc->editlevel) 
+   {
+     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
+     acc->editlevel = 0;
    }
-   else if(acc->editlevel == 0) {
-     xaccAccountBringUpToDate(acc);
+   xaccAccountBringUpToDate(acc);
+
+   /* See if there's a backend.  If there is, invoke it. */
+   be = xaccAccountGetBackend (acc);
+   if (be && be->account_commit_edit) {
+      rc = (be->account_commit_edit) (be, acc);
+      /* hack alert -- we really really should be checking 
+       * for errors returned by the back end ... */
+      if (rc)
+      {
+         PERR (" backend asked engine to rollback, but this isn't"
+               " handled yet. Return code=%d", rc);
+      }
    }
 }
 
@@ -981,33 +1014,26 @@ void
 xaccAccountSetCommodity (Account * acc, const gnc_commodity * com) 
 {
   if ((!acc) || (!com)) return;
-  if (!acc->currency)
+
+  switch (acc->type) 
   {
-     xaccAccountSetCurrency (acc, com);
-     if (acc->security)
-     {
-        PWARN ("security was set, but currency wasn't");
-     }
-     return;
+     case BANK:
+     case CASH:
+     case CREDIT:
+     case ASSET:
+     case LIABILITY:
+     case INCOME:
+     case EXPENSE:
+     case EQUITY:
+        xaccAccountSetCurrency (acc, com);
+        break;
+     case STOCK:
+     case MUTUAL:
+     case CURRENCY:
+        xaccAccountSetSecurity (acc, com);
+        break;
+     default:
   }
-
-  if (gnc_commodity_equiv(com, acc->currency)) return;
-
-  if (!acc->security)
-  {
-     xaccAccountSetSecurity (acc, com);
-     return;
-  }
-
-  if (gnc_commodity_equiv(com, acc->security)) return;
-  
-  PWARN ("unexpected, don't know what to do\n"
-         "\tacc->currecny=%s\n"
-         "\tacc->security=%s\n"
-         "\tset commodity=%s\n",
-         gnc_commodity_get_unique_name (acc->currency),
-         gnc_commodity_get_unique_name (acc->security),
-         gnc_commodity_get_unique_name (com));
 }
 
 /********************************************************************\

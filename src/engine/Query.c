@@ -692,12 +692,12 @@ date_cmp_func(Timespec *t1, Timespec *t2) {
 }
 
 static int
-split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
+split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) 
+{
   Split       * sa = (Split *)ga;
   Split       * sb = (Split *)gb;
   Transaction * ta;
   Transaction * tb;
-  int retval;
   unsigned long n1;                             
   unsigned long n2;                             
   char   *da, *db;                               
@@ -759,56 +759,17 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     if (gnc_strisnum(db)) {                       
       return +1;                                  
     }                                             
-    if (!da && db) {                              
-      return -1;                                  
-    }                                             
-    if (da && !db) {                              
-      return +1;                                  
-    }                                             
-    if (!da && !db) {                             
-      return 0;                                   
-    } 
-    return strcmp (da, db); 
-
+    return safe_strcmp (da, db); 
     break;
 
   case BY_MEMO:
     /* sort on memo strings */                    
-    da = sa->memo;                             
-    db = sb->memo;                             
-    if (da && db) {                               
-      return strcmp (da, db);                   
-    } 
-    else if (!da && db) {                              
-      return -1;                                  
-    } 
-    else if (da && !db) {                              
-      return +1;                                  
-    }                                             
-    else {
-      return 0;
-    }
+    return safe_strcmp (sa->memo, sb->memo);
     break;
 
   case BY_DESC:
     /* sort on transaction strings */             
-    da = ta->description;                         
-    db = tb->description;   
-    
-    if (da && db) {                               
-      retval = strcmp (da, db);                   
-      /* if strings differ, return */             
-      if (retval) return retval;                  
-    } 
-    else if (!da && db) {                              
-      return -1;                                  
-    } 
-    else if (da && !db) {                              
-      return +1;                                  
-    }         
-    else {
-      return 0;
-    }
+    return safe_strcmp (ta->description, tb->description);
     break;
 
   case BY_AMOUNT:    

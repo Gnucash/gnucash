@@ -39,7 +39,6 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 
-
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
 
@@ -142,7 +141,17 @@ void gnc_set_log_level_global(gncLogLevel level);
 
 /** Prototypes *************************************************/
 
+/* The safe_strcmp compares strings a and b the same way that strcmp()
+ * does, except that either may be null.  This routine assumes that
+ * a non-null string is always greater than a null string.
+ */
 int safe_strcmp (const char * da, const char * db);
+
+/* The null_strcmp compares strings a and b the same way that strcmp()
+ * does, except that either may be null.  This routine assumes that
+ * a null string is equal to the empty string.
+ */
+int null_strcmp (const char * da, const char * db);
 
 /* Search for str2 in first nchar chars of str1, ignore case. Return
  * pointer to first match, or null. These are just like that strnstr
