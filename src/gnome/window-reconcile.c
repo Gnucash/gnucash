@@ -239,8 +239,12 @@ recnRecalculateBalance (RecnWindow *recnData)
   starting = gnc_ui_account_get_reconciled_balance(account, include_children);
   print_info = gnc_account_print_info (account, TRUE);
 
-  if (reverse_balance)
-    starting = gnc_numeric_neg (starting);
+  /*
+   * Do not reverse the balance here.  It messes up the math in the
+   * reconciliation window.  Also, the balance should show up as a
+   * positive number in the reconciliation window to match the positive
+   * number that shows in the register window.
+   */
 
   amount = xaccPrintAmount(starting, print_info);
   gnc_set_label_color(recnData->starting, starting);
@@ -582,11 +586,12 @@ startRecnWindow(GtkWidget *parent, Account *account,
                                                  include_children);
   print_info = gnc_account_print_info (account, TRUE);
 
-  if (gnc_reverse_balance(account))
-  {
-    ending = gnc_numeric_neg (ending);
-    *new_ending = gnc_numeric_neg (*new_ending);
-  }
+  /*
+   * Do not reverse the balance here.  It messes up the math in the
+   * reconciliation window.  Also, the balance should show up as a
+   * positive number in the reconciliation window to match the positive
+   * number that shows in the register window.
+   */
 
   /* Create the dialog box */
   title = gnc_recn_make_window_name (account);
