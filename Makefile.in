@@ -82,6 +82,13 @@ distclean: clean
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
 
+
+tagsfiles := $(shell find -name "*.[ch]")
+
+TAGS: ${tagsfiles}
+	etags ${tagsfiles}    
+
+
 install: $(TARGET)
 	@mkdir -p $(PREFIX)/bin
 	$(INSTALL) $(TARGET) $(PREFIX)/bin/$(TARGET)
