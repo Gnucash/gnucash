@@ -32,6 +32,7 @@ src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
 src/guile/gnucash.c
+src/register/gnome/gnucash-style.c
 src/register/recncell.c
 src/register/splitreg.c
 src/FileDialog.c

@@ -62,9 +62,13 @@ static GdkAtom ctext_atom = GDK_NONE;
 typedef struct _TextDrawInfo TextDrawInfo;
 struct _TextDrawInfo
 {
-        char *text_1;
-        char *text_2;
-        char *text_3;
+        GdkWChar *all_text;
+
+        GdkWChar *text_1;
+        GdkWChar *text_2;
+        GdkWChar *text_3;
+
+        int total_len;
 
         int len_1;
         int len_2;
@@ -145,6 +149,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         int start_pos, end_pos;
         int toggle_space, cursor_pos;
         int xoffset;
+        char *text;
         gboolean hatching;
         guint32 argb;
 
@@ -172,9 +177,15 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         end_pos = MAX(editable->selection_start_pos,
                       editable->selection_end_pos);
 
-        info->text_1 = gtk_entry_get_text(GTK_ENTRY (item_edit->editor));
+        text = gtk_entry_get_text(GTK_ENTRY (item_edit->editor));
+        text_len = strlen(text);
+
+        info->all_text = g_new0(GdkWChar, text_len + 1);
+        text_len = gdk_mbstowcs(info->all_text, text, text_len);
+        info->total_len = text_len;
+
+        info->text_1 = info->all_text;
         info->len_1  = start_pos;
-        text_len     = strlen(info->text_1);
 
         info->text_2 = &info->text_1[start_pos];
         info->len_2  = end_pos - start_pos;
@@ -182,12 +193,12 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_3 = &info->text_1[end_pos];
         info->len_3  = text_len - end_pos;
 
-        total_width = gdk_text_measure (info->font, info->text_1, text_len);
-        pre_cursor_width = gdk_text_width (info->font, info->text_1,
-                                           cursor_pos);
+        total_width = gdk_text_width_wc (info->font, info->text_1, text_len);
+        pre_cursor_width = gdk_text_width_wc (info->font, info->text_1,
+                                              cursor_pos);
 
-        width_1 = gdk_text_width (info->font, info->text_1, info->len_1);
-        width_2 = gdk_text_width (info->font, info->text_2, info->len_2);
+        width_1 = gdk_text_width_wc (info->font, info->text_1, info->len_1);
+        width_2 = gdk_text_width_wc (info->font, info->text_2, info->len_2);
 
         item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
 
@@ -236,6 +247,16 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                 info->hatch_rect.width = wd;
                 info->hatch_rect.height = hd;
         }
+}
+
+static void
+item_edit_free_draw_info_members(TextDrawInfo *info)
+{
+        if (info == NULL)
+                return;
+
+        g_free(info->all_text);
+        info->all_text = NULL;
 }
 
 static void
@@ -292,22 +313,22 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                     info.font->ascent + info.font->descent);
 
                 gdk_gc_set_foreground (item_edit->gc, info.fg_color2);
-                gdk_draw_text (drawable, info.font, item_edit->gc,
-                               info.text_x2, info.text_y,
-                               info.text_2, info.len_2);
+                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
+                                  info.text_x2, info.text_y,
+                                  info.text_2, info.len_2);
         }
 
         gdk_gc_set_foreground (item_edit->gc, info.fg_color);
 
         if (info.len_1 > 0)
-                gdk_draw_text (drawable, info.font, item_edit->gc,
-                               info.text_x1, info.text_y,
-                               info.text_1, info.len_1);
+                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
+                                  info.text_x1, info.text_y,
+                                  info.text_1, info.len_1);
 
         if (info.len_3 > 0)
-                gdk_draw_text (drawable, info.font, item_edit->gc,
-                               info.text_x3, info.text_y,
-                               info.text_3, info.len_3);
+                gdk_draw_text_wc (drawable, info.font, item_edit->gc,
+                                  info.text_x3, info.text_y,
+                                  info.text_3, info.len_3);
 
         if (info.len_2 == 0)
                 gdk_draw_line (drawable, item_edit->gc,
@@ -315,6 +336,8 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                info.cursor_x, info.cursor_y2);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
+
+        item_edit_free_draw_info_members(&info);
 }
 
 
@@ -509,7 +532,7 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         CellDimensions *cd;
         gint cell_row, cell_col;
         SheetBlockStyle *style;
-        char *text;
+        GdkWChar *text;
 
         g_return_val_if_fail (IS_ITEM_EDIT(item_edit), FALSE);
 
@@ -544,19 +567,25 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         item_edit_draw_info(item_edit, o_x, o_y, &info);
 
         if (info.text_1 == NULL)
+        {
+                item_edit_free_draw_info_members(&info);
                 return FALSE;
+        }
 
-        pos = strlen(info.text_1);
+        pos = info.total_len;
         if (pos == 0)
+        {
+                item_edit_free_draw_info_members(&info);
                 return FALSE;
+        }
 
         text = info.text_1 + (pos - 1);
 
         while (text >= info.text_1) {
                 pos_x = o_x + info.text_x1 +
-                        gdk_text_width (info.font, info.text_1, pos);
+                        gdk_text_width_wc (info.font, info.text_1, pos);
 
-                if (pos_x <= x + (gdk_char_width(info.font, *text) / 2))
+                if (pos_x <= x + (gdk_char_width_wc(info.font, *text) / 2))
                         break;
 
                 pos--;
@@ -591,6 +620,8 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         gtk_editable_set_position (editable, pos);
 
         queue_sync (item_edit);
+
+        item_edit_free_draw_info_members(&info);
 
         return TRUE;
 }
@@ -1226,6 +1257,9 @@ item_edit_hide_popup (ItemEdit *item_edit)
 {
         g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+
+	if (item_edit->item_list == NULL)
+		return;
 
 	if (item_edit->item_list)
                 gnome_canvas_item_set
