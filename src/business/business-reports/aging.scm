@@ -36,7 +36,6 @@
 (gnc:module-load "gnucash/business-core" 0)
 (use-modules (gnucash report business-reports))
 
-(define sect-acc (N_ "Accounts"))
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))

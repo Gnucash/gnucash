@@ -34,7 +34,8 @@
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
 
-(define this-acc "Payable Account")
+(define acc-page (N_ "Account"))
+(define this-acc (N_ "Payable Account"))
 
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
@@ -44,7 +45,7 @@
 
     (add-option
      (gnc:make-account-list-limited-option
-      "Account" this-acc
+      acc-page this-acc
       "" ""
       (lambda () '())
       #f
@@ -79,7 +80,7 @@
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
 
-  (let* ((payables-account (op-value "Account" this-acc)))
+  (let* ((payables-account (op-value acc-page this-acc)))
     (gnc:debug "payables-account" payables-account)
 
     (if (null? payables-account)
@@ -98,8 +99,8 @@
  'in-menu? #t)
 
 (define (payables-report-create-internal acct)
-  (let* ((options (gnc:make-report-options "Payable Aging"))
-	 (acct-op (gnc:lookup-option options "Account" this-acc)))
+  (let* ((options (gnc:make-report-options (N_ "Payable Aging")))
+	 (acct-op (gnc:lookup-option options acc-page this-acc)))
 
     (gnc:option-set-value acct-op (list acct))
     (gnc:make-report "Payable Aging" options)))

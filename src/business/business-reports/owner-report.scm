@@ -18,6 +18,9 @@
 (gnc:module-load "gnucash/business-gnome" 0)
 (use-modules (gnucash report standard-reports))
 
+(define acct-string (N_ "Account"))
+(define owner-string (N_ "Company"))
+
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
 
@@ -246,7 +249,7 @@
 
     table))
 
-(define (options-generator acct-type-list)
+(define (options-generator acct-type-list owner-type)
 
   (define gnc:*report-options* (gnc:new-options))
 
@@ -254,11 +257,11 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
-   (gnc:make-owner-option "__reg" "owner" "" ""
-			    (lambda () #f) #f))
+   (gnc:make-owner-option "__reg" owner-string "" ""
+			    (lambda () #f) #f owner-type))
 
   (gnc:register-inv-option
-   (gnc:make-account-list-limited-option "Account" "Account" "" ""
+   (gnc:make-account-list-limited-option acct-string acct-string "" ""
 			    (lambda () '()) #f #f acct-type-list))
 
   (gnc:options-add-report-date!
@@ -301,10 +304,10 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable)))
+  (options-generator '(receivable) 'gnc-owner-customer))
 
 (define (vendor-options-generator)
-  (options-generator '(payable)))
+  (options-generator '(payable) 'gnc-owner-vendor))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -424,9 +427,9 @@
 	 (table '())
 	 (orders '())
 	 (query (gnc:malloc-query))
-	 (account-list (opt-val "Account" "Account"))
+	 (account-list (opt-val acct-string acct-string))
 	 (account #f)
-	 (owner (opt-val "__reg" "owner"))
+	 (owner (opt-val "__reg" owner-string))
 	 (report-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
@@ -544,8 +547,8 @@
 
 (define (owner-report-create-internal report-name owner account)
   (let* ((options (gnc:make-report-options report-name))
-	 (owner-op (gnc:lookup-option options "__reg" "owner"))
-	 (account-op (gnc:lookup-option options "Account" "Account")))
+	 (owner-op (gnc:lookup-option options "__reg" owner-string))
+	 (account-op (gnc:lookup-option options acct-string acct-string)))
 
     (gnc:option-set-value owner-op owner)
     (gnc:option-set-value account-op (list account))
@@ -556,10 +559,10 @@
 	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
     (case type
       ((gnc-owner-customer)
-       (owner-report-create-internal "Customer Report" owner account))
+       (owner-report-create-internal (N_ "Customer Report") owner account))
 
       ((gnc-owner-vendor)
-       (owner-report-create-internal "Vendor Report" owner account))
+       (owner-report-create-internal (N_ "Vendor Report") owner account))
 
       (else #f))))
 

@@ -192,14 +192,17 @@
 	 sort-tag
 	 documentation-string
 	 default-getter
-	 value-validator)
+	 value-validator
+	 owner-type)
 
   (let ((option-value (gnc:owner-create)))
 
     (define (convert-to-pair item)
       (if (pair? item)
 	  item
-	  (cons (gnc:owner-get-type item) (gnc:owner-get-guid item))))
+	  (cons (gw:enum-<gnc:GncOwnerType>-val->sym
+		 (gnc:owner-get-type item) #f)
+		(gnc:owner-get-guid item))))
 
     (define (convert-to-owner pair)
       (if (pair? pair)
@@ -238,7 +241,14 @@
 				  (if option-set option #f)))))
 	   (validator
 	    (if (not value-validator)
-		(lambda (owner) (list #t owner))
+		(lambda (owner)
+		  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+			       (if (pair? owner)
+				   (car owner)
+				   (gnc:owner-get-type owner)) #f)))
+		    (if (equal? type owner-type)
+			(list #t owner)
+			(list #f "Owner-Type Mismatch"))))
 		(lambda (owner)
 		  (value-validator (convert-to-owner owner))))))
 
@@ -258,7 +268,7 @@
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
        validator
-       #f #f #f #f))))
+       owner-type #f #f #f))))
 
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)
