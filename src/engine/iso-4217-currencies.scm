@@ -2,6 +2,9 @@
 ;; Format is:
 ;; (fullname unitname partname namespace mnemonic exchange-code 
 ;;  parts-per-unit smallest-fraction)
+;;
+;; This file is not currently used at runtime.  It's used to generate
+;; the contents of iso-4217-currencies.c.
 
 ( "Afghanistan Afghani" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 )
 ( "Albanian Lek" "lek" "qindarka" "ISO4217" "ALL" "008" 100 100 )
@@ -9,7 +12,7 @@
 ( "Andorran Franc" "franc" "centime" "ISO4217" "ADF" "950" 100 100 )
 ( "Andorran Peseta" "peseta" "centimo"  "ISO4217" "ADP" "724" 100 100 )
 ( "Angolan New Kwanza" "new kwanza" "lwei" "ISO4217" "AON" "024" 100 100 )
-( "Argentine Austral" "austral" "centavo" "ISO4217" "ARA" XXX 100 100 )
+( "Argentine Austral" "austral" "centavo" "ISO4217" "ARA" "XXX" 100 100 )
 ( "Argentine Peso" "peso" "centavo"  "ISO4217" "ARS" "032" 100 100 )
 ( "Aruban Florin" "florin" "cent" "ISO4217" "AWG" "533" 100 100 )
 ( "Australian Dollar" "dollar" "cent" "ISO4217" "AUD" "036" 100 100 )
@@ -18,7 +21,7 @@
 ( "Bahraini Dinar" "dinar" "fil"  "ISO4217" "BHD" "048" 1000 1000 )
 ( "Bangladeshi Taka" "taka" "paisa"  "ISO4217" "BDT" "050" 100 100 )
 ( "Barbados Dollar" "dollar" "cent"  "ISO4217" "BBD" "052" 100 100 )
-( "Belgian Franc" "franc" "centime" "ISO4217" "BEF" "056" 100 100 ) ::::
+( "Belgian Franc" "franc" "centime" "ISO4217" "BEF" "056" 100 100 )
 ( "Belize Dollar" "dollar" "cent" "ISO4217" "BZD" "084" 100 100 )
 ( "Bermudian Dollar" "dollar" "cent" "ISO4217" "BMD" "060" 100 100 )
 ( "Bhutan Ngultrum" "ngultrum" "chetrum" "ISO4217" "BTN" "064" 100 100 )
@@ -143,7 +146,7 @@
 ( "South African Rand" "rand" "cent" "ISO4217" "ZAR" "710" 100 100 )
 ( "Spanish Peseta" "peseta" "centimo"  "ISO4217" "ESP" "724" 100 100 )
 ( "Sri Lanka Rupee" "rupee" "cent"  "ISO4217" "LKR" "144" 100 100 )
-( "St. Helena Pound" "pound" "pence"  "ISO4217" "SHP"  654 100 100 )
+( "St. Helena Pound" "pound" "pence"  "ISO4217" "SHP"  "654" 100 100 )
 ( "Sudanese Dinar" "dinar" "piastre"  "ISO4217" "SDD" "736" 100 100 )
 ( "Sudanese Pound" "pound" "piastre"  "ISO4217" "SDP" "736" 100 100 )
 ( "Suriname Guilder" "guilder" "cent"  "ISO4217" "SRG" "740" 100 100 )
@@ -166,7 +169,7 @@
 ( "Vanuatu Vatu" "vatu" "centime" "ISO4217" "VUV" "548" 100 100 )
 ( "Venezuelan Bolivar" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 )
 ( "Vietnamese Dong" "dong" "hao" "ISO4217" "VND" "704" 100 100 )
-( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  890 100 100)
+( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)
 ( "Zambian Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 )
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 )
 ( "Silver" "ounce" "ounce" "ISO4217" "XAG" "961" 1 1000000 )
