@@ -112,6 +112,7 @@ The Transaction Edit Cycle
 
 * General Transaction API::     
 * Transaction Getters::         
+* Transaction Setters::         
 
 Register
 

@@ -913,6 +913,7 @@ for editing.
 @menu
 * General Transaction API::     
 * Transaction Getters::         
+* Transaction Setters::         
 @end menu
 
 
@@ -942,7 +943,7 @@ Associate a copy of @var{value} with @var{key} in @var{trans}.
 @end deftypefun
 
 
-@node Transaction Getters,  , General Transaction API, Transactions
+@node Transaction Getters, Transaction Setters, General Transaction API, Transactions
 @subsection Transaction Getters
 
 @deftypefun {Split *} xaccTransGetSplit (Transaction * @var{trans}, int @var{i})
@@ -981,6 +982,42 @@ use.
 
 @deftypefun int xaccTransCountSplits (Transaction * @var{trans})
 Return the number of Splits in @var{trans}.
+@end deftypefun
+
+
+@node Transaction Setters,  , Transaction Getters, Transactions
+@subsection Transaction Setters
+
+@deftypefun void xaccTransSetDate (Transaction * @var{trans}, int @var{day}, int @var{mon}, int @var{year})
+Set the post date of @var{trans} with @var{day}, @var{month}, and @var{year}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateSecs (Transaction * @var{trans}, time_t @var{time})
+Set the post date of @var{trans} using a @code{time_t} value.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateToday (Transaction * @var{trans})
+Set the post date of @var{trans} to the current time.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateTS (Transaction * @var{trans}, const Timespec * @var{ts})
+Set the post date of @var{trans} from @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateEnteredSecs (Transaction *trans, time_t time)
+Set the entry date of @var{trans} from a @code{time_t} value.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateEnteredTS (Transaction * @var{trans}, const Timespec * @var{ts})
+Set the entry date of @var{trans} from @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransSetNum (Transaction * @var{trans}, const char * @var{num})
+Set the number field of @var{trans} to @var{num}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDescription (Transaction * @var{trans}, const char * @var{desc})
+Set the description field of @var{trans} to @var{desc}.
 @end deftypefun
 
 
