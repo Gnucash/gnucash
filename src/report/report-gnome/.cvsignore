@@ -1,2 +1,7 @@
 Makefile
 Makefile.in
+.scm-links
+gw-report-gnome.scm
+gw-report-gnome.html
+gw-report-gnome.h
+gw-report-gnome.c
