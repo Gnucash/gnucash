@@ -84,8 +84,9 @@ xferWindow( Widget parent )
   XferWindow *xferData;
   int        position,i;
   int        initial = 0;
+  AccountGroup *grp = topgroup;  /* hack alert -- should be pased as arg */
   
-  if (1 >= (topgroup->numAcc)) {
+  if (1 >= (grp->numAcc)) {
     errorBox (toplevel,
 "There must be at least two accounts\n\
 created before you can transfer funds.\n");
@@ -224,7 +225,7 @@ created before you can transfer funds.\n");
    * The popup menus that let the user choose the account to        *
    * transfer to and the account to transfer from                   *
   \******************************************************************/
-  accountMenu = (MenuItem *)_malloc((topgroup->numAcc+1)*sizeof(MenuItem));
+  accountMenu = (MenuItem *)_malloc((grp->numAcc+1)*sizeof(MenuItem));
   
   /* We have to keep track of the menuData stuff so we can free this
    * memory when the transfer window is closed... the even slots in
@@ -232,15 +233,15 @@ created before you can transfer funds.\n");
    * used by the "To" menu.  (The even/odd way was a simple way to
    * still use i as a index to the array... it makes sense to me,
    * at least)  */
-  xferData->menuData = (MenuData **)_malloc(2*topgroup->numAcc*sizeof(MenuData *));
-  xferData->numMenuData = 2 * topgroup->numAcc;
+  xferData->menuData = (MenuData **)_malloc(2*grp->numAcc*sizeof(MenuData *));
+  xferData->numMenuData = 2 * grp->numAcc;
   
   for( i=0; i<xferData->numMenuData; i++ )
     xferData->menuData[i] = NULL;
   
-  for( i=0; i<topgroup->numAcc; i++ )
+  for( i=0; i<grp->numAcc; i++ )
     {
-    Account *acc = getAccount( topgroup, i );
+    Account *acc = getAccount( grp, i );
     
     /* This account menu uses the even menuData slots (ie (2*i) ) */
     xferData->menuData[2*i] = (MenuData *)_malloc(sizeof(MenuData));
@@ -271,9 +272,9 @@ created before you can transfer funds.\n");
   
   XtManageChild(widget);
   
-  for( i=0; i<topgroup->numAcc; i++ )
+  for( i=0; i<grp->numAcc; i++ )
     {
-    Account *acc = getAccount( topgroup, i );
+    Account *acc = getAccount( grp, i );
     
     /* This account menu uses the odd menuData slots (ie (2*i)+1 ) */
     xferData->menuData[2*i+1] = (MenuData *)_malloc(sizeof(MenuData));
@@ -432,6 +433,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   Account *acc;
   String  str;
   float   val=0.0;
+  AccountGroup *grp = topgroup; /* hack alert -- should pass as arg */
 
   /* silently reject transfers into-out-of the same account */
   if (xferData->from == xferData->to) {
@@ -439,7 +441,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
     return;
   }
 
-  topgroup->saved = False;
+  grp->saved = False;
   
   /* a double-entry transfer -- just one record, two accounts */
   trans   = mallocTransaction();
@@ -460,11 +462,11 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->reconciled  = NREC;
   
   /* make note of which accounts this was transfered from & to */
-  trans->debit       = (struct _account *) getAccount(topgroup,xferData->from);
-  trans->credit      = (struct _account *) getAccount(topgroup,xferData->to);
+  trans->debit       = (struct _account *) getAccount(grp,xferData->from);
+  trans->credit      = (struct _account *) getAccount(grp,xferData->to);
 
   /* insert transaction into from acount */
-  acc = getAccount(topgroup,xferData->from);
+  acc = getAccount(grp,xferData->from);
   insertTransaction( acc, trans );
   
   /* Refresh the "from" account register window */
@@ -473,7 +475,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   recnRefresh(acc->recnData);
   
   /* insert transaction into to acount */
-  acc = getAccount(topgroup,xferData->to);
+  acc = getAccount(grp,xferData->to);
   insertTransaction( acc, trans );
 
   /* Refresh the "to" account register window */
