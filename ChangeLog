@@ -1,3 +1,267 @@
+2001-10-10  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/test-core/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/tax/us/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/tax/us/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/report/utility-reports/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/report/utility-reports/iframe-url.scm: use slib and require
+	format.
+
+	* src/report/utility-reports/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/report/stylesheets/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/report/stylesheets/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/report/standard-reports/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/report/standard-reports/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/report/report-system/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/report/report-system/report-system.scm:
+	(use-modules (g-wrapped gw-glib))
+
+	* src/report/report-system/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/report/locale-specific/us/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/report/locale-specific/us/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/register-gnome/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/register-gnome/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/register-core/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/register-core/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/ledger-core/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/register/ledger-core/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/optional/swig/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/network-utils/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/network-utils/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/network-utils/.cvsignore: add .libs.
+
+	* src/import-export/qif-io-core/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/import-export/qif-io-core/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/import-export/qif-io-core/.cvsignore: add .deps.
+
+	* src/import-export/qif-import/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/import-export/binary-import/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/import-export/binary-import/Makefile.am : support new g-wrap
+	.scm module files.
+	(pkglib_LTLIBRARIES): move libgw-binary-import.la here.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/import-export/binary-import/.cvsignore: add .libs and
+	gw-binary-import.scm.
+
+	* src/guile/Makefile.am: support new g-wrap .scm module files.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/guile/.cvsignore: add gw-gnc.scm.
+
+	* src/gnome-utils/test/Makefile.am 
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/gnome-utils/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/gnome-utils/.cvsignore: add .libs.
+
+	* src/gnome/window-register.c
+	(print_check_cb): coerce away guile 1.3.4 warning.
+	(report_helper): coerce away guile 1.3.4 warning.
+
+	* src/gnome/window-help.c
+	(gnc_help_window_load_topics): coerce away guile 1.3.4 warning.
+
+	* src/gnome/top-level.c
+	(gnc_get_remaining_argv): coerce away guile 1.3.4 warning.
+	(gnc_set_remaining_argv): coerce away guile 1.3.4 warning.
+
+	* src/gnome/argv-list-converters.c
+	(gnc_argvarr_to_scheme_list): coerce away guile 1.3.4 warning.
+
+	* src/gnome/Makefile.am: use INTLTOOL_DESKTOP_RULE.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/gnc-module/test/mod-foo/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/gnc-module/test/mod-baz/Makefile.am
+	(CFLAGS): add GUILE_INCS.
+
+	* src/gnc-module/test/mod-bar/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/gnc-module/test/test-scm-init: convert to shell script that
+	invokes contents as guile script.
+
+	* src/gnc-module/test/test-scm-dynload: adjust dynamic-link call
+	based on guile version.
+
+	* src/gnc-module/test/test-dynload.c
+	(guile_main): call lt_dlinit();
+
+	* src/gnc-module/test/Makefile.am
+	(CFLAGS): add GUILE_INCS.
+
+	* src/gnc-module/gnc-module.scm
+	(gnc:module-system-init): adjust dynamic-link call based on guile
+	version.
+
+	* src/gnc-module/Makefile.am: support new g-wrap .scm module files.
+	(CFLAGS): add GUILE_INCS.
+	(pkglib_LTLIBRARIES): move libgw-gnc-module.la here.
+
+	* src/gnc-module/.cvsignore: add gw-gnc-module.scm.
+
+	* src/experimental/cgi-bin/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/engine/test-core/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/engine/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+
+	* src/engine/engine.scm: (use-modules (g-wrapped gw-runtime)).
+
+	* src/engine/Makefile.am: support new g-wrap .scm module files.
+	(pkglib_LTLIBRARIES): move libgw-glib.la, libgw-engine.la, and
+	libgw-kvp.la here.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/engine/.cvsignore: add gw-engine.scm, gw-glib.scm, and
+	gw-kvp.scm.
+
+	* src/calculation/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/rpc/Makefile.am: 
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/postgres/test/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/postgres/test/.cvsignore: add .deps.
+
+	* src/backend/postgres/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/net/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/file/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/backend/file/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/app-utils/test/Makefile.am
+	(TESTS_ENVIRONMENT): fix for guile 1.3.4 and new g-wrap.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/app-utils/option-util.c
+	(gnc_option_db_register_change_callback): coerce away guile 1.3.4
+	warning.
+
+	* src/app-utils/guile-util.c
+	(gnc_depend): coerce away guile 1.3.4 warning.
+	(gnc_split_scm_set_memo): coerce away guile 1.3.4 warning.
+	(gnc_split_scm_set_memo): coerce away guile 1.3.4 warning.
+	(gnc_split_scm_set_action): coerce away guile 1.3.4 warning.
+	(gnc_trans_scm_set_num): coerce away guile 1.3.4 warning.
+	(gnc_trans_scm_set_description): coerce away guile 1.3.4 warning.
+	(gnc_trans_scm_set_notes): coerce away guile 1.3.4 warning.
+	(gnc_get_debit_string): coerce away guile 1.3.4 warning.
+
+	* src/app-utils/gnc-ui-util.c
+	(gnc_ui_account_get_tax_info_string): coerce to supress warning
+	for guile 1.3.4.
+
+	* src/app-utils/app-utils.scm: must load "gnucash/engine" module.
+
+	* src/app-utils/Makefile.am: support new g-wrap .scm module files.
+	(pkglib_LTLIBRARIES): move libgw-app-utils.la here.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/app-utils/.cvsignore: add gw-app-utils.scm.
+
+	* src/app-file/gnome/Makefile.am
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* src/app-file/gnc-file.c
+	(gnc_book_opened): coerce to supress warning for guile 1.3.4.
+	(gnc_file_new): coerce to supress warning for guile 1.3.4.
+	(gnc_post_file_open): coerce to supress warning for guile 1.3.4.
+	(gnc_file_save): coerce to supress warning for guile 1.3.4.
+	(gnc_file_quit): coerce to supress warning for guile 1.3.4.
+
+	* src/app-file/Makefile.am: support new g-wrap .scm module files.
+	(CFLAGS): move INCLUDES bits to CFLAGS.
+	(pkglib_LTLIBRARIES): move libgw-app-file.la here.
+
+	* src/app-file/.cvsignore: add gw-app-file.scm.
+
+	* macros/autogen.sh: update for intltool.
+
+	* configure.in: update for intltool.  Update LIBTOOL macros to
+	match libtool docs.  Require at least g-wrap 1.1.12.  Add
+	src/backend/net/Makefile to output.
+
+	* src/Makefile.am (CFLAGS): move INCLUDES bits to CFLAGS.
+
+	* macros/autogen.sh: update for intltool.
+
+	* acinclude.m4: added AM_ACLOCAL_INCLUDE so it would work from
+	configure.in under the new auto* tools.
+
+	* .cvsignore: add intltool files.
+
 2001-10-10  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/test-core/test-engine-stuff.c
