@@ -52,9 +52,10 @@ gnc_split_register_load_recn_cells (SplitRegister *reg)
 
   if (!cell) return;
 
-  s = gnc_get_reconcile_valid_chars ();
-  gnc_recn_cell_set_valid_chars (cell, s, *s);
-  gnc_recn_cell_set_char_order (cell, gnc_get_reconcile_char_order ());
+  s = gnc_get_reconcile_valid_flags ();
+  gnc_recn_cell_set_valid_flags (cell, s, *s);
+  gnc_recn_cell_set_flag_order (cell, gnc_get_reconcile_flag_order ());
+  gnc_recn_cell_set_string_getter (cell, gnc_get_reconcile_str);
 }
 
 static void
@@ -71,8 +72,8 @@ gnc_split_register_load_type_cells (SplitRegister *reg)
   if (!cell) return;
 
   /* FIXME: These should get moved to an i18n function */
-  gnc_recn_cell_set_valid_chars (cell, "IP", 'I');
-  gnc_recn_cell_set_char_order (cell, "IP");
+  gnc_recn_cell_set_valid_flags (cell, "IP", 'I');
+  gnc_recn_cell_set_flag_order (cell, "IP");
 }
 
 static void

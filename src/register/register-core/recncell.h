@@ -42,31 +42,36 @@
 
 #include "basiccell.h"
 
+typedef const char * (*RecnCellStringGetter) (char flag);
 typedef gboolean (*RecnCellConfirm) (char old_flag, gpointer data);
 
 typedef struct
 {
   BasicCell cell;
 
-  char reconciled_flag; /* The actual flag value */
+  char flag; /* The actual flag value */
 
-  char * valid_chars;		/* The list of valid flag types */
-  char * char_order;		/* The order of automatic flag selection */
-  char 	default_flag;		/* The default flag for unknown user input */
+  char * valid_flags;		/* The list of valid flags */
+  char * flag_order;		/* Automatic flag selection order */
+  char 	default_flag;		/* Default flag for unknown user input */
 
+  RecnCellStringGetter get_string;
   RecnCellConfirm confirm_cb;
   gpointer confirm_data;
 } RecnCell;
 
 BasicCell * gnc_recn_cell_new (void);
 
-void        gnc_recn_cell_set_flag (RecnCell *cell, char reconciled_flag);
+void        gnc_recn_cell_set_flag (RecnCell *cell, char flag);
 char        gnc_recn_cell_get_flag (RecnCell *cell);
 
 void        gnc_recn_cell_set_confirm_cb (RecnCell *cell,
                                           RecnCellConfirm confirm_cb,
                                           gpointer data);
  
+void	    gnc_recn_cell_set_string_getter (RecnCell *cell,
+					     RecnCellStringGetter getter);
+
 /*
  * note that chars is copied into the RecnCell directly, but remains
  * the "property" of the caller.  The caller must maintain the chars
@@ -75,8 +80,9 @@ void        gnc_recn_cell_set_confirm_cb (RecnCell *cell,
  * that use the same set of flags -- this saves you an alloc/free for
  * each cell.  - warlord  2001-11-28
  */
-void	    gnc_recn_cell_set_valid_chars (RecnCell *cell, const char *chars,
+void	    gnc_recn_cell_set_valid_flags (RecnCell *cell, const char *flags,
 					   char default_flag);
-void	    gnc_recn_cell_set_char_order (RecnCell *cell, const char *chars);
+void	    gnc_recn_cell_set_flag_order (RecnCell *cell, const char *flags);
 
 #endif
+

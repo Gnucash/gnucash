@@ -707,48 +707,30 @@ gnc_get_reconcile_str (char reconciled_flag)
 }
 
 /********************************************************************\
- * gnc_get_reconcile_valid_chars                                    *
- *   return a string containing the i18n'd                          *
- *   characters for the list of reconciled flags                    *
+ * gnc_get_reconcile_valid_flags                                    *
+ *   return a string containing the list of reconciled flags        *
  *                                                                  *
  * Returns: the i18n'd reconciled flags string                      *
 \********************************************************************/
 const char *
-gnc_get_reconcile_valid_chars (void)
+gnc_get_reconcile_valid_flags (void)
 {
-  const char flags[4] = { NREC, CREC, YREC, FREC };
-  static char str[5] = { 0, 0, 0, 0, 0 };
-  int i = 0;
-
-  for (i = 0; i < sizeof (flags); i++) {
-    char *s = gnc_get_reconcile_str (flags[i]);
-    str[i] = *s;
-  }
-
-  return str;
+  static const char flags[] = { NREC, CREC, YREC, FREC, 0 };
+  return flags;
 }
 
 /********************************************************************\
- * gnc_get_reconcile_char_order                                     *
- *   return a string containing the i18n'd                          *
- *   characters for the list of reconciled-flag order changes       *
+ * gnc_get_reconcile_flag_order                                     *
+ *   return a string containing the reconciled-flag change order    *
  *                                                                  *
  * Args: reconciled_flag - the flag to stringize                    *
  * Returns: the i18n'd reconciled string                            *
 \********************************************************************/
 const char *
-gnc_get_reconcile_char_order (void)
+gnc_get_reconcile_flag_order (void)
 {
-  const char flags[2] = { NREC, CREC };
-  static char str[3] = { 0, 0, 0 };
-  int i = 0;
-
-  for (i = 0; i < sizeof (flags); i++) {
-    char *s = gnc_get_reconcile_str (flags[i]);
-    str[i] = *s;
-  }
-
-  return str;
+  static const char flags[] = { NREC, CREC, 0 };
+  return flags;
 }
 
 
