@@ -389,8 +389,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       pgendCopySplitsToEngine (be, trans);
    }
 
-#if 1
-/* hack alert !! deal with kvp later -- huge sucking sound ! */
+   /* hack alert !! deal with kvp later -- huge sucking sound ! */
    /* restore any kvp data associated with the transaction and splits */
    for (node=xaction_list; node; node=node->next)
    {
@@ -408,7 +407,6 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 
       xaccTransCommitEdit (trans);
    }
-#endif
 
    /* run the fill-out algorithm */
    for (node=xaction_list; node; node=node->next)
@@ -429,6 +427,35 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
          int found = 0;
          Split *s = (Split *) snode->data;
          Account *acc = xaccSplitGetAccount (s);
+         GList *splits;
+
+         /* make sure the earliest split is first */
+         xaccAccountSortSplits (acc, TRUE);
+
+         splits = xaccAccountGetSplitList (acc);
+
+         /* See if we already have a split (acc_split)
+          * earlier than this transaction. Then either:
+          *
+          *   1) The acc_split was pulled in by the same
+          *      query which brought in the current split
+          *      and we will get to acc_split later.
+          *   2) The acc_split was loaded already and
+          *      the account starting balance is correct
+          *      up to that point.
+          *
+          * Either way, we can ignore the current split
+          * for the purposes of checkpointing.
+          */
+         if (splits)
+         {
+           Split *acc_split = splits->data;
+           Transaction *t = xaccSplitGetParent (acc_split);
+           Timespec ts_2 = xaccTransRetDatePostedTS (t);
+
+           if (timespec_cmp (&ts_2, &ts) < 0)
+             continue;
+         }
 
          /* lets see if we have a record of this account already */
          for (anode = acct_list; anode; anode = anode->next)

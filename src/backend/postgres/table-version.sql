@@ -14,3 +14,4 @@
 
 INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table');
 INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables');
+INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,2,1,'Fix gncSubtotalReconedBalance');

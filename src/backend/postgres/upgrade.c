@@ -37,7 +37,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 
 #define PGEND_CURRENT_MAJOR_VERSION  1
-#define PGEND_CURRENT_MINOR_VERSION  1
+#define PGEND_CURRENT_MINOR_VERSION  2
 #define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
@@ -204,10 +204,46 @@ put_iguid_in_tables (PGBackend *be)
    sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
-	   
-   p = "DROP TABLE gncGUIDCache;";
+
+   p = "DROP TABLE gncGUIDCache; \n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,1,'End Put iGUID in Main Tables');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+}
+
+static void 
+fix_reconciled_balance_func (PGBackend *be)
+{
+   char *p;
+
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,2,0,'Start Fix gncSubtotalReconedBalance');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   p = "DROP FUNCTION "
+       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME);";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   p = "CREATE FUNCTION "
+       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)"
+         "RETURNS INT8 "
+         "AS 'SELECT INT8(sum(gncEntry.amount)) "
+           "FROM gncEntry, gncTransaction "
+           "WHERE "
+           "gncEntry.accountGuid = $1 AND "
+           "gncEntry.transGuid = gncTransaction.transGuid AND "
+           "gncTransaction.date_posted BETWEEN $2 AND $3 AND "
+           "(gncEntry.reconciled = \\'y\\' OR "
+           " gncEntry.reconciled = \\'f\\')' "
+         "LANGUAGE 'sql';";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,2,1,'End Fix gncSubtotalReconedBalance');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 }
@@ -233,7 +269,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
    }
    if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
        (PGEND_CURRENT_MINOR_VERSION <= vers.minor)) return 0;
-   
+
    /* check to see if this client can connect */
    if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
@@ -250,19 +286,22 @@ void
 pgendUpgradeDB (PGBackend *be)
 {
    pgendVersion vers;
-   
+
    vers = pgendGetVersion(be);
 
    /* start adding features to bring database up to date */
    if (1 == vers.major)
    {
       /* version 1.1.0 add iguids to transaction and entry tables */
-      if (1> vers.minor)
+      if (1 > vers.minor)
       {
          put_iguid_in_tables(be);
       }
+      if (2 > vers.minor)
+      {
+        fix_reconciled_balance_func (be);
+      }
    }
-
 }
 
 /* ======================== END OF FILE ======================== */

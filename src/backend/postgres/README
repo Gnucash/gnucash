@@ -290,6 +290,11 @@ access).
    (??? Maybe this has been fixed now, in the redesigned
    gnc-book/gnc-session code ??? Maybe we just need to cleanup in 
    the postgres backend ??)
+   NOTE: (dave_p) In the redesigned book/session code, if
+                  gnc_session_begin is called on a session
+                  with a backend, the backend destroy function
+                  is called before creating a new backend.
+                  This seems to work ok in test-db.c.
 
 -- allow user to enter URL in GUI dialog.  User can currently type URL
    into the file dialog window; it would be nice to have something 

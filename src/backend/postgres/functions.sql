@@ -41,7 +41,8 @@ CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)
         gncEntry.accountGuid = $1 AND
         gncEntry.transGuid = gncTransaction.transGuid AND
         gncTransaction.date_posted BETWEEN $2 AND $3 AND
-        gncEntry.reconciled = \\'y\\''
+        (gncEntry.reconciled = \\'y\\' OR
+         gncEntry.reconciled = \\'f\\')'
     LANGUAGE 'sql';
 
 -- helper functions.  These intentionally use the 'wrong' fraction. 
