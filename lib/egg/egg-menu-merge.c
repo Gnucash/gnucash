@@ -905,6 +905,79 @@ find_toolbar_position (GNode *node, GtkWidget **toolbar_p, gint *pos_p)
   return TRUE;
 }
 
+enum {
+  SEPARATOR_MODE_SMART,
+  SEPARATOR_MODE_VISIBLE,
+  SEPARATOR_MODE_HIDDEN
+};
+
+static void
+update_smart_separators (GtkWidget *proxy)
+{
+  GtkWidget *parent = NULL;
+
+  if (GTK_IS_MENU (proxy) || GTK_IS_TOOLBAR (proxy))
+    parent = proxy;
+  else if (GTK_IS_MENU_ITEM (proxy) || EGG_IS_TOOL_ITEM (proxy))
+    parent = gtk_widget_get_parent (proxy);
+
+  if (parent) 
+    {
+      gboolean visible;
+      GList *children, *cur, *last;
+
+      children = gtk_container_get_children (GTK_CONTAINER (parent));
+      
+      visible = FALSE;
+      last = NULL;
+      cur = children;
+      while (cur) 
+	{
+	  if (GTK_IS_SEPARATOR_MENU_ITEM (cur->data) ||
+	      EGG_IS_SEPARATOR_TOOL_ITEM (cur->data))
+	    {
+	      gint mode = 
+		GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cur->data), 
+						    "gtk-separator-mode"));
+	      switch (mode) 
+		{
+		case SEPARATOR_MODE_VISIBLE:
+		  gtk_widget_show (GTK_WIDGET (cur->data));
+		  last = NULL;
+		  visible = FALSE;
+		  break;
+		case SEPARATOR_MODE_HIDDEN:
+		  gtk_widget_hide (GTK_WIDGET (cur->data));
+		  break;
+		case SEPARATOR_MODE_SMART:
+		  if (visible)
+		    {
+		      gtk_widget_show (GTK_WIDGET (cur->data));
+		      last = cur;
+		      visible = FALSE;
+		    }
+		  else
+		      gtk_widget_hide (GTK_WIDGET (cur->data));
+		  break;
+		}
+	    }
+	  else if (GTK_WIDGET_VISIBLE (cur->data))
+	    {
+	      last = NULL;
+	      if (GTK_IS_TEAROFF_MENU_ITEM (cur->data))
+		visible = FALSE;
+	      else 
+		visible = TRUE;
+	    }
+	  
+	  cur = cur->next;
+	}
+
+      if (last)
+	gtk_widget_hide (GTK_WIDGET (last->data));
+    }
+}
+
 static void
 update_node (EggMenuMerge *self, GNode *node)
 {
@@ -1077,14 +1150,18 @@ update_node (EggMenuMerge *self, GNode *node)
 	      if (find_menu_position(node, &menushell, &pos))
 		{
 		  NODE_INFO(node)->proxy = gtk_separator_menu_item_new();
+		  g_object_set_data (G_OBJECT (info->proxy),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 		  gtk_menu_shell_insert(GTK_MENU_SHELL(menushell),
 					NODE_INFO(node)->proxy, pos);
-		  //gtk_widget_show(NODE_INFO(node)->proxy);
 
 		  NODE_INFO(node)->extra = gtk_separator_menu_item_new();
+		  g_object_set_data (G_OBJECT (info->extra),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 		  gtk_menu_shell_insert(GTK_MENU_SHELL(menushell),
 					NODE_INFO(node)->extra, pos+1);
-		  //gtk_widget_show(NODE_INFO(node)->extra);
 		}
 	    }
 	  break;
@@ -1114,12 +1191,16 @@ update_node (EggMenuMerge *self, GNode *node)
 		  item = egg_separator_tool_item_new();
 		  egg_toolbar_insert(EGG_TOOLBAR(toolbar), item, pos);
 		  NODE_INFO(node)->proxy = GTK_WIDGET (item);
-		  //gtk_widget_show(NODE_INFO(node)->proxy);
+		  g_object_set_data (G_OBJECT (info->proxy),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 
 		  item = egg_separator_tool_item_new();
 		  egg_toolbar_insert(EGG_TOOLBAR(toolbar), item, pos+1);
 		  NODE_INFO(node)->extra = GTK_WIDGET (item);
-		  //gtk_widget_show(NODE_INFO(node)->extra);
+		  g_object_set_data (G_OBJECT (info->extra),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
 		}
 	    }
 	  break;
@@ -1128,6 +1209,9 @@ update_node (EggMenuMerge *self, GNode *node)
 	  if (info->proxy &&  G_OBJECT_TYPE(info->proxy) !=
 	      EGG_ACTION_GET_CLASS(info->action)->menu_item_type)
 	    {
+	      g_signal_handlers_disconnect_by_func (info->proxy,
+						    G_CALLBACK (update_smart_separators),
+						    0);  
 	      gtk_container_remove(GTK_CONTAINER(info->proxy->parent),
 				   info->proxy);
 	      info->proxy = NULL;
@@ -1148,15 +1232,23 @@ update_node (EggMenuMerge *self, GNode *node)
 	    }
 	  else
 	    {
+	      g_signal_handlers_disconnect_by_func (info->proxy,
+						    G_CALLBACK (update_smart_separators),
+						    0);
 	      gtk_menu_item_set_submenu(GTK_MENU_ITEM(info->proxy), NULL);
 	      egg_action_connect_proxy (info->action, info->proxy);
 	    }
+	  g_signal_connect (info->proxy, "notify::visible",
+			    G_CALLBACK (update_smart_separators), 0);
 	  break;
 	case EGG_MENU_MERGE_TOOLITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE(info->proxy) !=
 	      EGG_ACTION_GET_CLASS(info->action)->toolbar_item_type)
 	    {
+	      g_signal_handlers_disconnect_by_func (info->proxy,
+						    G_CALLBACK (update_smart_separators),
+						    0);
 	      gtk_container_remove(GTK_CONTAINER(info->proxy->parent),
 				   info->proxy);
 	      info->proxy = NULL;
@@ -1177,8 +1269,13 @@ update_node (EggMenuMerge *self, GNode *node)
 	    }
 	  else
 	    {
+	      g_signal_handlers_disconnect_by_func (info->proxy,
+						    G_CALLBACK (update_smart_separators),
+						    0);
 	      egg_action_connect_proxy (info->action, info->proxy);
 	    }
+	  g_signal_connect (info->proxy, "notify::visible",
+			    G_CALLBACK (update_smart_separators), 0);
 	  break;
 	case EGG_MENU_MERGE_SEPARATOR:
 	  if (NODE_INFO (node->parent)->type == EGG_MENU_MERGE_TOOLBAR ||
@@ -1199,6 +1296,9 @@ update_node (EggMenuMerge *self, GNode *node)
 		  EggToolItem *item = egg_separator_tool_item_new();
 		  egg_toolbar_insert (EGG_TOOLBAR (toolbar), item, pos);
 		  info->proxy = GTK_WIDGET (item);
+		  g_object_set_data (G_OBJECT (info->proxy),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
 		  gtk_widget_show(info->proxy);
 		}
 	    }
@@ -1217,6 +1317,9 @@ update_node (EggMenuMerge *self, GNode *node)
 	      if (find_menu_position(node, &menushell, &pos))
 		{
 		  info->proxy = gtk_separator_menu_item_new();
+		  g_object_set_data (G_OBJECT (info->proxy),
+				     "gtk-separator-mode",
+				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
 		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
 					 info->proxy, pos);
 		  gtk_widget_show(info->proxy);
@@ -1238,6 +1341,14 @@ update_node (EggMenuMerge *self, GNode *node)
       current = child;
       child = current->next;
       update_node (self, current);
+    }
+
+  if (info->proxy) 
+    {
+      if (info->type == EGG_MENU_MERGE_MENU) 
+	update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
+      else if (info->type == EGG_MENU_MERGE_TOOLBAR)
+	update_smart_separators (info->proxy);
     }
 
   /* handle cleanup of dead nodes */
