@@ -90,6 +90,8 @@ EXTRA_DIST = \
   gnc-dir.h.in \
   ${glade_DATA}
 
+dialog-utils.c: gnc-dir.h
+
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
