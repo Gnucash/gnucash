@@ -88,7 +88,7 @@ GNOME_XML_CHECK
 #])
 
 dnl Set of available languages.
-ALL_LINGUAS="az da de el en_GB es es_NI fr hu it ja nl no pl pt pt_BR ru sk sv"
+ALL_LINGUAS="az da de el en_GB es es_NI fr hu it ja nl no pl pt pt_BR ru sk sv zh_TW"
 AM_GNU_GETTEXT
 
 if test "x${XGETTEXT}" != x; then
