@@ -64,7 +64,7 @@ open_new_file (const char * newfile)
    * switchover is not something we want to keep in a journal.  */
   xaccLogDisable ();
 
-  newgrp = xaccReadAccountGroup (datafile);   
+  newgrp = xaccReadAccountGroup (newfile);   
  
   /* check for i/o error, put up appropriate error message */
   io_error = xaccGetFileIOError();
