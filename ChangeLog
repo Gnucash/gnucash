@@ -1,3 +1,11 @@
+2004-03-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-load.c: make the code a
+	  little cleaner by not re-using (and re-defining!) the same
+	  variable name inside a block of code and "over-riding" an
+	  existing variable.  Unlikely to actually fix anything, but
+	  you never know what a compiler might do.
+
 2004-02-14  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Require the correct openhbci2 version. Add verbose
