@@ -1091,10 +1091,10 @@ development project.
          (4.6+0.8+16.8)</ENTRY>
 <ENTRY>37 files
          (10.7)</ENTRY>
-<ENTRY>37 files
-         (5.8)</ENTRY>
-<ENTRY>330 files
-         (111.8)</ENTRY>
+<ENTRY>48 files
+         (8.2)</ENTRY>
+<ENTRY>341 files
+         (114.2)</ENTRY>
 </ROW>
 </TBODY>
 </TGROUP>
@@ -1152,8 +1152,9 @@ development project.
  </PARA>
 </LISTITEM>
 
-<LISTITEM> <PARA>txt -- internal <filename>README</filename> and
-<filename>*.txt</filename> documentation files in all subdirectories
+<LISTITEM> <PARA>txt -- internal <filename>README</filename>,
+<filename>*.txt</filename> and <filename>*.texinfo</filename>
+documentation files in all subdirectories,
 </PARA>
 </LISTITEM>
 
