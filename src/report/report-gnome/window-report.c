@@ -1115,13 +1115,14 @@ gnc_report_raise_editor(SCM report)
 }
 
 static gboolean
-gnc_html_file_stream_cb (const char *location, char ** data)
+gnc_html_file_stream_cb (const char *location, char ** data, int *len)
 {
-  return (gncReadFile (location, data) > 0);
+  *len = gncReadFile (location, data);
+  return (*len > 0);
 }
 
 static gboolean
-gnc_html_report_stream_cb (const char *location, char ** data)
+gnc_html_report_stream_cb (const char *location, char ** data, int *len)
 {
   gboolean ok;
 
@@ -1133,6 +1134,7 @@ gnc_html_report_stream_cb (const char *location, char ** data)
 			     _("Report error"),
 			     _("An error occurred while running the report."));
 
+  *len = strlen(*data);
   return ok;
 }
 

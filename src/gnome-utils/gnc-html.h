@@ -85,7 +85,7 @@ typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
                                  gpointer data); 
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
-typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data);
+typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data, int *datalen);
 typedef gboolean (* GncHTMLUrlCB)(const char *location, const char *label,
                                   gboolean new_window, GNCURLResult * result);
 

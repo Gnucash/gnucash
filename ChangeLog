@@ -1,5 +1,15 @@
 2002-12-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-html.c: The stream_handler hook needs to
+	return a file size. Not all files opened by this function are
+	ASCII text.  Reset the base_location properly when switching
+	documents. Add debugging. #101783
+
+	* src/report/report-gnome/window-report.c: Update the various
+	functions used as stream_handlers to return correct file
+	sizes. #101783
+
+
 	* configure.in: When checking for gtkhtml-1.1, make the lack of
 	pkg-config a fatal error. Also check for pkgconfig due to some
 	clueless software mismanagement.
