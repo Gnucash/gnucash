@@ -408,7 +408,7 @@ gncFileOpen (void)
   if (!gncFileQuerySave ())
     return;
 
-  newfile = fileBox(_("Open"), NULL, NULL);
+  newfile = fileBox(_("Open"), NULL, gnc_history_get_last());
   gncPostFileOpen (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -492,7 +492,7 @@ gncFileSaveAs (void)
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
-  filename = fileBox(_("Save"), "*.gnc", NULL);
+  filename = fileBox(_("Save"), "*.gnc", gnc_history_get_last());
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current
