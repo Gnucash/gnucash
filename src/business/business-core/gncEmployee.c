@@ -415,7 +415,7 @@ static const char * _gncEmployeePrintable (gpointer item)
   return gncAddressGetName(v->addr);
 }
 
-static GncObject_t gncEmployeeDesc = {
+static QofObject gncEmployeeDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Employee",
@@ -441,7 +441,7 @@ gboolean gncEmployeeRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEmployeeCompare,params);
 
-  return gncObjectRegister (&gncEmployeeDesc);
+  return qof_object_register (&gncEmployeeDesc);
 }
 
 gint64 gncEmployeeNextID (QofBook *book)

@@ -476,7 +476,7 @@ static const char * _gncVendorPrintable (gpointer item)
   return v->name;
 }
 
-static GncObject_t gncVendorDesc = {
+static QofObject gncVendorDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Vendor",
@@ -502,7 +502,7 @@ gboolean gncVendorRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare, params);
 
-  return gncObjectRegister (&gncVendorDesc);
+  return qof_object_register (&gncVendorDesc);
 }
 
 gint64 gncVendorNextID (QofBook *book)

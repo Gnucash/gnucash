@@ -741,7 +741,7 @@ static void _gncTaxTableForeach (QofBook *book, foreachObjectCB cb,
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static GncObject_t gncTaxTableDesc = {
+static QofObject gncTaxTableDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Tax Table",
@@ -763,5 +763,5 @@ gboolean gncTaxTableRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncTaxTableCompare, params);
 
-  return gncObjectRegister (&gncTaxTableDesc);
+  return qof_object_register (&gncTaxTableDesc);
 }

@@ -1188,7 +1188,7 @@ static void _gncEntryForeach (QofBook *book, foreachObjectCB cb,
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static GncObject_t gncEntryDesc = {
+static QofObject gncEntryDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Order/Invoice/Bill Entry",
@@ -1223,5 +1223,5 @@ gboolean gncEntryRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEntryCompare, params);
 
-  return gncObjectRegister (&gncEntryDesc);
+  return qof_object_register (&gncEntryDesc);
 }

@@ -422,7 +422,7 @@ static const char * _gncOrderPrintable (gpointer obj)
   return order->printname;
 }
 
-static GncObject_t gncOrderDesc = {
+static QofObject gncOrderDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Order",
@@ -452,7 +452,7 @@ gboolean gncOrderRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOrderCompare, params);
 
-  return gncObjectRegister (&gncOrderDesc);
+  return qof_object_register (&gncOrderDesc);
 }
 
 gint64 gncOrderNextID (QofBook *book)

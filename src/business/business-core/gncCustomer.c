@@ -524,7 +524,7 @@ static const char * _gncCustomerPrintable (gpointer item)
   return c->name;
 }
 
-static GncObject_t gncCustomerDesc = {
+static QofObject gncCustomerDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Customer",
@@ -551,7 +551,7 @@ gboolean gncCustomerRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,params);
 
-  return gncObjectRegister (&gncCustomerDesc);
+  return qof_object_register (&gncCustomerDesc);
 }
 
 gint64 gncCustomerNextID (QofBook *book)

@@ -1357,7 +1357,7 @@ static const char * _gncInvoicePrintable (gpointer obj)
   return invoice->printname;
 }
 
-static GncObject_t gncInvoiceDesc = {
+static QofObject gncInvoiceDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Invoice",
@@ -1421,7 +1421,7 @@ gboolean gncInvoiceRegister (void)
   reg_lot ();
   reg_txn ();
 
-  return gncObjectRegister (&gncInvoiceDesc);
+  return qof_object_register (&gncInvoiceDesc);
 }
 
 gint64 gncInvoiceNextID (QofBook *book)

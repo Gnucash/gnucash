@@ -639,7 +639,7 @@ static void _gncBillTermForeach (QofBook *book, foreachObjectCB cb,
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
-static GncObject_t gncBillTermDesc = {
+static QofObject gncBillTermDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Billing Term",
@@ -661,5 +661,5 @@ gboolean gncBillTermRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncBillTermCompare, params);
 
-  return gncObjectRegister (&gncBillTermDesc);
+  return qof_object_register (&gncBillTermDesc);
 }

@@ -368,7 +368,7 @@ static const char * _gncJobPrintable (gpointer item)
   return c->name;
 }
 
-static GncObject_t gncJobDesc = {
+static QofObject gncJobDesc = {
   QOF_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Job",
@@ -396,7 +396,7 @@ gboolean gncJobRegister (void)
 
   gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncJobCompare, params);
 
-  return gncObjectRegister (&gncJobDesc);
+  return qof_object_register (&gncJobDesc);
 }
 
 gint64 gncJobNextID (QofBook *book)
