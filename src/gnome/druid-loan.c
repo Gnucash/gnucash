@@ -415,6 +415,39 @@ gnc_ui_sx_loan_druid_create(void)
         
         /* non-gladeable widget setup */
         {
+                int i;
+                // LIABILITY
+                GList *liabilityAcct;
+                // BANK, CASH, CREDIT, ASSET + LIABILITY
+                GList *paymentFromAccts;
+                // EXPENSE, LIABILITY, + payment-froms.
+                GList *paymentToAccts;
+                int fromLen = 5;
+                GNCAccountType paymentFroms[] = { BANK, CASH, CREDIT, ASSET, LIABILITY };
+                int toLen = 2;
+                GNCAccountType paymentTos[] = { EXPENSE };
+
+                liabilityAcct = NULL;
+                paymentFromAccts = NULL;
+                paymentToAccts = NULL;
+
+                liabilityAcct = g_list_append( liabilityAcct,
+                                               GINT_TO_POINTER( LIABILITY ) );
+                for ( i = 0; i < fromLen; i++ )
+                {
+                        paymentFromAccts
+                                = g_list_append( paymentFromAccts,
+                                                 GINT_TO_POINTER( paymentFroms[i] ) );
+                        paymentToAccts
+                                = g_list_append( paymentToAccts,
+                                                 GINT_TO_POINTER( paymentFroms[i] ) );
+                }
+
+                for ( i = 0; i < toLen; i++ )
+                {
+                        paymentToAccts = g_list_append( paymentToAccts,
+                                                        GINT_TO_POINTER( paymentTos[i] ) );
+                }
 
                 /* All of the GncAccountSel[ectors]... */
                 {
@@ -426,16 +459,17 @@ gnc_ui_sx_loan_druid_create(void)
                                 GtkTable *table;
                                 gboolean newAcctAbility;
                                 int left, right, top, bottom;
+                                GList *allowableAccounts;
                         } gas_data[] = {
                                 /* These ints are the GtkTable boundries */
-                                { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 4, 0, 1 },
-                                { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 4, 2, 3 },
-                                { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 2, 3, 4 },
-                                { &ldd->repIntToGAS,       ldd->repTable, TRUE,  3, 4, 3, 4 },
-                                { &ldd->payAcctFromGAS,    ldd->payTable, TRUE,  1, 2, 4, 5 },
-                                { &ldd->payAcctEscToGAS,   ldd->payTable, FALSE, 3, 4, 4, 5 },
-                                { &ldd->payAcctEscFromGAS, ldd->payTable, FALSE, 1, 2, 5, 6 },
-                                { &ldd->payAcctToGAS,      ldd->payTable, TRUE,  3, 4, 5, 6 },
+                                { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 4, 0, 1, liabilityAcct },
+                                { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 4, 2, 3, paymentFromAccts },
+                                { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 2, 3, 4, paymentToAccts  },
+                                { &ldd->repIntToGAS,       ldd->repTable, TRUE,  3, 4, 3, 4, paymentToAccts },
+                                { &ldd->payAcctFromGAS,    ldd->payTable, TRUE,  1, 2, 4, 5, paymentFromAccts },
+                                { &ldd->payAcctEscToGAS,   ldd->payTable, FALSE, 3, 4, 4, 5, paymentToAccts },
+                                { &ldd->payAcctEscFromGAS, ldd->payTable, FALSE, 1, 2, 5, 6, paymentFromAccts },
+                                { &ldd->payAcctToGAS,      ldd->payTable, TRUE,  3, 4, 5, 6, paymentToAccts },
                                 { NULL }
                         };
 
@@ -455,6 +489,10 @@ gnc_ui_sx_loan_druid_create(void)
                                 gas = GNC_ACCOUNT_SEL(gnc_account_sel_new());
                                 gnc_account_sel_set_new_account_ability(
                                         gas, gas_data[i].newAcctAbility );
+                                if ( gas_data[i].allowableAccounts != NULL ) {
+                                        gnc_account_sel_set_acct_filters(
+                                                gas, gas_data[i].allowableAccounts );
+                                }
                                 gtk_container_add( GTK_CONTAINER(a),
                                                    GTK_WIDGET(gas) );
                                 gtk_table_attach( gas_data[i].table,
@@ -2197,16 +2235,17 @@ ld_create_sxes( LoanDruidData *ldd )
         paymentSX->name  = g_strdup(ldd->ld.repMemo);
         paymentSX->start = *ldd->ld.startDate;
         paymentSX->last  = *ldd->ld.repStartDate;
+	g_date_subtract_months( &paymentSX->last, 1 );
         {
                 paymentSX->end = *ldd->ld.repStartDate;
-                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain );
+                g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain - 1);
         }
         paymentSX->freq = ldd->ld.repFreq;
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
         paymentSX->instNum =
                 (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
-                - ldd->ld.numMonRemain;
+                - ldd->ld.numMonRemain + 1;
 
         paymentSX->mainTxn = gnc_ttinfo_malloc();
         gnc_ttinfo_set_currency( paymentSX->mainTxn,
@@ -2485,11 +2524,18 @@ static
 void
 ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
 {
+        int monthsTotal;
+        struct tm *endDateMath;
+
         *start = *ldd->ld.startDate;
-        *end = *start;
-        g_date_add_months( end,
-                           ldd->ld.numPer
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+
+        endDateMath = g_new0( struct tm, 1 );
+        g_date_to_struct_tm( ldd->ld.startDate, endDateMath );
+        monthsTotal = ( (ldd->ld.numPer - 1)
+                        * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+        endDateMath->tm_mon += monthsTotal;
+        g_date_set_time( end, mktime( endDateMath ) );
+        g_free( endDateMath );
 }
 
 static
@@ -2521,6 +2567,7 @@ ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
                 PERR( "Unknown review date range option %d", range );
                 break;
         }
+       
 }
 
 static
@@ -2592,7 +2639,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 g_date_subtract_days( &curDate, 1 );
                 xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
                                              &curDate, &curDate );
-                for ( i=0;
+                for ( i=1;
                       g_date_valid( &curDate )
                       && g_date_compare( &curDate, &end ) <= 0 ;
                       i++,

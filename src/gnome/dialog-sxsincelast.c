@@ -404,6 +404,15 @@ show_handler (const char *class, gint component_id,
 }
 
 /**
+ * we need to show the dialog if there's something for the user to interact
+ * with.
+ *
+ * we need to show the dialog if there are auto-created,
+ * notification-requested transactions.
+ *
+ * we don't want to show the dialog if there's nothing for the user to see.
+ *
+ * --------------------------------------------------
  * @return The magnitude of the return value is the number of auto-created,
  * no-notification scheduled transactions created.  This value is positive if
  * there are additionally other SXes which need user interaction and the
@@ -626,7 +635,8 @@ static
 gboolean
 gnc_sxsld_autocreate_appr( sxSinceLastData *sxsld )
 {
-        return (sxsld->autoCreatedCount > 0);
+  return (sxsld->autoCreatedCount > 0);
+  //return ( g_list_length( sxsld->autoCreateList ) != 0 );
 }
 
 static
@@ -1010,6 +1020,7 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         }
         g_list_free( tci->createdTxnGUIDs );
         tci->createdTxnGUIDs = NULL;
+	gnc_resume_gui_refresh();
 }
 
 /**
@@ -2372,10 +2383,13 @@ create_each_transaction_helper( Transaction *t, void *d )
         gboolean errFlag;
         createData *createUD;
         toCreateInstance *tci;
-        gnc_commodity *commonCommodity = NULL;
+        gnc_commodity *commonCommodity;
         GHashTable *actualVars;
         gnc_numeric *varIValue;
+        gboolean toRetVal;
 
+        commonCommodity = NULL;
+        toRetVal = FALSE;
         errFlag = FALSE;
 
         /* FIXME: In general, this should [correctly] deal with errors such
@@ -2393,6 +2407,16 @@ create_each_transaction_helper( Transaction *t, void *d )
         /* the action and description/memo are in the template */
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );
 
+        {
+                char *guidStr;
+                
+                guidStr = guid_to_string( xaccTransGetGUID( newT ) );
+                DEBUG( "SX [%s] -> newT:guid [%s]",
+                       xaccSchedXactionGetName( tci->parentTCT->sx ),
+                       guidStr );
+                g_free( guidStr );
+        }
+
         xaccTransSetDate( newT,
                           g_date_day( tci->date ),
                           g_date_month( tci->date ),
@@ -2406,6 +2430,8 @@ create_each_transaction_helper( Transaction *t, void *d )
                 xaccTransDestroy( newT );
                 xaccTransCommitEdit( newT );
                 return FALSE;
+                // don't goto cleanup; here because we haven't created the
+                // stuff to cleanup yet.
         }
 
         /* Setup the predefined variables for credit/debit formula
@@ -2448,20 +2474,43 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                            GNC_SX_ACCOUNT,
                                                            NULL );
                         if ( kvp_val == NULL ) {
-                                PERR( "Null kvp_val for account" );
+                                PERR( "Null kvp_val for account in SX \"%s\" -- fix manually; "
+                                      "see http://bugzilla.gnome.org/show_bug.cgi?id=102311",
+                                      xaccSchedXactionGetName( createUD->tci->parentTCT->sx ) );
+                                /* Fix for bug#102311 -- skip the offending
+                                 * transaction by skipping the split. */
+                                
+                                /* No ... we reallly need to skip the entire
+                                   transaction, at this point. :( Bug#130330. */
+                                PERR( "err transaction %.8x", (int)newT );
+                                errFlag = TRUE;
+                                break;
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
-                        acct = xaccAccountLookup( acct_guid,
-                                                  gnc_get_current_book ());
+                        acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+
+                        if ( acct == NULL )
+                        {
+                                char *guidStr;
+
+                                guidStr = guid_to_string( acct_guid );
+                                PERR( "No account for guid [%s], cancelling SX [%s] creation.",
+                                      guidStr, xaccSchedXactionGetName( createUD->tci->parentTCT->sx ) );
+                                g_free( guidStr );
+                                errFlag = TRUE;
+                                break;
+                        }
 #if 0 /* debug */
-                        DEBUG( "Got account with name \"%s\"",
-                                xaccAccountGetName( acct ) );
+                        DEBUG( "Got account [%.8x] with name [%s]",
+                               (int)acct, xaccAccountGetName( acct ) );
 #endif /* 0 -- debug */
                         if ( commonCommodity != NULL ) {
                                 if ( commonCommodity != xaccAccountGetCommodity( acct ) ) {
                                         PERR( "Common-commodity difference: old=%s, new=%s\n",
                                               gnc_commodity_get_mnemonic( commonCommodity ),
                                               gnc_commodity_get_mnemonic( xaccAccountGetCommodity( acct ) ) );
+                                        errFlag = TRUE;
+                                        break;
                                 }
                         }
                         commonCommodity = xaccAccountGetCommodity( acct );
@@ -2558,19 +2607,8 @@ create_each_transaction_helper( Transaction *t, void *d )
         }
 
 
-        /* Cleanup actualVars table. */
-        {
-                g_hash_table_foreach( actualVars,
-                                      gnc_sxsl_del_vars_table_ea,
-                                      NULL );
-                g_hash_table_destroy( actualVars );
-                actualVars = NULL;
-        }
-
         /* set the balancing currency. */
-        if ( commonCommodity == NULL ) {
-                PERR( "Unable to find common currency/commodity." );
-        } else {
+        if ( commonCommodity != NULL ) {
                 xaccTransSetCurrency( newT, commonCommodity );
         }
 
@@ -2590,20 +2628,41 @@ create_each_transaction_helper( Transaction *t, void *d )
         if ( errFlag ) {
                 PERR( "Some error in new transaction creation..." );
                 xaccTransRollbackEdit( newT );
+
+                xaccTransBeginEdit( newT );
                 xaccTransDestroy( newT );
                 xaccTransCommitEdit( newT );
-                return FALSE;
+
+                toRetVal = FALSE;
+                goto cleanup;
+        }
+        else
+        {
+                xaccTransCommitEdit( newT );
+
+                if ( createUD->createdGUIDs != NULL ) {
+                        char *guidStr = guid_to_string( (gpointer)xaccTransGetGUID(newT) );
+                        DEBUG( "adding created GUID [%s]", guidStr );
+                        g_free( guidStr );
+                        *createUD->createdGUIDs =
+                                g_list_append( *(createUD->createdGUIDs),
+                                               (gpointer)xaccTransGetGUID(newT) );
+                }
+
+                toRetVal = TRUE;
         }
 
-        xaccTransCommitEdit( newT );
 
-        if ( createUD->createdGUIDs != NULL ) {
-                *createUD->createdGUIDs =
-                        g_list_append( *(createUD->createdGUIDs),
-                                       (gpointer)xaccTransGetGUID(newT) );
+ cleanup:
+        /* Cleanup actualVars table. */
+        {
+                g_hash_table_foreach( actualVars,
+                                      gnc_sxsl_del_vars_table_ea,
+                                      NULL );
+                g_hash_table_destroy( actualVars );
+                actualVars = NULL;
         }
-
-        return TRUE;
+        return toRetVal;
 }
 
 /**

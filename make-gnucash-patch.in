@@ -7,7 +7,7 @@
 # consult the README.
 #
 # This script requires the programs 'makepatch', 'gzip',
-# 'diff', and 'uuencode'.
+# a 'diff' work-a-like, and 'uuencode'.
 #
 # Author: Dave Peticolas <dave@krondo.com>
 
@@ -18,6 +18,7 @@ use Getopt::Long;
 
 $::ask_description = 1;
 $::should_uuencode = 1;
+$::diffcmd = "diff -up";
 
 my $rcfile = $ENV{"HOME"} . "/.gnucash-patch.rc";
 
@@ -92,8 +93,8 @@ $result = GetOptions("old=s" => \$old, "new=s" => \$new,
             "prefix=s" => \$gnc_home, "help" => \$help,
             "file=s" => \@filename, "ask!" => \$::ask_description,
             "diff=s" => \$diffname, "uuencode!" => \$::should_uuencode,
-            "zip!" => \$zip, "ignore=s" => \$ignorename,
-            "manifest=s" => \$manifest);
+            "diffcmd!" => \$::diffcmd, "zip!" => \$zip, 
+            "ignore=s" => \$ignorename, "manifest=s" => \$manifest);
 
 if ($help or $result == 0) {
   printf "Help information\n\n";
@@ -102,6 +103,7 @@ if ($help or $result == 0) {
   printf "--new \"newdir\"     Directory with modified copy\n";
   printf "--prefex \"homedir\" Full path of parent directory\n";
   printf "--diff \"diffname\"  Output name for diff file\n";
+  printf "--diffcmd \"cmd\"    Command to compare two files\n";
   printf "--file \"filename\"  Make patch for filename ONLY\n";
   printf "--manifest \"file\"  Use file as a manifest file\n";
   printf "--ignore \"igname\"  File containing file matches to ignore\n";
@@ -114,8 +116,8 @@ if ($help or $result == 0) {
   printf "and of course:\n";
   printf "--help             Displays this text\n";
   printf "\nAll options can be abbreviated to their shortest unique\n";
-  printf "  form: --o, --ne, --p, --d, --f, --m, --i, --u/--nou,\n";
-  printf "        --z/--noz, --a/--noa, and --h\n";
+  printf "  form: --o, --ne, --p, --d, --diffc, --f, --m, --i,\n";
+  printf "        --u/--nou, --z/--noz, --a/--noa, and --h\n";
   printf "\n";
   exit 1;
 }
@@ -154,7 +156,10 @@ if (not defined($old)) {
 
 chdir $gnc_home . "/" . $new or die "Can't cd!\n";
 # Start out with our basic makepatch arguments
-my @args = ('-verbose', '-diff', 'diff -up', '-exclude-vc');
+my @args = ('-verbose', '-exclude-vc');
+
+# Push the diff command value
+push(@args, '-diff',  "$::diffcmd");
 
 if (not $::ask_description) {
   push(@args, '-description', '');

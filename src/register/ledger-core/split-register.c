@@ -317,7 +317,7 @@ gnc_split_register_current_trans_expanded (SplitRegister *reg)
 
   if (reg->style == REG_STYLE_AUTO_LEDGER ||
       reg->style == REG_STYLE_JOURNAL)
-    return FALSE;
+    return TRUE;
 
   return info->trans_expanded;
 }
@@ -1632,6 +1632,17 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   else
     value = xaccSplitGetValue (split);
 
+
+  /* Check if shares and price are BOTH zero (and value is non-zero).
+   * If so, we can assume that this is an income-correcting split
+   */
+  if (gnc_numeric_zero_p(amount) && gnc_numeric_zero_p(price) &&
+      !gnc_numeric_zero_p(value))
+  {
+    /* XXX: should we ask the user? */
+    return TRUE;
+  }
+
   /* Check if precisely one value is zero. If so, we can assume that the
    * zero value needs to be recalculated.   */
 
@@ -2101,14 +2112,12 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
 
-  /* Initialize the rate cells */
-  gnc_price_cell_set_fraction
-    ((PriceCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RATE_CELL), 1000000);
-
+  /* Initialize the rate cell
+   * use a share_print_info to make sure we don't have rounding errors
+   */
   gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
-     gnc_default_price_print_info());
+     gnc_default_share_print_info());
 
   /* The action cell should accept strings not in the list */
   gnc_combo_cell_set_strict
@@ -2234,6 +2243,24 @@ gnc_split_register_config (SplitRegister *reg,
                            gboolean use_double_line)
 {
   if (!reg) return;
+
+  /* If shrinking the transaction split, put the cursor on the first row of the trans */
+  if (reg->use_double_line && !use_double_line) {
+    VirtualLocation virt_loc = reg->table->current_cursor_loc;
+    if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE)) {
+      if (virt_loc.phys_row_offset) {
+	gnc_table_move_vertical_position (reg->table, &virt_loc, -virt_loc.phys_row_offset);
+	gnc_table_move_cursor_gui (reg->table, virt_loc);
+      }
+    } else {
+      /* WTF?  Go to a known safe location. */
+      virt_loc.vcell_loc.virt_row = 1;
+      virt_loc.vcell_loc.virt_col = 0;
+      virt_loc.phys_row_offset = 0;
+      virt_loc.phys_col_offset = 0;
+      gnc_table_move_cursor_gui (reg->table, virt_loc);
+    }
+  }
 
   reg->type = newtype;
 

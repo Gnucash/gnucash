@@ -29,7 +29,7 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include "dialog-utils.h"
 #include "global-options.h"
 #include "import-settings.h"
 
@@ -38,7 +38,7 @@
  * If you modify the value of any of these, you must do the same in *
  * generic-import.scm                                               *
 \********************************************************************/
-#define MATCHER_PREF_PAGE "Transaction Matcher"
+#define MATCHER_PREF_PAGE "Online Banking & Importing"
 
 /** Transaction who's best match probability is equal or higher than
    this will reconcile their best match by default */

@@ -27,6 +27,7 @@
 #include <gnome.h>
 #include <openhbci/account.h>
 #include <openhbci/api.h>
+#include "gnc-ui.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-book.h"
@@ -84,9 +85,11 @@ const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
 
-/* Make a lot of debugging messages about this outboxjob.  */
-void 
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
+/* Return the HBCI return code of the given 'job', or zero if none was
+ * found. If 'verbose' is TRUE, make a lot of debugging messages about
+ * this outboxjob. */
+int
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose);
 
 /* Check HBCI_Error on whether some feedback should be given to the
  * user. Returns true if the HBCI action should be tried again; on the
@@ -114,6 +117,45 @@ char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans);
  * information given in the HBCI_Transaction h_trans. The returned
  * string must be g_free'd by the caller. */
 char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans);
+
+/** Return the first customer that can act on the specified account,
+    or NULL if none was found (and an error message is printed on
+    stdout). */
+const HBCI_Customer *
+gnc_hbci_get_first_customer(const HBCI_Account *h_acc);
+
+/** Returns the name of this bank. This function is helpful because it
+ * always makes sure to return a valid const char pointer, even if no
+ * bankName is available. */
+const char *bank_to_str (const HBCI_Bank *bank);
+
+/** Chooses one bank out of the given list. 
+ *
+ * If the list has more than one bank, this displays a multichoice
+ * dialog so that the user can choose one bank. If the list has only
+ * one bank, it returns it. If the list has zero banks, it returns
+ * NULL. */ 
+const HBCI_Bank *
+choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist);
+
+/** Chooses one customer out of the given list. 
+ *
+ * If the list has more than one customer, this displays a multichoice
+ * dialog so that the user can choose one customer. If the list has only
+ * one customer, it returns it. If the list has zero customers, it returns
+ * NULL. */ 
+const HBCI_Customer *
+choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist);
+
+/** Chooses one user out of the given list. 
+ *
+ * If the list has more than one user, this displays a multichoice
+ * dialog so that the user can choose one user. If the list has only
+ * one user, it returns it. If the list has zero users, it returns
+ * NULL. */ 
+const HBCI_User *
+choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist);
+
 
 
 #endif

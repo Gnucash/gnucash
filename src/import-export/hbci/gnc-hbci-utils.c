@@ -90,7 +90,7 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
     gnc_hbci_api_interactors (api, parent);
 
   return api;
-};
+}
 
 static HBCI_API *gnc_hbci_api = NULL;
 static char *gnc_hbci_configfile = NULL;
@@ -122,7 +122,7 @@ HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
     GNCInteractor_reparent (*inter, parent);
     return gnc_hbci_api;
   }
-};
+}
 
 void gnc_hbci_api_delete (HBCI_API *api)
 {
@@ -160,17 +160,17 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
   bankcode = gnc_hbci_get_account_bankcode (gnc_acc);
   countrycode = gnc_hbci_get_account_countrycode (gnc_acc);
   if (bankcode && (strlen(bankcode)>0) && (countrycode > 0)) {
-    //printf("gnc_acc %s has blz %s and ccode %d\n",
-    //   xaccAccountGetName (gnc_acc), bankcode, countrycode);
+    /*printf("gnc_acc %s has blz %s and ccode %d\n",
+      xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
     bank = HBCI_API_findBank (api, countrycode, bankcode);
     if (bank) {
       accountid = gnc_hbci_get_account_accountid (gnc_acc);
       if (accountid && (strlen(accountid)>0)) {
 	hbci_acc = HBCI_Bank_findAccount (bank, accountid);
 	if (hbci_acc) {
-	  //printf("can connect gnc_acc %s to hbci_acc %s\n",
-	  // xaccAccountGetName (gnc_acc), 
-	  // HBCI_Account_accountId (hbci_acc));
+	  /*printf("can connect gnc_acc %s to hbci_acc %s\n",
+	    xaccAccountGetName (gnc_acc), 
+	    HBCI_Account_accountId (hbci_acc));*/
 	  return hbci_acc;
 	} /* hbci_acc */
       } /* accountid */
@@ -196,6 +196,9 @@ print_list_int (const list_int *list)
 static void *
 get_resultcode_error_cb (int value, void *user_data)
 {
+  int *tmp_result = user_data;
+  if (value > *tmp_result)
+    *tmp_result = value;
   if (value >= 9000)
     return (void*) value;
   else
@@ -204,46 +207,90 @@ get_resultcode_error_cb (int value, void *user_data)
 static int
 get_resultcode_error (const list_int *list)
 {
+  int tmp_result = 0, cause = 0;
   g_assert (list);
-  return (int) list_int_foreach (list, &get_resultcode_error_cb, NULL);
+  cause = (int) list_int_foreach (list, &get_resultcode_error_cb, &tmp_result);
+  return MAX(tmp_result, cause);
 }
 
-void 
-gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
+int
+gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job, gboolean verbose)
 {
   list_int *list;
   const char *msg;
-  int cause;
+  int cause = 0;
   
   g_assert (job);
 /*   if (HBCI_OutboxJob_status (job) != HBCI_JOB_STATUS_DONE) */
 /*     return; */
 /*   if (HBCI_OutboxJob_result (job) != HBCI_JOB_RESULT_FAILED) */
 /*     return; */
-  list = HBCI_OutboxJob_resultCodes (job);
-  if (list_int_size (list) > 0) {
-    printf("OutboxJob failed. Resultcodes were: ");
-    print_list_int (list);
-    cause = get_resultcode_error (list);
-    switch (cause) {
-    case 9310:
-      msg = "Schluessel noch nicht hinterlegt";
+
+  if (verbose) {
+    printf("OutboxJob status: ");
+    switch(HBCI_OutboxJob_status (job)) {
+    case HBCI_JOB_STATUS_TODO:
+      printf("todo");
       break;
-    case 9320:
-      msg = "Schluessel noch nicht freigeschaltet";
-      break;
-    case 9330:
-      msg = "Schluessel gesperrt";
-      break;
-    case 9340:
-      msg = "Schluessel falsch";
+    case HBCI_JOB_STATUS_DONE:
+      printf("done");
       break;
     default:
-      msg = "Unknown";
+    case HBCI_JOB_STATUS_NONE:
+      printf("none");
+      break;
     }
-    printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+
+    printf(", result: ");
+    switch(HBCI_OutboxJob_result (job)) {
+    case HBCI_JOB_RESULT_SUCCESS:
+      printf("success");
+      break;
+    case HBCI_JOB_RESULT_FAILED:
+      printf("failed");
+      break;
+    default:
+    case HBCI_JOB_STATUS_NONE:
+      printf("none");
+      break;
+    }
+    printf("\n");
+  }
+  
+  list = HBCI_OutboxJob_resultCodes (job);
+  if (list_int_size (list) > 0) {
+
+    cause = get_resultcode_error (list);
+
+    if (verbose) {
+      printf("OutboxJob resultcodes: ");
+      print_list_int (list);
+
+      switch (cause) {
+      case 9310:
+	msg = "Schluessel noch nicht hinterlegt";
+	break;
+      case 9320:
+	msg = "Schluessel noch nicht freigeschaltet";
+	break;
+      case 9330:
+	msg = "Schluessel gesperrt";
+	break;
+      case 9340:
+	msg = "Schluessel falsch";
+	break;
+      default:
+	msg = "Unknown";
+      }
+      printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+    }
+  } else {
+    if (verbose)
+      printf("OutboxJob's resultCodes list has zero length.\n");
   }
   list_int_delete (list);
+
+  return cause;
 }
 
 
@@ -260,7 +307,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "Do you want to try again?"));
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_PIN_WRONG_0:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog_parented (parent,
@@ -282,7 +328,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       _("The PIN you entered was wrong.\n"
 					 "You have two further wrong retries left.\n"
 					 "Do you want to try again?"));
-#endif
   case HBCI_ERROR_CODE_PIN_ABORTED:
     /*     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n"); */
     return FALSE;
@@ -292,7 +337,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was too short.\n"
 					 "Do you want to try again?"));
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_CARD_DESTROYED:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented
@@ -300,17 +344,14 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("Unfortunately you entered a wrong PIN for too many times.\n"
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
-#endif
   case HBCI_ERROR_CODE_FILE_NOT_FOUND:
     /*     printf("gnc_hbci_error_feedback: File not found error.\n"); */
     return FALSE;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_NO_CARD:
     return gnc_verify_dialog_parented (parent,
 				       TRUE,
 				       _("No chip card has been found in the chip card reader.\n"
 					 "Do you want to try again?"));
-#endif
   case HBCI_ERROR_CODE_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented 
@@ -318,7 +359,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("Unfortunately this HBCI job is not supported \n"
 	 "by your bank or for your account. Aborting."));
     return FALSE;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_SOCKET_NO_CONNECT:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented 
@@ -326,7 +366,22 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("The server of your bank refused the HBCI connection.\n"
 	 "Please try again later. Aborting."));
     return FALSE;
-#endif    
+  case HBCI_ERROR_CODE_MEDIUM:
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("There was an error when loading the plugin for your security medium \n"
+	 "(see log window). Probably the versions of your currently installed \n"
+	 "OpenHBCI library and of the plugin do not match. In that case you need \n"
+	 "to recompile and reinstall the plugin again. Aborting now."));
+    GNCInteractor_hide (inter);
+    return FALSE;
+  case HBCI_ERROR_CODE_BAD_MEDIUM:
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("Your security medium is not supported. No appropriate plugin \n"
+	 "has been found for that medium. Aborting."));
+    GNCInteractor_hide (inter);
+    return FALSE;
       
   default:
     return FALSE;
@@ -339,21 +394,25 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 		      HBCI_OutboxJob *job, GNCInteractor *inter)
 {
   HBCI_Error *err;
+  int resultcode;
 	  
   if (inter)
     GNCInteractor_show (inter);
 
   if (gnc_lookup_boolean_option("_+Advanced", 
 				"HBCI Verbose Debug Messages", FALSE))
-    HBCI_Hbci_setDebugLevel (3);
+    HBCI_Hbci_setDebugLevel (4);
   else
     HBCI_Hbci_setDebugLevel (0);
 
   do {
+    if (inter)
+      GNCInteractor_show_nodelete (inter);
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);
   } while (gnc_hbci_error_retry (parent, err, inter));
   
+  resultcode = gnc_hbci_debug_outboxjob (job, FALSE);
   if (!HBCI_Error_isOk(err)) {
     char *errstr = 
       g_strdup_printf("gnc_hbci_api_execute: Error at executeQueue: %s",
@@ -363,12 +422,24 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 				      (HBCI_API_Hbci (api)), errstr);
     g_free (errstr);
     HBCI_Error_delete (err);
-    gnc_hbci_debug_outboxjob (job);
+    gnc_hbci_debug_outboxjob (job, TRUE);
+    GNCInteractor_show_nodelete (inter);
     return FALSE;
   }
 
-  HBCI_Error_delete (err);
-  return TRUE;
+  GNCInteractor_set_cache_valid (inter, TRUE);
+  if (resultcode <= 20) {
+    HBCI_Error_delete (err);
+    return TRUE;
+  }
+  else {
+    printf("gnc_hbci_api_execute: Some message at executeQueue: %s",
+	   HBCI_Error_message (err));
+    HBCI_Error_delete (err);
+    GNCInteractor_show_nodelete (inter);
+    return TRUE; /* <- This used to be a FALSE but this was probably
+		  * as wrong as it could get. @§%$! */
+  }
 }
 
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
@@ -469,3 +540,255 @@ char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans)
   return g_memo;
 }
 
+
+/** Return the only customer that can act on the specified account, or
+    NULL if none was found. */
+const HBCI_Customer *
+gnc_hbci_get_first_customer(const HBCI_Account *h_acc)
+{
+  /* Get one customer. */
+  const list_HBCI_Customer *custlist;
+    
+  custlist = HBCI_Account_authorizedCustomers (h_acc);
+  g_assert (custlist);
+  return choose_one_customer(gnc_ui_get_toplevel (), custlist);
+}
+
+const char *bank_to_str (const HBCI_Bank *bank)
+{
+  g_assert (bank);
+  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
+	  HBCI_Bank_name (bank) :
+	  HBCI_Bank_bankCode(bank));
+}
+
+
+const HBCI_Bank *
+choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist)
+{
+  const HBCI_Bank *bank;
+  list_HBCI_Bank_iter *iter, *end;
+  int list_size;
+  g_assert (parent);
+  g_assert (banklist);
+
+  /*printf("%d banks found.\n", list_HBCI_Bank_size (banklist));*/
+  list_size = list_HBCI_Bank_size (banklist);
+  if (list_size == 0) 
+    return NULL;
+
+  if (list_size == 1) 
+    {
+      /* Get bank. */
+      iter = list_HBCI_Bank_begin (banklist);
+      bank = list_HBCI_Bank_iter_get (iter);
+      list_HBCI_Bank_iter_delete (iter);
+      return bank;
+    }
+
+  /* More than one bank available. */
+  {
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
+
+    end = list_HBCI_Bank_end (banklist);
+    for (iter = list_HBCI_Bank_begin (banklist);
+	 !list_HBCI_Bank_iter_equal(iter, end); 
+	 list_HBCI_Bank_iter_next(iter))
+      {
+	bank = list_HBCI_Bank_iter_get (iter);
+	radio_list = g_list_append(radio_list, 
+				   g_strdup_printf ("%s (%s)",
+						    HBCI_Bank_name (bank),
+						    HBCI_Bank_bankCode (bank)));
+      }
+    list_HBCI_Bank_iter_delete (iter);
+      
+    choice = gnc_choose_radio_option_dialog_parented
+      (parent,
+       _("Choose HBCI bank"), 
+       _("More than one HBCI bank is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_Bank_begin (banklist);
+	 !list_HBCI_Bank_iter_equal(iter, end); 
+	 list_HBCI_Bank_iter_next(iter))
+      if (i == choice)
+	{
+	  bank = list_HBCI_Bank_iter_get (iter);
+	  list_HBCI_Bank_iter_delete (iter);
+	  list_HBCI_Bank_iter_delete (end);
+	  return bank;
+	}
+      else
+	++i;
+  }
+  
+  g_assert_not_reached();
+  return NULL;
+}
+
+const HBCI_Customer *
+choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist)
+{
+  const HBCI_Customer *customer;
+  list_HBCI_Customer_iter *iter, *end;
+  g_assert(parent);
+  g_assert(custlist);
+  
+  if (list_HBCI_Customer_size (custlist) == 0) {
+    printf ("choose_one_customer: oops, no customer found.\n");
+    return NULL;
+  }
+  if (list_HBCI_Customer_size (custlist) == 1) 
+    {
+      /* Get one customer */
+      iter = list_HBCI_Customer_begin (custlist);
+      customer = list_HBCI_Customer_iter_get (iter);
+      list_HBCI_Customer_iter_delete (iter);
+      
+      return customer;
+    }
+
+  /* More than one customer available. */
+  {
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
+
+    end = list_HBCI_Customer_end (custlist);
+    for (iter = list_HBCI_Customer_begin (custlist);
+	 !list_HBCI_Customer_iter_equal(iter, end); 
+	 list_HBCI_Customer_iter_next(iter))
+      {
+	customer = list_HBCI_Customer_iter_get (iter);
+	radio_list = 
+	  g_list_append(radio_list, 
+			/* Translators: %s is the name of the
+			 * customer. %s is the id of the customer. %s
+			 * is the name of the bank. %s is the bank
+			 * code. */
+			g_strdup_printf (_("%s (%s) at bank %s (%s)"),
+					 HBCI_Customer_custName (customer),
+					 HBCI_Customer_custId (customer),
+					 bank_to_str (HBCI_User_bank(HBCI_Customer_user(customer))),
+					 HBCI_Bank_bankCode (HBCI_User_bank(HBCI_Customer_user(customer)))));
+      }
+    list_HBCI_Customer_iter_delete (iter);
+      
+    choice = gnc_choose_radio_option_dialog_parented
+      (parent,
+       _("Choose HBCI customer"), 
+       _("More than one HBCI customer is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_Customer_begin (custlist);
+	 !list_HBCI_Customer_iter_equal(iter, end); 
+	 list_HBCI_Customer_iter_next(iter))
+      if (i == choice)
+	{
+	  customer = list_HBCI_Customer_iter_get (iter);
+	  list_HBCI_Customer_iter_delete (iter);
+	  list_HBCI_Customer_iter_delete (end);
+	  return customer;
+	}
+      else
+	++i;
+  }
+  
+  g_assert_not_reached();
+  return NULL;
+}
+
+const HBCI_User *
+choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist)
+{
+  const HBCI_User *user;
+  list_HBCI_User_iter *iter, *end;
+  g_assert(parent);
+  g_assert(userlist);
+
+  if (list_HBCI_User_size (userlist) == 0) {
+    printf("choose_one_user: oops, no user found.\n");
+    return NULL;
+  }
+  if (list_HBCI_User_size (userlist) == 1)
+    {
+      /* Get one User */
+      iter = list_HBCI_User_begin (userlist);
+      user = list_HBCI_User_iter_get (iter);
+      list_HBCI_User_iter_delete (iter);
+
+      return user;
+    }
+
+  /* More than one user available. */
+  {
+    int choice, i;
+    GList *node;
+    GList *radio_list = NULL;
+
+    end = list_HBCI_User_end (userlist);
+    for (iter = list_HBCI_User_begin (userlist);
+	 !list_HBCI_User_iter_equal(iter, end); 
+	 list_HBCI_User_iter_next(iter))
+      {
+	user = list_HBCI_User_iter_get (iter);
+	radio_list = g_list_append
+	    (radio_list, 
+	     g_strdup_printf (_("%s (%s) at bank %s (%s)"),
+			      HBCI_User_userName (user),
+			      HBCI_User_userId (user),
+			      bank_to_str (HBCI_User_bank(user)),
+			      HBCI_Bank_bankCode (HBCI_User_bank(user))));
+      }
+    list_HBCI_User_iter_delete (iter);
+      
+    choice = gnc_choose_radio_option_dialog_parented
+      (parent,
+       _("Choose HBCI user"), 
+       _("More than one HBCI user is available for \n"
+	 "the requested operation. Please choose \n"
+	 "the one that should be used."), 
+       0, 
+       radio_list);
+      
+    for (node = radio_list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (radio_list);
+
+    i = 0;
+    for (iter = list_HBCI_User_begin (userlist);
+	 !list_HBCI_User_iter_equal(iter, end); 
+	 list_HBCI_User_iter_next(iter))
+      if (i == choice)
+	{
+	  user = list_HBCI_User_iter_get (iter);
+	  list_HBCI_User_iter_delete (iter);
+	  list_HBCI_User_iter_delete (end);
+	  return user;
+	}
+      else
+	++i;
+  }
+  
+  g_assert_not_reached();
+  return NULL;
+}

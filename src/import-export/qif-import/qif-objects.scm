@@ -186,7 +186,7 @@
    'qif-xtn
    '(date payee address number action cleared  
           from-acct share-price num-shares security-name commission 
-          splits mark)))
+          default-split splits mark)))
 
 (define qif-xtn?
   (record-predicate <qif-xtn>))
@@ -257,6 +257,12 @@
 (define qif-xtn:set-commission! 
   (simple-obj-setter <qif-xtn> 'commission))
 
+(define qif-xtn:default-split
+  (simple-obj-getter <qif-xtn> 'default-split))
+
+(define qif-xtn:set-default-split! 
+  (simple-obj-setter <qif-xtn> 'default-split))
+
 (define qif-xtn:splits
   (simple-obj-getter <qif-xtn> 'splits))
 
@@ -280,16 +286,33 @@
 
 
 (define (qif-xtn:split-amounts self)
-  (map 
-   (lambda (split)
-     (qif-split:amount split))
-   (qif-xtn:splits self)))
+  (let ((def-spl (qif-xtn:default-split self))
+	(spl-lst (qif-xtn:splits self)))
+    (map
+     (lambda (split)
+       (qif-split:amount split))
+     (if def-spl (cons def-spl spl-lst) spl-lst))))
 
 (define (qif-xtn:set-split-amounts! self amounts)
-  (map 
-   (lambda (split amount)
-     (qif-split:set-amount! split amount))
-   (qif-xtn:splits self) amounts))
+  (define (set-amounts neg? amounts)
+    (map 
+     (lambda (split amount)
+       (qif-split:set-amount! split (if neg? (gnc:numeric-neg amount) amount)))
+     (qif-xtn:splits self) amounts))
+
+  (define (need-neg amounts)
+    (let ((sum (gnc:numeric-zero)))
+      (for-each
+       (lambda (amt)
+	 (set! sum (gnc:numeric-add sum amt 0 GNC-DENOM-LCD)))
+       amounts)
+      (gnc:numeric-zero-p sum)))
+
+  (let ((def-spl (qif-xtn:default-split self)))
+    (if def-spl
+	(set-amounts (need-neg amounts) (cdr amounts))
+	(set-amounts #f amounts))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <qif-acct>

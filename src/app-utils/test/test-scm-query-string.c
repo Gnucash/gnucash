@@ -63,12 +63,14 @@ run_tests (void)
   val2str = gh_eval_str ("gnc:value->string");
   g_return_if_fail (gh_procedure_p (val2str));
 
-  for (i = 0; i < 100; i++) {
+  for (i = 0; i < 1000; i++) {
     q = get_random_query ();
     test_query (q, val2str);
     xaccFreeQuery (q);
+    printf(".");
+    fflush(stdout);
   }
-  success ("");
+  printf("\n");
 }
 
 static void
@@ -84,6 +86,10 @@ main_helper (int argc, char **argv)
 
   /* double->string->double is not idempotent */
   kvp_exclude_type (KVP_TYPE_DOUBLE);
+
+  /* Initialize to a known RNG position */
+  guid_init();
+  srand(1);
 
   run_tests ();
 

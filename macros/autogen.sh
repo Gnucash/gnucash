@@ -26,17 +26,14 @@ fi
   DIE=1
 }
 
-GETTEXTIZE_VERSION=`${GETTEXTIZE} --version`
-gettextize_major_version=`echo ${GETTEXTIZE_VERSION} | \
-	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\1/'`
-gettextize_minor_version=`echo ${GETTEXTIZE_VERSION} | \
-	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\2/'`
-if [  $gettextize_major_version -gt 0   -o \
-      $gettextize_minor_version -gt 10  ]; then
-  INTL="--intl";
-else
-  INTL="";
-fi
+gettext_version=`gettextize --version 2>&1 | sed -n 's/^.*GNU gettext.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
+case $gettext_version in
+0.10.*)
+	;;
+	
+*)
+	INTL="--intl --no-changelog";;
+esac
 
 #(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
 #  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
@@ -139,13 +136,16 @@ do
 	  fi
         fi
       done
+      grep "intl/Makefile" configure.in > /dev/null &&
+      ( sed -e 's#^AC_OUTPUT(.*intl/Makefile po/Makefile.in#AC_OUTPUT(#' \
+	  configure.in >configure.in.new && mv configure.in.new configure.in )
       if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then
 	if grep "sed.*POTFILES" configure.in >/dev/null; then
 	  : do nothing -- we still have an old unmodified configure.in
 	else
 	  echo "Creating $dr/aclocal.m4 ..."
 	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	  echo "Running ${GETTEXTIZE}...  Ignore non-fatal messages."
+	  echo "(1) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
 	  echo "no" | ${GETTEXTIZE} --force --copy $INTL
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
@@ -154,11 +154,19 @@ do
       if grep "^AM_GNOME_GETTEXT" configure.in >/dev/null; then
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	echo "Running ${GETTEXTIZE}...  Ignore non-fatal messages."
+	echo "(2) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
 	echo "no" | ${GETTEXTIZE} --force --copy $INTL
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
+      echo
+      echo "*** WARNING ***"
+      echo "*** Ignore any instruction above about running aclocal by hand."
+      echo "*** I repeat, do not run aclocal by hand.  You have been warned....."
+      echo
+      grep "intl/Makefile" configure.in > /dev/null ||
+      ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
+	configure.in >configure.in.new && mv configure.in.new configure.in )
       if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
         echo "Running ${INTLTOOLIZE} ..."
         ${INTLTOOLIZE} --copy --force --automake

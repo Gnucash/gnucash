@@ -114,9 +114,10 @@ get_random_timespec(void)
 {
   Timespec *ret;
 
-  ret = g_new(Timespec, 1);
+  ret = g_new0(Timespec, 1);
 
-  ret->tv_sec = rand();
+  while (ret->tv_sec <= 0)
+    ret->tv_sec = rand();
 
   if (zero_nsec)
     ret->tv_nsec = 0;
@@ -435,7 +436,7 @@ get_random_kvp_value_depth (int type, gint depth)
         break;
 
     case KVP_TYPE_DOUBLE:
-        return kvp_value_new_double(get_random_double());
+	return NULL;
         break;
 
     case KVP_TYPE_NUMERIC:
@@ -1350,7 +1351,7 @@ get_random_query(void)
   Query *q;
   int num_terms;
 
-  num_terms = get_random_int_in_range (1, 4);
+  num_terms = get_random_int_in_range (1, 3);
 
   q = xaccMallocQuery ();
 

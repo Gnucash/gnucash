@@ -128,7 +128,7 @@ pgendStoreBook (PGBackend *be, GNCBook *book)
 /* ============================================================= */
 
 /* ============================================================= */
-/* The pgendGetBook() routine restores the all book data,
+/* The pgendBookRestore() routine restores the all book data,
  * including the account heirarchy, the price db, commodities, etc.
  */
 
@@ -153,7 +153,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 void
-pgendGetBook (PGBackend *be, GNCBook *book)
+pgendBookRestore (PGBackend *be, GNCBook *book)
 {
    char * bufp;
 

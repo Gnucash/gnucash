@@ -86,6 +86,7 @@ struct freqTypeTuple {
 };
 
 struct freqTypeTuple freqTypeStrs[] = {
+    { "none",             INVALID },
     { "once",             ONCE },
     { "daily",            DAILY },
     { "weekly",           WEEKLY },
@@ -163,6 +164,11 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         xmlAddChild( ret, xmlSub );
 
         switch( fs->type ) {
+
+        case INVALID: {
+                xmlSub = xmlNewNode( NULL, "fs:none" );
+        } break;
+
         case ONCE: {
                 xmlSub = xmlNewNode( NULL, "fs:once" );
                 xmlAddChild( xmlSub, 
@@ -260,7 +266,6 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
                 xmlAddChild( ret, xmlComposites );
         } break;
         
-        case INVALID:
         default:
                 g_return_val_if_fail( FALSE, NULL );
         }
@@ -414,6 +419,21 @@ struct dom_tree_handler fs_union_dom_handlers[] = {
 
 static
 gboolean
+fs_none_handler( xmlNodePtr node, gpointer data )
+{
+        fsParseData *fspd = data;
+        gboolean	successful;
+        successful = dom_tree_generic_parse( node,
+                                             fs_union_dom_handlers,
+                                             fspd );
+        if ( !successful )
+                return FALSE;
+        fspd->fs->type	      = INVALID;
+        return TRUE;
+}
+
+static
+gboolean
 fs_once_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
@@ -531,6 +551,7 @@ static struct dom_tree_handler fs_dom_handlers[] = {
         { "gnc:freqspec",      gnc_fs_handler,            0, 0 },
         { "fs:ui_type",        fs_uift_handler,           1, 0 },
         { "fs:id",             fs_guid_handler,           1, 0 },
+        { "fs:none",           fs_none_handler,           0, 0 },
         { "fs:once",           fs_once_handler,           0, 0 },
         { "fs:daily",          fs_daily_handler,          0, 0 },
         { "fs:weekly",         fs_weekly_handler,         0, 0 },

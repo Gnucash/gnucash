@@ -57,6 +57,9 @@ struct _inter_data
 
   const char *format_pin_user_bank;
   const char *format_pin_min_char;
+
+  /* PinKeypad dialog, if used */
+  GtkWidget *pin_keypad_dialog;
   
   /* Flags to keep track on whether an HBCI action is running or
      not. */
@@ -74,6 +77,8 @@ struct _inter_data
   /* The cached PIN and the HBCI_User it's cached for. */
   char *pw;
   const HBCI_User *user;
+  /* Whether this PIN is really valid or not. */
+  gboolean cache_valid;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);

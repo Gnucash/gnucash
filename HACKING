@@ -73,4 +73,15 @@ Starting GnuCash in GDB -- Oct 2002
 
 % gnucash-env gdb /path/to/guile
 [gdb output]
-% gdb> run -e main -s /path/to/devel-gnucash/libexec/overrides/gnucash --g-fatal-warnings
+% gdb> run -e main -s /path/to/devel-gnucash/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+
+--------------------------------------------------
+
+Running GnuCash under valgrind
+
+% gnucash-env valgrind /usr/bin/guile -e main -s /path/to/devel-gnucash/libexec/overrides/gnucash  # --g-fatal-warnings
+
+------------------------------------------------------------
+/opt/gnucash-unstable/libexec/gnucash/overrides/gnucash-env valgrind --gen-suppressions=yes --suppressions=lib/gnucash_valgrind.supp --leak-check=yes /usr/bin/guile -e main -s /opt/gnucash-unstable/libexec/gnucash/overrides/gnucash
+
+/opt/gnucash-unstable/libexec/gnucash/overrides/gnucash-env valgrind --gen-suppressions=yes --suppressions=lib/gnucash_valgrind.supp --leak-check=yes --error-limit=no --logfile=valgrind.out /usr/bin/guile -e main -s /opt/gnucash-unstable/libexec/gnucash/overrides/gnucash

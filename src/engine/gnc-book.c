@@ -52,7 +52,7 @@
 #include "engine-helpers.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "DateUtils.h"
+#include "date.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
@@ -142,6 +142,8 @@ gnc_book_destroy (GNCBook *book)
   xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
+
+  kvp_frame_delete (book->kvp_data);
 
   /* FIXME: Make sure the data_table is empty */
   g_hash_table_destroy (book->data_tables);

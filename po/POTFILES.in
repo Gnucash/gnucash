@@ -172,7 +172,6 @@ src/core-utils/core-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/Backend.c
-src/engine/DateUtils.c
 src/engine/FreqSpec.c
 src/engine/GNCId.c
 src/engine/Group.c
@@ -297,7 +296,6 @@ src/gnome-search/search-date.c
 src/gnome-search/search-double.c
 src/gnome-search/search-int64.c
 src/gnome-search/search-numeric.c
-src/gnome-search/search-param.c
 src/gnome-search/search-string.c
 src/gnome-search/search.glade
 src/gnome-search/search-reconciled.c
@@ -335,6 +333,7 @@ src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/dialog-account-pick.c
 src/gnome-utils/exchange-dialog.glade
 src/gnome-utils/dialog-transfer.c
+src/gnome-utils/search-param.c
 src/gnome-utils/QuickFill.c
 src/import-export/binary-import/test/test-link-module.c
 src/import-export/binary-import/binary-import.glade
@@ -345,7 +344,6 @@ src/import-export/gncmod-generic-import.c
 src/import-export/hbci/glade/hbci.glade
 src/import-export/hbci/glade/hbcipass.glade
 src/import-export/hbci/dialog-pass.c
-src/import-export/hbci/druid-hbci-final.c
 src/import-export/hbci/druid-hbci-initial.c
 src/import-export/hbci/druid-hbci-utils.c
 src/import-export/hbci/gnc-hbci-kvp.c
@@ -376,7 +374,6 @@ src/import-export/import-account-matcher.c
 src/import-export/import-backend.c
 src/import-export/import-commodity-matcher.c
 src/import-export/import-main-matcher.c
-src/import-export/gnc-gen-transaction.c
 src/import-export/import-match-map.c
 src/import-export/import-match-picker.c
 src/import-export/import-settings.c
