@@ -909,6 +909,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 	taxes = gncAccountValueAdd (taxes, acc, tax);
 	break;
       default:
+       break;
       }
     }
     *tax_value = taxes;

@@ -59,7 +59,9 @@ enum {
 
 static GHashTable *typeTable = NULL;
 
+#if LAST_SIGNAL > 0
 static guint signals[LAST_SIGNAL] = { 0 };
+#endif
 
 guint
 gnc_search_core_type_get_type (void)
@@ -99,8 +101,9 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *class)
   class->editable_enters = editable_enters;
 
   /* signals */
-
+#if LAST_SIGNAL > 0
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+#endif
 }
 
 static void

@@ -107,6 +107,7 @@ static void gncJobFree (GncJob *job)
     gncVendorRemoveJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
+    break;
   }
 
   remObj (job);
@@ -182,6 +183,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
     gncVendorRemoveJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
+    break;
   }
 
   gncOwnerCopy (owner, &(job->owner));
@@ -194,6 +196,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
     gncVendorAddJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
+    break;
   }
 
   mark_job (job);

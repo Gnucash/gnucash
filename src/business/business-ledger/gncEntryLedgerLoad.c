@@ -201,6 +201,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  taxincluded_p = gncVendorGetTaxIncluded (owner->owner.vendor);
 	  break;
 	default:
+	  break;
 	}
 
 	/* Compute the default taxincluded */
@@ -233,6 +234,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	    table = gncVendorGetTaxTable (owner->owner.vendor);
 	  break;
 	default:
+	  break;
 	}
 
 	if (ledger->is_invoice) {

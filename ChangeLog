@@ -33,6 +33,8 @@
 
 2002-11-17  David Hampton  <hampton@employees.org>
 
+	* various: Clean up compilation warnings.
+	
 	* src/gnome/window-reconcile.c: Fix a couple of functions that
 	were illegally casting pointers to the wrong type.  Use the new
 	gnc_split_reg_xxx functions instead of the old gnc_register_xxx

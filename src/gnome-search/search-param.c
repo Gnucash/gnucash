@@ -34,7 +34,9 @@ enum {
   LAST_SIGNAL
 };
 
+#if LAST_SIGNAL > 0
 static guint signals[LAST_SIGNAL] = { 0 };
+#endif
 
 guint
 gnc_search_param_get_type (void)
@@ -71,8 +73,9 @@ gnc_search_param_class_init (GNCSearchParamClass *class)
   /* override methods */
 
   /* signals */
-
+#if LAST_SIGNAL > 0
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+#endif
 }
 
 static void

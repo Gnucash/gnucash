@@ -1787,9 +1787,7 @@ void
 gnc_option_db_reset_widgets (GNCOptionDB *odb)
 {
   GSList *section_node;
-  GSList *option_node;
   GNCOptionSection *section;
-  GNCOption *option;
 
   g_return_if_fail (odb);
 

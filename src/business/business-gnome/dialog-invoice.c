@@ -1573,6 +1573,7 @@ gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
     objtype = _("Bill");
     break;
   default:
+    break;
   }  
 
   title = g_strconcat (wintype, " ", objtype, " - ", id, NULL);

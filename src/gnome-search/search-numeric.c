@@ -55,7 +55,9 @@ enum {
   LAST_SIGNAL
 };
 
+#if LAST_SIGNAL > 0
 static guint signals[LAST_SIGNAL] = { 0 };
+#endif
 
 guint
 gnc_search_numeric_get_type (void)
@@ -99,8 +101,9 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   gnc_search_core_type->clone = gncs_clone;
 
   /* signals */
-
+#if LAST_SIGNAL > 0
   gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
+#endif
 }
 
 static void
