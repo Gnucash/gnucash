@@ -294,7 +294,14 @@ operation is probably OK.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
 
+-- get notify timestamp from trail. (to avoid clock skew)
+
 -- NOTIFY is not updating main window balances ...
+
+-- notify does not update main window or account info after an 
+   edit.
+
+-- transaction deletion not handled by notify
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details

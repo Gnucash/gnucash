@@ -2,7 +2,7 @@
 # Build the postgres backend as its own loadable shared object.
 
 lib_LTLIBRARIES = libgnc_postgres.la
-libgnc_postgres_la_LDFLAGS = -version-info 6:3:6
+libgnc_postgres_la_LDFLAGS = -version-info 7:0:7
 
 
 libgnc_postgres_la_SOURCES = \
@@ -10,6 +10,7 @@ libgnc_postgres_la_SOURCES = \
   builder.c \
   checkpoint.c \
   escape.c \
+  events.c \
   gncquery.c \
   kvp-sql.c
 
@@ -18,6 +19,7 @@ noinst_HEADERS = \
   builder.h \
   checkpoint.h \
   escape.h \
+  events.h \
   gncquery.h \
   kvp-sql.h \
   putil.h
