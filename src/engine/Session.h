@@ -106,6 +106,15 @@ void       xaccSessionDestroy (Session *);
  *    save the account group to a file.  Thus, this method acts as an "abort" or
  *    "rollback" primitive.
  *
+ * The xaccResolveFilePath() routine is a utility that will accept a
+ *    fragmentary filename as input, and resolve it into a fully-qualified path
+ *    in the file system, i.e. a path that begins with a leading slash.
+ *    First, the current working directory is searched for the file.
+ *    Next, the directory $HOME/.gnucash/data, and finally, a list of other
+ *    (configurable) paths.  If the file is not found, then the path 
+ *    $HOME/.gnucash/data is used.  If $HOME is not defined, then the current
+ *    working directory is used.
+ *
  * EXAMPLE USAGE:
  * To read, modify and save an existing file:
  * ------------------------------------------
@@ -150,6 +159,7 @@ char         * xaccSessionGetFilePath (Session *);
 void           xaccSessionSave (Session *);
 void           xaccSessionEnd  (Session *);
 
+char         * xaccResolveFilePath (const char * filefrag);
 
 #endif /* __XACC_SESSION_H__ */
 /* ==================== END OF FILE ================== */

@@ -130,14 +130,6 @@ xaccSessionGetFilePath (Session *sess)
 
 /* ============================================================== */
 
-/* hack alert -- we should be yanking this out of 
- * some config file 
- */
-static char * searchpaths[] = {
-   "/usr/share/gnucash/data",
-   NULL,
-};
-
 AccountGroup *
 xaccSessionBegin (Session *sess, char * sid)
 {
@@ -178,8 +170,7 @@ xaccSessionBeginFile (Session *sess, char * filefrag)
    struct stat statbuf;
    char pathbuf[PATH_MAX];
    char *path = NULL;
-   int namelen, len;
-   int i, rc;
+   int rc;
 
    if (!sess) return NULL;
 
@@ -201,105 +192,21 @@ xaccSessionBeginFile (Session *sess, char * filefrag)
    /* ---------------------------------------------------- */
    /* OK, now we try to find or build an absolute file path */
 
-   /* check for an absolute file path */
-   if ('/' == *filefrag) {
-      sess->fullpath = strdup (filefrag);
-   } else {
-
-      /* get conservative on the length so that sprintf(getpid()) works ... */
-      /* strlen ("/.LCK") + sprintf (%x%d) */
-      namelen = strlen (filefrag) + 25; 
-
-      for (i=-2; 1 ; i++) 
-      {
-         switch (i) {
-            case -2: {
-               /* try to find a file by this name in the cwd ... */
-               path = getcwd (pathbuf, PATH_MAX);
-               if (!path) continue;
-               len = strlen (path) + namelen;
-               if (PATH_MAX <= len) continue;
-               strcat (path, "/");
-               break;
-            }
-            case -1: {
-               /* look for something in $HOME/.gnucash/data */
-               path = getenv ("HOME");
-               if (!path) continue;
-               len = strlen (path) + namelen + 20;
-               if (PATH_MAX <= len) continue;
-               strcpy (pathbuf, path);
-               strcat (pathbuf, "/.gnucash/data/");
-               path = pathbuf;
-               break;
-            }
-            default: {
-               /* OK, check the user-configured paths */
-               path = searchpaths[i];
-               len = strlen (path) + namelen;
-               if (PATH_MAX <= len) continue;
-               strcpy (pathbuf, path);
-               path = pathbuf;
-            }
-         }
-
-         if (!path) break;
-
-         /* lets see if we found the file here ... */
-         strcat (path, filefrag);
-         rc = stat (path, &statbuf);
-         if (!rc) {
-            sess->fullpath = strdup (path);
-            break;
-         }
-      }
-
-      /* OK, we didn't find the file */
-      /* Lets try creating a new file in $HOME/.gnucash/data */
-      if (!(sess->fullpath)) 
-      {
-         path = getenv ("HOME");
-         if (path) {
-            len = strlen (path) + namelen + 50;
-            if (PATH_MAX > len) {
-               strcpy (pathbuf, path);
-               strcat (pathbuf, "/.gnucash/data/");
-               strcat (pathbuf, filefrag);
-               sess->fullpath = strdup (pathbuf);
-            }
-         } 
-      }
-
-      /* OK, we still didn't find the file */
-      /* Lets try creating a new file in the cwd */
-      if (!(sess->fullpath)) 
-      {
-         /* create a new file in the cwd */
-         path = getcwd (pathbuf, PATH_MAX);
-         if (!path) {
-            sess->errtype = ERANGE;  
-            return NULL;    /* ouch */
-         }
-         len = strlen (path) + namelen;
-         if (PATH_MAX <= len) {
-            sess->errtype = ERANGE;  
-            return NULL;    /* ouch */
-         }
-         strcat (path, "/");
-         strcat (path, filefrag);
-         sess->fullpath = strdup (path);
-      }
+   sess->fullpath = xaccResolveFilePath (filefrag);
+   if (! (sess->fullpath)) {
+      sess->errtype = ERANGE;  
+      return NULL;    /* ouch */
    }
-   assert (sess->fullpath);  /* no one fucked with the code, yeah? */
-      
+
    /* Store the sessionid URL also ... */
    strcpy (pathbuf, "file:");
    strcat (pathbuf, filefrag);
    sess->sessionid = strdup (pathbuf);
 
    /* ---------------------------------------------------- */
-   /* Yow! OK, after all of that, we've finnaly got a fully 
-    * resolved path name.  Lets see if we can get a lock on it */
+   /* We should now have a fully resolved path name.
+    * Lets see if we can get a lock on it. 
+    */
 
    sess->lockfile = malloc (strlen (sess->fullpath) + 5);
    strcpy (sess->lockfile, sess->fullpath);
@@ -422,6 +329,111 @@ xaccSessionDestroy (Session *sess)
    if (!sess) return;
    xaccSessionEnd (sess);
    free (sess);
+}
+
+/* ============================================================== */
+
+/* hack alert -- we should be yanking this out of 
+ * some config file 
+ */
+static char * searchpaths[] = {
+   "/usr/share/gnucash/data",
+   NULL,
+};
+
+char * 
+xaccResolveFilePath (const char * filefrag)
+{
+   struct stat statbuf;
+   char pathbuf[PATH_MAX];
+   char *path = NULL;
+   int namelen, len;
+   int i, rc;
+
+   /* seriously invalid */
+   if (!filefrag) return NULL;
+
+   /* ---------------------------------------------------- */
+   /* OK, now we try to find or build an absolute file path */
+
+   /* check for an absolute file path */
+   if ('/' == *filefrag) {
+      return (strdup (filefrag));
+   } 
+
+   /* get conservative on the length so that sprintf(getpid()) works ... */
+   /* strlen ("/.LCK") + sprintf (%x%d) */
+   namelen = strlen (filefrag) + 25; 
+
+   for (i=-2; 1 ; i++) 
+   {
+      switch (i) {
+         case -2: {
+            /* try to find a file by this name in the cwd ... */
+            path = getcwd (pathbuf, PATH_MAX);
+            if (!path) continue;
+            len = strlen (path) + namelen;
+            if (PATH_MAX <= len) continue;
+            strcat (path, "/");
+            break;
+         }
+         case -1: {
+            /* look for something in $HOME/.gnucash/data */
+            path = getenv ("HOME");
+            if (!path) continue;
+            len = strlen (path) + namelen + 20;
+            if (PATH_MAX <= len) continue;
+            strcpy (pathbuf, path);
+            strcat (pathbuf, "/.gnucash/data/");
+            path = pathbuf;
+            break;
+         }
+         default: {
+            /* OK, check the user-configured paths */
+            path = searchpaths[i];
+            len = strlen (path) + namelen;
+            if (PATH_MAX <= len) continue;
+            strcpy (pathbuf, path);
+            path = pathbuf;
+         }
+      }
+
+      if (!path) break;
+
+      /* lets see if we found the file here ... */
+      strcat (path, filefrag);
+      rc = stat (path, &statbuf);
+      if (!rc) {
+         return (strdup (path));
+      }
+   }
+
+   /* OK, we didn't find the file */
+   /* Lets try creating a new file in $HOME/.gnucash/data */
+   path = getenv ("HOME");
+   if (path) {
+      len = strlen (path) + namelen + 50;
+      if (PATH_MAX > len) {
+         strcpy (pathbuf, path);
+         strcat (pathbuf, "/.gnucash/data/");
+         strcat (pathbuf, filefrag);
+         return (strdup (pathbuf));
+      }
+   } 
+
+   /* OK, we still didn't find the file */
+   /* Lets try creating a new file in the cwd */
+   path = getcwd (pathbuf, PATH_MAX);
+   if (path) {
+      len = strlen (path) + namelen;
+      if (PATH_MAX > len) {
+         strcat (path, "/");
+         strcat (path, filefrag);
+         return (strdup (path));
+      }
+   }
+
+   return NULL;
 }
 
 /* ==================== END OF FILE ================== */
