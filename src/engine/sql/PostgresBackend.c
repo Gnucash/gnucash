@@ -237,13 +237,6 @@ static const char *table_drop_str =
 /*      (UTILITIES FIRST, THEN SETTERS, THEN GETTERS)            */
 /* ============================================================= */
 /* ============================================================= */
-/* The pgendAccountCompareVersion() routine compares the version 
- * number of the account in the engine and the sql database. It 
- * returns a negative number if the sql version is older (or the 
- * acount is not present in the sql db). It returns a positive 
- * number if the sql version is newer.  It returns zero if the 
- * two are equal.
- */
 
 /* ============================================================= */
 /* the pgendStoreAccount() routine stores an account to the 
@@ -383,6 +376,50 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 
 /* ============================================================= */
 /*        ACCOUNT GETTERS (SETTERS ARE ABOVE)                    */
+/* ============================================================= */
+
+/* ============================================================= */
+/* This hack is a work-around for obtaining the account currency.
+ * The sql backend doens't actually store one, so we work around 
+ * it here. This routine goes away when the rest of gnucash stops 
+ * using account currencies. 
+ */
+
+static gpointer
+get_hack_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   Account *acc = (Account *) data;
+   xaccAccountSetCurrency (acc, 
+                 gnc_string_to_commodity (DB_GET_VAL("currency",j)));
+   return data;
+}
+
+static void 
+pgendGetAccountCurrencyHack (PGBackend *be, Account *acc)
+{
+   char *p;
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT gncTransaction.currency FROM "
+                  "    gncAccount, gncEntry, gncTransaction WHERE "
+                  "    gncEntry.accountGuid = '");
+   p = guid_to_string_buff (xaccAccountGetGUID (acc), p);
+   p = stpcpy (p, "'  AND "
+                  "    gncEntry.transGuid = gncTransaction.transGuid AND "
+                  "    gncTransaction.currency <> gncAccount.commodity "
+                  "    LIMIT 1;");
+   SEND_QUERY (be, be->buff, );
+   pgendGetResults (be, get_hack_cb, acc);
+}
+  
+static gpointer 
+get_account_currency_hack_cb (Account *acc, gpointer data)
+{
+   PGBackend *be = (PGBackend *) data;
+   pgendGetAccountCurrencyHack (be, acc);
+   return NULL;
+}
+
 /* ============================================================= */
 /* This routine walks the account group, gets all KVP values */
 
@@ -546,6 +583,10 @@ pgendGetAllAccounts (PGBackend *be, AccountGroup *topgrp)
    bufp = "SELECT * FROM gncAccount;";
    SEND_QUERY (be, bufp, NULL);
    pgendGetResults (be, get_account_cb, topgrp);
+
+   /* hack alert -- get account currencies */
+   xaccGroupForEachAccount (topgrp,
+       get_account_currency_hack_cb, be, TRUE);
 
    pgendGetAllAccountKVP (be, topgrp);
 
