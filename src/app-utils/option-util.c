@@ -645,7 +645,7 @@ gnc_option_type(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_symbol_to_string(getters.type,
-					  option->guile_option);
+                                          option->guile_option);
 }
 
 
@@ -680,7 +680,7 @@ gnc_option_documentation(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_to_string(getters.documentation,
-				   option->guile_option);
+                                   option->guile_option);
 }
 
 
@@ -698,7 +698,7 @@ gnc_option_getter(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_to_procedure(getters.getter,
-				      option->guile_option);
+                                      option->guile_option);
 }
 
 
@@ -716,7 +716,7 @@ gnc_option_setter(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_to_procedure(getters.setter,
-				      option->guile_option);
+                                      option->guile_option);
 }
 
 
@@ -734,7 +734,7 @@ gnc_option_default_getter(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_to_procedure(getters.default_getter,
-				      option->guile_option);
+                                      option->guile_option);
 }
 
 
@@ -752,7 +752,7 @@ gnc_option_value_validator(GNCOption *option)
   initialize_getters();
 
   return gnc_guile_call1_to_procedure(getters.value_validator,
-				      option->guile_option);
+                                      option->guile_option);
 }
 
 
@@ -896,7 +896,7 @@ gnc_option_permissible_value(GNCOption *option, int index)
   initialize_getters();
 
   value = scm_call_2(getters.index_to_value, option->guile_option,
-		     scm_int2num(index));
+                     scm_int2num(index));
 
   return value;
 }
@@ -923,7 +923,7 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
   initialize_getters();
 
   name = scm_call_2(getters.index_to_name, option->guile_option,
-		    scm_int2num(index));
+                    scm_int2num(index));
   if (name == SCM_UNDEFINED)
     return NULL;
   
@@ -952,7 +952,7 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
   initialize_getters();
 
   help = scm_call_2(getters.index_to_description, option->guile_option,
-		    scm_int2num(index));
+                    scm_int2num(index));
   if (help == SCM_UNDEFINED)
     return NULL;
 
@@ -1477,7 +1477,7 @@ gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
     if (old != NULL)
     {
       if (section->section_name != NULL)
-	free(section->section_name);
+        free(section->section_name);
       g_free(section);
       section = old->data;
     }
@@ -1487,7 +1487,7 @@ gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
   }
 
   section->options = g_slist_insert_sorted(section->options, option,
-					   compare_option_tags);
+                                           compare_option_tags);
 }
 
 
@@ -1591,7 +1591,7 @@ gnc_option_db_get_option_by_name(GNCOptionDB *odb, const char *section_name,
   section_key.section_name = (char *) section_name;
 
   section_node = g_slist_find_custom(odb->option_sections, &section_key,
-				     compare_sections);
+                                     compare_sections);
 
   if (section_node == NULL)
     return NULL;
@@ -1733,7 +1733,7 @@ gnc_commit_option(GNCOption *option)
     section = gnc_option_section(option);
 
     gnc_send_gui_error(_("There is a problem with option %s:%s.\n%s"),
-			   section ? section : "(null)",
+                           section ? section : "(null)",
                            name ? name : "(null)",
                            message ? message : "(null)");
 
@@ -1771,12 +1771,12 @@ gnc_option_db_get_changed(GNCOptionDB *odb)
     section = section_node->data;
 
     for (option_node = section->options; option_node;
-	 option_node = option_node->next) {
+         option_node = option_node->next) {
 
       option = option_node->data;
 
       if (option->changed)
-	return TRUE;
+        return TRUE;
     }
   }
   return FALSE;
@@ -1814,9 +1814,9 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
       if (option->changed)
       {
-	gnc_commit_option(option_node->data);
-	changed_something = TRUE;
-	option->changed = FALSE;
+        gnc_commit_option(option_node->data);
+        changed_something = TRUE;
+        option->changed = FALSE;
       }
 
       option_node = option_node->next;
@@ -2021,7 +2021,7 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_STRINGP(value))
-	return gh_scm2newstr(value, NULL);
+        return gh_scm2newstr(value, NULL);
     }
   }
 
@@ -2086,7 +2086,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_SYMBOLP(value))
-	return gh_symbol2newstr(value, NULL);
+        return gh_symbol2newstr(value, NULL);
     }
   }
 
@@ -2124,9 +2124,9 @@ time_t
 gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                  const char *section,
                                  const char *name,
-				 gboolean *is_relative,
+                                 gboolean *is_relative,
                                  Timespec *set_ab_value,
-				 char **set_rel_value, 
+                                 char **set_rel_value, 
                                  Timespec *default_value)
 {
   GNCOption *option;
@@ -2230,7 +2230,7 @@ gnc_option_db_lookup_number_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_NUMBERP(value))
-	return scm_num2dbl(value, __FUNCTION__);
+        return scm_num2dbl(value, __FUNCTION__);
     }
   }
 
@@ -2513,9 +2513,9 @@ gnc_option_db_set_number_option(GNCOptionDB *odb,
 \********************************************************************/
 gboolean
 gnc_option_db_set_boolean_option(GNCOptionDB *odb,
-				 const char *section,
-				 const char *name,
-				 gboolean value)
+                                 const char *section,
+                                 const char *name,
+                                 gboolean value)
 {
   GNCOption *option;
   SCM scm_value;
@@ -2553,9 +2553,9 @@ gnc_option_db_set_boolean_option(GNCOptionDB *odb,
 \********************************************************************/
 gboolean
 gnc_option_db_set_string_option(GNCOptionDB *odb,
-				const char *section,
-				const char *name,
-				const char *value)
+                                const char *section,
+                                const char *name,
+                                const char *value)
 {
   GNCOption *option;
   SCM scm_value;
@@ -2695,8 +2695,8 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
  */
 
 gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
-					   GNCDateMonthFormat *months,
-					   gboolean *years, char **custom)
+                                           GNCDateMonthFormat *months,
+                                           gboolean *years, char **custom)
 {
   SCM val;
   char *str;
@@ -2717,8 +2717,8 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
 
     if (format) {
       if (gnc_date_string_to_dateformat(str, format)) {
-	free(str);
-	break;
+        free(str);
+        break;
       }
     }
 
@@ -2733,8 +2733,8 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
 
     if (months) {
       if (gnc_date_string_to_monthformat(str, months)) {
-	free(str);
-	break;
+        free(str);
+        break;
       }
     }
 
@@ -2766,7 +2766,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
 }
 
 SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
-				    gboolean years, const char *custom)
+                                    gboolean years, const char *custom)
 {
   SCM value = SCM_EOL;
   SCM val;
