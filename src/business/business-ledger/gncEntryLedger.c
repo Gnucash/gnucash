@@ -789,7 +789,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
 
     result = gnc_ok_cancel_dialog (ledger->parent, GTK_RESPONSE_OK, message);
 
-    if (result == GTK_RESPONSE_CANCEL) {
+    if (result != GTK_RESPONSE_OK) {
       gnc_resume_gui_refresh ();
       return;
     }

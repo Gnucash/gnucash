@@ -1720,7 +1720,7 @@ void gnc_hbci_initial_druid (void)
     info->serverpage = page;
     info->server_vbox = glade_xml_get_widget(xml, "iniletter_server_vbox");
     info->server_frame = glade_xml_get_widget(xml, "iniletter_server_frame");
-    info->server_html = gnc_html_new();
+    info->server_html = gnc_html_new(info->window);
     gtk_container_add (GTK_CONTAINER (info->server_frame), 
 		       gnc_html_get_widget (info->server_html));
 
@@ -1751,7 +1751,7 @@ void gnc_hbci_initial_druid (void)
     page = glade_xml_get_widget(xml, "iniletter_user_page");
     info->user_vbox = glade_xml_get_widget(xml, "iniletter_user_vbox");
     info->user_frame = glade_xml_get_widget(xml, "iniletter_user_frame");
-    info->user_html = gnc_html_new();
+    info->user_html = gnc_html_new(info->window);
     gtk_container_add (GTK_CONTAINER (info->user_frame), 
 		       gnc_html_get_widget (info->user_html));
 

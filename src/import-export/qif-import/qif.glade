@@ -25,29 +25,29 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="hbuttonbox1">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button1">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="button2">
+	    <widget class="GtkButton" id="cancelbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-6</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="okbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-5</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -189,9 +189,9 @@ to abort the process. </property>
 	<widget class="GnomeDruidPageStandard" id="load_file_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Select a QIF file to load</property>
-	  <property name="title_foreground">#34600830ceb8</property>
-	  <property name="background">#0448082ce9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#5b50082ddd38</property>
+	  <property name="background">#6800082de9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_load_file_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_load_file_back_cb"/>
 
@@ -308,9 +308,9 @@ worry if your data is in multiple files.
 	<widget class="GnomeDruidPageStandard" id="date_format_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Set a date format for this QIF file</property>
-	  <property name="title_foreground">#92e80845ceb8</property>
-	  <property name="background">#98200845e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#a2d8082ddd38</property>
+	  <property name="background">#b2d8082de9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_date_format_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
@@ -440,9 +440,9 @@ US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.
 	<widget class="GnomeDruidPageStandard" id="account_name_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Set the default QIF account name</property>
-	  <property name="title_foreground">#1ad80848ceb8</property>
-	  <property name="background">#9c600832e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#1170082edd38</property>
+	  <property name="background">#2398082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_default_acct_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
@@ -563,9 +563,9 @@ in that program.
 	<widget class="GnomeDruidPageStandard" id="loaded_files_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">QIF files you have loaded</property>
-	  <property name="title_foreground">#33600849ceb8</property>
-	  <property name="background">#15800836e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#3f68082edd38</property>
+	  <property name="background">#4a50082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -710,9 +710,9 @@ of the QIF import process. </property>
 	<widget class="GnomeDruidPageStandard" id="account_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Accounts and stock holdings</property>
-	  <property name="title_foreground">#1db00849ceb8</property>
-	  <property name="background">#4168083be9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#a410082edd38</property>
+	  <property name="background">#a9a8082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -765,9 +765,9 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<widget class="GnomeDruidPageStandard" id="account_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
-	  <property name="title_foreground">#ae680840ceb8</property>
-	  <property name="background">#0200084de9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#b648082edd38</property>
+	  <property name="background">#e3a8082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_accounts_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -835,9 +835,9 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<widget class="GnomeDruidPageStandard" id="category_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Income and Expense categories</property>
-	  <property name="title_foreground">#df280839ceb8</property>
-	  <property name="background">#52880841e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#20e8082fdd38</property>
+	  <property name="background">#33a8082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -886,9 +886,9 @@ within GnuCash.</property>
 	<widget class="GnomeDruidPageStandard" id="category_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
-	  <property name="title_foreground">#25e00830ceb8</property>
-	  <property name="background">#75200841e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#47f0082fdd38</property>
+	  <property name="background">#5938082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_categories_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -956,9 +956,9 @@ within GnuCash.</property>
 	<widget class="GnomeDruidPageStandard" id="memo_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Payees and memos</property>
-	  <property name="title_foreground">#88b0082eceb8</property>
-	  <property name="background">#08d8084de9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#8b78082fdd38</property>
+	  <property name="background">#9d38082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1006,9 +1006,9 @@ files. </property>
 	<widget class="GnomeDruidPageStandard" id="memo_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
-	  <property name="title_foreground">#7fb00841ceb8</property>
-	  <property name="background">#2b080835e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#9ff8082fdd38</property>
+	  <property name="background">#bd98082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_memo_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
@@ -1055,9 +1055,9 @@ files. </property>
 	<widget class="GnomeDruidPageStandard" id="currency_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter the currency used for new accounts</property>
-	  <property name="title_foreground">#ddf80832ceb8</property>
-	  <property name="background">#57d8083de9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#eee8082fdd38</property>
+	  <property name="background">#f7f8082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1184,9 +1184,9 @@ mutual funds in the imported data.</property>
 	<widget class="GnomeDruidPageStandard" id="commodity_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Tradable commodities</property>
-	  <property name="title_foreground">#5088083dceb8</property>
-	  <property name="background">#da700835e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#3fe80830dd38</property>
+	  <property name="background">#47800830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_commodity_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -1239,9 +1239,9 @@ or listing for its type.</property>
 	<widget class="GnomeDruidPageStandard" id="match_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match duplicate transactions</property>
-	  <property name="title_foreground">#c5a0083fceb8</property>
-	  <property name="background">#21d0084ee9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#52180830dd38</property>
+	  <property name="background">#35a80830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1296,9 +1296,9 @@ Click &quot;Next&quot; to find duplicate transactions. </property>
 	<widget class="GnomeDruidPageStandard" id="match_duplicates_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Select possible duplicates</property>
-	  <property name="title_foreground">#f4380830ceb8</property>
-	  <property name="background">#37280838e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#76180830dd38</property>
+	  <property name="background">#a8400830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 

@@ -13,6 +13,7 @@
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
+  <signal name="destroy" handler="gnc_job_window_destroy_cb" last_modification_time="Sat, 19 Jul 2003 23:00:18 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox2">
@@ -26,38 +27,41 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button8">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="button9">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="button10">
+	    <widget class="GtkButton" id="helpbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-11</property>
+	      <signal name="clicked" handler="gnc_job_window_help_cb" last_modification_time="Sat, 19 Jul 2003 22:59:31 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="cancelbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-6</property>
+	      <signal name="clicked" handler="gnc_job_window_cancel_cb" last_modification_time="Sat, 19 Jul 2003 22:59:19 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="okbutton">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-5</property>
+	      <signal name="clicked" handler="gnc_job_window_ok_cb" last_modification_time="Sat, 19 Jul 2003 22:59:09 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -164,7 +168,8 @@
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char" translatable="yes">*</property>
-			  <property name="activates_default">False</property>
+			  <property name="activates_default">True</property>
+			  <signal name="changed" handler="gnc_job_name_changed_cb" last_modification_time="Sat, 19 Jul 2003 22:58:48 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -177,13 +182,15 @@
 			<widget class="GtkEntry" id="name_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
+			  <property name="has_focus">True</property>
 			  <property name="editable">True</property>
 			  <property name="visibility">True</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char" translatable="yes">*</property>
-			  <property name="activates_default">False</property>
+			  <property name="activates_default">True</property>
+			  <signal name="changed" handler="gnc_job_name_changed_cb" last_modification_time="Sat, 19 Jul 2003 22:58:36 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>

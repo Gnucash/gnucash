@@ -427,10 +427,6 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term)
 
   /* Make 'enter' do the right thing */
   gnome_dialog_set_default (GNOME_DIALOG (nbt->dialog), 0);
-  gnome_dialog_editable_enters (GNOME_DIALOG (nbt->dialog),
-				GTK_EDITABLE (nbt->name_entry));
-  gnome_dialog_editable_enters (GNOME_DIALOG (nbt->dialog),
-				GTK_EDITABLE (nbt->desc_entry));
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (nbt->dialog), 0,
@@ -713,9 +709,6 @@ gnc_ui_billterms_window_new (GNCBook *book)
   btw->desc_entry = glade_xml_get_widget (xml, "desc_entry");
   btw->type_label = glade_xml_get_widget (xml, "type_label");
   btw->term_vbox = glade_xml_get_widget (xml, "term_vbox");
-
-  gnome_dialog_editable_enters (GNOME_DIALOG (btw->dialog),
-				GTK_EDITABLE (btw->desc_entry));
 
   /* Initialize the notebook widgets */
   init_notebook_widgets (&btw->notebook, TRUE,

@@ -113,7 +113,7 @@ gnc_search_param_finalize (GObject *obj)
 GNCSearchParam *
 gnc_search_param_new (void)
 {
-  GNCSearchParam *o = (GNCSearchParam *)gtk_type_new(gnc_search_param_get_type ());
+  GNCSearchParam *o = (GNCSearchParam *)g_object_new(gnc_search_param_get_type (), NULL);
   return o;
 }
 

@@ -31,7 +31,7 @@
 
 #define d(x)
 
-static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
@@ -92,13 +92,6 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-#if 0
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
-#endif
 }
 
 static void
@@ -306,16 +299,15 @@ grab_focus (GNCSearchCoreType *fe)
 }
 
 static void
-editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
-  g_return_if_fail (dialog);
 
   if (fi->priv->entry)
-    gnome_dialog_editable_enters (dialog, GTK_EDITABLE (fi->priv->entry));
+    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
 }
 
 static GtkWidget *

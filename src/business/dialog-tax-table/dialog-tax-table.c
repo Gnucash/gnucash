@@ -248,19 +248,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(ntt->acct_tree));
 
   /* Make 'enter' do the right thing */
-  gnome_dialog_set_default (GNOME_DIALOG (ntt->dialog), 0);
-  gnome_dialog_editable_enters (GNOME_DIALOG (ntt->dialog),
-				GTK_EDITABLE (ntt->name_entry));
-  gnome_dialog_editable_enters (GNOME_DIALOG (ntt->dialog),
-				GTK_EDITABLE (gnc_amount_edit_gtk_entry
-					      (GNC_AMOUNT_EDIT (ntt->amount_entry))));
-
-  /* Connect the dialog buttons */
-  gnome_dialog_button_connect (GNOME_DIALOG (ntt->dialog), 0,
-			       G_CALLBACK (new_tax_table_ok_cb), ntt);
-
-  gnome_dialog_button_connect (GNOME_DIALOG (ntt->dialog), 1,
-			       G_CALLBACK (new_tax_table_cancel_cb), ntt);
+  gtk_entry_set_activates_default(GTK_ENTRY (gnc_amount_edit_gtk_entry
+					     (GNC_AMOUNT_EDIT (ntt->amount_entry))),
+				  TRUE);
 
   /* Fill in the widgets appropriately */
   if (entry) {
@@ -273,10 +263,11 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   /* Set our modality */
   gnome_dialog_set_parent (GNOME_DIALOG (ntt->dialog),
 			   GTK_WINDOW (ttw->dialog));
-  gtk_window_set_modal (GTK_WINDOW (ntt->dialog), TRUE);
 
-  g_signal_connect (G_OBJECT (ntt->dialog), "destroy",
-		    G_CALLBACK (new_tax_table_dialog_destroy_cb), ntt);
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ntt);
 
   /* Show what we should */
   gtk_widget_show_all (ntt->dialog);

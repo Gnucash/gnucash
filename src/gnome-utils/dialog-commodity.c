@@ -100,9 +100,8 @@ void gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
 
 /* The commodity creation window */
 void gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data);
-void gnc_ui_commodity_ok_cb(GtkButton * button, gpointer user_data);
-void gnc_ui_commodity_help_cb(GtkButton * button, gpointer user_data);
 void gnc_ui_commodity_quote_info_cb(GtkWidget *w, gpointer data);
+gboolean gnc_ui_commodity_dialog_to_object(CommodityWindow * w);
 
 #define GNC_RESPONSE_NEW 0
 static void gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer data);
@@ -176,6 +175,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
       break;
      case GNC_RESPONSE_NEW:
       DEBUG("case NEW");
+      gnc_ui_select_commodity_new_cb(NULL, win);
       break;
      default:	/* Cancel, Escape, Close, etc. */
       DEBUG("default: %d", value);
@@ -343,7 +343,7 @@ gnc_ui_select_commodity_changed_cb(GtkEditable * entry,
 
   ok = (w->selection != NULL);
   gtk_widget_set_sensitive(w->ok_button, ok);
-  gnome_dialog_set_default(GNOME_DIALOG(w->dialog), ok ? 0 : 2);
+  gtk_dialog_set_default_response(GTK_DIALOG(w->dialog), ok ? 0 : 2);
   LEAVE("sensitive=%d, default = %d", ok, ok ? 0 : 2);
 }
 
@@ -468,8 +468,8 @@ gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer
 	(w->callback) (commodity, w->callback_data);
       gnc_ui_select_commodity_destroy (w);
     } else {
-      gnc_warning_dialog (_
-			  ("You must select a commodity.\n"
+      gnc_warning_dialog (dialog,
+			 _("You must select a commodity.\n"
 			   "To create a new one, click \"New\""));
     }
     break;
@@ -639,7 +639,7 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
     ok = TRUE;
   }
   gtk_widget_set_sensitive(w->ok_button, ok);
-  gnome_dialog_set_default(GNOME_DIALOG(w->dialog), ok ? 0 : 1);
+  gtk_dialog_set_default_response(GTK_DIALOG(w->dialog), ok ? 0 : 1);
   LEAVE("sensitive=%d, default = %d", ok, ok ? 0 : 1);
 }
 
@@ -867,17 +867,6 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (retval->fraction_spinbutton),
 			       fraction);
 
-#if 0
-
-  /* Set up so <CR> activates default button */
-  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
-			       GTK_EDITABLE(retval->fullname_entry));
-  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
-			       GTK_EDITABLE(retval->mnemonic_entry));
-  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
-			       GTK_EDITABLE(retval->code_entry));
-#endif
-
   LEAVE(" ");
   return retval;
 }
@@ -967,12 +956,14 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     value = gtk_dialog_run(GTK_DIALOG(win->dialog));
     switch (value) {
      case GTK_RESPONSE_OK:
-      retval = win->edit_commodity;
-      done = TRUE;
       DEBUG("case OK");
+      done = gnc_ui_commodity_dialog_to_object(win);
+      retval = win->edit_commodity;
       break;
      case GTK_RESPONSE_HELP:
       DEBUG("case HELP");
+      if (help_callback)
+	help_callback ();
       break;
      default:	/* Cancel, Escape, Close, etc. */
       DEBUG("default: %d", value);
@@ -1048,14 +1039,12 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
 
 
 /********************************************************************
- * gnc_ui_commodity_ok_cb()
+ * gnc_ui_commodity_dialog_to_object()
  ********************************************************************/
 
-void
-gnc_ui_commodity_ok_cb(GtkButton * button,
-                       gpointer user_data)
+gboolean
+gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 {
-  CommodityWindow * w = user_data;
   gnc_quote_source *source;
   QuoteSourceType type;
   const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
@@ -1078,11 +1067,11 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
       selection = gnc_option_menu_get_active (w->quote_tz_menu);
       string = gnc_timezone_menu_position_to_string(selection);
       gnc_commodity_set_quote_tz(c, string);
-      return;
+      return TRUE;
     }
     gnc_warning_dialog(w->dialog,
 		       _("You may not create a new national currency."));
-    return;
+    return FALSE;
   }
 
   if(fullname && fullname[0] &&
@@ -1094,7 +1083,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     if ((!w->edit_commodity && c) ||
         (w->edit_commodity && c && (c != w->edit_commodity))) {
       gnc_warning_dialog (w->dialog, _("That commodity already exists."));
-      return;
+      return FALSE;
     }
 
     if (!w->edit_commodity) {
@@ -1136,19 +1125,8 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 		       _("You must enter a non-empty \"Full name\", "
 			 "\"Symbol/abbreviation\",\n"
 			 "and \"Type\" for the commodity."));
+    return FALSE;
   }
   LEAVE(" ");
-}
-
-
-/********************************************************************
- * gnc_ui_commodity_help_cb()
- ********************************************************************/
-
-void
-gnc_ui_commodity_help_cb(GtkButton * button,
-                         gpointer user_data)
-{
-  if (help_callback)
-    help_callback ();
+  return TRUE;
 }

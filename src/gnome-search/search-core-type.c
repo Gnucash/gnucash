@@ -41,7 +41,7 @@
 #include "search-account.h"
 
 static void grab_focus (GNCSearchCoreType *fe);
-static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void editable_enters (GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 
 static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
@@ -137,10 +137,9 @@ gnc_search_core_type_new (void)
 }
 
 void
-gnc_search_core_type_editable_enters (GNCSearchCoreType *fe,
-				      GnomeDialog *dialog)
+gnc_search_core_type_editable_enters (GNCSearchCoreType *fe)
 {
-  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->editable_enters (fe, dialog);
+  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->editable_enters (fe);
 }
 
 void
@@ -239,7 +238,7 @@ grab_focus (GNCSearchCoreType *fe)
 }
 
 static void
-editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+editable_enters (GNCSearchCoreType *fe)
 {
   return;
 }

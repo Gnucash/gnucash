@@ -385,7 +385,7 @@ gnc_invoice_window_ok_save (InvoiceWindow *iw)
   return TRUE;
 }
 
-static void
+void
 gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
@@ -406,7 +406,7 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (iw->component_id);
 }
 
-static void
+void
 gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
@@ -414,12 +414,10 @@ gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (iw->component_id);
 }
 
-static void
+void
 gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = HH_INVOICE;
-
-  helpWindow(NULL, NULL, help_file);
+  helpWindow(NULL, NULL, HH_INVOICE);
 }
 
 static void
@@ -2185,22 +2183,10 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   if (iw->dialog_type == NEW_INVOICE)
     gtk_editable_set_editable (GTK_EDITABLE (iw->notes_text), TRUE);
 
-  /* default to ok */
-  gnome_dialog_editable_enters (iwd, GTK_EDITABLE (iw->id_entry));
-  gnome_dialog_set_default (iwd, 0);
-
-  g_signal_connect (G_OBJECT (iw->dialog), "destroy",
-		    G_CALLBACK (gnc_invoice_window_destroy_cb), iw);
-  g_signal_connect (G_OBJECT (iw->id_entry), "changed",
-		    G_CALLBACK (gnc_invoice_id_changed_cb), iw);
-
-  gnome_dialog_button_connect (iwd, 0,
-  			       G_CALLBACK (gnc_invoice_window_ok_cb), iw);
-  gnome_dialog_button_connect (iwd, 1,
-  			       G_CALLBACK (gnc_invoice_window_cancel_cb), iw);
-  gnome_dialog_button_connect (iwd, 2,
-  			       G_CALLBACK (gnc_invoice_window_help_cb), iw);
-
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     iw);
   /* Setup initial values */
   iw->invoice_guid = *gncInvoiceGetGUID (invoice);
 

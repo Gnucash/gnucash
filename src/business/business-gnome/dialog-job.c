@@ -136,7 +136,7 @@ gnc_job_verify_ok (JobWindow *jw)
   return TRUE;
 }
 
-static void
+void
 gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
@@ -152,7 +152,7 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (jw->component_id);
 }
 
-static void
+void
 gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
@@ -160,12 +160,10 @@ gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (jw->component_id);
 }
 
-static void
+void
 gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = HH_JOB;
-
-  helpWindow(NULL, NULL, help_file);
+  helpWindow(NULL, NULL, HH_JOB);
 }
 
 
@@ -312,33 +310,10 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
   owner_box = glade_xml_get_widget (xml, "customer_hbox");
   owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* Connect buttons */
-  gnome_dialog_button_connect (jwd, 0,
-			       GTK_SIGNAL_FUNC(gnc_job_window_ok_cb), jw);
-  gnome_dialog_button_connect (jwd, 1,
-			       GTK_SIGNAL_FUNC(gnc_job_window_cancel_cb), jw);
-  gnome_dialog_button_connect (jwd, 2,
-			       GTK_SIGNAL_FUNC(gnc_job_window_help_cb), jw);
-
   /* Setup signals */
-  gtk_signal_connect (jwo, "destroy",
-		      GTK_SIGNAL_FUNC(gnc_job_window_destroy_cb), jw);
-
-  gtk_signal_connect(GTK_OBJECT (jw->id_entry), "changed",
-		     GTK_SIGNAL_FUNC(gnc_job_name_changed_cb), jw);
-
-  gtk_signal_connect(GTK_OBJECT (jw->name_entry), "changed",
-		     GTK_SIGNAL_FUNC(gnc_job_name_changed_cb), jw);
-
-
-  /* Attach <Enter> to default button */
-  gnome_dialog_editable_enters (jwd, GTK_EDITABLE (jw->id_entry));
-  gnome_dialog_editable_enters (jwd, GTK_EDITABLE (jw->name_entry));
-  gnome_dialog_editable_enters (jwd, GTK_EDITABLE (jw->desc_entry));
-
-  /* Start at the name */
-  gtk_widget_grab_focus (jw->name_entry);
-
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     jw);
   /* Set initial entries */
   if (job != NULL) {
     jw->job_guid = *gncJobGetGUID (job);

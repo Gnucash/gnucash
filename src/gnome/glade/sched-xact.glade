@@ -22,19 +22,7 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area17">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-
-	  <child>
-	    <widget class="GtkButton" id="ok_button">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
 	    <widget class="GtkButton" id="help_button">
@@ -44,7 +32,7 @@
 	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-11</property>
 	    </widget>
 	  </child>
 
@@ -54,6 +42,18 @@
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="ok_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -1028,7 +1028,6 @@
 	      <property name="right_attach">2</property>
 	      <property name="top_attach">0</property>
 	      <property name="bottom_attach">1</property>
-	      <property name="x_options">fill</property>
 	      <property name="y_options"></property>
 	    </packing>
 	  </child>
@@ -4773,8 +4772,8 @@
 		  <property name="visible">True</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">New</property>
-		  <property name="use_underline">True</property>
+		  <property name="label">gtk-new</property>
+		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		</widget>
 	      </child>
@@ -4784,9 +4783,63 @@
 		  <property name="visible">True</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Edit</property>
-		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+
+		  <child>
+		    <widget class="GtkAlignment" id="alignment24">
+		      <property name="visible">True</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">0</property>
+		      <property name="yscale">0</property>
+
+		      <child>
+			<widget class="GtkHBox" id="hbox179">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">2</property>
+
+			  <child>
+			    <widget class="GtkImage" id="image1">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-properties</property>
+			      <property name="icon_size">4</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847980">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Edit</property>
+			      <property name="use_underline">True</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 
@@ -4795,8 +4848,8 @@
 		  <property name="visible">True</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Delete</property>
-		  <property name="use_underline">True</property>
+		  <property name="label">gtk-delete</property>
+		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		</widget>
 	      </child>
@@ -4875,19 +4928,7 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area21">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-
-	  <child>
-	    <widget class="GtkButton" id="ok_button">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">
@@ -4895,6 +4936,18 @@
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="ok_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -5574,19 +5627,7 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area23">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-
-	  <child>
-	    <widget class="GtkButton" id="ok_button">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
 	    <widget class="GtkButton" id="advanced_button">
@@ -5606,6 +5647,18 @@
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="ok_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -5714,28 +5767,6 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkEntry" id="name_entry">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="editable">True</property>
-		      <property name="visibility">True</property>
-		      <property name="max_length">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
-		      <property name="activates_default">False</property>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">0</property>
-		      <property name="bottom_attach">1</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkOptionMenu" id="freq_option_menu">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
@@ -5801,6 +5832,27 @@
 		      <property name="top_attach">1</property>
 		      <property name="bottom_attach">2</property>
 		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkEntry" id="name_entry">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">True</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
 		      <property name="y_options"></property>
 		    </packing>
 		  </child>
@@ -6020,8 +6072,8 @@
 	<widget class="GnomeDruidPageStandard" id="what_to_do">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">What to do, what to do?</property>
-	  <property name="title_foreground">#41b0083dceb8</property>
-	  <property name="background">#2b38083de9eb</property>
+	  <property name="title_foreground">#7d100839d8c8</property>
+	  <property name="background">#49880839e9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6082,8 +6134,8 @@
 	<widget class="GnomeDruidPageStandard" id="reminders_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Transaction Reminders</property>
-	  <property name="title_foreground">#6270083dceb8</property>
-	  <property name="background">#7250083de9eb</property>
+	  <property name="title_foreground">#bda80839d8c8</property>
+	  <property name="background">#c6980839e9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6150,8 +6202,8 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="auto_create_notify_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Auto-Created Transactions Notification</property>
-	  <property name="title_foreground">#ab50083dceb8</property>
-	  <property name="background">#bf60083de9eb</property>
+	  <property name="title_foreground">#0a58083ad8c8</property>
+	  <property name="background">#0da0083ae9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6177,8 +6229,8 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="to_create_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">To-Create Transaction Preparation</property>
-	  <property name="title_foreground">#c898083dceb8</property>
-	  <property name="background">#c1e0083de9eb</property>
+	  <property name="title_foreground">#1ec0083ad8c8</property>
+	  <property name="background">#39a0083ae9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6529,8 +6581,8 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="created_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Created Transaction Review</property>
-	  <property name="title_foreground">#7b20083eceb8</property>
-	  <property name="background">#8500083ee9eb</property>
+	  <property name="title_foreground">#f7d8083ad8c8</property>
+	  <property name="background">#0a48083be9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6556,8 +6608,8 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="obsolete_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Obsolete Scheduled Transactions</property>
-	  <property name="title_foreground">#9b10083eceb8</property>
-	  <property name="background">#ac00083ee9eb</property>
+	  <property name="title_foreground">#0d80083bd8c8</property>
+	  <property name="background">#28c8083be9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -6698,8 +6750,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_info_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Loan Information</property>
-	  <property name="title_foreground">#4da8083fceb8</property>
-	  <property name="background">#6b80083fe9eb</property>
+	  <property name="title_foreground">#dab0083bd8c8</property>
+	  <property name="background">#f128083be9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7127,8 +7179,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="loan_opts_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Options</property>
-	  <property name="title_foreground">#ecb0083fceb8</property>
-	  <property name="background">#f8f8083fe9eb</property>
+	  <property name="title_foreground">#87a0083cd8c8</property>
+	  <property name="background">#9a70083ce9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7277,8 +7329,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="repayment_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Repayment</property>
-	  <property name="title_foreground">#23b00840ceb8</property>
-	  <property name="background">#39e00840e9eb</property>
+	  <property name="title_foreground">#c160083cd8c8</property>
+	  <property name="background">#cec0083ce9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7546,9 +7598,9 @@ the created Scheduled Transactions directly.</property>
       <child>
 	<widget class="GnomeDruidPageStandard" id="payment_pg">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">repayment type</property>
-	  <property name="title_foreground">#94780840ceb8</property>
-	  <property name="background">#7e400840e9eb</property>
+	  <property name="title" translatable="yes">Repayment Type</property>
+	  <property name="title_foreground">#2618083dd8c8</property>
+	  <property name="background">#0e20083de9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">
@@ -7957,8 +8009,8 @@ the created Scheduled Transactions directly.</property>
 	<widget class="GnomeDruidPageStandard" id="review_pg">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Review</property>
-	  <property name="title_foreground">#1e500841ceb8</property>
-	  <property name="background">#1ba80841e9eb</property>
+	  <property name="title_foreground">#b458083dd8c8</property>
+	  <property name="background">#b1b0083de9eb</property>
 	  <property name="logo_background">#1df0081d0001</property>
 
 	  <child internal-child="vbox">

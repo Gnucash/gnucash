@@ -917,22 +917,21 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
 }
 
 /**
- * gnc_date_editable_enters:
- * @dialog: The gnome dialog this date editor lives in
+ * gnc_date_set_activates_default:
  * @gde: The date editor to modity
+ * @state: The new state for this widget.
  * 
  * Extracts the editable field from a GNCDateEdit widget, and sets it
  * up so that pressing the Enter key in this field as the same as
  * clicking the button that has the default.
  **/
 void
-gnc_date_editable_enters (GnomeDialog *dialog, GNCDateEdit *gde)
+gnc_date_editable_enters (GNCDateEdit *gde, gboolean state)
 {
-	if (!dialog || !gde)
+	if (!gde)
 		return;
 
-	gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
-				     GTK_EDITABLE(gde->date_entry));
+    gtk_entry_set_activates_default(GTK_ENTRY(gde->date_entry), state);
 }
 
 

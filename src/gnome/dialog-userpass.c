@@ -60,11 +60,6 @@ gnc_get_username_password (GtkWidget *parent,
 
   gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
 
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (username_entry));
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (password_entry));
-
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
 

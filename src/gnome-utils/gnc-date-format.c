@@ -129,11 +129,6 @@ gnc_date_format_class_init (GNCDateFormatClass *class)
 		  G_TYPE_NONE,
 		  0);
 
-#if 0
-  gtk_object_class_add_signals (object_class, date_format_signals,
-				LAST_SIGNAL);
-#endif
-
   object_class->destroy = gnc_date_format_destroy;
 
   class->format_changed = NULL;
@@ -381,8 +376,7 @@ gnc_date_format_editable_enters (GnomeDialog *dialog, GNCDateFormat *gdf)
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
-  gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
-			       GTK_EDITABLE(gdf->priv->custom_entry));
+  gtk_entry_set_activates_default(GTK_ENTRY(gdf->priv->custom_entry), TRUE);
 }
 
 void

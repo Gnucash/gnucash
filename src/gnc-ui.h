@@ -47,6 +47,12 @@
 #define HH_SXEDITOR          "gnucash-help/usage.html#tran-sched"
 #define HH_VENDOR            "gnucash-help/usage.html"
 
+/* GTK Windows - Common Response Codes */
+
+#define GNC_RESPONSE_ADD    1
+#define GNC_RESPONSE_REMOVE 2
+#define GNC_RESPONSE_EDIT   3
+
 /* Dialog windows ***************************************************/
 
 extern gint

@@ -352,12 +352,6 @@ gnc_query_list_class_init (GNCQueryListClass *klass)
 		 1,
 		 G_TYPE_POINTER);
 
-#if 0
-  gtk_object_class_add_signals(object_class,
-			       query_list_signals,
-			       LAST_SIGNAL);
-#endif
-
   object_class->destroy = gnc_query_list_destroy;
 
   clist_class->select_row = gnc_query_list_select_row;

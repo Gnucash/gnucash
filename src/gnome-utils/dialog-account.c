@@ -1421,12 +1421,6 @@ gnc_account_window_create(AccountWindow *aw)
   aw->code_entry =        glade_xml_get_widget (xml, "code_entry");
   aw->notes_text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (glade_xml_get_widget (xml, "notes_text")));
 
-  /* GNOME 2 Port (Not avaiable in GNOME 2)
-  gtk_dialog_editable_enters(awd, GTK_EDITABLE(aw->name_entry));
-  gtk_dialog_editable_enters(awd, GTK_EDITABLE(aw->description_entry));
-  gtk_dialog_editable_enters(awd, GTK_EDITABLE(aw->code_entry));
-  */
-
   box = glade_xml_get_widget (xml, "commodity_hbox");
   aw->commodity_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
 					       gnc_commodity_edit_get_string,
@@ -1461,6 +1455,7 @@ gnc_account_window_create(AccountWindow *aw)
 						     "text", GNC_TREE_MODEL_ACCOUNT_COL_NAME,
 						     NULL);
   gtk_tree_view_append_column (aw->parent_tree, column);
+  gtk_tree_view_set_headers_visible (aw->parent_tree, FALSE);
   gtk_tree_view_expand_all (aw->parent_tree);
 
   aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");

@@ -206,7 +206,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (td->dialog), GTK_WINDOW (parent));
+    gtk_widget_set_parent (td->dialog, parent);
   
   {
     GtkWidget *heading_label;
@@ -321,14 +321,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
 
     /* Default button */
-    gnome_dialog_set_default (GNOME_DIALOG (td->dialog), 0);
+    gtk_dialog_set_default_response (GTK_DIALOG (td->dialog), GTK_RESPONSE_OK);
     
-    gtk_widget_grab_focus (td->recp_name_entry);
-
-    /* Hide on close instead of destroy since we still need the values
-       from the boxes. */
-    gnome_dialog_close_hides (GNOME_DIALOG (td->dialog), TRUE);
-
   } /* GtkWidget declarations/definitions */
   
   return td;
@@ -342,7 +336,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
 				 const HBCI_Account *h_acc)
 {
-  int result;
+  gint result;
   gboolean values_ok;
 
   /* Repeat until entered values make sense */
@@ -352,7 +346,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     gtk_widget_show_all (td->dialog); 
 
     /* Now run the dialog until it gets closed by a button press. */
-    result = gnome_dialog_run (GNOME_DIALOG (td->dialog));
+    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
     /* printf("hbci_trans: result button was %d.\n", result); */
 
     /* The dialog gets hidden anyway as soon as any button is pressed. */
@@ -360,8 +354,9 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 
     /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
        scheduled for later execution (currently unimplemented) */
-    if ((result != 0) && (result != 1)) {
+    if (result != GTK_RESPONSE_OK) {
       gtk_widget_destroy (GTK_WIDGET (td->dialog));
+      td->dialog = NULL;
       return -1;
     }
 

@@ -9,6 +9,7 @@ glade_DATA = \
 	price.glade \
 	print.glade \
 	progress.glade \
+	reconcile.glade \
 	register.glade \
 	stocks.glade \
 	tax.glade \

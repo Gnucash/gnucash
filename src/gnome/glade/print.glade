@@ -23,23 +23,23 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area6">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button21">
+	    <widget class="GtkButton" id="helpbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="gnc_ui_print_check_dialog_ok_cb"/>
+	      <property name="response_id">-11</property>
+	      <signal name="clicked" handler="gnc_ui_print_check_dialog_help_cb"/>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button22">
+	    <widget class="GtkButton" id="cancelbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -52,15 +52,15 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button23">
+	    <widget class="GtkButton" id="okbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-help</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="gnc_ui_print_check_dialog_help_cb"/>
+	      <signal name="clicked" handler="gnc_ui_print_check_dialog_ok_cb"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -165,52 +165,6 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkOptionMenu" id="check_format_picker">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="history">0</property>
-
-		  <child internal-child="menu">
-		    <widget class="GtkMenu" id="convertwidget1">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="convertwidget2">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Quicken/QuickBooks (tm) US-Letter</property>
-			  <property name="use_underline">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="buyand1">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Deluxe(tm) Personal Checks US-Letter</property>
-			  <property name="use_underline">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="convertwidget3">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Custom</property>
-			  <property name="use_underline">True</property>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">4</property>
-		  <property name="top_attach">0</property>
-		  <property name="bottom_attach">1</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
 		<widget class="GtkOptionMenu" id="check_position_picker">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
@@ -263,9 +217,54 @@
 		  <property name="y_options"></property>
 		</packing>
 	      </child>
+
+	      <child>
+		<widget class="GtkOptionMenu" id="check_format_picker">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="history">0</property>
+
+		  <child internal-child="menu">
+		    <widget class="GtkMenu" id="convertwidget1">
+		      <property name="visible">True</property>
+
+		      <child>
+			<widget class="GtkMenuItem" id="convertwidget2">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Quicken/QuickBooks (tm) US-Letter</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="buyand1">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Deluxe(tm) Personal Checks US-Letter</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="convertwidget3">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Custom</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		  <property name="y_options">fill</property>
+		</packing>
+	      </child>
 	    </widget>
 	    <packing>
-	      <property name="tab_expand">False</property>
+	      <property name="tab_expand">True</property>
 	      <property name="tab_fill">True</property>
 	    </packing>
 	  </child>

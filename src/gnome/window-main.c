@@ -459,7 +459,7 @@ gnc_main_window_new (void)
  * these are the "templates" that are installed in every top level
  * MDI window
  ********************************************************************/
-#if 0
+#if INCLUDE_GNOME1_BASED_ROUTINES
 static void
 gnc_main_window_options_cb(GtkWidget *widget, gpointer data)
 {

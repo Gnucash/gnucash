@@ -29,9 +29,13 @@
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
 #include "global-options.h"
+#include "gnc-engine-util.h"
 #include "gnc-ui.h"
 #include "window-help.h"
 
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 /* function to open a qif import druid */
 static void (*qifImportDruidFcn)(void) = NULL;
@@ -63,6 +67,7 @@ gnc_ui_new_user_dialog (void)
   GladeXML  *xml;
   gint result;
 
+  ENTER(" ");
   xml = gnc_glade_xml_new ("newuser.glade", "New User Dialog");
 
   dialog = glade_xml_get_widget (xml, "New User Dialog");
@@ -101,6 +106,7 @@ gnc_ui_new_user_dialog (void)
   }
 
   gtk_widget_destroy (dialog);
+  LEAVE(" ");
 }
 
 static void

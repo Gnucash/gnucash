@@ -54,36 +54,22 @@ gnc_hbci_get_password (GtkWidget *parent,
   password_entry = glade_xml_get_widget (xml, "password_entry");
   g_assert(heading_label && password_entry);
 
-  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
-
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (password_entry));
-
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
   if (initial_password)
     gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
 
-  gtk_widget_grab_focus (password_entry);
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy(dialog);
 
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
-
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-
-  if (result == 0)
+  if (result == GTK_RESPONSE_OK)
   {
     *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
-
-    gtk_widget_destroy (GTK_WIDGET (dialog));
     return TRUE;
   }
 
   *password = NULL;
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
   return FALSE;
 }
 
@@ -114,26 +100,13 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
   confirm_entry = glade_xml_get_widget (xml, "confirm_entry");
   g_assert(heading_label && password_entry && confirm_entry);
 
-  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
-
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (password_entry));
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (confirm_entry));
-
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-  gtk_widget_grab_focus (password_entry);
-
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
-
   while (TRUE) {
-    result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
     
-    if (result == 0)
+    if (result == GTK_RESPONSE_OK)
       {
 	char *pw, *confirm;
 	pw = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
@@ -155,7 +128,7 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
     if (gnc_ok_cancel_dialog (parent, GTK_RESPONSE_OK,
 			      _("The two passwords didn't match. \n"
 				"Please try again."))
-	== GTK_RESPONSE_CANCEL)
+	!= GTK_RESPONSE_OK)
       break;
   }
   *password = NULL;

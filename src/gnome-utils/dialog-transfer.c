@@ -114,13 +114,6 @@ struct _xferDialog
    */
   gnc_numeric * exch_rate;
 
-  /* a place to store the result quality (ok or cancel) because gnome_dialog_run
-   * doesn't seem to work right for this function.  <-- That's probably because
-   * the dialog is being closed and deleted out from under the gnome_dialog_run
-   * function.
-   */
-  gboolean *	result_p;
-
   /* Callback funtion to notify of the newly created Transaction */
   gnc_xfer_dialog_cb transaction_cb;
   /* , and its user_data */
@@ -529,8 +522,11 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   Account *other_acct = NULL;   /* the Account of the other split */
   gboolean changed = FALSE;
 
-  if( !xferData )
+  ENTER("xferData=%p", xferData);
+  if( !xferData ) {
+    LEAVE("bad args");
     return( FALSE );
+  }
 
   match_account = gnc_transfer_dialog_get_selected_account (xferData, xferData->quickfill);
 
@@ -541,8 +537,11 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
 
   split = xaccAccountFindSplitByDesc( match_account, desc );
 
-  if( !split )
+  if( !split ) {
+    LEAVE("split not found");
     return( FALSE );
+  }
+  DEBUG("split=%p", split);
 
   /* Now update any blank fields of the transfer dialog with
    * the memo and amount from the split, and the description
@@ -552,6 +551,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   if( gnc_numeric_zero_p(
            gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit))))
   {
+    DEBUG("updating amount");
     gnc_numeric amt = xaccSplitGetValue( split );
 
     /* If we've matched a previous transfer, it will appear
@@ -568,6 +568,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
 
   if( !safe_strcmp(gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry)),"" ))
   {
+    DEBUG("updating memo");
     gtk_entry_set_text( GTK_ENTRY(xferData->memo_entry),
                         xaccSplitGetMemo( split ) );
     changed = TRUE;
@@ -584,6 +585,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
     GNCAccountType other_type;
     GtkWidget *other_button;
     
+    DEBUG("updating other split");
     if (xferData->quickfill == XFER_DIALOG_FROM) {
       other_button = xferData->from_show_button;
     }
@@ -702,8 +704,10 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
     g_signal_stop_emission_by_name (G_OBJECT (entry), "insert_text");
 
     /* This doesn't seem to fix the selection problems, why? */
-    gtk_entry_select_region (entry, 0, 0);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, 0);
+#if DRH_NEEDS_INVESTIGATION
     gtk_old_editable_claim_selection (GTK_OLD_EDITABLE (entry), FALSE, GDK_CURRENT_TIME);
+#endif
 
     /* Store off data for the key_press_cb or
      * the button_release_cb to make use of. */
@@ -726,11 +730,16 @@ static gboolean
 common_post_quickfill_handler(guint32 time, XferDialog *xferData )
 {
   GtkEntry *entry = GTK_ENTRY(xferData->description_entry);
-  gint current_pos   = gtk_editable_get_position( GTK_EDITABLE(entry) );
-  gint current_start = GTK_OLD_EDITABLE(entry)->selection_start_pos;
-  gint current_end   = GTK_OLD_EDITABLE(entry)->selection_end_pos;
+  gint current_pos;
+  gint current_start;
+  gint current_end;
   gboolean did_something = FALSE;   /* was the selection or position changed? */
 
+  ENTER(" ");
+  current_pos = gtk_editable_get_position( GTK_EDITABLE(entry) );
+  gtk_editable_get_selection_bounds( GTK_EDITABLE(entry),
+				     &current_start,
+				     &current_end);
   if( current_pos != xferData->desc_cursor_position )
   {
     gtk_entry_set_position( entry, xferData->desc_cursor_position );
@@ -744,7 +753,9 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
   {
     gtk_entry_select_region( entry, xferData->desc_start_selection,
                                     xferData->desc_end_selection );
+#if DRH_NEEDS_INVESTIGATION
     gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
+#endif
     did_something = TRUE;
   }
 
@@ -761,6 +772,7 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
    */
   xferData->desc_didquickfill = FALSE;
 
+  LEAVE("did_something=%d", did_something);
   return( did_something );
 }
 
@@ -775,6 +787,7 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
    * the entry's key press handler, but in some cases that doesn't
    * seem to work right, so handle it here.
    */
+  ENTER(" ");
   switch( event->keyval )
   {
     case GDK_Left:        /* right/left cause a focus change which is bad */
@@ -805,8 +818,10 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
          * field.  Unselect the current field, though.
          */
         gtk_entry_select_region( GTK_ENTRY(xferData->description_entry), 0, 0 );
+#if DRH_NEEDS_INVESTIGATION
         gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
                                           FALSE, event->time );
+#endif
       }
       break;
   }
@@ -820,6 +835,7 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
   if( done_with_input )
     g_signal_stop_emission_by_name (G_OBJECT (entry), "key_press_event");
 
+  LEAVE("done=%d", done_with_input);
   return( done_with_input );
 }
 
@@ -1277,8 +1293,8 @@ gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rat
   gnc_xfer_update_to_amount (xferData);
 }
 
-static void
-gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
+void
+gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 {
   XferDialog *xferData = data;
   Account *to_account;
@@ -1296,9 +1312,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
   Split *to_split;
 
   ENTER(" ");
-  if (response_id != GTK_RESPONSE_OK) {
+  if (response != GTK_RESPONSE_OK) {
     gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
-    LEAVE("not ok");
+    LEAVE("cancel, etc.");
     return;
   }
 
@@ -1545,16 +1561,12 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer data)
   /* Refresh everything */
   gnc_resume_gui_refresh ();
 
-  /* Tell the caller that this is "ok" */
-  if (xferData->result_p)
-    *(xferData->result_p) = TRUE;
-
   DEBUG("close component");
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
   LEAVE("ok");
 }
 
-static int
+void
 gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 {
   XferDialog * xferData = data;
@@ -1591,8 +1603,6 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
   g_free(xferData);
 
   DEBUG("xfer dialog destroyed");
-
-  return FALSE;
 }
 
 
@@ -1612,11 +1622,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
   if (parent != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  /* default to ok */
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-  g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gnc_xfer_dialog_response_cb), xferData);
-  g_signal_connect (G_OBJECT (dialog), "close", G_CALLBACK (gnc_xfer_dialog_close_cb), xferData);
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, xferData);
 
   xferData->tips = gtk_tooltips_new();
 
@@ -1657,7 +1663,6 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
     entry = glade_xml_get_widget (xml, "num_entry");
     xferData->num_entry = entry;
-    /* gnome_dialog_editable_enters (GNOME_DIALOG (dialog), GTK_EDITABLE (entry)); */
 
     entry = glade_xml_get_widget (xml, "description_entry");
     xferData->description_entry = entry;
@@ -1672,7 +1677,6 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
     entry = glade_xml_get_widget (xml, "memo_entry");
     xferData->memo_entry = entry;
-    /* gnome_dialog_editable_enters (GNOME_DIALOG (dialog), GTK_EDITABLE (entry)); */
   }
 
   /* from and to */
@@ -1716,7 +1720,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
     g_signal_connect (G_OBJECT (entry), "focus-out-event",
 		      G_CALLBACK (gnc_xfer_price_update_cb), xferData);
-    /* gnome_dialog_editable_enters (GNOME_DIALOG (dialog), GTK_EDITABLE (entry)); */
+    gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
 
     edit = gnc_amount_edit_new();
     hbox = glade_xml_get_widget (xml, "to_amount_hbox");
@@ -1725,7 +1729,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
     g_signal_connect (G_OBJECT (entry), "focus-out-event",
 		      G_CALLBACK (gnc_xfer_to_amount_update_cb), xferData);
-    /* gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry)); */
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
     button = glade_xml_get_widget (xml, "price_radio");
     xferData->price_radio = button;
@@ -1746,6 +1750,7 @@ close_handler (gpointer user_data)
   XferDialog *xferData = user_data;
 
   DEBUG(" ");
+  gtk_widget_hide (GTK_WIDGET (xferData->dialog));
   gtk_widget_destroy (GTK_WIDGET (xferData->dialog));
 }
 
@@ -1932,34 +1937,55 @@ find_xfer (gpointer find_data, gpointer user_data)
  */
 gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
 {
-  gboolean result_ok = FALSE;
+  gboolean result_ok = FALSE, done = FALSE;
+  gint response;
 
-  if( xferData )
+  ENTER("xferData=%p", xferData);
+  if( xferData == NULL ) {
+    LEAVE("bad args");
+    return( FALSE );
+  }
+
+  while( !done )
   {
-    xferData->result_p = &result_ok;
-    while( TRUE )
-    {
-      gtk_dialog_run (GTK_DIALOG (xferData->dialog));
-
-        /* See if the dialog is still there.  For various reasons, the
-         * user could have hit OK but remained in the dialog.  We don't
-         * want to return processing back to anyone else until we clear
-         * off this dialog, so if the dialog is still there we'll just
-         * run it again.
-         */
-  
-      DEBUG("find component");
+    g_object_ref(xferData->dialog);
+    response = gtk_dialog_run (GTK_DIALOG (xferData->dialog));
+    g_object_unref(xferData->dialog);
+    switch (response) {
+     case GTK_RESPONSE_OK:
+      /* See if the dialog is still there.  For various reasons, the
+       * user could have hit OK but remained in the dialog.  We don't
+       * want to return processing back to anyone else until we clear
+       * off this dialog, so if the dialog is still there we'll just
+       * run it again.
+       */
+      DEBUG("OK");
       if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
                                            find_xfer, xferData ) )
         {
           /* no more dialog, and OK was clicked, so assume it's all good */
-          return( result_ok );
+	  result_ok = TRUE;
+          return( TRUE );
         }
-        /* else run the dialog again */
+
+      /* else run the dialog again */
+      continue;
+
+     case GTK_RESPONSE_CANCEL:
+      DEBUG("CANCEL");
+      done = TRUE;
+      break;
+
+     default:
+      DEBUG("%d", response);
+      done = TRUE;
+      break;
     }
   }
-    
-  return( FALSE );
+
+  gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
+  LEAVE("unreached");
+  return( result_ok );
 }
 
 
@@ -2034,7 +2060,8 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
   GNCAccountType type;
   GtkTreePath *path;
 
-  g_return_if_fail (account != NULL);
+  if (account == NULL)
+    return;
 
   switch (direction) {
    case XFER_DIALOG_FROM:

@@ -59,9 +59,9 @@ HBCI connection now.</property>
 	<widget class="GnomeDruidPageStandard" id="configfile_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter OpenHBCI Configuration File</property>
-	  <property name="title_foreground">#1cc8082fceb8</property>
-	  <property name="background">#56600838e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#bad8082bd2e8</property>
+	  <property name="background">#ce70082be9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox132">
@@ -211,9 +211,9 @@ Setup finishes.</property>
 	<widget class="GnomeDruidPageStandard" id="bank_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter Bank Information</property>
-	  <property name="title_foreground">#a1d00832ceb8</property>
-	  <property name="background">#cb28083ce9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#1540082ed2e8</property>
+	  <property name="background">#0950082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox130">
@@ -461,9 +461,9 @@ Setup finishes.</property>
 	<widget class="GnomeDruidPageStandard" id="user_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter User Information</property>
-	  <property name="title_foreground">#dec00839ceb8</property>
-	  <property name="background">#d9100837e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#66b0082ed2e8</property>
+	  <property name="background">#5d58082ee9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="vbox141">
@@ -1125,9 +1125,9 @@ use the tool 'hbcicard' from the libchipcard package to read these numbers from 
 	<widget class="GnomeDruidPageStandard" id="account_info_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Account list will be updated</property>
-	  <property name="title_foreground">#6ec8081cceb8</property>
-	  <property name="background">#90c8082ee9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#8660082fd2e8</property>
+	  <property name="background">#9bb8082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1170,9 +1170,9 @@ progress of the HBCI connection in the HBCI connection window.</property>
 	<widget class="GnomeDruidPageStandard" id="account_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match HBCI accounts with GnuCash accounts</property>
-	  <property name="title_foreground">#36700849ceb8</property>
-	  <property name="background">#ffe0082de9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#a990082fd2e8</property>
+	  <property name="background">#ba80082fe9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox3">
@@ -1379,9 +1379,9 @@ Press 'Finish' now.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_info_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Public Keys will be retrieved</property>
-	  <property name="title_foreground">#4a580835ceb8</property>
-	  <property name="background">#a4a00833e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#39000830d2e8</property>
+	  <property name="background">#57f80830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1430,9 +1430,9 @@ before this whole druid has finished.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_server_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Verify Ini-Letter from Server</property>
-	  <property name="title_foreground">#21780830ceb8</property>
-	  <property name="background">#b138082fe9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#5b180830d2e8</property>
+	  <property name="background">#80d00830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox8">
@@ -1591,9 +1591,9 @@ before this whole druid has finished.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_userinfo_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">User Keys will be sent</property>
-	  <property name="title_foreground">#bc280834ceb8</property>
-	  <property name="background">#21f00833e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#b8500830d2e8</property>
+	  <property name="background">#c8300830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -1644,9 +1644,9 @@ connection in the HBCI connection window.</property>
 	<widget class="GnomeDruidPageStandard" id="iniletter_user_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Print Ini-Letter of User</property>
-	  <property name="title_foreground">#d5a00839ceb8</property>
-	  <property name="background">#eff00840e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#c9a00830d2e8</property>
+	  <property name="background">#e1900830e9eb</property>
+	  <property name="logo_background">#1e40081d0001</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="iniletter_user_vbox">
@@ -1795,18 +1795,6 @@ Press 'Finish' now.</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="exec_now_button">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Execute Now</property>
-	      <property name="use_underline">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	    </widget>
-	  </child>
-
-	  <child>
 	    <widget class="GtkButton" id="exec_later_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -1826,7 +1814,73 @@ Press 'Finish' now.</property>
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-6</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="exec_now_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-5</property>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment1">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox118">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-execute</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label8877454">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Execute Now</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -1979,6 +2033,7 @@ Press 'Finish' now.</property>
 		<widget class="GtkEntry" id="recp_name_entry">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
+		  <property name="has_focus">True</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">True</property>
 		  <property name="max_length">0</property>
@@ -2553,11 +2608,11 @@ Press 'Finish' now.</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="close_button">
+	    <widget class="GtkButton" id="abort_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-close</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -2565,11 +2620,11 @@ Press 'Finish' now.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="abort_button">
+	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -2877,11 +2932,11 @@ Press 'Finish' now.</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="ok_button">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -2889,11 +2944,11 @@ Press 'Finish' now.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="cancel_button">
+	    <widget class="GtkButton" id="ok_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -3202,11 +3257,11 @@ Press 'Finish' now.</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button2">
+	    <widget class="GtkButton" id="button4">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -3214,11 +3269,11 @@ Press 'Finish' now.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button4">
+	    <widget class="GtkButton" id="button2">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>

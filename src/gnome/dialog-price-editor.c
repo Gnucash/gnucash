@@ -343,8 +343,7 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   gtk_widget_show (w);
   g_signal_connect (G_OBJECT (GTK_COMBO(w)->entry), "changed",
                     G_CALLBACK (currency_changed_cb), pedit_dialog);
-  /*gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
-			       GTK_EDITABLE(GTK_COMBO(w)->entry));*/
+  gtk_entry_set_activates_default(GTK_ENTRY(GTK_COMBO(w)->entry), TRUE);
 
   box = glade_xml_get_widget (xml, "date_box");
   w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
@@ -355,7 +354,7 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
                     G_CALLBACK (date_changed_cb), pedit_dialog);
   g_signal_connect (G_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
                     G_CALLBACK (date_entry_changed_cb), pedit_dialog);
-  /* gnc_date_editable_enters(GNOME_DIALOG(dialog), GNC_DATE_EDIT(w)); */
+  gtk_entry_set_activates_default(GTK_ENTRY(GNC_DATE_EDIT(w)->date_entry), TRUE);
 
 
   w = glade_xml_get_widget (xml, "source_entry");
@@ -378,7 +377,7 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   print_info = gnc_default_price_print_info ();
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (w), 1000000);
-  /* gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(w)); */
+  gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
   gtk_widget_show (w);
 
   entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));

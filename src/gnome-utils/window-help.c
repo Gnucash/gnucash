@@ -708,7 +708,7 @@ gnc_help_window_new (void)
   help->search_results = glade_xml_get_widget (xml, "search_results_list");
   help->type_pixmap    = glade_xml_get_widget (xml, "file_type_pixmap");
 
-  help->html         = gnc_html_new();
+  help->html         = gnc_html_new(help->toplevel);
 
   glade_xml_signal_connect_data
     (xml, "gnc_help_window_search_button_cb",

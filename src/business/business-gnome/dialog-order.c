@@ -167,7 +167,7 @@ gnc_order_window_ok_save (OrderWindow *ow)
   return TRUE;
 }
 
-static void
+void
 gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -181,7 +181,7 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (ow->component_id);
 }
 
-static void
+void
 gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
   OrderWindow *ow = data;
@@ -189,12 +189,10 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (ow->component_id);
 }
 
-static void
+void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = HH_ORDER;
-
-  helpWindow(NULL, NULL, help_file);
+  helpWindow(NULL, NULL, HH_ORDER);
 }
 
 static void
@@ -592,7 +590,6 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
   ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
   /* default to ok */
-  gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
   gnome_dialog_set_default (owd, 0);
 
   /* Build the ledger */
@@ -697,20 +694,10 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
   ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* default to ok */
-  gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
-  gnome_dialog_set_default (owd, 0);
-
-  gtk_signal_connect (GTK_OBJECT (ow->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_order_window_destroy_cb), ow);
-
-  gnome_dialog_button_connect (owd, 0,
-			       GTK_SIGNAL_FUNC(gnc_order_window_ok_cb), ow);
-  gnome_dialog_button_connect (owd, 1,
-			       GTK_SIGNAL_FUNC(gnc_order_window_cancel_cb), ow);
-  gnome_dialog_button_connect (owd, 2,
-			       GTK_SIGNAL_FUNC(gnc_order_window_help_cb), ow);
-
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ow);
   /* Setup initial values */
   ow->order_guid = *gncOrderGetGUID (order);
   gtk_entry_set_text (GTK_ENTRY (ow->id_entry),

@@ -80,7 +80,7 @@ struct _vendor_window {
   GncTaxTable *	taxtable;
 };
 
-static void
+void
 gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton,
 				gpointer user_data)
 {
@@ -162,7 +162,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
   return FALSE;
 }
 
-static void
+void
 gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
@@ -204,7 +204,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (vw->component_id);
 }
 
-static void
+void
 gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
@@ -212,15 +212,13 @@ gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data)
   gnc_close_gui_component (vw->component_id);
 }
 
-static void
+void
 gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = HH_VENDOR;
-
-  helpWindow(NULL, NULL, help_file);
+  helpWindow(NULL, NULL, HH_VENDOR);
 }
 
-static void
+void
 gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
@@ -240,7 +238,7 @@ gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data)
   g_free (vw);
 }
 
-static void
+void
 gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
@@ -387,44 +385,10 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   hbox = glade_xml_get_widget (xml, "currency_box");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  /* Setup Dialog for Editing */
-  gnome_dialog_set_default (vwd, 0);
-
-  /* Attach <Enter> to default button */
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->id_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->company_entry));
-
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->name_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->addr1_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->addr2_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->addr3_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->addr4_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->phone_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->fax_entry));
-  gnome_dialog_editable_enters (vwd, GTK_EDITABLE (vw->email_entry));
-
-  /* Set focus to company name */
-  gtk_widget_grab_focus (vw->company_entry);
-
   /* Setup signals */
-  gnome_dialog_button_connect
-    (vwd, 0, GTK_SIGNAL_FUNC(gnc_vendor_window_ok_cb), vw);
-  gnome_dialog_button_connect
-    (vwd, 1, GTK_SIGNAL_FUNC(gnc_vendor_window_cancel_cb), vw);
-  gnome_dialog_button_connect
-    (vwd, 2, GTK_SIGNAL_FUNC(gnc_vendor_window_help_cb), vw);
-
-  gtk_signal_connect (GTK_OBJECT (vw->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_vendor_window_destroy_cb), vw);
-
-  gtk_signal_connect(GTK_OBJECT (vw->id_entry), "changed",
-		     GTK_SIGNAL_FUNC(gnc_vendor_name_changed_cb), vw);
-
-  gtk_signal_connect(GTK_OBJECT (vw->company_entry), "changed",
-		     GTK_SIGNAL_FUNC(gnc_vendor_name_changed_cb), vw);
-
-  gtk_signal_connect(GTK_OBJECT (vw->taxtable_check), "toggled",
-		     GTK_SIGNAL_FUNC(gnc_vendor_taxtable_check_cb), vw);
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     vw);
 
   /* Setup initial values */
   if (vendor != NULL) {

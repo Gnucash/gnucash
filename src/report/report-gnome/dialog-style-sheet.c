@@ -185,9 +185,9 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
   g_list_free(strings);
 
   /* get the name */
-  dialog_retval = gnome_dialog_run(GNOME_DIALOG(dlg));
+  dialog_retval = gtk_dialog_run(GTK_DIALOG(dlg));
 
-  if(dialog_retval == 0) {
+  if(dialog_retval == GTK_RESPONSE_OK) {
     template_str = gtk_entry_get_text(GTK_ENTRY(template_entry));
     name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
     if(template_str && name_str) {
@@ -199,7 +199,7 @@ gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
     }
   }
 
-  gnome_dialog_close(GNOME_DIALOG(dlg));
+  gtk_widget_destroy(dlg);
 }
 
 

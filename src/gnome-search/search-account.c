@@ -229,7 +229,7 @@ describe_button (GNCSearchAccount *fi)
 static void
 button_clicked (GtkButton *button, GNCSearchAccount *fi)
 {
-  GnomeDialog *dialog;
+  GtkDialog *dialog;
   GtkWidget *account_tree;
   GtkWidget *accounts_scroller;
   GtkWidget *label;
@@ -258,11 +258,12 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
   /* Create the dialog */
   dialog =
-    (GnomeDialog *) gnome_dialog_new (_("Select the Accounts to Compare"),
-				      GNOME_STOCK_BUTTON_OK,
-				      GNOME_STOCK_BUTTON_CANCEL,
-				      NULL);
-  gnome_dialog_close_hides (dialog, TRUE);
+    GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
+					   NULL,
+					   0,
+					   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					   GTK_STOCK_OK, GTK_RESPONSE_OK,
+					   NULL));
 
   /* Put the dialog together */
   gtk_box_pack_start ((GtkBox *)dialog->vbox, label,
@@ -273,9 +274,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
   gtk_widget_show_all (GTK_WIDGET (dialog));
 
   /* Now run the dialog */
-  switch (gnome_dialog_run (dialog)) {
-  case -1:			/* wm close */
-  case 0:			/* ok */
+  if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK) {
     if (fi->priv->selected_accounts)
       g_list_free (fi->priv->selected_accounts);
 
@@ -284,10 +283,6 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
     desc = describe_button (fi);
     gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), desc);
-    break;
-
-  case 1:			/* cancel */
-    break;
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));

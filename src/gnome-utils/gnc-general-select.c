@@ -120,12 +120,6 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
-#if 0
-        gtk_object_class_add_signals(object_class,
-                                     general_select_signals,
-                                     LAST_SIGNAL);
-#endif
-
 	container_class->forall = gnc_general_select_forall;
 
 	object_class->destroy = gnc_general_select_destroy;

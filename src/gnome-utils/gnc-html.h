@@ -90,7 +90,7 @@ typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data, int *dat
 typedef gboolean (* GncHTMLUrlCB)(const char *location, const char *label,
                                   gboolean new_window, GNCURLResult * result);
 
-gnc_html    * gnc_html_new(void);
+gnc_html    * gnc_html_new(GtkWidget *window);
 void          gnc_html_destroy(gnc_html * html);
 void          gnc_html_show_url(gnc_html * html, 
                                 URLType type,

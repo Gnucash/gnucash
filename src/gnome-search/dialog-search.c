@@ -571,7 +571,7 @@ option_activate (GtkMenuItem *item, struct _crit_data *data)
 
   /* And grab focus */
   gnc_search_core_type_grab_focus (newelem);
-  gnc_search_core_type_editable_enters (newelem, data->dialog);
+  gnc_search_core_type_editable_enters (newelem);
 }
 
 static void
@@ -668,7 +668,7 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
     attach_element (w, sw, rows);
 
     gnc_search_core_type_grab_focus (new);
-    gnc_search_core_type_editable_enters (new, GNOME_DIALOG (sw->dialog));
+    gnc_search_core_type_editable_enters (new);
   }
 }
 

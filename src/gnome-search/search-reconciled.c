@@ -85,13 +85,6 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-#if 0
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
-#endif
 }
 
 static void

@@ -35,7 +35,7 @@ static short module = MOD_GUI;
 
 
 /********************************************************************\
- * gnc_ok_cancel_dialog_common                                      *
+ * gnc_ok_cancel_dialog                                             *
  *   display a message, and asks the user to press "Ok" or "Cancel" *
  *                                                                  *
  * NOTE: This function does not return until the dialog is closed   *
@@ -60,50 +60,29 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
   gchar *buffer;
   va_list args;
 
+  if (parent == NULL)
+    parent = gnc_ui_get_toplevel();
+
   va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
-  dialog = gnome_message_box_new(buffer,
-                                 GNOME_MESSAGE_BOX_QUESTION,
-                                 GNOME_STOCK_BUTTON_OK,
-                                 GNOME_STOCK_BUTTON_CANCEL,
-                                 NULL);
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_OK_CANCEL,
+				   buffer);
   g_free(buffer);
   va_end(args);
 
-  switch (default_result)
-  {
-    case GTK_RESPONSE_OK:
-      default_button = 0;
-      break;
-    case GTK_RESPONSE_CANCEL:
-      default_button = 1;
-      break;
-    default:
-      PWARN("bad default button\n");
-      default_button = 0;
-      break;
-  }
-
-  gnome_dialog_set_default(GNOME_DIALOG(dialog), default_button);
-  if (parent != NULL)
-    gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(parent));
-
-  result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
-
-  switch (result)
-  {
-    case 0:
-      return GTK_RESPONSE_OK;
-    case 1:
-    default:
-      return GTK_RESPONSE_CANCEL;
-  }
+  gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
+  result = gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
+  return(result);
 }
 
 
 
 /********************************************************************\
- * gnc_verify_cancel_dialog_common                                  *
+ * gnc_verify_cancel_dialog                                         *
  *   display a message, and asks the user to press "Yes", "No", or  *
  *   "Cancel"                                                       *
  *                                                                  *
@@ -123,62 +102,40 @@ gnc_verify_cancel_dialog(GtkWidget *parent,
 			 gint default_result,
 			 const gchar *format, ...)
 {
-  GtkWidget *verify_box = NULL;
-  gint default_button;
+  GtkWidget *dialog;
   gint result;
   gchar *buffer;
   va_list args;
 
+  if (parent == NULL)
+    parent = gnc_ui_get_toplevel();
+
   va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
-  verify_box = gnome_message_box_new(buffer,
-				     GNOME_MESSAGE_BOX_QUESTION,
-				     GNOME_STOCK_BUTTON_YES,
-				     GNOME_STOCK_BUTTON_NO,
-                                     GNOME_STOCK_BUTTON_CANCEL,
-				     NULL);
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_NONE,
+				   buffer);
   g_free(buffer);
   va_end(args);
 
-  switch (default_result)
-  {
-    case GTK_RESPONSE_YES:
-      default_button = 0;
-      break;
-    case GTK_RESPONSE_NO:
-      default_button = 1;
-      break;
-    case GTK_RESPONSE_CANCEL:
-      default_button = 2;
-      break;
-    default:
-      PWARN("bad default button\n");
-      default_button = 0;
-      break;
-  }
+  gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+			  GTK_STOCK_YES,    GTK_RESPONSE_YES,
+			  GTK_STOCK_NO,     GTK_RESPONSE_NO,
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			  NULL);
 
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box), default_button);
-  if (parent != NULL)
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
-
-  result = gnome_dialog_run_and_close(GNOME_DIALOG(verify_box));
-
-  switch (result)
-  {
-    case 0:
-      return GTK_RESPONSE_YES;
-    case 1:
-      return GTK_RESPONSE_NO;
-    case 2:
-    default:
-      return GTK_RESPONSE_CANCEL;
-  }
+  gtk_dialog_set_default_response(GTK_DIALOG(dialog), default_result);
+  result = gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
+  return(result);
 }
 
 
 
 /********************************************************************\
- * gnc_verify_dialog_common                                         *
+ * gnc_verify_dialog                                                *
  *   display a message, and asks the user to press "Yes" or "No"    *
  *                                                                  *
  * NOTE: This function does not return until the dialog is closed   *
@@ -195,32 +152,35 @@ gboolean
 gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
 		  const gchar *format, ...)
 {
-  GtkWidget *verify_box = NULL;
+  GtkWidget *dialog;
   gchar *buffer;
+  gint result;
   va_list args;
+
+  if (parent == NULL)
+    parent = gnc_ui_get_toplevel();
 
   va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
-  verify_box = gnome_message_box_new(buffer,
-				     GNOME_MESSAGE_BOX_QUESTION,
-				     GNOME_STOCK_BUTTON_YES,
-				     GNOME_STOCK_BUTTON_NO,
-				     NULL);
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_QUESTION,
+				   GTK_BUTTONS_YES_NO,
+				   buffer);
   g_free(buffer);
   va_end(args);
 
-  if (parent != NULL)
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
-  
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box), (yes_is_default ? 0 : 1));
-
-  return (gnome_dialog_run_and_close(GNOME_DIALOG(verify_box)) == 0);
+  gtk_dialog_set_default_response(GTK_DIALOG(dialog),
+				  (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
+  result = gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
+  return (result == GTK_RESPONSE_YES);
 }
 
 
 
 /********************************************************************\
- * gnc_info_dialog_common                                           * 
+ * gnc_info_dialog                                                  * 
  *   displays an information dialog box                             * 
  *                                                                  * 
  * Args:   parent  - the parent window                              *  
@@ -233,7 +193,7 @@ gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
 void 
 gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 {
-  GtkWidget *info_box = NULL;
+  GtkWidget *dialog;
   gchar *buffer;
   va_list args;
 
@@ -242,17 +202,16 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 
   va_start(args, format);
   buffer = g_strdup_vprintf(format, args);
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_INFO,
+				   GTK_BUTTONS_CLOSE,
+				   buffer);
   va_end(args);
 
-  if (parent)
-    info_box = gnome_ok_dialog_parented(buffer, GTK_WINDOW(parent));
-  else
-    info_box = gnome_ok_dialog(buffer);
-  g_free(buffer);
-
-  gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
 }
-
 
 
 
@@ -270,17 +229,22 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 static void 
 gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 {
-  GtkWidget *warning_box = NULL;
+  GtkWidget *dialog = NULL;
   gchar *buffer;
 
   if (parent == NULL)
     parent = GTK_WIDGET(gnc_ui_get_toplevel());
 
   buffer = g_strdup_vprintf(format, args);
-  warning_box = gnome_warning_dialog_parented(buffer, GTK_WINDOW(parent));
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_WARNING,
+				   GTK_BUTTONS_CLOSE,
+				   buffer);
   g_free(buffer);
 
-  gnome_dialog_run_and_close(GNOME_DIALOG(warning_box));
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
 }
 
 void 
@@ -315,19 +279,22 @@ gnc_warning_dialog(GtkWidget *parent, const gchar *format, ...)
 static void 
 gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 {
-  GtkWidget *top_window, *error_box = NULL;
+  GtkWidget *dialog;
   gchar *buffer;
 
-  if (parent == NULL) {
-    top_window = gnc_ui_get_toplevel();
-    parent = top_window ? top_window : NULL;
-  }
+  if (parent == NULL)
+    parent = GTK_WIDGET(gnc_ui_get_toplevel());
 
   buffer = g_strdup_vprintf(format, args);
-  error_box = gnome_error_dialog_parented(buffer, GTK_WINDOW(parent));
+  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_ERROR,
+				   GTK_BUTTONS_CLOSE,
+				   buffer);
   g_free(buffer);
 
-  gnome_dialog_run_and_close(GNOME_DIALOG(error_box));
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
 }
 
 void 
@@ -422,6 +389,21 @@ gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
   return(result);
 }
 
+int
+gnc_generic_error_dialog(GtkWidget *parent, const char **buttons,
+			 const gchar *format, ...)
+{
+  int result;
+  va_list args;
+
+  va_start(args, format);
+  result = gnc_generic_dialog_common(parent,
+				     GNOME_MESSAGE_BOX_ERROR,
+				     buttons, format, args);
+  va_end(args);
+  return(result);
+}
+
 static void
 gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 {
@@ -495,26 +477,23 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
 		       &radio_result);
   }
 
-  dialog = gnome_dialog_new (title,
-                             GNOME_STOCK_BUTTON_OK,
-                             GNOME_STOCK_BUTTON_CANCEL,
-                             NULL);
-
-  if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+  dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					NULL);
 
   /* default to ok */
-  gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
+  gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
-  /* destroy, don't hide */
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
-
-  dvbox = GNOME_DIALOG(dialog)->vbox;
+  dvbox = GTK_DIALOG(dialog)->vbox;
 
   gtk_box_pack_start(GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
 
-  if (gnome_dialog_run_and_close(GNOME_DIALOG(dialog)) != 0)
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
     radio_result = -1;
+
+  gtk_widget_destroy (dialog);
 
   return radio_result;
 }

@@ -310,10 +310,6 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
 
   g_assert( i == LAST_SIGNAL );
 
-#if 0
-  gtk_object_class_add_signals (object_class, gnc_split_reg_signals, LAST_SIGNAL);
-#endif
-
   /* Setup the default handlers. */
   class->enter_ent_cb    = gsr_default_enter_handler;
   class->cancel_ent_cb   = gsr_default_cancel_handler;
@@ -2118,7 +2114,7 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
 
   client = gconf_client_get_default ();
   /* Glade insists on making this a tearoff menu. */
-  if (gconf_client_get_string (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
+  if (gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
     GtkMenuShell *ms = GTK_MENU_SHELL(popup);
     GtkWidget *tearoff;
 

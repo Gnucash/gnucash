@@ -2373,11 +2373,6 @@ gnucash_register_class_init (GnucashRegisterClass *class)
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
-#if 0
-        gtk_object_class_add_signals(object_class, register_signals,
-                                     LAST_SIGNAL);
-#endif
-
         class->activate_cursor = NULL;
         class->redraw_all = NULL;
         class->redraw_help = NULL;

@@ -29,546 +29,7 @@
 	  <property name="shadow_type">GTK_SHADOW_OUT</property>
 
 	  <child>
-	    <widget class="GtkMenuBar" id="gnc_register_menubar">
-	      <property name="visible">True</property>
-
-	      <child>
-		<widget class="GtkMenuItem" id="menuitem1">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_File</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="menuitem1_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem2">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Create a new account</property>
-			  <property name="label" translatable="yes">New Account</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_new_account_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem3">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem1">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gtk-save</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_file_save_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem2">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gtk-save-as</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_file_save_as_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem4">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem3">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gtk-print</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_print_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem5">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Print a check using a standard format</property>
-			  <property name="label" translatable="yes">Print _Check</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_print_check_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem6">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem4">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gtk-close</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_close_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem5">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gtk-quit</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_exit_cb"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="gnc_register_edit_menu">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Edit</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="gnc_register_edit_menu_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_edit_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Edit Account</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_edit_cb"/>
-			  <accelerator key="F6" modifiers="0" signal="activate"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="gnc_register_find_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Find</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_ui_find_transactions_cb"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="convertwidget1">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-find</property>
-			      <property name="icon_size">4</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="gnc_register_view_menu">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_View</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="gnc_register_view_menu_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkCheckMenuItem" id="gnc_register_toolbar_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Toolbar</property>
-			  <property name="use_underline">True</property>
-			  <property name="active">True</property>
-			  <signal name="activate" handler="gnc_register_toolbar_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkCheckMenuItem" id="gnc_register_summary_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">S_ummary Bar</property>
-			  <property name="use_underline">True</property>
-			  <property name="active">True</property>
-			  <signal name="activate" handler="gnc_register_summarybar_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkCheckMenuItem" id="gnc_register_statusbar_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Status Bar</property>
-			  <property name="use_underline">True</property>
-			  <property name="active">True</property>
-			  <signal name="activate" handler="gnc_register_statusbar_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="separator14">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_select_trans_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">S_elect Transactions</property>
-			  <property name="use_underline">True</property>
-
-			  <child>
-			    <widget class="GtkMenu" id="gnc_register_select_trans_mi_menu">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="gnc_register_date_range_mi">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Date _Range</property>
-				  <property name="use_underline">True</property>
-
-				  <child>
-				    <widget class="GtkMenu" id="gnc_register_date_range_mi_menu">
-				      <property name="visible">True</property>
-
-				      <child>
-					<widget class="GtkMenuItem" id="show_all1">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Show _All</property>
-					  <property name="use_underline">True</property>
-					  <signal name="activate" handler="gnc_register_date_show_all_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="set_range1">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Set _Range...</property>
-					  <property name="use_underline">True</property>
-					  <signal name="activate" handler="gnc_register_date_range_cb"/>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="gnc_register_date_range_mi">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Status</property>
-				  <property name="use_underline">True</property>
-
-				  <child>
-				    <widget class="GtkMenu" id="gnc_register_date_range_mi_menu">
-				      <property name="visible">True</property>
-
-				      <child>
-					<widget class="GtkMenuItem" id="show_all_status">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_All</property>
-					  <property name="use_underline">True</property>
-					  <signal name="activate" handler="gnc_register_show_all_status_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="separator15">
-					  <property name="visible">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkCheckMenuItem" id="show_reconciled">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_Reconciled</property>
-					  <property name="use_underline">True</property>
-					  <property name="active">True</property>
-					  <signal name="activate" handler="gnc_register_show_one_status_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkCheckMenuItem" id="show_cleared">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_Cleared</property>
-					  <property name="use_underline">True</property>
-					  <property name="active">True</property>
-					  <signal name="activate" handler="gnc_register_show_one_status_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkCheckMenuItem" id="show_voided">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_Voided</property>
-					  <property name="use_underline">True</property>
-					  <property name="active">True</property>
-					  <signal name="activate" handler="gnc_register_show_one_status_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkCheckMenuItem" id="show_frozen">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_Frozen</property>
-					  <property name="use_underline">True</property>
-					  <property name="active">True</property>
-					  <signal name="activate" handler="gnc_register_show_one_status_cb"/>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkCheckMenuItem" id="show_unreconciled">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">_Unreconciled</property>
-					  <property name="use_underline">True</property>
-					  <property name="active">True</property>
-					  <signal name="activate" handler="gnc_register_show_one_status_cb"/>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="gnc_register_actions_menu">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Actions</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="gnc_register_actions_menu_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_xfer_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Transfer...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_xfer_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_recn_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Reconcile...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_start_recn_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_stock_split_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Stock Split...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_stock_split_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="gnc_register_scrub_mi">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Chec_k &amp; Repair</property>
-			  <property name="use_underline">True</property>
-
-			  <child>
-			    <widget class="GtkMenu" id="gnc_register_scrub_mi_menu">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="all_transactions1">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_All transactions</property>
-				  <property name="use_underline">True</property>
-				  <signal name="activate" handler="gnc_register_scrub_all_cb"/>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="this_transaction1">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">_This transaction</property>
-				  <property name="use_underline">True</property>
-				  <signal name="activate" handler="gnc_register_scrub_current_cb"/>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="menuitem41">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Reports</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="menuitem41_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem42">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Open a register report window for this transaction</property>
-			  <property name="label" translatable="yes">_Account Report</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_report_account_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem43">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Open a register report window for this transaction</property>
-			  <property name="label" translatable="yes">_Transaction Report</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_report_trans_cb"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="menuitem44">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Tools</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="menuitem44_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem45">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Open a general ledger window</property>
-			  <property name="label" translatable="yes">_General Ledger</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_gl_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem46">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">View and edit the prices for stocks and mutual funds</property>
-			  <property name="label" translatable="yes">_Price Editor</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_prices_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem47">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">View and edit the commodities for stocks and mutual funds</property>
-			  <property name="label" translatable="yes">_Commodity Editor</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_commodities_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem48">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Use the financial calculator</property>
-			  <property name="label" translatable="yes">_Financial Calculator</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_register_fincalc_cb"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="menuitem49">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Help</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="menuitem49_menu">
-		      <property name="visible">True</property>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem50">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Open the GnuCash Tutorial</property>
-			  <property name="label" translatable="yes">Tutorial and Concepts _Guide</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_tutorial_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem51">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">View the Tips of the Day</property>
-			  <property name="label" translatable="yes">_Tip Of The Day</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_totd_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="help1">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Open the GnuCash Help</property>
-			  <property name="label" translatable="yes">_Help</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_help_cb"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="menuitem52">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="pixmapmenuitem10">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">gnome-stock-about</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="gnc_main_window_about_cb"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-	    </widget>
+	    <placeholder/>
 	  </child>
 	</widget>
 	<packing>
@@ -1010,20 +471,6 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="set_range">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="has_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Set Date Range</property>
-	      <property name="use_underline">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="gnc_register_date_cb"/>
-	    </widget>
-	  </child>
-
-	  <child>
 	    <widget class="GtkButton" id="button80">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -1032,6 +479,74 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="set_range">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="gnc_register_date_cb"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment1">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox87">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-ok</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847672">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Set Date Range</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -1052,10 +567,13 @@
 	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox97">
+	    <widget class="GtkTable" id="table1">
 	      <property name="visible">True</property>
+	      <property name="n_rows">5</property>
+	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
+	      <property name="row_spacing">0</property>
+	      <property name="column_spacing">0</property>
 
 	      <child>
 		<widget class="GtkRadioButton" id="start_earliest">
@@ -1064,76 +582,60 @@
 		  <property name="label" translatable="yes">Show Earliest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">True</property>
+		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox85">
+		<widget class="GtkRadioButton" id="start_date">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Start date:</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">start_earliest</property>
+		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="start_date_entry">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkRadioButton" id="start_date">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Start date:</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <property name="group">start_earliest</property>
-		      <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHBox" id="start_date_entry">
-		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHSeparator" id="hseparator1">
-		  <property name="visible">True</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
@@ -1144,82 +646,96 @@
 		  <property name="label" translatable="yes">Show Latest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">True</property>
+		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox86">
+		<widget class="GtkRadioButton" id="end_date">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">End date:</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">end_latest</property>
+		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="today">
+		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Today</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <signal name="clicked" handler="gnc_register_today_cb"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">3</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="end_date_entry">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkRadioButton" id="end_date">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">End date:</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <property name="group">end_latest</property>
-		      <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHBox" id="end_date_entry">
-		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkButton" id="today">
-		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Today</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <signal name="clicked" handler="gnc_register_today_cb"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options">fill</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkHSeparator" id="hseparator1">
+		  <property name="visible">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">2</property>
+		  <property name="bottom_attach">3</property>
+		  <property name="y_padding">3</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 	    </widget>
@@ -1257,12 +773,11 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button81">
+	    <widget class="GtkButton" id="button83">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
-	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -1270,11 +785,12 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button83">
+	    <widget class="GtkButton" id="button81">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -1351,7 +867,7 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
+	      <property name="expand">False</property>
 	      <property name="fill">True</property>
 	    </packing>
 	  </child>
@@ -1383,8 +899,8 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">False</property>
-	      <property name="fill">False</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
 	    </packing>
 	  </child>
 	</widget>
@@ -1536,13 +1052,11 @@
 
 	  <child>
 	    <widget class="GtkMenu" id="menu_edit_menu">
-	      <property name="visible">True</property>
 
 	      <child>
 		<widget class="GtkImageMenuItem" id="menu_cut">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">gtk-cut</property>
-		  <property name="use_underline">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_CUT_ITEM</property>
 		  <signal name="activate" handler="gnc_split_reg_cut_cb"/>
 		</widget>
 	      </child>
@@ -1550,8 +1064,7 @@
 	      <child>
 		<widget class="GtkImageMenuItem" id="menu_copy">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">gtk-copy</property>
-		  <property name="use_underline">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_COPY_ITEM</property>
 		  <signal name="activate" handler="gnc_split_reg_copy_cb"/>
 		</widget>
 	      </child>
@@ -1559,8 +1072,7 @@
 	      <child>
 		<widget class="GtkImageMenuItem" id="menu_paste">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">gtk-paste</property>
-		  <property name="use_underline">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_PASTE_ITEM</property>
 		  <signal name="activate" handler="gnc_split_reg_paste_cb"/>
 		</widget>
 	      </child>
@@ -1613,7 +1125,6 @@
 
 	  <child>
 	    <widget class="GtkMenu" id="menu_view_menu">
-	      <property name="visible">True</property>
 
 	      <child>
 		<widget class="GtkMenuItem" id="menu_sort_order">
@@ -1623,7 +1134,6 @@
 
 		  <child>
 		    <widget class="GtkMenu" id="menu_sort_order_menu">
-		      <property name="visible">True</property>
 
 		      <child>
 			<widget class="GtkRadioMenuItem" id="menu_sort_standard">
@@ -1738,7 +1248,6 @@
 
 		  <child>
 		    <widget class="GtkMenu" id="menu_style_menu">
-		      <property name="visible">True</property>
 
 		      <child>
 			<widget class="GtkRadioMenuItem" id="menu_style_basic_ledger">
@@ -1808,7 +1317,6 @@
 
 	  <child>
 	    <widget class="GtkMenu" id="menu_actions_menu">
-	      <property name="visible">True</property>
 
 	      <child>
 		<widget class="GtkMenuItem" id="menu_enter">
@@ -1821,32 +1329,68 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="menu_cancel">
+		<widget class="GtkImageMenuItem" id="menu_cancel">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Cancel the current transaction</property>
 		  <property name="label" translatable="yes">_Cancel</property>
 		  <property name="use_underline">True</property>
 		  <signal name="activate" handler="gnc_split_reg_cancel_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image11">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-cancel</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="menu_delete">
+		<widget class="GtkImageMenuItem" id="menu_delete">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Delete the current transaction</property>
 		  <property name="label" translatable="yes">_Delete</property>
 		  <property name="use_underline">True</property>
 		  <signal name="activate" handler="gnc_split_reg_delete_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image12">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-delete</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="menu_blank">
+		<widget class="GtkImageMenuItem" id="menu_blank">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
 		  <property name="label" translatable="yes">_Blank</property>
 		  <property name="use_underline">True</property>
 		  <signal name="activate" handler="gnc_split_reg_new_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image13">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-clear</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 
@@ -1906,12 +1450,24 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="menu_jump">
+		<widget class="GtkImageMenuItem" id="menu_jump">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
 		  <property name="label" translatable="yes">_Jump</property>
 		  <property name="use_underline">True</property>
 		  <signal name="activate" handler="gnc_split_reg_jump_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image14">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-jump-to</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
 		</widget>
 	      </child>
 	    </widget>

@@ -235,7 +235,7 @@
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char" translatable="yes">*</property>
-			      <property name="activates_default">False</property>
+			      <property name="activates_default">True</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -254,7 +254,7 @@
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char" translatable="yes">*</property>
-			      <property name="activates_default">False</property>
+			      <property name="activates_default">True</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -273,7 +273,7 @@
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char" translatable="yes">*</property>
-			      <property name="activates_default">False</property>
+			      <property name="activates_default">True</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -453,7 +453,6 @@
 
 			      <child>
 				<widget class="GtkLabel" id="label8477401">
-				  <property name="visible">True</property>
 				  <property name="label" translatable="yes"></property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
@@ -1533,7 +1532,7 @@ and placeholder accounts may have an opening balance.</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">Finish Account Setup</property>
-	  <property name="text" translatable="yes">Press `Finish' to create your new accounts.
+	  <property name="text" translatable="yes">Press `Apply' to create your new accounts.
 
 Press `Back' to review your selections.
 

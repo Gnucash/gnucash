@@ -23,14 +23,14 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area15">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button73">
+	    <widget class="GtkButton" id="cancelbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -38,11 +38,11 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button75">
+	    <widget class="GtkButton" id="okbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -137,18 +137,19 @@
 		    <widget class="GtkEntry" id="name_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
+		      <property name="has_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="visibility">True</property>
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char" translatable="yes">*</property>
-		      <property name="activates_default">False</property>
+		      <property name="activates_default">True</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
 		    </packing>
 		  </child>
 
@@ -213,7 +214,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
+		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -370,8 +371,8 @@
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
 	</packing>
       </child>
 
@@ -669,7 +670,7 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
-  <property name="resizable">True</property>
+  <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
 
@@ -682,14 +683,14 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area17">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button90">
+	    <widget class="GtkButton" id="cancelbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -697,11 +698,11 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button92">
+	    <widget class="GtkButton" id="okbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -776,27 +777,6 @@
 		      <property name="fill">False</property>
 		    </packing>
 		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="label847731">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes"></property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_CENTER</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -841,27 +821,6 @@
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
 		      <property name="adjustment">1 0 100 1 10 10</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="label847732">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes"></property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_CENTER</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>

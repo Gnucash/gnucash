@@ -3,7 +3,8 @@
 	* lib/egg/egg-action.c: Fix problem connecting toolbar actions and
 	switching a proxy between actions.
 	
-	* lib/egg/egg-menu-merge.c: Make popup menus work.
+	* lib/egg/egg-menu-merge.c: Make popup menus work.  Remove some
+	debug messages.
 
 	* src/gnc-ui.h:
 	* src/gnome/druid-stock-split.[ch]:
@@ -16,6 +17,25 @@
 	* src/gnome-utils/gnc-splash.[ch]: Move this code to the
 	gnome-utils directory.
 
+	* src/gnome/gnc-plugin-page-account-tree.c: Fix various problems.
+
+	* src/engine/gnc-commodity.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/glade/commodities.glade:
+	* src/gnome-utils/gnc-tree-model-commodity.c:
+	* src/gnome-utils/gnc-tree-model-commodity.h: Enhance the
+	commodity selection dialog.  Now does the right thing when
+	commodities are added or deleted.
+
+	* src/app-file/gnc-file.c: Tear down the splash screen before
+	presenting an error.  Use new gnome2 button order.
+
+	* All dialog-*.c and *.glade files: First pass at converting to
+	Gnome 2 HIG for button order.  Convert gnome1 dialogs to gtk2
+	dialogs. Set the function to activate the default button the
+	gnome2 way (was editable_enters).  Remove some code not needed in
+	gnome2 widget setup.
+	
 2003-08-08  David Hampton  <hampton@employees.org>
 
 	* lots of files: Sync up at the gnome2-merge-2 tag.

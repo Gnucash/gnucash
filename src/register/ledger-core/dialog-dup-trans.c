@@ -161,9 +161,6 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     num_spin = glade_xml_get_widget (xml, "num_spin");
     dt_dialog->num_edit = num_spin;
 
-    /*gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                  GTK_EDITABLE (num_spin));*/
-
     gtk_signal_connect (GTK_OBJECT(num_spin), "focus-out-event",
 			GTK_SIGNAL_FUNC(gnc_dup_trans_focus_out_cb), dt_dialog);
     gtk_signal_connect (GTK_OBJECT(num_spin), "draw",

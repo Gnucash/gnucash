@@ -35,6 +35,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-split-reg.h"
+#include "gnc-session.h"
 #include "gnc-totd-dialog.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
@@ -91,6 +92,7 @@ static void gnc_main_window_cmd_help_tutorial (EggAction *action, GncMainWindow 
 static void gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_update_title (GncMainWindow *window);
 
 struct GncMainWindowPrivate
 {
@@ -675,8 +677,16 @@ gnc_main_window_cmd_file_new (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *window)
 {
+	EggActionGroup *action_group;
+	EggAction *acct_tree_action;
+
 	gnc_file_open ();
+	gnc_main_window_update_title (window);
 	/* FIXME GNOME 2 Port (update the title etc.) */
+
+	action_group = gnc_main_window_get_action_group(window, "gnc-plugin-account-tree-default-actions");
+	acct_tree_action = egg_action_group_get_action(action_group, "FileNewAccountTreeAction");
+	egg_action_activate(acct_tree_action);
 }
 
 static void
@@ -923,4 +933,22 @@ gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window)
 
 	gdk_pixbuf_unref (logo);
 	gtk_dialog_run (GTK_DIALOG (about));
+}
+
+static void
+gnc_main_window_update_title (GncMainWindow *window)
+{
+  const gchar *filename;
+  gchar *title;
+
+  filename = gnc_session_get_url (gnc_get_current_session ());
+
+  if (!filename)
+    filename = _("<no file>");
+  else if (strncmp ("file:", filename, 5) == 0)
+    filename += 5;
+
+  title = g_strdup_printf ("Gnucash (%s)", filename);
+  gtk_window_set_title (GTK_WINDOW(&window->parent), title);
+  g_free(title);
 }

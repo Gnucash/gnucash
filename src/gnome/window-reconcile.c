@@ -155,6 +155,9 @@ static void   recnFinishCB (GtkWidget *w, gpointer data);
 static void   recnPostponeCB (GtkWidget *w, gpointer data);
 static void   recnCancelCB (GtkWidget *w, gpointer data);
 
+void gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data);
+void gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data);
+
 static void   gnc_reconcile_window_set_sensitivity(RecnWindow *recnData);
 static char * gnc_recn_make_window_name(Account *account);
 static void   gnc_recn_set_window_name(RecnWindow *recnData);
@@ -340,7 +343,7 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
                               new_balance);
 }
 
-static void
+void
 gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
 {
   data->include_children =
@@ -534,13 +537,13 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(entry));
-    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
     data->original_value = after;
     data->user_set_value = FALSE;
   }
 }
 
-static void
+void
 gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
 {
   /* indicate in account that user wants
@@ -620,6 +623,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 		gboolean enable_subaccount)
 {
   GtkWidget *dialog, *end_value, *date_value, *include_children_button;
+  GladeXML *xml;
   startRecnWindowData data = { NULL };
   gboolean auto_interest_xfer_option;
   GNCPrintAmountInfo print_info;
@@ -655,56 +659,46 @@ startRecnWindow(GtkWidget *parent, Account *account,
    */
 
   /* Create the dialog box */
+  xml = gnc_glade_xml_new ("reconcile.glade", "Reconcile Start Dialog");
+  dialog = glade_xml_get_widget (xml, "Reconcile Start Dialog");
   title = gnc_recn_make_window_name (account);
-
-  dialog = gnome_dialog_new (title,
-                             GNOME_STOCK_BUTTON_OK,
-                             GNOME_STOCK_BUTTON_CANCEL,
-                             NULL);
+  gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free (title);
 
   data.startRecnWindow = GTK_WIDGET(dialog);
 
-  gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
-  gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
-  gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
-  gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(parent));
+  if (parent != NULL)
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   {
-    GtkWidget *frame = gtk_frame_new(_("Reconcile Information"));
-    GtkWidget *main_area = gtk_hbox_new(FALSE, 5);
-    GtkWidget *left_column = gtk_vbox_new(TRUE, 0);
-    GtkWidget *right_column = gtk_vbox_new(TRUE, 0);
-    GtkWidget *date_title = gtk_label_new(_("Statement Date:"));
-    GtkWidget *start_title = gtk_label_new(_("Starting Balance:"));
-    GtkWidget *end_title = gtk_label_new(_("Ending Balance:"));
-    GtkWidget *start_value =
-      gtk_label_new(xaccPrintAmount (ending, print_info));
-    GtkWidget *blank_label = gtk_label_new("");
-    GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
+    GtkWidget *start_value, *box;
     GtkWidget *entry;
     GtkWidget *interest = NULL;
 
-    include_children_button =
-      gtk_check_button_new_with_label(_("Include Subaccounts"));
+    start_value = glade_xml_get_widget(xml, "start_value");
+    gtk_label_set_text(GTK_LABEL(start_value), xaccPrintAmount (ending, print_info));
+
+    include_children_button = glade_xml_get_widget(xml, "subaccount_check");
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children_button),
                                  data.include_children);
     gtk_widget_set_sensitive(include_children_button, enable_subaccount);
-    gtk_signal_connect ( GTK_OBJECT (include_children_button), "toggled",
-          GTK_SIGNAL_FUNC (gnc_start_recn_children_changed), (gpointer) &data );
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
     data.date_value = date_value;
+    box = glade_xml_get_widget(xml, "date_value_box");
+    gtk_box_pack_start(GTK_BOX(box), date_value, TRUE, TRUE, 0);
 
     end_value = gnc_amount_edit_new ();
     data.end_value = GNC_AMOUNT_EDIT(end_value);
     data.original_value = *new_ending;
     data.user_set_value = FALSE;
+    box = glade_xml_get_widget(xml, "ending_value_box");
+    gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
 
     /* need to get a callback on date changes to update the recn balance */
-    gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
-          GTK_SIGNAL_FUNC (gnc_start_recn_date_changed), (gpointer) &data );
-    gnc_date_editable_enters(GNOME_DIALOG(dialog), GNC_DATE_EDIT(date_value));
+    g_signal_connect ( G_OBJECT (date_value), "date_changed",
+          G_CALLBACK (gnc_start_recn_date_changed), (gpointer) &data );
+    gnc_date_editable_enters(GNC_DATE_EDIT(date_value), TRUE);
 
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
@@ -714,60 +708,34 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (end_value), *new_ending);
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
-    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-
-    gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
-                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), (gpointer) &data);
-
-    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
-
-    gtk_misc_set_alignment(GTK_MISC(date_title), 1.0, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(start_title), 1.0, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(start_value), 0.0, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(end_title), 1.0, 0.5);
-
-    gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
-    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-    gtk_container_add(GTK_CONTAINER(frame), main_area);
-
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
-
-    gtk_box_pack_start(GTK_BOX(main_area), left_column, FALSE, FALSE, 0);
-    gtk_box_pack_end(GTK_BOX(main_area), right_column, TRUE, TRUE, 0);
-
-    gtk_box_pack_start(GTK_BOX(left_column), date_title, TRUE, TRUE, 3);
-    gtk_box_pack_start(GTK_BOX(left_column), start_title, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(left_column), end_title, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(left_column), blank_label, TRUE, TRUE, 0);
-
-    gtk_box_pack_start(GTK_BOX(right_column), date_value, TRUE, TRUE, 3);
-    gtk_box_pack_start(GTK_BOX(right_column), start_value, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(right_column), include_children_button, TRUE, TRUE, 0);
+    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
+    g_signal_connect(G_OBJECT(entry), "focus-out-event",
+		     G_CALLBACK(gnc_start_recn_update_cb), (gpointer) &data);
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
     /* if it's possible to enter an interest payment or charge for this
      * account, add a button so that the user can pop up the appropriate
      * dialog if it isn't automatically popping up.
      */
+    interest = glade_xml_get_widget(xml, "interest_button");
     if( account_type_has_auto_interest_payment( data.account_type ) )
-      interest = gtk_button_new_with_label( _("Enter Interest Payment...") );
+      gtk_button_set_label(GTK_BUTTON(interest), _("Enter Interest Payment...") );
     else if( account_type_has_auto_interest_charge( data.account_type ) )
-      interest = gtk_button_new_with_label( _("Enter Interest Charge...") );
+      gtk_button_set_label(GTK_BUTTON(interest), _("Enter Interest Charge...") );
+    else {
+      gtk_widget_destroy(interest);
+      interest = NULL;
+    }
 
     if( interest )
     {
-      GtkWidget *alignment = gtk_alignment_new(0.5, 0.5, 0.5, 0.5);
       data.xfer_button = interest;
-
-      gtk_box_pack_end( GTK_BOX(vbox), alignment, FALSE, FALSE, 0 );
-      gtk_container_add(GTK_CONTAINER(alignment), interest);
-      gtk_signal_connect(GTK_OBJECT(interest), "clicked",
-                        GTK_SIGNAL_FUNC(gnc_start_recn_interest_clicked_cb),
-                        (gpointer) &data );
-
       if( auto_interest_xfer_option )
        gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
     }
+
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+				      &data);
 
     gtk_widget_show_all(dialog);
 
@@ -785,9 +753,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   while (TRUE)
   {
-    result = gnome_dialog_run(GNOME_DIALOG(dialog));
-
-    if (result == 0) /* ok button */
+    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    if (result == GTK_RESPONSE_OK)
     {
       *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
       *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
@@ -803,10 +770,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
     /* cancel or delete */
     break;
   }
-
   gtk_widget_destroy (dialog);
 
-  return (result == 0);
+  return (result == GTK_RESPONSE_OK);
 }
 
 

@@ -26,14 +26,14 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="hbuttonbox1">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="button1">
+	    <widget class="GtkButton" id="cancelbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -41,11 +41,11 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button2">
+	    <widget class="GtkButton" id="okbutton">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -164,7 +164,7 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">1000</property>
+  <property name="default_width">800</property>
   <property name="default_height">600</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -183,6 +183,19 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
+	    <widget class="GtkButton" id="matcher_cancel">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="on_matcher_cancel_clicked"/>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkButton" id="matcher_ok">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -194,19 +207,6 @@
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
 	      <signal name="clicked" handler="on_matcher_ok_clicked"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="matcher_cancel">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="on_matcher_cancel_clicked"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -337,19 +337,6 @@
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="ok_button">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="on_matcher_ok_clicked"/>
-	    </widget>
-	  </child>
-
-	  <child>
 	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -359,6 +346,19 @@
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
 	      <signal name="clicked" handler="on_matcher_cancel_clicked"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="ok_button">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="on_matcher_ok_clicked"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -485,11 +485,11 @@ click &quot;Ok&quot;.</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="ok_button">
+	    <widget class="GtkButton" id="cancel_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
+	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
@@ -497,11 +497,11 @@ click &quot;Ok&quot;.</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="cancel_button">
+	    <widget class="GtkButton" id="ok_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-cancel</property>
+	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
