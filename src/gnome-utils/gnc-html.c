@@ -864,30 +864,6 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 
 /********************************************************************
- * gnc_html_open_options
- * open an editor for report parameters 
- ********************************************************************/
-
-static void
-gnc_html_open_options(gnc_html * html, const gchar * location) {
-  int report_id;
-  SCM find_report  = gh_eval_str("gnc:find-report");
-  SCM start_editor = gh_eval_str("gnc:report-edit-options");
-  SCM report;
-  
-  /* href="gnc-options:report-id=2676" */
-  if(!strncmp("report-id=", location, 10)) {
-    sscanf(location+10, "%d", &report_id);
-    report = gh_call1(find_report, gh_int2scm(report_id));
-    gh_call1(start_editor, report);
-  }
-  else {
-    gnc_warning_dialog(_("Badly formed options URL."));
-  }
-}
-
-
-/********************************************************************
  * gnc_html_open_help
  * open a help window 
  ********************************************************************/
@@ -1033,10 +1009,6 @@ gnc_html_show_url(gnc_html * html, URLType type,
   }
 
   switch(type) {
-  case URL_TYPE_OPTIONS:
-    gnc_html_open_options(html, location);
-    break;
-
   case URL_TYPE_HELP:
     gnc_html_open_help(html, location, label, new_window);
     break;
@@ -1080,8 +1052,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
 
   case URL_TYPE_ACTION:
     gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, 
-                                                      location, label));
+                            gnc_html_history_node_new(type, location, label));
     gnc_html_submit_cb(GTK_HTML(html->html), "get", 
                        gnc_build_url(type, location, label), NULL,
                        (gpointer)html);

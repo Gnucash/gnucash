@@ -47,84 +47,6 @@
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
 
-(define (gnc:report-menu-setup)
-  ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_File" menu. 
-  (define menu (gnc:make-menu gnc:menuname-reports (list "_File")))
-  (define menu-namer (gnc:new-menu-namer))
-  (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list gnc:menuname-reports "")))
-  (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:menuname-reports "")))
-  (define asset-liability-menu
-    (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:menuname-reports "")))
-  (define utility-menu
-    (gnc:make-menu gnc:menuname-utility
-                   (list gnc:menuname-reports "")))
-  (define menu-hash (make-hash-table 23))
-
-  (define (add-report-menu-item name report)
-    (if (gnc:report-template-in-menu? report)
-        (let ((title (string-append (_ "Report") ": " (_ name)))
-              (menu-path (gnc:report-template-menu-path report))
-              (menu-name (gnc:report-template-menu-name report))
-              (menu-tip (gnc:report-template-menu-tip report))
-              (item #f))
-
-          (if (not menu-path)
-              (set! menu-path '(""))
-              (set! menu-path
-                    (append menu-path '(""))))
-
-          (set! menu-path (append (list gnc:menuname-reports) menu-path))
-
-          (if menu-name (set! name menu-name))
-
-          (if (not menu-tip)
-              (set! menu-tip
-                    (sprintf #f (_ "Display the %s report") (_ name))))
-
-          (set! item
-                (gnc:make-menu-item
-                 ((menu-namer 'add-name) name)
-                 menu-tip
-                 menu-path
-                 (lambda ()
-                   (let ((rept (gnc:make-report
-                                (gnc:report-template-name report))))
-                     (gnc:main-window-open-report rept #f)))))
-          (gnc:add-extension item))))
-
-  (gnc:add-extension menu)
-
-  ;; add the menu option to edit style sheets 
-  (gnc:add-extension
-   (gnc:make-menu-item 
-    ((menu-namer 'add-name) (_ "Style Sheets..."))
-    (_ "Edit report style sheets.")
-    (list "_Settings" "")
-    (lambda ()
-      (gnc:style-sheet-dialog-open))))
-
-;  (gnc:add-extension tax-menu)
-  (gnc:add-extension income-expense-menu)
-  (gnc:add-extension asset-liability-menu)
-  (gnc:add-extension utility-menu)
-
-  ;; push reports (new items added on top of menu)
-  (hash-for-each add-report-menu-item *gnc:_report-templates_*)
-
-  ;; the Welcome to Gnucash-1.6 extravaganza 
-  (gnc:add-extension 
-   (gnc:make-menu-item 
-    ((menu-namer 'add-name) (_ "Welcome Extravaganza")) 
-    (_ "Welcome-to-GnuCash screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda ()
-      (gnc:make-welcome-report)))))
-
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
@@ -485,5 +407,7 @@
 ;;             (display html) (newline)
              html)
            #f)))))
-              
-(gnc:hook-add-dangler gnc:*ui-startup-hook* gnc:report-menu-setup)
+
+(define (gnc:report-templates-for-each thunk)
+  (hash-for-each (lambda (name template) (thunk name template))
+                 *gnc:_report-templates_*))

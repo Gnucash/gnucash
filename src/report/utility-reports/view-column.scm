@@ -28,6 +28,9 @@
 
 (define-module (gnucash report view-column))
 
+(use-modules (ice-9 slib))
+(require 'printf)
+
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 

@@ -102,6 +102,18 @@
 (export gnc:report-template-new-options/name)
 (export gnc:report-template-menu-name/name)
 (export gnc:report-template-new-options)
+(export gnc:report-template-version)
+(export gnc:report-template-name)
+(export gnc:report-template-options-generator)
+(export gnc:report-template-options-editor)
+(export gnc:report-template-options-cleanup-cb)
+(export gnc:report-template-options-changed-cb)
+(export gnc:report-template-renderer)
+(export gnc:report-template-in-menu?)
+(export gnc:report-template-menu-path)
+(export gnc:report-template-menu-name)
+(export gnc:report-template-menu-tip)
+(export gnc:report-template-export-thunk)
 (export gnc:report-type)
 (export gnc:report-set-type!)
 (export gnc:report-id)
@@ -132,6 +144,7 @@
 (export gnc:report-generate-restore-forms)
 (export gnc:report-render-html)
 (export gnc:report-run)
+(export gnc:report-templates-for-each)
 
 ;; html-barchart.scm
 
