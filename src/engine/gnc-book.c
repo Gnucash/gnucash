@@ -33,7 +33,7 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
-#include <errno.h>
+#include <dlfcn.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -42,6 +42,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "Backend.h"
 #include "BackendP.h"
 #include "FileIO.h"
 #include "Group.h"
@@ -64,14 +65,11 @@ struct _gnc_book
 
   /* if book_begin failed, this records the failure reason 
    * (file not found, etc).
-   * the standard errno values are used.
-   */
-  int errtype;
-
-  /* FIXME: This is a hack.  I'm trying to move us away from static
+   * This is a 'stack' that is one deep.
+   * FIXME: This is a hack.  I'm trying to move us away from static
    * global vars. This may be a temp fix if we decide to integrate
    * FileIO errors into GNCBook errors. */
-  GNCFileIOError last_file_err;
+  GNCBackendError last_err;
 
   /* ---------------------------------------------------- */
   /* the following struct members apply only for file-io */
@@ -92,12 +90,45 @@ struct _gnc_book
 /* ============================================================== */
 
 static void
+gnc_book_clear_error (GNCBook *book)
+{
+  book->last_err = ERR_BACKEND_NO_ERR;
+}
+
+static void
+gnc_book_push_error (GNCBook *book, GNCBackendError err)
+{
+  book->last_err = err;
+}
+
+/* ============================================================== */
+
+GNCBackendError
+gnc_book_get_error (GNCBook * book)
+{
+  if (!book) return ERR_BACKEND_NO_BACKEND;
+  return book->last_err;
+}
+
+GNCBackendError
+gnc_book_pop_error (GNCBook * book)
+{
+  GNCBackendError err;
+  if (!book) return ERR_BACKEND_NO_BACKEND;
+  err = book->last_err;
+  book->last_err = ERR_BACKEND_NO_ERR;
+  return err;
+}
+
+/* ============================================================== */
+
+static void
 gnc_book_init (GNCBook *book)
 {
   if (!book) return;
 
   book->topgroup = xaccMallocAccountGroup ();
-  book->last_file_err = ERR_FILEIO_NONE;
+  gnc_book_clear_error (book);
   book->lockfd = -1;
 };
 
@@ -111,30 +142,6 @@ gnc_book_new (void)
   gnc_book_init (book);
 
   return book;
-}
-
-/* ============================================================== */
-
-int
-gnc_book_get_error (GNCBook * book)
-{
-  int retval;
-
-  if (!book) return EINVAL;
-
-  retval = book->errtype;
-  book->errtype = 0;
-
-  return retval;
-}
-
-/* ============================================================== */
-
-GNCFileIOError
-gnc_book_get_file_error (GNCBook * book)
-{
-  if (!book) return ERR_FILEIO_MISC;
-  return book->last_file_err;
 }
 
 /* ============================================================== */
@@ -194,7 +201,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (!rc)
   {
     /* oops .. file is all locked up  .. */
-    book->errtype = ETXTBSY;  
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     return FALSE;
   }
 
@@ -202,7 +209,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (book->lockfd < 0)
   {
     /* oops .. file is all locked up  .. */
-    book->errtype = ETXTBSY;
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     return FALSE;
   }
 
@@ -230,7 +237,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (rc)
   {
     /* oops .. stat failed!  This can't happen! */
-    book->errtype = ETXTBSY;
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     unlink (pathbuf);
     close (book->lockfd);
     unlink (book->lockfile);
@@ -240,7 +247,7 @@ gnc_book_get_file_lock (GNCBook *book)
   if (statbuf.st_nlink != 2)
   {
     /* oops .. stat failed!  This can't happen! */
-    book->errtype = ETXTBSY;
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     unlink (pathbuf);
     close (book->lockfd);
     unlink (book->lockfile);
@@ -265,7 +272,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
   book->fullpath = xaccResolveFilePath (filefrag);
   if (!book->fullpath)
   {
-    book->errtype = ERANGE;  
+    gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND);
     return FALSE;    /* ouch */
   }
 
@@ -280,7 +287,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
 
   if (!ignore_lock && !gnc_book_get_file_lock (book))
   {
-    book->errtype = EBUSY;  
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     g_free (book->book_id);  book->book_id = NULL;
     g_free (book->fullpath); book->fullpath = NULL;
     g_free (book->lockfile); book->lockfile = NULL;
@@ -299,23 +306,22 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
   int rc;
 
   if (!book) return FALSE;
-  ENTER (" book-id=%s", book_id);
+  ENTER (" ignore_lock=%d, book-id=%s", ignore_lock, book_id);
 
   /* clear the error condition of previous errors */
-  book->errtype = 0;
-  book->last_file_err = ERR_FILEIO_NONE;
+  gnc_book_clear_error (book);
 
   /* check to see if this session is already open */
   if (book->book_id)
   {
-    book->errtype = ETXTBSY;
+    gnc_book_push_error (book, ERR_BACKEND_LOCKED);
     return FALSE;
   }
 
   /* seriously invalid */
   if (!book_id)
   {
-    book->errtype = EINVAL;
+    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
     return FALSE;
   }
 
@@ -339,7 +345,7 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
 
     /* We create a local filepath that correspnds to the URL.
      * This filepath is handy for logs, lock-files and other 
-     * goodies that need to be stored in teh local filesystem.
+     * goodies that need to be stored in the local filesystem.
      * The local filename is generated by converting slashes 
      * in the URL to commas.
      */
@@ -350,14 +356,14 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
        p = strchr (filefrag, '/');
     }
     book->fullpath = xaccResolveFilePath (filefrag);
+    g_free (filefrag);
     if (!book->fullpath)
     {
-      book->errtype = ERANGE;  
-      g_free (filefrag);
+      gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND);
       return FALSE;    /* ouch */
     }
-    g_free (filefrag);
     PINFO ("filepath=%s\n", book->fullpath);
+
 
     /* load different backend based on URL.  We should probably
      * dynamically load these based on some config file ... */
@@ -369,28 +375,58 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
     } else 
     if (!strncmp(book_id, "postgres://", 11))
     {
-/* #define SQLHACK */
-#ifdef SQLHACK
-      extern Backend * pgendNew (void);
-      book->backend = pgendNew ();
-#else
-      g_free(book->fullpath);
-      book->fullpath = NULL;
-      book->errtype = ENOSYS;
-      return FALSE;
-#endif
+      char * dll_err;
+      void * dll_handle;
+      Backend * (*pg_new)(void);
+ 
+      /* open and resolve all symbols now (we don't want mystery 
+       * failure later) */
+      dll_handle = dlopen ("libgnc_postgres.so", RTLD_NOW);
+      if (! dll_handle) 
+      {
+        dll_err = dlerror();
+        PWARN (" can't load library: %s\n", dll_err);
+        g_free(book->fullpath);
+        book->fullpath = NULL;
+        g_free(book->book_id);
+        book->book_id = NULL;
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        return FALSE;
+      }
+
+      // book->backend = pgendNew ();
+      pg_new = dlsym (dll_handle, "pgendNew");
+      dll_err = dlerror();
+      if (dll_err) 
+      {
+        PWARN (" can't find symbol: %s\n", dll_err);
+        g_free(book->fullpath);
+        book->fullpath = NULL;
+        g_free(book->book_id);
+        book->book_id = NULL;
+        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
+        return FALSE;
+      }
+
+      book->backend = (*pg_new) ();
     }
 
     /* if there's a begin method, call that. */
     if (book->backend->book_begin)
     {
-      (book->backend->book_begin)(book, book->book_id);
-      /* hack alert we should check for errors here ... */
+      GNCBackendError err;
 
-      /* not sure what else should happen here ... should we check to see
-       * if the URL is reachable ?? Should we login the user ??
-       */
-      
+      (book->backend->book_begin)(book, book->book_id, ignore_lock);
+      err = xaccBackendGetError(book->backend);
+      if (ERR_BACKEND_NO_ERR != err)
+      {
+        g_free(book->fullpath);
+        book->fullpath = NULL;
+        g_free(book->book_id);
+        book->book_id = NULL;
+        gnc_book_push_error (book, err);
+        return FALSE;
+      }
     }
     return TRUE;
   }
@@ -407,6 +443,8 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
 gboolean
 gnc_book_load (GNCBook *book)
 {
+  GNCBackendError retval;
+
   if (!book) return FALSE;
   if (!book->book_id) return FALSE;
 
@@ -418,7 +456,7 @@ gnc_book_load (GNCBook *book)
 
     if (!book->lockfile)
     {
-      book->errtype = ENOLCK;
+      gnc_book_push_error (book, ERR_BACKEND_LOCKED);
       return FALSE;
     }
       
@@ -430,15 +468,14 @@ gnc_book_load (GNCBook *book)
     book->topgroup = NULL;
 
     xaccLogSetBaseName(book->fullpath);
-    book->errtype = 0;
-    book->last_file_err = ERR_FILEIO_NONE;
+    gnc_book_clear_error (book);
     book->topgroup = xaccReadAccountGroupFile (book->fullpath,
-                                               &(book->last_file_err));
+                                               &retval);
+    if (ERR_BACKEND_NO_ERR != retval) gnc_book_push_error (book, retval);
     xaccLogEnable();
 
-    if (!book->topgroup || (book->last_file_err != ERR_FILEIO_NONE))
+    if (!book->topgroup || (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR))
     {
-      book->errtype = EIO;
       return FALSE;
     }
 
@@ -465,26 +502,23 @@ gnc_book_load (GNCBook *book)
     xaccLogEnable();
     book->topgroup = NULL;
 
-    book->errtype = 0;
-    book->last_file_err = ERR_FILEIO_NONE;
+    gnc_book_clear_error (book);
 
     /* starting the session should result in a bunch of accounts
      * and currencies being downloaded, but probably no transactions;
      * The GUI will need to do a query for that.
      */
-    if (be && be->book_load) {
+    if (be && be->book_load) 
+    {
        xaccLogDisable();
        xaccLogSetBaseName(book->fullpath);
+
        book->topgroup = (be->book_load) (be);
+
+       xaccGroupSetBackend (book->topgroup, be);
+
+       gnc_book_push_error(book, xaccBackendGetError(be));
        xaccLogEnable();
-    }
-
-    xaccGroupSetBackend (book->topgroup, be);
-
-    if (!book->topgroup || (book->last_file_err != ERR_FILEIO_NONE))
-    {
-      book->errtype = EIO;
-      return FALSE;
     }
 
     LEAVE("book_id=%s", book->book_id);
@@ -492,7 +526,7 @@ gnc_book_load (GNCBook *book)
   }
   else
   {
-    book->errtype = ENOSYS;
+    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND);
     return FALSE;
   }  
 }
@@ -519,6 +553,7 @@ gnc_book_save_may_clobber_data (GNCBook *book)
 void
 gnc_book_save (GNCBook *book)
 {
+  GNCBackendError retval;
   Backend *be;
   if (!book) return;
 
@@ -533,27 +568,34 @@ gnc_book_save (GNCBook *book)
   if (be && be->sync && book->topgroup)
   {
      (be->sync)(be, book->topgroup);
-     if (ERR_BACKEND_NO_ERR == be->last_err) return;
+     retval = xaccBackendGetError(be);
+
+     if (ERR_BACKEND_NO_ERR != retval) 
+     {
+       gnc_book_push_error (book, retval);
+       if (be->book_end)
+       {
+          (be->book_end)(be);
+       }
+     }
+     return;
   } 
 
   /* if the fullpath doesn't exist, either the user failed to initialize,
    * or the lockfile was never obtained. Either way, we can't write. */
-  book->errtype = 0;
-  book->last_file_err = ERR_FILEIO_NONE;
+  gnc_book_clear_error (book);
 
   if (!book->fullpath)
   {
-    book->errtype = ENOLCK;
+    gnc_book_push_error (book, ERR_BACKEND_MISC);
     return;
   }
 
   if (book->topgroup)
   {
-    gboolean write_ok = xaccWriteAccountGroupFile (book->fullpath,
-                                                   book->topgroup,
-                                                   TRUE,
-                                                   &(book->last_file_err));
-    if (!write_ok) book->errtype = errno;
+    xaccWriteAccountGroupFile (book->fullpath, book->topgroup,
+                                               TRUE, &retval);
+    if (ERR_BACKEND_NO_ERR != retval) gnc_book_push_error (book, retval);
   }
   LEAVE(" ");
 }
@@ -572,8 +614,7 @@ gnc_book_end (GNCBook *book)
     (book->backend->book_end)(book->backend);
   }
 
-  book->errtype = 0;
-  book->last_file_err = ERR_FILEIO_NONE;
+  gnc_book_clear_error (book);
 
   if (book->linkfile)
     unlink (book->linkfile);

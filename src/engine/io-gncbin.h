@@ -30,6 +30,7 @@
 #ifndef __IO_GNCBIN_H__
 #define __IO_GNCBIN_H__
 
+#include "Backend.h"
 #include "Group.h"
 #include "FileIO.h"
 
@@ -71,6 +72,6 @@
  *    deeper stack.
  *     */
 AccountGroup  *xaccReadGncBinAccountGroupFile  (const char *filename);
-GNCFileIOError xaccGetGncBinFileIOError (void);
+GNCBackendError xaccGetGncBinFileIOError (void);
 
 #endif /* __IO_GNCBIN_H__ */

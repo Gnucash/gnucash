@@ -25,6 +25,7 @@
 #include <guile/gh.h>
 #include <string.h>
 
+#include "Backend.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "FileIO.h"
@@ -46,98 +47,92 @@ static GNCBook *current_book = NULL;
 
 /* ======================================================== */
 
-static const char *
-file_not_found_msg (void)
-{
-  return _("The file \n    %s\n could not be found.");
-}
-
-/* ======================================================== */
-
 static gboolean
-show_file_error (GNCFileIOError io_error, const char *newfile)
+show_book_error (GNCBackendError io_error, const char *newfile)
 {
-  gboolean uh_oh = FALSE;
+  gboolean uh_oh = TRUE;
+  const char *fmt;
   char *buf = NULL;
+
+  if (NULL == newfile) { newfile = _("(null)"); }
 
   switch (io_error)
   {
-    case ERR_FILEIO_NONE:
+    case ERR_BACKEND_NO_ERR:
+      uh_oh = FALSE;
       break;
-    case ERR_FILEIO_MISC:
-      buf = _("There was an error during file IO.");
+
+    case ERR_BACKEND_NO_BACKEND:
+      fmt = _("The URL \n    %s\n"
+               "is not supported by this version of GnuCash.");
+      buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
-      uh_oh = TRUE;
       break;
-    case ERR_FILEIO_FILE_NOT_FOUND:
-      buf = g_strdup_printf (file_not_found_msg(), newfile);
+
+    case ERR_BACKEND_LOCKED:
+      fmt = _("The URL \n    %s\n"
+               "is in use by another user.");
+      buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
-      g_free (buf);
-      uh_oh = TRUE;
       break;
-    case ERR_FILEIO_FILE_EMPTY:
-      buf = _("The file \n    %s\n is empty.");
-      buf = g_strdup_printf (buf, newfile);
+
+    case ERR_BACKEND_MISC:
+      fmt = _("An error occurred while processing\n    %s\n");
+      buf = g_strdup_printf (fmt, newfile);
       gnc_error_dialog (buf);
-      g_free (buf);
-      uh_oh = TRUE;
       break;
-    case ERR_FILEIO_FILE_TOO_NEW:
-      buf = _("This file appears to be from a newer version "
-              "of GnuCash. You must upgrade GnuCash to read "
-              "this file.");
-      gnc_error_dialog (buf);
-      uh_oh = TRUE;
-      break;
-    case ERR_FILEIO_FILE_TOO_OLD:
-      buf = _("This file is from an older version of "
-              "GnuCash.\nDo you want to continue?");
-      if (!gnc_verify_dialog (buf, TRUE))
-        uh_oh = TRUE;
-      break;
+
     case ERR_FILEIO_FILE_BAD_READ:
-      buf = _("There was an error reading the file.\n"
+      fmt = _("There was an error reading the file.\n"
               "Do you want to continue?");
-      if (!gnc_verify_dialog (buf, TRUE))
-        uh_oh = TRUE;
+      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
       break;
+
+    case ERR_FILEIO_FILE_EMPTY:
+      fmt = _("The file \n    %s\n is empty.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_FILEIO_FILE_NOT_FOUND:
+      fmt = _("The file \n    %s\n could not be found.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
+    case ERR_FILEIO_FILE_TOO_NEW:
+      fmt = _("This file appears to be from a newer version\n"
+              "of GnuCash. You must upgrade GnuCash to read\n"
+              "this file.");
+      gnc_error_dialog (fmt);
+      break;
+
+    case ERR_FILEIO_FILE_TOO_OLD:
+      fmt = _("This file is from an older version of GnuCash.\n"
+              "Do you want to continue?");
+      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
+      break;
+
+    case ERR_FILEIO_MISC:
+      fmt = _("There was an error during file I/O.");
+      gnc_error_dialog (fmt);
+      break;
+
+    case ERR_SQL_CANT_CONNECT:
+      fmt = _("Can't connect to the database\n   %s\n"
+              "The host, username or password were incorrect.");
+      buf = g_strdup_printf (fmt, newfile);
+      gnc_error_dialog (buf);
+      break;
+
     default:
-      PERR("FIXME: Unhandled FileIO error in show_file_error.");
-      uh_oh = TRUE;
+      PERR("FIXME: Unhandled error %d", io_error);
+      fmt = _("An unknown I/O error occurred.");
+      gnc_error_dialog (fmt);
       break;
   }
 
-  return uh_oh;
-}
-
-/* ======================================================== */
-
-static gboolean
-show_book_error(GNCBook *book, const char *newfile, int norr)
-{
-  gboolean uh_oh = FALSE;
-  char *buf = NULL;
-
-  if (ETXTBSY == norr)
-  {
-    uh_oh = TRUE;
-  }
-  else if (ERANGE == norr)
-  {
-    buf = g_strdup_printf (file_not_found_msg(), newfile);
-    gnc_error_dialog (buf);
-    uh_oh = TRUE;
-  }
-  else if (norr)
-  {
-    const char *format = _("The filepath \n    %s\n"
-                           "is not a valid location in the filesystem.");
-    buf = g_strdup_printf (format, newfile);
-    gnc_error_dialog (buf);
-    uh_oh = TRUE;
-  }
-
-  g_free(buf);
+  if (buf) g_free(buf);
   return uh_oh;
 }
 
@@ -218,9 +213,9 @@ gncLockFailHandler (const char *file)
 {
   const char *format = _("Gnucash could not obtain the lock for\n"
                          "   %s.\n"
-                         "That file may be in use by another user,\n"
-                         "in which case you should not open the file.\n"
-                         "\nDo you want to proceed with opening the file?");
+                         "That database may be in use by another user,\n"
+                         "in which case you should not open the database.\n"
+                         "\nDo you want to proceed with opening the database?");
   char *message;
   gboolean result;
 
@@ -245,17 +240,14 @@ gncPostFileOpen (const char * filename)
   gboolean uh_oh = FALSE;
   AccountGroup *new_group;
   char * newfile;
-  int norr = 0;
-  GNCFileIOError io_err = 0;
+  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   if (!filename) return;
 
   newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
-     char *buf = g_strdup_printf (file_not_found_msg(), filename);
-     gnc_error_dialog (buf);
-     g_free (buf);
+     show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
      return;
   }
 
@@ -280,19 +272,12 @@ gncPostFileOpen (const char * filename)
 
   new_group = NULL;
 
-  /* hack alert -- there has got to be a simpler way of dealing with 
-   * errors than this spaghetti code!  I believe that this would simplify
-   * a whole lot if all functions returned void, and one *always* used
-   * try-throw semantics, instead of this hodge-podge of testing 
-   * return values.  -- linas jan 2001
-   */
   gnc_book_begin (new_book, newfile, FALSE);
-  norr = gnc_book_get_error (new_book);
+  io_err = gnc_book_get_error (new_book);
 
   /* if file appears to be locked, ask the user ... */
-  if (EBUSY == norr) 
+  if (ERR_BACKEND_LOCKED == io_err)
   {
-     norr = 0;
      if (gncLockFailHandler (newfile))
      {
         /* user told us to ignore locks. So ignore them. */
@@ -300,34 +285,30 @@ gncPostFileOpen (const char * filename)
      }
   }
 
-  /* for any other error, put up appropriate dialog */
-  uh_oh = show_book_error (new_book, newfile, norr);
+  /* Check for errors again, since above may have cleared the lock */
+  /* If its still locked, don't bother with the message */
+  io_err = gnc_book_get_error (new_book);
+  if (ERR_BACKEND_LOCKED != io_err)
+  {
+    uh_oh = show_book_error (io_err, newfile);
+  }
 
   if (!uh_oh)
   {
-    if (gnc_book_load (new_book)) 
-    {
-      new_group = gnc_book_get_group (new_book);
-    }
+    gnc_book_load (new_book);
 
-    /* for any other error, put up appropriate dialog */
-    norr = gnc_book_get_error (new_book);
-    uh_oh = show_book_error (new_book, newfile, norr);
+    /* check for i/o error, put up appropriate error dialog */
+    io_err = gnc_book_get_error (new_book);
+    uh_oh = show_book_error (io_err, newfile);
 
-    io_err = gnc_book_get_file_error (new_book);
-
-    /* check for i/o error, put up appropriate error message */
-    uh_oh += show_file_error(io_err, newfile);
+    new_group = gnc_book_get_group (new_book);
     if (uh_oh) new_group = NULL;
 
-    /* Umm, came up empty-handed, i.e. the file was not found. */
-    /* This is almost certainly not what the user wanted. */
-    if (!uh_oh && !new_group && (io_err == ERR_FILEIO_NONE)) 
+    /* Umm, came up empty-handed, but no error: 
+     * The backend forgot to set an error. So make one up. */
+    if (!uh_oh && !new_group) 
     {
-      char *buf = g_strdup_printf (file_not_found_msg(), newfile);
-      gnc_error_dialog (buf);
-      g_free (buf);
-      uh_oh = TRUE;
+      uh_oh = show_book_error (ERR_BACKEND_MISC, newfile);
     }
   }
 
@@ -415,11 +396,9 @@ static gboolean been_here_before = FALSE;
 void
 gncFileSave (void)
 {
-  GNCFileIOError io_err;
+  GNCBackendError io_err;
   const char * newfile;
   GNCBook *book;
-  int uh_oh = 0;
-  int norr;
   ENTER (" ");
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
@@ -440,41 +419,21 @@ gncFileSave (void)
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
-  norr = gnc_book_get_error (book);
-  if (norr)
+  newfile = gnc_book_get_file_path (book);
+  io_err = gnc_book_get_error (book);
+  if (ERR_BACKEND_NO_ERR != io_err)
   {
-    const char *format = _("There was an error writing the file\n     %s"
-                           "\n\n%s");
-    char *message;
-
     newfile = gnc_book_get_file_path (book);
-    if (newfile == NULL)
-      newfile = "";
-
-    message = g_strdup_printf(format, newfile, g_strerror(norr));
-    gnc_error_dialog(message);
-    g_free(message);
+    show_book_error (io_err, newfile);
 
     if (been_here_before) return;
-
     been_here_before = TRUE;
     gncFileSaveAs();   /* been_here prevents infinite recursion */
     been_here_before = FALSE;
-
     return;
   }
 
-  /* check for i/o error, put up appropriate error message.
-   * NOTE: the file-writing routines never set the file io
-   * error code, so this seems to be unneccesary. */
-  io_err = gnc_book_get_file_error (book);
-  newfile = gnc_book_get_file_path (book);
   gnc_history_add_file (newfile);
-
-  uh_oh = show_file_error (io_err, newfile);
-
-  /* going down -- abandon ship */
-  if (uh_oh) return;
 
   xaccGroupMarkSaved (gnc_book_get_group (book));
   LEAVE (" ");
@@ -491,8 +450,7 @@ gncFileSaveAs (void)
   const char *filename;
   char *newfile;
   const char *oldfile;
-  gboolean uh_oh = FALSE;
-  int norr = 0;
+  GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
   filename = fileBox(_("Save"), "*.gnc", NULL);
@@ -504,11 +462,10 @@ gncFileSaveAs (void)
   newfile = xaccResolveURL (filename);
   if (!newfile)
   {
-     char *buf = g_strdup_printf (file_not_found_msg(), filename);
-     gnc_error_dialog (buf);
-     g_free (buf);
+     show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
      return;
   }
+
   book = gncGetCurrentBook ();
   oldfile = gnc_book_get_file_path (book);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
@@ -527,11 +484,10 @@ gncFileSaveAs (void)
   new_book = gnc_book_new ();
   gnc_book_begin (new_book, newfile, FALSE);
 
-  norr = gnc_book_get_error (new_book);
+  io_err = gnc_book_get_error (new_book);
   /* if file appears to be locked, ask the user ... */
-  if (EBUSY == norr) 
+  if (ERR_BACKEND_LOCKED == io_err) 
   {
-    norr = 0;
     if (gncLockFailHandler (newfile))
     {
        /* user told us to ignore locks. So ignore them. */
@@ -539,15 +495,14 @@ gncFileSaveAs (void)
     }
   }
 
-  /* check for session errors (e.g. file locked by another user) */
-  if (!norr) norr = gnc_book_get_error (new_book);
-  uh_oh = show_book_error (new_book, newfile, norr);
-
-  /* No check for file errors since we didn't read a file... */
-
-  /* going down -- abandon ship */
-  if (uh_oh)
+  /* check again for session errors (since above dialog may have 
+   * cleared a file lock & moved things forward some more) 
+   * This time, errors will be fatal.
+   */
+  io_err = gnc_book_get_error (new_book);
+  if (ERR_BACKEND_NO_ERR != io_err) 
   {
+    show_book_error (io_err, newfile);
     gnc_book_destroy (new_book);
     g_free (newfile);
     return;

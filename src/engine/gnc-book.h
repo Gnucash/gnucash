@@ -95,28 +95,19 @@ gboolean gnc_book_begin (GNCBook *book, const char * book_id,
 gboolean gnc_book_load (GNCBook *book);
 
 /* The gnc_book_get_error() routine can be used to obtain the reason
- *    for any failure. Standard errno values are used.  Calling this
- *    routine resets the error value.  This routine allows an
- *    implementation of multiple error values, e.g. in a stack, where
- *    this routine pops the top value. The current implementation has
- *    a stack that is one-deep.
- * 
- *    Some important error values:
- *       EINVAL  -- bad argument
- *       ETXTBSY -- ???
- *       EBUSY   -- book id is in use; it's locked by someone else.
- *       ENOSYS  -- unsupported URI type.
- *       ERANGE  -- file path too long
- *       ENOLCK  -- book not open when gnc_book_save() was called.
+ *    for any failure.  Calling this routine returns the current error.
+ *
+ * The gnc_book_pop_error() routine can be used to obtain the reason
+ *    for any failure.  Calling this routine resets the error value.  
+ *
+ *    This routine allows an implementation of multiple error values, 
+ *    e.g. in a stack, where this routine pops the top value. The current 
+ *    implementation has a stack that is one-deep.
+ *
+ *    See Backend.h for a listing of returned errors.
  */
-int gnc_book_get_error (GNCBook *book);
-
-/* FIXME: This is a hack. I'm trying to move us away from static
- * global vars.  This may be a temp fix if we decide to integrate
- * FileIO errors into GNCBook errors. This just returns the last
- * FileIO error, but it doesn't clear it.
- */
-GNCFileIOError gnc_book_get_file_error (GNCBook *book);
+GNCBackendError gnc_book_get_error (GNCBook *book);
+GNCBackendError gnc_book_pop_error (GNCBook *book);
 
 /* The gnc_book_get_group() method will return the current top-level 
  *    account group.

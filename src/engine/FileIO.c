@@ -32,13 +32,13 @@
 #include "io-gncbin.h"
 
 AccountGroup *
-xaccReadAccountGroupFile(const gchar *name, GNCFileIOError *error_result) 
+xaccReadAccountGroupFile(const gchar *name, GNCBackendError *error_result) 
 {
   AccountGroup *result_grp;
   
   if(is_gncxml_file(name)) {
     if(gncxml_read(name, &result_grp)) {
-      if(error_result) *error_result = ERR_FILEIO_NONE;
+      if(error_result) *error_result = ERR_BACKEND_NO_ERR;
       return result_grp;
     } else {
       if(error_result) *error_result = ERR_FILEIO_MISC;
@@ -49,7 +49,7 @@ xaccReadAccountGroupFile(const gchar *name, GNCFileIOError *error_result)
     result_grp = xaccReadGncBinAccountGroupFile(name);
     
     if(result_grp) {
-      if(error_result) *error_result = ERR_FILEIO_NONE;
+      if(error_result) *error_result = ERR_BACKEND_NO_ERR;
       return result_grp;
     } else {
       if(error_result) *error_result = xaccGetGncBinFileIOError();
@@ -65,11 +65,11 @@ gboolean
 xaccWriteAccountGroupFile(const char *datafile,
                           AccountGroup *grp,
                           gboolean make_backup,
-                          GNCFileIOError *error_result) 
+                          GNCBackendError *error_result) 
 {
 
   if(!datafile) {
-    if(error_result) *error_result = ERR_FILEIO_MISC;
+    if(error_result) *error_result = ERR_FILEIO_FILE_NOT_FOUND;
     return FALSE;
   }
 
@@ -79,7 +79,7 @@ xaccWriteAccountGroupFile(const char *datafile,
   }
 
   if(!make_backup) {
-    if(error_result) *error_result = ERR_FILEIO_NONE;
+    if(error_result) *error_result = ERR_BACKEND_NO_ERR;
     return TRUE;
   } else {
     char * timestamp;
@@ -100,7 +100,7 @@ xaccWriteAccountGroupFile(const char *datafile,
     free (timestamp);
     
     if(gncxml_write(grp, backup)) {
-      if(error_result) *error_result = ERR_FILEIO_NONE;
+      if(error_result) *error_result = ERR_BACKEND_NO_ERR;
       free (backup);
       return TRUE;
     } else {

@@ -19,41 +19,11 @@
 #include "config.h"
 
 #include "Account.h"
+#include "Backend.h"
 #include "Group.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "gnc-book.h"
-
-
-typedef enum {
-  ERR_BACKEND_NO_ERR = 0,
-  ERR_BACKEND_NO_BACKEND,   /* Backend * pointer was null the err routine */
-  ERR_BACKEND_MISC,         /* undetermined error */
-
-  /* fileio errors */
-  ERR_BFILEIO_FILE_BAD_READ,
-  ERR_BFILEIO_FILE_EMPTY,
-  ERR_BFILEIO_FILE_NOT_FOUND,
-  ERR_BFILEIO_FILE_TOO_NEW,
-  ERR_BFILEIO_FILE_TOO_OLD,
-  ERR_BFILEIO_ALLOC,
-
-  /* network errors */
-  ERR_NETIO_NO_CONNECTION,      /* network failure */
-  ERR_NETIO_SHORT_READ,         /* not enough bytes received */
-  ERR_NETIO_WRONG_CONTENT_TYPE, /* wrong kind of server, wrong data served */
-  ERR_NETIO_NOT_GNCXML,
-
-  /* database errors */
-  ERR_SQL_BUSY,              /* single-mode access doesn't allow other users */
-  ERR_SQL_CANT_CONNECT,      /* network failure */
-  ERR_SQL_SEND_QUERY_FAILED,
-  ERR_SQL_FINISH_QUERY_FAILED,
-  ERR_SQL_GET_RESULT_FAILED,
-  ERR_SQL_CORRUPT_DB,
-  ERR_SQL_MISSING_DATA,     /* database doesn't contain expected data */
-} GNCBackendError;
-
 
 typedef struct _backend Backend;
 
@@ -63,6 +33,14 @@ typedef struct _backend Backend;
  *    the URL is syntactically correct, and that it is actually
  *    reachable.  This is probably(?) a good time to initialize
  *    the actual network connection.
+ *
+ *    The 'ignore_lock' argument indicates whether the single-user
+ *    lock on the backend should be cleared.  The typical gui sequence
+ *    leading to this is: (1) gui attempts to open the backend
+ *    by calling this routine with FALSE==ignore_lock.  (2) If backend  
+ *    error'ed BACKEND_LOCK, then GUI asks user what to do. (3) if user 
+ *    answers 'break & enter' then this routine is called again with
+ *    TURE==ignore_lock.
  *
  * The book_load() routine should return at least an account tree,
  *    and all currencies.  It does not have to return any transactions
@@ -123,7 +101,7 @@ typedef struct _backend Backend;
 
 struct _backend 
 {
-  void (*book_begin) (GNCBook *, const char *book_id);
+  void (*book_begin) (GNCBook *, const char *book_id, int ignore_lock);
   AccountGroup * (*book_load) (Backend *);
   void (*book_end) (Backend *);
   int (*account_begin_edit) (Backend *, Account *);

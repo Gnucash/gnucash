@@ -30,18 +30,8 @@
 #ifndef __FILE_IO_H__
 #define __FILE_IO_H__
 
+#include "Backend.h"
 #include "Group.h"
-
-typedef enum {
-  ERR_FILEIO_NONE = 0,
-  ERR_FILEIO_MISC,
-  ERR_FILEIO_FILE_BAD_READ,
-  ERR_FILEIO_FILE_EMPTY,
-  ERR_FILEIO_FILE_NOT_FOUND,
-  ERR_FILEIO_FILE_TOO_NEW,
-  ERR_FILEIO_FILE_TOO_OLD,
-  ERR_FILEIO_ALLOC
-} GNCFileIOError;
 
 /*
   
@@ -63,12 +53,12 @@ typedef enum {
 */
 
 AccountGroup *xaccReadAccountGroupFile(const char *datafile,
-                                       GNCFileIOError *error);
+                                       GNCBackendError *error);
 
 gboolean      xaccWriteAccountGroupFile(const char *datafile,
                                         AccountGroup *grp,
                                         gboolean make_backup,
-                                        GNCFileIOError *error);
+                                        GNCBackendError *error);
 /* If make_backup is true, write out a time-stamped copy of the file
    into the same directory as the indicated file, with a filename of
    "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS is replaced with the

@@ -94,6 +94,7 @@
 #include "kvp_frame.h"
 #include "Account.h"
 #include "AccountP.h"
+#include "Backend.h"
 #include "date.h"
 #include "DateUtils.h"
 #include "io-gncbin.h"
@@ -196,7 +197,7 @@ static int           readTSDate( int fd, Timespec *, int token );
 
 /*******************************************************/
 
-GNCFileIOError 
+GNCBackendError 
 xaccGetGncBinFileIOError (void)
 {
    /* reset the error code */
@@ -321,7 +322,7 @@ xaccReadAccountGroup(int fd)
   AccountGroup *grp = 0x0;
 
   maingrp = 0x0;
-  error_code = ERR_FILEIO_NONE;
+  error_code = ERR_BACKEND_NO_ERR;
 
   /* check for valid file descriptor */
   if( 0 > fd ) 
@@ -429,7 +430,7 @@ xaccReadGncBinAccountGroupFile( const char *datafile )
   AccountGroup *grp = 0x0;
 
   maingrp = 0x0;
-  error_code = ERR_FILEIO_NONE;
+  error_code = ERR_BACKEND_NO_ERR;
 
   fd = open( datafile, RFLAGS, 0 );
   if( 0 > fd ) 
