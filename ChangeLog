@@ -1,3 +1,10 @@
+2001-09-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Account.c (xaccInitAccount): initialize scus to 0
+
+	* src/engine/io-gncxml-v2.c (clear_up_account_commodity): fix scu
+	values
+
 2001-08-29  Christian Stimming <stimming@tuhh.de> 
 
 	* po/pl.po: Added (preliminary) Polish translation by Zbigniew
