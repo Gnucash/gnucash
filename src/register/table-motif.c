@@ -43,7 +43,6 @@ static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
 static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
 static void modifyCB (Widget mw, XtPointer cd, XtPointer cb);
 static void traverseCB (Widget mw, XtPointer cd, XtPointer cb);
-static void doRefreshCursorGUI (Table * table, CellBlock *curs, int row, int col);
 
 /* The XrmQuarks are used to figure out the direction of
  * traversal from cell to cell */
@@ -62,26 +61,6 @@ xaccNextTabGroup (Table *table, Widget w)
    table->next_tab_group = w;
 }
 
-/* ==================================================== */
-
-static void 
-wrapVerifyCursorPosition (Table *table, int row, int col)
-{
-   CellBlock *save_curs = table->current_cursor;
-   int save_phys_row = table->current_cursor_phys_row;
-   int save_phys_col = table->current_cursor_phys_col;
-
-   /* VerifyCursor will do all sorts of gui-independent machinations */
-   xaccVerifyCursorPosition (table, row, col);
-
-   if ((save_phys_row != table->current_cursor_phys_row) ||
-       (save_phys_col != table->current_cursor_phys_col))
-   {
-      /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);  
-      doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
-   }
-}
 
 /* ==================================================== */
 /* this routine calls the individual cell callbacks */
@@ -92,8 +71,6 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    Table *table;
    XbaeMatrixDefaultActionCallbackStruct *cbs;
    int row, col;
-   int rel_row, rel_col;
-   CellBlock *arr, *header;
    int invalid = 0;
 
    table = (Table *) cd;
@@ -116,50 +93,13 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     * repositioned.  Thus, the call below should always no-op out.
     * However, if/when things go berzerk, the call below does at least
     * a partial butt-save for us, so lets leave it in for now.  */
+
    if (XbaeEnterCellReason == cbs->reason) 
    {
-      wrapVerifyCursorPosition (table, row, col);
+     wrapVerifyCursorPosition (table, row, col);
    }
 
-   /* can't edit outside of the physical space */
-   invalid = (0 > row) || (0 > col) ;
-   invalid = invalid || (row >= table->num_phys_rows);
-   invalid = invalid || (col >= table->num_phys_cols);
-
-   /* header rows cannot be modified */
-   /* hack alert -- assumes that header is first cell */
-   /* if 0,0 is not a headr  row, then trouble ... */
-   header = table->handlers[0][0];
-   invalid = invalid || (row < header->numRows);
-
-   /* compute the cell location */
-   rel_row = table->locators[row][col]->phys_row_offset;
-   rel_col = table->locators[row][col]->phys_col_offset;
-
-  /* verify that cursor offsets are valid.  This may occur if
-   * the app that is using the table has a paritally initialized
-   * cursor. (probably due to a prograing error, but maybe they
-   * meant to do this). */
-   invalid = invalid || (0 > rel_row);
-   invalid = invalid || (0 > rel_col);
-
-   /* check for a cell handler, but only if cell adress is valid */
-   arr = table->current_cursor;
-   if (arr && !invalid) {
-      if (! (arr->cells[rel_row][rel_col])) {
-         invalid = TRUE;
-      } else {
-         /* if cell is marked as output-only,
-          * then don't call callbacks */
-         if (0 == (XACC_CELL_ALLOW_INPUT & ((arr->cells[rel_row][rel_col])->input_output))) 
-         {
-            invalid = TRUE;
-         }
-      }
-
-   } else {
-      invalid = TRUE;
-   }
+   invalid = ! gnc_register_cell_valid(table, row, col);
 
    /* oops the callback failed for some reason ... 
     * reject the enter/edit/leave  and return */
@@ -888,7 +828,7 @@ xaccRefreshTableGUI (Table * table)
 
 /* ==================================================== */
 
-static void        
+void        
 doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
 {
    int phys_row, phys_col;
@@ -931,16 +871,6 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
     * So in fact things work best in this enable/disable is left alone.
     * XbaeMatrixEnableRedisplay (table->table_widget, True);
     */
-}
-
-/* ==================================================== */
-
-void        
-xaccRefreshCursorGUI (Table * table)
-{
-   doRefreshCursorGUI (table, table->current_cursor,
-      table->current_cursor_phys_row,
-      table->current_cursor_phys_col);
 }
 
 /* ================== end of file ======================= */
