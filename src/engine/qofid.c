@@ -102,10 +102,10 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
   qof_collection_insert_entity (col, ent);
 }
 
-GUID *
+const GUID *
 qof_entity_get_guid (QofEntity *ent)
 {
-  if (!ent) return NULL;
+  if (!ent) return guid_null();
   return &ent->guid;
 }
 

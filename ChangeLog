@@ -1,3 +1,7 @@
+2003-10-26  David Hampton  <hampton@employees.org>
+
+	* src/engine/qofid.[ch]: Fix another crash caused by qof changes.
+
 2003-10-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-stock-split.c: Fix crash caused by qof changes.
