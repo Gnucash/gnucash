@@ -20,14 +20,14 @@
   <act:description>Actif</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Actif actuel</act:name>
+  <act:name>Actifs actuels</act:name>
   <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
   <act:type>ASSET</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Actif actuel</act:description>
+  <act:description>Actifs actuels</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -81,7 +81,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Comptes de dettes<act:description>
+  <act:description>Comptes de dettes</act:description>
   <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

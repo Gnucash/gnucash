@@ -1,3 +1,7 @@
+2002-10-18  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/fr_FR/*: Some bug fixes by frederic.lespez@wanadoo.fr.
+
 2002-09-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-style-info.scm
