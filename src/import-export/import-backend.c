@@ -493,68 +493,88 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	  /*DEBUG("heuristics:  probability - 10 (date)"); */
 	}
       
-    
-      /* Memo heuristics */  
-      if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		 xaccSplitGetMemo(split))
-	  ==0))
-	{	
-	  /* An exact match of description gives a +2 */
-	  prob = prob+2;
-	  /* DEBUG("heuristics:  probability + 2 (memo)"); */
+      /* Check number heuristics */  
+      if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+	{     
+	  if((strcmp(xaccTransGetNum
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetNum(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of the Check number gives a +5 */
+	      prob = prob+5;
+	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
+	    }
 	}
-      else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		       xaccSplitGetMemo(split),
-		       strlen(xaccSplitGetMemo(split))/2)
-	       ==0))
+      
+      /* Memo heuristics */  
+      if(strlen(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	  if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+		     xaccSplitGetMemo(split))
+	      ==0))
+	    {	
+	      /* An exact match of description gives a +2 */
+	      prob = prob+2;
+	      /* DEBUG("heuristics:  probability + 2 (memo)"); */
+	    }
+	  else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
+			   xaccSplitGetMemo(split),
+			   strlen(xaccSplitGetMemo(split))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (memo)");	*/
+	    }
 	}
 
       /* Description heuristics */  
-      if((strcmp(xaccTransGetDescription
-		 (gnc_import_TransInfo_get_trans (trans_info)),
-		 xaccTransGetDescription(xaccSplitGetParent(split)))
-	  ==0))
-	{	
-	  /*An exact match of Description gives a +2 */
-	  prob = prob+2;
-	  /*DEBUG("heuristics:  probability + 2 (description)");*/
-	}
-      else if((strncmp(xaccTransGetDescription
-		       (gnc_import_TransInfo_get_trans (trans_info)),
-		       xaccTransGetDescription(xaccSplitGetParent(split)),
-		       strlen(xaccTransGetDescription
-			      (gnc_import_TransInfo_get_trans (trans_info)))/2)
-	  ==0))
+      if(strlen(xaccTransGetDescription(gnc_import_TransInfo_get_trans (trans_info)))!=0)
 	{
-	  /* Very primitive fuzzy match worth +1.  This matches the
-	     first 50% of the strings to skip annoying transaction
-	     number some banks seem to include in the memo but someone
-	     should write something more sophisticated */ 
-      	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	  if((strcmp(xaccTransGetDescription
+		     (gnc_import_TransInfo_get_trans (trans_info)),
+		     xaccTransGetDescription(xaccSplitGetParent(split)))
+	      ==0))
+	    {	
+	      /*An exact match of Description gives a +2 */
+	      prob = prob+2;
+	      /*DEBUG("heuristics:  probability + 2 (description)");*/
+	    }
+	  else if((strncmp(xaccTransGetDescription
+			   (gnc_import_TransInfo_get_trans (trans_info)),
+			   xaccTransGetDescription(xaccSplitGetParent(split)),
+			   strlen(xaccTransGetDescription
+				  (gnc_import_TransInfo_get_trans (trans_info)))/2)
+		   ==0))
+	    {
+	      /* Very primitive fuzzy match worth +1.  This matches the
+		 first 50% of the strings to skip annoying transaction
+		 number some banks seem to include in the memo but someone
+		 should write something more sophisticated */ 
+	      prob = prob+1;
+	      /*DEBUG("heuristics:  probability + 1 (description)");	*/
+	    }
 	}
 
+      /*Online id punishment*/
       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&
 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
 	{
 	  /* If the pref is to show match even with online ID's,
-	     puninsh the transaction with online if */
+	     puninsh the transaction with online id */
 	  prob = prob-3;
 	}
-
+      
       /* Is the probability high enough? Otherwise do nothing and return. */
       if(prob < display_threshold)
 	{
 	  return;
 	}
-
+      
       /* The probability is high enough, so allocate an object
 	 here. Allocating it only when it's actually being used is
 	 probably quite some performance gain. */
@@ -563,8 +583,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       match_info->probability = prob;
       match_info->split = split;
       match_info->trans = xaccSplitGetParent(split);
-   
-
+      
+      
       /* Append that to the list. */
       trans_info->match_list = 
 	g_list_append(trans_info->match_list,

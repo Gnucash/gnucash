@@ -6,6 +6,11 @@
 	* src/scm/command-line.scm: remove the "development version" string
 	  when running "gnucash --version"
 
+	Pull up from HEAD:
+	* src/import-export/import-backend.c: Add heuristic for duplicate
+	  matching by check number.  
+	* doc/README.OFX: Update
+
 2003-02-05  Derek Atkins  <derek@ihtfp.com>
 
 	Pull up from HEAD:
