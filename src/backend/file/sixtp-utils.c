@@ -365,19 +365,26 @@ gnc_timegm (struct tm *tm)
   char *put_str;
   char *old_tz;
 
-  old_tz = g_strdup (getenv ("TZ"));
-  putenv ("TZ=UTC");
+  old_tz = getenv ("TZ");
+
+  /* FIXME: there's no way to report this error to the caller. */
+  if(gnc_setenv("TZ", "UTC", 1) != 0)
+    g_error ("gnc_timegm couldn't switch the TZ.");
 
   result = mktime (tm);
 
-  put_str = g_strdup_printf ("TZ=%s", old_tz ? old_tz : "");
-  putenv (put_str);
-
-  /* We can't free put_str since it is used directly.
-   * This is a memory leak, but how to solve it? *?
-  /* g_free (put_str); */
-  g_free (old_tz);
-
+  if(old_tz)
+  {
+    /* FIXME: there's no way to report this error to the caller. */
+    if(gnc_setenv("TZ", old_tz, 1) != 0)
+      g_error ("gnc_timegm couldn't switch the TZ back.");
+  }
+  else
+  {
+    /* FIXME: there's no way to report this error to the caller. */
+    if(gnc_unsetenv("TZ") != 0)
+      g_error ("gnc_timegm couldn't restore the TZ to undefined.");
+  }
   return result;
 }
 #endif
