@@ -42,5 +42,6 @@ int           xaccWriteAccountGroup (char *datafile, AccountGroup *grp);
 int           xaccGetFileIOError (void);
 
 AccountGroup *xaccReadQIFAccountGroup (char *datafile);
+int           xaccGetQIFIOError (void);
 
 #endif /* __FILEIO_H__ */

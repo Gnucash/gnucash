@@ -909,6 +909,40 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
  *         datafile    - the name of the user's datafile            *
  *         toplevel    - the toplevel widget                        *
 \********************************************************************/
+
+#define SHOW_IO_ERR_MSG(io_error) {				\
+  switch (io_error) {						\
+     case ERR_FILEIO_NO_ERROR:					\
+        break;							\
+     case ERR_FILEIO_FILE_NOT_FOUND:				\
+        sprintf (buf, FILE_NOT_FOUND_MSG, datafile);		\
+        errorBox (toplevel, buf);				\
+        break;							\
+     case ERR_FILEIO_FILE_EMPTY:				\
+        sprintf (buf, FILE_EMPTY_MSG, datafile);		\
+        errorBox (toplevel, buf);				\
+        break;							\
+     case ERR_FILEIO_FILE_TOO_NEW:				\
+        errorBox (toplevel, FILE_TOO_NEW_MSG);			\
+        break;							\
+     case ERR_FILEIO_FILE_TOO_OLD:				\
+        if (!verifyBox( toplevel, FILE_TOO_OLD_MSG )) {		\
+           xaccFreeAccountGroup (newgrp);			\
+           newgrp = NULL;					\
+        }							\
+        break;							\
+     case ERR_FILEIO_FILE_BAD_READ:				\
+        if (!verifyBox( toplevel, FILE_BAD_READ_MSG )) {	\
+           xaccFreeAccountGroup (newgrp);			\
+           newgrp = NULL;					\
+        }							\
+        break;							\
+     default:							\
+        break;							\
+  }								\
+}
+      
+
 void
 fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
@@ -965,35 +999,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
         /* check for i/o error, put up appropriate error message */
         io_error = xaccGetFileIOError();
-        switch (io_error) {
-           case ERR_FILEIO_NO_ERROR:
-              break;
-           case ERR_FILEIO_FILE_NOT_FOUND:
-              sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
-              errorBox (toplevel, buf);
-              break;
-           case ERR_FILEIO_FILE_EMPTY:
-              sprintf (buf, FILE_EMPTY_MSG, datafile);
-              errorBox (toplevel, buf);
-              break;
-           case ERR_FILEIO_FILE_TOO_NEW:
-              errorBox (toplevel, FILE_TOO_NEW_MSG);
-              break;
-           case ERR_FILEIO_FILE_TOO_OLD:
-              if (!verifyBox( toplevel, FILE_TOO_OLD_MSG )) {
-                 xaccFreeAccountGroup (newgrp);
-                 newgrp = NULL;
-              }
-              break;
-           case ERR_FILEIO_FILE_BAD_READ:
-              if (!verifyBox( toplevel, FILE_BAD_READ_MSG )) {
-                 xaccFreeAccountGroup (newgrp);
-                 newgrp = NULL;
-              }
-              break;
-           default:
-              break;
-        }
+        SHOW_IO_ERR_MSG(io_error);
       
         /* if we managed to read something, then go display it */
         if (newgrp) {
@@ -1009,6 +1015,8 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case FMB_IMPORT: {
       char * newfile;
       char buf[BUFSIZE];
+      int io_error;
+      AccountGroup *newgrp;
 
       DEBUG("FMB_IMPORT\n");
 
@@ -1019,7 +1027,11 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         datafile = XtNewString (buf);
       
         /* load the accounts from the users datafile */
-        grp = xaccReadQIFAccountGroup (newfile);
+        newgrp = xaccReadQIFAccountGroup (newfile);
+      
+        /* check for i/o error, put up appropriate error message */
+        io_error = xaccGetQIFIOError();
+        SHOW_IO_ERR_MSG(io_error);
       
         if( NULL == topgroup ) {
           /* no topgroup exists */
@@ -1028,7 +1040,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
         /* since quicken will not export all accounts 
          * into one file, we must merge them in one by one */
-        xaccConcatGroups (topgroup, grp);
+        xaccConcatGroups (topgroup, newgrp);
         xaccMergeAccounts (topgroup);
         xaccConsolidateGrpTransactions (topgroup);
       }

@@ -30,20 +30,28 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include <Xm/Xm.h>
 
 #include "config.h"
 
 #include "Account.h"
 #include "Group.h"
-#include "messages.h"
+#include "FileIO.h"
 #include "util.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
-extern Widget toplevel;
+/** GLOBALS *********************************************************/
+
+static int          error_code=0; /* error code, if error occurred */
+
+/*******************************************************/
+
+int xaccGetQIFIOError (void)
+{
+   return error_code;
+}
 
 /********************************************************************\
  * xaccReadQIFLine                                                  * 
@@ -338,8 +346,8 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 
             /* trim off the parent account name ... */
             /* tok += sizeof(char);  leave behind the colon ... */
-            str = XtNewString (tok);
-            XtFree (acc->accountName);
+            str = strdup (tok);
+            free (acc->accountName);
             acc->accountName = str;
 
             xaccInsertSubAccount( parent, acc );
@@ -460,9 +468,9 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    /* if not, create it */
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
-      xfer_acc->accountName = XtNewString (qifline);
-      xfer_acc->description = XtNewString ("");
-      xfer_acc->notes = XtNewString ("");
+      xfer_acc->accountName = strdup (qifline);
+      xfer_acc->description = strdup ("");
+      xfer_acc->notes = strdup ("");
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
       xfer_acc->type = acc_type;
@@ -545,9 +553,9 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    /* if not, create it */
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
-      xfer_acc->accountName = XtNewString (qifline);
-      xfer_acc->description = XtNewString ("");
-      xfer_acc->notes = XtNewString ("");
+      xfer_acc->accountName = strdup (qifline);
+      xfer_acc->description = strdup ("");
+      xfer_acc->notes = strdup ("");
       xfer_acc->type = STOCK;
       xaccInsertSubAccount (acc, xfer_acc);
    }
@@ -569,7 +577,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 
 #define XACC_ACTION(q,x)				\
    if (!strncmp (&qifline[1], q, strlen(q))) {		\
-      trans->credit_split.action = XtNewString(x);	\
+      trans->credit_split.action = strdup(x);	\
    } else
 
 
@@ -885,8 +893,7 @@ xaccReadQIFAccountGroup( char *datafile )
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
-    sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
-    errorBox (toplevel, buf);
+    error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
     }
   
@@ -894,8 +901,7 @@ xaccReadQIFAccountGroup( char *datafile )
   qifline = xaccReadQIFLine (fd); 
   if( NULL == qifline )
     {
-    sprintf (buf, FILE_EMPTY_MSG, datafile);
-    errorBox (toplevel, buf);
+    error_code = ERR_FILEIO_FILE_EMPTY;
     close(fd);
     return NULL;
     }
@@ -908,9 +914,9 @@ xaccReadQIFAccountGroup( char *datafile )
         DEBUG ("got bank\n");
 
         acc->type = BANK;
-        acc->accountName = XtNewString ("Quicken Bank Account");
-        acc->description = XtNewString ("");
-        acc->notes = XtNewString ("");
+        acc->accountName = strdup ("Quicken Bank Account");
+        acc->description = strdup ("");
+        acc->notes = strdup ("");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
@@ -934,9 +940,9 @@ xaccReadQIFAccountGroup( char *datafile )
         DEBUG ("got Invst\n");
 
         acc->type = BANK;
-        acc->accountName = XtNewString ("Quicken Investment Account");
-        acc->description = XtNewString ("");
-        acc->notes = XtNewString ("");
+        acc->accountName = strdup ("Quicken Investment Account");
+        acc->description = strdup ("");
+        acc->notes = strdup ("");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
