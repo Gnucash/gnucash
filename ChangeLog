@@ -7,6 +7,10 @@
 
 	* business/business-core/*.c: add begin/commit edit calls in every 'set'
 	  function.  Fixes 96855.
+
+	* gnome-utils/dialog-account.c: change the BeginEdit() call on the
+	  (temporary) top-level account, so the SQL backend doesn't hate us
+	  for committing and account without a commodity.
 	
 2002-11-03  Christian Stimming  <stimming@tuhh.de>
 

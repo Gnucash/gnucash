@@ -1104,7 +1104,6 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   gnc_unregister_gui_component (aw->component_id);
 
-  xaccAccountBeginEdit (aw->top_level_account);
   xaccAccountDestroy (aw->top_level_account);
   aw->top_level_account = NULL;
 
@@ -1509,6 +1508,7 @@ gnc_account_window_create(AccountWindow *aw)
   box = glade_xml_get_widget (xml, "parent_scroll");
 
   aw->top_level_account = xaccMallocAccount(gnc_get_current_book ());
+  xaccAccountBeginEdit (aw->top_level_account);
   xaccAccountSetName(aw->top_level_account, _("New top level account"));
 
   aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
