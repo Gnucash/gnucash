@@ -59,6 +59,7 @@ printf "const char *all_strings[]={\n";
 while(<>)
   {
     printf ("\t%s,\n", $1) if (/^#define\s+([A-Z0-9_]+)\s+_\(\"/);
+    printf ("\t_ %s,\n", $1) if (/^#define\s+([A-Z0-9_]+)\s+N_\(\"/);
   }
 
 printf "\tNULL\n";

@@ -1,3 +1,7 @@
+2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* extract-macros.perl.in: fix this to handle N_ macros.
+
 2000-03-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* POTFILES.in: added guile_strings.txt, a collection of strings
