@@ -223,11 +223,11 @@ balance at a given time"))
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the weighted
         ;; average of all past transactions.
-        (abs (gnc:numeric-to-double 
-              (gnc:gnc-monetary-amount
-               (gnc:sum-collector-commodity 
-                c report-currency 
-                exchange-fn)))))
+        (gnc:numeric-to-double 
+         (gnc:gnc-monetary-amount
+          (gnc:sum-collector-commodity 
+           c report-currency 
+           exchange-fn))))
 
       ;; Calculates all account's balances. Returns a list of
       ;; balance <=> account pairs, like '((10.0 Earnings) (142.5
@@ -260,17 +260,24 @@ balance at a given time"))
              (lambda (a)
                (list (collector->double (profit-fn a #t)) a))
              (filter show-acct? accts))))
-      
+
+      (define (fix-signs combined)
+        (map (lambda (pair)
+               (if (gnc:account-reverse-balance? (cadr pair))
+                   (cons (- (car pair)) (cdr pair))
+                   pair))
+             combined))
+
       ;; Now do the work here.
 
       (if (not (null? accounts))
           (begin
             (set! combined
-		  (sort (filter (lambda (pair) (not (= 0.0 (car pair))))
-				(traverse-accounts 
-				 1 topl-accounts))
+		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
+				(fix-signs
+                                 (traverse-accounts 1 topl-accounts)))
 			(lambda (a b) (> (car a) (car b)))))
-            
+
             ;; if too many slices, condense them to an 'other' slice
             ;; and add a link to a new pie report with just those
             ;; accounts
