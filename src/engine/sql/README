@@ -50,10 +50,6 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
--- missing function: handle kvp frames (this is important for accounts)
-
--- bug: transaction memo in double line mode is lost.
-
 -- bug/feature: the 'save as' semantics are ... unexpected, if 
    the database already exists and has data in it ... 
 
@@ -67,11 +63,13 @@ Core bugs/features that still need work:
 
 -- fix the annoying postgres:,,localhost,asdf file syntax: needs
    mods to gnc-book to keep it happy about lock files & such.
+   (coord with rlb on gnc-book redesign)
 
 
 To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
+
 
 -- implement account commit edit (actually, the check&rollback part)
    (need to check the account version number beofer the commit happens)

@@ -39,6 +39,7 @@
 
 #include "builder.h"
 #include "gncquery.h"
+#include "kvp-sql.h"
 #include "PostgresBackend.h"
 
 #include "putil.h"
@@ -122,9 +123,44 @@ gnc_string_to_commodity (const char *str)
 }
 
 /* ============================================================= */
+/* send the query, process the results */
+
+gpointer
+pgendGetResults (PGBackend *be, 
+             gpointer (*handler) (PGBackend *, PGresult *, int, gpointer),
+             gpointer data)
+{   
+   PGresult *result;
+   int i=0;
+
+   be->nrows=0;
+   do {
+      GET_RESULTS (be->connection, result);
+      {
+         int j, jrows;
+         int ncols = PQnfields (result);
+         jrows = PQntuples (result);
+         be->nrows += jrows;
+         PINFO ("query result %d has %d rows and %d cols",
+            i, jrows, ncols);
+
+         for (j=0; j<jrows; j++)
+         {
+            data = handler (be, result, j, data);
+         }
+      }
+      i++;
+      PQclear (result);
+   } while (result);
+
+   return data;
+}
+
+
+/* ============================================================= */
 /* include the auto-generated code */
 
-#include "autogen.c"
+#include "base-autogen.c"
 
 static const char *table_create_str = 
 #include "table-create.c"
@@ -173,6 +209,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    com = xaccAccountGetCommodity (acct);
    pgendPutOneCommodityOnly (be, (gnc_commodity *) com);
 
+   pgendKVPStore (be, &(acct->guid), acct->kvp_data);
    LEAVE(" ");
 }
 
@@ -183,14 +220,29 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
  * as well. 
  */
 
+static gpointer
+delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   GList * deletelist = (GList *) data;
+   GUID guid = nullguid;
+
+   string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
+   /* If the database has splits that the engine doesn't,
+    * collect 'em up & we'll have to delete em */
+   if (NULL == xaccLookupEntity (&guid, GNC_ID_SPLIT))
+   {
+      deletelist = g_list_prepend (deletelist, 
+                   g_strdup(DB_GET_VAL ("entryGuid", j)));
+   }
+   return deletelist;
+}
+
 static void
 pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans, 
                              gboolean do_mark)
 {
    GList *start, *deletelist=NULL, *node;
-   PGresult *result;
    char * p;
-   int i, nrows;
 
    if (!be || !trans) return;
    ENTER ("trans=%p, mark=%d", trans, do_mark);
@@ -205,63 +257,43 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    p = stpcpy (p, "';");
 
    SEND_QUERY (be,be->buff, );
+   deletelist = pgendGetResults (be, delete_list_cb, deletelist);
 
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            GUID guid = nullguid;
-            string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
-            /* If the database has splits that the engine doesn't,
-             * collect 'em up & we'll have to delete em */
-            if (NULL == xaccLookupEntity (&guid, GNC_ID_SPLIT))
-            {
-               deletelist = g_list_prepend (deletelist, 
-                        g_strdup(DB_GET_VAL ("entryGuid", j)));
-            }
-         }
-      }
-      i++;
-      PQclear (result);
-   } while (result);
-
-
-   /* delete those that don't belong */
+   /* delete those splits that don't belong */
    p = be->buff; *p = 0;
    for (node=deletelist; node; node=node->next)
    {
       p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
       p = stpcpy (p, node->data);
       p = stpcpy (p, "';\n");
-      g_free (node->data);
    }
    if (p != be->buff)
    {
       PINFO ("%s", be->buff);
       SEND_QUERY (be,be->buff, );
       FINISH_QUERY(be->connection);
+
+      /* destroy any associated kvp data as well */
+      for (node=deletelist; node; node=node->next)
+      {
+         pgendKVPDeleteStr (be, (char *)(node->data));
+         g_free (node->data);
+      }
    }
 
    /* Update the rest */
    start = xaccTransGetSplitList(trans);
 
-   if ((start) && !(trans->open & BEING_DESTROYED))
+   if ((start) && !(trans->do_free))
    { 
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
          pgendPutOneSplitOnly (be, s);
+         pgendKVPStore (be, &(s->guid), s->kvp_data);
       }
       pgendPutOneTransactionOnly (be, trans);
+      pgendKVPStore (be, &(trans->guid), trans->kvp_data);
    }
    else
    {
@@ -280,6 +312,14 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       PINFO ("%s\n", be->buff);
       SEND_QUERY (be,be->buff, );
       FINISH_QUERY(be->connection);
+
+      /* destroy any associated kvp data as well */
+      for (node=start; node; node=node->next) 
+      {
+         Split * s = node->data;
+         pgendKVPDelete (be, &(s->guid));
+      }
+      pgendKVPDelete (be, &(trans->guid));
    }
 
    LEAVE(" ");
@@ -584,6 +624,12 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    /* if engine data was newer, we are done */
    if (TRUE == engine_data_is_newer) return TRUE;
 
+   /* ------------------------------------------------- */
+   /* If we are here, then the sql database contains data that is
+    * newer than what we have in the engine.  And so, below, 
+    * we finish the job of yanking data out of the db.
+    */
+
    /* build the sql query the splits */
    pbuff = be->buff;
    pbuff[0] = 0;
@@ -684,6 +730,9 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    /* close out dangling edit session */
    xaccAccountCommitEdit (previous_acc);
 
+   /* ------------------------------------------------- */
+   /* destroy any splits that the engine has that the DB didn't */
+
    i=0; j=0;
    engine_splits = xaccTransGetSplitList(trans);
    for (node = engine_splits; node; node=node->next)
@@ -706,7 +755,21 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    g_list_free (delete_splits);
    g_list_free (db_splits);
 
-   /* see note about as to why we do this set here ... */
+   /* ------------------------------------------------- */
+   /* restore any kvp data associated with the transaction and splits */
+
+   trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+
+   engine_splits = xaccTransGetSplitList(trans);
+   for (node = engine_splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+   }
+
+   /* ------------------------------------------------- */
+
+   /* see note above as to why we do this set here ... */
    xaccTransSetCurrency (trans, modity);
 
    xaccTransCommitEdit (trans);
@@ -793,59 +856,39 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
  *    form "SELECT * FROM gncEntry [...]"
  */
 
-static gboolean 
-IsGuidInList (GList *list, GUID *guid)
+static gpointer
+query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node;
-   for (node=list; node; node=node->next)
+   GList *node, *xact_list = (GList *) data;
+   GUID *trans_guid;
+
+   /* find the transaction this goes into */
+   trans_guid = xaccGUIDMalloc();
+   *trans_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
+
+   /* don't put transaction into the list more than once ... */
+   for (node=xact_list; node; node=node->next)
    {
-      if (guid_equal ((GUID *)node->data, guid)) return TRUE;
+      if (guid_equal ((GUID *)node->data, trans_guid)) 
+      {
+         return xact_list;
+      }
    }
-   return FALSE;
+
+   xact_list = g_list_prepend (xact_list, trans_guid);
+   return xact_list;
 }
 
 static void 
 pgendRunQueryHelper (PGBackend *be, const char *qstring)
 {
-   PGresult *result;
-   int i, nrows;
    GList *node, *xact_list = NULL;
 
    ENTER ("string=%s\n", qstring);
 
    SEND_QUERY (be, qstring, );
-
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            GUID *trans_guid;
-
-            /* find the transaction this goes into */
-            trans_guid = xaccGUIDMalloc();
-	    *trans_guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
-
-            /* don't put transaction into the list more than once ... */
-            if (FALSE == IsGuidInList(xact_list, trans_guid))
-            {
-               xact_list = g_list_prepend (xact_list, trans_guid);
-            }
-         }
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
+   xact_list = pgendGetResults (be, query_cb, xact_list);
 
    /* restore the transactions */
    for (node=xact_list; node; node=node->next)
@@ -887,64 +930,71 @@ pgendRunQuery (Backend *bend, Query *q)
 }
 
 /* ============================================================= */
+/* This routine walks the account group, gets all KVP values */
+
+static gpointer
+restore_cb (Account *acc, void * cb_data)
+{
+   PGBackend *be = (PGBackend *) cb_data;
+   acc->kvp_data = pgendKVPFetch (be, &(acc->guid), acc->kvp_data);
+   return NULL;
+}
+
+static void 
+pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
+{
+   if (!grp) return;
+
+   xaccGroupForEachAccountDeeply (grp, restore_cb, be);
+}
+
+/* ============================================================= */
 /* This routine restores all commodities in the database.
  */
+
+static gpointer
+get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   gnc_commodity_table *comtab = (gnc_commodity_table *) data;
+   gnc_commodity *com;
+
+   /* first, lets see if we've already got this one */
+   com = gnc_commodity_table_lookup(comtab, 
+         DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
+
+   if (com) return comtab;
+
+   /* no we don't ... restore it */
+   com = gnc_commodity_new (
+                    DB_GET_VAL("fullname",j), 
+                     DB_GET_VAL("namespace",j), 
+                     DB_GET_VAL("mnemonic",j),
+                     DB_GET_VAL("code",j),
+                     atoi(DB_GET_VAL("fraction",j)));
+
+   gnc_commodity_table_insert (comtab, com);
+   return comtab;
+}
 
 static void
 pgendGetAllCommodities (PGBackend *be)
 {
-   gnc_commodity_table *comtab = gnc_engine_commodities();
-   PGresult *result;
-   char * bufp;
-   int i, nrows;
-
-   ENTER ("be=%p", be);
+   gnc_commodity_table *comtab;
+   char * p;
    if (!be) return;
 
+   ENTER ("be=%p", be);
+
+   comtab = gnc_engine_commodities();
    if (!comtab) {
       PERR ("can't get global commodity table");
       return;
    }
 
    /* Get them ALL */
-   bufp = "SELECT * FROM gncCommodity;";
-   SEND_QUERY (be, bufp, );
-
-   i=0; nrows=0; 
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            gnc_commodity *com;
-
-            /* first, lets see if we've already got this one */
-            com = gnc_commodity_table_lookup(comtab, 
-                     DB_GET_VAL("namespace",j), DB_GET_VAL("mnemonic",j));
-
-            if (com) continue;
-            /* no we don't ... restore it */
-            com = gnc_commodity_new (
-                     DB_GET_VAL("fullname",j), 
-                     DB_GET_VAL("namespace",j), 
-                     DB_GET_VAL("mnemonic",j),
-                     DB_GET_VAL("code",j),
-                     atoi(DB_GET_VAL("fraction",j)));
-
-            gnc_commodity_table_insert (comtab, com);
-         }
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
+   p = "SELECT * FROM gncCommodity;";
+   SEND_QUERY (be, p, );
+   pgendGetResults (be, get_commodities_cb, comtab);
 
    LEAVE (" ");
 }
@@ -952,20 +1002,70 @@ pgendGetAllCommodities (PGBackend *be)
 /* ============================================================= */
 /* This routine restores the account heirarchy of *all* accounts in the DB.
  * It implicitly assumes that the database has only one account
- * heirarchy in it, i.e. anny accounts without a parent will be stuffed
+ * heirarchy in it, i.e. any accounts without a parent will be stuffed
  * into the same top group.
- *
- * hack alert -- not all account fields being restored.
- * specifically, need to handle kvp data
  */
+
+static gpointer
+get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   AccountGroup *topgrp = (AccountGroup *) data;
+   Account *parent;
+   Account *acc;
+   GUID guid;
+
+   /* first, lets see if we've already got this one */
+   PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
+   guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
+   acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+   if (!acc) 
+   {
+      acc = xaccMallocAccount();
+      xaccAccountBeginEdit(acc);
+      xaccAccountSetGUID(acc, &guid);
+   }
+
+   xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
+   xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
+   xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
+   xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
+   xaccAccountSetCommodity(acc, 
+       gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
+
+   /* try to find the parent account */
+   PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
+   guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("parentGUID",j), &guid);
+   if (guid_equal(xaccGUIDNULL(), &guid)) 
+   {
+      /* if the parent guid is null, then this
+       * account belongs in the top group */
+      xaccGroupInsertAccount (topgrp, acc);
+   }
+   else
+   {
+      /* if we haven't restored the parent account, create
+       * an empty holder for it */
+      parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+      if (!parent)
+      {
+         parent = xaccMallocAccount();
+         xaccAccountBeginEdit(parent);
+         xaccAccountSetGUID(parent, &guid);
+      }
+      xaccAccountInsertSubAccount(parent, acc);
+   }
+   xaccAccountCommitEdit(acc);
+
+   return topgrp;
+}
 
 static AccountGroup *
 pgendGetAllAccounts (PGBackend *be)
 {
-   PGresult *result;
    AccountGroup *topgrp;
    char * bufp;
-   int i, nrows, iacc;
 
    ENTER ("be=%p", be);
    if (!be) return NULL;
@@ -973,79 +1073,14 @@ pgendGetAllAccounts (PGBackend *be)
    /* first, make sure commodities table is up to date */
    pgendGetAllCommodities (be);
 
+   topgrp = xaccMallocAccountGroup();
+
    /* Get them ALL */
    bufp = "SELECT * FROM gncAccount;";
    SEND_QUERY (be, bufp, NULL);
+   pgendGetResults (be, get_account_cb, topgrp);
 
-   i=0; nrows=0; iacc=0;
-   topgrp = xaccMallocAccountGroup();
-   
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            Account *parent;
-            Account *acc;
-            GUID guid;
-
-            /* first, lets see if we've already got this one */
-	    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
-	    guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-            acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
-            if (!acc) 
-            {
-               acc = xaccMallocAccount();
-               xaccAccountBeginEdit(acc);
-               xaccAccountSetGUID(acc, &guid);
-            }
-
-            xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
-            xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
-            xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
-            xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
-            xaccAccountSetCommodity(acc, 
-                   gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
-
-            /* try to find the parent account */
-	    PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
-	    guid = nullguid;  /* just in case the read fails ... */
-            string_to_guid (DB_GET_VAL("parentGUID",j), &guid);
-            if (guid_equal(xaccGUIDNULL(), &guid)) 
-            {
-               /* if the parent guid is null, then this
-                * account belongs in the top group */
-               xaccGroupInsertAccount (topgrp, acc);
-            }
-            else
-            {
-               /* if we haven't restored the parent account, create
-                * an empty holder for it */
-               parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
-               if (!parent)
-               {
-                  parent = xaccMallocAccount();
-                  xaccAccountBeginEdit(parent);
-                  xaccAccountSetGUID(parent, &guid);
-               }
-               xaccAccountInsertSubAccount(parent, acc);
-            }
-
-            xaccAccountCommitEdit(acc);
-         }
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
+   pgendGetAllAccountKVP (be, topgrp);
 
    /* Mark the newly read group as saved, since the act of putting
     * it together will have caused it to be marked up as not-saved.
@@ -1293,14 +1328,38 @@ pgend_book_load_single_lockerr (Backend *bend)
  * test-n-set atomic operation.
  */
 
+static gpointer
+get_session_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   char *lock_holder = (char *) data;
+   char *mode = DB_GET_VAL("session_mode", j);
+
+   if ((MODE_SINGLE_FILE == be->session_mode) ||
+       (MODE_SINGLE_UPDATE == be->session_mode) ||
+       (0 == strcasecmp (mode, "SINGLE-FILE")) ||
+       (0 == strcasecmp (mode, "SINGLE-UPDATE")))
+   {
+      char * hostname = DB_GET_VAL("hostname", j);
+      char * username = DB_GET_VAL("login_name",j);
+      char * gecos = DB_GET_VAL("gecos",j);
+      char * datestr = DB_GET_VAL("time_on", j);
+
+      PWARN ("This database is already opened by \n"
+             "\t%s@%s (%s) in mode %s on %s \n",
+             username, hostname, gecos, mode, datestr);
+      PWARN ("The above messages should be handled by the GUI\n");
+
+      if (lock_holder) return be;
+      lock_holder = g_strdup (DB_GET_VAL("sessionGUID",j));
+   }
+   return lock_holder;
+}
+
 static gboolean
 pgendSessionCanStart (PGBackend *be, int break_lock)
 {
-   char *lock_holder = NULL;
    gboolean retval = TRUE;
-   PGresult *result;
-   int i, nrows;
-   char *p;
+   char *p, *lock_holder;
 
    ENTER (" ");
    /* Find out if there are any open sessions.
@@ -1308,54 +1367,17 @@ pgendSessionCanStart (PGBackend *be, int break_lock)
    p = "SELECT * FROM gncSession "
        "WHERE time_off='INFINITY';";
    SEND_QUERY (be,p, FALSE);
+   lock_holder = pgendGetResults (be, get_session_cb, NULL);
   
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
-         {
-            char * mode = DB_GET_VAL("session_mode", j);
-
-            if ((MODE_SINGLE_FILE == be->session_mode) ||
-                (MODE_SINGLE_UPDATE == be->session_mode) ||
-                (0 == strcasecmp (mode, "SINGLE-FILE")) ||
-                (0 == strcasecmp (mode, "SINGLE-UPDATE")))
-            {
-               char * hostname = DB_GET_VAL("hostname", j);
-               char * username = DB_GET_VAL("login_name",j);
-               char * gecos = DB_GET_VAL("gecos",j);
-               char * datestr = DB_GET_VAL("time_on", j);
-         
-               PWARN ("This database is already opened by \n"
-                      "\t%s@%s (%s) in mode %s on %s \n",
-                      username, hostname, gecos, mode, datestr);
-               PWARN ("The above messages should be handled by the GUI\n");
-         
-               lock_holder = g_strdup (DB_GET_VAL("sessionGUID",j));
-
-               retval = FALSE;
-            }
-         }
-      }
-      PQclear (result);
-      i++;
-   } while (result);
+   if (lock_holder) retval = FALSE;
 
    /* If just one other user has a lock, then will go ahead and 
     * break the lock... If the user approved.  I don't like this
     * but that's what the GUI is set up to do ...
     */
    PINFO ("break_lock=%d nrows=%d lock_holder=%s\n", 
-           break_lock, nrows, lock_holder);
-   if (break_lock && (1==nrows) && lock_holder)
+           break_lock, be->nrows, lock_holder);
+   if (break_lock && (1==be->nrows) && lock_holder)
    {
       p = be->buff; *p=0;
       p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
@@ -1451,6 +1473,7 @@ pgendSessionEnd (PGBackend *be)
 static void
 pgend_session_end (Backend *bend)
 {
+   int i;
    PGBackend *be = (PGBackend *)bend;
    if (!be) return;
 
@@ -1473,6 +1496,17 @@ pgend_session_end (Backend *bend)
    sqlBuilder_destroy (be->builder); be->builder = NULL;
    g_free (be->buff); be->buff = NULL; 
 
+   /* free the path strings */
+   for (i=0; i< be->path_cache_size; i++) 
+   {
+      if ((be->path_cache)[i]) g_free ((be->path_cache)[i]);
+      (be->path_cache)[i] = NULL;
+   }
+   g_free (be->path_cache);
+   be->path_cache = NULL;
+   be->path_cache_size = 0;
+   be->ipath_max = 0;
+
    LEAVE("be=%p", be);
 }
 
@@ -1491,6 +1525,7 @@ pgend_book_load_poll (Backend *bend)
    gnc_engine_suspend_events();
    pgendDisable(be);
 
+   pgendKVPInit(be);
    grp = pgendGetAllAccounts (be);
    pgendGroupGetAllCheckpoints (be, grp);
 
@@ -1516,6 +1551,7 @@ pgend_book_load_single (Backend *bend)
    gnc_engine_suspend_events();
    pgendDisable(be);
 
+   pgendKVPInit(be);
    grp = pgendGetAllAccounts (be);
    pgendGetAllTransactions (be, grp);
 
@@ -1845,6 +1881,8 @@ pgendEnable (PGBackend *be)
 static void 
 pgendInit (PGBackend *be)
 {
+   int i;
+
    /* initialize global variable */
    nullguid = *(xaccGUIDNULL());
 
@@ -1880,6 +1918,15 @@ pgendInit (PGBackend *be)
 
    be->buff = g_malloc (QBUFSIZE);
    be->bufflen = QBUFSIZE;
+   be->nrows = 0;
+
+#define INIT_CACHE_SZ 1000
+   be->path_cache = (char **) g_malloc (INIT_CACHE_SZ * sizeof(char *));
+   be->path_cache_size = INIT_CACHE_SZ;
+   for (i=0; i< be->path_cache_size; i++) {
+      (be->path_cache)[i] = NULL;
+   }
+   be->ipath_max = 0;
 }
 
 /* ============================================================= */

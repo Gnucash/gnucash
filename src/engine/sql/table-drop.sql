@@ -13,3 +13,13 @@ DROP TABLE gncEntry;
 DROP TABLE gncCheckpoint;
 DROP TABLE gncSession;
 --
+DROP TABLE gncPathCache;
+DROP TABLE gncGUIDCache;
+DROP TABLE gncKVPvalue;
+DROP TABLE gncKVPvalue_int64;
+DROP TABLE gncKVPvalue_dbl;
+DROP TABLE gncKVPvalue_numeric;
+DROP TABLE gncKVPvalue_str;
+DROP TABLE gncKVPvalue_guid;
+DROP TABLE gncKVPvalue_list;
+DROP TABLE gncKVPvalue_frame;

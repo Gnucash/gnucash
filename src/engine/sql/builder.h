@@ -45,6 +45,7 @@ void sqlBuild_Set_GUID  (sqlBuilder *b, const char *tag, const GUID *val);
 void sqlBuild_Set_Date  (sqlBuilder *b, const char *tag, Timespec val);
 void sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 val);
 void sqlBuild_Set_Int32 (sqlBuilder *b, const char *tag, gint32 val);
+void sqlBuild_Set_Double(sqlBuilder *b, const char *tag, double val);
 
 
 /* build the update 'where' clause */
@@ -53,6 +54,7 @@ void sqlBuild_Set_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 
 void sqlBuild_Where_Str  (sqlBuilder *b, const char *tag, const char *val);
 void sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val);
+void sqlBuild_Where_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 
 
 /* Get the completed query string back.  This query string is

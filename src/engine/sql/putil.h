@@ -30,6 +30,19 @@
 
 extern GUID nullguid;
 
+/* The pgenGetResults() routine loops over all of the results returned
+ *    by the database, and invokes the 'handler' routine on it.  The
+ *    gpointer 'data' is passed to (*handler) the first time its invoked.
+ *    Each subsequent time, the return value of (*handler) is passed
+ *    as the 'data' gpointer.   This routine returns the gpointer that
+ *    (handler) returned the last time it was invoked.
+ */
+
+gpointer pgendGetResults (PGBackend *be,
+            gpointer (*handler) (PGBackend *, PGresult *, int, gpointer),
+            gpointer data);
+
+
 /* hack alert -- calling PQFinish() is quite harsh, since all 
  * subsequent sql queries will fail. On the other hand, killing
  * anything that follows *is* a way of minimizing data corruption 
@@ -248,6 +261,20 @@ extern GUID nullguid;
    if (atol (DB_GET_VAL(sqlname,0)) != fun) {			\
       PINFO("mis-match: %s sql='%s', eng='%d'", sqlname, 	\
          DB_GET_VAL (sqlname,0), fun); 				\
+      ndiffs++; 						\
+   }								\
+}
+
+#define DBL_RESOLUTION  2.0e-16
+
+/* compare 64-bit floats */
+#define COMP_DOUBLE(sqlname,fun,ndiffs) { 			\
+   double sqlval = atof (DB_GET_VAL(sqlname,0));		\
+   double engval = fun;						\
+   if (((sqlval-engval) > DBL_RESOLUTION*engval) ||		\
+       ((engval-sqlval) > DBL_RESOLUTION*engval)) {		\
+      PINFO("mis-match: %s sql=%24.18g, eng=%24.18g", sqlname, 	\
+         sqlval, engval); 					\
       ndiffs++; 						\
    }								\
 }

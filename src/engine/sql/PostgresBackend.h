@@ -14,6 +14,12 @@
 #define __POSTGRES_BACKEND_H__
 
 #include <pgsql/libpq-fe.h>
+
+#include "Group.h"
+#include "guid.h"
+#include "Transaction.h"
+
+#include "builder.h"
 #include "BackendP.h"
 
 typedef struct _pgend PGBackend;
@@ -29,9 +35,6 @@ typedef enum {
 struct _pgend {
    Backend be;
 
-   /* snr is used only for temporarily saving hook values */
-   Backend snr;    
-
    /* session mode */
    AccessMode session_mode;
    GUID *sessionGuid;
@@ -45,12 +48,21 @@ struct _pgend {
    char * dbName;
    PGconn * connection;
 
+   /* counter used to nest callback disables */
+   int nest_count;
+   /* callback hooks are saved in snr during disables */
+   Backend snr;    
+
+
    /* scratch space for constructing queries */ 
    int bufflen;
    char *buff;
+   int nrows;  /* number of rows in query result */
 
-   /* counter used to nest callback disables */
-   int nest_count;
+   /* kvp path cache */
+   char **path_cache;
+   int path_cache_size;
+   int ipath_max;
 };
 
 /*
@@ -90,27 +102,5 @@ typedef struct _checkpoint {
 
 void pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp);
 void pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp);
-
-/* -------------------------------------------------------- */
-/* the following protypes belong in a 'autogen.h' file */
-
-void pgendStoreOneAccountOnly (PGBackend *be, Account *ptr, 
-                                 sqlBuild_QType update);
-
-void pgendStoreOneCheckpointOnly (PGBackend *be, Checkpoint *ptr, 
-                                 sqlBuild_QType update);
-
-void pgendStoreOneCommodityOnly (PGBackend *be, gnc_commodity *ptr, 
-                                 sqlBuild_QType update);
-
-void pgendStoreOneSessionOnly (PGBackend *be, void *ptr, 
-                                 sqlBuild_QType update);
-
-void pgendStoreOneSplitOnly (PGBackend *be, Split *ptr, 
-                                 sqlBuild_QType update);
-
-void pgendStoreOneTransactionOnly (PGBackend *be, Transaction *ptr, 
-                                 sqlBuild_QType update);
-
 
 #endif /* __POSTGRES_BACKEND_H__ */

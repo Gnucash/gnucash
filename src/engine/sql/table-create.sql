@@ -126,3 +126,50 @@ CREATE TABLE gncSession (
 );
 
 
+-- The kvp path-cache replaces a long path name with a single unique
+-- number.  The guid-cache replaces a 32-byte guid with a shorter 
+-- 4-byte identifier.  The KVP Value table stores the actual values.
+
+CREATE TABLE gncPathCache (
+	ipath		SERIAL PRIMARY KEY,
+	path		TEXT
+);
+
+CREATE TABLE gncGUIDCache (
+	iguid		SERIAL PRIMARY KEY,
+	guid		CHAR(32) UNIQUE NOT NULL
+);
+
+CREATE TABLE gncKVPvalue (
+	iguid		INT4,
+	ipath		INT4,
+	type		char(4),
+
+        PRIMARY KEY (iguid, ipath)
+);
+
+CREATE TABLE gncKVPvalue_int64 (
+	data		INT8
+) INHERITS (gncKVPvalue);
+
+CREATE TABLE gncKVPvalue_dbl (
+	data		FLOAT8
+) INHERITS (gncKVPvalue);
+
+CREATE TABLE gncKVPvalue_numeric (
+	num		INT8,
+	denom		INT8
+) INHERITS (gncKVPvalue);
+
+CREATE TABLE gncKVPvalue_str (
+	data		TEXT
+) INHERITS (gncKVPvalue);
+
+CREATE TABLE gncKVPvalue_guid (
+	data		CHAR(32)
+) INHERITS (gncKVPvalue);
+
+CREATE TABLE gncKVPvalue_list (
+	data		TEXT[]
+) INHERITS (gncKVPvalue);
+

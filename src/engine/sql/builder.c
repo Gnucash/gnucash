@@ -37,6 +37,7 @@ struct _builder {
    /* sql needs commas to separate values */
    short  tag_need_comma;
    short  val_need_comma;
+   short  where_need_and;
 
    /* pointers to the start of two different assembly areas. */
    char * tag_base;
@@ -127,6 +128,7 @@ sqlBuilder_new (void)
 
    b->tag_need_comma = 0;
    b->val_need_comma = 0;
+   b->where_need_and = 0;
 
    /* the escape area */
    b->escape = g_malloc (INITIAL_BUFSZ);
@@ -163,6 +165,7 @@ sqlBuild_Table (sqlBuilder *b, const char *tablename, sqlBuild_QType qt)
 
    b->tag_need_comma = 0;
    b->val_need_comma = 0;
+   b->where_need_and = 0;
 
    switch (qt) 
    {
@@ -267,8 +270,18 @@ sqlBuild_Set_GUID (sqlBuilder *b, const char *tag, const GUID *val)
 void
 sqlBuild_Set_Date (sqlBuilder *b, const char *tag, Timespec ts)
 {
-  char buf[512];
+  char buf[120];
   gnc_timespec_to_iso8601_buff (ts, buf);
+  sqlBuild_Set_Str (b, tag, buf);
+}
+
+/* ================================================ */
+
+void
+sqlBuild_Set_Double (sqlBuilder *b, const char *tag, double flt)
+{
+  char buf[120];
+  snprintf (buf, 120, "%24.18g", flt);
   sqlBuild_Set_Str (b, tag, buf);
 }
 
@@ -334,9 +347,8 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 
       case SQL_UPDATE:
       case SQL_SELECT:
-         // hack alert -- implement multiple where's ...
-         // if (b->tag_need_comma) b->ptag = stpcpy(b->ptag, ", ");
-         // b->tag_need_comma = 1;
+         if (b->where_need_and) b->pval = stpcpy(b->pval, " AND ");
+         b->where_need_and = 1;
 
          b->pval = stpcpy(b->pval, tag);
          b->pval = stpcpy(b->pval, "='");
@@ -360,6 +372,16 @@ sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val)
   char guid_str[GUID_ENCODING_LENGTH+1];
   guid_to_string_buff(val, guid_str);
   sqlBuild_Where_Str (b, tag, guid_str);
+}
+
+/* ================================================ */
+
+void
+sqlBuild_Where_Int32 (sqlBuilder *b, const char *tag, gint32 val)
+{
+  char str[40];
+  snprintf (str, 40, "%d", val);
+  sqlBuild_Where_Str (b, tag, str);
 }
 
 /* ================================================ */

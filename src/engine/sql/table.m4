@@ -78,6 +78,43 @@ define(`session', `gncSession, Session, void,
        sessionGUID,      KEY, GUID *, be->sessionGuid,
        ')
        
+define(`kvp_gint64', `gncKVPvalue_int64, KVPint64, store_data_t,
+       type,                , char *, ptr->stype,
+       data,                , int64,  ptr->u.ival,
+       iguid,            KEY, int32,  ptr->iguid,
+       ipath,            KEY, int32,  ptr->ipath,
+       ')
+       
+
+define(`kvp_double', `gncKVPvalue_dbl, KVPdouble, store_data_t,
+       type,                , char *, ptr->stype,
+       data,                , double, ptr->u.dbl,
+       iguid,            KEY, int32,  ptr->iguid,
+       ipath,            KEY, int32,  ptr->ipath,
+       ')
+       
+define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t,
+       type,                , char *, ptr->stype,
+       num,                 , int64,  ptr->u.numeric.num,
+       denom,               , int64,  ptr->u.numeric.denom,
+       iguid,            KEY, int32,  ptr->iguid,
+       ipath,            KEY, int32,  ptr->ipath,
+       ')
+       
+define(`kvp_string', `gncKVPvalue_str, KVPstring, store_data_t,
+       type,                , char *, ptr->stype,
+       data,                , char *, ptr->u.str,
+       iguid,            KEY, int32,  ptr->iguid,
+       ipath,            KEY, int32,  ptr->ipath,
+       ')
+       
+define(`kvp_guid', `gncKVPvalue_guid, KVPguid, store_data_t,
+       type,                , char *, ptr->stype,
+       data,                , char *, ptr->u.str,
+       iguid,            KEY, int32,  ptr->iguid,
+       ipath,            KEY, int32,  ptr->ipath,
+       ')
+       
 /* ------------------------------------------------------- */
 /* symbolic names for the table accessors */
 define(`tablename', $1)
@@ -92,12 +129,14 @@ define(`nextrec', `shift(shift(shift(shift($@))))')
 
 define(`sql_setter', `ifelse($2, `KEY',
                      `ifelse($1, `char *',   sqlBuild_Where_Str,
+                             $1, `int32',    sqlBuild_Where_Int32,
                              $1, `GUID *',   sqlBuild_Where_GUID)',
 
                              $2,     ,
                      `ifelse($1, `char *',   sqlBuild_Set_Str,
                              $1, `now',      sqlBuild_Set_Str,
                              $1, `commod',   sqlBuild_Set_Str,
+                             $1, `double',   sqlBuild_Set_Double,
                              $1, `int32',    sqlBuild_Set_Int32,
                              $1, `int64',    sqlBuild_Set_Int64,
                              $1, `GUID *',   sqlBuild_Set_GUID,
@@ -122,6 +161,7 @@ define(`cmp_value', `ifelse($1, `char *',   COMP_STR,
                             $1, `now',      COMP_NOW,
                             $1, `int32',    COMP_INT32,
                             $1, `int64',    COMP_INT64,
+                            $1, `double',   COMP_DOUBLE,
                             $1, `GUID *',   COMP_GUID,
                             $1, `commod',   COMP_COMMODITY,
                             $1, `Timespec', COMP_DATE,
@@ -147,7 +187,7 @@ define(`store_one_only',
  * It just pokes the data in 
  */
 
-void 
+static void 
 pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
                      xacc_type($@) *ptr,
                      sqlBuild_QType update)
@@ -242,19 +282,3 @@ pgendPutOne`'func_name($@)`'Only (PGBackend *be,
 
 /* ------------------------------------------------------- */
 divert
-store_one_only(account)
-store_one_only(checkpoint)
-store_one_only(modity)
-store_one_only(session)
-store_one_only(split)
-store_one_only(transaction)
-
-compare_one_only(account)
-compare_one_only(modity)
-compare_one_only(split)
-compare_one_only(transaction)
-
-put_one_only(account)
-put_one_only(modity)
-put_one_only(split)
-put_one_only(transaction)
