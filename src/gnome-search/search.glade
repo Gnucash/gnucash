@@ -32,7 +32,7 @@
   <widget>
     <class>GtkVBox</class>
     <child_name>GnomeDialog:vbox</child_name>
-    <name>dialog_vbox</name>
+    <name>dialog-vbox1</name>
     <homogeneous>False</homogeneous>
     <spacing>8</spacing>
     <child>
@@ -44,7 +44,7 @@
     <widget>
       <class>GtkHButtonBox</class>
       <child_name>GnomeDialog:action_area</child_name>
-      <name>dialog-action_area</name>
+      <name>dialog-action_area1</name>
       <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
       <spacing>8</spacing>
       <child_min_width>85</child_min_width>
@@ -54,14 +54,15 @@
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
-	<fill>True</fill>
+	<fill>False</fill>
 	<pack>GTK_PACK_END</pack>
       </child>
 
       <widget>
 	<class>GtkButton</class>
-	<name>button26</name>
+	<name>button33</name>
 	<can_default>True</can_default>
+	<has_default>True</has_default>
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>clicked</name>
@@ -75,7 +76,7 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button27</name>
+	<name>button34</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<signal>
@@ -89,7 +90,21 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button28</name>
+	<name>new_item_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>gnc_ui_search_new_cb</handler>
+	  <data>Search Dialog</data>
+	  <last_modification_time>Mon, 18 Feb 2002 05:35:22 GMT</last_modification_time>
+	</signal>
+	<label>New Item....</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button35</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<signal>
@@ -103,70 +118,10 @@
     </widget>
 
     <widget>
-      <class>GtkHBox</class>
-      <name>hbox71</name>
+      <class>GtkVBox</class>
+      <name>vbox89</name>
       <homogeneous>False</homogeneous>
       <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-      </child>
-
-      <widget>
-	<class>GtkHBox</class>
-	<name>hbox72</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>type_label</name>
-	  <label>()</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label844</name>
-	  <label> Search </label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkFrame</class>
-      <name>search_frame</name>
-      <border_width>3</border_width>
-      <label>Search Criteria</label>
-      <label_xalign>0</label_xalign>
-      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
 	<padding>0</padding>
 	<expand>True</expand>
@@ -174,16 +129,19 @@
       </child>
 
       <widget>
-	<class>GtkVBox</class>
-	<name>vbox88</name>
-	<border_width>3</border_width>
+	<class>GtkHBox</class>
+	<name>hbox71</name>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
 
 	<widget>
 	  <class>GtkHBox</class>
-	  <name>hbox73</name>
-	  <border_width>3</border_width>
+	  <name>hbox72</name>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 	  <child>
@@ -193,45 +151,12 @@
 	  </child>
 
 	  <widget>
-	    <class>GtkHBox</class>
-	    <name>add_button_box</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>type_menu_box</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	      <pack>GTK_PACK_END</pack>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-
-	  <widget>
 	    <class>GtkLabel</class>
-	    <name>label846</name>
-	    <label>Search for items where</label>
-	    <justify>GTK_JUSTIFY_RIGHT</justify>
+	    <name>type_label</name>
+	    <label>()</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
-	    <xalign>1</xalign>
+	    <xalign>0.5</xalign>
 	    <yalign>0.5</yalign>
 	    <xpad>0</xpad>
 	    <ypad>0</ypad>
@@ -239,57 +164,146 @@
 	      <padding>0</padding>
 	      <expand>False</expand>
 	      <fill>False</fill>
-	      <pack>GTK_PACK_END</pack>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label844</name>
+	    <label> Search </label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
 	    </child>
 	  </widget>
 	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>search_frame</name>
+	<border_width>3</border_width>
+	<label>Search Criteria</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
 
 	<widget>
-	  <class>GtkTable</class>
-	  <name>criteria_table</name>
+	  <class>GtkVBox</class>
+	  <name>vbox88</name>
 	  <border_width>3</border_width>
-	  <rows>1</rows>
-	  <columns>2</columns>
 	  <homogeneous>False</homogeneous>
-	  <row_spacing>0</row_spacing>
-	  <column_spacing>0</column_spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox73</name>
+	    <border_width>3</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>add_button_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>type_menu_box</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+		<pack>GTK_PACK_END</pack>
+	      </child>
+
+	      <widget>
+		<class>Placeholder</class>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label846</name>
+	      <label>Search for items where</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+		<pack>GTK_PACK_END</pack>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkTable</class>
+	    <name>criteria_table</name>
+	    <border_width>3</border_width>
+	    <rows>1</rows>
+	    <columns>2</columns>
+	    <homogeneous>False</homogeneous>
+	    <row_spacing>0</row_spacing>
+	    <column_spacing>0</column_spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
 	</widget>
       </widget>
-    </widget>
-
-    <widget>
-      <class>GtkHBox</class>
-      <name>result_hbox</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>False</fill>
-      </child>
 
       <widget>
 	<class>GtkHBox</class>
-	<name>hboxXXX</name>
+	<name>result_hbox</name>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
 	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
+	  <expand>True</expand>
+	  <fill>True</fill>
 	</child>
 
 	<widget>
-	  <class>GtkFrame</class>
-	  <name>frame12</name>
-	  <label>Type of search</label>
-	  <label_xalign>0</label_xalign>
-	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <class>GtkHBox</class>
+	  <name>hboxXXX</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
 	  <child>
 	    <padding>0</padding>
 	    <expand>False</expand>
@@ -297,94 +311,107 @@
 	  </child>
 
 	  <widget>
-	    <class>GtkVBox</class>
-	    <name>vbox24</name>
-	    <border_width>3</border_width>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
+	    <class>GtkFrame</class>
+	    <name>frame12</name>
+	    <label>Type of search</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
 
 	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>new_search_radiobutton</name>
-	      <can_focus>True</can_focus>
-	      <signal>
-		<name>toggled</name>
-		<handler>gnc_ui_search_type_cb</handler>
-		<data>Search Dialog</data>
-		<last_modification_time>Thu, 07 Feb 2002 01:25:13 GMT</last_modification_time>
-	      </signal>
-	      <label>New search</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>search_type</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
+	      <class>GtkVBox</class>
+	      <name>vbox24</name>
+	      <border_width>3</border_width>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
 
-	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>narrow_search_radiobutton</name>
-	      <can_focus>True</can_focus>
-	      <signal>
-		<name>toggled</name>
-		<handler>gnc_ui_search_type_cb</handler>
-		<data>Search Dialog</data>
-		<last_modification_time>Wed, 05 Apr 2000 14:20:05 GMT</last_modification_time>
-	      </signal>
-	      <label>Refine current search</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>search_type</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
+	      <widget>
+		<class>GtkRadioButton</class>
+		<name>new_search_radiobutton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>toggled</name>
+		  <handler>gnc_ui_search_type_cb</handler>
+		  <data>Search Dialog</data>
+		  <last_modification_time>Thu, 07 Feb 2002 01:25:13 GMT</last_modification_time>
+		</signal>
+		<label>New search</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>search_type</group>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
 
-	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>add_search_radiobutton</name>
-	      <can_focus>True</can_focus>
-	      <signal>
-		<name>toggled</name>
-		<handler>gnc_ui_search_type_cb</handler>
-		<data>Search Dialog</data>
-		<last_modification_time>Wed, 05 Apr 2000 14:20:17 GMT</last_modification_time>
-	      </signal>
-	      <label>Add results to current search</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>search_type</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
-	    </widget>
+	      <widget>
+		<class>GtkRadioButton</class>
+		<name>narrow_search_radiobutton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>toggled</name>
+		  <handler>gnc_ui_search_type_cb</handler>
+		  <data>Search Dialog</data>
+		  <last_modification_time>Wed, 05 Apr 2000 14:20:05 GMT</last_modification_time>
+		</signal>
+		<label>Refine current search</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>search_type</group>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
 
-	    <widget>
-	      <class>GtkRadioButton</class>
-	      <name>delete_search_radiobutton</name>
-	      <can_focus>True</can_focus>
-	      <signal>
-		<name>toggled</name>
-		<handler>gnc_ui_search_type_cb</handler>
-		<data>Search Dialog</data>
-		<last_modification_time>Wed, 05 Apr 2000 14:20:26 GMT</last_modification_time>
-	      </signal>
-	      <label>Delete results from current search</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <group>search_type</group>
-	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
-	      </child>
+	      <widget>
+		<class>GtkRadioButton</class>
+		<name>add_search_radiobutton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>toggled</name>
+		  <handler>gnc_ui_search_type_cb</handler>
+		  <data>Search Dialog</data>
+		  <last_modification_time>Wed, 05 Apr 2000 14:20:17 GMT</last_modification_time>
+		</signal>
+		<label>Add results to current search</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>search_type</group>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkRadioButton</class>
+		<name>delete_search_radiobutton</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>toggled</name>
+		  <handler>gnc_ui_search_type_cb</handler>
+		  <data>Search Dialog</data>
+		  <last_modification_time>Wed, 05 Apr 2000 14:20:26 GMT</last_modification_time>
+		</signal>
+		<label>Delete results from current search</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+		<group>search_type</group>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>

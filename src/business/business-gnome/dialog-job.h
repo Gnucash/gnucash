@@ -8,6 +8,9 @@
 #ifndef GNC_DIALOG_JOB_H_
 #define GNC_DIALOG_JOB_H_
 
+#include "gncJob.h"
+#include "gncOwner.h"
+
 /* Functions to create and edit jobs */
 GncJob * gnc_job_new (GtkWidget *parent, GNCBook *book, GncOwner *owner);
 void gnc_job_edit (GtkWidget *parent, GncJob *job);

@@ -8,8 +8,11 @@
 #ifndef GNC_DIALOG_JOB_SELECT_H_
 #define GNC_DIALOG_JOB_SELECT_H_
 
+#include "gncJob.h"
+#include "gncOwner.h"
+
 /* Create a dialog to select a job based upon potentially-existing
- * customer and jobs.  Allows creation of both jobs and customers.
+ * owner and jobs.  Allows creation of both jobs and owners.
  */
 GncJob *
 gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,

@@ -17,13 +17,14 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "window-help.h"
+#include "dialog-search.h"
+#include "search-param.h"
 
 #include "gncAddress.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 
 #include "dialog-employee.h"
-#include "business-chooser.h"
 
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
@@ -36,6 +37,7 @@ typedef enum
 
 struct _employee_select_window {
   GNCBook *	book;
+  GtkWidget *	parent;
 };
 
 typedef struct _employee_window {
@@ -531,41 +533,93 @@ gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
   return;
 }
 
-/* Functions for widgets for employee selection */
+/* Functions for employee selection widgets */
 
-static gpointer gnc_employee_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+static gboolean
+edit_employee_cb (gpointer *employee_p, gpointer user_data)
 {
-  struct _employee_select_window *sw = arg;
+  struct _employee_select_window *sw = user_data;
+  GncEmployee *employee;
 
-  if (!arg) return NULL;
+  g_return_val_if_fail (employee_p && user_data, TRUE);
 
-  return gnc_employee_new (toplevel, sw->book);
+  employee = *employee_p;
+
+  if (!employee)
+    return TRUE;
+
+  gnc_employee_edit (sw->parent, employee);
+  return TRUE;
 }
 
-static void gnc_employee_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static gboolean
+select_employee_cb (gpointer *employee_p, gpointer user_data)
 {
-  GncEmployee *employee = obj;
+  g_return_val_if_fail (employee_p && user_data, TRUE);
+  if (*employee_p)
+    return FALSE;
+  return TRUE;
+}
 
-  if (!arg || !obj) return;
+static gpointer
+new_employee_cb (gpointer user_data)
+{
+  struct _employee_select_window *sw = user_data;
+  
+  g_return_val_if_fail (user_data, NULL);
 
-  gnc_employee_edit (toplevel, employee);
+  return gnc_employee_new (sw->parent, sw->book);
+}
+
+GncEmployee *
+gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
+{
+  GList *params = NULL;
+  gpointer res;
+  QueryNew *q, *q2 = NULL;
+  GNCSearchCallbackButton buttons[] = { 
+    { N_("Select Employee"), select_employee_cb},
+    { N_("View/Edit Employee"), edit_employee_cb},
+    { NULL },
+  };
+  GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
+  struct _employee_select_window sw;
+
+  g_return_val_if_fail (book, NULL);
+
+  /* Build parameter list in reverse order*/
+  params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
+				     type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
+				     type, EMPLOYEE_USERNAME, NULL);
+  params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
+				     EMPLOYEE_ID, NULL);
+
+
+  /* Build the queries */
+  q = gncQueryCreate ();
+  gncQuerySetBook (q, book);
+
+  if (start) {
+    q2 = gncQueryCopy (q);
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, EMPLOYEE_GUID),
+			  gncEmployeeGetGUID (start), QUERY_AND);
+  }
+
+  /* launch select dialog and return the result */
+  sw.book = book;
+  sw.parent = parent;
+  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
+					 NULL, new_employee_cb, &sw);
+
+  gncQueryDestroy (q);
+  return res;
 }
 
 gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 				       GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
-  struct _employee_select_window sw;
-
-  g_return_val_if_fail (bookp != NULL, NULL);
-
-  sw.book = book;
-
-  return
-    gnc_ui_business_chooser_new (toplevel, employee,
-				 book, GNC_EMPLOYEE_MODULE_NAME,
-				 gnc_employee_edit_new_cb,
-				 gnc_employee_edit_edit_cb, &sw);
+  return gnc_employee_find (toplevel, employee, bookp);
 }
 
 gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,

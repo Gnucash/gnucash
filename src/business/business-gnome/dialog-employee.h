@@ -11,6 +11,8 @@
 /* Functions to create and edit employees */
 GncEmployee * gnc_employee_new (GtkWidget *parent, GNCBook *book);
 void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
+GncEmployee *gnc_employee_find (GtkWidget *parent, GncEmployee *start,
+				GNCBook *book);
 
 /* Callbacks to select a employee that match the necessary functions
  * for use with the gnc_general_select widget.

@@ -19,5 +19,6 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
 				   GNCBook *book, GncOwner *owner);
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
+void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
 
 #endif /* GNC_BUSINESS_UTILS_H_ */

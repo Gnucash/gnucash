@@ -19,7 +19,6 @@
 #include "gncJob.h"
 #include "gncJobP.h"
 
-#include "business-chooser.h"
 #include "business-utils.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"

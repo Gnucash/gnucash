@@ -600,6 +600,25 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
 			   guid, _GNC_MOD_NAME);
 }
 
+static gboolean gncInvoiceDateExists (Timespec *date)
+{
+  g_return_val_if_fail (date, FALSE);
+  if (date->tv_sec || date->tv_nsec) return TRUE;
+  return FALSE;
+}
+
+gboolean gncInvoiceIsPosted (GncInvoice *invoice)
+{
+  if (!invoice) return FALSE;
+  return gncInvoiceDateExists (&(invoice->date_posted));
+}
+
+gboolean gncInvoiceIsPaid (GncInvoice *invoice)
+{
+  if (!invoice) return FALSE;
+  return gncInvoiceDateExists (&(invoice->date_paid));
+}
+
 GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
@@ -693,7 +712,7 @@ static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
 static GncObject_t gncInvoiceDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
-  "Purchase/Sales Invoice",
+  "Invoice",
   _gncInvoiceCreate,
   _gncInvoiceDestroy,
   _gncInvoiceForeach,
@@ -710,6 +729,8 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_POSTED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePosted },
     { INVOICE_DUE, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateDue },
     { INVOICE_PAID, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePaid },
+    { INVOICE_IS_POSTED, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPosted },
+    { INVOICE_IS_PAID, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPaid },
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },

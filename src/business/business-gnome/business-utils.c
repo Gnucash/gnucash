@@ -117,3 +117,16 @@ void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
   owner->owner.undefined =
     gnc_general_select_get_selected (GNC_GENERAL_SELECT (widget));
 }
+
+void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (owner != NULL);
+
+  /* We'll assume that the owner has the proper 'type' because we
+   * can't change it here.  Hopefully the caller has it set properly
+   */
+
+  gnc_general_select_set_selected (GNC_GENERAL_SELECT (widget),
+				   owner->owner.undefined);
+}

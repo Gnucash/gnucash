@@ -58,4 +58,15 @@ gboolean		gnc_search_param_type_match (GNCSearchParam *a,
 void	gnc_search_param_override_param_type (GNCSearchParam *param,
 					      GNCIdTypeConst param_type);
 
+/*************************************************************
+ * Helper function ..
+ */
+
+/* Create a paramter and prepend it to a GSList */
+GList *		gnc_search_param_prepend (GList *list, char const *title,
+					  GNCIdTypeConst type_override,
+					  GNCIdTypeConst search_type,
+					  const char *param, ...);
+					  
+
 #endif /* _GNCSEARCH_PARAM_H */

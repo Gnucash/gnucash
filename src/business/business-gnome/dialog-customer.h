@@ -12,6 +12,9 @@
 GncCustomer * gnc_customer_new (GtkWidget *parent, GNCBook *book);
 void gnc_customer_edit (GtkWidget *parent, GncCustomer *cust);
 
+GncCustomer *gnc_customer_find (GtkWidget *parent, GncCustomer *start,
+				GNCBook *book);
+
 /* Callbacks to select a customer that match the necessary functions
  * for use with the gnc_general_select widget.
  *

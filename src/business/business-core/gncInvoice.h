@@ -81,6 +81,8 @@ gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
+gboolean gncInvoiceIsPosted (GncInvoice *invoice);
+gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 
 #define INVOICE_GUID	"guid"
 #define INVOICE_ID	"id"
@@ -89,6 +91,8 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
 #define INVOICE_POSTED	"date_posted"
 #define INVOICE_DUE	"date_due"
 #define INVOICE_PAID	"date_paid"
+#define INVOICE_IS_POSTED	"is_posted?"
+#define INVOICE_IS_PAID	"is_paid?"
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"

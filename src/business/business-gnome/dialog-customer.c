@@ -18,12 +18,17 @@
 #include "gnc-engine-util.h"
 #include "window-help.h"
 
+#include "dialog-search.h"
+#include "search-param.h"
+
 #include "gncAddress.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 
 #include "dialog-customer.h"
-#include "business-chooser.h"
+#include "dialog-job-select.h"
+#include "dialog-order.h"
+#include "dialog-invoice.h"
 
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
@@ -36,6 +41,7 @@ typedef enum
 
 struct _customer_select_window {
   GNCBook *	book;
+  GtkWidget *	parent;
 };
 
 typedef struct _customer_window {
@@ -626,41 +632,156 @@ gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
   return;
 }
 
-/* Functions for widgets for customer selection */
+/* Functions for customer selection widgets */
 
-static gpointer gnc_customer_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+
+static gboolean
+invoice_customer_cb (gpointer *cust_p, gpointer user_data)
 {
-  struct _customer_select_window *sw = arg;
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
 
-  if (!arg) return NULL;
+  g_return_val_if_fail (cust_p && user_data, TRUE);
 
-  return gnc_customer_new (toplevel, sw->book);
+  cust = *cust_p;
+
+  if (!cust)
+    return TRUE;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_invoice_find (sw->parent, NULL, &owner, sw->book);
+  return TRUE;
 }
 
-static void gnc_customer_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static gboolean
+order_customer_cb (gpointer *cust_p, gpointer user_data)
 {
-  GncCustomer *cust = obj;
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
 
-  if (!arg || !obj) return;
+  g_return_val_if_fail (cust_p && user_data, TRUE);
 
-  gnc_customer_edit (toplevel, cust);
+  cust = *cust_p;
+
+  if (!cust)
+    return TRUE;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_order_find (sw->parent, NULL, &owner, sw->book);
+  return TRUE;
+}
+
+static gboolean
+jobs_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncOwner owner;
+  GncCustomer *cust;
+
+  g_return_val_if_fail (cust_p && user_data, TRUE);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return TRUE;
+
+  gncOwnerInitCustomer (&owner, cust);
+  gnc_ui_select_job_new (sw->parent, sw->book, &owner, NULL);
+  return TRUE;
+}
+
+static gboolean
+edit_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  GncCustomer *cust;
+
+  g_return_val_if_fail (cust_p && user_data, TRUE);
+
+  cust = *cust_p;
+
+  if (!cust)
+    return TRUE;
+
+  gnc_customer_edit (sw->parent, cust);
+  return TRUE;
+}
+
+static gboolean
+select_customer_cb (gpointer *cust_p, gpointer user_data)
+{
+  g_return_val_if_fail (cust_p && user_data, TRUE);
+  if (*cust_p)
+    return FALSE;
+  return TRUE;
+}
+
+static gpointer
+new_customer_cb (gpointer user_data)
+{
+  struct _customer_select_window *sw = user_data;
+  
+  g_return_val_if_fail (user_data, NULL);
+
+  return gnc_customer_new (sw->parent, sw->book);
+}
+
+GncCustomer *
+gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
+{
+  GList *params = NULL;
+  gpointer res;
+  QueryNew *q, *q2 = NULL;
+  GNCSearchCallbackButton buttons[] = { 
+    { N_("Select Customer"), select_customer_cb},
+    { N_("View/Edit Customer"), edit_customer_cb},
+    { N_("Customer Jobs"), jobs_customer_cb},
+    { N_("Customer Orders"), order_customer_cb},
+    { N_("Customer Invoices"), invoice_customer_cb},
+    { NULL },
+  };
+  GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
+  struct _customer_select_window sw;
+
+  g_return_val_if_fail (book, NULL);
+
+  /* Build parameter list in reverse order*/
+  params = gnc_search_param_prepend (params, _("Shipping Contact"), NULL, type,
+				     CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
+				     CUSTOMER_ADDR, ADDRESS_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
+				     CUSTOMER_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
+				     CUSTOMER_ID, NULL);
+
+
+  /* Build the queries */
+  q = gncQueryCreate ();
+  gncQuerySetBook (q, book);
+
+  if (start) {
+    q2 = gncQueryCopy (q);
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, CUSTOMER_GUID),
+			  gncCustomerGetGUID (start), QUERY_AND);
+  }
+
+  /* launch select dialog and return the result */
+  sw.book = book;
+  sw.parent = parent;
+  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
+					 NULL, new_customer_cb, &sw);
+
+  gncQueryDestroy (q);
+  return res;
 }
 
 gpointer gnc_customer_edit_new_select (gpointer bookp, gpointer cust,
 				       GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
-  struct _customer_select_window sw;
-
-  g_return_val_if_fail (bookp != NULL, NULL);
-
-  sw.book = book;
-
-  return
-    gnc_ui_business_chooser_new (toplevel, cust,
-				 book, GNC_CUSTOMER_MODULE_NAME,
-				 gnc_customer_edit_new_cb,
-				 gnc_customer_edit_edit_cb, &sw);
+  return gnc_customer_find (toplevel, cust, bookp);
 }
 
 gpointer gnc_customer_edit_new_edit (gpointer bookp, gpointer cust,

@@ -17,6 +17,8 @@
 #include "gnc-engine-util.h"
 #include "gnucash-sheet.h"
 #include "window-help.h"
+#include "dialog-search.h"
+#include "search-param.h"
 
 #include "gncOrder.h"
 #include "gncOrderP.h"
@@ -25,7 +27,6 @@
 
 #include "dialog-order.h"
 #include "dialog-invoice.h"
-#include "business-chooser.h"
 #include "business-utils.h"
 #include "dialog-date-close.h"
 
@@ -42,6 +43,8 @@ typedef enum
 
 struct _order_select_window {
   GNCBook *	book;
+  GtkWidget *	parent;
+  GncOwner *	owner;
 };
 
 typedef struct _order_window {
@@ -724,41 +727,125 @@ gnc_order_edit (GtkWidget *parent, GncOrder *order)
   return;
 }
 
-/* Functions for widgets for order selection */
+/* Functions for order selection widgets */
 
-static gpointer gnc_order_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+static gboolean
+edit_order_cb (gpointer *order_p, gpointer user_data)
 {
-  struct _order_select_window *sw = arg;
+  struct _order_select_window *sw = user_data;
+  GncOrder *order;
 
-  if (!arg) return NULL;
+  g_return_val_if_fail (order_p && user_data, TRUE);
 
-  return gnc_order_new (toplevel, NULL, sw->book); /* XXX, set owner type? */
+  order = *order_p;
+
+  if (!order)
+    return TRUE;
+
+  gnc_order_edit (sw->parent, order);
+  return TRUE;
 }
 
-static void gnc_order_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static gboolean
+select_order_cb (gpointer *order_p, gpointer user_data)
 {
-  GncOrder *order = obj;
+  g_return_val_if_fail (order_p && user_data, TRUE);
+  if (*order_p)
+    return FALSE;
+  return TRUE;
+}
 
-  if (!arg || !obj) return;
+static gpointer
+new_order_cb (gpointer user_data)
+{
+  struct _order_select_window *sw = user_data;
+  
+  g_return_val_if_fail (user_data, NULL);
 
-  gnc_order_edit (toplevel, order);
+  return gnc_order_new (sw->parent, sw->owner, sw->book);
+}
+
+GncOrder *
+gnc_order_find (GtkWidget *parent, GncOrder *start, GncOwner *owner,
+		GNCBook *book)
+{
+  GList *params = NULL;
+  gpointer res;
+  QueryNew *q, *q2 = NULL;
+  GNCSearchCallbackButton buttons[] = { 
+    { N_("Select Order"), select_order_cb},
+    { N_("View/Edit Order"), edit_order_cb},
+    { NULL },
+  };
+  GNCIdType type = GNC_ORDER_MODULE_NAME;
+  struct _order_select_window sw;
+
+  g_return_val_if_fail (book, NULL);
+
+  /* Build parameter list in reverse order*/
+  params = gnc_search_param_prepend (params, _("Order Notes"), NULL, type,
+				     ORDER_NOTES, NULL);
+  params = gnc_search_param_prepend (params, _("Date Closed"), NULL, type,
+				     ORDER_CLOSED, NULL);
+  params = gnc_search_param_prepend (params, _("Is Closed?"), NULL, type,
+				     ORDER_IS_CLOSED, NULL);
+  params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
+				     ORDER_OPENED, NULL);
+  params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+				     ORDER_OWNER, OWNER_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
+				     ORDER_ID, NULL);
+
+  /* Build the queries */
+  q = gncQueryCreate ();
+  gncQuerySetBook (q, book);
+
+  /* If owner is supplied, limit all searches to orders who's owner
+   * (or parent) is the supplied owner!
+   */
+  if (owner && gncOwnerGetGUID (owner)) {
+    QueryNew *tmp, *q3;
+
+    q3 = gncQueryCreate ();
+    gncQueryAddGUIDMatch (q3, g_slist_prepend
+			  (g_slist_prepend (NULL, OWNER_GUID),
+			   ORDER_OWNER),
+			  gncOwnerGetGUID (owner), QUERY_OR);
+    gncQueryAddGUIDMatch (q3, g_slist_prepend
+			  (g_slist_prepend (NULL, OWNER_PARENTG),
+			   ORDER_OWNER),
+			  gncOwnerGetGUID (owner), QUERY_OR);
+
+    tmp = gncQueryMerge (q, q3, QUERY_AND);
+    gncQueryDestroy (q);
+    gncQueryDestroy (q3);
+    q = tmp;
+    q2 = gncQueryCopy (q);
+  }
+
+  if (start) {
+    if (q2 == NULL)
+      q2 = gncQueryCopy (q);
+
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, ORDER_GUID),
+			  gncOrderGetGUID (start), QUERY_AND);
+  }
+
+  /* launch select dialog and return the result */
+  sw.book = book;
+  sw.parent = parent;
+  sw.owner = owner;
+  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
+					 NULL, new_order_cb, &sw);
+
+  gncQueryDestroy (q);
+  return res;
 }
 
 gpointer gnc_order_edit_new_select (gpointer bookp, gpointer order,
 				       GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
-  struct _order_select_window sw;
-
-  g_return_val_if_fail (bookp != NULL, NULL);
-
-  sw.book = book;
-
-  return
-    gnc_ui_business_chooser_new (toplevel, order,
-				 book, GNC_ORDER_MODULE_NAME,
-				 gnc_order_edit_new_cb,
-				 gnc_order_edit_edit_cb, &sw);
+  return gnc_order_find (toplevel, order, NULL, bookp);
 }
 
 gpointer gnc_order_edit_new_edit (gpointer bookp, gpointer v,

@@ -53,11 +53,14 @@ void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (GncOrder *a, GncOrder *b);
 
+gboolean gncOrderIsClosed (GncOrder *order);
+
 #define ORDER_GUID	"guid"
 #define ORDER_ID	"id"
 #define ORDER_OWNER	"owner"
 #define ORDER_OPENED	"date_opened"
 #define ORDER_CLOSED	"date_closed"
+#define ORDER_IS_CLOSED	"is_closed?"
 #define ORDER_NOTES	"notes"
 
 #endif /* GNC_ORDER_H_ */

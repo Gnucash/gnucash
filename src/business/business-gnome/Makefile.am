@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
   ${GNOME_PRINT_CFLAGS} \
@@ -23,7 +24,6 @@ AM_CFLAGS = \
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
-  business-chooser.c \
   business-utils.c \
   dialog-customer.c \
   dialog-date-close.c \
@@ -36,7 +36,6 @@ libgncmod_business_gnome_la_SOURCES = \
   gnc-business-utils.c
 
 noinst_HEADERS = \
-  business-chooser.h \
   business-utils.h \
   dialog-customer.h \
   dialog-date-close.h \
@@ -68,7 +67,6 @@ gncmod_DATA = business-gnome.scm
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
-  business-chooser.glade \
   customer.glade \
   date-close.glade \
   employee.glade \

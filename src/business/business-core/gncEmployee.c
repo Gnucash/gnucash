@@ -332,6 +332,7 @@ gboolean gncEmployeeRegister (void)
     { EMPLOYEE_GUID, QUERYCORE_GUID, (QueryAccess)gncEmployeeGetGUID },
     { EMPLOYEE_ID, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetID },
     { EMPLOYEE_USERNAME, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetUsername },
+    { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncEmployeeGetAddr },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEmployeeGetBook },
     { NULL },
   };

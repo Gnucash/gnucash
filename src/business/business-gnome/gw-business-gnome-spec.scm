@@ -71,12 +71,12 @@
 
   (gw:wrap-function
    ws
-   'gnc:customer-select
+   'gnc:customer-find
    '<gnc:GncCustomer*>
-   "gnc_customer_edit_new_select"
-   '((<gnc:Book*> book) (<gnc:GncCustomer*> start_selection)
-     (<gnc:UIWidget> parent))
-   "Dialog: Select a GncCustomer.  Parent and start_selection may be NULL.")
+   "gnc_customer_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncCustomer*> start_selection)
+     (<gnc:Book*> book) )
+   "Dialog: Find a GncCustomer.  Parent and start_selection may be NULL.")
 
   ;;
   ;; dialog-employee.h
@@ -101,12 +101,12 @@
 
   (gw:wrap-function
    ws
-   'gnc:employee-select
+   'gnc:employee-find
    '<gnc:GncEmployee*>
-   "gnc_employee_edit_new_select"
-   '((<gnc:Book*> book) (<gnc:GncEmployee*> start_selection)
-     (<gnc:UIWidget> parent))
-   "Dialog: Select a GncEmployee.  Parent and start_selection may be NULL.")
+   "gnc_employee_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncEmployee*> start_selection)
+     (<gnc:Book*> book))
+   "Dialog: Find a GncEmployee.  Parent and start_selection may be NULL.")
 
   ;;
   ;; dialog-invoice.h
@@ -131,12 +131,13 @@
 
   (gw:wrap-function
    ws
-   'gnc:invoice-select
+   'gnc:invoice-find
    '<gnc:GncInvoice*>
-   "gnc_invoice_edit_new_select"
-   '((<gnc:Book*> book) (<gnc:GncInvoice*> start_selection)
-     (<gnc:UIWidget> parent))
-   "Dialog: Select a GncInvoice.  Parent and start_selection may be NULL.")
+   "gnc_invoice_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncInvoice*> start_selection)
+     (<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: Select a GncInvoice.  Any of the parent, start_selection, "
+   "and owner may be NULL.")
   
   ;;
   ;; dialog-job.h
@@ -195,12 +196,13 @@
 
   (gw:wrap-function
    ws
-   'gnc:order-select
+   'gnc:order-find
    '<gnc:GncOrder*>
-   "gnc_order_edit_new_select"
-   '((<gnc:Book*> book) (<gnc:GncOrder*> start_selection)
-     (<gnc:UIWidget> parent))
-   "Dialog: Select a GncOrder.  Parent and start_selection may be NULL.")
+   "gnc_order_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncOrder*> start_selection)
+     (<gnc:GncOwner*> order_owner) (<gnc:Book*> book) )
+   "Dialog: Select a GncOrder.  Any of parent, start_selection, and "
+   "order_owner may be NULL.")
   
   ;;
   ;; dialog-vendor.h
@@ -225,11 +227,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:vendor-select
+   'gnc:vendor-find
    '<gnc:GncVendor*>
-   "gnc_vendor_edit_new_select"
-   '((<gnc:Book*> book) (<gnc:GncVendor*> start_selection)
-     (<gnc:UIWidget> parent))
+   "gnc_vendor_find"
+   '((<gnc:UIWidget> parent) (<gnc:GncVendor*> start_selection)
+     (<gnc:Book*> book))
    "Dialog: Select a GncVendor.  Parent and start_selection may be NULL.")
   
 )

@@ -23,10 +23,14 @@ typedef struct _GNCSearchWindow GNCSearchWindow;
  *
  * In the second callback, the query is the property of the search
  * dialog; the callback should copy it if they want to keep it.
+ *
+ * The third callback will create a new item, and if the item is created,
+ * it will destroy the search dialog.
  */
-typedef gboolean (*GNCSearchCallback)(gpointer *obj_p, gpointer user_data);
+typedef gboolean (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
 typedef gboolean (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
 				       gpointer *result);
+typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);
 
 typedef struct {
   const char *		label;
@@ -36,24 +40,37 @@ typedef struct {
 /* Caller MUST supply _EITHER_ a result_callback or a list of callback
  * buttons.  The caller MUST NOT supply both.
  *
- * The start_query is the property of the caller.
+ * The param_list is the property of the dialog but will NOT be destroyed.
+ * The start_query is the property of the caller and will only be copied.
+ * The show_start_query, if it exists, will become the property of the
+ * dialog and will be automatically destroyed.  
  */
 GNCSearchWindow * gnc_search_dialog_create (GNCIdTypeConst obj_type,
+					    GList *param_list,
 					    QueryNew *start_query,
-					    gboolean show_start_results,
+					    QueryNew *show_start_query,
 					    GNCSearchCallbackButton *callbacks,
 					    GNCSearchResultCB result_callback,
+					    GNCSearchNewItemCB new_item_cb,
 					    gpointer user_data);
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_test (void);
 
 
-/* Use this function to choose (and return) an object. */
+/* Use this function to choose (and return) an object.
+ *
+ * The param_list is the property of the dialog but will NOT be destroyed.
+ * the start_query is the property of the caller and will only be copied.
+ * the show_start_query, if it exists, will become the property of the
+ * dialog and will be automatically destroyed.
+ */
 gpointer gnc_search_dialog_choose_object (GNCIdTypeConst obj_type,
+					  GList *param_list,
 					  QueryNew *start_query,
-					  gboolean show_start_results,
+					  QueryNew *show_start_query,
 					  GNCSearchCallbackButton *callbacks,
 					  GNCSearchResultCB result_callback,
+					  GNCSearchNewItemCB new_item_cb,
 					  gpointer user_data);
 
 #endif

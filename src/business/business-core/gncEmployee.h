@@ -51,5 +51,6 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 #define EMPLOYEE_GUID	"guid"
 #define EMPLOYEE_ID	"id"
 #define EMPLOYEE_USERNAME	"username"
+#define EMPLOYEE_ADDR	"addr"
 
 #endif /* GNC_EMPLOYEE_H_ */

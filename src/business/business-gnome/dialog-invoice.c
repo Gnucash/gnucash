@@ -17,6 +17,8 @@
 #include "gnc-engine-util.h"
 #include "gnucash-sheet.h"
 #include "window-help.h"
+#include "dialog-search.h"
+#include "search-param.h"
 
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
@@ -24,7 +26,6 @@
 #include "gncEntryLedger.h"
 
 #include "dialog-invoice.h"
-#include "business-chooser.h"
 #include "business-utils.h"
 #include "dialog-date-close.h"
 
@@ -41,6 +42,8 @@ typedef enum
 
 struct _invoice_select_window {
   GNCBook *	book;
+  GtkWidget *	parent;
+  GncOwner *	owner;
 };
 
 typedef struct _invoice_window {
@@ -825,41 +828,120 @@ gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice)
   return;
 }
 
-/* Functions for widgets for invoice selection */
+/* Functions for invoice selection widgets */
 
-static gpointer gnc_invoice_edit_new_cb (gpointer arg, GtkWidget *toplevel)
+static gboolean
+edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-  struct _invoice_select_window *sw = arg;
+  struct _invoice_select_window *sw = user_data;
+  GncInvoice *invoice;
 
-  if (!arg) return NULL;
+  g_return_val_if_fail (invoice_p && user_data, TRUE);
 
-  return gnc_invoice_new (toplevel, NULL, sw->book); /* XXX, set owner type? */
+  invoice = *invoice_p;
+
+  if (!invoice)
+    return TRUE;
+
+  gnc_invoice_edit (sw->parent, invoice);
+  return TRUE;
 }
 
-static void gnc_invoice_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
+static gboolean
+select_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-  GncInvoice *invoice = obj;
+  g_return_val_if_fail (invoice_p && user_data, TRUE);
+  if (*invoice_p)
+    return FALSE;
+  return TRUE;
+}
 
-  if (!arg || !obj) return;
+static gpointer
+new_invoice_cb (gpointer user_data)
+{
+  struct _invoice_select_window *sw = user_data;
+  
+  g_return_val_if_fail (user_data, NULL);
 
-  gnc_invoice_edit (toplevel, invoice);
+  return gnc_invoice_new (sw->parent, sw->owner, sw->book);
+}
+
+GncInvoice *
+gnc_invoice_find (GtkWidget *parent, GncInvoice *start, GncOwner *owner,
+		GNCBook *book)
+{
+  GList *params = NULL;
+  gpointer res;
+  QueryNew *q, *q2 = NULL;
+  GNCSearchCallbackButton buttons[] = { 
+    { N_("Select Invoice"), select_invoice_cb},
+    { N_("View/Edit Invoice"), edit_invoice_cb},
+    { NULL },
+  };
+  GNCIdType type = GNC_INVOICE_MODULE_NAME;
+  struct _invoice_select_window sw;
+
+  g_return_val_if_fail (book, NULL);
+
+  /* Build parameter list in reverse invoice*/
+  params = gnc_search_param_prepend (params, _("Invoice Notes"), NULL, type,
+				     INVOICE_NOTES, NULL);
+  params = gnc_search_param_prepend (params, _("Date Paid"), NULL, type,
+				     INVOICE_PAID, NULL);
+  params = gnc_search_param_prepend (params, _("Is Paid?"), NULL, type,
+				     INVOICE_IS_PAID, NULL);
+  params = gnc_search_param_prepend (params, _("Date Due"), NULL, type,
+				     INVOICE_DUE, NULL);
+  params = gnc_search_param_prepend (params, _("Date Posted"), NULL, type,
+				     INVOICE_POSTED, NULL);
+  params = gnc_search_param_prepend (params, _("Is Posted?"), NULL, type,
+				     INVOICE_IS_POSTED, NULL);
+  params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
+				     INVOICE_OPENED, NULL);
+  params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+				     INVOICE_OWNER, OWNER_NAME, NULL);
+  params = gnc_search_param_prepend (params, _("Invoice ID"), NULL, type,
+				     INVOICE_ID, NULL);
+
+  /* Build the queries */
+  q = gncQueryCreate ();
+  gncQuerySetBook (q, book);
+
+  /* If owner is supplied, limit all searches to invoices who's owner
+   * is the supplied owner!  Show all invoices by this owner.
+   */
+  if (owner && gncOwnerGetGUID (owner)) {
+    gncQueryAddGUIDMatch (q, g_slist_prepend
+			  (g_slist_prepend (NULL, OWNER_GUID),
+			   INVOICE_OWNER),
+			  gncOwnerGetGUID (owner), QUERY_AND);
+
+    q2 = gncQueryCopy (q);
+  }
+
+  if (start) {
+    if (q2 == NULL)
+      q2 = gncQueryCopy (q);
+
+    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, INVOICE_GUID),
+			  gncInvoiceGetGUID (start), QUERY_AND);
+  }
+
+  /* launch select dialog and return the result */
+  sw.book = book;
+  sw.parent = parent;
+  sw.owner = owner;
+  res = gnc_search_dialog_choose_object (type, params, q, q2, buttons,
+					 NULL, new_invoice_cb, &sw);
+
+  gncQueryDestroy (q);
+  return res;
 }
 
 gpointer gnc_invoice_edit_new_select (gpointer bookp, gpointer invoice,
 				       GtkWidget *toplevel)
 {
-  GNCBook *book = bookp;
-  struct _invoice_select_window sw;
-
-  g_return_val_if_fail (bookp != NULL, NULL);
-
-  sw.book = book;
-
-  return
-    gnc_ui_business_chooser_new (toplevel, invoice,
-				 book, GNC_INVOICE_MODULE_NAME,
-				 gnc_invoice_edit_new_cb,
-				 gnc_invoice_edit_edit_cb, &sw);
+  return gnc_invoice_find (toplevel, invoice, NULL, bookp);
 }
 
 gpointer gnc_invoice_edit_new_edit (gpointer bookp, gpointer v,

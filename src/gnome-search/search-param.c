@@ -8,6 +8,7 @@
 #endif
 
 #include <string.h>
+#include <stdarg.h>
 #include <gnome.h>
 
 #include "gnc-engine-util.h"
@@ -193,3 +194,44 @@ gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 
   return FALSE;
 }
+
+GList *
+gnc_search_param_prepend (GList *list, char const *title,
+			  GNCIdTypeConst type_override,
+			  GNCIdTypeConst search_type,
+			  const char *param, ...)
+{
+  GNCSearchParam *p;
+  GSList *path = NULL;
+  va_list ap;
+  const char *this_param;
+
+  g_return_val_if_fail (title, list);
+  g_return_val_if_fail (search_type, list);
+  g_return_val_if_fail (param, list);
+
+  p = gnc_search_param_new ();
+  gnc_search_param_set_title (p, title);
+
+  /* Build the parameter path */
+  va_start (ap, param);
+
+  for (this_param = param; this_param;
+       this_param = va_arg (ap, const char *)) {
+    path = g_slist_prepend (path, this_param);
+  }
+
+  va_end (ap);
+
+  /* put the path into the right order, and set it */
+  path = g_slist_reverse (path);
+  gnc_search_param_set_param_path (p, search_type, path);
+
+  /* Maybe over-ride the type */
+  if (type_override)
+    gnc_search_param_override_param_type (p, type_override);
+
+  /* And return it */
+  return g_list_prepend (list, p);
+}
+

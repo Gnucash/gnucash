@@ -247,6 +247,13 @@ gboolean gncOrderIsDirty (GncOrder *order)
   return order->dirty;
 }
 
+gboolean gncOrderIsClosed (GncOrder *order)
+{
+  if (!order) return FALSE;
+  if (order->closed.tv_sec || order->closed.tv_nsec) return TRUE;
+  return FALSE;
+}
+
 void gncOrderBeginEdit (GncOrder *order)
 {
   if (!order) return;
@@ -331,7 +338,7 @@ static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
 static GncObject_t gncOrderDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
-  "Purchase/Sales Order",
+  "Order",
   _gncOrderCreate,
   _gncOrderDestroy,
   _gncOrderForeach,
@@ -345,6 +352,7 @@ gboolean gncOrderRegister (void)
     { ORDER_ID, QUERYCORE_STRING, (QueryAccess)gncOrderGetID },
     { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncOrderGetOwner },
     { ORDER_OPENED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateOpened },
+    { ORDER_IS_CLOSED, QUERYCORE_BOOLEAN, (QueryAccess)gncOrderIsClosed },
     { ORDER_CLOSED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateClosed },
     { ORDER_NOTES, QUERYCORE_STRING, (QueryAccess)gncOrderGetNotes },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
