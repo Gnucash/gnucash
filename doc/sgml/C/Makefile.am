@@ -35,6 +35,7 @@ GNUCASH_SGML_FILES = \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \
 	xacc-reports.sgml \
+	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
 	xacc-userdocs.sgml \

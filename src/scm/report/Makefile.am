@@ -9,7 +9,8 @@ gncscm_DATA = \
   folio.scm \
   hello-world.scm \
   report-list.scm \
-  transaction-report.scm
+  transaction-report.scm \
+  tax.scm
 
 EXTRA_DIST = \
   .cvsignore \

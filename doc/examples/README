@@ -19,6 +19,10 @@ trading2.xac
     income taxes.  In particular, a paycheck is split up into several
     pieces.
 
+taxreport.xac
+    A demo that can be used with the tax report to show income tax
+    related income and expenses.
+
 Guide to QIF Files:
 -------------------
 

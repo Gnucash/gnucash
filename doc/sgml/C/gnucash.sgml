@@ -29,6 +29,7 @@
 <!entity xaccregwinkbd system "xacc-regwin-kbd.sgml">
 <!entity xaccreports system "xacc-reports.sgml">
 <!entity xaccticker system "xacc-ticker.sgml">
+<!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
 <!entity xaccdochack system "xacc-dochack.sgml">
 <!entity xaccy2k system "xacc-y2k.sgml">
@@ -68,6 +69,7 @@
 &xaccregwin;
 &xaccregwinkbd;
 &xaccreports;
+&xacctaxreport;
 &xaccticker;
 &xacctransreport;
 &xaccdochack;

@@ -176,7 +176,7 @@ provide an accurate Profit & Loss statement.
 <TITLE>Lead Developers</TITLE>
 <PARA>    <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><email> rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
+<GLOSSTERM><email>rclark@hmc.edu</email> Robin Clark</GLOSSTERM>
 <GLOSSDEF>
 <PARA>wrote the original <application>X-Accountant</application> in
     Motif as a school project, taking it to version 0.9 by October
@@ -187,7 +187,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> linas@linas.org</email> Linas Vepstas</GLOSSTERM>
+<GLOSSTERM><email>linas@linas.org</email> Linas Vepstas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>liked what he saw: the GUI was slick, the code was
       documented and well structured, and it was all GPL'ed. And so he
@@ -208,7 +208,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremy
+<GLOSSTERM><email>jcollins@gnucash.org</email> Jeremy
       Collins</GLOSSTERM>
 <GLOSSDEF>
 <PARA>publicized the <application>GnoMoney</application> project widely
@@ -225,7 +225,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
+<GLOSSTERM><email>rlb@cs.utexas.edu</email> Rob Browning</GLOSSTERM>
 <GLOSSDEF>
 <PARA>abused everyone for not using Perl, and then after we
       added Perl support, dumped Perl in favor of Guile/Scheme
@@ -238,7 +238,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
+<GLOSSTERM><email>dave@krondo.com</email> Dave Peticolas</GLOSSTERM>
 <GLOSSDEF>
 <PARA>hacks obsessively on GnuCash. But he can stop anytime he
       wants to. Really.
@@ -248,7 +248,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> grib@billgribble.com</email> Bill
+<GLOSSTERM><email>grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
 <GLOSSDEF>
 <PARA>
@@ -270,27 +270,27 @@ provide an accurate Profit & Loss statement.
 
     <GLOSSLIST>
 <GLOSSENTRY>
-<GLOSSTERM><email> arensb@cfar.umd.edu</email> Andrew
+<GLOSSTERM><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for FreeBSD and other patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> matt_armstrong@bigfoot.com</email> Matt
+<GLOSSTERM><email>matt_armstrong@bigfoot.com</email> Matt
       Armstrong</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> fred@moremagic.com</email> Fred Baube</GLOSSTERM>
+<GLOSSTERM><email>fred@moremagic.com</email> Fred Baube</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for attempted Java port/MoneyDance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dennisb@cs.chalmers.se</email> Dennis
+<GLOSSTERM><email>dennisb@cs.chalmers.se</email> Dennis
       Bj&ouml;rklund</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Swedish translation</PARA>
@@ -298,7 +298,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> bojsen@worldnet.att.net</email> Per
+<GLOSSTERM><email>bojsen@worldnet.att.net</email> Per
       Bojsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>several core dump fixes</PARA>
@@ -306,7 +306,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tboldt@attglobal.net</email> Terry Boldt
+<GLOSSTERM><email>tboldt@attglobal.net</email> Terry Boldt
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>financial calculator and expression parser</PARA>
@@ -331,7 +331,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 <GLOSSENTRY>
 
-<GLOSSTERM><email> wwc@wwcnet.nu</email> Bill
+<GLOSSTERM><email>wwc@wwcnet.nu</email> Bill
       Carlson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>performance improvements</PARA>
@@ -339,14 +339,14 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> grahamc@zeta.org.au</email> Graham
+<GLOSSTERM><email>grahamc@zeta.org.au</email> Graham
       Chapman</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for the xacc-rpts addon package</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> georgec@sco.com</email> George Chen</GLOSSTERM>
+<GLOSSTERM><email>georgec@sco.com</email> George Chen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for MS-Money QIF support</PARA>
 </GLOSSDEF>
@@ -359,14 +359,14 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jcollins@gnucash.org</email> Jeremey
+<GLOSSTERM><email>jcollins@gnucash.org</email> Jeremey
       Collins</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for GnoMoney and GTK port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mcondell@bbn.com</email> Matthew
+<GLOSSTERM><email>mcondell@bbn.com</email> Matthew
       Condell</GLOSSTERM>
 <GLOSSDEF>
 <PARA>FreeBSD patch</PARA>
@@ -374,7 +374,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> pcondon@rackspace.com</email> Patrick
+<GLOSSTERM><email>pcondon@rackspace.com</email> Patrick
       Condron</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for webserver and T1 connection.</PARA>
@@ -382,7 +382,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> raphael.dechenaux@worldonline.fr</email> Raphael
+<GLOSSTERM><email>raphael.dechenaux@worldonline.fr</email> Raphael
       Dechenaux</GLOSSTERM>
 <GLOSSDEF>
 <PARA>register patch</PARA>
@@ -390,7 +390,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> Ciaran.Deignan@bull.net</email> Ciaran
+<GLOSSTERM><email>Ciaran.Deignan@bull.net</email> Ciaran
       Deignan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for AIX binary version</PARA>
@@ -398,7 +398,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gjditchfield@acm.org</email> Glen
+<GLOSSTERM><email>gjditchfield@acm.org</email> Glen
       Ditchfield</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated documentation</PARA>
@@ -406,25 +406,25 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tyson@tyse.net</email> Tyson Dowd</GLOSSTERM>
+<GLOSSTERM><email>tyson@tyse.net</email> Tyson Dowd</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for config/make patches and debian maintenance</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> ripley@xs4all.nl</email> Koen D'Hondt</GLOSSTERM>
+<GLOSSTERM><email>ripley@xs4all.nl</email> Koen D'Hondt</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris patches to XmHTML</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> bob@mostly.com</email> Bob Drzyzgula</GLOSSTERM>
+<GLOSSTERM><email>bob@mostly.com</email> Bob Drzyzgula</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for budgeting design notes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> pjf@schools.net.au</email> Paul
+<GLOSSTERM><email>pjf@schools.net.au</email> Paul
       Fenwick</GLOSSTERM>
 <GLOSSDEF>
 <PARA>ASX support, Finance::Quote</PARA>
@@ -432,7 +432,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> hfiguiere@teaser.fr</email> Hubert
+<GLOSSTERM><email>hfiguiere@teaser.fr</email> Hubert
       Figuiere</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION></PARA>
@@ -440,7 +440,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> frob@df.ru</email> Valek Filippov
+<GLOSSTERM><email>frob@df.ru</email> Valek Filippov
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>Russian translation</PARA>
@@ -448,42 +448,42 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> ju_finck@mail.netwave.de</email> Jan-Uwe
+<GLOSSTERM><email>ju_finck@mail.netwave.de</email> Jan-Uwe
       Finck</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German message translation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> kevinfinn@mediaone.net</email> Kevin
+<GLOSSTERM><email>kevinfinn@mediaone.net</email> Kevin
       Finn</GLOSSTERM>
 <GLOSSDEF>
 <PARA>auto-decimal point patch, options patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rjf@aracnet.com</email> Ron
+<GLOSSTERM><email>rjf@aracnet.com</email> Ron
       Forrester</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> DFreese@osc.uscg.mil</email> Dave
+<GLOSSTERM><email>DFreese@osc.uscg.mil</email> Dave
       Freese</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for leap-year fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jgoerzen@complete.org</email> John
+<GLOSSTERM><email>jgoerzen@complete.org</email> John
       Goerzen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>file i/o fix for 64-bit architectures</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> grib@billgribble.com</email> Bill
+<GLOSSTERM><email>grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import code, check printing, transaction find
@@ -491,33 +491,33 @@ provide an accurate Profit & Loss statement.
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> otto@bug.redhat.com</email> Otto
+<GLOSSTERM><email>otto@bug.redhat.com</email> Otto
       Hammersmith</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for RedHat RPM packaging</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> offby1@blarg.net</email> Eric Hanchrow</GLOSSTERM>
+<GLOSSTERM><email>offby1@blarg.net</email> Eric Hanchrow</GLOSSTERM>
 <GLOSSDEF>
 <PARA>updated currency documentation</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> haral@codec.ro</email> Alexandru
+<GLOSSTERM><email>haral@codec.ro</email> Alexandru
       Harsanyi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> john@dhh.gt.org</email> John Hasler</GLOSSTERM>
+<GLOSSTERM><email>john@dhh.gt.org</email> John Hasler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> hellan@acm.org</email> Jon K&aring;re
+<GLOSSTERM><email>hellan@acm.org</email> Jon K&aring;re
       Hellan</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
@@ -525,7 +525,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> PrakashK@bigfoot.com</email> Prakash
+<GLOSSTERM><email>PrakashK@bigfoot.com</email> Prakash
       Kailasa</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for gnome build fixes</PARA>
@@ -533,7 +533,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> small@arcadia.spb.ru</email> Alexey
+<GLOSSTERM><email>small@arcadia.spb.ru</email> Alexey
       Kakunin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>quickfill patch for cyrillic</PARA>
@@ -541,54 +541,54 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
+<GLOSSTERM><email>tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SGI Irix port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> sk@xgm.de</email> Sven Kuenzler</GLOSSTERM>
+<GLOSSTERM><email>sk@xgm.de</email> Sven Kuenzler</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SuSE README file</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> blarsen@ada-works.com</email> Bryan
+<GLOSSTERM><email>blarsen@ada-works.com</email> Bryan
       Larsen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile budget report</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mellon@andare.fugue.com</email> Ted
+<GLOSSTERM><email>mellon@andare.fugue.com</email> Ted
       Lemon</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for NetBSD port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> y-le-ny@ifrance.com</email> Yannick Le
+<GLOSSTERM><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</GLOSSTERM>
 <GLOSSDEF>
 <PARA>pour la traduction en Fran&ccedil;ais</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> glikely@nortelnetworks.com</email> Grant
+<GLOSSTERM><email>glikely@nortelnetworks.com</email> Grant
       Likely</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome and engine patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> martinh@pegasus.cc.ucf.edu</email> Heath
+<GLOSSTERM><email>martinh@pegasus.cc.ucf.edu</email> Heath
       Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>major work on the gnome register</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> mgmartin@abacusnet.net</email> Matt
+<GLOSSTERM><email>mgmartin@abacusnet.net</email> Matt
       Martin</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile error handling code</PARA>
@@ -596,7 +596,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> rgmerk@mira.net</email> Robert Graham
+<GLOSSTERM><email>rgmerk@mira.net</email> Robert Graham
       Merkel</GLOSSTERM>
 <GLOSSDEF>
 <PARA>reporting, gnome, and configuration patches.</PARA>
@@ -604,7 +604,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> juanmagm@mail.com</email> Juan Manuel
+<GLOSSTERM><email>juanmagm@mail.com</email> Juan Manuel
       García Molina</GLOSSTERM>
 <GLOSSDEF>
 <PARA>spanish translation</PARA>
@@ -612,7 +612,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> molnarc@mandrakesoft.com</email> Christopher
+<GLOSSTERM><email>molnarc@mandrakesoft.com</email> Christopher
       Molnar</GLOSSTERM>
 <GLOSSDEF>
 <PARA>build system patch</PARA>
@@ -620,7 +620,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
+<GLOSSTERM><email>mooney@dogbert.cc.ndsu.NoDak.edu</email> Tim
       Mooney</GLOSSTERM>
 <GLOSSDEF>
 <PARA>port to alpha-dec-osf4.0f</PARA>
@@ -628,7 +628,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gam3@ann.softgams.com</email> G. Allen Morris
+<GLOSSTERM><email>gam3@ann.softgams.com</email> G. Allen Morris
       III</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for QIF core dump fix</PARA>
@@ -636,7 +636,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> sjmurdoch@linuxfan.com</email> Steven
+<GLOSSTERM><email>sjmurdoch@linuxfan.com</email> Steven
       Murdoch</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnc-prices fix for London exchange</PARA>
@@ -644,14 +644,14 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> brent@baton.phys.lsu.edu</email> Brent
+<GLOSSTERM><email>brent@baton.phys.lsu.edu</email> Brent
       Neal</GLOSSTERM>
 <GLOSSDEF>
 <PARA>TIAA-CREF support</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> spacey@inch.com</email> Peter
+<GLOSSTERM><email>spacey@inch.com</email> Peter
       Norton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for a valiant attempt at a GTK port</PARA>
@@ -659,7 +659,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> webmaster@obsidian.uia.net</email> OmNiBuS
+<GLOSSTERM><email>webmaster@obsidian.uia.net</email> OmNiBuS
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>web site graphics and content</PARA>
@@ -667,7 +667,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> gordo@pincoya.com</email> Gordon Oliver
+<GLOSSTERM><email>gordo@pincoya.com</email> Gordon Oliver
       </GLOSSTERM>
 <GLOSSDEF>
 <PARA>multiple currency status line patch</PARA>
@@ -675,68 +675,68 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> mopyr@IPM.Lviv.UA</email> Myroslav
+<GLOSSTERM><email>mopyr@IPM.Lviv.UA</email> Myroslav
       Opyr</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for misc patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> laurent.pelecq@wanadoo.fr</email> Laurent
+<GLOSSTERM><email>laurent.pelecq@wanadoo.fr</email> Laurent
       P&eacute;lecq</GLOSSTERM>
 <GLOSSDEF>
 <PARA>i18n patches with gettext</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> Alain.Peyrat@nmu.alcatel.fr</email> Alain
+<GLOSSTERM><email>Alain.Peyrat@nmu.alcatel.fr</email> Alain
       Peyrat</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> peter@wuzel.m.isar.de</email> Peter
+<GLOSSTERM><email>peter@wuzel.m.isar.de</email> Peter
       Pointner</GLOSSTERM>
 <GLOSSDEF>
 <PARA>motif and configuration patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> maufk@csv.warwick.ac.uk</email> Gavin
+<GLOSSTERM><email>maufk@csv.warwick.ac.uk</email> Gavin
       Porter</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for euro style dates</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> tpo@spin.ch</email> Tomas Pospisek</GLOSSTERM>
+<GLOSSTERM><email>tpo@spin.ch</email> Tomas Pospisek</GLOSSTERM>
 <GLOSSDEF>
 <PARA>debian patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rr@sco.com</email> Ron Record</GLOSSTERM>
+<GLOSSTERM><email>rr@sco.com</email> Ron Record</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for SCO Unixware and OpenServer binaries</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> Keith.Refson@earth.ox.ac.uk</email> Keith
+<GLOSSTERM><email>Keith.Refson@earth.ox.ac.uk</email> Keith
       Refson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Solaris fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> schoenberger@signsoft.com</email> Dirk
+<GLOSSTERM><email>schoenberger@signsoft.com</email> Dirk
       Schoenberger</GLOSSTERM>
 <GLOSSDEF>
 <PARA>began the Qt/KDE port</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> jan.schrage@urz.uni-heidelberg.de</email> Jan
+<GLOSSTERM><email>jan.schrage@urz.uni-heidelberg.de</email> Jan
       Schrage</GLOSSTERM>
 <GLOSSDEF>
 <PARA>documentation patches</PARA>
@@ -744,7 +744,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> cls@seawood.org</email> Christopher
+<GLOSSTERM><email>cls@seawood.org</email> Christopher
       Seawood</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for XbaeMatrix core dump</PARA>
@@ -752,7 +752,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> aleseveso@tiscalinet.it</email> Alessandro
+<GLOSSTERM><email>aleseveso@tiscalinet.it</email> Alessandro
       Seveso</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Italian translations</PARA>
@@ -760,21 +760,21 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> msimons@fsimons01.erols.com</email> Mike
+<GLOSSTERM><email>msimons@fsimons01.erols.com</email> Mike
       Simons</GLOSSTERM>
 <GLOSSDEF>
 <PARA>misc <FILENAME>configure.in</FILENAME> patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rich@brake.demon.co.uk</email> Richard
+<GLOSSTERM><email>rich@brake.demon.co.uk</email> Richard
       Skelton</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for Solaris cleanup</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> spruth@bigfoot.com</email> Henning
+<GLOSSTERM><email>spruth@bigfoot.com</email> Henning
       Spruth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for German text and euro date rework</PARA>
@@ -782,7 +782,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> robby.stephenson@usa.net</email> Robby
+<GLOSSTERM><email>robby.stephenson@usa.net</email> Robby
       Stephenson</GLOSSTERM>
 <GLOSSDEF>
 <PARA>register &amp; file history patches</PARA>
@@ -790,7 +790,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> stimming@uclink.berkeley.edu</email> Christian
+<GLOSSTERM><email>stimming@uclink.berkeley.edu</email> Christian
       Stimming</GLOSSTERM>
 <GLOSSDEF>
 <PARA>report patch</PARA>
@@ -798,7 +798,7 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> bszx@bszxdomain.edu.eu.org</email> Bartek
+<GLOSSTERM><email>bszx@bszxdomain.edu.eu.org</email> Bartek
       Szady</GLOSSTERM>
 <GLOSSDEF>
 <PARA>engine and build system patches</PARA>
@@ -806,47 +806,57 @@ provide an accurate Profit & Loss statement.
 </GLOSSENTRY>
 
 <GLOSSENTRY>
-<GLOSSTERM><email> tma@iis.fhg.de</email> Herbert Thoma</GLOSSTERM>
+<GLOSSTERM><email>tma@iis.fhg.de</email> Herbert Thoma</GLOSSTERM>
 <GLOSSDEF>
 <PARA>gnome register &amp; euro support patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><email> detrout@earthlink.net</email> Diane
+<GLOSSTERM><email>detrout@earthlink.net</email> Diane
       Trout</GLOSSTERM>
 <GLOSSDEF>
 <PARA>scheme qif import patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
-<GLOSSTERM><email> rkw@dataplex.net</email> Richard
+<GLOSSTERM><email>uschold@cs.ucf.edu</email> Richard
+      -Gilligan- Uschold</GLOSSTERM>
+<GLOSSDEF>
+<PARA>tax report</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>rkw@dataplex.net</email> Richard
       Wackerbarth</GLOSSTERM>
 <GLOSSDEF>
 <PARA>patch to <APPLICATION>gnc-prices</APPLICATION>, qif import fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> rob@valinux.com</email> Rob Walker</GLOSSTERM>
+<GLOSSTERM><email>rob@valinux.com</email> Rob Walker</GLOSSTERM>
 <GLOSSDEF>
 <PARA>guile and register patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> dwmw2@infradead.org</email> David
+<GLOSSTERM><email>dwmw2@infradead.org</email> David
       Woodhouse</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Great Britain translations</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> gooch@ic.EECS.Berkeley.EDU</email> Ken
+<GLOSSTERM><email>gooch@ic.EECS.Berkeley.EDU</email> Ken
       Yamaguchi</GLOSSTERM>
 <GLOSSDEF>
 <PARA>QIF import fixes; MYM import</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>
-<GLOSSTERM><email> shimpei@gol.com</email> Shimpei
+<GLOSSTERM><email>shimpei@gol.com</email> Shimpei
       Yamashita</GLOSSTERM>
 <GLOSSDEF>
 <PARA>Japanese translation</PARA>
