@@ -1,4 +1,8 @@
 2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Remove 
+	#include "gnc-generic-import.h"
+
+2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Account-matcher.[c,h]: Minor changes to make
 	the matcher more generic:  Improved text handling, default account
 	support, enable account description, disable showing Online ID 

@@ -31,7 +31,6 @@
 #include "date.h"
 #include "Transaction.h"
 #include "gnc-engine-util.h" 
-#include "gnc-generic-import.h"
 #include "gnc-gen-transaction.h"
 
 #include "hbci-interaction.h"
