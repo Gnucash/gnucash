@@ -19,7 +19,55 @@
 static gboolean add_comms_to_engine = TRUE;
 static gboolean glist_strings_only = FALSE;
 
+static GHashTable *exclude_kvp_types = NULL;
+static gint kvp_max_depth = G_MAXINT;
+static gint kvp_frame_max_elements = 10;
+
+
+static kvp_value* get_random_kvp_value_depth (int type, gint depth);
+
+
 /***********************************************************************/
+
+void
+set_max_kvp_depth (gint max_kvp_depth)
+{
+  kvp_max_depth = MAX (max_kvp_depth, 1);
+}
+
+void
+set_max_kvp_frame_elements (gint max_kvp_frame_elements)
+{
+  kvp_frame_max_elements = MAX (max_kvp_frame_elements, 1);
+}
+
+void
+glist_exclude_type (kvp_value_t kvp_type)
+{
+  gint *key;
+
+  if (!exclude_kvp_types)
+    exclude_kvp_types = g_hash_table_new (g_int_hash, g_int_equal);
+
+  key = g_new (gint, 1);
+  *key = kvp_type;
+
+  g_hash_table_insert (exclude_kvp_types, key, exclude_kvp_types);
+}
+
+static gboolean
+glist_type_excluded (kvp_value_t kvp_type)
+{
+  gint key = kvp_type;
+
+  if (!exclude_kvp_types)
+    return FALSE;
+
+  if (g_hash_table_lookup (exclude_kvp_types, &key))
+    return TRUE;
+
+  return FALSE;
+}
 
 void
 add_random_commodities_to_engine (gboolean add)
@@ -144,23 +192,33 @@ get_random_guid(void)
     return ret;
 }
 
-GList*
-get_random_glist(void)
+static GList*
+get_random_glist_depth (gint depth)
 {
     GList *ret = NULL;
-    int i;
     int count = get_random_int_in_range(1, 5);
-    
+    int i;
+
+    if (depth >= kvp_max_depth)
+      return NULL;
+
     for (i = 0; i < count; i++)
     {
         kvp_value_t kvpt;
 
         kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
 
-        ret = g_list_prepend(ret, get_random_kvp_value (kvpt));
+        ret = g_list_prepend(ret,
+                             get_random_kvp_value_depth (kvpt, depth + 1));
     }
-    
+
     return ret;
+}
+
+GList*
+get_random_glist(void)
+{
+  return get_random_glist_depth (0);
 }
 
 bin_data*
@@ -182,12 +240,15 @@ get_random_binary_data(void)
     return ret;
 }
 
-kvp_frame*
-get_random_kvp_frame(void)
+static kvp_frame*
+get_random_kvp_frame_depth (gint depth)
 {
     kvp_frame *ret;
     int vals_to_add;
-    
+
+    if (depth >= kvp_max_depth)
+      return NULL;
+
     ret = kvp_frame_new();
 
     vals_to_add = get_random_int_in_range(1,10);
@@ -198,23 +259,29 @@ get_random_kvp_frame(void)
         kvp_value *val;
         
         key = get_random_string();
-        val = get_random_kvp_value(-1);
+        val = get_random_kvp_value_depth (-1, depth + 1);
 
         if(!key)
         {
             return NULL;
         }
-        
+
         kvp_frame_set_slot_nc(ret, key, val);
 
         g_free(key);
     }
-    
+
     return ret;
 }
 
-kvp_value*
-get_random_kvp_value(int type)
+kvp_frame*
+get_random_kvp_frame (void)
+{
+  return get_random_kvp_frame_depth (0);
+}
+
+static kvp_value*
+get_random_kvp_value_depth (int type, gint depth)
 {
     int datype = type;
 
@@ -227,7 +294,16 @@ get_random_kvp_value(int type)
     {
         datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME);
     }
-    
+
+    if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
+      return NULL;
+
+    if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
+      return NULL;
+
+    if (glist_type_excluded (datype))
+      return NULL;
+
     switch(datype)
     {
     case KVP_TYPE_GINT64:
@@ -282,14 +358,14 @@ get_random_kvp_value(int type)
         break;
  
     case KVP_TYPE_GLIST:
-        return kvp_value_new_glist_nc(get_random_glist());
+        return kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
         break;
 
     case KVP_TYPE_FRAME:
     {
         kvp_frame *tmp_frame;
         kvp_value *ret;
-        tmp_frame = get_random_kvp_frame();
+        tmp_frame = get_random_kvp_frame_depth(depth + 1);
         ret = kvp_value_new_frame(tmp_frame);
         kvp_frame_delete(tmp_frame);
         return ret;
@@ -300,6 +376,12 @@ get_random_kvp_value(int type)
         return NULL;
         break;
     }
+}
+
+kvp_value *
+get_random_kvp_value(int type)
+{
+  return get_random_kvp_value_depth (type, 0);
 }
 
 static void

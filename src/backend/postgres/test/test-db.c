@@ -102,7 +102,13 @@ guile_main (int argc, char **argv)
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
-  random_glist_strings_only (TRUE);
+  glist_exclude_type (KVP_TYPE_BINARY);
+  glist_exclude_type (KVP_TYPE_GLIST);
+  /* The random double generator is making values
+   * that postgres doesn't like. */
+  glist_exclude_type (KVP_TYPE_DOUBLE);
+  set_max_kvp_depth (3);
+  set_max_kvp_frame_elements (3);
 
   xaccLogDisable ();
 
@@ -115,7 +121,7 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  /*  getchar (); */
+  getchar ();
 
   gh_enter (argc, argv, guile_main);
 

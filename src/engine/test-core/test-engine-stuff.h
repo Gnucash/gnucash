@@ -17,12 +17,11 @@
 Timespec* get_random_timespec(void);
 kvp_value* get_random_kvp_value(int type);
 
-struct _bin_data
+typedef struct
 {
     guchar *data;
     int len;
-};
-typedef struct _bin_data bin_data;
+} bin_data;
 
 bin_data* get_random_binary_data(void);
 
@@ -32,6 +31,9 @@ GUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 void random_glist_strings_only (gboolean strings_only);
+void glist_exclude_type (kvp_value_t kvp_type);
+void set_max_kvp_depth (gint max_kvp_depth);
+void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 
 GNCPrice * get_random_price(void);
 void make_random_pricedb (GNCPriceDB *pdb);

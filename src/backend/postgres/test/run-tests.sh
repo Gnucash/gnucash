@@ -16,7 +16,7 @@ diff -u test-file-1 test-file-2 || EXIT_VALUE=1
 
 if test $EXIT_VALUE != 0; then exit $EXIT_VALUE; fi
 
-./db-control.sh destroy
+#./db-control.sh destroy
 rm -f test-file-*
 
 exit $EXIT_VALUE
