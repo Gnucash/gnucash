@@ -27,15 +27,11 @@
 #ifndef GNC_TRACE_H
 #define GNC_TRACE_H
 
-/*
-#include <errno.h>
-#include <glib.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-*/
-
 #include "config.h"
+
+#include <glib.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
@@ -81,12 +77,12 @@ typedef enum
 } gncLogLevel;
 
 
-typedef void (*GNCGuiMessage) (const gchar *format, va_list args);
+typedef void (*GNCGuiMessage) (const char *format, va_list args);
 void gnc_set_warning_message (GNCGuiMessage func);
 void gnc_set_error_message (GNCGuiMessage func);
 
-gboolean gnc_send_gui_warning (const gchar *format, ...);
-gboolean gnc_send_gui_error (const gchar *format, ...);
+gboolean gnc_send_gui_warning (const char *format, ...);
+gboolean gnc_send_gui_error (const char *format, ...);
 
 /* FIXME: these logging functions should proably get replaced by
  * the glib.h g_error(), etc functions. That way, we would have
