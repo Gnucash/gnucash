@@ -39,7 +39,8 @@
  * owned by the kvp_frame.  Make copies as needed.
  * 
  * kvp_frame_delete and kvp_value_delete are deep (recursive) deletes.
- * kvp_frame_copy and kvp_value_copy are deep value copies. */
+ * kvp_frame_copy and kvp_value_copy are deep value copies. 
+ */
  
 typedef enum {
   KVP_TYPE_GINT64,
@@ -53,22 +54,31 @@ typedef enum {
 } kvp_value_t;
 
 typedef struct _kvp_frame kvp_frame;
-
-#if 0
-typedef union _kvp_value kvp_value;
-#else
 typedef struct _kvp_value kvp_value;
-#endif
+
 
 /* kvp_frame functions */
 kvp_frame   * kvp_frame_new(void);
 void          kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
+
+/* The kvp_frame_set_slot() routine copies the value into the frame,
+ *    associating it with 'key'.
+ * The kvp_frame_set_slot_nc() routine puts the value (without copying
+ *    it) into the frame, associating it with 'key'.  This routine is
+ *    handy for aviding excess memory allocations & frees.
+ */
 void          kvp_frame_set_slot(kvp_frame * frame, 
                                  const char * key, const kvp_value * value);
+void          kvp_frame_set_slot_nc(kvp_frame * frame, 
+                                 const char * key, kvp_value * value);
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 
+/* The kvp_frame_set_slot_path() routines walk the heirarchy,
+ * using the key falues to pick each branch.  When the terminal node
+ * is reached, the value is copied into it.
+ */
 void          kvp_frame_set_slot_path (kvp_frame *frame,
                                        const kvp_value *value,
                                        const char *first_key, ...);
@@ -77,6 +87,30 @@ void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
                                               const kvp_value *value,
                                               GSList *key_path);
 
+/* The following routines return the last frame of the path.
+ * If the frame path doesn't exist, it is created.  
+ *
+ * The kvp_frame_get_frame_slash() routine takes a single string
+ *    where the keys are separated by slashes; thus, for example:
+ *    /this/is/a/valid/path  and///so//is////this/
+ *    Multiple slashes are compresed. leading slash is optional.
+ *    The pointers . and .. are *not* followed/obeyed.  (This is 
+ *    arguably a bug that needs fixing).
+ *
+ * 
+ */
+kvp_frame    * kvp_frame_get_frame (kvp_frame *frame,
+                                    const char *first_key, ...);
+
+kvp_frame    * kvp_frame_get_frame_gslist (kvp_frame *frame,
+                                           GSList *key_path);
+
+kvp_frame    * kvp_frame_get_frame_slash (kvp_frame *frame,
+                                          const char *path);
+
+/* The following routines return the value att the end of the
+ * path, or NULL if any portion of the path doesn't exist.
+ */
 kvp_value   * kvp_frame_get_slot_path (kvp_frame *frame,
                                        const char *first_key, ...);
 

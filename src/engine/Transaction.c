@@ -1917,23 +1917,12 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
-  kvp_value *new_value;
-  
   if (!trans || !notes) return;
   check_open (trans);
 
-  new_value = kvp_value_new_string (notes);
-
-  if (new_value)
-  {
-    kvp_frame_set_slot (xaccTransGetSlots (trans), "notes", new_value);
-    kvp_value_delete (new_value);
-    mark_trans (trans);
-  }
-  else
-  {
-    PERR ("failed to allocate kvp");
-  }
+  kvp_frame_set_slot_nc (trans->kvp_data, "notes", 
+                                    kvp_value_new_string (notes));
+  mark_trans (trans);
 }
 
 /********************************************************************\
@@ -2226,11 +2215,10 @@ xaccSplitGetType(const Split *s)
 void
 xaccSplitMakeStockSplit(Split *s)
 {
-  kvp_frame *frame = xaccSplitGetSlots(s);
   check_open (s->parent);
 
   xaccSplitSetValue(s, gnc_numeric_zero());
-  kvp_frame_set_slot(frame,
+  kvp_frame_set_slot_nc(s->kvp_data,
                      "split-type",
                      kvp_value_new_string("stock-split"));
   mark_split(s);

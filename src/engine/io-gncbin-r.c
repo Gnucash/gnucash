@@ -907,8 +907,7 @@ readTransaction( int fd, Account *acc, int token )
          free(tmp);
          return(NULL);
        }
-       kvp_frame_set_slot(xaccTransGetSlots(trans), "old-docref", new_value);
-       kvp_value_delete(new_value);
+       kvp_frame_set_slot_nc(xaccTransGetSlots(trans), "old-docref", new_value);
      }
      free (tmp);
   }
@@ -1252,8 +1251,7 @@ readSplit ( int fd, int token )
          free(tmp);
          return(NULL);
        }
-       kvp_frame_set_slot(xaccSplitGetSlots(split), "old-docref",  new_value);
-       kvp_value_delete(new_value);
+       kvp_frame_set_slot_nc(xaccSplitGetSlots(split), "old-docref", new_value);
      }
      free (tmp);
   }

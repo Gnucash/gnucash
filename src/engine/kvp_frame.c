@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#define _GNU_SOURCE
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
@@ -185,6 +186,17 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
   kvp_frame_set_slot_destructively(frame, slot, new_value);
 }
 
+void
+kvp_frame_set_slot_nc(kvp_frame * frame, const char * slot, 
+                      kvp_value * value) {
+  /* FIXME: no way to indicate errors... */
+
+  if (!frame)
+    return;
+
+  kvp_frame_set_slot_destructively(frame, slot, value);
+}
+
 kvp_value * 
 kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
   if (!frame)
@@ -192,6 +204,8 @@ kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
   if(!frame->hash) return(NULL);
   return (kvp_value *)g_hash_table_lookup(frame->hash, slot);
 }
+
+/* ============================================================ */
 
 void
 kvp_frame_set_slot_path (kvp_frame *frame,
@@ -222,10 +236,7 @@ kvp_frame_set_slot_path (kvp_frame *frame,
       kvp_frame *new_frame = kvp_frame_new ();
       kvp_value *frame_value = kvp_value_new_frame (new_frame);
 
-      kvp_frame_set_slot (frame, key, frame_value);
-
-      kvp_value_delete (frame_value);
-      kvp_frame_delete (new_frame);
+      kvp_frame_set_slot_nc (frame, key, frame_value);
 
       value = kvp_frame_get_slot (frame, key);
       if (!value)
@@ -267,10 +278,7 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
       kvp_frame *new_frame = kvp_frame_new ();
       kvp_value *frame_value = kvp_value_new_frame (new_frame);
 
-      kvp_frame_set_slot (frame, key, frame_value);
-
-      kvp_value_delete (frame_value);
-      kvp_frame_delete (new_frame);
+      kvp_frame_set_slot_nc (frame, key, frame_value);
 
       value = kvp_frame_get_slot (frame, key);
       if (!value)
@@ -282,6 +290,130 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
       return;
   }
 }
+
+/* ============================================================ */
+
+kvp_frame *
+kvp_frame_get_frame (kvp_frame *frame, const char *first_key, ...) 
+{
+  va_list ap;
+  const char *key;
+
+  if (!frame || !first_key)
+    return frame;
+
+  va_start (ap, first_key);
+
+  key = first_key;
+
+  while (TRUE) {
+    kvp_value *value;
+
+    /* get the frame assoc with key, or create it if needed */
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) {
+      kvp_frame *new_frame = kvp_frame_new ();
+      kvp_value *frame_value = kvp_value_new_frame (new_frame);
+
+      kvp_frame_set_slot_nc (frame, key, frame_value);
+
+      value = kvp_frame_get_slot (frame, key);
+      if (!value)
+        break;    /* error, should never occur */
+    }
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+      break;     /* error, should never occur */
+
+    key = va_arg (ap, const char *);
+    if (!key) {
+      break;   /* the normal exit to this routine. */
+    }
+  }
+
+  va_end (ap);
+  return frame;
+}
+
+
+kvp_frame *
+kvp_frame_get_frame_gslist (kvp_frame *frame, GSList *key_path) 
+{
+  if (!frame || !key_path)
+    return frame;
+
+  while (TRUE) {
+    const char *key = key_path->data;
+    kvp_value *value;
+
+    if (!key)
+      return frame;  /* an unusual but valid exit for this routine. */
+
+    /* get the named frame, or create it if it doesn't exist */
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) {
+      kvp_frame *new_frame = kvp_frame_new ();
+      kvp_value *frame_value = kvp_value_new_frame (new_frame);
+
+      kvp_frame_set_slot_nc (frame, key, frame_value);
+
+      value = kvp_frame_get_slot (frame, key);
+      if (!value)
+        return frame; /* this should never happen */
+    }
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+      return NULL;  /* this should never happen */
+
+    key_path = key_path->next;
+    if (!key_path) {
+      return frame;  /* this is the normal exit for this func */
+    }
+  }
+}
+
+kvp_frame *
+kvp_frame_get_frame_slash (kvp_frame *frame, const char *key_path) 
+{
+  char *root, *key, *next;
+  if (!frame || !key_path)
+    return frame;
+
+  root = g_strdup (key_path);
+  key = root;
+  key --;
+
+  while (key) {
+    kvp_value *value;
+
+    key ++;
+    while ('/' == *key) { key++; }
+    if (0x0 == *key) break;    /* trailing slash */   
+    next = strchr (key, '/');
+    if (next) *next = 0x0;
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) {
+      kvp_frame *new_frame = kvp_frame_new ();
+      kvp_value *frame_value = kvp_value_new_frame (new_frame);
+
+      kvp_frame_set_slot_nc (frame, key, frame_value);
+      value = kvp_frame_get_slot (frame, key);
+      if (!value) break;  /* error - should never happen */
+    }
+
+    frame = kvp_value_get_frame (value);
+    if (!frame) break;  /* error - should never happen */
+
+    key = next;
+  }
+  g_free(root);
+  return frame;  
+}
+
+/* ============================================================ */
 
 kvp_value *
 kvp_frame_get_slot_path (kvp_frame *frame,

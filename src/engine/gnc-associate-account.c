@@ -88,14 +88,11 @@ back_associate_expense_accounts(Account *stock_account,
 
     g_return_if_fail(xaccGUIDType(existing_acc_guid) == GNC_ID_NONE);
     
-    kvp_frame_set_slot(acc_frame, "associated-stock-account",
+    kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
 		       stock_acc_guid_kvpval);
     
-    kvp_value_delete(stock_acc_guid_kvpval);
-
-    kvp_frame_set_slot(acc_frame, "associated-stock-account-category",
+    kvp_frame_set_slot_nc(acc_frame, "associated-stock-account-category",
 		       stock_acc_category_kvpval);
-    kvp_value_delete(stock_acc_category_kvpval);
   }
 
   return;
@@ -124,12 +121,10 @@ back_associate_income_accounts(Account *stock_account,
 
     g_return_if_fail(xaccGUIDType(existing_acc_guid) == GNC_ID_NONE);
     
-    kvp_frame_set_slot(acc_frame, "associated-stock-account",
+    kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
 		       stock_acc_guid_kvpval);
-    kvp_value_delete(stock_acc_guid_kvpval);
-    kvp_frame_set_slot(acc_frame, "associated-stock-account-category",
+    kvp_frame_set_slot_nc(acc_frame, "associated-stock-account-category",
 		       stock_acc_category_kvpval);
-    kvp_value_delete(stock_acc_category_kvpval);
   }
 
   return;
@@ -221,12 +216,9 @@ gnc_tracking_associate_income_accounts(Account *stock_account,
 
   back_associate_income_accounts(stock_account, account_list, category);
 
-  kvp_frame_set_slot(inc_account_frame, 
+  kvp_frame_set_slot_nc(inc_account_frame, 
 		     income_to_key[category],
 		     kvpd_on_account_list);
-
-  kvp_value_delete(kvpd_on_account_list);
-  return;
 }
 
 /*********************************************************************\
@@ -265,11 +257,9 @@ void gnc_tracking_asssociate_expense_account(Account *stock_account,
 
   back_associate_expense_accounts(stock_account, account_list, category);
 
-  kvp_frame_set_slot(expense_acc_frame, 
+  kvp_frame_set_slot_nc(expense_acc_frame, 
 		     expense_to_key[category],
 		     kvpd_on_account_list);
-  kvp_value_delete(kvpd_on_account_list);
-  return;
 }
 
 /*********************************************************************\
@@ -285,7 +275,7 @@ void gnc_tracking_asssociate_expense_account(Account *stock_account,
 \*********************************************************************/
 
 GList *gnc_tracking_find_expense_accounts(Account *stock_account, 
-                                                    GNCTrackingExpenseCategory category)
+                                 GNCTrackingExpenseCategory category)
 {
   
   GNCAccountType type;
@@ -462,10 +452,9 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
       assoc_acc_list_start = g_list_remove_link(assoc_acc_list_start, assoc_acc_list);
       g_list_free_1(assoc_acc_list);
       acc_list_kvpval = kvp_value_new_glist_nc(assoc_acc_list);
-      kvp_frame_set_slot(assoc_acc_kvpframe,
+      kvp_frame_set_slot_nc(assoc_acc_kvpframe,
 			 category_name,
 			 acc_list_kvpval);
-      kvp_value_delete(acc_list_kvpval);
       return;
     }
   }
@@ -473,11 +462,4 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
   PERR("Income/Expense account and stock account disagree on association");
 }
   
-  
-  
-  
-  
-  
-
-  
-  
+/* ========================== END OF FILE ===================== */

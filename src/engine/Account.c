@@ -1066,24 +1066,14 @@ xaccAccountSetDescription (Account *acc, const char *str) {
 }
 
 void
-xaccAccountSetNotes (Account *acc, const char *str) {
-  kvp_value *new_value;
-  
+xaccAccountSetNotes (Account *acc, const char *str) 
+{
   if ((!acc) || (!str)) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    new_value = kvp_value_new_string(str);
-    if(new_value) {
-      kvp_frame_set_slot(xaccAccountGetSlots(acc), "notes", new_value);
-      kvp_value_delete(new_value);
-    }
-    else {
-      PERR ("failed to allocate kvp");
-    }
-
-    mark_account (acc);
-  }
+  kvp_frame_set_slot_nc(acc->kvp_data, "notes", 
+                        kvp_value_new_string(str));
+  mark_account (acc);
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
@@ -1344,11 +1334,12 @@ xaccAccountGetDescription (Account *acc)
 }
 
 const char * 
-xaccAccountGetNotes (Account *acc) {
+xaccAccountGetNotes (Account *acc) 
+{
   kvp_value *v;
 
   if (!acc) return NULL;
-  v = kvp_frame_get_slot(xaccAccountGetSlots(acc), "notes");
+  v = kvp_frame_get_slot(acc->kvp_data, "notes");
   if(v) return(kvp_value_get_string(v));
   return(NULL);
 }
@@ -1497,7 +1488,7 @@ xaccAccountGetTaxRelated (Account *account)
   if (!account)
     return FALSE;
 
-  kvp = kvp_frame_get_slot (xaccAccountGetSlots (account), "tax-related");
+  kvp = kvp_frame_get_slot (account->kvp_data, "tax-related");
   if (!kvp)
     return FALSE;
 
@@ -1518,15 +1509,9 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
     new_value = NULL;
 
   xaccAccountBeginEdit (account);
-  {
-    kvp_frame_set_slot(xaccAccountGetSlots (account),
-                       "tax-related", new_value);
+  kvp_frame_set_slot_nc(account->kvp_data, "tax-related", new_value);
 
-    if (new_value)
-      kvp_value_delete(new_value);
-
-    mark_account (account);
-  }
+  mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
@@ -1727,7 +1712,7 @@ xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
   if (!account)
     return FALSE;
 
-  value = kvp_frame_get_slot_path (xaccAccountGetSlots (account),
+  value = kvp_frame_get_slot_path (account->kvp_data,
                                    "reconcile-info", "last-date", NULL);
   if (!value)
     return FALSE;
@@ -1745,30 +1730,27 @@ xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 {
+  kvp_frame *frame;
   if (!account)
     return;
 
   xaccAccountBeginEdit (account);
-  {
-    kvp_value *value;
-    value = kvp_value_new_gint64 (last_date);
+  frame = kvp_frame_get_frame (account->kvp_data, "reconcile-info", NULL);
+  kvp_frame_set_slot_nc (frame, "last-date", 
+                               kvp_value_new_gint64 (last_date));
 
-    kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
-                             "reconcile-info", "last-date", NULL);
-
-    kvp_value_delete (value);
-
-    mark_account (account);
-  }
+  mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
 /********************************************************************\
 \********************************************************************/
+
 gboolean
 xaccAccountGetReconcilePostponeDate (Account *account,
                                      time_t *postpone_date)
@@ -1778,7 +1760,7 @@ xaccAccountGetReconcilePostponeDate (Account *account,
   if (!account)
     return FALSE;
 
-  value = kvp_frame_get_slot_path (xaccAccountGetSlots (account),
+  value = kvp_frame_get_slot_path (account->kvp_data,
                                    "reconcile-info", "postpone", "date", NULL);
   if (!value)
     return FALSE;
@@ -1796,32 +1778,30 @@ xaccAccountGetReconcilePostponeDate (Account *account,
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountSetReconcilePostponeDate (Account *account,
                                      time_t postpone_date)
 {
+  kvp_frame *frame;
   if (!account)
     return;
 
   xaccAccountBeginEdit (account);
-  {
-    kvp_value *value;
+  frame = kvp_frame_get_frame (account->kvp_data, 
+                         "reconcile-info", "postpone", NULL);
 
-    value = kvp_value_new_gint64 (postpone_date);
+  kvp_frame_set_slot_nc (frame, "date", 
+                         kvp_value_new_gint64 (postpone_date));
 
-    kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
-                             "reconcile-info", "postpone", "date", NULL);
-
-    kvp_value_delete (value);
-
-    mark_account (account);
-  }
+  mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
 /********************************************************************\
 \********************************************************************/
+
 gboolean
 xaccAccountGetReconcilePostponeBalance (Account *account,
                                         gnc_numeric *balance)
@@ -1831,7 +1811,7 @@ xaccAccountGetReconcilePostponeBalance (Account *account,
   if (!account)
     return FALSE;
 
-  value = kvp_frame_get_slot_path (xaccAccountGetSlots (account),
+  value = kvp_frame_get_slot_path (account->kvp_data,
                                    "reconcile-info", "postpone", "balance",
                                    NULL);
   if (!value)
@@ -1850,32 +1830,31 @@ xaccAccountGetReconcilePostponeBalance (Account *account,
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountSetReconcilePostponeBalance (Account *account,
                                         gnc_numeric balance)
 {
+  kvp_frame *frame;
   if (!account)
     return;
 
   xaccAccountBeginEdit (account);
-  {
-    kvp_value *value;
+  frame = kvp_frame_get_frame (account->kvp_data, 
+                         "reconcile-info", "postpone", NULL);
 
-    value = kvp_value_new_gnc_numeric (balance);
+  kvp_frame_set_slot_nc (frame, "balance", 
+                         kvp_value_new_gnc_numeric (balance));
 
-    kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
-                             "reconcile-info", "postpone", "balance", NULL);
-
-    kvp_value_delete (value);
-
-    mark_account (account);
-  }
+  mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
 /********************************************************************\
+
 \********************************************************************/
+
 void
 xaccAccountClearReconcilePostpone (Account *account)
 {
@@ -1884,7 +1863,7 @@ xaccAccountClearReconcilePostpone (Account *account)
 
   xaccAccountBeginEdit (account);
   {
-    kvp_frame_set_slot_path (xaccAccountGetSlots (account), NULL,
+    kvp_frame_set_slot_path (account->kvp_data, NULL,
                              "reconcile-info", "postpone", NULL);
 
     mark_account (account);
@@ -1895,6 +1874,7 @@ xaccAccountClearReconcilePostpone (Account *account)
 
 /********************************************************************\
 \********************************************************************/
+
 const char *
 xaccAccountGetLastNum (Account *account)
 {
@@ -1903,7 +1883,7 @@ xaccAccountGetLastNum (Account *account)
   if (!account)
     return FALSE;
 
-  value = kvp_frame_get_slot (xaccAccountGetSlots (account), "last-num");
+  value = kvp_frame_get_slot (account->kvp_data, "last-num");
   if (!value)
     return FALSE;
 
@@ -1912,6 +1892,7 @@ xaccAccountGetLastNum (Account *account)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccAccountSetLastNum (Account *account, const char *num)
 {
@@ -1919,25 +1900,19 @@ xaccAccountSetLastNum (Account *account, const char *num)
     return;
 
   xaccAccountBeginEdit (account);
-  {
-    kvp_value *value;
-
-    value = kvp_value_new_string (num);
-
-    kvp_frame_set_slot (xaccAccountGetSlots (account), "last-num", value);
-
-    kvp_value_delete (value);
-
-    mark_account (account);
-  }
+  kvp_frame_set_slot_nc (account->kvp_data, "last-num", 
+                                            kvp_value_new_string (num));
+  mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
 /********************************************************************\
 \********************************************************************/
+
 void
-xaccAccountSetPriceSrc(Account *acc, const char *src) {
+xaccAccountSetPriceSrc(Account *acc, const char *src) 
+{
 
   if(!acc) return;
   if(!src) return;
@@ -1947,16 +1922,10 @@ xaccAccountSetPriceSrc(Account *acc, const char *src) {
     GNCAccountType t = xaccAccountGetType(acc);
 
     if((t == STOCK) || (t == MUTUAL)) {
-      kvp_value *new_value = kvp_value_new_string(src);
-      if(new_value) {
-        kvp_frame_set_slot(xaccAccountGetSlots(acc),
+      kvp_frame_set_slot_nc(acc->kvp_data,
                            "old-price-source",
-                           new_value);
-        kvp_value_delete(new_value);
-        mark_account (acc);
-      } else {
-        PERR ("xaccAccountSetPriceSrc: failed to allocate kvp_value.");
-      }
+                           kvp_value_new_string(src));
+      mark_account (acc);
     }
   }
   acc->core_dirty = TRUE;
@@ -1967,22 +1936,19 @@ xaccAccountSetPriceSrc(Account *acc, const char *src) {
 \********************************************************************/
 
 const char*
-xaccAccountGetPriceSrc(Account *acc) {
-  const char *result = NULL;
+xaccAccountGetPriceSrc(Account *acc) 
+{
+  GNCAccountType t;
+  if(!acc) return NULL;
 
-  if(!acc) {
-    result = NULL;
-  } else {
-    GNCAccountType t = xaccAccountGetType(acc);
-    if((t == STOCK) || (t == MUTUAL)) {
-      kvp_value *value = kvp_frame_get_slot(xaccAccountGetSlots(acc),
+  t = xaccAccountGetType(acc);
+  if((t == STOCK) || (t == MUTUAL)) 
+  {
+    kvp_value *value = kvp_frame_get_slot(acc->kvp_data,
                                             "old-price-source");
-      if(value) {
-        result = kvp_value_get_string(value);
-      }
-    }
+    if(value) return (kvp_value_get_string(value));
   }
-  return(result);
+  return NULL;
 }
 
 /********************************************************************\
