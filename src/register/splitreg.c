@@ -159,6 +159,8 @@ configLayout (SplitRegister *reg)
    int show_recs = (reg->type) & REG_SHOW_RECS;
    int show_tdetail = (reg->type) & REG_SHOW_TDETAIL;
 
+/* hack alert -------------------- kill this */
+show_tdetail = 1;
    /* perform a bsic layout that's valid for most
     * of the ledgers; then customize with case 
     * statements. */
@@ -656,14 +658,19 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    changed |= MOD_NUM  & reg->numCell->changed;
    changed |= MOD_DESC & reg->descCell->cell.changed;
    changed |= MOD_RECN & reg->recnCell->changed;
-   changed |= MOD_AMNT & reg->creditCell->cell.changed;
-   changed |= MOD_AMNT & reg->debitCell->cell.changed;
-   changed |= MOD_SHRS & reg->shrsCell->cell.changed; 
-   changed |= MOD_PRIC & reg->priceCell->cell.changed;
-   changed |= MOD_MEMO & reg->memoCell->changed;
+   changed |= MOD_TAMNT & reg->creditTransCell->cell.changed;
+   changed |= MOD_TAMNT & reg->debitTransCell->cell.changed;
+   changed |= MOD_TPRIC & reg->priceTransCell->cell.changed;
+   changed |= MOD_TVALU & reg->valueTransCell->cell.changed; 
+
    changed |= MOD_ACTN & reg->actionCell->cell.changed;
    changed |= MOD_XFRM & reg->xfrmCell->cell.changed;
    changed |= MOD_XTO  & reg->xtoCell->cell.changed; 
+   changed |= MOD_MEMO & reg->memoCell->changed;
+   changed |= MOD_AMNT & reg->creditCell->cell.changed;
+   changed |= MOD_AMNT & reg->debitCell->cell.changed;
+   changed |= MOD_PRIC & reg->priceCell->cell.changed;
+   changed |= MOD_VALU & reg->valueCell->cell.changed; 
 
    return changed;
 }

@@ -23,6 +23,7 @@ THIS FILE IS OBSOLETEED BY SPLITREG.C
  * Copyright (c) 1998 Linas Vepstas
  */
 
+#ifdef OBSOLETE 
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -495,4 +496,5 @@ xaccBasicRegisterGetChangeFlag (BasicRegister *reg)
    return changed;
 }
 
+#endif OBSLETE
 /* ============ END OF FILE ===================== */

@@ -1,3 +1,6 @@
+
+#ifdef OBSOLETE 
+
 /*
  * FILE:
  * register.h
@@ -142,4 +145,5 @@ unsigned int    xaccBasicRegisterGetChangeFlag (BasicRegister *);
 
 #endif /* __XACC_REGISTER_H__ */
 
+#endif /* OBSOLETE */
 /* ============ END OF FILE ===================== */
