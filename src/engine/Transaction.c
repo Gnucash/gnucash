@@ -33,6 +33,7 @@
 
 #include "AccountP.h"
 #include "Group.h"
+#include "Scrub3.h"
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "cap-gains.h"
@@ -1768,6 +1769,23 @@ xaccTransCommitEdit (Transaction *trans)
    if (trans->splits && !(trans->do_free))
    {
       SplitList *node;
+
+      /* Fix up split amount */
+restart:
+      for (node=trans->splits; node; node=node->next)
+      {
+         split = node->data;
+         CHECK_GAINS_STATUS (split);
+         if (split->gains & GAINS_STATUS_ADIRTY)
+         {
+            gboolean altered = FALSE;
+            split->gains |= ~GAINS_STATUS_ADIRTY;
+            if (split->lot) altered = xaccScrubLot (split->lot);
+            if (altered) goto restart;
+         }
+      }
+
+      /* Fix up gains split value */
       for (node=trans->splits; node; node=node->next)
       {
          split = node->data;
@@ -1781,9 +1799,6 @@ xaccTransCommitEdit (Transaction *trans)
          }
       }
    }
-
-   /* Fix up split amount */
-   /* XXX not done yet */
 
 
    /* At this point, we check to see if we have a valid transaction.

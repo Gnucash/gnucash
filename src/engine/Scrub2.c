@@ -98,6 +98,7 @@ xaccLotFill (GNCLot *lot)
 {
    gnc_numeric lot_baln;
    Account *acc;
+   Split *split;
 
    if (!lot) return;
    acc = lot->account;
@@ -108,15 +109,17 @@ xaccLotFill (GNCLot *lot)
    lot_baln = gnc_lot_get_balance (lot);
    if (gnc_numeric_zero_p (lot_baln)) return;
 
+   split = FIFOPolicyGetSplit (lot, NULL);
+   if (!split) return;   /* Handle the common case */
+
    xaccAccountBeginEdit (acc);
 
    /* Loop until we've filled up the lot, (i.e. till the 
     * balance goes to zero) or there are no splits left.  */
    while (1)
    {
-      Split *split, *subsplit;
+      Split *subsplit;
 
-      split = FIFOPolicyGetSplit (lot, NULL);
       subsplit = xaccSplitAssignToLot (split, lot);
       if (subsplit == split)
       {
@@ -127,6 +130,9 @@ xaccLotFill (GNCLot *lot)
 
       lot_baln = gnc_lot_get_balance (lot);
       if (gnc_numeric_zero_p (lot_baln)) break;
+
+      split = FIFOPolicyGetSplit (lot, NULL);
+      if (!split) break;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
