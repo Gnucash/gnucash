@@ -106,11 +106,18 @@ typedef enum
 } GNCAccountType;
 
 /* ------------------ */
-const char * xaccAccountGetTypeStr (GNCAccountType type); /* GUI names */
+/* The xaccAccountGetTypeStr() routine returns a string suitable for 
+ *    use in the GUI/Interface.  These strings should be translated
+ *    to the local language.
+ */
+const char * xaccAccountGetTypeStr (GNCAccountType type); 
 
-/* Conversion routines for the account types to/from strings.
- * Critical for the text communication mechanisms. i.e. INCOME ->
- * "INCOME". */
+/* 
+ * Conversion routines for the account types to/from strings
+ * that are used in persistant storage, communications.  These
+ * strings should *not& be translated to the local language.
+ * Typical converstion is INCOME -> "INCOME". 
+ */
 char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
 gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
 GNCAccountType xaccAccountStringToEnum (const char* str);
@@ -383,7 +390,8 @@ gpointer xaccAccountForEachSplit(Account *account,
                                  SplitCallback,
                                  gpointer data);
 
-/* Traverse all of the transactions in the given account.  Continue
+/* The xaccAccountForEachTransaction() routine will
+   traverse all of the transactions in the given account.  Continue
    processing IFF proc does not return FALSE. This function does not
    descend recursively to traverse transactions in child accounts.
 
@@ -394,23 +402,26 @@ gpointer xaccAccountForEachSplit(Account *account,
    and those accounts share transactions, proc will be called once per
    account for the shared transactions.
    
-   The result of this function will not be FALSE IFF every relevant
-   transaction was traversed exactly once.  */
+   The result of this function will not be FALSE if-and-only-if
+   every relevant transaction was traversed exactly once.  
+*/
 typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
 gboolean
 xaccAccountForEachTransaction(Account *account,
                               TransactionCallback,
                               void *data);
 
-/* Visit every transaction in the account that hasn't already been
+/* The xaccAccountVisitUnvisitedTransactions() routine will
+   visit every transaction in the account that hasn't already been
    visited exactly once.  visited_txns must be a hash table created
    via guid_hash_table_new() and is the authority about which
    transactions have already been visited.  Further, when this
    procedure returns visited_txns will have been modified to reflect
    all the newly visited transactions.
 
-   The result of this function will not be FALSE IFF every relevant
-   transaction was traversed exactly once.  */
+   The result of this function will not be FALSE if-and-only-if 
+   every relevant transaction was traversed exactly once.  
+*/
 gboolean
 xaccAccountVisitUnvisitedTransactions(Account *account,
                                       TransactionCallback,
