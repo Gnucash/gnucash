@@ -342,7 +342,14 @@ gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
 {
         gdk_gc_set_foreground (gc, &gn_light_gray);
 
-        gdk_draw_line (drawable, gc, x, y + height / 2, x + height / 2, y);
+        gdk_draw_rectangle (drawable, gc, FALSE,
+                            x + 2, y + 2, height / 3, height / 3);
+
+        gdk_draw_line (drawable, gc,
+                       x + 2, y + 2 + height / 3, x + 2 + height / 3, y + 2);
+
+        gdk_draw_line (drawable, gc,
+                       x + 2, y + 2, x + 2 + height / 3, y + 2 + height / 3);
 }
 
 static void
@@ -371,10 +378,6 @@ draw_cell (GnucashGrid *grid,
         gdk_gc_set_foreground (grid->gc, bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE,
                             x + 1, y + 1, width - 1, height - 1);
-
-        if (hatching)
-                gnucash_draw_hatching (drawable, grid->gc,
-                                       x, y, width, height);
 
         get_cell_borders (grid->sheet, virt_loc, &borders);
  
@@ -413,6 +416,10 @@ draw_cell (GnucashGrid *grid,
                         (borders.right > borders.bottom ?
                          y + height : y + height - 1),
                         borders.right);
+
+        if (hatching)
+                gnucash_draw_hatching (drawable, grid->gc,
+                                       x, y, width, height);
 
         /* dividing line */
         if ((virt_loc.phys_row_offset == 0) && (table->dividing_row >= 0))
