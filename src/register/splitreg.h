@@ -96,6 +96,7 @@ typedef enum
   MXFRM_CELL,     /* MXFRM is the "mirrored" transfer-from account */
   TCRED_CELL,     /* T* cells are transaction summary cells */
   TDEBT_CELL,
+  TSHRS_CELL,
   TSHRBALN_CELL,
   TBALN_CELL,
   NOTES_CELL,
@@ -197,6 +198,7 @@ struct _SplitRegister
   ComboCell     * mxfrmCell;
   PriceCell     * tcreditCell;
   PriceCell     * tdebitCell;
+  PriceCell     * tsharesCell;
   PriceCell     * tshrbalnCell;
   PriceCell     * tbalanceCell;
   QuickFillCell * notesCell;

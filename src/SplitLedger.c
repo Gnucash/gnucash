@@ -3103,6 +3103,35 @@ get_trans_total_value (SplitRegister *reg, Transaction *trans)
   return total;
 }
 
+static gnc_numeric
+get_trans_total_shares (SplitRegister *reg, Transaction *trans)
+{
+  GList *node;
+  Account *account;
+  gnc_numeric total = gnc_numeric_zero ();
+
+  SRInfo *info = xaccSRGetInfo(reg);
+  account = info->default_source_account;
+
+  if (!account)
+    return total;
+
+  total = gnc_numeric_convert (total, xaccAccountGetSecuritySCU (account),
+                               GNC_RND_ROUND);
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (xaccSplitGetAccount (split) != account)
+      continue;
+
+    total = gnc_numeric_add_fixed (total, xaccSplitGetShareAmount (split));
+  }
+
+  return total;
+}
+
 static Split *
 get_trans_last_split (SplitRegister *reg, Transaction *trans)
 {
@@ -3408,6 +3437,16 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
                                 gnc_split_value_print_info (split, FALSE));
       }
 
+    case TSHRS_CELL:
+      {
+        gnc_numeric total;
+
+        total = get_trans_total_shares (reg, trans);
+
+        return xaccPrintAmount (total,
+                                gnc_split_quantity_print_info (split, FALSE));
+      }
+
     default:
       return "";
       break;
@@ -3420,6 +3459,7 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
   SplitRegister *reg = user_data;
   const guint32 black = 0x000000;
   const guint32 red   = 0xff0000;
+  Transaction *trans;
   VirtualCell *vcell;
   gboolean is_current;
   CellType cell_type;
@@ -3436,6 +3476,8 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
   if (split == NULL)
     return black;
 
+  trans = xaccSplitGetParent (split);
+
   cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
 
   is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
@@ -3444,10 +3486,13 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
   switch (cell_type)
   {
     case SHRS_CELL:
+    case TSHRS_CELL:
       {
         gnc_numeric shares;
 
-        if (is_current)
+        if (cell_type == TSHRS_CELL)
+          shares = get_trans_total_shares (reg, trans);
+        else if (is_current)
           shares = xaccGetPriceCellValue (reg->sharesCell);
         else
           shares = xaccSplitGetShareAmount (split);
@@ -3460,10 +3505,14 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
       break;
 
     case SHRBALN_CELL:
+    case TSHRBALN_CELL:
       {
         gnc_numeric balance;
 
-        balance = xaccSplitGetShareBalance (split);
+        if (cell_type == SHRBALN_CELL)
+          balance = xaccSplitGetShareBalance (split);
+        else
+          balance = get_trans_total_share_balance (reg, trans);
 
         if (gnc_numeric_negative_p (balance))
           return red;
@@ -3473,12 +3522,16 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
       break;
 
     case BALN_CELL:
+    case TBALN_CELL:
       {
         gnc_numeric balance;
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = xaccSplitGetBalance (split);
+        if (cell_type == BALN_CELL)
+          balance = xaccSplitGetBalance (split);
+        else
+          balance = get_trans_total_balance (reg, trans);
 
         if (reverse_balance != NULL)
         {
