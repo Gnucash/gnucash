@@ -1602,6 +1602,11 @@ Associate a copy of @var{value} with @var{key} in @var{trans}.
 Return the @var{I}th Split of @var{trans}.
 @end deftypefun
 
+@deftypefun {GList *} xaccTransGetSplitList (Transaction * @var{trans})
+Return a @code{GList} of the Splits in @var{trans}. This list is owned
+by @var{trans} and should not be modified in any way!
+@end deftypefun
+
 @deftypefun {const char *} xaccTransGetNum (Transaction * @var{trans})
 Return the number field of @var{trans}.
 @end deftypefun
@@ -1690,7 +1695,7 @@ Set the description field of @var{trans} to @var{desc}.
 @section GNCBooks
 @tindex GNCBook
 
-The @dfn{GNCBook} interface encapsulate all the information about a
+The @dfn{GNCBook} interface encapsulates all the information about a
 GnuCash dataset, including the methods used to read and write the
 dataset to datastores.  This class provides several important services:
 
@@ -1731,7 +1736,7 @@ End any editing session associated with @var{book}, and free all
 memory associated with it.
 @end deftypefun
 
-@deftypefun gboolean gnc_book_begin (GNCBook * @var{book}, const char * @var{book_id})
+@deftypefun gboolean gnc_book_begin (GNCBook * @var{book}, const char * @var{book_id}, gboolean ignore_lock, gboolean create_if_nonexistent)
 Begins a new book editing sesssion. It takes as an argument the book id.
 The book id must be a string in the form of a URI/URL.  In the current
 implementation, only one type of URI is supported, and that is the file
@@ -1741,24 +1746,17 @@ GnuCash data file. Paths may be relative or absolute. If the path is
 relative; that is, if the argument is @url{file:somefile.xac} then a
 sequence of search paths are checked for a file of this name.
 
+The 'ignore_lock' argument, if set to TRUE, will cause this routine to
+ignore any file locks that it finds.  If set to FALSE, then file locks
+will be tested and obeyed.
+
 If the file exists, can be opened and read, and a lock can be obtained
-then a lock will be obtained and the function returns TRUE. Otherwise
-the function returns FALSE.
-@end deftypefun
+then a lock will be obtained and the function returns TRUE.
 
-@deftypefun gboolean (*GNCBookLockFailHandler) (const char * @var{file})
-A function prototype for lock fail handlers used below.
-@end deftypefun
+If the file/database doesn't exist, and the create_if_nonexistent flag
+is set to TRUE, then the database is created.
 
-@deftypefun gboolean gnc_book_begin_file (GNCBook * @var{book}, const char * @var{filename}, GNCBookLockFailHandler @var{handler})
-This routine is identical to the gnc_book_begin() routine, except that
-the argument is a filename (i.e. the five letters @code{file:} should
-not be prepended) and there is an additional function argument. This
-function is called if gnc_book_begin_file fails to obtain a lock for the
-file. If it returns TRUE, the file is loaded anyway. If it returns
-FALSE, or the handler is NULL, a failed lock attempt will abort the
-load. The lock fail handler is passed the filename of the data file
-being loaded.
+Otherwise the function returns FALSE.
 @end deftypefun
 
 @deftypefun gboolean gnc_book_load (GNCBook * @var{book})
@@ -1766,7 +1764,7 @@ Load the data associated with the book. The function returns TRUE on
 success.
 @end deftypefun
 
-@deftypefun int gnc_book_get_error (GNCBook * @var{book})
+@deftypefun GNCBackendError gnc_book_get_error (GNCBook * @var{book})
 Obtain the reason for a failure. Standard errno values are used. Calling
 this routine resets the error value. This routine allows an
 implementation of multiple error values, e.g. in a stack, where this
@@ -1793,6 +1791,16 @@ file path too long
 book not open when @code{gnc_book_save()} was called.
 
 @end table
+@end deftypefun
+
+@deftypefun {const char *} gnc_book_get_error_message(GNCBook * @var{book})
+Return a string describing the reason for the current error. Calling
+this routine resets the error value.
+@end deftypefun
+
+@deftypefun GNCBackendError gnc_book_pop_error (GNCBook * @var{book})
+Same as @code{gnc_book_get_error}, but the error value is reset
+in @var{book}.
 @end deftypefun
 
 @deftypefun {AccountGroup *} gnc_book_get_group (GNCBook * @var{book})
