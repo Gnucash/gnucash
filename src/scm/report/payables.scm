@@ -40,6 +40,9 @@
 (define optname-use-description (N_ "Use Description?"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
+(define optname-report-currency (N_ "Report's currency"))
+(define optname-price-source (N_ "Price Source"))
+(define optname-multicurrency-totals (N_ "Show Multi-currency Totals?"))
 
 ;; The idea is:  have a hash with the key being the creditor name
 ;; (In future this might be GUID'ed, but for now it's a string
@@ -196,6 +199,8 @@ more than one currency.  This report is not designed to cope with this possibili
 		(hash-set! hash creditor-name new-creditor)))
 	  (cons #t creditor-name)))))
 
+
+;; get the total debt from the buckets
 (define (buckets-get-total buckets)
   (let ((running-total (gnc:numeric-zero))
 	(buckets-list (vector->list buckets)))
@@ -204,6 +209,9 @@ more than one currency.  This report is not designed to cope with this possibili
 		      (gnc:numeric-add-fixed bucket running-total)))
 	      buckets-list)
     running-total))
+
+
+;; compare by the total in the buckets
 
 (define (compare-total litem-a litem-b)    
   (let*  ((creditor-a (cdr litem-a))
@@ -217,6 +225,8 @@ more than one currency.  This report is not designed to cope with this possibili
 	 (if (= difference-sign 0)
 	     (gnc:safe-strcmp (car litem-a) (car litem-b))
 	     difference-sign)))
+
+;; compare by buckets, oldest first.
 
 (define (compare-buckets litem-a litem-b)
   (define (driver buckets-a buckets-b)
@@ -269,6 +279,15 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:options-add-report-date!
      options gnc:pagename-general
      optname-to-date "a")
+   
+ ;; all about currencies
+    (gnc:options-add-currency!
+     options gnc:pagename-general
+     optname-report-currency "b")
+
+    (gnc:options-add-price-source! 
+     options gnc:pagename-general
+     optname-price-source "c" 'weighted-average)
 
     (add-option
      (gnc:make-account-list-option
@@ -358,6 +377,14 @@ more than one currency.  This report is not designed to cope with this possibili
       #t))
 
      
+       (add-option
+	(gnc:make-simple-boolean-option
+	 gnc:pagename-general
+	 optname-multicurrency-totals
+	 "i"
+	 (N_ "Show multi-currency totals.  If not selected, convert all\
+totals to report currency")
+	 #f))
     (gnc:options-set-default-section options "General")      
     options))
 
@@ -368,6 +395,8 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 (define (payables-renderer report-obj)
+
+  ;; Predicates for sorting the creditors once the data has been collected
 
   ;; Format: (cons 'sort-key (cons 'increasing-pred 'decreasing-pred))
   (define sort-preds
@@ -407,13 +436,10 @@ more than one currency.  This report is not designed to cope with this possibili
   
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
-  
-  (define (print-interval date-int)
-    (gnc:make-html-text
-     "("
-     (gnc:timepair-to-datestring date-int)
-     ")"))
-				 
+
+
+  ;; XXX: This is a hack - will be fixed when we move to a
+  ;; more general interval scheme in this report
   (define (make-heading-list)
     (list 
      (N_ "Creditor Name")
@@ -423,6 +449,36 @@ more than one currency.  This report is not designed to cope with this possibili
      (N_ "Total")))
 
 
+  ;;  Make a list of commodity collectors for column totals
+
+  ;; XXX: Magic number is a hack
+  (define (make-collector-list)
+    (define (make-collector-driver done total)
+      (if (< done total) 
+	  (cons 
+	   (gnc:make-commodity-collector)
+	   (make-collector-driver (+ done 1) total))
+	  '()))
+    (make-collector-driver 0 4))
+	  
+
+  ;; update the column totals 
+
+  (define (add-to-column-totals column-totals monetary-list)
+    (begin
+      (gnc:debug "column-totals" column-totals)
+      (gnc:debug "monetary-list" monetary-list)
+      (map (lambda (amount collector)
+	   (begin
+	     (gnc:debug "amount" amount)
+	     (gnc:debug "collector" collector)
+	     (collector 'add 
+			(gnc:gnc-monetary-commodity amount)
+			(gnc:gnc-monetary-amount amount))))
+	 monetary-list
+	 column-totals)))
+
+  ;; convert the buckets in the header data structure 
   (define (convert-to-monetary-list bucket-list currency)
     (let* ((running-total (gnc:numeric-zero))
 	  (monetised-buckets
@@ -432,11 +488,41 @@ more than one currency.  This report is not designed to cope with this possibili
 			  (gnc:numeric-add-fixed running-total bucket-list-entry))
 		  (gnc:make-gnc-monetary currency bucket-list-entry)))
 		(vector->list bucket-list))))
-      (append (reverse monetised-buckets) (list (gnc:make-gnc-monetary currency running-total)))))
+      (append (reverse monetised-buckets) 
+	      (list (gnc:make-gnc-monetary currency running-total)))))
 
-  ;; The first thing we do is make local variables for all the specific
-  ;; options in the set of options given to the function. This set will
-  ;; be generated by the options generator above.
+
+  ;; convert the collectors to the right output format 
+
+  (define (convert-collectors collector-list report-currency 
+			      exchange-fn
+			      multi-currencies-p)
+    (define (fmt-one-currency collector)
+      (let ((monetary (gnc:sum-collector-commodity collector report-currency exchange-fn)))
+	(if monetary
+	    monetary
+	    (begin
+	      (gnc:warn "Exchange-lookup failed in fmt-one-currency")
+	      #f))))
+
+    (define (fmt-multiple-currencies collector)
+      (let ((mini-table (gnc:make-html-table)))
+	(collector 'format 
+		   (lambda (commodity amount)
+		   (gnc:html-table-append-row!
+		    mini-table
+		    (list (gnc:make-gnc-monetary 
+			   commodity amount))))
+		   #f)
+	mini-table))
+			
+    (let ((fmt-function 
+	   (if multi-currencies-p
+	       fmt-multiple-currencies
+	       fmt-one-currency)))
+      (map fmt-function collector-list)))
+
+
   (let* ((payables-account (car (op-value sect-acc opt-pay-acc)))
 	 (creditors (make-hash-table 23))
 
@@ -448,47 +534,68 @@ more than one currency.  This report is not designed to cope with this possibili
 		       (op-value gnc:pagename-general (N_ "To")))))
 	(use-description? (op-value gnc:pagename-general optname-use-description))
 	(interval-vec (list->vector (make-interval-list report-date)))
-	(sort-pred (get-sort-pred (op-value gnc:pagename-general optname-sort-by)
-				   (op-value gnc:pagename-general optname-sort-order)))
+	(sort-pred (get-sort-pred 
+		    (op-value gnc:pagename-general optname-sort-by)
+		    (op-value gnc:pagename-general optname-sort-order)))
+	(report-currency (op-value gnc:pagename-general optname-report-currency))
+	(price-source (op-value gnc:pagename-general optname-price-source))
+	(multi-totals-p (op-value gnc:pagename-general optname-multicurrency-totals))
 	(heading-list (make-heading-list))
+	(exchange-fn (gnc:case-exchange-fn price-source report-currency report-date))
+	(total-collector-list (make-collector-list))
 	(table (gnc:make-html-table))
 	(query (gnc:malloc-query))
 	(creditor-list '())
         (document (gnc:make-html-document)))
-    (gnc:debug "Payables-account: " payables-account)
+;    (gnc:debug "Payables-account: " payables-account)
     (gnc:html-document-set-title! document report-title)
     (gnc:html-table-set-col-headers! table heading-list)
 				     
     (if payables-account
 	(begin
 	  (setup-query query payables-account report-date)
+	  ;; get the appropriate splits
 	  (let ((splits (gnc:glist->list (gnc:query-get-splits query) <gnc:Split*>)))
-	    (gnc:debug "splits" splits)
+;	    (gnc:debug "splits" splits)
+
+	    ;; build the table
 	    (for-each (lambda (split)
 			(update-creditor-hash creditors 
 					      split 
 					      interval-vec 
 					      use-description?))
 			splits)
-	    (gnc:debug "creditors" creditors)
+;	    (gnc:debug "creditors" creditors)
+	    ;; turn the hash into a list
 	    (hash-for-each (lambda (key value)
 			     (set! creditor-list
 				   (cons (cons key value) creditor-list)))
 			   creditors)
-	    (gnc:debug "creditor list" creditor-list)
+;	    (gnc:debug "creditor list" creditor-list)
 	   
 	    (set! creditor-list (sort-list! creditor-list
 					    sort-pred))
 
+	    ;; build the table
 	    (for-each (lambda (creditor-list-entry)
 			(let ((monetary-list (convert-to-monetary-list
 					      (creditor-get-buckets
 					       (cdr creditor-list-entry))
 					      (creditor-get-currency
 					       (cdr creditor-list-entry)))))
+			  (add-to-column-totals total-collector-list monetary-list)
 			  (gnc:html-table-append-row!
 			   table (cons (car creditor-list-entry) monetary-list))))
 		      creditor-list)
+
+	    ;; add the totals
+	    (gnc:html-table-append-row!
+	     table 
+	     (cons (_ "Total") (convert-collectors total-collector-list 
+						   report-currency
+						   exchange-fn
+						   multi-totals-p)))
+	     
 	    (gnc:html-document-add-object!
 	     document table)))
 	(gnc:html-document-add-object!

@@ -1,3 +1,8 @@
+2001-07-19  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/payables.scm: add column totals, add some
+	clarifying comments.
+
 2001-07-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnc-ui-util.c (balance_helper): fix bug
