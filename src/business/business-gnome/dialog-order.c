@@ -589,6 +589,8 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
     /* Hide the 'close order' button */
     hide = glade_xml_get_widget (xml, "close_order_button");
     gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (xml, "cancel_button");
+    gtk_widget_hide_all (hide);
     hide = glade_xml_get_widget (xml, "new_invoice_button");
     gtk_widget_hide_all (hide);
   }

@@ -19,15 +19,29 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 				Timespec *date);
 
 
+/* 
+ * Note that the dialog will "own" (and free) the acct_types list.
+ * it should be a list of GNCAccountTypes
+ */
+
+gboolean
+gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
+				const char *ddue_label_message,
+				const char *post_label_message,
+				const char *acct_label_message,
+				gboolean ok_is_default,
+				GList * acct_types, GNCBook *book,
+				/* Returned Data... */
+				Timespec *ddue, Timespec *post,
+				Account **acct);
+
 gboolean
 gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
-			       const char *ddue_label_message,
-			       const char *post_label_message,
+			       const char *date_label_message,
 			       const char *acct_label_message,
 			       gboolean ok_is_default,
-			       GNCAccountType acct_type, GNCBook *book,
-			       /* Returned Data... */
-			       Timespec *ddue, Timespec *post, Account **acct);
-
+			       GList * acct_types, GNCBook *book,
+				/* Returned Data... */
+			       Timespec *date, Account **acct);
 
 #endif /* _DIALOG_DATE_CLOSE_H */

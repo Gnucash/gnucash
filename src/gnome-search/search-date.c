@@ -172,8 +172,6 @@ option_changed (GtkWidget *widget, GNCSearchDate *fe)
 static void
 date_changed (GNCDateEdit *date_edit, GNCSearchDate *fe)
 {
-  time_t tt;
-	
   fe->ts = gnc_date_edit_get_date_ts (date_edit);
 }
 

@@ -24,7 +24,7 @@ typedef struct _dialog_date_close_window {
   GtkWidget *post_date;
   GtkWidget *acct_combo;
   Timespec *ts, *ts2;
-  GNCAccountType acct_type;
+  GList * acct_types;
   GNCBook *book;
   Account *acct;
   gboolean retval;
@@ -49,8 +49,8 @@ ask_make_acct (DialogDateClose *ddc, const char *name, gboolean new_acc)
       return NULL;
   }
 
-  types = g_list_append (types, (gpointer)(ddc->acct_type));
-  acc = gnc_ui_new_accounts_from_name_window_with_types (name, types);
+  acc = gnc_ui_new_accounts_from_name_window_with_types (name,
+							 ddc->acct_types);
   g_list_free (types);
   return acc;
 }
@@ -83,13 +83,12 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 	return;
       }
 
-      if (xaccAccountGetType (acc) != ddc->acct_type) {
+      if (g_list_index (ddc->acct_types, (gpointer)xaccAccountGetType (acc))
+	  == -1) {
 	char *message = 
 	  g_strdup_printf (_("Invalid Account Type, %s.\n"
-			     "You need an account of type %s."
 			     "Please try again..."),
-			     xaccAccountGetTypeStr (xaccAccountGetType (acc)),
-			     xaccAccountGetTypeStr (ddc->acct_type));
+			   xaccAccountGetTypeStr (xaccAccountGetType (acc)));
 	gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog), message);
 	g_free (name);
 	name = xaccAccountGetFullName (acc, gnc_get_account_separator ());
@@ -144,7 +143,8 @@ fill_in_acct_info (DialogDateClose *ddc)
     char *name;
 
     /* Only present accounts of the appropriate type */
-    if (xaccAccountGetType (account) != ddc->acct_type)
+    if (g_list_index (ddc->acct_types,
+		      (gpointer)xaccAccountGetType (account)) == -1)
       continue;
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
@@ -252,20 +252,21 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
   gtk_main ();
 
   retval = ddc->retval;
+  g_list_free (ddc->acct_types);
   g_free (ddc);
 
   return retval;
 }
 
 gboolean
-gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
-			       const char *ddue_label_message,
-			       const char *post_label_message,
-			       const char *acct_label_message,
-			       gboolean ok_is_default,
-			       GNCAccountType acct_type, GNCBook *book,
-			       /* Returned Data... */
-			       Timespec *ddue, Timespec *post, Account **acct)
+gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
+				const char *ddue_label_message,
+				const char *post_label_message,
+				const char *acct_label_message,
+				gboolean ok_is_default,
+				GList * acct_types, GNCBook *book,
+				/* Returned Data... */
+				Timespec *ddue, Timespec *post, Account **acct)
 {
   DialogDateClose *ddc;
   GtkWidget *hbox;
@@ -274,14 +275,14 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gboolean retval;
 
   if (!message || !ddue_label_message || !post_label_message ||
-      !acct_label_message || !book || !ddue || !post || !acct)
+      !acct_label_message || !acct_types || !book || !ddue || !post || !acct)
     return FALSE;
 
   ddc = g_new0 (DialogDateClose, 1);
   ddc->ts = ddue;
   ddc->ts2 = post;
   ddc->book = book;
-  ddc->acct_type = acct_type;
+  ddc->acct_types = acct_types;
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
@@ -332,3 +333,75 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   return retval;
 }
 
+gboolean
+gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
+			       const char *date_label_message,
+			       const char *acct_label_message,
+			       gboolean ok_is_default,
+			       GList * acct_types, GNCBook *book,
+			       /* Returned Data... */
+			       Timespec *date, Account **acct)
+{
+  DialogDateClose *ddc;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GladeXML *xml;
+  gboolean retval;
+
+  if (!message || !date_label_message || !acct_label_message ||
+      !acct_types || !book || !date || !acct)
+    return FALSE;
+
+  ddc = g_new0 (DialogDateClose, 1);
+  ddc->ts = date;
+  ddc->book = book;
+  ddc->acct_types = acct_types;
+
+  xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
+  ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
+  ddc->date = glade_xml_get_widget (xml, "date");
+  ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
+  hbox = glade_xml_get_widget (xml, "the_hbox");
+
+  if (parent)
+    gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
+
+  build_date_close_window (hbox, message);
+
+  /* Set the labels */
+  label = glade_xml_get_widget (xml, "date_label");
+  gtk_label_set_text (GTK_LABEL (label), date_label_message);
+  label = glade_xml_get_widget (xml, "acct_label");
+  gtk_label_set_text (GTK_LABEL (label), acct_label_message);
+
+  /* Set the date widget */
+  gnome_date_edit_set_time (GNOME_DATE_EDIT (ddc->date), date->tv_sec);
+
+  /* Setup the account widget */
+  fill_in_acct_info (ddc);
+
+  /* Connect the buttons */
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(ddc->dialog), 0,
+     GTK_SIGNAL_FUNC(gnc_dialog_date_close_ok_cb), ddc);
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(ddc->dialog), 1,
+     GTK_SIGNAL_FUNC(gnc_dialog_date_close_cancel_cb), ddc);
+
+  gtk_signal_connect (GTK_OBJECT(ddc->dialog), "close",
+                      GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
+
+  gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
+  gtk_widget_show (ddc->dialog);
+
+  gtk_widget_hide_all (glade_xml_get_widget (xml, "postdate_label"));
+  gtk_widget_hide_all (glade_xml_get_widget (xml, "post_date"));
+
+  gtk_main ();
+
+  retval = ddc->retval;
+  *acct = ddc->acct;
+  g_free (ddc);
+
+  return retval;
+}

@@ -47,4 +47,14 @@ void			gnc_search_param_set_title (GNCSearchParam *param,
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
 						     GNCSearchParam *b);
 
+
+/* This will override the automatic param_type logic from "set_param_path()"
+ * so that the programmer can force a particular UI to appear for a given
+ * parameter path.  This should be used with care -- if used improperly
+ * it could result in an invalid Query Term, where the path and the predicate
+ * don't match types properly.
+ */
+void	gnc_search_param_override_param_type (GNCSearchParam *param,
+					      GNCIdTypeConst *param_type);
+
 #endif /* _GNCSEARCH_PARAM_H */

@@ -148,6 +148,15 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
   param->priv->type = type;
 }
 
+void
+gnc_search_param_override_param_type (GNCSearchParam *param,
+				      GNCIdTypeConst *param_type)
+{
+  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_assert (param_type != NULL && *param_type != '\0');
+  param->priv->type = param_type;
+}
+
 GSList *
 gnc_search_param_get_param_path (GNCSearchParam *param)
 {

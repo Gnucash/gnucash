@@ -206,7 +206,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   GncInvoice *invoice;
   char *message, *ddue_label, *post_label, *acct_label;
   Account *acc = NULL;
-  GNCAccountType acct_type;
+  GList * acct_types = NULL;
   Timespec ddue, postdate;
   gboolean reverse = FALSE;
 
@@ -218,8 +218,8 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   if (!invoice)
     return;
 
-  /* Ok, we can close this.  Ask for verification, set the closed date,
-   * due date, and posted account
+  /* Ok, we can post this invoice.  Ask for verification, set the due date,
+   * post date, and posted account
    */
   message = _("Do you really want to post the invoice?");
   ddue_label = _("Due Date");
@@ -229,22 +229,22 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   /* Determine the type of account to post to */
   switch (gncOwnerGetType (&(iw->owner))) {
   case GNC_OWNER_CUSTOMER:
-    acct_type = RECEIVABLE;
+    acct_types = g_list_prepend (NULL, (gpointer)RECEIVABLE);
     reverse = TRUE;
     break;
   case GNC_OWNER_VENDOR:
-    acct_type = PAYABLE;
+    acct_types = g_list_prepend (NULL, (gpointer)PAYABLE);
     break;
   default:
-    acct_type = NO_TYPE;
+    acct_types = g_list_prepend (NULL, (gpointer)NO_TYPE);
   }
 
   /* Get the due date and posted account */
   timespecFromTime_t (&postdate, time(NULL));
   ddue = postdate;
   ddue.tv_sec += 3600*24*30;	/* XXX: due in 30 days */
-  if (!gnc_dialog_date_acct_parented (iw->dialog, message, ddue_label,
-				      post_label, acct_label, TRUE, acct_type,
+  if (!gnc_dialog_dates_acct_parented (iw->dialog, message, ddue_label,
+				      post_label, acct_label, TRUE, acct_types,
 				      iw->book, &ddue, &postdate, &acc))
     return;
 
@@ -269,30 +269,45 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_invoice_window_close_invoice_cb (GtkWidget *widget, gpointer data)
+gnc_invoice_window_pay_invoice_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
-  char *message, *label;
-  Timespec ts;
+  char *message, *date_label, *acct_label;
+  GList *acct_types;
+  Timespec paid_date;
+  Account *acc = NULL;
 
-  /* Note that this assumes we're already posted! Should we check? */
+  /* Note that this assumes we're already posted! Should we check?
+   * There shuldn't be any way to get to this callback unless we're
+   * already posted.
+   */
 
   invoice = iw_get_invoice (iw);
   if (!invoice)
     return;
 
-  message = _("Do you really want to close the invoice?");
-  label = _("Closed Date");
+  message = _("Do you really want to pay the invoice?");
+  date_label = _("Date Paid");
+  acct_label = _("Pay to Account");
 
-  timespecFromTime_t (&ts, time(NULL));
-  if (!gnc_dialog_date_close_parented (iw->dialog, message, label, TRUE, &ts))
+  /* Add "appropriate" accounts */
+  acct_types = g_list_prepend (NULL, BANK);
+  acct_types = g_list_prepend (acct_types, CASH);
+  acct_types = g_list_prepend (acct_types, ASSET);
+  acct_types = g_list_prepend (acct_types, LIABILITY);
+
+  timespecFromTime_t (&paid_date, time(NULL));
+  if (!gnc_dialog_date_acct_parented (iw->dialog, message, date_label,
+				      acct_label, TRUE, acct_types,
+				      iw->book, &paid_date, &acc))
     return;
 
-  gncInvoiceSetDateClosed (invoice, &ts);
+  /* Pay to the account now */
+  gncInvoicePayToAccount (invoice, acc, &paid_date);
 
-  /* And close the invoice */
-  return gnc_invoice_window_ok_cb (widget, data);
+  /* ... and redisplay here. */
+  gnc_invoice_update_window (iw);
 }
 
 static void
@@ -415,18 +430,19 @@ gnc_configure_register_colors (void)
 static void
 gnc_invoice_update_window (InvoiceWindow *iw)
 {
-  GtkWidget *closed_date, *due_date, *acct_entry;
+  GtkWidget *paid_date, *posted_date, *due_date, *acct_entry;
   GncInvoice *invoice;
   GncOwner *owner;
   gboolean is_posted = FALSE;
-  gboolean is_closed = FALSE;
+  gboolean is_paid = FALSE;
 
   invoice = iw_get_invoice (iw);
   owner = gncInvoiceGetOwner (invoice);
 
   gtk_widget_show_all (iw->dialog);
 
-  closed_date = glade_xml_get_widget (iw->xml, "closed_date");
+  paid_date = glade_xml_get_widget (iw->xml, "paid_date");
+  posted_date = glade_xml_get_widget (iw->xml, "posted_date");
   due_date = glade_xml_get_widget (iw->xml, "due_date");
   acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
 
@@ -473,50 +489,57 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     ts = gncInvoiceGetDateDue (invoice);
     gnome_date_edit_set_time (GNOME_DATE_EDIT (due_date), ts.tv_sec);
 
+    ts = gncInvoiceGetDatePosted (invoice);
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (posted_date), ts.tv_sec);
+
     string = xaccAccountGetFullName (acct, gnc_get_account_separator ());
     gtk_entry_set_text (GTK_ENTRY (acct_entry), string);
 
     /*
-     * Check if we're closed.  By closed, we'll have an actual
-     * closed-date as well as everything else.  Note that you can be
-     * posted without being closed, but not the reverse.  Perhaps
-     * "closed" should be renamed to "paid"?
+     * Check if we're paid.  By paid, we'll have an actual
+     * paid-date as well as everything else.  Note that you can be
+     * posted without being paid, but not the reverse.
      */
 
-    ts = gncInvoiceGetDateClosed (invoice);
+    ts = gncInvoiceGetDatePaid (invoice);
     if (timespec_equal (&ts, &ts_zero))
       break;
 
-    is_closed = TRUE;
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (closed_date), ts.tv_sec);
+    is_paid = TRUE;
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (paid_date), ts.tv_sec);
 
   } while (FALSE);
 
-  /* Hide/show the appropriate widgets based on our posted/closed state */
+  /* Hide/show the appropriate widgets based on our posted/paid state */
 
-  if (is_closed == FALSE) {
+  if (is_paid == FALSE) {
     GtkWidget *hide;
 
-    hide = glade_xml_get_widget (iw->xml, "cd_label");
+    hide = glade_xml_get_widget (iw->xml, "paid_label");
     gtk_widget_hide_all (hide);
-    gtk_widget_hide_all (closed_date);
+    gtk_widget_hide_all (paid_date);
 
-    hide = glade_xml_get_widget (iw->xml, "hide1");
-    gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (iw->xml, "hide2");
-    gtk_widget_hide_all (hide);
+    if (is_posted == TRUE) {
+      hide = glade_xml_get_widget (iw->xml, "hide1");
+      gtk_widget_hide_all (hide);
+      hide = glade_xml_get_widget (iw->xml, "hide2");
+      gtk_widget_hide_all (hide);
 
-    if (is_posted == FALSE) {
-      hide = glade_xml_get_widget (iw->xml, "dd_label");
+    } else {			/* ! posted */
+      hide = glade_xml_get_widget (iw->xml, "due_label");
       gtk_widget_hide_all (hide);
       gtk_widget_hide_all (due_date);
+
+      hide = glade_xml_get_widget (iw->xml, "posted_label");
+      gtk_widget_hide_all (hide);
+      gtk_widget_hide_all (posted_date);
 
       hide = glade_xml_get_widget (iw->xml, "acct_label");
       gtk_widget_hide_all (hide);
       gtk_widget_hide_all (acct_entry);
 
       /* hide the close invoice button -- it needs to be posted first! */
-      hide = glade_xml_get_widget (iw->xml, "close_invoice_button");
+      hide = glade_xml_get_widget (iw->xml, "pay_invoice_button");
       gtk_widget_hide_all (hide);
 
       /* Also hide the print invoice button, for the same reason */
@@ -534,12 +557,16 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     gtk_widget_set_sensitive (iw->opened_date, FALSE);
     gtk_widget_set_sensitive (iw->notes_text, FALSE); /* XXX: should notes remain writable? */
 
-    /* Hide the 'post invoice' button: "VIEW" implies is_posted */
+    /* Hide the 'post invoice' button */
     hide = glade_xml_get_widget (iw->xml, "post_invoice_button");
     gtk_widget_hide_all (hide);
 
-    if (is_closed) {
-      hide = glade_xml_get_widget (iw->xml, "close_invoice_button");
+    /* Hide the 'cancel' button */
+    hide = glade_xml_get_widget (iw->xml, "cancel_button");
+    gtk_widget_hide_all (hide);
+
+    if (is_paid) {
+      hide = glade_xml_get_widget (iw->xml, "pay_invoice_button");
       gtk_widget_hide_all (hide);
     }
   }  
@@ -647,7 +674,7 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
     (iwd, 4, GTK_SIGNAL_FUNC(gnc_invoice_window_post_invoice_cb), iw);
 
   gnome_dialog_button_connect
-    (iwd, 5, GTK_SIGNAL_FUNC(gnc_invoice_window_close_invoice_cb), iw);
+    (iwd, 5, GTK_SIGNAL_FUNC(gnc_invoice_window_pay_invoice_cb), iw);
 
   /* Setup initial values */
   iw->invoice_guid = *gncInvoiceGetGUID (invoice);
