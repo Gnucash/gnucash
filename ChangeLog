@@ -1,3 +1,17 @@
+2001-04-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-table.scm (gnc:html-table-remove-last-row!): Added
+	function.
+
+	* src/scm/html-utilities.scm (gnc:html-build-acct-table): Added
+	removal of the last empty line above the total sum.
+
+	* src/scm/html-document.scm: changed rendering of #f from one
+	whitespace to equally arbitrary three whitespaces. FIXME: This
+	should be configurable by a style-sheet.
+
+	* src/scm/report/pnl.scm: deactivated column headers.
+
 2001-04-05  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/balance-sheet.scm: Relabel summary rows, fix

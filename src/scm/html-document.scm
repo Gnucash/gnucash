@@ -362,7 +362,7 @@
                (lambda (obj doc)
                  (gnc:html-document-render-data doc obj))
                ;; if the object is #f, make it a placeholder
-               (if obj obj "&nbsp;")))        
+               (if obj obj "&nbsp;&nbsp;&nbsp;")))        
         (cond 
          ((gnc:html-text? obj)
           (set! o (gnc:make-html-object-internal 

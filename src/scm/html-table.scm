@@ -338,6 +338,20 @@
     (gnc:html-table-set-data! table dd)
     new-num-rows))
 
+(define (gnc:html-table-remove-last-row! table)
+  (if (> (gnc:html-table-num-rows table) 0)
+      (begin
+	(gnc:html-table-set-num-rows-internal! 
+	 table 
+	 (- (gnc:html-table-num-rows table) 1))
+	(gnc:html-table-set-data! 
+	 table
+	 ;; Note that the rows in html-table-data are stored in
+	 ;; reverse, i.e. the last appended table row is the first
+	 ;; list element.
+	 (cdr (gnc:html-table-data table))))
+      '()))
+
 (define (gnc:html-table-prepend-row! table newrow)
   (let* ((dd (gnc:html-table-data table))
 	(current-num-rows (gnc:html-table-num-rows table))

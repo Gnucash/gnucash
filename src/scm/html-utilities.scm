@@ -370,7 +370,7 @@
     (define (add-group! current-depth groupname subaccounts thisbalance)
       (begin
 	;; first the group name
-	(add-subtotal-row! current-depth groupname #f #f)
+	(add-subtotal-row! current-depth groupname #f #t)
 	;; then all the subaccounts
 	(traverse-accounts! subaccounts (+ 1 current-depth))
 	;; and now the "total" row
@@ -428,6 +428,21 @@
 				     equal? accounts topl-accounts)))
 	;; No extra grouping.
 	(traverse-accounts! (filter show-acct? topl-accounts) 1))
+
+    ;; This is kind of a hack: Remove the last appended row iff it has
+    ;; an empty text field (resulting from the add-group! function
+    ;; above). Depends on the structure of html-table-data, i.e. if
+    ;; those are changed then this might break.
+    (let ((row-head (car (car (gnc:html-table-data table)))))
+      (if (gnc:html-table-cell? row-head)
+	  (if (car (gnc:html-table-cell-data row-head))
+	      '()
+	      ;; html-table-cell-data field is #f i.e. empty.
+	      (gnc:html-table-remove-last-row! table))
+	  (if row-head
+	      '()
+	      ;; html-table-data element is #f in itself.
+	      (gnc:html-table-remove-last-row! table))))
     
     ;; Show the total sum.
     (if show-total?
