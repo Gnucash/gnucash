@@ -340,7 +340,7 @@ qif_parse_split_category(const char* str,
   }
 
   /* catgory name */
-  *cat = g_strndup(str+pmatch[2].rm_so, pmatch[2].rm_eo - pmatch[21].rm_so);
+  *cat = g_strndup(str+pmatch[2].rm_so, pmatch[2].rm_eo - pmatch[2].rm_so);
   /* category is account? */
   *cat_is_acct = (pmatch[1].rm_so != -1 && pmatch[3].rm_so != -1);
   /* category class */
