@@ -43,7 +43,8 @@ typedef enum
   DATE_FORMAT_UK,       /* Britain: dd/mm/yyyy */
   DATE_FORMAT_CE,       /* Continental Europe: dd.mm.yyyy */
   DATE_FORMAT_ISO,      /* ISO: yyyy-mm-dd */
-  DATE_FORMAT_LOCALE    /* Take from locale information */
+  DATE_FORMAT_LOCALE,    /* Take from locale information */
+  DATE_FORMAT_CUSTOM    /* Used by the check printing code */
 } DateFormat;
 
 #define DATE_FORMAT_FIRST DATE_FORMAT_US
