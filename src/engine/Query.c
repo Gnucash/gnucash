@@ -840,6 +840,9 @@ xaccQueryGetSplits(Query * q) {
     }
   }
 
+  if (all_accts)
+    free (all_accts);
+
   /* There is no absolute need to reverse this list, since it's
    * being sorted below. However, in the common case, we will be
    * searching in a single account and returning in the account

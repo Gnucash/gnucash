@@ -75,6 +75,9 @@ build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
       gtk_widget_show(tree_item);
     }
   }
+
+  if (accts)
+    free (accts);
 }
 
 

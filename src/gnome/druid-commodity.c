@@ -392,13 +392,16 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
                            old_comm)) {
       xaccAccountSetCurrency(*current, comm);
     }
-    
+
     if(gnc_commodity_equiv(xaccAccountGetSecurity(*current),
                            old_comm)) {
       xaccAccountSetSecurity(*current, comm);
     }
     xaccAccountCommitEdit(*current);    
-  } 
+  }
+
+  if (accts)
+    free (accts);
 }
 
 

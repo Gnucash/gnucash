@@ -1076,24 +1076,29 @@ xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
                                                      void *data),
                                     void *data,
                                     GHashTable *visited_txns) {
-  Account **accounts = NULL;
+  Account **list;
+  Account **accounts;
   gboolean keep_going = TRUE;
 
   if(!g) return(FALSE);
   if(!proc) return(FALSE);
   if(!visited_txns) return(FALSE);
 
-  accounts = xaccGetAccounts(g);
+  list = accounts = xaccGetAccounts(g);
   if(!accounts) return(FALSE);
 
   while(*accounts && keep_going) {
     Account *acc = *accounts;
-    
+
     keep_going =
       xaccAccountVisitUnvisitedTransactions(acc, proc, data, visited_txns);
-    
+
     if(keep_going) accounts++;
   }
+
+  if (list)
+    free (list);
+
   return(keep_going);
 }
 
