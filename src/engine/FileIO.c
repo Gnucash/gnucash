@@ -763,8 +763,8 @@ readTransaction( int fd, Account *acc, int token )
     XACC_FLIP_INT (numSplits);
     for (i=0; i<numSplits; i++) {
         split = readSplit (fd, token);
-        if (2 > i+offset) {
-           /* the first two splits have been malloced. just replace them */
+        if (0 == i+offset) {
+           /* the first split has been malloced. just replace it */
            xaccFreeSplit (trans->splits[i+offset]);
            trans->splits[i+offset] = split;
            split->parent = trans;
