@@ -258,7 +258,7 @@ directly. Example:
 
   account = < something to get an Account pointer >
 
-  saved_guid = *xaccAccountGetGuid(account);
+  saved_guid = *xaccAccountGetGUID(account);
 
   ...
 
@@ -1537,18 +1537,18 @@ for editing.
 Allocate, initialize, and return a new Transaction.
 @end deftypefun
 
-@deftypefun void xaccTransAppendSplit (Transaction * @var{trans}, Split * @var{split})
-Append @var{split} to the collection of Splits in @var{trans}. If the
-Split is already a part of another Transaction, it will be removed from
-that Transaction first.
-@end deftypefun
-
 @deftypefun void xaccTransDestroy (Transaction * {trans})
 Remove all of the Splits from each of their accounts and free the memory
 associated with them. This routine must be followed by either an
 @code{xaccTransCommitEdit()} in which case the transaction memory will
 be freed, or by @code{xaccTransRollbackEdit()}, in which case all the
 original Splits are put back into place.
+@end deftypefun
+
+@deftypefun void xaccTransAppendSplit (Transaction * @var{trans}, Split * @var{split})
+Append @var{split} to the collection of Splits in @var{trans}. If the
+Split is already a part of another Transaction, it will be removed from
+that Transaction first.
 @end deftypefun
 
 @deftypefun void xaccTransBeginEdit (Transaction * @var{trans})
@@ -1694,8 +1694,18 @@ contain the following pieces of information:
 The list of debits and credits which apply to the Account. The sum of
 all debits and credits is the account balance.
 
+@item A type
+An integer code identifying the type of account. The Account type
+determines whether the Account holds shares valued in a currency
+or not. It is also used by the GUI and reporting system to determine
+how debits & credits to the Account should be treated and displayed.
+
 @item A name
 The name of the Account.
+
+@item An account code
+A string that is intended to hold a unique user-selected identifier
+for the account. However, uniqueness of this field is not enforced.
 
 @item A description
 A textual description of the Account.
@@ -1704,6 +1714,10 @@ A textual description of the Account.
 The commodity that Splits in the account are valued in, i.e., the
 denomination of the 'value' member of Splits in the account.
 
+@item A curreny SCU
+The SCU is the smallest convertible unit that the currency is
+traded in. This value overrides the default SCU of the currency.
+
 @item A security
 For Accounts which may contain shares (such as stock accounts),
 the denomination of the 'share quantity' member of Splits in
@@ -1711,9 +1725,134 @@ the accounts. For accounts which do not contain shares, the
 security is blank, and the share quantities are denominated
 in the Account currency.
 
+@item A security SCU
+Analogous to the currency SCU, but for the security.
+
+@item A parent and child Account Group.
+The parent and child of an Account are Account Groups
+(@pxref{Account Groups}). Account Groups are used to
+connect Accounts together into an Account hierarchy.
+If the parent Account Group is not present, the Account
+is at the top level of the hierarchy. If the child
+Account Group is not present, the Account has no
+children.
+
 @end table
 
 In addition to the above, Accounts contain a key-value pair frame.
+
+@menu
+* Account Types::               
+* General Account API::         
+@end menu
+
+
+@node Account Types, General Account API, Accounts, Accounts
+@subsection Account Types
+@tindex GNCAccountType
+
+Account Types are defined by the @code{GNCAccountType} enumeration.
+Possible values are:
+
+  @table @code
+
+  @item BAD_TYPE, NO_TYPE
+  Both of these values indicate an illegal Account type.
+
+  @item BANK
+  Denotes a savings or checking account held at a bank.
+  Such an account is often interest bearing.
+
+  @item CASH
+  Denotes a shoe-box or pillowcase stuffed with cash. In other
+  words, actual currency held by the user.
+
+  @item CREDIT
+  Denotes credit card accounts.
+
+  @item ASSET
+  Denotes a generic asset account.
+
+
+  @item LIABILITY
+  Denotes a generic liability account.
+
+  @item STOCK
+  A stock account containing stock shares.
+
+  @item MUTUAL
+  A mutual fund account containing fund shares.
+
+  @item CURRENCY
+  Denotes a currency trading account. In many ways, a currency trading
+  account is like a stock trading account, where both quantities
+  and prices are set. However, generally both currency and security
+  are national currencies.
+
+  @item INCOME
+  Denotes an income account. The GnuCash financial model does not
+  use 'categories'. Actual accounts are used instead.
+
+  @item EXPENSE
+  Denotes an expense account.
+
+  @item EQUITY = 10,
+  Denotes an equity account.
+
+  @end table
+
+
+@node General Account API,  , Account Types, Accounts
+@subsection General Account API
+
+@deftypefun {Account *} xaccMallocAccount (void)
+Allocate and initialize an Account. The account must be
+destroyed by calling @code{xaccAccountBeginEdit} followed
+by @code{xaccAccountDestroy}.
+@end deftypefun
+
+@deftypefun void xaccAccountDestroy (Account * @var{account})
+Destroys @var{account} and frees all memory associated with
+it. This routine will also destroy the Account's children.
+You must call @code{xaccAccountBeginEdit} before calling
+this function.
+@end deftypefun
+
+@deftypefun void xaccAccountBeginEdit (Account * @var{account})
+This routine, together with @code{xaccAccountCommitEdit},
+provide a two-phase-commit wrapper for account updates
+much in the same way as @var{xaccTransBeginEdit} and
+@var{xaccTransCommitEdit} do for Transactions.
+@end deftypefun
+
+@deftypefun void xaccAccountCommitEdit (Account * @var{account})
+The counterpart to @var{xaccAccountBeginEdit}.
+@end deftypefun
+
+@deftypefun {Account *} xaccCloneAccountSimple(const Account * @var{from})
+Return a 'copy' of @var{from} that is identical in the type, name, code,
+description, kvp data, and currency. All other fields are the same as an
+account returned by @code{xaccMallocAccount}.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccAccountGetGUID (Account * @var{account})
+Return the globally unique id associated with @var{account}.
+@end deftypefun
+
+@deftypefun {Account *} xaccAccountLookup (const GUID * @var{guid})
+Return the Account associated with @var{guid}, or NULL if there is
+no such Account.
+@end deftypefun
+
+@deftypefun {kvp_frame *} xaccAccountGetSlots (Account * @var{account})
+Return the @code{kvp_frame} associated with @var{account}. User code
+may modify this @code{kvp_frame}, but must not destroy it.
+@end deftypefun
+
+@deftypefun void xaccAccountSetSlots_nc (Account * @var{account}, kvp_frame * @var{frame})
+Set the @code{kvp_frame} associated wih @var{account}. After the call,
+@var{frame} is owned by @var{account}, so don't destroy it.
+@end deftypefun
 
 
 @node Account Groups, GNCBooks, Accounts, Engine

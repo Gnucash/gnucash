@@ -130,11 +130,16 @@ Splits
 * Split Getters::               
 * Split Setters::               
 
-The Transaction Edit Cycle
+Transactions
 
 * General Transaction API::     
 * Transaction Getters::         
 * Transaction Setters::         
+
+Accounts
+
+* Account Types::               
+* General Account API::         
 
 GNCBooks
 

@@ -141,8 +141,7 @@ xaccCloneAccountSimple(const Account *from)
     Account *ret;
 
     ret = xaccMallocAccount();
-    xaccInitAccount(ret);
-    
+
     ret->type = from->type;
 
     ret->accountName = g_strdup(from->accountName);
@@ -476,6 +475,7 @@ xaccAccountBringUpToDate(Account *acc)
 
 kvp_frame * 
 xaccAccountGetSlots(Account * account) {
+  if (!account) return NULL;
   return(account->kvp_data);
 }
 

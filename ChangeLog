@@ -1,3 +1,17 @@
+2001-05-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/engine/Account.c (xaccCloneAccountSimple): remove
+	redundant initialization
+	(xaccAccountGetSlots): handle NULL
+
+	* src/engine/Account.h: fix docs
+
+	* src/engine/AccountP.h: fix spelling errors in comments
+
 2001-05-16  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/html-utilities.scm ((gnc:html-make-empty-data-warning)): 
@@ -123,12 +137,13 @@
 
 2001-05-15  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* doc/sgml/C/xacc-reports.sgml, xacc-about.sgml, xacc-dateinput.sgml, 
-	xacc-account-summary.sgml, xacc-balancesheet.sgml, xacc-common-report-options.sgml
+	* doc/sgml/C/xacc-reports.sgml, xacc-about.sgml,
+	xacc-dateinput.sgml, xacc-account-summary.sgml,
+	xacc-balancesheet.sgml, xacc-common-report-options.sgml
 	xacc-mainwin.sgml: update documentation for new features.
 
-	* doc/sgml/C/xacc-asset-liability-barcharts.sgml: new file.  Placeholder
-	at this stage.
+	* doc/sgml/C/xacc-asset-liability-barcharts.sgml: new file.
+	Placeholder at this stage.
 
 	* doc/sgml/C/xacc-asset-liability-piecharts.sgml, xacc-gnome-mdi.sgml,
 	xacc-income-expense-barcharts.sgml, xacc-income-expense-piecharts.sgml,

@@ -81,16 +81,13 @@ typedef enum
   CURRENCY = 7, 
   /* The currency account type indicates that the account is a
    * currency trading account.  In many ways, a currency trading
-   * account is like a stock trading account, where both quantities
-   * and prices are set.
+   * account is like a stock trading account, where both values
+   * and share quantities are set.
    */
 
   INCOME = 8,
   EXPENSE = 9,
-  /* Income and expense accounts are used to denote income and expenses.
-   * Thus, when data in these accountsare displayed, the sign of the
-   * splits (entries) must be reversed.
-   */ 
+  /* Income and expense accounts are used to denote income and expenses. */
 
   EQUITY = 10,
   /* Equity account is used to balance the balance sheet. */
@@ -122,14 +119,14 @@ gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
  * provide a two-phase-commit wrapper for account updates. 
- * They are incompletely implemented ....
+ * They are incompletely implemented.
  *
  * The xaccAccountDestroy() routine can be used to get rid of an
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
-Account     *xaccMallocAccount (void);
-Account * xaccCloneAccountSimple(const Account *from);
+Account    * xaccMallocAccount (void);
+Account    * xaccCloneAccountSimple(const Account *from);
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);
@@ -140,8 +137,6 @@ void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 /*
  * The xaccAccountGetGUID() subroutine will return the
  *    globally unique id associated with that account.
- *    User code should use this id to reference accounts
- *    and *not* the integer account id below.
  *
  * The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
@@ -222,7 +217,7 @@ void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
  * The future API will associate only one thing with an account:
  * the 'commodity'.  Use xaccAccountGetCommodity() to fetch it.
  */
-/* these two funcs take control of thier gnc_commodity args.  Don't free */
+/* these two funcs take control of their gnc_commodity args. Don't free */
 void xaccAccountSetCurrency (Account *account, gnc_commodity *currency);
 void xaccAccountSetSecurity (Account *account, gnc_commodity *security);
 void xaccAccountSetCurrencySCU (Account *account, int frac);

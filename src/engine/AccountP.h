@@ -57,23 +57,23 @@ struct _account {
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  /* The accountName is an arbitrary string assinged by the user. 
+  /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
-   * is displayed by the GUI as the account mnomenic. 
+   * is displayed by the GUI as the account mnemonic. 
    */
   char     *accountName;
 
-  /* The accountCode is an arbitary string assigned by the user.
+  /* The accountCode is an arbitrary string assigned by the user.
    * It is intended to be reporting code that is a synonym for the 
-   * accountName. Typically, it will be a numeric value tht follows 
+   * accountName. Typically, it will be a numeric value that follows 
    * the numbering assignments commonly used by accountants, such 
    * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
    * for detail accounts.
    */
   char     *accountCode;
 
-  /* The description is an arbitraary string assigned by the user. 
-   * It is intended to be a longer, 1-5 sentance description of what
+  /* The description is an arbitrary string assigned by the user. 
+   * It is intended to be a longer, 1-5 sentence description of what
    * this account is all about.
    */
   char     *description;
