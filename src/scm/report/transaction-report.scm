@@ -12,7 +12,6 @@
 
 (let ()
 
-  
   (define-syntax addto!
     (syntax-rules ()
 		  ((_ alist element) (set! alist (cons element alist)))))
@@ -61,7 +60,8 @@
 	(gnc:html-table-append-row!
 	 table
 	 (list heading-cell))
-	 (apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
+	 (apply set-last-row-style!
+                (cons table (cons "tr" subheading-style)))))
 
     (define (render-account-name-subheading split table width subheading-style)
       (add-subheading-row (gnc:account-get-name 
@@ -69,7 +69,8 @@
 			  table width subheading-style))
 
     (define (render-account-code-subheading split table width subheading-style)
-	(add-subheading-row (gnc:account-get-code (gnc:split-get-account split))
+	(add-subheading-row (gnc:account-get-code
+                             (gnc:split-get-account split))
 			    table width subheading-style))
 
     (define (render-corresponding-account-name-subheading 
@@ -385,8 +386,8 @@
 		 
                   (vector 'corresponding-acc-name-subtotal
                         (N_ "Transfer from/to (w/subtotal) by code ")
-                        (N_ "Sort and subtotal by account transferred \
-from/to's code"))
+                        (N_ "Sort and subtotal by account transferred
+ from/to's code"))
 				
 		  (vector 'corresponding-acc-code
                         (N_ "Transfer from/to code")
@@ -394,8 +395,8 @@ from/to's code"))
 		
 		  (vector 'corresponding-acc-code-subtotal
                         (N_ "Transfer from/to (w/subtotal)")
-                        (N_ "Sort and subtotal by account \
-transferred from/to's code"))
+                        (N_ "Sort and subtotal by account
+ transferred from/to's code"))
 		
                   (vector 'amount
                         (N_ "Amount")
@@ -485,8 +486,8 @@ transferred from/to's code"))
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Other Account")
-      "h" (N_ "Display the other account?\
-(if this is a split transaction, this parameter is guessed).") #f))
+      "h" (N_ "Display the other account?
+ (if this is a split transaction, this parameter is guessed).") #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -541,7 +542,7 @@ transferred from/to's code"))
     (gnc:register-trep-option
      (gnc:make-color-option
       (N_ "Colors")  (N_ "Split Odd")
-      "c" (N_ "Background color for odd-numbered splits (or main splits in a\
+      "c" (N_ "Background color for odd-numbered splits (or main splits in a
  multi-line report)")
       (list #xff #xff #xff 0)
       255 
@@ -550,9 +551,8 @@ transferred from/to's code"))
     (gnc:register-trep-option
      (gnc:make-color-option
       (N_ "Colors") (N_ "Split Even")
-      "d" (N_ "Background color for even-numbered splits\
-(or \"other\" splits in a\
- multi-line report)")
+      "d" (N_ "Background color for even-numbered splits
+ (or \"other\" splits in a multi-line report)")
      (list #xff #xff #xff 0)
       255
       #f))
@@ -589,7 +589,7 @@ transferred from/to's code"))
 			      (- unsigned-balance)
 			      unsigned-balance)))
      (string-append acc-name
-    " ("
+                    " ("
                     (_ "Opening Balance")
 		    " "
 		    (gnc:amount->string signed-balance
@@ -719,8 +719,15 @@ transferred from/to's code"))
                                     secondary-subtotal-collector 
                                     total-collector)
       (if (null? splits)
-          (add-subtotal-row table width total-collector grand-total-style)
-            
+          (begin
+            (gnc:html-table-append-row!
+             table
+             (list
+              (gnc:make-html-table-cell/size
+               1 width (gnc:make-html-text (gnc:html-markup-hr)))))
+
+            (add-subtotal-row table width total-collector grand-total-style))
+
 	  (let* ((current (car splits))
                  (current-row-style (if multi-rows? main-row-style
                                         (if odd-row? main-row-style 

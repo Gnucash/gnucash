@@ -427,19 +427,29 @@ gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
 
   if (error_loc == NULL)
   {
-    if (pnum)
+    if (gnc_numeric_check (pnum->value))
     {
-      if (value_p)
-        *value_p = gnc_numeric_reduce (pnum->value);
+      if (error_loc_p != NULL)
+        *error_loc_p = (char *) expression;
 
-      if (!result.variable_name)
-        g_free (pnum);
+      last_error = NUMERIC_ERROR;
     }
+    else
+    {
+      if (pnum)
+      {
+        if (value_p)
+          *value_p = gnc_numeric_reduce (pnum->value);
 
-    if (error_loc_p != NULL)
-      *error_loc_p = NULL;
+        if (!result.variable_name)
+          g_free (pnum);
+      }
 
-    last_error = PARSER_NO_ERROR;
+      if (error_loc_p != NULL)
+        *error_loc_p = NULL;
+
+      last_error = PARSER_NO_ERROR;
+    }
   }
   else
   {
@@ -479,5 +489,7 @@ gnc_exp_parser_error_string (void)
       return _("Not a variable");
     case PARSER_OUT_OF_MEMORY:
       return _("Out of memory");
+    case NUMERIC_ERROR:
+      return _("Numeric error");
   }
 }

@@ -953,12 +953,12 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     amount = gnc_amount_edit_new();
     hbox = gtk_object_get_data(tdo, "amount_hbox");
     gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
     xferData->amount_edit = amount;
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
     gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
                        GTK_SIGNAL_FUNC(gnc_xfer_amount_update_cb), xferData);
-    gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
     date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     hbox = gtk_object_get_data(tdo, "date_hbox");

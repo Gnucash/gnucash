@@ -139,7 +139,7 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
 GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
-                                       gnc_commodity *comodity,
+                                       gnc_commodity *commodity,
                                        gnc_commodity *currency);
 
 /* Return all prices that match the given commodity, currency, and

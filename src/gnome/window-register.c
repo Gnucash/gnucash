@@ -47,6 +47,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
+#include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnucash-sheet.h"
@@ -97,6 +98,8 @@ struct _RegWindow
   GtkWidget * cleared_label;
   GtkWidget * reconciled_label;
   GtkWidget * future_label;
+  GtkWidget * shares_label;
+  GtkWidget * value_label;
 
   GnucashRegister *reg;
 
@@ -906,7 +909,7 @@ gnc_register_create_tool_bar (RegWindow *regData)
       N_("Open a report window for this register"),
       reportCB, 
       NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ATTACH,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_GREEN,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
@@ -948,77 +951,80 @@ gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 }
 
 static GtkWidget *
-gnc_register_create_summary_bar (RegWindow *regData)
+add_summary_label (GtkWidget *summarybar, const char *label_str)
 {
-  SplitRegister *reg;
-  GtkWidget *summarybar;
   GtkWidget *hbox;
   GtkWidget *label;
-
-  reg = xaccLedgerDisplayGetSR (regData->ledger);
-
-  if (reg->type >= NUM_SINGLE_REGISTER_TYPES)
-  {
-    regData->cleared_label = NULL;
-    regData->balance_label = NULL;
-    regData->reconciled_label = NULL;
-    regData->future_label = NULL;
-
-    return NULL;
-  }
-
-  summarybar = gtk_hbox_new (FALSE, 4);
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new (_("Present:"));
+  label = gtk_label_new (label_str);
   gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
   label = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  regData->balance_label = label;
   gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
+  return label;
+}
 
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+static GtkWidget *
+gnc_register_create_summary_bar (RegWindow *regData)
+{
+  gboolean has_shares;
+  GtkWidget *summarybar;
+  GtkWidget *hbox;
+  GtkWidget *label;
 
-  label = gtk_label_new (_("Future:"));
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  regData->cleared_label    = NULL;
+  regData->balance_label    = NULL;
+  regData->reconciled_label = NULL;
+  regData->future_label     = NULL;
+  regData->shares_label     = NULL;
+  regData->value_label      = NULL;
 
-  label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  regData->future_label = label;
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  if (xaccLedgerDisplayType (regData->ledger) >= LD_SUBACCOUNT)
+    return NULL;
 
+  {
+    Account *account;
+    GNCAccountType atype;
 
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+    account = xaccLedgerDisplayLeader (regData->ledger);
+    atype = xaccAccountGetType (account);
 
-  label = gtk_label_new (_("Cleared:"));
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    switch (atype)
+    {
+      case STOCK:
+      case MUTUAL:
+      case CURRENCY:
+        has_shares = TRUE;
+        break;
 
-  label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  regData->cleared_label = label;
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+      default:
+        has_shares = FALSE;
+        break;
+    }
+  }
 
+  summarybar = gtk_hbox_new (FALSE, 4);
 
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
-
-  label = gtk_label_new (_("Reconciled:"));
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-  label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
-  regData->reconciled_label = label;
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  if (!has_shares)
+  {
+    regData->balance_label    = add_summary_label (summarybar, _("Present:"));
+    regData->future_label     = add_summary_label (summarybar, _("Future:"));
+    regData->cleared_label    = add_summary_label (summarybar, _("Cleared:"));
+    regData->reconciled_label = add_summary_label (summarybar,
+                                                   _("Reconciled:"));
+  }
+  else
+  {
+    regData->shares_label     = add_summary_label (summarybar, _("Shares:"));
+    regData->value_label      = add_summary_label (summarybar,
+                                                   _("Current Value:"));
+  }
 
   return summarybar;
 }
@@ -2125,6 +2131,23 @@ gnc_account_present_balance (Account *account)
   return gnc_numeric_zero ();
 }
 
+static GNCPrice *
+account_latest_price (Account *account)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  gnc_commodity *security;
+  gnc_commodity *currency;
+
+  security = xaccAccountGetSecurity (account);
+  currency = xaccAccountGetCurrency (account);
+
+  book = gncGetCurrentBook ();
+  pdb = gnc_book_get_pricedb (book);
+
+  return gnc_pricedb_lookup_latest (pdb, security, currency);
+}
+
 static void
 gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
@@ -2232,6 +2255,52 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     gnc_set_label_color (regData->future_label, amount);
     gtk_label_set_text (GTK_LABEL (regData->future_label), string);
+  }
+
+  if (regData->shares_label != NULL)
+  {
+    print_info = gnc_account_quantity_print_info (leader, TRUE);
+
+    amount = xaccAccountGetShareBalance (leader);
+    if (reverse)
+      amount = gnc_numeric_neg (amount);
+
+    xaccSPrintAmount (string, amount, print_info);
+
+    gnc_set_label_color (regData->shares_label, amount);
+    gtk_label_set_text (GTK_LABEL (regData->shares_label), string);
+  }
+
+  if (regData->value_label != NULL)
+  {
+    GNCPrice *price;
+
+    price = account_latest_price (leader);
+    if (!price)
+    {
+      gnc_set_label_color (regData->value_label, gnc_numeric_zero ());
+      gtk_label_set_text (GTK_LABEL (regData->value_label),
+                          _("<No information>"));
+    }
+    else
+    {
+      gnc_commodity *currency = gnc_price_get_currency (price);
+
+      print_info = gnc_commodity_print_info (currency, TRUE);
+
+      amount = xaccAccountGetShareBalance (leader);
+      if (reverse)
+        amount = gnc_numeric_neg (amount);
+
+      amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
+                                gnc_commodity_get_fraction (currency),
+                                GNC_RND_ROUND);
+
+      xaccSPrintAmount (string, amount, print_info);
+
+      gnc_set_label_color (regData->value_label, amount);
+      gtk_label_set_text (GTK_LABEL (regData->value_label), string);
+    }
   }
 
   gnc_reg_set_window_name (regData);

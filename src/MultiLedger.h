@@ -59,6 +59,8 @@ typedef enum
 /* returns the 'lead' account of a ledger display, or NULL if none. */
 Account * xaccLedgerDisplayLeader (xaccLedgerDisplay *ld);
 
+LedgerDisplayType xaccLedgerDisplayType (xaccLedgerDisplay *ld);
+
 /* get and set the user data associated with the ledger */
 void xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data);
 gpointer xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld);

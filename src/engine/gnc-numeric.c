@@ -734,6 +734,10 @@ gnc_numeric_reduce(gnc_numeric in) {
   int      three_count = 0;
   gnc_numeric out;
 
+  if(gnc_numeric_check(in)) {
+    return gnc_numeric_error(GNC_ERROR_ARG);
+  }
+
   /* the strategy is to eliminate common factors from 
    * 2 up to 'max', where max is the smaller of the smaller
    * part of the fraction and the sqrt of the larger part of 

@@ -74,7 +74,6 @@
 
       (if (opt-val (N_ "Display") (N_ "Price"))
           (vector-set! column-list 6 #t))
-;   (gnc:warn "Amount Display" (opt-val (N_ "Display") (N_ "Amount")))
 
       (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
         (if (eq? amount-setting 'single)
@@ -85,9 +84,8 @@
 	      (vector-set! column-list 9 #t))))
       (if (opt-val (N_ "Display") (N_ "Running Balance"))
           (vector-set! column-list 10 #t))
-                                        ;  (gnc:debug "Column list:" column-list)
-      column-list))
 
+      column-list))
 
   (define (make-heading-list column-vector)
     (let ((heading-list '()))
@@ -124,7 +122,7 @@
 	   (currency (gnc:account-get-commodity account))
 	   (damount (gnc:split-get-share-amount split))
 	   (split-value (gnc:make-gnc-monetary currency damount)))
-      
+
       (if (used-date column-vector)
 	  (addto! row-contents (gnc:timepair-to-datestring 
 				(gnc:transaction-get-date-posted parent))))
@@ -145,14 +143,20 @@
 	   row-contents 
 	   (gnc:make-gnc-monetary currency (gnc:split-get-share-price split))))
       (if (used-amount-single column-vector)
-	  (addto! row-contents split-value))
+	  (addto! row-contents
+                  (gnc:make-html-table-header-cell/markup "number-cell"
+                                                          split-value)))
       (if (used-amount-double-positive column-vector)
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
-	      (addto! row-contents split-value)
+	      (addto! row-contents
+                      (gnc:make-html-table-header-cell/markup "number-cell"
+                                                              split-value))
 	      (addto! row-contents " ")))
       (if (used-amount-double-negative column-vector)
 	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
-	      (addto! row-contents (gnc:monetary-neg split-value))
+	      (addto! row-contents
+                      (gnc:make-html-table-header-cell/markup
+                       "number-cell" (gnc:monetary-neg split-value)))
 	      (addto! row-contents " ")))
       (if (used-running-balance column-vector)
 	  (addto! row-contents
@@ -224,7 +228,7 @@
      (gnc:make-multichoice-option
       (N_ "Display") (N_ "Amount")
       "i" (N_ "Display the amount?")  
-      'single
+      'double
       (list
        (vector 'none (N_ "None") (N_ "No amount display"))
        (vector 'single (N_ "Single") (N_ "Single Column Display"))
@@ -300,11 +304,16 @@
       (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
 
   (define (make-split-table splits options)
-    (define (add-subtotal-row table width subtotal-collector 
-                              subtotal-style)
+    (define (add-subtotal-row table width subtotal-collector subtotal-style)
       (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f))
             (blanks (make-list (- width 1) #f)))
+
+        (gnc:html-table-append-row!
+         table
+         (list
+          (gnc:make-html-table-cell/size
+           1 width (gnc:make-html-text (gnc:html-markup-hr)))))
 
         (for-each (lambda (currency)
                     (gnc:html-table-append-row! 
@@ -452,4 +461,3 @@
     (gnc:option-set-value qo query)
     (gnc:option-set-value jo journal?)
     (gnc:report-window (gnc:make-report "Register" options))))
-

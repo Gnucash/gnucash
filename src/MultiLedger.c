@@ -90,6 +90,15 @@ xaccLedgerDisplayLeader (xaccLedgerDisplay *ld)
   return xaccAccountLookup (&ld->leader);
 }
 
+LedgerDisplayType
+xaccLedgerDisplayType (xaccLedgerDisplay *ld)
+{
+  if (!ld)
+    return -1;
+
+  return ld->ld_type;
+}
+
 void
 xaccLedgerDisplaySetUserData (xaccLedgerDisplay *ld, gpointer user_data)
 {
