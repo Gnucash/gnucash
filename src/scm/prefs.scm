@@ -672,7 +672,7 @@ Each element must be a string representing a directory or a symbol
 where 'default expands to the default path, and 'current expands to
 the current value of the path.")
     (lambda (var value)
-      (let ((result (gnc:_expand-load-path_ value)))
+      (let ((result (gnc:expand-load-path value)))
         (if (list? result)
             (list result)
             #f)))

@@ -27,7 +27,6 @@ gnc_regular_scm_files = \
   structure.scm \
   substring-search.scm \
   testbed.scm \
-  text-export.scm \
   tip-list.scm \
   tip-of-the-day.scm \
   utilities.scm \

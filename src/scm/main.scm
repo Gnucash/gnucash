@@ -70,7 +70,6 @@
   (gnc:depend "command-line.scm")
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
-  (gnc:depend "text-export.scm")
   (gnc:depend "main-window.scm")
   (gnc:depend "commodity-import.scm")
   (gnc:depend "printing/print-check.scm")

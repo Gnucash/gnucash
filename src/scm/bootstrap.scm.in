@@ -63,33 +63,6 @@
       (require 'format)
       (define simple-format format)))
 
-(define (build-path firstelement . restofpath)
-  (define separator "/")
-  (define (bp first rest)
-    (if (null? rest)
-	first
-	(bp 	
-	 (string-append first separator (car rest))
-	 (cdr rest))))
-  (if (null? restofpath)
-      firstelement
-      (bp 
-       (string-append firstelement separator
-		      (car restofpath))
-       (cdr restofpath))))
-
-;; In pre 1.3 guile's you have to do this manually, unless you call
-;; scm_shell, which we can't.
-(if (or (string=? (version) "1.2")
-        (string=? (version) "1.3a"))
-    (let ((boot-file (if (assoc 'prefix %guile-build-info)
-                         (string-append (cdr (assoc 'prefix %guile-build-info))
-                                        "/share/guile/"
-                                        (version)
-                                        "/ice-9/boot-9.scm")
-                         "/usr/share/guile/1.3a/ice-9/boot-9.scm")))
-      (primitive-load boot-file)))
-
 ;; Automatically generated defaults
 (define gnc:_config-dir-default_ "@-GNC_CONFIGDIR-@")
 (define gnc:_share-dir-default_ "@-GNC_SHAREDIR-@")
@@ -171,6 +144,21 @@
 
 ;;; Set up gnc:load.
 
+(define (build-path firstelement . restofpath)
+  (define separator "/")
+  (define (bp first rest)
+    (if (null? rest)
+	first
+	(bp 	
+	 (string-append first separator (car rest))
+	 (cdr rest))))
+  (if (null? restofpath)
+      firstelement
+      (bp 
+       (string-append firstelement separator
+		      (car restofpath))
+       (cdr restofpath))))
+
 (define (gnc:find-in-directories file directories)
   "Find file named 'file' anywhere in 'directories'.  'file' must be a
 string and 'directories' must be a list of strings."
@@ -182,40 +170,13 @@ string and 'directories' must be a list of strings."
        (result #f))
       ((or (null? rest) finished?) result)
 
-    (let ((file-name (string-append (car rest) "/" file)))
+    (let ((file-name (build-path (car rest) file)))
       (gnc:debug "  checking for " file-name)
       (if (access? file-name F_OK)
           (begin
             (gnc:debug "found file " file-name)
             (set! finished? #t)
             (set! result file-name))))))
-
-; (define (gnc:load name)
-;   "Name must be a string.  The system attempts to locate the file of
-; the given name and load it.  The system will attempt to locate the
-; file in all of the directories specified by gnc:*load-path*."
-
-;   (define (make-thunk file-name)
-;     (lambda () (primitive-load file-name) #t))
-
-;   (define (handler key . args)
-;     (apply display-error #f (current-error-port) args)
-;     #f)
-
-;   (let* ((path (if (list? gnc:*load-path*)
-;                    gnc:*load-path*
-;                    (gnc:config-var-value-get gnc:*load-path*)))
-;          (file-name (gnc:find-in-directories name path)))
-;     (if (not file-name)
-;         #f
-;         (if 
-;          (catch #t (make-thunk file-name) handler)
-;          (begin
-;            (gnc:debug "loaded file " file-name)
-;            #t)
-;          (begin
-;            (gnc:warn "failure loading " file-name)
-;            #f)))))
 
 (define (gnc:load name)
   "Name must be a string.  The system attempts to locate the file of
@@ -230,7 +191,7 @@ file in all of the directories specified by gnc:*load-path*."
         #f
         (primitive-load file-name))))
 
-(define (gnc:_expand-load-path_ new-path)
+(define (gnc:expand-load-path new-path)
   (let ((load-path-interpret
          (lambda (item)
            (cond ((string? item) (list item))
@@ -258,4 +219,4 @@ file in all of the directories specified by gnc:*load-path*."
                      (call-with-input-string
                       load-path-override (lambda (p) (read p)))
                      '(default))))
-  (set! gnc:*load-path* (gnc:_expand-load-path_ new-path)))
+  (set! gnc:*load-path* (gnc:expand-load-path new-path)))
