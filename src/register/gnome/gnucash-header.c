@@ -54,8 +54,8 @@ gnucash_header_update (GnomeCanvasItem *item, double *affine,
 
         item->x1 = 0;
         item->y1 = 0;
-        item->x2 = INT_MAX/2 -1;
-        item->y2 = INT_MAX/2 -1;
+        item->x2 = (INT_MAX / 2) - 1;
+        item->y2 = (INT_MAX / 2) - 1;
 }
 
 
@@ -89,8 +89,8 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         /* Assume all cells have the same color */
-        gdk_gc_set_foreground(header->gc, bg_color);
-        gdk_draw_rectangle(drawable, header->gc, TRUE, 0, 0, width, height);
+        gdk_gc_set_foreground (header->gc, bg_color);
+        gdk_draw_rectangle (drawable, header->gc, TRUE, 0, 0, width, height);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_foreground (header->gc, &gn_black);
@@ -98,9 +98,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                             style->dimensions->width,
                             style->dimensions->height);
         gdk_draw_line (drawable, header->gc, -x,
-                       style->dimensions->height - 1,
+                       style->dimensions->height + 1,
                        style->dimensions->width - 1,
-                       style->dimensions->height - 1);
+                       style->dimensions->height + 1);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_background (header->gc, &gn_white);
@@ -144,6 +144,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         y_offset = ((h / 2) +
                                     (((font->ascent + font->descent) / 2) -
                                      font->descent));
+                        y_offset++;
 
                         switch (gnc_table_get_align (table, virt_loc)) {
                         default:
@@ -278,7 +279,7 @@ gnucash_header_reconfigure (GnucashHeader *header)
         sheet->width = header->style->dimensions->width;
 
         w = header->style->dimensions->width;
-        h = header->style->dimensions->height;
+        h = header->style->dimensions->height + 2;
 
         if (header->height != h || header->width != w ||
             header->style != old_style) {

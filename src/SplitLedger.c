@@ -4026,10 +4026,15 @@ xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
 
   if (cursor_class == CURSOR_CLASS_SPLIT)
   {
-    borders->top    = MIN (borders->top,    CELL_BORDER_LINE_LIGHT);
-    borders->bottom = MIN (borders->bottom, CELL_BORDER_LINE_LIGHT);
+    borders->top    = CELL_BORDER_LINE_LIGHT;
+    borders->bottom = CELL_BORDER_LINE_LIGHT;
     borders->left   = MIN (borders->left,   CELL_BORDER_LINE_LIGHT);
     borders->right  = MIN (borders->right,  CELL_BORDER_LINE_LIGHT);
+
+    if (virt_loc.phys_col_offset == vcell->cellblock->start_col)
+      borders->left = CELL_BORDER_LINE_LIGHT;
+    if (virt_loc.phys_col_offset == vcell->cellblock->stop_col)
+      borders->right = CELL_BORDER_LINE_LIGHT;
   }
 }
 

@@ -65,27 +65,27 @@
 #include <g-wrap-runtime-guile.h>
 
 /** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format_cb(void *);
+static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
-static void gnc_configure_account_separator_cb(void *);
+static void gnc_configure_account_separator_cb(gpointer);
 static void gnc_configure_account_separator(void);
-static void gnc_configure_register_colors_cb(void *);
+static void gnc_configure_register_colors_cb(gpointer);
 static void gnc_configure_register_colors(void);
-static void gnc_configure_register_borders_cb(void *);
+static void gnc_configure_register_borders_cb(gpointer);
 static void gnc_configure_register_borders(void);
-static void gnc_configure_reverse_balance_cb(void *);
+static void gnc_configure_reverse_balance_cb(gpointer);
 static void gnc_configure_reverse_balance(void);
-static void gnc_configure_auto_raise_cb(void *);
+static void gnc_configure_auto_raise_cb(gpointer);
 static void gnc_configure_auto_raise(void);
-static void gnc_configure_negative_color_cb(void *);
+static void gnc_configure_negative_color_cb(gpointer);
 static void gnc_configure_negative_color(void);
-static void gnc_configure_auto_decimal_cb(void *);
+static void gnc_configure_auto_decimal_cb(gpointer);
 static void gnc_configure_auto_decimal(void);
-static void gnc_configure_auto_decimal_places_cb(void *);
+static void gnc_configure_auto_decimal_places_cb(gpointer);
 static void gnc_configure_auto_decimal_places(void);
-static void gnc_configure_register_font_cb(void *);
+static void gnc_configure_register_font_cb(gpointer);
 static void gnc_configure_register_font(void);
-static void gnc_configure_register_hint_font_cb(void *);
+static void gnc_configure_register_hint_font_cb(gpointer);
 static void gnc_configure_register_hint_font(void);
 
 /** GLOBALS *********************************************************/
@@ -772,7 +772,7 @@ gnc_configure_reverse_balance(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_auto_decimal_cb(void *not_used)
+gnc_configure_auto_decimal_cb(gpointer not_used)
 {
   gnc_configure_auto_decimal();
 }
@@ -863,7 +863,7 @@ gnc_configure_register_font(void)
  *  Returns: Nothing
  */
 static void
-gnc_configure_register_hint_font_cb(void *not_used)
+gnc_configure_register_hint_font_cb(gpointer not_used)
 {
   gnc_configure_register_hint_font();
 }

@@ -315,7 +315,7 @@ transaction.") #t))
  (gnc:make-color-option
   (N_ "Register Colors") (N_ "Primary active color")
   "d" (N_ "The background color for the current register row")
-  (list #xff #xf7 #xba 0)
+  (list #xff #xf0 #x99 0)
   255
   #f))
 
@@ -339,7 +339,7 @@ transaction.") #t))
  (gnc:make-color-option
   (N_ "Register Colors") (N_ "Split active color")
   "g" (N_ "The background color for the current split row in the register")
-  (list #xff #xf2 #xab 0)
+  (list #xff #xf0 #x99 0)
   255
   #f))
 

@@ -173,13 +173,13 @@ gnucash_cursor_configure (GnucashCursor *cursor)
 			       "GnomeCanvasGroup::y", (double)y,
 			       NULL);
 
+        cursor->w = w;
+        cursor->h = h + 1;
+
         item->x1 = cursor->x = x;
         item->y1 = cursor->y = y;
-        cursor->w = w;
-        cursor->h = h;
-
         item->x2 = x + w;
-        item->y2 = y + h;
+        item->y2 = y + h + 1;
 
         item = cursor->cursor[GNUCASH_CURSOR_BLOCK];
         block_cursor = GNUCASH_ITEM_CURSOR (item);
@@ -190,12 +190,12 @@ gnucash_cursor_configure (GnucashCursor *cursor)
         gnome_canvas_item_i2w (item, &wx, &wy);
         gnome_canvas_w2c (canvas, wx, wy, &block_cursor->x, &block_cursor->y);
         block_cursor->w = w;
-        block_cursor->h = h;
+        block_cursor->h = h + 1;
 
         item->x1 = block_cursor->x;
         item->y1 = block_cursor->y;
         item->x2 = block_cursor->x + w;
-        item->y2 = block_cursor->y + h;
+        item->y2 = block_cursor->y + h + 1;
 
         item = cursor->cursor[GNUCASH_CURSOR_CELL];
         cell_cursor = GNUCASH_ITEM_CURSOR(item);
@@ -242,9 +242,9 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx + 1, dy, dw - 2, dh);
-			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx, dy, dw, dh);
+					    dx, dy, dw, dh - 1);
+                        gdk_draw_line (drawable, cursor->gc,
+                                       dx, dy + dh, dx + dw, dy + dh);
 
 			break;
 
@@ -259,8 +259,6 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 
-			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-					    dx+1, dy+1, dw-2, dh-2);
 			gdk_draw_rectangle (drawable, cursor->gc, FALSE,
 					    dx, dy, dw, dh);
         }

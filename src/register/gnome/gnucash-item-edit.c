@@ -168,18 +168,18 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->bg_color2 = &gn_dark_gray;
         info->fg_color2 = &gn_white;
 
-        editable = GTK_EDITABLE(item_edit->editor);
+        editable = GTK_EDITABLE (item_edit->editor);
         cursor_pos = editable->current_pos;
-        start_pos = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_pos = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+        start_pos = MIN (editable->selection_start_pos,
+                         editable->selection_end_pos);
+        end_pos = MAX (editable->selection_start_pos,
+                       editable->selection_end_pos);
 
-        text = gtk_entry_get_text(GTK_ENTRY (item_edit->editor));
-        text_len = strlen(text);
+        text = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
+        text_len = strlen (text);
 
-        info->all_text = g_new0(GdkWChar, text_len + 1);
-        text_len = gdk_mbstowcs(info->all_text, text, text_len);
+        info->all_text = g_new0 (GdkWChar, text_len + 1);
+        text_len = gdk_mbstowcs (info->all_text, text, text_len);
         info->total_len = text_len;
 
         info->text_1 = info->all_text;
@@ -237,6 +237,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_y  = (dy + (hd / 2) +
                          (((info->font->ascent + info->font->descent) / 2)
                           - info->font->descent));
+        info->text_y++;
 
         info->cursor_x  = info->text_x1 + pre_cursor_width;
         info->cursor_y1 = info->text_y - info->font->ascent;
@@ -420,15 +421,12 @@ item_edit_realize (GnomeCanvasItem *item)
 
         if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->realize)
                 (*GNOME_CANVAS_ITEM_CLASS
-		 (item_edit_parent_class)->realize)(item);
+		 (item_edit_parent_class)->realize) (item);
 
         item_edit = ITEM_EDIT (item);
         window = GTK_WIDGET (canvas)->window;
 
         item_edit->gc = gdk_gc_new (window);
-
-        if (gdk_im_ready ())
-                g_warning ("xim ready");
 
 #ifdef USE_XIM
         if (gdk_im_ready () &&
@@ -512,6 +510,33 @@ item_edit_realize (GnomeCanvasItem *item)
                 }
         }
 #endif
+}
+
+
+static void
+item_edit_unrealize (GnomeCanvasItem *item)
+{
+        ItemEdit *item_edit;
+
+        item_edit = ITEM_EDIT (item);
+
+#ifdef USE_XIM
+        if (item_edit->ic)
+        {
+                gdk_ic_destroy (item_edit->ic);
+                item_edit->ic = NULL;
+        }
+
+        if (item_edit->ic_attr)
+        {
+                gdk_ic_attr_destroy (item_edit->ic_attr);
+                item_edit->ic_attr = NULL;
+        }
+#endif
+
+        if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->unrealize)
+                (*GNOME_CANVAS_ITEM_CLASS
+		 (item_edit_parent_class)->unrealize) (item);
 }
 
 
@@ -1077,6 +1102,7 @@ item_edit_class_init (ItemEditClass *item_edit_class)
         item_class->point       = item_edit_point;
         item_class->event       = item_edit_event;
         item_class->realize     = item_edit_realize;
+        item_class->unrealize   = item_edit_unrealize;
 }
 
 

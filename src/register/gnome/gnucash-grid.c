@@ -457,6 +457,7 @@ draw_cell (GnucashGrid *grid,
 
         y_offset = ((height / 2) +
                     (((font->ascent + font->descent) / 2) - font->descent));
+        y_offset++;
 
         switch (gnc_table_get_align (table, virt_loc))
         {
