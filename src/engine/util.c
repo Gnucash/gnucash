@@ -2,6 +2,7 @@
  * util.c -- utility functions that are used everywhere else for    *
  *           xacc (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -77,6 +78,52 @@ int
 safe_strcmp (const char * da, const char * db) {
    SAFE_STRCMP (da, db);
    return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+/* inverse of strtoul */
+
+#define MAX_DIGITS 50
+
+char *
+ultostr (unsigned long val, int base)
+{
+  char buf[MAX_DIGITS];
+  unsigned long broke[MAX_DIGITS];
+  int i;
+  unsigned long places=0, reval;
+  
+  if ((2>base) || (36<base)) return NULL;
+
+  /* count digits */
+  places = 0;
+  for (i=0; i<MAX_DIGITS; i++) {
+     broke[i] = val;
+     places ++;
+     val /= base;
+     if (0 == val) break;
+  }
+
+  /* normalize */
+  reval = 0;
+  for (i=places-2; i>=0; i--) {
+    reval += broke[i+1];
+    reval *= base;
+    broke[i] -= reval;
+  }
+
+  /* print */
+  for (i=0; i<places; i++) {
+    if (10>broke[i]) {
+       buf[places-1-i] = 0x30+broke[i];  /* ascii digit zero */
+    } else {
+       buf[places-1-i] = 0x41-10+broke[i];  /* ascii capaital A */
+    }
+  }
+  buf[places] = 0x0;
+
+  return strdup (buf);
 }
 
 /********************************************************************\

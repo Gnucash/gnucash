@@ -108,6 +108,14 @@ size_t dcoresize();
 
 int safe_strcmp (const char * da, const char * db);
 
+/********************************************************/
+/* the ultostr() subroutihne is the inverse of strtoul().
+ *    It accepts a number and prints it in the indicated base.
+ *    The returned string should be freed when done.
+ */
+
+char * ultostr (unsigned long val, int base);
+
 /** PROTOTYPES ******************************************************/
 
 #define PRTSYM 0x1
