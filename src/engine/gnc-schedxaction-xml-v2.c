@@ -416,7 +416,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail( tree, FALSE );
 
-    sx = xaccSchedXactionMalloc( NULL );
+    sx = xaccSchedXactionMalloc( NULL);
 
     /* FIXME: this should be removed somewhere near 1.8 release time. */
     {
@@ -470,6 +470,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             sx->template_acct = acct;
     }
 
+    xaccSchedXactionSetDirtyness(sx, FALSE);
     xmlFreeNode( tree );
 
     return successful;

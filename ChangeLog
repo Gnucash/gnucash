@@ -1,3 +1,23 @@
+2001-08-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/SchedXaction.{ch}: modified indenting to 2 spaces.
+
+	* src/engine/SchedXaction.{ch}: Added member for recording if
+	SX has changed since last save. 
+	(xaccSchedXactionSetDirtyness) provide API for modifying that field.
+	All setter functions changed to set member appropriately.
+	(xaccSchedXactionSetSlot, XaccSchedXactionGetSlot): New functions
+
+	* src/engine/gnc-book-p.h (struct gnc_book_struct): Added field
+	for recording whether sx list had changed.
+
+	* src/engine/gnc-book.c: (gnc_book_marked_save): mark the SX-related
+	stuff as saved.
+	(gnc_book_not_saved): look up the SX-related stuff as well.
+
+	* src/engine/gnc-schedxaction-v2.c: once a scheduled transaction is
+	loaded by the backend, mark it as not saved.
+
 2001-07-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-utilities.scm: Fixed bug with sub-balances in

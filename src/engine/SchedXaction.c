@@ -50,7 +50,7 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
+xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
 {
         AccountGroup        *ag;
         char                *name;
@@ -68,6 +68,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
         sx->autoCreateNotify = FALSE;
         sx->advanceCreateDays = 0;
         sx->advanceRemindDays = 0;
+	sx->dirty = TRUE;
 
 /*        sx->templateSplits = NULL; */
         /* create a new template account for our splits */
@@ -124,20 +125,6 @@ xaccSchedXactionFree( SchedXaction *sx )
         gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
         xaccRemoveEntity( &sx->guid );
 
-	/* 
-	 * FIXME: commented out at this stage because I haven't figured
-	 * out exactly how to get rid of sx->templateSplits yet
-	 * but I don't want to be deleting these transactions twice . . .
-	 */
-
-#if 0
-        g_list_foreach( sx->templateSplits,
-                        sxprivtransactionListMapDelete,
-                        NULL );
-
-        g_list_free( sx->templateSplits );
-
-#endif
         if ( sx->name )
                 g_free( sx->name );
 
@@ -185,6 +172,7 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 
         xaccFreqSpecFree( sx->freq );
         sx->freq = fs;
+	sx->dirty = TRUE;
 }
 
 gchar *
@@ -201,6 +189,7 @@ xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
                 g_free( sx->name );
                 sx->name = NULL;
         }
+	sx->dirty = TRUE;
         sx->name = g_strdup( newName );
 }
 
@@ -214,6 +203,7 @@ void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
         sx->start_date = *newStart;
+	sx->dirty = TRUE;
 }
 
 gboolean
@@ -231,13 +221,15 @@ xaccSchedXactionGetEndDate( SchedXaction *sx )
 void
 xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
 {
-        if ( g_date_valid( newEnd ) ) {
-                if ( g_date_compare( newEnd, &sx->start_date ) < 0 ) {
-                        /* FIXME:error
-                           error( "New end date before start date" ); */
-                }
-        }
-        sx->end_date = *newEnd;
+  if ( g_date_valid( newEnd ) ) {
+    if ( g_date_compare( newEnd, &sx->start_date ) < 0 ) {
+      /* FIXME:error
+	 error( "New end date before start date" ); */
+    }
+  }
+  
+  sx->end_date = *newEnd;
+  sx->dirty = TRUE;
 }
 
 GDate*
@@ -249,44 +241,76 @@ xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 void
 xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 {
-        sx->last_date = *newLastOccur;
+  sx->last_date = *newLastOccur;
+  sx->dirty = TRUE;
+  return;
 }
 
 gboolean
 xaccSchedXactionHasOccurDef( SchedXaction *sx )
 {
-        return ( xaccSchedXactionGetNumOccur( sx ) != 0 );
+  return ( xaccSchedXactionGetNumOccur( sx ) != 0 );
 }
 
 gint
 xaccSchedXactionGetNumOccur( SchedXaction *sx )
 {
-        return sx->num_occurances_total;
+  return sx->num_occurances_total;
 }
 
 void
 xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 {
-        sx->num_occurances_remain = sx->num_occurances_total = newNum;
+  sx->num_occurances_remain = sx->num_occurances_total = newNum;
+  sx->dirty = TRUE;
         
 }
 
 gint
 xaccSchedXactionGetRemOccur( SchedXaction *sx )
 {
-        return sx->num_occurances_remain;
+  return sx->num_occurances_remain;
 }
 
 void
 xaccSchedXactionSetRemOccur( SchedXaction *sx,
                              gint numRemain )
 {
-        /* FIXME This condition can be tightened up */
-        if ( numRemain > sx->num_occurances_total ) {
-                /* FIXME:error
-                   error( "more remaining occurances than total" ); */
-        }
-        sx->num_occurances_remain = numRemain;
+  /* FIXME This condition can be tightened up */
+  if ( numRemain > sx->num_occurances_total ) {
+    /* FIXME:error
+       error( "more remaining occurances than total" ); */
+  }
+  sx->num_occurances_remain = numRemain;
+  sx->dirty = TRUE;
+  return;
+}
+
+
+kvp_value *
+xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
+{
+  if (!sx) 
+  {
+    return NULL;
+  }
+
+  return kvp_frame_get_slot(sx->kvp_data, slot);
+}
+
+void
+xaccSchedXactionSetSlot( SchedXaction *sx, 
+			 const char *slot,
+			 const kvp_value *value )
+{
+  if (!sx)
+  {
+    return;
+  }
+
+  kvp_frame_set_slot( sx->kvp_data, slot, value );
+  sx->dirty = TRUE;
+  return;
 }
 
 kvp_frame*
@@ -298,7 +322,8 @@ xaccSchedXactionGetSlots( SchedXaction *sx )
 void
 xaccSchedXactionSetSlots( SchedXaction *sx, kvp_frame *frm )
 {
-        sx->kvp_data = frm;
+  sx->kvp_data = frm;
+  sx->dirty = TRUE;
 }
 
 const GUID*
@@ -310,7 +335,8 @@ xaccSchedXactionGetGUID( SchedXaction *sx )
 void
 xaccSchedXactionSetGUID( SchedXaction *sx, GUID g )
 {
-        sx->guid = g;
+  sx->guid = g;
+  sx->dirty = TRUE;
 }
 
 void
@@ -318,8 +344,9 @@ xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
-        *outAutoCreate = sx->autoCreateOption;
-        *outNotify     = sx->autoCreateNotify;
+  *outAutoCreate = sx->autoCreateOption;
+  *outNotify     = sx->autoCreateNotify;
+  return;
 }
 
 void
@@ -327,20 +354,24 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                gboolean newAutoCreate,
                                gboolean newNotify )
 {
-        sx->autoCreateOption = newAutoCreate;
-        sx->autoCreateNotify = newNotify;
+ 
+  sx->autoCreateOption = newAutoCreate;
+  sx->autoCreateNotify = newNotify; 
+  sx->dirty = TRUE;
+  return;
 }
 
 gint
 xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
 {
-        return sx->advanceCreateDays;
+  return sx->advanceCreateDays;
 }
 
 void
 xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 {
-        sx->advanceCreateDays = createDays;
+  sx->advanceCreateDays = createDays;
+  sx->dirty = TRUE;
 }
 
 gint
@@ -352,7 +383,8 @@ xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 {
-        sx->advanceRemindDays = reminderDays;
+  sx->dirty = TRUE;
+  sx->advanceRemindDays = reminderDays;
 }
 
 GDate
@@ -436,6 +468,21 @@ xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits )
 {
         g_return_if_fail( sx );
         sx->templateSplits = newSplits;
+	return;
 }
 
 #endif
+
+
+void
+xaccSchedXactionSetDirtyness( SchedXaction *sx, gboolean dirty_p)
+{
+  sx->dirty = dirty_p;
+  return;
+}
+
+gboolean
+xaccSchedXactionIsDirty(SchedXaction *sx)
+{
+  return sx->dirty;
+}

@@ -13,6 +13,7 @@ X XMLv2 I/O
 X need policy for start-dates in GNCFrequency
 X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
   X also needs to deal with >28-mday values WRT last-occur date + multipliers
+X Engine ...Init() functions should be private.
 X would like "don't even tell me you instantiated it, just fscking do
   it!" option for non-manual-conf SXes
 
@@ -21,7 +22,6 @@ X would like "don't even tell me you instantiated it, just fscking do
 ### '.' = to-do, 'X' = done
 ##################################################
 
-. Engine ...Init() functions should be private.
 
 . FreqSpec.c
   . xaccFreqSpecGetFreqStr [display] needs to go away [?]
@@ -33,7 +33,7 @@ X create a template register
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.
 
-. Hook into 'book data changed' save-on-exit decision.
+. Hook into 'book data changed' save-on-exit decision 
 
 . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
 

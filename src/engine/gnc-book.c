@@ -129,6 +129,7 @@ gnc_book_init (GNCBook *book)
   book->pricedb = gnc_pricedb_create();
 
   book->sched_xactions = NULL;
+  book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup();
 
   book->book_id = NULL;
@@ -217,8 +218,10 @@ gnc_book_get_schedxactions( GNCBook *book )
 void
 gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 {
-        if ( book == NULL ) return;
-        book->sched_xactions = newList;
+  if ( book == NULL ) return;
+  book->sched_xactions = newList;
+  book->sx_notsaved = TRUE;
+  return;
 }
 
 AccountGroup *
@@ -264,11 +267,35 @@ gnc_book_get_url (GNCBook *book)
 
 /* ---------------------------------------------------------------------- */
 
+static void
+mark_sx_clean(gpointer data, gpointer user_data)
+{
+  SchedXaction *sx = (SchedXaction *) data;
+  xaccSchedXactionSetDirtyness(sx, FALSE);
+  return;
+}
+
+static void
+book_sxns_mark_saved(GNCBook *book)
+{
+  book->sx_notsaved = FALSE;
+  g_list_foreach(gnc_book_get_schedxactions(book),
+		 mark_sx_clean, 
+		 NULL);
+  return;
+}
 void
 gnc_book_mark_saved(GNCBook *book)
 {
+  /* FIXME: is this the right behaviour if book == NULL? */
+  g_return_if_fail(book);
   xaccGroupMarkSaved(gnc_book_get_group(book));
   gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+  
+  xaccGroupMarkSaved(gnc_book_get_template_group(book));
+  book_sxns_mark_saved(book);
+  
+  return;
 }
 
 
@@ -502,6 +529,29 @@ gnc_book_load (GNCBook *book)
   return TRUE;
 }
 
+
+
+static gboolean
+book_sxlist_notsaved(GNCBook *book)
+{
+  GList *sxlist;
+  SchedXaction *sx;
+  if(book->sx_notsaved
+     ||
+     xaccGroupNotSaved(book->template_group)) return TRUE;
+ 
+  for(sxlist = book->sched_xactions;
+      sxlist != NULL;
+      sxlist = g_list_next(sxlist))
+  {
+    sx = (SchedXaction *) (sxlist->data);
+    if (xaccSchedXactionIsDirty( sx ))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+  
 /* ---------------------------------------------------------------------- */
 
 gboolean
@@ -511,7 +561,9 @@ gnc_book_not_saved(GNCBook *book)
 
   return(xaccGroupNotSaved(book->topgroup)
          ||
-         gnc_pricedb_dirty(book->pricedb));
+         gnc_pricedb_dirty(book->pricedb)
+	 ||
+	 book_sxlist_notsaved(book));
 }
 
 /* ---------------------------------------------------------------------- */

@@ -54,6 +54,13 @@ struct gnc_book_struct
   GList *sched_xactions;
   AccountGroup *template_group;
 
+  /*
+   * should be set true if sched_xactions is changed
+   * before saving
+   */
+
+  gboolean sx_notsaved; 
+ 
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
    */
@@ -80,6 +87,12 @@ struct gnc_book_struct
 
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
+
+/*
+ * used by backends to mark the notsaved as FALSE just after 
+ * loading.  Do not use otherwise!
+ */
+
 
 void gnc_book_mark_saved(GNCBook *book);
 

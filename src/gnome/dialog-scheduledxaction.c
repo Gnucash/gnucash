@@ -838,7 +838,7 @@ new_button_clicked( GtkButton *b, gpointer d )
 {
         SchedXactionDialog        *sxd;
         SchedXaction        *tmpSX =
-                xaccSchedXactionMalloc( gncGetCurrentBook() );
+                xaccSchedXactionMalloc( gncGetCurrentBook());
         SchedXactionEditorDialog *sxed;
 
         sxd = (SchedXactionDialog*)d;
