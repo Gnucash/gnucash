@@ -1,3 +1,7 @@
+2003-03-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
+
 2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: 
