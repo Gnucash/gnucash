@@ -75,6 +75,8 @@ struct _pgend {
    /* callback hooks are saved in snr during disables */
    Backend snr;    
 
+   /* my postgres backend pid, used for telling apart notifies */
+   int my_pid;
 
    /* scratch space for constructing queries */ 
    int bufflen;

@@ -212,7 +212,8 @@ done:
           " WHERE accountGuid='");
    p = stpcpy (p, guid_string);
    p = stpcpy (p, "';\n");
-   p = stpcpy (p, "COMMIT WORK;\n");
+   p = stpcpy (p, "COMMIT WORK;\n"
+                  "NOTIFY gncCheckpoint;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
@@ -262,7 +263,8 @@ pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
    p = stpcpy (p, dbuf);
    p = stpcpy (p, "';\n");
 
-   p = stpcpy (p, "COMMIT WORK;\n");
+   p = stpcpy (p, "COMMIT WORK;\n"
+                  "NOTIFY gncCheckpoint;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 }
@@ -290,7 +292,8 @@ pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
                   "  AND gncCheckpoint.accountGuid = gncEntry.accountGuid "
                   "  AND date_start <= gncTransaction.date_posted "
                   "  AND date_end > gncTransaction.date_posted;\n"
-                  "COMMIT WORK;\n");
+                  "COMMIT WORK;\n"
+                  "NOTIFY gncCheckpoint;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 }

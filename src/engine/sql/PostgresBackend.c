@@ -235,6 +235,137 @@ static const char *table_drop_str =
 
 /* ============================================================= */
 /* ============================================================= */
+/*              EVENT NOTIFICATION HANDLER                       */
+/* ============================================================= */
+/* ============================================================= */
+
+#define NOTIFY_ACCOUNT(be,x) {			\
+   if ((MODE_POLL == be->session_mode) ||	\
+       (MODE_EVENT == be->session_mode))	\
+   {						\
+      SEND_QUERY (be,"NOTIFY gncAccount;", x);	\
+      FINISH_QUERY(be->connection);		\
+   }						\
+}
+
+#define NOTIFY_CHECKPOINT(be,x) {		\
+   if ((MODE_POLL == be->session_mode) ||	\
+       (MODE_EVENT == be->session_mode))	\
+   {						\
+      SEND_QUERY (be,"NOTIFY gncCheckpoint;", x);\
+      FINISH_QUERY(be->connection);		\
+   }						\
+}
+
+#define NOTIFY_PRICE(be,x) {			\
+   if ((MODE_POLL == be->session_mode) ||	\
+       (MODE_EVENT == be->session_mode))	\
+   {						\
+      SEND_QUERY (be,"NOTIFY gncPrice;", x);	\
+      FINISH_QUERY(be->connection);		\
+   }						\
+}
+
+#define NOTIFY_TRANSACTION(be,x) {		\
+   if ((MODE_POLL == be->session_mode) ||	\
+       (MODE_EVENT == be->session_mode))	\
+   {						\
+      SEND_QUERY (be,"NOTIFY gncTransaction;", x);\
+      FINISH_QUERY(be->connection);		\
+   }						\
+}
+
+static void 
+pgendHandleEvents (PGBackend *be)
+{
+   PGnotify *note;
+   char *p;
+   int do_account=0, do_checkpoint=0, do_price=0;
+   int do_session=0, do_transaction=0;
+
+   /* no need to handle events in single-modes, since
+    * they shouldn't be generated nor received. */
+   if ((MODE_SINGLE_UPDATE == be->session_mode) ||
+       (MODE_SINGLE_FILE == be->session_mode))
+   {
+      note = PQnotifies (be->connection);
+      while (note)
+      {
+         note = PQnotifies (be->connection);
+      }
+      return;
+   }
+
+   /* consolidate multiple event notifications */
+   note = PQnotifies (be->connection);
+   while (note)
+   {
+      /* ignore notifies from myself */
+      if (note->be_pid == be->my_pid)
+      {
+         note = PQnotifies (be->connection);
+         continue;
+      }
+
+      PINFO ("%s", note->relname);
+
+      if (0 == strcasecmp ("gncTransaction", note->relname))
+      {
+         do_transaction ++;
+      } 
+      else
+      if (0 == strcasecmp ("gncCheckpoint", note->relname))
+      {
+         do_checkpoint ++;
+      } 
+      else
+      if (0 == strcasecmp ("gncPrice", note->relname))
+      {
+         do_price ++;
+      } 
+      else
+      if (0 == strcasecmp ("gncAccount", note->relname))
+      {
+         do_account ++;
+      } 
+      else
+      if (0 == strcasecmp ("gncSession", note->relname))
+      {
+         do_session ++;
+      } 
+      else
+      {
+         PERR ("unexpected notify %s", note->relname)
+      }
+
+      /* get the next one */
+      note = PQnotifies (be->connection);
+   } 
+
+   /* handle each event type */
+   if (do_account)
+   {
+   }
+
+   if (do_checkpoint)
+   {
+   }
+
+   if (do_price)
+   {
+   }
+
+   if (do_session)
+   {
+   }
+
+   if (do_transaction)
+   {
+   }
+}
+
+/* ============================================================= */
+/* ============================================================= */
 /*               ACCOUNT AND GROUP STUFF                         */
 /*      (UTILITIES FIRST, THEN SETTERS, THEN GETTERS)            */
 /* ============================================================= */
@@ -370,7 +501,8 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
    /* reset the write flags again */
    xaccClearMarkDownGr (grp, 0);
 
-   p = "COMMIT;";
+   p = "COMMIT;\n"
+       "NOTIFY gncAccount;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
    LEAVE(" ");
@@ -792,7 +924,8 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 
    pgendStoreTransactionNoLock (be, trans, TRUE);
 
-   bufp = "COMMIT;";
+   bufp = "COMMIT;\n"
+          "NOTIFY  gncTransaction;";
    SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
@@ -847,7 +980,8 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
    xaccGroupBeginStagedTransactionTraversals(grp);
    xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
 
-   p = "COMMIT;";
+   p = "COMMIT;\n"
+       "NOTIFY gncTransaction;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -947,6 +1081,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
                     guid_to_string (trans_guid));
              if (jrows != nrows) xaccTransCommitEdit (trans);
              xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+             pgendHandleEvents(be);
              pgendEnable(be);
              gnc_engine_resume_events();
              return 0;
@@ -1012,6 +1147,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        * punt for now ... */
       PERR ("no such transaction in the database. This is unexpected ...\n");
       xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
+      pgendHandleEvents(be);
       pgendEnable(be);
       gnc_engine_resume_events();
       return 0;
@@ -1020,6 +1156,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 
    {
+      pgendHandleEvents(be);
       pgendEnable(be);
       gnc_engine_resume_events();
       return engine_data_is_newer;
@@ -1180,6 +1317,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    xaccTransCommitEdit (trans);
 
    /* re-enable events to the backend and GUI */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1245,6 +1383,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    }
 
    /* re-enable events to the backend and GUI */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1475,6 +1614,7 @@ pgendRunQuery (Backend *bend, Query *q)
     * mark it all as having been saved. */
    xaccGroupMarkSaved (be->topgroup);
 
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1511,6 +1651,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    }
    g_list_free(xaction_list);
 
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 }
@@ -1618,7 +1759,8 @@ pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
 
    pgendStorePriceDBNoLock (be, prdb);
 
-   p = "COMMIT;";
+   p = "COMMIT;\n"
+       "NOTIFY gncPrice;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
    LEAVE(" ");
@@ -1802,6 +1944,7 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    gnc_pricedb_mark_clean (look->prdb);
 
    /* re-enable events */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1878,7 +2021,8 @@ pgend_account_commit_edit (Backend * bend,
       pgendStoreAccountNoLock (be, acct, FALSE, FALSE);
    }
 
-   p = "COMMIT;";
+   p = "COMMIT;\n"
+       "NOTIFY gncAccount;";
    SEND_QUERY (be,p,336);
    FINISH_QUERY(be->connection);
 
@@ -2003,7 +2147,8 @@ pgend_trans_commit_edit (Backend * bend,
    /* if we are here, we are good to go */
    pgendStoreTransactionNoLock (be, trans, FALSE);
 
-   bufp = "COMMIT;";
+   bufp = "COMMIT;\n"
+          "NOTIFY gncTransaction;";
    SEND_QUERY (be,bufp,334);
    FINISH_QUERY(be->connection);
 
@@ -2143,7 +2288,8 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
       pgendStorePriceNoLock (be, pr, FALSE);
    }
 
-   bufp = "COMMIT;";
+   bufp = "COMMIT;\n"
+          "NOTIFY gncPrice;";
    SEND_QUERY (be,bufp,335);
    FINISH_QUERY(be->connection);
 
@@ -2223,6 +2369,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
    }
 
    /* re-enable events */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -2301,6 +2448,7 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
    pgendGetAllPrices (be, prdb);
 
    /* re-enable events */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -2345,6 +2493,52 @@ pgendSyncPriceDBSingleFile (Backend *bend, GNCPriceDB *prdb)
    FINISH_QUERY(be->connection);
 
    LEAVE(" ");
+}
+
+/* ============================================================= */
+/* find the backend pid */
+
+static void 
+pgendSessionGetPid (PGBackend *be)
+{
+   PGnotify *note;
+   char *p;
+   long int r;
+
+   r = random ();
+   
+   p = be->buff; *p=0;
+   sprintf (p, "LISTEN \"%ld\";\n NOTIFY \"%ld\";", r, r);
+   SEND_QUERY (be, be->buff, );
+   FINISH_QUERY(be->connection);
+   note = PQnotifies (be->connection);
+   if (!note)
+   {
+      PERR ("didn't receive notification");
+      return;
+   }
+
+   be->my_pid = note->be_pid;
+   PINFO ("postgres backend pid =%d", be->my_pid);
+
+   p = be->buff; *p=0;
+   sprintf (p, "UNLISTEN \"%ld\";", r);
+   SEND_QUERY (be, be->buff, );
+   FINISH_QUERY(be->connection);
+}
+
+/* ============================================================= */
+
+static void 
+pgendSessionSetupNotifies (PGBackend *be)
+{
+   char *p;
+
+   p = "LISTEN gncSession;\nLISTEN gncAccount;\n"
+       "LISTEN gncPrice;\nLISTEN gncTransaction;\n"
+       "LISTEN gncCheckpoint;";
+   SEND_QUERY (be, p, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
@@ -2536,7 +2730,8 @@ pgendSessionValidate (PGBackend *be, int break_lock)
       retval = TRUE;
    }
 
-   p = "COMMIT;";
+   p = "COMMIT;\n"
+       "NOTIFY gncSession;";
    SEND_QUERY (be,p, FALSE);
    FINISH_QUERY(be->connection);
 
@@ -2560,7 +2755,8 @@ pgendSessionEnd (PGBackend *be)
    p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
                   "WHERE sessionGuid='");
    p = guid_to_string_buff (be->sessionGuid, p);
-   p = stpcpy (p, "';");
+   p = stpcpy (p, "';\n"
+                  "NOTIFY gncSession;");
   
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
@@ -2664,6 +2860,7 @@ pgend_book_load_poll (Backend *bend)
    pgendGroupGetAllBalances (be, grp, ts);
 
    /* re-enable events */
+   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -3174,6 +3371,10 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
 
          case MODE_POLL:
             pgendEnable(be);
+
+            pgendSessionGetPid (be);
+            pgendSessionSetupNotifies (be);
+
             be->be.book_load = pgend_book_load_poll;
             be->be.price_load = pgend_price_load_poll;
             be->be.account_begin_edit = NULL;
@@ -3188,9 +3389,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             // be->be.sync = pgendSync;
             be->be.sync = NULL;
             be->be.sync_price = pgendSyncPriceDB;
-            PWARN ("MODE_POLL is alpha -- \n"
-                   "there are a few unfixed bugs, but maybe this mode is usable.\n"
-                   "It might still corrupt your data, we're not sure yet.\n");
+            PWARN ("MODE_POLL is beta -- \n"
+                   "we've fixed all known bugs but that doesn't mean\n"
+                   "there aren't any! If something seems weird, let us know.\n");
             break;
 
          case MODE_EVENT:
@@ -3321,6 +3522,8 @@ pgendInit (PGBackend *be)
    be->dbName = NULL;
    be->username = NULL;
    be->connection = NULL;
+
+   be->my_pid = 0;
 
    be->builder = sqlBuilder_new();
 
