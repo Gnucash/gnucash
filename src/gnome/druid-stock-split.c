@@ -195,6 +195,10 @@ clist_select_row (GtkCList *clist,
 
   account = gtk_clist_get_row_data (clist, row);
 
+  /* Happens when the first row is inserted, before the row data can be added */
+  if (account == NULL)
+    return;
+
   info->account = *xaccAccountGetGUID (account);
 }
 
@@ -538,15 +542,7 @@ gnc_stock_split_druid_view_filter_income (GtkTreeModel *model,
   GNCAccountType type;
 
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
-#ifdef DEBUG
-  printf("Enter %s: model %p, iter %p, data %p, account %p (%s)\n", __FUNCTION__,
-	model, iter, data, account, xaccAccountGetName (account));
-#endif
-
   type = xaccAccountGetType(account);
-#ifdef DEBUG
-  printf("Leave %s: %s filter\n", __FUNCTION__, type == INCOME ? "passed" : "failed");
-#endif
   return (type == INCOME);
 }
 
@@ -556,18 +552,10 @@ gnc_stock_split_druid_view_filter_asset (GtkTreeModel *model,
 					 gpointer      data)
 {
   Account *account;
-    GNCAccountType type;
+  GNCAccountType type;
 
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
-#ifdef DEBUG
-  printf("Enter %s: model %p, iter %p, data %p, account %p (%s)\n", __FUNCTION__,
-	model, iter, data, account, xaccAccountGetName (account));
-#endif
   type = xaccAccountGetType(account);
-#ifdef DEBUG
-  printf("Leave %s: %s filter\n",  __FUNCTION__,
-	 (type == BANK) || (type == CASH) || (type == ASSET) ? "passed" : "failed");
-#endif
   return ((type == BANK) || (type == CASH) || (type == ASSET));
 }
 
@@ -689,8 +677,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   GtkWidget *page;
   GladeXML *xml;
 
-  id_type = xaccGUIDType (&info->account, gnc_get_current_book ());
   old_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
+  id_type = xaccGUIDType (old_account, gnc_get_current_book ());
 
   if (fill_account_list (info, old_account) == 0)
   {

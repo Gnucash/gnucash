@@ -32,6 +32,7 @@ QIF Import
 OFX Import
 MT940 Import (need test data file)
 Export Accounts
+Stock Split Dialog
 
 ========================================
           MISSING MENU ITEMS
@@ -103,10 +104,6 @@ Price Editor - MINIMALLY FUNCTIONAL
 	- Remove/Edit doesn't work
 	- Get Quotes works.
 	- Close doesn't work.
-
-Stock Split Dialog - Mostly done
-	-Fix up accounts presented on "Cash In Lieu" page.  Always
-	shows top two levels.
 
 Find - MINIMALLY FUNCTIONAL
 	- Can generate a query in the dialog.

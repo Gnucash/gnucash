@@ -34,6 +34,13 @@
 	* src/import-export/ofx: Install menus using the new plugin
 	system.  Cleanup some gnome2 errors.
 
+	* src/gnome/druid-stock-split.c: Fix a couple crashes.  Remove
+	debugging.
+
+	* src/gnome-utils/gnc-tree-view-account.c: Flush the tree when a
+	visibility filter is applied.  Prevents unwanted nodes from
+	appearing.
+
 2003-10-24  David Hampton  <hampton@employees.org>
 
 	* lots of files: Sync up at the gnome2-merge-4 tag.
