@@ -5,6 +5,11 @@ Version history:
          o First drop of GTK code from Jeremy Collins
          o First stab at GTK plotting from Rob Browning
          o Stock Ledger cleanup
+         o fixed up configure, gnome and motif makefile targets
+
+ 1.1.5 - 6 March 1998
+         o perl scripts for parsing stock quotes from internet
+           from Chrostopher B. Browne
 
  1.1.4 - 1 March 98
          o gui-independent engine code moved to src/engine
