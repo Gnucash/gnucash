@@ -210,8 +210,6 @@ void xaccQueryAddKVPMatch(Query *q, GSList *path, const KvpValue *value,
                           QofQueryCompare how, QofIdType id_type,
                           QofQueryOp op);
 
-void xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3);
-
 /*******************************************************************
  *  compatibility interface with old Query API 
  *******************************************************************/

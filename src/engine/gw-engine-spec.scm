@@ -1974,11 +1974,11 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-set-sort-order
  '<gw:void>
- "xaccQuerySetSortOrder"
+ "qof_query_set_sort_order"
  '((<gnc:Query*> q)
-   ((gw:glist-of <gnc:id-type> callee-owned) primary)
-   ((gw:glist-of <gnc:id-type> callee-owned) secondary)
-   ((gw:glist-of <gnc:id-type> callee-owned) tertiary))
+   ((gw:gslist-of <gnc:id-type> callee-owned) primary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) secondary)
+   ((gw:gslist-of <gnc:id-type> callee-owned) tertiary))
  "set sort order.")
 
 (gw:wrap-function
