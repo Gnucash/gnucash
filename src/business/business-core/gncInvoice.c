@@ -967,7 +967,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 }
 
 gboolean
-gncInvoiceUnpost (GncInvoice *invoice)
+gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
 {
   Transaction *txn;
   GNCLot *lot;
@@ -1002,6 +1002,25 @@ gncInvoiceUnpost (GncInvoice *invoice)
   invoice->posted_txn = NULL;
   invoice->posted_lot = NULL;
   invoice->date_posted.tv_sec = invoice->date_posted.tv_nsec = 0;
+
+  /* if we've been asked to reset the tax tables, then do so */
+  if (reset_tax_tables) {
+    gboolean reverse = (gncInvoiceGetOwnerType(invoice) == GNC_OWNER_CUSTOMER);
+    GList *iter;
+
+    for (iter = gncInvoiceGetEntries(invoice); iter; iter = iter->next) {
+      GncEntry *entry = iter->data;
+
+      gncEntryBeginEdit(entry);
+      if (reverse)
+	gncEntrySetInvTaxTable(entry,
+			       gncTaxTableGetParent(gncEntryGetInvTaxTable(entry)));
+      else
+	gncEntrySetBillTaxTable(entry,
+			       gncTaxTableGetParent(gncEntryGetBillTaxTable(entry)));
+      gncEntryCommitEdit(entry);
+    }
+  }
 
   mark_invoice (invoice);
   gncInvoiceCommitEdit (invoice);

@@ -82,14 +82,17 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 const char *memo);
 
 /*
- * UNpost this invoice.  This will destroy the posted transaction
- * and return the invoice to its unposted state.  It may leave empty
- * lots out there.
+ * UNpost this invoice.  This will destroy the posted transaction and
+ * return the invoice to its unposted state.  It may leave empty lots
+ * out there.  If reset_tax_tables is TRUE, then it will also revert
+ * all the Tax Tables to the parent, which will potentially change the
+ * total value of the invoice.  It may also leave some orphaned Tax
+ * Table children.
  *
  * Returns TRUE if successful, FALSE if there is a problem.
  */
 gboolean
-gncInvoiceUnpost (GncInvoice *invoice);
+gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 
 /*
  * Apply a payment of "amount" for the owner, between the xfer_account

@@ -10,6 +10,15 @@
 	  dependending on whether the cursor is on the current line or
 	  not.
 
+	* src/business/business-core/gncInvoice.[ch]: change the unpost
+	  API to select whether to repoint the entries to the current tax
+	  table or leave it at the child tax table.
+	* src/business/business-gnome/glade/invoice.glade:
+	* src/business/business-gnome/dialog-invoice.c:
+	  New UI when unposting an invoice -- ask whether to bring the tax
+	  tables up to date or leave the values when it was posted.
+	Fixes #113774
+
 2003-05-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c, dialog-hbcitrans.c,

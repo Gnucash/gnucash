@@ -154,6 +154,9 @@ struct _invoice_window {
 
   GncOwner	proj_cust;
   GncOwner	proj_job;
+
+  /* for Unposting */
+  gboolean	reset_tax_tables;
 };
 
 /* Forward definitions for CB functions */
@@ -202,6 +205,61 @@ static int voucher_last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
+
+/*******************************************************************************/
+/* FUNCTIONS FOR UNPOSTING */
+
+static void
+on_yes_tt_reset_toggled (GtkToggleButton *button, InvoiceWindow *iw)
+{
+  if (!iw) return;
+  if (gtk_toggle_button_get_active(button))
+    iw->reset_tax_tables = TRUE;
+}
+
+static void
+on_no_tt_reset_toggled (GtkToggleButton *button, InvoiceWindow *iw)
+{
+  if (!iw) return;
+  if (gtk_toggle_button_get_active(button))
+    iw->reset_tax_tables = FALSE;
+}
+
+static gboolean
+iw_ask_unpost (InvoiceWindow *iw)
+{
+  GtkWidget *dialog, *toggle, *pixmap;
+  GladeXML *xml;
+  char *s;
+
+  xml = gnc_glade_xml_new ("invoice.glade", "Unpost Message Dialog");
+  dialog = glade_xml_get_widget (xml, "Unpost Message Dialog");
+  toggle = glade_xml_get_widget (xml, "no_tt_reset");
+  pixmap = glade_xml_get_widget (xml, "q_pixmap");
+
+  gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(iw->dialog));
+
+  glade_xml_signal_connect_data (xml, "on_yes_tt_reset_toggled",
+				 GTK_SIGNAL_FUNC (on_yes_tt_reset_toggled), iw);
+  glade_xml_signal_connect_data (xml, "on_no_tt_reset_toggled",
+				 GTK_SIGNAL_FUNC (on_no_tt_reset_toggled), iw);
+  
+  iw->reset_tax_tables = FALSE;
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), TRUE);
+
+  s = gnome_unconditional_pixmap_file("gnome-question.png");
+  if (s) {
+    gnome_pixmap_load_file(GNOME_PIXMAP(pixmap), s);
+    g_free(s);
+  }
+
+  gtk_widget_show_all(dialog);
+
+  return (gnome_dialog_run_and_close(GNOME_DIALOG(dialog)) == 0);
+}
+
+/*******************************************************************************/
+/* INVOICE WINDOW */
 
 static GncInvoice *
 iw_get_invoice (InvoiceWindow *iw)
@@ -608,7 +666,6 @@ gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
-  char * msg;
   gboolean result;
 
   invoice = iw_get_invoice (iw);
@@ -616,15 +673,12 @@ gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data)
     return;
 
   /* make sure the user REALLY wants to do this! */
-  msg = _("Unposting this Invoice will delete the posted transaction.  "
-	  "Are you sure you want to unpost it?");
-  result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
-
+  result = iw_ask_unpost(iw);
   if (!result) return;
 
   /* Attempt to unpost the invoice */
   gnc_suspend_gui_refresh ();
-  result = gncInvoiceUnpost (invoice);
+  result = gncInvoiceUnpost (invoice, iw->reset_tax_tables);
   gnc_resume_gui_refresh ();
   if (!result) return;
 
