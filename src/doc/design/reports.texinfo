@@ -1,4 +1,4 @@
-@node Reports, Function Index, Register, Top
+@node Reports, User Preferences, Register, Top
 @chapter Reports
 
 To define a report, your report must have 

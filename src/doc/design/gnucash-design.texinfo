@@ -39,7 +39,7 @@ paragraph not being relevant to the printed manual).
 @subtitle Edition @value{EDITION} for Version @value{VERSION}
 @author Rob Browning
 @author Bill Gribble
-@author Robert Graham Merkel
+@author Robert Merkel
 @author Dave Peticolas
 @author Linas Vepstas
 @page
@@ -68,6 +68,7 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 * Engine::                      
 * Register::                    
 * Reports::                     
+* User Preferences::            
 * Function Index::              
 * Data Type Index::             
 * Concept Index::               
@@ -107,6 +108,13 @@ Cells
 
 * BasicCell::                   
 
+User Preferences
+
+* Option Databases::            
+* Option Types::                
+* Option Creation::             
+* Option Values::               
+
 @end detailmenu
 @end menu
 
@@ -116,6 +124,7 @@ Cells
 @include engine.texinfo
 @include register.texinfo
 @include reports.texinfo
+@include user-preferences.texinfo
 @include function-index.texinfo
 @include type-index.texinfo
 @include concept-index.texinfo

@@ -8,4 +8,5 @@ gnucash_design_TEXINFOS = concept-index.texinfo \
                           register.texinfo \
                           reports.texinfo \
                           top-level.texinfo \
-                          type-index.texinfo
+                          type-index.texinfo \
+			  user-preferences.texinfo

@@ -1,0 +1,289 @@
+@node User Preferences, Function Index, Reports, Top
+@chapter User Preferences
+
+The options system is used to obtain user preferences, both globally,
+and when displaying a report.  A wide variety of option types are
+supported, so it should be possible to create an option for just about
+any property the user might wish to specify.  New option types can be
+added if necessary, but as the process requires detailed knowledge of
+gnucash internals and GTK+/GNOME, it is not documented here.
+
+At present, users are most likely to come across the options system when
+designing custom reports, and are consequently mostly going to use the
+Scheme interface.  There is also a C interface to much of the options
+system which is used to access preferences for the UI, but it is not yet documented..
+
+@menu
+* Option Databases::            
+* Option Types::                
+* Option Creation::             
+* Option Values::               
+@end menu
+
+@node Option Databases, Option Types, User Preferences, User Preferences
+@section Options Databases
+
+The options for a particular report are placed in an @dfn{options
+database}.  For doing a report, the option-generator function must
+return an options database.  The function
+
+@code{(gnc:new-option)}
+
+returns a new, empty options database that you can then add options to.
+
+Options are organised into sections, which are each given a title string
+such as "Register" or "International".  The UI displays each section on
+a seperate page.  Each section has a number of options.  Each option has
+a name that uniquely identifies it in that section, and an alphabetic
+@dfn{sort tag} that determines the relative ordering of the options for
+display.
+
+@node Option Types, Option Creation, Option Databases, User Preferences
+@section Option Types
+
+Sometimes, GnuCash requires the user to specify true/false properties.
+Others properties most easily specified by selections from a list,
+others from a number, others still by selecting dates, or one or more
+accounts in the account hierachy, or even colors.  Gnucash supports all
+of these and more:
+
+@table @code
+
+@item boolean
+
+These are displayed as a checkbox by the UI.  They are used to specify
+yes/no answers.
+
+@item string
+
+The UI provides a text entry box where arbitrary text may be entered.
+
+@item font
+
+This allows users to select fonts from those available on the system.
+
+@item currency
+
+For specifying a currency such as "USD", "AUD", "UKP" etc.
+
+@item date
+
+For specifying dates.  Depending on exactly what is required, you can
+choose to let the user specify an @dfn{absolute} date, a @dfn{relative}
+date such as "one month ago", or "start of the current accounting
+period", or let the user choose how whether to specify the required date
+in relative or absolute terms.
+
+@item account-list
+
+For selecting a particular account or accounts.  The UI displays a tree
+of the account hierachy.
+
+@item multichoice
+
+For selecting one of a group of choices.
+
+@item list
+
+Similar to the multichoice option, but allows the selection of one
+or more items from the group.
+
+@item number-range
+
+For specifying a numeric quantity.  The programmer can bound the range
+and precision of the quantity.
+
+@item internal
+
+An option that isn't specified through an options dialog box.  For
+instance, this is used to store the window dimensions so that they are
+preserved along with other preferences.
+@end table
+
+@node Option Creation, Option Values, Option Types, User Preferences
+@section Option Creation
+
+To add an option to an options database, you first create that option,
+then register it with the database.  For example, to create a simple
+checkbox-style boolean option, you would use
+@code{gnc:make-simple-boolean-option} to create the option.  Once
+created, you can then register the option.  With
+@code{gnc:register-option}.
+
+@deffn Function gnc:register-option database option
+Register @var{option} in options database @var{database}
+@end deffn
+
+The example below shows how to create an options database, then register
+a boolean option with it:
+
+@example
+(define gnc:*hello-world-options* (gnc:new-options))
+(gnc:register-option gnc:*hello-world-options*
+     (gnc:make-simple-boolean-option
+      "Hello, World!" "Boolean Option"
+      "a" "This is a boolean option." #t))
+@end example
+
+@subsection Option Creation Functions
+
+@deffn Function gnc:make-simple-boolean-option section name sort-tag documentation-string default-value
+
+Creates a boolean option, with option section @var{section} and name
+@var{name} specified as strings.  Note that the section and name strings
+uniquely specify the option for the option database that they get
+registered to, and are used for looking up the option when the value is
+required.  @var{sort-tag} is a string tag that specifies the relative
+order when displaying the options.  Options are displayed top to bottom
+in case-sensitive alphabetical order.  @var{documentation-string} is a
+string containing a short string describing the purpose of the option,
+which the UI displays as a tooltip.  @var{default-value} should be a
+boolean value indicating the default value of this option.
+
+Note that @var{section}, @var{name}, @var{sort-tag}, and
+@var{documentation-string} are common to all the following functions.
+@end deffn
+
+@deffn Function gnc:make-complex-boolean-option section name sort-tag documentation-string default-value setter-function-called-cb option-widget-changed-cb
+
+As above, but the function specified in @var{option-widget-changed-cb}
+is called when the GUI widget representing the option is changed (the
+user clicks on the toggle button), and @var{setter-function-called-cb}
+is called when the option's setter is called (when the user selects "OK"
+or "Apply").
+
+One use for having a non-false @var{option-widget-changed-cb} is to make
+another option mutable (in concert with @code{gnc:option-set-sensitive},
+discussed later).
+@end deffn
+
+@deffn Function gnc:make-string-option section name sort-tag documentation-string default-value
+
+Make an option where the user can specify a string.  
+
+@end deffn
+
+@deffn Function gnc:make-date-option section name sort-tag documentation-string default-getter show-time subtype relative-date-list
+
+Create a date option.  There are three different variations of date
+options, specified by the variable @var{subtype}, which should be one of
+@code{'relative}, @code{'absolute}, or @code{both}.  @code{absolute}
+date options allow the selection of a specific day/month/year
+combination.  @code{relative} date options allow the selection from a
+list of different dates specified in relation to the current date, such
+as "today", "start of the current month", or "six months ago".  Finally
+@code{both} allows the user to choose either using absolute or relative
+date options.
+@end deffn
+@var{default-getter} should be a @dfn{thunk} (Scheme function taking
+no arguments) that returns a pair.  The car of the pair should contain
+either @code{'relative} or @code{'absolute}, to indicate whether the
+default value is relative or absolute.  If the car is @code{relative},
+then the cdr should be a one of the relative date symbols listed in
+@var{relative-date-list}.  If the car is @code{absolute}, it should be a
+timepair containing the default date/time.
+
+@var{show-time} is a boolean that indicates whether when selecting an
+absolute date, the user can specify a time.  It is ignored if the
+@var{subtype} is @code{relative}.
+
+@var{relative-date-list} is a list of symbols that indicate the relative
+dates permitted.  The symbols used must have been previously defined as
+indicating a particular relative date.  @var{gnc:relative-dates}
+contains a list of symbols that have already been set up for the most
+common relative dates.  FIXME: document relative date system.
+
+@deffn Function gnc:make-multichoice-option section name sort-tag documentation-string default-value value-list
+
+Create a multichoice option.  @var{value-list} is a list of vectors of
+length 3, each representing a different choice.  Each vector should
+contain - in the following order:
+@itemize
+@item
+A symbol identifying this choice.
+@item
+A string naming this choice - this string will be the main one
+displayed.
+@item
+A string describing this choice slightly more fully.  This string will
+appear as a tooltip.
+@end itemize
+
+@end deffn
+
+@deffn Function gnc:make-list-option section name sort-key documentation-string default-values value-list
+
+Like a multichoice option, but users can select one or more values from
+a list.  @var{default-values} is a list of selected values instead of
+just one.
+
+@end deffn
+
+@deffn Function gnc:make-font-option section name sort-tag documentation-string default-value
+
+Allow the user to specify the font.  Font options store font descriptions as strings, 
+like the X Logical Font Description.  You must provide a default value, as there is unfortunately
+no easy way for the GUI to pick a default value.
+
+@end deffn
+
+@deffn Function gnc:make-color-option section name sort-key documentation-string default-value
+scale use-alpha?
+
+Allow the user to select a color.  The default value should be a list of
+length 4 containing the red, green, blue, and alpha channel values for
+the color.  The scale is the maximum value for a channel, and the
+use-alpha? is a boolean that, if false, disregards the alpha channel
+(note: if you don't know what an alpha channel is, you don't need it).
+
+@end deffn
+
+@deffn Function gnc:make-currency-option section name sort-tag documentation-string default-value
+
+Let the user specify a currency using a currency code.  The GUI provides a specialised widget
+for currency selection.
+
+@end deffn
+
+@deffn Function gnc:make-account-list-option section name sort-tag documentation-string default-getter value-validator multiple-selection 
+@end deffn
+
+@deffn Function gnc:make-internal-option section name sort-key documentation-string default-value
+Create an option that isn't controlled through the options GUI.  This is
+used mainly by the GUI to store state that should be preserved from 
+session to session but isn't really configurable from a dialog box, 
+such as the size of the gnucash main window.  
+@end deffn
+
+@deffn Function gnc:make-number-range-option section name sort-tag documentation-string default-value lower-bound upper-bound num-decimals step-size
+
+Create an option for selecting a numerical quantity.  lower-bound and upper-bound specify the domain of acceptable figures, and num-decimals specifies the range
+to which the option will be displayed (FIXME:and rounded to?).  Step-size specifies the step size for the UI's up/down buttons.
+
+@end deffn
+
+@node Option Values,  , Option Creation, User Preferences
+@section Option Values
+
+To get the value of an option, you must first lookup the option in
+the options database.
+
+@deffn Function gnc:lookup-option options section name
+
+Looks up the option in section @var{section} and name @var{name} in the
+options database @var{options}.
+
+@end deffn
+
+
+Once you have looked up the option, you can get its value using
+the function @code{gnc:option-value}.
+
+@deffn Function gnc:option-value option
+
+Get the value of an option.  Option values returned are of the same
+type as how the default values are specified (except the date option
+which needs to be fixed).
+
+@end deffn
+
