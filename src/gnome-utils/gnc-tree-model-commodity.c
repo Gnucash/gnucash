@@ -140,6 +140,44 @@ gnc_tree_model_commodity_new (GList *commodities)
 }
 
 void
+gnc_tree_model_commodity_add_commodity (GncTreeModelCommodity *model,
+					gpointer commodity)
+{
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	g_return_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model));
+	g_return_if_fail (model->priv != NULL);
+	g_return_if_fail (commodity != NULL);
+
+	model->priv->commodities = g_list_prepend (model->priv->commodities, commodity);
+
+	path = gtk_tree_path_new_from_indices(0, -1);
+	if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
+	  gtk_tree_model_row_inserted(GTK_TREE_MODEL(model), path, &iter);
+	gtk_tree_path_free(path);
+}
+
+void
+gnc_tree_model_commodity_remove_commodity (GncTreeModelCommodity *model,
+					   gpointer commodity)
+{
+	GtkTreePath *path;
+	gint index;
+
+	g_return_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model));
+	g_return_if_fail (model->priv != NULL);
+	g_return_if_fail (commodity != NULL);
+
+	index = g_list_index (model->priv->commodities, commodity);
+	path = gtk_tree_path_new_from_indices(index, -1);
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
+	gtk_tree_path_free(path);
+
+	model->priv->commodities = g_list_remove (model->priv->commodities, commodity);
+}
+
+void
 gnc_tree_model_commodity_set_commodities (GncTreeModelCommodity *model,
 					  GList *commodities)
 {
@@ -206,10 +244,13 @@ gnc_tree_model_commodity_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME:
 		case GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE:
 		case GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME:
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE:
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ:
 			return G_TYPE_STRING;
 		case GNC_TREE_MODEL_COMMODITY_COL_FRACTION:
-		case GNC_TREE_MODEL_COMMODITY_COL_MARK:
 			return G_TYPE_INT;
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG:
+			return G_TYPE_BOOLEAN;
 		default:
 			g_assert_not_reached ();
 			return G_TYPE_INVALID;
@@ -275,6 +316,7 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
 {
 	GncTreeModelCommodity *model = GNC_TREE_MODEL_COMMODITY (tree_model);
 	gnc_commodity *commodity;
+	gnc_quote_source *source;
 
 	g_return_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model));
 	g_return_if_fail (iter != NULL);
@@ -320,10 +362,29 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
 
 			g_value_set_int (value, gnc_commodity_get_fraction (commodity));
 			break;
-		case GNC_TREE_MODEL_COMMODITY_COL_MARK:
-			g_value_init (value, G_TYPE_INT);
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG:
+			g_value_init (value, G_TYPE_BOOLEAN);
 
-			g_value_set_int (value, gnc_commodity_get_mark (commodity));
+			g_value_set_boolean (value, gnc_commodity_get_quote_flag (commodity));
+			break;
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE:
+			g_value_init (value, G_TYPE_STRING);
+
+			if (gnc_commodity_get_quote_flag (commodity)) {
+			  source = gnc_commodity_get_quote_source (commodity);
+			  g_value_set_string (value, gnc_quote_source_get_internal_name(source));
+			} else {
+			  g_value_set_static_string (value, "");
+			}
+			break;
+		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ:
+			g_value_init (value, G_TYPE_STRING);
+
+			if (gnc_commodity_get_quote_flag (commodity)) {
+			  g_value_set_string (value, gnc_commodity_get_quote_tz (commodity));
+			} else {
+			  g_value_set_static_string (value, "");
+			}
 			break;
 		default:
 			g_assert_not_reached ();

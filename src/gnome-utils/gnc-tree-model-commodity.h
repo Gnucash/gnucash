@@ -8,6 +8,7 @@
 #define __GNC_TREE_MODEL_COMMODITY_H
 
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreeselection.h>
 
 #include "gnc-commodity.h"
 
@@ -29,7 +30,9 @@ typedef enum {
 	GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
 	GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
 	GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
-	GNC_TREE_MODEL_COMMODITY_COL_MARK,
+	GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+	GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
+	GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
 	GNC_TREE_MODEL_COMMODITY_NUM_COLUMNS
 } GncTreeModelCommodityColumn;
 
@@ -52,6 +55,10 @@ typedef struct {
 GType          gnc_tree_model_commodity_get_type        (void);
 
 GtkTreeModel  *gnc_tree_model_commodity_new             (GList *commodities);
+
+void           gnc_tree_model_commodity_add_commodity (GncTreeModelCommodity *model,
+						       gpointer commodity);
+
 void           gnc_tree_model_commodity_set_commodities (GncTreeModelCommodity *model,
                                                          GList *commodities);
 

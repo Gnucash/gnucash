@@ -41,7 +41,7 @@
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
+static short module = MOD_GUI;
 
 typedef struct
 {
@@ -50,7 +50,7 @@ typedef struct
   GtkWidget * commodity_list;
   GtkWidget * edit_button;
   GtkWidget * remove_button;
-  GtkWidget * show_currencies;
+  gboolean    show_currencies;
 
   gboolean new;
 } CommoditiesDialog;
@@ -58,6 +58,16 @@ typedef struct
 
 static gint last_width = 0;
 static gint last_height = 0;
+
+void gnc_commodities_dialog_response (GtkDialog *dialog,
+				      gint response,
+				      CommoditiesDialog *cd);
+void gnc_commodities_window_destroy_cb (GtkObject *object, CommoditiesDialog *cd);
+void gnc_commodities_edit_clicked (GtkWidget *widget, CommoditiesDialog *cd);
+void gnc_commodities_remove_clicked (GtkWidget *widget, CommoditiesDialog *cd);
+void gnc_commodities_add_clicked (GtkWidget *widget, CommoditiesDialog *cd);
+
+
 
 static gnc_commodity *
 gnc_commodities_dialog_get_selected (CommoditiesDialog *cd)
@@ -86,30 +96,16 @@ gnc_commodities_dialog_get_selected (CommoditiesDialog *cd)
 	return gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY (model), &iter);
 }
 
-static void
-window_destroy_cb (GtkObject *object, gpointer data)
+void
+gnc_commodities_window_destroy_cb (GtkObject *object,   CommoditiesDialog *cd)
 {
-  CommoditiesDialog *cd = data;
-
   gnc_unregister_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 
   g_free (cd);
 }
 
 static void
-gnc_commodities_dialog_response (GtkDialog *dialog,
-				 gint response,
-				 CommoditiesDialog *cd)
-{
-	gboolean active;
-
-	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cd->show_currencies));
-	gnc_set_boolean_option ("__gui", "commodity_include_iso", active);
-	gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
-}
-
-static void
-edit_clicked (GtkWidget *widget, CommoditiesDialog *cd)
+edit_clicked (CommoditiesDialog *cd)
 {
 	gnc_commodity *commodity;
 
@@ -123,7 +119,7 @@ edit_clicked (GtkWidget *widget, CommoditiesDialog *cd)
 }
 
 static void
-remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
+remove_clicked (CommoditiesDialog *cd)
 {
   QofBook *book;
   GNCPriceDB *pdb;
@@ -188,10 +184,17 @@ remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
 
   if (do_delete)
   {
-    gnc_commodity_table *ct = gnc_get_current_commodities ();
+    GtkTreeModel *sort_model, *filter_model, *model;
+    gnc_commodity_table *ct;
 
+    ct = gnc_get_current_commodities ();
     for (node = prices; node; node = node->next)
       gnc_pricedb_remove_price(pdb, node->data);
+
+    sort_model = gtk_tree_view_get_model (GTK_TREE_VIEW (cd->commodity_list));
+    filter_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
+    model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
+    gnc_tree_model_commodity_remove_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity);
 
     gnc_commodity_table_remove (ct, commodity);
     gnc_commodity_destroy (commodity);
@@ -204,8 +207,9 @@ remove_clicked (GtkWidget *widget, CommoditiesDialog *cd)
 }
 
 static void
-add_clicked (GtkWidget *widget, CommoditiesDialog *cd)
+add_clicked (CommoditiesDialog *cd)
 {
+  GtkTreeModel *sort_model, *filter_model, *model;
   gnc_commodity *commodity;
   const char *namespace;
 
@@ -217,10 +221,39 @@ add_clicked (GtkWidget *widget, CommoditiesDialog *cd)
     namespace = NULL;
 
   commodity = gnc_ui_new_commodity_modal (namespace, cd->dialog);
-  if (commodity != NULL)
-  {
-    /* select commodity */
+  if (commodity != NULL) {
+    sort_model = gtk_tree_view_get_model (GTK_TREE_VIEW (cd->commodity_list));
+    filter_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
+    model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
+    gnc_tree_model_commodity_add_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity);
+    gnc_gui_refresh_all ();
   }
+}
+
+void
+gnc_commodities_dialog_response (GtkDialog *dialog,
+				 gint response,
+				 CommoditiesDialog *cd)
+{
+	switch (response) {
+	 case GNC_RESPONSE_ADD:
+	  add_clicked (cd);
+	  return;
+
+	 case GNC_RESPONSE_REMOVE:
+	  remove_clicked (cd);
+	  return;
+
+	 case GNC_RESPONSE_EDIT:
+	  edit_clicked (cd);
+	  return;
+
+	 case GTK_RESPONSE_CLOSE:
+	 default:
+	  gnc_set_boolean_option ("__gui", "commodity_include_iso", cd->show_currencies);
+	  gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
+	  return;
+	}
 }
 
 static void
@@ -247,7 +280,7 @@ show_currencies_toggled (GtkToggleButton *toggle,
 {
 	GtkTreeModel *sort_model, *filter_model;
 
-	cd->show_currencies = GTK_WIDGET(gtk_toggle_button_get_active (toggle));
+	cd->show_currencies = gtk_toggle_button_get_active (toggle);
 
 	sort_model = gtk_tree_view_get_model (GTK_TREE_VIEW (cd->commodity_list));
 	filter_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
@@ -270,6 +303,94 @@ gnc_commodities_dialog_filter_func (GtkTreeModel *model,
 }
 
 static void
+gnc_commodities_dialog_create_tree_view (GtkWidget *tree_view)
+{
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  int i;
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Type"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Symbol"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+    gtk_tree_view_column_clicked (column); /* Start sorted by Type -- DRH change to remember last sort order */
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Name"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_FULLNAME);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Code"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Fraction"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_FRACTION);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_toggle_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Q"),
+		    				       renderer,
+						       "active", GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+						       NULL);
+    gtk_tree_view_column_set_resizable(column, FALSE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Source"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Timezone"),
+		    				       renderer,
+						       "text", GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
+						       NULL);
+    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ);
+    gtk_tree_view_column_set_resizable(column, TRUE);
+    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+    
+
+}
+
+static void
 gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 {
   GtkWidget *dialog;
@@ -282,58 +403,22 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   GList *commodities;
   GtkTreeModel *model, *filter_model, *sort_model;
   GtkTreeSelection *selection;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-
-  xml = gnc_glade_xml_new ("commodities.glade", "commodities_vbox");
-
-  dialog = gtk_dialog_new ();
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Commodities"));
-  
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (gnc_commodities_dialog_response), cd);
   gboolean active;
-
-  g_signal_connect (G_OBJECT (dialog), "destroy",
-                    G_CALLBACK (window_destroy_cb), cd);
-
+ 
+  xml = gnc_glade_xml_new ("commodities.glade", "Commodities Dialog");
+  dialog = glade_xml_get_widget (xml, "Commodities Dialog");
+  
   cd->dialog = dialog;
+
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, cd);
 
   /* parent */
   if (parent != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   /* buttons */
-  
-  button = gtk_button_new_from_stock (GTK_STOCK_ADD);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), button);
-  gtk_widget_show (button);
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (add_clicked), cd);
-
-  button = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
-  gtk_widget_set_sensitive (button, FALSE);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), button);
-  gtk_widget_show (button);
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (remove_clicked), cd);
-  cd->remove_button = button;
-
-  button = gtk_button_new_from_stock (GTK_STOCK_PROPERTIES);
-  gtk_widget_set_sensitive (button, FALSE);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), button);
-  gtk_widget_show (button);
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (edit_clicked), cd);
-  cd->edit_button = button;
-
-  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
-
-  vbox = glade_xml_get_widget (xml, "commodities_vbox");
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vbox);
-
-  /* default to ok */
-  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+  cd->remove_button = glade_xml_get_widget (xml, "remove_button");
+  cd->edit_button = glade_xml_get_widget (xml, "edit_button");
 
   /* commodity tree */
     
@@ -364,45 +449,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     g_signal_connect (G_OBJECT (selection), "changed",
 		      G_CALLBACK (gnc_commodities_dialog_selection_changed), cd);
 
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Type"),
-		    				       renderer,
-						       "text", GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
-						       NULL);
-    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Symbol"),
-		    				       renderer,
-						       "text", GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
-						       NULL);
-    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Name"),
-		    				       renderer,
-						       "text", GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
-						       NULL);
-    gtk_tree_view_column_set_sort_column_id (column, GNC_TREE_MODEL_COMMODITY_COL_FULLNAME);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Code"),
-		    				       renderer,
-						       "text", GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
-						       NULL);
-    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
-
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Fraction"),
-		    				       renderer,
-						       "text", GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
-						       NULL);
-    gtk_tree_view_column_set_sort_column_id (column,  GNC_TREE_MODEL_COMMODITY_COL_FRACTION);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (list), column);
+    gnc_commodities_dialog_create_tree_view (list);
 
     /* Show currency button */
     button = glade_xml_get_widget (xml, "show_currencies_button");
@@ -414,11 +461,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   if (last_width == 0)
     gnc_get_window_size ("commodities_win", &last_width, &last_height);
 
-  if (last_height == 0)
-    last_height = 400;
-
-  gtk_window_set_default_size (GTK_WINDOW(cd->dialog),
-                               last_width, last_height);
+  if (last_width != 0)
+    gtk_window_resize (GTK_WINDOW(cd->dialog), last_width, last_height);
 }
 
 static void
@@ -426,20 +470,23 @@ close_handler (gpointer user_data)
 {
   CommoditiesDialog *cd = user_data;
 
-  gdk_window_get_geometry (GTK_WIDGET(cd->dialog)->window,
-                           NULL, NULL, &last_width, &last_height, NULL);
+  gtk_window_get_size(GTK_WINDOW(cd->dialog), &last_width, &last_height);
+  gnc_save_window_size("commodities_win", last_width, last_height);
 
-  gnc_save_window_size ("commodities_win", last_width, last_height);
-
-  gtk_widget_destroy (GTK_WIDGET (cd->dialog));
+  gtk_widget_destroy(cd->dialog);
 }
 
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
-	/* CommoditiesDialog *cd = user_data; */
+  CommoditiesDialog *cd = user_data;
+  GtkTreeModel *sort_model, *filter_model, *model;
 
-	/* reload gnc_commodity entries */
+  g_return_if_fail(cd != NULL);
+
+  sort_model = gtk_tree_view_get_model (GTK_TREE_VIEW (cd->commodity_list));
+  filter_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
+  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (filter_model));
 }
 
 static gboolean

@@ -66,10 +66,13 @@ struct gnc_commodity_s
 
 struct gnc_commodity_namespace_s {
   GHashTable * table;
+  GList      * list;
 };
 
 struct gnc_commodity_table_s {
   GHashTable * table;
+  GList      * list;
+  gboolean     dirty;
 };
 
 typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
@@ -862,6 +865,8 @@ gnc_commodity_table_new(void)
 {
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
   retval->table = g_hash_table_new(&g_str_hash, &g_str_equal);
+  retval->list = NULL;
+  retval->dirty = FALSE;
   return retval;
 }
 
@@ -1071,8 +1076,10 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     g_hash_table_insert(table->table, 
                         g_strdup(comm->namespace), 
                         (gpointer)nsp);
+    table->list = g_list_append(table->list, nsp);
   }
 
+  nsp->list = g_list_append(nsp->list, comm);
   g_hash_table_insert(nsp->table, 
                       (gpointer)g_strdup(comm->mnemonic),
                       (gpointer)comm);
@@ -1101,6 +1108,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
   nsp = g_hash_table_lookup (table->table, comm->namespace);
   if (!nsp) return;
 
+  nsp->list = g_list_remove(nsp->list, comm);
   g_hash_table_remove (nsp->table, comm->mnemonic);
 }
 
@@ -1295,6 +1303,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     g_hash_table_insert(table->table,
                         (gpointer) g_strdup(namespace), 
                         (gpointer) ns);
+    table->list = g_list_append(table->list, ns);
   }
 }
 
@@ -1326,7 +1335,10 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                     &orig_key,
                                     (gpointer)&value)) {
       g_hash_table_remove(table->table, namespace);
+      table->list = g_list_remove(table->list, value);
 
+      g_list_free(value->list);
+      value->list = NULL;
       g_hash_table_foreach_remove(value->table, ns_helper, NULL);
       g_hash_table_destroy(value->table);
       g_free(value);
@@ -1394,6 +1406,10 @@ static int
 ct_helper(gpointer key, gpointer value, gpointer data) 
 {
   gnc_commodity_namespace * ns = value;
+
+  g_list_free(ns->list);
+  ns->list = NULL;
+
   g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
   g_hash_table_destroy(ns->table);
   ns->table = NULL;
@@ -1406,7 +1422,8 @@ void
 gnc_commodity_table_destroy(gnc_commodity_table * t) 
 {
   if (!t) return;
-  
+
+  g_list_free(t->list);
   g_hash_table_foreach_remove(t->table, ct_helper, t);
   g_hash_table_destroy(t->table);
   g_free(t);
@@ -1490,6 +1507,33 @@ commodity_table_book_end (QofBook *book)
   gnc_commodity_table_set_table (book, NULL);
 }
 
+static gboolean
+commodity_table_is_dirty (QofBook *book)
+{
+  gnc_commodity_table *ct;
+
+  if (!book)
+    return;
+  ct = gnc_commodity_table_get_table (book);
+  if (!ct)
+    return;
+  return(ct->dirty);
+}
+
+static void
+commodity_table_mark_clean(QofBook *book)
+{
+  gnc_commodity_table *ct;
+
+  if (!book)
+    return;
+  ct = gnc_commodity_table_get_table (book);
+  if (!ct)
+    return;
+  ct->dirty = FALSE;
+}
+
+
 /* XXX Why is the commodity table never marked dirty/clean?
  * Don't we have to save user-created/modified commodities?
  * I don't get it ... does this need fixing?
@@ -1501,8 +1545,8 @@ static QofObject commodity_table_object_def =
   type_label:        "CommodityTable",
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
-  is_dirty:          NULL,
-  mark_clean:        NULL,
+  is_dirty:          commodity_table_is_dirty,
+  mark_clean:        commodity_table_mark_clean,
   foreach:           NULL,
   printable:         NULL,
 };
