@@ -1540,7 +1540,7 @@ void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
    struct tm date;
-   long long secs;
+   long long secs = 0;
    long long era = 0;
 
    year -= 1900;
@@ -1584,7 +1584,7 @@ xaccTransSetDateToday (Transaction *trans)
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 
    PINFO ("xaccTransSetDateToday(): addr=%p set date to %lu %s \n",
-         trans, tv.tv_sec, ctime (&tv.tv_sec));
+         trans, tv.tv_sec, ctime ((time_t *)&tv.tv_sec));
 
 }
 

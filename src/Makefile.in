@@ -33,6 +33,7 @@ INCLPATH = -I. \
 
 GNOME_CFLAGS += -I./gnome
 MOTIF_CFLAGS += -I./motif
+KDE_CFLAGS += -I./qt  -I/usr/local/qt/include
 
 CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
 

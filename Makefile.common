@@ -62,6 +62,11 @@ obj/gnome/%.o: %.c
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GNOME_CFLAGS} -DGNOME -o $@ $< 
 	${cleanupdeps}
 
+obj/qt/%.o: %.c
+	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
+	${cleanupdeps}
+
 obj/qt/%.o: %.cpp
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
 	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${QT_CFLAGS} -DKDE -o $@ $< 
