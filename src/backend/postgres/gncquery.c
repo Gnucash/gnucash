@@ -722,6 +722,24 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
 }
 
 /* =========================================================== */
+/* Design Note:
+ * The simplest way of doing a query in SQL would be to simply
+ * list all of the tables that might or might not be referenced:
+ * SELECT * FROM gncAccount, gnEntry, ... WHERE ...
+ * This is what this code originally used to do.  However, during
+ * performance tuning, I discovered that gratuitously listing a
+ * table that is not referenced (e.g. gncAccount when the query
+ * doesn't involve accounts) is not gratuitous: it can hurt 
+ * performance by factors of ten(!!!).  Thus, there is a *lot*
+ * (hundreds of lines of code) of extra complexity here to make
+ * sure that only the needed tables get listed, and no more. 
+ *
+ * Yes, I agree that this should have been idempotent code, and
+ * that a good SQL optimizer would have weeded away and discarded
+ * the tables that are not referenced.  But that is not the case
+ * as of Postgres 7.1. This code is needed: it delivers a big
+ * performance boost.
+ */
 
 const char *
 sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
@@ -741,8 +759,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
 
    if (!sq || !q || !session) return NULL;
 
-   /* determine whether the query will need to reference certain
-    * tables. */
+   /* Determine whether the query will need to reference certain
+    * tables. See note above for details. */
    qterms = xaccQueryGetTerms (q);
 
    for (il=qterms; il; il=il->next)
