@@ -211,9 +211,6 @@ void gnc_set_log_level_global(gncLogLevel level);
 void gnc_set_logfile (FILE *outfile);
 
 /** Macros *****************************************************/
-#define EPS  (1.0e-6)
-#define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
-#define DEQ(x,y) DEQEPS(x,y,EPS)
 
 #define SAFE_STRCMP_REAL(fcn,da,db) {	\
   if ((da) && (db)) {			\
