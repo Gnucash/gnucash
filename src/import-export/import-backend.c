@@ -478,19 +478,19 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       if (datediff_day == 0)
 	{
 	  prob = prob+3;
-	  /*DEBUG("heuristics:  probability + 3 (date)");*/
+	  DEBUG("heuristics:  probability + 3 (date)");
 	}
       else if (datediff_day <= MATCH_DATE_THRESHOLD)
 	{
 	  prob = prob+2;
-	  /*DEBUG("heuristics:  probability + 2 (date)");*/
+	  DEBUG("heuristics:  probability + 2 (date)");
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
 	  /* Extra penalty if that split lies awfully far away
 	     from the given one. */
 	  prob = prob-10;
-	  /* DEBUG("heuristics:  probability - 10 (date)"); */
+	   DEBUG("heuristics:  probability - 10 (date)"); 
 	}
       
     
@@ -545,8 +545,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
 	{
 	  /* If the pref is to show match even with online ID's,
-	     reverse the confidence value to distinguish them */
-	  prob = 0-prob;
+	     puninsh the transaction with online if */
+	  prob = prob-3;
 	}
 
       /* Is the probability high enough? Otherwise do nothing and return. */

@@ -1,3 +1,6 @@
+2002-1-6  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/import-backend.c: Fixed the date heuristics modifications, which had an unfortunate interaction with old debugging code, causing the score to be reversed, and making the matcher mostly unusable.
+	
 2003-01-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-model.c:
