@@ -114,26 +114,30 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
 }
 
 static void
-gnc_search_dialog_select_item (GtkListItem *item, GNCSearchWindow *sw)
+gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
+				 GdkEventButton *event, gpointer user_data)
 {
-  sw->selected_item = gtk_object_get_data (GTK_OBJECT (item), "item");
+  GNCSearchWindow *sw = user_data;
+  sw->selected_item = gtk_clist_get_row_data (clist, row);
+
+  /* XXX: Handle the Event */
 }
 
 static void
-gnc_search_dialog_unselect_item (GtkListItem *item, GNCSearchWindow *sw)
+gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
+				   GdkEventButton *event, gpointer user_data)
 {
-  gpointer data = gtk_object_get_data (GTK_OBJECT (item), "item");
+  GNCSearchWindow *sw = user_data;
+  gpointer item = gtk_clist_get_row_data (clist, row);
 
-  /* Only reset if this was the item we thought we had selected */
-  if (sw->selected_item == data)
+  if (sw->selected_item == item)
     sw->selected_item = NULL;
 }
 
 static void
 gnc_search_dialog_display_results (GNCSearchWindow *sw)
 {
-  GList *list, *itemlist = NULL;
-  GtkWidget *selected = NULL;
+  GList *list;
 
   /* Check if this is the first time this is called for this window.
    * If so, then build the results sub-window, the scrolled listbox,
@@ -141,20 +145,30 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
    */
   if (sw->result_list == NULL) {
     GtkWidget *scroller, *button_box, *button;
+    char * titles [] = { "Result" }; /* XXX */
 
-    /* Create the list */
-    sw->result_list = gtk_list_new ();
-    gtk_list_set_selection_mode (GTK_LIST (sw->result_list),
-				 GTK_SELECTION_SINGLE);
+    /* Create the list : XXX : move to function, provide multiple columns */
+    sw->result_list = gtk_clist_new_with_titles (1, titles);
+    gtk_clist_set_selection_mode (GTK_CLIST (sw->result_list),
+				  GTK_SELECTION_SINGLE);
+
+    /* Setup list properties */
+    gtk_clist_set_shadow_type(GTK_CLIST(sw->result_list), GTK_SHADOW_IN);
+    gtk_clist_column_titles_passive(GTK_CLIST(sw->result_list));
+
+    /* Setup the list callbacks */
+    gtk_signal_connect (GTK_OBJECT (sw->result_list), "select-row",
+			gnc_search_dialog_select_row_cb, sw);
+    gtk_signal_connect (GTK_OBJECT (sw->result_list), "unselect-row",
+			gnc_search_dialog_unselect_row_cb, sw);
 
     /* Create the scroller and add the list to the scroller */
     scroller = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW (scroller),
-					  sw->result_list);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
 				    GTK_POLICY_AUTOMATIC,
 				    GTK_POLICY_AUTOMATIC);
     gtk_widget_set_usize(GTK_WIDGET(scroller), 300, 100);
+    gtk_container_add (GTK_CONTAINER (scroller), sw->result_list);
 
     /* Create the button_box */
     button_box = gtk_vbox_new (FALSE, 3);
@@ -188,47 +202,49 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     /* But maybe hide the select button */
     if (!sw->selected_cb)
       gtk_widget_hide_all (sw->select_button);
-
-  } else {
-    /* Clear out all the items, to insert in a moment */
-    gtk_list_clear_items (GTK_LIST (sw->result_list), 0, -1);
   }
+
+  /* Clear out all the items, to insert in a moment */
+  gtk_clist_freeze (GTK_CLIST (sw->result_list));
+  gtk_clist_clear (GTK_CLIST (sw->result_list));
 
   /* Clear the watches */
   gnc_gui_component_clear_watches (sw->component_id);
 
   /* Compute the actual results */
-  list = gncQueryRun (sw->q, sw->search_for);
+  list = g_list_reverse (gncQueryRun (sw->q, sw->search_for));
 
+  /* Add the list of items to the clist */
   for (; list; list = list->next) {
     const GUID *guid = (const GUID *) ((sw->get_guid)(list->data));
-    GtkWidget *item =
-      gtk_list_item_new_with_label (gncObjectPrintable (sw->search_for,
-							list->data));
-    gtk_object_set_data (GTK_OBJECT (item), "item", list->data);
-    gtk_signal_connect (GTK_OBJECT (item), "select",
-			gnc_search_dialog_select_item, sw);
-    gtk_signal_connect (GTK_OBJECT (item), "deselect",
-			gnc_search_dialog_unselect_item, sw);
+    char * row_text[2] = { NULL, NULL };
+    gint row;
 
-    itemlist = g_list_prepend (itemlist, item);
-    if (list->data == sw->selected_item)
-      selected = item;
+    /* XXX: Move into a function and provide multiple columns */
+    row_text[0] = (char *) gncObjectPrintable (sw->search_for, list->data);
+    row = gtk_clist_prepend (GTK_CLIST (sw->result_list), row_text);
+    gtk_clist_set_row_data (GTK_CLIST (sw->result_list), row, list->data);
+    gtk_clist_set_selectable (GTK_CLIST (sw->result_list), row, TRUE);
 
     /* Watch this item in case it changes */
     gnc_gui_component_watch_entity (sw->component_id, guid, GNC_EVENT_MODIFY);
-  }  
+  }
 
-  if (!selected)
-    sw->selected_item = NULL;
+  /* Need to reverse again for internal consistency */
+  g_list_reverse (list);
 
-  itemlist = g_list_reverse (itemlist);
-  if (!selected && itemlist)
-    selected = itemlist->data;
-  gtk_list_prepend_items (GTK_LIST (sw->result_list), itemlist);
-  if (selected)
-    gtk_list_select_child (GTK_LIST (sw->result_list), selected);
-  gtk_widget_show_all (sw->result_list);
+  gtk_clist_thaw (GTK_CLIST (sw->result_list));
+
+  /* Figure out what to select */
+  {
+    gint row = gtk_clist_find_row_from_data (GTK_CLIST (sw->result_list),
+					     sw->selected_item);
+    if (row < 0)
+      row = 0;
+
+    gtk_clist_select_row (GTK_CLIST (sw->result_list), row, 0);
+    gtk_clist_moveto (GTK_CLIST (sw->result_list), row, 0, 0.5, 0);
+  }
 }
 
 static void
