@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-10-23 15:41-0700\n"
-"PO-Revision-Date: 2000-10-22 10:35+0100\n"
+"PO-Revision-Date: 2000-11-12 15:35+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH  <FR@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1171,7 +1171,7 @@ msgid ""
 "\"From\" date."
 msgstr ""
 "S'il vous plait choisissez les dates appropriées - la date \"vers\" "
-"devraitêtre *après* la date \"depuis\"."
+"devrait être *après* la date \"depuis\"."
 
 # po/guile_strings.txt:156
 #: po/guile_strings.txt:230
@@ -2308,9 +2308,8 @@ msgstr "Les changements suivants doivent être effectués. Continuer?"
 
 # messages-i18n.c:18
 #: src/gnome/dialog-account.c:715 src/gnome/dialog-account.c:836
-#, fuzzy
 msgid "The account must be given a name."
-msgstr "Un nom doit être donné au compte! \n"
+msgstr "Un nom doit être donné au compte."
 
 # messages-i18n.c:21
 #: src/gnome/dialog-account.c:723 src/gnome/dialog-account.c:887
@@ -2352,12 +2351,16 @@ msgid ""
 "You must select a commodity.\n"
 "To create a new one, click \"New\""
 msgstr ""
+"Vous devez sélectionner un produit.\n"
+"Pour créer un de nouveau, cliquez sur \"Nouveau\""
 
 #: src/gnome/dialog-commodity.c:463
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\",\n"
 "and \"Type\" for the commodity."
 msgstr ""
+"Vous devez entrer un \"Nom complet\" non vide, \"Code/abbréviation\",\n"
+"et  \"Type\" pour le produit."
 
 # messages-i18n.c:292
 #. GtkWidget             * dialog = GTK_WIDGET(user_data);
@@ -2443,13 +2446,12 @@ msgstr ""
 
 #: src/gnome/dialog-totd.c:308
 msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-msgstr ""
+msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
 
 # messages-i18n.c:53
 #: src/gnome/dialog-transfer.c:92
-#, fuzzy
 msgid "Show the income and expense accounts"
-msgstr "Montrer les comptes de revenus et dépenses."
+msgstr "Montrer les comptes de revenus et dépenses"
 
 # messages-i18n.c:13
 #: src/gnome/dialog-transfer.c:161
@@ -2529,30 +2531,41 @@ msgid ""
 "use \"ISO4217\".  Enter a new type in the box if the ones in the\n"
 "pick list are inappropriate."
 msgstr ""
+"Sélectionner le type de monnaie ou valeur. Pour les monnaies nationales,\n"
+"utiliser \"ISO4217\". Entrer un nouveau type dans la fenêtre si celles\n"
+"dans la liste à sélectionner sont inappropriées."
 
 #: src/gnome/druid-commodity.c:236
 msgid ""
 "Enter a descriptive name for the currency or stock, such as \n"
 "\"US Dollar\" or \"Red Hat Stock\""
 msgstr ""
+"Entrer un nom descriptif pour la monnaie ou l'action, tel que \n"
+"\"Dollar US\" or \"Action Red Hat\""
 
 #: src/gnome/druid-commodity.c:255
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\"), ISO currency symbol \n"
 "(such as \"USD\"), or other unique abbreviation for the name."
 msgstr ""
+"Entrer le code ticker (tel que \"RHAT\"), le code monétaire ISO\n"
+"(tel que \"USD\"), ou une autre abbréviation unique pour le nom."
 
 #: src/gnome/druid-commodity.c:274
 msgid ""
 "Click \"Next\" to accept the information and move \n"
 "to the next currency or stock."
 msgstr ""
+"Cliquez sur \"Suivant\" pour accepter l'information et avancer \n"
+"à la prochaine monnaie ou action."
 
 #: src/gnome/druid-commodity.c:352
 msgid ""
 "You must put values for the type, name,\n"
 "and abbreviation of the currency/stock."
 msgstr ""
+"Vous devez mettre des valeurs pour le type, le nom,\n"
+"et l'abbréviation de la monnaie/action."
 
 # src/gnome/dialog-qif-import.c:221
 #: src/gnome/druid-qif-import.c:229
@@ -2561,21 +2574,24 @@ msgstr "Sélectionner un fichier QIF"
 
 # src/gnome/dialog-qif-import.c:310
 #: src/gnome/druid-qif-import.c:290
-#, fuzzy
 msgid "Please select a file to load.\n"
-msgstr "Vous devez spécifier un fichier à charger."
+msgstr "S'il vous plait sélectionnez un fichier à charger.\n"
 
 #: src/gnome/druid-qif-import.c:296
 msgid ""
 "File not found or read permission denied.\n"
 "Please select another file."
 msgstr ""
+"Fichier non trouvé ou permission de lecture refusée.\n"
+"S'il vous plait sélectionner un autre fichier."
 
 #: src/gnome/druid-qif-import.c:308
 msgid ""
 "That QIF file is already loaded.\n"
 "Please select another file."
 msgstr ""
+"Ce fichier QIF est déjà chargé.\n"
+"S'il vous plait sélectionner un autre fichier."
 
 # messages-i18n.c:44
 #: src/gnome/druid-qif-import.c:331
@@ -2609,48 +2625,47 @@ msgstr ""
 
 # messages-i18n.c:21
 #: src/gnome/druid-qif-import.c:616
-#, fuzzy
 msgid "You must enter an account name."
-msgstr "Vous devez sélectionner un type de compte."
+msgstr "Vous devez entrer un nom de compte."
 
 #: src/gnome/druid-qif-import.c:967
-#, fuzzy
 msgid "You must enter a Type for the commodity."
-msgstr "Vous devez entrer les valeurs des autres quantitées."
+msgstr "Vous devez entrer un type pour le produit."
 
 #: src/gnome/druid-qif-import.c:971
-#, fuzzy
 msgid "You must enter a name for the commodity."
-msgstr "Vous devez entrer les valeurs des autres quantitées."
+msgstr "Vous devez entrer un nom pour le produit."
 
 #: src/gnome/druid-qif-import.c:975
-#, fuzzy
 msgid "You must enter an abbreviation for the commodity."
-msgstr "Vous devez entrer les valeurs des autres quantitées."
+msgstr "Vous devez entrer une abbréviation pour le produit."
 
 #. save the old commodity name
 #: src/gnome/druid-qif-import.c:1059
 #, c-format
 msgid "Enter information about \"%s\""
-msgstr ""
+msgstr "Entrez une information à propos de \"%s\""
 
 #: src/gnome/druid-qif-import.c:1072
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr ""
+msgstr "Sélectionner un marché de produit ou dans la liste\n"
+"(NASDAQ, NYSE, etc)."
 
 #: src/gnome/druid-qif-import.c:1097
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr ""
+msgstr "Entrer le nom complet du produit , tel que \"Red Hat Stock\""
 
 #: src/gnome/druid-qif-import.c:1119
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
 msgstr ""
+"Entrer le code ticker (tel que \"RHAT\") ou autre unique abbréviation pour "
+"le nom."
 
 #: src/gnome/druid-qif-import.c:1140
 msgid "Click \"Next\" to accept the information and move on."
-msgstr ""
+msgstr "Cliquez sur \"Suivant\" pour accepter l'information et avancer."
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: src/gnome/glade-gnc-dialogs.c:45
@@ -2948,21 +2963,18 @@ msgid "Match Date"
 msgstr "Date trouvé"
 
 #: src/gnome/glade-gnc-dialogs.c:1399
-#, fuzzy
 msgid "Find transactions occurring in the date range:"
 msgstr "Trouver les transactions ayant eu lieu entre les dates:"
 
 # po/guile_strings.txt:59
 #: src/gnome/glade-gnc-dialogs.c:1422
-#, fuzzy
 msgid "Starting "
-msgstr "Tri"
+msgstr "Débutant"
 
 # po/guile_strings.txt:122
 #: src/gnome/glade-gnc-dialogs.c:1429
-#, fuzzy
 msgid "Ending "
-msgstr "Fin"
+msgstr "Finissant"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: src/gnome/glade-gnc-dialogs.c:1466 src/gnome/glade-gnc-dialogs.c:1524
@@ -3110,18 +3122,16 @@ msgstr "Pointé"
 
 #: src/gnome/glade-gnc-dialogs.c:1995
 msgid "Match transaction tags (CURRENTLY INOPERABLE)"
-msgstr ""
+msgstr "Marqueurs de transactions correspondant (ACTUELLEMENT INUTILISABLE)"
 
 #: src/gnome/glade-gnc-dialogs.c:2010
-#, fuzzy
 msgid "Find transactions with the tag:"
-msgstr "Trouver des transactions avec une recherche."
+msgstr "Trouver des transactions avec le marqueur:"
 
 # po/guile_strings.txt:264
 #: src/gnome/glade-gnc-dialogs.c:2049
-#, fuzzy
 msgid "Tags"
-msgstr "Totaux"
+msgstr "Marqueurs"
 
 #: src/gnome/glade-gnc-dialogs.c:2070
 msgid "Type of search"
@@ -3409,58 +3419,56 @@ msgstr "Paiement initial:"
 
 #: src/gnome/glade-gnc-dialogs.c:3487
 msgid "Select currency/security "
-msgstr ""
+msgstr "Sélectionner monnaie/valeur"
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: src/gnome/glade-gnc-dialogs.c:3518
-#, fuzzy
 msgid "Currency/security:"
-msgstr "Monnaie:"
+msgstr "Monnaie/valeur:"
 
 # messages-i18n.c:303
 #: src/gnome/glade-gnc-dialogs.c:3577
-#, fuzzy
 msgid "New..."
-msgstr "Nouveau"
+msgstr "Nouveau..."
 
 #: src/gnome/glade-gnc-dialogs.c:3639
 msgid "New Currency/Security"
-msgstr ""
+msgstr "Nouvelle monnaie/valeur"
 
 # src/gnome/glade-gnc-dialogs.c:155
 #: src/gnome/glade-gnc-dialogs.c:3661
-#, fuzzy
 msgid "Full name:"
-msgstr "Nom du fichier QIF:"
+msgstr "Nom complet:"
 
 #: src/gnome/glade-gnc-dialogs.c:3669
 msgid "Symbol/abbreviation:"
-msgstr ""
+msgstr "Code/abbréviation:"
 
 #: src/gnome/glade-gnc-dialogs.c:3685
 msgid "CUSIP or other code:"
-msgstr ""
+msgstr "CUSIP ou autre code:"
 
 #: src/gnome/glade-gnc-dialogs.c:3693
 msgid "Fraction traded:"
-msgstr ""
+msgstr "Fraction vendus:"
 
 #: src/gnome/glade-gnc-dialogs.c:3714
 msgid "Enter the full name of the commodity. Example: US Dollars"
-msgstr ""
+msgstr "Entrer le nom complet du produit . Exemple: Dollars US"
 
 #: src/gnome/glade-gnc-dialogs.c:3722
 msgid ""
 "Enter the ticker symbol or currency code for the commodity. Example: USD"
 msgstr ""
+"Entrez le code ticker ou le code monnaie pour le produit. Exemple: USD"
 
 #: src/gnome/glade-gnc-dialogs.c:3751
 msgid "1 /"
-msgstr ""
+msgstr "1 /"
 
 #: src/gnome/glade-gnc-dialogs.c:3765
 msgid "Enter the smallest fraction of the commodity which can be traded."
-msgstr ""
+msgstr "Entrer la plus petite fraction du produit qui peut être vendus."
 
 # messages-i18n.c:190
 #: src/gnome/glade-gnc-dialogs.c:3854
@@ -3518,11 +3526,11 @@ msgstr "La source des cours des actions:"
 
 #: src/gnome/glade-gnc-dialogs.c:4175
 msgid "Import currency and stock information"
-msgstr ""
+msgstr "Importer information sur monnaie et action"
 
 #: src/gnome/glade-gnc-dialogs.c:4196
 msgid "Import currency and stock information "
-msgstr ""
+msgstr "Importer information sur monnaie et action "
 
 #: src/gnome/glade-gnc-dialogs.c:4197
 msgid ""
@@ -3537,10 +3545,20 @@ msgid ""
 "\n"
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
+"Le fichier que vous chargez provient d'une ancienne version de Gnucash.\n"
+"L'information sur les monnaies, actions, et fonds communs a besoin d'être\n" 
+"mis à jour pour la nouvelle version. \n"
+"\n"
+"Cette boite de dialogue vous demandera des informations supplémentaires\n" 
+"sur chaque monnaie, action, et fond commun qui apparait dans vos comptes.\n"
+"Après que vous ayez entré cette information, vous pouvez mettre à jour vos\n" 
+"comptes pour la nouvelle version de Gnucash.\n"
+"\n"
+"Appuyez sur \"Annuler\" maintenant pour stopper le chargement du fichier. "
 
 #: src/gnome/glade-gnc-dialogs.c:4209
 msgid "Update your accounts with the new information"
-msgstr ""
+msgstr "Mettre à jour vos comptes avec la nouvelle information"
 
 #: src/gnome/glade-gnc-dialogs.c:4210
 msgid ""
@@ -3551,16 +3569,21 @@ msgid ""
 "\n"
 "Click \"Back\" to review your currency selections."
 msgstr ""
+"Cliquez sur \"Terminer\" pour mettre à jour vos comptes pour utiliser la\n" 
+"nouvelle information que vous avez entrée.\n"
+"\n"
+"Cliquez sur \"Annuler\" pour annuler le processus de chargement \n"
+"du fichier. \n"
+"\n"
+"Cliquez sur \"Précédent\" pour revoir vos sélections de monnaies."
 
 # messages-i18n.c:293
 #: src/gnome/glade-gnc-dialogs.c:4333
-#, fuzzy
 msgid "QIF Import"
-msgstr "Importer"
+msgstr "Importer QIF"
 
 # src/gnome/glade-gnc-dialogs.c:74
 #: src/gnome/glade-gnc-dialogs.c:4354
-#, fuzzy
 msgid "Import QIF files"
 msgstr "Importer fichiers QIF"
 
@@ -3577,12 +3600,21 @@ msgid ""
 "Click \"Next\" to start loading your QIF data, or \"Cancel\"\n"
 "to abort the process. "
 msgstr ""
+"Gnucash peut importer des données financières à partir de fichiers QIF\n"
+"(Quicken Interchange Format) écrit par Quicken/Quickbooks, \n"
+"Microsoft Money, Moneydance, et beaucoup d'autres programmes.\n"
+"\n"
+"Le processus d'importation a plusieurs étapes. Vos comptes Gnucash ne\n"
+"seront pas changés jusqu'à ce que vous cliquiez sur \"Terminer\" \n"
+"à la fin du processus. \n"
+"\n"
+"Cliquez sur \"Suivant\" pour commencer le chargement de vos données QIF,\n"
+"ou sur \"Annuler\" pour annuler le processus. "
 
 # src/gnome/dialog-qif-import.c:221
 #: src/gnome/glade-gnc-dialogs.c:4366
-#, fuzzy
 msgid "Select a QIF file to load"
-msgstr "Sélectionner un fichier QIF"
+msgstr "Sélectionner un fichier QIF à charger"
 
 #: src/gnome/glade-gnc-dialogs.c:4374
 msgid ""
@@ -3594,6 +3626,13 @@ msgid ""
 "You will have the opportunity to load as many files as you wish, so don't \n"
 "worry if your data is in multiple files. \n"
 msgstr ""
+"S'il vous plaît sélectionnez un fichier à charger. Quand vous cliquerez sur "
+" \"Suivant\", le fichier sera chargé\n"
+"et analysé. Vous aurez besoin de répondre à quelques questions sur le(s) \n"
+"compte(s) dans le fichier.\n"
+"\n"
+"Vous aurez la possibilité de charger autant de fichiers que vous voulez,\n"
+"donc ne vous inquiétez pas si vos données sont dans plusieurs fichiers. \n" 
 
 # src/gnome/glade-gnc-dialogs.c:155
 #: src/gnome/glade-gnc-dialogs.c:4389
@@ -3607,9 +3646,8 @@ msgstr "Sélectionner..."
 
 # messages-i18n.c:75
 #: src/gnome/glade-gnc-dialogs.c:4421
-#, fuzzy
 msgid "Set a date format for this QIF file"
-msgstr "Mettre une échelle de date pour ce registre"
+msgstr "Mettre un format de date pour ce fichier QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4429
 msgid ""
@@ -3623,11 +3661,21 @@ msgid ""
 "software are likely  to be in \"d-m-y\" or day-month-year format, where\n"
 "US QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
 msgstr ""
-
+"Le fichier au format QIF ne spécifie pas dans quel ordre les éléments du\n"
+"jour, du mois, et de l'année d'une date sont stockés. Dans la plupart des\n" 
+"cas, il est possible de déterminer automatiquement lequel des formats qui\n" 
+"est utilisé dans un fichier en particulier.\n"
+"Cependant, dans ce fichier que vous venez juste d'importer, il existe plus\n"
+"d'un format possible qui correspond aux données.\n"
+"\n"
+"S'il vous plaît sélectionnez un format de datepour le fichier. Les\n" 
+"fichiers QIF créés par les logiciels européens sont probablement\n"
+"comme celà \"j-m-a\" ou format jour-mois-année, et les fichiers\n"
+"QIF US sont habituellement \"m-j-a\" ou mois-jour-année. \n" 
+  
 #: src/gnome/glade-gnc-dialogs.c:4461
-#, fuzzy
 msgid "Set the default QIF account name"
-msgstr "Compte QIF par défaut"
+msgstr "Mettre le nom du compte QIF par défaut"
 
 #: src/gnome/glade-gnc-dialogs.c:4469
 msgid ""
@@ -3638,31 +3686,32 @@ msgid ""
 "accounting program, you should use the same account name that was used \n"
 "in that program.\n"
 msgstr ""
+"Le fichier QIF que vous venez juste de charger semble contenir des\n"
+"transactions pour juste un compte, mais le fichier ne spécifie pas un \n"
+"nom pour ce compte. \n"
+"\n"
+"S'il vous plaît entrez un nom pour le compte. Si le fichier est exporté\n"
+"d'un autre programme de comptabilité, vous devrez utiliser le même nom\n"
+"de compte que celui utilisé dans ce programme.\n" 
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: src/gnome/glade-gnc-dialogs.c:4484
-#, fuzzy
 msgid "Account name:"
 msgstr "Nom du compte:"
 
 # messages-i18n.c:44
 #: src/gnome/glade-gnc-dialogs.c:4508
-#, fuzzy
 msgid "QIF files you have loaded"
-msgstr ""
-"Le chargement du fichier QIF:\n"
-"%s a échoué."
+msgstr "Fichiers QIF que vous avez chargés"
 
 # src/gnome/glade-gnc-dialogs.c:155
 #: src/gnome/glade-gnc-dialogs.c:4516
-#, fuzzy
 msgid "QIF Files"
-msgstr "Nom du fichier QIF:"
+msgstr "Fichiers QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4539
-#, fuzzy
 msgid "label827"
-msgstr "label812"
+msgstr "label827"
 
 #: src/gnome/glade-gnc-dialogs.c:4546
 msgid ""
@@ -3672,22 +3721,26 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step \n"
 "of the QIF import process. "
 msgstr ""
+"Cliquez sur \"Charger un autre fichier\" si vous avez plus de données à\n"
+"importer actuellement. Faites celà si vous avez sauvegardez vos comptes\n"
+"en plusieurs fichiers QIF séparés."
+"\n"
+"Cliquez sur \"Suivant\" pour terminer le chargement des fichiers et aller\n"
+"à la prochaine étape du processus d'importation QIF. " 
 
 # src/gnome/glade-gnc-dialogs.c:300
 #: src/gnome/glade-gnc-dialogs.c:4561
-#, fuzzy
 msgid "Load another file"
-msgstr "Charger un fichier"
+msgstr "Charger un autre fichier"
 
 # src/gnome/glade-gnc-dialogs.c:293
 #: src/gnome/glade-gnc-dialogs.c:4568
-#, fuzzy
 msgid "Unload selected file"
-msgstr "Sélectionner un fichier"
+msgstr "Décharger le fichier sélectionné"
 
 #: src/gnome/glade-gnc-dialogs.c:4584
 msgid "Your accounts and stock holdings"
-msgstr ""
+msgstr "Vos comptes et actions possédées"
 
 #: src/gnome/glade-gnc-dialogs.c:4592
 msgid ""
@@ -3712,38 +3765,50 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-
+"Sur la page suivante, les comptes dans vos fichiers QIF et tous les fonds\n"
+"communs ou actions que vous possédez seront mis en correspondance \n"
+"avec les comptes Gnucash. Si un compte GnuCash existe déjà avec le même\n"
+"nom, ou un nom similaire et un type compatible, ce compte sera utilisé\n"
+"comme une correspondance; autrement, GnuCash créra un nouveau compte\n"
+"avec le même nom et type que le compte QIF. Si vous n'aimez pas le compte\n"
+"Gnucash suggéré, cliquez pour le changer.\n"
+"\n"
+"Notez que Gnucash créra beaucoup de comptes qui n'existe pas sur votre\n"
+"autre programme de finances personnelles, incluant un compte séparé pour\n"
+"chaque action que vous possédez, des comptes séparés pour les comissions\n"
+"de courtage, comptes \"Capitaux propres\" spéciaux (sous-comptes de\n"
+"gain/bénéfices retenus, par défaut) qui sont la source de votre solde\n"
+"initial, etc. \n"
+"Tous ces comptes apparaitront à la page suivante et ainsi vous pouvez les\n"
+"changer si vous le voulez, mais il est plus sûr de les laisser seul.\n"
+  
 #: src/gnome/glade-gnc-dialogs.c:4609
 msgid "Match QIF accounts with Gnucash accounts"
-msgstr ""
+msgstr "Comptes QIF correspondant aux comptes Gnucash"
 
 # src/gnome/glade-gnc-dialogs.c:333
 #: src/gnome/glade-gnc-dialogs.c:4636
-#, fuzzy
 msgid "QIF account name"
-msgstr "Compte QIF"
+msgstr "Nom du compte QIF"
 
 # src/gnome/glade-gnc-dialogs.c:347 src/gnome/glade-gnc-dialogs.c:401
 #: src/gnome/glade-gnc-dialogs.c:4643 src/gnome/glade-gnc-dialogs.c:4732
-#, fuzzy
 msgid "Gnucash account name"
 msgstr "Nom du compte GNUCash"
 
 # messages-i18n.c:303
 #: src/gnome/glade-gnc-dialogs.c:4650 src/gnome/glade-gnc-dialogs.c:4739
-#, fuzzy
 msgid "New?"
-msgstr "Nouveau"
+msgstr "Nouveau?"
 
 #: src/gnome/glade-gnc-dialogs.c:4657
 msgid "Click \"Next\" to check matchings for QIF categories. "
-msgstr ""
+msgstr "Cliquez sur \"Suivant\" pour vérifier les catégories QIF trouvées. "
 
 # po/guile_strings.txt:98
 #: src/gnome/glade-gnc-dialogs.c:4673
-#, fuzzy
 msgid "Income and expense categories"
-msgstr "Inverser les comptes de revenus et dépenses."
+msgstr "Catégories de revenus et dépenses"
 
 #: src/gnome/glade-gnc-dialogs.c:4681
 msgid ""
@@ -3761,28 +3826,39 @@ msgid ""
 "safely\n"
 "within GnuCash."
 msgstr ""
+"Gnucash utilise des comptes séparés pour les Revenus et Dépenses plutôt que\n"
+"les catégories pour classifier vos transactions. Chacune des catégories\n" 
+"dans votre fichier QIF sera converties vers un compte Gnucash.\n"
+"\n"
+"Sur la page suivante, Vous aurez la possibilité de regarder les\n"
+"correspondances suggérées entre les comptes Gnucash et les catégories QIF\n"
+"Vous pouvez changer les correspondances que vous n'aimez pas en cliquant\n" 
+"sur la ligne contenant le nom de la catégorie.\n"
+"\n"
+"Si vous changez d'avis plus tard, vous pouvez réorganiser la structure du\n" 
+"compte en toute sécurité au sein de GnuCash." 
 
 #: src/gnome/glade-gnc-dialogs.c:4698
 msgid "Match QIF categories with Gnucash accounts"
-msgstr ""
+msgstr "Catégories QIF trouvées avec les comptes Gnucash"
 
 # src/gnome/glade-gnc-dialogs.c:387
 #: src/gnome/glade-gnc-dialogs.c:4725
-#, fuzzy
 msgid "QIF category name"
-msgstr "Catégorie QIF"
+msgstr "Nom de la catégorie QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4746
 msgid ""
 "Click \"Next\" to enter information about the currency used in your QIF "
 "files."
 msgstr ""
+"Cliquez sur \"Suivant\" pour entrer l'information sur la monnaie utilisé "
+"dans vos fichiers QIF."
 
 # po/guile_strings.txt:200
 #: src/gnome/glade-gnc-dialogs.c:4762
-#, fuzzy
 msgid "Enter the currency used for new accounts"
-msgstr "Monnaie par défaut pour les nouveaux comptes"
+msgstr "Entrer la monnaie utilisée pour les nouveaux comptes"
 
 #: src/gnome/glade-gnc-dialogs.c:4770
 msgid ""
@@ -3792,16 +3868,25 @@ msgid ""
 "\n"
 "Select the currency to use for transactions imported from your QIF files:\n"
 msgstr ""
+"L'importation QIF ne peut pas traiter des fichiers QIF avec plusieurs\n"
+"monnaies. Tous les comptes dans le(s) fichier(s) QIF que vous importez\n"
+"doivent être libellés dans la même monnaie.Cette limitation devrait être\n" 
+"enlevée bientôt.\n"
+"\n"
+"Sélectionnez la monnaie à utiliser pour les transactions importés depuis\n" 
+"vos fichiers QIF:\n"
 
 #: src/gnome/glade-gnc-dialogs.c:4792
 msgid ""
 "Click \"Next\" to enter information about stocks and\n"
 "mutual funds in the imported data."
 msgstr ""
+"Cliquez sur \"Suivant\" pour entrer l'information sur les\n"
+"actions et fonds communs dans les données importées."
 
 #: src/gnome/glade-gnc-dialogs.c:4808
 msgid "Tradable commodities"
-msgstr ""
+msgstr "Produits boursiers"
 
 #: src/gnome/glade-gnc-dialogs.c:4816
 msgid ""
@@ -3820,10 +3905,25 @@ msgid ""
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type.  \n"
 msgstr ""
+"Dans les prochaines pages, il vous sera demandé de fournir des informations\n"
+"sur les actions, fonds communs et autres produits boursiers qui\n"
+"apparaissent dans le(s) fichier(s) QIF que vous importez. Gnucash requiert\n"
+"plus d'informations sur les produits boursiers que le format QIF peut\n"
+"en stocker.\n"
+"\n"
+"Chaque action, fond commun, et autre produit doit avoir un type, qui est\n" 
+"le marché ou celui qui se trouve dans la liste (NASDAQ, NYSE, US Mutual\n" 
+"Funds, etc), un nom complet et une abbréviation.\n"
+"\n"
+"Vérifier pour voir s'il y a un type existant qui est approprié; sinon, vous\n"
+"pouvez entrer un nouveau nom de type manuellement dans la fenêtre.\n"
+"Soyez sûr que l'abbréviation que vous entrez correspond au code\n"
+"ticker utilisé pour les produits sur le marché ou listé pour ce type.\n"
+ 
 
 #: src/gnome/glade-gnc-dialogs.c:4835
 msgid "Update your Gnucash accounts"
-msgstr ""
+msgstr "Mettre à jour vos compte Gnucash"
 
 #: src/gnome/glade-gnc-dialogs.c:4836
 msgid ""
@@ -3838,6 +3938,17 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
+"Cliquez sur \"Terminé\" pour importer les données depuis le staging\n"
+"area et mettre à jour les comptes Gnucash. Les informations trouvées\n"
+"sur les catégories et le compte et que vous avez entrées seront \n" 
+"sauvegardées et utilisées par défaut la prochaine fois que vous\n"
+"utiliserez la fonction d'importation de fichiers QIF. \n"
+"\n"
+"Cliquez sur \"Précédent\" pour revoir votre compte et les catégories\n" 
+"trouvées, et changer les paramètres de monnaie et valeur pour les nouveaux\n"
+"comptes, ou ajouter plus de fichiers dans le staging area.\n"
+"\n"
+"Cliquez sur \"Annuler\" pour annuler le processus d'importation QIF."
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:4946
@@ -3936,9 +4047,8 @@ msgstr "Avancer d'un pas dans l'historique."
 
 # po/guile_strings.txt:31
 #: src/gnome/window-html.c:476
-#, fuzzy
 msgid "Print HTML Window"
-msgstr "Fenêtre principale"
+msgstr "Imprimer fenêtre HTML"
 
 # messages-i18n.c:261
 #: src/gnome/window-html.c:485 src/gnome/window-register.c:894
@@ -3953,15 +4063,13 @@ msgstr "Fermer cette fenêtre HTML."
 
 # messages-i18n.c:246
 #: src/gnome/window-main.c:162
-#, fuzzy
 msgid "Net Assets:"
-msgstr "Actifs(Avoirs)"
+msgstr "Actifs(Avoirs) nets:"
 
 # messages-i18n.c:318
 #: src/gnome/window-main.c:177
-#, fuzzy
 msgid "Profits:"
-msgstr "Profits"
+msgstr "Profits/"
 
 #: src/gnome/window-main.c:462 src/gnome/window-main.c:467
 msgid "Untitled"
@@ -3993,13 +4101,12 @@ msgstr ""
 
 # messages-i18n.c:19
 #: src/gnome/window-main.c:591 src/gnome/window-main.c:611
-#, fuzzy
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
 msgstr ""
 "Pour ouvrir un compte, vous devez d'abord \n"
-"choisir un compte à ouvrir.\n"
+"choisir un compte à ouvrir."
 
 # messages-i18n.c:15
 #: src/gnome/window-main.c:636
@@ -4012,13 +4119,12 @@ msgstr ""
 
 # messages-i18n.c:22
 #: src/gnome/window-main.c:655
-#, fuzzy
 msgid ""
 "To reconcile an account, you must first\n"
 "choose an account to reconcile."
 msgstr ""
 "Pour rapprocher un compte, vous devez d'abord \n"
-"choisir un compte à rapprocher.\n"
+"choisir un compte à rapprocher."
 
 # messages-i18n.c:20
 #: src/gnome/window-main.c:674 src/gnome/window-main.c:693
@@ -4206,9 +4312,8 @@ msgid "_Scrub"
 msgstr "Nettoyer"
 
 #: src/gnome/window-main.c:1240
-#, fuzzy
 msgid "_Financial Calculator"
-msgstr "Calculatrice financière"
+msgstr "Calculatrice _financière"
 
 #: src/gnome/window-main.c:1241
 msgid "Use the financial calculator"
@@ -4229,9 +4334,8 @@ msgid "_Tips Of The Day"
 msgstr "Astuce du jour"
 
 #: src/gnome/window-main.c:1262
-#, fuzzy
 msgid "View the Tips of the Day"
-msgstr "Astuces du jour"
+msgstr "Voir les astuces du jour"
 
 # messages-i18n.c:131
 #: src/gnome/window-main.c:1276
@@ -4256,16 +4360,14 @@ msgstr "Etat de la date:"
 # messages-i18n.c:179
 #. starting balance title/value
 #: src/gnome/window-reconcile.c:371 src/gnome/window-reconcile.c:1450
-#, fuzzy
 msgid "Starting Balance:"
-msgstr "Solde du début"
+msgstr "Solde du début:"
 
 # messages-i18n.c:179
 #. ending balance title/value
 #: src/gnome/window-reconcile.c:372 src/gnome/window-reconcile.c:1460
-#, fuzzy
 msgid "Ending Balance:"
-msgstr "Solde final"
+msgstr "Solde final:"
 
 # messages-i18n.c:269
 #: src/gnome/window-reconcile.c:528 src/gnome/window-reconcile.c:1035
@@ -4279,9 +4381,8 @@ msgstr "Crédits"
 
 # messages-i18n.c:344
 #: src/gnome/window-reconcile.c:613
-#, fuzzy
 msgid "Total:"
-msgstr "Total"
+msgstr "Total:"
 
 # messages-i18n.c:56
 #: src/gnome/window-reconcile.c:706 src/gnome/window-register.c:2412
@@ -4437,16 +4538,14 @@ msgstr "Terminer"
 # messages-i18n.c:195
 #. reconciled balance title/value
 #: src/gnome/window-reconcile.c:1470
-#, fuzzy
 msgid "Reconciled Balance:"
-msgstr "Solde rapproché"
+msgstr "Solde rapproché:"
 
 # messages-i18n.c:276
 #. difference title/value
 #: src/gnome/window-reconcile.c:1480
-#, fuzzy
 msgid "Difference:"
-msgstr "Différence"
+msgstr "Différence:"
 
 # messages-i18n.c:47
 #: src/gnome/window-reconcile.c:1691
@@ -4478,9 +4577,8 @@ msgstr "Montrer le premier"
 
 # messages-i18n.c:227
 #: src/gnome/window-register.c:720
-#, fuzzy
 msgid "Start date:"
-msgstr "Date de départ"
+msgstr "Date de départ:"
 
 # messages-i18n.c:219
 #: src/gnome/window-register.c:758
@@ -4489,9 +4587,8 @@ msgstr "Montrer le dernier"
 
 # messages-i18n.c:180
 #: src/gnome/window-register.c:769
-#, fuzzy
 msgid "End date:"
-msgstr "Date de fin"
+msgstr "Date de fin:"
 
 # messages-i18n.c:211
 #: src/gnome/window-register.c:801
@@ -4567,15 +4664,13 @@ msgstr "Fermer cette fenetre du registre"
 
 # messages-i18n.c:260
 #: src/gnome/window-register.c:955
-#, fuzzy
 msgid "Cleared:"
-msgstr "Pointé"
+msgstr "Pointé:"
 
 # messages-i18n.c:249 po/guile_strings.txt:12
 #: src/gnome/window-register.c:967
-#, fuzzy
 msgid "Balance:"
-msgstr "Solde"
+msgstr "Solde:"
 
 # messages-i18n.c:90
 #: src/gnome/window-register.c:1111
@@ -4605,7 +4700,6 @@ msgid "Sort by statement date"
 msgstr "Trier par l'état de la date"
 
 #: src/gnome/window-register.c:1144
-#, fuzzy
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr "Trier par l'état de la date (éléments non rapprochés en dernier)"
 
@@ -5097,6 +5191,8 @@ msgid ""
 "Something went wrong during file IO,\n"
 "but I'm not sure what."
 msgstr ""
+"Quelque chose s'est mal fait  durant IO de fichier,\n"
+"mais je ne suis pas sûr de celà."
 
 # messages-i18n.c:38
 #: src/FileDialog.c:79
@@ -5121,22 +5217,20 @@ msgstr ""
 
 # messages-i18n.c:31
 #: src/FileDialog.c:92
-#, fuzzy
 msgid ""
 "This file is from an older version of GnuCash.\n"
 "Do you want to continue?"
 msgstr ""
-"Ce fichier provient d'une ancienne version de GnuCash. \n"
+"Ce fichier provient d'une ancienne version de GnuCash.\n"
 "Voulez-vous continuer?"
 
 # messages-i18n.c:33
 #: src/FileDialog.c:98
-#, fuzzy
 msgid ""
 "There was an error reading the file.\n"
 "Do you want to continue?"
 msgstr ""
-"Il y a une erreur de lecture du fichier. \n"
+"Il y a une erreur de lecture du fichier.\n"
 "Voulez-vous continuer?"
 
 # messages-i18n.c:41
@@ -5168,6 +5262,12 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the file?"
 msgstr ""
+"Gnucash ne peut pas obtenir le verrouillage pour\n"
+"   %s.\n"
+"ce fichier peut-être utiliser par un autre utilisateur,\n"
+"dans ce cas vous devriez pas ouvrir le fichier.\n"
+"\n"
+"Voulez-vous procédez à l'ouverture du fichier?" 
 
 # messages-i18n.c:47
 #: src/SplitLedger.c:1750
@@ -5188,7 +5288,7 @@ msgstr ""
 "Etes-vous sûr de vouloir faire celà?"
 
 #: src/SplitLedger.c:2527 src/SplitLedger.c:2606
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You cannot transfer funds from the %s account.\n"
 "It does not have a matching currency.\n"
@@ -5200,7 +5300,7 @@ msgstr ""
 "Il n'a pas la monnaie correspondante.\n"
 "Pour transférer des fonds entre comptes avec différentes monnaies\n"
 "vous avez besoin d'un compte de monnaie intermédiaire.\n"
-"S'il vous plait regardez le manuel en ligne de Gnucash"
+"S'il vous plait regardez le manuel en ligne de Gnucash."
 
 # messages-i18n.c:57
 #: src/SplitLedger.c:2655
@@ -5209,13 +5309,12 @@ msgstr "Recalculer la transaction"
 
 # messages-i18n.c:58
 #: src/SplitLedger.c:2656
-#, fuzzy
 msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?"
 msgstr ""
 "Les valeurs entrées pour cette transaction sont contradictoires.\n"
-"Quelle valeur aimeriez-vous etre recalculée?\n"
+"Quelle valeur aimeriez-vous voir être recalculée?"
 
 # messages-i18n.c:256
 #: src/SplitLedger.c:2661 src/SplitLedger.c:2666 src/SplitLedger.c:2671
@@ -5315,13 +5414,13 @@ msgstr ""
 
 # messages-i18n.c:49
 #~ msgid "Warning! This is a reconciled transaction. Do you want do continue?"
-#~ msgstr ""
-#~ "Attention! Ceci est une transaction de rapprochement. Voulez-vous continuer?"
+#~ msgstr "Attention! Ceci est une transaction de rapprochement.\n"
+#~ "Voulez-vous continuer?"
 
 # messages-i18n.c:59
 #~ msgid ""
-#~ "The types of all the parent accounts and their subaccounts must be changed "
-#~ "to %s.\n"
+#~ "The types of all the parent accounts and their subaccounts must be"
+#~ "changed to %s.\n"
 #~ "Is that what you want to do?"
 #~ msgstr ""
 #~ "Les types de tous les comptes parents et leurs sous-comptes doivent être "
@@ -5811,7 +5910,8 @@ msgstr ""
 #~ msgstr "Comptes de débit"
 
 #~ msgid ""
-#~ "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense Accounts"
+#~ "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense 
+#~ "Accounts"
 #~ msgstr ""
 #~ "Inverser les comptes Banque, Espèces, Avoir, Actions, Fonds de placement, "
 #~ "Monnaie, et Dépenses"
@@ -5844,5 +5944,7 @@ msgstr ""
 #~ msgstr "Dialogue d'impression"
 
 #~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-#~ msgstr ""
-#~ "Erreur de chargement du fichier QIF. Etes-vous sûr que c'est un fichier QIF?"
+#~ msgstr "Erreur de chargement du fichier QIF. Etes-vous sûr que c'est un\n"
+#~ "fichier QIF?"
+
+

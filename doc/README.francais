@@ -58,11 +58,11 @@ Quelques une de ces caractéristiques sont:
     être affiché ensemble).
   - Récupère les cours des actions et fonds communs (FCP et SICAV) depuis
     différents sites web, met à jour automatiquement le porte-feuille
-    (plus de fonds doivent être ajouter réegulièrement).
+    (plus de fonds étant ajouter régulièrement).
   - Rapports: Affichent la feuille bilan , pertes et profits, évaluation du
     portefeuille, rapports de transactions, ou suivi du solde du compte,
     ou exportation de ceux-ci en HTML. Vous pouvez écrire votre propre
-    rapport personalisé si vous connaissez un peu de Scheme. Les rapports
+    rapport personalisé si vous connaissez un peu Scheme. Les rapports
     peuvent maintenant être réalisés sur une période comptable!
   - Monnaies/devises multiples et Marché des changes:
     De multiple monnaies sont supportées et peuvent être achetées
@@ -78,12 +78,12 @@ Quelques une de ces caractéristiques sont:
   - Transactions réparties: Une simple transaction peut être répartie
     en plusieurs morceaux pour enregistrer les impôts, paiements, et
     autres entrées composées.
-  - Partie double: Quand elle est active, chaque transaction
+  - Partie double: Quand elle est activé, chaque transaction
     doit débiter un compte et créditer un autre d'un montant équivalent.
     Celà permet de s'assurer que les "livres sont équilibrés":
-    c'est la différence entre les revenus et les sorties qui est exactement
-    égale à la somme de tous les avoirs, qu'ils soit bancaire, liquidités,
-    actions ou autre.
+    c'est à dire que la différence entre les revenus et les sorties est
+    exactement égale à la somme de tous les avoirs, qu'ils soit bancaire, 
+    liquidités, actions ou autre.
   - Types de comptes Revenus/Dépenses (Catégories):  
     Ils ne servent pas uniquement à catégoriser votre flux
     de liquidités/argent, mais quand ils sont utilisés avec la fonction de
@@ -164,11 +164,16 @@ gnome-libs: la version 1.0.40 ou ultérieure/plus récente devrait fonctionner.
 
 gnome-print: N'importe quelle version récente devrait fonctionner.
 
+gdk-pixbuf: N'importe quelle version devrait fonctionner.
+
 gtkhtml:   La version 0.4 ou ultérieure/plus récente devrait fonctionner.
-           Une capture du CVS de gtkhtml est disponible dans le répertoire CVS de
-           GnuCash sous le répertoire lib.
-           Pour compiler les sources de GtkHTML, il faut gdk-pixbuf 0.7.0 (ou ultérieure),
-           Bonobo 0.15 (ou ultérieure) et gnome-print 0.20 (ou ultérieure).
+             Vous pouvez obtenir la dernière version de gtkhtml depuis
+	 Helix Code. (voir site ftp Gnome: ftp.gnome.org)
+	 Noter que celà à changé depuis la 1.4, qui utilisait la vieille
+	librairie gtkxmhtml.
+            Pour compiler les sources de GtkHTML-0.4, il faut gdk-pixbuf 0.7.0
+	(ou ultérieure), Bonobo 0.15 (ou ultérieure) et gnome-print 0.16
+	(ou ultérieure).
 
 Pour avoir la possibilité d'utiliser certaines fonctionnalitées de GnuCash,
 tel que les rapports et les téléchargements de cours d'actions par le réseau,
@@ -240,7 +245,7 @@ GnuCash répond aux variables d'environnement suivantes:
 
   GNC_SCM_LOAD_PATH - une contrainte pour le chemin de chargement de scheme
   pour GnuCash.Il devrait être une chaine représentant une liste scheme
-  appopriée. Chaque élément peut soit être une chaine représentant un
+  appropriée. Chaque élément peut soit être une chaine représentant un
   répertoire, soit le symbole par défaut qui s'étendra au chemin par défaut,
   ou l'actuel qui s'étendra au chemin de chargement par défaut au moment où
   il rencontre le symbole.
@@ -315,6 +320,8 @@ doc/README.build-system.)
 
 GnuCash utilise GNU Automake pour traiter le processus de compilation, donc
 pour plus de détails, regardez les instructions générales dans INSTALL.
+(Notez que, pour avoir un ./configure fonctionnant, vous devrez lancer 
+./autogen.sh.)
 Ci-dessous nous détaillons les parties spécifiques de Gnucash.
   
 
@@ -332,14 +339,23 @@ SWIG    : Utilisé pour autogénérer les encapsuleurs perl.
            nécessite 1.1p5 ou ultérieure ...
 
 système de développement gnome: en-têtes (headers), librairies, etc.
+ibxml: disponible sur ftp.gnome.org
 
-libxml: disponible sur ftp.gnome.org
+g-wrap  : Les RPM's, debs, et sources sont disponibles à
+	ftp://ftp.gnucash.org/pub/g-wrap.
+	Si vous utilisez guile version 1.4 ou ultérieure, vous avez besoin de
+	g-wrap 0.9.5 ou ultérieure. Si vous utilisez une précédente version
+	de guile, vous devrez utilisez g-wrap 0.9.4.
 
-g-wrap  : Les RPM's, debs, et sources sont disponibles à 
-          ftp://ftp.gnucash.org/pub/g-wrap.
+  texinfo: Si vous compilez le CVS, vous avez besoin du package GNU texinfo,
+	version 4.0 ou ultérieure.
 
-Ce que vous aurez besoin de récupérer et installer dans l'ordre pour être
-sûr que vous avez tous ces éléments coorectement installés pour votre
+  docbook: Pour compiler le manuel en ligne, vous aurez besoin des outils
+	docbook,  incluant jade et les feuillles de style (stylesheets) de docbook .
+
+	
+Ce que vous aurez besoin de récupérer et d'installer dans l'ordre pour être
+sûr que vous ayez tous ces éléments corectement installés pour votre
 système d'exploitation favorit en particulier variera, mais ici se trouve au
 moins une liste partielle de ce que vous aurez besoin pour les systèmes
 que nous connaissons:
@@ -347,8 +363,8 @@ que nous connaissons:
   Debian/GNU/Linux:
     actuel:
       libgnome-dev
-      libxml-dev
-      libgtkxmhtml-dev
+      libgtkhtml-dev (vous pouvez le récupérer depuis Helixcode, il n'est pas  
+      dans la Debian)
       guile1.3
       libguile6-dev
       libguile6-slib
@@ -386,7 +402,7 @@ Si vous voulez être sûr que toutes les langues soit installées, lancez
   $ unset LINGUAS
   $ ./configure
 
-La dernière version stable de GnuCash avait une interface utilisateur basée
+La dernière version 1.2 stable de GnuCash avait une interface utilisateur basée
 sur Motif, et il y avait aussi un expérimental, mais jamais terminé interface
 en QT.
 L'ensemble de ceux-ci ont été enlevé de l'arborescence des sources durant le
@@ -400,7 +416,7 @@ que vous spécifiez à configure détermine où les exécutables résultant seront
 regardé pour des choses au lancement.  Normallement celà détermine où un 
 "make install" mettra tous les fichiers.  Toutefois, automake aussi supporte la
 variable.  DESTDIR est utilisé durant l'étape `make install' pour relocaliser
-les ojets d'installation dans un endroit prédisposé.  Chaque objet et chemin
+les objets d'installation dans un endroit prédisposé.  Chaque objet et chemin
 est préfixé avec la valeur de `DESTDIR' avant d'être copié dans l'endroit
 d'installation.
 Voici un exemple d'usage typique de DESTDIR:
@@ -441,7 +457,8 @@ ou  http://linas.org/linux/gnucash (slow-www )
 pour les binaires précompilés ( mais *très vieilles*) pour ces plateformes.
 
 Gnucash peut probablement être fait pour fonctionner avec la plupart des
-plateformes POSIX, si les les librairies fournies et les outils sont disponibles.
+plateformes POSIX, si les les librairies fournies et les outils sont 
+disponibles.
 
 #####################################
 Sites additionnels de téléchargement:
@@ -456,11 +473,12 @@ Vous pouvez télécharger les packages Solaris de GnuCash à partir de:
 
   - http://www.unixrealm.com/downloads/
 
-Vous pouvez récupérer les packages Mandrake de GnuCash sur les sites Cooker de Mandrake.
+Vous pouvez récupérer les packages Mandrake de GnuCash sur les sites Cooker de 
+Mandrake.
 
 Les binaires précompilés et les packages pré-requis peuvent être trouvé sur
 les sites suivants.Les versions de Gnucash ici sont toutes *extrêmement*
-vieilles, et sont en fait de l'ancêtre de gnucash : "xacc".
+vieilles, et sont en fait de l'ancêtre de gnucash : "x-accountant ou xacc".
 
 IBM AIX 4.1.5 
       -- SMIT-installable images
@@ -497,12 +515,14 @@ Le mot de passe (password)est "guest"
 Pour récupérer une copie des sources dans l'arborescence de développpement
 expérimental faites un
 
-cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD gnucash
+cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD 
+gnucash
 
 Pour récupérer une copie des sources de l'arborescence de la version de
-production stable gnucash-1.2, faites un
+production stable gnucash-1.4, faites un
 
-cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
+cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r
+gnucash-1-4-branch gnucash
 
 ########################
 Développement de GnuCash
@@ -510,10 +530,10 @@ Développement de GnuCash
 Avant de démarrer à développer sur GnuCash, vous devriez faire les choses
 suivantes:
 
-1. lisez le fichier src/coding-style.txt pour apprendre à propos des styles
+1. lisez le fichier src/coding-style.txt pour apprendre les styles
    de codage utilisés dans le code source de GnuCash.
 
-2. Plusieurs des répertoires sous src contiennent des fichiers appelés
+2. Plusieurs des répertoires sous src contiennent des fichiers appellés
    design.txt qui expliquent beaucoup des aspects de la conception de GnuCash.
    Lisez les.
 
@@ -577,8 +597,10 @@ Quand vous lancez le script, trois fichiers seront générés:
              fichier se trouve une liste de fichiers qui sont ajoutés,
              changés, ou supprimés.
 
-             S'il vous plait examinez ce fichier (spéciallement la liste en bas)
-             pour être sûr que tous vos changements (et pas d'autres changements)
+             S'il vous plait examinez ce fichier (spéciallement la liste en 
+bas)
+             pour être sûr que tous vos changements (et pas d'autres 
+changements)
              sont présent dans le fichier.
 
              Ne pas soumettre ce fichier!
@@ -597,8 +619,8 @@ Envoyez gnucash.diff.gz.uue à gnucash-patches@gnucash.org
 Merci par avance pour votre contribution!
 
 
-Traduction faite le 13/08/00 par Yannick LE NY
-Cette traduction n'est peut-etre plus a jour,
+Traduction faite le 12/11/00 par Yannick LE NY
+Cette traduction n'est peut-etre plus à jour,
 donc référez vous au fichier README en anglais.
 Pour toutes remarques ou suggestions:
 y-le-ny@ifrance.com
