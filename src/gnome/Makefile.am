@@ -19,6 +19,7 @@ libgncgnome_a_SOURCES = \
   dialog-edit.c \
   dialog-utils.c \
   extensions.c \
+  gtkselect.c \
   query-user.c \
   reconcile-list.c \
   window-report.c \
@@ -57,6 +58,7 @@ noinst_HEADERS = \
   gnc-datedelta.h \
   gnc-dateedit.h \
   gnome-top-level.h \
+  gtkselect.h \
   print-session.h \
   query-user.h \
   reconcile-list.h \
