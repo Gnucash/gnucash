@@ -134,6 +134,47 @@ gnc_numeric gnc_ui_account_get_balance (Account *account,
 gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
                                                   gboolean include_children);
 
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the account currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
+				  Account *account,
+				  gboolean recurse,
+				  gboolean *negative);
+
+/**
+ * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the default reporting
+ * currency.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
+					 Account *account,
+					 gboolean recurse,
+					 gboolean *negative);
+
+char *gnc_ui_account_get_tax_info_string (Account *account);
+
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
                                                    gboolean include_children);

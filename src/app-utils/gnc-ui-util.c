@@ -325,7 +325,7 @@ gnc_ui_account_get_reconciled_balance (Account *account,
  *                  is negative.  This can be used by the caller to
  *                  easily decode whether or not to color the output.
  */
-static gchar *
+gchar *
 gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
 				  Account *account,
 				  gboolean recurse,
@@ -355,7 +355,7 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
  *                  is negative.  This can be used by the caller to
  *                  easily decode whether or not to color the output.
  */
-static gchar *
+gchar *
 gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
 					 Account *account,
 					 gboolean recurse,
@@ -416,7 +416,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
   return balance;
 }
 
-static char *
+char *
 gnc_ui_account_get_tax_info_string (Account *account)
 {
   static SCM get_form = SCM_UNDEFINED;
