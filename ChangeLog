@@ -1,3 +1,8 @@
+2003-03-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.h: Pull missing prototype from
+	HEAD, for gnc_import_TransInfo_refresh_destacc.
+
 2003-03-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
