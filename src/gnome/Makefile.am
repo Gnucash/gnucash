@@ -148,6 +148,7 @@ INCLUDES = \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register \
   -I${top_srcdir}/src/register/gnome \
+  ${GUPPI_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
 

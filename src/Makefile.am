@@ -31,13 +31,13 @@ gnucash_LDADD = \
   calculation/libgnccalc.a \
   engine/libgncengine.la \
   ${GNOMEUI_LIBS} \
+  ${GUPPI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GTKHTML_LIBS} \
   ${GHTTP_LIBS} \
-  ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS} \
   ${EFENCE_LIBS}
