@@ -98,7 +98,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   if (!book) return NULL;
 
   term = g_new0 (GncBillTerm, 1);
-  qof_instance_init(&term->inst);
+  qof_instance_init(&term->inst, book);
   term->book = book;
   term->name = CACHE_INSERT ("");
   term->desc = CACHE_INSERT ("");

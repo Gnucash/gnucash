@@ -9,7 +9,8 @@
 
 typedef struct _gncCustomer GncCustomer;
 
-#include "gnc-book.h"
+#include "qofbook.h"
+#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
@@ -48,8 +49,6 @@ void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */
 
-QofBook * gncCustomerGetBook (GncCustomer *customer);
-const GUID * gncCustomerGetGUID (GncCustomer *customer);
 const char * gncCustomerGetID (GncCustomer *customer);
 const char * gncCustomerGetName (GncCustomer *customer);
 GncAddress * gncCustomerGetAddr (GncCustomer *customer);
@@ -80,5 +79,9 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 #define CUSTOMER_NAME	"name"
 #define CUSTOMER_ADDR	"addr"
 #define CUSTOMER_SHIPADDR	"shipaddr"
+
+/* deprecated functions, should be removed */
+#define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncCustomerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 
 #endif /* GNC_CUSTOMER_H_ */

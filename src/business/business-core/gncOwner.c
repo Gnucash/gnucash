@@ -9,9 +9,10 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
+#include "qofclass.h"
+#include "qofinstance.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofclass.h"
 
 #include "gncOwner.h"
 #include "gncOwnerP.h"
@@ -173,7 +174,7 @@ const GUID * gncOwnerGetGUID (GncOwner *owner)
   default:
     return NULL;
   case GNC_OWNER_CUSTOMER:
-    return gncCustomerGetGUID (owner->owner.customer);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.customer));
   case GNC_OWNER_JOB:
     return gncJobGetGUID (owner->owner.job);
   case GNC_OWNER_VENDOR:
