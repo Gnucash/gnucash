@@ -38,7 +38,7 @@ INCLPATH = -I/usr/include \
 CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
-LIBPATH  = -L@x_libraries@
+LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@
 TARGET   = ../xacc
 
 LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
