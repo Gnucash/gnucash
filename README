@@ -203,11 +203,14 @@ source distributions.
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
+libtool -- Used to build our internal version of g-wrap which handles
+           our guile C wrappers.  Available at ftp://ftp.gnu.org/gnu.
+           RPM's and debs are widely available with most disributions.
 nana    -- Used to provide a debugging infrastructure.
            Any version should work.
            http://www.fsf.org/software/nana/nana.html
 	   http://www.cs.ntu.edu.au/homepages/pjm/nana-home/
-SWIG    -- Used to autogenerate perl, tcl, guile wrappers.
+SWIG    -- Used to autogenerate perl wrappers.
            available at www.swig.org need 1.1p5 or later ...
 guile   -- Provides main extension language infrastructure.
            This is used extensively in gnucash for initialization & startup.
