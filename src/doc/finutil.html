@@ -1,0 +1,2278 @@
+<!-- heading 12001 1 -->
+<HTML>
+<HEAD>
+
+<TITLE>Financial Utility Documentation</TITLE>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+<HR size=4>
+<H1>Financial Transaction Utility</H1>
+<!-- <p>Copyright (C) 1990 - 2000 Terry D. Boldt, All Rights Reserved -->
+<HR size=4>
+<dl>
+<dt><A HREF="#FinCalc">Financial Calculator</A></dt>
+<dt><A HREF="#TimeValue">Time Value of Money</A></dt>
+  <dd><A HREF="#SimpleInterest">Simple Interest</A></dd>
+  <dd><A HREF="#CompoundInterest">Compound Interest</A></dd>
+  <dd><A HREF="#PeriodicPayments">Periodic Payments</A></dd>
+  <dd><A HREF="#FinTrans">Financial Transactions</A></dd>
+<dt><A HREF="#StandardFinConv">Standard Financial Conventions</A></dt>
+<dt><A HREF="#CashFlowDiag">Cash Flow Diagrams</A></dt>
+  <dd><A HREF="#Appreciation">Appreciation</A></dd>
+  <dd><A HREF="#Annuity">Annuity</A></dd>
+  <dd><A HREF="#Amortization">Amortization</A></dd>
+  <dd><A HREF="#Lease">Annuity</A></dd>
+<dt><A HREF="#Interest">Interest</A></dt>
+  <dd><A HREF="#CompFreq">Compounding Frequency</A></dd>
+  <dd><A HREF="#PayFreq">Payment Frequency</A></dd>
+  <dd><A HREF="#DiscIntNARtoEIR">NAR to EIR for Discrete Interest Periods</A></dd>
+  <dd><A HREF="#ContIntNARtoEIR">NAR to EIR for Continuous Interest</A></dd>
+  <dd><A HREF="#NorVal">Normal CF/PF Values</A></dd>
+  <dd><A HREF="#DiscIntEIRtoNAR">EIR to NAR for Discrete Interest Periods</A></dd>
+  <dd><A HREF="#ContIntEIRtoNAR">EIR to NAR for Continuous Compounding</A></dd>
+<dt><A HREF="#FinEquation">Financial Equation</A></dt>
+  <dd><A HREF="#FinDeriv">Financial Equation Derivation</A></dd>
+<dt><A HREF="#AmortSched">Amortization Schedules</A></dt>
+  <dd><A HREF="#ED_IP_Dates">Effective and Initial Payment Dates</A></dd>
+  <dd><A HREF="#Eff_PV">Effective Present Value</A></dd>
+  <dd><A HREF="#iterative_soltn">Iterative Amortization Schedule</A></dd>
+  <dd><A HREF="#AnnualSum">Annual Summary</A></dd>
+  <dd><A HREF="#FinalPayment">Final Payment Calculation</A></dd>
+  <dd><A HREF="#AmortCases">Amortization Cases</A></dd>
+  <dl><dt></dt>
+    <dd><A HREF="#ConstOrigData">Constant Repayment to Principal, Original Data</A></dd>
+    <dd><A HREF="#ConstNewData">Constant Repayment to Principal, Delayed Repayment</A></dd>
+    <dd><A HREF="#OrigData">Original Data Schedule</A></dd>
+    <dd><A HREF="#NewFinalPayment">Recomputed Final Payment</A></dd>
+    <dd><A HREF="#NewPayment">Recomputed Periodic Payment</A></dd>
+    <dd><A HREF="#NewTerm">Recomputed Term</A></dd>
+  </dl>
+  <dd><A HREF="#DisplaySched">Amortization Schedule Display</A></dd>
+<dt><A HREF="#Usage">Financial Calculator Usage</A></dt>
+  <dd><A HREF="#FinCommands">Calculator Commands</A></dd>
+  <dd><A HREF="#CalcInput">Calculator Input</A></dd>
+  <dd><A HREF="#CalcFun">Calculator Functions</A></dd>
+  <dd><A HREF="#UserVar">User Defined Variables</A></dd>
+  <dd><A HREF="#Rounding">Rounding</A></dd>
+<dt><A HREF="#Examples">Examples</A></dt>
+  <dd><A HREF="#SimpleInt">Simple Interest </A></dd>
+  <dd><A HREF="#CompundInt">Compound Interest</A></dd>
+  <dd><A HREF="#PeriodicPmt">Periodic Payment</A></dd>
+  <dd><A HREF="#ConvMortg">Conventional Mortgage</A></dd>
+  <dd><A HREF="#FinalPmt">Final Payment</A></dd>
+  <dd><A HREF="#AS_AnnualSum">Conventional Mortgage Amortization Schedule - Annual Summary</A></dd>
+  <dd><A HREF="#AS_PeriodicPmt">Conventional Mortgage Amortization Schedule - Periodic Payment Schedule</A></dd>
+  <dd><A HREF="#AS_VarAdvPmt">Conventional Mortgage Amortization Schedule - Variable Advanced Payments</A></dd>
+  <dd><A HREF="#AS_ConstAdvPmt">Conventional Mortgage Amortization Schedule - Constant Advanced Payments</A></dd>
+  <dd><A HREF="#BalloonPmt">Balloon Payment</A></dd>
+  <dd><A HREF="#CanadianMortg">Canadian Mortgage</A></dd>
+  <dd><A HREF="#EuropeanMortg">European Mortgage</A></dd>
+  <dd><A HREF="#BiWeeklySav">Bi-weekly Savings</A></dd>
+  <dd><A HREF="#PV_AnnuiytDue">Present Value - Annuity Due</A></dd>
+  <dd><A HREF="#EffRate">Effective Rate - 365/360 Basis</A></dd>
+  <dd><A HREF="#MortgPoints">Mortgage with "Points"</A></dd>
+  <dd><A HREF="#EquivPmt">Equivalent Payments</A></dd>
+  <dd><A HREF="#Perpetuity">Perpetuity - Continuous Compounding</A></dd>
+  <dd><A HREF="#DevCo">Investment Return</A></dd>
+  <dd><A HREF="#Retiement">Retirement Investment</A></dd>
+  <dd><A HREF="#PropVal">Property Values</A></dd>
+  <dd><A HREF="#CollegeExpenses">College Expenses</A></dd>
+  <dd><A HREF="#EffAPY">Certificate of Deposit, Annual Percentage Yield</A></dd>
+<dt><A HREF="#refs">References</A></dt>
+</dl>
+<HR size=4>
+<A NAME="FinCalc">
+<H1>Financial Calculator</H1></A>
+<P>Financial Calculator
+<!-- <p>Copyright (C) 1990 - 2000 Terry D. Boldt, All Rights Reserved -->
+
+<!-- <p>This version for use WITH ANSI.SYS display driver -->
+
+<p>This is  a complete  financial computation  utility to  solve for  the five
+standard financial values: n, %i, PV, PMT and FV
+<ul>
+<ul>
+<li>n   == number of payment periods
+<li>%i  == nominal interest rate, NAR, charged
+<li>PV  == Present Value of money
+<li>PMT == Periodic Payment
+<li>FV  == Future Value of money
+</ul>
+</ul>
+
+<p>In addition, four additional parameters may be specified:
+<ol>
+<li>Compounding Frequency per year, CF. The number of times the interest is compounded
+during the year. The default is 12. The compounding frequency per year may be
+different from the Payment Frequency per year
+
+<li>Payment Frequency per year, PF. The number of payments made in a year. Default is 12.
+
+<li>Discrete or continuous compounding, disc. The default is discrete compounding.
+
+<li>Payments may be at the beginning or end of the payment period, beg. The default is for
+payments to be made at the end of the payment period.
+</ol>
+
+<p>When an amortization schedule is desired, the financial transaction Effective Date, ED,
+and Initial Payment Date, IP, must also be entered.
+
+<p>Canadian  and  European  style  mortgages  can  be  handled  in  a simple,
+straight-forward manner. Standard financial sign conventions are used:
+
+<hr size=4>
+<p align="center">"Money paid out is Negative, Money received is Positive"
+<hr size=4>
+
+<A NAME="TimeValue">
+<H1>Time Value of Money</H1></A>
+<p>If you borrow money, you can expect  to pay rent or interest for its  use;
+conversely you expect to receive rent interest on money you loan or invest.
+When you rent property, equipment,  etc., rental payments are normal;  this
+is  also  true  when  renting  or  borrowing  money.  Therefore,  money  is
+considered to have a "time value". Money available now, has a greater value
+than money available at some future date because of its rental value or the
+interest that it can produce during the intervening period.
+
+<A NAME="SimpleInterest">
+<H2>Simple Interest</H2></A>
+<p>If you loaned $800 to  a friend with an agreement  that at the end of  one
+year he would  would repay you  $896, the "time  value" you placed  on your
+$800 (principal) was $96 (interest) for  the one year period (term) of  the
+loan. This  relationship of  principal, interest,  and time (term) is  most
+frequently expressed as an Annual  Percentage Rate (APR). In this  case the
+APR  was  12.0%  [(96/800)*100].  This  example  illustrates the four basic
+factors involved  in a  simple interest  case. The  time period (one year),
+rate (12.0%  APR), present  value of  the principal  ($800) and  the future
+value of the principal including interest ($896).
+
+<A NAME="CompoundInterest">
+<H2>Compound Interest</H2></A>
+<p>In many cases the interest charge is computed periodically during the term
+of  the  agreement.  For  example,  money  left  in a savings account earns
+interest that  is periodically  added to  the principal  and in  turn earns
+additional interest during succeeding periods. The accumulation of interest
+during  the  investment  period  represents  compound interest. If the loan
+agreement you  made with  your friend  had specified  a "compound  interest
+rate" of  12% (compounded  monthly) the  $800 principal  would have  earned
+$101.46 interest for the  one year period. The  value of the original  $800
+would be increased  by 1% the  first month to  $808 which in  turn would be
+increased  by  1%  to  816.08 the second month,  reaching a future value of
+$901.46 after the twelfth iteration. The monthly compounding of the nominal
+annual rate (NAR) of 12% produces an effective Annual Percentage Rate (APR)
+of 12.683% [(101.46/800)*100].  Interest may be  compounded at any  regular
+interval; annually, semiannually, monthly, weekly, daily, even continuously
+(a specification in some financial models).
+
+<A NAME="PeriodicPayments">
+<H2>Periodic Payments</H2></A>
+<p>When money is loaned for longer  periods of time, it is customary  for the
+agreement to require the borrower  to make periodic payments to  the lender
+during the term of the loan. The payments may be only large enough to repay
+the interest,  with the  principal due  at the  end of  the loan period (an
+interest only loan), or large enough  to fully repay both the interest  and
+principal during the term of the loan (a fully amoritized loan). Many loans
+fall somewhere between, with payments that do not fully cover repayment  of
+both the principal and interst. These loans require a larger final  payment
+(balloon)  to  complete  their  amortization.  Payments  may  occur  at the
+beginning or end of a payment period. If you and your friend had agreed  on
+monthly repayment of  the $800 loan  at 12% NAR  compounded monthly, twelve
+payments of $71.08 for a total of $852.96 would be required to amortize the
+loan. The $101.46  interest from the  annual plan is  more than the  $52.96
+under the monthly plan because under the monthly plan your friend would not
+have had the use of $800 for a full year.
+
+<A NAME="FinTrans">
+<H2>Financial Transactions</H2></A>
+<p>The  above  paragraphs  introduce  the  basic  factors  that  govern  most
+financial  transactions;  the  time  period,  interest rate, present value,
+payments and  the future  value. In  addition, certain  conventions must be
+adhered to: the interest rate must be relative to the compounding frequency
+and payment periods, and the term must be expressed as the total number  of
+payments (or compounding periods if there are no payments). Loans,  leases,
+mortgages, annuities, savings plans, appreciation, and compound growth  are
+amoung the many financial problems that can be defined in these terms. Some
+transactions do not involve payments, but  all of the other factors play  a
+part in "time value of money" transactions. When any one of the five  (four
+- if no payments are involved)  factors is unknown, it can be  derived from
+formulas using the known factors.
+
+<A NAME="StandardFinConv">
+<h1>Standard Financial Conventions</h1></A>
+<p>The Standard Financial Conventions are:
+
+<ul>
+<ul>
+<li>Money RECEIVED is a  POSITIVE value and is  represented by an arrow  above
+the line
+
+<li>Money PAID OUT is  a NEGATIVE value and  is represented by an  arrow below
+the line.
+</ul>
+</ul>
+
+<A NAME="CashFlowDiag">
+<h1>Cash Flow Diagrams</h1></A>
+<p>If payments are  a part of  the transaction, the  number of payments  must
+equal the number of periods (n).
+
+<p>Payments may be  represented as occuring  at the end  or beginning of  the
+periods.
+
+<p>Diagram  to  visualize  the  positive  and  negative cash flows (cash flow
+diagrams):
+
+<p>Amounts shown above the line are positve, received, and amounts shown below the
+line are negative, paid out.
+
+<hr>
+<A NAME="Appreciation">
+<h2>Appreciation</h2></A>
+<br>Appreciation
+<br>Depreciation
+<br>Compound Growth
+<br>Savings Account
+<pre>
+                                                                A FV*
+          1   2   3   4   .   .   .   .   .   .   .   .   .   n |
+ Period +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+        |
+        V
+        PV
+</pre>
+
+
+<!--#########################################################################-->
+
+<hr>
+<A NAME="Annuity">
+<h2>Annuity (series of payments)</h2></A>
+<br>Annuity (series of payments)
+<br>Pension Fund
+<br>Savings Plan
+<br>Sinking Fund
+
+<pre>
+     PV = 0                                                     A
+                                                                |
+ Period +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+        | 1 | 2 | 3 | 4 | . | . | . | . | . | . | . | . | . | n
+        V   V   V   V   V   V   V   V   V   V   V   V   V   V
+       PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT
+</pre>
+
+
+<!--#############################################################################-->
+
+<hr>
+<A NAME="Amortization">
+<h2>Amortization</h2></A>
+<br>Direct Reduction Loan
+<br>Mortgage (fully amortized)
+
+<pre>
+     PV ^
+        |                                                      FV=0
+ Period +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+          1 | 2 | 3 | 4 | . | . | . | . | . | . | . | . | . | n |
+            V   V   V   V   V   V   V   V   V   V   V   V   V   V
+           PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT
+</PRE>
+
+<!--#############################################################################-->
+
+<hr>
+<A NAME="Lease">
+<H2>Annuity</H2></a>
+<br>Annuity
+<BR>Lease (with buy back or residual)*
+<br>Loan or Mortgage (with balloon)*
+<pre>
+                                                                A FV*
+           PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT PMT  | +
+            A   A   A   A   A   A   A   A   A   A   A   A   A   A PMT
+          1 | 2 | 3 | 4 | . | . | . | . | . | . | . | . | . | n |
+ Period +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+        |
+        V
+        PV
+</pre>
+
+<!--#############################################################################-->
+
+<hr>
+<A NAME="Interest">
+<h1>Interest</h1></A>
+<p>Before discussing the financial equation, we will discuss interest. Most
+financial transactions utilize a nominal interest rate, NAR, i.e., the interest
+rate per year. The NAR must be converted to the interest rate per payment
+period and the compounding accounted for before it can be used in computing
+an interest payment. After this conversion process, the interest used is the
+effective interest rate, EIR. In converting NAR to EIR, there are two concepts
+to discuss first, the Compounding Frequency and the Payment Frequency and
+whether the interest is compounded in discrete intervals or continuously.
+
+<A NAME="CompFreq">
+<h2>Compounding Frequency</h2></A>
+<p>The compounding Frequency, CF, is simply the number of times per year, the
+monies in the financial transaction are compounded. In the U.S., monies
+are usually compounded daily on bank deposits, and monthly on loans. Somtimes
+long term deposits are compounded quarterly or weekly.
+
+<A NAME="PayFreq">
+<h2>Payment Frequency</h2></A>
+<p>The Payment Frequency, PF, is simply how often during a year payments are
+made in the transaction. Payments are usually scheduled on a regular basis
+and can be made at the beginning or end of the payment period. If made at
+the beginning of the payment period, interest must be applied to the payment
+as well as any previous money paid or money still owed.
+
+<A NAME="NorVal">
+<h2>Normal CF/PF Values</h2></A>
+<p>Normal values for CF and PF are:
+<ul>
+<ul>
+<li>1   == annual
+<li>2   == semi-annual
+<li>3   == tri-annual
+<li>4   == quaterly
+<li>6   == bi-monthly
+<li>12  == monthly
+<li>24  == semi-monthly
+<li>26  == bi-weekly
+<li>52  == weekly
+<li>360 == daily
+<li>365 == daily
+</ul>
+</ul>
+
+<p>The  Compounding  Frequency per year,  CF,  need not be identical  to the
+Payment Frequency per year, PF. Also,
+Interest may be compounded in either discrete intervals or continuously
+compounded and payments may be made at the beginning of the payment period or at the
+end of the payment period.
+
+<p>CF and PF are defaulted to  12. The default is for discrete interest intervals
+and payments are defaulted to the end of the payment period.
+
+<p>When a solution  for n, PV,  PMT or FV  is required, the  nominal interest
+rate, i, must first be converted to the effective interest rate per payment
+period. This rate, ieff, is then used to compute the selected variable.  To
+convert i to ieff, the following expressions are used:
+
+<A NAME="DiscIntNARtoEIR">
+<h2>NAR to EIR for Discrete Interest Periods</h2></A>
+<p>To convert NAR to EIR for discrete interest periods:
+
+<p>ieff = (1 + i/CF)^(CF/PF) - 1
+
+<A NAME="ContIntNARtoEIR">
+<h2>NAR to EIR for Continuous Compounding</h2></A>
+<p>to convert NAR to EIR for Continuous Compounding:
+
+<p>ieff = e^(i/PF) - 1 = exp(i/PF) - 1
+
+<p>When interest is computed, the computation produces the effective interest
+rate, ieff. This value must then be converted to the nominal interest rate.
+Function  _I  in the <tt>"fin.exp"</tt> utility returns  the  nominal  interest
+rate NOT the effective interest rate. ieff is converted to i using the following expressions:
+
+<A NAME="DiscIntEIRtoNAR">
+<h2>EIR to NAR for Discrete Interest Periods</h2></A>
+<p>To convert EIR to NAR for discrete interest periods:
+
+<p>i = CF*([(1+ieff)^(PF/CF) - 1)
+
+<A NAME="ContIntEIRtoNAR">
+<h2>EIR to NAR for Continuous Compounding</h2></A>
+<p>To convert EIR to NAR for continuous compounding:
+
+<p>i = ln((1+ieff)^PF)
+
+<!--#############################################################################-->
+
+<!--#############################################################################-->
+
+<A NAME="FinEquation">
+<H1>Financial Equation</h1></A>
+<p>NOTE: in the equations below for the financial transaction, all interest rates
+are the effective interest rate, <tt>ieff</tt>. The symbol will be shortned to just <tt>i</tt>.
+
+<p>The financial equation used to inter-relate n,i,PV,PMT and FV is:
+
+<p>1) PV*(1 + i)^n + PMT*(1 + iX)*[(1+i)^n - 1]/i + FV = 0
+
+<pre>
+   Where: X   == 0 for end of period payments, and
+          X   == 1 for beginning of period payments
+          n   == number of payment periods
+          i   == effective interest rate for payment period
+          PV  == Present Value
+          PMT == periodic payment
+          FV  == Future Value
+</pre>
+
+<!--#############################################################################-->
+<A NAME="FinDeriv">
+<h2>Financial Equation Derivation</h2></A>
+<p>The derivation of the financial equation is contained in the
+<A HREF="finderv.html#TOP">Financial Equations</A>
+section.
+
+
+<!--#############################################################################-->
+
+<A NAME="AmortSched">
+<h1>Amortization Schedules.</h1></A>
+
+<A NAME="ED_IP_Dates">
+<h2>Effective and Initial Payment Dates</h2></A>
+<p>Financial Transactions have an effective Date, ED, and an Initial Payment
+Date, IP. ED may or may not be the same as IP, but IP is always the same
+or later than ED. Most financial transaction calculators assume that
+IP is equal to ED for beginning of period payments or at the end of the
+first payment period for end of period payments.
+
+<p>This is not always true. IP may be delayed for financial reasons such as cash
+flow or accounting calender. The subsequent payments then follow the
+agreed upon periodicity.
+
+<A name="Eff_PV">
+<h2>Effective Present Value</h2></A>
+<p>Since money has a time value, the "delayed" IP
+must be accounted for. Computing an "Effective PV", pve, is one means of
+handling a delayed IP.
+
+<p>If
+
+<pre>
+ED_jdn == the Julian Day Number of ED, and
+IP_jdn == the Julian Day Number of IP
+</pre>
+
+<p>pve is computed as:
+
+<pre>
+   pve = pv*(1 + i)^(s*PF/d*CF)
+
+   Where: d = length of the payment period in days, and
+          s = IP_jdn - ED_jdn - d*(1 - X)
+</pre>
+
+<A name="iterative_soltn">
+<h2>Iterative Amortization Schedule</h2></A>
+<p>Computing an amortization Schedule for a given financial transaction is
+simply applying the basic equation iteratively for each payment period:
+
+<pre>
+   PV[n] = PV[n-1] + (PMT + (PV[n-1] + X * PMT) * i)
+         = PV[n-1] * (1 + i) + PMT * (1 + iX)
+    for n >= 1
+</pre>
+
+<p>At the end of each iteration, PV[n] is rounded to the nearest cent. For
+each payment period, the interest due may be computed separately as:
+
+<pre>
+   ID[n] = (PV[n-1] + X * PMT) * i
+</pre>
+
+<p>and rounded to the nearest cent. PV[n] then becomes:
+
+<pre>
+   PV[n] = PV[n-1] + PMT + ID[n]
+</pre>
+
+<A name="AnnualSum">
+<h2>Annual Summary</h2></A>
+<p>For those cases where a yearly summary only is desired, it is not necessary
+to compute each transaction for each payment period, rather the PV may be
+be computed for the beginning of each year, PV[yr], and the FV computed for
+the end of the year, FV[yr]. The interest paid during the year is the computed as:
+
+<pre>
+   ID[yr] = (NP * PMT) + PV[yr] + FV[yr]
+    where: NP == number of payments during year
+              == PF for a full year of payments
+</pre>
+
+<A name="FinalPayment">
+<h2>Final Payment Calculation</h2></A>
+<p>Since the final payment may not be equal to the periodic payment, the final
+payment must be computed separately as follows. Two derivations are given below
+for the final payment equation. Both derivations are given below since one or
+the other may be clearer to some readers. Both derivations are essentially
+the same, they just have different starting points. The first is the fastest to derive.
+
+<p>Note, for the purposes of computing an amortization table, the number of periodic
+payments is assumed to be an integral value. For most cases this is true, the two
+principles in any transaction usually agree upon a certain term or number of periodic
+payments. In some calculations, however, this may not hold. In all of the calculations
+below, n is assumed integral and in the gnucash implementation, the following calculation
+is performed to assure this fact:
+
+<pre>
+    n = int(n)
+</pre>
+
+<ol>
+<li>final_pmt == final payment @ payment n
+<p>From the basic financial equation derived above:
+
+<pre>
+       PV[n] = PV[n-1]*(1 + i) + final_pmt * (1 + iX), i == effective interest rate
+</pre>
+
+<p>solving for final_pmt, we have:
+<p>NOTE: FV[n] = -PV[n], for any n
+
+<pre>
+       final_pmt * (1 + iX) = PV[n] - PV[n-1]*(1 + i)
+                            = FV[n-1]*(1 + i) - FV[n]
+       final_pmt = FV[n-1]*(1+i)/(1 + iX) - FV[n]/(1 + iX)
+
+       final_pmt = FV[n-1]*(1 + i) - FV[n], for X == 0, end of period payments
+                 = FV[n-1] - FV[n]/(1 + i), for X == 1, beginning of period payments
+</pre>
+
+<li>final_pmt == final payment @ payment n
+
+<pre>
+       i[n] == interest due @ payment n
+       i[n] = (PV[n-1] + X * final_pmt) * i, i == effective interest rate
+            = (X * final_pmt - FV[n]) * i
+</pre>
+
+<p>Now the final payment is the sum of the interest due, plus the present value
+at the next to last payment plus any residual future value after the last payment:
+
+<pre>
+       final_pmt = -i[n] - PV[n-1] - FV[n]
+                 = FV[n-1] - i[n] - FV[n]
+                 = FV[n-1] - (X *final_pmt - FV[n-1])*i - FV[n]
+                 = FV[n-1]*(1 + i) - X*final_pmt*i - FV[n]
+</pre>
+
+<p>solving for final_pmt:
+
+<pre>
+       final_pmt*(1 + iX) = FV[n-1]*(1 + i) - FV[n]
+       final_pmt = FV[n-1]*(1 + i)/(1 + iX) - FV[n]/(1 + iX)
+
+       final_pmt = FV[n-1]*(1 + i) - FV[n], for X == 0, end of period payments
+                 = FV[n-1] - FV[n]/(1 + i), for X == 1, beginning of period payments
+</pre>
+</ol>
+
+<!--================================================================================-->
+
+<A name="AmortCases">
+<h2>Amortization Cases</h2></A>
+
+<p>The amortization schedule is computed for six different situations:
+
+<ol>
+<A name="ConstOrigData">
+<h3>Constant Repayment to Principal, Original Data</h3>
+<li>In a constant repayment to principal loan, each payment varies. A constant amount
+is applied to the principal for each payment, usually equal to the originating present value
+divided by the number of repayment periods, and the interest for the payment period is
+added to the constant principal payment. The derivation of the equation for this type
+is contained in the <A HREF="constderv.html#TOP">Constant Repayment Equations</A> section. This
+case computes the amortization schedule with the original loan data and a constant repayment
+to principal.
+
+<A name="ConstNewData">
+<h3>Constant Repayment to Principal, Delayed Repayment</h3>
+<li>In a constant repayment to principal loan, each payment varies. A constant amount
+is applied to the principal for each payment, usually equal to the originating present value
+divided by the number of repayment periods, and the interest for the payment period is
+added to the constant principal payment. The derivation of the equation for this type
+is contained in the <A HREF="constderv.html#TOP">Constant Repayment Equations</A> section. This
+case computes the amortization schedule with the delayed loan data and a constant repayment
+to principal.
+
+<A name="OrigData">
+<h3>Original Data Schedule</h3></A>
+<li>The original financial data is used. This ignores any possible agjustment to
+the Present value due to any delay in the initial payment. This is quite
+common in mortgages where end of period payments are used and the first
+payment is scheduled for the end of the first whole period, i.e., any
+partial payment period from ED to the beginning of the next payment period
+is ignored.
+
+<A name="NewFinalPayment">
+<h3>Recomputed Final Payment</h3></A>
+<li>The original periodic payment is used, the Present Value is adjusted for the
+delayed Initial Payment. The total number of payments remains the same. The
+final payment is adjusted to bring the balance into agreement with the
+agreed upon final Future Value.
+
+<A name="NewPayment">
+<h3>Recomputed Periodic Payment</h3></A>
+<li>A new periodic payment is computed based upon the adjusted Present Value, the
+originally agreed upon number of total payments and the agreed upon Future Value.
+The new periodic payments are computed to minimize the final payment in accordance
+with the Future Value after the last payment.
+
+<A name="NewTerm">
+<h3>Recomputed Term</h3></A>
+<li>The original periodic payment is retained and a new number of total payments is computed
+based upon the adjusted Present Value and the agreed upon Future Value.
+</ol>
+
+<a name="DisplaySched">
+<h2>Amortization Schedule Display</h2></A>
+<p>The amortization schedule may be computed and displayed in three manners:
+
+<ol>
+<li>The payment#, interest paid, principal paid and remaining PV for each payment period
+are computed and displayed.
+<p>At the end of each year a summary is computed and displayed
+and the total interest paid is diplayed at the end.
+
+<li>A summary is computed and displayed for each year. The interest paid during the
+year is computed and displayed as well as the remaining balance at years end.
+<p>The total interest paid is diplayed at the end.
+
+<li>An amortization schedule is computed and displayed for a common method of
+advanced payment of principal.
+<p>In this amortization schedule, the principal for the
+next payment is computed and added into the current payment. This method will
+cut the number of total payments in half and will cut the interest paid almost
+in half.
+<p>For mortgages, this method of prepayment has the advantage of keeping
+the total payments small during the initial payment periods
+The payments grow until the last payment period when presumably the borrower
+can afford larger payments.
+</ol>
+
+<!--================================================================================-->
+<p>NOTE: For Payment Frequencies, PF, semi-monthly or less, i.e., PF == 12 or PF == 24,
+a 360 day calender year and 30 day month are used. For Payment Frequencies, PF,
+greater than semi-monthly, PF > 24, the actual number of days per year and per payment
+period are used. The actual values are computed using the built-in 'jdn' function
+
+<!--#############################################################################-->
+<a name="Usage">
+<h1>Financial Calculator Usage</h1></a>
+<p>the Financial Calculator is run as a QTAwk utility. If input is to be interactive and
+from the keyboard, do not specify any input files on the command line. The financial
+calcutlator reads all input from the standard input file. The calculator is started
+as:
+
+<pre>
+QTAwk -f fin.exp
+</pre>
+
+<p>The calculator will clear the display screen and display a two screen help:
+
+<pre>
+Financial Calculator
+Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+To compute Loan Quantities:
+N ==> to compute # payment periods from i, pv, pmt, fv
+_N(i,pv,pmt,fv,CF,PF,disc,bep) ==> to compute # payment periods
+I ==> to compute nominal interest rate from n, pv, pmt, fv, CF, PF, disc, bep
+_I(n,pv,pmt,fv,CF,PF,disc,bep) ==> to compute interest
+PV ==> to compute Present Value from n, i, pmt, fv, CF, PF, disc, bep
+_PV(n,i,pmt,fv) ==> to compute Present Value
+PMT ==> to compute Payment from n, i, pv, fv, CF, PF, disc, bep
+_PMT(n,i,pv,fv,CF,PF,disc,bep) ==> to compute Payment
+FV ==> to compute Future Value from n, i, pv, pmt, CF, PF, disc, bep
+_FV(n,i,pv,pmt,CF,PF,disc,bep) ==> to compute Future Value
+Press Any Key to Continue
+</pre>
+
+<p>The first screen displays the calculator commands which are available. Press any key
+and a second screen displays the variables defined by the calculator and which must be
+set by the user to use the financial calculator functions.
+
+<pre>
+[Aa](mort)? to Compute Amortization Schedule
+[Cc](ls)? to Clear Screen
+[Dd](efault)? to Re-Initialize
+[Hh](elp) to Display This Help
+[Qq](uit)? to Quit
+[Ss](tatus)? to Display Status of Computations
+[Uu](ser) Display User Defined Variables
+
+Variables to set:
+n    == number of periodic payments
+i    == interest per compouding interval
+pv   == present value
+pmt  == periodic payment
+fv   == future value
+disc == TRUE/FALSE == discrete/continuous compounding
+bep  == TRUE/FALSE == beginning of period/end of period payments
+CF   == compounding frequency per year
+PF   == payment frequency per year
+
+ED   == effective date of transaction, mm/dd/yyyy
+IP   == initial payment date of transaction, mm/dd/yyyy
+</pre>
+
+<a name="FinCommands">
+<h2>Calculator Commands</h2></a>
+<p>The financial calculator commands available are listed above and below.
+
+<p>Note that the first letter of the command is all that is necessary to activate the
+desired function.
+
+<ol>
+<li>[Aa](mort)? to Compute Amortization Schedule
+<br>After all financial variables have been defined as well as the transaction dates,
+the amortization schedule can be computed for all financial transactions in which
+one would make sense.
+<li>[Cc](ls)? to Clear Screen
+<br>This command clears the screen and displays the copyright.
+<li>[Dd](efault)? to Re-Initialize
+<br>This command re-initializes all calculator variables to their start-up values.
+<li>[Hh](elp) to Display This Help
+<br>This command is used to display the start-up help screens at any time.
+<li>[Qq](uit)? to Quit
+<br>When the calculator is used interactively from the keyboard, this command allows
+the user to terminate the calculator session.
+<li>[Ss](tatus)? to Display Status of Computations
+<br>This command displays the status of the calculator variables. A typical status display
+would be:
+
+<pre>
+Financial Calculator
+Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved
+Current Financial Calculator Status:
+Compounding Frequency: (CF) 12
+Payment     Frequency: (PF) 12
+Compounding: Discrete (disc = TRUE)
+Payments: End of Period (bep = FALSE)
+Number of Payment Periods (n): 360              (Years: 30)
+Nominal Annual Interest Rate (i): 7.25
+  Effective Interest Rate Per Payment Period: 0.00604167
+Present Value (pv): 233,350.00
+Periodic Payment (pmt): -1,591.86
+Future Value (fv): 0.00
+Effective       Date: Tue Jun 04 00:00:00 1996(2450239)
+Initial Payment Date: Thu Aug 01 00:00:00 1996(2450297)
+<>
+</pre>
+<li>[Uu](ser) Display User Defined Variables
+<br>If any variables have been defined by the user, this command displays their names and
+values.
+</ol>
+
+<a name="CalcInput">
+<h2>Calculator Input</h2></a>
+<p>The calculator displays an <tt>input prompt</tt> whenever it is waiting for input
+from the keyboard. The <tt>input prompt</tt> is simply <tt>&#60;&#62;</tt>. The desired
+input is typed at the keyboard and the enter key pressed. The result of calculating the
+value of the input line is then displayed by the calculator. For example, if the user wanted
+to set the value of the nominal interest in the calculator to 6.25, the following line would be
+input to the calculator:
+
+<p><tt>i=6.25</tt>.
+
+<p>A semi-colon at the end of the input is optional.
+The line as seen on the display with the calculator input prompt would be:
+
+<pre>
+<>i = 6.25
+    6.25
+</pre>
+
+<p>Note that the calculator displays the value of the result, 6.25 in this case.
+
+<p>The calculator is controlled by setting the calculator variables to the desired values
+and <tt>"executing"</tt> the calculator functions to derive the values for the unknown
+variables. For example, for a conventional home mortgage for $233,350.00 with a thirty year
+term, nominal annual rate of 7.25%, n, i, pv and fv are known:
+
+<pre>
+n == 360 == 12 * 30
+i == 7.25
+pv= 233350
+fv = 0
+</pre>
+
+<p>The payments to completely pay off the mortgage with the 360 periodic payments is desired.
+To compute the desired periodic payment value, the <tt>PMT</tt> function is used. Since the
+function has no defined arguments, in invoking the function no arguments are specified. The
+complete session to input the desired values and calculate the periodic payment value would
+appear as:
+
+<pre>
+<>n=30*12
+        360
+<>i=7.25
+        7.25
+<>pv=233350
+        233,350
+<>PMT
+        -1,591.86
+</pre>
+
+<p>Note that the input may contain computations, <tt>n=30*12</tt>. In addition, any QTAwk
+built-in function may be specified and any functions defined in the financial calculator.
+This can be handy for computing intermediate values or other results from the results of
+the calculator.
+
+<p>Note that the output of the <tt>PMT</tt> function is rounded to the nearest cent. Over the
+thirty year term of the payback, the rounding will affect the last payment. To determine
+the balance due, fv, after 359 payment have been made, decrement n by 1 and compute the
+future value:
+
+<pre>
+<>n-=1
+        359
+<>FV
+        -1,580.20
+<>n+=1
+        360
+<>FV
+        2.12
+<>
+</pre>
+
+<p>The future value after 359 payments is less than the periodic payment and a full final payment
+will overpay the loan. The final FV computation with n restored to 360 shows an overpayment
+of 2.12.
+
+<a name="CalcFun">
+<h2>Calculator Functions</h2></a>
+<p>The calculator functions:
+
+<pre>
+N
+I
+PV
+PMT
+FV
+</pre>
+
+<p>can be used to calculate the variable with the corresponding lower case name, using the
+values of the other four calculator variables which have already been set. In addition, the
+calculator functions:
+
+<pre>
+_N(i,pv,pmt,fv,CF,PF,disc,bep)
+_I(n,pv,pmt,fv,CF,PF,disc,bep)
+_PV(n,i,pmt,fv,CF,PF,disc,bep)
+_PMT(n,i,pv,fv,CF,PF,disc,bep)
+_FV(n,i,pv,pmt,CF,PF,disc,bep)
+</pre>
+
+<p>can be used to compute the value of the corresponding quantity for any specified value
+of the input arguments.
+
+<p>There are three differences between the functions <tt>N, I, PV, PMT, FV</tt> and the
+functions
+<tt>_N(i,pv,pmt,fv,CF,PF,disc,bep), _I(n,pv,pmt,fv,CF,PF,disc,bep), _PV(n,i,pmt,fv,CF,PF,disc,bep),
+_PMT(n,i,pv,fv,CF,PF,disc,bep), _FV(n,i,pv,pmt,CF,PF,disc,bep)</tt>.
+<ol>
+<li>The first set of functions take no arguments and
+use the calculator variables, n, i, pv, pmt, fv, CF, PF, disc
+and bep to compute the desired value. The second set of functions use the values passed in
+the function arguments. The first set of functions call the second set with the necssary
+arguments.
+<li>The first set of functions round the computed value returned by the call to the second set
+of functions to the nearest cent. The second set of functions perform no rounding.
+<li>The first set of functions set the calculator variables with the corresponding lower case name
+to the value computed. The second set of functions set no global variable values.
+</ol>
+
+<a name="UserVar">
+<h2>User Defined Variables</h2></a>
+<p>User defined variables may be defined and their values set to a desired qunatity. For example,
+to save computation results before re-initializing the calculator to obtain other results. If
+the user desired to compare the periodic payments necessary to fully pay the conventional
+mortgage cited above, the payment computed above could be saved in the variable
+<tt>end_pmt</tt>, the payments set to beginning of period payments and the new payment
+computed. The new value could be set into the variable <tt>beg_pmt</tt>. The two payments
+could then be viewed with the <tt>u</tt> command. The difference could then be computed
+between the two payment methods:
+
+<pre>
+<>n=30*12
+        360
+<>i=7.25
+        7.25
+<>pv=233350
+        233,350
+<>PMT
+        -1,591.86
+<>end_pmt=pmt
+        -1,591.86
+<>bep=1
+        1
+<>PMT
+        -1,582.30
+<>beg_pmt=pmt
+        -1,582.30
+<>u
+
+Financial Calculator
+Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+Current Financial Calculator Status:
+User Defined Variables:
+end_pmt == -1,591.86
+beg_pmt == -1,582.30
+<>beg_pmt-end_pmt
+        9.56
+<>
+</pre>
+
+<p>The financial calculator is thus a true calculator and can be used for computations
+desired by the user beyond those performed by the functions of the utility.
+
+<a name="Rounding">
+<h2>Rounding</h2></a>
+<p>Note that the output of the calculator is rounded to the nearest cent for floating
+point values. Sometimes the full accuracy of the value is desired. This can be obtained
+by redefing the calculator variable <tt>ofmt</tt> to the string "%.15g". You might want to
+save the current value in a user variable for resetting. For example in the above
+conventional mortgage, the exact value of the periodic payment can be displayed as:
+
+<pre>
+<>sofmt=ofmt
+        "%.2f"
+<>ofmt="%.15g"
+        "%.15g"
+<>pmt=_PMT(n,i,pv,fv,CF,PF,disc,bep)
+        -1,591.85834951112
+<>ofmt=sofmt
+        "%.2f"
+<>
+</pre>
+
+<p>Note that the current value of the output format string, <tt>ofmt</tt>, has been
+saved in the variable, <tt>sofmt</tt>, and later restored.
+
+<a name="Examples">
+<h1>Examples</h1></a>
+<!-- Note: in the following examples, the user input is preceeded by the prompt     -->
+<!-- "<>". The result of evaluating the input expression is then displayed.         -->
+<!-- I have taken the liberty of including comments in the example                  -->
+<!-- input/output sessions by preceeding with '#'. Thus, for the line:              -->
+<!-- <>n=5         #set number of periods                                           -->
+<!-- the comment that setting the number of periods is not really input and the true-->
+<!-- input is only:                                                                 -->
+<!-- <>n=5                                                                          -->
+
+<a name="SimpleInt">
+<h2>Simple Interest </h2></a>
+<p>Simple Interest
+<p> Find the annual simple interest rate (%) for an $800 loan to be repayed at the
+ end of one year with a single payment of $896.
+<pre>
+ <>d
+ <>CF=PF=1
+         1
+ <>n=1
+         1
+ <>pv=-800
+         -800
+ <>fv=896
+         896
+ <>I
+         12.00
+</pre>
+
+<a name="CompundInt">
+<h2>Compound Interest</h2></a>
+<p>Compound Interest
+<p>Find the future value of $800 after one year at a nominal rate of 12%
+ compounded monthly. No payments are specified, so the payment frequency is
+ set equal to the compounding frequency at the default values.
+<pre>
+ <>d
+ <>n=12
+         12
+ <>i=12
+         12
+ <>pv=-800
+         -800
+ <>FV
+          901.46
+</pre>
+
+<a name="PeriodicPmt">
+<h2>Periodic Payment</h2></a>
+<p>Periodic Payment
+<p>Find the monthly end-of-period payment required to fully amortize the loan
+ in Example 2. A fully amortized loan has a future value of zero.
+<pre>
+ <>fv=0
+        0
+ <>PMT
+        71.08
+</pre>
+
+<a name="ConvMortg">
+<h2>Conventional Mortgage</h2></a>
+<p>Conventional Mortgage
+<p>Find the number of monthly payments necessary to fully amortize a loan of
+ $100,000 at a nominal rate of 13.25% compounded monthly, if monthly end-of-period
+ payments of $1125.75 are made.
+<pre>
+ <>d
+ <>i=13.25
+         13.25
+ <>pv=100000
+         100,000
+ <>pmt=-1125.75
+         -1,125.75
+ <>N
+         360.10
+</pre>
+
+<a name="FinalPmt">
+<h2>Final Payment</h2></a>
+<p>Final Payment
+<p>Using the data in the above example, find the amount of the final payment if n is
+changed to 360. The final payment will be equal to the regular payment plus
+any balance, future value, remaining at the end of period number 360.
+<pre>
+ <>n=int(n)
+        360
+ <>FV
+        -108.87
+ <>pmt+fv
+        -1,234.62
+</pre>
+
+<a name="AS_AnnualSum">
+<h2>Conventional Mortgage Amortization Schedule - Annual Summary</h2></a>
+<p>Conventional Mortgage Amortization Schedule - Annual Summary
+<p>Using the data from the loan in the previous example, compute the amortization
+schedule when the
+Effective date of the loan is June 6, 1996 and the initial payment is
+made on August 1, 1996. Ignore any change in the PV due to the delayed
+initial payment caused by the partial payment period from June 6 to July 1.
+
+<pre>
+ <>ED=6/6/1996
+ Effective Date set: (2450241) Thu Jun 06 00:00:00 1996
+ <>IP=8/1/96
+ Initial Payment Date set: (2450297) Thu Aug 01 00:00:00 1996
+ <>a
+   Effective       Date: Thu Jun 06 00:00:00 1996
+   Initial Payment Date: Thu Aug 01 00:00:00 1996
+   The amortization options are:
+   The Old Present Value (pv)     was: 100,000.00
+   The Old Periodic Payment (pmt) was: -1,125.75
+   The Old Future  Value (fv)     was: -108.87
+   1: Amortize with Original Transaction Values
+       and final payment: -1,125.75
+
+   The New Present Value (pve)  is:  100,919.30
+   The New Periodic Payment (pmt) is:  -1,136.10
+   2: Amortize with Original Periodic Payment
+       and final payment: -49,023.68
+   3: Amortize with New Periodic Payment
+       and final payment: -1,132.57
+   4: Amortize with Original Periodic Payment,
+       new number of total payments (n): 417
+       and final payment: -2,090.27
+
+   Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press '1' to choose option 1:
+
+<pre>
+    Amortization Schedule:
+   Yearly, y, per Payment, p, or Advanced Payment, a, Amortization
+   Enter choice y, p or a:
+   <>
+</pre>
+
+<p>Press 'y' for an annual summary:
+
+<pre>
+   Enter Filename for Amortization Schedule.
+     (null string uses Standard Output):
+</pre>
+
+<p>Press enter to display output on screen:
+
+<pre>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (359): -1,125.75
+  Final payment (# 360): -1,125.75
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Year      Interest   Ending Balance
+  1996     -5,518.42       -99,889.67
+  1997    -13,218.14       -99,598.81
+  1998    -13,177.17       -99,266.98
+  1999    -13,130.43       -98,888.41
+  2000    -13,077.11       -98,456.52
+  2001    -13,016.28       -97,963.80
+  2002    -12,946.88       -97,401.68
+  2003    -12,867.70       -96,760.38
+  2004    -12,777.38       -96,028.76
+  2005    -12,674.33       -95,194.09
+  2006    -12,556.76       -94,241.85
+  2007    -12,422.64       -93,155.49
+  2008    -12,269.63       -91,916.12
+  2009    -12,095.06       -90,502.18
+  2010    -11,895.91       -88,889.09
+  2011    -11,668.70       -87,048.79
+  2012    -11,409.50       -84,949.29
+  2013    -11,113.78       -82,554.07
+  2014    -10,776.41       -79,821.48
+  2015    -10,391.53       -76,704.01
+  2016     -9,952.43       -73,147.44
+  2017     -9,451.49       -69,089.93
+  2018     -8,879.99       -64,460.92
+  2019     -8,227.99       -59,179.91
+  2020     -7,484.16       -53,155.07
+  2021     -6,635.56       -46,281.63
+  2022     -5,667.43       -38,440.06
+  2023     -4,562.94       -29,494.00
+  2024     -3,302.89       -19,287.89
+  2025     -1,865.36        -7,644.25
+  2026       -236.00          -108.87
+
+  Total Interest: -305,270.00
+</pre>
+
+<p> NOTE: The amortization table leaves the FV as it was when the amortization
+function was entered. Thus, a balance of 108.87 is due at the end of the
+table. To completely pay the loan, set fv to 0.0:
+<pre>
+<>fv=0
+    0
+<>a
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  The amortization options are:
+  The Old Present Value (pv)     was: 100,000.00
+  The Old Periodic Payment (pmt) was: -1,125.75
+  The Old Future  Value (fv)     was: 0.00
+  1: Amortize with Original Transaction Values
+      and final payment: -1,234.62
+
+  The New Present Value (pve)  is:  100,919.30
+  The New Periodic Payment (pmt) is:  -1,136.12
+  2: Amortize with Original Periodic Payment
+      and final payment: -49,132.55
+  3: Amortize with New Periodic Payment
+      and final payment: -1,148.90
+  4: Amortize with Original Periodic Payment,
+      new number of total payments (n): 417
+      and final payment: -2,199.14
+
+  Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press '1' for option 1:
+
+<pre>
+    Amortization Schedule:
+   Yearly, y, per Payment, p, or Advanced Payment, a, Amortization
+   Enter choice y, p or a:
+   <>
+</pre>
+
+<p>Press 'y' for annual summary:
+
+<pre>
+   Enter Filename for Amortization Schedule.
+     (null string uses Standard Output):
+</pre>
+
+<p>Press enter to display output on screen:
+
+<pre>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (359): -1,125.75
+  Final payment (# 360): -1,234.62
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Year      Interest   Ending Balance
+  1996     -5,518.42       -99,889.67
+  1997    -13,218.14       -99,598.81
+  1998    -13,177.17       -99,266.98
+  1999    -13,130.43       -98,888.41
+  2000    -13,077.11       -98,456.52
+  2001    -13,016.28       -97,963.80
+  2002    -12,946.88       -97,401.68
+  2003    -12,867.70       -96,760.38
+  2004    -12,777.38       -96,028.76
+  2005    -12,674.33       -95,194.09
+  2006    -12,556.76       -94,241.85
+  2007    -12,422.64       -93,155.49
+  2008    -12,269.63       -91,916.12
+  2009    -12,095.06       -90,502.18
+  2010    -11,895.91       -88,889.09
+  2011    -11,668.70       -87,048.79
+  2012    -11,409.50       -84,949.29
+  2013    -11,113.78       -82,554.07
+  2014    -10,776.41       -79,821.48
+  2015    -10,391.53       -76,704.01
+  2016     -9,952.43       -73,147.44
+  2017     -9,451.49       -69,089.93
+  2018     -8,879.99       -64,460.92
+  2019     -8,227.99       -59,179.91
+  2020     -7,484.16       -53,155.07
+  2021     -6,635.56       -46,281.63
+  2022     -5,667.43       -38,440.06
+  2023     -4,562.94       -29,494.00
+  2024     -3,302.89       -19,287.89
+  2025     -1,865.36        -7,644.25
+  2026       -344.87             0.00
+
+  Total Interest: -305,378.87
+</pre>
+
+<p>Note that now the final payment differs from the periodic payment and
+the loan has been fully paid off.
+
+<a name="AS_PeriodicPmt">
+<h2>Conventional Mortgage Amortization Schedule - Periodic Payment Schedule</h2></a>
+<p>Conventional Mortgage Amortization Schedule  - Periodic Payment Schedule
+<p>Using the loan in the previous example, compute the amortization table and display the
+results for each payment period.
+As in example 6, ignore any increase in the PV due to the
+delayed IP.
+
+<pre>
+<>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (359): -1,125.75
+  Final payment (# 360): -1,234.62
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Pmt#       Interest      Principal        Balance
+     1      -1,104.17         -21.58     -99,978.42
+     2      -1,103.93         -21.82     -99,956.60
+     3      -1,103.69         -22.06     -99,934.54
+     4      -1,103.44         -22.31     -99,912.23
+     5      -1,103.20         -22.55     -99,889.68
+  Summary for 1996:
+    Interest  Paid: -5,518.43
+    Principal Paid: -110.32
+    Year Ending Balance: -99,889.68
+    Sum of Interest Paid: -5,518.43
+  Pmt#       Interest      Principal        Balance
+     6      -1,102.95         -22.80     -99,866.88
+     7      -1,102.70         -23.05     -99,843.83
+     8      -1,102.44         -23.31     -99,820.52
+     9      -1,102.18         -23.57     -99,796.95
+    10      -1,101.92         -23.83     -99,773.12
+    11      -1,101.66         -24.09     -99,749.03
+    12      -1,101.40         -24.35     -99,724.68
+    13      -1,101.13         -24.62     -99,700.06
+    14      -1,100.85         -24.90     -99,675.16
+    15      -1,100.58         -25.17     -99,649.99
+    16      -1,100.30         -25.45     -99,624.54
+    17      -1,100.02         -25.73     -99,598.81
+  Summary for 1997:
+    Interest  Paid: -13,218.13
+    Principal Paid: -290.87
+    Year Ending Balance: -99,598.81
+    Sum of Interest Paid: -18,736.56
+  Pmt#       Interest      Principal        Balance
+    18      -1,099.74         -26.01     -99,572.80
+    19      -1,099.45         -26.30     -99,546.50
+    .
+    .
+    .
+   346        -171.99        -953.76     -14,622.84
+   347        -161.46        -964.29     -13,658.55
+   348        -150.81        -974.94     -12,683.61
+   349        -140.05        -985.70     -11,697.91
+   350        -129.16        -996.59     -10,701.32
+   351        -118.16      -1,007.59      -9,693.73
+   352        -107.03      -1,018.72      -8,675.01
+   353         -95.79      -1,029.96      -7,645.05
+  Summary for 2025:
+    Interest  Paid: -1,865.45
+    Principal Paid: -11,643.55
+    Year Ending Balance: -7,645.05
+    Sum of Interest Paid: -305,034.80
+  Pmt#       Interest      Principal        Balance
+   354         -84.41      -1,041.34      -6,603.71
+   355         -72.92      -1,052.83      -5,550.88
+   356         -61.29      -1,064.46      -4,486.42
+   357         -49.54      -1,076.21      -3,410.21
+   358         -37.65      -1,088.10      -2,322.11
+   359         -25.64      -1,100.11      -1,222.00
+  Final Payment (360): -1,235.49
+   360         -13.49      -1,222.00           0.00
+  Summary for 2026:
+    Interest  Paid: -344.94
+    Principal Paid: -7,645.05
+
+  Total Interest: -305,379.74
+</pre>
+
+<p>The complete amortization table can be viewed in the
+<A HREF="./amortp.html#AmortPer">Periodic Amortization Schedule</A> for this loan.
+
+<p>You will notice several differences between this amortization schedule and the
+Annual Summary Schedule. The Periodic Payment Schedule lists the interest paid for
+each payment as well as the principal paid and the remaining balance to be repaid.
+At the end of each year an annual summary is printed. At the end of the table the
+total interest is printed as in the Annual Summary Schedule.
+
+<p>You will notice that the total interest output at the end of the Periodic Payment
+Schedule differs slightly from the total interest output at the end of the Annual Summary
+Schedule:
+
+<p>Total Interest for Periodic Payment Schedule:
+<pre>
+  Total Interest: -305,379.74
+</pre>
+
+<p>Total Interest for Annual Summary Schedule:
+
+<pre>
+  Total Interest: -305,378.87
+</pre>
+
+<p>The difference in total interest is due to the rounding of all quantities at
+each periodic payment. The Total Interest paid shown in the Periodic Payment
+Schedule will be the more accurate since all quantities exchanged in a financial
+transaction will be done to the nearest cent.
+
+<a name="AS_VarAdvPmt">
+<h2>Conventional Mortgage Schedule - Variable Advanced Payments</h2></a>
+<p>Conventional Mortgage Schedule - Variable Advanced Payments
+<p>Again using the loan in the previous examples, compute the amortization table using
+the advanced payment
+option to prepay the loan. As in the previous example, ignore any increase in the PV due to the
+delayed IP.
+
+<pre>
+<a>
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  The amortization options are:
+  The Old Present Value (pv)     was: 100,000.00
+  The Old Periodic Payment (pmt) was: -1,125.75
+  The Old Future  Value (fv)     was: 0.00
+  1: Amortize with Original Transaction Values
+      and final payment: -1,234.62
+
+  The New Present Value (pve)  is:  100,919.30
+  The New Periodic Payment (pmt) is:  -1,136.12
+  2: Amortize with Original Periodic Payment
+      and final payment: -49,132.55
+  3: Amortize with New Periodic Payment
+      and final payment: -1,148.90
+  4: Amortize with Original Periodic Payment,
+      new number of total payments (n): 417
+      and final payment: -2,199.14
+
+  Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press 1 for option 1:
+
+<pre>
+   Amortization Schedule:
+  Yearly, y, per Payment, p, or Advanced Payment, a, Amortization
+  Enter choice y, p or a:
+  <>
+</pre>
+
+<p>Press a for the Advanced Payment Option:
+
+<pre>
+  Enter Filename for Amortization Schedule.
+    (null string uses Standard Output):
+</pre>
+
+<p>Press enter to display output on screen:
+
+<pre>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (359): -1,125.75
+  Final payment (# 360): -1,234.62
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Advanced Prepayment Amortization
+  Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+     1    -1,104.17       -21.58       -21.82    -1,147.57   -99,956.60
+     2    -1,103.69       -22.06       -22.31    -1,148.06   -99,912.23
+     3    -1,103.20       -22.55       -22.80    -1,148.55   -99,866.88
+     4    -1,102.70       -23.05       -23.31    -1,149.06   -99,820.52
+     5    -1,102.18       -23.57       -23.83    -1,149.58   -99,773.12
+  Summary for 1996:
+    Interest  Paid: -5,515.94
+    Principal Paid: -226.88
+    Year Ending Balance: -99,773.12
+    Sum of Interest Paid: -5,515.94
+  Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+     6    -1,101.66       -24.09       -24.35    -1,150.10   -99,724.68
+     7    -1,101.13       -24.62       -24.90    -1,150.65   -99,675.16
+     8    -1,100.58       -25.17       -25.45    -1,151.20   -99,624.54
+     9    -1,100.02       -25.73       -26.01    -1,151.76   -99,572.80
+    10    -1,099.45       -26.30       -26.59    -1,152.34   -99,519.91
+    11    -1,098.87       -26.88       -27.18    -1,152.93   -99,465.85
+    12    -1,098.27       -27.48       -27.78    -1,153.53   -99,410.59
+    13    -1,097.66       -28.09       -28.40    -1,154.15   -99,354.10
+    14    -1,097.03       -28.72       -29.03    -1,154.78   -99,296.35
+    15    -1,096.40       -29.35       -29.68    -1,155.43   -99,237.32
+    16    -1,095.75       -30.00       -30.34    -1,156.09   -99,176.98
+    17    -1,095.08       -30.67       -31.01    -1,156.76   -99,115.30
+  Summary for 1997:
+    Interest  Paid: -13,181.90
+    Principal Paid: -657.82
+    Year Ending Balance: -99,115.30
+    Sum of Interest Paid: -18,697.84
+  Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+    18    -1,094.40       -31.35       -31.70    -1,157.45   -99,052.25
+    19    -1,093.70       -32.05       -32.40    -1,158.15   -98,987.80
+    20    -1,092.99       -32.76       -33.12    -1,158.87   -98,921.92
+    .
+    .
+    .
+   167      -298.87      -826.88      -836.01    -1,961.76   -25,404.90
+   168      -280.51      -845.24      -854.57    -1,980.32   -23,705.09
+   169      -261.74      -864.01      -873.55    -1,999.30   -21,967.53
+   170      -242.56      -883.19      -892.94    -2,018.69   -20,191.40
+   171      -222.95      -902.80      -912.77    -2,038.52   -18,375.83
+   172      -202.90      -922.85      -933.04    -2,058.79   -16,519.94
+   173      -182.41      -943.34      -953.76    -2,079.51   -14,622.84
+  Summary for 2010:
+    Interest  Paid: -3,448.07
+    Principal Paid: -20,232.96
+    Year Ending Balance: -14,622.84
+    Sum of Interest Paid: -152,300.57
+  Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+   174      -161.46      -964.29      -974.94    -2,100.69   -12,683.61
+   175      -140.05      -985.70      -996.59    -2,122.34   -10,701.32
+   176      -118.16    -1,007.59    -1,018.72    -2,144.47    -8,675.01
+   177       -95.79    -1,029.96    -1,041.34    -2,167.09    -6,603.71
+   178       -72.92    -1,052.83    -1,064.46    -2,190.21    -4,486.42
+   179       -49.54    -1,076.21    -1,088.10    -2,213.85    -2,322.11
+   180       -25.64    -1,100.11    -1,222.00    -2,347.75         0.00
+  Summary for 2011:
+    Interest  Paid: -663.56
+    Principal Paid: -14,622.84
+
+  Total Interest: -152,964.13
+</pre>
+
+<p>The complete amortization table can be viewed in the
+<A HREF="./amorta.html#AmortAdv">Advanced Payment Amortization Schedule</A> for this loan.
+
+<p>This schedule has added two columns over the Periodic Payment Schedule in Example 7. Namely,
+<tt>Prepay</tt> and the <tt>Total Pmt</tt> columns. The <tt>Prepay</tt> column is the
+amount of the loan prepayment for the period. The <tt>Total Pmt</tt> column is the sum
+of the periodic payment and the Prepayment. Note that both the <tt>Prepay</tt> and the
+<tt>Total Pmt</tt> quantities increase with each period.
+
+<a name="AS_ConstAdvPmt">
+<h2>Conventional Mortgage Schedule - Constant Advanced Payments</h2></a>
+<p>Conventional Mortgage Schedule - Constant Advanced Payments
+<p>Using the loan in the previous examples, compute the amortization table using
+another payment option for repaying a loan ahead of schedule and reducing the interest
+paid, constant repayments at each periodic payment. Suppose a constant $100.00 is paid
+towards the principal with each periodic payment. How many payments are needed to fully payoff
+the loan and what is the total interest paid?
+
+<p>As in the previous example, ignore any increase in the PV due to the
+delayed IP.
+
+<p>There are two ways to compute the amortization table for this type of prepayment option.
+In the first method, set the variable 'FP' to the amount of the monthly prepayment.
+
+<pre>
+<>FP=-100
+  -100
+<>a
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  The amortization options are:
+  The Old Present Value (pv)     was: 100,000.00
+  The Old Periodic Payment (pmt) was: -1,125.75
+  The Old Future  Value (fv)     was: 0.00
+  1: Amortize with Original Transaction Values
+      and final payment: -1,234.62
+
+  The New Present Value (pve)  is:  100,919.30
+  The New Periodic Payment (pmt) is:  -1,136.12
+  2: Amortize with Original Periodic Payment
+      and final payment: -49,132.55
+  3: Amortize with New Periodic Payment
+      and final payment: -1,148.90
+  4: Amortize with Original Periodic Payment,
+      new number of total payments (n): 417
+      and final payment: -2,199.14
+
+  Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press 1 for option 1:
+
+<pre>
+   Amortization Schedule:
+  Yearly, y, per Payment, p, Advanced Payment, a, or Fixed Prepayment, f, Amortization
+  Enter choice y, p, a or f:
+  <>
+</pre>
+
+<p>Press f for the Fixed Prepayment schedule.
+
+<pre>
+  Enter Filename for Amortization Schedule.
+    (null string uses Standard Output):
+</pre>
+
+<p>Press enter to display output on screen:
+
+<pre>
+Amortization Table
+Effective       Date: Thu Jun  6 00:00:00 1996
+Initial Payment Date: Thu Aug  1 00:00:00 1996
+Compounding Frequency per year: 12
+Payment     Frequency per year: 12
+Compounding: Discrete
+Payments: End of Period
+Payments (359): -1,125.75
+Final payment (# 360): -1,234.62
+Nominal Annual Interest Rate: 13.25
+  Effective Interest Rate Per Payment Period: 0.0110417
+Present Value: 100,000.00
+Advanced Prepayment Amortization - fixed prepayment: -100.00
+Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+   1    -1,104.17       -21.58      -100.00    -1,225.75   -99,878.42
+   2    -1,102.82       -22.93      -100.00    -1,225.75   -99,755.49
+   3    -1,101.47       -24.28      -100.00    -1,225.75   -99,631.21
+   4    -1,100.09       -25.66      -100.00    -1,225.75   -99,505.55
+   5    -1,098.71       -27.04      -100.00    -1,225.75   -99,378.51
+Summary for 1996:
+  Interest  Paid: -5,507.26
+  Principal Paid: -621.49
+  Year Ending Balance: -99,378.51
+  Sum of Interest Paid: -5,507.26
+Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+   6    -1,097.30       -28.45      -100.00    -1,225.75   -99,250.06
+   7    -1,095.89       -29.86      -100.00    -1,225.75   -99,120.20
+   8    -1,094.45       -31.30      -100.00    -1,225.75   -98,988.90
+   9    -1,093.00       -32.75      -100.00    -1,225.75   -98,856.15
+  10    -1,091.54       -34.21      -100.00    -1,225.75   -98,721.94
+  11    -1,090.05       -35.70      -100.00    -1,225.75   -98,586.24
+  12    -1,088.56       -37.19      -100.00    -1,225.75   -98,449.05
+  13    -1,087.04       -38.71      -100.00    -1,225.75   -98,310.34
+  14    -1,085.51       -40.24      -100.00    -1,225.75   -98,170.10
+  15    -1,083.96       -41.79      -100.00    -1,225.75   -98,028.31
+  16    -1,082.40       -43.35      -100.00    -1,225.75   -97,884.96
+  17    -1,080.81       -44.94      -100.00    -1,225.75   -97,740.02
+Summary for 1997:
+  Interest  Paid: -13,070.51
+  Principal Paid: -1,638.49
+  Year Ending Balance: -97,740.02
+  Sum of Interest Paid: -18,577.77
+.
+.
+.
+
+Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+ 186      -298.60      -827.15      -100.00    -1,225.75   -26,115.84
+ 187      -288.36      -837.39      -100.00    -1,225.75   -25,178.45
+ 188      -278.01      -847.74      -100.00    -1,225.75   -24,230.71
+ 189      -267.55      -858.20      -100.00    -1,225.75   -23,272.51
+ 190      -256.97      -868.78      -100.00    -1,225.75   -22,303.73
+ 191      -246.27      -879.48      -100.00    -1,225.75   -21,324.25
+ 192      -235.46      -890.29      -100.00    -1,225.75   -20,333.96
+ 193      -224.52      -901.23      -100.00    -1,225.75   -19,332.73
+ 194      -213.47      -912.28      -100.00    -1,225.75   -18,320.45
+ 195      -202.29      -923.46      -100.00    -1,225.75   -17,296.99
+ 196      -190.99      -934.76      -100.00    -1,225.75   -16,262.23
+ 197      -179.56      -946.19      -100.00    -1,225.75   -15,216.04
+Summary for 2012:
+  Interest  Paid: -2,882.05
+  Principal Paid: -11,826.95
+  Year Ending Balance: -15,216.04
+  Sum of Interest Paid: -156,688.79
+Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+ 198      -168.01      -957.74      -100.00    -1,225.75   -14,158.30
+ 199      -156.33      -969.42      -100.00    -1,225.75   -13,088.88
+ 200      -144.52      -981.23      -100.00    -1,225.75   -12,007.65
+ 201      -132.58      -993.17      -100.00    -1,225.75   -10,914.48
+ 202      -120.51    -1,005.24      -100.00    -1,225.75    -9,809.24
+ 203      -108.31    -1,017.44      -100.00    -1,225.75    -8,691.80
+ 204       -95.97    -1,029.78      -100.00    -1,225.75    -7,562.02
+ 205       -83.50    -1,042.25      -100.00    -1,225.75    -6,419.77
+ 206       -70.88    -1,054.87      -100.00    -1,225.75    -5,264.90
+ 207       -58.13    -1,067.62      -100.00    -1,225.75    -4,097.28
+ 208       -45.24    -1,080.51      -100.00    -1,225.75    -2,916.77
+ 209       -32.21    -1,093.54      -100.00    -1,225.75    -1,723.23
+Summary for 2013:
+  Interest  Paid: -1,216.19
+  Principal Paid: -13,492.81
+  Year Ending Balance: -1,723.23
+  Sum of Interest Paid: -157,904.98
+Pmt#     Interest    Principal       Prepay    Total Pmt      Balance
+ 210       -19.03    -1,106.72      -100.00    -1,225.75      -516.51
+ 211        -5.70      -516.51         0.00      -522.21         0.00
+
+Total Interest: 157,929.71
+
+</pre>
+
+<p>In the second method, the periodic payment is increased by 100. With this method,
+the annual summary table can also be computed.
+
+<pre>
+<>s
+Financial Calculator
+Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+Current Financial Calculator Status:
+Compounding Frequency: (CF) 12
+Payment     Frequency: (PF) 12
+Compounding: Discrete (disc = TRUE)
+Payments: End of Period (bep = FALSE)
+Number of Payment Periods (n): 360              (Years: 30)
+Nominal Annual Interest Rate (i): 13.25
+  Effective Interest Rate Per Payment Period: 0.0110417
+Present Value (pv): 100,000.00
+Periodic Payment (pmt): -1,125.75
+Future Value (fv): 0.00
+Effective       Date: Thu Jun 06 00:00:00 1996(2450241)
+Initial Payment Date: Thu Aug 01 00:00:00 1996(2450297)
+<>pmt-=100
+        -1,225.75
+<>N
+        210.42
+<>
+</pre>
+
+<p>Thus, the loan will now be fully repaid in 210 full payments and a partial payment
+as illustrated in the previous table.
+To get the total interest paid, display the Annual Summary Amortization Schedule:
+
+<pre>
+Effective       Date: Thu Jun 06 00:00:00 1996
+Initial Payment Date: Thu Aug 01 00:00:00 1996
+The amortization options are:
+The Old Present Value (pv)     was: 100,000.00
+The Old Periodic Payment (pmt) was: -1,225.75
+The Old Future  Value (fv)     was: 0.00
+1: Amortize with Original Transaction Values
+    and final payment: -1,742.55
+
+The New Present Value (pve)  is:  100,919.30
+The New Periodic Payment (pmt) is:  -1,237.02
+2: Amortize with Original Periodic Payment
+    and final payment: -10,967.39
+3: Amortize with New Periodic Payment
+    and final payment: -1,757.20
+4: Amortize with Original Periodic Payment,
+    new number of total payments (n): 218
+    and final payment: -1,668.45
+
+Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press '1' for option 1:
+
+<pre>
+ Amortization Schedule:
+Yearly, y, per Payment, p, or Advanced Payment, a, Amortization
+Enter choice y, p or a:
+<>
+</pre>
+
+<p>Press 'y' for an annual Summary
+
+<pre>
+Enter Filename for Amortization Schedule.
+  (null string uses Standard Output):
+</pre>
+
+<p>Press enter to display the summary on the screen:
+
+<pre>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (209): -1,225.75
+  Final payment (# 210): -1,742.55
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Year      Interest   Ending Balance
+  1996     -5,507.26       -99,378.51
+  1997    -13,070.52       -97,740.03
+  1998    -12,839.74       -95,870.77
+  1999    -12,576.45       -93,738.22
+  2000    -12,276.08       -91,305.30
+  2001    -11,933.40       -88,529.70
+  2002    -11,542.46       -85,363.16
+  2003    -11,096.45       -81,750.61
+  2004    -10,587.62       -77,629.23
+  2005    -10,007.12       -72,927.35
+  2006     -9,344.86       -67,563.21
+  2007     -8,589.32       -61,443.53
+  2008     -7,727.36       -54,461.89
+  2009     -6,744.00       -46,496.89
+  2010     -5,622.13       -37,410.02
+  2011     -4,342.24       -27,043.26
+  2012     -2,882.08       -15,216.34
+  2013     -1,216.25        -1,723.59
+  2014        -18.96             0.00
+
+  Total Interest: -157,924.30
+</pre>
+
+<p>From the last line the Total interest has been decreased from $305,379.74 to
+$157,924.30.
+
+<p>We can also ask how much of a constant repayment would be necessary to  fully
+repay the loan in 15 years and what would be the total interest paid?
+
+<pre>
+  <>n=12*15
+          180
+  <>opmt=pmt
+          -1,125.75
+  <>PMT
+          -1,281.74
+  <>pmt-opmt
+          -155.99
+</pre>
+
+<p>Thus, a constant advanced repayment per periodic payment of $155.99 would fully
+amortize the loan in 15 years.
+
+<pre>
+  <>a
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  The amortization options are:
+  The Old Present Value (pv)     was: 100,000.00
+  The Old Periodic Payment (pmt) was: -1,281.74
+  The Old Future  Value (fv)     was: 0.00
+  1: Amortize with Original Transaction Values
+      and final payment: -1,279.73
+
+  The New Present Value (pve)  is:  100,919.30
+  The New Periodic Payment (pmt) is:  -1,293.52
+  2: Amortize with Original Periodic Payment
+      and final payment: -7,915.43
+  3: Amortize with New Periodic Payment
+      and final payment: -1,293.20
+  4: Amortize with Original Periodic Payment,
+      new number of total payments (n): 185
+      and final payment: -1,738.05
+
+  Enter choice 1, 2, 3 or 4: <>
+</pre>
+
+<p>Press '1' for option 1:
+
+<pre>
+   Amortization Schedule:
+  Yearly, y, per Payment, p, or Advanced Payment, a, Amortization
+  Enter choice y, p or a:
+  <>
+</pre>
+
+<p>Press 'y' for an annual Summary
+
+<pre>
+  Amortization Table
+  Effective       Date: Thu Jun 06 00:00:00 1996
+  Initial Payment Date: Thu Aug 01 00:00:00 1996
+  Compounding Frequency per year: 12
+  Payment     Frequency per year: 12
+  Compounding: Discrete
+  Payments: End of Period
+  Payments (179): -1,281.74
+  Final payment (# 180): -1,279.73
+  Nominal Annual Interest Rate: 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value: 100,000.00
+  Year      Interest   Ending Balance
+  1996     -5,501.01       -99,092.31
+  1997    -12,987.86       -96,699.29
+  1998    -12,650.80       -93,969.21
+  1999    -12,266.27       -90,854.60
+  2000    -11,827.58       -87,301.30
+  2001    -11,327.09       -83,247.51
+  2002    -10,756.12       -78,622.75
+  2003    -10,104.72       -73,346.59
+  2004     -9,361.57       -67,327.28
+  2005     -8,513.75       -60,460.15
+  2006     -7,546.51       -52,625.78
+  2007     -6,443.04       -43,687.94
+  2008     -5,184.14       -33,491.20
+  2009     -3,747.93       -21,858.25
+  2010     -2,109.42        -8,586.79
+  2011       -383.38             0.00
+
+  Total Interest: -130,711.19
+</pre>
+
+<p>The toral interest is reduced to $130,711.19. This compares to:
+
+<ol>
+<li>$130,711.19 - Fixed prepayment $155.99/period, 15 year term
+<li>$152,964.13 - Variable Advanced Repayment, 15 year term
+<li>$305,379.74 - no prepayment, 30 year term
+</ol>
+
+<a name="BalloonPmt">
+<h2>Balloon Payment</h2></a>
+<p>Balloon Payment
+<p>On long term loans, small changes in the periodic payments can generate
+large changes in the future value. If the monthly payment in the previous example is
+rounded down to $1125, how much addtional (balloon) payment will be due
+with the final regular payment.
+<pre>
+  <>s
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  Current Financial Calculator Status:
+  Compounding Frequency: (CF) 12
+  Payment     Frequency: (PF) 12
+  Compounding: Discrete (disc = TRUE)
+  Payments: End of Period (bep = FALSE)
+  Number of Payment Periods (n): 180              (Years: 15)
+  Nominal Annual Interest Rate (i): 13.25
+    Effective Interest Rate Per Payment Period: 0.0110417
+  Present Value (pv): 100,000.00
+  Periodic Payment (pmt): -1,281.74
+  Future Value (fv): 0.00
+  Effective       Date: Thu Jun 06 00:00:00 1996(2450241)
+  Initial Payment Date: Thu Aug 01 00:00:00 1996(2450297)
+  <>n=360
+          360
+  <>pmt=-1125
+          -1,125
+  <>FV
+          -3,579.99
+  <>
+</pre>
+
+<a name="CanadianMortg">
+<h2>Canadian Mortgage</h2></a>
+<p>Canadian Mortgage
+<p>A "Canadian Mortgage" is defined with semi-annual compunding, <tt>CF == 2</tt>,
+and monthly payments, <tt>PF == 12</tt>.
+
+<p>Find the monthly end-of-period payment necessary to fully amortize a 25 year
+$85,000 loan at 11% compounded semi-annually.
+<pre>
+ <>d
+ <>CF=2
+         2
+ <>n=300
+         300
+ <>i=11
+         11
+ <>pv=85000
+         85,000
+ <>PMT
+         -818.15
+</pre>
+
+<a name="EuropeanMortg">
+<h2></h2></a>
+<p>European Mortgage
+<p>The "effective annual rate (EAR)" is used in some countries (especially
+ in Europe) in lieu of the nominal rate commonly used in the United States
+ and Canada. For a 30 year $90,000 mortgage at 14% (EAR), compute the monthly
+ end-of-period payments. When using an EAR, the compounding frequency is
+ set to 1.
+<pre>
+ <>d
+ <>CF=1
+         1
+ <>n=30*12
+         360
+ <>i=14
+         14
+ <>pv=90000
+         90,000
+ <>PMT
+         -1,007.88
+</pre>
+
+<a name="BiWeeklySav">
+<h2>Bi-weekly Savings</h2></a>
+<p>Bi-weekly Savings
+<p>Compute the future value, fv, of bi-weekly savings of $100 for 3 years at a
+ nominal annual rate of 5.5% compounded daily. (Set payment to
+ beginning-of-period, bep = TRUE)
+<pre>
+ <>d
+ <>bep=TRUE
+         1
+ <>CF=365
+         365
+ <>PF=26
+         26
+ <>n=3*26
+         78
+ <>i=5.5
+         5.50
+ <>pmt=-100
+         -100
+ <>FV
+         8,489.32
+</pre>
+
+<a name="PV_AnnuiytDue">
+<h2>Present Value - Annuity Due</h2></a>
+<p>Present Value - Annuity Due
+<p>What is the present value of $500 to be received at the beginning of each
+ quarter over a 10 year period if money is being discounted at 10% nominal
+ annual rate compounded monthly?
+<pre>
+ <>d
+ <>bep=TRUE
+         1
+ <>PF=4
+         4
+ <>n=4*10
+         40
+ <>i=10
+         10
+ <>pmt=500
+         500
+ <>PV
+         -12,822.64
+</pre>
+
+<a name="EffRate">
+<h2>Effective Rate - 365/360 Basis</h2></a>
+<p>Effective Rate - 365/360 Basis
+<p>Compute the effective annual rate (%APR) for a nominal annual rate of 12%
+ compounded on a 365/360 basis used by some Savings & Loan Associations.
+<pre>
+ <>d
+ <>n=365
+         365
+ <>CF=365
+         365
+ <>PF=360
+         360
+ <>i=12
+         12
+ <>pv=-100
+         -100
+ <>FV
+         112.94
+ <>fv+pv
+         12.94
+</pre>
+
+<a name="EffAPY">
+<h2>Certificate of Deposit, Annual Percentage Yield</h2></a>
+<p>Certificate of Deposit, Annual Percentage Yield
+<p>Most, if not all banks have started stating return rates on Certificates of Deposit, CDs, as
+an Annual Percentage Yoild, APY, and the nominal annual interest. For example, a bank will advertise
+a CD with a 18 month term, an APY of 5.20% and a nominal rate of 5.00. What values of CF and PF will
+are being used?
+
+<pre>
+ <>d
+ <>n=365
+         365
+ <>CF=PF=365
+         365
+ <>i=5
+         5
+ <>pv=-100
+         -100
+ <>FV
+         105.13
+ <>CF=PF=360
+         360
+ <>fv+pv
+         -5.20
+</pre>
+<a name="MortgPoints">
+<h2>Mortgage with "Points"</h2></a>
+<p>Mortgage with "Points"
+<p>What is the true APR of a 30 year, $75,000 loan at a nominal rate of 13.25%
+ compounded monthly, with monthly end-of-period payments, if 3 "points"
+ are charged? The pv must be reduced by the dollar value of the points
+ and/or any lenders fees to establish an effective pv. Because payments remain
+ the same, the true APR will be higher than the nominal rate. Note, first
+ compute the payments on the pv of the loan amount.
+<pre>
+  <>n=30*12
+          360
+  <>i=13.25
+          13.25
+  <>pv=75000
+          75,000
+  <>PMT
+          -844.33
+  <>pv-=pv*0.03
+          72,750.00
+  <>I
+          13.69
+  <>
+</pre>
+
+<a name="EquivPmt">
+<h2>Equivalent Payments</h2></a>
+<p>Equivalent Payments
+<p>Find the equivalent monthly payment required to amortize a 20 year $40,000
+loan at 10.5% nominal annual rate compounded monthly, with 10 annual
+payments of $5029.71 remaining. Compute the pv of the remaining annual
+payments, then change n, the number of periods, and the payment frequency,
+PF, to a monthly basis and compute the equivalent monthly pmt.
+<pre>
+ <>d
+ <>PF=1
+         1
+ <>n=10
+         10
+ <>i=10.5
+         10.50
+ <>pmt=-5029.71
+         -5,029.71
+ <>PV
+         29,595.88
+ <>PF=12
+         12
+ <>n=120
+         120
+ <>PMT
+         -399.35
+</pre>
+
+<a name="Perpetuity">
+<h2>Perpetuity - Continuous Compounding</h2></a>
+<p>Perpetuity - Continuous Compounding
+<p>If you can purchase a single payment annuity with an initial investment of
+ $60,000 that will be invested at 15% nominal annual rate compounded
+ continuously, what is the maximum monthly return you can receive without
+ reducing the $60,000 principal? If the principal is not disturbed, the
+ payments can go on indefinitely (a perpetuity). Note that the term,n, of
+ a perpetuity is immaterial. It can be any non-zero value.
+<pre>
+ <>d
+ <>disc=FALSE
+         0
+ <>n=12
+         12
+ <>CF=1
+         1
+ <>i=15
+         15
+ <>fv=60000
+         60,000
+ <>pv=-60000
+         -60,000
+ <>PMT
+         754.71
+</pre>
+
+<a name="DevCo">
+<h2>Investment Return</h2></a>
+<p>Investment Return
+<p>A development company is purchasing an investment property with an annual net cash
+flow of $25,000.00. The expected holding period for the property is 10 years with an estimated
+selling price of $850,000.00 at that time. If the company is to realize a 15% yield on the
+investment, what is the maximum price they can pay for the property today?
+
+<pre>
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  <>CF=PF=1
+          1
+  <>n=10
+          10
+  <>i=15
+          15
+  <>pmt=25000
+          25,000
+  <>fv=850000
+          850,000
+  <>PV
+          -335,576.22
+</pre>
+
+<p>So the maximum purchase price today would be $335,576.22 to achieve the desired yield.
+
+<a name="Retiement">
+<h2>Retirement Investment</h2></a>
+<p>Retirement Investment
+<p>You wish to retire in 20 years and wish to deposit a lump sum amount in an account
+today which will grow to $100,000.00, earning 6.5% interest compounded semi-annually.
+How much do you need to deposit?
+
+<pre>
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  <>CF=PF=2
+          2
+  <>n=2*20
+          40
+  <>i=6.5
+          6.50
+  <>fv=100000
+          100,000
+  <>PV
+          -27,822.59
+</pre>
+
+<p>If you were to make semi-annual deposits of $600.00, how much would you need to deposit today?
+
+<pre>
+  <>pmt=-600
+          -600
+  <>PV
+          -14,497.53
+</pre>
+
+<p>If you were to make monthly deposits of $100.00?
+
+<pre>
+  <>PF=12
+          12
+  <>n=20*12
+          240
+  <>pmt=-100
+          -100
+  <>PV
+          -14,318.21
+</pre>
+
+<a name="PropVal">
+<h2>Property Values</h2></a>
+<p>Property Values
+<p>Property values in an area you are considering moving to are declining at the rate
+of 2.35% annually. What will property presently appraised at $155,500.00 be worth in 10 years
+if the trend continues?
+
+<pre>
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  <>CF=PF=1
+          1
+  <>n=10
+          10
+  <>i=-2.35
+          -2.35
+  <>pv=155500
+          155,500
+  <>FV
+          -122,589.39
+</pre>
+
+<a name="CollegeExpenses">
+<h2>College Expenses</h2></a>
+<p>College Expenses
+<p>You and your spouse are planning for your child's college expenses. Your child
+will be entering college in 15 years. You expect that college expenses at that time
+will amount to $25,000.00 per year or about $2,100.00/month. If the child withdrew
+the expenses from a bank account monthly paying 6% compounded on a daily basis (using
+360 days/year), how much must you deposit in the account at the start of the  four
+years?
+
+<pre>
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  <>CF=360
+          360
+  <>PF=12
+          12
+  <>n=12*4
+          48
+  <>i=6
+          6
+  <>pmt=2100
+          2,100
+  <>PV
+          -89,393.32
+</pre>
+
+<p>Your next problem is how to accumulate the money by the time the child starts college.
+You have a $50,000.00 paid-up insurance policy for your child that has a cash value
+of $6,500.00. It is accumulating annual dividends of $1,200 earning 6.75% compounded monthly.
+What will be the cash value of the policy in 15 years?
+
+<pre>
+  <>college_fund=-pv
+          89,393.32
+  <>d
+  <>PF=1
+          1
+  <>n=20
+          20
+  <>i=6.75
+          6.75
+  <>pmt=1200
+          1,200
+  <>FV
+          -48,995.19
+  <>insurance=-fv+6500
+          55,495.19
+  <>college_fund-insurance
+          33,898.13
+</pre>
+
+<p>The paid-up insurance cash value and dividends will provide $55,495.19 of the amount
+necessary, leaving $33,898.13 to accumulate in savings. Making monthly payments into
+a savings account paying 4.5% compounded daily, what level of monthly payments would be
+needed?
+
+<pre>
+  Financial Calculator
+  Copyright (C) 1990 - 1997 Terry D. Boldt, All Rights Reserved.
+  <>d
+  <>CF=360
+          360
+  <>n=PF*15
+          180
+  <>i=4.5
+          4.50
+  <>fv=college_fund - insurance
+          33,898.13
+  <>PMT
+          -132.11
+</pre>
+
+<a name="refs">
+<h1>References</h1></a>
+<address>
+PPC ROM User's Manual
+<br>pages 148 - 164
+</address>
+<HR size=4>
+<A HREF="#TOP">TOP</A>
+</body>

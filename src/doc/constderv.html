@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+
+<TITLE>Financial Equations Documentation</TITLE>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+<A HREF="./finutil.html#ConstOrigData">Return</A>
+<HR>
+<h1>Constant Repayment to Principal Equations Derivation</h1>
+<p>In this loan, each total payment is different, with each succeeding payment
+less than the preceeding payment. Each payment is the total of the constant
+ammount to the principal plus the interest for the period. The constant payment
+to the principal is computed as:
+
+<pre>
+        C = -PV / N
+
+<p>Where PV is the loan amount to be repaid in N payments (periods). Thus the
+principal after the first payment is:
+
+<pre>
+    PV[1] = PV[0] + C = PV + C
+</pre>
+
+<p>after the second payment, the principal is:
+
+<pre>
+    PV[2] = PV[1] + C = PV[0] + 2C
+</pre>
+
+<p>In general, the remaining principal after n payments is:
+
+<pre>
+    PV[n] = PV[0] + nC = PV + nC
+</pre>
+
+<p>If the effective interest per payment period is i, then the interest for the
+first payment is:
+
+<pre>
+    I[1] = -i*PV[0]
+</pre>
+
+<p>and for the second:
+
+<pre>
+    I[2] = -i * PV[1]
+</pre>
+
+<p>and in general, for the n'th payment the interest is:
+
+<pre>
+    I[n] = -i * PV[n-1]
+         = -i * (PV + (n - 1)C)
+</pre>
+
+<p>The total payment for any period, n, is:
+
+<pre>
+    P[n] = C + I[n]
+         = C - i * (PV + (n - 1)C)
+         = C(1 + i) - i * (PV + nC)
+</pre>
+
+<p>The total interest paid to period n is:
+
+<pre>
+    T[n] = I[1] + I[2] + I[3] + ... + I[n]
+    T[n] = sum(j = 1 to n: I[j])
+    T[n] = sum(j = 1 to n: -i * (PV + (j-1)C))
+    T[n] = sum(j=1 to n: -i*PV) + sum(j=1 to n: iC) + sum(j=1 to n: -iCj)
+    T[n] = -i*n*PV + i*n*C - i*C*sum(j=1 to n:j)
+        sum(j=1 to n:j) = n(n+1)/2
+    T[n] = -i*n*(PV + C) - i*C*n(n+1)/2
+    T[n] = -i*n*(PV + (C*(n - 1)/2))
+</pre>
+
+<p>Note: substituing for C = -PV/N, in the equations for PV[n], I[n], P[n], and T[n]
+would give the following equations:
+
+<pre>
+    PV[n] = PV*(1 - n/N)
+    I[n]  = -i*PV*(1 + N - n)/N
+    P[n]  = -i*PV*(2 + N - n)/N
+    T[n]  = -i*n*PV*(2*N - n + 1)/(2*N)
+</pre>
+
+<p>Using thses equations for the calculations would eliminate the dependence
+on C, but only if C is always defined as above and would eliminate the
+possibility of another value for C. If the value of C was less than -PV/N
+then a balloon payment would be due at the final payment and this is a possible
+alternative for some people.
