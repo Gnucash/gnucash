@@ -1,3 +1,9 @@
+2002-11-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c -- fix some compiler warnings
+	* src/gnome/window-register.c -- fix a compiler warning
+	* src/gnome/dialog-scheduledxaction.c -- fix a compiler warning
+
 2002-11-24  David Hampton  <hampton@employees.org>
 
 	* src/app-file/gncmod-app-file.c: 

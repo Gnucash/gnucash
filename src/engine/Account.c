@@ -1248,8 +1248,7 @@ xaccAccountFixSplitDateOrder (Account * acc, Split *split)
 void
 xaccTransFixSplitDateOrder (Transaction *trans)
 {
-  GList *node, *next;
-  static int level = 0;
+  GList *node;
 
   if (trans == NULL) return;
 

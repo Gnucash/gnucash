@@ -1811,7 +1811,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         GString *nextDate;
         gint row;
         int i;
-        GDate *nextInstDate, *calEndDate;
+        GDate *nextInstDate = NULL, *calEndDate;
         int instArraySize;
         GDate **instArray;
         GList *instList;

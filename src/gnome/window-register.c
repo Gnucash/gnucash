@@ -124,7 +124,7 @@ gnc_RegWindow_set_pcd (RegWindow *data, gpointer pcd)
 
 /* This static indicates the debugging module that this .o belongs to.   */
 /* static short module = MOD_GUI; */
-static short module = MOD_SX; /* for the moment... */
+//static short module = MOD_SX; /* for the moment... */
 
 static int last_width = 0;
 static int last_stock_width = 0;
