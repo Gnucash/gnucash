@@ -4,6 +4,9 @@ It probably has lots of bugs and unstable features!
 If you are looking for a stable personal finance application,
 you should use the latest release of GnuCash 1.4.")
 
+ (N_ "Users upgrading from GnuCash 1.4 should read the 
+\"What's new in GnuCash 1.6\" page in the online manual.")
+
  (N_ "The GnuCash online manual has lots of helpful information.
 You can access the manual under the Help menu.")
 

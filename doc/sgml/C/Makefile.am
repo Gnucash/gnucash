@@ -24,6 +24,7 @@ GNUCASH_SGML_FILES = \
         xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
+	xacc-features.sgml \
 	xacc-gnome-mdi.sgml \
 	xacc-gnucash-web-browser.sgml \
 	xacc-gpl.sgml \
@@ -42,6 +43,7 @@ GNUCASH_SGML_FILES = \
 	xacc-print.sgml \
 	xacc-qif-import.sgml \
 	xacc-quicken.sgml \
+	xacc-quickstart.sgml \
 	xacc-recnwin.sgml \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \

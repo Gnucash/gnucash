@@ -1,3 +1,19 @@
+2001-05-24  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/gnucash.sgml: add references to new files.
+
+	* doc/sgml/C/xacc-quickstart.sgml: New file, new user
+	documentation.
+
+	* doc/sgml/C/xacc-features.sgml: New file, describing 
+	the features of GnuCash.
+
+	* doc/sgml/C/Makefile.am: update for new files.
+
+	* lib/srfi/srfi-19.scm: revert to older version.
+
+	* src/scm/tip-list.scm: more tips.
+
 2001-05-23  Christian Stimming  <stimming@tuhh.de>
 
 	* po/pt_PT.po: Duarte Loreto's updated translation.

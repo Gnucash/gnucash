@@ -1,0 +1,169 @@
+<article id="xacc-features">
+  <artheader>
+    <title>
+      Features
+      </title>
+  </artheader>
+
+  <sect1>
+    <title>
+      Basic features
+    </title>
+
+    <para>
+      GnuCash is powerful, versatile, and easy to use.  If you want
+      to get an idea of everything GnuCash offers, read on!
+    </para>
+
+    <itemizedlist>
+      <listitem> 
+	<para><emphasis>Multiple Accounts.</emphasis> Create a GnuCash
+	 account for each of your bank accounts.  Each account
+	  maintains both a running balance and a reconciled balance, 
+	  so you can keep track of the checks that have cleared your 
+	  account.
+	</para>
+      </listitem>
+
+      <listitem> 
+	<para> <emphasis>Simple User Interface.</emphasis> </para>
+	<para>If you can use the register in the back of your checkbook, you
+	  can use <application>GnuCash.</application> Type directly into the
+	  register, tab between fields, and use quick-fill to automatically
+	  complete transactions.
+	</para>
+      </listitem>
+      
+      <listitem> <para> <emphasis><link linkend="xacc-recnwin">Automated Tools
+	      for Reconciling Accounts.</link></emphasis> </para>
+	
+	<para>At the end of the month, open up the <emphasis>reconcile</emphasis>
+	  window, enter the ending balance from your bank statement, and check
+	  off the transactions that appear in the bank statement. This agrees
+	  what you have recorded in GnuCash with what your bank has reported,
+	  and makes it easier to track down any discrepancies. </para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>QuickFill.</emphasis> </para>
+	
+	<para>If you begin typing in the description field, and the text matches
+	  a previous transaction, hitting <keycap>TAB</keycap> will copy in that
+	  previous transaction. This is a handy time saver if you regularly create
+	  similar transactions.
+	</para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>Stock/Mutual Fund Portfolios.</emphasis> </para>
+	
+	<para>Track stocks individually (one per account) or in
+	  portfolio of accounts (a group of accounts that can be
+	  displayed together).
+	  There are tools to 
+	  <link linkend="xacc-ticker">automatically collect stock quotes.</link>
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para>Support for <emphasis><link linkend="xacc-currencyhandling">multiple
+	      currencies</link></emphasis> and <emphasis>currency trading accounts.
+	  </emphasis>
+	  (partial, still broken). 
+	  Bank accounts may be established in different
+	  currencies, and trades at varying exchange rates may be
+	  made, in much the same way stocks trade at varying
+	  prices.
+	  
+	  
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis><link linkend="qif">Quicken File Import</link>.</emphasis> 
+	</para>
+	<para>Imports Quicken-style QIF files.  The import wizard automatically
+	  merges duplicate transactions.
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis>Gnome MDI Interface</emphasis></para>
+	<para>Have multiple views of your financial data, arranged how you want
+	  them, in one or more windows that stay around through GnuCash sessions.
+	</para>
+      </listitem>
+      
+      <listitem>
+	<para><emphasis><link
+	linkend="xacc-reports">Reports</link>.</emphasis> Display,
+	export as HTML, or print a variety of reports, including
+	Balance Sheet, Account Summary, Profit and Loss, Stock
+	Portfolios, and Transaction Reports.  Reports are saved from
+	session to session, and rolling reports are possible with
+	relative dates.  GnuCash also supports a variety of
+	customizable, printable, bar and pie charts.
+	</para>
+      </listitem>
+      
+    </itemizedlist>
+
+  </sect1>
+  <sect1 id="xacc-advanced-features">
+    <title>Advanced Features</title>
+    <para>GnuCash offers some features not found in simpler accounting
+      programs.</para>
+
+    <itemizedlist>
+<listitem>
+<para> <emphasis><link linkend="xacc-chartofaccts">Chart of Accounts</link></emphasis> 
+
+ </para>
+<para>A master account can have a hierarchy of more detailed
+        accounts arranged underneath it. This allows related
+        account types (<emphasis>e.g.</emphasis> - Cash, Bank, Stock) to be
+        grouped under one master account ( <emphasis>e.g.</emphasis> -
+        Assets).
+
+ </para>
+</listitem>
+<listitem>
+<para><emphasis><link linkend="xacc-doubleentry">Double
+      Entry</link></emphasis> 
+
+ </para>
+<para>Every transaction must debit one account and credit others
+      by an equal amount. This ensures that the 'books balance':
+      that the difference between income and outflow exactly equals
+      the sum of all assets, be they bank, cash, stock or other.
+
+ </para>
+</listitem>
+<listitem>
+<para><emphasis><link linkend="xacc-incomeexpense">Income/Expense Account
+      Types (Categories)</link></emphasis> 
+ </para>
+<para>These serve not only to categorize your cash flow, but when used
+properly with the double-entry feature and equity accounts, these can
+provide an accurate Profit & Loss statement.
+ </para>
+</listitem>
+
+<listitem>
+<para><emphasis>General Ledger</emphasis> </para>
+
+<para>Multiple accounts may be displayed in one register
+        window at the same time. This can make it easier to track
+        down data errors. It also provides a convenient way of
+        viewing a portfolio of many stocks, by showing all
+        transactions in that portfolio.
+
+ </para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+
+</article>
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->
