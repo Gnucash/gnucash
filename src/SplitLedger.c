@@ -319,7 +319,6 @@ xaccSRSaveRegEntry (SplitRegister *reg)
 {
    Split *split;
    Transaction *trans, *oldtrans;
-   Account * acc;
    unsigned int changed;
    int style;
 
@@ -373,6 +372,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       xaccTransAppendSplit (trans, split);
 
       if (force_double_entry_awareness) {
+         Account * acc;
          acc = xaccSplitGetAccount (s);
          xaccAccountInsertSplit (acc, split);
       }
@@ -515,7 +515,38 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    }
 
    if (MOD_PRIC & changed) {
+      Account *acc;
+      int n;
       xaccSplitSetSharePrice (split, reg->priceCell->amount);
+
+      /* Here we handle a very special case: the user just created 
+       * an account, which now has two splits in it, and the user 
+       * is editing the opening balance split.  Then copy the price
+       * over to the last split, so that the account balance, when
+       * computed, won't be obviously bad.  Strictly speaking, everything
+       * will automatically fix itself once the user closes the window,
+       * or if they start editing the second split, and so we don't
+       * really have to do this.  This is more of a feel-good thing,
+       * so that they won't see even breifly what looks like bad values, 
+       * and that might give them the willies.  We want them to feel good.
+       */
+      acc = xaccSplitGetAccount (split);
+      n = xaccAccountGetNumSplits (acc);
+      if (2 == n) {
+         Split *s = xaccAccountGetSplit (acc, 0);
+         if (s == split) {
+            Transaction *t;
+            double currprice;
+            s = xaccAccountGetSplit (acc, 1);
+            currprice = xaccSplitGetSharePrice (s);
+            if (DEQ (currprice, 1.0)) {
+               t = xaccSplitGetParent (s);
+               xaccTransBeginEdit (t, 0);
+               xaccSplitSetSharePrice (s, reg->priceCell->amount);
+               xaccTransCommitEdit (t);
+            }
+         }
+      }
    }
 
    if (MOD_VALU & changed) {
