@@ -2513,7 +2513,7 @@ xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   assert(s && pd);
   assert(pd->type == PD_DATE);
   
-  xaccTransGetDateTS(xaccSplitGetParent(s), &transtime);
+  xaccTransGetDatePostedTS(xaccSplitGetParent(s), &transtime);
 
   if(pd->date.use_start && pd->date.use_end) {
     return ((transtime.tv_sec >= pd->date.start.tv_sec) &&

@@ -2207,7 +2207,7 @@ xaccTransGetDate (Transaction *trans)
 }
 
 void
-xaccTransGetDateTS (Transaction *trans, Timespec *ts)
+xaccTransGetDatePostedTS (Transaction *trans, Timespec *ts)
 {
    if (!trans || !ts) return;
    *ts = (trans->date_posted);

@@ -682,7 +682,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
     trans = xaccSplitGetParent (split);
 
-    xaccTransGetDateTS (trans, &ts);
+    xaccTransGetDatePostedTS (trans, &ts);
 
     strings[0] = gnc_print_date (ts);
     strings[1] = xaccTransGetNum (trans);

@@ -4035,7 +4035,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       {
         Timespec ts;
 
-        xaccTransGetDateTS (trans, &ts);
+        xaccTransGetDatePostedTS (trans, &ts);
 
         return gnc_print_date (ts);
       }

@@ -1824,7 +1824,7 @@ writeTransaction( int fd, Transaction *trans )
   err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
   
-  xaccTransGetDateTS (trans, &ts);
+  xaccTransGetDatePostedTS (trans, &ts);
   err = writeTSDate( fd, &ts);
   if( -1 == err ) return err;
   

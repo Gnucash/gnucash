@@ -210,8 +210,7 @@ const char *  xaccTransGetDescription (Transaction *trans);
 const char *  xaccTransGetNotes (Transaction *trans);
 time_t        xaccTransGetDate (Transaction *trans);
 
-void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
-#define xaccTransGetDatePostedTS xaccTransGetDateTS
+void          xaccTransGetDatePostedTS (Transaction *trans, Timespec *ts);
 
 void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
