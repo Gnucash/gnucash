@@ -113,7 +113,7 @@
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
 
-  ;; add a hood to shut down the C side options code
+  ;; add a hook to shut down the C side options code
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:c-options-shutdown)
 
   (if (null? gnc:*batch-mode-things-to-do*)
