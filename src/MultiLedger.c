@@ -43,9 +43,7 @@ static xaccLedgerDisplay **fullList = NULL;    /* all registers */
 
 /** PROTOTYPES ******************************************************/
 
-xaccLedgerDisplay * regWindowLedger (Account *lead, Account **acclist, int type);
-void        regRefresh (xaccLedgerDisplay *regData);
-
+static void        regRefresh (xaccLedgerDisplay *regData);
 
 /********************************************************************\
  * Ledger utilities                                                 *
@@ -183,7 +181,7 @@ xaccLedgerDisplaySimple (Account *acc)
       break;
     }
 
-  retval = regWindowLedger (acc, NULL, reg_type);
+  retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
   }
 
@@ -252,7 +250,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
       _free (list);
       return NULL;
   }
-  retval = xaccLedgerDisplayLedger (acc, list, ledger_type);
+  retval = xaccLedgerDisplayGeneral (acc, list, ledger_type);
 
   if (list) _free (list);
 
@@ -271,11 +269,9 @@ xaccLedgerDisplayAccGroup (Account *acc)
 \********************************************************************/
 
 xaccLedgerDisplay *
-xaccLedgerDisplayLedger (Account *lead_acc, Account **acclist, int ledger_type)
+xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   {
   xaccLedgerDisplay   *regData = NULL;
-  int    position=0;
-  char *windowname;
 
   /******************************************************************\
   \******************************************************************/
@@ -331,7 +327,8 @@ xaccLedgerDisplayLedger (Account *lead_acc, Account **acclist, int ledger_type)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-void regRefresh (xaccLedgerDisplay *regData)
+static void 
+regRefresh (xaccLedgerDisplay *regData)
 {
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
@@ -351,6 +348,7 @@ void regRefresh (xaccLedgerDisplay *regData)
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
 
+#ifdef LATER
   /* provide some convenience data for the ture GUI window.
    * If the GUI wants to display yet other stuff, its on its own.
    */
@@ -371,8 +369,12 @@ void regRefresh (xaccLedgerDisplay *regData)
       prt_clearedBalance = -prt_clearedBalance;
     }
   }
+#endif
 
   /* OK, now tell this specific GUI window to redraw itself ... */
+  if (regData->redraw) {
+     (regData->redraw) (regData);
+   }
 
 }
 
@@ -380,7 +382,8 @@ void regRefresh (xaccLedgerDisplay *regData)
  * mark dirty *all* register windows which contain this account      * 
 \********************************************************************/
 
-static void MarkDirtyAllRegs (Account *acc)
+static void 
+MarkDirtyAllRegs (Account *acc)
 {
    xaccLedgerDisplay *regData;
    int n;
@@ -431,6 +434,7 @@ void xaccAccountDisplayRefresh (Account *acc)
    RefreshAllRegs (acc);
 }
 
+#ifdef LATER
 /********************************************************************\
  * xaccDestroyxaccLedgerDisplay()
  * It is enought to call just XtDestroy Widget.  Any allocated
@@ -438,7 +442,7 @@ void xaccAccountDisplayRefresh (Account *acc)
 \********************************************************************/
 
 void
-xaccDestroyxaccLedgerDisplay (Account *acc)
+xaccDestroyLedgerDisplay (Account *acc)
 {
    xaccLedgerDisplay *regData;
    int n;
@@ -475,7 +479,7 @@ xaccDestroyxaccLedgerDisplay (Account *acc)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-closexaccLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
+closeLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
 {
   xaccLedgerDisplay *regData = (xaccLedgerDisplay *)cd;
   Account *acc = regData->lead_acct;
@@ -493,5 +497,6 @@ closexaccLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
 
   free(regData);
 }
+#endif
 
 /************************** END OF FILE *************************/

@@ -54,6 +54,23 @@ struct _xaccLedgerDisplay {
 /** PROTOTYPES ******************************************************/
 
 /*
+ * opens up a register window to display a single account  
+ */
+extern xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
+
+/*
+ * opens up a register window to display the parent account
+ * and all of its children.
+ */
+extern xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
+
+/*
+ * display list of accounts in a general ledger.
+ */
+extern xaccLedgerDisplay * xaccLedgerDisplayGeneral 
+      (Account *lead_acc, Account **acclist, int ledger_type);
+
+/*
  * redisplay/redraw all windows that contain any transactions
  * that are associated with the indicated account.
  */
