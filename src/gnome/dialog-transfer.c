@@ -26,6 +26,7 @@
 
 #include <gnome.h>
 
+#include "EuroUtils.h"
 #include "FileDialog.h"
 #include "MultiLedger.h"
 #include "account-tree.h"
@@ -195,6 +196,44 @@ gnc_xfer_dialog_get_selected_curr_acct(XferDialog *xferData)
   return curr;
 }
 
+static void
+gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
+                                gboolean currency_active,
+                                const gnc_commodity *from_currency,
+                                const gnc_commodity *to_currency)
+{
+  gnc_numeric from_rate;
+  gnc_numeric to_rate;
+  gnc_numeric price;
+
+  if (!currency_active)
+  {
+    GtkEntry *entry;
+
+    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
+                               gnc_numeric_zero ());
+    entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
+                      (GNC_AMOUNT_EDIT(xferData->price_edit)));
+    gtk_entry_set_text(entry, "");
+
+    return;
+  }
+
+  if (!gnc_is_euro_currency (from_currency) ||
+      !gnc_is_euro_currency (to_currency))
+    return;
+
+  from_rate = gnc_euro_currency_get_rate (from_currency);
+  to_rate = gnc_euro_currency_get_rate (to_currency);
+
+  if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
+    return;
+
+  price = gnc_numeric_div (from_rate, to_rate, GNC_DENOM_AUTO, 
+                           GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
+
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
+}
 
 static void
 gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
@@ -241,6 +280,9 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
   gtk_widget_set_sensitive(xferData->price_radio, curr_active);
   gtk_widget_set_sensitive(xferData->amount_radio, curr_active);
 
+  gnc_xfer_dialog_set_price_auto (xferData, curr_active,
+                                  from_currency, to_currency);
+
   if(curr_active)
   {
     gnc_xfer_dialog_list_curr_accts(gncGetCurrentGroup(),
@@ -266,12 +308,6 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
     curr_accts_name_list = g_list_append(curr_accts_name_list, "");
     gtk_combo_set_popdown_strings(GTK_COMBO(xferData->curr_acct_combo),
 				  curr_accts_name_list);
-
-    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
-                               gnc_numeric_zero ());
-    entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
-		      (GNC_AMOUNT_EDIT(xferData->price_edit)));
-    gtk_entry_set_text(entry, "");
 
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
                                gnc_numeric_zero ());
@@ -598,7 +634,7 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
   account = gnc_account_tree_get_current_account(xferData->from);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->to);
-  
+
   currency = xaccAccountGetCurrency(account);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
@@ -1066,6 +1102,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 		       GTK_SIGNAL_FUNC(price_amount_radio_toggled_cb),
 		       xferData);
   }
+
+  gtk_clist_set_selection_mode(GTK_CLIST(xferData->from),
+                               GTK_SELECTION_BROWSE);
+  gtk_clist_set_selection_mode(GTK_CLIST(xferData->to),
+                               GTK_SELECTION_BROWSE);
 }
 
 static void
@@ -1106,8 +1147,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   gnc_xfer_dialog_select_from_account(xferData, initial);
   gnc_xfer_dialog_select_to_account(xferData, initial);
 
-  if (initial == NULL)
-    gnc_xfer_dialog_curr_acct_activate(xferData);
+  gnc_xfer_dialog_curr_acct_activate(xferData);
 
   gtk_widget_show_all(xferData->dialog);
 

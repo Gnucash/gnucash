@@ -1,3 +1,10 @@
+2001-04-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: set price for euro currencies
+	automatically
+
+	* src/EuroUtils.c (gnc_euro_currency_get_rate): new func
+
 2001-04-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/gnc-html-guppi.c: check for new guppi args before
