@@ -72,9 +72,6 @@ static void year_range_menu_helper( GtkWidget *dayOptMenu,
                                     gint monthsInRange,
                                     time_t date );
 
-static void gnc_frequency_setup_default( GNCFrequency *gf, 
-                                         FreqSpec *fs, GDate *date);
-
 /** Static Inits ********************/
 
 static const struct pageDataTuple PAGES[] = {
@@ -248,19 +245,12 @@ gnc_frequency_init( GNCFrequency *gf )
 
 }
 
-GtkWidget *
-gnc_frequency_new( FreqSpec *fs, GDate *date )
-{
-        GNCFrequency  *toRet;
-        toRet = gtk_type_new( gnc_frequency_get_type() );
-        gnc_frequency_setup_default( toRet, fs, date );
-        return GTK_WIDGET(toRet);
-}
-
 static void
-do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, 
-                    UIFreqType uift, time_t *secs)
+do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 {
+        UIFreqType uift;
+        int i, page;
+
         /* Set the start date, but only if present. */
         if (secs)
         {
@@ -271,10 +261,27 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs,
                 }
         }
  
-        /* If freq spec not present, then we are done.  */
+        /* If freq spec not present, then we are done; 
+         * don't change any other settings.  */
         if (NULL == fs) return;
 
-        switch ( uift ) {
+        uift = xaccFreqSpecGetUIType( fs );
+        page = -1;
+        for ( i=0; i < UIFREQ_NUM_UI_FREQSPECS+1; i++ ) 
+        {
+                if ( PAGES[i].uiFTVal == uift ) 
+                {
+                         page = PAGES[i].idx;
+                         break;
+                }
+        }
+        g_assert( page != -1 );
+
+        gtk_notebook_set_page( gf->nb, page );
+        gtk_option_menu_set_history( gf->freqOpt, page );
+
+        switch ( uift ) 
+        {
         case UIFREQ_NONE:
                 break;
         case UIFREQ_ONCE:
@@ -551,28 +558,28 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs,
 static void
 gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 {
-   UIFreqType uift;
    time_t secs;
-   int i, page;
 
-   if ( fs != NULL ) {
-      uift = xaccFreqSpecGetUIType( fs );
-   } else {
-      uift = UIFREQ_NONE;
-   }
-
-   page = -1;
-   for ( i=0; i < UIFREQ_NUM_UI_FREQSPECS+1; i++ ) 
+   /* If no freq-spec, then set the widget to blank */
+   if (NULL == fs)
    {
-      if ( PAGES[i].uiFTVal == uift ) 
-      {
-          page = PAGES[i].idx;
-      }
-   }
-   g_assert( page != -1 );
+      UIFreqType uift = UIFREQ_NONE;
+      int i, page;
 
-   gtk_notebook_set_page( gf->nb, page );
-   gtk_option_menu_set_history( gf->freqOpt, page );
+      page = -1;
+      for ( i=0; i < UIFREQ_NUM_UI_FREQSPECS+1; i++ ) 
+      {
+         if ( PAGES[i].uiFTVal == uift ) 
+         {
+             page = PAGES[i].idx;
+             break;
+         }
+      }
+      g_assert( page != -1 );
+   
+      gtk_notebook_set_page( gf->nb, page );
+      gtk_option_menu_set_history( gf->freqOpt, page );
+   }
 
    /* Setup the start date */
    if (!date ||  ! g_date_valid(date) ) 
@@ -586,33 +593,37 @@ gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
       secs = mktime (&stm);
    }
  
-   do_frequency_setup(gf, fs, uift, &secs);
+   do_frequency_setup(gf, fs, &secs);
 }
 
 void
 gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 {
-   UIFreqType uift;
    time_t secs;
 
-   if ( fs != NULL ) {
-      uift = xaccFreqSpecGetUIType( fs );
-   } else {
-      uift = UIFREQ_NONE;
-   }
+   if (!gf) return;
 
    /* Setup the start date */
    if (!date ||  ! g_date_valid(date) ) 
    {
-      do_frequency_setup(gf, fs, uift, NULL);
+      do_frequency_setup(gf, fs, NULL);
    } 
    else 
    {
       struct tm stm;
       g_date_to_struct_tm( date, &stm);
       secs = mktime (&stm);
-      do_frequency_setup(gf, fs, uift, &secs);
+      do_frequency_setup(gf, fs, &secs);
    }
+}
+
+GtkWidget *
+gnc_frequency_new( FreqSpec *fs, GDate *date )
+{
+        GNCFrequency  *toRet;
+        toRet = gtk_type_new( gnc_frequency_get_type() );
+        gnc_frequency_setup_default( toRet, fs, date );
+        return GTK_WIDGET(toRet);
 }
 
 void
