@@ -143,18 +143,26 @@ DateMV (BasicCell *_cell,
    char buff[30];
    char *datestr;
    int accel=0;
+   short accept=0;
 
    /* if user hit backspace, accept the change */
-   if (!change) return newval;
-   if (0x0 == change[0]) return newval;
+   if (!change) accept=1;
+   else if (0x0 == change[0]) accept=1;
 
    /* accept any numeric input */
-   if (isdigit (change[0])) return newval;
+   else if (isdigit (change[0])) accept=1;
 
    /* accept the separator character */
    /* Note that the separator of '-' (for DATE_FORMAT_ISO) takes precedence
       over the accelerator below! */
-   if (dateSeparator() == change[0]) return newval;
+   else if (dateSeparator() == change[0]) accept=1;
+
+   /* keep a copy of the new value */
+   if (accept) {
+      if (cell->cell.value) free (cell->cell.value);
+      cell->cell.value = strdup (newval);
+      return newval;
+   }
 
    /* otherwise, maybe its an accelerator key. */
    date = &(cell->date);
