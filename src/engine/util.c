@@ -182,6 +182,12 @@ PrtAmtComma (char * buf, double val, int prec)
    double tmp, amt=0.0;
    char *start = buf;
 
+   /* check if we're printing infinity */
+   if (!finite(val)) {
+      strcpy (buf, "inf");
+      return 3;
+   }
+
    /* count number of commas */
    tmp = val;
    while (tmp > 1000.0) {
