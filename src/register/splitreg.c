@@ -39,9 +39,10 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib.h>
 
 #include "gnc-engine-util.h"
 #include "messages.h"

@@ -26,6 +26,8 @@
  *     Dave Peticolas <dave@krondo.com>
  */
 
+#include "config.h"
+
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"

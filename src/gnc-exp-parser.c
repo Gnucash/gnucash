@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include <ctype.h>
+#include <locale.h>
 #include <guile/gh.h>
 
 #include "finproto.h"
