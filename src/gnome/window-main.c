@@ -937,7 +937,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Tutorial and Concepts Guide"),
+      N_("Tutorial and Concepts _Guide"),
       N_("Open the GnuCash Tutorial"),
       gnc_main_window_tutorial_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
