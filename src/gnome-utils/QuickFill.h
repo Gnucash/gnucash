@@ -28,22 +28,23 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 
-/**
- * @file QuickFill.h
- * @breif Quickfill is used to auto-complete typed user entries.
- * @author Copyright (C) 1997 Robin D. Clark
- * @author Copyright (C) 1998,2004 Linas Vepstas <linas@linas.org>
- * @author Copyright (C) 2000 Dave Peticolas
- *
- * QuickFill is meant to be used to quickly auto-complete typed 
- * user input.  Quickfill is implemented as a heirarchical tree 
- * of partial matching strings.  The root of the tree contains 
- * all of the strings that user input should be matched to.  
- * Then, given a short string segment, quickfill will return 
- * a subtree containing only those strings that start with desired
- * substring.  As additional letters are added to the substring,
- * Quickfill will thus narrow down to the unique matching string
- * (or to nothing if no match).
+/** @addtogroup QuickFill
+   QuickFill is meant to be used to quickly auto-complete typed 
+   user input.  Quickfill is implemented as a heirarchical tree 
+   of partial matching strings.  The root of the tree contains 
+   all of the strings that user input should be matched to.  
+   Then, given a short string segment, quickfill will return 
+   a subtree containing only those strings that start with desired
+   substring.  As additional letters are added to the substring,
+   Quickfill will thus narrow down to the unique matching string
+   (or to nothing if no match).
+   @{
+  
+   @file QuickFill.h
+   @breif Quickfill is used to auto-complete typed user entries.
+   @author Copyright (C) 1997 Robin D. Clark
+   @author Copyright (C) 1998,2004 Linas Vepstas <linas@linas.org>
+   @author Copyright (C) 2000 Dave Peticolas
  */
 
 typedef enum
@@ -55,7 +56,7 @@ typedef enum
 typedef struct _QuickFill QuickFill;
 
 
-/** PROTOTYPES ******************************************************/
+/* PROTOTYPES ******************************************************/
 
 QuickFill *  gnc_quickfill_new (void);
 void         gnc_quickfill_destroy (QuickFill *qf);
@@ -116,4 +117,5 @@ void         gnc_quickfill_insert (QuickFill *root, const char *text,
 void         gnc_quickfill_insert_wc (QuickFill *root, const GdkWChar *text,
                                       QuickFillSort sort_code);
 
+/** @} */
 #endif /* QUICKFILL_H */
