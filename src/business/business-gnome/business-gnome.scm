@@ -167,7 +167,7 @@
     ))
 
 (define (add-business-items)
-  (define menu (gnc:make-menu top-level (list "_Tools")))
+  (define menu (gnc:make-menu top-level (list "_Actions")))
   ;;(define new (gnc:make-menu (N_ new-label) (list top-level "")))
   ;;(define find (gnc:make-menu (N_ find-label) (list top-level "")))
 
