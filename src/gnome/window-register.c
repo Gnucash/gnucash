@@ -721,11 +721,12 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
   RegWindow *regData = data;
 
-  if ( regData ) {
-    gnc_reg_save_size( regData );
-  }
+  if ( NULL == regData )  return TRUE;
 
-  if (gnc_split_reg_check_close(regData->gsr) != FALSE) {
+  gnc_reg_save_size( regData );
+
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE) 
+  {
     gnc_ledger_display_close (regData->ledger);
     return FALSE;
   }
