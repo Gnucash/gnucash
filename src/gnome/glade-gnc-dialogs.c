@@ -5038,6 +5038,9 @@ create_Help_Window (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (help_toolbar);
   gtk_container_add (GTK_CONTAINER (handlebox1), help_toolbar);
+  gtk_container_set_border_width (GTK_CONTAINER (help_toolbar), 2);
+  gtk_toolbar_set_space_style (GTK_TOOLBAR (help_toolbar), GTK_TOOLBAR_SPACE_LINE);
+  gtk_toolbar_set_button_relief (GTK_TOOLBAR (help_toolbar), GTK_RELIEF_NONE);
 
   help_paned = gtk_hpaned_new ();
   gtk_widget_ref (help_paned);
@@ -5245,6 +5248,9 @@ create_Report_Window (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (report_toolbar);
   gtk_container_add (GTK_CONTAINER (handlebox2), report_toolbar);
+  gtk_container_set_border_width (GTK_CONTAINER (report_toolbar), 2);
+  gtk_toolbar_set_space_style (GTK_TOOLBAR (report_toolbar), GTK_TOOLBAR_SPACE_LINE);
+  gtk_toolbar_set_button_relief (GTK_TOOLBAR (report_toolbar), GTK_RELIEF_NONE);
 
   report_paned = gtk_hpaned_new ();
   gtk_widget_ref (report_paned);

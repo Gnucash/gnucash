@@ -7357,11 +7357,12 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
       <widget>
 	<class>GtkToolbar</class>
 	<name>help_toolbar</name>
+	<border_width>2</border_width>
 	<orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
 	<type>GTK_TOOLBAR_BOTH</type>
 	<space_size>5</space_size>
-	<space_style>GTK_TOOLBAR_SPACE_EMPTY</space_style>
-	<relief>GTK_RELIEF_NORMAL</relief>
+	<space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
+	<relief>GTK_RELIEF_NONE</relief>
 	<tooltips>True</tooltips>
 
 	<widget>
@@ -7681,11 +7682,12 @@ words.
       <widget>
 	<class>GtkToolbar</class>
 	<name>report_toolbar</name>
+	<border_width>2</border_width>
 	<orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
 	<type>GTK_TOOLBAR_BOTH</type>
 	<space_size>5</space_size>
-	<space_style>GTK_TOOLBAR_SPACE_EMPTY</space_style>
-	<relief>GTK_RELIEF_NORMAL</relief>
+	<space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
+	<relief>GTK_RELIEF_NONE</relief>
 	<tooltips>True</tooltips>
 
 	<widget>
