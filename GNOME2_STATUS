@@ -37,12 +37,37 @@ Main Window
   File
     Import
       OFX
+    Print <- remove ?
   Edit
+    Style Sheets
     Tax Options - Lots 'o errors
-  Reports
+  Actions
+    Close Books
+  Reports (all)
 
 Register Window
-  Reports
+  Edit
+    Cut Transaction
+    Copy Transaction
+    Paste Transaction
+    --
+    Void Transaction
+    Unvoid Transaction
+    Reverse Transaction
+    Find (on tools, same as account tree)
+  View
+    Style
+      Double Line - Initial state wrong
+  Actions
+    Check and Repair (all)
+  Reports (all)
+  Business <- remove ?
+
+
+Register Toolbar
+  Find
+  Report
+  Print
 
 ========================================
             General Notes
