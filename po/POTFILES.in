@@ -14,6 +14,7 @@ src/backend/file/test/test-xml-transaction.c
 src/backend/file/test/test-xml2-is-file.c
 src/backend/file/test/test-file-stuff.c
 src/backend/file/test/test-date-converting.c
+src/backend/file/test/test-xml-pricedb.c
 src/backend/file/gnc-account-xml-v2.c
 src/backend/file/gnc-backend-file.c
 src/backend/file/gnc-commodity-xml-v2.c
@@ -63,6 +64,7 @@ src/backend/postgres/upgrade.c
 src/FileDialog.c
 src/app-utils/test/test-link-module.c
 src/app-utils/test/test-exp-parser.c
+src/app-utils/test/test-print-parse-amount.c
 src/app-utils/gfec.c
 src/app-utils/global-options.c
 src/app-utils/gnc-component-manager.c
@@ -227,11 +229,11 @@ src/optional/swig/gnucash-swig-defines.c
 src/optional/swig/helperfuncs.c
 src/test-core/test-stuff.c
 src/test-core/gncmod-test.c
-src/register/ledger-core/MultiLedger.c
 src/register/ledger-core/split-register.c
 src/register/ledger-core/gncmod-ledger-core.c
 src/register/ledger-core/split-register-control.c
 src/register/ledger-core/split-register-util.c
+src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/split-register-model.c
 src/register/ledger-core/split-register-model-save.c
 src/register/ledger-core/split-register-load.c
