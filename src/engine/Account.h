@@ -87,6 +87,16 @@ void         xaccZeroRunningBalances (Account **list);
  */
 int          xaccAccountOrder (Account**, Account **);
 
+/* The xaccAccountAutoCode() method will assign an automatically
+ *    generated account code to the account, if one does not already 
+ *    exist.  Account codes will have the indicated number of digits
+ *    in them.  The numbering scheme roughly follows generally
+ *    accepted accounting practice, in that top-level accounts
+ *    will be number 100, 200, etc., second level accounts 110, 120,
+ *    .. 210, 220, ...etc. and third level accounts 111, 112, .. etc.
+ */
+void         xaccAccountAutoCode (Account *, int digits);
+
 /* The xaccConsolidateTransactions() subroutine scans through
  *    all of the transactions in an account, and compares them.
  *    If any of them are exact duplicates, the duplicates are removed.
@@ -95,7 +105,7 @@ int          xaccAccountOrder (Account**, Account **);
  *    as it may remove transactions that were not true duplicatees ...
  */
 
-void        xaccConsolidateTransactions (Account *);
+void         xaccConsolidateTransactions (Account *);
 
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
