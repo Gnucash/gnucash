@@ -1,5 +1,8 @@
 2001-04-26  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/report/net-barchart.scm: New file, it is the merger of
+	income-expense-graph.scm and net-worth-timeseries.scm.
+
 	* src/scm/report/*.scm: adapt to changed gnc:make-report-anchor.
 	
 	* src/scm/html-utilities.scm (gnc:make-report-anchor):
