@@ -58,16 +58,38 @@
 /* this callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
  * go to a new one.  So, save the current transaction.
+ *
+ * This callback is centrally involved in the redraw sequence.
+ * When the user moves from one cell to another, the following 
+ * sequence of events get triggered and cascade down:
+ *    traverseCB () {
+ *      VerifyCursorPosition() {
+ *        MoveCursor() {  
+ *         callback for move() which is this function (LedgerMoveCursor)
+ *           SaveRegEntry() {}
+ *           RedrawRegEntry() {
+ *              SRLoadRegister() {
+ *                SRLoadRegEntry() {
+ *                   MoveCursor () { }
+ *                }
+ *             }
+ *          } }}}}
  */
 
 static void
-LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * client_data)
+LedgerMoveCursor  (Table *table, 
+                   int *p_new_phys_row, 
+                   int *p_new_phys_col, 
+                   void * client_data)
 {
+   int new_phys_row = *p_new_phys_row;
+   int new_phys_col = *p_new_phys_col;
    SplitRegister *reg = (SplitRegister *) client_data;
    int style;
 
    /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
+   xaccSRRedrawRegEntry (reg); 
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -84,6 +106,9 @@ LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * clie
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
       xaccRegisterRefresh (reg);
+
+      /* indicate what row we *should* have gone to */
+      *p_new_phys_row = table->current_cursor_phys_row;
    }
 }
 
@@ -122,6 +147,42 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 }
 
 /* ======================================================== */
+
+void 
+xaccSRRedrawRegEntry (SplitRegister *reg) 
+{
+   Split *split;
+   Transaction *trans;
+   Account * acc;
+   unsigned int changed;
+   int i;
+
+   /* use the changed flag to avoid heavy-weight redraws
+    * This will help cut down on uneccessary register redraws.  */
+   changed = xaccSplitRegisterGetChangeFlag (reg);
+   if (!changed) return;
+
+   split = xaccSRGetCurrentSplit (reg);
+   trans = xaccSplitGetParent (split);
+
+   /* refresh the register windows */
+   /* This split belongs to a transaction that might be displayed
+    * in any number of windows.  Changing any one split is likely
+    * to affect any account windows associated with the other splits
+    * in this transaction.  So basically, send redraw events to all
+    * of the splits.
+    */
+   i = 0;
+   split = xaccTransGetSplit (trans, i);
+   while (split) {
+      acc = xaccSplitGetAccount (split);
+      xaccAccountDisplayRefresh (acc);
+      i++;
+      split = xaccTransGetSplit (trans, i);
+   }
+}
+
+/* ======================================================== */
 /* Copy from the register object to the engine */
 
 void 
@@ -132,7 +193,6 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    Account * acc;
    unsigned int changed;
    int style;
-   int i;
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
@@ -177,6 +237,10 @@ printf ("save split is %p \n", split);
       xaccTransBeginEdit (trans);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
+
+      assert (reg->table->current_cursor);
+      reg->table->current_cursor->user_data = (void *) split;
+
    } else {
       trans = xaccSplitGetParent (split);
       xaccTransBeginEdit (trans);
@@ -283,22 +347,6 @@ xaccTransGetDescription(trans));
    split = xaccTransGetSplit (trans, 0);
    if (split == ((Split *) (reg->user_hook))) {
       reg->user_hook = NULL;
-   }
-
-   /* refresh the register windows */
-   /* This split belongs to a transaction that might be displayed
-    * in any number of windows.  Changing any one split is likely
-    * to affect any account windows associated with the other splits
-    * in this transaction.  So basically, send redraw events to all
-    * of the splits.
-    */
-   i = 0;
-   split = xaccTransGetSplit (trans, i);
-   while (split) {
-      acc = xaccSplitGetAccount (split);
-      xaccAccountDisplayRefresh (acc);
-      i++;
-      split = xaccTransGetSplit (trans, i);
    }
 }
 
@@ -482,9 +530,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
-   if (reg->table->current_cursor) {
-      save_current_split = (Split *) (reg->table->current_cursor->user_data);
-   }
+   save_current_split = xaccSRGetCurrentSplit (reg);
 
    /* disable move callback -- we con't want the cascade of 
     * callbacks while we are fiddling with loading the register */
@@ -700,7 +746,6 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       vrow ++;
       phys_row += lead_cursor->numRows; 
    }
-   
 
    /* restore the cursor to its original location */
    if (!save_current_split || (phys_row <= save_cursor_phys_row)) {
