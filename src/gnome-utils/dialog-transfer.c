@@ -112,7 +112,9 @@ struct _xferDialog
   gnc_numeric * exch_rate;
 
   /* a place to store the result quality (ok or cancel) because gnome_dialog_run
-   * doesn't seem to work right for this function
+   * doesn't seem to work right for this function.  <-- That's probably because
+   * the dialog is being closed and deleted out from under the gnome_dialog_run
+   * function.
    */
   gboolean *	result_p;
 };
@@ -1946,8 +1948,6 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     {
       gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
 
-      if( result_ok == TRUE )
-      {
         /* See if the dialog is still there.  For various reasons, the
          * user could have hit OK but remained in the dialog.  We don't
          * want to return processing back to anyone else until we clear
@@ -1959,15 +1959,9 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
                                            find_xfer, xferData ) )
         {
           /* no more dialog, and OK was clicked, so assume it's all good */
-          return( TRUE );
+          return( result_ok );
         }
         /* else run the dialog again */
-  
-      }
-      else   /* result was Cancel */
-      {
-        return( FALSE );
-      }
     }
   }
     

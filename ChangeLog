@@ -1,3 +1,9 @@
+2003-05-11  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-transfer.c: Fix transfer dialog to not
+	hang if OK button is clicked w/o filling in dialog properly.
+	#109497
+
 2003-05-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: you have to declare
