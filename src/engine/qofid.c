@@ -47,8 +47,7 @@ struct QofCollection_s
 
 /* =============================================================== */
 
-static void qof_collection_remove_entity (QofCollection *col, QofEntity *ent);
-static void qof_collection_insert_entity (QofCollection *col, QofEntity *ent);
+static void qof_collection_remove_entity (QofEntity *ent);
 
 void
 qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
@@ -75,9 +74,9 @@ qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
 void
 qof_entity_release (QofEntity *ent)
 {
+  qof_collection_remove_entity (ent);
   CACHE_REMOVE (ent->e_type);
-  qof_collection_remove_entity (ent->collection, ent);
-  ent->collection = NULL;
+  ent->e_type = NULL;
 }
 
 
@@ -86,10 +85,13 @@ qof_entity_release (QofEntity *ent)
 void
 qof_entity_set_guid (QofEntity *ent, const GUID *guid)
 {
+  QofCollection *col;
   if (guid_equal (guid, &ent->guid)) return;
-  qof_collection_remove_entity (ent->collection, ent);
+
+  col = ent->collection;
+  qof_collection_remove_entity (ent);
   ent->guid = *guid;
-  qof_collection_insert_entity (ent->collection, ent);
+  qof_collection_insert_entity (col, ent);
 }
 
 GUID *
@@ -156,17 +158,21 @@ qof_collection_destroy (QofCollection *col)
 /* =============================================================== */
 
 static void
-qof_collection_remove_entity (QofCollection *col, QofEntity *ent)
+qof_collection_remove_entity (QofEntity *ent)
 {
+  QofCollection *col = ent->collection;
+  if (!col) return;
   g_hash_table_remove (col->hash_of_entities, &ent->guid);
+  ent->collection = NULL;
 }
 
-static void
+void
 qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
 {
   if (guid_equal(&ent->guid, guid_null())) return;
-  qof_collection_remove_entity (col, ent);
+  qof_collection_remove_entity (ent);
   g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
+  ent->collection = col;
 }
 
 QofEntity *

@@ -31,7 +31,16 @@
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
+/** Set the ID of the entity, over-riding teh previous ID. 
+ *  Very dangerous, use only for file i/o work. 
+ */
 void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
+
+/** Take entity, remove it from whatever collection its currently
+ *  in, and place it in a new collection.  To be used only for
+ *  moving entity from one book to another.
+ */
+void qof_collection_insert_entity (QofCollection *, QofEntity *);
 
 
 #endif /* QOF_ID_P_H */
