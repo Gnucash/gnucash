@@ -11,8 +11,11 @@
 	* src/register/ledger-core/split-register.c
 	  AUTO_LEDGER and JOURNAL register types _ARE_ expanded -- return
 	  TRUE, not FALSE.
-	
 	Fixes 105319
+
+	* src/report/standard-report/advanced-portfolio.scm: add extra
+	  arguments to prevent scheme crash.
+	Fixes 105405
 
 2003-02-07  Derek Atkins  <derek@ihtfp.com>
 
