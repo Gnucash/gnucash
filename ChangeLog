@@ -4,6 +4,10 @@
 	  qif file contexts into a single parent context while retaining
 	  the ability to add/remove new files.
 
+	* src/import-export/qif-context.c: add functions to get the list
+	  of used QifAccount and QifCategory objects from the set of
+	  transactions.
+
 2003-07-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-gnome/business-gnome.scm: remove

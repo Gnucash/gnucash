@@ -12,6 +12,9 @@
 #include <glib.h>
 
 #include "qif-import-p.h"
+#include "qif-objects-p.h"
+
+static void qif_object_map_get_helper(gpointer key, gpointer value, gpointer listp);
 
 QifContext
 qif_context_new(void)
@@ -57,6 +60,103 @@ qif_context_destroy(QifContext ctx)
 
   g_assert(ctx->files == NULL);
   g_free(ctx);
+}
+
+static GList *
+qif_context_get_foo_helper(QifContext ctx, GFunc get_helper)
+{
+  GHashTable *ht;
+  GList *node, *list = NULL;
+  QifContext fctx;
+
+  g_return_val_if_fail(ctx, NULL);
+  g_return_val_if_fail(ctx->parsed, NULL);
+  g_return_val_if_fail(get_helper, NULL);
+
+  ht = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  for (node = ctx->files; node; node = node->next) {
+    fctx = node->data;
+    qif_object_list_foreach(fctx, QIF_O_TXN, get_helper, ht);
+  }
+
+  g_hash_table_foreach(ht, qif_object_map_get_helper, &list);
+  g_hash_table_destroy(ht);
+
+  return list;
+}
+
+static void
+qif_split_accts_helper(QifSplit split, GHashTable *ht)
+{
+  if (split->cat.obj && split->cat_is_acct)
+    g_hash_table_insert(ht, split->cat.acct, split->cat.acct);
+}
+
+static void
+qif_get_accts_helper(gpointer obj, gpointer htp)
+{
+  QifTxn txn = obj;
+  QifSplit split;
+  GHashTable *ht = htp;
+  GList *node;
+
+  if (txn->from_acct)
+    g_hash_table_insert(ht, txn->from_acct, txn->from_acct);
+
+  if (txn->invst_info && txn->invst_info->far_cat.obj &&
+      txn->invst_info->far_cat_is_acct)
+    g_hash_table_insert(ht, txn->invst_info->far_cat.acct,
+			txn->invst_info->far_cat.acct);
+
+  if (txn->default_split)
+    qif_split_accts_helper(txn->default_split, ht);
+
+  for (node = txn->splits; node; node = node->next) {
+    split = node->data;
+    qif_split_accts_helper(split, ht);
+  }
+}
+
+GList *
+qif_context_get_accounts(QifContext ctx)
+{
+  return qif_context_get_foo_helper(ctx, qif_get_accts_helper);
+}
+
+static void
+qif_split_cats_helper(QifSplit split, GHashTable *ht)
+{
+  if (split->cat.obj && !split->cat_is_acct)
+    g_hash_table_insert(ht, split->cat.cat, split->cat.cat);
+}
+
+static void
+qif_get_cats_helper(gpointer obj, gpointer htp)
+{
+  QifTxn txn = obj;
+  QifSplit split;
+  GHashTable *ht = htp;
+  GList *node;
+
+  if (txn->invst_info && txn->invst_info->far_cat.obj &&
+      !txn->invst_info->far_cat_is_acct)
+    g_hash_table_insert(ht, txn->invst_info->far_cat.cat,
+			txn->invst_info->far_cat.cat);
+
+  if (txn->default_split)
+    qif_split_cats_helper(txn->default_split, ht);
+
+  for (node = txn->splits; node; node = node->next) {
+    split = node->data;
+    qif_split_cats_helper(split, ht);
+  }
+}
+
+GList *
+qif_context_get_categories(QifContext ctx)
+{
+  return qif_context_get_foo_helper(ctx, qif_get_cats_helper);
 }
 
 /*****************************************************************************/
@@ -302,4 +402,3 @@ qif_object_list_destroy(QifContext ctx)
   g_hash_table_foreach_remove(ctx->object_lists, qif_object_list_remove_all, NULL);
   g_hash_table_destroy(ctx->object_lists);
 }
-

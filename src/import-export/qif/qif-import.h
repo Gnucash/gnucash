@@ -125,4 +125,14 @@ void qif_file_set_default_account(QifContext ctx, const char *acct_name);
 /* Parse the QIF File */
 QifError qif_file_parse(QifContext ctx, gpointer ui_arg);
 
+/* Merge all the qif-files from the children and into the context */
+void qif_parse_merge_files(QifContext ctx);
+
+/* Obtain the list of USED QifAccounts and QifCategories.  Finds all
+ * references from the transactions in the QifContext.  The returned
+ * GList must be freed by the caller.
+ */
+GList *qif_context_get_accounts(QifContext ctx);
+GList *qif_context_get_categories(QifContext ctx);
+
 #endif /* QIF_IMPORT_H */

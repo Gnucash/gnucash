@@ -30,7 +30,4 @@ GList * qif_parse_acct_type_guess(QifType type);
 /* Parse all objects */
 void qif_parse_all(QifContext ctx, gpointer ui_args);
 
-/* Merge all the qif-files from the children and into the context */
-void qif_parse_merge_files(QifContext ctx);
-
 #endif /* QIF_PARSE_H */
