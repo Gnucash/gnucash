@@ -30,6 +30,9 @@
 #include "messages.h"
 #include "util.h"
 
+/* hack alert -- stpcpy prototype is missing, use -DGNU */
+char * stpcpy (char *dest, const char *src);
+
 /** GLOBALS *********************************************************/
 /* 
    0 == disable all messages
