@@ -37,7 +37,7 @@
 <!entity xaccgpl system "xacc-gpl.sgml">
 <!entity bofamym system "bofa-mym.sgml">
 ]>
-<BOOK ID="GNUCASH">
+<BOOK ID="index">
 <TITLE>GnuCash Documentation Set</TITLE>
 
 &xaccabout;

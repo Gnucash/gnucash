@@ -1,7 +1,5 @@
 gnucash_helpdir = $(datadir)/gnome/help/gnucash/C
 
-GNUCASH_DSL = mysheet.dsl
-
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
 	xacc-about.sgml \
@@ -40,72 +38,72 @@ GNUCASH_SGML_FILES = \
 	xacc-userdocs.sgml \
 	xacc-y2k.sgml
 
-GNUCASH_HTML_FILES = \
-	docbook.css
-	bofa-mym.html
-	gnucash.html
-	xacc-about.html
-	xacc-accountedit.html
-	xacc-acctypes.html
-	xacc-adjbalwin.html
-	xacc-apar.html
-	xacc-ar.html
-	xacc-arch.html
-	xacc-archaeology.html
-	xacc-ardef.html
-	xacc-balancereport.html
-	xacc-balancesheet.html
-	xacc-capitalgains.html
-	xacc-chartofaccts.html
-	xacc-currencyhandling.html
-	xacc-customreports.html
-	xacc-dateinput.html
-	xacc-depr.html
-	xacc-depreciation.html
-	xacc-docbookuse.html
-	xacc-dochack.html
-	xacc-doubledef.html
-	xacc-doubleentry.html
-	xacc-doubleuse.html
-	xacc-dupetxns.html
-	xacc-euro.html
-	xacc-exthelp.html
-	xacc-feats.html
-	xacc-gpl.html
-	xacc-incexpuse.html
-	xacc-incomeexpense.html
-	xacc-isocurr.html
-	xacc-locatingtxns.html
-	xacc-mainwin.html
-	xacc-mantxn.html
-	xacc-newacctwin.html
-	xacc-pnl.html
-	xacc-portfolio-report.html
-	xacc-preferences.html
-	xacc-preferences2.html
-	xacc-prepaidexpenses.html
-	xacc-print-check.html
-	xacc-print.html
-	xacc-project.html
-	xacc-qif-import.html
-	xacc-qif.html
-	xacc-quicken.html
-	xacc-quickencats.html
-	xacc-recnwin.html
-	xacc-reconciliation.html
-	xacc-references.html
-	xacc-regwin-kbd.html
-	xacc-regwin.html
-	xacc-reports.html
-	xacc-reportwindow.html
-	xacc-reqs.html
-	xacc-samplechart.html
-	xacc-scrubbing.html
-	xacc-size.html
-	xacc-stkptlo.html
-	xacc-termsother.html
-	xacc-ticker.html
-	xacc-trans-report.html
-	xacc-userdocs.html
-	xacc-viewtxn.html
-	xacc-y2k.html
+install-data-local: gnucash/index.html
+	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
+	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/image
+	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
+#	$(INSTALL_DATA) $(srcdir)/topic.dat \
+#			$(DESTDIR)$(gnucash_helpdir)/topic.dat
+#	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(gnucash_helpdir)/
+	for file in gnucash/*.html; do \
+	  basefile=`basename $$file` \
+	  $(INSTALL_DATA) $(srcdir)/$$file \
+                          $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+	done
+	for file in gnucash/*.css; do \
+	  basefile=`basename $$file` \
+	  $(INSTALL_DATA) $(srcdir)/$$file \
+                          $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+	done
+#	for file in gnucash/image/*.png; do \
+#	  basefile=`basename $$file` \
+#	  $(INSTALL_DATA) $(srcdir)/$$file \
+#                          $(DESTDIR)$(gnucash_helpdir)/figs/$$basefile;\
+#	done
+	for file in gnucash/stylesheet-images/*.gif; do \
+	  basefile=`basename $$file` \
+	  $(INSTALL_DATA) \
+            $(srcdir)/$$file \
+            $(DESTDIR)$(gnucash_helpdir)/stylesheet-images/$$basefile; \
+	done
+
+
+EXTRA_DIST = \
+	$(GNUCASH_SGML_FILES)
+#	topic.dat
+
+manual-html: gnucash/index.html
+manual-dvi: gnucash/gnucash.dvi
+manual-ps: gnucash/gnucash.ps
+manual-rtf: gnucash/gnucash.rtf
+manual-all: manual-html manual-ps manual-rtf
+
+all: manual-html
+
+clean:
+	rm -rf gnucash
+	rm -rf gnucash.junk
+
+gnucash/gnucash.dvi: $(GNUCASH_SGML_FILES)
+	db2dvi gnucash.sgml
+
+gnucash/gnucash.ps: $(GNUCASH_SGML_FILES)
+	db2ps gnucash.sgml
+
+gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
+	db2rtf gnucash.sgml
+
+gnucash/index.html: $(GNUCASH_SGML_FILES)
+	-(db2html gnucash.sgml)
+#	  && mkdir -p users-guide/figs \
+#	  && cp $(srcdir)/figs/*.png users-guide/figs || exit 1)
+
+
+dist-hook:
+	mkdir $(distdir)/gnucash
+#	mkdir $(distdir)/gnucash/figs
+	mkdir $(distdir)/gnucash/stylesheet-images
+	cp gnucash/*.html $(distdir)/gnucash
+	cp gnucash/*.css $(distdir)/gnucash
+#	cp gnucash/figs/*.png $(distdir)/gnucash/figs
+	cp gnucash/stylesheet-images/*.gif $(distdir)/gnucash/stylesheet-images
