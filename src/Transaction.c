@@ -46,7 +46,8 @@ xaccInitSplit( Split * split )
   {
   
   /* fill in some sane defaults */
-  split->debit = 0x0;
+  split->debit       = NULL;
+  split->parent      = NULL;
   
   split->memo        = XtNewString("");
   split->reconciled  = NREC;
@@ -78,6 +79,8 @@ xaccFreeSplit( Split *split )
    * by any accounts. */
   if (split->debit) return;
 
+  xaccRemoveSplit (split);
+
   XtFree(split->memo);
 
   /* just in case someone looks up freed memory ... */
@@ -85,6 +88,7 @@ xaccFreeSplit( Split *split )
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
+  split->parent      = NULL;
 
   split->write_flag  = 0;
   _free(split);
@@ -215,6 +219,7 @@ xaccInsertSplit (Transaction *trans, Split *split)
    if (!trans) return;
    if (!split) return;
    
+   split->parent = (struct _transaction *) trans;
    num = xaccCountSplits (trans->splits);
 
    oldarray = trans->splits;
@@ -232,10 +237,17 @@ xaccInsertSplit (Transaction *trans, Split *split)
 \********************************************************************/
 
 void
-xaccRemoveSplit (Transaction *trans, Split *split) 
+xaccRemoveSplit (Split *split) 
 {
    int i=0, n=0;
    Split *s;
+   Transaction *trans;
+
+   if (!split) return;
+   trans = (Transaction *) split->parent;
+   split->parent = NULL;
+
+   if (!trans) return;
 
    s = trans->splits[0];
    while (s) {
@@ -246,6 +258,8 @@ xaccRemoveSplit (Transaction *trans, Split *split)
      s = trans->splits[n];
    }
    trans->splits[i] = NULL;
+
+   /* hack alert -- we should also remove it from the account */
 }
 
 /********************************************************************\
