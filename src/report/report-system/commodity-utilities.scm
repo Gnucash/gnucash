@@ -141,10 +141,10 @@
 			 value-amount share-amount))))
 	 
 	 ;;(warn "gnc:get-commodity-totalavg-prices: value " 
-	 ;;      (gnc:commodity-numeric->string
-	 ;;	(first foreignlist) (second foreignlist))
-	 ;;     " bought shares "
-	 ;;   (gnc:commodity-numeric->string
+	 ;;    (gnc:commodity-numeric->string
+	 ;;(first foreignlist) (second foreignlist))
+	 ;;      " bought shares "
+	 ;;    (gnc:commodity-numeric->string
 	 ;;price-commodity (third foreignlist)))
 
 	 ;; Try EURO exchange if necessary
@@ -200,19 +200,21 @@
 	 commodity-list report-currency end-date-tp
 	 start-percent delta-percent)
   (let ((currency-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group))))
+	 ;;(filter gnc:account-has-shares?  
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
      (lambda (c)
-       (set! work-done (+ 1 work-done))
-       (if start-percent
-	   (gnc:report-percent-done
-	    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
-       (cons c
-	     (gnc:get-commodity-totalavg-prices
-	      currency-accounts end-date-tp c report-currency)))
+       (begin
+	 (set! work-done (+ 1 work-done))
+	 (if start-percent
+	     (gnc:report-percent-done
+	      (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+	 (cons c
+	       (gnc:get-commodity-totalavg-prices
+		currency-accounts end-date-tp c report-currency))))
      commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
@@ -297,19 +299,21 @@
 	 commodity-list report-currency end-date-tp
 	 start-percent delta-percent)
   (let ((currency-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group))))
+	 ;;(filter gnc:account-has-shares? 
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
      (lambda (c)
-       (set! work-done (+ 1 work-done))
-       (if start-percent
-	   (gnc:report-percent-done
-	    (+ start-percent (* delta-percent (/ work-done work-to-do)))))
-       (cons c
-	     (gnc:get-commodity-inst-prices
-	      currency-accounts end-date-tp c report-currency)))
+       (begin
+	 (set! work-done (+ 1 work-done))
+	 (if start-percent
+	     (gnc:report-percent-done
+	      (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+	 (cons c
+	       (gnc:get-commodity-inst-prices
+		currency-accounts end-date-tp c report-currency))))
      commodity-list)))
 
 
@@ -514,8 +518,9 @@
 ;; sumlist.
 (define (gnc:get-exchange-totals report-commodity end-date)
   (let ((curr-accounts 
-	 (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-					  (gnc:get-current-group))))
+	 ;;(filter gnc:account-has-shares? ))
+	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
+	 (gnc:group-get-subaccounts (gnc:get-current-group)))
 	;; sumlist: a multilevel alist. Each element has a commodity
 	;; as key, and another alist as a value. The value-alist's
 	;; elements consist of a commodity as a key, and a pair of two

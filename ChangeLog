@@ -1,5 +1,12 @@
 2002-12-08  Christian Stimming  <stimming@tuhh.de>
 
+	* src/report/standard-reports/category-barchart.scm: Fix some
+	multi-currency bugs introduced during the progress bar work.
+
+	* src/report/report-system/commodity-utilities.scm: For
+	calculation of weighted average, use all accounts and not only
+	currency/stock accounts now with the new exchange system.
+
 	* src/import-export/import-backend.c: Fix zero amount in the
 	'other' split of an imported transaction by now using
 	SplitSetBaseValue.
