@@ -133,9 +133,9 @@
   ;; worrying about currency ATM :(
 
   (define (analyze-splits splits start-bal start-date end-date interval)
-    (let* ((minmax-accum (make-stats-collector))
-           (stats-accum (make-stats-collector))
-           (gain-loss-accum (make-drcr-collector))
+    (let* ((minmax-accum (gnc:make-stats-collector))
+           (stats-accum (gnc:make-stats-collector))
+           (gain-loss-accum (gnc:make-drcr-collector))
            (interval-start start-date)
            (interval-end (incdate start-date interval))
            (last-balance start-bal)

@@ -37,8 +37,8 @@
 
   (define (report-rows)
 
-    (define total-value (make-stats-collector))
-    (define total-cost (make-stats-collector))
+    (define total-value (gnc:make-stats-collector))
+    (define total-cost (gnc:make-stats-collector))
 
     (define blank-row
       (list "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp" "&nbsp"))

@@ -76,8 +76,8 @@
     ;; numeric-collectors, where [abc] are numeric-collectors. See the
     ;; real variable names below.
     (define (make-newrate unknown-coll un->known-coll known-pair)
-      (let ((a (make-numeric-collector))
-	    (b (make-numeric-collector)))
+      (let ((a (gnc:make-numeric-collector))
+	    (b (gnc:make-numeric-collector)))
 	(a 'add (unknown-coll 'total #f))
 	(b 'add 
 	   ;; round to (at least) 6 significant digits
@@ -207,8 +207,8 @@
 	     (if (not comm-list)
 		 ;; no, create sub-alist from scratch
 		 (let ((pair (list transaction-comm
-				   (cons (make-numeric-collector)
-					 (make-numeric-collector)))))
+				   (cons (gnc:make-numeric-collector)
+					 (gnc:make-numeric-collector)))))
 		   ((caadr pair) 'add value-amount)
 		   ((cdadr pair) 'add share-amount)
 		   (set! comm-list (list account-comm (list pair)))
@@ -233,8 +233,8 @@
 		       (begin
 			 (set! 
 			  pair (list (car foreignlist)
-				     (cons (make-numeric-collector) 
-					   (make-numeric-collector))))
+				     (cons (gnc:make-numeric-collector) 
+					   (gnc:make-numeric-collector))))
 			 (set! 
 			  comm-list (list (car comm-list) 
 					  (cons pair (cadr comm-list))))
@@ -292,7 +292,7 @@
 ;; <gnc-monetary> with the domestic commodity and its corresponding
 ;; balance.
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
-  (let ((balance (make-commodity-collector)))
+  (let ((balance (gnc:make-commodity-collector)))
     (foreign
      'format 
      (lambda (curr val) 

@@ -1,3 +1,28 @@
+2001-02-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Formatting cleanups.
+	Gotta keep Dave P happy . . .
+
+	* src/scm/html-table.scm: html table data field list now stored in
+	*reverse* order, to make appending rows fast (prepending is now
+	O(n^2) however.  If we want linear-time appends and prepends,
+	we'll need a Glist wrapper :) )
+
+	* src/scm/report/folio.scm: use renamed collector functions (dunno
+	why, code is dead . . .)
+
+	* src/scm/report/taxtxf.scm: use renamed collector functions (see
+	above)
+
+	* src/scm/report/average-balance.scm: changed to use renamed
+	collector functions.
+
+	* src/scm/commodity-utilities.scm: changed to used renamed
+	make-<foo>-collector functions.
+
+	* src/scm/report-utilities.scm (gnc:make-<foo>-collector): renamed
+	to prevent namespace pollution.
+
 2001-02-27  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-xml-account.c (node_and_account_equal): Start

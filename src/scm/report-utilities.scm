@@ -167,7 +167,7 @@
 ;;; It would be a logical extension to throw in a "slot" for x^2 so
 ;;; that you could also extract the variance and standard deviation
 
-(define (make-stats-collector)
+(define (gnc:make-stats-collector)
   (let ;;; values
       ((value 0)
        (totalitems 0)
@@ -202,7 +202,7 @@
 	  ('reset (reset-all))
           (else (gnc:warn "bad stats-collector action: " action)))))))
 
-(define (make-drcr-collector)
+(define (gnc:make-drcr-collector)
   (let ;;; values
       ((debits 0)
        (credits 0)
@@ -233,7 +233,7 @@
 
 ;; This is a collector of values -- works similar to the stats-collector but
 ;; has much less overhead. It is used by the currency-collector (see below).
-(define (make-value-collector)
+(define (gnc:make-value-collector)
   (let ;;; values
       ((value 0))
     (lambda (action amount)  ;;; Dispatch function
@@ -244,7 +244,7 @@
 	(else (gnc:warn "bad value-collector action: " action))))))
 
 ;; Same as above but with gnc:numeric
-(define (make-numeric-collector)
+(define (gnc:make-numeric-collector)
   (let ;;; values
       ((value (gnc:numeric-zero)))
     (lambda (action amount)  ;;; Dispatch function
@@ -252,9 +252,9 @@
 	('add (if (gnc:gnc-numeric? amount) 
 		  (set! value (gnc:numeric-add-fixed amount value))
 		  (gnc:warn 
-		   "numeric-collector called with wrong argument: " amount)))
+		   "gnc:numeric-collector called with wrong argument: " amount)))
 	('total value)
-	(else (gnc:warn "bad numeric-collector action: " action))))))
+	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
@@ -292,7 +292,7 @@
 ;;   (internal) 'list #f #f: get the association list of 
 ;;       commodity->numeric-collector
 
-(define (make-commodity-collector)
+(define (gnc:make-commodity-collector)
   (let 
       ;; the association list of (commodity -> value-collector) pairs.
       ((commoditylist '()))
@@ -305,7 +305,7 @@
 	(if (not pair)
 	    (begin
 	      ;; create a new pair, using the gnc:numeric-collector
-	      (set! pair (list commodity (make-numeric-collector)))
+	      (set! pair (list commodity (gnc:make-numeric-collector)))
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
@@ -416,7 +416,7 @@
          (if include-children?
              (gnc:group-get-comm-balance-at-date
               (gnc:account-get-children account) date)
-             (make-commodity-collector)))
+             (gnc:make-commodity-collector)))
         (query (gnc:malloc-query))
         (splits #f))
 
@@ -455,7 +455,7 @@
 ;; commodity-collector.
 (define (gnc:accounts-get-balance-helper 
 	 accounts get-balance-fn reverse-balance-fn)
-  (let ((collector (make-commodity-collector)))
+  (let ((collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (acct)
        (collector (if (reverse-balance-fn acct)
@@ -490,7 +490,7 @@
 
 ;; returns a commodity-collector
 (define (gnc:group-get-comm-balance-at-date group date)
-  (let ((this-collector (make-commodity-collector)))
+  (let ((this-collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (x) (this-collector 'merge x #f))
      (gnc:group-map-accounts
@@ -533,7 +533,7 @@
 
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)
-  (let ((this-collector (make-commodity-collector)))
+  (let ((this-collector (gnc:make-commodity-collector)))
     (for-each (lambda (x) (this-collector 'merge x #f))
 	      (gnc:group-map-accounts
 	       (lambda (account)

@@ -139,7 +139,7 @@
   (let ((level-collector (make-vector num-levels)))
     (do ((i 0 (+ i 1)))
         ((= i num-levels) i)
-      (vector-set! level-collector i (make-stats-collector)))
+      (vector-set! level-collector i (gnc:make-stats-collector)))
     level-collector))
 
 ;; Just a private scope.

@@ -92,7 +92,9 @@
                     (vector 'by-date
                             split-same-month-p render-month-subheading))
 	      (cons 'date-yearly
-                    (vector 'by-date split-same-year-p render-year-subheading))
+                    (vector 'by-date 
+			    split-same-year-p 
+			    render-year-subheading))
 	      (cons 'corresponding-acc-name
                     (vector 'by-corr-account-name #f #f))
 	      (cons 'corresponding-acc-code
@@ -367,7 +369,8 @@
 		 
                   (vector 'corresponding-acc-name-subtotal
                         (N_ "Transfer from/to (w/subtotal) by code ")
-                        (N_ "Sort and subtotal by account transferred from/to's code"))
+                        (N_ "Sort and subtotal by account transferred \
+from/to's code"))
 				
 		  (vector 'corresponding-acc-code
                         (N_ "Transfer from/to code")
@@ -375,7 +378,8 @@
 		
 		  (vector 'corresponding-acc-code-subtotal
                         (N_ "Transfer from/to (w/subtotal)")
-                        (N_ "Sort and subtotal by account transferred from/to's code"))
+                        (N_ "Sort and subtotal by account \
+transferred from/to's code"))
 		
                   (vector 'amount
                         (N_ "Amount")
@@ -465,7 +469,8 @@
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Other Account")
-      "h" (N_ "Display the other account?  (if this is a split transaction, this parameter is guessed).") #f))
+      "h" (N_ "Display the other account?\
+(if this is a split transaction, this parameter is guessed).") #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -638,8 +643,7 @@
                               (not (secondary-subtotal-pred current next)))))
 		(begin (add-subtotal-row table current used-columns
                                          secondary-subtotal-collector)
-		       (set! secondary-subtotal-collector
-                             (make-commodity-collector))
+		       (secondary-subtotal-collector 'reset #f #f)
 		       (if next
                            (secondary-subheading-renderer current table))))
 	    (if (and primary-subtotal-pred
@@ -648,8 +652,7 @@
                               (not (primary-subtotal-pred current next)))))
 		(begin (add-subtotal-row table current used-columns
                                          primary-subtotal-collector)
-		       (set! primary-subtotal-collector
-                             (make-commodity-collector))
+		       (primary-subtotal-collector 'reset #f #f)
 		       (if next
 		       (primary-subheading-renderer next table))))
 	    (do-rows-with-subtotals rest 
@@ -682,10 +685,10 @@
                              secondary-subtotal-pred
 			     primary-subheading-renderer
 			     secondary-subheading-renderer
-			     (make-commodity-collector)
-                             (make-commodity-collector)
-                             (make-commodity-collector))
-     table))
+ 			     (gnc:make-commodity-collector)
+                              (gnc:make-commodity-collector)
+                              (gnc:make-commodity-collector))
+      table))
 
   (define (trep-renderer report-obj)
     (define (opt-val section name)
@@ -703,7 +706,7 @@
 	  (secondary-key (opt-val "Sorting" "Secondary Key"))
 	  (secondary-order (opt-val "Sorting" "Secondary Sort Order"))
 	  (splits '())
-	  (table '())
+          (table '())
 	  (query (gnc:malloc-query)))
 
       (gnc:query-set-group query (gnc:get-current-group))
