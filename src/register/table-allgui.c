@@ -358,7 +358,9 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    }
 
    /* check for out-of-bounds conditions (which may be deliberate) */
-   if ((0 > new_phys_row) || (0 > new_phys_col)) {
+   if ((0 > new_phys_row) || (0 > new_phys_col) ||
+      (new_phys_row >= table->num_phys_rows) ||
+      (new_phys_col >= table->num_phys_cols)) {
       new_virt_row = -1;
       new_virt_col = -1;
    } else {
@@ -398,6 +400,8 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
    if (new_virt_row >= table->num_virt_rows) return;
    if (new_virt_col >= table->num_virt_cols) return;
+   if (new_phys_row >= table->num_phys_rows) return;
+   if (new_phys_col >= table->num_phys_cols) return;
 
    /* ok, we now have a valid position.  Find the new cursor to use,
     * and initialize it's cells */
