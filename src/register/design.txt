@@ -227,6 +227,9 @@ paste automatically, etc.  The resulting "cooked" strings are passed
 to the register code (in table-motif.c) which then hands it off to the
 cell handlers.
 
+People porting this should give serious thought to finding and using
+"vi" or "emacs" editing text widgets under the covers. 
+
 That's pretty much it, except for some assorted gui-independent setup.
 
 
