@@ -25,8 +25,7 @@
 
 #include "gnucash.h"
 #include "options-dialog.h"
-#include "Add_Dialog.h"
-#include "MenuBar.h"
+#include "AccWindow.h"
 #include "MenuCommands.h"
 #include "messages.h"
 #include "RegWindow.h"
@@ -79,7 +78,7 @@ acct_tree_select(GtkWidget *widget, GdkEventButton *event, GtkWidget *child)
 void
 refreshMainWindow()
 {
-
+  gnc_ui_refresh_tree();
 }
 
 
@@ -246,13 +245,13 @@ gnc_ui_add_account ( GtkWidget *widget, gpointer data )
     if ( selection->data != NULL )
     {
       Account *acc = gtk_object_get_user_data(GTK_OBJECT(selection->data));
-      create_add_account_dialog(acc);  
+      accWindow( (AccountGroup *) acc);
     }
    
   }
   else
   {
-    create_add_account_dialog(NULL);
+    accWindow(NULL);
   }
   
 }
@@ -328,15 +327,68 @@ gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
   }  
 }
 
-static void
-quit_menu_item_helper() {
-  gnc_shutdown(0);
-}
+//static void
+//quit_menu_item_helper() {
+//  gnc_shutdown(0);
+//}
 
 static void
 gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
   gnc_show_options_dialog();
 }
+
+/* Menus */
+
+static GnomeUIInfo filemenu[] = {
+       {GNOME_APP_UI_ITEM, 
+       N_("New"), N_("Create New File."),
+       NULL, NULL, NULL, 
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT,
+       0, 0, NULL},
+       {GNOME_APP_UI_ITEM,
+       N_("Open"), N_("Open File."),
+       file_cmd_open, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
+       0,0, NULL},
+       {GNOME_APP_UI_ITEM,
+       N_("Import"), N_("Import QIF File."),
+       file_cmd_import, NULL, NULL,
+       GNOME_APP_PIXMAP_NONE, NULL,
+       0, 0, NULL},
+       GNOMEUIINFO_END             
+};
+
+static GnomeUIInfo optionsmenu[] = {
+	{GNOME_APP_UI_ITEM,
+	 N_("Preferences"), N_("Preferences"),
+	 gnc_ui_options_cb, NULL, NULL,
+	 GNOME_APP_PIXMAP_NONE, NULL,
+	 0, 0, NULL},
+	 GNOMEUIINFO_END
+};
+  
+static GnomeUIInfo helpmenu[] = {
+    {GNOME_APP_UI_ITEM, 
+     N_("About"), N_("About Gnucash."),
+     gnc_ui_about_cb, NULL, NULL, 
+     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT, 0, 0, NULL},
+     GNOMEUIINFO_SEPARATOR,
+    {GNOME_APP_UI_ITEM,
+     N_("Help"), N_("Gnucash Help."),
+     gnc_ui_help_cb, NULL, NULL,
+     GNOME_APP_PIXMAP_NONE, NULL,
+     0, 0, NULL},
+     GNOMEUIINFO_END
+};
+
+ /*GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),*/
+
+static GnomeUIInfo mainmenu[] = {
+    GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
+    GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
+    GNOMEUIINFO_END
+};
 
 void
 mainWindow() {
@@ -344,37 +396,9 @@ mainWindow() {
   GtkWidget 	*scrolled_win;
   GtkWidget 	*main_vbox;
   GtkWidget 	*clist_vbox;
-  GtkWidget	  *menubar;
   GtkWidget 	*clist;
   GtkWidget 	*notebook;
   AccountGroup *accts = xaccSessionGetGroup(current_session);
-  int nmenu_items;
-  /*GtkAcceleratorTable *accel;*/
-
-
-  /* this is the GtkMenuEntry structure used to create new menus.  The
-     first member is the menu definition string.  The second, the default
-     accelerator key used to access this menu function with the keyboard.
-     The third is the callback function to call when this menu item is
-     selected (by the accelerator key, or with the mouse.) The last
-     member is the data to pass to your callback function.  */
-  
-  GtkMenuEntry menu_items[] =
-  {
-    {"<Main>/File/New", "<control>N", NULL, NULL},
-    {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
-    {"<Main>/File/Import", NULL, file_cmd_import, NULL},
-    {"<Main>/File/Save", "<control>S", file_cmd_save, NULL},
-    {"<Main>/File/Save as", NULL, NULL, NULL},
-    {"<Main>/File/<separator>", NULL, NULL, NULL},
-    {"<Main>/File/Quit", "<control>Q", quit_menu_item_helper, NULL },
-    {"<Main>/Options/Preferences..", "<control>A", gnc_ui_options_cb, NULL},
-    {"<Main>/Help/Help", NULL, gnc_ui_help_cb, NULL},
-    {"<Main>/Help/<separator>", NULL, NULL, NULL},
-    {"<Main>/Help/About..", NULL, gnc_ui_about_cb, NULL}
-  };
-
-  MenuBar *main_menu_bar;
 
   mwindow = g_malloc ( sizeof ( main_window ) );
   mwindow->maintree = GTK_TREE(gtk_tree_new());
@@ -403,10 +427,10 @@ mainWindow() {
       GNOMEUIINFO_END
      };
 
-    /* calculate the number of menu_item's */
-    nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
 
     gnome_app_create_toolbar(GNOME_APP(app), toolbar);
+    gnome_app_create_menus(GNOME_APP(app), mainmenu);
+
   }
 
   /* Cram accounts into the tree widget */
@@ -441,33 +465,17 @@ mainWindow() {
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_widget_show (scrolled_win);
 
-  {
-    MenuBarGroup *mbg = menuBarGroupCreate();
-    main_menu_bar = menuBarCreate(mbg, "<Main>");
-    menuBarGroupAddItems(mbg, menu_items, nmenu_items);
-  }
-
-  menubar = main_menu_bar->widget;
-  /*accel = main_menu_bar->table;*/
-
-//gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
-  gnome_app_set_menus ( GNOME_APP (app), GTK_MENU_BAR (menubar));
   gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win),
-                                        GTK_WIDGET(mwindow->maintree));
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win), GTK_WIDGET(mwindow->maintree));
 
   /* Append some pages to notebook */
   {
     GtkWidget *label;
-   // label = gtk_label_new ( " All Accounts " );
-   // gtk_notebook_append_page (GTK_NOTEBOOK(notebook), clist_vbox, label);
     
     label = gtk_label_new ( " Bank Accounts " );
     gtk_notebook_append_page (GTK_NOTEBOOK(notebook), scrolled_win, label);
   }
   
-  //gtk_widget_show(clist_vbox);
-  gtk_widget_show(menubar);
   gtk_widget_show(GTK_WIDGET(mwindow->maintree));
 
   /* Setup some callbacks */

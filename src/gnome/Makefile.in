@@ -60,7 +60,7 @@ OTHER_OBJS += $(wildcard @top_srcdir@/src/swig/obj/*.o)
 
 ######################################################################
 # See Makefile.common for information about these variables.
-GNOME_SRCS := top-level.c MainWindow.c MenuBar.c RegWindow.c Add_Dialog.c \
+GNOME_SRCS := top-level.c MainWindow.c RegWindow.c \
               xtutil.c RecnWindow.c MenuCommands.c FileBox.c \
               options-dialog.c AccWindow.c AdjBWindow.c
 ######################################################################
