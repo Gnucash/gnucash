@@ -1,3 +1,10 @@
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/dialog-vendor.c:
+	  Make sure we set the proper search-type when we create the
+	  query, otherwise the search will fail later.
+	  Fixes #141526.
+
 2004-12-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-ledger/Makefile.am: add explicit
