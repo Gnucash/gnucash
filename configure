@@ -905,133 +905,6 @@ EOF
 fi
 
 
-# *******************************************
-# check for UI libs:
-LIBS="-lXmu -lXext -lX11 -lSM -lICE"
-#AC_CHECK_LIB(SM, ???)
-#AC_CHECK_LIB(ICE, ???)
-echo $ac_n "checking for -lXt""... $ac_c" 1>&6
-ac_lib_var=`echo Xt'_'XtVaCreateWidget | tr './+\055' '__p_'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lXt  $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 922 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char XtVaCreateWidget();
-
-int main() { return 0; }
-int t() {
-XtVaCreateWidget()
-; return 0; }
-EOF
-if { (eval echo configure:934: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  LIBS="-lXt $LIBS"
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Must have libXt" 1>&2; exit 1; } 
-fi
-
-echo $ac_n "checking for -lXm""... $ac_c" 1>&6
-ac_lib_var=`echo Xm'_'XmCreateMainWindow | tr './+\055' '__p_'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lXm  $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 961 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char XmCreateMainWindow();
-
-int main() { return 0; }
-int t() {
-XmCreateMainWindow()
-; return 0; }
-EOF
-if { (eval echo configure:973: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  LIBS="-lXm $LIBS"
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Must have libXm" 1>&2; exit 1; } 
-fi
-
-echo $ac_n "checking for -lXpm""... $ac_c" 1>&6
-ac_lib_var=`echo Xpm'_'XpmReadFileToXpmImage | tr './+\055' '__p_'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lXpm  $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 1000 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char XpmReadFileToXpmImage();
-
-int main() { return 0; }
-int t() {
-XpmReadFileToXpmImage()
-; return 0; }
-EOF
-if { (eval echo configure:1012: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  cat >> confdefs.h <<\EOF
-#define HAVE_XPM 1
-EOF
- LIBS="-lXpm $LIBS"
-else
-  echo "$ac_t""no" 1>&6
-cat >> confdefs.h <<\EOF
-#define HAVE_XPM 0
-EOF
- 
-fi
 
 echo $ac_n "checking how to run the C preprocessor""... $ac_c" 1>&6
 # On Suns, sometimes $CPP names a directory.
@@ -1318,8 +1191,137 @@ else
 fi
 
 
-
-
+# *******************************************
+# hack alert -- this set of tests must be moved to
+# somewhere where the location of the X11 libs has been found.
+# On my system, this fails because libXt can't be found.
+# -------- linas ------
+# check for UI libs:
+#hack alert LIBS="-lXmu -lXext -lX11 -lSM -lICE"
+#hack alert #AC_CHECK_LIB(SM, ???)
+#hack alert #AC_CHECK_LIB(ICE, ???)
+#hack alert echo $ac_n "checking for -lXt""... $ac_c" 1>&6
+#hack alert ac_lib_var=`echo Xt'_'XtVaCreateWidget | tr './+\055' '__p_'`
+#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
+#hack alert else
+#hack alert   ac_save_LIBS="$LIBS"
+#hack alert LIBS="-lXt  $LIBS"
+#hack alert cat > conftest.$ac_ext <<EOF
+#hack alert #line 922 "configure"
+#hack alert #include "confdefs.h"
+#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
+#hack alert /* We use char because int might match the return type of a gcc2
+#hack alert     builtin and then its argument prototype would still apply.  */
+#hack alert char XtVaCreateWidget();
+#hack alert 
+#hack alert int main() { return 0; }
+#hack alert int t() {
+#hack alert XtVaCreateWidget()
+#hack alert ; return 0; }
+#hack alert EOF
+#hack alert if { (eval echo configure:934: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
+#hack alert else
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
+#hack alert fi
+#hack alert rm -f conftest*
+#hack alert LIBS="$ac_save_LIBS"
+#hack alert 
+#hack alert fi
+#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+#hack alert   echo "$ac_t""yes" 1>&6
+#hack alert   LIBS="-lXt $LIBS"
+#hack alert else
+#hack alert   echo "$ac_t""no" 1>&6
+#hack alert { echo "configure: error: Must have libXt" 1>&2; exit 1; } 
+#hack alert fi
+#hack alert 
+#hack alert echo $ac_n "checking for -lXm""... $ac_c" 1>&6
+#hack alert ac_lib_var=`echo Xm'_'XmCreateMainWindow | tr './+\055' '__p_'`
+#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
+#hack alert else
+#hack alert   ac_save_LIBS="$LIBS"
+#hack alert LIBS="-lXm  $LIBS"
+#hack alert cat > conftest.$ac_ext <<EOF
+#hack alert #line 961 "configure"
+#hack alert #include "confdefs.h"
+#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
+#hack alert /* We use char because int might match the return type of a gcc2
+#hack alert     builtin and then its argument prototype would still apply.  */
+#hack alert char XmCreateMainWindow();
+#hack alert 
+#hack alert int main() { return 0; }
+#hack alert int t() {
+#hack alert XmCreateMainWindow()
+#hack alert ; return 0; }
+#hack alert EOF
+#hack alert if { (eval echo configure:973: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
+#hack alert else
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
+#hack alert fi
+#hack alert rm -f conftest*
+#hack alert LIBS="$ac_save_LIBS"
+#hack alert 
+#hack alert fi
+#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+#hack alert   echo "$ac_t""yes" 1>&6
+#hack alert   LIBS="-lXm $LIBS"
+#hack alert else
+#hack alert   echo "$ac_t""no" 1>&6
+#hack alert { echo "configure: error: Must have libXm" 1>&2; exit 1; } 
+#hack alert fi
+#hack alert 
+#hack alert echo $ac_n "checking for -lXpm""... $ac_c" 1>&6
+#hack alert ac_lib_var=`echo Xpm'_'XpmReadFileToXpmImage | tr './+\055' '__p_'`
+#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
+#hack alert else
+#hack alert   ac_save_LIBS="$LIBS"
+#hack alert LIBS="-lXpm  $LIBS"
+#hack alert cat > conftest.$ac_ext <<EOF
+#hack alert #line 1000 "configure"
+#hack alert #include "confdefs.h"
+#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
+#hack alert /* We use char because int might match the return type of a gcc2
+#hack alert     builtin and then its argument prototype would still apply.  */
+#hack alert char XpmReadFileToXpmImage();
+#hack alert 
+#hack alert int main() { return 0; }
+#hack alert int t() {
+#hack alert XpmReadFileToXpmImage()
+#hack alert ; return 0; }
+#hack alert EOF
+#hack alert if { (eval echo configure:1012: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
+#hack alert else
+#hack alert   rm -rf conftest*
+#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
+#hack alert fi
+#hack alert rm -f conftest*
+#hack alert LIBS="$ac_save_LIBS"
+#hack alert 
+#hack alert fi
+#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+#hack alert   echo "$ac_t""yes" 1>&6
+#hack alert   cat >> confdefs.h <<\EOF
+#hack alert define HAVE_XPM 1
+#hack alert EOF
+#hack alert  LIBS="-lXpm $LIBS"
+#hack alert else
+#hack alert   echo "$ac_t""no" 1>&6
+#hack alert cat >> confdefs.h <<\EOF
+#hack alert define HAVE_XPM 0
+#hack alert EOF
+#hack alert  
+#hack alert fi
 
 
 trap '' 1 2 15
