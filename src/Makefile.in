@@ -115,7 +115,7 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
-SUBDIRS =    doc   engine   experimental   register   guile   gnome   scm   quotes   pixmaps   optional
+SUBDIRS =    doc   engine   calculation   experimental   register   guile   gnome   scm   quotes   pixmaps   optional
 
 
 # Engine Makefile.am file.

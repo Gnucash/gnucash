@@ -2,6 +2,7 @@
 SUBDIRS = \
   doc \
   engine \
+  calculation \
   experimental \
   register \
   guile \
