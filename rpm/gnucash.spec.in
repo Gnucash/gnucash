@@ -9,7 +9,7 @@
   %define _with_postgres 0
   %define sql_config --disable-sql
 %endif
-%define version @VERSION@
+%define version @-VERSION-@
 %define __libtoolize /bin/true
 
 Name:      	gnucash
