@@ -1,13 +1,6 @@
 ############################################################
-          Gnucash 1.5.x README.patches file.
+          Gnucash 1.6.x README.patches file.
 
-NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
-BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
-
-USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS)
-
-If you want something a bit more tested, please use the
-1.4 stable series.
 ------------------------------------------------------------
 
 Submitting a Patch:
