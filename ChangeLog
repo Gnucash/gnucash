@@ -1,16 +1,28 @@
+2002-11-12  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register-control.c
+	(gnc_split_register_traverse): Move the checking for non-existent
+	and placeholder accounts to a separate function, and call that new
+	function.
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_cancel_cursor_trans_changes): Do a full
+	refresh after calling this function.  Cleans up some gui leftovers
+	after a delete. (gnc_split_register_get_account_by_name): Add the
+	new function that checks for non-existent and placeholder
+	accounts.  (gnc_split_register_get_account): Call the new function
+	to get the addditional checks.  This solves #92157.
+
 2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Fix previous patch.  
 	gcc 3.2 is too forgiving...
 
-2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Dynamically generate
 	a pixmap to display match confidence graphically.
 
-2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/ofx/gnc-ofx-import.c: Fix call to 
 	g_strdup_printf in Christian's 2002-11-03 translation patch.
 
-2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c
 	* src/import-export/generic-import.glade: First round of 
 	transaction matcher UI changes.  Create a pseudo-widget in first 

@@ -884,7 +884,6 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   do
   {
     ComboCell *cell;
-    Account *account;
     char *name;
 
 
@@ -919,41 +918,9 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
         safe_strcmp (name, STOCK_SPLIT_STR) == 0)
       break;
 
-    account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          cell->cell.value,
-                                          gnc_get_account_separator ());
-    if (account)
-    {
-      if (xaccAccountGetPlaceholder (account))
-      {
-        const char *format = _("The account %s does not allow transactions.\n");
-	gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
-				   format, name);
-      }
-      break;
-    }
-    else
-    {
-      const char *format = _("The account %s does not exist.\n"
-                             "Would you like to create it?");
-      if (!gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-				       TRUE, format, name))
-        break;
-    }
-
-    info->full_refresh = FALSE;
-
-    account = gnc_ui_new_accounts_from_name_window (name);
-    if (!account)
-      break;
-
-    info->full_refresh = TRUE;
-
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    gnc_combo_cell_set_value (cell, name);
-    gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    g_free (name);
-
+    /* Create the account if necessary. Also checks for a placeholder */
+    (void) gnc_split_register_get_account_by_name (reg, (BasicCell *)cell, cell->cell.value,
+						   &info->full_refresh);
   } while (FALSE);
 
   /* See if we are tabbing off the end of the very last line */

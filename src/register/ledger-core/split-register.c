@@ -1104,6 +1104,7 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
   xaccTransRollbackEdit (pending_trans);
 
   info->pending_trans_guid = *xaccGUIDNULL ();
+  info->full_refresh = TRUE;
 
   gnc_resume_gui_refresh ();
 }
@@ -1470,18 +1471,69 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    return TRUE;
 }
 
+
+Account *
+gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
+					const char *name, gboolean *new)
+{
+  const char *placeholder = _("The account %s does not allow transactions.\n");
+  const char *missing = _("The account %s does not exist.\n"
+			  "Would you like to create it?");
+  char *fullname;
+  ComboCell *cell = (ComboCell *) bcell;
+  Account *account;
+
+  /* No changes, as yet. */
+  *new = FALSE;
+
+  /* Find the account */
+  account = xaccGetAccountFromFullName (gnc_get_current_group (),
+					name, gnc_get_account_separator ());
+
+  if (!account) {
+    /* Ask if they want to create a new one. */
+    if (!gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
+				     TRUE, missing, name))
+      return NULL;
+    
+    /* User said yes, they want to create a new account. */
+    account = gnc_ui_new_accounts_from_name_window (name);
+    if (!account)
+      return NULL;
+    *new = TRUE;
+
+    /* Now have a new account. Update the cell with the name as created. */
+    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    gnc_combo_cell_set_value (cell, fullname);
+    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    g_free (fullname);
+  }
+
+  /* See if the account (either old or new) is a placeholder. */
+  if (xaccAccountGetPlaceholder (account)) {
+    gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
+			       placeholder, name);
+  }
+
+  /* Be seeing you. */
+  return account;
+}
+
 Account *
 gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 {
+  BasicCell *cell;
   const char *name;
+  gboolean dummy;
 
   if (!gnc_table_layout_get_cell_changed (reg->table->layout, cell_name, TRUE))
     return NULL;
 
-  name = gnc_table_layout_get_cell_value (reg->table->layout, cell_name);
-
-  return xaccGetAccountFromFullName (gnc_get_current_group (),
-                                     name, gnc_get_account_separator ());
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return NULL;
+  name = gnc_basic_cell_get_value (cell);
+  return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
 }
 
 static gboolean
