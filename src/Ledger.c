@@ -39,42 +39,6 @@ Split * xaccGetCurrentSplit (BasicRegister *reg)
 
 /* ======================================================== */
 
-void 
-xaccSaveRegEntry (BasicRegister *reg)
-{
-   Split *split;
-   Transaction *trans;
-   Account * acc;
-
-   /* get the handle to the current split and transaction */
-   split = xaccGetCurrentSplit (reg);
-   if (!split) return;
-   trans = (Transaction *) (split->parent);
-   
-   /* copy the contents from the cursor to the split */
-   xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
-                            reg->dateCell->date.tm_mon+1,
-                            reg->dateCell->date.tm_year+1900);
-
-   xaccTransSetNum (trans, reg->numCell->value);
-   xaccTransSetDescription (trans, reg->descCell->cell.value);
-   xaccSplitSetMemo (split, reg->memoCell->value);
-   xaccSplitSetAction (split, reg->actionCell->cell.value);
-   xaccSplitSetReconcile (split, reg->recnCell->value[0]);
-
-   /* hack alert -- do transfers */
-
-   /* lets assume that the amount changed, and 
-    * refresh all related accounts & account windows */
-   xaccTransRecomputeBalance (trans);
-   acc = (Account *) split->acc;
-   accRefresh (acc);
-   acc = (Account *) trans->credit_split.acc;
-   accRefresh (acc);
-}
-
-/* ======================================================== */
-
 static char * 
 GetPeerAccName (Split *split)
 {
@@ -96,6 +60,80 @@ GetPeerAccName (Split *split)
    }
    if (acc) return acc->accountName;
    return "";
+}
+
+/* ======================================================== */
+
+static Split * 
+GetPeerSplit (Split *split)
+{
+   Transaction *trans = (Transaction *) (split->parent);
+
+   if (split != &(trans->credit_split)) {
+      return &(trans->credit_split);
+   } else {
+      if (trans->debit_splits) {
+        /* if only one split, then use that */
+        if (NULL == trans->debit_splits[1]) {
+           return (trans->debit_splits[0]);
+        }
+      } 
+   }
+   return NULL;
+}
+
+/* ======================================================== */
+
+void 
+xaccSaveRegEntry (BasicRegister *reg)
+{
+   Split *split;
+   Transaction *trans;
+   Account * acc;
+   char * xfr;
+
+   /* get the handle to the current split and transaction */
+   split = xaccGetCurrentSplit (reg);
+   if (!split) return;
+   trans = (Transaction *) (split->parent);
+   
+   /* copy the contents from the cursor to the split */
+   xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
+                            reg->dateCell->date.tm_mon+1,
+                            reg->dateCell->date.tm_year+1900);
+
+   xaccTransSetNum (trans, reg->numCell->value);
+   xaccTransSetDescription (trans, reg->descCell->cell.value);
+   xaccSplitSetMemo (split, reg->memoCell->value);
+   xaccSplitSetAction (split, reg->actionCell->cell.value);
+   xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+
+   /* hack alert -- do transfers */
+
+   xfr = GetPeerAccName (split);
+   if (strcmp (xfr, reg->xfrmCell->cell.value) &&
+       strcmp (SPLIT_STR, reg->xfrmCell->cell.value)) {
+      Split *peer_split;
+
+      peer_split = GetPeerSplit (split);
+      if (peer_split) {
+         acc = (Account *) (peer_split->acc);
+         xaccRemoveSplit (acc, peer_split);
+         accRefresh (acc);
+
+         acc = xaccGetPeerAccountFromName (acc, reg->xfrmCell->cell.value);
+         xaccInsertSplit (acc, peer_split);
+         accRefresh (acc);
+      }
+   }
+
+   /* lets assume that the amount changed, and 
+    * refresh all related accounts & account windows */
+   xaccTransRecomputeAmount (trans);
+   acc = (Account *) split->acc;
+   accRefresh (acc);
+   acc = (Account *) trans->credit_split.acc;
+   accRefresh (acc);
 }
 
 /* ======================================================== */
