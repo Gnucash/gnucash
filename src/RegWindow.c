@@ -37,7 +37,6 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Action.h"
 #include "AdjBWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
@@ -46,7 +45,6 @@
 #include "MainWindow.h"
 #include "Ledger.h"
 #include "LedgerUtils.h"
-#include "PopBox.h"
 #include "QuickFill.h"
 #include "RecnWindow.h"
 #include "Transaction.h"
