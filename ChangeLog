@@ -1,3 +1,10 @@
+2002-12-9  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/import-main-matcher.c:
+	* src/import-export/generic-import.glade: Change colors, remove 
+	imbalance column and put it's info into the "Select action column",
+	 when appropriate.  Change many strings after discussion with 
+	Wilddev.
+
 2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/import-account-matcher.c,h: Add param to 
 	 gnc_import_select_account():

@@ -28,7 +28,7 @@
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>False</allow_shrink>
+  <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
@@ -244,7 +244,7 @@
   <modal>False</modal>
   <default_width>1000</default_width>
   <default_height>600</default_height>
-  <allow_shrink>False</allow_shrink>
+  <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
@@ -363,8 +363,8 @@
 	    <handler>downloaded_transaction_unselect_cb</handler>
 	    <last_modification_time>Thu, 22 Aug 2002 02:05:02 GMT</last_modification_time>
 	  </signal>
-	  <columns>10</columns>
-	  <column_widths>67,89,49,109,43,58,32,29,34,33</column_widths>
+	  <columns>9</columns>
+	  <column_widths>67,89,49,109,43,58,32,29,34</column_widths>
 	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 	  <show_titles>True</show_titles>
 	  <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -437,21 +437,8 @@
 	  <widget>
 	    <class>GtkLabel</class>
 	    <child_name>CList:title</child_name>
-	    <name>label847730</name>
-	    <label>Imbalance</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>0.5</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	  </widget>
-
-	  <widget>
-	    <class>GtkLabel</class>
-	    <child_name>CList:title</child_name>
 	    <name>label847786</name>
-	    <label>ADD</label>
+	    <label>A</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
@@ -464,7 +451,7 @@
 	    <class>GtkLabel</class>
 	    <child_name>CList:title</child_name>
 	    <name>label847787</name>
-	    <label>RECONCILE</label>
+	    <label>R</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
@@ -490,7 +477,7 @@
 	    <class>GtkLabel</class>
 	    <child_name>CList:title</child_name>
 	    <name>label847789</name>
-	    <label>Specific action to be taken</label>
+	    <label>Select Import Action</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
@@ -508,7 +495,10 @@
 -Yellow transactions probably require your intervention or they will be imported unbalanced.
 -Green transactions will be imported balanced (you may still want to double check the match or destination account).
 
-Click in &quot;Specific action to be taken&quot; to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</label>
+-Select &quot;A&quot; to Add the transaction as new
+-Select &quot;R&quot; to Reconcile a matching transaction
+-Select neither to Skip (The transaction won't be imported at all)
+-&quot;Select Import Action&quot; allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</label>
 	<justify>GTK_JUSTIFY_LEFT</justify>
 	<wrap>False</wrap>
 	<xalign>0.5</xalign>
@@ -539,7 +529,7 @@ Click in &quot;Specific action to be taken&quot; to change the matching transact
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>False</allow_shrink>
+  <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>True</auto_close>
@@ -789,7 +779,7 @@ click &quot;Ok&quot;.</label>
   <modal>False</modal>
   <default_width>800</default_width>
   <default_height>600</default_height>
-  <allow_shrink>False</allow_shrink>
+  <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>

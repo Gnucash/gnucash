@@ -56,17 +56,16 @@ struct _generic_transaction_info
   int selected_row;
 };
 
-#define NUM_COLUMNS_DOWNLOADED_CLIST 10
+#define NUM_COLUMNS_DOWNLOADED_CLIST 9
 #define DOWNLOADED_CLIST_ACCOUNT 1
 #define DOWNLOADED_CLIST_DATE 0
 #define DOWNLOADED_CLIST_AMOUNT 2
 #define DOWNLOADED_CLIST_DESCRIPTION 3
 #define DOWNLOADED_CLIST_MEMO 4
-#define DOWNLOADED_CLIST_IMBALANCE 5
-#define DOWNLOADED_CLIST_ACTION_ADD 6
-#define DOWNLOADED_CLIST_ACTION_CLEAR 7
-#define DOWNLOADED_CLIST_ACTION_EDIT 8
-#define DOWNLOADED_CLIST_ACTION_INFO 9
+#define DOWNLOADED_CLIST_ACTION_ADD 5
+#define DOWNLOADED_CLIST_ACTION_CLEAR 6
+#define DOWNLOADED_CLIST_ACTION_EDIT 7
+#define DOWNLOADED_CLIST_ACTION_INFO 8
 static short module = MOD_IMPORT;
 
 static char * fleche_xpm[] = {
@@ -429,13 +428,13 @@ GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent,
 									    checkbox_unchecked_xpm);
  /*Initialise the colors */
   info->color_back_red.red=65535;
-  info->color_back_red.green=32766;
-  info->color_back_red.blue=32766;
+  info->color_back_red.green=16383;
+  info->color_back_red.blue=16383;
   info->color_back_green.red=49151;
   info->color_back_green.green=65535;
   info->color_back_green.blue=49151;
   info->color_back_yellow.red=65535;
-  info->color_back_yellow.green=65535;
+  info->color_back_yellow.green=55255;
   info->color_back_yellow.blue=0;
   info->color_back_white.red=65535;
   info->color_back_white.green=65535;
@@ -446,9 +445,6 @@ GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent,
 				    TRUE);
   gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
 				    DOWNLOADED_CLIST_AMOUNT,
-				    TRUE);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
-				    DOWNLOADED_CLIST_IMBALANCE,
 				    TRUE);
   gtk_clist_set_column_auto_resize (GTK_CLIST (info->clist),
 				    DOWNLOADED_CLIST_ACTION_ADD,
@@ -532,7 +528,7 @@ refresh_clist_row (GNCGenTransaction *gui,
   char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
   char **old_text = g_new(char *, NUM_COLUMNS_DOWNLOADED_CLIST);/* Should be g_new?*/
   gint i;
-  gchar *tmp;
+  gchar *tmp,*imbalance;
   g_assert (gui);
   g_assert (info);
     DEBUG("Begin");
@@ -582,21 +578,6 @@ refresh_clist_row (GNCGenTransaction *gui,
 		      DOWNLOADED_CLIST_MEMO, 
 		      text[DOWNLOADED_CLIST_MEMO]);
   
-  /*Imbalance*/
-  if(gnc_import_TransInfo_is_balanced(info)==TRUE)
-    {
-      text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup("");
-    }
-  else
-    {
-      text[DOWNLOADED_CLIST_IMBALANCE]=g_strdup(xaccPrintAmount (xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) ), 
-								 gnc_commodity_print_info (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),TRUE) )
-						);
-    }
-  gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
-		      DOWNLOADED_CLIST_IMBALANCE, 
-		      text[DOWNLOADED_CLIST_IMBALANCE]);
-  
   /*Actions*/
   text[DOWNLOADED_CLIST_ACTION_ADD] = g_strdup("");
   text[DOWNLOADED_CLIST_ACTION_CLEAR] = g_strdup("");
@@ -610,12 +591,14 @@ refresh_clist_row (GNCGenTransaction *gui,
     case GNCImport_ADD:
       if(gnc_import_TransInfo_is_balanced(info)==TRUE)
 	{
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add, transaction already balanced"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("New, already balanced"));
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_green));
 	}
       else
 	{
+	  imbalance=g_strdup(xaccPrintAmount (gnc_numeric_neg(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) )), 
+					      gnc_commodity_print_info (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),TRUE) ));
 	  if (gnc_import_TransInfo_get_destacc (info) != NULL)
 	    {
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
@@ -625,20 +608,22 @@ refresh_clist_row (GNCGenTransaction *gui,
 		 gnc_get_account_separator ());
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, auto-balance into (user-selected) \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, transfer %s to (manual) \"%s\""),imbalance,tmp);
 		}
 	      else
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add, auto-balance into (auto-selected) \"%s\""),tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, transfer %s to (auto) \"%s\""),imbalance,tmp);
 		}
-	      free (tmp);
+	      g_free (tmp);
+
 	    }
 	  else
 	    {
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 					&(gui->color_back_yellow));
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Add UNBALANCED (no auto-balance account)"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, UNBALANCED (need acct to transfer %s)!"),imbalance);
 	    }
+	      g_free (imbalance);
 	}
       break;
     case GNCImport_CLEAR: 
@@ -648,24 +633,24 @@ refresh_clist_row (GNCGenTransaction *gui,
 				    &(gui->color_back_green));
 	  if(gnc_import_TransInfo_get_match_selected_manually(info)==TRUE)
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (user-selected) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (manual) match"));
 	    }
 	  else
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (auto-selected) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (auto) match"));
 	    }
 	}
       else
 	{
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_red));
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Please select a match (or another action)"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Match missing!"));
 	}
       break;
     case GNCImport_EDIT: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
       break;
     case GNCImport_SKIP: 
-      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Skip this transaction (no action selected)"));
+      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Do not import (no action selected)"));
       gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				&(gui->color_back_red));
       break;
