@@ -13,9 +13,9 @@
 (use-modules (gnucash main))		;for gnc:debug
 
 (define main-window gnc:window-name-main)
-(define top-level "_Business")
-(define new-label "New")
-(define find-label "Find")
+(define top-level (N_ "_Business"))
+(define new-label (N_ "New"))
+(define find-label (N_ "Find"))
 
 (define gnc:*business-label* (N_ "Business"))
 (define gnc:*company-name* (N_ "Company Name"))
@@ -25,10 +25,10 @@
 
 (define (add-customer-items)
   (let ((last-cust (gnc:owner-create))
-	(cust "Customers"))
+	(cust (N_ "Customers")))
 
     (define customer-menu
-      (gnc:make-menu (N_ cust)
+      (gnc:make-menu cust
 		     (list main-window top-level "")))
 
     (define new-customer-item
@@ -102,7 +102,7 @@
 
 (define (add-vendor-items)
   (let ((last-vendor (gnc:owner-create))
-	(vendor "Vendors"))
+	(vendor (N_ "Vendors")))
 
     (define vendor-menu
       (gnc:make-menu (N_ vendor)
