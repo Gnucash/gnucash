@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Empréstimo para Automóvel
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Contas para empréstimo para automóvel e juros associados
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Você desejará seleccionar este conjunto de contas caso tenha um empréstimo para automóvel (empréstimo para automóvel, juro do empréstimo).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Passivo</act:name>
+  <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Passivo</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Empréstimos</act:name>
+  <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Empréstimos</act:description>
+  <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Empréstimo Automóvel</act:name>
+  <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Empréstimo Automóvel</act:description>
+  <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Despesas</act:name>
+  <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Despesas</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juro</act:name>
+  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juro</act:description>
+  <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juro Empréstimo Automóvel</act:name>
+  <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juro Empréstimo Automóvel</act:description>
+  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

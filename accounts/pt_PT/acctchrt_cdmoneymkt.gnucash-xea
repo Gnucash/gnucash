@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Depósitos a Prazo e Mercado Monetário
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Contas para Depósitos a Prazo e investimentos no mercado monetário
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Desejará utilizar este conjunto de contas caso tenha depósitos a prazo ou contas no mercado financeiro (DP, Juros DP, mercado monetário, juro mercado monetário).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Activos</act:name>
+  <act:id type="new">7b1a39efc6234d1db148baa722c9471e</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Activos</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activos Actuais</act:name>
+  <act:id type="new">1880e89ec9fe82622b8648df481dd2b7</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Activos Actuais</act:description>
+  <act:parent type="new">7b1a39efc6234d1db148baa722c9471e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>DP Banco</act:name>
+  <act:id type="new">c1620f9c3082e33d8fd559e17f90a122</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>DP Banco</act:description>
+  <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Mercado Monetário</act:name>
+  <act:id type="new">3a01e5b0132ba26803b49732a3242654</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Mercado Monetário</act:description>
+  <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Receita</act:name>
+  <act:id type="new">4b3e36f325569b80efc7d3331bdf851b</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Receita</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juros da Receita</act:name>
+  <act:id type="new">fd131cae797d1fb83c2e2bf57254eca5</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juros da Receita</act:description>
+  <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juros do DP</act:name>
+  <act:id type="new">28d311f0f38da5e35628e76ad8bcc853</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juros do DP</act:description>
+  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juros do Mercado Monetário</act:name>
+  <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juros do Mercado Monetário</act:description>
+  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
