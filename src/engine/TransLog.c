@@ -65,7 +65,7 @@ xaccOpenLog (void)
 
       trans_log = fopen (filename, "a");
 
-      fprintf (trans_log, "duhh	duhhh\n");
+      fprintf (trans_log, "num	description\n");
       fprintf (trans_log, "-----------------\n");
    }
 
@@ -78,7 +78,7 @@ xaccOpenLog (void)
 
       split_log = fopen (filename, "a");
 
-      fprintf (split_log, "duhh	duhhh\n");
+      fprintf (split_log, "num	memo	action\n");
       fprintf (split_log, "-----------------\n");
    }
    free (timestamp);
@@ -90,6 +90,12 @@ xaccOpenLog (void)
 void
 xaccTransWriteLog (Transaction *trans)
 {
+   fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
+
+   fprintf (split_log, "%s	%s	%s\n",
+            trans->num,
+            trans->source_split.memo,
+            trans->source_split.action);
 }
 
 /************************ END OF ************************************\
