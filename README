@@ -199,6 +199,13 @@ So the two most likely sets of build instructions would be as follows:
     make motif
     make install-opt
 
+Examples of other funny configure options:
+    configure --with-motif=/usr/local/opt/mootif \
+              --prefix=/usr/local/opt/gnucash \
+              --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
+              --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
+
+
 Status:
 -------
 As of version 1.0.18:
