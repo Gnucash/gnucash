@@ -446,8 +446,8 @@ recnInterestXferWindow( startRecnWindowData *data)
 
 
   /* change frame labels */
-  gnc_xfer_dialog_set_information_frame_label( data->xferData,
-                                               _("Payment Information") );
+  gnc_xfer_dialog_set_information_label( data->xferData,
+					 _("Payment Information") );
 
   /* Interest accrued is a transaction from an income account
    * to a bank account.  Interest charged is a transaction from
@@ -456,12 +456,12 @@ recnInterestXferWindow( startRecnWindowData *data)
    */
   if( account_type_has_auto_interest_payment( data->account_type ) )
   {
-    gnc_xfer_dialog_set_from_account_frame_label( data->xferData,
-                                                  _("Payment From") );
+    gnc_xfer_dialog_set_from_account_label( data->xferData,
+		    			    _("Payment From") );
     gnc_xfer_dialog_set_from_show_button_active( data->xferData, TRUE );
 
-    gnc_xfer_dialog_set_to_account_frame_label( data->xferData,
-                                                _("Reconcile Account") );
+    gnc_xfer_dialog_set_to_account_label( data->xferData,
+		    			  _("Reconcile Account") );
     gnc_xfer_dialog_select_to_account( data->xferData, data->account );
     gnc_xfer_dialog_lock_to_account_tree( data->xferData );
 
@@ -470,13 +470,13 @@ recnInterestXferWindow( startRecnWindowData *data)
   }
   else  /* interest charged to account rather than paid to it */
   {
-    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, 
-                                                  _("Reconcile Account") );
+    gnc_xfer_dialog_set_from_account_label( data->xferData,
+		    			    _("Reconcile Account") );
     gnc_xfer_dialog_select_from_account( data->xferData, data->account );
     gnc_xfer_dialog_lock_from_account_tree( data->xferData );
 
-    gnc_xfer_dialog_set_to_account_frame_label( data->xferData,
-                                                _("Payment To") );
+    gnc_xfer_dialog_set_to_account_label( data->xferData,
+		    			  _("Payment To") );
     gnc_xfer_dialog_set_to_show_button_active( data->xferData, TRUE );
 
     /* Quickfill based on the reconcile account, which is the "From" acct. */
@@ -493,7 +493,7 @@ recnInterestXferWindow( startRecnWindowData *data)
     (gpointer) data );
 
   /* no currency frame */
-  gnc_xfer_dialog_toggle_currency_frame( data->xferData, FALSE );
+  gnc_xfer_dialog_toggle_currency_table( data->xferData, FALSE );
 
   /* set the reconcile date for the transaction date */
   gnc_xfer_dialog_set_date( data->xferData, data->date );

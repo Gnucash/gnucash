@@ -89,8 +89,10 @@ struct _xferDialog
   gint desc_cursor_position;
   gboolean desc_didquickfill;
 
-  GtkWidget * from_transfer_frame;
-  GtkWidget * to_transfer_frame;
+  GtkWidget * transferinfo_label;
+
+  GtkWidget * from_transfer_label;
+  GtkWidget * to_transfer_label;
 
   GtkWidget * from_currency_label;
   GtkWidget * to_currency_label;
@@ -98,7 +100,7 @@ struct _xferDialog
   GtkWidget * from_show_button;
   GtkWidget * to_show_button;
 
-  GtkWidget * curr_xfer_frame;
+  GtkWidget * curr_xfer_table;
 
   GtkWidget * price_edit;
   GtkWidget * to_amount_edit;
@@ -270,7 +272,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 		 && !gnc_commodity_equiv(xferData->from_commodity,
 					 xferData->to_commodity);
 
-  gtk_widget_set_sensitive(xferData->curr_xfer_frame, curr_active);
+  gtk_widget_set_sensitive(xferData->curr_xfer_table, curr_active);
   gtk_widget_set_sensitive(xferData->price_edit,
 			   curr_active && gtk_toggle_button_get_active
 			   (GTK_TOGGLE_BUTTON(xferData->price_radio)));
@@ -1166,7 +1168,7 @@ gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
 /********************************************************************\
  * gnc_xfer_dialog_is_exchange_dialog                               *
  *   set the dialog as an "exchange-dialog", which means that the   *
- *   Transfer Information frame is read-only (and the dialog        *
+ *   Transfer Information table is read-only (and the dialog        *
  *   will NOT create a transaction when it is closed)               *
  *                                                                  *
  * Args:   xferData - xfer dialog structure                         *
@@ -1648,6 +1650,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
   /* default to quickfilling off of the "From" account. */
   xferData->quickfill = XFER_DIALOG_FROM;
 
+  xferData->transferinfo_label = glade_xml_get_widget (xml, "transferinfo-label");
+
   /* amount & date widgets */
   {
     GtkWidget *amount;
@@ -1697,24 +1701,28 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   /* from and to */
   {
-    GtkWidget *label, *frame;
+    GtkWidget *label;
+    gchar *text;
 
     gnc_xfer_dialog_fill_tree_view (xferData, XFER_DIALOG_TO);
     gnc_xfer_dialog_fill_tree_view (xferData, XFER_DIALOG_FROM);
 
     /* Reverse from and to account trees when in "accountant" mode,
-       see comment in function gnc_xfer_dialog_fill_tree_frame */
+       see comment in function gnc_xfer_dialog_fill_tree_table */
     if(use_accounting_labels) {
-      frame = glade_xml_get_widget (xml, "right_trans_frame");
-      xferData->from_transfer_frame = frame;
+      label = glade_xml_get_widget (xml, "right_trans_label");
+      xferData->from_transfer_label = label;
 
-      frame = glade_xml_get_widget (xml, "left_trans_frame");
-      xferData->to_transfer_frame = frame;
+      label = glade_xml_get_widget (xml, "left_trans_label");
+      xferData->to_transfer_label = label;
 
-      gtk_frame_set_label(GTK_FRAME(xferData->from_transfer_frame),
-			  _("Credit Account"));
-      gtk_frame_set_label(GTK_FRAME(xferData->to_transfer_frame),
-			  _("Debit Account"));
+      text = g_strconcat ("<b>", _("Credit Account"), "</b>", NULL);
+      gtk_label_set_markup (GTK_LABEL (xferData->from_transfer_label), text);
+      g_free (text);
+
+      text = g_strconcat ("<b>", _("Debit Account"), "</b>", NULL);
+      gtk_label_set_markup (GTK_LABEL (xferData->to_transfer_label), text);
+      g_free (text);
 
       label = glade_xml_get_widget (xml, "right_currency_label");
       xferData->from_currency_label = label;
@@ -1723,16 +1731,18 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
       xferData->to_currency_label = label;
     }
     else {
-      frame = glade_xml_get_widget (xml, "left_trans_frame");
-      xferData->from_transfer_frame = frame;
+      label = glade_xml_get_widget (xml, "left_trans_label");
+      xferData->from_transfer_label = label;
 
-      frame = glade_xml_get_widget (xml, "right_trans_frame");
-      xferData->to_transfer_frame = frame;
+      label = glade_xml_get_widget (xml, "right_trans_label");
+      xferData->to_transfer_label = label;
 
-      gtk_frame_set_label(GTK_FRAME(xferData->from_transfer_frame),
-			  _("Transfer From"));
-      gtk_frame_set_label(GTK_FRAME(xferData->to_transfer_frame),
-			  _("Transfer To"));
+      text = g_strconcat ("<b>", _("Transfer From"), "</b>", NULL);
+      gtk_label_set_markup (GTK_LABEL (xferData->from_transfer_label), text);
+      g_free (text);
+
+      text = g_strconcat ("<b>", _("Transfer To"), "</b>", NULL);
+      gtk_label_set_markup (GTK_LABEL (xferData->to_transfer_label), text);
 
       label = glade_xml_get_widget (xml, "left_currency_label");
       xferData->from_currency_label = label;
@@ -1750,14 +1760,14 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   /* optional intermediate currency account */
   {
-    GtkWidget *frame;
+    GtkWidget *table;
     GtkWidget *entry;
     GtkWidget *edit;
     GtkWidget *hbox;
     GtkWidget *button;
 
-    frame = glade_xml_get_widget (xml, "curr_transfer_frame");
-    xferData->curr_xfer_frame = frame;
+    table = glade_xml_get_widget (xml, "curr_transfer_table");
+    xferData->curr_xfer_table = table;
 
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
@@ -1893,46 +1903,38 @@ gnc_xfer_dialog_set_title( XferDialog *xferData, const gchar *title )
 }
 
 void
-gnc_xfer_dialog_set_information_frame_label( XferDialog *xferData,
-                                             const gchar *label )
+gnc_xfer_dialog_set_information_label( XferDialog *xferData,
+				       const gchar *text )
 {
-  if( xferData && label )
-  {
-    GtkWidget *frame = gnc_glade_lookup_widget (xferData->dialog,
-                                                "transferinfo-frame" );
-    gtk_frame_set_label( GTK_FRAME(frame), label );
-  }
+  if(xferData && text)
+    gtk_label_set_label (GTK_LABEL (xferData->transferinfo_label), text);
 }
 
 
 static void
-gnc_xfer_dialog_set_account_frame_label( XferDialog *xferData,
-                                         const gchar *label,
-                                         XferDirection direction)
+gnc_xfer_dialog_set_account_label( XferDialog *xferData,
+				   const gchar *text,
+				   XferDirection direction )
 {
-  if( xferData && label )
-  {
-    /* "frame34" is the from frame, "frame35" is the to frame */
-    GtkWidget *frame = gnc_glade_lookup_widget (xferData->dialog,
-                                             ( direction == XFER_DIALOG_FROM ?
-                                               "transferfrom-frame" :
-                                               "transferto-frame" ));
-    gtk_frame_set_label( GTK_FRAME(frame), label );
-  }
+  if(xferData && text)
+    gtk_label_set_text (GTK_LABEL ((direction == XFER_DIALOG_FROM ?
+				    xferData->from_transfer_label :
+				    xferData->to_transfer_label)),
+		    	text);
 }
 
 void
-gnc_xfer_dialog_set_from_account_frame_label( XferDialog *xferData,
-                                              const gchar *label )
+gnc_xfer_dialog_set_from_account_label( XferDialog *xferData,
+					const gchar *label )
 {
-  gnc_xfer_dialog_set_account_frame_label( xferData, label, XFER_DIALOG_FROM );
+  gnc_xfer_dialog_set_account_label (xferData, label, XFER_DIALOG_FROM);
 }
 
 void
-gnc_xfer_dialog_set_to_account_frame_label( XferDialog *xferData,
-                                            const gchar *label )
+gnc_xfer_dialog_set_to_account_label( XferDialog *xferData,
+				      const gchar *label )
 {
-  gnc_xfer_dialog_set_account_frame_label( xferData, label, XFER_DIALOG_TO );
+  gnc_xfer_dialog_set_account_label (xferData, label, XFER_DIALOG_TO);
 }
 
 void
@@ -1974,15 +1976,15 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
   }
 }
 
-void gnc_xfer_dialog_toggle_currency_frame( XferDialog *xferData, 
-                                            gboolean show_frame )
+void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData, 
+                                            gboolean show_table )
 {
-  if( xferData && xferData->curr_xfer_frame )
+  if (xferData && xferData->curr_xfer_table)
   {
-    if( show_frame )
-      gtk_widget_show( xferData->curr_xfer_frame );
+    if (show_table)
+      gtk_widget_show(xferData->curr_xfer_table);
     else
-      gtk_widget_hide( xferData->curr_xfer_frame );
+      gtk_widget_hide(xferData->curr_xfer_table);
   }
 }
 

@@ -1,3 +1,14 @@
+2004-05-05  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/newuser.glade:
+	* src/gnome-utils/dialog-transfer.[ch]:
+	* src/gnome-utils/transfer.glade: HIGify several dialogs.
+
 2004-05-05  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/egg/egg-menu-merge.c:
@@ -7,6 +18,16 @@
 	  cause problems later where we expect to get an actual string.
 	* src/report/report-gnome/report-gnome.scm:
 	  Make sure we actually have a menu-path list!
+
+2004-05-03  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome-search/search-date.c: Fix a crash.
+	
+	* src/gnome-utils/gnc-tree-model-account.c: Fix memory leaks.
+	
+	* src/register/register-gnome/gnucash-sheet.c: Fix popup menu.
 
 2004-05-02  David Hampton  <hampton@employees.org>
 
@@ -18,7 +39,7 @@
 	* src/import-export/binary-import/Makefile.am: Work around
 	  problems with libltdl3.
 
-	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couiple
+	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couple
 	  of compiler warning messages.
 
 2004-05-02  Joshua Sled  <jsled@asynchronous.org>

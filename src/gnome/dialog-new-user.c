@@ -112,26 +112,19 @@ static void
 gnc_ui_new_user_cancel_dialog (void)
 {
   GtkWidget *dialog;
-  GtkWidget *toggle;
   GladeXML  *xml;
   gint result;
 
   xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
 
   dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
-  toggle = glade_xml_get_widget (xml, "run_again_toggle");
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (result == GTK_RESPONSE_OK)
-  {
-    gboolean keepshowing = TRUE;
+  gboolean keepshowing = (result == GTK_RESPONSE_YES);
 
-    keepshowing = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
+  gnc_set_first_startup (keepshowing);
+  gncp_new_user_finish ();
 
-    gnc_set_first_startup (keepshowing);
-
-    gncp_new_user_finish ();
-  }
   gtk_widget_destroy(dialog);
 }
 
