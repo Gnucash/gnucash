@@ -313,13 +313,16 @@ gnucash_header_reconfigure (GnucashHeader *header)
             header->width != w  ||
             header->style != old_style)
         {
+                gint old_height = header->height;
+
                 header->height = h;
                 header->width = w;
 
                 gnome_canvas_set_scroll_region (GNOME_CANVAS(canvas),
                                                 0, 0, w, h);
 
-                gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
+                if (old_height != h)
+                        gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
 
                 gnucash_header_request_redraw (header);
         }
