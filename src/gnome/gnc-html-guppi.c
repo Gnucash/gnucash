@@ -603,7 +603,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
   /* FIXME: Temporary workaround for allocation (?) problems with the
      g_hash_table (segfault at too many subsequent g_hash_table_lookup
      calls)*/
-#define UNNEEDED_OPTIONS 1
+#define UNNEEDED_OPTIONS 0
 
   if((param = g_hash_table_lookup(params, "data_rows")) != NULL) {
     sscanf(param, "%d", &datarows);
