@@ -1,7 +1,7 @@
 /********************************************************************\
  * TransactionP.h -- private header for transaction & splits        *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -110,7 +110,7 @@ struct split_s
 
   /* 'value' is the amount of the transaction balancing commodity
    * (i.e. currency) involved, 'amount' is the amount of the account's
-   * commodity (formerly known as 'security') involved. */
+   * commodity involved. */
   gnc_numeric  value;
   gnc_numeric  amount;
 
@@ -161,16 +161,9 @@ struct transaction_s
 
 
   /* The common_currency field is the balancing common currency for
-   * all the splits in the transaction. 
-   *
-   * This field is going to replace the currency field in the account
-   * structures.  However, right now we are in a transition period: we
-   * store it here an in the account, and test its value dynamically
-   * for correctness.  If we can run for a few months without errors,
-   * then we'll make the conversion permanent.
-   *
-   * Alternate, better(?) name: "valuation currency": it is the
-   * currency in which all of the splits can be valued.  */
+   * all the splits in the transaction.  Alternate, better(?) name: 
+   * "valuation currency": it is the currency in which all of the 
+   * splits can be valued.  */
   gnc_commodity *common_currency;
 
   /* version number, used for tracking multiuser updates */
@@ -190,7 +183,7 @@ struct transaction_s
   gint32 editlevel; /* nestcount of begin/end edit calls */
   gboolean do_free; /* transaction in process of being destroyed */
 
-  /* the orig pointer points at a copy of the original transaction,
+  /* The orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
    * any changes made if/when the edit is abandoned.
    */
