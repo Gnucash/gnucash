@@ -520,7 +520,9 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
       xfer_acc->accountName = XtNewString (qifline);
       xfer_acc->description = XtNewString ("");
       xfer_acc->notes = XtNewString ("");
-      xfer_acc->type = BANK;
+
+      /* by default, assume its an expense-type category */
+      xfer_acc->type = EXPENSE;
       insertAccount (rootgrp, xfer_acc);
    }
 
