@@ -1,6 +1,6 @@
 /********************************************************************\
  * price.c -- implements price handling for the postgres backend    *
- * Copyright (c) 2001 Linas Vepstas                                 *
+ * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -215,11 +215,8 @@ pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
    gnc_commodity_table *comtab;
 
    comtab = gnc_book_get_commodity_table (be->book);
-printf ("duude comtab=%p book=%p session=%p sess-boo=%p\n",
-comtab, be->book, be->session,
-gnc_session_get_book(be->session));
 
-   /* clear the marks on commodities -- we use this to mark 
+   /* Clear the marks on commodities -- we use this to mark 
     * the thing as 'already stored', avoiding redundant stores */
    gnc_commodity_table_foreach_commodity (comtab, commodity_mark_cb, 0);
 
@@ -236,7 +233,7 @@ pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb)
    ENTER ("be=%p, prdb=%p", be, prdb);
    if (!be || !prdb) return;
 
-   /* lock it up so that we store atomically */
+   /* Lock it up so that we store atomically */
    p = "BEGIN;\n"
        "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
@@ -272,7 +269,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    gnc_commodity * modity;
 
-   /* first, lets see if we've already got this one */
+   /* First, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
    pr = gnc_price_lookup (&guid, be->book);
 

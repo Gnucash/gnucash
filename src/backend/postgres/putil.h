@@ -27,7 +27,7 @@
  * Postgres backend utility macros
  *
  * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas
+ * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>
  * 
  */
 
