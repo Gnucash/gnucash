@@ -1,3 +1,8 @@
+2000-06-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/FileIO.c: John Goerzen's patch for 64-bit
+	architectures.
+
 2000-06-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/splitreg.c: added functions for getting cell types

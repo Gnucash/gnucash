@@ -957,7 +957,7 @@ msgstr ""
 
 #: messages-i18n.c:216 po/guile_strings.txt:4
 msgid "Mutual Fund"
-msgstr ""
+msgstr "Unit Trust"
 
 #: messages-i18n.c:217
 msgid "New Account"
@@ -3132,7 +3132,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:646
 msgid "Mutual"
-msgstr ""
+msgstr "Unit Trust"
 
 #: src/gnome/glade-gnc-dialogs.c:711 src/gnome/glade-gnc-dialogs.c:719
 msgid "Print Preview"

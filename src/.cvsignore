@@ -1,6 +1,4 @@
 Makefile
-tmp
-obj
 *.diff
 *.diffs
 *.patch

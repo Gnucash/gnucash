@@ -1,6 +1,4 @@
 Makefile
-tmp
-obj
 *.diff
 backup.glade
 glade-cb-gnc-dialogs.c
