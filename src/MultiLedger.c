@@ -178,6 +178,8 @@ xaccLedgerDisplaySimple (Account *acc)
       break;
     }
 
+  reg_type |= REG_SHOW_SDETAIL;
+
   retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
   return retval;
   }
@@ -247,10 +249,12 @@ xaccLedgerDisplayAccGroup (Account *acc)
       _free (list);
       return NULL;
   }
+
+  ledger_type |= REG_SHOW_SDETAIL;
+
   retval = xaccLedgerDisplayGeneral (acc, list, ledger_type);
 
   if (list) _free (list);
-
   return retval;
   }
 

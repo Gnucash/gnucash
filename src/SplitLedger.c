@@ -428,8 +428,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    int num_virt_rows;
    int phys_row;
    int vrow;
+   int double_line, multi_line;
 
    table = reg->table;
+   double_line = (reg->type) & REG_DOUBLE_LINE;
+   multi_line  = (reg->type) & REG_MULTI_LINE;
 
    /* disable move callback -- we con't want the cascade of 
     * callbacks while we are fiddling with loading the register */
@@ -477,28 +480,46 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       num_virt_rows ++;
       num_phys_rows += reg->trans_cursor->numRows; 
       
-      /* add a row for each split, minus one, plus one */
-      j = xaccTransCountSplits (trans);
-      num_virt_rows += j;
-      num_phys_rows += j * reg->split_cursor->numRows; 
+      if (double_line) {
+         /* add one row */
+         num_virt_rows ++;
+         num_phys_rows += reg->split_cursor->numRows; 
+      }
+      if (multi_line) {
+         /* add a row for each split, minus one, plus one */
+         j = xaccTransCountSplits (trans);
+         num_virt_rows += j;
+         num_phys_rows += j * reg->split_cursor->numRows; 
+      }
 
       i++;
       split = slist[i];
    }
 
-   /* If user_hook is null, then we haven'tet up the blank split yet,
+   /* If user_hook is null, then we haven't set up the blank split yet,
     * so add two lines for it: one blank transaction, one blank split.  
     * But if we have set it up yet, then we've counted one split too 
     * many: the blank-blank at the very end.  Subtract it back out.
     */
-   if (!(reg->user_hook)) {
-      i++;
-      num_virt_rows += 2; 
-      num_phys_rows += reg->trans_cursor->numRows;
-      num_phys_rows += reg->split_cursor->numRows;
-   } else {
-      num_virt_rows -= 1; 
-      num_phys_rows -= reg->split_cursor->numRows;
+   if (multi_line) {
+      if (!(reg->user_hook)) {
+         i++;
+         num_virt_rows += 2; 
+         num_phys_rows += reg->trans_cursor->numRows;
+         num_phys_rows += reg->split_cursor->numRows;
+      } else {
+         num_virt_rows -= 1; 
+         num_phys_rows -= reg->split_cursor->numRows;
+      }
+   }
+
+/* hack alert -- this extra stuff is all wrong !?!?! */
+   if (double_line) {
+      /* add two rows */
+      num_virt_rows ++;
+      num_phys_rows += reg->trans_cursor->numRows; 
+      num_virt_rows ++;
+      num_phys_rows += reg->split_cursor->numRows; 
    }
 
    /* num_virt_cols is always one. */
@@ -528,28 +549,39 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
          vrow ++;
          phys_row += reg->trans_cursor->numRows; 
    
-         /* loop over all of the splits in the transaction */
-         /* the do..while will automaticaly put a blank (null) split at the end */
-         trans = xaccSplitGetParent (split);
-         j = 0;
-         do {
-            secondary = xaccTransGetSplit (trans, j);
-            if (secondary != split) {
+         if (double_line) {
+            xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+            xaccMoveCursor (table, phys_row, 0);
+            xaccSRLoadSplitEntry (reg, split, 1);
+            vrow ++;
+            phys_row += reg->split_cursor->numRows; 
+         }
+
+         if (multi_line) {
+            /* loop over all of the splits in the transaction */
+            /* the do..while will automaticaly put a blank (null) split at the end */
+            trans = xaccSplitGetParent (split);
+            j = 0;
+            do {
+               secondary = xaccTransGetSplit (trans, j);
+               if (secondary != split) {
 printf ("load split %d at phys row %d \n", j, phys_row);
-               xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-               xaccMoveCursor (table, phys_row, 0);
-               xaccSRLoadSplitEntry (reg, secondary, 1);
-               vrow ++;
-               phys_row += reg->split_cursor->numRows; 
-            }
-            j++;
-         } while (secondary);
+                  xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+                  xaccMoveCursor (table, phys_row, 0);
+                  xaccSRLoadSplitEntry (reg, secondary, 1);
+                  vrow ++;
+                  phys_row += reg->split_cursor->numRows; 
+               }
+               j++;
+            } while (secondary);
+         } 
       }
 
       i++; 
       split = slist[i];
    }
 
+#ifdef LATER
    /* add the "blank split" at the end.  We use either the blank
     * split we've cached away previously in "user_hook", or we create
     * a new one, as needed. */
@@ -585,6 +617,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
    vrow ++;
    phys_row += reg->split_cursor->numRows; 
    }
+#endif 
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
