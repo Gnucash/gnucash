@@ -5,6 +5,9 @@
 	  0..255 instead of -128..127.  Force a "signed char" to make sure
 	  we get the latter interpretation.
 
+	* src/app-utils/gnc-ui-utils.c: Don't round unless force_fit is true.
+	  Fixes Debian Bug #179802.
+
 2003-02-04  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
