@@ -23,12 +23,13 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
 #include <ctype.h>
 #include <string.h>
 
-#include "config.h"
-
 #include "QuickFill.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
 
@@ -47,7 +48,7 @@ static void quickfill_insert_recursive (QuickFill *qf, const char *text,
 static short module = MOD_REGISTER;
 
 /* A cache for quickfill strings */
-GCache * qf_string_cache = NULL;
+static GCache * qf_string_cache = NULL;
 
 
 /********************************************************************\
@@ -74,12 +75,9 @@ gnc_quickfill_new (void)
 {
   QuickFill *qf;
 
+  /* For now, use the engine cache. */
   if (qf_string_cache == NULL)
-  {
-    qf_string_cache = g_cache_new((GCacheNewFunc) g_strdup, g_free,
-                                  (GCacheDupFunc) g_strdup, g_free,
-                                  g_str_hash, g_str_hash, g_str_equal);
-  }
+    qf_string_cache = gnc_string_cache;
 
   qf = g_new (QuickFill, 1);
 
