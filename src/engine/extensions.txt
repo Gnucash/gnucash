@@ -1,8 +1,9 @@
 
 Proposed Extensions
 -------------------
-The following are extension proposals to the various underlying data
-structures and interfaces:
+The following are proposals for various, as-yet-unimplemented
+enhancements.  The goal of this document is to understand some
+of the changes that will come soon to the interfaces.
 
 Accounting Periods
 ------------------
@@ -37,4 +38,20 @@ should probably be a list of key-value pairs, where the keys & values
 can be completely configured by the user, and hold the needed data
 that the user wants to store.  For the SQL backend, this is a key
 to a user-definable table.
+
+====================================================================
+
+Additional Banking Info
+
+BankId -- routing & transit number (US) or Bankleitzan (DE) or Banque (FR)
+BranchID -- Agence (FR), blank for other countries
+
+AcctKey -- Cle (FR), blank in others
+
+
+Account type enumerants:
+bank account types:
+    checking, savings, moneymarket, creditline, cma (cash amangement account)
+
+
 
