@@ -25,28 +25,32 @@
 #ifndef QOF_ID_H
 #define QOF_ID_H 
 
-/** This file defines an API for using the QOF entity identifiers.
+/** This file defines an API that adds types to the GUID's.
+ *  GUID's with types cna be used to identify and reference 
+ * typed entities.
  *
- * Identifiers can be used to reference QOF Objects.
+ * GUID Identifiers can be used to reference QOF Objects.
  * Identifiers are globally-unique and permanent, i.e., once
  * an entity has been assigned an identifier, it retains that same
  * identifier for its lifetime.
  *
- * Identifiers can be encoded as hex strings. */
+ * Identifiers can be encoded as hex strings. 
+ */
 
 #include "guid.h"
 
-/* Identifiers are 'typed' with strings. The ids used in gnucash are
- * defined below. An id with type GNC_ID_NONE does not refer to any
- * entity, although that may change as new ids are created. An id with
- * type GNC_ID_NULL does not refer to any entity, and will never refer
+/** GUID Identifiers are 'typed' with strings. The native ids used 
+ * by QOF are defined below. An id with type QOF_ID_NONE does not 
+ * refer to any entity, although that may change (???). An id with 
+ * type QOF_ID_NULL does not refer to any entity, and will never refer
  * to any entity. An identifier with any other type may refer to an
- * actual entity, but that is not guaranteed. If an id does refer to
- * an entity, the type of the entity will match the type of the
- * identifier. */
+ * actual entity, but that is not guaranteed (??? Huh?).  If an id 
+ * does refer to an entity, the type of the entity will match the 
+ * type of the identifier. 
+ */
 
-typedef const char * GNCIdType;
-typedef const char * GNCIdTypeConst;
+typedef const char * QofIdType;
+typedef const char * QofIdTypeConst;
 
 #define QOF_ID_NONE           NULL
 #define QOF_ID_BOOK           "Book"
@@ -54,28 +58,19 @@ typedef const char * GNCIdTypeConst;
 #define QOF_ID_SESSION        "Session"
 
 
-typedef struct gnc_entity_table GNCEntityTable;
+typedef struct _QofEntityTable QofEntityTable;
 
-GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
-                                   GNCEntityTable *entity_table);
-
-/* Return the type of an identifier.
- * Equivalent function prototype:
- * GNCIdType xaccGUIDType (const GUID * guid, QofBook *book); 
- */
-
-#define xaccGUIDType(guid,book)      \
-    xaccGUIDTypeEntityTable ((guid), qof_book_get_entity_table (book))
-
+QofIdType qof_guid_type (const GUID * guid,
+                                   QofEntityTable *entity_table);
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
-const GUID * xaccGUIDNULL (void);
+const GUID * guid_null (void);
 
 /* Efficiently allocate & free memory for GUIDs */
-GUID * xaccGUIDMalloc (void);
-void   xaccGUIDFree (GUID *guid);
+GUID * guid_malloc (void);
+void   guid_free (GUID *guid);
 
-/* Callback type for xaccForeachEntity */
+/* Callback type for qof_entity_foreach */
 typedef void (*foreachObjectCB) (gpointer object, gpointer user_data);
 
 #endif /* QOF_ID_H */

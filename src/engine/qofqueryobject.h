@@ -54,7 +54,7 @@ typedef int (*QofSortFunc)(gpointer, gpointer);
  * "converters" are NULL-terminated arrays of structures.  Either
  * argument may be NULL if there is nothing to be registered.
  */
-void qof_query_object_register (GNCIdTypeConst obj_name,
+void qof_query_object_register (QofIdTypeConst obj_name,
 			     QofSortFunc default_sort_fcn,
 			     const QofQueryObject *params);
 
@@ -79,15 +79,15 @@ void qof_query_object_register (GNCIdTypeConst obj_name,
  */
 
 /** Return the core datatype of the specified object's parameter */
-QofQueryCoreType qof_query_object_parameter_type (GNCIdTypeConst obj_name,
+QofQueryCoreType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name);
 
 /** Return the registered Object Definition for the requested parameter */
-const QofQueryObject * qof_query_object_get_parameter (GNCIdTypeConst obj_name,
+const QofQueryObject * qof_query_object_get_parameter (QofIdTypeConst obj_name,
 						   const char *parameter);
 
 /** Return the object's parameter getter function */
-QofAccessFunc qof_query_object_get_parameter_getter (GNCIdTypeConst obj_name,
+QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
 					      const char *parameter);
 
 

@@ -56,7 +56,7 @@ QofBook * qof_book_new (void);
 void      qof_book_destroy (QofBook *book);
 
 /** \return The Entity table for the book. */
-GNCEntityTable      * qof_book_get_entity_table (QofBook *book);
+QofEntityTable      * qof_book_get_entity_table (QofBook *book);
 
 /** \return The GUID for the book. */
 const GUID          * qof_book_get_guid (QofBook *book);

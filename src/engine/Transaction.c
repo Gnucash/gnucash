@@ -133,7 +133,7 @@ xaccInitSplit(Split * split, QofBook *book)
   split->book = book;
 
   xaccGUIDNew (&split->guid, book);
-  xaccStoreEntity(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  qof_entity_store(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -214,7 +214,7 @@ xaccSplitClone (Split *s)
   split->idata               = 0;
 
   xaccGUIDNew(&split->guid, s->book);
-  xaccStoreEntity(s->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  qof_entity_store(s->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 
   xaccAccountInsertSplit(s->acc, split);
   if (s->lot) {
@@ -439,14 +439,14 @@ xaccSplitGetAccount (const Split *s)
 const GUID *
 xaccSplitGetGUID (const Split *split)
 {
-  if (!split) return xaccGUIDNULL();
+  if (!split) return guid_null();
   return &split->guid;
 }
 
 GUID
 xaccSplitReturnGUID (const Split *split)
 {
-  if (!split) return *xaccGUIDNULL();
+  if (!split) return *guid_null();
   return split->guid;
 }
 
@@ -458,9 +458,9 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
 {
   if (!split || !guid) return;
   check_open (split->parent);
-  xaccRemoveEntity(split->book->entity_table, &split->guid);
+  qof_entity_remove(split->book->entity_table, &split->guid);
   split->guid = *guid;
-  xaccStoreEntity(split->book->entity_table, split,
+  qof_entity_store(split->book->entity_table, split,
                   &split->guid, GNC_ID_SPLIT);
 }
 
@@ -471,7 +471,7 @@ Split *
 xaccSplitLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity(qof_book_get_entity_table (book),
+  return qof_entity_lookup(qof_book_get_entity_table (book),
                           guid, GNC_ID_SPLIT);
 }
 
@@ -479,7 +479,7 @@ Split *
 xaccSplitLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity(qof_book_get_entity_table (book),
+  return qof_entity_lookup(qof_book_get_entity_table (book),
                           &guid, GNC_ID_SPLIT);
 }
 
@@ -840,7 +840,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->book = book;
 
   xaccGUIDNew (&trans->guid, book);
-  xaccStoreEntity (book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  qof_entity_store (book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -1006,7 +1006,7 @@ xaccTransClone (Transaction *t)
   trans->idata         	 = 0;
 
   xaccGUIDNew (&trans->guid, t->book);
-  xaccStoreEntity (t->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  qof_entity_store (t->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
   xaccTransBeginEdit(trans);
   for (node = t->splits; node; node = node->next)
@@ -1269,14 +1269,14 @@ xaccTransSetSlots_nc (Transaction *t, kvp_frame *frm)
 const GUID *
 xaccTransGetGUID (const Transaction *trans)
 {
-  if (!trans) return xaccGUIDNULL();
+  if (!trans) return guid_null();
   return &trans->guid;
 }
 
 GUID
 xaccTransReturnGUID (const Transaction *trans)
 {
-  if (!trans) return *xaccGUIDNULL();
+  if (!trans) return *guid_null();
   return trans->guid;
 }
 
@@ -1287,9 +1287,9 @@ void
 xaccTransSetGUID (Transaction *trans, const GUID *guid)
 {
   if (!trans || !guid) return;
-  xaccRemoveEntity(trans->book->entity_table, &trans->guid);
+  qof_entity_remove(trans->book->entity_table, &trans->guid);
   trans->guid = *guid;
-  xaccStoreEntity(trans->book->entity_table, trans,
+  qof_entity_store(trans->book->entity_table, trans,
                   &trans->guid, GNC_ID_TRANS);
 }
 
@@ -1301,7 +1301,7 @@ Transaction *
 xaccTransLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                            guid, GNC_ID_TRANS);
 }
 
@@ -1309,7 +1309,7 @@ Transaction *
 xaccTransLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity (qof_book_get_entity_table (book),
+  return qof_entity_lookup (qof_book_get_entity_table (book),
                            &guid, GNC_ID_TRANS);
 }
 
@@ -1867,7 +1867,7 @@ xaccTransCommitEdit (Transaction *trans)
       PINFO ("delete trans at addr=%p", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
-      xaccRemoveEntity(trans->book->entity_table, &trans->guid);
+      qof_entity_remove(trans->book->entity_table, &trans->guid);
       xaccFreeTransaction (trans);
       return;
    }
@@ -1920,7 +1920,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* If the transaction had been deleted before the rollback,
     * the guid would have been unlisted. Restore that */
-   xaccStoreEntity(trans->book->entity_table, trans,
+   qof_entity_store(trans->book->entity_table, trans,
                    &trans->guid, GNC_ID_TRANS);
 
    trans->common_currency = orig->common_currency;
@@ -2046,7 +2046,7 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccAccountRemoveSplit (acc, s);
          xaccAccountRecomputeBalance (acc);
          gen_event (s);
-         xaccRemoveEntity(s->book->entity_table, &s->guid);
+         qof_entity_remove(s->book->entity_table, &s->guid);
          xaccFreeSplit (s);
       }
 
@@ -2064,7 +2064,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
          s->parent = trans;
          s->acc = NULL;
-         xaccStoreEntity(s->book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+         qof_entity_store(s->book->entity_table, s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (account, s);
          mark_split (s);
          xaccAccountRecomputeBalance (account);
@@ -2191,7 +2191,7 @@ xaccTransDestroy (Transaction *trans)
     xaccAccountRemoveSplit (split->acc, split);
     xaccAccountRecomputeBalance (split->acc);
     gen_event (split);
-    xaccRemoveEntity(split->book->entity_table, &split->guid);
+    qof_entity_remove(split->book->entity_table, &split->guid);
     xaccFreeSplit (split);
 
     node->data = NULL;
@@ -2200,7 +2200,7 @@ xaccTransDestroy (Transaction *trans)
   g_list_free (trans->splits);
   trans->splits = NULL;
 
-  xaccRemoveEntity(trans->book->entity_table, &trans->guid);
+  qof_entity_remove(trans->book->entity_table, &trans->guid);
 
   /* the actual free is done with the commit call, else its rolled back */
   /* xaccFreeTransaction (trans);  don't do this here ... */
@@ -2257,7 +2257,7 @@ xaccSplitDestroy (Split *split)
    xaccAccountRecomputeBalance (acc);
 
    gen_event (split);
-   xaccRemoveEntity (split->book->entity_table, &split->guid);
+   qof_entity_remove (split->book->entity_table, &split->guid);
    xaccFreeSplit (split);
    return TRUE;
 }
@@ -3542,15 +3542,15 @@ xaccTransactionGetBackend (Transaction *trans)
 \********************************************************************/
 /* gncObject function implementation */
 static void
-do_foreach (QofBook *book, GNCIdType type, foreachObjectCB cb, gpointer ud)
+do_foreach (QofBook *book, QofIdType type, foreachObjectCB cb, gpointer ud)
 {
-  GNCEntityTable *et;
+  QofEntityTable *et;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
   et = qof_book_get_entity_table (book);
-  xaccForeachEntity (et, type, cb, ud);
+  qof_entity_foreach (et, type, cb, ud);
 }
 
 static void

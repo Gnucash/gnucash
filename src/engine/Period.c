@@ -81,7 +81,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    xaccTransCommitEdit (trans);
 
    /* fiddle the transaction into place in the new book */
-   xaccStoreEntity(book->entity_table, newtrans, &newtrans->guid, GNC_ID_TRANS);
+   qof_entity_store(book->entity_table, newtrans, &newtrans->guid, GNC_ID_TRANS);
    newtrans->book = book;
 
    xaccTransBeginEdit (newtrans);
@@ -92,7 +92,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
       /* move the split into the new book ... */
       s->book = book;
-      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -140,9 +140,9 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    /* Fiddle the transaction into place in the new book */
    xaccTransBeginEdit (trans);
 
-   xaccRemoveEntity (trans->book->entity_table, &trans->guid);
+   qof_entity_remove (trans->book->entity_table, &trans->guid);
    trans->book = book;
-   xaccStoreEntity(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+   qof_entity_store(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
    for (node = trans->splits; node; node = node->next)
    {
@@ -150,9 +150,9 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      xaccRemoveEntity (s->book->entity_table, &s->guid);
+      qof_entity_remove (s->book->entity_table, &s->guid);
       s->book = book;
-      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);

@@ -75,7 +75,7 @@ struct gncp_SchedXaction
  
   Account        *template_acct;
   GUID            guid;
-  GNCEntityTable *entity_table;
+  QofEntityTable *entity_table;
   
   /** The list of deferred SX instances.  This list is of temporalStateData
    * instances.  */

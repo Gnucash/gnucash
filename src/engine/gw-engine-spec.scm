@@ -93,7 +93,7 @@
 
 (gw:wrap-as-wct ws '<gnc:GList*> "GList*" "const GList*")
 
-(gw:wrap-as-wct ws '<gnc:id-type> "GNCIdType" "GNCIdTypeConst")
+(gw:wrap-as-wct ws '<gnc:id-type> "QofIdType" "QofIdTypeConst")
 (gw:wrap-as-wct ws '<gnc:Account*> "Account*" "const Account*")
 (gw:wrap-as-wct ws '<gnc:Account**> "Account**" "const Account**")
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")

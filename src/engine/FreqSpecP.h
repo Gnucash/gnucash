@@ -108,7 +108,7 @@ struct gncp_freq_spec {
                 } composites;
         } s;
         GUID guid;
-        GNCEntityTable *entity_table;
+        QofEntityTable *entity_table;
 };
 
 #endif /* XACC_FREQSPECP_H */

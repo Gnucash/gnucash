@@ -476,7 +476,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op)
 
 void
 xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
-		      GNCIdType id_type, QofQueryOp op)
+		      QofIdType id_type, QofQueryOp op)
 {
   GSList *param_list = NULL;
 
@@ -513,7 +513,7 @@ xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
 
 void
 xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const kvp_value *value,
-		     QofQueryCompare how, GNCIdType id_type,
+		     QofQueryCompare how, QofIdType id_type,
 		     QofQueryOp op)
 {
   GSList *param_list = NULL;
