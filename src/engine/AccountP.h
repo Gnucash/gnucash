@@ -89,12 +89,13 @@ struct _account {
 
   /* The currency field denotes the default currency in which all
    * splits in this account are denominated.  It's value *MUST*
-   * be a three-letter ISO currency code.  Currency trading accounts
-   * are created by creating two accounts, each with a different
-   * default currency, and then having transactions with one split in one
-   * currency account, and another split in the other currency account.
+   * be a three-letter ISO currency code, or it must be a comma followed
+   * by an arbitrary string (security name).  Currency trading accounts
+   * allow splits between accounts when the currency string matches the
+   * security string.
    */
   char    *currency;
+  char    *security;
 
   /* The parent and children pointers are used to implement an account
    * heirarchy, of accounts that have sub-accounts ("detail accounts").

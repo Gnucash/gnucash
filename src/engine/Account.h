@@ -102,12 +102,14 @@ void xaccAccountSetName (Account *, char *);
 void xaccAccountSetDescription (Account *, char *);
 void xaccAccountSetNotes (Account *, char *);
 void xaccAccountSetCurrency (Account *, char *);
+void xaccAccountSetSecurity (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);
 char *         xaccAccountGetCurrency (Account *);
+char *         xaccAccountGetSecurity (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 

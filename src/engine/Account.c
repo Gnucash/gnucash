@@ -81,6 +81,7 @@ xaccInitAccount (Account * acc)
   acc->description = NULL;
   acc->notes       = NULL;
   acc->currency    = NULL;
+  acc->security    = NULL;
   
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
@@ -120,6 +121,7 @@ xaccFreeAccount( Account *acc )
   if (acc->description) free (acc->description);
   if (acc->notes) free (acc->notes);
   if (acc->currency) free (acc->currency);
+  if (acc->security) free (acc->security);
   
   /* any split pointing at this account needs to be unmarked */
   i=0;
@@ -160,6 +162,7 @@ xaccFreeAccount( Account *acc )
   acc->description = NULL;
   acc->notes       = NULL;
   acc->currency    = NULL;
+  acc->security    = NULL;
   
   acc->changed     = 0;
   acc->open        = 0;
@@ -742,6 +745,22 @@ xaccAccountSetCurrency (Account *acc, char *str)
    acc->currency = strdup (str);
 }
 
+void 
+xaccAccountSetSecurity (Account *acc, char *str)
+{
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   if (acc->security) {
+      printf ("Error: xacAccountSetCurrency(): "
+              "the security denomination of an account "
+              "cannot be changed!\n"
+             );
+      return;
+   }
+   acc->security = strdup (str);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -791,7 +810,14 @@ char *
 xaccAccountGetCurrency (Account *acc)
 {
    if (!acc) return NULL;
-   return (acc->notes);
+   return (acc->currency);
+}
+
+char * 
+xaccAccountGetSecurity (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->security);
 }
 
 double
