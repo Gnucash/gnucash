@@ -43,8 +43,10 @@ SCM    gnc_guile_call1_to_list(SCM func, SCM arg);
 SCM    gnc_guile_list_ref(SCM list, int index);
 SCM    gnc_guile_call1_to_vector(SCM func, SCM arg);
 
-/* Accessing the gnucash/guile dependency mechanism */
-gboolean gnc_depend(const char *scm_file);
+/* Don't use this to get hold of symbols that are considered private
+ * to a given module unless the C code you're writing is considered
+ * part of that module.  */
+SCM    gnc_scm_lookup(const char *module, const char *symbol);
 
 /* The next set of functions is for manipulating scheme
  * representations of splits and transactions. */
