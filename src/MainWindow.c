@@ -886,7 +886,8 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
         /* since quicken will not export all accounts 
          * into one file, we must merge them in one by one */
-        xaccMergeGroup (topgroup, grp);
+        xaccConcatGroups (topgroup, grp);
+        xaccMergeAccounts (topgroup);
       }
       break;
     }

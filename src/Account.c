@@ -105,6 +105,7 @@ freeAccount( Account *acc )
     Transaction *trans = acc->transaction[i];
     struct _account * _acc = (struct _account *) acc; 
 
+    if (!trans) continue;
     /* free the transaction only if its not 
      * a part of a double entry */
     if (_acc == trans->credit) trans->credit = NULL;

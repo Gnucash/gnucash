@@ -499,7 +499,7 @@ xaccGetRootGroupOfAcct (Account *acc)
 \********************************************************************/
 
 void 
-xaccMergeGroup (AccountGroup *togrp, AccountGroup *fromgrp)
+xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
 {
    Account * acc;
    int i;
@@ -515,6 +515,67 @@ xaccMergeGroup (AccountGroup *togrp, AccountGroup *fromgrp)
    _free (fromgrp->account);
    fromgrp->account = NULL;
    fromgrp->numAcc = 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccMergeAccounts (AccountGroup *grp)
+{
+   Account *acc_a, *acc_b;
+   int i,j, k;
+
+   if (!grp) return;
+   
+   for (i=0; i<grp->numAcc; i++) {
+      acc_a = grp->account[i];
+      for (j=i+1; j<grp->numAcc; j++) {
+         acc_b = grp->account[j];
+         if ((0 == strcmp(acc_a->accountName, acc_b->accountName)) &&
+             (0 == strcmp(acc_a->description, acc_b->description)) &&
+             (0 == strcmp(acc_a->notes, acc_b->notes)) &&
+             (acc_a->type == acc_b->type)) {
+
+            AccountGroup *ga, *gb;
+
+            /* consolidate children */
+            ga = (AccountGroup *) acc_a->children;
+            gb = (AccountGroup *) acc_b->children;
+            if (gb) {
+               if (!ga) {
+                  acc_a->children = (struct _account_group *) gb;
+                  gb->parent = acc_a;
+                  acc_b->children = NULL;
+               } else {
+                  xaccConcatGroups (ga, gb);
+                  freeAccountGroup (gb);
+                  acc_b->children = NULL;
+               }
+            }
+
+            /* recurse to do the children's children */
+            xaccMergeAccounts (ga);
+
+            /* consolidate transactions */
+            for (k=0; k<acc_b->numTrans; k++) {
+               Transaction *trans;
+               trans = acc_b->transaction[k];
+               acc_b->transaction[k] = NULL;
+               if (acc_b == (Account *) trans->debit) trans->debit = (struct _account *) acc_a;
+               if (acc_b == (Account *) trans->credit) trans->credit = (struct _account *) acc_a;
+               insertTransaction (acc_a, trans);
+            }
+
+            /* free the account structure itself */
+            acc_b->numTrans = 0;
+            freeAccount (acc_b);
+            grp->account[j] = grp->account[grp->numAcc -1];
+            grp->account[grp->numAcc -1] = NULL;
+            grp->numAcc --;
+         }
+      }
+   }
 }
 
 /****************** END OF FILE *************************************/

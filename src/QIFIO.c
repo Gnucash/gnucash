@@ -140,6 +140,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
    acc -> type = -1;      /* type is byte */
    acc -> accountName = 0x0;  /* string */
    acc -> description = 0x0;  /* string */
+   acc -> notes = 0x0;  /* string */
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -187,6 +188,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
    XACC_PREP_NULL_STRING (acc->accountName);
    XACC_PREP_NULL_STRING (acc->description);
+   XACC_PREP_NULL_STRING (acc->notes);
 
    return qifline;
 }
@@ -210,6 +212,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
    acc -> type = -1;      /* type is byte  */
    acc -> accountName = 0x0;  /* string */
    acc -> description = 0x0;  /* string */
+   acc -> notes = 0x0;  /* string */
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -259,6 +262,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 
    XACC_PREP_NULL_STRING (acc->accountName);
    XACC_PREP_NULL_STRING (acc->description);
+   XACC_PREP_NULL_STRING (acc->notes);
 
    return qifline;
 }
@@ -483,6 +487,8 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
    if (!xfer_acc) {
       xfer_acc = mallocAccount ();
       xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->description = XtNewString ("");
+      xfer_acc->notes = XtNewString ("");
       xfer_acc->type = BANK;
       insertAccount (rootgrp, xfer_acc);
    }
@@ -520,6 +526,8 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    if (!xfer_acc) {
       xfer_acc = mallocAccount ();
       xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->description = XtNewString ("");
+      xfer_acc->notes = XtNewString ("");
       xfer_acc->type = STOCK;
       xaccInsertSubAccount (acc, xfer_acc);
    }
@@ -723,8 +731,12 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      } else
      if ('!' == qifline [0]) break;
      qifline = xaccReadQIFLine (fd);
+
    }
 
+   /* at this point, we should see an end-of-transaction marker
+    * if we see something else, assume the worst, free the last 
+    * transaction, and return */
    if ('!' == qifline[0]) {
       xaccRemoveTransaction ((Account *) trans->debit, trans);
       xaccRemoveTransaction ((Account *) trans->credit, trans);
@@ -808,6 +820,8 @@ char * xaccReadQIFTransList (int fd, Account *acc)
    if (!acc) return 0x0;
    do { 
       qifline = xaccReadQIFTransaction (fd, acc);
+
+      if ('!' == qifline[0]) break;
    } while (qifline);
    return qifline;
 }
@@ -856,6 +870,8 @@ xaccReadQIFData( char *datafile )
 
         acc->type = BANK;
         acc->accountName = XtNewString ("Quicken Bank Account");
+        acc->description = XtNewString ("");
+        acc->notes = XtNewString ("");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
@@ -880,6 +896,8 @@ xaccReadQIFData( char *datafile )
 
         acc->type = BANK;
         acc->accountName = XtNewString ("Quicken Investment Account");
+        acc->description = XtNewString ("");
+        acc->notes = XtNewString ("");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
