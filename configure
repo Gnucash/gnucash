@@ -1498,7 +1498,7 @@ fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   cat >> confdefs.h <<\EOF
-#define HAVE_Z 1
+#define HAVE_ZLIB 1
 EOF
  LIBS="-lz $LIBS"
 else

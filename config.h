@@ -47,7 +47,7 @@
 #define  HAVE_XPM            1
 
 /* Use the new XmHTML widdget instead of the old htmlw widget */
-#define HAVE_Z 1               
+#define HAVE_ZLIB 1               
 #define HAVE_PNG 1             
 #define HAVE_JPEG 1            
 
