@@ -380,23 +380,39 @@ draw_cell (GnucashGrid *grid,
  
         /* top */
         draw_cell_line (drawable, grid->gc, bg_color,
-                        x, y, x + width, y,
+                        borders.top >= borders.left ? x : x + 1,
+                        y,
+                        (borders.top >= borders.right ?
+                         x + width : x + width - 1),
+                        y,
                         borders.top);
-
-        /* right */
-        draw_cell_line (drawable, grid->gc, bg_color,
-                        x + width, y, x + width, y + height,
-                        borders.right);
 
         /* bottom */
         draw_cell_line (drawable, grid->gc, bg_color,
-                        x + width, y + height, x, y + height,
+                        borders.bottom >= borders.left ? x : x + 1,
+                        y + height,
+                        (borders.bottom >= borders.right ?
+                         x + width : x + width - 1),
+                        y + height,
                         borders.bottom);
 
         /* left */
         draw_cell_line (drawable, grid->gc, bg_color,
-                        x, y + height, x, y,
+                        x,
+                        borders.left > borders.top ? y : y + 1,
+                        x,
+                        (borders.left > borders.bottom ?
+                         y + height : y + height - 1),
                         borders.left);
+
+        /* right */
+        draw_cell_line (drawable, grid->gc, bg_color,
+                        x + width,
+                        borders.right > borders.top ? y : y + 1,
+                        x + width,
+                        (borders.right > borders.bottom ?
+                         y + height : y + height - 1),
+                        borders.right);
 
         /* dividing line */
         if ((virt_loc.phys_row_offset == 0) && (table->dividing_row >= 0))
