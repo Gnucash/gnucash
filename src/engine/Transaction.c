@@ -1455,7 +1455,7 @@ xaccSplitGetBaseValue (const Split *s,
       g_return_val_if_fail (s->acc, gnc_numeric_zero ());
     } 
     else { 
-      return xaccSplitGetValue(s);
+      return xaccSplitGetValue((Split *)s);
     }
   }
 
@@ -3214,16 +3214,40 @@ xaccSplitGetReconcile (const Split *split)
 
 
 gnc_numeric
-xaccSplitGetAmount (const Split * split)
+xaccSplitGetAmount (const Split * cs)
 {
+  Split *split = (Split *) cs;
   if (!split) return gnc_numeric_zero();
+
+  /* The value of cap-gains splits is slave to the
+   * transaction that's actually causing the gains.
+XXX implementation not finished!!
+   */
+
+  CHECK_GAINS_STATUS(split);
   return split->amount;
 }
 
 gnc_numeric
-xaccSplitGetValue (const Split * split) 
+xaccSplitGetValue (const Split * cs) 
 {
+  Split *split = (Split *) cs;
   if (!split) return gnc_numeric_zero();
+
+  /* The value of cap-gains splits is slave to the 
+   * transaction that's actually causing the gains.
+
+XXX this test is wrong, it also needs to check for changed amount
+which will should casue lot to recomputed!
+   */
+  CHECK_GAINS_STATUS(split);
+  if ((split->gains & GAINS_STATUS_GAINS) &&
+       split->gains_split &&
+      (split->gains_split->gains & GAINS_STATUS_VDIRTY))
+  {
+    xaccSplitComputeCapGains (split, NULL);
+    split->gains_split->gains |= ~GAINS_STATUS_VDIRTY;
+  }
   return split->value; 
 }
 

@@ -558,7 +558,10 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 
-/** Returns the amount of the split in the account's commodity. */
+/** Returns the amount of the split in the account's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+ */
 gnc_numeric   xaccSplitGetAmount (const Split * split);
 
 /** The xaccSplitSetValue() method sets the value of this split in the
@@ -569,7 +572,10 @@ gnc_numeric   xaccSplitGetAmount (const Split * split);
  */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
 
-/** Returns the value of this split in the transaction's commodity. */
+/** Returns the value of this split in the transaction's commodity. 
+ *   Note that for cap-gains splits, this is slaved to the transaction
+ *   that is causing the gains to occur.
+*/
 gnc_numeric   xaccSplitGetValue (const Split * split);
 
 /** The xaccSplitSetSharePriceAndAmount() method will simultaneously

@@ -512,9 +512,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    opening_split = gnc_lot_get_earliest_split(lot);
    if (split == opening_split)
    {
-      /* Check to make sure this split doesn't have a cap-gain 
-       * transaction associated with it.  If it does, that's
-       * wrong, and we ruthlessly destroy it.
+      /* Check to make sure that this opening split doesn't 
+       * have a cap-gain transaction associated with it.  
+       * If it does, that's wrong, and we ruthlessly destroy it.
        * XXX Don't do this, it leads to infinite loops.
        * We need to scrub out errors like this elsewhere!
        */
