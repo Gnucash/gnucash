@@ -5,3 +5,6 @@ Makefile.in
 gnc-dir.h
 gnucash.desktop
 gnucash.keys
+*.la
+*.lo
+.libs
