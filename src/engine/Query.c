@@ -88,6 +88,7 @@ static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
 /********************************************************************
  ********************************************************************/
 
+
 void 
 xaccQueryPrint(Query * q) 
 {
@@ -121,6 +122,23 @@ xaccQueryPrint(Query * q)
       qt = (QueryTerm *)j->data;
       switch (qt->data.base.term_type) 
       {
+        case PR_ACCOUNT:
+          printf ("account sense=%d how=%d\n",
+                  qt->data.base.sense,
+                  qt->data.acct.how);
+          break;
+        case PR_ACTION:
+          printf ("action\n");
+          break;
+        case PR_AMOUNT:
+          printf ("amount\n");
+          break;
+        case PR_BALANCE:
+          printf ("balance\n");
+          break;
+        case PR_CLEARED:
+          printf ("cleared\n");
+          break;
         case PR_DATE:
           printf ("date sense=%d use_start=%d use_end=%d\n", 
                   qt->data.base.sense,
@@ -128,8 +146,27 @@ xaccQueryPrint(Query * q)
                   qt->data.date.use_end
                   );
           break;
+        case PR_DESC:
+          printf ("desc\n");
+          break;
+        case PR_MEMO:
+          printf ("memo\n");
+          break;
+        case PR_MISC:
+          printf ("misc\n");
+          break;
+        case PR_NUM:
+          printf ("num\n");
+          break;
+        case PR_PRICE:
+          printf ("price\n");
+          break;
+        case PR_SHRS:
+          printf ("shrs\n");
+          break;
+
         default:
-          printf ("other\n");
+          printf ("unkown\n");
       }
     }
     printf("\n");
@@ -268,8 +305,9 @@ free_query_term(QueryTerm *qt)
       g_list_free (qt->data.acct.accounts);
       qt->data.acct.accounts = NULL;
 
-      for (node = qt->data.acct.account_guids; node; node = node->next)
+      for (node = qt->data.acct.account_guids; node; node = node->next) {
         g_free (node->data);
+      }
       g_list_free (qt->data.acct.account_guids);
       qt->data.acct.account_guids = NULL;
       break;
@@ -1865,13 +1903,13 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
   assert(s && pd);
   assert(pd->type == PD_ACCOUNT);
 
-  parent = xaccSplitGetParent(s);
-  assert(parent);
 
   switch(pd->acct.how) {
   case ACCT_MATCH_ALL:
     /* there must be a split in parent that matches each of the 
      * accounts listed in pd. */
+    parent = xaccSplitGetParent(s);
+    assert(parent);
     numsplits = xaccTransCountSplits(parent);
     for(acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next) {
       for(i=0; i < numsplits; i++) {
@@ -2162,6 +2200,11 @@ xaccQuerySetSortIncreasing(Query * q, gboolean increasing)
 void
 xaccQuerySetMaxSplits(Query * q, int n) {
   q->max_splits = n;
+}
+
+int
+xaccQueryGetMaxSplits(Query * q) {
+  return q->max_splits;
 }
 
 

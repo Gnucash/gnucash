@@ -158,6 +158,7 @@ void          xaccTransSetDate (Transaction *trans,
 void          xaccTransSetDateSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateToday (Transaction *trans);
 void          xaccTransSetDateTS (Transaction *trans, const Timespec *ts);
+#define   xaccTransSetDatePostedTS xaccTransSetDateTS
 
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
