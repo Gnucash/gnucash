@@ -186,4 +186,38 @@ qof_class_get_default_sort (QofIdTypeConst obj_name)
   return g_hash_table_lookup (sortTable, obj_name);
 }
 
+/* ================================================================ */
+
+struct _iterate {
+  QofParamForeachCB   fcn;
+  gpointer                data;
+};
+                                                                                
+static void 
+foreach_cb (gpointer key, gpointer item, gpointer arg)
+{
+  struct _iterate *iter = arg;
+  QofParam *parm = item;
+                                                                                
+  iter->fcn (parm, iter->data);
+}
+
+
+void
+qof_class_param_foreach (QofIdTypeConst obj_name,
+                         QofParamForeachCB cb, gpointer user_data)
+{
+  struct _iterate iter;
+  GHashTable *param_ht;
+
+  if (!obj_name || !cb) return;
+  param_ht = g_hash_table_lookup (paramTable, obj_name);
+  if (!param_ht) return;
+
+  iter.fcn = cb;
+  iter.data = user_data;
+
+  g_hash_table_foreach (param_ht, foreach_cb, &iter);
+}
+
 /* ============================= END OF FILE ======================== */

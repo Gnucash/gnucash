@@ -116,9 +116,9 @@ typedef void (*QofSetterFunc) (gpointer, gpointer);
  *    object (QofIdType) or it can be a core data type (QofType).
  * -- param_getfcn is the function to actually obtain the parameter
  * -- param_setfcn is the function to actually set the parameter
- * -- param_userdata is a place where the user can place any desiered
- *    user-defined data (and thus can be used by the user-defined
- *    setter/getter).
+ * -- param_userdata is a place where the object author can place any 
+ *    desired object-author-defined data (and thus can be used by the 
+ *    author-defined setter/getter).
  *
  * Either the getter or the setter may be NULL.
  *
@@ -194,6 +194,15 @@ QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
 /** Return the object's parameter setter function */
 QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
                                               const char *parameter);
+
+/** Type definition for the paramter callback function. */
+typedef void (*QofParamForeachCB) (QofParam *, gpointer user_data);
+
+/** Call the callback once for each parameter on the indicated 
+ *  object class.  The 'user_data' is passed back to teh callback.
+ */
+void qof_class_param_foreach (QofIdTypeConst obj_name,
+                              QofParamForeachCB, gpointer user_data);
 
 
 #endif /* QOF_CLASS_H */
