@@ -409,18 +409,22 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    }
 
    if (MOD_NUM & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_NUM: %s\n", reg->numCell->value);
       xaccTransSetNum (trans, reg->numCell->value);
    }
    
    if (MOD_DESC & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_DESC: %s\n", reg->descCell->cell.value);
       xaccTransSetDescription (trans, reg->descCell->cell.value);
    }
 
    if (MOD_RECN & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_RECN: %c\n", reg->recnCell->value[0]);
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
    if (MOD_ACTN & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_ACTN: %s\n", reg->actionCell->cell.value);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
    }
 
@@ -434,6 +438,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
     */
    if (MOD_XFRM & changed) {
       Account *old_acc=NULL, *new_acc=NULL;
+      DEBUG ("xaccSRSaveRegEntry(): MOD_XFRM: %s\n", reg->xfrmCell->cell.value);
 
       /* do some reparenting. Insertion into new account will automatically
        * delete this split from the old account */
@@ -448,6 +453,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
 
    if (MOD_MXFRM & changed) {
       Split *other_split = NULL;
+      DEBUG ("xaccSRSaveRegEntry(): MOD_MXFRM: %s\n", reg->mxfrmCell->cell.value);
 
       other_split = xaccGetOtherSplit(split);
 
@@ -458,7 +464,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
        *     and "other" is null because there is no other.
        *
        * In the case (2), we want to create the other split, so that 
-       * the user's request to transfer actually woprks out.
+       * the user's request to transfer actually works out.
        */
 
       if (!other_split) {
@@ -489,6 +495,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    }
 
    if (MOD_MEMO & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_MEMO: %s\n", reg->memoCell->value);
       xaccSplitSetMemo (split, reg->memoCell->value);
    }
 
@@ -504,6 +511,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       } else {
          new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
       }
+      DEBUG ("xaccSRSaveRegEntry(): MOD_AMNT: %f\n", new_amount);
       if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
           (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
@@ -518,6 +526,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    if (MOD_PRIC & changed) {
       Account *acc;
       int n;
+      DEBUG ("xaccSRSaveRegEntry(): MOD_PRIC: %f\n", reg->priceCell->amount);
       xaccSplitSetSharePrice (split, reg->priceCell->amount);
 
       /* Here we handle a very special case: the user just created 
@@ -551,6 +560,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    }
 
    if (MOD_VALU & changed) {
+      DEBUG ("xaccSRSaveRegEntry(): MOD_VALU: %f\n", reg->valueCell->amount);
       xaccSplitSetValue (split, (reg->valueCell->amount));
    }
 
