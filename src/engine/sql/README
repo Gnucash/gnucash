@@ -221,8 +221,11 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- checkpoint balance is broken for when register asks for only a small
-   number of splits.
+-- test checkpoint balances. I think they work, but ...
+
+-- modify checkpoint computation to always occur on fixed dates.
+   Failure to do so causes the fill-out algorithm to pull in all 
+   data.
 
 -- if another user deletes a transaction, or an account, there is no way
    for us to know.  Thus, any sort of sync will probably (incorrectly)
