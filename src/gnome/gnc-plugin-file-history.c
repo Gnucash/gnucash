@@ -67,6 +67,7 @@ struct GncPluginFileHistoryPrivate
  *                     Other Functions                      *
  ************************************************************/
 
+/* Caller is responsible for g_free'ing returned memory */
 static gchar *
 gnc_history_generate_label (int index, const gchar *filename)
 {
@@ -131,6 +132,7 @@ gnc_history_update_menus (GncPlugin *plugin)
 	  label_name = gnc_history_generate_label(i, tmp->data);
 	  g_value_set_string (&label, label_name);
 	  g_object_set_property (G_OBJECT(action), "label", &label);
+          g_value_unset(&label);
 	  g_free(label_name);
 
 	  /* set the filename for the callback function */

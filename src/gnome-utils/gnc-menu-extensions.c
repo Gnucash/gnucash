@@ -586,10 +586,10 @@ gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, GnomeUIInfo *menui
 }
 
 static GString*
-gnc_ext_gen_action_name( gchar *name )
+gnc_ext_gen_action_name(const gchar *name )
 {
   //gchar *extName;
-  gchar *extChar;
+  const gchar *extChar;
   GString *actionName;
 
   //extName = gnc_extension_name(extInf);
@@ -625,7 +625,7 @@ gnc_ext_gen_ui_path( ExtensionInfo *extInfo )
         pathElts; pathElts = pathElts->next ) {
     GString *eltActionName;
 
-    eltActionName = gnc_ext_gen_action_name( (gchar*)pathElts->data );
+    eltActionName = gnc_ext_gen_action_name( pathElts->data );
 
     if ( safe_strcmp( (gchar*)pathElts->data, "Main" ) != 0 )
     {
@@ -649,6 +649,7 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
   GSList        * l = NULL;
   ExtensionInfo * info;
 
+  ENTER(" ");
   for (l = extension_list; l; l = l->next) {
     info = l->data;
     if ((strcmp(info->window, window) != 0)
@@ -662,17 +663,20 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
       GString *extActionName;
       GString *extUIPath;
       gchar *docString;
+      char *tmpname;
       GCallback gcb;
       //EggMenuMergeType extType;
 
-      extActionName = gnc_ext_gen_action_name( gnc_extension_name(info) );
+      tmpname = gnc_extension_name( info );
+      extActionName = gnc_ext_gen_action_name( tmpname );
       extUIPath = gnc_ext_gen_ui_path( info );
       docString = gnc_extension_documentation( info );
 
       DEBUG( "extension [%s]: %s / %s [%s]\n",
-             gnc_extension_name( info ),
+             tmpname,
              extUIPath->str, extActionName->str,
              docString );
+      g_free(tmpname);
 
       //gnc_extension_path( info->extension, (char**)&windowTmp, (char**)&pathTmp );
       /*printf( "extension [%s] path: %s:%s\n",
@@ -707,6 +711,7 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
         egg_action_group_add_actions( eag, newEntry, G_N_ELEMENTS (newEntry), info );
         egg_menu_merge_insert_action_group( uiMerge, eag, 0 );
         new_merge_id = egg_menu_merge_new_merge_id( uiMerge );
+        g_free(docString);
 
         {
           gchar *typeStr;
@@ -735,8 +740,11 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
         egg_menu_merge_ensure_update( uiMerge );
         
       }
+      g_string_free(extActionName, TRUE);
+      g_string_free(extUIPath, TRUE);
     }
-  }
+  } /* end of for loop */
+  LEAVE(" ");
 }
 
 #if 0 /* re-add */

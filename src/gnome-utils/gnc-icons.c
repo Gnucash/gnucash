@@ -44,6 +44,7 @@ gnc_add_stock_icon_pair (GtkIconFactory *factory,
 	gtk_icon_source_set_filename (source, fullname1);
 	gtk_icon_source_set_pixbuf (source, pixbuf1);
 	gtk_icon_set_add_source (set, source);
+        gtk_icon_source_free(source);
 
 	source = gtk_icon_source_new ();
 	gtk_icon_source_set_filename (source, fullname2);
@@ -51,6 +52,7 @@ gnc_add_stock_icon_pair (GtkIconFactory *factory,
 	gtk_icon_source_set_size (source, GTK_ICON_SIZE_MENU);
 	gtk_icon_source_set_size_wildcarded (source, FALSE);
 	gtk_icon_set_add_source (set, source);
+        gtk_icon_source_free(source);
 
 	/* Add it to the factory */
 	gtk_icon_factory_add (factory, stock, set);

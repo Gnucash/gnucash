@@ -271,6 +271,7 @@ static KvpValue*
 get_random_kvp_value_depth (int type, gint depth)
 {
     int datype = type;
+    KvpValue *ret;
 
     if (datype == -1)
     {
@@ -294,82 +295,74 @@ get_random_kvp_value_depth (int type, gint depth)
     switch(datype)
     {
     case KVP_TYPE_GINT64:
-        return kvp_value_new_gint64(get_random_gint64());
+        ret = kvp_value_new_gint64(get_random_gint64());
         break;
 
     case KVP_TYPE_DOUBLE:
-        return NULL;
+        ret = NULL;
         break;
 
     case KVP_TYPE_NUMERIC:
-        return kvp_value_new_gnc_numeric(get_random_gnc_numeric());
+        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric());
         break;
 
     case KVP_TYPE_STRING:
     {
         gchar *tmp_str;
-        KvpValue *ret;
         tmp_str = get_random_string();
         if(!tmp_str)
-        {
-            return NULL;
-        }
+	  return NULL;
         
         ret = kvp_value_new_string(tmp_str);
         g_free(tmp_str);
-        return ret;
     }
         break;
 
     case KVP_TYPE_GUID:
     {
         GUID *tmp_guid;
-        KvpValue *ret;
         tmp_guid = get_random_guid();
         ret = kvp_value_new_guid(tmp_guid);
         g_free(tmp_guid);
-        return ret;
     }
         break;
 
     case KVP_TYPE_TIMESPEC:
     {
         Timespec *ts = get_random_timespec();
-        return kvp_value_new_timespec (*ts);
+        ret = kvp_value_new_timespec (*ts);
+        g_free(ts);
     }
 	break;
     
     case KVP_TYPE_BINARY:
     {
         bin_data *tmp_data;
-        KvpValue *ret;
         tmp_data = get_random_binary_data();
         ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
         g_free(tmp_data->data);
         g_free(tmp_data);
-        return ret;
     }
         break;
  
     case KVP_TYPE_GLIST:
-        return kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
+        ret = kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
         break;
 
     case KVP_TYPE_FRAME:
     {
         KvpFrame *tmp_frame;
-        KvpValue *ret;
         tmp_frame = get_random_kvp_frame_depth(depth + 1);
         ret = kvp_value_new_frame(tmp_frame);
         kvp_frame_delete(tmp_frame);
-        return ret;
     }
         break;
 
     default:
-        return NULL;
+        ret = NULL;
         break;
     }
+    return ret;
 }
 
 static KvpFrame*
@@ -392,14 +385,19 @@ get_random_kvp_frame_depth (gint depth)
         gchar *key;
         KvpValue *val;
 
-        do
-        {
-          key = get_random_string_without("/");
-        } while (!key || *key == '\0');
-
+	key = NULL;
+	while (key == NULL) {
+	  key = get_random_string_without("/");
+	  if (*key == '\0') {
+	    g_free(key);
+	    key = NULL;
+	  }
+	}
+	
         val = get_random_kvp_value_depth (-1, depth + 1);
         if (!val)
         {
+	  g_free(key);
           if (!val_added)
             vals_to_add++;
           continue;

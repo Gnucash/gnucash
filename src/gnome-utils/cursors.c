@@ -71,7 +71,7 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
   }
 
   if (type != GNC_CURSOR_NORMAL)
-    gdk_cursor_destroy (cursor);
+    gdk_cursor_unref (cursor);
 }
 
 

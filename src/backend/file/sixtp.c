@@ -729,9 +729,11 @@ sixtp_parse_file(sixtp *sixtp,
                  gpointer global_data,
                  gpointer *parse_result) 
 {
-  xmlParserCtxtPtr context = xmlCreateFileParserCtxt( filename );
-  return sixtp_parse_file_common(sixtp, context, data_for_top_level,
-				 global_data, parse_result);
+    gboolean ret;
+    xmlParserCtxtPtr context = xmlCreateFileParserCtxt( filename );
+    ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
+                                  global_data, parse_result);
+    return ret;
 }
 
 gboolean
@@ -742,9 +744,11 @@ sixtp_parse_buffer(sixtp *sixtp,
                    gpointer global_data,
                    gpointer *parse_result) 
 {
-  xmlParserCtxtPtr context = xmlCreateMemoryParserCtxt( bufp, bufsz );
-  return sixtp_parse_file_common(sixtp, context, data_for_top_level,
-				 global_data, parse_result);
+    gboolean ret;
+    xmlParserCtxtPtr context = xmlCreateMemoryParserCtxt( bufp, bufsz );
+    ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
+                                  global_data, parse_result);
+    return ret;
 }
 
 /***********************************************************************/
