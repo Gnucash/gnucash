@@ -61,6 +61,7 @@ void prepare_app ( void );
 /** GLOBALS *********************************************************/
 extern char  *helpPath;
 extern GtkWidget   *app;
+extern AccountGroup *topgroup;
 
 #endif
 

@@ -23,6 +23,7 @@
 #include "MainWindow.h"
 #include "MenuBar.h"
 #include "Add_Dialog.h"
+#include "main.h"
 #include "messages.h"
 #include "version.h"
 #include "RegWindow.h"

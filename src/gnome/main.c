@@ -42,6 +42,7 @@
 
 /** GLOBALS *********************************************************/
 
+AccountGroup *topgroup = 0x0;
 char        *helpPath = NULL;
 GtkWidget   *toplevel;
 GtkWidget   *filebox;
@@ -50,25 +51,6 @@ GtkWidget   *import_filebox;
 char        *datafile = NULL;
 GtkWidget   *app;
 
-
-/* The names of the different types of accounts.  For resource
- * specification. Must match the enums in Account.h */
-
-gchar *accRes[] ={
-  "bank",
-  "cash",
-  "asset",
-  "credit",
-  "liability",
-  "stock",
-  "mutual",
-  "income",
-  "expense",
-  "equity",
-  "checking",
-  "savings",
-  "creditline",
-};
 
 void
 file_ok_sel (GtkWidget *w, GtkFileSelection *fs)

@@ -567,7 +567,6 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
 
   /* The CreateTable will do the actual gui init, 
    * returning a widget */
-  //reg = xaccCreateTable (regData->ledger->table, frame, accRes[ledger_type]);
   reg = xaccCreateTable (regData->ledger->table, regData->dialog);
   
   regData->reg = reg;
@@ -800,8 +799,6 @@ void regRefresh (RegWindow *regData)
     * new splits and get them into the system.
     */
 
-   /* hack alert -- should be recomputing the list of splits */
-/* ???? */
    xaccBRLoadRegister (regData->ledger, 
                      xaccAccountGetSplitList (regData->leader),
                      regData->leader);
