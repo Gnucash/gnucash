@@ -188,7 +188,7 @@ GUID gncOwnerRetGUID (GncOwner *owner)
   const GUID *guid = gncOwnerGetGUID (owner);
   if (guid)
     return *guid;
-  return *xaccGUIDNULL ();
+  return *guid_null ();
 }
 
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner)

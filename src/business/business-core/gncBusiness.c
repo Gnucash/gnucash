@@ -10,7 +10,8 @@
 
 #include "gncBusiness.h"
 #include "gnc-book.h"
-#include "GNCIdP.h"
+#include "GNCId.h"
+#include "qofid-p.h"
 
 struct _iterate {
   foreachObjectCB cb;
