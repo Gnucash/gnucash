@@ -159,7 +159,8 @@
                  (gaincoll      (gnc:make-commodity-collector))
 
                  (price-list (price-fn commodity to-date))
-                 (price      (car price-list))
+                 (price      (if (> (length price-list) 0)
+				 (car price-list) #f))
                  
                  (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency to-date))
                )
@@ -233,10 +234,13 @@
 			       "number-cell" (gnc:amount->string units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
-			       (gnc:html-price-anchor
-				price
-				(gnc:make-gnc-monetary (gnc:price-get-currency price)
-						       (gnc:price-get-value price))))
+			       (if price
+				   (gnc:html-price-anchor
+				    price
+				    (gnc:make-gnc-monetary
+				     (gnc:price-get-currency price)
+				     (gnc:price-get-value price)))
+				   #f))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)
                               (gnc:make-html-table-header-cell/markup
