@@ -18,6 +18,9 @@
 	  - Use gnc_commodity_table_find_namespace() throughout
 	  - fix a crash when adding a new namespace to the commodity table.
 
+	* src/engine/Account.c:
+	  - updated implementation of qofAccountSetParent().
+
 2005-01-26  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' QSF Backend.
