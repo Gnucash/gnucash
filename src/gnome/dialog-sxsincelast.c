@@ -1010,6 +1010,7 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         }
         g_list_free( tci->createdTxnGUIDs );
         tci->createdTxnGUIDs = NULL;
+	gnc_resume_gui_refresh();
 }
 
 /**
