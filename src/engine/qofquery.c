@@ -360,11 +360,14 @@ check_object (QofQuery *q, gpointer object)
   QofQueryTerm * qt;
   int       and_terms_ok=1;
   
-  for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
+  for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
+  {
     and_terms_ok = 1;
-    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) 
+    {
       qt = (QofQueryTerm *)(and_ptr->data);
-      if (qt->param_fcns && qt->pred_fcn) {
+      if (qt->param_fcns && qt->pred_fcn) 
+      {
         GSList *node;
         QofAccessFunc get_fcn;
         gpointer conv_obj = object;
@@ -380,19 +383,30 @@ check_object (QofQuery *q, gpointer object)
           conv_obj = get_fcn (conv_obj);
         }
 
-        if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata))
-            == qt->invert) {
+        if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata)) == qt->invert) 
+        {
           and_terms_ok = 0;
           break;
         }
-      } else {
+      } 
+      else 
+      {
         /* XXX: Don't know how to do this conversion -- do we care? */
       }
     }
-    if(and_terms_ok) {
+    if (and_terms_ok) 
+    {
       return 1;
     }
   }
+
+  /* If there are no terms, assume a "match any" applies.
+   * A query with no terms is still meaningful, since the user
+   * may want to get all objects, but in a particular sorted 
+   * order.
+   */
+  if (NULL == q->terms) return 1;
+
   return 0;
 }
 
