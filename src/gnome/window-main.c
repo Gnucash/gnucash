@@ -70,8 +70,7 @@
 #include "messages.h"
 #include "guile-mappings.h"
 
-static gboolean gnc_show_status_bar = TRUE;
-static gboolean gnc_show_summary_bar = TRUE;
+static short module = MOD_GUI;
 
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
@@ -91,18 +90,52 @@ static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
 static GNCMDIChildInfo *
 gnc_main_window_get_mdi_child (void)
 {
+  GNCMDIChildInfo *child_info;
   GNCMDIInfo *main_info;
+  GnomeMDIChild *child;
   GnomeMDI *mdi;
+  GnomeApp *app;
+  GtkWidget *view;
 
+  ENTER(" ");
   main_info = gnc_mdi_get_current ();
-  if (!main_info)
+  if (!main_info) {
+    LEAVE("main_info is NULL");
     return(NULL);
+  }
 
   mdi = main_info->mdi;
-  if (!mdi || !mdi->active_child)
-    return(NULL);
+  if (!mdi) {
+    LEAVE("null mdi");
+    return NULL;
+  }
 
-  return(gtk_object_get_user_data(GTK_OBJECT(mdi->active_child)));
+  child = gnome_mdi_get_active_child(mdi);
+  if (child) {
+    child_info = gtk_object_get_user_data(GTK_OBJECT(child));
+    LEAVE("child=%p", child_info);
+    return(child_info);
+  }
+
+  /* Grrr. There should have been an active child but the MDI code has
+   * some rough edges, to put it politely.  If we hit this case and
+   * the user has more than one child window, this code may or may not
+   * select the right child.  There's absolutely no way to tell from
+   * the available data which view is in front. */
+  DEBUG("mdi=%p, mdi->active_child=%p", mdi, child);
+  app = gnome_mdi_get_active_window(mdi);
+  if (app) {
+    /* Force the MDI to have a valid view. */
+    view = gnome_mdi_get_view_from_window (mdi, app);
+    gnome_mdi_set_active_view (mdi, view);
+
+    child_info = gnc_mdi_child_find_by_app(app);
+    LEAVE("child=%p", child_info);
+    return(child_info);
+  }
+
+  LEAVE("oops. No valid no child or app");
+  return(NULL);
 }
 
 /********************************************************************
@@ -141,6 +174,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   GtkWidget * statusbar;
 
   /* add the summarybar */
+  ENTER(" ");
   summarybar = gnc_main_window_summary_new();
 
   {
@@ -184,6 +218,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 
   /* make sure the file history is shown */ 
   gnc_history_update_menu (GTK_WIDGET (app));
+  LEAVE(" ");
 }
 
 static void
@@ -191,6 +226,7 @@ gnc_refresh_main_window_info (void)
 {
   GList *containers = gtk_container_get_toplevels ();
 
+  ENTER(" ");
   while (containers)
   {
     GtkWidget *w = containers->data;
@@ -203,6 +239,7 @@ gnc_refresh_main_window_info (void)
 
     containers = containers->next;
   }
+  LEAVE(" ");
 }
 
 
@@ -220,9 +257,11 @@ gnc_main_window_create_child(const gchar * configstring)
   char * location;
   char * label;
 
+  ENTER(" ");
   if (!configstring)
   {
     gnc_main_window_open_accounts (FALSE);
+    LEAVE("no configstring");
     return NULL;
   }
 
@@ -240,6 +279,7 @@ gnc_main_window_create_child(const gchar * configstring)
     child = NULL;
   }
 
+  LEAVE(" ");
   return child;
 }
 
@@ -255,40 +295,11 @@ gnc_main_window_can_restore_cb (const char * filename)
 }
 
 /**
- * gnc_main_window_tweak_menus
- *
- * @mc: A pointer to the GNC MDI child associated with the Main
- * window.
- *
- * This routine tweaks the View window in the main window menubar so
- * that the menu checkboxes correctly show the state of the Toolbar,
- * Summarybar and Statusbar.  There is no way to have the checkboxes
- * start checked.  This will trigger each of the callbacks once, but
- * they are designed to ignore the first 'sync' callback.  This is a
- * suboptimal solution, but I can't find a better one at the moment.
- */
-static void
-gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
-{
-  GtkWidget *widget;
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Toolbar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Status Bar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/S_ummary Bar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  mc->gnc_mdi->menu_tweaking = NULL;
-}
-
-/**
  * gnc_main_window_flip_toolbar_cb
  *
  * @widget: A pointer to the menu item selected. (ignored)
- * @data: The user data for this menu item. (ignored)
+ * @data: The user data for this menu item. This is a pointer to a
+ * GNCMDIInfo data structure. (ignored)
  *
  * This routine flips the state of the toolbar, hiding it if currently
  * visible, and showing it if not.  This routine has to grovel through
@@ -301,23 +312,17 @@ static void
 gnc_main_window_flip_toolbar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  static gboolean in_sync = FALSE;
   gboolean toolbar_visibility = !gnc_mdi_get_toolbar_visibility();
 
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
+  ENTER("widget=%p, data=%p", widget, data);
+  mc = gnc_main_window_get_mdi_child();
+  if (!mc) {
+    LEAVE("oops");
     return;
   }
-
-  mc = gnc_main_window_get_mdi_child();
-  if (!mc)
-    return;
   gnc_mdi_set_toolbar_visibility(toolbar_visibility);
   gnc_mdi_show_toolbar(mc);
+  LEAVE("flipped");
 }
 
 /**
@@ -337,29 +342,17 @@ static void
 gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  static gboolean in_sync = FALSE;
+  gboolean statusbar_visibility = !gnc_mdi_get_statusbar_visibility();
 
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
-    return;
-  }
-
-  gnc_show_status_bar = !gnc_show_status_bar;
-
+  ENTER(" ");
   mc = gnc_main_window_get_mdi_child();
-  if (!mc || !mc->app)
+  if (!mc) {
+    LEAVE("oops");
     return;
-
-  if (gnc_show_status_bar) {
-    gtk_widget_show(mc->app->statusbar);
-  } else {
-    gtk_widget_hide(mc->app->statusbar);
-    gtk_widget_queue_resize(mc->app->statusbar->parent);
   }
+  gnc_mdi_set_statusbar_visibility(statusbar_visibility);
+  gnc_mdi_show_statusbar(mc);
+  LEAVE("flipped");
 }
 
 /**
@@ -379,36 +372,17 @@ static void
 gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  GnomeDockItem *summarybar;
-  guint dc1, dc2, dc3, dc4;
-  static gboolean in_sync = FALSE;
+  gboolean summarybar_visibility = !gnc_mdi_get_summarybar_visibility();
 
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
-    return;
-  }
-
-  gnc_show_summary_bar = !gnc_show_summary_bar;
-
+  ENTER(" ");
   mc = gnc_main_window_get_mdi_child();
-  if (!mc || !mc->app)
+  if (!mc) {
+    LEAVE("oops");
     return;
-
-  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
-					   "Summary Bar",
-					   &dc1, &dc2, &dc3, &dc4);
-  if (!summarybar) return;
-
-  if (gnc_show_summary_bar) {
-    gtk_widget_show(GTK_WIDGET(summarybar));
-  } else {
-    gtk_widget_hide(GTK_WIDGET(summarybar));
-    gtk_widget_queue_resize(mc->app->dock);
   }
+  gnc_mdi_set_summarybar_visibility(summarybar_visibility);
+  gnc_mdi_show_summarybar(mc);
+  LEAVE("flipped");
 }
 
 /********************************************************************
@@ -421,6 +395,7 @@ gnc_main_window_new (void)
 {
   GNCMDIInfo * retval;
 
+  ENTER(" ");
   retval = gnc_mdi_new ("GnuCash", "GnuCash",
                         gnc_main_window_toolbar_prefix (),
                         gnc_main_window_toolbar_suffix (),
@@ -446,9 +421,7 @@ gnc_main_window_new (void)
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
 
-  /* handle show/hide items in view menu */
-  retval->menu_tweaking = gnc_main_window_tweak_menus;
-
+  LEAVE(" ");
   return retval;
 }
 
@@ -1016,10 +989,12 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
     GNOMEUIINFO_END
   };
 
+  ENTER(" ");
   gnome_mdi_set_menubar_template(GNOME_MDI(maininfo->mdi),
                                  gnc_main_menu_template);
 
   gnc_file_history_add_after ("Open _Recent/");
+  LEAVE(" ");
 }
 
 static GnomeUIInfo *

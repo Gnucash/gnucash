@@ -73,7 +73,6 @@ typedef struct
   GList    * children;
 
   GNCShutdownFunc shutdown;
-  GNCMDIAutoSetup menu_tweaking;
 
   GNCMDICanRestoreCB can_restore_cb;
   GNCMDIRestoreCB restore_cb;
@@ -116,6 +115,7 @@ void gnc_mdi_add_child (GNCMDIInfo * wind, GNCMDIChildInfo * child);
 void gnc_mdi_remove_child (GNCMDIInfo * gnc_mdi, GNCMDIChildInfo * child);
 void gnc_mdi_child_refresh (GNCMDIChildInfo *child);
 
+GNCMDIChildInfo * gnc_mdi_child_find_by_app (GnomeApp *app);
 GNCMDIInfo * gnc_mdi_get_current (void);
 gboolean gnc_mdi_has_apps (void);
 
@@ -135,8 +135,14 @@ GtkWidget * gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name);
 void gnc_mdi_set_dispatch_cb (GNCMDIChildInfo * mc, GNCMDIDispatchType type,
 			      GtkCallback cb, gpointer data);
 gboolean gnc_mdi_get_toolbar_visibility (void);
+gboolean gnc_mdi_get_statusbar_visibility (void);
+gboolean gnc_mdi_get_summarybar_visibility (void);
 void gnc_mdi_set_toolbar_visibility (gboolean visible);
+void gnc_mdi_set_statusbar_visibility (gboolean visible);
+void gnc_mdi_set_summarybar_visibility (gboolean visible);
 void gnc_mdi_show_toolbar (GNCMDIChildInfo *mc);
+void gnc_mdi_show_statusbar (GNCMDIChildInfo *mc);
+void gnc_mdi_show_summarybar (GNCMDIChildInfo *mc);
 
 
 #endif
