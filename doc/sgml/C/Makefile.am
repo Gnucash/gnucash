@@ -8,6 +8,7 @@ GNUCASH_SGML_FILES = \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
+	xacc-account-summary.sgml \
 	xacc-adjbalwin.sgml \
 	xacc-apar.sgml \
 	xacc-asset-liability-barcharts.sgml \
@@ -30,6 +31,7 @@ GNUCASH_SGML_FILES = \
 	xacc-locatingtxns.sgml \
 	xacc-mainwin.sgml \
 	xacc-multicolumn-view-reports.sgml \
+	xacc-net-worth-barchart.sgml \
 	xacc-newacctwin.sgml \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
@@ -41,7 +43,9 @@ GNUCASH_SGML_FILES = \
 	xacc-recnwin.sgml \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \
+	xacc-repdev.sgml \
 	xacc-reports.sgml \
+	xacc-scheme.sgml \
 	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
