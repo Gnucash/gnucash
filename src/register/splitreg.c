@@ -1111,6 +1111,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
          xaccSetPriceCellSharesValue (reg->creditCell, GNC_T);
          xaccSetPriceCellSharesValue (reg->ndebitCell, GNC_T);
          xaccSetPriceCellSharesValue (reg->ncreditCell, GNC_T);
+         xaccSetPriceCellIsCurrency (reg->priceCell, GNC_T);
 
          xaccSetBasicCellBlankHelp (&reg->priceCell->cell, PRICE_CELL_HELP);
          xaccSetBasicCellBlankHelp (&reg->valueCell->cell, VALUE_CELL_HELP);
