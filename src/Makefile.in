@@ -40,7 +40,7 @@ LIBPATH  = -L@x_libraries@
 TARGET   = ../xacc
 
 LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
-LIBXMHTML= ../lib/XmHTML-1.1.0/libXmHTML.a
+LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
 LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 ######################################################################
