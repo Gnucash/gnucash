@@ -133,15 +133,16 @@ get_random_commodity_namespace(void)
     return get_random_string_in_array(types);
 }
 
-GNCPrice *
-get_random_price(GNCSession *session)
+void
+make_random_changes_to_price (GNCSession *session, GNCPrice *p)
 {
-  GNCPrice *p;
   Timespec *ts;
   char *string;
   gnc_commodity *c;
 
-  p = gnc_price_create (session);
+  g_return_if_fail (session && p);
+
+  gnc_price_begin_edit (p);
 
   c = get_random_commodity (session);
   gnc_price_set_commodity (p, c);
@@ -162,6 +163,18 @@ get_random_price(GNCSession *session)
   g_free (string);
 
   gnc_price_set_value (p, get_random_gnc_numeric ());
+
+  gnc_price_commit_edit (p);
+}
+
+GNCPrice *
+get_random_price(GNCSession *session)
+{
+  GNCPrice *p;
+
+  p = gnc_price_create (session);
+
+  make_random_changes_to_price (session, p);
 
   return p;
 }
@@ -194,6 +207,63 @@ get_random_pricedb(GNCSession *session)
   make_random_pricedb (session, db);
 
   return db;
+}
+
+static gboolean
+price_accumulator (GNCPrice *p, gpointer data)
+{
+  GList **list = data;
+
+  *list = g_list_prepend (*list, p);
+
+  return FALSE;
+}
+
+void
+make_random_changes_to_pricedb (GNCSession *session, GNCPriceDB *pdb)
+{
+  GList *list = NULL;
+  GList *node;
+
+  g_return_if_fail (pdb);
+
+  gnc_pricedb_foreach_price (pdb, price_accumulator, &list, FALSE);
+
+  for (node = list; node; node = node->next)
+  {
+    GNCPrice *p = node->data;
+
+    switch (get_random_int_in_range (0, 5))
+    {
+      case 0: /* Delete */
+        gnc_pricedb_remove_price (pdb, p);
+        break;
+
+      case 1:
+      case 2: /* Change */
+        make_random_changes_to_price (session, p);
+        break;
+
+      default: /* nothing */
+        break;
+    }
+  }
+
+  g_list_free (list);
+
+  /* Add a few new ones */
+  {
+    int i = get_random_int_in_range (1, 5);
+
+    while (i--)
+    {
+      GNCPrice *p = get_random_price (session);
+
+      gnc_pricedb_add_price (pdb, p);
+
+      gnc_price_unref (p);
+    }
+  }
 }
 
 GUID*
@@ -655,7 +725,41 @@ make_random_changes_to_group (GNCSession *session, AccountGroup *group)
   g_list_free (splits);
   g_list_free (accounts);
 
-  /* TODO: move some accounts around */
+  accounts = xaccGroupGetSubAccounts (group);
+
+  /* move some accounts around */
+  {
+    int i = get_random_int_in_range (1, 4);
+
+    while (i--)
+    {
+      Account *a1, *a2;
+
+      a1 = get_random_list_element (accounts);
+
+      if (get_random_boolean ())
+        a2 = get_random_list_element (accounts);
+      else
+        a2 = NULL;
+
+      if (!a2)
+      {
+        xaccGroupInsertAccount (group, a1);
+        continue;
+      }
+
+      if (xaccAccountHasAncestor (a1, a2) ||
+          xaccAccountHasAncestor (a2, a1))
+      {
+        i++;
+        continue;
+      }
+
+      xaccAccountInsertSubAccount (a2, a1);
+    }
+  }
+
+  g_list_free (accounts);
 }
 
 Account*
@@ -970,6 +1074,68 @@ get_random_commodity (GNCSession *session)
     return ret;
 }
 
+void
+make_random_changes_to_commodity (gnc_commodity *com)
+{
+  char *str;
+
+  g_return_if_fail (com);
+
+  str = get_random_string ();
+  gnc_commodity_set_namespace (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_mnemonic (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_fullname (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_exchange_code (com, str);
+  g_free (str);
+
+  gnc_commodity_set_fraction (com, get_random_int_in_range (1, 100000));
+}
+
+void
+make_random_changes_to_commodity_table (gnc_commodity_table *table)
+{
+  GList *namespaces;
+  GList *node;
+
+  g_return_if_fail (table);
+
+  namespaces = gnc_commodity_table_get_namespaces (table);
+
+  for (node = namespaces; node; node = node->next)
+  {
+    const char *ns = node->data;
+    GList *commodities;
+    GList *com_node;
+
+    if (strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
+      continue;
+
+    commodities = gnc_commodity_table_get_commodities (table, ns);
+
+    for (com_node = commodities; com_node; com_node = com_node->next)
+    {
+      gnc_commodity *com = com_node->data;
+
+      gnc_commodity_table_remove (table, com);
+      make_random_changes_to_commodity (com);
+      gnc_commodity_table_insert (table, com);
+    }
+
+    g_list_free (commodities);
+  }
+
+  g_list_free (namespaces);
+}
+
 static GList *
 get_random_guids(int max)
 {
@@ -1166,7 +1332,7 @@ get_random_book (GNCSession *session)
 
   gnc_book_set_group (book, get_random_group (session));
 
-  /* make_random_pricedb (gnc_book_get_pricedb (book)); */
+  make_random_pricedb (session, gnc_book_get_pricedb (book));
 
   return book;
 }
@@ -1182,6 +1348,8 @@ get_random_session (void)
   book = gnc_session_get_book (session);
 
   gnc_book_set_group (book, get_random_group (session));
+
+  make_random_pricedb (session, gnc_book_get_pricedb (book));
 
   return session;
 }
@@ -1241,6 +1409,11 @@ make_random_changes_to_book (GNCSession *session, GNCBook *book)
   g_return_if_fail (session && book);
 
   make_random_changes_to_group (session, gnc_book_get_group (book));
+  make_random_changes_to_pricedb (session, gnc_book_get_pricedb (book));
+
+#if 0
+  make_random_changes_to_commodity_table (gnc_book_get_commodity_table (book));
+#endif
 }
 
 void

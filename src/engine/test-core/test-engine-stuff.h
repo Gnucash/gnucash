@@ -59,6 +59,10 @@ GNCSession * get_random_session (void);
 void add_random_transactions_to_session (GNCSession *session,
                                          gint num_transactions);
 
+void make_random_changes_to_commodity (gnc_commodity *com);
+void make_random_changes_to_commodity_table (gnc_commodity_table *table);
+void make_random_changes_to_price (GNCSession *session, GNCPrice *price);
+void make_random_changes_to_pricedb (GNCSession *session, GNCPriceDB *pdb);
 void make_random_changes_to_split (Split *split);
 void make_random_changes_to_transaction (GNCSession *session,
                                          Transaction *trans);
