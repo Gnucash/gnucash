@@ -95,6 +95,12 @@ struct _RegWindow
   /* pcd = "print check dialog" */
   gpointer pcd;
   gboolean read_only;
+
+  GtkWidget *reconciled_menu_item;
+  GtkWidget *cleared_menu_item;
+  GtkWidget *voided_menu_item;
+  GtkWidget *frozen_menu_item;
+  GtkWidget *unreconciled_menu_item;
 };
 
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
@@ -144,6 +150,8 @@ void gnc_register_exit_cb(GtkWidget *w, gpointer data);
 void gnc_register_report_account_cb(GtkWidget *w, gpointer data);
 void gnc_register_report_trans_cb(GtkWidget *w, gpointer data);
 void gnc_register_print_cb(GtkWidget *w, gpointer data);
+void gnc_register_show_all_status_cb(GtkWidget *widget, gpointer data);
+void gnc_register_show_one_status_cb(GtkWidget *widget, gpointer data);
 void gnc_register_date_cb(GtkWidget *widget, gpointer data);
 void gnc_register_date_show_all_cb(GtkWidget *w, gpointer data);
 void gnc_register_today_cb(GtkWidget *w, gpointer data);
@@ -327,6 +335,79 @@ gnc_date_range_set_sensitivities(RegWindow *regData)
     gtk_widget_set_sensitive(regDateData->end_date, TRUE);
     gtk_widget_set_sensitive(regDateData->today_button, TRUE);
   }
+}
+
+static void
+gnc_register_show_status(RegWindow *regData)
+{
+  RegDateWindow *regDateData;
+  GSList *param_list = NULL;
+  gboolean show_reconciled, show_unreconciled;
+  cleared_match_t how = 0;
+  Query *query;
+
+  if (!regData)
+    return;
+
+  if (!regData->ledger)
+    return;
+
+  if (GTK_CHECK_MENU_ITEM(regData->reconciled_menu_item)->active)
+    how |= CLEARED_RECONCILED;
+  if (GTK_CHECK_MENU_ITEM(regData->cleared_menu_item)->active)
+    how |= CLEARED_CLEARED;
+  if (GTK_CHECK_MENU_ITEM(regData->voided_menu_item)->active)
+    how |= CLEARED_VOIDED;
+  if (GTK_CHECK_MENU_ITEM(regData->frozen_menu_item)->active)
+    how |= CLEARED_FROZEN;
+  if (GTK_CHECK_MENU_ITEM(regData->unreconciled_menu_item)->active)
+    how |= CLEARED_NO;
+
+  query = gnc_ledger_display_get_query( regData->ledger );
+  if (!query)
+    return;
+
+  regDateData = regData->date_window;
+  if (regDateData == NULL)
+    return;
+
+  param_list = gncQueryBuildParamList (SPLIT_RECONCILE, NULL);
+  gncQueryPurgeTerms (query, param_list);
+  if (how == CLEARED_ALL)
+    return;
+
+  xaccQueryAddClearedMatch(query, how, QUERY_AND);
+}
+
+void
+gnc_register_show_one_status_cb(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_show_status(regData);
+
+  gnc_ledger_display_refresh (regData->ledger);
+}
+
+void
+gnc_register_show_all_status_cb(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+
+  /* 
+   * Don't call gtk_check_menu_item_set_active() because this would
+   * just generate a callback that would then need to be blocked. Set
+   * the bit directly so the menu items will be displayed correctly
+   * next time around.
+   */
+  GTK_CHECK_MENU_ITEM(regData->reconciled_menu_item)->active = TRUE;
+  GTK_CHECK_MENU_ITEM(regData->cleared_menu_item)->active = TRUE;
+  GTK_CHECK_MENU_ITEM(regData->voided_menu_item)->active = TRUE;
+  GTK_CHECK_MENU_ITEM(regData->frozen_menu_item)->active = TRUE;
+  GTK_CHECK_MENU_ITEM(regData->unreconciled_menu_item)->active = TRUE;
+  gnc_register_show_status(regData);
+
+  gnc_ledger_display_refresh (regData->ledger);
 }
 
 static void
@@ -885,6 +966,12 @@ regWindowLedger( GNCLedgerDisplay *ledger )
                       GTK_SIGNAL_FUNC( gnc_register_include_date_adapter ),
                       regData );
 
+  regData->reconciled_menu_item = glade_xml_get_widget( xml, "show_reconciled" );
+  regData->cleared_menu_item = glade_xml_get_widget( xml, "show_cleared" );
+  regData->voided_menu_item = glade_xml_get_widget( xml, "show_voided" );
+  regData->frozen_menu_item = glade_xml_get_widget( xml, "show_frozen" );
+  regData->unreconciled_menu_item = glade_xml_get_widget( xml, "show_unreconciled" );
+
   /* The menu bar. Menu extension setup needs to come *after* that. */
   gnc_register_setup_menu_widgets( regData, xml );
   gnc_extensions_menu_setup_with_data( GNOME_APP(register_window),
@@ -940,6 +1027,7 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   }
 
   gtk_widget_show_all( GTK_WIDGET(regData->window) );
+  gtk_widget_hide(regData->frozen_menu_item); // Is this state supported?
   gnc_window_adjust_for_screen( GTK_WINDOW(regData->window) );
 
   {
@@ -1013,7 +1101,7 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
   gtk_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
-  tmpMi = glade_xml_get_widget( xml, "gnc_register_date_range_mi" );
+  tmpMi = glade_xml_get_widget( xml, "gnc_register_select_trans_mi" );
   gtk_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (4 + adj) );

@@ -191,11 +191,13 @@ void xaccQueryAddDateMatchTT(Query * q,
                              int use_end, time_t ett,
                              QueryOp op);
 typedef enum {
-  CLEARED_NO         = 1 << 0,
-  CLEARED_CLEARED    = 1 << 1,
-  CLEARED_RECONCILED = 1 << 2, 
-  CLEARED_FROZEN     = 1 << 3,
-  CLEARED_VOIDED     = 1 << 4
+  CLEARED_NONE       = 0x0000,
+  CLEARED_NO         = 0x0001,
+  CLEARED_CLEARED    = 0x0002,
+  CLEARED_RECONCILED = 0x0004, 
+  CLEARED_FROZEN     = 0x0008,
+  CLEARED_VOIDED     = 0x0010,
+  CLEARED_ALL        = 0x001F
 } cleared_match_t;
 
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
