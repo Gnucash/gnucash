@@ -16,7 +16,6 @@
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "Group.h"
 #include "io-gncxml-v2.h"
 
  
@@ -26,9 +25,7 @@ main (int argc, char *argv[])
    int fake_argc =1;
    char * fake_argv[] = {"hello", 0};
    GNCBook *book;
-   AccountGroup *grp;
-   char *bufp = NULL;
-   int rc, sz = 0;
+   int rc;
    
    /* intitialize the engine */
    gnc_engine_init (fake_argc, fake_argv);
@@ -61,21 +58,14 @@ main (int argc, char *argv[])
       goto bookerrexit;
    }
 
-   /* the grp pointer points to our local cache of the data */
-   grp = gnc_book_get_group (book);
-   
- //  gncxml_write_to_buf(grp, &bufp, &sz);
-// write_pricedb_str (NULL, book);
-
-
    /* print the HTTP header */
    printf ("HTTP/1.1 200 OK\n");
    printf ("Content-Type: text/gnc-xml\r\n");
-   printf ("Content-Length: %d\r\n", sz);
+   // the current write interfaces don't give us a length :-( 
+   // printf ("Content-Length: %d\r\n", sz);
    printf ("\r\n");
 
-   printf ("%s", bufp);
-   free (bufp);
+   gnc_book_write_to_xml_filehandle_v2 (book, stdout);
 
 bookerrexit:
    /* close the book */
