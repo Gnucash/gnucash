@@ -1,3 +1,17 @@
+2001-04-23  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/engine/Account.c
+	  src/engine/Account.h: added xaccAccountGetBalanceAsOfDate and
+	xaccAccountGetShareBalanceAsOfDate, to determine the balance
+	of an account on a given date.
+
+	* src/gnome/window-reconcile.c: added appropriate callbacks
+	so that changes to the startRecnWindow date entry will update
+	the ending balance amount entry.  Once the user manually updates
+	the ending balance amount, the automatic updates will no longer
+	occur if the date entry is changed again.  Changed 
+   gnc_get_reconcile_info to use the *AsOfDate funcs if possible.
+
 2001-04-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-find-transactions.c: remove tags notebook page.

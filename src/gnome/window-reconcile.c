@@ -281,6 +281,82 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   return FALSE;
 }
 
+/* gnc_start_recn_date_changed needs to know the
+ * account and the amount edit to update.  Use this private
+ * structure to hand off that information.
+ * Don't need to include the date edit object since it's
+ * passed into gnc_start_recn_date_changed as the
+ * widget.
+ *
+ * Not sure if this is 100% the best way to do this...
+ */
+
+typedef struct start_recn_callback_data
+{
+   Account       *account;
+   GNCAmountEdit *gae;
+} start_recn_callback_data;
+
+/* After the user has modified the end_value field,
+ * don't do any more auto updates for the remaining
+ * life of the startRecnWindow.  Use this flag to keep track.
+ */
+static gboolean allow_auto_end_value_updates = TRUE;
+
+/* Note user changes to the startRecnWindow end_value amount edit */
+static void
+gnc_start_recn_end_val_cb (GtkWidget *widget, gpointer data)
+{
+  allow_auto_end_value_updates = FALSE;
+}
+
+/* If the user changed the date edit widget, and automatic
+ * ending balance updates are still allowed (i.e. the user
+ * hasn't manually updated the ending balance), update the
+ * ending balance to reflect the ending balance of the account
+ * on the date that the date edit was changed to.
+ */
+static void
+gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
+{
+  GNCDateEdit *gde = GNC_DATE_EDIT (widget);
+  start_recn_callback_data *cb_data = data;
+  Account *acc = cb_data->account;
+  GNCAccountType type = xaccAccountGetType( acc );
+  gboolean use_shares = ((type == STOCK) || (type == MUTUAL) ||
+                         (type == CURRENCY));
+  gnc_numeric new_balance;
+  time_t new_date;
+  GNCAmountEdit *gae;
+
+  if (allow_auto_end_value_updates)
+  {
+    new_date = gnc_date_edit_get_date_end (gde);
+
+    /* get the balance for the account as of the new date */
+    new_balance = use_shares ?
+      xaccAccountGetShareBalanceAsOfDate (acc, new_date) :
+      xaccAccountGetBalanceAsOfDate (acc, new_date);
+
+    gae = cb_data->gae;
+
+    /* Update the balance display widget, first blocking the "changed"
+     * signal to the callback above because this isn't a user change of
+     * the field.  Otherwise the emitted "changed" signal would prevent
+     * future automatic updates of the end_value field.
+     */
+    gtk_signal_handler_block_by_func(
+          GTK_OBJECT(gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae))),
+          GTK_SIGNAL_FUNC( gnc_start_recn_end_val_cb ),
+          gae );
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (gae), new_balance);
+    gtk_signal_handler_unblock_by_func(
+          GTK_OBJECT(gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae))),
+          GTK_SIGNAL_FUNC( gnc_start_recn_end_val_cb ),
+          gae );
+  }
+}
+
 /********************************************************************\
  * startRecnWindow                                                  *
  *   opens up the window to prompt the user to enter the ending     *
@@ -305,6 +381,11 @@ startRecnWindow(GtkWidget *parent, Account *account,
   gnc_numeric ending;
   char *title;
   int result;
+
+  /* This is a new startRecnWindow, so enable automatic
+   * updates of the ending balance amount edit widget.
+   */
+  allow_auto_end_value_updates = TRUE;
 
   account_type = xaccAccountGetType(account);
 
@@ -352,10 +433,22 @@ startRecnWindow(GtkWidget *parent, Account *account,
       gtk_label_new(xaccPrintAmount (ending, print_info));
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     GtkWidget *entry;
+    start_recn_callback_data cb_data = { NULL };
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
 
     end_value = gnc_amount_edit_new ();
+
+    /* Using local storage should be OK since this function doesn't return
+     * until the user is done with the dialog box.
+     */
+    cb_data.account = account;
+    cb_data.gae     = (GNCAmountEdit *)end_value;
+
+    /* need to get a callback on date changes to update the recn balance */
+    gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
+          GTK_SIGNAL_FUNC (gnc_start_recn_date_changed), (gpointer) &cb_data );
+
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
     if ((account_type == STOCK) || (account_type == MUTUAL) ||
@@ -373,6 +466,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
                        GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), end_value);
+
+    gtk_signal_connect(GTK_OBJECT(entry), "changed",
+                       GTK_SIGNAL_FUNC(gnc_start_recn_end_val_cb), end_value);
 
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
@@ -1287,6 +1383,7 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
 
 static void
 gnc_get_reconcile_info (Account *account,
+                        gboolean use_shares,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
@@ -1304,7 +1401,17 @@ gnc_get_reconcile_info (Account *account,
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);
 
-  xaccAccountGetReconcilePostponeBalance (account, new_ending);
+  if( !xaccAccountGetReconcilePostponeBalance (account, new_ending) )
+  {
+    /* if the account wasn't previously postponed, try to predict
+     * the statement balance based on the statement date.
+     */
+    if (use_shares)
+      *new_ending = xaccAccountGetShareBalanceAsOfDate(account, *statement_date);
+    else
+      *new_ending = xaccAccountGetBalanceAsOfDate(account, *statement_date);
+  }
+
 }
 
 static gboolean
@@ -1438,11 +1545,6 @@ recnWindow (GtkWidget *parent, Account *account)
   recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
                           (type == CURRENCY));
 
-  if (recnData->use_shares)
-    new_ending = xaccAccountGetShareBalance(account);
-  else
-    new_ending = xaccAccountGetBalance(account);
-
   /* The last time reconciliation was attempted during the current
    * execution of gnucash, the date was stored. Use that date if
    * possible. This helps with balancing multiple accounts for which
@@ -1453,7 +1555,7 @@ recnWindow (GtkWidget *parent, Account *account)
   else
      statement_date = last_statement_date;
 
-  gnc_get_reconcile_info (account, &new_ending, &statement_date);
+  gnc_get_reconcile_info (account, recnData->use_shares, &new_ending, &statement_date);
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */

@@ -1488,6 +1488,96 @@ xaccAccountGetShareReconciledBalance (Account *acc)
   return acc->share_reconciled_balance;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+static gnc_numeric
+get_balance_as_of_date (Account *acc, time_t date, gboolean use_shares)
+{
+  /* This is common code to handle both xaccAccountGetBalanceAsOfDate
+   * and xaccAccountGetShareBalanceAsOfDate.  use_shares is TRUE if the
+   * share balance is being requested.
+   */
+
+  /* Ideally this could use xaccAccountForEachSplit, but
+   * it doesn't exist yet and I'm uncertain of exactly how
+   * it would work at this time, since it differs from
+   * xaccAccountForEachTransaction by using gpointer return
+   * values rather than gbooleans.
+   */
+
+  GList   *lp;
+  Timespec ts, trans_ts;
+  gboolean found = FALSE;
+  gnc_numeric balance;
+  
+  balance = use_shares ?
+    xaccAccountGetShareBalance( acc ) : xaccAccountGetBalance( acc );
+
+  xaccAccountSortSplits( acc );   /* just in case, normally a nop */
+
+  /* Since transaction post times are stored as a Timespec,
+   * convert date into a Timespec as well rather than converting
+   * each transaction's Timespec into a time_t.
+   */
+
+  ts.tv_sec = date;
+  ts.tv_nsec = 0;
+
+  /* Do checks from xaccAccountRecomputeBalance.  balance_dirty isn't
+   * checked because it shouldn't be necessary.
+   */
+
+  if( NULL == acc ||
+      acc->editlevel > 0 ||
+      acc->do_free           )
+  {
+    return ( balance );
+  }
+
+  lp = xaccAccountGetSplitList( acc );
+  while( lp && !found )
+  {
+    xaccTransGetDatePostedTS( xaccSplitGetParent( (Split *)lp->data ),
+                              &trans_ts );
+    if( timespec_cmp( &trans_ts, &ts ) > 0 )
+      found = TRUE;
+    else
+      lp = lp->next;
+  }
+
+  if( lp && lp->prev )
+  {
+    /* Since lp is now pointing to a split which was past the reconcile
+     * date, get the running balance of the previous split.
+     */
+    balance = use_shares ?
+      xaccSplitGetShareBalance( (Split *)lp->prev->data ) :
+      xaccSplitGetBalance( (Split *)lp->prev->data );
+  }
+
+  /* Otherwise there were no splits posted after the given date,
+   * so the latest account balance should be good enough.
+   */
+
+  return( balance );
+}
+
+gnc_numeric
+xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
+{
+   return( get_balance_as_of_date( acc, date, FALSE ) );
+}
+
+gnc_numeric
+xaccAccountGetShareBalanceAsOfDate (Account *acc, time_t date)
+{
+   return( get_balance_as_of_date( acc, date, TRUE ) );
+}
+
+/********************************************************************\
+\********************************************************************/
+
 Split *
 xaccAccountGetSplit(Account *acc, int i) {
   GList *result;

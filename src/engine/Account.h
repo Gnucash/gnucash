@@ -252,6 +252,10 @@ gnc_numeric     xaccAccountGetShareBalance (Account *account);
 gnc_numeric     xaccAccountGetShareClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetShareReconciledBalance (Account *account);
 
+gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
+gnc_numeric     xaccAccountGetShareBalanceAsOfDate (Account *account,
+                                                    time_t date);
+
 Split *         xaccAccountGetSplit (Account *account, int i);
 int             xaccAccountGetNumSplits (Account *account);
 
