@@ -239,8 +239,10 @@ multi-user mode is fundamentally broken unless they are fixed.
    as to what this is about.  For the first pass, this is not a 
    serious issue; its a 'nice to have' thing.
 
--- bug: price editing from price edit gui only causes price to be deleted,
-   the new price is not stored ...
+-- bug: price editing from price edit gui causes date to be off
+   by one. This is because the editor sets date to midnight GMT,
+   and not the local timezone.  Editor should return noon, and
+   we should check the gmt/localtime issue.
 
 -- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)

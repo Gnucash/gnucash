@@ -40,15 +40,19 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;
 
+static gboolean add_price(GNCPriceDB *db, GNCPrice *p);
+static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
+
 /* ==================================================================== */
 /* GNCPrice functions
  */
 
 /* allocation */
 GNCPrice *
-gnc_price_create()
+gnc_price_create(void)
 {
   GNCPrice *p = g_new0(GNCPrice, 1);
+  ENTER(" ");
   p->refcount = 1;
   p->editlevel = 0;
   p->not_saved = FALSE;
@@ -63,6 +67,7 @@ gnc_price_create()
 static void 
 gnc_price_destroy (GNCPrice *p)
 {
+  ENTER(" ");
   gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
   xaccRemoveEntity(&p->guid);
 
@@ -84,6 +89,7 @@ void
 gnc_price_unref(GNCPrice *p)
 {
   if(!p) return;
+  ENTER("pr=%p refcount=%d", p, p->refcount);
   if(p->refcount == 0) {
     PERR("refcount == 0 !!!!");
     assert(p->refcount != 0);
@@ -107,6 +113,7 @@ gnc_price_clone(GNCPrice* p)
   /* the clone doesn't belong to a PriceDB */
   GNCPrice *new_p;
   
+  ENTER ("pr=%p", p);
   if(!p) return NULL;
   new_p = gnc_price_create();
   if(!new_p) return NULL;
@@ -134,6 +141,7 @@ gnc_price_begin_edit (GNCPrice *p)
   if (!p) return;
   p->editlevel++;
   if (1 < p->editlevel) return;
+  ENTER ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
 
   if (0 >= p->editlevel)
   {
@@ -154,6 +162,7 @@ gnc_price_begin_edit (GNCPrice *p)
     p->not_saved = TRUE;
   }
 
+  LEAVE ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
 }
 
 void 
@@ -164,6 +173,7 @@ gnc_price_commit_edit (GNCPrice *p)
   p->editlevel--;
   if (0 < p->editlevel) return;
 
+  ENTER ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
   if (0 > p->editlevel)
   {
     PERR ("unbalanced call - resetting (was %d)", p->editlevel);
@@ -196,6 +206,7 @@ gnc_price_commit_edit (GNCPrice *p)
   } else {
     p->not_saved = TRUE;
   }
+  LEAVE ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
 }
 
 /* ==================================================================== */
@@ -215,83 +226,113 @@ void
 gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(!gnc_commodity_equiv(p->commodity, c)) {
+
+  if(!gnc_commodity_equiv(p->commodity, c)) 
+  {
+    /* Changing the commodity requires the hash table 
+     * position to be modified. The easiest way of doing 
+     * this is to remove and reinsert. */
+    remove_price (p->db, p, FALSE);
+    gnc_price_begin_edit (p);
     p->commodity = c;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
+    add_price (p->db, p);
   }
-  gnc_price_commit_edit (p);
 }
+
 
 void
 gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(!gnc_commodity_equiv(p->currency, c)) {
+  if(!gnc_commodity_equiv(p->currency, c)) 
+  {
+    /* Changing the currency requires the hash table 
+     * position to be modified. The easiest way of doing 
+     * this is to remove and reinsert. */
+    remove_price (p->db, p, FALSE);
+    gnc_price_begin_edit (p);
     p->currency = c;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
+    add_price (p->db, p);
   }
-  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_time(GNCPrice *p, Timespec t)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(!timespec_equal(&(p->time), &t)) {
+  if(!timespec_equal(&(p->time), &t)) 
+  {
+    /* Changing the datesatamp requires the hash table 
+     * position to be modified. The easiest way of doing 
+     * this is to remove and reinsert. */
+    remove_price (p->db, p, FALSE);
+    gnc_price_begin_edit (p);
     p->time = t;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
+    add_price (p->db, p);
   }
-  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_source(GNCPrice *p, const char *s)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(safe_strcmp(p->source, s) != 0) {
-    GCache *cache = gnc_engine_get_string_cache();
-    char *tmp = g_cache_insert(cache, (gpointer) s);
+  if(safe_strcmp(p->source, s) != 0) 
+  {
+    GCache *cache;
+    char *tmp;
+
+    gnc_price_begin_edit (p);
+    cache = gnc_engine_get_string_cache();
+    tmp = g_cache_insert(cache, (gpointer) s);
     if(p->source) g_cache_remove(cache, p->source);
     p->source = tmp;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
   }
-  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_type(GNCPrice *p, const char* type)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(safe_strcmp(p->type, type) != 0) {
-    GCache *cache = gnc_engine_get_string_cache();
-    gchar *tmp = g_cache_insert(cache, (gpointer) type);
+  if(safe_strcmp(p->type, type) != 0) 
+  {
+    GCache *cache;
+    gchar *tmp;
+
+    gnc_price_begin_edit (p);
+    cache = gnc_engine_get_string_cache();
+    tmp = g_cache_insert(cache, (gpointer) type);
     if(p->type) g_cache_remove(cache, p->type);
     p->type = tmp;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
   }
-  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_value(GNCPrice *p, gnc_numeric value)
 {
   if(!p) return;
-  gnc_price_begin_edit (p);
-  if(!gnc_numeric_eq(p->value, value)) {
+  if(!gnc_numeric_eq(p->value, value)) 
+  {
+    gnc_price_begin_edit (p);
     p->value = value;
     if(p->db) p->db->dirty = TRUE;
+    gnc_price_commit_edit (p);
   }
-  gnc_price_commit_edit (p);
 }
 
 void
 gnc_price_set_version(GNCPrice *p, gint32 vers)
 {
+  /* begin/end edit is inappropriate here, this is a backend thing only. */
   if(!p) return;
   p->version = vers;
 }
@@ -401,8 +442,7 @@ gnc_price_list_insert(GList **prices, GNCPrice *p)
 {
   GList *result_list;
 
-  if(!prices) return FALSE;
-  if(!p) return FALSE;
+  if(!prices || !p) return FALSE;
   gnc_price_ref(p);
   result_list = g_list_insert_sorted(*prices, p, compare_prices_by_date);
   if(!result_list) return FALSE;
@@ -416,8 +456,7 @@ gnc_price_list_remove(GList **prices, GNCPrice *p)
   GList *result_list;
   GList *found_element;
 
-  if(!prices) return FALSE;
-  if(!p) return FALSE;
+  if(!prices || !p) return FALSE;
   
   found_element = g_list_find(*prices, p);
   if(!found_element) return TRUE;
@@ -526,9 +565,11 @@ gnc_pricedb_mark_clean(GNCPriceDB *p)
 }
 
 /* ==================================================================== */
+/* The add_price() function is a utility that only manages the 
+ * dual hash table instertion */
 
-gboolean
-gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
+static gboolean
+add_price(GNCPriceDB *db, GNCPrice *p)
 {
   /* this function will use p, adding a ref, so treat p as read-only
      if this function succeeds. */
@@ -538,6 +579,7 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
   commodity = gnc_price_get_commodity(p);
   if(!commodity) {
     PWARN("no commodity");
@@ -562,25 +604,45 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
 
+  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+  return TRUE;
+}
+
+/* the gnc_pricedb_add_price() function will use p, adding a ref, so treat p as read-only
+   if this function succeeds. (Huh ???) */
+gboolean
+gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
+{
+
+  if(!db || !p) return FALSE;
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+
+  if (FALSE == add_price(db, p)) return FALSE;
+
   /* if we haven't been able to call the backend before, call it now */
   if (TRUE == p->not_saved) {
     gnc_price_begin_edit(p);
     db->dirty = TRUE;
     gnc_price_commit_edit(p);
   }
+  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
   return TRUE;
 }
 
-gboolean
-gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
+/* remove_price() is a utility; its only function is to remove the price
+ * from the double-hash tables.
+ */
+
+static gboolean
+remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
 {
-  guint num_currencies;
   GList *price_list;
   gnc_commodity *commodity;
   gnc_commodity *currency;
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
   commodity = gnc_price_get_commodity(p);
   if(!commodity) return FALSE;
   currency = gnc_price_get_currency(p);
@@ -603,14 +665,31 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   } else {
     g_hash_table_remove(currency_hash, currency);
 
-    /* chances are good that this commodity had only one currency ... 
-     * if there are no currencies, we may as well destroy the commodity  too. */
-    num_currencies = g_hash_table_size (currency_hash);
-    if (0 == num_currencies) {
-      g_hash_table_remove (db->commodity_hash, commodity);
-      g_hash_table_destroy (currency_hash);
+    if (cleanup) {
+      /* chances are good that this commodity had only one currency ... 
+       * if there are no currencies, we may as well destroy the commodity  too. */
+      guint num_currencies = g_hash_table_size (currency_hash);
+      if (0 == num_currencies) {
+        g_hash_table_remove (db->commodity_hash, commodity);
+        g_hash_table_destroy (currency_hash);
+      }
     }
   }
+
+  gnc_price_unref(p);
+  LEAVE ("db=%p, pr=%p", db, p);
+  return TRUE;
+}
+
+gboolean
+gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
+{
+  gboolean rc;
+  if(!db || !p) return FALSE;
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+
+  gnc_price_ref(p);
+  rc = remove_price (db, p, TRUE);
 
   /* invoke the backend to delete this price */
   gnc_price_begin_edit (p);
@@ -620,7 +699,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 
   p->db = NULL;
   gnc_price_unref(p);
-  return TRUE;
+  LEAVE ("db=%p, pr=%p", db, p);
+  return rc;
 }
 
 /* ==================================================================== */
