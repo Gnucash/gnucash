@@ -10,13 +10,13 @@ IF YOU WANT TO USE XACC, USE VERSION 1.0.17 INSTEAD!!
 ##############################################
 
 
-X-Accountant
-------------
+GnuCash
+-------
 
-xacc is a program to keep track of your finances.  It is similar in
-concept to Quicken(TM).  Although xacc still lacks the advanced
-features of quicken, it does have the basic functionality.  Some
-of the features of xacc are:
+gnucash is a program to keep track of your finances.  It is similar in
+concept to Quicken(TM).  Although GnuCash still lacks the advanced
+features of Quicken, it does have the basic functionality.  Some
+of the features of GnuCash are:
 
   - Multiple Accounts
   - Each account keeps a running balance and
@@ -24,7 +24,7 @@ of the features of xacc are:
     of the checks that have clear your account.
   - A simple interface.  If you can use the
     register in the back of your checkbook,
-    you can use xacc.
+    you can use GnuCash.
   - QuickFill... if you begin typing a description
     in the description fields, and it matches an
     previous transaction, hitting <TAB> will copy
@@ -39,7 +39,7 @@ of the features of xacc are:
 
 Advanced Features
 -----------------
-X-Accountant offers some features not usually found
+GnuCash offers some features not usually found
 in simpler accounting programs.
   - Sub-accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
@@ -73,6 +73,10 @@ in simpler accounting programs.
 
 Home Page:
 ----------
+http://gnucash.ml.org/
+http://gnucash.org/
+
+Origianl X-Accountant home page:
 http://www.cs.hmc.edu/~rclark/xacc
 
 Important Note:
@@ -108,10 +112,10 @@ or, for bash/bsh/ksh/sh
 % set XACC_HELP=/usr/local/share/xacc/Docs
 % export XACC_HELP
 
-You can then start xacc at the command-line, with
-"xacc" or "xacc <filename>", where <filename> is an
-xacc account file.  Sample accounts can be found in 
-"data" subdirectory.  *.dat files are xacc accounts that can 
+You can then start GnuCash at the command-line, with
+"xacc" or "xacc <filename>", where <filename> is a
+GnuCash account file.  Sample accounts can be found in 
+"data" subdirectory.  *.dat files are GnuCash accounts that can 
 opened with the "Open File" menu entry.  *.qif files are
 Quicken Import Format files that can be opened with the 
 "Import QIF" menu entry.
@@ -122,14 +126,14 @@ Building & Installing:
 These steps does not apply to binary distributions; only to
 source distributions.
 
-Normally, to build and install xacc, all you have to do is:
+Normally, to build and install GnuCash, all you have to do is:
 
   # ./configure
   # make depend
   # make
   # make install
 
-You can also build xacc in a seperate directory, which is
+You can also build GnuCash in a seperate directory, which is
 useful if you are compiling for several platforms from a
 single copy of the source tree:
 
@@ -149,7 +153,7 @@ Status:
 -------
 As of version 1.0.16:
 
-xacc is known to work in the following configs:
+GnuCash is known to work in the following configs:
 Linux 2.0.x           -- Intel  w/ RedHat Motif
 Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
 Linux 2.0.x           -- Intel  w/ Lesstif v0.81
@@ -160,7 +164,7 @@ SCO OpenServer 5.0.4  -- Intel
 
 See http://linas.org/linux/xacc for precompiled binaries for these platforms
 
-xacc seems to be having problems with:
+GnuCash seems to be having problems with:
 Solaris -- Sparc  -- won't compile due to va-args in XmHTML
 Linux 2.0.x -- Intel w/ Lesstif v0.82
 
@@ -211,8 +215,8 @@ cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
 Main Developers:
 ----------------
 Rob Browning <rlb@cs.utexas.edu> for perl, scheme & GTK graphing
-Robin Clark <rclark@hmc.edu> for original xacc
-Jeremy Collins <linux@cyberramp.net> for GTK port
+Robin Clark <rclark@hmc.edu> for original X-Accountant
+Jeremy Collins <linux@cyberramp.net> for GnuCash web site & GTK port
 Linas Vepstas <linas@linas.org> for extensive enhancements
 
 
