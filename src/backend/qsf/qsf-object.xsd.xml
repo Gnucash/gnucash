@@ -1,0 +1,103 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+targetNamespace="urn:qof-qsf-container" xmlns="urn:qof-qsf-container">
+ <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+	Query Object Framework Serialization Format (QSF)
+	Copyright 2004 Neil Williams linux@codehelp.co.uk
+	QSF is part of QOF.
+	QOF is free software; you can redistribute it and/or modify it
+	under the terms of the GNU General Public License as published by the
+	Free Software Foundation; either version 2 of the License, or (at your
+	option) any later version.
+	This program is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details.
+	You should have received a copy of the GNU General Public License along
+	with this program; if not, write to the Free Software Foundation, Inc., 59
+	Temple	Place, Suite 330, Boston, MA 02111-1307 USA
+    </xsd:documentation>
+  </xsd:annotation>
+<xsd:element name="qof-qsf" type="qsf-type"/>
+<xsd:complexType name="qsf-type">
+ <xsd:sequence>
+   <xsd:element name="book" type="qofbook"/>
+ </xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="qofbook">
+ <xsd:sequence>
+   <xsd:element name="book-guid" type="xsd:string"/>
+   <xsd:element name="object" type="qsfobject" minOccurs="1" maxOccurs="unbounded"/>
+ </xsd:sequence>
+ <xsd:attribute name="count" type="xsd:positiveInteger"/>
+</xsd:complexType>
+<xsd:complexType name="qsfobject">
+ <xsd:sequence>
+   <xsd:element name="string" minOccurs="0" maxOccurs="unbounded">
+     <xsd:complexType>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+       <xsd:attribute name="type" type="xsd:string"/>
+      </xsd:extension>
+     </xsd:simpleContent>
+     </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="guid" minOccurs="0" maxOccurs="unbounded">
+   <xsd:complexType>
+   <xsd:simpleContent>
+     <xsd:extension base="xsd:string">
+       <xsd:attribute name="type" type="xsd:string"/>
+     </xsd:extension>
+    </xsd:simpleContent>
+   </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="boolean" minOccurs="0" maxOccurs="unbounded">
+     <xsd:complexType>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:boolean">
+       <xsd:attribute name="type" type="xsd:string"/>
+      </xsd:extension>
+     </xsd:simpleContent>
+     </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="numeric" minOccurs="0" maxOccurs="unbounded">
+   <xsd:complexType>
+    <xsd:simpleContent>
+     <xsd:extension base="xsd:string">
+      <xsd:attribute name="type" type="xsd:string"/>
+     </xsd:extension>
+    </xsd:simpleContent>
+   </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="date" minOccurs="0" maxOccurs="unbounded" >
+     <xsd:complexType>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:dateTime">
+       <xsd:attribute name="type" type="xsd:string"/>
+      </xsd:extension>
+     </xsd:simpleContent>
+     </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="gint32" minOccurs="0" maxOccurs="unbounded">
+     <xsd:complexType>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:int">
+       <xsd:attribute name="type" type="xsd:string"/>
+      </xsd:extension>
+     </xsd:simpleContent>
+     </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="gint64" minOccurs="0" maxOccurs="unbounded">
+     <xsd:complexType>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:int">
+       <xsd:attribute name="type" type="xsd:string"/>
+      </xsd:extension>
+     </xsd:simpleContent>
+     </xsd:complexType>
+   </xsd:element>
+</xsd:sequence>
+ <xsd:attribute name="type" type="xsd:string"/>
+ <xsd:attribute name="count" type="xsd:positiveInteger"/>
+</xsd:complexType>
+</xsd:schema>

@@ -55,6 +55,9 @@ typedef enum
     GNC_BOOK_BIN_FILE,
     GNC_BOOK_XML1_FILE,
     GNC_BOOK_XML2_FILE,
+    QSF_GNC_OBJECT,
+    QSF_OBJECT,
+    QSF_MAP,
 } QofBookFileType;
 
 QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);

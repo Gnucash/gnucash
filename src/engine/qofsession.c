@@ -310,76 +310,6 @@ qof_session_get_url (QofSession *session)
 }
 
 /* ====================================================================== */
-
-#ifdef GNUCASH_MAJOR_VERSION 
-
-static void
-qof_session_int_backend_load_error(QofSession *session,
-                                   char *message, char *dll_err)
-{
-    PWARN ("%s %s", message, dll_err ? dll_err : "");
-
-    g_free(session->book_id);
-    session->book_id = NULL;
-
-    qof_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
-}
-
-/* Gnucash uses its module system to load a backend; other users
- * use traditional dlopen calls.
- */
-static void
-qof_session_load_backend(QofSession * session, char * backend_name)
-{
-  GNCModule  mod = 0;
-  QofBackend    *(* be_new_func)(void);
-  char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
-
-  /* FIXME : reinstate better error messages with gnc_module errors */
-  ENTER (" ");
-  /* FIXME: this needs to be smarter with version numbers. */
-  /* FIXME: this should use dlopen(), instead of guile/scheme, 
-   *    to load the modules.  Right now, this requires the engine to
-   *    link to scheme, which is an obvious architecture flaw. 
-   *    XXX this is fexed below, in the non-gnucash version. Cut
-   *    over at some point.
-   */
-  mod = gnc_module_load(mod_name, 0);
-
-  if (mod) 
-  {
-    be_new_func = gnc_module_lookup(mod, "gnc_backend_new");
-
-    if(be_new_func) 
-    {
-      GList *node;
-      session->backend = be_new_func();
-
-      for (node=session->books; node; node=node->next)
-      {
-         QofBook *book = node->data;
-         qof_book_set_backend (book, session->backend);
-      }
-    }
-    else
-    {
-      qof_session_int_backend_load_error(session, " can't find backend_new ",
-                                         "");
-    }      
-  }
-  else
-  {
-    qof_session_int_backend_load_error(session,
-                                       " failed to load '%s' backend", 
-                                       backend_name);
-  }
-
-  g_free(mod_name);
-  LEAVE (" ");
-}
-
-#else /* GNUCASH */
-
 /* Specify a library, and a function name. Load the library, 
  * call the function name in the library.  */
 static void
@@ -404,6 +334,111 @@ load_backend_library (const char * libso, const char * loadfn)
 	}
 }
 
+#ifdef GNUCASH_MAJOR_VERSION 
+
+static void
+qof_session_int_backend_load_error(QofSession *session,
+                                   char *message, char *dll_err)
+{
+    PWARN ("%s %s", message, dll_err ? dll_err : "");
+
+    g_free(session->book_id);
+    session->book_id = NULL;
+
+    qof_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
+}
+
+/* Gnucash uses its module system to load a backend; other users
+ * use traditional dlopen calls.
+ */
+static void
+qof_session_load_backend(QofSession * session, char * backend_name)
+{
+  GSList *p;
+  GList *node;
+  QofBook *book;
+  GNCModule  mod = 0;
+  QofBackend    *(* be_new_func)(void);
+  char 	*access_method;
+  char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
+
+  /* FIXME : reinstate better error messages with gnc_module errors */
+  ENTER (" ");
+  /* FIXME: this needs to be smarter with version numbers. */
+  /* FIXME: this should use dlopen(), instead of guile/scheme, 
+   *    to load the modules.  Right now, this requires the engine to
+   *    link to scheme, which is an obvious architecture flaw. 
+   *    XXX this is fexed below, in the non-gnucash version. Cut
+   *    over at some point.
+   */
+
+  mod = gnc_module_load(mod_name, 0);
+
+  if (mod) 
+  {
+    be_new_func = gnc_module_lookup(mod, "gnc_backend_new");
+
+    if(be_new_func) 
+    {
+      session->backend = be_new_func();
+
+      for (node=session->books; node; node=node->next)
+      {
+         book = node->data;
+         qof_book_set_backend (book, session->backend);
+      }
+    }
+    else
+    {
+      qof_session_int_backend_load_error(session, " can't find backend_new ",
+                                         "");
+    }      
+  }
+  else
+  {
+	/* QSF is built for the QOF version, use that if no module is found.
+	  This allows the GnuCash version to be called with an access method,
+	  as it would be in QOF, instead of a resolved module name.
+	*/
+	access_method = g_strdup(backend_name);
+	if (NULL == provider_list)
+	{
+        load_backend_library ("libqsf-backend-file.so", "qsf_provider_init" );
+  }
+	for (p = provider_list; p; p=p->next)
+	{
+		QofBackendProvider *prov = p->data;
+
+		/* Does this provider handle the desired access method? */
+		if (0 == strcasecmp (access_method, prov->access_method))
+		{
+			if (NULL == prov->backend_new) continue;
+
+			/* Use the providers creation callback */
+        	session->backend = (*(prov->backend_new))();
+
+			/* Tell the books about the backend that they'll be using. */
+			for (node=session->books; node; node=node->next)
+	{
+				book = node->data;
+				qof_book_set_backend (book, session->backend);
+			}
+		return;
+	}
+	}
+	qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, NULL);
+
+/*    qof_session_int_backend_load_error(session,
+                                       " failed to load '%s' backend", 
+                                       backend_name);*/
+    g_free(access_method);
+	}
+  g_free(mod_name);
+  LEAVE (" ");
+}
+
+#else /* GNUCASH */
+
 static void
 qof_session_load_backend(QofSession * session, char * access_method)
 {
@@ -411,10 +446,11 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	ENTER (" ");
 
 	/* If the provider list is null, try to register the 'well-known'
-	 *  backends. Right now, there's only one. */
+	 *  backends. Right now, there are only two. */
 	if (NULL == provider_list)
 	{
 		load_backend_library ("libqof_backend_dwi.so", "dwiend_provider_init");
+        load_backend_library ("libqsf-backend-file.so", "qsf_provider_init" );
 	}
 
 	for (p = provider_list; p; p=p->next)

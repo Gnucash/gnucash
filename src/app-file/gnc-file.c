@@ -176,6 +176,56 @@ show_session_error (QofBackendError io_error, const char *newfile)
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
+	/* QSF additions */
+	case ERR_QSF_INVALID_OBJ: {
+		fmt = _("Invalid QSF Object file!\n"
+			"The QSF object file\n%s\n failed to validate"
+			" against the QSF object schema.\nThe XML structure of the file"
+			" is either not well-formed or contains illegal data.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break; 
+	}
+	case ERR_QSF_INVALID_MAP: {
+		fmt = _("Invalid QSF Map file!\n"
+			"The QSF map file\n%s\n failed to validate "
+			" against the QSF map schema.\nThe XML structure of the file"
+			" is either not well-formed or contains illegal data.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break; 
+	}
+	case ERR_QSF_BAD_QOF_VERSION: {
+		fmt = _("The QSF Map file\n%s\nwas written for a different version of QOF\n"
+			"It may need to be modified to work with your current QOF installation.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break; 
+	}
+	case ERR_QSF_BAD_MAP: {
+		fmt = _("The selected QSF map\n%s\ncontains unusable data."
+			"  This is usually because not all the required parameters for "
+			" the defined objects have calculations described in the map.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break; 
+	}
+	case ERR_QSF_NO_MAP: {
+		fmt = _("The selected QSF Object file\n%s\nrequires a map but it was not provided.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break; 
+	}
+	case ERR_QSF_WRONG_MAP: {
+		fmt = _("Wrong QSF map selected.\n"
+			"The selected map,\n%s\n validates but was written"
+			"for different QOF objects.\n The list of objects defined in "
+			"this map does not include all the objects described in"
+			"the current QSF object file.");
+	  gnc_error_dialog(parent, fmt, newfile);
+	  break; 
+	}
+	case ERR_QSF_MAP_NOT_OBJ: {
+	  fmt = _("The selected file %s is a QSF map and cannot be "
+			"opened as a QSF object.");
+	  gnc_error_dialog(parent, fmt, newfile);
+	  break; 
+	}
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file.\n"
               "Do you want to continue?");

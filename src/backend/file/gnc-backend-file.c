@@ -58,6 +58,7 @@
 #include "qofbackend-p.h"
 #include "qofbook-p.h"
 #include "qofsession.h"
+#include "qsf-xml.h"
 
 static short module = MOD_BACKEND;
 
@@ -396,6 +397,12 @@ gnc_file_be_determine_file_type(const char *path)
         return GNC_BOOK_XML1_FILE;
     } else if(is_gzipped_file(path)) {
         return GNC_BOOK_XML2_FILE;
+    } else if(is_our_qsf_object(path)) {
+        return QSF_GNC_OBJECT;  /**< QSF object file using only GnuCash QOF objects */
+	} else if(is_qsf_object(path)) {
+		return QSF_OBJECT;  	/**< QSF object file that needs a QSF map */
+	} else if(is_qsf_map(path)) {
+		return QSF_MAP;  		/**< QSF map file */
     } else {
         return GNC_BOOK_BIN_FILE;
     }
@@ -806,10 +813,11 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
 static void
 gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
 {
-    QofBackendError error = ERR_BACKEND_NO_ERR;
+    QofBackendError error;
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
 
+	error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;
 
     switch (gnc_file_be_determine_file_type(be->fullpath))
@@ -824,12 +832,24 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
+	case QSF_GNC_OBJECT:
+		error = qof_session_load_our_qsf_object(qof_session_get_current_session(), be->fullpath);
+		break;
+
+	case QSF_OBJECT:
+		/* a QSF object file needs a QSF map to convert external objects */
+		error = qof_session_load_qsf_object(qof_session_get_current_session(), be->fullpath);
+		break;
+
+	case QSF_MAP:
+		error = ERR_QSF_MAP_NOT_OBJ;
+		break;
+
     case GNC_BOOK_BIN_FILE:
         /* presume it's an old-style binary file */
         qof_session_load_from_binfile(book, be->fullpath);
         error = gnc_get_binfile_io_error();
         break;
-
     default:
         PWARN("File not any known type");
         error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
