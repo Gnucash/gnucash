@@ -126,7 +126,7 @@ unsigned                 delete_var(char *var_name,
                                     parser_env_ptr pe);
 /* Line Number: 451 */
 char                    *parse_string(var_store_ptr value,
-                                      char *string,
+                                      const char *string,
                                       parser_env_ptr pe);
 
 /*==================================================*/

@@ -29,7 +29,7 @@ parser_env_ptr init_parser(
                            var_store_ptr  predefined_vars,
                            char  radix_point,
                            char  group_char,
-                           void          *trans_numeric(char  *digit_str,
+                           void          *trans_numeric(const char *digit_str,
                                                         char   radix_point,
                                                         char   group_char,
                                                         char **rstr),

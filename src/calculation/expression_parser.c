@@ -382,7 +382,7 @@ typedef struct parser_env {
 
     var_store_ptr  unnamed_vars;
 
-    char *parse_str;
+    const char *parse_str;
     char  radix_point;
     char  group_char;
     char  name[50];
@@ -393,7 +393,7 @@ typedef struct parser_env {
     ParseError error_code;
 
     void          *numeric_value;
-    void         *(*trans_numeric)(char  *digit_str,
+    void         *(*trans_numeric)(const char *digit_str,
                                    char   radix_point,
                                    char   group_char,
                                    char **rstr);
@@ -423,7 +423,7 @@ parser_env_ptr
 init_parser(var_store_ptr  predefined_vars,
             char  radix_point,
             char  group_char,
-            void          *trans_numeric(char  *digit_str,
+            void          *trans_numeric(const char *digit_str,
                                          char   radix_point,
                                          char   group_char,
                                          char **rstr),
@@ -530,7 +530,7 @@ unsigned       delete_var(char *var_name,
  * error occured. */
 char *
 parse_string(var_store_ptr value,
-             char *string,
+             const char *string,
              parser_env_ptr pe)
 {
     var_store_ptr  retv;
@@ -560,7 +560,7 @@ parse_string(var_store_ptr value,
 
     pe->unnamed_vars = NULL;
 
-    return pe->parse_str;
+    return (char *) pe->parse_str;
 } /* expression */
 
 /* pop value off value stack */
@@ -670,8 +670,8 @@ static void    free_var(var_store_ptr  value,
  */
 static void next_token(parser_env_ptr       pe)
 {
-    char *nstr,
-         *str_parse = pe->parse_str;
+    char *nstr;
+    const char *str_parse = pe->parse_str;
     void *number;
 
     while ( isspace(*str_parse) ) str_parse++;

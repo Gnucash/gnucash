@@ -82,7 +82,7 @@ static double pos_table[] = {
  *
  */
 void           *trans_numeric(
-char  *str,              /* pointer to string to translate */
+const char *str,              /* pointer to string to translate */
 char   radix_point,      /* radix character                */
 char   group_char,       /* grouping character to left of radix  */
 char **endstr)           /* where to return pointer to first unrecognized character */
@@ -99,7 +99,7 @@ char **endstr)           /* where to return pointer to first unrecognized charac
 	unsigned       radix = 0,
 	               sign = 0,
 	               digit_cnt = 0;
-	char          *strinit = str;
+	const char    *strinit = str;
 	numeric_ptr    rslt = NULL;
 
 	while ( isspace(*str) ) str++;
@@ -225,8 +225,8 @@ char **endstr)           /* where to return pointer to first unrecognized charac
     } /* endif */
 	
 	if ( endstr ) {
-	   if ( !digit_cnt ) *endstr = strinit;
-	     else *endstr = str;
+	   if ( !digit_cnt ) *endstr = (char *) strinit;
+	     else *endstr = (char *) str;
 	} /* endif */
 	
 	return (void *)rslt;
