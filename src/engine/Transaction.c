@@ -1337,7 +1337,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
        * doesn't mean the denominators are the same! */
       if (base_currency &&
           gnc_commodity_equiv(currency, base_currency)) {
-        value = gnc_numeric_add(value, s->amount,
+        value = gnc_numeric_add(value, s->value,
                                 GNC_DENOM_AUTO, GNC_DENOM_LCD);
       }
       else if (base_currency && 

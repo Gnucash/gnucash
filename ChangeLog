@@ -1,4 +1,9 @@
-2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Derek Atkins  <derek@ihtfp.com>
+
+	* revert patch in src/engine/Transaction.c -- imbalance is computed
+	  by _value_ -- ALWAYS.
+
+2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	Huge patch, this is the new generic import 
 	architecture/transaction matcher.  Many old
@@ -64,6 +69,9 @@
 	  the amount to the txn currency if necessary in cases where all
 	  accounts involved in a split are different (strange edge case).
 	  Fixes #100277
+
+	* src/register/ledger-core/split-register-model-save.c -- Handle
+	  the case where only the exchrate changed.  Actually change it!
 	
 2002-12-06  David Hampton  <hampton@employees.org>
 
