@@ -218,6 +218,15 @@ traverseCB() callback that is called when user tabs through sequence of
     cells.  This callback allows a sequence of cells to be defined
     for tabbing trhough.
 
+Under the covers, XbaeMatrix uses the Motif Text Widget to create
+"cooked" strings out of raw key/button presses.  The Motif Text
+Widget automatically handles french/german/icelandic/cyrillic keyboards,
+it handles the shift, alt & delete keys automatically, it handles
+the delete/backspace keys automatically, it handles middle-mouse
+paste automatically, etc.  The resulting "cooked" strings are passed
+to the register code (in table-motif.c) which then hands it off to the
+cell handlers.
+
 That's pretty much it, except for some assorted gui-independent setup.
 
 
