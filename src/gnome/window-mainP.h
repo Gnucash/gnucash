@@ -33,9 +33,8 @@ struct _GNCMainInfo
   GtkWidget *assets_label;
   GtkWidget *profits_label;
 
-  SCM tree_change_callback_1;
-  SCM tree_change_callback_2;
-  SCM toolbar_change_callback;
+  SCM main_window_change_callback_id;
+  SCM toolbar_change_callback_id;
 
   GSList *account_sensitives;
 };

@@ -267,6 +267,25 @@ gnc_lookup_color_option_argb(const char *section, const char *name,
 
 
 /********************************************************************\
+ * gnc_lookup_list_option                                           *
+ *   looks up a list option. If present, returns its value as a     *
+ *   list of strings representing the symbols.                      *
+ *                                                                  *
+ * Args: section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       default_value - default value to return if problem         *
+ * Return: list of values                                           *
+\********************************************************************/
+GSList *
+gnc_lookup_list_option(const char *section, const char *name,
+                       GSList *default_value)
+{
+  return gnc_option_db_lookup_list_option(global_options, section, name,
+                                          default_value);
+}
+
+
+/********************************************************************\
  * gnc_set_option_default                                           *
  *   set the option to its default value                            *
  *                                                                  *

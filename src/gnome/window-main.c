@@ -418,9 +418,11 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
 {
   GNCMainInfo *main_info = user_data;
 
-  gnc_unregister_option_change_callback_id(main_info->tree_change_callback_1);
-  gnc_unregister_option_change_callback_id(main_info->tree_change_callback_2);
-  gnc_unregister_option_change_callback_id(main_info->toolbar_change_callback);
+  gnc_unregister_option_change_callback_id
+    (main_info->main_window_change_callback_id);
+
+  gnc_unregister_option_change_callback_id
+    (main_info->toolbar_change_callback_id);
 
   g_slist_free(main_info->account_sensitives);
   main_info->account_sensitives = NULL;
@@ -472,110 +474,91 @@ gnc_configure_account_tree(void *data)
   GNCAccountTree *tree;
   AccountViewInfo new_avi;
   AccountViewInfo old_avi;
+  GSList *list, *node;
+
+  memset(&new_avi, 0, sizeof(new_avi));
 
   app = GTK_OBJECT(gnc_get_ui_data());
-  tree = gnc_get_current_account_tree();
 
+  tree = gnc_get_current_account_tree();
   if (tree == NULL)
     return;
 
+  list = gnc_lookup_list_option("Main Window",
+                                "Account types to display",
+                                NULL);
+
+  for (node = list; node != NULL; node = node->next)
+  {
+    if (safe_strcmp(node->data, "bank") == 0)
+      new_avi.include_type[BANK] = TRUE;
+
+    else if (safe_strcmp(node->data, "cash") == 0)
+      new_avi.include_type[CASH] = TRUE;
+
+    else if (safe_strcmp(node->data, "credit") == 0)
+      new_avi.include_type[CREDIT] = TRUE;
+
+    else if (safe_strcmp(node->data, "asset") == 0)
+      new_avi.include_type[ASSET] = TRUE;
+
+    else if (safe_strcmp(node->data, "liability") == 0)
+      new_avi.include_type[LIABILITY] = TRUE;
+
+    else if (safe_strcmp(node->data, "stock") == 0)
+      new_avi.include_type[STOCK] = TRUE;
+
+    else if (safe_strcmp(node->data, "mutual") == 0)
+      new_avi.include_type[MUTUAL] = TRUE;
+
+    else if (safe_strcmp(node->data, "currency") == 0)
+      new_avi.include_type[CURRENCY] = TRUE;
+
+    else if (safe_strcmp(node->data, "income") == 0)
+      new_avi.include_type[INCOME] = TRUE;
+
+    else if (safe_strcmp(node->data, "expense") == 0)
+      new_avi.include_type[EXPENSE] = TRUE;
+
+    else if (safe_strcmp(node->data, "equity") == 0)
+      new_avi.include_type[EQUITY] = TRUE;
+  }
+
+  gnc_free_list_option_value(list);
+
+  list = gnc_lookup_list_option("Main Window",
+                                "Account fields to display",
+                                NULL);
+
+  for (node = list; node != NULL; node = node->next)
+  {
+    if (safe_strcmp(node->data, "type") == 0)
+      new_avi.show_field[ACCOUNT_TYPE] = TRUE;
+
+    else if (safe_strcmp(node->data, "code") == 0)
+      new_avi.show_field[ACCOUNT_CODE] = TRUE;
+
+    else if (safe_strcmp(node->data, "description") == 0)
+      new_avi.show_field[ACCOUNT_DESCRIPTION] = TRUE;
+
+    else if (safe_strcmp(node->data, "notes") == 0)
+      new_avi.show_field[ACCOUNT_NOTES] = TRUE;
+
+    else if (safe_strcmp(node->data, "currency") == 0)
+      new_avi.show_field[ACCOUNT_CURRENCY] = TRUE;
+
+    else if (safe_strcmp(node->data, "security") == 0)
+      new_avi.show_field[ACCOUNT_SECURITY] = TRUE;
+
+    else if (safe_strcmp(node->data, "balance") == 0)
+      new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
+  }
+
+  gnc_free_list_option_value(list);
+
+  new_avi.show_field[ACCOUNT_NAME] = TRUE;
+
   gnc_account_tree_get_view_info(tree, &old_avi);
-
-  new_avi.include_type[BANK] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show bank accounts",
-			      old_avi.include_type[BANK]);
-
-  new_avi.include_type[CASH] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show cash accounts",
-			      old_avi.include_type[CASH]);
-
-  new_avi.include_type[CREDIT] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show credit accounts",
-			      old_avi.include_type[CREDIT]);
-
-  new_avi.include_type[ASSET] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show asset accounts",
-			      old_avi.include_type[ASSET]);
-
-  new_avi.include_type[LIABILITY] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show liability accounts",
-			      old_avi.include_type[LIABILITY]);
-
-  new_avi.include_type[STOCK] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show stock accounts",
-			      old_avi.include_type[STOCK]);
-
-  new_avi.include_type[MUTUAL] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show mutual fund accounts",
-			      old_avi.include_type[MUTUAL]);
-
-  new_avi.include_type[CURRENCY] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show currency accounts",
-			      old_avi.include_type[CURRENCY]);
-
-  new_avi.include_type[INCOME] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show income accounts",
-			      old_avi.include_type[INCOME]);
-
-  new_avi.include_type[EXPENSE] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show expense accounts",
-			      old_avi.include_type[EXPENSE]);
-
-  new_avi.include_type[EQUITY] =
-    gnc_lookup_boolean_option("Account Types",
-			      "Show equity accounts",
-			      old_avi.include_type[EQUITY]);
-
-
-  new_avi.show_field[ACCOUNT_TYPE] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account type",
-			      old_avi.show_field[ACCOUNT_TYPE]);
-
-  new_avi.show_field[ACCOUNT_NAME] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account name",
-			      old_avi.show_field[ACCOUNT_NAME]);
-
-  new_avi.show_field[ACCOUNT_CODE] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account code",
-			      old_avi.show_field[ACCOUNT_CODE]);
-
-  new_avi.show_field[ACCOUNT_DESCRIPTION] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account description",
-			      old_avi.show_field[ACCOUNT_DESCRIPTION]);
-
-  new_avi.show_field[ACCOUNT_NOTES] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account notes",
-			      old_avi.show_field[ACCOUNT_NOTES]);
-
-  new_avi.show_field[ACCOUNT_CURRENCY] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account currency",
-			      old_avi.show_field[ACCOUNT_CURRENCY]);
-
-  new_avi.show_field[ACCOUNT_SECURITY] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account security",
-			      old_avi.show_field[ACCOUNT_SECURITY]);
-
-  new_avi.show_field[ACCOUNT_BALANCE] =
-    gnc_lookup_boolean_option("Account Fields",
-			      "Show account balance",
-			      old_avi.show_field[ACCOUNT_BALANCE]);
 
   if (memcmp(&old_avi, &new_avi, sizeof(AccountViewInfo)) != 0)
     gnc_account_tree_set_view_info(tree, &new_avi);
@@ -945,13 +928,9 @@ mainWindow()
 
   main_info->account_tree = gnc_account_tree_new();
 
-  main_info->tree_change_callback_1 =
+  main_info->main_window_change_callback_id =
     gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
-                                        "Account Types", NULL);
-
-  main_info->tree_change_callback_2 =
-    gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
-                                        "Account Fields", NULL);
+                                        "Main Window", NULL);
 
   gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
 		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
@@ -973,7 +952,7 @@ mainWindow()
 
   gnc_main_create_toolbar(GNOME_APP(app), main_info);
   gnc_configure_toolbar(NULL);
-  main_info->toolbar_change_callback =
+  main_info->toolbar_change_callback_id =
     gnc_register_option_change_callback(gnc_configure_toolbar, NULL,
                                         "General", "Toolbar Buttons");
 

@@ -1746,6 +1746,78 @@ uint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
 
 
 /********************************************************************\
+ * gnc_option_db_lookup_list_option                                 *
+ *   looks up a list option. If present, returns its value as a     *
+ *   list of strings representing the symbols.                      *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       default_value - default value to return if problem         *
+ * Return: list of values                                           *
+\********************************************************************/
+GSList *
+gnc_option_db_lookup_list_option(GNCOptionDB *odb,
+                                 const char *section,
+                                 const char *name,
+                                 GSList *default_value)
+{
+  GNCOption *option;
+  GSList *list = NULL;
+  SCM getter;
+  SCM value;
+  SCM item;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+  if (option == NULL)
+    return default_value;
+
+  getter = gnc_option_getter(option);
+  if (getter == SCM_UNDEFINED)
+    return default_value;
+
+  value = gh_call0(getter);
+  while (gh_list_p(value) && !gh_null_p(value))
+  {
+    item = gh_car(value);
+    value = gh_cdr(value);
+
+    if (!gh_symbol_p(item))
+    {
+      gnc_free_list_option_value(list);
+
+      return default_value;
+    }
+
+    list = g_slist_prepend(list, gh_symbol2newstr(item, NULL));
+  }
+
+  if (!gh_list_p(value) || !gh_null_p(value))
+  {
+    gnc_free_list_option_value(list);
+
+    return default_value;
+  }
+
+  return list;
+}
+
+
+static void
+free_helper(gpointer string, gpointer not_used)
+{
+  if (string) free(string);
+}
+
+void
+gnc_free_list_option_value(GSList *list)
+{
+  g_slist_foreach(list, free_helper, NULL);
+  g_slist_free(list);
+}
+
+
+/********************************************************************\
  * gnc_option_db_set_option_default                                 *
  *   set the option to its default value                            *
  *                                                                  *

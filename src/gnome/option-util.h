@@ -164,6 +164,13 @@ uint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
                                               const char *name,
                                               uint32 default_value);
 
+GSList * gnc_option_db_lookup_list_option(GNCOptionDB *odb,
+                                          const char *section,
+                                          const char *name,
+                                          GSList *default_value);
+
+void gnc_free_list_option_value(GSList *list);
+
 void gnc_option_db_set_option_default(GNCOptionDB *odb,
                                       const char *section,
                                       const char *name);

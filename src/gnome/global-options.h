@@ -61,6 +61,9 @@ gboolean gnc_lookup_color_option(const char *section, const char *name,
 uint32 gnc_lookup_color_option_argb(const char *section, const char *name,
                                     uint32 default_value);
 
+GSList * gnc_lookup_list_option(const char *section, const char *name,
+                                GSList *default_value);
+
 void gnc_set_option_default(const char *section, const char *name);
 
 gboolean gnc_set_number_range_option(const char *section, const char *name,

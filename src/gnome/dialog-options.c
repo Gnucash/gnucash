@@ -122,6 +122,39 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 
     g_list_free(list);
   }
+  else if (safe_strcmp(type, "list") == 0)
+  {
+    gint num_rows, row;
+
+    gtk_clist_unselect_all(GTK_CLIST(option->widget));
+
+    num_rows = gnc_option_num_permissible_values(option);
+    for (row = 0; row < num_rows; row++)
+      gtk_clist_set_row_data(GTK_CLIST(option->widget),
+                             row, GINT_TO_POINTER(FALSE));
+
+    while (gh_list_p(value) && !gh_null_p(value))
+    {
+      SCM item;
+
+      item = gh_car(value);
+      value = gh_cdr(value);
+
+      row = gnc_option_permissible_value_index(option, item);
+      if (index < 0)
+      {
+        bad_value = TRUE;
+        break;
+      }
+
+      gtk_clist_select_row(GTK_CLIST(option->widget), row, 0);
+      gtk_clist_set_row_data(GTK_CLIST(option->widget),
+                             row, GINT_TO_POINTER(TRUE));
+    }
+
+    if (!gh_list_p(value) || !gh_null_p(value))
+      bad_value = TRUE;
+  }
   else if (safe_strcmp(type, "number-range") == 0)
   {
     GtkSpinButton *spinner;
@@ -232,6 +265,24 @@ gnc_option_get_ui_value(GNCOption *option)
     result = gnc_account_list_to_scm(list);
 
     g_list_free(list);
+  }
+  else if (safe_strcmp(type, "list") == 0)
+  {
+    gboolean selected;
+    GtkCList *clist;
+    gint num_rows;
+    gint row;
+
+    clist = GTK_CLIST(option->widget);
+    num_rows = gnc_option_num_permissible_values(option);
+    result = gh_eval_str("()");
+
+    for (row = 0; row < num_rows; row++)
+    {
+      selected = GPOINTER_TO_INT(gtk_clist_get_row_data(clist, row));
+      if (selected)
+        result = gh_cons(gnc_option_permissible_value(option, row), result);
+    }
   }
   else if (safe_strcmp(type, "number-range") == 0)
   {
@@ -495,6 +546,151 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 }
 
 static void
+gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
+                          GdkEventButton *event, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *pbox;
+
+  option->changed = TRUE;
+
+  gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
+                            GdkEventButton *event, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *pbox;
+
+  option->changed = TRUE;
+
+  gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *pbox;
+
+  gtk_clist_select_all(GTK_CLIST(option->widget));
+
+  option->changed = TRUE;
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *pbox;
+
+  gtk_clist_unselect_all(GTK_CLIST(option->widget));
+
+  option->changed = TRUE;
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static GtkWidget *
+gnc_option_create_list_widget(GNCOption *option, char *name)
+{
+  GtkWidget *scroll_win;
+  GtkWidget *top_hbox;
+  GtkWidget *button;
+  GtkWidget *frame;
+  GtkWidget *clist;
+  GtkWidget *hbox;
+  GtkWidget *bbox;
+  gint num_values;
+  gint width;
+  gint i;
+
+  top_hbox = gtk_hbox_new(FALSE, 0);
+
+  frame = gtk_frame_new(name);
+  gtk_box_pack_start(GTK_BOX(top_hbox), frame, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(frame), hbox);
+
+  clist = gtk_clist_new(1);
+  gtk_clist_column_titles_hide(GTK_CLIST(clist));
+  gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_MULTIPLE);
+
+  num_values = gnc_option_num_permissible_values(option);
+  for (i = 0; i < num_values; i++)
+  {
+    gchar *text[1];
+    gchar *string;
+
+    string = gnc_option_permissible_value_name(option, i);
+    if (string != NULL)
+    {
+      text[0] = _(string);
+      gtk_clist_append(GTK_CLIST(clist), text);
+      gtk_clist_set_row_data(GTK_CLIST(clist), i, GINT_TO_POINTER(FALSE));
+      free(string);
+    }
+    else
+    {
+      PERR("gnc_option_create_list_widget: bad value name\n");
+    }
+  }
+
+  scroll_win = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
+                                 GTK_POLICY_NEVER, 
+                                 GTK_POLICY_AUTOMATIC);
+
+  width = gtk_clist_columns_autosize(GTK_CLIST(clist));
+  gtk_widget_set_usize(scroll_win, width + 50, 0);
+
+  gtk_box_pack_start(GTK_BOX(hbox), scroll_win, FALSE, FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_add(GTK_CONTAINER(scroll_win), clist);
+
+  bbox = gtk_vbutton_box_new();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
+  gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 10);
+
+  button = gtk_button_new_with_label(SELECT_ALL_STR);
+  gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                     GTK_SIGNAL_FUNC(gnc_option_list_select_all_cb),
+                     option);
+
+  button = gtk_button_new_with_label(CLEAR_ALL_STR);
+  gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+                     GTK_SIGNAL_FUNC(gnc_option_list_clear_all_cb),
+                     option);
+
+  button = gtk_button_new_with_label(SELECT_DEFAULT_STR);
+  gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect(GTK_OBJECT(button), "clicked",
+		     GTK_SIGNAL_FUNC(default_button_cb), option);
+
+  option->widget = clist;
+
+  return top_hbox;
+}
+
+static void
 gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
                             guint arg3, guint arg4, gpointer data)
 {
@@ -651,6 +847,33 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     gtk_clist_set_row_height(GTK_CLIST(value), 0);
     gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
+  }
+  else if (safe_strcmp(type, "list") == 0)
+  {
+    gint num_lines;
+
+    enclosing = gnc_option_create_list_widget(option, name);
+    value = option->widget;
+
+    gtk_tooltips_set_tip(tooltips, enclosing, documentation, NULL);
+
+    gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 5);
+    packed = TRUE;
+
+    gtk_widget_realize(value);
+
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "select_row",
+                       GTK_SIGNAL_FUNC(gnc_option_list_select_cb), option);
+    gtk_signal_connect(GTK_OBJECT(value), "unselect_row",
+                       GTK_SIGNAL_FUNC(gnc_option_list_unselect_cb), option);
+
+    num_lines = gnc_option_num_permissible_values(option);
+    num_lines = MIN(num_lines, 9) + 1;
+
+    gtk_clist_set_row_height(GTK_CLIST(value), 0);
+    gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * num_lines);
   }
   else if (safe_strcmp(type, "number-range") == 0)
   {
