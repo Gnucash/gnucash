@@ -1,3 +1,9 @@
+2004-09-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-transaction-reversal.c:
+	* src/engine/test-core/test-engine-stuff.c:
+	  Fix for ISO C90.  Fixes #153465.
+
 2004-09-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c,

@@ -55,8 +55,10 @@ run_test (void)
   /* Find a transaction that isn't voided */
   do
   {
+    gboolean voyd;
+    
     transaction = get_random_transaction (book);
-    gboolean voyd = xaccTransGetVoidStatus (transaction);
+    voyd = xaccTransGetVoidStatus (transaction);
     if (voyd)
     {
       xaccTransBeginEdit (transaction);
