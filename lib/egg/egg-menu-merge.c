@@ -936,6 +936,7 @@ update_node (EggMenuMerge *self, GNode *node)
 
   info = NODE_INFO(node);
 
+#if 0
   g_print("update_node name=%s dirty=%d (", info->name, info->dirty);
   for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
     {
@@ -945,6 +946,7 @@ update_node (EggMenuMerge *self, GNode *node)
 	g_print(", ");
     }
   g_print(")\n");
+#endif
 
   if (NODE_INFO(node)->dirty)
     {
@@ -1278,7 +1280,7 @@ do_updates(EggMenuMerge *self)
    *    is created and added to the parent container).
    */
 
-  g_message("do_updates");
+  //g_message("do_updates");
 
   update_node (self, self->root_node);
 
