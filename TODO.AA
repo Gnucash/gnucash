@@ -4,24 +4,14 @@
 
 02) 'configure' should check for the existence of the 'nana' package.
 
-03) "Makefile.in" (and "Makefile.init") sets SHELL=/bin/bash. This may
-    be necessary for Solaris, but breaks (under FreeBSD 3.0) if
-    /bin/bash doesn't exist.
-    Obviously, 'configure' should find 'bash' and use it if possible,
-    or /bin/sh if it doesn't exist.
-
-04) Something needs to be done about all of the instance of 'long
-    long', which gcc claims ANSI C doesn't support. SWIG can't be the
-    only thing that can't cope with them, can it?
-
 05) In register/table-allgui.h, the TABLE_PRIVATE_DATA hack is fugly.
-    Why not add a 'void *gui_specific_extension;' field? Or do what
-    the X widgets do, and have
+    Why not do what the X widgets do, and have
 	struct GTK_Table {
 		struct _Table corePart;
 		struct GTK_TablePrivate gtkPart;
 	};
     ?
+Answer: that is more or less what that code does. Its meant to be simple, stupid. 
 
 06) 'configure' ought to figure out whether the malloc_usable_size()
     function is available. When this happens, the ugly #if (OS)
@@ -47,9 +37,6 @@
     "(directory? foo)" to "(directory? foo/.)" (or the Scheme
     equivalent thereof).
 
-13) src/engine/AccInfo.c should probably be modified to support
-    'nana'.
-
 14) The Perl scripts should have associated .in files for their #!
     lines, because not everyone's perl is /usr/bin/perl. Also, the
     blank after the "#!" should be removed, since not all systems can
@@ -60,10 +47,29 @@
 	./src/cbb/cbb-engine/CBBlib-auto.plp
 	./src/cbb/cbb-engine/CBBlib.pl
 	./src/cbb/cbb-engine/common.pl
-	./src/engine/Query.c
-	./src/engine/perm.pl
 	./src/quotes/Quote.pm
 	./src/quotes/Quote_example.pl
-	./src/quotes/update_prices
+	./src/quotes/gnc-prices
 	./src/quotes/value_portfolio
 	./src/swig/examples/scan-acct.pl
+
+Answers to questions:
+---------------------
+03) "Makefile.in" (and "Makefile.init") sets SHELL=/bin/bash. This may
+    be necessary for Solaris, but breaks (under FreeBSD 3.0) if
+    /bin/bash doesn't exist.
+    Obviously, 'configure' should find 'bash' and use it if possible,
+    or /bin/sh if it doesn't exist.
+
+Fixed by AA.
+
+04) Something needs to be done about all of the instance of 'long
+    long', which gcc claims ANSI C doesn't support. SWIG can't be the
+    only thing that can't cope with them, can it?
+This is how 64-bit math is done on gcc, AIX xlC, other compilers.
+Its there to handle 64-bit dates.
+
+13) src/engine/AccInfo.c should probably be modified to support
+    'nana'.
+Done
+
