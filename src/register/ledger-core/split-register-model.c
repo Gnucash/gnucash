@@ -1558,7 +1558,7 @@ gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
   if (!txn) return FALSE;
 
   type = xaccTransGetTxnType (txn);
-  return (type != TXN_TYPE_NONE);
+  return (type == TXN_TYPE_INVOICE);
 }
 
 static CellIOFlags

@@ -45,6 +45,9 @@
 
 	* accounts/C/acctchrt_business.gnucash-xea: fix some of the accounts
 	  in the tree to be more accurate to the real world.
+
+	* src/register/ledger-core/split-register-module.c: only set ReadOnly
+	  status for Invoices, not Payments.  Fixes #105032
 	
 2003-02-01  Derek Atkins  <derek@ihtfp.com>
 
