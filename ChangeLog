@@ -3,6 +3,8 @@
 	* src/scm/qif-import/qif-objects.scm: initialize fields to ""
 	rather than #f
 
+	* src/scm/qif-import/qif-to-gnc.scm: fix cut-n-paste error 
+	
 2001-06-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-scheduledxaction.c: use C comments. fix warning

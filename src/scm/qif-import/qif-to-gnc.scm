@@ -480,7 +480,7 @@
                                  (= (length splits) 1)
                                  (hash-ref qif-memo-map qif-payee))
                             (and (string? memo)
-                                 (not (string=? qif-memo ""))
+                                 (not (string=? memo ""))
                                  (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
                          (set! far-acct-info (hash-ref qif-cat-map cat)))))
