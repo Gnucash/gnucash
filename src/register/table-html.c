@@ -149,7 +149,7 @@ xaccTablePrintHTML (Table * table, char *filename)
 
    if ((!table) || (!filename)) return 0;
 
-   fd = open (filename, O_CREAT | O_APPEND | O_WRONLY);
+   fd = open (filename, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR);
    if (0 > fd) {
       int norr = errno;
       printf ("Error: xaccTablePrintHTML(): can't open file %s\n", filename);
