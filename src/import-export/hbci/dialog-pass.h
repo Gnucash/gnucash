@@ -20,6 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#ifndef DIALOG_PASS_H
+#define DIALOG_PASS_H
+
 #include <gnome.h>
 
 gboolean
@@ -33,3 +36,4 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
 			       char **password);
 
 
+#endif

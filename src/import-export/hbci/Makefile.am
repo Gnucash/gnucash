@@ -6,6 +6,7 @@ libgncmod_hbci_la_SOURCES = \
   gncmod-hbci.c \
   druid-hbci-utils.c \
   dialog-pass.c \
+  dialog-hbcitrans.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
   gnc-hbci-cb.c \

@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-hbci-actions.h -- hbci action functions                      *
+ * dialog-hbcitrans.h -- dialog for HBCI transaction data           *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,18 +20,22 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HBCI_ACTIONS_H
-#define GNC_HBCI_ACTIONS_H
+#ifndef DIALOG_HBCITRANS_H
+#define DIALOG_HBCITRANS_H
 
 #include <gnome.h>
-#include "Account.h"
 
-void
-gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
+#include <openhbci/api.h>
+#include <openhbci/account.h>
+#include <openhbci/customer.h>
+#include <openhbci/transaction.h>
 
-void 
-gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc);
+HBCI_Transaction *
+gnc_hbci_trans (GtkWidget *parent,
+		HBCI_API *api,
+		const HBCI_Account *h_acc,
+		const HBCI_Customer *customer);
 
 
 
-#endif /* GNC_HBCI_ACTIONS_H */
+#endif

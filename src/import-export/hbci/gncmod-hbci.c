@@ -77,6 +77,10 @@ gnc_module_init(int refcount)
 			   N_("Get the account balance online through HBCI"),
 			   gnc_hbci_register_menu_getbalance_cb, 
 			   GNOME_APP_PIXMAP_NONE),
+	GNOMEUIINFO_ITEM ( N_("HBCI Make Transaction"),
+			   N_("Invoke a new transaction online through HBCI"),
+			   gnc_hbci_register_menu_maketrans_cb, 
+			   GNOME_APP_PIXMAP_NONE),
 	GNOMEUIINFO_END
       };
     

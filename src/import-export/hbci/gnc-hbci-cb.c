@@ -79,3 +79,20 @@ gnc_hbci_acct_tree_menu_gettrans_cb (GtkWidget * widget,
   
 }
 
+void
+gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget, 
+				     gpointer data)
+{
+  RegWindow *regData = data;
+  GNCLedgerDisplay *ledger = NULL;
+  Account *account = NULL;
+
+  /* g_assert (widget);*/
+  g_assert (regData);
+  ledger = gnc_RegWindow_ledger (regData);
+  g_assert (ledger);
+  account = gnc_ledger_display_leader (ledger);
+  g_assert (account);
+    
+  gnc_hbci_maketrans (gnc_RegWindow_window (regData), account);
+}

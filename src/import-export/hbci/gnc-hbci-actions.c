@@ -28,6 +28,7 @@
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
+#include "dialog-hbcitrans.h"
 
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
@@ -127,6 +128,103 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 			"Result of HBCI job: \nAccount balance is %f.",
 			HBCI_Value_getValue (val));
     }
+  }
+}
+
+void 
+gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc)
+{
+  HBCI_API *api = NULL;
+  const HBCI_Account *h_acc = NULL;
+  GNCInteractor *interactor = NULL;
+  const HBCI_Customer *customer = NULL;
+  
+  g_assert(parent);
+  g_assert(gnc_acc);
+
+  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  g_assert (interactor);
+  if (api == NULL) {
+    printf("gnc_hbci_maketrans: Couldn't get HBCI API.\n");
+    return;
+  }
+  
+  h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
+  if (h_acc == NULL) {
+    printf("gnc_hbci_maketrans: No HBCI account found.\n");
+    return;
+  }
+  /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
+    HBCI_Account_accountId (h_acc));*/
+  
+  {
+    /* Get one customer. */
+    const list_HBCI_Customer *custlist;
+    list_HBCI_Customer_iter *iter;
+    
+    custlist = HBCI_Account_authorizedCustomers (h_acc);
+    g_assert (custlist);
+    switch (list_HBCI_Customer_size (custlist)) {
+    case 0:
+      printf("gnc_hbci_maketrans: No HBCI customer found.\n");
+      return;
+    case 1:
+      break;
+    default:
+      gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
+				  "Sorry, Choosing one out of several HBCI Customers not yet implemented.");
+      return;
+    }
+    iter = list_HBCI_Customer_begin (custlist);
+    customer = list_HBCI_Customer_iter_get (iter);
+    list_HBCI_Customer_iter_delete (iter);
+  }
+  g_assert (customer);
+  /*printf("gnc_hbci_maketrans: Customer id %s found.\n",
+    HBCI_Customer_custId ((HBCI_Customer *)customer));*/
+
+  {
+    /* Now open the HBCI_trans_dialog. */
+    HBCI_Transaction *trans = gnc_hbci_trans (parent, api, h_acc, customer);
+    if (!trans)
+      return;
+
+    {
+      /* Execute a Do-Transaction (Transfer) job. */
+      HBCI_OutboxJobTransfer *transfer_job;
+      HBCI_OutboxJob *job;
+      HBCI_Error *err;
+    
+      transfer_job = 
+	HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      g_assert (job);
+      HBCI_API_addJob (api, job);
+
+      if (interactor)
+	GNCInteractor_show (interactor);
+
+      HBCI_Hbci_setDebugLevel(1);
+      err = HBCI_API_executeQueue (api, TRUE);
+      g_assert (err);
+      if (!HBCI_Error_isOk(err)) {
+	char *errstr = g_strdup_printf("gnc_hbci_maketrans: Error at executeQueue: %s",
+				       HBCI_Error_message (err));
+	printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	       HBCI_OutboxJob_result(job));
+	HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
+					  (HBCI_API_Hbci (api)), errstr);
+	g_free (errstr);
+	HBCI_Error_delete (err);
+	gnc_hbci_debug_outboxjob (job);
+	return;
+      }
+      /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
+      HBCI_Error_delete (err);
+    
+    }
+    
+    HBCI_Transaction_delete (trans);
   }
 }
 

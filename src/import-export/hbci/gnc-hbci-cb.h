@@ -41,4 +41,9 @@ void
 gnc_hbci_acct_tree_menu_gettrans_cb (GtkWidget * widget, 
 				     GnomeMDIChild * child);
 
+/* Callback from register window to invoke Transaction invocation. */
+void
+gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget, 
+				     gpointer data);
+
 #endif /* GNC_HBCI_CB_H */

@@ -1,3 +1,11 @@
+2002-09-19  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-actions.[hc], gnc-hbci-cb.[hc],
+	dialog-hbcitrans.[hc], gncmod-hbci.c,
+	src/import-export/hbci/glade/hbci.glade: Added dialog and HBCI
+	code for HBCI online transaction invocation, and added a menu item
+	to call this dialog.
+
 2002-09-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gncmod-hbci.c: Add menu-extension code
