@@ -181,23 +181,24 @@ gnc_reconcile_list_init(GNCReconcileList *list)
 
     list->reconciled_style = gtk_style_copy(style);
 
-#if !USE_NO_COLOR
-    style = list->reconciled_style;
+    if (gnc_color_deficits())
+    {
+      style = list->reconciled_style;
 
-    /* A dark green */
-    style->fg[GTK_STATE_NORMAL].red   = 0;
-    style->fg[GTK_STATE_NORMAL].green = 40000;
-    style->fg[GTK_STATE_NORMAL].blue  = 0;
+      /* A dark green */
+      style->fg[GTK_STATE_NORMAL].red   = 0;
+      style->fg[GTK_STATE_NORMAL].green = 40000;
+      style->fg[GTK_STATE_NORMAL].blue  = 0;
 
-    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
+      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
 
-    /* A nice yellow */
-    style->fg[GTK_STATE_SELECTED].red   = 65280;
-    style->fg[GTK_STATE_SELECTED].green = 62976;
-    style->fg[GTK_STATE_SELECTED].blue  = 36608;
+      /* A nice yellow */
+      style->fg[GTK_STATE_SELECTED].red   = 65280;
+      style->fg[GTK_STATE_SELECTED].green = 62976;
+      style->fg[GTK_STATE_SELECTED].blue  = 36608;
 
-    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
-#endif
+      gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_SELECTED], FALSE, TRUE);
+    }
   }
 }
 

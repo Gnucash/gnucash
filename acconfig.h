@@ -47,10 +47,6 @@
 /* check for stpcpy for Solaris */
 #undef HAVE_STPCPY
 
-/* Don't color the balance depending on whether positive
- * or negative */
-#define USE_NO_COLOR        
-
 /* If configure found libXpm, then use it */
 #undef HAVE_XPM            
 

@@ -418,6 +418,24 @@ gnc_get_toolbar_style(void)
 
 
 /********************************************************************\
+ * gnc_color_deficits                                               *
+ *   return a boolean value indicating whether deficit quantities   *
+ *   should be displayed using the gnc_get_deficit_color().         *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: boolean deficit color indicator                         *
+ \*******************************************************************/
+gboolean
+gnc_color_deficits (void)
+{
+  return gnc_lookup_boolean_option ("General",
+                                    "Display negative amounts in red",
+                                    TRUE);
+
+}
+
+
+/********************************************************************\
  * gnc_get_deficit_color                                            *
  *   fill in the 3 color values for the color of deficit values     *
  *                                                                  *
@@ -444,10 +462,15 @@ gnc_get_deficit_color(GdkColor *color)
 void
 gnc_set_label_color(GtkWidget *label, double value)
 {
-#if !USE_NO_COLOR
   gboolean deficit;
-  GdkColormap *cm = gtk_widget_get_colormap(GTK_WIDGET(label));
-  GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(label));
+  GdkColormap *cm;
+  GtkStyle *style;
+
+  if (!gnc_color_deficits())
+    return;
+
+  cm = gtk_widget_get_colormap(GTK_WIDGET(label));
+  style = gtk_widget_get_style(GTK_WIDGET(label));
 
   style = gtk_style_copy(style);
 
@@ -464,7 +487,6 @@ gnc_set_label_color(GtkWidget *label, double value)
   gtk_widget_set_style(label, style);
 
   gtk_style_unref(style);
-#endif
 }
 
 

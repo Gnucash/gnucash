@@ -171,4 +171,9 @@ gboolean xaccSRHasPendingChanges (SplitRegister *reg);
  * Otherwise, it returns FALSE. */
 gboolean xaccSRCheckReconciled (SplitRegister *reg);
 
+/* If TRUE, visually indicate the demarcation between splits with post
+ * dates prior to the present, and after. This will only make sense if
+ * the splits are ordered primarily by post date. */
+void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
+
 #endif /* __XACC_SPLIT_LEDGER_H__ */

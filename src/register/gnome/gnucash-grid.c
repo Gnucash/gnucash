@@ -263,6 +263,7 @@ draw_cell (GnucashGrid *grid, int block,
         SheetBlock *sheet_block;
         SheetBlockCell *sb_cell;
         VirtualCellLocation vcell_loc = { block, 0 };
+        VirtualCell *vcell;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
@@ -271,7 +272,7 @@ draw_cell (GnucashGrid *grid, int block,
         sb_cell = gnucash_sheet_block_get_cell (sheet_block, i, j);
 
         gdk_gc_set_foreground (grid->gc, sb_cell->bg_color);
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x,  y, width, height);
+        gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
 
@@ -294,6 +295,28 @@ draw_cell (GnucashGrid *grid, int block,
         /* left */
         if (cs->border & STYLE_BORDER_LEFT)
                 gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
+
+        /* dividing line */
+        if ((i == 0) && (table->dividing_row >= 0))
+        {
+                vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+                if (vcell->phys_loc.phys_row == table->dividing_row)
+                {
+                        gdk_gc_set_foreground (grid->gc, &gn_blue);
+                        gdk_draw_line (drawable, grid->gc, x, y, x + width, y);
+                }
+        }
+
+        if ((i == (style->nrows - 1)) && (table->dividing_row >= 0))
+        {
+                vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+                if (vcell->phys_loc.phys_row == (table->dividing_row - 1))
+                {
+                        gdk_gc_set_foreground (grid->gc, &gn_blue);
+                        gdk_draw_line (drawable, grid->gc, x, y + height,
+                                       x + width, y + height);
+                }
+        }
 
 #undef ROUNDED_CORNERS        
 #ifdef ROUNDED_CORNERS        

@@ -107,6 +107,7 @@ gnc_table_init (Table * table)
    table->num_virt_cols = -1;
 
    table->current_cursor = NULL;
+
    table->current_cursor_virt_loc.virt_row = -1;
    table->current_cursor_virt_loc.virt_col = -1;
    table->current_cursor_phys_loc.phys_row = -1;
@@ -118,6 +119,8 @@ gnc_table_init (Table * table)
    table->user_data = NULL;
 
    table->alternate_bg_colors = FALSE;
+
+   table->dividing_row = -1;
 
    /* initialize private data */
 

@@ -199,7 +199,7 @@ gnc_account_tree_init(GNCAccountTree *tree)
 
   tree->deficit_style = NULL;
 
-#if !USE_NO_COLOR
+  if (gnc_color_deficits())
   {
     GdkColormap *cm = gtk_widget_get_colormap(GTK_WIDGET(tree));
     GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(tree));
@@ -211,7 +211,6 @@ gnc_account_tree_init(GNCAccountTree *tree)
 
     gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
   }
-#endif
 }
 
 static void
@@ -986,7 +985,7 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
   for (i = 0; i < tree->num_columns; i++)
     g_free(text[i]);
 
-#if !USE_NO_COLOR
+  if (gnc_color_deficits())
   {
     GtkStyle *style;
     double balance;
@@ -1020,7 +1019,6 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 				    tree->total_column + 1, style);
     }
   }
-#endif
 
   /* Set the user_data for the tree item to the account it */
   /* represents.                                           */

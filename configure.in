@@ -69,12 +69,6 @@ AM_GNU_GETTEXT
 ### Variables
 ### Set up all the initial variable values...
 
-# Should we uses color (red/black) balances?
-AC_ARG_ENABLE(color,
-       [  --disable-color         don't use color (red/black) balances],
-       AC_DEFINE(USE_NO_COLOR,1),
-       AC_DEFINE(USE_NO_COLOR,0) )
-
 AC_ARG_ENABLE(opt-style-install,
   [  --enable-opt-style-install   install everything in subdirs of --prefix],
   [case "${enableval}" in

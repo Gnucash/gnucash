@@ -95,6 +95,8 @@ GtkWidget * gnc_build_option_menu(GNCOptionInfo *option_info,
 
 GtkToolbarStyle gnc_get_toolbar_style(void);
 
+gboolean gnc_color_deficits (void);
+
 void gnc_get_deficit_color(GdkColor *color);
 void gnc_set_label_color(GtkWidget *label, double value);
 

@@ -156,6 +156,10 @@ struct _SRInfo
   /* true if the current blank split has been edited and commited */
   gboolean blank_split_edited;
 
+  /* true if the demarcation between 'past' and 'future' transactions
+   * should be visible */
+  gboolean show_present_divider;
+
   /* User data for users of SplitRegisters */
   void *user_data;
 
@@ -3046,11 +3050,13 @@ xaccSRCountRows (SplitRegister *reg,
    Transaction *trans;
    Split *split;
    Table *table;
+   time_t present;
 
    gboolean found_split = FALSE;
    gboolean found_trans = FALSE;
    gboolean found_trans_split = FALSE;
    gboolean on_blank_split = FALSE;
+   gboolean found_divider = FALSE;
    gboolean did_expand = FALSE;
    gboolean on_trans_split;
    gboolean multi_line;
@@ -3120,6 +3126,8 @@ xaccSRCountRows (SplitRegister *reg,
    if ((split != NULL) && (split == find_trans_split))
      found_trans_split = TRUE;
 
+   present = time(NULL);
+
    /* now count the rows */
    i=0;
    if (slist)
@@ -3133,6 +3141,14 @@ xaccSRCountRows (SplitRegister *reg,
          gboolean do_expand;
 
          trans = xaccSplitGetParent(split);
+
+         if (info->show_present_divider &&
+             !found_divider &&
+             (present < xaccTransGetDate (trans)))
+         {
+           table->dividing_row = num_phys_rows;
+           found_divider = TRUE;
+         }
 
          /* lets determine where to locate the cursor ... */
          on_trans_split = (find_trans_split == split);
@@ -3809,6 +3825,19 @@ xaccSRCheckReconciled (SplitRegister *reg)
     return TRUE;
 
   return gnc_verify_dialog_parented(xaccSRGetParent(reg), message, FALSE);
+}
+
+/* ======================================================== */
+
+void
+xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+
+  if (reg == NULL)
+    return;
+
+  info->show_present_divider = show_present;
 }
 
 /* =======================  end of file =================== */

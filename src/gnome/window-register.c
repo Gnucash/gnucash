@@ -346,6 +346,7 @@ static void
 gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
 {
   Query *query = regData->ledger->query;
+  gboolean show_present_divider = FALSE;
 
   if (regData->sort_type == sort_code)
     return;
@@ -354,9 +355,11 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
   {
     case BY_STANDARD:
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
+      show_present_divider = TRUE;
       break;
     case BY_DATE:
       xaccQuerySetSortOrder(query, BY_DATE, BY_STANDARD, BY_NONE);
+      show_present_divider = TRUE;
       break;
     case BY_DATE_ENTERED:
       xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
@@ -380,6 +383,8 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
     default:
       assert(0); /* we should never be here */
   }
+
+  xaccSRShowPresentDivider (regData->ledger->ledger, show_present_divider);
 
   regData->sort_type = sort_code;
 
@@ -703,7 +708,7 @@ gnc_register_date_window(RegWindow *regData)
     radio = gtk_radio_button_new_with_label(NULL, SHOW_EARLIEST_STR);
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_earliest = radio;
-    
+
     if (show_all)
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio), TRUE);
 
@@ -1719,6 +1724,8 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   }
 
   gtk_widget_show_all(register_window);
+
+  xaccSRShowPresentDivider (ledger->ledger, TRUE);
 
   ledger->dirty = 1;
   xaccLedgerDisplayRefresh(ledger);

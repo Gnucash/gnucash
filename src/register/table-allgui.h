@@ -210,6 +210,9 @@ struct _Table
    * physical rows within cellblocks. */
   gboolean alternate_bg_colors;
 
+  /* If positive, denotes a row that marks a boundary that should
+   * be visually distinguished. */
+  short dividing_row;
 
   /* private data */
 
@@ -285,7 +288,7 @@ void        gnc_table_set_size (Table * table,
 /* The gnc_table_create_cursor() method can be called whenever a
  *   reconfig of the cursor may require new gui elements to be
  *   initialized. */
-void        gnc_table_create_cursor (Table *, CellBlock *);
+void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
 
 /* indicate what handler should be used for a given virtual block */
 void        gnc_table_set_cursor (Table *table, CellBlock *curs,
