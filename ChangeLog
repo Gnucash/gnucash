@@ -1,3 +1,11 @@
+2003-03-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEntry.[ch]: add interfaces
+	  to deal with bill 'payment types', in preparation for
+	  employee expense vouchers.
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	  add support for the bill payment type.
+
 2003-03-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/prefs.scm: Adjust the names of register styles in
