@@ -4,7 +4,7 @@
              Architecture & Implementation Overview
 
                Linas Vepstas <linas@linas.org>
-                  Last Revised January 2003
+                  Last Revised August 2003
 
 
 One often needs to know that the item 'bought' in one transaction
@@ -337,13 +337,32 @@ that it shows.
 The implementation that seems best is to represnet the sale
 with two separate transactions: one for the sale itself, and a
 separate one for the gains.  This makes computing the balance 
-easier, although it makes  the logic for setting the date
+easier, although it makes the logic for setting the date
 more complex.  Ughh..
+
+Cap Gains Implementation Notes
+==============================
+Cap Gains will be handled by GnuCash as described above, using 
+two distinct transactions.  These transactions will be marked up
+using KVP, pointing to each other, so that the one can be found
+from the other.  Implementation in src/engine/cap-gains.c
+
+Quick API Overview:
+   xaccSplitGetCapGains(): Returns the capital gains associated with
+      a split.  Split must have been a sale/purchase in a previously 
+      opened lot.
+   xaccSplitAssignToLot(): If a split is not already in a lot,
+      then it places it into a lot, using a FIFO accounting policy.
+
+TODO:
+-- need to recompute lot membership when source split 'amount' changes.
+-- need to recompute gain value when source split value changes.
+-- need to copy dates, etc. when source split date changes.
 
 
 Conversion
 ==========
-When Lots are finally put into production, old GnuCash datasets
+As Lots are put into production, old GnuCash datasets
 will need to be converted.   Conversion will be done by running 
 all splits in an account through an accounting FIFO.  The goal
 of the FIFO is to match up purchases and sales so that these can
@@ -365,6 +384,13 @@ for each account {
 
 See the file Scrub2.h for details.
 
+There is a bit of a problem with this conversion proceedure: If the
+user had prviously recorded cap gains using a 'handmade' version of
+lots, those cap gains will be ignored and will throw off balances.
+User will need to hand-edit to recover.
+
+-- TODO: Modify scrub routines to look for splits with zero amount,
+   try to assign these to lots as appropriate. ??
 
 GUI
 ===
@@ -431,11 +457,15 @@ Status
    signalled that the lots have changed.  This is the case both for
    Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
 
- o prototype GUI in src/gnome/lot-viewer.c
+ o prototype lot-viewing GUI in src/gnome/lot-viewer.c
+   This GUI cannot 'edit' lots.
 
-XXX It is a good idea to generate a gain/loss split for ever sale, not
-just the lot closure.  Need to tweak the register to hide/show as appropriate.
-Need to add a tag to the gain split to indicate its's 'special' nature.
+ o Work has begun on the automatic computation & tracking of gain/loss
+   transactions.   See src/engine/cap-gains.h  Routines now exist to 
+   compute these.  Need to add infrastructure to auto-recompute as 
+   needed, make use of this in register gui's, etc.  A lot of work left.
+   In particular, what about the cap-gains report?
+
 
 
 -------------------------- end of file ------------------------------
