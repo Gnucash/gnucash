@@ -1,3 +1,11 @@
+2003-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]: add APIs to get
+	  TotalSubtotal() and TotalTax().
+	* src/business/business-gnome/dialog-invoice.c: Add Subtotal and Tax
+	  labels in the summary bar to print the Invoice's total amounts.
+	Fixes #113769.
+
 2003-05-29  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/engine/TransLog.c: Now log the transaction notes field (kvp actually).

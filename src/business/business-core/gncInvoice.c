@@ -436,13 +436,16 @@ static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
   return (gncOwnerGetType (owner));
 }
 
-gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
+static gnc_numeric
+gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
+			    gboolean use_tax,
+			    gboolean use_payment_type, GncEntryPaymentType type)
 {
   GList *node;
   gnc_numeric total = gnc_numeric_zero();
   gboolean reverse;
 
-  if (!invoice) return total;
+  g_return_val_if_fail (invoice, total);
 
   reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
@@ -450,51 +453,48 @@ gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
     GncEntry *entry = node->data;
     gnc_numeric value, tax;
 
+    if (use_payment_type && gncEntryGetBillPayment (entry) != type)
+      continue;
+
     gncEntryGetValue (entry, reverse, &value, NULL, &tax, NULL);
     
-    if (gnc_numeric_check (value) == GNC_ERROR_OK)
-      total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-    else
+    if (gnc_numeric_check (value) == GNC_ERROR_OK) {
+      if (use_value)
+	total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    } else
       g_warning ("bad value in our entry");
 
-    if (gnc_numeric_check (value) == GNC_ERROR_OK)
-      total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-    else
+    if (gnc_numeric_check (tax) == GNC_ERROR_OK) {
+      if (use_tax)
+	total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    } else
       g_warning ("bad tax-value in our entry");
   }
   return total;
 }
 
+gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
+{
+  if (!invoice) return gnc_numeric_zero();
+  return gncInvoiceGetTotalInternal(invoice, TRUE, TRUE, FALSE, 0);
+}
+
+gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice)
+{
+  if (!invoice) return gnc_numeric_zero();
+  return gncInvoiceGetTotalInternal(invoice, TRUE, FALSE, FALSE, 0);
+}
+
+gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice)
+{
+  if (!invoice) return gnc_numeric_zero();
+  return gncInvoiceGetTotalInternal(invoice, FALSE, TRUE, FALSE, 0);
+}
+
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 {
-  GList *node;
-  gnc_numeric total = gnc_numeric_zero();
-  gboolean reverse;
-
-  if (!invoice) return total;
-
-  reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
-
-  for (node = gncInvoiceGetEntries(invoice); node; node = node->next) {
-    GncEntry *entry = node->data;
-    gnc_numeric value, tax;
-
-    if (gncEntryGetBillPayment (entry) != type)
-      continue;
-
-    gncEntryGetValue (entry, reverse, &value, NULL, &tax, NULL);
-    
-    if (gnc_numeric_check (value) == GNC_ERROR_OK)
-      total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-    else
-      g_warning ("bad value in our entry");
-
-    if (gnc_numeric_check (value) == GNC_ERROR_OK)
-      total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-    else
-      g_warning ("bad tax-value in our entry");
-  }
-  return total;
+  if (!invoice) return gnc_numeric_zero();
+  return gncInvoiceGetTotalInternal(invoice, TRUE, TRUE, TRUE, type);
 }
 
 const char * gncInvoiceGetType (GncInvoice *invoice)

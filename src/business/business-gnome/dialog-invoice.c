@@ -100,6 +100,8 @@ struct _invoice_window {
   GtkWidget *	total_label;
   GtkWidget *	total_cash_label;
   GtkWidget *	total_charge_label;
+  GtkWidget *	total_subtotal_label;
+  GtkWidget *	total_tax_label;
 
   /* Menu Widgets */
   GtkWidget *	menu_print;
@@ -1001,14 +1003,27 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
   iw->total_label	    = NULL;
   iw->total_cash_label      = NULL;
   iw->total_charge_label    = NULL;
+  iw->total_subtotal_label  = NULL;
+  iw->total_tax_label       = NULL;
 
   summarybar = gtk_hbox_new (FALSE, 4);
 
   iw->total_label	    = add_summary_label (summarybar, _("Total:"));
 
-  if (gncOwnerGetType (&iw->owner) == GNC_OWNER_EMPLOYEE) {
+  switch (gncOwnerGetType (&iw->owner)) {
+  case GNC_OWNER_CUSTOMER:
+  case GNC_OWNER_VENDOR:
+    iw->total_subtotal_label= add_summary_label (summarybar, _("Subtotal:"));
+    iw->total_tax_label     = add_summary_label (summarybar, _("Tax:"));
+    break;
+
+  case GNC_OWNER_EMPLOYEE:
     iw->total_cash_label    = add_summary_label (summarybar, _("Total Cash:"));
     iw->total_charge_label  = add_summary_label (summarybar, _("Total Charge:"));
+    break;
+
+  default:
+    break;
   }
 
   return summarybar;
@@ -1370,10 +1385,11 @@ gnc_invoice_window_close_handler (gpointer user_data)
 }
 
 static void
-gnc_invoice_reset_total_label (GtkLabel *label, gnc_numeric amt)
+gnc_invoice_reset_total_label (GtkLabel *label, gnc_numeric amt, gnc_commodity *com)
 {
   char string[256];
 
+  amt = gnc_numeric_convert (amt, gnc_commodity_get_fraction(com), GNC_RND_ROUND);
   xaccSPrintAmount (string, amt, gnc_default_print_info (TRUE));
   gtk_label_set_text (label, string);
 }
@@ -1396,14 +1412,24 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   if (!invoice)
     return;
 
+  currency = gncInvoiceGetCurrency (invoice);
+
   if (iw->total_label) {
     amount = gncInvoiceGetTotal (invoice);
-    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_label), amount);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_label), amount, currency);
+  }
+
+  if (iw->total_subtotal_label) {
+    amount = gncInvoiceGetTotalSubtotal (invoice);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_subtotal_label), amount, currency);
+  }
+
+  if (iw->total_tax_label) {
+    amount = gncInvoiceGetTotalTax (invoice);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_tax_label), amount, currency);
   }
 
   /* Deal with extra items for the expense voucher */
-
-  currency = gncInvoiceGetCurrency (invoice);
 
   if (iw->to_charge_edit) {
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit));
@@ -1414,14 +1440,14 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
     amount = gnc_numeric_sub (amount, to_charge_amt,
 			      gnc_commodity_get_fraction (currency), GNC_RND_ROUND);
-    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount, currency);
   }
 
   if (iw->total_charge_label) {
     amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
     amount = gnc_numeric_add (amount, to_charge_amt, 
 			      gnc_commodity_get_fraction (currency), GNC_RND_ROUND);
-    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount);
+    gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount, currency);
   }
 }
 

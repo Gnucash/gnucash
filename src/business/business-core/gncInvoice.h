@@ -68,6 +68,8 @@ Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 /* return the "total" amount of the invoice */
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
+gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
 GList * gncInvoiceGetEntries (GncInvoice *invoice);
 
