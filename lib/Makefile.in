@@ -32,12 +32,10 @@ include @top_srcdir@/Makefile.init
 #   install      -- ??todo??
 #
 
-GTKSHEET_DIR := @GTKSHEET_DIR@
-
 ######################################################################
 # See Makefile.common for information about these variables.
 CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas g-wrap
-CLEAN_SUBDIRS += ${GTKSHEET_DIR} gtkfilesel2
+CLEAN_SUBDIRS += gtkfilesel2
 ######################################################################
 
 all:
@@ -76,7 +74,6 @@ motif:	g-wrap-install
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
 gnome:	g-wrap-install
-	@cd ${GTKSHEET_DIR};  $(MAKE) default
 	@cd gtkfilesel2;      $(MAKE) default
 
 qt:	g-wrap-install

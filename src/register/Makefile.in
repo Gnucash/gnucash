@@ -23,16 +23,15 @@
 
 include @top_srcdir@/Makefile.init
 
-GTKSHEET_DIR := @GTKSHEET_DIR@
-
 INCLPATH = -I@top_srcdir@/ \
            -I@top_srcdir@/src \
            -I@top_srcdir@/include \
            -I@top_srcdir@/src/engine \
-           -I@top_srcdir@/lib/${GTKSHEET_DIR} \
            -I@top_srcdir@/lib/ComboBox-1.33 \
            -I@top_srcdir@/lib/Xbae-4.6.2-linas \
-           -I@prefix@/include
+           -I@prefix@/include \
+	   -I@top_srcdir@/src/register \
+           -I@top_srcdir@/src/register/gnome
 
 
 CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} ${CPPFLAGS}
@@ -44,7 +43,7 @@ COMMON_SRCS := basiccell.c cellblock.c \
 	       recncell.c splitreg.c \
                table-allgui.c table-html.c textcell.c
 MOTIF_SRCS := table-motif.c combocell-motif.c
-GNOME_SRCS := table-gtk.c combocell-gtk.c
+GNOME_SRCS := table-gnome.c
 QT_SRCS    := table-qt.cpp combocell-qt.cpp
 ######################################################################
 
@@ -63,11 +62,8 @@ include @top_srcdir@/Makefile.common
 motif: ${MOTIF_OBJS}
 
 gnome: ${GNOME_OBJS}
+	@cd gnome; $(MAKE) gnome
 
 qt: $(QT_OBJS)
 
 .PHONY: all motif gnome qt
-
-# Local Variables:
-# tab-width: 2
-# End:

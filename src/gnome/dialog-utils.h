@@ -82,10 +82,22 @@ enum
 };
 
 
+/* Structure for building option buttons */
+typedef struct _GNCOptionInfo GNCOptionInfo;
+struct _GNCOptionInfo
+{
+  char *name;
+  gpointer callback;
+  gpointer user_data;
+};
+
+
 /**** PROTOTYPES *************************************************/
 char * gnc_ui_get_account_field_name(int field);
 
 char * gnc_ui_get_account_field_value_string(Account *account, int field);
+
+double gnc_ui_get_account_full_balance(Account *account);
 
 GtkWidget * gnc_ui_notes_frame_create(GtkEditable **notes_entry);
 
@@ -119,5 +131,9 @@ gchar * gnc_get_source_name(gint source);
 gchar * gnc_get_source_code_name(gint source);
 gint    gnc_get_source_code(gchar * codename);
 
+void gnc_set_tooltip(GtkWidget *w, const gchar *tip);
+
+GtkWidget * gnc_build_option_menu(GNCOptionInfo *option_info,
+				  gint num_options);
 
 #endif

@@ -18,6 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include "top-level.h"
+
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "messages.h"
@@ -38,7 +40,7 @@ static short module = MOD_GUI;
 GtkWidget *
 gnc_ui_notes_frame_create(GtkEditable **notes_entry)
 {
-  GtkWidget *frame, *text, *table, *vscr, *scrollWin;
+  GtkWidget *frame, *text, *table, *vscr;
     
   frame = gtk_frame_new("Notes");
   gtk_container_border_width(GTK_CONTAINER(frame), 5);
@@ -586,6 +588,35 @@ char * gnc_ui_get_account_field_name(int field)
   return NULL;
 }
 
+
+double
+gnc_ui_get_account_full_balance(Account *account)
+{
+  AccountGroup *acc_children;
+  double balance;
+  int type;
+
+  assert(account != NULL);
+
+  acc_children = xaccAccountGetChildren (account);
+  type = xaccAccountGetType(account);
+  balance = xaccAccountGetBalance (account);
+
+  /* if the account has children, add in their balance */
+  if (acc_children)
+    balance += xaccGroupGetBalance(acc_children);
+
+  /* the meaning of "balance" for income and expense
+   * accounts is reversed, since a deposit of a paycheck in a
+   * bank account will appear as a debit of the corresponding
+   * amount in the income account */
+  if ((type == EXPENSE) || (type == INCOME))
+    balance = -balance;
+
+  return balance;
+}
+
+
 char * gnc_ui_get_account_field_value_string(Account *account, int field)
 {
   assert(account != NULL);
@@ -616,26 +647,61 @@ char * gnc_ui_get_account_field_value_string(Account *account, int field)
       break;
     case ACCOUNT_BALANCE :
       {
-	AccountGroup *acc_children = xaccAccountGetChildren (account);
-	int type = xaccAccountGetType(account);
-	double dbalance = xaccAccountGetBalance (account);
+	double balance = gnc_ui_get_account_full_balance(account);
 
-	/* if the account has children, add in their balance */
-	if (acc_children)
-	  dbalance += xaccGroupGetBalance (acc_children);
-
-	/* the meaning of "balance" for income and expense
-	 * accounts is reversed, since a deposit of a paycheck in a
-	 * bank account will appear as a debit of the corresponding
-	 * amount in the income account */
-	if ((type == EXPENSE) || (type == INCOME))
-	  dbalance = -dbalance;
-
-	return xaccPrintAmount (dbalance, PRTSYM | PRTSEP);
+	return xaccPrintAmount(balance, PRTSYM | PRTSEP);
       }
       break;
   }
 
   assert(0);
   return NULL;
+}
+
+
+void gnc_set_tooltip(GtkWidget *w, const gchar *tip)
+{
+  GtkTooltips *t = gtk_tooltips_new();
+
+  gtk_tooltips_set_tip(t, w, tip, NULL);
+}
+
+
+/********************************************************************\
+ * gnc_ui_create_option_button                                      *
+ *   create an option button given the option structure             *
+ *                                                                  *
+ * Args: option_info - the option structure to use                  *
+ *       num_options - the number of options                        *
+ * Returns: void                                                    *
+ \*******************************************************************/
+GtkWidget *
+gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
+{
+  GtkWidget *omenu;
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  gint i;
+
+  omenu = gtk_option_menu_new();
+  gtk_widget_show(omenu);
+
+  menu = gtk_menu_new();
+  gtk_widget_show(menu);
+
+  for (i = 0; i < num_options; i++)
+  {
+    menu_item = gtk_menu_item_new_with_label(option_info[i].name);
+    gtk_widget_show(menu_item);
+
+    gtk_signal_connect(GTK_OBJECT(menu_item), "activate",
+                       GTK_SIGNAL_FUNC(option_info[i].callback),
+		       option_info[i].user_data);
+
+    gtk_menu_append(GTK_MENU(menu), menu_item);
+  }
+
+  gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
+
+  return omenu;
 }

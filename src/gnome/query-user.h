@@ -12,6 +12,7 @@ enum
 };
 
 void gnc_info_dialog( const char *message );
+void gnc_warning_dialog(const char *message);
 
 SCM gnc_choose_item_from_list_dialog(const char *title, SCM list_items);
 

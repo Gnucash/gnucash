@@ -115,16 +115,20 @@ gnc_account_tree_init(GNCAccountTree *tree)
 		      tree->num_columns, 0,
 		      tree->column_headings);
 
-  gtk_clist_set_shadow_type (GTK_CLIST(tree), GTK_SHADOW_IN);
+  gtk_clist_set_shadow_type(GTK_CLIST(tree), GTK_SHADOW_IN);
+  gtk_clist_column_titles_passive(GTK_CLIST(tree));
+  gtk_clist_set_column_justification(GTK_CLIST(tree),
+				     tree->balance_column,
+				     GTK_JUSTIFY_RIGHT);
 
   {
-    GtkStyle *st = gtk_widget_get_style(GTK_WIDGET(tree));
+    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(tree));
     GdkFont *font = NULL;
     gint width;
     gint i;
 
-    if (st != NULL)
-      font = st->font;
+    if (style != NULL)
+      font = style->font;
 
     if (font != NULL)
       for (i = 0; i < tree->num_columns; i++)
@@ -133,6 +137,24 @@ gnc_account_tree_init(GNCAccountTree *tree)
 	gtk_clist_set_column_min_width(GTK_CLIST(tree), i, width + 5);
       }
   }
+
+  tree->deficit_style = NULL;
+
+#if !USE_NO_COLOR
+  {
+    GdkColormap *cm = gtk_widget_get_colormap(GTK_WIDGET(tree));
+    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(tree));
+
+    tree->deficit_style = gtk_style_copy(style);
+    style = tree->deficit_style;
+
+    style->fg[GTK_STATE_NORMAL].red   = 50000;
+    style->fg[GTK_STATE_NORMAL].green = 0;
+    style->fg[GTK_STATE_NORMAL].blue  = 0;
+
+    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
+  }
+#endif
 }
 
 static void
@@ -186,6 +208,8 @@ gnc_account_tree_class_init(GNCAccountTreeClass *klass)
 			       account_tree_signals,
 			       LAST_SIGNAL);
 
+  object_class->destroy = gnc_account_tree_destroy;
+
   widget_class->button_press_event = gnc_account_tree_button_press;
 
   ctree_class->tree_select_row   = gnc_account_tree_select_row;
@@ -229,6 +253,44 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
 
 /********************************************************************\
+ * gnc_account_tree_set_view_info                                   *
+ *   installs a new view information and refreshes the tree         *
+ *                                                                  *
+ * Args: tree - the tree to install new info                        *
+ *       info - the view info structure                             *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_set_view_info(GNCAccountTree *tree, AccountViewInfo *info)
+{
+  assert(GTK_IS_GNC_ACCOUNT_TREE(tree));
+  assert(info != NULL);
+
+  tree->avi = *info;
+
+  gnc_account_tree_refresh(tree);
+}
+
+
+/********************************************************************\
+ * gnc_account_tree_get_view_info                                   *
+ *   retrieves the current view information for a tree              *
+ *                                                                  *
+ * Args: tree - the tree to get view info for                       *
+ *       info - the view info structure to fill                     *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
+{
+  assert(GTK_IS_GNC_ACCOUNT_TREE(tree));
+  assert(info != NULL);
+
+  *info = tree->avi;
+}
+
+
+/********************************************************************\
  * gnc_account_tree_select_account                                  *
  *   select an account in the tree and expands the tree to ensure   *
  *   that it is shown.                                              *
@@ -243,8 +305,7 @@ gnc_account_tree_select_account(GNCAccountTree *tree, Account *account)
   GtkCTreeNode *node;
   GtkCTreeRow  *row;
 
-  node = gtk_ctree_find_by_row_data(GTK_CTREE(tree),
-				    NULL, account);
+  node = gtk_ctree_find_by_row_data(GTK_CTREE(tree), NULL, account);
 
   if (node == NULL)
     return FALSE;
@@ -252,7 +313,7 @@ gnc_account_tree_select_account(GNCAccountTree *tree, Account *account)
   gtk_ctree_select(GTK_CTREE(tree), node);
 
   row = GTK_CTREE_ROW(node);
-  while (node = row->parent)
+  while ((node = row->parent) != NULL)
   {
     gtk_ctree_expand(GTK_CTREE(tree), node);
     row = GTK_CTREE_ROW(node);
@@ -362,6 +423,7 @@ gnc_account_tree_update_column_visibility(GNCAccountTree *tree)
       (GTK_CLIST(tree), i, tree->avi.show_field[tree->column_fields[i]]);
 }
 
+
 /********************************************************************\
  * gnc_account_tree_get_current_account                             *
  *   returns the current account selected, or NULL if none          *
@@ -375,7 +437,15 @@ gnc_account_tree_get_current_account (GNCAccountTree *tree)
   return tree->current_account;
 }
 
-static void
+
+/********************************************************************\
+ * gnc_init_account_view_info                                       *
+ *   initialize an account view info structure with default values  *
+ *                                                                  *
+ * Args: avi - structure to initialize                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
 gnc_init_account_view_info(AccountViewInfo *avi)
 {
   int i;
@@ -402,7 +472,10 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
   tree->column_fields[i++] = ACCOUNT_SECURITY;
   tree->column_fields[i++] = ACCOUNT_CODE;
   tree->column_fields[i++] = ACCOUNT_DESCRIPTION;
+
+  tree->balance_column = i;
   tree->column_fields[i++] = ACCOUNT_BALANCE;
+
   tree->column_fields[i++] = ACCOUNT_NOTES;
 
   tree->num_columns = i;
@@ -503,7 +576,7 @@ gnc_account_tree_fill(GNCAccountTree *tree,
   GtkCTreeNode *node;
   gint totalAccounts = xaccGroupGetNumAccounts(accts);
   gint currentAccount;
-  gint row, type;
+  gint type;
 
   /* Add each account to the tree */  
   for ( currentAccount = 0;
@@ -550,9 +623,39 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 			       text, 0, NULL, NULL, NULL, NULL,
 			       FALSE, FALSE);
 
+#if !USE_NO_COLOR
+  {
+    GtkStyle *style;
+
+    if (gnc_ui_get_account_full_balance(acc) < 0)
+      style = tree->deficit_style;
+    else
+      style = gtk_widget_get_style(GTK_WIDGET(tree));
+
+    if (style != NULL)
+      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
+				    tree->balance_column, style);
+  }
+#endif
+
   /* Set the user_data for the tree item to the account it */
   /* represents.                                           */
   gtk_ctree_node_set_row_data(GTK_CTREE(tree), node, acc);
 
   return node;
+}
+
+static void
+gnc_account_tree_destroy(GtkObject *object)
+{
+  GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
+
+  if (tree->deficit_style != NULL)
+  {
+    gtk_style_unref(tree->deficit_style);
+    tree->deficit_style = NULL;
+  }
+
+  if (GTK_OBJECT_CLASS(parent_class)->destroy)
+    (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }

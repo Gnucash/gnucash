@@ -87,6 +87,26 @@ static short module = MOD_REGISTER;
 #define BALN_CELL_WIDTH    12
 
 
+#define DATE_CELL_ALIGN    ALIGN_RIGHT
+#define NUM_CELL_ALIGN      ALIGN_LEFT
+#define ACTN_CELL_ALIGN     ALIGN_LEFT
+#define XFRM_CELL_ALIGN    ALIGN_LEFT
+#define MXFRM_CELL_ALIGN   ALIGN_LEFT
+#define XTO_CELL_ALIGN     ALIGN_LEFT
+#define DESC_CELL_ALIGN    ALIGN_LEFT
+#define MEMO_CELL_ALIGN    ALIGN_LEFT
+#define RECN_CELL_ALIGN     ALIGN_CENTER
+#define DEBT_CELL_ALIGN    ALIGN_RIGHT
+#define CRED_CELL_ALIGN    ALIGN_RIGHT
+#define NDEBT_CELL_ALIGN   ALIGN_RIGHT
+#define NCRED_CELL_ALIGN   ALIGN_RIGHT
+#define PRIC_CELL_ALIGN     ALIGN_RIGHT
+#define VALU_CELL_ALIGN    ALIGN_RIGHT
+#define SHRS_CELL_ALIGN    ALIGN_RIGHT
+#define BALN_CELL_ALIGN    ALIGN_RIGHT
+
+
+
 /* ============================================== */
 
 #define LABEL(NAME,label)					\
@@ -270,7 +290,11 @@ configAction (SplitRegister *reg)
 								\
    if ((0<=row) && (0<=col)) {					\
       curs->cells [row][col] = (handler);			\
+      curs->cell_types[row][col] = NAME##_CELL;                  \
       header->widths[col] = NAME##_CELL_WIDTH;			\
+      header->alignments[col] = NAME##_CELL_ALIGN;			\
+      curs->widths[col] = NAME##_CELL_WIDTH;			\
+      curs->alignments[col] = NAME##_CELL_ALIGN;			\
       if (hcell) {						\
          if (1 == reg->num_header_rows) {			\
             header->cells[0][col] = hcell;			\

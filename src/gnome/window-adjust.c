@@ -26,8 +26,14 @@
 #include <gnome.h>
 #include <time.h>
 
-#include "config.h"
+#include "top-level.h"
+
+#include "ui-callbacks.h"
+#include "MultiLedger.h"
 #include "AdjBWindow.h"
+#include "Refresh.h"
+#include "window-reconcile.h"
+#include "query-user.h"
 #include "messages.h"
 #include "util.h"
 
@@ -53,6 +59,8 @@ gnc_ui_adjBWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
 {
   AdjBWindow * adjBData = (AdjBWindow *) user_data;
   Account *account = adjBData->account;
+
+  DEBUG("Closing adjust balance window");
 
   REMOVE_FROM_LIST (AdjBWindow, adjBList, account, account); 
 
@@ -113,8 +121,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
   xaccAccountCommitEdit(adjBData->account);
   xaccTransCommitEdit(trans);
   
-  xaccAccountDisplayRefresh(adjBData->account);
-  recnRefresh(adjBData->account);
+  gnc_account_ui_refresh(adjBData->account);
   gnc_refresh_main_window();
 
   gnome_dialog_close(GNOME_DIALOG(adjBData->dialog));

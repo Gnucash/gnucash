@@ -58,7 +58,8 @@
 #define MOD_GUI        6
 #define MOD_SCRUB      7
 #define MOD_GTK_REG    8
-#define MODULE_MAX     9
+#define MOD_GUILE      9
+#define MODULE_MAX    10
 
 extern int loglevel[MODULE_MAX];
 

@@ -41,26 +41,29 @@
 
 ;; We'd rather use a hash table for this, but until hash-for-each or
 ;; hash-keys is generally available, we can't...
-(define gnc_:*options-dialog-entries* '())
+(define gnc:*options-entries* '())
 
 ;; This will be an alist
 ;;   (k v) -> (section-name list-of-option-items)
 
-;; For now all the setters need to be idempotent.  We may call them
-;; more than once per value change.  This is because of the way we
-;; handle cancel and apply.
-
 (define (gnc:make-configuration-option
+	 ;; The category of this option
          section
          name
+	 ;; The sort-tag determines the relative ordering of options in
+	 ;; this category. It is used by the gui for display.
          sort-tag
          type
          documentation-string
          getter
+	 ;; The setter is responsible for ensuring that the value is valid.
          setter
          default-getter
          generate-restore-form
-         ui-value-validator)
+	 ;; Validation func should accept a value and return (#t value)
+	 ;; on success, and (#f "failure-message") on failure. If #t,
+	 ;; the supplied value will be used to set the option.
+         value-validator)
   (vector section
           name
           sort-tag
@@ -70,8 +73,22 @@
           setter
           default-getter
           generate-restore-form
-          #f
-          ui-value-validator))
+          value-validator))
+
+(define (gnc:make-simple-boolean-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value)
+  (let ((option default-value))
+    (gnc:make-configuration-option section name sort-tag 'boolean
+				   documentation-string
+				   (lambda () option)
+				   (lambda (x) (set! option x))
+				   (lambda () default-value)
+				   #f
+				   (lambda (x) (list #t x)))))
 
 (define (gnc:configuration-option-section option)
   (vector-ref option 0))
@@ -91,204 +108,127 @@
   (vector-ref option 7))
 (define (gnc:configuration-option-generate-restore-form option)
   (vector-ref option 8))
-
-(define (gnc:configuration-option-widget-get option)
+(define (gnc:configuration-option-value-validator option)
   (vector-ref option 9))
-(define (gnc:configuration-option-widget-set! option widget)
-  (vector-set! option 9 widget))
-
-;; Validation func should return (#t value) on success, and
-;; (#f "failure-message") on failure.
-(define (gnc:configuration-option-ui-value-validator option)
-  (vector-ref option 10))
 
 
 (define (gnc:register-configuration-option new-item)
-  
+
   (let* ((section (gnc:configuration-option-section new-item))
-         (existing-entry (assoc-ref gnc_:*options-dialog-entries* section)))
+         (existing-entry (assoc-ref gnc:*options-entries* section)))
     (if existing-entry
-        (set! gnc_:*options-dialog-entries*
-              (assoc-set! gnc_:*options-dialog-entries*
+        (set! gnc:*options-entries*
+              (assoc-set! gnc:*options-entries*
                           section 
                           (cons new-item existing-entry)))
-        (set! gnc_:*options-dialog-entries*
-              (assoc-set! gnc_:*options-dialog-entries*
+        (set! gnc:*options-entries*
+              (assoc-set! gnc:*options-entries*
                           section 
                           (list new-item))))))
 
-;; Cancel checkpoint actions.
-
-(define (gnc:options-dialog-clear-cancel-actions) #f)
-(define (gnc:options-dialog-apply-cancel-actions) #f)
-(define (gnc:options-dialog-add-cancel-action action) #f)
-
-(let ((cancel-actions '()))
-  (set! gnc:options-dialog-clear-cancel-actions
-        (lambda () (set! cancel-actions '())))
-  (set! gnc:options-dialog-apply-cancel-actions
-        (lambda ()
-          (for-each (lambda (a) (a)) (reverse cancel-actions))))
-  (set! gnc:options-dialog-add-cancel-action
-        (lambda (action)
-          (set! cancel-actions (cons action cancel-actions)))))
-
-(define (gnc:options-dialog-cancel-clicked)
-  (gnc:options-dialog-apply-cancel-actions))
-
-;; Apply checkpoint actions.
-
-(define (gnc:options-dialog-clear-ok-actions) #f)
-(define (gnc:options-dialog-get-ok-actions) #f)
-(define (gnc:options-dialog-add-ok-action action) #f)
-
-(let ((ok-actions '()))
-  (set! gnc:options-dialog-clear-ok-actions
-        (lambda () (set! ok-actions '())))
-  (set! gnc:options-dialog-get-ok-actions
-        (lambda ()
-          ok-actions))
-  (set! gnc:options-dialog-add-ok-action
-        (lambda (action)
-          (set! ok-actions (cons action ok-actions)))))
-
-(define (gnc:options-dialog-ok-clicked)
-  (let ((actions (reverse (gnc:options-dialog-get-ok-actions))))
-    (let execute-actions ((remainder actions))
-      (cond ((null? remainder) #t)
-            (else (if ((car remainder))
-                      (execute-actions (cdr remainder))
-                      #f))))))
-
-(define (gnc_warning_dialog message)
-  (gnc:warn message)
-  (gnc:warn "This function needs to be replaced by a real UI."))
-
-(define (gnc:options-dialog-item-apply-new-ui-value item)
-  (let ((current-ui-value (_gnc_options_dialog_item_get_ui_value_ item))
-        (validation-func (gnc:configuration-option-ui-value-validator item))
-        (verification-result #f))
-    
-    (if validation-func
-        (set! verification-result (validation-func current-ui-value))
-        (set! verification-result (list current-ui-value)))
-    
-    (if (car verification-result)
-        (begin
-          ;; if it's OK then update item, refresh UI, and return #t
-          ((gnc:configuration-option-setter item) (cadr verification-result))
-          (_gnc_options_dialog_item_refresh_ui_ item)
-          #t)
-        (begin
-          (gnc_warning_dialog (cadr verification-result))
-          #f))))
-
-(define (gnc_:insert-options-dialog-item gnome-widget configuration-item)
-
-  ;; Set things up so that we can revert to the current value if the
-  ;; user hits cancel (elegant method, no?).
-  (gnc:options-dialog-add-cancel-action
-   (let ((current-value ((gnc:configuration-option-getter configuration-item)))
-         (setter (gnc:configuration-option-setter configuration-item)))
-     (lambda ()
-       (setter current-value))))
-
-  (gnc:options-dialog-add-ok-action
-   (lambda ()
-     (gnc:options-dialog-item-apply-new-ui-value configuration-item)))
-
-  (_gnc_options_dialog_add_item_ gnome-widget configuration-item))
-
-
-(define (gnc_:build-options-dialog-page section-info)
+(define (gnc:send-ui-section-options section-info)
   ;; section-info is a pair (section-name . list-of-options)
-  (let ((gtk-page-widget (_gnc_options_dialog_add_page_ (car section-info)))
-        (sorted-section-items
-         (sort (cdr section-info)
-               (lambda (x y)
-                 (string<? (gnc:configuration-option-sort-tag x)
-                           (gnc:configuration-option-sort-tag y))))))
-    (for-each (lambda (item)
-                (gnc_:insert-options-dialog-item gtk-page-widget item))
-              sorted-section-items)))
+  (for-each gnc:register-option-ui (cdr section-info)))
 
-(define (gnc_:build-options-dialog)
-  (for-each gnc_:build-options-dialog-page
-            (sort gnc_:*options-dialog-entries*
-                  (lambda (x y)
-                    (string<? (car x)
-                              (car y))))))
+(define (gnc:send-ui-options)
+  (for-each gnc:send-ui-section-options gnc:*options-entries*))
 
-
-(define (set-background-color! c) #f)
-(define (get-background-color) #f)
-(define (default-background-color) "grey")
-
-(let ((color (default-background-color)))
-  (set! set-background-color! (lambda (c) (set! color c)))
-  (set! get-background-color (lambda () color)))
 
 (gnc:register-configuration-option
- (gnc:make-configuration-option "Appearance"
-                                "Default background color"
-                                "50-background-color"
-                                'string
-                                "Set the default background color."
-                                get-background-color
-                                set-background-color!
-                                default-background-color
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Appearance"
-                                "foo2"
-                                "50-foo2"
-                                'boolean
-                                "foo2 something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Security"
-                                "foo"
-                                "50-foo"
-                                'string
-                                "foo something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
-(gnc:register-configuration-option
- (gnc:make-configuration-option "Register"
-                                "foo"
-                                "50-foo"
-                                'boolean
-                                "foo something"
-                                (lambda ()
-                                  (display "getting\n")
-                                  #f)
-                                (lambda (x)
-                                  (display "setting\n")
-                                  #f)
-                                #f
-                                #f
-                                #f))
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show bank accounts"
+  "a" "Show bank accounts in the account tree." #t))
 
-(for-each
- (lambda (x) (display x) (newline))
- gnc_:*options-dialog-entries*)
-(newline)
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show cash accounts"
+  "b" "Show cash accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show credit accounts"
+  "c" "Show credit accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show asset accounts"
+  "d" "Show asset accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show liability accounts"
+  "e" "Show liability accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show stock accounts"
+  "f" "Show stock accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show mutual fund accounts"
+  "g" "Show mutual fund accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show currency accounts"
+  "h" "Show currency accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show income accounts"
+  "i" "Show income accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show expense accounts"
+  "j" "Show expense accounts in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Types" "Show equity accounts"
+  "k" "Show equity accounts in the account tree." #t))
+
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account name"
+  "a" "Show the account name column in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account type"
+  "b" "Show the account type column in the account tree." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account code"
+  "c" "Show the account code column in the account tree." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account description"
+  "d" "Show the account description column in the account tree." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account notes"
+  "e" "Show the account notes column in the account tree." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account currency"
+  "f" "Show the account currency column in the account tree." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account security"
+  "g" "Show the account security column in the account tree." #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Account Fields" "Show account balance"
+  "h" "Show the account balance column in the account tree." #t))
 
 
 (define gnc:*arg-show-usage*
@@ -361,4 +301,3 @@ the current value of the path."
            #f)))
    equal?
    '(default)))
-

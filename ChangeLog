@@ -1,3 +1,33 @@
+1999-11-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/Refresh.c: Added this code for refreshing account-related
+ 	windows when accounts change. Right now, this is registers and
+ 	reconcile windows.
+
+	* src/gnome/window-register.c: fixed deleting of blank split
+	
+1999-11-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Add this changelog entry which I should have done a long
+	time ago.
+
+	* Rework most of the src/gnome stuff to be compliant with
+	gnome-standards.
+
+	* Add QIF fixes.
+
+	* Add Transfer and Adjust Balance windows.
+
+	* Add gnome<->guile options interface.
+
+	* Add c-side SCM registry, courtesy of Rob.
+
+	* Add Alexandru's register window enhancements.
+
+	* Add Heath's gnome register enhancements.
+
+	* Remove dependencies on gtksheet. Hooray!
+
 1999-08-25  Rob Browning  <rlb@cs.utexas.edu>
 
 	* Add ./README.gnome-hackers.

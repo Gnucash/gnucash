@@ -24,8 +24,6 @@
 
 include @top_srcdir@/Makefile.init
 
-GTKSHEET_DIR := @GTKSHEET_DIR@
-
 INCLPATH := -I.. \
             -I../.. \
             -I../guile \
@@ -36,7 +34,8 @@ INCLPATH := -I.. \
             -I@top_srcdir@/lib/g-wrap-install/include \
             -I@top_srcdir@/src/g-wrap \
             -I${includedir} \
-            -I../../lib/gtkfilesel2
+            -I../../lib/gtkfilesel2 \
+	    -I@top_srcdir@/src/register/gnome
 
 # All the other GNOME CFLAGS are handled in Makefile.common now
 CFLAGS   = @CFLAGS@ ${INCLPATH}
@@ -53,7 +52,6 @@ endif
 
 # Have to use wildcard here otherwise filters below won't get the expanded
 # text to work on...
-OTHER_OBJS += $(wildcard @top_srcdir@/lib/${GTKSHEET_DIR}/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/lib/gtkfilesel2/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
@@ -63,15 +61,16 @@ OTHER_OBJS += $(wildcard @top_srcdir@/src/guile/obj/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/swig/obj/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/g-wrap/obj/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/g-wrap/obj/gnome/*.o)
+OTHER_OBJS += $(wildcard @top_srcdir@/src/register/gnome/obj/gnome/*.o)
 
 ######################################################################
 # See Makefile.common for information about these variables.
 GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               window-help.c cursors.c account-tree.c \
-              ui-callbacks.c window-reconcile.c \
-              dialog-options.c dialog-filebox.c \
+              window-reconcile.c option-util.c \
+              dialog-options.c dialog-filebox.c dialog-transfer.c \
               dialog-add.c dialog-edit.c dialog-utils.c \
-              scripts_menu.c query-user.c
+              scripts_menu.c query-user.c reconcile-list.c
 ######################################################################
 
 all: gnome

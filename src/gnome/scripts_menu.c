@@ -19,7 +19,6 @@
 
 #include "scripts_menu.h"
 
-#include <nana.h>
 #include <guile/gh.h>
 
 #include "top-level.h"
@@ -31,17 +30,21 @@ static short module = MOD_GUI;
 /* FIXME: is this always kosher?  Will SCM's always fit in a gpointer? */
 
 static void
-gnc_extensions_menu_cb( GtkWidget *w, gpointer p) {
+gnc_extensions_menu_cb( GtkWidget *w, gpointer p)
+{
   SCM closure = (SCM) p;
-  if(!p) return;
+
+  if (!p)
+    return;
+
   gh_call0(closure);
 }
 
 void
 gnc_extensions_menu_add_item(char name[],
                              char hint[],
-                             gpointer data) {
-  gint pos;
+                             gpointer data)
+{
   GnomeUIInfo item_info[2];
   GnomeUIInfo tmpi;
   
@@ -63,55 +66,8 @@ gnc_extensions_menu_add_item(char name[],
   tmpi.moreinfo = NULL;
   item_info[1] = tmpi;
   
-  /* GtkWidget *w = gnome_app_find_menu_pos(www, "Extensions/", &pos); */
-
   PINFO ("gnc_extensions_menu_add_item(): %s %s %p\n", name, hint, data);
-  gnome_app_insert_menus(GNOME_APP(gnc_get_ui_data()), "Extensions/", item_info);
+  gnome_app_insert_menus(GNOME_APP(gnc_get_ui_data()), "Extensions/",
+			 item_info);
+  gnome_app_install_menu_hints(GNOME_APP(gnc_get_ui_data()), item_info);
 }
-
-#if 0
-/* FIXME: This is ugly.  Shouldn't use a static for this... */
-static GnomeUIInfo *scripts_menu_data = NULL;
-
-GnomeUIInfo *create_scripts_menu_data() {
-  I(scripts_menu_data == NULL);
-
-  {
-    GnomeUIInfo tmpi;
-    
-    scripts_menu_data = (GnomeUIInfo *) malloc(2 * sizeof(GnomeUIInfo));
-    
-    tmpi.type = GNOME_APP_UI_ITEM;
-    tmpi.label = NULL;
-    tmpi.hint = NULL;
-    tmpi.moreinfo = NULL;
-    tmpi.user_data = NULL;
-    tmpi.unused_data = NULL;
-    tmpi.pixmap_type = GNOME_APP_PIXMAP_NONE;
-    tmpi.pixmap_info = NULL;
-    tmpi.accelerator_key = 0;
-    tmpi.ac_mods = (GdkModifierType) 0;
-    tmpi.widget = NULL;
-
-    tmpi.label = N_("Test menu item");
-    tmpi.hint = N_("A simple test menu item");
-    tmpi.moreinfo = gnc_extensions_menu_cb;
-    scripts_menu_data[0] = tmpi;
-
-    tmpi.type = GNOME_APP_UI_ENDOFINFO;
-    tmpi.label = NULL;
-    tmpi.moreinfo = NULL;
-    scripts_menu_data[1] = tmpi;
-  }
-
-  return(scripts_menu_data);
-};  
-
-void
-destroy_scripts_menu_data(GnomeUIInfo *sm) {
-  if(scripts_menu_data) {
-    free(scripts_menu_data);
-    scripts_menu_data = NULL;
-  }
-}
-#endif

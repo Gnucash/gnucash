@@ -111,7 +111,9 @@
       
       (gnc:debug "handling arg " item)
  
-      (if (not (string=? "--" (make-shared-substring item 0 2)))
+      (if (not (string=? "--"
+			 (make-shared-substring item 0
+						(min (string-length item) 2))))
           (begin
             (gnc:debug "non-option " item ", assuming file")
             (set! rest (cdr rest))

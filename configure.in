@@ -409,11 +409,6 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 AC_SUBST(GNC_RUNTIME_SHAREDIR)
 AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 
-# UGLY HACK
-
-GTKSHEET_DIR="gtksheet"
-AC_SUBST(GTKSHEET_DIR)
-
 #CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
@@ -432,11 +427,11 @@ AC_OUTPUT(Makefile
           src/motif/Makefile
           src/qt/Makefile
           src/register/Makefile
+	  src/register/gnome/Makefile
           src/reports/Makefile
           src/swig/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
-          lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
           lib/ComboBox-1.33/Makefile

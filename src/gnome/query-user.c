@@ -19,9 +19,9 @@
 
 #include <gnome.h>
  
-#include "config.h"
-#include "messages.h"
 #include "top-level.h"
+
+#include "messages.h"
 #include "query-user.h"
 #include "util.h"
 
@@ -105,7 +105,8 @@ gnc_foundation_query_dialog(const gchar *title,
 
   int button_count = 0;
   int default_button = 0;
-  int delete_result;
+  int delete_result = 0;
+
 
   /* Validate our arguments */
   assert(yes_allowed || ok_allowed || no_allowed || cancel_allowed);
@@ -244,6 +245,24 @@ gnc_info_dialog(const char *message) {
 				      GTK_WINDOW(gnc_get_ui_data()));
 
   gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
+}
+
+/********************************************************************\
+ * gnc_warning_dialog                                               * 
+ *   displays a warning dialog box                                  * 
+ *                                                                  * 
+ * Args:   message - the warning message to display                 * 
+ * Return: none                                                     * 
+\********************************************************************/
+void 
+gnc_warning_dialog(const char *message)
+{
+  GtkWidget *warning_box = NULL;
+  
+  warning_box = gnome_warning_dialog_parented(message,
+					      GTK_WINDOW(gnc_get_ui_data()));
+
+  gnome_dialog_run_and_close(GNOME_DIALOG(warning_box));
 }
 
 /********************************************************************\

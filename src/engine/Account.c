@@ -1168,5 +1168,18 @@ IthAccount (Account **list, int i)
    if (!list || 0 > i) return NULL;
    return list[i];
 }
+
+/********************************************************************\
+\********************************************************************/
+
+gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
+					  Account *account_2)
+{
+  if ((account_1 == NULL) || (account_2 == NULL))
+    return GNC_F;
+
+  return xaccIsCommonCurrency(account_1->currency, account_1->security,
+			      account_2->currency, account_2->security);
+}
    
 /*************************** END OF FILE **************************** */

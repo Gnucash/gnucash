@@ -59,11 +59,8 @@ static void gnc_account_tree_fill(GNCAccountTree *tree,
 
 static void gnc_account_tree_set_view_info_real(GNCAccountTree *tree);
 
-
-static void gnc_init_account_view_info(AccountViewInfo *avi);
-
-static GtkCTreeNode * gnc_account_tree_insert_root(GNCAccountTree *tree);
-
 static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
+
+static void gnc_account_tree_destroy(GtkObject *object);
 
 #endif

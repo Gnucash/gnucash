@@ -601,6 +601,36 @@ xaccTransGetImbalance (Transaction * trans)
 
 /********************************************************************\
 \********************************************************************/
+gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
+				char *currency_2, char *security_2)
+{
+  int c1c2, c1s2, s1c2, s1s2;
+
+  if ((currency_1 == NULL) || (currency_2 == NULL))
+    return GNC_F;
+
+  if ((security_1 != NULL) && (security_1[0] == 0x0))
+    security_1 = NULL;
+
+  if ((security_2 != NULL) && (security_2[0] == 0x0))
+    security_2 = NULL;
+
+  c1c2 = safe_strcmp(currency_1, currency_2);
+  c1s2 = safe_strcmp(currency_1, security_2);
+
+  if (security_1 != NULL)
+  {
+    s1c2 = safe_strcmp(security_1, currency_2);
+    s1s2 = safe_strcmp(security_1, security_2);
+  }
+  else /* no match */
+  {
+    s1c2 = 1;
+    s1s2 = 1;
+  }
+
+  return (c1c2 == 0) || (c1s2 == 0) || (s1c2 == 0) || (s1s2 == 0);
+}
 
 static char *
 FindCommonCurrency (Split **slist, char * ra, char * rb)

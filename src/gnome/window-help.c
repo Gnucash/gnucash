@@ -160,6 +160,7 @@ historyCurrent( HTMLHistory **history )
 #endif
 
 /* Remove all entries from history: */
+#if 0
 static void
 historyClear( HTMLHistory **history )
   {
@@ -184,7 +185,7 @@ historyClear( HTMLHistory **history )
   _free(*history);
   (*history) = NULL;
   }
-
+#endif
 
 /********************************************************************\
  *     HTML Window stuff...                                         * 
@@ -211,17 +212,13 @@ static void   htmlWindow( GtkWidget *parent, HTMLWindow **hwinp,
                           const char * const title, 
                           const char * const htmlfile, 
                           const char * const text);
-static void   closeHtmlWin( GtkWidget *widget, gpointer data );
-static void   frameCB( GtkWidget *widget, gpointer data );
-static void   formCB( GtkWidget *widget, gpointer data );
 static void   htmlBackCB( GtkWidget *widget,  gpointer data );
 static void   htmlFwdCB( GtkWidget *widget, gpointer data );
 static void   htmlAnchorCB( GtkWidget *widget, XmHTMLAnchorCallbackStruct *acbs, gpointer data );
 
 #if HAVE_LIBXMHTML
 static char * xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text);
-static XmImageInfo * htmlReadImageProc (GtkWidget *widget, String file);
-#endif /* WANT_XMHTML */
+#endif /* HAVE_XMHTML */
 
 /********************************************************************\
  * reportWindow                                                     * 
@@ -289,12 +286,6 @@ htmlWindow( GtkWidget *parent,
             const char * const htmlfile,
             const char * const htmltext)
 {
-  GtkWidget dialog,
-         pane,
-         controlform,
-         buttonform,
-         widget;
-  int position=0;
   HTMLWindow *hw = *hwinp;
   char * text=0x0;
   
@@ -387,79 +378,6 @@ htmlWindow( GtkWidget *parent,
  *     callback functions...                                        * 
 \********************************************************************/
 
-/* sample usage for data target frame: 
- * <frame name="report-target" src="xxx.html">
- * design hack alert -- to be general and flexible and less of a hack,
- * we should be keeping track of the named frame elements, and pushing
- * them onto a linked list.  Then, the URL that gets clicked on 
- * should contain the name of the target frame that we want to draw
- * draw to ... and we could look up that name in our list.
- */
-#define DATA_TARGET "report-target"
-#define MENU_TARGET "menu-target"
-
-#if HAVE_LIBXMHTML
-static void
-frameCB( GtkWidget *widget, gpointer data )
-{
-   #if 0
-  XmHTMLFrameCallbackStruct *fcs = (XmHTMLFrameCallbackStruct *) cb;
-  HTMLWindow *hw = (HTMLWindow *) cd;
-  
-  if (XmCR_HTML_FRAMECREATE == fcs->reason) { 
-     fcs->doit = True;
-  } else
-  if (XmCR_HTML_FRAME == fcs->reason) { 
-     XtVaSetValues (fcs->html, XmNimageProc, htmlReadImageProc,  NULL);
-     XtAddCallback (fcs->html, XmNactivateCallback, htmlAnchorCB, cd);
-     xaccJumpToLabel (fcs->html, fcs->src, NULL); 
-
-     /* keep track of the frame where we will be placing the reports. */
-     if (!strcmp (fcs->name, DATA_TARGET)) {
-        hw->data_target_frame = fcs->html;
-        if (0 == hw->installed_data_frame_form_cb) {
-           hw->installed_data_frame_form_cb = 1;
-           XtAddCallback( hw->data_target_frame, 
-               XmNformCallback, formCB, (XtPointer) hw);
-        }
-     } else 
-     if (!strcmp (fcs->name, MENU_TARGET)) {
-        hw->menu_target_frame = fcs->html;
-        if (0 == hw->installed_menu_frame_form_cb) {
-           hw->installed_menu_frame_form_cb = 1;
-           XtAddCallback( hw->menu_target_frame, 
-               XmNformCallback, formCB, (XtPointer) hw);
-        }
-     }
-  }
-  #endif
-}
-
-/********************************************************************\
-\********************************************************************/
-static void
-formCB( GtkWidget *widget, gpointer data )
-{
-
-#if 0
-  int i,n;
-  XmHTMLFormCallbackStruct *fcs = (XmHTMLFormCallbackStruct *) cb;
-  // HTMLWindow *hw = (HTMLWindow *) cd;
-  
-   PINFO ("formCB(): action=%s\n", fcs->action);
-   PINFO ("formCB(): encoding=%s\n", fcs->enctype);
-   PINFO ("formCB(): num keys=%d \n", fcs->ncomponents);
-
-   DEBUGCMD ({
-      n = fcs->ncomponents;
-      for (i=0; i<n; i++) {
-         DEBUG ("formCB(): %s=%s\n", 
-             fcs->components[i].name, fcs->components[i].value);
-      }
-   });
- #endif
-}
-#endif
 
 /********************************************************************\
  * htmlBackCB - called when user clicks "Back" button... shows last * 
@@ -512,17 +430,20 @@ htmlFwdCB( GtkWidget *widget, gpointer data )
  *         cb -                                                     * 
  * Return: none                                                     * 
 \********************************************************************/
+#if 0
 static void
 closeHtmlWin( GtkWidget *widget, gpointer data )
-  {
+{
   HTMLWindow **hw = (HTMLWindow **) data;
+
   /* Delete the history: */
   historyClear (&((*hw)->history));
   (*hw)->history=NULL;
   (*hw)->htmlwidget=0;
   free (*hw);
   (*hw) = NULL;
-  }
+}
+#endif
 
 /********************************************************************\
  * htmlAnchorCB - called when user clicks on html anchor tag        * 
@@ -625,6 +546,7 @@ xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text)
 /********************************************************************\
  *     HTML functions...                                            * 
 \********************************************************************/
+
 /********************************************************************\
  * htmlReadImageProc                                                * 
  *                                                                  * 
@@ -632,11 +554,12 @@ xaccJumpToLabel (GtkWidget *widget, const char * jumpfile, char * text)
  * Return: none                                                     * 
  * Global: helpPath - the path to the help files                    * 
 \********************************************************************/
+#if 0
 static XmImageInfo *
 htmlReadImageProc (GtkWidget *widget, String file) 
   {
   char  *filename;
-  XmImageInfo *retval;
+  XmImageInfo *retval = NULL;
 
   /* construct absolute path -- twiddle the relative path we recieved */  
   filename = gncFindFile (file);
@@ -647,6 +570,7 @@ htmlReadImageProc (GtkWidget *widget, String file)
   free(filename);
   return retval;
 }
+#endif /* 0 */
 #endif /* HAVE_XMHTML */
 
 /* ----------------------- END OF FILE ---------------------  */

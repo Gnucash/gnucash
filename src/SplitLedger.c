@@ -92,13 +92,15 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "top-level.h"
+
 #include "ui-callbacks.h"
-#include "SplitLedger.h"
 #include "messages.h"
+#include "SplitLedger.h"
 #include "MultiLedger.h"
+#include "Refresh.h"
 #include "splitreg.h"
 #include "table-allgui.h"
-#include "Transaction.h"
 #include "util.h"
 
 #define BUFSIZE 1024
@@ -330,7 +332,7 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
     * in this transaction.  So basically, send redraw events to all
     * of the splits.
     */
-   xaccTransDisplayRefresh (trans);
+   gnc_transaction_ui_refresh(trans);
    gnc_refresh_main_window();
 }
 
@@ -469,7 +471,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       xaccAccountInsertSplit (new_acc, split);
    
       /* make sure any open windows of the old account get redrawn */
-      xaccAccountDisplayRefresh (old_acc);
+      gnc_account_ui_refresh(old_acc);
       gnc_refresh_main_window();
    }
 
@@ -512,7 +514,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
          xaccAccountInsertSplit (new_acc, other_split);
    
          /* make sure any open windows of the old account get redrawn */
-         xaccAccountDisplayRefresh (old_acc);
+         gnc_account_ui_refresh(old_acc);
          gnc_refresh_main_window();
       }
    }

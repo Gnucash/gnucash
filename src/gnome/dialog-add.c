@@ -39,20 +39,18 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "config.h"
+#include "top-level.h"
 
 #include "AccWindow.h"
-#include "AccInfo.h"
-#include "Account.h"
-#include "top-level.h"
 #include "gnucash.h"
 #include "MainWindow.h"
+#include "FileDialog.h"
 #include "window-main.h"
 #include "dialog-utils.h"
 #include "account-tree.h"
 #include "messages.h"
 #include "util.h"
-#include "FileDialog.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -88,7 +86,6 @@ static void
 gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
 				GdkEventButton * event, gpointer data)
 {
-  gint i;
   gboolean sensitive;
   AccWindow * accData = (AccWindow *) data;
 
@@ -227,7 +224,7 @@ gnc_ui_accWindow_list_row_set_active(GtkCList *type_list, gint row,
   {
     gtk_clist_unselect_row(type_list, row, 0);
     gtk_clist_set_selectable(type_list, row, FALSE);
-    gtk_clist_set_background(type_list, row, &style->dark[0]);
+    gtk_clist_set_background(type_list, row, &style->dark[GTK_STATE_NORMAL]);
   }
 }
 
@@ -328,8 +325,7 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
     
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
   gtk_container_border_width (GTK_CONTAINER (scrollWin), 5);
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrollWin),
-					accountTree);
+  gtk_container_add(GTK_CONTAINER(scrollWin), accountTree);
 
   return frame;
 }
@@ -387,7 +383,7 @@ gnc_ui_accWindow_create_account(Account * account,
  * Args: accData - the information structure for this window        *
  * Return: the created window                                       *
  \*******************************************************************/
-GtkWidget *
+static GtkWidget *
 gnc_accWindow_create(AccWindow *accData) 
 {
   GtkWidget *vbox, *hbox, *dialog, *widget, *source_box;
@@ -412,6 +408,9 @@ gnc_accWindow_create(AccWindow *accData)
 
   /* hide, don't destroy */
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
+
+  /* close on buttons */
+  gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
 
   /* Account field edit box */
   widget = gnc_ui_account_field_box_create(&accData->edit_info, FALSE);
@@ -519,6 +518,8 @@ accWindow (AccountGroup *this_is_not_used)
 
     break;
   }
+
+  DEBUG("destroying account add window\n");
 
   gtk_widget_destroy(dialog);
   g_free(accData);

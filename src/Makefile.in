@@ -40,8 +40,8 @@ CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := MultiLedger.c SplitLedger.c Destroy.c
 CLEAN_SUBDIRS := engine gnome motif register g-wrap guile reports swig qt scm
-MOTIF_SRCS := FileDialog.c
-GNOME_SRCS := FileDialog.c
+MOTIF_SRCS := FileDialog.c Refresh.c
+GNOME_SRCS := FileDialog.c Refresh.c
 ######################################################################
 
 all: default

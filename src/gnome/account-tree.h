@@ -1,5 +1,5 @@
 /*******************************************************************\
- * account-tree.h -- private GNOME account tree functions           *
+ * account-tree.h -- GNOME account tree functions                   *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -52,8 +52,11 @@ struct _GNCAccountTree
   AccountViewInfo avi;
 
   gint    num_columns;
+  gint    balance_column;
   gint    column_fields[NUM_ACCOUNT_FIELDS];
   gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
+
+  GtkStyle *deficit_style;
 
   Account *root_account;
   Account *current_account;
@@ -79,22 +82,25 @@ struct _GNCAccountTreeClass
  *                public functions                         *
  ***********************************************************/
 
-GtkType gnc_account_tree_get_type     (void);
+GtkType gnc_account_tree_get_type (void);
 
-GtkWidget * gnc_account_tree_new      (void);
+GtkWidget * gnc_account_tree_new (void);
 
 GtkWidget * gnc_account_tree_new_with_root (Account *account);
 
-void gnc_account_tree_refresh         (GNCAccountTree *tree);
+void gnc_account_tree_refresh (GNCAccountTree *tree);
 
-gboolean gnc_account_tree_select_account  (GNCAccountTree *tree,
-					   Account *account);
+void gnc_account_tree_set_view_info(GNCAccountTree *tree,
+				    AccountViewInfo *info);
 
-void gnc_account_tree_insert_account  (GNCAccountTree *tree,
-				       Account *account);
+gboolean gnc_account_tree_select_account (GNCAccountTree *tree,
+					  Account *account);
 
-void gnc_account_tree_remove_account  (GNCAccountTree *tree,
-				       Account *account);
+void gnc_account_tree_insert_account (GNCAccountTree *tree,
+				      Account *account);
+
+void gnc_account_tree_remove_account (GNCAccountTree *tree,
+				      Account *account);
 
 void gnc_account_tree_show_categories (GNCAccountTree *tree);
 
@@ -103,6 +109,14 @@ void gnc_account_tree_hide_categories (GNCAccountTree *tree);
 Account * gnc_account_tree_get_current_account (GNCAccountTree *tree);
 
 void gnc_account_tree_hide_all_but_name (GNCAccountTree *tree);
+
+void gnc_init_account_view_info(AccountViewInfo *avi);
+
+void gnc_account_tree_set_view_info (GNCAccountTree *tree,
+				     AccountViewInfo *info);
+
+void gnc_account_tree_get_view_info (GNCAccountTree *tree,
+				     AccountViewInfo *info);
 
 
 #ifdef __cplusplus

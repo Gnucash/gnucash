@@ -8,6 +8,7 @@
 (gnc:load "config-var.scm")
 (gnc:load "utilities.scm")
 (gnc:load "path.scm")
+(gnc:load "c-interface.scm")
 (gnc:load "prefs.scm")
 (gnc:load "command-line.scm")
 (gnc:load "convenience-wrappers.scm")

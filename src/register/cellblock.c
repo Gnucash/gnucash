@@ -44,6 +44,7 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 
    arr->user_data = NULL;
    arr->cells = NULL;
+   arr->cell_types = NULL;
    arr->right_traverse_r = NULL;
    arr->right_traverse_c = NULL;
    arr->widths = NULL;
@@ -72,6 +73,13 @@ FreeCellBlockMem (CellBlock *arr)
       free (arr->cells);
    }
 
+   /* free label array, if any */
+   if (arr->cell_types) {
+      for (i=0; i<oldrows; i++) {
+         if (arr->cell_types[i]) free (arr->cell_types[i]);
+      }
+   }
+   
    /* free traversal chain */
    if (arr->right_traverse_r) {
       for (i=0; i<oldrows; i++) {
@@ -105,10 +113,13 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
 
    /* malloc new cell array */
    arr->cells = (BasicCell ***) malloc (numrows * sizeof (BasicCell **));
+   arr->cell_types = (short **) malloc (numrows * sizeof (short *));
    for (i=0; i<numrows; i++) {
       (arr->cells)[i] = (BasicCell **) malloc (numcols * sizeof (BasicCell *));
+      (arr->cell_types)[i] = (short *) malloc (numcols * sizeof (short));
       for (j=0; j<numcols; j++) {
          (arr->cells)[i][j] = NULL;
+         (arr->cell_types)[i][j] = -1;         
       }
    }
 
@@ -136,11 +147,11 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
    arr->last_reenter_traverse_col = numcols-1;
 
    arr->widths = (short *) malloc (numcols * sizeof(short));
-   arr->alignments = (unsigned char *) malloc (numcols * sizeof(unsigned char));
+   arr->alignments = (Alignments *) malloc (numcols * sizeof(Alignments));
    
    for (j=0; j<numcols; j++) {
       arr->widths[j] = 0;
-      arr->alignments[j] = 0;
+      arr->alignments[j] = ALIGN_RIGHT;
    }
 }
 

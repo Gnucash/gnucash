@@ -28,13 +28,10 @@
 #include <gnome.h>
 #include <stdio.h>
 
-#include "config.h"
-
 #include "top-level.h"
+
 #include "AccWindow.h"
 #include "MainWindow.h"
-#include "AccInfo.h"
-#include "Account.h"
 #include "dialog-utils.h"
 #include "messages.h"
 #include "util.h"
@@ -249,6 +246,30 @@ editAccWindow(Account *acc)
   gtk_widget_show(dialog);
 
   return editAccData;
+}
+
+
+/********************************************************************\
+ * gnc_ui_edit_acc_window_raise                                     *
+ *   shows and raises an account editing window                     * 
+ *                                                                  * 
+ * Args:   editAccData - the edit window structure                  * 
+\********************************************************************/
+void
+gnc_ui_edit_account_window_raise(EditAccWindow * editAccData)
+{
+  if (editAccData == NULL)
+    return;
+
+  if (editAccData->dialog == NULL)
+    return;
+
+  gtk_widget_show(editAccData->dialog);
+
+  if (editAccData->dialog->window == NULL)
+    return;
+
+  gdk_window_raise(editAccData->dialog->window);
 }
 
 

@@ -29,7 +29,8 @@
 
 #include "config.h"
 
-#include "Account.h"
+#include "top-level.h"
+
 
 /** GLOBALS *********************************************************/
 
@@ -39,6 +40,8 @@ typedef struct _RecnWindow RecnWindow;
 /** PROTOTYPES ******************************************************/
 void        recnRefresh(Account *account);
 RecnWindow *recnWindow(GtkWidget *parent, Account *account);
+
+void gnc_ui_reconcile_window_raise(RecnWindow * recnData);
 
 /*
  * The xaccDestroyRecnWindow() subroutine can be called from 

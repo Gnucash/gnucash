@@ -1,377 +1,344 @@
+/********************************************************************\
+ * dialog-options.h -- GNOME option handling                        *
+ * Copyright (C) 1998,1999 Linas Vepstas                            *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
-#include <guile/gh.h>
 #include <gnome.h>
 
 #include "dialog-options.h"
+#include "dialog-utils.h"
+#include "option-util.h"
+#include "query-user.h"
 #include "util.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-/* Note that in general, passing SCM values to the GTK/GNOME callbacks
-   as the "data" value requires you to make sure that that pointer is
-   also known in some other way to Guile.  Otherwise the GC won't know
-   about it, and may accidentally garbage collect it while you're
-   still using it.  Here we should be safe, though, because all of the
-   SCM values are also stored on the Guile side as part of the
-   configuration-item which is stored in the main configuration-item
-   list.  If you notice any SCM values that you think aren't
-   protected, let me know.  */
-
-/*
-  TODO:
-
-  Need options_dirty to keep from calling all the setters on a close
-  even if nothing has changed.
-
-  Right now the semantics are that changes take effect for most values
-  immediately, and when you click apply for strings.  This may not be
-  what we want in the long run...
-
-  Add callback for OK button.
-
-  Add verify functions for strings
-
-  Add string handlers...
-
-  Change this around so that each UI button, etc only calls:
-
-    (gnc:options-dialog-ok)
-    (gnc:options-dialog-apply)
-    (gnc:options-dialog-close)
-
-    (gnc:options-dialog-item-get-ui-value)
-    (gnc:options-dialog-item-refresh-ui-value)
-    
-*/
-
-
 static GnomePropertyBox *options_dialog = NULL;
 
-static gint
-show_option_documentation(GtkWidget *widget,
-                          GdkEventButton *event,
-                          gpointer data) {
-  gnome_ok_dialog((char *) data);
-  return 0;
-}
-
-static gint
-call_boolean_ui_apply_func(GtkWidget *widget, gpointer data) {
-
-  SCM setter_func = (SCM) data;
-  if(GTK_TOGGLE_BUTTON(widget)->active) {
-    gh_call1(setter_func, SCM_BOOL_T);
-  } else {
-    gh_call1(setter_func, SCM_BOOL_F);
-  } 
-  return 0;
-}
 
 static void
-extract_configuration_item_parts(SCM item,
-                                 char **item_type,
-                                 char **item_name,
-                                 char **documentation,
-                                 SCM *value_getter,
-                                 SCM *value_setter,
-                                 SCM *default_value_getter,
-                                 GtkWidget **w) {
-  /* Cache these */
-  static SCM type_getter;
-  static SCM name_getter;
-  static SCM documentation_getter;
-  static SCM get_value_getter;
-  static SCM get_value_setter;
-  static SCM get_default_value_getter;
-  static SCM widget_getter;
-  static gboolean getters_inited = FALSE;
-  
-  if(!getters_inited) {
-    type_getter = gh_eval_str("gnc:configuration-option-type");
-    name_getter = gh_eval_str("gnc:configuration-option-name");
-    documentation_getter = gh_eval_str("gnc:configuration-option-documentation");
-    get_value_getter = gh_eval_str("gnc:configuration-option-getter");
-    get_value_setter = gh_eval_str("gnc:configuration-option-setter");
-    get_default_value_getter =
-      gh_eval_str("gnc:configuration-option-default-getter");
-    widget_getter =
-      gh_eval_str("gnc:configuration-option-widget-get");
-    
-    getters_inited = TRUE;
-  }
+gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
+{
+  gboolean bad_value = FALSE;
+  char *type;
+  SCM getter;
+  SCM value;
 
-  if(item_type) {
-    *item_type = gh_symbol2newstr(gh_call1(type_getter, item), NULL);
-  }
-  if(item_name) {
-    *item_name = gh_scm2newstr(gh_call1(name_getter, item), NULL);
-  }
-  if(documentation) {
-    *documentation = gh_scm2newstr(gh_call1(documentation_getter, item), NULL);
-  }
-  if(value_getter) {
-    *value_getter = gh_call1(get_value_getter, item);
-  }
-  if(value_setter) {
-    *value_setter = gh_call1(get_value_setter, item);
-  }
-  if(default_value_getter) {
-    *default_value_getter = gh_call1(get_default_value_getter, item);
-  }
-  if(w) {
-    *w = (GtkWidget *) gh_scm2ulong(gh_call1(widget_getter, item));
-  }
-}
+  if ((option == NULL) || (option->widget == NULL))
+    return;
 
-static gint
-call_reset_to_default_func(GtkWidget *widget,
-                           GdkEventButton *event,
-                           gpointer data) {
-  SCM item = (SCM) data;
-  SCM value_setter;
-  SCM default_value_getter;
-  
-  extract_configuration_item_parts(item,
-                                   NULL,
-                                   NULL,
-                                   NULL,
-                                   NULL,
-                                   &value_setter,
-                                   &default_value_getter,
-                                   NULL);
+  type = gnc_option_type(option);
 
+  if (use_default)
+    getter = gnc_option_default_getter(option);
+  else
+    getter = gnc_option_getter(option);
+
+  value = gh_call0(getter);
+
+  if (safe_strcmp(type, "boolean") == 0)
   {
-    SCM default_value = gh_call0(default_value_getter);
-    gh_call1(value_setter, default_value);
+    if (gh_boolean_p(value))
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(option->widget),
+				  gh_scm2bool(value));
+    else
+      bad_value = TRUE;
   }
-  return 0;
+  else if (safe_strcmp(type, "string") == 0)
+  {
+    if (gh_string_p(value))
+    {
+      char *string = gh_scm2newstr(gh_call0(getter), NULL);
+      gtk_entry_set_text(GTK_ENTRY(option->widget), string);
+      free(string);
+    }
+    else
+      bad_value = TRUE;
+  }
+  else
+  {
+    PERR("gnc_option_set_ui_value: Unknown type. Ignoring.\n");
+  }
+
+  if (bad_value)
+  {
+    PERR("gnc_option_set_ui_value: bad value\n");
+  }
+
+  free(type);
 }
 
 void
-_gnc_options_dialog_item_refresh_ui_(SCM item) {
-
-  if(options_dialog) {
-    
-    char *item_type;
-    SCM value_getter;
-    GtkWidget *w;
-    
-    extract_configuration_item_parts(item,
-                                     &item_type,
-                                     NULL,
-                                     NULL,
-                                     &value_getter,
-                                     NULL,
-                                     NULL,
-                                     &w);
-    
-    if(strcmp(item_type, "boolean")) {
-      gboolean current_state = gh_scm2bool(gh_call0(value_getter));
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(w), current_state);    
-    } else {
-      PERR ("_gnc_options_dialog_item_refresh_ui_(): "
-            "Unknown type for refresh.  Ignoring.\n");
-    }
-    free(item_type);
-  }
+_gnc_option_refresh_ui(SCM guile_option)
+{
+  gnc_option_set_ui_value(gnc_get_option_by_SCM(guile_option), FALSE);
 }
 
 SCM
-_gnc_options_dialog_item_get_ui_value_(SCM item) {
-  SCM result = 0;
-  if(options_dialog) {    
-    char *item_type;
-    SCM value_getter;
-    GtkWidget *w;
-    
-    extract_configuration_item_parts(item,
-                                     &item_type,
-                                     NULL,
-                                     NULL,
-                                     &value_getter,
-                                     NULL,
-                                     NULL,
-                                     &w);
-    
-    if(strcmp(item_type, "boolean")) {
-      result = gh_bool2scm(GTK_TOGGLE_BUTTON(w)->active);
-    } else {
-      PERR ("_gnc_options_dialog_item_get_ui_value_(): "
-            "Unknown type for refresh.  Ignoring.\n");
-      result = SCM_UNDEFINED;
-    }
-    free(item_type);
-  }
-  return(result);
-}
+gnc_option_get_ui_value(GNCOption *option)
+{
+  SCM result = SCM_UNDEFINED;
+  char *type;
 
-void
-_gnc_options_dialog_add_item_(GtkBox *page_w, SCM item) {
+  if (option->widget == NULL)
+    return result;
 
-  char *item_type;
-  char *item_name;
-  char *item_documentation;
-  SCM item_value_getter;
-  SCM item_value_setter;
-  SCM item_default_value_getter;
-  gboolean known_type = FALSE;
-  
-  extract_configuration_item_parts(item,
-                                   &item_type,
-                                   &item_name,
-                                   &item_documentation,
-                                   &item_value_getter,
-                                   &item_value_setter,
-                                   &item_default_value_getter,
-                                   NULL);
+  type = gnc_option_type(option);
+
+  if (safe_strcmp(type, "boolean") == 0)
   {
-    /* Horizontal box to hold all the UI items. */
-    GtkWidget *hbox = gtk_hbox_new(FALSE, 1);
-    GtkWidget *value_widget = NULL;
-    
-    gtk_box_pack_start(GTK_BOX(page_w), GTK_WIDGET(hbox), FALSE, FALSE, 3);
-    
-    if(strcmp(item_type, "boolean") == 0) {
-      gboolean current_state;
+    gboolean active;
 
-      value_widget = gtk_check_button_new_with_label(item_name);
-      current_state = gh_scm2bool(gh_call0(item_value_getter));
-      
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(value_widget),
-                                  current_state);
-      gtk_signal_connect (GTK_OBJECT (value_widget), 
-                          "toggled",
-                          (GtkSignalFunc) call_boolean_ui_apply_func,
-                          (gpointer) item_value_setter);
-      known_type = TRUE;
-    } else {
-      gchar *label_name = g_strdup_printf("%s: <unknown-type>", item_name);
-      value_widget = gtk_label_new(label_name);
-    }
-    
-    gtk_widget_show(value_widget);
-    gtk_box_pack_start(GTK_BOX(hbox), value_widget, FALSE, FALSE, 3);
-
-    {
-      static SCM item_widget_setter;
-      static gboolean setter_inited = FALSE;
-      if(!setter_inited) {
-        item_widget_setter = gh_eval_str("gnc:configuration-option-widget-set!");
-        setter_inited = TRUE;
-      }
-      /* HACK: gh_ulong2scm might not always be OK for pointers... */
-      gh_call2(item_widget_setter, item,
-               gh_ulong2scm((unsigned long) value_widget));
-    } 
-    
-    {
-      GtkWidget *help_button = gtk_button_new_with_label("Help");
-      gtk_widget_show(help_button);
-      gtk_box_pack_end(GTK_BOX(hbox), help_button, FALSE, FALSE, 3);
-      gtk_signal_connect (GTK_OBJECT (help_button), 
-                          "button_press_event",
-                          (GtkSignalFunc) show_option_documentation,
-                          (gpointer) g_strdup(item_documentation));
-    }
-
-    
-    if(known_type) {
-      GtkWidget *default_button = gtk_button_new_with_label("Set to default");
-      gtk_widget_show(default_button);
-      gtk_box_pack_end(GTK_BOX(hbox), default_button, FALSE, FALSE, 3);  
-      gtk_signal_connect (GTK_OBJECT (default_button), 
-                          "button_press_event",
-                          (GtkSignalFunc) call_reset_to_default_func,
-                          (gpointer) item);
-    }
-    gtk_widget_show(hbox);    
+    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(option->widget));
+    result = gh_bool2scm(active);
   }
-  free(item_type);
-  free(item_name);
-  free(item_documentation);
-}
+  else if (safe_strcmp(type, "string") == 0)
+  {
+    char * string;
 
-GtkWidget *
-_gnc_options_dialog_add_page_(const char label[]) {
-  
-  GtkWidget *page_label;
-  GtkWidget *page_content_box;
+    string = gtk_editable_get_chars(GTK_EDITABLE(option->widget), 0, -1);
+    result = gh_str02scm(string);
+    g_free(string);
+  }
+  else
+  {
+    PERR("_gnc_option_get_guile_value: "
+	 "Unknown type for refresh. Ignoring.\n");
+  }
 
-  page_label = gtk_label_new(label);
-  gtk_widget_show(page_label);
-  page_content_box = gtk_vbox_new ( FALSE, 1 );
-  gtk_widget_show (page_content_box);
-  
-  gnome_property_box_append_page(options_dialog, page_content_box, page_label);
-  
-  //gtk_widget_set_usize ( GTK_WIDGET(box2), 225, 225 ); 
-  return(page_content_box);
+  free(type);
+
+  return result;
 }
 
 static void
-build_options_dialog_contents() {
-  const char builder_name[] = "gnc_:build-options-dialog";
+default_button_cb(GtkButton *button, gpointer data)
+{
+  GNCOption *option = data;
 
-  /* FIXME: We should be using this, but it doesn't work.  I think
-     it's a module namespace issue...*/
-  /*SCM scm_builder = gh_lookup(builder_name);*/
+  gnc_option_set_ui_value(option, TRUE);
 
-  SCM scm_builder = gh_eval_str((char *) builder_name);
+  option->changed = TRUE;
+  gnome_property_box_changed(options_dialog);
+}
+
+static GtkWidget *
+gnc_option_create_default_button(GNCOption *option)
+{
+  GtkWidget *default_button = gtk_button_new_with_label("Set to default");
+
+  gtk_widget_show(default_button);
+  gtk_container_set_border_width(GTK_CONTAINER(default_button), 2);
+
+  gtk_signal_connect(GTK_OBJECT(default_button), "clicked",
+		     GTK_SIGNAL_FUNC(default_button_cb), option);
+
+  return default_button;
+}
+
+static void
+gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
+{
+  GNCOption *option = data;
+
+  option->changed = TRUE;
+  gnome_property_box_changed(options_dialog);
+}
+
+static void
+gnc_option_changed_cb(GtkEditable *editable, gpointer data)
+{
+  GNCOption *option = data;
+
+  option->changed = TRUE;
+  gnome_property_box_changed(options_dialog);
+}
+
+static GtkWidget *
+gnc_option_set_ui_widget(GNCOption *option)
+{
+  GtkWidget *enclosing = NULL;
+  GtkWidget *value = NULL;
+  char *name, *documentation;
+  char *type;
+
+  type = gnc_option_type(option);
+  name = gnc_option_name(option);
+  documentation = gnc_option_documentation(option);
+
+  if (safe_strcmp(type, "boolean") == 0)
+  {
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gtk_check_button_new_with_label(name);
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "toggled",
+		       GTK_SIGNAL_FUNC(gnc_option_toggled_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option),
+		     FALSE, FALSE, 0);
+  }
+  else if (safe_strcmp(type, "string") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gtk_entry_new();
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "changed",
+		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option),
+		     FALSE, FALSE, 0);
+  }
+  else
+  {
+    PERR("gnc_option_set_ui_widget: Unknown type. Ignoring.\n");
+  }
+
+  if (value != NULL)
+    gnc_set_tooltip(value, documentation);
+
+  if (enclosing != NULL)
+    gtk_widget_show_all(enclosing);
+
+  free(documentation);
+  free(name);
+  free(type);
+
+  return enclosing;
+}
+
+static void
+gnc_options_dialog_add_option(GtkWidget *page, GNCOption *option)
+{
+  gtk_box_pack_start(GTK_BOX(page), gnc_option_set_ui_widget(option),
+		     FALSE, FALSE, 0);
+}
+
+static void
+gnc_options_dialog_append_page(GNCOptionSection *section)
+{
+  GNCOption *option;
+  GtkWidget *page_label;
+  GtkWidget *page_content_box;
+  gint num_options;
+  gint i;
+
+  page_label = gtk_label_new(section->section_name);
+  gtk_widget_show(page_label);
+
+  page_content_box = gtk_vbox_new(FALSE, 5);
+  gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 5);
+  gtk_widget_show(page_content_box);
   
-  if(gh_procedure_p(scm_builder)) {
-    gh_call0(scm_builder);
-  } else {
-    fprintf(stderr, "gnucash: function lookup failed %s\n", builder_name);
-    exit(1);
+  gnome_property_box_append_page(options_dialog, page_content_box, page_label);
+
+  num_options = gnc_option_section_num_options(section);
+  for (i = 0; i < num_options; i++)
+  {
+    option = gnc_get_option_section_option(section, i);
+    gnc_options_dialog_add_option(page_content_box, option);
   }
 }
 
-static gint
-options_dialog_close_cb(GtkWidget *widget,
-                        GdkEventButton *event,
-                        gpointer data) {
-  gh_eval_str("(gnc:options-dialog-cancel-clicked)");
-  return 0;
+static void
+build_options_dialog_contents()
+{
+  GNCOptionSection *section;
+  gint num_sections = gnc_num_option_sections();
+  gint i;
+
+  for (i = 0; i < num_sections; i++)
+  {
+    section = gnc_get_option_section(i);
+    gnc_options_dialog_append_page(section);
+  }
 }
 
-#if 0
-static gint
-options_dialog_ok_cb(GtkWidget *widget,
-                        GdkEventButton *event,
-                        gpointer data) {
-  gh_eval_str("(gnc:options-dialog-ok-clicked)");
-
-  /* Need to return a value that determines if we succeed...  If we
-     don't, don't close the window...*/
-
-  return 0;
+static void
+gnc_options_dialog_apply_cb(GnomePropertyBox *propertybox,
+			    gint arg1, gpointer user_data)
+{
+  if (arg1 == -1)
+    gnc_options_commit();
 }
-#endif
 
+static void
+gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
+			   gint arg1, gpointer user_data)
+{
+  gnome_ok_dialog("Help on properties");
+}
 
 /* Options dialog... this should house all of the config options     */
 /* like where the docs reside, and whatever else is deemed necessary */
 void
-gnc_show_options_dialog()  {
+gnc_show_options_dialog()
+{
+  if (gnc_num_option_sections() == 0)
+  {
+    gnc_warning_dialog("No options!");
+    return;
+  }
 
-  if(!options_dialog) {
-    gh_eval_str("(gnc:options-dialog-clear-cancel-actions)");
-    //gh_eval_str("(gnc:options-dialog-clear-apply-actions)");
+  if (gnc_options_dirty())
+  {
+    if (options_dialog != NULL)
+      gtk_widget_destroy(GTK_WIDGET(options_dialog));
 
+    options_dialog = NULL;
+  }
+
+  if (options_dialog == NULL)
+  {
     options_dialog = GNOME_PROPERTY_BOX(gnome_property_box_new());
-    gnome_dialog_close_hides (GNOME_DIALOG(options_dialog), TRUE);
+    gnome_dialog_close_hides(GNOME_DIALOG(options_dialog), TRUE);
 
     build_options_dialog_contents();
-    
-    gtk_widget_set_usize ( GTK_WIDGET(options_dialog), 500, 400 );
+    gnc_options_clean();
 
-    gtk_signal_connect (GTK_OBJECT (options_dialog->cancel_button), 
-                        "button_press_event",
-                        (GtkSignalFunc) options_dialog_close_cb,
-                        (gpointer) NULL);
+    gtk_signal_connect(GTK_OBJECT(options_dialog), "apply",
+		       GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),
+		       NULL);
+
+    gtk_signal_connect(GTK_OBJECT(options_dialog), "help",
+		       GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb),
+		       NULL);
   }
+
   gtk_widget_show(GTK_WIDGET(options_dialog));  
   gdk_window_raise(GTK_WIDGET(options_dialog)->window);
 }
-

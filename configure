@@ -2511,7 +2511,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lXpm -L$x_libraries -lX11 $LIBS"
+LIBS="-lXpm $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2517 "configure"
 #include "confdefs.h"
@@ -3058,12 +3058,7 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 
 
 
-# UGLY HACK
-
-GTKSHEET_DIR="gtksheet"
-
-
-CFLAGS="${CFLAGS} -Werror -Wno-unused"
+#CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
 
@@ -3182,11 +3177,11 @@ trap 'rm -fr `echo "Makefile
           src/motif/Makefile
           src/qt/Makefile
           src/register/Makefile
+	  src/register/gnome/Makefile
           src/reports/Makefile
           src/swig/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
-          lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
           lib/ComboBox-1.33/Makefile
@@ -3253,7 +3248,6 @@ s%@GNC_CONFIGDIR@%$GNC_CONFIGDIR%g
 s%@GNC_SHAREDIR@%$GNC_SHAREDIR%g
 s%@GNC_RUNTIME_SHAREDIR@%$GNC_RUNTIME_SHAREDIR%g
 s%@GNC_RUNTIME_CONFIGDIR@%$GNC_RUNTIME_CONFIGDIR%g
-s%@GTKSHEET_DIR@%$GTKSHEET_DIR%g
 s%@ABSOLUTE_TOP_SRCDIR@%$ABSOLUTE_TOP_SRCDIR%g
 
 CEOF
@@ -3307,11 +3301,11 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           src/motif/Makefile
           src/qt/Makefile
           src/register/Makefile
+	  src/register/gnome/Makefile
           src/reports/Makefile
           src/swig/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
-          lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
           lib/ComboBox-1.33/Makefile

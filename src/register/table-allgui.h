@@ -100,7 +100,7 @@
 #endif 
 
 #ifdef GNOME
-#include "table-gtk.h"
+#include "table-gnome.h"
 #endif 
 
 #ifdef KDE
@@ -140,6 +140,20 @@ struct _Locator {
 };
 
 typedef struct _Locator Locator;
+
+/*  The RevLocator gives a reverse mapping from a virtual
+ *  cell block to the origin of the block in physical coordinates.
+ *
+ *  There is one instance of a RevLocator for each virtual cell.
+ */
+
+struct _RevLocator {
+  short phys_row;
+  short phys_col;
+};
+
+typedef struct _RevLocator RevLocator;
+
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -201,6 +215,10 @@ struct _Table {
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
   Locator ***locators;
+
+  /* reverse locators for each cell,
+     of dimension num_virt_rows * num_virt_cols */
+  RevLocator ***rev_locators;
 
   /* user hooks, of dimension num_virt_rows * num_virt_cols */
   void ***user_data;

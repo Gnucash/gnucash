@@ -83,6 +83,7 @@ xaccInitTable (Table * table)
    table->bg_colors = NULL;
    table->fg_colors = NULL;
    table->locators = NULL;
+   table->rev_locators = NULL;
    table->user_data = NULL;
    table->handlers = NULL;
 
@@ -186,6 +187,7 @@ xaccFreeTableEntries (Table * table)
 
    /* free the locators */
    FREE_PARR (locators, FREEUP, NULL);
+   FREE_VARR (rev_locators, FREEUP, NULL);   
 
    /* free the foreground and background color arrays */
    FREE_PARR (bg_colors, NOOP, 0xffffff);
@@ -209,6 +211,18 @@ xaccMallocLocator (void)
    loc->virt_col = -1;
 
    return (loc);
+}
+
+/* ==================================================== */
+static RevLocator *
+xaccMallocRevLocator (void)
+{
+   RevLocator *rloc;
+   rloc = (RevLocator *) malloc (sizeof (RevLocator));
+   rloc->phys_row = -1;
+   rloc->phys_col = -1;
+
+   return (rloc);
 }
 
 /* ==================================================== */
@@ -248,6 +262,17 @@ xaccTableResize (Table * table,
                (xaccMallocLocator ()),
                free);
 
+   /* resize the reverse locator array */
+   XACC_RESIZE_ARRAY ((table->num_virt_rows),
+               (table->num_virt_cols),
+               new_virt_rows,
+               new_virt_cols,
+               (table->rev_locators),
+               RevLocator *,
+               (xaccMallocRevLocator ()),
+               free);
+
+   
    /* resize the bg color array (white background)  */
    XACC_RESIZE_ARRAY ((table->num_phys_rows),
                (table->num_phys_cols),
@@ -327,6 +352,10 @@ xaccSetCursor (Table *table, CellBlock *curs,
 
    /* this cursor is the handler for this block */
    table->handlers[virt_row][virt_col] = curs;
+
+   table->rev_locators[virt_row][virt_col]->phys_row = phys_row_origin;
+   table->rev_locators[virt_row][virt_col]->phys_col = phys_col_origin;
+   
 
    /* intialize the mapping so that we will be able to find
     * the handler, given this range of physical cell addressses */
@@ -806,7 +835,7 @@ gnc_register_cell_valid(Table *table, int row, int col)
      This is probably a good check anyway. */
   invalid = invalid || (table->handlers == NULL);
 
-  if(invalid) return(invalid);
+  if(invalid) return(!invalid);
 
   /* header rows cannot be modified */
   /* hack alert -- assumes that header is first cell */
@@ -1033,8 +1062,8 @@ gnc_table_traverse_update(Table *table, int row, int col,
   gncBoolean exit_register = FALSE;
   CellBlock *arr = table->current_cursor;
   
-  ENTER("gnc_table_traverse_update(): proposed (%d, %d) -> (%d %d)\n",
-    row, col, *dest_row, *dest_col);
+  ENTER("gnc_table_traverse_update(): proposed (%d %d) -> (%d %d)\n",
+        row, col, *dest_row, *dest_col);
 
   /* first, make sure our destination cell is valid.  If it is out of
    * bounds report an error.  I don't think this ever happens. */
@@ -1087,7 +1116,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
       break;
   
     default:
-      /* FIXME: Right now we don't handle anything but forward
+         /* FIXME: Right now we don't handle anything but forward
          traversals, but in the future, here's how it should go:
 
          By default, we *accept* the proposed traversal.

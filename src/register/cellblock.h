@@ -55,6 +55,19 @@
 
 #include "basiccell.h"
 
+enum _Alignments {
+  ALIGN_RIGHT,
+  ALIGN_CENTER,
+  ALIGN_LEFT,
+  ALIGN_FILL,
+};
+
+#ifdef MOTIF
+typedef unsigned char Alignments;
+#else
+typedef enum _Alignments Alignments;
+#endif
+
 struct _CellBlock {
 
   short numRows;
@@ -67,6 +80,8 @@ struct _CellBlock {
    */
   BasicCell ***cells;  /* row-col array */
 
+  short **cell_types;  /* row-col array of the cell types in splitreg.h */
+  
   /* The active_bg_color is the default color (in argb) for the cell
    * backgrounds when this cell block needs to be "highlighted" in 
    * some way (typically, when this cellblock represents the
@@ -80,7 +95,7 @@ struct _CellBlock {
 
   /* other attributes */
   short         *widths;        /* column widths */
-  unsigned char *alignments;    /* column text alignments */
+  Alignments *alignments;    /* column text alignments */
 
   short     **right_traverse_r;
   short     **right_traverse_c;

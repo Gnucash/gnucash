@@ -156,4 +156,11 @@ int            xaccAccountGetNumSplits (Account *acc);
 
 Account *      IthAccount (Account **list, int i);
 
+/* xaccAccountsHaveCommonCurrency returns true if the two given accounts
+ * have a currency in common, i.e., if they can have common transactions.
+ * Useful for UI sanity checks.
+ */
+gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
+					  Account *account_2);
+
 #endif /* __XACC_ACCOUNT_H__ */

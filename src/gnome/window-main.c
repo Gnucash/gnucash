@@ -21,29 +21,34 @@
 
 #include <gnome.h>
 #include <guile/gh.h>
+#include <string.h>
 
-#include "config.h"
+#include "top-level.h"
 
 #include "AccWindow.h"
+#include "AdjBWindow.h"
 #include "dialog-options.h"
 #include "FileDialog.h"
 #include "g-wrap.h"
 #include "gnucash.h"
 #include "MainWindow.h"
+#include "Destroy.h"
 #include "messages.h"
 #include "RegWindow.h"
-#include "top-level.h"
 #include "version.h"
 #include "window-main.h"
 #include "window-mainP.h"
+#include "window-reconcile.h"
 #include "window-help.h"
 #include "account-tree.h"
+#include "dialog-transfer.h"
+#include "dialog-edit.h"
 #include "util.h"
+#include "gnc.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-static short show_categories = GNC_T;
 
 enum {
   FMB_NEW,
@@ -74,28 +79,6 @@ static GnomeUIInfo filemenu[] = {
   GNOMEUIINFO_SEPARATOR,
   GNOMEUIINFO_MENU_EXIT_ITEM(gnc_ui_filemenu_cb,
 			     GINT_TO_POINTER(FMB_QUIT)),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo viewmenu[] = {
-  {
-    GNOME_APP_UI_ITEM,
-    N_("Hide categories"), N_("Hide the income and expense accounts"),
-    gnc_ui_view_cb, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-    0, 0, NULL
-  },
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo showmenu[] = {
-  {
-    GNOME_APP_UI_ITEM,
-    N_("Show categories"), N_("Show the income and expense accounts"),
-    gnc_ui_view_cb, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
-    0, 0, NULL
-  },
   GNOMEUIINFO_END
 };
 
@@ -152,6 +135,21 @@ static GnomeUIInfo accountsmenu[] = {
     GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
     'e', GDK_CONTROL_MASK, NULL
   },
+  GNOMEUIINFO_SEPARATOR,
+  {
+    GNOME_APP_UI_ITEM,
+    N_("Re_concile..."), N_("Reconcile the account"),
+    gnc_ui_mainWindow_reconcile, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, 0, NULL
+  },
+  {
+    GNOME_APP_UI_ITEM,
+    N_("_Transfer..."), N_("Transfer funds from one account to another"),
+    gnc_ui_mainWindow_transfer, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    't', GDK_CONTROL_MASK, NULL
+  },
   {
     GNOME_APP_UI_ITEM,
     N_("Adjust _Balance..."), N_("Adjust the balance of the account"),
@@ -197,11 +195,10 @@ static GnomeUIInfo scriptsmenu[] = {
 
 static GnomeUIInfo mainmenu[] = {
   GNOMEUIINFO_MENU_FILE_TREE(filemenu),
-  GNOMEUIINFO_SUBTREE(N_("View"), viewmenu),    
-  GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
-  GNOMEUIINFO_SUBTREE(N_("Reports"), reportsmenu),
-  GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
-  GNOMEUIINFO_SUBTREE(N_("Extensions"), scriptsmenu),    
+  GNOMEUIINFO_SUBTREE(N_("_Accounts"), accountsmenu),
+  GNOMEUIINFO_SUBTREE(N_("_Reports"), reportsmenu),
+  GNOMEUIINFO_SUBTREE(N_("_Options"), optionsmenu),
+  GNOMEUIINFO_SUBTREE(N_("_Extensions"), scriptsmenu),    
   GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
   GNOMEUIINFO_END
 };
@@ -300,65 +297,66 @@ static void
 gnc_ui_refresh_statusbar()
 {
   GtkWidget *label;
-  guint     context_id;
+  double assets  = 0.0;
+  double profits = 0.0;
+  AccountGroup *group;
+  AccountGroup *children;
+  Account *account;
+  char *asset_string;
+  char *profit_string;
+  char *label_string;
+  int num_accounts;
+  int account_type;
   int i;
-  double  assets  = 0.0;
-  double  profits = 0.0;
-  char buf[BUFSIZE];
-  char *amt;
-  AccountGroup *grp;
-  Account *acc;
-  int nacc;
 
-  grp = gncGetCurrentGroup ();
-  nacc = xaccGroupGetNumAccounts (grp);
-  for (i=0; i<nacc; i++) {
-     int acc_type;
-     AccountGroup *acc_children;
-
-     acc = xaccGroupGetAccount (grp,i);
+  group = gncGetCurrentGroup ();
+  num_accounts = xaccGroupGetNumAccounts(group);
+  for (i = 0; i < num_accounts; i++)
+  {
+    account = xaccGroupGetAccount(group, i);
  
-     acc_type = xaccAccountGetType (acc);
-     acc_children = xaccAccountGetChildren (acc);
+    account_type = xaccAccountGetType(account);
+    children = xaccAccountGetChildren(account);
 
-     switch (acc_type) {
-        case BANK:
-        case CASH:
-        case ASSET:
-        case STOCK:
-        case MUTUAL:
-        case CREDIT:
-        case LIABILITY:
-           assets += xaccAccountGetBalance (acc);
-           if (acc_children) {
-              assets += xaccGroupGetBalance (acc_children);
-           }
-           break;
-        case INCOME:
-        case EXPENSE:
-           profits -= xaccAccountGetBalance (acc); /* flip the sign !! */
-           if (acc_children) {
-              profits -= xaccGroupGetBalance (acc_children); /* flip the sign !! */
-           }
-           break;
-        case EQUITY:
-        default:
-           break;
-     }
+    switch (account_type)
+    {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case STOCK:
+      case MUTUAL:
+      case CREDIT:
+      case LIABILITY:
+	assets += xaccAccountGetBalance(account);
+	if (children != NULL)
+	  assets += xaccGroupGetBalance(children);
+	break;
+      case INCOME:
+      case EXPENSE:
+	profits -= xaccAccountGetBalance(account); /* flip the sign !! */
+	if (children != NULL)
+	  profits -= xaccGroupGetBalance(children); /* flip the sign !! */
+	break;
+      case EQUITY:
+      default:
+	break;
+    }
   }
   
-  amt = xaccPrintAmount (assets, PRTSYM | PRTSEP);
-  strcpy (buf, "Assets: ");
-  strcat (buf, amt);
-  strcat (buf, "   Profits: ");
-  amt = xaccPrintAmount (profits, PRTSYM | PRTSEP);
-  strcat (buf, amt);
-  strcat (buf, "  ");
+  asset_string = g_strdup(xaccPrintAmount(assets, PRTSYM | PRTSEP));
+  profit_string = g_strdup(xaccPrintAmount(profits, PRTSYM | PRTSEP));
+
+  label_string = g_strconcat("Assets: ", asset_string,
+			     "   Profits: ", profit_string, "  ", NULL);
    
   label = gtk_object_get_data(GTK_OBJECT(gnc_get_ui_data()),
 			      "balance_label");
 
-  gtk_label_set_text( GTK_LABEL(label), buf);
+  gtk_label_set_text(GTK_LABEL(label), label_string);
+
+  g_free(asset_string);
+  g_free(profit_string);
+  g_free(label_string);
 }
 
 /* Required for compatibility with Motif code... */
@@ -460,11 +458,36 @@ static void
 gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
 {
   Account *account = gnc_get_current_account();
+  EditAccWindow *edit_window_data;
   
   if (account != NULL)
-    editAccWindow(account);
+  {
+    edit_window_data = editAccWindow(account);
+    gnc_ui_edit_account_window_raise(edit_window_data);
+  }
   else
     gnc_error_dialog(ACC_EDIT_MSG);
+}
+
+static void
+gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data)
+{
+  Account *account = gnc_get_current_account();
+  RecnWindow *recnData;
+
+  if (account != NULL)
+  {
+    recnData = recnWindow(gnc_get_ui_data(), account);
+    gnc_ui_reconcile_window_raise(recnData);
+  }
+  else
+    gnc_error_dialog("You must select an account");
+}
+
+static void
+gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
+{
+  gnc_xfer_dialog(gnc_get_ui_data(), gnc_get_current_account());
 }
 
 static void
@@ -479,41 +502,9 @@ gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
-  gnc_show_options_dialog();
-}
-
-/* This function currently just hides/shows the INCOME/EXPENSE
- * accounts. It could and should be extended to allow full
- * customization of the account tree widget. For instance the user
- * should be able to choose which fields get displayed such as
- * balance, description, account type, etc.
- */
-static void
-gnc_ui_view_cb(GtkWidget *widget, gpointer viewType)
+gnc_ui_options_cb(GtkWidget *widget, gpointer data)
 {
-  if (show_categories)
-  {
-    /* Widget label -> Hide Categories */
-    gnome_app_remove_menus (GNOME_APP(gnc_get_ui_data()),
-			    "View/Hide categories", 1);
-    gnome_app_insert_menus (GNOME_APP(gnc_get_ui_data()),
-			    "View/", showmenu);
-    gnome_app_install_menu_hints(GNOME_APP(gnc_get_ui_data()), showmenu);
-    gnc_account_tree_hide_categories(gnc_get_current_account_tree());
-    show_categories = GNC_F;
-  }
-  else
-  {
-    /* Widget label -> Show Categories */
-    gnome_app_remove_menus (GNOME_APP(gnc_get_ui_data()),
-			    "View/Show categories", 1);
-    gnome_app_insert_menus (GNOME_APP(gnc_get_ui_data()),
-			    "View/", viewmenu);
-    gnome_app_install_menu_hints(GNOME_APP(gnc_get_ui_data()), viewmenu);
-    gnc_account_tree_show_categories(gnc_get_current_account_tree());
-    show_categories = GNC_T;
-  }
+  gnc_show_options_dialog();
 }
 
 static void
@@ -587,6 +578,122 @@ gnc_account_tree_double_click_cb(GNCAccountTree *tree,
   regWindowSimple(account);
 }
 
+static void
+gnc_configure_account_tree()
+{
+  GtkObject *app;
+  GNCAccountTree *tree;
+  AccountViewInfo new_avi;
+  AccountViewInfo old_avi;
+
+  app = GTK_OBJECT(gnc_get_ui_data());
+  tree = GNC_ACCOUNT_TREE(gtk_object_get_data(app, "account_tree"));
+
+  if (tree == NULL)
+    return;
+
+  gnc_account_tree_get_view_info(tree, &old_avi);
+
+  new_avi.include_type[BANK] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show bank accounts",
+			      old_avi.include_type[BANK]);
+
+  new_avi.include_type[CASH] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show cash accounts",
+			      old_avi.include_type[CASH]);
+
+  new_avi.include_type[CREDIT] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show credit accounts",
+			      old_avi.include_type[CREDIT]);
+
+  new_avi.include_type[ASSET] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show asset accounts",
+			      old_avi.include_type[ASSET]);
+
+  new_avi.include_type[LIABILITY] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show liability accounts",
+			      old_avi.include_type[LIABILITY]);
+
+  new_avi.include_type[STOCK] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show stock accounts",
+			      old_avi.include_type[STOCK]);
+
+  new_avi.include_type[MUTUAL] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show mutual fund accounts",
+			      old_avi.include_type[MUTUAL]);
+
+  new_avi.include_type[CURRENCY] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show currency accounts",
+			      old_avi.include_type[CURRENCY]);
+
+  new_avi.include_type[INCOME] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show income accounts",
+			      old_avi.include_type[INCOME]);
+
+  new_avi.include_type[EXPENSE] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show expense accounts",
+			      old_avi.include_type[EXPENSE]);
+
+  new_avi.include_type[EQUITY] =
+    gnc_lookup_boolean_option("Account Types",
+			      "Show equity accounts",
+			      old_avi.include_type[EQUITY]);
+
+
+  new_avi.show_field[ACCOUNT_TYPE] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account type",
+			      old_avi.show_field[ACCOUNT_TYPE]);
+
+  new_avi.show_field[ACCOUNT_NAME] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account name",
+			      old_avi.show_field[ACCOUNT_NAME]);
+
+  new_avi.show_field[ACCOUNT_CODE] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account code",
+			      old_avi.show_field[ACCOUNT_CODE]);
+
+  new_avi.show_field[ACCOUNT_DESCRIPTION] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account description",
+			      old_avi.show_field[ACCOUNT_DESCRIPTION]);
+
+  new_avi.show_field[ACCOUNT_NOTES] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account notes",
+			      old_avi.show_field[ACCOUNT_NOTES]);
+
+  new_avi.show_field[ACCOUNT_CURRENCY] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account currency",
+			      old_avi.show_field[ACCOUNT_CURRENCY]);
+
+  new_avi.show_field[ACCOUNT_SECURITY] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account security",
+			      old_avi.show_field[ACCOUNT_SECURITY]);
+
+  new_avi.show_field[ACCOUNT_BALANCE] =
+    gnc_lookup_boolean_option("Account Fields",
+			      "Show account balance",
+			      old_avi.show_field[ACCOUNT_BALANCE]);
+
+  if (memcmp(&old_avi, &new_avi, sizeof(AccountViewInfo)) != 0)
+    gnc_account_tree_set_view_info(tree, &new_avi);
+}
+
 void
 mainWindow()
 {
@@ -599,15 +706,16 @@ mainWindow()
 
   account_tree = gnc_account_tree_new();
   gtk_object_set_data (GTK_OBJECT (app), "account_tree", account_tree);
-  gtk_signal_connect (GTK_OBJECT (account_tree), "double_click_account",
-                      GTK_SIGNAL_FUNC (gnc_account_tree_double_click_cb),
-                      NULL);
+  gnc_configure_account_tree();
+  gnc_register_option_change_callback(gnc_configure_account_tree);
+  gtk_signal_connect(GTK_OBJECT (account_tree), "double_click_account",
+		     GTK_SIGNAL_FUNC (gnc_account_tree_double_click_cb), NULL);
 
   popup = gnome_popup_menu_new(accountsmenu);
-  gnome_popup_menu_attach (GTK_WIDGET(popup), GTK_WIDGET(account_tree), NULL);
+  gnome_popup_menu_attach(GTK_WIDGET(popup), GTK_WIDGET(account_tree), NULL);
 
   gnome_app_create_toolbar(GNOME_APP(app), toolbar);
-  gnome_app_create_menus  (GNOME_APP(app), mainmenu);
+  gnome_app_create_menus(GNOME_APP(app), mainmenu);
 
   /* create statusbar and add it to the application. */
   statusbar = gnome_appbar_new(GNC_F, /* no progress bar, maybe later? */
@@ -621,8 +729,6 @@ mainWindow()
   gtk_object_set_data (GTK_OBJECT (app), "balance_label", label);
   gtk_box_pack_end(GTK_BOX(statusbar), label, GNC_F, GNC_F, 0);
 
-  gnome_app_install_menu_hints(GNOME_APP(app), mainmenu);
-
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gnome_app_set_contents(GNOME_APP(app), scrolled_win);
@@ -633,8 +739,7 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(account_tree));
 
-
-  gtk_widget_set_usize ( GTK_WIDGET(app), 500, 400 );
+  gtk_widget_set_usize(GTK_WIDGET(app), 0, 400);
 
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
@@ -642,6 +747,8 @@ mainWindow()
     SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
     gh_call2(run_danglers, hook, window); 
   }
+
+  gnome_app_install_menu_hints(GNOME_APP(app), mainmenu);
 
   /* Attach delete and destroy signals to the main window */  
   gtk_signal_connect (GTK_OBJECT (app), "delete_event",

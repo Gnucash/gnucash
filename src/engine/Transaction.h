@@ -27,6 +27,7 @@
 #define __XACC_TRANSACTION_H__
 
 #include "config.h"
+#include "gnc-common.h"
 
 #include <time.h>
 
@@ -236,6 +237,15 @@ void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
 
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
+
+
+/* xaccIsCommonCurrency returns true if the given currency/security
+ * pairs have a currency in common. It uses the same method as
+ * xaccTransFindCommonCurrency. This method is useful for determining
+ * whether two accounts can have transactions in common.
+ */
+gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
+				char *currency_2, char *security_2);
 
 /* The xaccTransFindCommonCurrency () method returns a string value 
  *    indicating a currency denomination that all of the splits in this

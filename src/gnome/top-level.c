@@ -20,24 +20,24 @@
 \********************************************************************/
 
 #include <stdlib.h>
-#include <assert.h>
 #include <guile/gh.h>
 #include <gnome.h>
 
-#include "config.h"
+#include "top-level.h"
 
 #include "window-main.h"
-#include "Account.h"
+#include "gnucash-sheet.h"
+#include "gnucash-color.h"
+#include "gnucash-style.h"
 #include "FileIO.h"
 #include "FileBox.h"
 #include "FileDialog.h"
-#include "Group.h"
 #include "MainWindow.h"
+#include "Destroy.h"
 #include "messages.h"
-#include "Transaction.h"
 #include "TransLog.h"
 #include "util.h"
-#include "top-level.h"
+
 
 /** PROTOTYPES ******************************************************/
 
@@ -96,7 +96,20 @@ gnucash_ui_init()
 
     app = gnome_app_new ( "GnuCash", "GnuCash" );
 
+    {
+      SCM func = gh_eval_str("gnc:send-ui-options");
+      if (gh_procedure_p(func))
+	gh_call0(func);
+      else
+      {
+	PERR("gnucash_ui_init: no guile options!");
+      }
+    }
+
     mainWindow();
+
+    gnucash_style_init();
+    gnucash_color_init();
   }
 
   LEAVE ("gnucash_ui_init");
@@ -111,6 +124,7 @@ gnc_ui_shutdown (void)
 {
   if (gnome_is_running && !gnome_is_terminating) {
     gnome_is_terminating = TRUE;
+    xaccGroupWindowDestroy(gncGetCurrentGroup());
     gtk_widget_hide(app);
     gtk_main_quit();
   }

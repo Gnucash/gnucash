@@ -36,15 +36,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gtk/gtk.h>
+#include <gnome.h>
 
-#include "gtksheet.h"
-#include "gtksheetentry.h"
-
+#include "splitreg.h"
 #include "table-allgui.h"
-#include "table-gtk.h"
+#include "table-gnome.h"
 #include "util.h"
 #include "combocell.h"
+#include "gnucash-sheet.h"
 
 
 /* Some GUI-private date that is inappropriate for 
@@ -58,7 +57,7 @@
 
 typedef struct _PopBox {
   GList *menustrings;
-  GtkSheet *sheet;
+  GnucashSheet *sheet;
 } PopBox;
 
 static void realizeCombo (BasicCell *bcell, void *w, int width);
@@ -101,7 +100,7 @@ destroyCombo (BasicCell *bcell) {
   
   if (!(cell->cell.realize)) {
     /* allow the widget to be shown again */
-    cell->cell.realize = realizeCombo;
+          cell->cell.realize = NULL;
     cell->cell.move = NULL;
     cell->cell.enter_cell = NULL;
     cell->cell.leave_cell = NULL;
@@ -142,13 +141,14 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr) {
     
     /* if we are adding the menu item to a cell that is already
        realized, then alose add it to the widget directly.  */
-
+#if 0
     if(box->sheet) {
       if(GTK_IS_COMBO(gtk_sheet_get_entry(box->sheet))) {
         GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
         gtk_combo_set_popdown_strings(combobox, box->menustrings);
       }
     }
+#endif
   }
 }
 
@@ -184,16 +184,29 @@ xaccSetComboCellValue (ComboCell *cell, const char * str) {
 
 static void
 setComboValue (BasicCell *_cell, const char *str) {
-  ComboCell * cell = (ComboCell *) _cell;
+  ComboCell *cell = (ComboCell *) _cell;
   xaccSetComboCellValue(cell, str);
 }
+
+static const char *
+ComboMV (BasicCell *_cell,
+         const char *oldval,
+         const char *change,
+         const char *newval)
+{
+        xaccSetBasicCellValue (_cell, newval);
+
+        return newval;
+}
+         
+
 
 
 /* =============================================== */
 
 static void
 realizeCombo (BasicCell *bcell, void *data, int pixel_width) {
-  GtkSheet *sheet = (GtkSheet *) data;
+  GnucashSheet *sheet = (GnucashSheet *) data;
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = cell->cell.gui_private;
   
@@ -205,7 +218,16 @@ realizeCombo (BasicCell *bcell, void *data, int pixel_width) {
   cell->cell.move = moveCombo;
   cell->cell.enter_cell = enterCombo;
   cell->cell.leave_cell = leaveCombo;
+  cell->cell.destroy = NULL;
+  cell->cell.modify_verify = ComboMV;
+  
+#if 0
+  cell->cell.realize = NULL;
+  cell->cell.move = moveCombo;
+  cell->cell.enter_cell = enterCombo;
+  cell->cell.leave_cell = leaveCombo;
   cell->cell.destroy = destroyCombo;
+#endif
 }
 
 /* =============================================== */
@@ -222,25 +244,21 @@ static const char *
 enterCombo (BasicCell *bcell, const char *value) {
 
   ComboCell *cell = (ComboCell *) bcell;
+
+#if 0
   PopBox *box = (PopBox *) (cell->cell.gui_private);
-  GtkWidget *entry = gtk_sheet_get_entry(box->sheet);
-  
+
+  GnucashSheet *sheet = box->sheet;
+#endif
 
   PINFO("ComboBox(%p): enter value (%s)\n", cell, value);
-  
-  gtk_sheet_change_entry(box->sheet, gtk_combo_get_type());
 
-  {
-    GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
+#if 0
+  gnome_canvas_item_set (sheet->item_editor,
+                         "combo_show", TRUE,
+                         NULL);
+#endif
 
-    /* Add all the strings... */
-    gtk_combo_set_popdown_strings(combobox, box->menustrings);
-
-    gtk_sheet_set_cell_text(box->sheet,
-                            box->sheet->active_cell.row,
-                            box->sheet->active_cell.col,
-                            (char *)value); 
-  }
   return NULL;
 }
 
@@ -248,25 +266,26 @@ enterCombo (BasicCell *bcell, const char *value) {
 
 static const char *
 leaveCombo (BasicCell *bcell, const char *value) {
+
+#if 0
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
-  GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
-  GtkWidget *entry = gtk_sheet_get_entry(box->sheet);
-  
-	/* the next call will free() the text in the sheet->cell */
-	/* so be careful that value isn't a pointer to that text */
-  gtk_sheet_change_entry((box->sheet), gtk_shentry_get_type()); 
 
-  gtk_entry_set_text (GTK_ENTRY(gtk_sheet_get_entry(box->sheet)), value);
+  GnucashSheet *sheet = box->sheet;
 
-  gtk_sheet_set_cell_text(box->sheet,
-                            box->sheet->active_cell.row,
-                            box->sheet->active_cell.col,
-                            (char *)value); 
-  
-  SET (&(cell->cell), value);
-  
-  return NULL;
+  gnome_canvas_item_set (sheet->item_editor,
+                         "combo_show", FALSE,
+                         NULL);
+#endif
+
+  return value;
 }
 
 /* =============== end of file =================== */
+
+
+/*
+  Local Variables:
+  c-basic-offset: 8
+  End:
+*/

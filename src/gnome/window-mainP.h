@@ -26,8 +26,9 @@
 #define __WINDOW_MAINP_H__
 
 #include <gtk/gtk.h>
-#include "Group.h"
-#include "config.h"
+
+#include "top-level.h"
+
 
 /** PROTOTYPES ******************************************************/
 static void gnc_ui_refresh_statusbar(void);
@@ -39,9 +40,10 @@ static void gnc_ui_add_account(GtkWidget *widget, gpointer data);
 static void gnc_ui_delete_account_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_toolbar_open(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_toolbar_edit(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_reconcile(GtkWidget *widget, gpointer data);
+static void gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data);
 static void gnc_ui_mainWindow_adjust_balance(GtkWidget *widget, gpointer data);
 static void gnc_ui_options_cb(GtkWidget *widget, gpointer data);
-static void gnc_ui_view_cb(GtkWidget *widget, gpointer viewType);
 static void gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem);
 
 static gboolean gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
