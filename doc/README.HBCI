@@ -1,6 +1,17 @@
 README.HBCI
 -----------
 
+1. Introduction
+2. Requirements
+3. Quick Tour
+4. Known Banks
+5. Call for Feedback
+6. Known Problems
+7. Credits
+
+1. Introduction
+-----------
+
 Since the beta release 1.7.2, GnuCash features HBCI online banking
 support. This makes it the world's first *free* HBCI-enabled personal
 finance manager.
@@ -14,7 +25,7 @@ through a bank-issued chip card or a self-generated file-based RSA key
 pair. (In the latter case, the user prints out his public key finger
 print on paper, signs it, and sends it to his bank.)
 
-Requirements
+2. Requirements
 ------------
 
 OpenHBCI 0.9.3 or later 
@@ -31,7 +42,7 @@ And you need to apply at your Bank to get HBCI access. The bank will
 provide you with some paper work which is needed during HBCI setup in 
 GnuCash.
 
-Quick Tour
+3. Quick Tour
 ----------
 
 HBCI support is accessible through a few new menu items:
@@ -40,14 +51,16 @@ HBCI support is accessible through a few new menu items:
 (German: "Werkzeuge") now contains the item "HBCI Setup" ("HBCI 
 Einrichtung"). This menu item opens the HBCI Setup druid which will 
 guide you through the setup.
-   - Chip card users will need to run this only once (even though I
-     haven't tested chip cards myself so far, so please don't hesitate to
-     send feedback)
+
+   - Chip card users will need to run this only once. (see 6. Known
+     Problems below if this doesn't work)
+
    - Users with self-generated file-based keys need to run this for the
      first time to generate their keys and have their Ini-Letter printed,
      which they need to send to their bank. After some days when the bank
      has processed that letter, they need to run the HBCI Setup druid
      a second time.
+
    - Either way, eventually you are presented with a list of
      HBCI-accessible accounts, and can choose which of your gnucash
      account should be matched with each HBCI account.
@@ -70,7 +83,14 @@ activating the appropriate button in the Edit->Preference dialog
 ("Bearbeiten->Einstellungen") in the tab "Online Banking & Importing". 
 Of course the password/PIN is *never ever* stored on disk anywhere.
 
-Known Banks
+* Debug Preference: If HBCI connectivity does not work the way you
+expected it to work, you can enable a whole lot of HBCI debugging
+output. First, on the "General" page of the preferences, activate the
+checkbox for "Show Advanced Setting". Then, on the newly appearing
+"Advanced" page, activate "HBCI Verbose Debug Messages" to get much
+more debugging output.
+
+4. Known Banks
 -----------
 
 OpenHBCI/Gnucash is successfully being used with:
@@ -79,27 +99,38 @@ OpenHBCI/Gnucash is successfully being used with:
 - Hamburger Sparkasse
 - Sparkasse Wilhelmshaven
 
-Call for Feedback
+5. Call for Feedback
 -----------------
 
-If you encounter an error, don't hesitate to report it on 
-gnucash-devel@gnucash.org and on openhbci-general@lists.sf.net . Please 
-remember to include the version numbers of gnucash and openhbci as well 
-as any console output and/or HBCI connection log.
+If you encounter an error, you can report it in German language on
+gnucash-de@gnucash.org (Subscriber-only list; please subscribe on
+http://www.gnucash.org/cgi-bin/mailman/listinfo/gnucash-de ) and on on
+openhbci-general@lists.sf.net. Please remember to include the version
+numbers of gnucash and openhbci as well as any console output and/or
+HBCI connection log (can be obtained through the HBCI Verbose Debug
+Messages preference mentioned above).
 
 Also, if you managed to successfully setup a bank that we don't have in 
 our list yet, please let us know as well. We appreciate any feedback on 
 this new functionality.
 
-Known Problems
+6. Known Problems
 --------------
 
 * If you don't see the menu items mentioned above, then GnuCash was
-not built with --enable-hbci. Please check back on
-gnucash-devel@gnucash.org for debugging your build.
+  not built/compiled with --enable-hbci. Please try to compile GnuCash
+  by yourself or contact the place where you got your pre-compiled
+  version of GnuCash from.
 
-* Currently each HBCI action can only be executed while you are online; 
-support for off-line preparation and queueing is not yet implemented.
+* If you cannot select "Chip Card" as security medium, it means that
+  your installed version of the OpenHBCI library has been compiled
+  without chipcard support. You will need to recompile OpenHBCI while
+  libchipcard is installed, and then you (probably) need to recompile
+  GnuCash.
+
+* Currently each HBCI action can only be executed while you are
+  online; support for off-line preparation and queueing is not yet
+  implemented.
 
 If you think you can do better on any of these issues -- why not give it 
 a try and start coding on yet more HBCI features? Gnucash only requires 
@@ -112,7 +143,7 @@ medium term. So if you want more features, why don't *you* start coding
 today? We definitely welcome any new developer who contributes even the 
 smallest improvements.
 
-Credits
+7. Credits
 -------
 
 The excellent OpenHBCI library is written by Fabian Kaiser 
@@ -121,5 +152,5 @@ Christian Stimming <stimming@tuhh.de>. Libchipcard is written by Martin
 Preuss <openhbci@aquamaniac.de>.
 
 By Christian Stimming <stimming@tuhh.de>
-Monday, 25 Nov 2002
+Saturday, Feb 1, 2003
 
