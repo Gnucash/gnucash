@@ -33,6 +33,7 @@ INCLPATH = -I/usr/include \
            -I./../include \
            -I./../lib/ComboBox-1.33 \
            -I./../lib/XmHTML-1.1.0/src \
+           -I./../lib/Xbae-4.6.2-linas \
            -I./../lib/libhtmlw 
 CFLAGS   = -O2 -DCELL_WIDGETS=1
 LFLAGS   = -O2

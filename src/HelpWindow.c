@@ -351,7 +351,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 #if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
 #endif
-#ifdef USE_XMHTML
+#if USE_XMHTML
     xaccJumpToLabel( helpwidget, htmlfile );
 #endif
 
@@ -374,7 +374,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 #if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
 #endif
-#ifdef USE_XMHTML
+#if USE_XMHTML
     xaccJumpToLabel( helpwidget, htmlfile );
 #endif
     }
@@ -403,7 +403,7 @@ helpBackCB( Widget mw, XtPointer cd, XtPointer cb )
 #if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
 #endif
-#ifdef USE_XMHTML
+#if USE_XMHTML
     xaccJumpToLabel( helpwidget, file );
 #endif
     }
@@ -427,7 +427,7 @@ helpFwdCB( Widget mw, XtPointer cd, XtPointer cb )
 #if USE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
 #endif
-#ifdef USE_XMHTML
+#if USE_XMHTML
     xaccJumpToLabel( helpwidget, file );
 #endif
     }
@@ -471,7 +471,7 @@ helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
     }
 #endif
 
-#ifdef USE_XMHTML
+#if USE_XMHTML
    XmHTMLAnchorCallbackStruct *acbs = (XmHTMLAnchorCallbackStruct *) cb;
 
    if(acbs->reason != XmCR_ACTIVATE) return;
