@@ -336,7 +336,7 @@ xaccGroupGetNumSubAccounts (AccountGroup *grp)
 \********************************************************************/
 
 static void
-xaccAppendAccounts (AccountGroup *grp, GList **accounts_p)
+xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
 {
   GList *node;
 
@@ -346,9 +346,9 @@ xaccAppendAccounts (AccountGroup *grp, GList **accounts_p)
   {
     Account *account = node->data;
 
-    *accounts_p = g_list_append (*accounts_p, account);
+    *accounts_p = g_list_prepend (*accounts_p, account);
 
-    xaccAppendAccounts (account->children, accounts_p);
+    xaccPrependAccounts (account->children, accounts_p);
   }
 }
 
@@ -359,9 +359,9 @@ xaccGroupGetSubAccounts (AccountGroup *grp)
 
   if (!grp) return NULL;
 
-  xaccAppendAccounts (grp, &accounts);
+  xaccPrependAccounts (grp, &accounts);
 
-  return accounts;
+  return g_list_reverse (accounts);
 }
 
 AccountList *
