@@ -83,6 +83,11 @@ struct _RegWindow
 
   GtkWidget * statusbar;
 
+  GtkWidget * ledger_button;
+  GtkWidget * auto_ledger_button;
+  GtkWidget * journal_button;
+  GtkWidget * expand_button;
+
   GtkWidget * balance_label;
   GtkWidget * cleared_label;
 
@@ -131,6 +136,7 @@ static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
+static void expand_trans_cb(GtkWidget *widget, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
 static void jump_cb(GtkWidget *widget, gpointer data);
 static void print_check_cb(GtkWidget * widget, gpointer data);
@@ -222,7 +228,7 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
   if (trans != NULL)
     if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
     {
-      regData->ledger->dirty = 1;
+      regData->ledger->dirty = TRUE;
       xaccLedgerDisplayRefresh(regData->ledger);
     }
 
@@ -249,8 +255,8 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
   if (trans != NULL)
     if (gnc_register_include_date(regData, xaccTransGetDate(trans)))
     {
-      regData->ledger->dirty = 1;
-      xaccLedgerDisplayRefresh(regData->ledger);
+      regData->ledger->dirty = TRUE;
+      xaccLedgerDisplayRefresh (regData->ledger);
     }
 
   if (xaccSRGetSplitAmountVirtLoc(regData->ledger->ledger, split, &virt_loc))
@@ -259,17 +265,67 @@ gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
 
 
 static void
-gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
+gnc_register_change_style (RegWindow *regData, SplitRegisterStyle style)
 {
   SplitRegister *reg = regData->ledger->ledger;
+  GtkCheckMenuItem *radio_button;
+  GtkToggleButton *expand_button;
 
   if (style == reg->style)
     return;
 
-  xaccConfigSplitRegister(reg, reg->type, style, reg->use_double_line);
+  gtk_signal_handler_block_by_data (GTK_OBJECT (regData->ledger_button),
+                                    regData);
+  gtk_signal_handler_block_by_data (GTK_OBJECT (regData->auto_ledger_button),
+                                    regData);
+  gtk_signal_handler_block_by_data (GTK_OBJECT (regData->journal_button),
+                                    regData);
+  gtk_signal_handler_block_by_data (GTK_OBJECT (regData->expand_button),
+                                    regData);
 
-  regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(regData->ledger);
+  expand_button = GTK_TOGGLE_BUTTON (regData->expand_button);
+
+  switch (style)
+  {
+    case REG_STYLE_LEDGER:
+      radio_button = GTK_CHECK_MENU_ITEM (regData->ledger_button);
+      gtk_toggle_button_set_active (expand_button, FALSE);
+      gtk_widget_set_sensitive (regData->expand_button, TRUE);
+      break;
+
+    case REG_STYLE_AUTO_LEDGER:
+      radio_button = GTK_CHECK_MENU_ITEM (regData->auto_ledger_button);
+      gtk_toggle_button_set_active (expand_button, TRUE);
+      gtk_widget_set_sensitive (regData->expand_button, TRUE);
+      break;
+
+    case REG_STYLE_JOURNAL:
+      radio_button = GTK_CHECK_MENU_ITEM (regData->journal_button);
+      gtk_toggle_button_set_active (expand_button, TRUE);
+      gtk_widget_set_sensitive (regData->expand_button, FALSE);
+      break;
+
+    default:
+      PERR ("Bad style");
+      radio_button = NULL;
+      break;
+  }
+
+  gtk_check_menu_item_set_active (radio_button, TRUE);
+
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (regData->ledger_button),
+                                      regData);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (regData->auto_ledger_button),
+                                      regData);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (regData->journal_button),
+                                      regData);
+  gtk_signal_handler_unblock_by_data (GTK_OBJECT (regData->expand_button),
+                                      regData);
+
+  xaccConfigSplitRegister (reg, reg->type, style, reg->use_double_line);
+
+  regData->ledger->dirty = TRUE;
+  xaccLedgerDisplayRefresh (regData->ledger);
 }
 
 static void
@@ -319,7 +375,7 @@ gnc_register_double_line_cb (GtkWidget *w, gpointer data)
 
   xaccConfigSplitRegister(reg, reg->type, reg->style, use_double_line);
 
-  regData->ledger->dirty = 1;
+  regData->ledger->dirty = TRUE;
   xaccLedgerDisplayRefresh(regData->ledger);
 }
 
@@ -369,7 +425,7 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
 
   regData->sort_type = sort_code;
 
-  regData->ledger->dirty = 1;
+  regData->ledger->dirty = TRUE;
   xaccLedgerDisplayRefresh(regData->ledger);
 }
 
@@ -557,8 +613,8 @@ gnc_register_date_cb(GtkWidget *widget, gpointer data)
 
   gnc_register_set_date_range(regData);
 
-  regData->ledger->dirty = 1;
-  xaccLedgerDisplayRefresh(regData->ledger);
+  regData->ledger->dirty = TRUE;
+  xaccLedgerDisplayRefresh (regData->ledger);
 }
 
 static void
@@ -792,11 +848,11 @@ gnc_register_date_window(RegWindow *regData)
 }
 
 static GtkWidget *
-gnc_register_create_tool_bar(RegWindow *regData)
+gnc_register_create_tool_bar (RegWindow *regData)
 {
   GtkWidget *toolbar;
 
-  static GnomeUIInfo toolbar_info[] =
+  GnomeUIInfo toolbar_info[] =
   {
     {
       GNOME_APP_UI_ITEM,
@@ -832,6 +888,14 @@ gnc_register_create_tool_bar(RegWindow *regData)
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_TOGGLEITEM,
+      N_("Expand"),
+      N_("Expand the current transaction"),
+      expand_trans_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_OPEN,
+      0, 0, NULL
+    },
     {
       GNOME_APP_UI_ITEM,
       N_("Blank"),
@@ -881,18 +945,20 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_END
   };
 
-  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
-  gnome_app_fill_toolbar_with_data(GTK_TOOLBAR(toolbar), toolbar_info,
-                                   NULL, regData);
+  gnome_app_fill_toolbar_with_data (GTK_TOOLBAR(toolbar), toolbar_info,
+                                    NULL, regData);
 
   regData->toolbar = toolbar;
+
+  regData->expand_button = toolbar_info[6].widget;
 
   return toolbar;
 }
 
 static void
-gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
+gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow * regdata = data;
   if(regdata->ledger->type == SEARCH_LEDGER) {
@@ -973,6 +1039,18 @@ gnc_register_jump_to_blank(RegWindow *regData)
     gnucash_register_goto_virt_cell(regData->reg, vcell_loc);
 }
 
+
+static void
+expand_trans_cb(GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegisterStyle style;
+
+  style = GTK_TOGGLE_BUTTON (widget)->active ?
+    REG_STYLE_AUTO_LEDGER : REG_STYLE_LEDGER;
+
+  gnc_register_change_style (regData, style);
+}
 
 static void
 new_trans_cb(GtkWidget *widget, gpointer data)
@@ -1366,6 +1444,10 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
                                       register_window_menu);
+
+  regData->ledger_button      = style_list[0].widget;
+  regData->auto_ledger_button = style_list[1].widget;
+  regData->journal_button     = style_list[2].widget;
 
   /* Make sure the right style radio item is active */
   {
@@ -1774,7 +1856,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
   xaccSRShowPresentDivider (ledger->ledger, TRUE);
 
-  ledger->dirty = 1;
+  ledger->dirty = TRUE;
   xaccLedgerDisplayRefresh(ledger);
   gnc_reg_refresh_toolbar(regData);
 
@@ -2505,9 +2587,9 @@ closeCB(GtkWidget *widget, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-dateCB(GtkWidget *widget, gpointer data)
+dateCB (GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   gnc_register_show_date_window(regData);
 }
@@ -2520,9 +2602,9 @@ dateCB(GtkWidget *widget, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void
-helpCB(GtkWidget *widget, gpointer data)
+helpCB (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_REGWIN);
+  helpWindow (NULL, NULL, HH_REGWIN);
 }
 
 /************************** END OF FILE **************************/

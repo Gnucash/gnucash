@@ -202,6 +202,9 @@ void     xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 /* If use_red is TRUE, negative amounts will be printed in red. */
 void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
 
+/* Expand the current transaction if it is collapsed. */
+void     xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand);
+
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                     short _cell_type,

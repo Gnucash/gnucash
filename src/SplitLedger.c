@@ -153,6 +153,10 @@ struct _SRInfo
    * See table-allgui.[ch] for details. */
   gboolean exact_traversal;
 
+  /* Indicates that the current transaction is expanded
+   * in ledger mode. Meaningless in other modes. */
+  gboolean trans_expanded;
+
   /* The default account where new splits are added */
   Account *default_source_account;
 
@@ -302,7 +306,8 @@ xaccSRDestroyRegisterData(SplitRegister *reg)
 static SRInfo *
 xaccSRGetInfo(SplitRegister *reg)
 {
-  assert(reg != NULL);
+  if (!reg)
+    return NULL;
 
   if (reg->user_data == NULL)
     xaccSRInitRegisterData(reg);
@@ -729,12 +734,16 @@ sr_get_passive_cursor (SplitRegister *reg)
 static CellBlock *
 sr_get_active_cursor (SplitRegister *reg)
 {
+  SRInfo *info = xaccSRGetInfo (reg);
+
   switch (reg->style)
   {
     case REG_STYLE_LEDGER:
-      return reg->use_double_line ?
-        reg->cursor_ledger_double : reg->cursor_ledger_single;
+      if (!info->trans_expanded)
+        return reg->use_double_line ?
+          reg->cursor_ledger_double : reg->cursor_ledger_single;
 
+      /* fall through */
     case REG_STYLE_AUTO_LEDGER:
     case REG_STYLE_JOURNAL:
       return reg->use_double_line ?
@@ -744,6 +753,46 @@ sr_get_active_cursor (SplitRegister *reg)
   PWARN ("bad register style");
 
   return NULL;
+}
+
+void
+xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  if (!reg)
+    return;
+
+  if (reg->style == REG_STYLE_AUTO_LEDGER ||
+      reg->style == REG_STYLE_JOURNAL)
+    return;
+
+  /* ok, so I just wanted an excuse to use exclusive-or */
+  if (!(expand ^ info->trans_expanded))
+    return;
+
+  if (!expand)
+  {
+    VirtualLocation virt_loc;
+
+    virt_loc = reg->table->current_cursor_loc;
+    xaccSRGetTransSplit (reg, virt_loc.vcell_loc, &virt_loc.vcell_loc);
+
+    if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
+      gnc_table_move_cursor_gui (reg->table, virt_loc);
+    else
+    {
+      PERR ("Can't find place to go!");
+      return;
+    }
+  }
+
+  xaccSRSetTransVisible (reg, reg->table->current_cursor_loc.vcell_loc,
+                         expand, FALSE);
+
+  gnc_table_refresh_gui (reg->table);
+
+  info->trans_expanded = expand;
 }
 
 /* ======================================================== */
@@ -4123,14 +4172,20 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
     trans_split = xaccSRGetTransSplit (reg, save_loc.vcell_loc,
                                        &trans_split_loc.vcell_loc);
-    if (dynamic || multi_line)
+
+    if (dynamic || multi_line || info->trans_expanded)
     {
       gnc_table_set_virt_cell_cursor (table, trans_split_loc.vcell_loc,
                                       sr_get_active_cursor (reg));
       xaccSRSetTransVisible (reg, trans_split_loc.vcell_loc, TRUE, multi_line);
+
+      info->trans_expanded = (reg->style == REG_STYLE_LEDGER);
     }
     else
+    {
       save_loc = trans_split_loc;
+      info->trans_expanded = FALSE;
+    }
 
     if (gnc_table_find_close_valid_cell (table, &save_loc, FALSE))
     {
