@@ -314,7 +314,8 @@ gnc_depend(const char *scm_file)
   if (!gh_procedure_p(depend_func))
     return FALSE;
 
-  arg = gh_str02scm(scm_file);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) scm_file);
 
   return gh_scm2bool(gh_call1(depend_func, arg));
 }
@@ -489,7 +490,8 @@ gnc_split_scm_set_memo(SCM split_scm, const char *memo)
   if (memo == NULL)
     return;
 
-  arg = gh_str02scm(memo);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) memo);
 
   gh_call2(setters.split_scm_memo, split_scm, arg);
 }
@@ -515,7 +517,8 @@ gnc_split_scm_set_action(SCM split_scm, const char *action)
   if (action == NULL)
     return;
 
-  arg = gh_str02scm(action);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) action);
 
   gh_call2(setters.split_scm_action, split_scm, arg);
 }
@@ -892,7 +895,8 @@ gnc_trans_scm_set_num(SCM trans_scm, const char *num)
   if (num == NULL)
     return;
 
-  arg = gh_str02scm(num);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) num);
 
   gh_call2(setters.trans_scm_num, trans_scm, arg);
 }
@@ -918,7 +922,8 @@ gnc_trans_scm_set_description(SCM trans_scm, const char *description)
   if (description == NULL)
     return;
 
-  arg = gh_str02scm(description);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) description);
 
   gh_call2(setters.trans_scm_description, trans_scm, arg);
 }
@@ -944,7 +949,8 @@ gnc_trans_scm_set_notes(SCM trans_scm, const char *notes)
   if (notes == NULL)
     return;
 
-  arg = gh_str02scm(notes);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_str02scm((char *) notes);
 
   gh_call2(setters.trans_scm_notes, trans_scm, arg);
 }
@@ -1077,7 +1083,8 @@ gnc_get_debit_string(GNCAccountType account_type)
 
   type_string = xaccAccountTypeEnumAsString(account_type);
 
-  arg = gh_symbol2scm(type_string);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  arg = gh_symbol2scm((char *) type_string);
 
   result = gh_call1(getters.debit_string, arg);
   if (!gh_string_p(result))
