@@ -4,13 +4,19 @@
 <TITLE>Depreciation and Capital Gains</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> Depreciation and Capital Gains</TITLE>
-<PARA>    </PARA>
-<PARA>This section provides a treatment of the handling of
-    depreciation and appreciation of assets in GnuCash.
+<TITLE>Depreciation and Capital Gains</TITLE>
+<PARA>
+If you hold assets for business purposes, thier decline in value over
+time can be treated as a deduction for tax purposes, called
+Depreciation.  On the other hand, if you own assets such as real estate,
+collectibles (like paintings), and investments (like shares in
+companies), you may see them appreciate in value over time.  In this
+case, you must recognize -- for tax purposes -- what are called 
+<EMPHASIS>Captial Gains</EMPHASIS>
 
-    </PARA>
-<PARA>It also provides a brief introduction to the related tax
+<PARA>This section discusses the handling of
+    depreciation and appreciation of assets in GnuCash.
+    It also provides a brief introduction to the related tax
     issues.
 
     </PARA>
@@ -21,45 +27,38 @@
     tax/depreciation policies.</EMPHASIS>
 
     </PARA>
-<PARA>Note that appreciation and depreciation of assets tend to be
+<PARA>Appreciation and depreciation of assets are
     treated somewhat differently:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        <LINK LINKEND="XACC-DEPRECIATION">Depreciation</LINK> is <EMPHASIS>usually</EMPHASIS>
+<PARA><LINK LINKEND="XACC-DEPRECIATION">Depreciation</LINK> 
+        is <EMPHASIS>usually</EMPHASIS>
         recognized (the technical term is <EMPHASIS>accrued</EMPHASIS>) as an
-        expense on an ongoing basis, gradually reducing the value
-        of an asset towards zero. 
-
-        </PARA>
-<PARA>Depreciation tends to only get calculated on assets that
-        are used for professional or business purposes, because
+        ongoing expense, gradually reducing the value
+        of an asset toward zero. 
+        Depreciation is usually only calculated on assets 
+        used for professional or business purposes, because
         governments don't generally allow you to claim depreciation
         deductions on personal assets, and it's pointless to bother
         with the procedure if it's not deductible.
-      
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        In contrast, <LINK LINKEND="APPR">Capital Gains,</LINK> which could
+<PARA> <LINK LINKEND="APPR">Capital Gains,</LINK> which could
         be called <EMPHASIS>asset value appreciation,</EMPHASIS> are typically
-        <EMPHASIS>not</EMPHASIS> recognized until some time down the road when
+        <EMPHASIS>not</EMPHASIS> recognized until 
         the asset is sold, and at that <EMPHASIS>instant,</EMPHASIS> the entire
         gain becomes income. 
-
-        </PARA>
-<PARA>Unlike depreciation, governments tend to be <EMPHASIS>quite
+        Governments tend to be <EMPHASIS>quite
         interested</EMPHASIS> in taxing capital gains in one manner or
         another.
-
-        </PARA>
-<PARA>(As always, there are exceptions. If you hold a bond
+        (As always, there are exceptions. If you hold a bond
         that pays all of its interest at maturity, tax authorities
-        will often require that you recognize interest each year,
+        often require that you recognize interest each year,
         and refuse this to be treated as a capital gain. The
         phrases <EMPHASIS>accrued interest,</EMPHASIS> or <EMPHASIS>imputed
-        interest</EMPHASIS> are often there to scare those that are
+        interest</EMPHASIS> are often used to scare those who are
         sensitive to such things...)
       
     </PARA>
@@ -71,40 +70,36 @@
 <SECT1 ID="XACC-CAPITALGAINS">
 <TITLE> Capital Gains - Asset Appreciation</TITLE>
 <PARA>    <ANCHOR ID="APPR"> 
-
     </PARA>
-<PARA>Appreciation of assets is, in general, a fairly tricky
-    matter to deal with. This is so because, for some sorts of
+<PARA>Appreciation of assets is generally a tricky
+    matter because, for some sorts of
     assets, it is difficult to correctly estimate an increase in
     value <EMPHASIS>until you actually sell the asset.</EMPHASIS>
 
-    </PARA>
-<PARA>If you invest in <LINK LINKEND="XACC-TICKER">securities</LINK>
-    that are traded on a daily basis on open markets such as stock
-    exchanges, prices may be quite exact, and selling the asset at
+    If you invest in <LINK LINKEND="XACC-TICKER">securities</LINK>
+    traded daily on open markets such as stock
+    exchanges, prices are often quite exact, and selling the asset at
     market prices may be as simple as calling a broker and issuing
     a <EMPHASIS>Market Order.</EMPHASIS>
-
-    </PARA>
-<PARA>On the other hand, homes in your neighborhood are sold
-    somewhat less often, such sales tend to involve expending
+    On the other hand, homes in your neighborhood are sold
+    somewhat less often.  Such sales tend to involve expending
     considerable effort, and involve negotiations, which means that
     estimates are likely to be less precise. Similarly, selling a
     used automobile involves a negotiation process that makes
     pricing a bit less predictable.
 
     </PARA>
-<PARA>Harder to estimate are values of collectible objects such as
-    jewelry, works of art, baseball cards, and "Beanie Babies." The
+<PARA>Values of collectible objects such as
+    jewelry, works of art, baseball cards, and "Beanie Babies" 
+    are harder to estimate.
+    The
     markets for such objects are somewhat less open than the
     securities markets.
-
-    </PARA>
-<PARA>Worse still are one-of-a-kind assets. Factories often
+    Worse still are one-of-a-kind assets. Factories often
     contain presses and dies customized to build a very specific
     product that cost tens or hundreds of thousands of dollars;
     this equipment may be <EMPHASIS>worthless</EMPHASIS> outside of that very
-    specific context. In such cases, there several conflicting
+    specific context. In such cases, several conflicting
     values might be attached to the asset, <EMPHASIS>none</EMPHASIS> of them
     unambiguously correct.
 
@@ -113,9 +108,7 @@
     value, say a Degas painting, and want to track this. (The
     insurance company will care about this, even if nobody else
     does.)
-
-    </PARA>
-<PARA>Properly tracking the continually-increasing value of the
+    Properly tracking the continually increasing value of the
     Degas will require at least three, quite possibly the following
     four accounts (plus a bank or cash account where the money for
     the purchase comes from):
@@ -123,21 +116,19 @@
     <ITEMIZEDLIST>
 <LISTITEM>
 <PARA>An <EMPHASIS>Asset Cost</EMPHASIS> asset account to track the
-      original cost of the painting,
+      original cost of the painting.
 
       </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>An <EMPHASIS>Accrued Unrealized Gains on Asset</EMPHASIS> asset
-      account to keep track of increases in value, and
-
+      account to keep track of increases in value.
       </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA>An <EMPHASIS>Accrued Gain On Asset Income</EMPHASIS> income account
       in which to record the income side of the annual gains in
-      your riches, and
-
+      your riches.
       </PARA>
 </LISTITEM>
 <LISTITEM>
@@ -155,23 +146,21 @@
 
     </PARA>
 <SECT2>
-<TITLE>The handling of capital gains in GnuCash</TITLE>
+<TITLE>The Handling of Capital Gains in GnuCash</TITLE>
 <PARA>    </PARA>
 <SECT3>
 <TITLE>The Acquisition</TITLE>
-<PARA>The first thing you have to do is to create the <EMPHASIS>asset
-    cost account</EMPHASIS>, then transfer the sum you paid for this
-    painting from your bank account to this asset account to record
-    the purchase.
+<PARA>First, create the <EMPHASIS>asset
+    cost account</EMPHASIS>. To record the purchase, transfer the sum 
+    you paid for this
+    painting from your bank account to this asset account.
 
     </PARA>
 <PARA>A month later, you have reason to suspect that the value of
     your painting has increased by $1200. In order to record this
     you transfer $1200 from your <EMPHASIS>accrued gains on asset</EMPHASIS>
     income account to your asset account.
-
-    </PARA>
-<PARA>Your main window will resemble this:
+    Your main window will resemble this:
     <INLINEMEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/appr-main1.png">
@@ -196,45 +185,39 @@
 </SECT3>
 <SECT3>
 <TITLE>While You Hold the Asset</TITLE>
-<PARA>Asset appreciation is a sort of income but it is <EMPHASIS>    not</EMPHASIS> cash in hand.
-
-    </PARA>
-<PARA>The people that got "rich" in 1999 from IPOs of
+<PARA>Asset appreciation is a sort of income but it is 
+      <EMPHASIS>not</EMPHASIS> cash in hand.
+    The people that got "rich" in 1999 from IPOs of
     Linux-related companies like Red Hat Software and VA Linux
     Systems could verify this. They hold options or stock that are
     <EMPHASIS>theoretically</EMPHASIS> valued at millions of dollars USD.
-
-    </PARA>
-<PARA>That doesn't mean that they are actually millionaires; the
+    They aren't actually millionaires; the
     principal participants have to hold their stock for at least
     six months before selling <EMPHASIS>any</EMPHASIS> of it. The fact that
     they <EMPHASIS>can't</EMPHASIS> sell it means that while it may in theory
-    be worth millions of dollars on paper, there is, as of late
-    1999, no way for them to legally <EMPHASIS>get</EMPHASIS> those
+    be worth millions of dollars on paper, there is
+    no way for them to legally <EMPHASIS>get</EMPHASIS> those
     millions.
 
     </PARA>
 </SECT3>
 <SECT3>
 <TITLE>Selling the Asset</TITLE>
-<PARA>Let&acute;s say another month later prices for Degas
+<PARA>Let's suppose another month later prices for Degas
     paintings have gone up some more, in your case about $2500, you
-    estimate. You duly record these $2500 as an income like above,
+    estimate. You duly record the $2500 as an income like above,
     then decide to sell the painting.
 
     </PARA>
-<PARA>Now there arise three possibilities:
+<PARA>Three possibilities arise:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        Your optimistic estimate of the painting's value was
-        correct. 
-
-        </PARA>
-<PARA>The income account is left alone (or perhaps gets
-        transferred from an <EMPHASIS>Accrued Gain</EMPHASIS> income to a <EMPHASIS>        Realized Gain</EMPHASIS> income account), and the recording is
-        rather like:
-
+<PARA>Your optimistic estimate of the painting's value was correct. 
+       The income account is left alone (or perhaps gets
+       transferred from an <EMPHASIS>Accrued Gain</EMPHASIS> income 
+       to a <EMPHASIS>Realized Gain</EMPHASIS> income account), and 
+       the recording would appear as follows:
         <TABLE>
 <TITLE>Turning an Accrued Gain into a Realized Gain</TITLE>
 <TGROUP COLS="2">
@@ -262,7 +245,7 @@
 </TABLE>
 
         </PARA>
-<PARA>And if any amounts had been accrued as <EMPHASIS>Accrued
+<PARA>If any amounts had been accrued as <EMPHASIS>Accrued
         Gains,</EMPHASIS> the asset amount should be closed out, offset
         by a <EMPHASIS>negative</EMPHASIS> value for <EMPHASIS>Accrued Gain</EMPHASIS>
         income. If the total that had been accrued was $5000, then
@@ -307,21 +290,15 @@
         that the <EMPHASIS>current</EMPHASIS> income resulting from the
         transaction is only $55. The remaining $5000 had previously
         been recognized as <EMPHASIS>Accrued Gain Income.</EMPHASIS>
-      
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        You were over-optimistic about the value of the painting. 
-
-        </PARA>
-<PARA>Instead of the $16055 you thought the painting was worth
+<PARA>You were over-optimistic about the value of the painting. 
+      Instead of the $16055 you thought the painting was worth
         are only offered $15000. But you still decide to sell,
         because you value $15000 more than you value the
         painting.
-
-        </PARA>
-<PARA>The numbers change a little bit, but not too
+        The numbers change a little bit, but not too
         dramatically.
 
         <TABLE>
@@ -364,16 +341,13 @@
         transaction turns out to be a <EMPHASIS>loss</EMPHASIS> of $1000.
         That's fine, as you had previously recognized $5000 in
         income.
-      
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        You manage to sell your painting for more than you thought
-        in your wildest dreams. 
-
-        </PARA>
-<PARA>The extra value is, again, recorded as a gain, <EMPHASIS>        i.e.</EMPHASIS> an income.
+<PARA>You manage to sell your painting for more than you thought
+      in your wildest dreams. 
+      The extra value is, again, recorded as a gain, 
+      <EMPHASIS>i.e.</EMPHASIS> an income.
 
         <TABLE>
 <TITLE>Accrued Gain Becomes Handsome Realized Gain</TITLE>
@@ -414,10 +388,11 @@
 </ITEMIZEDLIST>
 
     </PARA>
-<PARA>In practice, it truly is important to keep the <EMPHASIS>Accrued
+<PARA>In practice, it is very important to keep the <EMPHASIS>Accrued
     Gain Income</EMPHASIS> separate from the <EMPHASIS>Realized Gain
     Income,</EMPHASIS> as the former is likely to be ignored by your tax
-    authorities, who will only care to charge you on the <EMPHASIS>    Realized Gain.</EMPHASIS>
+    authorities, who will only care to charge you on the 
+    <EMPHASIS>Realized Gain.</EMPHASIS>
 
     </PARA>
 <PARA>Below, we show the second case discussed.
@@ -443,50 +418,37 @@
 </SECT2>
 <SECT2>
 <TITLE>Caution about Valuation</TITLE>
-<PARA>    </PARA>
 <PARA>As we see in this example, for non-financial assets, it may
     be difficult to correctly estimate the ``true'' value of an
     asset.
-
-    </PARA>
-<PARA>It is quite easy to count yourself rich based on
+    It is quite easy to count yourself rich based on
     questionable estimates that do not reflect "money in the
     bank."
-
     </PARA>
-<PARA>Thus, when dealing with appreciation of assets,
+
+<PARA>When dealing with appreciation of assets,
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        Be careful with your estimation of values. 
-
-        </PARA>
-<PARA>Do not indulge in wishful thinking.
-      
-
+<PARA>Be careful with your estimation of values. 
+      Do not indulge in wishful thinking.
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Never, ever, count on money you do not have in your bank or
-        as cash. 
-
-        </PARA>
-<PARA>Until you have actually sold your asset and got the
-        money, any numbers on paper (or magnetic patterns on your
-        hard disk) are merely that.
-
-        </PARA>
-<PARA>If you could realistically convince a banker to lend you
-        money, using the assets as collateral, that is a pretty
-        reasonable evidence that the assets have value, as lenders
-        are professionally suspicious of dubious overestimations of
-        value.
-
-        </PARA>
-<PARA>Be aware: all too many companies that appear
-        "profitable" on paper go out of business as a result of
-        running out of <EMPHASIS>cash,</EMPHASIS> precisely because "valuable
-        assets" were not the same thing as cash.
+<PARA>Never, ever, count on money you do not have in your bank or
+      as cash. 
+      Until you have actually sold your asset and got the
+      money, any numbers on paper (or magnetic patterns on your
+      hard disk) are merely that.
+      If you could realistically convince a banker to lend you
+      money, using the assets as collateral, that is a pretty
+      reasonable evidence that the assets have value, as lenders
+      are professionally suspicious of dubious overestimations of
+      value.
+      Be aware: all too many companies that appear
+      "profitable" on paper go out of business as a result of
+      running out of <EMPHASIS>cash,</EMPHASIS> precisely because "valuable
+      assets" were not the same thing as cash.
       
     </PARA>
 </LISTITEM>
@@ -500,14 +462,11 @@
 <PARA>Taxation policies vary considerably between countries, so it
     is virtually impossible to say anything that will be
     universally useful.
-
-    </PARA>
-<PARA>However, it is <EMPHASIS>common</EMPHASIS> for income generated by
+    However, it is <EMPHASIS>common</EMPHASIS> for income generated by
     capital gains to not be subject to taxation until the date that
     the asset is actually sold, and sometimes not even then.
 
-    </PARA>
-<PARA>North American home owners <EMPHASIS>usually</EMPHASIS> find that when
+    North American home owners <EMPHASIS>usually</EMPHASIS> find that when
     they sell personal residences, capital gains that occur are
     exempt from taxation. It appears that other countries treat
     sale of homes differently, taxing people on such gains. German
@@ -522,15 +481,14 @@ and expected a <EMPHASIS>considerable</EMPHASIS> tax bill that turned
 out to be virtually nil due to having owned the property before 1971
 (wherein lies a critical "Valuation Day" date in Canada) and due to it
 being a <EMPHASIS>dairy</EMPHASIS> farm, with some <EMPHASIS>really
-peculiar</EMPHASIS> resulting deductions.  </PARA>
-
-<PARA>The point of this story is that while the presentation here is
+peculiar</EMPHASIS> resulting deductions.  
+The point of this story is that while the presentation here is
 fairly simple, taxation often gets terribly complicated...  </PARA>
 
 </SECT2>
 </SECT1>
 <SECT1 ID="XACC-DEPR">
-<TITLE> Depreciation of assets</TITLE>
+<TITLE>Depreciation of Assets</TITLE>
 <PARA>Compared to the often uncertain estimates one has to do
     where appreciation of assets is concerned, we are on somewhat
     firmer ground here.
@@ -539,7 +497,6 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
 <LISTITEM>
 <PARA>Governments tend to set up precise rules as to how you
       are required to calculate depreciation for tax purposes.
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
@@ -565,9 +522,8 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
     </PARA>
 <SECT2>
 <TITLE>Depreciation schemes</TITLE>
-<PARA>    </PARA>
 <SECT3>
-<TITLE>Linear depreciation</TITLE>
+<TITLE>Linear Sepreciation</TITLE>
 <PARA>Linear depreciation diminishes the value of an asset by a
     fixed amount each period until the net value is zero. This is
     the <EMPHASIS>simplest</EMPHASIS> calculation, as you estimate a useful
@@ -636,9 +592,7 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
     percentage in the first period.</EMPHASIS> On the other hand, in
     Canada, this is reversed, as they permit only a <EMPHASIS>half</EMPHASIS>
     share of "Capital Cost Allowance" in the first year.
-
-    </PARA>
-<PARA>The result of this approach is that asset value decreases
+    The result of this approach is that asset value decreases
     more rapidly at the beginning than at the end which is <EMPHASIS>    probably</EMPHASIS> more realistic for most assets than a linear
     scheme. This is certainly true for automobiles.
 
@@ -744,8 +698,7 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
 </SECT3>
 </SECT2>
 <SECT2>
-<TITLE>The handling of depreciation in gnucash</TITLE>
-<PARA>    </PARA>
+<TITLE>The Handling of Depreciation in GnuCash</TITLE>
 <PARA>In order to keep track of the depreciation of an asset, you
     need :
 
@@ -771,14 +724,12 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
 </ITEMIZEDLIST>
 
     </PARA>
-<PARA>The first step, again, is to record the purchase of your
+<PARA>The first step is to record the purchase of your
     asset by transferring the money from bank bank account to the
     <EMPHASIS>asset cost</EMPHASIS> account. Afterwards, in each accounting
     period you record the depreciation as an expense in the
     appropriate account.
-
-    </PARA>
-<PARA>The two windows below show your asset account and the main
+    The two windows below show your asset account and the main
     window after the third year of depreciation using a "sum of
     digits" scheme for the example above.
     <INLINEMEDIAOBJECT>
@@ -802,8 +753,7 @@ fairly simple, taxation often gets terribly complicated...  </PARA>
     </PARA>
 </SECT2>
 <SECT2>
-<TITLE>A word of caution</TITLE>
-<PARA>    </PARA>
+<TITLE>A Word of Caution</TITLE>
 <PARA>Since depreciation and tax issues are closely related, you
     may not always be free in choosing your preferred method.
     Fixing wrong calculations will cost a whole lot more time and
