@@ -1,3 +1,22 @@
+2003-03-02 TomF changes for Gnome-2 branch
+
+	* configure.in: Change GNOME_XML_CHECK call to GNOME_XML2_CHECK
+	  to fix wrong libxml library in gcc calls.
+          Move AS_SCRUB_INCLUDE call to macros/gnome-xml-check.m4
+	  Commented out the po/Makefile lines in AC_OUTPUT calls to bypass
+	  "not found" errors
+	* macros/autogen.sh: Commented out gettextize lines to bypass
+	  "not found" errors
+	  might want to change the gettextize to glib-gettextize
+	* macros/gnome-xml-check.m4: changed macro name to GNOME_XML2_CHECK
+	  Changed xml to xml2; changed GNOME-CONFIG to PKG-CONFIG
+	  Moved AS_SCRUB_INCLUDE call from configure.in
+	  This .m4 file was not in the Gnome-2 branch, so it has to be
+	  added in cvs.  It don't know how it got dropped.
+	* src/engine/gnc-associate-account.c: Fixed gcc warning messages.
+	* Currently, make fails at gnc-gpg.c, and there is an unknown text
+	  file: src/network-utils/gnc-gpg.loT
+
 2003-02-27   Derek Atkins  <derek@ihtfp.com>
 
 	* re-add macros/gnome.m4 for GNOME_INIT

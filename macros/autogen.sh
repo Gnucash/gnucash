@@ -7,8 +7,8 @@ AUTOCONF=${AUTOCONF:-autoconf}
 AUTOHEADER=${AUTOHEADER:-autoheader}
 AUTOMAKE=${AUTOMAKE:-automake}
 ACLOCAL=${ACLOCAL:-aclocal}
-GETTEXTIZE=${GETTEXTIZE:-gettextize}
-INTLTOOLIZE=${INTLTOOLIZE:-intltoolize}
+#GETTEXTIZE=${GETTEXTIZE:-gettextize}
+#INTLTOOLIZE=${INTLTOOLIZE:-intltoolize}
 LIBTOOLIZE=${LIBTOOLIZE:-libtoolize}
 LIBTOOL=${LIBTOOL:-libtool}
 
@@ -26,17 +26,17 @@ fi
   DIE=1
 }
 
-GETTEXTIZE_VERSION=`${GETTEXTIZE} --version`
-gettextize_major_version=`echo ${GETTEXTIZE_VERSION} | \
-	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\1/'`
-gettextize_minor_version=`echo ${GETTEXTIZE_VERSION} | \
-	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\2/'`
-if [  $gettextize_major_version -gt 0   -o \
-      $gettextize_minor_version -gt 10  ]; then
-  INTL="--intl";
-else
-  INTL="";
-fi
+#GETTEXTIZE_VERSION=`${GETTEXTIZE} --version`
+#gettextize_major_version=`echo ${GETTEXTIZE_VERSION} | \
+#	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\1/'`
+#gettextize_minor_version=`echo ${GETTEXTIZE_VERSION} | \
+#	sed 's/^.*GNU gettext.* \([0-9]*\)\.\([0-9]*\).\([0-9]*\).*$/\2/'`
+#if [  $gettextize_major_version -gt 0   -o \
+#      $gettextize_minor_version -gt 10  ]; then
+#  INTL="--intl";
+#else
+#  INTL="";
+#fi
 
 #(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
 #  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
@@ -159,10 +159,10 @@ do
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
-      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
-        echo "Running ${INTLTOOLIZE} ..."
-        ${INTLTOOLIZE} --copy --force --automake
-      fi 
+#      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+#        echo "Running ${INTLTOOLIZE} ..."
+#        ${INTLTOOLIZE} --copy --force --automake
+#      fi 
 #      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
 #	if test -z "$NO_LIBTOOLIZE" ; then 
 #	  echo "Running ${LIBTOOLIZE}..."

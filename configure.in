@@ -300,17 +300,16 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 ### --------------------------------------------------------------------------
 ### Gnome XML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
-# GNOME_XML_CHECK 2/18/03 remove to bypass autogen.sh message
-GNOME_XML_CFLAGS=`$PKG_CONFIG --cflags xml`
-AS_SCRUB_INCLUDE(GNOME_XML_CFLAGS)
+GNOME_XML2_CHECK 
+# GNOME_XML_CFLAGS=`$PKG_CONFIG --cflags xml2` Done in GNOME_XML2_CHECK
 
-AC_SUBST(GNOME_XML_CFLAGS)
 
 oLIBS="$LIBS"
 LIBS="$LIBS $GNOME_XML_LIB"
 
-AC_CHECK_LIB(xml, xmlElemDump, [:], [
-  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
+# Compile a test program to verify that the xml2 library works.
+AC_CHECK_LIB(xml2, xmlElemDump, [:], [
+  AC_MSG_ERROR([libxml2 is required for GnuCash])
   ])
 LIBS="$oLIBS"
 
@@ -1015,7 +1014,8 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( m4/Makefile  po/Makefile.in intl/Makefile 
+#AC_OUTPUT( m4/Makefile  po/Makefile.in intl/Makefile
+AC_OUTPUT( m4/Makefile 
           dnl # Makefiles
           Makefile
           accounts/Makefile
