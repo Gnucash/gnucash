@@ -1,3 +1,25 @@
+2001-07-27  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-pricedb-xml-v1.c: remove include of
+	sixtp-writers.h and remove func xml_add_gnc_pricedb (no longer
+	used anywhere)
+	(gnc_pricedb_parser_new): reorder functions.
+
+	* src/engine/io-gncxml-v1.c: move v1 kvp parser code to this
+	file. 
+
+	* src/engine/sixtp-parsers.h: remove old v1 parser decls to
+	io-gncxml-v1.c 
+
+	* src/engine/gnc-schedxaction-xml-v2.c
+	(gnc_schedXaction_dom_tree_create): remove usage of
+	xml_add_gint32. 
+
+2001-07-26  James LewisMoss  <jimdres@mindspring.com>
+
+	* configure.in: comment out AC_ARG_PROGRAM called.  Presumeably
+	called by one of the AM macros.
+
 2001-07-26  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.c (xaccSchedTransactionInit):

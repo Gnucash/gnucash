@@ -178,8 +178,7 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     return TRUE;
 }
 
-static
-gboolean
+static gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
     GList *list;
@@ -189,8 +188,7 @@ add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
     return TRUE;
 }
 
-static
-gboolean
+static gboolean
 add_template_transaction_local( sixtp_gdv2 *data,
                                 gnc_template_xaction_data *txd )
 {

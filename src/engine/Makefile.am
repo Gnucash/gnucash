@@ -46,11 +46,9 @@ libgncengine_la_SOURCES = \
   md5.c \
   sixtp-dom-generators.c \
   sixtp-dom-parsers.c \
-  sixtp-kvp-parser.c \
   sixtp-stack.c \
   sixtp-to-dom-parser.c \
   sixtp-utils.c \
-  sixtp-xml-write-utils.c \
   sixtp.c \
   FreqSpec.c \
   SchedXaction.c \
@@ -104,8 +102,6 @@ noinst_HEADERS = \
   sixtp-parsers.h \
   sixtp-stack.h \
   sixtp-utils.h \
-  sixtp-writers.h \
-  sixtp-xml-write-utils.h \
   sixtp.h \
   FreqSpec.h \
   SchedXaction.h

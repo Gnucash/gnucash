@@ -33,7 +33,6 @@
 #include "sixtp-parsers.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
-#include "sixtp-writers.h"
 #include "sixtp-xml-write-utils.h"
 #include "io-gncxml-gen.h"
 
@@ -305,15 +304,6 @@ pricedb_v2_end_handler(
 }
 
 sixtp*
-gnc_pricedb_sixtp_parser_create(void)
-{
-    sixtp *ret;
-    ret = gnc_pricedb_parser_new();
-    sixtp_set_end(ret, pricedb_v2_end_handler);
-    return ret;
-}
-
-sixtp*
 gnc_pricedb_parser_new(void) 
 {
   sixtp *top_level;
@@ -341,6 +331,16 @@ gnc_pricedb_parser_new(void)
   sixtp_add_sub_parser(top_level, "price", price_parser);
   return top_level;
 }
+
+sixtp*
+gnc_pricedb_sixtp_parser_create(void)
+{
+    sixtp *ret;
+    ret = gnc_pricedb_parser_new();
+    sixtp_set_end(ret, pricedb_v2_end_handler);
+    return ret;
+}
+
 
 /***********************************************************************/
 /* WRITING */
@@ -457,17 +457,4 @@ xmlNodePtr
 gnc_pricedb_dom_tree_create(GNCPriceDB *db)
 {
     return gnc_pricedb_to_dom_tree("gnc:pricedb", db);
-}
-
-gboolean
-xml_add_gnc_pricedb(xmlNodePtr p, const char *tag, GNCPriceDB *db)
-{
-  xmlNodePtr db_xml = NULL;
-
-  if(!p || !tag) return FALSE;
-  if(!db) return TRUE;
-
-  xmlAddChild(p, gnc_pricedb_to_dom_tree(tag, db));
-
-  return TRUE;
 }

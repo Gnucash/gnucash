@@ -128,8 +128,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                      ( sx->autoCreateOption ? "y" : "n" ) );
     xmlNewTextChild( ret, NULL, "sx:autoCreateNotify",
                      ( sx->autoCreateNotify ? "y" : "n" ) );
-    xml_add_gint32( ret, "sx:advanceCreateDays", sx->advanceCreateDays );
-    xml_add_gint32( ret, "sx:advanceRemindDays", sx->advanceRemindDays );
+    xmlAddChild(ret, int_to_dom_tree("sx:advanceCreateDays",
+                                     sx->advanceCreateDays));
+    xmlAddChild(ret, int_to_dom_tree("sx:advanceRemindDays",
+                                     sx->advanceRemindDays));
 
     xmlAddChild( ret,
                  gdate_to_dom_tree( "sx:start",
@@ -141,10 +143,12 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     }
 
     if ( xaccSchedXactionHasOccurDef(sx) ) {
-         xml_add_gint32( ret, "sx:num-occur", 
-                         (gint32)xaccSchedXactionGetNumOccur(sx) );
-         xml_add_gint32( ret, "sx:rem-occur",
-                         (gint32)xaccSchedXactionGetRemOccur(sx) );
+        xmlAddChild(ret, int_to_dom_tree(
+                        "sx:num-occur",
+                        (gint32)xaccSchedXactionGetNumOccur(sx)));
+        xmlAddChild(ret, int_to_dom_tree(
+                        "sx:rem-occur",
+                        (gint32)xaccSchedXactionGetRemOccur(sx)));
     } else if ( xaccSchedXactionHasEndDate(sx) ) {
             xmlAddChild( ret,
                          gdate_to_dom_tree( "sx:end",
