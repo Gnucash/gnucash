@@ -1,3 +1,9 @@
+2003-04-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c: xaccSplitGetCorrAccountCode() should
+	  actually return the account Code, not the account Name!  Fixes
+	  #110561.
+
 2003-04-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-util/transfer-dialog.c: Pop up a dialog if the user
