@@ -485,6 +485,27 @@ double xaccGetClearedBalance (Account *acc, Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
+double xaccGetReconciledBalance (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
+      
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      themount = trans->credit_reconciled_balance;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      themount = trans->debit_reconciled_balance;
+   } else {
+      printf ("Internal Error: xaccGetReconciledBalance: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      themount = 0.0;  /* punt */
+   }
+   return themount;
+}
+    
+/********************************************************************\
+\********************************************************************/
+
 double xaccGetShareBalance (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
@@ -537,8 +558,10 @@ xaccRecomputeBalance( Account * acc )
   int  i; 
   double  dbalance    = 0.0;
   double  dcleared_balance = 0.0;
+  double  dreconciled_balance = 0.0;
   double  share_balance    = 0.0;
   double  share_cleared_balance = 0.0;
+  double  share_reconciled_balance = 0.0;
   double  amt = 0.0;
   Transaction *trans, *last_trans=NULL;
   Account *tracc;
@@ -557,6 +580,11 @@ xaccRecomputeBalance( Account * acc )
       dcleared_balance += amt * (trans->share_price);
     }
 
+    if( YREC == trans->reconciled ) {
+      share_reconciled_balance += amt;
+      dreconciled_balance += amt * (trans->share_price);
+    }
+
     tracc = (Account *) trans->credit;
     if (tracc == acc) {
       /* For bank accounts, the invarient subtotal is the dollar
@@ -564,13 +592,17 @@ xaccRecomputeBalance( Account * acc )
       if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> credit_share_balance = share_balance;
         trans -> credit_share_cleared_balance = share_cleared_balance;
+        trans -> credit_share_reconciled_balance = share_reconciled_balance;
         trans -> credit_balance = trans->share_price * share_balance;
         trans -> credit_cleared_balance = trans->share_price * share_cleared_balance;
+        trans -> credit_reconciled_balance = trans->share_price * share_reconciled_balance;
       } else {
         trans -> credit_share_balance = dbalance;
         trans -> credit_share_cleared_balance = dcleared_balance;
+        trans -> credit_share_reconciled_balance = dreconciled_balance;
         trans -> credit_balance = dbalance;
         trans -> credit_cleared_balance = dcleared_balance;
+        trans -> credit_reconciled_balance = dreconciled_balance;
       }
     }
     tracc = (Account *) trans->debit;
@@ -578,13 +610,17 @@ xaccRecomputeBalance( Account * acc )
       if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> debit_share_balance = share_balance;
         trans -> debit_share_cleared_balance = share_cleared_balance;
+        trans -> debit_share_reconciled_balance = share_reconciled_balance;
         trans -> debit_balance = trans->share_price * share_balance;
         trans -> debit_cleared_balance = trans->share_price * share_cleared_balance;
+        trans -> debit_reconciled_balance = trans->share_price * share_reconciled_balance;
       } else {
         trans -> debit_share_balance = dbalance;
         trans -> debit_share_cleared_balance = dcleared_balance;
+        trans -> debit_share_reconciled_balance = dreconciled_balance;
         trans -> debit_balance = dbalance;
         trans -> debit_cleared_balance = dcleared_balance;
+        trans -> debit_reconciled_balance = dreconciled_balance;
       }
     }
 
@@ -595,13 +631,16 @@ xaccRecomputeBalance( Account * acc )
     if (last_trans) {
        acc -> balance = share_balance * (last_trans->share_price);
        acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+       acc -> reconciled_balance = share_reconciled_balance * (last_trans->share_price);
     } else {
        acc -> balance = 0.0;
        acc -> cleared_balance = 0.0;
+       acc -> reconciled_balance = 0.0;
     }
   } else {
     acc -> balance = dbalance;
     acc -> cleared_balance = dcleared_balance;
+    acc -> reconciled_balance = dreconciled_balance;
   }
     
   return;

@@ -239,18 +239,16 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
            widget, endB, newB;
   Transaction *trans;
   char   buf[BUFSIZE];
-  int    j;
   double dendBalance;
   int    done=-1;
   
   setBusyCursor( parent );
   
-  /* Figure out previous ending balance: */
-  dendBalance=0.0;
-  j=0;
-  while( (trans = getTransaction(acc,j++)) != NULL )
-    if( trans->reconciled == YREC )
-      dendBalance += xaccGetAmount (acc, trans);
+  /* Get the previous ending balance.  Use the published
+   * account interface for this, since the ending balance
+   * may have to be adjusted for stock price fluctuations.
+   */
+  dendBalance = acc->reconciled_balance;
   
   /* Create the dialog box... XmNdeleteResponse is set to
    * XmDESTROY so the dialog's memory is freed when it is closed */
