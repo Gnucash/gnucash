@@ -1,5 +1,10 @@
 2001-07-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/gnc-dateedit.c: sync with datecell-gnome.c
+
+	* src/register/gnome/datecell-gnome.c: use GDate to do
+	date manipulations.
+
 	* src/scm/bootstrap.scm.in: instead of the scheme command,
 	just tell the user to run gnucash once as root.
 

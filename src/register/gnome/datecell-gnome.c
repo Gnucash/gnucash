@@ -567,12 +567,15 @@ DateDirect (BasicCell *bcell,
   PopBox *box = cell->cell.gui_private;
   GdkEventKey *event = gui_data;
   char buff[DATE_BUF];
-  struct tm *date;
+  GDate gdate;
 
   if (event->type != GDK_KEY_PRESS)
     return FALSE;
 
-  date = &(box->date);
+  g_date_set_dmy (&gdate, 
+                  box->date.tm_mday,
+                  box->date.tm_mon + 1,
+                  box->date.tm_year + 1900);
 
   switch (event->keyval)
   {
@@ -580,13 +583,13 @@ DateDirect (BasicCell *bcell,
     case GDK_plus:
     case GDK_equal:
       if (event->state & GDK_SHIFT_MASK)
-        date->tm_mday += 7;
+        g_date_add_days (&gdate, 7);
       else if (event->state & GDK_MOD1_MASK)
-        date->tm_mon++;
+        g_date_add_months (&gdate, 1);
       else if (event->state & GDK_CONTROL_MASK)
-        date->tm_year++;
+        g_date_add_years (&gdate, 1);
       else
-        date->tm_mday++;
+        g_date_add_days (&gdate, 1);
       break;
 
     case GDK_minus:
@@ -610,64 +613,65 @@ DateDirect (BasicCell *bcell,
     case GDK_KP_Subtract:
     case GDK_underscore:
       if (event->state & GDK_SHIFT_MASK)
-        date->tm_mday -= 7;
+        g_date_subtract_days (&gdate, 7);
       else if (event->state & GDK_MOD1_MASK)
-        date->tm_mon--;
+        g_date_subtract_months (&gdate, 1);
       else if (event->state & GDK_CONTROL_MASK)
-        date->tm_year--;
+        g_date_subtract_years (&gdate, 1);
       else
-        date->tm_mday--;
+        g_date_subtract_days (&gdate, 1);
       break;
 
     case GDK_braceright:
     case GDK_bracketright:
       /* increment month */
-      date->tm_mon++;
+      g_date_add_months (&gdate, 1);
       break;
 
     case GDK_braceleft:
     case GDK_bracketleft:
       /* decrement month */
-      date->tm_mon--;
+      g_date_subtract_months (&gdate, 1);
       break;
 
     case GDK_M:
     case GDK_m:
       /* beginning of month */
-      date->tm_mday = 1;
+      g_date_set_day (&gdate, 1);
       break;
 
     case GDK_H:
     case GDK_h:
       /* end of month */
-      date->tm_mon++;
-      date->tm_mday = 0;
+      g_date_set_day (&gdate, 1);
+      g_date_add_months (&gdate, 1);
+      g_date_subtract_days (&gdate, 1);
       break;
 
     case GDK_Y:
     case GDK_y:
       /* beginning of year */
-      date->tm_mday = 1;
-      date->tm_mon = 0;
+      g_date_set_day (&gdate, 1);
+      g_date_set_month (&gdate, 1);
       break;
 
     case GDK_R:
     case GDK_r:
       /* end of year */
-      date->tm_mday = 31;
-      date->tm_mon = 11;
+      g_date_set_day (&gdate, 1);
+      g_date_set_month (&gdate, 1);
+      g_date_add_years (&gdate, 1);
+      g_date_subtract_days (&gdate, 1);
       break;
 
     case GDK_T:
     case GDK_t:
       {
         /* today */
-        time_t secs;
-        struct tm *now;
+        GTime gtime;
 
-        time (&secs);
-        now = localtime (&secs);
-        *date = *now;
+        gtime = time (NULL);
+        g_date_set_time (&gdate, gtime);
         break;
       }
 
@@ -675,11 +679,12 @@ DateDirect (BasicCell *bcell,
       return FALSE;
   }
 
-  date->tm_isdst = -1;
+  g_date_to_struct_tm (&gdate, &(box->date));
 
-  mktime (date);
-
-  printDate (buff, date->tm_mday, date->tm_mon + 1, date->tm_year + 1900);
+  printDate (buff,
+             box->date.tm_mday,
+             box->date.tm_mon + 1,
+             box->date.tm_year + 1900);
 
   xaccSetBasicCellValueInternal (&cell->cell, buff);
 
