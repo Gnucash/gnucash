@@ -58,4 +58,11 @@ struct _account_group {
   double balance;
 };
 
+
+/* Set the group's GUID. This should only be done when reading
+ * a group from a datafile, or some other external source. Never
+ * call this on an existing group! */
+void xaccGroupSetGUID (AccountGroup *group, GUID *guid);
+
+
 #endif /* __XACC_ACCOUNT_GROUP_P_H__ */

@@ -160,7 +160,6 @@ struct _account {
  *    it should be immediately destroyed, or it should be inserted into  
  *    an account.
  */
-
 void         xaccAccountRemoveSplit (Account *, Split *);
 
 /* the following recompute the partial balances (stored with the
@@ -173,6 +172,12 @@ void         xaccAccountRecomputeBalances (Account **);
  * recomputes the cost basis 
  */
 void         xaccAccountRecomputeCostBasis (Account *);
+
+
+/* Set the account's GUID. This should only be done when reading
+ * an account from a datafile, or some other external source. Never
+ * call this on an existing account! */
+void xaccAccountSetGUID (Account *account, GUID *guid);
 
 
 /** GLOBALS *********************************************************/

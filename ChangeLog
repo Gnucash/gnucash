@@ -1,5 +1,10 @@
 2000-05-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/engine/GNCId.c (xaccRemoveEntity): don't allow the NULL id
+	to be removed.
+
+	* src/scm: remove some old, unused files.
+
 	* src/register/splitreg.c (configLayout): swap mirrored xfer from
 	and xfer to field in the transaction line of the ledgers.
 

@@ -109,12 +109,3 @@ string and 'directories' must be a list of strings."
       (car lst))
      (else
       ""))))
-
-;;;; Simple lookup scheme; can be turned into a hash table If Need Be.
-;;; Initialize lookup table
-(define (initialize-hashtable . size)
-  (make-vector
-   (if (null? size)
-       313
-       (car size))
-   '()))

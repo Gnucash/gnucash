@@ -180,6 +180,16 @@ struct _transaction
 };
 
 
+/* Set the transaction's GUID. This should only be done when reading
+ * a transaction from a datafile, or some other external source. Never
+ * call this on an existing transaction! */
+void xaccTransSetGUID (Transaction *trans, GUID *guid);
+
+/* Set the split's GUID. This should only be done when reading
+ * a split from a datafile, or some other external source. Never
+ * call this on an existing split! */
+void xaccSplitSetGUID (Split *split, GUID *guid);
+
 /* The xaccFreeTransaction() method simply frees all memory associated
  * with the transaction.  It does not perform any consistency checks 
  * to verify that such freeing can be safely done. (e.g. id does

@@ -203,6 +203,19 @@ xaccSplitGetGUID (Split *split)
 
 /********************************************************************\
 \********************************************************************/
+void xaccSplitSetGUID (Split *split, GUID *guid)
+{
+  if (!split || !guid) return;
+
+  xaccRemoveEntity(&split->guid);
+
+  split->guid = *guid;
+
+  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
+}
+
+/********************************************************************\
+\********************************************************************/
 Split *
 xaccSplitLookup (const GUID *guid)
 {
@@ -503,6 +516,20 @@ xaccTransGetGUID (Transaction *trans)
 
   return &trans->guid;
 }
+
+/********************************************************************\
+\********************************************************************/
+void xaccTransSetGUID (Transaction *trans, GUID *guid)
+{
+  if (!trans || !guid) return;
+
+  xaccRemoveEntity(&trans->guid);
+
+  trans->guid = *guid;
+
+  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+}
+
 
 /********************************************************************\
 \********************************************************************/

@@ -157,6 +157,19 @@ xaccGroupGetGUID (AccountGroup *group)
 
 /********************************************************************\
 \********************************************************************/
+void xaccGroupSetGUID (AccountGroup *group, GUID *guid)
+{
+  if (!group || !guid) return;
+
+  xaccRemoveEntity(&group->guid);
+
+  group->guid = *guid;
+
+  xaccStoreEntity(group, &group->guid, GNC_ID_GROUP);
+}
+
+/********************************************************************\
+\********************************************************************/
 AccountGroup *
 xaccGroupLookup (const GUID *guid)
 {

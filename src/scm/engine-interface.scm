@@ -63,7 +63,8 @@
   (record-accessor gnc:split-structure 'share-price))
 
 ;; This function take a C split and returns a representation
-;; of it as a split-structure.
+;; of it as a split-structure. Assumes the transaction is open
+;; for editing.
 (define (gnc:split->split-scm split)
   (gnc:make-split-scm
    (gnc:split-get-guid split)
@@ -76,16 +77,6 @@
    (gnc:split-get-reconciled-date split)
    (gnc:split-get-share-amount split)
    (gnc:split-get-share-price split)))
-
-;; gnc:split-copy is a form of gnc:split->split-scm used by C routines.
-;; It stores the split in an internal variable so C can safely register
-;; it before it gets garbage collected.
-(define gnc:copy-split #f)
-(let ((last-split #f))
-  (set! gnc:copy-split
-        (lambda (split)
-          (set! last-split (gnc:split->split-scm split))
-          last-split)))
 
 ;; Copy a scheme representation of a split onto a C split.
 ;; If possible, insert the C split into the account of the

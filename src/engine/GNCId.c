@@ -29,6 +29,10 @@
 #include "GNCIdP.h"
 
 
+/** #defines ********************************************************/
+#define GNCID_DEBUG 0
+
+
 /** Type definitions ************************************************/
 typedef struct entity_node
 {
@@ -247,8 +251,9 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
 void
 xaccRemoveEntity(const GUID * guid)
 {
-  gpointer e_node;
+  EntityNode *e_node;
   gpointer old_guid;
+  gpointer node;
 
   if (guid == NULL)
     return;
@@ -256,9 +261,13 @@ xaccRemoveEntity(const GUID * guid)
   if (entity_table == NULL)
     entity_table_init();
 
-  if (g_hash_table_lookup_extended(entity_table, guid, &old_guid, &e_node))
+  if (g_hash_table_lookup_extended(entity_table, guid, &old_guid, &node))
   {
+    e_node = node;
+    if (e_node->entity_type == GNC_ID_NULL)
+      return;
+
     g_hash_table_remove(entity_table, old_guid);
-    entity_node_destroy(old_guid, e_node, NULL);
+    entity_node_destroy(old_guid, node, NULL);
   }
 }

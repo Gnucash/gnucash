@@ -229,6 +229,19 @@ xaccAccountGetGUID (Account *account)
 
 /********************************************************************\
 \********************************************************************/
+void xaccAccountSetGUID (Account *account, GUID *guid)
+{
+  if (!account || !guid) return;
+
+  xaccRemoveEntity(&account->guid);
+
+  account->guid = *guid;
+
+  xaccStoreEntity(account, &account->guid, GNC_ID_ACCOUNT);
+}
+
+/********************************************************************\
+\********************************************************************/
 Account *
 xaccAccountLookup (const GUID *guid)
 {
