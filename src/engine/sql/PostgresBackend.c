@@ -1250,9 +1250,6 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    if (!be) return;
    ncalls ++;
 
-   gnc_engine_suspend_events();
-   pgendDisable(be);
-
    SEND_QUERY (be, query_string, );
    xaction_list = pgendGetResults (be, query_cb, xaction_list);
    if (NULL == xaction_list) return;
@@ -1320,7 +1317,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
     * than the earliest split. Next, we get *all* of the splits from
     * that checkpoint onwards.
     */
-   for (anode = acct_list; anode; anode->next)
+   for (anode = acct_list; anode; anode = anode->next)
    {
       char *p;
       Timespec start_date;
