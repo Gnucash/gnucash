@@ -459,7 +459,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       parent = xaccAccountGetParent(acct);
       if (parent) parent->saved = 1;
-      return 0;
+      return;
    }
 
    /* lock it up so that we query and store atomically */
