@@ -610,7 +610,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 \********************************************************************/
 
 static int
-group_insert_helper (gconstpointer a, gconstpointer b)
+group_sort_helper (gconstpointer a, gconstpointer b)
 {
   Account *aa = (Account *) a;
   Account *bb = (Account *) b;
@@ -629,16 +629,23 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
    * the sort order to be checked. */
-  if (acc->parent)
-    xaccRemoveAccount (acc);
+  if (acc->parent == grp)
+  {
+    grp->accounts = g_list_sort (grp->accounts, group_sort_helper);
+  }
+  else
+  {
+    if (acc->parent)
+      xaccRemoveAccount (acc);
+
+    /* set back-pointer to the account's parent */
+    acc->parent = grp;
+
+    grp->accounts = g_list_insert_sorted (grp->accounts, acc,
+                                          group_sort_helper);
+  }
 
   grp->saved = 0;
-
-  /* set back-pointer to the account's parent */
-  acc->parent = grp;
-
-  grp->accounts = g_list_insert_sorted (grp->accounts, acc,
-                                        group_insert_helper);
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
