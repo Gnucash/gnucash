@@ -1,3 +1,19 @@
+2003-03-31  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/engine/gnc-pricedb.c
+	* src/engine/gnc-pricedb.h: new function
+	gnc_pricedb_lookup_latest_any_currency, return any available
+	prices for given commodity regardless of currency
+	
+	* src/app-utils/gnc-ui-util.c: do a "two stage" price lookup in
+	gnc_ui_convert_balance_to_currency if no price for the commodity
+	is found in the requested currency, then look for prices in any
+	currency and for a exchange rate from the price currency to the
+	requested currency
+
+	* src/gnome/gnc-split-reg.c: do currency conversion and show the
+	value in the status line of stock and mutual fund accounts
+
 2003-03-31  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/test/test-employee.c:  fix the test

@@ -249,6 +249,12 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
                                        gnc_commodity *commodity,
                                        gnc_commodity *currency);
 
+/** gnc_pricedb_lookup_latest_any_currency - find the most recent prices
+     for the given commodity in any available currency.  Returns NULL on
+     failure. */
+GList      *gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
+                                                   gnc_commodity *commodity);
+
 /** gnc_pricedb_get_prices - return all the prices for a given
      commodity in the given currency.  Returns NULL on failure.  The
      result is a GNCPrice list (see above).  */

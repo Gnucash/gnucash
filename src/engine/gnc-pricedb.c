@@ -989,6 +989,44 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   return result;
 }
 
+static void
+lookup_latest(gpointer key, gpointer val, gpointer user_data)
+{
+  //gnc_commodity *currency = (gnc_commodity *)key;
+  GList *price_list = (GList *)val;
+  GList **return_list = (GList **)user_data;
+
+  if(!price_list) return;
+
+  /* the latest price ist the first in list */
+  gnc_price_list_insert(return_list, price_list->data);
+}
+
+GList *
+gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
+                                       gnc_commodity *commodity)
+{
+  GList *result;
+  GHashTable *currency_hash;
+
+  result = NULL;
+
+  ENTER ("db=%p commodity=%p", db, commodity);
+  if(!db || !commodity) return NULL;
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+  if(!currency_hash) return NULL;
+
+  g_hash_table_foreach(currency_hash, lookup_latest, &result);
+
+  if(!result) return NULL;
+
+  result = g_list_sort(result, compare_prices_by_date);
+
+  LEAVE(" ");
+  return result;
+}
+
 GList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
                        gnc_commodity *commodity,

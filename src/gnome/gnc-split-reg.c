@@ -645,6 +645,29 @@ account_latest_price (Account *account)
   return gnc_pricedb_lookup_latest (pdb, commodity, currency);
 }
 
+static GNCPrice *
+account_latest_price_any_currency (Account *account)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  gnc_commodity *commodity;
+  GList *price_list;
+  GNCPrice *result;
+
+  commodity = xaccAccountGetCommodity (account);
+
+  book = gnc_get_current_book ();
+  pdb = gnc_book_get_pricedb (book);
+
+  price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
+
+  result = gnc_price_clone((GNCPrice *)(price_list->data), book);
+
+  gnc_price_list_destroy(price_list);
+
+  return result;
+}
+
 static
 void
 gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
@@ -716,9 +739,45 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         price = account_latest_price (leader);
         if (!price)
           {
-            gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
-            gtk_label_set_text (GTK_LABEL (gsr->value_label),
-                                _("<No information>"));
+	    price = account_latest_price_any_currency (leader);
+	    if(!price)
+	      {
+		gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
+		gtk_label_set_text (GTK_LABEL (gsr->value_label),
+				    _("<No information>"));
+	      }
+	    else
+	      {
+		gnc_commodity *currency = gnc_price_get_currency (price);
+                gnc_commodity *default_currency = gnc_default_currency ();
+                gnc_numeric currency_amount;
+                gnc_numeric default_currency_amount;
+
+		print_info = gnc_commodity_print_info (currency, TRUE);
+
+		amount = xaccAccountGetBalance (leader);
+		if (reverse)
+		  amount = gnc_numeric_neg (amount);
+
+                currency_amount = gnc_ui_convert_balance_to_currency(amount, commodity, currency);
+
+		xaccSPrintAmount (string, currency_amount, print_info);
+
+                default_currency_amount = gnc_ui_convert_balance_to_currency(amount, commodity,
+                                                                             default_currency);
+		if(!gnc_numeric_zero_p(default_currency_amount))
+		  {
+		    strcat( string, " / " );
+		    print_info = gnc_commodity_print_info (default_currency, TRUE);
+		    xaccSPrintAmount( string + strlen( string ), default_currency_amount,
+				      print_info);
+		  }
+
+		gnc_set_label_color (gsr->value_label, amount);
+		gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
+
+		gnc_price_unref (price);
+	      }
           }
         else
           {

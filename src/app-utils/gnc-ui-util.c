@@ -392,14 +392,70 @@ gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_c
   pdb = gnc_book_get_pricedb (book);
 
   price = gnc_pricedb_lookup_latest (pdb, balance_currency, currency);
-  if (!price)
-    return gnc_numeric_zero ();
 
-  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
-                             gnc_commodity_get_fraction (currency),
-                             GNC_RND_ROUND);
+  if (price)
+  {
+    balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (currency),
+                               GNC_RND_ROUND);
+    gnc_price_unref (price);
+  }
+  else
+  {
+    /* no direct price found, try if we find a price in another
+      currency and convert in two stages */
+    GList *price_list = gnc_pricedb_lookup_latest_any_currency(pdb, balance_currency);
+    
+    if(price_list)
+    {
+      GList *list_helper = price_list;
+      gnc_numeric currency_price_value = gnc_numeric_zero();
+      gnc_commodity *intermediate_currency;
+      GNCPrice *currency_price;
 
-  gnc_price_unref (price);
+      do
+      {
+        price = (GNCPrice *)(list_helper->data);
+
+        intermediate_currency = gnc_price_get_currency(price);
+        currency_price = gnc_pricedb_lookup_latest(pdb, intermediate_currency, currency);
+        if(currency_price)
+	{
+          currency_price_value = gnc_price_get_value(currency_price);
+          gnc_price_unref(currency_price);
+	}
+        else
+	{
+          currency_price = gnc_pricedb_lookup_latest(pdb, currency, intermediate_currency);
+          if(currency_price)
+	  {
+            /* here we need the reciprocal */
+            currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
+                                                   gnc_price_get_value(currency_price),
+                                                   gnc_commodity_get_fraction (currency),
+                                                   GNC_RND_ROUND);
+            gnc_price_unref(currency_price);
+	  }
+	}
+
+        list_helper = list_helper->next;
+      }
+      while((list_helper != NULL) && (!gnc_numeric_zero_p(currency_price_value)));
+
+      balance = gnc_numeric_mul (balance, currency_price_value,
+                                 gnc_commodity_get_fraction (currency),
+                                 GNC_RND_ROUND);      
+      balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                                 gnc_commodity_get_fraction (currency),
+                                 GNC_RND_ROUND);      
+
+      gnc_price_list_destroy(price_list);
+    }
+    else
+    {
+      balance =  gnc_numeric_zero ();
+    }
+  }
 
   return balance;
 }
