@@ -196,7 +196,8 @@ xaccQueryPrint(Query * q)
           char buff[40];
           printf ("guid sense=%d\n", qt->data.guid.sense);
           guid_to_string_buff (&qt->data.guid.guid, buff);
-          printf ("\tguid %s\n", buff);
+          printf ("\tguid=%s\n", buff);
+          printf ("\tid type=%d\n", qt->data.guid.id_type);
           break;
         }
         case PR_KVP: {
@@ -1425,6 +1426,8 @@ xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
     case PD_GUID:
       if (!guid_equal (&qt1->data.guid.guid, &qt2->data.guid.guid))
         return FALSE;
+      if (qt1->data.guid.id_type != qt2->data.guid.id_type)
+        return FALSE;
       break;
 
     case PD_KVP: {
@@ -2206,7 +2209,8 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
  ********************************************************************/
 
 void
-xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op)
+xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+                      GNCIdType id_type, QueryOp op)
 {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
@@ -2217,6 +2221,7 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op)
   qt->data.base.term_type = PR_GUID;
   qt->data.base.sense     = 1;
   qt->data.guid.guid      = guid ? *guid : *xaccGUIDNULL ();
+  qt->data.guid.id_type   = id_type;
 
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
@@ -2473,7 +2478,7 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
 
   guid = &pd->guid.guid;
 
-  switch (xaccGUIDTypeEntityTable (guid, s->entity_table))
+  switch (pd->guid.id_type)
   {
     case GNC_ID_NONE:
     case GNC_ID_NULL:

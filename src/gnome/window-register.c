@@ -3339,7 +3339,8 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
 
   xaccQuerySetGroup (query, gnc_get_current_group ());
 
-  xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split), QUERY_AND);
+  xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
+                         GNC_ID_SPLIT, QUERY_AND);
 
   report_helper (regData, func, query);
 }

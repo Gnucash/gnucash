@@ -352,6 +352,17 @@
   (gw:wrap-non-native-type mod '<gnc:QueryTerm*> 
                            "QueryTerm *" "const QueryTerm *")
 
+  (let ((wt (gw:wrap-enumeration mod '<gnc:id-type> 
+				 "GNCIdType" "const GNCIdType")))
+    (gw:enum-add-value! wt "GNC_ID_NONE" 'gnc-id-none)
+    (gw:enum-add-value! wt "GNC_ID_NULL" 'gnc-id-null)
+    (gw:enum-add-value! wt "GNC_ID_ACCOUNT" 'gnc-id-account)
+    (gw:enum-add-value! wt "GNC_ID_TRANS" 'gnc-id-trans)
+    (gw:enum-add-value! wt "GNC_ID_SPLIT" 'gnc-id-split)
+    (gw:enum-add-value! wt "GNC_ID_PRICE" 'gnc-id-price)
+    (gw:enum-add-value! wt "GNC_ID_SCHEDXACTION" 'gnc-id-sched-xaction)
+    (gw:enum-add-value! wt "GNC_ID_FREQSPEC" 'gnc-id-freq-spec))
+
   (let ((wt (gw:wrap-enumeration mod '<gnc:query-op> 
 				 "QueryOp" "const QueryOp")))
     (gw:enum-add-value! wt "QUERY_AND" 'query-and)

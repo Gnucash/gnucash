@@ -803,10 +803,18 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                break;
 
             case PR_GUID:
-               if (!guid_equal (&pd->guid.guid, xaccGUIDNULL ()))
+               switch (pd->guid.id_type)
                {
-                 need_account = TRUE;
-                 need_entry = TRUE;
+                 case GNC_ID_ACCOUNT:
+                   need_account = TRUE;
+                   break;
+
+                 case GNC_ID_SPLIT:
+                   need_entry = TRUE;
+                   break;
+
+                 default:
+                   break;
                }
                break;
 
@@ -1046,25 +1054,31 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
 
                sq->pq = stpcpy (sq->pq, " (");
 
-               if (guid_equal (&pd->guid.guid, xaccGUIDNULL ()))
+               switch (pd->guid.id_type)
                {
-                 sq->pq = stpcpy(sq->pq, "FALSE ");
-               }
-               else
-               {
-                 sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
-                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                 sq->pq = stpcpy(sq->pq, "' ");
-                 sq->pq = stpcpy(sq->pq, " OR ");
+                 default:
+                 case GNC_ID_NULL:
+                 case GNC_ID_NONE:
+                   sq->pq = stpcpy(sq->pq, "FALSE ");
+                   break;
 
-                 sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
-                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                 sq->pq = stpcpy(sq->pq, "' ");
-                 sq->pq = stpcpy(sq->pq, " OR ");
+                 case GNC_ID_ACCOUNT:
+                   sq->pq = stpcpy(sq->pq, "gncAccount.accountGuid = '");
+                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                   sq->pq = stpcpy(sq->pq, "' ");
+                   break;
 
-                 sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
-                 sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
-                 sq->pq = stpcpy(sq->pq, "' ");
+                 case GNC_ID_TRANS:
+                   sq->pq = stpcpy(sq->pq, "gncTransaction.transGuid = '");
+                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                   sq->pq = stpcpy(sq->pq, "' ");
+                   break;
+
+                 case GNC_ID_SPLIT:
+                   sq->pq = stpcpy(sq->pq, "gncEntry.entryGuid = '");
+                   sq->pq = guid_to_string_buff (&pd->guid.guid, sq->pq);
+                   sq->pq = stpcpy(sq->pq, "' ");
+                   break;
                }
 
                sq->pq = stpcpy (sq->pq, ") ");

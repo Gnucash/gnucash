@@ -1219,6 +1219,12 @@ free_random_kvp_path (GSList *path)
   g_slist_free (path);
 }
 
+static GNCIdType
+get_random_id_type (void)
+{
+  return get_random_int_in_range (0, LAST_GNC_ID);
+}
+
 Query *
 get_random_query(void)
 {
@@ -1318,7 +1324,10 @@ get_random_query(void)
 
       case PR_GUID:
         guid = get_random_guid ();
-        xaccQueryAddGUIDMatch (q, guid, get_random_queryop ());
+        xaccQueryAddGUIDMatch (q,
+                               guid,
+                               get_random_id_type (),
+                               get_random_queryop ());
         g_free (guid);
         break;
 
@@ -1645,9 +1654,14 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
   if (query_types & GUID_QT)
   {
-    xaccQueryAddGUIDMatch (q, xaccSplitGetGUID (s), QUERY_AND);
-    xaccQueryAddGUIDMatch (q, xaccTransGetGUID (trans), QUERY_AND);
-    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a), QUERY_AND);
+    xaccQueryAddGUIDMatch (q, xaccSplitGetGUID (s),
+                           GNC_ID_SPLIT, QUERY_AND);
+
+    xaccQueryAddGUIDMatch (q, xaccTransGetGUID (trans),
+                           GNC_ID_TRANS, QUERY_AND);
+
+    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a),
+                           GNC_ID_ACCOUNT, QUERY_AND);
   }
 
   if (query_types & SPLIT_KVP_QT)

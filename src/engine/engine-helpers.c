@@ -23,20 +23,20 @@
 \********************************************************************/
 
 #include "config.h"
-#include "gnc-engine-util.h"
-#include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "gnc-book.h"
+
+#include <g-wrap-runtime-guile.h>
+#include <libguile.h>
+#include <string.h>
+
 #include "Backend.h"
 #include "Query.h"
 #include "date.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
-
-#include <libguile.h>
-#include <string.h>
-
-#include <g-wrap-runtime-guile.h>
+#include "gnc-book.h"
+#include "gnc-engine-util.h"
+#include "gnc-engine.h"
+#include "gnc-numeric.h"
 
 gnc_commodity_table *
 gnc_engine_commodity_table_new (void)
@@ -325,6 +325,18 @@ static sort_type_t
 gnc_scm2sort_type (SCM sort_type_scm)
 {
   return gnc_gw_enum_scm2val ("<gnc:sort-type>", sort_type_scm);
+}
+
+static SCM
+gnc_id_type2scm (GNCIdType id_type)
+{
+  return gnc_gw_enum_val2scm ("<gnc:id-type>", id_type);
+}
+
+static GNCIdType
+gnc_scm2id_type (SCM id_type_scm)
+{
+  return gnc_gw_enum_scm2val ("<gnc:id-type>", id_type_scm);
 }
 
 static SCM
@@ -833,6 +845,7 @@ gnc_queryterm2scm (QueryTerm *qt)
 
     case PD_GUID:
       qt_scm = gh_cons (gnc_guid2scm (qt->data.guid.guid), qt_scm);
+      qt_scm = gh_cons (gnc_id_type2scm (qt->data.guid.id_type), qt_scm);
       break;
 
     case PD_KVP:
@@ -1138,6 +1151,7 @@ gnc_scm2query_term_query (SCM query_term_scm)
     case PD_GUID:
       {
         GUID guid;
+        GNCIdType id_type;
 
         /* guid */
         if (gh_null_p (query_term_scm))
@@ -1148,7 +1162,14 @@ gnc_scm2query_term_query (SCM query_term_scm)
 
         guid = gnc_scm2guid (scm);
 
-        xaccQueryAddGUIDMatch (q, &guid, QUERY_OR);
+        /* id type */
+
+        scm = gh_car (query_term_scm);
+        query_term_scm = gh_cdr (query_term_scm);
+
+        id_type = gnc_scm2id_type (scm);
+
+        xaccQueryAddGUIDMatch (q, &guid, id_type, QUERY_OR);
       }
 
       ok = TRUE;

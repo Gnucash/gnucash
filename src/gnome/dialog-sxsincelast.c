@@ -886,6 +886,7 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                               (thisGUID = thisGUID->next) ) {
                                 xaccQueryAddGUIDMatch( sxsld->autoCreateQuery,
                                                        (GUID*)thisGUID->data,
+                                                       GNC_ID_TRANS,
                                                        QUERY_OR );
                         }
                         g_list_free( createdGUIDs );
@@ -897,9 +898,9 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         }
         gnc_resume_gui_refresh();
 
-        gnc_ledger_display_set_query( sxsld->ac_ledger, sxsld->autoCreateQuery );
+        gnc_ledger_display_set_query( sxsld->ac_ledger,
+                                      sxsld->autoCreateQuery );
         gnc_ledger_display_refresh( sxsld->ac_ledger );
-
 }
 
 static void

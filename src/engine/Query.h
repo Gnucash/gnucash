@@ -213,6 +213,7 @@ typedef struct {
   pr_type_t       term_type;
   int             sense;
   GUID            guid;
+  GNCIdType       id_type;
 } GUIDPredicateData;
 
 typedef struct {
@@ -333,7 +334,8 @@ void xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                            int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
 void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
-void xaccQueryAddGUIDMatch(Query * q, const GUID *guid, QueryOp op);
+void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+                           GNCIdType id_type, QueryOp op);
 /* given kvp value is on right side of comparison */
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
                           kvp_match_t how, kvp_match_where_t where,

@@ -26,10 +26,9 @@ TESTS = \
   test-query \
   test-resolve-file-path \
   test-split-vs-account  \
-  test-transaction-voiding 
-
-#  test-freq-spec 
-#  test-scm-query 
+  test-transaction-voiding \
+  test-freq-spec \
+  test-scm-query 
 
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine" \
