@@ -681,16 +681,6 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
   static GnomeUIInfo toolbar[] = 
   {
     { GNOME_APP_UI_ITEM,
-      OPEN_STR_N,
-      TOOLTIP_OPEN_FILE_N,
-      gnc_ui_filemenu_cb, 
-      GINT_TO_POINTER(FMB_OPEN),
-      NULL,
-      GNOME_APP_PIXMAP_STOCK, 
-      GNOME_STOCK_PIXMAP_OPEN,
-      0, 0, NULL
-    },
-    { GNOME_APP_UI_ITEM,
       SAVE_STR_N,
       TOOLTIP_SAVE_FILE_N,
       gnc_ui_filemenu_cb, 
@@ -781,9 +771,9 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
 
   list = main_info->account_sensitives;
 
+  list = g_slist_prepend(list, toolbar[3].widget);
   list = g_slist_prepend(list, toolbar[4].widget);
-  list = g_slist_prepend(list, toolbar[5].widget);
-  list = g_slist_prepend(list, toolbar[8].widget);
+  list = g_slist_prepend(list, toolbar[7].widget);
 
   main_info->account_sensitives = list;
 }

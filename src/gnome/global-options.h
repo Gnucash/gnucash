@@ -54,8 +54,8 @@ char * gnc_lookup_string_option(const char *section, const char *name,
 char * gnc_lookup_multichoice_option(const char *section, const char *name,
                                      char *default_value);
 
-gdouble gnc_lookup_number_range_option(const char *section, const char *name,
-                                       gdouble default_value);
+gdouble gnc_lookup_number_option(const char *section, const char *name,
+                                 gdouble default_value);
 
 gboolean gnc_lookup_color_option(const char *section, const char *name,
                                  gdouble *red, gdouble *green,
@@ -69,8 +69,8 @@ GSList * gnc_lookup_list_option(const char *section, const char *name,
 
 void gnc_set_option_default(const char *section, const char *name);
 
-gboolean gnc_set_number_range_option(const char *section, const char *name,
-                                     gdouble value);
+gboolean gnc_set_number_option(const char *section, const char *name,
+                               gdouble value);
 
 /* private */
 

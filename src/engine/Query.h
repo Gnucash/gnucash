@@ -43,6 +43,7 @@ typedef enum {
 typedef enum {
   BY_STANDARD,
   BY_DATE,
+  BY_DATE_ENTERED,
   BY_NUM,
   BY_AMOUNT,
   BY_MEMO,

@@ -67,6 +67,7 @@ struct _RecnWindow
 
   GtkWidget *starting;      /* The starting balance                 */
   GtkWidget *ending;        /* The ending balance                   */
+  GtkWidget *reconciled;    /* The reconciled balance               */
   GtkWidget *difference;    /* Text field, amount left to reconcile */
 
   GtkWidget *total_debit;   /* Text field, total debit reconciled   */
@@ -154,6 +155,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   double credit;
   double starting;
   double ending;
+  double reconciled;
   double diff;
   short shares = PRTSYM | PRTSEP;
   gboolean reverse_balance;
@@ -166,6 +168,7 @@ recnRecalculateBalance(RecnWindow *recnData)
       (account_type == CURRENCY))
     shares |= PRTSHR;
 
+  /* update the starting balance */
   starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
     starting = -starting;
@@ -175,6 +178,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   if (reverse_balance)
     starting = -starting;
 
+  /* update the ending balance */
   ending = recnData->new_ending;
   if (reverse_balance)
     ending = -ending;
@@ -190,14 +194,25 @@ recnRecalculateBalance(RecnWindow *recnData)
   credit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->credit));
 
-  /* Update the difference field, and the total fields */
+  /* Update the total debit and credit fields */
   amount = xaccPrintAmount(DABS(debit), shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
   amount = xaccPrintAmount(credit, shares, NULL);
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
-  diff = ending - (starting + debit - credit);
+  /* update the reconciled balance */
+  reconciled = starting + debit - credit;
+  if (reverse_balance)
+    reconciled = -reconciled;
+  amount = xaccPrintAmount(reconciled, shares, NULL);
+  gnc_set_label_color(recnData->reconciled, reconciled);
+  gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
+  if (reverse_balance)
+    reconciled = -reconciled;
+
+  /* update the difference */
+  diff = ending - reconciled;
   if (reverse_balance)
     diff = -diff;
   amount = xaccPrintAmount(diff, shares, NULL);
@@ -293,9 +308,9 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
     GtkWidget *main_area = gtk_hbox_new(FALSE, 5);
     GtkWidget *left_column = gtk_vbox_new(TRUE, 0);
     GtkWidget *right_column = gtk_vbox_new(TRUE, 0);
-    GtkWidget *prev_title = gtk_label_new(PREV_BALN_C_STR);
+    GtkWidget *start_title = gtk_label_new(START_BALN_C_STR);
     GtkWidget *end_title = gtk_label_new(END_BALN_C_STR);
-    GtkWidget *prev_value = gtk_label_new(amount);
+    GtkWidget *start_value = gtk_label_new(amount);
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
@@ -310,9 +325,9 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
                                  GTK_EDITABLE(end_value));
 
+    gtk_misc_set_alignment(GTK_MISC(start_title), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(start_value), 0, 0.5);
     gtk_misc_set_alignment(GTK_MISC(end_title), 0.95, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(prev_title), 0.95, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(prev_value), 0, 0.5);
 
     gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
     gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
@@ -322,10 +337,10 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
 
     gtk_box_pack_start(GTK_BOX(main_area), left_column, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(main_area), right_column, TRUE, TRUE, 0);
-    
-    gtk_box_pack_start(GTK_BOX(left_column), prev_title, TRUE, TRUE, 0);
+
+    gtk_box_pack_start(GTK_BOX(left_column), start_title, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(left_column), end_title, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(right_column), prev_value, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(right_column), start_value, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
 
     gtk_widget_show_all(dialog);
@@ -1081,22 +1096,22 @@ recnWindow(GtkWidget *parent, Account *account)
       gtk_container_set_border_width(GTK_CONTAINER(totals_hbox), 5);
 
       /* vbox to hold titles */
-      title_vbox = gtk_vbox_new(TRUE, 3);
+      title_vbox = gtk_vbox_new(FALSE, 3);
       gtk_box_pack_start(GTK_BOX(totals_hbox), title_vbox, FALSE, FALSE, 0);
 
       /* vbox to hold values */
-      value_vbox = gtk_vbox_new(TRUE, 3);
+      value_vbox = gtk_vbox_new(FALSE, 3);
       gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
 
-      /* previous balance title/value */
-      title = gtk_label_new(PREV_BALN_C_STR);
+      /* starting balance title/value */
+      title = gtk_label_new(START_BALN_C_STR);
       gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
-      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
 
       value = gtk_label_new("");
       recnData->starting = value;
       gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
-      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
 
       /* ending balance title/value */
       title = gtk_label_new(END_BALN_C_STR);
@@ -1105,6 +1120,16 @@ recnWindow(GtkWidget *parent, Account *account)
 
       value = gtk_label_new("");
       recnData->ending = value;
+      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+
+      /* reconciled balance title/value */
+      title = gtk_label_new(RECONCILE_BALN_C_STR);
+      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+
+      value = gtk_label_new("");
+      recnData->reconciled = value;
       gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
       gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 

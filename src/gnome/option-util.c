@@ -1671,8 +1671,8 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
 
 
 /********************************************************************\
- * gnc_option_db_lookup_number_range_option                         *
- *   looks up a number range option. If present, returns its value  *
+ * gnc_option_db_lookup_number_option                               *
+ *   looks up a number option. If present, returns its value        *
  *   as a gdouble, otherwise returns the default_value.             *
  *                                                                  *
  * Args: odb       - option database to search in                   *
@@ -1682,10 +1682,10 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
  * Return: gdouble representation of value                          *
 \********************************************************************/
 gdouble
-gnc_option_db_lookup_number_range_option(GNCOptionDB *odb,
-                                         const char *section,
-                                         const char *name,
-                                         gdouble default_value)
+gnc_option_db_lookup_number_option(GNCOptionDB *odb,
+                                   const char *section,
+                                   const char *name,
+                                   gdouble default_value)
 {
   GNCOption *option;
   SCM getter;
@@ -1858,8 +1858,8 @@ gnc_option_db_set_option_default(GNCOptionDB *odb,
 }
 
 /********************************************************************\
- * gnc_option_db_set_number_range_option                            *
- *   sets the number range option to the given value. If successful *
+ * gnc_option_db_set_number_option                                  *
+ *   sets the number option to the given value. If successful       *
  *   returns TRUE, otherwise FALSE.                                 *
  *                                                                  *
  * Args: odb       - option database to search in                   *
@@ -1869,10 +1869,10 @@ gnc_option_db_set_option_default(GNCOptionDB *odb,
  * Return: success indicator                                        *
 \********************************************************************/
 gboolean
-gnc_option_db_set_number_range_option(GNCOptionDB *odb,
-                                      const char *section,
-                                      const char *name,
-                                      gdouble value)
+gnc_option_db_set_number_option(GNCOptionDB *odb,
+                                const char *section,
+                                const char *name,
+                                gdouble value)
 {
   GNCOption *option;
   SCM scm_value;

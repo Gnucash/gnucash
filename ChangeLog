@@ -1,4 +1,19 @@
+2000-05-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-main.c (gnc_main_create_toolbar): removed the
+	'open file' item from the toolbar, to lessen conflict with the
+	'open account' item.
+
 2000-05-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c: add a gui option for sorting by
+	date entered.
+
+	* src/engine/Query.c: add a BY_DATE_ENTERED sorting option.
+
+	* src/scm/prefs.scm: convert the gui options to internal options.
+
+	* src/scm/options.scm: add an interal option type with no frills.
 
 	* src/engine/util.c (xaccSPrintAmount): add a space after the
 	currency code to make the currency symbol.

@@ -330,6 +330,21 @@
      (list lower-bound upper-bound num-decimals step-size)
      #f)))
 
+(define (gnc:make-internal-option
+         section
+         name
+         default-value)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name "" 'internal #f
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x) (list #t x))
+     #f #f)))
+
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
 ;; is the range of possible rgba values and whose
@@ -616,7 +631,7 @@
      (if (external-name? section)
          (gnc:register-translatable-strings section)))
    (lambda (option)
-     (if (external-name? (gnc:option-name option))
+     (if (not (eq? (gnc:option-type option) 'internal))
          (gnc:register-translatable-strings (gnc:option-name option)))
      (gnc:register-translatable-strings (gnc:option-documentation option))
      (let ((getter (gnc:option-strings-getter option)))

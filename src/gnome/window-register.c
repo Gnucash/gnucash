@@ -331,6 +331,9 @@ gnc_register_sort(RegWindow *regData, int sort_code)
     case BY_DATE:
       xaccQuerySetSortOrder(query, BY_DATE, BY_NUM, BY_AMOUNT);
       break;
+    case BY_DATE_ENTERED:
+      xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
+      break;
     case BY_NUM:
       xaccQuerySetSortOrder(query, BY_NUM, BY_DATE, BY_AMOUNT);
       break;
@@ -365,6 +368,14 @@ gnc_register_sort_date_cb(GtkWidget *w, gpointer data)
   RegWindow *regData = data;
 
   gnc_register_sort(regData, BY_DATE);
+}
+
+static void
+gnc_register_sort_date_entered_cb(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  gnc_register_sort(regData, BY_DATE_ENTERED);
 }
 
 static void
@@ -1054,6 +1065,9 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
                                gnc_register_sort_standard_cb, NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR_N, TOOLTIP_SORT_BY_DATE_N,
                                gnc_register_sort_date_cb, NULL, NULL),
+    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_ENTERED_STR_N,
+                               TOOLTIP_SORT_BY_ENTERED_N,
+                               gnc_register_sort_date_entered_cb, NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
                                gnc_register_sort_num_cb, NULL, NULL),
     GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
@@ -1578,8 +1592,8 @@ regWindowLedger(xaccLedgerDisplay *ledger)
     table_frame = gtk_frame_new(NULL);
     gnome_dock_set_client_area(GNOME_DOCK(register_dock), table_frame);
 
-    num_rows = (guint) gnc_lookup_number_range_option("Register",
-                                                      "Number of Rows", 15.0);
+    num_rows = (guint) gnc_lookup_number_option("Register",
+                                                "Number of Rows", 15.0);
     gnucash_register_set_initial_rows(num_rows);
 
     register_widget = gnucash_register_new(ledger->ledger->table);
@@ -1668,7 +1682,8 @@ regRefresh(xaccLedgerDisplay *ledger)
   char *currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
-  euro = euro && strncasecmp("EUR", currency, 3) && gnc_is_euro_currency(currency);
+  euro = (euro && strncasecmp("EUR", currency, 3) &&
+          gnc_is_euro_currency(currency));
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
 

@@ -467,6 +467,29 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     return 0;
     break;
 
+  case BY_DATE_ENTERED:
+    /* if dates differ, return */ 
+    if ( (ta->date_entered.tv_sec) < 
+         (tb->date_entered.tv_sec)) { 
+      return -1; 
+    } 
+    else if ((ta->date_entered.tv_sec) > 
+             (tb->date_entered.tv_sec)) { 
+      return +1; 
+    } 
+
+    /* else, seconds match. check nanoseconds */ 
+    if ( (ta->date_entered.tv_nsec) < 
+         (tb->date_entered.tv_nsec)) { 
+      return -1; 
+    } 
+    else if ( (ta->date_entered.tv_nsec) > 
+              (tb->date_entered.tv_nsec)) { 
+      return +1; 
+    }
+    return 0;
+    break;
+
   case BY_NUM:
     /* sort on transaction number */              
     da = ta->num;                                 

@@ -410,84 +410,36 @@ the current value of the path."
 ;; displayed in option dialogs.
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "account_add_win_width" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "account_add_win_width" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "account_add_win_height" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "account_add_win_height" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "account_edit_win_width" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "account_edit_win_width" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "account_edit_win_height" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "account_edit_win_height" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "main_win_width" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "main_win_width" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "main_win_height" #f #f
-      400.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "main_win_height" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "reg_win_width" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "reg_win_width" 0))
 
 (gnc:register-configuration-option
- (gnc:make-number-range-option
-  "__gui" "reg_stock_win_width" #f #f
-        0.0 ;; default
-        0.0 ;; lower bound
-    32000.0 ;; upper bound
-        0.0 ;; number of decimals
-        1.0 ;; step size
-        ))
+ (gnc:make-internal-option
+  "__gui" "reg_stock_win_width" 0))
 
 
 ;; This needs to be after all the global options definitions

@@ -74,7 +74,7 @@ struct _accwindow
  *         data      - gtk user data pointer, will point to the     *
  *                     accWindow structure                          *
  * Return: none                                                     *
- \********************************************************************/
+\********************************************************************/
 static void 
 gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
 				GdkEventButton * event, gpointer data)
@@ -116,7 +116,7 @@ gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
  *         data      - gtk user data pointer, will point to the     *
  *                     accWindow structure                          *
  * Return: none                                                     *
- \********************************************************************/
+\********************************************************************/
 static void 
 gnc_ui_accWindow_list_unselect_cb(GtkCList * type_list, gint row, gint column,
 				  GdkEventButton * event, gpointer data)

@@ -209,8 +209,8 @@ gnc_lookup_multichoice_option(const char *section, const char *name,
 
 
 /********************************************************************\
- * gnc_lookup_number_range_option                                   *
- *   looks up a number range option. If present, return its value   *
+ * gnc_lookup_number_option                                         *
+ *   looks up a number option. If present, return its value         *
  *   as a gdouble, otherwise returns default_value.                 *
  *                                                                  *
  * Args: section - section name of option                           *
@@ -219,11 +219,11 @@ gnc_lookup_multichoice_option(const char *section, const char *name,
  * Return: char * option value                                      *
 \********************************************************************/
 gdouble
-gnc_lookup_number_range_option(const char *section, const char *name,
-                               gdouble default_value)
+gnc_lookup_number_option(const char *section, const char *name,
+                         gdouble default_value)
 {
-  return gnc_option_db_lookup_number_range_option(global_options, section,
-                                                  name, default_value);
+  return gnc_option_db_lookup_number_option(global_options, section,
+                                            name, default_value);
 }
 
 
@@ -304,8 +304,8 @@ gnc_set_option_default(const char *section, const char *name)
 
 
 /********************************************************************\
- * gnc_set_number_range_option                                      *
- *   sets the number range option to the given value. If successful *
+ * gnc_set_number_option                                            *
+ *   sets the number option to the given value. If successful       *
  *   returns TRUE, otherwise FALSE.                                 *
  *                                                                  *
  * Args: section   - section name of option                         *
@@ -314,12 +314,9 @@ gnc_set_option_default(const char *section, const char *name)
  * Return: success indicator                                        *
 \********************************************************************/
 gboolean
-gnc_set_number_range_option(const char *section, const char *name,
-                            gdouble value)
+gnc_set_number_option(const char *section, const char *name, gdouble value)
 {
-  return gnc_option_db_set_number_range_option(global_options,
-                                               section, name,
-                                               value);
+  return gnc_option_db_set_number_option(global_options, section, name, value);
 }
 
 

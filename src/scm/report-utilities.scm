@@ -104,6 +104,9 @@
           (loop (+ i 1)
                 (cons (thunk (gnc:group-get-account group i)) collected))))))
 
+(define (gnc:group-get-accounts group)
+  (gnc:group-map-accounts (lambda (a) a) group))
+
 ;; Pull a scheme list of splits from a C array
 (define (gnc:convert-split-list split-array)
   (let loop ((index 0)

@@ -921,11 +921,11 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
   if (gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE))
   {
     name = g_strconcat(prefix, "_width", NULL);
-    w = gnc_lookup_number_range_option("__gui", name, 0.0);
+    w = gnc_lookup_number_option("__gui", name, 0.0);
     g_free(name);
 
     name = g_strconcat(prefix, "_height", NULL);
-    h = gnc_lookup_number_range_option("__gui", name, 0.0);
+    h = gnc_lookup_number_option("__gui", name, 0.0);
     g_free(name);
   }
   else
@@ -951,14 +951,14 @@ gnc_save_window_size(const char *prefix, int width, int height)
 
   name = g_strconcat(prefix, "_width", NULL);
   if (save)
-    gnc_set_number_range_option("__gui", name, width);
+    gnc_set_number_option("__gui", name, width);
   else
     gnc_set_option_default("__gui", name);
   g_free(name);
 
   name = g_strconcat(prefix, "_height", NULL);
   if (save)
-    gnc_set_number_range_option("__gui", name, height);
+    gnc_set_number_option("__gui", name, height);
   else
     gnc_set_option_default("__gui", name);
   g_free(name);

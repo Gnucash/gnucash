@@ -151,10 +151,10 @@ time_t gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                         Timespec *set_value,
                                         Timespec *default_value);
 
-gdouble gnc_option_db_lookup_number_range_option(GNCOptionDB *odb,
-                                                 const char *section,
-                                                 const char *name,
-                                                 gdouble default_value);
+gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
+                                           const char *section,
+                                           const char *name,
+                                           gdouble default_value);
 
 gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
                                            const char *section,
@@ -180,10 +180,10 @@ void gnc_option_db_set_option_default(GNCOptionDB *odb,
                                       const char *section,
                                       const char *name);
 
-gboolean gnc_option_db_set_number_range_option(GNCOptionDB *odb,
-                                               const char *section,
-                                               const char *name,
-                                               gdouble value);
+gboolean gnc_option_db_set_number_option(GNCOptionDB *odb,
+                                         const char *section,
+                                         const char *name,
+                                         gdouble value);
 
 /* private */
 
