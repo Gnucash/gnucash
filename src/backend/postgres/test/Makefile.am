@@ -23,7 +23,6 @@ LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
         ${top_srcdir}/src/engine/libgncmod-engine.la \
         ${top_srcdir}/src/engine/libgncmod-engine.la \
         ${top_srcdir}/src/engine/libgw-engine.la \
-        ${top_srcdir}/src/engine/libgw-glib.la \
         ${top_srcdir}/src/engine/libgw-kvp.la \
         ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
 	${top_srcdir}/src/backend/postgres/libgncmod-backend-postgres.la \
