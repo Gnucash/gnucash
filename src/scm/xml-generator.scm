@@ -53,10 +53,9 @@
 ;;;; construct the whole document as One Big List; 
 ;;;; output-xml-element will be useful for generating subtree output.
 ;;;; Your control structure will need to duplicate the structure of
-;;;; output-xml-element.  Alternatively, it would be a slick idea to
-;;;; change output-xml-element so that "children" could be a thunk
-;;;; (function with no arguments) that invokes output-xml-element
-;;;; internally as needed.
+;;;; output-xml-element.  Alternatively, if "children" could is a thunk
+;;;; (function with no arguments),  invoking output-xml-element
+;;;; internally as needed, the "children" can be an XML generator.
 
 (define xml-indentation 0)
 
@@ -147,8 +146,8 @@
     (cond
      ((not children)           ;;; If children is blank
       (xml-display "/>" port)) ;;; Short result 
-     ((procedure? children)    ;;; children is a function
-      (xml-display ">" port)
+     ((procedure? children)    ;;; If children is a function
+      (xml-display ">" port)   
       (children port)          ;;; Invoke the function
       (output-xml-element-name-end elname port))
      (else

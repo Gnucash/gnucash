@@ -1,42 +1,44 @@
 ;; -*-scheme-*-
+;; $Id$
+;; Balance and Profit/Loss Reports
 
 (gnc:support "report/balance-and-pnl.scm")
 (gnc:depend "text-export.scm")
+(gnc:depend "report-utilities.scm")
 
-(let ()
+(let 
+    ((l0-collector (make-stats-collector))
+     (l1-collector (make-stats-collector))
+     (l2-collector (make-stats-collector)))
   ;; Just a private scope.
 
-  (define (render-level-2-account level-2-account level-2-balance)
+  (define (render-level-2-account level-2-account l2-value)
     (let ((account-name (gnc:account-get-name level-2-account))
           (type-name (gnc:account-get-type-string
                       (gnc:account-get-type level-2-account))))
-      (string-append
-       "<tr><td>" account-name "<td>" type-name
-       (sprintf #f "<td align=right nowrap>&nbsp;$%10.2f\n"
-                level-2-balance))))
+      (html-table-row
+       (list
+	account-name type-name l2-value))))
 
-  (define (render-level-1-account account level-1-balance level-2-balance)
+  (define (render-level-1-account account l1-value l2-value)
     (let ((name (gnc:account-get-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
-      (string-append
-       "<tr><td>" name "<td>" type
-       (sprintf #f "<td align=right nowrap>&nbsp;$%10.2f" level-2-balance)
-       (sprintf #f "<td align=right nowrap>&nbsp;&nbsp;<u>$%10.2f</u> \n"
-                level-1-balance)
-       "<tr><td>&nbsp;<td>&nbsp;<td>&nbsp;\n")))   ;; blank line
+      (html-table-row 
+       (list name type l2-value l1-value
+	     "&nbsp;" "&nbsp;"))))
 
-  (define (render-total level-0-balance)
-    (string-append
-     "<tr><td>&nbsp;<td>&nbsp;<td>&nbsp;\n"   ;; blank line
-     "<tr><td><b>Net</b><td>&nbsp;"
-     "<td>&nbsp;"
-     (sprintf #f "<td align=right nowrap>&nbsp;&nbsp;<u>$%10.2f</u> \n"
-              level-0-balance)))
+  (define (render-total l0-value)
+    (html-table-row (list "&nbsp;" "&nbsp;" "&nbsp;" (html-strong "Net")
+			  "&nbsp;" l0-value)))
+
+  (define (is-it-on-balance-sheet? type balance?)
+    (eq? 
+     (not (member type '(INCOME EXPENSE)))
+     (not balance?)))
 
   (define (generate-balance-sheet-or-pnl report-name
-                                         report-description
-                                         balance-sheet?)
-
+					 report-description
+					 balance-sheet?)
     ;; currency symbol that is printed is a dollar sign, for now
     ;; currency amounts get printed with two decimal places
     ;; balance sheet doesn't print income or expense
@@ -46,77 +48,73 @@
     ;; just translated it directly from the old ePerl with a few
     ;; schemifications.
 
-    (let ((level-0-balance 0)
-          (level-1-balance 0)
-          (level-2-balance 0)
-          (current-group (gnc:get-current-group))
-          (output '()))
+  (define (handle-level-1-account account)
+    (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
+      (if (is-it-on-balance-sheet? type balance-sheet?)
+	  ;; Ignore
+	  '()
+	  (let 
+	      ((childrens-output (gnc:group-map-accounts
+				  handle-level-2-account
+				  (gnc:account-get-children account)))
 
-      (define (handle-level-2-account account)
-        (let ((type (gnc:account-type->symbol (gnc:account-get-type account)))
-              (balance (gnc:account-get-balance account)))
-          
-          (if (not balance-sheet?) (set! balance (- balance)))
-          
-          (if (not (or (and balance-sheet?
-                            (not (eq? type 'INCOME))
-                            (not (eq? type 'EXPENSE)))
-                       (and (not balance-sheet?)
-                            (or (eq? type 'INCOME)
-                                (eq? type 'EXPENSE)))))
-              ;; Ignore
-              '()
+	       (account-balance (gnc:account-get-balance account)))
+	    
+	    (if (not balance-sheet?)
+		(set! account-balance (- account-balance)))
+	    (l2-collector 'add account-balance)
+	    (l1-collector 'add account-balance)
+	    (l0-collector 'add (l1-collector 'total #f))
+	    (let ((level-1-output 
+		   (render-level-1-account account
+					   (l1-collector 'total #f)
+					   (l2-collector 'total #f))))
+	      (l1-collector 'reset #f)
+	      (l2-collector 'reset #f)
+	      (list childrens-output level-1-output))))))
 
-              ;; add in balances for any sub-sub groups
-              (let ((grandchildren (gnc:account-get-children account)))
-                
-                (if (not (pointer-token-null? grandchildren))
-                    (set! balance
-                          ((if balance-sheet? + -)
-                           balance (gnc:group-get-balance grandchildren))))
+    (define (handle-level-2-account account)
+      (let 
+	  ((type (gnc:account-type->symbol (gnc:account-get-type account)))
+	   (balance (make-stats-collector))
+	   (rawbal (gnc:account-get-balance account)))
+	(balance 'add 
+		 (if balance-sheet? 
+		     rawbal
+		     (- rawbal)))
+	(if (is-it-on-balance-sheet? type balance-sheet?)
+	    ;; Ignore
+	    '()
+	    ;; add in balances for any sub-sub groups
+	    (let ((grandchildren (gnc:account-get-children account)))
+	      (if (not (pointer-token-null? grandchildren))
+		  (balance 'add 
+			   ((if balance-sheet? + -) 
+			    0
+			    (gnc:group-get-balance grandchildren))))
+	      (l2-collector 'add (balance 'get #f))
+	      (l1-collector 'add (l2-collector 'get #f))
+	      (let 
+		  ((result (render-level-2-account 
+			    account (l2-collector 'get #f))))
+		(l2-collector 'reset #f)
+		result)))))
+    (let
+	((current-group (gnc:get-current-group))
+	 (output '()))
 
-                (set! level-2-balance (+ level-2-balance balance))
-                (set! level-1-balance (+ level-1-balance level-2-balance))
-                (let ((result (render-level-2-account account level-2-balance)))
-                  (set! level-2-balance 0)
-                  result)))))
-
-      (define (handle-level-1-account account)
-        (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
-
-          (if (not (or (and balance-sheet?
-                            (not (eq? type 'INCOME))
-                            (not (eq? type 'EXPENSE)))
-                       (and (not balance-sheet?)
-                            (or (eq? type 'INCOME)
-                                (eq? type 'EXPENSE)))))
-
-              ;; Ignore
-              '()
-              (let ((childrens-output (gnc:group-map-accounts
-                                       handle-level-2-account
-                                       (gnc:account-get-children account)))
-                    (account-balance (gnc:account-get-balance account)))
-
-                (if (not balance-sheet?)
-                    (set! account-balance (- account-balance)))
-
-                (set! level-2-balance (+ level-2-balance account-balance))
-                (set! level-1-balance (+ level-1-balance account-balance))
-                (set! level-0-balance (+ level-0-balance level-1-balance))
-
-                (let ((level-1-output 
-		       (render-level-1-account account
-					       level-1-balance
-					       level-2-balance)))
-                  (set! level-1-balance 0)
-                  (set! level-2-balance 0)
-                  (list childrens-output level-1-output))))))
+	;;; Now, the main body
+	;;; Reset all the balance collectors
+      (l0-collector 'reset #f)
+      (l1-collector 'reset #f)
+      (l2-collector 'reset #f)
       (if (not (pointer-token-null? current-group))
-          (set! output
-                (list
-                 (gnc:group-map-accounts handle-level-1-account current-group)
-                 (render-total level-0-balance))))
+	  (set! output
+		(list
+		 (gnc:group-map-accounts
+		  handle-level-1-account 
+		  current-group)
+		 (render-total  (l0-collector 'total #f)))))
 
       (list
        "<html>"
@@ -130,7 +128,7 @@
 
        "<table cellpadding=1>"
        "<caption><b>" (gnc:_ report-name) "</b></caption>"
-       "<tr><th>"(gnc:_ "Account Name")"<th align=center>"(gnc:_ "Type")
+       "<tr><th>"(gnc:_ "Account Name")"<th align=center>" (gnc:_ "Type")
        "<th> <th align=center>"(gnc:_ "Balance")
 
        output
@@ -141,27 +139,28 @@
 
 
   (gnc:define-report
-   ;; version
-   1
-   ;; Menu name
-   "Balance sheet"
-   ;; Options Generator (none currently)
-   #f
-   ;; Code to generate the report   
-   (lambda (options)
-     (generate-balance-sheet-or-pnl "Balance Sheet"
-                                    "This page shows your net worth."
-                                    #t)))
+     ;; version
+     1
+     ;; Menu name
+     "Balance sheet"
+     ;; Options Generator (none currently)
+     #f
+     ;; Code to generate the report   
+     (lambda (options)
+       (generate-balance-sheet-or-pnl "Balance Sheet"
+				      "This page shows your net worth."
+				      #t)))
 
-  (gnc:define-report
-   ;; version
-   1
-   ;; Menu name
-   "Profit and Loss"
-   ;; Options (none currently)
-   #f
-   ;; Code to generate the report   
-   (lambda (options)
-     (generate-balance-sheet-or-pnl "Profit and Loss"
-                                    "This page shows your profits and losses."
-                                    #f))))
+    (gnc:define-report
+     ;; version
+     1
+     ;; Menu name
+     "Profit and Loss"
+     ;; Options (none currently)
+     #f
+     ;; Code to generate the report   
+     (lambda (options)
+       (generate-balance-sheet-or-pnl 
+	"Profit and Loss"
+	"This page shows your profits and losses."
+	#f))))

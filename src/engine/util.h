@@ -151,7 +151,7 @@ struct lconv * gnc_localeconv();
  *
  *    PRTSYM -- also print currency symbol.
  *    PRTSHR -- print four decimal places
- *    PRTSYM | PRTSHR --  prints three decimal places followed by string "shrs" 
+ *    PRTSYM | PRTSHR -- prints three decimal places followed by string "shrs"
  *    PRTSEP -- print comma-separated K's
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
@@ -165,6 +165,10 @@ struct lconv * gnc_localeconv();
  *    number of trailing zeros to be set. You can also set
  *    whether the amount should be printed as monetary or
  *    non-monetary, which affects fomatting in locales.
+ *
+ * The xaccPrintAmountArgs() routine is identical to xaccPrintAmount,
+ *    except that the arguments are given as boolean values intead of
+ *    a bitfield. This is primarily intended for guile use.
  */
 
 #define PRTSYM 0x1
@@ -176,6 +180,10 @@ int xaccSPrintAmount (char *buf, double val, short shrs);
 int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
                              int precision, gncBoolean monetary,
                              int min_trailing_zeros);
+char * xaccPrintAmountArgs (double val,
+                            gncBoolean print_currency_symbol,
+                            gncBoolean print_separators,
+                            gncBoolean is_shares_value);
 
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gncBoolean monetary);
@@ -188,7 +196,7 @@ double xaccParseAmount (const char * instr, gncBoolean monetary);
  *   or they may be in european format: DDD.DDD.DDD,CC
  *   The routine tries to 'guess' which of these it is.
  *   This sounds really dopey, but Intuit/Quicken managed to 'internationalize'
- *   thier export format, causeing no end of pain.
+ *   their export format, causing no end of pain.
  *
  * XXX hack alert: the right way to do this is to do the following:
  *  -- have a global flag that indicates 'euro' or 'us style'

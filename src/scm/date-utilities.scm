@@ -65,23 +65,6 @@
 (define (gnc:date-to-day-fraction caltime)
   (/ (/ caltime 3600.0) 24))
 
-;; convert a date to a defined fraction
-(define (gnc:date-to-N-fraction caltime type)
-  (case type
-    ((gnc:budget-day) (gnc:date-to-day-fraction caltime))
-    ((gnc:budget-week) (gnc:date-to-week-fraction caltime))
-    ((gnc:budget-month) (gnc:date-to-month-fraction caltime))
-    ((gnc:budget-year) (gnc:date-to-year-fraction caltime))
-    (else (gnc:debug "undefined period type in budget!") #f)))
-
-;; describe a time type
-(define (gnc:date-describe-type type)
-  (case type
-    ((gnc:budget-day) "days")
-    ((gnc:budget-week) "weeks")
-    ((gnc:budget-month) "months")
-    ((gnc:budget-year) "years")))
-
 ;; Modify a date
 (define (moddate op adate delta)
   (let ((newtm (localtime (car adate))))

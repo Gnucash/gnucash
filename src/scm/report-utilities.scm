@@ -2,6 +2,9 @@
 ;;; Reporting utilities
 (gnc:support "report-utilities.scm")
 
+(define (gnc:amount->formatted-string amount shares_value?)
+  (gnc:amount->string amount #t #t shares_value?))
+
 (define (gnc:account-separator-char)
   (let ((option (gnc:lookup-option gnc:*options-entries*
                                    "General" "Account Separator")))
@@ -18,47 +21,53 @@
 ;; get a full account name
 (define (gnc:account-get-full-name account)
   (let ((separator (gnc:account-separator-char)))
-    (cond ((pointer-token-null? account) "")
-          (else 
-           (let ((parent-name
-                  (gnc:account-get-full-name 
-                   (gnc:group-get-parent
-                    (gnc:account-get-parent account)))))	   
-             (if (string=? parent-name "")
-                 (gnc:account-get-name account)
-                 (string-append
-                  parent-name
-                  separator
-                  (gnc:account-get-name account))))))))
+    (if (pointer-token-null? account) 
+	""
+	(let ((parent-name
+	       (gnc:account-get-full-name 
+		(gnc:group-get-parent
+		 (gnc:account-get-parent account)))))
+	  (if (string=? parent-name "")
+	      (gnc:account-get-name account)
+	      (string-append
+	       parent-name
+	       separator
+	       (gnc:account-get-name account)))))))
 
 (define (gnc:filter-list the-list predicate)
-  (cond ((not (list? the-list))
-         (gnc:error("Attempted to filter a non-list object")))
-        ((null? the-list) '())
-        ((predicate (car the-list))
-         (cons (car the-list)
-               (gnc:filter-list (cdr the-list) predicate)))
-        (else (gnc:filter-list (cdr the-list) predicate))))
+  (cond 
+   ((not (list? the-list))
+    (gnc:error("Attempted to filter a non-list object")))
+   ((null? the-list) 
+    '())
+   ((predicate (car the-list))
+    (cons (car the-list)
+	  (gnc:filter-list (cdr the-list) predicate)))
+   (else (gnc:filter-list (cdr the-list) predicate))))
 
 ;; like map, but restricted to one dimension, and
 ;; guaranteed to have inorder semantics.
 (define (gnc:inorder-map the-list fn)
-  (cond ((not (list? the-list))
-	 (gnc:error("Attempted to map a non-list object")))
-	((not (procedure? fn))
-	 (gnc:error("Attempted to map a non-function object to a list")))
-	((eq? the-list '()) '())
-	(else (cons (fn (car the-list))
-		    (gnc:inorder-map (cdr the-list) fn)))))
+  (cond 
+   ((not (list? the-list))
+    (gnc:error("Attempted to map a non-list object")))
+   ((not (procedure? fn))
+    (gnc:error("Attempted to map a non-function object to a list")))
+   ((eq? the-list '()) '())
+   (else (cons (fn (car the-list))
+	       (gnc:inorder-map (cdr the-list) fn)))))
 
 (define (gnc:for-loop thunk first last step)
-  (cond ((< first last) (thunk first) 
-	 (gnc:for-loop thunk (+ first step) last step))
-	(else #f)))
+  (if (< first last) 
+      (begin
+	(thunk first)
+	(gnc:for-loop thunk (+ first step) last step))
+      #f))
 
 ;;; applies thunk to each split in account account
 (define (gnc:for-each-split-in-account account thunk)
-  (gnc:for-loop (lambda (x) (thunk (gnc:account-get-split account x)))
+  (gnc:for-loop (lambda (x) 
+		  (thunk (gnc:account-get-split account x)))
 		0 (gnc:account-get-split-count account) 1))
 
 (define (gnc:group-map-accounts thunk group)
@@ -73,7 +82,7 @@
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group
 ;   ;; before using this...
-
+;
 ;   (let loop ((num-splits (gnc:account-get-split-count account))
 ;              (i 0))
 ;     (if (< i num-splits)
@@ -95,12 +104,52 @@
          (loop num-splits (+ i 1)))
         '())))
 
+;;; Here's a statistics collector...  Collects max, min, total, and makes
+;;; it easy to get at the mean.
+
+;;; It would be a logical extension to throw in a "slot" for x^2 so
+;;; that you could also extract the variance and standard deviation
+
+(define (make-stats-collector)
+  (let ;;; values
+      ((value 0)
+       (totalitems 0)
+       (max -10E9)
+       (min 10E9))
+    (let ;;; Functions to manipulate values
+	((adder (lambda (amount)
+		  (if (number? amount) 
+		      (begin
+			(set! value (+ amount value))
+			(if (> amount max)
+			    (set! max amount))
+			(if (< amount min)
+			    (set! min amount))
+			(set! totalitems (+ 1 totalitems))))))
+	 (gettotal (lambda () value))
+	 (getaverage (lambda () (/ value totalitems)))
+	 (getmax (lambda () max))
+	 (getmin (lambda () min))
+	 (reset-all (lambda ()
+		    (set! value 0)
+		    (set! max -10E9)
+		    (set! min 10E9)
+		    (set! totalitems 0))))
+      (lambda (action value)  ;;; Dispatch function
+	(case action
+	  ('add (adder value))
+	  ('total (gettotal))
+	  ('average (getaverage))
+	  ('getmax (getmax))
+	  ('getmin (getmin))
+	  ('reset (reset-all)))))))
+
 (define (makedrcr-collector)
-  (let
+  (let ;;; values
       ((debits 0)
        (credits 0)
        (totalitems 0))
-    (let
+    (let ;;; Functions to manipulate values
 	((adder (lambda (amount)
 		 (if (> 0 amount)
 		     (set! credits (- credits amount))
@@ -115,7 +164,7 @@
 		    (set! credits 0)
 		    (set! debits 0)
 		    (set! totalitems 0))))
-      (lambda (action value)
+      (lambda (action value)  ;;; Dispatch function
 	(case action
 	  ('add (adder value))
 	  ('debits (getdebits))
@@ -131,17 +180,17 @@
 	  lst	; found, quit search and don't add again
 	  (cons (car lst) (addunique (cdr lst) x))))) ; keep searching
 
-
 ;; find's biggest number in recursive set of vectors
 (define (find-largest-in-vector input)
   (let loop ((i 0)
-	     (max 0))  ; fixme: should be most negative number
-    (if (= i (vector-length input)) max
+	     (max -9999999))  ; fixme: should be most negative number
+    (if (= i (vector-length input))
+	max
 	(let subloop ((x (vector-ref input i)))
-	  (cond ((vector? x) (subloop (find-largest-in-vector x)))
+	  (cond ((vector? x) 
+		 (subloop (find-largest-in-vector x)))
 		((number? x) (if (> x max) (loop (+ i 1) x) (loop (+ i 1) max)))
 		(else (loop (+ i 1) max)))))))
-		
 
 ;; takes in a vector consisting of integers, #f's and vectors (which
 ;; take integers, #f's and vectors ...)
@@ -151,50 +200,54 @@
 ;;  #(1 #(0 #f 2) 3) ->  #( (1 0) (0) (1 2) (2) )
 
 (define (find-vector-mappings input)
-  (let ((outvec (make-vector (+ 1 (find-largest-in-vector input)) #f)))
+  (let 
+      ((outvec (make-vector (+ 1 (find-largest-in-vector input)) #f)))
     (let loop ((i 0)
 	       (refs '())
 	       (vec input))
-      (cond ((= i (vector-length vec)) outvec)
-	    (else
-	     (let ((item (vector-ref vec i)))
-	       (if (vector? item) (loop 0 (cons i refs) item))
-	       (if (integer? item)
-		   (if (>= item 0)
-		       (vector-set! outvec item (reverse (cons i refs)))))
-	       (loop (+ i 1) refs vec)))))
+      (if (= i (vector-length vec)) 
+	  outvec
+	  (let ((item (vector-ref vec i)))
+	    (if (vector? item) (loop 0 (cons i refs) item))
+	    (if (integer? item)
+		(if (>= item 0)
+		    (vector-set! outvec item (reverse (cons i refs)))))
+	    (loop (+ i 1) refs vec))))
     outvec))
 
 ;; recursively apply vector-ref
 (define (vector-N-ref vector ref-list)
-  (cond ((eqv? ref-list '()) vector)
-	(else (vector-N-ref (vector-ref vector (car ref-list)) (cdr ref-list)))))
+  (if (eqv? ref-list '()) 
+      vector
+      (vector-N-ref (vector-ref vector (car ref-list)) (cdr ref-list))))
 
 ;; map's a recursive vector in a given order (returning a list).  the
 ;; order is as generated by find-vector-mappings.  
 (define (vector-map-in-specified-order proc vector order)
   (let loop ((i 0))
-    (cond ((= i (vector-length order)) '())
-	  (else
-	   (let ((ref-list (vector-ref order i)))
-	     (cond ((not ref-list) (loop (+ 1 i)))
-		   (else 
-		    (cons (proc (vector-N-ref vector ref-list))
-			  (loop (+ 1 i))))))))))
+    (if (= i (vector-length order)) 
+	'()
+	(let 
+	    ((ref-list (vector-ref order i)))
+	  (if (not ref-list) 
+	      (loop (+ 1 i))
+	      (cons (proc (vector-N-ref vector ref-list))
+		    (loop (+ 1 i))))))))
 
 ;; map's a recursive vector in a given order (returning a list).  the
 ;; order is as generated by find-vector-mappings.  the procedure is a
 ;; vector itself, with the same structure as the input vector.
 (define (vector-map-in-specified-order-uniquely procvec vector order)
   (let loop ((i 0))
-    (cond ((= i (vector-length order)) '())
-	  (else
-	   (let ((ref-list (vector-ref order i)))
-	     (cond ((not ref-list) (loop (+ 1 i)))
-		   (else 
-		    (cons ((vector-N-ref procvec ref-list)
-			   (vector-N-ref vector ref-list))
-			  (loop (+ 1 i))))))))))
+    (if (= i (vector-length order)) 
+	'()
+	(let 
+	    ((ref-list (vector-ref order i)))
+	  (if (not ref-list) 
+	      (loop (+ 1 i))
+	      (cons ((vector-N-ref procvec ref-list)
+		     (vector-N-ref vector ref-list))
+		    (loop (+ 1 i))))))))
 
 ;;; applies thunk to each split in account account
 (define (gnc:for-each-split-in-account account thunk)
@@ -223,7 +276,6 @@
         (let ((time (car (mktime bdtime))))
           (cons time 0))))
     #f))
-
   ;; to-date
   (gnc:register-trep-option
    (gnc:make-date-option
@@ -317,6 +369,5 @@
     'ascend
     (list #(ascend "Ascending" "smallest to largest, earliest to latest")
 	  #(descend "Descending" "largest to smallest, latest to earliest"))))
-
   gnc:*transaction-report-options*)
 

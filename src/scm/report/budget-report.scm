@@ -16,17 +16,35 @@
 (gnc:depend "date-utilities.scm")
 
 ;; time values
-(define gnc:budget-day 1)
-(define gnc:budget-week 2)
-(define gnc:budget-month 3)
-(define gnc:budget-year 4)
+;(define gnc:budget-day 1)
+;(define gnc:budget-week 2)
+;(define gnc:budget-month 3)
+;(define gnc:budget-year 4)
 
 ;; budget types
-(define gnc:budget-recurring 1) ; regular, recurring budget expenses
+;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
 				; that happen once per period
-(define gnc:budget-contingency 2) ; a budget item where you estimate a
+;(define gnc:budget-contingency 2) ; a budget item where you estimate a
 				  ; value over a long period for
 				  ; unexpected expenses.
+
+;; convert a date to a defined fraction
+(define (gnc:date-to-N-fraction caltime type)
+  (display type) (newline)
+  (case type
+    ((gnc:budget-day) (gnc:date-to-day-fraction caltime))
+    ((gnc:budget-week) (gnc:date-to-week-fraction caltime))
+    ((gnc:budget-month) (gnc:date-to-month-fraction caltime))
+    ((gnc:budget-year) (gnc:date-to-year-fraction caltime))
+    (else (gnc:debug "undefined period type in budget!") #f)))
+
+;; describe a time type
+(define (gnc:date-describe-type type)
+  (case type
+    ((gnc:budget-day) "days")
+    ((gnc:budget-week) "weeks")
+    ((gnc:budget-month) "months")
+    ((gnc:budget-year) "years")))
 
 ;; define the budget itself.  For prototype, define inline.
 ;; the budget is a vector of vectors.  the vectors contain:
@@ -44,11 +62,11 @@
 (define gnc:budget
   (vector 
    (make-budget-entry "lunch" 8 '("Food:Lunch") 1 
-		      'gnc:budget-day gnc:budget-recurring)
+                      'gnc:budget-day 'gnc:budget-recurring)
    (make-budget-entry "junk food" 0.50 '("Food:Junk") 1 
-		      'gnc:budget-day gnc:budget-recurring)
+                      'gnc:budget-day 'gnc:budget-recurring)
    (make-budget-entry "car repairs" 2500 '("Car:Repairs") 5
-		      'gnc:budget-year gnc:budget-contingency)))
+                      'gnc:budget-year 'gnc:budget-contingency)))
 
 ;;; For future: make-budget-entry should create a structure.
 ;;; And gnc:budget should be a list, not a vector.
@@ -152,10 +170,15 @@
 ;; dates are in # seconds after 1970
 (define (gnc:budget-calculate-periods! budget-line budget-report-line 
 				      begin-date end-date)
+    (display "gnc:budget-calculate-periods!  ")
   (let* ((N-type (gnc:budget-get-period-type budget-line))
 	 (begin-N (gnc:date-to-N-fraction begin-date N-type))
 	 (end-N (gnc:date-to-N-fraction end-date N-type)))
-    (vector-set! budget-report-line 2 
+    (display " type:") (display N-type)
+    (display "begin-N:") (display begin-N)
+    (display " end-N:") (display end-N) (newline)
+    (newline)
+    (vector-set! budget-report-line 2
 		 (/ (- end-N begin-N)
 		    (gnc:budget-get-period budget-line)))))
 
@@ -182,6 +205,7 @@
 ;; calculate the amount of time remaining in the budget period
 ;; dependency: budget-calculate-periods!
 (define (gnc:budget-calculate-time-remaining! budget-line budget-report-line)
+  (display "gnc:budget-calculate-time-remaining!") (newline)
   (vector-set! 
    budget-report-line 5
    (* (- (ceiling (gnc:budget-report-get-periods budget-report-line))

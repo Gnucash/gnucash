@@ -479,7 +479,7 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
                                   GNC_T, min_trailing_zeros);
 }
 
-char * 
+char *
 xaccPrintAmount (double val, short shrs) 
 {
    /* hack alert -- this is not thread safe ... */
@@ -489,6 +489,19 @@ xaccPrintAmount (double val, short shrs)
 
    /* its OK to return buf, since we declared it static */
    return buf;
+}
+
+char *
+xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
+                     gncBoolean print_separators, gncBoolean is_shares_value)
+{
+  short shrs = 0;
+
+  if (print_currency_symbol) shrs |= PRTSYM;
+  if (print_separators)      shrs |= PRTSEP;
+  if (is_shares_value)       shrs |= PRTSHR;
+
+  return xaccPrintAmount(val, shrs);
 }
 
 
