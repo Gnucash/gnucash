@@ -312,6 +312,21 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
+  /*
+   * Which split list to use?  If there is a transction pending, then
+   * use the saved list so that the transaction is guaranteed to
+   * remain in the register intil the user finishes editing
+   * it. Otherwise, the moment the user changes the account field of
+   * the split that is attached to the register, the transaction will
+   * be ripped out from underneath them.
+   */
+  if (pending_trans != NULL) {
+    slist = info->saved_slist;
+  } else {
+    g_list_free(info->saved_slist);
+    info->saved_slist = g_list_copy(slist);
+  }
+
   /* populate the table */
   for (node = slist; node; node = node->next) 
   {

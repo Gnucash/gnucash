@@ -1,8 +1,23 @@
 2002-12-20  David Hampton  <hampton@employees.org>
 
-	* src/gnome/window-reconcile.c (gnc_ui_reconcile_window_change_cb):
-	Make sure to set the balance properly for reversed
-	accounts. #100998
+	* src/register/ledger-core/gnc-ledger-display.c:
+	Remove the original fix for #92158 as it caused #100852.
+
+	* src/register/ledger-core/split-register-p.h:
+	* src/register/ledger-core/split-register.c: Add place to save the
+	list of splits used to fill the register.
+	
+	* src/register/ledger-core/split-register-load.c: 
+	If there is a transction pending when updating the register, use
+	the saved list so that the transaction is guaranteed to remain in
+	the register intil the user finishes editing it. Otherwise,
+	populate the saved split list. #92158
+
+	* src/gnome/gnc-split-reg.c: Don't let users delete the split that
+	attaches a transaction to the current register.
+
+	* src/gnome/window-reconcile.c: Make sure to set the balance
+	properly for reversed accounts. #100998
 
 2002-12-20  Chris Lyttle  <chris@wilddev.net>
 

@@ -2262,11 +2262,13 @@ gnc_split_register_destroy_info (SplitRegister *reg)
   g_free (info->tdebit_str);
   g_free (info->credit_str);
   g_free (info->tcredit_str);
+  g_list_free (info->saved_slist);
 
   info->debit_str = NULL;
   info->tdebit_str = NULL;
   info->credit_str = NULL;
   info->tcredit_str = NULL;
+  info->saved_slist = NULL;
 
   g_free (reg->sr_info);
 
