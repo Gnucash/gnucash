@@ -43,7 +43,8 @@
 
 
 gboolean
-isspace_str(const gchar *str, int nomorethan) {
+isspace_str(const gchar *str, int nomorethan)
+{
   const gchar *cursor = str;
   while(*cursor && (nomorethan != 0)) {
     if(!isspace(*cursor)) {
@@ -61,7 +62,8 @@ allow_and_ignore_only_whitespace(GSList *sibling_data,
                                  gpointer global_data,
                                  gpointer *result,
                                  const char *text,
-                                 int length) {
+                                 int length)
+{
   return(isspace_str(text, length));
 }
 
@@ -72,7 +74,8 @@ generic_accumulate_chars(GSList *sibling_data,
                          gpointer *result,
                          
                          const char *text,
-                         int length) {
+                         int length)
+{
   gchar *copytxt = g_strndup(text, length);
   g_return_val_if_fail(result, FALSE);
 
@@ -88,12 +91,14 @@ generic_free_data_for_children(gpointer data_for_children,
                                gpointer parent_data,
                                gpointer global_data,
                                gpointer *result,
-                               const gchar *tag) {
+                               const gchar *tag)
+{
   if(data_for_children) g_free(data_for_children);
 }
 
 gchar *
-concatenate_child_result_chars(GSList *data_from_children) {
+concatenate_child_result_chars(GSList *data_from_children)
+{
   GSList *lp;
   gchar *name = g_strdup("");
 
@@ -193,11 +198,14 @@ string_to_double(const char *str, double *result)
  */
 
 gboolean
-string_to_gint64(const gchar *str, gint64 *v) {
+string_to_gint64(const gchar *str, gint64 *v)
+{
   /* convert a string to a gint64. only whitespace allowed before and after. */
   long long int v_in;
   int num_read;
 
+  g_return_val_if_fail(str, FALSE);
+  
   /* must use "<" here because %n's effects aren't well defined */
   if(sscanf(str, " " GNC_SCANF_LLD " %n", &v_in, &num_read) < 1) {
     return(FALSE);
@@ -215,7 +223,8 @@ string_to_gint64(const gchar *str, gint64 *v) {
  */
 
 gboolean
-string_to_gint32(const gchar *str, gint32 *v) {
+string_to_gint32(const gchar *str, gint32 *v)
+{
   /* convert a string to a gint32. only whitespace allowed before and after. */
   int num_read;
   int v_in;
@@ -237,7 +246,8 @@ string_to_gint32(const gchar *str, gint32 *v) {
  */
 
 gboolean
-hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len) {
+hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
+{
   /* Convert a hex string to binary.  No whitespace allowed. */
   const gchar *cursor = str;
   guint64 str_len;
