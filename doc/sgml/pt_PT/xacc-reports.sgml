@@ -41,14 +41,8 @@
       </para>
 </listitem>
 <listitem>
-<para><link linkend="xacc-txf-export-report">Relatório de Exportação TXF:</link>
+<para><link linkend="xacc-txf-export">Relatório de Exportação TXF:</link>
       exporta um ficheiro .TXF que pode ser importado para o TaxCut ou TurboTax.
-
-      </para>
-</listitem>
-<listitem>
-<para><link linkend="xacc-hierarchical-report">Relatório Hierárquico:</link>
-      mostra as contas num formato hierárquico.
 
       </para>
 </listitem>

@@ -21,22 +21,18 @@
  *                                                                  *
 \********************************************************************/
 
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
+#include "config.h"
 
 #include <glib.h>
-
-#include "config.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 #include "DateUtils.h"
 
 #define BUFFSIZE 100
 
-
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /* ======================================================== */
 char *

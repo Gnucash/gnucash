@@ -33,6 +33,7 @@
 <!entity xaccticker system "xacc-ticker.sgml">
 <!entity xacctaxreport system "xacc-tax-report.sgml">
 <!entity xacctransreport system "xacc-trans-report.sgml">
+<!entity xacctxfcategories system "xacc-txf-categories.sgml">
 <!entity xacctxfexportanomalies system "xacc-txf-export-anomalies.sgml">
 <!entity xacctxfexport system "xacc-txf-export.sgml">
 <!entity xaccdochack system "xacc-dochack.sgml">
@@ -78,6 +79,7 @@
 &xacctaxreport;
 &xaccticker;
 &xacctransreport;
+&xacctxfcategories;
 &xacctxfexportanomalies;
 &xacctxfexport;
 &xaccdochack;
