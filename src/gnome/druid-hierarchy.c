@@ -356,7 +356,7 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
     gchar *locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
 
     gnc_suspend_gui_refresh ();
-    list = gnc_load_example_account_list (gnc_get_current_session (),
+    list = gnc_load_example_account_list (gnc_get_current_book (),
                                           locale_dir);
     gnc_resume_gui_refresh ();
 
@@ -567,7 +567,7 @@ clone_account (const Account* from, gnc_commodity *com)
 {
   Account *ret;
 
-  ret = xaccCloneAccountSimple (from, gnc_get_current_session ());
+  ret = xaccCloneAccountSimple (from, gnc_get_current_book ());
 
   xaccAccountSetCommodity (ret, com);
 
@@ -639,7 +639,7 @@ hierarchy_merge_groups (GSList *dalist)
 {
   GSList *mark;
   gnc_commodity *com;
-  AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_session ());
+  AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_book ());
 
   com = gnc_general_select_get_selected (get_commodity_editor ());
 
@@ -821,7 +821,7 @@ starting_balance_helper (Account *account, gpointer data)
   balance = get_final_balance (account);
   if (!gnc_numeric_zero_p (balance))
     gnc_account_create_opening_balance (account, balance, time (NULL),
-                                        gnc_get_current_session ());
+                                        gnc_get_current_book ());
 
   return NULL;
 }

@@ -1209,7 +1209,7 @@ new_button_clicked( GtkButton *b, gpointer d )
         FreqSpec *fs;
         GDate *gd;
         SchedXaction        *tmpSX =
-                xaccSchedXactionMalloc( gnc_get_current_session ());
+                xaccSchedXactionMalloc( gnc_get_current_book ());
         SchedXactionEditorDialog *sxed;
 
         /* Give decent initial FreqSpec for SX */

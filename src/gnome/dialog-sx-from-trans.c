@@ -224,7 +224,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
   tt_list = g_list_append(tt_list, tti);
 
   xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list,
-                                   gnc_get_current_session ());
+                                   gnc_get_current_book ());
 
   return 0;
 }
@@ -249,7 +249,7 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     break;
 
   case FREQ_WEEKLY:
-    tmpfs = xaccFreqSpecMalloc(gnc_get_current_session ());
+    tmpfs = xaccFreqSpecMalloc(gnc_get_current_book ());
     xaccFreqSpecSetComposite(fs);
     xaccFreqSpecSetWeekly(tmpfs, date, 1);
     xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
@@ -307,7 +307,7 @@ sxftd_init( SXFromTransInfo *sxfti )
   /* compute good initial date. */
   start_tt = xaccTransGetDate( sxfti->trans );
   g_date_set_time( &date, start_tt );
-  fs = xaccFreqSpecMalloc( gnc_get_current_session() );
+  fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
 
@@ -358,7 +358,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
   g_date_set_time( &date, gnome_date_edit_get_date( GNOME_DATE_EDIT(w) ) );
  
-  fs = xaccFreqSpecMalloc(gnc_get_current_session ());
+  fs = xaccFreqSpecMalloc(gnc_get_current_book ());
   sxftd_update_fs( sxfti, &date, fs );
   if (sxftd_errno == 0)
   {
@@ -446,7 +446,7 @@ sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
   tmp_tt = xaccTransGetDate( sxfti->trans );
   g_date_set_time( &date, tmp_tt );
   
-  fs = xaccFreqSpecMalloc( gnc_get_current_session() );
+  fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
 
@@ -506,7 +506,7 @@ gnc_sx_create_from_trans(Transaction *trans)
 
   sxfti->trans = trans;
   
-  sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_session ());
+  sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
 
   if ( (errno = sxftd_init( sxfti )) < 0 ) {
           PERR( "Error in sxftd_init: %d", errno );

@@ -201,7 +201,7 @@ recn_get_account (RecnWindow *recnData)
   if (!recnData)
     return NULL;
 
-  return xaccAccountLookup (&recnData->account, gnc_get_current_session ());
+  return xaccAccountLookup (&recnData->account, gnc_get_current_book ());
 }
 
 /********************************************************************\
@@ -1131,8 +1131,8 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans (account, gnc_get_current_session ());
-  xaccAccountTreeScrubImbalance (account, gnc_get_current_session ());
+  xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
+  xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
 
   gnc_resume_gui_refresh ();
 }

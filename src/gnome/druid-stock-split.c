@@ -26,6 +26,7 @@
 #include <gnome.h>
 
 #include "Group.h"
+#include "Transaction.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "global-options.h"
@@ -173,7 +174,7 @@ refresh_details_page (StockSplitInfo *info)
   GNCPrintAmountInfo print_info;
   Account *account;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
+  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
   g_return_if_fail (account != NULL);
 
@@ -197,7 +198,7 @@ account_next (GnomeDruidPage *druidpage,
   StockSplitInfo *info = user_data;
   Account *account;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
+  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
   g_return_val_if_fail (account != NULL, TRUE);
 
@@ -357,7 +358,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
   Split *split;
   time_t date;
 
-  account = xaccAccountLookup (&info->account, gnc_get_current_session ());
+  account = xaccAccountLookup (&info->account, gnc_get_current_book ());
   g_return_if_fail (account != NULL);
 
   amount = gnc_amount_edit_get_amount
@@ -366,7 +367,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   gnc_suspend_gui_refresh ();
 
-  trans = xaccMallocTransaction (gnc_get_current_session ());
+  trans = xaccMallocTransaction (gnc_get_current_book ());
 
   xaccTransBeginEdit (trans);
 
@@ -382,7 +383,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     xaccTransSetDescription (trans, description);
   }
 
-  split = xaccMallocSplit (gnc_get_current_session ());
+  split = xaccMallocSplit (gnc_get_current_book ());
 
   xaccAccountBeginEdit (account);
   account_commits = g_list_prepend (NULL, account);
@@ -409,7 +410,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     ts.tv_sec = date;
     ts.tv_nsec = 0;
 
-    price = gnc_price_create (gnc_get_current_session ());
+    price = gnc_price_create (gnc_get_current_book ());
 
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, xaccAccountGetCommodity (account));
@@ -441,7 +442,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->asset_tree));
 
-    split = xaccMallocSplit (gnc_get_current_session ());
+    split = xaccMallocSplit (gnc_get_current_book ());
 
     xaccAccountBeginEdit (account);
     account_commits = g_list_prepend (account_commits, account);
@@ -460,7 +461,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     account = gnc_account_tree_get_current_account
       (GNC_ACCOUNT_TREE (info->income_tree));
 
-    split = xaccMallocSplit (gnc_get_current_session ());
+    split = xaccMallocSplit (gnc_get_current_book ());
 
     xaccAccountBeginEdit (account);
     account_commits = g_list_prepend (account_commits, account);
@@ -499,7 +500,7 @@ account_currency_filter (Account *account, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
   Account *split_account = xaccAccountLookup (&info->account,
-                                              gnc_get_current_session ());
+                                              gnc_get_current_book ());
 
   if (!account)
     return FALSE;
@@ -677,8 +678,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   GtkWidget *page;
   GladeXML *xml;
 
-  id_type = xaccGUIDType (&info->account, gnc_get_current_session ());
-  old_account = xaccAccountLookup (&info->account, gnc_get_current_session ());
+  id_type = xaccGUIDType (&info->account, gnc_get_current_book ());
+  old_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
   if (fill_account_list (info, old_account) == 0)
   {
@@ -686,7 +687,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     return;
   }
 
-  new_account = xaccAccountLookup (&info->account, gnc_get_current_session ());
+  new_account = xaccAccountLookup (&info->account, gnc_get_current_book ());
 
   if (id_type == GNC_ID_NULL || old_account == new_account)
     return;

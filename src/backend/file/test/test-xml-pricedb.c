@@ -91,7 +91,8 @@ test_db (int i, GNCPriceDB *db)
                     __FILE__, __LINE__, "%d", i);
     }
     else if (!gnc_xml_parse_file (parser, filename1, test_add_pricedb,
-                                  (gpointer)&data, session))
+                                  (gpointer)&data,
+                                  gnc_session_get_book (session)))
     {
       failure_args ("gnc_xml_parse_file returned FALSE",
                     __FILE__, __LINE__, "%d", i);
@@ -112,7 +113,7 @@ test_generation (void)
   {
     GNCPriceDB *db;
 
-    db = get_random_pricedb (session);
+    db = get_random_pricedb (gnc_session_get_book (session));
 
     if (gnc_pricedb_get_num_prices (db))
       test_db (i, db);

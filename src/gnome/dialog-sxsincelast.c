@@ -1422,7 +1422,7 @@ create_each_transaction_helper( Transaction *t, void *d )
         createUD = (createData*)d;
         tct = createUD->tct;
 
-        newT = xaccMallocTransaction(gnc_get_current_session ());
+        newT = xaccMallocTransaction(gnc_get_current_book ());
         xaccTransBeginEdit( newT );
         /* the action and description/memo are in the template */
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );
@@ -1468,7 +1468,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
                         acct = xaccAccountLookup( acct_guid,
-                                                  gnc_get_current_session ());
+                                                  gnc_get_current_book ());
 #if 0
                         DEBUG( "Got account with name \"%s\"",
                                 xaccAccountGetName( acct ) );
