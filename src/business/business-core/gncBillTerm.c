@@ -44,6 +44,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 
@@ -432,7 +433,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  GNC_BEGIN_EDIT (&term->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&term->inst);
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
@@ -451,16 +452,14 @@ static inline void on_done (QofInstance *inst) {}
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
   GNC_COMMIT_EDIT_PART1 (&term->inst);
-  GNC_COMMIT_EDIT_PART2 (&term->inst, _GNC_MOD_NAME, gncBillTermOnError,
+  GNC_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
                          on_done, bill_free);
 }
 
 /* Get Functions */
 GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
+  ELOOKUP(GncBillTerm);
 }
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
@@ -714,16 +713,16 @@ static void _gncBillTermMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncBillTermForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncBillTermForeach (QofBook *book, QofForeachCB cb,
                               gpointer user_data)
 {
-  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
+  gncBusinessForeach (book, _GNC_MOD_NAME, (QofEntityForeachCB) cb, user_data);
 }
 
 static QofObject gncBillTermDesc = 
 {
   interface_version:   QOF_OBJECT_VERSION,
-  name:                _GNC_MOD_NAME,
+  e_type:              _GNC_MOD_NAME,
   type_label:          "Billing Term",
   book_begin:          _gncBillTermCreate,
   book_end:            _gncBillTermDestroy,

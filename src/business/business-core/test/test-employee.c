@@ -14,23 +14,23 @@
 static int count = 0;
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *));
 
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *));
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gboolean),
 		  gboolean (*get) (GncEmployee *));
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *));
 #endif
@@ -38,10 +38,10 @@ test_gint_fcn (GNCBook *book, const char *message,
 static void
 test_employee (void)
 {
-  GNCBook *book;
+  QofBook *book;
   GncEmployee *employee;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
 
   /* Test creation/destruction */
   {
@@ -106,7 +106,7 @@ test_employee (void)
 }
 
 static void
-test_string_fcn (GNCBook *book, const char *message,
+test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *))
 {
@@ -125,7 +125,7 @@ test_string_fcn (GNCBook *book, const char *message,
 }
 
 static void
-test_numeric_fcn (GNCBook *book, const char *message,
+test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *))
 {
@@ -144,7 +144,7 @@ test_numeric_fcn (GNCBook *book, const char *message,
 }
 
 static void
-test_bool_fcn (GNCBook *book, const char *message,
+test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gboolean),
 	       gboolean (*get) (GncEmployee *))
 {
@@ -166,7 +166,7 @@ test_bool_fcn (GNCBook *book, const char *message,
 
 #if 0
 static void
-test_gint_fcn (GNCBook *book, const char *message,
+test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *))
 {

@@ -43,6 +43,7 @@
 #include "qofid-p.h"
 #include "qofid.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
@@ -398,7 +399,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  GNC_BEGIN_EDIT (&cust->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -422,7 +423,7 @@ static inline void cust_free (QofInstance *inst)
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
   GNC_COMMIT_EDIT_PART1 (&cust->inst);
-  GNC_COMMIT_EDIT_PART2 (&cust->inst, _GNC_MOD_NAME, gncCustomerOnError,
+  GNC_COMMIT_EDIT_PART2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 
@@ -539,9 +540,7 @@ GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)
 
 GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
+  ELOOKUP (GncCustomer);
 }
 
 gboolean gncCustomerIsDirty (GncCustomer *cust)
@@ -585,7 +584,7 @@ static void _gncCustomerMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncCustomerForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncCustomerForeach (QofBook *book, QofForeachCB cb,
                                  gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

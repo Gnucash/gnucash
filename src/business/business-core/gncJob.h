@@ -59,9 +59,6 @@ const char * gncJobGetReference (GncJob *job);
 GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
-GUID gncJobRetGUID (GncJob *job);
-GncJob *gncJobLookupDirect (GUID guid, QofBook *book);
-
 GncJob * gncJobLookup (QofBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
 
@@ -78,5 +75,7 @@ int gncJobCompare (const GncJob *a, const GncJob *b);
 /** deprecated functions */
 #define gncJobGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncJobGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncJobRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncJobLookupDirect(G,B) gncJobLookup((B),&(G))
 
 #endif /* GNC_JOB_H_ */

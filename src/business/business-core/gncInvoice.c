@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncInvoice.c -- the Core Business Invoice                        *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncInvoice.c -- the Core Business Invoice
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -20,6 +41,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
@@ -144,14 +166,13 @@ static void gncInvoiceFree (GncInvoice *invoice)
   g_free (invoice);
 }
 
-/* Set Functions */
-
-void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid)
+GncInvoice *
+gncInvoiceLookup(QofBook *book, const GUID *guid)
 {
-  if (!invoice || !guid) return;
-
-  qof_entity_set_guid(&invoice->inst.entity, guid);
+  ELOOKUP(GncInvoice);
 }
+
+/* Set Functions */
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)
 {
@@ -588,9 +609,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
   if (!value) return NULL;
 
   guid = kvp_value_get_guid (value);
-
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+  return gncInvoiceLookup(book, guid);
 }
 
 static void
@@ -614,7 +633,8 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
   gncInvoiceSetPostedTxn (invoice, txn);
 }
 
-GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
+GncInvoice * 
+gncInvoiceGetInvoiceFromTxn (Transaction *txn)
 {
   KvpFrame *kvp;
   KvpValue *value;
@@ -629,9 +649,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   if (!value) return NULL;
 
   guid = kvp_value_get_guid (value);
-
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+  return gncInvoiceLookup(book,guid);
 }
 
 struct lotmatch {
@@ -1207,40 +1225,17 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
   return gnc_lot_is_closed(invoice->posted_lot);
 }
 
-GUID gncInvoiceRetGUID (GncInvoice *invoice)
-{
-  if (!invoice)
-    return *guid_null();
-
-  return invoice->inst.entity.guid;
-}
-
-GncInvoice * gncInvoiceLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncInvoiceLookup (book, &guid);
-}
-
-GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid)
-{
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
-}
-
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  GNC_BEGIN_EDIT (&invoice->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&invoice->inst);
 }
 
-static void inline gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
+static inline void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Invoice QofBackend Failure: %d", errcode);
 }
 
-static void gncInvoiceOnDone (QofInstance *invoice)
-{
-}
+static inline void gncInvoiceOnDone (QofInstance *invoice) { }
 
 static inline void invoice_free (QofInstance *inst)
 {
@@ -1251,7 +1246,7 @@ static inline void invoice_free (QofInstance *inst)
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
   GNC_COMMIT_EDIT_PART1 (&invoice->inst);
-  GNC_COMMIT_EDIT_PART2 (&invoice->inst, _GNC_MOD_NAME, gncInvoiceOnError,
+  GNC_COMMIT_EDIT_PART2 (&invoice->inst, gncInvoiceOnError,
 			 gncInvoiceOnDone, invoice_free);
 }
 
@@ -1292,12 +1287,12 @@ static gboolean _gncInvoiceIsDirty (QofBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
-static void _gncInvoiceMarkClean (QofBook *book)
+static inline void _gncInvoiceMarkClean (QofBook *book)
 {
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncInvoiceForeach (QofBook *book, QofEntityForeachCB cb,
+static inline void _gncInvoiceForeach (QofBook *book, QofForeachCB cb,
 				gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

@@ -9,7 +9,8 @@
 
 typedef struct _gncEmployee GncEmployee;
 
-#include "gnc-book.h"
+#include "qofbook.h"
+#include "qofid.h"
 #include "gncAddress.h"
 #include "Account.h"
 
@@ -35,7 +36,6 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
 /* Get Functions */
 
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
-const GUID * gncEmployeeGetGUID (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
 GncAddress * gncEmployeeGetAddr (GncEmployee *employee);
@@ -50,8 +50,6 @@ Account * gncEmployeeGetCCard (GncEmployee *employee);
 GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
-GUID gncEmployeeRetGUID (GncEmployee *employee);
-GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book);
 
 void gncEmployeeBeginEdit (GncEmployee *employee);
 void gncEmployeeCommitEdit (GncEmployee *employee);
@@ -60,5 +58,10 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 #define EMPLOYEE_ID	"id"
 #define EMPLOYEE_USERNAME	"username"
 #define EMPLOYEE_ADDR	"addr"
+
+/** deprecated routines */
+// const GUID * gncEmployeeGetGUID (GncEmployee *employee);
+#define gncEmployeeRetGUID(E) (*(qof_entity_get_guid(QOF_ENTITY(E))))
+#define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 
 #endif /* GNC_EMPLOYEE_H_ */

@@ -106,9 +106,6 @@ gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry);
 int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
 int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
 
-GUID gncTaxTableRetGUID (GncTaxTable *table);
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book);
-
 /************************************************/
 
 struct _gncAccountValue {
@@ -131,9 +128,10 @@ gnc_numeric gncAccountValueTotal (GList *list);
 /** Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
 
-
 /** deprecated routine */
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncTaxTableRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncTaxTableLookupDirect(G,B) gncTaxTableLookup((B), &(G))
 
 #endif /* GNC_TAXTABLE_H_ */
 /** @} */
