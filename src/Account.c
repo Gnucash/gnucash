@@ -71,6 +71,10 @@ mallocAccount( void )
   acc->transaction = (Transaction **) _malloc (sizeof (Transaction *));
   acc->transaction[0] = NULL;
   
+  acc->numSplits   = 0;
+  acc->splits      = (Split **) _malloc (sizeof (Split *));
+  acc->splits[0]   = NULL;
+  
   /* private data */
   acc->arrowb        = NULL;
   acc->expand        = 0;
@@ -92,6 +96,7 @@ void
 freeAccount( Account *acc )
 {
   int i;
+  Split *s;
 
   if (NULL == acc) return;
     
@@ -104,6 +109,23 @@ freeAccount( Account *acc )
   
   freeQuickFill(acc->qfRoot);
   
+  /* free up splits */
+  /* hack alert -- this is incomplete and broken, 
+   * and interacts badly with the free-transaction code
+   * immediately below. Should be corrected when final
+   * split work is completed. */
+  i=0;
+  s = acc->splits[0];
+  while (s) {
+    struct _account * _acc = (struct _account *) acc; 
+    if (_acc == s->debit) s->debit = NULL;
+    i++;
+    s = acc->splits[i];
+  }
+  _free (acc->splits);
+  acc->numSplits = 0;
+  
+  /* free transactions */
   for( i=0; i<acc->numTrans; i++ ) {
     Transaction *trans = acc->transaction[i];
     struct _account * _acc = (struct _account *) acc; 
@@ -117,6 +139,7 @@ freeAccount( Account *acc )
       freeTransaction( trans );
     }
   }
+
   
   /* free the array of pointers */
   _free( acc->transaction );
@@ -237,8 +260,6 @@ removeTransaction( Account *acc, int num )
   if (((Account *)trans->credit) == acc) trans->credit = NULL;
   if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
 
-  /* hack alert -- we should alos remove splits from accounts */
-
   return trans;
 }
 
@@ -355,6 +376,67 @@ insertTransaction( Account *acc, Transaction *trans )
     qfInsertTransaction( acc->qfRoot, trans );
   
   return position;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccInsertSplit ( Account *acc, Split *split )
+  {
+  int  i,j;
+  int  inserted = False;
+  Split **oldsplits;
+  Transaction *trans;
+
+  if (!acc) return;
+  if (!split) return;
+
+  /* mark the data file as needing to be saved: */
+  if( acc->parent != NULL ) acc->parent->saved = False;
+
+  split->debit = (struct _account *) acc;
+    
+  oldsplits = acc->splits;
+  acc->numSplits ++;
+  acc->splits = (Split **)_malloc(((acc->numSplits) + 1) * sizeof(Split *));
+  
+  /* dt is the date of the transaction we are inserting, and dj
+   * is the date of the "cursor" transaction... we want to insert
+   * the new transaction before the first transaction of the same
+   * or later date.  The !inserted bit is a bit of a kludge to 
+   * make sure we only insert the new transaction once! */
+  trans = (Transaction *) (split->parent);
+  for( i=0,j=0; i<acc->numSplits; i++,j++ ) {
+    /* if we didn't do this, and we needed to insert into the
+     * last spot in the array, we would walk off the end of the
+     * old array, which is no good! */
+    if( j>=(acc->numSplits-1) ) {
+      acc->splits[i] = split;
+      break;
+    } else {
+      if (!inserted) {
+        Transaction *ot;
+        ot = (Transaction *) (oldsplits[j] -> parent);
+        if (xaccTransOrder (&ot,&trans) > 0) {
+          acc->splits[i] = split;
+          j--;
+          inserted = True;
+        } else {
+          acc->splits[i] = oldsplits[j];
+        }
+      } else {
+        acc->splits[i] = oldsplits[j];
+      }
+    }
+  }
+  
+  /* make sure the array is NULL terminated */
+  acc->splits[acc->numSplits] = NULL;
+
+  _free(oldsplits);
+
+  qfInsertTransaction( acc->qfRoot, trans );
 }
 
 /********************************************************************\

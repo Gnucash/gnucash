@@ -211,7 +211,7 @@ implemented and tested.
 /********************************************************************\
 \********************************************************************/
 void
-xaccInsertSplit (Transaction *trans, Split *split) 
+xaccAppendSplit (Transaction *trans, Split *split) 
 {
    int i, num;
    Split **oldarray;
