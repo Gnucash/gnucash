@@ -62,7 +62,7 @@ struct   _CellLayoutInfo
 {
         unsigned int **flags;
         unsigned int **user_flags;  /* For user mutable flags */
-        
+
         int **chars_width;
         int **pixels_width;
         int **chars_min;
@@ -89,7 +89,7 @@ typedef struct
 {
         unsigned int flags;
         unsigned int user_flags;  /* For user mutable flags */
-        
+
         int chars_width;
         int pixels_width;
         int chars_min;
@@ -292,16 +292,17 @@ layout_init_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
         char date_str[128];
         int i, j;
 
-        double perc[1][7] = {{0.10, 0.07, 0.32, 0.25, 0.02, 0.12, 0.12}};
+        double perc[1][8] = {{0.10, 0.07, 0.21, 0.18, 0.18, 0.02, 0.12, 0.12}};
 
-        CellLayoutData ld[1][7] =
+        CellLayoutData ld[1][8] =
         {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
           {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,10,0,0,0,0,0,0,0,XFTO_STR},
           {STRING_MIN,RESIZABLE,0,0,0,0,10,0,0,0,0,0,0,0,XFRM_STR},
           {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
         }};
 
         printDate(date_str, 29, 12, 2000);
@@ -309,7 +310,7 @@ layout_init_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
 
         layout_info = style_layout_info_new (style);
 
-        SET_CELL_LAYOUT_DATA (1, 7);
+        SET_CELL_LAYOUT_DATA (1, 8);
 
         g_hash_table_insert (sheet->layout_info_hash_table,
                              style_get_key (style), layout_info);
@@ -326,7 +327,7 @@ layout_init_double(GnucashSheet *sheet, SheetBlockStyle *style)
         int i, j;
 
         double perc[2][8] = {{0.10, 0.07, 0.25, 0.20, 0.02, 0.12, 0.12, 0.12},
-                             {0.10, 0.07, 0.83, 0.0, 0.0, 0.0, 0.0, 0.0}};
+                             {0.10, 0.07, 0.83, 0.00, 0.00, 0.00, 0.00, 0.00}};
 
         CellLayoutData ld[2][8] =
         {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
@@ -368,20 +369,22 @@ layout_init_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
         char date_str[128];
         int i, j;
 
-        double perc[2][7] = {{0.10, 0.07, 0.32, 0.25, 0.02, 0.12, 0.12},
-                             {0.10, 0.07, 0.83, 0.0, 0.0, 0.0, 0.0}};
+        double perc[2][8] = {{0.10, 0.07, 0.21, 0.18, 0.18, 0.02, 0.12, 0.12},
+                             {0.10, 0.07, 0.83, 0.00, 0.00, 0.00, 0.00, 0.00}};
 
-        CellLayoutData ld[2][7] =
+        CellLayoutData ld[2][8] =
         {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
           {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFTO_STR},
           {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
           {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL}},
          {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
           {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,7,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
@@ -393,7 +396,7 @@ layout_init_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
 
         layout_info = style_layout_info_new (style);
 
-        SET_CELL_LAYOUT_DATA (2, 7);
+        SET_CELL_LAYOUT_DATA (2, 8);
 
         g_hash_table_insert (sheet->layout_info_hash_table,
                              style_get_key (style), layout_info);
@@ -447,20 +450,21 @@ layout_init_stock_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
         char date_str[128];
         int i, j;
 
-        double perc[1][10] = {{0.09, 0.06, 0.24, 0.19, 0.01, 0.10,
-                               0.10, 0.07, 0.07, 0.07}};
+        double perc[1][11] = {{0.09, 0.05, 0.18, 0.14, 0.14, 0.01,
+                               0.09, 0.09, 0.07, 0.07, 0.07}};
 
-        CellLayoutData ld[1][10] =
+        CellLayoutData ld[1][11] =
         {{{STRING_FIXED,RESIZABLE, 0,0,0,0,0,0,0,0,0,0,0,0,date_str},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
           {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFTO_STR},
           {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
           {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
         }};
 
         printDate(date_str, 29, 12, 2000);
@@ -468,7 +472,7 @@ layout_init_stock_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
 
         layout_info = style_layout_info_new (style);
 
-        SET_CELL_LAYOUT_DATA (1, 10);
+        SET_CELL_LAYOUT_DATA (1, 11);
 
         g_hash_table_insert (sheet->layout_info_hash_table,
                              style_get_key (style), layout_info);
@@ -486,8 +490,8 @@ layout_init_stock_double(GnucashSheet *sheet, SheetBlockStyle *style)
 
         double perc[2][11] = {{0.09, 0.06, 0.20, 0.14, 0.01,
                                0.10, 0.10, 0.07, 0.07, 0.07, 0.09},
-                              {0.0, 0.15, 0.11, 0.74, 0.0,
-                               0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+                              {0.00, 0.15, 0.11, 0.74, 0.00,
+                               0.00, 0.00, 0.00, 0.00, 0.00, 0.0}};
 
         CellLayoutData ld[2][11] =
         {{{STRING_FIXED, RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
@@ -535,25 +539,27 @@ layout_init_stock_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
         char date_str[128];
         int i, j;
 
-        double perc[2][10] = {{0.09, 0.06, 0.24, 0.19, 0.01,
-                               0.10, 0.10, 0.07, 0.07, 0.07},
-                              {0.0, 0.15, 0.11, 0.74, 0.0,
-                               0.0, 0.0, 0.0, 0.0, 0.0}};
+        double perc[2][11] = {{0.09, 0.05, 0.18, 0.14, 0.14,
+                               0.01, 0.09, 0.09, 0.07, 0.07, 0.07},
+                              {0.00, 0.15, 0.11, 0.74, 0.00,
+                               0.00, 0.00, 0.00, 0.00, 0.00, 0.0}};
 
-        CellLayoutData ld[2][10] =
+        CellLayoutData ld[2][11] =
         {{{STRING_FIXED, RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
           {CHARS_MIN,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN | FILL,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFTO_STR},
           {STRING_MIN | FILL,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
           {STRING_FIXED, 0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
           {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
-          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,6,NULL}},
          {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
           {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,10,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
           {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
@@ -568,7 +574,7 @@ layout_init_stock_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
 
         layout_info = style_layout_info_new (style);
 
-        SET_CELL_LAYOUT_DATA (2, 10);
+        SET_CELL_LAYOUT_DATA (2, 11);
 
         g_hash_table_insert (sheet->layout_info_hash_table,
                              style_get_key (style), layout_info);

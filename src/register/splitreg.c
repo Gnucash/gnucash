@@ -220,17 +220,14 @@ configLabels (SplitRegister *reg)
          LABEL (DEBT,  REBATE_STR);
          LABEL (CRED,  EXPENSE_STR);
          break;
-      case GENERAL_LEDGER:  
-      case EQUITY_REGISTER:
-         LABEL (DEBT,  SURPLUS_STR);
-         LABEL (CRED,  DEFICIT_STR);
-         break;
       case STOCK_REGISTER:
       case PORTFOLIO_LEDGER:
       case CURRENCY_REGISTER:
          LABEL (DEBT,  SOLD_STR);
          LABEL (CRED,  BOUGHT_STR);
          break;
+      case GENERAL_LEDGER:  
+      case EQUITY_REGISTER:
       case SEARCH_LEDGER:
          LABEL (DEBT, DEBIT_STR);
          LABEL (CRED, CREDIT_STR);
@@ -294,7 +291,7 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, PAYMENT_STR);
          break;
-      case INCOME_LEDGER:  
+      case INCOME_LEDGER:
       case INCOME_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
@@ -306,7 +303,7 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
          break;
-      case GENERAL_LEDGER:  
+      case GENERAL_LEDGER:
       case EQUITY_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
@@ -450,10 +447,11 @@ configLayout (SplitRegister *reg)
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
+         FANCY (XTO,    xto,      3,  0);
+         FANCY (MXFRM,  mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -463,25 +461,27 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
+         FANCY (XFRM,   mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
 
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
          FANCY (MEMO,   memo,     2,  0);
-         FANCY (XFRM,   xfrm,     3,  0);
-         FANCY (NDEBT,  ndebit,   5,  0);
-         FANCY (NCRED,  ncredit,  6,  0);
+         FANCY (XFRM,   xfrm,     4,  0);
+         FANCY (NDEBT,  ndebit,   6,  0);
+         FANCY (NCRED,  ncredit,  7,  0);
 
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
+         FANCY (XTO,    xto,      3,  0);
+         FANCY (MXFRM,  mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
 
          break;
       }
@@ -501,7 +501,7 @@ configLayout (SplitRegister *reg)
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+         FANCY (BALN,   balance, 10,  0);
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -537,7 +537,7 @@ configLayout (SplitRegister *reg)
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+         FANCY (BALN,   balance, 10,  0);
 
          break;
       }
@@ -549,13 +549,14 @@ configLayout (SplitRegister *reg)
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (XTO,    xto,      3,  0);
+         FANCY (MXFRM,  mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
+         FANCY (PRIC,   price,    8,  0);
+         FANCY (VALU,   value,    9,  0);
+         FANCY (SHRS,   shrs,    10,  0);
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -565,31 +566,33 @@ configLayout (SplitRegister *reg)
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
          FANCY (XTO,    xto,      3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (XFRM,   mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
+         FANCY (PRIC,   price,    8,  0);
+         FANCY (VALU,   value,    9,  0);
+         FANCY (SHRS,   shrs,    10,  0);
 
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
          FANCY (MEMO,   memo,     2,  0);
-         FANCY (XFRM,   xfrm,     3,  0);
-         FANCY (NDEBT,  ndebit,   5,  0);
-         FANCY (NCRED,  ncredit,  6,  0);
+         FANCY (XFRM,   xfrm,     4,  0);
+         FANCY (NDEBT,  ndebit,   6,  0);
+         FANCY (NCRED,  ncredit,  7,  0);
 
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          FANCY (NUM,    num,      1,  0);
          FANCY (DESC,   desc,     2,  0);
-         FANCY (MXFRM,  mxfrm,    3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
+         FANCY (XTO,    xto,      3,  0);
+         FANCY (MXFRM,  mxfrm,    4,  0);
+         BASIC (RECN,   recn,     5,  0);
+         FANCY (DEBT,   debit,    6,  0);
+         FANCY (CRED,   credit,   7,  0);
+         FANCY (PRIC,   price,    8,  0);
+         FANCY (VALU,   value,    9,  0);
+         FANCY (SHRS,   shrs,    10,  0);
 
          break;
       }
@@ -947,15 +950,18 @@ mallocCursors (SplitRegister *reg)
     case INCOME_LEDGER:
     case GENERAL_LEDGER:
     case SEARCH_LEDGER:
-      reg->num_cols = 7;
+      reg->num_cols = 8;
       break;
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
       reg->num_cols = 11;
       break;
+
     case PORTFOLIO_LEDGER:
-      reg->num_cols = 10;
+      reg->num_cols = 11;
+      break;
+
     default:
       break;
   }
