@@ -274,7 +274,7 @@ pricedb_v2_end_handler(
     GSList* sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *result, const gchar *tag)
 {
-    GNCPriceDB *db = (GNCPriceDB*)result;
+    GNCPriceDB *db = *result;
     sixtp_gdv2* globaldata = (sixtp_gdv2*)global_data;
 
     if(parent_data)
@@ -288,6 +288,7 @@ pricedb_v2_end_handler(
     }
     
     globaldata->addPriceDBFunc(globaldata, db);
+    *result = NULL;
 
     return TRUE;
 }

@@ -1,4 +1,15 @@
+2001-03-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-pricedb-xml-v1.c (pricedb_v2_end_handler): fix bug
+
 2001-03-23  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/txf-export.scm: redo data structure
+	for txf info
+
+	* src/guile/gnc.gwp: wrap tax info api getters
+
+	* src/scm/report/income-or-expense-pie.scm: show total in subtitle
 
 	* src/scm/html-utilities.scm (gnc:assign-colors): make the order
 	of color assignment stable

@@ -331,20 +331,6 @@
 				      " \\ " (symbol->string 
 					      (car code-lst))))))))))
 
-  ;; insert help strings in txf categories
-  (define (txf-help cat-list)
-    (do ((i 0 (+ i 1))
-	 (len (length cat-list)))
-	((>= i len))
-      (let* ((item (list-ref cat-list i))
-	     (code (vector-ref item 0))
-	     (help (assq-ref txf-help-strings code)))
-	(if help
-	    (begin (array-set! item help 2)
-		   (list-set! cat-list i item)
-		   #t)
-	    #f))))
-
   ;; print txf help strings
   (define (txf-print-help table vect inc)
     (let* ((markup (if inc "income" "expense"))
@@ -1083,22 +1069,18 @@ Go the the Tax Information dialog to set up tax-related accounts.")))))
 
         doc)))
 
-  ;; copy help strings to category structures.
-  (txf-help txf-income-categories)
-  (txf-help txf-expense-categories)
-  (txf-help txf-help-categories)
-
-  (gnc:define-report
-   'version 1
-   'name (N_ "Tax")
-   'options-generator tax-options-generator
-   'renderer (lambda (report-obj)
-               (generate-tax-or-txf
-                (_ "Taxable Income / Deductible Expenses")
-                (_ "This page shows your Taxable Income and \
-Deductable Expenses.")
-                report-obj
-		#t))))
+;  (gnc:define-report
+;   'version 1
+;   'name (N_ "Tax")
+;   'options-generator tax-options-generator
+;   'renderer (lambda (report-obj)
+;               (generate-tax-or-txf
+;                (_ "Taxable Income / Deductible Expenses")
+;                (_ "This page shows your Taxable Income and \
+;Deductable Expenses.")
+;                report-obj
+;		#t)))
+  #f)
 
 ;  (gnc:define-report
 ;   'version 1

@@ -119,7 +119,7 @@
 	  (account-levels (op-value pagename-general optname-levels))
 	  (report-currency (op-value pagename-general
 				     optname-report-currency))
-	  
+
 	  (show-fullname? (op-value pagename-display optname-fullname))
 	  (show-total? (op-value pagename-display optname-show-total))
 	  (max-slices (op-value pagename-display optname-slices))
@@ -157,7 +157,7 @@
 	     (combined '())
 	     (other-anchor "")
 	     (print-info (gnc:commodity-print-info report-currency #t)))
-	
+
 	;; Converts a commodity-collector into one single double
 	;; number, depending on the report currency and the
 	;; exchange-alist calculated above. Returns the absolute value
@@ -222,7 +222,8 @@
 	      (set! combined
 		    (append start
 			    (list (list sum (_ "Other")))))
-	      (let* ((name (if is-income? (N_ "Income Piechart") 
+	      (let* ((name (if is-income?
+                               (N_ "Income Piechart") 
 			       (N_ "Expense Piechart")))
 		     (options (gnc:make-report-options name))
 		     (account-op (gnc:lookup-option options
@@ -245,10 +246,17 @@
 		   (_ "Expenses by Account")))
 
 	(gnc:html-piechart-set-subtitle!
-	 chart (sprintf #f
-			(_ "%s to %s")
-			(gnc:timepair-to-datestring from-date-tp) 
-			(gnc:timepair-to-datestring to-date-tp)))
+	 chart (string-append
+                (sprintf #f
+                         (_ "%s to %s")
+                         (gnc:timepair-to-datestring from-date-tp) 
+                         (gnc:timepair-to-datestring to-date-tp))
+                (if show-total?
+                    (let ((total (apply + (unzip1 combined))))
+                      (sprintf #f ": %s"
+                               (gnc:amount->string total print-info)))
+                          
+                    "")))
 
 	(gnc:html-piechart-set-width! chart width)
 	(gnc:html-piechart-set-height! chart height)
