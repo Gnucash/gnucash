@@ -71,16 +71,27 @@
 #define GENERAL_LEDGER      9
 #define INCOME_LEDGER       10
 #define PORTFOLIO           11
-
 #define REG_TYPE_MASK       0xff
+
+/* 
+ * REG_SHOW_TAMOUNT -- show debit, credit, price, value cells on the transaction line 
+ * REG_SHOW_SAMOUNT -- show debit, credit, price, value cells on the split line 
+ * REG_SHOW_TXFRM   -- show transfer-from cell on transaction line
+ * REG_SHOW_RECS    -- show reconcile cell on split line
+ * REG_DOUBLE_LINE  -- show two lines per transaction
+ * REG_MULTI_LINE   -- show multiple lines per transaction
+ * REG_DYNAMIC      -- dynamically expand edited transaction
+ */
+ 
 #define REG_SHOW_TAMOUNT    0x0100
 #define REG_SHOW_SAMOUNT    0x0200
 #define REG_SHOW_TXFRM      0x0400
 #define REG_SHOW_RECS       0x0800
 #define REG_DOUBLE_LINE     0x1000
 #define REG_MULTI_LINE      0x2000
+#define REG_DYNAMIC         0x4000
 
-/* modified flags -- indicate how values have been modified */
+/* modified flags -- indicate which cell values have been modified by user */
 #define MOD_NONE   0x0000
 #define MOD_DATE   0x0001
 #define MOD_NUM    0x0002
