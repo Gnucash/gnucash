@@ -515,7 +515,7 @@
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>20</text_max_length>
-	      <text>$ x.x</text>
+	      <text></text>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>

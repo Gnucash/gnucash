@@ -54,6 +54,9 @@ create_newUserDialog (void)
   GtkWidget *newAccountsTypeList_SelectAllButton;
   GtkWidget *newAccountsTypeList_ClearAllButton;
   GtkWidget *finalAccountDruidPage;
+  GdkColor finalAccountDruidPage_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor finalAccountDruidPage_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor finalAccountDruidPage_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox3;
   GtkWidget *label6;
   GtkWidget *hbox4;
@@ -286,6 +289,9 @@ create_newUserDialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show_all (finalAccountDruidPage);
   gnome_druid_append_page (GNOME_DRUID (accountChooseDruidPage), GNOME_DRUID_PAGE (finalAccountDruidPage));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), &finalAccountDruidPage_title_color);
   gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage), _("Check and Enter Final Account Info"));
 
   druid_vbox3 = GNOME_DRUID_PAGE_STANDARD (finalAccountDruidPage)->vbox;
@@ -390,7 +396,6 @@ create_newUserDialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (checkAccount_StartBalanceEntry);
   gtk_box_pack_start (GTK_BOX (vbox5), checkAccount_StartBalanceEntry, FALSE, FALSE, 0);
-  gtk_entry_set_text (GTK_ENTRY (checkAccount_StartBalanceEntry), _("$ x.x"));
 
   newUserDruidFinishPage = gnome_druid_page_finish_new ();
   gtk_widget_set_name (newUserDruidFinishPage, "newUserDruidFinishPage");

@@ -710,7 +710,7 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     {
       GNOME_APP_UI_ITEM,
       N_("Close _Window"),
-      N_("Close this MDI window"),
+      N_("Close the current notebook page"),
       gnc_main_window_file_close_cb, NULL, NULL, 
       GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
     },    
