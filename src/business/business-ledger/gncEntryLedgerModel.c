@@ -349,9 +349,6 @@ static const char * get_value_entry (VirtualLocation virt_loc,
 
     gncEntryGetValue (entry, &value, NULL);
   }
-  if (gnc_numeric_zero_p (value))
-    return NULL;
-
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }
 
@@ -387,8 +384,6 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
 
     gncEntryGetValue (entry, NULL, &value);
   }
-  if (gnc_numeric_zero_p (value))
-    return NULL;
 
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }

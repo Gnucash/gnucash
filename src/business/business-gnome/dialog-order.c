@@ -119,7 +119,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   res = gncOwnerGetName (&(ow->owner));
   if (res == NULL || safe_strcmp (res, "") == 0) {
     gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-  			       _("The Order must be given an Owner."));
+  			       _("You need to supply Billing Information."));
     return FALSE;
   }
 
@@ -371,7 +371,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *owd;
   GList *entries;
-  GtkWidget *hide1, *hide2;
+  gboolean hide_cd = FALSE;
 
   gnc_configure_register_colors ();
 
@@ -522,12 +522,9 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
     ts = gncOrderGetDateClosed (order);
     if (timespec_equal (&ts, &ts_zero)) {
       tt = time(NULL);
-      hide1 = ow->closed_date;
-      hide2 = cd_label;
+      hide_cd = TRUE;
     } else {
       tt = ts.tv_sec;		/* XXX */
-      hide1 = glade_xml_get_widget (xml, "hide1");
-      hide2 = glade_xml_get_widget (xml, "hide2");
     }
     gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
 
@@ -545,10 +542,21 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   gtk_widget_show_all (ow->dialog);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);
 
-  gtk_widget_hide_all (hide1);
-  gtk_widget_hide_all (hide2);
+  if (hide_cd) {
+    GtkWidget *hide;
+
+    gtk_widget_hide_all (ow->closed_date);
+    gtk_widget_hide_all (cd_label);
+
+    hide = glade_xml_get_widget (xml, "hide1");
+    gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (xml, "hide2");
+    gtk_widget_hide_all (hide);
+  }
 
   if (type == VIEW_ORDER) {
+    GtkWidget *hide;
+
     /* Setup viewer for read-only access */
     gtk_widget_set_sensitive (ow->id_entry, FALSE);
     gtk_widget_set_sensitive (ow->opened_date, FALSE);
@@ -556,10 +564,10 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
     gtk_widget_set_sensitive (ow->notes_text, FALSE);
 
     /* Hide the 'close order' button */
-    hide1 = glade_xml_get_widget (xml, "close_order_button");
-    gtk_widget_hide_all (hide1);
-    hide1 = glade_xml_get_widget (xml, "new_invoice_button");
-    gtk_widget_hide_all (hide1);
+    hide = glade_xml_get_widget (xml, "close_order_button");
+    gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (xml, "new_invoice_button");
+    gtk_widget_hide_all (hide);
   }
   
   return ow;
