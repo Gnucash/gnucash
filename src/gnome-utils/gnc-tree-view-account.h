@@ -191,10 +191,11 @@ void          gnc_tree_view_account_init_view_info        (AccountViewInfo *avi)
  *  function will be called when the filter is destroyed.  may be
  *  NULL.
  */
-void          gnc_tree_view_account_set_filter            (GncTreeViewAccount *account_view, 
-							   EggTreeModelFilterVisibleFunc  func,
-							   gpointer                       data,
-							   GtkDestroyNotify               destroy);
+typedef gboolean (*gnc_tree_view_account_filter_func)(Account*, gpointer data);
+void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view, 
+				       gnc_tree_view_account_filter_func func,
+				       gpointer data,
+				       GtkDestroyNotify destroy);
 
 
 /** This function forces the account tree filter to be evaluated.  It
@@ -214,6 +215,20 @@ void          gnc_tree_view_account_refilter              (GncTreeViewAccount *v
 /** @name Account Tree View Get/Set Functions */
 /** @{ */
 
+/** This function determines if an account in the account tree view
+ *  has any visible children.
+ *
+ *  @param account_view A pointer to an account tree view.
+ *
+ *  @param account A pointer to the account to check.
+ *
+ *  @return The number of children of the specified account. Returns 0
+ *  on error.
+ */
+gint          gnc_tree_view_account_count_children (GncTreeViewAccount *view,
+						    Account *account);
+
+
 /** This function returns the account associated with the top level
  *  pseudo-account.  The gnucash engine does not have a single top
  *  level account (it has a list of top level accounts), but this code
@@ -232,8 +247,30 @@ void          gnc_tree_view_account_refilter              (GncTreeViewAccount *v
 Account     * gnc_tree_view_account_get_top_level         (GncTreeViewAccount *view);
 
 
+/** This function returns the account associated with the specified
+ *  path.  This function is useful in selection callbacks on an
+ *  account tree widget.
+ *
+ *  @param account_view A pointer to an account tree view.
+ *
+ *  @param path A path specifying a node in the account tree.
+ *
+ *  @return The account associated with this path.
+ */
 Account     * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
 							   GtkTreePath *path);
+
+
+/** This function returns the account in the account tree view at the
+ *  current location of the cursor. (The outline frame. Usually is
+ *  selected and therefore filled in, but not always.)
+ *
+ *  @param account_view A pointer to an account tree view.
+ *
+ *  @return The account at the cursor.
+ */
+Account *     gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view);
+
 
 /** This function returns the account associated with the selected
  *  item in the account tree view.
@@ -306,8 +343,26 @@ GList       * gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *v
 void          gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
 							   GList *account_list,
 							   gboolean show_last);
+
+
+/** This function selects all sub-accounts of an account in the
+ *  account tree view.  All other accounts will be unselected.
+ *
+ *  @note It only makes sense to call this function when the account
+ *  tree is set to select multiple items.  There is a different
+ *  function to use when the tree supports multiple selections.
+ *
+ *  @param account_view A pointer to an account tree view.
+ *
+ *  @param account A pointer to the account whose children should be
+ *  selected.
+ */
+void          gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
+							Account *account);
+
 /** @} */
 
+/** @} */
 
 G_END_DECLS
 

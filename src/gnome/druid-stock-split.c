@@ -40,7 +40,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -534,27 +533,21 @@ gnc_stock_split_druid_cancel_druid (GnomeDruid *druid, gpointer user_data)
 }
 
 static gboolean
-gnc_stock_split_druid_view_filter_income (GtkTreeModel *model,
-					  GtkTreeIter  *iter,
-					  gpointer      data)
+gnc_stock_split_druid_view_filter_income (Account  *account,
+					  gpointer  data)
 {
-  Account *account;
   GNCAccountType type;
 
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
   type = xaccAccountGetType(account);
   return (type == INCOME);
 }
 
 static gboolean
-gnc_stock_split_druid_view_filter_asset (GtkTreeModel *model,
-					 GtkTreeIter  *iter,
-					 gpointer      data)
+gnc_stock_split_druid_view_filter_asset (Account  *account,
+					 gpointer  data)
 {
-  Account *account;
   GNCAccountType type;
 
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
   type = xaccAccountGetType(account);
   return ((type == BANK) || (type == CASH) || (type == ASSET));
 }

@@ -1,3 +1,22 @@
+2003-10-26  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-stock-split.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Simplify the way
+	filters are applied to an account tree view.
+
+	* src/gnome/gnc-plugin-page-register.c: Start the "double line"
+	menu item in the correct state.
+
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome/glade/tax.glade: Get "Tax Options" working in the g2
+	port.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/glade/acctperiod.glade:
+	* src/gnome/ui/gnc-main-window-ui.xml: Add the "Close Books" menu
+	item.
+
 2003-10-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.[ch]:

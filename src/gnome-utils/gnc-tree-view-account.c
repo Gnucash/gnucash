@@ -376,6 +376,104 @@ gnc_tree_view_account_new (gboolean show_root)
 }
 
 /************************************************************/
+/*                   Auxiliary Functions                    */
+/************************************************************/
+
+#if 0
+#define debug_path(fn, path) { \
+    gchar *path_string = gtk_tree_path_to_string(path); \
+    fn("tree path %s", path_string); \
+    g_free(path_string); \
+  }
+
+static GtkTreePath *
+gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
+					     Account *account)
+{
+  GtkTreeModel *model, *f_model;
+  GtkTreePath *path, *f_path;
+
+  ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
+
+  if (account == NULL) {
+    LEAVE("no account");
+    return NULL;
+  }
+
+  /* Reach down to the real model and get a path for this account */
+  f_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (f_model));
+  path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
+  if (path == NULL) {
+    LEAVE("get_path_from_account failed");
+    return NULL;
+  }
+  /* convert back to a filtered path */
+  f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model), path);
+  gtk_tree_path_free(path);
+
+  debug_path(LEAVE, f_path);
+  return f_path;
+}
+#endif
+
+static gboolean
+gnc_tree_view_account_get_iter_from_account (GncTreeViewAccount *view,
+					     Account *account,
+					     GtkTreeIter *f_iter)
+{
+  GtkTreeModel *model, *f_model;
+  GtkTreeIter iter;
+
+  g_return_val_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view), FALSE);
+  g_return_val_if_fail(account != NULL, FALSE);
+  g_return_val_if_fail(f_iter != NULL, FALSE);
+  
+  ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
+
+  /* Reach down to the real model and get an iter for this account */
+  f_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (f_model));
+  if (!gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT(model), account, &iter)) {
+    LEAVE("model_get_iter_from_account failed");
+    return FALSE;
+  }
+
+  /* convert back to a filter iter */
+  egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER(f_model),
+						    f_iter, &iter);
+  LEAVE(" ");
+  return TRUE;
+}
+
+gint
+gnc_tree_view_account_count_children (GncTreeViewAccount *view,
+				      Account *account)
+{
+  GtkTreeModel *f_model;
+  GtkTreeIter f_iter;
+  gint num_children;
+
+  ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
+
+  if (account == NULL) {
+    LEAVE("no account");
+    return 0;
+  }
+
+  if (!gnc_tree_view_account_get_iter_from_account (view, account, &f_iter)) {
+    LEAVE("view_get_iter_from_account failed");
+    return 0;
+  }
+
+  /* Any children? */
+  f_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  num_children = gtk_tree_model_iter_n_children(f_model, &f_iter);
+  LEAVE("%d children", num_children);
+  return num_children;
+}
+
+/************************************************************/
 /*            Account Tree View Filter Functions            */
 /************************************************************/
 
@@ -492,6 +590,38 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
   LEAVE(" ");
 }
 
+typedef struct {
+  gnc_tree_view_account_filter_func user_fn;
+  gpointer                          user_data;
+  GtkDestroyNotify                  user_destroy;
+} filter_user_data;
+
+static void
+gnc_tree_view_account_filter_destroy (gpointer data)
+{
+  filter_user_data *fd = data;
+
+  if (fd->user_destroy)
+    fd->user_destroy(fd->user_data);
+  g_free(fd);
+}
+
+static gboolean
+gnc_tree_view_account_filter_helper (GtkTreeModel *tree_model,
+				     GtkTreeIter *iter,
+				     gpointer data)
+{
+  GncTreeModelAccount *model;
+  Account *account;
+  filter_user_data *fd = data;
+
+  g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
+
+  model = GNC_TREE_MODEL_ACCOUNT (tree_model);
+  account = gnc_tree_model_account_get_account (model, iter);
+  return fd->user_fn(account, fd->user_data);
+}
+
 /*
  * Set an eggtreemodel visible filter on this account.  This filter will be
  * called for each account that the tree is about to show, and the
@@ -499,17 +629,26 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
  */
 void
 gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view, 
-				  EggTreeModelFilterVisibleFunc  func,
-				  gpointer                       data,
-				  GtkDestroyNotify               destroy)
+				  gnc_tree_view_account_filter_func func,
+				  gpointer data,
+				  GtkDestroyNotify destroy)
 {
   GtkTreeModel *filter_model;
+  filter_user_data *fd = data;
 
   ENTER("view %p, filter func %p, data %p, destroy %p",
 	account_view, func, data, destroy);
+
+  fd = g_malloc(sizeof(filter_user_data));
+  fd->user_fn      = func;
+  fd->user_data    = data;
+  fd->user_destroy = destroy;
+
   filter_model = gtk_tree_view_get_model (GTK_TREE_VIEW (account_view));
   egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (filter_model),
-					  func, data, destroy);
+					  gnc_tree_view_account_filter_helper,
+					  fd,
+					  gnc_tree_view_account_filter_destroy);
 
   /* Whack any existing levels. The top two levels have been created
    * before this routine can be called. */
@@ -565,7 +704,7 @@ gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
 
     ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
-
+    g_return_val_if_fail (path != NULL, NULL);
     
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     if (!gtk_tree_model_get_iter (model, &iter, path)) {
@@ -684,9 +823,12 @@ get_selected_accounts_helper (GtkTreeModel *model,
 			      gpointer data)
 {
   GList **return_list = data;
+  GtkTreeIter child_iter;
   Account *account;
 
-  account = iter->user_data;
+  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (model),
+						    &child_iter, iter);
+  account = child_iter.user_data;
   *return_list = g_list_append(*return_list, account);
 }
 
@@ -761,9 +903,89 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
   }
 }
 
+/*
+ * Selects all sub-accounts of an acccount.
+ */
+void
+gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
+					  Account *account)
+{
+  GtkTreeModel *f_model;
+  GtkTreeSelection *selection;
+  GtkTreePath *fp_account, *fp_start, *fp_end;
+  GtkTreeIter fi_account, fi_start, fi_end;
+  gint num_children;
+
+  ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
+
+  if (account == NULL) {
+    LEAVE("no account");
+    return;
+  }
+
+  if (!gnc_tree_view_account_get_iter_from_account (view, account, &fi_account)) {
+    LEAVE("view_get_iter_from_account failed");
+    return;
+  }
+
+  /* Any children? */
+  f_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  num_children = gtk_tree_model_iter_n_children(f_model, &fi_account);
+  if (num_children == 0) {
+    LEAVE("no children");
+    return;
+  }
+
+  /* Expand the tree.  Required for selection to work */
+  fp_account = gtk_tree_model_get_path (f_model, &fi_account);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW(view), fp_account, TRUE);
+
+  /* compute start/end paths */
+  gtk_tree_model_iter_nth_child (f_model, &fi_start, &fi_account, 0);
+  gtk_tree_model_iter_nth_child (f_model, &fi_end, &fi_account, num_children - 1);
+  fp_start = gtk_tree_model_get_path (f_model, &fi_start);
+  fp_end = gtk_tree_model_get_path (f_model, &fi_end);
+
+  /* select everything between */
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  gtk_tree_selection_select_range (selection, fp_start, fp_end);
+
+  /* clean up */
+  gtk_tree_path_free(fp_start);
+  gtk_tree_path_free(fp_end);
+  gtk_tree_path_free(fp_account);
+  LEAVE(" ");
+  return;
+}
+
+/*
+ * Retrieve the account currently under the cursor.
+ */
+Account *
+gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view)
+{
+    GtkTreeModel *f_model;
+    GtkTreePath *f_path;
+    Account *account;
+
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
+
+    f_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+    gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &f_path, NULL);
+    if (f_path) {
+      account = gnc_tree_view_account_get_account_from_path (view, f_path);
+      gtk_tree_path_free(f_path);
+    } else {
+      account = NULL;
+    }
+    LEAVE("account %p (%s)", account, xaccAccountGetName (account));
+    return account;
+}
+
 
 /************************************************************/
-/*           Account Tree View Get/Set Functions            */
+/*         Account Tree View Add Column Functions           */
 /************************************************************/
 
 static void

@@ -43,9 +43,6 @@ Main Window
     Print <- remove ?
   Edit
     Style Sheets
-    Tax Options - Lots 'o errors
-  Actions
-    Close Books
   Reports (all)
 
 Register Window
@@ -57,10 +54,6 @@ Register Window
     Void Transaction
     Unvoid Transaction
     Reverse Transaction
-    Find (on tools, same as account tree)
-  View
-    Style
-      Double Line - Initial state wrong
   Actions
     Check and Repair (all)
   Reports (all)

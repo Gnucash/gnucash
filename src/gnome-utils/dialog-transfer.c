@@ -38,7 +38,6 @@
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "messages.h"
@@ -401,26 +400,19 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
 }
 
 static gboolean
-gnc_xfer_dialog_show_inc_exp_visible_cb (GtkTreeModel *tree_model,
-					 GtkTreeIter *iter,
+gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
 					 gpointer data)
 {
-  GncTreeModelAccount *model;
   GtkCheckButton *show_button;
   GNCAccountType type;
-  Account *account;
 
-  g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
   g_return_val_if_fail (GTK_IS_CHECK_BUTTON (data), FALSE);
 
-  model = GNC_TREE_MODEL_ACCOUNT (tree_model);
   show_button = GTK_CHECK_BUTTON (data);
-
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_button))) {
     return TRUE;
   }
 
-  account = gnc_tree_model_account_get_account (model, iter);
   type = xaccAccountGetType(account);
   return ((type != INCOME) && (type != EXPENSE)); 
 }
