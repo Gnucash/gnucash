@@ -122,7 +122,7 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] = {
 typedef struct
 {
         FreqSpec        *fs;              /* FreqSpec we're parsing into. */
-        GNCSession      *session;         /* Session we're loading into. */
+        GNCBook         *book;            /* Book we're loading into. */
 
         /* fields used in the union of unions... :) */
         GDate                 once_day;     /* once */
@@ -138,7 +138,7 @@ fspd_init( fsParseData *fspd )
 {
         fspd->fs      = NULL;
         fspd->list    = NULL;
-        fspd->session = NULL;
+        fspd->book    = NULL;
         fspd->interval
                 = fspd->offset
                 = fspd->day
@@ -398,7 +398,7 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
         fsParseData *fspd = data;
         FreqSpec        *fs;
         gboolean        successful;
-        fs = dom_tree_to_freqSpec( node, fspd->session );
+        fs = dom_tree_to_freqSpec( node, fspd->book );
         if ( fs == NULL )
                 return FALSE;
         fspd->list = g_list_append( fspd->list, fs );
@@ -558,7 +558,7 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
         sixtp_gdv2                *globaldata = (sixtp_gdv2*)global_data;
 
         fspd_init( &fspd );
-        fspd.session = globaldata->session;
+        fspd.book = globaldata->book;
 
         /* this won't actually get invoked [FreqSpecs aren't top-level
            elements]; see dom_tree_to_freqSpec(), below. */
@@ -570,7 +570,7 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
 
         g_return_val_if_fail( tree, FALSE );
 
-        fspd.fs = xaccFreqSpecMalloc(globaldata->session);
+        fspd.fs = xaccFreqSpecMalloc(globaldata->book);
         successful = dom_tree_generic_parse( tree, fs_dom_handlers, &fspd );
         if (!successful) {
                 xmlElemDump( stdout, NULL, tree );
@@ -589,15 +589,15 @@ gnc_freqSpec_sixtp_parser_create(void)
 }
 
 FreqSpec*
-dom_tree_to_freqSpec(xmlNodePtr node, GNCSession *session)
+dom_tree_to_freqSpec(xmlNodePtr node, GNCBook *book)
 {
     gboolean        successful;
     fsParseData        fspd;
 
     fspd_init( &fspd );
-    fspd.session = session;
+    fspd.book = book;
 
-    fspd.fs = xaccFreqSpecMalloc(session);
+    fspd.fs = xaccFreqSpecMalloc(book);
     successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );
     if ( !successful ) {
         xmlElemDump(stdout, NULL, node);

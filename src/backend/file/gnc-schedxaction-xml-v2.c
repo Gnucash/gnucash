@@ -26,6 +26,9 @@
 #include <glib.h>
 #include <string.h>
 
+#include "Group.h"
+#include "SchedXactionP.h"
+
 #include "gnc-xml-helper.h"
 #include "gnc-engine-util.h"
 
@@ -42,7 +45,6 @@
 #include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
-#include "SchedXactionP.h"
 
 static short module = MOD_SX;
 
@@ -216,7 +218,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 struct sx_pdata
 {
   SchedXaction *sx;
-  GNCSession *session;
+  GNCBook *book;
 };
 
 static
@@ -358,7 +360,7 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 
     g_return_val_if_fail( node, FALSE );
 
-    fs = dom_tree_to_freqSpec( node, pdata->session );
+    fs = dom_tree_to_freqSpec( node, pdata->book );
     xaccSchedXactionSetFreqSpec( sx, fs );
 
     return TRUE;
@@ -395,7 +397,7 @@ sx_templ_acct_handler( xmlNodePtr node, gpointer sx_pdata)
     return FALSE;
   }
 
-  sx->template_acct = xaccAccountLookup(templ_acct_guid, pdata->session);
+  sx->template_acct = xaccAccountLookup(templ_acct_guid, pdata->book);
   g_free(templ_acct_guid);
 
   return TRUE;
@@ -469,7 +471,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     g_return_val_if_fail( tree, FALSE );
 
-    sx = xaccSchedXactionMalloc( gdata->sessiondata );
+    sx = xaccSchedXactionMalloc( gdata->bookdata );
 
     /* FIXME: this should be removed somewhere near 1.8 release time. */
     {
@@ -482,7 +484,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     }
 
     sx_pdata.sx = sx;
-    sx_pdata.session = gdata->sessiondata;
+    sx_pdata.book = gdata->bookdata;
 
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
 
@@ -502,7 +504,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             sixtp_gdv2 *sixdata = gdata->parsedata;
             GNCBook *book;
 
-            book = gnc_session_get_book (sixdata->session);
+            book = sixdata->book;
 
             /* We're dealing with a pre-200107<near-end-of-month> rgmerk
                change re: storing template accounts. */
@@ -558,7 +560,7 @@ tt_act_handler( xmlNodePtr node, gpointer data )
         Account *acc;
         gnc_commodity *com;
 
-        acc = dom_tree_to_account(node, txd->session);
+        acc = dom_tree_to_account(node, txd->book);
 
         if ( acc == NULL ) {
                 return FALSE;
@@ -594,7 +596,7 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
         gnc_template_xaction_data *txd = data;
         Transaction        *trn;
 
-        trn = dom_tree_to_transaction( node, txd->session );
+        trn = dom_tree_to_transaction( node, txd->book );
 
         if ( trn == NULL ) {
                 return FALSE;
@@ -626,11 +628,11 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         xmlNodePtr achild;
         xmlNodePtr tree = data_for_children;
         gxpf_data  *gdata = global_data;
-        GNCSession *session = gdata->sessiondata;
+        GNCBook    *book = gdata->bookdata;
         GList      *n;
         gnc_template_xaction_data txd;
 
-        txd.session = session;
+        txd.book = book;
         txd.accts = NULL;
         txd.transactions = NULL;
 

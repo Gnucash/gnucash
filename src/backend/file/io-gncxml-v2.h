@@ -33,10 +33,11 @@
 
 #include <glib.h>
 
-#include "gnc-session.h"
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
@@ -60,7 +61,7 @@ typedef struct
 
 typedef struct
 {
-    GNCSession *session;
+    GNCBook *book;
     load_counter counter;
     void (*countCallback)(const char *type, load_counter counter);
 } sixtp_gdv2;
@@ -75,7 +76,7 @@ typedef struct
 {
 	GList	*accts;
 	GList	*transactions;
-        GNCSession *session;
+        GNCBook *book;
 } gnc_template_xaction_data;
 
 /* read in an account group from a file */

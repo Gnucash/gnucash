@@ -87,7 +87,7 @@ static short module = MOD_ENGINE;
 */
 
 static gboolean
-price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCSession *session)
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCBook *book)
 {
   if(!p || !sub_node) return FALSE;
 
@@ -98,11 +98,11 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCSession *session)
     gnc_price_set_guid(p, c);
     g_free(c);
   } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
-    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_commodity(p, c);
   } else if(safe_strcmp("price:currency", sub_node->name) == 0) {
-    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, session);
+    gnc_commodity *c = dom_tree_to_commodity_ref(sub_node, book);
     if(!c) return FALSE;
     gnc_price_set_currency(p, c);
   } else if(safe_strcmp("price:time", sub_node->name) == 0) {
@@ -144,7 +144,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
   xmlNodePtr child;
   GNCPrice *p = NULL;
   gxpf_data *gdata = global_data;
-  GNCSession *session = gdata->sessiondata;
+  GNCBook *book = gdata->bookdata;
 
   /* we haven't been handed the *top* level node yet... */
   if(parent_data) return TRUE;
@@ -156,7 +156,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
   if(price_xml->prev) { ok = FALSE; goto cleanup_and_exit; }
   if(!price_xml->xmlChildrenNode) { ok = FALSE; goto cleanup_and_exit; }
 
-  p = gnc_price_create(session);
+  p = gnc_price_create(book);
   if(!p) { ok = FALSE; goto cleanup_and_exit; }
   
   for(child = price_xml->xmlChildrenNode; child; child = child->next) {
@@ -165,7 +165,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
     case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
-      if(!price_parse_xml_sub_node(p, child, session)) {
+      if(!price_parse_xml_sub_node(p, child, book)) {
         ok = FALSE;
         goto cleanup_and_exit;
       }

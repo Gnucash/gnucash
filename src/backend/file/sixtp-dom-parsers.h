@@ -32,7 +32,8 @@
 
 #include "date.h"
 #include "gnc-commodity.h"
-#include "gnc-session.h"
+#include "gnc-book.h"
+#include "kvp_frame.h"
 
 #include "GNCId.h"
 
@@ -40,10 +41,10 @@
 
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
-gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCSession *session);
+gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
 
-FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCSession *session );
+FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCBook *book);
 
 Timespec* dom_tree_to_timespec(xmlNodePtr node);
 GDate* dom_tree_to_gdate(xmlNodePtr node);
@@ -67,8 +68,8 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
-Account* dom_tree_to_account(xmlNodePtr node, GNCSession *session);
-Transaction* dom_tree_to_transaction(xmlNodePtr node, GNCSession *session);
+Account* dom_tree_to_account(xmlNodePtr node, GNCBook *book);
+Transaction* dom_tree_to_transaction(xmlNodePtr node, GNCBook *book);
 
 struct dom_tree_handler
 {
