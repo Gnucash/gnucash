@@ -178,6 +178,7 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   va_end (ap);
 
   fprintf (fout, "\n");
+  fflush (fout);
 }
 
 void
@@ -216,6 +217,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   va_end (ap);
 
   fprintf (fout, "\n");
+  fflush (fout);
 }
 
 void
@@ -249,6 +251,7 @@ gnc_report_clock_total (int clockno,
   va_end (ap);
 
   fprintf (fout, "\n");
+  fflush (fout);
 }
 
 gboolean
