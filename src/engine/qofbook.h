@@ -67,6 +67,8 @@ typedef struct _QofBook       QofBook;
 /** GList of QofBook */
 typedef GList                 QofBookList;
 
+typedef void (*QofBookFinalCB) (QofBook *, gpointer key, gpointer user_data);
+
 /** Register the book object with the QOF object system. */
 gboolean qof_book_register (void);
                                                                                 
@@ -90,18 +92,32 @@ QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 
-/** \return The kvp data for the book */
+/** \return The kvp data for the book.
+ *  Note that the boom KVP data is persistant, and is stored/retrevied
+ *  from the file/database.  Thus, the book KVP is the correct place to
+ *  store data that needs to be persistant accross sessions (or shared
+ *  between multiple users).  To store application runtime data, use
+ *  qof_book_set_data() isntead.
+ */
 KvpFrame   * qof_book_get_slots (QofBook *book);
 
 /** The qof_book_set_data() allows arbitrary pointers to structs 
  *    to be stored in QofBook. This is the "prefered" method for 
- *    extending QofBook to hold new data types.
+ *    extending QofBook to hold new data types.  This is also
+ *    the ideal location to store other arbitrary runtime data 
+ *    that the application may need.
  *
- * XXX FIXME: we need to add a destroy callback, so that when the
- * book gets destroyed, the user gets notified and thus has a chance
- * to clean up.
+ *    The book data differs from the book KVP in that the contents
+ *    of the book KVP are persistant (are saved and restored to file 
+ *    or database), whereas the data pointers exist only at runtime.
  */
 void qof_book_set_data (QofBook *book, const char *key, gpointer data);
+
+/** Same as qof_book_set_data(), except that the callback will be called
+ *  when the book is destroyed.  The argument to the callback will be 
+ *  the book followed by the data pointer.
+ */
+void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
 
 /** Retreives arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);

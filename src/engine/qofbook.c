@@ -69,6 +69,7 @@ qof_book_init (QofBook *book)
   book->kvp_data = kvp_frame_new ();
   
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+  book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
   
   book->book_open = 'y';
   book->version = 0;
@@ -98,21 +99,35 @@ coll_destroy(gpointer key, gpointer value, gpointer not_used)
   return TRUE;
 }
 
+static void
+book_final (gpointer key, gpointer value, gpointer booq)
+{
+  QofBookFinalCB cb = value;
+  QofBook *book = booq;
+
+  gpointer user_data = g_hash_table_lookup (book->data_tables, key);
+  (*cb) (book, key, user_data);
+}
+
 void
 qof_book_destroy (QofBook *book) 
 {
   if (!book) return;
+  ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-
-  ENTER ("book=%p", book);
   gnc_engine_force_event (&book->entity, GNC_EVENT_DESTROY);
+
+  /* Call the list of finalizers, let them do thier thing. 
+   * Do this before tearing into the rest of the book.
+   */
+  g_hash_table_foreach (book->data_table_finalizers, book_final, book);
 
   qof_object_book_end (book);
 
   kvp_frame_delete (book->kvp_data);
 
-  /* FIXME: Make sure the data_table is empty */
+  g_hash_table_destroy (book->data_table_finalizers);
   g_hash_table_destroy (book->data_tables);
 
   qof_entity_release (&book->entity);
@@ -201,19 +216,22 @@ void qof_book_kvp_changed (QofBook *book)
 
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
 /* XXX if data is NULL, we should remove the key from the hash table!
- *
- * XXX We need some design comments:  an equivalent storage mechanism
- * would have been to give each item a GUID, store the GUID in a kvp frame,
- * and then do a GUID lookup to get the pointer to the actual object.
- * Of course, doing a kvp lookup followed by a GUID lookup would be 
- * a good bit slower, but may be that's OK? In most cases, book data
- * is accessed only infrequently?  --linas
  */
 void 
 qof_book_set_data (QofBook *book, const char *key, gpointer data)
 {
   if (!book || !key) return;
   g_hash_table_insert (book->data_tables, (gpointer)key, data);
+}
+
+void 
+qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB cb)
+{
+  if (!book || !key) return;
+  g_hash_table_insert (book->data_tables, (gpointer)key, data);
+
+  if (!cb) return;
+  g_hash_table_insert (book->data_table_finalizers, (gpointer)key, cb);
 }
 
 gpointer 

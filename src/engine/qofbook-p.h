@@ -62,6 +62,9 @@ struct _QofBook
    */
   GHashTable *data_tables;
 
+  /** Hash table of destroy callbacks for the data table. */
+  GHashTable *data_table_finalizers;
+
   /** state flag: 'y' means 'open for editing', 
    * 'n' means 'book is closed'  
    */
