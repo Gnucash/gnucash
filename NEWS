@@ -1,5 +1,10 @@
 Version history:
 ------- -------
+ 1.4.10 - 18 March 2001
+         o Brazilian Portuguese, Danish,
+           Norwegian, and Ukranian translations
+         o bug fixes
+
  1.4.10 - 28 January 2001
          o updated translations
          o support for Greek Drachma as Euro currency
