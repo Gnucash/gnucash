@@ -511,7 +511,7 @@ xaccAccountRecomputeCostBasis( Account * acc )
        xaccQueuePushHead (q, split);
     } else 
     if (0.0 > amt) {
-       xaccQueuePopTailShares (q, amt);
+       xaccQueuePopTailShares (q, -amt);
     }
     split->cost_basis = xaccQueueGetValue (q);
 

@@ -356,7 +356,7 @@ double
 xaccQueueGetShares (Queue *q)
 {
    Split **list;
-   int shrs = 0.0;
+   double shrs = 0.0;
    int i, len, tail;
    if (!q) return 0.0;
 
@@ -376,20 +376,20 @@ double
 xaccQueueGetValue (Queue *q)
 {
    Split **list;
-   int shrs = 0.0;
+   double val = 0.0;
    int i, len, tail;
    if (!q) return 0.0;
 
-   shrs += q->head_amount * q->head_price;
-   shrs += q->tail_amount * q->tail_price;
+   val += q->head_amount * q->head_price;
+   val += q->tail_amount * q->tail_price;
    
    len = q->head_split - q->tail_split + 1;
    list = q->split_list;
    tail = q->tail_split;
    for (i=0; i<len; i++) {
-      shrs += list[i]->damount * list[i]->share_price;
+      val += list[i]->damount * list[i]->share_price;
    }
-   return shrs;
+   return val;
 }
 
 /* ================ END OF FILE  ==================== */
