@@ -362,7 +362,7 @@ add_closing_balances (AccountGroup *closed_grp,
 
          baln = xaccAccountGetBalance (candidate);
 
-         /* find the equity account into which we'll poke the 
+         /* Find the equity account into which we'll poke the 
           * balancing transaction */
          if (NULL == equity_account)
          {
@@ -374,9 +374,15 @@ add_closing_balances (AccountGroup *closed_grp,
          }
 
          /* -------------------------------- */
-         /* create the balancing transaction */
+         /* Create the balancing transaction */
          trans = xaccMallocTransaction (open_book);
          xaccTransBeginEdit (trans);
+
+         xaccTransSetDatePostedTS (trans, post_date);
+         xaccTransSetDateEnteredTS (trans, date_entered);
+         xaccTransSetDescription (trans, desc);
+         xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
+
          st = xaccMallocSplit(open_book);
          xaccAccountInsertSplit (twin, st);
          xaccTransAppendSplit(trans, st);
@@ -385,15 +391,12 @@ add_closing_balances (AccountGroup *closed_grp,
          xaccAccountInsertSplit (equity, se);
          xaccTransAppendSplit(trans, se);
 
+         xaccSplitSetAmount (st, baln);
          xaccSplitSetValue (st, baln);
+         xaccSplitSetAmount (se, gnc_numeric_neg(baln));
          xaccSplitSetValue (se, gnc_numeric_neg(baln));
 
-         xaccTransSetDatePostedTS (trans, post_date);
-         xaccTransSetDateEnteredTS (trans, date_entered);
-         xaccTransSetDescription (trans, desc);
-         xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
-
-         /* add KVP data showing where the balancing 
+         /* Add KVP data showing where the balancing 
           * transaction came from */
          cwd = xaccTransGetSlots (trans);
          cwd = kvp_frame_get_frame_slash (cwd, "/book/");
@@ -407,7 +410,7 @@ add_closing_balances (AccountGroup *closed_grp,
          xaccTransCommitEdit (trans);
 
          /* -------------------------------- */
-         /* add KVP to closed account, indicating where the
+         /* Add KVP to closed account, indicating where the
           * balance was carried forward to. */
          cwd = xaccAccountGetSlots (candidate);
          cwd = kvp_frame_get_frame_slash (cwd, "/book/");
@@ -416,11 +419,11 @@ add_closing_balances (AccountGroup *closed_grp,
          kvp_frame_set_slot_nc (cwd, "balancing-trans", vvv);
       }
 
-      /* we left an open dangling above ... */
+      /* We left an open dangling above ... */
       xaccAccountCommitEdit (candidate);
       xaccAccountCommitEdit (twin);
 
-      /* recurse down to the children */
+      /* Recurse down to the children */
       childs = xaccAccountGetChildren(candidate);
       if (childs) 
       {
@@ -435,7 +438,7 @@ add_closing_balances (AccountGroup *closed_grp,
 }
 
 /* ================================================================ */
-/* split a book into two by date */
+/* Split a book into two by date */
 
 QofBook * 
 gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
