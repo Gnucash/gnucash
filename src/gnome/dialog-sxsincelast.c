@@ -53,6 +53,7 @@
 #include <gnome.h>
 #include <glib.h>
 
+#include "date.h"
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"
@@ -124,15 +125,6 @@
 
 #define COERCE_VOID_TO_GBOOLEAN(x) ((gboolean)(*#x))
 
-#ifdef HAVE_LANGINFO_D_FMT
-#  define GNC_D_FMT (nl_langinfo (D_FMT))
-#else
-#  define GNC_D_FMT "%Y-%m-%d"
-#endif
-
-#define GNC_D_WIDTH 25
-#define GNC_D_BUF_WIDTH 26
-
 #define IGNORE_TEXT         "Ignored"
 #define POSTPONE_TEXT       "Postponed"
 #define READY_TEXT          "Ready to create"
@@ -152,8 +144,6 @@ typedef enum {
 
 /**
  * The states a to-be-created SX can be in...
- *
-
  * TO_CREATE   : The SX is ready to be created, depending on variable-binding
  *               requirements.
  * IGNORE      : Drop the SX on the floor forever.
@@ -1139,8 +1129,8 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 }
                 /* add to the postponed list. */
                 { 
-                        char tmpBuf[50];
-                        g_date_strftime( tmpBuf, 49, "%c", tci->date );
+                        char tmpBuf[ MAX_DATE_LENGTH+1 ];
+                        printGDate( tmpBuf, tci->date );
                         DEBUG( "Adding defer instance on %s for %s",
                                tmpBuf,
                                xaccSchedXactionGetName( tci->parentTCT->sx ) );
@@ -1236,8 +1226,8 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
                                               andequal_numerics_set,
                                               &allVarsBound );
                         if ( !allVarsBound ) {
-                                char tmpBuf[GNC_D_BUF_WIDTH];
-                                g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, tci->date );
+                                char tmpBuf[ MAX_DATE_LENGTH+1 ];
+                                printGDate( tmpBuf, tci->date );
                                 /* FIXME: this should be better-presented to the user. */
                                 DEBUG( "SX %s on date %s still has unbound variables.",
                                        xaccSchedXactionGetName(tci->parentTCT->sx), tmpBuf );
@@ -1789,8 +1779,9 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                                                   tci->varBindings );
                         }
 
-                        rowText[0] = g_new0( char, GNC_D_WIDTH );
-                        g_date_strftime( rowText[0], GNC_D_WIDTH, GNC_D_FMT, tci->date );
+                        rowText[0] = g_new0( char, MAX_DATE_LENGTH+1 );
+                        printGDate( rowText[0], tci->date );
+                        
 
                         switch ( tci->state ) {
                         case TO_CREATE:
@@ -1873,9 +1864,8 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                       instances = instances->next ) {
                         rit = (reminderInstanceTuple*)instances->data;
 
-                        rowText[0] = g_new0( gchar, GNC_D_WIDTH ); 
-                        g_date_strftime( rowText[0],
-                                         GNC_D_WIDTH, GNC_D_FMT, rit->occurDate );
+                        rowText[0] = g_new0( gchar, MAX_DATE_LENGTH+1 );
+                        printGDate( rowText[0], rit->occurDate );
                         rowText[1] = "";
                         rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size? */
                         sprintf( rowText[2], "%d",
@@ -1917,7 +1907,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                                               SX_OBSOLETE_CLIST ));
 
         tmp_str = g_string_new(NULL);
-        rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
+        //rowtext[2] = g_new0(gchar, MAX_DATE_LENGTH+1 ); 
 
         gtk_clist_freeze( cl );
         gtk_clist_clear( cl );
@@ -1935,7 +1925,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                 xaccFreqSpecGetFreqStr( fs, tmp_str );
                 rowtext[1] = tmp_str->str;
 
-                strcpy( rowtext[2], _( OBSOLETE_TEXT ) );
+                rowtext[2] = g_strdup( _(OBSOLETE_TEXT) );
 
                 gtk_clist_insert( cl, row, rowtext );
                 gtk_clist_set_row_data( cl, row, tdt );
@@ -3431,11 +3421,11 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
 {
         GString *msg;
         reminderInstanceTuple *rit;
-        static char tmpBuf[GNC_D_BUF_WIDTH];
+        static char tmpBuf[ MAX_DATE_LENGTH+1 ];
 
         rit = (reminderInstanceTuple*)data;
         msg = (GString*)ud;
-        g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, rit->occurDate );
+        printGDate( tmpBuf, rit->occurDate );
         g_string_sprintfa( msg, tmpBuf );
         g_string_sprintfa( msg, "\n" );
 }

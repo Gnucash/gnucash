@@ -1,5 +1,14 @@
 2002-11-17  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-sxsincelast.c: 
+	* src/gnome/dialog-scheduledxaction.c:
+	Use printGDate() when we need to print dates; fixes Bug#96477.
+
+	* src/engine/date.[ch] (printGDate): Convenience wrapper around
+	printDate.
+
+2002-11-17  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/druid-loan.c (ld_calc_current_instance_num): Do some
 	work to figure out the correct current-instance-number for
 	non-monthly Loan-Repayment SXes.

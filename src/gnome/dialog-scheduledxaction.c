@@ -27,6 +27,7 @@
 #include <locale.h>
 #include <time.h>
 
+#include "date.h"
 #include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "dialog-scheduledxaction.h"
@@ -88,12 +89,6 @@ static short module = MOD_SX;
 
 #define EX_CAL_NUM_MONTHS 6
 #define EX_CAL_MO_PER_COL 2
-
-#ifdef HAVE_LANGINFO_D_FMT
-#  define GNC_D_FMT (nl_langinfo (D_FMT))
-#else
-#  define GNC_D_FMT "%Y-%m-%d"
-#endif
 
 #define GNC_D_WIDTH 25
 #define GNC_D_BUF_WIDTH 26
@@ -1439,8 +1434,8 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         {
                 gd = xaccSchedXactionGetLastOccurDate( sxed->sx );
                 if ( g_date_valid( gd ) ) {
-                        gchar dateBuf[ GNC_D_BUF_WIDTH ];
-                        g_date_strftime( dateBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
+                        gchar dateBuf[ MAX_DATE_LENGTH+1 ];
+                        printGDate( dateBuf, gd );
                         gtk_label_set_text( sxed->lastOccurLabel, dateBuf );
                 } else {
                         gtk_label_set_text( sxed->lastOccurLabel, _( "(never)" ) );
@@ -1857,10 +1852,12 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         if ( instList == NULL ) {
                 g_string_sprintf( nextDate, "not scheduled" );
         } else {
-                char tmpBuf[26];
+                char tmpBuf[ MAX_DATE_LENGTH+1 ];
+                char dowBuf[ 25 ]; /* <- fixme: appropriate length? */
                 nextInstDate = (GDate*)instList->data;
-                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", nextInstDate );
-                g_string_sprintf( nextDate, "%s", tmpBuf );
+                printGDate( tmpBuf, nextInstDate );
+                g_date_strftime( dowBuf, 25, "%A", nextInstDate );
+                g_string_sprintf( nextDate, "%s (%s)", tmpBuf, dowBuf );
         }
 
         /* Add markings to GncDenseCal */
