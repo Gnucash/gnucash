@@ -756,7 +756,8 @@ gnc_session_destroy (GNCSession *session)
   }
 
   session->books  = NULL;
-  current_session = NULL;
+  if (session == current_session)
+    current_session = NULL;
 
   xaccLogEnable();
 
