@@ -27,7 +27,7 @@
 #include <guile/gh.h>
 
 #include "dialog-progress.h"
-#include "glade-gnc-dialogs.h"
+#include "dialog-utils.h"
 #include "messages.h"
 
 
@@ -158,8 +158,11 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 {
   GtkWidget *dialog;
   GtkObject *tdo;
+  GladeXML  *xml;
 
-  dialog = create_Progress_Dialog();
+  xml = gnc_glade_xml_new ("progress.glade", "Progress Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Progress Dialog");
   progress->dialog = dialog;
   tdo = GTK_OBJECT (dialog);
 
@@ -172,15 +175,15 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 
   gtk_signal_connect (tdo, "destroy", GTK_SIGNAL_FUNC (destroy_cb), progress);
 
-  progress->heading_label = gtk_object_get_data(tdo, "heading_label");
+  progress->heading_label = glade_xml_get_widget (xml, "heading_label");
   gtk_widget_hide(progress->heading_label);
 
-  progress->progress_bar = gtk_object_get_data(tdo, "progress_bar");
+  progress->progress_bar = glade_xml_get_widget (xml, "progress_bar");
   gtk_progress_set_show_text (GTK_PROGRESS(progress->progress_bar), TRUE);
   gtk_progress_configure (GTK_PROGRESS(progress->progress_bar),
                           0.0, 0.0, 100.0);
 
-  progress->ok_button = gtk_object_get_data(tdo, "ok_button");
+  progress->ok_button = glade_xml_get_widget (xml, "ok_button");
 
   gtk_signal_connect(GTK_OBJECT(progress->ok_button), "clicked",
                      GTK_SIGNAL_FUNC(ok_cb), progress);
@@ -188,7 +191,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
   if (!progress->use_ok_button)
     gtk_widget_hide (progress->ok_button);
 
-  progress->cancel_button = gtk_object_get_data(tdo, "cancel_button");
+  progress->cancel_button = glade_xml_get_widget (xml, "cancel_button");
 
   gtk_signal_connect(GTK_OBJECT(progress->cancel_button), "clicked",
                      GTK_SIGNAL_FUNC(cancel_cb), progress);

@@ -65,8 +65,6 @@
 
 #include "File.h"
 #include "dialog-utils.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "glade-gnc-dialogs.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-html-history.h"
@@ -524,10 +522,9 @@ show_search_results(gnc_help_window * help, const char * matches,
 }
 
 
-void
+static void
 gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
-  GtkObject       * hw   = data;
-  gnc_help_window * help = gtk_object_get_data(hw, "help_window_struct");
+  gnc_help_window * help = data;
   char            * search_string = 
     gtk_entry_get_text(GTK_ENTRY(help->search_entry));
   DBT             key, value;
@@ -551,11 +548,10 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
   }
 }
 
-void
+static void
 gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data) {
 #if 0
-  GtkObject       * hw   = data;
-  gnc_help_window * help = gtk_object_get_data(hw, "help_window_struct");
+  gnc_help_window * help = data;
 #endif
 
   printf("help on help\n");
@@ -591,7 +587,6 @@ gnc_help_window *
 gnc_help_window_new (void) {
   
   gnc_help_window * help = g_new0(gnc_help_window, 1);
-  GtkObject       * tlo;
   char            * indexfile;
   GnomeUIInfo     toolbar_data[] = 
   {
@@ -663,25 +658,33 @@ gnc_help_window_new (void) {
     },
     GNOMEUIINFO_END
   };
-  
-  help->toplevel = create_Help_Window();
-  tlo = GTK_OBJECT(help->toplevel);
+  GladeXML *xml;
+
+  xml = gnc_glade_xml_new ("help.glade", "Help Window");
+
+  help->toplevel = glade_xml_get_widget (xml, "Help Window");
 
   gnc_register_gui_component (WINDOW_HELP_CM_CLASS, NULL, close_handler, help);
 
-  help->toolbar      = gtk_object_get_data(tlo, "help_toolbar");
-  help->statusbar    = gtk_object_get_data(tlo, "help_statusbar");
-  help->statusbar_hbox = gtk_object_get_data(tlo, "statusbar_hbox");
-  help->html_vbox    = gtk_object_get_data(tlo, "help_html_vbox");
-  help->topics_tree  = gtk_object_get_data(tlo, "help_topics_tree");
-  help->paned        = gtk_object_get_data(tlo, "help_paned");
-  help->search_entry = gtk_object_get_data(tlo, "help_search_entry");
-  help->search_results = gtk_object_get_data(tlo, "search_results_list");
-  help->type_pixmap  = gtk_object_get_data(tlo, "file_type_pixmap");
-  
+  help->toolbar        = glade_xml_get_widget (xml, "help_toolbar");
+  help->statusbar      = glade_xml_get_widget (xml, "help_statusbar");
+  help->statusbar_hbox = glade_xml_get_widget (xml, "statusbar_hbox");
+  help->html_vbox      = glade_xml_get_widget (xml, "help_html_vbox");
+  help->topics_tree    = glade_xml_get_widget (xml, "help_topics_tree");
+  help->paned          = glade_xml_get_widget (xml, "help_paned");
+  help->search_entry   = glade_xml_get_widget (xml, "help_search_entry");
+  help->search_results = glade_xml_get_widget (xml, "search_results_list");
+  help->type_pixmap    = glade_xml_get_widget (xml, "file_type_pixmap");
+
   help->html         = gnc_html_new();
 
-  gtk_object_set_data(tlo, "help_window_struct", (gpointer)help);
+  glade_xml_signal_connect_data
+    (xml, "gnc_help_window_search_button_cb",
+     GTK_SIGNAL_FUNC (gnc_help_window_search_button_cb), help);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_help_window_search_help_button_cb",
+     GTK_SIGNAL_FUNC (gnc_help_window_search_help_button_cb), help);
 
   gnome_app_fill_toolbar(GTK_TOOLBAR(help->toolbar), toolbar_data, NULL);
   gtk_box_pack_start(GTK_BOX(help->html_vbox), 

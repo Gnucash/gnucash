@@ -71,8 +71,7 @@
                         (N_ "Test progress dialog")
                         (list "Extensions" "")
                         (lambda ()
-                          (let ((dialog (gnc:progress-dialog-new
-                                         (gnc:get-ui-data) #f))
+                          (let ((dialog (gnc:progress-dialog-new #f #f))
                                 (canceled #f))
                             (gnc:progress-dialog-set-activity-mode dialog #t)
                             (gnc:progress-dialog-set-heading dialog #f)

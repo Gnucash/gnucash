@@ -1,5 +1,11 @@
 2001-06-13  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/extensions.scm: fix bug
+
+	* src/gnome/dialog-progress.c: use libglade
+
+	* src/gnome/window-help.c: use libglade
+
 	* src/gnome/dialog-utils.c (gnc_glade_lookup_widget): new func
 
 	* src/gnome/dialog-tax-info.c: use libglade

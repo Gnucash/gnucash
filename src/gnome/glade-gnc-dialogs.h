@@ -14,6 +14,3 @@ GtkWidget* create_Account_Dialog (void);
 GtkWidget* create_New_Commodity_Format_Druid (void);
 GtkWidget* create_QIF_Import_Druid (void);
 GtkWidget* create_Transfer_Dialog (void);
-GtkWidget* create_Progress_Dialog (void);
-GtkWidget* create_Help_Window (void);
-GtkWidget* create_Report_Window (void);
