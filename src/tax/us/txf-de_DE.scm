@@ -70,16 +70,50 @@
    (cons 'K77 #(none "77" "Umsätze land- und forstwirtschaftlicher Betriebe:: Lieferungen in das übrige Gemeinschaftsgebiet an Abnehmer mit USt-IdNr." 2 #f "77"))
    (cons 'K76 #(none "76" "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Bemessungsgrundlage)" 2 #f "76"))
    (cons 'K80 #(none "80" "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Steuer)" 1 #f "80"))
+
+   (cons 'K39 #(none "39" "Anrechnung (Abzug) der festgesetzten Sondervorauszahlung für Dauerfristverlängerung" 1 #f "39"))
+   (cons 'K83 #(none "83" "Verbleibende Umsatzsteuer-Vorauszahlung" 1 #f "83"))
+
    ))
 
 
+;; We use several formats; nr. 1 means Euro+Cent, nr. 2 means only full Euro
+
+;; Also, we abuse the "category-key" for now to store the Kennzahl as
+;; well. We are not yet sure what to use the "form" field for.
+
+;; Format: (name-source  form  description  format  multiple  category-key)
 (define txf-expense-categories
   (list
    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
 
-   (cons 'K91 #(none "91" "Steuerfreie innergemeinschaftliche Erwerbe" 2 #f "91"))
+   (cons 'K91 #(none "91" "Steuerfreie innergemeinschaftliche Erwerbe nach §4b UStG" 2 #f "91"))
+   (cons 'K97 #(none "97" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 16 v.H." 2 #f "97"))
+   (cons 'K93 #(none "93" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.H." 2 #f "93"))
+   (cons 'K95 #(none "95" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Bemessungsgrundlage)" 2 #f "95"))
+   (cons 'K98 #(none "98" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Steuer)" 1 #f "98"))
+   (cons 'K94 #(none "94" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Bemessungsgrundlage)" 2 #f "94"))
+   (cons 'K96 #(none "96" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Steuer)" 1 #f "96"))
+   (cons 'K42 #(none "42" "Lieferungen des ersten Abnehmers (§25b Abs. 2 UStG) bei innergemeinschaftlichen Dreiecksgeschäften" 2 #f "42"))
+
+   (cons 'K54 #(none "54" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet - zum Steuersatz von 16 v.H. (Bemessungsgrundlage)" 2 #f "54"))
+   (cons 'K55 #(none "55" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet - zum Steuersatz von 7 v.H. (Bemessungsgrundlage)" 2 #f "55"))
+   (cons 'K57 #(none "57" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet - zu anderen Steuersätzen (Bemessungsgrundlage)" 2 #f "57"))
+   (cons 'K45 #(none "45" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet - Nicht steuerbare Umsätze (Bemessungsgrundlage)" 2 #f "45"))
+
+   (cons 'K58 #(none "58" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet - zu anderen Steuersätzen (Steuer)" 1 #f "58"))
+   (cons 'K65 #(none "65" "Steuer infolge Wechsels der Besteuerungsart/-form" 1 #f "65"))
 
    (cons 'K66 #(none "66" "Vorsteuerbeträge aus Rechnungen von anderen Unternehmern" 1 #f "66"))
+   (cons 'K61 #(none "61" "Vorsteuerbeträge aus dem innergemeinschaftlichen Erwerb von Gegenständen" 1 #f "61"))
+   (cons 'K62 #(none "62" "Entrichtete Einfuhrumsatzsteuer" 1 #f "62"))
+   (cons 'K67 #(none "67" "Vorsteuerbeträge aus Leistungen im Sinne des $13b Abs. 1 UStG" 1 #f "67"))
+   (cons 'K63 #(none "63" "Vorsteuerbeträge, die nach allgemeinen Durchschnittssätzen berechnet sind" 1 #f "63"))
+   (cons 'K64 #(none "64" "Berichtigung des Vorsteuerabzugs" 1 #f "64"))
+   (cons 'K59 #(none "59" "Vorsteuerabzug für innergemeinschaftliche Lieferungen neuer Fahrzeuge außerhalb eines Unternehmens" 1 #f "59"))
+
+   (cons 'K69 #(none "69" "Steuerbeträge, die vom letzten Abnehmer eines innergemeinschaftlichen Dreiecksgeschäfts geschuldet werden" 1 #f "69"))
+
    ))
 
 
