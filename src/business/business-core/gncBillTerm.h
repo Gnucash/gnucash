@@ -33,6 +33,7 @@ typedef struct _gncBillTerm GncBillTerm;
 #include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "qofbook.h"
+#include "qofid.h"
 #include "qofinstance.h"
 #include "gncBusiness.h"
 

@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -54,13 +55,13 @@
 
 struct _gncEmployee 
 {
-  QofInstance inst;
+  QofInstance     inst;
   char *          id;
   char *          username;
   GncAddress *    addr;
   gnc_commodity * currency;
   gboolean        active;
-  
+ 
   char *          language;
   char *          acl;
   gnc_numeric     workday;
@@ -85,6 +86,7 @@ mark_employee (GncEmployee *employee)
   gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ============================================================== */
 /* Create/Destroy Functions */
 
 GncEmployee *gncEmployeeCreate (QofBook *book)
@@ -133,6 +135,49 @@ static void gncEmployeeFree (GncEmployee *employee)
   g_free (employee);
 }
 
+GncEmployee *
+gncCloneEmployee (GncEmployee *from, QofBook *book)
+{
+  GncEmployee *employee;
+  if (!book || !from) return NULL;
+
+  employee = g_new0 (GncEmployee, 1);
+  qof_instance_init(&employee->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&employee->inst, &from->inst);
+
+  employee->id = CACHE_INSERT (from->id);
+  employee->username = CACHE_INSERT (from->username);
+  employee->language = CACHE_INSERT (from->language);
+  employee->acl = CACHE_INSERT (from->acl);
+  employee->addr = gncCloneAddress (from->addr, book);
+  employee->workday = from->workday;
+  employee->rate = from->rate;
+  employee->active = from->active;
+  employee->currency = from->currency;
+  employee->ccard_acc = 
+     GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
+  
+  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+
+  return employee;
+}
+
+GncEmployee *
+gncEmployeeObtainTwin (GncEmployee *from, QofBook *book)
+{
+  GncEmployee *employee;
+  if (!book) return NULL;
+
+  employee = (GncEmployee *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!employee)
+  {
+    employee = gncCloneEmployee (from, book);
+  }
+
+  return employee;
+}
+
+/* ============================================================== */
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
@@ -233,6 +278,7 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
   gncEmployeeCommitEdit (employee);
 }
 
+/* ============================================================== */
 /* Get Functions */
 const char * gncEmployeeGetID (GncEmployee *employee)
 {
@@ -330,6 +376,7 @@ void gncEmployeeCommitEdit (GncEmployee *employee)
                          gncEmployeeOnDone, emp_free);
 }
 
+/* ============================================================== */
 /* Other functions */
 
 int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
