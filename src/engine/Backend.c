@@ -43,6 +43,9 @@ void
 xaccBackendSetError (Backend *be, GNCBackendError err)
 {
    if (!be) return;
+
+   /* use stack-push semantics. Only the earliest error counts */
+   if (ERR_BACKEND_NO_ERR != be->last_err) return;
    be->last_err = err;
 }
 
