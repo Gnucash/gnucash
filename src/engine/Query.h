@@ -23,6 +23,7 @@
 #ifndef __GNUCASH_QUERY_H__
 #define __GNUCASH_QUERY_H__
 
+#include <sys/types.h>
 #include <time.h>
 #include <glib.h>
 #include <regex.h>
