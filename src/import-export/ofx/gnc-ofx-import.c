@@ -1,4 +1,4 @@
-/********************************************************************\
+/*******************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -72,64 +72,18 @@ SCM  scm_gnc_file_ofx_import ()
    ofx_proc_transaction_cb can use it. */
 GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
 
-void gnc_file_ofx_import (void)
-{
-  extern int ofx_PARSER_msg;
-  extern int ofx_DEBUG_msg;
-  extern int ofx_WARNING_msg;
-  extern int ofx_ERROR_msg;
-  extern int ofx_INFO_msg;
-  extern int ofx_STATUS_msg;
-  char *filenames[3];
-  const char *selected_filename;
-  char *default_dir;
-
-  ofx_PARSER_msg = false;
-  ofx_DEBUG_msg = false;
-  ofx_WARNING_msg = true;
-  ofx_ERROR_msg = true;
-  ofx_INFO_msg = true;
-  ofx_STATUS_msg = false;
-
-  gnc_set_log_level(MOD_IMPORT, GNC_LOG_TRACE);
-  ENTER(" ");
-
-  default_dir = gnc_lookup_string_option("__paths", "Import OFX", NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
-  selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
-				      NULL,
-				      default_dir);
-
-  if(selected_filename!=NULL)
-    {
-      /* Remember the directory as the default. */
-      gnc_extract_directory(&default_dir, selected_filename);
-      gnc_set_string_option("__paths", "Import OFX", default_dir);
-      g_free(default_dir);
-
-      /*strncpy(file,selected_filename, 255);*/
-      DEBUG("Filename found: %s",selected_filename);
-      filenames[0]=NULL;
-      filenames[1]= (char *)selected_filename;
-      /*      filenames[1]=file;*/
-      filenames[2]=NULL;
-
-      /* Create the Generic transaction importer GUI. */
-      gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE);
-
-      DEBUG("Opening selected file");
-      ofx_proc_file(2, filenames);
-    }
-
-}
-
+/*
 int ofx_proc_status_cb(struct OfxStatusData data)
 {
   return 0;
 }
+*/
 
-int ofx_proc_security_cb(const struct OfxSecurityData data)
+int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data);
+int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data);
+int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
+
+int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
   char * tmp_exchange_code=NULL;
   char * tmp_default_fullname=NULL;
@@ -155,7 +109,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data)
   return 0;
 }
 
-int ofx_proc_transaction_cb(struct OfxTransactionData data)
+int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data)
 {
   char dest_string[255];
   time_t current_time; 
@@ -563,12 +517,14 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   return 0;
 }//end ofx_proc_transaction()
 
-int ofx_proc_statement_cb(struct OfxStatementData data)
+/*
+int ofx_proc_statement_cb(struct OfxStatementData data, void * statement_user_data)
 {
   return 0;
 }//end ofx_proc_statement()
+*/
 
-int ofx_proc_account_cb(struct OfxAccountData data)
+int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 {
   Account *selected_account;
   gnc_commodity_table * commodity_table;
@@ -645,5 +601,63 @@ int ofx_proc_account_cb(struct OfxAccountData data)
 
   return 0;
 }
+
+void gnc_file_ofx_import (void)
+{
+  extern int ofx_PARSER_msg;
+  extern int ofx_DEBUG_msg;
+  extern int ofx_WARNING_msg;
+  extern int ofx_ERROR_msg;
+  extern int ofx_INFO_msg;
+  extern int ofx_STATUS_msg;
+  const char *selected_filename;
+  char *default_dir;
+  LibofxContextPtr libofx_context = libofx_get_new_context();
+
+  ofx_PARSER_msg = false;
+  ofx_DEBUG_msg = false;
+  ofx_WARNING_msg = true;
+  ofx_ERROR_msg = true;
+  ofx_INFO_msg = true;
+  ofx_STATUS_msg = false;
+
+  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  DEBUG("gnc_file_ofx_import(): Begin...\n");
+
+  default_dir = gnc_lookup_string_option("__paths", "Import OFX", NULL);
+  if (default_dir == NULL)
+    gnc_init_default_directory(&default_dir);
+  selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
+				      NULL,
+				      default_dir);
+
+  if(selected_filename!=NULL)
+    {
+      /* Remember the directory as the default. */
+      gnc_extract_directory(&default_dir, selected_filename);
+      gnc_set_string_option("__paths", "Import OFX", default_dir);
+      g_free(default_dir);
+
+      /*strncpy(file,selected_filename, 255);*/
+      DEBUG("Filename found: %s",selected_filename);
+
+      /* Create the Generic transaction importer GUI. */
+      gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE);
+
+      /* Initialize libofx */
+
+      /*ofx_set_statement_cb(libofx_context, ofx_proc_statement_cb, 0);*/
+      ofx_set_account_cb(libofx_context, ofx_proc_account_cb, 0);
+      ofx_set_transaction_cb(libofx_context, ofx_proc_transaction_cb, 0);
+      ofx_set_security_cb(libofx_context, ofx_proc_security_cb, 0);
+      /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
+
+
+      DEBUG("Opening selected file");
+     libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
+    }
+
+}
+
 
 /** @} */

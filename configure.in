@@ -549,13 +549,9 @@ then
     LIBS="${LIBS} ${LIBOFX_LIBS}"
     AC_TRY_LINK( [
 #include <libofx/libofx.h>
-int ofx_proc_status_cb(const struct OfxStatusData data) { return 0; }
-int ofx_proc_account_cb(const struct OfxAccountData data) { return 0; }
-int ofx_proc_security_cb(const struct OfxSecurityData data) { return 0; }
-int ofx_proc_transaction_cb(const struct OfxTransactionData data) { return 0; }
-int ofx_proc_statement_cb(const struct OfxStatementData data) { return 0; }
 	], [
-	ofx_proc_file(0, NULL);
+	LibofxContextPtr libofx_context = libofx_get_new_context();
+	libofx_free_context(libofx_context);
 	], AC_MSG_RESULT(yes),
 	[ AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.]) ] )
 

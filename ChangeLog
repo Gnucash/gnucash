@@ -1,3 +1,15 @@
+2004-10-08  Benoit Grégoire <bock@step.polymtl.ca>
+       	* src/import-export/import-backend.c:  Duplicate match tweaks:
+               -Change MATCH_DATE_NOT_THRESHOLD from 3 weeks to two weeks
+               -A transaction amount mismatch past the threshold is now punished by -5 instead of -1
+               -Date mismatch is now worth -5 isntead of -10
+               -Check number mismatch is now punished -2, but only if both numbers are NOT empty.
+       	* src/import-export/ofx/gnc-ofx-import.c: Update for new LibOfx, this among other things, gives gnucash Microsoft OFC support.
+       	* src/import-export/ofx/test/test-link.cL Update for new LibOfx.
+       	* configure.in:  Partly update for new libofx.  It will crash if the right version isn't available, but there is no explicit version support (if someone wants to code it, you can use the output of "ofxdump --version".
+	* src/gnome-utils/gnc-query-list.c:  Fix gcc3.4 compile problem
+
+
 2004-09-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix HBCI balance
