@@ -13,6 +13,7 @@
 #include "window-help.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gncObject.h"
 #include "QueryNew.h"
@@ -556,7 +557,7 @@ search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 static void
 search_help_cb (GtkButton *button, GNCSearchWindow *sw)
 {
-  helpWindow (NULL, NULL, "");	/* XXX */
+  helpWindow (NULL, NULL, HH_FIND_TRANSACTIONS);
 }
 
 static void

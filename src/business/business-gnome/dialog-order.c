@@ -192,7 +192,7 @@ gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = "";		/* XXX: FIXME */
+  char *help_file = HH_ORDER;
 
   helpWindow(NULL, NULL, help_file);
 }

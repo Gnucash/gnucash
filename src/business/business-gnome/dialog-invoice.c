@@ -328,7 +328,7 @@ gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = "";		/* XXX: FIXME */
+  char *help_file = HH_INVOICE;
 
   helpWindow(NULL, NULL, help_file);
 }

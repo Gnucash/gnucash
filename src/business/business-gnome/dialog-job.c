@@ -163,9 +163,7 @@ gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = "";		/* xxx */
-
-  /* XXX */
+  char *help_file = HH_JOB;
 
   helpWindow(NULL, NULL, help_file);
 }

@@ -1,3 +1,14 @@
+2002-12-21  Chris Lyttle  <chris@wilddev.net>
+
+	* src/gnc-ui.h: Change help files
+	* src/business/business-gnome/dialog-customer.c: fix help button
+	* src/business/business-gnome/dialog-employee.c: fix help button
+	* src/business/business-gnome/dialog-invoice.c: fix help button
+	* src/business/business-gnome/dialog-job.c: fix help button
+	* src/business/business-gnome/dialog-order.c: fix help button
+	* src/business/business-gnome/dialog-vendor.c: fix help button
+	* src/gnome-search/dialog-search.c: fix help button
+
 2002-12-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sx-from-trans.c (sxftd_compute_sx): Respect the

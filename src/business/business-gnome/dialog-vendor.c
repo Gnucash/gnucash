@@ -208,7 +208,7 @@ gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  char *help_file = "";		/* xxx */
+  char *help_file = HH_VENDOR;
 
   helpWindow(NULL, NULL, help_file);
 }
