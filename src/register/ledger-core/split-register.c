@@ -498,7 +498,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
 
     result = gnc_ok_cancel_dialog_parented
       (gnc_split_register_get_parent (reg),
-       message, GNC_VERIFY_OK);
+       GNC_VERIFY_OK, message);
 
     if (result == GNC_VERIFY_CANCEL)
     {
@@ -799,7 +799,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != NULL)
       result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                           message, FALSE);
+                                           FALSE, message);
     else
       result = TRUE;
 
@@ -836,7 +836,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != blank_split)
       result = gnc_verify_dialog_parented(gnc_split_register_get_parent(reg),
-                                          message, FALSE);
+                                          FALSE, message);
     else
       result = TRUE;
 

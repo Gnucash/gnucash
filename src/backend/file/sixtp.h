@@ -29,8 +29,6 @@
 
 #include <stdarg.h>
 
-#include "libxml/SAX.h"
-
 #include "gnc-xml-helper.h"
 
 typedef struct _sixtp_child_result sixtp_child_result;

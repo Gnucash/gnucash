@@ -926,13 +926,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
       if (xaccAccountGetPlaceholder (account))
       {
         const char *format = _("The account %s does not allow transactions.\n");
-	char *message;
-
-	message = g_strdup_printf (format, name);
-
 	gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
-				   message);
-	g_free(message);
+				   format, name);
       }
       break;
     }
@@ -940,15 +935,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     {
       const char *format = _("The account %s does not exist.\n"
                              "Would you like to create it?");
-      char *message;
-      gboolean result;
-
-      message = g_strdup_printf (format, name);
-
-      result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                           message, TRUE);
-      g_free(message);
-      if (!result)
+      if (!gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
+				       TRUE, format, name))
         break;
     }
 
@@ -1067,7 +1055,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     result = gnc_verify_cancel_dialog_parented
       (gnc_split_register_get_parent (reg),
-       message, GNC_VERIFY_YES);
+       GNC_VERIFY_YES, message);
   }
 
   switch (result)
@@ -1145,7 +1133,7 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
       return TRUE;
 
     return gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                       message, TRUE);
+                                       TRUE, message);
   }
 
   return TRUE;

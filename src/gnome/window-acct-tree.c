@@ -329,7 +329,6 @@ gnc_acct_tree_window_delete_common (Account *account)
 			   "transactions.  Are you sure you want to delete the\n"
 			   "%s account and all its children?");
     const char *format;
-    char *message;
     char *name;
 
     name = xaccAccountGetFullName(account, gnc_get_account_separator ());
@@ -350,9 +349,7 @@ gnc_acct_tree_window_delete_common (Account *account)
 	format = children ? no_splits : no_splits_no_children;
     }
 
-    message = g_strdup_printf(format, name);
-
-    if (gnc_verify_dialog(message, FALSE)) {
+    if (gnc_verify_dialog(FALSE, format, name)) {
       gnc_suspend_gui_refresh ();
       
       xaccAccountBeginEdit (account);
@@ -361,7 +358,6 @@ gnc_acct_tree_window_delete_common (Account *account)
       gnc_resume_gui_refresh ();
     }
     g_free(name);
-    g_free(message);
   }
   else
   {

@@ -373,7 +373,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   char * path_to_load;
-  char * error_string = NULL;
   char * default_acctname = NULL;
 
   GList * format_strings;
@@ -445,10 +444,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if(gh_list_p(load_return) &&
        (gh_car(load_return) == SCM_BOOL_T)) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
-      error_string = g_strdup_printf(_("QIF file load warning:\n%s"),
-                                     warn_str ? warn_str : "(null)");
-      gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
-      g_free(error_string);
+      gnc_warning_dialog_parented(GTK_WIDGET(wind->window),
+				  _("QIF file load warning:\n%s"),
+				  warn_str ? warn_str : "(null)");
       free (warn_str);
     }
 
@@ -463,10 +461,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
              (!gh_list_p(load_return) || 
               (gh_car(load_return) != SCM_BOOL_T))) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
-      error_string = g_strdup_printf(_("QIF file load failed:\n%s"),
-                                     warn_str ? warn_str : "(null)");
-      gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
-      g_free(error_string);
+      gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+				_("QIF file load failed:\n%s"),
+				warn_str ? warn_str : "(null)");
       free (warn_str);
 
       imported_files = 
@@ -519,10 +516,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
         char *warn_str = gh_scm2newstr(gh_cadr(parse_return), NULL);
-        error_string = g_strdup_printf(_("QIF file parse failed:\n%s"),
-                                       warn_str ? warn_str : "(null)");
-        gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
-        g_free(error_string);
+        gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+				  _("QIF file parse failed:\n%s"),
+				  warn_str ? warn_str : "(null)");
         free(warn_str);
 
         imported_files = 

@@ -1388,8 +1388,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (recn == YREC)
   {
     gboolean confirm;
-    char *message = _("You are about to change a reconciled split.\n"
-                      "Are you sure you want to do that?");
+    const gchar *message = _("You are about to change a reconciled split.\n"
+			     "Are you sure you want to do that?");
 
     confirm = gnc_lookup_boolean_option ("Register",
                                          "Confirm before changing reconciled",
@@ -1398,7 +1398,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
       return TRUE;
 
     confirm = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                          message, FALSE);
+                                          FALSE, message);
 
     info->change_confirmed = confirm;
 

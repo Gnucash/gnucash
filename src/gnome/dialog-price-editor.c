@@ -510,7 +510,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
   if (!pdb_dialog->price)
     return;
 
-  if (gnc_verify_dialog_parented (pdb_dialog->dialog, message, TRUE))
+  if (gnc_verify_dialog_parented (pdb_dialog->dialog, TRUE, message))
   {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);

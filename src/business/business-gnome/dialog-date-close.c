@@ -33,19 +33,13 @@ typedef struct _dialog_date_close_window {
 static Account *
 ask_make_acct (DialogDateClose *ddc, const char *name, gboolean new_acc)
 {
-  char *message;
   GList *types = NULL;
   Account *acc;
 
   if (new_acc) {
-    gboolean result;
-    message = g_strdup_printf (_("The account \"%s\" does not exist.\n"
-				 "Would you like to create it?"), name);
-    
-    result =
-      gnc_verify_dialog_parented (ddc->dialog, message, TRUE);
-
-    if (!result)
+    const gchar *format  = _("The account \"%s\" does not exist.\n"
+			     "Would you like to create it?");
+    if (!gnc_verify_dialog_parented (ddc->dialog, TRUE, format, name))
       return NULL;
   }
 
@@ -85,12 +79,12 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 
       if (g_list_index (ddc->acct_types, (gpointer)xaccAccountGetType (acc))
 	  == -1) {
-	char *message = 
-	  g_strdup_printf (_("Invalid Account Type, %s.\n"
-			     "Please try again..."),
-			   xaccAccountGetTypeStr (xaccAccountGetType (acc)));
-	gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog), message);
-	g_free (message);
+	const char *format = _("Invalid Account Type, %s.\n"
+			       "Please try again...");
+
+	gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog),
+				   format,
+				   xaccAccountGetTypeStr (xaccAccountGetType (acc)));
 	g_free (name);
 	name = xaccAccountGetFullName (acc, gnc_get_account_separator ());
 	acc = NULL;

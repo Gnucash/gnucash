@@ -29,9 +29,6 @@
 #include <stdarg.h>
 #include <sys/types.h>
 
-#include "libxml/SAX.h"
-#include "libxml/parser.h"
-
 #include "sixtp.h"
 #include "sixtp-stack.h"
 

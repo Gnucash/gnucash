@@ -112,12 +112,8 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
   name = cell->cell.value;
   if (!name || *name == '\0') {
     const char *format = _("Invalid Entry:  You need to supply %s.");
-    char *message;
 
-    message = g_strdup_printf (format, cell_msg);
-    gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), message);
-    g_free(message);
-
+    gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), format, cell_msg);
     return FALSE;
   }
   return TRUE;
@@ -309,14 +305,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     {
       const char *format = _("The account %s does not exist.\n"
                              "Would you like to create it?");
-      char *message;
-      gboolean result;
-
-      message = g_strdup_printf (format, name);
-
-      result =
-	gnc_verify_dialog_parented (ledger->parent, message, TRUE);
-      if (!result)
+      if (!gnc_verify_dialog_parented (ledger->parent, TRUE, format, name))
         break;
     }
 
@@ -463,7 +452,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     }
 
     result = gnc_verify_cancel_dialog_parented (ledger->parent,
-						message, GNC_VERIFY_YES);
+						GNC_VERIFY_YES, message);
   }
 
 dontask:
@@ -575,7 +564,7 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
     if (!gnc_entry_ledger_verify_can_save (ledger))
       return FALSE;
 
-    if (dontask || gnc_verify_dialog_parented (parent, message, TRUE))
+    if (dontask || gnc_verify_dialog_parented (parent, TRUE, message))
       gnc_entry_ledger_save (ledger, TRUE);
     else
       gnc_entry_ledger_cancel_cursor_changes (ledger);

@@ -161,8 +161,8 @@
    'gnc:verify-dialog
    '<gw:bool>
    "gnc_verify_dialog"
-   '(((<gw:mchars> caller-owned const) message)
-     (<gw:bool> yes_is_default))
+   '((<gw:bool> yes_is_default)
+     ((<gw:mchars> caller-owned const) message))
    "Show yes/no dialog box with given message.")
 
   (gw:wrap-function

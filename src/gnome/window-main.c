@@ -350,13 +350,10 @@ gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
   /* Check for an error that isn't a non-existant file. */
   if (rc != 0 && errno != ENOENT)
   {
-    const char *message = _("You cannot save to that filename.");
-    char *string;
+    const char *format = _("You cannot save to that filename.\n\n%s");
 
-    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
     gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               string);
-    g_free (string);
+                               format, strerror(errno));
     return;
   }
 
@@ -374,28 +371,18 @@ gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
-    char *string;
-    gboolean result;
-
-    string = g_strdup_printf (format, filename);
-    result = gnc_verify_dialog_parented (gtk_widget_get_toplevel (widget),
-                                         string, FALSE);
-    g_free (string);
-
-    if (!result)
+    if (!gnc_verify_dialog_parented (gtk_widget_get_toplevel (widget),
+				     FALSE, format, filename))
       return;
   }
 
   file = fopen (filename, "w");
   if (!file)
   {
-    const char *message = _("You cannot save to that file.");
-    char *string;
+    const char *format = _("You cannot save to that file.\n\n%s");
 
-    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
     gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               string);
-    g_free (string);
+                               format, strerror(errno));
     return;
   }
 
@@ -407,13 +394,10 @@ gnc_main_window_file_export_cb(GtkWidget * widget, gpointer data)
 
   if (!ok)
   {
-    const char *message = _("There was an error saving the file.");
-    char *string;
+    const char *format = _("There was an error saving the file.\n\n%s");
 
-    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
     gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-                               string);
-    g_free (string);
+                               format, strerror(errno));
     return;
   }
 }

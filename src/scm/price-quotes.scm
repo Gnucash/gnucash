@@ -31,6 +31,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (g-wrapped gw-gnome-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
 
@@ -635,7 +636,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog
+               (gnc:verify-dialog #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -643,8 +644,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                    (display "  " p)
                    (display (string-join problem-syms "\n  ") p)
                    (newline p)
-                   (display (_ "Continue using only the good quotes?") p)))
-                #t))
+                   (display (_ "Continue using only the good quotes?") p)))))
               (begin
                 (gnc:error-dialog
                  (call-with-output-string
@@ -675,7 +675,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
            (if (gnc:ui-is-running?)
                (set!
                 keep-going?
-                (gnc:verify-dialog
+                (gnc:verify-dialog #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)
@@ -683,8 +683,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                     (display "  " p)
                     (display (string-join (filter string? prices) "\n  ") p)
                     (newline p)
-                    (display (_ "Add remaining good quotes?") p)))
-                 #t))
+                    (display (_ "Add remaining good quotes?") p)))))
                (gnc:warn
                 (call-with-output-string
                  (lambda (p)

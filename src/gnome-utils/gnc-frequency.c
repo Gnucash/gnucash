@@ -279,7 +279,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
   FreqSpec *subFS;
   GList *list;
   int i;
-  char *str;
+  const char *str;
 
   page = 0;
   if ( fs != NULL ) {

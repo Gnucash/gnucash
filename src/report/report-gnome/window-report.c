@@ -403,12 +403,9 @@ gnc_get_export_filename (SCM choice)
   /* Check for an error that isn't a non-existant file. */
   if (rc != 0 && errno != ENOENT)
   {
-    const char *message = _("You cannot save to that filename.");
-    char *string;
+    const char *format = _("You cannot save to that filename.\n\n%s");
 
-    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
-    gnc_error_dialog (string);
-    g_free (string);
+    gnc_error_dialog (format, strerror(errno));
     return NULL;
   }
 
@@ -425,14 +422,8 @@ gnc_get_export_filename (SCM choice)
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
-    char *string;
-    gboolean result;
 
-    string = g_strdup_printf (format, filepath);
-    result = gnc_verify_dialog (string, FALSE);
-    g_free (string);
-
-    if (!result)
+    if (!gnc_verify_dialog (FALSE, format, filepath))
       return NULL;
   }
 
@@ -486,12 +477,8 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
   {
     const char *fmt = _("Could not open the file\n"
                         "     %s\n%s");
-    char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
-                                 strerror (errno) ? strerror (errno) : "");
-
-    gnc_error_dialog (buf);
-
-    g_free (buf);
+    gnc_error_dialog (fmt, filepath ? filepath : "(null)",
+		      strerror (errno) ? strerror (errno) : "");
   }
 
   return TRUE;

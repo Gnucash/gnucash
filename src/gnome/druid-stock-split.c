@@ -215,7 +215,6 @@ static void
 gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
 {
   const char * parse_error_string;
-  char * error_phrase;
 
   parse_error_string = gnc_exp_parser_error_string ();
   if (parse_error_string == NULL)
@@ -224,13 +223,10 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
   if (error_string == NULL)
     error_string = "";
 
-  error_phrase = g_strdup_printf ("%s.\n\n%s: %s.",
-                                  error_string, _("Error"),
-                                  parse_error_string);
-
-  gnc_error_dialog_parented (GTK_WINDOW (info->window), error_phrase);
-
-  g_free (error_phrase);
+  gnc_error_dialog_parented (GTK_WINDOW (info->window),
+			     "%s.\n\n%s: %s.",
+			     error_string, _("Error"),
+			     parse_error_string);
 }
 
 static gboolean

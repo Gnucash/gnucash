@@ -3054,7 +3054,7 @@ deleteCB(GtkWidget *widget, gpointer data)
       buf = new_buf;
     }
 
-    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
+    result = gnc_verify_dialog_parented (regData->window, FALSE, buf);
 
     g_free(buf);
 
@@ -3082,7 +3082,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     else
       buf = g_strdup (message);
 
-    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
+    result = gnc_verify_dialog_parented (regData->window, FALSE, buf);
 
     g_free (buf);
 
@@ -3191,7 +3191,7 @@ gnc_register_check_close(RegWindow *regData)
   {
     const char *message = _("The current transaction has been changed.\n"
                             "Would you like to record it?");
-    if (gnc_verify_dialog_parented(regData->window, message, TRUE))
+    if (gnc_verify_dialog_parented(regData->window, TRUE, message))
       recordCB(regData->window, regData);
     else
       gnc_split_register_cancel_cursor_trans_changes (reg);

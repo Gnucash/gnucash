@@ -23,12 +23,21 @@
 #ifndef QUERY_USER_H
 #define QUERY_USER_H
 
-void gnc_info_dialog(const char *message);
-void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
+extern void
+gnc_info_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_info_dialog_parented(GtkWindow *parent,
+			 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
-void gnc_warning_dialog(const char *message);
 
-void gnc_error_dialog(const char *message);
-void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
+extern void
+gnc_warning_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+
+
+extern void
+gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_error_dialog_parented(GtkWindow *parent,
+			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
 #endif

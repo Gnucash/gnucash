@@ -382,7 +382,6 @@ static void
 gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
 {
   const char * parse_error_string;
-  char * error_phrase;
 
   parse_error_string = gnc_exp_parser_error_string ();
   if (parse_error_string == NULL)
@@ -391,13 +390,10 @@ gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
   if (error_string == NULL)
     error_string = "";
 
-  error_phrase = g_strdup_printf ("%s\n\n%s: %s.",
-                                  error_string, _("Error"),
-                                  parse_error_string);
-
-  gnc_error_dialog_parented (GTK_WINDOW(xferData->dialog), error_phrase);
-
-  g_free (error_phrase);
+  gnc_error_dialog_parented (GTK_WINDOW(xferData->dialog),
+			     "%s\n\n%s: %s.",
+			     error_string, _("Error"),
+			     parse_error_string);
 }
 
 /*** Callbacks for description quickfill. ***/
@@ -1061,7 +1057,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   {
     const char *placeholder_format =
 	_("The account %s\ndoes not allow transactions.\n");
-    char *message, *name;
+    char *name;
 
     if (xaccAccountGetPlaceholder(from_account))
 	name = xaccAccountGetFullName(from_account,
@@ -1069,9 +1065,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     else
 	name = xaccAccountGetFullName(to_account,
 				      gnc_get_account_separator ());
-    message = g_strdup_printf(placeholder_format, name);
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
-    g_free(message);
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), placeholder_format, name);
     g_free(name);
     return;
   }

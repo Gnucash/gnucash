@@ -55,27 +55,49 @@ typedef enum
   GNC_VERIFY_OK
 } GNCVerifyResult;
 
-GNCVerifyResult
+extern GNCVerifyResult
+gnc_verify_cancel_dialog(GNCVerifyResult default_result,
+			 const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern GNCVerifyResult
 gnc_verify_cancel_dialog_parented(gncUIWidget parent,
-                                  const char *message,
-                                  GNCVerifyResult default_result);
+				  GNCVerifyResult default_result,
+				  const char *format, ...) G_GNUC_PRINTF (3,4);
 
-GNCVerifyResult gnc_verify_cancel_dialog(const char *message, 
-                                         GNCVerifyResult default_result);
 
-gboolean gnc_verify_dialog_parented(gncUIWidget parent,
-                                    const char *message,
-                                    gboolean yes_is_default);
 
-GNCVerifyResult gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-                                              const char *message,
-                                              GNCVerifyResult default_result);
+extern gboolean
+gnc_verify_dialog(gboolean yes_is_default,
+		  const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern gboolean
+gnc_verify_dialog_parented(gncUIWidget parent,
+			   gboolean yes_is_default,
+			   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
-void     gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
-gboolean gnc_verify_dialog(const char *message, gboolean yes_is_default);
 
-void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
+extern GNCVerifyResult
+gnc_ok_cancel_dialog(GNCVerifyResult default_result,
+		     const char *format, ...) G_GNUC_PRINTF (2, 3);
+extern GNCVerifyResult
+gnc_ok_cancel_dialog_parented(gncUIWidget parent,
+			      GNCVerifyResult default_result,
+			      const char *format, ...) G_GNUC_PRINTF (3,4);
+
+
+
+extern void
+gnc_warning_dialog_parented(gncUIWidget parent,
+			    const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+
+
+
+extern void
+gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_error_dialog_parented(GtkWindow *parent,
+			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+
+
 
 int      gnc_choose_radio_option_dialog_parented (gncUIWidget parent,
                                                   const char *title,

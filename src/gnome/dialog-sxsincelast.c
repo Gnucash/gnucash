@@ -714,8 +714,8 @@ cancel_check( GnomeDruidPage *druid_page,
                 return FALSE;
         }
 
-        if ( !gnc_verify_dialog_parented( sxsld->sincelast_window,
-                                          lastrun_cancel_check_msg, TRUE ) ) {
+        if ( !gnc_verify_dialog_parented( sxsld->sincelast_window, TRUE,
+                                          lastrun_cancel_check_msg ) ) {
                 return TRUE;
         }
 

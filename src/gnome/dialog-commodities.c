@@ -264,7 +264,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
     const char *message = _("Are you sure you want to delete the\n"
                             "current commodity?");
 
-    do_delete = gnc_verify_dialog_parented (cd->dialog, message, TRUE);
+    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
   }
 
   if (do_delete)

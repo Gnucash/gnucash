@@ -94,7 +94,6 @@ show_session_error (GNCBackendError io_error, const char *newfile)
 {
   gboolean uh_oh = TRUE;
   const char *fmt;
-  char *buf = NULL;
 
   if (NULL == newfile) { newfile = _("(null)"); }
 
@@ -107,28 +106,24 @@ show_session_error (GNCBackendError io_error, const char *newfile)
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL \n    %s\n"
               "is not supported by this version of GnuCash.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_BAD_URL:
       fmt = _("Can't parse the URL\n   %s\n");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_CANT_CONNECT:
       fmt = _("Can't connect to\n   %s\n"
               "The host, username or password were incorrect.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_CONN_LOST:
       fmt = _("Can't connect to\n   %s\n"
               "Connection was lost, unable to send data.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_TOO_NEW:
@@ -142,8 +137,7 @@ show_session_error (GNCBackendError io_error, const char *newfile)
       fmt = _("The database\n"
               "   %s\n"
               "doesn't seem to exist. Do you want to create it?\n");
-      buf = g_strdup_printf (fmt, newfile);
-      if (gnc_verify_dialog (buf, TRUE)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_LOCKED:
@@ -152,71 +146,63 @@ show_session_error (GNCBackendError io_error, const char *newfile)
               "That database may be in use by another user,\n"
               "in which case you should not open the database.\n"
               "\nDo you want to proceed with opening the database?");
-      buf = g_strdup_printf (fmt, newfile);
-      if (gnc_verify_dialog (buf, TRUE)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:
       fmt = _("The file/URL \n    %s\n"
               "does not contain GnuCash data or the data is corrupt.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_SERVER_ERR:
       fmt = _("The server at URL \n    %s\n"
               "experienced an error or encountered bad or corrupt data.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_PERM:
       fmt = _("You do not have permission to access\n    %s\n");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_BACKEND_MISC:
       fmt = _("An error occurred while processing\n    %s\n");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file.\n"
               "Do you want to continue?");
-      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_FILE_EMPTY:
       fmt = _("The file \n    %s\n is empty.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
       fmt = _("The file \n    %s\n could not be found.");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog (buf);
+      gnc_error_dialog (fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_TOO_OLD:
       fmt = _("This file is from an older version of GnuCash.\n"
               "Do you want to continue?");
-      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
       fmt = _("Unknown file type");
-      buf = g_strdup_printf (fmt, newfile);
-      gnc_error_dialog(buf);
+      gnc_error_dialog(fmt, newfile);
       break;
       
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash.\n"
               "Do you want to want to upgrade the database"
               "to the current version?");
-      if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_SQL_DB_BUSY:
@@ -235,7 +221,6 @@ show_session_error (GNCBackendError io_error, const char *newfile)
       break;
   }
 
-  if (buf) g_free(buf);
   return uh_oh;
 }
 
@@ -325,10 +310,10 @@ gnc_file_query_save (void)
                             "Save. Save the data to file?");
 
     if (can_cancel_cb && can_cancel_cb ())
-      result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
+      result = gnc_verify_cancel_dialog (GNC_VERIFY_YES, message);
     else
     {
-      gboolean do_save = gnc_verify_dialog (message, TRUE);
+      gboolean do_save = gnc_verify_dialog (TRUE, message);
 
       result = do_save ? GNC_VERIFY_YES : GNC_VERIFY_NO;
     }
@@ -687,15 +672,9 @@ gnc_file_save_as (void)
   {
     const char *format = _("The file \n    %s\n already exists.\n"
                            "Are you sure you want to overwrite it?");
-    char *tmpmsg;
-    gboolean result;
-
-    tmpmsg = g_strdup_printf (format, newfile);
-    result = gnc_verify_dialog (tmpmsg, FALSE);
-    g_free (tmpmsg);
 
     /* if user says cancel, we should break out */
-    if (!result)
+    if (!gnc_verify_dialog (FALSE, format, newfile))
     {
       g_free (newfile);
       return;

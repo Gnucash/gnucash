@@ -314,7 +314,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 w = glade_xml_get_widget( sxed->gxml, "sxe_name" );
                 name = gtk_entry_get_text( GTK_ENTRY(w) );
                 if ( strlen(name) == 0 ) {
-                        char *sx_has_no_name_msg =
+                        const char *sx_has_no_name_msg =
                                 _( "Please name the Scheduled Transaction." );
                         gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
                                                    sx_has_no_name_msg );
@@ -336,24 +336,15 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                         nameExists |= ( g_strcasecmp(name, existingName) == 0 );
                 }
                 if ( nameHasChanged && nameExists ) {
-                        char *sx_has_existing_name_msg =
+                        const char *sx_has_existing_name_msg =
                                 _( "A Scheduled Transaction with this name \"%s\" already exists.\n"
                                    "Are you sure you want to name this one the same?" );
-                        GString *realMsg;
-
-                        int len = strlen( sx_has_existing_name_msg)
-                                + strlen( name );
-
-                        realMsg = g_string_sized_new( len );
-                        g_string_sprintf( realMsg, sx_has_existing_name_msg, name );
-                        if ( ! gnc_verify_dialog_parented( sxed->dialog,
-                                                           realMsg->str,
-                                                           FALSE ) ) {
+                        if ( ! gnc_verify_dialog_parented( sxed->dialog, FALSE,
+                                                           sx_has_existing_name_msg,
+							   name) ) {
                                 /* They don't; so don't. */
-                                g_string_free( realMsg, TRUE );
                                 return;
                         }
-                        g_string_free( realMsg, TRUE );
                 }
                 xaccSchedXactionSetName( sxed->sx, name );
         }
@@ -448,9 +439,8 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                                 _( "You have attempted to create a Scheduled "
                                    "Transaction which will never run.\nDo you "
                                    "really want to do this?" );
-                        if ( ! gnc_verify_dialog_parented( sxed->dialog,
-                                                           invalid_sx_check_msg,
-                                                           FALSE ) ) {
+                        if ( ! gnc_verify_dialog_parented( sxed->dialog, FALSE,
+                                                           invalid_sx_check_msg) ) {
                         
                                 return;
                         }
@@ -1174,9 +1164,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
                  * they confirm they actually want to do the deletion
                  * generically.  If it's false, cleanup and return. */
                 if ( ! (destroyOpenedResult =
-                        gnc_verify_dialog_parented( sxd->dialog,
-                                                    realConfDelOpenMsg->str,
-                                                    FALSE )) ) {
+                        gnc_verify_dialog_parented( sxd->dialog, FALSE,
+                                                    realConfDelOpenMsg->str )) ) {
                         for ( l = beingEditedList; l; l = l->next ) {
                                 g_list_free( (GList*)l->data );
                         }
@@ -1186,9 +1175,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 }
         }
 
-        if ( gnc_verify_dialog_parented( sxd->dialog,
-                                         realConfDeleteMsg->str,
-                                         FALSE ) ) {
+        if ( gnc_verify_dialog_parented( sxd->dialog, FALSE,
+                                         realConfDeleteMsg->str ) ) {
                 /* Close the being-edited transactions. */
                 if ( destroyOpenedResult ) {
                         GList *component;
@@ -1566,7 +1554,7 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
                 const char *message =
                         _("The current template transaction has been changed.\n"
                           "Would you like to record the changes?");
-                if (gnc_verify_dialog_parented(sxed->dialog, message, TRUE)) {
+                if (gnc_verify_dialog_parented(sxed->dialog, TRUE, message)) {
                         sxed_reg_recordCB(sxed->dialog, sxed);
                 } else {
                         gnc_split_register_cancel_cursor_trans_changes (reg);

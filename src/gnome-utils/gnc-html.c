@@ -938,17 +938,10 @@ gnc_html_show_url(gnc_html * html, URLType type,
     ok = url_handler (location, label, new_window, &result);
     if (!ok)
     {
-      char *error_message;
-
       if (result.error_message)
-        error_message = g_strdup (result.error_message);
+        gnc_error_dialog(result.error_message);
       else
-        error_message = g_strdup_printf (_("There was an error accessing %s."),
-                                         location);
-
-      gnc_error_dialog (error_message);
- 
-      g_free (error_message);
+        gnc_error_dialog(_("There was an error accessing %s."), location);
 
       if (html->load_cb)
         html->load_cb (html, result.url_type,
