@@ -861,8 +861,8 @@ regRecalculateBalance( RegWindow *regData )
      * Note, however, that this algorithm will provide confusing
      * results unless all transactions are absolutely ordered.
      * That is, date order is not enough, if several transactions
-     * occur on the same date:  they MUST be completely disambiguated
-     * and absolutely ordered.
+     * occur on the same date:  the same transactions must occur
+     * *IN THE SAME ORDER* in the different accounts.
      */
     if (is_credit) {
       tmp = xaccGetBalance (credit_acc, trans);
@@ -898,6 +898,7 @@ regRecalculateBalance( RegWindow *regData )
      * bank account, and a debit to the income account.
      * Thus, positive and negative are interchanged */
     prt_balance = dbalance;
+    prt_clearedBalance = dclearedBalance;
     if( (EXPENSE    == regData->type) ||
         (INCOME     == regData->type) ||
         (INC_LEDGER == regData->type) ) {
