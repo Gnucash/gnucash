@@ -289,6 +289,197 @@ xaccDestroyRegWindow (RegWindow *regData)
 }
 
 /********************************************************************\
+ * xaccDisplayAmount                                                *
+ *   draw the amount into the appropriate cell                      *
+ *                                                                  *
+ * Args:   regData -- this RegWindow                                *
+ * Return: NONE                                                     *
+\********************************************************************/
+void
+xaccGetDisplayAmountStrings (RegWindow *regData, 
+                             double themount,
+                             Transaction *trans,
+                             char ** pay, char **dep)
+{
+   char buf[BUFSIZE];
+
+   /* display of amounts depends on account type */
+   /* For-single-account displays, positive and negative 
+    * quantities are sorted into "payment" and "deposit"
+    * columns. The value in each column is always positive.
+    *
+    * For a general ledger display, the sign is preserved,
+    * and the two columns are interpreted as "debit" and 
+    * "credit" columns.
+    *
+    * Note also, that for single accounts, the amount
+    * is fetched based on the account, since this may 
+    * introduce and extra minus sign, depending on whether
+    * the account is being debited instead of credited.
+    *
+    * For general ledger entries, we can fetch the amount
+    * directly: we already know which accounts should be 
+    * debited and credited.
+    */
+   switch (regData->type) {
+     case BANK:
+     case CASH:
+     case ASSET:
+     case CREDIT:
+     case LIABILITY:
+     case INCOME:
+     case EXPENSE:
+     case EQUITY: {
+       if( 0.0 > themount ) {
+         sprintf( buf, "%.2f ", -themount );
+         *pay = XtNewString(buf);
+         *dep = XtNewString("");
+       } else {
+         sprintf( buf, "%.2f ", themount );
+         *pay = XtNewString("");
+         *dep = XtNewString(buf);
+       }
+     }  
+     break;
+
+     case STOCK:
+     case MUTUAL: {
+
+       /* if the share amount is zero (e.g. for a price quote)
+        * then just leave both these cells blank */
+       if( DEQ (0.0,themount) ) {
+         *pay = XtNewString("");
+         *dep = XtNewString("");
+       } else 
+       if( 0.0 > themount ) {
+         sprintf( buf, "%.3f ", -themount );
+         *pay = XtNewString(buf);
+         *dep = XtNewString("");
+       } else {
+         sprintf( buf, "%.3f ", themount );
+         *pay = XtNewString("");
+         *dep = XtNewString(buf);
+       }
+     }  
+     break;
+
+     case INC_LEDGER: 
+     case GEN_LEDGER: {
+        Account * acc;
+        int show_debit, show_credit;
+
+        acc = (Account *) (trans->debit);
+        show_debit = xaccIsAccountInList (acc, regData->blackacc);
+
+        acc = (Account *) (trans->credit);
+        show_credit = xaccIsAccountInList (acc, regData->blackacc);
+
+        /* attempt to keep all displayed quantities positive by
+         * flipping signs and columns for negative entries */
+        /* hack alert -- but does this really work ??? */
+        sprintf( buf, "%.2f ", DABS(themount) );
+
+        if (0.0 < themount) {
+
+           if (show_debit) {
+              *pay = XtNewString(buf);
+           } else {
+              *pay = XtNewString("");
+           }
+
+           if (show_credit) {
+              *dep = XtNewString(buf);
+           } else {
+              *dep = XtNewString("");
+           }
+        } else {
+
+           if (show_debit) {
+              *dep = XtNewString(buf);
+           } else {
+              *dep = XtNewString("");
+           }
+       
+           if (show_credit) {
+              *pay = XtNewString(buf);
+           } else {
+              *pay = XtNewString("");
+           }
+        }
+     }  
+       break;
+
+     /* ----------------------- */
+     case PORTFOLIO: {
+        Account * acc;
+        int show_debit, show_credit;
+
+        /* Show the share debit amount, if the debit account 
+         * is in this ledger. But don't show share amount unless
+         * the account type is stock or mutual, since other types
+         * do not have shares. */
+        acc = (Account *) (trans->debit);
+        if (acc) {
+          if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
+            show_debit = xaccIsAccountInList (acc, regData->blackacc);
+          }
+        }
+
+        acc = (Account *) (trans->credit);
+        if (acc) {
+          if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
+            show_credit = xaccIsAccountInList (acc, regData->blackacc);
+          }
+        }
+
+        /* if the amount is zero, then leave the cell blank */
+        if (DEQ(0.0, themount)) {
+          *pay = XtNewString("");
+          *dep = XtNewString("");
+        } else {
+          /* attempt to keep all displayed quantities positive by
+           * flipping signs and columns for negative entries */
+          /* hack alert -- but does this really work ??? */
+          sprintf( buf, "%.3f ", DABS(themount) );
+  
+          if (0.0 < themount) {
+  
+             if (show_debit) {
+                *pay = XtNewString(buf);
+             } else {
+                *pay = XtNewString("");
+             }
+  
+             if (show_credit) {
+                *dep = XtNewString(buf);
+             } else {
+                *dep = XtNewString("");
+             }
+          } else {
+  
+             if (show_debit) {
+                *dep = XtNewString(buf);
+             } else {
+                *dep = XtNewString("");
+             }
+         
+           if (show_credit) {
+                *pay = XtNewString(buf);
+             } else {
+                *pay = XtNewString("");
+             }
+          }
+        }
+     }  
+       break;
+
+     default:
+       fprintf (stderr, "Internal Error: xaccDisplayAmount(): ");
+       fprintf (stderr, "Account type: %d is unknown!\n", regData->type);
+   }
+}
+
+/********************************************************************\
  * regRefresh                                                       *
  *   refreshes the register matrix to reflect the current           *
  *   transactions                                                   *
@@ -425,23 +616,6 @@ regRefresh( RegWindow *regData )
 
       /* ----------------------------------- */
       /* display of amounts depends on account type */
-      /* For-single-account displays, positive and negative 
-       * quantities are sorted into "payment" and "deposit"
-       * columns. The value in each column is always positive.
-       *
-       * For a general ledger display, the sign is preserved,
-       * and the two columns are interpreted as "debit" and 
-       * "credit" columns.
-       *
-       * Note also, that for single accounts, the amount
-       * is fetched based on the account, since this may 
-       * introduce and extra minus sign, depending on whether
-       * the account is being debited instead of credited.
-       *
-       * For general ledger entries, we can fetch the amount
-       * directly: we already know which accounts should be 
-       * debited and credited.
-       */
       switch (regData->type) {
         case BANK:
         case CASH:
@@ -453,134 +627,31 @@ regRefresh( RegWindow *regData )
         case EQUITY: {
           Account *main_acc = regData->blackacc[0];
           themount = xaccGetAmount (main_acc, trans);
-          if( 0.0 > themount ) {
-            sprintf( buf, "%.2f ", -themount );
-            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-          } else {
-            sprintf( buf, "%.2f ", themount );
-            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
           }
-        }  
           break;
 
         case STOCK:
         case MUTUAL: {
           Account *main_acc = regData->blackacc[0];
           themount = xaccGetShareAmount (main_acc, trans);
-
-          /* if the share amount is zero (e.g. for a price quote)
-           * then just leave both these cells blank */
-          if( DEQ (0.0,themount) ) {
-            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-          } else 
-          if( 0.0 > themount ) {
-            sprintf( buf, "%.3f ", -themount );
-            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-          } else {
-            sprintf( buf, "%.3f ", themount );
-            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
           }
-        }  
           break;
 
         case INC_LEDGER: 
-        case GEN_LEDGER: {
-           Account * acc;
-           int show;
-           themount = trans->damount * trans->share_price;
-
-           /* attempt to keep all displayed quantities positive by
-            * flipping signs and columns for negative entries */
-           /* hack alert -- but does this really work ??? */
-           if (0.0 < themount) {
-              sprintf( buf, "%.2f ", themount );
-              acc = (Account *) (trans->debit);
-              show = xaccIsAccountInList (acc, regData->blackacc);
-              if (show) {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-              } else {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-              }
-   
-              acc = (Account *) (trans->credit);
-              show = xaccIsAccountInList (acc, regData->blackacc);
-              if (show) {
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
-              } else {
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-              }
-           } else {
-              themount = - themount;
-              sprintf( buf, "%.2f ", themount );
-              acc = (Account *) (trans->debit);
-              show = xaccIsAccountInList (acc, regData->blackacc);
-              if (show) {
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
-              } else {
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-              }
-          
-              acc = (Account *) (trans->credit);
-              show = xaccIsAccountInList (acc, regData->blackacc);
-              if (show) {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-              } else {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-              }
-           }
-        }  
+        case GEN_LEDGER: 
+          themount = trans->damount * trans->share_price;
           break;
 
-        case PORTFOLIO: {
-           Account * acc;
-           int show;
-
-           /* Show the share debit amount, if the debit account 
-            * is in this ledger. But don't show share amount unless
-            * the account type is stock or mutual, since other types
-            * do not have shares. */
-           show = 0;
-           acc = (Account *) (trans->debit);
-           if (acc) {
-             if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
-               show += xaccIsAccountInList (acc, regData->blackacc);
-             }
-           }
-           acc = (Account *) (trans->credit);
-           if (acc) {
-             if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
-               show += xaccIsAccountInList (acc, regData->blackacc);
-             }
-           }
-
-           /* if the amount is zero, then leave the cell blank */
-           themount = trans->damount;
-           if (show && !(DEQ(0.0, themount)) ) {
-              sprintf( buf, "%.3f ", DABS(themount) );
-  
-              if (0.0 > themount ) {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-              } else {
-                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
-              }
-           } else {
-             newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-             newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
-           }
-        }  
+        case PORTFOLIO: 
+          themount = trans->damount;
           break;
 
         default:
-          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
-                  regData->type);
+          break;
       }
+      xaccGetDisplayAmountStrings (regData, themount, trans,
+                      &(newData[row+PAY_CELL_R][PAY_CELL_C]),
+                      &(newData[row+DEP_CELL_R][DEP_CELL_C]));
       
       /* ----------------------------------- */
       /* extra columns for mutual funds, etc. */
@@ -1339,6 +1410,7 @@ regSaveTransaction( RegWindow *regData, int position )
     float val=0.0;  /* must be float for sscanf to work */
     double debit_amount = 0.0;
     double credit_amount = 0.0;
+    double themount = 0.0;
 
     DEBUG("MOD_AMNT\n");
 
@@ -1360,53 +1432,12 @@ regSaveTransaction( RegWindow *regData, int position )
       case LIABILITY:
       case INCOME:
       case EXPENSE:
-      case EQUITY: {
-        double themount = credit_amount - debit_amount;
-        Account *main_acc = regData->blackacc[0];
-        xaccSetShareAmount (main_acc, trans, themount);
-
-        /* Reset so there is only one field filled */
-        if( 0.0 > themount )
-          {
-          sprintf( buf, "%.2f ", -themount );
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
-          }
-        else
-          {
-          sprintf( buf, "%.2f ", themount );
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
-          }
-        }
-        break;
-
+      case EQUITY: 
       case STOCK:
       case MUTUAL: {
-        double themount = credit_amount - debit_amount;
         Account *main_acc = regData->blackacc[0];
+        themount = credit_amount - debit_amount;
         xaccSetShareAmount (main_acc, trans, themount);
-
-        /* Reset so there is only one field filled */
-        /* if share amount is zero (e.g. for a price quote) 
-         * then leave both cells blank */
-        if (DEQ (0.0, themount) ) 
-          {
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
-          } else
-        if( 0.0 > themount )
-          {
-          sprintf( buf, "%.3f ", -themount );
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
-          }
-        else
-          {
-          sprintf( buf, "%.3f ", themount );
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
-          }
         }
         break;
 
@@ -1414,15 +1445,15 @@ regSaveTransaction( RegWindow *regData, int position )
       case INC_LEDGER: 
       case GEN_LEDGER: {
         Account *acc;
-        double themount = 0.0;
-        int show_debit, show_credit;
+        int show = 0;
 
         acc = (Account *) (trans->debit);
-        show_debit = xaccIsAccountInList (acc, regData->blackacc);
+        show += xaccIsAccountInList (acc, regData->blackacc);
         acc = (Account *) (trans->credit);
-        show_credit = xaccIsAccountInList (acc, regData->blackacc);
+        show += xaccIsAccountInList (acc, regData->blackacc);
 
-        if (show_debit && show_credit) {
+        themount = 0.0;
+        if (show) {
            /* try to figure out which entry the user changed ! */
            if (DEQ (debit_amount, trans->damount)) themount = credit_amount;
            if (DEQ (credit_amount, trans->damount)) themount = debit_amount;
@@ -1430,54 +1461,20 @@ regSaveTransaction( RegWindow *regData, int position )
            themount = credit_amount - debit_amount;
         }
         trans->damount = themount;
-
-        /* attempt to keep all displayed quantities positive by
-         * flipping signs and columns for negative entries */
-        /* hack alert -- but does this really work ??? */
-        if (0.0 < themount) {
-           if (PORTFOLIO == regData->type) {
-             sprintf( buf, "%.3f ", themount );
-           } else {
-             sprintf( buf, "%.2f ", themount );
-           }
-
-           if (show_debit) {
-              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-           } else {
-              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-           }
-  
-           if (show_credit) {
-              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
-           } else {
-              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
-           }
-        } else {
-           themount = - themount;
-
-           if (PORTFOLIO == regData->type) {
-             sprintf( buf, "%.3f ", themount );
-           } else {
-             sprintf( buf, "%.2f ", themount );
-           }
-
-           if (show_debit) {
-              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
-           } else {
-              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
-           }
-  
-           if (show_credit) {
-              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-           } else {
-              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-           }
-        }
       }
         break;
 
       default:
         break;
+    }
+
+    { 
+    char *pay, *dep;
+    xaccGetDisplayAmountStrings (regData, themount, trans, &pay, &dep);
+    XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, pay );
+    XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, dep );
+    XtFree (pay);
+    XtFree (dep);
     }
   }
 
