@@ -46,4 +46,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gnome/apps/Applications/gnucash.desktop
 /usr/share/locale/de/LC_MESSAGES/gnucash.mo
 /usr/share/locale/fr/LC_MESSAGES/gnucash.mo
+/usr/share/locale/en_GB/LC_MESSAGES/gnucash.mo
 %doc /usr/doc/gnucash

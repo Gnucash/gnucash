@@ -193,6 +193,8 @@ gnc_get_source_name(gint source)
       return NONE_STR;
     case SOURCE_YAHOO :
       return "Yahoo";
+    case SOURCE_YAHOO_EUROPE :
+      return "Yahoo Europe";
     case SOURCE_FIDELITY :
       return "Fidelity";
     case SOURCE_TROWEPRICE :
@@ -215,6 +217,8 @@ gnc_get_source_code_name(gint source)
       return NULL;
     case SOURCE_YAHOO :
       return "YAHOO";
+    case SOURCE_YAHOO_EUROPE :
+      return "YAHOO_EUROPE";
     case SOURCE_FIDELITY :
       return "FIDELITY";
     case SOURCE_TROWEPRICE :

@@ -239,6 +239,9 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, ACH_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, WIRE_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, CREDIT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, DIRECTDEBIT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, TRANSFER_STR);
          break;
       case CASH_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);

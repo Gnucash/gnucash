@@ -1,3 +1,23 @@
+2000-03-14  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_register_key_press_cb): generate activate event on a
+ 	keypad enter as well as the return key.
+
+	* Docs/C/xacc-ticker.html: updated for Yahoo Europe information.
+
+2000-03-13  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-utils.c: added Yahoo Europe to the quote source
+ 	menu.
+
+	* src/quotes/Quote.pm: added method for getting Yahoo European
+ 	quotes. Also, fixed the parsing of csv data.
+
+	* src/quotes/gnc-prices: cleanup the code, less wordy output.
+
+	* src/quotes/Quote.pm (yahoo): updates from latest YahooQuote.pm
+
 2000-03-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/c-interface.scm (gnc:error->string tag args): print a

@@ -2546,6 +2546,7 @@ gnucash_register_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 
         switch (event->keyval) {
                 case GDK_Return:
+                case GDK_KP_Enter:
                         gtk_signal_emit_by_name(GTK_OBJECT(reg),
                                                 "activate_cursor");
                         return TRUE;

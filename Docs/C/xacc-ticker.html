@@ -31,14 +31,17 @@
       "Security:"</li>
 
       <li>Select a quote source from the pull-down menu. Currently
-      supported quote sources include <b>Yahoo</b>, <b>Fidelity
-      Investments</b>, <b>T. Rowe Price</b> and the <b>Vanguard
-      Group</b>. Note that Yahoo will provide price quotes for many
-      mutual funds <em>including</em> Fidelity, T.Rowe Price and
-      Vanguard, and that the quoted prices at Yahoo <em>
-      should</em> be identical to those that may be found at the
-      source sites. (Otherwise, somebody's reporting wrong
-      information!)</li>
+      supported quote sources include <b>Yahoo</b>, <b>Yahoo
+      Europe</b>, <b>Fidelity Investments</b>, <b>T. Rowe Price</b>
+      and the <b>Vanguard Group</b>. Note that Yahoo will provide
+      price quotes for many mutual funds <em>including</em> Fidelity,
+      T.Rowe Price and Vanguard, and that the quoted prices at Yahoo
+      <em> should</em> be identical to those that may be found at the
+      source sites (otherwise, somebody's reporting wrong
+      information!). If you choose Yahoo Europe, you should append the
+      market code for the security, such as PA for Paris, BE for
+      Berlin, etc. Example: 12150.PA (a Peugot security in the Paris
+      market).</li>
     </ul>
 
     <p> A sample image is shown below:</p>
@@ -52,12 +55,11 @@
     gnc-prices myaccts.xac
 </pre>
 
-    <p> Running this command will print various diagnostic messages
-    to the screen while it loads data. It will work only when the
-    host computer is attached to the internet. It <em> can</em>
-    function in conjunction with masquerading-style firewalls, but
-    is not currently able to use proxy servers to get through proxy
-    or socks-style firewalls.</p>
+    <p> Running this command will print various diagnostic messages to
+    the screen while it loads data. It will work only when the host
+    computer is attached to the internet. It can function in
+    conjunction with masquerading-style firewalls and proxy
+    servers.</p>
 
     <p> The command can be run many times in one day; however, it
     will update the accounts at most once with the most recent
@@ -84,4 +86,3 @@
     Page.</a></p>
   </body>
 </html>
-

@@ -12,7 +12,7 @@
 # Copyright (c) 1999-2000 Linas Vepstas
 
 # hack alert -- this pathname should *NOT* be hard-coded.
-use lib '/usr/lib/gnucash/';
+use lib '/usr/lib/gnucash';
 use Quote;
 use gnucash;
 
@@ -23,23 +23,26 @@ use gnucash;
 
 sub account_flatlist 
 {
-   local ($grp) = $_[0];
-   local ($naccts) = gnucash::xaccGroupGetNumAccounts ($grp);
-   local ($n);
-   local (@acctlist, @childlist);
-   local ($children);
+  my $grp = $_[0];
+  my $naccts = gnucash::xaccGroupGetNumAccounts ($grp);
+  my $n;
+  my (@acctlist, @childlist);
+  my $children;
 
-   foreach $n (0..$naccts-1) {
-      $acct = gnucash::xaccGroupGetAccount ($grp, $n);
-      push (@acctlist, $acct);
-      $children = gnucash::xaccAccountGetChildren ($acct);
-      if ($children) { 
-         @childlist = &account_flatlist ($children);
-         push (@acctlist, @childlist);
-      }
-   }
+  foreach $n (0..$naccts-1)
+  {
+    $acct = gnucash::xaccGroupGetAccount ($grp, $n);
+    push (@acctlist, $acct);
 
-   return (@acctlist);
+    $children = gnucash::xaccAccountGetChildren ($acct);
+    if ($children)
+    {
+      @childlist = &account_flatlist ($children);
+      push (@acctlist, @childlist);
+    }
+  }
+
+  return (@acctlist);
 }
 
 # --------------------------------------------------
@@ -49,29 +52,32 @@ sub account_flatlist
 
 sub checkprice
 {
-   local ($acct)  = $_[0];
-   local ($dayte) = $_[1];
-   local ($query, $datesecs, $earliest, $latest);
-   local ($splitlist, $i, $split, $action);
+  my $acct  = $_[0];
+  my $dayte = $_[1];
+  my ($query, $datesecs, $earliest, $latest);
+  my ($splitlist, $i, $split, $action);
 
-   $datesecs = gnucash::xaccScanDateS ($dayte);
-   $earliest = $datesecs - 16*3600;        # subtract 16 hours
-   $latest = $datesecs + 16*3600;          # add 16 hours
-   $query = gnucash::xaccMallocQuery();
-   gnucash::xaccQueryAddAccount ($query, $acct);
-   gnucash::xaccQuerySetDateRange ($query, $earliest, $latest);
-   $splitlist = gnucash::xaccQueryGetSplits ($query);
+  $datesecs = gnucash::xaccScanDateS ($dayte);
+  $earliest = $datesecs - 16*3600;        # subtract 16 hours
+  $latest = $datesecs + 16*3600;          # add 16 hours
+  $query = gnucash::xaccMallocQuery();
+  gnucash::xaccQueryAddAccount ($query, $acct);
+  gnucash::xaccQuerySetDateRange ($query, $earliest, $latest);
+  $splitlist = gnucash::xaccQueryGetSplits ($query);
 
-   $i=0;
-   $split = gnucash::IthSplit ($splitlist, $i);
-   while ($split) {
-      $action = gnucash::xaccSplitGetAction ($split);
-      if ($action eq "Price") { return 1; }
-      $i++;
-      $split = gnucash::IthSplit ($splitlist, $i);
-   }
-   gnucash::xaccFreeQuery ($query);
-   0;
+  $i = 0;
+  $split = gnucash::IthSplit ($splitlist, $i);
+  while ($split)
+  {
+    $action = gnucash::xaccSplitGetAction ($split);
+    if ($action eq "Price") { return 1; }
+    $i++;
+    $split = gnucash::IthSplit ($splitlist, $i);
+  }
+
+  gnucash::xaccFreeQuery ($query);
+
+  return 0;
 }
 
 # --------------------------------------------------
@@ -81,25 +87,26 @@ sub checkprice
 
 sub setprice 
 {
-   local ($acct)  = $_[0];
-   local ($dayte) = $_[1];
-   local ($price) = $_[2];
-   local ($trans, $split);
+  my $acct  = $_[0];
+  my $dayte = $_[1];
+  my $price = $_[2];
+  my ($trans, $split);
 
-   $trans = gnucash::xaccMallocTransaction();
-   gnucash::xaccTransBeginEdit ($trans, 1);
-   gnucash::xaccTransSetDescription ($trans, "Price");
-   gnucash::xaccTransSetDateStr ($trans,$dayte);
+  $trans = gnucash::xaccMallocTransaction();
+  gnucash::xaccTransBeginEdit ($trans, 1);
+  gnucash::xaccTransSetDescription ($trans, "Price");
+  gnucash::xaccTransSetDateStr ($trans,$dayte);
 
-   $split = gnucash::xaccTransGetSplit ($trans, 0);
-   gnucash::xaccSplitSetSharePriceAndAmount ($split, $price, 0.0);
-   gnucash::xaccSplitSetAction ($split, "Price");
-   gnucash::xaccTransCommitEdit ($trans);
+  $split = gnucash::xaccTransGetSplit ($trans, 0);
+  gnucash::xaccSplitSetSharePriceAndAmount ($split, $price, 0.0);
+  gnucash::xaccSplitSetAction ($split, "Price");
+  gnucash::xaccTransCommitEdit ($trans);
 
-   gnucash::xaccAccountBeginEdit ($acct, 1);
-   gnucash::xaccAccountInsertSplit ($acct, $split);
-   gnucash::xaccAccountCommitEdit ($acct);
-   1;
+  gnucash::xaccAccountBeginEdit ($acct, 1);
+  gnucash::xaccAccountInsertSplit ($acct, $split);
+  gnucash::xaccAccountCommitEdit ($acct);
+
+  return 1;
 }
 
 # --------------------------------------------------
@@ -107,7 +114,7 @@ sub setprice
 die "Usage: $0 <gnucash-filename>" if $#ARGV < 0;
 
 # open the file, read all of the accounts
-print "Info: Opening file $ARGV[0]\n";
+print "Opening file $ARGV[0]\n";
 $sess = gnucash::xaccMallocSession ();
 $grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 
@@ -117,58 +124,78 @@ die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 @acctlist = &account_flatlist ($grp);
 
 # loop over the accounts, look for stock and mutual funds.
-ACCTLOOP:
-foreach $acct (@acctlist) {
-   $name = gnucash::xaccAccountGetName ($acct);
-   print "Info: Found account $name\n";
-   $type = gnucash::xaccAccountGetType ($acct);
+foreach $acct (@acctlist)
+{
+  $name = gnucash::xaccAccountGetName ($acct);
+  $type = gnucash::xaccAccountGetType ($acct);
 
-   if (($type == $gnucash::STOCK) ||
-       ($type == $gnucash::MUTUAL)) 
+  if (($type == $gnucash::STOCK) ||
+      ($type == $gnucash::MUTUAL))
+  {
+    print "$name: ";
+
+    $security = gnucash::xaccAccountGetSecurity ($acct);
+    $accinfo = gnucash::xaccAccountGetAccInfo ($acct);
+    $invacct = gnucash::xaccCastToInvAcct ($accinfo);
+
+    if ($invacct)
     {
-      $security = gnucash::xaccAccountGetSecurity ($acct);
-      $accinfo = gnucash::xaccAccountGetAccInfo ($acct);
-      $invacct = gnucash::xaccCastToInvAcct ($accinfo);
-      if ($invacct) {
-         $quotesrc = gnucash::xaccInvAcctGetPriceSrc ($invacct);
-         print "Info: will use $quotesrc for $name price quotes\n";
-         undef $price;  # undef to make sure later if($price) not broken
-         QUOTE: {
-            if ("YAHOO" eq $quotesrc) { 
-                %quotes = &Quote::yahoo ($security); 
-                $price = $quotes {$security, "last"};
-                last QUOTE;
-            }
-            if ("FIDELITY" eq $quotesrc) { 
-                %quotes = &Quote::fidelity ($security); 
-                $price = $quotes {$security, "nav"};
-                last QUOTE;
-            }
-            if ("TRPRICE" eq $quotesrc) { 
-                %quotes = &Quote::troweprice ($security); 
-                $price = $quotes {$security, "nav"};
-                last QUOTE;
-            }
-            if ("VANGUARD" eq $quotesrc) { 
-                %quotes = &Quote::vanguard ($security); 
-                $price = $quotes {$security, "nav"};
-                last QUOTE;
-            }
-            next ACCTLOOP;  # no quote available, go to next account
-         }
-         $dayte = $quotes {$security, "date"};
-         $prodname = $quotes {$security, "name"};
-         if ($price) {
-            print "Info: $security $prodname last price = $price at $dayte\n";
-            # This || construction will store the price if its not already 
-            # stored (in the 28 hour period surrounding "dayte")
-            &checkprice ($acct, $dayte) || &setprice ($acct, $dayte, $price);
-         }
-         print "\n";
+      $quotesrc = gnucash::xaccInvAcctGetPriceSrc ($invacct);
+      unless ($quotesrc)
+      {
+        print "no quote source found\n";
+        next;
       }
-   }
+
+      undef $price;  # undef to make sure later if($price) not broken
+
+      if ("YAHOO" eq $quotesrc)
+      {
+        %quotes = &Quote::yahoo ($security);
+        $price = $quotes {$security, "last"};
+      }
+      elsif ("YAHOO_EUROPE" eq $quotesrc)
+      {
+        %quotes = &Quote::yahoo_europe ($security);
+        $price = $quotes {$security, "last"};
+      }
+      elsif ("FIDELITY" eq $quotesrc)
+      {
+        %quotes = &Quote::fidelity ($security);
+        $price = $quotes {$security, "nav"};
+      }
+      elsif ("TRPRICE" eq $quotesrc)
+      {
+        %quotes = &Quote::troweprice ($security);
+        $price = $quotes {$security, "nav"};
+      }
+      elsif ("VANGUARD" eq $quotesrc)
+      {
+        %quotes = &Quote::vanguard ($security);
+        $price = $quotes {$security, "nav"};
+      }
+      else
+      {
+        print "unknown quote source: $quotesrc\n";
+        next;
+      }
+
+      print "using $quotesrc\n";
+      print "$name: ";
+
+      $dayte = $quotes {$security, "date"};
+      $prodname = $quotes {$security, "name"};
+
+      if ($price)
+      {
+        print "$security $prodname last price = $price at $dayte\n";
+        # This || construction will store the price if its not already 
+        # stored (in the 28 hour period surrounding "dayte")
+        &checkprice ($acct, $dayte) || &setprice ($acct, $dayte, $price);
+      }
+    }
+  }
 }
 
 gnucash::xaccSessionSave ($sess);
 gnucash::xaccSessionEnd ($sess);
-

@@ -2,6 +2,7 @@
 #
 #    Copyright (C) 1998, Dj Padzensky <djpadz@padz.net>
 #    Copyright (C) 1998, 1999 Linas Vepstas <linas@linas.org>
+#    Copyright (C) 2000 Yannick LE NY <y-le-ny@ifrance.com>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,18 +28,21 @@ require 5.000;
 
 require Exporter;
 use strict;
-use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
-            $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL $FIDELITY_GLBND_URL
-            $FIDELITY_MM_URL $FIDELITY_ASSET_URL $TROWEPRICE_URL
+use vars qw($VERSION @EXPORT @ISA $TIMEOUT
+            $YAHOO_URL $YAHOO_EUROPE_URL
+            $FIDELITY_GANDI_URL $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL
+            $FIDELITY_GLBND_URL $FIDELITY_MM_URL $FIDELITY_ASSET_URL
+            $TROWEPRICE_URL
             $VANGUARD_QUERY_URL $VANGUARD_CSV_URL @vanguard_ids);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
-$VERSION = '0.08';
+$VERSION = '0.13';
 @ISA = qw(Exporter);
 
 $YAHOO_URL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
+$YAHOO_EUROPE_URL = ("http://finance.fr.yahoo.com/d/quotes.csv?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
 $FIDELITY_GANDI_URL = ("http://personal441.fidelity.com/gen/prices/gandi.csv");
 $FIDELITY_GROWTH_URL = ("http://personal441.fidelity.com/gen/prices/growth.csv");
 $FIDELITY_CORPBOND_URL = ("http://personal441.fidelity.com/gen/prices/corpbond.csv");
@@ -52,42 +56,109 @@ $VANGUARD_CSV_URL = ("http://www.vanguard.com/cgi-bin/Custom?ACTION=Download&Fil
 # Don't export; let user invoke with Quote::getquote syntax.
 # @EXPORT = qw(&yahoo, &fidelity);
 
+undef $TIMEOUT;
+
+# =======================================================================
+# Grabbed from the Perl Cookbook. Parsing csv isn't as simple as you thought!
+sub parse_csv
+{
+    my $text = shift;      # record containing comma-separated values
+    my @new  = ();
+
+    push(@new, $+) while $text =~ m{
+        # the first part groups the phrase inside the quotes.
+        # see explanation of this pattern in MRE
+        "([^\"\\]*(?:\\.[^\"\\]*)*)",?
+           |  ([^,]+),?
+           | ,
+       }gx;
+       push(@new, undef) if substr($text, -1,1) eq ',';
+
+       return @new;      # list of values that were comma-separated
+}  
+
 # =======================================================================
 # yahoo gets quotes from the Yahoo service
 # which is primarily the new york stock exchange.
-sub yahoo {
+sub yahoo
+{
     my @symbols = @_;
     my($x,@q,%aa,$ua,$url,$sym);
+
     $x = $";
     $" = "+";
     $url = $YAHOO_URL."@symbols";
     $" = $x;
     $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
-        $sym = $q[0];
-        $aa {$sym, "exchange"} = "NYSE";  # new  york stock exchange
-        $aa {$sym, "name"} = $q[1];
-        $aa {$sym, "last"} = $q[2];
-        $aa {$sym, "date"} = $q[3];
-        $aa {$sym, "time"} = $q[4];
-        $aa {$sym, "volume"} = $q[7];
-        $aa {$sym, "bid"} = $q[9];
-        $aa {$sym, "ask"} = $q[10];
-        $aa {$sym, "close"} = $q[11];
-        $aa {$sym, "open"} = $q[12];
-        $aa {$sym, "eps"} = $q[15];
-        $aa {$sym, "pe"} = $q[16];
-        $aa {$sym, "cap"} = $q[20];
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+    foreach (split('\015?\012',$ua->request(GET $url)->content))
+    {
+      @q = parse_csv($_);
+
+      $sym = $q[0];
+      $aa {$sym, "exchange"} = "NYSE";  # new  york stock exchange
+      $aa {$sym, "name"} = $q[1];
+      $aa {$sym, "last"} = $q[2];
+      $aa {$sym, "date"} = $q[3];
+      $aa {$sym, "time"} = $q[4];
+      $aa {$sym, "volume"} = $q[7];
+      $aa {$sym, "bid"} = $q[9];
+      $aa {$sym, "ask"} = $q[10];
+      $aa {$sym, "close"} = $q[11];
+      $aa {$sym, "open"} = $q[12];
+      $aa {$sym, "eps"} = $q[15];
+      $aa {$sym, "pe"} = $q[16];
+      $aa {$sym, "cap"} = $q[20];
     }
+
     # return wantarray() ? @qr : \@qr;
     return %aa;
 }
 
 # =======================================================================
-# the fideility routine gets quotes from fidelity investments
+# yahoo_europe gets quotes for European markets from Yahoo.
+sub yahoo_europe
+{
+    my @symbols = @_;
+    my($x,@q,%aa,$ua,$url,$sym);
+
+    $x = $";
+    $" = "+";
+    $url = $YAHOO_EUROPE_URL."@symbols";
+    $" = $x;
+    $ua = LWP::UserAgent->new;
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+    foreach (split('\015?\012',$ua->request(GET $url)->content))
+    {
+      @q = parse_csv($_);
+
+      $sym = $q[0];
+      # $aa {$sym, "exchange"} = "NYSE";
+      $aa {$sym, "name"} = $q[1];
+      $aa {$sym, "last"} = $q[2];
+      $aa {$sym, "date"} = $q[3];
+      $aa {$sym, "time"} = $q[4];
+      $aa {$sym, "volume"} = $q[7];
+      $aa {$sym, "bid"} = $q[9];
+      $aa {$sym, "ask"} = $q[10];
+      $aa {$sym, "close"} = $q[11];
+      $aa {$sym, "open"} = $q[12];
+      $aa {$sym, "eps"} = $q[15];
+      $aa {$sym, "pe"} = $q[16];
+      $aa {$sym, "cap"} = $q[20];
+    }
+
+    # return wantarray() ? @qr : \@qr;
+    return %aa;
+}
+
+# =======================================================================
+# the fidelity routine gets quotes from fidelity investments
 #
-sub fidelity {
+sub fidelity
+{
     my @symbols = @_;
     my(%aa,%cc,$sym, $k);
 
@@ -169,21 +240,27 @@ sub fidelity {
           }
        }
     }
+
     return %aa;
 }
 
 # =======================================================================
 
-sub fidelity_nav {
+sub fidelity_nav
+{
     my(@q,%aa,$ua,$url,$sym, $dayte);
     my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
+                'Thursday','Thu','Friday','Fri','Saturday','Sat',
+                'Sunday','Sun');
 
     # for Fidelity, we get them all. 
     $url = $_[0];
     $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+    foreach (split('\015?\012',$ua->request(GET $url)->content))
+    {
+        @q = parse_csv($_);
 
         # extract the date which is usually on the second line fo the file.
         if (! defined ($dayte)) {
@@ -204,21 +281,27 @@ sub fidelity_nav {
             $aa {$sym, "date"} = $dayte;
         }
     }
+
     return %aa;
 }
 
 # =======================================================================
 
-sub fidelity_mm {
+sub fidelity_mm
+{
     my(@q,%aa,$ua,$url,$sym, $dayte);
     my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
-                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
+                'Thursday','Thu','Friday','Fri','Saturday','Sat',
+                'Sunday','Sun');
 
     # for Fidelity, we get them all. 
     $url = $_[0];
     $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+    foreach (split('\015?\012',$ua->request(GET $url)->content))
+    {
+        @q = parse_csv($_);
 
         # extract the date which is usually on the second line fo the file.
         if (! defined ($dayte)) {
@@ -237,19 +320,24 @@ sub fidelity_mm {
             $aa {$sym, "date"} = $dayte;
         }
     }
+
     return %aa;
 }
 
 # =======================================================================
 
-sub troweprice {
+sub troweprice
+{
     my(@q,%aa,$ua,$url,$sym);
 
     # for T Rowe Price,  we get them all. 
     $url = $TROWEPRICE_URL;
     $ua = LWP::UserAgent->new;
-    foreach (split('\n',$ua->request(GET $url)->content)) {
-	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+    foreach (split('\015?\012',$ua->request(GET $url)->content))
+    {
+        @q = parse_csv($_);
 
         # extract the date which is usually on the second line fo the file.
         ($sym = $q[0]) =~ s/^ +//;
@@ -261,16 +349,17 @@ sub troweprice {
             $aa {$sym, "date"} = $q[2];
         }
     }
+
     return %aa;
 }
 
 # =======================================================================
 
-sub vanguard {
-
-    # The Vanguard Group doesn't use thier ticker symbols to look up funds.
-    # but we do use the ticker symbols.  Therefore, we need to do a reverse lookup.
-    # Load the array on first use only
+sub vanguard
+{
+    # The Vanguard Group doesn't use their ticker symbols to look up funds.
+    # but we do use the ticker symbols. Therefore, we need to do a reverse
+    # lookup. Load the array on first use only
     if (! @vanguard_ids ) {
         push (@vanguard_ids, ("0002", "Bal Index ", "VBINX"));
         push (@vanguard_ids, ("0006", "Value Idx ", "VIVAX"));
@@ -395,11 +484,13 @@ sub vanguard {
     # ask for a special report with these symbols in them
     $url .="COLS=COL1%2C3&COLS=COL4&COLS=COL5&COLS=COL11%2C12&ACTION=Accept";
     $ua = LWP::UserAgent->new;
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
     $reply = $ua->request(GET $url)->content;
 
     # now build the second url which will actually contain the data
     undef $url;
-    foreach (split('\n',$reply)) {
+    foreach (split('\015?\012',$reply)) {
        if (/FileName=V(.*)\.txt/) {
            $url = $VANGUARD_CSV_URL . "V" . $1 . ".txt";
            last;
@@ -409,7 +500,7 @@ sub vanguard {
     $reply = $ua->request(GET $url)->content;
 
     # parse the data, stick it into the array the user will get
-    foreach (split('\n',$reply)) {
+    foreach (split('\015?\012',$reply)) {
        @q = split (/,/);
        ($sym = $q[0]) =~ s/\W//g;
        $aa {$sym, "exchange"} = "Vanguard";  # Vanguard
@@ -432,14 +523,15 @@ sub vanguard {
           $aa {$sym, "name"} = $fid;
        }
     }
+
     return %aa;
 }
 
 # =======================================================================
 
-__END__
-
 1;
+
+__END__
 
 =head1 NAME
 
@@ -448,19 +540,21 @@ Finance::Quote - Get stock and mutual fund quotes from various exchanges
 =head1 SYNOPSIS
 
   use Finance::Quote;
-  %quotes = Quote::yahoo @symbols;	# Get NYSE quotes from Yahoo
-  %quotes = Quote::fidelity @symbols;	# Get quotes from Fidelity Investments
-  %quotes = Quote::troweprice @symbols;	# Get quotes from T. Rowe Price
-  %quotes = Quote::vanguard @symbols;	# Get quotes from the Vanguard Group
+  $Finance::Quote::TIMEOUT = 60;
+  %quotes = Quote::yahoo @symbols;	 # Get NYSE quotes from Yahoo
+  %quotes = Quote::yahoo_europe @symbols;# Get Europe quotes from Yahoo France
+  %quotes = Quote::fidelity @symbols;	 # Get quotes from Fidelity Investments
+  %quotes = Quote::troweprice @symbols;	 # Get quotes from T. Rowe Price
+  %quotes = Quote::vanguard @symbols;	 # Get quotes from the Vanguard Group
   print ("the last price was ", $quotes {"IBM", "last"} );
 
 =head1 DESCRIPTION
 
-This module gets stock quotes from various internet sources, including 
-Yahoo! Finance and Fidelity Investments.  The
-B<quote_yahoo> function will return a quote for each of the stock symbols
-passed to it.  The return value of each of the routines is an associative
-array, which may include one or more of the following elements:
+This module gets stock quotes from various internet sources, including
+Yahoo! Finance and Fidelity Investments.  The B<quote_yahoo> function
+will return a quote for each of the stock symbols passed to it.  The
+return value of each of the routines is an associative array, which
+may include one or more of the following elements:
 
     name         Company or Mutual Fund Name
     last         Last Price
@@ -485,10 +579,37 @@ array, which may include one or more of the following elements:
     nav          Net Asset Value
     yeild        Yeild (usually 30 day avg)
 
+You may optionally override the default LWP timeout of 180 seconds by setting
+$Finance::Quote::TIMEOUT to your preferred value.
+
+=head1 FAQ
+
+If there's one question I get asked over and over again, it's how did
+I figure out the format string?  Having typed the answer in
+innumerable emails, I figure sticking it directly into the man page
+might help save my fingers a bit...
+
+If you have a My Yahoo! (http://my.yahoo.com) account, go to the
+following URL:
+
+    http://edit.my.yahoo.com/config/edit_pfview?.vk=v1
+
+Viewing the source of this page, you'll come across the section that
+defines the menus that let you select which elements go into a
+particular view.  The <option> values are the strings that pick up
+the information described in the menu item.  For example, Symbol
+refers to the string "s" and name refers to the string "l".  Using
+"sl" as the format string, we would get the symbol followed by the
+name of the security.
+
+If you have questions regarding this, play around with $QURL, changing
+the value of the f parameter.
+
 =head1 COPYRIGHT
 
 Copyright 1998, Dj Padzensky
 Copyright 1998, 1999 Linas Vepstas
+Copyright 2000, Yannick LE NY (update for Yahoo Europe and YahooQuote)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -496,7 +617,7 @@ the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
 The information that you obtain with this library may be copyrighted
-by Yahoo! Inc., and is governed by their usage license.  See
+by Yahoo! Inc., and is governed by their usage license. See
 http://www.yahoo.com/docs/info/gen_disclaimer.html for more
 information.
 
@@ -504,6 +625,7 @@ information.
 
 Dj Padzensky (C<djpadz@padz.net>), PadzNet, Inc.
 Linas Vepstas (C<linas@linas.org>)
+Yannick LE NY (C<y-le-ny@ifrance.com>)
 
 The Finance::YahooQuote home page can be found at
 http://www.padz.net/~djpadz/YahooQuote/

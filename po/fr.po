@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.2.0\n"
-"POT-Creation-Date: 2000-03-12 23:14-0800\n"
+"POT-Creation-Date: 2000-03-14 15:41-0800\n"
 "PO-Revision-Date: 2000-03-06 23:47+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "Nom du compte"
 msgid "Date"
 msgstr "Date"
 
-#: ../po/guile_strings.txt:6 messages-i18n.c:272
+#: ../po/guile_strings.txt:6 messages-i18n.c:274
 msgid "Equity"
 msgstr "Capitaux propres(Actif)"
 
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Time"
 msgstr "Heure"
 
-#: ../po/guile_strings.txt:19 messages-i18n.c:292
+#: ../po/guile_strings.txt:19 messages-i18n.c:294
 msgid "Memo"
 msgstr "Mémo"
 
@@ -342,7 +342,7 @@ msgstr "Moyenne"
 msgid "A_ccount Balance Tracker"
 msgstr "Suivi du solde du compte"
 
-#: ../po/guile_strings.txt:78 messages-i18n.c:280
+#: ../po/guile_strings.txt:78 messages-i18n.c:282
 msgid "From"
 msgstr "Depuis"
 
@@ -524,7 +524,7 @@ msgstr "Transactions avec couleurs alternées en mode double"
 msgid "General"
 msgstr "Général"
 
-#: ../po/guile_strings.txt:122 messages-i18n.c:320
+#: ../po/guile_strings.txt:122 messages-i18n.c:322
 msgid "Security"
 msgstr "Valeur"
 
@@ -536,7 +536,7 @@ msgstr "Ligne unique"
 msgid "Sub-Accounts"
 msgstr "Sous-comptes"
 
-#: ../po/guile_strings.txt:125 messages-i18n.c:288
+#: ../po/guile_strings.txt:125 messages-i18n.c:290
 msgid "Liability"
 msgstr "Dettes(Passif)"
 
@@ -572,7 +572,7 @@ msgstr "Numéro"
 msgid "Show both icons and text"
 msgstr "Montrer ensemble les icônes et le texte"
 
-#: ../po/guile_strings.txt:134 messages-i18n.c:296
+#: ../po/guile_strings.txt:134 messages-i18n.c:298
 msgid "Notes"
 msgstr "Notes"
 
@@ -584,7 +584,7 @@ msgstr "Rapports"
 msgid "Single mode active background"
 msgstr "Arrière-plan de la transaction active en mode simple"
 
-#: ../po/guile_strings.txt:137 messages-i18n.c:314
+#: ../po/guile_strings.txt:137 messages-i18n.c:316
 msgid "Register"
 msgstr "Registre"
 
@@ -660,7 +660,7 @@ msgstr "Trier par ce second critère"
 msgid "Income.Salary.Taxable"
 msgstr "Revenus.Salaire.Imposable"
 
-#: ../po/guile_strings.txt:156 messages-i18n.c:284
+#: ../po/guile_strings.txt:156 messages-i18n.c:286
 msgid "Income"
 msgstr "Revenus"
 
@@ -825,7 +825,7 @@ msgstr "Le caractère utilisé pour séparer les noms de comptes utilisables"
 msgid "__gui"
 msgstr ""
 
-#: ../po/guile_strings.txt:195 messages-i18n.c:332
+#: ../po/guile_strings.txt:195 messages-i18n.c:334
 msgid "To"
 msgstr "Vers"
 
@@ -833,7 +833,7 @@ msgstr "Vers"
 msgid "smallest to largest, earliest to latest"
 msgstr "du plus petit vers le plus grand, du plus ancien vers le plus récent"
 
-#: ../po/guile_strings.txt:197 messages-i18n.c:335
+#: ../po/guile_strings.txt:197 messages-i18n.c:337
 msgid "Type"
 msgstr "Type"
 
@@ -893,7 +893,7 @@ msgstr "2 semaines"
 msgid "Nothing"
 msgstr "Rien"
 
-#: ../po/guile_strings.txt:212 messages-i18n.c:274
+#: ../po/guile_strings.txt:212 messages-i18n.c:276
 msgid "Expense"
 msgstr "Dépenses"
 
@@ -970,11 +970,11 @@ msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr ""
 "Inverser les comptes carte de crédit, dettes, capitaux propres, et revenus"
 
-#: ../po/guile_strings.txt:230 messages-i18n.c:328
+#: ../po/guile_strings.txt:230 messages-i18n.c:330
 msgid "Stock"
 msgstr "Actions"
 
-#: ../po/guile_strings.txt:231 messages-i18n.c:276
+#: ../po/guile_strings.txt:231 messages-i18n.c:278
 msgid "Extensions"
 msgstr "Extensions"
 
@@ -2123,245 +2123,254 @@ msgid "Difference"
 msgstr "Différence"
 
 #: messages-i18n.c:269
+msgid "Direct Debit"
+msgstr ""
+
+#: messages-i18n.c:270
 msgid "Dist"
 msgstr "Dist"
 
-#: messages-i18n.c:270
+#: messages-i18n.c:271
 msgid "Div"
 msgstr "Div"
 
-#: messages-i18n.c:271
+#: messages-i18n.c:272
+#, fuzzy
+msgid "Duplicate"
+msgstr "Date"
+
+#: messages-i18n.c:273
 msgid "Edit"
 msgstr "Afficher"
 
-#: messages-i18n.c:273
+#: messages-i18n.c:275
 msgid "Exit"
 msgstr "Quitter"
 
-#: messages-i18n.c:275
+#: messages-i18n.c:277
 msgid "Export"
 msgstr "Exporter"
 
-#: messages-i18n.c:277
+#: messages-i18n.c:279
 msgid "Fee"
 msgstr "Taxes/Impots"
 
-#: messages-i18n.c:278
+#: messages-i18n.c:280
 msgid "File"
 msgstr "Fichier"
 
-#: messages-i18n.c:279
+#: messages-i18n.c:281
 msgid "Forward"
 msgstr "Suivant"
 
-#: messages-i18n.c:281
+#: messages-i18n.c:283
 msgid "GnuCash Preferences"
 msgstr "Préférences de GnuCash"
 
-#: messages-i18n.c:282
+#: messages-i18n.c:284
 msgid "Help"
 msgstr "Aide"
 
-#: messages-i18n.c:283
+#: messages-i18n.c:285
 msgid "Import"
 msgstr "Importer"
 
-#: messages-i18n.c:285
+#: messages-i18n.c:287
 msgid "Increase"
 msgstr "Augmenter"
 
-#: messages-i18n.c:286
+#: messages-i18n.c:288
 msgid "Int"
 msgstr "Int"
 
-#: messages-i18n.c:287
+#: messages-i18n.c:289
 msgid "Jump"
 msgstr "Sauter"
 
-#: messages-i18n.c:289
+#: messages-i18n.c:291
 msgid "License"
 msgstr "Licence"
 
-#: messages-i18n.c:290
+#: messages-i18n.c:292
 msgid "Loan"
 msgstr "Emprunt"
 
-#: messages-i18n.c:291
+#: messages-i18n.c:293
 msgid "LTCG"
 msgstr "PVLT"
 
-#: messages-i18n.c:293
+#: messages-i18n.c:295
 msgid "New"
 msgstr "Nouveau"
 
-#: messages-i18n.c:294
+#: messages-i18n.c:296
 msgid "No"
 msgstr "Non"
 
-#: messages-i18n.c:295
+#: messages-i18n.c:297
 msgid "(none)"
 msgstr "(aucun)"
 
-#: messages-i18n.c:297
+#: messages-i18n.c:299
 msgid "Num"
 msgstr "Num"
 
-#: messages-i18n.c:298
+#: messages-i18n.c:300
 msgid "Ok"
 msgstr "Ok"
 
-#: messages-i18n.c:299
+#: messages-i18n.c:301
 msgid "Online"
 msgstr "En ligne"
 
-#: messages-i18n.c:300
+#: messages-i18n.c:302
 msgid "Open"
 msgstr "Ouvrir"
 
-#: messages-i18n.c:301
+#: messages-i18n.c:303
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: messages-i18n.c:302
+#: messages-i18n.c:304
 msgid "Payment"
 msgstr "Paiement"
 
-#: messages-i18n.c:303
+#: messages-i18n.c:305
 msgid "Portfolio"
 msgstr "Portefeuille"
 
-#: messages-i18n.c:304
+#: messages-i18n.c:306
 msgid "POS"
 msgstr "DAB"
 
-#: messages-i18n.c:305
+#: messages-i18n.c:307
 msgid "Preferences"
 msgstr "Préferences"
 
-#: messages-i18n.c:306
+#: messages-i18n.c:308
 msgid "Price"
 msgstr "Cours"
 
-#: messages-i18n.c:307
+#: messages-i18n.c:309
 msgid "Print"
 msgstr "Imprimer"
 
-#: messages-i18n.c:308
+#: messages-i18n.c:310
 msgid "Profits"
 msgstr "Profits"
 
-#: messages-i18n.c:309
+#: messages-i18n.c:311
 msgid "Quit"
 msgstr "Quitter"
 
-#: messages-i18n.c:310
+#: messages-i18n.c:312
 msgid "Rebate"
 msgstr "Rabais"
 
-#: messages-i18n.c:311
+#: messages-i18n.c:313
 msgid "Receive"
 msgstr "Reçu"
 
-#: messages-i18n.c:312
+#: messages-i18n.c:314
 msgid "Reconcile"
 msgstr "Rapprocher"
 
-#: messages-i18n.c:313
+#: messages-i18n.c:315
 msgid "Record"
 msgstr "Enregistrer"
 
-#: messages-i18n.c:315
+#: messages-i18n.c:317
 msgid "Report"
 msgstr "Rapport"
 
-#: messages-i18n.c:316
+#: messages-i18n.c:318
 msgid "Reports"
 msgstr "Rapports"
 
-#: messages-i18n.c:317
+#: messages-i18n.c:319
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: messages-i18n.c:318
+#: messages-i18n.c:320
 msgid "Savings"
 msgstr "Epargne"
 
-#: messages-i18n.c:319
+#: messages-i18n.c:321
 msgid "Scrub"
 msgstr "Nettoyer"
 
-#: messages-i18n.c:321
+#: messages-i18n.c:323
 msgid "Sell"
 msgstr "Vendre"
 
-#: messages-i18n.c:322
+#: messages-i18n.c:324
 msgid "Settings"
 msgstr "Paramètres"
 
-#: messages-i18n.c:323
+#: messages-i18n.c:325
 msgid "Simple"
 msgstr "Simple"
 
-#: messages-i18n.c:324
+#: messages-i18n.c:326
 msgid "Sold"
 msgstr "Vendu"
 
-#: messages-i18n.c:325
+#: messages-i18n.c:327
 msgid "Spend"
 msgstr "Dépenser"
 
-#: messages-i18n.c:326
+#: messages-i18n.c:328
 msgid "Split"
 msgstr "Répartition"
 
-#: messages-i18n.c:327
+#: messages-i18n.c:329
 msgid "STCG"
 msgstr "PVCT"
 
-#: messages-i18n.c:329
+#: messages-i18n.c:331
 msgid "Style"
 msgstr "Style"
 
-#: messages-i18n.c:330
+#: messages-i18n.c:332
 msgid "Surplus"
 msgstr "Excédent"
 
-#: messages-i18n.c:331
+#: messages-i18n.c:333
 msgid "Teller"
 msgstr "Caissier"
 
-#: messages-i18n.c:333
+#: messages-i18n.c:335
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: messages-i18n.c:334
+#: messages-i18n.c:336
 msgid "Total"
 msgstr "Total"
 
-#: messages-i18n.c:336
+#: messages-i18n.c:338
 msgid "Transaction"
 msgstr "Transaction"
 
-#: messages-i18n.c:337
+#: messages-i18n.c:339
 msgid "Transfer"
 msgstr "Transférer"
 
-#: messages-i18n.c:338
+#: messages-i18n.c:340
 msgid "Value"
 msgstr "Montant"
 
-#: messages-i18n.c:339
+#: messages-i18n.c:341
 msgid "WARNING"
 msgstr "ATTENTION"
 
-#: messages-i18n.c:340
+#: messages-i18n.c:342
 msgid "Wire"
 msgstr "Télétransmission"
 
-#: messages-i18n.c:341
+#: messages-i18n.c:343
 msgid "Withdraw"
 msgstr "Se retirer"
 
-#: messages-i18n.c:342
+#: messages-i18n.c:344
 msgid "Yes"
 msgstr "Oui"
