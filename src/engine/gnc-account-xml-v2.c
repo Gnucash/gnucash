@@ -323,7 +323,6 @@ gnc_account_end_handler(gpointer data_for_children,
     
     xmlFreeNode(tree);
 
-
     return successful;
 }
 
