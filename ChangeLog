@@ -1,3 +1,13 @@
+2001-05-31  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sixtp-utils.c (string_to_gint32): use intermediate
+	variable in case int != gint32.
+
+	* src/test/test-dom-converters1.c: fix spelling
+
+	* src/engine/sixtp-dom-generators.c (int_to_dom_tree): cast
+	gint64 to long long int for %lld.
+
 2001-05-31  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/scm/tip-of-the-day.scm ((gnc:current-tip-number)): reset

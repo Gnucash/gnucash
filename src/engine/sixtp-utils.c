@@ -214,13 +214,17 @@ string_to_gint64(const gchar *str, gint64 *v) {
 
 gboolean
 string_to_gint32(const gchar *str, gint32 *v) {
-  /* convert a string to a gint32.  only whitespace allowed before and after. */
+  /* convert a string to a gint32. only whitespace allowed before and after. */
   int num_read;
+  int v_in;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %d %n", v, &num_read) < 1) {
+  if(sscanf(str, " %d %n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+
+  if (v)
+    *v = v_in;
 
   if(!isspace_str(str + num_read, -1)) return(FALSE);
   return(TRUE);
