@@ -1,6 +1,16 @@
 This directory contains
 
--- engine  -- a directory containing gui-independent accounting engine
--- motif   -- the motif implementation of the xacc app
+-- engine   -- a directory containing gui-independent accounting engine
+-- gnome    -- the gtk/gnome implementation of gnucash
+-- motif    -- the motif implementation of gnucash
+-- qt       -- the Qt/KDE implementation of gnucash
 -- register -- a directory containg the register object
--- files that are gui-independent, but do not belong to the engine
+
+This directory contains a smatttering of gui-independent mis files.
+
+Ledger.c       -- obsolete, will be removed soon.
+SplitLedger.c  -- loads a register window with data from the engine
+MultiLedger.c  -- utilities for handling and updating multiple
+                  register windows at once.  
+
+
