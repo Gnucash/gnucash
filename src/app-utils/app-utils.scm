@@ -167,6 +167,7 @@
 (export YearDelta )
 (export ThirtyDayDelta)
 (export NinetyDayDelta)
+(export gnc:deltasym-to-delta)
 (export gnc:timepair-delta)
 (export gnc:time-elapsed)
 (export gnc:timepair-start-day-time)

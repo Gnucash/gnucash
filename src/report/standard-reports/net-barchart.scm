@@ -176,7 +176,7 @@
                       ((if inc-exp? gnc:timepair-start-day-time 
                            gnc:timepair-end-day-time) from-date-tp) 
                       (gnc:timepair-end-day-time to-date-tp)
-                      (eval interval)))
+                      (gnc:deltasym-to-delta interval)))
          (report-title (if inc-exp? (_ "Income/Expense Chart") 
                            (_ "Net Worth Chart")))
          (classified-accounts (gnc:decompose-accountlist accounts))

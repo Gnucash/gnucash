@@ -224,11 +224,11 @@ developing over time"))
                                (gnc:make-date-interval-list
                                 (gnc:timepair-start-day-time from-date-tp) 
                                 (gnc:timepair-end-day-time to-date-tp)
-                                (eval interval))
+                                (gnc:deltasym-to-delta interval))
                                (gnc:make-date-list
                                 (gnc:timepair-end-day-time from-date-tp) 
                                 (gnc:timepair-end-day-time to-date-tp)
-                                (eval interval))))
+                                (gnc:deltasym-to-delta interval))))
                ;; Here the date strings for the x-axis labels are
                ;; created.
                (date-string-list

@@ -268,7 +268,7 @@
          (enddate (gnc:timepair-end-day-time 
                    (gnc:date-option-absolute-time 
                     (get-option gnc:pagename-general optname-to-date))))
-         (stepsize (eval (get-option gnc:pagename-general optname-stepsize)))
+         (stepsize (gnc:deltasym-to-delta (get-option gnc:pagename-general optname-stepsize)))
          (report-currency (get-option gnc:pagename-general 
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general

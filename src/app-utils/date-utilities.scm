@@ -294,6 +294,25 @@
     (set-tm:mday ddt 90)
     ddt))
 
+;; if you add any more FooDeltas, add to this list!!!
+
+(define deltalist
+  (list (cons 'SecDelta SecDelta)
+	(cons 'DayDelta DayDelta)
+	(cons 'WeejDelta WeekDelta)
+	(cons 'MonthDelta MonthDelta)
+	(cons 'QuarterDelta QuarterDelta)
+	(cons 'HalfYearDelta HalfYearDelta)
+	(cons 'YearDelta YearDelta)
+	(cons 'ThirtyDayDelta ThirtyDayDelta)
+	(cons 'NinetyDayDelta NinetyDayDelta)))
+
+(define (gnc:deltasym-to-delta ds)
+  (let ((retval (assq ds deltalist)))
+    (if (pair? retval)
+	(cdr retval)
+	#f)))
+
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
   (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))

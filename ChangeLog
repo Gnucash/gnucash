@@ -1,3 +1,13 @@
+2001-09-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/app-utils/date-utilities.scm ((gnc:deltasym-to-delta)): new function
+	to convert datedelta symbols to the actual deltas.
+
+	* src/app-utils/app-utils.scm: export gnc:deltasym-to-delta
+
+	* src/report/standard-reports/net-barchart.scm (etc.): replace eval usage
+	with gnc:deltasym-to-delta
+
 2001-09-21  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.c: fix split account bugs.
