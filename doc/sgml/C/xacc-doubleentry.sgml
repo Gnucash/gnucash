@@ -7,15 +7,12 @@
 <SECT1>
 <TITLE> Why Use Double Entry Accounting?</TITLE>
 <PARA>    </PARA>
-<PARA>If you are a novice to accounting, you <EMPHASIS>need</EMPHASIS> double
-    entry accounting to help you keep your accounts straight. It
-    will keep you from creating an unverifiable mess. It will make
-    your life easier, and it will make this software easier to
-    understand and to use.
-
-    </PARA>
-<PARA>And if you are an experienced accountant, you would likely
-    feel <EMPHASIS>ill</EMPHASIS> at the thought of life without it.
+<PARA>
+    Double-entry accounting helps you avoid mistakes.  This is why
+    professional accountants use it.  If you are new to accounting, 
+    it will help you organize your records and keep you from creating an
+    unauditable mess.  If you are an experienced accountant, then you
+    probably won't want to imagine what life was like before it.
 
     </PARA>
 </SECT1>
@@ -24,73 +21,90 @@
 <PARA>    </PARA>
 <PARA>Double entry bookkeeping is an accounting methodology
     introduced in the 13th century to to make sure that each
-    accounts and indeed <EMPHASIS>each transaction</EMPHASIS> is properly
-    balanced.
-
-    </PARA>
-<PARA>When these are all required to balance, the likelihood of
-    data-entry errors is greatly reduced. For large, complex sets
-    of accounts with many transactions, it is distressingly easy to
-    make errors that may go undetected for a long time, and be
-    appallingly difficult to track down, even when double-entry
-    bookkeeping is used.
+    transaction and account is properly balanced.
+    It greatly reduces the likelihood of data-entry errors.
 
     </PARA>
 <PARA>A double-entry transaction is a transaction that contains
     entries for two (or more) accounts that balance against one
-    another. One account is <EMPHASIS>debited</EMPHASIS> by an amount exactly
+    another. One account is <EMPHASIS>debited</EMPHASIS> by an amount 
     equal to what the other is <EMPHASIS>credited.</EMPHASIS> By ensuring that
     each transaction balances, a balanced set of accounts is
-    guaranteed. This doesn't prevent you from having errors, but
-    certainly eliminates the large class of <EMPHASIS>I forgot to enter
-    that part of the transaction</EMPHASIS> errors.
+    guaranteed. This doesn't totally prevent errors, but it does
+    eliminate the class of <EMPHASIS>"I forgot to enter
+    that part of the transaction"</EMPHASIS> errors.
+    In the course  of maintaining large, complex sets of accounts with many
+    transactions, it is very easy to make errors that may go undetected for
+    a long time, and be appallingly difficult to track down, even when
+    double-entry bookkepping is used.
 
     </PARA>
-<PARA>Double-entry may be introduced in a more intuitive way via
-    the notion of a transfer from one bank account to another,
-    where an amount is taken out of one bank account and deposited
-    in the other. This is effectively the "rule" of double entry
-    accounting; if you add something in to one account, you <EMPHASIS>    have</EMPHASIS> to have another component to that transaction to
-    balance it.
+</SECT1>
+<SECT1>
+<TITLE> The Rule of Double-Entry Accounting</TITLE>
+<PARA>The intuitive way of understanding double-entry 
+    is as a transfer from one bank account to another,
+    where the amount taken out of one bank account must equal that
+    deposited in the other. This is effectively the "rule" of double entry
+    accounting; if you add something in to one account, you 
+    have to subtract it from somewhere else.
+    When this is done regularly and consistently, this results in the
+    magical identity of accounting:
+    <ENVAR>Total of Debits = Total of Credits.</ENVAR>
+
 
     </PARA>
-<PARA><EMPHASIS>Not-quite-an-aside:</EMPHASIS> If you look at your bank
-    statements, they are typically written up from the <EMPHASIS>    bank's</EMPHASIS> perspective, which is exactly <EMPHASIS>opposite</EMPHASIS> to
-    yours. For instance, when you put money in, establishing a
-    deposit, this establishes a <EMPHASIS>DEBT</EMPHASIS> on their part.
-    As a result, "newcomers to accounting," who only see the terms
-    "Debit" and "Credit" on statements from their bank seem to get
-    fairly confused about this. 
+<PARA>There is another important aspect to double-entry that
+    should also be understood: to get the complete picture,
+    you must also track income and expense.  When you deposit
+    your paycheck into your bank account, that money didn't 
+    come 'from thin air'.   Thus, when you record that bank deposit,
+    you shouldn't fool your accounting system about that thin air.
+    You should record your income in an income account:  
+    the money that goes into your bank comes from your income 
+    account.  Once again, adding in one place subtracts from another.
+    By keeping track of your income and expenses, you can ultimately
+    keep track of your equity:  Simply put, after years of earning and
+    spending, what you have left is what you got in, minus the 
+    amount you spent.
+    This is discussed in more detail in the 
+    <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK> 
+    chapter.
 
     </PARA>
-<PARA>The perhaps less obvious extension is the notion that double
-    entry can be used to represent income and expenses as well as bank
-    transfers. See the <LINK
-    LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK> page for a more
-    detailed discussion of that.
-
-    </PARA>
-<PARA><ANCHOR ID="IDENTITY">In a traditional system that records
-    debits and credits separately, the identity that all
-    transactions are required to satisfy is that <ENVAR>Total of
-    Debits = Total of Credits.</ENVAR>
-
-    </PARA>
-<PARA>The fact that the identity requires merely that the <EMPHASIS>    total</EMPHASIS> balances means that it is a little bit misleading to
-    call this <EMPHASIS>double</EMPHASIS>-entry bookkeeping; it would be
+<PARA><EMPHASIS>Insider knowledge:</EMPHASIS> 
+    GnuCash treats "Debits" as positive values, and "Credits" as
+    negative values, and so the identity of accounting
+    simplifies to 
+    <LITERAL>value<SUBSCRIPT>1</SUBSCRIPT> + 
+    value<SUBSCRIPT>2</SUBSCRIPT> + 
+    value<SUBSCRIPT>3</SUBSCRIPT> + ...
+    = 0</LITERAL>
+    Calling this 
+   <EMPHASIS>double</EMPHASIS>-entry bookkeeping is a bit misleading; 
+    it would be
     somewhat more accurate to call it <EMPHASIS>multiple-</EMPHASIS>entry
     bookkeeping. Unfortunately, there's 700 years of history of use
-    of the term, which sufficiently discourages changing it. (To
-    think some newcomers to UNIX think that it has some crufty old
-    bits of oddness. Hah! We've got UNIX beat by the better part of
-    a millennium!)
+    of the term, which sufficiently discourages changing it. (And you
+    thought parts of Unix were criufty and old!)
 
     </PARA>
-<PARA>GnuCash treats "Debits" as positive values, and "Credits" as
-    negative values, so that this identity simplifies to <LITERAL>    value<SUBSCRIPT>1</SUBSCRIPT> + value<SUBSCRIPT>2</SUBSCRIPT> + value<SUBSCRIPT>3</SUBSCRIPT> + ...
-    = 0</LITERAL>
 
     </PARA>
+<PARA><EMPHASIS>Insider knowledge:</EMPHASIS> 
+    Bank statements are frequently written up from the 
+    <EMPHASIS>bank's</EMPHASIS> perspective, which is 
+    exactly <EMPHASIS>opposite</EMPHASIS> to
+    yours. For example, when you make a deposit at the bank,
+    you are giving them money which they promise to pay you back
+    someday.  To the bank, your money is a debt: it is money that they
+    owe you.  Thus, when you receive a statement from them, 
+    you may find the columns to be oddly mislabelled:  your
+    deposits are marked as 'debits', and withdrawls as 'credits'.
+    This practice is particularly common at older and more staid 
+    banks.
+    </PARA>
+
 </SECT1>
 <SECT1 ID="XACC-DOUBLEUSE">
 <TITLE> Using Double Entry</TITLE>
