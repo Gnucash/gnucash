@@ -97,7 +97,36 @@
         (_ "General") (_ "Include Sub-Account balances")
         "d" (_ "Include sub-account balances in printed balance?") #t))
       
+      (opt-register
+       (gnc:make-simple-boolean-option
+	(_ "General") (_ "Show Foreign Currencies")
+	"da" (_ "Display the account's foreign currency amount?") #f))
+      
+      (opt-register
+       (gnc:make-currency-option 
+	(_ "General") (_ "Report's currency") 
+	"db" (_ "All other currencies will get converted to this currency.")
+	(gnc:locale-default-currency)))
+      
       options))
+
+  ;; In progress: A suggested function to calculate the weighted
+  ;; average exchange rate between all commodities and the
+  ;; report-commodity. Returns an alist.
+  (define (make-exchange-alist report-commodity)
+    (let* ((all-accounts (gnc:group-get-subaccounts
+			 (gnc:get-current-group)))
+	   (curr-accounts 
+	    (filter 
+	     (lambda (a) (let ((t (gw:enum-<gnc:AccountType>-val->sym
+				    (gnc:account-get-type a) #f)))
+			   (member t '(stock mutual-fund currency))))
+	     all-accounts)))
+      ;;(gnc:free-account-group all-accounts)
+      (for-each (lambda (a)
+		  (warn a (gnc:account-get-name a)))
+		curr-accounts)))
+  ;; Unfinished.
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Start of report generating code
@@ -116,59 +145,134 @@
 	(cons #f (make-empty-cells (- n 1)))
 	'()))
 
-  ;; returns a list which makes up a row in the table
-  (define (make-row acct end-date tree-depth current-depth subtot?)
-    (append
-     (make-empty-cells (- current-depth 1))
-     (list (gnc:make-html-table-cell/size 
-	    1 (+ 1 (- tree-depth current-depth)) 
-	    (gnc:make-html-text (gnc:html-markup-anchor
-				 (string-append 
-				  "gnc-register:account=" 
-				  (gnc:account-get-full-name acct))
-				 (gnc:account-get-name acct)))))
-     (make-empty-cells (- tree-depth current-depth))
-     ;; the account balance
-     (list 
-      (let ((pair ((gnc:account-get-comm-balance-at-date 
-		    acct end-date subtot?) 
-		   'getpair (gnc:account-get-commodity acct) #f)))
-	;; pair is a list of one gnc:commodity and 
-	;; one gnc:numeric value. 
-	(commodity-value->string pair)))
-     (make-empty-cells (- current-depth 1))))
-  
-  ;; Goes through the list of accounts, runs make-row on each account.
-  ;; If tree-depth and current-depth require, it will recursively call
-  ;; itself on the list of children accounts.
-  (define (traverse-accounts accounts table end-date 
-			     tree-depth current-depth subtot?)
-    (if (<= current-depth tree-depth)
-	(map (lambda (acct)
-	       (begin
-		 (gnc:html-table-append-row!
-		  table 
-		  (make-row acct end-date tree-depth current-depth 
-			    subtot?))
-		 (let* ((children 
-			 (gnc:account-get-immediate-subaccounts acct)))
-		   (if (not (null? children))
-		       (traverse-accounts children table end-date
-					  tree-depth (+ 1 current-depth)
-					  subtot?)))))
-	     accounts)))
-	
+  ;; returns the account name as html-text and anchor to the register.
+  (define (html-account-anchor acct)
+    (gnc:make-html-text (gnc:html-markup-anchor
+			 (string-append 
+			  "gnc-register:account=" 
+			  (gnc:account-get-full-name acct))
+			 (gnc:account-get-name acct))))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; build-acct-table
-  ;; builds the tree-shaped table
+  ;; builds and returns the tree-shaped table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (define (build-acct-table accounts end-date tree-depth do-subtot?)
+  (define (build-acct-table accounts end-date tree-depth do-subtot?
+			    show-fcur? report-commodity exchange-fn)
     (let ((table (gnc:make-html-table)))
 
+      ;; The following functions are defined inside build-acct-table
+      ;; to avoid passing tons of arguments which are constant anyway
+      ;; inside this function.
+
+      ;;;;;;;;;;;;;;;;;
+      ;; functions for table without foreign commodities 
+      
+      ;; returns a list which makes up a row in the table
+      (define (make-row acct current-depth)
+	(append
+	 (make-empty-cells (- current-depth 1))
+	 (list (gnc:make-html-table-cell/size 
+		1 (+ 1 (- tree-depth current-depth)) 
+		(html-account-anchor acct)))
+	 (make-empty-cells (- tree-depth current-depth))
+	 ;; the account balance
+	 (list 
+	  ;; FIXME: report-commodity is ignored right now.
+	  (let ((pair ((gnc:account-get-comm-balance-at-date 
+			acct end-date do-subtot?) 
+		       'getpair (gnc:account-get-commodity acct) #f)))
+	    ;; pair is a list of one gnc:commodity and 
+	    ;; one gnc:numeric value. 
+	    (commodity-value->string pair)))
+	 (make-empty-cells (- current-depth 1))))
+      
+      ;; Adds rows to the table. Therefore it goes through the list of
+      ;; accounts, runs make-row on each account.  If tree-depth and
+      ;; current-depth require, it will recursively call itself on the
+      ;; list of children accounts. Is used if the foreign commodity is
+      ;; not shown.
+      (define (traverse-accounts! accnts current-depth)
+	(if (<= current-depth tree-depth)
+	    (map (lambda (acct)
+		   (begin
+		     (gnc:html-table-append-row!
+		      table 
+		      (make-row acct current-depth))
+		     (let ((children 
+			     (gnc:account-get-immediate-subaccounts acct)))
+		       (if (not (null? children))
+			   (traverse-accounts! 
+			    children (+ 1 current-depth))))))
+		 accnts)))
+      
+      ;;;;;;;;;;;;;;;;;;;
+      ;; functions for table with foreign commodities visible
+
+      ;; adds all appropriate rows to the table which belong to one
+      ;; account, i.e. one row for each commodity. (Note: Multiple
+      ;; commodities come from subaccounts with different commodities.) Is
+      ;; used only if options "show foreign commodities" == #t.
+      (define (add-commodity-rows! acct current-depth) 
+	(let ((balance (gnc:account-get-comm-balance-at-date 
+			acct end-date do-subtot?)))
+	  ;; the first row for each account: shows the name and the
+	  ;; balance in the report-commodity
+	  (gnc:html-table-append-row! 
+	   table
+	   (append
+	    (make-empty-cells (- current-depth 1))
+	    (list (gnc:make-html-table-cell/size 
+		   1 (+ 1 (- tree-depth current-depth)) 
+		   (html-account-anchor acct)))
+	    (make-empty-cells (+ 1 (* 2 (- tree-depth current-depth))))
+	    ;; the account balance in terms of report commodity
+	    (list
+	     (commodity-value->string (balance 'getpair report-commodity #f)))
+	    (make-empty-cells (* 2 (- current-depth 1)))))
+	  ;; The additional rows: show no name, but the foreign currency
+	  ;; balance and its corresponding value in the
+	  ;; report-currency. One row for each non-report-currency.
+	  (balance 
+	   'format 
+	   (lambda (curr val)
+	     (if (gnc:commodity-equiv? curr report-commodity)
+	     '()
+	     (gnc:html-table-append-row! 
+	      table
+	      (append
+	       ;; print no account name 
+	       (make-empty-cells tree-depth)
+	       (make-empty-cells  (* 2 (- tree-depth current-depth)))
+	       ;; print the account balance in the respective commodity
+	       (list
+		(commodity-value->string (list curr val))
+		(commodity-value->string 
+		 (exchange-fn (list curr val) report-commodity)))
+	       (make-empty-cells (* 2 (- current-depth 1))))))) 
+       #f)))
+  
+      ;; The same as above, but for showing foreign currencies/commodities.
+      (define (traverse-accounts-fcur! accnts current-depth) 
+	(if (<= current-depth tree-depth)
+	    (map (lambda (acct)
+		   (begin
+		     (add-commodity-rows! acct current-depth)
+		     (let* ((children 
+			     (gnc:account-get-immediate-subaccounts acct)))
+		       (if (not (null? children))
+			   (traverse-accounts-fcur! 
+			    children (+ 1 current-depth))))))
+		 accnts)))
+
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	
       ;; start the recursive account processing
-      (traverse-accounts accounts table end-date tree-depth 1 do-subtot?)
-            
+      (if show-fcur?
+	  (traverse-accounts-fcur! accounts 1)
+	  (traverse-accounts! accounts 1))
+      
       ;; set default alignment to right, and override for the name
       ;; columns
       (gnc:html-table-set-style! 
@@ -226,33 +330,53 @@
        (gnc:lookup-option options (_ "General") optname)))
     
     (let ((accounts (get-option (_ "Account")))
-          (date-tp (vector-ref (get-option (_ "Date")) 1))
           (display-depth (get-option (_ "Account Display Depth")))
           (do-subtotals? (get-option (_ "Include Sub-Account balances")))
+	  (show-fcur? (get-option (_ "Show Foreign Currencies")))
+	  (report-currency (get-option (_ "Report's currency")))
+	  ;; DIRTY BUGFIX! Without this +[one day] only those splits
+	  ;; which have a date <= the first second of the desired
+	  ;; end-date are returned. Permanent repair: Change the
+	  ;; semantics of the date-option to return not the first but
+	  ;; the last second of the desired day.
+          (date-tp (cons (+ 86399 
+			    (car (vector-ref (get-option (_ "Date")) 1)))
+			 0))
           (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! doc "Account Summary")
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
-	  (let ((tree-depth (if (equal? display-depth 'all)
+	  (let* ((tree-depth (if (equal? display-depth 'all)
 				(find-depth accounts)
-				display-depth)))
-	    ;; do the (recursive) processing here
-	    (let ((table (build-acct-table accounts date-tp 
-					   tree-depth do-subtotals?)))
-	      ;; set some column headers 
-              (gnc:html-table-set-col-headers!
-               table 
-               (list (gnc:make-html-table-header-cell/size 
-                      1 tree-depth (_ "Account name"))
-                     (gnc:make-html-table-header-cell/size
-                      1 tree-depth (_ "Balance"))))
+				display-depth))
+		 ;; temporary replacement for the real function
+		 (exchange-fn (lambda(foreign-pair domestic)
+				(list domestic (cadr foreign-pair))))
+		 ;; do the (recursive) processing here
+		 (table (build-acct-table accounts date-tp 
+					  tree-depth do-subtotals?
+					  show-fcur? report-currency
+					  exchange-fn)))
+	    ;; TEST
+	    ;;(make-exchange-alist report-currency)
 
-              ;; add the table 
-              (gnc:html-document-add-object! doc table)))	        
-
-          ;; error condition: no accounts specified
+	    ;; set some column headers 
+	    (gnc:html-table-set-col-headers!
+	     table 
+	     (list (gnc:make-html-table-header-cell/size 
+		    1 tree-depth (_ "Account name"))
+		   (gnc:make-html-table-header-cell/size
+		    1 (if show-fcur? 
+			  (* 2 tree-depth)
+			  tree-depth)
+		    (_ "Balance"))))
+	    
+	    ;; add the table 
+	    (gnc:html-document-add-object! doc table))
+      
+	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
             (gnc:html-text-append! 
              p 

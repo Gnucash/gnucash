@@ -27,7 +27,9 @@
   (gnc:amount->string-helper amount info))
 
 (define (gnc:account-has-shares? account)
-  (let ((type (gw:enum-GNCAccountType-val->sym
+  ;; FYI: The val->sym function used to be called 
+  ;; gw:enum-GNCAccountType-val->sym
+  (let ((type (gw:enum-<gnc:AccountType>-val->sym
                (gnc:account-get-type account)
                #f)))
     (member type '(stock mutual-fund currency))))
