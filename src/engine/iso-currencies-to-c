@@ -33,7 +33,7 @@ exec guile -s $0 "$@"
          output-port "
   {
     const char *fullname = ~S;
-    gnc_commodity *c = gnc_commodity_new(fullname,
+    gnc_commodity *c = gnc_commodity_new(_(fullname),
                                          ~S,
                                          ~S,
                                          ~S,
