@@ -82,9 +82,9 @@ gwrap_micro_version=`${G_WRAP} --version | \
 major_required=`echo ${min_gwrap_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
 minor_required=`echo ${min_gwrap_version} |\
-	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
 micro_required=`echo ${min_gwrap_version} |\
-	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
 if ${GUILE} -c "(cond ((> ${gwrap_major_version} ${major_required}) (exit 0))\
 	           ((< ${gwrap_major_version} ${major_required}) (exit 1))\
