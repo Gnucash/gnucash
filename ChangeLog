@@ -16,6 +16,12 @@
 	* NEWS: update to new version 1.7.4
 	* configure.in: update to new version 1.7.4
 	
+2002-12-01  David Hampton  <hampton@employees.org>
+
+	* src/engine/Transaction.c (xaccTransOrder): The sort on the
+	transaction number filed should be a numeric sort not an alpha
+	sort. #99579
+
 2002-12-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-account-sel.c
