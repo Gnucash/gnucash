@@ -134,10 +134,17 @@ Account *xaccGetPeerAccountFromName (Account *, const char *);
 
 /*
  * The xaccRecomputeGroupBalance() subroutine recursively totals
- * up the balances of all accounts in a group.
+ *    up the balances of all accounts in a group.
  */
 
 void xaccRecomputeGroupBalance (AccountGroup *);
+
+/*
+ * The xaccGroupGetBalance() method returns the total of the balances 
+ *    of all the children in this group.
+ */
+
+double    xaccGroupGetBalance (AccountGroup *);
 
 /*
  * The xaccGetAccountRoot () subroutine will find the topmost 
@@ -159,7 +166,6 @@ AccountGroup * xaccGetAccountRoot (Account *);
 void xaccConsolidateGrpTransactions (AccountGroup *);
 
 Account * xaccGroupGetAccount (AccountGroup *, int);
-double    xaccGroupGetBalance (AccountGroup *);
 
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
