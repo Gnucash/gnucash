@@ -255,43 +255,63 @@
 	      (set! combined
 		    (append start
 			    (list (list sum (_ "Other")))))
-	      (let* ((name reportname)
-		     (options (gnc:make-report-options name))
-		     (account-op 
-		      (gnc:lookup-option options pagename-accounts
-					 optname-accounts)))
+	      (let ((options (gnc:make-report-options reportname)))
 		;; now copy all the options
-		(define (set-option! pagename optname value)
-		  (gnc:option-set-value
-		   (gnc:lookup-option options pagename optname)
-		   value))
-		(for-each
-		 (lambda (l) (set-option! (car l) (cadr l) (caddr l)))
-		 (append
-		  (if do-intervals?
-		      (list (list pagename-general optname-from-date
-				  (cons 'absolute from-date-tp)))
-		      '())
-		  (list
-		   (list pagename-general optname-to-date
-			 (cons 'absolute to-date-tp))
-		   (list pagename-general optname-report-currency
-			 report-currency)
-		   (list pagename-accounts optname-levels account-levels)
-		   (list pagename-display optname-fullname show-fullname?)
-		   (list pagename-display optname-show-total show-total?)
-		   (list pagename-display optname-slices max-slices)
-		   (list pagename-display optname-plot-height height) 
-		   (list pagename-display optname-plot-width width))))
-		(call-with-values (lambda () (unzip2 finish))
-				  (lambda (ds as)
-				    (gnc:option-set-value account-op as)))
+		(gnc:options-copy-values (gnc:report-options report-obj)
+					 options)
+		;; and set the destination accounts
+		(gnc:option-set-value
+		 (gnc:lookup-option options pagename-accounts 
+				    optname-accounts)
+		 (map car finish))
+		;; set the URL.
 		(set! other-anchor
 		      (gnc:report-anchor-text
-		       (gnc:make-report name options))))))
+		       (gnc:make-report reportname options))))))
 
+	;; set the URLs
+	(let ((urls 
+	       (map 
+		(lambda (pair)
+		  (if (string? (cadr pair))
+		      other-anchor
+			(let* ((acct (cadr pair))
+			      (subaccts 
+			       (gnc:account-get-immediate-subaccounts 
+				acct)))       
+			  (if (null? subaccts)
+			      ;; if leaf-account, make this an anchor
+			      ;; to the register.
+			      (gnc:account-anchor-text (cadr pair))
+			      ;; if non-leaf account, make this a link
+			      ;; to another report which is run on the
+			      ;; immediate subaccounts of this account
+			      ;; (and including this account).
+			      (let ((options (gnc:make-report-options 
+					      reportname)))
+				(gnc:options-copy-values 
+				 (gnc:report-options report-obj) options)
+				(gnc:option-set-value
+				 (gnc:lookup-option options pagename-accounts
+						    optname-accounts)
+				 (cons acct subaccts))
+				(gnc:option-set-value
+				 (gnc:lookup-option options pagename-accounts
+						    optname-levels)
+				 (+ 1 tree-depth))
+				(gnc:report-anchor-text
+				 (gnc:make-report reportname options)))))))
+		combined)))
+	  (gnc:html-piechart-set-button-1-slice-urls! chart urls)
+	  (gnc:html-piechart-set-button-1-legend-urls! chart urls))
+	
 	(gnc:html-piechart-set-title!
 	 chart report-title)
+	(gnc:html-piechart-set-width! chart width)
+	(gnc:html-piechart-set-height! chart height)
+	(gnc:html-piechart-set-data! chart (unzip1 combined))
+	(gnc:html-piechart-set-colors! chart
+				       (gnc:assign-colors (length combined)))
 
 	(gnc:html-piechart-set-subtitle!
 	 chart (string-append
@@ -310,9 +330,6 @@
 		    
 		    "")))
 	
-	(gnc:html-piechart-set-width! chart width)
-	(gnc:html-piechart-set-height! chart height)
-	(gnc:html-piechart-set-data! chart (unzip1 combined))
 	(gnc:html-piechart-set-labels!
 	 chart
 	 (map (lambda (pair)
@@ -328,15 +345,6 @@
 		      (gnc:amount->string (car pair) print-info))
 		     "")))
 	      combined))
-	(gnc:html-piechart-set-colors! chart
-				       (gnc:assign-colors (length combined)))
-	(let ((urls (map (lambda (pair)
-			   (if (string? (cadr pair))
-			       other-anchor
-			       (gnc:account-anchor-text (cadr pair))))
-			 combined)))
-	  (gnc:html-piechart-set-button-1-slice-urls! chart urls)
-	  (gnc:html-piechart-set-button-1-legend-urls! chart urls))
 
 	(gnc:html-document-add-object! document chart) 
 

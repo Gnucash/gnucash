@@ -5,6 +5,15 @@
 
 2001-04-11  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/options.scm (gnc:options-copy-values): New function.
+	
+	* src/scm/report/account-piecharts.scm: Added anchors to yet other
+	reports on the slices of the pie. Simplified creation of other
+	report's options.
+
+	* src/scm/report/category-barchart.scm: Simplified creation of
+	other report's options.
+
 	* src/scm/report/report-list.scm: Renamed file.
 	
 	* src/scm/report/account-piecharts.scm: Renamed to this filename

@@ -330,34 +330,19 @@
 	      (set! all-data
 		    (append start
 			    (list (list (_ "Other") other-sum))))
-	      (let* ((name reportname)
-		     (options (gnc:make-report-options name)))
+	      (let* ((options (gnc:make-report-options reportname)))
 		;; now copy all the options
-		(define (set-option! pagename optname value)
-		  (gnc:option-set-value
-		   (gnc:lookup-option options pagename optname)
-		   value))
-		(for-each
-		 (lambda (l) (set-option! (car l) (cadr l) (caddr l)))
-		 (list
-		  (list pagename-general optname-from-date
-			(cons 'absolute from-date-tp))
-		  (list pagename-general optname-to-date
-			(cons 'absolute to-date-tp))
-		  (list pagename-general optname-stepsize interval)
-		  (list pagename-general optname-report-currency
-			report-currency)
-		  (list pagename-accounts optname-accounts
-			(map car finish))
-		  (list pagename-accounts optname-levels account-levels)
-		  (list pagename-display optname-fullname show-fullname?)
-		  (list pagename-display optname-stacked stacked?)
-		  (list pagename-display optname-slices max-slices)
-		  (list pagename-display optname-plot-height height) 
-		  (list pagename-display optname-plot-width width)))
+		(gnc:options-copy-values 
+		 (gnc:report-options report-obj) options)
+		;; and set the destination accounts
+		(gnc:option-set-value
+		 (gnc:lookup-option options pagename-accounts 
+				    optname-accounts)
+		 (map car finish))
+		;; Set the URL to point to this report.
 		(set! other-anchor
 		      (gnc:report-anchor-text
-		       (gnc:make-report name options))))))
+		       (gnc:make-report reportname options))))))
 	
 	;; This adds the data. Note the apply-zip stuff: This
 	;; transposes the data, i.e. swaps rows and columns. Pretty
