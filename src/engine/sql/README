@@ -326,6 +326,15 @@ operation is probably OK.
 
 -- implement price change events
 
+-- implement a version table so that we can be upwardly compatible 
+   with future database changes.
+
+-- use FOREIGN KEY to ensure that table integrity is maintained.
+
+-- use table constraint ON DELETE to make sure we have no
+   dangling splits when a transaction is deleted.  As added 
+   benefit, this might simplify some logic.
+
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
    as to what this is about.  For the first pass, this is not a 
