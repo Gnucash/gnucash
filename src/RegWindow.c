@@ -1456,6 +1456,21 @@ regSaveTransaction( RegWindow *regData, int position )
       return;
     }
 
+    /* for ledgers, the user *MUST* specify either a 
+     * credited or a debited account, or both.  If they 
+     * have specified these, then the account is already 
+     * inserted, and we have nothing to do.  If they have
+     * not specified either one, then it is an error 
+     * condition -- we cannot insert, because we don't know
+     * where to insert.
+     *
+     * Warn the user about this.  */
+    if ((NULL == trans->credit) && (NULL == trans->debit)) {
+      errorBox (toplevel, XFER_NO_ACC_MSG);
+      freeTransaction (trans);
+      return;
+    }
+
     /* if we got to here, we've got a live one. Insert it into 
      * an account, if we haven't done so already.  Do this 
      * before we get to the date code below, since date the
@@ -1472,20 +1487,6 @@ regSaveTransaction( RegWindow *regData, int position )
     } 
   }
 
-  /* for ledgers, the user *MUST* specify either a 
-   * credited or a debited account, or both.  If they 
-   * have specified these, then the account is already 
-   * inserted, and we have nothing to do.  If they have
-   * not specified either one, then it is an error 
-   * condition -- we cannot insert, because we don't know
-   * where to insert.
-   *
-   * Warn the user about this.  */
-  if ((NULL == trans->credit) && (NULL == trans->debit)) {
-    errorBox (toplevel, XFER_NO_ACC_MSG);
-    freeTransaction (trans);
-    return;
-  }
       
   if( regData->changed & MOD_DATE )
     {
@@ -2290,7 +2291,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   XtAddCallback( widget, XmNactivateCallback, 
                  destroyShellCB, (XtPointer)(regData->dialog) );
   
-  position += NUM_ROWS_PER_TRANS;
+  position += 2;
   
   /* Fix button area of the buttonform to its current size, and not let 
    * it resize. */
