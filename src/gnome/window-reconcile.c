@@ -1020,11 +1020,13 @@ static void
 gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
 {
   RecnWindow *recnData = data;
+  Account *account = recn_get_account (recnData);
   gnc_numeric new_ending = recnData->new_ending;
   time_t statement_date = recnData->statement_date;
 
-  if (startRecnWindow(recnData->window, recn_get_account (recnData),
-                      &new_ending, &statement_date))
+  if (gnc_reverse_balance (account))
+    new_ending = gnc_numeric_neg (new_ending);
+  if (startRecnWindow(recnData->window, account, &new_ending, &statement_date))
   {
     recnData->new_ending = new_ending;
     recnData->statement_date = statement_date;

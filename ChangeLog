@@ -1,3 +1,9 @@
+2002-12-20  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c (gnc_ui_reconcile_window_change_cb):
+	Make sure to set the balance properly for reversed
+	accounts. #100998
+
 2002-12-20  Chris Lyttle  <chris@wilddev.net>
 
 	* src/pixmaps/gnucash-icon.png: new gnucash icon
