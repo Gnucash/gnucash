@@ -22,7 +22,7 @@
 /** @file Account.h 
     @brief Account handling public routines   
     @author Copyright (C) 1997 Robin D. Clark
-    @author Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef XACC_ACCOUNT_H
@@ -342,32 +342,57 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
 /*@}*/
 
 
-/** @name Account Children and Parent */
+/** @name Account Children and Parents. 
+ * The set of accounts is represented as a doubly-linked tree, so that given 
+ * any account, both its parent and its children can be easily found.  
+ * To make the management of sets of accounts easier, an account does not
+ * directly point at its children, but rather at an 'Account Group' that
+ * stores the children.  At the top of the tree heirarchy lies a single
+ * root node, the root account group.
+ * 
+ * The account tree heirarchy is unique, in that a given account can 
+ * have only one parent account. 
+ */
 /** @{ */
 
-/** DOCUMENT ME! */
+/** This routine returns the group holding the set of subaccounts 
+ * for this account.  */
 AccountGroup * xaccAccountGetChildren (Account *account);
-/** DOCUMENT ME! 
- *
- * FIXME: Is the ancestor account xaccAccountHasAncestor() the same as the parent account? 
+
+/** This routine returns the group which contains this account.
  */
 AccountGroup * xaccAccountGetParent (Account *account);
-/** DOCUMENT ME! 
- *
- * FIXME: Is the ancestor account xaccAccountHasAncestor() the same as the parent account? 
+
+/** This routine returns the parent of the group that is the parent
+ * of this account.  It is equivalent to the nested call
+ * xaccGroupGetParentAccount (xaccAccountGetParent ())
+ * Note that if the account is in the root group node, then its
+ * parent will be NULL.
  */
 Account *      xaccAccountGetParentAccount (Account *account);
-/** DOCUMENT ME! */
+
+/** This routine returns a flat list of all of the accounts
+ * that are descendents of this account.  This includes not
+ * only the the children, but the cheldren of the children, etc.
+ * This routine is equivalent to the nested calls
+ * xaccGroupGetSubAccounts (xaccAccountGetChildren())
+ *
+ * The returned list should be freed with g_list_free() when 
+ * no longer needed.
+ */
 GList *        xaccAccountGetDescendants (Account *account);
 
 /** DOCUMENT ME! */
 void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+
 /** DOCUMENT ME! */
 gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
+
 /** Returns true if the account has 'ancestor' as an ancestor.
- * Returns false if either one is NULL. 
- *
- * FIXME: Is the ancestor account the same as the parent account? */
+ *  An ancestor account my be the accounts parent, its parent's parent,
+ * its parent,s parent's parent, etc.
+ *  Returns false if either one is NULL. 
+ */
 gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /** @} */
 
