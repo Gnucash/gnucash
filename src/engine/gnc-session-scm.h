@@ -41,6 +41,7 @@
 
 #include <libguile.h>
 #include "guile-mappings.h"
+#include "gnc-engine.h"
 
 void gnc_session_scm_load (GNCSession *session);
 gboolean gnc_session_scm_export (GNCSession *tmp_session,

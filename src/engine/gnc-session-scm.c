@@ -34,24 +34,13 @@
 
 #include "config.h"
 
-#include <dlfcn.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <glib.h>
 
-#include "BackendP.h"
-#include "TransLog.h"
-#include "gnc-engine-util.h"
-#include "date.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-module.h"
-#include "gnc-session-p.h"
+#include "gnc-session.h"
 #include "gnc-session-scm.h"
 
 //static short module = MOD_IO;
