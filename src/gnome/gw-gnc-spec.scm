@@ -133,35 +133,6 @@
    '()
    "Destroy the UI.")
 
-  (gw:wrap-function
-   mod
-   'gnc:info-dialog
-   '<gw:void>
-   "gnc_info_dialog"
-   '(((<gw:m-chars-caller-owned> gw:const) message))
-   "Show ok dialog box with given message.")
-
-  (gw:wrap-function
-   mod
-   'gnc:warning-dialog
-   '<gw:void>
-   "gnc_warning_dialog"
-   '(((<gw:m-chars-caller-owned> gw:const) message))
-   "Show warning dialog box with given message.")
-
-  (gw:wrap-function
-   mod
-   'gnc:choose-radio-option-dialog-parented
-   '<gw:int>
-   "gnc_choose_radio_option_dialog_parented"
-   '((<gnc:UIWidget> parent)
-     ((<gw:m-chars-caller-owned> gw:const) title)
-     ((<gw:m-chars-caller-owned> gw:const) msg)
-     (<gw:int> default-choice)
-     (<gnc:list-of-string> choices))
-   "Show a dialog offering different mutually exclusive choices
-in a radio list.")
-
   (let ((nnt (gw:wrap-non-native-type
               mod
               '<gnc:PrintCheckDialog*>
