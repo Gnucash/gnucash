@@ -1,3 +1,10 @@
+2003-06-09  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, src/import-export/hbci/dialog-hbcitrans.c: Add
+	support for KtoBlzCheck, a small checking package for destination
+	account numbers for German banks. Very small, very useful :),
+	http://sourceforge.net/projects/ktoblzcheck
+
 2003-06-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/transaction.scm: make sure we have
