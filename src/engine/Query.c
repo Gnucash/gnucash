@@ -1434,7 +1434,7 @@ xaccQueryTermEqual (QueryTerm *qt1, QueryTerm *qt2)
       n2 = qt2->data.kvp.path;
 
       for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
-        if (!safe_strcmp (n1->data, n2->data))
+        if (safe_strcmp (n1->data, n2->data) != 0)
           return FALSE;
 
       if (n1 || n2)

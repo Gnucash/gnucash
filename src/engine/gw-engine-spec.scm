@@ -384,14 +384,15 @@
 
   (let ((wt (gw:wrap-enumeration mod '<gnc:query-term-type>
                                  "pd_type_t" "const pd_type_t")))
-    (gw:enum-add-value! wt "PD_DATE" 'pd-date)
-    (gw:enum-add-value! wt "PD_AMOUNT" 'pd-amount)
     (gw:enum-add-value! wt "PD_ACCOUNT" 'pd-account)
-    (gw:enum-add-value! wt "PD_STRING" 'pd-string)
-    (gw:enum-add-value! wt "PD_CLEARED" 'pd-cleared)
+    (gw:enum-add-value! wt "PD_AMOUNT" 'pd-amount)
     (gw:enum-add-value! wt "PD_BALANCE" 'pd-balance)
+    (gw:enum-add-value! wt "PD_CLEARED" 'pd-cleared)
+    (gw:enum-add-value! wt "PD_DATE" 'pd-date)
     (gw:enum-add-value! wt "PD_GUID" 'pd-guid)
+    (gw:enum-add-value! wt "PD_KVP" 'pd-kvp)
     (gw:enum-add-value! wt "PD_MISC" 'pd-misc)
+    (gw:enum-add-value! wt "PD_STRING" 'pd-string)
     #t)
 
   (let ((wt (gw:wrap-enumeration mod '<gnc:query-pred-type>
@@ -404,6 +405,7 @@
     (gw:enum-add-value! wt "PR_DATE" 'pr-date)
     (gw:enum-add-value! wt "PR_DESC" 'pr-desc)
     (gw:enum-add-value! wt "PR_GUID" 'pr-guid)
+    (gw:enum-add-value! wt "PR_KVP" 'pr-kvp)
     (gw:enum-add-value! wt "PR_MEMO" 'pr-memo)
     (gw:enum-add-value! wt "PR_NUM" 'pr-num)
     (gw:enum-add-value! wt "PR_PRICE" 'pr-price)
@@ -449,6 +451,35 @@
                                  "query_run_t" "const query_run_t")))
     (gw:enum-add-value! wt "QUERY_MATCH_ALL" 'query-match-all)    
     (gw:enum-add-value! wt "QUERY_MATCH_ANY" 'query-match-any)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration mod '<gnc:kvp-match-how>
+                                 "kvp_match_t" "const kvp_match_t")))
+    (gw:enum-add-value! wt "KVP_MATCH_LT" 'kvp-match-lt)
+    (gw:enum-add-value! wt "KVP_MATCH_LTE" 'kvp-match-lte)
+    (gw:enum-add-value! wt "KVP_MATCH_EQ" 'kvp-match-eq)
+    (gw:enum-add-value! wt "KVP_MATCH_GTE" 'kvp-match-gte)
+    (gw:enum-add-value! wt "KVP_MATCH_GT" 'kvp-match-gt)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration mod '<gnc:kvp-match-where>
+                                 "kvp_match_where_t"
+                                 "const kvp_match_where_t")))
+    (gw:enum-add-value! wt "KVP_MATCH_SPLIT" 'kvp-match-split)
+    (gw:enum-add-value! wt "KVP_MATCH_TRANS" 'kvp-match-trans)
+    (gw:enum-add-value! wt "KVP_MATCH_ACCOUNT" 'kvp-match-account)
+    #t)
+
+  (let ((wt (gw:wrap-enumeration mod '<gnc:kvp-value-t>
+                                 "kvp_value_t" "const kvp_value_t")))
+    (gw:enum-add-value! wt "KVP_TYPE_GINT64" 'kvp-type-gint64)
+    (gw:enum-add-value! wt "KVP_TYPE_DOUBLE" 'kvp-type-double)
+    (gw:enum-add-value! wt "KVP_TYPE_NUMERIC" 'kvp-type-numeric)
+    (gw:enum-add-value! wt "KVP_TYPE_STRING" 'kvp-type-string)
+    (gw:enum-add-value! wt "KVP_TYPE_GUID" 'kvp-type-guid)
+    (gw:enum-add-value! wt "KVP_TYPE_BINARY" 'kvp-type-binary)
+    (gw:enum-add-value! wt "KVP_TYPE_GLIST" 'kvp-type-glist)
+    (gw:enum-add-value! wt "KVP_TYPE_FRAME" 'kvp-type-frame)
     #t)
 
   (let ((we 

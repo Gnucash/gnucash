@@ -13,10 +13,15 @@ gnc_kvp_value_ptr_p(SCM arg)
     return TRUE;
 }
 
+/* NOTE: There are some problems with this approach. Currently,
+ *       guids are stored simply as strings in scheme, so some
+ *       strings could be mistaken for guids, although that is
+ *       unlikely. The general problem is distinguishing kvp
+ *       types based only on the scheme type. */
 kvp_value*
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
-    if(gnc_gh_gint64_p(val))
+    if(gh_exact_p (val) && gnc_gh_gint64_p(val))
     {
         return kvp_value_new_gint64(gnc_scm_to_gint64(val));
     }
@@ -43,9 +48,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         return ret;
     }
     /* FIXME: add binary handler here when it's figured out */
-    else if(gh_list_p(val))
-    {
-    }
+    /* FIXME: add list handler here */
     /* FIXME: add frame handler here when it's figured out */
     return NULL;
 }
@@ -73,6 +76,8 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
         return gnc_guid2scm(*tempguid);
     }
         break;
+
+    /* FIXME: handle types below */
     case KVP_TYPE_BINARY:
         break;
     case KVP_TYPE_GLIST:

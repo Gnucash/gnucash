@@ -164,7 +164,7 @@ gnc_guid_p(SCM guid_scm) {
   GUID guid;
 
   if (!gh_string_p(guid_scm))
-    return (0 == 1);
+    return FALSE;
 
   gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH);
   string[GUID_ENCODING_LENGTH] = '\0';
@@ -304,6 +304,18 @@ gnc_scm2amt_match_sign (SCM how_scm)
 }
 
 static SCM
+gnc_kvp_match_how2scm (kvp_match_t how)
+{
+  return gnc_gw_enum_val2scm ("<gnc:kvp-match-how>", how);
+}
+
+static kvp_match_t
+gnc_scm2kvp_match_how (SCM how_scm)
+{
+  return gnc_gw_enum_scm2val ("<gnc:kvp-match-how>", how_scm);
+}
+
+static SCM
 gnc_sort_type2scm (sort_type_t sort_type)
 {
   return gnc_gw_enum_val2scm ("<gnc:sort-type>", sort_type);
@@ -387,6 +399,18 @@ gnc_scm2balance_match_how (SCM how_scm)
 }
 
 static SCM
+gnc_kvp_match_where2scm (kvp_match_where_t where)
+{
+  return gnc_bitfield2scm ("<gnc:kvp-match-where>", where);
+}
+
+static kvp_match_where_t
+gnc_scm2kvp_match_where (SCM where_scm)
+{
+  return gnc_scm2bitfield ("<gnc:kvp-match-where>", where_scm);
+}
+
+static SCM
 gnc_acct_guid_glist2scm (GList *account_guids)
 {
   SCM guids = SCM_EOL;
@@ -439,6 +463,328 @@ acct_guid_glist_free (GList *guids)
 }
 
 static SCM
+gnc_kvp_path2scm (GSList *path)
+{
+  SCM path_scm = SCM_EOL;
+  GSList *node;
+
+  for (node = path; node; node = node->next)
+  {
+    const char *key = node->data;
+
+    if (key)
+      path_scm = gh_cons (gh_str02scm (key), path_scm);
+  }
+
+  return gh_reverse (path_scm);
+}
+
+static GSList *
+gnc_scm2kvp_path (SCM path_scm)
+{
+  GSList *path = NULL;
+
+  if (!gh_list_p (path_scm))
+    return NULL;
+
+  while (!gh_null_p (path_scm))
+  {
+    SCM key_scm = gh_car (path_scm);
+    char *key, *tmp;
+
+    if (!gh_string_p (key_scm))
+      break;
+
+    tmp = gh_scm2newstr (key_scm, NULL);
+    key = g_strdup (tmp);
+    if (tmp) free (tmp);
+
+    path = g_slist_prepend (path, key);
+
+    path_scm = gh_cdr (path_scm);
+  }
+
+  return g_slist_reverse (path);
+}
+
+static void
+gnc_kvp_path_free (GSList *path)
+{
+  GSList *node;
+
+  for (node = path; node; node = node->next)
+    g_free (node->data);
+
+  g_slist_free (path);
+}
+
+static SCM
+gnc_kvp_value_type2scm (kvp_value_t how)
+{
+  return gnc_gw_enum_val2scm ("<gnc:kvp-value-t>", how);
+}
+
+static kvp_value_t
+gnc_scm2kvp_value_type (SCM value_type_scm)
+{
+  return gnc_gw_enum_scm2val ("<gnc:kvp-value-t>", value_type_scm);
+}
+
+static SCM gnc_kvp_frame2scm (kvp_frame *frame);
+
+static SCM
+gnc_kvp_value2scm (kvp_value *value)
+{
+  SCM value_scm = SCM_EOL;
+  kvp_value_t value_t;
+  SCM scm;
+
+  if (!value) return SCM_BOOL_F;
+
+  value_t = kvp_value_get_type (value);
+
+  value_scm = gh_cons (gnc_kvp_value_type2scm (value_t), value_scm);
+
+  switch (value_t)
+  {
+    case KVP_TYPE_GINT64:
+      scm = gnc_gint64_to_scm (kvp_value_get_gint64 (value));
+      break;
+
+    case KVP_TYPE_DOUBLE:
+      scm = gh_double2scm (kvp_value_get_double (value));
+      break;
+
+    case KVP_TYPE_STRING:
+      scm = gh_str02scm (kvp_value_get_string (value));
+      break;
+
+    case KVP_TYPE_GUID:
+      scm = gnc_guid2scm (*kvp_value_get_guid (value));
+      break;
+
+    case KVP_TYPE_BINARY:
+      scm = SCM_BOOL_F;
+      break;
+
+    case KVP_TYPE_NUMERIC: {
+      gnc_numeric n = kvp_value_get_numeric (value);
+      scm = gh_cons (gnc_gint64_to_scm (n.num),
+                     gnc_gint64_to_scm (n.denom));
+      break;
+    }
+
+    case KVP_TYPE_GLIST: {
+      GList *node;
+
+      scm = SCM_EOL;
+      for (node = kvp_value_get_glist (value); node; node = node->next)
+        scm = gh_cons (gnc_kvp_value2scm (node->data), scm);
+      scm = gh_reverse (scm);
+      break;
+    }
+
+    case KVP_TYPE_FRAME:
+      scm = gnc_kvp_frame2scm (kvp_value_get_frame (value));
+      break;
+
+    default:
+      scm = SCM_BOOL_F;
+      break;
+  }
+
+  value_scm = gh_cons (scm, value_scm);
+
+  return gh_reverse (value_scm);
+}
+
+typedef struct
+{
+  SCM scm;
+} KVPSCMData;
+
+static void
+kvp_frame_slot2scm (const char *key, kvp_value *value, gpointer data)
+{
+  KVPSCMData *ksd = data;
+  SCM value_scm;
+  SCM key_scm;
+  SCM pair;
+
+  key_scm = gh_str02scm (key);
+  value_scm = gnc_kvp_value2scm (value);
+  pair = gh_cons (key_scm, value_scm);
+
+  ksd->scm = gh_cons (pair, ksd->scm);
+}
+
+static SCM
+gnc_kvp_frame2scm (kvp_frame *frame)
+{
+  KVPSCMData ksd;
+
+  if (!frame) return SCM_BOOL_F;
+
+  ksd.scm = SCM_EOL;
+
+  kvp_frame_for_each_slot (frame, kvp_frame_slot2scm, &ksd);
+
+  return ksd.scm;
+}
+
+static kvp_frame * gnc_scm2kvp_frame (SCM frame_scm);
+
+static kvp_value *
+gnc_scm2kvp_value (SCM value_scm)
+{
+  kvp_value_t value_t;
+  kvp_value *value;
+  SCM type_scm;
+  SCM val_scm;
+
+  if (!gh_list_p (value_scm) || gh_null_p (value_scm))
+    return NULL;
+
+  type_scm = gh_car (value_scm);
+  value_t = gnc_scm2kvp_value_type (type_scm);
+
+  value_scm = gh_cdr (value_scm);
+  if (!gh_list_p (value_scm) || gh_null_p (value_scm))
+    return NULL;
+
+  val_scm = gh_car (value_scm);
+
+  switch (value_t)
+  {
+    case KVP_TYPE_GINT64:
+      value = kvp_value_new_gint64 (gnc_scm_to_gint64 (val_scm));
+      break;
+
+    case KVP_TYPE_DOUBLE:
+      value = kvp_value_new_double (gh_scm2double (val_scm));
+      break;
+
+    case KVP_TYPE_STRING: {
+      char *str = gh_scm2newstr (val_scm, NULL);
+      value = kvp_value_new_string (str);
+      if (str) free (str);
+      break;
+    }
+
+    case KVP_TYPE_GUID: {
+      GUID guid = gnc_scm2guid (val_scm);
+      value = kvp_value_new_guid (&guid);
+      break;
+    }
+
+    case KVP_TYPE_BINARY:
+      return NULL;
+      break;
+
+    case KVP_TYPE_NUMERIC: {
+      gnc_numeric n;
+      SCM denom;
+      SCM num;
+
+      if (!gh_pair_p (val_scm))
+        return NULL;
+
+      num = gh_car (val_scm);
+      denom = gh_cdr (val_scm);
+
+      n = gnc_numeric_create (gnc_scm_to_gint64 (num),
+                              gnc_scm_to_gint64 (denom));
+
+      value = kvp_value_new_gnc_numeric (n);
+      break;
+    }
+
+    case KVP_TYPE_GLIST: {
+      GList *list = NULL;
+      GList *node;
+
+      for (; gh_list_p (val_scm) && !gh_null_p (val_scm);
+           val_scm = gh_cdr (val_scm))
+      {
+        SCM scm = gh_car (val_scm);
+
+        list = g_list_prepend (list, gnc_scm2kvp_value (scm));
+      }
+
+      list = g_list_reverse (list);
+
+      value = kvp_value_new_glist (list);
+
+      for (node = list; node; node = node->next)
+        kvp_value_delete (node->data);
+      g_list_free (list);
+      break;
+    }
+
+    case KVP_TYPE_FRAME: {
+      kvp_frame *frame;
+
+      frame = gnc_scm2kvp_frame (val_scm);
+      value = kvp_value_new_frame (frame);
+      kvp_frame_delete (frame);
+      break;
+    }
+
+    default:
+      g_warning ("unexpected type: %d", value_t);
+      return NULL;
+  }
+
+  return value;
+}
+
+static kvp_frame *
+gnc_scm2kvp_frame (SCM frame_scm)
+{
+  kvp_frame * frame;
+
+  if (!gh_list_p (frame_scm)) return NULL;
+
+  frame = kvp_frame_new ();
+
+  for (; gh_list_p (frame_scm) && !gh_null_p (frame_scm);
+       frame_scm = gh_cdr (frame_scm))
+  {
+    SCM pair = gh_car (frame_scm);
+    kvp_value *value;
+    SCM key_scm;
+    SCM val_scm;
+    char *key;
+
+    if (!gh_pair_p (pair))
+      continue;
+
+    key_scm = gh_car (pair);
+    val_scm = gh_cdr (pair);
+
+    if (!gh_string_p (key_scm))
+      continue;
+
+    key = gh_scm2newstr (key_scm, NULL);
+    if (!key)
+      continue;
+
+    value = gnc_scm2kvp_value (val_scm);
+    if (!value)
+    {
+      free (key);
+      continue;
+    }
+
+    kvp_frame_set_slot_nc (frame, key, value);
+
+    free (key);
+  }
+
+  return frame;
+}
+
+static SCM
 gnc_queryterm2scm (QueryTerm *qt)
 {
   SCM qt_scm = SCM_EOL;
@@ -487,6 +833,13 @@ gnc_queryterm2scm (QueryTerm *qt)
 
     case PD_GUID:
       qt_scm = gh_cons (gnc_guid2scm (qt->data.guid.guid), qt_scm);
+      break;
+
+    case PD_KVP:
+      qt_scm = gh_cons (gnc_kvp_match_how2scm (qt->data.kvp.how), qt_scm);
+      qt_scm = gh_cons (gnc_kvp_match_where2scm (qt->data.kvp.where), qt_scm);
+      qt_scm = gh_cons (gnc_kvp_path2scm (qt->data.kvp.path), qt_scm);
+      qt_scm = gh_cons (gnc_kvp_value2scm (qt->data.kvp.value), qt_scm);
       break;
 
     default:
@@ -797,6 +1150,57 @@ gnc_scm2query_term_query (SCM query_term_scm)
 
         xaccQueryAddGUIDMatch (q, &guid, QUERY_OR);
       }
+
+      ok = TRUE;
+      break;
+
+    case PD_KVP: {
+      GSList *path;
+      kvp_value *value;
+      kvp_match_t how;
+      kvp_match_where_t where;
+
+      /* how */
+      if (gh_null_p (query_term_scm))
+        break;
+
+      scm = gh_car (query_term_scm);
+      query_term_scm = gh_cdr (query_term_scm);
+
+      how = gnc_scm2kvp_match_how (scm);
+
+      /* where */
+      if (gh_null_p (query_term_scm))
+        break;
+
+      scm = gh_car (query_term_scm);
+      query_term_scm = gh_cdr (query_term_scm);
+
+      where = gnc_scm2kvp_match_where (scm);
+
+      /* path */
+      if (gh_null_p (query_term_scm))
+        break;
+
+      scm = gh_car (query_term_scm);
+      query_term_scm = gh_cdr (query_term_scm);
+
+      path = gnc_scm2kvp_path (scm);
+
+      /* value */
+      if (gh_null_p (query_term_scm))
+        break;
+
+      scm = gh_car (query_term_scm);
+      query_term_scm = gh_cdr (query_term_scm);
+
+      value = gnc_scm2kvp_value (scm);
+
+      xaccQueryAddKVPMatch (q, path, value, how, where, QUERY_OR);
+
+      gnc_kvp_path_free (path);
+      kvp_value_delete (value);
+    }
 
       ok = TRUE;
       break;
@@ -1273,8 +1677,8 @@ gnc_gh_gint64_p(SCM num)
     scm_protect_object(minval);
     initialized = 1;
   }
-  return((scm_geq_p(num, minval) != SCM_BOOL_F) &&
-         (scm_leq_p(num, maxval) != SCM_BOOL_F));
+  return ((scm_geq_p(num, minval) != SCM_BOOL_F) &&
+          (scm_leq_p(num, maxval) != SCM_BOOL_F));
 }
 
 gnc_numeric

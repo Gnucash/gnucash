@@ -495,12 +495,12 @@ guile_main (int argc, char **argv)
 
   /* g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
 
-  glist_exclude_type (KVP_TYPE_BINARY);
-  glist_exclude_type (KVP_TYPE_GLIST);
+  kvp_exclude_type (KVP_TYPE_BINARY);
+  kvp_exclude_type (KVP_TYPE_GLIST);
 
   /* The random double generator is making values
    * that postgres doesn't like. */
-  glist_exclude_type (KVP_TYPE_DOUBLE);
+  kvp_exclude_type (KVP_TYPE_DOUBLE);
 
   set_max_kvp_depth (3);
   set_max_kvp_frame_elements (3);

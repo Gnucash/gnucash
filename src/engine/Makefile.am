@@ -83,26 +83,35 @@ noinst_HEADERS = \
 libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS}
 
-libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
-libgw_glib_la_LDFLAGS=-module ${G_WRAP_LINK_ARGS}
+libgw_glib_la_SOURCES = gw-glib.c glib-helpers.c
+libgw_glib_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
-libgw_engine_la_SOURCES=gw-engine.c engine-helpers.c
-libgw_engine_la_LDFLAGS=-module ${G_WRAP_LINK_ARGS}
+libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
+libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
-libgw_kvp_la_SOURCES=gw-kvp.c kvp-scm.c
-libgw_kvp_la_LDFLAGS=-module ${G_WRAP_LINK_ARGS}
+libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c
+libgw_engine_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
-gncmoddir=${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA=engine.scm 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = engine.scm 
 
-gncscmdir=${GNC_SHAREDIR}/scm
-gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
-engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm 
+gncscmdir = ${GNC_SHAREDIR}/scm
+gncscm_DATA = \
+  commodity-table.scm \
+  engine-init.scm \
+  engine-interface.scm \
+  engine-utilities.scm \
+  gnc-numeric.scm \
+  iso-4217-currencies.scm 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-engine.scm gw-glib.scm gw-kvp.scm \
-  gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
+  gw-engine.scm \
+  gw-glib.scm \
+  gw-kvp.scm \
+  gw-engine-spec.scm \
+  gw-glib-spec.scm \
+  gw-kvp-spec.scm
 
 EXTRA_DIST = \
   .cvsignore \

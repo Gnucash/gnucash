@@ -57,7 +57,7 @@ set_max_kvp_frame_elements (gint max_kvp_frame_elements)
 }
 
 void
-glist_exclude_type (kvp_value_t kvp_type)
+kvp_exclude_type (kvp_value_t kvp_type)
 {
   gint *key;
 
@@ -71,7 +71,7 @@ glist_exclude_type (kvp_value_t kvp_type)
 }
 
 static gboolean
-glist_type_excluded (kvp_value_t kvp_type)
+kvp_type_excluded (kvp_value_t kvp_type)
 {
   gint key = kvp_type;
 
@@ -403,7 +403,7 @@ get_random_kvp_value_depth (int type, gint depth)
     if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
       return NULL;
 
-    if (glist_type_excluded (datype))
+    if (kvp_type_excluded (datype))
       return NULL;
 
     switch(datype)
@@ -1170,6 +1170,32 @@ get_random_queryop(void)
   return get_random_int_in_range (1, QUERY_XOR);
 }
 
+static GSList *
+get_random_kvp_path (void)
+{
+  GSList *path;
+  gint len;
+
+  path = NULL;
+  len = get_random_int_in_range (1, kvp_max_depth);
+
+  while (len--)
+    path = g_slist_prepend (path, get_random_string ());
+
+  return g_slist_reverse (path);
+}
+
+static void
+free_random_kvp_path (GSList *path)
+{
+  GSList *node;
+
+  for (node = path; node; node = node->next)
+    g_free (node->data);
+
+  g_slist_free (path);
+}
+
 Query *
 get_random_query(void)
 {
@@ -1184,9 +1210,11 @@ get_random_query(void)
   while (num_terms-- > 0)
   {
     pr_type_t pr_type;
+    kvp_value *value;
     Timespec *start;
     Timespec *end;
     GList *guids;
+    GSList *path;
     char *string;
     GUID *guid;
 
@@ -1226,14 +1254,19 @@ get_random_query(void)
       case PR_BALANCE:
         xaccQueryAddBalanceMatch
           (q,
-           get_random_int_in_range (1, BALANCE_UNBALANCED),
+           get_random_int_in_range (1, BALANCE_BALANCED | BALANCE_UNBALANCED),
            get_random_queryop ());
         break;
 
       case PR_CLEARED:
         xaccQueryAddClearedMatch
           (q,
-           get_random_int_in_range (1, CLEARED_VOIDED),
+           get_random_int_in_range (1,
+                                    CLEARED_NO |
+                                    CLEARED_CLEARED |
+                                    CLEARED_RECONCILED |
+                                    CLEARED_FROZEN |
+                                    CLEARED_VOIDED),
            get_random_queryop ());
         break;
 
@@ -1264,6 +1297,25 @@ get_random_query(void)
         guid = get_random_guid ();
         xaccQueryAddGUIDMatch (q, guid, get_random_queryop ());
         g_free (guid);
+        break;
+
+      case PR_KVP:
+        path = get_random_kvp_path ();
+        do
+        {
+          value = get_random_kvp_value_depth (-2, kvp_max_depth);
+        } while (!value);
+        xaccQueryAddKVPMatch (q,
+                              path,
+                              value,
+                              get_random_int_in_range (1, KVP_MATCH_GT),
+                              get_random_int_in_range (1,
+                                                       KVP_MATCH_SPLIT |
+                                                       KVP_MATCH_TRANS |
+                                                       KVP_MATCH_ACCOUNT),
+                              get_random_queryop ());
+        kvp_value_delete (value);
+        free_random_kvp_path (path);
         break;
 
       case PR_MEMO:

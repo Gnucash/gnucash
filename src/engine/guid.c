@@ -470,13 +470,11 @@ decode_md5_string(const char *string, unsigned char *data)
   return TRUE;
 
 badstring:
-  PERR ("bad string, stopped at %d\n", count);
   for (count = 0; count < 16; count++)
   {
     data[count] = 0;
   }
   return FALSE;
-
 }
 
 char *

@@ -63,6 +63,9 @@ main_helper (int argc, char **argv)
 
   xaccLogDisable ();
 
+  /* scm conversion doesn't handle binary atm */
+  kvp_exclude_type (KVP_TYPE_BINARY);
+
   run_tests ();
 
   print_test_results ();
