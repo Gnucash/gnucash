@@ -2759,10 +2759,14 @@ txn_restore_start_handler(GSList* sibling_data, gpointer parent_data,
                           gpointer global_data, gpointer *data_for_children,
                           gpointer *result, const gchar *tag, gchar **attrs)
 {
-  Transaction *trans = xaccMallocTransaction();
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
+  Transaction *trans = xaccMallocTransaction(pstatus->session);
+
   g_return_val_if_fail(trans, FALSE);
+
   xaccTransBeginEdit(trans);
   *data_for_children = trans;
+
   return(TRUE);
 }
 

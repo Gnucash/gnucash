@@ -611,7 +611,7 @@ xaccSplitGetReconciledBalance (Split *s)  {
 \********************************************************************/
 
 static void
-xaccInitTransaction (Transaction * trans)
+xaccInitTransaction (Transaction * trans, GNCSession *session)
 {
   /* Fill in some sane defaults */
   trans->num         = g_cache_insert(gnc_engine_get_string_cache(), "");
@@ -644,11 +644,11 @@ xaccInitTransaction (Transaction * trans)
 \********************************************************************/
 
 Transaction *
-xaccMallocTransaction (void)
+xaccMallocTransaction (GNCSession *session)
 {
   Transaction *trans = g_new(Transaction, 1);
 
-  xaccInitTransaction (trans);
+  xaccInitTransaction (trans, session);
 
   gnc_engine_generate_event (&trans->guid, GNC_EVENT_CREATE);
 

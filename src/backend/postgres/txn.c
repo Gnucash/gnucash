@@ -530,13 +530,14 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    trans = xaccTransLookup (trans_guid);
    if (!trans)
    {
-      trans = xaccMallocTransaction();
+      trans = xaccMallocTransaction(be->session);
       do_set_guid=TRUE;
       engine_data_is_newer = -1;
    }
    else 
    {
-      /* save some performance, don't go to the backend if the data is recent. */
+      /* save some performance, don't go to the
+         backend if the data is recent. */
       if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
       {
          PINFO ("fresh data, skip check");

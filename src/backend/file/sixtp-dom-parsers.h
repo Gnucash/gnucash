@@ -67,7 +67,7 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 
 Account* dom_tree_to_account(xmlNodePtr node, GNCSession *session);
-Transaction* dom_tree_to_transaction(xmlNodePtr node);
+Transaction* dom_tree_to_transaction(xmlNodePtr node, GNCSession *session);
 
 struct dom_tree_handler
 {

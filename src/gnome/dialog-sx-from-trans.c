@@ -196,7 +196,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     split_value = xaccSplitGetValue(sp);
     gnc_ttsplitinfo_set_memo(ttsi, xaccSplitGetMemo(sp));
 
-    if(gnc_numeric_positive_p(split_value)) /* FIXME:I still can't remember which one is stored positive :) */
+    if(gnc_numeric_positive_p(split_value))
     {
       gnc_ttsplitinfo_set_debit_formula_numeric(ttsi, split_value);
     }
@@ -212,7 +212,8 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
   tt_list = g_list_append(tt_list, tti);
 
-  xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list);
+  xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list,
+                                   gnc_get_current_session ());
 
   return 0;
 }

@@ -230,6 +230,7 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx, GDate *date );
  * the edit dialog doesn't use this mechanism.  Maybe it should
  */
 
-void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list);
+void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
+                                      GNCSession *session);
 
 #endif /* XACC_SCHEDXACTION_H */

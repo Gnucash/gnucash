@@ -567,7 +567,9 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct, Transaction *parent_t
 }
   
 
-void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list)
+void
+xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
+                                 GNCSession *session)
 {
   
   Transaction *new_trans;
@@ -583,7 +585,7 @@ void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list)
   {
     tti = t_t_list->data;
 
-    new_trans = xaccMallocTransaction();
+    new_trans = xaccMallocTransaction(session);
 
     xaccTransBeginEdit(new_trans);
 

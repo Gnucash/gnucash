@@ -574,7 +574,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
       return NULL;
     }
 
-    new_trans = xaccMallocTransaction ();
+    new_trans = xaccMallocTransaction (gnc_get_current_session ());
 
     xaccTransBeginEdit (new_trans);
     gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);

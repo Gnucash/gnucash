@@ -325,9 +325,9 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
          xaccTransBeginEdit (trans);
       }
    }
-   else 
+   else
    {
-      trans = xaccMallocTransaction();
+      trans = xaccMallocTransaction(be->session);
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }

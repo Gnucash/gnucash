@@ -464,19 +464,23 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             ag = gnc_book_get_template_group(book);
             if ( ag == NULL )
             {
-                    PERR( "Error getting template account group from being-parsed Book." );
+                    PERR( "Error getting template account group "
+                          "from being-parsed Book." );
                     xmlFreeNode( tree );
                     return FALSE;
             }
             acct = xaccGetAccountFromName( ag, id );
             if ( acct == NULL )
             {
-                    PERR( "Error getting template account with name \"%s\"", id );
+                    PERR( "Error getting template account "
+                          "with name \"%s\"", id );
                     xmlFreeNode( tree );
                     return FALSE;
             }
-            DEBUG( "Got template account with name \"%s\" for SX with GUID \"%s\"",
+            DEBUG( "Got template account with name \"%s\" for "
+                   "SX with GUID \"%s\"",
                    xaccAccountGetName( acct ), id );
+
             /* FIXME: free existing template account. 
 	     *  HUH????? We only execute this if there isn't
 	     * currently an existing template account, don't we?
@@ -541,12 +545,15 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
 {
         gnc_template_xaction_data *txd = data;
         Transaction        *trn;
-        trn = dom_tree_to_transaction( node );
+
+        trn = dom_tree_to_transaction( node, txd->session );
+
         if ( trn == NULL ) {
                 return FALSE;
         } else {
                 txd->transactions = g_list_append( txd->transactions, trn );
         }
+
         return TRUE;
 }
 
@@ -573,16 +580,16 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         gxpf_data  *gdata = global_data;
         GNCSession *session = gdata->sessiondata;
         GList      *n;
-        gnc_template_xaction_data *txd;
+        gnc_template_xaction_data txd;
 
-        txd = g_new0 (gnc_template_xaction_data, 1);
-
-        txd->session = session;
+        txd.session = session;
+        txd.accts = NULL;
+        txd.transactions = NULL;
 
         /* the DOM tree will have an account tree [the template group
            and account] and a list of transactions [which will be
            members of the template account].
-        
+
            we want to parse through the dom trees for each, placing
            the null-parent account in the book's template-group slot,
            the others under it, and the transactions as normal. */
@@ -597,24 +604,24 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
 
         g_return_val_if_fail( tree, FALSE );
         
-        successful = dom_tree_generic_parse( tree, tt_dom_handlers, txd );
+        successful = dom_tree_generic_parse( tree, tt_dom_handlers, &txd );
 
         if ( successful ) {
-                gdata->cb( tag, gdata->parsedata, txd );
+                gdata->cb( tag, gdata->parsedata, &txd );
         } else {
                 xmlElemDump( stdout, NULL, tree );
         }
-        
+
         /* cleanup */
-        for ( n = txd->accts; n; n = n->next ) {
+        for ( n = txd.accts; n; n = n->next ) {
                 n->data = NULL;
         }
-        for ( n = txd->transactions; n; n = n->next ) {
+        for ( n = txd.transactions; n; n = n->next ) {
                 n->data = NULL;
         }
-        g_list_free( txd->accts );
-        g_list_free( txd->transactions );
-        g_free( txd );
+        g_list_free( txd.accts );
+        g_list_free( txd.transactions );
+
         xmlFreeNode( tree );
 
         return successful;
@@ -623,5 +630,6 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
 sixtp*
 gnc_template_transaction_sixtp_parser_create( void )
 {
-        return sixtp_dom_parser_new( gnc_template_transaction_end_handler, NULL, NULL );
+        return sixtp_dom_parser_new( gnc_template_transaction_end_handler,
+                                     NULL, NULL );
 }

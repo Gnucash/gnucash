@@ -942,7 +942,7 @@ readTransaction(GNCSession *session, int fd, Account *acc, int revision)
   ENTER (" ");
 
   /* create a transaction structure */
-  trans = xaccMallocTransaction();
+  trans = xaccMallocTransaction(session);
   xaccTransBeginEdit (trans);  
 
   tmp = readString( fd, revision );

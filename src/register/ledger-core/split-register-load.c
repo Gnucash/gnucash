@@ -174,7 +174,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gnc_suspend_gui_refresh ();
 
-    trans = xaccMallocTransaction ();
+    trans = xaccMallocTransaction (gnc_get_current_session ());
 
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */

@@ -1674,7 +1674,7 @@ of having a parent transaction with which one is working...")
    'gnc:transaction-create
    '<gnc:Transaction*>
    "xaccMallocTransaction"
-   '()
+   '((<gnc:Session*> session>))
    "Create a Transaction structure")
 
   (gw:wrap-function

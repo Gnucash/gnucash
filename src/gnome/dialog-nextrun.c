@@ -280,7 +280,7 @@ create_each_transaction( Transaction *t, void *d )
 
         gd = (GDate*)d;
 
-        newT = xaccMallocTransaction();
+        newT = xaccMallocTransaction(gnc_get_current_session ());
         xaccTransBeginEdit( newT );
         /* the action and description/memo are in the template */
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );

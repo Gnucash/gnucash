@@ -919,7 +919,7 @@ gnc_account_create_opening_balance (Account *account,
   xaccAccountBeginEdit (account);
   xaccAccountBeginEdit (equity_account);
 
-  trans = xaccMallocTransaction ();
+  trans = xaccMallocTransaction (session);
 
   xaccTransBeginEdit (trans);
 

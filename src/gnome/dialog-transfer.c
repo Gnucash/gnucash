@@ -1112,7 +1112,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   gnc_suspend_gui_refresh ();
 
   /* Create the transaction */
-  trans = xaccMallocTransaction();
+  trans = xaccMallocTransaction(gnc_get_current_session ());
 
   xaccTransBeginEdit(trans);
 

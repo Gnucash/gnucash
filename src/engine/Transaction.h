@@ -76,9 +76,10 @@ int    xaccConfigGetForceDoubleEntry (void);
  *    Once created, it is usually unsafe to merely "free" this memory;
  *    the xaccTransDestroy() method should be called.
  */ 
-Transaction * xaccMallocTransaction (void); 
+Transaction * xaccMallocTransaction (GNCSession *session); 
 
-gboolean xaccTransEqual(const Transaction *ta, const Transaction *tb,
+gboolean xaccTransEqual(const Transaction *ta,
+                        const Transaction *tb,
                         gboolean check_guids,
                         gboolean check_splits);
 

@@ -87,7 +87,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    else
    {
-      trans = xaccMallocTransaction();
+      trans = xaccMallocTransaction(be->session);
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }

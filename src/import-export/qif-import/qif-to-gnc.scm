@@ -330,7 +330,8 @@
              (if (not (qif-xtn:mark xtn))
                  (begin 
                    ;; create and fill in the GNC transaction
-                   (let ((gnc-xtn (gnc:transaction-create)))
+                   (let ((gnc-xtn (gnc:transaction-create
+                                   (gnc:get-current-session))))
                      (gnc:transaction-begin-edit gnc-xtn)
 
                      ;; FIXME. This is probably wrong

@@ -496,10 +496,10 @@ gnc_transaction_end_handler(gpointer data_for_children,
     {
         return TRUE;
     }
-    
+
     g_return_val_if_fail(tree, FALSE);
-    
-    trn = dom_tree_to_transaction(tree);
+
+    trn = dom_tree_to_transaction(tree, gdata->sessiondata);
     if(trn != NULL)
     {
         gdata->cb(tag, gdata->parsedata, trn);
@@ -512,14 +512,14 @@ gnc_transaction_end_handler(gpointer data_for_children,
 }
 
 Transaction *
-dom_tree_to_transaction( xmlNodePtr node )
+dom_tree_to_transaction( xmlNodePtr node, GNCSession *session )
 {
     Transaction *trn;
     gboolean	successful;
 
     g_return_val_if_fail(node, FALSE);
     
-    trn = xaccMallocTransaction();
+    trn = xaccMallocTransaction(session);
     g_return_val_if_fail(trn, FALSE);
     xaccTransBeginEdit(trn);
 

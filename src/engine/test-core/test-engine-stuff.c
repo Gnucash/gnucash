@@ -567,7 +567,7 @@ get_random_transaction(GNCSession *session)
 {
     Transaction* ret;
 
-    ret = xaccMallocTransaction();
+    ret = xaccMallocTransaction(session);
 
     xaccTransBeginEdit(ret);
 

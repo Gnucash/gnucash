@@ -146,7 +146,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-io:invst-xtn-import qif-xtn qif-file gnc-acct-info commodity)
-  (let ((gnc-xtn (gnc:transaction-create))
+  (let ((gnc-xtn (gnc:transaction-create (gnc:get-current-session)))
         (format-info (qif-io:file-invst-xtn-format qif-file)))
     ;; utility to make a new split and add it both to an 
     ;; account and to the transaction

@@ -1114,7 +1114,7 @@ _create_each_transaction_helper( Transaction *t, void *d )
         createUD = (createData*)d;
         tct = createUD->tct;
 
-        newT = xaccMallocTransaction();
+        newT = xaccMallocTransaction(gnc_get_current_session ());
         xaccTransBeginEdit( newT );
         /* the action and description/memo are in the template */
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );

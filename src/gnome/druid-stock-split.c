@@ -366,7 +366,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   gnc_suspend_gui_refresh ();
 
-  trans = xaccMallocTransaction ();
+  trans = xaccMallocTransaction (gnc_get_current_session ());
 
   xaccTransBeginEdit (trans);
 

@@ -226,7 +226,7 @@ gnc_account_create_transfer_balance (Account *account,
   xaccAccountBeginEdit (account);
   xaccAccountBeginEdit (transfer);
 
-  trans = xaccMallocTransaction ();
+  trans = xaccMallocTransaction (gnc_get_current_session ());
 
   xaccTransBeginEdit (trans);
 
