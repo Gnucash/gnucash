@@ -35,13 +35,14 @@
 #include <Xbae/Matrix.h>
 
 #include "Account.h"
-#include "ActionBox.h"
+#include "Action.h"
 #include "AdjBWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
 #include "date.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "PopBox.h"
 #include "QuickFill.h"
 #include "RecnWindow.h"
 #include "Transaction.h"
@@ -62,7 +63,7 @@ typedef struct _RegWindow {
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
-  ActionBox      *ab;
+  PopBox         *actbox;
 } RegWindow;
 
 
@@ -819,7 +820,6 @@ regWindow( Widget parent, Account *acc )
     haveQuarks = True;
     }
   
-/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
   acc -> regData = regData;        /* avoid having two open registers for one account */
   regData->acc       = acc;
@@ -862,7 +862,7 @@ regWindow( Widget parent, Account *acc )
                            XmNmarginWidth,   1,
                            XmNallowResize,   True,
                            XmNpaneMaximum,   200,
-                           XmNpaneMinimum,   200,
+                           XmNpaneMinimum,   800,
                            NULL );
   
   /* Setup the menubar at the top of the window */
@@ -982,13 +982,13 @@ regWindow( Widget parent, Account *acc )
     /* ----------------------------------- */
     /* set up column widths */
 
-    acc -> colWidths[DATE_CELL_C] = 5;   /* the widths of columns */
-    acc -> colWidths[NUM_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[DESC_CELL_C] = 35;  /* the widths of columns */
+    acc -> colWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
+    acc -> colWidths[NUM_CELL_C]  = 8;   /* also XFER_CELL_C */
+    acc -> colWidths[DESC_CELL_C] = 35;  /* also MEMO_CELL_C */
     acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
     acc -> colWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
     acc -> colWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
-    acc -> colWidths[BALN_CELL_C] = 12;  /* $ balance */
+    acc -> colWidths[BALN_CELL_C] = 12;  /* dollar balance */
 
     switch(acc->type)
       {
@@ -1010,7 +1010,7 @@ regWindow( Widget parent, Account *acc )
     /* set up column alignments */
 
     acc -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
-    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_END;
+    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  /* need XFER to be visible */
     acc -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
     acc -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
     acc -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
@@ -1128,7 +1128,13 @@ regWindow( Widget parent, Account *acc )
   
 
   /* create action box for the first time */
-  regData->ab = actionBox (reg);
+  regData->actbox = actionBox (reg);
+
+/* xxxxxxxxxxxxxxxxxxxx */
+  /* create the xfer account box for the first time */
+/*
+  regData->xferbox = actionBox (reg);
+*/
  
 
   /******************************************************************\
@@ -1248,7 +1254,7 @@ regWindow( Widget parent, Account *acc )
   XtPopup( regData->dialog, XtGrabNone );
   
   /* unmanage the action box, until it is needed */
-  SetActionBox (regData->ab, -1, -1);
+  SetPopBox (regData->actbox, -1, -1);
 
   unsetBusyCursor( parent );
   
@@ -1476,7 +1482,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
                ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
         {
-           SetActionBox (regData->ab, row, col);
+           SetPopBox (regData->actbox, row, col);
            regData->changed |= MOD_ACTN;
         }
       break;
