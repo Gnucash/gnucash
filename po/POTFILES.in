@@ -99,6 +99,7 @@ src/gnome-utils/gtkselect.c
 src/gnome-utils/print-session.c
 src/gnome-utils/commodity.glade
 src/gnome-utils/gnc-mdi-utils.c
+src/gnome-utils/dialog-options.c
 src/network-utils/gnc-gpg.c
 src/network-utils/gnc-http.c
 src/network-utils/gncmod-network-utils.c
@@ -199,7 +200,6 @@ src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions.c
 src/gnome/dialog-new-user.c
 src/gnome/dialog-nextrun.c
-src/gnome/dialog-options.c
 src/gnome/dialog-price-editor.c
 src/gnome/dialog-print-check.c
 src/gnome/dialog-progress.c
@@ -214,8 +214,8 @@ src/gnome/reconcile-list.c
 src/gnome/window-main.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-stock-split.c
-src/gnome/window-help.c
 src/gnome/top-level.c
+src/gnome/window-help.c
 src/gnome/gnc-network.c
 src/gnome/gnc-splash.c
 src/gnome/gnucash.keys.in
