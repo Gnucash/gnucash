@@ -1034,9 +1034,9 @@ static gboolean
 LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
                      VirtualLocation *p_new_virt_loc)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+  SRInfo *info = xaccSRGetInfo (reg);
+  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *blank_trans = xaccSplitGetParent (blank_split);
   VirtualLocation new_virt_loc;
   CursorClass cursor_class;
@@ -1269,8 +1269,8 @@ LedgerTraverse (Table *table,
                 gncTableTraversalDir dir)
 {
   SplitRegister *reg = table->user_data;
-  SRInfo *info = xaccSRGetInfo(reg);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SRInfo *info = xaccSRGetInfo (reg);
+  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   VirtualLocation virt_loc = *p_new_virt_loc;
   Transaction *trans, *new_trans;
   GNCVerifyResult result;
@@ -1317,10 +1317,12 @@ LedgerTraverse (Table *table,
         if (changed & MOD_XFRM)
           cell = reg->xfrmCell;
         break;
+
       case MXFRM_CELL:
         if (changed & MOD_MXFRM)
           cell = reg->mxfrmCell;
         break;
+
       default:
         break;
     }
@@ -1405,10 +1407,11 @@ LedgerTraverse (Table *table,
       return FALSE;
   }
 
-  /* See if we are tabbing off the end of the blank split */
+  /* See if we are tabbing off the end of a blank split */
   do
   {
     VirtualLocation virt_loc;
+    int old_virt_row;
 
     if (!changed)
       break;
@@ -1420,7 +1423,10 @@ LedgerTraverse (Table *table,
       break;
 
     virt_loc = table->current_cursor_loc;
-    if (gnc_table_move_tab (table, &virt_loc, TRUE))
+    old_virt_row = virt_loc.vcell_loc.virt_row;
+
+    if (gnc_table_move_tab (table, &virt_loc, TRUE) &&
+        old_virt_row == virt_loc.vcell_loc.virt_row)
       break;
 
     /* If we are here, then: (a) the current cursor has been
