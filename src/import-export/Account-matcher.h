@@ -73,6 +73,9 @@
     the function returns NULL, otherwise, the user will be asked to 
     create a new account.
 
+    Account * default_selection: If not NULL, that account will be 
+    pre-selected by default.
+
   Return: A pointer to the found or created Account, or NULL if no
   account was found or created.
 
@@ -81,6 +84,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char auto_create,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
-				    GNCAccountType new_account_default_type);
+				    GNCAccountType new_account_default_type,
+				    Account * default_selection);
 
 #endif

@@ -83,7 +83,7 @@
     <widget>
       <class>GtkLabel</class>
       <name>label847715</name>
-      <label>The following online account is currently unknown to GnuCash:</label>
+      <label>Please select or create an appropriate Gnucash account for:</label>
       <justify>GTK_JUSTIFY_CENTER</justify>
       <wrap>False</wrap>
       <xalign>0.5</xalign>
@@ -117,7 +117,7 @@
     <widget>
       <class>GtkFrame</class>
       <name>frame1</name>
-      <label>Please select or create the matching Gnucash account:</label>
+      <label></label>
       <label_xalign>0</label_xalign>
       <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
@@ -148,8 +148,8 @@
 	    <handler>gnc_ui_generic_account_picker_unselect_cb</handler>
 	    <last_modification_time>Fri, 07 Jun 2002 17:34:00 GMT</last_modification_time>
 	  </signal>
-	  <columns>3</columns>
-	  <column_widths>215,48,80</column_widths>
+	  <columns>4</columns>
+	  <column_widths>215,48,82,80</column_widths>
 	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 	  <show_titles>True</show_titles>
 	  <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -184,6 +184,19 @@
 	    <class>GtkLabel</class>
 	    <child_name>CTree:title</child_name>
 	    <name>label847713</name>
+	    <label>Description</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>label847785</name>
 	    <label>Account ID</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
@@ -942,7 +955,6 @@
 	<widget>
 	  <class>GtkCList</class>
 	  <name>downloaded_clist</name>
-	  <can_focus>False</can_focus>
 	  <signal>
 	    <name>select_row</name>
 	    <handler>downloaded_transaction_select_cb</handler>

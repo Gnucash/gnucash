@@ -160,7 +160,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
   gchar *notes, *tmp;
   
   if(data.account_id_valid==true){
-    account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE);
+    account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE, NULL);
     if(account!=NULL)
       {
 	/********** Create the transaction and setup transaction data ************/
@@ -386,7 +386,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 								   1,
 								   investment_account_text, 
 								   investment_commodity,
-								   STOCK);
+								   STOCK,
+								   NULL);
 		    g_free (investment_account_text);
 		    if(investment_account!=NULL&&
 		       data.unitprice_valid==true&&
@@ -440,7 +441,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 								     1,
 								     investment_account_text, 
 								     currency,
-								     INCOME);
+								     INCOME,
+								     NULL);
 			    income_acc_guid = xaccAccountGetGUID(income_account);
 			    kvp_val = kvp_value_new_guid(income_acc_guid);
 			    if( acc_frame==NULL)
@@ -537,6 +539,8 @@ int ofx_proc_account_cb(struct OfxAccountData data)
   gnc_commodity_table * commodity_table;
   gnc_commodity * default_commodity;
   GNCAccountType default_type=NO_TYPE;
+  gchar * account_description;
+  gchar * account_type_name;
 
   if(data.account_id_valid==true){
     //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");
@@ -556,23 +560,44 @@ int ofx_proc_account_cb(struct OfxAccountData data)
     
     if(data.account_type_valid==true){
       switch(data.account_type){
-      case OFX_CHECKING : default_type=BANK;
+      case OFX_CHECKING : 
+	default_type=BANK;
+	account_type_name = g_strdup_printf(_("Unknown OFX checking account"));
 	break;
-      case OFX_SAVINGS : default_type=BANK;
+      case OFX_SAVINGS : 
+	default_type=BANK;
+	account_type_name = g_strdup_printf(_("Unknown OFX savings account"));
 	break;
-      case OFX_MONEYMRKT : default_type=MONEYMRKT;
+      case OFX_MONEYMRKT : 
+	default_type=MONEYMRKT;
+	account_type_name = g_strdup_printf(_("Unknown OFX money market account"));
 	break;
-      case OFX_CREDITLINE : default_type=CREDITLINE;
+      case OFX_CREDITLINE : 
+	default_type=CREDITLINE;
+	account_type_name = g_strdup_printf(_("Unknown OFX credit line account"));
 	break;
-      case OFX_CMA : default_type=NO_TYPE;
+      case OFX_CMA : 
+	default_type=NO_TYPE;
+	account_type_name = g_strdup_printf(_("Unknown OFX CMA account"));
 	break;
-      case OFX_CREDITCARD : default_type=CREDIT;
+      case OFX_CREDITCARD : 
+	default_type=CREDIT;
+	account_type_name = g_strdup_printf(_("Unknown OFX credit card account"));
 	break;
       default: PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
       }
     }
 
-    selected_account = gnc_import_select_account(data.account_id, 1, data.account_name, default_commodity, default_type);
+    account_description = g_strdup_printf( /* This string is a default account
+					      name. It MUST NOT contain the
+					      character ':' anywhere in it or
+					      in any translation.  */
+					  "%s \"%s\"",
+					  account_type_name,
+					  data.account_name);
+    selected_account = gnc_import_select_account(data.account_id, 1, account_description, default_commodity, default_type, NULL);
+    g_free(account_description);
+    g_free(account_type_name);
   }
   else
     {

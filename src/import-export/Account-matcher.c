@@ -47,6 +47,20 @@
 
 static short module = MOD_IMPORT;
 
+/********************************************************************\
+ *   Constants   *
+\********************************************************************/
+
+#define NUM_COLUMNS_CLIST 4
+static const int CLIST_NAME= 0;
+static const int CLIST_TYPE = 1;
+static const int CLIST_DESCRIPTION = 2;
+static const int CLIST_ONLINE_ID = 3;
+
+/********************************************************************\
+ *   Structs   *
+\********************************************************************/
+
 struct _accountpickerdialog {
   GtkWidget       * dialog;
   GtkWidget       * treeview;
@@ -67,18 +81,20 @@ struct _accountpickerdialog {
  * 
 \********************************************************************/
 
-static void acct_tree_add_accts(AccountGroup * accts, GtkCTree * tree, GtkCTreeNode * parent)
+static void acct_tree_add_accts(struct _accountpickerdialog * picker, AccountGroup * accts, GtkCTree * tree, GtkCTreeNode * parent)
 {
   GtkCTreeNode * node;
   Account *current_acct;
   guint i;
-  gchar * acctinfo[3];
+  gchar * acctinfo[NUM_COLUMNS_CLIST];
+
   for(i=0;i<xaccGroupGetNumAccounts(accts);i++)
     {
       current_acct = xaccGroupGetAccount(accts, i);
-      acctinfo[0]=(gchar *)xaccAccountGetName(current_acct);
-      acctinfo[1]=g_strdup(xaccAccountGetTypeStr(xaccAccountGetType(current_acct)));
-      acctinfo[2]=g_strdup(gnc_import_get_acc_online_id(current_acct));
+      acctinfo[CLIST_NAME]=(gchar *)xaccAccountGetName(current_acct);
+      acctinfo[CLIST_TYPE]=g_strdup(xaccAccountGetTypeStr(xaccAccountGetType(current_acct)));
+      acctinfo[CLIST_DESCRIPTION]=(gchar *)xaccAccountGetDescription(current_acct);
+      acctinfo[CLIST_ONLINE_ID]=g_strdup(gnc_import_get_acc_online_id(current_acct));
       //printf("acct_tree_add_acct(): %s%s",xaccAccountGetName(current_acct),"\n");
       node = gtk_ctree_insert_node         (tree,
 					    parent,
@@ -91,7 +107,12 @@ static void acct_tree_add_accts(AccountGroup * accts, GtkCTree * tree, GtkCTreeN
       gtk_ctree_node_set_row_data     (tree,
 				       node,
                                        current_acct);
-      acct_tree_add_accts(xaccAccountGetChildren(current_acct), tree, node);
+      if(current_acct==picker->selected_acct)
+	{
+	  gtk_ctree_select(tree,
+			   node);
+	}
+      acct_tree_add_accts(picker, xaccAccountGetChildren(current_acct), tree, node);
     }
 }
 
@@ -107,7 +128,7 @@ build_acct_tree(struct _accountpickerdialog * picker) {
   gtk_clist_clear(GTK_CLIST(picker->treeview));
   gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
                                       1, GTK_JUSTIFY_CENTER);
-  acct_tree_add_accts(picker->acct_group,  GTK_CTREE(picker->treeview), NULL);
+  acct_tree_add_accts(picker, picker->acct_group,  GTK_CTREE(picker->treeview), NULL);
   
   if(picker->selected_acct!=NULL) {
     new_sel = gtk_ctree_find_by_row_data(GTK_CTREE(picker->treeview),
@@ -193,7 +214,8 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    char auto_create,
 				    char * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
-				    GNCAccountType new_account_default_type)
+				    GNCAccountType new_account_default_type,
+				    Account * default_selection)
 {
   #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
   struct _accountpickerdialog * picker;
@@ -214,6 +236,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
   picker->account_human_description =  account_human_description;
   picker->new_account_default_commodity = new_account_default_commodity;
   picker->new_account_default_type = new_account_default_type;
+  picker->selected_acct=default_selection;
 
   DEBUG("Looking for account with online_id: %s", account_online_id_value);
   if(account_online_id_value!=NULL)
@@ -253,9 +276,18 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	  strncat(account_description_text, account_online_id_value, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	  strncat(account_description_text, ")", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	}
+      else
+	{
+	  gtk_clist_set_column_visibility (GTK_CLIST (picker->treeview),
+					   CLIST_ONLINE_ID,
+					   FALSE);
+	}
       gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
       build_acct_tree(picker);
-      
+
+      gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
+      gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
+
       ui_retval = gnome_dialog_run_and_close(GNOME_DIALOG(picker->dialog));  
 
       if(ui_retval == 0) {

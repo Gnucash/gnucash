@@ -1,3 +1,15 @@
+2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Account-matcher.[c,h]: Minor changes to make
+	the matcher more generic:  Improved text handling, default account
+	support, enable account description, disable showing Online ID 
+	column if online_id isn't specified in the function call.
+	* src/import-export/generic-import.glade: Adjust text for above 		changes.
+	* src/import-export/gnc-gen-transaction.c:  Use the more feature		 complete Account-matcher.h from the generic import module instead
+	 of dialog-account-pick.h.  Christian, tell me you didn't implement
+	a fourth account picker from scratch. 
+	* src/import-export/ofx/gnc-ofx-import.c: Adapt text to 
+	Account-matcher changes.
+
 2002-11-24  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/druid-loan.c (ld_rev_prep): Initial support for a

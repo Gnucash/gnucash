@@ -32,10 +32,10 @@
 #include "global-options.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
-#include "dialog-account-pick.h"
 
 #include "gnc-import-match-map.h"
 #include "Transaction-matcher.h"
+#include "Account-matcher.h"
 
 struct _generic_transaction_info
 {
@@ -99,7 +99,13 @@ run_account_picker_dialog (GNCGenTransaction *info,
 {
   Account *old_acc, *new_acc;
   old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-  new_acc = gnc_account_picker_dialog(old_acc);
+/*  new_acc = gnc_account_picker_dialog(old_acc);*/
+  new_acc = gnc_import_select_account(NULL,
+				      TRUE,
+				      _("A destination split for the transaction you selected."),
+				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
+				      NO_TYPE,
+				      old_acc);
   if (old_acc != new_acc) {
     gnc_import_TransInfo_set_destacc (trans_info, new_acc);
     refresh_clist_row (info, row, trans_info);
