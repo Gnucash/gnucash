@@ -305,9 +305,7 @@ Books will be closed on midnight of the selected date.</label>
       <class>GnomeDruidPageFinish</class>
       <name>finish page</name>
       <title>Finish Closing Books</title>
-      <text>If you are finished setting up accounting periods, press `Finish'.
-You may also press `Back' to review your choices, or `Cancel' to
-quit without making any changes.</text>
+      <text>xxx</text>
       <background_color>102,102,153</background_color>
       <logo_background_color>102,102,153</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
