@@ -174,10 +174,11 @@ xaccFreeAccount( Account *acc )
 \********************************************************************/
 
 void 
-xaccAccountBeginEdit (Account *acc)
+xaccAccountBeginEdit (Account *acc, int defer)
 {
    if (!acc) return;
-   acc->open = 1;
+   acc->open = ACC_BEGIN_EDIT;
+   if (defer) acc->open |= ACC_DEFER_REBALANCE;
 }
 
 void 

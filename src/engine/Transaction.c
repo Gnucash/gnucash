@@ -436,6 +436,7 @@ xaccSplitRebalance (Split *split)
   if (!(split->acc)) return;
 
   if (DEFER_REBALANCE & (trans->open)) return;
+  if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
   assert (trans->splits);
   assert (trans->splits[0]);
 

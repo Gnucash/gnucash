@@ -295,7 +295,7 @@ xaccReadAccountGroup( char *datafile )
 
     /* create a lost account, put the missing accounts there */
     acc = xaccMallocAccount();
-    xaccAccountBeginEdit (acc);
+    xaccAccountBeginEdit (acc, 1);
     xaccAccountSetName (acc, LOST_ACC_STR);
     acc -> children = holder;
     xaccAccountCommitEdit (acc);
@@ -395,7 +395,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     insertAccount (holder, acc);
   }
   
-  xaccAccountBeginEdit (acc);
+  xaccAccountBeginEdit (acc, 1);
 
   err = read( fd, &(acc->flags), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }

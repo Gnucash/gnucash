@@ -166,7 +166,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
    if (!acc) return NULL;
 
-   xaccAccountBeginEdit (acc);
+   xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
    xaccAccountSetName (acc, "");
    xaccAccountSetDescription (acc, "");
@@ -244,7 +244,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 
    if (!acc) return NULL;
 
-   xaccAccountBeginEdit (acc);
+   xaccAccountBeginEdit (acc, 0);
    xaccAccountSetType (acc, -1);
    xaccAccountSetName (acc, "");
    xaccAccountSetDescription (acc, "");

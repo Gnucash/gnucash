@@ -130,6 +130,10 @@ struct _account {
   short open;
 };
 
+/* bitflields for theopen flag */
+#define ACC_BEGIN_EDIT        0x1
+#define ACC_DEFER_REBALANCE   0x2
+
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split
  *    from the indicated account.  Note that this will leave the split
