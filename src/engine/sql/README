@@ -380,9 +380,6 @@ operation is probably OK.
    problem.  Anyway, what's there now should be pretty good & should
    work for now.  Except its mostly untested.
 
--- review & match up against docs at 
-   http://www.lupercalia.net/gnc-db/
-
 -- use version numbers for commodities.  Right now, multi-user
    updates of commodities are not detected (this seem OK for
    now, since this is a rare occurrence, right ???)
