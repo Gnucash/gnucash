@@ -1,3 +1,19 @@
+2001-04-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-price-editor.c: new file with price db
+	editor. Unfinished.
+
+	* src/engine/gnc-pricedb.c: connect prices to pricedbs
+
+2001-04-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): fix
+	for files with no pricedb section
+
+2001-04-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/prefs.scm: add price editor geometry options
+
 2001-04-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/balance-sheet.scm: Major overhaul. Adapted to new

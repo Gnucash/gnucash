@@ -824,6 +824,12 @@ gnc_ui_mainWindow_gl_cb(GtkWidget *widget, gpointer data)
   gnc_register_raise (regData);
 }
 
+static void
+gnc_ui_mainWindow_prices_cb(GtkWidget *widget, gpointer data)
+{
+  gnc_prices_dialog (NULL);
+}
+
 static gboolean
 gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
 			    GdkEvent  *event,
@@ -1319,6 +1325,14 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       N_("_General Ledger"),
       N_("Open a general ledger window"),
       gnc_ui_mainWindow_gl_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Price Editor"),
+      N_("View and edit the prices for stocks and mutual funds"),
+      gnc_ui_mainWindow_prices_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

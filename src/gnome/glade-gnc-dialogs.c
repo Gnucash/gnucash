@@ -3304,6 +3304,7 @@ create_New_Commodity_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (code_entry);
   gtk_box_pack_start (GTK_BOX (vbox78), code_entry, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, code_entry, _("Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."), NULL);
 
   hbox64 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox64);
@@ -3319,14 +3320,14 @@ create_New_Commodity_Dialog (void)
   gtk_widget_show (label814);
   gtk_box_pack_start (GTK_BOX (hbox64), label814, FALSE, FALSE, 4);
 
-  fraction_spinbutton_adj = gtk_adjustment_new (100, 1, 1e+08, 1, 100, 100);
+  fraction_spinbutton_adj = gtk_adjustment_new (10000, 1, 1e+08, 1, 100, 100);
   fraction_spinbutton = gtk_spin_button_new (GTK_ADJUSTMENT (fraction_spinbutton_adj), 1, 0);
   gtk_widget_ref (fraction_spinbutton);
   gtk_object_set_data_full (GTK_OBJECT (New_Commodity_Dialog), "fraction_spinbutton", fraction_spinbutton,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fraction_spinbutton);
   gtk_box_pack_start (GTK_BOX (hbox64), fraction_spinbutton, TRUE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, fraction_spinbutton, _("Enter the smallest fraction of the commodity which can be traded."), NULL);
+  gtk_tooltips_set_tip (tooltips, fraction_spinbutton, _("Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."), NULL);
 
   dialog_action_area13 = GNOME_DIALOG (New_Commodity_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (New_Commodity_Dialog), "dialog_action_area13", dialog_action_area13);
@@ -7279,5 +7280,381 @@ create_Edit_Report_Size (void)
   GTK_WIDGET_SET_FLAGS (button92, GTK_CAN_DEFAULT);
 
   return Edit_Report_Size;
+}
+
+GtkWidget*
+create_Prices_Dialog (void)
+{
+  GtkWidget *Prices_Dialog;
+  GtkWidget *vbox121;
+  GtkWidget *hbox104;
+  GtkWidget *frame50;
+  GtkWidget *vbox122;
+  GtkWidget *scrolledwindow32;
+  GtkWidget *price_list;
+  GtkWidget *label8477415;
+  GtkWidget *label8477416;
+  GtkWidget *label8477417;
+  GtkWidget *label8477418;
+  GtkWidget *label8477419;
+  GtkWidget *label8477420;
+  GtkWidget *hbuttonbox5;
+  GtkWidget *add_button;
+  GtkWidget *remove_button;
+  GtkWidget *edit_button;
+  GtkWidget *hbuttonbox4;
+  GtkWidget *close_button;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
+
+  Prices_Dialog = gnome_dialog_new (_("Prices Editor"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "Prices_Dialog", Prices_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Prices_Dialog), TRUE, TRUE, FALSE);
+
+  vbox121 = GNOME_DIALOG (Prices_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "vbox121", vbox121);
+  gtk_widget_show (vbox121);
+
+  hbox104 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox104);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "hbox104", hbox104,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox104);
+  gtk_box_pack_start (GTK_BOX (vbox121), hbox104, TRUE, TRUE, 0);
+
+  frame50 = gtk_frame_new (_("Prices"));
+  gtk_widget_ref (frame50);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "frame50", frame50,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame50);
+  gtk_box_pack_start (GTK_BOX (hbox104), frame50, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame50), 3);
+
+  vbox122 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox122);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "vbox122", vbox122,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox122);
+  gtk_container_add (GTK_CONTAINER (frame50), vbox122);
+
+  scrolledwindow32 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow32);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "scrolledwindow32", scrolledwindow32,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow32);
+  gtk_box_pack_start (GTK_BOX (vbox122), scrolledwindow32, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow32), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow32), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  price_list = gtk_clist_new (6);
+  gtk_widget_ref (price_list);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "price_list", price_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow32), price_list);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 0, 80);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 1, 80);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 2, 80);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 3, 80);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 4, 80);
+  gtk_clist_set_column_width (GTK_CLIST (price_list), 5, 80);
+  gtk_clist_set_selection_mode (GTK_CLIST (price_list), GTK_SELECTION_BROWSE);
+  gtk_clist_column_titles_show (GTK_CLIST (price_list));
+
+  label8477415 = gtk_label_new (_("Commodity"));
+  gtk_widget_ref (label8477415);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477415", label8477415,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477415);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 0, label8477415);
+
+  label8477416 = gtk_label_new (_("Currency"));
+  gtk_widget_ref (label8477416);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477416", label8477416,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477416);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 1, label8477416);
+
+  label8477417 = gtk_label_new (_("Date"));
+  gtk_widget_ref (label8477417);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477417", label8477417,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477417);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 2, label8477417);
+
+  label8477418 = gtk_label_new (_("Source"));
+  gtk_widget_ref (label8477418);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477418", label8477418,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477418);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 3, label8477418);
+
+  label8477419 = gtk_label_new (_("Type"));
+  gtk_widget_ref (label8477419);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477419", label8477419,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477419);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 4, label8477419);
+
+  label8477420 = gtk_label_new (_("Price"));
+  gtk_widget_ref (label8477420);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "label8477420", label8477420,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477420);
+  gtk_clist_set_column_widget (GTK_CLIST (price_list), 5, label8477420);
+
+  hbuttonbox5 = gtk_hbutton_box_new ();
+  gtk_widget_ref (hbuttonbox5);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "hbuttonbox5", hbuttonbox5,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbuttonbox5);
+  gtk_box_pack_start (GTK_BOX (vbox122), hbuttonbox5, FALSE, FALSE, 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox5), GTK_BUTTONBOX_SPREAD);
+
+  add_button = gtk_button_new_with_label (_("Add"));
+  gtk_widget_ref (add_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "add_button", add_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (add_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox5), add_button);
+  GTK_WIDGET_SET_FLAGS (add_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, add_button, _("Add a new price."), NULL);
+
+  remove_button = gtk_button_new_with_label (_("Remove"));
+  gtk_widget_ref (remove_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "remove_button", remove_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (remove_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox5), remove_button);
+  GTK_WIDGET_SET_FLAGS (remove_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, remove_button, _("Remove the current price"), NULL);
+
+  edit_button = gtk_button_new_with_label (_("Edit"));
+  gtk_widget_ref (edit_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "edit_button", edit_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (edit_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox5), edit_button);
+  GTK_WIDGET_SET_FLAGS (edit_button, GTK_CAN_DEFAULT);
+
+  hbuttonbox4 = GNOME_DIALOG (Prices_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "hbuttonbox4", hbuttonbox4);
+  gtk_widget_show (hbuttonbox4);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox4), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox4), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Prices_Dialog), GNOME_STOCK_BUTTON_CLOSE);
+  close_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Prices_Dialog)->buttons)->data);
+  gtk_widget_ref (close_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "close_button", close_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (close_button);
+  GTK_WIDGET_SET_FLAGS (close_button, GTK_CAN_DEFAULT);
+
+  gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "tooltips", tooltips);
+
+  return Prices_Dialog;
+}
+
+GtkWidget*
+create_Price_Dialog (void)
+{
+  GtkWidget *Price_Dialog;
+  GtkWidget *dialog_vbox18;
+  GtkWidget *price_info_frame;
+  GtkWidget *vbox126;
+  GtkWidget *hbox106;
+  GtkWidget *vbox125;
+  GtkWidget *label8477399;
+  GtkWidget *label8477400;
+  GtkWidget *label8477401;
+  GtkWidget *label8477402;
+  GtkWidget *label8477403;
+  GtkWidget *label8477404;
+  GtkWidget *vbox126zz;
+  GtkWidget *commodity_box;
+  GtkWidget *currency_box;
+  GtkWidget *date_box;
+  GtkWidget *source_entry;
+  GtkWidget *type_option;
+  GtkWidget *type_option_menu;
+  GtkWidget *glade_menuitem;
+  GtkWidget *price_box;
+  GtkWidget *dialog_action_area18;
+  GtkWidget *ok_button;
+  GtkWidget *cancel_button;
+
+  Price_Dialog = gnome_dialog_new (_("Price Dialog"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Price_Dialog), "Price_Dialog", Price_Dialog);
+  gtk_window_set_modal (GTK_WINDOW (Price_Dialog), TRUE);
+  gtk_window_set_policy (GTK_WINDOW (Price_Dialog), FALSE, FALSE, FALSE);
+
+  dialog_vbox18 = GNOME_DIALOG (Price_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Price_Dialog), "dialog_vbox18", dialog_vbox18);
+  gtk_widget_show (dialog_vbox18);
+
+  price_info_frame = gtk_frame_new (_("Price Information"));
+  gtk_widget_ref (price_info_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "price_info_frame", price_info_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_info_frame);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox18), price_info_frame, TRUE, TRUE, 0);
+
+  vbox126 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox126);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "vbox126", vbox126,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox126);
+  gtk_container_add (GTK_CONTAINER (price_info_frame), vbox126);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox126), 3);
+
+  hbox106 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox106);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "hbox106", hbox106,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox106);
+  gtk_box_pack_start (GTK_BOX (vbox126), hbox106, FALSE, FALSE, 0);
+
+  vbox125 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox125);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "vbox125", vbox125,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox125);
+  gtk_box_pack_start (GTK_BOX (hbox106), vbox125, FALSE, FALSE, 0);
+
+  label8477399 = gtk_label_new (_("Commodity:"));
+  gtk_widget_ref (label8477399);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477399", label8477399,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477399);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477399, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477399), 1, 0.5);
+
+  label8477400 = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (label8477400);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477400", label8477400,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477400);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477400, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477400), 1, 0.5);
+
+  label8477401 = gtk_label_new (_("Date:"));
+  gtk_widget_ref (label8477401);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477401", label8477401,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477401);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477401, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477401), 1, 0.5);
+
+  label8477402 = gtk_label_new (_("Source:"));
+  gtk_widget_ref (label8477402);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477402", label8477402,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477402, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477402), 1, 0.5);
+
+  label8477403 = gtk_label_new (_("Type:"));
+  gtk_widget_ref (label8477403);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477403", label8477403,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477403);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477403, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477403), 1, 0.5);
+
+  label8477404 = gtk_label_new (_("Price:"));
+  gtk_widget_ref (label8477404);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "label8477404", label8477404,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477404);
+  gtk_box_pack_start (GTK_BOX (vbox125), label8477404, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label8477404), 1, 0.5);
+
+  vbox126zz = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox126zz);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "vbox126zz", vbox126zz,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox126zz);
+  gtk_box_pack_start (GTK_BOX (hbox106), vbox126zz, TRUE, TRUE, 0);
+
+  commodity_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (commodity_box);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "commodity_box", commodity_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (commodity_box);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), commodity_box, TRUE, TRUE, 0);
+
+  currency_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (currency_box);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "currency_box", currency_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (currency_box);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), currency_box, TRUE, TRUE, 0);
+
+  date_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (date_box);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "date_box", date_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_box);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), date_box, TRUE, TRUE, 0);
+
+  source_entry = gtk_entry_new ();
+  gtk_widget_ref (source_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "source_entry", source_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), source_entry, FALSE, FALSE, 0);
+  gtk_entry_set_editable (GTK_ENTRY (source_entry), FALSE);
+
+  type_option = gtk_option_menu_new ();
+  gtk_widget_ref (type_option);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "type_option", type_option,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (type_option);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), type_option, FALSE, FALSE, 0);
+  type_option_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Bid"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Ask"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Last"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Unknown"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (type_option), type_option_menu);
+
+  price_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (price_box);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "price_box", price_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_box);
+  gtk_box_pack_start (GTK_BOX (vbox126zz), price_box, TRUE, TRUE, 0);
+
+  dialog_action_area18 = GNOME_DIALOG (Price_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Price_Dialog), "dialog_action_area18", dialog_action_area18);
+  gtk_widget_show (dialog_action_area18);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area18), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area18), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Price_Dialog), GNOME_STOCK_BUTTON_OK);
+  ok_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data);
+  gtk_widget_ref (ok_button);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "ok_button", ok_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (ok_button);
+  GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Price_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  cancel_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Price_Dialog)->buttons)->data);
+  gtk_widget_ref (cancel_button);
+  gtk_object_set_data_full (GTK_OBJECT (Price_Dialog), "cancel_button", cancel_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (cancel_button);
+  GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
+
+  return Price_Dialog;
 }
 

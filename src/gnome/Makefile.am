@@ -14,6 +14,7 @@ libgncgnome_a_SOURCES = \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-options.c \
+  dialog-price-editor.c \
   dialog-print-check.c \
   dialog-progress.c \
   dialog-style-sheet.c \

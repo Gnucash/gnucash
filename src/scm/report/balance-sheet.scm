@@ -233,12 +233,11 @@
 				(gnc:html-markup-b
 				 (gnc:sum-collector-commodity 
 				  balance report-currency exchange-fn)))))))))
-      
-      
+
       ;;(gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
        ;; FIXME: Use magic sprintf code.
-       doc (sprintf #f (N_ "Balance sheet at %s")
+       doc (sprintf #f (_ "Balance sheet at %s")
 		    (gnc:timepair-to-datestring to-date-tp)))
 
       (if (not (null? accounts))

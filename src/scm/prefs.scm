@@ -644,6 +644,14 @@ the current value of the path.")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
+  "__gui" "prices_win_width" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "prices_win_height" 0))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
   "__gui" "reg_win_width" 0))
 
 (gnc:register-configuration-option

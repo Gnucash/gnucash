@@ -394,6 +394,7 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   if(!price_list) return FALSE;
   g_hash_table_insert(currency_hash, currency, price_list);
   db->dirty = TRUE;
+  p->db = db;
   return TRUE;
 }
 
@@ -416,15 +417,21 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   if(!currency_hash) return FALSE;
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!gnc_price_list_remove(&price_list, p)) return FALSE;
+  gnc_price_ref(p);
+  if(!gnc_price_list_remove(&price_list, p)) {
+    gnc_price_unref(p);
+    return FALSE;
+  }
   if(price_list) {
     g_hash_table_insert(currency_hash, currency, price_list);
   } else {
     g_hash_table_remove(currency_hash, currency);
   }
   db->dirty = TRUE;
+  p->db = NULL;
+  gnc_price_unref(p);
   return TRUE;
-}                     
+}
 
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,

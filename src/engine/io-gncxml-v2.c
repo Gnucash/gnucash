@@ -284,6 +284,12 @@ gnc_book_load_from_xml_file_v2(
         return FALSE;
     }
 
+    /* If the parse succeeded, but there is no pricedb,
+     * then the file had no pricedb section. However,
+     * this routine is expected to put one in the book. */
+    if (!gnc_book_get_pricedb (book))
+      gnc_book_set_pricedb (book, gnc_pricedb_create ());
+
     /* mark the newly read group as saved, since the act of putting 
      * it together will have caused it to be marked up as not-saved. 
      */
