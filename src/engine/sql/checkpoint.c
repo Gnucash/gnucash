@@ -70,8 +70,8 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
     * the checkpoints. (hack alert -verify that this is the correct
     * lock) */
    p = "BEGIN WORK; "
-       "LOCK TABLE gncEntry IN SHARE MODE; "
-       "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE; ";
+       "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE; "
+       "LOCK TABLE gncEntry IN SHARE MODE; ";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
@@ -302,7 +302,7 @@ pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp)
       gnc_numeric cleared_baln;
       gnc_numeric reconciled_baln;
 
-      /* setupwhat we will match for */
+      /* setup what we will match for */
       acc = (Account *) node->data;
       com = xaccAccountGetCommodity(acc);
       chk.commodity = gnc_commodity_get_unique_name(com);

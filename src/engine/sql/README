@@ -97,8 +97,7 @@ Core bugs/features that still need work:
 -- Implement GUI to ask user for username/password to log onto the
    server. 
 
--- bug: during exit, it asks 'do you want to save', when this 
-   isn't/shouldn't be needed
+-- add support for rlb's price db
 
 -- error code should include strings passed back, to be shown in 
    gui dialogs. This is because the backen needs to return things
@@ -125,13 +124,21 @@ Core bugs/features that still need work:
    as to what this is about.  For the first pass, this is not a 
    serious issue; its a 'nice to have' thing.
 
+-- during open of register window, a query of splits is typically run
+   twice (once during open -- LedgerDisplayInternal(), and again
+   during LedgerDisplayRefresh()) this results in twice as much data 
+   to the sql backend as needed.  This is a performance issue,
+   should someday be fixed.
+
+-- during transaction edit, query of splits is run twice --
+   once during edit recordCB()->xaccSRSaveRegEntry(), and again
+   recordCB()->xaccSRRedrawReg().  As above, this is performance 
+   problem waiting to aggrevate.
+
 
 To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
-
--- saving as single-user, then re-opening in multi-user mains missing
-   checkpoints, and thus no balances.
 
 -- checkpoint ending balance is showing up as starting balance
 

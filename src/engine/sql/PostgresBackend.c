@@ -27,6 +27,7 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
@@ -803,6 +804,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    gboolean do_set_guid=FALSE;
    int engine_data_is_newer = 0;
    int i, j, nrows;
+   int save_state = 1;
    GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
    
    ENTER ("be=%p", be);
@@ -1018,7 +1020,9 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
                   xaccAccountBeginEdit (acc);
                   previous_acc = acc;
                }
+               if (acc->parent) save_state = acc->parent->saved;
                xaccAccountInsertSplit(acc, s);
+               if (acc->parent) acc->parent->saved = save_state;
 
                /* finally tally them up; we use this below to 
                 * clean out deleted splits */
@@ -1267,12 +1271,19 @@ static int
 pgend_account_commit_edit (Backend * bend, 
                            Account * acct)
 {
+   AccountGroup *parent;
    char *p;
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, acct=%p", be, acct);
    if (!be || !acct) return 1;  /* hack alert hardcode literal */
-   if (FALSE == acct->core_dirty) return 0;
+
+   if (FALSE == acct->core_dirty)
+   {
+      parent = xaccAccountGetParent(acct);
+      if (parent) parent->saved = 1;
+      return 0;
+   }
 
    /* lock it up so that we query and store atomically */
    /* its not at all clear to me that this isn't rife with deadlocks. */
@@ -1326,7 +1337,8 @@ PWARN(" account data in engine is newer\n"
     * is too liberal, and could screw up synchronization if we've lost
     * contact with the back end at some point.  So hack alert -- fix 
     * this. */
-   xaccGroupMarkSaved (xaccAccountGetParent(acct));
+   parent = xaccAccountGetParent(acct);
+   if (parent) parent->saved = 1;
    LEAVE ("commited");
    return 0;
 }
@@ -1474,11 +1486,11 @@ pgendSync (Backend *bend, AccountGroup *grp)
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
 
-   if ((MODE_SINGLE_FILE != be->session_mode) &&
-       (MODE_SINGLE_UPDATE != be->session_mode))
-   {
-      pgendGroupRecomputeAllCheckpoints (be, grp);
-   }
+   /* although the book may be open in 'single-user' mode right now,
+    * it might be opened in multi-user mode next time. Thus, update
+    * the account balance checkpoints just in case. 
+    */
+   pgendGroupRecomputeAllCheckpoints (be, grp);
 
    /* don't send events  to GUI, don't accept callaback to backend */
    gnc_engine_suspend_events();

@@ -171,10 +171,8 @@ sqlQuery_build (sqlQuery*sq, Query *q)
    max_rows = xaccQueryGetMaxSplits (q);
    if (0 <= max_rows)
    {
-      char buff[30];
-      snprintf (buff, 30, "%d", max_rows);
       sq->pq = stpcpy(sq->pq, " LIMIT ");
-      sq->pq = stpcpy(sq->pq, buff);
+      sq->pq += snprintf (sq->pq, 30, "%d", max_rows);
    }
 
    sq->pq = stpcpy(sq->pq, ";");
