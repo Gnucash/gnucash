@@ -146,23 +146,51 @@ GNCDruid* gnc_druid_new(const gchar* title, GList *providers, gpointer backend_c
 			void (*cancel)(gpointer be_ctx))
 {
   GNCDruid *druid;
+  GList *prov_list = NULL;
+  GList *node;
+  GNCDruidProvider *prov;
+  GNCDruidPage *page;
+  GNCDruidClass *gdc;
 
   g_return_val_if_fail(title, NULL);
   g_return_val_if_fail(providers, NULL);
   g_return_val_if_fail(new_druid_fcn, NULL);
 
   /* Build the druid */
-  druid = new_druid_fcn(title, providers);
+  druid = new_druid_fcn(title);
+  g_return_val_if_fail(druid, NULL);
+  g_return_val_if_fail(druid->ui_type, NULL);
 
   /* Fill in local data */
-  if (druid) {
-    druid->be_ctx = backend_ctx;
-    druid->finish = finish;
-    druid->cancel = cancel;
+  druid->be_ctx = backend_ctx;
+  druid->finish = finish;
+  druid->cancel = cancel;
+
+  gdc = GNC_DRUID_GET_CLASS(druid);
+  g_return_val_if_fail(gdc->append_provider, NULL);
+
+  /* Now build the set of providers */
+  for (node = providers; node; node = node->next) {
+    GNCDruidProviderDesc *prov_desc = node->data;
+    
+    /* create the provider */
+    g_assert(prov_desc);
+    prov = gnc_druid_provider_new(druid, prov_desc);
+    g_assert(prov);
+
+    /* add the provider to the druid */
+    gdc->append_provider(druid, prov);
+    prov_list = g_list_prepend(prov_list, prov);
   }
+  druid->providers = g_list_reverse(prov_list);
 
   /* Free the list (the provider descriptions are in the providers) */
   g_list_free(providers);
+
+  /* Set the first page of the druid */
+  prov = gnc_druid_next_provider(druid);
+  page = gnc_druid_provider_first_page(prov);
+  gnc_druid_set_page(druid, page);
 
   /* And return the new druid. */
   return druid;

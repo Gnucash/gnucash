@@ -10,7 +10,15 @@
 	* src/app-utils/gnc-druid*:
 	  - add class macros
 	  - add a title to the basic provider desc and clean it up.
-	
+
+	* src/gnome-utils/Makefile.am: add preliminary gnome gnc-druid impl.
+	* src/gnome-utils/gnc-druid-gnome.[ch]:  gnome implementation of gnc-druid
+	* src/app-utils/gnc-druid*:
+	  - move the provider-building into the generic class and add an
+	    "append_provider" method to the druid class.  Use that when
+	    building the druid.
+	  - add a ui_type to the druid class and use that when building providers.
+
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.

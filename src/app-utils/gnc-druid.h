@@ -30,10 +30,11 @@ struct _GNCDruid
   GObject obj;
 
   /* PROVIDED BY TOOLKIT IMPLEMENTATION... */
-  GList *providers;		/* list of GNCProvider*; list is owned herein */
+  const gchar *ui_type;
 
   /* PROVIDED HEREIN */
   GNCDruidProvider *provider;	/* current provider */
+  GList *providers;		/* list of GNCProvider*; list is owned herein */
 
   /* Backend information */
   gpointer be_ctx;		/* backend context pointer */
@@ -47,11 +48,12 @@ struct _GNCDruidClass
 
   /* virtual methods */
   void	(*set_page)(GNCDruid*, GNCDruidPage*);
+  void	(*append_provider)(GNCDruid*, GNCDruidProvider*);
 };
 
 GType	gnc_druid_get_type(void);
 
-typedef GNCDruid* (*GNCDruidNew)(const char* title, GList *providers);
+typedef GNCDruid* (*GNCDruidNew)(const char* title);
 void	gnc_druid_register_ui(const gchar* ui_type, GNCDruidNew new_druid);
 
 /* methods */

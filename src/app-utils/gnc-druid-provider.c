@@ -102,15 +102,13 @@ gnc_druid_provider_register(const gchar* ui_type, const gchar* name,
   g_hash_table_insert(table, (gpointer)name, new_provider);  
 }
 
-GNCDruidProvider* gnc_druid_provider_new(const gchar* ui_type,
-					 GNCDruid* druid_ctx,
+GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid_ctx,
 					 GNCDruidProviderDesc* desc)
 {
   GHashTable *table;
   GNCDruidProviderNew new_provider;
   GNCDruidProvider *provider;
 
-  g_return_val_if_fail(ui_type, NULL);
   g_return_val_if_fail(desc, NULL);
   g_return_val_if_fail(IS_GNC_DRUID_PROVIDER_DESC(desc), NULL);
   g_return_val_if_fail(druid_ctx, NULL);
@@ -118,7 +116,7 @@ GNCDruidProvider* gnc_druid_provider_new(const gchar* ui_type,
   g_return_val_if_fail(typeTable, NULL);
 
   /* Lookup the UI Type provider table */
-  table = g_hash_table_lookup(typeTable, ui_type);
+  table = g_hash_table_lookup(typeTable, druid_ctx->ui_type);
   g_return_val_if_fail(table, NULL);
 
   /* Now look up the actual provider creator for this provider type */

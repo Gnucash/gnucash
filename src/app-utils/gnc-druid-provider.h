@@ -44,8 +44,7 @@ struct _GNCDruidProviderClass
 };
 
 GType	gnc_druid_provider_get_type(void);
-GNCDruidProvider* gnc_druid_provider_new(const gchar* ui_type,
-					 GNCDruid* druid_ctx,
+GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid,
 					 GNCDruidProviderDesc* desc);
 
 
