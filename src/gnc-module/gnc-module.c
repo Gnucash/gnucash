@@ -120,7 +120,9 @@ gnc_module_system_setup_load_path(void)
       gh_eval_str(evalstr);
       g_free(evalstr);
     }
+    g_free(lp->data);
   }
+  g_list_free(dirs);
 }
 
 /*************************************************************
@@ -186,10 +188,8 @@ gnc_module_system_refresh(void)
       {
         namelen = strlen(dent->d_name);
         
-        /* is the file a .so shared lib? */
-        if((namelen > 3) && 
-           ((!strncmp(dent->d_name + namelen - 3, ".so", 3)) ||
-            (!strncmp(dent->d_name + namelen - 3, ".la", 3)))) 
+        /* is the file a .la shared lib? */
+        if((namelen > 3) && (!strncmp(dent->d_name + namelen - 3, ".la", 3)))
 	{
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
@@ -206,7 +206,6 @@ gnc_module_system_refresh(void)
       }
     }
   }
-
   /* free the search dir strings */
   for(current = search_dirs; current; current=current->next) 
   {
