@@ -233,7 +233,7 @@
 	      #t
 	      (lambda ()
 		(set! results (read from-child))
-;;		(write (list 'results results)) (newline)
+		(gnc:debug (list 'results results))
 		results)
 	      (lambda (key . args)
 		key)))))
@@ -321,7 +321,7 @@
 		(catch
 		 #t
 		 (lambda ()
-;;		   (write (list 'handling-request request)) (newline)
+		   (gnc:debug (list 'handling-request request))
 		   ;; we need to display the first element (the method, so it
 		   ;; won't be quoted) and then write the rest
 		   (display #\( to-child)
@@ -332,7 +332,7 @@
 		   (newline to-child)
 		   (force-output to-child)
 		   (set! results (read from-child))
-;;		   (write (list 'results results)) (newline)
+		   (gnc:debug (list 'results results))
 		   results)
 		 (lambda (key . args)
 		   key)))
