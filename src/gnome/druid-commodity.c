@@ -86,6 +86,23 @@ gnc_import_legacy_commodities(const char * filename) {
 }
 
 
+static gboolean
+window_delete_cb(GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer  user_data)
+{
+  CommodityDruid *cd = user_data;
+
+  /* unload the current file (can't have out-of-date commodities) */
+  gncFileQuit();
+
+  gnc_ui_commodity_druid_destroy (cd);
+
+  /* Don't delete the window, we'll handle things ourselves. */
+  return TRUE;
+}
+
+
 /********************************************************************
  * gnc_ui_commodity_druid_create()
  ********************************************************************/
@@ -104,6 +121,9 @@ gnc_ui_commodity_druid_create(const char * filename) {
   /* call the glade creator */
   d->window = create_New_Commodity_Format_Druid();
   dobj = GTK_OBJECT(d->window);
+
+  gtk_signal_connect (dobj, "delete_event",
+                      GTK_SIGNAL_FUNC (window_delete_cb), d);
 
   d->druid           = gtk_object_get_data(dobj, "commodity_druid");
   d->intro_page      = gtk_object_get_data(dobj, "start_page");
@@ -294,13 +314,17 @@ gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {
 
   GList * p;
   CommodityDruidPage * cdp;
-  
+
+  /* remove the old commodities no matter how we exit */
+  gnc_commodity_table_delete_namespace(gnc_engine_commodities(),
+                                       GNC_COMMODITY_NS_LEGACY);
+
   for(p=cd->pages; p; p=p->next) {
     cdp = (CommodityDruidPage *)p->data;
     g_free(cdp->old_name);
     g_free(cdp);
   }
-  
+
   g_list_free(cd->pages);
   g_hash_table_destroy(cd->new_map);
   g_hash_table_destroy(cd->old_map);
@@ -323,6 +347,7 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
   CommodityDruid * cd = 
     (CommodityDruid *)gtk_object_get_data(GTK_OBJECT(user_data),
                                           "commodity_druid_struct");
+
   /* unload the current file (can't have out-of-date commodities) */
   gncFileQuit();
 
@@ -417,9 +442,6 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   /* add the new commodities to the engine's namespace map and 
    * replace the account commodity pointers */
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
-
-  gnc_commodity_table_delete_namespace(gnc_engine_commodities(),
-                                       GNC_COMMODITY_NS_LEGACY);
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
