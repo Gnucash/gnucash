@@ -216,7 +216,7 @@ gnc_history_update_menu()
     (menu+i)->hint = NULL;
 
     (menu+i)->moreinfo = (gpointer)__gnc_history_file_cb;
-    (menu+i)->user_data = (char *)g_slist_nth_data(history_list, i-1);
+    (menu+i)->user_data = file;
     (menu+i)->unused_data = NULL;
     (menu+i)->pixmap_type = 0;
     (menu+i)->pixmap_info = NULL;
@@ -224,7 +224,7 @@ gnc_history_update_menu()
   }
   (menu+i)->type = GNOME_APP_UI_ENDOFINFO;
 
-  path = g_strdup_printf("%s/%s", _("_File"), IMPORT_QIF_E_STR_N);
+  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, IMPORT_QIF_E_STR_N);
   gnome_app_insert_menus(GNOME_APP(app), path, menu);
   num_menu_entries = n;
   g_free(path);
