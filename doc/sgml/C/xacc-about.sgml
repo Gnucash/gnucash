@@ -194,6 +194,13 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <glosslist>
 
 <glossentry>
+<glossterm><email>azerb_linux@hotmail.com</email> Vasif</glossterm>
+<glossdef>
+<para>Azerbaijani Turkic translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</glossterm>
 <glossdef>
@@ -1105,6 +1112,13 @@ Nielsen</glossterm>
       Woodhouse</glossterm>
 <glossdef>
 <para>Great Britain translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>simos@hellug.gr</email> Simos Xenitellis</glossterm>
+<glossdef>
+<para>Greek translation</para>
 </glossdef>
 </glossentry>
 
