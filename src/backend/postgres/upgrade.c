@@ -152,7 +152,8 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4 DEFAULT 0;\n"
+   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntry ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncEntry SET iguid = 0;\n" 
        
        "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
@@ -160,7 +161,8 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
 
-       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncEntryTrail ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncEntryTrail SET iguid = 0;\n" 
        
        "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
@@ -170,7 +172,8 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
    
-   p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4 DEFAULT 0;\n"
+   p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncTransaction ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncTransaction SET iguid = 0;\n" 
        
        "UPDATE gncTransaction SET iguid = gncGUIDCache.iguid "
@@ -178,7 +181,8 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
 
-       "ALTER TABLE gncTransactionTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "ALTER TABLE gncTransactionTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncTransactionTrail ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncTransactionTrail SET iguid = 0;\n" 
        
        "UPDATE gncTransactionTrail SET iguid = gncGUIDCache.iguid "
@@ -188,7 +192,8 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 	   
-   p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4 DEFAULT 0;\n"
+   p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncAccount ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncAccount SET iguid = 0;\n" 
        
        "UPDATE gncAccount SET iguid = gncGUIDCache.iguid "
@@ -196,7 +201,8 @@ put_iguid_in_tables (PGBackend *be)
        " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
 
-       "ALTER TABLE gncAccountTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "ALTER TABLE gncAccountTrail ADD COLUMN iguid INT4;\n"
+       "ALTER TABLE gncAccountTrail ALTER COLUMN iguid set DEFAULT 0;\n"
        "UPDATE gncAccountTrail SET iguid = 0;\n" 
        
        "UPDATE gncAccountTrail SET iguid = gncGUIDCache.iguid "

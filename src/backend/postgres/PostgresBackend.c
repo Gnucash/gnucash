@@ -148,7 +148,7 @@ pgendAccountLookup (PGBackend *be, const GUID *acct_guid)
    GList *node;
    Account * acc = NULL;
 
-   ENTER("guid = %s", acct_guid);
+   ENTER("guid = %s", guid_to_string(acct_guid));
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
@@ -166,7 +166,7 @@ pgendTransLookup (PGBackend *be, const GUID *txn_guid)
    GList *node;
    Transaction * txn = NULL;
 
-   ENTER("guid = %s", txn_guid);
+   ENTER("guid = %s", guid_to_string(txn_guid));
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
@@ -184,7 +184,7 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    GList *node;
    Split * split = NULL;
 
-   ENTER("guid = %s", split_guid);
+   ENTER("guid = %s", guid_to_string(split_guid));
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
@@ -202,7 +202,7 @@ pgendPriceLookup (PGBackend *be, const GUID *price_guid)
    GList *node;
    GNCPrice * price = NULL;
 
-   ENTER("guid = %s", price_guid);
+   ENTER("guid = %s", guid_to_string(price_guid));
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
@@ -219,7 +219,7 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
    GList *node;
    GNCIdType tip = GNC_ID_NONE;
 
-   ENTER("guid = %s", guid);
+   ENTER("guid = %s", guid_to_string(guid));
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
@@ -1137,6 +1137,9 @@ pgendSessionGetMode (PGBackend *be)
          return "POLL";
       case MODE_EVENT:
          return "EVENT";
+      /* quiet compiler warnings about MODE_NONE */
+      default:
+         return "ERROR";
    }
    return "ERROR";
 }
@@ -1629,15 +1632,15 @@ pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
     return pgend_book_transfer_begin (bend, object);
 
   switch (be->session_mode) {
-  case MODE_EVENT:
-  case MODE_POLL:
-  case MODE_SINGLE_UPDATE:
+      case MODE_EVENT:
+      case MODE_POLL:
+      case MODE_SINGLE_UPDATE:
+          if (!safe_strcmp (type, GNC_ID_PRICE))
+              return pgend_price_begin_edit (bend, object);
 
-    if (!safe_strcmp (type, GNC_ID_PRICE))
-      return pgend_price_begin_edit (bend, object);
-
-  case MODE_SINGLE_FILE:
-    break;
+      case MODE_SINGLE_FILE:
+      case MODE_NONE:
+          break;
   }
 
   /* XXX: Add dynamic plug-in here */
@@ -1670,7 +1673,9 @@ pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
       return pgend_account_commit_edit (bend, object);
 
   case MODE_SINGLE_FILE:
+  case MODE_NONE:
     break;
+    
   }
 
   /* XXX: Add dynamic plug-in here */
@@ -1692,6 +1697,7 @@ pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
 
   case MODE_SINGLE_UPDATE:
   case MODE_SINGLE_FILE:
+  case MODE_NONE:
     break;
   }
 

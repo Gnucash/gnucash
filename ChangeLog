@@ -1,3 +1,18 @@
+2003-01-03  Matthew Vanecek <mevanecek@yahoo.com>
+    * src/backend/postgres/Postgresbackend.c: Fixed some compiler
+    warning messages about MODE_NONE and a some GUIDs used as
+    string pointers in informational messages.
+
+    * src/backend/postgres/test/test-db.c: Commented out the
+    "short module" declaration.  It was not used and was causing a
+    compiler warning.
+
+    * src/backend/postgres/upgrade.c: Changed the "ALTER TABLE table
+    ADD COLUMN..." statements to conform to the current Postgres
+    implementation (and SQL 92) standard by putting the DEFAULT 
+    modifier in a separate ALTER statement.  This was reported by
+    Christopher B. Browne.
+
 2003-01-02  David Hampton  <hampton@employees.org>
 
 	* src/report/report-system/html-utilities.scm: Fix malformed URLs

@@ -21,7 +21,8 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 
-static short module = MOD_TEST; 
+/* Prevent compiler warnings.  Uncomment if LEAVE/WARN/et al get used*/
+/* static short module = MOD_TEST;  */
 
 static void
 save_xml_file (GNCSession *session, const char *filename_base)
