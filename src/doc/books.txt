@@ -285,33 +285,51 @@ Plan A has been implemented in the engine.
    There is currently no support for loading multiple books from multiple
    files.
 
+Open Issues/Questions that Need Discussion:
+-------------------------------------------
+*) Discussion Q: What should the naming convention be for the different 
+   books?  When the XML file backend is used, different books need to be 
+   stored as different files (in order to avoid the performance 
+   penalty of a large file load).  Currently, what's implemented is
+
+   book-1dc750aa3e6fd045c13ac8afb1a9ac03-my-gnucash-file.xac.gml
+
+   where the number is the GUID of the closed book (needed to be able to
+   quickly find the book/file) and 'my-gnucash-file.xac' is the name of
+   the orignial file whose books were closed.
+
+*) Discussion Q: When saving books, make the book title part of the 
+   book name (user convenience).
+
+*) Should closed books be allowed to have unreconciled transactions?
+   Answer: probably.  Should there be a warning? 
+
+*) Special considerations for scheduled transactions/recurring 
+   transactions?  Probably none needed.  Should copies of SX's be 
+   placed in old books? Probably not -- what purpose would that serve?
+
+
 
 Open Issues / ToDo
 ------------------
-*) Handling of lots in book closing is implemented but is poorly tested 
-   and still has at least one known bug (see below).  Need to right test case.
- 
-*) Naming convention for the different books?  When the XML file backend
-   is used, different books need to be stored as different files (in order
-   to avoid the performance penalty of a large file load).  
+*) Big Bug: closing books still seems to leave registers and accounts
+   showing old data. whazzup with that? 
 
-*) When saving books, make the book title part of the book name (user
-   convenience).
+*) Bug: price db is not split up. why nnot?
 
-*) Special considerations for scheduled transactions/recurring transactions?
+*) Handling of lots in book closing is implemented but is poorly tested.
+   Need to write test cases.  Also test cases for prices in book
+   closing.
 
-*) Provide for loading of closed books, if that is desired ... 
+*) Need to provide for loading of closed books, because this is needed
+   for reports.
 
 *) Handling of multi-book reports ???  Need to work out the recommended way
    of making this happen....
 
+*) Have some way of remembering the quickfill text from older books.
+
 *) Need to mark closed book as unalterable, and respect that markup.
-
-*) Need to trimming of price database 
-
-*) bug: transactions that reference open lots might also reference closed
-   lots, and those close lots have transactions; none of this can be moved
-   to closed book; must walk the entire tree.
 
 *) book closing GUI needs to save/restore period end date to KVP on 
    open book.
