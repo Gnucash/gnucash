@@ -330,8 +330,6 @@ configLayout (SplitRegister *reg)
   CellBlock *curs;
   int i;
 
-  printf( "configLayout with type %d\n", reg->type );
-
   /* fill things up with null cells */
   for (i = 0; i < reg->cursor_header->num_cols; i++)
   {
