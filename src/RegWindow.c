@@ -73,6 +73,7 @@ typedef struct _RegWindow {
   Widget   dialog;
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
+  Widget   record;            /* the record transaction button           */
   unsigned short changed;     /* bitmask of fields that have changed in  *
                                * transaction currEntry                   */
   unsigned short currEntry;   /* to keep track of last edited transaction*/
@@ -2280,10 +2281,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                             XmNshadowType,          XmSHADOW_ETCHED_IN,
                             XmNverticalScrollBarDisplayPolicy,XmDISPLAY_STATIC,
                             XmNselectScrollVisible, True,
-XmNnavigationType, XmEXCLUSIVE_TAB_GROUP,  
-/*
-XmNnavigationType, XmSTICKY_TAB_GROUP,  
-*/
+                            XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,  
                             NULL);
     
     regData->reg     = reg;
@@ -2348,6 +2346,7 @@ XmNnavigationType, XmSTICKY_TAB_GROUP,
   
   XtAddCallback( widget, XmNactivateCallback, 
 		 recordCB, (XtPointer)regData );
+  regData->record = widget;
   
   /* The "Cancel" button */
   position++;
@@ -2376,6 +2375,7 @@ XmNnavigationType, XmSTICKY_TAB_GROUP,
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    XmNshowAsDefault,      True,
+                                    XmNnavigationType,     XmNONE,  /* stop tabbing ! */
 				    NULL );
   
   XtAddCallback( widget, XmNactivateCallback, 
@@ -2932,7 +2932,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
          * BTW -- note that we are emulating a normal, right-moving tab. 
          * Backwards tabs are probably broken. 
          */
-        if (0 == tcbs->qparam) {
+        if (NULLQUARK == tcbs->qparam) {
           if ((0==row) && (0==col)) {
              if ((0 != regData->prev_row) || (0 != regData->prev_col)) {
                tcbs->qparam = QRight;
@@ -3077,10 +3077,26 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           }
 
           /* If we are in the memo cell, stay there! */
+          /* umm, no, don't stay, go to the record button */
           if( (IN_MEMO_CELL(row,col)) && 
               (IN_BAD_CELL(tcbs->next_row,tcbs->next_column)) ) {
+#ifdef STAY_IN_THE_MEMO_CELL
             tcbs->next_row    = row;
             tcbs->next_column = MEMO_CELL_C;
+#else /* STAY_IN_THE_MEMO_CELL */
+            /* hack alert --  Hmm, this seems not to work */
+            /* The corect solution is probably to create a new quark
+             * (call it QTab), add it to the translation resources,
+             * so that it calls EditCell(Tab), and then test for 
+             * QTab above, instead of QRight. Just remeber to reset
+             * qparam to QRight when done.  Right now, this is more 
+             * complicated than I feel like getting into.  Maybe 
+             * some rainy day ... */
+            tcbs->next_row    = 0;
+            tcbs->next_column = 0;
+            tcbs->qparam = NULLQUARK;
+            XmProcessTraversal(regData->record, XmTRAVERSE_CURRENT);
+#endif /* STAY_IN_THE_MEMO_CELL */
           }
         }
 
