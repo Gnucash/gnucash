@@ -1,3 +1,8 @@
+2004-06-21  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ru.po: Updated Russian translation by Vitaly Lipatov
+	<lav@altlinux.ru>
+
 2004-06-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/main-window.scm, src/scm/main.scm: Added example Menu
