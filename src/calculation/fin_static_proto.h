@@ -90,7 +90,7 @@ static void              free_var(
                                   var_store_ptr value,
                                   parser_env_ptr pe);
 /* Line Number: 596 */
-static unsigned char     next_token(
+static void              next_token(
                                     parser_env_ptr pe);
 /* Line Number: 426 */
 static void              assignment_op(

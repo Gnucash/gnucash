@@ -1,3 +1,12 @@
+2000-07-21  Dave Peticolas  <dave@krondo.com>
+
+	* src/calculation/fin.c: Some cleanup and renaming of function
+	names to be longer and more descriptive.
+
+	* src/gnome/dialog-transfer.c: Add Num field to the transfer
+	dialog. Add APIs to change the amount, the description, and the
+	accounts. Fix a bug in the default sense of the show/hide buttons.
+
 2000-07-20  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): destroy

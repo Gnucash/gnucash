@@ -294,7 +294,7 @@ init_fi(FinCalcDialog *fcd)
   fcd->financial_info.disc = TRUE;
   fcd->financial_info.prec = lc->frac_digits;
 
-  FV(&fcd->financial_info);
+  fi_calc_future_value(&fcd->financial_info);
 }
 
 /* Determine whether the value can be calculated. If it can, return
@@ -374,19 +374,19 @@ calc_value(FinCalcDialog *fcd, FinCalcValue value)
   switch (value)
   {
     case PAYMENT_PERIODS:
-      N(&fcd->financial_info);
+      fi_calc_num_payments(&fcd->financial_info);
       break;
     case INTEREST_RATE:
-      I(&fcd->financial_info);
+      fi_calc_interest(&fcd->financial_info);
       break;
     case PRESENT_VALUE:
-      PV(&fcd->financial_info);
+      fi_calc_present_value(&fcd->financial_info);
       break;
     case PERIODIC_PAYMENT:
-      PMT(&fcd->financial_info);
+      fi_calc_payment(&fcd->financial_info);
       break;
     case FUTURE_VALUE:
-      FV(&fcd->financial_info);
+      fi_calc_future_value(&fcd->financial_info);
       break;
     default:
       PERR("Unknown financial variable");

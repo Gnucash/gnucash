@@ -24,10 +24,10 @@
 /* fin.c
  */
 /* Line Number: 1209 */
-unsigned                 N(
+unsigned                 fi_calc_num_payments(
                            fi_ptr fi);
 /* Line Number: 1221 */
-double                   _N(
+double                   _fi_calc_num_payments(
                             double nint, /* nominal interest rate */
                             double pv, /* present value */
                             double pmt, /* periodic payment */
@@ -37,10 +37,10 @@ double                   _N(
                             unsigned disc, /* discrete/continuous compounding flag */
                             unsigned bep); /* beginning/end of period payment flag */
 /* Line Number: 1240 */
-double                   I(
+double                   fi_calc_interest(
                            fi_ptr fi);
 /* Line Number: 1257 */
-double                   _I(
+double                   _fi_calc_interest(
                             unsigned per, /* number of periods */
                             double pv, /* present value */
                             double pmt, /* periodic payment */
@@ -50,10 +50,10 @@ double                   _I(
                             unsigned disc, /* discrete/continuous compounding flag */
                             unsigned bep); /* beginning/end of period payment flag */
 /* Line Number: 1300 */
-double                   PV(
+double                   fi_calc_present_value(
                             fi_ptr fi);
 /* Line Number: 1312 */
-double                   _PV(
+double                   _fi_calc_present_value(
                              unsigned per, /* number of periods */
                              double nint, /* nominal interest rate */
                              double pmt, /* periodic payment */
@@ -63,10 +63,10 @@ double                   _PV(
                              unsigned disc, /* discrete/continuous compounding flag */
                              unsigned bep); /* beginning/end of period payment flag */
 /* Line Number: 1332 */
-double                   PMT(
+double                   fi_calc_payment(
                              fi_ptr fi);
 /* Line Number: 1344 */
-double                   _PMT(
+double                   _fi_calc_payment(
                               unsigned per, /* number of periods */
                               double nint, /* nominal interest rate */
                               double pv, /* present value */
@@ -76,10 +76,10 @@ double                   _PMT(
                               unsigned disc, /* discrete/continuous compounding flag */
                               unsigned bep); /* beginning/end of period payment flag */
 /* Line Number: 1363 */
-double                   FV(
+double                   fi_calc_future_value(
                             fi_ptr fi);
 /* Line Number: 1375 */
-double                   _FV(
+double                   _fi_calc_future_value(
                              unsigned per, /* number of periods */
                              double nint, /* nominal interest rate */
                              double pv, /* present value */
@@ -92,7 +92,7 @@ double                   _FV(
 void                     set_default(
                                      fi_ptr fi);
 /* Line Number: 1511 */
-unsigned long            jdn(
+unsigned long            julian_day_number(
                              unsigned year,
                              unsigned month,
                              unsigned day);

@@ -699,10 +699,12 @@
  *       can afford larger payments.
  *
  *================================================================================
- *   NOTE: For Payment Frequencies, PF, semi-monthly or less, i.e., PF == 12 or PF == 24,
- *   a 360 day calender year and 30 day month are used. For Payment Frequencies, PF,
- *   greater than semi-monthly, PF > 24, the actual number of days per year and per payment
- *   period are used. The actual values are computed using the built-in 'jdn' function
+ *   NOTE: For Payment Frequencies, PF, semi-monthly or less, i.e., PF
+ *   == 12 or PF == 24, a 360 day calender year and 30 day month are
+ *   used. For Payment Frequencies, PF, greater than semi-monthly, PF
+ *   > 24, the actual number of days per year and per payment period
+ *   are used. The actual values are computed using the built-in
+ *   'julian_day_number' function
  *
  * *****************************************************************************
  *
@@ -1126,8 +1128,7 @@
  * 1. PPC ROM User's Manual
  *    pages 148 - 164
  *
- *
- */
+ * */
 
 #include <time.h>
 #include <stdio.h>
@@ -1151,7 +1152,7 @@ unsigned      places)
     unsigned char buf[50]; /* make buffer large enough */
 
     if ( places >= 0 ) {
-        sprintf(buf,"%.*f",places,x);
+        sprintf(buf,"%.*f",(int)places,x);
         sscanf(buf,"%lf",&r);
     } else r = x;
 
@@ -1206,11 +1207,11 @@ unsigned      beg) {
 
 /* compute Number of Periods from preset data
  */
-unsigned N(
+unsigned fi_calc_num_payments(
 fi_ptr   fi)
 {
-    return fi->npp = (unsigned)rnd(_N(fi->ir,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),0);
-} /* N */
+    return fi->npp = (unsigned)rnd(_fi_calc_num_payments(fi->ir,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),0);
+} /* fi_calc_num_payments */
 
 /* Compute number of periods from:
  *   1. Nominal Interest
@@ -1218,7 +1219,7 @@ fi_ptr   fi)
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _N(
+double   _fi_calc_num_payments(
 double   nint,  /* nominal interest rate    */
 double   pv,    /* present value            */
 double   pmt,   /* periodic payment         */
@@ -1233,18 +1234,18 @@ unsigned bep)   /* beginning/end of period payment flag */
 
     CC = (CC - fv)/(CC + pv);
     return (CC > 0.0) ? log(CC)/log(1.0 + eint) : 0.0;
-} /* _N */
+} /* _fi_calc_num_payments */
 
 /* compute Interest from preset data
  */
-double I(
+double fi_calc_interest(
 fi_ptr fi)
 {
-    if ( fi->npp ) fi->ir = _I(fi->npp,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep);
+    if ( fi->npp ) fi->ir = _fi_calc_interest(fi->npp,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep);
 /*     else print "Number of periods is zero, probably not specified";  */
 
     return  fi->ir;
-} /* I */
+} /* fi_calc_interest */
 
 double ratio = 1e4; /* ratio used in iterative solution for interest */
 
@@ -1254,7 +1255,7 @@ double ratio = 1e4; /* ratio used in iterative solution for interest */
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _I(
+double   _fi_calc_interest(
 unsigned per,   /* number of periods        */
 double   pv,    /* present value            */
 double   pmt,   /* periodic payment         */
@@ -1292,15 +1293,15 @@ unsigned bep)   /* beginning/end of period payment flag */
     } /* endif */
 
     return 100.0 * nom_int(eint,CF,PF,disc);
-} /* _I */
+} /* _fi_calc_interest */
 
 /* compute Present value from preset data
  */
-double PV(
+double fi_calc_present_value(
 fi_ptr fi)
 {
-    return fi->pv = rnd(_PV(fi->npp,fi->ir,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* PV */
+    return fi->pv = rnd(_fi_calc_present_value(fi->npp,fi->ir,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
+} /* fi_calc_present_value */
 
 /* Compute Present Value from:
  *   1. Number of periods
@@ -1308,7 +1309,7 @@ fi_ptr fi)
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _PV(
+double   _fi_calc_present_value(
 unsigned per,   /* number of periods        */
 double   nint,  /* nominal interest rate    */
 double   pmt,   /* periodic payment         */
@@ -1323,15 +1324,15 @@ unsigned bep)   /* beginning/end of period payment flag */
     double CC = _C(eint,pmt,bep);
 
     return -(fv + (AA * CC))/(AA + 1.0);
-} /* _PV */
+} /* _fi_calc_present_value */
 
 /* compute Periodic Payment from preset data
  */
-double PMT(
+double fi_calc_payment(
 fi_ptr fi)
 {
-    return fi->pmt = rnd(_PMT(fi->npp,fi->ir,fi->pv,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* PMT */
+    return fi->pmt = rnd(_fi_calc_payment(fi->npp,fi->ir,fi->pv,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
+} /* fi_calc_payment */
 
 /* Compute Periodic Payment from:
  *   1. Number of periods
@@ -1339,7 +1340,7 @@ fi_ptr fi)
  *   3. Present Value
  *   4. Future Value
  */
-double   _PMT(
+double   _fi_calc_payment(
 unsigned per,   /* number of periods        */
 double   nint,  /* nominal interest rate    */
 double   pv,    /* present value            */
@@ -1354,15 +1355,15 @@ unsigned bep)   /* beginning/end of period payment flag */
     double BB = _B(eint,bep);
 
     return -(fv + pv * (AA + 1.0))/(AA * BB);
-} /* _PMT */
+} /* _fi_calc_payment */
 
 /* compute Future Value from preset data
  */
-double FV(
+double fi_calc_future_value(
 fi_ptr fi)
 {
-    return fi->fv = rnd(_FV(fi->npp,fi->ir,fi->pv,fi->pmt,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* FV */
+    return fi->fv = rnd(_fi_calc_future_value(fi->npp,fi->ir,fi->pv,fi->pmt,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
+} /* fi_calc_future_value*/
 
 /* Compute Future Value from:
  *   1. Number of periods
@@ -1370,7 +1371,7 @@ fi_ptr fi)
  *   3. Present Value
  *   4. Periodic Payments
  */
-double   _FV(
+double   _fi_calc_future_value(
 unsigned per,   /* number of periods        */
 double   nint,  /* nominal interest rate    */
 double   pv,    /* present value            */
@@ -1385,7 +1386,7 @@ unsigned bep)   /* beginning/end of period payment flag */
     double CC = _C(eint,pmt,bep);
 
     return -(pv + AA * (pv + CC));
-} /* _FV */
+} /* _fi_calc_future_value */
 
 /* compute Nominal Interest Rate from Effective Interest Rate
  */
@@ -1506,7 +1507,7 @@ fi_ptr fi)
 
 /* compute Julian Day Number from calender date
  */
-unsigned long jdn(
+unsigned long julian_day_number(
 unsigned      year,
 unsigned      month,
 unsigned      day)
@@ -1526,7 +1527,7 @@ unsigned      day)
     if ( gregorian ) ljdn += -(long)(yr/100.0) + (long)(yr/400.0) + 2;
 
     return ljdn;
-} /* jdn */
+} /* julian_day_number */
 
 amort_sched_ptr Amortization_init(
 amort_sched_ptr amortsched)
@@ -1548,13 +1549,13 @@ amort_sched_ptr amortsched)
     unsigned long   s,
                     d,
                     days_to_yr_end,
-                    Eff_Date_jdn = jdn(amortsched->year_E,amortsched->month_E,amortsched->day_E),
-                    Init_Date_jdn = jdn(amortsched->year_I,amortsched->month_I,amortsched->day_I);
+                    Eff_Date_jdn = julian_day_number(amortsched->year_E,amortsched->month_E,amortsched->day_E),
+                    Init_Date_jdn = julian_day_number(amortsched->year_I,amortsched->month_I,amortsched->day_I);
 
     amortsched->Eff_Date_jdn  = Eff_Date_jdn;
     amortsched->Init_Date_jdn = Init_Date_jdn;
-    amortsched->yday_E        = Eff_Date_jdn - jdn(amortsched->year_E,1,1);
-    amortsched->yday_I        = Init_Date_jdn - jdn(amortsched->year_I,1,1);
+    amortsched->yday_E        = Eff_Date_jdn - julian_day_number(amortsched->year_E,1,1);
+    amortsched->yday_I        = Init_Date_jdn - julian_day_number(amortsched->year_I,1,1);
     amortsched->eint          = eint = eff_int(nint/100.0,CF,PF,disc);
     amortsched->fv_case       = dabs(fv) > dabs(pv);
     amortsched->bp            = bep ? 1.0 : 0.0;
@@ -1564,7 +1565,7 @@ amort_sched_ptr amortsched)
          * use actual number of days
          */
         s = Init_Date_jdn - Eff_Date_jdn;
-        days_to_yr_end = jdn(amortsched->year_I + 1,1,0) - Init_Date_jdn;
+        days_to_yr_end = julian_day_number(amortsched->year_I + 1,1,0) - Init_Date_jdn;
         d = 366 / PF;
       } else {
         /* Payment frequency per year bi-monthly or less
@@ -1611,11 +1612,11 @@ amort_sched_ptr amortsched)
 /*
  *   option 3, compute new periodic payment
  */
-    amortsched->new_pmt = new_pmt = rnd(_PMT(n,nint,pve,fv,CF,PF,disc,bep),prec);
+    amortsched->new_pmt = new_pmt = rnd(_fi_calc_payment(n,nint,pve,fv,CF,PF,disc,bep),prec);
 /*
  *   option 4: compute new number of total payments, new_n
  */
-    amortsched->new_n = new_n = (unsigned)rnd(_N(nint,pve,pmt,fv,CF,PF,disc,bep),0);
+    amortsched->new_n = new_n = (unsigned)rnd(_fi_calc_num_payments(nint,pve,pmt,fv,CF,PF,disc,bep),0);
 
     /* following used in QTAwk to insure integer value, not needed in C
      */
@@ -1639,16 +1640,16 @@ amort_sched_ptr amortsched)
 
 
     if ( bep ) {
-        amortsched->final_pmt_opt_3 = rnd(_FV(n - 1,nint,pv,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        amortsched->final_pmt_opt_4 = rnd(_FV(n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        amortsched->final_pmt_opt_5 = rnd(_FV(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_FV(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
+        amortsched->final_pmt_opt_3 = rnd(_fi_calc_future_value(n - 1,nint,pv,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
+        amortsched->final_pmt_opt_4 = rnd(_fi_calc_future_value(n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
+        amortsched->final_pmt_opt_5 = rnd(_fi_calc_future_value(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
+        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_fi_calc_future_value(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
           else amortsched->final_pmt_opt_6 = 0.0;
       } else {
-        amortsched->final_pmt_opt_3 = rnd(_FV(n - 1,nint,pv,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        amortsched->final_pmt_opt_4 = rnd(_FV(n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        amortsched->final_pmt_opt_5 = rnd(_FV(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_FV(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
+        amortsched->final_pmt_opt_3 = rnd(_fi_calc_future_value(n - 1,nint,pv,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
+        amortsched->final_pmt_opt_4 = rnd(_fi_calc_future_value(n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
+        amortsched->final_pmt_opt_5 = rnd(_fi_calc_future_value(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
+        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_fi_calc_future_value(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
           else amortsched->final_pmt_opt_6 = 0.0;
     } /* endif */
 
@@ -1684,7 +1685,7 @@ amort_sched_ptr amortsched)
                        s,
                        yr,
                        per_cnt,
-                       pmt_cnt,
+                       pmt_cnt = 0,
                        k = 0,
                        sum_prt;
 
@@ -2309,7 +2310,7 @@ amort_sched_ptr amortsched)
                     yr_fv = fv;
                     yr_int = rnd(((jj - 1) * pmt) + hpv + final_pmt,prec);
                   } else {
-                    yr_fv = -rnd(_FV(yr_pmt,nint,hpv,pmt,CF,PF,disc,bep),prec);
+                    yr_fv = -rnd(_fi_calc_future_value(yr_pmt,nint,hpv,pmt,CF,PF,disc,bep),prec);
                     yr_int = rnd((yr_pmt * pmt) + hpv - yr_fv,prec);
                 }  /* * endif */
 

@@ -592,7 +592,7 @@ parser_env_ptr pe)
 
 /* parse next token from string
  */
-static unsigned char next_token(
+static void next_token(
 parser_env_ptr       pe)
 {
     unsigned char *nstr,
@@ -627,7 +627,7 @@ parser_env_ptr       pe)
         } /* endif */
       /* test for numeric token
        */
-      } else if ( number = (pe->trans_numeric)(str_parse,pe->radix_point,pe->group_char,&nstr) ) {
+      } else if ( (number = (pe->trans_numeric)(str_parse,pe->radix_point,pe->group_char,&nstr)) ) {
         pe->Token         = NUM_TOKEN;
         pe->numeric_value = number;
         str_parse         = nstr;

@@ -57,6 +57,7 @@ struct _xferDialog
 
   GtkWidget * amount_entry;
   GtkWidget * date_entry;
+  GtkWidget * num_entry;
   GtkWidget * description_entry;
   GtkWidget * memo_entry;
 
@@ -126,7 +127,7 @@ gnc_xfer_dialog_create_tree_frame(gchar *title,
 
   button = gtk_check_button_new_with_label(SHOW_INC_EXP_STR);
   *set_show_button = button;
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
   gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
   gtk_tooltips_set_tip(tooltips, button, SHOW_INC_EXP_MSG, NULL);
 
@@ -240,6 +241,54 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
 }
 
 
+/********************************************************************\
+ * gnc_xfer_dialog_set_amount                                       *
+ *   set the amount in the given xfer dialog                        *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ *         amount   - the amount to set                             *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_set_amount(XferDialog *xferData, double amount)
+{
+  Account *account;
+  const char *currency;
+  gchar *string;
+
+  if (xferData == NULL)
+    return;
+
+  account = gnc_account_tree_get_current_account(xferData->from);
+  if (account == NULL)
+    account = gnc_account_tree_get_current_account(xferData->to);
+
+  currency = xaccAccountGetCurrency(account);
+
+  string = xaccPrintAmount(amount, PRTSEP, currency);
+
+  gtk_entry_set_text(GTK_ENTRY(xferData->amount_entry), string);
+}
+
+
+/********************************************************************\
+ * gnc_xfer_dialog_set_description                                  *
+ *   set the description in the given xfer dialog                   *
+ *                                                                  *
+ * Args:   xferData    - xfer dialog structure                      *
+ *         description - the description to set                     *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_set_description(XferDialog *xferData, const char *description)
+{
+  if (xferData == NULL)
+    return;
+
+  gtk_entry_set_text(GTK_ENTRY(xferData->description_entry), description);
+}
+
+
 static void
 gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 {
@@ -285,6 +334,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   xaccTransBeginEdit(trans, GNC_T);
   xaccTransSetDateSecs(trans, time);
+
+  string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+  xaccTransSetNum(trans, string);
 
   string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
   xaccTransSetDescription(trans, string);
@@ -387,7 +439,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   tooltips = gtk_tooltips_new();
 
-  /* contains amount, date, description, and notes */
+  /* contains amount, date, num, description, and memo */
   {
     GtkWidget *frame, *vbox, *hbox, *label;
 
@@ -441,15 +493,22 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
       gtk_box_pack_start(GTK_BOX(vbox), sep, TRUE, TRUE, 3);
     }
 
-    /* Contains description and memo */
+    /* Contains num, description, and memo */
     hbox = gtk_hbox_new(FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
     {
       GtkWidget *vbox;
+      gchar *string;
 
       vbox = gtk_vbox_new(TRUE, 5);
       gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+
+      string = g_strconcat(NUM_STR, ":", NULL);
+      label = gtk_label_new(string);
+      g_free(string);
+      gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+      gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
       label = gtk_label_new(DESC_C_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -461,20 +520,25 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
     }
 
     {
-      GtkWidget *vbox, *desc, *memo;
+      GtkWidget *vbox, *entry;
 
       vbox = gtk_vbox_new(TRUE, 5);
       gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 
-      desc = gtk_entry_new();
-      gtk_box_pack_start(GTK_BOX(vbox), desc, TRUE, TRUE, 0);
-      xferData->description_entry = desc;
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(desc));
+      entry = gtk_entry_new();
+      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
+      xferData->num_entry = entry;
+      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
-      memo = gtk_entry_new();
-      gtk_box_pack_start(GTK_BOX(vbox), memo, TRUE, TRUE, 0);
-      xferData->memo_entry = memo;
-      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(memo));
+      entry = gtk_entry_new();
+      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
+      xferData->description_entry = entry;
+      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
+
+      entry = gtk_entry_new();
+      gtk_box_pack_start(GTK_BOX(vbox), entry, TRUE, TRUE, 0);
+      xferData->memo_entry = entry;
+      gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
     }
   }
 
