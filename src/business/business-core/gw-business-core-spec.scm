@@ -598,6 +598,14 @@
    '((<gnc:Lot*> lot))
    "Return the Invoice attached to a Lot.")
 
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-invoice-from-txn
+   '<gnc:GncInvoice*>
+   "gncInvoiceGetInvoiceFromTxn"
+   '((<gnc:Transaction*> txn))
+   "Return the Invoice attached to a Txn.")
+
   ;;
   ;; gncJob.h
   ;;
