@@ -328,7 +328,7 @@ outside of the session; its just that it cannot be saved/made persistent.
 
 The goal of sessin management is to ensure that e.g. two users don't end 
 up editing the same file at the same time, or, e.g. that an automatic
-stock-quote update daemon runnig under a different pid adoesn't trash 
+stock-quote update daemon running under a different pid doesn't trash 
 data being currently edited by the user.
 
 
