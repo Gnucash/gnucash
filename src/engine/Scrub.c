@@ -221,6 +221,16 @@ xaccSplitScrub (Split *split)
     account = xaccSplitGetAccount (split);
   }
 
+  /* Grrr... the register gnc_split_register_load() line 203 of
+   *  src/register/ledger-core/split-register-load.c will create
+   * free-floating bogus transactions. Ignore these for now ... 
+   */
+  if (!account) 
+  {
+    PINFO ("Free Floating Transaction!");
+    return;  
+  }
+
   currency = xaccTransGetCurrency (trans);
 
   /* If the account doesn't have a commodity, 
@@ -314,52 +324,60 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 {
   Split *balance_split = NULL;
   gnc_numeric imbalance;
+  Account *account;
+  SplitList *node, *slist;
 
-  if (!trans || !root) return;
+  if (!trans) return;
 
   xaccTransScrubSplits (trans);
 
+  /* If the transaction is balanced, nothing more to do */
+  imbalance = xaccTransGetImbalance (trans);
+  if (gnc_numeric_zero_p (imbalance)) return;
+
+  slist = xaccTransGetSplitList (trans);
+  if (!slist) return;
+
+  if (!parent)
   {
-    Account *account;
-    GList *node;
+    if (!root) 
+    { 
+       Split *s = slist->data; 
+       root = xaccAccountGetRoot (s->acc);
+    }
+    account = xaccScrubUtilityGetOrMakeAccount (root, 
+        trans->common_currency, _("Imbalance"));
+  }
+  else
+  {
+    account = parent;
+  }
 
-    imbalance = xaccTransGetImbalance (trans);
-    if (gnc_numeric_zero_p (imbalance))
+  if (!account) 
+  {
+      PERR ("Can't get balancing account");
       return;
+  }
 
-    if (!parent)
+  for (node = slist; node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (xaccSplitGetAccount (split) == account)
     {
-      account = xaccScrubUtilityGetOrMakeAccount (root, 
-          trans->common_currency, _("Imbalance"));
+      balance_split = split;
+      break;
     }
-    else
-    {
-      account = parent;
-    }
+  }
 
-    if (!account)
-      return;
+  /* Put split into account before setting split value */
+  if (!balance_split)
+  {
+    balance_split = xaccMallocSplit (trans->book);
 
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      Split *split = node->data;
-
-      if (xaccSplitGetAccount (split) == account)
-      {
-        balance_split = split;
-        break;
-      }
-    }
-
-    /* put split into account before setting split value */
-    if (!balance_split)
-    {
-      balance_split = xaccMallocSplit (root->book);
-
-      xaccAccountBeginEdit (account);
-      xaccAccountInsertSplit (account, balance_split);
-      xaccAccountCommitEdit (account);
-    }
+    xaccAccountBeginEdit (account);
+    xaccAccountInsertSplit (account, balance_split);
+    xaccAccountCommitEdit (account);
   }
 
   PINFO ("unbalanced transaction");
@@ -367,24 +385,17 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   {
     const gnc_commodity *currency;
     const gnc_commodity *commodity;
-    gboolean trans_was_open;
-    gnc_numeric new_value;
-    Account *account;
+    gnc_numeric old_value, new_value;
 
-    trans_was_open = xaccTransIsOpen (trans);
-
-    if (!trans_was_open)
-      xaccTransBeginEdit (trans);
+    xaccTransBeginEdit (trans);
 
     currency = xaccTransGetCurrency (trans);
-    account = xaccSplitGetAccount (balance_split);
-
-    new_value = xaccSplitGetValue (balance_split);
+    old_value = xaccSplitGetValue (balance_split);
 
     /* Note: We have to round for the commodity's fraction, NOT any
      * already existing denominator (bug #104343), because either one
      * of the denominators might already be reduced.  */
-    new_value = gnc_numeric_sub (new_value, imbalance,
+    new_value = gnc_numeric_sub (old_value, imbalance,
              gnc_commodity_get_fraction(currency), 
              GNC_RND_ROUND);
 
@@ -392,21 +403,13 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
     commodity = xaccAccountGetCommodity (account);
     if (gnc_commodity_equiv (currency, commodity))
-      xaccSplitSetAmount (balance_split, new_value);
-
-    if (!parent && gnc_numeric_zero_p (new_value))
     {
-      xaccSplitDestroy (balance_split);
-      balance_split = NULL;
+      xaccSplitSetAmount (balance_split, new_value);
     }
 
-    if (balance_split)
-      xaccTransAppendSplit (trans, balance_split);
-
+    xaccTransAppendSplit (trans, balance_split);
     xaccSplitScrub (balance_split);
-
-    if (!trans_was_open)
-      xaccTransCommitEdit (trans);
+    xaccTransCommitEdit (trans);
   }
 }
 
