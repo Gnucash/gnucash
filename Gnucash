@@ -1,5 +1,5 @@
 ! /********************************************************************\
-!  * main.c -- main for xacc (X-Accountant)                           *
+!  * Gnucash -- X11 resources for gnucash                             *
 !  * Copyright (C) 1997 Robin D. Clark                                *
 !  *                                                                  *
 !  * This program is free software; you can redistribute it and/or    *
@@ -23,64 +23,64 @@
 ! \********************************************************************/
 
 Xacc*Foreground:               black 
-xacc*Background:               grey
+gnucash*Background:               grey
 
-xacc*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*
-xacc*text.fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+gnucash*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*
+gnucash*text.fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
 
 ! Help stuff:
-xacc*help*geometry:            530x480-0-0
-! xacc*help*View*Background:     #ffffff 
+gnucash*help*geometry:            530x480-0-0
+! gnucash*help*View*Background:     #ffffff 
 
 !
 !  MenuBar stuff:
-xacc*menubar*marginHeight:     1
-xacc*menubar*marginWidth:      1
+gnucash*menubar*marginHeight:     1
+gnucash*menubar*marginWidth:      1
 
 ! Register window account type specific stuff: 
-xacc*regbank.oddRowBackground:      #aaccff
-xacc*regcash.oddRowBackground:      #ccffcc
-xacc*regasset.oddRowBackground:     #aaffcc
-xacc*regcredit.oddRowBackground:    #ffffaa
-xacc*regliability.oddRowBackground: #ffcccc
-xacc*regportfolio.oddRowBackground: #ccffff
-xacc*regmutual.oddRowBackground:    #ccffff
-xacc*regincome.oddRowBackground:    #aaccff
-xacc*regexpense.oddRowBackground:   #ffcccc
-xacc*regequity.oddRowBackground:    #ffffaa
-xacc*regportfolio.evenRowBackground:grey
-xacc*regmutual.evenRowBackground:   grey
+gnucash*regbank.oddRowBackground:      #aaccff
+gnucash*regcash.oddRowBackground:      #ccffcc
+gnucash*regasset.oddRowBackground:     #aaffcc
+gnucash*regcredit.oddRowBackground:    #ffffaa
+gnucash*regliability.oddRowBackground: #ffcccc
+gnucash*regportfolio.oddRowBackground: #ccffff
+gnucash*regmutual.oddRowBackground:    #ccffff
+gnucash*regincome.oddRowBackground:    #aaccff
+gnucash*regexpense.oddRowBackground:   #ffcccc
+gnucash*regequity.oddRowBackground:    #ffffaa
+gnucash*regportfolio.evenRowBackground:grey
+gnucash*regmutual.evenRowBackground:   grey
 
 ! pop-down box (combobox stuff)
 ! combobox -- don't want the cell to be outlined 
-xacc*reg*popbox*shadowThickness:     0
+gnucash*reg*popbox*shadowThickness:     0
 
 ! we *do* want the combobox scroll bar to show, thoguh 
-xacc*reg*popbox*list*shadowThickness:     1  
+gnucash*reg*popbox*list*shadowThickness:     1  
 
 ! slider width ignored ... why ??? 
-xacc*reg*popbox*list*thickness:     24  
-xacc*reg*popbox*list*VertScrollBar*width:     24  
+gnucash*reg*popbox*list*thickness:     24  
+gnucash*reg*popbox*list*VertScrollBar*width:     24  
 
 ! Other register window account stuff: 
-xacc*reg*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
-xacc*reg*evenRowBackground:   white
-xacc*reg*shadowType:          SHADOW_IN
-xacc*reg*shadowThickness:     1
-xacc*reg*cellShadowThickness: 1
-xacc*reg*cellShadowType:      SHADOW_IN
-xacc*reg*cellMarginWidth:     1
-xacc*reg*cellMarginHeight:    0
+gnucash*reg*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+gnucash*reg*evenRowBackground:   white
+gnucash*reg*shadowType:          SHADOW_IN
+gnucash*reg*shadowThickness:     1
+gnucash*reg*cellShadowThickness: 1
+gnucash*reg*cellShadowType:      SHADOW_IN
+gnucash*reg*cellMarginWidth:     1
+gnucash*reg*cellMarginHeight:    0
 
 ! Reconcile window matrices stuff: 
-xacc*recn*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
-xacc*recn*.oddRowBackground:   white
-xacc*recn*.evenRowBackground:  white
-xacc*recn*shadowType:          SHADOW_ETCHED_IN
-xacc*recn*shadowThickness:     1
-xacc*recn*cellShadowThickness: 1
-xacc*recn*cellShadowType:      SHADOW_ETCHED_IN
-xacc*recn*cellMarginWidth:     0
-xacc*recn*cellMarginHeight:    0
+gnucash*recn*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+gnucash*recn*.oddRowBackground:   white
+gnucash*recn*.evenRowBackground:  white
+gnucash*recn*shadowType:          SHADOW_ETCHED_IN
+gnucash*recn*shadowThickness:     1
+gnucash*recn*cellShadowThickness: 1
+gnucash*recn*cellShadowType:      SHADOW_ETCHED_IN
+gnucash*recn*cellMarginWidth:     0
+gnucash*recn*cellMarginHeight:    0
 
 
