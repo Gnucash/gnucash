@@ -29,15 +29,15 @@
 #include <Xm/PanedW.h>
 #include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
-#include "main.h"
-#include "util.h"
-#include "date.h"
-#include "Data.h"
-#include "MainWindow.h"
+
 #include "Account.h"
+#include "Data.h"
+#include "date.h"
+#include "main.h"
+#include "MainWindow.h"
+#include "util.h"
 
 /** GLOBALS *********************************************************/
-extern Data *data;
 
 /** STRUCTS *********************************************************/
 typedef struct _AdjBWindow
@@ -274,8 +274,8 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   double   themount=0.0,dcurrAmount=0.0;
   int      i;
   
-  data->saved = False;
   acc = adjBData->acc;
+  acc->parent->saved = False;
   
   /* allocate mem for the new transaction */
   trans   = (Transaction *)_malloc(sizeof(Transaction));

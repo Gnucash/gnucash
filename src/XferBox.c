@@ -33,7 +33,7 @@
 \********************************************************************/
 
 PopBox *
-xferBox (Widget parent, Data *dayta)
+xferBox (Widget parent, AccountGroup *grp)
 {
    PopBox *popGUI;
    Account * acc;
@@ -43,11 +43,11 @@ xferBox (Widget parent, Data *dayta)
 
    /* build the xfer menu out of account names */
    n = 0;
-   acc = getAccount (dayta, n);
+   acc = getAccount (grp, n);
    while (acc) {
       AddPopBoxMenuItem (popGUI, acc->accountName);
       n++;
-      acc = getAccount (dayta, n);
+      acc = getAccount (grp, n);
    }
 
    return popGUI;

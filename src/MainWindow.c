@@ -24,25 +24,26 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/PanedW.h>
 #include <Xm/Form.h>
-#include <Xm/MainW.h>
 #include <Xm/Label.h>
 #include <Xm/LabelGP.h>
 #include <Xm/List.h>
+#include <Xm/MainW.h>
+#include <Xm/PanedW.h>
 #include <Xm/RowColumn.h>
 #include <Xbae/Matrix.h>
-#include "main.h"
-#include "util.h"
-#include "Data.h"
+
 #include "Account.h"
-#include "FileIO.h"
-#include "FileBox.h"
 #include "BuildMenu.h"
+#include "Data.h"
+#include "FileBox.h"
+#include "FileIO.h"
+#include "HelpWindow.h"
+#include "main.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
+#include "util.h"
 #include "XferWindow.h"
-#include "HelpWindow.h"
 
 /** PROTOTYPES ******************************************************/
 void closeMainWindow( Widget mw, XtPointer cd, XtPointer cb );
@@ -52,7 +53,6 @@ void accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
 void helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
 
 /** GLOBALS *********************************************************/
-extern Data   *data;
 extern char   *datafile;
 extern Widget toplevel;
 int    row;              /* The selected row of accountlist */
@@ -81,16 +81,17 @@ refreshMainWindow( void )
   {
   int   i,nrows;
   char  buf[BUFSIZE];
+  AccountGroup *grp = topgroup;    /* hack -- should pass as arguyment ... */
   
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
   /* Add all the accounts to the list */
-  for( i=0; i<data->numAcc; i++ )
+  for( i=0; i<grp->numAcc; i++ )
     {
     String rows[3];
     Transaction *trans=NULL;
-    Account *acc = getAccount( data, i );
+    Account *acc = getAccount( grp, i );
     double dbalance;
     
     xaccRecomputeBalance (acc);
@@ -471,6 +472,7 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
 void
 fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
+  AccountGroup *grp = topgroup;
   int button = (int)cd;
   
   /*
@@ -486,23 +488,24 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     {
     case FMB_NEW:
       DEBUG("FMB_NEW");
-      if( (!(data->saved)) && (datafile != NULL) )
+      if( (!(grp->saved)) && (datafile != NULL) )
         {
         char *msg = SAVE_MSG;
         if( verifyBox(toplevel,msg) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       datafile = NULL;
-      freeData(data);
-      data = mallocData();
-      data->new = True;            /* so we have to do a "SaveAs" when
+      freeAccountGroup (grp);
+      grp = mallocAccountGroup();
+      grp->new = True;             /* so we have to do a "SaveAs" when
                                     * the file is first saved */
+      topgroup = grp;
       break;
 
     case FMB_OPEN: {
       char * newfile;
       DEBUG("FMB_OPEN");
-      if( (!(data->saved)) && (datafile != NULL) )
+      if( (!(grp->saved)) && (datafile != NULL) )
         {
         char *msg = SAVE_MSG;
         if( verifyBox(toplevel,msg) )
@@ -511,23 +514,24 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       newfile = fileBox(toplevel,OPEN);
       if (newfile) {
         datafile = newfile;
-        freeData(data);
+        freeAccountGroup (grp);
       
         /* load the accounts from the users datafile */
-        data = readData(datafile);
+        grp = readData (datafile);
       
-        if( data == NULL ) {
+        if( NULL == grp ) {
           /* the file could not be found */
-          data = mallocData();
+          grp = mallocAccountGroup();
         }
+        topgroup = grp;
       }
       break;
     }
     case FMB_SAVE:
       DEBUG("FMB_SAVE");
       /* ??? Somehow make sure all in-progress edits get committed! */
-      writeData( datafile, data );
-      data->saved = True;
+      writeData( datafile, grp );
+      grp->saved = True;
       break;
 
     case FMB_SAVEAS: {
@@ -546,28 +550,29 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       {
       Account *acc;
       int i=0;
-      while( (acc=getAccount(data,i++)) != NULL )
+      while( (acc=getAccount (grp,i++)) != NULL )
         {
         if( acc->regData != NULL )
           {
-          /* ??? */
+          /* ??? -- hack alert -- should free */
           acc->regData = NULL;
           }
         if( acc->recnData != NULL )
           {
-          /* ??? */
+          /* ??? -- hack alert -- should free */
           acc->recnData = NULL;
           }
         }
       
-      if( (!(data->saved)) && (datafile != NULL) )
+      if( (!(grp->saved)) && (datafile != NULL) )
         {
         char *msg = SAVE_MSG;
         if( verifyBox(toplevel,msg) )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
         }
       
-      freeData(data);
+      freeAccountGroup (grp);
+      topgroup = NULL;
       XtUnmapWidget(toplevel);     /* make it disappear quickly */
       XtDestroyWidget(toplevel);
       return;                      /* to avoid the refreshMainWindow */
@@ -596,6 +601,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   int button = (int)cd;
   int *posList;
   int numPos;
+  AccountGroup *grp = topgroup;
   
   /*
    * which of the file menubar options was chosen
@@ -615,7 +621,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_OPEN:
       DEBUG("AMB_OPEN");
         {
-        Account *acc = getAccount(data,row);
+        Account *acc = getAccount (grp,row);
         if( NULL == acc ) {
           int make_new = verifyBox (toplevel,
 "Do you want to create a new account?\n\
@@ -635,20 +641,20 @@ account to open in the main window.\n");
     case AMB_EDIT:
       DEBUG("AMB_EDIT");
       {
-        Account *acc = getAccount(data,row);
+        Account *acc = getAccount (grp,row);
         if( NULL == acc ) {
           errorBox (toplevel,
 "To edit an account, you must first \n\
 choose an account to delete.\n");
         } else {
-          editAccWindow( toplevel, getAccount(data,row) );
+          editAccWindow( toplevel, getAccount(grp,row) );
         }
       }
       break;
     case AMB_DEL:
       DEBUG("AMB_DEL");
         {
-        Account *acc = getAccount(data,row);
+        Account *acc = getAccount (grp,row);
         if( NULL == acc ) {
           errorBox (toplevel,
 "To delete an account, you must first \n\
@@ -656,7 +662,7 @@ choose an account to delete.\n");
         } else {
           char *msg = "Are you sure you want to delete this account?";
           if( verifyBox(toplevel,msg) ) {
-            freeAccount( removeAccount(data,row) );
+            freeAccount( removeAccount (grp, row) );
             refreshMainWindow();
             }
           }

@@ -23,60 +23,68 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include "Data.h"
 #include "Account.h"
+#include "Data.h"
 #include "util.h"
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
- * Data data structure, in order to encapsulate the knowledge       *
- * of the internals of the Data in one file.                        *
+ * AccountGroup data structure, in order to encapsulate the         *
+ * knowledge of the internals of the AccountGroup in one file.      *
 \********************************************************************/
+
+AccountGroup *topgroup = 0x0;
 
 /********************************************************************\
 \********************************************************************/
-Data *
-mallocData( void )
+AccountGroup *
+mallocAccountGroup( void )
   {
-  Data *data = (Data *)_malloc(sizeof(Data));
+  AccountGroup *grp = (AccountGroup *)_malloc(sizeof(AccountGroup));
   
-  data->saved   = True;
-  data->new     = False;
+  grp->saved   = True;
+  grp->new     = False;
   
-  data->numAcc  = 0;
-  data->account = NULL;
+  grp->numAcc  = 0;
+  grp->account = NULL;
   
-  return data;
+  grp->numGroups  = 0;
+  grp->groups = NULL;
+  
+  return grp;
   }
 
 /********************************************************************\
 \********************************************************************/
 void
-freeData( Data *data )
+freeAccountGroup( AccountGroup *grp )
   {
-  if( data != NULL )
+  if( grp != NULL )
     {
     int i;
     
-    for( i=0; i<data->numAcc; i++ )
-      freeAccount( data->account[i] );
+    for( i=0; i<grp->numAcc; i++ )
+      freeAccount( grp->account[i] );
     
-    _free( data->account );
+    for( i=0; i<grp->numGroups; i++ )
+      freeAccountGroup( (AccountGroup *) grp->groups[i] );
     
-    _free(data);
+    _free( grp->account );
+    
+    _free(grp);
     }
   }
 
 /********************************************************************\
 \********************************************************************/
 Account *
-getAccount( Data *data, int num )
+getAccount( AccountGroup *grp, int num )
   {
-  if( data != NULL )
+  if( grp != NULL )
     {
-    if( (0 <= num) && (num < data->numAcc) )
-      return data->account[num];
+    if( (0 <= num) && (num < grp->numAcc) )
+      return grp->account[num];
     else
       return NULL;
     }
@@ -91,17 +99,17 @@ getAccount( Data *data, int num )
 Account *
 xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 {
-  Data * data;
+  AccountGroup * grp;
   Account *peer_acc;
   int i;
 
   if (NULL == acc) return NULL;
   if (-1 >= acc_id) return NULL;
 
-  data = (Data *) acc->data;
+  grp = (AccountGroup *) acc->parent;
 
-  for (i=0; i<data->numAcc; i++) {
-    peer_acc = data->account[i];
+  for (i=0; i<grp->numAcc; i++) {
+    peer_acc = grp->account[i];
     if (acc_id == peer_acc->id) return peer_acc;
   }
 
@@ -115,17 +123,17 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 Account *
 xaccGetPeerAccountFromName ( Account *acc, char * name )
 {
-  Data * data;
+  AccountGroup * grp;
   Account *peer_acc;
   int i;
 
   if (NULL == acc) return NULL;
   if (NULL == name) return NULL;
 
-  data = (Data *) acc->data;
+  grp = (AccountGroup *) acc->parent;
 
-  for (i=0; i<data->numAcc; i++) {
-    peer_acc = data->account[i];
+  for (i=0; i<grp->numAcc; i++) {
+    peer_acc = grp->account[i];
     if (!strcmp(peer_acc->accountName, name)) return peer_acc;
   }
 
@@ -135,26 +143,26 @@ xaccGetPeerAccountFromName ( Account *acc, char * name )
 /********************************************************************\
 \********************************************************************/
 Account *
-removeAccount( Data *data, int num )
+removeAccount( AccountGroup *grp, int num )
   {
   Account *acc = NULL;
   
-  if( data != NULL )
+  if( grp != NULL )
     {
     int i,j;
-    Account **oldAcc = data->account;
+    Account **oldAcc = grp->account;
 
-    data->saved = False;
+    grp->saved = False;
     
-    data->numAcc--;
-    data->account = (Account **)_malloc((data->numAcc)*sizeof(Account *));
+    grp->numAcc--;
+    grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
     
-    acc = oldAcc[data->numAcc];    /* In case we are deleting last in
+    acc = oldAcc[grp->numAcc];    /* In case we are deleting last in
 				    * old array */
-    for( i=0,j=0; i<data->numAcc; i++,j++ )
+    for( i=0,j=0; i<grp->numAcc; i++,j++ )
       {
       if( j != num )
-        data->account[i] = oldAcc[j];
+        grp->account[i] = oldAcc[j];
       else
         {
         acc = oldAcc[j];
@@ -170,28 +178,28 @@ removeAccount( Data *data, int num )
 /********************************************************************\
 \********************************************************************/
 int
-insertAccount( Data *data, Account *acc )
+insertAccount( AccountGroup *grp, Account *acc )
   {
   int i=-1;
   Account **oldAcc;
   
-  if (NULL == data) return -1;
+  if (NULL == grp) return -1;
   if (NULL == acc) return -1;
 
   /* set back-pointer to the accounts parent */
-  acc->data = (struct _data *) data;
+  acc->parent = (struct _account_group *) grp;
 
-  oldAcc = data->account;
+  oldAcc = grp->account;
     
-  data->saved = False;
+  grp->saved = False;
   
-  data->numAcc++;
-  data->account = (Account **)_malloc((data->numAcc)*sizeof(Account *));
+  grp->numAcc++;
+  grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
   
-  for( i=0; i<(data->numAcc-1); i++ )
-    data->account[i] = oldAcc[i];
+  for( i=0; i<(grp->numAcc-1); i++ )
+    grp->account[i] = oldAcc[i];
   
-  data->account[i] = acc;
+  grp->account[i] = acc;
   
   _free(oldAcc);
 

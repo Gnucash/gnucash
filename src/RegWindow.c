@@ -84,7 +84,6 @@ void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int
 
 /** GLOBALS *********************************************************/
 extern Widget  toplevel;
-extern Data   *data;
 
 /* The XrmQuarks are used by regCB to figure out the kind of traversal 
  * that is going on */
@@ -563,7 +562,7 @@ regSaveTransaction( RegWindow *regData, int position )
   if (MOD_NONE == regData->changed) return;
 
   /* Be sure to prompt the user to save to disk after changes are made! */
-  acc->data->saved = False;
+  acc->parent->saved = False;
 
   trans = getTransaction( acc, position );
   
@@ -1134,7 +1133,7 @@ regWindow( Widget parent, Account *acc )
   regData->actbox = actionBox (reg);
 
   /* create the xfer account box for the first time */
-  regData->xferbox = xferBox (reg, data);
+  regData->xferbox = xferBox (reg, acc->parent);
 
 
   /******************************************************************\

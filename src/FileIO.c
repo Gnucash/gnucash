@@ -158,7 +158,7 @@ double xaccFlipDouble (double val)
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
-Data *
+AccountGroup *
 readData( char *datafile )
   {
   int  fd;
@@ -166,13 +166,13 @@ readData( char *datafile )
   int  err=0;
   int  token=0;
   int  i;
-  Data *data = mallocData();
+  AccountGroup *grp = mallocAccountGroup();
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
     ERROR();
-    freeData(data);
+    freeAccountGroup (grp);
     return NULL;
     }
   
@@ -182,7 +182,7 @@ readData( char *datafile )
     {
     ERROR();
     close(fd);
-    freeData(data);
+    freeAccountGroup (grp);
     return NULL;
     }
   XACC_FLIP_INT (token);
@@ -212,7 +212,7 @@ readData( char *datafile )
   if( err == -1 )
     {
     close(fd);
-    freeData(data);
+    freeAccountGroup (grp);
     return NULL;
     }
   XACC_FLIP_INT (numAcc);
@@ -223,24 +223,24 @@ readData( char *datafile )
   for( i=0; i<numAcc; i++ )
     {
     Account *acc   = mallocAccount();
-    insertAccount( data, acc );
+    insertAccount( grp, acc );
     }
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
     {
-    Account *acc   = getAccount (data, i);
+    Account *acc   = getAccount (grp, i);
     err = readAccount( fd, acc, token );
     if( -1 == err )
       {
       close(fd);
       printf(" numAcc = %d, i = %d\n",numAcc,i);
-      return data;
+      return grp;
       }
     }
   
   close(fd);
-  return data;
+  return grp;
   }
 
 /********************************************************************\
@@ -634,23 +634,23 @@ readDate( int fd, int token )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-writeData( char *datafile, Data *data )
+writeData( char *datafile, AccountGroup *grp )
   {
   int i,numAcc;
   int err = 0;
   int token = VERSION;    /* The file format version */
   int fd;
   
-  if (NULL == data) return -1;
+  if (NULL == grp) return -1;
 
   /* first, zero out the write flag on all of the 
    * transactions */
-  numAcc = data ->numAcc;
+  numAcc = grp ->numAcc;
   for( i=0; i<numAcc; i++ ) {
     int n=0;
     Account *acc;
     Transaction * trans;
-    acc = getAccount (data,i) ;
+    acc = getAccount (grp,i) ;
     trans = getTransaction (acc, n); 
     n++;
     while (trans) {
@@ -677,15 +677,15 @@ writeData( char *datafile, Data *data )
     return -1;
     }
 
-  numAcc = data->numAcc;
+  numAcc = grp->numAcc;
   XACC_FLIP_INT (numAcc);
   err = write( fd, &numAcc, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  for( i=0; i<data->numAcc; i++ )
+  for( i=0; i<grp->numAcc; i++ )
     {
-    err = writeAccount( fd, getAccount(data,i) );
+    err = writeAccount( fd, getAccount(grp,i) );
     if( err == -1 )
       return err;
     }

@@ -32,13 +32,12 @@
 #include <Xm/Text.h>
 #include <string.h>
 
-#include "BuildMenu.h"
 #include "Account.h"
+#include "BuildMenu.h"
 #include "Data.h"
 #include "main.h"
 #include "util.h"
 
-extern Widget  toplevel;
 
 typedef struct _menuData
 {
@@ -60,7 +59,7 @@ typedef struct _xferwindow
 } XferWindow;
 
 /** GLOBALS *********************************************************/
-extern Data   *data;
+extern Widget  toplevel;
 
 /** PROTOTYPES ******************************************************/
 void closeXferWindow( Widget mw, XtPointer cd, XtPointer cb );
@@ -73,7 +72,7 @@ void xferCB( Widget mw, XtPointer cd, XtPointer cb );
  *                                                                  * 
  * Args:   parent   - the parent of the window to be created        * 
  * Return: none                                                     *
- * Global: data     - the accounts, and stuff...                    *
+ * Global: topgroup - the accounts, and stuff...                    *
 \********************************************************************/
 void 
 xferWindow( Widget parent )
@@ -86,7 +85,7 @@ xferWindow( Widget parent )
   int        position,i;
   int        initial = 0;
   
-  if (1 >= (data->numAcc)) {
+  if (1 >= (topgroup->numAcc)) {
     errorBox (toplevel,
 "There must be at least two accounts\n\
 created before you can transfer funds.\n");
@@ -225,7 +224,7 @@ created before you can transfer funds.\n");
    * The popup menus that let the user choose the account to        *
    * transfer to and the account to transfer from                   *
   \******************************************************************/
-  accountMenu = (MenuItem *)_malloc((data->numAcc+1)*sizeof(MenuItem));
+  accountMenu = (MenuItem *)_malloc((topgroup->numAcc+1)*sizeof(MenuItem));
   
   /* We have to keep track of the menuData stuff so we can free this
    * memory when the transfer window is closed... the even slots in
@@ -233,15 +232,15 @@ created before you can transfer funds.\n");
    * used by the "To" menu.  (The even/odd way was a simple way to
    * still use i as a index to the array... it makes sense to me,
    * at least)  */
-  xferData->menuData = (MenuData **)_malloc(2*data->numAcc*sizeof(MenuData *));
-  xferData->numMenuData = 2 * data->numAcc;
+  xferData->menuData = (MenuData **)_malloc(2*topgroup->numAcc*sizeof(MenuData *));
+  xferData->numMenuData = 2 * topgroup->numAcc;
   
   for( i=0; i<xferData->numMenuData; i++ )
     xferData->menuData[i] = NULL;
   
-  for( i=0; i<data->numAcc; i++ )
+  for( i=0; i<topgroup->numAcc; i++ )
     {
-    Account *acc = getAccount( data, i );
+    Account *acc = getAccount( topgroup, i );
     
     /* This account menu uses the even menuData slots (ie (2*i) ) */
     xferData->menuData[2*i] = (MenuData *)_malloc(sizeof(MenuData));
@@ -272,9 +271,9 @@ created before you can transfer funds.\n");
   
   XtManageChild(widget);
   
-  for( i=0; i<data->numAcc; i++ )
+  for( i=0; i<topgroup->numAcc; i++ )
     {
-    Account *acc = getAccount( data, i );
+    Account *acc = getAccount( topgroup, i );
     
     /* This account menu uses the odd menuData slots (ie (2*i)+1 ) */
     xferData->menuData[2*i+1] = (MenuData *)_malloc(sizeof(MenuData));
@@ -423,7 +422,7 @@ menuCB( Widget mw, XtPointer cd, XtPointer cb )
  *              the XfewWindow                                      * 
  *         cb -                                                     * 
  * Return: none                                                     * 
- * Global: data        - the data from the datafile                 *
+ * Global: topgroup        - the topgroup of accounts               *
 \********************************************************************/
 void
 xferCB( Widget mw, XtPointer cd, XtPointer cb )
@@ -440,7 +439,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
     return;
   }
 
-  data->saved = False;
+  topgroup->saved = False;
   
   /* a double-entry transfer -- just one record, two accounts */
   trans   = mallocTransaction();
@@ -461,11 +460,11 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->reconciled  = NREC;
   
   /* make note of which accounts this was transfered from & to */
-  trans->debit       = (struct _account *) getAccount(data,xferData->from);
-  trans->credit      = (struct _account *) getAccount(data,xferData->to);
+  trans->debit       = (struct _account *) getAccount(topgroup,xferData->from);
+  trans->credit      = (struct _account *) getAccount(topgroup,xferData->to);
 
   /* insert transaction into from acount */
-  acc = getAccount(data,xferData->from);
+  acc = getAccount(topgroup,xferData->from);
   insertTransaction( acc, trans );
   
   /* Refresh the "from" account register window */
@@ -474,7 +473,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   recnRefresh(acc->recnData);
   
   /* insert transaction into to acount */
-  acc = getAccount(data,xferData->to);
+  acc = getAccount(topgroup,xferData->to);
   insertTransaction( acc, trans );
 
   /* Refresh the "to" account register window */

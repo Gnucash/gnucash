@@ -29,7 +29,6 @@
 #include "main.h"
 #include "util.h"
 
-extern Data *data;
 int next_free_unique_account_id = 0;
 
 /********************************************************************\
@@ -49,7 +48,7 @@ mallocAccount( void )
   acc->id = next_free_unique_account_id;
   next_free_unique_account_id ++;
 
-  acc->data = NULL;
+  acc->parent = NULL;
   acc->balance = 0.0;
   acc->cleared_balance = 0.0;
 
@@ -149,8 +148,7 @@ removeTransaction( Account *acc, int num )
     if( (0 > num) || (num >= acc->numTrans) ) return NULL;
 
     /* Set this flag, so we know we need to save the data file: */
-    if( data != NULL )
-      data->saved = False;
+    if( NULL != acc->parent ) acc->parent->saved = False;
     
     acc->numTrans--;
     acc->transaction = (Transaction **)_malloc((acc->numTrans)*
@@ -236,8 +234,7 @@ insertTransaction( Account *acc, Transaction *trans )
   }
 
   /* mark the data file as needing to be saved: */
-  if( data != NULL )
-    data->saved = False;
+  if( acc->parent != NULL ) acc->parent->saved = False;
   
   acc->numTrans++;
   oldTrans = acc->transaction;

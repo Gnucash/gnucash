@@ -69,7 +69,6 @@ typedef struct _editaccwindow {
 } EditAccWindow;
 
 /** GLOBALS *********************************************************/
-extern Data   *data;
 extern Widget toplevel;
 
 /** PROTOTYPES ******************************************************/
@@ -672,7 +671,7 @@ Do you want to continue anyway?\n");
   insertTransaction( acc, trans );
   
   /* once the account is set up, add it to data */
-  insertAccount( data, acc );
+  insertAccount( topgroup, acc );
   
   /* make sure the accountlist is updated to reflect the new account */
   refreshMainWindow();
