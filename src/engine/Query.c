@@ -72,15 +72,17 @@ xaccQuerySetAccounts (Query *q, Account **list)
    int i=0;
    Account *acc;
 
-   if (!q || !list) return;
+   if (!q) return;
    q->changed = 1; 
-   
+   if (q->acc_list) free (q->acc_list);
+   q->acc_list = NULL;
+   if (!list) return;
+
+   /* copy in the account list */
    i=0; acc = list[0];
    while (acc) {
       i++;  acc = list[i];
    }  
-
-   if (q->acc_list) free (q->acc_list);
 
    q->acc_list = (Account **) _malloc ( (i+1) * sizeof (Account *));
 
@@ -115,16 +117,18 @@ xaccQueryAddAccount (Query *q, Account *addme)
 
    q->acc_list = (Account **) _malloc ( (i+2) * sizeof (Account *));
 
-   i=0; acc = oldlist[0];
-   while (acc) {
-      q->acc_list[i] = acc;
-      i++;  acc = oldlist[i];
-   }  
+   i=0; 
+   if (oldlist) {
+      acc = oldlist[0];
+      while (acc) {
+         q->acc_list[i] = acc;
+         i++;  acc = oldlist[i];
+      }  
+      free (oldlist);
+   }
    q->acc_list[i] = addme;
    i++;
    q->acc_list[i] = NULL;
-
-   if (oldlist) free (oldlist);
 }
 
 /* ================================================== */
