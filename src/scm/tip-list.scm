@@ -5,16 +5,16 @@ If you are looking for a stable personal finance application,
 you should use the latest release of GnuCash 1.6.")
 
  (N_ "The GnuCash online manual has lots of helpful information.  
-If you are upgrading from GnuCash 1.4, the section \"What's new in
-GnuCash 1.6\" is particularly interesting. You can access the manual
-under the Help menu.")
+If you are upgrading from earlier versions of GnuCash, the section
+\"What's new in GnuCash 1.8\" is particularly interesting. You can
+access the manual under the Help menu.")
 
  (N_ "You can easily import your existing financial data from Quicken,
-MS Money or other programs that export QIF (Quicken Interchange
-Format) files.  Click the Import button in the main window tool
-bar and follow the instructions provided.")
+MS Money or other programs that export QIF files or OFX files.  In the
+File menu, click on the sub-menu Import and click on QIF or OFX file,
+respectively. Then, follow the instructions provided.")
 
-(N_ "If you are familiar with other financial programs such as Quicken,
+ (N_ "If you are familiar with other financial programs such as Quicken,
 note that GnuCash uses accounts instead of categories to track
 income and expenses.  For more information on income and expense
 accounts, please see the GnuCash online manual.")
@@ -29,12 +29,16 @@ manual.")
 account menu options. Within each register, clicking the right
 mouse button brings up the transaction menu options.")
 
+ (N_ "To enter multiple-split transactions such as a paycheck with
+multiple deductions, click the Split button in the tool bar.
+Alternatively, in the View -> Style menu, you can choose the register
+style Auto-Split Ledger or Transaction Journal.")
+
  (N_ "As you enter amounts in the register, you can use the GnuCash
 calculator to add, subtract, multiply and divide .  Simply type
 the first value, then select '+', '-','*', or '/'.  Type the
 second value and press Enter to record the calculated amount.")
 
- 
  (N_ "Quick-fill makes it easy to enter common transactions.  When you
 type the first letter(s) of a common transaction description,
 GnuCash will automatically complete the remainder of the
@@ -46,43 +50,42 @@ your list of accounts. For subaccounts, type the first letter(s)
 of the parent account, followed by ':' and the first letter(s) of
 the subaccount (e.g. A:C for Assets:Cash.)")
 
- (N_ "To enter multiple-split transactions such as a paycheck with
-multiple deductions, click the Split button in the tool bar.
-Alternatively, you can choose the register style Auto-Split Ledger or
-Transaction Journal from the Register|Style menu option.")
+;; FIXME: #99454 needs to be fixed first.
+;; (N_ "Want to see all your subaccount transactions in one register?
+;;From the main menu, highlight the parent account and select
+;;Accounts -> Open Subaccounts from the menu.")
 
- (N_ "Want to see all your subaccount transactions in one register?
-From the main menu, highlight the parent account and select
-Accounts|Open Subaccounts from the menu.")
+ (N_ "When entering dates, you can type '+' or '-' to increment or
+decrement the selected date. You can use '+' and '-' to increment and
+decrement check numbers as well.")
 
- (N_ "In the reconcile window, you can press the spacebar
-to mark transactions as reconciled.
-You can also press Tab and Shift-Tab to move between
-deposits and withdrawals.")
+ (N_ "In the reconcile window, you can press the spacebar to mark
+transactions as reconciled.  You can also press Tab and Shift-Tab to
+move between deposits and withdrawals.")
 
- (N_ "When entering check numbers in the register, you can
-type '+' to enter the next number or '-' to enter the previous
-number. You can use '+' and '-' to increment and decrement
-dates as well.")
+;; FIXME:
+;; (N_ "You should back up your files regularly.  Just copy
+;;your GnuCash data file to a floppy or other backup device.")
 
- (N_ "You should back up your files regularly.  Just copy
-your GnuCash data file to a floppy or other backup device.")
-
+;; FIXME: Mention the new multi-currency dialog here, when such a
+;; transaction is going to be edited.
  (N_ "To transfer funds between accounts with different currencies,
-you need an intermediate currency trading account. Click the Transfer
-button in the register toolbar to let GnuCash create the intermediate
-transaction. See the GnuCash online manual for details.")
+click on the Transfer button in the register toolbar, select the
+accounts, and the Currency Transfer options for entering the exchange
+rate or the other currency's amount will be available.")
 
  (N_ "You can pack multiple reports into a single window, 
 providing all the financial information you want at a glance.
-To do so, use the \"Custom Multicolumn Report\" report.")
+To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" 
+report.")
 
  (N_ "GnuCash can act as a simple web browser!  To display
-a web page as a report, use the \"Custom Web Report\" report.")
+a web page as a report, use the Sample & Custom -> 
+\"Custom Web Report\" report.")
 
  (N_ "Style Sheets affect how reports are displayed.  Choose
 a style sheet for your report as a report option, and use
-the Style Sheets menu to customize style sheets.")
+the Edit -> Style Sheets menu to customize style sheets.")
 
  (N_ "The GnuCash developers are easy to contact.  As well
 as several mailing lists, you can chat to them live on IRC!
