@@ -179,7 +179,7 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   int        sel_option;
   double     multip = 72.0;
 
-  char       * formats[]   = { "quicken", "deluxe", "custom" };
+  char       * formats[]   = { "quicken", "deluxe", "wallet", "custom" };
   char       * positions[] = { "top", "middle", "bottom", "custom" };
 
   sel_option = gnc_option_menu_get_active(pcd->format_picker);

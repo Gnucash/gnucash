@@ -1,3 +1,10 @@
+2004-07-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-print-check.c:
+	* src/gnome/glade/print.glade:
+	* src/scm/printing/print-check.scm:
+	  Apply David Reiser's patch for Quicken(tm) cheques with stub.
+
 2004-06-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-gnome/window-report.c: Add toolbar element for
