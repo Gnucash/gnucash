@@ -290,8 +290,14 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
  *    in the currency that is returned by the xaccTransFindCommonCurrency()
  *    method.
  */
-double       DxaccTransGetImbalance (Transaction * trans);
-gnc_numeric  xaccTransGetImbalance (Transaction * trans);
+gnc_numeric xaccTransGetImbalance (Transaction * trans);
+
+/* The xaccTransGetBalanceSplit method returns the 'balance' split of
+ *    a transaction or NULL if there is no balance split. The balance
+ *    split is an 'artificial' split created to make the transaction
+ *    balance. This split is automatically managed by the rebalancing
+ *    routines and is created and destroyed as needed. */
+Split * xaccTransGetBalanceSplit (Transaction *trans);
 
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
@@ -475,7 +481,7 @@ int xaccCountSplits (Split **sarray);
  * The xaccGetAccountByFullName routine is similar, but uses
  *    full names using the given separator.
  */
-Account * xaccGetAccountByName (Transaction *, const char *);
+Account * xaccGetAccountByName (Transaction *trans, const char *name);
 Account * xaccGetAccountByFullName (Transaction *trans,
                                     const char *name,
                                     const char separator);

@@ -32,8 +32,8 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
+#include <glib.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "Account.h"
@@ -41,6 +41,7 @@
 #include "GroupP.h"
 #include "Scrub.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
 
@@ -73,9 +74,9 @@ xaccAccountScrubOrphans (Account *acc) {
   GList *slp;
   Transaction *trans;
   Account * parent;
-  
+
   PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
-  
+
   for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next) {
     Split *split = (Split *) slp->data;
     Split * tsplit;
@@ -130,28 +131,55 @@ xaccAccountScrubImbalance (Account *acc) {
    for(slp = xaccAccountGetSplitList(acc); slp; slp = slp->next) {
      Split *split = (Split *) slp->data;
      Transaction *trans = xaccSplitGetParent(split);
-     double imbalance;
 
-      imbalance = DxaccTransGetImbalance (trans);
-      if (!(DEQ (imbalance, 0.0))) {
-         Split *splat;
-         Account *orph;
-         DEBUG ("Found imbalance of %g\n", imbalance);
-         /* OK, we found an imbalanced trans.  Put it in the imbal account. */
-         orph = GetOrMakeAccount (acc, trans, _("Imbalance"));
-         
-         /* put split into account before setting split value */
-         splat = xaccMallocSplit();
-         xaccAccountBeginEdit (orph);
-         xaccAccountInsertSplit (orph, splat);
-         xaccAccountCommitEdit (orph);
-
-         xaccTransBeginEdit (trans, 1);
-         DxaccSplitSetValue (splat, -imbalance);
-         xaccTransAppendSplit (trans, splat);
-         xaccTransCommitEdit (trans);
-      }
+     xaccTransScrubImbalance (trans);
    }
+}
+
+void
+xaccTransScrubImbalance (Transaction *trans)
+{
+  GList *node;
+  Split *split;
+  Account *peer;
+  Account *account;
+  gnc_numeric imbalance;
+
+  imbalance = xaccTransGetImbalance (trans);
+  if (gnc_numeric_zero_p (imbalance))
+    return;
+
+  DEBUG ("Found imbalance");
+
+  peer = NULL;
+  for (node = trans->splits; node; node = node->next)
+  {
+    split = node->data;
+
+    peer = xaccSplitGetAccount (split);
+    if (peer)
+      break;
+  }
+
+  if (!peer)
+  {
+    PERR ("Transaction with no accounts");
+    return;
+  }
+
+  /* OK, we found an imbalanced trans.  Put it in the imbal account. */
+  account = GetOrMakeAccount (peer, trans, _("Imbalance"));
+
+  /* put split into account before setting split value */
+  split = xaccMallocSplit();
+  xaccAccountBeginEdit (account);
+  xaccAccountInsertSplit (account, split);
+  xaccAccountCommitEdit (account);
+
+  xaccTransBeginEdit (trans, TRUE);
+  xaccSplitSetValue (split, gnc_numeric_neg (imbalance));
+  xaccTransAppendSplit (trans, split);
+  xaccTransCommitEdit (trans);
 }
 
 /* ================================================================ */
@@ -166,27 +194,29 @@ GetOrMakeAccount (Account *peer, Transaction *trans, const char *name_root)
 
    /* build the account name */
    currency = xaccTransFindCommonCurrency (trans);
-   accname = alloca (strlen (name_root) + 
-                     strlen (gnc_commodity_get_mnemonic(currency)) + 2);
-   strcpy (accname, name_root);
-   strcat (accname, "-");
-   strcat (accname, gnc_commodity_get_mnemonic(currency)); 
+
+   accname = g_strconcat (name_root, "-",
+                          gnc_commodity_get_mnemonic(currency), NULL);
 
    /* see if we've got one of these going already ... */
    acc = xaccGetPeerAccountFromName (peer, accname);
-   if (acc) return acc;
 
-   /* guess not. We'll have to build one */
-   acc = xaccMallocAccount ();
-   xaccAccountBeginEdit (acc);
-   xaccAccountSetName (acc, accname);
-   xaccAccountSetCurrency (acc, currency);
-   xaccAccountSetType (acc, BANK);
+   if (acc == NULL)
+   {
+     /* guess not. We'll have to build one */
+     acc = xaccMallocAccount ();
+     xaccAccountBeginEdit (acc);
+     xaccAccountSetName (acc, accname);
+     xaccAccountSetCurrency (acc, currency);
+     xaccAccountSetType (acc, BANK);
 
-   /* hang the account off the root */
-   root = xaccGetAccountRoot (peer);
-   xaccGroupInsertAccount (root, acc);
-   xaccAccountCommitEdit (acc);
+     /* hang the account off the root */
+     root = xaccGetAccountRoot (peer);
+     xaccGroupInsertAccount (root, acc);
+     xaccAccountCommitEdit (acc);
+   }
+
+   g_free (accname);
 
    return acc;
 }

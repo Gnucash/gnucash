@@ -62,6 +62,7 @@ void xaccGroupScrubOrphans (AccountGroup *grp);
  *    is created to offset this amount and is added to an "imbalance"
  *    account.
  */
+void xaccTransScrubImbalance (Transaction *trans);
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
 void xaccGroupScrubImbalance (AccountGroup *grp);

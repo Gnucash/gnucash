@@ -230,6 +230,8 @@ void  xaccFreeSplit   (Split *split);    /* frees memory */
 
 void xaccSplitRebalance (Split *split);
 
+/* Set the balance split of a transaction. */
+void xaccTransSetBalanceSplit (Transaction *trans, Split *split);
 
 /* FIXME: this is probably wrong, but it'll have to wait until Bill
    returns.  It's *ONLY* for file IO.  Don't use these elsewhere. */

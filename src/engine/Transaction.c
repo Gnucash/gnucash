@@ -959,18 +959,58 @@ ComputeValue (GList *splits, Split * skip_me,
   return value;
 }
 
-double
-DxaccTransGetImbalance (Transaction * trans)
-{
-  return gnc_numeric_to_double(xaccTransGetImbalance(trans));
-}
-
 gnc_numeric
 xaccTransGetImbalance (Transaction * trans)
 {
   const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
   gnc_numeric imbal = ComputeValue (trans->splits, NULL, currency);
   return imbal;
+}
+
+Split *
+xaccTransGetBalanceSplit (Transaction *trans)
+{
+  Split *split;
+  kvp_value *kvp;
+  GUID *guid;
+
+  if (!trans)
+    return NULL;
+
+  kvp = kvp_frame_get_slot (xaccTransGetSlots (trans), "balance-split");
+  if (!kvp)
+    return NULL;
+
+  guid = kvp_value_get_guid (kvp);
+  if (!guid)
+    return NULL;
+
+  split = xaccSplitLookup (guid);
+  if (g_list_find (trans->splits, split))
+    return split;
+
+  xaccTransSetBalanceSplit (trans, NULL);
+
+  return NULL;
+}
+
+void
+xaccTransSetBalanceSplit (Transaction *trans, Split *split)
+{
+  kvp_value *new_value;
+
+  if (!trans)
+    return;
+
+  if (split)
+    new_value = kvp_value_new_guid (xaccSplitGetGUID (split));
+  else
+    new_value = NULL;
+
+  kvp_frame_set_slot(xaccTransGetSlots (trans), "balance-split", new_value);
+
+  if (new_value)
+    kvp_value_delete(new_value);
 }
 
 /********************************************************************\
@@ -1129,7 +1169,7 @@ xaccSplitRebalance (Split *split)
 {
   Transaction *trans;
   gnc_numeric value;
-  const gnc_commodity  * base_currency = NULL;
+  const gnc_commodity * base_currency = NULL;
 
   trans = split->parent;
 
@@ -1358,7 +1398,7 @@ xaccTransCommitEdit (Transaction *trans)
      xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
      xaccSplitSetValue(s, gnc_numeric_neg(split->value));
    }
-   
+
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
