@@ -31,6 +31,7 @@
 
 #include "AccWindow.h"
 #include "Scrub.h"
+#include "Scrub2.h"
 #include "dialog-account.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
@@ -655,10 +656,7 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 
   xaccAccountScrubOrphans (account);
   xaccAccountScrubImbalance (account);
-/* #define TEST_LOT_SCRUBBING */
-#ifdef TEST_LOT_SCRUBBING
   xaccAccountScrubLotsBalance (account);
-#endif
 
   gnc_resume_gui_refresh ();
 }
@@ -681,9 +679,7 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
 
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
-#ifdef TEST_LOT_SCRUBBING
   xaccAccountTreeScrubLotsBalance (account);
-#endif
 
   gnc_resume_gui_refresh ();
 }
@@ -698,10 +694,7 @@ gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget,
 
   xaccGroupScrubOrphans (group);
   xaccGroupScrubImbalance (group);
-
-#ifdef TEST_LOT_SCRUBBING
   xaccGroupScrubLotsBalance (group);
-#endif
 
   gnc_resume_gui_refresh ();
 }
