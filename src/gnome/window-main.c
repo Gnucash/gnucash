@@ -49,7 +49,7 @@
 #include "window-help.h"
 #include "account-tree.h"
 #include "dialog-transfer.h"
-#include "dialog-edit.h"
+#include "dialog-account.h"
 #include "dialog-qif-import.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
@@ -481,7 +481,7 @@ gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 {
-  accWindow(NULL);
+  gnc_ui_new_account_window (NULL);
 }
 
 static void
@@ -564,11 +564,11 @@ static void
 gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
 {
   Account *account = gnc_get_current_account();
-  EditAccWindow *edit_window_data;
+  AccountWindow *edit_window_data;
   
   if (account != NULL)
   {
-    edit_window_data = editAccWindow(account);
+    edit_window_data = gnc_ui_edit_account_window(account);
     gnc_ui_edit_account_window_raise(edit_window_data);
   }
   else

@@ -525,19 +525,11 @@ the current value of the path."
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__gui" "account_add_win_width" 0))
+  "__gui" "account_win_width" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__gui" "account_add_win_height" 0))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "account_edit_win_width" 0))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "account_edit_win_height" 0))
+  "__gui" "account_win_height" 0))
 
 (gnc:register-configuration-option
  (gnc:make-internal-option

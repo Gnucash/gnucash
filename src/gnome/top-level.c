@@ -32,12 +32,13 @@
 
 #include "gnome-top-level.h"
 #include "window-main.h"
-#include "dialog-add.h"
+#include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
+#include "ui-callbacks.h"
 #include "extensions.h"
 #include "window-help.h"
 #include "window-report.h"
@@ -492,7 +493,8 @@ gnc_configure_newacc_currency(void)
     gnc_lookup_string_option("International",
                              "Default Currency",
                              "USD");
-  xaccSetDefaultNewaccountCurrency(newacc_def_currency);
+
+  gnc_ui_set_default_new_account_currency (newacc_def_currency);
 
   if (newacc_def_currency != NULL)
     free(newacc_def_currency);

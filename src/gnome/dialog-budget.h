@@ -33,6 +33,6 @@
 typedef struct _BudgetDialog BudgetDialog;
 
 BudgetDialog * gnc_ui_budget_dialog_create(SCM budget, SCM apply_func);
-void gnc_ui_budget_dialog_destroy(BudgetDialog *bd);
+void           gnc_ui_budget_dialog_destroy(BudgetDialog *bd);
 
 #endif

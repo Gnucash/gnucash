@@ -34,34 +34,34 @@
    
 /* ------------------------------------------------------ */
 void
-xaccAccountWindowDestroySimple (Account *acc)
+xaccAccountWindowDestroySimple (Account *account)
 {
-  xaccDestroyLedgerDisplay (acc);
-  xaccDestroyRecnWindow (acc);
-  xaccDestroyAdjBWindow (acc);
-  xaccDestroyEditAccWindow (acc);
+  xaccDestroyLedgerDisplay (account);
+  xaccDestroyRecnWindow (account);
+  xaccDestroyAdjBWindow (account);
+  gnc_ui_destroy_edit_account_window (account);
 }
 
 /* ------------------------------------------------------ */
 void
-xaccAccountWindowDestroy (Account *acc)
+xaccAccountWindowDestroy (Account *account)
 {
    int i;
-   AccountGroup *acc_children;
+   AccountGroup *account_children;
 
-   if (!acc) return;
+   if (!account) return;
 
    /* recursively destroy windows associated with children */
-   acc_children = xaccAccountGetChildren (acc);
-   if (acc_children) {
-      int nacc = xaccGroupGetNumAccounts (acc_children);
+   account_children = xaccAccountGetChildren (account);
+   if (account_children) {
+      int nacc = xaccGroupGetNumAccounts (account_children);
       for (i=0; i<nacc; i++) {
-         Account *child = xaccGroupGetAccount (acc_children, i);
+         Account *child = xaccGroupGetAccount (account_children, i);
          xaccAccountWindowDestroy (child);
       }
    }
 
-   xaccAccountWindowDestroySimple(acc);
+   xaccAccountWindowDestroySimple(account);
 }
 
 /* ------------------------------------------------------ */
@@ -77,8 +77,8 @@ xaccGroupWindowDestroy (AccountGroup *grp)
    /* recursively destroy windows associated with children */
    nacc = xaccGroupGetNumAccounts (grp);
    for (i=0; i<nacc; i++) {
-      Account *acc = xaccGroupGetAccount (grp, i);
-      xaccAccountWindowDestroy (acc);
+      Account *account = xaccGroupGetAccount (grp, i);
+      xaccAccountWindowDestroy (account);
    }
 }
 

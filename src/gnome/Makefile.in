@@ -117,14 +117,14 @@ l = @l@
 
 noinst_LIBRARIES = libgncgnome.a
 
-libgncgnome_a_SOURCES =    account-tree.c   cursors.c   dialog-account-picker.c   dialog-add.c   dialog-budget.c   dialog-edit.c   dialog-filebox.c   dialog-fincalc.c   dialog-find-transactions.c   dialog-options.c   dialog-print-check.c   dialog-qif-import.c   dialog-totd.c   dialog-transfer.c   dialog-utils.c   extensions.c   file-history.c   glade-gnc-dialogs.c   gnc-currency-edit.c   gnc-datedelta.c   gnc-dateedit.c   gtkselect.c   print-session.c   query-user.c   reconcile-list.c   top-level.c   window-adjust.c   window-help.c   window-html.c   window-main.c   window-reconcile.c   window-register.c   window-report.c
+libgncgnome_a_SOURCES =    account-tree.c   cursors.c   dialog-account.c   dialog-account-picker.c   dialog-budget.c   dialog-filebox.c   dialog-fincalc.c   dialog-find-transactions.c   dialog-options.c   dialog-print-check.c   dialog-qif-import.c   dialog-totd.c   dialog-transfer.c   dialog-utils.c   extensions.c   file-history.c   glade-gnc-dialogs.c   gnc-currency-edit.c   gnc-datedelta.c   gnc-dateedit.c   gtkselect.c   print-session.c   query-user.c   reconcile-list.c   top-level.c   window-adjust.c   window-help.c   window-html.c   window-main.c   window-reconcile.c   window-register.c   window-report.c
 
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_DATA = gnucash.desktop
 
-noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account-picker.h   dialog-add.h   dialog-budget.h   dialog-edit.h   dialog-fincalc.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-totd.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   gtkselect.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
+noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account.h   dialog-account-picker.h   dialog-budget.h   dialog-fincalc.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-totd.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   gtkselect.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
 
 
 EXTRA_DIST =    .cvsignore   gnc-dialogs.glade   gnucash.desktop
@@ -149,10 +149,10 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libgncgnome_a_LIBADD = 
-libgncgnome_a_OBJECTS =  account-tree.o cursors.o \
-dialog-account-picker.o dialog-add.o dialog-budget.o dialog-edit.o \
-dialog-filebox.o dialog-fincalc.o dialog-find-transactions.o \
-dialog-options.o dialog-print-check.o dialog-qif-import.o dialog-totd.o \
+libgncgnome_a_OBJECTS =  account-tree.o cursors.o dialog-account.o \
+dialog-account-picker.o dialog-budget.o dialog-filebox.o \
+dialog-fincalc.o dialog-find-transactions.o dialog-options.o \
+dialog-print-check.o dialog-qif-import.o dialog-totd.o \
 dialog-transfer.o dialog-utils.o extensions.o file-history.o \
 glade-gnc-dialogs.o gnc-currency-edit.o gnc-datedelta.o gnc-dateedit.o \
 gtkselect.o print-session.o query-user.o reconcile-list.o top-level.o \
@@ -175,8 +175,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/account-tree.P .deps/cursors.P \
-.deps/dialog-account-picker.P .deps/dialog-add.P .deps/dialog-budget.P \
-.deps/dialog-edit.P .deps/dialog-filebox.P .deps/dialog-fincalc.P \
+.deps/dialog-account-picker.P .deps/dialog-account.P \
+.deps/dialog-budget.P .deps/dialog-filebox.P .deps/dialog-fincalc.P \
 .deps/dialog-find-transactions.P .deps/dialog-options.P \
 .deps/dialog-print-check.P .deps/dialog-qif-import.P \
 .deps/dialog-totd.P .deps/dialog-transfer.P .deps/dialog-utils.P \

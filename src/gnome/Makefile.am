@@ -4,10 +4,9 @@ noinst_LIBRARIES = libgncgnome.a
 libgncgnome_a_SOURCES = \
   account-tree.c \
   cursors.c \
+  dialog-account.c \
   dialog-account-picker.c \
-  dialog-add.c \
   dialog-budget.c \
-  dialog-edit.c \
   dialog-filebox.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -44,10 +43,9 @@ noinst_HEADERS = \
   account-tree.h \
   account-treeP.h \
   cursors.h \
+  dialog-account.h \
   dialog-account-picker.h \
-  dialog-add.h \
   dialog-budget.h \
-  dialog-edit.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-options.h \

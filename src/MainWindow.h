@@ -1,7 +1,8 @@
 /********************************************************************\
  * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+ *                 and callback functions for GnuCash               *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,27 +24,11 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAINWINDOW_H__
-#define __MAINWINDOW_H__
-
-#include "config.h"
-#include "ui-callbacks.h"
-#include "gnc-common.h"
-
-/** GLOBALS *********************************************************/
-typedef enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-} gncHelpTypes;
+#ifndef __MAIN_WINDOW_H__
+#define __MAIN_WINDOW_H__
 
 /** PROTOTYPES ******************************************************/
 
-void     mainWindow();
-void     gnc_show_help(const gncHelpTypes t);
+void mainWindow();
 
 #endif

@@ -34,6 +34,7 @@
 #include <gnome.h>
 
 #include "gnome-top-level.h"
+#include "ui-callbacks.h"
 #include "MultiLedger.h"
 #include "MainWindow.h"
 #include "RegWindow.h"
@@ -753,7 +754,7 @@ gnc_recn_edit_account_cb(GtkWidget * w, gpointer data)
   if (account == NULL)
     return;
 
-  editAccWindow(account);
+  gnc_ui_edit_account_window(account);
 }
 
 static void 

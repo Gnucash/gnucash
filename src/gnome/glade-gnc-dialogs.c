@@ -3944,3 +3944,308 @@ create_Amortization_Schedule_Dialog (void)
   return Amortization_Schedule_Dialog;
 }
 
+GtkWidget*
+create_Account_Dialog (void)
+{
+  GtkWidget *Account_Dialog;
+  GtkWidget *dialog_vbox12;
+  GtkWidget *vbox75;
+  GtkWidget *frame28;
+  GtkWidget *hbox62;
+  GtkWidget *vbox76;
+  GtkWidget *label807;
+  GtkWidget *label808;
+  GtkWidget *label809;
+  GtkWidget *label810;
+  GtkWidget *label811;
+  GtkWidget *vbox77;
+  GtkWidget *name_entry;
+  GtkWidget *description_entry;
+  GtkWidget *currency_box;
+  GtkWidget *security_entry;
+  GtkWidget *code_entry;
+  GtkWidget *hbox65;
+  GtkWidget *frame29;
+  GtkWidget *scrolledwindow7;
+  GtkWidget *type_list;
+  GtkWidget *label812;
+  GtkWidget *frame30;
+  GtkWidget *parent_scroll;
+  GtkWidget *frame31;
+  GtkWidget *source_box;
+  GtkWidget *label813;
+  GtkWidget *frame32;
+  GtkWidget *scrolledwindow9;
+  GtkWidget *notes_text;
+  GtkWidget *dialog_action_area12;
+  GtkWidget *button63;
+  GtkWidget *button64;
+  GtkWidget *button65;
+
+  Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
+  gtk_window_set_policy (GTK_WINDOW (Account_Dialog), TRUE, TRUE, FALSE);
+
+  dialog_vbox12 = GNOME_DIALOG (Account_Dialog)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_vbox12", dialog_vbox12);
+  gtk_widget_show (dialog_vbox12);
+
+  vbox75 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox75);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox75", vbox75,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox75);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox12), vbox75, TRUE, TRUE, 0);
+
+  frame28 = gtk_frame_new (_("Account Information"));
+  gtk_widget_ref (frame28);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame28", frame28,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame28);
+  gtk_box_pack_start (GTK_BOX (vbox75), frame28, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame28), 3);
+
+  hbox62 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox62);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox62", hbox62,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox62);
+  gtk_container_add (GTK_CONTAINER (frame28), hbox62);
+
+  vbox76 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox76);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox76", vbox76,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox76);
+  gtk_box_pack_start (GTK_BOX (hbox62), vbox76, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox76), 3);
+
+  label807 = gtk_label_new (_("Account Name:"));
+  gtk_widget_ref (label807);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label807", label807,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label807);
+  gtk_box_pack_start (GTK_BOX (vbox76), label807, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label807), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label807), 1, 0.5);
+
+  label808 = gtk_label_new (_("Description:"));
+  gtk_widget_ref (label808);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label808", label808,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label808);
+  gtk_box_pack_start (GTK_BOX (vbox76), label808, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label808), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label808), 1, 0.5);
+
+  label809 = gtk_label_new (_("Currency:"));
+  gtk_widget_ref (label809);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label809", label809,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label809);
+  gtk_box_pack_start (GTK_BOX (vbox76), label809, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label809), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label809), 1, 0.5);
+
+  label810 = gtk_label_new (_("Security:"));
+  gtk_widget_ref (label810);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label810", label810,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label810);
+  gtk_box_pack_start (GTK_BOX (vbox76), label810, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label810), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label810), 1, 0.5);
+
+  label811 = gtk_label_new (_("Account Code:"));
+  gtk_widget_ref (label811);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label811", label811,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label811);
+  gtk_box_pack_start (GTK_BOX (vbox76), label811, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label811), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label811), 1, 0.5);
+
+  vbox77 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox77);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox77", vbox77,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox77);
+  gtk_box_pack_start (GTK_BOX (hbox62), vbox77, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox77), 3);
+
+  name_entry = gtk_entry_new ();
+  gtk_widget_ref (name_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "name_entry", name_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (name_entry);
+  gtk_box_pack_start (GTK_BOX (vbox77), name_entry, FALSE, FALSE, 0);
+
+  description_entry = gtk_entry_new ();
+  gtk_widget_ref (description_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "description_entry", description_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_entry);
+  gtk_box_pack_start (GTK_BOX (vbox77), description_entry, FALSE, FALSE, 0);
+
+  currency_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (currency_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "currency_box", currency_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (currency_box);
+  gtk_box_pack_start (GTK_BOX (vbox77), currency_box, TRUE, TRUE, 0);
+
+  security_entry = gtk_entry_new ();
+  gtk_widget_ref (security_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "security_entry", security_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (security_entry);
+  gtk_box_pack_start (GTK_BOX (vbox77), security_entry, FALSE, FALSE, 0);
+
+  code_entry = gtk_entry_new ();
+  gtk_widget_ref (code_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "code_entry", code_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (code_entry);
+  gtk_box_pack_start (GTK_BOX (vbox77), code_entry, FALSE, FALSE, 0);
+
+  hbox65 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox65);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox65", hbox65,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox65);
+  gtk_box_pack_start (GTK_BOX (vbox75), hbox65, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox65), 3);
+
+  frame29 = gtk_frame_new (_("Account Type"));
+  gtk_widget_ref (frame29);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame29", frame29,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame29);
+  gtk_box_pack_start (GTK_BOX (hbox65), frame29, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame29), 3);
+
+  scrolledwindow7 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow7);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "scrolledwindow7", scrolledwindow7,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow7);
+  gtk_container_add (GTK_CONTAINER (frame29), scrolledwindow7);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow7), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow7), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  type_list = gtk_clist_new (1);
+  gtk_widget_ref (type_list);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "type_list", type_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (type_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow7), type_list);
+  gtk_clist_set_column_width (GTK_CLIST (type_list), 0, 80);
+  gtk_clist_column_titles_hide (GTK_CLIST (type_list));
+
+  label812 = gtk_label_new (_("label812"));
+  gtk_widget_ref (label812);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label812", label812,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label812);
+  gtk_clist_set_column_widget (GTK_CLIST (type_list), 0, label812);
+
+  frame30 = gtk_frame_new (_("Parent Account"));
+  gtk_widget_ref (frame30);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame30", frame30,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame30);
+  gtk_box_pack_start (GTK_BOX (hbox65), frame30, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame30), 3);
+
+  parent_scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (parent_scroll);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "parent_scroll", parent_scroll,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (parent_scroll);
+  gtk_container_add (GTK_CONTAINER (frame30), parent_scroll);
+  gtk_container_set_border_width (GTK_CONTAINER (parent_scroll), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (parent_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  frame31 = gtk_frame_new (_("Price Quote Source"));
+  gtk_widget_ref (frame31);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame31", frame31,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame31);
+  gtk_box_pack_start (GTK_BOX (vbox75), frame31, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame31), 3);
+
+  source_box = gtk_hbox_new (FALSE, 3);
+  gtk_widget_ref (source_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "source_box", source_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (source_box);
+  gtk_container_add (GTK_CONTAINER (frame31), source_box);
+  gtk_container_set_border_width (GTK_CONTAINER (source_box), 3);
+
+  label813 = gtk_label_new (_("The source for price quotes:"));
+  gtk_widget_ref (label813);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label813", label813,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label813);
+  gtk_box_pack_start (GTK_BOX (source_box), label813, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label813), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label813), 1, 0.5);
+
+  frame32 = gtk_frame_new (_("Notes"));
+  gtk_widget_ref (frame32);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame32", frame32,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame32);
+  gtk_box_pack_start (GTK_BOX (vbox75), frame32, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame32), 3);
+
+  scrolledwindow9 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow9);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "scrolledwindow9", scrolledwindow9,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow9);
+  gtk_container_add (GTK_CONTAINER (frame32), scrolledwindow9);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow9), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow9), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  notes_text = gtk_text_new (NULL, NULL);
+  gtk_widget_ref (notes_text);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "notes_text", notes_text,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (notes_text);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow9), notes_text);
+  gtk_text_set_editable (GTK_TEXT (notes_text), TRUE);
+
+  dialog_action_area12 = GNOME_DIALOG (Account_Dialog)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_action_area12", dialog_action_area12);
+  gtk_widget_show (dialog_action_area12);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area12), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area12), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_OK);
+  button63 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  gtk_widget_ref (button63);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button63", button63,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button63);
+  GTK_WIDGET_SET_FLAGS (button63, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_CANCEL);
+  button64 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  gtk_widget_ref (button64);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button64", button64,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button64);
+  GTK_WIDGET_SET_FLAGS (button64, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Account_Dialog), GNOME_STOCK_BUTTON_HELP);
+  button65 = g_list_last (GNOME_DIALOG (Account_Dialog)->buttons)->data;
+  gtk_widget_ref (button65);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "button65", button65,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button65);
+  GTK_WIDGET_SET_FLAGS (button65, GTK_CAN_DEFAULT);
+
+  return Account_Dialog;
+}
+

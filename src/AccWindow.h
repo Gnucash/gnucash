@@ -31,23 +31,21 @@
 #include "Account.h"
 #include "Group.h"
 
+
 /** PROTOTYPES ******************************************************/
-typedef struct _accwindow       AccWindow;
-typedef struct _editaccwindow   EditAccWindow;
+typedef struct _AccountWindow  AccountWindow;
 
-AccWindow       * accWindow( AccountGroup *grp);
-EditAccWindow   * editAccWindow( Account *account );
+AccountWindow * gnc_ui_new_account_window (AccountGroup *group);
+AccountWindow * gnc_ui_edit_account_window (Account *account);
 
+/* The xaccDestroyEditAccWindow() subroutine can be called from
+ *   anywhere to shut down the Register window. Used primarily when
+ *   destroying the underlying account.  */
+void gnc_ui_destroy_edit_account_window (Account *account);
 
-/*
- * The xaccDestroyEditAccWindow() subroutine can be called from 
- * anywhere to shut down the Register window.  Used primarily when
- * destroying the underlying account.
- */
-void xaccDestroyEditAccWindow (Account *);
+void gnc_ui_refresh_edit_account_window (Account *account);
 
-void editAccountRefresh(Account *);
+void gnc_ui_set_default_new_account_currency (const char *currency);
 
-void xaccSetDefaultNewaccountCurrency(char *new_default_currency);
 
 #endif /* __ACC_WINDOW_H__ */

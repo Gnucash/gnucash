@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-07-21 13:51-0700\n"
+"POT-Creation-Date: 2000-08-09 18:27-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Account Name"
 msgstr ""
 
-#: messages-i18n.c:203
+#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4119
 msgid "Account Type"
 msgstr ""
 
@@ -1034,7 +1034,7 @@ msgstr ""
 msgid "Mutual Fund"
 msgstr ""
 
-#: messages-i18n.c:232
+#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3985
 msgid "New Account"
 msgstr ""
 
@@ -1082,7 +1082,7 @@ msgstr ""
 msgid "Pick One"
 msgstr ""
 
-#: messages-i18n.c:244
+#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4152
 msgid "Parent Account"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Purch Price"
 msgstr ""
 
-#: messages-i18n.c:247
+#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4169
 msgid "Price Quote Source"
 msgstr ""
 
@@ -1248,7 +1248,7 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: messages-i18n.c:290
+#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:4000
 msgid "Account Information"
 msgstr ""
 
@@ -1564,6 +1564,7 @@ msgid "(none)"
 msgstr ""
 
 #: messages-i18n.c:366 po/guile_strings.txt:209
+#: src/gnome/glade-gnc-dialogs.c:4194
 msgid "Notes"
 msgstr ""
 
@@ -3095,7 +3096,7 @@ msgstr ""
 msgid "Default QIF acct:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:167
+#: src/gnome/glade-gnc-dialogs.c:167 src/gnome/glade-gnc-dialogs.c:4041
 msgid "Currency:"
 msgstr ""
 
@@ -3145,7 +3146,7 @@ msgid "Selected account:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
-#: src/gnome/glade-gnc-dialogs.c:3018
+#: src/gnome/glade-gnc-dialogs.c:3018 src/gnome/glade-gnc-dialogs.c:4032
 msgid "Description:"
 msgstr ""
 
@@ -3730,6 +3731,26 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:3782
 msgid "Initial Payment:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4023
+msgid "Account Name:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4050
+msgid "Security:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4059
+msgid "Account Code:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4145
+msgid "label812"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4185
+msgid "The source for price quotes:"
 msgstr ""
 
 #: src/gnome/print-session.c:233

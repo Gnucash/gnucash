@@ -1,5 +1,6 @@
 /********************************************************************\
- * dialog-add.h -- window for creating new accounts for GnuCash     *
+ * dialog-account.h -- window for creating and editing accounts for *
+ *                     GnuCash                                      *
  * Copyright (C) 2000 Dave Peticolas <petcola@cs.ucdavis.edu>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,10 +21,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_EDIT_H_
-#define __DIALOG_EDIT_H_
+#ifndef __DIALOG_ACCOUNT_H__
+#define __DIALOG_ACCOUNT_H__
+
+#include "AccWindow.h"
 
 void gnc_ui_destroy_account_add_windows();
+void gnc_ui_edit_account_window_raise(AccountWindow * winData);
 
 
 #endif

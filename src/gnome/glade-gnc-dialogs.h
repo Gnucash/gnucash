@@ -13,3 +13,4 @@ GtkWidget* create_Select_Date (void);
 GtkWidget* create_Budget_Dialog (void);
 GtkWidget* create_Financial_Calculator_Dialog (void);
 GtkWidget* create_Amortization_Schedule_Dialog (void);
+GtkWidget* create_Account_Dialog (void);

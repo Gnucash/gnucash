@@ -32,6 +32,7 @@
 #include <math.h>
 
 #include "gnome-top-level.h"
+#include "ui-callbacks.h"
 #include "MultiLedger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
@@ -1891,7 +1892,7 @@ closeRegWindow(GtkWidget * widget, RegWindow *regData)
 static void 
 newAccountCB(GtkWidget * w, gpointer data)
 {
-  accWindow(NULL);
+  gnc_ui_new_account_window(NULL);
 }
 
 
@@ -2054,7 +2055,7 @@ editCB(GtkWidget * w, gpointer data)
   if (account == NULL)
     return;
 
-  editAccWindow(account);
+  gnc_ui_edit_account_window(account);
 }
 
 
