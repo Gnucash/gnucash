@@ -130,6 +130,12 @@ gnc_lot_lookup (const GUID *guid, GNCBook *book)
                                           guid, GNC_ID_LOT);
 }
 
+GNCBook *
+gnc_lot_get_book (GNCLot *lot)
+{
+  if (!lot) return NULL;
+  return lot->book;
+}
 
 
 /* ============================================================= */
