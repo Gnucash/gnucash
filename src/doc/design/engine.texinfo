@@ -31,7 +31,7 @@ be created as a shared library for use by other programs.
 @node Engine Introduction, Globally Unique Identifiers, Engine, Engine
 @section Introduction
 
-Splits (@pxref{Splits}), or "Journal Entries" are the fundamental
+Splits (@pxref{Splits}), or "Ledger Entries" are the fundamental
 accounting units. Each Split consists of a quantity (number of dollar
 bills, number of shares, etc.), the price of that quantity (the price of
 one dollar is 1.00 dollars, etc.), a Memo, a pointer to the parent
@@ -72,19 +72,20 @@ forced by the engine. The engine user cannnot accidentally destroy this
 relationship as long as they stick to using the API and never access
 internal structures directly.
 
-Splits are grouped into Accounts (@pxref{Accounts}). Each Account
-consists of a list of Splits that debit that Account. To ensure
-consistency, if a Split points at an Account, then the Account must
-point at the Split, and vice-versa.  A Split can belong to at most one
-Account. Besides merely containing a list of Splits, the Account
-structure also give the Account a name, a code number, description and
-notes fields, a key-value frame, a pointer to the currency that is used
-for all splits in this account, and a pointer to the "security" used for
-all splits in this account.  The "security" can be the name of a stock
-(e.g. "IBM", "McDonald's"), or another currency (e.g. "USD", "GBP").
-The security is used during Transaction balancing to enable trading
-between accounts denominated in different currencies, or to, for
-example, move stocks from one Account to another.
+Splits are grouped into Accounts (@pxref{Accounts}) which are also known
+as "Ledgers" in accouting practice. Each Account consists of a list of
+Splits that debit that Account. To ensure consistency, if a Split points
+at an Account, then the Account must point at the Split, and vice-versa.
+A Split can belong to at most one Account. Besides merely containing a
+list of Splits, the Account structure also give the Account a name, a
+code number, description and notes fields, a key-value frame, a pointer
+to the currency that is used for all splits in this account, and a
+pointer to the "security" used for all splits in this account. The
+"security" can be the name of a stock (e.g. "IBM", "McDonald's"), or
+another currency (e.g. "USD", "GBP").  The security is used during
+Transaction balancing to enable trading between accounts denominated in
+different currencies, or to, for example, move stocks from one Account
+to another.
 
 Accounts can be arranged in a hierarchical tree. The nodes of the tree
 are called "Account Groups" (@pxref{Account Groups}). By accounting
@@ -233,7 +234,8 @@ performed.
 
 The following functions access the value of a given @code{kvp_value}
 object. If the type of the object does not correspond to that named
-in the function, @code{NULL} is returned.
+in the function, @code{NULL}, @code{0}, or @code{0.0} is returned
+as appropriate.
 
 @deftypefun gint64 kvp_value_get_int64(const kvp_value * @var{value})
 @end deftypefun
