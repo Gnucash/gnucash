@@ -37,6 +37,7 @@
 #include "global-options.h"
 
 #include "dialog-pass.h"
+#include "gnc-hbci-utils.h"
 
 #include <openhbci.h>
 
@@ -143,15 +144,6 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
       gnome_dialog_set_parent (GNOME_DIALOG (i->dialog), 
 			       GTK_WINDOW (new_parent));
     }
-}
-
-/* Helper functions */
-static const char *bank_to_str (const HBCI_Bank *bank)
-{
-  g_assert (bank);
-  return ((strlen(HBCI_Bank_name (bank)) > 0) ?
-	  HBCI_Bank_name (bank) :
-	  HBCI_Bank_bankCode(bank));
 }
 
 /********************************************************
