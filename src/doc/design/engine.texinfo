@@ -34,7 +34,6 @@ be created as a shared library for use by other programs.
 @node Key-Value Pair Frames, Sessions, Globally Unique Identifiers, Engine
 @section Key-Value Pair Frames
 @cindex Key-Value Pairs
-@tindex kvp_list
 
 The number and types of data items which are associated with the
 financial abstractions (Accounts, Transactions, and Splits) can vary
@@ -51,11 +50,11 @@ a set of associations between character strings (keys) and
 @code{kvp_value} structures. A @code{kvp_value} is a union with
 possible types enumerated in the @code{kvp_value_t} enum which
 indicates the type of data stored in a @code{kvp_value} object.
-Possible @code{kvp_value_t} values and their meanings are:
 
 @menu
 * kvp_frame::                   
 * kvp_value::                   
+* kvp_list::                    
 @end menu
 
 
@@ -90,13 +89,21 @@ for @var{key}. The value returned is not a copy.
 @end deftypefun
 
 
-@node kvp_value,  , kvp_frame, Key-Value Pair Frames
+@node kvp_value, kvp_list, kvp_frame, Key-Value Pair Frames
 @subsection kvp_value
 @tindex kvp_value
 @tindex kvp_value_t
 
 The @code{kvp_value} object stores the 'value' part of a key-value
 association in a @code{kvp_frame} object.
+
+@deftypefun void kvp_value_delete(kvp_value * @var{value})
+Free all of the memory associated with @var{value}.
+@end deftypefun
+
+@deftypefun kvp_value* kvp_value_copy(const kvp_value * @var{value})
+Return a deep copy of @var{value}.
+@end deftypefun
 
 @deftypefun kvp_value_t kvp_value_get_type(const kvp_value * @var{value})
 Return the type of value stored in @var{value}.
@@ -132,6 +139,91 @@ A @code{kvp_frame} object. Thus, frames may contain other frames in a
 recursive manner.
 
 @end table
+
+@subsubsection Value Constructors
+
+The following functions create and return @code{kvp_value} objects with
+particular values. In the case of pointer arguments, deep copies are
+performed.
+
+@deftypefun kvp_value* kvp_value_new_int64(gint64 @var{value})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_float64(double @var{value})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_string(const char * @var{value})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_guid(const GUID * @var{guid})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_binary(const void * @var{data}, int @var{datasize})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_list(const kvp_list * @var{value})
+@end deftypefun
+@deftypefun kvp_value* kvp_value_new_frame(const kvp_frame * @var{value});
+@end deftypefun
+
+@subsubsection Value Accessors
+
+The following functions access the value of a given @code{kvp_value}
+object. If the type of the object does not correspond to that named
+in the function, @code{NULL} is returned.
+
+@deftypefun gint64 kvp_value_get_int64(const kvp_value * @var{value})
+@end deftypefun
+@deftypefun double kvp_value_get_float64(const kvp_value * @var{value})
+@end deftypefun
+@deftypefun char* kvp_value_get_string(const kvp_value * @var{value})
+@end deftypefun
+@deftypefun GUID* kvp_value_get_guid(const kvp_value * @var{value})
+@end deftypefun
+@deftypefun void* kvp_value_get_binary(const kvp_value * @var{value}, int * @var{size_return})
+@end deftypefun
+@deftypefun kvp_list* kvp_value_get_list(const kvp_value * @var{value})
+@end deftypefun
+@deftypefun kvp_frame* kvp_value_get_frame(const kvp_value * @var{value})
+@end deftypefun
+
+
+@node kvp_list,  , kvp_value, Key-Value Pair Frames
+@subsection kvp_list
+@tindex kvp_list
+
+A @code{kvp_list} object abstract a list of @code{kvp_value} objects.
+
+@deftypefun kvp_list* kvp_list_new()
+Return a newly allocated @code{kvp_list} object.
+@end deftypefun
+
+@deftypefun void kvp_list_delete(kvp_list * @var{list})
+Free all memory associated with @var{list}, including the
+@code{kvp_value} objects in @var{list}.
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_copy(const kvp_list * @var{list})
+Return a deep copy of @var{list}.
+@end deftypefun
+
+@deftypefun gboolean kvp_list_null_p(const kvp_list * @var{list})
+Return @code{TRUE} if @var{list} is the empty list.
+@end deftypefun
+
+@deftypefun kvp_value* kvp_list_car(kvp_list * @var{list})
+If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
+Otherwise, return the first @code{kvp_value} object in the list.
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_cdr(kvp_list * @var{list})
+If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
+Otherwise, return a @code{kvp_list} object consisting of @var{list}
+with the first value removed. NOTE: the returned list is not a copy!
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_cons(kvp_value * @var{car}, kvp_list * @var{cdr})
+If either @var{car} or @var{cdr} is @code{NULL}, return @code{NULL}. Otherwise,
+return a @code{kvp_list} object consisting of the value of @var{car} followed
+by the values of @var{cdr}. This function uses 'hand-over' semantics, i.e.,
+the arguments @var{car} and @var{cdr} are no longer the responsibility of
+the caller and should not be accessed after the function returns.
+@end deftypefun
 
 
 @node Sessions, Account Groups, Key-Value Pair Frames, Engine
