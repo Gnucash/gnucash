@@ -133,23 +133,25 @@ xaccMallocSplit(void)
 static Split *
 xaccCloneSplit (Split *s)
 {
-  Split *split = g_new(Split, 1);
-
-  split->acc         = s->acc;
-  split->parent      = s->parent;
-
-  split->action      = g_cache_insert(gnc_string_cache, s->action);
-  split->memo        = g_cache_insert(gnc_string_cache, s->memo);
-  split->reconciled  = s->reconciled;
-  split->damount     = s->damount;
-  split->value       = s->value;
-
-  split->date_reconciled.tv_sec  = s->date_reconciled.tv_sec;
-  split->date_reconciled.tv_nsec = s->date_reconciled.tv_nsec;
+  Split *split = g_new0 (Split, 1);
 
   /* copy(!) the guid.  The cloned split is *not* unique,
    * is a sick twisted clone that holds 'undo' information. */
   split->guid = s->guid;
+
+  split->acc         = s->acc;
+  split->parent      = s->parent;
+
+  split->memo        = g_cache_insert (gnc_string_cache, s->memo);
+  split->action      = g_cache_insert (gnc_string_cache, s->action);
+
+  split->kvp_data    = kvp_frame_copy (s->kvp_data);
+
+  split->reconciled  = s->reconciled;
+  split->date_reconciled = s->date_reconciled;
+
+  split->value       = s->value;
+  split->damount     = s->damount;
 
   /* no need to futz with the balances;  these get wiped each time ... 
    * split->balance             = s->balance;
@@ -160,7 +162,7 @@ xaccCloneSplit (Split *s)
    * split->share_reconciled_balance  = s->share_reconciled_balance;
    */
 
-  return (split);
+  return split;
 }
 
 /********************************************************************\
@@ -171,12 +173,15 @@ xaccFreeSplit (Split *split)
 {
   if (!split) return;
 
+  kvp_frame_delete (split->kvp_data);
+
   g_cache_remove(gnc_string_cache, split->memo);
   g_cache_remove(gnc_string_cache, split->action);
 
   /* just in case someone looks up freed memory ... */
   split->memo        = NULL;
   split->action      = NULL;
+  split->kvp_data    = NULL;
   split->reconciled  = NREC;
   split->damount     = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -205,7 +210,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     if(!guid_equal(&(sa->guid), &(sb->guid))) return FALSE;
   }
 
-    /* Since these strings are cached we can just use pointer equality */
+  /* Since these strings are cached we can just use pointer equality */
   if(sa->memo != sb->memo) return FALSE;
   if(sa->action != sb->action) return FALSE;
 
@@ -599,10 +604,12 @@ xaccCloneTransaction (Transaction *t)
   Transaction *trans;
   GList *node;
 
-  trans = g_new(Transaction, 1);
+  trans = g_new0 (Transaction, 1);
 
-  trans->num         = g_cache_insert(gnc_string_cache, t->num);
-  trans->description = g_cache_insert(gnc_string_cache, t->description);
+  trans->num         = g_cache_insert (gnc_string_cache, t->num);
+  trans->description = g_cache_insert (gnc_string_cache, t->description);
+
+  trans->kvp_data = kvp_frame_copy (t->kvp_data);
 
   trans->splits = g_list_copy (t->splits);
   for (node = trans->splits; node; node = node->next)
@@ -621,7 +628,7 @@ xaccCloneTransaction (Transaction *t)
    * is a sick twisted clone that holds 'undo' information. */
   trans->guid = t->guid;
 
-  return (trans);
+  return trans;
 }
 
 
@@ -647,9 +654,13 @@ xaccFreeTransaction (Transaction *trans)
   g_cache_remove(gnc_string_cache, trans->num);
   g_cache_remove(gnc_string_cache, trans->description);
 
+  kvp_frame_delete (trans->kvp_data);
+
   /* just in case someone looks up freed memory ... */
   trans->num         = NULL;
   trans->description = NULL;
+
+  trans->kvp_data = NULL;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;
@@ -659,7 +670,8 @@ xaccFreeTransaction (Transaction *trans)
 
   trans->open = 0;
 
-  if (trans->orig) {
+  if (trans->orig)
+  {
     xaccFreeTransaction (trans->orig);
     trans->orig = NULL;
   }
@@ -1396,6 +1408,12 @@ xaccTransRollbackEdit (Transaction *trans)
    trans->description = orig->description;
    orig->description = g_cache_insert(gnc_string_cache, "");
 
+   kvp_frame_delete (trans->kvp_data);
+   trans->kvp_data = orig->kvp_data;
+   if (!trans->kvp_data)
+     trans->kvp_data = kvp_frame_new ();
+   orig->kvp_data = kvp_frame_new ();
+
    trans->date_entered.tv_sec  = orig->date_entered.tv_sec;
    trans->date_entered.tv_nsec = orig->date_entered.tv_nsec;
 
@@ -1410,11 +1428,13 @@ xaccTransRollbackEdit (Transaction *trans)
     * CheckDateOrder routine could be cpu-cyle brutal, so it maybe 
     * it could use some tuning.
     */
-   if (trans->open & BEING_DESTROYED) {
+   if (trans->open & BEING_DESTROYED)
+   {
       force_it = 1;
       mismatch = 0;
    }
-   else  {
+   else 
+   {
       GList *node;
       GList *node_orig;
       Split *s, *so;
@@ -1423,11 +1443,17 @@ xaccTransRollbackEdit (Transaction *trans)
 
       for (i = 0, node = trans->splits, node_orig = orig->splits ;
            node && node_orig ;
-           i++, node = node->next, node_orig = node_orig->next) {
+           i++, node = node->next, node_orig = node_orig->next)
+      {
          s = node->data;
          so = node_orig->data;
 
-         if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
+         if (so->acc != s->acc)
+         {
+           force_it = 1;
+           mismatch = i;
+           break;
+         }
 
          g_cache_remove (gnc_string_cache, s->action);
          s->action = so->action;
@@ -1436,6 +1462,12 @@ xaccTransRollbackEdit (Transaction *trans)
          g_cache_remove (gnc_string_cache, s->memo);
          s->memo = so->memo;
          so->memo = g_cache_insert(gnc_string_cache, "");
+
+         kvp_frame_delete (s->kvp_data);
+         s->kvp_data = so->kvp_data;
+         if (!s->kvp_data)
+           s->kvp_data = kvp_frame_new ();
+         so->kvp_data = kvp_frame_new ();
 
          s->reconciled  = so->reconciled;
          s->damount     = so->damount;
@@ -1451,19 +1483,25 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccAccountRecomputeBalance (s->acc);
       }
 
-      if (so != s) { force_it = 1; mismatch=i; }
+      if (so != s)
+      {
+        force_it = 1;
+        mismatch = i;
+      }
    }
 
    /* OK, if force_it got set, we'll have to tough it out and brute-force
     * the rest of the way.  Clobber all the edited splits, add all new splits.
     * Unfortunately, this can suck up CPU cycles in the Remove/Insert routines.
     */  
-   if (force_it) {
+   if (force_it)
+   {
       GList *node;
 
       for (i = 0, node = trans->splits ;
            node && i < mismatch ;
-           i++, node = node->next) {
+           i++, node = node->next)
+      {
          Split *s = node->data;
          GList *node_orig;
 
@@ -1473,7 +1511,8 @@ xaccTransRollbackEdit (Transaction *trans)
       }
 
       for (node = g_list_nth (trans->splits, mismatch) ;
-           node ; node = node->next) {
+           node ; node = node->next)
+      {
          Split *s = node->data;
 
          MARK_SPLIT (s);
@@ -1489,7 +1528,8 @@ xaccTransRollbackEdit (Transaction *trans)
       orig->splits = NULL;
 
       for (node = g_list_nth (trans->splits, mismatch) ;
-           node ; node = node->next) {
+           node ; node = node->next)
+      {
          Split *s = node->data;
 
          MARK_SPLIT (s);
@@ -1529,7 +1569,8 @@ xaccTransDestroy (Transaction *trans)
    trans->open |= BEING_DESTROYED;
    xaccTransWriteLog (trans, 'D');
 
-   for (node = trans->splits; node; node = node->next) {
+   for (node = trans->splits; node; node = node->next)
+   {
       Split *split = node->data;
 
       MARK_SPLIT (split);
@@ -1573,7 +1614,6 @@ xaccSplitDestroy (Split *split)
 {
    Transaction *trans;
    gboolean ismember = FALSE;
-   GList *node;
 
    if (!split) return;
 
@@ -1584,15 +1624,7 @@ xaccSplitDestroy (Split *split)
 
    xaccRemoveEntity(&split->guid);
 
-   for (node = trans->splits; node; node = node->next)
-   {
-     Split *s = node->data;
-
-     MARK_SPLIT(s); /* why??? */
-
-     if (s == split)
-       ismember = TRUE;
-   }
+   ismember = (g_list_find (trans->splits, split) != NULL);
 
    assert (ismember);
 

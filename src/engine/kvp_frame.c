@@ -94,6 +94,9 @@ kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) {
 
 void
 kvp_frame_delete(kvp_frame * frame) {
+  if (!frame)
+    return;
+
   if(frame->hash) {
     /* free any allocated resource for frame or its children */
     g_hash_table_foreach(frame->hash, & kvp_frame_delete_worker, 
@@ -119,6 +122,10 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
 kvp_frame * 
 kvp_frame_copy(const kvp_frame * frame) {
   kvp_frame * retval = kvp_frame_new();
+
+  if (!frame)
+    return retval;
+
   if(frame->hash) {
     if(!init_frame_body_if_needed(retval)) return(NULL);
     g_hash_table_foreach(frame->hash,
