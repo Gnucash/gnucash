@@ -293,6 +293,8 @@ void
 xaccCommitDateCell (DateCell *cell)
 {
    char buff[30];
+
+   if (!cell) return;
    ENTER ("xaccCommitDateCell(): value is %s \n", cell->cell.value);
    xaccParseDate (&(cell->date), cell->cell.value);
    printDate (buff, cell->date.tm_mday, 
