@@ -67,6 +67,11 @@ dnl Now check if the installed GNUCASH is sufficiently new. (Also sanity
 dnl checks the results of gnucash-config to some extent
 dnl
       rm -f conf.gnucashtest
+      OLD_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+      NEW_LD_PATH=`$GNUCASH_CONFIG $gnucash_config_args --ld-library-path`
+      if test "$NEW_LD_PATH"x != x; then
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$NEW_LD_PATH"
+      fi
       AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
@@ -195,4 +200,7 @@ main ()
   rm -f conf.gnucashtest
   AC_PATH_PROG(GNUCASH_RUN_SCRIPT, gnucash-run-script, gnucash-run-script)
   AC_SUBST(GNUCASH_RUN_SCRIPT)
+  if test "$NEW_LD_PATH"x != x; then
+    export LD_LIBRARY_PATH="$OLD_LD_LIBRARY_PATH"
+  fi
 ])
