@@ -9,11 +9,15 @@ translatable strings in GnuCash are taken from scheme files and will
 be missed.
 
 
-gnc-glossary.txt contains a glossary of the financial terms used
-inside GnuCash. To achieve a decent consistency in terminology within
-GnuCash, it is recommended to translate it and to use it during the
-translation process. The file format is a tab-delimited ASCII table
-with each table cell enclosed in double quotation marks (").
+The subdirectory glossary/ contains a glossary of the financial terms
+used inside GnuCash. To achieve a decent consistency in terminology
+within GnuCash, it is recommended to translate it and to use it during
+the translation process. There is one po files per translation of the
+glossary. The english definitions are in the file gnc-glossary.txt
+which is a tab-delimited ASCII table with each table cell enclosed in
+double quotation marks ("). If the file gnc-glossary.txt was updated,
+you can build a new glossary.pot file by using the shell script
+txt-to-pot.sh so that you can update the po file.
 
 
 GnuCash .pot files contain some strings of the form:
