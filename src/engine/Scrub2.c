@@ -316,7 +316,7 @@ xaccAccountScrubDoubleBalance (Account *acc)
          gain_split = xaccMallocSplit (acc->book);
 
          root = xaccAccountGetRoot(acc);
-         gain_acc = xaccScrubUtilityGetOrMakeAccount (root, currency, _("Realized Gain/Loss"));
+         gain_acc = xaccScrubUtilityGetOrMakeAccount (root, currency, _("Orphaned Realized Gain/Loss"));
          xaccAccountBeginEdit (gain_acc);
          xaccAccountInsertSplit (gain_acc, gain_split);
          xaccAccountCommitEdit (gain_acc);
@@ -350,6 +350,23 @@ xaccAccountScrubDoubleBalance (Account *acc)
 
       }
    }
+}
+
+/* ============================================================== */
+
+static gpointer 
+lot_scrub_cb (Account *acc, gpointer data)
+{
+   if (FALSE == xaccAccountHasTrades (acc)) return NULL;
+   xaccAccountScrubLots (acc);
+   xaccAccountScrubDoubleBalance (acc);
+   return NULL;
+}
+
+void 
+xaccGroupScrubLotsBalance (AccountGroup *grp)
+{
+   xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
 }
 
 /* =========================== END OF FILE ======================= */

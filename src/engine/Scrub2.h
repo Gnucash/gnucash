@@ -72,10 +72,24 @@ void xaccAccountScrubLots (Account *acc);
 
 /** The xaccAccountScrubDoubleBalance() routine examines all
  *   of the closed lots in an account, and verifies that the
- *   lots are 'double balanced'
- *
+ *   lots are 'double balanced'.  By 'double balance', we mean
+ *   that both the sum of the split amounts is zero, and that
+ *   the sum of the split values is zero.  If a closed lot is 
+ *   found where the sum of the values is not zero, the lot
+ *   is considered to have a 'realized gain or loss' that
+ *   hadn't been correctly handled.  This routine then creates
+ *   a balancing transaction to make not of the realized 
+ *   gain/loss, adds it to the lot, and add it to a special
+ *   orphaned gain/loss account.
  */
 void xaccAccountScrubDoubleBalance (Account *acc);
+
+/** The xaccGroupScrubLotsBalance() routine walks the
+ *   account tree, and invokes xaccAccountScrubLots()
+ *   and xaccAccountScrubDoubleBalance() on all accounts 
+ *   that are trading accounts.
+ */
+void xaccGroupScrubLotsBalance (AccountGroup *grp);
 
 #endif /* XACC_SCRUB2_H */
 /** @} */
